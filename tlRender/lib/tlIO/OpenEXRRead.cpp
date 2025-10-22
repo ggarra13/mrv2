@@ -6,6 +6,7 @@
 #include <tlIO/OpenEXRPrivate.h>
 
 #include <tlCore/FileIO.h>
+#include <tlCore/HDR.h>
 #include <tlCore/Locale.h>
 #include <tlCore/LogSystem.h>
 #include <tlCore/StringFormat.h>
@@ -257,6 +258,21 @@ namespace tl
 
                     // Get the tags.
                     readTags(header, _info.tags);
+
+                    if (hasChromaticities(header))
+                    {
+                        using V2f = math::Vector2f;
+                        const std::string& name =
+                            image::primariesName(V2f(_chromaticities.red.x,
+                                                     _chromaticities.red.y),
+                                                 V2f(_chromaticities.green.x,
+                                                     _chromaticities.green.y),
+                                                 V2f(_chromaticities.blue.x,
+                                                     _chromaticities.blue.y),
+                                                 V2f(_chromaticities.white.x,
+                                                     _chromaticities.white.y));
+                        _info.tags["Video Color Primaries"] = name;
+                    }
 
                     // Get the layers.
                     std::string view;

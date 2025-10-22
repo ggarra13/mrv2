@@ -360,7 +360,8 @@ namespace tl
                     while (p.thumbnailThread.running)
                     {
                         if (ctx.queue() == VK_NULL_HANDLE ||
-                            ctx.device == VK_NULL_HANDLE)
+                            ctx.device == VK_NULL_HANDLE ||
+                            ctx.instance == VK_NULL_HANDLE)
                             continue;
 
                         if (!p.thumbnailThread.render)

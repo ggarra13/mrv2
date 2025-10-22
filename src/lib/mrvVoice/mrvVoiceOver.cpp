@@ -398,6 +398,10 @@ namespace mrv
 #endif // TLRENDER_AUDIO   
         }
 
+        std::string VoiceOver::getFileName() const
+        {
+            return fileName;
+        }
         
         void VoiceOver::loadAudio()
         {

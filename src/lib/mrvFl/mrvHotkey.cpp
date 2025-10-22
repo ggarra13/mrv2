@@ -388,6 +388,11 @@ namespace mrv
         }
     }
 
+    /** 
+     * Load hotkeys from a path
+     * 
+     * @param path This parameter is the preferences path.  Not the full path.
+     */
     void load_hotkeys(const std::string& path)
     {
         Fl_Preferences* keys = new Fl_Preferences(
@@ -399,12 +404,21 @@ namespace mrv
 
     void load_hotkeys()
     {
-        std::string hotkeyPath = studiopath() +
+        std::string hotkeyPath = prefspath() +
                                  Preferences::hotkeys_file + ".pref";
         if (file::isReadable(hotkeyPath))
-            load_hotkeys(studiopath());
-        else
+        {
             load_hotkeys(prefspath());
+        }
+        else
+        {
+            hotkeyPath = studiopath() +
+                         Preferences::hotkeys_file + ".pref";
+            if (file::isReadable(hotkeyPath))
+            {
+                load_hotkeys(studiopath());
+            }
+        }
     }
 
 
@@ -465,7 +479,8 @@ namespace mrv
         tooltip += addHotkey(kDrawMode);
         ui->uiDraw->copy_tooltip(tooltip.c_str());
 
-        tooltip = _("Eraser Tool");
+        tooltip = _("Eraser Tool.   "
+                    "ALT + Left Mouse Button to erase an area.");
         tooltip += addHotkey(kEraseMode);
         ui->uiErase->copy_tooltip(tooltip.c_str());
         
@@ -540,6 +555,11 @@ namespace mrv
         tooltip = _("Set Out Point");
         tooltip += addHotkey(kSetOutPoint);
         c->uiEndButton->copy_tooltip(tooltip.c_str());
+        
+        tooltip = _("Mute/Unmute audio - Select Audio track with Right "
+                    "Mouse Button");
+        tooltip += addHotkey(kToggleMuteAudio);
+        c->uiAudioTracks->copy_tooltip(tooltip.c_str());
         
         //
         // Pixel Tool Bar.

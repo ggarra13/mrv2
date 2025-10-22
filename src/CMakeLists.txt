@@ -107,6 +107,10 @@ elseif(MRV2_BACKEND STREQUAL "BOTH")
     add_definitions(-DMRV2_BACKEND_BOTH=1)
 endif()
 
+if(MRV2_CPPTRACE)
+    add_definitions( -D MRV2_CPPTRACE )
+endif()
+
 if(MRV2_DEMO)
     add_definitions( -D MRV2_DEMO )
 endif()
@@ -128,11 +132,17 @@ if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
 endif()
 
 if(NOT APPLE)
-    find_package(cpptrace CONFIG REQUIRED)
+    if (MRV2_CPPTRACE)
+	find_package(cpptrace CONFIG REQUIRED)
+    endif()
 endif()
 
 if("${TLRENDER_API}" STREQUAL "GL_4_1_Debug")
     add_definitions(-DTLRENDER_API_GL_4_1_Debug)
+endif()
+
+if(TLRENDER_AOM)
+    add_definitions(-DTLRENDER_AOM)
 endif()
 
 if(TLRENDER_AUDIO)

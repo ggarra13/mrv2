@@ -414,6 +414,22 @@ if(TLRENDER_VPX)
 	    --extra-ldflags="${INSTALL_PREFIX}/lib/libvpx.a")
     endif()
 endif()
+
+if(TLRENDER_AOM)
+    list(APPEND FFmpeg_DEPENDENCIES AOM)
+    list(APPEND FFmpeg_CONFIGURE_ARGS
+	--enable-libaom
+        --enable-encoder=libaom_av1)
+    if(UNIX)
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+	    --extra-ldflags="${INSTALL_PREFIX}/lib/libaom.a")
+	if (NOT APPLE)
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--extra-libs=-lm
+		--extra-libs=-lpthread)
+	endif()
+    endif()
+endif()
 if(TLRENDER_AV1)
     list(APPEND FFmpeg_DEPENDENCIES dav1d)
     list(APPEND FFmpeg_CONFIGURE_ARGS

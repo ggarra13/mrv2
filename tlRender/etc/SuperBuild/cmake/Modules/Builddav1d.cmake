@@ -50,7 +50,7 @@ else()
 	set(MESON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/Bin/Scripts/meson)
     else()
 	set(MESON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/meson)
-	set(dav1d_PYTHONPATH "PYTHONPATH=${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/site-packages")
+	set(dav1d_PYTHONPATH "PYTHONPATH=${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/site-packages:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/lib-dynload")
     endif()
 endif()
 

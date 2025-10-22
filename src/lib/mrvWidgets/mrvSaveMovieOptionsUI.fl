@@ -208,7 +208,7 @@ v->hide();}
       }
     }
     Fl_Window uiAdvancedSettings {
-      label {Advanced Settings} open
+      label {Advanced Settings}
       xywh {1185 376 411 310} type Double hide hotspot modal
     } {
       Fl_Check_Button Override {
@@ -340,7 +340,7 @@ settings->setValue("SaveMovie/Color Primaries", value);}
         callback {int value = o->value();
 
 auto settings = mrv::App::app->settings();
-settings->setValue("SaveMovie/Color TRC", value);} open
+settings->setValue("SaveMovie/Color TRC", value);}
         tooltip {FFMpeg's Color Transfer Function settings for the codec selected.} xywh {129 190 170 29} down_box BORDER_BOX
       } {
         MenuItem {} {
@@ -408,7 +408,7 @@ settings->setValue("SaveMovie/Color TRC", value);} open
           xywh {150 150 100 20}
         }
         MenuItem {} {
-          label hlg selected
+          label hlg
           xywh {160 160 100 20}
         }
       }
@@ -656,7 +656,8 @@ v->add("YUV_420P_10LE");
 v->add("YUV_422P_10LE");
 v->add("YUV_444P_10LE");} {}
   }
-  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {} {
+  Function {add_pixel_formats(Fl_Choice* o, Fl_Choice* v)} {open
+  } {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
 if (!item || !item->label()) return;
 
@@ -769,7 +770,7 @@ else if (codec == "Cineform")
     v->add("GBRP_12LE");
     v->add("GBRAP_12LE");
 }
-else if (codec == "AV1")
+else if (codec == "AV1" || codec == "AV1_AOM")
 {  
    v->add("YUV_420P");
    v->add("YUV_420P_10LE");
@@ -797,7 +798,8 @@ if (v->size() > 0)
         }
     }
     v->value(0);
-}} {}
+}} {selected
+    }
   }
   Function {add_presets(Fl_Choice* o, Fl_Choice* v)} {} {
     code {const Fl_Menu_Item* item = &o->menu()[o->value()];
@@ -862,6 +864,10 @@ for (auto entry : entries)
 \#endif
 \#ifndef TLRENDER_SVTAV1
    if (entry == "AV1")
+      continue;
+\#endif
+\#ifndef TLRENDER_AOM
+   if (entry == "AV1_AOM")
       continue;
 \#endif
     o->add(gettext(entry.c_str()));

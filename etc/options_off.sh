@@ -12,14 +12,16 @@
 # These are some of the expensive mrv2 options
 #
 export BUILD_PYTHON=OFF
+export MRV2_CPPTRACE=OFF
 export MRV2_PYFLTK=OFF
-export MRV2_PYBIND11=OFF   # we need this, unfortunately to get PYTHON_VERSION
-export MRV2_NETWORK=OFF
+export MRV2_PYBIND11=OFF
+export MRV2_NETWORK=OFF    
 export MRV2_PDF=OFF
 
 #
 # These are some of the expensive TLRENDER options
 #
+export TLRENDER_AOM=OFF
 export TLRENDER_AV1=OFF
 export TLRENDER_EXR=OFF
 export TLRENDER_FFMPEG=OFF

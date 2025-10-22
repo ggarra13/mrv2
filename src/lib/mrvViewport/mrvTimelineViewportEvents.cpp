@@ -863,6 +863,75 @@ namespace mrv
             p.event_x = Fl::event_x();
             p.event_y = Fl::event_y();
 
+#ifdef VULKAN_BACKEND
+            ret = 0;
+            if (p.multilineText)
+            {
+                switch(event)
+                {   
+                case FL_ENTER:
+                case FL_LEAVE:
+                case FL_FOCUS:
+                case FL_UNFOCUS:
+                    return 1;
+                case FL_MOVE:
+                {
+                    p.mousePos = _getFocus();
+                    const math::Vector2i pos = _getRaster();
+                    const math::Vector2i widget = p.multilineText->box.min;
+                    if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
+                        pos.y >= widget.y && pos.y <= widget.y + 10)
+                    {
+                        set_cursor(FL_CURSOR_ARROW);
+                    }
+                    else
+                    {
+                        if (p.multilineText->box.contains(pos))
+                            set_cursor(FL_CURSOR_INSERT);
+                        else
+                            set_cursor(FL_CURSOR_CROSS);
+                    }
+                    return 1;
+                }
+                case FL_NO_EVENT:
+                default:
+                    break;
+                }
+                // Handle a virtual FL_PASTE event that will get sent
+                // to the multilineText widget.
+                // If we have a text widget, don't swallow key presses
+                unsigned rawkey = Fl::event_key();
+#if defined(FLTK_USE_WAYLAND)
+                if (rawkey >= 'A' && rawkey <= 'Z')
+                {
+                    rawkey = tolower(rawkey);
+                }
+#endif
+                if (event == FL_KEYBOARD && Fl::event_ctrl() && rawkey == 'v')
+                {
+                    Fl::paste(*this, 1);
+                    return 1;
+                }
+                if (event == FL_PUSH && Fl::event_button2())
+                {
+                    p.mousePos = _getFocus();
+                    const math::Vector2i pos = _getRaster();
+                    if (p.multilineText->box.contains(pos))
+                    {
+                        Fl::paste(*this, 0);
+                        return 1;
+                    }
+                }
+                    
+                ret = p.multilineText->handle(event);
+                if (ret)
+                {
+                    redrawWindows();
+                    return ret;
+                }
+            }
+#endif
+            
             switch (event)
             {
             case FL_FOCUS:
@@ -913,13 +982,34 @@ namespace mrv
                 break;
             case FL_PUSH:
             {
+
+#ifdef VULKAN_BACKEND
+                if (p.multilineText)
+                {
+                    const math::Vector2i pos = _getRaster();
+                    auto widget = p.multilineText->box.min;
+                    if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
+                        pos.y >= widget.y && pos.y <= widget.y + 10)
+                    {
+                        return acceptMultilineInput();
+                    }
+                    else
+                    {
+                        if (p.multilineText->box.contains(pos))
+                        {
+                            int ret = p.multilineText->handle_mouse_click(event, pos);
+                            redrawWindows();
+                            return 1;
+                        }
+                    }
+                }
+#endif
+                p.mousePress = _getFocus();
                 if (!children() && Fl::focus() != this && Fl::event_button1())
                 {
                     take_focus();
-                    if (Fl::event_clicks() < 2)
-                        return 1;
                 }
-                p.mousePress = _getFocus();
+                
                 if (Fl::event_button1())
                 {
                     if (Fl::event_ctrl())
@@ -927,7 +1017,7 @@ namespace mrv
                         p.viewPosMousePress = p.viewPos;
                         return 1;
                     }
-                
+
                     _handlePushLeftMouseButton();
                 }
                 else if (Fl::event_button2())
@@ -1142,6 +1232,21 @@ namespace mrv
                 p.mousePos = _getFocus();
                 if (Fl::event_button1())
                 {
+                    const math::Vector2i pos = _getRaster();
+                    
+#ifdef VULKAN_BACKEND
+                    if (p.multilineText &&
+                        p.multilineText->box.contains(pos))
+                    {
+                        int ret = p.multilineText->handle_mouse_click(event, pos);
+                        if (ret)
+                        {
+                            redrawWindows();
+                            return ret;
+                        }
+                    }
+#endif
+                    
                     if (Fl::event_ctrl())
                     {
                         _handleDragMiddleMouseButton();
@@ -1237,7 +1342,6 @@ namespace mrv
             }
             case FL_KEYBOARD:
             {
-
                 // If we have a text widget, don't swallow key presses
                 unsigned rawkey = Fl::event_key();
 #if defined(FLTK_USE_WAYLAND)
@@ -1507,6 +1611,13 @@ namespace mrv
                 else if (kUndoDraw.match(rawkey))
                 {
                     undo();
+                    return 1;
+                }
+                else if (kToggleMuteAudio.match(rawkey))
+                {
+                    TimelineClass* c = p.ui->uiTimeWindow;
+                    c->uiAudioTracks->value(!c->uiAudioTracks->value());
+                    c->uiAudioTracks->do_callback();
                     return 1;
                 }
                 else if (kZoomIn.match(rawkey))

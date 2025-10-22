@@ -17,10 +17,15 @@ namespace tl
 
         void Polyline2D::filterPoints()
         {
+            if (points.size() < 2)
+            {
+                return;
+            }
+            
             PointList filteredPoints;
             filteredPoints.push_back(points.front());
 
-            for (size_t i = 1; i < points.size(); i++)
+            for (size_t i = 1; i < points.size() - 1; i++)
             {
                 const Point& p0 = filteredPoints.back();
                 const Point& p1 = points[i];
@@ -30,6 +35,20 @@ namespace tl
                     continue;
                 filteredPoints.push_back(p1);
             }
+
+            
+            // Always add the very last point to ensure the line draws to the
+            // cursor.
+            // We check against the last added point to avoid duplicates if
+            // the mouse hasn't moved.
+            const Point& lastPoint = points.back();
+
+            // Use a small epsilon
+            if ((filteredPoints.back() - lastPoint).length() > 1e-6) 
+            {
+                filteredPoints.push_back(lastPoint);
+            }
+    
             points = filteredPoints;
         }
 

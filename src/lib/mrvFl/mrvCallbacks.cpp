@@ -1748,8 +1748,8 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-    void toggle_ui_bar(ViewerUI* ui, Fl_Group* const bar, const int size)
-    {
+    void toggle_ui_bar(ViewerUI* ui, Fl_Group* const bar)
+    {   
         if (bar->visible())
         {
             bar->hide();
@@ -1760,8 +1760,8 @@ namespace mrv
         }
 
         ui->uiRegion->layout();
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-       
+        
+        ui->uiMain->fill_menu(ui->uiMenuBar);       
     }
 
     void toggle_menu_bar(Fl_Menu_*, ViewerUI* ui)
@@ -1999,6 +1999,48 @@ namespace mrv
         c->uiEndButton->value(!c->uiEndButton->value());
         c->uiEndButton->do_callback();
         ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void playback_toggle_in_out_points_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        static otime::TimeRange inOut = time::invalidTimeRange;
+
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player) return;
+        
+        TimelineClass* c = ui->uiTimeWindow;
+        const otime::TimeRange& inOutRange = player->inOutRange();
+        const otime::TimeRange& timeRange = player->timeRange();
+        if (timeRange != inOutRange)
+        {
+            inOut = inOutRange;
+            c->uiStartButton->value(false);
+            c->uiStartButton->do_callback();
+            c->uiEndButton->value(false);
+            c->uiEndButton->do_callback();
+        }
+        else
+        {
+            if (inOut == time::invalidTimeRange)
+            {
+                player->setInOutRange(timeRange);
+                c->uiStartButton->value(false);
+                c->uiStartButton->do_callback();
+                c->uiEndButton->value(false);
+                c->uiEndButton->do_callback();
+            }
+            else
+            {
+                player->setInOutRange(inOut);
+                c->uiStartFrame->setTime(inOut.start_time());
+                c->uiStartButton->value(true);
+                c->uiEndFrame->setTime(inOut.end_time_exclusive());
+                c->uiEndButton->value(true);
+            }
+        }
+        
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+        
     }
 
     static void playback_loop_mode(ViewerUI* ui, timeline::Loop mode)
@@ -2981,19 +3023,39 @@ namespace mrv
         save_session_impl(file, ui);
     }
 
-    void load_session_cb(Fl_Menu_* m, ViewerUI* ui)
+    void load_session_impl(const std::string& fileName, ViewerUI* ui)
     {
-        const std::string& file = open_session_file();
-        if (file.empty())
-            return;
-
-        if (session::load(file))
+        if (session::load(fileName))
         {
             auto settings = ui->app->settings();
-            settings->addRecentFile(file);
+            settings->addRecentFile(fileName);
         }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
+    void load_session_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        const std::string& fileName = open_session_file();
+        if (fileName.empty())
+            return;
+
+        load_session_impl(fileName, ui);
+    }
+
+    void reload_session_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        std::string fileName = session::current();
+        if (fileName.empty())
+            fileName = tmppath() + "/temp.mrv2s";
+
+        save_session_impl(fileName, ui);
+
+        int ret = os::execv("", fileName, false);
+        if (ret != 0)
+        {
+            LOG_ERROR(_("Could not restart mrv2 instance with a session file."));
+        }
     }
 
     void clear_note_annotation_cb(ViewerUI* ui)

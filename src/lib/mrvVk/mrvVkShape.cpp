@@ -629,7 +629,7 @@ namespace mrv
         return 0;
     }
     
-    int VKTextShape::handle_mouse_click(const math::Vector2i& local)
+    int VKTextShape::handle_mouse_click(int event, const math::Vector2i& local)
     {
         file::Path path(fontPath);
         const std::string fontFamily = path.getBaseName();
@@ -642,7 +642,12 @@ namespace mrv
         int y = pts[0].y;
         math::Vector2i cursor_pos(x, y);
         std::size_t pos = txt.find('\n');
-        cursor = 0;
+
+        utf8_pos = 0;
+        const char* text_start = text.c_str();
+        const char* text_it = text_start; 
+        const char* text_end = text_it + text.size();
+        
         for (; pos != std::string::npos; pos = txt.find('\n'))
         {
             const std::string line = txt.substr(0, pos);
@@ -655,7 +660,12 @@ namespace mrv
                         local.y > cursor_pos.y)
                     {
                         cursor_pos.x += glyph->advance;
-                        ++cursor;
+                        if (text_it < text_end)
+                        {
+                            const char* old_it = text_it;
+                            text_it = fl_utf8fwd(text_it + 1, text_start, text_end);
+                            utf8_pos += (text_it - old_it);
+                        }
                     }
                 }
             }
@@ -666,7 +676,12 @@ namespace mrv
                 {
                     cursor_pos.x = x;
                     cursor_pos.y += fontSize;
-                    ++cursor;
+                    // --- Update utf8_pos for the newline ('\n') ---
+                    if (text_it < text_end && *text_it == '\n')
+                    {
+                        utf8_pos += 1;
+                        text_it++; // Advance past the single-byte newline
+                    }
                 }
             }
         }
@@ -681,11 +696,19 @@ namespace mrv
                         local.y > cursor_pos.y)
                     {
                         cursor_pos.x += glyph->advance;
-                        ++cursor;
+                        
+                        // --- Update utf8_pos using 3-parameter fl_utf8fwd ---
+                        if (text_it < text_end)
+                        {
+                            const char* old_it = text_it;
+                            text_it = fl_utf8fwd(text_it + 1, text_start, text_end); 
+                            utf8_pos += (text_it - old_it);
+                        }
                     }
                 }
             }
         }
+        to_cursor();
         return 1;
     }
     

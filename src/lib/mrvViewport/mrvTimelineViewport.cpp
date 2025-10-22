@@ -50,6 +50,7 @@
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
+#include "mrvCore/mrvWait.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -252,6 +253,23 @@ namespace mrv
         {
             TLRENDER_P();
 
+            // If switching tool or clicking twice on voice over annotation,
+            // turn off voice over annotation recording or playing
+            if (currentVoiceOver)
+            {
+                switch(currentVoiceOver->getStatus())
+                {
+                case voice::RecordStatus::Recording:
+                    _stopVoiceRecording(currentVoiceOver);
+                    break;
+                case voice::RecordStatus::Playing:
+                    _stopVoicePlaying(currentVoiceOver);
+                    break;
+                default:
+                    break;
+                }
+            }
+            
             if (mode == p.actionMode)
                 return;
 
@@ -289,6 +307,7 @@ namespace mrv
             }
 
             p.actionMode = mode;
+            
 
             switch (mode)
             {
@@ -577,7 +596,7 @@ namespace mrv
             c->uiPlayForwards->color(FL_BACKGROUND_COLOR);
             c->uiPlayBackwards->color(FL_BACKGROUND_COLOR);
             c->uiStop->color(FL_BACKGROUND_COLOR);
-            Fl_Color color = FL_YELLOW;
+            Fl_Color color = 14;  // a nice FL_CYAN
             switch (p.player->playback())
             {
             case timeline::Playback::Forward:
@@ -1773,12 +1792,17 @@ namespace mrv
             if (use_maximize && !p.presentation && p.resizeWindow)
             {
                 mw->maximize();
+#ifdef __linux__
+                // On Linux, we wait 100 milliseconds to account for
+                // the main Window's animation when maximize is used.
+                wait::milliseconds(100);
+#endif
             }
             else
             {
                 mw->resize(posX, posY, W, H);
             }
-
+            
             if (frameView)
             {
                 mw->wait_for_expose();

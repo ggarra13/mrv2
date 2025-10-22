@@ -209,12 +209,12 @@ int main(int argc, char** argv)
 
     win.begin();
 
-    Fl_Tabs*    tabs = new Fl_Tabs(10, 30, 600, 350);
+    Fl_Tabs*    tabs = new Fl_Tabs(20, 30, 600, 350);
     tabs->labelsize(20);
     tabs->selection_color(FL_YELLOW);
 
     {
-        Fl_Group* node_locked = new Fl_Group(10, 60, 600-20, 320,
+        Fl_Group* node_locked = new Fl_Group(20, 60, 600-20, 320,
                                              "Node-Locked License"); 
         Fl_Box*    box = new Fl_Box(20, 70, 600, 80);
         box->label("Please submit this machine id "
@@ -233,7 +233,7 @@ int main(int argc, char** argv)
     }
     
     {
-        Fl_Group* floating = new Fl_Group(10, 60, 600-20, 320,
+        Fl_Group* floating = new Fl_Group(20, 60, 600-20, 320,
                                           "Floating License");
         
         Fl_Box*    box = new Fl_Box(20, 60, 580, 80);

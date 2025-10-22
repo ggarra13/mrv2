@@ -57,7 +57,8 @@ namespace mrv
                 const std::shared_ptr<timeline_vlk::Render>& render,
                 const math::Vector2f& center, const float radius,
                 const float width, const image::Color4f& color,
-                const bool soft = false);
+                const bool soft = false,
+                const std::string& pipelineName = "cursor");
             
             //! Draw a circle.
             void drawFilledCircle(

@@ -72,7 +72,7 @@ namespace tl
         //! Offscreen buffer options.
         struct OffscreenBufferOptions
         {
-            image::PixelType colorType = image::PixelType::kNone;
+            image::PixelType colorType = offscreenColorDefault;
             timeline::ImageFilters colorFilters;
             OffscreenDepth depth = OffscreenDepth::kNone;
             OffscreenStencil stencil = OffscreenStencil::kNone;

@@ -221,7 +221,7 @@ endif()
 
 
 set(cpptrace_DEP )
-if(NOT APPLE)
+if(NOT APPLE AND MRV2_CPPTRACE)
     include(cmake/Modules/Buildcpptrace.cmake)
 endif()
 

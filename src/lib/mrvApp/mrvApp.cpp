@@ -86,7 +86,9 @@ namespace py = pybind11;
 // we include it here to avoid tl::image and mrv::image clashes
 #include "mrvFl/mrvOCIO.h"
 
-#include <Poco/Net/SSLManager.h>
+#ifdef MRV2_NETWORK
+#    include <Poco/Net/SSLManager.h>
+#endif
 
 #include <FL/platform.H>
 #include <FL/filename.H>
@@ -261,7 +263,19 @@ namespace mrv
 
     static void beat_cb(void* data)
     {
-        license_beat();
+        static int counter = 0;
+        License ok = license_beat();
+        if (ok != License::kValid)
+        {
+            ++counter;
+            if (counter == 3)
+            {
+                fl_alert("%s", _("Usage time for demo exceeded"));
+                Fl::check();
+                exit_cb(nullptr, App::ui);
+            }
+        }
+        
         Fl::repeat_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, data);
     }
 
@@ -569,6 +583,13 @@ namespace mrv
         }
         DBG;
 
+        //
+        // Initialize POCO Net for SSL connections.
+        //
+#ifdef MRV2_NETWORK
+        Poco::Net::initializeSSL();
+#endif
+        
         // Classes used to handle network connections
 #ifdef MRV2_NETWORK
         p.commandInterpreter = new CommandInterpreter(ui);
@@ -605,11 +626,6 @@ namespace mrv
 
         DBG;
         uiLogDisplay = new LogDisplay(0, 20, 340, 320);
-
-        //
-        // Initialize POCO Net for SSL connections.
-        //
-        Poco::Net::initializeSSL();
 
 
         License ok = license_beat();

@@ -1,22 +1,22 @@
-v1.4.2
+v1.4.3
 ======
 
-mrv2 and vmrv2 are an open source professional players and review tools for vfx, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
+mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
 mrv2 ships now in two compiled versions:
 
-   - mrv2 with OpenGL backend  (free up to version 1.4.0 -
-     	       	      	        donationware afterwards)
-				
+   - mrv2 with OpenGL backend  (free up to version 1.4.0 - donationware afterwards)
+   
    - vmrv2 with Vulkan backend (donationware)
 
+It also ships for many more architectures, so be careful to download the correct one.
 
 Difference between OpenGL and Vulkan
 ------------------------------------
 
 Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS. It supports true HDR (High Dynamic Range), it is about 20% to 50% faster than the OpenGL version (on Windows, macOS M1+ and it is the same speed for Linux's GNOME 48 and later) but it does not support OpenUSD.
 
-OpenGL's main benefit at this point is that it supports OpenUSD and works better on old CPUs (macOS Intel and older Wayland compositors).
+OpenGL's main benefit at this point is that it supports OpenUSD and works better on old CPUs (macOS Intel and X11 backend).
 
 Prices for binaries
 -------------------
@@ -38,6 +38,50 @@ You need to have an internet connection for the license system.
 ChangeLog
 ---------
 
+- Upgraded to OpenColorIO v2.5.0.
+- Upgraded to yaml-cpp v8.0.0.
+- Upgraded to expat R_2_7_2.
+- Upgraded to minizip-ng v4.0.10.
+- Made Voice Over Annotations stop playing or recording when clicking on any other action tool or clicking on voice over annotation tool again.
+- Fixed an incorrect dependency on OpenGL on tlDevice when compiling the Vulkan backend.
+- Added guards on MRV2_NETWORK and TLRENDER_NET for network code.
+- Added support for libaom for encoding AV1 instead of SvtAV1, as it is better supported and portable to aarch64.
+- Removed a line printout debugging from video saving code.
+- Fixed Edit timeline refreshing improperly under Wayland (needs nvidia-drivers-580).
+- Fixed hiding of pixel toolbar on Wayland which had gotten broken.
+- Added getting name of all temporary audio files from voice over annotations.
+- Fixed a crash on A/B Comparison Overlays on the Vulkan backend.
+- Fixed a redraw (trails) on A/B Comparison Overlays on the Vulkan backend when alpha was not solid.
+- Fixed background color/checkers not showing on A/B comparisons on Vulkan backend.
+- Fixed loading of hotkeys.  The user's home directory mrv2.keys.prefs takes precedence over the STUDIOPATH one.
+- Made Audio mute's icon turn on (off actually) automatically if volume is too low.
+- Added Mute Hotkey to turn on/off audio ('m' key by default).
+- Added a hotkey to toggle the in/out points together (Shift + 'i' by default).
+- Fixed scrubbing "jumping" when the previous action had been pressing on the timeline bar (like the Stop button).
+- Made color of S (Start) and E (End) range buttons more prominent.
+- Made the color of play buttons match the color of S and E.
+- Fixed drawing annotations not following the cursor accurately.
+- Fixed Text annotations on Vulkan backend which had gotten broken in v1.4.2 due to refactoring of code.
+- Improved performance of draw cursor on Windows by using PRESENTATION_MAILBOX instead of PRESENTATION_FIFO.
+- Fixed decoding of some movies where a frame would be missing with FFmpeg 8.0.
+- Made Save and Reload Session close the original mrv2 and open a new one with the session.
+- Added presentation mode used in Vulkan's viewport when displaying FPS.
+- Fixed resource leak on Vulkan's vmrv2 exit.
+- Improved performance of Vulkan under Wayland to support 4K OpenEXRs at 60FPS properly.
+- Limited usage time of demo to about 9 minutes before exiting the program.
+- Fixed dock panel location when the window was maximized.
+- Made HUD draw an outline on the text to make it more readable.
+- Fixed Linux drawing of timeline and viewport on OpenGL Wayland with buggy NVidia drivers.
+- Vulkan's vmrv2 OpenEXR saving now saves out HDR Primaries as OpenEXR chromaticities.  Also, the inverse PQ transform is made to keep the OpenEXR as close to match the HDR video (with the use of OpenColorIO).
+- Added OpenColorIO's ACES 2.0 .ocio files, besides using ocio:// so that artists can inspect and modify the original .ocio configs.
+- Added "Video Primaries Name" to OpenEXR to more easily clasify the chromaticities attribute.
+- Fixed starting up with the Files Panel as a Window under Wayland.  Previously, it would cut out the window's height.
+
+
+v1.4.2
+======
+
+
 - Added Linux aarch64 builds, without NDI.
 - Added Windows aarch64 builds, without NDI or SVT-AV1 encoder.
 - Upgraded OpenJPH to v0.24.1 from OpenEXR's internal version.
@@ -48,7 +92,7 @@ ChangeLog
 - Made Erase tool support Alt + Drag to clear a rectangular area quickly.
 - Fixed subwindow panels flickering/wobbling under Wayland and X11.
   Tested under:
-  	* Wayland ubuntu GNOME Shell 48.0 (older GNOME's still wobble)
+  	* Wayland Ubuntu GNOME Shell 48.0 (older GNOMEs may still wobble)
 - Fixed lookup of machine's UUID for licensing on Windows aarch64 builds.
 - Created a web server for node-lock licenses so that hacking the node-lock
   license cannot happen.

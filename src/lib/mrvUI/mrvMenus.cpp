@@ -109,11 +109,11 @@ namespace mrv
         menu->add(
             _("File/Open/Session"), kOpenSession.hotkey(),
             (Fl_Callback*)load_session_cb, ui);
-        
+
         menu->add(
             _("File/Open/New Program Instance"), kOpenNewInstance.hotkey(),
             (Fl_Callback*)open_new_instance_cb, ui);
-
+        
         mode = 0;
         if (numFiles == 0)
             mode = FL_MENU_INACTIVE;
@@ -169,6 +169,9 @@ namespace mrv
         menu->add(
             _("File/Close All"), kCloseAll.hotkey(), (Fl_Callback*)close_all_cb,
             ui, mode);
+
+        menu->add(_("File/Save and Reload Session"), kReloadSession.hotkey(),
+                  (Fl_Callback*)reload_session_cb, ui, mode);
 
         // std_any value;
         SettingsObject* settings = ui->app->settings();
@@ -961,6 +964,10 @@ namespace mrv
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
         if (c->uiEndButton->value())
             item->set();
+        idx = menu->add(
+            _("Playback/Toggle In and Out Points"), kToggleInOutPoint.hotkey(),
+            (Fl_Callback*)playback_toggle_in_out_points_cb, ui,
+            FL_MENU_DIVIDER | mode);
 
         if (isOtio)
         {

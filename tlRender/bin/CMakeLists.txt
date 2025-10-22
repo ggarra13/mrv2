@@ -1,8 +1,0 @@
-add_subdirectory(tlresource)
-if(TLRENDER_GLFW)
-    add_subdirectory(tlbake)
-    add_subdirectory(tlplay)
-endif()
-if(TLRENDER_QT6 OR TLRENDER_QT5 AND NOT "${TLRENDER_API}" STREQUAL "GLES_2")
-    add_subdirectory(tlplay-qt)
-endif()

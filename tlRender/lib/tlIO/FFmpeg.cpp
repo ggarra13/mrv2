@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlIO/FFmpeg.h>
@@ -30,7 +31,7 @@ namespace tl
             Profile, "None", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT",
             "ProRes_HQ", "ProRes_4444", "ProRes_XQ", "DNxHD", "DNxHR_LB",
             "DNxHR_SQ", "DNxHR_HQ", "DNxHR_HQX", "DNxHR_444", "VP9", "Cineform",
-            "AV1", "HAP");
+            "AV1", "HAP", "AV1_AOM");
         TLRENDER_ENUM_SERIALIZE_IMPL(Profile);
 
         TLRENDER_ENUM_IMPL(

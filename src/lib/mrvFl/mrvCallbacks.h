@@ -173,7 +173,7 @@ namespace mrv
     void toggle_status_bar(Fl_Menu_*, ViewerUI* ui);
     void toggle_ui_bar(
         ViewerUI* ui, Fl_Group* const bar, const int sizeX, const int sizeY);
-    void toggle_ui_bar(ViewerUI* ui, Fl_Group* const bar, const int size = 0);
+    void toggle_ui_bar(ViewerUI* ui, Fl_Group* const bar);
     void hide_ui_state(ViewerUI* ui);
     void restore_ui_state(ViewerUI* ui);
 
@@ -186,6 +186,7 @@ namespace mrv
     // In/Out point callbacks
     void playback_set_in_point_cb(Fl_Menu_*, ViewerUI* ui);
     void playback_set_out_point_cb(Fl_Menu_*, ViewerUI* ui);
+    void playback_toggle_in_out_points_cb(Fl_Menu_*, ViewerUI* ui);
     void toggle_otio_clip_in_out_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Loop callbacks
@@ -278,6 +279,7 @@ namespace mrv
     void save_session_as_cb(Fl_Menu_* m, ViewerUI* ui);
     void save_session_cb(Fl_Menu_* m, ViewerUI* ui);
     void load_session_cb(Fl_Menu_* m, ViewerUI* ui);
+    void reload_session_cb(Fl_Menu_* m, ViewerUI* ui);
 
     // Note annotations
     void clear_note_annotation_cb(ViewerUI* ui);

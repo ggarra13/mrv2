@@ -1,18 +1,13 @@
-mrv2 v1.4.1
+mrv2 v1.4.2
 =======
 
-mrv2 and vmrv2 are an open source professional players and review tools for vfx, animation and computer graphics for Windows, Linux and macOS.
+mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.
 
 It ships now in two compiled versions:
-   - mrv2 with OpenGL backend  (free up to version 1.4.0 -
-     	       	      	        donationware afterwards)
+   - mrv2 with OpenGL backend  (free up to version 1.4.0 - donationware afterwards)
    - vmrv2 with Vulkan backend (donationware)
 
-Updates OpenEXR to v3.4, FFmpeg to v8.0, fixes a number of Vulkan issues,
-adds Vulkan instructions for the different distros, adds the revolutionary
-Voice Annotations feature, makes UI more responsive while loading clips from
-the command-line.  Adds an option to not load Python, for even faster start
-ups.
+Aarch builds on Linux and Windows.  Erase tool can use Alt + Rectangle to quickly erase an area.  Licensing is now in a database to support users that bought a node-locked license to own.  Floating licenses are available upon request.
 
 Donationware licenses are paid through PayPal:
 
@@ -44,9 +39,9 @@ https://www.github.com/ggarra13/mrv2
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.4.0
+mrv2 v1.4.2
 
-mrv2, an open source professional player and review tool for vfx, animation and computer graphics for Windows, Linux and macOS has a new version.
+mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and CGI for Windows, Linux and macOS has a new version.
 
 Release History and Binaries:
 https://github.com/ggarra13/mrv2/releases/

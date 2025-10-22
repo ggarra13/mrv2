@@ -6,6 +6,9 @@
 
 #include "mrvPy/CmdsAux.h"
 
+#include "mrvVoice/mrvVoiceOver.h"
+#include "mrvVoice/mrvAnnotation.h"
+
 #include "mrvFl/mrvCallbacks.h"
 
 #include "mrvCore/mrvI8N.h"
@@ -78,6 +81,25 @@ namespace mrv2
             return out;
         }
         
+        std::vector<std::string >
+        getVoiceAnnotations(const otime::RationalTime& time)
+        {
+            std::vector<std::string > out;
+        
+            auto player = App::ui->uiView->getTimelinePlayer();
+            if (!player) return out;
+
+            auto annotations = player->getVoiceAnnotations();
+            for (auto annotation : annotations)
+            {
+                for (auto voice : annotation->voices )
+                {
+                    out.push_back(voice->getFileName());
+                }
+            }
+            return out;
+        }
+        
     } // namespace annotations
 } // namespace mrv2
 
@@ -113,4 +135,7 @@ Contains all functions and classes related to the annotationss.
     annotations.def(
         "getTimes", &mrv2::annotations::getTimes,
         _("Get all times for annotations."));
+    annotations.def(
+        "getVoiceAnnotations", &mrv2::annotations::getVoiceAnnotations,
+        _("Get all voice annotations for current frame."));
 }

@@ -8,6 +8,7 @@
 #include <tlCore/HDR.h>
 
 #include <tlCore/Error.h>
+#include <tlCore/Math.h>
 #include <tlCore/String.h>
 
 namespace tl
@@ -17,6 +18,90 @@ namespace tl
         TLRENDER_ENUM_IMPL(HDRPrimaries, "Red", "Green", "Blue", "White");
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRPrimaries);
 
+        std::string primariesName(const math::Vector2f& r,
+                                  const math::Vector2f& g,
+                                  const math::Vector2f& b,
+                                  const math::Vector2f& w)
+        {
+            using tl::math::fuzzyCompare;
+            
+            std::string out = "Unknown";
+            if (fuzzyCompare(r.x, 0.708F) &&
+                fuzzyCompare(r.y, 0.292F) &&
+                fuzzyCompare(g.x, 0.170F) &&
+                fuzzyCompare(g.y, 0.797F) &&
+                fuzzyCompare(b.x, 0.131F) &&
+                fuzzyCompare(b.y, 0.046F) &&
+                fuzzyCompare(w.x, 0.3127F) &&
+                fuzzyCompare(w.y, 0.3290F))
+                out = "Rec. 2020 (BT.2020)";
+            else if (fuzzyCompare(r.x, 0.680F) &&
+                     fuzzyCompare(r.y, 0.320F) &&
+                     fuzzyCompare(g.x, 0.265F) &&
+                     fuzzyCompare(g.y, 0.690F) &&
+                     fuzzyCompare(b.x, 0.150F) &&
+                     fuzzyCompare(b.y, 0.060F) &&
+                     fuzzyCompare(w.x, 0.3140F) &&
+                     fuzzyCompare(w.y, 0.3510F))
+                out = "DCI-P3 (DCI white)";
+            else if (fuzzyCompare(r.x, 0.680F) &&
+                     fuzzyCompare(r.y, 0.320F) &&
+                     fuzzyCompare(g.x, 0.265F) &&
+                     fuzzyCompare(g.y, 0.690F) &&
+                     fuzzyCompare(b.x, 0.150F) &&
+                     fuzzyCompare(b.y, 0.060F) &&
+                     fuzzyCompare(w.x, 0.3127F) &&
+                     fuzzyCompare(w.y, 0.3290F))
+                out = "P3-D65 / Display P3 (D65 white)";
+            else if (fuzzyCompare(r.x, 0.640F) &&
+                     fuzzyCompare(r.y, 0.330F) &&
+                     fuzzyCompare(g.x, 0.300F) &&
+                     fuzzyCompare(g.y, 0.600F) &&
+                     fuzzyCompare(b.x, 0.150F) &&
+                     fuzzyCompare(b.y, 0.060F) &&
+                     fuzzyCompare(w.x, 0.3127F) &&
+                     fuzzyCompare(w.y, 0.3290F))
+                out = "Rec. 709 (BT.709 / sRGB)";
+            else if (fuzzyCompare(r.x, 0.670F) &&
+                     fuzzyCompare(r.y, 0.330F) &&
+                     fuzzyCompare(g.x, 0.210F) &&
+                     fuzzyCompare(g.y, 0.710F) &&
+                     fuzzyCompare(b.x, 0.140F) &&
+                     fuzzyCompare(b.y, 0.080F) &&
+                     fuzzyCompare(w.x, 0.310F) &&
+                     fuzzyCompare(w.y, 0.316F))
+                out = "BT470M";
+            else if (fuzzyCompare(r.x, 0.640F) &&
+                     fuzzyCompare(r.y, 0.330F) &&
+                     fuzzyCompare(g.x, 0.290F) &&
+                     fuzzyCompare(g.y, 0.600F) &&
+                     fuzzyCompare(b.x, 0.150F) &&
+                     fuzzyCompare(b.y, 0.060F) &&
+                     fuzzyCompare(w.x, 0.3127F) &&
+                     fuzzyCompare(w.y, 0.3290F))
+                out = "NTSC / PAL / SECAM";
+            else if (fuzzyCompare(r.x, 0.681F) &&
+                     fuzzyCompare(r.y, 0.340F) &&
+                     fuzzyCompare(g.x, 0.310F) &&
+                     fuzzyCompare(g.y, 0.595F) &&
+                     fuzzyCompare(b.x, 0.155F) &&
+                     fuzzyCompare(b.y, 0.070F) &&
+                     fuzzyCompare(w.x, 0.3127F) &&
+                     fuzzyCompare(w.y, 0.3290F))
+                out = "SMPTE240M";
+            else if (fuzzyCompare(r.x, 0.681F) &&
+                     fuzzyCompare(r.y, 0.319F) &&
+                     fuzzyCompare(g.x, 0.243F) &&
+                     fuzzyCompare(g.y, 0.692F) &&
+                     fuzzyCompare(b.x, 0.145F) &&
+                     fuzzyCompare(b.y, 0.049F) &&
+                     fuzzyCompare(w.x, 0.310F) &&
+                     fuzzyCompare(w.y, 0.316F))
+                out = "Film";
+            return out;
+        }
+
+        
         void to_json(nlohmann::json& json, const HDRBezier& value)
         {
             json = nlohmann::json{

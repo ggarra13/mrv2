@@ -180,20 +180,6 @@ the runme*.sh scripts.  For example, to build with 4 cores, you can do:
 ./runme.sh -j 4
 ```
 
-
-Later, if you just want to build mrv2 quickly (runme quick mnemonic)
-without running through all the dependencies, run:
-
-```
-./runmeq.sh
-```
-
-Later, to just build FLTK, tlRender and mrv2  (runme three mnemonic), run;
-
-```
-./runmet.sh
-```
-
 Also, look in the bin/ directory for other runme.sh scripts which compile  a quicker version of mrv2 without features like USD, python or networking.
 
 ## Debug builds

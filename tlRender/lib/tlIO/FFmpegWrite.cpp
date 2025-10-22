@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
-// Copyright (c) 2024-2025 Gonzalo Garramuño
+// Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <fstream>
@@ -443,8 +443,8 @@ namespace tl
                     if (line.empty() || line[0] == '#')
                         continue;
 
-                    // Find the position of the colon
-                    size_t colonPos = line.find(':');
+                    // Find the position of the rightmost colon
+                    size_t colonPos = line.rfind(':');
                     if (colonPos == std::string::npos)
                         continue;
 
@@ -1247,6 +1247,10 @@ namespace tl
                     avCodecID = AV_CODEC_ID_HAP;
                     avProfile = AV_PROFILE_UNKNOWN;
                     break;
+                case Profile::AV1_AOM:
+                    avCodecID = AV_CODEC_ID_AV1;
+                    avProfile = AV_PROFILE_UNKNOWN;
+                    break;
                 default:
                     break;
                 }
@@ -1297,6 +1301,14 @@ namespace tl
                     {
                         hardwareEncode = false;
                         avCodec = avcodec_find_encoder_by_name("libvpx-vp9");
+                    }
+                }
+                else if (avCodecID == AV_CODEC_ID_AV1)
+                {
+                    hardwareEncode = false;
+                    if (profile == Profile::AV1_AOM)
+                    {
+                        avCodec = avcodec_find_encoder_by_name("libaom-av1");
                     }
                 }
                 else if (avCodecID == AV_CODEC_ID_PRORES)
@@ -1788,7 +1800,6 @@ namespace tl
 
                     if (p.avCodecContext)
                     {
-                        std::cerr << __LINE__ << std::endl;
                         _encode(
                             p.avCodecContext, p.avVideoStream, nullptr,
                             p.avPacket);

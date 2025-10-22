@@ -846,7 +846,7 @@ namespace mrv
 
         Fl_Preferences video(base, "opengl");
 
-        video.get("vsync", tmp, 1);
+        video.get("vsync", tmp, 2);
         uiPrefs->uiPrefsOpenGLVsync->value(tmp);
 
         video.get("color_buffers_accuracy", tmp, 0);
@@ -933,28 +933,28 @@ namespace mrv
         reset_hotkeys();
         if (!resetHotkeys)
         {
-            std::string hotkeyPath = studiopath() + hotkeys_file + ".prefs";
-            if (file::isReadable(hotkeyPath))
+            std::string hotkeyPath = prefspath();
+            std::string hotkeyFile = hotkeyPath + hotkeys_file + ".prefs";
+            if (!file::isReadable(hotkeyFile))
             {
-                msg =
-                    tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
-                    .arg(studiopath())
-                    .arg(hotkeys_file);
+                hotkeyPath = studiopath();
             }
-            else
+            hotkeyFile = hotkeyPath + hotkeys_file + ".prefs";
+            if (file::isReadable(hotkeyFile))
             {
-                msg =
-                    tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
-                    .arg(prefspath())
-                    .arg(hotkeys_file);;
+                msg = tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
+                      .arg(hotkeyPath)
+                      .arg(hotkeys_file);
+                    
+                load_hotkeys(hotkeyPath);
+                LOG_STATUS(msg);
             }
-            load_hotkeys();
         }
         else
         {
             msg = tl::string::Format(_("Resetting hotkeys to default."));
+            LOG_STATUS(msg);
         }
-        LOG_STATUS(msg);
 
         // Fill the hotkeys window
         HotkeyUI* h = ui->uiHotkey;
@@ -1514,6 +1514,12 @@ namespace mrv
             "max_images_apart", (int)uiPrefs->uiPrefsMaxImagesApart->value());
 
         char key[256];
+
+
+        userprefspath = studiopath();
+        if (!file::isReadable(userprefspath + "/mrv2.paths.prefs"))
+            userprefspath = prefspath();
+        
         Fl_Preferences path_mapping(
             userprefspath.c_str(), "filmaura", "mrv2.paths",
             (Fl_Preferences::Root)((int)Fl_Preferences::CLEAR));
@@ -1603,7 +1609,8 @@ namespace mrv
                      (int)uiPrefs->uiPrefsAllowScreenSaver->value());
         
         {
-
+            userprefspath = prefspath();
+        
             Fl_Preferences keys(
                 userprefspath.c_str(), "filmaura", hotkeys_file.c_str(),
                 (Fl_Preferences::Root)((int)Fl_Preferences::CLEAR));
@@ -1613,7 +1620,7 @@ namespace mrv
                       _("Hotkeys have been saved to \"{0}{1}.prefs\"."))
                       .arg(userprefspath)
                       .arg(hotkeys_file);
-            LOG_INFO(msg);
+            LOG_STATUS(msg);
         }
 
         base.flush();

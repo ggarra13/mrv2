@@ -71,23 +71,45 @@ if(APPLE)
 	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade)
 
 elseif(UNIX)
-
+    
     set(Python_LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH})
     set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
     set(Python_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
     set(Python_LD_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" )
 
-    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- ./configure
+    # The standard library is in 'Lib' in the source directory during the build
+    set(Python_SOURCE_LIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/deps/Python/src/Python/Lib")
+    
+    # Existing ENV setting for shared library path
+    set( Python_ENV ${CMAKE_COMMAND} -E env "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_LD_LIBRARY_PATH}" "PYTHONPATH=${Python_SOURCE_LIB_DIR}" "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- )
+
+    set( Python_CONFIGURE ${Python_ENV} ./configure
 	--enable-optimizations
 	--enable-shared
         --prefix=${CMAKE_INSTALL_PREFIX}
+	--without-ensurepip
     )
-    set( Python_ENV ${CMAKE_COMMAND} -E env "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_LD_LIBRARY_PATH}" -- )
-    set( Python_BUILD ${Python_ENV} make -j ${NPROCS} )
+    
+    # Build command
+    set( Python_BUILD
+	COMMAND ${Python_ENV} make -j ${NPROCS}
+    )
+
+    # --- NEW: Environment for INSTALL/POST-INSTALL (Needed for 'ensurepip') ---
+    # Once installed, the Python executable relies on PYTHONHOME to find its standard library
+    set( Python_INSTALL_ENV ${CMAKE_COMMAND} -E env
+        "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_LD_LIBRARY_PATH}"
+        "PYTHONHOME=${CMAKE_INSTALL_PREFIX}" # Crucial for finding 'encodings' after installation
+        --
+    )
+    
+    # Existing INSTALL commands (Use Python_ENV as defined above)
     set( Python_INSTALL
-	COMMAND ${Python_ENV} make -j ${NPROCS} install
-	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade 
-	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m pip install meson)
+        COMMAND ${Python_ENV} make -j ${NPROCS} install
+        COMMAND ${Python_INSTALL_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade 
+        COMMAND ${Python_INSTALL_ENV} ${Python_EXECUTABLE} -m pip install meson
+    )
+
 else()
     
     set( platform x64 )
@@ -148,7 +170,7 @@ if (WIN32)
 else()
     set( ENV{PATH} "${CMAKE_INSTALL_PREFIX}/bin:$ENV{PATH}" )
     if (UNIX AND NOT APPLE)
-	set( ENV{PYTHONPATH} "${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/site-packages:$ENV{PYTHONPATH}" )
+	set( ENV{PYTHONPATH} "${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/site-packages:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/lib-dynload:$ENV{PYTHONPATH}" )
     endif()
 endif()
 

@@ -60,19 +60,28 @@ set(SOURCES
     mrvWait.cpp
 )
 
-find_package(Poco REQUIRED Net NetSSL JSON Foundation)
-find_package(OpenSSL REQUIRED)
+if (MRV2_NETWORK)
+    find_package(Poco REQUIRED Net NetSSL JSON Foundation)
+endif()
+if (TLRENDER_NET)
+    find_package(OpenSSL REQUIRED)
+endif()
 
 set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath ${FLTK_LIBRARIES})
 
-set(LIBRARIES_PRIVATE
-    Poco::Net
-    Poco::NetSSL
-    Poco::JSON
-    Poco::Foundation
-    OpenSSL::SSL
-    OpenSSL::Crypto)
-
+if (MRV2_NETWORK)
+    set(LIBRARIES_PRIVATE
+	Poco::Net
+	Poco::NetSSL
+	Poco::JSON
+	Poco::Foundation
+    )
+endif()
+if (TLRENDER_NET)
+    list(APPEND LIBRARIES_PRIVATE
+	OpenSSL::SSL
+	OpenSSL::Crypto)
+endif()
 
 if( WIN32 )
     list( APPEND HEADERS
@@ -91,7 +100,9 @@ else()
     list(APPEND SOURCES
         mrvFileManager.cpp
 	Linux/mrvSignalHandler.cpp)
-    list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)
+    if (MRV2_CPPTRACE)
+	list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)
+    endif()
 endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})
