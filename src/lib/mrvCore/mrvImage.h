@@ -24,6 +24,45 @@ namespace mrv
     
     namespace
     {
+        // HLG (BT.2100) -> Linear light (normalized to 10,000 nits = 1.0)
+        inline float hlg_to_linear(float hlg, const float L_W = 100.F)
+        {
+            // Clamp to [0, 1] to avoid NANs and invalid ranges
+            hlg = std::clamp(hlg, 0.0f, 1.0f);
+
+            // HLG EOTF Constants (BT.2100-2)
+            // L_W is the System White level (100 nits).
+            // The final result is normalized to L_PEAK = 10000 nits.
+            const double a = 0.17883277;
+            const double b = 1.0 - 4.0 * a; // ~0.28466892
+            const double c = 0.5 - 2.0 * a; // ~0.14233446
+    
+            // Scale factor to convert the output (normalized to L_W) to L_PEAK (10000 nits)
+            // L_W / L_PEAK = 100 / 10000 = 0.01
+            const double scale_factor = L_W / 10000.F; 
+
+            double L; // Linear light value, normalized to 10000 nits = 1.0
+    
+            // Low-luminance segment (0 <= V <= 0.5)
+            if (hlg <= 0.5)
+            {
+                // E_nits = L_W * 3 * V^2
+                // L = (L_W / 10000) * 3 * V^2 = 0.03 * V^2
+                L = 3.0 * std::pow(hlg, 2.0) * scale_factor;
+            }
+            // High-luminance segment (0.5 < V <= 1.0)
+            else
+            {
+                // E_nits = (L_W / 12) * (exp((V - c) / a) + b)
+                // L = (L_W / 10000) * (E_nits / L_W) * L_W / 12 * (exp... + b)
+                // L = (0.01 / 12.0) * (exp((V - c) / a) + b)
+                const double exp_term = std::exp((hlg - c) / a);
+                L = (exp_term + b) * scale_factor / 12.0;
+            }
+
+            return static_cast<float>(L);
+        }
+        
         // PQ (ST2084) → Linear light (normalized to 10,000 nits = 1.0)
         inline float pq_to_linear(float pq)
         {

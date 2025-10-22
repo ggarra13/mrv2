@@ -97,9 +97,9 @@ namespace mrv
             }
 
             const auto& hdrOptions = ui->uiView->getHDROptions();
+            const auto& hdr = hdrOptions.hdrData;
             if (hdrOptions.passthru || hdrOptions.tonemap)
             {
-                const auto& hdr = hdrOptions.hdrData;
                 std::stringstream s;
                 s << hdr.primaries[0].x << " " << hdr.primaries[0].y
                   << hdr.primaries[1].x << " " << hdr.primaries[1].y
@@ -757,6 +757,8 @@ namespace mrv
                 int numChannels = image::getChannelCount(type);
                 
                 int channelCount = numChannels;
+                
+                // We don't consider the alpha channel for conversion.
                 if (numChannels == 2 || numChannels == 4)
                     channelCount = numChannels - 1;
 
@@ -782,10 +784,24 @@ namespace mrv
                                 p += offset;
                                 
                                 // 1. Apply inverse EOTF.
-                                *p = pq_to_linear(*p);
+                                switch(hdr.eotf)
+                                {
+                                case image::EOTF_BT2100_HLG:
+                                    *p = hlg_to_linear(*p);
+                                    
+                                    // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
+                                    *p *= SCALE_FACTOR;
+                                    break;
+                                case image::EOTF_BT2020:
+                                case image::EOTF_BT2100_PQ:
+                                    *p = pq_to_linear(*p);
                                 
-                                // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
-                                *p *= SCALE_FACTOR;
+                                    // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
+                                    *p *= SCALE_FACTOR;
+                                    break;
+                                default:
+                                    break;
+                                }
                             }
                             else if (type == image::PixelType::RGBA_F16 ||
                                      type == image::PixelType::RGB_F16)
@@ -795,10 +811,27 @@ namespace mrv
 
                                 // 1. Convert to float and apply inverse EOTF.
                                 float tmp = *p;
-                                tmp = pq_to_linear(tmp);
+                                        
+                                switch(hdr.eotf)
+                                {
+                                case image::EOTF_BT2100_HLG:
+                                    tmp = hlg_to_linear(tmp);
+
+                                    // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
+                                    tmp *= SCALE_FACTOR;
+                                    
+                                    break;
+                                case image::EOTF_BT2020:
+                                case image::EOTF_BT2100_PQ:
+                                    tmp = pq_to_linear(tmp);
+
+                                    // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
+                                    tmp *= SCALE_FACTOR;
+                                    break;
+                                default:
+                                    break;
+                                }
                                 
-                                // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
-                                tmp *= SCALE_FACTOR;
 
                                 // 3. Convert back to half
                                 *p = tmp;

@@ -191,7 +191,8 @@ namespace mrv
                 s << speed;
                 ioOptions["OpenEXR/Speed"] = s.str();
             }
-            
+
+            const bool use_pq = true;
             const auto& hdrOptions = ui->uiView->getHDROptions();
             if (hdrOptions.passthru || hdrOptions.tonemap)
             {
@@ -1163,6 +1164,8 @@ namespace mrv
                         int numChannels = image::getChannelCount(type);
                 
                         int channelCount = numChannels;
+
+                        // We don't consider the alpha channel for conversion.
                         if (numChannels == 2 || numChannels == 4)
                             channelCount = numChannels - 1;
 
@@ -1170,6 +1173,7 @@ namespace mrv
                         const float SCALE_FACTOR = 10000.0f / MAX_CLL_SOURCE;
                         const size_t w = outputImage->getWidth();
                         const size_t h = outputImage->getHeight();
+                        const auto& hdr = hdrOptions.hdrData;
                         for (size_t y = 0; y < h; ++y)
                         {
                             const size_t y_stride = y * w * numChannels;
@@ -1187,7 +1191,18 @@ namespace mrv
                                         p += offset;
                                 
                                         // 1. Apply inverse EOTF.
-                                        *p = pq_to_linear(*p);
+                                        switch(hdr.eotf)
+                                        {
+                                        case image::EOTF_BT2100_HLG:
+                                            *p = hlg_to_linear(*p);
+                                            break;
+                                        case image::EOTF_BT2020:
+                                        case image::EOTF_BT2100_PQ:
+                                            *p = pq_to_linear(*p);
+                                            break;
+                                        default:
+                                            break;
+                                        }
                                 
                                         // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
                                         *p *= SCALE_FACTOR;
@@ -1200,7 +1215,19 @@ namespace mrv
 
                                         // 1. Convert to float and apply inverse EOTF.
                                         float tmp = *p;
-                                        tmp = pq_to_linear(tmp);
+                                        
+                                        switch(hdr.eotf)
+                                        {
+                                        case image::EOTF_BT2100_HLG:
+                                            tmp = hlg_to_linear(tmp);
+                                            break;
+                                        case image::EOTF_BT2020:
+                                        case image::EOTF_BT2100_PQ:
+                                            tmp = pq_to_linear(tmp);
+                                            break;
+                                        default:
+                                            break;
+                                        }
                                 
                                         // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
                                         tmp *= SCALE_FACTOR;

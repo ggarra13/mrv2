@@ -170,7 +170,7 @@ namespace tl
             if (_hasChromaticities)
             {
                 addChromaticities(header, _chromaticities);
-                addWhiteLuminance(header, 100.0F);
+                addWhiteLuminance(header, 1.F);
                 Imath::V2f adoptedNeutral(_chromaticities.white.x,
                                           _chromaticities.white.y);
                 addAdoptedNeutral(header, adoptedNeutral);
