@@ -191,6 +191,18 @@ namespace mrv
                 s << speed;
                 ioOptions["OpenEXR/Speed"] = s.str();
             }
+            
+            const auto& hdrOptions = ui->uiView->getHDROptions();
+            if (hdrOptions.passthru || hdrOptions.tonemap)
+            {
+                const auto& hdr = hdrOptions.hdrData;
+                std::stringstream s;
+                s << hdr.primaries[0].x << " " << hdr.primaries[0].y
+                  << hdr.primaries[1].x << " " << hdr.primaries[1].y
+                  << hdr.primaries[2].x << " " << hdr.primaries[2].y
+                  << hdr.primaries[3].x << " " << hdr.primaries[3].y;
+                ioOptions["OpenEXR/Chromaticities"] = s.str();
+            }
 #endif
 
             auto model = ui->app->filesModel();
@@ -1144,6 +1156,64 @@ namespace mrv
                         outputImage = bufferImage;
                     }
 
+#ifdef TLRENDER_EXR
+                    if (hdrOptions.passthru || hdrOptions.tonemap)
+                    {
+                        image::PixelType type = outputImage->getPixelType();
+                        int numChannels = image::getChannelCount(type);
+                
+                        int channelCount = numChannels;
+                        if (numChannels == 2 || numChannels == 4)
+                            channelCount = numChannels - 1;
+
+                        const float MAX_CLL_SOURCE = hdrOptions.hdrData.maxCLL;
+                        const float SCALE_FACTOR = 10000.0f / MAX_CLL_SOURCE;
+                        const size_t w = outputImage->getWidth();
+                        const size_t h = outputImage->getHeight();
+                        for (size_t y = 0; y < h; ++y)
+                        {
+                            const size_t y_stride = y * w * numChannels;
+                            for (size_t x = 0; x < w; ++x)
+                            {
+                                const size_t xy_stride = y_stride + x * numChannels;
+                                for (int c = 0; c < channelCount; ++c)
+                                {
+                                    const size_t offset = xy_stride + c;
+                            
+                                    if (type == image::PixelType::RGBA_F32 ||
+                                        type == image::PixelType::RGB_F32)
+                                    {
+                                        float* p = reinterpret_cast<float*>(outputImage->getData());
+                                        p += offset;
+                                
+                                        // 1. Apply inverse EOTF.
+                                        *p = pq_to_linear(*p);
+                                
+                                        // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
+                                        *p *= SCALE_FACTOR;
+                                    }
+                                    else if (type == image::PixelType::RGBA_F16 ||
+                                             type == image::PixelType::RGB_F16)
+                                    {
+                                        half* p = reinterpret_cast<half*>(outputImage->getData());
+                                        p += offset;
+
+                                        // 1. Convert to float and apply inverse EOTF.
+                                        float tmp = *p;
+                                        tmp = pq_to_linear(tmp);
+                                
+                                        // 2. Apply Luminance Scaling based on Source MaxCLL (e.g., 1000 nits)
+                                        tmp *= SCALE_FACTOR;
+
+                                        // 3. Convert back to half
+                                        *p = tmp;
+                                    }
+                                }
+                            }
+                        }
+                    }
+#endif
+            
                     if (videoTime.contains(currentTime))
                     {
                         const auto& tags = ui->uiView->getTags();

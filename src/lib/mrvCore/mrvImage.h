@@ -8,6 +8,9 @@
 
 #include <Imath/half.h>
 
+    
+#include <algorithm>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <cstring> // For memcpy
@@ -21,6 +24,31 @@ namespace mrv
     
     namespace
     {
+        // PQ (ST2084) → Linear light (normalized to 10,000 nits = 1.0)
+        inline float pq_to_linear(float pq)
+        {
+            // Clamp to [0, 1] to avoid NANs
+            pq = std::clamp(pq, 0.0f, 1.0f);
+        
+            // Note: Constants are defined in terms of the formula:
+            // L = ((max(0, V^(1/m2) - c1)) / (c2 - c3 * V^(1/m2)))^(1/m1)
+            const double m1 = 0.1593017578125;
+            const double m2 = 78.84375;
+            const double c1 = 0.8359375;
+            const double c2 = 18.8515625;
+            const double c3 = 18.6875;
+
+            // Compute the EOTF
+            const double vp = std::pow(pq, 1.0 / m2);
+            const double numerator = std::max(vp - c1, 0.0);
+            const double denominator = c2 - c3 * vp;
+            const double L = std::pow(numerator / denominator, 1.0 / m1);
+        
+            // L is already the relative linear light value where
+            // 1.0 == 10000 nits.
+            return static_cast<float>(L);
+        }
+        
         // Saturating cast: integers clamp to their min/max, floats just cast.
         // (Works for uint8_t/uint16_t/int16_t/etc. and float/half-like types.)
         template <class T, class Acc>
