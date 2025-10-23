@@ -11,6 +11,8 @@
 #include "mrvGLUtil.h"
 #include "mrvGLShape.h"
 
+#include <FL/Fl.H>
+
 namespace
 {
     using tl::geom::Triangle2;
@@ -383,6 +385,29 @@ namespace mrv
         lines->drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+
+        math::Vector2f center;
+        center.x = (pts[0].x + pts[1].x + pts[2].x) / 3;
+        center.y = (pts[0].y + pts[1].y + pts[2].y) / 3;
+        float radius = std::abs(pts[0].y - pts[1].y) * 1.05;
+        
+        lines->drawCircle(render, center, radius, pen_size, color, soft);
+    }
+    
+    int GLLinkShape::handle(int event)
+    {
+        if (event == FL_PUSH)
+        {
+            if (Fl::event_button1())
+            {
+                return 1;
+            }
+            else if (Fl::event_button3())
+            {
+                return 1;
+            }
+        }
+        return 0;
     }
 
     void GLTextShape::draw(

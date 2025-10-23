@@ -213,6 +213,8 @@ namespace mrv
             VKPathShape() {};
         virtual ~VKLinkShape() {};
 
+        int handle(int event);
+        
         virtual void draw(
             const std::shared_ptr<timeline_vlk::Render>&,
             const std::shared_ptr<vulkan::Lines> lines) override;

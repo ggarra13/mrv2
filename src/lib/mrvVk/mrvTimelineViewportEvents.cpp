@@ -116,8 +116,6 @@ namespace mrv
 
             switch (p.actionMode)
             {
-            case ActionMode::kScrub:
-                return;
             case ActionMode::kRectangle:
             case ActionMode::kFilledRectangle:
             {
@@ -240,7 +238,9 @@ namespace mrv
                 }
                 return;
             }
+            case ActionMode::kScrub:
             case ActionMode::kVoice:
+            case ActionMode::kLink:
                 return;
             default:
                 LOG_ERROR(_("Unknown action mode in ") << __FUNCTION__);
@@ -321,6 +321,9 @@ namespace mrv
         void TimelineViewport::_handlePushLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
+
+            if (!p.player)
+                return;
 
 
             uint8_t r, g, b;
@@ -570,7 +573,8 @@ namespace mrv
                 shape->pts.push_back(pnt2);
                 shape->pts.push_back(pnt3);
                 annotation->push_back(shape);
-                _createAnnotationShape(false);
+                _createAnnotationShape(false);   
+                _endAnnotationShape();
                 break;
             }
             case ActionMode::kText:

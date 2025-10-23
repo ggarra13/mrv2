@@ -8,6 +8,14 @@
 
 #include "mrvApp/mrvSettingsObject.h"
 
+#ifdef VULKAN_BACKEND
+#    include "mrvVk/mrvVkShape.h"
+#endif
+
+#ifdef OPENGL_BACKEND
+#    include "mrvGL/mrvGLShape.h"
+#endif
+
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvLaserFadeData.h"
@@ -1004,6 +1012,37 @@ namespace mrv
                     }
                 }
 #endif
+                if (p.player)
+                {
+                    auto annotation = p.player->getAnnotation();
+                    if (p.actionMode == ActionMode::kLink && annotation)
+                    {
+                        for (auto& shape : annotation->shapes)
+                        {
+#ifdef VULKAN_BACKEND
+                            VKLinkShape* s;
+                            if (!(s = dynamic_cast<VKLinkShape*>(shape.get())))
+                                continue;
+#endif
+#ifdef OPENGL_BACKEND
+                            GLLinkShape* s;
+                            if (!(s = dynamic_cast<GLLinkShape*>(shape.get())))
+                                continue;
+#endif
+                            const auto& pnt1 = s->pts[0];
+                            const auto& pnt2 = s->pts[1];
+                            const auto& pnt3 = s->pts[2];
+                            
+                            const math::Vector2f& pos = _getRasterf();
+                            if (pos.x >= pnt1.x - 5 && pos.x <= pnt3.x + 5 &&
+                                pos.y >= pnt1.y - 5 && pos.y <= pnt2.y + 5)
+                            {
+                                return s->handle(event);
+                            }
+                        }
+                    }
+                }
+                
                 p.mousePress = _getFocus();
                 if (!children() && Fl::focus() != this && Fl::event_button1())
                 {

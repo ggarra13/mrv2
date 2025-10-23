@@ -233,6 +233,7 @@ namespace mrv
             }
             case ActionMode::kScrub:
             case ActionMode::kVoice:
+            case ActionMode::kLink:
                 return;
             default:
                 LOG_ERROR(_("Unknown action mode in ") << __FUNCTION__);

@@ -229,6 +229,8 @@ namespace mrv
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
 
+        int handle(int event);
+        
     public:
         LinkType    type;
         std::string url;
