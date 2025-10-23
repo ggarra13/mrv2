@@ -340,7 +340,7 @@ namespace mrv
             GL_ONE_MINUS_SRC_ALPHA);
 
         bool catmullRomSpline = false;
-        std::vector< Point > line;
+        std::vector< draw::Point > line;
 
         line.push_back(pts[1]);
         line.push_back(pts[2]);
@@ -377,7 +377,7 @@ namespace mrv
             GL_ONE_MINUS_SRC_ALPHA);
 
         bool catmullRomSpline = false;
-        std::vector< Point > line;
+        std::vector< draw::Point > line;
 
         line.push_back(pts[0]);
         line.push_back(pts[1]);
