@@ -1273,6 +1273,7 @@ Icons
 Darby Johnston                                (Most icons)
 Gonzalo Garramuño                             (USD, NDI, Undo/Redo, Arrows, etc)
 Christoph Lohr                                (new mrv2 icon)
+Hassan Ali                                    (Link icon - CC license)
 
 Beta testers
 ------------

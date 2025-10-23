@@ -76,6 +76,12 @@ namespace mrv
             json.get_to(*shape.get());
             return shape;
         }
+        else if (type == "Link")
+        {
+            auto shape = std::make_shared< GLLinkShape >();
+            json.get_to(*shape.get());
+            return shape;
+        }
         // else if ( type == "Text" )
         // {
         //     auto shape = std::make_shared< GLTextShape >(fontSystem);

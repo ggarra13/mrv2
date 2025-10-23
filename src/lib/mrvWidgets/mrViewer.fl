@@ -441,7 +441,7 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class TimelineClass {open
+widget_class TimelineClass {
   xywh {0 0 933 56} box NO_BOX hide resizable
   class Fl_Double_Window
 } {
@@ -809,7 +809,7 @@ const auto& endTime = range.end_time_inclusive();
 uiEndFrame->setTime( endTime );
 
 ui->uiTimeline->setTimelinePlayer(player);
-ui->uiTimeline->redraw();} selected
+ui->uiTimeline->redraw();}
           xywh {808 3 27 24} type Toggle selection_color 14 labelcolor 20
         }
         Fl_Input uiEndFrame {
@@ -845,7 +845,8 @@ ui->uiView->take_focus();}
   }
 }
 
-class ViewerUI {} {
+class ViewerUI {open
+} {
   decl {static mrv::App* app;} {public local
   }
   decl {static PreferencesUI* uiPrefs;} {public local
@@ -868,11 +869,11 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 933 641} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {933 641 0 0}
+      xywh {0 0 933 674} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {933 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
-        xywh {0 0 933 641} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
+        xywh {0 0 933 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
           label MenuBar
@@ -1136,22 +1137,22 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
         }
         Fl_Tile uiTileGroup {
           label TileGroup open
-          xywh {0 59 933 498} labeltype NO_LABEL
+          xywh {0 59 933 531} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
         } {
           Fl_Box uiTimelineLimit {
-            xywh {0 86 933 441} labeltype NO_LABEL hide resizable
+            xywh {0 86 933 474} labeltype NO_LABEL hide resizable
           }
           Fl_Pack uiViewGroup {
-            label ViewGroup
-            xywh {0 59 933 468} type HORIZONTAL box FLAT_BOX labeltype NO_LABEL
+            label ViewGroup open
+            xywh {0 59 933 501} type HORIZONTAL box FLAT_BOX labeltype NO_LABEL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {
-              xywh {0 59 42 468} box FLAT_BOX
+            Fl_Group uiToolsGroup {open
+              xywh {0 59 42 501} box FLAT_BOX
             } {
               Fl_Button uiScrub {
                 user_data this user_data_type {ViewerUI*}
@@ -1340,8 +1341,17 @@ uiView->setActionMode( mrv::ActionMode::kVoice );}
                 tooltip {Voice Annotation Tool} image {../../icons/Microphone.svg} compress_image 1 xywh {2 363 40 33} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
-              Fl_Group {} {
-                xywh {2 399 40 55}
+              Fl_Button uiLink {
+                user_data this user_data_type {ViewerUI*}
+                callback {if (mrv::App::demo_mode)
+    return;  
+    
+uiView->setActionMode( mrv::ActionMode::kLink );}
+                tooltip {Voice Annotation Tool} image {../../icons/Link.svg} compress_image 1 xywh {2 397 40 33} down_box DOWN_BOX selection_color 95
+                class {mrv::Button}
+              }
+              Fl_Group {} {open
+                xywh {2 432 40 57}
               } {
                 Fl_Slider uiPenOpacity {
                   callback {auto settings = app->settings();
@@ -1352,52 +1362,52 @@ settings->setValue( mrv::kPenColorA, a);}
                 Fl_Button uiFlipPenColor {
                   user_data this user_data_type {ViewerUI*}
                   callback {mrv::flip_pen_color_cb( o, v );}
-                  tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {23 399 16 19} box NO_BOX labelfont 8 labelsize 24 align 16
+                  tooltip {Switch Colors} image {../../icons/Flip.svg} compress_image 1 xywh {23 453 16 19} box NO_BOX labelfont 8 labelsize 24 align 16
                   class {mrv::Button}
-                }
-                Fl_Button uiOldPenColor {
-                  user_data this user_data_type {ViewerUI*}
-                  tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {23 418 15 15} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
                 }
                 Fl_Button uiPenColor {
                   user_data this user_data_type {ViewerUI*}
                   callback {mrv::set_pen_color_cb( o, v );}
-                  tooltip {Pick Draw Color and Alpha} xywh {3 399 20 19} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                  tooltip {Pick Draw Color and Alpha} xywh {3 453 20 19} box ENGRAVED_BOX color 3 selection_color 3 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
+                }
+                Fl_Button uiOldPenColor {
+                  user_data this user_data_type {ViewerUI*}
+                  tooltip {Old Color Used.  Click on the Arrow to alternate.} xywh {23 472 15 15} box ENGRAVED_BOX color 1 selection_color 1 labeltype NO_LABEL labelfont 8 labelsize 24 align 32
                 }
               }
               Fl_Group {} {
-                xywh {0 456 42 71}
+                xywh {0 489 42 71}
               } {
                 Fl_Button uiUndoDraw {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->undo();}
-                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 1 xywh {0 456 40 35} deactivate
+                  tooltip {Undo Last Shape Drawn in Current Frame.} image {../../icons/Undo.svg} compress_image 1 xywh {0 489 40 35} deactivate
                   class {mrv::Button}
                 }
                 Fl_Button uiRedoDraw {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->redo();}
-                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {0 491 40 36} deactivate
+                  tooltip {Redo Previous Shape Drawn in Current Frame.} image {../../icons/Redo.svg} compress_image 1 xywh {0 524 40 36} deactivate
                   class {mrv::Button}
                 }
               }
             }
-            Fl_Group uiView {open
-              xywh {42 59 621 468} color 56 labeltype NO_LABEL resizable
+            Fl_Group uiView {selected
+              xywh {42 59 621 501} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class MyViewport
             } {}
             Fl_Group uiDockGroup {open
-              xywh {663 59 270 468} box FLAT_BOX hide
+              xywh {663 59 270 501} box FLAT_BOX hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
-                xywh {663 59 10 468} box ENGRAVED_BOX
+                xywh {663 59 10 501} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
               Fl_Group uiDock {
                 label DockGroup open
-                xywh {673 59 260 468} box FLAT_BOX labeltype NO_LABEL resizable
+                xywh {673 59 260 501} box FLAT_BOX labeltype NO_LABEL resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
                 class {mrv::DockGroup}
@@ -1406,50 +1416,50 @@ settings->setValue( mrv::kPenColorA, a);}
           }
           Fl_Group uiTimelineGroup {
             label uiTimelineGroup open
-            xywh {0 527 933 30} box FLAT_BOX color 51 labeltype NO_LABEL
+            xywh {0 560 933 30} box FLAT_BOX color 51 labeltype NO_LABEL
             class {mrv::TimelineGroup}
           } {
             Fl_Group uiTimeline {
-              label uiTimeline open
-              xywh {0 535 933 22} labeltype NO_LABEL resizable
+              label uiTimeline
+              xywh {0 568 933 22} box FLAT_BOX color 6 labeltype NO_LABEL resizable
               class MyTimelineWidget
             } {}
           }
         }
         Fl_Group uiBottomBar {
-          label BottomBar
-          xywh {0 557 933 29} box FLAT_BOX labeltype NO_LABEL
+          label BottomBar open
+          xywh {0 590 933 29} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group uiTimeWindow {open
-            xywh {0 557 933 29} box FLAT_BOX resizable
+            xywh {0 590 933 29} box FLAT_BOX color 87 resizable
             code0 {o->border(0);}
             code1 {o->setUI( this );}
             class TimelineClass
           } {}
         }
         Fl_Group uiPixelBar {
-          label PixelBar
-          xywh {0 586 933 30} box FLAT_BOX color 56 labeltype NO_LABEL labelcolor 17
+          label PixelBar open
+          xywh {0 619 933 30} box FLAT_BOX color 56 labeltype NO_LABEL labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
-            xywh {0 586 933 30} box FLAT_BOX color 56 resizable
+            xywh {0 619 933 30} box FLAT_BOX color 56 resizable
             code1 {o->setUI( this );}
             class PixelToolBarClass
           } {}
         }
         Fl_Group uiStatusGroup {
-          label StatusBar
-          xywh {0 616 933 25} color 0 labeltype NO_LABEL
+          label StatusBar open
+          xywh {0 649 933 25} color 0 labeltype NO_LABEL
         } {
           Fl_Group uiStatusBar {open
-            xywh {0 616 933 25} box FLAT_BOX labelsize 10 align 84
+            xywh {0 649 933 25} box FLAT_BOX labelsize 10 align 84
             code0 {o->save_colors();}
             code1 {o->default_message();}
             class {mrv::StatusBar}
           } {
             Fl_Box uiStatus {
               label Scrub
-              tooltip {Current tool being used.} xywh {818 616 115 25} box ENGRAVED_BOX align 64
+              tooltip {Current tool being used.} xywh {818 649 115 25} box ENGRAVED_BOX align 64
             }
           }
         }

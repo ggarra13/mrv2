@@ -197,6 +197,34 @@ namespace mrv
     void from_json(const nlohmann::json& json, VKTextShape& value);
 
 
+
+    class VKLinkShape : public VKPathShape
+    {
+    public:
+        enum class LinkType
+        {
+            kURL,
+            kFile,
+            kDirectory
+        };
+        
+    public:
+        VKLinkShape() :
+            VKPathShape() {};
+        virtual ~VKLinkShape() {};
+
+        virtual void draw(
+            const std::shared_ptr<timeline_vlk::Render>&,
+            const std::shared_ptr<vulkan::Lines> lines) override;
+
+    public:
+        LinkType    type;
+        std::string url;
+    };
+
+    void to_json(nlohmann::json& json, const VKLinkShape& value);
+    void from_json(const nlohmann::json& json, VKLinkShape& value);
+    
     class VKErasePathShape : public VKPathShape
     {
     public:

@@ -582,6 +582,21 @@ namespace mrv
                 _createAnnotationShape(laser);
                 break;
             }
+            case ActionMode::kLink:
+            {
+                auto shape = std::make_shared< GLLinkShape >();
+                shape->pen_size = pen_size;
+                shape->soft = softBrush;
+                shape->color = color;
+                shape->pts.push_back(pnt);
+                pnt.y -= 10;
+                shape->pts.push_back(pnt);
+                pnt.x += 10;
+                shape->pts.push_back(pnt);
+                annotation->push_back(shape);
+                _createAnnotationShape(false);
+                break;
+            }
             case ActionMode::kText:
             {
                 const auto& renderSize = getRenderSize();

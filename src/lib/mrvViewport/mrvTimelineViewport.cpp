@@ -287,6 +287,7 @@ namespace mrv
             p.ui->uiArrow->value(0);
             p.ui->uiText->value(0);
             p.ui->uiVoice->value(0);
+            p.ui->uiLink->value(0);
             
             if (mode != ActionMode::kSelection)
             {
@@ -372,6 +373,10 @@ namespace mrv
                 p.ui->uiPolygon->value(1);
                 p.ui->uiPolygon->bind_image(MRV2_LOAD_SVG(FilledPolygon));
                 p.ui->uiStatus->copy_label(_("Filled Polygon"));
+                break;
+            case ActionMode::kLink:
+                p.ui->uiLink->value(1);
+                p.ui->uiStatus->copy_label(_("Link"));
                 break;
             case ActionMode::kEditTrim:
                 p.ui->uiStatus->copy_label(_("Trim"));
@@ -1155,7 +1160,8 @@ namespace mrv
             if (p.actionMode == ActionMode::kScrub ||
                 p.actionMode == ActionMode::kSelection ||
                 p.actionMode == ActionMode::kRotate ||
-                p.actionMode == ActionMode::kVoice)
+                p.actionMode == ActionMode::kVoice ||
+                p.actionMode == ActionMode::kLink)
             {
                 set_cursor(FL_CURSOR_CROSS);
             }

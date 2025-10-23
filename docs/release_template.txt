@@ -1,4 +1,4 @@
-mrv2 v1.4.2
+mrv2 v1.4.3
 =======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.
@@ -7,7 +7,7 @@ It ships now in two compiled versions:
    - mrv2 with OpenGL backend  (free up to version 1.4.0 - donationware afterwards)
    - vmrv2 with Vulkan backend (donationware)
 
-Aarch builds on Linux and Windows.  Erase tool can use Alt + Rectangle to quickly erase an area.  Licensing is now in a database to support users that bought a node-locked license to own.  Floating licenses are available upon request.
+OpenColorIO v2.5.0, simpler Voice Over Annotations, more readable HUD, NVidia OpenGL draws fixed, simpler name of OpenEXR's chromaticities, other bugs fixed and several minor UI improvements.
 
 Donationware licenses are paid through PayPal:
 
@@ -39,7 +39,7 @@ https://www.github.com/ggarra13/mrv2
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.4.2
+mrv2 v1.4.3
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and CGI for Windows, Linux and macOS has a new version.
 

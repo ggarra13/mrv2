@@ -17,6 +17,7 @@ namespace mrv
         kArrow,
         kText,
         kVoice,
+        kLink,
         kRotate,
         kFilledCircle,
         kFilledRectangle,

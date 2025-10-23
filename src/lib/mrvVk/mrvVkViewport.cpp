@@ -1188,6 +1188,7 @@ namespace mrv
                 p.actionMode != ActionMode::kVoice &&
                 p.actionMode != ActionMode::kSelection &&
                 p.actionMode != ActionMode::kRotate &&
+                p.actionMode != ActionMode::kLink &&
                 Fl::belowmouse() == this)
             {
                 _drawCursor(mvp);

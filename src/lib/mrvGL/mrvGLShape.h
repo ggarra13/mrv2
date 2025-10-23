@@ -210,6 +210,34 @@ namespace mrv
 
 #endif
 
+    class GLLinkShape : public GLPathShape
+    {
+    public:
+        enum class LinkType
+        {
+            kURL,
+            kFile,
+            kDirectory
+        };
+        
+    public:
+        GLLinkShape() :
+            GLPathShape() {};
+        virtual ~GLLinkShape() {};
+
+        virtual void draw(
+            const std::shared_ptr<timeline::IRender>&,
+            const std::shared_ptr<opengl::Lines>&) override;
+
+    public:
+        LinkType    type;
+        std::string url;
+    };
+
+    void to_json(nlohmann::json& json, const GLLinkShape& value);
+    void from_json(const nlohmann::json& json, GLLinkShape& value);
+
+    
     class GLErasePathShape : public GLPathShape
     {
     public:

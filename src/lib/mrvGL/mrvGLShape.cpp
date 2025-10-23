@@ -362,6 +362,29 @@ namespace mrv
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
     }
 
+    void GLLinkShape::draw(
+        const std::shared_ptr<timeline::IRender>& render,
+        const std::shared_ptr<opengl::Lines>& lines)
+    {
+        using namespace mrv::draw;
+
+        gl::SetAndRestore(GL_BLEND, GL_TRUE);
+
+        glBlendFuncSeparate(
+            GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+            GL_ONE_MINUS_SRC_ALPHA);
+
+        bool catmullRomSpline = false;
+        std::vector< Point > line;
+
+        line.push_back(pts[0]);
+        line.push_back(pts[1]);
+        line.push_back(pts[2]);
+        lines->drawLines(
+            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+    }
+
     void GLTextShape::draw(
         const std::shared_ptr<timeline::IRender>& render,
         const std::shared_ptr<opengl::Lines>& lines)
@@ -479,6 +502,22 @@ namespace mrv
     }
 #endif
 
+    void to_json(nlohmann::json& json, const GLLinkShape& value)
+    {
+        to_json(json, static_cast<const draw::Shape&>(value));
+        json["type"] = "Link";
+        json["link_type"] = value.type;
+        json["url"] = value.url;
+    }
+
+    void from_json(const nlohmann::json& json, GLLinkShape& value)
+    {
+        from_json(json, static_cast<draw::Shape&>(value));
+        json.at("link_type").get_to(value.type);
+        json.at("url").get_to(value.url);
+    }
+
+    
     void to_json(nlohmann::json& json, const GLCircleShape& value)
     {
         to_json(json, static_cast<const draw::Shape&>(value));

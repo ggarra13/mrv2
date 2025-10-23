@@ -70,6 +70,12 @@ namespace mrv
             json.get_to(*shape.get());
             return shape;
         }
+        else if (type == "Link")
+        {
+            auto shape = std::make_shared< VKLinkShape >();
+            json.get_to(*shape.get());
+            return shape;
+        }
         else if (type == "Note")
         {
             auto shape = std::make_shared< draw::NoteShape >();
