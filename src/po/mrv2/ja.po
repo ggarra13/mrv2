@@ -3295,6 +3295,9 @@ msgstr "クリックしてテキストを編集"
 msgid "Voice Annotation Tool"
 msgstr "音声注釈ツール"
 
+msgid "URL/File Link Tool"
+msgstr "URL/ファイルリンクツール"
+
 msgid "Undo Draw"
 msgstr "取り消し"
 
@@ -3693,6 +3696,9 @@ msgstr "ポリゴン"
 
 msgid "Filled Polygon"
 msgstr "ポリゴン"
+
+msgid "Link"
+msgstr "リンク"
 
 msgid "Trim"
 msgstr "削除"
@@ -5615,6 +5621,9 @@ msgstr "消しゴムツール"
 msgid "Polygon Tool."
 msgstr "多角形ツール"
 
+msgid "Link Annotation Tool"
+msgstr "リンク注釈ツール"
+
 msgid "Opacity of pen stroke"
 msgstr "ペンのストロークの不透明度"
 
@@ -7531,6 +7540,9 @@ msgstr "テキストモード"
 
 msgid "Voice Mode"
 msgstr "音声モード"
+
+msgid "File/URL Link Mode"
+msgstr "ファイル/URLリンクモード"
 
 msgid "Pen Size More"
 msgstr "ペンサイズ増加"

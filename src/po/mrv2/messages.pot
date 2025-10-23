@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.4.3\n"
+"Project-Id-Version: mrv2 v1.4.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -3049,6 +3049,9 @@ msgstr ""
 msgid "Voice Annotation Tool"
 msgstr ""
 
+msgid "URL/File Link Tool"
+msgstr ""
+
 msgid "Undo Draw"
 msgstr ""
 
@@ -3438,6 +3441,9 @@ msgid "Polygon"
 msgstr ""
 
 msgid "Filled Polygon"
+msgstr ""
+
+msgid "Link"
 msgstr ""
 
 msgid "Trim"
@@ -5262,6 +5268,9 @@ msgstr ""
 msgid "Polygon Tool."
 msgstr ""
 
+msgid "Link Annotation Tool"
+msgstr ""
+
 msgid "Opacity of pen stroke"
 msgstr ""
 
@@ -6189,8 +6198,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -7157,6 +7166,9 @@ msgid "Text Mode"
 msgstr ""
 
 msgid "Voice Mode"
+msgstr ""
+
+msgid "File/URL Link Mode"
 msgstr ""
 
 msgid "Pen Size More"

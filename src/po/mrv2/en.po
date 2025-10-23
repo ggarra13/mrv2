@@ -1522,7 +1522,7 @@ msgid "Get all times for annotations."
 msgstr "Get all times for annotations."
 
 msgid "Get all voice annotations for current frame."
-msgstr "Add notes annotations to current clip at a certain frame."
+msgstr "Get all voice annotations for current frame."
 
 msgid "Open with Audio"
 msgstr "Open with Audio"
@@ -3346,6 +3346,9 @@ msgstr "Text Tool.   Right click to edit previously stamped text."
 msgid "Voice Annotation Tool"
 msgstr "Voice Annotation Tool"
 
+msgid "URL/File Link Tool"
+msgstr ""
+
 msgid "Undo Draw"
 msgstr "Undo Draw"
 
@@ -3377,7 +3380,7 @@ msgid "Set Out Point"
 msgstr "Set Out Point"
 
 msgid "Mute/Unmute audio - Select Audio track with Right Mouse Button"
-msgstr "Mute/Unmute audio - Switch Audio tracks with the Right Mouse Button."
+msgstr "Mute/Unmute audio - Select Audio track with Right Mouse Button"
 
 msgid "Image zoom setting."
 msgstr "Image zoom setting."
@@ -3749,6 +3752,9 @@ msgstr "Polygon"
 
 msgid "Filled Polygon"
 msgstr "Filled Polygon"
+
+msgid "Link"
+msgstr ""
 
 msgid "Trim"
 msgstr "Trim"
@@ -5635,7 +5641,7 @@ msgid "mrv2"
 msgstr "mrv2"
 
 msgid "MenuBar"
-msgstr "Menu Bar"
+msgstr "MenuBar"
 
 msgid "Edit"
 msgstr "Edit"
@@ -5717,13 +5723,16 @@ msgid "TileGroup"
 msgstr "TileGroup"
 
 msgid "ViewGroup"
-msgstr "TileGroup"
+msgstr "ViewGroup"
 
 msgid "Eraser Tool"
 msgstr "Eraser Tool"
 
 msgid "Polygon Tool."
 msgstr "Polygon Tool."
+
+msgid "Link Annotation Tool"
+msgstr "Voice Annotation Tool"
 
 msgid "Opacity of pen stroke"
 msgstr "Opacity of pen stroke"
@@ -5744,10 +5753,10 @@ msgid "DockGroup"
 msgstr "DockGroup"
 
 msgid "uiTimelineGroup"
-msgstr "TileGroup"
+msgstr "uiTimelineGroup"
 
 msgid "uiTimeline"
-msgstr "Timeline"
+msgstr "uiTimeline"
 
 msgid "BottomBar"
 msgstr "BottomBar"
@@ -5756,7 +5765,7 @@ msgid "PixelBar"
 msgstr "PixelBar"
 
 msgid "StatusBar"
-msgstr "Status Bar"
+msgstr "StatusBar"
 
 msgid "Current tool being used."
 msgstr "Current tool being used."
@@ -7271,7 +7280,7 @@ msgid "Invalid license. Entering demo mode"
 msgstr "Invalid license. Entering demo mode"
 
 msgid "License expired. Entering demo mode"
-msgstr "License expired"
+msgstr "License expired. Entering demo mode"
 
 msgid "Open Directory"
 msgstr "Open Directory"
@@ -7720,6 +7729,9 @@ msgstr "Text Mode"
 msgid "Voice Mode"
 msgstr "Voice Mode"
 
+msgid "File/URL Link Mode"
+msgstr ""
+
 msgid "Pen Size More"
 msgstr "Pen Size More"
 
@@ -7835,7 +7847,7 @@ msgstr "Toggle About Window"
 #~ msgstr "Invalid font for text drawing"
 
 #~ msgid "uiMenuBar"
-#~ msgstr "MenuBar"
+#~ msgstr "uiMenuBar"
 
 #~ msgid "uiStatusBar"
-#~ msgstr "StatusBar"
+#~ msgstr "uiStatusBar"

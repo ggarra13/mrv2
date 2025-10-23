@@ -3323,6 +3323,9 @@ msgstr "Text-Tool. Rechtsklick, um zuvor gestempelten Text zu bearbeiten."
 msgid "Voice Annotation Tool"
 msgstr "Sprachkommentar-Werkzeug"
 
+msgid "URL/File Link Tool"
+msgstr "URL/Datei-Verknüpfungswerkzeug"
+
 msgid "Undo Draw"
 msgstr "Ziehen rckgngig machen"
 
@@ -3730,6 +3733,9 @@ msgstr "Polygon"
 
 msgid "Filled Polygon"
 msgstr "Polygon gefüllt"
+
+msgid "Link"
+msgstr "Verknüpfung"
 
 msgid "Trim"
 msgstr "Trimmung"
@@ -5704,6 +5710,9 @@ msgstr "Eraster-Tool"
 
 msgid "Polygon Tool."
 msgstr "Polygon-Werkzeug."
+
+msgid "Link Annotation Tool"
+msgstr "Verknüpfungs-Annotationswerkzeug"
 
 msgid "Opacity of pen stroke"
 msgstr "Deckkraft des Pen-Hubs"
@@ -7723,6 +7732,9 @@ msgstr "Textmodus"
 
 msgid "Voice Mode"
 msgstr "Sprachmodus"
+
+msgid "File/URL Link Mode"
+msgstr "Datei/URL-Verknüpfungsmodus"
 
 msgid "Pen Size More"
 msgstr "Stiftgre mehr"

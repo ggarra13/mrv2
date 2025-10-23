@@ -3366,6 +3366,9 @@ msgstr "Нажмите правый нажатие на ранее отпеча�
 msgid "Voice Annotation Tool"
 msgstr "Инструмент голосовых аннотаций"
 
+msgid "URL/File Link Tool"
+msgstr "Инструмент ссылки URL/файла"
+
 msgid "Undo Draw"
 msgstr "Отменить рисование"
 
@@ -3769,6 +3772,9 @@ msgstr "Полигон"
 
 msgid "Filled Polygon"
 msgstr "Заполненный многоугольник"
+
+msgid "Link"
+msgstr "Ссылка"
 
 msgid "Trim"
 msgstr "Трим"
@@ -5746,6 +5752,9 @@ msgstr "Стереть инструмент"
 
 msgid "Polygon Tool."
 msgstr "Многоугольник."
+
+msgid "Link Annotation Tool"
+msgstr "Инструмент аннотации ссылок"
 
 msgid "Opacity of pen stroke"
 msgstr "Непрозрачность ручного инсульта"
@@ -7752,6 +7761,9 @@ msgstr "Текстовый режим"
 
 msgid "Voice Mode"
 msgstr "Голосовой режим"
+
+msgid "File/URL Link Mode"
+msgstr "Режим ссылки файла/URL"
 
 msgid "Pen Size More"
 msgstr "Размер пены больше"

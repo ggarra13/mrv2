@@ -3323,6 +3323,9 @@ msgstr ""
 msgid "Voice Annotation Tool"
 msgstr "Ferramenta de anotação de voz"
 
+msgid "URL/File Link Tool"
+msgstr "Ferramenta de Link de URL/Arquivo"
+
 msgid "Undo Draw"
 msgstr "Desfazer Desenhar"
 
@@ -3729,6 +3732,9 @@ msgstr "Polígono"
 
 msgid "Filled Polygon"
 msgstr "Polígono enchido"
+
+msgid "Link"
+msgstr "Link"
 
 msgid "Trim"
 msgstr "Trim"
@@ -5705,6 +5711,9 @@ msgstr "Ferramenta de eliminao"
 
 msgid "Polygon Tool."
 msgstr "Ferramenta de polígonos."
+
+msgid "Link Annotation Tool"
+msgstr "Ferramenta de Anotação de Link"
 
 msgid "Opacity of pen stroke"
 msgstr "Opacidade do curso da caneta"
@@ -7720,6 +7729,9 @@ msgstr "Modo de texto"
 
 msgid "Voice Mode"
 msgstr "Modo de voz"
+
+msgid "File/URL Link Mode"
+msgstr "Modo de Link de Arquivo/URL"
 
 msgid "Pen Size More"
 msgstr "Tamanho da caneta Mais"

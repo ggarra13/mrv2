@@ -3285,6 +3285,9 @@ msgstr "文本工具。 右键单击以编辑先前标记的文本"
 msgid "Voice Annotation Tool"
 msgstr "语音注释工具"
 
+msgid "URL/File Link Tool"
+msgstr "URL/文件链接工具"
+
 msgid "Undo Draw"
 msgstr "撤消绘制"
 
@@ -3683,6 +3686,9 @@ msgstr "多边形多边形"
 
 msgid "Filled Polygon"
 msgstr "填充多边形"
+
+msgid "Link"
+msgstr "链接"
 
 msgid "Trim"
 msgstr "Trim"
@@ -5638,6 +5644,9 @@ msgstr "橡皮擦工具"
 msgid "Polygon Tool."
 msgstr "多边形工具 。"
 
+msgid "Link Annotation Tool"
+msgstr "链接注释工具"
+
 msgid "Opacity of pen stroke"
 msgstr "笔触透明度"
 
@@ -7542,6 +7551,9 @@ msgstr "文本模式"
 
 msgid "Voice Mode"
 msgstr "语音模式"
+
+msgid "File/URL Link Mode"
+msgstr "文件/URL 链接模式"
 
 msgid "Pen Size More"
 msgstr "笔变大"

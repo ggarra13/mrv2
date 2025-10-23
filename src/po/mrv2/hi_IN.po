@@ -3327,6 +3327,9 @@ msgstr "पाठ औज़ार. पिछला दबाने पर पा
 msgid "Voice Annotation Tool"
 msgstr "वॉइस टिप्पणी उपकरण"
 
+msgid "URL/File Link Tool"
+msgstr "URL/फ़ाइल लिंक उपकरण"
+
 msgid "Undo Draw"
 msgstr "आरेखित करें"
 
@@ -3731,6 +3734,9 @@ msgstr "बहुभुज"
 
 msgid "Filled Polygon"
 msgstr "भरा हुआ बहुभुज"
+
+msgid "Link"
+msgstr "लिंक"
 
 msgid "Trim"
 msgstr "ट्रिग"
@@ -5683,6 +5689,9 @@ msgstr "मिटाने का औजार"
 
 msgid "Polygon Tool."
 msgstr "बहुभुज औज़ार."
+
+msgid "Link Annotation Tool"
+msgstr "लिंक टिप्पणी उपकरण"
 
 msgid "Opacity of pen stroke"
 msgstr "पेन स्ट्रोक की अपारदर्शिता"
@@ -7679,6 +7688,9 @@ msgstr "पाठ मोड"
 
 msgid "Voice Mode"
 msgstr "वॉइस मोड"
+
+msgid "File/URL Link Mode"
+msgstr "फ़ाइल/URL लिंक मोड"
 
 msgid "Pen Size More"
 msgstr "पेन आकार अधिक"
