@@ -1575,11 +1575,20 @@ namespace mrv
             // when playback is stopped.
             if (desktop::Wayland())
             {
-                _sizeHintEvent();
-                _setGeometry();
-                _clipEvent();
-                redraw();
-                App::ui->uiView->redraw();
+                static int counter = 3;
+                if (_getSizeUpdate(p.timelineWindow))
+                {
+                    _sizeHintEvent();
+                    _setGeometry();
+                    _clipEvent();
+                }
+                ++counter;
+                if (counter == 10)
+                {
+                    redraw();
+                    App::ui->uiView->redraw();
+                    counter = 0;
+                }
             }
             else if(_getSizeUpdate(p.timelineWindow))
             {
