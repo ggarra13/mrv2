@@ -869,7 +869,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 933 674} type Double align 80 resizable
+      xywh {138 161 933 674} type Double align 80 resizable
       class {mrv::MainWindow} size_range {933 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -1346,8 +1346,8 @@ uiView->setActionMode( mrv::ActionMode::kVoice );}
                 callback {if (mrv::App::demo_mode)
     return;  
     
-uiView->setActionMode( mrv::ActionMode::kLink );}
-                tooltip {Voice Annotation Tool} image {../../icons/Link.svg} compress_image 1 xywh {2 397 40 33} down_box DOWN_BOX selection_color 95
+uiView->setActionMode( mrv::ActionMode::kLink );} selected
+                tooltip {Link Annotation Tool} image {../../icons/Link.svg} compress_image 1 xywh {2 397 40 33} down_box DOWN_BOX selection_color 95
                 class {mrv::Button}
               }
               Fl_Group {} {open
@@ -1392,7 +1392,7 @@ settings->setValue( mrv::kPenColorA, a);}
                 }
               }
             }
-            Fl_Group uiView {selected
+            Fl_Group uiView {
               xywh {42 59 621 501} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class MyViewport
