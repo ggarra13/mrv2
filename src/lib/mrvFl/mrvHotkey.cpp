@@ -509,6 +509,10 @@ namespace mrv
         tooltip += addHotkey(kVoiceMode);
         ui->uiVoice->copy_tooltip(tooltip.c_str());
         
+        tooltip = _("URL/File Link Tool");
+        tooltip += addHotkey(kLinkMode);
+        ui->uiVoice->copy_tooltip(tooltip.c_str());
+        
         tooltip = _("Undo Draw");
         tooltip += addHotkey(kUndoDraw);
         ui->uiUndoDraw->copy_tooltip(tooltip.c_str());

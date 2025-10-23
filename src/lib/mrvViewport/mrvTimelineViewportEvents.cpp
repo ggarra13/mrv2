@@ -1543,6 +1543,11 @@ namespace mrv
                     setActionMode(ActionMode::kVoice);
                     return 1;
                 }
+                else if (kLinkMode.match(rawkey))
+                {
+                    setActionMode(ActionMode::kLink);
+                    return 1;
+                }
                 else if (
                     (p.actionMode != ActionMode::kScrub &&
                      p.actionMode != ActionMode::kSelection &&

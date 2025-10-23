@@ -551,15 +551,24 @@ namespace mrv
             }
             case ActionMode::kLink:
             {
+                // Create 2 more points.
+                math::Vector2i tmp = _getFocus(Fl::event_x(), Fl::event_y() + 10);
+                draw::Point pnt2(_getRasterf(tmp.x, tmp.y));
+                tmp = _getFocus(Fl::event_x() + 7, Fl::event_y() + 10);
+                draw::Point pnt3(_getRasterf(tmp.x, tmp.y));
+                
                 auto shape = std::make_shared< VKLinkShape >();
-                shape->pen_size = pen_size;
+                // Calculate a multiplier for pixel size.
+                const auto& renderSize = getRenderSize();
+                float pct = renderSize.w / 4096.F;
+                float multiplier = pct * p.viewZoom / pixels_per_unit();
+                shape->pen_size = pen_size * multiplier;
+                
                 shape->soft = softBrush;
                 shape->color = color;
                 shape->pts.push_back(pnt);
-                pnt.y += 10;
-                shape->pts.push_back(pnt);
-                pnt.x += 10;
-                shape->pts.push_back(pnt);
+                shape->pts.push_back(pnt2);
+                shape->pts.push_back(pnt3);
                 annotation->push_back(shape);
                 _createAnnotationShape(false);
                 break;
