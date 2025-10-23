@@ -39,6 +39,7 @@ ChangeLog
 ---------
 
 - Made default Read Ahead be 4 seconds instead of 2.
+- Frame/Seconds/Timecode widgets now handle focus by clicking on them instead of just entering them.
 
 
 v1.4.3
