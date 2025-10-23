@@ -335,7 +335,7 @@ namespace mrv
         using namespace mrv::draw;
 
         const bool catmullRomSpline = false;
-        std::vector< Point > line;
+        std::vector< draw::Point > line;
 
         line.push_back(pts[0]);
         line.push_back(pts[1]);
