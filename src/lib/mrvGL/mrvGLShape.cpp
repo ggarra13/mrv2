@@ -2,16 +2,29 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrvURLLinkUI.h"
+
+#include "mrvGL/mrvGLUtil.h"
+#include "mrvGL/mrvGLShape.h"
+
+#include "mrvFl/mrvIO.h"
+
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvMath.h"
 
 #include <tlGL/Shader.h>
 #include <tlGL/Util.h>
 
-#include "mrvGLUtil.h"
-#include "mrvGLShape.h"
+#include <tlCore/StringFormat.h>
 
 #include <FL/Fl.H>
+#include <FL/filename.H>
+
+namespace
+{
+    const char* kModule = "shape";
+}
 
 namespace
 {
@@ -393,6 +406,47 @@ namespace mrv
         
         lines->drawCircle(render, center, radius, pen_size, color, soft);
     }
+
+    void GLLinkShape::open()
+    {
+        if (url.substr(0, 4) == "http" ||
+            url.substr(0, 3) == "ftp")
+        {
+            char errmsg[512];
+            if (!fl_open_uri(url.c_str(), errmsg, sizeof(errmsg)))
+            {
+                LOG_ERROR(errmsg);
+            }
+        }
+        else if (file::isDirectory(url))
+        {
+        }
+        else if (file::isReadable(url))
+        {
+        }
+        else
+        {
+            const std::string err = string::Format(_("'{0}' is not a file, directory or url.")).arg(url);
+            LOG_ERROR(err); 
+        }
+    }
+    
+    bool GLLinkShape::edit()
+    {
+        URLLinkUI linkEdit(this);
+        if (linkEdit.cancel)
+            return false;
+
+        url = linkEdit.uiURL->value();
+        if (url.empty())
+            return false;
+        
+        if (url.substr(0, 4) == "www.")
+            url = "http://" + url;
+        
+        title = linkEdit.uiTitle->value();
+        return true;
+    }
     
     int GLLinkShape::handle(int event)
     {
@@ -400,10 +454,12 @@ namespace mrv
         {
             if (Fl::event_button1())
             {
+                open();
                 return 1;
             }
             else if (Fl::event_button3())
             {
+                edit();
                 return 1;
             }
         }
@@ -531,15 +587,15 @@ namespace mrv
     {
         to_json(json, static_cast<const draw::Shape&>(value));
         json["type"] = "Link";
-        json["link_type"] = value.type;
         json["url"] = value.url;
+        json["title"] = value.title;
     }
 
     void from_json(const nlohmann::json& json, GLLinkShape& value)
     {
         from_json(json, static_cast<draw::Shape&>(value));
-        json.at("link_type").get_to(value.type);
         json.at("url").get_to(value.url);
+        json.at("title").get_to(value.title);
     }
 
     

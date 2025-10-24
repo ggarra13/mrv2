@@ -4,21 +4,29 @@
 
 
 #include "mrViewer.h"
+#include "mrvURLLinkUI.h"
 
 #include "mrvVk/mrvVkUtil.h"
 #include "mrvVk/mrvVkShape.h"
 
+#include "mrvFl/mrvIO.h"
+
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvMath.h"
 
 #include <tlVk/Shader.h>
 #include <tlVk/Util.h>
 
+#include <tlCore/StringFormat.h>
+
+#include <FL/filename.H>
 #include <FL/fl_utf8.h>
 
 namespace
 {
     const int kCrossSize = 10;
+    const char* kModule = "shape";
 }
 
 namespace
@@ -352,15 +360,68 @@ namespace mrv
         lines->drawCircle(render, center, radius, pen_size, color, soft);
     }
 
+    void VKLinkShape::open()
+    {
+        if (url.substr(0, 4) == "http" ||
+            url.substr(0, 3) == "ftp")
+        {
+            char errmsg[512];
+            if (!fl_open_uri(url.c_str(), errmsg, sizeof(errmsg)))
+            {
+                LOG_ERROR(errmsg);
+            }
+        }
+        else if (file::isDirectory(url))
+        {
+            char errmsg[512];
+            if (!fl_open_uri(url.c_str(), errmsg, sizeof(errmsg)))
+            {
+                LOG_ERROR(errmsg);
+            }
+        }
+        else if (file::isReadable(url))
+        {
+            char errmsg[512];
+            if (!fl_open_uri(url.c_str(), errmsg, sizeof(errmsg)))
+            {
+                LOG_ERROR(errmsg);
+            }
+        }
+        else
+        {
+            const std::string err = string::Format(_("'{0}' is not a file, directory or url.")).arg(url);
+            LOG_ERROR(err); 
+        }
+    }
+
+    bool VKLinkShape::edit()
+    {
+        URLLinkUI linkEdit(this);
+        if (linkEdit.cancel)
+            return false;
+
+        url = linkEdit.uiURL->value();
+        if (url.empty())
+            return false;
+        
+        if (url.substr(0, 4) == "www.")
+            url = "http://" + url;
+        
+        title = linkEdit.uiTitle->value();
+        return true;
+    }
+    
     int VKLinkShape::handle(int event)
     {
         if (event == FL_PUSH)
         {
             if (Fl::event_button1())
             {
+                open();
             }
             else if (Fl::event_button3())
             {
+                edit();
             }
             return 1;
         }
@@ -953,15 +1014,15 @@ namespace mrv
     {
         to_json(json, static_cast<const draw::Shape&>(value));
         json["type"] = "Link";
-        json["link_type"] = value.type;
         json["url"] = value.url;
+        json["title"] = value.title;
     }
 
     void from_json(const nlohmann::json& json, VKLinkShape& value)
     {
         from_json(json, static_cast<draw::Shape&>(value));
-        json.at("link_type").get_to(value.type);
         json.at("url").get_to(value.url);
+        json.at("title").get_to(value.title);
     }
     
     void to_json(nlohmann::json& json, const VKCircleShape& value)

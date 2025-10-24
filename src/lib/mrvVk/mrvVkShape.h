@@ -201,18 +201,12 @@ namespace mrv
     class VKLinkShape : public VKPathShape
     {
     public:
-        enum class LinkType
-        {
-            kURL,
-            kFile,
-            kDirectory
-        };
-        
-    public:
         VKLinkShape() :
             VKPathShape() {};
         virtual ~VKLinkShape() {};
 
+        void open();
+        bool edit();
         int handle(int event);
         
         virtual void draw(
@@ -220,8 +214,8 @@ namespace mrv
             const std::shared_ptr<vulkan::Lines> lines) override;
 
     public:
-        LinkType    type;
         std::string url;
+        std::string title;
     };
 
     void to_json(nlohmann::json& json, const VKLinkShape& value);

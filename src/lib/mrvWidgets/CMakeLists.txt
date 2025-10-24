@@ -13,6 +13,7 @@ set( FL_SOURCES
     mrvPDFOptionsUI.fl
     mrvPreferencesUI.fl
     mrvSaveImageOptionsUI.fl
+    mrvURLLinkUI.fl
     mrViewer.fl
 )
 

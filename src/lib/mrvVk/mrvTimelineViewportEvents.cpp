@@ -561,20 +561,24 @@ namespace mrv
                 draw::Point pnt3(_getRasterf(tmp.x, tmp.y));
                 
                 auto shape = std::make_shared< VKLinkShape >();
+                
                 // Calculate a multiplier for pixel size.
                 const auto& renderSize = getRenderSize();
                 float pct = renderSize.w / 4096.F;
                 float multiplier = pct * p.viewZoom / pixels_per_unit();
                 shape->pen_size = pen_size * multiplier;
+                if (shape->pen_size < 1.F) shape->pen_size = 1.F;
                 
                 shape->soft = softBrush;
                 shape->color = color;
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt2);
                 shape->pts.push_back(pnt3);
-                annotation->push_back(shape);
-                _createAnnotationShape(false);   
-                _endAnnotationShape();
+                if (shape->edit())
+                {                    
+                    annotation->push_back(shape);
+                    _createAnnotationShape(false);
+                }
                 break;
             }
             case ActionMode::kText:

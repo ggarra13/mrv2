@@ -212,15 +212,7 @@ namespace mrv
 
     class GLLinkShape : public GLPathShape
     {
-    public:
-        enum class LinkType
-        {
-            kURL,
-            kFile,
-            kDirectory
-        };
-        
-    public:
+   public:
         GLLinkShape() :
             GLPathShape() {};
         virtual ~GLLinkShape() {};
@@ -229,11 +221,13 @@ namespace mrv
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
 
+        void open();
+        bool edit();
         int handle(int event);
         
     public:
-        LinkType    type;
         std::string url;
+        std::string title;
     };
 
     void to_json(nlohmann::json& json, const GLLinkShape& value);

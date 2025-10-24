@@ -8,29 +8,94 @@ i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
 include_guard {}
+decl {\#include "mrvCore/mrvBackend.h"} {public global
+}
+
+decl {\#ifdef VULKAN_BACKEND
+\#  include "mrvVk/mrvVkShape.h"
+\#endif
+
+\#ifdef OPENGL_BACKEND
+\#  include "mrvGL/mrvGLShape.h"
+\#endif} {public global
+}
+
 decl {\#include "mrvFl/mrvFileRequester.h"} {public global
 }
 
 class URLLinkUI {open
 } {
+  decl {bool cancel = false;} {public local
+  }
   Function {make_window()} {open
   } {
-    Fl_Window {} {open
-      xywh {0 0 771 334} type Double visible
+    Fl_Window uiMain {
+      label {Link Annotation} open
+      xywh {0 0 774 200} type Double hide
     } {
-      Fl_Input uiURL {
-        label {File / URL} selected
-        tooltip {Enter a URL or choose an image file.} xywh {130 33 550 36}
-      }
-      Fl_Button {} {
-        label Pick
-        user_data this user_data_type {URLLinkUI*}
-        callback {std::string r = mrv::open_image_file(v->uiURL->value(), false);
-if ( r.empty() ) return;
+      Fl_Group {} {open
+        xywh {130 33 634 36}
+      } {
+        Fl_Input uiURL {
+          label {File / URL}
+          tooltip {Enter a URL or choose an image file.} xywh {130 33 550 36} color 20 textcolor 56
+        }
+        Fl_Button {} {
+          label Pick
+          user_data uiURL user_data_type {Fl_Input*}
+          callback {auto files = mrv::open_image_file(v->value(), false);
+if ( files.empty() ) return;
 
-v->uiURL->value( r.c_str() );}
-        xywh {684 33 80 36}
+v->value( files[0].c_str() );}
+          xywh {684 33 80 36}
+        }
       }
+      Fl_Input uiTitle {
+        label Title
+        tooltip {Enter a URL or choose an image file.} xywh {130 82 550 36} color 20 textcolor 56
+      }
+      Fl_Group {} {open
+        xywh {197 144 416 40}
+      } {
+        Fl_Button {} {
+          label OK
+          user_data uiMain user_data_type {Fl_Double_Window*}
+          callback {v->hide();}
+          xywh {491 144 122 40}
+        }
+        Fl_Button {} {
+          label Cancel
+          user_data uiMain user_data_type {Fl_Double_Window*}
+          callback {cancel = true;
+v->hide();}
+          xywh {197 144 122 40}
+        }
+      }
+    }
+  }
+  Function {URLLinkUI(tl::draw::Shape* shape)} {open
+  } {
+    code {using namespace mrv;
+
+auto w = make_window();
+
+\#ifdef VULKAN_BACKEND
+   VKLinkShape* s = dynamic_cast<VKLinkShape*>(shape);
+\#endif
+\#ifdef OPENGL_BACKEND
+   GLLinkShape* s = dynamic_cast<GLLinkShape*>(shape);
+\#endif
+
+if (!s) return;
+
+uiURL->value(s->url.c_str());
+uiTitle->value(s->title.c_str());
+
+w->show();
+while (w->visible())
+{
+  Fl::check();
+}} {selected
     }
   }
 }
