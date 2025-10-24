@@ -1,0 +1,36 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0500
+i18n_type 1
+i18n_include {<libintl.h>}
+i18n_conditional {}
+i18n_gnu_function gettext
+i18n_gnu_static_function gettext_noop
+header_name {.h}
+code_name {.cxx}
+include_guard {}
+decl {\#include "mrvFl/mrvFileRequester.h"} {public global
+}
+
+class URLLinkUI {open
+} {
+  Function {make_window()} {open
+  } {
+    Fl_Window {} {open
+      xywh {0 0 771 334} type Double visible
+    } {
+      Fl_Input uiURL {
+        label {File / URL} selected
+        tooltip {Enter a URL or choose an image file.} xywh {130 33 550 36}
+      }
+      Fl_Button {} {
+        label Pick
+        user_data this user_data_type {URLLinkUI*}
+        callback {std::string r = mrv::open_image_file(v->uiURL->value(), false);
+if ( r.empty() ) return;
+
+v->uiURL->value( r.c_str() );}
+        xywh {684 33 80 36}
+      }
+    }
+  }
+}
