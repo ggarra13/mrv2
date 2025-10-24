@@ -112,6 +112,33 @@ namespace mrv
         }
     }
     
+    template <>
+    inline void convert_rgba_array(float* output_pixels,
+                                   const half* input_pixels,
+                                   const size_t pixel_count)
+    {
+        for (size_t i = 0; i < pixel_count * 4; i += 4)
+        {
+            output_pixels[i]     = input_pixels[i];
+            output_pixels[i + 1] = input_pixels[i + 1];
+            output_pixels[i + 2] = input_pixels[i + 2];
+            output_pixels[i + 3] = input_pixels[i + 3];
+        }
+    }
+    
+    template <>
+    inline void convert_rgba_array(half* output_pixels,
+                                   const float* input_pixels,
+                                   const size_t pixel_count)
+    {
+        for (size_t i = 0; i < pixel_count * 4; i += 4)
+        {
+            output_pixels[i]     = input_pixels[i];
+            output_pixels[i + 1] = input_pixels[i + 1];
+            output_pixels[i + 2] = input_pixels[i + 2];
+            output_pixels[i + 3] = input_pixels[i + 3];
+        }
+    }
 /**
  * @brief Converts an array of RGBA float pixels to an array of RGB unsigned integer pixels.
  *
@@ -130,6 +157,32 @@ namespace mrv
             *output_pixels++ = convert_channel<OutputInt>(*input_pixels++);
             *output_pixels++ = convert_channel<OutputInt>(*input_pixels++);
             *output_pixels++ = convert_channel<OutputInt>(*input_pixels++);
+            input_pixels++;
+        }
+    }
+
+    template<>
+    inline void convert_rgba_to_rgb_array(float* output_pixels,
+                                          const half* input_pixels,
+                                          const size_t pixel_count)
+    {
+        for (size_t i = 0; i < pixel_count * 3; i += 3) {
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            input_pixels++;
+        }
+    }
+    
+    template<>
+    inline void convert_rgba_to_rgb_array(half* output_pixels,
+                                          const float* input_pixels,
+                                          const size_t pixel_count)
+    {
+        for (size_t i = 0; i < pixel_count * 3; i += 3) {
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
             input_pixels++;
         }
     }
