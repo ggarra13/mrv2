@@ -1088,8 +1088,7 @@ namespace mrv
                             if (pos.x >= pnt1.x - 5 && pos.x <= pnt3.x + 5 &&
                                 pos.y >= pnt1.y - 5 && pos.y <= pnt2.y + 5)
                             {
-                                if (Fl::event_button1() ||
-                                    Fl::event_button2())
+                                if (Fl::event_button1())
                                 {
                                     return s->handle(event);
                                 }

@@ -26,7 +26,6 @@
 namespace
 {
     const int kCrossSize = 10;
-    const char* kModule = "shape";
 }
 
 namespace
@@ -342,26 +341,55 @@ namespace mrv
     {
         using namespace mrv::draw;
 
+        math::Vector2f center;
+        const image::Color4f shadowColor(0.F, 0.F, 0.F, 1.F);
         const bool catmullRomSpline = false;
+        const float radius = std::fabs(pts[0].y - pts[1].y) * 1.05;
+        const float offset = radius * 0.05F;
+        
         std::vector< draw::Point > line;
-
+        
         line.push_back(pts[0]);
         line.push_back(pts[1]);
         line.push_back(pts[2]);
+
+        line[0].x += offset;
+        line[0].y += offset;
+        line[1].x += offset;
+        line[1].y += offset;
+        line[2].x += offset;
+        line[2].y += offset;
+        
+        lines->drawLines(
+            render, line, shadowColor, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        
+        center.x = (pts[0].x + pts[1].x + pts[2].x) / 3 + offset;
+        center.y = (pts[0].y + pts[1].y + pts[2].y) / 3 + offset;
+        
+        lines->drawCircle(render, center, radius, pen_size, shadowColor, soft);
+
+        line[0].x -= offset;
+        line[0].y -= offset;
+        line[1].x -= offset;
+        line[1].y -= offset;
+        line[2].x -= offset;
+        line[2].y -= offset;
+        
         lines->drawLines(
             render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
         
-        math::Vector2f center;
         center.x = (pts[0].x + pts[1].x + pts[2].x) / 3;
         center.y = (pts[0].y + pts[1].y + pts[2].y) / 3;
-        float radius = std::abs(pts[0].y - pts[1].y) * 1.05;
         
         lines->drawCircle(render, center, radius, pen_size, color, soft);
     }
 
     void VKLinkShape::open()
     {
+        const char* kModule = "link";
+        
         if (url.substr(0, 4) == "http" ||
             url.substr(0, 3) == "ftp")
         {
@@ -423,12 +451,14 @@ namespace mrv
         {
             if (Fl::event_button1())
             {
-                open();
-                return 1;
-            }
-            else if (Fl::event_button2())
-            {
-                edit();
+                if (Fl::event_alt())
+                {
+                    edit();
+                }
+                else
+                {
+                    open();
+                }
                 return 1;
             }
         }

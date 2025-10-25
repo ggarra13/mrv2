@@ -585,21 +585,43 @@ namespace mrv
             }
             case ActionMode::kLink:
             {
-                // Create 2 more points.
-                math::Vector2i tmp = _getFocus(Fl::event_x(), Fl::event_y() + 10);
-                draw::Point pnt2(_getRasterf(tmp.x, tmp.y));
-                tmp = _getFocus(Fl::event_x() + 7, Fl::event_y() + 10);
-                draw::Point pnt3(_getRasterf(tmp.x, tmp.y));
-                
+                // --- Pen Size Calculation ---
+
+                // The effective pixels per raster unit, which is the base scale 
+                // (pixels_per_unit) scaled by the viewer zoom (p.viewZoom).
+                // We use the reciprocal for the conversion from pixels to raster units.
+                float effective_pixels_per_unit = pixels_per_unit() * p.viewZoom;
+
+                // Desired pen size in screen pixels
+                const float desired_pen_thickness_px = 3.0F;
+
+                // --- 'L' Shape Points Calculation ---
+
+                // Define constant screen-space offsets (in pixels) for the 'L' shape.
+                // The L will be 10 pixels high and 7 pixels wide on screen.
+                const float L_height_px = 10.0F;
+                const float L_width_px = 7.0F;
+
+                // The first point 'pnt' is assumed to be the corner of the 'L' (e.g., Fl::event_x(), Fl::event_y()).
+
+                // Point 2: Vertically offset from the first point in screen space.
+                // It uses the same X screen coordinate but Y is offset by L_height_px.
+                math::Vector2i tmp2 = _getFocus(Fl::event_x(), 
+                                                Fl::event_y() + L_height_px);
+                draw::Point pnt2(_getRasterf(tmp2.x, tmp2.y));
+
+                // Point 3: Horizontally and vertically offset from the first point in screen space.
+                // It forms the other end of the L, offset by L_width_px and L_height_px.
+                math::Vector2i tmp3 = _getFocus(Fl::event_x() + L_width_px,
+                                                Fl::event_y() + L_height_px);
+                draw::Point pnt3(_getRasterf(tmp3.x, tmp3.y));
+
+                // --- Shape Creation (Rest of your original code) ---
                 auto shape = std::make_shared< GLLinkShape >();
 
-                // Calculate a multiplier for pixel size.
-                const auto& renderSize = getRenderSize();
-                float pct = renderSize.w / 4096.F;
-                float multiplier = pct * p.viewZoom / pixels_per_unit();
-                shape->pen_size = pen_size * multiplier;
-                if (shape->pen_size < 1.F) shape->pen_size = 1.F;
-                
+                // To get the pen size in raster units, we divide the desired pixel thickness
+                // by the effective pixels per raster unit.
+                shape->pen_size = desired_pen_thickness_px / effective_pixels_per_unit;
                 shape->soft = softBrush;
                 shape->color = color;
                 shape->pts.push_back(pnt);
