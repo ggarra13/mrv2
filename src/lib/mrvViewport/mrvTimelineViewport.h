@@ -405,6 +405,9 @@ namespace mrv
             //! Play the mouse position callback.
             void playMousePosition();
 
+            //! Delete the selected URL link.
+            void linkDelete();
+            
             //! Delete the voice over.
             void voiceOverDelete();
 
@@ -546,6 +549,7 @@ namespace mrv
             
             voice::MouseData currentMouseData;
             std::shared_ptr<voice::VoiceOver> currentVoiceOver;
+            std::shared_ptr<tl::draw::Shape>  currentLink;
             
             TLRENDER_PRIVATE();
         };

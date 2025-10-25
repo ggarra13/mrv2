@@ -374,7 +374,10 @@ namespace mrv
         else if (file::isDirectory(url))
         {
             char errmsg[512];
-            if (!fl_open_uri(url.c_str(), errmsg, sizeof(errmsg)))
+            std::string uri = url;
+            if (uri.substr(0, 6) != "file://")
+                uri = "file://" + url;
+            if (!fl_open_uri(uri.c_str(), errmsg, sizeof(errmsg)))
             {
                 LOG_ERROR(errmsg);
             }
@@ -382,7 +385,10 @@ namespace mrv
         else if (file::isReadable(url))
         {
             char errmsg[512];
-            if (!fl_open_uri(url.c_str(), errmsg, sizeof(errmsg)))
+            std::string uri = url;
+            if (uri.substr(0, 6) != "file://")
+                uri = "file://" + url;
+            if (!fl_open_uri(uri.c_str(), errmsg, sizeof(errmsg)))
             {
                 LOG_ERROR(errmsg);
             }
@@ -418,12 +424,13 @@ namespace mrv
             if (Fl::event_button1())
             {
                 open();
+                return 1;
             }
-            else if (Fl::event_button3())
+            else if (Fl::event_button2())
             {
                 edit();
+                return 1;
             }
-            return 1;
         }
         return 0;
     }

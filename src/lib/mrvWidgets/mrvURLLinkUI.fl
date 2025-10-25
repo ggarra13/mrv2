@@ -31,23 +31,44 @@ class URLLinkUI {open
   } {
     Fl_Window uiMain {
       label {Link Annotation} open
-      xywh {0 0 774 200} type Double hide
+      xywh {0 0 774 200} type Double visible
     } {
-      Fl_Group {} {open
-        xywh {130 33 634 36}
+      Fl_Group {} {open selected
+        xywh {130 30 640 45}
       } {
         Fl_Input uiURL {
           label {File / URL}
           tooltip {Enter a URL or choose an image file.} xywh {130 33 550 36} color 20 textcolor 56
         }
-        Fl_Button {} {
+        Fl_Menu_Button {} {
           label Pick
           user_data uiURL user_data_type {Fl_Input*}
-          callback {auto files = mrv::open_image_file(v->value(), false);
+          callback {int type = o->value();
+
+std::vector<std::string> files;
+
+if (type == 0)
+{
+	files = mrv::open_image_file(v->value(), false);
+}
+else if (type == 1)
+{
+        std::string dir = mrv::open_directory(v->value());
+}
+
 if ( files.empty() ) return;
 
-v->value( files[0].c_str() );}
-          xywh {684 33 80 36}
+v->value( files[0].c_str() );} open
+          xywh {684 37 84 32}
+        } {
+          MenuItem {} {
+            label File
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Directory
+            xywh {10 10 100 20}
+          }
         }
       }
       Fl_Input uiTitle {
@@ -95,7 +116,6 @@ w->show();
 while (w->visible())
 {
   Fl::check();
-}} {selected
-    }
+}} {}
   }
 }

@@ -18,8 +18,8 @@
 
 #include <tlCore/StringFormat.h>
 
-#include <FL/Fl.H>
 #include <FL/filename.H>
+#include <FL/fl_utf8.h>
 
 namespace
 {
@@ -420,9 +420,25 @@ namespace mrv
         }
         else if (file::isDirectory(url))
         {
+            char errmsg[512];
+            std::string uri = url;
+            if (uri.substr(0, 6) != "file://")
+                uri = "file://" + url;
+            if (!fl_open_uri(uri.c_str(), errmsg, sizeof(errmsg)))
+            {
+                LOG_ERROR(errmsg);
+            }
         }
         else if (file::isReadable(url))
         {
+            char errmsg[512];
+            std::string uri = url;
+            if (uri.substr(0, 6) != "file://")
+                uri = "file://" + url;
+            if (!fl_open_uri(uri.c_str(), errmsg, sizeof(errmsg)))
+            {
+                LOG_ERROR(errmsg);
+            }
         }
         else
         {
@@ -457,7 +473,7 @@ namespace mrv
                 open();
                 return 1;
             }
-            else if (Fl::event_button3())
+            else if (Fl::event_button2())
             {
                 edit();
                 return 1;

@@ -102,6 +102,26 @@ namespace mrv
     {
         namespace
         {
+            void link_edit_cb(Fl_Menu_*, tl::draw::Shape* shape)
+            {
+#ifdef VULKAN_BACKEND
+                VKLinkShape* s;
+                if (!(s = dynamic_cast<VKLinkShape*>(shape)))
+                    return;
+#endif
+#ifdef OPENGL_BACKEND
+                GLLinkShape* s;
+                if (!(s = dynamic_cast<GLLinkShape*>(shape)))
+                    return;
+#endif
+                s->edit();
+            }
+            
+            void link_delete_cb(Fl_Menu_*, TimelineViewport* view)
+            {
+                view->linkDelete();
+            }
+            
             void voice_over_delete_cb(Fl_Menu_*, TimelineViewport* view)
             {
                 view->voiceOverDelete();
@@ -133,6 +153,37 @@ namespace mrv
             }
         }
 
+        void TimelineViewport::linkDelete()
+        {
+            TLRENDER_P();
+
+            if (!currentLink)
+                return;
+            
+            if (!p.player)
+                return;
+            
+            auto annotation = p.player->getAnnotation();
+            if (!annotation)
+                return;
+
+            annotation->shapes.erase(
+                std::remove_if(annotation->shapes.begin(),
+                               annotation->shapes.end(),
+                               [this](const std::shared_ptr<tl::draw::Shape>& a){
+                                   return a == currentLink;
+                               }),
+                annotation->shapes.end()
+                );
+            
+            currentLink.reset();
+            
+            if (annotation->shapes.empty())
+                p.player->removeAnnotation(annotation);
+            
+            redrawWindows();
+        }
+        
         void TimelineViewport::voiceOverDelete()
         {
             TLRENDER_P();
@@ -1037,7 +1088,31 @@ namespace mrv
                             if (pos.x >= pnt1.x - 5 && pos.x <= pnt3.x + 5 &&
                                 pos.y >= pnt1.y - 5 && pos.y <= pnt2.y + 5)
                             {
-                                return s->handle(event);
+                                if (Fl::event_button1() ||
+                                    Fl::event_button2())
+                                {
+                                    return s->handle(event);
+                                }
+                                else
+                                {
+                                    currentLink = shape;
+                                    
+                                    Fl_Group::current(0);
+                                    p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
+                                    p.popupMenu->textsize(12);
+                                    p.popupMenu->type(Fl_Menu_Button::POPUP3);
+                                    p.popupMenu->add(
+                                        _("Link/Edit"),
+                                        0,
+                                        (Fl_Callback*)link_edit_cb,
+                                        s);
+                                    p.popupMenu->add(
+                                        _("Link/Delete"), 0,
+                                        (Fl_Callback*)link_delete_cb,
+                                        this);
+                                    p.popupMenu->popup();
+                                    return 1;
+                                }
                             }
                         }
                     }
