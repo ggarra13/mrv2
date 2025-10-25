@@ -722,7 +722,7 @@ namespace mrv
         }
 #    endif
 #    ifdef FLTK_USE_WAYLAND
-        if (desktop::Wayland() && !synthetic)
+        if (desktop::Wayland() && value && !synthetic)
         {
             const std::string& compositor_name = desktop::WaylandCompositor();
             if (compositor_name == "gnome-shell")

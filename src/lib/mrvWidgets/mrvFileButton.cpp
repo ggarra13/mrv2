@@ -158,7 +158,7 @@ namespace mrv
                     p.drag = FileDragger::create();
                     p.drag->image(image());
                     auto window = p.drag->window();
-                    window->always_on_top(true);
+                    window->always_on_top(true, true);
                 }
 
                 if (p.drag)

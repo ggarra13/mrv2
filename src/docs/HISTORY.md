@@ -42,6 +42,7 @@ ChangeLog
 - Frame/Seconds/Timecode widgets now handle focus by clicking on them instead of just entering them.
 - Made Vulkan save out images with full color corrections (HDR + OCIO) when annotations is on.
 - Added a first pass at Link Annotations.  Works fine on Linux as is, but needs more testing on Windows.
+- Fixed a Linux Wayland warning about Always On Top when dragging a File item under Gnome.
 
 
 v1.4.3
