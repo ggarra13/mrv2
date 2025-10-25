@@ -41,6 +41,7 @@ ChangeLog
 - Made default Read Ahead be 4 seconds instead of 2.
 - Frame/Seconds/Timecode widgets now handle focus by clicking on them instead of just entering them.
 - Made Vulkan save out images with full color corrections (HDR + OCIO) when annotations is on.
+- Added a first pass at Link Annotations.  Works fine on Linux as is, but needs more testing on Windows.
 
 
 v1.4.3
