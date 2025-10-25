@@ -950,6 +950,8 @@ namespace mrv
                         else
                             set_cursor(FL_CURSOR_CROSS);
                     }
+
+                    
                     return 1;
                 }
                 case FL_NO_EVENT:
@@ -1231,6 +1233,37 @@ namespace mrv
                     
                     redrawWindows();
                 }
+
+                if (p.player && p.actionMode == ActionMode::kLink)
+                {
+                    auto annotation = p.player->getAnnotation();
+                    if (annotation)
+                    {
+                        for (auto& shape : annotation->shapes)
+                        {
+#ifdef VULKAN_BACKEND
+                            VKLinkShape* s;
+                            if (!(s = dynamic_cast<VKLinkShape*>(shape.get())))
+                                continue;
+#endif
+#ifdef OPENGL_BACKEND
+                            GLLinkShape* s;
+                            if (!(s = dynamic_cast<GLLinkShape*>(shape.get())))
+                                continue;
+#endif
+                            const auto& pnt1 = s->pts[0];
+                            const auto& pnt2 = s->pts[1];
+                            const auto& pnt3 = s->pts[2];
+                            
+                            const math::Vector2f& pos = _getRasterf();
+                            if (pos.x >= pnt1.x - 5 && pos.x <= pnt3.x + 5 &&
+                                pos.y >= pnt1.y - 5 && pos.y <= pnt2.y + 5)
+                            {
+                            }
+                        }
+                    }
+                }
+                
                 if (p.presentation)
                 {
                     p.presentationTime = std::chrono::high_resolution_clock::now();
