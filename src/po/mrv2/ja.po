@@ -3359,8 +3359,8 @@ msgstr ""
 "\n"
 "0から9までの数字で特定のズームレベルに切り替えます。"
 
-msgid "Load Directory"
-msgstr "ディレクトリ"
+msgid "Choose Directory"
+msgstr "ディレクトリを選択"
 
 msgid "Reels (*.{"
 msgstr "リール (*.{"
@@ -3377,11 +3377,11 @@ msgstr "すべて (*.{"
 msgid "Movies (*.{"
 msgstr "映画 (*.{"
 
-msgid "Load Image(s)"
-msgstr "画像を読み込む"
+msgid "Choose Image(s)"
+msgstr "画像を選択"
 
-msgid "Load Movie or Sequence"
-msgstr "映画なんかどうかな？"
+msgid "Choose Movie or Sequence"
+msgstr "ムービーまたはシーケンスを選択"
 
 msgid "Save OTIO timeline"
 msgstr "OTIO タイムラインを保存"
@@ -3634,6 +3634,12 @@ msgstr "彼らが都を守ってくれます"
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "ビューポートサイズ: {0} - X={1}, Y={2}"
 
+msgid "Link/Edit"
+msgstr "リンク/編集"
+
+msgid "Link/Delete"
+msgstr "リンク/削除"
+
 msgid "Voice Over/Delete"
 msgstr "ボイスオーバー/削除"
 
@@ -3763,6 +3769,9 @@ msgstr "HDRモニターが見つからないか、設定されていません。
 
 msgid "Edit Text"
 msgstr "テキストを編集"
+
+msgid "'{0}' is not a file, directory or url."
+msgstr "'{0}' はファイル、ディレクトリ、またはURLではありません。"
 
 msgid "Could not convert message to shape: "
 msgstr "ベクター図形に変換"
@@ -5659,6 +5668,21 @@ msgstr "ステータスバー"
 
 msgid "Current tool being used."
 msgstr "現在使用中のツール。"
+
+msgid "File"
+msgstr "ファイル"
+
+msgid "Link Annotation"
+msgstr "リンク注釈"
+
+msgid "File / URL"
+msgstr "ファイル / URL"
+
+msgid "Enter a URL or choose an image file."
+msgstr "URLを入力するか、画像ファイルを選択してください。"
+
+msgid "Title"
+msgstr "タイトル"
 
 msgid "Half"
 msgstr "ハーフ"
@@ -7621,6 +7645,9 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
+
+#~ msgid "Load Movie or Sequence"
+#~ msgstr "映画なんかどうかな？"
 
 #~ msgid "Renderer"
 #~ msgstr "レンダラー"

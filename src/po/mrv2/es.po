@@ -3469,8 +3469,8 @@ msgstr ""
 "\n"
 "0 a 9 para ampliar a un nivel específico."
 
-msgid "Load Directory"
-msgstr "Cargar Directoro"
+msgid "Choose Directory"
+msgstr "Elegir directorio"
 
 msgid "Reels (*.{"
 msgstr "Reels (*.{"
@@ -3487,11 +3487,11 @@ msgstr "Todos (*.{"
 msgid "Movies (*.{"
 msgstr "Movies (*.{"
 
-msgid "Load Image(s)"
-msgstr "Cargar Imágen(es)"
+msgid "Choose Image(s)"
+msgstr "Elegir imagen(es)"
 
-msgid "Load Movie or Sequence"
-msgstr "Cargar Película o Secuencia"
+msgid "Choose Movie or Sequence"
+msgstr "Elegir película o secuencia"
 
 msgid "Save OTIO timeline"
 msgstr "Guardar Línea de Tiempo OTIO"
@@ -3748,6 +3748,12 @@ msgstr "Imagen demasiado grande.  Guardaré el tamaño de la vista."
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
 
+msgid "Link/Edit"
+msgstr "Enlace/Editar"
+
+msgid "Link/Delete"
+msgstr "Enlace/Eliminar"
+
 msgid "Voice Over/Delete"
 msgstr "Voz/Borrar"
 
@@ -3881,6 +3887,9 @@ msgstr "Monitor HDR no encontrado o no configurado."
 
 msgid "Edit Text"
 msgstr "Editar Texto"
+
+msgid "'{0}' is not a file, directory or url."
+msgstr "'{0}' no es un archivo, directorio ni URL."
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -5826,6 +5835,21 @@ msgstr "StatusBar"
 
 msgid "Current tool being used."
 msgstr "Herramienta siendo usada."
+
+msgid "File"
+msgstr "Archivo"
+
+msgid "Link Annotation"
+msgstr "Anotación de enlace"
+
+msgid "File / URL"
+msgstr "Archivo / URL"
+
+msgid "Enter a URL or choose an image file."
+msgstr "Ingrese una URL o elija un archivo de imagen."
+
+msgid "Title"
+msgstr "Título"
 
 msgid "Half"
 msgstr "Half"
@@ -7884,6 +7908,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Load Movie or Sequence"
+#~ msgstr "Cargar Película o Secuencia"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderizador"

@@ -329,7 +329,7 @@ namespace mrv
     std::string open_directory(const char* startfile)
     {
         std::string dir;
-        std::string title = _("Load Directory");
+        std::string title = _("Choose Directory");
         bool native = mrv::Preferences::native_file_chooser;
         if (native)
         {
@@ -391,10 +391,10 @@ namespace mrv
             kSESSIONS_PATTERN;
 
         std::string pattern = kIMAGE_PATTERN + kAUDIO_PATTERN;
-        std::string title = _("Load Image(s)");
+        std::string title = _("Choose Image(s)");
         if (compact_images)
         {
-            title = _("Load Movie or Sequence");
+            title = _("Choose Movie or Sequence");
             pattern = kALL_PATTERN;
         }
 

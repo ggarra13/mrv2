@@ -43,6 +43,7 @@ ChangeLog
 - Made Vulkan save out images with full color corrections (HDR + OCIO) when annotations is on.
 - Added a first pass at Link Annotations.  Works fine on Linux as is, but needs more testing on Windows.
 - Fixed a Linux Wayland warning about Always On Top when dragging a File item under Gnome.
+- Made popup menus on viewport use a bigger font for better readability.
 
 
 v1.4.3

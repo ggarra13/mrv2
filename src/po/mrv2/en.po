@@ -3347,7 +3347,7 @@ msgid "Voice Annotation Tool"
 msgstr "Voice Annotation Tool"
 
 msgid "URL/File Link Tool"
-msgstr ""
+msgstr "URL/File Link Tool"
 
 msgid "Undo Draw"
 msgstr "Undo Draw"
@@ -3410,8 +3410,8 @@ msgstr ""
 "\n"
 "0 to 9 to zoom to a specific level."
 
-msgid "Load Directory"
-msgstr "Load Directory"
+msgid "Choose Directory"
+msgstr "Choose Directory"
 
 msgid "Reels (*.{"
 msgstr "Reels (*.{"
@@ -3428,11 +3428,11 @@ msgstr "All (*.{"
 msgid "Movies (*.{"
 msgstr "Movies (*.{"
 
-msgid "Load Image(s)"
-msgstr "Load Image(s)"
+msgid "Choose Image(s)"
+msgstr "Choose Image(s)"
 
-msgid "Load Movie or Sequence"
-msgstr "Load Movie or Sequence"
+msgid "Choose Movie or Sequence"
+msgstr "Choose Movie or Sequence"
 
 msgid "Save OTIO timeline"
 msgstr "Save OTIO timeline"
@@ -3690,6 +3690,12 @@ msgstr "Image too big.  Will save the viewport size."
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Viewport Size: {0} - X={1}, Y={2}"
 
+msgid "Link/Edit"
+msgstr "Link/Edit"
+
+msgid "Link/Delete"
+msgstr "Link/Delete"
+
 msgid "Voice Over/Delete"
 msgstr "Voice Over/Delete"
 
@@ -3754,7 +3760,7 @@ msgid "Filled Polygon"
 msgstr "Filled Polygon"
 
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 msgid "Trim"
 msgstr "Trim"
@@ -3823,6 +3829,9 @@ msgstr "HDR monitor not found or not configured."
 
 msgid "Edit Text"
 msgstr "Edit Text"
+
+msgid "'{0}' is not a file, directory or url."
+msgstr "'{0}' is not a file, directory or url."
 
 msgid "Could not convert message to shape: "
 msgstr "Could not convert message to shape: "
@@ -5732,7 +5741,7 @@ msgid "Polygon Tool."
 msgstr "Polygon Tool."
 
 msgid "Link Annotation Tool"
-msgstr "Voice Annotation Tool"
+msgstr "Link Annotation Tool"
 
 msgid "Opacity of pen stroke"
 msgstr "Opacity of pen stroke"
@@ -5769,6 +5778,21 @@ msgstr "StatusBar"
 
 msgid "Current tool being used."
 msgstr "Current tool being used."
+
+msgid "File"
+msgstr "File"
+
+msgid "Link Annotation"
+msgstr "Link Annotation"
+
+msgid "File / URL"
+msgstr "File / URL"
+
+msgid "Enter a URL or choose an image file."
+msgstr "Enter a URL or choose an image file."
+
+msgid "Title"
+msgstr "Title"
 
 msgid "Half"
 msgstr "Half"
@@ -7730,7 +7754,7 @@ msgid "Voice Mode"
 msgstr "Voice Mode"
 
 msgid "File/URL Link Mode"
-msgstr ""
+msgstr "File/URL Link Mode"
 
 msgid "Pen Size More"
 msgstr "Pen Size More"
@@ -7809,6 +7833,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Load Movie or Sequence"
+#~ msgstr "Load Movie or Sequence"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"

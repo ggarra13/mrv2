@@ -3105,7 +3105,7 @@ msgid ""
 "0 to 9 to zoom to a specific level."
 msgstr ""
 
-msgid "Load Directory"
+msgid "Choose Directory"
 msgstr ""
 
 msgid "Reels (*.{"
@@ -3123,10 +3123,10 @@ msgstr ""
 msgid "Movies (*.{"
 msgstr ""
 
-msgid "Load Image(s)"
+msgid "Choose Image(s)"
 msgstr ""
 
-msgid "Load Movie or Sequence"
+msgid "Choose Movie or Sequence"
 msgstr ""
 
 msgid "Save OTIO timeline"
@@ -3380,6 +3380,12 @@ msgstr ""
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
+msgid "Link/Edit"
+msgstr ""
+
+msgid "Link/Delete"
+msgstr ""
+
 msgid "Voice Over/Delete"
 msgstr ""
 
@@ -3508,6 +3514,9 @@ msgid "HDR monitor not found or not configured."
 msgstr ""
 
 msgid "Edit Text"
+msgstr ""
+
+msgid "'{0}' is not a file, directory or url."
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -5305,6 +5314,21 @@ msgid "StatusBar"
 msgstr ""
 
 msgid "Current tool being used."
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Link Annotation"
+msgstr ""
+
+msgid "File / URL"
+msgstr ""
+
+msgid "Enter a URL or choose an image file."
+msgstr ""
+
+msgid "Title"
 msgstr ""
 
 msgid "Half"

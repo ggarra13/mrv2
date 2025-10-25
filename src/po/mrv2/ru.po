@@ -3430,8 +3430,8 @@ msgstr ""
 "\n"
 "От 0 до 9, чтобы увеличить до определенного уровня."
 
-msgid "Load Directory"
-msgstr "Загрузить каталог"
+msgid "Choose Directory"
+msgstr "Выбрать каталог"
 
 msgid "Reels (*.{"
 msgstr "Крылья (*. {"
@@ -3448,11 +3448,11 @@ msgstr "Все (*. {"
 msgid "Movies (*.{"
 msgstr "Фильмы (*) {"
 
-msgid "Load Image(s)"
-msgstr "Загрузить изображение (фотографии)"
+msgid "Choose Image(s)"
+msgstr "Выбрать изображение(я)"
 
-msgid "Load Movie or Sequence"
-msgstr "Загрузить кино или последовательность"
+msgid "Choose Movie or Sequence"
+msgstr "Выбрать фильм или последовательность"
 
 msgid "Save OTIO timeline"
 msgstr "Сохранить график OTIO"
@@ -3710,6 +3710,12 @@ msgstr "Слишком большое изображение, сохранит �
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
 
+msgid "Link/Edit"
+msgstr "Связать/Редактировать"
+
+msgid "Link/Delete"
+msgstr "Связать/Удалить"
+
 msgid "Voice Over/Delete"
 msgstr "Озвучка/Удалить"
 
@@ -3843,6 +3849,9 @@ msgstr "HDR-монитор не найден или не настроен."
 
 msgid "Edit Text"
 msgstr "Изменить текст"
+
+msgid "'{0}' is not a file, directory or url."
+msgstr "'{0}' не является файлом, каталогом или URL."
 
 msgid "Could not convert message to shape: "
 msgstr "Невозможно преобразовать сообщение в форму:"
@@ -5791,6 +5800,21 @@ msgstr "Строка статуса"
 
 msgid "Current tool being used."
 msgstr "Используется текущий инструмент."
+
+msgid "File"
+msgstr "Файл"
+
+msgid "Link Annotation"
+msgstr "Аннотация ссылки"
+
+msgid "File / URL"
+msgstr "Файл / URL"
+
+msgid "Enter a URL or choose an image file."
+msgstr "Введите URL или выберите файл изображения."
+
+msgid "Title"
+msgstr "Заголовок"
 
 msgid "Half"
 msgstr "Половина"
@@ -7842,6 +7866,9 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
+
+#~ msgid "Load Movie or Sequence"
+#~ msgstr "Загрузить кино или последовательность"
 
 #~ msgid "Renderer"
 #~ msgstr "Редактор"

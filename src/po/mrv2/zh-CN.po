@@ -3349,8 +3349,8 @@ msgstr ""
 "\n"
 "0至9到缩放到特定级别。"
 
-msgid "Load Directory"
-msgstr "载入目录"
+msgid "Choose Directory"
+msgstr "选择目录"
 
 msgid "Reels (*.{"
 msgstr "Reels (*.{"
@@ -3367,11 +3367,11 @@ msgstr "All (*.{"
 msgid "Movies (*.{"
 msgstr "Movies (*.{"
 
-msgid "Load Image(s)"
-msgstr "导入图像"
+msgid "Choose Image(s)"
+msgstr "选择图像"
 
-msgid "Load Movie or Sequence"
-msgstr "导入影片或序列"
+msgid "Choose Movie or Sequence"
+msgstr "选择影片或序列"
 
 msgid "Save OTIO timeline"
 msgstr "保存 OTIO 时间轴"
@@ -3624,6 +3624,12 @@ msgstr "图像太大。 将保存视图的大小 。"
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "视图端口大小 : {0} - X={1}, Y={2}"
 
+msgid "Link/Edit"
+msgstr "链接/编辑"
+
+msgid "Link/Delete"
+msgstr "链接/删除"
+
 msgid "Voice Over/Delete"
 msgstr "配音/删除"
 
@@ -3753,6 +3759,9 @@ msgstr "未找到HDR显示器或未配置。"
 
 msgid "Edit Text"
 msgstr "编辑文本"
+
+msgid "'{0}' is not a file, directory or url."
+msgstr "'{0}' 不是文件、目录或 URL。"
 
 msgid "Could not convert message to shape: "
 msgstr "无法将信息转换为形状 :"
@@ -5682,6 +5691,21 @@ msgstr "状态栏"
 
 msgid "Current tool being used."
 msgstr "当前工具正在使用中"
+
+msgid "File"
+msgstr "文件"
+
+msgid "Link Annotation"
+msgstr "链接注释"
+
+msgid "File / URL"
+msgstr "文件 / URL"
+
+msgid "Enter a URL or choose an image file."
+msgstr "输入一个 URL 或选择一个图像文件。"
+
+msgid "Title"
+msgstr "标题"
 
 msgid "Half"
 msgstr "Half"
@@ -7632,6 +7656,9 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "Load Movie or Sequence"
+#~ msgstr "导入影片或序列"
 
 #~ msgid "Renderer"
 #~ msgstr "渲染器"

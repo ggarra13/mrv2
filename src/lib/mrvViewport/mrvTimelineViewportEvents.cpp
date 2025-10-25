@@ -1098,7 +1098,7 @@ namespace mrv
                                     
                                     Fl_Group::current(0);
                                     p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
-                                    p.popupMenu->textsize(12);
+                                    p.popupMenu->textsize(14);
                                     p.popupMenu->type(Fl_Menu_Button::POPUP3);
                                     p.popupMenu->add(
                                         _("Link/Edit"),
@@ -1158,7 +1158,7 @@ namespace mrv
                     Fl_Group::current(0);
                     p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
 
-                    p.popupMenu->textsize(12);
+                    p.popupMenu->textsize(14);
                     p.popupMenu->type(Fl_Menu_Button::POPUP3);
 
                     p.mousePos = _getFocus();
