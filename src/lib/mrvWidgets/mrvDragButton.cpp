@@ -19,6 +19,7 @@
 #include "mrvUI/mrvDesktop.h"
 
 #define DEBUG_EVENTS 0
+#define USE_TIMEOUT 1
 
 namespace
 {
@@ -100,7 +101,9 @@ namespace mrv
                 get_window_coords(winx, winy);
                 dragging = true;
 
+#if USE_TIMEOUT
                 Fl::add_timeout(0.0, drag_idle, this);
+#endif
                 return 1;
             case FL_DRAG:
                 dragging = true;
@@ -113,11 +116,17 @@ namespace mrv
                     was_docked = false;
                     get_global_coords(fromx, fromy);
                     get_window_coords(winx, winy);
+#if USE_TIMEOUT
                     Fl::add_timeout(0.0, drag_idle, this);
+#endif
                 }
+#if !USE_TIMEOUT
+                update_drag();
+#endif
                 return 1;
             case FL_RELEASE:
                 dragging = false;
+                update_drag();
                     
                 // Finalize the dock state.
                 if (would_dock())
