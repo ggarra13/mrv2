@@ -47,6 +47,8 @@ ChangeLog
 - Fixed a Linux Wayland warning about Always On Top when dragging a File item under Gnome.
 - Made popup menus on viewport use a bigger font for better readability.
 - Made docking faster when subwindow is dragged to it (open/close dock).
+- Fixed Automatic color buffer type selected when YUV_420P_U12/16 and similar depth movies are loaded in both OpenGL and Vulkan.
+- Fixed saving in Vulkan all RGBA image types supported by vmrv2.
 
 
 v1.4.3

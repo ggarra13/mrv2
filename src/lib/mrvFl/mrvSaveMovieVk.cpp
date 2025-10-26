@@ -8,6 +8,7 @@
 
 #include "mrvUI/mrvDesktop.h"
 
+#include "mrvFl/mrvConvertImage.h"
 #include "mrvFl/mrvSaveOptions.h"
 #include "mrvFl/mrvIO.h"
 
@@ -20,7 +21,6 @@
 #include "mrvCore/mrvImage.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMath.h"
-#include "mrvCore/mrvPixelConverter.h"
 #include "mrvCore/mrvUtil.h"
 
 #include <tlIO/System.h>
@@ -576,7 +576,7 @@ namespace mrv
                 {
                     buffer = view->getVideoFBO();
                     offscreenBufferOptions = buffer->getOptions();
-                            
+                    
                     if (!annotationImage)
                     {
                         image::Info annotationInfo = outputInfo;
@@ -975,233 +975,12 @@ namespace mrv
                 
                     if (bufferImage != scaleImage)
                     {
-                        const size_t width = bufferImage->getWidth();
-                        const size_t height = bufferImage->getHeight();
-                        
                         if (!scaleImage)
                         {
                             scaleImage = outputImage;
                         }
 
-
-                        switch(outputInfo.pixelType)
-                        {
-                        case image::PixelType::RGB_U8:
-                        {
-                            switch(bufferInfo.pixelType)
-                            {
-                            case image::PixelType::RGB_F16:
-                                convert_rgb_array<uint8_t, half>
-                                    (reinterpret_cast<uint8_t*>(scaleImage->getData()),
-                                     reinterpret_cast<half*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGB_F32:
-                                convert_rgb_array<uint8_t, float>
-                                    (reinterpret_cast<uint8_t*>(scaleImage->getData()),
-                                     reinterpret_cast<float*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_F16:
-                                convert_rgba_to_rgb_array<uint8_t, half>
-                                    (reinterpret_cast<uint8_t*>(scaleImage->getData()),
-                                     reinterpret_cast<half*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_F32:
-                                convert_rgba_to_rgb_array<uint8_t, float>
-                                    (reinterpret_cast<uint8_t*>(scaleImage->getData()),
-                                     reinterpret_cast<float*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            default:
-                                LOG_ERROR("Unhandled buffer format " << bufferInfo.pixelType);
-                                break;
-                            }
-                            break;
-                        }
-                        case image::PixelType::RGB_U16:
-                        {
-                            switch(bufferInfo.pixelType)
-                            {
-                            case image::PixelType::RGB_F16:
-                                convert_rgb_array<uint16_t, half>
-                                    (reinterpret_cast<uint16_t*>(scaleImage->getData()),
-                                     reinterpret_cast<half*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGB_F32:
-                                convert_rgb_array<uint16_t, float>
-                                    (reinterpret_cast<uint16_t*>(scaleImage->getData()),
-                                     reinterpret_cast<float*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_F16:
-                                convert_rgba_to_rgb_array<uint16_t, half>
-                                    (reinterpret_cast<uint16_t*>(scaleImage->getData()),
-                                     reinterpret_cast<half*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_F32:
-                                convert_rgba_to_rgb_array<uint16_t, float>
-                                    (reinterpret_cast<uint16_t*>(scaleImage->getData()),
-                                     reinterpret_cast<float*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            default:
-                                LOG_ERROR("Unhandled buffer format " << bufferInfo.pixelType);
-                                break;
-                            }
-                            break;
-                        }
-                        case image::PixelType::RGBA_U8:
-                        {
-                            switch(bufferInfo.pixelType)
-                            {
-                            case image::PixelType::RGBA_F16:
-                                convert_rgba_array<uint8_t, half>
-                                    (reinterpret_cast<uint8_t*>(scaleImage->getData()),
-                                     reinterpret_cast<half*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_F32:
-                                convert_rgba_array<uint8_t, float>
-                                    (reinterpret_cast<uint8_t*>(scaleImage->getData()),
-                                     reinterpret_cast<float*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_U8:
-                                scaleImage = bufferImage;
-                                break;
-                            default:
-                                LOG_ERROR("Unhandled buffer format " << bufferInfo.pixelType);
-                                break;
-                            }
-                            break;
-                        }
-                        case image::PixelType::RGBA_U16:
-                        {
-                            switch(bufferInfo.pixelType)
-                            {
-                            case image::PixelType::RGB_F16:
-                                convert_rgb_to_rgba_array<uint16_t, half>
-                                    (reinterpret_cast<uint16_t*>(scaleImage->getData()),
-                                     reinterpret_cast<half*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGB_F32:
-                                convert_rgb_to_rgba_array<uint16_t, float>
-                                    (reinterpret_cast<uint16_t*>(scaleImage->getData()),
-                                     reinterpret_cast<float*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_F16:
-                                convert_rgba_array<uint16_t, half>
-                                    (reinterpret_cast<uint16_t*>(scaleImage->getData()),
-                                     reinterpret_cast<half*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_F32:
-                                convert_rgba_array<uint16_t, float>
-                                    (reinterpret_cast<uint16_t*>(scaleImage->getData()),
-                                     reinterpret_cast<float*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_U16:
-                                scaleImage = bufferImage;
-                                break;
-                            default:
-                                LOG_ERROR("Unhandled buffer format: " << bufferInfo.pixelType);
-                                break;
-                            }
-                            break;
-                        }
-                        case image::PixelType::RGBA_F16:
-                        {
-                            switch(bufferInfo.pixelType)
-                            {
-                            case image::PixelType::RGB_F16:
-                                convert_rgb_to_rgba_array<half, half>
-                                    (reinterpret_cast<half*>(scaleImage->getData()),
-                                     reinterpret_cast<half*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGB_F32:
-                                convert_rgb_to_rgba_array<uint16_t, float>
-                                    (reinterpret_cast<uint16_t*>(scaleImage->getData()),
-                                     reinterpret_cast<float*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_F16:
-                                scaleImage = bufferImage;
-                                break;
-                            case image::PixelType::RGBA_F32:
-                                convert_rgba_array<half, float>
-                                    (reinterpret_cast<half*>(scaleImage->getData()),
-                                     reinterpret_cast<float*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_U16:
-                                convert_rgba_array<half, uint16_t>
-                                    (reinterpret_cast<half*>(scaleImage->getData()),
-                                     reinterpret_cast<uint16_t*>(bufferImage->getData()),
-                                     width * height);
-                                scaleImage = bufferImage;
-                                break;
-                            default:
-                                LOG_ERROR("Unhandled buffer format: " << bufferInfo.pixelType);
-                                break;
-                            }
-                            break;
-                        }
-                        case image::PixelType::RGBA_F32:
-                        {
-                            switch(bufferInfo.pixelType)
-                            {
-                            case image::PixelType::RGB_F16:
-                                convert_rgb_to_rgba_array<float, half>
-                                    (reinterpret_cast<float*>(scaleImage->getData()),
-                                     reinterpret_cast<half*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGB_F32:
-                                convert_rgb_to_rgba_array<float, float>
-                                    (reinterpret_cast<float*>(scaleImage->getData()),
-                                     reinterpret_cast<float*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_F16:
-                                convert_rgba_array<float, half>
-                                    (reinterpret_cast<float*>(scaleImage->getData()),
-                                     reinterpret_cast<half*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            case image::PixelType::RGBA_F32:
-                                scaleImage = bufferImage;
-                                break;
-                            case image::PixelType::RGBA_U16:
-                                convert_rgba_array<float, uint16_t>
-                                    (reinterpret_cast<float*>(scaleImage->getData()),
-                                     reinterpret_cast<uint16_t*>(bufferImage->getData()),
-                                     width * height);
-                                break;
-                            default:
-                                LOG_ERROR("Unhandled buffer format: " << bufferInfo.pixelType);
-                                break;
-                            }
-                            break;
-                        }
-                        default:
-                            if (bufferInfo.pixelType != outputInfo.pixelType)
-                            {
-                                LOG_ERROR("Unhandled output format: " << outputInfo.pixelType);
-                            }
-                            else
-                            {
-                                scaleImage = bufferImage;
-                            }
-                            break;
-                        }
+                        convertImage(scaleImage, bufferImage);
                     }
                     
                     //
