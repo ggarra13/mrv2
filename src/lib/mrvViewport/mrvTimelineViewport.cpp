@@ -22,8 +22,10 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvUI/mrvDesktop.h"
+
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
+#include "mrvWidgets/mrvTooltip.h"
 
 #include "mrvViewport/mrvTimelineViewport.h"
 

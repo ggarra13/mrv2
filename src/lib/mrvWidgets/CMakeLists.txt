@@ -71,6 +71,7 @@ set(HEADERS
     mrvTimecode.h
     mrvTimelineGroup.h
     mrvToggleButton.h
+    mrvTooltip.h
     mrvVectorscope.h
     mrvVersion.h
     mrvVolumeSlider.h
@@ -120,6 +121,7 @@ set(SOURCES
     mrvTimelineGroup.cpp
     mrvTile.cpp
     mrvToggleButton.cpp
+    mrvTooltip.cpp
     mrvVectorscope.cpp
     mrvVersion.cpp
     mrvVolumeSlider.cpp

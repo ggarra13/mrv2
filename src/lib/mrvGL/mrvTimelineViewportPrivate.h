@@ -184,12 +184,15 @@ namespace mrv
             std::deque<double> frameTimes;
             std::chrono::high_resolution_clock::time_point startTime;
 
-            // Observers
+            // Observers.
             std::shared_ptr<observer::ListObserver<timeline::VideoData> >
             videoDataObserver;
 
-            //! Overlay
+            //! Overlay.
             std::shared_ptr<image::Image> overlayImage;
+
+            //! Tooltip.
+            Tooltip* tooltip = nullptr;
         };
     }  // namespace opengl
 } // namespace mrv

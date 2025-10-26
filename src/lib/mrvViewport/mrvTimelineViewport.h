@@ -47,6 +47,8 @@ namespace mrv
 
     class TimelinePlayer;
 
+    class Tooltip;
+
     namespace voice
     {
         class VoiceOver;

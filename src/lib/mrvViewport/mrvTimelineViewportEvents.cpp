@@ -24,6 +24,7 @@
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
+#include "mrvWidgets/mrvTooltip.h"
 
 #include "mrvNetwork/mrvTCP.h"
 
@@ -102,6 +103,21 @@ namespace mrv
     {
         namespace
         {
+            void link_open_cb(Fl_Menu_*, tl::draw::Shape* shape)
+            {
+#ifdef VULKAN_BACKEND
+                VKLinkShape* s;
+                if (!(s = dynamic_cast<VKLinkShape*>(shape)))
+                    return;
+#endif
+#ifdef OPENGL_BACKEND
+                GLLinkShape* s;
+                if (!(s = dynamic_cast<GLLinkShape*>(shape)))
+                    return;
+#endif
+                s->open();
+            }
+            
             void link_edit_cb(Fl_Menu_*, tl::draw::Shape* shape)
             {
 #ifdef VULKAN_BACKEND
@@ -1103,6 +1119,11 @@ namespace mrv
                                     p.popupMenu->textsize(14);
                                     p.popupMenu->type(Fl_Menu_Button::POPUP3);
                                     p.popupMenu->add(
+                                        _("Link/Open"),
+                                        0,
+                                        (Fl_Callback*)link_open_cb,
+                                        s);
+                                    p.popupMenu->add(
                                         _("Link/Edit"),
                                         0,
                                         (Fl_Callback*)link_edit_cb,
@@ -1239,6 +1260,8 @@ namespace mrv
                     auto annotation = p.player->getAnnotation();
                     if (annotation)
                     {
+                        bool found = false;
+                        
                         for (auto& shape : annotation->shapes)
                         {
 #ifdef VULKAN_BACKEND
@@ -1259,8 +1282,26 @@ namespace mrv
                             if (pos.x >= pnt1.x - 5 && pos.x <= pnt3.x + 5 &&
                                 pos.y >= pnt1.y - 5 && pos.y <= pnt2.y + 5)
                             {
+                                found = true;
+                                
+                                int X = Fl::event_x_root() - p.ui->uiMain->x_root();
+                                int Y = Fl::event_y_root() - p.ui->uiMain->y_root();
+                                    
+                                if (!p.tooltip)
+                                {
+                                    Fl_Group::current(p.ui->uiMain);
+                                    p.tooltip = new Tooltip(X, Y, 120, 40);
+                                }
+
+                                p.tooltip->position(X, Y);
+                                p.tooltip->copy_label(s->title);
+                                if (!p.tooltip->shown() || !p.tooltip->visible())
+                                    p.tooltip->show();
+                                break;
                             }
                         }
+                        
+                        if (!found && p.tooltip) p.tooltip->hide();
                     }
                 }
                 

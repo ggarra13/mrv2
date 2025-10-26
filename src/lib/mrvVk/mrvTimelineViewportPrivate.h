@@ -189,11 +189,14 @@ namespace mrv
             std::shared_ptr<observer::ListObserver<timeline::VideoData> >
             videoDataObserver;
 
-            //! Editing
+            //! Editing.
             std::shared_ptr<VKTextShape> multilineText;
             
-            //! Overlay
+            //! Overlay.
             std::shared_ptr<image::Image> overlayImage;
+
+            //! Tooltip.
+            Tooltip* tooltip = nullptr;
         };
 
     }  // namespace vlk
