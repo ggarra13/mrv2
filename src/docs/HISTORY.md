@@ -42,6 +42,8 @@ ChangeLog
 - Frame/Seconds/Timecode widgets now handle focus by clicking on them instead of just entering them.
 - Made Vulkan save out images with full color corrections (HDR + OCIO) when annotations is on.
 - Added Link Annotations.  Title is shown as a tooltip when moving the mouse pointer near the Link drawing.
+- Added Link Annotations to Session saving.
+- Added path mapping to Link Annotations.
 - Fixed a Linux Wayland warning about Always On Top when dragging a File item under Gnome.
 - Made popup menus on viewport use a bigger font for better readability.
 

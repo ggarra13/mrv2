@@ -8,6 +8,7 @@
 #include "mrvGL/mrvGLShape.h"
 
 #include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvPathMapping.h"
 
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvI8N.h"
@@ -628,7 +629,7 @@ namespace mrv
 
     void to_json(nlohmann::json& json, const GLLinkShape& value)
     {
-        to_json(json, static_cast<const draw::Shape&>(value));
+        to_json(json, static_cast<const draw::PathShape&>(value));
         json["type"] = "Link";
         json["url"] = value.url;
         json["title"] = value.title;
@@ -636,9 +637,10 @@ namespace mrv
 
     void from_json(const nlohmann::json& json, GLLinkShape& value)
     {
-        from_json(json, static_cast<draw::Shape&>(value));
+        from_json(json, static_cast<draw::PathShape&>(value));
         json.at("url").get_to(value.url);
         json.at("title").get_to(value.title);
+        replace_path(value.url);
     }
 
     

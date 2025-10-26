@@ -106,7 +106,12 @@ namespace mrv
         nlohmann::json msg;
         auto ptr = shape.get();
 
-        if (dynamic_cast< GLFilledRectangleShape* >(ptr))
+        if (dynamic_cast< GLLinkShape* >(ptr))
+        {
+            GLLinkShape* p = reinterpret_cast< GLLinkShape* >(ptr);
+            msg = *p;
+        }
+        else if (dynamic_cast< GLFilledRectangleShape* >(ptr))
         {
             GLFilledRectangleShape* p =
                 reinterpret_cast< GLFilledRectangleShape* >(ptr);

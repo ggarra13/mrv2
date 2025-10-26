@@ -1,7 +1,7 @@
 # English translations for hdr package.
 # This file is distributed under the same license as the hdr package.
 # Automatically generated, 2025.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: hdr v1.3.7\n"

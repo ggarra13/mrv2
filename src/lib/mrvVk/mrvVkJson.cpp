@@ -98,7 +98,12 @@ namespace mrv
         nlohmann::json msg;
         auto ptr = shape.get();
 
-        if (dynamic_cast< VKFilledRectangleShape* >(ptr))
+        if (dynamic_cast< VKLinkShape* >(ptr))
+        {
+            VKLinkShape* p = reinterpret_cast< VKLinkShape* >(ptr);
+            msg = *p;
+        }
+        else if (dynamic_cast< VKFilledRectangleShape* >(ptr))
         {
             VKFilledRectangleShape* p =
                 reinterpret_cast< VKFilledRectangleShape* >(ptr);
