@@ -23,16 +23,17 @@
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
 
-#include <tlIO/System.h>
-
-#include <tlCore/String.h>
-#include <tlCore/StringFormat.h>
-#include <tlCore/Time.h>
 
 #include <tlGL/Init.h>
 #include <tlGL/Util.h>
 #include <tlGL/GLFWWindow.h>
 #include <tlTimelineGL/Render.h>
+
+#include <tlIO/System.h>
+
+#include <tlCore/String.h>
+#include <tlCore/StringFormat.h>
+#include <tlCore/Time.h>
 
 #include <chrono>
 #include <string>

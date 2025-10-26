@@ -403,8 +403,8 @@ namespace mrv
         float L_width_raster = pixel_dims.x * mult;
         
         // --- 3. Calculate Final Raster Points ---
-        draw::Point pnt2(pnt.x, pnt.y + L_height_raster);
-        draw::Point pnt3(pnt.x + L_width_raster, pnt.y + L_height_raster);
+        draw::Point pnt2(pnt.x, pnt.y - L_height_raster);
+        draw::Point pnt3(pnt.x + L_width_raster, pnt.y - L_height_raster);
         
         // --- 4. Calculate radius of circle and shadow offset
         const float radius = std::fabs(pts[0].y - pnt2.y) * 1.05;
@@ -417,36 +417,39 @@ namespace mrv
         line.push_back(pnt3);
         
         line[0].x += offset;
-        line[0].y += offset;
-        line[1].x += offset;
-        line[1].y += offset;
-        line[2].x += offset;
-        line[2].y += offset;
-        
-        lines->drawLines(
-            render, line, shadowColor, pen_size, soft, Polyline2D::JointStyle::ROUND,
-            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
-        
-        center.x = (pts[0].x + pnt2.x + pnt3.x) / 3 + offset;
-        center.y = (pts[0].y + pnt2.y + pnt3.y) / 3 + offset;
-        
-        lines->drawCircle(render, center, radius, pen_size, shadowColor, soft);
-
-        line[0].x -= offset;
         line[0].y -= offset;
-        line[1].x -= offset;
+        line[1].x += offset;
         line[1].y -= offset;
-        line[2].x -= offset;
+        line[2].x += offset;
         line[2].y -= offset;
         
         lines->drawLines(
-            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            render, line, shadowColor, pen_size_raster, soft,
+            Polyline2D::JointStyle::ROUND,
+            Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
+        
+        center.x = (pts[0].x + pnt2.x + pnt3.x) / 3 + offset;
+        center.y = (pts[0].y + pnt2.y + pnt3.y) / 3 - offset;
+        
+        lines->drawCircle(render, center, radius, pen_size_raster,
+                          shadowColor, soft);
+
+        line[0].x -= offset;
+        line[0].y += offset;
+        line[1].x -= offset;
+        line[1].y += offset;
+        line[2].x -= offset;
+        line[2].y += offset;
+        
+        lines->drawLines(
+            render, line, color, pen_size_raster,
+            soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
         
         center.x -= offset;
-        center.y -= offset;
+        center.y += offset;
         
-        lines->drawCircle(render, center, radius, pen_size, color, soft);
+        lines->drawCircle(render, center, radius, pen_size_raster, color, soft);
     }
 
     void GLLinkShape::open()
@@ -519,8 +522,8 @@ namespace mrv
         float L_width_raster = pixel_dims.x * scale;
 
         // --- 3. Calculate Final Raster Points ---
-        draw::Point pnt2(pnt.x, pnt.y + L_height_raster);
-        draw::Point pnt3(pnt.x + L_width_raster, pnt.y + L_height_raster);
+        draw::Point pnt2(pnt.x, pnt.y - L_height_raster);
+        draw::Point pnt3(pnt.x + L_width_raster, pnt.y - L_height_raster);
         
         const float radius = std::fabs(pts[0].y - pnt2.y) * 1.05;
 

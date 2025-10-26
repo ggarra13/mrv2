@@ -558,16 +558,14 @@ namespace mrv
                 // --- Shape Creation (Rest of your original code) ---
                 auto shape = std::make_shared< VKLinkShape >();
 
-                // To get the pen size in raster units, we divide the desired pixel thickness
-                // by the effective pixels per raster unit.
-                shape->pen_size = 3.0;
+                shape->pen_size = 1.5;
                 shape->soft = softBrush;
                 shape->color = color;
                 shape->pts.push_back(pnt);
 
-                // The L will be 10 pixels high and 7 pixels wide on screen.
-                const float L_height_px = 10.0F;
-                const float L_width_px = 7.0F;
+                // The L will be 5 pixels high and 3.5 pixels wide on screen.
+                const float L_height_px = 5.0F;
+                const float L_width_px = 3.5F;
                 
                 // Store PIXEL OFFSETS in pts[1]
                 // We only need one extra point for this.
