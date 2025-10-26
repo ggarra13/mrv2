@@ -500,7 +500,12 @@ namespace mrv
                 float alpha = shape->color.a;
                 shape->color.a *= alphamult;
                 shape->color.a *= shape->fade;
-                if (auto glshape = dynamic_cast<GLErasePathShape*>(shape.get()))
+                if (auto glshape = dynamic_cast<GLLinkShape*>(shape.get()))
+                {
+                    glshape->mult = resolutionMultiplier;
+                    glshape->draw(gl.render, gl.lines);
+                }
+                else if (auto glshape = dynamic_cast<GLErasePathShape*>(shape.get()))
                 {
                     glshape->mult = resolutionMultiplier;
                     glshape->draw(gl.render, gl.lines);

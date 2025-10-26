@@ -208,6 +208,8 @@ namespace mrv
         void open();
         bool edit();
         int handle(int event);
+
+        const math::Box2f getBBox(float mult) const;
         
         virtual void draw(
             const std::shared_ptr<timeline_vlk::Render>&,
@@ -216,6 +218,7 @@ namespace mrv
     public:
         std::string url;
         std::string title;
+        float mult = 1;
     };
 
     void to_json(nlohmann::json& json, const VKLinkShape& value);

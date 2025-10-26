@@ -272,6 +272,11 @@ namespace mrv
                     vkshape->mult = resolutionMultiplier;
                     vkshape->draw(render, vk.lines);
                 }
+                else if (auto vkshape = dynamic_cast<VKLinkShape*>(shape.get()))
+                {
+                    vkshape->mult = resolutionMultiplier;
+                    vkshape->draw(render, vk.lines);
+                }
                 else if (auto vkshape = dynamic_cast<VKPathShape*>(shape.get()))
                 {
                     vkshape->draw(render, vk.lines);
@@ -368,9 +373,6 @@ namespace mrv
 
             
             VKVoiceOverShape shape;
-
-            float mult = renderSize.w * 6 / 4096.0 / p.viewZoom;
-            mult = std::clamp(mult, 1.F, 10.F);
             
             for (const auto annotation : voannotations)
             {

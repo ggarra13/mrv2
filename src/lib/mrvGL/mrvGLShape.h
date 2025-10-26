@@ -217,6 +217,8 @@ namespace mrv
             GLPathShape() {};
         virtual ~GLLinkShape() {};
 
+        const math::Box2f getBBox(float scale) const;
+        
         virtual void draw(
             const std::shared_ptr<timeline::IRender>&,
             const std::shared_ptr<opengl::Lines>&) override;
@@ -228,6 +230,7 @@ namespace mrv
     public:
         std::string url;
         std::string title;
+        float mult = 1.F;
     };
 
     void to_json(nlohmann::json& json, const GLLinkShape& value);

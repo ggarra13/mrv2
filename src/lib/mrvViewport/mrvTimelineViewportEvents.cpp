@@ -1257,10 +1257,17 @@ namespace mrv
 
                 if (p.player && p.actionMode == ActionMode::kLink)
                 {
+                            
                     auto annotation = p.player->getAnnotation();
                     if (annotation)
                     {
                         bool found = false;
+
+                        const math::Vector2f& pos = _getRasterf();
+                        const auto& renderSize = getRenderSize();
+                        
+                        float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
+                        mult = std::clamp(mult, 1.F, 10.F);
                         
                         for (auto& shape : annotation->shapes)
                         {
@@ -1274,13 +1281,8 @@ namespace mrv
                             if (!(s = dynamic_cast<GLLinkShape*>(shape.get())))
                                 continue;
 #endif
-                            const auto& pnt1 = s->pts[0];
-                            const auto& pnt2 = s->pts[1];
-                            const auto& pnt3 = s->pts[2];
-                            
-                            const math::Vector2f& pos = _getRasterf();
-                            if (pos.x >= pnt1.x - 5 && pos.x <= pnt3.x + 5 &&
-                                pos.y >= pnt1.y - 5 && pos.y <= pnt2.y + 5)
+                            auto box = s->getBBox(mult);
+                            if (box.contains(pos))
                             {
                                 found = true;
                                 
@@ -1294,7 +1296,10 @@ namespace mrv
                                 }
 
                                 p.tooltip->position(X, Y);
-                                p.tooltip->copy_label(s->title);
+                                if (!s->title.empty())
+                                    p.tooltip->copy_label(s->title);
+                                else
+                                    p.tooltip->copy_label(s->url);
                                 if (!p.tooltip->shown() || !p.tooltip->visible())
                                     p.tooltip->show();
                                 break;

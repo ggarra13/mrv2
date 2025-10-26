@@ -336,6 +336,31 @@ namespace mrv
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
     }
 
+    const math::Box2f VKLinkShape::getBBox(float scale) const
+    {
+        // --- 1. Get Stored Data (using the "hack" method) ---
+        const draw::Point& pnt = pts[0]; // Anchor (raster space)
+        const draw::Point& pixel_dims = pts[1]; // L-shape (pixel space)
+        
+        // Calculate current raster offsets
+        float L_height_raster = pixel_dims.y * scale;
+        float L_width_raster = pixel_dims.x * scale;
+
+        // --- 3. Calculate Final Raster Points ---
+        draw::Point pnt2(pnt.x, pnt.y + L_height_raster);
+        draw::Point pnt3(pnt.x + L_width_raster, pnt.y + L_height_raster);
+        
+        const float radius = std::fabs(pts[0].y - pnt2.y) * 1.05;
+
+        math::Vector2f center;
+        center.x = (pts[0].x + pnt2.x + pnt3.x) / 3;
+        center.y = (pts[0].y + pnt2.y + pnt3.y) / 3;
+        
+        return math::Box2f(center.x - radius, center.y - radius,
+                           radius * 2, radius * 2);
+                           
+    }
+    
     void VKLinkShape::draw(
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::shared_ptr<vulkan::Lines> lines)
@@ -345,14 +370,32 @@ namespace mrv
         math::Vector2f center;
         const image::Color4f shadowColor(0.F, 0.F, 0.F, 1.F);
         const bool catmullRomSpline = false;
-        const float radius = std::fabs(pts[0].y - pts[1].y) * 1.05;
-        const float offset = radius * 0.05F;
+
+        // --- 1. Get Stored Data ---
+        const draw::Point& pnt = pts[0]; // Anchor (raster space)
+        const draw::Point& pixel_dims = pts[1]; // L-shape (pixel space)
+        const float pen_size_px = pen_size; // Pen (pixel space)
+
+        // --- 2. Convert Pixel-Space values to Raster-Space ---
+        // Calculate current raster pen size
+        float pen_size_raster = pen_size_px * mult;
         
+        // Calculate current raster offsets
+        float L_height_raster = pixel_dims.y * mult;
+        float L_width_raster = pixel_dims.x * mult;
+
+        // --- 3. Calculate Final Raster Points ---
+        draw::Point pnt2(pnt.x, pnt.y + L_height_raster);
+        draw::Point pnt3(pnt.x + L_width_raster, pnt.y + L_height_raster);
+
+        // --- 4. Calculate radius of circle and shadow offset
+        const float radius = std::fabs(pts[0].y - pnt2.y) * 1.05;
+        const float offset = radius * 0.15F;
+
         std::vector< draw::Point > line;
-        
         line.push_back(pts[0]);
-        line.push_back(pts[1]);
-        line.push_back(pts[2]);
+        line.push_back(pnt2);
+        line.push_back(pnt3);
 
         line[0].x += offset;
         line[0].y += offset;
@@ -362,13 +405,15 @@ namespace mrv
         line[2].y += offset;
         
         lines->drawLines(
-            render, line, shadowColor, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            render, line, shadowColor, pen_size_raster,
+            soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
         
-        center.x = (pts[0].x + pts[1].x + pts[2].x) / 3 + offset;
-        center.y = (pts[0].y + pts[1].y + pts[2].y) / 3 + offset;
+        center.x = (pts[0].x + pnt2.x + pnt3.x) / 3 + offset;
+        center.y = (pts[0].y + pnt2.y + pnt3.y) / 3 + offset;
         
-        lines->drawCircle(render, center, radius, pen_size, shadowColor, soft);
+        lines->drawCircle(render, center, radius,
+                          pen_size_raster, shadowColor, soft);
 
         line[0].x -= offset;
         line[0].y -= offset;
@@ -378,13 +423,13 @@ namespace mrv
         line[2].y -= offset;
         
         lines->drawLines(
-            render, line, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
+            render, line, color, pen_size_raster, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
         
-        center.x = (pts[0].x + pts[1].x + pts[2].x) / 3;
-        center.y = (pts[0].y + pts[1].y + pts[2].y) / 3;
+        center.x -= offset;
+        center.y -= offset;
         
-        lines->drawCircle(render, center, radius, pen_size, color, soft);
+        lines->drawCircle(render, center, radius, pen_size_raster, color, soft);
     }
 
     void VKLinkShape::open()
