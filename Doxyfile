@@ -875,7 +875,17 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = src/lib/mrvCore \
+INPUT                  = tlRender/lib/tlCore \
+		       	 tlRender/lib/tlIO \
+			 tlRender/lib/tlDevice \
+		       	 tlRender/lib/tlTimeline \
+		       	 tlRender/lib/tlGL \
+		       	 tlRender/lib/tlTimelineGL \
+		       	 tlRender/lib/tlTimelineUI \
+		       	 tlRender/lib/tlVk \
+		       	 tlRender/lib/tlTimelineVk \
+		       	 tlRender/lib/tlTimelineUIVk \
+		       	 src/lib/mrvCore \
 			 src/lib/mrvFLU \
 			 src/lib/mrvFlmm \
 			 src/lib/mrvUI \
@@ -883,6 +893,7 @@ INPUT                  = src/lib/mrvCore \
 			 src/lib/mrvDraw \
 			 src/lib/mrvPDF \
 			 src/lib/mrvFl \
+			 src/lib/mrvVk \
 			 src/lib/mrvNetwork \
 			 src/lib/mrvEdit \
 			 src/lib/mrvPanels \
