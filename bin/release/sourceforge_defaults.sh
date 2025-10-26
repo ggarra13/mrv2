@@ -11,6 +11,9 @@ fi
 
 project='mrv2'
 
+vmrv2='vmrv2'
+mrv2='mrv2'
+
 API_KEY='568e57c2-5865-4a83-9ffc-1219d88be13d'
 
 
@@ -19,9 +22,9 @@ download_site="https://sourceforge.net/projects/${project}/files/${release}"
 # Use parallel arrays for platforms and filenames
 platforms=("windows" "mac" "linux")
 files=(
-    "${project}-${release}-Windows-amd64.exe"
-    "${project}-${release}-Darwin-amd64.dmg"
-    "${project}-${release}-Linux-amd64.deb"
+    "${vmrv2}-${release}-Windows-amd64.exe"
+    "${mrv2}-${release}-Darwin-amd64.dmg"
+    "${vmrv2}-${release}-Linux-amd64.deb"
 )
 
 change_default() {
