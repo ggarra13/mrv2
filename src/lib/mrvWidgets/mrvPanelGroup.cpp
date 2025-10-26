@@ -143,8 +143,6 @@ namespace mrv
             set_Fl_Group();
 
             tw = new PanelWindow(X, Y, W, H);
-            // if (label == "Python" || label == "Logs")
-            //     tw->size_range(640, 400);
             tw->end();
             dock->remove(this);
             tw->add(this);  // move the tool group into the floating window

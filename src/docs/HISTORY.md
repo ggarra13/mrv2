@@ -46,6 +46,7 @@ ChangeLog
 - Added path mapping to Link Annotations.
 - Fixed a Linux Wayland warning about Always On Top when dragging a File item under Gnome.
 - Made popup menus on viewport use a bigger font for better readability.
+- Made docking faster when subwindow is dragged to it (open/close dock).
 
 
 v1.4.3

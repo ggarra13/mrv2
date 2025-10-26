@@ -182,8 +182,11 @@ namespace mrv
         PanelGroup* tg = static_cast<PanelGroup*>(parent());
         DockGroup* uiDock = tg->get_dock();
         Fl_Widget* widget = uiDock->get_scroll();
-        widget->color(c);
-        widget->redraw();
+        if (c != widget->color())
+        {
+            widget->color(c);
+            widget->redraw();
+        }
     }
     
     void DragButton::show_dock_group()
