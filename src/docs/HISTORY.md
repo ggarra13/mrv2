@@ -54,6 +54,7 @@ ChangeLog
 - Improved performance of image saving code in the Vulkan backend.
 - Improved performance of panel subwindows dragging on Wayland.
 - Fixed saving elapsed time being not being in milliseconds in the progress report bar.
+- Fixed showing Original (O) pixel values on the Vulkan backend as image was flipped in Y.
 
 
 v1.4.3

@@ -2669,7 +2669,12 @@ namespace mrv
 
             const uint8_t* data = image->getData();
             int X = pos.x / pixelAspectRatio;
+#ifdef VULKAN_BACKEND
+            int Y = pos.y;
+#endif
+#ifdef OPENGL_BACKEND
             int Y = size.h - pos.y - 1;
+#endif
             if (p.displayOptions[0].mirror.x)
                 X = size.w - X - 1;
             if (p.displayOptions[0].mirror.y)
