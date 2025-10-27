@@ -86,6 +86,32 @@ namespace mrv
             *output_pixels++ = convert_channel<OutputInt>(1.F);
         }
     }
+    
+    template <>
+    void convert_rgb_to_rgba_array(half* output_pixels,
+                                   const float* input_pixels,
+                                   const size_t pixel_count)
+    {
+        for (size_t i = 0; i < pixel_count * 3; i += 3) {
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = 1.F;
+        }
+    }
+    
+    template <>
+    void convert_rgb_to_rgba_array(float* output_pixels,
+                                   const half* input_pixels,
+                                   const size_t pixel_count)
+    {
+        for (size_t i = 0; i < pixel_count * 3; i += 3) {
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = 1.F;
+        }
+    }
 
 // --- RGBA Conversion Functions ---
 
