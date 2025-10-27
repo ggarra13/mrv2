@@ -889,6 +889,12 @@ namespace tl
             case image::PixelType::LA_U8:
                 out.pixelType = image::PixelType::LA_F16;
                 break;
+            case image::PixelType::YUV_420P_U12:
+            case image::PixelType::YUV_422P_U12:
+            case image::PixelType::YUV_444P_U12:
+            case image::PixelType::YUV_420P_U16:
+            case image::PixelType::YUV_422P_U16:
+            case image::PixelType::YUV_444P_U16:
             case image::PixelType::RGB_U8:
                 out.pixelType = image::PixelType::RGB_F16;
                 break;

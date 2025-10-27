@@ -95,19 +95,6 @@ namespace mrv
                 s << options.dwaCompressionLevel;
                 ioOptions["OpenEXR/DWACompressionLevel"] = s.str();
             }
-
-            const auto& hdrOptions = ui->uiView->getHDROptions();
-            const auto& hdr = hdrOptions.hdrData;
-            if (hdrOptions.passthru || hdrOptions.tonemap)
-            {
-                std::stringstream s;
-                s << hdr.primaries[0].x << " " << hdr.primaries[0].y
-                  << hdr.primaries[1].x << " " << hdr.primaries[1].y
-                  << hdr.primaries[2].x << " " << hdr.primaries[2].y
-                  << hdr.primaries[3].x << " " << hdr.primaries[3].y;
-                ioOptions["OpenEXR/Chromaticities"] = s.str();
-            }
-            
 #endif
 
             otime::TimeRange oneFrameTimeRange(
@@ -300,6 +287,9 @@ namespace mrv
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
             std::shared_ptr<vlk::OffscreenBuffer> buffer;
 
+            buffer = view->getVideoFBO();
+            offscreenBufferOptions = buffer->getOptions();
+
             if (options.annotations)
             {
                 view->setShowVideo(options.video);
@@ -314,18 +304,10 @@ namespace mrv
                 view->redraw();
                 // flush is needed
                 Fl::flush();
-
-                buffer = view->getVideoFBO();
-                offscreenBufferOptions = buffer->getOptions();
                 
                 image::Info annotationInfo = outputInfo;
                 annotationInfo.pixelType = image::PixelType::RGBA_U8;
                 annotationImage = image::Image::create(annotationInfo);
-            }
-            else
-            {
-                buffer = vlk::OffscreenBuffer::create(
-                    ctx, offscreenBufferSize, offscreenBufferOptions);
             }
             
             const size_t width = buffer->getWidth();
@@ -405,59 +387,57 @@ namespace mrv
             // Turn off hud so it does not get captured by glReadPixels.
             view->setHudActive(false);
 
-            if (bufferInfo.pixelType != outputInfo.pixelType)
-                options.annotations = true;
-                
             if (options.annotations)
             {
                 view->setSaveOverlay(true);
+            }
+            else
+            {
+                view->setSaveOverlay(false);
+            }
                 
-                view->redraw();
-                view->flush(); // needed
-                Fl::flush();
+                
+            view->redraw();
+            view->flush(); // needed
+            Fl::flush();
                         
-                auto buffer = view->getVideoFBO();
-                auto bufferOptions = buffer->getOptions();
+            VkDevice device = view->device();
+            VkCommandPool commandPool = view->commandPool();
+
+            // Read Main Image Viewport
+            VkCommandBuffer cmd = beginSingleTimeCommands(device,
+                                                          commandPool);
+            
+            buffer->readPixels(cmd, 0, 0, width, height);
+            
+            vkEndCommandBuffer(cmd);
+            
+            buffer->submitReadback(cmd);
+
+            view->wait_queue();
+            
+            const void* imageData = buffer->getLatestReadPixels();
+            if (imageData)
+            {                            
+                std::memcpy(bufferImage->getData(), imageData,
+                            bufferImage->getDataByteCount());
+            }
+            else
+            {
+                LOG_ERROR(_("Could not read image data from view"));
+            }
+
+            vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+
+            //
+            // Read Annotation Image
+            //
+            flipImageInY(bufferImage);
                         
+                        
+            if (options.annotations)
+            {
                 auto overlayBuffer = view->getAnnotationFBO();
-
-                VkDevice device = view->device();
-                VkCommandPool commandPool = view->commandPool();
-
-                // Read Main Image Viewport
-                VkCommandBuffer cmd = beginSingleTimeCommands(device,
-                                                              commandPool);
-            
-                const size_t width = buffer->getWidth();
-                const size_t height = buffer->getHeight();
-
-                buffer->readPixels(cmd, 0, 0, width, height);
-            
-                vkEndCommandBuffer(cmd);
-            
-                buffer->submitReadback(cmd);
-
-                view->wait_queue();
-            
-                const void* imageData = buffer->getLatestReadPixels();
-                if (imageData)
-                {                            
-                    std::memcpy(bufferImage->getData(), imageData,
-                                bufferImage->getDataByteCount());
-                }
-                else
-                {
-                    LOG_ERROR(_("Could not read image data from view"));
-                }
-
-                vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-
-                //
-                // Read Annotation Image
-                //
-                flipImageInY(bufferImage);
-                        
-                        
                 if (overlayBuffer)
                 {
                     VkCommandBuffer cmd = beginSingleTimeCommands(device,
@@ -490,82 +470,15 @@ namespace mrv
                 }
 
                 //
-                // Composite output
+                // Composite annotation image over buffer.
                 //
                 composite_RGBA_U8(bufferImage, annotationImage);
                 
                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);
                         
                 view->setSaveOverlay(false);
-                
             }
-            else
-            {
-
-                math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
-                
-                auto buffer = vlk::OffscreenBuffer::create(
-                    ctx, offscreenBufferSize, offscreenBufferOptions);
             
-                // Get the videoData
-                auto videoData = timeline->getVideo(currentTime).future.get();
-                videoData.layers[0].image->setPixelAspectRatio(1.F);
-
-                VkDevice device = ctx.device;
-                VkCommandPool commandPool = ctx.commandPool;
-                
-                VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
-                buffer->transitionToColorAttachment(cmd);
-
-                {
-                    locale::SetAndRestore saved;
-                    timeline::RenderOptions renderOptions;
-                    renderOptions.clear = true;
-                    render->begin(cmd, buffer, frameIndex, offscreenBufferSize,
-                                  renderOptions);
-                    const math::Matrix4x4f ortho = math::ortho(
-                        0.F, static_cast<float>(renderSize.w),
-                        static_cast<float>(renderSize.h), 0.F,
-                        -1.F, 1.F);
-                    render->setTransform(ortho);
-                    render->setOCIOOptions(view->getOCIOOptions());
-                    render->setLUTOptions(view->lutOptions());
-
-                    render->drawVideo(
-                        {videoData},
-                        {math::Box2i(0, 0, renderSize.w, renderSize.h)},
-                        {timeline::ImageOptions()},
-                        {timeline::DisplayOptions()},
-                        timeline::CompareOptions(),
-                        ui->uiView->getBackgroundOptions());
-                    
-                    render->end();
-                }
-
-                // Read back the image
-                
-                buffer->transitionToColorAttachment(cmd);
-                
-                buffer->readPixels(cmd, 0, 0, renderSize.w, renderSize.h);
-                                    
-                vkEndCommandBuffer(cmd);
-                
-                buffer->submitReadback(cmd);
-
-                {
-                    std::lock_guard<std::mutex> lock(ctx.queue_mutex());
-                    vkQueueWaitIdle(ctx.queue());
-                }
-                                                    
-                void* imageData = buffer->getLatestReadPixels();
-                if (imageData)
-                {
-                    std::memcpy(bufferImage->getData(), imageData,
-                                bufferImage->getDataByteCount());   
-                }
-                
-                vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-            }
             
             if (bufferImage != scaleImage)
             {

@@ -49,6 +49,9 @@ ChangeLog
 - Made docking faster when subwindow is dragged to it (open/close dock).
 - Fixed Automatic color buffer type selected when YUV_420P_U12/16 and similar depth movies are loaded in both OpenGL and Vulkan.
 - Fixed saving in Vulkan all RGBA image types supported by vmrv2.
+- Improved precision of PNGs by saving RGB_U16 or RGBA_U16 when possible.
+- Cleaned up saving movie/image code in the Vulkan backend.
+- Improved performance of image saving code in the Vulkan backend.
 
 
 v1.4.3

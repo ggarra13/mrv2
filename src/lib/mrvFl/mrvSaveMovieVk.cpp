@@ -124,7 +124,7 @@ namespace mrv
 
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
-        const std::string& number = path.getNumber();
+        const std::string& number = std::to_string(startTime.to_frames());
         const std::string& extension = path.getExtension();
 
         std::string newFile = directory + baseName + number + extension;
@@ -190,19 +190,6 @@ namespace mrv
                 std::stringstream s;
                 s << speed;
                 ioOptions["OpenEXR/Speed"] = s.str();
-            }
-
-            const bool use_pq = true;
-            const auto& hdrOptions = ui->uiView->getHDROptions();
-            if (hdrOptions.passthru || hdrOptions.tonemap)
-            {
-                const auto& hdr = hdrOptions.hdrData;
-                std::stringstream s;
-                s << hdr.primaries[0].x << " " << hdr.primaries[0].y
-                  << hdr.primaries[1].x << " " << hdr.primaries[1].y
-                  << hdr.primaries[2].x << " " << hdr.primaries[2].y
-                  << hdr.primaries[3].x << " " << hdr.primaries[3].y;
-                ioOptions["OpenEXR/Chromaticities"] = s.str();
             }
 #endif
 
@@ -567,10 +554,11 @@ namespace mrv
             std::shared_ptr<vlk::OffscreenBuffer> buffer;
             if (hasVideo)
             {
+                buffer = view->getVideoFBO();
+                offscreenBufferOptions = buffer->getOptions();
+                    
                 if (options.annotations)
                 {
-                    buffer = view->getVideoFBO();
-                    offscreenBufferOptions = buffer->getOptions();
                     
                     if (!annotationImage)
                     {
@@ -578,11 +566,6 @@ namespace mrv
                         annotationInfo.pixelType = image::PixelType::RGBA_U8;
                         annotationImage = image::Image::create(annotationInfo);
                     }
-                }
-                else
-                {
-                    buffer = vlk::OffscreenBuffer::create(
-                        ctx, offscreenBufferSize, offscreenBufferOptions);
                 }
 
                 const size_t width = buffer->getWidth();
@@ -800,53 +783,59 @@ namespace mrv
                     if (options.annotations)
                     {
                         view->setSaveOverlay(true);
+                    }
+                    else
+                    {
+                        view->setSaveOverlay(false);
+                    }
                         
-                        view->redraw();
-                        view->flush(); // needed
-                        Fl::flush();
+                    view->redraw();
+                    view->flush(); // needed
+                    Fl::flush();
                         
-                        auto buffer = view->getVideoFBO();
-                        auto bufferOptions = buffer->getOptions();
+                    auto buffer = view->getVideoFBO();
+                    auto bufferOptions = buffer->getOptions();
+                    
+                    VkDevice device = view->device();
+                    VkCommandPool commandPool = view->commandPool();
+
+                    // Read Main Image Viewport
+                    VkCommandBuffer cmd = beginSingleTimeCommands(device,
+                                                                  commandPool);
+            
+                    const size_t width = buffer->getWidth();
+                    const size_t height = buffer->getHeight();
+                    
+                    buffer->readPixels(cmd, 0, 0, width, height);
+                    
+                    vkEndCommandBuffer(cmd);
+                    
+                    buffer->submitReadback(cmd);
+                    
+                    view->wait_queue();
+                    
+                    const void* imageData = buffer->getLatestReadPixels();
+                    if (imageData)
+                    {                            
+                        std::memcpy(bufferImage->getData(), imageData,
+                                    bufferImage->getDataByteCount());
+                    }
+                    else
+                    {
+                        LOG_ERROR(_("Could not read image data from view"));
+                    }
+
+                    vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+
+                    flipImageInY(bufferImage);
                         
+                        
+                    //
+                    // Read Annotation Image
+                    //
+                    if (options.annotations)
+                    {    
                         auto overlayBuffer = view->getAnnotationFBO();
-
-                        VkDevice device = view->device();
-                        VkCommandPool commandPool = view->commandPool();
-
-                        // Read Main Image Viewport
-                        VkCommandBuffer cmd = beginSingleTimeCommands(device,
-                                                                      commandPool);
-            
-                        const size_t width = buffer->getWidth();
-                        const size_t height = buffer->getHeight();
-
-                        buffer->readPixels(cmd, 0, 0, width, height);
-            
-                        vkEndCommandBuffer(cmd);
-            
-                        buffer->submitReadback(cmd);
-
-                        view->wait_queue();
-            
-                        const void* imageData = buffer->getLatestReadPixels();
-                        if (imageData)
-                        {                            
-                            std::memcpy(bufferImage->getData(), imageData,
-                                        bufferImage->getDataByteCount());
-                        }
-                        else
-                        {
-                            LOG_ERROR(_("Could not read image data from view"));
-                        }
-
-                        vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-
-                        //
-                        // Read Annotation Image
-                        //
-                        flipImageInY(bufferImage);
-                        
-                        
                         if (overlayBuffer)
                         {
                             VkCommandBuffer cmd = beginSingleTimeCommands(device,
@@ -870,109 +859,22 @@ namespace mrv
                             {
                                 annotationImage->zero();
                             }
+
+                            //
+                            // Composite annotation image over buffer image.
+                            //
+                            composite_RGBA_U8(bufferImage, annotationImage);
+                        
+                            vkFreeCommandBuffers(device, commandPool, 1, &cmd);
                         }
                         else
                         {
                             annotationImage->zero();
                         }
                         
-                        //
-                        // Composite output
-                        //
-                        composite_RGBA_U8(bufferImage, annotationImage);
-                        
-                        vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-                        
                         view->setSaveOverlay(false);
                     }
-                    else
-                    {
-                        // Get the videoData
-                        auto videoData =
-                            timeline->getVideo(currentTime).future.get();
-
-                        if (videoData.layers.empty() ||
-                            !videoData.layers[0].image)
-                        {
-                            std::string err =
-                                string::Format(_("Empty video data at time "
-                                                 "{0}.  Repeating frame."))
-                                    .arg(currentTime);
-                            LOG_WARNING(err);
-                        }
-                        else
-                        {
-
-                            // This refreshes the view window
-                            if (interactive)
-                            {
-                                view->currentVideoCallback({videoData});
-                                view->redraw();
-                                Fl::flush();
-                            }
-
-                            VkDevice device = ctx.device;
-                            VkCommandPool commandPool = ctx.commandPool;
                 
-                            VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
-                            buffer->transitionToColorAttachment(cmd);
-
-                            {
-                                locale::SetAndRestore saved;
-                                timeline::RenderOptions renderOptions;
-                                renderOptions.clear = true;
-                                render->begin(cmd, buffer, frameIndex,
-                                              offscreenBufferSize,
-                                              renderOptions);
-                                const math::Matrix4x4f ortho = math::ortho(
-                                    0.F, static_cast<float>(renderSize.w),
-                                    static_cast<float>(renderSize.h), 0.F,
-                                    -1.F, 1.F);
-                                render->setTransform(ortho);
-                                render->setOCIOOptions(view->getOCIOOptions());
-                                render->setLUTOptions(view->lutOptions());
-                    
-                                render->drawVideo(
-                                    {videoData},
-                                    {math::Box2i(0, 0,
-                                                 renderSize.w, renderSize.h)},
-                                    {timeline::ImageOptions()},
-                                    {timeline::DisplayOptions()},
-                                    timeline::CompareOptions(),
-                                    ui->uiView->getBackgroundOptions());
-                    
-                                render->end();
-                            }
-
-                            buffer->transitionToColorAttachment(cmd);
-                
-                            buffer->readPixels(cmd, 0, 0,
-                                               renderSize.w, renderSize.h);
-                                    
-                            vkEndCommandBuffer(cmd);
-                
-                            buffer->submitReadback(cmd);
-
-                            {
-                                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
-                                vkQueueWaitIdle(ctx.queue());
-                            }
-                                    
-                            void* imageData = buffer->getLatestReadPixels();
-                            if (imageData)
-                            {
-                                std::memcpy(bufferImage->getData(), imageData,
-                                            bufferImage->getDataByteCount());
-                            }
-                            else
-                            {
-                                bufferImage->zero();
-                            }
-                                    
-                            vkFreeCommandBuffers(device, commandPool, 1,
-                                                 &cmd);
-                        }
-                    }
                 
                     if (bufferImage != scaleImage)
                     {
@@ -1036,9 +938,9 @@ namespace mrv
                     // movies can lag behind the seek
                     // When saving video and not options.annotations, we cannot
                     // use seek as it corrupts the timeline.
-                    if (options.annotations && hasVideo)
+                    if (hasVideo)
                         player->frameNext();
-                    else if (!hasVideo)
+                    else
                         player->seek(currentTime);
                 }
 

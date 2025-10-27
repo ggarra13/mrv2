@@ -58,6 +58,14 @@ namespace tl
             out.size = info.size;
             switch (info.pixelType)
             {
+            case image::PixelType::YUV_420P_U12:
+            case image::PixelType::YUV_422P_U12:
+            case image::PixelType::YUV_444P_U12:
+            case image::PixelType::YUV_420P_U16:
+            case image::PixelType::YUV_422P_U16:
+            case image::PixelType::YUV_444P_U16:
+                out.pixelType = image::PixelType::RGBA_U16;
+                break;
             case image::PixelType::L_U8:
             case image::PixelType::L_U16:
             case image::PixelType::L_F32:

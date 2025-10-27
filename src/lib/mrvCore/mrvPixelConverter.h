@@ -161,6 +161,20 @@ namespace mrv
     }
     
     template <>
+    inline void convert_rgba_array<uint16_t, uint8_t>(
+        uint16_t* output_pixels,
+        const uint8_t* input_pixels,
+        const size_t pixel_count)
+    {
+        const float SCALE_FACTOR = 65535.F / 255.F;
+        
+        for (size_t i = 0; i < pixel_count * 4; ++i)
+        {
+            output_pixels[i] = (uint16_t)((float)(input_pixels[i] * SCALE_FACTOR));
+        }
+    }
+    
+    template <>
     inline void convert_rgba_array<uint8_t, uint16_t>(
         uint8_t* output_pixels,
         const uint16_t* input_pixels,
@@ -332,4 +346,29 @@ namespace mrv
         }
     }
     
+    template<>
+    inline void convert_rgba_to_rgb_array(uint16_t* output_pixels,
+                                          const uint16_t* input_pixels,
+                                          const size_t pixel_count)
+    {
+        for (size_t i = 0; i < pixel_count; ++i) {
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            input_pixels++;
+        }
+    }
+    
+    template<>
+    inline void convert_rgba_to_rgb_array(uint8_t* output_pixels,
+                                          const uint8_t* input_pixels,
+                                          const size_t pixel_count)
+    {
+        for (size_t i = 0; i < pixel_count; ++i) {
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            *output_pixels++ = *input_pixels++;
+            input_pixels++;
+        }
+    }
 }
