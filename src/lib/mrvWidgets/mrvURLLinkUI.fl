@@ -31,13 +31,13 @@ class URLLinkUI {open
   } {
     Fl_Window uiMain {
       label {Link Annotation} open
-      xywh {0 0 774 200} type Double non_modal visible
+      xywh {0 0 774 200} type Double modal visible
     } {
       Fl_Input uiTitle {
         label Title
         tooltip {Enter a URL or choose an image file.} xywh {130 35 550 36} color 20 textcolor 56
       }
-      Fl_Group {} {open selected
+      Fl_Group {} {open
         xywh {130 77 640 45}
       } {
         Fl_Input uiURL {

@@ -513,11 +513,6 @@ namespace mrv
                         image::PixelType::RGB_F32;
                 }
 
-                msg = tl::string::Format(_("Output info: {0} {1}"))
-                          .arg(outputInfo.size)
-                          .arg(outputInfo.pixelType);
-                LOG_STATUS(msg);
-
 #ifdef TLRENDER_EXR
                 ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
@@ -599,12 +594,18 @@ namespace mrv
                 bufferInfo.size.h = height;
                 bufferImage = image::Image::create(bufferInfo);
                         
-                std::string msg =
-                    tl::string::Format(_("Offscreen Buffer info: {0}"))
-                    .arg(offscreenBufferOptions.colorType);
+                msg = tl::string::Format(_("Offscreen Buffer info: {0}"))
+                      .arg(offscreenBufferOptions.colorType);
                 LOG_STATUS(msg);
             }
 
+
+            msg = tl::string::Format(_("Output info: {0} {1}"))
+                  .arg(outputInfo.size)
+                  .arg(outputInfo.pixelType);
+            LOG_STATUS(msg);
+
+                
             // Turn off hud so it does not get captured by readPixels.
             view->setHudActive(false);
 
