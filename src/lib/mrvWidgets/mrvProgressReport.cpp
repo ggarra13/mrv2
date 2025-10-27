@@ -23,8 +23,7 @@ namespace mrv
         Fl_Window* main, int64_t start, int64_t end, const char* title) :
         _frame(start),
         _start(start),
-        _end(end),
-        _time(0)
+        _end(end)
     {
         Fl_Group::current(0);
         w = new Fl_Window(
@@ -91,11 +90,17 @@ namespace mrv
         progress->value(progress->value() + 1);
 
         const auto now = std::chrono::steady_clock::now();
-        std::chrono::duration<float> diff = now - _startTime;
-        _time += diff.count();
 
+        // Calculate the total elapsed duration since start
+        std::chrono::duration<float> elapsed_duration = now - _startTime;
+
+        // Use the count of the total elapsed duration directly (in seconds)
+        // float current_elapsed_seconds = elapsed_duration.count(); 
+        // If _time must store the elapsed time:
+        _time = elapsed_duration.count(); // _time now correctly stores the total elapsed seconds
+        
         int hour, min, sec, ms;
-        to_hour_min_sec(_time, hour, min, sec, ms);
+        to_hour_min_sec(_time * 1000.0, hour, min, sec, ms);
 
         char buf[120];
         snprintf(buf, 120, " %02d:%02d:%02d.%d", hour, min, sec, ms);

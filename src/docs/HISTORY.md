@@ -53,6 +53,7 @@ ChangeLog
 - Cleaned up saving movie/image code in the Vulkan backend.
 - Improved performance of image saving code in the Vulkan backend.
 - Improved performance of panel subwindows dragging on Wayland.
+- Fixed saving elapsed time being not being in milliseconds in the progress report bar.
 
 
 v1.4.3
