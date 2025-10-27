@@ -386,7 +386,7 @@ namespace mrv
             GL_ONE_MINUS_SRC_ALPHA);
 
         math::Vector2f center;
-        const image::Color4f shadowColor(0.F, 0.F, 0.F, 1.F);
+        const image::Color4f shadowColor(0.F, 0.F, 0.F, color.a);
         const bool catmullRomSpline = false;
 
         // --- 1. Get Stored Data ---

@@ -1302,13 +1302,17 @@ namespace mrv
                                     p.tooltip->copy_label(s->title);
                                 else
                                     p.tooltip->copy_label(s->url);
-                                if (!p.tooltip->shown() || !p.tooltip->visible())
+                                if (!p.tooltip->shown() ||
+                                    !p.tooltip->visible())
                                     p.tooltip->show();
                                 break;
                             }
                         }
                         
-                        if (!found && p.tooltip) p.tooltip->hide();
+                        if (!found && p.tooltip)
+                        {
+                            p.tooltip->hide();
+                        }
                     }
                 }
                 
