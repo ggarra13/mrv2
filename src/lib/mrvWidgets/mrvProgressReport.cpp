@@ -94,13 +94,11 @@ namespace mrv
         // Calculate the total elapsed duration since start
         std::chrono::duration<float> elapsed_duration = now - _startTime;
 
-        // Use the count of the total elapsed duration directly (in seconds)
-        // float current_elapsed_seconds = elapsed_duration.count(); 
-        // If _time must store the elapsed time:
-        _time = elapsed_duration.count(); // _time now correctly stores the total elapsed seconds
+        // Get elapsed time in milliseconds (long long)
+        const auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_duration).count();
         
         int hour, min, sec, ms;
-        to_hour_min_sec(_time * 1000.0, hour, min, sec, ms);
+        to_hour_min_sec(elapsed_ms, hour, min, sec, ms);
 
         char buf[120];
         snprintf(buf, 120, " %02d:%02d:%02d.%d", hour, min, sec, ms);
