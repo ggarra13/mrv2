@@ -75,9 +75,8 @@ namespace mrv
     }
 
     void ProgressReport::to_hour_min_sec(
-        const double t, int& hour, int& min, int& sec, int& ms)
+        const long long milliseconds, int& hour, int& min, int& sec, int& ms)
     {
-        long long milliseconds = t;
         long long total_seconds = milliseconds / 1000;
         hour = total_seconds / 3600;
         min = (total_seconds % 3600) / 60;

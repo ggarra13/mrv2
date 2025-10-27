@@ -25,10 +25,11 @@ namespace mrv
         void show(); // hides automatically when it goes out of scope.
 
     protected:
-        //! Convert a double in seconds to hour, minutes, seconds and
-        //! milliseconds
+        //! Convert a long long in milliseconds to hour, minutes, seconds and
+        //! milliseconds remainder.
         void
-        to_hour_min_sec(const double t, int& hour, int& min, int& sec, int& ms);
+        to_hour_min_sec(const long long time,
+                        int& hour, int& min, int& sec, int& ms);
 
     protected:
         Fl_Window* w;
