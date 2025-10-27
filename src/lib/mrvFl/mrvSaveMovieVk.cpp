@@ -124,7 +124,10 @@ namespace mrv
 
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
-        const std::string& number = std::to_string(startTime.to_frames());
+        
+        std::string number = path.getNumber();
+        if (!number.empty()) number = std::to_string(startTime.to_frames());
+
         const std::string& extension = path.getExtension();
 
         std::string newFile = directory + baseName + number + extension;

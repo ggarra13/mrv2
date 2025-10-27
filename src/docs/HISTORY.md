@@ -52,6 +52,7 @@ ChangeLog
 - Improved precision of PNGs by saving RGB_U16 or RGBA_U16 when possible.
 - Cleaned up saving movie/image code in the Vulkan backend.
 - Improved performance of image saving code in the Vulkan backend.
+- Improved performance of panel subwindows dragging on Wayland.
 
 
 v1.4.3

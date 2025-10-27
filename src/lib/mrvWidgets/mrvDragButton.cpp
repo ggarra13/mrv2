@@ -19,7 +19,7 @@
 #include "mrvUI/mrvDesktop.h"
 
 #define DEBUG_EVENTS 0
-#define USE_TIMEOUT 1
+#define USE_TIMEOUT 0
 
 namespace
 {
