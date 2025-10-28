@@ -32,7 +32,7 @@ I use the email information to contact you privately.  I don't sell your informa
 
 - The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
 
-License works for both mrv2 and vmrv2 (you can have both installed).
+Licens	     e works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
 
 ChangeLog
@@ -55,6 +55,7 @@ ChangeLog
 - Improved performance of panel subwindows dragging on Wayland.
 - Fixed saving elapsed time being not being in milliseconds in the progress report bar.
 - Fixed showing Original (O) pixel values on the Vulkan backend as image was flipped in Y.
+- Made thumbnail generation on Vulkan backend faster.
 
 
 v1.4.3
