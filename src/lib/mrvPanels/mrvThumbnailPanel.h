@@ -44,8 +44,6 @@ namespace mrv
 
             void clearCache();
 
-            static void activeEvent_cb(ThumbnailPanel* self);
-
         protected:
             void _createThumbnail(
                 Fl_Widget* widget, const file::Path& path,

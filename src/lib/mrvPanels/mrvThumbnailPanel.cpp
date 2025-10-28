@@ -35,7 +35,7 @@ namespace mrv
         ThumbnailPanel::ThumbnailPanel(ViewerUI* ui) :
             PanelWidget(ui)
         {
-            Fl::add_timeout(1.0, (Fl_Timeout_Handler)timerEvent_cb, this);
+            Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
         }
 
         ThumbnailPanel::~ThumbnailPanel()
@@ -99,20 +99,6 @@ namespace mrv
             }
             Fl::repeat_timeout(
                 kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
-        }
-
-        void ThumbnailPanel::activeEvent_cb(ThumbnailPanel* self)
-        {
-            const auto context = App::app->getContext();
-#ifdef OPENGL_BACKEND
-            auto thumbnailSystem =
-                context->getSystem<timelineui::ThumbnailSystem>();
-#endif
-#ifdef VULKAN_BACKEND
-            auto thumbnailSystem =
-                context->getSystem<timelineui_vk::ThumbnailSystem>();
-#endif
-            thumbnailSystem->setActive();
         }
         
         void ThumbnailPanel::_createThumbnail(
@@ -193,8 +179,6 @@ namespace mrv
                 
                 thumbnailRequests[widget] =
                     thumbnailSystem->getThumbnail(path, size.h, time, options);
-
-                Fl::add_timeout(4.0, (Fl_Timeout_Handler)activeEvent_cb, this);
             }
             catch (const std::exception& e)
             {

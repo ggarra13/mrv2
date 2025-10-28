@@ -230,7 +230,6 @@ namespace tl
             std::weak_ptr<system::Context> context;
             std::shared_ptr<ThumbnailCache> cache;
             uint64_t requestId = 0;
-            std::atomic<bool> active = false;
 
             struct InfoRequest
             {
@@ -334,11 +333,6 @@ namespace tl
             startThreads();
         }
 
-        void ThumbnailGenerator::setActive()
-        {
-            _p->active = true;
-        }
-        
         void ThumbnailGenerator::startThreads()
         {
             TLRENDER_P();
@@ -403,8 +397,7 @@ namespace tl
                             }
                         }
 
-                        if (p.active)
-                            _thumbnailRun();
+                        _thumbnailRun();
                     }
                     {
                         std::unique_lock<std::mutex> lock(
@@ -1280,11 +1273,6 @@ namespace tl
             const otime::TimeRange& timeRange, const io::Options& ioOptions)
         {
             return _p->generator->getWaveform(path, size, timeRange, ioOptions);
-        }
-
-        void ThumbnailSystem::setActive()
-        {
-            _p->generator->setActive();
         }
 
         void ThumbnailSystem::cancelRequests(const std::vector<uint64_t>& ids)

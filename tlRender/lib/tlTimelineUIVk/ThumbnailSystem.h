@@ -148,9 +148,6 @@ namespace tl
                 const std::shared_ptr<system::Context>&,
                 Fl_Vk_Context&);
 
-            //! Make Thumbnail generator active.
-            void setActive();
-            
             //! Get information.
             InfoRequest
             getInfo(const file::Path&, const io::Options& = io::Options());
@@ -223,9 +220,6 @@ namespace tl
             create(const std::shared_ptr<system::Context>&,
                    Fl_Vk_Context& ctx);
 
-            //! Make thumbnail system active.
-            void setActive();
-            
             //! Get information.
             InfoRequest
             getInfo(const file::Path&, const io::Options& = io::Options());
