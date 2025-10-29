@@ -9,6 +9,7 @@
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvString.h"
 
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
 #include "mrvOptions/mrvStereo3DOptions.h"
@@ -867,8 +868,10 @@ namespace mrv
             ui->uiTimeline->redraw();
             ui->uiMain->fill_menu(ui->uiMenuBar);
 
-            // Change current session filename.
-            setCurrent(fileName);
+            // Change current session filename unless it is temp.mrv2s.
+            if (! string::ends_with(fileName, "temp.mrv2s") &&
+                ! string::ends_with(fileName, "lang.mrv2s"))
+                setCurrent(fileName);
                 
             
             return true;

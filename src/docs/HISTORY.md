@@ -32,7 +32,7 @@ I use the email information to contact you privately.  I don't sell your informa
 
 - The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
 
-Licens	     e works for both mrv2 and vmrv2 (you can have both installed).
+License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
 
 ChangeLog
@@ -40,7 +40,7 @@ ChangeLog
 
 - Made default Read Ahead be 4 seconds instead of 2.
 - Frame/Seconds/Timecode widgets now handle focus by clicking on them instead of just entering them.
-- Made Vulkan save out images with full color corrections (HDR + OCIO) when annotations is on.
+- Made Vulkan save out images and sequences with full color corrections (HDR + OCIO) if those are active.
 - Added Link Annotations.  Title is shown as a tooltip when moving the mouse pointer near the Link drawing.
 - Added Link Annotations to Session saving.
 - Added path mapping to Link Annotations.
@@ -56,6 +56,7 @@ ChangeLog
 - Fixed saving elapsed time being not being in milliseconds in the progress report bar.
 - Fixed showing Original (O) pixel values on the Vulkan backend as image was flipped in Y.
 - Made thumbnail generation on Vulkan backend faster.
+- When saving out a temporary session file (temp.mrv2s or lang.mrv2s), the current session file is no longer updated to it.
 
 
 v1.4.3
