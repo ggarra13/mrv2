@@ -136,14 +136,13 @@ namespace mrv
                 time = player->currentTime();
 
             file::Path lastPath;
-
+            
             for (size_t i = 0; i < numFiles; ++i)
             {
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
 
                 const bool isEDL = file::isTemporaryEDL(path);
-                const bool isNDI = file::isTemporaryNDI(path);
 
                 // When we refresh the .otio for EDL, we get two clips with the
                 // same name, we avoid displaying both with this check.
@@ -202,7 +201,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                _createThumbnail(b, path, time, layerId, isNDI);
+                _createThumbnail(b, path, time, layerId);
             }
 
             int Y = g->y() + 20 + numFiles * 64;
@@ -281,13 +280,12 @@ namespace mrv
             const auto& model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
-
+            
             for (auto& m : _r->map)
             {
                 size_t i = m.first;
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
-                const bool isNDI = file::isTemporaryNDI(path);
 
                 const std::string& protocol = path.getProtocol();
                 const std::string& dir = path.getDirectory();
@@ -316,7 +314,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                _createThumbnail(b, path, time, layerId, isNDI);
+                _createThumbnail(b, path, time, layerId);
             }
         }
 

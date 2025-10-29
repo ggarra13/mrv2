@@ -404,17 +404,35 @@ namespace tl
         ThumbnailGenerator::~ThumbnailGenerator()
         {
             TLRENDER_P();
-            p.infoThread.running = false;
+
+            // Stop info thread
+            {
+                std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
+                p.infoThread.running = false;
+            }
+            p.infoThread.cv.notify_one();
             if (p.infoThread.thread.joinable())
             {
                 p.infoThread.thread.join();
             }
-            p.thumbnailThread.running = false;
+
+            // Stop thumbnail thread
+            {
+                std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
+                p.thumbnailThread.running = false;
+            }
+            p.thumbnailThread.cv.notify_one();
             if (p.thumbnailThread.thread.joinable())
             {
                 p.thumbnailThread.thread.join();
             }
-            p.waveformThread.running = false;
+
+            // Stop waveform thread
+            {
+                std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
+                p.waveformThread.running = false;
+            }
+            p.waveformThread.cv.notify_one();
             if (p.waveformThread.thread.joinable())
             {
                 p.waveformThread.thread.join();
@@ -626,14 +644,29 @@ namespace tl
             std::shared_ptr<Private::InfoRequest> request;
             {
                 std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
-                if (p.infoThread.cv.wait_for(
-                        lock, std::chrono::milliseconds(5),
-                        [this] { return !_p->infoMutex.requests.empty(); }))
+
+                // Wait until there is a request OR the thread is stopped
+                p.infoThread.cv.wait(lock, [this] {
+                    return !_p->infoMutex.requests.empty() || !_p->infoThread.running;
+                });
+
+                // Check if we woke up to stop
+                if (!p.infoThread.running)
                 {
-                    request = p.infoMutex.requests.front();
-                    p.infoMutex.requests.pop_front();
+                    return;
                 }
+
+                // Check for spurious wakeup
+                if (p.infoMutex.requests.empty())
+                {
+                    return;
+                }
+
+                request = p.infoMutex.requests.front();
+                p.infoMutex.requests.pop_front();
             }
+            
+            // The request will be null if we woke up for any other reason
             if (request)
             {
                 io::Info info;
@@ -673,53 +706,138 @@ namespace tl
             std::shared_ptr<Private::ThumbnailRequest> request;
             {
                 std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
-                if (p.thumbnailThread.cv.wait_for(
-                        lock, std::chrono::milliseconds(5), [this]
-                        { return !_p->thumbnailMutex.requests.empty(); }))
+                // Wait until there is a request OR the thread is stopped
+                p.thumbnailThread.cv.wait(lock, [this] {
+                    return !_p->thumbnailMutex.requests.empty() || !_p->thumbnailThread.running;
+                });
+
+                // Check if we woke up to stop
+                if (!p.thumbnailThread.running)
                 {
-                    request = p.thumbnailMutex.requests.front();
-                    p.thumbnailMutex.requests.pop_front();
+                    return;
                 }
-            }
-            if (request)
-            {
-                std::shared_ptr<image::Image> image;
-                const std::string key = ThumbnailCache::getThumbnailKey(
-                    request->height, request->path, request->time,
-                    request->options);
-                if (!p.cache->getThumbnail(key, image))
+
+                // Check for spurious wakeup
+                if (p.thumbnailMutex.requests.empty())
                 {
-                    if (auto context = p.context.lock())
+                    return;
+                }
+        
+                request = p.thumbnailMutex.requests.front();
+                p.thumbnailMutex.requests.pop_front();
+            }
+            
+            // If we didn't get a valid request, just return and wait again
+            if (!request)
+            {
+                return;
+            }
+            
+            std::shared_ptr<image::Image> image;
+            const std::string key = ThumbnailCache::getThumbnailKey(
+                request->height, request->path, request->time,
+                request->options);
+            if (!p.cache->getThumbnail(key, image))
+            {
+                if (auto context = p.context.lock())
+                {
+                    auto ioSystem = context->getSystem<io::System>();
+                    try
                     {
-                        auto ioSystem = context->getSystem<io::System>();
-                        try
+                        const std::string& fileName = request->path.get();
+                        // std::cout << "thumbnail request: " << fileName <<
+                        // " " <<
+                        //     request->time << std::endl;
+                        std::shared_ptr<io::IRead> read;
+                        if (!p.thumbnailThread.ioCache.get(fileName, read))
                         {
-                            const std::string& fileName = request->path.get();
-                            // std::cout << "thumbnail request: " << fileName <<
-                            // " " <<
-                            //     request->time << std::endl;
-                            std::shared_ptr<io::IRead> read;
-                            if (!p.thumbnailThread.ioCache.get(fileName, read))
+                            auto ioSystem =
+                                context->getSystem<io::System>();
+                            read = ioSystem->read(
+                                request->path, request->memoryRead,
+                                request->options);
+                            p.thumbnailThread.ioCache.add(fileName, read);
+                        }
+                        if (read)
+                        {
+                            const io::Info info = read->getInfo().get();
+                            math::Size2i size;
+                            if (!info.video.empty())
                             {
-                                auto ioSystem =
-                                    context->getSystem<io::System>();
-                                read = ioSystem->read(
-                                    request->path, request->memoryRead,
-                                    request->options);
-                                p.thumbnailThread.ioCache.add(fileName, read);
+                                size.w = request->height *
+                                         info.video[0].size.getAspect();
+                                size.h = request->height;
                             }
-                            if (read)
+                            gl::OffscreenBufferOptions options;
+                            options.colorType = image::PixelType::RGBA_U8;
+                            if (gl::doCreate(
+                                    p.thumbnailThread.buffer, size,
+                                    options))
                             {
-                                const io::Info info = read->getInfo().get();
-                                math::Size2i size;
-                                if (!info.video.empty())
-                                {
-                                    size.w = request->height *
-                                             info.video[0].size.getAspect();
-                                    size.h = request->height;
-                                }
+                                p.thumbnailThread.buffer =
+                                    gl::OffscreenBuffer::create(
+                                        size, options);
+                            }
+                            const otime::RationalTime time =
+                                request->time != time::invalidTime
+                                ? request->time
+                                : info.videoTime.start_time();
+                            const auto videoData =
+                                read->readVideo(time, request->options)
+                                .get();
+                            if (p.thumbnailThread.render &&
+                                p.thumbnailThread.buffer && videoData.image)
+                            {
+                                gl::OffscreenBufferBinding binding(
+                                    p.thumbnailThread.buffer);
+                                p.thumbnailThread.render->begin(size);
+                                p.thumbnailThread.render->drawImage(
+                                    videoData.image,
+                                    {math::Box2i(0, 0, size.w, size.h)});
+                                p.thumbnailThread.render->end();
+                                image = image::Image::create(
+                                    size.w, size.h,
+                                    image::PixelType::RGBA_U8);
+                                glPixelStorei(GL_PACK_ALIGNMENT, 1);
+                                glReadPixels(
+                                    0, 0, size.w, size.h, GL_RGBA,
+                                    GL_UNSIGNED_BYTE, image->getData());
+                            }
+                        }
+                        else if (
+                            string::compare(
+                                ".otio", request->path.getExtension(),
+                                string::Compare::CaseInsensitive) ||
+                            string::compare(
+                                ".otioz", request->path.getExtension(),
+                                string::Compare::CaseInsensitive))
+                        {
+                            otime::RationalTime offsetTime =
+                                time::invalidTime;
+                            timeline::Options timelineOptions;
+                            timelineOptions.ioOptions = request->options;
+                            auto timeline = timeline::Timeline::create(
+                                request->path, context, offsetTime,
+                                timelineOptions);
+                            const auto info = timeline->getIOInfo();
+                            // const auto videoData = timeline->getVideo(
+                            //     timeline->getTimeRange().start_time()).future.get();
+                            const auto videoData =
+                                timeline->getVideo(request->time)
+                                .future.get();
+                            math::Size2i size;
+                            if (!info.video.empty())
+                            {
+                                size.w =
+                                    request->height *
+                                    info.video.front().size.getAspect();
+                                size.h = request->height;
+                            }
+                            if (size.isValid())
+                            {
                                 gl::OffscreenBufferOptions options;
-                                options.colorType = image::PixelType::RGBA_U8;
+                                options.colorType =
+                                    image::PixelType::RGBA_U8;
                                 if (gl::doCreate(
                                         p.thumbnailThread.buffer, size,
                                         options))
@@ -728,22 +846,16 @@ namespace tl
                                         gl::OffscreenBuffer::create(
                                             size, options);
                                 }
-                                const otime::RationalTime time =
-                                    request->time != time::invalidTime
-                                        ? request->time
-                                        : info.videoTime.start_time();
-                                const auto videoData =
-                                    read->readVideo(time, request->options)
-                                        .get();
                                 if (p.thumbnailThread.render &&
-                                    p.thumbnailThread.buffer && videoData.image)
+                                    p.thumbnailThread.buffer)
                                 {
                                     gl::OffscreenBufferBinding binding(
                                         p.thumbnailThread.buffer);
                                     p.thumbnailThread.render->begin(size);
-                                    p.thumbnailThread.render->drawImage(
-                                        videoData.image,
-                                        {math::Box2i(0, 0, size.w, size.h)});
+                                    p.thumbnailThread.render->drawVideo(
+                                        {videoData},
+                                        {math::Box2i(
+                                                0, 0, size.w, size.h)});
                                     p.thumbnailThread.render->end();
                                     image = image::Image::create(
                                         size.w, size.h,
@@ -754,78 +866,16 @@ namespace tl
                                         GL_UNSIGNED_BYTE, image->getData());
                                 }
                             }
-                            else if (
-                                string::compare(
-                                    ".otio", request->path.getExtension(),
-                                    string::Compare::CaseInsensitive) ||
-                                string::compare(
-                                    ".otioz", request->path.getExtension(),
-                                    string::Compare::CaseInsensitive))
-                            {
-                                otime::RationalTime offsetTime =
-                                    time::invalidTime;
-                                timeline::Options timelineOptions;
-                                timelineOptions.ioOptions = request->options;
-                                auto timeline = timeline::Timeline::create(
-                                    request->path, context, offsetTime,
-                                    timelineOptions);
-                                const auto info = timeline->getIOInfo();
-                                // const auto videoData = timeline->getVideo(
-                                //     timeline->getTimeRange().start_time()).future.get();
-                                const auto videoData =
-                                    timeline->getVideo(request->time)
-                                        .future.get();
-                                math::Size2i size;
-                                if (!info.video.empty())
-                                {
-                                    size.w =
-                                        request->height *
-                                        info.video.front().size.getAspect();
-                                    size.h = request->height;
-                                }
-                                if (size.isValid())
-                                {
-                                    gl::OffscreenBufferOptions options;
-                                    options.colorType =
-                                        image::PixelType::RGBA_U8;
-                                    if (gl::doCreate(
-                                            p.thumbnailThread.buffer, size,
-                                            options))
-                                    {
-                                        p.thumbnailThread.buffer =
-                                            gl::OffscreenBuffer::create(
-                                                size, options);
-                                    }
-                                    if (p.thumbnailThread.render &&
-                                        p.thumbnailThread.buffer)
-                                    {
-                                        gl::OffscreenBufferBinding binding(
-                                            p.thumbnailThread.buffer);
-                                        p.thumbnailThread.render->begin(size);
-                                        p.thumbnailThread.render->drawVideo(
-                                            {videoData},
-                                            {math::Box2i(
-                                                0, 0, size.w, size.h)});
-                                        p.thumbnailThread.render->end();
-                                        image = image::Image::create(
-                                            size.w, size.h,
-                                            image::PixelType::RGBA_U8);
-                                        glPixelStorei(GL_PACK_ALIGNMENT, 1);
-                                        glReadPixels(
-                                            0, 0, size.w, size.h, GL_RGBA,
-                                            GL_UNSIGNED_BYTE, image->getData());
-                                    }
-                                }
-                            }
-                        }
-                        catch (const std::exception&)
-                        {
                         }
                     }
+                    catch (const std::exception&)
+                    {
+                    }
                 }
-                request->promise.set_value(image);
-                p.cache->addThumbnail(key, image);
             }
+            request->promise.set_value(image);
+            p.cache->addThumbnail(key, image);
+            
         }
 
         namespace
@@ -977,13 +1027,26 @@ namespace tl
             std::shared_ptr<Private::WaveformRequest> request;
             {
                 std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
-                if (p.waveformThread.cv.wait_for(
-                        lock, std::chrono::milliseconds(5),
-                        [this] { return !_p->waveformMutex.requests.empty(); }))
+
+                // Wait until there is a request OR the thread is stopped
+                p.waveformThread.cv.wait(lock, [this] {
+                    return !_p->waveformMutex.requests.empty() || !_p->waveformThread.running;
+                });
+
+                // Check if we woke up to stop
+                if (!p.waveformThread.running)
                 {
-                    request = p.waveformMutex.requests.front();
-                    p.waveformMutex.requests.pop_front();
+                    return;
                 }
+
+                // Check for spurious wakeup
+                if (p.waveformMutex.requests.empty())
+                {
+                    return;
+                }
+        
+                request = p.waveformMutex.requests.front();
+                p.waveformMutex.requests.pop_front();
             }
             if (request)
             {

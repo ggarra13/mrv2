@@ -1489,7 +1489,8 @@ namespace mrv
             const auto& timeRange = p.player->inOutRange();
             const bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
             const bool playbackFlag =
-                p.options.playback != timeline::Playback::Count;
+                p.options.playback != timeline::Playback::Count &&
+                p.options.playback != timeline::Playback::Stop;
             if (!p.session && (autoPlayback || playbackFlag) &&
                 timeRange.duration().value() > 1)
             {
@@ -2089,7 +2090,7 @@ namespace mrv
                                 autoPlayback = false;
 
                             if (!file::isTemporaryEDL(item->path) &&
-                                autoPlayback)
+                                autoPlayback && isRunning())
                             {
                                 player->setPlayback(
                                     timeline::Playback::Forward);

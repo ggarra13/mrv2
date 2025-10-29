@@ -23,7 +23,7 @@ namespace py = pybind11;
 
 namespace
 {
-    const float kTimeout = 0.05;
+    const float kTimeout = 0.01;
 }
 
 namespace mrv
@@ -43,9 +43,8 @@ namespace mrv
             Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
         }
 
-        void ThumbnailPanel::timerEvent_cb(void* opaque)
+        void ThumbnailPanel::timerEvent_cb(ThumbnailPanel* panel)
         {
-            ThumbnailPanel* panel = static_cast< ThumbnailPanel* >(opaque);
             panel->timerEvent();
         }
 
@@ -103,8 +102,7 @@ namespace mrv
         
         void ThumbnailPanel::_createThumbnail(
             Fl_Widget* widget, const file::Path& path,
-            const otime::RationalTime& currentTime, const int layerId,
-            const bool isNDI)
+            const otime::RationalTime& currentTime, const int layerId)
         {
             TLRENDER_P();
 
@@ -116,7 +114,7 @@ namespace mrv
                 return;
             }
 
-            if (isNDI)
+            if (file::isTemporaryNDI(path))
             {
                 widget->bind_image(NDIimage->copy());
                 return;

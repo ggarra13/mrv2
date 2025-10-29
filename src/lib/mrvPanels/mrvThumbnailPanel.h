@@ -39,7 +39,7 @@ namespace mrv
             virtual ~ThumbnailPanel();
 
             //! FLTK callbacks
-            static void timerEvent_cb(void* data);
+            static void timerEvent_cb(ThumbnailPanel* data);
             void timerEvent();
 
             void clearCache();
@@ -47,8 +47,7 @@ namespace mrv
         protected:
             void _createThumbnail(
                 Fl_Widget* widget, const file::Path& path,
-                const otime::RationalTime& time, const int layerId = 0,
-                const bool isNDI = false);
+                const otime::RationalTime& time, const int layerId = 0);
 
             void _cancelRequests();
 

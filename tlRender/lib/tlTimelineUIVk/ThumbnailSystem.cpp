@@ -20,9 +20,6 @@
 #include <FL/Fl_Vk_Utils.H>
 #include <FL/Fl.H>
 
-#include <chrono>
-#include <thread>
-
 namespace tl
 {
     namespace timelineui_vk
@@ -332,116 +329,86 @@ namespace tl
             
             startThreads();
         }
-
+        
         void ThumbnailGenerator::startThreads()
         {
             TLRENDER_P();
-            
+
+            // --- infoThread ---
+            // (This thread lambda is already correct)
             p.infoThread.running = true;
             p.infoThread.thread = std::thread(
                 [this]
-                {
-                    TLRENDER_P();
-                    while (p.infoThread.running)
                     {
-                        _infoRun();
-                    }
-                    {
-                        std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
-                        p.infoMutex.stopped = true;
-                    }
-                    _infoCancel();
-                });            
-            
+                        TLRENDER_P();
+                        while (p.infoThread.running)
+                        {
+                            _infoRun();
+                        }
+                        {
+                            std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
+                            p.infoMutex.stopped = true;
+                        }
+                        _infoCancel();
+                    });
+
+            // --- thumbnailThread ---
             p.thumbnailThread.ioCache.setMax(ioCacheMax);
             p.thumbnailThread.running = true;
             p.thumbnailThread.thread = std::thread(
                 [this]
-                {
-                    TLRENDER_P();
-
-                    while (p.thumbnailThread.running)
                     {
-                        if (ctx.queue() == VK_NULL_HANDLE ||
-                            ctx.device == VK_NULL_HANDLE ||
-                            ctx.instance == VK_NULL_HANDLE)
-                            continue;
+                        TLRENDER_P();
 
-                        if (!p.thumbnailThread.render)
+                        while (p.thumbnailThread.running)
                         {
-                            if (auto context = p.context.lock())
-                            {
-                                p.thumbnailThread.render =
-                                    timeline_vlk::Render::create(ctx, context);
-                                
-                                // Create command pool
-                                if (p.thumbnailThread.commandPool == VK_NULL_HANDLE)
-                                {
-                                    VkDevice device = ctx.device;
-                                
-                                    VkCommandPoolCreateInfo cmd_pool_info = {};
-                                    cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-                                    cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
-                                    cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-                                    vkCreateCommandPool(device, &cmd_pool_info, nullptr,
-                                                        &p.thumbnailThread.commandPool);
-                                    
-                                    VkCommandBufferAllocateInfo allocInfo = {};
-                                    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-                                    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-                                    allocInfo.commandPool = p.thumbnailThread.commandPool;
-                                    allocInfo.commandBufferCount = 1;
-                                    
-                                    vkAllocateCommandBuffers(device, &allocInfo, &p.thumbnailThread.cmd);
-                                }
-                            }
+                            _thumbnailRun();
                         }
 
-                        _thumbnailRun();
-                    }
-                    {
-                        std::unique_lock<std::mutex> lock(
-                            p.thumbnailMutex.mutex);
-                        p.thumbnailMutex.stopped = true;
-                    }
-                    VkDevice device = ctx.device;
-                    if (device != VK_NULL_HANDLE &&
-                        p.thumbnailThread.commandPool != VK_NULL_HANDLE)
-                    {
-                        VkCommandPool& commandPool = p.thumbnailThread.commandPool;
-                            
-                        vkFreeCommandBuffers(device, commandPool, 1, &p.thumbnailThread.cmd);
-                        p.thumbnailThread.cmd = VK_NULL_HANDLE;
-                        
-                        vkDestroyCommandPool(device,
-                                             p.thumbnailThread.commandPool,
-                                             nullptr);
-                        p.thumbnailThread.commandPool = VK_NULL_HANDLE;
-                                    
-                    }
-                    p.thumbnailThread.buffer.reset();
-                    p.thumbnailThread.render.reset();
-                    _thumbnailCancel();
-                });
+                        // --- Cleanup ---
+                        {
+                            std::unique_lock<std::mutex> lock(
+                                p.thumbnailMutex.mutex);
+                            p.thumbnailMutex.stopped = true;
+                        }
+                        VkDevice device = ctx.device;
+                        if (device != VK_NULL_HANDLE &&
+                            p.thumbnailThread.commandPool != VK_NULL_HANDLE)
+                        {
+                            VkCommandPool& commandPool = p.thumbnailThread.commandPool;
+
+                            vkFreeCommandBuffers(device, commandPool, 1, &p.thumbnailThread.cmd);
+                            p.thumbnailThread.cmd = VK_NULL_HANDLE;
+
+                            vkDestroyCommandPool(device,
+                                                 p.thumbnailThread.commandPool,
+                                                 nullptr);
+                            p.thumbnailThread.commandPool = VK_NULL_HANDLE;
+
+                        }
+                        p.thumbnailThread.buffer.reset();
+                        p.thumbnailThread.render.reset();
+                        _thumbnailCancel();
+                    });
 
             p.waveformThread.ioCache.setMax(ioCacheMax);
             p.waveformThread.running = true;
             p.waveformThread.thread = std::thread(
                 [this]
-                {
-                    TLRENDER_P();
-                    
-                    while (p.waveformThread.running)
                     {
-                        _waveformRun();
-                    }
-                    {
-                        std::unique_lock<std::mutex> lock(
-                            p.waveformMutex.mutex);
-                        p.waveformMutex.stopped = true;
-                    }
-                    _waveformCancel();
-                });
+                        TLRENDER_P();
+
+                        while (p.waveformThread.running)
+                        {
+                            _waveformRun();
+                        }
+                        {
+                            std::unique_lock<std::mutex> lock(
+                                p.waveformMutex.mutex);
+                            p.waveformMutex.stopped = true;
+                        }
+                        _waveformCancel();
+                    });
         }
 
         ThumbnailGenerator::ThumbnailGenerator(Fl_Vk_Context& ctx) :
@@ -458,18 +425,35 @@ namespace tl
         void ThumbnailGenerator::exitThreads()
         {
             TLRENDER_P();
-            
-            p.infoThread.running = false;
+
+            // Stop info thread
+            {
+                std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
+                p.infoThread.running = false;
+            }
+            p.infoThread.cv.notify_one();
             if (p.infoThread.thread.joinable())
             {
                 p.infoThread.thread.join();
             }
-            p.thumbnailThread.running = false;
+
+            // Stop thumbnail thread
+            {
+                std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
+                p.thumbnailThread.running = false;
+            }
+            p.thumbnailThread.cv.notify_one();
             if (p.thumbnailThread.thread.joinable())
             {
                 p.thumbnailThread.thread.join();
             }
-            p.waveformThread.running = false;
+
+            // Stop waveform thread
+            {
+                std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
+                p.waveformThread.running = false;
+            }
+            p.waveformThread.cv.notify_one();
             if (p.waveformThread.thread.joinable())
             {
                 p.waveformThread.thread.join();
@@ -681,14 +665,29 @@ namespace tl
             std::shared_ptr<Private::InfoRequest> request;
             {
                 std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
-                if (p.infoThread.cv.wait_for(
-                        lock, std::chrono::milliseconds(5),
-                        [this] { return !_p->infoMutex.requests.empty(); }))
+
+                // Wait until there is a request OR the thread is stopped
+                p.infoThread.cv.wait(lock, [this] {
+                    return !_p->infoMutex.requests.empty() || !_p->infoThread.running;
+                });
+
+                // Check if we woke up to stop
+                if (!p.infoThread.running)
                 {
-                    request = p.infoMutex.requests.front();
-                    p.infoMutex.requests.pop_front();
+                    return;
                 }
+
+                // Check for spurious wakeup
+                if (p.infoMutex.requests.empty())
+                {
+                    return;
+                }
+
+                request = p.infoMutex.requests.front();
+                p.infoMutex.requests.pop_front();
             }
+    
+            // The request will be null if we woke up for any other reason
             if (request)
             {
                 io::Info info;
@@ -728,17 +727,88 @@ namespace tl
             std::shared_ptr<Private::ThumbnailRequest> request;
             {
                 std::unique_lock<std::mutex> lock(p.thumbnailMutex.mutex);
-                if (p.thumbnailThread.cv.wait_for(
-                        lock, std::chrono::milliseconds(5), [this]
-                        { return !_p->thumbnailMutex.requests.empty(); }))
+
+                // Wait until there is a request OR the thread is stopped
+                p.thumbnailThread.cv.wait(lock, [this] {
+                    return !_p->thumbnailMutex.requests.empty() || !_p->thumbnailThread.running;
+                });
+
+                // Check if we woke up to stop
+                if (!p.thumbnailThread.running)
                 {
-                    request = p.thumbnailMutex.requests.front();
-                    p.thumbnailMutex.requests.pop_front();
+                    return;
+                }
+
+                // Check for spurious wakeup
+                if (p.thumbnailMutex.requests.empty())
+                {
+                    return;
+                }
+        
+                request = p.thumbnailMutex.requests.front();
+                p.thumbnailMutex.requests.pop_front();
+            }
+    
+            // If we didn't get a valid request, just return and wait again
+            if (!request)
+            {
+                return;
+            }
+
+            // --- Vulkan and Renderer Checks ---
+    
+            // 1. Check Vulkan context
+            if (ctx.queue() == VK_NULL_HANDLE ||
+                ctx.device == VK_NULL_HANDLE ||
+                ctx.instance == VK_NULL_HANDLE)
+            {
+                // Context is not ready, fail the request and return
+                request->promise.set_value(nullptr);
+                return;
+            }
+
+            // 2. Check and initialize renderer
+            if (!p.thumbnailThread.render)
+            {
+                if (auto context = p.context.lock())
+                {
+                    p.thumbnailThread.render =
+                        timeline_vlk::Render::create(ctx, context);
+
+                    VkDevice device = ctx.device;
+
+                    // Create command pool
+                    if (p.thumbnailThread.commandPool == VK_NULL_HANDLE)
+                    {
+                        VkCommandPoolCreateInfo cmd_pool_info = {};
+                        cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+                        cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
+                        cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+                        vkCreateCommandPool(device, &cmd_pool_info, nullptr,
+                                            &p.thumbnailThread.commandPool);
+                    }
+
+                    if (p.thumbnailThread.cmd == VK_NULL_HANDLE)
+                    {
+                        VkCommandBufferAllocateInfo allocInfo = {};
+                        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+                        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+                        allocInfo.commandPool = p.thumbnailThread.commandPool;
+                        allocInfo.commandBufferCount = 1;
+
+                        vkAllocateCommandBuffers(device, &allocInfo, &p.thumbnailThread.cmd);
+                    }
+                }
+                else
+                {
+                    // System context is gone, fail the request
+                    request->promise.set_value(nullptr);
+                    return;
                 }
             }
-            if (!request)
-                return;
+    
 
+            // --- Process the Request ---
             std::shared_ptr<image::Image> image;
             const std::string key = ThumbnailCache::getThumbnailKey(
                 request->height, request->path, request->time,
@@ -751,9 +821,8 @@ namespace tl
                     try
                     {
                         const std::string& fileName = request->path.get();
-                        // std::cout << "thumbnail request: " << fileName <<
-                        // " " <<
-                        //     request->time << std::endl;
+                        // std::cout << "thumbnail request: " << fileName
+                        //           << " " << request->time << std::endl;
                         std::shared_ptr<io::IRead> read;
                         if (!p.thumbnailThread.ioCache.get(fileName, read))
                         {
@@ -795,23 +864,21 @@ namespace tl
                             if (p.thumbnailThread.render &&
                                 p.thumbnailThread.buffer && videoData.image)
                             {
-                                        
-                                    
                                 image = image::Image::create(
                                     size.w, size.h,
                                     image::PixelType::RGBA_U8);
 
                                 VkCommandBuffer& cmd = p.thumbnailThread.cmd;
                                 vkResetCommandBuffer(cmd, 0);
-                                    
+                        
                                 VkCommandBufferBeginInfo beginInfo = {};
                                 beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
                                 beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-   
+                        
                                 vkBeginCommandBuffer(cmd, &beginInfo);
-                                    
+                        
                                 p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
-                                    
+                        
                                 timeline::RenderOptions renderOptions;
                                 renderOptions.clear = true;
                                 p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
@@ -823,7 +890,7 @@ namespace tl
                                     0.F, static_cast<float>(size.h),
                                     -1.F, 1.F);
                                 p.thumbnailThread.render->setTransform(ortho);
-  
+                        
                                 p.thumbnailThread.render->drawImage(
                                     videoData.image,
                                     {math::Box2i(0, 0, size.w, size.h)});
@@ -900,9 +967,6 @@ namespace tl
                                         size.w, size.h,
                                         image::PixelType::RGBA_U8);
                                         
-                                    VkDevice& device = ctx.device;
-                                    VkCommandPool& commandPool = p.thumbnailThread.commandPool;
-                                    
                                     VkCommandBuffer& cmd = p.thumbnailThread.cmd;
                                     vkResetCommandBuffer(cmd, 0);
                                     
@@ -911,9 +975,9 @@ namespace tl
                                     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
    
                                     vkBeginCommandBuffer(cmd, &beginInfo);
-                                    
+                            
                                     p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
-                                    
+                            
                                     timeline::RenderOptions renderOptions;
                                     renderOptions.clear = true;
                                     p.thumbnailThread.render->begin(cmd,
@@ -932,7 +996,7 @@ namespace tl
                                                 0, 0, size.w, size.h)});
                                     p.thumbnailThread.render->end();
                                     p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
-                                    
+                            
                                     p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
                                                                          size.h);
                                     
@@ -940,7 +1004,7 @@ namespace tl
                 
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
-                                    
+
                                     void* imageData = nullptr;
                                     while (! (imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
                                         ;
@@ -1112,14 +1176,28 @@ namespace tl
             std::shared_ptr<Private::WaveformRequest> request;
             {
                 std::unique_lock<std::mutex> lock(p.waveformMutex.mutex);
-                if (p.waveformThread.cv.wait_for(
-                        lock, std::chrono::milliseconds(5),
-                        [this] { return !_p->waveformMutex.requests.empty(); }))
+
+                // Wait until there is a request OR the thread is stopped
+                p.waveformThread.cv.wait(lock, [this] {
+                    return !_p->waveformMutex.requests.empty() || !_p->waveformThread.running;
+                });
+
+                // Check if we woke up to stop
+                if (!p.waveformThread.running)
                 {
-                    request = p.waveformMutex.requests.front();
-                    p.waveformMutex.requests.pop_front();
+                    return;
                 }
+
+                // Check for spurious wakeup
+                if (p.waveformMutex.requests.empty())
+                {
+                    return;
+                }
+        
+                request = p.waveformMutex.requests.front();
+                p.waveformMutex.requests.pop_front();
             }
+    
             if (request)
             {
                 std::shared_ptr<geom::TriangleMesh2> mesh;

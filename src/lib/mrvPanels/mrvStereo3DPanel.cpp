@@ -127,8 +127,6 @@ namespace mrv
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
 
-                const bool isNDI = file::isTemporaryNDI(path);
-
                 // We skip EDLs created in tmp dir here.
                 const bool isEDL = file::isTemporaryEDL(path);
 
@@ -184,7 +182,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                _createThumbnail(b, path, time, layerId, isNDI);
+                _createThumbnail(b, path, time, layerId);
             }
 
             Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -379,7 +377,6 @@ namespace mrv
                 size_t i = m.first;
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
-                const bool isNDI = file::isTemporaryNDI(path);
 
                 const std::string& protocol = path.getProtocol();
                 const std::string& dir = path.getDirectory();
@@ -420,7 +417,7 @@ namespace mrv
                 b->copy_label(text.c_str());
                 b->labelcolor(FL_WHITE);
 
-                _createThumbnail(b, path, time, layerId, isNDI);
+                _createThumbnail(b, path, time, layerId);
             }
         }
 

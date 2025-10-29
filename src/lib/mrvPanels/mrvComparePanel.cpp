@@ -152,7 +152,6 @@ namespace mrv
                 const auto& path = media->path;
 
                 const bool isEDL = file::isTemporaryEDL(path);
-                const bool isNDI = file::isTemporaryNDI(path);
 
                 // When we refresh the .otio for EDL, we get two clips with the
                 // same name, we avoid displaying both with this check.
@@ -210,7 +209,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                _createThumbnail(b, path, time, layerId, isNDI);
+                _createThumbnail(b, path, time, layerId);
 
                 Y += size.h;
             }
@@ -545,8 +544,7 @@ namespace mrv
             {
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
-                const bool isNDI = file::isTemporaryNDI(path);
-
+                
                 const std::string& protocol = path.getProtocol();
                 const std::string& dir = path.getDirectory();
                 const std::string file =
@@ -589,7 +587,7 @@ namespace mrv
                 std::string text = protocol + dir + "\n" + file + layer;
                 b->copy_label(text.c_str());
 
-                _createThumbnail(b, path, time, layerId, isNDI);
+                _createThumbnail(b, path, time, layerId);
             }
         }
 
