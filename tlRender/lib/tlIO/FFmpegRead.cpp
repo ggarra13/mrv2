@@ -257,18 +257,30 @@ namespace tl
         Read::~Read()
         {
             TLRENDER_P();
-            p.videoThread.running = false;
-            p.audioThread.running = false;
+
+            // Stop the video thread
+            {
+                std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
+                p.videoThread.running = false;
+            }
+            p.videoThread.cv.notify_one();
             if (p.videoThread.thread.joinable())
             {
                 p.videoThread.thread.join();
             }
+
+            // Stop the audio thread
+            {
+                std::unique_lock<std::mutex> lock(p.audioMutex.mutex);
+                p.audioThread.running = false;
+            }
+            p.audioThread.cv.notify_one();
             if (p.audioThread.thread.joinable())
             {
                 p.audioThread.thread.join();
             }
         }
-
+        
         std::shared_ptr<Read> Read::create(
             const file::Path& path, const io::Options& options,
             const std::shared_ptr<io::Cache>& cache,
@@ -405,21 +417,27 @@ namespace tl
                 std::shared_ptr<Private::VideoRequest> videoRequest;
                 {
                     std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
-                    if (p.videoThread.cv.wait_for(
-                            lock,
-                            std::chrono::milliseconds(p.options.requestTimeout),
-                            [this]
+                    p.videoThread.cv.wait(
+                            lock, [this]
                             {
-                                return !_p->videoMutex.infoRequests.empty() ||
-                                       !_p->videoMutex.videoRequests.empty();
-                            }))
+                                return (!_p->videoMutex.infoRequests.empty() ||
+                                        !_p->videoMutex.videoRequests.empty() ||
+                                        !_p->videoThread.running);
+                            });
+
+                    // Check if we woke up to stop
+                    if (!p.videoThread.running)
+                        return;
+
+                    // Check for spurious wakeup
+                    if (p.videoMutex.infoRequests.empty())
+                        continue;
+                    
+                    infoRequests = std::move(p.videoMutex.infoRequests);
+                    if (!p.videoMutex.videoRequests.empty())
                     {
-                        infoRequests = std::move(p.videoMutex.infoRequests);
-                        if (!p.videoMutex.videoRequests.empty())
-                        {
-                            videoRequest = p.videoMutex.videoRequests.front();
-                            p.videoMutex.videoRequests.pop_front();
-                        }
+                        videoRequest = p.videoMutex.videoRequests.front();
+                        p.videoMutex.videoRequests.pop_front();
                     }
                 }
 
@@ -540,28 +558,31 @@ namespace tl
                 bool seek = false;
                 {
                     std::unique_lock<std::mutex> lock(p.audioMutex.mutex);
-                    if (p.audioThread.cv.wait_for(
-                            lock,
-                            std::chrono::milliseconds(p.options.requestTimeout),
-                            [this]
-                            { return !_p->audioMutex.requests.empty(); }))
+                    p.audioThread.cv.wait(
+                        lock, [this]
+                            { return (!_p->audioMutex.requests.empty() ||
+                                      !_p->audioThread.running); });
+
+                    // Check if we woke up to stop
+                    if (!p.audioThread.running)
+                        return;
+                    
+                    // Check for spurious wakeup
+                    if (p.audioMutex.requests.empty())
+                        continue;
+                                        
+                    request = p.audioMutex.requests.front();
+                    p.audioMutex.requests.pop_front();
+                    requestSampleCount =
+                        request->timeRange.duration()
+                        .rescaled_to(p.info.audio.sampleRate)
+                        .value();
+                    if (!request->timeRange.start_time().strictly_equal(
+                            p.audioThread.currentTime))
                     {
-                        if (!p.audioMutex.requests.empty())
-                        {
-                            request = p.audioMutex.requests.front();
-                            p.audioMutex.requests.pop_front();
-                            requestSampleCount =
-                                request->timeRange.duration()
-                                    .rescaled_to(p.info.audio.sampleRate)
-                                    .value();
-                            if (!request->timeRange.start_time().strictly_equal(
-                                    p.audioThread.currentTime))
-                            {
-                                seek = true;
-                                p.audioThread.currentTime =
-                                    request->timeRange.start_time();
-                            }
-                        }
+                        seek = true;
+                        p.audioThread.currentTime =
+                            request->timeRange.start_time();
                     }
                 }
 
