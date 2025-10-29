@@ -58,8 +58,9 @@ ChangeLog
 - Made thumbnail generation on both Vulkan and OpenGL bakends faster.
 - When saving out a temporary session file (temp.mrv2s or lang.mrv2s), the current session file is no longer updated to it.
 - Fixed -p Stop command-line flag stopping after playback was started when AutoPlayback was on in the Preferences.ç
-- Fixed thumbnail generation on Vulkan make the playback stutter.
-- Improved performance of video decoding.
+- Fixed thumbnail generation on Vulkan making the playback stutter.
+- Improved the performance of video decoding.
+- Improved the performance of sequence decoding (all formats).
 
 
 v1.4.3

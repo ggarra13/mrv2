@@ -428,10 +428,6 @@ namespace tl
                     // Check if we woke up to stop
                     if (!p.videoThread.running)
                         return;
-
-                    // Check for spurious wakeup
-                    if (p.videoMutex.infoRequests.empty())
-                        continue;
                     
                     infoRequests = std::move(p.videoMutex.infoRequests);
                     if (!p.videoMutex.videoRequests.empty())

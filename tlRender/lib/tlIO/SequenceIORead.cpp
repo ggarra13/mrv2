@@ -175,7 +175,13 @@ namespace tl
         void ISequenceRead::_finish()
         {
             TLRENDER_P();
-            p.thread.running = false;
+            
+            // Stop the sequence thread
+            {
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.thread.running = false;
+            }
+            p.thread.cv.notify_one();
             if (p.thread.thread.joinable())
             {
                 p.thread.thread.join();
@@ -194,26 +200,28 @@ namespace tl
                     videoRequests;
                 {
                     std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                    if (p.thread.cv.wait_for(
-                            lock, sequenceRequestTimeout,
-                            [this]
+                    p.thread.cv.wait(
+                            lock, [this]
                             {
-                                return !_p->mutex.infoRequests.empty() ||
-                                       !_p->mutex.videoRequests.empty() ||
-                                       !_p->thread.videoRequestsInProgress
-                                            .empty();
-                            }))
+                                return (!_p->mutex.infoRequests.empty() ||
+                                        !_p->mutex.videoRequests.empty() ||
+                                        !_p->thread.videoRequestsInProgress.empty() ||
+                                        !_p->thread.running);
+                            });
+
+                    if (!p.thread.running)
+                        return;
+                    
+                    infoRequests = std::move(p.mutex.infoRequests);
+                    while (!p.mutex.videoRequests.empty() &&
+                           (p.thread.videoRequestsInProgress.size() +
+                            videoRequests.size()) < p.threadCount)
                     {
-                        infoRequests = std::move(p.mutex.infoRequests);
-                        while (!p.mutex.videoRequests.empty() &&
-                               (p.thread.videoRequestsInProgress.size() +
-                                videoRequests.size()) < p.threadCount)
-                        {
-                            videoRequests.push_back(
-                                p.mutex.videoRequests.front());
-                            p.mutex.videoRequests.pop_front();
-                        }
+                        videoRequests.push_back(
+                            p.mutex.videoRequests.front());
+                        p.mutex.videoRequests.pop_front();
                     }
+                    
                 }
 
                 // Information rquests.
