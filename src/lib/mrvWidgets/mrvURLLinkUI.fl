@@ -58,11 +58,12 @@ if (type == 0)
 else if (type == 1)
 {
         std::string dir = mrv::open_directory(v->value());
+        files.push_back(dir);
 }
 
 if ( files.empty() ) return;
 
-v->value( files[0].c_str() );} open
+v->value( files[0].c_str() );} open selected
           xywh {684 84 84 32}
         } {
           MenuItem {} {

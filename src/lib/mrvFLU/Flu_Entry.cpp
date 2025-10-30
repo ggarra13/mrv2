@@ -283,7 +283,7 @@ void Flu_Entry::updateIcon()
     }
     // if there is no icon, assign a default one
     if (!icon && type == ENTRY_FILE &&
-        !(static_cast<int>(chooser->selectionType) &
+        !(static_cast<int>(chooser->type()) &
           static_cast<int>(ChooserType::DEACTIVATE_FILES)))
         icon = chooser->defaultFileIcon;
     if (type == ENTRY_FAVORITE)
@@ -456,9 +456,9 @@ int Flu_Entry::handle(int event)
                 // double-clicking a file chooses it if we are in file selection
                 // mode
                 else if (
-                    !(static_cast<int>(chooser->selectionType) &
-                      static_cast<int>(ChooserType::DIRECTORY)) ||
-                    (static_cast<int>(chooser->selectionType) &
+                    (static_cast<int>(chooser->type()) &
+                     static_cast<int>(ChooserType::DIRECTORY)) ||
+                    (static_cast<int>(chooser->type()) &
                      static_cast<int>(ChooserType::STDFILE)))
                 {
                     Fl::event_clicks(0);
@@ -486,7 +486,7 @@ int Flu_Entry::handle(int event)
           }
 
           else*/
-        if (static_cast<int>(chooser->selectionType) &
+        if (static_cast<int>(chooser->type()) &
             static_cast<int>(ChooserType::MULTI))
         {
             if (Fl::event_state(FL_CTRL))
@@ -551,9 +551,9 @@ int Flu_Entry::handle(int event)
                 chooser->getEntryContainer()->take_focus();
             }
 
-            if (!((static_cast<int>(chooser->selectionType) &
+            if (!((static_cast<int>(chooser->type()) &
                    static_cast<int>(ChooserType::DIRECTORY)) ||
-                  (static_cast<int>(chooser->selectionType) &
+                  (static_cast<int>(chooser->type()) &
                    static_cast<int>(ChooserType::STDFILE))) &&
                 (Fl::event_state(FL_CTRL) || Fl::event_state(FL_SHIFT)))
             {
@@ -588,13 +588,13 @@ int Flu_Entry::handle(int event)
 
         // don't put the filename into the box if we are a directory but we are
         // not choosing directories or if we are in SAVING mode
-        if ((static_cast<int>(chooser->selectionType) &
+        if ((static_cast<int>(chooser->type()) &
              static_cast<int>(ChooserType::DIRECTORY)) ||
-            (static_cast<int>(chooser->selectionType) &
+            (static_cast<int>(chooser->type()) &
              static_cast<int>(ChooserType::STDFILE)) ||
             type == ENTRY_FILE || type == ENTRY_SEQUENCE)
             chooser->filename.value(filename.c_str());
-        else if (!(static_cast<int>(chooser->selectionType) &
+        else if (!(static_cast<int>(chooser->type()) &
                    static_cast<int>(ChooserType::SAVING)))
             chooser->filename.value("");
         chooser->filename.insert_position(
@@ -604,7 +604,7 @@ int Flu_Entry::handle(int event)
     }
     else if (event == FL_DRAG)
     {
-        if (static_cast<int>(chooser->selectionType) &
+        if (static_cast<int>(chooser->type()) &
             static_cast<int>(ChooserType::MULTI))
         {
             // toggle all items from the last selected item to this one

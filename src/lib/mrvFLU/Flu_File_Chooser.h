@@ -140,19 +140,6 @@ public:
         ENTRY_SEQUENCE = 128 /*!< The entry referring to a sequence of frames */
     };
 
-    //! Chooser type
-    enum {
-        SINGLE = 0,    /*!< Choose a single file or directory */
-        MULTI = 1,     /*!< Choose multiple files or directories */
-        DIRECTORY = 4, /*!< Choose directories (choosing files is implicit if
-                          this bit is clear) */
-        DEACTIVATE_FILES = 8, /*!< When choosing directories, also show the
-                                 files in a deactivated state */
-        SAVING = 16, /*!< When choosing files, whether to keep the current
-                        filename always in the input area */
-        STDFILE = 32 /*!< Choose both files and directories at the same time */
-    };
-
     //! Structure holding the info needed for custom file types
     struct FileTypeInfo
     {
@@ -290,7 +277,7 @@ public:
     }
 
     //! Get the type of the chooser
-    inline int type(int t) const { return selectionType; }
+    inline int type() const { return selectionType; }
 
     //! Unselect all entries
     void unselect_all();

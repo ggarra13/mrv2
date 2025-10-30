@@ -570,6 +570,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     configFilename = userHome + "/.filmaura/mrv2.favorites";
 
     selectionType = type;
+    
     filenameEnterCallback = filenameTabCallback = false;
     sortMethod = SORT_NAME;
 
@@ -1761,7 +1762,8 @@ void Flu_File_Chooser::okCB()
     cancelThumbnailRequests();
     // if exactly one directory is selected and we are not choosing directories,
     // cd to that directory.
-    if (!(selectionType & DIRECTORY) && !(selectionType & STDFILE))
+    if (!(selectionType & static_cast<int>(ChooserType::DIRECTORY))
+        && !(selectionType & static_cast<int>(ChooserType::STDFILE)))
     {
         Fl_Group* g = getEntryGroup();
         std::string dir;
@@ -1789,8 +1791,8 @@ void Flu_File_Chooser::okCB()
     // only hide if the filename is not blank or the user is choosing
     // directories, in which case use the current directory
 
-    if (selectionType & DIRECTORY ||
-        ((selectionType & STDFILE) &&
+    if (selectionType & static_cast<int>(ChooserType::DIRECTORY) ||
+        ((selectionType & static_cast<int>(ChooserType::STDFILE)) &&
          fl_filename_isdir((currentDir + filename.value()).c_str())))
     {
 #ifdef _WIN32
@@ -1800,7 +1802,7 @@ void Flu_File_Chooser::okCB()
             return;
         }
 #endif
-        if (!(selectionType & MULTI))
+        if (!(selectionType & static_cast<int>(ChooserType::MULTI)))
         {
             if (strlen(filename.value()) != 0)
                 cd(filename.value());
@@ -1835,7 +1837,7 @@ void Flu_File_Chooser::okCB()
 
             // prepend the path
             std::string fullname;
-            if (selectionType & SAVING)
+            if (selectionType & static_cast<int>(ChooserType::SAVING))
             {
                 std::string file = filename.value();
                 if (e && e->type == ENTRY_SEQUENCE && e->selected &&
@@ -2527,7 +2529,7 @@ void Flu_File_Chooser::unselect_all()
 
 void Flu_File_Chooser::select_all()
 {
-    if (!(selectionType & MULTI))
+    if (!(selectionType & static_cast<int>(ChooserType::MULTI)))
         return;
     Fl_Group* g = getEntryGroup();
     Flu_Entry* e;
@@ -2579,7 +2581,7 @@ const char* Flu_File_Chooser::value()
 
 int Flu_File_Chooser::count()
 {
-    if (selectionType & MULTI)
+    if (selectionType & static_cast<int>(ChooserType::MULTI))
     {
         int n = 0;
         Fl_Group* g = getEntryGroup();
@@ -3611,10 +3613,10 @@ void Flu_File_Chooser::cd(const char* path)
         if (filename.value()[0] != '/')
 #endif
         {
-            if (!(selectionType & SAVING))
+            if (!(selectionType & static_cast<int>(ChooserType::SAVING)))
                 filename.value("");
         }
-        if (!(selectionType & SAVING))
+        if (!(selectionType & static_cast<int>(ChooserType::SAVING)))
             currentFile = "";
     }
 
@@ -3784,9 +3786,10 @@ void Flu_File_Chooser::cd(const char* path)
 #endif
 
             // only directories?
-            if ((selectionType & DIRECTORY) && !isDir &&
-                !(selectionType & STDFILE) &&
-                !(selectionType & DEACTIVATE_FILES))
+            if ((selectionType & static_cast<int>(ChooserType::DIRECTORY)) &&
+                !isDir &&
+                !(selectionType & static_cast<int>(ChooserType::STDFILE)) &&
+                !(selectionType & static_cast<int>(ChooserType::DEACTIVATE_FILES)))
             {
                 continue;
             }
@@ -4300,7 +4303,8 @@ size_t flu_multi_file_chooser(
     const bool compact_files)
 {
     _flu_file_chooser(
-        context, message, pattern, filename, Flu_File_Chooser::MULTI, filelist,
+        context, message, pattern, filename,
+        static_cast<int>(ChooserType::MULTI), filelist,
         compact_files);
     return filelist.size();
 }
@@ -4311,7 +4315,8 @@ const char* flu_file_chooser(
 {
     FluStringVector filelist;
     return _flu_file_chooser(
-        context, message, pattern, filename, Flu_File_Chooser::SINGLE, filelist,
+        context, message, pattern, filename,
+        static_cast<int>(ChooserType::SINGLE), filelist,
         compact_files);
 }
 
@@ -4322,7 +4327,8 @@ const char* flu_save_chooser(
     FluStringVector filelist;
     return _flu_file_chooser(
         context, message, pattern, filename,
-        Flu_File_Chooser::SINGLE | Flu_File_Chooser::SAVING, filelist,
+        static_cast<int>(ChooserType::SINGLE) |
+        static_cast<int>(ChooserType::SAVING), filelist,
         compact_files);
 }
 
@@ -4332,7 +4338,8 @@ const char* flu_dir_chooser(
 {
     FluStringVector filelist;
     return _flu_file_chooser(
-        context, message, "*", filename, Flu_File_Chooser::DIRECTORY, filelist);
+        context, message, "*", filename,
+        static_cast<int>(ChooserType::DIRECTORY), filelist);
 }
 
 const char* flu_dir_chooser(
@@ -4343,7 +4350,8 @@ const char* flu_dir_chooser(
     if (showFiles)
         return _flu_file_chooser(
             context, message, "*", filename,
-            Flu_File_Chooser::DIRECTORY | Flu_File_Chooser::DEACTIVATE_FILES,
+            static_cast<int>(ChooserType::DIRECTORY) |
+            static_cast<int>(ChooserType::DEACTIVATE_FILES),
             filelist);
     else
         return (flu_dir_chooser(context, message, filename));
@@ -4355,5 +4363,6 @@ const char* flu_file_and_dir_chooser(
 {
     FluStringVector filelist;
     return _flu_file_chooser(
-        context, message, "*", filename, Flu_File_Chooser::STDFILE, filelist);
+        context, message, "*", filename,
+        static_cast<int>(ChooserType::STDFILE), filelist);
 }

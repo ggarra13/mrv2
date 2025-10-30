@@ -61,6 +61,7 @@ ChangeLog
 - Fixed thumbnail generation on Vulkan making the playback stutter.
 - Improved the performance of video decoding.
 - Improved the performance of sequence decoding (all formats).
+- Fixed Linux directory selection in file requester, not allowing selection when travel single drawers was on. 
 
 
 v1.4.3
