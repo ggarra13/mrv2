@@ -63,6 +63,7 @@ ChangeLog
 - Improved the performance of sequence decoding (all formats).
 - Fixed Linux directory selection in file requester, not allowing selection when travel single drawers was on.
 - Fixed a movie decoding error sometimes skipping frames.
+- Removed LOG_ERROR reporting when pixel values at mouse position could not be read (due to a window resize usually).
 
 
 v1.4.3
