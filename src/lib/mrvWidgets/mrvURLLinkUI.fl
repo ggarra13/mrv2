@@ -8,7 +8,7 @@ i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
 include_guard {}
-decl {\#include "mrvCore/mrvBackend.h"} {public global
+decl {\#include "mrvCore/mrvBackend.h"} {selected public global
 }
 
 decl {\#ifdef VULKAN_BACKEND
@@ -31,7 +31,7 @@ class URLLinkUI {open
   } {
     Fl_Window uiMain {
       label {Link Annotation} open
-      xywh {0 0 774 200} type Double modal visible
+      xywh {0 0 774 176} type Double modal visible
     } {
       Fl_Input uiTitle {
         label Title
@@ -58,12 +58,14 @@ if (type == 0)
 else if (type == 1)
 {
         std::string dir = mrv::open_directory(v->value());
+        if (dir.empty()) return;
+        
         files.push_back(dir);
 }
 
 if ( files.empty() ) return;
 
-v->value( files[0].c_str() );} open selected
+v->value( files[0].c_str() );} open
           xywh {684 84 84 32}
         } {
           MenuItem {} {
