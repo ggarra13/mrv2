@@ -1304,7 +1304,7 @@ namespace tl
                 // std::cout << "video timestamp: " << timestamp << std::endl;
                 const auto& avVideoStream =
                     _avFormatContext->streams[_avStream];
-
+                
                 const otime::RationalTime time(
                     _timeRange.start_time().value() +
                         av_rescale_q(
@@ -1315,7 +1315,9 @@ namespace tl
                 if (time >= targetTime || backwards ||
                     (_avFrame->duration == 0 && _useAudioOnly))
                 {
-                    if (time >= targetTime)
+                    // Use actual time of frame when possible, except when
+                    // going backwards.
+                    if (backwards && time >= targetTime)
                         currentTime = targetTime;
                     else
                         currentTime = time;
