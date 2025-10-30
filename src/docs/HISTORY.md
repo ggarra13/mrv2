@@ -55,9 +55,9 @@ ChangeLog
 - Improved performance of panel subwindows dragging on Wayland.
 - Fixed saving elapsed time being not being in milliseconds in the progress report bar.
 - Fixed showing Original (O) pixel values on the Vulkan backend as image was flipped in Y.
-- Made thumbnail generation on both Vulkan and OpenGL bakends faster.
+- Made thumbnail generation on both Vulkan and OpenGL backends faster.
 - When saving out a temporary session file (temp.mrv2s or lang.mrv2s), the current session file is no longer updated to it.
-- Fixed -p Stop command-line flag stopping after playback was started when AutoPlayback was on in the Preferences.ç
+- Fixed -p Stop command-line flag stopping after playback was started when AutoPlayback was on in the Preferences.
 - Fixed thumbnail generation on Vulkan making the playback stutter.
 - Improved the performance of video decoding.
 - Improved the performance of sequence decoding (all formats).
