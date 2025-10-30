@@ -13,8 +13,8 @@ VULKAN_URL = "https://sourceforge.net/projects/mrv2/files/beta/vulkan/"
 OPENGL_URL = "https://sourceforge.net/projects/mrv2/files/beta/opengl/"
 
 # Local directory to save downloads
-VULKAN_DIR = "vulkan"
-OPENGL_DIR = "opengl"
+VULKAN_DIR = "releases/vulkan"
+OPENGL_DIR = "releases/opengl"
 
 # Create output directory if missing
 os.makedirs(VULKAN_DIR, exist_ok=True)
