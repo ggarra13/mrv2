@@ -1315,10 +1315,7 @@ namespace tl
                 if (time >= targetTime || backwards ||
                     (_avFrame->duration == 0 && _useAudioOnly))
                 {
-                    if (time >= targetTime)
-                        currentTime = targetTime;
-                    else
-                        currentTime = time;
+                    currentTime = time;
                     
                     std::shared_ptr<image::Image> image;
 
