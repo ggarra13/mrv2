@@ -1483,10 +1483,7 @@ namespace mrv
 
                     const void* data = vk.buffer->getLatestReadPixels();
                     if (!data)
-                    {
-                        LOG_ERROR("Could not get pixel under mouse");
                         return;
-                    }
 
                     const auto options = vk.buffer->getOptions();
                     rgba = color::fromVoidPtr(data, options.colorType);
