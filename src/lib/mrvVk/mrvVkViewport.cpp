@@ -410,6 +410,13 @@ namespace mrv
                 vk.loadRenderPass = VK_NULL_HANDLE;
             }
             
+            if (vk.annotation_pipeline_layout != VK_NULL_HANDLE)
+            {
+                vkDestroyPipelineLayout(device(),
+                                        vk.annotation_pipeline_layout, nullptr);
+                vk.annotation_pipeline_layout = VK_NULL_HANDLE;
+            }
+            
             if (vk.pipeline_layout != VK_NULL_HANDLE)
             {
                 vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
@@ -1029,7 +1036,6 @@ namespace mrv
 
                 if (vk.vao && vk.vbo)
                 {
-            
                     const VkColorComponentFlags allMask[] =
                         { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
                           VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
@@ -1137,7 +1143,7 @@ namespace mrv
                 // dstImage barrier (swapchain image)
                 transitionImageLayout(cmd, dstImage,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
             }
             
 

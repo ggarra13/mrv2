@@ -1010,7 +1010,7 @@ namespace mrv
 
                 // dstImage barrier (swapchain image)
                 transitionImageLayout(cmd, dstImage,
-                                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                      VK_IMAGE_LAYOUT_UNDEFINED,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
                 if (p.buffer->getFormat() == format())

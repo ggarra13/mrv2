@@ -8,9 +8,8 @@ It ships now in two compiled versions:
    - vmrv2 with Vulkan backend (donationware)
 
 New Link Annotations to add URLs, Files or Directories annotations in the image.
-Fixed and improved Saving Sequences in Vulkan baking the transform and HDR shader to OpenEXRs when Annotations is on.  OpenGL baking of HDR is limited.
-Improved performance of the dock panel.
-Fixed resizing of OpenGL's Wayland build.
+Fixed and improved Saving Sequences in Vulkan baking the transform and HDR shader to OpenEXRs when Annotations is on. Improved performance of the dock panel.
+Fixed resizing of OpenGL's Wayland build.  Improved performance of playback (movies and images).
 
 Donationware licenses are paid through PayPal:
 
@@ -42,7 +41,7 @@ https://www.github.com/ggarra13/mrv2
 -------------------------------------------------------------------------------
 
 
-mrv2 v1.4.3
+mrv2 v1.4.4
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and CGI for Windows, Linux and macOS has a new version.
 

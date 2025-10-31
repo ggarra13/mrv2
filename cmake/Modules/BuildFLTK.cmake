@@ -15,7 +15,7 @@ if(TLRENDER_VK)
 	set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
     endif()
     
-    set(FLTK_GIT_TAG v1.0.9)
+    set(FLTK_GIT_TAG v1.1.0)
     #set(FLTK_GIT_TAG vk)  # Cutting edge!
     #set(FLTK_GIT_TAG vk_test) # Testing branch
 else()

@@ -42,7 +42,7 @@ namespace mrv
             m_validate = false;
             m_debugSync = false;
 #ifndef NDEBUG
-            // m_validate = true;
+            m_validate = true;
 #endif
         }
 
