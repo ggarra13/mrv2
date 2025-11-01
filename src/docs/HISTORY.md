@@ -1,6 +1,5 @@
-v1.4.4
+v1.4.5
 ======
-
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
 mrv2 ships now in two compiled versions:
@@ -34,6 +33,15 @@ I use the email information to contact you privately.  I don't sell your informa
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
+
+ChangeLog
+---------
+
+- Fixed some validation warnings on Vulkan backend that got past the v1.4.4 release.
+
+
+v1.4.4
+======
 
 ChangeLog
 ---------
