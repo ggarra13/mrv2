@@ -1,4 +1,4 @@
-v1.4.5
+v1.4.4
 ======
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
@@ -38,14 +38,6 @@ ChangeLog
 ---------
 
 - Fixed some validation warnings on Vulkan backend that got past the v1.4.4 release.
-
-
-v1.4.4
-======
-
-ChangeLog
----------
-
 - Made default Read Ahead be 4 seconds instead of 2.
 - Frame/Seconds/Timecode widgets now handle focus by clicking on them instead of just entering them.
 - Made Vulkan save out images and sequences with full color corrections (HDR + OCIO) if those are active.
