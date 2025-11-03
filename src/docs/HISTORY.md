@@ -38,7 +38,7 @@ ChangeLog
 ---------
 
 - Fixed some Vulkan validation errors that got through in the original v1.4.4 release.
-- Fixed a FLTK Wayland crash when tooltips where shown and the mouse pointer was moved inside them.
+- Fixed a FLTK Wayland crash when tooltips where shown and the mouse pointer was moved inside them under Linux.  Both mrv2-Linux and vmrv2-Linux builds suffered from it.
 
 
 v1.4.4
