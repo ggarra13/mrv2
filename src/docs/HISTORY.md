@@ -1,4 +1,4 @@
-v1.4.4
+v1.4.5
 ======
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
@@ -13,9 +13,9 @@ It also ships for many more architectures, so be careful to download the correct
 Difference between OpenGL and Vulkan
 ------------------------------------
 
-Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS. It supports true HDR (High Dynamic Range), it is about 20% to 50% faster than the OpenGL version (on Windows, macOS M1+ and it is the same speed for Linux's GNOME 48 and later) but it does not support OpenUSD.
+Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS. It supports true HDR (High Dynamic Range), it is about 20% to 50% faster than the OpenGL version but it does not support OpenUSD.
 
-OpenGL's main benefit at this point is that it supports OpenUSD and works better on old CPUs (macOS Intel and X11 backend).
+OpenGL's main benefit at this point is that it supports OpenUSD and works better on older CPUs (macOS Intel and Linux X11 backend).
 
 Prices for binaries
 -------------------
@@ -33,6 +33,16 @@ I use the email information to contact you privately.  I don't sell your informa
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
+
+ChangeLog
+---------
+
+- Fixed some Vulkan validation errors that got through in the original v1.4.4 release.
+- Fixed a FLTK Wayland crash when tooltips where shown and the mouse pointer was moved inside them.
+
+
+v1.4.4
+======
 
 ChangeLog
 ---------
