@@ -212,9 +212,6 @@ namespace mrv
                 g->x() + 90, Y, g->w(), 20, _("Enable Lighting"));
             Fl_Check_Button* c = cV;
             c->labelsize(12);
-            std::cerr << "lighting="
-                      << settings->getValue<bool>("USD/enableLighting")
-                      << std::endl;
             c->value(settings->getValue<bool>("USD/enableLighting"));
 
             cV->callback(
@@ -231,7 +228,7 @@ namespace mrv
                 g->x() + 90, Y, g->w(), 20, _("Enable Scene Lights"));
             c = cV;
             c->labelsize(12);
-            c->value(settings->getValue<bool>("USD/enableSceneLigths"));
+            c->value(settings->getValue<bool>("USD/enableSceneLights"));
 
             cV->callback(
                 [=](auto w)

@@ -163,7 +163,11 @@ namespace tl
         Render::~Render()
         {
             TLRENDER_P();
-            p.thread.running = false;
+            {
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.thread.running = false;
+            }
+            p.thread.cv.notify_one();
             if (p.thread.thread.joinable())
             {
                 p.thread.thread.join();
@@ -443,24 +447,26 @@ namespace tl
                 std::shared_ptr<Private::Request> request;
                 {
                     std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                    if (p.thread.cv.wait_for(
-                            lock, std::chrono::milliseconds(5),
-                            [this] {
-                                return !_p->mutex.infoRequests.empty() ||
-                                       !_p->mutex.requests.empty();
-                            }))
+                    p.thread.cv.wait(
+                        lock, [this] {
+                            return ( !_p->mutex.infoRequests.empty() ||
+                                     !_p->mutex.requests.empty() ||
+                                     !_p->thread.running );
+                        });
+
+                    if (!p.thread.running)
+                        break;
+                    
+                    if (!p.mutex.infoRequests.empty())
                     {
-                        if (!p.mutex.infoRequests.empty())
-                        {
-                            infoRequest = p.mutex.infoRequests.front();
-                            p.mutex.infoRequests.pop_front();
-                        }
-                        if (!p.mutex.requests.empty())
-                        {
-                            request = p.mutex.requests.front();
-                            p.mutex.requests.pop_front();
-                        }
+                        infoRequest = p.mutex.infoRequests.front();
+                        p.mutex.infoRequests.pop_front();
                     }
+                    if (!p.mutex.requests.empty())
+                    {
+                        request = p.mutex.requests.front();
+                        p.mutex.requests.pop_front();
+                    }                    
                 }
 
                 // Set options.

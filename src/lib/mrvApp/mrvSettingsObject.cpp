@@ -158,6 +158,10 @@ namespace mrv
             static_cast<int>(usd::RenderOptions().drawMode);
         p.defaultValues["USD/enableLighting"] =
             static_cast<int>(usd::RenderOptions().enableLighting);
+        p.defaultValues["USD/enableSceneLights"] = 
+            static_cast<int>(usd::RenderOptions().enableSceneLights);
+        p.defaultValues["USD/enableSceneMaterials"] = 
+            static_cast<int>(usd::RenderOptions().enableSceneMaterials);
         p.defaultValues["USD/sRGB"] =
             static_cast<int>(usd::RenderOptions().sRGB);
         p.defaultValues["USD/stageCacheByteCount"] =

@@ -41,6 +41,9 @@ ChangeLog
 - Fixed a FLTK Wayland crash when tooltips where shown and the mouse pointer was moved inside them.
 - Upgraded OpenEXR to v3.4.3.
 - Upgraded OpenJPH to v0.25.0.
+- Minor speeding up in OpenUSD playback.
+- Removed an old "lighting=1/0" message when opening the USD Panel in mrv2.
+- Added enableSceneLighting and enableSceneMaterials as properties that the USD Panel will save on exit.
 
 
 v1.4.4

@@ -273,6 +273,7 @@ namespace mrv
                 fl_alert("%s", _("Usage time for demo exceeded"));
                 Fl::check();
                 exit_cb(nullptr, App::ui);
+                exit(0);
             }
         }
         
