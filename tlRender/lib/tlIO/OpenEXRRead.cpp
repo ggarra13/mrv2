@@ -15,7 +15,7 @@
 #include <ImfChannelList.h>
 #include <ImfStandardAttributes.h>
 #include <ImfRgbaFile.h>
-#include <ImfTiledInputFile.h>
+#include <ImfTiledInputPart.h>
 
 #include <ImathMatrix.h>
 #include <ImathVec.h>
@@ -343,17 +343,17 @@ namespace tl
 
                 void readMipmap()
                 {
-                    int numXLevels = _t->numXLevels();
-                    int numYLevels = _t->numYLevels();
+                    int numXLevels = _t_part->numXLevels();
+                    int numYLevels = _t_part->numYLevels();
 
                     if (_xLevel > numXLevels - 1)
                         _xLevel = numXLevels - 1;
                     if (_yLevel > numYLevels - 1)
                         _yLevel = numYLevels - 1;
 
-                    Imf::Header header = _t->header();
+                    Imf::Header header = _t_part->header();
                     header.dataWindow() =
-                        _t->dataWindowForLevel(_xLevel, _yLevel);
+                        _t_part->dataWindowForLevel(_xLevel, _yLevel);
                     header.displayWindow() = header.dataWindow();
 
                     parseHeader(header);
@@ -387,41 +387,76 @@ namespace tl
                         _s.reset(new IStream(fileName.c_str()));
                     }
 
+                    // 2. ALWAYS open as MultiPartInputFile. 
                     try
                     {
-                        _t.reset(new Imf::TiledInputFile(*_s));
-
-                        int numXLevels = _t->numXLevels();
-                        int numYLevels = _t->numYLevels();
-
-                        {
-                            std::stringstream ss;
-                            ss << numXLevels;
-                            _info.tags["numXLevels"] = ss.str();
-                        }
-                        {
-                            std::stringstream ss;
-                            ss << numYLevels;
-                            _info.tags["numYLevels"] = ss.str();
-                        }
+                        _f.reset(new Imf::MultiPartInputFile(*_s));
                     }
                     catch (const std::exception& e)
                     {
-                        _t.reset();
+                        if (auto log = logSystemWeak.lock())
+                        {
+                            std::string msg = "Failed to open EXR file: " + std::string(e.what());
+                            log->print(_fileName, msg, log::Type::Error);
+                        }
+                        return; // Failed to open, exit constructor
                     }
 
+                    int numberOfParts = _f->parts();
+                    if (numberOfParts == 0)
+                    {
+                        if (auto log = logSystemWeak.lock())
+                        {
+                            log->print(_fileName, "EXR file has no parts.",
+                                       log::Type::Error);
+                        }
+                        return;
+                    }
+
+                    // 3. Now check logic based on mipmap request
                     if (_xLevel > 0 || _yLevel > 0)
                     {
-                        readMipmap();
+                        // Mipmaps requested. The part MUST be tiled.
+                        // (This example assumes you only read mipmaps from part 0)
+                        const Imf::Header& header = _f->header(0);
+                        if (!header.hasTileDescription())
+                        {
+                            if (auto log = logSystemWeak.lock())
+                            {
+                                log->print(_fileName,
+                                           "Cannot read mipmaps: File is not tiled.", log::Type::Error);
+                            }
+                            // Do NOT proceed
+                        }
+                        else
+                        {
+                            // Safe to read mipmaps.
+                            // Create a TiledInputPart for reading.
+                            _t_part.reset(new Imf::TiledInputPart(*_f, 0));
+
+                            int numXLevels = _t_part->numXLevels();
+                            int numYLevels = _t_part->numYLevels();
+            
+                            {
+                                std::stringstream ss;
+                                ss << numXLevels;
+                                _info.tags["numXLevels"] = ss.str();
+                            }
+                            {
+                                std::stringstream ss;
+                                ss << numYLevels;
+                                _info.tags["numYLevels"] = ss.str();
+                            }
+                            readMipmap();
+                        }
                     }
                     else
                     {
-                        _f.reset(new Imf::MultiPartInputFile(*_s));
-                        int numberOfParts = _f->parts();
-                        int partNumber;
-
-                        for (partNumber = 0; partNumber < numberOfParts;
-                             ++partNumber)
+                        // Base level requested. Just parse headers.
+                        // The actual read() function (called later) will need to check
+                        // header.hasTileDescription() to decide whether to create
+                        // an InputPart or a TiledInputPart.
+                        for (int partNumber = 0; partNumber < numberOfParts; ++partNumber)
                         {
                             const Imf::Header& header = _f->header(partNumber);
                             parseHeader(header, partNumber);
@@ -574,13 +609,14 @@ namespace tl
                     }
                 }
 
-                void readTiled(
+                bool readTiled(
                     io::VideoData& out, const int layer, const int minX,
-                    const int maxX, const int minY, const int maxY)
+                    const int maxX, const int minY, const int maxY,
+                    Imf::TiledInputPart& tiledInputPart)
                 {
-                    Imf::Header header = _t->header();
+                    Imf::Header header = tiledInputPart.header();
                     header.dataWindow() =
-                        _t->dataWindowForLevel(_xLevel, _yLevel);
+                        tiledInputPart.dataWindowForLevel(_xLevel, _yLevel);
                     header.displayWindow() = header.dataWindow();
                     Imf::LineOrder lineOrder = header.lineOrder();
 
@@ -595,39 +631,45 @@ namespace tl
                         imageInfo.size.w * channels * channelByteCount;
 
                     Imf::FrameBuffer frameBuffer;
+                    bool YBYRY = false;
                     for (size_t c = 0; c < channels; ++c)
                     {
                         const std::string& name =
                             _layers[layer].channels[c].name;
                         const math::Vector2i& sampling =
                             _layers[layer].channels[c].sampling;
-
+                        
+                        if (name == "RY" || name == "BY") // <-- Check for YBYRY
+                            YBYRY = true;
+                        
                         frameBuffer.insert(
                             name.c_str(),
                             Imf::Slice(
                                 _layers[layer].channels[c].pixelType,
                                 reinterpret_cast<char*>(out.image->getData()) +
-                                    (c * channelByteCount),
+                                     (c * channelByteCount),
                                 cb, scb, sampling.x, sampling.y, 0.F));
                     }
-                    _t->setFrameBuffer(frameBuffer);
+                    tiledInputPart.setFrameBuffer(frameBuffer);
 
-                    int tx = _t->numXTiles(_xLevel);
-                    int ty = _t->numYTiles(_yLevel);
+                    int tx = tiledInputPart.numXTiles(_xLevel);
+                    int ty = tiledInputPart.numYTiles(_yLevel);
 
                     // Read tiles in order for most efficiency.
                     if (lineOrder == Imf::INCREASING_Y)
                     {
                         for (int y = 0; y < ty; ++y)
                             for (int x = 0; x < tx; ++x)
-                                _t->readTile(x, y, _xLevel, _yLevel);
+                                tiledInputPart.readTile(x, y, _xLevel, _yLevel);
                     }
                     else
                     {
                         for (int y = ty - 1; y >= 0; --y)
                             for (int x = 0; x < tx; ++x)
-                                _t->readTile(x, y, _xLevel, _yLevel);
+                                tiledInputPart.readTile(x, y, _xLevel, _yLevel);
                     }
+
+                    return YBYRY;
                 }
 
                 io::VideoData read(
@@ -644,11 +686,13 @@ namespace tl
                             static_cast<int>(_info.video.size()) - 1);
                     }
 
-                    if (!_t)
-                    {
-                        const Imf::Header& header =
-                            _f->header(_layers[layer].partNumber);
+                    // 1. Get header for the current part.
+                    const Imf::Header& header =
+                        _f->header(_layers[layer].partNumber);
 
+                    // 2. Update window info if not a mipmap read (it was set for mipmap in constructor).
+                    if (!_t_part)
+                    {
                         // Get the display and data windows which can change
                         // from frame to frame.
                         const auto& displayWindow = header.displayWindow();
@@ -679,14 +723,27 @@ namespace tl
                     int maxX =
                         std::max(_dataWindow.max.x, _displayWindow.max.x);
                     image::Info imageInfo = _info.video[layer];
-
-                    if (_t)
+                    
+                    // 3. Determine Tiled status and prepare TiledInputPart if necessary
+                    bool isTiled = false;
+                    std::unique_ptr<Imf::TiledInputPart> tiledPartForRead;
+                    bool YBYRY = false;
+                    if (_t_part)
                     {
-                        readTiled(out, layer, minX, maxX, minY, maxY);
+                        // Case 1: Mipmap read (tiled data, _t_part is set from constructor)
+                        isTiled = true;
+                        readTiled(out, layer, minX, maxX, minY, maxY, *_t_part);
+                    }
+                    else if (header.hasTileDescription())
+                    {
+                        // Case 2: Base level tiled read (tiledPartForRead was created above)
+                        isTiled = true;
+                        tiledPartForRead.reset(new Imf::TiledInputPart(*_f, _layers[layer].partNumber));
+                       YBYRY = readTiled(out, layer, minX, maxX, minY, maxY, *tiledPartForRead);
                     }
                     else
                     {
-                        bool YBYRY = false;
+                        // Case 3: Scanline read
                         out.image = image::Image::create(imageInfo);
                         const size_t channels =
                             image::getChannelCount(imageInfo.pixelType);
@@ -933,7 +990,7 @@ namespace tl
                 std::weak_ptr<log::System> logSystemWeak;
                 Imf::Chromaticities _chromaticities;
                 std::unique_ptr<Imf::IStream> _s;
-                std::unique_ptr<Imf::TiledInputFile> _t;
+                std::unique_ptr<Imf::TiledInputPart> _t_part;
                 std::unique_ptr<Imf::MultiPartInputFile> _f;
                 math::Box2i _displayWindow;
                 math::Box2i _dataWindow;
