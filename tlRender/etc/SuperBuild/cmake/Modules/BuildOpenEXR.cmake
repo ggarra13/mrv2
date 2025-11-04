@@ -7,9 +7,9 @@ set(OpenEXR_DEPENDENCIES ${OpenJPH_DEP} Imath ZLIB)
 message(STATUS "OpenEXR DEPENDENCIES=${OpenEXR_DEPENDENCIES}")
 
 # \bug Disable OpenEXR threading to work around a crash at shutdown in the
-# OpenEXR thread pool. Note that we already set the OpenEXR global thread
-# count to zero since we load frames in parallel.
-# \bug Disabling OpenEXR threading makes the library not thread safe currently.
+#      OpenEXR thread pool. Note that we already set the OpenEXR global thread
+#      count to zero wiht Imf::setGlobalThreadCount(0), since we load frames in
+#      parallel.
 set(OpenEXR_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DOPENEXR_BUILD_TOOLS=OFF
