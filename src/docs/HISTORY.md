@@ -46,6 +46,7 @@ ChangeLog
 - Added enableSceneLighting and enableSceneMaterials as properties that the USD Panel will save on exit.
 - Removed error on opening vmrv2 with the USD panel open.
 - Made HUD less prominent as it was somewhat unreadable and making Vulkan skip frames too.
+- Fixed OpenEXR's tile reading code.
 
 
 v1.4.4

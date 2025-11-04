@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlIO/Normalize.h>
@@ -460,6 +461,42 @@ namespace tl
                         {
                             const Imf::Header& header = _f->header(partNumber);
                             parseHeader(header, partNumber);
+                            
+                            // Check for tiling and get counts for base level reads ---
+                            if (header.hasTileDescription())
+                            {
+                                // Temporarily create TiledInputPart just for querying metadata
+                                Imf::TiledInputPart tempPart(*_f, partNumber);
+                                int numXLevels = tempPart.numXLevels();
+                                int numYLevels = tempPart.numYLevels();
+                                int numXTiles = tempPart.numXTiles(0); // Level 0
+                                int numYTiles = tempPart.numYTiles(0); // Level 0
+
+                                // Assuming single-part/part 0 for simplicity if tags are file-wide
+                                if (partNumber == 0)
+                                {
+                                    {
+                                        std::stringstream ss;
+                                        ss << numXLevels;
+                                        _info.tags["numXLevels"] = ss.str();
+                                    }
+                                    {
+                                        std::stringstream ss;
+                                        ss << numYLevels;
+                                        _info.tags["numYLevels"] = ss.str();
+                                    }
+                                    {
+                                        std::stringstream ss;
+                                        ss << numXTiles;
+                                        _info.tags["numXTiles_BaseLevel"] = ss.str();
+                                    }
+                                    {
+                                        std::stringstream ss;
+                                        ss << numYTiles;
+                                        _info.tags["numYTiles_BaseLevel"] = ss.str();
+                                    }
+                                }
+                            }
                         }
                     }
                 }
