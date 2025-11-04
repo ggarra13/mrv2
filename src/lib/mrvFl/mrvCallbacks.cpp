@@ -1601,6 +1601,10 @@ namespace mrv
             w = ui->uiAbout->uiMain;
         else
         {
+#ifdef VULKAN_BACKEND
+            if (label == "USD")
+                return;
+#endif
             LOG_ERROR("Callbacks: Unknown window " << label);
             return; // Unknown window
         }

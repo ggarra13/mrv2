@@ -1,5 +1,6 @@
 v1.4.5
 ======
+
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
 mrv2 ships now in two compiled versions:
@@ -41,9 +42,10 @@ ChangeLog
 - Fixed a FLTK Wayland crash when tooltips where shown and the mouse pointer was moved inside them.
 - Upgraded OpenEXR to v3.4.3.
 - Upgraded OpenJPH to v0.25.0.
-- Minor speeding up in OpenUSD playback.
+- Tiny speed up in OpenUSD playback.
 - Removed an old "lighting=1/0" message when opening the USD Panel in mrv2.
 - Added enableSceneLighting and enableSceneMaterials as properties that the USD Panel will save on exit.
+- Removed error on opening vmrv2 with the USD panel open.
 
 
 v1.4.4
