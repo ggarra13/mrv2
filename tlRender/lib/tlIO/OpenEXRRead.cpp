@@ -418,7 +418,6 @@ namespace tl
                     if (_xLevel > 0 || _yLevel > 0)
                     {
                         // Mipmaps requested. The part MUST be tiled.
-                        // (This example assumes you only read mipmaps from part 0)
                         const Imf::Header& header = _f->header(0);
                         if (!header.hasTileDescription())
                         {
@@ -427,7 +426,6 @@ namespace tl
                                 log->print(_fileName,
                                            "Cannot read mipmaps: File is not tiled.", log::Type::Error);
                             }
-                            // Do NOT proceed
                         }
                         else
                         {
@@ -454,9 +452,6 @@ namespace tl
                     else
                     {
                         // Base level requested. Just parse headers.
-                        // The actual read() function (called later) will need to check
-                        // header.hasTileDescription() to decide whether to create
-                        // an InputPart or a TiledInputPart.
                         for (int partNumber = 0; partNumber < numberOfParts; ++partNumber)
                         {
                             const Imf::Header& header = _f->header(partNumber);
@@ -469,8 +464,6 @@ namespace tl
                                 Imf::TiledInputPart tempPart(*_f, partNumber);
                                 int numXLevels = tempPart.numXLevels();
                                 int numYLevels = tempPart.numYLevels();
-                                int numXTiles = tempPart.numXTiles(0); // Level 0
-                                int numYTiles = tempPart.numYTiles(0); // Level 0
 
                                 // Assuming single-part/part 0 for simplicity if tags are file-wide
                                 if (partNumber == 0)
@@ -484,16 +477,6 @@ namespace tl
                                         std::stringstream ss;
                                         ss << numYLevels;
                                         _info.tags["numYLevels"] = ss.str();
-                                    }
-                                    {
-                                        std::stringstream ss;
-                                        ss << numXTiles;
-                                        _info.tags["numXTiles_BaseLevel"] = ss.str();
-                                    }
-                                    {
-                                        std::stringstream ss;
-                                        ss << numYTiles;
-                                        _info.tags["numYTiles_BaseLevel"] = ss.str();
                                     }
                                 }
                             }
@@ -652,9 +635,15 @@ namespace tl
                     Imf::TiledInputPart& tiledInputPart)
                 {
                     Imf::Header header = tiledInputPart.header();
-                    header.dataWindow() =
-                        tiledInputPart.dataWindowForLevel(_xLevel, _yLevel);
-                    header.displayWindow() = header.dataWindow();
+
+                    if (_xLevel > 0 || _yLevel > 0)
+                    {
+                        header.dataWindow() =
+                            tiledInputPart.dataWindowForLevel(_xLevel, _yLevel);
+                        header.displayWindow() = header.dataWindow();
+                        parseHeader(header);
+                    }
+    
                     Imf::LineOrder lineOrder = header.lineOrder();
 
                     image::Info imageInfo = _info.video[layer];
@@ -664,11 +653,45 @@ namespace tl
                     const size_t channelByteCount =
                         image::getBitDepth(imageInfo.pixelType) / 8;
                     const size_t cb = channels * channelByteCount;
-                    const size_t scb =
-                        imageInfo.size.w * channels * channelByteCount;
+
+
+                    bool YBYRY = false;
+                    bool needTemp = !_ignoreDisplayWindow && (_displayWindow != _dataWindow);
+
+                    std::shared_ptr<image::Image> tempImage;
+                    size_t tempScb = 0;
+                    math::Box2i tempDataWindow;
+                    image::Info tempInfo;
+
+                    uint8_t* basePtr = nullptr;
+                    size_t scb = 0;
+                    char* sliceBase = nullptr;
+                    
+                    if (needTemp)
+                    {
+                        tempDataWindow = _dataWindow;
+                        tempInfo = imageInfo;
+                        tempInfo.size.w = _dataWindow.w();
+                        tempInfo.size.h = _dataWindow.h();
+                        tempImage = image::Image::create(tempInfo);
+                        tempScb = tempInfo.size.w * cb;
+
+                        basePtr = tempImage->getData();
+                        scb = tempScb;
+                        sliceBase = reinterpret_cast<char*>(basePtr) -
+                                    (_dataWindow.min.y * scb) -
+                                    (_dataWindow.min.x * cb);
+                    }
+                    else
+                    {
+                        basePtr = out.image->getData();
+                        scb = imageInfo.size.w * cb;
+                        sliceBase = reinterpret_cast<char*>(basePtr) -
+                                    (minY * scb) -
+                                    (minX * cb);
+                    }
 
                     Imf::FrameBuffer frameBuffer;
-                    bool YBYRY = false;
                     for (size_t c = 0; c < channels; ++c)
                     {
                         const std::string& name =
@@ -676,15 +699,14 @@ namespace tl
                         const math::Vector2i& sampling =
                             _layers[layer].channels[c].sampling;
                         
-                        if (name == "RY" || name == "BY") // <-- Check for YBYRY
+                        if (name == "RY" || name == "BY")
                             YBYRY = true;
                         
                         frameBuffer.insert(
                             name.c_str(),
                             Imf::Slice(
                                 _layers[layer].channels[c].pixelType,
-                                reinterpret_cast<char*>(out.image->getData()) +
-                                     (c * channelByteCount),
+                                sliceBase + (c * channelByteCount),
                                 cb, scb, sampling.x, sampling.y, 0.F));
                     }
                     tiledInputPart.setFrameBuffer(frameBuffer);
@@ -705,7 +727,186 @@ namespace tl
                             for (int x = 0; x < tx; ++x)
                                 tiledInputPart.readTile(x, y, _xLevel, _yLevel);
                     }
+                    
+                    if (needTemp)
+                    {
+                        if (YBYRY)
+                        {
+                            uint8_t* tempPtr = tempImage->getData();
+                            int tempWidth = tempInfo.size.w;
+                            int tempHeight = tempInfo.size.h;
 
+                            for (int c = 0; c < channels; ++c)
+                            {
+                                const std::string& name =
+                                    _layers[layer].channels[c].name;
+                                const math::Vector2i& sampling =
+                                    _layers[layer].channels[c].sampling;
+
+                                if ((name == "RY" || name == "BY") &&
+                                    sampling.x == 2 && sampling.y == 2)
+                                {
+                                    switch (tempInfo.pixelType)
+                                    {
+                                    case image::PixelType::RGB_F16:
+                                    case image::PixelType::RGBA_F16:
+                                    {
+                                        half* src =
+                                            reinterpret_cast<half*>(tempPtr);
+                                        upscaleRYBY(
+                                            src, c, channels, tempWidth,
+                                            tempHeight);
+                                        break;
+                                    }
+                                    case image::PixelType::RGB_F32:
+                                    case image::PixelType::RGBA_F32:
+                                    {
+                                        float* src =
+                                            reinterpret_cast<float*>(tempPtr);
+                                        upscaleRYBY(
+                                            src, c, channels, tempWidth,
+                                            tempHeight);
+                                        break;
+                                    }
+                                    default:
+                                        break;
+                                    }
+                                }
+                            }
+
+                            switch (tempInfo.pixelType)
+                            {
+                            case image::PixelType::RGB_F16:
+                            case image::PixelType::RGBA_F16:
+                            {
+                                half* src = reinterpret_cast<half*>(tempPtr);
+                                ycToRgb(src, channels, tempWidth, tempHeight);
+                                break;
+                            }
+                            case image::PixelType::RGB_F32:
+                            case image::PixelType::RGBA_F32:
+                            {
+                                float* src = reinterpret_cast<float*>(tempPtr);
+                                ycToRgb(src, channels, tempWidth, tempHeight);
+                                break;
+                            }
+                            default:
+                                break;
+                            }
+                        }
+
+                        // Copy intersection from temp to out.image, zero the rest
+                        uint8_t* outPtr = out.image->getData();
+                        size_t outScb = imageInfo.size.w * cb;
+                        int outWidth = imageInfo.size.w;
+                        int outHeight = imageInfo.size.h;
+
+                        int dispMinX = _displayWindow.min.x;
+                        int dispMinY = _displayWindow.min.y;
+                        int dataMinX = _dataWindow.min.x;
+                        int dataMinY = _dataWindow.min.y;
+                        int interMinX = _intersectedWindow.min.x;
+                        int interMinY = _intersectedWindow.min.y;
+                        int interMaxX = _intersectedWindow.max.x;
+                        int interMaxY = _intersectedWindow.max.y;
+
+                        for (int outY = 0; outY < outHeight; ++outY)
+                        {
+                            int y = dispMinY + outY;
+                            uint8_t* linePtr = outPtr + outY * outScb;
+
+                            if (y < interMinY || y > interMaxY)
+                            {
+                                std::memset(linePtr, 0, outScb);
+                                continue;
+                            }
+
+                            // Zero left
+                            int leftZeroW = interMinX - dispMinX;
+                            size_t leftZeroSize = leftZeroW * cb;
+                            std::memset(linePtr, 0, leftZeroSize);
+
+                            // Copy intersection
+                            int copyW = _intersectedWindow.w();
+                            size_t copySize = copyW * cb;
+                            uint8_t* copyTo = linePtr + leftZeroSize;
+
+                            int tempOffX = interMinX - dataMinX;
+                            int tempOffY = y - dataMinY;
+                            uint8_t* copyFrom = tempImage->getData() + tempOffY * tempScb + tempOffX * cb;
+                            std::memcpy(copyTo, copyFrom, copySize);
+
+                            // Zero right
+                            uint8_t* rightPtr = copyTo + copySize;
+                            std::memset(rightPtr, 0, (linePtr + outScb) - rightPtr);
+                        }
+                    }
+                    else if (YBYRY)
+                    {
+                        // Existing YBYRY handling on out.image
+                        uint8_t* origPtr = out.image->getData();
+                        int dstWidth = maxX - minX + 1;
+                        int dstHeight = maxY - minY + 1;
+
+                        for (int c = 0; c < channels; ++c)
+                        {
+                            const std::string& name =
+                                _layers[layer].channels[c].name;
+                            const math::Vector2i& sampling =
+                                _layers[layer].channels[c].sampling;
+
+                            if ((name == "RY" || name == "BY") &&
+                                sampling.x == 2 && sampling.y == 2)
+                            {
+
+                                switch (imageInfo.pixelType)
+                                {
+                                case image::PixelType::RGB_F16:
+                                case image::PixelType::RGBA_F16:
+                                {
+                                    half* src =
+                                        reinterpret_cast<half*>(origPtr);
+                                    upscaleRYBY(
+                                        src, c, channels, dstWidth,
+                                        dstHeight);
+                                    break;
+                                }
+                                case image::PixelType::RGB_F32:
+                                case image::PixelType::RGBA_F32:
+                                {
+                                    float* src =
+                                        reinterpret_cast<float*>(origPtr);
+                                    upscaleRYBY(
+                                        src, c, channels, dstWidth,
+                                        dstHeight);
+                                    break;
+                                }
+                                default:
+                                    break;
+                                }
+                            }
+                        }
+
+                        switch (imageInfo.pixelType)
+                        {
+                        case image::PixelType::RGB_F16:
+                        case image::PixelType::RGBA_F16:
+                        {
+                            half* src = reinterpret_cast<half*>(origPtr);
+                            ycToRgb(src, channels, dstWidth, dstHeight);
+                            break;
+                        }
+                        case image::PixelType::RGB_F32:
+                        case image::PixelType::RGBA_F32:
+                        {
+                            float* src = reinterpret_cast<float*>(origPtr);
+                            ycToRgb(src, channels, dstWidth, dstHeight);
+                            break;
+                        }
+                        default:
+                            break;
+                        }
+                    }
                     return YBYRY;
                 }
 
@@ -776,7 +977,7 @@ namespace tl
                         // Case 2: Base level tiled read (tiledPartForRead was created above)
                         isTiled = true;
                         tiledPartForRead.reset(new Imf::TiledInputPart(*_f, _layers[layer].partNumber));
-                       YBYRY = readTiled(out, layer, minX, maxX, minY, maxY, *tiledPartForRead);
+                        YBYRY = readTiled(out, layer, minX, maxX, minY, maxY, *tiledPartForRead);
                     }
                     else
                     {
@@ -896,8 +1097,7 @@ namespace tl
                                     in.readPixels(y, y);
                                     std::memcpy(
                                         p,
-                                        buf.data() +
-                                            std::max(_dataWindow.min.x, 0) * cb,
+                                        buf.data(),
                                         size);
                                     p += size;
                                     std::memset(p, 0, end - p);
