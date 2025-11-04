@@ -559,7 +559,7 @@ namespace mrv
                 vertical = false;
             }
 
-            int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
+            int width = 2 / _p->viewZoom;
             
             math::Box2i box;
             int X, Y;
@@ -975,16 +975,16 @@ namespace mrv
             std::stringstream ss(dw);
             ss >> box;
 
-            math::Matrix4x4f vm =
-                math::translate(math::Vector3f(p.viewPos.x, p.viewPos.y, 0.F));
-            const auto pm = math::ortho(
-                0.F, static_cast<float>(viewportSize.w),
-                0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
+            const math::Matrix4x4f mvp = _projectionMatrix();
+            const VkRenderPass oldRenderPass = vk.render->getRenderPass();
             const math::Matrix4x4f oldTransform = vk.render->getTransform();
-            const math::Matrix4x4f mvp = pm * vm;
-            vk.render->setTransform(mvp);
+
+            vk.render->setRenderPass(renderPass());
+
             _drawRectangleOutline(pipelineName, mvp, box, color);
+
             vk.render->setTransform(oldTransform);
+            vk.render->setRenderPass(oldRenderPass);
         }
 
         void Viewport::_drawDataWindow() noexcept

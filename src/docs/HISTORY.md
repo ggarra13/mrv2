@@ -47,7 +47,7 @@ ChangeLog
 - Removed error on opening vmrv2 with the USD panel open.
 - Made HUD less prominent as it was somewhat unreadable and making Vulkan skip frames too.
 - Fixed OpenEXR's tile reading code.
-
+- Fixed Vulkan's Data Window and Display Window.
 
 v1.4.4
 ======
