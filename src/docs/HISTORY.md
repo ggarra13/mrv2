@@ -5,8 +5,7 @@ mrv2 and vmrv2 are open source professional players and review tools for VFX, an
 
 mrv2 ships now in two compiled versions:
 
-   - mrv2 with OpenGL backend  (free up to version 1.4.0 - donationware afterwards)
-   
+   - mrv2 with OpenGL backend  (free up to version 1.4.0 - donationware afterwards)   
    - vmrv2 with Vulkan backend (donationware)
 
 It also ships for many more architectures, so be careful to download the correct one.
@@ -30,7 +29,7 @@ I use the email information to contact you privately.  I don't sell your informa
 - u$  50 for a node-lock license for one year.
 - u$ 150 for a node-lock license to own.
 
-- The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
+The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
@@ -46,6 +45,7 @@ ChangeLog
 - Removed an old "lighting=1/0" message when opening the USD Panel in mrv2.
 - Added enableSceneLighting and enableSceneMaterials as properties that the USD Panel will save on exit.
 - Removed error on opening vmrv2 with the USD panel open.
+- Made HUD less prominent as it was somewhat unreadable and making Vulkan skip frames too.
 
 
 v1.4.4

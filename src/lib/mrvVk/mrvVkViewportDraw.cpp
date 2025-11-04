@@ -649,11 +649,9 @@ namespace mrv
         {
             TLRENDER_P();
 
-            const image::Color4f shadowColor(0.F, 0.F, 0.F, 0.7F);
-            const math::Vector2i shadowPos1{ 2, 2 };
-            const math::Vector2i shadowPos2{ -2, 2 };
-            const math::Vector2i shadowPos3{ -2, -2 };
-            const math::Vector2i shadowPos4{ 2, -2 };
+            const image::Color4f shadowColor(0.F, 0.F, 0.F, 1.F);
+            const math::Vector2i shadowPos1{ 1, 1 };
+            const math::Vector2i shadowPos2{ -1, -1 };
             
             Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
             uint8_t r, g, b;
@@ -663,8 +661,7 @@ namespace mrv
             
             _drawText(textInfos, shadowPos1, shadowColor);
             _drawText(textInfos, shadowPos2, shadowColor);
-            _drawText(textInfos, shadowPos3, shadowColor);
-            _drawText(textInfos, shadowPos4, shadowColor);
+            
             _drawText(textInfos, labelPos, labelColor);
         }
         
