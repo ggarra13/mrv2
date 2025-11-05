@@ -1087,42 +1087,20 @@ namespace tl
                             }
                             else
                             {
-                                // Display the full data window
+                                // Always read full data window when ignoring display
+                                minY = _dataWindow.min.y;
+                                maxY = _dataWindow.max.y;
+                                minX = _dataWindow.min.x;
+                                maxX = _dataWindow.max.x;
+                                
+                                const size_t size = _dataWindow.w() * cb;
                                 for (int y = minY; y <= maxY; ++y)
                                 {
                                     uint8_t* p =
                                         out.image->getData() + (y - minY) * scb;
-                                    uint8_t* end = p + scb;
-                                    size_t size = _dataWindow.w() * cb;
                                     in.readPixels(y, y);
-                                    std::memcpy(
-                                        p,
-                                        buf.data(),
-                                        size);
-                                    p += size;
-                                    std::memset(p, 0, end - p);
+                                    std::memcpy(p, buf.data(), size);
                                 }
-
-                                const Imf::Header& header =
-                                    _f->header(_layers[layer].partNumber);
-
-                                // Get the display and data windows which can
-                                // change from frame to frame.
-                                auto display = header.displayWindow();
-                                auto data = header.dataWindow();
-
-                                display.min.y += -data.min.y;
-                                display.max.y += -data.min.y;
-                                display.min.x += -data.min.x;
-                                display.max.x += -data.min.x;
-                                data.max.y += -data.min.y;
-                                data.min.y = 0;
-                                data.max.x += -data.min.x;
-                                data.min.x = 0;
-
-                                _info.tags["Display Window"] =
-                                    serialize(display);
-                                _info.tags["Data Window"] = serialize(data);
                             }
                         }
 
@@ -1199,6 +1177,33 @@ namespace tl
                         }
                     }
 
+                    if (_ignoreDisplayWindow && 
+                        (_dataWindow.min.x < _displayWindow.min.x ||
+                         _dataWindow.max.x > _displayWindow.max.x ||
+                         _dataWindow.min.y < _displayWindow.min.y ||
+                         _dataWindow.max.y > _displayWindow.max.y))
+                    {
+                        const Imf::Header& header = _f->header(_layers[layer].partNumber);
+
+                        // Get the display and data windows which can
+                        // change from frame to frame.
+                        auto display = header.displayWindow();
+                        auto data = header.dataWindow();
+
+                        display.min.y += -data.min.y;
+                        display.max.y += -data.min.y;
+                        display.min.x += -data.min.x;
+                        display.max.x += -data.min.x;
+                        data.max.y += -data.min.y;
+                        data.min.y = 0;
+                        data.max.x += -data.min.x;
+                        data.min.x = 0;
+                                
+                        _info.tags["Display Window"] =
+                            serialize(display);
+                        _info.tags["Data Window"] = serialize(data);
+                    }
+                    
                     if (_autoNormalize)
                     {
                         math::Vector4f minimum, maximum;
