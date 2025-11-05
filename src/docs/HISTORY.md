@@ -37,6 +37,7 @@ You need to have an internet connection for the license system.
 ChangeLog
 ---------
 
+- Made Cache Read Ahead default to 5.0 seconds.
 - Fixed some Vulkan validation errors that got through in the original v1.4.4 release.
 - Fixed a FLTK Wayland crash when tooltips where shown and the mouse pointer was moved inside them.
 - Upgraded OpenEXR to v3.4.3.
@@ -48,6 +49,8 @@ ChangeLog
 - Made HUD less prominent as it was somewhat unreadable and making Vulkan skip frames too.
 - Fixed OpenEXR's tile reading code.
 - Fixed Vulkan's Data Window and Display Window.
+- Fixed OpenGL's line size consistency on OpenEXR's Data/Display Windows.
+
 
 v1.4.4
 ======

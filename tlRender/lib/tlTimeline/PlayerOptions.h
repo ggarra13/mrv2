@@ -37,7 +37,7 @@ namespace tl
         struct PlayerCacheOptions
         {
             //! Cache read ahead.
-            otime::RationalTime readAhead = otime::RationalTime(4.0, 1.0);
+            otime::RationalTime readAhead = otime::RationalTime(5.0, 1.0);
 
             //! Cache read behind.
             otime::RationalTime readBehind = otime::RationalTime(0.5, 1.0);
