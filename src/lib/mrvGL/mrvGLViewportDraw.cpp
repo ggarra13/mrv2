@@ -365,7 +365,7 @@ namespace mrv
             const math::Matrix4x4f& mvp) const noexcept
         {
             MRV2_GL();
-            float width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
+            float width = 2 / _p->viewZoom;
             gl.render->setTransform(mvp);
             drawRectOutline(gl.render, box, color, width);
         }
@@ -826,7 +826,7 @@ namespace mrv
             box.max.x = X;
             box.max.y = -Y;
 
-            int width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
+            float width = 2 / _p->viewZoom;
 
             if (width < 2)
                 width = 2;
@@ -1212,7 +1212,9 @@ namespace mrv
             math::Matrix4x4f mvp = _projectionMatrix();
             mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
             gl.render->setTransform(mvp);
-            drawRectOutline(gl.render, box, color, 2);
+            
+            float width = 2 / _p->viewZoom;
+            drawRectOutline(gl.render, box, color, width);
         }
 
         void Viewport::_drawDataWindow() const noexcept
