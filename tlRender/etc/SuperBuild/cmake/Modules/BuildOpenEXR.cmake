@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 set(OpenEXR_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/openexr.git")
-set(OpenEXR_GIT_TAG "v3.4.3-rc2")
+set(OpenEXR_GIT_TAG "v3.4.3")
 
 set(OpenEXR_DEPENDENCIES ${OpenJPH_DEP} Imath ZLIB)
 message(STATUS "OpenEXR DEPENDENCIES=${OpenEXR_DEPENDENCIES}")
