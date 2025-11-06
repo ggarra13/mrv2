@@ -2093,8 +2093,6 @@ namespace mrv
                             if (!file::isTemporaryEDL(item->path) &&
                                 autoPlayback && isRunning())
                             {
-                                player->setPlayback(
-                                    timeline::Playback::Forward);
                                 
                                 // If we have autoplayback on and auto hide
                                 // pixel bar, do so here.
@@ -2114,6 +2112,10 @@ namespace mrv
                                     toggle_pixel_bar(nullptr, ui);
                                     Fl::flush();
                                 }
+
+                                p.options.playback = timeline::Playback::Forward;
+                                Fl::add_timeout(
+                                    0.0, (Fl_Timeout_Handler)start_playback_cb, this);
                             }
 
                             // Add the new file to recent files, unless it is

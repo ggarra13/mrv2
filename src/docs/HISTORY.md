@@ -54,6 +54,7 @@ ChangeLog
 - Fixed Vulkan's playback slow down when mouse entered the title bar.
 - Fixed file associations for mrv2 and vmrv2 on Linux.
 - Fixed removal of icons on Linux on DEB and RPM uninstall.
+- Fixed caching when loading a file and autoPlayback was on.
 
 
 v1.4.4
