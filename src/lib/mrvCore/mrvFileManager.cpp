@@ -16,13 +16,8 @@ namespace fs = std::filesystem;
 
 #include "mrvCore/mrvFileManager.h"
 #include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvOS.h"
 
-#include "mrvFl/mrvIO.h"
-
-namespace
-{
-    const char* kModule = "filemgr";
-}
 
 #ifdef __linux__
 namespace
@@ -73,36 +68,11 @@ namespace mrv
 #ifdef _WIN32
     int explorer_file_manager(const std::string& file)
     {
-        fs::path path(file);
+        const fs::path path(file);
         const fs::path back = path.make_preferred();
         const auto native_path = back.u8string();
-        std::string buf = "explorer /select,\"" + native_path + "\"";
-
-        // CreateProcess parameters
-        STARTUPINFOA si;
-        PROCESS_INFORMATION pi;
-        ZeroMemory(&si, sizeof(si));
-        ZeroMemory(&pi, sizeof(pi));
-        si.cb = sizeof(si);
-
-        // Create the process
-        if (CreateProcessA(
-                NULL, const_cast<char*>(buf.c_str()), NULL, NULL, FALSE,
-                CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
-        {
-            // Wait for the process to complete (optional)
-            WaitForSingleObject(pi.hProcess, INFINITE);
-
-            // Close process and thread handles
-            CloseHandle(pi.hProcess);
-            CloseHandle(pi.hThread);
-            return 0;
-        }
-        else
-        {
-            // Handle the error if needed
-            return 1;
-        }
+        const std::string cmd = "explorer /select,\"" + native_path + "\"";
+        return os::exec_command(cmd);
     }
 #endif
 

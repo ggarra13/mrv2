@@ -113,7 +113,7 @@ namespace mrv
             si.cb = sizeof(si);
             ZeroMemory(&pi, sizeof(pi));
 
-            // Convert command to a mutable char buffer for CreateProcessA
+            // Convert command to a mutable char buffer for CreateProcessW
             std::vector<wchar_t> cmd(utf16_command.begin(),
                                      utf16_command.end());
             cmd.push_back('\0');
@@ -167,7 +167,7 @@ namespace mrv
             si.cb = sizeof(si);
             ZeroMemory(&pi, sizeof(pi));
 
-            // Convert command to a mutable char buffer for CreateProcessA
+            // Convert command to a mutable char buffer for CreateProcessW
             std::vector<wchar_t> cmd(utf16_command.begin(),
                                      utf16_command.end());
             cmd.push_back('\0');
