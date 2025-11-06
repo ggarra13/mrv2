@@ -51,6 +51,7 @@ ChangeLog
 - Fixed Vulkan's Data Window and Display Window.
 - Fixed OpenGL's line size consistency on OpenEXR's Data/Display Windows.
 - Fixed Wayland's scaling under the Vulkan backend.
+- Fixed Wayland's playback slow down when mouse entered the title bar.
 
 
 v1.4.4
