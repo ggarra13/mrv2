@@ -24,6 +24,10 @@ namespace mrv
 
         void show(); // hides automatically when it goes out of scope.
 
+        void set_title(const char* title);
+        void set_start(int64_t start);
+        void set_end(int64_t end);
+        
     protected:
         //! Convert a long long in milliseconds to hour, minutes, seconds and
         //! milliseconds remainder.

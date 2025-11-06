@@ -2,8 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <cinttypes>
-#include <cmath>
+
+
+#include "mrvWidgets/mrvProgressReport.h"
+
+#include "mrvCore/mrvI8N.h"
 
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Progress.H>
@@ -12,9 +15,9 @@
 #include <FL/Fl.H>
 #include <FL/fl_ask.H>
 
-#include "mrvCore/mrvI8N.h"
-
-#include "mrvProgressReport.h"
+#include <iostream>
+#include <cinttypes>
+#include <cmath>
 
 namespace mrv
 {
@@ -66,12 +69,32 @@ namespace mrv
     ProgressReport::~ProgressReport()
     {
         delete w;
-        w = NULL;
+        w = nullptr;
+        progress = nullptr;
+        fps = nullptr;
+        remain = nullptr;
+        elapsed = nullptr;
     }
 
+    void ProgressReport::set_start(int64_t value)
+    {
+        _frame = _start = value;
+    }
+    
+    void ProgressReport::set_end(int64_t value)
+    {
+        _end = value;
+    }
+
+    void ProgressReport::set_title(const char* title)
+    {
+        progress->copy_label(title);
+    }
+    
     void ProgressReport::show()
     {
         w->show();
+        w->wait_for_expose();
     }
 
     void ProgressReport::to_hour_min_sec(
@@ -141,6 +164,7 @@ namespace mrv
 
         if (!w->visible())
         {
+            std::cerr << "called delete w " << this << std::endl;
             delete w;
             w = nullptr;
             return false;

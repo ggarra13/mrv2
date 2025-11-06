@@ -55,6 +55,7 @@ ChangeLog
 - Fixed file associations for mrv2 and vmrv2 on Linux.
 - Fixed removal of icons on Linux on DEB and RPM uninstall.
 - Fixed caching when loading a file and autoPlayback was on.
+- Added Progress Report when caching files upon loading.
 
 
 v1.4.4

@@ -190,7 +190,7 @@ namespace mrv
     struct App::Private
     {
         Options options;
-
+        
         ContextObject* contextObject = nullptr;
         std::shared_ptr<timeline::TimeUnitsModel> timeUnitsModel;
         SettingsObject* settings = nullptr;
@@ -241,6 +241,9 @@ namespace mrv
         bool mute = false;
 
         std::shared_ptr<TimelinePlayer> player;
+
+        // Progress report FLTK widget
+        ProgressReport* progress = nullptr;
 
         MainControl* mainControl = nullptr;
 
@@ -1358,6 +1361,74 @@ namespace mrv
         app->startPlayback();
     }
 
+    void App::_calculateCacheTimes(otime::RationalTime& startTime,
+                                   otime::RationalTime& endTime)
+    {
+        TLRENDER_P();
+        const timeline::Playback& playback = p.options.playback;
+        const auto& time = p.player->currentTime();    
+
+        if (playback != timeline::Playback::Reverse)
+        {
+            const auto& cache =
+                p.player->player()->observeCacheOptions()->get();
+            const auto& rate = time.rate();
+            const auto& readAhead =
+                cache.readAhead.rescaled_to(rate);
+            const auto& readBehind =
+                cache.readBehind.rescaled_to(rate);
+            const auto& timeRange = p.player->inOutRange();
+
+            startTime = time;
+            endTime = time + readAhead;
+            if (endTime >= timeRange.end_time_exclusive())
+            {
+                endTime = timeRange.end_time_exclusive();
+            }
+
+            // Avoid rounding errors
+            endTime = endTime.floor();
+            startTime = startTime.ceil();
+        }
+        else
+        {
+            const auto& cache =
+                p.player->player()->observeCacheOptions()->get();
+            const auto& rate = time.rate();
+            const auto& readAhead =
+                cache.readAhead.rescaled_to(rate);
+            const auto& readBehind =
+                cache.readBehind.rescaled_to(rate);
+            const auto& timeRange = p.player->inOutRange();
+
+            startTime = time + readBehind;
+            endTime = time - readAhead;
+            if (endTime < timeRange.start_time())
+            {
+                auto diff = timeRange.start_time() - endTime;
+                endTime = timeRange.end_time_exclusive();
+                startTime = endTime - diff;
+
+                // Check in case of negative frames
+                if (startTime > endTime)
+                    startTime = endTime;
+            }
+
+            // Sanity check just in case
+            if (endTime < startTime)
+            {
+                const auto tmp = endTime;
+                endTime = startTime;
+                startTime = tmp;
+            }
+
+            // Avoid rounding errors
+            endTime = endTime.floor();
+            startTime = startTime.ceil();
+        }
+        
+    }
+    
     void App::startPlayback()
     {
         TLRENDER_P();
@@ -1365,10 +1436,32 @@ namespace mrv
 
         p.player->setPlayback(timeline::Playback::Stop);
         
+        otime::RationalTime startTime, endTime;
+        _calculateCacheTimes(startTime, endTime);
+        
+        int64_t start = std::floor(startTime.to_seconds());
+        int64_t end   = std::ceil(endTime.to_seconds());
+
+        if (!p.progress)
+        {
+            p.progress = new ProgressReport(ui->uiMain,
+                                            start, end,
+                                            _("Caching..."));
+        }
+        else
+        {
+            p.progress->set_start(start);
+            p.progress->set_end(end);
+        }
+        p.progress->show();
+
+        Fl::flush();
+        
         const timeline::Playback& playback = p.options.playback;
 
         if (playback == timeline::Playback::Forward)
         {
+            
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
@@ -1376,39 +1469,32 @@ namespace mrv
                         {
                             TLRENDER_P();
 
-                            const auto& time = p.player->currentTime();
-
-                            const auto& cache =
-                                p.player->player()->observeCacheOptions()->get();
-                            const auto& rate = time.rate();
-                            const auto& readAhead =
-                                cache.readAhead.rescaled_to(rate);
-                            const auto& readBehind =
-                                cache.readBehind.rescaled_to(rate);
-                            const auto& timeRange = p.player->inOutRange();
-
-                            auto startTime = time;
-                            auto endTime = time + readAhead;
-                            if (endTime >= timeRange.end_time_exclusive())
-                            {
-                                endTime = timeRange.end_time_exclusive();
-                            }
-
-                            // Avoid rounding errors
-                            endTime = endTime.floor();
-                            startTime = startTime.ceil();
+                            otime::RationalTime startTime, endTime;
+                            _calculateCacheTimes(startTime, endTime);
 
                             // Keep UI responsive
-                            Fl::check();
+                            if (p.progress)
+                            {
+                                p.progress->tick();
+                            }
+                            else
+                            {
+                                delete p.progress;
+                                p.progress = nullptr;
+                                p.cacheInfoObserver.reset();
+                                return;
+                            }
                             
                             for (const auto& t : value.videoFrames)
                             {
                                 if (t.start_time() <= startTime &&
                                     t.end_time_exclusive() >= endTime)
                                 {
+                                    delete p.progress;
+                                    p.progress = nullptr;
                                     ui->uiView->setPlayback(playback);
                                     p.cacheInfoObserver.reset();
-                                    break;
+                                    return;
                                 }
                             }
                         });
@@ -1420,59 +1506,38 @@ namespace mrv
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
                     [this, playback](const timeline::PlayerCacheInfo& value)
-                    {
-                        TLRENDER_P();
-
-                        const auto& time = p.player->currentTime();
-
-                        const auto& cache =
-                            p.player->player()->observeCacheOptions()->get();
-                        const auto& rate = time.rate();
-                        const auto& readAhead =
-                            cache.readAhead.rescaled_to(rate);
-                        const auto& readBehind =
-                            cache.readBehind.rescaled_to(rate);
-                        const auto& timeRange = p.player->inOutRange();
-
-                        auto startTime = time + readBehind;
-                        auto endTime = time - readAhead;
-                        if (endTime < timeRange.start_time())
                         {
-                            auto diff = timeRange.start_time() - endTime;
-                            endTime = timeRange.end_time_exclusive();
-                            startTime = endTime - diff;
-
-                            // Check in case of negative frames
-                            if (startTime > endTime)
-                                startTime = endTime;
-                        }
-
-                        // Sanity check just in case
-                        if (endTime < startTime)
-                        {
-                            const auto tmp = endTime;
-                            endTime = startTime;
-                            startTime = tmp;
-                        }
-
-                        // Avoid rounding errors
-                        endTime = endTime.floor();
-                        startTime = startTime.ceil();
-
-                        // Keep UI responsive
-                        Fl::check();
+                            TLRENDER_P();
                             
-                        for (const auto& t : value.videoFrames)
-                        {
-                            if (t.start_time() <= startTime &&
-                                t.end_time_exclusive() >= endTime)
+                            otime::RationalTime startTime, endTime;
+                            _calculateCacheTimes(startTime, endTime);
+                            
+                            // Keep UI responsive
+                            if (p.progress)
                             {
-                                ui->uiView->setPlayback(playback);
-                                p.cacheInfoObserver.reset();
-                                break;
+                                p.progress->tick();
                             }
-                        }
-                    });
+                            else
+                            {
+                                delete p.progress;
+                                p.progress = nullptr;
+                                p.cacheInfoObserver.reset();
+                                return;
+                            }
+                            
+                            for (const auto& t : value.videoFrames)
+                            {
+                                if (t.start_time() <= startTime &&
+                                    t.end_time_exclusive() >= endTime)
+                                {
+                                    delete p.progress;
+                                    p.progress = nullptr;
+                                    ui->uiView->setPlayback(playback);
+                                    p.cacheInfoObserver.reset();
+                                    break;
+                                }
+                            }
+                        });
         }
     }
 

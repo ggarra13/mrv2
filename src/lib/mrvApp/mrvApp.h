@@ -197,6 +197,9 @@ namespace mrv
 
         io::Options _getIOOptions() const;
 
+        void _calculateCacheTimes(otime::RationalTime& startTime,
+                                  otime::RationalTime& endTime);
+        
         otime::RationalTime _cacheReadAhead() const;
         otime::RationalTime _cacheReadBehind() const;
 
