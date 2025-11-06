@@ -159,19 +159,18 @@ fi
 
 shortcut="@mrv2_NAME@.desktop"
 appshortcut="${appdir}/${shortcut}"
-cp -f "${appshortcut}" /usr/share/applications
 cp -f "${appshortcut}" /usr/share/applications/@mrv2_NAME@.desktop
 
 
 #
 # Associate Video formats
 #
-xdg-mime default "${appshortcut}" video/mp4 video/mpeg video/quicktime video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-otio video/x-usd video/x-usda video/x-usdc video/x-usdz
+xdg-mime default "${shortcut}" video/mp4 video/mpeg video/quicktime video/x-flv video/x-matroska video/x-ms-wmv video/x-msvideo image/x-avi video/x-otio video/x-usd video/x-usda video/x-usdc video/x-usdz
 
 #
 # Associate Image formats
 #
-xdg-mime default "${appshortcut}" image/x-cin image/x-dpx image/jpeg image/png image/x-tiff image/x-tga image/x-exr image/x-sxr
+xdg-mime default "${shortcut}" image/x-cin image/x-dpx image/jpeg image/png image/tiff image/x-tga image/x-exr image/x-pnm image/x-hdr image/x-cr2 image/x-arw image/x-sxr
 
 echo "Updating desktop database..."
 update-desktop-database
