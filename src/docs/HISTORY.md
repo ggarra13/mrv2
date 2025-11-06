@@ -56,6 +56,8 @@ ChangeLog
 - Fixed removal of icons on Linux on DEB and RPM uninstall.
 - Fixed caching when loading a file and autoPlayback was on.
 - Added Progress Report when caching files upon loading.
+- Fixed exec_command on Windows platforms to properly use UTF-8.
+- Fixed exec_command with pipes using threads to capture output.
 
 
 v1.4.4
