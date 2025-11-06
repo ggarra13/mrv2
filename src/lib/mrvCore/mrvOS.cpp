@@ -52,6 +52,8 @@
 #    include "mrvWidgets/mrvVersion.h"
 #endif
 
+#include <FL/fl_utf8.h>
+
 #include <string>
 #include <vector>
 #include <stdexcept>
@@ -68,6 +70,43 @@ namespace mrv
     namespace os
     {
 
+        std::wstring convert_utf8_to_utf16(const std::string& utf8_command)
+        {
+            if (utf8_command.empty())
+            {
+                return L"";
+            }
+
+            // 1. Determine the required size of the UTF-16 buffer.
+            // The 'to' argument is passed as NULL to just calculate the length.
+            // The length returned is the number of wide characters (wchar_t), 
+            // including the null terminator.
+            int wide_len = fl_utf8toUtf16(
+                utf8_command.c_str(), 
+                static_cast<unsigned>(utf8_command.length()),
+                nullptr, 
+                0);
+
+            if (wide_len <= 0) {
+                // Handle conversion error or empty string case
+                return L""; 
+            }
+
+            // 2. Allocate the buffer and perform the conversion.
+            // We use a std::vector<wchar_t> to manage the memory.
+            std::vector<unsigned short> wide_buffer(wide_len + 1);
+
+            fl_utf8toUtf16(
+                utf8_command.c_str(), 
+                static_cast<unsigned>(utf8_command.length()),
+                wide_buffer.data(),
+                wide_len + 1 // The size of the output buffer in bytes
+                );
+
+            // 3. Construct the std::wstring from the buffer (excluding the null terminator).
+            return std::wstring(reinterpret_cast<const wchar_t*>(wide_buffer.data()), wide_len);
+        }
+
         std::string sgetenv(const char* const n)
         {
             if (fl_getenv(n))
@@ -78,23 +117,27 @@ namespace mrv
 
 
 #ifdef _WIN32
-        int exec_command(const std::string& command)
+        int exec_command(const std::string& utf8_command)
         {
-            STARTUPINFOA si;
+            STARTUPINFOW si;
             PROCESS_INFORMATION pi;
 
+            // 1. Convert UTF-8 std::string to UTF-16 std::wstring
+            std::wstring utf16_command = convert_utf8_to_utf16(utf8_command);
+            
             // Initialize the structures
             ZeroMemory(&si, sizeof(si));
             si.cb = sizeof(si);
             ZeroMemory(&pi, sizeof(pi));
 
             // Convert command to a mutable char buffer for CreateProcessA
-            std::vector<char> cmd(command.begin(), command.end());
+            std::vector<wchar_t> cmd(utf16_command.begin(),
+                                     utf16_command.end());
             cmd.push_back('\0');
 
             // Create the process
             // The CREATE_NO_WINDOW flag is key to preventing a console from popping up
-            if (!CreateProcessA(
+            if (!CreateProcessW(
                     NULL,           // No module name (use command line)
                     cmd.data(),     // Command line
                     NULL,           // Process handle not inheritable
@@ -103,10 +146,15 @@ namespace mrv
                     CREATE_NO_WINDOW, // Don't create a console window
                     NULL,           // Use parent's environment block
                     NULL,           // Use parent's starting directory
-                    &si,            // Pointer to STARTUPINFOA structure
+                    &si,            // Pointer to STARTUPINFOW structure
                     &pi             // Pointer to PROCESS_INFORMATION structure
-                    )) {
-                throw std::runtime_error("CreateProcess failed!");
+                    ))
+            {
+                DWORD error = GetLastError();
+                LOG_ERROR("CreateProcessW failed with error: " +
+                          std::to_string(error));
+                std::string err = "Failed for " + utf8_command;
+                throw std::runtime_error(err);
             }
 
             // Wait until the child process exits.
@@ -123,10 +171,13 @@ namespace mrv
             return static_cast<int>(exitCode);
         }
         
-        int exec_command_no_block(const std::string& command)
+        int exec_command_no_block(const std::string& utf8_command)
         {        
-            STARTUPINFOA si;
+            STARTUPINFOW si;
             PROCESS_INFORMATION pi;
+            
+            // 1. Convert UTF-8 std::string to UTF-16 std::wstring
+            std::wstring utf16_command = convert_utf8_to_utf16(utf8_command);
 
             // Initialize the structures
             ZeroMemory(&si, sizeof(si));
@@ -134,11 +185,12 @@ namespace mrv
             ZeroMemory(&pi, sizeof(pi));
 
             // Convert command to a mutable char buffer for CreateProcessA
-            std::vector<char> cmd(command.begin(), command.end());
+            std::vector<wchar_t> cmd(utf16_command.begin(),
+                                     utf16_command.end());
             cmd.push_back('\0');
 
             // Create the process
-            if (!CreateProcessA(
+            if (!CreateProcessW(
                     NULL,           // No module name (use command line)
                     cmd.data(),     // Command line
                     NULL,           // Process handle not inheritable
@@ -147,10 +199,15 @@ namespace mrv
                     CREATE_NO_WINDOW, // Don't create a console window
                     NULL,           // Use parent's environment block
                     NULL,           // Use parent's starting directory
-                    &si,            // Pointer to STARTUPINFOA structure
+                    &si,            // Pointer to STARTUPINFOW structure
                     &pi             // Pointer to PROCESS_INFORMATION structure
-                    )) {
-                throw std::runtime_error("CreateProcess failed!");
+                    ))
+            {
+                DWORD error = GetLastError();
+                LOG_ERROR("exec_command_no_block: CreateProcessW failed with error: " +
+                          std::to_string(error));
+                std::string err = "Failed for " + utf8_command;
+                throw std::runtime_error(err);
             }
 
 
@@ -164,7 +221,7 @@ namespace mrv
             return 0;
         }
         
-        int exec_command(const std::string& command,
+        int exec_command(const std::string& utf8_command,
                          std::string& std_out,
                          std::string& std_err)
         {
@@ -172,6 +229,9 @@ namespace mrv
             HANDLE hStdOutRead, hStdOutWrite;
             HANDLE hStdErrRead, hStdErrWrite;
 
+            // Convert UTF-8 std::string to UTF-16 std::wstring
+            std::wstring utf16_command = convert_utf8_to_utf16(utf8_command);
+            
             // Initialize output variables
             std_out.clear();
             std_err.clear();
@@ -193,28 +253,35 @@ namespace mrv
             SetHandleInformation(hStdErrRead, HANDLE_FLAG_INHERIT, 0);
 
             // Configure STARTUPINFO
-            STARTUPINFOA si;
+            STARTUPINFOW si;
             PROCESS_INFORMATION pi;
-            ZeroMemory(&si, sizeof(STARTUPINFO));
+            ZeroMemory(&si, sizeof(STARTUPINFOW));
             ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
-            si.cb = sizeof(STARTUPINFO);
+            si.cb = sizeof(STARTUPINFOW);
             si.hStdOutput = hStdOutWrite;
             si.hStdError = hStdErrWrite;
             si.dwFlags |= STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
             si.wShowWindow = SW_HIDE; // Prevent console window from appearing
 
             // Convert command to mutable char buffer
-            std::vector<char> cmd(command.begin(), command.end());
+            std::vector<wchar_t> cmd(utf16_command.begin(),
+                                     utf16_command.end());
             cmd.push_back(0);
 
             // Create the process
-            if (!CreateProcessA(NULL, cmd.data(), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+            if (!CreateProcessW(NULL, cmd.data(), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
             {
+                DWORD error = GetLastError();
+                LOG_ERROR("exec_command: CreateProcessW failed with error: " +
+                          std::to_string(error));
+                
                 CloseHandle(hStdOutRead);
                 CloseHandle(hStdOutWrite);
                 CloseHandle(hStdErrRead);
                 CloseHandle(hStdErrWrite);
-                throw std::runtime_error("CreateProcess failed!");
+                
+                std::string err = "Failed for " + utf8_command;
+                throw std::runtime_error(err);
             }
 
             // Close write ends in parent
@@ -469,7 +536,7 @@ namespace mrv
                 0,                      // Creation flags
                 NULL,                   // Use parent's environment
                 NULL,                   // Use parent's current directory
-                &si,                    // STARTUPINFO
+                &si,                    // STARTUPINFOW
                 &pi                     // PROCESS_INFORMATION
                 );
 

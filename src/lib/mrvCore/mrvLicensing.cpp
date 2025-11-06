@@ -655,7 +655,7 @@ namespace mrv
                 helper = rootpath() + "/../Resources/bin/license_helper";
             }
 #endif
-            int ret = os::exec_command(helper.c_str());
+            int ret = os::exec_command(helper);
             if (ret == 0)
             {
                 License ok = validate_license(expiration);
@@ -676,6 +676,10 @@ namespace mrv
             {
                 App::demo_mode = true;
             }
+        }
+        else
+        {
+            App::demo_mode = true;    
         }
         return ok;
     }
