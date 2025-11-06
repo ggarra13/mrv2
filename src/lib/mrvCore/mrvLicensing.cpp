@@ -634,52 +634,54 @@ namespace mrv
     {
         std::string expiration;
         License ok = validate_license(expiration);
-        if (ok != License::kValid)
+        if (ok == License::kValid)
         {
-            if (ok == License::kExpired)
-            {
-                fl_alert("License expired on %s. Please enter new license.",
-                         expiration.c_str());
-                Fl::check();
-            }
+            App::demo_mode = false;
+        }
+        else if (ok == License::kExpired)
+        {
+            fl_alert("License expired on %s. Please enter new license.",
+                     expiration.c_str());
+            Fl::check();
+        }
 
 #ifdef _WIN32
-            std::string helper = rootpath() + "/bin/license_helper.exe";
+        std::string helper = rootpath() + "/bin/license_helper.exe";
 #else
-            std::string helper = rootpath() + "/bin/license_helper";
+        std::string helper = rootpath() + "/bin/license_helper";
 #endif
 #ifdef __APPLE__
-            // This is needed for macOS installed bundle.
-            if (!file::isReadable(helper))
-            {
-                helper = rootpath() + "/../Resources/bin/license_helper";
-            }
+        // This is needed for macOS installed bundle.
+        if (!file::isReadable(helper))
+        {
+            helper = rootpath() + "/../Resources/bin/license_helper";
+        }
 #endif
-            int ret = os::exec_command(helper);
-            if (ret == 0)
-            {
-                License ok = validate_license(expiration);
-                if (ok == License::kInvalid)
-                {
-                    fl_alert("%s", _("Invalid license. Entering demo mode"));
-                    Fl::check();
-                    App::demo_mode = true;
-                }
-                else if (ok == License::kExpired)
-                {
-                    fl_alert("%s", _("License expired. Entering demo mode"));
-                    Fl::check();
-                    App::demo_mode = true;
-                }
-            }
-            else
-            {
-                App::demo_mode = true;
-            }
+        int ret = os::exec_command(helper);
+        if (ret != 0)
+        {
+            App::demo_mode = true;
         }
         else
         {
-            App::demo_mode = false;    
+            // License helper ran, validate license again.
+            License ok = validate_license(expiration);
+            if (ok == License::kInvalid)
+            {
+                fl_alert("%s", _("Invalid license. Entering demo mode"));
+                Fl::check();
+                App::demo_mode = true;
+            }
+            else if (ok == License::kExpired)
+            {
+                fl_alert("%s", _("License expired. Entering demo mode"));
+                Fl::check();
+                App::demo_mode = true;
+            }
+            else
+            {
+                App::demo_mode = false;
+            }
         }
         return ok;
     }
