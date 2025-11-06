@@ -679,7 +679,7 @@ namespace mrv
         }
         else
         {
-            App::demo_mode = true;    
+            App::demo_mode = false;    
         }
         return ok;
     }
