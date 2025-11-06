@@ -16,6 +16,15 @@ namespace mrv
     {
         using namespace tl::string;
 
+        /** 
+         * Convert a utf8 string to a utf16 string as used in Windows APIs
+         * 
+         * @param command as utf8 string
+         * 
+         * @return Same command as utf16 string
+         */
+        std::wstring convert_utf8_to_utf16(const std::string& utf8_command);
+        
         inline
         bool ends_with(const std::string& value, const std::string& ending)
         {

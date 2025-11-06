@@ -22,6 +22,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <thread>
 #include <vector>
 
 #include <tlCore/OS.h>
@@ -52,8 +53,6 @@
 #    include "mrvWidgets/mrvVersion.h"
 #endif
 
-#include <FL/fl_utf8.h>
-
 #include <string>
 #include <vector>
 #include <stdexcept>
@@ -70,43 +69,6 @@ namespace mrv
     namespace os
     {
 
-        std::wstring convert_utf8_to_utf16(const std::string& utf8_command)
-        {
-            if (utf8_command.empty())
-            {
-                return L"";
-            }
-
-            // 1. Determine the required size of the UTF-16 buffer.
-            // The 'to' argument is passed as NULL to just calculate the length.
-            // The length returned is the number of wide characters (wchar_t), 
-            // including the null terminator.
-            int wide_len = fl_utf8toUtf16(
-                utf8_command.c_str(), 
-                static_cast<unsigned>(utf8_command.length()),
-                nullptr, 
-                0);
-
-            if (wide_len <= 0) {
-                // Handle conversion error or empty string case
-                return L""; 
-            }
-
-            // 2. Allocate the buffer and perform the conversion.
-            // We use a std::vector<wchar_t> to manage the memory.
-            std::vector<unsigned short> wide_buffer(wide_len + 1);
-
-            fl_utf8toUtf16(
-                utf8_command.c_str(), 
-                static_cast<unsigned>(utf8_command.length()),
-                wide_buffer.data(),
-                wide_len + 1 // The size of the output buffer in bytes
-                );
-
-            // 3. Construct the std::wstring from the buffer (excluding the null terminator).
-            return std::wstring(reinterpret_cast<const wchar_t*>(wide_buffer.data()), wide_len);
-        }
-
         std::string sgetenv(const char* const n)
         {
             if (fl_getenv(n))
@@ -117,13 +79,34 @@ namespace mrv
 
 
 #ifdef _WIN32
+
+        // Helper function to read a pipe and append data to a string.
+        // This will be run in a separate thread.
+        static void ReadPipeThread(HANDLE hPipe, std::string& dest)
+        {
+            char buffer[256];
+            DWORD bytesRead;
+            dest.clear();
+
+            // ReadFile will return FALSE (or 0 bytes read) when the
+            // write-end of the pipe is closed by the child process.
+            while (ReadFile(hPipe, buffer, sizeof(buffer) - 1, &bytesRead,
+                            NULL) && bytesRead > 0)
+            {
+                // Use append(buffer, bytesRead) instead of += buffer
+                // as buffer is not null-terminated at bytesRead.
+                // This also correctly handles null characters in the output.
+                dest.append(buffer, bytesRead);
+            }
+        }
+        
         int exec_command(const std::string& utf8_command)
         {
             STARTUPINFOW si;
             PROCESS_INFORMATION pi;
 
             // 1. Convert UTF-8 std::string to UTF-16 std::wstring
-            std::wstring utf16_command = convert_utf8_to_utf16(utf8_command);
+            std::wstring utf16_command = string::convert_utf8_to_utf16(utf8_command);
             
             // Initialize the structures
             ZeroMemory(&si, sizeof(si));
@@ -177,7 +160,7 @@ namespace mrv
             PROCESS_INFORMATION pi;
             
             // 1. Convert UTF-8 std::string to UTF-16 std::wstring
-            std::wstring utf16_command = convert_utf8_to_utf16(utf8_command);
+            std::wstring utf16_command = string::convert_utf8_to_utf16(utf8_command);
 
             // Initialize the structures
             ZeroMemory(&si, sizeof(si));
@@ -230,7 +213,7 @@ namespace mrv
             HANDLE hStdErrRead, hStdErrWrite;
 
             // Convert UTF-8 std::string to UTF-16 std::wstring
-            std::wstring utf16_command = convert_utf8_to_utf16(utf8_command);
+            std::wstring utf16_command = string::convert_utf8_to_utf16(utf8_command);
             
             // Initialize output variables
             std_out.clear();
@@ -288,31 +271,37 @@ namespace mrv
             CloseHandle(hStdOutWrite);
             CloseHandle(hStdErrWrite);
 
-            // Read stdout and stderr
-            char buffer[256];
-            DWORD bytesRead;
+            // Create local strings for threads to write to.
+            // This avoids race conditions on std_out and std_err.
+            std::string outThreadData;
+            std::string errThreadData;
 
-            while (ReadFile(hStdOutRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0)
-            {
-                buffer[bytesRead] = '\0';
-                std_out += buffer;
-            }
-
-            while (ReadFile(hStdErrRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0)
-            {
-                buffer[bytesRead] = '\0';
-                std_err += buffer;
-            }
-
-            // Close handles
-            CloseHandle(hStdOutRead);
-            CloseHandle(hStdErrRead);
+            // Create two threads to read from stdout and stderr concurrently
+            std::thread outThread(ReadPipeThread, hStdOutRead,
+                                  std::ref(outThreadData));
+            std::thread errThread(ReadPipeThread, hStdErrRead,
+                                  std::ref(errThreadData));
 
             // Wait for process to exit and get exit code
             WaitForSingleObject(pi.hProcess, INFINITE);
+
+            // Get the exit code
             DWORD exitCode;
             GetExitCodeProcess(pi.hProcess, &exitCode);
 
+            // Wait for both reader threads to complete.
+            // They will have already exited or will exit shortly after
+            // the process terminates.
+            outThread.join();
+            errThread.join();
+
+            std_out = outThreadData;
+            std_err = errThreadData;
+            
+            // Close handles
+            CloseHandle(hStdOutRead);
+            CloseHandle(hStdErrRead);
+            
             // Cleanup
             CloseHandle(pi.hProcess);
             CloseHandle(pi.hThread);
