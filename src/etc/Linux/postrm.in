@@ -10,6 +10,7 @@ fi
 
 # Remove /usr/bin/mrv2 if it is a symlink to our version
 removed=0
+fullpath=""
 if [[ -L /usr/bin/@mrv2_NAME@ ]]; then
     fullpath=`readlink /usr/bin/@mrv2_NAME@`
     installpath="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
@@ -27,10 +28,13 @@ if [[ -L /usr/bin/@mrv2_NAME@ ]]; then
 fi
 
 # When installing vmrv2, as we renamed the file, we need to clear
-# the directory manually.  \@bug: This is wrong.
-# if [[ -e "@CPACK_INSTALL_PREFIX@" ]]; then
-#    rm -rf "@CPACK_INSTALL_PREFIX@"
-# fi
+# the directory manually.
+if [[ -e "@CPACK_INSTALL_PREFIX@" ]]; then
+    rm -rf "@CPACK_INSTALL_PREFIX@"
+fi
+
+sharedir=/usr/share
+appdir=${sharedir}/applications
 
 echo "Removing symlink from /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@"
 rm -f /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@
@@ -90,9 +94,6 @@ rm -f "${desktop_dir}/@mrv2_NAME@-v@mrv2_VERSION@.desktop"
 if [ -e "${desktop_dir}/hdr-v@mrv2_VERSION@.desktop" ]; then
     rm -f "${desktop_dir}/hdr-v@mrv2_VERSION@.desktop"
 fi
-
-sharedir=/usr/share
-appdir=${sharedir}/applications
 
 #
 # Remove all icon sizes
