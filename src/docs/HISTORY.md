@@ -53,6 +53,7 @@ ChangeLog
 - Fixed Wayland's scaling under the Vulkan backend for vmrv2.
 - Fixed Vulkan's playback slow down when mouse entered the title bar.
 - Fixed file associations for mrv2 and vmrv2 on Linux.
+- Fixed removal of icons on Linux on DEB and RPM uninstall.
 
 
 v1.4.4
