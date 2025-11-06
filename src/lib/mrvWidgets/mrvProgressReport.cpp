@@ -109,6 +109,9 @@ namespace mrv
 
     bool ProgressReport::tick()
     {
+        if (!w)
+            return false;
+        
         progress->value(progress->value() + 1);
 
         const auto now = std::chrono::steady_clock::now();
@@ -164,7 +167,6 @@ namespace mrv
 
         if (!w->visible())
         {
-            std::cerr << "called delete w " << this << std::endl;
             delete w;
             w = nullptr;
             return false;

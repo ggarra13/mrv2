@@ -1475,14 +1475,13 @@ namespace mrv
                             // Keep UI responsive
                             if (p.progress)
                             {
-                                p.progress->tick();
-                            }
-                            else
-                            {
-                                delete p.progress;
-                                p.progress = nullptr;
-                                p.cacheInfoObserver.reset();
-                                return;
+                                if (!p.progress->tick())
+                                {
+                                    delete p.progress;
+                                    p.progress = nullptr;
+                                    p.cacheInfoObserver.reset();
+                                    return;
+                                }
                             }
                             
                             for (const auto& t : value.videoFrames)
@@ -1515,14 +1514,13 @@ namespace mrv
                             // Keep UI responsive
                             if (p.progress)
                             {
-                                p.progress->tick();
-                            }
-                            else
-                            {
-                                delete p.progress;
-                                p.progress = nullptr;
-                                p.cacheInfoObserver.reset();
-                                return;
+                                if (!p.progress->tick())   
+                                {
+                                    delete p.progress;
+                                    p.progress = nullptr;
+                                    p.cacheInfoObserver.reset();
+                                    return;
+                                }
                             }
                             
                             for (const auto& t : value.videoFrames)
