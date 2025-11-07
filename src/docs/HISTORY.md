@@ -58,6 +58,7 @@ ChangeLog
 - Added Progress Report when caching files upon loading.
 - Fixed exec_command on Windows platforms to properly use UTF-8.
 - Fixed exec_command with pipes using threads to capture output.
+- Fixed licensing issue on Windows using legacy wmic which is no longer present on newer Windows distros.
 
 
 v1.4.4
