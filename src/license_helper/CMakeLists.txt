@@ -6,11 +6,14 @@
 set(HEADERS
     mrvFile.h
     mrvOS.h
+    mrvString.h
 )
 set(SOURCES
+    main.cpp
     mrvFile.cpp
     mrvOS.cpp
-    main.cpp)
+    mrvString.cpp
+)
 
 list(APPEND LIBRARIES ${FLTK_LIBRARIES})
 
