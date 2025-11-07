@@ -21,10 +21,14 @@ TLRENDER_DIRS = [
     "tlRender/lib/tlBaseApp",
     "tlRender/lib/tlCore",
     "tlRender/lib/tlIO",
-    "tlRender/lib/tlGL",
     "tlRender/lib/tlTimeline",
-    "tlRender/lib/tlTimelineGL",
     "tlRender/lib/tlTimelineUI",
+    "tlRender/lib/tlGL",
+    "tlRender/lib/tlTimelineGL",
+    "tlRender/lib/tlTimelineUIGL",
+    "tlRender/lib/tlVk",
+    "tlRender/lib/tlTimelineVk",
+    "tlRender/lib/tlTimelineUIVk",
     "tlRender/lib/tlDevice",
 ]
 
@@ -72,6 +76,33 @@ BASH_DIRS = [
     ".githooks"
 ]
 
+def process_tlrender_files():
+    for cpp_dir in TLRENDER_DIRS:
+        print("Processing",cpp_dir)
+        cpp_files = glob.glob( cpp_dir + "/*.cpp" )
+        h_files = glob.glob( cpp_dir + "/*.h" )
+        glsl_files = glob.glob( cpp_dir + "/*.glsl" )
+
+        files = cpp_files + h_files + glsl_files
+
+        for f in files:
+            with open( f, encoding='utf-8' ) as ip:
+                text = ip.read()
+            with open( f + ".new", "w", encoding='utf-8' ) as out:
+
+                if not re.search( "Copyright", text ):
+                    license = """// SPDX-License-Identifier: BSD-3-Clause
+// mrv2
+// Copyright Contributors to the mrv2 Project. All rights reserved.
+
+"""
+                    print("Adding copyright to",f)
+                    text = license + text
+
+                out.write( text )
+
+            shutil.move( f + ".new", f )
+
 def process_cpp_files():
     for cpp_dir in CPP_DIRS:
         print("Processing",cpp_dir)
@@ -82,9 +113,9 @@ def process_cpp_files():
         files = cpp_files + h_files + glsl_files
 
         for f in files:
-            with open( f ) as ip:
+            with open( f, encoding='utf-8' ) as ip:
                 text = ip.read()
-            with open( f + ".new", "w" ) as out:
+            with open( f + ".new", "w", encoding='utf-8' ) as out:
 
                 if not re.search( "Copyright", text ):
                     license = """// SPDX-License-Identifier: BSD-3-Clause
@@ -135,7 +166,7 @@ def process_bash_files():
         files = glob.glob( bash_dir + "/*.sh" )
 
         for f in files:
-            with open( f ) as ip:
+            with open( f, encoding='utf-8' ) as ip:
                 text = ip.read()
                 
             has_license = False
@@ -143,7 +174,7 @@ def process_bash_files():
                 has_license = True
 
             if has_license == False:
-                with open( f + ".new", "w" ) as out:
+                with open( f + ".new", "w", encoding='utf-8' ) as out:
 
                     license = """# SPDX-License-Identifier: BSD-3-Clause
 # mrv2
@@ -162,6 +193,7 @@ def process_bash_files():
                 os.chmod(f, 0o755)
 
 
+process_tlrender_files()
 process_cpp_files()
 process_cmake_files()
 process_bash_files()
