@@ -26,6 +26,7 @@ namespace mrv
         const image::PixelType outputPixelType = outputImage->getPixelType();
         const image::PixelType inputPixelType = inputImage->getPixelType();
 
+        /* xgettext:c++-format */
         const std::string err = string::Format(
             _("Unhandled buffer format: {0} for output: {1}"))
                                 .arg(inputPixelType)

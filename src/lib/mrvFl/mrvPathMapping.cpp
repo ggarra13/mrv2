@@ -65,7 +65,8 @@ namespace mrv
         const std::map< std::string, std::string >& map = path_mappings();
         if (map.find(remote) != map.end())
         {
-            std::string err =
+            /* xgettext:c++-format */
+            const std::string err =
                 string::Format(_("Path mapping for {0} already exists!"))
                     .arg(remote);
             LOG_ERROR(err);
@@ -137,6 +138,7 @@ namespace mrv
         {
             const std::string& remote = item.first;
             const std::string& local = item.second;
+            /* xgettext:c++-format */
             std::string msg =
                 tl::string::Format(_("Comparing {0} to prefix {1}"))
                     .arg(file)
@@ -150,6 +152,7 @@ namespace mrv
                 if (file::isReadable(outFile))
                 {
                     file = outFile;
+                    /* xgettext:c++-format */
                     msg =
                         tl::string::Format(_("Found a match.  File is now {0}"))
                             .arg(file);

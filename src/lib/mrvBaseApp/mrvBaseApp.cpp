@@ -159,6 +159,7 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
+                    /* xgettext:c-format */
                     throw std::runtime_error(
                         string::Format(_("Cannot parse option \"{0}\": {1}"))
                             .arg(i->getMatchedName())
@@ -207,6 +208,7 @@ namespace mrv
                 }
                 catch (const std::exception& e)
                 {
+                    /* xgettext:c-format */
                     throw std::runtime_error(
                         string::Format(_("Cannot parse argument \"{0}\": {1}"))
                             .arg(i->getName())

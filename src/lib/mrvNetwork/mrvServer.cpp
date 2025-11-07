@@ -18,7 +18,8 @@ namespace mrv
         TCP(),
         serverSocket(port)
     {
-        std::string msg =
+        /* xgettext:c++-format */
+        const std::string msg =
             tl::string::Format(_("Server started at port {0}.")).arg(port);
         LOG_STATUS(msg);
 

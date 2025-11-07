@@ -69,6 +69,7 @@ namespace mrv
         m_threads.push_back(writer);
 
         //! Log the new connection
+        /* xgettext:c++-format */
         std::string msg =
             tl::string::Format(_("A client connected from {0}")).arg(host);
         LOG_STATUS(msg);
@@ -98,7 +99,8 @@ namespace mrv
         {
             auto clientIP = getIP();
             const auto& host = ipToHostname(clientIP);
-            std::string msg =
+            /* xgettext:c++-format */
+            const std::string msg =
                 tl::string::Format(_("Client at {0} disconnected.")).arg(host);
             LOG_STATUS(msg);
             messagePublisher.remove(clientIP);

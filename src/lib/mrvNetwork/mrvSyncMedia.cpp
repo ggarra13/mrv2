@@ -28,7 +28,8 @@ namespace
     {
         if (!mrv::file::isReadable(filePath))
         {
-            std::string msg =
+            /* xgettext:c++-format */
+            const std::string msg =
                 tl::string::Format(_("Remote file {0} does not "
                                      "exist on local filesystem."))
                     .arg(filePath);
@@ -131,6 +132,7 @@ namespace mrv
                     std::string msg;
                     if (remotePath.getBaseName() == localPath.getBaseName())
                     {
+                        /* xgettext:c++-format */
                         msg =
                             tl::string::Format(_("Remote file {0} matches "
                                                  "file name {1} but not path."))
@@ -141,6 +143,7 @@ namespace mrv
                     }
                     else
                     {
+                        /* xgettext:c++-format */
                         msg = tl::string::Format(_("Remote file {0} does not "
                                                    "match local filename."))
                                   .arg(remotePath.get());

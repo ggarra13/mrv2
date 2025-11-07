@@ -91,7 +91,8 @@ namespace mrv
             
             if (!mrv::file::isReadable(file))
             {
-                std::string err =
+                /* xgettext:c-format */
+                const std::string err =
                     string::Format(
                         _("Filename '{0}' does not exist or does not "
                           "have read permissions."))
@@ -203,6 +204,7 @@ namespace mrv
         stack->append_child(videoTrack, &errorStatus);
         if (otio::is_error(errorStatus))
         {
+            /* xgettext:c++-format */
             std::string error =
                 string::Format(_("Could not append video track {0}"))
                 .arg(errorStatus.full_description);
@@ -212,6 +214,7 @@ namespace mrv
         stack->append_child(audioTrack, &errorStatus);
         if (otio::is_error(errorStatus))
         {
+            /* xgettext:c++-format */
             std::string error =
                 string::Format(_("Could not append audio track {0}"))
                 .arg(errorStatus.full_description);

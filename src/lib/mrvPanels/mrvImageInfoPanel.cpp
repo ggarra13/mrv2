@@ -1405,6 +1405,7 @@ namespace mrv
             std::string text;
 
             double seconds = content.to_seconds();
+            /* xgettext:c-format */
             snprintf(buf, 128, _("%.3f seconds "), seconds);
             text += buf;
 
@@ -1720,6 +1721,7 @@ namespace mrv
 
                     if (num_video_streams > 1)
                     {
+                        /* xgettext:c-format */
                         snprintf(buf, 256, _("Video Stream #%d"), i + 1);
                         m_curr = add_browser(m_video, buf);
                     }
@@ -2244,7 +2246,9 @@ namespace mrv
                     char buf_english[256];
                     char buf[256];
 
+                    /* xgettext:c-format */
                     snprintf(buf_english, 256, "Audio Stream #%d:", i + 1);
+                    /* xgettext:c-format */
                     snprintf(buf, 256, _("Audio Stream #%d"), i + 1);
                     if (num_audio_streams > 1)
                     {
@@ -2298,10 +2302,12 @@ namespace mrv
 
                     add_text(
                         _("Format"), _("Format"), getLabel(audio.dataType));
+                    /* xgettext:c-format */
                     snprintf(buf, 256, _("%d Hz."), audio.sampleRate);
                     add_text(_("Frequency"), _("Frequency of audio"), buf);
 
 #if 0
+                    /* xgettext:c-format */
                     snprintf( buf, 256, _("%d kb/s"), s.bitrate/1000 );
                     add_text( _("Max. Bitrate"), _("Max. Bitrate"), buf );
 #endif
@@ -2347,6 +2353,7 @@ namespace mrv
 
                     if ( num_subtitle_streams > 1 )
                     {
+                        /* xgettext:c-format */
                         snprintf( buf, 256, _("Subtitle Stream #%d"), i+1 );
                         m_curr = add_browser( m_subtitle, buf );
                     }
@@ -2363,6 +2370,7 @@ namespace mrv
                               s.closed_captions );
                     ++group;
 
+                    /* xgettext:c-format */
                     snprintf( buf, 256, _("%d kb/s"), s.bitrate/1000 );
                     add_text( _("Avg. Bitrate"), _("Avg. Bitrate"), buf );
 

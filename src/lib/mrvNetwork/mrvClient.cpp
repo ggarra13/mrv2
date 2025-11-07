@@ -42,6 +42,7 @@ namespace mrv
         {
             m_socket.connect(m_address); // Connect to the server
 
+            /* xgettext:c++-format */
             std::string msg =
                 tl::string::Format(_("Connected to server at {0}, port {1}"))
                     .arg(host)

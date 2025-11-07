@@ -434,6 +434,7 @@ namespace mrv
                 
                 std::string format = item->label();
                 
+                /* xgettext:c++-format */
                 const std::string msg =
                     string::Format(_("Streaming {0} {1}...")).
                     arg(config.pixelType).

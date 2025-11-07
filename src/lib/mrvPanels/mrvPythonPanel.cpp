@@ -420,6 +420,7 @@ namespace mrv
                 fs::path filename = fullPath.filename();
 
                 char buf[256];
+                /* xgettext:c-format */
                 snprintf(buf, 256, _("Scripts/%s"),
                          filename.u8string().c_str());
 
@@ -577,7 +578,8 @@ from mrv2 import playlist, timeline, ui, )PYTHON";
 
             if (fs::exists(file))
             {
-                std::string msg =
+                /* xgettext:c++-format */
+                const std::string msg =
                     tl::string::Format(
                         _("Python file {0} already "
                           "exists.  Do you want to overwrite it?"))
@@ -627,6 +629,7 @@ from mrv2 import playlist, timeline, ui, )PYTHON";
             Fl_Group::current(0);
             Fl_Double_Window win(500, 100, _("Type your editor command"));
             win.begin();
+            /* xgettext:c++-format */
             Fl_Box b(
                 10, 10, win.w() - 20, 20,
                 _("{0} will be replaced with the line number.  {1} with the "
@@ -680,7 +683,8 @@ from mrv2 import playlist, timeline, ui, )PYTHON";
                 }
                 catch (const std::regex_error& e)
                 {
-                    std::string msg =
+                    /* xgettext:c++-format */
+                    const std::string msg =
                         tl::string::Format(_("Regular expression error: {0}"))
                             .arg(e.what());
                     LOG_ERROR(msg);
@@ -729,6 +733,7 @@ from mrv2 import playlist, timeline, ui, )PYTHON";
                     int ret = std::system(command.c_str());
                     if (ret != 0)
                     {
+                        /* xgettext:c++-format */
                         const std::string msg =
                             tl::string::Format(
                                 _("Could not open python editor: {0}"))
@@ -739,7 +744,8 @@ from mrv2 import playlist, timeline, ui, )PYTHON";
             }
             catch (const std::regex_error& e)
             {
-                std::string msg =
+                /* xgettext:c++-format */
+                const std::string msg =
                     tl::string::Format(_("Regular expression error: {0}"))
                         .arg(e.what());
                 LOG_ERROR(msg);

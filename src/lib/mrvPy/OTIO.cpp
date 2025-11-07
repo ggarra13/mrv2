@@ -75,6 +75,7 @@ RationalTime _type_checked(py::object const& rhs, char const* op)
     {
         std::string rhs_type =
             py::cast<std::string>(py::type::of(rhs).attr("__name__"));
+        /* xgettext:c++-format */
         throw py::type_error(
             tl::string::Format(_("unsupported operand type(s) for {0}: "
                                  "RationalTime and {1}"))

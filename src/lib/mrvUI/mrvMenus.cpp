@@ -182,6 +182,7 @@ namespace mrv
         {
             file = string::commentCharacter(file, '\\');
             file = string::commentCharacter(file, '/');
+            /* xgettext:c-format */
             snprintf(buf, 256, _("File/Recent/%s"), file.c_str());
             menu->add(buf, 0, (Fl_Callback*)open_recent_cb, ui);
         }
@@ -1089,6 +1090,7 @@ namespace mrv
             tmp = ui->uiPrefs->uiPrefsCropArea->child(i)->label();
             if (!tmp)
                 continue;
+            /* xgettext:c-format */
             snprintf(buf, 256, _("View/Mask/%s"), tmp);
             idx = menu->add(buf, 0, (Fl_Callback*)masking_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
@@ -1274,6 +1276,7 @@ namespace mrv
             {
                 for (unsigned i = 0; i < tracks.size(); ++i)
                 {
+                    /* xgettext:c++-format */
                     std::string msg =
                         tl::string::Format(_("Timeline/Visible Tracks/{0}"))
                             .arg(tracks[i]);
@@ -1539,6 +1542,7 @@ namespace mrv
 
         menu->add(_("OCIO/Current"), 0, 0, nullptr, FL_MENU_INACTIVE);
 
+        /* xgettext:c-format */
         snprintf(buf, 1024, _("OCIO/         ICS: %s"), ics.c_str());
         idx = menu->add(buf, 0, 0, nullptr);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
@@ -1548,11 +1552,13 @@ namespace mrv
         const timeline::OCIOOptions& o = uiView->getOCIOOptions();
         if (num_screens == 1)
         {
+            /* xgettext:c-format */
             snprintf(buf, 1024, _("OCIO/     Display: %s"), o.display.c_str());
             menu->add(buf, 0, 0, nullptr);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             item->labelcolor(FL_YELLOW);
 
+            /* xgettext:c-format */
             snprintf(buf, 1024, _("OCIO/        View: %s"), o.view.c_str());
             menu->add(buf, 0, 0, nullptr);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
@@ -1576,12 +1582,14 @@ namespace mrv
             if (same)
             {
                 const timeline::OCIOOptions& o = uiView->getOCIOOptions(0);
+                /* xgettext:c-format */
                 snprintf(
                     buf, 1024, _("OCIO/     Display: %s"), o.display.c_str());
                 idx = menu->add(buf, 0, 0, nullptr);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                 item->labelcolor(FL_YELLOW);
 
+                /* xgettext:c-format */
                 snprintf(buf, 1024, _("OCIO/        View: %s"), o.view.c_str());
                 idx = menu->add(buf, 0, 0, nullptr);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
@@ -1593,6 +1601,7 @@ namespace mrv
                 {
                     const timeline::OCIOOptions& o = uiView->getOCIOOptions(m);
                     std::string monitorName = mrv::desktop::monitorName(m);
+                    /* xgettext:c-format */
                     snprintf(
                         buf, 1024, _("OCIO/  Monitor #%d Display: %s"), m,
                         o.display.c_str());
@@ -1600,6 +1609,7 @@ namespace mrv
                     item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                     item->labelcolor(FL_YELLOW);
 
+                    /* xgettext:c-format */
                     snprintf(
                         buf, 1024, _("OCIO/  Monitor #%d    View: %s"), m,
                         o.view.c_str());
@@ -1610,6 +1620,7 @@ namespace mrv
             }
         }
 
+        /* xgettext:c-format */
         snprintf(buf, 1024, _("OCIO/        Look: %s"), look.c_str());
         idx = menu->add(buf);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
@@ -1619,6 +1630,7 @@ namespace mrv
         if (lut.enabled && !lut.fileName.empty())
         {
             file::Path path(lut.fileName);
+            /* xgettext:c-format */
             snprintf(
                 buf, 1024, _("OCIO/        LUT: %s"),
                 path.getBaseName().c_str());
@@ -1926,6 +1938,7 @@ namespace mrv
             if (!py::isinstance<py::function>(obj) &&
                 !py::isinstance<py::tuple>(obj))
             {
+                /* xgettext:c++-format */
                 std::string msg =
                     string::Format(_("In '{0}' expected a function as a value "
                                      "or a tuple containing a Python function "
@@ -1950,6 +1963,7 @@ namespace mrv
                 }
                 else
                 {
+                    /* xgettext:c++-format */
                     std::string msg =
                         string::Format(
                             _("In '{0}' expected a function a tuple "

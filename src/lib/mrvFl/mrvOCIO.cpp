@@ -385,7 +385,8 @@ namespace mrv
             {
                 if (!file::isReadable(config))
                 {
-                    std::string err =
+                    /* xgettext:c++-format */
+                    const std::string err =
                         string::Format(_("OCIO config '{0}' does not "
                                          "exist or is not readable."))
                             .arg(config);
@@ -480,10 +481,10 @@ namespace mrv
                 }
                 if (value == -1)
                 {
-                    std::string err =
+                    /* xgettext:c++-format */
+                    const std::string err =
                         string::Format(_("Invalid OCIO Ics '{0}'.")).arg(name);
                     throw std::runtime_error(err);
-                    return;
                 }
             }
             uiICS->value(value);
@@ -573,7 +574,8 @@ namespace mrv
             }
             if (value == -1)
             {
-                std::string err =
+                /* xgettext:c++-format */
+                const std::string err =
                     string::Format(_("Invalid OCIO Look '{0}'.")).arg(name);
                 throw std::runtime_error(err);
                 return;
@@ -679,7 +681,8 @@ namespace mrv
             }
             if (value == -1)
             {
-                std::string err =
+                /* xgettext:c++-format */
+                const std::string err =
                     string::Format(_("Invalid OCIO Display/View '{0}'."))
                         .arg(name);
                 throw std::runtime_error(err);
@@ -743,6 +746,7 @@ namespace mrv
                 pos = view.find('(');
                 if (pos == std::string::npos)
                 {
+                    /* xgettext:c++-format */
                     const std::string& err =
                         string::Format(
                             _("Could not split '{0}' into display and view."))
@@ -847,6 +851,7 @@ namespace mrv
             auto defaultView = OCIOconfig->getDefaultView(display.c_str());
             if (!defaultView || strlen(defaultView) == 0)
             {
+                /* xgettext:c++-format */
                 const std::string err =
                     string::Format(_("No default view for display "
                                      "'{0}'.  Does display exist?"))
@@ -1000,6 +1005,7 @@ namespace mrv
             {
                 if (preset.name == presetName)
                 {
+                    /* xgettext:c++-format */
                     std::string msg =
                         string::Format(_("Setting OCIO Preset '{0}'."))
                             .arg(presetName);
@@ -1023,7 +1029,8 @@ namespace mrv
                 }
             }
 
-            std::string msg =
+            /* xgettext:c++-format */
+            const std::string msg =
                 string::Format(_("Preset '{0}' not found.")).arg(presetName);
             LOG_ERROR(msg);
         }
@@ -1034,6 +1041,7 @@ namespace mrv
             {
                 if (preset.name == presetName)
                 {
+                    /* xgettext:c++-format */
                     std::string msg =
                         string::Format(_("OCIO Preset '{0}' already exists!"))
                             .arg(presetName);
@@ -1122,6 +1130,7 @@ namespace mrv
             }
             if (!found)
             {
+                /* xgettext:c++-format */
                 std::string msg = string::Format(_("Preset '{0}' not found."))
                                       .arg(presetName);
                 LOG_ERROR(msg);
@@ -1136,6 +1145,7 @@ namespace mrv
                 std::ifstream ifs(fileName);
                 if (!ifs.is_open())
                 {
+                    /* xgettext:c++-format */
                     const std::string& err =
                         string::Format(
                             _("Failed to open the file '{0}' for reading."))
@@ -1149,6 +1159,7 @@ namespace mrv
 
                 if (ifs.fail())
                 {
+                    /* xgettext:c++-format */
                     const std::string& err =
                         string::Format(_("Failed to load the file '{0}'."))
                             .arg(fileName);
@@ -1165,6 +1176,7 @@ namespace mrv
 
                 presets = j.get<std::vector<OCIOPreset>>();
 
+                /* xgettext:c++-format */
                 const std::string& msg =
                     string::Format(_("Loaded {0} ocio presets from \"{1}\"."))
                         .arg(presets.size())
@@ -1185,6 +1197,7 @@ namespace mrv
                 std::ofstream ofs(fileName);
                 if (!ofs.is_open())
                 {
+                    /* xgettext:c++-format */
                     const std::string& err =
                         string::Format(
                             _("Failed to open the file '{0}' for saving."))
@@ -1199,6 +1212,7 @@ namespace mrv
 
                 if (ofs.fail())
                 {
+                    /* xgettext:c++-format */
                     const std::string& err =
                         string::Format(_("Failed to save the file '{0}'."))
                             .arg(fileName);
@@ -1213,6 +1227,7 @@ namespace mrv
                 }
                 ofs.close();
 
+                /* xgettext:c++-format */
                 const std::string& msg =
                     string::Format(
                         _("OCIO presets have been saved to \"{0}\"."))

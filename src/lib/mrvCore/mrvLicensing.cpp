@@ -301,6 +301,7 @@ namespace mrv
             bool useDefault = false;
             if (!file::isReadable(caLocation))
             {
+                /* xgettext:c++-format */
                 std::string msg =
                     string::Format(_("{0} is not readable. Using system default.")).
                     arg(caLocation);
@@ -642,6 +643,7 @@ namespace mrv
 
         if (App::license_type != LicenseType::kDemo)
         {
+            /* xgettext:c++-format */
             std::string msg =
                 string::Format(_("Your {0} license will expire on {1}."))
                 .arg(App::license_type)

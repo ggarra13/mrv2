@@ -93,6 +93,7 @@ namespace mrv
     {
         char buf[256];
         unsigned idx = audioTracks.size() + 1;
+        /* xgettext:c-format */
         snprintf(buf, 256, _("Track #%d - %s"), idx, name.c_str());
         audioTracks.push_back(buf);
     }

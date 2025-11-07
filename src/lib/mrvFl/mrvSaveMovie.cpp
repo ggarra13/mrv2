@@ -336,6 +336,7 @@ namespace mrv
             {
                 if (fs::exists(newFile))
                 {
+                    /* xgettext:c++-format */
                     throw std::runtime_error(
                         string::Format(_("New file {0} already exist!  "
                                          "Cannot overwrite it."))
@@ -362,6 +363,7 @@ namespace mrv
             const std::string& originalFile = player->path().get();
             if (originalFile == file)
             {
+                /* xgettext:c++-format */
                 throw std::runtime_error(
                     string::Format("{0}: Saving over same file being played!")
                         .arg(file));
@@ -397,6 +399,7 @@ namespace mrv
                     renderSize.w = renderSize.h;
                     renderSize.h = tmp;
 
+                    /* xgettext:c++-format */
                     msg = tl::string::Format(_("Rotated image info: {0}"))
                               .arg(renderSize);
                     LOG_STATUS(msg);
@@ -405,6 +408,7 @@ namespace mrv
                 {
                     renderSize.w /= 2;
                     renderSize.h /= 2;
+                    /* xgettext:c++-format */
                     msg = tl::string::Format(_("Scaled image info: {0}"))
                               .arg(renderSize);
                     LOG_STATUS(msg);
@@ -413,6 +417,7 @@ namespace mrv
                 {
                     renderSize.w /= 4;
                     renderSize.h /= 4;
+                    /* xgettext:c++-format */
                     msg = tl::string::Format(_("Scaled image info: {0}"))
                               .arg(renderSize);
                     LOG_STATUS(msg);
@@ -439,6 +444,7 @@ namespace mrv
 
             if (!writerPlugin)
             {
+                /* xgettext:c++-format */
                 throw std::runtime_error(
                     string::Format(_("{0}: Cannot open writer plugin."))
                         .arg(file));
@@ -458,7 +464,7 @@ namespace mrv
 
             if (hasVideo)
             {
-
+                /* xgettext:c++-format */
                 msg = tl::string::Format(_("Image info: {0} {1}"))
                           .arg(outputInfo.size)
                           .arg(outputInfo.pixelType);
@@ -537,6 +543,7 @@ namespace mrv
                     outputInfo.size.w = std::round(outputInfo.size.w);
                     outputInfo.size.h = std::round(outputInfo.size.h);
 
+                    /* xgettext:c++-format */
                     msg = tl::string::Format(_("Viewport Size: {0} - "
                                                "X={1}, Y={2}"))
                               .arg(viewportSize)
@@ -582,6 +589,7 @@ namespace mrv
                             image::PixelType::RGB_F32;
                     }
 #endif
+                    /* xgettext:c++-format */
                     msg = tl::string::Format(
                               _("Writer plugin did not get output info.  "
                                 "Defaulting to {0}"))
@@ -623,7 +631,8 @@ namespace mrv
                     auto entries = tl::ffmpeg::getProfileLabels();
                     std::string profileName =
                         entries[(int)options.ffmpegProfile];
-
+                    
+                    /* xgettext:c++-format */
                     msg = tl::string::Format(
                               _("Using profile {0}, pixel format {1}."))
                               .arg(profileName)
@@ -631,6 +640,7 @@ namespace mrv
                     LOG_STATUS(msg);
                     if (!options.ffmpegPreset.empty())
                     {
+                        /* xgettext:c++-format */
                         msg = tl::string::Format(_("Using preset {0}."))
                                   .arg(options.ffmpegPreset);
                         LOG_STATUS(msg);
@@ -663,11 +673,13 @@ namespace mrv
                 if (static_cast<ffmpeg::AudioCodec>(options.ffmpegAudioCodec) ==
                         ffmpeg::AudioCodec::kNone ||
                     !hasAudio)
+                    /* xgettext:c-format */
                     snprintf(
                         title, 1024,
                         _("Saving Movie without Audio %" PRId64 " - %" PRId64),
                         startFrame, endFrame);
                 else
+                    /* xgettext:c-format */
                     snprintf(
                         title, 1024,
                         _("Saving Movie with Audio %" PRId64 " - %" PRId64),
@@ -675,6 +687,7 @@ namespace mrv
             }
             else if (hasAudio && savingAudio)
             {
+                /* xgettext:c-format */
                 snprintf(
                     title, 1024, _("Saving Audio %" PRId64 " - %" PRId64),
                     startFrame, endFrame);
@@ -683,6 +696,7 @@ namespace mrv
 #endif
                 if (hasVideo && !savingMovie && !savingAudio)
             {
+                /* xgettext:c-format */
                 snprintf(
                     title, 1024,
                     _("Saving Pictures without Audio %" PRId64 " - %" PRId64),
@@ -711,11 +725,13 @@ namespace mrv
             {
                 if (GL_NONE == format || GL_NONE == type)
                 {
+                    /* xgettext:c++-format */
                     throw std::runtime_error(
                         string::Format(_("{0}: Invalid OpenGL format and type"))
                             .arg(file));
                 }
 
+                /* xgettext:c++-format */
                 msg = tl::string::Format(_("OpenGL info: {0}"))
                           .arg(offscreenBufferOptions.colorType);
                 LOG_STATUS(msg);
@@ -759,6 +775,7 @@ namespace mrv
                 }
                 else
                 {
+                    /* xgettext:c++-format */
                     msg = string::Format(_("Saving... {0}")).arg(currentTime);
                     LOG_STATUS(msg);
                 }
@@ -923,7 +940,8 @@ namespace mrv
                         if (videoData.layers.empty() ||
                             !videoData.layers[0].image)
                         {
-                            std::string err =
+                            /* xgettext:c++-format */
+                            const std::string err =
                                 string::Format(_("Empty video data at time "
                                                  "{0}.  Repeating frame."))
                                     .arg(currentTime);

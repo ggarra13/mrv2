@@ -489,6 +489,7 @@ namespace mrv
         }
         else
         {
+            /* xgettext:c++-format */
             const std::string err = string::Format(_("'{0}' is not a file, directory or url.")).arg(url);
             LOG_ERROR(err); 
         }

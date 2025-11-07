@@ -727,6 +727,7 @@ namespace mrv
             const std::string& compositor_name = desktop::WaylandCompositor();
             if (compositor_name == "gnome-shell")
             {
+                /* xgettext:c++-format */
                 const std::string msg =
                     string::Format(_("Wayland supports Float on Top only "
                                      "through hotkeys.  Press {0}."))
@@ -962,6 +963,7 @@ namespace mrv
                         ret = os::exec_command(cmd, out, err);
                         if (ret == 0)
                         {
+                            /* xgettext:c++-format */
                             const std::string msg =
                                 string::Format(
                                     _("No GNOME Shell Hotkey for Float On Top.  "

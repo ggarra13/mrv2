@@ -52,11 +52,10 @@ namespace mrv
                 "([\\w\\d/:\\-]*?[\\._\\-]*" + orig + ")(\\d+)([\\w\\d\\./]*)";
             if (verbose)
             {
-                std::string msg = tl::string::Format(
-                                      _("Regular expression created from {0}.  "
-                                        "It is:\n{1}"))
-                                      .arg(orig)
-                                      .arg(regex_string);
+                /* xgettext:c++-format */
+                const std::string msg = tl::string::Format(
+                    _("Regular expression created from {0}.  "
+                      "It is:\n{1}")).arg(orig).arg(regex_string);
                 LOG_INFO(msg);
             }
         }
@@ -71,7 +70,8 @@ namespace mrv
         }
         catch (const std::regex_error& e)
         {
-            std::string msg =
+            /* xgettext:c++-format */
+            const std::string msg =
                 tl::string::Format(_("Regular expression error: {0}"))
                     .arg(e.what());
             LOG_ERROR(msg);
@@ -128,6 +128,7 @@ namespace mrv
 
                         char buf[128];
                         snprintf(buf, 128, "%0*d", padding, num);
+                        /* xgettext:c++-format */
                         msg = tl::string::Format(
                                   _("Iteration {0} will check version={1}"))
                                   .arg(iter)
@@ -168,7 +169,8 @@ namespace mrv
             }
             catch (const std::regex_error& e)
             {
-                std::string err =
+                /* xgettext:c++-format */
+                const std::string err =
                     tl::string::Format(_("Regular expression error: {0}"))
                         .arg(e.what());
                 LOG_ERROR(err);
@@ -182,7 +184,8 @@ namespace mrv
             tl::file::Path newClipPath(loadfile);
             if (!replaceClipPath(newClipPath, ui))
             {
-                std::string err =
+                /* xgettext:c++-format */
+                const std::string err =
                     tl::string::Format(_("Could not replace {0} with {1}"))
                         .arg(path.get())
                         .arg(newClipPath.get());

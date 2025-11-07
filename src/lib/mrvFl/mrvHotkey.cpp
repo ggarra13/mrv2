@@ -166,6 +166,7 @@ namespace mrv
 
             if (is_assigned)
             {
+                /* xgettext:c-format */
                 int ok = fl_choice(
                     _("Hotkey \"%s\" already used in \"%s\".\n"
                       "Do you want to override it?"),
@@ -366,6 +367,7 @@ namespace mrv
                 {
                     if (hotkeys[j].force != true)
                     {
+                        /* xgettext:c++-format */
                         std::string err =
                             tl::string::Format(
                                 _("Corruption in hotkeys preferences. "

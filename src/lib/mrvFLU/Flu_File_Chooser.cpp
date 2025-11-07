@@ -143,12 +143,16 @@ std::string Flu_File_Chooser::listTTxt = _("List mode");
 std::string Flu_File_Chooser::wideListTTxt = _("Wide list mode");
 std::string Flu_File_Chooser::detailTTxt = _("Detail mode");
 
+/* xgettext:c-format */
 std::string Flu_File_Chooser::createFolderErrTxt =
     _("Could not create directory '%s'. You may not have permission to "
     "perform this operation.");
+/* xgettext:c-format */
 std::string Flu_File_Chooser::deleteFileErrTxt =
     _("An error occurred while trying to delete '%s'. %s");
+/* xgettext:c-format */
 std::string Flu_File_Chooser::fileExistsErrTxt = _("File '%s' already exists!");
+/* xgettext:c-format */
 std::string Flu_File_Chooser::renameErrTxt = _("Unable to rename '%s' to '%s'");
 
 // just a string that no file could probably ever be called
@@ -1421,6 +1425,7 @@ void Flu_File_Chooser::trashCB(bool recycle)
 #ifdef _WIN32
                     if (result == ERROR_SHARING_VIOLATION)
                     {
+                        /* xgettext:c-format */
                         snprintf(error, 2048,
                                  _("Another process using the file."));
                     }

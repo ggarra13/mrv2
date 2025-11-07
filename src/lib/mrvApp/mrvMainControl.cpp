@@ -373,6 +373,7 @@ namespace mrv
                         continue;
                     const auto& info = *audio.audioInfo[i];
                     const std::string& name = codeToLanguage(info.name);
+                    /* xgettext:c++-format */
                     const std::string& trackName =
                         string::Format(_("{0} - Channels: {1} {2} {3}"))
                             .arg(_(name.c_str()))

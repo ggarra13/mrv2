@@ -944,6 +944,7 @@ namespace mrv
             }
             else
             {
+                /* xgettext:c++-format */
                 std::string err = tl::string::Format(_("Audio annotation file {0} is missing or not exists!")).arg(value.fileName);
                 LOG_ERROR(err);
             }

@@ -359,6 +359,7 @@ namespace mrv
             std::ofstream ofs(fileName);
             if (!ofs.is_open())
             {
+                /* xgettext:c++-format */
                 const std::string& err =
                     string::Format(
                         _("Failed to open the file {0} for writing."))
@@ -371,6 +372,7 @@ namespace mrv
 
             if (ofs.fail())
             {
+                /* xgettext:c++-format */
                 const std::string& err =
                     string::Format(_("Failed to write to the file {0}."))
                         .arg(fileName);
@@ -391,7 +393,8 @@ namespace mrv
 
             ui->uiMain->update_title_bar();
             
-            std::string msg =
+            /* xgettext:c++-format */
+            const std::string msg =
                 string::Format(_("Session saved to \"{0}\".")).arg(fileName);
             LOG_STATUS(msg);
 
@@ -410,6 +413,7 @@ namespace mrv
             std::ifstream ifs(fileName);
             if (!ifs.is_open())
             {
+                /* xgettext:c++-format */
                 const std::string& err =
                     string::Format(
                         _("Failed to open the file '{0}' for reading."))
@@ -428,6 +432,7 @@ namespace mrv
 
                 if (ifs.fail())
                 {
+                    /* xgettext:c++-format */
                     const std::string& err =
                         string::Format(_("Failed to load the file '{0}."))
                             .arg(fileName);

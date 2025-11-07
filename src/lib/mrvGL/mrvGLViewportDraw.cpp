@@ -1113,6 +1113,7 @@ namespace mrv
                     totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
                     totalPhysMem, physMemUsed, physMemUsedByMe);
 
+                /* xgettext:c-format */
                 snprintf(
                     buf, 512,
                     _("PMem: %" PRIu64 " / %" PRIu64 " MB  VMem: %" PRIu64
@@ -1163,14 +1164,17 @@ namespace mrv
                 const size_t maxCache = cache->getMax() / memory::gigabyte;
                 const float pctCache = cache->getPercentage();
                 const float usedCache = maxCache * (pctCache / 100.F);
+                /* xgettext:c-format */
                 snprintf(
                     buf, 512, _("    Used: %.2g of %zu Gb (%.2g %%)"), usedCache,
                     maxCache, pctCache);
                 _appendText(textInfos, buf, fontInfo, pos, lineHeight);
+                /* xgettext:c-format */
                 snprintf(
                     buf, 512, _("    Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
                     aheadVideoFrames, aheadAudioFrames);
                 _appendText(textInfos, buf, fontInfo, pos, lineHeight);
+                /* xgettext:c-format */
                 snprintf(
                     buf, 512, _("    Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
                     behindVideoFrames, behindAudioFrames);

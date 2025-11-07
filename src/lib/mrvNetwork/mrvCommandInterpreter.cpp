@@ -1458,7 +1458,8 @@ namespace mrv
                 int value = message["value"];
                 if (value != kProtocolVersion)
                 {
-                    std::string msg =
+                    /* xgettext:c++-format */
+                    const std::string msg =
                         tl::string::Format(
                             _("Server protocol version is {0}.  Client "
                               "protocol version is {1}"))

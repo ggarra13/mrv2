@@ -149,6 +149,7 @@ namespace mrv
                     renderSize.w /= 4;
                     renderSize.h /= 4;
                 }
+                /* xgettext:c++-format */
                 msg = tl::string::Format(_("Render size: {0}"))
                       .arg(renderSize);
                 LOG_STATUS(msg);
@@ -274,6 +275,7 @@ namespace mrv
                     outputInfo.size.w = std::round(outputInfo.size.w);
                     outputInfo.size.h = std::round(outputInfo.size.h);
 
+                    /* xgettext:c++-format */
                     msg = tl::string::Format(_("Viewport Size: {0} - "
                                                "X={1}, Y={2}"))
                               .arg(viewportSize)
@@ -312,6 +314,7 @@ namespace mrv
             {
                 std::string layerName = ui->uiColorChannel->label();
                 outputInfo.pixelType = info.video[layerId].pixelType;
+                /* xgettext:c++-format */
                 msg = tl::string::Format(_("Image Layer '{0}' info: {1} {2}"))
                       .arg(layerName)
                       .arg(outputInfo.size)
@@ -384,12 +387,14 @@ namespace mrv
             const GLenum type = gl::getReadPixelsType(outputInfo.pixelType);
             if (GL_NONE == format || GL_NONE == type)
             {
+                /* xgettext:c++-format */
                 throw std::runtime_error(
                     string::Format("{0}: Cannot open").arg(file));
             }
 #endif
             {
-                std::string msg =
+                /* xgettext:c++-format */
+                const std::string msg =
                     tl::string::Format(_("Offscreen Buffer info: {0}"))
                                       .arg(offscreenBufferOptions.colorType);
                 LOG_STATUS(msg);

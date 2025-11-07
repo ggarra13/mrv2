@@ -103,7 +103,8 @@ namespace mrv
         auto it = sockets.find(ip);
         if (it != sockets.end())
         {
-            std::string msg =
+            /* xgettext:c++-format */
+            const std::string msg =
                 tl::string::Format(_("Removing {0} from message publisher."))
                     .arg(ipToHostname(ip));
             it = sockets.erase(it);

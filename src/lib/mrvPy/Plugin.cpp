@@ -157,6 +157,7 @@ namespace mrv
                         entry.path().filename().u8string();
                     if (plugins.find(file) != plugins.end())
                     {
+                        /* xgettext:c++-format */
                         std::string err =
                             string::Format(_("Duplicated Python plugin {0} in "
                                              "{1} and {2}."))

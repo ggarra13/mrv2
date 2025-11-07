@@ -100,6 +100,7 @@ namespace mrv
         if (!file::isReadable(userprefspath + "/mrv2.prefs"))
             userprefspath = prefspath();
         
+        /* xgettext:c++-format */
         std::string msg =
             tl::string::Format(_("Reading preferences from \"{0}{1}\"."))
                 .arg(userprefspath)
@@ -181,7 +182,8 @@ namespace mrv
             }
             else
             {
-                std::string msg =
+                /* xgettext:c++-format */
+                const std::string msg =
                     tl::string::Format(_("Failed to retrieve {0}.")).arg(buf);
                 LOG_ERROR(msg);
             }
@@ -200,7 +202,8 @@ namespace mrv
             }
             else
             {
-                std::string msg =
+                /* xgettext:c++-format */
+                const std::string msg =
                     tl::string::Format(_("Failed to retrieve {0}.")).arg(buf);
                 LOG_ERROR(msg);
             }
@@ -218,7 +221,8 @@ namespace mrv
             }
             else
             {
-                std::string msg =
+                /* xgettext:c++-format */
+                const std::string msg =
                     tl::string::Format(_("Failed to retrieve {0}.")).arg(buf);
                 LOG_ERROR(msg);
             }
@@ -434,7 +438,8 @@ namespace mrv
             colorname = root + "/colors/mrv2.colors";
             if (!(loaded = schemes.read_themes(colorname.c_str())))
             {
-                std::string msg =
+                /* xgettext:c++-format */
+                const std::string msg =
                     tl::string::Format(
                         _("Could not open color theme from \"{0}\"."))
                         .arg(colorname);
@@ -444,10 +449,10 @@ namespace mrv
 
         if (loaded)
         {
-
-            std::string msg =
+            /* xgettext:c++-format */
+            const std::string msg =
                 tl::string::Format(_("Loaded color themes from \"{0}\"."))
-                    .arg(colorname);
+                .arg(colorname);
 
             LOG_INFO(msg);
         }
@@ -784,6 +789,7 @@ namespace mrv
                 continue;
             uiPrefs->PathMappings->add(tmpS);
         }
+        /* xgettext:c++-format */
         msg = tl::string::Format(_("Path mappings have been loaded from "
                                    "\"{0}{1}\"."))
                   .arg(mappingpath)
@@ -942,6 +948,7 @@ namespace mrv
             hotkeyFile = hotkeyPath + hotkeys_file + ".prefs";
             if (file::isReadable(hotkeyFile))
             {
+                /* xgettext:c++-format */
                 msg = tl::string::Format(_("Loading hotkeys from \"{0}{1}.prefs\"."))
                       .arg(hotkeyPath)
                       .arg(hotkeys_file);
@@ -1529,6 +1536,8 @@ namespace mrv
             snprintf(key, 256, "Path #%d", i - 1);
             path_mapping.set(key, uiPrefs->PathMappings->text(i));
         }
+        
+        /* xgettext:c++-format */
         std::string msg =
             tl::string::Format(_("Path mappings have been saved to "
                                  "\"{0}{1}\"."))
@@ -1616,6 +1625,7 @@ namespace mrv
                 (Fl_Preferences::Root)((int)Fl_Preferences::CLEAR));
             save_hotkeys(keys);
 
+            /* xgettext:c++-format */
             msg = tl::string::Format(
                       _("Hotkeys have been saved to \"{0}{1}.prefs\"."))
                       .arg(userprefspath)
@@ -1625,6 +1635,7 @@ namespace mrv
 
         base.flush();
 
+        /* xgettext:c++-format */
         msg = tl::string::Format(_("Preferences have been saved to: "
                                    "\"{0}{1}\"."))
                   .arg(userprefspath)
@@ -2127,7 +2138,8 @@ namespace mrv
             }
             else
             {
-                std::string msg =
+                /* xgettext:c++-format */
+                const std::string msg =
                     tl::string::Format(
                         _("OCIO file \"{0}\" not found or not readable."))
                         .arg(configName);

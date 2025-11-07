@@ -716,6 +716,7 @@ namespace mrv
 
             if (idx == -1)
             {
+                /* xgettext:c++-format */
                 std::string err =
                     string::Format(_("EDL item '{0}' no longer loaded.  "
                                      "Cannot undo or redo."))
@@ -1039,6 +1040,7 @@ namespace mrv
                 item, track, rescaledRange, true, nullptr, &errorStatus);
             if (otio::is_error(errorStatus))
             {
+                /* xgettext:c++-format */
                 std::string err =
                     string::Format(_("Could not paste {0}.  Error {1}."))
                         .arg(track->kind())
@@ -1900,6 +1902,7 @@ namespace mrv
         timeline->to_json_file(file, &errorStatus);
         if (otio::is_error(errorStatus))
         {
+            /* xgettext:c++-format */
             std::string error =
                 string::Format(_("Could not save .otio file: {0}"))
                     .arg(errorStatus.full_description);
@@ -1928,6 +1931,7 @@ namespace mrv
         out->to_json_file(otioFile, &errorStatus);
         if (otio::is_error(errorStatus))
         {
+            /* xgettext:c++-format */
             std::string err = string::Format(_("Error saving {0}. {1}"))
                                   .arg(otioFile)
                                   .arg(errorStatus.full_description);
@@ -2805,6 +2809,7 @@ namespace mrv
 
             ++trackIndex;
 
+            /* xgettext:c++-format */
             const std::string name = tl::string::Format(_("Track #{0} - {1}"))
                                          .arg(trackIndex)
                                          .arg(track->name());

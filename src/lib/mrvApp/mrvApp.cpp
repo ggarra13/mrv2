@@ -1770,7 +1770,8 @@ namespace mrv
 
         if (!file::isDirectory(fileName) && !file::isReadable(fileName))
         {
-            std::string err =
+            /* xgettext:c-format */
+            const std::string err =
                 string::Format(_("Filename '{0}' does not exist or does not "
                                  "have read permissions."))
                     .arg(fileName);

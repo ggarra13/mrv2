@@ -96,6 +96,7 @@ namespace mrv
                 path.getBaseName() + path.getNumber() + path.getExtension();
 
             char page_title[256];
+            /* xgettext:c-format */
             snprintf(
                 page_title, 256, _("%s - Page %d"), title.c_str(), pageNumber);
             ++pageNumber;
@@ -157,6 +158,7 @@ namespace mrv
             fl_color(FL_BLACK);
             fl_font(font, 11);
 
+            /* xgettext:c++-format */
             std::string buf =
                 tl::string::Format(_("Frame {0} - TC: {1} - S: {2}"))
                     .arg(time.to_frames())
@@ -323,6 +325,7 @@ namespace mrv
             X = (viewportSize.w - renderSize.w) / 2;
             Y = (viewportSize.h - renderSize.h) / 2;
 
+            /* xgettext:c++-format */
             std::string msg = tl::string::Format(_("Viewport Size: {0} - "
                                                    "X={1}, Y={2}"))
                                   .arg(viewportSize)

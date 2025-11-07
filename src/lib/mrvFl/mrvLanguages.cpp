@@ -70,6 +70,7 @@ void check_language(PreferencesUI* uiPrefs, int& language_index, mrv::App* app)
     {
         const char* language = _(kLanguages[uiIndex].name);
 
+        /* xgettext:c++-format */
         std::string question =
             tl::string::Format(
                 _("Need to reboot mrv2 to change language to {0}.  "
@@ -391,6 +392,7 @@ namespace mrv
         bind_textdomain_codeset(buf, "UTF-8");
         textdomain(buf);
 
+        /* xgettext:c++-format */
         const std::string msg =
             tl::string::Format(_("Set Language to {0}, Numbers to {1}"))
                 .arg(language)
