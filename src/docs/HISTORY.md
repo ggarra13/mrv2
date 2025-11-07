@@ -60,6 +60,7 @@ ChangeLog
 - Fixed exec_command with pipes using threads to capture output.
 - Fixed licensing issue on newer Windows using legacy wmic which is no longer present on newer Windows distros.
 - Made all paths on Windows use forward slashes instead of backwards slashes or a mix of both.
+- Made session file paths use forward slashes on Windows.
 
 
 v1.4.4
