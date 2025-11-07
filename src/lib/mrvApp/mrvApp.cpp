@@ -1435,6 +1435,21 @@ namespace mrv
         
 
         p.player->setPlayback(timeline::Playback::Stop);
+
+        //
+        // Check if loading 4K or a movie of more than 180 seconds.
+        //
+        bool use_progress = false;
+        auto info = p.player->ioInfo();
+        if (!info.video.empty())
+        {
+            auto video = info.video[0];
+            const auto duration = info.videoTime.duration();
+            if (duration.to_seconds() > 180.0)
+                use_progress = true;
+            if (video.size.w > 1920)
+                use_progress = true;
+        }
         
         otime::RationalTime startTime, endTime;
         _calculateCacheTimes(startTime, endTime);
@@ -1453,7 +1468,8 @@ namespace mrv
             p.progress->set_start(start);
             p.progress->set_end(end);
         }
-        p.progress->show();
+        if (use_progress)
+            p.progress->show();
 
         Fl::flush();
         
