@@ -1,4 +1,5 @@
 
+#include "mrvFile.h"
 #include "mrvOS.h"
 
 
@@ -35,32 +36,49 @@ namespace fs = std::filesystem;
 std::string get_machine_id() {
     std::string out;
         
+        
 #if defined(_WIN32)
 #  if defined(_M_X64) || defined(_M_AMD64)
-    std::string errors;
-    mrv::os::exec_command("wmic csproduct get uuid", out, errors);
-    size_t pos = out.find("\r\n");
-    if (pos != std::string::npos)
+    //
+    // Due to legacy issues, on AMD64 we relied on wmic for the license.
+    //
+    const std::string wmic_exe = "C:/Windows/System32/wbem/WMIC.exe";
+    if (mrv::file::isReadable(wmic_exe))
     {
-        out = out.substr(pos + 2);
-    }
-#  else
-    HKEY hKey;
-    if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
-                      "SOFTWARE\\Microsoft\\Cryptography",
-                      0, KEY_READ, &hKey) == ERROR_SUCCESS)
-    {
-        char value[256];
-        DWORD value_length = sizeof(value);
-        if (RegGetValueA(hKey, nullptr, "MachineGuid",
-                         RRF_RT_REG_SZ, nullptr,
-                         &value, &value_length) == ERROR_SUCCESS)
+        std::string errors;
+        try
         {
-            out = value;
+            mrv::os::exec_command("wmic csproduct get uuid", out,
+                                  errors);
+            size_t pos = out.find("\r\n");
+            if (pos != std::string::npos)
+            {
+                out = out.substr(pos + 2);
+            }
         }
-        RegCloseKey(hKey);
+        catch(const std::exception& e)
+        {
+        }
     }
 #  endif
+    if (out.empty())
+    {
+        HKEY hKey;
+        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+                          "SOFTWARE\\Microsoft\\Cryptography",
+                          0, KEY_READ, &hKey) == ERROR_SUCCESS)
+        {
+            char value[256];
+            DWORD value_length = sizeof(value);
+            if (RegGetValueA(hKey, nullptr, "MachineGuid",
+                             RRF_RT_REG_SZ, nullptr,
+                             &value, &value_length) == ERROR_SUCCESS)
+            {
+                out = value;
+            }
+            RegCloseKey(hKey);
+        }
+    }
 #elif defined(__APPLE__)
     std::array<char, 128> buffer;
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(

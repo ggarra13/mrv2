@@ -4,9 +4,11 @@
 
 
 set(HEADERS
+    mrvFile.h
     mrvOS.h
 )
 set(SOURCES
+    mrvFile.cpp
     mrvOS.cpp
     main.cpp)
 
