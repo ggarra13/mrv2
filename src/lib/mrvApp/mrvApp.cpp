@@ -1450,7 +1450,8 @@ namespace mrv
             if (video.size.w > 1920)
                 use_progress = true;
         }
-        
+
+        // Calculate start and end time used in progress report
         otime::RationalTime startTime, endTime;
         _calculateCacheTimes(startTime, endTime);
         
@@ -1469,9 +1470,10 @@ namespace mrv
             p.progress->set_end(end);
         }
         if (use_progress)
+        {
             p.progress->show();
-
-        Fl::flush();
+            Fl::flush();
+        }
         
         const timeline::Playback& playback = p.options.playback;
 
