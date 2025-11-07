@@ -68,13 +68,13 @@ namespace mrv
         std::string path;
         if ((e = fl_getenv("TMP")))
         {
-            path = e;
+            path = file::normalizePath(e);
             if (fs::is_directory(path))
                 return path;
         }
         if ((e = fl_getenv("TEMP")))
         {
-            path = e;
+            path = file::normalizePath(e);
             if (fs::is_directory(path))
                 return path;
         }
@@ -94,7 +94,7 @@ namespace mrv
         char* e = nullptr;
         if ((e = fl_getenv("HOME")))
         {
-            path = e;
+            path = file::normalizePath(e);
             size_t pos = path.rfind("Documents");
             if (pos != std::string::npos)
             {
@@ -105,13 +105,13 @@ namespace mrv
         }
         if ((e = fl_getenv("USERPROFILE")))
         {
-            path = e;
+            path = file::normalizePath(e);
             if (fs::is_directory(path))
                 return path;
         }
         if ((e = fl_getenv("HOMEDRIVE")))
         {
-            path = e;
+            path = file::normalizePath(e);
             path += os::sgetenv("HOMEPATH");
             path += "/" + os::sgetenv("USERNAME");
             if (fs::is_directory(path))
@@ -159,7 +159,7 @@ namespace mrv
             c = fl_getenv("STUDIOPATH");
         if (!c || strlen(c) == 0)
             return "";
-        std::string r = c;
+        std::string r = file::normalizePath(c);
         r += "/.filmaura/";
         return r;
     }

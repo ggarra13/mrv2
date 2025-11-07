@@ -36,6 +36,7 @@ namespace fs = std::filesystem;
 #endif
 
 #include "mrvCore/mrvEnv.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvRoot.h"
 
@@ -197,7 +198,7 @@ namespace mrv
         fs::path parent = rootdir.parent_path(); // Skip executable
         rootdir = parent.parent_path();          // Skip bin/ directory
 
-        g_root_path = rootdir.u8string();
+        g_root_path = file::normalizePath(rootdir.u8string());
         
         std::wstring root_str = rootdir.wstring();
         if (setenv(L"MRV2_ROOT", root_str.c_str(), 1) != 0)

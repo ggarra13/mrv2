@@ -174,7 +174,7 @@ namespace mrv
             
         //! Returns whether command is in the PATH environment variable.
         bool isInPath(const std::string& command);
-
+        
     } // namespace file
 
 } // namespace mrv
