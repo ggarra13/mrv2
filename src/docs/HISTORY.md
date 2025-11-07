@@ -39,7 +39,7 @@ ChangeLog
 
 - Made Cache Read Ahead default to 5.0 seconds.
 - Fixed some Vulkan validation errors that got through in the original v1.4.4 release.
-- Fixed a FLTK Wayland crash when tooltips where shown and the mouse pointer was moved inside them.
+- Fixed a FLTK Wayland crash when tooltips were shown and the mouse pointer was moved inside them.
 - Upgraded OpenEXR to v3.4.3.
 - Upgraded OpenJPH to v0.25.0.
 - Tiny speed up in OpenUSD playback.
