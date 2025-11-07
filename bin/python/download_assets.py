@@ -2,9 +2,10 @@
 
 import os
 import re
-import requests
+import requests # Still needed for initial directory listing and parsing
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+import subprocess # New import for running curl
 
 MATCH_REGEX=re.compile(r"arm64|aarch64")
 
@@ -23,10 +24,14 @@ os.makedirs(OPENGL_DIR, exist_ok=True)
 
 def download_url(base_url, dest_dir):
 
-    # Get the HTML page
+    # Get the HTML page (This part still uses requests/BeautifulSoup)
     print(f"Fetching file list from {base_url}...")
-    response = requests.get(base_url)
-    response.raise_for_status()
+    try:
+        response = requests.get(base_url)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching URL: {e}")
+        return
 
     # Parse HTML
     soup = BeautifulSoup(response.text, "html.parser")
@@ -42,7 +47,7 @@ def download_url(base_url, dest_dir):
 
     print(f"Found {len(links)} files to download.")
 
-    # Download each file
+    # Download each file using curl
     for filename, file_url in links:
         if filename == 'README.md':
             continue
@@ -50,23 +55,59 @@ def download_url(base_url, dest_dir):
         if not MATCH_REGEX.search(filename):
             print(f"Skipping non-regex file: {filename}")
             continue
-    
-    
+        
         output_path = os.path.join(dest_dir, filename)
-        if os.path.exists(output_path):
-            print(f"Skipping existing file: {filename}")
-            continue
+        
+        # Check for existing file size to handle resume/skip logic
+        file_exists = os.path.exists(output_path)
+        
+        if file_exists:
+            # Check if the file is already fully downloaded
+            # SourceForge download links usually redirect, so getting the exact remote size is tricky
+            # The safest approach is to either SKIP if it exists or use 'curl -C -' to resume.
+            print(f"File {filename} exists. Attempting to **resume** download...")
+        else:
+            print(f"Downloading {filename}...")
 
-        print(f"Downloading {filename}...")
-        with requests.get(file_url, stream=True) as r:
-            r.raise_for_status()
-            with open(output_path, "wb") as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    f.write(chunk)
-            print(f"Saved {filename} ({os.path.getsize(output_path)} bytes)")
+        # Construct the curl command:
+        # -L: Follow redirects (necessary for SourceForge download links)
+        # -C -: Resume a broken/partial transfer
+        # -o <file>: Write output to a local file
+        curl_command = [
+            "curl",
+            "-L",
+            "-C",
+            "-",
+            "-o",
+            output_path,
+            file_url
+        ]
+        
+        try:
+            # Execute the curl command
+            # Note: This will block until curl finishes (or fails)
+            result = subprocess.run(
+                curl_command, 
+                check=True, 
+                stdout=subprocess.PIPE, 
+                stderr=subprocess.PIPE,
+                text=True
+            )
+            # The check=True argument raises a CalledProcessError if curl exits with a non-zero status
+            
+            # Print success message. curl outputs progress to stderr by default
+            # We capture stdout/stderr but rely on the exit code.
+            if result.returncode == 0:
+                print(f"Successfully downloaded/resumed {filename}")
+            
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Error downloading {filename} with curl (Exit code {e.returncode}):")
+            print(f"   {e.stderr.strip()}")
+        except FileNotFoundError:
+            print("❌ Error: 'curl' command not found. Please ensure curl is installed and in your PATH.")
+            return
 
-    print("✅ All files downloaded successfully.")
-
+    print("✅ All download attempts completed.")
 
 download_url(VULKAN_URL, VULKAN_DIR)
 download_url(OPENGL_URL, OPENGL_DIR)
