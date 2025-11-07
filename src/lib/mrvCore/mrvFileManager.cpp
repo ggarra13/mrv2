@@ -68,7 +68,7 @@ namespace mrv
 #ifdef _WIN32
     int explorer_file_manager(const std::string& file)
     {
-        const fs::path path(file);
+        fs::path path(file);
         const fs::path back = path.make_preferred();
         const auto native_path = back.u8string();
         const std::string cmd = "explorer /select,\"" + native_path + "\"";
