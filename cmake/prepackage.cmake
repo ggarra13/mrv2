@@ -574,6 +574,8 @@ if (APPLE)
     
     install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libMoltenVK*")	
     
+    file(COPY ${CPACK_PREPACKAGE}/certs
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
     file(COPY ${CPACK_PREPACKAGE}/colors
 	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
     if (EXISTS ${CPACK_PREPACKAGE}/docs)
@@ -672,6 +674,7 @@ if (APPLE)
     # Clean up main staging area
     #
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/bin)
+    file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/certs)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/colors)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/docs)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/lib)

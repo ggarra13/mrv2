@@ -7,6 +7,8 @@ set(HEADERS )
 set(SOURCES main.cpp )
 
 
+list(APPEND LIBRARIES ${FLTK_LIBRARIES})
+
 add_executable(vmrv2 WIN32  ${SOURCES} ${HEADERS})
 
 target_link_libraries(vmrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})

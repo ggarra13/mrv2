@@ -258,10 +258,10 @@ namespace mrv
     bool App::unsaved_annotations = false;
     bool App::unsaved_edits = false;
 
-    std::vector< std::string > OSXfiles;
-    void osx_open_cb(const char* fname)
+    std::vector<std::string > OSXfiles;
+    void osx_open_cb(const char* filename)
     {
-        OSXfiles.push_back(fname);
+        OSXfiles.push_back(filename);
     }
 
     static void beat_cb(void* data)
@@ -521,6 +521,11 @@ namespace mrv
             return;
         }
 
+#ifdef __APPLE__
+        // For macOS, to read command-line arguments
+        fl_open_callback(osx_open_cb);
+#endif
+        
         DBG;
         file::Path lastPath;
         const auto& unusedArgs = getUnusedArgs();
@@ -612,9 +617,6 @@ namespace mrv
         Fl_Mac_App_Menu::services = _("Services");
         Fl_Mac_App_Menu::show = _("Show All");
         Fl_Mac_App_Menu::quit = _("Quit mrv2");
-
-        // For macOS, to read command-line arguments
-        fl_open_callback(osx_open_cb);
         fl_open_display();
 #endif
         ui->uiView->setContext(context);
@@ -694,6 +696,10 @@ namespace mrv
 
         Preferences prefs(p.options.resetSettings, p.options.resetHotkeys);
 
+        //
+        // I don't think this is used, as we pass command-line arguments
+        // through a launcher program anyway.
+        //
         if (!OSXfiles.empty())
         {
             if (p.options.fileNames.empty())

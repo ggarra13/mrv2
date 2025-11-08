@@ -1,4 +1,4 @@
-v1.4.5
+v1.4.6
 ======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
@@ -33,6 +33,17 @@ The prices are cumulative.  If you donate, say u$10 in 5 months, you can access 
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
+
+
+ChangeLog
+---------
+
+- Fixed certs directory on macOS install.
+- Fixed double clicking and Open With on macOS.
+
+
+v1.4.5
+======
 
 ChangeLog
 ---------

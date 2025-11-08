@@ -1,6 +1,14 @@
+#include <FL/platform.H>
+
+#include <FL/Fl.H>
+#include <FL/fl_ask.H> // For error reporting
+#include <unistd.h>     // For execv
+#include <vector>       // To collect arguments
+#include <string>       // For storing file paths
+#include <cstdio>       // For perror
+
 #include <cstdlib>
 #include <unistd.h>
-#include <stdio.h>
 #include <iostream>
 #include <string>
 #include <filesystem>
@@ -61,6 +69,13 @@ int get_app_path(char* pname, size_t pathsize)
 
 // Store root path of mrv2's (Installation Directory)
 std::string g_bin_path;
+
+std::vector<std::string> OSXfiles;
+static void osx_open_cb(const char* filename)
+{
+    std::cerr << "osx_open_cb got " << filename << std::endl;
+    OSXfiles.push_back(filename);
+}
     
 void set_root_path(const int argc, char** argv)
 {
@@ -79,10 +94,27 @@ void set_root_path(const int argc, char** argv)
     g_bin_path = parent.string();
 }
 
+
+// --- Configuration ---
+
+// 1. Global vector to collect file paths
+// We use std::string to safely copy the const char* from the callback.
+std::vector<std::string> g_opened_files;
+
+/**
+ * 2. The 'fl_open_callback' function.
+ * This function will be called by FLTK for EACH file that is
+ * opened with the application (e.g., dropped on the icon).
+ */
+void open_file_callback(const char* filepath) {
+    if (filepath) {
+        g_opened_files.push_back(filepath);
+    }
+}
+
 int main(int argc, char* argv[])
 {
     // Path to the actual binary (relative to Contents/MacOS/)
-    // const char* real_binary = "./vmrv2.sh";
     set_root_path(argc, argv);
 
     std::string binary = "vmrv2.sh";
@@ -107,11 +139,52 @@ int main(int argc, char* argv[])
                   << std::endl;
         return 1;
     }
-    
-    // Execute the real app binary, replacing the stub process
-    execv(full_path.c_str(), argv);
 
-    // If execv returns, there was an error
-    perror("execv failed");
+    
+    // 3. Set the callback.
+    // This MUST be done before initializing the display.
+    fl_open_callback(open_file_callback);
+
+    // 4. Initialize the connection to the OS windowing system.
+    // This is necessary to receive Apple Events but does not show a window.
+    fl_open_display();
+
+    // 5. Process any pending system events.
+    // This single call will dispatch any queued "open document" events,
+    // firing our 'open_file_callback' for each file.
+    Fl::check();
+
+    // 6. Build the new argument list for execv
+    std::vector<const char*> new_argv;
+
+    // By convention, argv[0] is the program name (path)
+    new_argv.push_back(strdup(full_path.c_str()));
+
+    // Add all original command-line arguments (skipping argv[0], our launcher's name)
+    for (int i = 1; i < argc; i++) {
+        new_argv.push_back(argv[i]);
+    }
+
+    // Add all the files collected from the 'fl_open_callback'
+    for (const std::string& file : g_opened_files) {
+        new_argv.push_back(file.c_str());
+    }
+
+    // The argv array for execv MUST be terminated with a NULL pointer
+    new_argv.push_back(NULL);
+
+    // 7. Call execv to replace this launcher with the real program
+    // We use .data() to get the underlying C-style array from the vector.
+    execv(full_path.c_str(), (char* const*)new_argv.data());
+
+    // 8. Error handling
+    // If execv returns, it means it failed.
+    char error_msg[1024];
+    snprintf(error_msg, sizeof(error_msg), 
+             "Launcher Error:\nFailed to execute:\n%s", full_path.c_str());
+    
+    // Use fl_alert to show a graphical error if the execv fails
+    fl_alert("%s\n\nError: %s", error_msg, strerror(errno));
+    
     return 1;
 }
