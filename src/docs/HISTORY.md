@@ -61,6 +61,7 @@ ChangeLog
 - Fixed licensing issue on newer Windows using legacy wmic which is no longer present on newer Windows distros.
 - Made all paths on Windows use forward slashes instead of backwards slashes or a mix of both.
 - Made session file paths use forward slashes on Windows.
+- Fixed macOS file associations.
 
 
 v1.4.4
