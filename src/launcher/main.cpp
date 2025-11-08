@@ -90,8 +90,12 @@ int main(int argc, char* argv[])
 
     if (!fs::exists(full_path))
     {
-        binary = "mrv2";
-        full_path = g_bin_path + "/" + binary;
+        full_path = g_bin_path + "/../Resources/bin/mrv2.sh";
+    }
+
+    if (!fs::exists(full_path))
+    {
+        full_path = g_bin_path + "/mrv2";
     }
 
     if (!fs::exists(full_path))
@@ -103,7 +107,7 @@ int main(int argc, char* argv[])
                   << std::endl;
         return 1;
     }
-
+    
     // Execute the real app binary, replacing the stub process
     execv(full_path.c_str(), argv);
 

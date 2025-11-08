@@ -5,7 +5,7 @@
 	<key>CFBundleExecutable</key>
 	<string>@INSTALL_NAME@</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.mrv2.mrv2</string>
+	<string>com.@INSTALL_NAME@.@INSTALL_NAME@</string>
 	<key>CFBundleName</key>
 	<string>@INSTALL_NAME@</string>
 	<key>CFBundleIconFile</key>
@@ -77,8 +77,10 @@
             </array>
         </dict>
         <dict>
+	  <key>CFBundleTypeName</key>
+	  <string>Image Files</string>
           <key>CFBundleTypeRole</key>
-          <string>Editor</string>
+          <string>Viewer</string>
             <key>LSItemContentTypes</key>
             <array>
                 <string>com.openexr.image</string>
@@ -114,7 +116,7 @@
         </dict>
         <dict>
           <key>CFBundleTypeRole</key>
-          <string>Editor</string>
+          <string>Viewer</string>
             <key>LSItemContentTypes</key>
             <array>
                 <string>public.movie</string>

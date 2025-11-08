@@ -406,7 +406,7 @@ add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 #
 add_subdirectory(main)
 
-if (APPLE AND MRV2_BACKEND STREQUAL "VK")
+if (APPLE)
     add_subdirectory(launcher)
 endif()
 

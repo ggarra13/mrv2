@@ -560,10 +560,6 @@ if (APPLE)
 	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
     file(COPY ${CPACK_PREPACKAGE}/bin/mrv2
 	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
-    if (MRV2_BACKEND STREQUAL "VK")
-	file(COPY ${CPACK_PREPACKAGE}/bin/vmrv2
-	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/)
-    endif()
     file(COPY ${CPACK_PREPACKAGE}/bin/license_helper
 	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
     file(COPY ${CPACK_PREPACKAGE}/bin/environment.sh
@@ -619,6 +615,11 @@ if (APPLE)
 	install_vulkan_lib_glob("libvulkan*" vmrv2)
 	
 	install_vulkan_icd_filenames(vmrv2)
+    else()
+	file(COPY ${CPACK_PREPACKAGE}/bin/vmrv2
+	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/)
+	file(RENAME ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/vmrv2
+	    ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/mrv2)
     endif()
 	
     #
