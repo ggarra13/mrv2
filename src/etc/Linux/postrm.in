@@ -27,10 +27,10 @@ if [[ -L /usr/bin/@mrv2_NAME@ ]]; then
     fi
 fi
 
-# When installing vmrv2, as we renamed the file, we need to clear
-# the directory manually.
-if [[ -e "@CPACK_INSTALL_PREFIX@" ]]; then
-    rm -rf "@CPACK_INSTALL_PREFIX@"
+if [[ @mrv2_NAME@ == "vmrv2" ]]; then
+    mrv2="@CPACK_INSTALL_PREFIX@/bin/mrv2"
+    vmrv2="@CPACK_INSTALL_PREFIX@/bin/@mrv2_NAME@"
+    mv $vmrv2 $mrv2
 fi
 
 sharedir=/usr/share
