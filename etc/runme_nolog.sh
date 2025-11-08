@@ -514,9 +514,6 @@ run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
-cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t mo"
-run_cmd $cmd
-
 if [[ "$CMAKE_TARGET" == "" ]]; then
     CMAKE_TARGET=install
 fi
