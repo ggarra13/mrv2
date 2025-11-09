@@ -39,3 +39,9 @@ export LD_LIBRARY_PATH="${dir}/lib64:${dir}/lib:${LD_LIBRARY_PATH}:/usr/lib64:/u
 export DYLD_LIBRARY_PATH="${dir}/lib:${DYLD_LIBRARY_PATH}:/usr/local/lib:/usr/ib"
 export PYTHONHOME="${dir}/"
 export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${HOME}/.local/lib/python@MRV2_PYTHON_VERSION@/site_packages:${PYTHONPATH}"
+
+
+#
+# Make Kwin use libdecor to allow dragging subwindows outside main window.
+# 
+export LIBDECOR_FORCE_CSD=1
