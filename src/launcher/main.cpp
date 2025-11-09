@@ -70,13 +70,6 @@ int get_app_path(char* pname, size_t pathsize)
 // Store root path of mrv2's (Installation Directory)
 std::string g_bin_path;
 
-std::vector<std::string> OSXfiles;
-static void osx_open_cb(const char* filename)
-{
-    std::cerr << "osx_open_cb got " << filename << std::endl;
-    OSXfiles.push_back(filename);
-}
-    
 void set_root_path(const int argc, char** argv)
 {
     char binpath[PATH_MAX];
@@ -91,7 +84,7 @@ void set_root_path(const int argc, char** argv)
 
     fs::path rootdir(binpath);
     fs::path parent = rootdir.parent_path(); // skip executable
-    g_bin_path = parent.string();
+    g_bin_path = parent.u8string();
 }
 
 
