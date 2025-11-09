@@ -1754,8 +1754,8 @@ void Flu_File_Chooser::okCB()
     cancelThumbnailRequests();
     // if exactly one directory is selected and we are not choosing directories,
     // cd to that directory.
-    if (!(selectionType & static_cast<int>(ChooserType::DIRECTORY))
-        && !(selectionType & static_cast<int>(ChooserType::STDFILE)))
+    if (!(type() & static_cast<int>(ChooserType::DIRECTORY))
+        && !(type() & static_cast<int>(ChooserType::STDFILE)))
     {
         Fl_Group* g = getEntryGroup();
         std::string dir;
@@ -1783,8 +1783,8 @@ void Flu_File_Chooser::okCB()
     // only hide if the filename is not blank or the user is choosing
     // directories, in which case use the current directory
 
-    if (selectionType & static_cast<int>(ChooserType::DIRECTORY) ||
-        ((selectionType & static_cast<int>(ChooserType::STDFILE)) &&
+    if (type() & static_cast<int>(ChooserType::DIRECTORY) ||
+        ((type() & static_cast<int>(ChooserType::STDFILE)) &&
          fl_filename_isdir((currentDir + filename.value()).c_str())))
     {
 #ifdef _WIN32
@@ -1794,7 +1794,7 @@ void Flu_File_Chooser::okCB()
             return;
         }
 #endif
-        if (!(selectionType & static_cast<int>(ChooserType::MULTI)))
+        if (!(type() & static_cast<int>(ChooserType::MULTI)))
         {
             if (strlen(filename.value()) != 0)
                 cd(filename.value());
@@ -1829,7 +1829,7 @@ void Flu_File_Chooser::okCB()
 
             // prepend the path
             std::string fullname;
-            if (selectionType & static_cast<int>(ChooserType::SAVING))
+            if (type() & static_cast<int>(ChooserType::SAVING))
             {
                 std::string file = filename.value();
                 if (e && e->type == ENTRY_SEQUENCE && e->selected &&
@@ -2521,7 +2521,7 @@ void Flu_File_Chooser::unselect_all()
 
 void Flu_File_Chooser::select_all()
 {
-    if (!(selectionType & static_cast<int>(ChooserType::MULTI)))
+    if (!(type() & static_cast<int>(ChooserType::MULTI)))
         return;
     Fl_Group* g = getEntryGroup();
     Flu_Entry* e;
@@ -2573,7 +2573,7 @@ const char* Flu_File_Chooser::value()
 
 int Flu_File_Chooser::count()
 {
-    if (selectionType & static_cast<int>(ChooserType::MULTI))
+    if (type() & static_cast<int>(ChooserType::MULTI))
     {
         int n = 0;
         Fl_Group* g = getEntryGroup();
@@ -3564,10 +3564,10 @@ void Flu_File_Chooser::cd(const char* path)
         if (filename.value()[0] != '/')
 #endif
         {
-            if (!(selectionType & static_cast<int>(ChooserType::SAVING)))
+            if (!(type() & static_cast<int>(ChooserType::SAVING)))
                 filename.value("");
         }
-        if (!(selectionType & static_cast<int>(ChooserType::SAVING)))
+        if (!(type() & static_cast<int>(ChooserType::SAVING)))
             currentFile = "";
     }
 
@@ -3737,10 +3737,10 @@ void Flu_File_Chooser::cd(const char* path)
 #endif
 
             // only directories?
-            if ((selectionType & static_cast<int>(ChooserType::DIRECTORY)) &&
+            if ((type() & static_cast<int>(ChooserType::DIRECTORY)) &&
                 !isDir &&
-                !(selectionType & static_cast<int>(ChooserType::STDFILE)) &&
-                !(selectionType & static_cast<int>(ChooserType::DEACTIVATE_FILES)))
+                !(type() & static_cast<int>(ChooserType::STDFILE)) &&
+                !(type() & static_cast<int>(ChooserType::DEACTIVATE_FILES)))
             {
                 continue;
             }
@@ -4255,7 +4255,8 @@ size_t flu_multi_file_chooser(
 {
     _flu_file_chooser(
         context, message, pattern, filename,
-        static_cast<int>(ChooserType::MULTI), filelist,
+        static_cast<int>(ChooserType::MULTI) |
+        static_cast<int>(ChooserType::STDFILE), filelist,
         compact_files);
     return filelist.size();
 }
@@ -4267,7 +4268,9 @@ const char* flu_file_chooser(
     FluStringVector filelist;
     return _flu_file_chooser(
         context, message, pattern, filename,
-        static_cast<int>(ChooserType::SINGLE), filelist,
+        static_cast<int>(ChooserType::SINGLE) |
+        static_cast<int>(ChooserType::STDFILE),
+        filelist,
         compact_files);
 }
 

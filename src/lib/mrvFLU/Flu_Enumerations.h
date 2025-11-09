@@ -76,7 +76,7 @@ enum {
 
 
 //! Chooser type
-enum class ChooserType {
+enum ChooserType {
     SINGLE = 0,    /*!< Choose a single file or directory */
     MULTI = 1,     /*!< Choose multiple files or directories */
     DIRECTORY = 4, /*!< Choose directories (choosing files is implicit if

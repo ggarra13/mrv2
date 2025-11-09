@@ -2112,7 +2112,7 @@ namespace mrv
         if (!p.activeFiles.empty() && isRunning() && p.player)
         {
             p.activeFiles[0]->speed = p.player->speed();
-            p.activeFiles[0]->playback = p.player->playback();
+            // p.activeFiles[0]->playback = p.player->playback();
             p.activeFiles[0]->loop = p.player->loop();
             p.activeFiles[0]->currentTime = p.player->currentTime();
             p.activeFiles[0]->inOutRange = p.player->inOutRange();
@@ -2176,6 +2176,10 @@ namespace mrv
                                 ui->uiPrefs->uiPrefsAutoPlayback->value();
                             if (item->inOutRange.duration().value() <= 1)
                                 autoPlayback = false;
+                            if (autoPlayback)
+                            {
+                                item->playback = timeline::Playback::Forward;
+                            }
 
                             if (!file::isTemporaryEDL(item->path) &&
                                 autoPlayback && isRunning())

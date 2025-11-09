@@ -173,7 +173,7 @@ void Flu_Entry::_init(const char* name, int t, bool d, Flu_File_Chooser* c)
     editMode = 0;
     description = "";
 
-    if (type == ENTRY_FILE && (static_cast<int>(c->selectionType) &
+    if (type == ENTRY_FILE && (c->type() &
                                static_cast<int>(ChooserType::DEACTIVATE_FILES)))
     {
         textcolor(FL_GRAY);
@@ -425,7 +425,7 @@ int Flu_Entry::handle(int event)
     Fl_Group* g = chooser->getEntryGroup();
     if (event == FL_PUSH)
     {
-        if (Fl::event_button() == FL_LEFT_MOUSE)
+        if (Fl::event_button1())
         {
             // double-clicking a directory cd's to it or single travel too
             if ((Flu_File_Chooser::singleButtonTravelDrawer ||

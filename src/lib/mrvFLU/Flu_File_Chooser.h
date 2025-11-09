@@ -153,7 +153,8 @@ public:
     //! is a logical OR of Flu_File_Chooser::SINGLE, Flu_File_Chooser::MULTI,
     //! and Flu_File_Chooser::DIRECTORY
     Flu_File_Chooser(
-        const char* path, const char* pattern, int type, const char* title,
+        const char* path, const char* pattern, int type,
+        const char* title,
         const std::shared_ptr<tl::system::Context>& context,
         const bool compact = true);
 
