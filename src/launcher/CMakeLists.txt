@@ -7,7 +7,7 @@ set(HEADERS )
 set(SOURCES main.cpp )
 
 
-list(APPEND LIBRARIES ${FLTK_LIBRARIES})
+list(APPEND LIBRARIES fltk::fltk)
 
 add_executable(vmrv2 WIN32  ${SOURCES} ${HEADERS})
 
