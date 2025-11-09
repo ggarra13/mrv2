@@ -15,7 +15,10 @@ set(SOURCES
     mrvString.cpp
 )
 
-list(APPEND LIBRARIES ${FLTK_LIBRARIES})
+#
+# Use static FLTK
+#
+list(APPEND LIBRARIES fltk::fltk)
 
 add_executable(license_helper WIN32 ${SOURCES} ${HEADERS})
 
