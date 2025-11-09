@@ -19,7 +19,7 @@ set(SOURCES
 # Use static FLTK
 #
 set(LIBRARIES )
-if(APPLE)
+if(UNIX)
     list(APPEND LIBRARIES fltk::fltk)
 else()
     list(APPEND LIBRARIES ${FLTK_LIBRARIES})
