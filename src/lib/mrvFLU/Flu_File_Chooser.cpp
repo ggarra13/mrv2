@@ -6,7 +6,7 @@
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- *
+ *t
  * License is like FLTK.
  ***************************************************************/
 
@@ -14,17 +14,19 @@
 #    define strcasecmp _stricmp
 #endif
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
 #include <ctype.h>
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <algorithm>
 #include <random>
 #include <iostream>
-#include <algorithm>
+#include <sstream>
+#include <string>
 #include <mutex>
 #include <set>
 
@@ -162,9 +164,7 @@ std::string Flu_File_Chooser::renameErrTxt = _("Unable to rename '%s' to '%s'");
 
 #define streq(a, b) (strcmp(a, b) == 0)
 
-Flu_File_Chooser::FileTypeInfo* Flu_File_Chooser::types = nullptr;
-int Flu_File_Chooser::numTypes = 0;
-int Flu_File_Chooser::typeArraySize = 0;
+std::vector<Flu_File_Chooser::FileTypeInfo> Flu_File_Chooser::types;
 Flu_File_Chooser::ContextHandlerVector Flu_File_Chooser::contextHandlers;
 int (*Flu_File_Chooser::customSort)(const char*, const char*) = 0;
 std::string Flu_File_Chooser::dArrow[4];
@@ -290,43 +290,17 @@ void Flu_File_Chooser::add_type(
     std::transform(ext.begin(), ext.end(), ext.begin(), (int (*)(int))toupper);
 
     // are we overwriting an existing type?
-    for (int i = 0; i < numTypes; i++)
+    for (auto& type : types)
     {
-        if (types[i].extensions == ext)
+        if (type.extensions == ext)
         {
-            types[i].icon = icon;
-            types[i].type = short_description;
+            type.icon = icon;
+            type.type = short_description;
             return;
         }
     }
 
-    if (numTypes == typeArraySize)
-    {
-        int newSize =
-            (typeArraySize == 0)
-                ? 1
-                : typeArraySize * 2; // double the size of the old list
-                                     // (same behavior as STL vector)
-        // allocate the new list
-        FileTypeInfo* newTypes = new FileTypeInfo[newSize];
-        // copy the old list to the new list
-        for (int i = 0; i < numTypes; i++)
-        {
-            newTypes[i].icon = types[i].icon;
-            newTypes[i].extensions = types[i].extensions;
-            newTypes[i].type = types[i].type;
-        }
-        // delete the old list and replace it with the new list
-        delete[] types;
-        types = newTypes;
-        typeArraySize = newSize;
-    }
-
-    types[numTypes].icon = icon;
-    types[numTypes].extensions = ext;
-    types[numTypes].type = short_description;
-
-    numTypes++;
+    types.push_back({icon, ext, short_description});
 }
 
 Flu_File_Chooser::FileTypeInfo*
@@ -339,17 +313,31 @@ Flu_File_Chooser::find_type(const char* extension)
         ext = "\t"; // indicates a directory
     std::transform(ext.begin(), ext.end(), ext.begin(), (int (*)(int))toupper);
 
-    // lookup the type based on the extension
-    for (int i = 0; i < numTypes; i++)
+    // Refactored code
+    for (auto& type : types)
     {
-        // check extension against every token
-        std::string e = types[i].extensions;
-        char* tok = strtok((char*)e.c_str(), " ,");
-        while (tok)
+        std::stringstream ss(type.extensions);
+        std::string token;
+        char delimiter = ' ';
+        while (std::getline(ss, token, delimiter))
         {
-            if (ext == tok)
-                return &(types[i]);
-            tok = strtok(nullptr, " ,");
+            if (token.empty()) continue;
+            // Also handle comma as a delimiter
+            if (token.back() == ',') {
+                token.pop_back();
+            }
+            
+            if (ext == token) {
+                return &type;
+            }
+
+            // Handle case where multiple tokens are on one line "OBJ,STL"
+            std::stringstream ss2(token);
+            while (std::getline(ss2, token, ',')) {
+                if (ext == token) {
+                    return &type;
+                }
+            }
         }
     }
 
@@ -507,7 +495,6 @@ Flu_File_Chooser::Flu_File_Chooser(
         uArrow[j] = "@-18UpArrow " + text;
     }
 
-    history = currentHist = nullptr;
     walkingHistory = false;
     fileEditing = false;
     caseSort = false;
@@ -536,8 +523,8 @@ Flu_File_Chooser::Flu_File_Chooser(
     // construct the user desktop path
     // userDesktop = userHome + "/" + desktopTxt;
 
-    win2unix(userDesktop);
-    win2unix(userDocs);
+    userDesktop = file::normalizePath(userDesktop);
+    userDocs = file::normalizePath(userDocs);
 
     // make sure they don't end in '/'
     if (userDesktop[userDesktop.size() - 1] == '/')
@@ -2766,18 +2753,9 @@ std::string Flu_File_Chooser::formatDate(const char* d)
     return formatted;
 }
 
-void Flu_File_Chooser::win2unix(std::string& s)
-{
-    size_t len = s.size();
-    for (size_t i = 0; i < len; i++)
-        if (s[i] == '\\')
-            s[i] = '/';
-}
-
 void Flu_File_Chooser::cleanupPath(std::string& s)
 {
-    // convert all '\' to '/'
-    win2unix(s);
+    s = mrv::file::normalizePath(s);
 
     std::string newS;
     newS.resize(s.size() + 1);
@@ -2826,28 +2804,24 @@ void Flu_File_Chooser::cleanupPath(std::string& s)
 
 void Flu_File_Chooser::backCB()
 {
-    if (!currentHist)
-        return;
-    if (currentHist->last)
+    if (_historyIndex > 0)
     {
-        currentHist = currentHist->last;
+        _historyIndex--;
         walkingHistory = true;
-        delayedCd = currentHist->path;
+        delayedCd = _history[_historyIndex];
         Fl::add_timeout(0.0f, Flu_File_Chooser::delayedCdCB, this);
     }
 }
 
 void Flu_File_Chooser::forwardCB()
 {
-    if (!currentHist)
+    if (_historyIndex >= _history.size() - 1)
         return;
-    if (currentHist->next)
-    {
-        currentHist = currentHist->next;
-        walkingHistory = true;
-        delayedCd = currentHist->path;
-        Fl::add_timeout(0.0f, Flu_File_Chooser::delayedCdCB, this);
-    }
+
+    _historyIndex++;
+    walkingHistory = true;
+    delayedCd = _history[_historyIndex];
+    Fl::add_timeout(0.0f, Flu_File_Chooser::delayedCdCB, this);
 }
 
 bool Flu_File_Chooser::correctPath(std::string& path)
@@ -3125,62 +3099,34 @@ void Flu_File_Chooser::buildLocationCombo()
 
 void Flu_File_Chooser::clear_history()
 {
-    currentHist = history;
-    while (currentHist)
-    {
-        History* next = currentHist->next;
-        delete currentHist;
-        currentHist = next;
-    }
-    currentHist = history = nullptr;
+    _history.clear();
+    _historyIndex = 0;
+    
     backBtn->deactivate();
     forwardBtn->deactivate();
 }
 
 void Flu_File_Chooser::addToHistory()
 {
-    // remember history
-    // only store this path in the history if it is not the current directory
-    if (currentDir.size() && !walkingHistory)
+    if (!walkingHistory)
     {
-        if (history == nullptr)
+        // If we branched, erase forward history
+        if (_historyIndex > 0 && _historyIndex < _history.size() - 1)
         {
-            history = new History;
-            currentHist = history;
-            currentHist->path = currentDir;
+            _history.erase(_history.begin() + _historyIndex + 1, _history.end());
         }
-        else if (currentHist->path != currentDir)
-        {
-            // since we are adding a new path, delete everything after this path
-            History* h = currentHist->next;
-            while (h)
-            {
-                History* next = h->next;
-                delete h;
-                h = next;
-            }
-            currentHist->next = new History;
-            currentHist->next->last = currentHist;
-            currentHist = currentHist->next;
-            currentHist->path = currentDir;
-        }
-        History* h = history;
-        while (h)
-            h = h->next;
+        _history.push_back(currentDir);
+        _historyIndex = _history.size() - 1;
     }
-    walkingHistory = false;
 
-    if (currentHist)
-    {
-        if (currentHist->last)
-            backBtn->activate();
-        else
-            backBtn->deactivate();
-        if (currentHist->next)
-            forwardBtn->activate();
-        else
-            forwardBtn->deactivate();
-    }
+    if (_historyIndex > 0)
+        backBtn->activate();
+    else
+        backBtn->deactivate();
+    if (_historyIndex < _history.size() - 1)
+        forwardBtn->activate();
+    else
+        forwardBtn->deactivate();
 }
 
 // treating the string as a '|' or ';' delimited sequence of patterns, strip

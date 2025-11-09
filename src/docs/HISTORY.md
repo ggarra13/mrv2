@@ -41,6 +41,9 @@ ChangeLog
 - Fixed certs directory on macOS install.
 - Fixed double clicking and Open With on macOS.
 - Fixed URL Link requester's buttons going off screen.
+- Fixed Progress Report when loading multiple clips in a single call from the file requester.
+- Cleaned up FLU's file requester (used on Linux).  
+
 
 v1.4.5
 ======

@@ -162,15 +162,18 @@ namespace mrv
 
         ++_framesSinceLastFpsFrame;
 
-        Fl::check();
-        ++_frame;
-
-        if (!w->visible())
+        if (w && !w->visible())
         {
             delete w;
             w = nullptr;
             return false;
         }
+
+        // This must come after w->visible() check to avoid progress reports
+        // when loading multiple small movies.
+        Fl::check();
+        ++_frame;
+        
         return true;
     }
 

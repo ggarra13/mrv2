@@ -1485,7 +1485,6 @@ namespace mrv
 
         if (playback == timeline::Playback::Forward)
         {
-            
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),

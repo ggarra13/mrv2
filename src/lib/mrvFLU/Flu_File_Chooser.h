@@ -589,8 +589,6 @@ public:
     Fl_Group* getEntryGroup();
     Fl_Group* getEntryContainer();
 
-    void win2unix(std::string& s);
-
     void cleanupPath(std::string& s);
 
     bool correctPath(std::string& path);
@@ -645,9 +643,7 @@ public:
 
     FluStringVector patterns;
 
-    static FileTypeInfo* types;
-    static int numTypes;
-    static int typeArraySize;
+    static std::vector<FileTypeInfo> types;
 
     static bool thumbnailsUSD;
     static bool thumbnailsFileReq;
@@ -663,15 +659,8 @@ public:
     bool refreshDrives;
 #endif
 
-    class History
-    {
-    public:
-        History() { last = next = NULL; }
-        std::string path;
-        History *last, *next;
-    };
-
-    History *history, *currentHist;
+    std::vector<std::string> _history;
+    size_t _historyIndex = 0;
 
     Fl_Callback* _callback;
     void* _userdata;
