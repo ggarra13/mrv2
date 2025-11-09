@@ -514,12 +514,24 @@ run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 
 cd -
 
-if [[ "$CMAKE_TARGET" == "" ]]; then
-    CMAKE_TARGET=install
+if [[ "$CMAKE_TARGET" == "package" ]]; then
+    #
+    # When packaging, run mo target first.
+    #
+    export CMAKE_TARGET="mo"
+
+    cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t ${CMAKE_TARGET}"
+    run_cmd $cmd
+
+    #
+    # Finally package it
+    #
+    export CMAKE_TARGET="package"
 fi
 
-cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t mo"
-run_cmd $cmd
+if [[ "$CMAKE_TARGET" == "" ]]; then
+    export CMAKE_TARGET="install"
+fi
 
 cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t ${CMAKE_TARGET}"
 run_cmd $cmd

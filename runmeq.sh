@@ -62,7 +62,6 @@ if [[ "$CMAKE_TARGET" == "mo" ]]; then
     
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t pot
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
     sleep 5
     export CMAKE_TARGET=install
