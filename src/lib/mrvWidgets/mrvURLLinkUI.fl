@@ -8,7 +8,7 @@ i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
 include_guard {}
-decl {\#include "mrvCore/mrvBackend.h"} {selected public global
+decl {\#include "mrvCore/mrvBackend.h"} {public global
 }
 
 decl {\#ifdef VULKAN_BACKEND
@@ -31,18 +31,18 @@ class URLLinkUI {open
   } {
     Fl_Window uiMain {
       label {Link Annotation} open
-      xywh {0 0 774 176} type Double modal visible
+      xywh {216 239 799 176} type Double modal visible
     } {
       Fl_Input uiTitle {
         label Title
-        tooltip {Enter a URL or choose an image file.} xywh {130 35 550 36} color 20 textcolor 56
+        tooltip {Enter a URL or choose an image file.} xywh {130 24 550 36} color 20 textcolor 56
       }
-      Fl_Group {} {open
-        xywh {130 77 640 45}
+      Fl_Group {} {
+        xywh {130 66 652 45}
       } {
         Fl_Input uiURL {
           label {File / URL}
-          tooltip {Enter a URL or choose an image file.} xywh {130 80 550 36} color 20 textcolor 56
+          tooltip {Enter a URL or choose an image file.} xywh {130 69 550 36} color 20 textcolor 56
         }
         Fl_Menu_Button {} {
           label Pick
@@ -66,7 +66,7 @@ else if (type == 1)
 if ( files.empty() ) return;
 
 v->value( files[0].c_str() );} open
-          xywh {684 84 84 32}
+          xywh {688 69 90 36}
         } {
           MenuItem {} {
             label File
@@ -78,21 +78,21 @@ v->value( files[0].c_str() );} open
           }
         }
       }
-      Fl_Group {} {open
-        xywh {197 144 416 40}
+      Fl_Group {} {
+        xywh {197 121 416 54}
       } {
         Fl_Button {} {
           label OK
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {491 144 122 40}
+          xywh {491 121 122 40}
         }
         Fl_Button {} {
           label Cancel
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {cancel = true;
 v->hide();}
-          xywh {197 144 122 40}
+          xywh {197 121 122 40}
         }
       }
     }
