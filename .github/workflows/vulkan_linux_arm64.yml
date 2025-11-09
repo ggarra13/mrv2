@@ -143,13 +143,13 @@ jobs:
       with:
         tag_name: betas
         name: Betas Builds
-          body: |
-            Latest beta build - auto-updated.
-            Built on: ${{ github.event.head_commit.message }}
-          prerelease: true
-          files: |
-            packages/Linux-vulkan-arm64/Release/vmrv2-beta-Linux-arm64.deb
-            packages/Linux-vulkan-arm64/Release/vmrv2-beta-Linux-arm64.rpm
-            packages/Linux-vulkan-arm64/Release/vmrv2-beta-Linux-arm64.tar.gz
-          overwrite: true   # THIS IS KEY
-          token: ${{ secrets.GITHUB_TOKEN }}
+        body: |
+          Latest beta build - auto-updated.
+          Built on: ${{ github.event.head_commit.message }}
+        prerelease: true
+        files: |
+          packages/Linux-vulkan-arm64/Release/vmrv2-beta-Linux-arm64.deb
+          packages/Linux-vulkan-arm64/Release/vmrv2-beta-Linux-arm64.rpm
+          packages/Linux-vulkan-arm64/Release/vmrv2-beta-Linux-arm64.tar.gz
+        overwrite: true   # THIS IS KEY
+        token: ${{ secrets.GITHUB_TOKEN }}
