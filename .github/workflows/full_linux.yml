@@ -15,6 +15,8 @@ jobs:
   ###################################
   linux-full-build:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write   # Needed to update releases
 
     steps:
     
@@ -149,3 +151,19 @@ jobs:
     - name: Upload binaries 
       run: |
         ./bin/release/upload_sourceforge.sh 
+
+    - name: Upload Beta Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: betas
+        name: Betas Builds
+        body: |
+          Latest beta build - auto-updated.
+          Built on: ${{ github.event.head_commit.message }}
+        prerelease: true
+        files: |
+          packages/BUILD-Linux-amd64/Release/mrv2-beta-Linux-amd64.deb
+          packages/BUILD-Linux-amd64/Release/mrv2-beta-Linux-amd64.rpm
+          packages/BUILD-Linux-amd64/Release/mrv2-beta-Linux-amd64.tar.gz
+        overwrite: true   # THIS IS KEY
+        token: ${{ secrets.GITHUB_TOKEN }}

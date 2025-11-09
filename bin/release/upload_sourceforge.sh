@@ -361,7 +361,8 @@ file_array=($files)
 # Iterate over the array of filenames
 for src in "${file_array[@]}"; do
     dest=`echo $src | sed -e "s#v$mrv2_VERSION#beta#"`
-    upload_file "${src}" "${dest}"
+    mv "${src}" "${dest}"
+    upload_file "${dest}" "${dest}"
 done
 
 # Reset IFS to its default value (space, tab, newline)

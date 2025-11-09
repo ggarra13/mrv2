@@ -127,3 +127,17 @@ jobs:
     - name: Upload binaries  # Conditional step
       run: |
         ./bin/release/upload_sourceforge.sh -vk
+
+    - name: Upload Beta Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: betas
+        name: Betas Builds
+        body: |
+          Latest beta build - auto-updated.
+          Built on: ${{ github.event.head_commit.message }}
+        prerelease: true
+        files: |
+          packages/Darwin-vulkan-amd64/Release/vmrv2-beta-Darwin-amd64.dmg
+        overwrite: true   # THIS IS KEY
+        token: ${{ secrets.GITHUB_TOKEN }}
