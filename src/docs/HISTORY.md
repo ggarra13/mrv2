@@ -40,7 +40,7 @@ ChangeLog
 
 - Fixed certs directory on macOS install.
 - Fixed double clicking and Open With on macOS.
-
+- Fixed URL Link requester's buttons going off screen.
 
 v1.4.5
 ======
