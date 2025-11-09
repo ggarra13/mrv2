@@ -18,7 +18,12 @@ set(SOURCES
 #
 # Use static FLTK
 #
-list(APPEND LIBRARIES fltk::fltk)
+set(LIBRARIES )
+if(APPLE)
+    list(APPEND LIBRARIES fltk::fltk)
+else()
+    list(APPEND LIBRARIES ${FLTK_LIBRARIES})
+endif()
 
 add_executable(license_helper WIN32 ${SOURCES} ${HEADERS})
 
