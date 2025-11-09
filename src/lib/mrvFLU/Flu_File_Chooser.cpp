@@ -523,8 +523,8 @@ Flu_File_Chooser::Flu_File_Chooser(
     // construct the user desktop path
     // userDesktop = userHome + "/" + desktopTxt;
 
-    userDesktop = file::normalizePath(userDesktop);
-    userDocs = file::normalizePath(userDocs);
+    userDesktop = mrv::file::normalizePath(userDesktop);
+    userDocs = mrv::file::normalizePath(userDocs);
 
     // make sure they don't end in '/'
     if (userDesktop[userDesktop.size() - 1] == '/')
