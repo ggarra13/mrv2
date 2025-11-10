@@ -27,8 +27,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <mutex>
-#include <set>
 
 #define FLU_USE_REGISTRY
 
@@ -242,6 +240,7 @@ struct Flu_File_Chooser::Private
 void Flu_File_Chooser::previewCB()
 {
     TLRENDER_P();
+    
     bool inFavorites = (currentDir == FAVORITES_UNIQUE_STRING);
     if (inFavorites)
     {
@@ -250,14 +249,13 @@ void Flu_File_Chooser::previewCB()
     }
 
     thumbnailsFileReq = previewBtn->value();
-
     updateEntrySizes();
 
     Fl_Group* g = getEntryGroup();
     unsigned num = g->children();
     for (unsigned i = 0; i < num; ++i)
     {
-        Flu_Entry* c = (Flu_Entry*)g->child(i);
+        Flu_Entry* c = static_cast<Flu_Entry*>(g->child(i));
         c->set_colors();
     }
 }
@@ -385,110 +383,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     cancel.label(_(cancelTxt.c_str()));
     cancel.labelsize(FL_NORMAL_SIZE);
 
-    add_type(nullptr, _(directoryTxt.c_str()), &folder_closed);
-    add_type("3gp", _("3GP Movie"), &reel);
-    add_type("asf", _("Advanced Systems Format Media"), &reel);
-    add_type("avc", _("AVCHD Video"), &reel);
-    add_type("avchd", _("AVCHD Video"), &reel);
-    add_type("avi", _("AVI Movie"), &reel);
-    add_type("divx", _("DIVX Movie"), &reel);
-    add_type("dv", _("Digital Video"), &reel);
-    add_type("flv", _("Flash Movie"), &reel);
-    add_type("m2ts", _("AVCHD Video"), &reel);
-    add_type("m2t", _("AVCHD Video"), &reel);
-    add_type("m4v", _("Apple's M4V Movie"), &reel);
-    add_type("mkv", _("Matroska Movie"), &reel);
-    add_type("mov", _("Quicktime Movie"), &reel);
-    add_type("mp4", _("MP4 Movie"), &reel);
-    add_type("mpeg", _("MPEG Movie"), &reel);
-    add_type("mpg", _("MPEG Movie"), &reel);
-    add_type("mxf", _("MXF Movie"), &reel);
-    add_type("ogm", _("Ogg Movie"), &reel);
-    add_type("ogv", _("Ogg Video"), &reel);
-    add_type("otio", _("OpenTimelineIO EDL"), &reel);
-    add_type("otioz", _("OpenTimelineIO Zipped EDL"), &reel);
-    add_type("qt", _("Quicktime Movie"), &reel);
-    add_type("rm", _("Real Media Movie"), &reel);
-    add_type("ts", _("AVCHD Video"), &reel);
-    add_type("vob", _("VOB Movie"), &reel);
-    add_type("webm", _("WebM Movie"), &reel);
-    add_type("wmv", _("WMV Movie"), &reel);
-
-    add_type("3fr", _("RAW Picture"), &picture);
-    add_type("arw", _("RAW Picture"), &picture);
-    add_type("bay", _("RAW Picture"), &picture);
-    add_type("bmp", _("Bitmap Picture"), &picture);
-    add_type("bmq", _("RAW Picture"), &picture);
-    add_type("cap", _("RAW Picture"), &picture);
-    add_type("cin", _("Cineon Picture"), &picture);
-    add_type("cine", _("RAW Picture"), &picture);
-    add_type("cap", _("RAW Picture"), &picture);
-    add_type("cr2", _("Canon Raw Picture"), &picture);
-    add_type("cr3", _("Canon Raw Picture"), &picture);
-    add_type("crw", _("Canon Raw Picture"), &picture);
-    add_type("cs1", _("RAW Picture"), &picture);
-    add_type("dcr", _("RAW Picture"), &picture);
-    add_type("dng", _("Kodak Digital Negative"), &picture);
-    add_type("dpx", _("DPX Picture"), &picture);
-    add_type("drf", _("RAW Picture"), &picture);
-    add_type("dsc", _("RAW Picture"), &picture);
-    add_type("erf", _("RAW Picture"), &picture);
-    add_type("exr", _("EXR Picture"), &picture);
-    add_type("fff", _("RAW Picture"), &picture);
-    add_type("gif", _("GIF Picture"), &picture);
-    add_type("hdr", _("HDRI Picture"), &picture);
-    add_type("ia", _("RAW Picture"), &picture);
-    add_type("iiq", _("RAW Picture"), &picture);
-    add_type("jpg", _("JPEG Picture"), &picture);
-    add_type("jpeg", _("JPEG Picture"), &picture);
-    add_type("jfif", _("JPEG Picture"), &picture);
-    add_type("kdc", _("RAW Picture"), &picture);
-    add_type("mdc", _("RAW Picture"), &picture);
-    add_type("mef", _("RAW Picture"), &picture);
-    add_type("mos", _("RAW Picture"), &picture);
-    add_type("mrw", _("RAW Picture"), &picture);
-    add_type("nef", _("RAW Picture"), &picture);
-    add_type("nrw", _("RAW Picture"), &picture);
-    add_type("orf", _("RAW Picture"), &picture);
-    add_type("pef", _("RAW Picture"), &picture);
-    add_type("pic", _("Softimage Picture"), &picture);
-    add_type("png", _("Portable Network Graphics Picture"), &picture);
-    add_type("ppm", _("Portable Pixmap"), &picture);
-    add_type("psd", _("Photoshop Picture"), &picture);
-    add_type("pxn", _("RAW Picture"), &picture);
-    add_type("qtk", _("RAW Picture"), &picture);
-    add_type("raf", _("RAW Picture"), &picture);
-    add_type("raw", _("RAW Picture"), &picture);
-    add_type("rgb", _("SGI Picture"), &picture);
-    add_type("rgba", _("SGI Picture"), &picture);
-    add_type("rw2", _("RAW Picture"), &picture);
-    add_type("rwl", _("RAW Picture"), &picture);
-    add_type("rwz", _("RAW Picture"), &picture);
-    add_type("sgi", _("SGI Picture"), &picture);
-    add_type("sr2", _("RAW Picture"), &picture);
-    add_type("srf", _("RAW Picture"), &picture);
-    add_type("srw", _("RAW Picture"), &picture);
-    add_type("sti", _("RAW Picture"), &picture);
-    add_type("sxr", _("Stereo OpenEXR Picture"), &picture);
-    add_type("tga", _("TGA Picture"), &picture);
-    add_type("tif", _("TIFF Picture"), &picture);
-    add_type("tiff", _("TIFF Picture"), &picture);
-    add_type("x3f", _("RAW Picture"), &picture);
-
-    if (!music)
-        music = MRV2_LOAD_SVG(Music);
-
-    add_type("mp3", _("MP3 music"), music);
-    add_type("ogg", _("OGG Vorbis music"), music);
-    add_type("wav", _("Wave music"), music);
-
-    if (!usd)
-        usd = MRV2_LOAD_SVG(USD);
-    add_type("usd", _("OpenUSD Asset"), usd);
-    add_type("usdz", _("OpenUSD Zipped Asset"), usd);
-    add_type("usdc", _("OpenUSD Compressed Asset"), usd);
-    add_type("usda", _("OpenUSD ASCII Asset"), usd);
-
+    
     for (int j = 0; j < 4; j++)
     {
         std::string text = _(detailTxt[j].c_str());
@@ -921,6 +816,113 @@ Flu_File_Chooser::Flu_File_Chooser(
         filename.value(pathname);
     }
 }
+
+    void Flu_File_Chooser::initFileTypes()
+    {
+    add_type(nullptr, _(directoryTxt.c_str()), &folder_closed);
+    add_type("3gp", _("3GP Movie"), &reel);
+    add_type("asf", _("Advanced Systems Format Media"), &reel);
+    add_type("avc", _("AVCHD Video"), &reel);
+    add_type("avchd", _("AVCHD Video"), &reel);
+    add_type("avi", _("AVI Movie"), &reel);
+    add_type("divx", _("DIVX Movie"), &reel);
+    add_type("dv", _("Digital Video"), &reel);
+    add_type("flv", _("Flash Movie"), &reel);
+    add_type("m2ts", _("AVCHD Video"), &reel);
+    add_type("m2t", _("AVCHD Video"), &reel);
+    add_type("m4v", _("Apple's M4V Movie"), &reel);
+    add_type("mkv", _("Matroska Movie"), &reel);
+    add_type("mov", _("Quicktime Movie"), &reel);
+    add_type("mp4", _("MP4 Movie"), &reel);
+    add_type("mpeg", _("MPEG Movie"), &reel);
+    add_type("mpg", _("MPEG Movie"), &reel);
+    add_type("mxf", _("MXF Movie"), &reel);
+    add_type("ogm", _("Ogg Movie"), &reel);
+    add_type("ogv", _("Ogg Video"), &reel);
+    add_type("otio", _("OpenTimelineIO EDL"), &reel);
+    add_type("otioz", _("OpenTimelineIO Zipped EDL"), &reel);
+    add_type("qt", _("Quicktime Movie"), &reel);
+    add_type("rm", _("Real Media Movie"), &reel);
+    add_type("ts", _("AVCHD Video"), &reel);
+    add_type("vob", _("VOB Movie"), &reel);
+    add_type("webm", _("WebM Movie"), &reel);
+    add_type("wmv", _("WMV Movie"), &reel);
+
+    add_type("3fr", _("RAW Picture"), &picture);
+    add_type("arw", _("RAW Picture"), &picture);
+    add_type("bay", _("RAW Picture"), &picture);
+    add_type("bmp", _("Bitmap Picture"), &picture);
+    add_type("bmq", _("RAW Picture"), &picture);
+    add_type("cap", _("RAW Picture"), &picture);
+    add_type("cin", _("Cineon Picture"), &picture);
+    add_type("cine", _("RAW Picture"), &picture);
+    add_type("cap", _("RAW Picture"), &picture);
+    add_type("cr2", _("Canon Raw Picture"), &picture);
+    add_type("cr3", _("Canon Raw Picture"), &picture);
+    add_type("crw", _("Canon Raw Picture"), &picture);
+    add_type("cs1", _("RAW Picture"), &picture);
+    add_type("dcr", _("RAW Picture"), &picture);
+    add_type("dng", _("Kodak Digital Negative"), &picture);
+    add_type("dpx", _("DPX Picture"), &picture);
+    add_type("drf", _("RAW Picture"), &picture);
+    add_type("dsc", _("RAW Picture"), &picture);
+    add_type("erf", _("RAW Picture"), &picture);
+    add_type("exr", _("EXR Picture"), &picture);
+    add_type("fff", _("RAW Picture"), &picture);
+    add_type("gif", _("GIF Picture"), &picture);
+    add_type("hdr", _("HDRI Picture"), &picture);
+    add_type("ia", _("RAW Picture"), &picture);
+    add_type("iiq", _("RAW Picture"), &picture);
+    add_type("jpg", _("JPEG Picture"), &picture);
+    add_type("jpeg", _("JPEG Picture"), &picture);
+    add_type("jfif", _("JPEG Picture"), &picture);
+    add_type("kdc", _("RAW Picture"), &picture);
+    add_type("mdc", _("RAW Picture"), &picture);
+    add_type("mef", _("RAW Picture"), &picture);
+    add_type("mos", _("RAW Picture"), &picture);
+    add_type("mrw", _("RAW Picture"), &picture);
+    add_type("nef", _("RAW Picture"), &picture);
+    add_type("nrw", _("RAW Picture"), &picture);
+    add_type("orf", _("RAW Picture"), &picture);
+    add_type("pef", _("RAW Picture"), &picture);
+    add_type("pic", _("Softimage Picture"), &picture);
+    add_type("png", _("Portable Network Graphics Picture"), &picture);
+    add_type("ppm", _("Portable Pixmap"), &picture);
+    add_type("psd", _("Photoshop Picture"), &picture);
+    add_type("pxn", _("RAW Picture"), &picture);
+    add_type("qtk", _("RAW Picture"), &picture);
+    add_type("raf", _("RAW Picture"), &picture);
+    add_type("raw", _("RAW Picture"), &picture);
+    add_type("rgb", _("SGI Picture"), &picture);
+    add_type("rgba", _("SGI Picture"), &picture);
+    add_type("rw2", _("RAW Picture"), &picture);
+    add_type("rwl", _("RAW Picture"), &picture);
+    add_type("rwz", _("RAW Picture"), &picture);
+    add_type("sgi", _("SGI Picture"), &picture);
+    add_type("sr2", _("RAW Picture"), &picture);
+    add_type("srf", _("RAW Picture"), &picture);
+    add_type("srw", _("RAW Picture"), &picture);
+    add_type("sti", _("RAW Picture"), &picture);
+    add_type("sxr", _("Stereo OpenEXR Picture"), &picture);
+    add_type("tga", _("TGA Picture"), &picture);
+    add_type("tif", _("TIFF Picture"), &picture);
+    add_type("tiff", _("TIFF Picture"), &picture);
+    add_type("x3f", _("RAW Picture"), &picture);
+
+    if (!music)
+        music = MRV2_LOAD_SVG(Music);
+
+    add_type("mp3", _("MP3 music"), music);
+    add_type("ogg", _("OGG Vorbis music"), music);
+    add_type("wav", _("Wave music"), music);
+
+    if (!usd)
+        usd = MRV2_LOAD_SVG(USD);
+    add_type("usd", _("OpenUSD Asset"), usd);
+    add_type("usdz", _("OpenUSD Zipped Asset"), usd);
+    add_type("usdc", _("OpenUSD Compressed Asset"), usd);
+    add_type("usda", _("OpenUSD ASCII Asset"), usd);
+    }
 
 Flu_File_Chooser::~Flu_File_Chooser()
 {
@@ -2749,51 +2751,15 @@ std::string Flu_File_Chooser::formatDate(const char* d)
 
 void Flu_File_Chooser::cleanupPath(std::string& s)
 {
-    s = mrv::file::normalizePath(s);
-
-    std::string newS;
-    newS.resize(s.size() + 1);
-
-    size_t oldPos, newPos;
-    for (oldPos = 0, newPos = 0; oldPos < s.size(); oldPos++)
+    try
     {
-        // remove "./"
-        if (s[oldPos] == '.' && s[oldPos + 1] == '/')
-            oldPos += 2;
-
-        // convert "//" to "/"
-        else if (s[oldPos] == '/' && s[oldPos + 1] == '/')
-            oldPos++;
-
-#ifdef _WIN32
-        // downcase "c:" to "C:"
-        else if (s[oldPos + 1] == ':')
-            s[oldPos] = toupper(s[oldPos]);
-#endif
-
-        // remove "../" by removing everything back to the last "/"
-        if (oldPos + 2 < s.size()) // bounds check
-        {
-            if (s[oldPos] == '.' && s[oldPos + 1] == '.' &&
-                s[oldPos + 2] == '/' && newS != "/")
-            {
-                // erase the last character, which should be a '/'
-                newPos--;
-                newS = newS.substr(0, newPos);
-                // look for the previous '/'
-                char* lastSlash = const_cast<char*>(strrchr(newS.c_str(), '/'));
-                // make the new string position after the slash
-                newPos = (lastSlash - newS.c_str()) + 1;
-                oldPos += 3;
-            }
-        }
-
-        newS[newPos] = s[oldPos];
-        newPos++;
+        s = fs::canonical(fs::path(s)).u8string();
     }
-
-    newS = newS.substr(0, newPos);
-    s = newS;
+    catch(const fs::filesystem_error& e)
+    {
+        s = mrv::file::normalizePath(s);
+    }
+    if (!s.empty() && s.back() != '/') s += '/';  // Ensure trailing slash
 }
 
 void Flu_File_Chooser::backCB()
@@ -4181,23 +4147,21 @@ std::string Flu_File_Chooser::commonStr()
     return common;
 }
 
-std::string retname;
-
 static const char* _flu_file_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
     const char* pattern, const char* filename, int type,
     FluStringVector& filelist, const bool compact_files = true)
 {
-    if (!retname.empty())
-        filename = retname.c_str();
+    static std::string lastFile;
+    if (!lastFile.empty()) filename = lastFile.c_str();
 
     Fl_Group::current(0);
     Flu_File_Chooser::window = new Flu_File_Chooser(
         filename, pattern, type, message, context, compact_files);
     Flu_File_Chooser::window->end();
-    if (Flu_File_Chooser::window && !retname.empty())
+    if (Flu_File_Chooser::window && filename)
     {
-        Flu_File_Chooser::window->value(retname.c_str());
+        Flu_File_Chooser::window->value(filename);
     }
     
     Flu_File_Chooser::window->set_non_modal();
@@ -4222,11 +4186,11 @@ static const char* _flu_file_chooser(
                     std::string(Flu_File_Chooser::window->value(i)));
             }
         }
-        retname = Flu_File_Chooser::window->value();
+        lastFile = Flu_File_Chooser::window->value();
 
         delete Flu_File_Chooser::window;
         Flu_File_Chooser::window = nullptr;
-        return retname.c_str();
+        return lastFile.c_str();
     }
     else
     {
