@@ -165,5 +165,5 @@ jobs:
           packages/BUILD-Linux-amd64/Release/mrv2-beta-Linux-amd64.deb
           packages/BUILD-Linux-amd64/Release/mrv2-beta-Linux-amd64.rpm
           packages/BUILD-Linux-amd64/Release/mrv2-beta-Linux-amd64.tar.gz
-        overwrite: true   # THIS IS KEY
+        overwrite_files: true   # THIS IS KEY
         token: ${{ secrets.GITHUB_TOKEN }}

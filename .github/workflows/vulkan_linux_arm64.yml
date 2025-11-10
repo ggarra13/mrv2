@@ -151,5 +151,5 @@ jobs:
           packages/Linux-vulkan-aarch64/Release/vmrv2-beta-Linux-aarch64.deb
           packages/Linux-vulkan-aarch64/Release/vmrv2-beta-Linux-aarch64.rpm
           packages/Linux-vulkan-aarch64/Release/vmrv2-beta-Linux-aarch64.tar.gz
-        overwrite: true   # THIS IS KEY
+        overwrite_files: true   # THIS IS KEY
         token: ${{ secrets.GITHUB_TOKEN }}

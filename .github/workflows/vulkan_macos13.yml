@@ -139,5 +139,5 @@ jobs:
         prerelease: true
         files: |
           packages/Darwin-vulkan-amd64/Release/vmrv2-beta-Darwin-amd64.dmg
-        overwrite: true   # THIS IS KEY
+        overwrite_files: true   # THIS IS KEY
         token: ${{ secrets.GITHUB_TOKEN }}

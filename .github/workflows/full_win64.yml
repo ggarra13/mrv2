@@ -138,5 +138,5 @@ jobs:
         files: |
           packages/BUILD-Windows-amd64/Release/mrv2-beta-Windows-amd64.exe
           packages/BUILD-Windows-amd64/Release/mrv2-beta-Windows-amd64.zip
-        overwrite: true   # THIS IS KEY
+        overwrite_files: true   # THIS IS KEY
         token: ${{ secrets.GITHUB_TOKEN }}

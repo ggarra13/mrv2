@@ -67,6 +67,7 @@
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvString.h"
 
+
 #include "mrvIcons/Documents.h"
 #include "mrvIcons/FavoritesButton.h"
 #include "mrvIcons/FavoritesFolders.h"
@@ -1095,13 +1096,6 @@ int Flu_File_Chooser::handle(int event)
         _callback = Fl_Double_Window::callback();
         _userdata = Fl_Double_Window::user_data();
         Fl_Double_Window::callback(_hideCB, this);
-    }
-
-    if (event == FL_HIDE)
-    {
-    }
-    else if (event == FL_SHOW)
-    {
     }
 
     if (Fl_Double_Window::handle(event))
@@ -3298,9 +3292,6 @@ void Flu_File_Chooser::cd(const char* path)
     resize(x(), y(), w(), h());
     if (listMode)
     {
-        // filecolumns->hide();
-        // filescroll->hide();
-
         fileDetailsGroup->hide();
         filelist->show();
         filelist->parent()->resizable(filelist);
@@ -3309,9 +3300,6 @@ void Flu_File_Chooser::cd(const char* path)
     {
         filelist->hide();
 
-        // filecolumns->show();
-        // filescroll->show();
-        // filescroll->parent()->resizable( filescroll );
         fileDetailsGroup->show();
         fileDetailsGroup->parent()->resizable(fileDetailsGroup);
     }

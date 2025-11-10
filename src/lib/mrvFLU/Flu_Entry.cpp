@@ -5,13 +5,10 @@
 
 // #define DEBUG_REQUESTS 1
 
-#include "mrvCore/mrvBackend.h"
+#include "mrvApp/mrvApp.h"
 
-
-
-#include <tlCore/Path.h>
-#include <tlCore/String.h>
-#include <tlCore/StringFormat.h>
+#include "mrvUI/mrvAsk.h"
+#include "mrvUI/mrvUtil.h"
 
 #include "mrvFLU/flu_pixmaps.h"
 #include "mrvFLU/flu_file_chooser_pixmaps.h"
@@ -19,13 +16,16 @@
 #include "mrvFLU/Flu_Entry.h"
 #include "mrvFLU/Flu_File_Chooser.h"
 
+#include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvI8N.h"
 
-#include "mrvUI/mrvAsk.h"
-#include "mrvUI/mrvUtil.h"
 
-#include "mrvApp/mrvApp.h"
+#include <tlCore/Path.h>
+#include <tlCore/String.h>
+#include <tlCore/StringFormat.h>
+
+
 
 #ifdef OPENGL_BACKEND
 #include <tlTimelineUI/ThumbnailSystem.h>
@@ -809,7 +809,6 @@ void Flu_Entry::inputCB()
             mrv::fl_alert(
                 Flu_File_Chooser::renameErrTxt.c_str(), oldName.c_str(),
                 newName.c_str());
-            // return;  // leave editing on
         }
         else
         {
@@ -817,8 +816,6 @@ void Flu_Entry::inputCB()
             updateSize();
             updateIcon();
         }
-        // QUESTION: should we set the chooser filename to the modified name?
-        // chooser->filename.value( filename.c_str() );
     }
 
     // only turn off editing if we have a successful name change
@@ -1001,11 +998,6 @@ void Flu_Entry::startRequest()
         isPicture = true;
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
-
-#ifdef DEBUG_REQUESTS
-    std::cerr << "\tSTART REQUEST " << id << " for " << path.get() << " " << x()
-              << " " << y() << " " << w() << "x" << h() << std::endl;
-#endif
 }
 
 void Flu_Entry::cancelRequest()
@@ -1023,9 +1015,4 @@ void Flu_Entry::cancelRequest()
         p.thumbnail.init = true;
         Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
     }
-
-#ifdef DEBUG_REQUESTS
-    std::cerr << "\tCANCELED REQUEST " << p.id << " for " << toTLRender() << " "
-              << x() << " " << y() << " " << w() << "x" << h() << std::endl;
-#endif
 }
