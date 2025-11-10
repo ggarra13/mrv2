@@ -1,5 +1,12 @@
 #!/bin/sh
 
+#
+# Launcher script placed as vmrv2.sh inside Contents/MacOS/
+#
+# Launcher excutable (src/launcher/main.cpp) installed as mrv2 or vmrv2 in
+# the macOS bundle (Contents/MacOS) will call this script 
+#
+
 dir=$0
 
 symlink=`readlink ${dir}`

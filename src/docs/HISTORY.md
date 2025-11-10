@@ -46,6 +46,7 @@ ChangeLog
 - Fixed FLU's file requester not accepting double clicks to accept a file.
 - Fixed AutoPlayback when loading multiple clips.
 - Fixed Wayland's Kwin decorations to use libdecor to allow subwindows to be dragged outside the main window.
+- Simplified MacOS launcher and made it work without "exec" Window.
 
 
 v1.4.5

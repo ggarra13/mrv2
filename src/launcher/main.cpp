@@ -109,26 +109,14 @@ int main(int argc, char* argv[])
 {
     // Path to the actual binary (relative to Contents/MacOS/)
     set_root_path(argc, argv);
+    
+    std::string script = "launcher.sh";
+    std::string full_path = g_bin_path + "/" + script;
 
-    std::string binary = "vmrv2.sh";
-    std::string full_path = g_bin_path + "/" + binary;
-
-    if (!fs::exists(full_path))
-    {
-        full_path = g_bin_path + "/../Resources/bin/mrv2.sh";
-    }
-
-    if (!fs::exists(full_path))
-    {
-        full_path = g_bin_path + "/mrv2";
-    }
 
     if (!fs::exists(full_path))
     {
         std::cerr << "Could not locate " << full_path
-                  << std::endl;
-        std::cerr << "Could not locate " << g_bin_path
-                  << "/vmrv2.sh"
                   << std::endl;
         return 1;
     }

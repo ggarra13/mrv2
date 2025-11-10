@@ -608,20 +608,16 @@ if (APPLE)
     message(STATUS "VULKAN_SDK set to ${VULKAN_SDK}")
 
     #
-    # Copy Apple vmrv2 launcher
+    # Copy vmrv2/mrv2 launcher with the name of the directory.
     #
+    file(COPY ${CPACK_PREPACKAGE}/bin/launcher
+	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/)
+    file(RENAME ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/launcher
+	${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/${mrv2_NAME})
+    
     if (MRV2_BACKEND STREQUAL "VK")
-	file(COPY ${CPACK_PREPACKAGE}/bin/vmrv2
-	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS)
-	
 	install_vulkan_lib_glob("libvulkan*" vmrv2)
-	
 	install_vulkan_icd_filenames(vmrv2)
-    else()
-	file(COPY ${CPACK_PREPACKAGE}/bin/vmrv2
-	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/)
-	file(RENAME ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/vmrv2
-	    ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/mrv2)
     endif()
 	
     #
@@ -688,12 +684,4 @@ if (APPLE)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/presets)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/python)
     file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/share)
-
-    #
-    # Sync the file system
-    #
-    if (APPLE)
-	execute_process(COMMAND sync)
-	execute_process(COMMAND sync)
-    endif()
 endif()

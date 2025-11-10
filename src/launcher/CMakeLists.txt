@@ -9,12 +9,12 @@ set(SOURCES main.cpp )
 
 list(APPEND LIBRARIES fltk::fltk)
 
-add_executable(vmrv2 WIN32  ${SOURCES} ${HEADERS})
+add_executable(launcher WIN32  ${SOURCES} ${HEADERS})
 
-target_link_libraries(vmrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
-target_link_directories(vmrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
+target_link_libraries(launcher PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
+target_link_directories(launcher BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
 
-install(TARGETS vmrv2
+install(TARGETS launcher
     RUNTIME DESTINATION bin COMPONENT applications
     LIBRARY DESTINATION lib COMPONENT libraries
     ARCHIVE DESTINATION lib COMPONENT libraries )

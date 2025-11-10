@@ -112,12 +112,6 @@ if(APPLE)
     ##############################
     # New Method using Dragndrop #
     ##############################
-
-    set(mrv2_NAME mrv2)
-    if (MRV2_BACKEND STREQUAL "VK")
-	set(mrv2_NAME vmrv2)
-    endif()
-    
     set( INSTALL_NAME ${mrv2_NAME} )
     set( HDR_INSTALL_NAME hdr )
 
@@ -133,15 +127,17 @@ if(APPLE)
     configure_file(${MRV2_DIR}/etc/macOS/mrv2.icns
 	${MRV2_BUNDLE_DIR}/Contents/Resources/${mrv2_NAME}.icns COPYONLY)
     
-    # Copy the shell scripts into the bundles and make them executable
-    if (MRV2_BACKEND STREQUAL "VK")
-	configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
-	    ${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME}.sh COPYONLY)
-    else()
-	configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
-	    ${MRV2_BUNDLE_DIR}/Contents/MacOS/${mrv2_NAME} COPYONLY)
-    endif()
-    
+    # Copy the shell script into the bundles' MacOS as 'launcher.sh'
+    # and make them executable
+    configure_file(${MRV2_DIR}/etc/macOS/mrv2.sh
+	${MRV2_BUNDLE_DIR}/Contents/MacOS/launcher.sh 
+	FILE_PERMISSIONS
+	OWNER_READ OWNER_EXECUTE
+	GROUP_READ GROUP_EXECUTE
+	WORLD_READ WORLD_EXECUTE
+	COPYONLY)
+
+    # Copy the Info.plist modifying its variables
     configure_file(
      	${MRV2_DIR}/etc/macOS/mrv2.plist.in
      	${MRV2_BUNDLE_DIR}/Contents/Info.plist )
@@ -168,8 +164,14 @@ if(APPLE)
 	file(COPY ${MRV2_DIR}/etc/macOS/hdr.icns
 	    DESTINATION ${HDR_BUNDLE_DIR}/Contents/Resources)
     
-	# Copy the shell scripts into the bundles and make them executable
-	configure_file(${MRV2_DIR}/etc/macOS/hdr.sh ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr COPYONLY)
+	# Copy the shell script into the MacOS bundle and make them executable
+	configure_file(${MRV2_DIR}/etc/macOS/hdr.sh
+	    ${HDR_BUNDLE_DIR}/Contents/MacOS/hdr
+	    FILE_PERMISSIONS
+	    OWNER_READ OWNER_EXECUTE
+	    GROUP_READ GROUP_EXECUTE
+	    WORLD_READ WORLD_EXECUTE
+	    COPYONLY)
     
 	configure_file(
      	    ${MRV2_DIR}/etc/macOS/hdr.plist.in
