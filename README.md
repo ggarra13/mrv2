@@ -135,6 +135,7 @@ Currently supported:
 - RAW Camera Formats (CR2, CR3, X3F, etc).
 - Multi-channel audio
 - Color management
+- HDR support
 - A/B comparison
 - Native OpenTimelineIO with dissolves
 - .otioz file bundles

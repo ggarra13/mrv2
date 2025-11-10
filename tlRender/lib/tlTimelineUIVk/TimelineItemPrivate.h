@@ -64,7 +64,8 @@ namespace tl
             };
             DrawData draw;
 
-            enum class MouseMode { kNone, CurrentTime, Item };
+            enum class MouseMode { kNone, CurrentTime, Item,
+                                   TransitionMove, TransitionLeft, TransitionRight };
             struct MouseItemData
             {
                 MouseItemData();

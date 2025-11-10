@@ -313,6 +313,16 @@ namespace tl
                     int transitionH = 0;
                     for (const auto& item : track.transitions)
                     {
+                        const auto i = std::find_if(
+                            p.mouse.items.begin(), p.mouse.items.end(),
+                            [item](const std::shared_ptr<Private::MouseItemData>&
+                                   value) { return item == value->p; });
+                        if (i != p.mouse.items.end())
+                        {
+                            const math::Size2i& sizeHint = item->getSizeHint();
+                            y += sizeHint.h;
+                            continue;
+                        }
                         const otime::TimeRange& timeRange =
                             item->getTimeRange();
                         const math::Size2i& sizeHint = item->getSizeHint();
@@ -459,6 +469,21 @@ namespace tl
                 p.player->seek(time);
                 break;
             }
+            case Private::MouseMode::TransitionMove:
+            {
+                if (!p.mouse.items.empty())
+                {
+                    for (const auto& item : p.mouse.items)
+                    {
+                        const math::Box2i& g = item->geometry;
+                        _mouse.pos.y = _mouse.pressPos.y;
+                        const math::Box2i& move = math::Box2i(
+                            g.min + _mouse.pos - _mouse.pressPos, g.getSize());
+                        item->p->setGeometry(move);
+                    }
+                }
+                break;
+            }
             case Private::MouseMode::Item:
             {
                 if (!p.mouse.items.empty())
@@ -466,8 +491,9 @@ namespace tl
                     for (const auto& item : p.mouse.items)
                     {
                         const math::Box2i& g = item->geometry;
-                        item->p->setGeometry(math::Box2i(
-                            g.min + _mouse.pos - _mouse.pressPos, g.getSize()));
+                        const math::Box2i& move = math::Box2i(
+                            g.min + _mouse.pos - _mouse.pressPos, g.getSize());
+                        item->p->setGeometry(move);
                     }
 
                     int dropTarget = -1;
@@ -553,6 +579,35 @@ namespace tl
                     }
                 }
 
+                if (p.mouse.items.empty())
+                {
+                    for (int i = 0; i < p.tracks.size(); ++i)
+                    {
+                        if (_isTrackVisible(i))
+                        {
+                            const auto& transitions = p.tracks[i].transitions;
+                            for (int j = 0; j < transitions.size(); ++j)
+                            {
+                                const auto& item = transitions[j];
+                                if (item->getGeometry().contains(event.pos))
+                                {
+                                    p.mouse.mode = Private::MouseMode::TransitionMove;
+                                    p.mouse.items.push_back(
+                                        std::make_shared<
+                                            Private::MouseItemData>(
+                                            item, j, i));
+                                    moveToFront(item);
+                                    break;
+                                }
+                            }
+                        }
+                        if (!p.mouse.items.empty())
+                        {
+                            break;
+                        }
+                    }
+                }
+                
                 if (p.mouse.items.empty())
                 {
                     p.mouse.mode = Private::MouseMode::CurrentTime;
