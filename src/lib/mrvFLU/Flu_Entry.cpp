@@ -5,13 +5,10 @@
 
 // #define DEBUG_REQUESTS 1
 
-#include "mrvCore/mrvBackend.h"
+#include "mrvApp/mrvApp.h"
 
-
-
-#include <tlCore/Path.h>
-#include <tlCore/String.h>
-#include <tlCore/StringFormat.h>
+#include "mrvUI/mrvAsk.h"
+#include "mrvUI/mrvUtil.h"
 
 #include "mrvFLU/flu_pixmaps.h"
 #include "mrvFLU/flu_file_chooser_pixmaps.h"
@@ -19,13 +16,16 @@
 #include "mrvFLU/Flu_Entry.h"
 #include "mrvFLU/Flu_File_Chooser.h"
 
+#include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvI8N.h"
 
-#include "mrvUI/mrvAsk.h"
-#include "mrvUI/mrvUtil.h"
 
-#include "mrvApp/mrvApp.h"
+#include <tlCore/Path.h>
+#include <tlCore/String.h>
+#include <tlCore/StringFormat.h>
+
+
 
 #ifdef OPENGL_BACKEND
 #include <tlTimelineUI/ThumbnailSystem.h>
@@ -40,6 +40,8 @@
 #include <FL/fl_utf8.h>
 
 
+#include <filesystem>
+namespace fs = std::filesystem;
 #include <random>
 #include <mutex>
 
@@ -94,6 +96,8 @@ namespace
         while (W > maxW && pos > start)
         {
             // Move back one character (considering UTF-8 encoding)
+            if (pos <= start)
+                break;
             pos = fl_utf8back(pos - 1, start, pos);
             shortened = std::string(start, pos) + "...";
             W = 0;
@@ -362,7 +366,7 @@ void Flu_Entry::set_colors()
     }
 }
 
-std::string Flu_Entry::toTLRender()
+std::string Flu_Entry::toTLRender() const
 {
     std::string fullname = Flu_File_Chooser::currentDir + filename;
 
@@ -371,7 +375,7 @@ std::string Flu_Entry::toTLRender()
         std::string number = filesize;
         std::size_t pos = number.find(' ');
         number = number.substr(0, pos);
-        int frame = atoi(number.c_str());
+        int frame = std::stoi(number);
         char tmp[1024];
         // Note: fullname is a valid C format sequence, like picture.%04d.exr
         snprintf(tmp, 1024, fullname.c_str(), frame);
@@ -470,22 +474,6 @@ int Flu_Entry::handle(int event)
                 return 1;
             }
         }
-
-        /*
-          if( selected && !Fl::event_button3() && !Fl::event_state(FL_CTRL) &&
-          !Fl::event_state(FL_SHIFT) )
-          {
-          // only allow editing of certain files and directories
-          if( chooser->fileEditing && ( type == ENTRY_FILE || type == ENTRY_DIR
-          ) )
-          {
-          // if already selected, switch to input mode
-          Fl::add_timeout( 1.0, _editCB, this );
-          return 1;
-          }
-          }
-
-          else*/
         if (static_cast<int>(chooser->type()) &
             static_cast<int>(ChooserType::MULTI))
         {
@@ -511,7 +499,7 @@ int Flu_Entry::handle(int event)
                     // get the index of the last selected item and this item
                     int lastindex = -1, thisindex = -1;
                     int i;
-                    for (i = 0; i < g->children(); i++)
+                    for (i = 0; i < g->children(); ++i)
                     {
                         if (g->child(i) == chooser->lastSelected)
                             lastindex = i;
@@ -560,7 +548,7 @@ int Flu_Entry::handle(int event)
                 // if we are only choosing multiple files, don't allow a
                 // directory to be selected
                 Fl_Group* g = chooser->getEntryGroup();
-                for (int i = 0; i < g->children(); i++)
+                for (int i = 0; i < g->children(); ++i)
                 {
                     Flu_Entry* e = (Flu_Entry*)g->child(i);
                     if (e->type == ENTRY_DIR)
@@ -614,7 +602,7 @@ int Flu_Entry::handle(int event)
                 // get the index of the last selected item and this item
                 int lastindex = -1, thisindex = -1;
                 int i;
-                for (i = 0; i < g->children(); i++)
+                for (i = 0; i < g->children(); ++i)
                 {
                     if (g->child(i) == chooser->lastSelected)
                         lastindex = i;
@@ -627,11 +615,7 @@ int Flu_Entry::handle(int event)
                 {
                     // loop from this item to the last item, toggling each item
                     // except the last
-                    int inc;
-                    if (thisindex > lastindex)
-                        inc = -1;
-                    else
-                        inc = 1;
+                    int inc = (thisindex > lastindex) ? -1 : 1;
                     Flu_Entry* e;
                     for (i = thisindex; i != lastindex; i += inc)
                     {
@@ -795,8 +779,7 @@ void Flu_Entry::inputCB()
         std::string oldName = chooser->currentDir + filename,
                     newName = chooser->currentDir + value();
         // see if new name already exists
-        struct stat s;
-        int result = ::stat(newName.c_str(), &s);
+        int result = fs::exists(newName);
         if (result == 0)
         {
             mrv::fl_alert(
@@ -804,12 +787,13 @@ void Flu_Entry::inputCB()
             return; // leave editing on
         }
 
-        if (rename(oldName.c_str(), newName.c_str()) == -1)
+        fs::rename(oldName, newName);
+
+        if (!fs::exists(newName))
         {
             mrv::fl_alert(
                 Flu_File_Chooser::renameErrTxt.c_str(), oldName.c_str(),
                 newName.c_str());
-            // return;  // leave editing on
         }
         else
         {
@@ -817,8 +801,6 @@ void Flu_Entry::inputCB()
             updateSize();
             updateIcon();
         }
-        // QUESTION: should we set the chooser filename to the modified name?
-        // chooser->filename.value( filename.c_str() );
     }
 
     // only turn off editing if we have a successful name change
@@ -994,18 +976,17 @@ void Flu_Entry::startRequest()
         }
 
         io::Options options;
-        options["clearCache"] = string::Format("{0}").arg(rand());
+
+        std::random_device rd;
+        options["clearCache"] = string::Format("{0}").arg(rd());
         p.thumbnail.request = thumbnailSystem->getThumbnail(path, size.h, time,
                                                             options);
         p.thumbnail.init = false;
         isPicture = true;
+
+        Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
     }
-
-#ifdef DEBUG_REQUESTS
-    std::cerr << "\tSTART REQUEST " << id << " for " << path.get() << " " << x()
-              << " " << y() << " " << w() << "x" << h() << std::endl;
-#endif
 }
 
 void Flu_Entry::cancelRequest()
@@ -1023,9 +1004,4 @@ void Flu_Entry::cancelRequest()
         p.thumbnail.init = true;
         Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
     }
-
-#ifdef DEBUG_REQUESTS
-    std::cerr << "\tCANCELED REQUEST " << p.id << " for " << toTLRender() << " "
-              << x() << " " << y() << " " << w() << "x" << h() << std::endl;
-#endif
 }

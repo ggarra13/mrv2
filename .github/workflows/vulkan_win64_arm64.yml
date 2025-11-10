@@ -163,5 +163,5 @@ jobs:
         files: |
           packages/Windows-vulkan-aarch64/Release/vmrv2-beta-Windows-aarch64.exe
           packages/Windows-vulkan-aarch64/Release/vmrv2-beta-Windows-aarch64.zip
-        overwrite: true   # THIS IS KEY
+        overwrite_files: true   # THIS IS KEY
         token: ${{ secrets.GITHUB_TOKEN }}

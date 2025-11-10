@@ -666,6 +666,9 @@ public:
     Fl_Callback* _callback;
     void* _userdata;
 
+    void initFileTypes();
+    
+    
     static Flu_File_Chooser* window;
 
     TLRENDER_PRIVATE();

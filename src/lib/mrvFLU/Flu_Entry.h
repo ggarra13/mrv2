@@ -55,7 +55,7 @@ public:
     void editCB();
 
     //! Convert our internal information to a tlRender friendly filename.
-    std::string toTLRender();
+    std::string toTLRender() const;
 
 public:
     std::string filename, date, filesize, shortname, owner, description,

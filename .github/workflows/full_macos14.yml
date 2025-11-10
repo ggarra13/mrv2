@@ -121,5 +121,5 @@ jobs:
         prerelease: true
         files: |
           packages/BUILD-Darwin-arm64/Release/mrv2-beta-Darwin-arm64.dmg
-        overwrite: true   # THIS IS KEY
+        overwrite_files: true   # THIS IS KEY
         token: ${{ secrets.GITHUB_TOKEN }}
