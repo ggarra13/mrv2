@@ -359,6 +359,8 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     _compact = compact;
 
+    initFileTypes();
+    
     int oldNormalSize = FL_NORMAL_SIZE;
     FL_NORMAL_SIZE = 12;
 
@@ -817,8 +819,8 @@ Flu_File_Chooser::Flu_File_Chooser(
     }
 }
 
-    void Flu_File_Chooser::initFileTypes()
-    {
+void Flu_File_Chooser::initFileTypes()
+{
     add_type(nullptr, _(directoryTxt.c_str()), &folder_closed);
     add_type("3gp", _("3GP Movie"), &reel);
     add_type("asf", _("Advanced Systems Format Media"), &reel);
@@ -922,7 +924,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     add_type("usdz", _("OpenUSD Zipped Asset"), usd);
     add_type("usdc", _("OpenUSD Compressed Asset"), usd);
     add_type("usda", _("OpenUSD ASCII Asset"), usd);
-    }
+}
 
 Flu_File_Chooser::~Flu_File_Chooser()
 {
