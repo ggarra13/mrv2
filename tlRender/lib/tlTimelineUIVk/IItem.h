@@ -126,6 +126,9 @@ namespace tl
             //! Get the item time range.
             const otime::TimeRange& getTimeRange() const;
 
+            //! Set the item time range.
+            void setTimeRange(const otime::TimeRange&);
+            
             //! Set the item scale.
             virtual void setScale(double);
 

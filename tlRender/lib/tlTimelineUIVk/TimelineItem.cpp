@@ -453,7 +453,7 @@ namespace tl
                 const auto& dt = p.mouse.dropTargets[p.mouse.currentDropTarget];
                 event.render->drawRect(
                     dt.draw, event.style->getColorRole(ui::ColorRole::Green));
-            }            
+            }
         }
 
         void TimelineItem::mouseMoveEvent(ui::MouseMoveEvent& event)
@@ -491,9 +491,8 @@ namespace tl
                     for (const auto& item : p.mouse.items)
                     {
                         const math::Box2i& g = item->geometry;
-                        const math::Box2i& move = math::Box2i(
-                            g.min + _mouse.pos - _mouse.pressPos, g.getSize());
-                        item->p->setGeometry(move);
+                        item->p->setGeometry(math::Box2i(
+                            g.min + _mouse.pos - _mouse.pressPos, g.getSize()));
                     }
 
                     int dropTarget = -1;
@@ -658,6 +657,32 @@ namespace tl
                 auto otioTimeline = timeline::move(
                     p.player->getTimeline()->getTimeline().value, moveData);
                 p.player->getTimeline()->setTimeline(otioTimeline);
+            }
+            else if (!p.mouse.items.empty())
+            {
+                for (const auto& item : p.mouse.items)
+                {
+                    const std::shared_ptr<IItem> transition = item->p;
+                    const int fromTrack = item->track;
+                    const int fromIndex = item->index;
+                    // const int fromOtioIndex =
+                    //     p.tracks[fromTrack].otioIndexes[fromIndex];
+                    int x = transition->getGeometry().x();
+                    const otime::RationalTime startTime = posToTime(x) - _timeRange.start_time();
+                    otime::TimeRange timeRange = transition->getTimeRange();   
+                    const otime::RationalTime& duration = timeRange.duration();
+                    timeRange = otime::TimeRange(startTime, duration);
+                    const math::Size2i& sizeHint = transition->getSizeHint();
+                    transition->setTimeRange(timeRange);
+                    const int y = item->geometry.y();
+                    item->p->setGeometry(
+                        math::Box2i(
+                            _geometry.min.x + timeRange.start_time()
+                                                      .rescaled_to(1.0)
+                                                      .value() *
+                                                  _scale,
+                            y, sizeHint.w, sizeHint.h));
+                }
             }
             p.mouse.items.clear();
             if (!p.mouse.dropTargets.empty())
@@ -1023,7 +1048,7 @@ namespace tl
                     event.render->drawMesh(
                         mesh, math::Vector2i(),
                         event.style->getColorRole(ui::ColorRole::VideoCache),
-                        "cache");
+                        "video cache");
                 }
             }
 
@@ -1060,7 +1085,7 @@ namespace tl
                     event.render->drawMesh(
                         mesh, math::Vector2i(),
                         event.style->getColorRole(ui::ColorRole::AudioCache),
-                        "cache");
+                        "audio cache");
                 }
             }
         }
@@ -1090,10 +1115,13 @@ namespace tl
                                          math::Vector2i(
                                              pos.x + p.size.border * 2 + p.size.margin,
                                              pos.y + p.size.margin + p.size.fontMetrics.ascender));
-                
-                event.render->drawText(textInfos[0], math::Vector2i(),
-                                       event.style->getColorRole(
-                                           ui::ColorRole::Text));
+                            
+                for (const auto& textInfo : textInfos)
+                {
+                    event.render->drawText(textInfo, math::Vector2i(),
+                                           event.style->getColorRole(
+                                               ui::ColorRole::Text));
+                }
             }
         }
 

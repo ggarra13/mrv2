@@ -54,6 +54,7 @@ namespace tl
                 image::FontMetrics fontMetrics;
 
                 math::Vector2i scrollPos;
+                std::vector<timeline::TextInfo> textInfos;
             };
             SizeData size;
 
@@ -63,7 +64,8 @@ namespace tl
             };
             DrawData draw;
 
-            enum class MouseMode { kNone, CurrentTime, Item };
+            enum class MouseMode { kNone, CurrentTime, Item,
+                                   TransitionMove, TransitionLeft, TransitionRight };
             struct MouseItemData
             {
                 MouseItemData();

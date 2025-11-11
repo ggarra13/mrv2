@@ -147,6 +147,15 @@ namespace tl
             return _timeRange;
         }
 
+        void IItem::setTimeRange(const otime::TimeRange& value)
+        {
+            if (_timeRange == value)
+                return;
+            _timeRange = value;
+            _updates |= ui::Update::Size;
+            _updates |= ui::Update::Draw;
+        }
+
         void IItem::setScale(double value)
         {
             if (value == _scale)

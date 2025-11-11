@@ -304,6 +304,16 @@ namespace tl
                     int transitionH = 0;
                     for (const auto& item : track.transitions)
                     {
+                        const auto i = std::find_if(
+                            p.mouse.items.begin(), p.mouse.items.end(),
+                            [item](const std::shared_ptr<Private::MouseItemData>&
+                                   value) { return item == value->p; });
+                        if (i != p.mouse.items.end())
+                        {
+                            const math::Size2i& sizeHint = item->getSizeHint();
+                            y += sizeHint.h;
+                            continue;
+                        }
                         const otime::TimeRange& timeRange =
                             item->getTimeRange();
                         const math::Size2i& sizeHint = item->getSizeHint();
@@ -324,6 +334,7 @@ namespace tl
             {
                 p.size.scrollPos = scrollArea->getScrollPos();
             }
+            p.size.textInfos.clear();
         }
 
         void TimelineItem::sizeHintEvent(const ui::SizeHintEvent& event)
@@ -346,6 +357,7 @@ namespace tl
                     _displayOptions.fontSize * _displayScale);
                 p.size.fontMetrics =
                     event.fontSystem->getMetrics(p.size.fontInfo);
+                p.size.textInfos.clear();
             }
             p.size.sizeInit = false;
 
@@ -416,13 +428,15 @@ namespace tl
                 math::Box2i(g.min.x, y, g.w(), h),
                 event.style->getColorRole(ui::ColorRole::Border));
 
+            _drawInOutPoints(drawRect, event); // draws in-out points
+            _drawTimeTicks(drawRect, event);   // draws time ticks
+
+            _drawFrameMarkers(drawRect, event);  // draws optional markers
+            _drawTimeLabels(drawRect, event);  // draws labels next to time ticks
             
-            _drawInOutPoints(drawRect, event);
-            _drawTimeTicks(drawRect, event);
-            _drawFrameMarkers(drawRect, event);
-            _drawTimeLabels(drawRect, event);
-            _drawCacheInfo(drawRect, event);
-            _drawCurrentTime(drawRect, event);
+            _drawCacheInfo(drawRect, event);     // draws audio and video cache
+
+            _drawCurrentTime(drawRect, event);   // draws red line and frame text
 
             if (p.mouse.currentDropTarget >= 0 &&
                 p.mouse.currentDropTarget < p.mouse.dropTargets.size())
@@ -444,6 +458,21 @@ namespace tl
                 const otime::RationalTime time = posToTime(event.pos.x);
                 p.timeScrub->setIfChanged(time);
                 p.player->seek(time);
+                break;
+            }
+            case Private::MouseMode::TransitionMove:
+            {
+                if (!p.mouse.items.empty())
+                {
+                    for (const auto& item : p.mouse.items)
+                    {
+                        const math::Box2i& g = item->geometry;
+                        _mouse.pos.y = _mouse.pressPos.y;
+                        const math::Box2i& move = math::Box2i(
+                            g.min + _mouse.pos - _mouse.pressPos, g.getSize());
+                        item->p->setGeometry(move);
+                    }
+                }
                 break;
             }
             case Private::MouseMode::Item:
@@ -542,6 +571,35 @@ namespace tl
 
                 if (p.mouse.items.empty())
                 {
+                    for (int i = 0; i < p.tracks.size(); ++i)
+                    {
+                        if (_isTrackVisible(i))
+                        {
+                            const auto& transitions = p.tracks[i].transitions;
+                            for (int j = 0; j < transitions.size(); ++j)
+                            {
+                                const auto& item = transitions[j];
+                                if (item->getGeometry().contains(event.pos))
+                                {
+                                    p.mouse.mode = Private::MouseMode::TransitionMove;
+                                    p.mouse.items.push_back(
+                                        std::make_shared<
+                                            Private::MouseItemData>(
+                                            item, j, i));
+                                    moveToFront(item);
+                                    break;
+                                }
+                            }
+                        }
+                        if (!p.mouse.items.empty())
+                        {
+                            break;
+                        }
+                    }
+                }
+                
+                if (p.mouse.items.empty())
+                {
                     p.mouse.mode = Private::MouseMode::CurrentTime;
                     if (p.stopOnScrub)
                     {
@@ -590,6 +648,32 @@ namespace tl
                 auto otioTimeline = timeline::move(
                     p.player->getTimeline()->getTimeline().value, moveData);
                 p.player->getTimeline()->setTimeline(otioTimeline);
+            }
+            else if (!p.mouse.items.empty())
+            {
+                for (const auto& item : p.mouse.items)
+                {
+                    const std::shared_ptr<IItem> transition = item->p;
+                    const int fromTrack = item->track;
+                    const int fromIndex = item->index;
+                    // const int fromOtioIndex =
+                    //     p.tracks[fromTrack].otioIndexes[fromIndex];
+                    int x = transition->getGeometry().x();
+                    const otime::RationalTime startTime = posToTime(x) - _timeRange.start_time();
+                    otime::TimeRange timeRange = transition->getTimeRange();   
+                    const otime::RationalTime& duration = timeRange.duration();
+                    timeRange = otime::TimeRange(startTime, duration);
+                    const math::Size2i& sizeHint = transition->getSizeHint();
+                    transition->setTimeRange(timeRange);
+                    const int y = item->geometry.y();
+                    item->p->setGeometry(
+                        math::Box2i(
+                            _geometry.min.x + timeRange.start_time()
+                                                      .rescaled_to(1.0)
+                                                      .value() *
+                                                  _scale,
+                            y, sizeHint.w, sizeHint.h));
+                }
             }
             p.mouse.items.clear();
             if (!p.mouse.dropTargets.empty())
@@ -873,33 +957,35 @@ namespace tl
                 _getTimeTicks(event.fontSystem, seconds, tick);
                 if (seconds > 0.0 && tick > 0)
                 {
-                    const math::Size2i labelMaxSize =
-                        _getLabelMaxSize(event.fontSystem);
-                    std::vector<timeline::TextInfo> textInfos;
-                    for (double t = 0.0; t < duration; t += seconds)
+                    if (p.size.textInfos.empty())
                     {
-                        const otime::RationalTime time =
-                            _timeRange.start_time() +
-                            otime::RationalTime(t, 1.0).rescaled_to(
-                                _timeRange.duration().rate());
-                        const math::Box2i box(
-                            g.min.x + t / duration * w + p.size.border +
-                                p.size.margin,
-                            p.size.scrollPos.y + g.min.y + p.size.margin,
-                            labelMaxSize.w, p.size.fontMetrics.lineHeight);
-                        if (time != p.currentTime && box.intersects(drawRect))
+                        const math::Size2i labelMaxSize =
+                            _getLabelMaxSize(event.fontSystem);
+                        for (double t = 0.0; t < duration; t += seconds)
                         {
-                            const std::string label =
-                                _data->timeUnitsModel->getLabel(time);
-                            event.render->appendText(textInfos,
-                                                     event.fontSystem->getGlyphs(
-                                                         label, p.size.fontInfo),
-                                                     math::Vector2i(
-                                                         box.min.x,
-                                                         box.min.y + p.size.fontMetrics.ascender));
+                            const otime::RationalTime time =
+                                _timeRange.start_time() +
+                                otime::RationalTime(t, 1.0).rescaled_to(
+                                    _timeRange.duration().rate());
+                            const math::Box2i box(
+                                g.min.x + t / duration * w + p.size.border +
+                                p.size.margin,
+                                p.size.scrollPos.y + g.min.y + p.size.margin,
+                                labelMaxSize.w, p.size.fontMetrics.lineHeight);
+                            if (time != p.currentTime && box.intersects(drawRect))
+                            {
+                                const std::string label =
+                                    _data->timeUnitsModel->getLabel(time);
+                                event.render->appendText(p.size.textInfos,
+                                                         event.fontSystem->getGlyphs(
+                                                             label, p.size.fontInfo),
+                                                         math::Vector2i(
+                                                             box.min.x,
+                                                             box.min.y + p.size.fontMetrics.ascender));
+                            }
                         }
                     }
-                    for (const auto& textInfo : textInfos)
+                    for (const auto& textInfo : p.size.textInfos)
                     {
                         event.render->drawText(textInfo, math::Vector2i(),
                                                event.style->getColorRole(
@@ -1049,6 +1135,8 @@ namespace tl
         void TimelineItem::_textUpdate()
         {
             TLRENDER_P();
+            
+            p.size.textInfos.clear();
             for (const auto& track : p.tracks)
             {
                 const otime::RationalTime duration = track.timeRange.duration();

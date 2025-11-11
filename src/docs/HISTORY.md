@@ -47,6 +47,8 @@ ChangeLog
 - Fixed AutoPlayback when loading multiple clips.
 - Fixed Wayland's Kwin decorations to use libdecor to allow subwindows to be dragged outside the main window.
 - Simplified MacOS launcher and made it work without "exec" Window.
+- Started work on OTIO dissolves editing.  Lots of work to do.
+- Minor speed up in Edit viewport on OpenGL backend.
 
 
 v1.4.5
