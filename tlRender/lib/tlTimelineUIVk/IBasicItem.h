@@ -30,6 +30,8 @@ namespace tl
         public:
             virtual ~IBasicItem() = 0;
 
+            std::string getLabel() const;
+
             void setDisplayOptions(const DisplayOptions&) override;
 
             void sizeHintEvent(const ui::SizeHintEvent&) override;

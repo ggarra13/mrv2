@@ -439,12 +439,9 @@ namespace tl
 
             _drawInOutPoints(drawRect, event); // draws in-out points
             _drawTimeTicks(drawRect, event);   // draws time ticks
-
             _drawFrameMarkers(drawRect, event);  // draws optional markers
             _drawTimeLabels(drawRect, event);  // draws labels next to time ticks
-            
             _drawCacheInfo(drawRect, event);     // draws audio and video cache
-
             _drawCurrentTime(drawRect, event);   // draws red line and frame text
 
             if (p.mouse.currentDropTarget >= 0 &&
@@ -476,9 +473,54 @@ namespace tl
                     for (const auto& item : p.mouse.items)
                     {
                         const math::Box2i& g = item->geometry;
+                        const int transitionTrack = item->track;
+                        
+                        // const int transitionIndex = item->index;
                         _mouse.pos.y = _mouse.pressPos.y;
+                        int offset = _mouse.pos.x - _mouse.pressPos.x;
+
+                        auto transitionItem = dynamic_cast<TransitionItem*>(item->p.get());
+                        auto transitionOtio = transitionItem->getOtioObject();
+                        otime::RationalTime in_offset = transitionOtio->in_offset();
+                        otime::RationalTime out_offset = transitionOtio->out_offset();
+                        otime::TimeRange timeRange = transitionItem->getTimeRange();
                         const math::Box2i& move = math::Box2i(
                             g.min + _mouse.pos - _mouse.pressPos, g.getSize());
+
+                        // Calculate new moved TimeRange.
+                        const otime::RationalTime startTime = posToTime(move.x()) -
+                                                              _timeRange.start_time();
+                        const otime::RationalTime& duration = timeRange.duration();
+                        timeRange = otime::TimeRange(startTime, duration);
+
+                        // Get clip ranges.
+                        int i = 0;
+                        std::vector<otime::TimeRange> clipRanges;
+                        for (const auto& item : p.tracks[transitionTrack].items)
+                        {
+                            IBasicItem* clip = static_cast<IBasicItem*>(item.get());
+                            otime::TimeRange itemRange = clip->getTimeRange();
+                            const otime::RationalTime clipStartTime =
+                                itemRange.start_time() +
+                                otime::RationalTime(1.0,
+                                                    itemRange.duration().rate());
+                            const otime::RationalTime& duration =
+                                itemRange.duration() -
+                                otime::RationalTime(1.0,
+                                                    itemRange.duration().rate());
+                            itemRange = otime::TimeRange(clipStartTime, duration);
+                            if (itemRange.intersects(timeRange))
+                            {
+                                clipRanges.push_back(itemRange);
+                            }
+                        }
+                            
+                        // Clamp on clip left.
+                        if (clipRanges.size() < 2 ||
+                            startTime >= clipRanges[0].end_time_exclusive())
+                        {
+                            continue;
+                        }
                         item->p->setGeometry(move);
                     }
                 }
@@ -663,10 +705,8 @@ namespace tl
                 for (const auto& item : p.mouse.items)
                 {
                     const std::shared_ptr<IItem> transition = item->p;
-                    const int fromTrack = item->track;
-                    const int fromIndex = item->index;
-                    // const int fromOtioIndex =
-                    //     p.tracks[fromTrack].otioIndexes[fromIndex];
+                    const int transitionTrack = item->track;
+                    const int transitionIndex = item->index;
                     int x = transition->getGeometry().x();
                     const otime::RationalTime startTime = posToTime(x) - _timeRange.start_time();
                     otime::TimeRange timeRange = transition->getTimeRange();   

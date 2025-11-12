@@ -80,6 +80,11 @@ namespace tl
 
         IBasicItem::~IBasicItem() {}
 
+        std::string IBasicItem::getLabel() const
+        {
+            return _p->label;
+        }
+        
         void IBasicItem::setDisplayOptions(const DisplayOptions& value)
         {
             const bool changed = value != _displayOptions;

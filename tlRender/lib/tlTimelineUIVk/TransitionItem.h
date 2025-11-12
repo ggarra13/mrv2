@@ -40,6 +40,8 @@ namespace tl
             void clipEvent(const math::Box2i&, bool) override;
             void drawEvent(const math::Box2i&, const ui::DrawEvent&) override;
 
+            otio::SerializableObject::Retainer<otio::Transition> getOtioObject();
+            
         private:
             void _timeUnitsUpdate() override;
             void _textUpdate();
