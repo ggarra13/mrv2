@@ -147,30 +147,36 @@ else()
 endif()
 
 set(tlRender_GL_FOUND FALSE)
+set(tlRender_GL_LIBRARIES)
 if(tlRender_tlGL_LIBRARY AND tlRender_tlTimelineGL_LIBRARY)
     set(tlRender_GL_FOUND TRUE)
+    set(tlRender_GL_LIBRARIES
+	${tlRender_tlTimelineUI_LIBRARY}
+	${tlRender_tlTimelineGL_LIBRARY}
+	${tlRender_tlGL_LIBRARY}
+	${tlRender_glad_LIBRARY})
 endif()
 
 set(tlRender_VK_FOUND FALSE)
+set(tlRender_VK_LIBRARIES)
 if(tlRender_tlVk_LIBRARY AND tlRender_tlTimelineVk_LIBRARY)
     set(tlRender_VK_FOUND TRUE)
+    set(tlRender_VK_LIBRARIES
+	${tlRender_tlVk_LIBRARY}
+	${tlRender_tlTimelineVk_LIBRARY}
+	${tlRender_tlTimelineUIVk_LIBRARY})
 endif()
 
 set(tlRender_LIBRARIES
     ${tlRender_tlCore_LIBRARY}
     ${tlRender_tlIO_LIBRARY}
     ${tlRender_tlBaseApp_LIBRARY}
-    ${tlRender_tlTimelineUIVk_LIBRARY}
-    ${tlRender_tlTimelineUI_LIBRARY}
+    ${tlRender_VK_LIBRARIES}
+    ${tlRender_GL_LIBRARIES}
     ${tlRender_tlTimeline_LIBRARY}
     ${tlRender_tlDevice_LIBRARY}
     ${tlRender_tlDraw_LIBRARY}
-    ${tlRender_tlTimelineGL_LIBRARY}
-    ${tlRender_tlGL_LIBRARY}
-    ${tlRender_tlTimelineVk_LIBRARY}
     ${tlRender_tlUI_LIBRARY}
-    ${tlRender_tlVk_LIBRARY}
-    ${tlRender_glad_LIBRARY}
     ${Imath_LIBRARIES}
     ${nlohmann_json_LIBRARIES}
     ${FREETYPE_LIBRARIES}
@@ -194,9 +200,9 @@ find_package_handle_standard_args(
         tlRender_tlBaseApp_LIBRARY
         tlRender_tlIO_LIBRARY
         tlRender_tlTimeline_LIBRARY
-        tlRender_tlTimelineUI_LIBRARY
         tlRender_tlDevice_LIBRARY
-        tlRender_glad_LIBRARY)
+	${tlRender_GL_LIBRARIES}
+	${tlRender_VK_LIBRARIES})
 mark_as_advanced(
     tlRender_INCLUDE_DIR
     tlRender_tlCore_LIBRARY
@@ -238,17 +244,6 @@ if (TIFF_FOUND)
     list(APPEND tlRender_tlIO_LIBRARIES TIFF)
 endif()
 if (OpenEXR_FOUND)
-    # Print the version and the location of the config file that was found
-    message(STATUS "Found OpenEXR version: ${OpenEXR_VERSION}")
-    message(STATUS "OpenEXR config file location: ${OpenEXR_CONFIG}")
-
-    # For modern CMake with imported targets (like OpenEXR::OpenEXR)
-    # this is the most reliable way to check the linked library.
-    get_target_property(OPENEXR_LIBRARY OpenEXR::OpenEXR IMPORTED_LOCATION_RELEASE)
-    get_target_property(OPENEXR_INCLUDES OpenEXR::OpenEXR INTERFACE_INCLUDE_DIRECTORIES)
-
-    message(STATUS "OpenEXR include directories: ${OPENEXR_INCLUDES}")
-    message(STATUS "OpenEXR library file: ${OPENEXR_LIBRARY}")
     list(APPEND tlRender_tlIO_LIBRARIES OpenEXR::OpenEXR)
 endif()
 if (FFmpeg_FOUND)
