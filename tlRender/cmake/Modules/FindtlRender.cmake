@@ -200,9 +200,7 @@ find_package_handle_standard_args(
         tlRender_tlBaseApp_LIBRARY
         tlRender_tlIO_LIBRARY
         tlRender_tlTimeline_LIBRARY
-        tlRender_tlDevice_LIBRARY
-	${tlRender_GL_LIBRARIES}
-	${tlRender_VK_LIBRARIES})
+        tlRender_tlDevice_LIBRARY)
 mark_as_advanced(
     tlRender_INCLUDE_DIR
     tlRender_tlCore_LIBRARY

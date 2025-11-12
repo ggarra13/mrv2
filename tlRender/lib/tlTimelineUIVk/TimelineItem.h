@@ -105,6 +105,24 @@ namespace tl
         private:
             bool _isTrackVisible(int) const;
 
+            void _mouseMoveEventFill(ui::MouseMoveEvent&);
+            void _mouseMoveEventMove(ui::MouseMoveEvent&);
+            void _mouseMoveEventRipple(ui::MouseMoveEvent&);
+            void _mouseMoveEventRoll(ui::MouseMoveEvent&);
+            void _mouseMoveEventSlice(ui::MouseMoveEvent&);
+            void _mouseMoveEventSlide(ui::MouseMoveEvent&);
+            void _mouseMoveEventSlip(ui::MouseMoveEvent&);
+            void _mouseMoveEventTrim(ui::MouseMoveEvent&);
+            
+            void _mouseReleaseEventFill(ui::MouseClickEvent&);
+            void _mouseReleaseEventMove(ui::MouseClickEvent&);
+            void _mouseReleaseEventRipple(ui::MouseClickEvent&);
+            void _mouseReleaseEventRoll(ui::MouseClickEvent&);
+            void _mouseReleaseEventSlice(ui::MouseClickEvent&);
+            void _mouseReleaseEventSlide(ui::MouseClickEvent&);
+            void _mouseReleaseEventSlip(ui::MouseClickEvent&);
+            void _mouseReleaseEventTrim(ui::MouseClickEvent&);
+            
             void _drawInOutPoints(const math::Box2i&, const ui::DrawEvent&);
             math::Size2i
             _getLabelMaxSize(const std::shared_ptr<image::FontSystem>&) const;

@@ -70,7 +70,7 @@ namespace tl
                 kNone,
                 CurrentTime,
                 Item,
-                TransitionMove
+                Transition
             };
             
             struct MouseItemData

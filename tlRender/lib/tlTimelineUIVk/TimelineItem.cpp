@@ -462,6 +462,102 @@ namespace tl
         {
             IWidget::mouseMoveEvent(event);
             TLRENDER_P();
+            switch(p.editMode)
+            {
+            case timeline::EditMode::Fill:
+                _mouseMoveEventFill(event);
+                break;
+            case timeline::EditMode::Move:
+                _mouseMoveEventMove(event);
+                break;
+            case timeline::EditMode::Ripple:
+                _mouseMoveEventRipple(event);
+                break;
+            case timeline::EditMode::Roll:
+                _mouseMoveEventRoll(event);
+                break;
+            case timeline::EditMode::Slice:
+                _mouseMoveEventSlice(event);
+                break;
+            case timeline::EditMode::Slide:
+                _mouseMoveEventSlide(event);
+                break;
+            case timeline::EditMode::Slip:
+                _mouseMoveEventSlip(event);
+                break;
+            case timeline::EditMode::Trim:
+                _mouseMoveEventTrim(event);
+                break;
+            }
+        }
+            
+
+        void TimelineItem::_mouseMoveEventFill(ui::MouseMoveEvent& event)
+        {
+            TLRENDER_P();
+        }
+
+        void TimelineItem::_mouseMoveEventRipple(ui::MouseMoveEvent& event)
+        {
+            TLRENDER_P();
+        }
+
+        void TimelineItem::_mouseMoveEventRoll(ui::MouseMoveEvent& event)
+        {
+            TLRENDER_P();
+        }
+        
+        void TimelineItem::_mouseMoveEventSlice(ui::MouseMoveEvent& event)
+        {
+            TLRENDER_P();
+        }
+        
+        void TimelineItem::_mouseMoveEventSlide(ui::MouseMoveEvent& event)
+        {
+            TLRENDER_P();
+        }
+        
+        void TimelineItem::_mouseMoveEventSlip(ui::MouseMoveEvent& event)
+        {
+            TLRENDER_P();
+        }
+        
+        void TimelineItem::_mouseMoveEventTrim(ui::MouseMoveEvent& event)
+        {
+            TLRENDER_P();
+            if (p.mouse.items.empty())
+                return;
+            switch (p.mouse.mode)
+            {
+            case Private::MouseMode::Transition:
+            {
+                int offset = _mouse.pos.x - _mouse.pressPos.x;
+                for (const auto& item : p.mouse.items)
+                {
+                    const math::Box2i& g = item->geometry;
+                    const int transitionTrack = item->track;
+                    _mouse.pos.y = _mouse.pressPos.y;
+                    int offset = _mouse.pos.x - _mouse.pressPos.x;
+                    int x = _mouse.pressPos.x;
+                    auto transitionItem = dynamic_cast<TransitionItem*>(item->p.get());
+                    const otime::RationalTime& time = posToTime(x);
+                    std::cerr << "time=" << time << std::endl;
+                }
+                break;
+            }
+            case Private::MouseMode::Item:
+            {
+                break;
+            }
+            default:
+                break;
+            }
+        }
+
+        void TimelineItem::_mouseMoveEventMove(ui::MouseMoveEvent& event)
+        {
+            TLRENDER_P();
+            
             switch (p.mouse.mode)
             {
             case Private::MouseMode::CurrentTime:
@@ -471,16 +567,16 @@ namespace tl
                 p.player->seek(time);
                 break;
             }
-            case Private::MouseMode::TransitionMove:
+            case Private::MouseMode::Transition:
             {
                 if (!p.mouse.items.empty())
                 {
+                    
                     for (const auto& item : p.mouse.items)
                     {
                         const math::Box2i& g = item->geometry;
                         const int transitionTrack = item->track;
                         
-                        // const int transitionIndex = item->index;
                         _mouse.pos.y = _mouse.pressPos.y;
                         int offset = _mouse.pos.x - _mouse.pressPos.x;
 
@@ -649,7 +745,7 @@ namespace tl
                                 const auto& item = transitions[j];
                                 if (item->getGeometry().contains(event.pos))
                                 {
-                                    p.mouse.mode = Private::MouseMode::TransitionMove;
+                                    p.mouse.mode = Private::MouseMode::Transition;
                                     p.mouse.items.push_back(
                                         std::make_shared<
                                             Private::MouseItemData>(
@@ -681,99 +777,39 @@ namespace tl
             }
         }
 
+        
         void TimelineItem::mouseReleaseEvent(ui::MouseClickEvent& event)
         {
             IWidget::mouseReleaseEvent(event);
             TLRENDER_P();
             p.scrub->setIfChanged(false);
-            if (!p.mouse.items.empty() && p.mouse.currentDropTarget != -1)
+            switch(p.editMode)
             {
-                const auto& dropTarget =
-                    p.mouse.dropTargets[p.mouse.currentDropTarget];
-                std::vector<timeline::MoveData> moveData;
-                for (const auto& item : p.mouse.items)
-                {
-                    const int fromTrack = item->track;
-                    const int fromIndex = item->index;
-                    const int fromOtioIndex =
-                        p.tracks[fromTrack].otioIndexes[fromIndex];
-                    const int toTrack = dropTarget.track +
-                                        (item->track - p.mouse.items[0]->track);
-                    const int toIndex = dropTarget.index;
-                    int toOtioIndex = toIndex;
-                    if (toOtioIndex < p.tracks[toTrack].otioIndexes.size())
-                    {
-                        toOtioIndex = p.tracks[toTrack].otioIndexes[toIndex];
-                    }
-                    moveData.push_back(
-                        {
-                            timeline::MoveType::Clip,
-                            fromTrack, fromIndex, fromOtioIndex,
-                            toTrack, toIndex, toOtioIndex
-                        });
-                    item->p->hide();
-                }
-                if (p.moveCallback && !moveData.empty())
-                    p.moveCallback(moveData);
-                auto otioTimeline = timeline::move(
-                    p.player->getTimeline()->getTimeline().value, moveData);
-                p.player->getTimeline()->setTimeline(otioTimeline);
+            case timeline::EditMode::Fill:
+                _mouseReleaseEventFill(event);
+                break;
+            case timeline::EditMode::Move:
+                _mouseReleaseEventMove(event);
+                break;
+            case timeline::EditMode::Ripple:
+                _mouseReleaseEventRipple(event);
+                break;
+            case timeline::EditMode::Roll:
+                _mouseReleaseEventRoll(event);
+                break;
+            case timeline::EditMode::Slice:
+                _mouseReleaseEventSlice(event);
+                break;
+            case timeline::EditMode::Slide:
+                _mouseReleaseEventSlide(event);
+                break;
+            case timeline::EditMode::Slip:
+                _mouseReleaseEventSlip(event);
+                break;
+            case timeline::EditMode::Trim:
+                _mouseReleaseEventTrim(event);
+                break;
             }
-            else if (!p.mouse.items.empty() && p.mouse.mode == Private::MouseMode::TransitionMove)
-            {
-                std::vector<timeline::MoveData> moveData;
-                for (const auto& item : p.mouse.items)
-                {
-                    const std::shared_ptr<IItem> transition = item->p;
-                    const int transitionTrack = item->track;
-                    const int transitionIndex = item->index;
-                    int x = transition->getGeometry().x();
-                    const otime::RationalTime startTime = posToTime(x) - _timeRange.start_time();
-                    otime::TimeRange timeRange = transition->getTimeRange();   
-                    const otime::RationalTime& duration = timeRange.duration();
-                    timeRange = otime::TimeRange(startTime, duration);
-                    const math::Size2i& sizeHint = transition->getSizeHint();
-                    transition->setTimeRange(timeRange);
-                    const int y = item->geometry.y();
-                    item->p->setGeometry(
-                        math::Box2i(
-                            _geometry.min.x + timeRange.start_time()
-                                                      .rescaled_to(1.0)
-                                                      .value() *
-                                                  _scale,
-                            y, sizeHint.w, sizeHint.h));
-
-                    std::vector<IBasicItem*> items;
-                    _getTransitionItems(items, transitionTrack, timeRange);
-                    const otime::TimeRange itemRange = items[1]->getTimeRange();
-
-                    const int transitionOtioIndex =
-                        p.tracks[transitionTrack].otioTransitionIndexes[transitionIndex];
-                    const otime::RationalTime in_offset = itemRange.start_time() -
-                                                          timeRange.start_time();
-                    const otime::RationalTime out_offset = timeRange.end_time_exclusive() -
-                                                           itemRange.start_time();
-                    moveData.push_back(
-                        {
-                            timeline::MoveType::Transition,
-                            transitionTrack, transitionIndex, transitionOtioIndex,
-                            transitionTrack, transitionIndex, transitionOtioIndex,
-                            in_offset, out_offset
-                        });
-                }
-                if (p.moveCallback && !moveData.empty())
-                    p.moveCallback(moveData);
-                auto otioTimeline = timeline::move(
-                    p.player->getTimeline()->getTimeline().value, moveData);
-                p.player->getTimeline()->setTimeline(otioTimeline);
-            }
-            p.mouse.items.clear();
-            if (!p.mouse.dropTargets.empty())
-            {
-                p.mouse.dropTargets.clear();
-                _updates |= ui::Update::Draw;
-            }
-            p.mouse.currentDropTarget = -1;
             p.mouse.mode = Private::MouseMode::kNone;
         }
 
@@ -1275,6 +1311,130 @@ namespace tl
             }
         }
 
+        void TimelineItem::_mouseReleaseEventFill(ui::MouseClickEvent& event)
+        {
+            TLRENDER_P();
+        }
+        
+        void TimelineItem::_mouseReleaseEventMove(ui::MouseClickEvent& event)
+        {
+            TLRENDER_P();
+            if (!p.mouse.items.empty() && p.mouse.currentDropTarget != -1)
+            {
+                const auto& dropTarget =
+                    p.mouse.dropTargets[p.mouse.currentDropTarget];
+                std::vector<timeline::MoveData> moveData;
+                for (const auto& item : p.mouse.items)
+                {
+                    const int fromTrack = item->track;
+                    const int fromIndex = item->index;
+                    const int fromOtioIndex =
+                        p.tracks[fromTrack].otioIndexes[fromIndex];
+                    const int toTrack = dropTarget.track +
+                                        (item->track - p.mouse.items[0]->track);
+                    const int toIndex = dropTarget.index;
+                    int toOtioIndex = toIndex;
+                    if (toOtioIndex < p.tracks[toTrack].otioIndexes.size())
+                    {
+                        toOtioIndex = p.tracks[toTrack].otioIndexes[toIndex];
+                    }
+                    moveData.push_back(
+                        {
+                            timeline::MoveType::Clip,
+                            fromTrack, fromIndex, fromOtioIndex,
+                            toTrack, toIndex, toOtioIndex
+                        });
+                    item->p->hide();
+                }
+                if (p.moveCallback && !moveData.empty())
+                    p.moveCallback(moveData);
+                auto otioTimeline = timeline::move(
+                    p.player->getTimeline()->getTimeline().value, moveData);
+                p.player->getTimeline()->setTimeline(otioTimeline);
+            }
+            else if (!p.mouse.items.empty() &&
+                     p.mouse.mode == Private::MouseMode::Transition)
+            {
+                std::vector<timeline::MoveData> moveData;
+                for (const auto& item : p.mouse.items)
+                {
+                    const std::shared_ptr<IItem> transition = item->p;
+                    const int transitionTrack = item->track;
+                    const int transitionIndex = item->index;
+                    int x = transition->getGeometry().x();
+                    const otime::RationalTime startTime = posToTime(x) - _timeRange.start_time();
+                    otime::TimeRange timeRange = transition->getTimeRange();   
+                    const otime::RationalTime& duration = timeRange.duration();
+                    timeRange = otime::TimeRange(startTime, duration);
+                    const math::Size2i& sizeHint = transition->getSizeHint();
+                    transition->setTimeRange(timeRange);
+                    const int y = item->geometry.y();
+                    item->p->setGeometry(
+                        math::Box2i(
+                            _geometry.min.x + timeRange.start_time()
+                                                      .rescaled_to(1.0)
+                                                      .value() *
+                                                  _scale,
+                            y, sizeHint.w, sizeHint.h));
+
+                    std::vector<IBasicItem*> items;
+                    _getTransitionItems(items, transitionTrack, timeRange);
+                    const otime::TimeRange itemRange = items[1]->getTimeRange();
+
+                    const int transitionOtioIndex =
+                        p.tracks[transitionTrack].otioTransitionIndexes[transitionIndex];
+                    const otime::RationalTime in_offset = itemRange.start_time() -
+                                                          timeRange.start_time();
+                    const otime::RationalTime out_offset = timeRange.end_time_exclusive() -
+                                                           itemRange.start_time();
+                    moveData.push_back(
+                        {
+                            timeline::MoveType::Transition,
+                            transitionTrack, transitionIndex, transitionOtioIndex,
+                            transitionTrack, transitionIndex, transitionOtioIndex,
+                            in_offset, out_offset
+                        });
+                }
+                if (p.moveCallback && !moveData.empty())
+                    p.moveCallback(moveData);
+                auto otioTimeline = timeline::move(
+                    p.player->getTimeline()->getTimeline().value, moveData);
+                p.player->getTimeline()->setTimeline(otioTimeline);
+            }
+            p.mouse.items.clear();
+            if (!p.mouse.dropTargets.empty())
+            {
+                p.mouse.dropTargets.clear();
+                _updates |= ui::Update::Draw;
+            }
+            p.mouse.currentDropTarget = -1;
+        }
+        
+        void TimelineItem::_mouseReleaseEventRipple(ui::MouseClickEvent& event)
+        {
+            TLRENDER_P();
+        }
+        
+        void TimelineItem::_mouseReleaseEventSlice(ui::MouseClickEvent& event)
+        {
+            TLRENDER_P();
+        }
+        
+        void TimelineItem::_mouseReleaseEventSlide(ui::MouseClickEvent& event)
+        {
+            TLRENDER_P();
+        }
+        
+        void TimelineItem::_mouseReleaseEventSlip(ui::MouseClickEvent& event)
+        {
+            TLRENDER_P();
+        }        
+        
+        void TimelineItem::_mouseReleaseEventTrim(ui::MouseClickEvent& event)
+        {
+            TLRENDER_P();
+        }
+        
         TimelineItem::Private::MouseItemData::MouseItemData() {}
 
         TimelineItem::Private::MouseItemData::MouseItemData(
