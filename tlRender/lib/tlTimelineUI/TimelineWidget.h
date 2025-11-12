@@ -52,6 +52,9 @@ namespace tl
             //! Set whether the timeline is editable.
             void setEditable(bool);
 
+            //! Set action mode.
+            void setEditMode(const timeline::EditMode);
+            
             ///@}
 
             //! \name View

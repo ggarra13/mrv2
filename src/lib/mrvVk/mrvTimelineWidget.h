@@ -130,6 +130,8 @@ namespace mrv
             int keyPressEvent(unsigned key, const int modifiers);
             int keyReleaseEvent(unsigned key, const int modifiers);
 
+            void setEditMode(const timeline::EditMode);
+            
             void moveCallback(const std::vector<tl::timeline::MoveData>&);
 
             void continuePlaying();

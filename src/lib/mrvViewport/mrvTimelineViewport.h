@@ -95,6 +95,12 @@ namespace mrv
             //! Get the action mode.
             ActionMode getActionMode() noexcept;
 
+            //! Set the edit mode.
+            void setEditMode(const timeline::EditMode& mode) noexcept;
+            
+            //! Get the edit mode.
+            timeline::EditMode getEditMode() noexcept;
+
             //! Get the color information of the selected area
             const area::Info& getColorAreaInfo() noexcept;
 

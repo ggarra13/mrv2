@@ -2545,6 +2545,24 @@ namespace mrv
 
         for (const auto& move : moves)
         {
+            if (move.type == tl::timeline::MoveType::Transition)
+            {
+                if (auto track = otio::dynamic_retainer_cast<otio::Track>(
+                        tracks[move.fromTrack]))
+                {
+                    auto child = track->children()[move.fromOtioIndex];
+                    auto transition = otio::dynamic_retainer_cast<otio::Transition>(child);
+                    if (!transition)
+                    {
+                        LOG_ERROR("Invalid otio transition index");
+                        continue;
+                    }
+                    transition->set_in_offset(move.in_offset);
+                    transition->set_out_offset(move.out_offset);
+                }
+                continue;
+            }
+            
             if (move.toIndex < 0 || move.toTrack < 0 ||
                 move.toTrack >= tracks.size())
             {
@@ -2636,6 +2654,8 @@ namespace mrv
         otio::ErrorStatus errorStatus;
         for (const auto& move : moves)
         {
+            if (move.type == tl::timeline::MoveType::Transition)
+                continue;
             std::vector<int> fromOtioIndexes;
             std::vector<int> toOtioIndexes;
             if (auto track = otio::dynamic_retainer_cast<otio::Track>(
@@ -3143,6 +3163,17 @@ namespace mrv
             b->labelcolor(FL_FOREGROUND_COLOR);
         }
         b->redraw();
+        
+        if (active && ui->uiTimeline->isEditable())
+        {
+            ui->uiEditGroup->show();
+            ui->uiActionGroup->hide();
+        }
+        else
+        {
+            ui->uiEditGroup->hide();
+            ui->uiActionGroup->show();
+        }
     }
 
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui)

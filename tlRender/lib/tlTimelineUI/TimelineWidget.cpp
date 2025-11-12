@@ -23,6 +23,7 @@ namespace tl
             std::shared_ptr<ItemData> itemData;
             std::shared_ptr<timeline::Player> player;
             std::shared_ptr<observer::Value<bool> > editable;
+            timeline::EditMode editMode = timeline::EditMode::Move;
             std::shared_ptr<observer::Value<bool> > frameView;
             std::function<void(bool)> frameViewCallback;
             std::shared_ptr<observer::Value<bool> > scrollToCurrentFrame;
@@ -81,6 +82,7 @@ namespace tl
             p.itemData = std::make_shared<ItemData>();
             p.itemData->timeUnitsModel = timeUnitsModel;
 
+            p.editMode = timeline::EditMode::Move;
             p.editable = observer::Value<bool>::create(false);
             p.frameView = observer::Value<bool>::create(true);
             p.scrollToCurrentFrame = observer::Value<bool>::create(true);
@@ -203,6 +205,15 @@ namespace tl
             }
         }
 
+        void TimelineWidget::setEditMode(const timeline::EditMode value)
+        {
+            TLRENDER_P();
+            if (p.timelineItem)
+            {
+                p.timelineItem->setEditMode(value);
+            }
+        }
+        
         void TimelineWidget::setViewZoom(double value)
         {
             setViewZoom(

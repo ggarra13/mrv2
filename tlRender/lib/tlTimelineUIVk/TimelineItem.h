@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
 #pragma once
@@ -55,6 +56,9 @@ namespace tl
 
             //! Set whether the timeline is editable.
             void setEditable(bool);
+
+            //! Set the action mode.
+            void setEditMode(const timeline::EditMode);
 
             //! Set whether playback stops when scrubbing.
             void setStopOnScrub(bool);
@@ -112,10 +116,9 @@ namespace tl
             void _drawTimeLabels(const math::Box2i&, const ui::DrawEvent&);
             void _drawCacheInfo(const math::Box2i&, const ui::DrawEvent&);
             void _drawCurrentTime(const math::Box2i&, const ui::DrawEvent&);
-
             void _getTransitionItems(std::vector<IBasicItem*>& items,
                                      const int trackNumber,
-                                     const otime::TimeRange transitionRange);
+                                     const otime::TimeRange& transitionRange);
             void _addOneFrameGap(const otime::RationalTime& videoTime,
                                  otime::TimeRange& timeRange);
             void _tracksUpdate();

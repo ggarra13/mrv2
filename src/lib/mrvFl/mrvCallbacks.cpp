@@ -2522,6 +2522,7 @@ namespace mrv
         Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
         bool editable = (bool)item->value();
         ui->uiTimeline->setEditable(editable);
+        set_edit_button(mrv::editMode, ui);
         Message msg;
         msg["command"] = "setTimelineEditable";
         msg["value"] = editable;

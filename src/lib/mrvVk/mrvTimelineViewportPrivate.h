@@ -111,10 +111,13 @@ namespace mrv
             //! Per-monitor Display/View OCIO Options.
             static std::vector<timeline::OCIOOptions> monitorOCIOOptions;
 
-            //! Action Mode
+            //! Action Mode.
             static ActionMode actionMode;
 
-            //! Playback mode before scrubbing
+            //! Edit Mode.
+            static timeline::EditMode editMode;
+            
+            //! Playback mode before scrubbing.
             static tl::timeline::Playback playbackMode;
 
             //! Boolean flag used to mark that scrubbing is being used.

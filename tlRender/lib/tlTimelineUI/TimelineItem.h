@@ -1,13 +1,16 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
 #pragma once
 
-#include <tlTimelineUI/IItem.h>
+#include <tlTimelineUI/IBasicItem.h>
 
 #include <tlTimeline/Edit.h>
 #include <tlTimeline/Player.h>
+
+#include <vector>
 
 namespace tl
 {
@@ -65,6 +68,9 @@ namespace tl
             //! Returns whether a clip is getting dragged.
             bool isDraggingClip() const;
 
+            //! Set the edit mode for the window.
+            void setEditMode(const timeline::EditMode mode);
+            
             //! Sets a callback for inserting items
             void setMoveCallback(const std::function<void(
                                      const std::vector<timeline::MoveData>&)>&);
@@ -113,7 +119,11 @@ namespace tl
             void _drawTimeLabels(const math::Box2i&, const ui::DrawEvent&);
             void _drawCacheInfo(const math::Box2i&, const ui::DrawEvent&);
             void _drawCurrentTime(const math::Box2i&, const ui::DrawEvent&);
-
+            void _getTransitionItems(std::vector<IBasicItem*>& items,
+                                     const int trackNumber,
+                                     const otime::TimeRange& transitionRange);
+            void _addOneFrameGap(const otime::RationalTime& videoTime,
+                                 otime::TimeRange& timeRange);
             void _tracksUpdate();
             void _textUpdate();
 

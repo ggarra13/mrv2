@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <tlTimeline/Edit.h>
+
 namespace mrv
 {
     enum class ActionMode {
@@ -22,14 +24,6 @@ namespace mrv
         kFilledCircle,
         kFilledRectangle,
         kFilledPolygon,
-        kEditOverwrite,
-        kEditInsert,
-        kEditTrim,
-        kEditSlice,
-        kEditSlip,
-        kEditSlide,
-        kEditRipple,
-        kEditRoll,
-        kEditFill
     };
+
 }

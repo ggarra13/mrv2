@@ -197,6 +197,15 @@ namespace tl
                 }
             }
         }
+        
+        void TimelineWidget::setEditMode(const timeline::EditMode value)
+        {
+            TLRENDER_P();
+            if (p.timelineItem)
+            {
+                p.timelineItem->setEditMode(value);
+            }
+        }
 
         void TimelineWidget::setViewZoom(double value)
         {

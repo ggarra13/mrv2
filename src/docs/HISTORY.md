@@ -49,6 +49,9 @@ ChangeLog
 - Simplified MacOS launcher and made it work without "exec" Window.
 - Started work on OTIO dissolves editing.  Lots of work to do.
 - Minor speed up in Edit viewport on OpenGL backend.
+- Improved speed of compilation of Vulkan backend.
+- OTIO transitions (dissolves) can now be moved and trimmed.
+- Added new Editing tools (only move working and no icons yet).
 
 
 v1.4.5

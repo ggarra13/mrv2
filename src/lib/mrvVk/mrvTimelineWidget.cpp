@@ -284,6 +284,7 @@ namespace mrv
                                                       context);
             p.timelineWidget->setEditable(false);
             p.timelineWidget->setFrameView(true);
+            p.timelineWidget->setEditMode(timeline::EditMode::Move);
             p.timelineWidget->setScrollBarsVisible(false);
             p.timelineWidget->setMoveCallback(
                 std::bind(
@@ -345,6 +346,11 @@ namespace mrv
             _p->timelineWidget->setEditable(value);
         }
 
+        void TimelineWidget::setEditMode(const timeline::EditMode value)
+        {
+            _p->timelineWidget->setEditMode(value);
+        }
+        
         void TimelineWidget::setScrollBarsVisible(bool value)
         {
             _p->timelineWidget->setScrollBarsVisible(value);

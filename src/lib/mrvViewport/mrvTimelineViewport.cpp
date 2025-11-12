@@ -108,6 +108,7 @@ namespace mrv
         math::Box2i TimelineViewport::Private::selection =
             math::Box2i(0, 0, -1, -1);
         image::Size TimelineViewport::Private::videoSize;
+        timeline::EditMode TimelineViewport::Private::editMode = timeline::EditMode::Move;
         ActionMode TimelineViewport::Private::actionMode = ActionMode::kScrub;
         std::vector<timeline::OCIOOptions>
         TimelineViewport::Private::monitorOCIOOptions;
@@ -246,6 +247,72 @@ namespace mrv
             updateUndoRedoButtons();
         }
 
+        timeline::EditMode TimelineViewport::getEditMode() noexcept
+        {
+            return _p->editMode;
+        }
+        
+        void TimelineViewport::setEditMode(const timeline::EditMode& mode) noexcept
+        {
+            TLRENDER_P();
+            
+            if (mode == p.editMode)
+                return;
+
+            p.editMode = mode;
+            
+            p.ui->uiMove->value(0);
+            p.ui->uiTrim->value(0);
+            p.ui->uiSlice->value(0);
+            p.ui->uiSlip->value(0);
+            p.ui->uiSlide->value(0);
+            p.ui->uiRipple->value(0);
+            p.ui->uiRoll->value(0);
+            p.ui->uiFill->value(0);
+
+
+            switch(mode)
+            {
+            case timeline::EditMode::kNone:
+                p.ui->uiEditStatus->copy_label(_("None"));
+                break;
+            case timeline::EditMode::Move:
+                p.ui->uiMove->value(1);
+                p.ui->uiEditStatus->copy_label(_("Move"));
+                break;
+            case timeline::EditMode::Trim:
+                p.ui->uiTrim->value(1);
+                p.ui->uiEditStatus->copy_label(_("Trim"));
+                break;
+            case timeline::EditMode::Slice:
+                p.ui->uiSlice->value(1);
+                p.ui->uiEditStatus->copy_label(_("Slice"));
+                break;
+            case timeline::EditMode::Slip:
+                p.ui->uiSlip->value(1);
+                p.ui->uiEditStatus->copy_label(_("Slip"));
+                break;
+            case timeline::EditMode::Slide:
+                p.ui->uiSlide->value(1);
+                p.ui->uiEditStatus->copy_label(_("Slide"));
+                break;
+            case timeline::EditMode::Ripple:
+                p.ui->uiRipple->value(1);
+                p.ui->uiEditStatus->copy_label(_("Ripple"));
+                break;
+            case timeline::EditMode::Roll:
+                p.ui->uiRoll->value(1);
+                p.ui->uiEditStatus->copy_label(_("Roll"));
+                break;
+            case timeline::EditMode::Fill:
+                p.ui->uiFill->value(1);
+                p.ui->uiEditStatus->copy_label(_("Fill"));
+                break;
+            }
+            
+            p.ui->uiTimeline->setEditMode(mode);
+        }
+
         ActionMode TimelineViewport::getActionMode() noexcept
         {
             return _p->actionMode;
@@ -379,21 +446,6 @@ namespace mrv
             case ActionMode::kLink:
                 p.ui->uiLink->value(1);
                 p.ui->uiStatus->copy_label(_("Link"));
-                break;
-            case ActionMode::kEditTrim:
-                p.ui->uiStatus->copy_label(_("Trim"));
-                break;
-            case ActionMode::kEditSlip:
-                p.ui->uiStatus->copy_label(_("Slip"));
-                break;
-            case ActionMode::kEditSlide:
-                p.ui->uiStatus->copy_label(_("Slide"));
-                break;
-            case ActionMode::kEditRipple:
-                p.ui->uiStatus->copy_label(_("Ripple"));
-                break;
-            case ActionMode::kEditRoll:
-                p.ui->uiStatus->copy_label(_("Roll"));
                 break;
             }
 

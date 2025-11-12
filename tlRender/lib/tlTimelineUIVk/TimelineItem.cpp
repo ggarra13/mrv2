@@ -141,6 +141,7 @@ namespace tl
                             track.transitions.push_back(TransitionItem::create(
                                 transition, scale, options, displayOptions,
                                 itemData, context, shared_from_this()));
+                            track.otioTransitionIndexes.push_back(otioIndex);
                         }
                         ++otioIndex;
                     }
@@ -208,6 +209,11 @@ namespace tl
         void TimelineItem::setEditable(bool value)
         {
             _p->editable = value;
+        }
+        
+        void TimelineItem::setEditMode(const timeline::EditMode value)
+        {
+            _p->editMode = value;
         }
 
         void TimelineItem::setStopOnScrub(bool value)
@@ -509,7 +515,7 @@ namespace tl
                         // Clamp on clips.
                         if (timeRanges.size() < 2 ||
                             startTime >= timeRanges[0].end_time_exclusive() ||
-                            startTime + duration <= timeRanges[1].start_time())
+                            startTime + duration < timeRanges[1].start_time())
                         {
                             continue;
                         }
@@ -680,7 +686,6 @@ namespace tl
             IWidget::mouseReleaseEvent(event);
             TLRENDER_P();
             p.scrub->setIfChanged(false);
-            p.mouse.mode = Private::MouseMode::kNone;
             if (!p.mouse.items.empty() && p.mouse.currentDropTarget != -1)
             {
                 const auto& dropTarget =
@@ -701,18 +706,22 @@ namespace tl
                         toOtioIndex = p.tracks[toTrack].otioIndexes[toIndex];
                     }
                     moveData.push_back(
-                        {fromTrack, fromIndex, fromOtioIndex, toTrack, toIndex,
-                         toOtioIndex});
+                        {
+                            timeline::MoveType::Clip,
+                            fromTrack, fromIndex, fromOtioIndex,
+                            toTrack, toIndex, toOtioIndex
+                        });
                     item->p->hide();
                 }
-                if (p.moveCallback)
+                if (p.moveCallback && !moveData.empty())
                     p.moveCallback(moveData);
                 auto otioTimeline = timeline::move(
                     p.player->getTimeline()->getTimeline().value, moveData);
                 p.player->getTimeline()->setTimeline(otioTimeline);
             }
-            else if (!p.mouse.items.empty())
+            else if (!p.mouse.items.empty() && p.mouse.mode == Private::MouseMode::TransitionMove)
             {
+                std::vector<timeline::MoveData> moveData;
                 for (const auto& item : p.mouse.items)
                 {
                     const std::shared_ptr<IItem> transition = item->p;
@@ -733,7 +742,30 @@ namespace tl
                                                       .value() *
                                                   _scale,
                             y, sizeHint.w, sizeHint.h));
+
+                    std::vector<IBasicItem*> items;
+                    _getTransitionItems(items, transitionTrack, timeRange);
+                    const otime::TimeRange itemRange = items[1]->getTimeRange();
+
+                    const int transitionOtioIndex =
+                        p.tracks[transitionTrack].otioTransitionIndexes[transitionIndex];
+                    const otime::RationalTime in_offset = itemRange.start_time() -
+                                                          timeRange.start_time();
+                    const otime::RationalTime out_offset = timeRange.end_time_exclusive() -
+                                                           itemRange.start_time();
+                    moveData.push_back(
+                        {
+                            timeline::MoveType::Transition,
+                            transitionTrack, transitionIndex, transitionOtioIndex,
+                            transitionTrack, transitionIndex, transitionOtioIndex,
+                            in_offset, out_offset
+                        });
                 }
+                if (p.moveCallback && !moveData.empty())
+                    p.moveCallback(moveData);
+                auto otioTimeline = timeline::move(
+                    p.player->getTimeline()->getTimeline().value, moveData);
+                p.player->getTimeline()->setTimeline(otioTimeline);
             }
             p.mouse.items.clear();
             if (!p.mouse.dropTargets.empty())
@@ -742,6 +774,7 @@ namespace tl
                 _updates |= ui::Update::Draw;
             }
             p.mouse.currentDropTarget = -1;
+            p.mouse.mode = Private::MouseMode::kNone;
         }
 
         bool TimelineItem::isDraggingClip() const
@@ -789,7 +822,7 @@ namespace tl
         
         void TimelineItem::_getTransitionItems(std::vector<IBasicItem*>& items,
                                                const int trackNumber,
-                                               const otime::TimeRange transitionRange)
+                                               const otime::TimeRange& transitionRange)
         {
             TLRENDER_P();
             

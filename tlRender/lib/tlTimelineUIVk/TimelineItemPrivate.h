@@ -19,6 +19,7 @@ namespace tl
             otime::TimeRange inOutRange = time::invalidTimeRange;
             timeline::PlayerCacheInfo cacheInfo;
             bool editable = false;
+            timeline::EditMode editMode = timeline::EditMode::Move;
             bool stopOnScrub = true;
             std::function<void(const std::vector<timeline::MoveData>&)>
                 moveCallback;
@@ -39,6 +40,7 @@ namespace tl
                 std::vector<std::shared_ptr<IItem> > items;
                 std::vector<int> otioIndexes;
                 std::vector<std::shared_ptr<TransitionItem> > transitions;
+                std::vector<int> otioTransitionIndexes;
                 math::Size2i size;
                 int clipHeight = 0;
             };
@@ -64,8 +66,13 @@ namespace tl
             };
             DrawData draw;
 
-            enum class MouseMode { kNone, CurrentTime, Item,
-                                   TransitionMove, TransitionLeft, TransitionRight };
+            enum class MouseMode {
+                kNone,
+                CurrentTime,
+                Item,
+                TransitionMove
+            };
+            
             struct MouseItemData
             {
                 MouseItemData();

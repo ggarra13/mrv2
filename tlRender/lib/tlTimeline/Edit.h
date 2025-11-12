@@ -17,15 +17,41 @@ namespace tl
         otio::SerializableObject::Retainer<otio::Timeline>
         copy(const otio::SerializableObject::Retainer<otio::Timeline>&);
 
+        enum class EditMode
+        {
+            kNone,
+            Move,
+            Trim,
+            Slice,
+            Slip,
+            Slide,
+            Ripple,
+            Roll,
+            Fill,
+        };
+        
+        enum class MoveType
+        {
+            Clip,
+            Transition
+        };
+        
         //! Move items data.
         struct MoveData
         {
+            MoveType type = MoveType::Clip;
+
+            // Clip move variables.
             int fromTrack = 0;
             int fromIndex = 0;
             int fromOtioIndex = 0;
             int toTrack = 0;
             int toIndex = 0;
             int toOtioIndex = 0;
+
+            // Transition move variables.
+            otime::RationalTime in_offset = time::invalidTime;
+            otime::RationalTime out_offset = time::invalidTime;
         };
 
         //! Move items in the timeline.
