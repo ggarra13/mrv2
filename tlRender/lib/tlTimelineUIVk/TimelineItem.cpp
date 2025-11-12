@@ -540,7 +540,8 @@ namespace tl
                     int offset = _mouse.pos.x - _mouse.pressPos.x;
                     int x = _mouse.pressPos.x;
                     auto transitionItem = dynamic_cast<TransitionItem*>(item->p.get());
-                    const otime::RationalTime& time = posToTime(x);
+                    const otime::RationalTime& time = posToTime(x) -
+                                                      _timeRange.start_time();
                     std::cerr << "time=" << time << std::endl;
                 }
                 break;
@@ -1411,6 +1412,11 @@ namespace tl
         }
         
         void TimelineItem::_mouseReleaseEventRipple(ui::MouseClickEvent& event)
+        {
+            TLRENDER_P();
+        }
+        
+        void TimelineItem::_mouseReleaseEventRoll(ui::MouseClickEvent& event)
         {
             TLRENDER_P();
         }
