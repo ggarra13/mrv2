@@ -4,12 +4,14 @@
 
 #pragma once
 
-#include <tlTimelineUIVk/IItem.h>
+#include <tlTimelineUIVk/IBasicItem.h>
 
 #include <tlTimeline/Edit.h>
 #include <tlTimeline/Player.h>
 
 #include <FL/Fl_Vk_Context.H>
+
+#include <vector>
 
 namespace tl
 {
@@ -111,6 +113,11 @@ namespace tl
             void _drawCacheInfo(const math::Box2i&, const ui::DrawEvent&);
             void _drawCurrentTime(const math::Box2i&, const ui::DrawEvent&);
 
+            void _getTransitionItems(std::vector<IBasicItem*>& items,
+                                     const int trackNumber,
+                                     const otime::TimeRange transitionRange);
+            void _addOneFrameGap(const otime::RationalTime& videoTime,
+                                 otime::TimeRange& timeRange);
             void _tracksUpdate();
             void _textUpdate();
 
