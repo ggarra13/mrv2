@@ -479,9 +479,6 @@ namespace tl
                         int offset = _mouse.pos.x - _mouse.pressPos.x;
 
                         auto transitionItem = dynamic_cast<TransitionItem*>(item->p.get());
-                        auto transitionOtio = transitionItem->getOtioObject();
-                        otime::RationalTime in_offset = transitionOtio->in_offset();
-                        otime::RationalTime out_offset = transitionOtio->out_offset();
                         otime::TimeRange timeRange = transitionItem->getTimeRange();
                         const math::Box2i& move = math::Box2i(
                             g.min + _mouse.pos - _mouse.pressPos, g.getSize());

@@ -15,7 +15,6 @@ namespace tl
     {
         struct TransitionItem::Private
         {
-            otio::SerializableObject::Retainer<otio::Transition> transition;
             std::string label;
             ui::FontRole labelFontRole = ui::FontRole::Label;
             std::string durationLabel;
@@ -67,7 +66,6 @@ namespace tl
 
             TLRENDER_P();
 
-            p.transition = const_cast<otio::SerializableObject::Retainer<otio::Transition >& >(transition);
             p.label = transition->name();
             if (p.label.empty())
             {
@@ -85,11 +83,6 @@ namespace tl
         }
 
         TransitionItem::~TransitionItem() {}
-        
-        otio::SerializableObject::Retainer<otio::Transition> TransitionItem::getOtioObject()
-        {
-            return _p->transition;
-        }
         
         std::shared_ptr<TransitionItem> TransitionItem::create(
             const otio::SerializableObject::Retainer<otio::Transition>&
