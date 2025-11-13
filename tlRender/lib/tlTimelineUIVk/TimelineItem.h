@@ -5,6 +5,8 @@
 
 #pragma once
 
+#define DEBUG_TIME_RANGES 0
+
 #include <tlTimelineUIVk/IBasicItem.h>
 
 #include <tlTimeline/Edit.h>

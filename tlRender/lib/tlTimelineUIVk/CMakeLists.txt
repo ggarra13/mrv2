@@ -20,6 +20,14 @@ set(SOURCE
     Init.cpp
     ThumbnailSystem.cpp
     TimelineItem.cpp
+    TimelineItemFill.cpp
+    TimelineItemMove.cpp
+    TimelineItemRipple.cpp
+    TimelineItemRoll.cpp
+    TimelineItemSlice.cpp
+    TimelineItemSlide.cpp
+    TimelineItemSlip.cpp
+    TimelineItemTrim.cpp
     TimelineWidget.cpp
     TransitionItem.cpp
     VideoClipItem.cpp)

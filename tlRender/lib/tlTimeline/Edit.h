@@ -17,17 +17,21 @@ namespace tl
         otio::SerializableObject::Retainer<otio::Timeline>
         copy(const otio::SerializableObject::Retainer<otio::Timeline>&);
 
+        //! Edit Modes supported.
+        //! \@see: https://github.com/mccartnm/OpenTimelineIO/blob/openedit_design/docs/design/editorial_design.md
         enum class EditMode
         {
             kNone,
             Fill,
+            Insert,
             Move,
+            Overwrite,
             Ripple,
-            Roll,
+            Roll,    // Slides One clip to the side, expanding its neighbor
             Slice,
             Slip,
             Slide,
-            Trim,
+            Trim,   // Moves clip's side leaving a mew gap
             
             Count,
             First = Move
