@@ -18,7 +18,7 @@ namespace tl
             otime::RationalTime currentTime = time::invalidTime;
             otime::TimeRange inOutRange = time::invalidTimeRange;
             timeline::PlayerCacheInfo cacheInfo;
-            timeline::EditMode editMode = timeline::EditMode::Move;
+            timeline::EditMode editMode = timeline::EditMode::Count;
             bool editable = false;
             bool stopOnScrub = true;
             std::function<void(const std::vector<timeline::MoveData>&)>

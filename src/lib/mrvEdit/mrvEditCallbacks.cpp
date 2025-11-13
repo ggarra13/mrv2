@@ -807,11 +807,14 @@ namespace mrv
         player = ui->uiView->getTimelinePlayer();
         buffer.annotations = player->getAllAnnotations();
         undoBuffer.push_back(buffer);
+
+        ui->uiUndoEdit->activate();
     }
 
     void edit_clear_redo(ViewerUI* ui)
     {
         redoBuffer.clear();
+        ui->uiRedoEdit->deactivate();
     }
 
     bool edit_has_undo()
@@ -847,11 +850,7 @@ namespace mrv
         player = ui->uiView->getTimelinePlayer();
         buffer.annotations = player->getAllAnnotations();
         redoBuffer.push_back(buffer);
-    }
-
-    void edit_remove_undo()
-    {
-        undoBuffer.pop_back();
+        ui->uiRedoEdit->activate();
     }
 
     void edit_copy_frame_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -1684,17 +1683,7 @@ namespace mrv
 
         tcp->pushMessage("Edit/Audio Gap/Remove", time);
     }
-
-    void edit_trim_cb(Fl_Menu_* m, ViewerUI* ui) {}
-
-    void edit_slip_cb(Fl_Menu_* m, ViewerUI* ui) {}
-
-    void edit_slide_cb(Fl_Menu_* m, ViewerUI* ui) {}
-
-    void edit_ripple_cb(Fl_Menu_* m, ViewerUI* ui) {}
-
-    void edit_roll_cb(Fl_Menu_* m, ViewerUI* ui) {}
-
+    
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1708,6 +1697,8 @@ namespace mrv
 
         auto buffer = undoBuffer.back();
         undoBuffer.pop_back();
+        if (undoBuffer.empty())
+            ui->uiUndoEdit->deactivate();
 
         if (!switchToEDL(buffer.fileName, ui))
             return;
@@ -1748,6 +1739,8 @@ namespace mrv
 
         auto buffer = redoBuffer.back();
         redoBuffer.pop_back();
+        if (redoBuffer.empty())
+            ui->uiRedoEdit->deactivate();
 
         if (!switchToEDL(buffer.fileName, ui))
             return;
@@ -2530,6 +2523,8 @@ namespace mrv
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
+        
+        edit_store_undo(player, ui);
 
         const auto& startTimeOpt = timeline->global_start_time();
         otime::RationalTime startTime(0.0, timeline->duration().rate());
@@ -2543,6 +2538,7 @@ namespace mrv
         const auto& stack = timeline->tracks();
         const auto& tracks = stack->children();
 
+        
         for (const auto& move : moves)
         {
             if (move.type == tl::timeline::MoveType::Transition)
@@ -2555,6 +2551,19 @@ namespace mrv
                     if (!transition)
                     {
                         LOG_ERROR("Invalid otio transition index");
+                        continue;
+                    }
+                    if (move.in_offset.value() < 1.F || move.out_offset.value() < 1.F)
+                    {
+                        std::cerr << "ORIG in_offset=" << transition->in_offset()
+                                  << std::endl;
+                        std::cerr << "ORIG out_offset=" << transition->out_offset()
+                                  << std::endl;
+                        std::cerr << "NEW  in_offset=" << move.in_offset
+                                  << std::endl;
+                        std::cerr << "NEW  out_offset=" << move.out_offset
+                                  << std::endl;
+                        LOG_ERROR("Move offsets are invalid - Ignoring");
                         continue;
                     }
                     transition->set_in_offset(move.in_offset);

@@ -19,7 +19,7 @@ namespace tl
             otime::TimeRange inOutRange = time::invalidTimeRange;
             timeline::PlayerCacheInfo cacheInfo;
             bool editable = false;
-            timeline::EditMode editMode = timeline::EditMode::Move;
+            timeline::EditMode editMode = timeline::EditMode::Count;
             bool stopOnScrub = true;
             std::function<void(const std::vector<timeline::MoveData>&)>
                 moveCallback;

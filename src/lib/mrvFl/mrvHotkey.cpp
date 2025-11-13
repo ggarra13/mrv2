@@ -522,6 +522,23 @@ namespace mrv
         tooltip = _("Redo Draw");
         tooltip += addHotkey(kRedoDraw);
         ui->uiRedoDraw->copy_tooltip(tooltip.c_str());
+        
+        tooltip = _("Move Edit Tool");
+        tooltip += addHotkey(kEditMove);
+        ui->uiMove->copy_tooltip(tooltip.c_str());
+        
+        tooltip = _("Trim Edit Tool");
+        tooltip += addHotkey(kEditTrim);
+        ui->uiTrim->copy_tooltip(tooltip.c_str());
+        
+        tooltip = _("Undo Edit");
+        tooltip += addHotkey(kEditUndo);
+        ui->uiUndoEdit->copy_tooltip(tooltip.c_str());
+        
+        tooltip = _("Redo Edit");
+        tooltip += addHotkey(kEditRedo);
+        ui->uiRedoEdit->copy_tooltip(tooltip.c_str());
+
 
         // Timebar Window Toolbar
         TimelineClass* c = ui->uiTimeWindow;

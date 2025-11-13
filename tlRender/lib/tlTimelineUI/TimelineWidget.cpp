@@ -23,7 +23,7 @@ namespace tl
             std::shared_ptr<ItemData> itemData;
             std::shared_ptr<timeline::Player> player;
             std::shared_ptr<observer::Value<bool> > editable;
-            timeline::EditMode editMode = timeline::EditMode::Move;
+            std::shared_ptr<observer::Value<timeline::EditMode> > editMode;
             std::shared_ptr<observer::Value<bool> > frameView;
             std::function<void(bool)> frameViewCallback;
             std::shared_ptr<observer::Value<bool> > scrollToCurrentFrame;
@@ -82,7 +82,7 @@ namespace tl
             p.itemData = std::make_shared<ItemData>();
             p.itemData->timeUnitsModel = timeUnitsModel;
 
-            p.editMode = timeline::EditMode::Move;
+            p.editMode = observer::Value<timeline::EditMode>::create(timeline::EditMode::Move);
             p.editable = observer::Value<bool>::create(false);
             p.frameView = observer::Value<bool>::create(true);
             p.scrollToCurrentFrame = observer::Value<bool>::create(true);
@@ -175,6 +175,8 @@ namespace tl
                             _p->currentTime = value;
                             _scrollUpdate();
                         });
+
+                setEditMode(p.editMode->get());
             }
             else
             {
@@ -208,6 +210,7 @@ namespace tl
         void TimelineWidget::setEditMode(const timeline::EditMode value)
         {
             TLRENDER_P();
+            p.editMode->setAlways(value);
             if (p.timelineItem)
             {
                 p.timelineItem->setEditMode(value);
@@ -746,6 +749,7 @@ namespace tl
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
                         p.itemData, p.window, context);
                     p.timelineItem->setEditable(p.editable->get());
+                    p.timelineItem->setEditMode(p.editMode->get());
                     p.timelineItem->setStopOnScrub(p.stopOnScrub->get());
                     p.timelineItem->setMoveCallback(p.moveCallback);
                     p.timelineItem->setFrameMarkers(p.frameMarkers);

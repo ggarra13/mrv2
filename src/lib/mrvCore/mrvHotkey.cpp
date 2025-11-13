@@ -265,6 +265,15 @@ namespace mrv
     Hotkey kEditInsertAudioGap(false, false, false, false, 0);
     Hotkey kEditRemoveAudioGap(false, false, false, false, 0);
 
+    Hotkey kEditFill(false, false, false, false, 0);
+    Hotkey kEditMove(false, false, false, false, 0);
+    Hotkey kEditTrim(false, false, false, false, 0);
+    Hotkey kEditRipple(false, false, false, false, 0);
+    Hotkey kEditRoll(false, false, false, false, 0);
+    Hotkey kEditSlice(false, false, false, false, 0);
+    Hotkey kEditSlide(false, false, false, false, 0);
+    Hotkey kEditSlip(false, false, false, false, 0);
+    
     Hotkey kEditUndo(false, false, false, false, ';');
     Hotkey kEditRedo(false, false, false, false, ':');
 
@@ -525,8 +534,17 @@ namespace mrv
         HotkeyEntry(_("Insert Audio Gap"), &kEditInsertAudioGap),
         HotkeyEntry(_("Remove Audio Gap"), &kEditRemoveAudioGap),
 
-        HotkeyEntry(_("Edit Undo"), &kEditUndo),
-        HotkeyEntry(_("Edit Redo"), &kEditRedo),
+        HotkeyEntry(_("Edit - Fill Tool"), &kEditFill),
+        HotkeyEntry(_("Edit - Move Tool"), &kEditMove),
+        HotkeyEntry(_("Edit - Trim Tool"), &kEditTrim),
+        HotkeyEntry(_("Edit - Ripple Tool"), &kEditRipple),
+        HotkeyEntry(_("Edit - Roll Tool"), &kEditRoll),
+        HotkeyEntry(_("Edit - Slice Tool"), &kEditSlice),
+        HotkeyEntry(_("Edit - Slide Tool"), &kEditSlide),
+        HotkeyEntry(_("Edit - Slip Tool"), &kEditSlip),
+        
+        HotkeyEntry(_("Edit - Undo"), &kEditUndo),
+        HotkeyEntry(_("Edit - Redo"), &kEditRedo),
 
         HotkeyEntry(_("Toggle Menu Bar"), &kToggleMenuBar),
         HotkeyEntry(_("Toggle Top Bar"), &kToggleTopBar),

@@ -435,7 +435,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-decl {class HotkeyUI;} {public global
+decl {class HotkeyUI;} {selected public global
 }
 
 decl {class AboutUI;} {public global
@@ -913,8 +913,7 @@ else
     if (value) mrv::editMode = mrv::EditMode::kFull;
     else       mrv::editMode = mrv::EditMode::kNone;
     mrv::toggle_timeline_bar(nullptr, v);
-}
-}
+}}
               tooltip {Toggle Edit Mode.} xywh {813 0 79 30} down_box DOWN_BOX selection_color 95 labelsize 12 align 192
             }
           }
@@ -1152,71 +1151,73 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {open selected
+            Fl_Group uiToolsGroup {open
               xywh {0 59 42 501}
             } {
               Fl_Group uiEditGroup {open
-                xywh {0 59 42 501} box FLAT_BOX hide
+                xywh {0 59 42 501} box FLAT_BOX
               } {
                 Fl_Button uiMove {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Move );}
-                  tooltip {Move Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 59 40 35} down_box DOWN_BOX value 1 selection_color 95
+                  tooltip {Move Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 60 40 50} down_box DOWN_BOX value 1 selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiTrim {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Trim );}
-                  tooltip {Trim Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 94 40 35} down_box DOWN_BOX selection_color 95
+                  tooltip {Trim Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 110 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiSlice {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Slice );}
-                  tooltip {Slice Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 129 40 35} down_box DOWN_BOX selection_color 95
-                  class {mrv::Button}
-                }
-                Fl_Button uiSlip {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Slip );}
-                  tooltip {Slip Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 164 40 35} down_box DOWN_BOX selection_color 95
+                  tooltip {Slice Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 160 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiSlide {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Slide );}
-                  tooltip {Slide Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 199 40 35} down_box DOWN_BOX selection_color 95
+                  tooltip {Slide Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 260 40 50} down_box DOWN_BOX selection_color 95
+                  class {mrv::Button}
+                }
+                Fl_Button uiSlip {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Slip );}
+                  tooltip {Slip Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 210 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiRipple {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Ripple );}
-                  tooltip {Ripple Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 234 40 35} down_box DOWN_BOX selection_color 95
+                  tooltip {Ripple Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 310 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiRoll {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Roll );}
-                  tooltip {Roll Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 269 40 35} down_box DOWN_BOX selection_color 95
+                  tooltip {Roll Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 360 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiFill {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Fill );}
-                  tooltip {Fill Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 304 40 35} down_box DOWN_BOX selection_color 95
+                  tooltip {Fill Editing Tool.} image {../../icons/Scrub.svg} compress_image 1 xywh {2 410 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Group {} {open
-                  xywh {0 489 42 71}
+                  xywh {0 460 42 100}
                 } {
                   Fl_Button uiUndoEdit {
                     user_data this user_data_type {ViewerUI*}
-                    tooltip {Undo Last Edit.} image {../../icons/Undo.svg} compress_image 1 xywh {0 489 40 35} deactivate
+                    callback {mrv::edit_undo_cb(nullptr, v);}
+                    tooltip {Undo Last Edit.} image {../../icons/Undo.svg} compress_image 1 xywh {0 460 40 50} deactivate
                     class {mrv::Button}
                   }
                   Fl_Button uiRedoEdit {
                     user_data this user_data_type {ViewerUI*}
-                    tooltip {Redo Previous Edit.} image {../../icons/Redo.svg} compress_image 1 xywh {0 524 40 36} deactivate
+                    callback {mrv::edit_redo_cb(nullptr, v);}
+                    tooltip {Redo Previous Edit.} image {../../icons/Redo.svg} compress_image 1 xywh {0 510 40 50} deactivate
                     class {mrv::Button}
                   }
                 }

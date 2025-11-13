@@ -84,21 +84,6 @@ namespace mrv
     //! Menu function to remove audio gap at current time.
     void edit_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
 
-    //! Set Action Mode to trim
-    void edit_trim_cb(Fl_Menu_* m, ViewerUI* ui);
-
-    //! Set Action Mode to slip
-    void edit_slip_cb(Fl_Menu_* m, ViewerUI* ui);
-
-    //! Set Action Mode to slide
-    void edit_slide_cb(Fl_Menu_* m, ViewerUI* ui);
-
-    //! Set Action Mode to ripple
-    void edit_ripple_cb(Fl_Menu_* m, ViewerUI* ui);
-
-    //! Set Action Mode to roll
-    void edit_roll_cb(Fl_Menu_* m, ViewerUI* ui);
-
     //! Menu function to undo an edit or annotation.
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui);
 

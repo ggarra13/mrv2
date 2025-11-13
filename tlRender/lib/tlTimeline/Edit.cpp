@@ -6,6 +6,7 @@
 
 #include <tlTimeline/MemoryReference.h>
 
+#include <tlCore/Error.h>
 #include <tlCore/StringFormat.h>
 
 namespace tl
@@ -240,6 +241,11 @@ namespace tl
             };
         } // namespace
 
+        TLRENDER_ENUM_IMPL(
+            EditMode, "None", "Fill", "Move", "Ripple", "Roll",
+            "Slice", "Slip", "Slide", "Trim");
+        TLRENDER_ENUM_SERIALIZE_IMPL(EditMode);
+        
         otio::SerializableObject::Retainer<otio::Timeline>
         copy(const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
         {

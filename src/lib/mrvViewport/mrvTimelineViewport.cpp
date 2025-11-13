@@ -258,17 +258,23 @@ namespace mrv
             
             if (mode == p.editMode)
                 return;
-
+            
             p.editMode = mode;
             
+            p.ui->uiFill->value(0);
             p.ui->uiMove->value(0);
-            p.ui->uiTrim->value(0);
-            p.ui->uiSlice->value(0);
-            p.ui->uiSlip->value(0);
-            p.ui->uiSlide->value(0);
             p.ui->uiRipple->value(0);
             p.ui->uiRoll->value(0);
-            p.ui->uiFill->value(0);
+            p.ui->uiSlice->value(0);
+            p.ui->uiSlide->value(0);
+            p.ui->uiSlip->value(0);
+            p.ui->uiTrim->value(0);
+            
+            if (App::demo_mode)
+            {
+                p.ui->uiMove->value(1);
+                return;
+            }
 
 
             switch(mode)

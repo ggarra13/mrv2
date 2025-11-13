@@ -137,8 +137,14 @@ namespace tl
             void _getTransitionItems(std::vector<IBasicItem*>& items,
                                      const int trackNumber,
                                      const otime::TimeRange& transitionRange);
+            void _getTransitionTimeRanges(std::vector<otime::TimeRange>& items,
+                                          const int trackNumber,
+                                          const otime::TimeRange& transitionRange);
             void _addOneFrameGap(const otime::RationalTime& videoTime,
                                  otime::TimeRange& timeRange);
+            bool _transitionIntersects(const std::shared_ptr<IItem> transition,
+                                       const int transitionTrack,
+                                       const otime::TimeRange& timeRange);
             void _tracksUpdate();
             void _textUpdate();
 

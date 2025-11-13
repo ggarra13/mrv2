@@ -20,15 +20,20 @@ namespace tl
         enum class EditMode
         {
             kNone,
+            Fill,
             Move,
-            Trim,
+            Ripple,
+            Roll,
             Slice,
             Slip,
             Slide,
-            Ripple,
-            Roll,
-            Fill,
+            Trim,
+            
+            Count,
+            First = Move
         };
+        TLRENDER_ENUM(EditMode);
+        TLRENDER_ENUM_SERIALIZE(EditMode);
         
         enum class MoveType
         {

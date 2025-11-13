@@ -51,7 +51,8 @@ ChangeLog
 - Minor speed up in Edit viewport on OpenGL backend.
 - Improved speed of compilation of Vulkan backend.
 - OTIO transitions (dissolves) can now be moved and trimmed.
-- Added new Editing tools (only move working and no icons yet).
+- Added new Editing tools (no icons yet).
+- Fixed undo on moving clips. 
 
 
 v1.4.5

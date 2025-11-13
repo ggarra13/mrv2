@@ -100,6 +100,12 @@ namespace tl
             return out;
         }
 
+        void TransitionItem::setDurationLabel(const std::string& value)
+        {
+            _p->durationLabel = value;
+            _p->draw.durationGlyphs.clear();
+        }
+        
         void TransitionItem::sizeHintEvent(const ui::SizeHintEvent& event)
         {
             IItem::sizeHintEvent(event);

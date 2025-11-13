@@ -488,6 +488,8 @@ namespace tl
             case timeline::EditMode::Trim:
                 _mouseMoveEventTrim(event);
                 break;
+            default:
+                throw std::runtime_error("Unhandled Edit Mode");
             }
         }
             
@@ -531,18 +533,88 @@ namespace tl
             {
             case Private::MouseMode::Transition:
             {
-                int offset = _mouse.pos.x - _mouse.pressPos.x;
+                _mouse.pos.y = _mouse.pressPos.y;
+                const int offset = _mouse.pos.x - _mouse.pressPos.x;
+                std::cerr << "-TRIM MOVE------ " << _mouse.pos.x << std::endl;
+                math::Box2i move;
+                    
                 for (const auto& item : p.mouse.items)
                 {
                     const math::Box2i& g = item->geometry;
+                    auto transitionItem = static_cast<TransitionItem*>(item->p.get());
+                    otime::TimeRange timeRange = item->p->getTimeRange();
+
+                    // Get transition items (ie. the clips associated to the
+                    // transition) time ranges.
                     const int transitionTrack = item->track;
-                    _mouse.pos.y = _mouse.pressPos.y;
-                    int offset = _mouse.pos.x - _mouse.pressPos.x;
-                    int x = _mouse.pressPos.x;
-                    auto transitionItem = dynamic_cast<TransitionItem*>(item->p.get());
-                    const otime::RationalTime& time = posToTime(x) -
-                                                      _timeRange.start_time();
-                    std::cerr << "time=" << time << std::endl;
+                    std::vector<otime::TimeRange> itemRanges;
+                    _getTransitionTimeRanges(itemRanges, transitionTrack,
+                                             timeRange);
+                        
+                    const int midpoint = (g.x() + g.w() / 2);
+                    if (_mouse.pressPos.x < midpoint)
+                    {
+                        math::Size2i size = g.getSize();
+                        size.w -= offset;
+                        
+                        move = math::Box2i(
+                            g.min + _mouse.pos - _mouse.pressPos,
+                            size );
+                    }
+                    else
+                    {
+                        math::Size2i size = g.getSize();
+                        size.w += offset;
+                        move = math::Box2i(g.min, size);
+                    }
+
+                    const otime::RationalTime& startTime = posToTime(move.x());
+                    const otime::RationalTime& duration  = posToTime(move.x() + move.w()) - startTime;
+                        
+                    timeRange = otime::TimeRange(startTime - _timeRange.start_time(), duration);
+                    const otime::RationalTime in_offset = itemRanges[1].start_time() -
+                                                          timeRange.start_time();
+                    const otime::RationalTime out_offset = timeRange.end_time_exclusive() -
+                                                           itemRanges[1].start_time();
+                    std::cerr << "in_offset=" << in_offset.value() << std::endl;
+                    std::cerr << "out_offset=" << out_offset.value() << std::endl;
+
+                    // Clamp on clips.
+                    if (duration.value() <= 1.F)
+                    {
+                        std::cerr << __LINE__ << std::endl;
+                        continue;
+                    }
+
+                    if (timeRange.start_time() <= itemRanges[0].start_time())
+                    {
+                        std::cerr << __LINE__ << std::endl;
+                        continue;
+                    }
+                    
+                    if (timeRange.start_time() >= itemRanges[0].end_time_exclusive())
+                    {
+                        std::cerr << __LINE__ << std::endl;
+                        continue;
+                    }
+                    
+                    if (timeRange.end_time_exclusive() >= itemRanges[1].end_time_inclusive())
+                    {
+                        std::cerr << __LINE__ << std::endl;
+                        std::cerr << timeRange.end_time_exclusive() << " > "
+                                  << itemRanges[1].end_time_exclusive()
+                                  << std::endl;
+                        continue;
+                    }
+                    
+                    // Clamp on other transitions.
+                    if (_transitionIntersects(item->p, transitionTrack, timeRange))
+                    {
+                        continue;
+                    }
+                    
+                    transitionItem->setDurationLabel(std::to_string(int(duration.value())));
+                    item->p->setGeometry(move);
                 }
                 break;
             }
@@ -572,68 +644,49 @@ namespace tl
             {
                 if (!p.mouse.items.empty())
                 {
-                    
+                    _mouse.pos.y = _mouse.pressPos.y;
+                    const int offset = _mouse.pos.x - _mouse.pressPos.x;
+                    math::Box2i move;
+                        
                     for (const auto& item : p.mouse.items)
                     {
                         const math::Box2i& g = item->geometry;
-                        const int transitionTrack = item->track;
-                        
-                        _mouse.pos.y = _mouse.pressPos.y;
-                        int offset = _mouse.pos.x - _mouse.pressPos.x;
-
                         auto transitionItem = dynamic_cast<TransitionItem*>(item->p.get());
                         otime::TimeRange timeRange = transitionItem->getTimeRange();
-                        const math::Box2i& move = math::Box2i(
-                            g.min + _mouse.pos - _mouse.pressPos, g.getSize());
 
-                        // Calculate interections with original TimeRange.
-                        otime::RationalTime startTime = timeRange.start_time();
-                        const otime::RationalTime& duration = timeRange.duration();
-                        timeRange = otime::TimeRange(startTime, duration);
-
-                        // Get transition items (ie. the clips associated to the
-                        // transition).
-                        std::vector<IBasicItem*> transitionItems;
-                        _getTransitionItems(transitionItems, transitionTrack,
-                                            timeRange);
+                        // Get item time ranges for transitions.
+                        const int transitionTrack = item->track;
+                        std::vector<otime::TimeRange> itemRanges;
+                        _getTransitionTimeRanges(itemRanges, transitionTrack,
+                                                 timeRange);
                         
-                        // Get clip transition ranges
-                        std::vector<otime::TimeRange> timeRanges;
-                        for (const auto& item : transitionItems)
-                        {
-                            otime::TimeRange itemRange = item->getTimeRange();
-                            _addOneFrameGap(itemRange.duration(), itemRange);
-                            timeRanges.push_back(itemRange);
-                        }
+                        move = math::Box2i(
+                            g.min + _mouse.pos - _mouse.pressPos,
+                            g.getSize() );
+                            
+                        const otime::RationalTime& startTime = posToTime(move.x());
+                        const otime::RationalTime& duration  = timeRange.duration();
                         
-                        startTime = posToTime(move.x()) - _timeRange.start_time();
                         timeRange = otime::TimeRange(startTime, duration);
                         
                         // Clamp on clips.
-                        if (timeRanges.size() < 2 ||
-                            startTime >= timeRanges[0].end_time_exclusive() ||
-                            startTime + duration < timeRanges[1].start_time())
+                        if (timeRange.start_time() - _timeRange.start_time() >=
+                            itemRanges[0].end_time_exclusive())
+                        {
+                            continue;
+                        }
+                        
+                        // Clamp on clips.
+                        if (timeRange.end_time_inclusive() - _timeRange.start_time() <
+                            itemRanges[1].start_time())
                         {
                             continue;
                         }
 
-                        // Clamp on other transitions.
-                        bool intersects = false;
-                        for (const auto& transition : p.tracks[transitionTrack].transitions)
+                        if (_transitionIntersects(item->p, transitionTrack, timeRange))
                         {
-                            if (item->p == transition)
-                                continue;
-                            otime::TimeRange transitionRange = transition->getTimeRange();
-                            _addOneFrameGap(transitionRange.duration(),
-                                            transitionRange);
-                            if (transitionRange.intersects(timeRange))
-                            {
-                                intersects = true;
-                                break;
-                            }
-                        }
-                        if (intersects)
                             continue;
+                        }
                         
                         item->p->setGeometry(move);
                     }
@@ -810,7 +863,10 @@ namespace tl
             case timeline::EditMode::Trim:
                 _mouseReleaseEventTrim(event);
                 break;
+            default:
+                throw std::runtime_error("Unhandled Edit Mode");
             }
+            p.mouse.items.clear();
             p.mouse.mode = Private::MouseMode::kNone;
         }
 
@@ -872,6 +928,26 @@ namespace tl
                     items.push_back(clip);
                 }
             }
+        }
+        
+        void TimelineItem::_getTransitionTimeRanges(std::vector<otime::TimeRange>& timeRanges,
+                                                    const int trackNumber,
+                                                    const otime::TimeRange& transitionRange)
+        {
+            TLRENDER_P();
+            
+            std::vector<IBasicItem*> items;
+            _getTransitionItems(items, trackNumber, transitionRange);
+
+            for (const auto& item : items)
+            {
+                otime::TimeRange itemRange = item->getTimeRange();
+                _addOneFrameGap(_timeRange.duration(), itemRange);
+                timeRanges.push_back(itemRange);
+            }
+
+            if (timeRanges.size() != 2)
+                throw std::runtime_error("Broken transition in otio file");
         }
         
         void TimelineItem::_timeUnitsUpdate()
@@ -1360,7 +1436,6 @@ namespace tl
                 for (const auto& item : p.mouse.items)
                 {
                     const std::shared_ptr<IItem> transition = item->p;
-                    const int transitionTrack = item->track;
                     const int transitionIndex = item->index;
                     int x = transition->getGeometry().x();
                     const otime::RationalTime startTime = posToTime(x) - _timeRange.start_time();
@@ -1378,9 +1453,11 @@ namespace tl
                                                   _scale,
                             y, sizeHint.w, sizeHint.h));
 
-                    std::vector<IBasicItem*> items;
-                    _getTransitionItems(items, transitionTrack, timeRange);
-                    const otime::TimeRange itemRange = items[1]->getTimeRange();
+                    // Clamp on transition items.
+                    std::vector<IBasicItem*> transitionItems;
+                    const int transitionTrack = item->track;
+                    _getTransitionItems(transitionItems, transitionTrack, timeRange);
+                    const otime::TimeRange& itemRange = transitionItems[1]->getTimeRange();
 
                     const int transitionOtioIndex =
                         p.tracks[transitionTrack].otioTransitionIndexes[transitionIndex];
@@ -1402,7 +1479,6 @@ namespace tl
                     p.player->getTimeline()->getTimeline().value, moveData);
                 p.player->getTimeline()->setTimeline(otioTimeline);
             }
-            p.mouse.items.clear();
             if (!p.mouse.dropTargets.empty())
             {
                 p.mouse.dropTargets.clear();
@@ -1439,7 +1515,140 @@ namespace tl
         void TimelineItem::_mouseReleaseEventTrim(ui::MouseClickEvent& event)
         {
             TLRENDER_P();
+            if (p.mouse.items.empty())
+                return;
+            switch (p.mouse.mode)
+            {
+            case Private::MouseMode::CurrentTime:
+            {
+                break;
+            }
+            case Private::MouseMode::Item:
+            {
+                break;
+            }
+            case Private::MouseMode::Transition:
+            {
+                _mouse.pos.y = _mouse.pressPos.y;
+                const int offset = _mouse.pos.x - _mouse.pressPos.x;
+                math::Box2i move;
+                std::vector<timeline::MoveData> moveData;
+                std::cerr << "-TRIM RELEASE END------ " << _mouse.pos.x << std::endl;
+                for (const auto& item : p.mouse.items)
+                {
+                    const math::Box2i& g = item->geometry;
+                    otime::TimeRange timeRange = item->p->getTimeRange();
+                    
+                    // Get transition items (ie. the clips associated to the
+                    // transition) time ranges.
+                    const int transitionTrack = item->track;
+                    const int transitionIndex = item->index;
+                    std::vector<otime::TimeRange> itemRanges;
+                    _getTransitionTimeRanges(itemRanges, transitionTrack,
+                                             timeRange);
+                    
+                    const int midpoint = (g.x() + g.w() / 2);
+                    if (_mouse.pressPos.x < midpoint)
+                    {
+                        math::Size2i size = g.getSize();
+                        size.w -= offset;
+                        
+                        move = math::Box2i(
+                            g.min + _mouse.pos - _mouse.pressPos,
+                            size );
+                    }
+                    else
+                    {
+                        math::Size2i size = g.getSize();
+                        size.w += offset;
+                        move = math::Box2i(g.min, size);
+                    }
+
+                    const otime::RationalTime& startTime = posToTime(move.x());
+                    const otime::RationalTime& duration  = posToTime(move.x() + move.w()) -
+                                                           startTime;
+                        
+                    timeRange = otime::TimeRange(startTime - _timeRange.start_time(), duration);
+                    const otime::RationalTime in_offset = itemRanges[1].start_time() -
+                                                          timeRange.start_time();
+                    const otime::RationalTime out_offset = timeRange.end_time_exclusive() -
+                                                           itemRanges[1].start_time();
+
+                    std::cerr << "in_offset=" << in_offset << std::endl;
+                    std::cerr << "out_offset=" << out_offset << std::endl;
+                    
+                    // Clamp on clips.
+                    if (duration.value() <= 1.F)
+                    {
+                        std::cerr << __LINE__ << std::endl;
+                        continue;
+                    }
+
+                    if (timeRange.start_time() <= itemRanges[0].start_time())
+                    {
+                        std::cerr << __LINE__ << std::endl;
+                        continue;
+                    }
+                    
+                    if (timeRange.start_time() >= itemRanges[0].end_time_exclusive())
+                    {
+                        std::cerr << __LINE__ << std::endl;
+                        std::cerr << timeRange.start_time() << " > "
+                                  << itemRanges[0].end_time_exclusive()
+                                  << std::endl;
+                        continue;
+                    }
+                    
+                    if (timeRange.end_time_exclusive() >= itemRanges[1].end_time_inclusive())
+                    {
+                        std::cerr << __LINE__ << std::endl;
+                        std::cerr << timeRange.end_time_exclusive() << " > "
+                                  << itemRanges[1].end_time_exclusive()
+                                  << std::endl;
+                        continue;
+                    }
+                    
+                    const int transitionOtioIndex =
+                        p.tracks[transitionTrack].otioTransitionIndexes[transitionIndex];
+                    moveData.push_back(
+                        {
+                            timeline::MoveType::Transition,
+                            transitionTrack, transitionIndex, transitionOtioIndex,
+                            transitionTrack, transitionIndex, transitionOtioIndex,
+                            in_offset, out_offset
+                        });
+                }
+                if (p.moveCallback && !moveData.empty())
+                    p.moveCallback(moveData);
+                auto otioTimeline = timeline::move(
+                    p.player->getTimeline()->getTimeline().value, moveData);
+                p.player->getTimeline()->setTimeline(otioTimeline);
+            }
+            }
         }
+
+        bool TimelineItem::_transitionIntersects(const std::shared_ptr<IItem> item,
+                                                 const int transitionTrack,
+                                                 const otime::TimeRange& timeRange)
+        {
+            TLRENDER_P();
+            
+            bool out = false;
+            for (const auto& transition : p.tracks[transitionTrack].transitions)
+            {
+                if (item == transition)
+                    continue;
+                otime::TimeRange transitionRange = transition->getTimeRange();
+                _addOneFrameGap(_timeRange.duration(), transitionRange);
+                if (transitionRange.intersects(timeRange))
+                {
+                    out = true;
+                    break;
+                }
+            }
+            return out;
+        }
+
         
         TimelineItem::Private::MouseItemData::MouseItemData() {}
 
