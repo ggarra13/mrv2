@@ -607,7 +607,6 @@ namespace tl
             }
         }
 
-        
         void TimelineItem::mouseReleaseEvent(ui::MouseClickEvent& event)
         {
             IWidget::mouseReleaseEvent(event);

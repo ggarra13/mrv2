@@ -2541,6 +2541,8 @@ namespace mrv
         
         for (const auto& move : moves)
         {
+            if (move.type == tl::timeline::MoveType::UndoOnly)
+                continue;
             if (move.type == tl::timeline::MoveType::Transition)
             {
                 if (auto track = otio::dynamic_retainer_cast<otio::Track>(

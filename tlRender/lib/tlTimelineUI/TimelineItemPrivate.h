@@ -2,6 +2,8 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
+#pragma once
+
 #include <tlTimelineUI/ThumbnailSystem.h>
 #include <tlTimelineUI/TimelineItem.h>
 #include <tlTimelineUI/TransitionItem.h>
@@ -18,11 +20,11 @@ namespace tl
             otime::RationalTime currentTime = time::invalidTime;
             otime::TimeRange inOutRange = time::invalidTimeRange;
             timeline::PlayerCacheInfo cacheInfo;
-            timeline::EditMode editMode = timeline::EditMode::Count;
             bool editable = false;
+            timeline::EditMode editMode = timeline::EditMode::Count;
             bool stopOnScrub = true;
             std::function<void(const std::vector<timeline::MoveData>&)>
-                moveCallback;
+            moveCallback;
             std::shared_ptr<observer::Value<bool> > scrub;
             std::shared_ptr<observer::Value<otime::RationalTime> > timeScrub;
             std::vector<int> frameMarkers;
@@ -66,11 +68,19 @@ namespace tl
             };
             DrawData draw;
 
-            enum class MouseMode {
+            enum class MouseMode
+            {
                 kNone,
                 CurrentTime,
                 Item,
-                TransitionMove
+                Transition
+            };
+
+            enum class MouseClick
+            {
+                Center,
+                Left,
+                Right,
             };
             
             struct MouseItemData
@@ -99,6 +109,7 @@ namespace tl
                 std::vector<std::shared_ptr<MouseItemData> > items;
                 std::vector<MouseItemDropTarget> dropTargets;
                 int currentDropTarget = -1;
+                MouseClick side = MouseClick::Center;
             };
             MouseData mouse;
 

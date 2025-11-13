@@ -27,9 +27,6 @@ namespace tl
         //!
         //! \todo Add a selection model.
         //! \todo Add support for dragging clips to different tracks.
-        //! \todo Add support for adjusting clip handles.
-        //! \todo Add an option for viewing/playing individual clips ("solo"
-        //! mode).
         class TimelineItem : public IItem
         {
         protected:

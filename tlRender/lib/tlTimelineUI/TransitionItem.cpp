@@ -83,7 +83,7 @@ namespace tl
         }
 
         TransitionItem::~TransitionItem() {}
-
+        
         std::shared_ptr<TransitionItem> TransitionItem::create(
             const otio::SerializableObject::Retainer<otio::Transition>&
                 transition,
@@ -100,6 +100,12 @@ namespace tl
             return out;
         }
 
+        void TransitionItem::setDurationLabel(const std::string& value)
+        {
+            _p->durationLabel = value;
+            _p->draw.durationGlyphs.clear();
+        }
+        
         void TransitionItem::sizeHintEvent(const ui::SizeHintEvent& event)
         {
             IItem::sizeHintEvent(event);
@@ -157,6 +163,14 @@ namespace tl
             TLRENDER_P();
 
             const math::Box2i& g = _geometry;
+            ui::ColorRole colorRole = getSelectRole();
+            if (colorRole != ui::ColorRole::kNone)
+            {
+                event.render->drawMesh(
+                    ui::border(g, p.size.border * 2), math::Vector2i(),
+                    event.style->getColorRole(colorRole));
+            }
+
             const math::Box2i g2 = g.margin(-p.size.border);
             event.render->drawMesh(
                 ui::rect(g2, p.size.margin), math::Vector2i(),

@@ -453,126 +453,37 @@ namespace tl
         {
             IWidget::mouseMoveEvent(event);
             TLRENDER_P();
-            switch (p.mouse.mode)
+            switch(p.editMode)
             {
-            case Private::MouseMode::CurrentTime:
-            {
-                const otime::RationalTime time = posToTime(event.pos.x);
-                p.timeScrub->setIfChanged(time);
-                p.player->seek(time);
+            case timeline::EditMode::Fill:
+                _mouseMoveEventFill(event);
                 break;
-            }
-            case Private::MouseMode::TransitionMove:
-            {
-                if (!p.mouse.items.empty())
-                {
-                    for (const auto& item : p.mouse.items)
-                    {
-                        const math::Box2i& g = item->geometry;
-                        const int transitionTrack = item->track;
-                        
-                        // const int transitionIndex = item->index;
-                        _mouse.pos.y = _mouse.pressPos.y;
-                        int offset = _mouse.pos.x - _mouse.pressPos.x;
-
-                        auto transitionItem = dynamic_cast<TransitionItem*>(item->p.get());
-                        otime::TimeRange timeRange = transitionItem->getTimeRange();
-                        const math::Box2i& move = math::Box2i(
-                            g.min + _mouse.pos - _mouse.pressPos, g.getSize());
-
-                        // Calculate interections with original TimeRange.
-                        otime::RationalTime startTime = timeRange.start_time();
-                        const otime::RationalTime& duration = timeRange.duration();
-                        timeRange = otime::TimeRange(startTime, duration);
-
-                        // Get transition items (ie. the clips associated to the
-                        // transition).
-                        std::vector<IBasicItem*> transitionItems;
-                        _getTransitionItems(transitionItems, transitionTrack,
-                                            timeRange);
-                        
-                        // Get clip transition ranges
-                        std::vector<otime::TimeRange> timeRanges;
-                        for (const auto& item : transitionItems)
-                        {
-                            otime::TimeRange itemRange = item->getTimeRange();
-                            _addOneFrameGap(itemRange.duration(), itemRange);
-                            timeRanges.push_back(itemRange);
-                        }
-                        
-                        startTime = posToTime(move.x()) - _timeRange.start_time();
-                        timeRange = otime::TimeRange(startTime, duration);
-                        
-                        // Clamp on clips.
-                        if (timeRanges.size() < 2 ||
-                            startTime >= timeRanges[0].end_time_exclusive() ||
-                            startTime + duration < timeRanges[1].start_time())
-                        {
-                            continue;
-                        }
-
-                        // Clamp on other transitions.
-                        bool intersects = false;
-                        for (const auto& transition : p.tracks[transitionTrack].transitions)
-                        {
-                            if (item->p == transition)
-                                continue;
-                            otime::TimeRange transitionRange = transition->getTimeRange();
-                            _addOneFrameGap(transitionRange.duration(),
-                                            transitionRange);
-                            if (transitionRange.intersects(timeRange))
-                            {
-                                intersects = true;
-                                break;
-                            }
-                        }
-                        if (intersects)
-                            continue;
-                        
-                        item->p->setGeometry(move);
-                    }
-                }
+            case timeline::EditMode::Move:
+                _mouseMoveEventMove(event);
                 break;
-            }
-            case Private::MouseMode::Item:
-            {
-                if (!p.mouse.items.empty())
-                {
-                    for (const auto& item : p.mouse.items)
-                    {
-                        const math::Box2i& g = item->geometry;
-                        item->p->setGeometry(math::Box2i(
-                            g.min + _mouse.pos - _mouse.pressPos, g.getSize()));
-                    }
-
-                    int dropTarget = -1;
-                    for (size_t i = 0; i < p.mouse.dropTargets.size(); ++i)
-                    {
-                        if (p.mouse.dropTargets[i].mouse.contains(event.pos))
-                        {
-                            dropTarget = i;
-                            break;
-                        }
-                    }
-                    if (dropTarget != p.mouse.currentDropTarget)
-                    {
-                        for (const auto& item : p.mouse.items)
-                        {
-                            item->p->setSelectRole(
-                                dropTarget != -1 ? ui::ColorRole::Green
-                                                 : ui::ColorRole::Checked);
-                        }
-                        p.mouse.currentDropTarget = dropTarget;
-                        _updates |= ui::Update::Draw;
-                    }
-                }
+            case timeline::EditMode::Ripple:
+                _mouseMoveEventRipple(event);
                 break;
-            }
+            case timeline::EditMode::Roll:
+                _mouseMoveEventRoll(event);
+                break;
+            case timeline::EditMode::Slice:
+                _mouseMoveEventSlice(event);
+                break;
+            case timeline::EditMode::Slide:
+                _mouseMoveEventSlide(event);
+                break;
+            case timeline::EditMode::Slip:
+                _mouseMoveEventSlip(event);
+                break;
+            case timeline::EditMode::Trim:
+                _mouseMoveEventTrim(event);
+                break;
             default:
-                break;
+                throw std::runtime_error("Unhandled Edit Mode");
             }
         }
-
+            
         void TimelineItem::mousePressEvent(ui::MouseClickEvent& event)
         {
             IWidget::mousePressEvent(event);
@@ -583,6 +494,7 @@ namespace tl
                 takeKeyFocus();
 
                 p.mouse.mode = Private::MouseMode::kNone;
+                p.mouse.side = Private::MouseClick::Center;
 
                 const math::Box2i& g = _geometry;
                 if (p.editable)
@@ -640,7 +552,7 @@ namespace tl
                                 const auto& item = transitions[j];
                                 if (item->getGeometry().contains(event.pos))
                                 {
-                                    p.mouse.mode = Private::MouseMode::TransitionMove;
+                                    p.mouse.mode = Private::MouseMode::Transition;
                                     p.mouse.items.push_back(
                                         std::make_shared<
                                             Private::MouseItemData>(
@@ -669,6 +581,19 @@ namespace tl
                     p.timeScrub->setIfChanged(time);
                     p.player->seek(time);
                 }
+                else
+                {
+                    const math::Box2i& g = p.mouse.items[0]->geometry;                    
+                    const int midpoint = (g.x() + g.w() / 2);
+                    if (_mouse.pressPos.x < midpoint)
+                    {
+                        p.mouse.side = Private::MouseClick::Left;
+                    }
+                    else
+                    {
+                        p.mouse.side = Private::MouseClick::Right;
+                    }
+                }
             }
         }
 
@@ -677,95 +602,36 @@ namespace tl
             IWidget::mouseReleaseEvent(event);
             TLRENDER_P();
             p.scrub->setIfChanged(false);
-            if (!p.mouse.items.empty() && p.mouse.currentDropTarget != -1)
+            switch(p.editMode)
             {
-                const auto& dropTarget =
-                    p.mouse.dropTargets[p.mouse.currentDropTarget];
-                std::vector<timeline::MoveData> moveData;
-                for (const auto& item : p.mouse.items)
-                {
-                    const int fromTrack = item->track;
-                    const int fromIndex = item->index;
-                    const int fromOtioIndex =
-                        p.tracks[fromTrack].otioIndexes[fromIndex];
-                    const int toTrack = dropTarget.track +
-                                        (item->track - p.mouse.items[0]->track);
-                    const int toIndex = dropTarget.index;
-                    int toOtioIndex = toIndex;
-                    if (toOtioIndex < p.tracks[toTrack].otioIndexes.size())
-                    {
-                        toOtioIndex = p.tracks[toTrack].otioIndexes[toIndex];
-                    }
-                    moveData.push_back(
-                        {
-                            timeline::MoveType::Clip,
-                            fromTrack, fromIndex, fromOtioIndex,
-                            toTrack, toIndex, toOtioIndex
-                        });
-                    item->p->hide();
-                }
-                if (p.moveCallback && !moveData.empty())
-                    p.moveCallback(moveData);
-                auto otioTimeline = timeline::move(
-                    p.player->getTimeline()->getTimeline().value, moveData);
-                p.player->getTimeline()->setTimeline(otioTimeline);
-            }
-            else if (!p.mouse.items.empty() && p.mouse.mode == Private::MouseMode::TransitionMove)
-            {
-                p.mouse.mode = Private::MouseMode::kNone;
-                std::vector<timeline::MoveData> moveData;
-                for (const auto& item : p.mouse.items)
-                {
-                    const std::shared_ptr<IItem> transition = item->p;
-                    const int transitionTrack = item->track;
-                    const int transitionIndex = item->index;
-                    int x = transition->getGeometry().x();
-                    const otime::RationalTime startTime = posToTime(x) - _timeRange.start_time();
-                    otime::TimeRange timeRange = transition->getTimeRange();   
-                    const otime::RationalTime& duration = timeRange.duration();
-                    timeRange = otime::TimeRange(startTime, duration);
-                    const math::Size2i& sizeHint = transition->getSizeHint();
-                    transition->setTimeRange(timeRange);
-                    const int y = item->geometry.y();
-                    item->p->setGeometry(
-                        math::Box2i(
-                            _geometry.min.x + timeRange.start_time()
-                                                      .rescaled_to(1.0)
-                                                      .value() *
-                                                  _scale,
-                            y, sizeHint.w, sizeHint.h));
-
-                    std::vector<IBasicItem*> items;
-                    _getTransitionItems(items, transitionTrack, timeRange);
-                    const otime::TimeRange itemRange = items[1]->getTimeRange();
-
-                    const int transitionOtioIndex =
-                        p.tracks[transitionTrack].otioTransitionIndexes[transitionIndex];
-                    const otime::RationalTime in_offset = itemRange.start_time() -
-                                                          timeRange.start_time();
-                    const otime::RationalTime out_offset = timeRange.end_time_exclusive() -
-                                                           itemRange.start_time();
-                    moveData.push_back(
-                        {
-                            timeline::MoveType::Transition,
-                            transitionTrack, transitionIndex, transitionOtioIndex,
-                            transitionTrack, transitionIndex, transitionOtioIndex,
-                            in_offset, out_offset
-                        });
-                }
-                if (p.moveCallback && !moveData.empty())
-                    p.moveCallback(moveData);
-                auto otioTimeline = timeline::move(
-                    p.player->getTimeline()->getTimeline().value, moveData);
-                p.player->getTimeline()->setTimeline(otioTimeline);
+            case timeline::EditMode::Fill:
+                _mouseReleaseEventFill(event);
+                break;
+            case timeline::EditMode::Move:
+                _mouseReleaseEventMove(event);
+                break;
+            case timeline::EditMode::Ripple:
+                _mouseReleaseEventRipple(event);
+                break;
+            case timeline::EditMode::Roll:
+                _mouseReleaseEventRoll(event);
+                break;
+            case timeline::EditMode::Slice:
+                _mouseReleaseEventSlice(event);
+                break;
+            case timeline::EditMode::Slide:
+                _mouseReleaseEventSlide(event);
+                break;
+            case timeline::EditMode::Slip:
+                _mouseReleaseEventSlip(event);
+                break;
+            case timeline::EditMode::Trim:
+                _mouseReleaseEventTrim(event);
+                break;
+            default:
+                throw std::runtime_error("Unhandled Edit Mode");
             }
             p.mouse.items.clear();
-            if (!p.mouse.dropTargets.empty())
-            {
-                p.mouse.dropTargets.clear();
-                _updates |= ui::Update::Draw;
-            }
-            p.mouse.currentDropTarget = -1;
             p.mouse.mode = Private::MouseMode::kNone;
         }
 
@@ -827,6 +693,25 @@ namespace tl
                     items.push_back(clip);
                 }
             }
+        }
+        
+        void TimelineItem::_getTransitionTimeRanges(std::vector<otime::TimeRange>& timeRanges,
+                                                    const int trackNumber,
+                                                    const otime::TimeRange& transitionRange)
+        {
+            TLRENDER_P();
+            
+            std::vector<IBasicItem*> items;
+            _getTransitionItems(items, trackNumber, transitionRange);
+
+            for (const auto& item : items)
+            {
+                otime::TimeRange itemRange = item->getTimeRange();
+                timeRanges.push_back(itemRange);
+            }
+
+            if (timeRanges.size() != 2)
+                throw std::runtime_error("Broken transition in otio file");
         }
         
         void TimelineItem::_timeUnitsUpdate()
@@ -1267,6 +1152,28 @@ namespace tl
             }
         }
 
+        bool TimelineItem::_transitionIntersects(const std::shared_ptr<IItem> item,
+                                                 const int transitionTrack,
+                                                 const otime::TimeRange& timeRange)
+        {
+            TLRENDER_P();
+            
+            bool out = false;
+            for (const auto& transition : p.tracks[transitionTrack].transitions)
+            {
+                if (item == transition)
+                    continue;
+                otime::TimeRange transitionRange = transition->getTimeRange();
+                if (transitionRange.intersects(timeRange))
+                {
+                    out = true;
+                    break;
+                }
+            }
+            return out;
+        }
+
+        
         TimelineItem::Private::MouseItemData::MouseItemData() {}
 
         TimelineItem::Private::MouseItemData::MouseItemData(

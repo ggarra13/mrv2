@@ -28,10 +28,6 @@ namespace tl
         //!
         //! \todo Add a selection model.
         //! \todo Add support for dragging clips to different tracks.
-        //! \todo Add support for adjusting clip handles.
-        //! \todo Add support for undo/redo.
-        //! \todo Add an option for viewing/playing individual clips ("solo"
-        //! mode).
         class TimelineItem : public IItem
         {
         protected:
@@ -62,15 +58,15 @@ namespace tl
             //! Set whether the timeline is editable.
             void setEditable(bool);
 
+            //! Set the action mode.
+            void setEditMode(const timeline::EditMode);
+
             //! Set whether playback stops when scrubbing.
             void setStopOnScrub(bool);
 
             //! Returns whether a clip is getting dragged.
             bool isDraggingClip() const;
 
-            //! Set the edit mode for the window.
-            void setEditMode(const timeline::EditMode mode);
-            
             //! Sets a callback for inserting items
             void setMoveCallback(const std::function<void(
                                      const std::vector<timeline::MoveData>&)>&);
@@ -108,6 +104,24 @@ namespace tl
         private:
             bool _isTrackVisible(int) const;
 
+            void _mouseMoveEventFill(ui::MouseMoveEvent&);
+            void _mouseMoveEventMove(ui::MouseMoveEvent&);
+            void _mouseMoveEventRipple(ui::MouseMoveEvent&);
+            void _mouseMoveEventRoll(ui::MouseMoveEvent&);
+            void _mouseMoveEventSlice(ui::MouseMoveEvent&);
+            void _mouseMoveEventSlide(ui::MouseMoveEvent&);
+            void _mouseMoveEventSlip(ui::MouseMoveEvent&);
+            void _mouseMoveEventTrim(ui::MouseMoveEvent&);
+            
+            void _mouseReleaseEventFill(ui::MouseClickEvent&);
+            void _mouseReleaseEventMove(ui::MouseClickEvent&);
+            void _mouseReleaseEventRipple(ui::MouseClickEvent&);
+            void _mouseReleaseEventRoll(ui::MouseClickEvent&);
+            void _mouseReleaseEventSlice(ui::MouseClickEvent&);
+            void _mouseReleaseEventSlide(ui::MouseClickEvent&);
+            void _mouseReleaseEventSlip(ui::MouseClickEvent&);
+            void _mouseReleaseEventTrim(ui::MouseClickEvent&);
+            
             void _drawInOutPoints(const math::Box2i&, const ui::DrawEvent&);
             math::Size2i
             _getLabelMaxSize(const std::shared_ptr<image::FontSystem>&) const;
@@ -122,8 +136,14 @@ namespace tl
             void _getTransitionItems(std::vector<IBasicItem*>& items,
                                      const int trackNumber,
                                      const otime::TimeRange& transitionRange);
+            void _getTransitionTimeRanges(std::vector<otime::TimeRange>& items,
+                                          const int trackNumber,
+                                          const otime::TimeRange& transitionRange);
             void _addOneFrameGap(const otime::RationalTime& videoTime,
                                  otime::TimeRange& timeRange);
+            bool _transitionIntersects(const std::shared_ptr<IItem> transition,
+                                       const int transitionTrack,
+                                       const otime::TimeRange& timeRange);
             void _tracksUpdate();
             void _textUpdate();
 

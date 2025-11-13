@@ -41,6 +41,7 @@ namespace tl
         
         enum class MoveType
         {
+            UndoOnly,
             Clip,
             Transition
         };

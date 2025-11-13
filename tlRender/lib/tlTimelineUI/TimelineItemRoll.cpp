@@ -1,10 +1,10 @@
 
-#include <tlTimelineUIVk/TimelineItem.h>
-#include <tlTimelineUIVk/TimelineItemPrivate.h>
+#include <tlTimelineUI/TimelineItem.h>
+#include <tlTimelineUI/TimelineItemPrivate.h>
 
 namespace tl
 {
-    namespace timelineui_vk
+    namespace timelineui
     {
         
         void TimelineItem::_mouseMoveEventRoll(ui::MouseMoveEvent& event)

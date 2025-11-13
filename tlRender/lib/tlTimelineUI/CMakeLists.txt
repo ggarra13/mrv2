@@ -6,7 +6,6 @@ set(HEADERS
     Init.h
     ThumbnailSystem.h
     TimelineItem.h
-    TimelineViewport.h
     TimelineWidget.h
     TransitionItem.h
     VideoClipItem.h)
@@ -21,7 +20,14 @@ set(SOURCE
     Init.cpp
     ThumbnailSystem.cpp
     TimelineItem.cpp
-    TimelineViewport.cpp
+    TimelineItemFill.cpp
+    TimelineItemMove.cpp
+    TimelineItemRipple.cpp
+    TimelineItemRoll.cpp
+    TimelineItemSlice.cpp
+    TimelineItemSlide.cpp
+    TimelineItemSlip.cpp
+    TimelineItemTrim.cpp
     TimelineWidget.cpp
     TransitionItem.cpp
     VideoClipItem.cpp)
