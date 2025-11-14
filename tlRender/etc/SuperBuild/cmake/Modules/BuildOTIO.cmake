@@ -1,8 +1,11 @@
 include(ExternalProject)
 
 set(OTIO_GIT_REPOSITORY "https://github.com/PixarAnimationStudios/OpenTimelineIO.git")
-set(OTIO_GIT_TAG "v0.18.0")
-#set(OTIO_GIT_TAG "v0.17.0")
+if(UNIX)
+    set(OTIO_GIT_TAG "v0.18.1")
+else()
+    set(OTIO_GIT_TAG "v0.17.0")
+endif()
 
 set(OTIO_DEPENDENCIES Imath)
 message(STATUS "OTIO DEPENDENCIES=${OTIO_DEPENDENCIES}")

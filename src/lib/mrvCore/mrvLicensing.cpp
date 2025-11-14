@@ -486,7 +486,7 @@ namespace mrv
 
         expiration_date = expires_at;
         if (plan == "Pro")
-        {                
+        {
             App::supports_layers = true;
             App::supports_annotations = true;
             App::supports_editing = true;
@@ -496,6 +496,7 @@ namespace mrv
         {
             App::supports_layers = true;
             App::supports_annotations = true;
+            App::supports_editing = false;
         }
         else
         {
@@ -587,7 +588,7 @@ namespace mrv
             App::supports_layers = true;
             App::supports_annotations = true;
             App::supports_editing = false;
-            App::supports_hdr = false;
+            App::supports_hdr = true;
         }
 
         return License::kValid;
