@@ -51,8 +51,11 @@ ChangeLog
 - Minor speed up in Edit viewport on OpenGL backend.
 - Improved speed of compilation of Vulkan backend.
 - OTIO transitions (dissolves) can now be moved and trimmed.
-- Added new Editing tools (no icons yet).
-- Fixed undo on moving clips. 
+- OTIO clips can be trimmed and rolled (name concepts popular to editors).
+- Added new Editing tools (only trim icon).
+- Fixed undo on moving clips.
+- Upgraded OTIO to v0.18.1 from v0.17.0.
+- Improved performance of 4K OpenEXR sequences.  With the new htjk256 and similar codecs, is possible to play back 4K sequences at 60 FPS.
 
 
 v1.4.5

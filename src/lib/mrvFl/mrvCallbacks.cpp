@@ -2658,7 +2658,7 @@ namespace mrv
     {
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = 100;
+        options.thumbnailHeight = 50 * ui->uiView->pixels_per_unit();
         options.waveformHeight = options.thumbnailHeight / 2;
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
@@ -2675,7 +2675,7 @@ namespace mrv
     {
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = 200;
+        options.thumbnailHeight = 100 * ui->uiView->pixels_per_unit();;
         options.waveformHeight = options.thumbnailHeight / 2;
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";
@@ -2692,7 +2692,7 @@ namespace mrv
     {
         auto options = ui->uiTimeline->getDisplayOptions();
         options.thumbnails = true;
-        options.thumbnailHeight = 300;
+        options.thumbnailHeight = 150 * ui->uiView->pixels_per_unit();;
         options.waveformHeight = options.thumbnailHeight / 2;
         Message msg;
         msg["command"] = "setTimelineDisplayOptions";

@@ -1780,13 +1780,13 @@ namespace mrv
                 options.thumbnails = false;
                 break;
             case 1: // Small
-                options.thumbnailHeight = 100;
+                options.thumbnailHeight = 50 * ui->uiView->pixels_per_unit();
                 break;
             case 2: // Medium
-                options.thumbnailHeight = 200;
+                options.thumbnailHeight = 100 * ui->uiView->pixels_per_unit();
                 break;
             case 3: // Large
-                options.thumbnailHeight = 300;
+                options.thumbnailHeight = 150 * ui->uiView->pixels_per_unit();
                 break;
             }
             options.waveformHeight = options.thumbnailHeight / 2;
