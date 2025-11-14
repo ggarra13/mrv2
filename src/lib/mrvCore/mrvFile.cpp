@@ -2,19 +2,20 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <regex>
-#include <fstream>
-#include <filesystem>
-namespace fs = std::filesystem;
-
 #include <tlIO/System.h>
 
-#include <FL/Fl.H>
+#include "mrvApp/mrvApp.h"
 
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 
-#include "mrvApp/mrvApp.h"
+
+#include <FL/Fl.H>
+
+#include <regex>
+#include <fstream>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #ifdef _WIN32
 #    include <process.h>

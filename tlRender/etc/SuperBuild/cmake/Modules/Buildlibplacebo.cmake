@@ -54,6 +54,7 @@ endif()
 
 set(CLANG_ENV )
 if(WIN32)
+    # \@todo: Replace clang with GENERIC_COMPILER_NAME
     set(CLANG_ENV CC=clang CXX=clang)
 endif()
 

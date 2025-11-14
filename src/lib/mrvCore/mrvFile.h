@@ -7,6 +7,9 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#undef OPENTIME_API
+#define OPENTIME_API
+
 #include <tlCore/String.h>
 #include <tlCore/Path.h>
 

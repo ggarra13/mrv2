@@ -29,7 +29,6 @@
 
 #include "mrvApp/mrvApp.h"
 
-
 namespace
 {
     const char* kModule = "edl";
@@ -58,7 +57,7 @@ namespace mrv
         
         otio::SerializableObject::Retainer<otio::Timeline> otioTimeline =
             new otio::Timeline("EDL");
-        
+
         auto videoTrack =
             new otio::Track("Video", std::nullopt, otio::Track::Kind::video);
         
@@ -233,9 +232,7 @@ namespace mrv
                 .arg(errorStatus.full_description);
             throw std::runtime_error(error);
         }
-        
+
         return true;
     }
-
-
 }

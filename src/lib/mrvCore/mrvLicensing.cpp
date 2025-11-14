@@ -56,6 +56,7 @@
 #include <vector>
 #include <ctime>
 
+#include <windows.h>
 
 namespace
 {
@@ -726,10 +727,11 @@ namespace mrv
         {
             App::demo_mode = true;
 
-            App::supports_layers = false;
             App::supports_annotations = false;
             App::supports_editing = false;
-            App::supports_hdr = false;
+            App::supports_hdr = true;
+            App::supports_layers = false;
+            App::supports_voice = false;
         }
         else
         {
@@ -742,10 +744,10 @@ namespace mrv
                 
                 App::demo_mode = true;
                 
-                App::supports_layers = false;
                 App::supports_annotations = false;
                 App::supports_editing = false;
-                App::supports_hdr = false;
+                App::supports_layers = false;
+                App::supports_voice = false;
             }
             else if (ok == License::kExpired)
             {
@@ -754,10 +756,10 @@ namespace mrv
                 
                 App::demo_mode = true;
 
-                App::supports_layers = false;
                 App::supports_annotations = false;
                 App::supports_editing = false;
-                App::supports_hdr = false;
+                App::supports_layers = false;
+                App::supports_voice = false;
             }
             else
             {

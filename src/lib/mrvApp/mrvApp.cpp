@@ -261,6 +261,7 @@ namespace mrv
     bool App::supports_annotations = false;
     bool App::supports_editing = false;
     bool App::supports_hdr = false;
+    bool App::supports_voice = false;
     
     bool App::unsaved_annotations = false;
     bool App::unsaved_edits = false;
@@ -642,9 +643,12 @@ namespace mrv
 
 
         License ok = license_beat();
+
+#ifdef VULKAN_BACKEND
         if (ok != License::kValid || license_type == LicenseType::kFloating)
             Fl::add_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, this);
-
+#endif
+        
         DBG;
         std::string version = "mrv2 v";
         version += mrv::version();

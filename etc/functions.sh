@@ -24,6 +24,8 @@ run_cmd()
     fi
 }
 
+
+
 #
 # Get the linux id if available
 #
@@ -39,28 +41,38 @@ get_kernel()
 {
     export KERNEL=`uname`
     export MACOS_BRAND=''
-    if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ]]; then
+    if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ||
+	      $KERNEL == *Windows* ]]; then
 	export KERNEL=Windows
+
 	export NATIVE_C_COMPILER=`which cl.exe`
 	export NATIVE_C_COMPILER_NAME="cl.exe"
+
 	export NATIVE_CXX_COMPILER=`which cl.exe`
 	export NATIVE_CXX_COMPILER_NAME="cl.exe"
-
-	if [[ "$GENERIC_C_COMPILER" == "" ]]; then
-	    export GENERIC_C_COMPILER=`which clang.exe`
-	    export GENERIC_C_COMPILER_NAME="clang.exe"
-	fi
-	if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
-	    export GENERIC_CXX_COMPILER=`which clang.exe`
-	    export GENERIC_CXX_COMPILER_NAME="clang.exe"
-	    if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
-		echo "WARNING: GENERIC_CXX_COMPILER for "\
-		     "this platform was not found"
-	    fi
-	fi
 	
+	export GENERIC_C_COMPILER=`which clang-cl`
+	export GENERIC_C_COMPILER_NAME="clang-cl"
+	
+	export GENERIC_CXX_COMPILER=`which clang-cl`
+	export GENERIC_CXX_COMPILER_NAME="clang-cl"
+	
+	export GENERIC_GNU_C_COMPILER=`which clang`
+	export GENERIC_GNU_C_COMPILER_NAME="clang"
+
+	export GENERIC_GNU_CXX_COMPILER=`which clang`
+	export GENERIC_GNU_CXX_COMPILER_NAME="clang"
+    
     elif [[ $KERNEL == *Darwin* ]]; then
 	export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string)
+
+	# C Compiler for Darwin
+	export NATIVE_C_COMPILER=`which clang`
+	export NATIVE_C_COMPILER_NAME="clang"
+	export GENERIC_C_COMPILER=`which cc`
+	export GENERIC_C_COMPILER_NAME="cc"
+
+	# C++ Compiler for Darwin
 	export NATIVE_CXX_COMPILER=`which clang`
 	export NATIVE_CXX_COMPILER_NAME="clang"
 	export GENERIC_CXX_COMPILER=`which cc`
@@ -98,6 +110,73 @@ get_kernel()
 	fi
     fi
 
+    if [[ "$GENERIC_C_COMPILER" == "" ]]; then
+	export GENERIC_C_COMPILER=`which clang`
+	export GENERIC_C_COMPILER_NAME="clang"
+	if [[ "$GENERIC_C_COMPILER" == "" ]]; then
+	    echo "WARNING: GENERIC_C_COMPILER for "\
+		 "this platform was not found. Using: ${NATIVE_C_COMPILER_NAME}"
+	    export GENERIC_C_COMPILER=${NATIVE_C_COMPILER}
+	    export GENERIC_C_COMPILER_NAME=${NATIVE_C_COMPILER_NAME}
+	fi
+    fi
+    
+    if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
+	export GENERIC_CXX_COMPILER=`which clang`
+	export GENERIC_CXX_COMPILER_NAME="clang"
+	if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
+	    echo "WARNING: GENERIC_CXX_COMPILER for "\
+		 "this platform was not found. Using: ${NATIVE_CXX_COMPILER_NAME}"
+	    export GENERIC_CXX_COMPILER=${NATIVE_CXX_COMPILER}
+	    export GENERIC_CXX_COMPILER_NAME=${NATIVE_CXX_COMPILER_NAME}
+	fi
+    fi
+
+    #
+    # Sanity checks
+    #
+    if [[ "$GENERIC_GNU_C_COMPILER" == "" ]]; then
+	if [[ "$GENERIC_C_COMPILER" == "" ]]; then
+	    if [[ "$GENERIC_C_COMPILER" != "" ]]; then
+		echo "WARNING: GENERIC_GNU_C_COMPILER for "\
+		     "this platform was not found. Using: ${GENERIC_C_COMPILER_NAME}"
+		export GENERIC_GNU_CXX_COMPILER=${GENERIC_C_COMPILER}
+		export GENERIC_GNU_CXX_COMPILER_NAME=${GENERIC_C_COMPILER_NAME}
+	    else
+		export GENERIC_GNU_CXX_COMPILER=${NATIVE_CXX_COMPILER}
+		export GENERIC_GNU_CXX_COMPILER_NAME=${NATIVE_CXX_COMPILER_NAME}
+	    fi
+	fi
+    fi
+    
+    if [[ "$GENERIC_GNU_CXX_COMPILER" == "" ]]; then
+	if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
+	    if [[ "$GENERIC_CXX_COMPILER" != "" ]]; then
+		echo "WARNING: GENERIC_GNU_CXX_COMPILER for "\
+		     "this platform was not found. Using: ${GENERIC_CXX_COMPILER_NAME}"
+		export GENERIC_GNU_CXX_COMPILER=${GENERIC_CXX_COMPILER}
+		export GENERIC_GNU_CXX_COMPILER_NAME=${GENERIC_CXX_COMPILER_NAME}
+	    else
+		export GENERIC_GNU_CXX_COMPILER=${NATIVE_CXX_COMPILER}
+		export GENERIC_GNU_CXX_COMPILER_NAME=${NATIVE_CXX_COMPILER_NAME}
+	    fi
+	fi
+    fi
+
+    if [[ "$NATIVE_CXX_COMPILER_NAME" == "cl.exe" ]]; then
+	export NATIVE_C_COMPILER_VERSION=${MSVC_VERSION}
+	export NATIVE_CXX_COMPILER_VERSION=${MSVC_VERSION}
+    else
+	export NATIVE_C_COMPILER_VERSION=`"${NATIVE_C_COMPILER}" --version`
+	export NATIVE_CXX_COMPILER_VERSION=`"${NATIVE_CXX_COMPILER}" --version`
+    fi
+    
+    export GENERIC_C_COMPILER_VERSION=`"${GENERIC_C_COMPILER}" --version`
+    export GENERIC_CXX_COMPILER_VERSION=`"${GENERIC_CXX_COMPILER}" --version`
+
+    export GENERIC_GNU_C_COMPILER_VERSION=`"${GENERIC_GNU_C_COMPILER}" --version`
+    export GENERIC_GNU_CXX_COMPILER_VERSION=`"${GENERIC_GNU_CXX_COMPILER}" --version`
+    
     if [[ $ARCH == "" ]]; then
 	export ARCH=`uname -m` # was uname -a
 	export UNAME_ARCH=$ARCH # Store uname architecture to compile properly

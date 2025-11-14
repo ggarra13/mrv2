@@ -40,6 +40,25 @@ jobs:
         Start-Process vc_redist_2022.arm64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
       shell: powershell
   
+    # - name: Install specific MSVC toolset (in case build breaks)
+    #   shell: powershell
+    #   run: |
+    #     Invoke-WebRequest `
+    #     -Uri https://aka.ms/vs/17/release/vs_BuildTools.exe `
+    #     -OutFile vs_BuildTools.exe
+
+    #     Start-Process .\vs_BuildTools.exe `
+    #     -ArgumentList `
+    #     "--quiet", "--wait",
+    #     "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+    #     "--includeRecommended",
+    #     "--installPath C:\VS2022Custom" `
+    #     -NoNewWindow -Wait- name: Activate MSVC
+      
+    # uses: ilammy/msvc-dev-cmd@v1
+    # with:
+    #   path: 'C:\VS2022Custom'
+      
     - name: Synchronize clock
       shell: cmd
       run: |

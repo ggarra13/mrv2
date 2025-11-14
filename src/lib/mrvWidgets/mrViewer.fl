@@ -1405,7 +1405,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiVoice {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (mrv::App::supports_annotations)
+                  callback {if (!mrv::App::supports_voice)
     return;  
     
 uiView->setActionMode( mrv::ActionMode::kVoice );} selected
@@ -1414,7 +1414,7 @@ uiView->setActionMode( mrv::ActionMode::kVoice );} selected
                 }
                 Fl_Button uiLink {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (mrv::App::supports_annotations)
+                  callback {if (!mrv::App::supports_voice)
     return;  
     
 uiView->setActionMode( mrv::ActionMode::kLink );} selected
