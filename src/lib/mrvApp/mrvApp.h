@@ -185,8 +185,13 @@ namespace mrv
         static ViewerUI* ui;
         static App* app;
 
-        // Licensing information.
         static bool demo_mode;
+
+        static bool supports_annotations;
+        static bool supports_layers;
+        static bool supports_editing;
+        static bool supports_hdr;
+        
         static LicenseType license_type;
         
         static bool unsaved_annotations;

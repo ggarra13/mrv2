@@ -246,9 +246,6 @@ namespace mrv
 
     void FilesModel::setB(int index, bool value)
     {
-        if (App::demo_mode)
-            return;
-        
         TLRENDER_P();
         if (index >= 0 && index < p.files->getSize())
         {
@@ -490,8 +487,6 @@ namespace mrv
     {
         TLRENDER_P();
         const int index = _index(item);
-        if (App::demo_mode && index > 0)
-            return;
 
         if (index != -1 &&
             layer < p.files->getItem(index)->videoLayers.size() &&
@@ -549,9 +544,6 @@ namespace mrv
 
     void FilesModel::setCompareOptions(const timeline::CompareOptions& value)
     {
-        if (App::demo_mode)
-            return;
-
         TLRENDER_P();
         
         if (p.compareOptions->setIfChanged(value))

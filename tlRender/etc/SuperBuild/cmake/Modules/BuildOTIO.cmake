@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 set(OTIO_GIT_REPOSITORY "https://github.com/PixarAnimationStudios/OpenTimelineIO.git")
-set(OTIO_GIT_TAG "v0.18.1")
+set(OTIO_GIT_TAG "v0.18.0")
 #set(OTIO_GIT_TAG "v0.17.0")
 
 set(OTIO_DEPENDENCIES Imath)
@@ -28,11 +28,11 @@ if(WIN32)
 endif()
 
 set(OTIO_PATCH )
-if(WIN32)
-    list(APPEND OTIO_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	${CMAKE_CURRENT_SOURCE_DIR}/patches/OTIO-patch/src/opentime/timeRange.h
-	${CMAKE_CURRENT_BINARY_DIR}/OTIO/src/OTIO/src/opentime/timeRange.h)
-endif()
+# if(WIN32)
+#     list(APPEND OTIO_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
+# 	${CMAKE_CURRENT_SOURCE_DIR}/patches/OTIO-patch/src/opentime/timeRange.h
+# 	${CMAKE_CURRENT_BINARY_DIR}/OTIO/src/OTIO/src/opentime/timeRange.h)
+# endif()
 
 ExternalProject_Add(
     OTIO

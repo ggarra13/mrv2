@@ -6,6 +6,8 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include "mrvWidgets/mrvVersion.h"
+
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvI8N.h"
@@ -302,7 +304,7 @@ namespace mrv
             if (!file::isReadable(caLocation))
             {
                 /* xgettext:c++-format */
-                std::string msg =
+                const std::string msg =
                     string::Format(_("{0} is not readable. Using system default.")).
                     arg(caLocation);
                 LOG_STATUS(msg);
@@ -468,6 +470,7 @@ namespace mrv
         // Get the 'payload' object with ordered keys
         const nlohmann::ordered_json& payload_json = json_data.at("payload");
         const std::string expires_at = payload_json.at("expires_at").get<std::string>();
+        const std::string plan = payload_json.at("plan").get<std::string>();
         
         // -------------------------
         // Verify license
@@ -482,6 +485,24 @@ namespace mrv
         }
 
         expiration_date = expires_at;
+        if (plan == "Pro")
+        {                
+            App::supports_layers = true;
+            App::supports_annotations = true;
+            App::supports_editing = true;
+            App::supports_hdr = true;
+        }
+        else if (plan == "Standard")
+        {
+            App::supports_layers = true;
+            App::supports_annotations = true;
+        }
+        else
+        {
+            const std::string msg =
+                string::Format(_("Unknown licese plan '{0}'")).arg(plan);
+            LOG_ERROR(msg);
+        }
         return License::kValid;
     }
     
@@ -496,10 +517,10 @@ namespace mrv
                                   master_key);
             
         // --- Build JSON request ---
-        const std::string plan = "Pro";
+        const std::string requestVersion = mrv::version();  // unused - legacy
         const std::string requestBody = "{\"machine_id\":\"" +
                                         machine_id + "\",\"plan\":\""
-                                        + plan + "\"}";
+                                        + requestVersion + "\"}";
 
         // --- HTTP POST to /node_locked_license ---
         nlohmann::json json_data = post_request(serverHost, serverPort,
@@ -519,11 +540,13 @@ namespace mrv
         const nlohmann::ordered_json& payload_json = json_data.at("payload");
 
         if (!payload_json.contains("expires_at") ||
-            !payload_json.contains("machine_id"))
+            !payload_json.contains("machine_id") ||
+            !payload_json.contains("plan"))
             return License::kInvalid;
         
         const std::string expires_at = payload_json.at("expires_at").get<std::string>();
         const std::string payload_machine_id = payload_json.at("machine_id").get<std::string>();
+        const std::string plan = payload_json.at("plan").get<std::string>();
         
             
         // -------------------------
@@ -550,6 +573,21 @@ namespace mrv
         if (has_license_expired(expires_at) == License::kExpired)
         {
             return License::kExpired;
+        }
+        
+        if (plan == "Pro")
+        {                
+            App::supports_layers = true;
+            App::supports_annotations = true;
+            App::supports_editing = true;
+            App::supports_hdr = true;
+        }
+        else if (plan == "Standard")
+        {
+            App::supports_layers = true;
+            App::supports_annotations = true;
+            App::supports_editing = false;
+            App::supports_hdr = false;
         }
 
         return License::kValid;
@@ -686,6 +724,11 @@ namespace mrv
         if (ret != 0)
         {
             App::demo_mode = true;
+
+            App::supports_layers = false;
+            App::supports_annotations = false;
+            App::supports_editing = false;
+            App::supports_hdr = false;
         }
         else
         {
@@ -695,13 +738,25 @@ namespace mrv
             {
                 fl_alert("%s", _("Invalid license. Entering demo mode"));
                 Fl::check();
+                
                 App::demo_mode = true;
+                
+                App::supports_layers = false;
+                App::supports_annotations = false;
+                App::supports_editing = false;
+                App::supports_hdr = false;
             }
             else if (ok == License::kExpired)
             {
                 fl_alert("%s", _("License expired. Entering demo mode"));
                 Fl::check();
+                
                 App::demo_mode = true;
+
+                App::supports_layers = false;
+                App::supports_annotations = false;
+                App::supports_editing = false;
+                App::supports_hdr = false;
             }
             else
             {

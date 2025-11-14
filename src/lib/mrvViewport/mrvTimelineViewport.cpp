@@ -270,7 +270,7 @@ namespace mrv
             p.ui->uiSlip->value(0);
             p.ui->uiTrim->value(0);
             
-            if (App::demo_mode)
+            if (!App::supports_editing)
             {
                 p.ui->uiMove->value(1);
                 return;
@@ -371,7 +371,7 @@ namespace mrv
                 setSelectionArea(area);
             }
 
-            if (App::demo_mode)
+            if (!App::supports_annotations)
             {
                 p.ui->uiScrub->value(1);
                 return;
@@ -975,7 +975,7 @@ namespace mrv
                 auto i = p.tagData.find("hdr");
                 if (i != p.tagData.end())
                 {
-                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.tonemap = App::supports_hdr;
                     p.hdr = i->second;
 
                     // Parse the JSON string back into a nlohmann::json object
@@ -985,7 +985,7 @@ namespace mrv
                 else
                 {
                     if (d.hdrInfo == timeline::HDRInformation::Active)
-                        p.hdrOptions.tonemap = true;
+                        p.hdrOptions.tonemap = App::supports_hdr;
                 }
             }
             else

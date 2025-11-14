@@ -254,7 +254,14 @@ namespace mrv
     ViewerUI* App::ui = nullptr;
     App* App::app = nullptr;
     bool App::demo_mode = true;
+
     LicenseType App::license_type = LicenseType::kDemo;
+
+    bool App::supports_layers = false;
+    bool App::supports_annotations = false;
+    bool App::supports_editing = false;
+    bool App::supports_hdr = false;
+    
     bool App::unsaved_annotations = false;
     bool App::unsaved_edits = false;
 

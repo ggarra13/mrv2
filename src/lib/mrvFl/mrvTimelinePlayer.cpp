@@ -537,7 +537,7 @@ namespace mrv
 
     void TimelinePlayer::setVideoLayer(int value)
     {
-        if (App::demo_mode && value > 0)
+        if (App::supports_layers && value > 0)
             return;
 
         pushMessage("setVideoLayer", value);
