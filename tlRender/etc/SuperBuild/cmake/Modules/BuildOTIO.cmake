@@ -27,6 +27,13 @@ if(WIN32)
     )
 endif()
 
+set(OTIO_PATCH )
+if(WIN32)
+    list(APPEND OTIO_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	${CMAKE_CURRENT_SOURCE_DIR}/patches/OTIO-patch/src/opentime/timeRange.h
+	${CMAKE_CURRENT_BINARY_DIR}/OTIO/src/OTIO/src/opentime/timeRange.h)
+endif()
+
 ExternalProject_Add(
     OTIO
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OTIO
