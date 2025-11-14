@@ -54,9 +54,8 @@ ChangeLog
 - OTIO clips can be trimmed and rolled (name concepts popular to editors).
 - Added new Editing tools (only trim icon).
 - Fixed undo on moving clips.
-- Upgraded OTIO to v0.18.1 from v0.17.0.
+- Upgraded OTIO to v0.18.0 from v0.17.0.
 - Improved performance of 4K OpenEXR sequences.  With the new htjk256 and similar OpenEXR compressions, is possible to play back 4K sequences at 60 FPS.
-- 
 
 
 v1.4.5
