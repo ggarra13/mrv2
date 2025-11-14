@@ -10,13 +10,6 @@ mrv2 ships now in two compiled versions:
 
 It also ships for many more architectures, so be careful to download the correct one.
 
-Difference between OpenGL and Vulkan
-------------------------------------
-
-Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS. It supports true HDR (High Dynamic Range), it is about 20% to 50% faster than the OpenGL version but it does not support OpenUSD.
-
-OpenGL's main benefit at this point is that it supports OpenUSD and works better on older CPUs (macOS Intel and Linux X11 backend).
-
 Prices for binaries
 -------------------
 
@@ -27,7 +20,8 @@ Donationware prices of binary licenses through PayPal:
 I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
 
 - u$  50 for a node-lock license for one year.
-- u$ 150 for a node-lock license to own.
+- u$  75 for a node-lock license with editing tools.
+- u$ 150 for a node-lock license to own with the full feature set.
 
 The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
 
@@ -52,11 +46,13 @@ ChangeLog
 - Improved speed of compilation of Vulkan backend.
 - OTIO transitions (dissolves) can now be moved and trimmed.
 - OTIO clips can be trimmed and rolled (name concepts popular to editors).
-- Added new Editing tools (only trim icon).
+- Added new Editing tools (only trim and move icon).
 - Fixed undo on moving clips.
-- Upgraded OTIO to v0.18.0 from v0.17.0.
+- Upgraded OTIO to v0.18.0 from v0.17.0.  Except on Windows.
 - Improved performance of 4K OpenEXR sequences.  With the new htjk256 and similar OpenEXR compressions, is possible to play back 4K sequences at 60 FPS on the Vulkan backend.
 - Fixed toggling Edit mode on and off.
+- By popular demand, the DEMO / BETA versions no longer log you off after a number of minutes.  The Vulkan port still supports HDR and the OpenGL port supports tone mapping.
+- Made OTIO clips smaller on non-high DPI sets.
 
 
 v1.4.5
