@@ -1,4 +1,4 @@
-find_package(OTIO REQUIRED)
+find_package(OpenTimelineIO REQUIRED)
 
 set(source main.cpp)
 
