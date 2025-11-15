@@ -114,10 +114,6 @@ if(MRV2_CPPTRACE)
     add_definitions( -D MRV2_CPPTRACE )
 endif()
 
-if(MRV2_DEMO)
-    add_definitions( -D MRV2_DEMO )
-endif()
-
 if(MRV2_NETWORK)
     find_package(Poco REQUIRED
 	COMPONENTS Net Foundation
