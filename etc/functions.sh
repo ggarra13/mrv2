@@ -57,11 +57,11 @@ get_kernel()
 	export GENERIC_CXX_COMPILER=`which clang-cl`
 	export GENERIC_CXX_COMPILER_NAME="clang-cl"
 	
-	export GENERIC_GNU_C_COMPILER=`which clang`
-	export GENERIC_GNU_C_COMPILER_NAME="clang"
+	export GNU_C_COMPILER=`which clang`
+	export GNU_C_COMPILER_NAME="clang"
 
-	export GENERIC_GNU_CXX_COMPILER=`which clang`
-	export GENERIC_GNU_CXX_COMPILER_NAME="clang"
+	export GNU_CXX_COMPILER=`which clang`
+	export GNU_CXX_COMPILER_NAME="clang"
     
     elif [[ $KERNEL == *Darwin* ]]; then
 	export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string)
@@ -90,30 +90,35 @@ get_kernel()
 	    export NATIVE_C_COMPILER_NAME="cc"
 	    export NATIVE_CXX_COMPILER=`which c++`
 	    export NATIVE_CXX_COMPILER_NAME="c++"
-	fi
-
-	if [[ -z "$NATIVE_C_COMPILER" ]]; then
+	else
 	    export NATIVE_C_COMPILER=`which gcc`
 	    export NATIVE_C_COMPILER_NAME="gcc"
-	fi
-	if [[ -z "$NATIVE_CXX_COMPILER" ]]; then
 	    export NATIVE_CXX_COMPILER=`which g++`
 	    export NATIVE_CXX_COMPILER_NAME="g++"
 	fi
-	if [[ -z "$GENERIC_C_COMPILER" ]]; then
-	    export GENERIC_C_COMPILER=`which gcc`
-	    export GENERIC_C_COMPILER_NAME="gcc"
-	fi
-	if [[ -z "$GENERIC_CXX_COMPILER" ]]; then
-	    export GENERIC_CXX_COMPILER=`which g++`
-	    export GENERIC_CXX_COMPILER_NAME="g++"
-	fi
+
+	export NATIVE_C_COMPILER=`which gcc`
+	export NATIVE_C_COMPILER_NAME="gcc"
+
+	export NATIVE_CXX_COMPILER=`which g++`
+	export NATIVE_CXX_COMPILER_NAME="g++"
+
+	export GENERIC_C_COMPILER=`which gcc`
+	export GENERIC_C_COMPILER_NAME="gcc"
+
+	export GENERIC_CXX_COMPILER=`which g++`
+	export GENERIC_CXX_COMPILER_NAME="g++"
+
+	export GNU_C_COMPILER=`which gcc`
+	export GNU_C_COMPILER_NAME="gcc"
+	export GNU_CXX_COMPILER=`which g++`
+	export GNU_CXX_COMPILER_NAME="g++"
     fi
 
-    if [[ "$GENERIC_C_COMPILER" == "" ]]; then
+    if [[ -z "$GENERIC_C_COMPILER" ]]; then
 	export GENERIC_C_COMPILER=`which clang`
 	export GENERIC_C_COMPILER_NAME="clang"
-	if [[ "$GENERIC_C_COMPILER" == "" ]]; then
+	if [[ -z "$GENERIC_C_COMPILER" ]]; then
 	    echo "WARNING: GENERIC_C_COMPILER for "\
 		 "this platform was not found. Using: ${NATIVE_C_COMPILER_NAME}"
 	    export GENERIC_C_COMPILER=${NATIVE_C_COMPILER}
@@ -121,10 +126,10 @@ get_kernel()
 	fi
     fi
     
-    if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
+    if [[ -z "$GENERIC_CXX_COMPILER" ]]; then
 	export GENERIC_CXX_COMPILER=`which clang`
 	export GENERIC_CXX_COMPILER_NAME="clang"
-	if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
+	if [[ -z "$GENERIC_CXX_COMPILER" ]]; then
 	    echo "WARNING: GENERIC_CXX_COMPILER for "\
 		 "this platform was not found. Using: ${NATIVE_CXX_COMPILER_NAME}"
 	    export GENERIC_CXX_COMPILER=${NATIVE_CXX_COMPILER}
@@ -135,47 +140,43 @@ get_kernel()
     #
     # Sanity checks
     #
-    if [[ "$GENERIC_GNU_C_COMPILER" == "" ]]; then
-	if [[ "$GENERIC_C_COMPILER" == "" ]]; then
-	    if [[ "$GENERIC_C_COMPILER" != "" ]]; then
-		echo "WARNING: GENERIC_GNU_C_COMPILER for "\
-		     "this platform was not found. Using: ${GENERIC_C_COMPILER_NAME}"
-		export GENERIC_GNU_CXX_COMPILER=${GENERIC_C_COMPILER}
-		export GENERIC_GNU_CXX_COMPILER_NAME=${GENERIC_C_COMPILER_NAME}
-	    else
-		export GENERIC_GNU_CXX_COMPILER=${NATIVE_CXX_COMPILER}
-		export GENERIC_GNU_CXX_COMPILER_NAME=${NATIVE_CXX_COMPILER_NAME}
-	    fi
+    if [[ -z "$GNU_C_COMPILER" ]]; then
+	if [[ "$GENERIC_C_COMPILER" != "" ]]; then
+	    echo "WARNING: GNU_C_COMPILER for "\
+		 "this platform was not found. Using: ${GENERIC_C_COMPILER_NAME}"
+	    export GNU_C_COMPILER=${GENERIC_C_COMPILER}
+	    export GNU_C_COMPILER_NAME=${GENERIC_C_COMPILER_NAME}
+	else
+	    export GNU_C_COMPILER=${NATIVE_CXX_COMPILER}
+	    export GNU_C_COMPILER_NAME=${NATIVE_CXX_COMPILER_NAME}
 	fi
     fi
     
-    if [[ "$GENERIC_GNU_CXX_COMPILER" == "" ]]; then
-	if [[ "$GENERIC_CXX_COMPILER" == "" ]]; then
-	    if [[ "$GENERIC_CXX_COMPILER" != "" ]]; then
-		echo "WARNING: GENERIC_GNU_CXX_COMPILER for "\
-		     "this platform was not found. Using: ${GENERIC_CXX_COMPILER_NAME}"
-		export GENERIC_GNU_CXX_COMPILER=${GENERIC_CXX_COMPILER}
-		export GENERIC_GNU_CXX_COMPILER_NAME=${GENERIC_CXX_COMPILER_NAME}
-	    else
-		export GENERIC_GNU_CXX_COMPILER=${NATIVE_CXX_COMPILER}
-		export GENERIC_GNU_CXX_COMPILER_NAME=${NATIVE_CXX_COMPILER_NAME}
-	    fi
+    if [[ -z "$GNU_CXX_COMPILER" ]]; then
+	if [[ "$GENERIC_CXX_COMPILER" != "" ]]; then
+	    echo "WARNING: GNU_CXX_COMPILER for "\
+		 "this platform was not found. Using: ${GENERIC_CXX_COMPILER_NAME}"
+	    export GNU_CXX_COMPILER=${GENERIC_CXX_COMPILER}
+	    export GNU_CXX_COMPILER_NAME=${GENERIC_CXX_COMPILER_NAME}
+	else
+	    export GNU_CXX_COMPILER=${NATIVE_CXX_COMPILER}
+	    export GNU_CXX_COMPILER_NAME=${NATIVE_CXX_COMPILER_NAME}
 	fi
     fi
-
+    
     if [[ "$NATIVE_CXX_COMPILER_NAME" == "cl.exe" ]]; then
+	get_msvc_version
 	export NATIVE_C_COMPILER_VERSION=${MSVC_VERSION}
 	export NATIVE_CXX_COMPILER_VERSION=${MSVC_VERSION}
     else
-	export NATIVE_C_COMPILER_VERSION=`"${NATIVE_C_COMPILER}" --version`
-	export NATIVE_CXX_COMPILER_VERSION=`"${NATIVE_CXX_COMPILER}" --version`
+	export NATIVE_C_COMPILER_VERSION=$(get_compiler_version "${NATIVE_C_COMPILER}")
+	export NATIVE_CXX_COMPILER_VERSION=$(get_compiler_version "${NATIVE_CXX_COMPILER}")
     fi
     
-    export GENERIC_C_COMPILER_VERSION=`"${GENERIC_C_COMPILER}" --version`
-    export GENERIC_CXX_COMPILER_VERSION=`"${GENERIC_CXX_COMPILER}" --version`
-
-    export GENERIC_GNU_C_COMPILER_VERSION=`"${GENERIC_GNU_C_COMPILER}" --version`
-    export GENERIC_GNU_CXX_COMPILER_VERSION=`"${GENERIC_GNU_CXX_COMPILER}" --version`
+    export GENERIC_C_COMPILER_VERSION=$(get_compiler_version "${GENERIC_C_COMPILER}")
+    export GENERIC_CXX_COMPILER_VERSION=$(get_compiler_version "${GENERIC_CXX_COMPILER}")
+    export GNU_C_COMPILER_VERSION=$(get_compiler_version "${GNU_C_COMPILER}")
+    export GNU_CXX_COMPILER_VERSION=$(get_compiler_version "${GNU_CXX_COMPILER}")
     
     if [[ $ARCH == "" ]]; then
 	export ARCH=`uname -m` # was uname -a
@@ -208,30 +209,34 @@ get_kernel()
     fi
 }
 
+#
+# Extract compiler version for MSVC (There's no --version command in MSVC)
+#
 get_msvc_version()
 {
     export MSVC_VERSION=`echo $VCINSTALLDIR | grep -o '2[0-9]\+'`
 }
 
+#
+# Extract compile version passed as first string
+#
+get_compiler_version() {
+    local compiler="$1"
+
+    # Extract first version string (v optional, digits + optional .digits)
+    "${compiler}" --version 2>/dev/null |
+        grep -oE 'v?[0-9]+(\.[0-9]+)*' |
+        head -n1
+}
+
+#
+# Extract cmake version
+#
 get_cmake_version()
 {
     export CMAKE_LOCATION=`which cmake`
     export CMAKE_VERSION=`cmake --version | grep -o 'cmake version [0-9.]*' | cut -d' ' -f3`
 }
-
-get_compiler_version()
-{
-    if [[ $KERNEL == *Windows* ]]; then
-	get_msvc_version
-	export NATIVE_COMPILER_VERSION="MSVC ${MSVC_VERSION}"
-	export GENERIC_COMPILER_VERSION=`clang --version | grep version`
-    elif [[ $KERNEL == *Linux* ]]; then
-	export NATIVE_COMPILER_VERSION=`gcc --version | grep gcc`
-    else
-	export NATIVE_COMPILER_VERSION=`clang --version | grep version`
-    fi
-}
-
 
 #
 # Extract version from cmake/version.cmake

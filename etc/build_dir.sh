@@ -64,13 +64,6 @@ fi
 #
 . etc/build_cores.sh
 
-
-#
-# Extract compiler version
-#
-get_compiler_version
-
-
 #
 # For Darwin, when building amd64, we make it compatible with macOS 11.0
 #

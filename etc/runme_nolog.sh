@@ -29,7 +29,7 @@ export PATH="$PWD/${BUILD_DIR}/install/bin:$PWD/$BUILD_DIR/install/bin/Scripts:$
 echo "PATH is now set now to ${PATH}"
 echo "It has:"
 mkdir -p $PWD/${BUILD_DIR}/install/bin/
-ls $PWD/${BUILD_DIR}/install/bin/
+
 
 #
 # Extract cmake version
@@ -37,6 +37,7 @@ ls $PWD/${BUILD_DIR}/install/bin/
 . etc/install_cmake.sh
 
 get_cmake_version
+
 
 #
 # These are some of the expensive mrv2 options
@@ -303,6 +304,8 @@ unset PYTHONPATH
 #
 #  export PYTHONUTF8=1  USD needs it, meson fails.
 
+echo "Z"
+
 echo
 echo
 echo "Building summary"
@@ -315,16 +318,17 @@ echo "Build type      is ${CMAKE_BUILD_TYPE}"
 echo "Build cores     is ${CPU_CORES}"
 echo
 echo "C COMPILERS"
-echo
+echo "-----------"
 echo "Native C compiler ${NATIVE_C_COMPILER_NAME} version ${NATIVE_C_COMPILER_VERSION}"
 echo "Generic C compiler ${GENERIC_C_COMPILER_NAME} version ${GENERIC_C_COMPILER_VERSION}"
-echo "Generic GNU C compiler ${GENERIC_GNU_C_COMPILER_NAME} ${GENERIC_GNU_C_COMPILER_VERSION}"
+echo "Generic GNU C compiler ${GNU_C_COMPILER_NAME} ${GNU_C_COMPILER_VERSION}"
 echo
 echo "CXX COMPILERS"
-echo
+echo "-------------"
 echo "Native CXX compiler ${NATIVE_CXX_COMPILER_NAME} version ${NATIVE_CXX_COMPILER_VERSION}"
 echo "Generic CXX with ${GENERIC_CXX_COMPILER_NAME} version ${GENERIC_CXX_COMPILER_VERSION}"
-echo "Generic GNU CXX compiler ${GENERIC_GNU_CXX_COMPILER_NAME} ${GENERIC_GNU_CXX_COMPILER_VERSION}"
+echo "Generic GNU CXX compiler ${GNU_CXX_COMPILER_NAME} ${GNU_CXX_COMPILER_VERSION}"
+echo
 echo "CMake at: ${CMAKE_LOCATION} ${CMAKE_VERSION}"
 if [[ $KERNEL == *Darwin* ]]; then
     echo "Building on MacOS Brand ${MACOS_BRAND}"
@@ -338,16 +342,6 @@ if [[ $KERNEL == *Windows* ]]; then
     fi
     nsis_version=`"${nsis_exe}" -version`
     echo "NSIS ${nsis_version}"
-    if command -v clang > /dev/null 2>&1; then
-	clang_exe=clang.exe
-	${clang_exe} --version
-    else
-	echo
-	echo "clang.exe NOT found!!! Cannot compile libplacebo."
-	echo "Please re-install MSVC with Clang turned on."
-	echo
-	exit 1
-    fi
 fi
 
 
@@ -458,19 +452,19 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   
 	   -D NATIVE_C_COMPILER=\"${NATIVE_C_COMPILER}\"
 	   -D GENERIC_C_COMPILER=\"${GENERIC_C_COMPILER}\"
-	   -D GENERIC_GNU_C_COMPILER=\"${GENERIC_GNU_C_COMPILER}\"
+	   -D GNU_C_COMPILER=\"${GNU_C_COMPILER}\"
 
 	   -D NATIVE_CXX_COMPILER=\"${NATIVE_CXX_COMPILER}\"
 	   -D GENERIC_CXX_COMPILER=\"${GENERIC_CXX_COMPILER}\"
-	   -D GENERIC_GNU_CXX_COMPILER=\"${GENERIC_GNU_CXX_COMPILER}\"
+	   -D GNU_CXX_COMPILER=\"${GNU_CXX_COMPILER}\"
 
 	   -D NATIVE_CXX_COMPILER_NAME=\"${NATIVE_CXX_COMPILER_NAME}\"
 	   -D GENERIC_CXX_COMPILER_NAME=\"${GENERIC_CXX_COMPILER_NAME}\"
-	   -D GENERIC_GNU_CXX_COMPILER_NAME=\"${GENERIC_GNU_CXX_COMPILER_NAME}\"
+	   -D GNU_CXX_COMPILER_NAME=\"${GNU_CXX_COMPILER_NAME}\"
 
 	   -D NATIVE_C_COMPILER_NAME=\"${NATIVE_C_COMPILER_NAME}\"
 	   -D GENERIC_C_COMPILER_NAME=\"${GENERIC_C_COMPILER_NAME}\"
-	   -D GENERIC_GNU_C_COMPILER_NAME=\"${GENERIC_GNU_C_COMPILER_NAME}\"
+	   -D GNU_C_COMPILER_NAME=\"${GNU_C_COMPILER_NAME}\"
 
 	   -D BUILD_PYTHON=${BUILD_PYTHON}
 	   -D BUILD_X11=${BUILD_X11}
