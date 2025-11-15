@@ -42,6 +42,7 @@ Prices might change depending on competition and new features.
 ChangeLog
 ---------
 
+- By popular demand, the DEMO / BETA versions no longer log you off after a number of minutes.  The Vulkan port still supports HDR and the OpenGL port supports tone mapping.
 - Fixed certs directory on macOS install.
 - Fixed double clicking and Open With on macOS.
 - Fixed URL Link requester's buttons going off screen.
@@ -61,7 +62,6 @@ ChangeLog
 - Upgraded OTIO to v0.18.0 from v0.17.0.  Except on Windows for the time being.
 - Improved performance of 4K OpenEXR sequences.  With the new htjk256 and similar OpenEXR compressions, is possible to play back 4K sequences at 60 FPS on the Vulkan backend.
 - Fixed toggling Edit mode on and off.
-- By popular demand, the DEMO / BETA versions no longer log you off after a number of minutes.  The Vulkan port still supports HDR and the OpenGL port supports tone mapping.
 - Made OTIO clips smaller on non-high DPI OSes.
 
 
