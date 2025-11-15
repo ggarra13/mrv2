@@ -9,6 +9,7 @@ mrv2 ships now in two compiled versions:
    - vmrv2 with Vulkan backend (donationware)
 
 It also ships for many more architectures, so be careful to download the correct one.
+It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).
 
 Prices for binaries
 -------------------
@@ -19,15 +20,24 @@ Donationware prices of binary licenses through PayPal:
 
 I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
 
-- u$  50 for a node-lock license for one year.
-- u$  75 for a node-lock license with annotations and editing tools (WIP).
-- u$ 150 for a node-lock license to own with the full feature set.
+- u$  50 for a Standard node-lock standard license for one year (Annotations, no NDI or Editing).
+- u$  75 for a Edit node-lock license with annotations and editing tools (WIP).
+- u$ 150 for a Pro node-lock license to own with the full feature set (NDI, aarch64 access, etc).
 
-The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
+The prices are cumulative.  If you donate, say u$10 as a recurring donation, you can access the node-lock license for one year.
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
 
+The donationware version when running without a donation, does not have:
+
+    - Annotations
+    - Voice Annotations
+    - Editing
+    - NDI
+    - OpenEXR layer switching.
+
+Prices might change depending on competition and new features.
 
 ChangeLog
 ---------
@@ -52,7 +62,7 @@ ChangeLog
 - Improved performance of 4K OpenEXR sequences.  With the new htjk256 and similar OpenEXR compressions, is possible to play back 4K sequences at 60 FPS on the Vulkan backend.
 - Fixed toggling Edit mode on and off.
 - By popular demand, the DEMO / BETA versions no longer log you off after a number of minutes.  The Vulkan port still supports HDR and the OpenGL port supports tone mapping.
-- Made OTIO clips smaller on non-high DPI sets.
+- Made OTIO clips smaller on non-high DPI OSes.
 
 
 v1.4.5

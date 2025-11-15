@@ -148,7 +148,9 @@ Currently supported:
 - PDF Exporting of Annotations and Notes
 - Linux Wayland support
 - Internationalization (Translations) support
+- Editing
 - OpenGL and Vulkan backends
+- Linux and Windows aarch64 (untested)
 
 # Tutorials
 

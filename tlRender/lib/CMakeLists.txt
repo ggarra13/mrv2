@@ -1,4 +1,3 @@
-add_subdirectory(tlBaseApp)
 add_subdirectory(tlCore)
 if(NOT MRV2_BACKEND STREQUAL "VK")
     add_subdirectory(tlGL)

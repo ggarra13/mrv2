@@ -261,6 +261,15 @@ namespace mrv
             for (const auto& i : p.cmdLine.options)
             {
                 bool first = true;
+                if (i->isTitle())
+                {
+                    for (const auto& j : i->getHelpText())
+                    {
+                        _print(j);
+                    }
+                    _printNewline();
+                    continue;
+                }
                 for (const auto& j : i->getHelpText())
                 {
                     if (first)

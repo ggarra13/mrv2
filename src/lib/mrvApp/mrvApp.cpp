@@ -356,18 +356,19 @@ namespace mrv
                   "folders."),
                 true, true)},
             {
-#if 1 //ndef NDEBUG
+                app::CmdLineHeader::create({}, _("Debugging:")),
                 app::CmdLineValueOption<int>::create(
                     Preferences::debug, {"-debug", "-d"},
                     _("Debug verbosity.")),
-#endif
                 app::CmdLineValueOption<int>::create(
                     Preferences::logLevel, {"-logLevel", "-l"},
                     _("Log verbosity."),
                     string::Format("{0}").arg(Preferences::logLevel)),
+                app::CmdLineHeader::create({}, _("Audio:")),
                 app::CmdLineValueOption<std::string>::create(
                     p.options.audioFileName, {"-audio", "-a"},
                     _("Audio file name.")),
+                app::CmdLineHeader::create({}, _("Compare:")),
                 app::CmdLineValueOption<std::string>::create(
                     p.options.compareFileName, {"-compare", "-b"},
                     _("A/B comparison \"B\" file name.")),
@@ -387,6 +388,7 @@ namespace mrv
                     _("A/B comparison wipe rotation."),
                     string::Format("{0}").arg(
                         p.options.compareOptions.wipeRotation)),
+                app::CmdLineHeader::create({}, _("Editing:")),
                 app::CmdLineFlagOption::create(
                     p.options.createOtioTimeline, {"-otio", "-o", "-edl"},
                     _("Create OpenTimelineIO EDL from the list of clips "
@@ -397,6 +399,7 @@ namespace mrv
                 app::CmdLineFlagOption::create(
                     p.options.singleImages, {"-single", "-s"},
                     _("Load the images as still images not sequences.")),
+                app::CmdLineHeader::create({}, _("Playback:")),
                 app::CmdLineValueOption<double>::create(
                     p.options.speed, {"-speed"}, _("Playback speed.")),
                 app::CmdLineValueOption<timeline::Playback>::create(
@@ -416,6 +419,7 @@ namespace mrv
                     p.options.inOutRange, {"-inOutRange", "-inout"},
                     _("Set the in/out points range in start/end/fps "
                       "format, like 23/120/24.")),
+                app::CmdLineHeader::create({}, _("OCIO:")),
                 app::CmdLineValueOption<std::string>::create(
                     p.options.ocioOptions.input, {"-ocioInput", "-ics", "-oi"},
                     _("OpenColorIO input color space.")),
@@ -437,6 +441,7 @@ namespace mrv
                     string::Format("{0}").arg(p.options.lutOptions.order),
                     string::join(timeline::getLUTOrderLabels(), ", ")),
 #ifdef MRV2_PYBIND11
+                app::CmdLineHeader::create({}, _("Python:")),
                 app::CmdLineFlagOption::create(
                     p.options.noPython, {"-noPython", "-np"},
                     _("Don't load python for faster startup.")),
@@ -449,6 +454,7 @@ namespace mrv
                       "single quoted string like \"arg1 'arg2 asd' arg3\", "
                       "stored in cmd.argv.")),
 #endif
+                app::CmdLineHeader::create({}, _("Preferences:")),
                 app::CmdLineFlagOption::create(
                     p.options.resetSettings, {"-resetSettings"},
                     _("Reset settings to defaults.")),
@@ -456,6 +462,7 @@ namespace mrv
                     p.options.resetHotkeys, {"-resetHotkeys"},
                     _("Reset hotkeys to defaults.")),
 #if defined(TLRENDER_USD)
+                app::CmdLineHeader::create({}, _("OpenUSD:")),
                 app::CmdLineValueOption<bool>::create(
                     p.options.usdOverrides, {"-usd", "-usdOverrides"},
                     "USD overrides.",
@@ -502,6 +509,7 @@ namespace mrv
                     string::Format("{0}").arg(p.options.usd.diskCache)),
 #endif // TLRENDER_USD
 #ifdef MRV2_NETWORK
+                app::CmdLineHeader::create({}, _("Networking:")),
                 app::CmdLineFlagOption::create(
                     p.options.server, {"-server"},
                     _("Start a server.  Use -port to specify a port "
