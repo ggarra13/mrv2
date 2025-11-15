@@ -5,9 +5,8 @@ set(USD_DEPENDENCIES ${PYTHON_DEP})
 message(STATUS "USD DEPENDENCIES=${USD_DEPENDENCIES}")
 
 set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
-                          
-set(USD_GIT_TAG v25.11)   # Chokes on TBB::TBB
-#set(USD_GIT_TAG v25.02a) # v25.02a works
+                        # v24.08 works
+set(USD_GIT_TAG v25.02a) # v25.02a works
 #set(USD_GIT_TAG v25.08) # latest - broken on Windows and Linux assembler.
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} cmake_build_type)
