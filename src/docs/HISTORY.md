@@ -20,7 +20,7 @@ Donationware prices of binary licenses through PayPal:
 I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
 
 - u$  50 for a node-lock license for one year.
-- u$  75 for a node-lock license with editing tools.
+- u$  75 for a node-lock license with annotations and editing tools (WIP).
 - u$ 150 for a node-lock license to own with the full feature set.
 
 The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
@@ -48,7 +48,7 @@ ChangeLog
 - OTIO clips can be trimmed and rolled (name concepts popular to editors).
 - Added new Editing tools (only trim and move icon).
 - Fixed undo on moving clips.
-- Upgraded OTIO to v0.18.0 from v0.17.0.  Except on Windows.
+- Upgraded OTIO to v0.18.0 from v0.17.0.  Except on Windows for the time being.
 - Improved performance of 4K OpenEXR sequences.  With the new htjk256 and similar OpenEXR compressions, is possible to play back 4K sequences at 60 FPS on the Vulkan backend.
 - Fixed toggling Edit mode on and off.
 - By popular demand, the DEMO / BETA versions no longer log you off after a number of minutes.  The Vulkan port still supports HDR and the OpenGL port supports tone mapping.
