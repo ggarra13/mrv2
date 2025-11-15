@@ -15,9 +15,7 @@
 # Use runme.sh for that.
 #
 #
-#
-# Install cmake
-#
+
 if [[ !$RUNME ]]; then
     . $PWD/etc/build_dir.sh
 fi
@@ -34,7 +32,9 @@ mkdir -p $PWD/${BUILD_DIR}/install/bin/
 #
 # Extract cmake version
 #
-. etc/install_cmake.sh
+if [[ $INSTALL_CMAKE == 1 ]]; then
+    . etc/install_cmake.sh
+fi
 
 get_cmake_version
 

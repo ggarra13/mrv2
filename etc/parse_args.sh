@@ -102,6 +102,14 @@ fi
 if [[ -z $ASK_TO_CONTINUE ]]; then
     export ASK_TO_CONTINUE=0
 fi
+if [[ -z $INSTALL_CMAKE ]]; then
+    if [[ "$USER" == "User-PC" ||
+	      "$USER" == "gga" ]]; then
+	export INSTALL_CMAKE=0
+    else
+	export INSTALL_CMAKE=1
+    fi
+fi
 
 if [[ "$NOARGS" == "" ]]; then
     
@@ -150,6 +158,11 @@ if [[ "$NOARGS" == "" ]]; then
 	    --minimal|-minimal|--min|-min)
 		shift
 		export BUILD_ROOT=$default_build_root-minimal
+		continue
+		;;
+	    --no-local-cmake|-no-cmake|--no-cmake)
+		shift
+		export INSTALL_CMAKE=0
 		continue
 		;;
 	    clean)
