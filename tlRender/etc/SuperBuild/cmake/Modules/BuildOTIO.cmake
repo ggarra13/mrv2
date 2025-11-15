@@ -1,8 +1,8 @@
 include(ExternalProject)
 
 set(OTIO_GIT_REPOSITORY "https://github.com/PixarAnimationStudios/OpenTimelineIO.git")
-#set(OTIO_GIT_TAG "v0.17.0")
-set(OTIO_GIT_TAG d3ca19d802f3c0ea750ab722aa90448a5fdff11f)
+set(OTIO_GIT_TAG "v0.18.0")
+#set(OTIO_GIT_TAG d3ca19d802f3c0ea750ab722aa90448a5fdff11f) # working
 
 set(OTIO_DEPENDENCIES Imath)
 message(STATUS "OTIO DEPENDENCIES=${OTIO_DEPENDENCIES}")
@@ -15,7 +15,7 @@ endif()
 set(OTIO_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DOTIO_FIND_IMATH=ON
-    -DOTIO_SHARED_LIBS=${OTIO_SHARED_LIBS}
+    -DOTIO_SHARED_LIBS=OFF
     -DOTIO_PYTHON_INSTALL=${TLRENDER_ENABLE_PYTHON})
 
 if(WIN32)

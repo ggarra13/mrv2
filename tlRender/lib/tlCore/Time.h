@@ -8,24 +8,6 @@
 
 #include <opentimelineio/version.h>
 
-//
-// \@bug: MSVC Windows compiler cannot compile constexpr in DLLs in OTIO
-//        v1.1
-//
-#if defined(_WINDOWS) && defined(_MSV_VER)
-
-#  undef OPENTIME_API
-#  define OPENTIME_API
-#  undef OPENTIME_API_TYPE
-#  define OPENTIME_API_TYPE
-
-#  undef OTIO_API
-#  define OTIO_API
-#  undef OTIO_API_TYPE
-#  define OTIO_API_TYPE
-
-#endif
-
 #include <opentime/rationalTime.h>
 #include <opentime/timeRange.h>
 

@@ -19,7 +19,7 @@
 #
 params=$*
 
-export BUILD_ROOT=BUILD-minimal
+export BUILD_ROOT=BUILD-otio
 
 #
 # Find out our build dir
@@ -37,16 +37,15 @@ export CMAKE_FLAGS=""
 
 . etc/options_off.sh
 
+export BUILD_PYTHON=OFF
 
 export TLRENDER_EXR=ON
 export TLRENDER_FFMPEG=ON
 export TLRENDER_FFMPEG_MINIMAL=ON
 export TLRENDER_LIBPLACEBO=OFF
 export TLRENDER_WAYLAND=ON
-export TLRENDER_EXR=ON
 export TLRENDER_OPENJPH=ON
 export TLRENDER_X11=ON
-export BUILD_PYTHON=ON
 
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."

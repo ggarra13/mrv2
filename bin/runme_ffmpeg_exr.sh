@@ -30,6 +30,8 @@
 #
 params=$*
 
+export BUILD_ROOT=BUILD-ffmpeg-exr
+
 #
 # Find out our build dir
 #
