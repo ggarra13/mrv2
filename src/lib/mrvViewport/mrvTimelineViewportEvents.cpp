@@ -203,7 +203,8 @@ namespace mrv
         void TimelineViewport::voiceOverDelete()
         {
             TLRENDER_P();
-            
+
+#ifdef TLRENDER_FFMPEG
             if (!currentVoiceOver)
                 return;
 
@@ -229,19 +230,23 @@ namespace mrv
                 p.player->removeAnnotation(annotation);
             
             redrawWindows();
+#endif
         }
         
         void TimelineViewport::voiceOverClear()
         {
+#ifdef TLRENDER_FFMPEG
             if (!currentVoiceOver)
                 return;
 
             currentVoiceOver->clear();
             redrawWindows();
+#endif
         }
 
         void TimelineViewport::voiceOverAppend()
         {
+#ifdef TLRENDER_FFMPEG
             if (!currentVoiceOver)
                 return;
 
@@ -250,10 +255,12 @@ namespace mrv
 
             Fl::add_timeout(kVoiceTimeout,
                             (Fl_Timeout_Handler)record_mouse_position_cb, this);
+#endif
         }
         
         void TimelineViewport::recordMousePosition()
         {
+#ifdef TLRENDER_FFMPEG
             if (!currentVoiceOver)
                 return;
 
@@ -265,10 +272,12 @@ namespace mrv
                 Fl::repeat_timeout(kVoiceTimeout,
                                    (Fl_Timeout_Handler)record_mouse_position_cb, this);
             }
+#endif
         }
 
         void TimelineViewport::playMousePosition()
         {
+#ifdef TLRENDER_FFMPEG
             if (!currentVoiceOver)
                 return;
 
@@ -288,6 +297,7 @@ namespace mrv
                 auto files = _p->ui->app->filesModel();
                 files->forceA(files->observeAIndex()->get());
             }
+#endif
         }
         
         //! This callback must be part of TimelineViewport as CommandInterpreter will call it.
@@ -489,6 +499,7 @@ namespace mrv
         {
             TLRENDER_P();
             
+#ifdef TLRENDER_FFMPEG
             p.mousePos = _getFocus();
             auto pos = _getRasterf();
 
@@ -500,20 +511,25 @@ namespace mrv
             Fl::add_timeout(kVoiceTimeout,
                             (Fl_Timeout_Handler)record_mouse_position_cb, this);
             redrawWindows();
+#endif
         }
         
         void TimelineViewport::_stopVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice)
         {
+#ifdef TLRENDER_FFMPEG
             voice->stopRecording();
             currentVoiceOver.reset();
             redrawWindows();
+#endif
         }
                                             
         void TimelineViewport::_stopVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice)
         {
+#ifdef TLRENDER_FFMPEG
             voice->stopPlaying();
             currentVoiceOver.reset();
             redrawWindows();
+#endif
         }
         
         void TimelineViewport::_stopVoiceRecording()
@@ -647,6 +663,7 @@ namespace mrv
                                         // pop it out of the program.
                                         App::unsaved_annotations = true;
                                         
+#ifdef TLRENDER_FFMPEG
                                         switch(status)
                                         {
                                         case voice::RecordStatus::Stopped:
@@ -675,6 +692,7 @@ namespace mrv
                                         default:
                                             return;
                                         }
+#endif
                                         redrawWindows();
                                         return;
                                     }
@@ -682,7 +700,7 @@ namespace mrv
                             }
                         }
                         
-                
+#ifdef TLRENDER_FFMPEG
                         if (currentVoiceOver)
                         {
                             switch(currentVoiceOver->getStatus())
@@ -708,6 +726,7 @@ namespace mrv
                         }
                         return;
                     }
+#endif
 
                     _handlePushLeftMouseButtonShapes();
                 }
@@ -1194,6 +1213,7 @@ namespace mrv
                     float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
                     mult = std::clamp(mult, 1.F, 10.F);
 
+#ifdef TLRENDER_FFMPEG
                     if (p.player)
                     {
                         auto annotations = p.player->getVoiceAnnotations();
@@ -1225,7 +1245,7 @@ namespace mrv
                             }
                         }
                     }
-
+#endif
                     
                     p.ui->uiMain->fill_menu(p.popupMenu);
                     p.popupMenu->popup();
@@ -1548,6 +1568,7 @@ namespace mrv
                     rawkey = tolower(rawkey);
                 }
 #endif
+#ifdef TLRENDER_FFMPEG
                 if (currentVoiceOver)
                 {
                     switch(rawkey)
@@ -1577,7 +1598,9 @@ namespace mrv
                             break;
                         }
                         case voice::RecordStatus::Playing:
+#ifdef TLRENDER_FFMPEG
                             _stopVoicePlaying(currentVoiceOver);
+#endif
                             return 1;
                             break;
                         default:
@@ -1585,6 +1608,7 @@ namespace mrv
                         }
                         break;
                     case FL_Enter:
+#ifdef TLRENDER_FFMPEG
                         switch(currentVoiceOver->getStatus())
                         {
                         case voice::RecordStatus::Recording:
@@ -1598,11 +1622,13 @@ namespace mrv
                         default:
                             break;
                         }
+#endif
                         break;
                     default:
                         break;
                     }
                 }
+#endif
 
                 if (kResetChanges.match(rawkey))
                 {

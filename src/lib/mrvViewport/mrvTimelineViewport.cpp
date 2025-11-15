@@ -330,6 +330,7 @@ namespace mrv
 
             // If switching tool or clicking twice on voice over annotation,
             // turn off voice over annotation recording or playing
+#ifdef TLRENDER_FFMPEG
             if (currentVoiceOver)
             {
                 switch(currentVoiceOver->getStatus())
@@ -344,6 +345,7 @@ namespace mrv
                     break;
                 }
             }
+#endif
             
             if (mode == p.actionMode)
                 return;
