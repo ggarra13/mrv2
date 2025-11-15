@@ -503,6 +503,10 @@ namespace mrv
         }
         else
         {
+            App::supports_layers = false;
+            App::supports_annotations = false;
+            App::supports_editing = false;
+            
             const std::string msg =
                 string::Format(_("Unknown licese plan '{0}'")).arg(plan);
             LOG_ERROR(msg);

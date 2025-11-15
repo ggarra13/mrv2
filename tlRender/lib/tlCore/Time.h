@@ -6,13 +6,11 @@
 
 #include <tlCore/Util.h>
 
-#include <opentime/export.h>
-#include <opentimelineio/export.h>
-
 #include <opentimelineio/version.h>
 
 //
-// \@bug: MSVC Windows compiler cannot compile constexpr in DLLs 
+// \@bug: MSVC Windows compiler cannot compile constexpr in DLLs in OTIO
+//        v1.1
 //
 #if defined(_WINDOWS) && defined(_MSV_VER)
 
