@@ -4,6 +4,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 
+#include <opentime/version.h>
 #include <opentime/rationalTime.h>
 #include <opentime/timeRange.h>
 
@@ -143,8 +144,9 @@ Compute the duration of samples from first to last (including last). This is not
 
 For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Result will be in the rate of start_time.
 )docstring"))
+#if OPENTIME_VERSION_MAJOR > 1 || (OPENTIME_VERSION_MAJOR == 1 && OPENTIME_VERSION_MINOR >= 18)
         .def_static(
-            "nearest_valid_timecode_rate",
+            "nearest_smpte_timecode_rate",
             &RationalTime::nearest_smpte_timecode_rate, "rate"_a,
             _("Returns the first valid timecode rate that has the least "
               "difference from the given value."))
@@ -153,6 +155,13 @@ For example, the duration of a clip from frame 10 to frame 15 is 6 frames. Resul
             &RationalTime::nearest_smpte_timecode_rate, "rate"_a,
             _("Returns the first valid timecode rate that has the least "
               "difference from the given value."))
+#elif OPENTIME_VERSION_MAJOR > 1 || (OPENTIME_VERSION_MAJOR == 1 && OPENTIME_VERSION_MINOR >= 18)
+        .def_static(
+            "nearest_valid_timecode_rate",
+            &RationalTime::nearest_valid_timecode_rate, "rate"_a,
+            _("Returns the first valid timecode rate that has the least "
+              "difference from the given value."))
+#endif
         .def_static(
             "from_frames", &RationalTime::from_frames, "frame"_a, "rate"_a,
             _("Turn a frame number and rate into a :class:`~RationalTime` "
