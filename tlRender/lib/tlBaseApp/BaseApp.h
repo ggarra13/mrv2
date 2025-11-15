@@ -1,19 +1,27 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
-// Copyright (c) 2024-2025 Gonzalo Garramuño
 // All rights reserved.
 
 #pragma once
 
-#include <mrvBaseApp/mrvCmdLine.h>
+#include <tlBaseApp/CmdLine.h>
 
 #include <tlCore/Context.h>
 
-namespace mrv
+#if defined(_WINDOWS)
+#    define TLRENDER_MAIN() int wmain(int argc, wchar_t* argv[])
+#else // _WINDOWS
+#    define TLRENDER_MAIN() int main(int argc, char* argv[])
+#endif // _WINDOWS
+
+namespace tl
 {
     //! Base application
     namespace app
     {
+        class ICmdLineArg;
+        class ICmdLineOption;
+
         //! Application options.
         struct Options
         {
@@ -76,4 +84,4 @@ namespace mrv
             TLRENDER_PRIVATE();
         };
     } // namespace app
-} // namespace mrv
+} // namespace tl

@@ -84,13 +84,15 @@ if (TLRENDER_NET)
 endif()
 
 if( WIN32 )
-    list( APPEND HEADERS
-	mrvEnv.h)
-    list( APPEND SOURCES
-	win32/mrvSignalHandler.cpp
-        mrvFileManager.cpp
-	mrvEnv.cpp )
-    list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)
+    if (MRV2_CPPTRACE)
+	list( APPEND HEADERS
+	    mrvEnv.h)
+	list( APPEND SOURCES
+	    win32/mrvSignalHandler.cpp
+            mrvFileManager.cpp
+	    mrvEnv.cpp )
+	list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)
+    endif()
 elseif( APPLE )
     # macOS has a great a built-in stack trace and signal handler
     list( APPEND SOURCES

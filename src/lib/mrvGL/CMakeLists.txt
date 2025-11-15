@@ -52,7 +52,9 @@ files_to_absolute_paths()
 target_link_libraries(mrvGL PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(mrvGL PROPERTIES FOLDER lib)
 
-add_dependencies(mrvGL mrvVoice)
+if(TLENDER_FFMPEG)
+    add_dependencies(mrvGL mrvVoice)
+endif()
 
 install(TARGETS mrvGL
     ARCHIVE DESTINATION lib
