@@ -106,6 +106,8 @@ namespace tl
             
             switch (p.mouse.mode)
             {
+            case Private::MouseMode::kNone:
+                break;
             case Private::MouseMode::CurrentTime:
             {
                 const otime::RationalTime time = posToTime(event.pos.x);

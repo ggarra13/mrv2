@@ -14,6 +14,8 @@ namespace tl
                 return;
             switch (p.mouse.mode)
             {
+            case Private::MouseMode::kNone:
+                break;
             case Private::MouseMode::Transition:
             {
                 _mouseMoveEventTrim(event);                

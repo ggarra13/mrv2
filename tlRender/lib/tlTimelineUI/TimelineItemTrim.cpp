@@ -16,6 +16,8 @@ namespace tl
                 return;
             switch (p.mouse.mode)
             {
+            case Private::MouseMode::kNone:
+                break;
             case Private::MouseMode::Transition:
             {
                 _mouse.pos.y = _mouse.pressPos.y;
@@ -156,6 +158,8 @@ namespace tl
                 return;
             switch (p.mouse.mode)
             {
+            case Private::MouseMode::kNone:
+                break;
             case Private::MouseMode::CurrentTime:
             {
                 break;
