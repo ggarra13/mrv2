@@ -9,7 +9,9 @@
 #include "mrvFl/mrvPreferences.h"
 #include "mrvFl/mrvIO.h"
 
+#ifdef TLRENDER_FFMPEG
 #include "mrvVoice/mrvAnnotation.h"
+#endif
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
@@ -89,11 +91,13 @@ namespace mrv
         //! Last annotation undone.
         std::vector<std::shared_ptr<draw::Annotation> > undoAnnotations;
 
+#ifdef TLRENDER_FFMPEG
         //! List of voice annotations.
         std::vector<std::shared_ptr<voice::Annotation> > voiceAnnotations;
 
         //! Last voice annotation undone.
         std::vector<std::shared_ptr<voice::Annotation> > undoVoiceAnnotations;
+#endif
     };
 
     void TimelinePlayer::_init(
@@ -629,8 +633,12 @@ namespace mrv
     }
 
     bool TimelinePlayer::hasAnnotations() const
-    {            
+    {
+#ifdef TLRENDER_FFMPEG
         return !_p->annotations.empty() || !_p->voiceAnnotations.empty();
+#else
+        return !_p->annotations.empty();
+#endif
     }
 
     const std::vector< otime::RationalTime >
@@ -643,10 +651,12 @@ namespace mrv
         {
             times.push_back(annotation->time);
         }
+#ifdef TLRENDER_FFMPEG
         for (auto annotation : p.voiceAnnotations)
         {
             times.push_back(annotation->time);
         }
+#endif
         return times;
     }
 
@@ -902,6 +912,7 @@ namespace mrv
         return !annotation->undo_shapes.empty();
     }
 
+#ifdef TLRENDER_FFMPEG
     //! Get annotation for current time
     std::shared_ptr< voice::Annotation > TimelinePlayer::getVoiceAnnotation() const
     {
@@ -1050,7 +1061,7 @@ namespace mrv
                         p.voiceAnnotations.end(), voiceAnnotation),
             p.voiceAnnotations.end());
     }
-
+#endif
     
     void TimelinePlayer::timerEvent()
     {

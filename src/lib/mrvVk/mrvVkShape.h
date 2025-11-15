@@ -7,7 +7,9 @@
 #include "mrvVk/mrvVkDefines.h"
 #include "mrvVk/mrvVkLines.h"
 
-#include "mrvVoice/mrvVoiceOver.h"
+#ifdef TLRENDER_FFMPEG
+#  include "mrvVoice/mrvVoiceOver.h"
+#endif
 
 #include <tlTimelineVk/Render.h>
 
@@ -245,7 +247,7 @@ namespace mrv
 
     typedef std::vector< std::shared_ptr< draw::Shape > > ShapeList;
 
-
+#ifdef TLRENDER_FFMPEG
     /** 
      * Auxiliary class used to draw a voice over icon.
      * 
@@ -266,6 +268,6 @@ namespace mrv
         float mult = 1;
         unsigned blinkingIndex = 0;
     };
-
+#endif
 
 } // namespace mrv

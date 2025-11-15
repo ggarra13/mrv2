@@ -13,7 +13,6 @@
 #include <tlVk/Shader.h>
 
 #include "mrvVk/mrvVkDefines.h"
-// #include "mrvVk/mrvVkErrors.h"
 #include "mrvVk/mrvVkLines.h"
 #include "mrvVk/mrvVkViewport.h"
 

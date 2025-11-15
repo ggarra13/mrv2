@@ -9,7 +9,9 @@
 
 #include "mrvGL/mrvGLDefines.h"
 
-#include "mrvVoice/mrvAnnotation.h"
+#ifdef TLRENDER_FFMPEG
+#    include "mrvVoice/mrvAnnotation.h"
+#endif
 
 #include <tlGL/OffscreenBuffer.h>
 
@@ -90,6 +92,7 @@ namespace mrv
 
             void _drawCursor(const math::Matrix4x4f& mvp) const noexcept;
 
+#ifdef TLRENDER_FFMPEG
             void _drawAnnotations(
                 const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
                 const math::Matrix4x4f& renderMVP,
@@ -97,7 +100,16 @@ namespace mrv
                 const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
                 const std::vector<std::shared_ptr<voice::Annotation>>& voannotations,
                 const math::Size2i& renderSize);
-
+#else
+            void _drawAnnotations(
+                const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
+                const math::Matrix4x4f& renderMVP,
+                const otime::RationalTime& time,
+                const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
+                const std::vector<std::shared_ptr<bool>& voannotations,
+                const math::Size2i& renderSize);
+#endif
+            
 #ifdef USE_OPENGL2
             void _drawGL1TextShapes(const tl::math::Matrix4x4f&,
                                     const double viewZoom);

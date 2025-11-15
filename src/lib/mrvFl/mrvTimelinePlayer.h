@@ -7,7 +7,9 @@
 
 #include "mrvWidgets/mrvBackend.h"
 
-#include "mrvVoice/mrvAnnotation.h"
+#ifdef TLRENDER_FFMPEG
+#  include "mrvVoice/mrvAnnotation.h"
+#endif
 
 #include <tlTimeline/Player.h>
 
@@ -374,7 +376,8 @@ namespace mrv
         //! @}
 
         //! @{
-        
+
+#ifdef TLRENDER_FFMPEG
         //! Get annotation for current time
         std::shared_ptr< voice::Annotation > getVoiceAnnotation() const;
         
@@ -404,7 +407,8 @@ namespace mrv
 
         //! Remove an annotation from list.
         void removeAnnotation(const std::shared_ptr< voice::Annotation >&);
-
+#endif
+        
         //! @}
         
         //! Clear all annotations in timeline player for current frame (time).

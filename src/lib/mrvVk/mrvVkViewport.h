@@ -9,7 +9,9 @@
 
 #include "mrvViewport/mrvTimelineViewport.h"
 
-#include "mrvVoice/mrvAnnotation.h"
+#ifdef TLRENDER_FFMPEG
+#    include "mrvVoice/mrvAnnotation.h"
+#endif
 
 #include <tlVk/OffscreenBuffer.h>
 
@@ -101,6 +103,7 @@ namespace mrv
 
             void _drawCursor(const math::Matrix4x4f& mvp) noexcept;
 
+#ifdef TLRENDER_FFMPEG
             void _drawAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
                 const std::shared_ptr<tl::timeline_vlk::Render>& render,
@@ -111,7 +114,18 @@ namespace mrv
                 const std::vector<std::shared_ptr<voice::Annotation> >&
                 voannotations,
                 const math::Size2i& renderSize);
-
+#else
+            void _drawAnnotations(
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
+                const std::shared_ptr<tl::timeline_vlk::Render>& render,
+                const math::Matrix4x4f& renderMVP,
+                const otime::RationalTime& time,
+                const std::vector<std::shared_ptr<draw::Annotation>>&
+                    annotations,
+                const std::vector<bool>&
+                voannotations,
+                const math::Size2i& renderSize);
+#endif
             void _pushAnnotationShape(const std::string& cmd) const override;
 
             void _readPixel(image::Color4f& rgba) override;

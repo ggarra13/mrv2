@@ -484,8 +484,13 @@ namespace mrv
 
             const auto& annotations =
                 player->getAnnotations(p.ghostPrevious, p.ghostNext);
-            const auto& voannotations = player->getVoiceAnnotations();
 
+#ifdef TLRENDER_FFMPEG
+            const auto& voannotations = player->getVoiceAnnotations();
+#else
+            const auto std::vector<bool> voannotations;
+#endif
+            
             MultilineInput* w = getMultilineInput();
             if (w)
             {
@@ -597,11 +602,17 @@ namespace mrv
                 }
                 else
                 {
+#ifdef TLRENDER_FFMPEG
                     if (annotations.empty() && voannotations.empty())
                         mvp = _projectionMatrix();
                     else
                         mvp = _createTexturedRectangle();
-
+#else
+                    if (annotations.empty())
+                        mvp = _projectionMatrix();
+                    else
+                        mvp = _createTexturedRectangle();
+#endif
                     const GLint viewportX = p.viewPos.x;
                     const GLint viewportY = p.viewPos.y;
                     const GLsizei sizeW = renderSize.w * p.viewZoom;
@@ -674,27 +685,21 @@ namespace mrv
                         _createOverlayPBO(renderSize);
                         CHECK_GL;
                     }
-                    CHECK_GL;
                     
                     const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
                     _drawAnnotations(
                         gl.overlay, renderMVP, currentTime, annotations,
                         voannotations, renderSize);
-                    CHECK_GL;
 
                     // Copy data to PBO:
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.overlayPBO);
-                    CHECK_GL;
                     glReadPixels(
                         0, 0, renderSize.w, renderSize.h, GL_RGBA, GL_UNSIGNED_BYTE,
                         nullptr);
-                    CHECK_GL;
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-                    CHECK_GL;
 
                     // Create a fence for the overlay PBO
                     gl.overlayFence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-                    CHECK_GL;
 
                     // Wait for the fence to complete before compositing
                     GLenum waitReturn =

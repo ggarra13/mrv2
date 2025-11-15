@@ -293,6 +293,7 @@ namespace mrv
             }
         }
 
+#ifdef TLRENDER_FFMPEG
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
             const std::shared_ptr<tl::timeline_vlk::Render>& render,
@@ -300,6 +301,15 @@ namespace mrv
             const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
             const std::vector<std::shared_ptr<voice::Annotation> >& voannotations,
             const math::Size2i& renderSize)
+#else
+        void Viewport::_drawAnnotations(
+            const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
+            const std::shared_ptr<tl::timeline_vlk::Render>& render,
+            const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
+            const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
+            const std::vector<std::shared_ptr<bool> >& voannotations,
+            const math::Size2i& renderSize)
+#endif  
         {
             TLRENDER_P();
             MRV2_VK();
@@ -371,7 +381,7 @@ namespace mrv
                 }
             }
 
-            
+#ifdef TLRENDER_FFMPEG
             VKVoiceOverShape shape;
             
             for (const auto annotation : voannotations)
@@ -393,7 +403,7 @@ namespace mrv
                     shape.draw(render, mouseData);
                 }
             }
-            
+#endif
             render->endRenderPass();
             render->end();
         }
