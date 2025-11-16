@@ -490,22 +490,35 @@ namespace mrv
         expiration_date = expires_at;
         if (plan == "Pro")
         {
-            App::supports_layers = true;
             App::supports_annotations = true;
             App::supports_editing = true;
-            App::supports_hdr = true;
+            App::supports_layers = true;
+            App::supports_python = true;
+            App::supports_voice = true;
         }
         else if (plan == "Standard")
         {
-            App::supports_layers = true;
             App::supports_annotations = true;
             App::supports_editing = false;
+            App::supports_layers = true;
+            App::supports_python = true;
+            App::supports_voice = false;
+        }
+        else if (plan == "Solo")
+        {
+            App::supports_annotations = true;
+            App::supports_editing = false;
+            App::supports_layers = true;
+            App::supports_python = false;
+            App::supports_voice = false;
         }
         else
         {
-            App::supports_layers = false;
             App::supports_annotations = false;
             App::supports_editing = false;
+            App::supports_layers = false;
+            App::supports_python = false;
+            App::supports_voice = false;
             
             const std::string msg =
                 string::Format(_("Unknown licese plan '{0}'")).arg(plan);

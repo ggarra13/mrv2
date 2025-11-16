@@ -244,7 +244,7 @@ namespace mrv
 
         // Progress report FLTK widget
         ProgressReport* progress = nullptr;
-
+        
         MainControl* mainControl = nullptr;
 
         bool session = false;
@@ -260,7 +260,8 @@ namespace mrv
     bool App::supports_layers = false;
     bool App::supports_annotations = false;
     bool App::supports_editing = false;
-    bool App::supports_hdr = false;
+    bool App::supports_hdr = true;
+    bool App::supports_python = false;
     bool App::supports_voice = false;
     
     bool App::unsaved_annotations = false;
@@ -281,7 +282,7 @@ namespace mrv
             ++counter;
             if (counter == 3)
             {
-                fl_alert("%s", _("Usage time for demo exceeded"));
+                fl_alert("%s", _("Floating license time for demo exceeded"));
                 Fl::check();
                 exit_cb(nullptr, App::ui);
                 exit(0);
@@ -441,7 +442,7 @@ namespace mrv
                     string::Format("{0}").arg(p.options.lutOptions.order),
                     string::join(timeline::getLUTOrderLabels(), ", ")),
 #ifdef MRV2_PYBIND11
-                app::CmdLineHeader::create({}, _("Python:")),
+                app::CmdLineHeader::create({}, _("Python (if supported):")),
                 app::CmdLineFlagOption::create(
                     p.options.noPython, {"-noPython", "-np"},
                     _("Don't load python for faster startup.")),
@@ -653,7 +654,9 @@ namespace mrv
         License ok = license_beat();
 
 #ifdef VULKAN_BACKEND
-        if (ok != License::kValid || license_type == LicenseType::kFloating)
+        // Vulkan backend or floating licenses will pop up the license_helper
+        // three times.
+        if (license_type == LicenseType::kFloating)
             Fl::add_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, this);
 #endif
         
@@ -991,7 +994,7 @@ namespace mrv
         // This is needed to avoid an issue with Wayland not properly
         // refreshing the play buttons.
 #ifdef MRV2_PYBIND11
-        if (p.options.pythonScript.empty())
+        if (p.options.pythonScript.empty() && App::supports_python)
 #endif
         {
             ui->uiMain->show();
@@ -1151,7 +1154,7 @@ namespace mrv
         }
 
 #ifdef MRV2_PYBIND11
-        if (!p.options.noPython)
+        if (!p.options.noPython && App::supports_python)
         {
             // Import the mrv2 python module so we read all python
             // plug-ins.

@@ -191,6 +191,7 @@ namespace mrv
         static bool supports_layers;
         static bool supports_editing;
         static bool supports_hdr;
+        static bool supports_python;
         static bool supports_voice;
         
         static LicenseType license_type;

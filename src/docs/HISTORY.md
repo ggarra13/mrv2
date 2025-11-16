@@ -20,22 +20,21 @@ Donationware prices of binary licenses through PayPal:
 
 I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
 
-- u$  50 for a Standard node-lock standard license for one year (Annotations, no NDI or Editing).
-- u$  75 for a Edit node-lock license with annotations and editing tools (WIP).
-- u$ 150 for a Pro node-lock license to own with the full feature set (NDI, aarch64 access, etc).
-
-The prices are cumulative.  If you donate, say u$10 as a recurring donation, you can access the node-lock license for one year.
+- u$  25 for a Solo node-locked license for one year.
+- u$  50 for a Standard node-locked standard license for one year.
+- u$  75 for a Edit node-locked license with annotations and editing tools for one year.
+- u$ 150 for a Pro node-locked license to own.
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
 
 The donationware version when running without a donation, does not have:
 
-    - Annotations
-    - Voice Annotations
-    - Editing
-    - NDI
-    - OpenEXR layer switching.
+    - Annotations (available from Solo+)
+    - Python (available in Standard+)
+    - OpenEXR layer switching (available in Standard+).
+    - Edit (available in Edit+)
+    - Voice Annotations (available in Pro)
 
 Prices might change depending on competition and new features.
 
@@ -64,7 +63,7 @@ ChangeLog
 - Improved performance of 4K OpenEXR sequences.  With the new htjk256 and similar OpenEXR compressions, is possible to play back 4K sequences at 60 FPS on the Vulkan backend.  OpenGL backend plays at 30FPS.
 - Fixed toggling Edit mode on and off.
 - Made OTIO clips smaller on non-high DPI OSes.
-- Improved Windows resizing on Vulkan backend.
+- Improved window resizing on Vulkan backend.
 
 
 v1.4.5
