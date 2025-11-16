@@ -60,8 +60,8 @@ ChangeLog
 - OTIO clips can be trimmed and rolled (name concepts popular to editors).
 - Added new Editing tools (only trim and move icon).
 - Fixed undo on moving clips.
-- Upgraded OTIO to v0.18.0 from v0.17.0.  Except on Windows for the time being.
-- Improved performance of 4K OpenEXR sequences.  With the new htjk256 and similar OpenEXR compressions, is possible to play back 4K sequences at 60 FPS on the Vulkan backend.
+- Upgraded OTIO to v0.18.0 from v0.17.0.
+- Improved performance of 4K OpenEXR sequences.  With the new htjk256 and similar OpenEXR compressions, is possible to play back 4K sequences at 60 FPS on the Vulkan backend.  OpenGL backend plays at 30FPS.
 - Fixed toggling Edit mode on and off.
 - Made OTIO clips smaller on non-high DPI OSes.
 
