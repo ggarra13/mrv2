@@ -163,7 +163,46 @@ namespace
         return false;
     }
 #endif
-    
+
+    void activatePlan(const std::string& plan)
+    {
+        if (plan == "Pro")
+        {
+            mrv::App::supports_annotations = true;
+            mrv::App::supports_editing = true;
+            mrv::App::supports_layers = true;
+            mrv::App::supports_python = true;
+            mrv::App::supports_voice = true;
+        }
+        else if (plan == "Standard")
+        {
+            mrv::App::supports_annotations = true;
+            mrv::App::supports_editing = false;
+            mrv::App::supports_layers = true;
+            mrv::App::supports_python = true;
+            mrv::App::supports_voice = false;
+        }
+        else if (plan == "Solo")
+        {
+            mrv::App::supports_annotations = true;
+            mrv::App::supports_editing = false;
+            mrv::App::supports_layers = true;
+            mrv::App::supports_python = false;
+            mrv::App::supports_voice = false;
+        }
+        else
+        {
+            mrv::App::supports_annotations = false;
+            mrv::App::supports_editing = false;
+            mrv::App::supports_layers = false;
+            mrv::App::supports_python = false;
+            mrv::App::supports_voice = false;
+            
+            const std::string msg =
+                tl::string::Format(_("Unknown licese plan '{0}'")).arg(plan);
+            LOG_ERROR(msg);
+        }
+    }
 }
 
 namespace mrv
@@ -488,42 +527,7 @@ namespace mrv
         }
 
         expiration_date = expires_at;
-        if (plan == "Pro")
-        {
-            App::supports_annotations = true;
-            App::supports_editing = true;
-            App::supports_layers = true;
-            App::supports_python = true;
-            App::supports_voice = true;
-        }
-        else if (plan == "Standard")
-        {
-            App::supports_annotations = true;
-            App::supports_editing = false;
-            App::supports_layers = true;
-            App::supports_python = true;
-            App::supports_voice = false;
-        }
-        else if (plan == "Solo")
-        {
-            App::supports_annotations = true;
-            App::supports_editing = false;
-            App::supports_layers = true;
-            App::supports_python = false;
-            App::supports_voice = false;
-        }
-        else
-        {
-            App::supports_annotations = false;
-            App::supports_editing = false;
-            App::supports_layers = false;
-            App::supports_python = false;
-            App::supports_voice = false;
-            
-            const std::string msg =
-                string::Format(_("Unknown licese plan '{0}'")).arg(plan);
-            LOG_ERROR(msg);
-        }
+        activatePlan(plan);
         return License::kValid;
     }
     
@@ -596,20 +600,7 @@ namespace mrv
             return License::kExpired;
         }
         
-        if (plan == "Pro")
-        {                
-            App::supports_layers = true;
-            App::supports_annotations = true;
-            App::supports_editing = true;
-            App::supports_hdr = true;
-        }
-        else if (plan == "Standard")
-        {
-            App::supports_layers = true;
-            App::supports_annotations = true;
-            App::supports_editing = false;
-            App::supports_hdr = true;
-        }
+        activatePlan(plan);
 
         return License::kValid;
     }
