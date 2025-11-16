@@ -39,6 +39,7 @@ The donationware version when running without a donation, does not have:
 
 Prices might change depending on competition and new features.
 
+
 ChangeLog
 ---------
 
