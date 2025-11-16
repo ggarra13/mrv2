@@ -92,6 +92,11 @@ namespace mrv
         {
             MRV2_VK();
 
+            // Early return if the layout already exists
+            if (vk.annotation_pipeline_layout != VK_NULL_HANDLE) {
+                return;
+            }
+    
             VkResult result;
 
             //
@@ -128,6 +133,11 @@ namespace mrv
         void Viewport::prepare_pipeline_layout()
         {
             MRV2_VK();
+
+           // Early return if the layout already exists (avoids recreation on resize)
+            if (vk.pipeline_layout != VK_NULL_HANDLE) {
+                return;  // Already created; reuse it
+            }
             
             VkResult result;
 
@@ -415,19 +425,6 @@ namespace mrv
                 vkDestroyRenderPass(device(), vk.loadRenderPass, nullptr);
                 vk.loadRenderPass = VK_NULL_HANDLE;
             }
-            
-            if (vk.annotation_pipeline_layout != VK_NULL_HANDLE)
-            {
-                vkDestroyPipelineLayout(device(),
-                                        vk.annotation_pipeline_layout, nullptr);
-                vk.annotation_pipeline_layout = VK_NULL_HANDLE;
-            }
-            
-            if (vk.pipeline_layout != VK_NULL_HANDLE)
-            {
-                vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
-                vk.pipeline_layout = VK_NULL_HANDLE;
-            }
 
             if (m_pipeline != VK_NULL_HANDLE)
             {
@@ -537,6 +534,12 @@ namespace mrv
                     float opacity = 1.F;
                     vk.shader->addPush("opacity", opacity, vlk::kShaderFragment);
                     vk.shader->createBindingSet();
+                    
+                    if (vk.pipeline_layout != VK_NULL_HANDLE)
+                    {
+                        vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
+                        vk.pipeline_layout = VK_NULL_HANDLE;
+                    }
                 }
 
                 if (!vk.annotationShader)
@@ -554,6 +557,14 @@ namespace mrv
                     int channels = 0; // Color Channel
                     vk.annotationShader->createUniform("channels", channels);
                     vk.annotationShader->createBindingSet();
+            
+                    if (vk.annotation_pipeline_layout != VK_NULL_HANDLE)
+                    {
+                        vkDestroyPipelineLayout(device(),
+                                                vk.annotation_pipeline_layout, nullptr);
+                        vk.annotation_pipeline_layout = VK_NULL_HANDLE;
+                    }
+
                 }
             }
         }
@@ -1020,7 +1031,8 @@ namespace mrv
 
                 // Bind the main composition pipeline (created/managed outside this
                 // draw loop)
-                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline());
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                  pipeline());
             
                 // --- Update Descriptor Set for the SECOND pass (Composition) ---
                 // This updates the descriptor set for the CURRENT frame index on
