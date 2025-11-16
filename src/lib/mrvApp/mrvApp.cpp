@@ -986,16 +986,21 @@ namespace mrv
         outputDisplay = new PythonOutput(0, 0, 400, 400);
 #endif
         
-
         //
-        // Show the UI if no python script was fed in.
-        //
+        // Show the UI if no python script was fed in (when Python is supported).
         // We make sure the UI is visible when we feed a filename.
-        // This is needed to avoid an issue with Wayland not properly
-        // refreshing the play buttons.
+        // This is needed to avoid an issue with Wayland not properly refreshing the play buttons.
+        //
+        bool showUI = true;
+
 #ifdef MRV2_PYBIND11
-        if (p.options.pythonScript.empty() && App::supports_python)
+        if (App::supports_python && !p.options.pythonScript.empty())
+        {
+            showUI = false;
+        }
 #endif
+
+        if (showUI)
         {
             ui->uiMain->show();
             ui->uiView->take_focus();
@@ -1007,7 +1012,7 @@ namespace mrv
             {
                 ui->uiMain->always_on_top(value);
             }
-        }
+        }            
 
         if (!p.options.fileNames.empty())
         {
