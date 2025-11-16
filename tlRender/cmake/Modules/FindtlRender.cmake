@@ -34,7 +34,7 @@ set(tlRender_VERSION 0.0.1)
 find_package(Imath REQUIRED CONFIG)
 find_package(nlohmann_json REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(OpenTimelineIO REQUIRED)
+find_package(OpenTimelineIO REQUIRED CONFIG)
 find_package(PNG REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(RtAudio)
@@ -164,29 +164,6 @@ if(tlRender_tlVk_LIBRARY AND tlRender_tlTimelineVk_LIBRARY)
 	${tlRender_tlTimelineUIVk_LIBRARY})
 endif()
 
-set(tlRender_LIBRARIES
-    ${tlRender_tlCore_LIBRARY}
-    ${tlRender_tlIO_LIBRARY}
-    ${tlRender_VK_LIBRARIES}
-    ${tlRender_GL_LIBRARIES}
-    ${tlRender_tlTimeline_LIBRARY}
-    ${tlRender_tlDevice_LIBRARY}
-    ${tlRender_tlDraw_LIBRARY}
-    ${tlRender_tlUI_LIBRARY}
-    ${Imath_LIBRARIES}
-    ${nlohmann_json_LIBRARIES}
-    ${FREETYPE_LIBRARIES}
-    ${LIBPLACEBO_LIBRARIES}
-    ${OTIO_LIBRARIES}
-    ${RtAudio_LIBRARIES}
-    ${TIFF_LIBRARIES}
-    ${PNG_LIBRARIES}
-    ${OpenEXR_LIBRARIES}
-    ${FFmpeg_LIBRARIES}
-    ${LibRaw_LIBRARIES}
-    ${NDI_LIBRARIES}
-    ${glfw3_LIBRARIES})
-
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
     tlRender
@@ -212,7 +189,7 @@ mark_as_advanced(
     tlRender_tlVk_LIBRARY
     tlRender_glad_LIBRARY)
 
-set(tlRender_tlCore_LIBRARIES "OTIO;Imath::Imath;Freetype::Freetype;nlohmann_json::nlohmann_json" )
+set(tlRender_tlCore_LIBRARIES "OTIO::opentimelineio;Imath::Imath;Freetype::Freetype;nlohmann_json::nlohmann_json" )
 set(tlRender_tlDraw_LIBRARIES "tlRender::tlCore")
 if (OpenColorIO_FOUND)
     list(APPEND tlRender_tlCore_LIBRARIES OpenColorIO::OpenColorIO)

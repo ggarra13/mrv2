@@ -12,7 +12,7 @@ set(SOURCES
     mrvVoiceOver.cpp
 )
 
-set(LIBRARIES mrvWidgets tlRender::tlCore ${FLTK_LIBRARIES} )
+set(LIBRARIES mrvWidgets mrvCore ${FLTK_LIBRARIES} )
 add_library(mrvVoice ${SOURCES} ${HEADERS})
 
 files_to_absolute_paths()
