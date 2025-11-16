@@ -32,7 +32,7 @@ set(tlRender_VERSION 0.0.1)
 #
 # Use this variable to debug where libraries are found
 #
-set(CMAKE_FIND_DEBUG_MODE TRUE)
+#set(CMAKE_FIND_DEBUG_MODE TRUE)
 
 find_package(Imath REQUIRED CONFIG)
 find_package(nlohmann_json REQUIRED)
