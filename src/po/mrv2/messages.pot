@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.4.5\n"
+"Project-Id-Version: mrv2 v1.4.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -1298,7 +1298,7 @@ msgstr ""
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr ""
 
-msgid "Usage time for demo exceeded"
+msgid "Floating license time for demo exceeded"
 msgstr ""
 
 msgid "Play timelines, movies, and image sequences."
@@ -1307,13 +1307,22 @@ msgstr ""
 msgid "Timelines, movies, image sequences, USD assets or folders."
 msgstr ""
 
+msgid "Debugging:"
+msgstr ""
+
 msgid "Debug verbosity."
 msgstr ""
 
 msgid "Log verbosity."
 msgstr ""
 
+msgid "Audio:"
+msgstr ""
+
 msgid "Audio file name."
+msgstr ""
+
+msgid "Compare:"
 msgstr ""
 
 msgid "A/B comparison \"B\" file name."
@@ -1328,6 +1337,9 @@ msgstr ""
 msgid "A/B comparison wipe rotation."
 msgstr ""
 
+msgid "Editing:"
+msgstr ""
+
 msgid "Create OpenTimelineIO EDL from the list of clips provided."
 msgstr ""
 
@@ -1335,6 +1347,9 @@ msgid "OpenTimelineIO Edit mode."
 msgstr ""
 
 msgid "Load the images as still images not sequences."
+msgstr ""
+
+msgid "Playback:"
 msgstr ""
 
 msgid "Playback speed."
@@ -1350,6 +1365,9 @@ msgid "Seek to the given time, in value/fps format.  Example: 50/30."
 msgstr ""
 
 msgid "Set the in/out points range in start/end/fps format, like 23/120/24."
+msgstr ""
+
+msgid "OCIO:"
 msgstr ""
 
 msgid "OpenColorIO input color space."
@@ -1370,6 +1388,9 @@ msgstr ""
 msgid "LUT operation order."
 msgstr ""
 
+msgid "Python (if supported):"
+msgstr ""
+
 msgid "Don't load python for faster startup."
 msgstr ""
 
@@ -1381,10 +1402,19 @@ msgid ""
 "\"arg1 'arg2 asd' arg3\", stored in cmd.argv."
 msgstr ""
 
+msgid "Preferences:"
+msgstr ""
+
 msgid "Reset settings to defaults."
 msgstr ""
 
 msgid "Reset hotkeys to defaults."
+msgstr ""
+
+msgid "OpenUSD:"
+msgstr ""
+
+msgid "Networking:"
 msgstr ""
 
 msgid "Start a server.  Use -port to specify a port number."
@@ -1669,6 +1699,21 @@ msgid "Streaming {0} {1}..."
 msgstr ""
 
 msgid "Stop streaming"
+msgstr ""
+
+msgid "Renderer"
+msgstr ""
+
+msgid "Complexity"
+msgstr ""
+
+msgid "Draw Mode"
+msgstr ""
+
+msgid "Stage Cache"
+msgstr ""
+
+msgid "Disk Cache in GB"
 msgstr ""
 
 msgid "Toggle other eye stereo image."
@@ -2633,28 +2678,34 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
+msgid "Rotated image info: {0}"
+msgstr ""
+
+msgid "Scaled image info: {0}"
+msgstr ""
+
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
 msgid "Image info: {0} {1}"
 msgstr ""
 
-msgid "Scaled image info: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
+msgstr ""
+
+msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
 msgid "Using preset {0}."
-msgstr ""
-
-msgid "Offscreen Buffer info: {0}"
-msgstr ""
-
-msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -2672,13 +2723,31 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr ""
+
+msgid "OpenGL info: {0}"
+msgstr ""
+
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Could not read image data from view"
+msgid "Unsupported output format"
+msgstr ""
+
+msgid "Empty video data at time {0}.  Repeating frame."
 msgstr ""
 
 msgid "Render size: {0}"
+msgstr ""
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr ""
+
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+msgid "Unsupported output format: "
 msgstr ""
 
 msgid ""
@@ -3058,6 +3127,18 @@ msgstr ""
 msgid "Redo Draw"
 msgstr ""
 
+msgid "Move Edit Tool"
+msgstr ""
+
+msgid "Trim Edit Tool"
+msgstr ""
+
+msgid "Undo Edit"
+msgstr ""
+
+msgid "Redo Edit"
+msgstr ""
+
 msgid "Go to the beginning of the sequence."
 msgstr ""
 
@@ -3380,7 +3461,7 @@ msgstr ""
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
-msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgid "Could not read image data from view"
 msgstr ""
 
 msgid "Link/Open"
@@ -3414,6 +3495,30 @@ msgid "Record Again"
 msgstr ""
 
 msgid "Delete"
+msgstr ""
+
+msgid "Move"
+msgstr ""
+
+msgid "Trim"
+msgstr ""
+
+msgid "Slice"
+msgstr ""
+
+msgid "Slip"
+msgstr ""
+
+msgid "Slide"
+msgstr ""
+
+msgid "Ripple"
+msgstr ""
+
+msgid "Roll"
+msgstr ""
+
+msgid "Fill"
 msgstr ""
 
 msgid "Scrub"
@@ -3458,21 +3563,6 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-msgid "Trim"
-msgstr ""
-
-msgid "Slip"
-msgstr ""
-
-msgid "Slide"
-msgstr ""
-
-msgid "Ripple"
-msgstr ""
-
-msgid "Roll"
-msgstr ""
-
 msgid "(no image)"
 msgstr ""
 
@@ -3513,16 +3603,13 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr ""
 
 msgid "'{0}' is not a file, directory or url."
+msgstr ""
+
+msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -5277,6 +5364,12 @@ msgstr ""
 msgid "ViewGroup"
 msgstr ""
 
+msgid "Undo Last Edit."
+msgstr ""
+
+msgid "Redo Previous Edit."
+msgstr ""
+
 msgid "Eraser Tool"
 msgstr ""
 
@@ -5317,6 +5410,9 @@ msgid "PixelBar"
 msgstr ""
 
 msgid "StatusBar"
+msgstr ""
+
+msgid "Current edit tool being used."
 msgstr ""
 
 msgid "Current tool being used."
@@ -6228,8 +6324,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6739,6 +6835,9 @@ msgstr ""
 msgid "{0} is not readable. Using system default."
 msgstr ""
 
+msgid "Unknown licese plan '{0}'"
+msgstr ""
+
 msgid "Released Floating License"
 msgstr ""
 
@@ -7051,10 +7150,34 @@ msgstr ""
 msgid "Remove Audio Gap"
 msgstr ""
 
-msgid "Edit Undo"
+msgid "Edit - Fill Tool"
 msgstr ""
 
-msgid "Edit Redo"
+msgid "Edit - Move Tool"
+msgstr ""
+
+msgid "Edit - Trim Tool"
+msgstr ""
+
+msgid "Edit - Ripple Tool"
+msgstr ""
+
+msgid "Edit - Roll Tool"
+msgstr ""
+
+msgid "Edit - Slice Tool"
+msgstr ""
+
+msgid "Edit - Slide Tool"
+msgstr ""
+
+msgid "Edit - Slip Tool"
+msgstr ""
+
+msgid "Edit - Undo"
+msgstr ""
+
+msgid "Edit - Redo"
 msgstr ""
 
 msgid "Toggle Menu Bar"
@@ -7172,9 +7295,6 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
-msgstr ""
-
-msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"
