@@ -182,6 +182,7 @@ namespace mrv
             void prepare_annotation_pipeline();
             void prepare_pipeline();
             void prepare_pipeline_layout();
+            void prepare_annotation_pipeline_layout();
             void prepare_load_render_pass();
             void prepare_shaders();
             void prepare_render();

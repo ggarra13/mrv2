@@ -53,24 +53,24 @@ namespace mrv
             std::shared_ptr<tl::vlk::OffscreenBuffer> overlay;
 
             std::shared_ptr<tl::image::Image> annotationImage; // only used on APPLE
-            // Compositing shaders
+            //! Compositing shaders
             std::shared_ptr<vlk::Shader> shader;
             std::shared_ptr<vlk::Shader> annotationShader;
 
-            // Main mesh
+            //! Main mesh
             std::shared_ptr<vlk::VBO> vbo;
             std::shared_ptr<vlk::VAO> vao;
 
-            // Annotation mesh
+            //! Annotation mesh
             std::shared_ptr<vlk::VBO> avbo;
             std::shared_ptr<vlk::VAO> avao;
             
-            // Lines drawn into the rendered annotations
+            //! Lines drawn into the rendered annotations.
             std::shared_ptr<vulkan::Lines> lines;
 
-            // Lines drawn into the viewport (safe areas, selection, cursor)
+            //! Lines drawn into the viewport (safe areas, selection, cursor).
             std::shared_ptr<vulkan::Lines> viewport;
-
+            
             bool init_debug = false;
         };
 

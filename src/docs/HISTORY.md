@@ -64,6 +64,7 @@ ChangeLog
 - Improved performance of 4K OpenEXR sequences.  With the new htjk256 and similar OpenEXR compressions, is possible to play back 4K sequences at 60 FPS on the Vulkan backend.  OpenGL backend plays at 30FPS.
 - Fixed toggling Edit mode on and off.
 - Made OTIO clips smaller on non-high DPI OSes.
+- Improved Windows resizing on Vulkan backend.
 
 
 v1.4.5

@@ -88,6 +88,43 @@ namespace mrv
             _vk->saveOverlay = true;
         }
 
+        void Viewport::prepare_annotation_pipeline_layout()
+        {
+            MRV2_VK();
+
+            VkResult result;
+
+            //
+            // Prepare annotation pipeline layout
+            //            
+            VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
+            pPipelineLayoutCreateInfo.sType =
+                VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+            pPipelineLayoutCreateInfo.pNext = NULL;
+            pPipelineLayoutCreateInfo.setLayoutCount = 1;
+
+            VkDescriptorSetLayout setLayout = vk.annotationShader->getDescriptorSetLayout();
+            pPipelineLayoutCreateInfo.pSetLayouts = &setLayout;
+
+            VkPushConstantRange pushConstantRange = {};
+            std::size_t pushSize = vk.annotationShader->getPushSize();
+            if (pushSize > 0)
+            {
+                pushConstantRange.stageFlags =
+                    vk.annotationShader->getPushStageFlags();
+                pushConstantRange.offset = 0;
+                pushConstantRange.size = pushSize;
+
+                pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
+                pPipelineLayoutCreateInfo.pPushConstantRanges =
+                    &pushConstantRange;
+            }
+
+            result = vkCreatePipelineLayout(
+                device(), &pPipelineLayoutCreateInfo, NULL,
+                &vk.annotation_pipeline_layout);
+        }
+        
         void Viewport::prepare_pipeline_layout()
         {
             MRV2_VK();
@@ -123,38 +160,6 @@ namespace mrv
             result = vkCreatePipelineLayout(
                 device(), &pPipelineLayoutCreateInfo, NULL,
                 &vk.pipeline_layout);
-
-
-            //
-            // Prepare annotation pipeline layout
-            //
-            
-            pPipelineLayoutCreateInfo = {};
-            pPipelineLayoutCreateInfo.sType =
-                VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-            pPipelineLayoutCreateInfo.pNext = NULL;
-            pPipelineLayoutCreateInfo.setLayoutCount = 1;
-
-            setLayout = vk.annotationShader->getDescriptorSetLayout();
-            pPipelineLayoutCreateInfo.pSetLayouts = &setLayout;
-
-            pushConstantRange = {};
-            pushSize = vk.annotationShader->getPushSize();
-            if (pushSize > 0)
-            {
-                pushConstantRange.stageFlags =
-                    vk.annotationShader->getPushStageFlags();
-                pushConstantRange.offset = 0;
-                pushConstantRange.size = pushSize;
-
-                pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
-                pPipelineLayoutCreateInfo.pPushConstantRanges =
-                    &pushConstantRange;
-            }
-
-            result = vkCreatePipelineLayout(
-                device(), &pPipelineLayoutCreateInfo, NULL,
-                &vk.annotation_pipeline_layout);
         }
 
         void Viewport::prepare_pipeline()
@@ -382,6 +387,7 @@ namespace mrv
             prepare_load_render_pass();  // swapchain render pass that loads contents
             prepare_shaders();
             prepare_pipeline_layout();
+            prepare_annotation_pipeline_layout();
         }
 
         void Viewport::destroy()

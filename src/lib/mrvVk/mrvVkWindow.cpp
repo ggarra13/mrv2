@@ -49,6 +49,12 @@ namespace mrv
         // m_depth (optionally) -> creates m_renderPass
         void VkWindow::prepare_render_pass() 
         {
+            if (m_renderPass != VK_NULL_HANDLE &&
+                _oldRenderPassFormat == ctx.format)
+            {
+                return;
+            }
+            
             bool has_depth = mode() & FL_DEPTH;
             bool has_stencil = mode() & FL_STENCIL;
 
@@ -121,6 +127,8 @@ namespace mrv
             VkResult result;
             result = vkCreateRenderPass(device(), &rp_info, NULL, &m_renderPass);
             VK_CHECK(result);
+
+            _oldRenderPassFormat = ctx.format;
         }
 
 

@@ -40,6 +40,8 @@ namespace mrv
             void prepare_render_pass(); 
 
             void _init();
+
+            VkFormat _oldRenderPassFormat = VK_FORMAT_UNDEFINED;
         };
 
     } // namespace vulkan
