@@ -1652,6 +1652,13 @@ namespace mrv
         void Viewport::prepare_load_render_pass() 
         {
             MRV2_VK();
+
+            if (vk.loadRenderPass != VK_NULL_HANDLE &&
+                format() == _oldRenderPassFormat)
+            {
+                // Format hasn't changed and render pass exists: DO NOTHING.
+                return;
+            }
             
             bool has_depth = mode() & FL_DEPTH;
             bool has_stencil = mode() & FL_STENCIL;
