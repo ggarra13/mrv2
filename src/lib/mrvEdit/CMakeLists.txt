@@ -21,7 +21,7 @@ add_library(mrvEdit ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
 set(LIBRARIES mrvViewport mrvWidgets mrvNetwork)
-list(APPEND LIBRARIES OTIO)
+list(APPEND LIBRARIES OTIO::opentimelineio)
 
 target_link_libraries(mrvEdit PUBLIC ${LIBRARIES} )
 set_target_properties(mrvEdit PROPERTIES FOLDER lib)

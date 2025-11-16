@@ -304,8 +304,6 @@ unset PYTHONPATH
 #
 #  export PYTHONUTF8=1  USD needs it, meson fails.
 
-echo "Z"
-
 echo
 echo
 echo "Building summary"
