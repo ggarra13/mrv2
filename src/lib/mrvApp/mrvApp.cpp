@@ -1483,11 +1483,12 @@ namespace mrv
             if (video.size.w > 1920)
                 use_progress = true;
         }
-
         // Calculate start and end time used in progress report
         otime::RationalTime startTime, endTime;
         _calculateCacheTimes(startTime, endTime);
         
+        const timeline::Playback& playback = p.options.playback;
+
         int64_t start = std::floor(startTime.to_seconds());
         int64_t end   = std::ceil(endTime.to_seconds());
 
@@ -1507,8 +1508,11 @@ namespace mrv
             p.progress->show();
             Fl::flush();
         }
-        
-        const timeline::Playback& playback = p.options.playback;
+        else
+        {
+            // Start playback right away.
+            ui->uiView->setPlayback(playback);
+        }
 
         if (playback == timeline::Playback::Forward ||
             playback == timeline::Playback::Stop)
@@ -1522,7 +1526,13 @@ namespace mrv
 
                             otime::RationalTime startTime, endTime;
                             _calculateCacheTimes(startTime, endTime);
-
+                            
+                            // std::cerr << "in line " << __LINE__
+                            //           << " "
+                            //           << value.videoFrames.size()
+                            //           << std::endl;
+                            
+                            
                             // Keep UI responsive
                             if (p.progress)
                             {
@@ -1530,11 +1540,16 @@ namespace mrv
                                 {
                                     delete p.progress;
                                     p.progress = nullptr;
+                                    ui->uiView->setPlayback(playback);
                                     p.cacheInfoObserver.reset();
                                     return;
                                 }
                             }
-                            
+                            else
+                            {
+                                Fl::check();
+                            }
+
                             for (const auto& t : value.videoFrames)
                             {
                                 if (t.start_time() <= startTime &&
@@ -1569,9 +1584,14 @@ namespace mrv
                                 {
                                     delete p.progress;
                                     p.progress = nullptr;
+                                    ui->uiView->setPlayback(playback);
                                     p.cacheInfoObserver.reset();
                                     return;
                                 }
+                            }
+                            else
+                            {
+                                Fl::check();
                             }
                             
                             for (const auto& t : value.videoFrames)

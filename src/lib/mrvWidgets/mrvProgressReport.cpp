@@ -107,6 +107,12 @@ namespace mrv
         ms = milliseconds % 1000;
     }
 
+    void ProgressReport::set_value(const int64_t value)
+    {
+        progress->value(value);
+        tick();
+    }
+    
     bool ProgressReport::tick()
     {
         if (!w)

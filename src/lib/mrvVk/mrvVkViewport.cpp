@@ -263,6 +263,7 @@ namespace mrv
             if (vk.annotation_pipeline != VK_NULL_HANDLE)
             {
                 vkDestroyPipeline(device(), vk.annotation_pipeline, nullptr);
+                vk.annotation_pipeline = VK_NULL_HANDLE;
             }
             
             // Elements of new Pipeline (fill with mesh info)
@@ -461,6 +462,19 @@ namespace mrv
             vk.stereoBuffer.reset();
             vk.annotation.reset();
             vk.overlay.reset();
+
+            if (vk.pipeline_layout != VK_NULL_HANDLE)
+            {
+                vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
+                vk.pipeline_layout = VK_NULL_HANDLE;
+            }
+            
+            if (vk.annotation_pipeline_layout != VK_NULL_HANDLE)
+            {
+                vkDestroyPipelineLayout(device(),
+                                        vk.annotation_pipeline_layout, nullptr);
+                vk.annotation_pipeline_layout = VK_NULL_HANDLE;
+            }
 
             // Destroy shaders
             vk.shader.reset();

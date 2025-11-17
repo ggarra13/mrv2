@@ -3877,12 +3877,12 @@ void Flu_File_Chooser::cd(const char* path)
                         else
                         {
                             seqname += "%0";
-                            char buf[19];
-                            buf[18] = 0;
+                            char buf[21];
+                            buf[20] = 0;
 #ifdef _WIN32
                             seqname += itoa(int((*i).number.size()), buf, 10);
 #else
-                            snprintf(buf, 18, "%ld", (*i).number.size());
+                            snprintf(buf, 21, "%zu", (*i).number.size());
                             seqname += buf;
 #endif
                             seqname += "d";

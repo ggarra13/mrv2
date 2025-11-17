@@ -39,8 +39,8 @@ namespace mrv
 
         void VkWindow::_init()
         {
-            m_validate = false;
-            m_debugSync = false;
+            m_validate = true;
+            m_debugSync = true;
 #ifndef NDEBUG
             m_validate = true;
 #endif
