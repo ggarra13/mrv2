@@ -202,6 +202,18 @@ namespace
                 tl::string::Format(_("Unknown licese plan '{0}'")).arg(plan);
             LOG_ERROR(msg);
         }
+        std::string msg = tl::string::Format(_("License plan '{0}'")).arg(plan);
+        LOG_STATUS(msg);
+        msg = tl::string::Format(_("Supports annotations '{0}'")).arg(mrv::App::supports_annotations);
+        LOG_INFO(msg);
+        msg = tl::string::Format(_("Supports editing '{0}'")).arg(mrv::App::supports_editing);
+        LOG_INFO(msg);
+        msg = tl::string::Format(_("Supports layers '{0}'")).arg(mrv::App::supports_layers);
+        LOG_INFO(msg);
+        msg = tl::string::Format(_("Supports python '{0}'")).arg(mrv::App::supports_python);
+        LOG_INFO(msg);
+        msg = tl::string::Format(_("Supports voice annotations '{0}'")).arg(mrv::App::supports_voice);
+        LOG_INFO(msg);
     }
 }
 
