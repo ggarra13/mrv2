@@ -18,9 +18,11 @@
 #    include <Poco/Net/HTTPSClientSession.h>
 #    include <Poco/Net/HTTPRequest.h>
 #    include <Poco/Net/HTTPResponse.h>
+#    include <Poco/Net/NetException.h>
 #    include <Poco/StreamCopier.h>
 #    include <Poco/Dynamic/Var.h>
 #    include <Poco/Exception.h>
+#    include <Poco/Net/DNS.h>        // newer Poco versions
 #    include <Poco/DateTimeFormatter.h>
 #    include <Poco/DateTimeParser.h>
 #    include <Poco/Timespan.h>
@@ -349,9 +351,11 @@ namespace mrv
                                 const std::string& requestBody)
     {
 #ifdef MRV2_NETWORK
+        using namespace Poco::Net;
+        using namespace Poco;
+
         try
-        {
-            
+        {            
             std::string caLocation = mrv::rootpath() + "/certs/cacert.pem";
 
             bool useDefault = false;
@@ -373,34 +377,34 @@ namespace mrv
             }
 
             
-            Poco::Net::Context::Ptr context = new Poco::Net::Context(
-                Poco::Net::Context::CLIENT_USE,
+            Context::Ptr context = new Context(
+                Context::CLIENT_USE,
                 "",    // privateKeyFile
                 "",    // certificateFile
                 caLocation,    // caLocation ("" = system default, if available)
-                Poco::Net::Context::VERIFY_STRICT,
+                Context::VERIFY_STRICT,
                 9,     // verificationDepth
                 useDefault, // load default CA location
                 "ALL"
                 );
             
-            Poco::Net::HTTPSClientSession session(serverHost, serverPort, context);
+            HTTPSClientSession session(serverHost, serverPort, context);
             // Shorter connect timeout (e.g. 2 seconds instead of ~20s default)
             session.setConnectTimeout(Poco::Timespan(2, 0));  
 
             // General operation timeout (read/write)
             session.setTimeout(Poco::Timespan(10, 0));
             
-            Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_POST,
+            HTTPRequest request(HTTPRequest::HTTP_POST,
                                            entryPoint,
-                                           Poco::Net::HTTPMessage::HTTP_1_1);
+                                           HTTPMessage::HTTP_1_1);
             request.setContentType("application/json");
             request.setContentLength(requestBody.length());
 
             std::ostream& os = session.sendRequest(request);
             os << requestBody;
 
-            Poco::Net::HTTPResponse response;
+            HTTPResponse response;
             std::istream& rs = session.receiveResponse(response);
 
             std::ostringstream oss;
@@ -415,7 +419,7 @@ namespace mrv
             
             nlohmann::json json_data = nlohmann::json::parse(respStr);
             
-            if (response.getStatus() != Poco::Net::HTTPResponse::HTTP_OK)
+            if (response.getStatus() != HTTPResponse::HTTP_OK)
             {
                 // Parse JSON error message
                 if (json_data.contains("detail")) {
@@ -427,7 +431,22 @@ namespace mrv
         
             return json_data;
         }
-        catch (const Poco::Exception& ex) {
+        catch (const Exception& ex) {
+            // Most DNS blocks throw one of these:
+            // - HostNotFoundException
+            // - DNSException
+            // - ConnectionRefusedException (some blockers return 0.0.0.0)
+            if (
+                dynamic_cast<const ConnectionRefusedException*>(&ex) ||
+                dynamic_cast<const HostNotFoundException*>(&ex) ||
+                dynamic_cast<const DNSException*>(&ex) ||
+                std::string(ex.displayText()).find("Name or service not known") != std::string::npos ||
+                std::string(ex.displayText()).find("NXDOMAIN") != std::string::npos)
+            {
+                std::string msg = "DNS resolution failed – very likely blocked by Pi-hole/AdGuard/hagezi Light";
+                LOG_ERROR(msg);
+            }
+
             LOG_ERROR("Request failed: " << ex.displayText());
         }
         catch (const std::exception& ex) {
