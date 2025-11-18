@@ -2848,6 +2848,7 @@ msgstr "远程文件少于本地文件 。"
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "远程文件 {0} 匹配文件名 {1}, 但不是路径 。"
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "远程文件 {0} 不匹配本地文件名 。"
 
@@ -2908,21 +2909,25 @@ msgstr "HAP 配置需要. mov 扩展。 将其修改为. mov"
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新建文件 {0} 已经存在! 无法覆盖它"
 
+#. ++-format
 msgid "Rotated image info: {0}"
 msgstr "已旋转的图像信息: {0}"
 
+#. ++-format
 msgid "Scaled image info: {0}"
 msgstr "缩放图像信息: {0}"
 
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: 无法打开插件"
 
+#. ++-format
 msgid "Image info: {0} {1}"
 msgstr "图像信息: {0} {1}"
 
 msgid "Image too big for Save Annotations.  Will scale to the viewport size."
 msgstr "图像太大, 无法保存说明 。 将缩放到查看端大小 。"
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "视图端口大小 : {0} - X={1}, Y={2}"
 
@@ -2935,6 +2940,7 @@ msgstr "输出信息: {0} {1}"
 msgid "Using profile {0}, pixel format {1}."
 msgstr "使用 profile {0}, 像素格式 {1} 。"
 
+#. ++-format
 msgid "Using preset {0}."
 msgstr "使用预设 {0} 。"
 
@@ -2956,9 +2962,11 @@ msgstr "Audio only in timeline, but not trying to save audio."
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: 无效的 OpenGL 格式和类型"
 
+#. ++-format
 msgid "OpenGL info: {0}"
 msgstr "OpenGL 信息: {0}"
 
+#. ++-format
 msgid "Saving... {0}"
 msgstr "保存... {0}"
 
@@ -2968,9 +2976,11 @@ msgstr "不支持的不支持输出格式"
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "时间 {0} 空视频数据 重复帧"
 
+#. ++-format
 msgid "Render size: {0}"
 msgstr "渲染尺寸：{0}"
 
+#. ++-format
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "图像层 '{0}' 信息：{1} {2}"
 
@@ -3040,9 +3050,11 @@ msgstr "设置基于偏好的OCIO配置"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "根据OCIO环境变量设置OCIO配置"
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "从 \"{0}{1}\" 导入路径映射图"
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "正在从 \"{0}{1}.prefs\" 导入快捷键"
 
@@ -3055,6 +3067,7 @@ msgstr "路径映射已保存到 \"{0}{1}\"。"
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "快捷键被保存到“ \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "首选项已保存为 \"{0}{1}\"."
 
@@ -3106,6 +3119,7 @@ msgstr "显示“ {0} ” 没有默认视图。 显示是否存在?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "设置 OCIO 预设 '{0}' 。"
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "找不到预设 '{0}' 。"
 
@@ -3666,6 +3680,7 @@ msgstr "无法粘贴 {0}  错误 {1}"
 msgid "Could not save .otio file: {0}"
 msgstr "无法保存. otio 文件: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "保存 {0} 出错  {1}"
 
@@ -3681,6 +3696,7 @@ msgstr "您只能将剪辑添加到.otio EDL 播放列表中"
 msgid "Unknown media reference"
 msgstr "未知媒体引用未知"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "音轨 #{0} - {1}"
 
@@ -3850,6 +3866,7 @@ msgstr "    后    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "Edit Text"
 msgstr "编辑文本"
 
+#. ++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' 不是文件、目录或 URL。"
 
@@ -3868,6 +3885,7 @@ msgstr "无法播放 – 音频注释为空"
 msgid "Status is not saved"
 msgstr "状态未保存"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "音频注释文件 {0} 缺失或不存在！"
 
@@ -7204,6 +7222,27 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "任务信息失败"
 
+msgid "Unknown licese plan '{0}'"
+msgstr "未知的许可计划“{0}”"
+
+msgid "License plan '{0}'"
+msgstr "许可计划「{0}」"
+
+msgid "Supports annotations '{0}'"
+msgstr "支持注释「{0}」"
+
+msgid "Supports editing '{0}'"
+msgstr "支持编辑「{0}」"
+
+msgid "Supports layers '{0}'"
+msgstr "支持图层「{0}」"
+
+msgid "Supports python '{0}'"
+msgstr "支持 Python「{0}」"
+
+msgid "Supports voice annotations '{0}'"
+msgstr "支持语音注释「{0}」"
+
 msgid "Demo"
 msgstr "演示版"
 
@@ -7218,9 +7257,6 @@ msgstr "许可证已过期"
 
 msgid "{0} is not readable. Using system default."
 msgstr "{0} 无法读取。正在使用系统默认值。"
-
-msgid "Unknown licese plan '{0}'"
-msgstr "未知的许可计划“{0}”"
 
 msgid "Released Floating License"
 msgstr "已释放浮动许可证"

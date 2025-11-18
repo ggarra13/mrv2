@@ -2869,6 +2869,7 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "O ficheiro remoto {0} corresponde ao nome do ficheiro {1} mas no ao caminho."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "O ficheiro remoto {0} no corresponde ao nome do ficheiro local."
 
@@ -2935,15 +2936,18 @@ msgstr "O perfil HAP precisa de uma extenso.mov. Mud-lo para.mov"
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "O novo ficheiro {0} j existe! No  possvel sobrescrev- lo."
 
+#. ++-format
 msgid "Rotated image info: {0}"
 msgstr "Informaes sobre a imagem rotativa: {0}"
 
+#. ++-format
 msgid "Scaled image info: {0}"
 msgstr "Informao da imagem escalada: {0}"
 
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: No foi possvel abrir o plugin do gravador."
 
+#. ++-format
 msgid "Image info: {0} {1}"
 msgstr "Informao da imagem: {0} {1}"
 
@@ -2952,6 +2956,7 @@ msgstr ""
 "Imagem muito grande para salvar anotações. Irá escalar para o tamanho do "
 "viewport."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamanho do visor: {0} - X={1}, Y={2}"
 
@@ -2964,6 +2969,7 @@ msgstr "Informaes sobre a sada: {0} {1}"
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Usando o perfil {0}, o formato de pixel {1}."
 
+#. ++-format
 msgid "Using preset {0}."
 msgstr "Usando o predefinido {0}."
 
@@ -2985,9 +2991,11 @@ msgstr "udio apenas na linha do tempo, mas no tentando salvar udio."
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Formato e tipo OpenGL invlidos"
 
+#. ++-format
 msgid "OpenGL info: {0}"
 msgstr "Informaes do OpenGL: {0}"
 
+#. ++-format
 msgid "Saving... {0}"
 msgstr "Salvar... {0}"
 
@@ -2997,9 +3005,11 @@ msgstr "Formato de saída não suportado"
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Dados de vídeo vazios no tempo {0}. Repetir o quadro."
 
+#. ++-format
 msgid "Render size: {0}"
 msgstr "Tamanho de renderização: {0}"
 
+#. ++-format
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Informações da Camada de Imagem '{0}': {1} {2}"
 
@@ -3073,9 +3083,11 @@ msgstr "Configurar a configurao OCIO a partir de preferncias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Configurao da configurao OCIO a partir da varivel de ambiente OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Os mapeamentos de caminhos foram carregados a partir de \"{0}{1}\"."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Carregando as teclas acessrias de \"{0}{1}.prefs\"."
 
@@ -3088,6 +3100,7 @@ msgstr "Os mapas dos caminhos foram salvos para \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "As teclas quentes foram salvas para \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "As preferncias foram salvas para: \"{0}{1}\"."
 
@@ -3139,6 +3152,7 @@ msgstr "Nenhuma vista padrão para exibir '{0}'. Existe exibição?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Configurao do OCIO Preset '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Predefinir \"{0}\" no foi encontrado."
 
@@ -3714,6 +3728,7 @@ msgstr "No foi possvel colar {0}. Erro {1}."
 msgid "Could not save .otio file: {0}"
 msgstr "No foi possvel salvar o ficheiro.otio: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Erro ao gravar {0}. {1}"
 
@@ -3729,6 +3744,7 @@ msgstr "Voc s pode adicionar clipes a uma lista de reproduo.otio EDL."
 msgid "Unknown media reference"
 msgstr "Referência dos meios de comunicação desconhecidos"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Pista #{0} - {1}"
 
@@ -3902,6 +3918,7 @@ msgstr "Atrs de V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "Edit Text"
 msgstr "Editar o Texto"
 
+#. ++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' não é um arquivo, diretório ou URL."
 
@@ -3920,6 +3937,7 @@ msgstr "Não é possível reproduzir – a anotação de áudio está vazia"
 msgid "Status is not saved"
 msgstr "O status não foi salvo"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "O arquivo de anotação de áudio {0} está ausente ou não existe!"
 
@@ -7384,6 +7402,27 @@ msgstr "falhou o host_statistics64"
 msgid "task info failed"
 msgstr "Falhou a informao da tarefa"
 
+msgid "Unknown licese plan '{0}'"
+msgstr "Plano de licença desconhecido '{0}'"
+
+msgid "License plan '{0}'"
+msgstr "Plano de licença «{0}»"
+
+msgid "Supports annotations '{0}'"
+msgstr "Suporta anotações «{0}»"
+
+msgid "Supports editing '{0}'"
+msgstr "Suporta edição «{0}»"
+
+msgid "Supports layers '{0}'"
+msgstr "Suporta camadas «{0}»"
+
+msgid "Supports python '{0}'"
+msgstr "Suporta Python «{0}»"
+
+msgid "Supports voice annotations '{0}'"
+msgstr "Suporta anotações de voz «{0}»"
+
 msgid "Demo"
 msgstr "Demo"
 
@@ -7398,9 +7437,6 @@ msgstr "Licença expirada"
 
 msgid "{0} is not readable. Using system default."
 msgstr "{0} não pode ser lido. Usando o padrão do sistema."
-
-msgid "Unknown licese plan '{0}'"
-msgstr "Plano de licença desconhecido '{0}'"
 
 msgid "Released Floating License"
 msgstr "Licença flutuante liberada"

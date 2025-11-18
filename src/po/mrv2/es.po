@@ -2939,6 +2939,7 @@ msgstr "Archivos remotos son menos que los archivos locales."
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Archivo remoto {0} iguala nombra base {1} pero no la carpeta."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Archivo remoto {0} no es igual al archivo local."
 
@@ -3008,15 +3009,18 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "El archivo {0} ya existe.  Por seguridad, no lo sobreescribiré."
 
+#. ++-format
 msgid "Rotated image info: {0}"
 msgstr "Información de Imagen Rotada: {0}"
 
+#. ++-format
 msgid "Scaled image info: {0}"
 msgstr "Información de Imagen Escalada: {0}"
 
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: No puedo abrir plugin de escritura."
 
+#. ++-format
 msgid "Image info: {0} {1}"
 msgstr "Información de Imagen: {0} {1}"
 
@@ -3025,6 +3029,7 @@ msgstr ""
 "Imagen demasiado grande para guardar anotaciones. Se escalará al tamaño de "
 "la vista."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
 
@@ -3037,6 +3042,7 @@ msgstr "Información de Salida: {0} {1}"
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Usando perfil {0}, formato de pixel {1}."
 
+#. ++-format
 msgid "Using preset {0}."
 msgstr "Usando preseteo {0}."
 
@@ -3058,9 +3064,11 @@ msgstr "Solo audio en la línea de tiempo, pero no intenta grabar audio."
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Formato y tipo de OpenGL inválidos"
 
+#. ++-format
 msgid "OpenGL info: {0}"
 msgstr "Información de OpenGL: {0}"
 
+#. ++-format
 msgid "Saving... {0}"
 msgstr "Grabando... {0}."
 
@@ -3070,9 +3078,11 @@ msgstr "Formato de salida no soportado"
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
 
+#. ++-format
 msgid "Render size: {0}"
 msgstr "Tamaño de renderizado: {0}"
 
+#. ++-format
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Información de la capa de imagen '{0}': {1} {2}"
 
@@ -3148,9 +3158,11 @@ msgstr "Seteando OCIO config desde preferencias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Seteando OCIO config de la variable de entorno OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Mapeo de carpetas ha sido cargado de \"{0}{1}\"."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
@@ -3163,6 +3175,7 @@ msgstr "Mapeo de carpetas ha sido grabado en \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Teclas han sido grabadas en: \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Preferencias han sido grabadas en: \"{0}{1}\"."
 
@@ -3214,6 +3227,7 @@ msgstr "No hay vista por defecto para display '{0}'.  ¿Existe el display?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Usando preseteo OCIO '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preseteo '{0}' no encontrado"
 
@@ -3792,6 +3806,7 @@ msgstr "No pude pegar {0}.  Error {1}."
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error grabando {0}. {1}"
 
@@ -3807,6 +3822,7 @@ msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
 msgid "Unknown media reference"
 msgstr "Referencia de los medios desconocidos"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Pista #{0} - {1}"
 
@@ -3980,6 +3996,7 @@ msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 msgid "Edit Text"
 msgstr "Editar Texto"
 
+#. ++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' no es un archivo, directorio ni URL."
 
@@ -3998,6 +4015,7 @@ msgstr "No puedo reproducir - la anotación de audio está vacia"
 msgid "Status is not saved"
 msgstr "Estatus no es grabado"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Anotación de audio en archivo {0} está faltante o no existe!"
 
@@ -7458,6 +7476,27 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "task info falló"
 
+msgid "Unknown licese plan '{0}'"
+msgstr "Plan de licencia desconocido '{0}'"
+
+msgid "License plan '{0}'"
+msgstr "Plan de licencia «{0}»"
+
+msgid "Supports annotations '{0}'"
+msgstr "Admite anotaciones «{0}»"
+
+msgid "Supports editing '{0}'"
+msgstr "Admite edición «{0}»"
+
+msgid "Supports layers '{0}'"
+msgstr "Admite capas «{0}»"
+
+msgid "Supports python '{0}'"
+msgstr "Admite Python «{0}»"
+
+msgid "Supports voice annotations '{0}'"
+msgstr "Admite anotaciones de voz «{0}»"
+
 msgid "Demo"
 msgstr "Demo"
 
@@ -7472,9 +7511,6 @@ msgstr "Licencia expiró"
 
 msgid "{0} is not readable. Using system default."
 msgstr "{0} no es legible.  Usando el sistema por defecto."
-
-msgid "Unknown licese plan '{0}'"
-msgstr "Plan de licencia desconocido '{0}'"
 
 msgid "Released Floating License"
 msgstr "Devolvió una Licencia Floatante."
