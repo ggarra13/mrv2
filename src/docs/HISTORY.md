@@ -1,4 +1,4 @@
-v1.4.6
+v1.4.7
 ======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
@@ -38,9 +38,15 @@ The donationware version when running without a donation, does not have:
 
 Prices might change depending on competition and new features.
 
-
 ChangeLog
 ---------
+
+- Made blue pixel color of Pixel Color Bar more readable against the black
+  background.
+  
+
+v1.4.6
+======
 
 - By popular demand, the DEMO / BETA versions no longer log you off after a number of minutes.  The Vulkan port still supports HDR and the OpenGL port supports tone mapping.
 - Fixed certs directory on macOS install.
