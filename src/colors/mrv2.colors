@@ -21,7 +21,7 @@ theme "Default"
     cmap 1 255 0 0		# red: red tty errors
     cmap 2 0 255 0		# grn: jobs 'Continue' button border color
     cmap 3 255 255 0		# yel
-    cmap 4 0 0 255		# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 4 0   40   255	# blue pixel bar color
     cmap 5 255 0 255		# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0 255 255
     cmap 7 255 255 255		# bg color of some input fields (Try, Add..)
@@ -286,7 +286,7 @@ theme "Dark Grey"
     cmap 1 150 30 30	# red: red tty errors
     cmap 2 0 180 0      # grn: jobs 'Continue' button border color
     cmap 3 180 180 0	# yel
-    cmap 4 0 0 180	# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 4 0   40   255	# blue pixel bar color
     cmap 5 180 0 180	# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0 180 180
     cmap 7 50 50 50	# bg color of some input fields (Try, Add, etc)
@@ -535,7 +535,7 @@ theme "Tan"
     cmap 1 255 0 0		# red: red tty errors
     cmap 2 0 255 0		# grn: jobs 'Continue' button border color
     cmap 3 255 255 0		# yel
-    cmap 4 0 0 255		# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 4 0   40   255		# blue pixel bar color
     cmap 5 255 0 255		# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0 255 255
     cmap 7 255 255 255		# bg color of some input fields (Try, Add..)
@@ -784,7 +784,7 @@ theme "Plain Gray"
     cmap 1 255 0 0		# red: red tty errors
     cmap 2 0 255 0		# grn: jobs 'Continue' button border color
     cmap 3 255 255 0		# yel
-    cmap 4 0 0 255		# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 4 0   40   255		# blue pixel bar color
     cmap 5 255 0 255		# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0 255 255
     cmap 7 255 255 255		# bg color of some input fields (Try, Add..)
@@ -1049,7 +1049,7 @@ theme "Shake"
     cmap 1 162 48 48		# (RED) "Fail"
     cmap 2 90 180 0		# (GRN) jobs 'Continue' button border color
     cmap 3 255 255 0		# (YEL)
-    cmap 4 88 120 152		# (BLU) "Run" text heading colors, label colors ("Cpu Controls", etc)
+    cmap 4 0   40   255		# blue pixel bar color
     cmap 5 180 0 180		# (MAG) LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0 180 180		# (CYN)
     cmap 7 220 220 220		# (WHT) alpha/lumma color in pixel bar
@@ -1114,7 +1114,7 @@ theme "Black"
     cmap 1 180 0   0            # red: selection of preferences/file requester
     cmap 2 0  180  0            # grn: jobs 'Continue' button border color
     cmap 3 120 120 0		# yel
-    cmap 4 0   0   220		# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    cmap 4 0   40   255		# blue pixel bar color
     cmap 5 120 0   120		# mag LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0   120 120		# cyn
     cmap 7 152 168 168		# color of background of input fields

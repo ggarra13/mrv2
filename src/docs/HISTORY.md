@@ -5,8 +5,8 @@ mrv2 and vmrv2 are open source professional players and review tools for VFX, an
 
 mrv2 ships now in two compiled versions:
 
-   - mrv2 with OpenGL backend  (free up to version 1.4.0 - donationware afterwards)   
-   - vmrv2 with Vulkan backend (donationware)
+   - mrv2 with OpenGL backend  (free and donationware)   
+   - vmrv2 with Vulkan backend (free and donationware)
 
 It also ships for many more architectures, so be careful to download the correct one.
 It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).

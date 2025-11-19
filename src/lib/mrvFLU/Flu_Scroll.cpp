@@ -17,7 +17,6 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Tiled_Image.H>
 #include <FL/fl_draw.H>
-#include <FL/names.h>
 
 #include "mrvFLU/Flu_Entry.h"
 #include "mrvFLU/Flu_File_Chooser.h"

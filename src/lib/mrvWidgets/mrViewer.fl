@@ -130,11 +130,11 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {
-  xywh {86 109 933 56} hide resizable
-  class Fl_Double_Window
+widget_class PixelToolBarClass {open
+  xywh {86 109 952 56} resizable
+  class Fl_Double_Window visible
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {0 0 933 30} box FLAT_BOX color 56
   } {
     Fl_Menu_Button uiZoom {
@@ -240,18 +240,18 @@ ui->uiView->centerView();}
         label XY
         tooltip {Image coordinate of pixel under mouse.} xywh {61 3 90 25} box FLAT_BOX color 56 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
       }
-      Fl_Group {} {
+      Fl_Group {} {open
         xywh {151 1 782 28}
       } {
         Fl_Group {} {open
           xywh {151 1 782 28}
         } {
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {151 3 319 25}
           } {
             Fl_Menu_Button uiAColorType {
               label RGBA user_data_type {void*}
-              callback {ui->uiView->updatePixelBar();}
+              callback {ui->uiView->updatePixelBar();} open
               tooltip {Switch RGBA display between floating point, hexadecimal (0..0xff) and decimal (0..255).} xywh {151 3 45 24} labelsize 9 align 48
               code0 {o->disable_glyph();}
               class {mrv::PopupMenu}
@@ -269,7 +269,7 @@ ui->uiView->centerView();}
                 xywh {5 5 100 20}
               }
             }
-            Fl_Group {} {
+            Fl_Group {} {open
               xywh {199 3 271 25}
             } {
               Fl_Output uiPixelR {
@@ -278,7 +278,7 @@ ui->uiView->centerView();}
               Fl_Output uiPixelG {
                 tooltip {Green value of image pixel under mouse.} xywh {266 3 68 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 2
               }
-              Fl_Output uiPixelB {
+              Fl_Output uiPixelB {selected
                 tooltip {Blue value of image pixel under mouse.} xywh {334 3 68 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 4
               }
               Fl_Output uiPixelA {
@@ -289,7 +289,7 @@ ui->uiView->centerView();}
           Fl_Output uiPixelView {
             tooltip {8-bit sample of image pixel under mouse.} xywh {505 3 34 25} box FLAT_BOX color 1397969664
           }
-          Fl_Group {} {
+          Fl_Group {} {open
             xywh {542 3 240 26}
           } {
             Fl_Menu_Button uiBColorType {
@@ -297,7 +297,7 @@ ui->uiView->centerView();}
               callback {int i = o->value();
 if ( i < 0 ) return;
 o->label( mrv::color::space2id( (mrv::color::Space) (i+1)) );
-ui->uiView->redraw();} open
+ui->uiView->redraw();}
               tooltip {Switch pixel color space information display for the pixel under the cursor.} xywh {543 3 36 25} labelsize 9
               code0 {o->disable_glyph();}
               code1 {o->disable_label();}
@@ -362,7 +362,7 @@ ui->uiView->redraw();} open
             label F user_data_type {void*}
             callback {select_character(uiPixelValue);
 ui->uiView->updatePixelBar();
-ui->uiView->redraw();} open
+ui->uiView->redraw();}
             tooltip {Displays:
 * Full Pixel Values (Gamma, Gain and LUT)
 * Original (No Gamma, No Gain, No Lut)} xywh {474 3 27 25} align 48
@@ -1165,7 +1165,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                 }
                 Fl_Button uiRoll {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );} selected
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );}
                   image {../../icons/EditRoll.svg} compress_image 1 xywh {2 110 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }

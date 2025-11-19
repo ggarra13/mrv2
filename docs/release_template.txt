@@ -1,19 +1,13 @@
-mrv2 v1.4.5
+mrv2 v1.4.6
 =======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.
 
 It ships now in two compiled versions:
-   - mrv2 with OpenGL backend  (free up to version 1.4.0 - donationware afterwards)
-   - vmrv2 with Vulkan backend (donationware)
+   - mrv2 with OpenGL backend  (both free and donationware)
+   - vmrv2 with Vulkan backend (both free and donationware)
 
-Many improvements to Linux users!
-Fixed Vulkan Desktop Scaling support on Linux Wayland.
-Fixed Licensing issues using wmic which is missing on newer Windows distros.
-Fixed Vulkan slowdown on Wayland when mouse entered the title bar.
-Fixed OpenEXR's tile reading code and improved its performance.
-Fixed Linux Wayland crash when tooltip was shown and the cursor entered it.
-
+By popular demand free version without me being evil.  I apologyze for getting too greedy.  Now there's more plans depending on what you want or need.
 
 Donationware licenses are paid through PayPal:
 
@@ -21,12 +15,24 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPX
 
 I use the email information to contact you privately and ask you for your machine ID.
 
-- u$ 50  for node-lock license for one year.
-- u$150 for node-lock license to own.
-- The prices are cumulative.  If you donate, say u$10 in 5 months, you can access the node-lock license for one year.
+u$ 25 for a Solo node-locked license for one year.
+u$ 50 for a Standard node-locked standard license for one year.
+u$ 75 for a Edit node-locked license with annotations and editing tools for one year.
+u$ 150 for a Pro node-locked license to own.
 
 License works for both mrv2 and vmrv2 (you can have both installed).
+You need to have an internet connection for the license system.
 
+List of features available based on donation plan:
+
+- Annotations (available from Solo and later) - u$ 25
+- Python (available in Standard and later) - u$ 50
+- OpenEXR layer switching (available in Standard and later). - u$ 50
+- Edit (available in Edit and later) - u$ 75
+- Voice Annotations (available in Pro) - u$ 150
+- Custom development - u$ 10000
+
+Prices might change depending on competition and new features.  Act now for cheaper prices or access to more features.
 
 Main Web page (with links to videos, donations and online documentation):
 https://mrv2.sourceforge.io
@@ -44,8 +50,7 @@ https://www.github.com/ggarra13/mrv2
 
 -------------------------------------------------------------------------------
 
-
-mrv2 v1.4.5
+mrv2 v1.4.6
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and CGI for Windows, Linux and macOS has a new version.
 
@@ -53,5 +58,4 @@ Release History and Binaries:
 https://github.com/ggarra13/mrv2/releases/
 https://sourceforge.net/projects/mrv2/files/
 
-Source code:
-https://github.com/ggarra13/mrv2/
+Free and donationware with a small license popup window.

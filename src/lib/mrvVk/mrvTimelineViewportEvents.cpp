@@ -6,7 +6,6 @@
 #include <cmath>
 #include <algorithm>
 
-#include <FL/names.h>
 #include <FL/filename.H>
 #include <FL/Fl_Menu_Button.H>
 

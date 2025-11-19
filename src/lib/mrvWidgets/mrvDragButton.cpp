@@ -8,7 +8,6 @@
 #include <FL/Fl_Scroll.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl.H>
-#include <FL/names.h>
 
 #include "mrvWidgets/mrvDropWindow.h"
 #include "mrvWidgets/mrvDragButton.h"

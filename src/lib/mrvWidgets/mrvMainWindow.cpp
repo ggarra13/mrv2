@@ -34,7 +34,6 @@
 #include "mrViewer.h"
 #include "mrvCore/mrvOS.h"
 
-#include <FL/names.h>
 #include <FL/platform.H>
 #include <FL/fl_utf8.h>
 #include <FL/Enumerations.H>

@@ -22,7 +22,6 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
-#include <FL/names.h>
 
 #include "mrvFLU/Flu_Entry.h"
 #include "mrvFLU/Flu_Pack.h"

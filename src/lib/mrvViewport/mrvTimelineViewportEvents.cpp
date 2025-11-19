@@ -33,8 +33,6 @@
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvUtil.h"
 
-
-#include <FL/names.h>
 #include <FL/filename.H>
 #include <FL/Fl_Menu_Button.H>
 
