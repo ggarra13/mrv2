@@ -1245,7 +1245,7 @@ if (!mrv::App::supports_annotations && Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (mrv::App::supports_annotations)
+                  callback {if (!mrv::App::supports_annotations)
    return;
 
 uiView->setActionMode( mrv::ActionMode::kDraw );
@@ -1260,7 +1260,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiErase {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (mrv::App::supports_annotations)
+                  callback {if (!mrv::App::supports_annotations)
     return;
     
     
@@ -1276,7 +1276,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiPolygon {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (mrv::App::supports_annotations)
+                  callback {if (!mrv::App::supports_annotations)
     return;
     
 auto mode = mrv::ActionMode::kPolygon;
@@ -1307,7 +1307,7 @@ uiView->setActionMode( mode );}
                 }
                 Fl_Button uiCircle {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (mrv::App::supports_annotations)
+                  callback {if (!mrv::App::supports_annotations)
     return;  
    
 auto mode = mrv::ActionMode::kCircle;
@@ -1337,7 +1337,7 @@ uiView->setActionMode( mode );}
                 }
                 Fl_Button uiRectangle {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (mrv::App::supports_annotations)
+                  callback {if (!mrv::App::supports_annotations)
     return;  
    
 auto mode = mrv::ActionMode::kRectangle;
@@ -1367,7 +1367,7 @@ uiView->setActionMode( mode );}
                 }
                 Fl_Button uiArrow {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (mrv::App::supports_annotations)
+                  callback {if (!mrv::App::supports_annotations)
     return;  
    
 uiView->setActionMode( mrv::ActionMode::kArrow );
@@ -1382,7 +1382,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiText {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (mrv::App::supports_annotations)
+                  callback {if (!mrv::App::supports_annotations)
     return;  
    
 
