@@ -342,7 +342,7 @@ class PySwigCommand(setuptools.Command):
     command = ['swig', '-D{0}'.format(sys.platform.upper()),
                # \@bug: Safe C++ casts are broken, so we use C casts 
                '-DSWIG_NO_CPLUSPLUS_CAST', 
-               ' -DFL_INTERNALS',  
+               '-DFL_INTERNALS',  
                '-w302',
                '-w312',
                '-w325',
