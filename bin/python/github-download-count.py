@@ -390,23 +390,30 @@ if __name__ == "__main__":
     mrv2_grand_total += mrv2_github_total
     vmrv2_grand_total += vmrv2_github_total
 
+    # 2. Get GitHub totals
+    mrv2_github_betas_total, vmrv2_github_betas_total = get_github_downloads(user, repo, "betas")
+    print("mrv2_github_betas_total=", mrv2_github_betas_total)
+    print("vmrv2_github_betas_total=", vmrv2_github_betas_total)
+    mrv2_grand_total += mrv2_github_betas_total
+    vmrv2_grand_total += vmrv2_github_betas_total
+
     if not repo or not args.tag:
         print("\nSkipping SourceForge downloads: Both repository (SourceForge project name) and tag (folder name) must be provided.")
         sys.exit(0)
 
     print(f"\n--- SourceForge Downloads for Project: {repo} ---")
 
-    # 2. Get SourceForge Released Totals
+    # 3. Get SourceForge Released Totals
     mrv2_sf_released_total, vmrv2_sf_released_total = count_sourceforge(repo, args.tag, end_date_str, start_date_str)
     mrv2_grand_total += mrv2_sf_released_total
     vmrv2_grand_total += vmrv2_sf_released_total
 
-    # 3. Get SourceForge Beta OpenGL Totals
+    # 4. Get SourceForge Beta OpenGL Totals
     mrv2_sf_beta_opengl_total, vmrv2_sf_beta_opengl_total = count_sourceforge(repo, 'beta/opengl', end_date_str, start_date_str)
     mrv2_grand_total += mrv2_sf_beta_opengl_total
     vmrv2_grand_total += vmrv2_sf_beta_opengl_total
 
-    # 4. Get SourceForge Beta Vulkan Totals
+    # 5. Get SourceForge Beta Vulkan Totals
     mrv2_sf_beta_vulkan_total, vmrv2_sf_beta_vulkan_total = count_sourceforge(repo, 'beta/vulkan', end_date_str, start_date_str)
     mrv2_grand_total += mrv2_sf_beta_vulkan_total
     vmrv2_grand_total += vmrv2_sf_beta_vulkan_total
