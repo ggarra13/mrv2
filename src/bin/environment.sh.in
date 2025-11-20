@@ -47,5 +47,6 @@ export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2
 
 #
 # Make Kwin use libdecor to allow dragging subwindows outside main window.
+# This will make the title bar not follow the standard KDE look.
 #
 export LIBDECOR_FORCE_CSD=1
