@@ -1,4 +1,10 @@
 /* File : fltk.i */
+
+// Override SWIG_as_voidptr to use reinterpret_cast instead of static_cast
+#undef SWIG_as_voidptr
+%define_as(SWIG_as_voidptr(a),
+  %const_cast(%reinterpret_cast(a,const void *), void *))
+
 %define DOCSTRING
 "pyFltk, the Python bindings to the FLTK GUI toolkit.
 This is an easy to use and light-weight GUI toolkit
@@ -8,6 +14,9 @@ graphical user interfaces."
 
 %module(docstring=DOCSTRING, directors="1", package="fltk._fltk") fltk
 
+
+// 3. Your module definition follows...
+%module mymodule
 
 %feature("director");
 

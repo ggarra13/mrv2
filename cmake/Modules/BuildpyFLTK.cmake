@@ -42,6 +42,12 @@ set(pyFLTK_PATCH
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/WindowShowTypemap.i"
     "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
 
+    # For avoiding fl_xid_ wrapping on Vulkan
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/x.i"
+    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
+
     # For avoiding check of fltk version as we are now compiling v1.5.0
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
