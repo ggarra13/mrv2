@@ -390,13 +390,6 @@ if __name__ == "__main__":
     mrv2_grand_total += mrv2_github_total
     vmrv2_grand_total += vmrv2_github_total
 
-    # 2. Get GitHub totals
-    mrv2_github_betas_total, vmrv2_github_betas_total = get_github_downloads(user, repo, "betas")
-    print("mrv2_github_betas_total=", mrv2_github_betas_total)
-    print("vmrv2_github_betas_total=", vmrv2_github_betas_total)
-    mrv2_grand_total += mrv2_github_betas_total
-    vmrv2_grand_total += vmrv2_github_betas_total
-
     if not repo or not args.tag:
         print("\nSkipping SourceForge downloads: Both repository (SourceForge project name) and tag (folder name) must be provided.")
         sys.exit(0)

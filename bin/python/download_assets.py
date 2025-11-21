@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import os
 import re
 import requests # Still needed for initial directory listing and parsing
@@ -7,11 +8,33 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import subprocess # New import for running curl
 
+VERSION=1.0
 MATCH_REGEX=re.compile(r"arm64|aarch64")
 
+description=f"""
+po_merge v{VERSION}
+
+A program to download all betas or version assets from sourceforge.
+"""
+            
+parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    description=description)
+
+parser.add_argument('version', type=str,
+                    help='Version to download')
+
+args = parser.parse_args()
+branch=args.version
+
 # Base SourceForge directory URL
-VULKAN_URL = "https://sourceforge.net/projects/mrv2/files/beta/vulkan/"
-OPENGL_URL = "https://sourceforge.net/projects/mrv2/files/beta/opengl/"
+
+if branch == 'beta':
+    VULKAN_URL = "https://sourceforge.net/projects/mrv2/files/beta/vulkan/"
+    OPENGL_URL = "https://sourceforge.net/projects/mrv2/files/beta/opengl/"
+else:
+    VULKAN_URL = f"https://sourceforge.net/projects/mrv2/files/{branch}"
+    OPENGL_URL = f"https://sourceforge.net/projects/mrv2/files/{branch}"
 
 # Local directory to save downloads
 VULKAN_DIR = "releases/vulkan"
@@ -22,7 +45,7 @@ os.makedirs(VULKAN_DIR, exist_ok=True)
 os.makedirs(OPENGL_DIR, exist_ok=True)
 
 
-def download_url(base_url, dest_dir):
+def download_url(base_url, dest_dir, mrv2_prefix):
 
     # Get the HTML page (This part still uses requests/BeautifulSoup)
     print(f"Fetching file list from {base_url}...")
@@ -52,6 +75,11 @@ def download_url(base_url, dest_dir):
         if filename == 'README.md':
             continue
 
+        PREFIX_REGEX=re.compile(rf"^{mrv2_prefix}-")
+        if not PREFIX_REGEX.search(filename):
+            print(f"Skipping non-prefix {mrv2_prefix} file: {filename}")
+            continue
+
         if not MATCH_REGEX.search(filename):
             print(f"Skipping non-regex file: {filename}")
             continue
@@ -76,10 +104,9 @@ def download_url(base_url, dest_dir):
         curl_command = [
             "curl",
             "-L",
-            "-C",
-            "-",
-            "-o",
-            output_path,
+            "-C", "-",
+            "-A", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/142.0.0.0 Safari/537.36",
+            "-o", output_path,
             file_url
         ]
         
@@ -109,5 +136,5 @@ def download_url(base_url, dest_dir):
 
     print("✅ All download attempts completed.")
 
-download_url(VULKAN_URL, VULKAN_DIR)
-download_url(OPENGL_URL, OPENGL_DIR)
+download_url(VULKAN_URL, VULKAN_DIR, 'vmrv2')
+download_url(OPENGL_URL, OPENGL_DIR, 'mrv2')

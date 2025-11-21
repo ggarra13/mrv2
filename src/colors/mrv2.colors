@@ -1375,18 +1375,18 @@ theme "Black"
     #     We have to force these off the normal ramps
     #     for the interface to look right..
     #
-    cmap 0   140 140 140	# black: color of most label text
-    cmap 1   180   40  40       # red: selection of preferences/file browser
-    cmap 2   0   180 0          # grn: jobs 'Continue' button border color
-    cmap 4   0 0     180	# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
-    cmap 5   160 60  160	# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
-    cmap 9   100 0   0		# Dump button red
-    cmap 13  60  20  60		# desaturated magenta: color for the 'enabled' search box
-    cmap 59  40 140  40		# "Done" green
-    cmap 90  160 120 40		# Die/Pause orange
-    cmap 94  120 80  20		# report button 'running a command'
-    cmap 95  140 140 100	# text selection color
-    cmap 124 90  68  30		# "End" and "Add Nevercpu" button color (orange)
-    cmap 254 50  70  70		# bgcolor of 'current jobid' lines in tty browser
-    cmap 255 70  70  70		# FL_WHITE -- tty browser bg color
+    # cmap 0   140 140 140	# black: color of most label text
+    # cmap 1   180   40  40       # red: selection of preferences/file browser
+    # cmap 2   0   180 0          # grn: jobs 'Continue' button border color
+    # cmap 4   0 0     180	# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
+    # cmap 5   160 60  160	# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
+    # cmap 9   100 0   0		# Dump button red
+    # cmap 13  60  20  60		# desaturated magenta: color for the 'enabled' search box
+    # cmap 59  40 140  40		# "Done" green
+    # cmap 90  160 120 40		# Die/Pause orange
+    # cmap 94  120 80  20		# report button 'running a command'
+    # cmap 95  140 140 100	# text selection color
+    # cmap 124 90  68  30		# "End" and "Add Nevercpu" button color (orange)
+    # cmap 254 50  70  70		# bgcolor of 'current jobid' lines in tty browse
+    # cmap 255 70  70  70		# FL_WHITE -- tty browser bg color
 }

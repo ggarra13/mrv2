@@ -36,7 +36,7 @@ then
     $PYTHON -m pip install requests bs4
 fi
 
-$PYTHON bin/python/download_assets.py
+$PYTHON bin/python/download_assets.py "$@"
 
 if [[ -e venv ]]; then
     if [[ $KERNEL != *Windows* ]]; then
