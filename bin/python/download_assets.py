@@ -37,8 +37,8 @@ else:
     OPENGL_URL = f"https://sourceforge.net/projects/mrv2/files/{branch}"
 
 # Local directory to save downloads
-VULKAN_DIR = "releases/vulkan"
-OPENGL_DIR = "releases/opengl"
+VULKAN_DIR = f"releases/{branch}/vulkan"
+OPENGL_DIR = f"releases/{branch}/opengl"
 
 # Create output directory if missing
 os.makedirs(VULKAN_DIR, exist_ok=True)

@@ -27,7 +27,7 @@ endif()
 #
 if(APPLE)
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
-	set(pyFLTK_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${pyFLTK_CXX_FLAGS}")
+	set(pyFLTK_CXX_FLAGS "-std=c++17 -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${pyFLTK_CXX_FLAGS}")
     endif()
 endif()
 
