@@ -125,7 +125,6 @@ elif sys.platform == 'darwin':
     lib_dir_list = [fltk_lib_dir]
     lib_list = ["fltk"]
     cpu_type = platform.processor()
-    compile_arg_list=['-arch', osx_arch, '-std=c++17']
     if cpu_type.startswith("i386"):
         print("i386 CPU variant detected")
         #lib_dir_list.append('/usr/local/lib')
@@ -138,6 +137,7 @@ elif sys.platform == 'darwin':
         print("PowerPC system detected")
         osx_arch = "ppc"
 
+    compile_arg_list=['-arch', osx_arch, '-std=c++17']
     link_arg_list=['-stdlib=libc++', '-arch', osx_arch, '-framework','ApplicationServices','-framework','Carbon','-framework', 'Cocoa', '-framework','OpenGL','-framework','AGL','-rpath', fltk_lib_dir]
 
 else:
