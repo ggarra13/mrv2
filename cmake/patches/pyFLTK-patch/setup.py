@@ -132,6 +132,7 @@ elif sys.platform == 'darwin':
     elif cpu_type.startswith("arm"):
         print("arm CPU variant detected")
         #lib_dir_list.append('/opt/homebrew/lib')
+        compile_arg_list.append('-std=c++17')
         osx_arch = "arm64"
     else:
         print("PowerPC system detected")
