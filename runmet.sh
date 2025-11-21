@@ -56,6 +56,8 @@ if [[ -d $dir ]]; then
 	export FLTK_HOME=$BUILD_DIR/install
     fi
 
+    rm -rf *.egg-info*
+    
     $PYTHONEXE setup.py build --enable-shared --disable-forms
     $PYTHONEXE -m pip install .
     if [[ $? != 0 ]]; then

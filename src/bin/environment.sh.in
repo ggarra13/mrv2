@@ -41,9 +41,15 @@ export PYTHONHOME="${dir}/"
 export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${HOME}/.local/lib/python@MRV2_PYTHON_VERSION@/site_packages:${PYTHONPATH}"
 
 #
-# Make NVidia graphic cards use implicit sync, instead of explicit.
+# Turn on/off explicit sync in Vulkan on Wayland.
+# Explicit sync is more compatible with graphic cards and modern, but it is slower.
+# Implicit sync is better for older graphic cards.
 #
-#export __NV_DISABLE_EXPLICIT_SYNC=1
+# Notes:  Vulkan NVidia stutters on implicit sync.
+#
+if [[ -z $FLTK_VK_EXPLICIT_SYNC ]]; then
+    export FLTK_VK_EXPLICIT_SYNC=0
+fi
 
 #
 # Make Kwin use libdecor to allow dragging subwindows outside main window.
