@@ -79,11 +79,11 @@ namespace mrv
                 key = prefix + "/WindowW";
                 value = settings->getValue<std::any>(key);
                 W = std_any_empty(value) ? W : std_any_cast<int>(value);
-
+                
                 key = prefix + "/WindowH";
                 value = settings->getValue<std::any>(key);
                 H = std_any_empty(value) ? H : std_any_cast<int>(value);
-                if (H == 0)
+                if (H <= 0)
                     H = 24 + 30;
 
                 //
@@ -195,7 +195,6 @@ namespace mrv
                 key = prefix + "/WindowW";
                 settings->setValue(key, w->w());
 
-                key = prefix + "/WindowH";
 
                 // Only store height if it is not a growing panel/window, else
                 // store 0.
@@ -204,6 +203,7 @@ namespace mrv
                 {
                     H = w->h();
                 }
+                key = prefix + "/WindowH";
                 settings->setValue(key, H);
             }
         }
