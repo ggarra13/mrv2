@@ -1,5 +1,3 @@
-#!/usr/env/bin python
-
 #
 # Built-in imports
 #

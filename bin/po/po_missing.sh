@@ -26,7 +26,7 @@ then
     $PYTHON -m pip install polib
 fi
 
-$PYTHON bin/python/po_missing.py $*
+$PYTHON bin/python/po_missing.py "$@"
 
 #
 # Remove all the dependencies we installed

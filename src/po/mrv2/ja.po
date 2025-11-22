@@ -2850,7 +2850,6 @@ msgstr "ローカルファイルのみがサポートされています。"
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "リモートファイル {0} はファイル名 {1} と一致しますが、パスは一致しません。"
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "リモートファイル {0} はローカルファイル名と一致しません。"
 
@@ -2911,25 +2910,21 @@ msgstr "HAP プロファイルには .mov 拡張子が必要です。.mov に変
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新しいファイル {0} はすでに存在します！上書きできません。"
 
-#. ++-format
 msgid "Rotated image info: {0}"
 msgstr "回転された画像情報: {0}"
 
-#. ++-format
 msgid "Scaled image info: {0}"
 msgstr "スケーリングされた画像情報: {0}"
 
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: ライタープラグインを開けません。"
 
-#. ++-format
 msgid "Image info: {0} {1}"
 msgstr "画像情報: {0} {1}"
 
 msgid "Image too big for Save Annotations.  Will scale to the viewport size."
 msgstr "画像が大きすぎてアノテーションを保存できません。ビューポートサイズに拡大縮小します。"
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "ビューポートサイズ: {0} - X={1}, Y={2}"
 
@@ -2942,7 +2937,6 @@ msgstr "出力情報: {0} {1}"
 msgid "Using profile {0}, pixel format {1}."
 msgstr "プロファイル {0}、ピクセル形式 {1} を使用しています。"
 
-#. ++-format
 msgid "Using preset {0}."
 msgstr "プリセット{0}"
 
@@ -2964,11 +2958,9 @@ msgstr "しかし、どこかへ行こうとしているわけじゃない。"
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: 無効な OpenGL 形式とタイプ"
 
-#. ++-format
 msgid "OpenGL info: {0}"
 msgstr "OpenGL 情報: {0}"
 
-#. ++-format
 msgid "Saving... {0}"
 msgstr "保存中... {0}"
 
@@ -2978,11 +2970,9 @@ msgstr "サポートされていない出力形式: %1%"
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
 
-#. ++-format
 msgid "Render size: {0}"
 msgstr "レンダーサイズ: {0}"
 
-#. ++-format
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "画像レイヤー '{0}' 情報: {1} {2}"
 
@@ -3054,11 +3044,9 @@ msgstr "OCIO ファイルから設定をインポート"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "OCIO 環境変数から OCIO 設定を設定しています。"
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "パス マッピングが「{0}{1}」から読み込まれました。"
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" からホットキーをロードしています。"
 
@@ -3071,7 +3059,6 @@ msgstr "パスマッピングは \"{0}{1}\" に保存されました。"
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "ホットキーは \"{0}{1}.prefs\" に保存されました。"
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "環境設定は \"{0}{1}\" に保存されました。"
 
@@ -3123,7 +3110,6 @@ msgstr "表示 '{0}' のデフォルトビューがありません。表示は�
 msgid "Setting OCIO Preset '{0}'."
 msgstr "プリセット{0}"
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "プリセット '{0}' が見つかりません。"
 
@@ -3690,7 +3676,6 @@ msgstr "{0} を貼り付けられませんでした。エラー {1}。"
 msgid "Could not save .otio file: {0}"
 msgstr ".otio ファイルを保存できませんでした: {0}"
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "保存エラー {0}。{1}"
 
@@ -3706,7 +3691,6 @@ msgstr "カートに追加できるの件数は{0}件のみです。"
 msgid "Unknown media reference"
 msgstr "不明なメディア参照"
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "トラック #{0} - {1}"
 
@@ -3876,7 +3860,6 @@ msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "Edit Text"
 msgstr "テキストを編集"
 
-#. ++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' はファイル、ディレクトリ、またはURLではありません。"
 
@@ -3895,7 +3878,6 @@ msgstr "再生できません ― 音声注釈が空です"
 msgid "Status is not saved"
 msgstr "ステータスは保存されていません"
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "オーディオ注釈ファイル {0} が見つからないか存在しません！"
 
@@ -7218,7 +7200,7 @@ msgid "License plan '{0}'"
 msgstr "ライセンスプラン「{0}」"
 
 msgid "Supports annotations '{0}'"
-msgstr "注釈"
+msgstr "アノテーション「{0}」をサポート"
 
 msgid "Supports editing '{0}'"
 msgstr "編集をサポート「{0}」"
@@ -7230,7 +7212,7 @@ msgid "Supports python '{0}'"
 msgstr "Python をサポート「{0}」"
 
 msgid "Supports voice annotations '{0}'"
-msgstr "注釈"
+msgstr "音声アノテーション「{0}」をサポート"
 
 msgid "Demo"
 msgstr "デモ"

@@ -312,6 +312,7 @@ echo "Building summary"
 echo "================"
 echo
 echo "mrv2 version to build is v${mrv2_VERSION}"
+echo "User is ${USER}"
 echo
 echo "Build directory is ${BUILD_DIR}"
 echo "Build type      is ${CMAKE_BUILD_TYPE}"

@@ -1552,7 +1552,7 @@ msgid "Timelines, movies, image sequences, USD assets or folders."
 msgstr "Timelines, movies, image sequences, USD assets or folders."
 
 msgid "Debugging:"
-msgstr ""
+msgstr "Debugging:"
 
 msgid "Debug verbosity."
 msgstr "Debug verbosity."
@@ -1633,7 +1633,7 @@ msgid "LUT operation order."
 msgstr "LUT operation order."
 
 msgid "Python (if supported):"
-msgstr ""
+msgstr "Python (if supported):"
 
 msgid "Don't load python for faster startup."
 msgstr "Don't load python for faster startup."
@@ -2891,7 +2891,6 @@ msgstr "Remote files are less than local files."
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Remote file {0} matches file name {1} but not path."
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Remote file {0} does not match local filename."
 
@@ -2956,25 +2955,21 @@ msgstr "HAP profile needs a .mov extension.  Changing it to .mov"
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "New file {0} already exist!  Cannot overwrite it."
 
-#. ++-format
 msgid "Rotated image info: {0}"
 msgstr "Rotated image info: {0}"
 
-#. ++-format
 msgid "Scaled image info: {0}"
 msgstr "Scaled image info: {0}"
 
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Cannot open writer plugin."
 
-#. ++-format
 msgid "Image info: {0} {1}"
 msgstr "Image info: {0} {1}"
 
 msgid "Image too big for Save Annotations.  Will scale to the viewport size."
 msgstr "Image too big for Save Annotations.  Will scale to the viewport size."
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Viewport Size: {0} - X={1}, Y={2}"
 
@@ -2987,7 +2982,6 @@ msgstr "Output info: {0} {1}"
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Using profile {0}, pixel format {1}."
 
-#. ++-format
 msgid "Using preset {0}."
 msgstr "Using preset {0}."
 
@@ -3009,11 +3003,9 @@ msgstr "Audio only in timeline, but not trying to save audio."
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Invalid OpenGL format and type"
 
-#. ++-format
 msgid "OpenGL info: {0}"
 msgstr "OpenGL info: {0}"
 
-#. ++-format
 msgid "Saving... {0}"
 msgstr "Saving... {0}"
 
@@ -3023,11 +3015,9 @@ msgstr "Unsupported output format"
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Empty video data at time {0}.  Repeating frame."
 
-#. ++-format
 msgid "Render size: {0}"
 msgstr "Render size: {0}"
 
-#. ++-format
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Image Layer '{0}' info: {1} {2}"
 
@@ -3103,11 +3093,9 @@ msgstr "Setting OCIO config from preferences."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Setting OCIO config from OCIO environment variable."
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Path mappings have been loaded from \"{0}{1}\"."
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
 
@@ -3120,7 +3108,6 @@ msgstr "Path mappings have been saved to \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys have been saved to \"{0}{1}.prefs\"."
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Preferences have been saved to: \"{0}{1}\"."
 
@@ -3172,7 +3159,6 @@ msgstr "No default view for display '{0}'.  Does display exist?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Setting OCIO Preset '{0}'."
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preset '{0}' not found."
 
@@ -3442,7 +3428,7 @@ msgid "Move Edit Tool"
 msgstr "Move Edit Tool"
 
 msgid "Trim Edit Tool"
-msgstr ""
+msgstr "Trim Edit Tool"
 
 msgid "Undo Edit"
 msgstr "Undo Edit"
@@ -3746,7 +3732,6 @@ msgstr "Could not paste {0}.  Error {1}."
 msgid "Could not save .otio file: {0}"
 msgstr "Could not save .otio file: {0}"
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error saving {0}. {1}"
 
@@ -3762,7 +3747,6 @@ msgstr "You can only add clips to an .otio EDL playlist."
 msgid "Unknown media reference"
 msgstr "Unknown media reference"
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Track #{0} - {1}"
 
@@ -3824,7 +3808,7 @@ msgid "Delete"
 msgstr "Delete"
 
 msgid "Move"
-msgstr ""
+msgstr "Move"
 
 msgid "Trim"
 msgstr "Trim"
@@ -3845,7 +3829,7 @@ msgid "Roll"
 msgstr "Roll"
 
 msgid "Fill"
-msgstr ""
+msgstr "Fill"
 
 msgid "Scrub"
 msgstr "Scrub"
@@ -3936,7 +3920,6 @@ msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "Edit Text"
 msgstr "Edit Text"
 
-#. ++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' is not a file, directory or url."
 
@@ -3955,7 +3938,6 @@ msgstr "Cannot play - audio annotation is empty"
 msgid "Status is not saved"
 msgstr "Status is not saved"
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Audio annotation file {0} is missing or not exists!"
 
@@ -5846,7 +5828,7 @@ msgid "ViewGroup"
 msgstr "ViewGroup"
 
 msgid "Undo Last Edit."
-msgstr ""
+msgstr "Undo Last Edit."
 
 msgid "Redo Previous Edit."
 msgstr "Redo Previous Edit."
@@ -7400,22 +7382,22 @@ msgid "task info failed"
 msgstr "task info failed"
 
 msgid "Unknown licese plan '{0}'"
-msgstr ""
+msgstr "Unknown licese plan '{0}'"
 
 msgid "License plan '{0}'"
-msgstr ""
+msgstr "License plan '{0}'"
 
 msgid "Supports annotations '{0}'"
 msgstr "Supports annotations '{0}'"
 
 msgid "Supports editing '{0}'"
-msgstr ""
+msgstr "Supports editing '{0}'"
 
 msgid "Supports layers '{0}'"
-msgstr ""
+msgstr "Supports layers '{0}'"
 
 msgid "Supports python '{0}'"
-msgstr ""
+msgstr "Supports python '{0}'"
 
 msgid "Supports voice annotations '{0}'"
 msgstr "Supports voice annotations '{0}'"
@@ -7748,28 +7730,28 @@ msgid "Remove Audio Gap"
 msgstr "Remove Audio Gap"
 
 msgid "Edit - Fill Tool"
-msgstr ""
+msgstr "Edit - Fill Tool"
 
 msgid "Edit - Move Tool"
-msgstr ""
+msgstr "Edit - Move Tool"
 
 msgid "Edit - Trim Tool"
-msgstr ""
+msgstr "Edit - Trim Tool"
 
 msgid "Edit - Ripple Tool"
-msgstr ""
+msgstr "Edit - Ripple Tool"
 
 msgid "Edit - Roll Tool"
-msgstr ""
+msgstr "Edit - Roll Tool"
 
 msgid "Edit - Slice Tool"
 msgstr "Edit - Slice Tool"
 
 msgid "Edit - Slide Tool"
-msgstr ""
+msgstr "Edit - Slide Tool"
 
 msgid "Edit - Slip Tool"
-msgstr ""
+msgstr "Edit - Slip Tool"
 
 msgid "Edit - Undo"
 msgstr "Edit - Undo"

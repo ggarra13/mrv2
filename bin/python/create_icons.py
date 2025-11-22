@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 #
 # This simple script uses Python's pillow (PIL) module to convert icons to
 # the different platforms.
