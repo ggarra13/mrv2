@@ -9,6 +9,7 @@ else
     dir=$0
 fi
 
+export KERNEL=`uname`
 
 symlink=`readlink ${dir}`
 
@@ -37,10 +38,10 @@ dir=${dir%/*}
 #
 export LD_LIBRARY_PATH="${dir}/lib64:${dir}/lib:${LD_LIBRARY_PATH}:/usr/lib64:/usr/lib"
 export DYLD_LIBRARY_PATH="${dir}/lib:${DYLD_LIBRARY_PATH}:/usr/local/lib:/usr/ib"
-export PYTHONHOME="${dir}/"
-export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${HOME}/.local/lib/python@MRV2_PYTHON_VERSION@/site_packages:${PYTHONPATH}"
-
-export KERNEL=`uname`
+if [[ "@BUILD_PYTHON@" == "ON" ]]; then
+    export PYTHONHOME="${dir}/"
+    export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${HOME}/.local/lib/python@MRV2_PYTHON_VERSION@/site_packages:${PYTHONPATH}"
+fi
 
 #
 # Turn on/off explicit sync in Vulkan on Wayland.
@@ -53,7 +54,9 @@ if [[ $KERNEL == *Linux* ]]; then
     if [[ -z $FLTK_VK_EXPLICIT_SYNC ]]; then
 	export FLTK_VK_EXPLICIT_SYNC=0
     fi
-    echo "        [vlk ] FLTK_VK_EXPLICIT_SYNC=${FLTK_VK_EXPLICIT_SYNC}"
+    if [[ "@TLRENDER_VK@" == "ON" ]]; then
+	echo "        [vlk.] FLTK_VK_EXPLICIT_SYNC=${FLTK_VK_EXPLICIT_SYNC}"
+    fi
 fi
 
 
