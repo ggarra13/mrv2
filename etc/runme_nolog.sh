@@ -28,7 +28,6 @@ echo "PATH is now set now to ${PATH}"
 echo "It has:"
 mkdir -p $PWD/${BUILD_DIR}/install/bin/
 
-
 #
 # Extract cmake version
 #
@@ -37,7 +36,6 @@ if [[ $INSTALL_CMAKE == 1 ]]; then
 fi
 
 get_cmake_version
-
 
 #
 # These are some of the expensive mrv2 options
@@ -196,6 +194,10 @@ fi
 
 if [ -z "$TLRENDER_RAW" ]; then
     export TLRENDER_RAW=ON
+fi
+
+if [ -z "$TLRENDER_SSL" ]; then
+    export TLRENDER_SSL=ON
 fi
 
 if [ -z "$TLRENDER_STB" ]; then
@@ -403,6 +405,7 @@ echo "JPEG   support ..................... ${TLRENDER_JPEG} 	(TLRENDER_JPEG)"
 echo "LibRaw support ..................... ${TLRENDER_RAW} 	(TLRENDER_RAW)"
 echo "OpenEXR support .................... ${TLRENDER_EXR} 	(TLRENDER_EXR)"
 echo "STB support (TGA, BMP, PSD) ........ ${TLRENDER_STB} 	(TLRENDER_STB)"
+echo "SSL support ........................ ${TLRENDER_SSL} 	(TLRENDER_SSL)"
 echo "TIFF support ....................... ${TLRENDER_TIFF} 	(TLRENDER_TIFF)"
 echo "tlRender API ....................... ${TLRENDER_API} 	(TLRENDER_API)"
 echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
@@ -499,6 +502,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D TLRENDER_NFD=OFF
 	   -D TLRENDER_OPENJPH=${TLRENDER_OPENJPH}
 	   -D TLRENDER_RAW=${TLRENDER_RAW}
+           -D TLRENDER_SSL=${TLRENDER_SSL}
            -D TLRENDER_STB=${TLRENDER_STB}
            -D TLRENDER_SVTAV1=${TLRENDER_SVTAV1}
 	   -D TLRENDER_TIFF=${TLRENDER_TIFF}

@@ -5,7 +5,6 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl.H>
-#include <FL/names.h>
 
 #include <tlTimelineUI/TimelineWidget.h>
 

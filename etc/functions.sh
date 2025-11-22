@@ -272,9 +272,9 @@ extract_python_version()
 
 locate_python() {
     # Clear previous exports to ensure a clean slate
-    unset PYTHONDIR PYTHONEXE PYTHON PYTHON_VERSION PYTHON_SITEDIR PYTHON_USER_SITEDIR PYTHON_LIBDIR
+    unset PYTHONDIR PYTHONEXE PYTHONPATH PYTHONHOME PYTHON PYTHON_VERSION PYTHON_SITEDIR PYTHON_USER_SITEDIR PYTHON_LIBDIR
 
-    local executables=("python.sh" "python" "python3" "python3.11" "python3.10" "python3.9" "py.exe")
+    local executables=("python.sh" "python3.13" "python3.12" "python3.11" "py.exe")
     local locations
     
     # Check if BUILD_DIR exists and is a directory
@@ -296,7 +296,7 @@ locate_python() {
             fi
         done
     done
-
+    
     # If Python is still not found, handle the error
     if [[ -z "${PYTHON}" ]]; then
         if [[ -z $BUILD_PYTHON ]]; then
@@ -328,7 +328,7 @@ locate_python() {
             export PYTHON_USER_SITEDIR=$(echo "${python_info}" | grep 'USER_SITEDIR=' | cut -d'=' -f2)
         else
             echo "Could not get Python details from ${PYTHON}. Falling back to old method." >&2
-            extract_python_version # Your fallback function
+	    
         fi
     fi
 

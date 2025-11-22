@@ -87,9 +87,6 @@ fi
 if [[ -z $CMAKE_VERBOSE_MAKEFILE ]]; then
     export CMAKE_VERBOSE_MAKEFILE=OFF
 fi
-if [[ -z $BUILD_TYPE_DIR ]]; then
-   export BUILD_TYPE_DIR="Release"
-fi
 if [[ -z $CMAKE_BUILD_TYPE ]]; then
    export CMAKE_BUILD_TYPE="Release"
 fi
@@ -117,19 +114,16 @@ if [[ "$NOARGS" == "" ]]; then
 	case $1 in
 	    reldeb|RelWithDebInfo)
 		export CMAKE_BUILD_TYPE="RelWithDebInfo"
-		export BUILD_TYPE_DIR="RelWithDebInfo"
 		shift
 		continue
 		;;
 	    release|Release)
 		export CMAKE_BUILD_TYPE="Release"
-		export BUILD_TYPE_DIR="Release"
 		shift
 		continue
 		;;
 	    debug|Debug)		
 		export CMAKE_BUILD_TYPE="Debug"
-		export BUILD_TYPE_DIR="Debug"
 		shift
 		continue
 		;;

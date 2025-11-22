@@ -206,6 +206,10 @@ if(TLRENDER_RAW)
     endif()
 endif()
 
+if(TLRENDER_SSL)
+    add_definitions(-DTLRENDER_SSL)
+endif()
+
 if(TLRENDER_STB)
     add_definitions(-DTLRENDER_STB)
 endif()

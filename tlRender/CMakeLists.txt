@@ -28,6 +28,7 @@ set(TLRENDER_PYTHON FALSE CACHE BOOL "Enable Python support (for OTIO Python ada
 set(TLRENDER_API "GL_4_1" CACHE STRING "Graphics API (GL_4_1, GL_4_1_Debug, GLES_2)")
 set(TLRENDER_GLFW TRUE CACHE BOOL "Enable support for GLFW")
 set(TLRENDER_NET FALSE CACHE BOOL "Enable network support")
+set(TLRENDER_SSL FALSE CACHE BOOL "Enable SSL authentication")
 set(TLRENDER_OCIO TRUE CACHE BOOL "Enable support for OpenColorIO")
 set(TLRENDER_AUDIO TRUE CACHE BOOL "Enable support for audio")
 set(TLRENDER_JPEG TRUE CACHE BOOL "Enable support for JPEG I/O")

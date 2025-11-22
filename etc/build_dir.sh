@@ -25,20 +25,18 @@ extract_version
 #
 extract_python_version
 
-
 #
 # Determine OS Kernel, OS CPU architecture
 #
 . etc/parse_args.sh
 
-
 #
 # Build a build directory with that information
 #
 if [[ -z $BUILD_ROOT ]]; then
-    export BUILD_DIR=$default_build_root/${BUILD_TYPE_DIR}
+    export BUILD_DIR=$default_build_root/${CMAKE_BUILD_TYPE}
 else
-    export BUILD_DIR=$BUILD_ROOT/${BUILD_TYPE_DIR}
+    export BUILD_DIR=$BUILD_ROOT/${CMAKE_BUILD_TYPE}
 fi
 
 #
@@ -54,10 +52,10 @@ fi
 #
 # Recreate the build directory
 #
+
 if [[ ! -d $BUILD_DIR ]]; then
     run_cmd mkdir -p $BUILD_DIR
 fi
-
 
 #
 # Get the number of CPU cores for maximum efficiency
@@ -67,7 +65,9 @@ fi
 #
 # For Darwin, when building amd64, we make it compatible with macOS 11.0
 #
-export CMAKE_OSX_DEPLOYMENT_TARGET=11.0
+if [[ -z $CMAKE_OSX_DEPLOYMENT_TARGET ]]; then
+    export CMAKE_OSX_DEPLOYMENT_TARGET=11.0
+fi
 
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
@@ -112,6 +112,7 @@ export PKG_CONFIG_PATH="$PWD/${BUILD_DIR}/install/lib64/pkgconfig:$PWD/${BUILD_D
 # Set the name of python executable we build
 #
 if [[ ! $RUNME || ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
+    
     locate_python
     #
     # Set PYTHONPATH
@@ -129,3 +130,5 @@ else
     export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"
 fi
  
+
+echo "Z"

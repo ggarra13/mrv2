@@ -73,7 +73,7 @@ namespace
 namespace
 {
 
-#ifdef TLRENDER_NET
+#if defined(TLRENDER_SSL) || defined(TLRENDER_NET) 
     // -------------------------
     // Base64 decode helper
     // -------------------------

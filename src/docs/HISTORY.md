@@ -43,7 +43,11 @@ ChangeLog
 
 - Made blue pixel color of Pixel Color Bar more readable against the black
   background.
-  
+- Fixed compiltion without libplacebo when BUILD_PYTHON is off.
+- Added TLRENDER_SSL only compilation for MRV2_NETWORK license check, without
+  full playing of clips from the network.
+- Added OpenSSL version to the About window.
+
 
 v1.4.6
 ======

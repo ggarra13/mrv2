@@ -43,30 +43,31 @@ fi
 cd -
 
 #
-#  Rebuild latest pyFLTK if on Windows
+#  Rebuild latest pyFLTK
 #
-root=$PWD
-dir=$PWD/$BUILD_DIR/deps/pyFLTK/src/pyFLTK/
+if [[ $KERNEL == *Windows* ]]; then
+    root=$PWD
+    dir=$PWD/$BUILD_DIR/deps/pyFLTK/src/pyFLTK/
 
-if [[ -d $dir ]]; then
-    echo $dir
-    cd $dir
+    if [[ -d $dir ]]; then
+	echo $dir
+	cd $dir
 
-    if [[ $KERNEL == *Windows* ]]; then
-	export FLTK_HOME=$BUILD_DIR/install
-    fi
+	if [[ $KERNEL == *Windows* ]]; then
+	    export FLTK_HOME=$BUILD_DIR/install
+	fi
 
-    rm -rf *.egg-info*
-    
-    $PYTHONEXE setup.py build --enable-shared --disable-forms
-    $PYTHONEXE -m pip install .
-    if [[ $? != 0 ]]; then
-	echo "COMPILATON of pyFLTK failed"
+	echo "PYTHONEXE=$PYTHONEXE"
+	$PYTHONEXE setup.py build --enable-shared --disable-forms
+	$PYTHONEXE -m pip install .
+	if [[ $? != 0 ]]; then
+	    echo "COMPILATON of pyFLTK failed"
+	    cd -
+	    exit 1
+	fi
+
 	cd -
-	exit 1
     fi
-
-    cd -
 fi
 
 dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/

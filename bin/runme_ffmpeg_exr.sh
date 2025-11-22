@@ -31,16 +31,17 @@
 params=$*
 
 export BUILD_ROOT=BUILD-ffmpeg-exr
+export CMAKE_BUILD_TYPE=Debug
 
 #
 # Find out our build dir
 #
 . etc/build_dir.sh
 
-
 #
 # Clear the flags, as they will be set by runme_nolog.sh.
 #
+export RUNME=0
 export FLAGS=""
 export CMAKE_FLAGS=""
 

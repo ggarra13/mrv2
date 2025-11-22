@@ -16,7 +16,7 @@ if [ "$symlink" != "" ]; then
     dir="$symlink"
     dir=${dir%/*}
 else
-# Find directory where mrv2 bash script resides
+    # Find directory where mrv2 bash script resides
     dir=${dir%/*}
 fi
 
@@ -40,6 +40,8 @@ export DYLD_LIBRARY_PATH="${dir}/lib:${DYLD_LIBRARY_PATH}:/usr/local/lib:/usr/ib
 export PYTHONHOME="${dir}/"
 export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${HOME}/.local/lib/python@MRV2_PYTHON_VERSION@/site_packages:${PYTHONPATH}"
 
+export KERNEL=`uname`
+
 #
 # Turn on/off explicit sync in Vulkan on Wayland.
 # Explicit sync is more compatible with graphic cards and modern, but it is slower.
@@ -47,12 +49,19 @@ export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2
 #
 # Notes:  Vulkan NVidia stutters on implicit sync.
 #
-if [[ -z $FLTK_VK_EXPLICIT_SYNC ]]; then
-    export FLTK_VK_EXPLICIT_SYNC=0
+if [[ $KERNEL == *Linux* ]]; then
+    if [[ -z $FLTK_VK_EXPLICIT_SYNC ]]; then
+	export FLTK_VK_EXPLICIT_SYNC=0
+    fi
+    echo "        [vlk ] FLTK_VK_EXPLICIT_SYNC=${FLTK_VK_EXPLICIT_SYNC}"
 fi
+
+
 
 #
 # Make Kwin use libdecor to allow dragging subwindows outside main window.
 # This will make the title bar not follow the standard KDE look.
 #
-export LIBDECOR_FORCE_CSD=1
+if [[ -z $LIBDECOR_FORCE_CSD ]]; then
+    export LIBDECOR_FORCE_CSD=1
+fi

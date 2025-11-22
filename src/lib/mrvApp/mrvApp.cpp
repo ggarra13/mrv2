@@ -1480,7 +1480,7 @@ namespace mrv
             const auto duration = info.videoTime.duration();
             if (duration.to_seconds() > 180.0)
                 use_progress = true;
-            if (video.size.w > 1920)
+            if (video.size.w > 2048)
                 use_progress = true;
         }
         // Calculate start and end time used in progress report
