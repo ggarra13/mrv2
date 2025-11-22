@@ -47,6 +47,7 @@ ChangeLog
 - Added TLRENDER_SSL only compilation for MRV2_NETWORK license check, without
   full playing of clips from the network.
 - Added OpenSSL version to the About window.
+- Fixed Floating panels on (K)Ubuntu 25.10+.
 
 
 v1.4.6
