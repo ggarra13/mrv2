@@ -54,7 +54,7 @@ if [[ $KERNEL == *Linux* ]]; then
     if [[ -z $FLTK_VK_EXPLICIT_SYNC ]]; then
 	export FLTK_VK_EXPLICIT_SYNC=0
     fi
-    if [[ "@TLRENDER_VK@" == "ON" ]]; then
+    if [[ "@MRV2_BACKEND@" == "VK" ]]; then
 	echo "        [vlk.] FLTK_VK_EXPLICIT_SYNC=${FLTK_VK_EXPLICIT_SYNC}"
     fi
 fi
