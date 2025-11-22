@@ -30,7 +30,12 @@ then
 	if [ ! -d .venv ]; then
 	    $PYTHON -m venv venv
 	fi
-	. venv/bin/activate
+	if [[ $KERNEL == *Windows* || $KERNEL == *MSys* ||
+		  $KERNEL == *MinGW* ]]; then
+	    . venv/Scripts/activate
+	else
+	    . venv/bin/activate
+	fi
 	export PYTHON=python
     fi
     $PYTHON -m pip install requests pytz
