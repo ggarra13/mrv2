@@ -197,6 +197,10 @@ extern "C"
 #    include <jasper/jas_version.h>  // Must be included last.
 #endif
 
+#if defined(TLRENDER_SSL) || defined(TLRENDER_NET)
+#    include <openssl/opensslv.h>
+#endif
+
 namespace mrv
 {
     namespace
@@ -968,6 +972,11 @@ namespace mrv
           << "Copyright (c) 2019, Kakadu Software Pty Ltd, Australia" << endl
           << "Copyright (c) 2019, The University of New South Wales, Australia"
           << endl
+          << endl;
+#endif
+#if defined(TLRENDER_SSL) || defined(TLRENDER_NET)
+        o << "OpenSSL v" << OPENSSL_FULL_VERSION_STR << endl
+          << "Copyright (c) 2017 Sean Barrett" << endl
           << endl;
 #endif
         o << "OpenTimelineIO" << endl

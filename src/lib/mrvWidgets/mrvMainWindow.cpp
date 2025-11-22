@@ -849,7 +849,7 @@ namespace mrv
 
         size_t numFiles = model->observeFiles()->getSize();
 
-        char buf[256];
+        char buf[512];
         std::string session = session::current();
         if (!session.empty())
         {
@@ -891,7 +891,7 @@ namespace mrv
             if (App::unsaved_edits)
                 unsaved += "(E) ";
             snprintf(
-                buf, 256, "mrv2 %s v%s %s%s %s %s",
+                buf, 512, "mrv2 %s v%s %s%s %s %s",
                 mrv::backend(),
                 mrv::version(),
                 unsaved.c_str(),
@@ -904,7 +904,7 @@ namespace mrv
             App::unsaved_annotations = false;
             App::unsaved_edits = false;
             snprintf(
-                buf, 256, "mrv2 %s v%s %s%s",
+                buf, 512, "mrv2 %s v%s %s%s",
                 mrv::backend(),
                 mrv::version(),
                 mrv::build_date().c_str(), session.c_str());

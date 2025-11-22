@@ -118,6 +118,7 @@ namespace mrv
                 Y -= ((Y - maxH) + H);
             }
         }
+
         Fl_Double_Window::resize(X, Y, W, H);
     }
 

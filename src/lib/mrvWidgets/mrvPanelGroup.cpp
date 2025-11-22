@@ -190,6 +190,7 @@ namespace mrv
 
     void PanelGroup::resize(int X, int Y, int W, int H)
     {
+        static bool recurse = false;
         int GH = group->visible() ? group->h() : 0;
         assert(GH >= 0);
         int DH = docker->h();
@@ -204,9 +205,10 @@ namespace mrv
         else
         {
             int screen = Fl::screen_num(tw->x(), tw->y(), tw->w(), tw->h());
-            int minX, minY, maxW, maxH;
+            assert(screen >= 0);
+            int minX = 0, minY = 0, maxW = 640, maxH = 480;
             Fl::screen_work_area(minX, minY, maxW, maxH, screen);
-
+            
             // leave some headroom for topbar
             maxH = maxH - docker->h(); // 20 of offset
             assert(maxH > 0);
@@ -228,9 +230,9 @@ namespace mrv
                 pack->size(W, H - kTitleBar - kMargin);
             scroll->init_sizes(); // needed? to reset scroll size init size
         }
-
+        
         Fl_Group::resize(X, Y, W, pack->h() + DH + GH);
-
+        
         // Make sure buttons don't stretch
         W = w() - kButtonW * 2;
 #ifdef LEFT_BUTTONS
@@ -275,14 +277,22 @@ namespace mrv
             int minX, minY, maxW, maxH;
             Fl::screen_work_area(minX, minY, maxW, maxH, screen);
 
+            assert(minX >= 0);
+            assert(minY >= 0);
+            assert(maxW >= 0);
+            assert(maxH >= 0);
+            
             // leave some headroom for topbar
             maxH = maxH - DH;
+            assert(maxH >= 0);
 
             int maxYH = minY + maxH - kMargin;
             int twYH = tw->y() + H - kMargin;
 
             if (twYH > maxYH)
                 H = maxH - kMargin;
+            assert(W >= 0);
+            assert(H >= 0);
 
             tw->resizable(0);
             tw->size(W + kMargin, H + kMargin);
@@ -425,7 +435,6 @@ namespace mrv
     void PanelGroup::create_floating(
         DockGroup* dk, int X, int Y, int W, int H, const char* lbl)
     {
-
         // create the group itself
         create_dockable_group(false, lbl);
 
