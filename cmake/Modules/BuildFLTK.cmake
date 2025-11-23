@@ -118,15 +118,19 @@ message(STATUS "FLTK DEPENDENCIES: ${FLTK_DEPENDENCIES}")
 ExternalProject_Add(
     FLTK
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/FLTK
+
     GIT_REPOSITORY ${FLTK_GIT_REPOSITORY}
     GIT_TAG ${FLTK_GIT_TAG}
+
+    # Force git to fetch all refs (including unreachable tags)
+    GIT_CONFIG     "remote.origin.fetch=+refs/*:refs/*"
+    
+    # URL https://github.com/ggarra13/fltk/archive/refs/tags/${FLTK_GIT_TAG}.tar.gz
 
     GIT_SHALLOW       OFF  # for ExternalProject_Add.
                            # For FetchContent_Declere it is GIT_SHALLOW FALSE
     
     DEPENDS ${FLTK_DEPENDENCIES}
-
-    LIST_SEPARATOR |
     
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}

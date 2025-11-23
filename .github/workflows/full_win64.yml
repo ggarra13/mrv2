@@ -143,7 +143,7 @@ jobs:
         TLRENDER_YASM: ON
         
       run: |
-        ./etc/runme_nolog.sh -v -t package
+        ./etc/runme_nolog.sh -v -t package clean
         
     - name: Upload binaries 
       run: |
