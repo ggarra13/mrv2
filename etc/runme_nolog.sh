@@ -28,14 +28,19 @@ echo "PATH is now set now to ${PATH}"
 echo "It has:"
 mkdir -p $PWD/${BUILD_DIR}/install/bin/
 
-#
-# Extract cmake version
-#
 if [[ $INSTALL_CMAKE == 1 ]]; then
     . etc/install_cmake.sh
 fi
 
+#
+# Extract cmake version and location
+#
 get_cmake_version
+
+#
+# Extract git version and location
+#
+get_git_version
 
 #
 # These are some of the expensive mrv2 options
@@ -330,7 +335,11 @@ echo "Native CXX compiler ${NATIVE_CXX_COMPILER_NAME} version ${NATIVE_CXX_COMPI
 echo "Generic CXX with ${GENERIC_CXX_COMPILER_NAME} version ${GENERIC_CXX_COMPILER_VERSION}"
 echo "Generic GNU CXX compiler ${GNU_CXX_COMPILER_NAME} ${GNU_CXX_COMPILER_VERSION}"
 echo
+
+
+
 echo "CMake at: ${CMAKE_LOCATION} ${CMAKE_VERSION}"
+echo "Git at: ${GIT_LOCATION} ${GIT_VERSION}"
 if [[ $KERNEL == *Darwin* ]]; then
     echo "Building on MacOS Brand ${MACOS_BRAND}"
 fi

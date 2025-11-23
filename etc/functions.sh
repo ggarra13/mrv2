@@ -239,6 +239,15 @@ get_cmake_version()
 }
 
 #
+# Extract git version
+#
+get_git_version()
+{
+    export GIT_LOCATION=`which git`
+    export GIT_VERSION=`git --version | grep -oE 'v?[0-9]+(\.[0-9]+)*`
+}
+
+#
 # Extract version from cmake/version.cmake
 #
 extract_version()
