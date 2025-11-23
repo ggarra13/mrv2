@@ -96,7 +96,7 @@ if( WIN32 )
 elseif( APPLE )
     # macOS has a great a built-in stack trace and signal handler
     list( APPEND SOURCES
-        mrvFileManager.mm
+       mrvFileManager.mm
     )
 else()
     list(APPEND SOURCES
