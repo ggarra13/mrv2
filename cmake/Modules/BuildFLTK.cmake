@@ -4,8 +4,8 @@
 
 include( ExternalProject )
 
-# was v1.2.2, v1.2.1 and efac0cb9ab3f228a28f365ef7e3ad3acf3144eff
-set(FLTK_GIT_TAG v1.2.3 )
+# was v1.2.1 and efac0cb9ab3f228a28f365ef7e3ad3acf3144eff
+set(FLTK_GIT_TAG v1.2.2 )
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_test) # Testing branch
     
