@@ -4,9 +4,10 @@
 
 include( ExternalProject )
 
- set(FLTK_GIT_TAG v1.2.2 )  # was v1.2.1 and efac0cb9ab3f228a28f365ef7e3ad3acf3144eff
- #set(FLTK_GIT_TAG vk)  # Cutting edge!
- #set(FLTK_GIT_TAG vk_test) # Testing branch
+# was v1.2.2, v1.2.1 and efac0cb9ab3f228a28f365ef7e3ad3acf3144eff
+set(FLTK_GIT_TAG v1.2.3 )
+#set(FLTK_GIT_TAG vk)  # Cutting edge!
+#set(FLTK_GIT_TAG vk_test) # Testing branch
     
 if(TLRENDER_VK)
     set(USER_NAME $ENV{USER})
