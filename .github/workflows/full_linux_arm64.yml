@@ -73,6 +73,11 @@ jobs:
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
+
+    - name: List disk space
+      shell: cmd
+      run: |
+        wmic logicaldisk get freespace, size, caption
       
     - name: Set permissions on SSH key
       run: chmod 600 ssh/id_rsa

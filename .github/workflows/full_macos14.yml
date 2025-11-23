@@ -73,6 +73,8 @@ jobs:
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
         
+    - name: Checkout FLTK git tag type
+      run: git ls-remote --tags https://github.com/ggarra13/fltk.git | grep v1.2.2
     - name: List disk space
       run: |
         df -k

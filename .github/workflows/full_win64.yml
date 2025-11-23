@@ -109,10 +109,13 @@ jobs:
       run: |
         pacman -S --noconfirm rsync
         
-    - name: List disk space
-      shell: cmd
-      run: |
-        wmic logicaldisk get freespace, size, caption
+    - name: Checkout FLTK git tag type
+      run: git ls-remote --tags https://github.com/ggarra13/fltk.git | grep v1.2.2
+      
+    # - name: List disk space (wmic is deprecated)
+    #   shell: cmd
+    #   run: |
+    #     wmic logicaldisk get freespace, size, caption
       
     - name: Build mrv2
       env:
