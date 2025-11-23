@@ -244,7 +244,7 @@ get_cmake_version()
 get_git_version()
 {
     export GIT_LOCATION=`which git`
-    export GIT_VERSION=`git --version | grep -oE 'v?[0-9]+(\.[0-9]+)*`
+    export GIT_VERSION=`git --version | grep -oE 'v?[0-9]+(\.[0-9]+)*'`
 }
 
 #
