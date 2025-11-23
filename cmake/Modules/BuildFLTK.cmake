@@ -5,7 +5,9 @@
 include( ExternalProject )
 
 # was v1.2.1 and efac0cb9ab3f228a28f365ef7e3ad3acf3144eff
-set(FLTK_GIT_TAG v1.2.2 )
+# set(FLTK_GIT_TAG v1.2.2 )
+set(FLTK_GIT_TAG 82b029b98e2274f12d044e49f2f0aec94632cd4b)
+
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_test) # Testing branch
     
@@ -119,7 +121,7 @@ ExternalProject_Add(
     GIT_REPOSITORY ${FLTK_GIT_REPOSITORY}
     GIT_TAG ${FLTK_GIT_TAG}
 
-    GIT_SHALLOW       "OFF"
+    GIT_SHALLOW       FALSE
     
     DEPENDS ${FLTK_DEPENDENCIES}
 
