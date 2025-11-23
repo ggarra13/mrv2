@@ -4,6 +4,10 @@
 
 include( ExternalProject )
 
+ set(FLTK_GIT_TAG v1.2.2 )  # was v1.2.1 and efac0cb9ab3f228a28f365ef7e3ad3acf3144eff
+ #set(FLTK_GIT_TAG vk)  # Cutting edge!
+ #set(FLTK_GIT_TAG vk_test) # Testing branch
+    
 if(TLRENDER_VK)
     set(USER_NAME $ENV{USER})
     if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
@@ -15,12 +19,8 @@ if(TLRENDER_VK)
 	set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
     endif()
     
-    set(FLTK_GIT_TAG v1.2.1)  # was v1.1.7
-    #set(FLTK_GIT_TAG vk)  # Cutting edge!
-    #set(FLTK_GIT_TAG vk_test) # Testing branch
 else()
     set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
-    set(FLTK_GIT_TAG efac0cb9ab3f228a28f365ef7e3ad3acf3144eff)
 endif()
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
