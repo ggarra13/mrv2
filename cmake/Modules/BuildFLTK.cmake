@@ -121,7 +121,8 @@ ExternalProject_Add(
     GIT_REPOSITORY ${FLTK_GIT_REPOSITORY}
     GIT_TAG ${FLTK_GIT_TAG}
 
-    GIT_SHALLOW       FALSE
+    GIT_SHALLOW       OFF  # for ExternalProject_Add.
+                           # For FetchContent_Declere it is GIT_SHALLOW FALSE
     
     DEPENDS ${FLTK_DEPENDENCIES}
 
