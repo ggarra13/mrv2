@@ -15,8 +15,8 @@ jobs:
   ###################################
   macos-full-build:
     runs-on: macos-15-intel
-    permissions:
-      contents: write   # Needed to update releases
+    # permissions:
+    #   contents: write   # Needed to update releases
 
     steps:
     
@@ -47,6 +47,9 @@ jobs:
       run: |
         brew uninstall --ignore-dependencies openexr imath || true
 
+    - name: Checkout git tag type
+      run: git ls-remote --tags https://github.com/ggarra13/fltk.git | grep v1.2.2
+        
     - name: Setup environment
       run: mkdir -p ssh
 
