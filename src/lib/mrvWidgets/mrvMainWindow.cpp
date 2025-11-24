@@ -942,7 +942,6 @@ namespace mrv
                 int ret = os::exec_command(cmd, out, err);
                 string::stripWhitespace(out);
                 string::removeTrailingNewlines(out);
-                std::cerr << "." << out << "." << std::endl;
                 if (!err.empty())
                 {
                     LOG_WARNING(err);
@@ -1076,36 +1075,27 @@ namespace mrv
     
     void MainWindow::show()
     {
-        std::cerr << "show window" << std::endl;
         DropWindow::show();
 
 #ifdef __linux__
 #  ifdef FLTK_USE_WAYLAND
         if (desktop::Wayland())
         {
-            std::cerr << "do transparency" << std::endl;
             // This call is needed for proper transparency of the main window.
             wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)),
                                          NULL);
-            std::cerr << "made transparency" << std::endl;
-
             //
             //
-            std::cerr << "get compositor" << std::endl;
             const std::string& compositor = desktop::WaylandCompositor();
-            std::cerr << "get hotkey" << std::endl;
             const std::string& hotkey = getCompositorHotkey(compositor);
             if (hotkey.empty())
             {
                 // Turn a mrv2 hotkey (if defined) into a compositor one.
-                std::cerr << "mrv2 to compositor hotkey" << std::endl;
                 mrv2_to_compositor_hotkey(compositor);
             }
             else 
             {
                 // Turn a Compositor Hotkey into an mrv2's hotkey.
-                std::cerr << "compositor to mrv2 hotkey " << hotkey
-                          << std::endl;
                 compositor_to_mrv2_hotkey(compositor, hotkey);
             }
             App::ui->uiMain->fill_menu(App::ui->uiMenuBar);
