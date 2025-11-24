@@ -92,7 +92,8 @@ jobs:
       shell: bash
         
     - name: Decode FLTK SSH key
-       run: |
+      shell: bash
+      run: |
          mkdir -p ~/.ssh
          echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
          chmod 600 ~/.ssh/id_ed25519
