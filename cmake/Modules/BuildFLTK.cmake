@@ -21,9 +21,6 @@ if(TLRENDER_VK)
     else()
 	set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
     endif()
-    
-else()
-    set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
 endif()
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
@@ -115,6 +112,20 @@ endif()
 
 message(STATUS "FLTK DEPENDENCIES: ${FLTK_DEPENDENCIES}")
 
+
+#
+# Use URL instead of GIT_REPOSITORY
+#
+# URL https://github.com/ggarra13/fltk/archive/refs/tags/${FLTK_GIT_TAG}.tar.gzy
+
+# # 1. Put the Git Commit SHA in the URL
+# URL https://github.com/ggarra13/fltk/archive/82b029b98e2274f12d044e49f2f0aec94632cd4b.tar.gz
+
+# # 2. Put the FILE SHA256 (Checksum) here
+# # (Run 'shasum -a 256 <file>' on the tarball to get this value)
+# URL_HASH SHA256=d226f3d9d3d3d3d3
+
+    
 ExternalProject_Add(
     FLTK
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/FLTK
@@ -125,15 +136,6 @@ ExternalProject_Add(
     # Force git to fetch all refs (including unreachable tags)
     GIT_CONFIG     "remote.origin.fetch=+refs/tags/${FLTK_GIT_TAG}:refs/tags/${FLTK_GIT_TAG}"
 
-    
-    # URL https://github.com/ggarra13/fltk/archive/refs/tags/${FLTK_GIT_TAG}.tar.gzy¡
-
-    # # 1. Put the Git Commit SHA in the URL
-    # URL https://github.com/ggarra13/fltk/archive/82b029b98e2274f12d044e49f2f0aec94632cd4b.tar.gz
-    
-    # # 2. Put the FILE SHA256 (Checksum) here
-    # # (Run 'shasum -a 256 <file>' on the tarball to get this value)
-    # URL_HASH SHA256=d226f3d9d3d3d3d3
 
     GIT_SHALLOW       OFF  # for ExternalProject_Add.
                            # For FetchContent_Declere it is GIT_SHALLOW FALSE
