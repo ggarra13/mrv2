@@ -15,8 +15,6 @@ jobs:
   ###################################
   windows-full-build:
     runs-on: windows-2022
-    permissions:
-      contents: write   # Needed to update releases
 
     defaults:
       run:
@@ -82,14 +80,14 @@ jobs:
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
-        
-    # - name: Decode FLTK SSH key
-    #   shell: bash
-    #   run: |
-    #       mkdir -p ~/.ssh
-    #       echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-    #       chmod 600 ~/.ssh/id_ed25519
-    #       ssh-keyscan github.com >> ~/.ssh/known_hosts
+      
+    - name: Decode FLTK SSH key
+      shell: bash
+      run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
           
     - name: Set permissions on SSH key
       shell: cmd
@@ -110,13 +108,14 @@ jobs:
       run: |
         pacman -S --noconfirm rsync
       
-    - name: Build vmrv2
+    - name: Build mrv2
       env:
         BUILD_PYTHON: ON
         MRV2_PYFLTK: ON
         MRV2_PYBIND11: ON
         MRV2_NETWORK: ON
         MRV2_PDF: ON
+        MRV2_VK: ON
         TLRENDER_AV1: ON
         TLRENDER_EXR: ON
         TLRENDER_FFMPEG: ON
@@ -132,7 +131,6 @@ jobs:
         TLRENDER_SVTAV1: ON
         TLRENDER_TIFF: ON
         TLRENDER_USD: ON
-        TLRENDER_VK: ON
         TLRENDER_VPX: ON
         TLRENDER_YASM: ON
         

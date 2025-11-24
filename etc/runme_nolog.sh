@@ -85,7 +85,6 @@ if [ -z "$MRV2_PDF" ]; then
     export MRV2_PDF=ON
 fi
 
-
 if [ -z "$MRV2_PYTHON" ]; then
     if [[ $BUILD_PYTHON == ON || $BUILD_PYTHON == 1 ]]; then
 	if [[ $KERNEL == *Windows* ]]; then
@@ -103,6 +102,11 @@ else
     export TLRENDER_USD_PYTHON=$MRV2_PYTHON
     export PYTHON=$MRV2_PYTHON
 fi
+
+if [ -z "$MRV2_VK" ]; then
+    export MRV2_VK=OFF
+fi
+
 
 #
 # These are some of the expensive TLRENDER options
@@ -491,6 +495,7 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK}
 	   -D MRV2_PYBIND11=${MRV2_PYBIND11}
 	   -D MRV2_PDF=${MRV2_PDF}
+	   -D MRV2_VK=${MRV2_VK}
 
 	   -D FLTK_BUILD_SHARED=${FLTK_BUILD_SHARED}
 

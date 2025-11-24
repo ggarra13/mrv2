@@ -15,8 +15,6 @@ jobs:
   ###################################
   linux-opengl-arm64:
     runs-on: ubuntu-22.04-arm
-    permissions:
-      contents: write   # Needed to update releases
 
     steps:
     
@@ -109,6 +107,7 @@ jobs:
         MRV2_PYBIND11: ON
         MRV2_NETWORK: ON
         MRV2_PDF: ON
+        MRV2_VK: ON
         TLRENDER_AV1: ON
         TLRENDER_EXR: ON
         TLRENDER_FFMPEG: ON

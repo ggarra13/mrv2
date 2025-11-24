@@ -88,6 +88,7 @@ jobs:
         MRV2_PYBIND11: ON
         MRV2_NETWORK: ON
         MRV2_PDF: ON
+        MRV2_VK: ON
         TLRENDER_AV1: ON
         TLRENDER_EXR: ON
         TLRENDER_FFMPEG: ON
@@ -103,7 +104,6 @@ jobs:
         TLRENDER_SVTAV1: ON
         TLRENDER_TIFF: ON
         TLRENDER_USD: ON
-        TLRENDER_VK: ON
         TLRENDER_VPX: ON
         TLRENDER_YASM: ON
         

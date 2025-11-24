@@ -8,12 +8,12 @@ set(FLTK_GIT_TAG v1.2.2 )
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_test) # Testing branch
 
-if(TLRENDER_VK)
+if(MRV2_VK)
     set(USER_NAME $ENV{USER})
     if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
 	    USER_NAME STREQUAL "ggarra13")
-	# \@todo: We check the repository with git so we can easily edit it
-	#         later.
+	# If it is me, we check the repository with git so we can easily edit it
+	# later.
 	set(FLTK_GIT_REPOSITORY "git@github.com:ggarra13/fltk.git")
     else()
         set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
@@ -23,7 +23,9 @@ else()
     set(FLTK_GIT_TAG master)
 endif()
 
+message(STATUS "FLTK MRV2_VK=${MRV2_VK}")
 message(STATUS "FLTK_GIT_REPOSITORY=${FLTK_GIT_REPOSITORY}")
+message(STATUS "FLTK_GIT_TAG=${FLTK_GIT_TAG}")
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
