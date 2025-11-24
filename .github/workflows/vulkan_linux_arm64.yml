@@ -1,3 +1,5 @@
+name: Vulkan Linux ARM64
+
 on:
   push:
     branches-ignore:
@@ -12,7 +14,6 @@ jobs:
   #                                 #
   ###################################
   linux-vulkan-arm64:
-    name: Vulkan Linux ARM64
     runs-on: ubuntu-22.04-arm
 
     steps:

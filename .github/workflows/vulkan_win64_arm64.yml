@@ -1,3 +1,5 @@
+name: Vulkan Win64 ARM64
+
 on:
   push:
     branches-ignore:
@@ -12,7 +14,6 @@ jobs:
   #                                 #
   ###################################
   windows-vulkan-arm64:
-    name: Vulkan Win64 ARM64
     runs-on: windows-11-arm
     permissions:
       contents: write   # Needed to update releases

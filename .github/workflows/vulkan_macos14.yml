@@ -1,3 +1,5 @@
+name: Vulkan MacOS M1
+
 on:
   push:
     branches-ignore:
@@ -12,7 +14,6 @@ jobs:
   #                                 #
   ###################################
   macos-14-vulkan-full-build:
-    name: Vulkan MacOS M1
     runs-on: macos-14
     permissions:
       contents: write   # Needed to update releases

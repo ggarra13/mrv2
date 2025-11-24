@@ -1,3 +1,5 @@
+name: OpenGL Win64
+
 on:
   push:
     branches-ignore:
@@ -12,7 +14,6 @@ jobs:
   #                                 #
   ###################################
   windows-full-build:
-    name: OpenGL Win64
     runs-on: windows-2022
 
     defaults:
