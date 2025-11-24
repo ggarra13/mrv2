@@ -4,7 +4,6 @@
 
 include( ExternalProject )
 
-# was v1.2.1 and efac0cb9ab3f228a28f365ef7e3ad3acf3144eff
 set(FLTK_GIT_TAG v1.2.2 )
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_test) # Testing branch
@@ -23,6 +22,8 @@ else()
     set(FLTK_GIT_REPOSITORY "git@github.com:fltk/fltk.git")
     set(FLTK_GIT_TAG master)
 endif()
+
+message(STATUS "FLTK_GIT_REPOSITORY=${FLTK_GIT_REPOSITORY}")
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared

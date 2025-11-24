@@ -21,12 +21,10 @@
 #include "mrvMainWindow.h"
 #include "mrvPreferencesUI.h"
 
-#ifdef __linux__
-#  ifdef FLTK_USE_WAYLAND
-#    include <regex>
-#    include <cairo/cairo.h>
-#    include <wayland-client.h>
-#  endif
+#ifdef FLTK_USE_WAYLAND
+#  include <cairo/cairo.h>
+#  include <wayland-client.h>
+#  include <regex>
 #endif
 
 #include "mrvFl/mrvIO.h"
@@ -39,6 +37,7 @@
 #include <FL/Enumerations.H>
 #include <FL/Fl.H>
 
+// X11 has conflicting macros, so we include them last
 #if defined(FLTK_USE_X11)
 #    include <unistd.h>
 #    include <sys/time.h>
@@ -566,9 +565,9 @@ namespace
         return 0;
     }
 
-#endif
+#endif  // ifdef FLTK_USE_X11
 
-} // namespace
+} // namespace empty
 
 namespace mrv
 {
@@ -635,7 +634,6 @@ namespace mrv
     {
         if (value)
         {
-#ifdef __linux__
 #  ifdef FLTK_USE_WAYLAND
             // Restore screensaver/black screen
 #  elif defined(FLTK_USE_X11)
@@ -644,7 +642,7 @@ namespace mrv
                 XScreenSaverSuspend(fl_x11_display(), False);
             }
 #  endif
-#elif defined(_WIN32)
+#if defined(_WIN32)
             SetThreadExecutionState(ES_CONTINUOUS);
 #elif defined(__APPLE__)
             success = IOPMAssertionRelease(assertionID);
@@ -653,8 +651,7 @@ namespace mrv
         else
         {
             //! Turn off screensaver and black screen
-#ifdef __linux__
-#  if defined(FLTK_USE_X11)
+#if defined(FLTK_USE_X11)
             if (fl_x11_display())
             {
                 int event_base, error_base;
@@ -664,7 +661,7 @@ namespace mrv
                     XScreenSaverSuspend(fl_x11_display(), True);
             }
 #endif
-#elif defined(_WIN32)
+#if defined(_WIN32)
             SetThreadExecutionState(
                 ES_CONTINUOUS | ES_DISPLAY_REQUIRED);
 #elif defined(__APPLE__)
@@ -719,7 +716,7 @@ namespace mrv
                 display, DefaultRootWindow(display), False,
                 SubstructureNotifyMask | SubstructureRedirectMask, &ev);
         }
-#    endif
+#    endif // FLTK_USE_X11
 #    ifdef FLTK_USE_WAYLAND
         if (desktop::Wayland() && value && !synthetic)
         {
@@ -742,8 +739,160 @@ namespace mrv
                               "Use your Window Manager to set a hotkey for it."));
             }
         }
-#    endif
+#    endif  // FLTK_USE_WAYLAND
     } // above_all function
+
+#ifdef FLTK_USE_WAYLAND
+    std::string getCompositorHotkey(const std::string& compositor)
+    {
+        std::string cmd;
+        std::string out;
+        std::string err;
+        if (compositor == "mutter")
+        {
+            cmd = "gsettings get org.gnome.shell.extensions.tiling-assistant toggle-always-on-top";
+        }
+        else if (compositor == "kwin")
+        {
+            cmd = "kreadconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" | awk -F',' '{print $1}'";
+        }
+        else
+        {
+            LOG_INFO("Compositor not known");
+        }
+        if (!cmd.empty())
+        {
+            int ret = os::exec_command(cmd, out, err);
+            string::stripWhitespace(out);
+            string::removeTrailingNewlines(out);
+            if (!err.empty())
+            {
+                LOG_WARNING(err);
+            }
+            if (ret != 0 ||
+                (compositor == "mutter" &&
+                 out.substr(out.size() - 2, 2) == "[]"))
+                out = "";
+        }
+        return out;
+    }
+
+    void mrv2_to_compositor_hotkey(const std::string& compositor)
+    {
+        int ret;
+        std::string cmd;
+        std::string out;
+        std::string err;
+        std::string hotkey = kToggleFloatOnTop.to_s();
+        if (hotkey.empty())
+            return;
+        if (compositor == "mutter")
+        {
+            size_t startPos = 0;
+            if (startPos = hotkey.find("Meta") != std::string::npos)
+            {
+                hotkey.replace(startPos, 4, "Super");
+            }
+            cmd = "gsettings set "
+                  "org.gnome.shell.extensions.tiling-assistant "
+                  "toggle-always-on-top \"['" +
+                  hotkey + "']\"";
+        }
+        else if (compositor == "kwin")
+        {
+            size_t startPos = 0;
+            while (startPos = hotkey.find('<') != std::string::npos)
+            {
+                hotkey.replace(startPos, 1, "");
+            }
+            while (startPos = hotkey.find('>') != std::string::npos)
+            {
+                hotkey.replace(startPos, 1, "+");
+            }
+            cmd = "kwriteconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" ";
+            cmd += hotkey;
+        }
+        else
+        {
+            // Not defined yet.
+        }
+            
+        if (!cmd.empty())
+        {
+            ret = os::exec_command(cmd, out, err);
+            if (!err.empty())
+            {
+                LOG_ERROR(err);
+            }
+            if (ret == 0)
+            {
+                /* xgettext:c++-format */
+                const std::string msg =
+                    string::Format(
+                        _("No Hotkey for Float On Top.  "
+                          "Setting it globally to '{0}'"))
+                    .arg(hotkey);
+                LOG_STATUS(msg);
+            }
+        }
+    }
+        
+    void compositor_to_mrv2_hotkey(const std::string& compositor,
+                                   const std::string& hotkey)
+    {
+        if (compositor == "mutter")
+        {
+            if (hotkey[0] != '[' || hotkey[hotkey.size() - 1] != ']')
+                return;
+            const std::regex kSuper("<Super>");
+            const std::regex kShift("<Shift>");
+            const std::regex kControl("<Ctrl>");
+            const std::regex kAlt("<Alt>");
+            kToggleFloatOnTop.meta = false;
+            if (std::regex_search(hotkey, kSuper))
+                kToggleFloatOnTop.meta = true;
+            kToggleFloatOnTop.shift = false;
+            if (std::regex_search(hotkey, kShift))
+                kToggleFloatOnTop.shift = true;
+            kToggleFloatOnTop.ctrl = false;
+            if (std::regex_search(hotkey, kControl))
+                kToggleFloatOnTop.ctrl = true;
+            kToggleFloatOnTop.alt = false;
+            if (std::regex_search(hotkey, kAlt))
+                kToggleFloatOnTop.alt = true;
+            std::string key = hotkey.substr(hotkey.size() - 3, 1);
+            char ch = key[0]; // Access the character
+            int asciiValue = static_cast<int>(ch); // Convert to ASCII
+            kToggleFloatOnTop.key = asciiValue;
+        }
+        else if (compositor == "kwin")
+        {
+            const std::regex kMeta("Meta");
+            const std::regex kShift("Shift");
+            const std::regex kControl("Ctrl");
+            const std::regex kAlt("Alt");
+            kToggleFloatOnTop.meta = false;
+            if (std::regex_search(hotkey, kMeta))
+                kToggleFloatOnTop.meta = true;
+            kToggleFloatOnTop.shift = false;
+            if (std::regex_search(hotkey, kShift))
+                kToggleFloatOnTop.shift = true;
+            kToggleFloatOnTop.ctrl = false;
+            if (std::regex_search(hotkey, kControl))
+                kToggleFloatOnTop.ctrl = true;
+            kToggleFloatOnTop.alt = false;
+            if (std::regex_search(hotkey, kAlt))
+                kToggleFloatOnTop.alt = true;
+            std::string key = hotkey.substr(hotkey.size() - 1, 1);
+            char ch = key[0]; // Access the character
+            int asciiValue = static_cast<int>(ch); // Convert to ASCII
+            kToggleFloatOnTop.key = asciiValue;
+        }
+        else
+        {
+        }
+    }
+#endif
 
 #endif
 
@@ -914,164 +1063,6 @@ namespace mrv
         }
         copy_label(buf);
     }
-
-
-    namespace
-    {
-#ifdef __linux__
-   #ifdef FLTK_USE_WAYLAND
-        std::string getCompositorHotkey(const std::string& compositor)
-        {
-            std::string cmd;
-            std::string out;
-            std::string err;
-            if (compositor == "mutter")
-            {
-                cmd = "gsettings get org.gnome.shell.extensions.tiling-assistant toggle-always-on-top";
-            }
-            else if (compositor == "kwin")
-            {
-                cmd = "kreadconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" | awk -F',' '{print $1}'";
-            }
-            else
-            {
-                LOG_INFO("Compositor not known");
-            }
-            if (!cmd.empty())
-            {
-                int ret = os::exec_command(cmd, out, err);
-                string::stripWhitespace(out);
-                string::removeTrailingNewlines(out);
-                if (!err.empty())
-                {
-                    LOG_WARNING(err);
-                }
-                if (ret != 0 ||
-                    (compositor == "mutter" &&
-                     out.substr(out.size() - 2, 2) == "[]"))
-                    out = "";
-            }
-            return out;
-        }
-
-        void mrv2_to_compositor_hotkey(const std::string& compositor)
-        {
-            int ret;
-            std::string cmd;
-            std::string out;
-            std::string err;
-            std::string hotkey = kToggleFloatOnTop.to_s();
-            if (hotkey.empty())
-                return;
-            if (compositor == "mutter")
-            {
-                size_t startPos = 0;
-                if (startPos = hotkey.find("Meta") != std::string::npos)
-                {
-                    hotkey.replace(startPos, 4, "Super");
-                }
-                cmd = "gsettings set "
-                      "org.gnome.shell.extensions.tiling-assistant "
-                      "toggle-always-on-top \"['" +
-                      hotkey + "']\"";
-            }
-            else if (compositor == "kwin")
-            {
-                size_t startPos = 0;
-                while (startPos = hotkey.find('<') != std::string::npos)
-                {
-                    hotkey.replace(startPos, 1, "");
-                }
-                while (startPos = hotkey.find('>') != std::string::npos)
-                {
-                    hotkey.replace(startPos, 1, "+");
-                }
-                cmd = "kwriteconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" ";
-                cmd += hotkey;
-            }
-            else
-            {
-                // Not defined yet.
-            }
-            
-            if (!cmd.empty())
-            {
-                ret = os::exec_command(cmd, out, err);
-                if (!err.empty())
-                {
-                    LOG_ERROR(err);
-                }
-                if (ret == 0)
-                {
-                    /* xgettext:c++-format */
-                    const std::string msg =
-                        string::Format(
-                            _("No Hotkey for Float On Top.  "
-                              "Setting it globally to '{0}'"))
-                        .arg(hotkey);
-                    LOG_STATUS(msg);
-                }
-            }
-        }
-        
-        void compositor_to_mrv2_hotkey(const std::string& compositor,
-                                       const std::string& hotkey)
-        {
-            if (compositor == "mutter")
-            {
-                if (hotkey[0] != '[' || hotkey[hotkey.size() - 1] != ']')
-                    return;
-                const std::regex kSuper("<Super>");
-                const std::regex kShift("<Shift>");
-                const std::regex kControl("<Ctrl>");
-                const std::regex kAlt("<Alt>");
-                kToggleFloatOnTop.meta = false;
-                if (std::regex_search(hotkey, kSuper))
-                    kToggleFloatOnTop.meta = true;
-                kToggleFloatOnTop.shift = false;
-                if (std::regex_search(hotkey, kShift))
-                    kToggleFloatOnTop.shift = true;
-                kToggleFloatOnTop.ctrl = false;
-                if (std::regex_search(hotkey, kControl))
-                    kToggleFloatOnTop.ctrl = true;
-                kToggleFloatOnTop.alt = false;
-                if (std::regex_search(hotkey, kAlt))
-                    kToggleFloatOnTop.alt = true;
-                std::string key = hotkey.substr(hotkey.size() - 3, 1);
-                char ch = key[0]; // Access the character
-                int asciiValue = static_cast<int>(ch); // Convert to ASCII
-                kToggleFloatOnTop.key = asciiValue;
-            }
-            else if (compositor == "kwin")
-            {
-                const std::regex kMeta("Meta");
-                const std::regex kShift("Shift");
-                const std::regex kControl("Ctrl");
-                const std::regex kAlt("Alt");
-                kToggleFloatOnTop.meta = false;
-                if (std::regex_search(hotkey, kMeta))
-                    kToggleFloatOnTop.meta = true;
-                kToggleFloatOnTop.shift = false;
-                if (std::regex_search(hotkey, kShift))
-                    kToggleFloatOnTop.shift = true;
-                kToggleFloatOnTop.ctrl = false;
-                if (std::regex_search(hotkey, kControl))
-                    kToggleFloatOnTop.ctrl = true;
-                kToggleFloatOnTop.alt = false;
-                if (std::regex_search(hotkey, kAlt))
-                    kToggleFloatOnTop.alt = true;
-                std::string key = hotkey.substr(hotkey.size() - 1, 1);
-                char ch = key[0]; // Access the character
-                int asciiValue = static_cast<int>(ch); // Convert to ASCII
-                kToggleFloatOnTop.key = asciiValue;
-            }
-            else
-            {
-            }
-        }
-    }
-#  endif
-#endif
     
     void MainWindow::show()
     {

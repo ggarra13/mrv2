@@ -83,13 +83,13 @@ jobs:
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
         
-    - name: Decode FLTK SSH key
-      shell: bash
-      run: |
-           mkdir -p ~/.ssh
-           echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-           chmod 600 ~/.ssh/id_ed25519
-           ssh-keyscan github.com >> ~/.ssh/known_hosts
+    # - name: Decode FLTK SSH key
+    #   shell: bash
+    #   run: |
+    #       mkdir -p ~/.ssh
+    #       echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+    #       chmod 600 ~/.ssh/id_ed25519
+    #       ssh-keyscan github.com >> ~/.ssh/known_hosts
           
     - name: Set permissions on SSH key
       shell: cmd
@@ -109,16 +109,8 @@ jobs:
     - name: Install MSYS2 Dependencies
       run: |
         pacman -S --noconfirm rsync
-        
-    - name: Checkout FLTK git tag type
-      run: git ls-remote --tags https://github.com/ggarra13/fltk.git | grep v1.2.2
       
-    # - name: List disk space (wmic is deprecated)
-    #   shell: cmd
-    #   run: |
-    #     wmic logicaldisk get freespace, size, caption
-      
-    - name: Build mrv2
+    - name: Build vmrv2
       env:
         BUILD_PYTHON: ON
         MRV2_PYFLTK: ON

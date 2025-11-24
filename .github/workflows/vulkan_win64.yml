@@ -100,6 +100,7 @@ jobs:
     #       chmod 600 ~/.ssh/id_ed25519
     #       ssh-keyscan github.com >> ~/.ssh/known_hosts
           
+          
     - name: Set permissions on SSH key
       shell: cmd
       run: |
@@ -118,11 +119,6 @@ jobs:
     - name: Install MSYS2 Dependencies
       run: |
         pacman -S --noconfirm rsync
-        
-    - name: List disk space
-      shell: cmd
-      run: |
-        wmic logicaldisk get freespace, size, caption
       
     - name: Build vmrv2
       env:
