@@ -15,8 +15,6 @@ jobs:
   ###################################
   windows-vulkan-full-build:
     runs-on: windows-2022
-    permissions:
-      contents: write   # Needed to update releases
 
     defaults:
       run:
