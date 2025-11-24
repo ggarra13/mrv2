@@ -1,5 +1,3 @@
-name: Vulkan Linux
-
 on:
   push:
     branches-ignore:
@@ -14,6 +12,7 @@ jobs:
   #                                 #
   ###################################
   linux-vulkan-full-build:
+    name: Vulkan Linux
     runs-on: ubuntu-22.04
     permissions:
       contents: write   # Needed to update releases

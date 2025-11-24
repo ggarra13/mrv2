@@ -1,5 +1,3 @@
-name: OpenGL MacOS M1
-
 on:
   push:
     branches-ignore:
@@ -14,6 +12,7 @@ jobs:
   #                                 #
   ###################################
   macos-14-full-build:
+    name: OpenGL MacOS M1
     runs-on: macos-14
     permissions:
       contents: write   # Needed to update releases

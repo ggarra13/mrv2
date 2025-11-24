@@ -1,5 +1,3 @@
-name: OpenGL MacOS Intel
-
 on:
   push:
     branches-ignore:
@@ -14,6 +12,7 @@ jobs:
   #                                 #
   ###################################
   macos-full-build:
+    name: OpenGL MacOS Intel
     runs-on: macos-15-intel
     # permissions:
     #   contents: write   # Needed to update releases

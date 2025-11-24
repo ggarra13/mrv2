@@ -1,5 +1,3 @@
-name: OpenGL Linux
-
 on:
   push:
     branches-ignore:
@@ -14,6 +12,7 @@ jobs:
   #                                 #
   ###################################
   linux-full-build:
+    name: OpenGL Linux
     runs-on: ubuntu-22.04
     permissions:
       contents: write   # Needed to update releases
