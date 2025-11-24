@@ -23,10 +23,6 @@ else()
     set(FLTK_GIT_TAG master)
 endif()
 
-message(STATUS "FLTK MRV2_VK=${MRV2_VK}")
-message(STATUS "FLTK_GIT_REPOSITORY=${FLTK_GIT_REPOSITORY}")
-message(STATUS "FLTK_GIT_TAG=${FLTK_GIT_TAG}")
-
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
     # If we are building pyFLTK compile shared
     set( FLTK_BUILD_SHARED_LIBS ON )  
