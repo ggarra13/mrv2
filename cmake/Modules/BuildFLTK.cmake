@@ -8,8 +8,10 @@ include( ExternalProject )
 set(FLTK_GIT_TAG v1.2.2 )
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_test) # Testing branch
-    
+
 set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
+if (MRV2_ORIG_FLTK)
+endif()
 
 if(TLRENDER_VK)
     set(USER_NAME $ENV{USER})
@@ -19,6 +21,9 @@ if(TLRENDER_VK)
 	#         later.
 	set(FLTK_GIT_REPOSITORY "git@github.com:ggarra13/fltk.git")
     endif()
+else()
+    set(FLTK_GIT_REPOSITORY "git@github.com:fltk/fltk.git")
+    set(FLTK_GIT_TAG master)
 endif()
 
 if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)

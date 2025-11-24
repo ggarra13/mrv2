@@ -723,20 +723,23 @@ namespace mrv
 #    ifdef FLTK_USE_WAYLAND
         if (desktop::Wayland() && value && !synthetic)
         {
-            const std::string& compositor_name = desktop::WaylandCompositor();
-            if (compositor_name == "gnome-shell")
+            const std::string& compositor = desktop::WaylandCompositor();
+            if (compositor == "mutter")
             {
                 /* xgettext:c++-format */
-                const std::string msg =
-                    string::Format(_("Wayland supports Float on Top only "
-                                     "through hotkeys.  Press {0}."))
+                if (!kToggleFloatOnTop.to_s().empty())
+                {
+                    const std::string msg =
+                        string::Format(_("Wayland Compositor supports Float on Top only "
+                                         "through hotkeys.  Press {0}."))
                         .arg(kToggleFloatOnTop.to_s());
-                LOG_WARNING(msg);
+                    LOG_WARNING(msg);
+                }
             }
             else
             {
-                LOG_WARNING(_("Wayland does not support Float on Top.  Use "
-                              "your Window Manager to set a hotkey for it."));
+                LOG_WARNING(_("Your Wayland compositor does not support Float on Top.  "
+                              "Use your Window Manager to set a hotkey for it."));
             }
         }
 #    endif
@@ -912,95 +915,200 @@ namespace mrv
         copy_label(buf);
     }
 
+
+    namespace
+    {
+#ifdef __linux__
+   #ifdef FLTK_USE_WAYLAND
+        std::string getCompositorHotkey(const std::string& compositor)
+        {
+            std::string cmd;
+            std::string out;
+            std::string err;
+            if (compositor == "mutter")
+            {
+                cmd = "gsettings get org.gnome.shell.extensions.tiling-assistant toggle-always-on-top";
+            }
+            else if (compositor == "kwin")
+            {
+                cmd = "kreadconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" | awk -F',' '{print $1}'";
+            }
+            else
+            {
+                LOG_INFO("Compositor not known");
+            }
+            if (!cmd.empty())
+            {
+                int ret = os::exec_command(cmd, out, err);
+                string::stripWhitespace(out);
+                string::removeTrailingNewlines(out);
+                std::cerr << "." << out << "." << std::endl;
+                if (!err.empty())
+                {
+                    LOG_WARNING(err);
+                }
+                if (ret != 0 ||
+                    (compositor == "mutter" &&
+                     out.substr(out.size() - 2, 2) == "[]"))
+                    out = "";
+            }
+            return out;
+        }
+
+        void mrv2_to_compositor_hotkey(const std::string& compositor)
+        {
+            int ret;
+            std::string cmd;
+            std::string out;
+            std::string err;
+            std::string hotkey = kToggleFloatOnTop.to_s();
+            if (hotkey.empty())
+                return;
+            if (compositor == "mutter")
+            {
+                size_t startPos = 0;
+                if (startPos = hotkey.find("Meta") != std::string::npos)
+                {
+                    hotkey.replace(startPos, 4, "Super");
+                }
+                cmd = "gsettings set "
+                      "org.gnome.shell.extensions.tiling-assistant "
+                      "toggle-always-on-top \"['" +
+                      hotkey + "']\"";
+            }
+            else if (compositor == "kwin")
+            {
+                size_t startPos = 0;
+                while (startPos = hotkey.find('<') != std::string::npos)
+                {
+                    hotkey.replace(startPos, 1, "");
+                }
+                while (startPos = hotkey.find('>') != std::string::npos)
+                {
+                    hotkey.replace(startPos, 1, "+");
+                }
+                cmd = "kwriteconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" ";
+                cmd += hotkey;
+            }
+            else
+            {
+                // Not defined yet.
+            }
+            
+            if (!cmd.empty())
+            {
+                ret = os::exec_command(cmd, out, err);
+                if (!err.empty())
+                {
+                    LOG_ERROR(err);
+                }
+                if (ret == 0)
+                {
+                    /* xgettext:c++-format */
+                    const std::string msg =
+                        string::Format(
+                            _("No Hotkey for Float On Top.  "
+                              "Setting it globally to '{0}'"))
+                        .arg(hotkey);
+                    LOG_STATUS(msg);
+                }
+            }
+        }
+        
+        void compositor_to_mrv2_hotkey(const std::string& compositor,
+                                       const std::string& hotkey)
+        {
+            if (compositor == "mutter")
+            {
+                if (hotkey[0] != '[' || hotkey[hotkey.size() - 1] != ']')
+                    return;
+                const std::regex kSuper("<Super>");
+                const std::regex kShift("<Shift>");
+                const std::regex kControl("<Ctrl>");
+                const std::regex kAlt("<Alt>");
+                kToggleFloatOnTop.meta = false;
+                if (std::regex_search(hotkey, kSuper))
+                    kToggleFloatOnTop.meta = true;
+                kToggleFloatOnTop.shift = false;
+                if (std::regex_search(hotkey, kShift))
+                    kToggleFloatOnTop.shift = true;
+                kToggleFloatOnTop.ctrl = false;
+                if (std::regex_search(hotkey, kControl))
+                    kToggleFloatOnTop.ctrl = true;
+                kToggleFloatOnTop.alt = false;
+                if (std::regex_search(hotkey, kAlt))
+                    kToggleFloatOnTop.alt = true;
+                std::string key = hotkey.substr(hotkey.size() - 3, 1);
+                char ch = key[0]; // Access the character
+                int asciiValue = static_cast<int>(ch); // Convert to ASCII
+                kToggleFloatOnTop.key = asciiValue;
+            }
+            else if (compositor == "kwin")
+            {
+                const std::regex kMeta("Meta");
+                const std::regex kShift("Shift");
+                const std::regex kControl("Ctrl");
+                const std::regex kAlt("Alt");
+                kToggleFloatOnTop.meta = false;
+                if (std::regex_search(hotkey, kMeta))
+                    kToggleFloatOnTop.meta = true;
+                kToggleFloatOnTop.shift = false;
+                if (std::regex_search(hotkey, kShift))
+                    kToggleFloatOnTop.shift = true;
+                kToggleFloatOnTop.ctrl = false;
+                if (std::regex_search(hotkey, kControl))
+                    kToggleFloatOnTop.ctrl = true;
+                kToggleFloatOnTop.alt = false;
+                if (std::regex_search(hotkey, kAlt))
+                    kToggleFloatOnTop.alt = true;
+                std::string key = hotkey.substr(hotkey.size() - 1, 1);
+                char ch = key[0]; // Access the character
+                int asciiValue = static_cast<int>(ch); // Convert to ASCII
+                kToggleFloatOnTop.key = asciiValue;
+            }
+            else
+            {
+            }
+        }
+    }
+#  endif
+#endif
+    
     void MainWindow::show()
     {
+        std::cerr << "show window" << std::endl;
         DropWindow::show();
 
 #ifdef __linux__
 #  ifdef FLTK_USE_WAYLAND
         if (desktop::Wayland())
         {
+            std::cerr << "do transparency" << std::endl;
             // This call is needed for proper transparency of the main window.
             wl_surface_set_opaque_region(fl_wl_surface(fl_wl_xid(this)),
                                          NULL);
+            std::cerr << "made transparency" << std::endl;
 
             //
-            // \@todo: Implement proper Always on Top on all compositors on
-            //         a per application, instead of a global key for just
-            //         GNOME Shell.
             //
-            const std::string& compositor_name = desktop::WaylandCompositor();
-            if (compositor_name == "gnome-shell")
+            std::cerr << "get compositor" << std::endl;
+            const std::string& compositor = desktop::WaylandCompositor();
+            std::cerr << "get hotkey" << std::endl;
+            const std::string& hotkey = getCompositorHotkey(compositor);
+            if (hotkey.empty())
             {
-                int ret;
-                std::string out, err;
-                std::string cmd =
-                    "gsettings get org.gnome.shell.extensions.tiling-assistant "
-                    "toggle-always-on-top";
-                ret = os::exec_command(cmd, out, err);
-                std::string hotkey = string::stripWhitespace(out);
-                if (ret == 0 &&
-                    (hotkey.empty() ||
-                     (hotkey.substr(hotkey.size() - 2, 2)) == "[]"))
-                {
-                    // If an FLTK hotkey is assigned, turn it into a GNOME
-                    // Hotkey.
-                    std::string hotkey = kToggleFloatOnTop.to_s();
-                    if (!hotkey.empty())
-                    {
-                        size_t startPos = 0;
-                        if (startPos = hotkey.find("Meta") != std::string::npos)
-                        {
-                            hotkey.replace(startPos, 4, "Super");
-                        }
-                        // Use a GNOME shell extension and set always on top
-                        // to Meta + w
-                        cmd = "gsettings set "
-                              "org.gnome.shell.extensions.tiling-assistant "
-                              "toggle-always-on-top \"['" +
-                              hotkey + "']\"";
-                        ret = os::exec_command(cmd, out, err);
-                        if (ret == 0)
-                        {
-                            /* xgettext:c++-format */
-                            const std::string msg =
-                                string::Format(
-                                    _("No GNOME Shell Hotkey for Float On Top.  "
-                                      "Setting it globally to '{0}'"))
-                                .arg(hotkey);
-                            LOG_STATUS(msg);
-                        }
-                    }
-                }
-                else
-                {
-                    if (hotkey[0] != '[' || hotkey[hotkey.size() - 1] != ']')
-                        return;
-
-                    // Turn a GNOME-Shell hotkey into an mrv2's hotkey
-                    const std::regex kSuper("<Super>");
-                    const std::regex kShift("<Shift>");
-                    const std::regex kControl("<Ctrl>");
-                    const std::regex kAlt("<Alt>");
-                    kToggleFloatOnTop.meta = false;
-                    if (std::regex_search(hotkey, kSuper))
-                        kToggleFloatOnTop.meta = true;
-                    kToggleFloatOnTop.shift = false;
-                    if (std::regex_search(hotkey, kShift))
-                        kToggleFloatOnTop.shift = true;
-                    kToggleFloatOnTop.ctrl = false;
-                    if (std::regex_search(hotkey, kControl))
-                        kToggleFloatOnTop.ctrl = true;
-                    kToggleFloatOnTop.alt = false;
-                    if (std::regex_search(hotkey, kAlt))
-                        kToggleFloatOnTop.alt = true;
-                    std::string key = hotkey.substr(hotkey.size() - 3, 1);
-                    char ch = key[0]; // Access the character
-                    int asciiValue = static_cast<int>(ch); // Convert to ASCII
-                    kToggleFloatOnTop.key = asciiValue;
-                    App::ui->uiMain->fill_menu(App::ui->uiMenuBar);
-                }
+                // Turn a mrv2 hotkey (if defined) into a compositor one.
+                std::cerr << "mrv2 to compositor hotkey" << std::endl;
+                mrv2_to_compositor_hotkey(compositor);
             }
+            else 
+            {
+                // Turn a Compositor Hotkey into an mrv2's hotkey.
+                std::cerr << "compositor to mrv2 hotkey " << hotkey
+                          << std::endl;
+                compositor_to_mrv2_hotkey(compositor, hotkey);
+            }
+            App::ui->uiMain->fill_menu(App::ui->uiMenuBar);
         }
 #  endif
 #endif

@@ -36,7 +36,7 @@ The donationware version when running without a donation, does not have:
     - Edit (available in Edit+)
     - Voice Annotations (available in Pro)
 
-Prices might change depending on competition and new features.
+Prices might change (go up or down) depending on competition and new features.
 
 ChangeLog
 ---------
@@ -48,6 +48,9 @@ ChangeLog
   full playing of clips from the network.
 - Added OpenSSL version to the About window.
 - Fixed Floating panels on (K)Ubuntu 25.10+.
+- Added support for pen/tablet on macOS (tested) and Wayland (untested).
+- Refactored Wayland's Always On Top hotkey code.
+- Added Donate button on the license_helper, with simple donations.
 
 
 v1.4.6

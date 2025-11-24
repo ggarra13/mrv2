@@ -58,6 +58,8 @@ if [[ $KERNEL != *Windows* ]]; then
 	chmod a+x $PWD/$BUILD_DIR/install/bin/hdr.sh
     fi
     if [ -d ~/bin ] && [ -w ~/bin ]; then
+	run_cmd rm -f ~/bin/license_helper
+	run_cmd ln -s $PWD/$BUILD_DIR/install/bin/license_helper ~/bin/license_helper
 	if [[ $CMAKE_BUILD_TYPE == Debug ]]; then
 	    if [ "$MRV2_BACKEND" == "VK" ]; then
 		run_cmd rm -f ~/bin/vmrv2-dbg

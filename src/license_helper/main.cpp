@@ -4,6 +4,7 @@
 
 
 #include <FL/fl_ask.H>
+#include <FL/filename.H>
 #include <FL/fl_utf8.h>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Box.H>
@@ -213,6 +214,10 @@ static void install_cb(Fl_Widget* b, void* data)
     exit(0);
 }
 
+static void donate_cb(Fl_Widget* b, void* data)
+{
+    fl_open_uri("https://www.paypal.com/donate/?hosted_button_id=UJMHRRKYCPXYW");
+}
 
 static void exit_cb(Fl_Widget* b, void* data)
 {
@@ -244,8 +249,11 @@ int main(int argc, char** argv)
         machine->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
         machine->value(machine_id.c_str());
         
-        Fl_Button* demo = new Fl_Button(180, 280, 250, 40, "Demo");
+        Fl_Button* demo = new Fl_Button(180, 280, 100, 40, "Demo");
         demo->callback((Fl_Callback*)exit_cb, nullptr);
+
+        Fl_Button* donate = new Fl_Button(300, 280, 100, 40, "Donate");
+        donate->callback((Fl_Callback*)donate_cb, nullptr);
         
         node_locked->end();
     }

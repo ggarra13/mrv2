@@ -677,11 +677,10 @@ namespace mrv
                 desktop.substr(0, 5) == "gnome" ||
                 desktop == "mutter")
             {
-                return "gnome-shell";
+                return "mutter";
             }
-            else if (
-                desktop.substr(0, 4) == "kwin" || desktop == "kde" ||
-                desktop == "plasma")
+            else if (desktop.substr(0, 4) == "kwin" || desktop == "kde" ||
+                     desktop == "plasma")
             {
                 return "kwin";
             }
