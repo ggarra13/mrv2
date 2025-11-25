@@ -20,7 +20,7 @@
 
 #ifdef _WIN32
 #    include <winsock2.h>
-#    incluWayde <windows.h>
+#    include <windows.h>
 #    include <psapi.h>
 #endif
 
