@@ -30,10 +30,10 @@ You need to have an internet connection for the license system.
 
 The donationware version when running without a donation, does not have:
 
-    - Annotations (available from Solo+)
-    - Python (available in Standard+)
-    - OpenEXR layer switching (available in Standard+).
-    - Edit (available in Edit+)
+    - Annotations (available from Solo and later)
+    - Python (available in Standard and later)
+    - OpenEXR layer switching (available in Standard and later).
+    - Edit (available in Edit and later)
     - Voice Annotations (available in Pro)
 
 Prices might change (go up or down) depending on competition and new features.
@@ -48,8 +48,9 @@ ChangeLog
   full playing of clips from the network.
 - Added OpenSSL version to the About window.
 - Fixed Floating panels on (K)Ubuntu 25.10+.
-- Added support for pen/tablet on macOS (tested) and Wayland (untested).
+- Added support for pen/tablet on macOS (tested) and Wayland's touch screens.
 - Refactored Wayland's Always On Top hotkey code.
+- Added libwayland's version to Help/About.
 - Added Donate button on the license_helper, with simple donations.
 
 

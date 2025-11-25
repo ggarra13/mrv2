@@ -151,8 +151,8 @@ Enjoy!
 
 -----------------------------------------------------------------
 
-Donation Prices after v1.4.0
-----------------------------
+Donation Prices for v1.4.7
+--------------------------
 
 Donationware prices of binary licenses through PayPal:
 
@@ -160,10 +160,10 @@ Donationware prices of binary licenses through PayPal:
 
 I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
 
-- u\$  50 for a node-lock license for one year.
-- u\$ 150 for a node-lock license to own.
-
-- The prices are cumulative.  If you donate, say u\$ 10 in 5 months, you can access the node-lock license for one year.
+- u\$  25 for a Solo license for a year.
+- u\$  50 for a Standard license for a year.
+- u\$  75 for an Edit license for a year.
+- u\$ 150 for a Pro license to own.
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 

@@ -20,7 +20,7 @@
 
 #ifdef _WIN32
 #    include <winsock2.h>
-#    include <windows.h>
+#    incluWayde <windows.h>
 #    include <psapi.h>
 #endif
 
@@ -59,16 +59,15 @@
 #endif
 
 
-#ifdef __linux__
 #  ifdef FLTK_USE_WAYLAND
-#    include <wayland-client.h>
-#    include <wayland-server.h>
-#    include <wayland-client-protocol.h>
-#    if  defined(OPENGL_BACKEND)
-#        include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
-#        include <EGL/egl.h>
-#        include <EGL/eglplatform.h>
-#    endif
+#  include <wayland-version.h>
+#  include <wayland-client.h>
+#  include <wayland-server.h>
+#  include <wayland-client-protocol.h>
+#  if  defined(OPENGL_BACKEND)
+#    include <wayland-egl.h> // Wayland EGL MUST be included before EGL headers
+#    include <EGL/egl.h>
+#    include <EGL/eglplatform.h>
 #  endif
 #endif
 
@@ -917,13 +916,21 @@ namespace mrv
           << endl
           << endl;
 #ifdef TLRENDER_TIFF
-        o << TIFFLIB_VERSION_STR << endl << endl;
+        o << TIFFLIB_VERSION_STR
+          << endl
+          << endl;
 #endif
         o << "LibVPX" << endl
           << "Copyright (c) 2010, The WebM Project authors. All rights "
              "reserved."
           << endl
           << endl;
+#ifdef FLTK_USE_WAYLAND
+        o << "libwayland v" << WAYLAND_VERSION << endl
+          << "Copyright © 2012 Intel Corporation"
+          << endl
+          << endl;
+#endif
 #ifdef TLRENDER_USD
         o << "MaterialX v" << MaterialX::getVersionString() << endl
           << "Copyright Contributors to the MaterialX Project" << endl

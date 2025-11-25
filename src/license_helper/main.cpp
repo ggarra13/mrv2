@@ -1,4 +1,6 @@
 
+#define _(x) x  // for now
+
 #include "mrvFile.h"
 #include "mrvOS.h"
 
@@ -9,6 +11,7 @@
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Flex.H>
 #include <FL/Fl_Multiline_Input.H>
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Preferences.H>
@@ -193,30 +196,12 @@ std::string studiopath()
     return out;
 }
 
-Fl_Multiline_Input* master_key;
-    
-static void install_cb(Fl_Widget* b, void* data)
-{
-    std::string key = master_key->value(); 
-    if (key.empty())
-    {
-        fl_alert("Please fill in the master key with the one you got.");
-        return;
-    }
-
-    std::string prefs_file = studiopath() + "/mrv2_licenses.lic";
-
-    std::ofstream s(prefs_file);
-    s << key << std::endl;
-
-    fl_alert("Saved master key file to %s", prefs_file.c_str());
-    
-    exit(0);
-}
-
 static void donate_cb(Fl_Widget* b, void* data)
 {
+    fl_alert(_("Check your browser for a valid donation.  Send your machine id in the comment."));
+    
     fl_open_uri("https://www.paypal.com/donate/?hosted_button_id=UJMHRRKYCPXYW");
+    fl_alert(_("If you submitted a valid donation, you will get a message in the mail activating your license plan."));
 }
 
 static void exit_cb(Fl_Widget* b, void* data)
@@ -228,54 +213,128 @@ int main(int argc, char** argv)
 {
     const std::string machine_id = get_machine_id();
     
-    Fl_Double_Window win(640, 380, "License helper");
+    Fl_Double_Window win(640, 640, _("License helper"));
 
     win.begin();
 
-    Fl_Tabs*    tabs = new Fl_Tabs(20, 30, 600, 350);
+    Fl_Tabs*    tabs = new Fl_Tabs(20, 30, 600, 640);
     tabs->labelsize(20);
     tabs->selection_color(FL_YELLOW);
 
     {
-        Fl_Group* node_locked = new Fl_Group(20, 60, 600-20, 320,
-                                             "Node-Locked License"); 
-        Fl_Box*    box = new Fl_Box(20, 70, 600, 80);
-        box->label("Please submit this machine id "
-                   "with your Paypal donation of\nUSD $50 (yearly license) or\n"
-                   "USD $150 (license to own) to ggarra13@@gmail.com.\n"
-                   "It will be added to mrv2's Internet database.");
+        Fl_Flex* node_locked = new Fl_Flex(20, 60, 600, 580,
+                                           _("Node-Locked License"));
+        node_locked->box(FL_ENGRAVED_BOX);
+        Fl_Flex* message = new Fl_Flex(20, 60, 600, 400);
 
-        Fl_Output* machine = new Fl_Output(20, 200, 600, 40, "Machine ID");
+        Fl_Box*  intro = new Fl_Box(20, 0, 600, 40);
+        intro->labelfont(FL_HELVETICA);
+        intro->label(_(R"TEXT(To enhance your experience, please submit the machine id below
+with your Paypal donation of:)TEXT"));
+        intro->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+                   
+        Fl_Box*    prices = new Fl_Box(20, 0, 600, 160);
+        prices->box(FL_ENGRAVED_BOX);
+        prices->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+        prices->label(_(R"TEXT(USD $ 25  Solo    
+USD $ 50  Standard
+USD $ 75  Edit    
+USD $150  Pro     
+
+to ggarra13@@gmail.com)TEXT"));
+
+        Fl_Box*    what = new Fl_Box(150, 0, 600, 60);
+        what->label(R"TEXT(
+		Solo			Annotations only for a year
+		Standard	    Solo + OpenEXR layers + Python
+		Edit			Standard + Editing
+		Pro			Edit + Voice Annotations
+		)TEXT");
+        what->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
+
+        Fl_Box* internet = new Fl_Box(20, 0, 600, 60);
+        internet->label(R"TEXT(Your email will be added to mrv2's Internet database.
+You need an Internet connection to use.)TEXT");
+        internet->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+
+        message->gap(20);
+        message->fixed(intro, intro->h());
+        message->fixed(prices, prices->h());
+        message->fixed(what, what->h());
+        message->fixed(internet, internet->h());
+        message->end();
+
+        Fl_Flex* info = new Fl_Flex(0, 0, 0, 120);
+        info->type(Fl_Flex::VERTICAL);
+        info->box(FL_ENGRAVED_BOX);
+        
+        Fl_Output* machine = new Fl_Output(20, 0, 600, 40, "Machine ID");
         machine->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
         machine->value(machine_id.c_str());
+
+        Fl_Flex* buttons = new Fl_Flex(180, 0, 100, 40);
+        buttons->type(Fl_Flex::HORIZONTAL);
+        buttons->margin(10, 10, 10, 10);
+        buttons->gap(10);
         
         Fl_Button* demo = new Fl_Button(180, 280, 100, 40, "Demo");
         demo->callback((Fl_Callback*)exit_cb, nullptr);
 
         Fl_Button* donate = new Fl_Button(300, 280, 100, 40, "Donate");
         donate->callback((Fl_Callback*)donate_cb, nullptr);
+        buttons->end();
+
+        info->fixed(machine, machine->h());
+
+        info->end();
         
+        node_locked->margin(10, 10, 10, 10);
+        node_locked->gap(5);
+        node_locked->fixed(message, message->h());
+        node_locked->fixed(info, info->h());
         node_locked->end();
     }
     
     {
-        Fl_Group* floating = new Fl_Group(20, 60, 600-20, 320,
-                                          "Floating License");
         
-        Fl_Box*    box = new Fl_Box(20, 60, 580, 80);
-        box->label("Please enter your master key for your facility you "
-                   "got from ggarra13@@gmail.com");
+        Fl_Flex* custom_dev = new Fl_Flex(20, 60, 600, 580,
+                                           _("Custom Development"));
+        custom_dev->box(FL_ENGRAVED_BOX);
+        Fl_Flex* message = new Fl_Flex(20, 60, 600, 400);
 
-        master_key = new Fl_Multiline_Input(20, 150, 580, 140, "Master Key");
-        master_key->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
+        Fl_Box*  intro = new Fl_Box(20, 0, 600, 40);
+        intro->labelfont(FL_HELVETICA);
+        intro->label(_(R"TEXT(For custom development:)TEXT"));
+        intro->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+                   
+        Fl_Box*    prices = new Fl_Box(20, 0, 600, 360);
+        prices->box(FL_ENGRAVED_BOX);
+        prices->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+        prices->label(_(R"TEXT(
+USD $  5000
+for Remote - Open Source Development without Hardware.
+
+USD $ 10000
+for Remote - Open Source Development With Hardware.
+
+USD $ 40000
+for Remote - Closed Source Custom Development.
+
+USD $100000
+for Buying the source as is and stop its Open Source Development.
+
+Contact ggarra13@@gmail.com)TEXT"));
+
+
+        message->gap(20);
+        message->fixed(intro, intro->h());
+        message->fixed(prices, prices->h());
+        message->end();
         
-        Fl_Button* install = new Fl_Button(340, 300, 250, 40, "Install");
-        install->callback((Fl_Callback*)install_cb, nullptr);
-        
-        Fl_Button* demo = new Fl_Button(80, 300, 220, 40, "Demo");
-        demo->callback((Fl_Callback*)exit_cb, nullptr);
-    
-        floating->end();
+        custom_dev->margin(10, 10, 10, 10);
+        custom_dev->gap(5);
+        custom_dev->fixed(message, message->h());
+        custom_dev->end();
     }
 
     tabs->end();
