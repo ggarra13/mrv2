@@ -239,16 +239,18 @@ with your Paypal donation of:)TEXT"));
         prices->label(_(R"TEXT(USD $ 25  Solo    
 USD $ 50  Standard
 USD $ 75  Edit    
-USD $150  Pro     
+USD $150  Pro
+USD $300  Pro Monthly
 
 to ggarra13@@gmail.com)TEXT"));
 
-        Fl_Box*    what = new Fl_Box(150, 0, 600, 60);
+        Fl_Box*    what = new Fl_Box(150, 0, 600, 80);
         what->label(R"TEXT(
 		Solo			Annotations only for a year
 		Standard	    Solo + OpenEXR layers + Python
 		Edit			Standard + Editing
 		Pro			Edit + Voice Annotations
+        Pro Monthly         Pro (change your machine[s] as you want)
 		)TEXT");
         what->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
 

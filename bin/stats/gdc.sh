@@ -73,11 +73,5 @@ fi
 
 $PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG "$date_created" "$next_tag_date"
 
-if [[ -e venv ]]; then
-    if [[ $KERNEL != *Windows* ]]; then
-	. venv/bin/deactivate
-    fi
-fi
-
 rm -rf venv
 

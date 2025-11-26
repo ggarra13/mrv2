@@ -60,11 +60,9 @@ sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel \
 	       swig
 
-sudo dnf install centos-release-scl
+sudo dnf install gcc-toolset-14
 
-sudo dnf install gcc-toolset-13
-
-scl enable gcc-toolset-13 bash
+scl enable gcc-toolset-14 bash
 
 ```
 

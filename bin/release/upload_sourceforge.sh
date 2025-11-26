@@ -164,6 +164,8 @@ I use the email information to contact you privately.  I don't sell your informa
 - u\$  50 for a Standard license for a year.
 - u\$  75 for an Edit license for a year.
 - u\$ 150 for a Pro license to own.
+- u\$ 300 for a Pro license to own (allowing changing machine id -
+      	      	    	       	   useful for trying Linux distros) 
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 

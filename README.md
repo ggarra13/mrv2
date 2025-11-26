@@ -50,7 +50,7 @@ The source forge site also hosts beta builds (nightly builds with the latest cha
 
 The Linux releases are built on Rocky Linux 8.10 using SCL.
 The Linux beta builds are built on Ubuntu 22.04.  The preferred OS for
-installation on Linux, however is one supporting GNOME 48+.
+installation on Linux, however is one supporting GNOME 48.
 
 ## Compatibility
 
