@@ -43,12 +43,12 @@ ChangeLog
 
 - Made blue pixel color of Pixel Color Bar more readable against the black
   background.
-- Fixed compiltion without libplacebo when BUILD_PYTHON is off.
+- Fixed compilation without libplacebo when BUILD_PYTHON is off.
 - Added TLRENDER_SSL only compilation for MRV2_NETWORK license check, without
   full playing of clips from the network.
 - Added OpenSSL version to the About window.
 - Fixed Floating panels on (K)Ubuntu 25.10+.
-- Added support for pen/tablet on macOS (tested) and Wayland's touch screens.
+- Added support for pen/tablet on macOS (tested).
 - Refactored Wayland's Always On Top hotkey code.
 - Added libwayland's version to Help/About.
 - Added Donate button on the license_helper, with simple donations.

@@ -104,7 +104,7 @@ else
 fi
 
 if [ -z "$MRV2_VK" ]; then
-    export MRV2_VK=OFF
+    export MRV2_VK=ON
 fi
 
 
