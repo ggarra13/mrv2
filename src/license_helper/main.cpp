@@ -314,7 +314,7 @@ You need an Internet connection to use.)TEXT");
         prices->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
         prices->label(_(R"TEXT(
 USD $  5000
-for Remote - Open Source Development without Hardware.
+for Remote - Open Source Development without Hardware (I may fail).
 
 USD $ 10000
 for Remote - Open Source Development With Hardware.

@@ -51,7 +51,6 @@ set(FLTK_vk_LIBRARY )
 
 if(FLTK_BUILD_SHARED_LIBS)
     if(MSVC)
-	add_definitions(-D FL_DLL)
 	set(FLTK_LIBRARIES fltk::fltk-shared )
 	set(FLTK_gl_LIBRARY )
     else()

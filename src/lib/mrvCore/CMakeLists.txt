@@ -111,6 +111,7 @@ add_library(mrvCore ${SOURCES} ${HEADERS})
 
 files_to_absolute_paths()
 
+target_compile_definitions(mrvCore PUBLIC FL_DLL)
 target_link_libraries(mrvCore PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvCore PROPERTIES FOLDER lib)
 

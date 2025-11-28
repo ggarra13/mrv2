@@ -20,9 +20,9 @@ set(SOURCES
 #
 set(LIBRARIES )
 if(UNIX)
-    list(APPEND LIBRARIES fltk::fltk)
+    list(APPEND LIBRARIES fltk::fltk fltk::images)
 else()
-    list(APPEND LIBRARIES ${FLTK_LIBRARIES})
+    list(APPEND LIBRARIES fltk::fltk fltk::images)
 endif()
 
 add_executable(license_helper WIN32 ${SOURCES} ${HEADERS})
