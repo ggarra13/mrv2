@@ -33,7 +33,7 @@ cd $dir
 #  Rebuild latest FLTK
 #
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install &> /dev/null
 if [[ $? != 0 ]]; then
     echo "COMPILATON of FLTK failed"
     cd -
@@ -50,12 +50,14 @@ if [[ $KERNEL == *Windows* ]]; then
     dir=$PWD/$BUILD_DIR/deps/pyFLTK/src/pyFLTK/
 
     if [[ -d $dir ]]; then
-	echo $dir
-	cd $dir
 
 	if [[ $KERNEL == *Windows* ]]; then
-	    export FLTK_HOME=$BUILD_DIR/install
+	    export FLTK_HOME=$PWD/$BUILD_DIR/install
+	    echo "FLTK_HOME is ${FLTK_HOME}"
 	fi
+	
+	echo $dir
+	cd $dir
 
 	echo "PYTHONEXE=$PYTHONEXE"
 	$PYTHONEXE setup.py build --enable-shared --disable-forms
@@ -70,27 +72,27 @@ if [[ $KERNEL == *Windows* ]]; then
     fi
 fi
 
-dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
-if [[ ! -d $dir ]]; then
-    echo "tlRender directory:"
-    echo $dir
-    echo "does not exist. Please run:"
-    echo " $ runme.sh [sameflags]"
-    exit 1
-fi
+# dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
+# if [[ ! -d $dir ]]; then
+#     echo "tlRender directory:"
+#     echo $dir
+#     echo "does not exist. Please run:"
+#     echo " $ runme.sh [sameflags]"
+#     exit 1
+# fi
 
-cd $dir
+# cd $dir
 
-#
-#  Rebuild tlRender
-#
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
-if [[ $? != 0 ]]; then
-    echo "COMPILATON of tlRender failed"
-    cd -
-    exit 1
-fi
-cd -
+# #
+# #  Rebuild tlRender
+# #
+# cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+# if [[ $? != 0 ]]; then
+#     echo "COMPILATON of tlRender failed"
+#     cd -
+#     exit 1
+# fi
+# cd -
 
 dir=$BUILD_DIR/mrv2/src/mrv2-build
 

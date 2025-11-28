@@ -162,7 +162,6 @@ namespace mrv
             };
         virtual ~VKTextShape() {};
 
-        int paste();
         int accept();
         
         int handle(int event);
@@ -174,6 +173,10 @@ namespace mrv
         int handle_mouse_click(int event, const math::Vector2i& pos);
 
     protected:
+        int kf_select_all();
+        int kf_copy();
+        int kf_copy_cut();
+        int kf_paste();
         void to_cursor();
         unsigned line_start(unsigned utf8);
         unsigned line_end(unsigned utf8);

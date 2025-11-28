@@ -518,7 +518,7 @@ namespace mrv
     
     unsigned VKTextShape::line_end(unsigned c)
     {
-        const char* start   = text.c_str();
+        const char* start = text.c_str();
         const char* end   = text.c_str() + text.size();
         const char* pos = start + c;
         while (pos[0] != '\n' && pos < end)
@@ -598,7 +598,7 @@ namespace mrv
         cursor = size;
     }
     
-    int VKTextShape::paste()
+    int VKTextShape::kf_paste()
     {
         if (!Fl::event_text() || !Fl::event_length()) return 1;
             
@@ -642,6 +642,21 @@ namespace mrv
         }
         return pos;
     }
+
+    int VKTextShape::kf_select_all()
+    {
+        return 0;
+    }
+
+    int VKTextShape::kf_copy()
+    {
+        return 0;
+    }
+    
+    int VKTextShape::kf_copy_cut()
+    {
+        return 0;
+    }
     
     int VKTextShape::handle(int e)
     {
@@ -651,12 +666,15 @@ namespace mrv
         {
             return accept();
         }
+        
+        int mods = Fl::event_state() & (FL_META|FL_CTRL|FL_ALT);
+        unsigned int shift = Fl::event_state() & FL_SHIFT;
              
         switch(e)
         {
         case FL_PASTE:
         {
-            return paste();
+            return kf_paste();
             break;
         }
         case FL_KEYBOARD:
@@ -666,6 +684,10 @@ namespace mrv
             {
                 switch(rawkey)
                 {
+                case FL_Insert:
+                    if (mods == 0 && shift) return kf_paste();
+                    if (mods == FL_CTRL)    return kf_copy();
+                    return 0;
                 case FL_Escape:
                     text = "";
                     return accept();
@@ -777,6 +799,15 @@ namespace mrv
                     Fl::compose_reset();
                     break;
                 }
+                case 'x':
+                    if (mods==FL_COMMAND) return kf_copy_cut();
+                    break;
+                case 'c':
+                    if (mods==FL_COMMAND) return kf_copy();
+                    break;
+                case 'v':
+                    if (mods==FL_COMMAND) return kf_paste();
+                    break;
                 default:
                     break;
                 }

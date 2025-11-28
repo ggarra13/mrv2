@@ -12,8 +12,9 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
+#include <FL/fl_utf8.h>
+
 #include <algorithm>
-#include <codecvt>
 #include <filesystem>
 #include <limits>
 #include <locale>
@@ -35,6 +36,72 @@
 #endif
 
 namespace fs = std::filesystem;
+
+namespace
+{
+#ifdef USE_CODECVT
+#if defined(_WINDOWS)
+    //! \bug
+    //! https://social.msdn.microsoft.com/Forums/vstudio/en-US/8f40dcd8-c67f-4eba-9134-a19b9178e481/vs-2015-rc-linker-stdcodecvt-error?forum=vcgeneral
+    typedef unsigned int tl_char_t;
+#else  // _WINDOWS
+    typedef wchar_t tl_char_t;
+#endif // _WINDOWS
+    
+#else
+    typedef wchar_t tl_char_t;
+    
+    // Helper to ensure pure UTF-32 (handles Windows UTF-16
+    // surrogates transparently via FLTK)
+    std::u32string utf8_to_utf32(const std::string& utf8_str) {
+        if (utf8_str.empty()) return {};
+
+        const char* src = utf8_str.c_str();
+        unsigned src_len = static_cast<unsigned>(utf8_str.size());
+
+        // First pass: measure required wide chars
+        unsigned wc_count = fl_utf8towc(src, src_len, nullptr, 0);
+        if (wc_count == 0) return {};  // Empty or invalid
+
+        std::vector<wchar_t> wc_buffer(wc_count);
+        unsigned converted = fl_utf8towc(src, src_len,
+                                         wc_buffer.data(), wc_count);
+        if (converted == 0) return {};  // Conversion failed
+
+        // Now decode to pure char32_t (UTF-32); on Unix it's 1:1,
+        // on Windows it expands surrogates
+        std::u32string utf32;
+        utf32.reserve(converted);
+        for (unsigned i = 0; i < converted; ++i) {
+            utf32.push_back(static_cast<wchar_t>(wc_buffer[i]));
+        }
+        return utf32;
+    }
+ 
+    std::string utf32_to_utf8(const std::u32string& utf32_str) {
+
+        if (utf32_str.empty()) return {};
+
+        const char32_t* src = reinterpret_cast<const char32_t*>(utf32_str.data());
+
+        // Safe cast; assumes valid codepoints
+        unsigned src_len = static_cast<unsigned>(utf32_str.size());
+
+        // First pass: measure required UTF-8 bytes
+        unsigned utf8_len = fl_utf8fromwc(nullptr, 0, (wchar_t*)src, src_len);
+        if (utf8_len == 0) return {};  // Empty or invalid
+
+        std::string utf8_str;
+        utf8_str.resize(utf8_len);
+        unsigned converted = fl_utf8fromwc(utf8_str.data(), utf8_len,
+                                           (wchar_t*)src, src_len);
+        if (converted == 0) return {};  // Failed
+        utf8_str.resize(converted);  // Trim if over-allocated
+        return utf8_str;
+    }
+#endif
+        
+}
 
 namespace
 {
@@ -75,6 +142,7 @@ namespace
 
         return paths;
     }
+
 }
 
 namespace tl
@@ -86,14 +154,6 @@ namespace tl
 #include <Fonts/NotoMono-Regular.font>
 #include <Fonts/NotoSans-Regular.font>
 #include <Fonts/NotoSans-Bold.font>
-
-#if defined(_WINDOWS)
-            //! \bug
-            //! https://social.msdn.microsoft.com/Forums/vstudio/en-US/8f40dcd8-c67f-4eba-9134-a19b9178e481/vs-2015-rc-linker-stdcodecvt-error?forum=vcgeneral
-            typedef unsigned int tl_char_t;
-#else  // _WINDOWS
-            typedef char32_t tl_char_t;
-#endif // _WINDOWS
         } // namespace
 
         std::vector<uint8_t> getFontData(const std::string& name)
@@ -122,16 +182,14 @@ namespace tl
         struct FontSystem::Private
         {
             std::shared_ptr<Glyph> getGlyph(uint32_t code, const FontInfo&);
-            void measure(
-                const std::basic_string<tl_char_t>& utf32, const FontInfo&,
-                int maxLineWidth, math::Size2i&,
-                std::vector<math::Box2i>* = nullptr);
 
             std::map<std::string, std::vector<uint8_t> > fontData;
             FT_Library ftLibrary = nullptr;
             std::map<std::string, FT_Face> ftFaces;
-            std::wstring_convert<std::codecvt_utf8<tl_char_t>, tl_char_t>
-                utf32Convert;
+            void measure(
+                const std::basic_string<char32_t>& utf32, const FontInfo&,
+                int maxLineWidth, math::Size2i&,
+                std::vector<math::Box2i>* = nullptr);
             memory::LRUCache<GlyphInfo, std::shared_ptr<Glyph> > glyphCache;
         };
 
@@ -287,13 +345,13 @@ namespace tl
             math::Size2i out;
             try
             {
-                const auto utf32 = p.utf32Convert.from_bytes(text);
-                p.measure(utf32, fontInfo, maxLineWidth, out);
+                 const std::u32string& utf32 = utf8_to_utf32(text);
+                 p.measure(utf32, fontInfo, maxLineWidth, out);
             }
             catch (const std::exception& e)
             {
                 _log(e.what(), log::Type::Error);
-            }
+            } 
             return out;
         }
 
@@ -304,7 +362,7 @@ namespace tl
             std::vector<math::Box2i> out;
             try
             {
-                const auto utf32 = p.utf32Convert.from_bytes(text);
+                const auto utf32 = utf8_to_utf32(text);
                 math::Size2i size;
                 p.measure(utf32, fontInfo, maxLineWidth, size, &out);
             }
@@ -322,7 +380,11 @@ namespace tl
             std::vector<std::shared_ptr<Glyph> > out;
             try
             {
+#ifdef USE_CODECVT
                 const auto utf32 = p.utf32Convert.from_bytes(text);
+#else
+                const auto utf32 = utf8_to_utf32(text);
+#endif
                 for (const auto& i : utf32)
                 {
                     out.push_back(p.getGlyph(i, fontInfo));
@@ -412,7 +474,7 @@ namespace tl
         } // namespace
 
         void FontSystem::Private::measure(
-            const std::basic_string<tl_char_t>& utf32, const FontInfo& fontInfo,
+            const std::u32string& utf32, const FontInfo& fontInfo,
             int maxLineWidth, math::Size2i& size,
             std::vector<math::Box2i>* glyphGeom)
         {

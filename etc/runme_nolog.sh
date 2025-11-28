@@ -260,17 +260,18 @@ if [ -z "$TLRENDER_VK" ]; then
 	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
     else
 	export TLRENDER_VK=OFF
-	export MRV2_HDR=OFF
+	export MRV2_HDR=ON
 	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
     fi
 else
     if [ ! -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
 	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
 	export TLRENDER_VK=OFF
-	export MRV2_HDR=OFF
+	export MRV2_HDR=ON
     else
 	if [[ "$TLRENDER_VK" == "ON" || "$TLRENDER_VK" == "1" ]]; then
 	    echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
+	    export MRV2_HDR=ON
 	else
 	    export MRV2_HDR=OFF
 	fi
@@ -486,7 +487,6 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
 	   -D BUILD_GETTEXT=${BUILD_GETTEXT}
 
-	   -D MRV2_COMPILER=${COMPILER}
 	   -D MRV2_BACKEND=${MRV2_BACKEND}
 	   -D MRV2_CPPTRACE=${MRV2_CPPTRACE}
 	   -D MRV2_DEMO=${MRV2_DEMO}

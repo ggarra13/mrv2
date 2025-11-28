@@ -241,6 +241,16 @@ set(VMA_DEP )
 #     include(cmake/Modules/BuildVMA.cmake)
 # endif()
 
+#
+# We build Wayland protocols
+#
+set(WAYLAND_PROTOCOLS_DEP )
+# if (UNIX AND NOT APPLE)
+#     if ($ENV{ARCH} MATCHES ".*aarch64.*")
+# 	include(cmake/Modules/Buildprotocols.cmake)	
+# endif()
+
+
 set(SHADERC_DEP )
 
 #
