@@ -19,11 +19,7 @@ set(SOURCES
 # Use static FLTK
 #
 set(LIBRARIES )
-if(UNIX)
-    list(APPEND LIBRARIES fltk::fltk fltk::images)
-else()
-    list(APPEND LIBRARIES fltk::fltk fltk::images)
-endif()
+list(APPEND LIBRARIES fltk::fltk)
 
 add_executable(license_helper WIN32 ${SOURCES} ${HEADERS})
 
