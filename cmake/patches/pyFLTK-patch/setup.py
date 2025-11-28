@@ -232,11 +232,11 @@ def fltk_config(fltk_dir):
 ###########################################################################
 all_include_dirs = ['./src', './contrib','/usr/include']
 if fltk_dir != "":
-    #if (sys.platform == 'win32'):
-    #    all_include_dirs.insert(0, fltk_dir+"/include")
-    #else:
-    #    all_include_dirs.insert(0, fltk_dir)
-    all_include_dirs.insert(0, os.path.join(fltk_dir,'/include'))
+    if (sys.platform == 'win32'):
+       all_include_dirs.insert(0, fltk_dir+"/include")
+       all_include_dirs.insert(0, os.path.join(fltk_dir,'/include'))
+       #else:
+       #    all_include_dirs.insert(0, fltk_dir)
 print("ALL_INCLUDE_DIRS=",all_include_dirs)
 ###########################################################################
 
@@ -390,7 +390,7 @@ module1 = setuptools.Extension(name='fltk._fltk',
 		    include_dirs = all_include_dirs+UserIncludeDirs,
                     sources = ['./fltk/fltk_wrap.cpp',
                                './contrib/ListSelect.cpp']+UserDefinedSources,
-		    extra_compile_args=compile_arg_list,
+                    extra_compile_args=compile_arg_list,
                     extra_link_args=link_arg_list,
 		    library_dirs=lib_dir_list,
           	    libraries=lib_list)
