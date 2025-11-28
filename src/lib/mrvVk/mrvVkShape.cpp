@@ -645,18 +645,22 @@ namespace mrv
 
     int VkTextShape::handle_key()
     {
+        return 0;
     }
 
     int VKTextShape::kf_select_all()
     {
+        return 0;
     }
 
     int VKTextShape::kf_copy()
     {
+        return 0;
     }
     
     int VKTextShape::kf_copy_cut()
     {
+        return 0;
     }
     
     int VKTextShape::handle(int e)
