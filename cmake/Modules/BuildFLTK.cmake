@@ -9,6 +9,7 @@ set(FLTK_GIT_TAG v1.2.4 )  # was 1.2.2
 #set(FLTK_GIT_TAG vk_test) # Testing branch
 
 if(MRV2_VK)
+    message(STATUS "Using ggarra13's private FLTK branch")
     set(USER_NAME $ENV{USER})
     if (USER_NAME STREQUAL "gga" OR USER_NAME STREQUAL "User-PC" OR
 	    USER_NAME STREQUAL "ggarra13")
@@ -19,7 +20,8 @@ if(MRV2_VK)
         set(FLTK_GIT_REPOSITORY "https://github.com/ggarra13/fltk.git")
     endif()
 else()
-    set(FLTK_GIT_REPOSITORY "git@github.com:fltk/fltk.git")
+    message(WARNING "Using FLTK's original FLTK branch")
+    set(FLTK_GIT_REPOSITORY "https://github.com/fltk/fltk.git")
     set(FLTK_GIT_TAG master)
 endif()
 
@@ -92,7 +94,6 @@ set(FLTK_BUILD_GL ${TLRENDER_GL})
 # Determine whether to build fltk-vk
 #
 set(FLTK_BUILD_VK ${TLRENDER_VK})
-
 
 set(FLTK_PATCH
 )

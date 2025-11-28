@@ -643,11 +643,6 @@ namespace mrv
         return pos;
     }
 
-    int VkTextShape::handle_key()
-    {
-        return 0;
-    }
-
     int VKTextShape::kf_select_all()
     {
         return 0;
@@ -689,7 +684,7 @@ namespace mrv
             {
                 switch(rawkey)
                 {
-                case Fl_Insert:
+                case FL_Insert:
                     if (mods == 0 && shift) return kf_paste();
                     if (mods == FL_CTRL)    return kf_copy();
                     return 0;
