@@ -29,6 +29,8 @@ if fltk_dir=="":
 # Use this to pass additional compile flags, like macOS -mmacosx-version-min=OS_VERSION
 cxx_flags = os.environ.get('CXX_FLAGS', '')
 print("pyFLTK CXX_FLAGS=",cxx_flags)
+print("fltk_dir=", fltk_dir)
+print("FLTK_HOME=", os.environ.get('FLTK_HOME'))
 
 # add your .cpp extensions in the plug-in/src directory.
 UserDefinedSources = glob.glob('./plug-in/src/*.cpp') + \
@@ -234,8 +236,8 @@ if fltk_dir != "":
     #    all_include_dirs.insert(0, fltk_dir+"/include")
     #else:
     #    all_include_dirs.insert(0, fltk_dir)
-    all_include_dirs.insert(0, os.path.join(fltk_dir,'include'))
-print(all_include_dirs)
+    all_include_dirs.insert(0, os.path.join(fltk_dir,'/include'))
+print("ALL_INCLUDE_DIRS=",all_include_dirs)
 ###########################################################################
 
 if not (sys.platform == 'win32'):
