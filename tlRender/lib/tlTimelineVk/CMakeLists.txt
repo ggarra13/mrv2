@@ -16,7 +16,7 @@ set(SOURCE
 
 set(LIBRARIES_PRIVATE )
 if(TLRENDER_LIBPLACEBO)
-    list(APPEND LIBRARIES_PRIVATE libplacebo)
+    list(APPEND LIBRARIES_PRIVATE libplacebo) 
 endif()
 
 find_package(Vulkan REQUIRED)
