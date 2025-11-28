@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v1.2.2 )
+set(FLTK_GIT_TAG v1.2.4 )  # was 1.2.2
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_test) # Testing branch
 
@@ -72,7 +72,8 @@ set(FLTK_USE_LIBDECOR_GTK FALSE)
 # This one may be turned off
 
 # Set FLTK default dependencies
-set(FLTK_DEPENDENCIES PNG ${VMA_DEP} ${SHADERC_DEP} ZLIB)
+set(FLTK_DEPENDENCIES PNG ${VMA_DEP} ${SHADERC_DEP}
+		      	  ${WAYLAND_PROTOCOLS_DEP} ZLIB)
 
 set(FLTK_USE_SYSTEM_LIBJPEG FALSE)
 if(TLRENDER_JPEG)
