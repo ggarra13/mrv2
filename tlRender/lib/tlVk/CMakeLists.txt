@@ -18,7 +18,7 @@ set(SOURCE
     TextureAtlas.cpp
     Util.cpp)
 
-find_package(Vulkan CONFIG REQUIRED)
+find_package(Vulkan REQUIRED)  # \@bug: \@todo: Should be CONFIG 
 find_package(FLTK CONFIG REQUIRED)
 
 set(LIBRARIES tlCore)

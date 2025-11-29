@@ -12,9 +12,13 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
-#include <FL/fl_utf8.h>
-
+//#define USE_CODECVT
 #include <algorithm>
+#ifndef USE_CODECVT
+#include <FL/fl_utf8.h>
+#else
+#include <codecvt>
+#endif
 #include <filesystem>
 #include <limits>
 #include <locale>
@@ -63,9 +67,9 @@ namespace
         unsigned wc_count = fl_utf8towc(src, src_len, nullptr, 0);
         if (wc_count == 0) return {};  // Empty or invalid
 
-        std::vector<wchar_t> wc_buffer(wc_count);
+        std::vector<wchar_t> wc_buffer(wc_count + 1);
         unsigned converted = fl_utf8towc(src, src_len,
-                                         wc_buffer.data(), wc_count);
+                                         wc_buffer.data(), wc_count + 1);
         if (converted == 0) return {};  // Conversion failed
 
         // Now decode to pure char32_t (UTF-32); on Unix it's 1:1,
@@ -92,8 +96,8 @@ namespace
         if (utf8_len == 0) return {};  // Empty or invalid
 
         std::string utf8_str;
-        utf8_str.resize(utf8_len);
-        unsigned converted = fl_utf8fromwc(utf8_str.data(), utf8_len,
+        utf8_str.resize(utf8_len + 1);
+        unsigned converted = fl_utf8fromwc(utf8_str.data(), utf8_len + 1,
                                            (wchar_t*)src, src_len);
         if (converted == 0) return {};  // Failed
         utf8_str.resize(converted);  // Trim if over-allocated
@@ -186,10 +190,18 @@ namespace tl
             std::map<std::string, std::vector<uint8_t> > fontData;
             FT_Library ftLibrary = nullptr;
             std::map<std::string, FT_Face> ftFaces;
+#ifdef USE_CODECVT
             void measure(
-                const std::basic_string<char32_t>& utf32, const FontInfo&,
+                const std::basic_string<tl_char_t>& utf32, const FontInfo&,
                 int maxLineWidth, math::Size2i&,
                 std::vector<math::Box2i>* = nullptr);
+            std::wstring_convert<std::codecvt_utf8<tl_char_t>, tl_char_t> utf32Convert;
+#else
+            void measure(
+                const std::u32string& utf32, const FontInfo&,
+                int maxLineWidth, math::Size2i&,
+                std::vector<math::Box2i>* = nullptr);
+#endif
             memory::LRUCache<GlyphInfo, std::shared_ptr<Glyph> > glyphCache;
         };
 
@@ -345,7 +357,11 @@ namespace tl
             math::Size2i out;
             try
             {
-                 const std::u32string& utf32 = utf8_to_utf32(text);
+#ifdef USE_CODECVT
+                 const auto utf32 = p.utf32Convert.from_bytes(text);
+#else
+                 const auto utf32 = utf8_to_utf32(text);
+#endif
                  p.measure(utf32, fontInfo, maxLineWidth, out);
             }
             catch (const std::exception& e)
@@ -362,7 +378,11 @@ namespace tl
             std::vector<math::Box2i> out;
             try
             {
+#ifdef USE_CODECVT
+                const auto utf32 = p.utf32Convert.from_bytes(text);
+#else
                 const auto utf32 = utf8_to_utf32(text);
+#endif
                 math::Size2i size;
                 p.measure(utf32, fontInfo, maxLineWidth, size, &out);
             }
@@ -472,11 +492,18 @@ namespace tl
                 return '\n' == c || '\r' == c;
             }
         } // namespace
-
+#ifdef USE_CODECVT
+        void FontSystem::Private::measure(
+            const std::basic_string<tl_char_t>& utf32, const FontInfo& fontInfo,
+            int maxLineWidth, math::Size2i& size,
+            std::vector<math::Box2i>* glyphGeom)
+#else
+        // Defined in C++ 11
         void FontSystem::Private::measure(
             const std::u32string& utf32, const FontInfo& fontInfo,
             int maxLineWidth, math::Size2i& size,
             std::vector<math::Box2i>* glyphGeom)
+#endif
         {
             const auto i = ftFaces.find(fontInfo.family);
             if (i != ftFaces.end())
