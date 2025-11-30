@@ -83,10 +83,6 @@ include( ../../cmake/documentation.cmake )
 # Handle install
 
 if (WIN32)
-    # set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS ON) # AI hallucination
-    # set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_VULKAN ON)
-    # set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION bin)
-    # include(InstallRequiredSystemLibraries)
    install(FILES
 	   $<TARGET_RUNTIME_DLLS:mrv2>
 	   DESTINATION bin)
@@ -294,21 +290,20 @@ elseif(WIN32)
 	    DESTINATION bin/Lib
 	    COMPONENT python_tk )
     endif()
-
-    # If we installed vulkan-1.dll, don't distribute it.
-    file(GLOB VULKAN_DLLS "${CMAKE_INSTALL_PREFIX}/bin/vulkan-.*\\.dll$")
+    
+    message( STATUS "Removing ${CMAKE_INSTALL_PREFIX}/bin/vulkan-1.dll")
+    file(GLOB VULKAN_DLLS "${CMAKE_INSTALL_PREFIX}/bin/vulkan-.*\\.dll")
+    message(STATUS "hdr VULKAN_DLLS=${VULKAN_DLLS}")
     foreach (_vulkan_dll ${VULKAN_DLLS})
-	message(STATUS "Removing ${_vulkan_dll}")
+	message(STATUS "mrv2: Removing ${_vulkan_dll}")
 	file(REMOVE ${_vulkan_dll})
     endforeach()
     
     # For Python, Poco, USD, FLTK, NDI, MSVC runtimes and FFmpeg
     file(GLOB MRV2_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*.dll"  )
-    # Remove any dll whose filename matches vulkan-*
-    list(FILTER MRV2_DLLS EXCLUDE REGEX ".*/vulkan-.*\\.dll$")
-    
+
     install(FILES ${MRV2_DLLS}
-    	DESTINATION bin/
+	DESTINATION bin/
 	COMPONENT applications )
     
 	    

@@ -19,6 +19,7 @@ else
 fi
 
 echo "BUILD_DIR=${BUILD_DIR}"
+echo 
 
 dir=$BUILD_DIR/mrv2/src/mrv2-build
 
@@ -82,15 +83,14 @@ cd $dir
 
 MAX_RETRIES=3
 if [[ $CMAKE_TARGET != "package" ]]; then
-   MAX_RETRIES=1
+    MAX_RETRIES=1
+    exit 0
 fi
 COUNT=1
 
 while (( COUNT <= MAX_RETRIES )); do
     echo "Build attempt $COUNT of $MAX_RETRIES..."
 
-    sync
-    
     cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t "${CMAKE_TARGET}"
     STATUS=$?
     

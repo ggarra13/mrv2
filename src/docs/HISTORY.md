@@ -55,6 +55,9 @@ ChangeLog
 - Added libwayland's version to Help/About.
 - Added Donate button on the license_helper, with simple donations.
 - Verified vmrv2 and mrv2 work on Kwin.
+- Fixed distributing libvulkan.so on Unix and vulkan-1.dll on Windows.  macOS
+  needs distributing as it does not come with the OS unless installed from
+  brew.
 
 
 v1.4.6

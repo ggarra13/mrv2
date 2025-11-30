@@ -82,6 +82,16 @@ endif()
 if(WIN32)
     message( STATUS "Removing ${CPACK_PREPACKAGE}/lib/usd")
     file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/lib/usd" )
+    
+    # If we installed vulkan-1.dll, don't distribute it.
+    message( STATUS "Removing ${CPACK_PREPACKAGE}/bin/vulkan-1.dll")
+    file(GLOB VULKAN_DLLS "${CPACK_PREPACKAGE}/bin/vulkan-.*\\.dll")
+    message(STATUS "hdr/mrv2 VULKAN_DLLS=${VULKAN_DLLS}")
+    foreach (_vulkan_dll ${VULKAN_DLLS})
+	message(STATUS "Removing ${_vulkan_dll}")
+	file(REMOVE ${_vulkan_dll})
+    endforeach()
+
 endif()
 
 #
