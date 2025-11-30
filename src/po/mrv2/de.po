@@ -2852,6 +2852,7 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "Die entfernte Datei {0} entspricht dem Dateinamen {1} aber nicht dem Pfad."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Die entfernte Datei {0} entspricht nicht dem lokalen Dateinamen."
 
@@ -3031,9 +3032,11 @@ msgstr "Einstellung von OCIO config aus Einstellungen."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Einstellung von OCIO config aus der Umgebungsvariable OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Pfad-Mappings wurden aus \"{0}{1}\" geladen."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Hotkeys von \"{0}{1}.prefs\" werden geladen."
 
@@ -3046,6 +3049,7 @@ msgstr "Pfad-Mappings wurden in \"{0}{1}\" gespeichert."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys wurden auf \"{0}{1}.prefs\" gespeichert."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Einstellungen wurden gespeichert auf: \"{0}{1}\"."
 
@@ -3097,6 +3101,7 @@ msgstr "Keine Standardansicht für die Anzeige '{0}'. Gibt es die Anzeige?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Einstellung OCIO Preset '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preset '{0}' nicht gefunden."
 
@@ -3674,6 +3679,7 @@ msgstr "Kann nicht {0} einfgen. Fehler {1}."
 msgid "Could not save .otio file: {0}"
 msgstr "Die.otio-Datei kann nicht gespeichert werden: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Fehler beim Speichern von {0}. {1}"
 
@@ -3689,6 +3695,7 @@ msgstr "Sie knnen Clips nur zu einer.otio EDL Wiedergabeliste hinzufgen."
 msgid "Unknown media reference"
 msgstr "Unbekannte Medienreferenz"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Gleis #{0} - {1}"
 
@@ -3713,6 +3720,7 @@ msgstr "Frame {0} - ZC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Bild zu gro. Speichert die Ansichtsfenstergre."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Ansichtsgre: {0} - X={1}, Y={2}"
 
@@ -3883,6 +3891,7 @@ msgstr "Wiedergabe nicht möglich – Audioanmerkung ist leer"
 msgid "Status is not saved"
 msgstr "Status ist nicht gespeichert"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Die Audioanmerkungsdatei {0} fehlt oder existiert nicht!"
 
@@ -4826,12 +4835,15 @@ msgstr ""
 "Drücken Sie {0}."
 
 msgid ""
-"Your Wayland compositor does not support Float on Top.  Go to the title bar "
-"of the Window and click RMB->->More Actions->Keep Above Others"
+"Your Wayland compositor does not support Float on Top.  Use your Window "
+"Manager to set a hotkey for it."
 msgstr ""
-"Ihr Wayland-Compositor unterstützt „Float on Top“ nicht. Gehen Sie zur "
-"Titelleiste des Fensters und wählen Sie RMB->Weitere Aktionen->Über anderen "
-"Fenstern halten."
+"Wayland unterstützt kein Float on Top. Verwenden Sie Ihren Window Manager, "
+"um einen Hotkey dafür zu setzen."
+
+msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
+msgstr ""
+"Kein GNOME Shell Hotkey für Float On Top. Setzen Sie ihn global auf '{0}'"
 
 msgid "Session: "
 msgstr "Sitzung:"
@@ -7949,6 +7961,14 @@ msgstr "Hotkeys-Fenster umschalten"
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
 
+#~ msgid ""
+#~ "Your Wayland compositor does not support Float on Top.  Go to the title bar "
+#~ "of the Window and click RMB->->More Actions->Keep Above Others"
+#~ msgstr ""
+#~ "Ihr Wayland-Compositor unterstützt „Float on Top“ nicht. Gehen Sie zur "
+#~ "Titelleiste des Fensters und wählen Sie RMB->Weitere Aktionen->Über anderen "
+#~ "Fenstern halten."
+
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
 
@@ -7989,17 +8009,6 @@ msgstr "Fenster umschalten"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Ungültige Schriftart für die Texterstellung"
-
-#~ msgid ""
-#~ "Wayland does not support Float on Top.  Use your Window Manager to set a "
-#~ "hotkey for it."
-#~ msgstr ""
-#~ "Wayland unterstützt kein Float on Top. Verwenden Sie Ihren Window Manager, "
-#~ "um einen Hotkey dafür zu setzen."
-
-#~ msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
-#~ msgstr ""
-#~ "Kein GNOME Shell Hotkey für Float On Top. Setzen Sie ihn global auf '{0}'"
 
 #~ msgid "Load Movie or Sequence"
 #~ msgstr "Film oder Sequenz laden"

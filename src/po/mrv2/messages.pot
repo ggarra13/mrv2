@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -2604,6 +2604,7 @@ msgstr ""
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr ""
 
@@ -2771,9 +2772,11 @@ msgstr ""
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr ""
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
@@ -2786,6 +2789,7 @@ msgstr ""
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr ""
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr ""
 
@@ -2837,6 +2841,7 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr ""
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr ""
 
@@ -3383,6 +3388,7 @@ msgstr ""
 msgid "Could not save .otio file: {0}"
 msgstr ""
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr ""
 
@@ -3398,6 +3404,7 @@ msgstr ""
 msgid "Unknown media reference"
 msgstr ""
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr ""
 
@@ -3422,6 +3429,7 @@ msgstr ""
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
@@ -3588,6 +3596,7 @@ msgstr ""
 msgid "Status is not saved"
 msgstr ""
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr ""
 
@@ -4523,8 +4532,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Your Wayland compositor does not support Float on Top.  Go to the title bar "
-"of the Window and click RMB->->More Actions->Keep Above Others"
+"Your Wayland compositor does not support Float on Top.  Use your Window "
+"Manager to set a hotkey for it."
+msgstr ""
+
+msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
 msgstr ""
 
 msgid "Session: "
@@ -6286,8 +6298,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"

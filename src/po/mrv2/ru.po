@@ -2896,6 +2896,7 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "Дистанционный файл {0} совпадает с именем файла {1}, но не с дорожкой."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Удалённый файл {0} не совпадает с местным именем файла."
 
@@ -3070,9 +3071,11 @@ msgstr "Сделать орио-конфигурацию из предпочте
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Запуск OCIO Conig из переменной окружающей среды OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Картирование путей было загружено с \" {0} {1}\"."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Загрузка хот-дога из \"{0}{1}.prefs\"."
 
@@ -3085,6 +3088,7 @@ msgstr "Картирование путей было сохранено до \" 
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys были сохранены на \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Преференции были сохранены следующим образом: \"{0}{1}\"."
 
@@ -3137,6 +3141,7 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Установка OCIO Preset '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Предположить '{0}' не найдено."
 
@@ -3713,6 +3718,7 @@ msgstr "Невозможно вставить {0}. Ошибка {1}."
 msgid "Could not save .otio file: {0}"
 msgstr "Невозможно сохранить файл.otio: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Ошибка сохранения {0}. {1}"
 
@@ -3728,6 +3734,7 @@ msgstr "Вы можете добавить только клипы в плейл
 msgid "Unknown media reference"
 msgstr "Неизвестная ссылка на средства массовой информации"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Дорожка # {0} - {1}"
 
@@ -3752,6 +3759,7 @@ msgstr "Рамка {0} - ТС: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Слишком большое изображение, сохранит размер смотрового портала."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
 
@@ -3922,6 +3930,7 @@ msgstr "Воспроизведение невозможно – аудио-ан�
 msgid "Status is not saved"
 msgstr "Статус не сохранён"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Файл аудиоаннотации {0} отсутствует или не существует!"
 
@@ -4865,12 +4874,16 @@ msgstr ""
 "Нажмите {0}."
 
 msgid ""
-"Your Wayland compositor does not support Float on Top.  Go to the title bar "
-"of the Window and click RMB->->More Actions->Keep Above Others"
+"Your Wayland compositor does not support Float on Top.  Use your Window "
+"Manager to set a hotkey for it."
 msgstr ""
-"Ваш композитор Wayland не поддерживает режим Float on Top. Перейдите к "
-"строке заголовка окна и нажмите ПКМ → «Дополнительные действия» → «Поверх "
-"всех»."
+"Уэйланд не поддерживает Float наверху. Используй своего менеджера окна, "
+"чтобы установить хижину для этого."
+
+msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
+msgstr ""
+"Нет горячей клавиши GNOME Shell для \"Плавать сверху\". Установка глобально "
+"на '{0}'"
 
 msgid "Session: "
 msgstr "Сессия:"
@@ -7977,6 +7990,14 @@ msgstr "Переключить окно горячих клавиш"
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
 
+#~ msgid ""
+#~ "Your Wayland compositor does not support Float on Top.  Go to the title bar "
+#~ "of the Window and click RMB->->More Actions->Keep Above Others"
+#~ msgstr ""
+#~ "Ваш композитор Wayland не поддерживает режим Float on Top. Перейдите к "
+#~ "строке заголовка окна и нажмите ПКМ → «Дополнительные действия» → «Поверх "
+#~ "всех»."
+
 #~ msgid "Renderer"
 #~ msgstr "Редактор"
 
@@ -8017,18 +8038,6 @@ msgstr "Закладка о окне"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Неверный шрифт для текстового рисунка"
-
-#~ msgid ""
-#~ "Wayland does not support Float on Top.  Use your Window Manager to set a "
-#~ "hotkey for it."
-#~ msgstr ""
-#~ "Уэйланд не поддерживает Float наверху. Используй своего менеджера окна, "
-#~ "чтобы установить хижину для этого."
-
-#~ msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
-#~ msgstr ""
-#~ "Нет горячей клавиши GNOME Shell для \"Плавать сверху\". Установка глобально "
-#~ "на '{0}'"
 
 #~ msgid "Load Movie or Sequence"
 #~ msgstr "Загрузить кино или последовательность"

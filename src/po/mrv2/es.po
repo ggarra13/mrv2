@@ -2924,6 +2924,7 @@ msgstr "Archivos remotos son menos que los archivos locales."
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Archivo remoto {0} iguala nombra base {1} pero no la carpeta."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Archivo remoto {0} no es igual al archivo local."
 
@@ -3107,9 +3108,11 @@ msgstr "Seteando OCIO config desde preferencias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Seteando OCIO config de la variable de entorno OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Mapeo de carpetas ha sido cargado de \"{0}{1}\"."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
@@ -3122,6 +3125,7 @@ msgstr "Mapeo de carpetas ha sido grabado en \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Teclas han sido grabadas en: \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Preferencias han sido grabadas en: \"{0}{1}\"."
 
@@ -3173,6 +3177,7 @@ msgstr "No hay vista por defecto para display '{0}'.  ¿Existe el display?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Usando preseteo OCIO '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preseteo '{0}' no encontrado"
 
@@ -3751,6 +3756,7 @@ msgstr "No pude pegar {0}.  Error {1}."
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error grabando {0}. {1}"
 
@@ -3766,6 +3772,7 @@ msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
 msgid "Unknown media reference"
 msgstr "Referencia de los medios desconocidos"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Pista #{0} - {1}"
 
@@ -3790,6 +3797,7 @@ msgstr "Cuadro {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagen demasiado grande.  Guardaré el tamaño de la vista."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
 
@@ -3960,6 +3968,7 @@ msgstr "No puedo reproducir - la anotación de audio está vacia"
 msgid "Status is not saved"
 msgstr "Estatus no es grabado"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Anotación de audio en archivo {0} está faltante o no existe!"
 
@@ -4902,12 +4911,16 @@ msgstr ""
 "acceso directo. Pulse {0}."
 
 msgid ""
-"Your Wayland compositor does not support Float on Top.  Go to the title bar "
-"of the Window and click RMB->->More Actions->Keep Above Others"
+"Your Wayland compositor does not support Float on Top.  Use your Window "
+"Manager to set a hotkey for it."
 msgstr ""
-"Tus compositor Wayland no soporta Siempre Arriba.  Vaya a la barra de título"
-" de la imagen de Window y cliqueá Botón Derecho del Ratón->Mas "
-"Acciones->Mantener sobre Otras"
+"Wayland no soporta Flotar en la parte superior. Utilice su Gestor de "
+"ventanas para establecer una tecla de acceso directo para ello."
+
+msgid "No Hotkey for Float On Top.  Setting it globally to '{0}'"
+msgstr ""
+"No hay tecla de acceso directo de GNOME Shell para flotar en la parte "
+"superior. Estableciéndolo globalmente a \"{0}\""
 
 msgid "Session: "
 msgstr "Sesión: "
@@ -8017,6 +8030,14 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
+#~ msgid ""
+#~ "Your Wayland compositor does not support Float on Top.  Go to the title bar "
+#~ "of the Window and click RMB->->More Actions->Keep Above Others"
+#~ msgstr ""
+#~ "Tus compositor Wayland no soporta Siempre Arriba.  Vaya a la barra de título"
+#~ " de la imagen de Window y cliqueá Botón Derecho del Ratón->Mas "
+#~ "Acciones->Mantener sobre Otras"
+
 #~ msgid "Renderer"
 #~ msgstr "Renderizador"
 
@@ -8057,18 +8078,6 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Fuente inválida para dibujar texto"
-
-#~ msgid ""
-#~ "Wayland does not support Float on Top.  Use your Window Manager to set a "
-#~ "hotkey for it."
-#~ msgstr ""
-#~ "Wayland no soporta Flotar en la parte superior. Utilice su Gestor de "
-#~ "ventanas para establecer una tecla de acceso directo para ello."
-
-#~ msgid "No GNOME Shell Hotkey for Float On Top.  Setting it globally to '{0}'"
-#~ msgstr ""
-#~ "No hay tecla de acceso directo de GNOME Shell para flotar en la parte "
-#~ "superior. Estableciéndolo globalmente a \"{0}\""
 
 #~ msgid "Load Movie or Sequence"
 #~ msgstr "Cargar Película o Secuencia"
