@@ -38,7 +38,7 @@ if [[ "$branch" != "beta" && \
 	  "$branch" != "opengl" && \
 	  "$branch" != "arm64" &&
           "$branch" != "peace" ]]; then
-    echo "You are not on the beta, vulkan or arm64 branch.  Will not make a release."
+    echo "You are not on the beta, vulkan, peace or arm64 branch.  Will not make a release."
     exit 0
 fi
 
