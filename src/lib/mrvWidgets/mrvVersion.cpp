@@ -1205,12 +1205,12 @@ namespace mrv
 
 #ifdef VULKAN_BACKEND
         VkInstance instance = ui->uiView->instance();
-        VkPhysicalDevice* devices = nullptr;
-        uint32_t num = 0;
-        vkEnumeratePhysicalDevices(instance, &num, nullptr);
-        devices = new VkPhysicalDevice[num];
-        vkEnumeratePhysicalDevices(instance, &num, devices);
-        for (int i = 0; i < num; i++)
+        uint32_t deviceCount = 0;
+        vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+        std::vector<VkPhysicalDevice> devices(deviceCount);
+        vkEnumeratePhysicalDevices(instance, &deviceCount,
+                                          devices.data());
+        for (int i = 0; i < deviceCount; i++)
         {
             VkPhysicalDeviceIDPropertiesKHR id_props = {};
             id_props.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES_KHR;
@@ -1222,17 +1222,30 @@ namespace mrv
             vkGetPhysicalDeviceProperties2(devices[i], &prop);
             VkPhysicalDeviceType t = prop.properties.deviceType;
             o << "GPU " << i << ": " << prop.properties.deviceName
-              << " v" << FLTK_OUTPUT_VERSION(prop.properties.apiVersion)
+              << " v" << FLTK_OUTPUT_VERSION(prop.properties.apiVersion);
+
+            uint32_t v = prop.properties.driverVersion;
+            uint32_t major = VK_API_VERSION_MAJOR(v);
+            uint32_t minor = VK_API_VERSION_MINOR(v);
+            uint32_t patch = VK_API_VERSION_PATCH(v);
+            uint32_t build = 0;
+            
+#ifdef _WIN32
+            // On Windows NVIDIA uses a custom encoding:
+            major = (v >> 22) & 0x3ff;
+            minor = (v >> 14) & 0xff;
+            patch = (v >> 6) & 0xff;
+            build = v & 0x3f;
+#endif
+            o << "Driver version: " << major << "." << minor << "." << patch
+              << build
               << std::endl
               << std::endl;
             
         }
-        delete [] devices;
 #endif
 
         o << "HW Stereo:\t" << (ui->uiView->can_do(FL_STEREO) ? "Yes" : "No")
-          << endl
-          << "HW Overlay:\t" << (ui->uiView->can_do_overlay() ? "Yes" : "No")
           << endl;
 
         return o.str();

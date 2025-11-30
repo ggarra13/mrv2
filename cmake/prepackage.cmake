@@ -323,5 +323,4 @@ remove_python_directories( "${MRV2_UNUSED_PYTHON_DIRS}" )
 
 if (APPLE)
     include( "${ROOT_DIR}/cmake/prepackage_macos.cmake" )
-    prepare_macos_packages()
 endif()
