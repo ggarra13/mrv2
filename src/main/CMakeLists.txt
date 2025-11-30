@@ -295,8 +295,17 @@ elseif(WIN32)
 	    COMPONENT python_tk )
     endif()
 
+    # If we installed vulkan-1.dll, don't distribute it.
+    file(GLOB VULKAN_DLLS "${CMAKE_INSTALL_PREFIX}/bin/vulkan-.*\\.dll$")
+    foreach (_vulkan_dll ${VULKAN_DLLS})
+	message(STATUS "Removing ${_vulkan_dll}")
+	file(REMOVE ${_vulkan_dll})
+    endforeach()
+    
     # For Python, Poco, USD, FLTK, NDI, MSVC runtimes and FFmpeg
     file(GLOB MRV2_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*.dll"  )
+    # Remove any dll whose filename matches vulkan-*
+    list(FILTER MRV2_DLLS EXCLUDE REGEX ".*/vulkan-.*\\.dll$")
     
     install(FILES ${MRV2_DLLS}
     	DESTINATION bin/

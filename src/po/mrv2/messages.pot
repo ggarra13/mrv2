@@ -1701,6 +1701,21 @@ msgstr ""
 msgid "Stop streaming"
 msgstr ""
 
+msgid "Renderer"
+msgstr ""
+
+msgid "Complexity"
+msgstr ""
+
+msgid "Draw Mode"
+msgstr ""
+
+msgid "Stage Cache"
+msgstr ""
+
+msgid "Disk Cache in GB"
+msgstr ""
+
 msgid "Toggle other eye stereo image."
 msgstr ""
 
@@ -2604,7 +2619,6 @@ msgstr ""
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr ""
 
@@ -2664,28 +2678,34 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
+msgid "Rotated image info: {0}"
+msgstr ""
+
+msgid "Scaled image info: {0}"
+msgstr ""
+
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
 msgid "Image info: {0} {1}"
 msgstr ""
 
-msgid "Scaled image info: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
+msgstr ""
+
+msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
 msgid "Using preset {0}."
-msgstr ""
-
-msgid "Offscreen Buffer info: {0}"
-msgstr ""
-
-msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -2703,13 +2723,31 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr ""
+
+msgid "OpenGL info: {0}"
+msgstr ""
+
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Could not read image data from view"
+msgid "Unsupported output format"
+msgstr ""
+
+msgid "Empty video data at time {0}.  Repeating frame."
 msgstr ""
 
 msgid "Render size: {0}"
+msgstr ""
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr ""
+
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+msgid "Unsupported output format: "
 msgstr ""
 
 msgid ""
@@ -2772,11 +2810,9 @@ msgstr ""
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr ""
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
@@ -2789,7 +2825,6 @@ msgstr ""
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr ""
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr ""
 
@@ -2841,7 +2876,6 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr ""
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr ""
 
@@ -3388,7 +3422,6 @@ msgstr ""
 msgid "Could not save .otio file: {0}"
 msgstr ""
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr ""
 
@@ -3404,7 +3437,6 @@ msgstr ""
 msgid "Unknown media reference"
 msgstr ""
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr ""
 
@@ -3429,8 +3461,7 @@ msgstr ""
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
-#. ++-format
-msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgid "Could not read image data from view"
 msgstr ""
 
 msgid "Link/Open"
@@ -3572,16 +3603,13 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
-msgid "HDR monitor found."
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "Edit Text"
 msgstr ""
 
 msgid "'{0}' is not a file, directory or url."
+msgstr ""
+
+msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -3596,7 +3624,6 @@ msgstr ""
 msgid "Status is not saved"
 msgstr ""
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr ""
 
@@ -7287,9 +7314,6 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
-msgstr ""
-
-msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"
