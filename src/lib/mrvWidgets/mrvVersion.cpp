@@ -1221,8 +1221,10 @@ namespace mrv
             
             vkGetPhysicalDeviceProperties2(devices[i], &prop);
             VkPhysicalDeviceType t = prop.properties.deviceType;
-            o << "GPU " << i << ": " << prop.properties.deviceName
-              << " v" << FLTK_OUTPUT_VERSION(prop.properties.apiVersion);
+            const std::string& deviceName = prop.properties.deviceName;
+            o << "GPU " << i << ":\t" << deviceName
+              << "\tv" << FLTK_OUTPUT_VERSION(prop.properties.apiVersion)
+              << std::endl;
 
             uint32_t v = prop.properties.driverVersion;
             uint32_t major = VK_API_VERSION_MAJOR(v);
@@ -1232,12 +1234,16 @@ namespace mrv
             
 #ifdef _WIN32
             // On Windows NVIDIA uses a custom encoding:
-            major = (v >> 22) & 0x3ff;
-            minor = (v >> 14) & 0xff;
-            patch = (v >> 6) & 0xff;
-            build = v & 0x3f;
+            if (deviceName.find("NVIDIA") != std::string::npos)
+            {
+                major = (v >> 22) & 0x3ff;
+                minor = (v >> 14) & 0xff;
+                patch = (v >> 6) & 0xff;
+                build = v & 0x3f;
+            }
 #endif
-            o << "Driver version: " << major << "." << minor << "." << patch
+            o << "\tDriver version: "
+              << major << "." << minor << "." << patch
               << build
               << std::endl
               << std::endl;
