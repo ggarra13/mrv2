@@ -45,6 +45,9 @@ get_git_version
 #
 # These are some of the expensive mrv2 options
 #
+if [ -z "$MSYS2_INSTALL" ]; then
+    export MSYS2_INSTALL=ON
+fi
 if [ -z "$BUILD_GETTEXT" ]; then
     export BUILD_GETTEXT=OFF
 fi

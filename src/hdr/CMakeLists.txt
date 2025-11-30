@@ -82,7 +82,7 @@ install(TARGETS hdr
 #
 # Handle install
 #
-include(InstallRequiredSystemLibraries)
+# include(InstallRequiredSystemLibraries)
 
 
 if(TLRENDER_NDI)

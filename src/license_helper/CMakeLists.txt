@@ -19,7 +19,7 @@ set(SOURCES
 # Use static FLTK
 #
 set(LIBRARIES )
-list(APPEND LIBRARIES fltk::fltk)
+list(APPEND LIBRARIES fltk::fltk) # Use static FLTK, not shared one
 
 add_executable(license_helper WIN32 ${SOURCES} ${HEADERS})
 

@@ -11,16 +11,13 @@ if [[ !$RUNME ]]; then
     . ./etc/build_dir.sh
 fi
 
-if [[ ! -d $PWD/$BUILD_DIR/install ]]; then
-    mkdir -p $PWD/$BUILD_DIR/install
-fi
+echo "INSTALL Lcoal Cmake AT $PWD/$BUILD_DIR/install"
 
-if [[ -e $PWD/$BUILD_DIR/install/bin/cmake ]]; then
-    return
-fi
+mkdir -p $PWD/$BUILD_DIR/install
 
 
-echo "Will install it in $PWD/$BUILD_DIR/install.."
+
+echo "Will install it in $PWD/$BUILD_DIR/install/bin/.."
 if [[ $KERNEL == *Linux* ]]; then
     if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
 	CMAKE_PLATFORM=linux-aarch64
@@ -29,12 +26,22 @@ if [[ $KERNEL == *Linux* ]]; then
     fi
     CMAKE_EXT=tar.gz
 elif [[ $KERNEL == *Windows* ]]; then
+    if [[ -e $PWD/$BUILD_DIR/install/bin/cmake.exe ]]; then
+	echo "LOCAL CMAKE ALREADY INSTALLED"
+	return
+    fi
+
     if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
 	CMAKE_PLATFORM=windows-arm64
     else
 	CMAKE_PLATFORM=windows-x86_64
     fi
     CMAKE_EXT=zip
+fi
+
+if [[ -e $PWD/$BUILD_DIR/install/bin/cmake.exe ]]; then
+    echo "LOCAL CMAKE ALREADY INSTALLED"
+    return
 fi
 
 echo "Downloading cmake from:"

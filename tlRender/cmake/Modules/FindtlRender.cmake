@@ -192,7 +192,7 @@ mark_as_advanced(
     tlRender_tlVk_LIBRARY
     tlRender_glad_LIBRARY)
 
-set(tlRender_tlCore_LIBRARIES "OTIO::opentimelineio;Imath::Imath;Freetype::Freetype;nlohmann_json::nlohmann_json" )
+set(tlRender_tlCore_LIBRARIES "OTIO::opentimelineio;Imath::Imath;nlohmann_json::nlohmann_json" )
 set(tlRender_tlDraw_LIBRARIES "tlRender::tlCore")
 if (OpenColorIO_FOUND)
     list(APPEND tlRender_tlCore_LIBRARIES OpenColorIO::OpenColorIO)

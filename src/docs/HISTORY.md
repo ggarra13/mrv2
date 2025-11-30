@@ -18,12 +18,13 @@ Donationware prices of binary licenses through PayPal:
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
 
-I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
+I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you if you run into issues.
 
 - u$  25 for a Solo node-locked license for one year.
 - u$  50 for a Standard node-locked standard license for one year.
 - u$  75 for a Edit node-locked license with annotations and editing tools for one year.
 - u$ 150 for a Pro node-locked license to own.
+- u% 200 for a Pro node-locked license to own monthly .
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
@@ -35,6 +36,7 @@ The donationware version when running without a donation, does not have:
     - OpenEXR layer switching (available in Standard and later).
     - Edit (available in Edit and later)
     - Voice Annotations (available in Pro)
+    - Move license to a new machine (available in Pro monthly)
 
 Prices might change (go up or down) depending on competition and new features.
 
@@ -52,6 +54,7 @@ ChangeLog
 - Refactored Wayland's Always On Top hotkey code.
 - Added libwayland's version to Help/About.
 - Added Donate button on the license_helper, with simple donations.
+- Verified vmrv2 and mrv2 work on Kwin.
 
 
 v1.4.6

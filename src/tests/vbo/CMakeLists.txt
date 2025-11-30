@@ -35,6 +35,6 @@ install(TARGETS vbo
 #
 # Handle install
 #
-include(InstallRequiredSystemLibraries)
+# include(InstallRequiredSystemLibraries)
 
 

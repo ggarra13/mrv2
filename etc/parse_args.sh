@@ -102,7 +102,7 @@ fi
 if [[ -z $INSTALL_CMAKE ]]; then
     if [[ "$USER" == "User-PC" ||
 	      "$USER" == "gga" ]]; then
-	export INSTALL_CMAKE=0
+	export INSTALL_CMAKE=1
     else
 	export INSTALL_CMAKE=1
     fi

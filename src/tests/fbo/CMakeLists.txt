@@ -32,9 +32,5 @@ install(TARGETS fbo
     LIBRARY DESTINATION lib COMPONENT libraries
     ARCHIVE DESTINATION lib COMPONENT libraries )
 
-#
-# Handle install
-#
-include(InstallRequiredSystemLibraries)
 
 

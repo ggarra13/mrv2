@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v1.2.6)  # was 1.2.2
+set(FLTK_GIT_TAG v1.2.7)  # was 1.2.2
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_test) # Testing branch
 
@@ -25,13 +25,8 @@ else()
     set(FLTK_GIT_TAG master)
 endif()
 
-if(MRV2_PYFLTK OR FLTK_BUILD_SHARED)
-    # If we are building pyFLTK compile shared
-    set( FLTK_BUILD_SHARED_LIBS ON )  
-else()
-    # else compile static
-    set( FLTK_BUILD_SHARED_LIBS OFF ) 
-endif()
+# If we are building pyFLTK compile shared
+set( FLTK_BUILD_SHARED_LIBS ON )  
 
 set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
 
@@ -89,11 +84,17 @@ message(STATUS "FLTK DEPENDENCIES=${FLTK_DEPENDENCIES}")
 # Determine whether to build fltk-gl
 #
 set(FLTK_BUILD_GL ${TLRENDER_GL})
+if (FLTK_BUILD_GL)
+    message(STATUS "Build FLTK OpenGL ${FLTK_BUILD_GL}")
+endif()
 
 #
 # Determine whether to build fltk-vk
 #
 set(FLTK_BUILD_VK ${TLRENDER_VK})
+if (FLTK_BUILD_VK)
+    message(STATUS "Build FLTK Vulkan ${FLTK_BUILD_VK}")
+endif()
 
 set(FLTK_PATCH
 )
@@ -110,9 +111,6 @@ else()
     set(TLRENDER_WAYLAND ON)
     set(FLTK_USE_PANGO   ON)
 endif()
-
-
-message(STATUS "FLTK DEPENDENCIES: ${FLTK_DEPENDENCIES}")
 
     
 ExternalProject_Add(

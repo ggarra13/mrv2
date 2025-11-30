@@ -31,7 +31,7 @@
 params=$*
 
 export BUILD_ROOT=BUILD-ffmpeg-exr
-export CMAKE_BUILD_TYPE=Debug
+export CMAKE_BUILD_TYPE=Release
 
 #
 # Find out our build dir

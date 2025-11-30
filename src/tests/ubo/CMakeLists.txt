@@ -35,6 +35,6 @@ install(TARGETS ubo
 #
 # Handle install
 #
-include(InstallRequiredSystemLibraries)
+# include(InstallRequiredSystemLibraries)
 
 
