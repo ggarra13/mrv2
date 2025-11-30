@@ -42,6 +42,7 @@ endif()
 
 add_executable(mrv2 WIN32  ${SOURCES} ${HEADERS})
 
+
 target_link_libraries(mrv2 PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories(mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
 
@@ -66,6 +67,7 @@ install(TARGETS mrv2
     LIBRARY DESTINATION lib COMPONENT libraries
     ARCHIVE DESTINATION lib COMPONENT libraries )
 
+
 #
 # Handle translations
 #
@@ -79,8 +81,16 @@ include( ../../cmake/documentation.cmake )
 
 #
 # Handle install
-#
-include(InstallRequiredSystemLibraries)
+
+if (WIN32)
+    # set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS ON) # AI hallucination
+    # set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_VULKAN ON)
+    # set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION bin)
+    # include(InstallRequiredSystemLibraries)
+   install(FILES
+	   $<TARGET_RUNTIME_DLLS:mrv2>
+	   DESTINATION bin)
+endif()
 
 
 #
