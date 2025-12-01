@@ -291,15 +291,7 @@ elseif(WIN32)
 	    DESTINATION bin/Lib
 	    COMPONENT python_tk )
     endif()
-    
-    message( STATUS "Removing ${CMAKE_INSTALL_PREFIX}/bin/vulkan-1.dll")
-    file(GLOB VULKAN_DLLS "${CMAKE_INSTALL_PREFIX}/bin/vulkan-.*\\.dll")
-    message(STATUS "hdr VULKAN_DLLS=${VULKAN_DLLS}")
-    foreach (_vulkan_dll ${VULKAN_DLLS})
-	message(STATUS "mrv2: Removing ${_vulkan_dll}")
-	file(REMOVE ${_vulkan_dll})
-    endforeach()
-    
+        
     # For Python, Poco, USD, FLTK, NDI, MSVC runtimes and FFmpeg
     file(GLOB MRV2_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*.dll"  )
 

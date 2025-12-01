@@ -40,7 +40,7 @@ endif()
 
 set(LIBRARIES mrvUI mrvWidgets mrvCore ${FLTK_vk_LIBRARY} )
 set(LIBRARIES_PRIVATE )
-list(APPEND LIBRARIES tlRender::tlDraw tlRender::tlVk tlRender::tlTimeline tlRender::tlUI tlRender::tlTimelineUIVk tlRender::tlTimelineVk)
+list(APPEND LIBRARIES tlRender::tlDraw Vulkan::Vulkan tlRender::tlVk tlRender::tlTimeline tlRender::tlUI tlRender::tlTimelineUIVk tlRender::tlTimelineVk)
 
 add_library(mrvVk ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

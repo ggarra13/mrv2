@@ -18,14 +18,14 @@ set(SOURCE
     TextureAtlas.cpp
     Util.cpp)
 
-find_package(Vulkan REQUIRED)  # \@bug: \@todo: Should be CONFIG 
+find_package(Vulkan REQUIRED COMPONENTS glslang shaderc_combined SPIRV-Tools)  
 find_package(FLTK CONFIG REQUIRED)
 
-set(LIBRARIES tlCore)
-set(LIBRARIES_PRIVATE Vulkan::Vulkan)
+set(LIBRARIES tlCore Vulkan::Vulkan)
+set(LIBRARIES_PRIVATE )
 
 add_library(tlVk ${HEADERS} ${SOURCE})
-target_link_libraries(tlVk ${LIBRARIES} ${LIBRARIES_PRIVATE})
+target_link_libraries(tlVk PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(tlVk PROPERTIES FOLDER lib)
 set_target_properties(tlVk PROPERTIES PUBLIC_HEADER "${HEADERS}")
 
