@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v1.2.7)  # was 1.2.4
+set(FLTK_GIT_TAG v1.2.8)  # was 1.2.7 and 1.2.4 before that
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_test) # Testing branch
 

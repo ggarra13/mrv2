@@ -26,9 +26,7 @@ set(OpenJPH_ARGS
     -D OJPH_BUILD_EXECUTABLES=OFF
 )
 
-set(OpenJPH_PATCH ${CMAKE_COMMAND} -E copy_if_different
-    ${CMAKE_CURRENT_SOURCE_DIR}/patches/OpenJPH-patch/src/core/CMakeLists.txt
-    ${CMAKE_CURRENT_BINARY_DIR}/OpenJPH/src/OpenJPH/src/core/CMakeLists.txt)
+set(OpenJPH_PATCH )
 
 ExternalProject_Add(
     OpenJPH
