@@ -63,7 +63,6 @@ export TLRENDER_TIFF=ON
 export TLRENDER_VPX=ON
 export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON
-export TLRENDER_YASM=ON
 
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."

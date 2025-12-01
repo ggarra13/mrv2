@@ -298,10 +298,6 @@ if [ -z "$TLRENDER_X11" ]; then
     export TLRENDER_X11=${BUILD_X11}
 fi
 
-if [ -z "$TLRENDER_YASM" ]; then
-    export TLRENDER_YASM=ON
-fi
-
 if [ -z "$FLTK_BUILD_SHARED" ]; then
     export FLTK_BUILD_SHARED=${MRV2_PYFLTK}
     if [ -z "$FLTK_BUILD_SHARED" ]; then
@@ -406,7 +402,6 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
     echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
     echo "    libplacebo support ............. ${TLRENDER_LIBPLACEBO}         (TLRENDER_LIBPLACEBO)"
-    echo "    YASM assembler ................. ${TLRENDER_YASM} 	(TLRENDER_YASM)"
 fi
 echo
 
@@ -530,7 +525,6 @@ cmd="cmake -G '${CMAKE_GENERATOR}'
 	   -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND}
            -D TLRENDER_X11=${TLRENDER_X11}
            -D TLRENDER_X264=${TLRENDER_X264}
-	   -D TLRENDER_YASM=${TLRENDER_YASM}
 	   -D TLRENDER_PROGRAMS=OFF
 	   -D TLRENDER_EXAMPLES=FALSE
 	   -D TLRENDER_TESTS=FALSE

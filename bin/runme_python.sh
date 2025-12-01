@@ -49,7 +49,6 @@ export MRV2_PYBIND11=ON
 
 export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON
-export TLRENDER_YASM=OFF
 
 echo
 echo "Saving compile log to $BUILD_DIR/compile.log ..."

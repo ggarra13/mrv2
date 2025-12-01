@@ -111,17 +111,20 @@ jobs:
     - name: Build mrv2
       env:
         BUILD_PYTHON: OFF
+        MRV2_CPPTRACE: OFF
         MRV2_PYFLTK: OFF
         MRV2_PYBIND11: OFF
         MRV2_NETWORK: OFF
         MRV2_PDF: OFF
         MRV2_VK: ON
+        TLRENDER_AOV: OFF
         TLRENDER_AV1: OFF
         TLRENDER_EXR: ON
         TLRENDER_FFMPEG: ON
         TLRENDER_FFMPEG_MINIMAL: ON
         TLRENDER_HAP: OFF
         TLRENDER_JPEG: OFF
+        TLRENDER_LIBPLACEBO: OFF
         TLRENDER_NDI: OFF
         TLRENDER_NET: ON
         TLRENDER_OPENJPH: OFF
@@ -132,7 +135,6 @@ jobs:
         TLRENDER_TIFF: OFF
         TLRENDER_USD: OFF
         TLRENDER_VPX: OFF
-        TLRENDER_YASM: OFF
         
       run: |
         ./etc/runme_nolog.sh -v -t package clean
