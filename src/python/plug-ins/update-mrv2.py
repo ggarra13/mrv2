@@ -20,6 +20,7 @@ GITHUB_ASSET_RELEASE_DAYS = 3
 #
 import mrv2
 from mrv2 import cmd, plugin, session, settings
+from fltk import *
 
 try:
     import gettext
@@ -78,7 +79,7 @@ def run_subprocess(command):
 
         
 def fltk_check_callback(data):
-    """FLTK Function to periodically call Fl.check() and check subprocess status
+    """FLTK Function to periodically call fltk.check() and check subprocess status
 
     Args:
         data (list): [self, download_file]
@@ -91,7 +92,6 @@ def fltk_check_callback(data):
     global subprocess_result, install_progress
 
     import os, platform, time
-    from fltk import Fl
     
     this = data[0]
     download_file = data[1]
@@ -106,9 +106,9 @@ def fltk_check_callback(data):
         if install_progress > 40:
             print()
             install_progress = 0
-            Fl.check()
+            fltk.check()
     if subprocess_result is None:
-        Fl.repeat_timeout(1.0, fltk_check_callback, data)
+        fltk.repeat_timeout(1.0, fltk_check_callback, data)
     else:
         print(_("\n\nInstall completed with output:\n"),subprocess_result)
         
@@ -121,7 +121,7 @@ def fltk_check_callback(data):
                 try:
                     os.remove(download_file)
                     print(_('Removed temporary "') + download_file + '".')
-                    Fl.check()
+                    fltk.check()
                 except:
                     time.sleep(2) # Wait 2 seconds before trying again. 
                     pass
@@ -132,11 +132,11 @@ def fltk_check_callback(data):
         exe = this.get_installed_executable(download_file)
         if os.path.exists(exe):
             print(_('The new version of mrv2 was installed.'))
-            Fl.check()
+            fltk.check()
             if os.path.exists(download_file):
                 os.remove(download_file)
                 print(_('Removed temporary "') + download_file + '".')
-                Fl.check()
+                fltk.check()
             this.start_new_mrv2(download_file, kernel)
         else:
             if kernel == 'Windows':
@@ -150,6 +150,16 @@ def fltk_check_callback(data):
         
 cmd.update()
 
+def _show_download_file_cb(widget, args):
+    password_win = args[0]
+    password_win.hide()
+    download_file = args[1]
+    win = Fl_Window(640, 400, _('Downloaded file.  Do a Manual Install'))
+    box = Fl_Box(10, 10, 620, 380, download_file)
+    win.show()
+    while win.visible():
+        fltk.check()
+        
 def _get_password_cb(widget, args):
     """FLTK callback to get the secret password, hide the parent window and
     run the command to install the downloaded file with the sudo password.
@@ -158,13 +168,12 @@ def _get_password_cb(widget, args):
         widget (Fl_Widget): FLTK's secret input widget.
         args (list): [self, command, download_file]
     """
-    from fltk import Fl
     this    = args[0]
     command = args[1]
     download_file = args[2]
     password = widget.value()
     widget.parent().hide()
-    Fl.check()
+    fltk.check()
     this.install_as_admin(command, download_file, password)
 
 
@@ -179,9 +188,8 @@ def _ignore_cb(widget, args):
     Returns:
         None
     """
-    from fltk import Fl
     widget.parent().hide()
-    Fl.check()
+    fltk.check()
     
 
 cmd.update()
@@ -228,12 +236,11 @@ def _get_latest_release_cb(widget, args):
     Returns:
         None
     """
-    from fltk import Fl
     this = args[0]
     release_info = args[1]
     extension = this.get_download_extension()
     widget.parent().hide()
-    Fl.check()
+    fltk.check()
     found = False
     name = release_info['name']
     if name.endswith(extension):
@@ -348,9 +355,8 @@ class UpdatePlugin(plugin.Plugin):
     def start_subprocess_in_thread(self, command, download_file):
         # Start the timeout callback
         import threading
-        from fltk import Fl
         data = [ self, download_file ]
-        Fl.add_timeout(4.0, fltk_check_callback, data)
+        fltk.add_timeout(4.0, fltk_check_callback, data)
         threading.Thread(target=run_subprocess, args=(command,)).start()
 
                          
@@ -372,13 +378,12 @@ class UpdatePlugin(plugin.Plugin):
         """
         global subprocess_result
         import platform
-        from fltk import Fl
         cmd = None
         print(_('Trying to install'),download_file + '.')
         kernel = platform.system()
         if kernel != 'Windows':
             print(_('Please wait'), end='', flush=True)
-            Fl.check()
+            fltk.check()
         if kernel == 'Windows':
             cmd = r'Powershell -Command Start-Process "' + command + '" -Verb RunAs'
         elif kernel == 'Linux':
@@ -393,15 +398,6 @@ class UpdatePlugin(plugin.Plugin):
             return
 
         self.start_subprocess_in_thread(cmd, download_file)
-
-    def _show_download_file_cb(self, download_file):
-        from fltk import Fl, Fl_Window, Fl_Box, \
-            FL_ALIGN_CENTER, FL_ALIGN_INSIDE
-        win = Fl_Window(640, 400, _('Downloaded file.  Do a Manual Install'))
-        box = Fl_Box(10, 10, 620, 380, download_file)
-        win.show()
-        while win.visible():
-            Fl.check()
         
     def ask_for_password(self, command, download_file):
         """Open a FLTK window and secret input to enter a password for sudo
@@ -414,8 +410,6 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
            None
         """
-        from fltk import Fl, Fl_Window, Fl_Secret_Input, fl_rgb_color, \
-            FL_ALIGN_TOP, FL_WHEN_ENTER_KEY, FL_WHEN_NOT_CHANGED
         win = Fl_Window(640, 100, _('Enter Sudo Password or Close Window'))
         pwd = Fl_Secret_Input(20, 40, win.w() - 40, 40, _('Password'))
         pwd.textcolor(fl_rgb_color(0, 0, 0 ))
@@ -424,10 +418,10 @@ class UpdatePlugin(plugin.Plugin):
         pwd.callback(_get_password_cb, [self, command, download_file])
         win.end()
         win.set_non_modal()
-        win.callback(_show_download_file_cb, [self, download_file])
+        win.callback(_show_download_file_cb, [win, download_file])
         win.show()
         while win.visible():
-            Fl.check()
+            fltk.check()
             
 
     def install_download(self, download_file):
@@ -530,7 +524,6 @@ class UpdatePlugin(plugin.Plugin):
 
     def download_file(self, name, download_url):
         import os, requests
-        from fltk import Fl, Fl_Window, Fl_Progress, FL_ALIGN_TOP
         response = requests.get(download_url, stream=True)
         response.raise_for_status()  # Raise exception for non-200 status codes
         total_size = int(response.headers.get('content-length', 0))
@@ -544,7 +537,7 @@ class UpdatePlugin(plugin.Plugin):
         progress.maximum(total_size)
         progress.align(FL_ALIGN_TOP)
         window.show()
-        Fl.check()  # Ensure UI responsiveness
+        fltk.check()  # Ensure UI responsiveness
 
         # Create a temporary download file path
         download_file = os.path.join(self.tempdir, name)
@@ -552,14 +545,14 @@ class UpdatePlugin(plugin.Plugin):
         downloaded = 0
         with open(download_file, 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
-                Fl.check()  # Ensure UI responsiveness
+                fltk.check()  # Ensure UI responsiveness
                 if chunk:  # filter out keep-alive new chunks
                     downloaded += len(chunk)
                     f.write(chunk)
                     # Update UI with progress
                     progress.value(downloaded)
                     progress.redraw()
-                    Fl.flush()
+                    fltk.flush()
                     f.flush()
                     if not window.visible():
                         break
@@ -583,8 +576,6 @@ class UpdatePlugin(plugin.Plugin):
         Returns:
             None
         """
-        from fltk import Fl, Fl_Window, Fl_Text_Buffer, Fl_Text_Display, \
-            fl_rgb_color, Fl_Box, Fl_Button
         date = release_info['published_at']
         win = Fl_Window(640, 600)
         textbuf = Fl_Text_Buffer()
@@ -611,7 +602,7 @@ class UpdatePlugin(plugin.Plugin):
         win.set_non_modal()
         win.show()
         while win.visible():
-            Fl.check()
+            fltk.check()
 
 
     def compare_versions(self, version1, version2):
