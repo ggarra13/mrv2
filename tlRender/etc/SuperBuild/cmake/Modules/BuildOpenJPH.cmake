@@ -1,19 +1,34 @@
 include(ExternalProject)
 
 set(OpenJPH_GIT_REPOSITORY "https://github.com/aous72/OpenJPH.git")
-#set(OpenJPH_GIT_TAG "0.25.3") # broken
-set(OpenJPH_GIT_TAG "0.24.1") # was 0.24.1
+set(OpenJPH_GIT_TAG "0.25.3") # broken on OpenGL/Vulkan Linux ARM64
 
 set(OpenJPH_DEPENDENCIES ZLIB)
 message(STATUS "OpenJPH DEPENDENCIES=${OpenJPH_DEPENDENCIES}")
 
+# \@todo: Revisit after each release of OpenJPH
+set(OpenJPH_DISABLE_SIMD OFF)
+if ($ENV{ARCH} MATCHES ".*aarch64.*")
+    set(OpenJPH_DISABLE_SIMD ON)
+endif()
+    
 set(OpenJPH_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
+    -D OJPH_DISABLE_SIMD=${OpenJPH_DISABLE_SIMD}
+    #-D OJPH_DISABLE_SSE
+    #-D OJPH_DISABLE_SSE2
+    #-D OJPH_DISABLE_SSE3
+    #-D OJPH_DISABLE_AVX
+    #-D OJPH_DISABLE_AVX2
+    #-D OJPH_DISABLE_AVX412
+    #-D OJPH_DISABLE_NEON
     -D OJPH_ENABLE_TIFF_SUPPORT=OFF
     -D OJPH_BUILD_EXECUTABLES=OFF
 )
 
-set(OpenJPH_PATCH )
+set(OpenJPH_PATCH ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/patches/OpenJPH-patch/src/core/CMakeLists.txt
+    ${CMAKE_CURRENT_BINARY_DIR}/OpenJPH/src/OpenJPH/src/core/CMakeLists.txt)
 
 ExternalProject_Add(
     OpenJPH
