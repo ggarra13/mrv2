@@ -29,9 +29,8 @@ run_cmd()
     # Exit on error
     if [[ $status -ne 0 ]]; then
         echo "ERROR: command failed with exit code $status"
-        exit $status        # or: return $status if you want only the function to fail
-    fi
-    
+        exit $status  
+    fi    
 }
 
 

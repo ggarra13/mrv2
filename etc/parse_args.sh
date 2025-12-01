@@ -234,7 +234,7 @@ if [[ "$NOARGS" == "" ]]; then
 		exit 1
 		;;
 	    *)
-		echo "Unknown option: $i"
+		echo "Unknown option: $1"
 		show_help
 		exit 1
 	esac
