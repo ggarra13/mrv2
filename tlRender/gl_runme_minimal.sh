@@ -22,7 +22,6 @@ export TLRENDER_USD=OFF
 export TLRENDER_VPX=OFF
 export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON
-export TLRENDER_YASM=OFF
 
 export BUILD_DIR=_build-minimal
 
@@ -52,8 +51,7 @@ cmake ../etc/SuperBuild -D CMAKE_VERBOSE_MAKEFILE=ON \
       -D TLRENDER_USD=${TLRENDER_USD} \
       -D TLRENDER_VPX=${TLRENDER_VPX} \
       -D TLRENDER_WAYLAND=${TLRENDER_WAYLAND} \
-      -D TLRENDER_X11=${TLRENDER_X11} \
-      -D TLRENDER_YASM=${TLRENDER_YASM} \
+      -D TLRENDER_X11=${TLRENDER_X11}
 
 cmake --build . -j 17 --config Debug 2>&1 | tee ../compile_minimal.log
 
