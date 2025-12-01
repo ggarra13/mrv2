@@ -62,7 +62,7 @@ if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL")
 endif()
 
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
-    list(APPEND LIBRARIES mrvVk )
+    list(APPEND LIBRARIES mrvVk Vulkan::Vulkan)
 endif()
 
 if(MRV2_PDF)
