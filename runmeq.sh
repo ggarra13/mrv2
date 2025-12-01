@@ -32,6 +32,23 @@ if [[ ! -d $dir ]]; then
     exit 1
 fi
 
+
+if [[ "$KERNEL" == *Windows* && "$ARCH" == *amd64* ]]; then
+    root=$BUILD_DIR/mrv2/src/mrv2-build/
+    echo "**************** Where we find vulkan-1.dll"
+    grep vulkan-1.dll $root -rn
+    echo "**************** Finished looking for vulkan-1.dll"
+    dirs="$root/main/ $root/license_helper $root/hdr"
+    for _dir in $dirs; do
+	cmake_install=$_dir/cmake_install.cmake
+	if [[ -e $cmake_install ]]; then
+	    echo "------------------------------- START $cmake_install"
+	    cat $cmake_install
+	    echo "------------------------------- END $cmake_install"
+	fi
+    done
+fi
+
 if [[ "$CMAKE_TARGET" == "package" ]]; then  
     # Needed to to force a relink and update build info.
     touch src/lib/mrvWidgets/mrvVersion.cpp
@@ -68,22 +85,6 @@ if [[ "$CMAKE_TARGET" == "mo" ]]; then
     export CMAKE_TARGET=install
 
     cd -
-fi
-
-if [[ "$KERNEL" == *Windows* ]]; then
-    root=$BUILD_DIR/mrv2/src/mrv2-build/
-    echo "**************** Where we find vulkan-1.dll"
-    grep vulkan-1.dll $root -rn
-    echo "**************** Finished looking for vulkan-1.dll"
-    dirs="$root/main/ $root/license_helper $root/hdr"
-    for _dir in $dirs; do
-	cmake_install=$_dir/cmake_install.cmake
-	if [[ -e $cmake_install ]]; then
-	    echo "------------------------------- START $cmake_install"
-	    cat $cmake_install
-	    echo "------------------------------- END $cmake_install"
-	fi
-    done
 fi
 
 
