@@ -78,8 +78,8 @@ if [[ "$CMAKE_TARGET" == "mo" ]]; then
     
     cd $dir
     
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t pot
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t pot
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
 
     sleep 5
     export CMAKE_TARGET=install
@@ -92,7 +92,7 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
     
     cd $dir
 	
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
     cd -
 fi

@@ -546,6 +546,7 @@ run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
 cd -
 
 if [[ "$CMAKE_TARGET" == "package" ]]; then
+    echo ".mo files creation"
     #
     # When packaging, run mo target first.
     #
@@ -564,6 +565,7 @@ if [[ "$CMAKE_TARGET" == "" ]]; then
     export CMAKE_TARGET="install"
 fi
 
+echo "Build target ${CMAKE_TARGET}"
 cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t ${CMAKE_TARGET}"
 run_cmd $cmd
 
