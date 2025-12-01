@@ -80,12 +80,13 @@ include( ../../cmake/documentation.cmake )
 
 
 #
-# Handle install
-
+# Handle install of DLLs for mrv2
+#
 if (WIN32)
-   install(FILES
-	   $<TARGET_RUNTIME_DLLS:mrv2>
-	   DESTINATION bin)
+    add_custom_command(TARGET mrv2 POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:mrv2> $<TARGET_RUNTIME_DLLS:mrv2>
+	COMMAND_EXPAND_LISTS
+    )
 endif()
 
 
