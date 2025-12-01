@@ -39,7 +39,7 @@ elif [[ $KERNEL == *Windows* ]]; then
     CMAKE_EXT=zip
 fi
 
-if [[ -e $PWD/$BUILD_DIR/install/bin/cmake.exe ]]; then
+if [[ -e $PWD/$BUILD_DIR/install/bin/cmake ]]; then
     echo "LOCAL CMAKE ALREADY INSTALLED"
     return
 fi
