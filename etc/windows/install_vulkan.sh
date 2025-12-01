@@ -3,6 +3,10 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#
+# This script needs to be run with Administrator rights.
+#
+
 . etc/build_dir.sh
 
 if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then

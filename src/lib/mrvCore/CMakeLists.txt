@@ -84,13 +84,16 @@ if (TLRENDER_NET)
 endif()
 
 if( WIN32 )
+    list( APPEND HEADERS
+	mrvEnv.h
+	mrvFileManager.h)
+    list( APPEND SOURCES
+	mrvEnv.cpp
+	mrvFileManager.cpp
+	mrvEnv.cpp )
     if (MRV2_CPPTRACE)
-	list( APPEND HEADERS
-	    mrvEnv.h)
 	list( APPEND SOURCES
-	    win32/mrvSignalHandler.cpp
-            mrvFileManager.cpp
-	    mrvEnv.cpp )
+	    win32/mrvSignalHandler.cpp)
 	list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)
     endif()
 elseif( APPLE )

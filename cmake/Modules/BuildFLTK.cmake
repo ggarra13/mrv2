@@ -25,7 +25,7 @@ else()
     set(FLTK_GIT_TAG master)
 endif()
 
-# If we are building pyFLTK compile shared
+# If we are building pyFLTK compile shared too.  FLTK compiles statically for fluid.
 set( FLTK_BUILD_SHARED_LIBS ON )  
 
 set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
@@ -35,8 +35,8 @@ set( FLTK_C_FLAGS ${CMAKE_C_FLAGS})
 set( FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
 if(APPLE)
-    set(FLTK_C_COMPILER /usr/bin/cc)
-    set(FLTK_CXX_COMPILER /usr/bin/c++)
+    set(FLTK_C_COMPILER ${NATIVE_C_COMPILER})
+    set(FLTK_CXX_COMPILER ${NATIVE_CXX_COMPILER})
 elseif(WIN32)
     set(FLTK_C_COMPILER ${NATIVE_C_COMPILER})
     set(FLTK_CXX_COMPILER ${NATIVE_CXX_COMPILER})
@@ -85,7 +85,7 @@ message(STATUS "FLTK DEPENDENCIES=${FLTK_DEPENDENCIES}")
 #
 set(FLTK_BUILD_GL ${TLRENDER_GL})
 if (FLTK_BUILD_GL)
-    message(STATUS "Build FLTK OpenGL ${FLTK_BUILD_GL}")
+    message(STATUS "FLTK BUILD OpenGL ${FLTK_BUILD_GL}")
 endif()
 
 #
@@ -93,7 +93,7 @@ endif()
 #
 set(FLTK_BUILD_VK ${TLRENDER_VK})
 if (FLTK_BUILD_VK)
-    message(STATUS "Build FLTK Vulkan ${FLTK_BUILD_VK}")
+    message(STATUS "FLTK BUILD Vulkan ${FLTK_BUILD_VK}")
 endif()
 
 set(FLTK_PATCH
