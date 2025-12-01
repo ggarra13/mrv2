@@ -2,6 +2,25 @@
 #include <FL/platform.H>
 #include <mrvMainWindow.h>
 
+// X11 has conflicting macros, so we include them last
+#if defined(FLTK_USE_X11)
+#    include <unistd.h>
+#    include <sys/time.h>
+#    include <X11/Xlib.h>
+
+namespace
+{
+    void mrv2_XSendEvent(
+        Display* display, Window target_window, Bool value, int mask,
+        XEvent* event)
+    {
+        XSendEvent(display, target_window, value, mask, event);
+        XFlush(display);
+    }
+}
+
+#endif
+
 #if !defined(__APPLE__)
     void MainWindow::always_on_top()
     {
