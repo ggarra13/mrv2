@@ -36,7 +36,7 @@ set( FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
 if(APPLE)
     set(FLTK_C_COMPILER /usr/bin/cc)
-    set(FLTK_CXX_COMPILER /usr/bin/cc)
+    set(FLTK_CXX_COMPILER /usr/bin/c++)
 elseif(WIN32)
     set(FLTK_C_COMPILER ${NATIVE_C_COMPILER})
     set(FLTK_CXX_COMPILER ${NATIVE_CXX_COMPILER})
