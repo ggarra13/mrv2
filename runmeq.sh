@@ -76,8 +76,8 @@ if [[ "$KERNEL" == *Windows* ]]; then
     grep vulkan-1.dll $root -rn
     echo "**************** Finished looking for vulkan-1.dll"
     dirs="$root/main/ $root/license_helper $root/hdr"
-    for dir in $dirs; do
-	cmake_install=$dir/cmake_install.cmake
+    for _dir in $dirs; do
+	cmake_install=$_dir/cmake_install.cmake
 	if [[ -e $cmake_install ]]; then
 	    echo "------------------------------- START $cmake_install"
 	    cat $cmake_install
