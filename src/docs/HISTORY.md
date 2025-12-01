@@ -53,6 +53,7 @@ ChangeLog
 - Added support for pen/tablet on macOS (tested).
 - Refactored Wayland's Always On Top hotkey code.
 - Added libwayland's version to Help/About.
+- Added Vulkan's GPU card and driver versions to Help/About (HW tab).
 - Added Donate button on the license_helper, with simple donations.
 - Verified vmrv2 and mrv2 work on Kwin.
 - Fixed distributing libvulkan.so on Unix and vulkan-1.dll on Windows.  macOS
