@@ -260,6 +260,7 @@ fi
 if [ -z "$TLRENDER_VK" ]; then
     if [ -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
 	export TLRENDER_VK=ON
+	export TLRENDER_GL=OFF
 	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
     else
 	export TLRENDER_VK=OFF

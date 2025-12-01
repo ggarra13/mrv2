@@ -59,6 +59,15 @@ ChangeLog
 - Fixed distributing libvulkan.so on Unix and vulkan-1.dll on Windows.  macOS
   needs distributing as it does not come with the OS unless installed from
   brew.
+- One feature of FLTK's python has changed.  You can no longer use:
+      ```from fltk import Fl
+        Fl.check()```
+  as the Fl module is gone.  It is replaced by:
+     ```import fltk
+      fltk.check```
+- Fixed libjpeg-turbo compilation on aarch64 runners.
+- Fixed OpenJPH compilation on aarch64 runners.
+- Made Vulkan compilation faster skipping OpenGL's tlRender files.
 
 
 v1.4.6
