@@ -5,6 +5,7 @@
 
 set(HEADERS
     mrvFile.h
+    mrvMainWindow.h
     mrvOS.h
     mrvString.h
 )
@@ -14,6 +15,12 @@ set(SOURCES
     mrvOS.cpp
     mrvString.cpp
 )
+
+if (APPLE)
+    list(APPEND SOURCES mrvMainWindow.mm)
+else()
+    list(APPEND SOURCES mrvMainWindow.cpp)
+endif()
 
 #
 # Use static FLTK

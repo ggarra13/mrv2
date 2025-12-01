@@ -2,13 +2,12 @@
 #define _(x) x  // for now
 
 #include "mrvFile.h"
+#include "mrvMainWindow.h"
 #include "mrvOS.h"
-
 
 #include <FL/fl_ask.H>
 #include <FL/filename.H>
 #include <FL/fl_utf8.h>
-#include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Flex.H>
@@ -209,12 +208,13 @@ static void exit_cb(Fl_Widget* b, void* data)
     exit(1);
 }
 
+
+
 int main(int argc, char** argv)
 {
     const std::string machine_id = get_machine_id();
     
-    Fl_Double_Window win(640, 640, _("License helper"));
-
+    MainWindow win(640, 640, _("License helper"));
     win.begin();
 
     Fl_Tabs*    tabs = new Fl_Tabs(20, 30, 600, 640);
@@ -347,6 +347,7 @@ Contact ggarra13@@gmail.com)TEXT"));
     
     win.end();               
     win.show();
+    win.always_on_top();
     return Fl::run();
 }
 
