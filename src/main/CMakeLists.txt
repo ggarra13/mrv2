@@ -82,12 +82,12 @@ include( ../../cmake/documentation.cmake )
 #
 # Handle install of DLLs for mrv2
 #
-if (WIN32)
-    add_custom_command(TARGET mrv2 POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:mrv2> $<TARGET_RUNTIME_DLLS:mrv2>
-	COMMAND_EXPAND_LISTS
-    )
-endif()
+# if (WIN32)
+#     add_custom_command(TARGET mrv2 POST_BUILD
+# 	COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:mrv2> $<TARGET_RUNTIME_DLLS:mrv2>
+# 	COMMAND_EXPAND_LISTS
+#     )
+# endif()
 
 
 #
@@ -141,17 +141,17 @@ if(TLRENDER_NDI)
     if (WIN32)
 	if (TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
 	    # Advanced lib is ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll
-	    file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll )
+	    file( GLOB MRV2_LIB_DLLS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll )
 	else()
 	    # Normal lib is ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll
-	    file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll )
+	    file( GLOB MRV2_LIB_DLLS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll )
 	endif()
-	install( FILES  ${MRV2_LIB_DYLIBS}
+	install( FILES  ${MRV2_LIB_DLLS}
 	    DESTINATION bin
 	    COMPONENT applications )
     elseif (APPLE)
-	file( GLOB MRV2_LIB_DYLIBS ${TLRENDER_NDI_SDK}/lib/macOS/*.dylib* )
-	install( FILES ${MRV2_LIB_DYLIBS}
+	file( GLOB MRV2_LIB_DLLS ${TLRENDER_NDI_SDK}/lib/macOS/*.dylib* )
+	install( FILES ${MRV2_LIB_DLLS}
 	    DESTINATION lib
 	    COMPONENT applications )
     elseif(UNIX)

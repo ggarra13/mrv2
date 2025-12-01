@@ -536,7 +536,7 @@ cmd="cmake -G 'Ninja'
 
 time run_cmd $cmd
 
-time run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE
+time run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE --target all
 
 cd -
 
