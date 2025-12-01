@@ -22,10 +22,14 @@ set(libjpeg-turbo_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_PREFIX}/lib
     -DENABLE_SHARED=${libjpeg-turbo_ENABLE_SHARED}
-    -DENABLE_STATIC=${libjpeg-turbo_ENABLE_STATIC})
+    -DENABLE_STATIC=${libjpeg-turbo_ENABLE_STATIC}
+    -DWITH_TESTS=OFF
+    -DWITH_TOOLS=OFF)
 if(NOT WIN32)
     if (NOT "$ENV{ARCH}" MATCHES ".*aarch64.*")
 	list(APPEND libjpeg-turbo_ARGS -DCMAKE_ASM_NASM_COMPILER=${CMAKE_INSTALL_PREFIX}/bin/nasm)
+     else()	    
+	list(APPEND libjpeg-turbo_ARGS -DWITH_SIMD=OFF)
     endif()
     if(NOT APPLE)
 	list(APPEND libjpeg-turbo_ARGS -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
