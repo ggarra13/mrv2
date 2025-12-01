@@ -240,7 +240,7 @@ with your Paypal donation of:)TEXT"));
 USD $ 50  Standard
 USD $ 75  Edit    
 USD $150  Pro
-USD $300  Pro Monthly
+USD $300  Pro+ (Monthly)
 
 to ggarra13@@gmail.com)TEXT"));
 
@@ -250,7 +250,7 @@ to ggarra13@@gmail.com)TEXT"));
 		Standard	    Solo + OpenEXR layers + Python
 		Edit			Standard + Editing
 		Pro			Edit + Voice Annotations
-        Pro Monthly         Pro (change your machine[s] as you want)
+        Pro+        Pro + change your machine[s] as you want
 		)TEXT");
         what->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
 

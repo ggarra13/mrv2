@@ -168,7 +168,7 @@ namespace
 
     void activatePlan(const std::string& plan)
     {
-        if (plan == "Pro")
+        if (plan == "Pro" or plan == "Pro+")
         {
             mrv::App::supports_annotations = true;
             mrv::App::supports_editing = true;
