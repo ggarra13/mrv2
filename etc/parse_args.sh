@@ -82,7 +82,10 @@ if [[ -z $TLRENDER_X264 ]]; then
 fi
 
 if [[ -z $CMAKE_OSX_ARCHITECTURES ]]; then
-    export CMAKE_OSX_ARCHITECTURES=""
+    export CMAKE_OSX_ARCHITECTURES="x86_64"
+    if [[ $ARCH == *arm64* ]]; then
+	export CMAKE_OSX_ARCHITECTURES="arm64"
+    fi
 fi
 if [[ -z $CMAKE_VERBOSE_MAKEFILE ]]; then
     export CMAKE_VERBOSE_MAKEFILE=OFF
