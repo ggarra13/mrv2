@@ -5,8 +5,10 @@ set(libjpeg-turbo_GIT_TAG "3.1.0") # was 3.0.0
 
 set(libjpeg-turbo_DEPENDENCIES ZLIB)
 if(NOT WIN32)
-    set(libjpeg-turbo_DEPENDENCIES ${libjpeg-turbo_DEPENDENCIES} NASM)
-endif()
+    if (NOT "$ENV{ARCH}" MATCHES ".*aarch64.*")
+       set(libjpeg-turbo_DEPENDENCIES ${libjpeg-turbo_DEPENDENCIES}  NASM)
+    endif()
+endif()		
 message(STATUS "libjpeg-turbo DEPENDENCIES=${libjpeg-turbo_DEPENDENCIES}")
 
 set(libjpeg-turbo_ENABLE_SHARED ON)
@@ -29,6 +31,8 @@ if(NOT WIN32)
 	list(APPEND libjpeg-turbo_ARGS -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
     endif()
 endif()
+
+message(STATUS "libjpeg-turbo ARGS=${libjpeg-turbo_ARGS}")
 
 ExternalProject_Add(
     libjpeg-turbo

@@ -4,14 +4,14 @@ project(mrv2)
 
 cmake_policy(SET CMP0091 NEW)
 cmake_policy(SET CMP0114 NEW)
-if( POLICY CMP0135 )
+if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
 if(APPLE)
-    message( STATUS "-------------------------------------------------" )
-    message( STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}" )
-    message( STATUS "-------------------------------------------------" )
+    message(STATUS "-------------------------------------------------")
+    message(STATUS "Building for macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}")
+    message(STATUS "-------------------------------------------------")
 endif()
 
 #
