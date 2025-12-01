@@ -15,22 +15,23 @@ run_cmd()
 {
     echo "> $@"
     # These quick commands we won't time them
-    if [[ "$1" == "rm" || "$1" == "mv" || "$1" == "cp" || \
-	      "$1" == "ln" ]]; then
-	command "$@"
-        status=$?                     # exit status of *command*
-    else	
-        # Run with time, capturing the actual command's exit code
-        { time command "$@"; }        # execute
-        status=$?                     # exit status of *command*, not time
-        echo
-    fi
+    case "$1" in
+        rm|mv|cp|ln|mkdir|touch)  # add more if you want
+            command "$@"
+            status=$?
+            ;;
+        *)  
+            eval command "$@"
+            status=$?
+	    echo
+	    ;;
+    esac
 
     # Exit on error
     if [[ $status -ne 0 ]]; then
         echo "ERROR: command failed with exit code $status"
         exit $status  
-    fi    
+    fi
 }
 
 
