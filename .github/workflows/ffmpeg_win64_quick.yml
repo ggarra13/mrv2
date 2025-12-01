@@ -74,6 +74,16 @@ jobs:
       run: |
         echo "Machine name: $RUNNER_NAME"
 
+    # Install Vulkan SDK
+    - name: Install Vulkan SDK
+      run: |
+
+        . ./etc/windows/install_vulkan.sh
+        
+        # Persist environment variables for subsequent steps
+        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+
     - name: Setup environment
       run: mkdir -p ssh
       
@@ -139,6 +149,10 @@ jobs:
       run: |
         ./etc/runme_nolog.sh -v -t package clean
         
+    - name: Upload binaries 
+      run: |
+        ./bin/release/upload_sourceforge.sh
+
     # - name: Upload Beta Release
     #   uses: softprops/action-gh-release@v2
     #   with:

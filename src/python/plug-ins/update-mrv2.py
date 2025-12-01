@@ -394,6 +394,15 @@ class UpdatePlugin(plugin.Plugin):
 
         self.start_subprocess_in_thread(cmd, download_file)
 
+    def _show_download_file_cb(self, download_file):
+        from fltk import Fl, Fl_Window, Fl_Box, \
+            FL_ALIGN_CENTER, FL_ALIGN_INSIDE
+        win = Fl_Window(640, 400, _('Downloaded file.  Do a Manual Install'))
+        box = Fl_Box(10, 10, 620, 380, download_file)
+        win.show()
+        while win.visible():
+            Fl.check()
+        
     def ask_for_password(self, command, download_file):
         """Open a FLTK window and secret input to enter a password for sudo
         access.
@@ -407,7 +416,7 @@ class UpdatePlugin(plugin.Plugin):
         """
         from fltk import Fl, Fl_Window, Fl_Secret_Input, fl_rgb_color, \
             FL_ALIGN_TOP, FL_WHEN_ENTER_KEY, FL_WHEN_NOT_CHANGED
-        win = Fl_Window(320, 100, _('Enter Sudo Password'))
+        win = Fl_Window(640, 100, _('Enter Sudo Password or Close Window'))
         pwd = Fl_Secret_Input(20, 40, win.w() - 40, 40, _('Password'))
         pwd.textcolor(fl_rgb_color(0, 0, 0 ))
         pwd.align(FL_ALIGN_TOP)
@@ -415,6 +424,7 @@ class UpdatePlugin(plugin.Plugin):
         pwd.callback(_get_password_cb, [self, command, download_file])
         win.end()
         win.set_non_modal()
+        win.callback(_show_download_file_cb, [self, download_file])
         win.show()
         while win.visible():
             Fl.check()
