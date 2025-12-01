@@ -171,15 +171,13 @@ function(create_translation_for TARGET SOURCES)
     if(UNIX AND NOT APPLE)
 	set(_abspot_dep ${TARGET} )
     endif()
-    if (_abspot_dep)
-	add_custom_target(
-	    ${_pot_target}
-	    COMMAND xgettext --package-name=${TARGET} --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d ${TARGET} -c++ -k_ ${SOURCES} -o "${_absPotFile}"
-	    WORKING_DIRECTORY "${ROOT_DIR}/lib"
-	    COMMENT Running xgettext for ${TARGET}_pot target
-	    DEPENDS ${_abspot_dep}
-	)
-    endif()
+    add_custom_target(
+	${_pot_target}
+	COMMAND xgettext --package-name=${TARGET} --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d ${TARGET} -c++ -k_ ${SOURCES} -o "${_absPotFile}"
+	WORKING_DIRECTORY "${ROOT_DIR}/lib"
+	COMMENT Running xgettext for ${TARGET}_pot target
+	DEPENDS ${_abspot_dep}
+    )
 
     #
     # Send the variables to the PARENT_SCOPE (ie. outside the function)
