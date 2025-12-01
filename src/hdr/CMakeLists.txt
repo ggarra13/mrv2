@@ -43,7 +43,10 @@ set(LIBRARIES
     mrvHDR
     ${Intl_LIBRARIES})
 
+find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
+
 list(APPEND LIBRARIES ${FLTK_LIBRARIES})
+list(APPEND LIBRARIES_PRIVATE Vulkan::Vulkan)
 
 if(WIN32)
     list(APPEND LIBRARIES dxgi)

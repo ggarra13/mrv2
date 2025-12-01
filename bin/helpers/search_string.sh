@@ -9,4 +9,4 @@
 #
 
 echo "Searching for '$1'..."
-grep -rn --exclude-dir='BUILD-*' --exclude-dir='.git' --exclude-dir 'Linux-*' --exclude-dir 'Windows-*' --exclude-dir 'Darwin-*'  --exclude-dir='tlRender' --exclude-dir='doc*' --exclude-dir='.github' "$1"
+grep -rn --exclude-dir='BUILD-*' --exclude-dir='.git' --exclude-dir 'Linux-*' --exclude-dir 'Windows-*' --exclude-dir 'Darwin-*'  --exclude-dir='tlRender' --exclude-dir='doc*' --exclude-dir='.github' --exclude-dir "src/po/mrv2" --exclude-dir "talks" "$1"
