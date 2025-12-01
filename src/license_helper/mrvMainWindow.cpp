@@ -30,7 +30,7 @@
                 ev.xclient.window = fl_x11_xid(this);
                 ev.xclient.message_type = net_wm_state;
                 ev.xclient.format = 32;
-            ev.xclient.data.l[0] = value;
+            ev.xclient.data.l[0] = 1;
             ev.xclient.data.l[1] = net_wm_state_above;
             ev.xclient.data.l[2] = 0;
             mrv2_XSendEvent(
