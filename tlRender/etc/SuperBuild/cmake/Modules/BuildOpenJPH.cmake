@@ -1,8 +1,8 @@
 include(ExternalProject)
 
 set(OpenJPH_GIT_REPOSITORY "https://github.com/aous72/OpenJPH.git")
-#set(OpenJPH_GIT_TAG "0.25.0") # broken
-set(OpenJPH_GIT_TAG "0.25.3") # was 0.24.1
+#set(OpenJPH_GIT_TAG "0.25.3") # broken
+set(OpenJPH_GIT_TAG "0.24.1") # was 0.24.1
 
 set(OpenJPH_DEPENDENCIES ZLIB)
 message(STATUS "OpenJPH DEPENDENCIES=${OpenJPH_DEPENDENCIES}")
