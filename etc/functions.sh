@@ -17,11 +17,21 @@ run_cmd()
     # These quick commands we won't time them
     if [[ "$1" == "rm" || "$1" == "mv" || "$1" == "cp" || \
 	      "$1" == "ln" ]]; then
-	eval command "$@"
-    else
-	time eval command "$@"
-	echo
+	command "$@"
+        status=$?                     # exit status of *command*
+    else	
+        # Run with time, capturing the actual command's exit code
+        { time command "$@"; }        # execute
+        status=$?                     # exit status of *command*, not time
+        echo
     fi
+
+    # Exit on error
+    if [[ $status -ne 0 ]]; then
+        echo "ERROR: command failed with exit code $status"
+        exit $status        # or: return $status if you want only the function to fail
+    fi
+    
 }
 
 
