@@ -28,7 +28,6 @@ set(HEADERS
     mrvPixelConverter.h
     mrvRoot.h
     mrvSequence.h
-    mrvSignalHandler.h
     mrvStackTrace.h
     mrvString.h
     mrvTimeObject.h
@@ -90,9 +89,11 @@ if( WIN32 )
     list( APPEND SOURCES
 	mrvEnv.cpp
 	mrvFileManager.cpp
-	mrvEnv.cpp )
+	mrvEnv.cpp)
     if (MRV2_CPPTRACE)
-	list( APPEND SOURCES
+	list(APPEND HEADERS
+	    mrvSignalHandler.h)
+	list(APPEND SOURCES
 	    win32/mrvSignalHandler.cpp)
 	list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)
     endif()

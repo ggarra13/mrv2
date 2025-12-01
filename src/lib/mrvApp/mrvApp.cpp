@@ -32,7 +32,10 @@ namespace py = pybind11;
 #include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvRoot.h"
-#include "mrvCore/mrvSignalHandler.h"
+
+#ifdef MRV2_CPPTRACE
+#  include "mrvCore/mrvSignalHandler.h"
+#endif
 
 #include "mrvFl/mrvContextObject.h"
 #include "mrvFl/mrvInit.h"
@@ -136,9 +139,10 @@ namespace mrv
 #ifndef __APPLE__
     // Apple has a kickass system handler and backtrace functions as part of
     // the OS.  No need for that there.
+#  ifdef MRV2_CPPTRACE
     static SignalHandler signalHandler;
+#  endif
 #endif
-
     namespace
     {
         const float kLicenseTimeout = 110;
