@@ -110,9 +110,10 @@ if (NOT ${Python_VERSION})
 endif()
 
 set(pyFLTK_ARGS )
-if(NOT TLRENDER_GL)
-    list(APPEND pyFLTK_ARGS --disable-gl)
-endif()
+# \@todo: we keep opengl for now.
+# if(NOT TLRENDER_GL)
+#     list(APPEND pyFLTK_ARGS --disable-gl)
+# endif()
 # Commands for configure, build and install
 set(pyFLTK_CONFIGURE
     COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install setuptools

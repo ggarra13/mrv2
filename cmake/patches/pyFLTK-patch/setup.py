@@ -282,7 +282,7 @@ if not (sys.platform == 'win32'):
     if not doOpenGL:
         # disable OpenGL support
         print("FLTK was configured without OpenGL support!")
-        UserDefinedSources.append('./src/Fl_Gl_Stubs.cxx')
+        #UserDefinedSources.append('./src/Fl_Gl_Stubs.cxx')
         compile_arg_list.append("-DDO_NOT_USE_OPENGL")
     else:
         print("FLTK was configured with OpenGL support!")
