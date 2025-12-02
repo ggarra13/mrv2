@@ -34,8 +34,12 @@ if(NOT WIN32)
     if(NOT APPLE)
 	list(APPEND libjpeg-turbo_ARGS -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
     endif()
+endif(NOT WIN32)
+if (WIN32)
+    if ("$ENV{ARCH}" MATCHES ".*aarch64.*")
+	list(APPEND libjpeg-turbo_ARGS -DWITH_SIMD=OFF)
+    endif()
 endif()
-
 message(STATUS "libjpeg-turbo ARGS=${libjpeg-turbo_ARGS}")
 
 ExternalProject_Add(
