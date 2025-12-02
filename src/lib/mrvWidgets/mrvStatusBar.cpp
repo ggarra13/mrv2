@@ -34,10 +34,8 @@ namespace mrv
     {
         std::string label = _("Everything OK. ");
         label += os::getDesktop();
-#ifdef TLRENDER_GL
         const std::string gpu = os::getGPUVendor();
         label += " - " + gpu;
-#endif
         if (gpu == _("GPU: Unknown"))
             Fl::repeat_timeout(1.0, (Fl_Timeout_Handler)all_ok_cb, this);
         

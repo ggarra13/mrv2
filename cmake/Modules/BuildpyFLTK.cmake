@@ -47,17 +47,23 @@ set(pyFLTK_PATCH
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/x.i"
     "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
-    
-    # For avoiding deprecated Fl.idle
-    COMMAND
-    ${CMAKE_COMMAND} -E copy_if_different
-    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/fltk/fltk.py"
-    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/fltk/"
 
     # For avoiding check of fltk version as we are now compiling v1.5.0
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/fltk.i"
+    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
+    
+    # For _fltk.idle
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/py_idle.i"
+    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
+    
+    # For _fltk.idle
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/pyFinalize.i"
     "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
 
     # For avoiding depreacated fl_ask
