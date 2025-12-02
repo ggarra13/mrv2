@@ -68,6 +68,7 @@ ChangeLog
 - Fixed libjpeg-turbo compilation on aarch64 runners.
 - Fixed OpenJPH compilation on aarch64 runners.
 - Made Vulkan compilation faster skipping OpenGL's tlRender files.
+- Added downloading only when updating mrv2 or vmrv2.
 
 v1.4.6
 ======
