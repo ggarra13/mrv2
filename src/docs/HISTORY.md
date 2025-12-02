@@ -69,7 +69,6 @@ ChangeLog
 - Fixed OpenJPH compilation on aarch64 runners.
 - Made Vulkan compilation faster skipping OpenGL's tlRender files.
 
-
 v1.4.6
 ======
 
