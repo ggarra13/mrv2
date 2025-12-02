@@ -16,7 +16,8 @@ set(SOURCES
 
 hdr_files_to_absolute_paths()
 
-set(LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES} ${Intl_LIBRARIES})
+find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
+set(LIBRARIES ${FLTK_vk_LIBRARY} Vulkan::Vulkan ${FLTK_LIBRARIES} ${Intl_LIBRARIES})
 
 if( APPLE )
     set(OSX_FRAMEWORKS "-framework IOKit")
