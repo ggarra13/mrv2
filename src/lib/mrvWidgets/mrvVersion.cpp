@@ -104,7 +104,7 @@
 #    include <rtaudio/RtAudio.h>
 #endif
 
-#if defined(TLRENDER_GL) && defined(OPENGL_BACKEND)
+#if defined(OPENGL_BACKEND)
 #    include <tlGL/Init.h>
 #    include "mrvGL/mrvGLErrors.h" // defines glGetString and GL_VERSION
 #endif
