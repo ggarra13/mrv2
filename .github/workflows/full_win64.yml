@@ -74,7 +74,8 @@ jobs:
       run: |
         echo "Machine name: $RUNNER_NAME"
 
-    # Install Vulkan SDK
+    # \@bug: Install Vulkan SDK (must be installed to prevent a copy of
+    #        vulkan-1.dll into C:/Windows/System32/vulkan-1.dll
     - name: Install Vulkan SDK
       run: |
 
