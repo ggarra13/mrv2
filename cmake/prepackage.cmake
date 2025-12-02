@@ -251,26 +251,6 @@ elseif(WIN32)
 	    "${MRV2_APP_DIR}/bin/mrv2.exe"
 	    "${MRV2_APP_DIR}/bin/mrv2-v${mrv2_VERSION}.exe") 
     endif()
-
-    if (EXISTS "${MV2_APP_DIR}")
-	# If we installed vulkan-1.dll, don't distribute it.
-	message( STATUS "Removing ${MRV2_APP_DIR}/bin/vulkan-1.dll")
-	file(GLOB VULKAN_DLLS "${MRV2_APP_DIR}/bin/vulkan-*.dll")
-	message(STATUS "hdr/mrv2 VULKAN_DLLS=${VULKAN_DLLS}")
-	foreach (_vulkan_dll ${VULKAN_DLLS})
-	    message(STATUS "Removing ${_vulkan_dll}")
-	    file(REMOVE ${_vulkan_dll})
-	endforeach()
-    else()
-	# If we installed vulkan-1.dll, don't distribute it.
-	message( STATUS "Removing ${CPACK_PREPACKAGE}/bin/vulkan-1.dll")
-	file(GLOB VULKAN_DLLS "${CPACK_PREPACKAGE}/bin/vulkan-*.dll")
-	message(STATUS "hdr/mrv2 VULKAN_DLLS=${VULKAN_DLLS}")
-	foreach (_vulkan_dll ${VULKAN_DLLS})
-	    message(STATUS "Removing ${_vulkan_dll}")
-	    file(REMOVE ${_vulkan_dll})
-	endforeach()
-    endif()
     
     
     set(MRV2_PYTHON_APP_LIB_DIR "${MRV2_APP_DIR}/bin/Lib")

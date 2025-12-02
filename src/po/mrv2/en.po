@@ -2917,6 +2917,7 @@ msgstr "Remote files are less than local files."
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Remote file {0} matches file name {1} but not path."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Remote file {0} does not match local filename."
 
@@ -3092,9 +3093,11 @@ msgstr "Setting OCIO config from preferences."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Setting OCIO config from OCIO environment variable."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Path mappings have been loaded from \"{0}{1}\"."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
 
@@ -3107,6 +3110,7 @@ msgstr "Path mappings have been saved to \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys have been saved to \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Preferences have been saved to: \"{0}{1}\"."
 
@@ -3158,6 +3162,7 @@ msgstr "No default view for display '{0}'.  Does display exist?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Setting OCIO Preset '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preset '{0}' not found."
 
@@ -3731,6 +3736,7 @@ msgstr "Could not paste {0}.  Error {1}."
 msgid "Could not save .otio file: {0}"
 msgstr "Could not save .otio file: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error saving {0}. {1}"
 
@@ -3746,6 +3752,7 @@ msgstr "You can only add clips to an .otio EDL playlist."
 msgid "Unknown media reference"
 msgstr "Unknown media reference"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Track #{0} - {1}"
 
@@ -3770,6 +3777,7 @@ msgstr "Frame {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image too big.  Will save the viewport size."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Viewport Size: {0} - X={1}, Y={2}"
 
@@ -3940,6 +3948,7 @@ msgstr "Cannot play - audio annotation is empty"
 msgid "Status is not saved"
 msgstr "Status is not saved"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Audio annotation file {0} is missing or not exists!"
 

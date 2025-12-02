@@ -2901,6 +2901,7 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "O ficheiro remoto {0} corresponde ao nome do ficheiro {1} mas no ao caminho."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "O ficheiro remoto {0} no corresponde ao nome do ficheiro local."
 
@@ -3077,9 +3078,11 @@ msgstr "Configurar a configurao OCIO a partir de preferncias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Configurao da configurao OCIO a partir da varivel de ambiente OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Os mapeamentos de caminhos foram carregados a partir de \"{0}{1}\"."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Carregando as teclas acessrias de \"{0}{1}.prefs\"."
 
@@ -3092,6 +3095,7 @@ msgstr "Os mapas dos caminhos foram salvos para \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "As teclas quentes foram salvas para \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "As preferncias foram salvas para: \"{0}{1}\"."
 
@@ -3143,6 +3147,7 @@ msgstr "Nenhuma vista padrão para exibir '{0}'. Existe exibição?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Configurao do OCIO Preset '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Predefinir \"{0}\" no foi encontrado."
 
@@ -3718,6 +3723,7 @@ msgstr "No foi possvel colar {0}. Erro {1}."
 msgid "Could not save .otio file: {0}"
 msgstr "No foi possvel salvar o ficheiro.otio: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Erro ao gravar {0}. {1}"
 
@@ -3733,6 +3739,7 @@ msgstr "Voc s pode adicionar clipes a uma lista de reproduo.otio EDL."
 msgid "Unknown media reference"
 msgstr "Referência dos meios de comunicação desconhecidos"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Pista #{0} - {1}"
 
@@ -3757,6 +3764,7 @@ msgstr "Quadro {0} - CT: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamanho do visor: {0} - X={1}, Y={2}"
 
@@ -3927,6 +3935,7 @@ msgstr "Não é possível reproduzir – a anotação de áudio está vazia"
 msgid "Status is not saved"
 msgstr "O status não foi salvo"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "O arquivo de anotação de áudio {0} está ausente ou não existe!"
 

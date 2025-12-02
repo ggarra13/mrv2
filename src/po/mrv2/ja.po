@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid ""
 "\n"
@@ -2899,6 +2899,7 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "リモートファイル {0} はファイル名 {1} と一致しますが、パスは一致しません。"
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "リモートファイル {0} はローカルファイル名と一致しません。"
 
@@ -3081,9 +3082,11 @@ msgstr "OCIO ファイルから設定をインポート"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "OCIO 環境変数から OCIO 設定を設定しています。"
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "パス マッピングが「{0}{1}」から読み込まれました。"
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" からホットキーをロードしています。"
 
@@ -3096,6 +3099,7 @@ msgstr "パスマッピングは \"{0}{1}\" に保存されました。"
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "ホットキーは \"{0}{1}.prefs\" に保存されました。"
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "環境設定は \"{0}{1}\" に保存されました。"
 
@@ -3147,6 +3151,7 @@ msgstr "表示 '{0}' のデフォルトビューがありません。表示は�
 msgid "Setting OCIO Preset '{0}'."
 msgstr "プリセット{0}"
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "プリセット '{0}' が見つかりません。"
 
@@ -3722,6 +3727,7 @@ msgstr "{0} を貼り付けられませんでした。エラー {1}。"
 msgid "Could not save .otio file: {0}"
 msgstr ".otio ファイルを保存できませんでした: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "保存エラー {0}。{1}"
 
@@ -3737,6 +3743,7 @@ msgstr "カートに追加できるの件数は{0}件のみです。"
 msgid "Unknown media reference"
 msgstr "不明なメディア参照"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "トラック #{0} - {1}"
 
@@ -3761,6 +3768,7 @@ msgstr "フレーム {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "彼らが都を守ってくれます"
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "ビューポートサイズ: {0} - X={1}, Y={2}"
 
@@ -3931,6 +3939,7 @@ msgstr "再生できません ― 音声注釈が空です"
 msgid "Status is not saved"
 msgstr "ステータスは保存されていません"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "オーディオ注釈ファイル {0} が見つからないか存在しません！"
 
