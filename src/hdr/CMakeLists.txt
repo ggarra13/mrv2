@@ -39,7 +39,6 @@ endif()
 
 set(LIBRARIES
     mrvBaseApp
-    mrvHDRWidgets
     mrvHDR
     ${Intl_LIBRARIES})
 
