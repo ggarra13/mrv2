@@ -21,6 +21,8 @@ GITHUB_ASSET_RELEASE_DAYS = 3
 import mrv2
 from mrv2 import cmd, plugin, session, settings
 from fltk import *
+import platform
+import sys
 
 try:
     import gettext
@@ -42,6 +44,27 @@ except Exception as e:
     _ = _gettext
 
 cmd.update()
+
+def get_arch():
+    m = platform.machine().lower()
+
+    # Normalize common names
+    if m in ("x86_64", "amd64"):
+        return "amd64"
+
+    if m in ("arm64", "aarch64"):
+        # macOS ARM reports: arm64
+        # Linux/Win ARM64 often report: aarch64
+        if sys.platform == "darwin":
+            return "arm64"
+        else:
+            return "aarch64"
+
+    # Fallback: return raw
+    return m
+
+print(get_arch())
+
 
 def is_dir_empty(dir_path):
   """Checks if a directory is empty.
@@ -662,6 +685,9 @@ class UpdatePlugin(plugin.Plugin):
         extension = self.get_download_extension()
         for asset in data['assets']:
             name = asset['name']
+            arch = get_arch()
+            if not arch in name:
+                continue
             if name.startswith(prefix) and name.endswith(extension):
                 return {
                     "name": asset.get(GITHUB_ASSET_NAME, None),
