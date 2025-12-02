@@ -63,9 +63,6 @@ def get_arch():
     # Fallback: return raw
     return m
 
-print(get_arch())
-
-
 def is_dir_empty(dir_path):
   """Checks if a directory is empty.
 
