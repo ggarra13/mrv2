@@ -12,13 +12,7 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
-//#define USE_CODECVT
 #include <algorithm>
-#ifndef USE_CODECVT
-#include <FL/fl_utf8.h>
-#else
-#include <codecvt>
-#endif
 #include <filesystem>
 #include <limits>
 #include <locale>
@@ -27,6 +21,8 @@
 #include <fstream>
 #include <vector>
 #include <cstdint>
+
+#include <FL/fl_utf8.h>
 
 #ifdef _WIN32
 # define NOMINMAX
@@ -43,68 +39,39 @@ namespace fs = std::filesystem;
 
 namespace
 {
-#ifdef USE_CODECVT
-#if defined(_WINDOWS)
-    //! \bug
-    //! https://social.msdn.microsoft.com/Forums/vstudio/en-US/8f40dcd8-c67f-4eba-9134-a19b9178e481/vs-2015-rc-linker-stdcodecvt-error?forum=vcgeneral
-    typedef unsigned int tl_char_t;
-#else  // _WINDOWS
     typedef wchar_t tl_char_t;
-#endif // _WINDOWS
-    
-#else
-    typedef wchar_t tl_char_t;
-    
-    // Helper to ensure pure UTF-32 (handles Windows UTF-16
-    // surrogates transparently via FLTK)
-    std::u32string utf8_to_utf32(const std::string& utf8_str) {
-        if (utf8_str.empty()) return {};
 
+    std::u32string utf8_to_utf32(const std::string& utf8_str)
+    {
         const char* src = utf8_str.c_str();
-        unsigned src_len = static_cast<unsigned>(utf8_str.size());
-
-        // First pass: measure required wide chars
-        unsigned wc_count = fl_utf8towc(src, src_len, nullptr, 0);
-        if (wc_count == 0) return {};  // Empty or invalid
-
-        std::vector<wchar_t> wc_buffer(wc_count + 1);
-        unsigned converted = fl_utf8towc(src, src_len,
-                                         wc_buffer.data(), wc_count + 1);
-        if (converted == 0) return {};  // Conversion failed
-
-        // Now decode to pure char32_t (UTF-32); on Unix it's 1:1,
-        // on Windows it expands surrogates
+        const char* end = src + utf8_str.size();
         std::u32string utf32;
-        utf32.reserve(converted);
-        for (unsigned i = 0; i < converted; ++i) {
-            utf32.push_back(static_cast<wchar_t>(wc_buffer[i]));
+        while (*src) {
+            int len = 0;
+            uint32_t ucs = fl_utf8decode(src, end, &len);
+            // vvv --- optional
+            if (*src & 0x80) {            // what should be a multibyte encoding
+                if (len==1)
+                    ucs = 0xFFFD;   // Turn errors into REPLACEMENT CHARACTER
+            }
+            // ^^^ --- optional
+            utf32.push_back(ucs);
+            src += len;
         }
         return utf32;
     }
- 
-    std::string utf32_to_utf8(const std::u32string& utf32_str) {
 
-        if (utf32_str.empty()) return {};
-
-        const char32_t* src = reinterpret_cast<const char32_t*>(utf32_str.data());
-
-        // Safe cast; assumes valid codepoints
-        unsigned src_len = static_cast<unsigned>(utf32_str.size());
-
-        // First pass: measure required UTF-8 bytes
-        unsigned utf8_len = fl_utf8fromwc(nullptr, 0, (wchar_t*)src, src_len);
-        if (utf8_len == 0) return {};  // Empty or invalid
-
-        std::string utf8_str;
-        utf8_str.resize(utf8_len + 1);
-        unsigned converted = fl_utf8fromwc(utf8_str.data(), utf8_len + 1,
-                                           (wchar_t*)src, src_len);
-        if (converted == 0) return {};  // Failed
-        utf8_str.resize(converted);  // Trim if over-allocated
-        return utf8_str;
+    std::string utf32_to_utf8(const std::u32string& utf32_str)
+    {
+        std::string utf8;
+        for (auto &ucs: utf32_str) {
+            char buf[6];
+            int len = fl_utf8encode(ucs, buf);
+            utf8.append(buf, len);
+        }
+        return utf8;
     }
-#endif
-        
+    
 }
 
 namespace
