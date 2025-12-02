@@ -35,6 +35,9 @@ msgstr ""
 msgid "Something failed installing mrv2 - It is not in \""
 msgstr ""
 
+msgid "Downloaded file.  Do a Manual Install"
+msgstr ""
+
 msgid "Invalid ISO 8601 format provided: "
 msgstr ""
 
@@ -69,7 +72,7 @@ msgstr ""
 msgid "Please wait"
 msgstr ""
 
-msgid "Enter Sudo Password"
+msgid "Enter Sudo Password or Close Window"
 msgstr ""
 
 msgid "Password"

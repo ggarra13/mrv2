@@ -494,7 +494,7 @@ def po_translate(lang):
     os.chdir(cwd)
     for plugin in plugins:
         plugin = plugin[:-3] + '.po'
-        plugin_po = f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
+        plugin_po = f'src/po/mrv2/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'
         print('Translating plugin',plugin)
         translator.translate_po(plugin_po)
 

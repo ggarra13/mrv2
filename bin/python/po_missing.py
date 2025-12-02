@@ -104,11 +104,11 @@ def find_missing_msgstr(lang):
     missing.find_missing_msgstr(main_po, out_po)
     
     cwd = os.getcwd()
-    os.chdir('src/po/mrv2/python/plug-ins')
-    plugins = glob.glob('*.py')
+    os.chdir('src/po/python/plug-ins/locale/')
+    plugins = glob.glob('*.pot')
     os.chdir(cwd)
     for plugin in plugins:
-        code   = plugin[:-3]
+        code   = plugin[:-4]
         plugin = code + '.po'
         out_po = code + '_missing.po'
         plugin_po = f'src/po/mrv2/python/plug-ins/locale/{lang}/LC_MESSAGES/{plugin}'

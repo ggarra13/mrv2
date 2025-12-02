@@ -69,6 +69,7 @@ ChangeLog
 - Fixed OpenJPH compilation on aarch64 runners.
 - Made Vulkan compilation faster skipping OpenGL's tlRender files.
 - Added downloading only when updating mrv2 or vmrv2.
+- Fixed UTF8toUTF32 and UTF32toUTF8 code from Darby.
 
 v1.4.6
 ======

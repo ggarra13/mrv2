@@ -38,6 +38,9 @@ msgstr ""
 msgid "Something failed installing mrv2 - It is not in \""
 msgstr "Etwas fehlgeschlagen Installation mrv2 - Es ist nicht in \""
 
+msgid "Downloaded file.  Do a Manual Install"
+msgstr "Datei heruntergeladen. Führen Sie eine manuelle Installation durch."
+
 msgid "Invalid ISO 8601 format provided: "
 msgstr "Ungültiges ISO 8601-Format bereitgestellt:"
 
@@ -71,8 +74,8 @@ msgstr "Versuchen zu installieren"
 msgid "Please wait"
 msgstr "Bitte warten Sie."
 
-msgid "Enter Sudo Password"
-msgstr "Sudo-Passwort eingeben"
+msgid "Enter Sudo Password or Close Window"
+msgstr "Sudo-Passwort eingeben oder Fenster schließen"
 
 msgid "Password"
 msgstr "Passwort"
@@ -130,11 +133,10 @@ msgid "No download url was found for"
 msgstr "Keine Download-URL wurde gefunden für"
 
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
-#, fuzzy
 msgid "releases found for the specified repository."
-msgstr "Für das angebene Repository wurden keine Releases gefunden."
+msgstr "keine Releases für das angegebene Repository gefunden."
 
 msgid "Help/Update mrv2"
 msgstr "Hilfe/Aktualisierung mrv2"

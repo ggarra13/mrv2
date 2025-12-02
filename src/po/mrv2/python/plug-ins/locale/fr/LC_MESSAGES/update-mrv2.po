@@ -37,6 +37,9 @@ msgstr "Peut-être que vous l'avez installé dans un endroit non par défaut."
 msgid "Something failed installing mrv2 - It is not in \""
 msgstr "Quelque chose a échoué à installer mrv2 - Il n'est pas dans \""
 
+msgid "Downloaded file.  Do a Manual Install"
+msgstr "Fichier téléchargé. Effectuez une installation manuelle."
+
 msgid "Invalid ISO 8601 format provided: "
 msgstr "Format ISO 8601 non valide fourni:"
 
@@ -70,8 +73,8 @@ msgstr "Essai d'installation"
 msgid "Please wait"
 msgstr "S'il vous plaît, attendez."
 
-msgid "Enter Sudo Password"
-msgstr "Saisissez le mot de passe de Sudo"
+msgid "Enter Sudo Password or Close Window"
+msgstr "Entrez le mot de passe sudo ou fermez la fenêtre"
 
 msgid "Password"
 msgstr "Mot de passe"
@@ -129,11 +132,10 @@ msgid "No download url was found for"
 msgstr "Aucun téléchargement url n'a été trouvé pour"
 
 msgid "No"
-msgstr ""
+msgstr "Non"
 
-#, fuzzy
 msgid "releases found for the specified repository."
-msgstr "Aucune version n'a été trouvée pour le dépôt spécifié."
+msgstr "aucune version trouvée pour le dépôt spécifié."
 
 msgid "Help/Update mrv2"
 msgstr "Aide/Mise à jour mrv2"

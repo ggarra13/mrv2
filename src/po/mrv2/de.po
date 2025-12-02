@@ -1964,21 +1964,6 @@ msgstr "Streaming von {0} {1}..."
 msgid "Stop streaming"
 msgstr "Streaming beenden"
 
-msgid "Renderer"
-msgstr "Renderer"
-
-msgid "Complexity"
-msgstr "Komplexität"
-
-msgid "Draw Mode"
-msgstr "Zeichenmodus"
-
-msgid "Stage Cache"
-msgstr "Stufen-Cache"
-
-msgid "Disk Cache in GB"
-msgstr "Festplatten-Cache in GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Schalten Sie andere Augen Stereo-Bild."
 
@@ -2990,37 +2975,29 @@ msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 "Die neue Datei {0} existiert bereits! Sie kann nicht berschrieben werden."
 
-msgid "Rotated image info: {0}"
-msgstr "Informationen zum gedrehten Bild: {0}"
-
-msgid "Scaled image info: {0}"
-msgstr "Skalierte Bildinformation: {0}"
-
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Das Schreiber-Plugin kann nicht geffnet werden."
 
 msgid "Image info: {0} {1}"
 msgstr "Bildinformation: {0} {1}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-"Bild zu groß für das Speichern von Anmerkungen. Es wird auf die "
-"Ansichtsgröße skaliert."
-
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Ansichtsgre: {0} - X={1}, Y={2}"
+msgid "Scaled image info: {0}"
+msgstr "Skalierte Bildinformation: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer Plugin bekam keine Ausgabeinformationen. Standardmig auf {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "Ausgabeinfos: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Verwendung von Profil {0}, Pixelformat {1}."
 
 msgid "Using preset {0}."
 msgstr "Verwendung von voreingestellten {0}."
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Offscreen-Puffer-Info: {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Ausgabeinfos: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Speichern von Filmen ohne Audio % <PRId64> - % <PRId64>"
@@ -3037,32 +3014,14 @@ msgstr "Speichern von Bildern ohne Audio % <PRId64> - % <PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio nur in der Zeitleiste, aber nicht versuchen, Audio zu speichern."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Ungültiges OpenGL-Format und -Typ"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL-Informationen: {0}"
-
 msgid "Saving... {0}"
 msgstr "Speichern... {0}"
 
-msgid "Unsupported output format"
-msgstr "Nicht unterstütztes Ausgabeformat"
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr "Leere Videodaten zur Zeit {0}. Wiederholungsbild."
+msgid "Could not read image data from view"
+msgstr "Konnte Bilddaten aus der Ansicht nicht lesen"
 
 msgid "Render size: {0}"
 msgstr "Rendergröße: {0}"
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "Bildebenen-Informationen '{0}': {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Offscreen-Puffer-Info: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Nicht unterstütztes Ausgabeformat: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3809,8 +3768,8 @@ msgstr "Frame {0} - ZC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Bild zu gro. Speichert die Ansichtsfenstergre."
 
-msgid "Could not read image data from view"
-msgstr "Konnte Bilddaten aus der Ansicht nicht lesen"
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Ansichtsgre: {0} - X={1}, Y={2}"
 
 msgid "Link/Open"
 msgstr "Verknüpfen/Öffnen"
@@ -3955,14 +3914,17 @@ msgstr "    Vorne    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
+
 msgid "Edit Text"
 msgstr "Text bearbeiten"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' ist keine Datei, kein Verzeichnis und keine URL."
-
-msgid "Invalid font for text drawing"
-msgstr "Ungültige Schriftart für die Texterstellung"
 
 msgid "Could not convert message to shape: "
 msgstr "Nachricht kann nicht in Form konvertiert werden:"
@@ -7952,6 +7914,9 @@ msgstr "Scrub-Modus"
 msgid "Area Selection Mode"
 msgstr "Modus fr die Flchenauswahl"
 
+msgid "Draw Mode"
+msgstr "Zeichenmodus"
+
 msgid "Erase Mode"
 msgstr "Lschmodus"
 
@@ -8054,11 +8019,47 @@ msgstr "Hotkeys-Fenster umschalten"
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
+#~ msgid "Renderer"
+#~ msgstr "Renderer"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
+#~ msgid "Complexity"
+#~ msgstr "Komplexität"
+
+#~ msgid "Stage Cache"
+#~ msgstr "Stufen-Cache"
+
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Festplatten-Cache in GB"
+
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "Informationen zum gedrehten Bild: {0}"
+
+#~ msgid ""
+#~ "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr ""
+#~ "Bild zu groß für das Speichern von Anmerkungen. Es wird auf die "
+#~ "Ansichtsgröße skaliert."
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Ungültiges OpenGL-Format und -Typ"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL-Informationen: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Nicht unterstütztes Ausgabeformat"
+
+#~ msgid "Empty video data at time {0}.  Repeating frame."
+#~ msgstr "Leere Videodaten zur Zeit {0}. Wiederholungsbild."
+
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "Bildebenen-Informationen '{0}': {1} {2}"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Nicht unterstütztes Ausgabeformat: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Ungültige Schriftart für die Texterstellung"
 
 #~ msgid ""
 #~ "Your Wayland compositor does not support Float on Top.  Go to the title "

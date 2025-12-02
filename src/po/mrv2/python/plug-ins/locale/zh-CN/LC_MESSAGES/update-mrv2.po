@@ -36,6 +36,9 @@ msgstr "也许你安装了它 在一个不默认的位置。"
 msgid "Something failed installing mrv2 - It is not in \""
 msgstr "安装 drv2 失败 - 它不在 \""
 
+msgid "Downloaded file.  Do a Manual Install"
+msgstr "文件已下载。请进行手动安装。"
+
 msgid "Invalid ISO 8601 format provided: "
 msgstr "已提供无效的 ISO 8601 格式 :"
 
@@ -69,8 +72,8 @@ msgstr "试图安装"
 msgid "Please wait"
 msgstr "请稍候"
 
-msgid "Enter Sudo Password"
-msgstr "输入 Sudo 密码"
+msgid "Enter Sudo Password or Close Window"
+msgstr "请输入 sudo 密码或关闭窗口"
 
 msgid "Password"
 msgstr "密码"
@@ -127,11 +130,10 @@ msgid "No download url was found for"
 msgstr "未找到下载 url"
 
 msgid "No"
-msgstr ""
+msgstr "否"
 
-#, fuzzy
 msgid "releases found for the specified repository."
-msgstr "未找到指定仓库的释放 。"
+msgstr "未找到指定仓库的任何版本。"
 
 msgid "Help/Update mrv2"
 msgstr "帮助/更新 mrv2"
