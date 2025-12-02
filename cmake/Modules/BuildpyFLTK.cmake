@@ -48,10 +48,16 @@ set(pyFLTK_PATCH
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/x.i"
     "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
 
-    # For avoiding check of fltk version as we are now compiling v1.5.0
+    # For avoiding check of fltk version check as we are now compiling v1.5.0
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/fltk.i"
+    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
+    
+    # For avoiding Fl.mt_run
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/Fl.i"
     "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
     
     # For _fltk.idle
