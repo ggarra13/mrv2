@@ -111,7 +111,7 @@ endif()
 
 set(pyFLTK_ARGS )
 if(NOT TLRENDER_GL)
-    list(APPEN pyFLTK_ARGS --disable-gl)
+    list(APPEND pyFLTK_ARGS --disable-gl)
 endif()
 # Commands for configure, build and install
 set(pyFLTK_CONFIGURE
