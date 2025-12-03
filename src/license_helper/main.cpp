@@ -199,7 +199,7 @@ static void donate_cb(Fl_Widget* b, void* data)
 {
     fl_alert(_("Check your browser for a valid donation.  Send your machine id in the comment."));
     
-    fl_open_uri("https://www.paypal.com/donate/?hosted_button_id=UJMHRRKYCPXYW");
+    fl_open_uri("https://www.paypal.com/donate/?hosted_button_id=PSYEULZG24QHY");
     fl_alert(_("If you submitted a valid donation, you will get a message in the mail activating your license plan."));
 }
 
