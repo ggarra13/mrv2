@@ -1,6 +1,6 @@
 # Japanese translations for mrv package.
 # Automatically generated, 2025.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv 2-build\n"

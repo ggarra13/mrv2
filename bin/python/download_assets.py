@@ -1,16 +1,17 @@
 import argparse
 import os
 import re
-import requests # Still needed for initial directory listing and parsing
+import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-import subprocess # New import for running curl
+import subprocess
+import json
 
-VERSION=1.0
+VERSION=1.1
 MATCH_REGEX=re.compile(r"arm64|aarch64")
 
 description=f"""
-po_merge v{VERSION}
+download_assets v{VERSION}
 
 A program to download all betas or version assets from sourceforge.
 """
@@ -43,28 +44,43 @@ os.makedirs(VULKAN_DIR, exist_ok=True)
 os.makedirs(OPENGL_DIR, exist_ok=True)
 
 
+# Optional: Set a custom User-Agent to ensure direct redirect (default python-requests works, but this mimics wget)
+headers = {
+    'User-Agent': 'Wget/1.21.4'
+}
+
+
+def parse_sourceforge_page(html_content, base_url):
+    """
+    Parse SourceForge page and extract file download links.
+    Handles both traditional HTML links and JavaScript-embedded data.
+    """
+    soup = BeautifulSoup(html_content, "html.parser")
+    links = []
+    
+    for a in soup.find_all("a", href=True):
+        href = a["href"]
+        if href.endswith("/download"):
+            file_url = urljoin(base_url, href)
+            filename = href.strip("/").split("/")[-2]
+            links.append((filename, file_url))
+    
+    return links
+
 def download_url(base_url, dest_dir, mrv2_prefix):
 
-    # Get the HTML page (This part still uses requests/BeautifulSoup)
+    # Get the HTML page
     print(f"Fetching file list from {base_url}...")
     try:
-        response = requests.get(base_url)
+        # Use headers to mimic a browser request
+        response = requests.get(base_url, headers=headers)
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
         print(f"Error fetching URL: {e}")
         return
 
-    # Parse HTML
-    soup = BeautifulSoup(response.text, "html.parser")
-
-    # Find all download links (they end with "/download")
-    links = []
-    for a in soup.find_all("a", href=True):
-        href = a["href"]
-        if href.endswith("/download"):
-            file_url = urljoin(base_url, href)
-            filename = href.strip("/").split("/")[-2]  # Extract filename before '/download'
-            links.append((filename, file_url))
+    # Parse the page for file links
+    links = parse_sourceforge_page(response.text, base_url)
 
     print(f"Found {len(links)} files to download.")
 
@@ -83,54 +99,33 @@ def download_url(base_url, dest_dir, mrv2_prefix):
             continue
         
         output_path = os.path.join(dest_dir, filename)
-        
-        # Check for existing file size to handle resume/skip logic
-        file_exists = os.path.exists(output_path)
-        
-        if file_exists:
-            # Check if the file is already fully downloaded
-            # SourceForge download links usually redirect, so getting the exact remote size is tricky
-            # The safest approach is to either SKIP if it exists or use 'curl -C -' to resume.
-            print(f"File {filename} exists. Attempting to **resume** download...")
-        else:
-            print(f"Downloading {filename}...")
 
-        # Construct the curl command:
-        # -L: Follow redirects (necessary for SourceForge download links)
-        # -C -: Resume a broken/partial transfer
-        # -o <file>: Write output to a local file
-        curl_command = [
-            "curl",
-            "-L",
-            "-C", "-",
-            "-A", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/142.0.0.0 Safari/537.36",
-            "-o", output_path,
-            file_url
-        ]
-        
         try:
-            # Execute the curl command
-            # Note: This will block until curl finishes (or fails)
-            result = subprocess.run(
-                curl_command, 
-                check=True, 
-                stdout=subprocess.PIPE, 
-                stderr=subprocess.PIPE,
-                text=True
-            )
-            # The check=True argument raises a CalledProcessError if curl exits with a non-zero status
+            # Fetch the file, following redirects
+            response = requests.get(file_url, headers=headers,
+                                    allow_redirects=True, stream=True)
+            response.raise_for_status()  # Raise an error for bad status codes
+
+            print(f"Downloading {filename}...")
             
-            # Print success message. curl outputs progress to stderr by default
-            # We capture stdout/stderr but rely on the exit code.
-            if result.returncode == 0:
-                print(f"Successfully downloaded/resumed {filename}")
-            
-        except subprocess.CalledProcessError as e:
-            print(f"❌ Error downloading {filename} with curl (Exit code {e.returncode}):")
-            print(f"   {e.stderr.strip()}")
-        except FileNotFoundError:
-            print("❌ Error: 'curl' command not found. Please ensure curl is installed and in your PATH.")
-            return
+            try:
+                os.remove(filename)
+            except FileNotFoundError:
+                pass   # Ignore if it doesn't exist
+
+
+            # Save the binary content
+            with open(filename, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    if chunk:
+                        print('*',end='')
+                        f.write(chunk)
+
+            print(f"\nDownload complete: {os.path.abspath(filename)} (Size: {os.path.getsize(filename)} bytes)")
+
+        except requests.exceptions.RequestException as e:
+            print(f"Error downloading: {e}")
+            exit(1)
 
     print("✅ All download attempts completed.")
 
