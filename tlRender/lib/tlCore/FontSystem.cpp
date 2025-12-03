@@ -46,6 +46,7 @@ namespace
         const char* src = utf8_str.c_str();
         const char* end = src + utf8_str.size();
         std::u32string utf32;
+        utf32.reserve(utf8_str.size());
         while (*src) {
             int len = 0;
             uint32_t ucs = fl_utf8decode(src, end, &len);
@@ -64,6 +65,7 @@ namespace
     std::string utf32_to_utf8(const std::u32string& utf32_str)
     {
         std::string utf8;
+        utf8.reserve(utf32_str.size());
         for (auto &ucs: utf32_str) {
             char buf[6];
             int len = fl_utf8encode(ucs, buf);

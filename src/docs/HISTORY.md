@@ -70,6 +70,10 @@ ChangeLog
 - Made Vulkan compilation faster skipping OpenGL's tlRender files.
 - Added downloading only when updating mrv2 or vmrv2.
 - Fixed UTF8toUTF32 and UTF32toUTF8 code from Darby.
+- Print out Vulkan color space and format detected when not in HDR.
+- Added Vulkan card drivers to Help->About->HW.
+- Improved utf8 to utf32 conversion and viceversa.
+
 
 v1.4.6
 ======
