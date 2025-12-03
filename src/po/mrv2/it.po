@@ -3910,7 +3910,7 @@ msgid "Vulkan color space is {0}"
 msgstr "Lo spazio colore Vulkan è {0}"
 
 msgid "Vulkan format is {0}"
-msgstr ""
+msgstr "Il formato Vulkan è {0}"
 
 msgid "Edit Text"
 msgstr "Modifica testo"
