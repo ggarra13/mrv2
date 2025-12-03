@@ -75,6 +75,7 @@ ChangeLog
 - Print out Vulkan color space and format detected when not in HDR.
 - Added Vulkan card name and drivers to Help->About->HW.
 - Improved utf8 to utf32 conversion and viceversa.
+- Keep the number for dropped frames after stopping playback.
 
 
 v1.4.6

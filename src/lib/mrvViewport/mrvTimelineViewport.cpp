@@ -779,7 +779,9 @@ namespace mrv
                 _showPixelBar();
             else
                 _hidePixelBar();
-            p.droppedFrames = 0;
+            
+            if (value != timeline::Playback::Stop)
+                p.droppedFrames = 0;
 
             p.player->setPlayback(value);
 
@@ -810,10 +812,12 @@ namespace mrv
                 return;
 
             _togglePixelBar();
-            p.droppedFrames = 0;
 
             p.player->togglePlayback();
 
+            if (p.player->playback() != timeline::Playback::Stop)
+                p.droppedFrames = 0;
+            
             updatePlaybackButtons();
             p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
         }
