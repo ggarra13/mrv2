@@ -109,16 +109,16 @@ def download_url(base_url, dest_dir, mrv2_prefix):
             print(f"Downloading {filename}...")
             
             try:
-                os.remove(filename)
+                os.remove(output_path)
             except FileNotFoundError:
                 pass   # Ignore if it doesn't exist
 
 
             # Save the binary content
-            with open(filename, 'wb') as f:
+            with open(output_path, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     if chunk:
-                        print('*',end='')
+                        print('*',end='', flush=True)
                         f.write(chunk)
 
             print(f"\nDownload complete: {os.path.abspath(filename)} (Size: {os.path.getsize(filename)} bytes)")
