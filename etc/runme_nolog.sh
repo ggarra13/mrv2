@@ -540,22 +540,6 @@ time run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE --target all
 
 cd -
 
-if [[ "$CMAKE_TARGET" == "package" ]]; then
-    echo ".mo files creation"
-    #
-    # When packaging, run mo target first.
-    #
-    export CMAKE_TARGET="mo"
-
-    cmd="./runmeq.sh ${CMAKE_BUILD_TYPE} -t ${CMAKE_TARGET}"
-    run_cmd $cmd
-
-    #
-    # Finally package it
-    #
-    export CMAKE_TARGET="package"
-fi
-
 if [[ "$CMAKE_TARGET" == "" ]]; then
     export CMAKE_TARGET="install"
 fi
