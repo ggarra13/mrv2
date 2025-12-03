@@ -2124,10 +2124,11 @@ namespace tl
                         else if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
                         {
                             dst_colorspace.transfer = PL_COLOR_TRC_HLG;
+                            dst_colorspace.transfer = PL_COLOR_TRC_PQ;
                         }
                         else if (ctx.colorSpace == VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT)
                         {
-                            dst_colorspace.primaries = PL_COLOR_PRIM_SRGB;
+                            dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                             dst_colorspace.transfer = PL_COLOR_TRC_LINEAR;
                         }
                         else if (

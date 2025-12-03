@@ -51,6 +51,7 @@ ChangeLog
 - Added OpenSSL version to the About window.
 - Fixed Floating panels on (K)Ubuntu 25.10+.
 - Added support for pen/tablet on macOS (tested).
+- Fixed Vulkan HDR support on Apple's M1+ which was not working.
 - Refactored Wayland's Always On Top hotkey code.
 - Added libwayland's version to Help/About.
 - Added Vulkan's GPU card and driver versions to Help/About (HW tab).
@@ -67,11 +68,12 @@ ChangeLog
       fltk.check```
 - Fixed libjpeg-turbo compilation on aarch64 runners.
 - Fixed OpenJPH compilation on aarch64 runners.
+- Upgraded OpenJPH version to 
 - Made Vulkan compilation faster skipping OpenGL's tlRender files.
 - Added downloading only when updating mrv2 or vmrv2.
 - Fixed UTF8toUTF32 and UTF32toUTF8 code from Darby.
 - Print out Vulkan color space and format detected when not in HDR.
-- Added Vulkan card drivers to Help->About->HW.
+- Added Vulkan card name and drivers to Help->About->HW.
 - Improved utf8 to utf32 conversion and viceversa.
 
 
