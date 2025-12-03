@@ -421,6 +421,8 @@ clean_mo_files()
     echo
     
     locales_dir="${BUILD_DIR}/install/share/locale/* ${BUILD_DIR}/install/python/plug-ins/locales/*"
-    
+    for _dir in $locales_dir; do
+	rm -rf $_dir
+    done
 }
     
