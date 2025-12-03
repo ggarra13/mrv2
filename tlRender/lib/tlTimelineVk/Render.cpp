@@ -781,6 +781,7 @@ namespace tl
             switch (ctx.colorSpace)
             {
             case VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT:
+            case VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT:
             case VK_COLOR_SPACE_HDR10_ST2084_EXT:
             case VK_COLOR_SPACE_HDR10_HLG_EXT:
             case VK_COLOR_SPACE_DOLBYVISION_EXT:
@@ -2123,6 +2124,11 @@ namespace tl
                         else if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
                         {
                             dst_colorspace.transfer = PL_COLOR_TRC_HLG;
+                        }
+                        else if (ctx.colorSpace == VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT)
+                        {
+                            dst_colorspace.primaries = PL_COLOR_PRIM_SRGB;
+                            dst_colorspace.transfer = PL_COLOR_TRC_LINEAR;
                         }
                         else if (
                             ctx.colorSpace == VK_COLOR_SPACE_DOLBYVISION_EXT)
