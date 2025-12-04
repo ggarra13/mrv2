@@ -248,8 +248,8 @@ namespace mrv
         {
             Fl_Vk_Window::init_colorspace();
 
-            format() = VK_FORMAT_B8G8R8A8_UNORM;
             colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+            format() = VK_FORMAT_B8G8R8A8_UNORM;
         }
         
         void TimelineWidget::setContext(

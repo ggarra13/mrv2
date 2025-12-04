@@ -386,11 +386,12 @@ namespace mrv
                 LOG_STATUS(_("HDR monitor not found or not configured."));
                 msg = string::Format(_("Vulkan color space detected {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
                 LOG_STATUS(msg);
-
-                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-                    
                 msg = string::Format(_("Vulkan format detected {0}")).arg(string_VkFormat(format()));
                 LOG_STATUS(msg);
+
+                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                format() = VK_FORMAT_B8G8R8A8_UNORM
+                    
             }
             
             msg = string::Format(_("Vulkan color space is {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
@@ -430,7 +431,7 @@ namespace mrv
             vk.avbo.reset();
             vk.avao.reset();
 
-            if (vk.loadRenderPass != VK_NULL_HANDLE)
+            if (vk.loadenderPass != VK_NULL_HANDLE)
             {
                 vkDestroyRenderPass(device(), vk.loadRenderPass, nullptr);
                 vk.loadRenderPass = VK_NULL_HANDLE;
