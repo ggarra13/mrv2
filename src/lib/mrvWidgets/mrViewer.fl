@@ -131,7 +131,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {open
-  xywh {86 109 952 56} resizable
+  xywh {0 0 952 30} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -278,7 +278,7 @@ ui->uiView->centerView();}
               Fl_Output uiPixelG {
                 tooltip {Green value of image pixel under mouse.} xywh {266 3 68 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 2
               }
-              Fl_Output uiPixelB {selected
+              Fl_Output uiPixelB {
                 tooltip {Blue value of image pixel under mouse.} xywh {334 3 68 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 4
               }
               Fl_Output uiPixelA {
@@ -869,8 +869,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {553 173 933 673} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {933 674 0 0}
+      xywh {0 0 933 673} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {933 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 933 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
@@ -1145,7 +1145,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             xywh {0 86 933 474} labeltype NO_LABEL hide resizable
           }
           Fl_Pack uiViewGroup {
-            label ViewGroup open
+            label ViewGroup open selected
             xywh {0 59 933 501} type HORIZONTAL box FLAT_BOX labeltype NO_LABEL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1154,7 +1154,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             Fl_Group uiToolsGroup {open
               xywh {0 59 42 501}
             } {
-              Fl_Group uiEditGroup {open
+              Fl_Group uiEditGroup {
                 xywh {0 59 42 501} box FLAT_BOX
               } {
                 Fl_Button uiMove {
@@ -1222,7 +1222,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                   }
                 }
               }
-              Fl_Group uiActionGroup {open
+              Fl_Group uiActionGroup {
                 xywh {0 59 42 501} box FLAT_BOX hide
               } {
                 Fl_Button uiScrub {

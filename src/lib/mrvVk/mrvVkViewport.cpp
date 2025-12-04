@@ -386,6 +386,8 @@ namespace mrv
                 LOG_STATUS(_("HDR monitor not found or not configured."));
                 msg = string::Format(_("Vulkan color space detected {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
                 LOG_STATUS(msg);
+
+                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                     
                 msg = string::Format(_("Vulkan format detected {0}")).arg(string_VkFormat(format()));
                 LOG_STATUS(msg);
