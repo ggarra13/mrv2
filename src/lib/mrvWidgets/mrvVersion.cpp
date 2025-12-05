@@ -51,6 +51,9 @@
 #endif
 
 #ifdef VULKAN_BACKEND
+#ifdef __APPLE__
+#    include <MoltenVk/mvk_private_api.h>
+#endif
 #    include <vulkan/vulkan.h>
 #    define FLTK_OUTPUT_VERSION(ver) \
     (int) VK_API_VERSION_MAJOR(ver) << "." << \
@@ -1237,10 +1240,14 @@ namespace mrv
         uint32_t patch = VK_API_VERSION_PATCH(v);
         uint32_t build = 0;
 
-        o << "Vulkan Loader Version: "
+        o << "Vulkan Loader Version: v"
           << major << "." << minor << "." << patch
           << std::endl
           << std::endl;
+
+#ifdef __APPLE__
+        o << "MoltenVk Version: v" << MVK_VERSION_STRING << std::endl;
+#endif
         
         VkInstance instance = ui->uiView->instance();
         uint32_t deviceCount = 0;
