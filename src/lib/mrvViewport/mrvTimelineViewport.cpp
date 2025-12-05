@@ -2472,10 +2472,12 @@ namespace mrv
                     vsync == MonitorVSync::kVSyncNone)
                 {
                     swap_interval(0);
+                    p.ui->uiTimeline->swap_interval(0);
                 }
                 else
                 {
                     swap_interval(1);
+                    p.ui->uiTimeline->swap_interval(1);
                 }
                 if (!p.fullScreen)
                     _setFullScreen(false);
@@ -2492,10 +2494,12 @@ namespace mrv
                     vsync == MonitorVSync::kVSyncAlways)
                 {
                     swap_interval(1);
+                    p.ui->uiTimeline->swap_interval(1);
                 }
                 else
                 {
                     swap_interval(0);
+                    p.ui->uiTimeline->swap_interval(0);
                 }
                 save_ui_state(p.ui);
                 if (!_hasSecondaryViewport())
@@ -2525,6 +2529,18 @@ namespace mrv
      
             if (!active)
             {
+                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                if (vsync == MonitorVSync::kVSyncPresentationOnly ||
+                    vsync == MonitorVSync::kVSyncNone)
+                {
+                    swap_interval(0);
+                    p.ui->uiTimeline->swap_interval(0);
+                }
+                else
+                {
+                    swap_interval(1);
+                    p.ui->uiTimeline->swap_interval(1);
+                }
                 if (!p.presentation)
                     _setFullScreen(false);
                 if (p.fullScreen || p.presentation)
@@ -2540,6 +2556,18 @@ namespace mrv
             }
             else
             {
+                int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                if (vsync == MonitorVSync::kVSyncPresentationOnly ||
+                    vsync == MonitorVSync::kVSyncAlways)
+                {
+                    swap_interval(1);
+                    p.ui->uiTimeline->swap_interval(1);
+                }
+                else
+                {
+                    swap_interval(0);
+                    p.ui->uiTimeline->swap_interval(0);
+                }
                 if (p.presentation)
                     restore_ui_state(p.ui);
                 save_ui_state(p.ui);

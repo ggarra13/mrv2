@@ -55,10 +55,6 @@ if [[ $KERNEL == *Linux* ]]; then
 	export FLTK_VK_EXPLICIT_SYNC=0
     fi
     if [[ "@MRV2_BACKEND@" == "VK" ]]; then
-	if [[ -z $ENABLE_HDR_WSI ]]; then
-	    export ENABLE_HDR_WSI=1
-	fi
-	echo "        [vlk.] ENABLE_HDR_WSI=${ENABLE_HDR_WSI}"
 	echo "        [vlk.] FLTK_VK_EXPLICIT_SYNC=${FLTK_VK_EXPLICIT_SYNC}"
 	echo "        [vlk.] If you get stutters, set FLTK_VK_EXPLICIT_SYNC=1"xs
     fi

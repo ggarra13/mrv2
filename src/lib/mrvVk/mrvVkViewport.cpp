@@ -66,8 +66,21 @@ namespace mrv
             TimelineViewport(X, Y, W, H, L),
             _vk(new VKPrivate)
         {
+            TLRENDER_P();
+            
             int stereo = 0;
             mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | stereo);
+
+            int vsync = App::ui->uiPrefs->uiPrefsOpenGLVsync->value();
+            if (vsync == MonitorVSync::kVSyncPresentationOnly ||
+                vsync == MonitorVSync::kVSyncNone)
+            {
+                swap_interval(0);
+            }
+            else
+            {
+                swap_interval(1);
+            }
             // m_debugSync = true;
         }
 
@@ -601,7 +614,7 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-            
+
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
 

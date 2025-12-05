@@ -76,6 +76,8 @@ ChangeLog
 - Added Vulkan card name and drivers to Help->About->HW.
 - Improved utf8 to utf32 conversion and viceversa.
 - Keep the number for dropped frames after stopping playback.
+- Fixed an issue on macOS M1 that would (possibly) make vrmv2 not work on M1+.
+- Fixed Vulkan MAILBOX issue on Gnome49 / Kwin6.4.5 (Ubuntu 25.10).
 
 
 v1.4.6

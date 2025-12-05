@@ -131,7 +131,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {open
-  xywh {0 0 952 30} resizable
+  xywh {0 0 952 56} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -1145,7 +1145,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             xywh {0 86 933 474} labeltype NO_LABEL hide resizable
           }
           Fl_Pack uiViewGroup {
-            label ViewGroup open selected
+            label ViewGroup open
             xywh {0 59 933 501} type HORIZONTAL box FLAT_BOX labeltype NO_LABEL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
@@ -1465,6 +1465,7 @@ settings->setValue( mrv::kPenColorA, a);}
               }
             }
             Fl_Group uiView {
+              label {Main Viewport} selected
               xywh {42 59 621 501} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class MyViewport
