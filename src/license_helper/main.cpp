@@ -242,6 +242,9 @@ USD $ 75  Edit
 USD $150  Pro
 USD $300  Pro+ (Monthly)
 
+Only the listed amounts unlock features; all others are
+regular donations.
+
 to ggarra13@@gmail.com)TEXT"));
 
         Fl_Box*    what = new Fl_Box(150, 0, 600, 80);
