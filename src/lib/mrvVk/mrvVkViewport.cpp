@@ -70,17 +70,6 @@ namespace mrv
             
             int stereo = 0;
             mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | stereo);
-
-            int vsync = App::ui->uiPrefs->uiPrefsOpenGLVsync->value();
-            if (vsync == MonitorVSync::kVSyncPresentationOnly ||
-                vsync == MonitorVSync::kVSyncNone)
-            {
-                swap_interval(0);
-            }
-            else
-            {
-                swap_interval(1);
-            }
             // m_debugSync = true;
         }
 

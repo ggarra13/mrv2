@@ -241,17 +241,6 @@ namespace mrv
         {
             int fl_double = FL_DOUBLE;
             mode(FL_RGB | FL_ALPHA | fl_double);
-            
-            int vsync = App::ui->uiPrefs->uiPrefsOpenGLVsync->value();
-            if (vsync == MonitorVSync::kVSyncPresentationOnly ||
-                vsync == MonitorVSync::kVSyncNone)
-            {
-                swap_interval(0);
-            }
-            else
-            {
-                swap_interval(1);
-            }
             // m_debugSync = true;
         }
 

@@ -1041,7 +1041,7 @@ namespace mrv
         // Set a minimum size for dockgroup
         if (width < 270)
             width = 270;
-
+            
         ui->uiViewGroup->fixed(ui->uiDockGroup, width);
     }
 
@@ -1708,6 +1708,8 @@ namespace mrv
 
         MyViewport* view = ui->uiView;
 
+
+
         // Only redisplay the tool bars if not on Presentation
         // Mode. (User changed Preferences while on Presentation mode).
         if (!view->getPresentationMode())
@@ -2053,6 +2055,35 @@ namespace mrv
             {
                 bool value = uiPrefs->uiPrefsSecondaryOnTop->value();
                 window->always_on_top(value);
+            }
+        }
+        
+        int vsync = ui->uiPrefs->uiPrefsOpenGLVsync->value();
+        if (vsync == MonitorVSync::kVSyncPresentationOnly ||
+            vsync == MonitorVSync::kVSyncNone)
+        {
+            view->swap_interval(0);
+            ui->uiTimeline->swap_interval(0);
+            if (secondary)
+            {
+                auto window = secondary->viewport();
+                if (window->visible())
+                {
+                    window->swap_interval(0);
+                }
+            }
+        }
+        else
+        {
+            view->swap_interval(1);
+            ui->uiTimeline->swap_interval(1);
+            if (secondary)
+            {
+                auto window = secondary->viewport();
+                if (window->visible())
+                {
+                    window->swap_interval(1);
+                }
             }
         }
 
