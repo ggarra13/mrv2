@@ -52,7 +52,7 @@
 
 #ifdef VULKAN_BACKEND
 #ifdef __APPLE__
-#    include <MoltenVk/mvk_private_api.h>
+#    include <MoltenVK/mvk_private_api.h>
 #endif
 #    include <vulkan/vulkan.h>
 #    define FLTK_OUTPUT_VERSION(ver) \
