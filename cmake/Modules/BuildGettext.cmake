@@ -38,7 +38,7 @@ elseif(APPLE)
 	/usr/local/include/libintl.h
 	/opt/homebrew/include/libintl.h)
     foreach(_h_file ${_libintl_h_files})
-	if (EXISTS "${_h_file})"
+	if (EXISTS "${_h_file})")
 	    file(COPY "${_h_file}" DESTINATION ${CMAKE_INSTALL_PREFIX}/include/)
 	endif()
     endforeach()
