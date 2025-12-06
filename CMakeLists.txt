@@ -90,16 +90,16 @@ else()
     set(vcpkg_OS "linux")
 endif()
 
-set(VCPKG_TARGET_TRIPLET "${vcpkg_ARCH}-${vcpkg_OS}")    
+set(VCPKG__TRIPLET "${vcpkg_ARCH}-${vcpkg_OS}")    
 
 message(STATUS "VCPKG running from ${VCPKG}")
-message(STATUS "VCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
+message(STATUS "VCPKG_TRIPLET=${VCPKG_TRIPLET}")
 
 
 # \@todo:
 # This is unused for now, as it is always out of date and does not do
 # patches.
-set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+#set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 
 
 set(Gettext_DEP )
