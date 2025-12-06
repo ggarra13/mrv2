@@ -145,6 +145,7 @@ jobs:
         TLRENDER_SVTAV1: OFF
         TLRENDER_TIFF: OFF
         TLRENDER_USD: OFF
+        TLRENDER_VK: OFF
         TLRENDER_VPX: OFF
         
       run: |

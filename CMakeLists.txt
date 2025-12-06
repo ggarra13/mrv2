@@ -55,11 +55,7 @@ find_package(Git REQUIRED)
 if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
-
-#
-# Handle libintl, gettext and libintl
-#
-    
+   
 set(vcpkg_DEP )
 set(USE_VCPKG TRUE)
 if (BUILD_VCPKG)
@@ -102,6 +98,9 @@ message(STATUS "VCPKG_TRIPLET=${VCPKG_TRIPLET}")
 #set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 
 
+#
+# Handle libintl and gettext
+#
 set(Gettext_DEP )
 include(cmake/Modules/BuildGettext.cmake )
 
@@ -113,7 +112,7 @@ string(REPLACE ";" "|" CMAKE_MODULE_PATH_TMP "${CMAKE_MODULE_PATH}")
     
 #
 # Python cannot be built with asan dependencies
-#set(PYTHON_DEP )
+set(PYTHON_DEP )
 if(BUILD_PYTHON)
     set(Python_EXECUTABLE "$ENV{PYTHON}")
     set(Python_VERSION "$ENV{PYTHON_VERSION}")
@@ -183,18 +182,18 @@ if (NOT BUILD_PYTHON)
     endif()
 endif()
 
-if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
-    # Check for Clang or GCC compiler  (\@todo: add Microsoft support)
-    if (TLRENDER_ASAN AND
-	    ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR
-		(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")))
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
-	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
-	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fsanitize=address")
-    endif()
-endif()
+# if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
+#     # Check for Clang or GCC compiler  (\@todo: add Microsoft support)
+#     if (TLRENDER_ASAN AND
+# 	    ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR
+# 		(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")))
+# 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+# 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+# 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+# 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
+# 	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fsanitize=address")
+#     endif()
+# endif()
 
 
 
