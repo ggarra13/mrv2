@@ -81,6 +81,7 @@ jobs:
         . ./etc/windows/install_vulkan.sh
         
         # Persist environment variables for subsequent steps
+        echo "WINDOWS_VULKAN_SDK=$WINDOWS_VULKAN_SDK" >> $GITHUB_ENV
         echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
         echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
 
@@ -89,7 +90,7 @@ jobs:
       run: |
         # 1. Run the Runtime Installer silently (/S)
         # This extracts vulkan-1.dll to C:\Windows\System32
-        cd $Env:VULKAN_SDK
+        cd $Env:WINDOWS_VULKAN_SDK
         
         Write-Host "Installing Vulkan Runtime..."
         Start-Process -FilePath ".\Helpers\VulkanRT.exe" -ArgumentList "/S" -Wait

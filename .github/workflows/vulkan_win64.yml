@@ -81,8 +81,9 @@ jobs:
         . ./etc/windows/install_vulkan.sh
         
         # Persist environment variables for subsequent steps
+        echo "WINDOWS_VULKAN_SDK=$WINDOWS_VULKAN_SDK" >> $GITHUB_ENV
         echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+        echo "${VULKAN_SDK}\bin" >> $GITHUB_PATH
         
     - name: Install and Copy Vulkan Runtime
       shell: powershell

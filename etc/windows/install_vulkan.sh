@@ -31,8 +31,7 @@ ls /tmp
 # Do not use the system VULKAN_SDK, which may be old.
 #
 export VULKAN_SDK="$PWD/VulkanSDK-vmrv2"
-echo "Remove ${VULKAN_ROOT}"
-rm -rf $VULKAN_SDK
+export WINDOWS_VULKAN_SDK=`cygpath -w "${VULKAN_SDK}"`
 
 /tmp/vulkan-sdk.exe \
     --root "$VULKAN_SDK" \
