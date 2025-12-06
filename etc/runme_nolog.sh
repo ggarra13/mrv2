@@ -266,19 +266,19 @@ else
 fi
     
 if [ -z "$TLRENDER_VK" ]; then
+    export TLRENDER_VK=OFF
     if [ -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
 	export TLRENDER_VK=ON
 	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
     else
-	export TLRENDER_VK=OFF
-	export MRV2_HDR=ON
+	export MRV2_HDR=OFF
 	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
     fi
 else
     if [ ! -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
 	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
 	export TLRENDER_VK=OFF
-	export MRV2_HDR=ON
+	export MRV2_HDR=OFF
     else
 	if [[ "$TLRENDER_VK" == "ON" || "$TLRENDER_VK" == "1" ]]; then
 	    echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
@@ -376,7 +376,8 @@ if [[ $KERNEL == *Linux* ]]; then
 fi
 
 echo "mrv2 Options"
-echo 
+echo
+echo "Build vcpkg......................... ${BUILD_VCPKG}		(BUILD_VCPKG)"
 echo "Build Python........................ ${BUILD_PYTHON} 	(BUILD_PYTHON)"
 if [[ ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
     echo "Python location: ${MRV2_PYTHON}"
@@ -518,7 +519,7 @@ cmd="cmake -G 'Ninja'
 	   -D TLRENDER_PROGRAMS=OFF
 	   -D TLRENDER_EXAMPLES=FALSE
 	   -D TLRENDER_TESTS=FALSE
-	   -D TLRENDER_USD_PYTHON=${TLRENDER_USD_PYTHON}
+	   -D TLRENDER_USD_PYTHON=\"${TLRENDER_USD_PYTHON}\"
 	   -D TLRENDER_QT6=OFF
 	   -D TLRENDER_QT5=OFF
 	   
