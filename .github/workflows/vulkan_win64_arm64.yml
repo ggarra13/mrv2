@@ -122,8 +122,8 @@ jobs:
             exit 1
         }
 
-    # - name: Verify Vulkan
-    #   run: vulkaninfo
+    - name: Verify Vulkan
+       run: ${VULKAN_SDK}/Bin/vulkaninfoSDK.exe
         
     - name: Setup environment
       run: mkdir -p ssh
