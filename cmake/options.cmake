@@ -7,7 +7,7 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_CXX_EXTENSIONS OFF )
 
 set(BUILD_ZLIB FALSE CACHE BOOL "Enable ZLIB building")
-set(BUILD_GETTEXT FALSE CACHE BOOL "Enable GETTEXT building")
+set(BUILD_VCPKG TRUE CACHE BOOL "Build vckg from source")
 set(BUILD_FLTK TRUE CACHE BOOL "Enable FLTK building (needed)")
 set(BUILD_MRV2 TRUE CACHE BOOL "Enable mrv2 building")
 
