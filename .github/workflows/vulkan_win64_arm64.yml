@@ -123,7 +123,7 @@ jobs:
         }
 
     - name: Verify Vulkan
-       run: ${VULKAN_SDK}/Bin/vulkaninfoSDK.exe
+      run: ${VULKAN_SDK}/Bin/vulkaninfoSDK.exe
         
     - name: Setup environment
       run: mkdir -p ssh
