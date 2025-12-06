@@ -25,17 +25,20 @@ if [[ ! -e /tmp/vulkan-sdk.exe ]]; then
     fi
 fi
 
-exit
-
 ls /tmp
 
-export VULKAN_SDK="/C/VulkanSDK"
+#
+# Do not use the system VULKAN_SDK, which may be old.
+#
+export VULKAN_SDK="$PWD/VulkanSDK-vmrv2"
+echo "Remove ${VULKAN_ROOT}"
 rm -rf $VULKAN_SDK
 
 /tmp/vulkan-sdk.exe \
     --root "$VULKAN_SDK" \
+    --accept-messages \
     --accept-licenses \
-    --default-answer \
+    -da \
     --confirm-command install
 
 rm -f /tmp/vulkan-sdk.exe
