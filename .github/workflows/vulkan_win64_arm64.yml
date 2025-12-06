@@ -103,7 +103,7 @@ jobs:
       run: |
         # 1. Run the Runtime Installer silently (/S)
         # This extracts vulkan-1.dll to C:\Windows\System32
-        cd $Emv:VULKAN_SDK
+        cd $Env:VULKAN_SDK
         
         Write-Host "Installing Vulkan Runtime..."
         Start-Process -FilePath ".\Helpers\VulkanRT.exe" -ArgumentList "/S" -Wait
