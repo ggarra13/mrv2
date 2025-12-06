@@ -90,7 +90,7 @@ else()
     set(vcpkg_OS "linux")
 endif()
 
-set(VCPKG__TRIPLET "${vcpkg_ARCH}-${vcpkg_OS}")    
+set(VCPKG_TRIPLET "${vcpkg_ARCH}-${vcpkg_OS}")    
 
 message(STATUS "VCPKG running from ${VCPKG}")
 message(STATUS "VCPKG_TRIPLET=${VCPKG_TRIPLET}")
