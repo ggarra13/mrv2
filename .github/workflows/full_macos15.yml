@@ -1,4 +1,4 @@
-                       name: OpenGL MacOS Intel
+name: OpenGL MacOS Intel
 
 on:
   push:
