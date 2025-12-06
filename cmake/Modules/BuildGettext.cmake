@@ -29,4 +29,6 @@ if(WIN32)
     set(VCPKG_BIN_DIR "${VCPKG_ROOT}/installed/${VCPKG_TRIPLET}/bin")
     
     list(APPEND CMAKE_PREFIX_PATH ${VCPKG_INSTALLED})
+elseif(APPLE)
+    
 endif()
