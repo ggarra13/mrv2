@@ -48,6 +48,11 @@ get_git_version
 if [ -z "$MSYS2_INSTALL" ]; then
     export MSYS2_INSTALL=ON
 fi
+
+if [ -z "$BUILD_VCPKG" ]; then
+    export BUILD_VCPKG=OFF
+fi
+
 if [ -z "$BUILD_GETTEXT" ]; then
     export BUILD_GETTEXT=OFF
 fi
@@ -464,6 +469,7 @@ cmd="cmake -G 'Ninja'
            -D CMAKE_OSX_ARCHITECTURES=\"${CMAKE_OSX_ARCHITECTURES}\"
            -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
 
+	   -D BUILD_VCPKG=${BUILD_VCPKG}
 	   -D BUILD_PYTHON=${BUILD_PYTHON}
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
