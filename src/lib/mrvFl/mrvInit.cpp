@@ -16,7 +16,9 @@
 #include <tlTimelineUIVk/Init.h>
 #endif
 
-#include <tlDevice/Init.h> // @todo:
+#ifdef TLRENDER_NDI
+#    include <tlDevice/Init.h>
+#endif
 
 namespace mrv
 {
@@ -31,7 +33,10 @@ namespace mrv
 #ifdef VULKAN_BACKEND
         timelineui_vk::init(context);
 #endif
+
+#ifdef TLRENDER_NDI
         device::init(context);
+#endif
     }
 
 } // namespace mrv

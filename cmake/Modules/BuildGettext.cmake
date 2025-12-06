@@ -30,13 +30,27 @@ if(WIN32)
     
     list(APPEND CMAKE_PREFIX_PATH ${VCPKG_INSTALLED})
 elseif(APPLE)
-    
     #
     # brew .dylibs are compiled only for the current version of the OS.
     #
     # We distribute libintl dylib compatible with v10.5 on Intel macOS
-    file(COPY
-	precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include/
-	FOLLOW_SYMLINK_CHAIN)
+    set(_libintl_h_files
+	/usr/local/include/libintl.h
+	/opt/homebrew/include/libintl.h)
+    foreach(_c_file ${_libintl_h_files)
+	if (EXISTS "${_c_file})"
+	    file(COPY "${_c_file}" DESTINATION ${CMAKE_INSTALL_PREFIX}/include/)
+	endif()
+    endforeach()
     
+    set(_libintl_dylib_files
+	/usr/local/lib/libintl.dylib
+	/opt/homebrew/lib/libintl.dylib
+    )
+    foreach(_dylib_file ${_libintl_dylib_files)
+	if (EXISTS "${_dylib_file}")
+	    file(COPY "${_dylib_file}" DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/
+		FOLLOW_SYMLINK_CHAIN)
+	endif()
+    endforeach()    
 endif()
