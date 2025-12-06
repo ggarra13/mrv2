@@ -78,6 +78,7 @@ ChangeLog
 - Fixed an issue on macOS M1 that would (possibly) make vrmv2 not work on M1+.
 - Fixed Vulkan MAILBOX issue on Gnome49 / Kwin6.4.5 (Ubuntu 25.10).
 - Added MoltenVK version to vmrv2 on macOS.
+- Fixed ussage of old vulkan-1.dll on Windows' machines on beta (Github) builds.
 
 
 v1.4.6
