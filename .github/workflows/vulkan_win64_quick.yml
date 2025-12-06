@@ -134,14 +134,16 @@ jobs:
         TLRENDER_JPEG: OFF
         TLRENDER_LIBPLACEBO: OFF
         TLRENDER_NDI: OFF
-        TLRENDER_NET: ON
+        TLRENDER_NET: OFF
         TLRENDER_OPENJPH: ON
         TLRENDER_RAW: OFF
         TLRENDER_SGI: OFF
+        TLRENDER_SSL: ON
         TLRENDER_STB: OFF
         TLRENDER_SVTAV1: OFF
         TLRENDER_TIFF: OFF
         TLRENDER_USD: OFF
+        TLRENDER_VK: ON
         TLRENDER_VPX: OFF
         
       run: |
