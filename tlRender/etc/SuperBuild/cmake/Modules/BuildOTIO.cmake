@@ -11,12 +11,12 @@ if(NOT BUILD_SHARED_LIBS)
     set(OTIO_SHARED_LIBS OFF)
 endif()
 
-set(OTIO_PATCH_COMMAND "")
+set(OTIO_PATCH "")
 if(WIN32)
-    list(APPEND OTIO_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    set(OTIO_PATCH ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/patches/OTIO-patch/src/opentime/timeRange.h
-	${CMAKE_CURRENT_BINARY_DIR}/OTIO/src/OTIO/src/opentime/timeRange.h)
-    list(APPEND OTIO_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	${CMAKE_CURRENT_BINARY_DIR}/OTIO/src/OTIO/src/opentime/timeRange.h
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/patches/OTIO-patch/src/opentimelineio/errorStatus.h
 	${CMAKE_CURRENT_BINARY_DIR}/OTIO/src/OTIO/src/opentimelineio/errorStatus.h)
 
@@ -34,6 +34,6 @@ ExternalProject_Add(
     DEPENDS ${OTIO_DEPENDENCIES}
     GIT_REPOSITORY ${OTIO_GIT_REPOSITORY}
     GIT_TAG ${OTIO_GIT_TAG}
-    PATCH_COMMAND ${OTIO_PATCH_COMMAND}
+    PATCH_COMMAND ${OTIO_PATCH}
     LIST_SEPARATOR |
     CMAKE_ARGS ${OTIO_ARGS})
