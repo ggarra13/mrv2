@@ -57,9 +57,8 @@ ChangeLog
 - Added Vulkan's GPU card and driver versions to Help/About (HW tab).
 - Added Donate button on the license_helper, with simple donations.
 - Verified vmrv2 and mrv2 work on Kwin.
-- Fixed distributing libvulkan.so on Unix and vulkan-1.dll on Windows.  macOS
-  needs distributing as it does not come with the OS unless installed from
-  brew.
+- Fixed distributing libvulkan.so on Unix.  macOS and Windows
+  needs distributing it..
 - One feature of FLTK's python has changed.  You can no longer use:
       ```from fltk import Fl
         Fl.check()```
@@ -78,6 +77,7 @@ ChangeLog
 - Keep the number for dropped frames after stopping playback.
 - Fixed an issue on macOS M1 that would (possibly) make vrmv2 not work on M1+.
 - Fixed Vulkan MAILBOX issue on Gnome49 / Kwin6.4.5 (Ubuntu 25.10).
+- Added MoltenVK version to vmrv2 on macOS.
 
 
 v1.4.6
