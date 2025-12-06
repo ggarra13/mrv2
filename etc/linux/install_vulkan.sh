@@ -67,7 +67,7 @@ ls /tmp
 
 mkdir -p VulkanSDK-Linux
 cd VulkanSDK-Linux
-tar -xvf /tmp/vulkan-sdk.tar.gz
+tar -xvf /tmp/vulkan-sdk.tar.xz
 
 cd ..
 
