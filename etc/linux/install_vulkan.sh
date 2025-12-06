@@ -56,7 +56,7 @@ fi
 #
 # If download failed, use latest (version is not available)
 #
-if [[ ! -e /tmp/vulkan-sdk.tar.xz]]; then
+if [[ ! -e /tmp/vulkan-sdk.tar.xz ]]; then
     echo "Vulkan version ${VK_DOWNLOAD} not found! Downloading latest"
     curl -L -o /tmp/vulkan-sdk.tar.xz "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"
 fi
