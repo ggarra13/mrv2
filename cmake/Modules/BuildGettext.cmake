@@ -37,9 +37,9 @@ elseif(APPLE)
     set(_libintl_h_files
 	/usr/local/include/libintl.h
 	/opt/homebrew/include/libintl.h)
-    foreach(_c_file ${_libintl_h_files)
-	if (EXISTS "${_c_file})"
-	    file(COPY "${_c_file}" DESTINATION ${CMAKE_INSTALL_PREFIX}/include/)
+    foreach(_h_file ${_libintl_h_files})
+	if (EXISTS "${_h_file})"
+	    file(COPY "${_h_file}" DESTINATION ${CMAKE_INSTALL_PREFIX}/include/)
 	endif()
     endforeach()
     
@@ -47,8 +47,9 @@ elseif(APPLE)
 	/usr/local/lib/libintl.dylib
 	/opt/homebrew/lib/libintl.dylib
     )
-    foreach(_dylib_file ${_libintl_dylib_files)
+    foreach(_dylib_file ${_libintl_dylib_files})
 	if (EXISTS "${_dylib_file}")
+	    file(COPY "${_dylib_file}" DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/)
 	    file(COPY "${_dylib_file}" DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/
 		FOLLOW_SYMLINK_CHAIN)
 	endif()
