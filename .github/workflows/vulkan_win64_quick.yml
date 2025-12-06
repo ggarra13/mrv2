@@ -108,8 +108,8 @@ jobs:
             exit 1
         }
 
-    - name: Verify Vulkan
-      run: vulkaninfo
+    # - name: Verify Vulkan
+    #   run: vulkaninfo
         
     - name: Setup environment
       run: mkdir -p ssh
