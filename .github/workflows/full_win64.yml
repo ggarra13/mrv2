@@ -76,14 +76,14 @@ jobs:
 
     # \@bug: Install Vulkan SDK (must be installed to prevent a copy of
     #        vulkan-1.dll into C:/Windows/System32/vulkan-1.dll
-    - name: Install Vulkan SDK
-      run: |
+    # - name: Install Vulkan SDK
+    #   run: |
 
-        . ./etc/windows/install_vulkan.sh
+    #     . ./etc/windows/install_vulkan.sh
         
-        # Persist environment variables for subsequent steps
-        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+    #     # Persist environment variables for subsequent steps
+    #     echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+    #     echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
 
     - name: Setup environment
       run: mkdir -p ssh

@@ -74,16 +74,17 @@ jobs:
     #     sudo apt-get install -y glslang-dev spirv-tools spirv-headers
         
     # Install Vulkan SDK
-    - name: Install Vulkan SDK
-      if: github.ref_name == 'vulkan'
-      run: |
+    
+    # - name: Install Vulkan SDK
+    #   if: github.ref_name == 'vulkan'
+    #   run: |
 
-        . ./etc/linux/install_vulkan.sh
+    #     . ./etc/linux/install_vulkan.sh
         
-        # Persist environment variables for subsequent steps
-        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-        echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
-        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+    #     # Persist environment variables for subsequent steps
+    #     echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+    #     echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
+    #     echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
         
     - name: Synchronize clock
       run: |
