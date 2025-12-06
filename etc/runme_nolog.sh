@@ -51,6 +51,9 @@ fi
 
 if [ -z "$BUILD_VCPKG" ]; then
     export BUILD_VCPKG=OFF
+    if [[ $KERNEL == *Windows* ]]; then
+	export BUILD_VCPKG=ON
+    fi
 fi
 
 if [ -z "$BUILD_GETTEXT" ]; then
