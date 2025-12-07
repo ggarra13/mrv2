@@ -20,9 +20,13 @@ GITHUB_ASSET_RELEASE_DAYS = 3
 #
 import mrv2
 from mrv2 import cmd, plugin, session, settings
-from fltk import *
 import platform
 import sys
+
+try:
+    from fltk import *
+except Exception as e:
+    pass
 
 try:
     import gettext

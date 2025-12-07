@@ -14,7 +14,7 @@ set(HEADERS
     mrvHistogramPanel.h
     mrvImageInfoPanel.h
     mrvLogsPanel.h
-    mrvPanelsAux.h
+     mrvPanelsAux.h
     mrvPanelsCallbacks.h
     mrvPanelWidget.h
     mrvPlaylistPanel.h
@@ -45,8 +45,6 @@ set(SOURCES
     mrvThumbnailPanel.cpp
     mrvVectorscopePanel.cpp
 )
-
-set(LIBRARIES mrvFl mrvEdit)
 	
 if(TLRENDER_USD)
     list( APPEND HEADERS mrvUSDPanel.h )
@@ -63,6 +61,7 @@ if(MRV2_PYBIND11)
     list( APPEND HEADERS mrvPythonPanel.h )
     list( APPEND SOURCES mrvPythonPanel.cpp )
     if(UNIX AND NOT APPLE)
+	# \@note: still needed?
 	# Needed for python3.10 on Rocky and Ubuntu 20.04
 	list( APPEND LIBRARIES "util" )
     endif()
@@ -72,6 +71,8 @@ if(MRV2_NETWORK)
     list( APPEND HEADERS mrvNetworkPanel.h )
     list( APPEND SOURCES mrvNetworkPanel.cpp )
 endif()
+
+set(LIBRARIES mrvFl mrvEdit)
 
 add_library(mrvPanels ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

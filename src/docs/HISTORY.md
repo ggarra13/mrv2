@@ -67,7 +67,7 @@ ChangeLog
       fltk.check```
 - Fixed libjpeg-turbo compilation on aarch64 runners.
 - Fixed OpenJPH compilation on aarch64 runners.
-- Upgraded OpenJPH version to 
+- Upgraded OpenJPH version to v0.25.3.
 - Made Vulkan compilation faster skipping OpenGL's tlRender files.
 - Added downloading only when updating mrv2 or vmrv2.
 - Fixed UTF8toUTF32 and UTF32toUTF8 code from Darby.
@@ -79,7 +79,8 @@ ChangeLog
 - Fixed Vulkan MAILBOX issue on Gnome49 / Kwin6.4.5 (Ubuntu 25.10).
 - Added MoltenVK version to vmrv2 on macOS.
 - Fixed ussage of old vulkan-1.dll on Windows' machines on beta (Github) builds.
-- Fixed a number of issues with aarch64 compilations.
+- Fixed a number of issues with aarch64 compilations.  Previous builds seem to have been AMD64 stubs.
+- Added shipping Python opentimelineio modules.
 
 
 v1.4.6

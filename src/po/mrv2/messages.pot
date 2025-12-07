@@ -1662,64 +1662,16 @@ msgstr ""
 msgid "No occurrences of '%s' found!"
 msgstr ""
 
-msgid "Input"
-msgstr ""
-
-msgid "NDI Connection"
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "Fast Format"
-msgstr ""
-
-msgid "Best Format"
-msgstr ""
-
-msgid "With Audio"
-msgstr ""
-
-msgid "Without Audio"
-msgstr ""
-
-msgid "Output"
-msgstr ""
-
-msgid "Start streaming"
-msgstr ""
-
-msgid "With Metadata"
-msgstr ""
-
-msgid "Without Metadata"
-msgstr ""
-
-msgid "Streaming {0} {1}..."
-msgstr ""
-
-msgid "Stop streaming"
-msgstr ""
-
-msgid "Renderer"
-msgstr ""
-
-msgid "Complexity"
-msgstr ""
-
-msgid "Draw Mode"
-msgstr ""
-
-msgid "Stage Cache"
-msgstr ""
-
-msgid "Disk Cache in GB"
-msgstr ""
-
 msgid "Toggle other eye stereo image."
 msgstr ""
 
+msgid "Input"
+msgstr ""
+
 msgid "Image"
+msgstr ""
+
+msgid "Output"
 msgstr ""
 
 msgid "Anaglyph"
@@ -1849,6 +1801,9 @@ msgid "Close current EDL."
 msgstr ""
 
 msgid "Clear the messages"
+msgstr ""
+
+msgid "None"
 msgstr ""
 
 msgid "Turn off image warping."
@@ -3457,18 +3412,6 @@ msgid "Could not append video track {0}"
 msgstr ""
 
 msgid "Could not append audio track {0}"
-msgstr ""
-
-msgid "%s - Page %d"
-msgstr ""
-
-msgid "Frame {0} - TC: {1} - S: {2}"
-msgstr ""
-
-msgid "Image too big.  Will save the viewport size."
-msgstr ""
-
-msgid "Could not read image data from view"
 msgstr ""
 
 msgid "Link/Open"
@@ -5372,6 +5315,9 @@ msgstr ""
 msgid "ViewGroup"
 msgstr ""
 
+msgid "Roll Editing Tool."
+msgstr ""
+
 msgid "Undo Last Edit."
 msgstr ""
 
@@ -6197,6 +6143,9 @@ msgstr ""
 msgid ""
 "This setting controls the sensitivity of scrubbing.  Smaller values make the "
 "mouse move jump more frames while higher values does the opposite."
+msgstr ""
+
+msgid "With Audio"
 msgstr ""
 
 msgid ""
@@ -7321,6 +7270,9 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
+msgstr ""
+
+msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"
