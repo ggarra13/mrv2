@@ -852,8 +852,11 @@ namespace mrv
 
         Fl_Preferences video(base, "opengl");
 
+#ifdef VULKAN_BACKEND
+        uiPrefs->uiPrefsOpenGLVsync->value(1);
+#else
         video.get("vsync", tmp, 2);
-        uiPrefs->uiPrefsOpenGLVsync->value(tmp);
+#endif
 
         video.get("color_buffers_accuracy", tmp, 0);
         uiPrefs->uiPrefsColorAccuracy->value(tmp);
@@ -1580,16 +1583,18 @@ namespace mrv
             "ffmpeg_log_display",
             (int)uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value());
 
-        Fl_Preferences opengl(base, "opengl");
-        opengl.set("vsync", (int)uiPrefs->uiPrefsOpenGLVsync->value());
-        opengl.set(
+        Fl_Preferences video(base, "opengl");
+#ifdef OPENGL_BACKEND
+        video.set("vsync", (int)uiPrefs->uiPrefsOpenGLVsync->value());
+#endif
+        video.set(
             "color_buffers_accuracy",
             (int)uiPrefs->uiPrefsColorAccuracy->value());
-        opengl.set(
+        video.set(
             "blit_main_viewport", (int)uiPrefs->uiPrefsBlitMainViewport->value());
-        opengl.set(
+        video.set(
             "blit_secondary_viewport", (int)uiPrefs->uiPrefsBlitSecondaryViewport->value());
-        opengl.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
+        video.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
         
         Fl_Preferences vulkan(base, "vulkan");
         vulkan.set(
