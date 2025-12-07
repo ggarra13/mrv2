@@ -131,8 +131,8 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {open
-  xywh {0 0 952 56} resizable
-  class Fl_Double_Window visible
+  xywh {64 75 952 56} hide resizable
+  class Fl_Double_Window
 } {
   Fl_Group {} {open
     xywh {0 0 933 30} box FLAT_BOX color 56
@@ -869,7 +869,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 933 673} type Double align 80 resizable
+      xywh {630 135 933 673} type Double align 80 resizable
       class {mrv::MainWindow} size_range {933 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -1154,7 +1154,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             Fl_Group uiToolsGroup {open
               xywh {0 59 42 501}
             } {
-              Fl_Group uiEditGroup {
+              Fl_Group uiEditGroup {open
                 xywh {0 59 42 501} box FLAT_BOX
               } {
                 Fl_Button uiMove {
@@ -1165,8 +1165,8 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                 }
                 Fl_Button uiRoll {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );}
-                  image {../../icons/EditRoll.svg} compress_image 1 xywh {2 110 40 50} down_box DOWN_BOX selection_color 95
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );} selected
+                  tooltip {Roll Editing Tool.} image {../../icons/EditRoll.svg} compress_image 1 xywh {2 110 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiTrim {
@@ -1465,7 +1465,7 @@ settings->setValue( mrv::kPenColorA, a);}
               }
             }
             Fl_Group uiView {
-              label {Main Viewport} selected
+              label {Main Viewport}
               xywh {42 59 621 501} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class MyViewport
