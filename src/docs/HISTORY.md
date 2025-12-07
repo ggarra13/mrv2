@@ -64,7 +64,8 @@ ChangeLog
         Fl.check()```
   as the Fl module is gone.  It is replaced by:
      ```import fltk
-      fltk.check```
+      import fltk as Fl
+      Fl.check()```
 - Fixed libjpeg-turbo compilation on aarch64 runners.
 - Fixed OpenJPH compilation on aarch64 runners.
 - Upgraded OpenJPH version to v0.25.3.

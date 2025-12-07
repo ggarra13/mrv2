@@ -854,13 +854,6 @@ namespace mrv
 
                     p.startTime = std::chrono::high_resolution_clock::now();
                 }
-                else if (player->playback() == timeline::Playback::Stop &&
-                         p.lastEvent != FL_DRAG)
-                {
-                    snprintf(
-                        buf, 512, "DF: %" PRIu64, p.droppedFrames);
-                    tmp += buf;
-                }
             }
 
             p.lastFrame = time.value();
