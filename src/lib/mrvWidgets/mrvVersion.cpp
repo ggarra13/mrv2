@@ -1240,7 +1240,14 @@ namespace mrv
         uint32_t patch = VK_API_VERSION_PATCH(v);
         uint32_t build = 0;
 
-        o << "Vulkan Loader Version: v"
+#ifdef _WINDOWS
+        o << "vulkan-1.dll Version:\tv" << VULKAN_DLL_VERSION
+          << std::endl
+          << std::endl;
+#endif
+
+        
+        o << "Vulkan Loader Version:\tv"
           << major << "." << minor << "." << patch
           << std::endl
           << std::endl;

@@ -46,6 +46,13 @@ endif()
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
     find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
+    set(VULKAN_DLL_VERSION )
+    if (WIN32)
+	execute_process(COMMAND powershell -Command "(Get-Item 'C:\\Windows\\System32\\vulkan-1.dll').VersionInfo.FileVersion"
+	    OUTPUT_VARIABLE VULKAN_DLL_VERSION
+	    OUTPUT_STRIP_TRAILING_WHITESPACE)
+    endif()
+    add_definitions(-DVULKAN_DLL_VERSION="${VULKAN_DLL_VERSION}")
 endif()
 
 find_package(FLTK CONFIG REQUIRED)
