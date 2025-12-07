@@ -34,7 +34,7 @@ The donationware version when running without a donation, does not have:
     - Annotations (available from Solo and later)
     - Python (available in Standard and later)
     - OpenEXR layer switching (available in Standard and later).
-    - Edit (available in Edit and later)
+    - Editing (available in Edit and later)
     - Voice Annotations (available in Pro)
     - Move license to a new machine (available in Pro monthly)
 
@@ -81,7 +81,8 @@ ChangeLog
 - Added MoltenVK version to vmrv2 on macOS.
 - Fixed ussage of old vulkan-1.dll on Windows' machines on beta (Github) builds.
 - Fixed a number of issues with aarch64 compilations.  Previous builds seem to have been AMD64 stubs.
-- Added shipping Python opentimelineio modules.
+- Added shipping Python opentimelineio modules within mrv2/vmrv2.
+- Fixed FLU file requester's on Linux putting the filename in the directory path after one save.
 
 
 v1.4.6

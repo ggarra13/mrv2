@@ -1444,45 +1444,50 @@ namespace mrv
                 }
             }
 
-            menu->add(
-                _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),
-                (Fl_Callback*)edit_cut_frame_cb, ui);
-            menu->add(
-                _("Edit/Frame/Copy"), kEditCopyFrame.hotkey(),
-                (Fl_Callback*)edit_copy_frame_cb, ui);
-            menu->add(
-                _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
-                (Fl_Callback*)edit_paste_frame_cb, ui);
-            menu->add(
-                _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
-                (Fl_Callback*)edit_insert_frame_cb, ui);
+            if (App::supports_editing)
+            {
+                menu->add(
+                    _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),
+                    (Fl_Callback*)edit_cut_frame_cb, ui);
+                menu->add(
+                    _("Edit/Frame/Copy"), kEditCopyFrame.hotkey(),
+                    (Fl_Callback*)edit_copy_frame_cb, ui);
+                menu->add(
+                    _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
+                    (Fl_Callback*)edit_paste_frame_cb, ui);
+                menu->add(
+                    _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
+                    (Fl_Callback*)edit_insert_frame_cb, ui);
 
-            menu->add(
-                _("Edit/Audio Clip/Insert"), kEditInsertAudioClip.hotkey(),
-                (Fl_Callback*)insert_audio_clip_cb, ui);
-            menu->add(
-                _("Edit/Audio Clip/Remove"), kEditRemoveAudioClip.hotkey(),
-                (Fl_Callback*)edit_remove_audio_clip_cb, ui);
-            menu->add(
-                _("Edit/Audio Gap/Insert"), kEditInsertAudioGap.hotkey(),
-                (Fl_Callback*)edit_insert_audio_gap_cb, ui);
-            menu->add(
-                _("Edit/Audio Gap/Remove"), kEditRemoveAudioGap.hotkey(),
-                (Fl_Callback*)edit_remove_audio_gap_cb, ui);
+                menu->add(
+                    _("Edit/Audio Clip/Insert"), kEditInsertAudioClip.hotkey(),
+                    (Fl_Callback*)insert_audio_clip_cb, ui);
+                menu->add(
+                    _("Edit/Audio Clip/Remove"), kEditRemoveAudioClip.hotkey(),
+                    (Fl_Callback*)edit_remove_audio_clip_cb, ui);
+                menu->add(
+                    _("Edit/Audio Gap/Insert"), kEditInsertAudioGap.hotkey(),
+                    (Fl_Callback*)edit_insert_audio_gap_cb, ui);
+                menu->add(
+                    _("Edit/Audio Gap/Remove"), kEditRemoveAudioGap.hotkey(),
+                    (Fl_Callback*)edit_remove_audio_gap_cb, ui);
 
-            menu->add(
-                _("Edit/Slice"), kEditSliceClip.hotkey(),
-                (Fl_Callback*)edit_slice_clip_cb, ui);
-            menu->add(
-                _("Edit/Remove"), kEditRemoveClip.hotkey(),
-                (Fl_Callback*)edit_remove_clip_cb, ui);
+                menu->add(
+                    _("Edit/Slice"), kEditSliceClip.hotkey(),
+                    (Fl_Callback*)edit_slice_clip_cb, ui);
+                menu->add(
+                    _("Edit/Remove"), kEditRemoveClip.hotkey(),
+                    (Fl_Callback*)edit_remove_clip_cb, ui);
 
-            menu->add(
-                _("Edit/Undo"), kEditUndo.hotkey(), (Fl_Callback*)edit_undo_cb,
-                ui);
-            menu->add(
-                _("Edit/Redo"), kEditRedo.hotkey(), (Fl_Callback*)edit_redo_cb,
-                ui);
+                menu->add(
+                    _("Edit/Undo"), kEditUndo.hotkey(),
+                    (Fl_Callback*)edit_undo_cb,
+                    ui);
+                menu->add(
+                    _("Edit/Redo"), kEditRedo.hotkey(),
+                    (Fl_Callback*)edit_redo_cb,
+                    ui);
+            }
         }
 
         // if ( num > 0 )

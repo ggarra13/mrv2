@@ -809,14 +809,15 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     clear_history();
 
-    cd(pathname);
+    tl::file::Path path(pathname);
+    std::string directory = path.getDirectory();
+    std::string fileName = path.get(-1, tl::file::PathType::FileName);
+
+    if (!directory.empty())
+        cd(directory.c_str());
 
     // if pathname does not start with "/" or "~", set the filename to it
-    if (pathname && pathname[0] != '/' && pathname[0] != '~' &&
-        (strlen(pathname) < 2 || pathname[1] != ':'))
-    {
-        filename.value(pathname);
-    }
+    filename.value(fileName.c_str());
 }
 
 void Flu_File_Chooser::initFileTypes()
