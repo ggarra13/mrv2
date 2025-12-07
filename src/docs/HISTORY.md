@@ -79,6 +79,7 @@ ChangeLog
 - Fixed Vulkan MAILBOX issue on Gnome49 / Kwin6.4.5 (Ubuntu 25.10).
 - Added MoltenVK version to vmrv2 on macOS.
 - Fixed ussage of old vulkan-1.dll on Windows' machines on beta (Github) builds.
+- Fixed a number of issues with aarch64 compilations.
 
 
 v1.4.6
