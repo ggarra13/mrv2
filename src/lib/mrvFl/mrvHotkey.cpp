@@ -532,7 +532,7 @@ namespace mrv
         ui->uiMove->copy_tooltip(tooltip.c_str());
         
         tooltip = _("Roll Edit Tool.\nMoves the ending or beginning and adds gaps.");
-        tooltip += addHotkey(kRollTrim);
+        tooltip += addHotkey(kEditRoll);
         ui->uiRoll->copy_tooltip(tooltip.c_str());
         
         tooltip = _("Trim Edit Tool\nMoves the ending or beginning without adding gaps");
