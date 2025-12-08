@@ -344,9 +344,26 @@ install( DIRECTORY share/locale
 #
 # Install update-mrv2 plugin
 #
-install( FILES python/plug-ins/update-mrv2.py
-    DESTINATION python/plug-ins
-    COMPONENT applications )
+if (MRV2_PYBIND11)
+    install( FILES python/plug-ins/update-mrv2.py
+	DESTINATION python/plug-ins
+	COMPONENT applications )
+    
+    install( DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
+	DESTINATION python/
+	COMPONENT applications )
+    
+    #
+    # Install mrv2's python demos
+    #
+    install( DIRECTORY python/demos
+	DESTINATION python
+	COMPONENT python_demos )
+
+    install( DIRECTORY python/plug-ins/demos
+	DESTINATION python/plug-ins
+	COMPONENT python_demos )
+endif()
 
 #
 # Install mrv2's documentation
@@ -354,17 +371,6 @@ install( FILES python/plug-ins/update-mrv2.py
 install( DIRECTORY docs
     DESTINATION .
     COMPONENT documentation )
-
-#
-# Install mrv2's python demos
-#
-install( DIRECTORY python/demos
-    DESTINATION python
-    COMPONENT python_demos )
-
-install( DIRECTORY python/plug-ins/demos
-    DESTINATION python/plug-ins
-    COMPONENT python_demos )
 
 #
 # These two variables will contain the sources for .po translation.
