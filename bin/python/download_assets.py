@@ -116,12 +116,12 @@ def download_url(base_url, dest_dir, mrv2_prefix):
 
             # Save the binary content
             with open(output_path, 'wb') as f:
-                for chunk in response.iter_content(chunk_size=8192):
+                for chunk in response.iter_content(chunk_size=4*1024*1024):
                     if chunk:
                         print('*',end='', flush=True)
                         f.write(chunk)
 
-            print(f"\nDownload complete: {os.path.abspath(filename)} (Size: {os.path.getsize(filename)} bytes)")
+            print(f"\nDownload complete: {os.path.abspath(output_path)} (Size: {os.path.getsize(output_path)} bytes)")
 
         except requests.exceptions.RequestException as e:
             print(f"Error downloading: {e}")
