@@ -283,7 +283,7 @@ namespace mrv
         gui.get("timeline_video_offset", tmpF, 0.0);
         uiPrefs->uiStartTimeOffset->value(tmpF);
 
-        gui.get("timeline_thumbnails", tmp, 1);
+        gui.get("timeline_thumbnails", tmp, 0);
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
         gui.get("panel_thumbnails", tmp, 1);
