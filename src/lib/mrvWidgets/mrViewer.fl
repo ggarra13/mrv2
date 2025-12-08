@@ -233,7 +233,7 @@ ui->uiView->centerView();}
         xywh {5 5 100 20}
       }
     }
-    Fl_Group {} {open
+    Fl_Group {} {
       xywh {36 1 897 28} box FLAT_BOX color 56
     } {
       Fl_Output uiCoord {
@@ -251,7 +251,7 @@ ui->uiView->centerView();}
           } {
             Fl_Menu_Button uiAColorType {
               label RGBA user_data_type {void*}
-              callback {ui->uiView->updatePixelBar();} open
+              callback {ui->uiView->updatePixelBar();}
               tooltip {Switch RGBA display between floating point, hexadecimal (0..0xff) and decimal (0..255).} xywh {151 3 45 24} labelsize 9 align 48
               code0 {o->disable_glyph();}
               class {mrv::PopupMenu}
@@ -269,7 +269,7 @@ ui->uiView->centerView();}
                 xywh {5 5 100 20}
               }
             }
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {199 3 271 25}
             } {
               Fl_Output uiPixelR {
@@ -925,7 +925,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar
+          label TopBar selected
           xywh {0 30 933 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -1165,8 +1165,8 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                 }
                 Fl_Button uiRoll {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );} selected
-                  tooltip {Roll Editing Tool.} image {../../icons/EditRoll.svg} compress_image 1 xywh {2 110 40 50} down_box DOWN_BOX selection_color 95
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );}
+                  image {../../icons/EditRoll.svg} compress_image 1 xywh {2 110 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiTrim {
@@ -1488,7 +1488,7 @@ settings->setValue( mrv::kPenColorA, a);}
             }
           }
           Fl_Group uiTimelineGroup {
-            label uiTimelineGroup open
+            label uiTimelineGroup
             xywh {0 560 933 30} box FLAT_BOX color 51 labeltype NO_LABEL
             class {mrv::TimelineGroup}
           } {

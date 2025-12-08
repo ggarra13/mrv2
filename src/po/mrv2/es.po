@@ -2,7 +2,7 @@
 # Traducciones al español para el paquete mrv2.
 # This file is distributed under the same license as the mrv2 package.
 # Gonzalo Garramuño <ggarra13@gmail.com>, 2023.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.2.8\n"
@@ -1984,17 +1984,50 @@ msgstr "Buscar Texto:"
 msgid "No occurrences of '%s' found!"
 msgstr "¡Ninguna ocurrencia de '%s' encontrado!"
 
-msgid "Toggle other eye stereo image."
-msgstr "Alternar el otro ojo de la imagen estéreo."
-
 msgid "Input"
 msgstr "Entrada"
 
-msgid "Image"
-msgstr "Imagen"
+msgid "NDI Connection"
+msgstr "Conexión NDI"
+
+msgid "None"
+msgstr "Ninguno"
+
+msgid "Fast Format"
+msgstr "Formato Rápido"
+
+msgid "Best Format"
+msgstr "Mejor Formato"
+
+msgid "With Audio"
+msgstr "Con Audio"
+
+msgid "Without Audio"
+msgstr "Sin Audio"
 
 msgid "Output"
 msgstr "Salida"
+
+msgid "Start streaming"
+msgstr "Empieza a transmitir"
+
+msgid "With Metadata"
+msgstr "Con metadatos"
+
+msgid "Without Metadata"
+msgstr "Sin metadatos"
+
+msgid "Streaming {0} {1}..."
+msgstr "Flujo {0} {1}..."
+
+msgid "Stop streaming"
+msgstr "Deja de transmitir"
+
+msgid "Toggle other eye stereo image."
+msgstr "Alternar el otro ojo de la imagen estéreo."
+
+msgid "Image"
+msgstr "Imagen"
 
 msgid "Anaglyph"
 msgstr "Anáglifo"
@@ -2135,9 +2168,6 @@ msgstr "Cerrar EDL Actual."
 
 msgid "Clear the messages"
 msgstr "Borrar los mensajes"
-
-msgid "None"
-msgstr "Ninguno"
 
 msgid "Turn off image warping."
 msgstr "Apagar distorsión de la imagen."
@@ -3005,37 +3035,29 @@ msgstr "Perfil HAP necesita una extension de película .mov.  Cambiando a .mov."
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "El archivo {0} ya existe.  Por seguridad, no lo sobreescribiré."
 
-msgid "Rotated image info: {0}"
-msgstr "Información de Imagen Rotada: {0}"
-
-msgid "Scaled image info: {0}"
-msgstr "Información de Imagen Escalada: {0}"
-
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: No puedo abrir plugin de escritura."
 
 msgid "Image info: {0} {1}"
 msgstr "Información de Imagen: {0} {1}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-"Imagen demasiado grande para guardar anotaciones. Se escalará al tamaño de "
-"la vista."
-
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
+msgid "Scaled image info: {0}"
+msgstr "Información de Imagen Escalada: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "El plugin de Escritura no obtuvo información de salida.  Usando {0}."
-
-msgid "Output info: {0} {1}"
-msgstr "Información de Salida: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Usando perfil {0}, formato de pixel {1}."
 
 msgid "Using preset {0}."
 msgstr "Usando preseteo {0}."
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Información del Buffer: {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Información de Salida: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
@@ -3052,32 +3074,14 @@ msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Solo audio en la línea de tiempo, pero no intenta grabar audio."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Formato y tipo de OpenGL inválidos"
-
-msgid "OpenGL info: {0}"
-msgstr "Información de OpenGL: {0}"
-
 msgid "Saving... {0}"
 msgstr "Grabando... {0}."
 
-msgid "Unsupported output format"
-msgstr "Formato de salida no soportado"
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
+msgid "Could not read image data from view"
+msgstr "No pude leer los datos de la imagen de la vista"
 
 msgid "Render size: {0}"
 msgstr "Tamaño de renderizado: {0}"
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "Información de la capa de imagen '{0}': {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Información del Buffer: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Formato de salida no soportado: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3830,6 +3834,18 @@ msgstr "No pude agregar pista de video {0}"
 msgid "Could not append audio track {0}"
 msgstr "No pude agregar pista de audio {0}"
 
+msgid "%s - Page %d"
+msgstr "%s - Página %d"
+
+msgid "Frame {0} - TC: {1} - S: {2}"
+msgstr "Cuadro {0} - TC: {1} - S: {2}"
+
+msgid "Image too big.  Will save the viewport size."
+msgstr "Imagen demasiado grande.  Guardaré el tamaño de la vista."
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
+
 msgid "Link/Open"
 msgstr "Enlace/Abrir"
 
@@ -3973,14 +3989,23 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
+msgid "HDR monitor found."
+msgstr "Monitor HDR no encontrado."
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR no encontrado o no configurado."
+
+msgid "Vulkan color space is {0}"
+msgstr "Espacio de color de Vulkan es {0}"
+
+msgid "Vulkan format is {0}"
+msgstr "Formato de Vulkan es {0}"
+
 msgid "Edit Text"
 msgstr "Editar Texto"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' no es un archivo, directorio ni URL."
-
-msgid "Invalid font for text drawing"
-msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -5893,10 +5918,6 @@ msgstr "TileGroup"
 msgid "ViewGroup"
 msgstr "ViewGroup"
 
-#, fuzzy
-msgid "Roll Editing Tool."
-msgstr "Herramienta de Edición Mover"
-
 msgid "Undo Last Edit."
 msgstr "Deshacer Última Edición."
 
@@ -6778,9 +6799,6 @@ msgid ""
 msgstr ""
 "Este seteo controla la sensibilidad de fregado.  Valores menores hacen que "
 "el ratón salte más cuadros mientras que valores más altos hacen lo opuesto."
-
-msgid "With Audio"
-msgstr "Con Audio"
 
 msgid ""
 "Start playback when scrubbing so that audio can be heard.  Scrubbing can be "
@@ -8067,32 +8085,39 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "NDI Connection"
-#~ msgstr "Conexión NDI"
+#, fuzzy
+#~ msgid "Roll Editing Tool."
+#~ msgstr "Herramienta de Edición Mover"
 
-#~ msgid "Fast Format"
-#~ msgstr "Formato Rápido"
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "Información de Imagen Rotada: {0}"
 
-#~ msgid "Best Format"
-#~ msgstr "Mejor Formato"
+#~ msgid ""
+#~ "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr ""
+#~ "Imagen demasiado grande para guardar anotaciones. Se escalará al tamaño "
+#~ "de la vista."
 
-#~ msgid "Without Audio"
-#~ msgstr "Sin Audio"
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Formato y tipo de OpenGL inválidos"
 
-#~ msgid "Start streaming"
-#~ msgstr "Empieza a transmitir"
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "Información de OpenGL: {0}"
 
-#~ msgid "With Metadata"
-#~ msgstr "Con metadatos"
+#~ msgid "Unsupported output format"
+#~ msgstr "Formato de salida no soportado"
 
-#~ msgid "Without Metadata"
-#~ msgstr "Sin metadatos"
+#~ msgid "Empty video data at time {0}.  Repeating frame."
+#~ msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
 
-#~ msgid "Streaming {0} {1}..."
-#~ msgstr "Flujo {0} {1}..."
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "Información de la capa de imagen '{0}': {1} {2}"
 
-#~ msgid "Stop streaming"
-#~ msgstr "Deja de transmitir"
+#~ msgid "Unsupported output format: "
+#~ msgstr "Formato de salida no soportado: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Fuente inválida para dibujar texto"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderizador"
@@ -8106,38 +8131,14 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 #~ msgid "Disk Cache in GB"
 #~ msgstr "Cache en Disco en GB"
 
-#~ msgid "%s - Page %d"
-#~ msgstr "%s - Página %d"
-
-#~ msgid "Frame {0} - TC: {1} - S: {2}"
-#~ msgstr "Cuadro {0} - TC: {1} - S: {2}"
-
-#~ msgid "Image too big.  Will save the viewport size."
-#~ msgstr "Imagen demasiado grande.  Guardaré el tamaño de la vista."
-
-#~ msgid "Could not read image data from view"
-#~ msgstr "No pude leer los datos de la imagen de la vista"
-
 #~ msgid "Trim Edit Tool"
 #~ msgstr "Herramienta de Edición Recortar"
-
-#~ msgid "HDR monitor found."
-#~ msgstr "Monitor HDR no encontrado."
-
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "Monitor HDR no encontrado o no configurado."
 
 #~ msgid "Vulkan color space detected {0}"
 #~ msgstr "Espacio de color de Vulkan dectectado {0}"
 
 #~ msgid "Vulkan format detected {0}"
 #~ msgstr "Format de Vulkan detectado {0}"
-
-#~ msgid "Vulkan color space is {0}"
-#~ msgstr "Espacio de color de Vulkan es {0}"
-
-#~ msgid "Vulkan format is {0}"
-#~ msgstr "Formato de Vulkan es {0}"
 
 #~ msgid ""
 #~ "Your Wayland compositor does not support Float on Top.  Go to the title "
