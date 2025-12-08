@@ -56,7 +56,6 @@ if [[ $KERNEL == *Linux* ]]; then
     fi
     if [[ "@MRV2_BACKEND@" == "VK" ]]; then
 	echo "        [vlk.] FLTK_VK_EXPLICIT_SYNC=${FLTK_VK_EXPLICIT_SYNC}"
-	echo "        [vlk.] If it stutters, set Preferences->Video->VSync to Always"
     fi
 fi
 
