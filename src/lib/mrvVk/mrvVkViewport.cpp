@@ -66,6 +66,8 @@ namespace mrv
             TimelineViewport(X, Y, W, H, L),
             _vk(new VKPrivate)
         {
+            TLRENDER_P();
+            
             int stereo = 0;
             mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | stereo);
             // m_debugSync = true;
@@ -384,11 +386,13 @@ namespace mrv
             else
             {
                 LOG_STATUS(_("HDR monitor not found or not configured."));
-                msg = string::Format(_("Vulkan color space detected {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
-                LOG_STATUS(msg);
-                    
-                msg = string::Format(_("Vulkan format detected {0}")).arg(string_VkFormat(format()));
-                LOG_STATUS(msg);
+                // msg = string::Format(_("Vulkan color space capable of {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
+                // LOG_STATUS(msg);
+                // msg = string::Format(_("Vulkan format capable of {0}")).arg(string_VkFormat(format()));
+                // LOG_STATUS(msg);
+
+                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                format() = VK_FORMAT_B8G8R8A8_UNORM;
             }
             
             msg = string::Format(_("Vulkan color space is {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
@@ -599,7 +603,7 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-            
+
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
 

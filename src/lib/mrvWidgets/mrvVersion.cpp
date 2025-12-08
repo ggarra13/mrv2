@@ -51,6 +51,9 @@
 #endif
 
 #ifdef VULKAN_BACKEND
+#ifdef __APPLE__
+#    include <MoltenVK/mvk_private_api.h>
+#endif
 #    include <vulkan/vulkan.h>
 #    define FLTK_OUTPUT_VERSION(ver) \
     (int) VK_API_VERSION_MAJOR(ver) << "." << \
@@ -1140,6 +1143,32 @@ namespace mrv
 #endif
         return out;
     }
+    
+    uint32_t getVulkanLoaderVersion()
+    {
+#ifdef OPENGL_BACKEND
+        return 0;
+#endif
+
+#ifdef VULKAN_BACKEND
+        // Attempt to get the function pointer for vkEnumerateInstanceVersion
+        PFN_vkEnumerateInstanceVersion pfnEnumerateInstanceVersion = 
+            (PFN_vkEnumerateInstanceVersion)vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion");
+
+        if (pfnEnumerateInstanceVersion) {
+            // vkEnumerateInstanceVersion is available (Vulkan 1.1 or higher)
+            uint32_t instanceVersion;
+            VkResult result = pfnEnumerateInstanceVersion(&instanceVersion);
+            if (result == VK_SUCCESS) {
+                return instanceVersion;
+            }
+        }
+    
+        // vkEnumerateInstanceVersion is not available, assume Vulkan 1.0
+        // This value is defined as VK_MAKE_API_VERSION(0, 1, 0, 0)
+        return VK_API_VERSION_1_0;
+#endif
+    }
 
     std::string gpu_information(ViewerUI* ui)
     {
@@ -1204,6 +1233,29 @@ namespace mrv
 #endif
 
 #ifdef VULKAN_BACKEND
+        uint32_t v = getVulkanLoaderVersion();
+
+        uint32_t major = VK_API_VERSION_MAJOR(v);
+        uint32_t minor = VK_API_VERSION_MINOR(v);
+        uint32_t patch = VK_API_VERSION_PATCH(v);
+        uint32_t build = 0;
+
+#ifdef _WINDOWS
+        o << "vulkan-1.dll Version:\tv" << VULKAN_DLL_VERSION
+          << std::endl
+          << std::endl;
+#endif
+
+        
+        o << "Vulkan Loader Version:\tv"
+          << major << "." << minor << "." << patch
+          << std::endl
+          << std::endl;
+
+#ifdef __APPLE__
+        o << "MoltenVk Version: v" << MVK_VERSION_STRING << std::endl;
+#endif
+        
         VkInstance instance = ui->uiView->instance();
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
@@ -1226,11 +1278,11 @@ namespace mrv
               << "\tv" << FLTK_OUTPUT_VERSION(prop.properties.apiVersion)
               << std::endl;
 
-            uint32_t v = prop.properties.driverVersion;
-            uint32_t major = VK_API_VERSION_MAJOR(v);
-            uint32_t minor = VK_API_VERSION_MINOR(v);
-            uint32_t patch = VK_API_VERSION_PATCH(v);
-            uint32_t build = 0;
+            v = prop.properties.driverVersion;
+            major = VK_API_VERSION_MAJOR(v);
+            minor = VK_API_VERSION_MINOR(v);
+            patch = VK_API_VERSION_PATCH(v);
+            build = 0;
             
 #ifdef _WIN32
             // On Windows NVIDIA uses a custom encoding:

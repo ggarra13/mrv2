@@ -59,6 +59,7 @@ translation=${BUILD_DIR}/install/share/locale/en/LC_MESSAGES/mrv2-v${mrv2_VERSIO
 if [[ ! -e $translation ]]; then
     
     clean_mo_files
+    echo ".mo files not found."
     
     cd $dir
     
@@ -66,6 +67,8 @@ if [[ ! -e $translation ]]; then
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
 
     cd -
+else
+    echo ".mo files already found."
 fi
 
 

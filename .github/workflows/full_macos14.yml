@@ -33,6 +33,9 @@ jobs:
 
     - name: Install ninja-build
       run: brew install ninja
+
+    - name: Install gettext
+      run: brew install gettext
       
     - name: Install automake and other network utils
       run: brew install automake curl rsync wget
@@ -43,9 +46,6 @@ jobs:
     - name: Install Python dependencies
       run: brew install libb2 libffi readline sqlite3 xz zlib
       
-    - name: Reinstall xz to avoid broken macOS 14
-      run: brew reinstall xz
-        
     - name: Install pyFLTK dependencies
       run: brew install swig
               
@@ -102,7 +102,7 @@ jobs:
         TLRENDER_SVTAV1: ON
         TLRENDER_TIFF: ON
         TLRENDER_USD: ON
-        TLRENDER_VK: ON
+        TLRENDER_VK: OFF
         TLRENDER_VPX: ON
         TLRENDER_YASM: ON
         

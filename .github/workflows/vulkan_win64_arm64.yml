@@ -95,9 +95,36 @@ jobs:
         . ./etc/windows/install_vulkan.sh
         
         # Persist environment variables for subsequent steps
+        echo "WINDOWS_VULKAN_SDK=$WINDOWS_VULKAN_SDK" >> $GITHUB_ENV
         echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
         echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
 
+    - name: Install and Copy Vulkan Runtime
+      shell: powershell
+      run: |
+        # 1. Run the Runtime Installer silently (/S)
+        # This extracts vulkan-1.dll to C:\Windows\System32
+        cd $Env:WINDOWS_VULKAN_SDK
+        
+        Write-Host "Installing Vulkan Runtime..."
+        Start-Process -FilePath ".\Helpers\VulkanRT.exe" -ArgumentList "/S" -Wait
+
+        # 2. Verify installation
+        $systemDll = "C:\Windows\System32\vulkan-1.dll"
+        if (Test-Path $systemDll) {
+            Write-Host "SUCCESS: vulkan-1.dll found in System32."
+            
+            # 3. (Optional) Copy to your local Bin folder if your build expects it there
+            Copy-Item -Path $systemDll -Destination ".\Bin\" -Force
+            Write-Host "Copied vulkan-1.dll to local Bin folder."
+        } else {
+            Write-Error "FAILURE: vulkan-1.dll was not found in System32 after running installer."
+            exit 1
+        }
+
+    # - name: Verify Vulkan
+    #   run: ${VULKAN_SDK}/Bin/vulkaninfoSDK.exe
+        
     - name: Setup environment
       run: mkdir -p ssh
       
@@ -149,6 +176,7 @@ jobs:
         TLRENDER_EXR: ON
         TLRENDER_FFMPEG: ON
         TLRENDER_FFMPEG_MINIMAL: ON
+        TLRENDER_GL: OFF
         TLRENDER_HAP: ON
         TLRENDER_JPEG: ON
         TLRENDER_NDI: OFF

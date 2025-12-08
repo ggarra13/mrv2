@@ -28,6 +28,7 @@ namespace mrv
     void thanks_message(mrv::TextBrowser* b);
 
     void cpu_information(mrv::TextBrowser* b);
+    uint32_t getVulkanLoaderVersion();
     std::string gpu_list(ViewerUI* ui);
     std::string gpu_information(ViewerUI* ui);
 

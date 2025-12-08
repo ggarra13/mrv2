@@ -522,12 +522,20 @@ namespace mrv
         tooltip = _("Redo Draw");
         tooltip += addHotkey(kRedoDraw);
         ui->uiRedoDraw->copy_tooltip(tooltip.c_str());
-        
+
+        //
+        // Editing tooltips
+        // 
+
         tooltip = _("Move Edit Tool");
         tooltip += addHotkey(kEditMove);
         ui->uiMove->copy_tooltip(tooltip.c_str());
         
-        tooltip = _("Trim Edit Tool");
+        tooltip = _("Roll Edit Tool.\nMoves the ending or beginning and adds gaps.");
+        tooltip += addHotkey(kEditRoll);
+        ui->uiRoll->copy_tooltip(tooltip.c_str());
+        
+        tooltip = _("Trim Edit Tool\nMoves the ending or beginning without adding gaps");
         tooltip += addHotkey(kEditTrim);
         ui->uiTrim->copy_tooltip(tooltip.c_str());
         
@@ -538,6 +546,7 @@ namespace mrv
         tooltip = _("Redo Edit");
         tooltip += addHotkey(kEditRedo);
         ui->uiRedoEdit->copy_tooltip(tooltip.c_str());
+
 
 
         // Timebar Window Toolbar

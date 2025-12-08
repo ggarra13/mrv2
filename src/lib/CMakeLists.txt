@@ -32,6 +32,7 @@ add_subdirectory(mrvNetwork) # mrvFl, Poco::Net
 add_subdirectory(mrvPanels)  # mrvFl, mrvEdit
 add_subdirectory(mrvBaseApp) # tlBaseApp, tlCore, RtAudio, freetype, Imath::Imath
 add_subdirectory(mrvApp)  # mrvBaseApp, mrvPanels, mrvFLU, mrvOptions
+                          # tlRender::tlDevice
 if(MRV2_PYBIND11)
     add_subdirectory(mrvPy)  # mrvApp
 endif()

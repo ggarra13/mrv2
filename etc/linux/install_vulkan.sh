@@ -35,14 +35,39 @@ get_kernel
 # slang: https://github.com/shader-slang/slang.git
 
 
-curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.gz"
+. etc/vulkan_version.sh
+
+#curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.gz"
+#curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/1.4.328.1/linux/vulkansdk-linux-x86_64-1.4.328.1.tar.xz"
+
+# curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkansdk-linux-x86_64-1.4.328.1.tar.xz"
+
+if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
+    VK_DOWNLOAD=latest
+fi
+
+if [[ "$VK_DOWNLOAD" == "latest" ]]; then
+	curl -L -o /tmp/vulkan-sdk.tar.xz "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"
+
+else
+	curl -L -o /tmp/vulkan-sdk.tar.xz "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkan-sdk-linux-x96_64-${VK_DOWNLOAD}.tar.xz"   
+fi
+
+#
+# If download failed, use latest (version is not available)
+#
+if [[ ! -e /tmp/vulkan-sdk.tar.xz ]]; then
+    echo "Vulkan version ${VK_DOWNLOAD} not found! Downloading latest"
+    curl -L -o /tmp/vulkan-sdk.tar.xz "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"
+fi
+
 
 echo "After downloading it..."
 ls /tmp
 
 mkdir -p VulkanSDK-Linux
 cd VulkanSDK-Linux
-tar -xvf /tmp/vulkan-sdk.tar.gz
+tar -xvf /tmp/vulkan-sdk.tar.xz
 
 cd ..
 

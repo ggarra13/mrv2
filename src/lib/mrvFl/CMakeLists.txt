@@ -81,6 +81,8 @@ if (WIN32)
     list(APPEND LIBRARIES comsuppw)
 endif()
 
+message(STATUS "mrvFl LIBRARIES=${LIBRARIES}")
+
 target_link_libraries(mrvFl PUBLIC ${LIBRARIES} )
 set_target_properties(mrvFl PROPERTIES FOLDER lib)
 

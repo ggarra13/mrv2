@@ -3,7 +3,21 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-curl -L -o /tmp/vulkan-sdk.zip "https://sdk.lunarg.com/sdk/download/latest/mac/vulkan-sdk.dmg"
+. etc/vulkan_version.sh
+
+rm -rf /mtp/vulkan-sdk.zip
+
+if [[ "$VK_DOWNLOAD" != "latest" ]]; then
+    curl -L -o /tmp/vulkan-sdk.zip "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/mac/vulkansdk-macos-${VK_DOWNLOAD}.zip"
+fi
+
+#
+# If download failed, version is prolaly not available.  Use latest.
+#
+if [[ ! -e /tmp/vulkan-sdk.zip ]]; then
+    echo "Vulkan version ${VK_DOWNLOAD} not found! Downloading latest"
+    curl -L -o /tmp/vulkan-sdk.zip "https://sdk.lunarg.com/sdk/download/latest/mac/vulkan-sdk.zip"
+fi
 
 cd /tmp
 unzip vulkan-sdk.zip

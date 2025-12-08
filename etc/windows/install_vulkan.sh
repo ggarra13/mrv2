@@ -8,23 +8,36 @@
 #
 
 . etc/build_dir.sh
+. etc/vulkan_version.sh
 
 if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
-    # curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/1.4.321.1/latest/windows/vulkansdk-windows-ARM64-1.4.321.1.exe"
-    curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/1.4.321.1/warm/vulkansdk-windows-ARM64-1.4.321.1.exe"
+    curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/warm/vulkansdk-windows-ARM64-${VK_DOWNLOAD}.exe"
 else
-    curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe"
+    curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/windows/vulkan-sdk-windows-X64-${VK_DOWNLOAD}.exe"
+fi
+
+if [[ ! -e /tmp/vulkan-sdk.exe ]]; then
+    echo "VK_DOWNLOAD ${VK_DOWNLOAD} version not found.  Downloading latest."
+    if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
+        curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/latest/warm/vulkan-sdk.exe"
+    else
+	curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe"
+    fi
 fi
 
 ls /tmp
 
-export VULKAN_SDK="/C/VulkanSDK"
-rm -rf $VULKAN_SDK
+#
+# Do not use the system VULKAN_SDK, which may be old.
+#
+export VULKAN_SDK="$PWD/VulkanSDK-vmrv2"
+export WINDOWS_VULKAN_SDK=`cygpath -w "${VULKAN_SDK}"`
 
 /tmp/vulkan-sdk.exe \
     --root "$VULKAN_SDK" \
+    --accept-messages \
     --accept-licenses \
-    --default-answer \
+    -da \
     --confirm-command install
 
 rm -f /tmp/vulkan-sdk.exe

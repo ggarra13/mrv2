@@ -283,7 +283,7 @@ namespace mrv
         gui.get("timeline_video_offset", tmpF, 0.0);
         uiPrefs->uiStartTimeOffset->value(tmpF);
 
-        gui.get("timeline_thumbnails", tmp, 1);
+        gui.get("timeline_thumbnails", tmp, 0);
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
         gui.get("panel_thumbnails", tmp, 1);
@@ -852,8 +852,11 @@ namespace mrv
 
         Fl_Preferences video(base, "opengl");
 
+#ifdef VULKAN_BACKEND
+        uiPrefs->uiPrefsOpenGLVsync->value(1);
+#else
         video.get("vsync", tmp, 2);
-        uiPrefs->uiPrefsOpenGLVsync->value(tmp);
+#endif
 
         video.get("color_buffers_accuracy", tmp, 0);
         uiPrefs->uiPrefsColorAccuracy->value(tmp);
@@ -1041,7 +1044,7 @@ namespace mrv
         // Set a minimum size for dockgroup
         if (width < 270)
             width = 270;
-
+            
         ui->uiViewGroup->fixed(ui->uiDockGroup, width);
     }
 
@@ -1580,16 +1583,18 @@ namespace mrv
             "ffmpeg_log_display",
             (int)uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value());
 
-        Fl_Preferences opengl(base, "opengl");
-        opengl.set("vsync", (int)uiPrefs->uiPrefsOpenGLVsync->value());
-        opengl.set(
+        Fl_Preferences video(base, "opengl");
+#ifdef OPENGL_BACKEND
+        video.set("vsync", (int)uiPrefs->uiPrefsOpenGLVsync->value());
+#endif
+        video.set(
             "color_buffers_accuracy",
             (int)uiPrefs->uiPrefsColorAccuracy->value());
-        opengl.set(
+        video.set(
             "blit_main_viewport", (int)uiPrefs->uiPrefsBlitMainViewport->value());
-        opengl.set(
+        video.set(
             "blit_secondary_viewport", (int)uiPrefs->uiPrefsBlitSecondaryViewport->value());
-        opengl.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
+        video.set("blit_timeline", (int)uiPrefs->uiPrefsBlitTimeline->value());
         
         Fl_Preferences vulkan(base, "vulkan");
         vulkan.set(
@@ -1707,6 +1712,8 @@ namespace mrv
         //
 
         MyViewport* view = ui->uiView;
+
+
 
         // Only redisplay the tool bars if not on Presentation
         // Mode. (User changed Preferences while on Presentation mode).
@@ -2053,6 +2060,35 @@ namespace mrv
             {
                 bool value = uiPrefs->uiPrefsSecondaryOnTop->value();
                 window->always_on_top(value);
+            }
+        }
+        
+        int vsync = ui->uiPrefs->uiPrefsOpenGLVsync->value();
+        if (vsync == MonitorVSync::kVSyncPresentationOnly ||
+            vsync == MonitorVSync::kVSyncNone)
+        {
+            view->swap_interval(0);
+            ui->uiTimeline->swap_interval(0);
+            if (secondary)
+            {
+                auto window = secondary->viewport();
+                if (window->visible())
+                {
+                    window->swap_interval(0);
+                }
+            }
+        }
+        else
+        {
+            view->swap_interval(1);
+            ui->uiTimeline->swap_interval(1);
+            if (secondary)
+            {
+                auto window = secondary->viewport();
+                if (window->visible())
+                {
+                    window->swap_interval(1);
+                }
             }
         }
 

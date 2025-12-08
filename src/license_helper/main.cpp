@@ -11,6 +11,7 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Flex.H>
+#include <FL/Fl_Group.H>
 #include <FL/Fl_Multiline_Input.H>
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Preferences.H>
@@ -214,95 +215,158 @@ int main(int argc, char** argv)
 {
     const std::string machine_id = get_machine_id();
     
-    MainWindow win(640, 640, _("License helper"));
+    MainWindow win(640, 660, _("License helper"));
     win.begin();
 
-    Fl_Tabs*    tabs = new Fl_Tabs(20, 30, 600, 640);
+    Fl_Tabs*    tabs = new Fl_Tabs(20, 30, 600, win.h()-30);
     tabs->labelsize(20);
-    tabs->selection_color(FL_YELLOW);
+    tabs->selection_color(FL_CYAN);
 
-    {
-        Fl_Flex* node_locked = new Fl_Flex(20, 60, 600, 580,
-                                           _("Node-Locked License"));
-        node_locked->box(FL_ENGRAVED_BOX);
-        Fl_Flex* message = new Fl_Flex(20, 60, 600, 400);
+    Fl_Flex* node_locked = nullptr; // message, plans, info
+       Fl_Flex* message = nullptr;
+          Fl_Box* intro = nullptr;
+             Fl_Flex* prices = nullptr;
+               Fl_Flex* plans = nullptr;
+               Fl_Box* listed = nullptr; // good so far
+         Fl_Box* internet = nullptr;
+      Fl_Flex* what = nullptr;    
+        Fl_Box* plan_type = nullptr;
+        Fl_Box* plan_features = nullptr;
+     Fl_Flex* info = nullptr;
+         Fl_Flex* buttons = nullptr;
+        
+    { // node_locker
+        node_locked = new Fl_Flex(20, 60, 600, tabs->h() - 90,
+                                  _("Node-Locked License"));
+        
+        { // node_locked contents
+            message = new Fl_Flex(20, 60, 600, 440);
+            message->box(FL_FLAT_BOX);
+            message->begin();
 
-        Fl_Box*  intro = new Fl_Box(20, 0, 600, 40);
-        intro->labelfont(FL_HELVETICA);
-        intro->label(_(R"TEXT(To enhance your experience, please submit the machine id below
-with your Paypal donation of:)TEXT"));
-        intro->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
-                   
-        Fl_Box*    prices = new Fl_Box(20, 0, 600, 160);
-        prices->box(FL_ENGRAVED_BOX);
-        prices->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
-        prices->label(_(R"TEXT(USD $ 25  Solo    
-USD $ 50  Standard
-USD $ 75  Edit    
-USD $150  Pro
-USD $300  Pro+ (Monthly)
+            Fl_Box*  intro = new Fl_Box(20, 0, 600, 40);
+            intro->labelfont(FL_HELVETICA);
+            intro->label(_("To unlock features, please submit the machine id below with your Paypal donation of:"));
+            intro->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+            message->fixed(intro, intro->h());
 
-to ggarra13@@gmail.com)TEXT"));
+            { // prices
+                prices = new Fl_Flex(20, 40, 600, 380);
 
-        Fl_Box*    what = new Fl_Box(150, 0, 600, 80);
-        what->label(R"TEXT(
-		Solo			Annotations only for a year
-		Standard	    Solo + OpenEXR layers + Python
-		Edit			Standard + Editing
-		Pro			Edit + Voice Annotations
-        Pro+        Pro + change your machine[s] as you want
-		)TEXT");
-        what->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
 
-        Fl_Box* internet = new Fl_Box(20, 0, 600, 60);
-        internet->label(R"TEXT(Your email will be added to mrv2's Internet database.
+                {
+                    plans = new Fl_Flex(20, prices->y(), 600, 140);
+                    plans->type(Fl_Flex::HORIZONTAL);
+                    plans->margin(190, 0, 190, 0);
+                    plans->gap(5);
+                    plans->box(FL_ENGRAVED_BOX);
+                
+                    Fl_Box* usd = new Fl_Box(20, prices->y(), 300, prices->h());
+                    usd->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
+                    usd->label(R"TEXT(
+USD $ 25
+USD $ 50
+USD $ 75
+USD $150
+USD $300)TEXT");
+                    Fl_Box* type = new Fl_Box(320, prices->y(), 300, prices->h());
+                    type->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
+                    type->label(R"TEXT(
+Solo
+Standard
+Edit
+Pro
+Pro+ (Monthly)
+)TEXT");
+                    plans->end();
+                }
+                
+                Fl_Box*    listed = new Fl_Box(20, 0, 600, 30);
+                listed->label(_("Only the listed amounts unlock features; all others are regular donations."));
+                listed->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+                
+                prices->fixed(plans, plans->h());
+                prices->fixed(listed, listed->h());
+
+                what = new Fl_Flex(20, 0, 600, 120);
+                what->box(FL_FLAT_BOX);
+                what->type(Fl_Flex::HORIZONTAL);
+                what->margin(80, 0, 190, 0);
+                what->gap(5);
+                
+                plan_type = new Fl_Box(20, 20, 300, 100);
+                plan_type->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
+                plan_type->label(R"TEXT(
+Solo
+Standard
+Edit
+Pro
+Pro+ (Monthly)
+)TEXT");
+                plan_features = new Fl_Box(320, 20, 300, 100);
+                plan_features->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
+                plan_features->label(_(R"TEXT(
+Annotations and Saving only for a year
+Solo + OpenEXR layers + Python
+Standard + Editing
+Edit + Voice Annotations
+Pro + change your machine[s] as you want
+)TEXT"));
+                what->end();
+                prices->fixed(what, what->h());
+            } // what
+            
+            internet = new Fl_Box(20, 0, 600, 80);
+            internet->box(FL_FLAT_BOX);
+            internet->label(R"TEXT(Your email will be added to mrv2's Internet database.
 You need an Internet connection to use.)TEXT");
-        internet->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+            internet->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+            
+            prices->gap(5);
+            message->fixed(internet, internet->h());
+            message->end();
 
-        message->gap(20);
-        message->fixed(intro, intro->h());
-        message->fixed(prices, prices->h());
-        message->fixed(what, what->h());
-        message->fixed(internet, internet->h());
-        message->end();
 
-        Fl_Flex* info = new Fl_Flex(0, 0, 0, 120);
-        info->type(Fl_Flex::VERTICAL);
-        info->box(FL_ENGRAVED_BOX);
+            {
+                info = new Fl_Flex(0, 0, 0, 120);
+                info->type(Fl_Flex::VERTICAL);
+                info->box(FL_ENGRAVED_BOX);
+
+                Fl_Output* machine = new Fl_Output(20, 0, 600, 40, "Machine ID");
+                machine->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
+                machine->value(machine_id.c_str());
+
+                buttons = new Fl_Flex(180, 0, 100, 40);
+                buttons->type(Fl_Flex::HORIZONTAL);
+                buttons->gap(10);
         
-        Fl_Output* machine = new Fl_Output(20, 0, 600, 40, "Machine ID");
-        machine->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
-        machine->value(machine_id.c_str());
+                Fl_Button* demo = new Fl_Button(180, 280, 100, 40, "Demo");
+                demo->callback((Fl_Callback*)exit_cb, nullptr);
+                
+                Fl_Button* donate = new Fl_Button(300, 280, 100, 40, "Donate");
+                donate->callback((Fl_Callback*)donate_cb, nullptr);
+                
+                buttons->end();
+                info->fixed(machine, machine->h());
+                info->end();
+            }
+         
+            node_locked->margin(10, 10, 10, 10);
+            node_locked->gap(10);
+            node_locked->fixed(message, message->h());
+            node_locked->fixed(info, info->h());
+            node_locked->end();
+    } // node_locked contents
+            
 
-        Fl_Flex* buttons = new Fl_Flex(180, 0, 100, 40);
-        buttons->type(Fl_Flex::HORIZONTAL);
-        buttons->margin(10, 10, 10, 10);
-        buttons->gap(10);
-        
-        Fl_Button* demo = new Fl_Button(180, 280, 100, 40, "Demo");
-        demo->callback((Fl_Callback*)exit_cb, nullptr);
-
-        Fl_Button* donate = new Fl_Button(300, 280, 100, 40, "Donate");
-        donate->callback((Fl_Callback*)donate_cb, nullptr);
-        buttons->end();
-
-        info->fixed(machine, machine->h());
-
-        info->end();
-        
-        node_locked->margin(10, 10, 10, 10);
-        node_locked->gap(5);
-        node_locked->fixed(message, message->h());
-        node_locked->fixed(info, info->h());
-        node_locked->end();
     }
-    
+
     {
         
-        Fl_Flex* custom_dev = new Fl_Flex(20, 60, 600, 580,
+        Fl_Flex* custom_dev = new Fl_Flex(20, 60, 600, tabs->h() - 30,
                                            _("Custom Development"));
         custom_dev->box(FL_ENGRAVED_BOX);
-        Fl_Flex* message = new Fl_Flex(20, 60, 600, 400);
+        Fl_Flex* custom_msg = new Fl_Flex(20, 60, 600, 400);
 
         Fl_Box*  intro = new Fl_Box(20, 0, 600, 40);
         intro->labelfont(FL_HELVETICA);
@@ -328,14 +392,14 @@ for Buying the source as is and stop its Open Source Development.
 Contact ggarra13@@gmail.com)TEXT"));
 
 
-        message->gap(20);
-        message->fixed(intro, intro->h());
-        message->fixed(prices, prices->h());
-        message->end();
+        custom_msg->gap(20);
+        custom_msg->fixed(intro, intro->h());
+        custom_msg->fixed(prices, prices->h());
+        custom_msg->end();
         
         custom_dev->margin(10, 10, 10, 10);
         custom_dev->gap(5);
-        custom_dev->fixed(message, message->h());
+        custom_dev->fixed(custom_msg, custom_msg->h());
         custom_dev->end();
     }
 

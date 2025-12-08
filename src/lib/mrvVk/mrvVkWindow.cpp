@@ -15,11 +15,6 @@
 
 #include "mrvVk/mrvVkWindow.h"
 
-namespace
-{
-    const char* kModule = "vk";
-}
-
 namespace mrv
 {
     namespace vulkan

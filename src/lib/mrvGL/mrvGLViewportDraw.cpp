@@ -1081,7 +1081,7 @@ namespace mrv
                     p.startTime = std::chrono::high_resolution_clock::now();
                 }
             }
-
+            
             p.lastFrame = time.value();
 
             if (!tmp.empty())

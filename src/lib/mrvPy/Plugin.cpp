@@ -122,7 +122,7 @@ namespace mrv
     {
         std::unordered_map<std::string, std::string> plugins;
         std::vector<std::string> paths = python_plugin_paths();
-
+        
         std::string installed_plugins = mrv::rootpath() + "/python/plug-ins";
         if (fs::exists(installed_plugins))
             paths.push_back(installed_plugins);
@@ -161,9 +161,9 @@ namespace mrv
                         std::string err =
                             string::Format(_("Duplicated Python plugin {0} in "
                                              "{1} and {2}."))
-                                .arg(file)
-                                .arg(path)
-                                .arg(plugins[file]);
+                            .arg(file)
+                            .arg(path)
+                            .arg(plugins[file]);
                         LOG_ERROR(err);
                         continue;
                     }
@@ -178,6 +178,12 @@ namespace mrv
         // Access the sys.path list
         py::list sysPath = sys.attr("path");
 
+        // Add the additional modules to the sys.path list
+        // Needed for opentimelineio.
+        std::string installed_modules = mrv::rootpath() + "/python/";
+        if (fs::exists(installed_modules))
+            sysPath.attr("append")(installed_modules);
+        
         for (const auto& path : paths)
         {
             // Add the additional directory to the sys.path list

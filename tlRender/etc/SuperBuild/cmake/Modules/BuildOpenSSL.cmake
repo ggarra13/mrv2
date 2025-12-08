@@ -115,7 +115,7 @@ else()
 	add_custom_target(
 	    OpenSSL ALL
 	    ${CMAKE_COMMAND} -E echo "Installing openssl..."
-	    COMMAND ${VCPKG} install openssl:${VCPKG_TARGET_TRIPLET}
+	    COMMAND ${VCPKG} install openssl:${VCPKG_TRIPLET}
 	    DEPENDS ${vcpkg_DEP} ${Gettext_DEP}) # Gettext_DEP needed
 
 	# \bug Copy libssl.lib to ssl.lib and libcrypto.lib to crypto.lib so the

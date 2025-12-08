@@ -55,79 +55,54 @@ find_package(Git REQUIRED)
 if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
+   
+set(vcpkg_DEP )
+set(USE_VCPKG TRUE)
+if (BUILD_VCPKG)
+    include(cmake/Modules/Buildvcpkg.cmake)
+else()
+    #
+    # Use default vcpkg from MSVC
+    #
+    set(VCPKG vcpkg)
+endif()
+
+set(vcpkg_ARCH x64)
+if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+    set(vcpkg_ARCH arm64)
+endif()
+    
+set(vcpkg_BUILD_TYPE debug)
+if (CMAKE_BUILD_TYPE MATCHES ".*Release.*")
+    set(vcpkg_BUILD_TYPE release)
+endif()
+
+set(vcpkg_OS "Unknown")
+if(WIN32)
+    set(vcpkg_OS "windows")
+elseif(APPLE)
+    set(vcpkg_OS "osx")
+else()
+    set(vcpkg_OS "linux")
+endif()
+
+set(VCPKG_TRIPLET "${vcpkg_ARCH}-${vcpkg_OS}")    
+
+message(STATUS "VCPKG running from ${VCPKG}")
+message(STATUS "VCPKG_TRIPLET=${VCPKG_TRIPLET}")
+
+
+# \@todo:
+# This is unused for now, as it is always out of date and does not do
+# patches.
+#set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+
 
 #
-# Handle libintl, gettext and libintl
+# Handle libintl and gettext
 #
 set(Gettext_DEP )
-if(BUILD_GETTEXT)
-    include(cmake/Modules/BuildGettext.cmake )
-elseif(APPLE)
-    if (NOT CMAKE_OSX_ARCHITECTURES OR CMAKE_OSX_ARCHITECTURES STREQUAL "")
-	message(WARNING
-	    "Target architecture not specified for macOS deployment")
-    else()
-	if(CMAKE_OSX_ARCHITECTURES MATCHES "^x86_64$") 
-	    #
-	    # brew .dylibs are compiled only for the current version of the OS.
-	    #
-	    # We distribute libintl dylib compatible with v10.5 on Intel macOS
-	    file(COPY
-		precompiled/macOS/v10.5/ DESTINATION ${CMAKE_INSTALL_PREFIX}/
-		FOLLOW_SYMLINK_CHAIN)
-	endif()
-    endif()
-elseif(WIN32)
-    
-    set(vcpkg_DEP )
-    set(BUILD_VCPKG TRUE)
-    set(USE_VCPKG TRUE)
-    if (BUILD_VCPKG)
-	include(cmake/Modules/Buildvcpkg.cmake)
-    else()
-	#
-	# Use default vcpkg from MSVC
-	#
-	set(VCPKG vcpkg)
-    endif()
-    
-    set(vcpkg_ARCH x64)
-    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
-	set(vcpkg_ARCH arm64)
-    endif()
-    
-    set(vcpkg_BUILD_TYPE debug)
-    if (CMAKE_BUILD_TYPE MATCHES ".*Release.*")
-	set(vcpkg_BUILD_TYPE release)
-    endif()
-    
-    set(VCPKG_TARGET_TRIPLET "${vcpkg_ARCH}-windows")
-    
-    message(STATUS "VCPKG running from ${VCPKG}")
-    message(STATUS "VCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
-    
-    add_custom_target(
-	libiconv ALL
-	${CMAKE_COMMAND} -E echo "Running libiconv_done..."
-	COMMAND ${VCPKG} install libiconv:${VCPKG_TARGET_TRIPLET}
-	DEPENDS ${vcpkg_DEP})
-    add_custom_target(
-	gettext ALL
-	${CMAKE_COMMAND} -E echo "Running gettext_done..."
-	COMMAND ${VCPKG} install gettext:${VCPKG_TARGET_TRIPLET}
-	DEPENDS ${vcpkg_DEP} libiconv)
-    set(Gettext_DEP libiconv gettext)
-
-    set(VCPKG_INSTALLED "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows")
-    set(VCPKG_INCLUDE_DIR "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/include")
-    set(VCPKG_LIB_DIR "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/lib")
-    set(VCPKG_BIN_DIR "${VCPKG_ROOT}/installed/${vcpkg_ARCH}-windows/bin")
-    
-    list(APPEND CMAKE_PREFIX_PATH ${VCPKG_INSTALLED})
-    set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-    
-    
-endif()
+include(cmake/Modules/BuildGettext.cmake )
 
 
 # https://stackoverflow.com/questions/45414507/pass-a-list-of-prefix-paths-to-externalproject-add-in-cmake-args
@@ -137,7 +112,7 @@ string(REPLACE ";" "|" CMAKE_MODULE_PATH_TMP "${CMAKE_MODULE_PATH}")
     
 #
 # Python cannot be built with asan dependencies
-#set(PYTHON_DEP )
+set(PYTHON_DEP )
 if(BUILD_PYTHON)
     set(Python_EXECUTABLE "$ENV{PYTHON}")
     set(Python_VERSION "$ENV{PYTHON_VERSION}")
@@ -207,18 +182,18 @@ if (NOT BUILD_PYTHON)
     endif()
 endif()
 
-if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
-    # Check for Clang or GCC compiler  (\@todo: add Microsoft support)
-    if (TLRENDER_ASAN AND
-	    ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR
-		(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")))
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
-	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
-	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fsanitize=address")
-    endif()
-endif()
+# if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
+#     # Check for Clang or GCC compiler  (\@todo: add Microsoft support)
+#     if (TLRENDER_ASAN AND
+# 	    ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR
+# 		(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")))
+# 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+# 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+# 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+# 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
+# 	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fsanitize=address")
+#     endif()
+# endif()
 
 
 

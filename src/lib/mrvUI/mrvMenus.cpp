@@ -118,61 +118,65 @@ namespace mrv
         if (numFiles == 0)
             mode = FL_MENU_INACTIVE;
 
-        menu->add(
-            _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
-            (Fl_Callback*)save_movie_cb, ui, mode);
-        menu->add(
-            _("File/Save/Audio"), kSaveAudio.hotkey(),
-            (Fl_Callback*)save_audio_cb, ui, mode);
-        menu->add(
-            _("File/Save/Single Frame"), kSaveImage.hotkey(),
-            (Fl_Callback*)save_single_frame_cb, ui, mode | FL_MENU_DIVIDER);
-        menu->add(
-            _("File/Save/Frames to Folder"), kSaveImageToFolder.hotkey(),
-            (Fl_Callback*)save_single_frame_to_folder_cb, ui,
-            mode | FL_MENU_DIVIDER);
-        menu->add(
-            _("File/Save/OTIO EDL Timeline"), kSaveOTIOEDL.hotkey(),
-            (Fl_Callback*)save_timeline_to_disk_cb, ui, mode | FL_MENU_DIVIDER);
-
         auto player = ui->uiView->getTimelinePlayer();
-        mode = 0;
-        if (!player || !player->hasAnnotations())
-            mode = FL_MENU_INACTIVE;
 
-        menu->add(
-            _("File/Save/Annotations Only"), kSaveAnnotationsOnly.hotkey(),
-            (Fl_Callback*)save_annotations_only_cb, ui, mode);
+        if (App::supports_saving)
+        {
+            menu->add(
+                _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
+                (Fl_Callback*)save_movie_cb, ui, mode);
+            menu->add(
+                _("File/Save/Audio"), kSaveAudio.hotkey(),
+                (Fl_Callback*)save_audio_cb, ui, mode);
+            menu->add(
+                _("File/Save/Single Frame"), kSaveImage.hotkey(),
+                (Fl_Callback*)save_single_frame_cb, ui, mode | FL_MENU_DIVIDER);
+            menu->add(
+                _("File/Save/Frames to Folder"), kSaveImageToFolder.hotkey(),
+                (Fl_Callback*)save_single_frame_to_folder_cb, ui,
+                mode | FL_MENU_DIVIDER);
+            menu->add(
+                _("File/Save/OTIO EDL Timeline"), kSaveOTIOEDL.hotkey(),
+                (Fl_Callback*)save_timeline_to_disk_cb, ui, mode | FL_MENU_DIVIDER);
 
-        menu->add(
-            _("File/Save/Annotations as JSON"), kSaveAnnotationsAsJson.hotkey(),
-            (Fl_Callback*)save_annotations_as_json_cb, ui,
-            mode | FL_MENU_DIVIDER);
+            mode = 0;
+            if (!player || !player->hasAnnotations())
+                mode = FL_MENU_INACTIVE;
 
-        mode = 0;
-        if (numFiles == 0)
-            mode = FL_MENU_INACTIVE;
-        menu->add(
-            _("File/Save/PDF Document"), kSavePDF.hotkey(),
-            (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER | mode);
-        menu->add(
-            _("File/Save/Session"), kSaveSession.hotkey(),
-            (Fl_Callback*)save_session_cb, ui);
-        menu->add(
-            _("File/Save/Session As"), kSaveSessionAs.hotkey(),
-            (Fl_Callback*)save_session_as_cb, ui);
+            menu->add(
+                _("File/Save/Annotations Only"), kSaveAnnotationsOnly.hotkey(),
+                (Fl_Callback*)save_annotations_only_cb, ui, mode);
 
-        menu->add(
-            _("File/Close Current"), kCloseCurrent.hotkey(),
-            (Fl_Callback*)close_current_cb, ui, mode);
+            menu->add(
+                _("File/Save/Annotations as JSON"), kSaveAnnotationsAsJson.hotkey(),
+                (Fl_Callback*)save_annotations_as_json_cb, ui,
+                mode | FL_MENU_DIVIDER);
 
-        menu->add(
-            _("File/Close All"), kCloseAll.hotkey(), (Fl_Callback*)close_all_cb,
-            ui, mode);
+            mode = 0;
+            if (numFiles == 0)
+                mode = FL_MENU_INACTIVE;
+            menu->add(
+                _("File/Save/PDF Document"), kSavePDF.hotkey(),
+                (Fl_Callback*)save_pdf_cb, ui, FL_MENU_DIVIDER | mode);
+            menu->add(
+                _("File/Save/Session"), kSaveSession.hotkey(),
+                (Fl_Callback*)save_session_cb, ui);
+            menu->add(
+                _("File/Save/Session As"), kSaveSessionAs.hotkey(),
+                (Fl_Callback*)save_session_as_cb, ui);
 
-        menu->add(_("File/Save and Reload Session"), kReloadSession.hotkey(),
-                  (Fl_Callback*)reload_session_cb, ui, mode);
+            menu->add(
+                _("File/Close Current"), kCloseCurrent.hotkey(),
+                (Fl_Callback*)close_current_cb, ui, mode);
 
+            menu->add(
+                _("File/Close All"), kCloseAll.hotkey(), (Fl_Callback*)close_all_cb,
+                ui, mode);
+
+            menu->add(_("File/Save and Reload Session"), kReloadSession.hotkey(),
+                      (Fl_Callback*)reload_session_cb, ui, mode);
+        }
+        
         // std_any value;
         SettingsObject* settings = ui->app->settings();
         const std::vector< std::string >& recentFiles = settings->recentFiles();
@@ -1444,45 +1448,50 @@ namespace mrv
                 }
             }
 
-            menu->add(
-                _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),
-                (Fl_Callback*)edit_cut_frame_cb, ui);
-            menu->add(
-                _("Edit/Frame/Copy"), kEditCopyFrame.hotkey(),
-                (Fl_Callback*)edit_copy_frame_cb, ui);
-            menu->add(
-                _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
-                (Fl_Callback*)edit_paste_frame_cb, ui);
-            menu->add(
-                _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
-                (Fl_Callback*)edit_insert_frame_cb, ui);
+            if (App::supports_editing)
+            {
+                menu->add(
+                    _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),
+                    (Fl_Callback*)edit_cut_frame_cb, ui);
+                menu->add(
+                    _("Edit/Frame/Copy"), kEditCopyFrame.hotkey(),
+                    (Fl_Callback*)edit_copy_frame_cb, ui);
+                menu->add(
+                    _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
+                    (Fl_Callback*)edit_paste_frame_cb, ui);
+                menu->add(
+                    _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
+                    (Fl_Callback*)edit_insert_frame_cb, ui);
 
-            menu->add(
-                _("Edit/Audio Clip/Insert"), kEditInsertAudioClip.hotkey(),
-                (Fl_Callback*)insert_audio_clip_cb, ui);
-            menu->add(
-                _("Edit/Audio Clip/Remove"), kEditRemoveAudioClip.hotkey(),
-                (Fl_Callback*)edit_remove_audio_clip_cb, ui);
-            menu->add(
-                _("Edit/Audio Gap/Insert"), kEditInsertAudioGap.hotkey(),
-                (Fl_Callback*)edit_insert_audio_gap_cb, ui);
-            menu->add(
-                _("Edit/Audio Gap/Remove"), kEditRemoveAudioGap.hotkey(),
-                (Fl_Callback*)edit_remove_audio_gap_cb, ui);
+                menu->add(
+                    _("Edit/Audio Clip/Insert"), kEditInsertAudioClip.hotkey(),
+                    (Fl_Callback*)insert_audio_clip_cb, ui);
+                menu->add(
+                    _("Edit/Audio Clip/Remove"), kEditRemoveAudioClip.hotkey(),
+                    (Fl_Callback*)edit_remove_audio_clip_cb, ui);
+                menu->add(
+                    _("Edit/Audio Gap/Insert"), kEditInsertAudioGap.hotkey(),
+                    (Fl_Callback*)edit_insert_audio_gap_cb, ui);
+                menu->add(
+                    _("Edit/Audio Gap/Remove"), kEditRemoveAudioGap.hotkey(),
+                    (Fl_Callback*)edit_remove_audio_gap_cb, ui);
 
-            menu->add(
-                _("Edit/Slice"), kEditSliceClip.hotkey(),
-                (Fl_Callback*)edit_slice_clip_cb, ui);
-            menu->add(
-                _("Edit/Remove"), kEditRemoveClip.hotkey(),
-                (Fl_Callback*)edit_remove_clip_cb, ui);
+                menu->add(
+                    _("Edit/Slice"), kEditSliceClip.hotkey(),
+                    (Fl_Callback*)edit_slice_clip_cb, ui);
+                menu->add(
+                    _("Edit/Remove"), kEditRemoveClip.hotkey(),
+                    (Fl_Callback*)edit_remove_clip_cb, ui);
 
-            menu->add(
-                _("Edit/Undo"), kEditUndo.hotkey(), (Fl_Callback*)edit_undo_cb,
-                ui);
-            menu->add(
-                _("Edit/Redo"), kEditRedo.hotkey(), (Fl_Callback*)edit_redo_cb,
-                ui);
+                menu->add(
+                    _("Edit/Undo"), kEditUndo.hotkey(),
+                    (Fl_Callback*)edit_undo_cb,
+                    ui);
+                menu->add(
+                    _("Edit/Redo"), kEditRedo.hotkey(),
+                    (Fl_Callback*)edit_redo_cb,
+                    ui);
+            }
         }
 
         // if ( num > 0 )

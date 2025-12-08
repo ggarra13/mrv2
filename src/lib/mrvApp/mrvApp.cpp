@@ -261,6 +261,7 @@ namespace mrv
 
     LicenseType App::license_type = LicenseType::kDemo;
 
+    bool App::supports_saving = false;
     bool App::supports_layers = false;
     bool App::supports_annotations = false;
     bool App::supports_editing = false;

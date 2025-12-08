@@ -48,6 +48,14 @@ get_git_version
 if [ -z "$MSYS2_INSTALL" ]; then
     export MSYS2_INSTALL=ON
 fi
+
+if [ -z "$BUILD_VCPKG" ]; then
+    export BUILD_VCPKG=OFF
+    if [[ $KERNEL == *Windows* ]]; then
+	export BUILD_VCPKG=ON
+    fi
+fi
+
 if [ -z "$BUILD_GETTEXT" ]; then
     export BUILD_GETTEXT=OFF
 fi
@@ -231,7 +239,13 @@ fi
 if [ -z "$VULKAN_SDK" ]; then
     export VULKAN_SDK=/crapola_of_dir
     if [[ $KERNEL == *Windows* ]]; then
-	export VULKAN_SDK=/C/VulkanSDK
+	vulkan_root=/C/VulkanSDK
+	if [[ -d $vulkan_root ]]; then
+	    SDK_VERSION=$(ls -d ${vulkan_root}/* | sort -r | grep -o "$vulkan_root/[0-9]*\..*"| sed -e "s#$vulkan_root/##" | head -1)
+	    export VULKAN_SDK=$vulkan_root/$SDK_VERSION/
+	else
+	    export VULKAN_SDK=$vulkan_root
+	fi
     elif [[ $KERNEL == *Linux* ]]; then
 	if [[ -d VulkanSDK-Linux ]]; then
 	    vulkan_root=$PWD/VulkanSDK-Linux
@@ -258,19 +272,19 @@ else
 fi
     
 if [ -z "$TLRENDER_VK" ]; then
+    export TLRENDER_VK=OFF
     if [ -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
 	export TLRENDER_VK=ON
 	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
     else
-	export TLRENDER_VK=OFF
-	export MRV2_HDR=ON
+	export MRV2_HDR=OFF
 	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
     fi
 else
     if [ ! -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
 	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
 	export TLRENDER_VK=OFF
-	export MRV2_HDR=ON
+	export MRV2_HDR=OFF
     else
 	if [[ "$TLRENDER_VK" == "ON" || "$TLRENDER_VK" == "1" ]]; then
 	    echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
@@ -368,7 +382,8 @@ if [[ $KERNEL == *Linux* ]]; then
 fi
 
 echo "mrv2 Options"
-echo 
+echo
+echo "Build vcpkg......................... ${BUILD_VCPKG}		(BUILD_VCPKG)"
 echo "Build Python........................ ${BUILD_PYTHON} 	(BUILD_PYTHON)"
 if [[ ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
     echo "Python location: ${MRV2_PYTHON}"
@@ -464,6 +479,7 @@ cmd="cmake -G 'Ninja'
            -D CMAKE_OSX_ARCHITECTURES=\"${CMAKE_OSX_ARCHITECTURES}\"
            -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
 
+	   -D BUILD_VCPKG=${BUILD_VCPKG}
 	   -D BUILD_PYTHON=${BUILD_PYTHON}
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
@@ -471,7 +487,6 @@ cmd="cmake -G 'Ninja'
 
 	   -D MRV2_BACKEND=${MRV2_BACKEND}
 	   -D MRV2_CPPTRACE=${MRV2_CPPTRACE}
-	   -D MRV2_DEMO=${MRV2_DEMO}
 	   -D MRV2_HDR=${MRV2_HDR}
 	   -D MRV2_NETWORK=${MRV2_NETWORK}
 	   -D MRV2_PYFLTK=${MRV2_PYFLTK}
@@ -492,7 +507,6 @@ cmd="cmake -G 'Ninja'
            -D TLRENDER_HAP=${TLRENDER_HAP}
            -D TLRENDER_JPEG=${TLRENDER_JPEG}
            -D TLRENDER_LIBPLACEBO=${TLRENDER_LIBPLACEBO}
-           -D TLRENDER_LOCAL=${TLRENDER_LOCAL}
 	   -D TLRENDER_NDI=${TLRENDER_NDI}
 	   -D TLRENDER_NET=${TLRENDER_NET}
 	   -D TLRENDER_NFD=OFF
@@ -511,7 +525,7 @@ cmd="cmake -G 'Ninja'
 	   -D TLRENDER_PROGRAMS=OFF
 	   -D TLRENDER_EXAMPLES=FALSE
 	   -D TLRENDER_TESTS=FALSE
-	   -D TLRENDER_USD_PYTHON=${TLRENDER_USD_PYTHON}
+	   -D TLRENDER_USD_PYTHON=\"${TLRENDER_USD_PYTHON}\"
 	   -D TLRENDER_QT6=OFF
 	   -D TLRENDER_QT5=OFF
 	   

@@ -31,10 +31,11 @@ You need to have an internet connection for the license system.
 
 The donationware version when running without a donation, does not have:
 
+    - Saving (available from Solo and later)
     - Annotations (available from Solo and later)
     - Python (available in Standard and later)
     - OpenEXR layer switching (available in Standard and later).
-    - Edit (available in Edit and later)
+    - Editing (available in Edit and later)
     - Voice Annotations (available in Pro)
     - Move license to a new machine (available in Pro monthly)
 
@@ -57,24 +58,32 @@ ChangeLog
 - Added Vulkan's GPU card and driver versions to Help/About (HW tab).
 - Added Donate button on the license_helper, with simple donations.
 - Verified vmrv2 and mrv2 work on Kwin.
-- Fixed distributing libvulkan.so on Unix and vulkan-1.dll on Windows.  macOS
-  needs distributing as it does not come with the OS unless installed from
-  brew.
+- Fixed distributing libvulkan.so on Unix.  macOS and Windows
+  needs distributing it..
 - One feature of FLTK's python has changed.  You can no longer use:
       ```from fltk import Fl
         Fl.check()```
   as the Fl module is gone.  It is replaced by:
      ```import fltk
-      fltk.check```
+      import fltk as Fl
+      Fl.check()```
 - Fixed libjpeg-turbo compilation on aarch64 runners.
 - Fixed OpenJPH compilation on aarch64 runners.
-- Upgraded OpenJPH version to 
+- Upgraded OpenJPH version to v0.25.3.
 - Made Vulkan compilation faster skipping OpenGL's tlRender files.
 - Added downloading only when updating mrv2 or vmrv2.
 - Fixed UTF8toUTF32 and UTF32toUTF8 code from Darby.
 - Print out Vulkan color space and format detected when not in HDR.
 - Added Vulkan card name and drivers to Help->About->HW.
 - Improved utf8 to utf32 conversion and viceversa.
+- Keep the number for dropped frames after stopping playback.
+- Fixed an issue on macOS M1 that would (possibly) make vrmv2 not work on M1+.
+- Fixed Vulkan MAILBOX issue on Gnome49 / Kwin6.4.5 (Ubuntu 25.10).
+- Added MoltenVK version to vmrv2 on macOS.
+- Fixed ussage of old vulkan-1.dll on Windows' machines on beta (Github) builds.
+- Fixed a number of issues with aarch64 compilations.  Previous builds seem to have been AMD64 stubs.
+- Added shipping Python opentimelineio modules within mrv2/vmrv2.
+- Fixed FLU file requester's on Linux putting the filename in the directory path after one save.
 
 
 v1.4.6

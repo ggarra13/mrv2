@@ -131,8 +131,8 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {open
-  xywh {86 109 952 56} resizable
-  class Fl_Double_Window visible
+  xywh {64 75 952 56} hide resizable
+  class Fl_Double_Window
 } {
   Fl_Group {} {open
     xywh {0 0 933 30} box FLAT_BOX color 56
@@ -233,7 +233,7 @@ ui->uiView->centerView();}
         xywh {5 5 100 20}
       }
     }
-    Fl_Group {} {open
+    Fl_Group {} {
       xywh {36 1 897 28} box FLAT_BOX color 56
     } {
       Fl_Output uiCoord {
@@ -251,7 +251,7 @@ ui->uiView->centerView();}
           } {
             Fl_Menu_Button uiAColorType {
               label RGBA user_data_type {void*}
-              callback {ui->uiView->updatePixelBar();} open
+              callback {ui->uiView->updatePixelBar();}
               tooltip {Switch RGBA display between floating point, hexadecimal (0..0xff) and decimal (0..255).} xywh {151 3 45 24} labelsize 9 align 48
               code0 {o->disable_glyph();}
               class {mrv::PopupMenu}
@@ -269,7 +269,7 @@ ui->uiView->centerView();}
                 xywh {5 5 100 20}
               }
             }
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {199 3 271 25}
             } {
               Fl_Output uiPixelR {
@@ -278,7 +278,7 @@ ui->uiView->centerView();}
               Fl_Output uiPixelG {
                 tooltip {Green value of image pixel under mouse.} xywh {266 3 68 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 2
               }
-              Fl_Output uiPixelB {selected
+              Fl_Output uiPixelB {
                 tooltip {Blue value of image pixel under mouse.} xywh {334 3 68 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 4
               }
               Fl_Output uiPixelA {
@@ -869,8 +869,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {553 173 933 673} type Double align 80 hide resizable
-      class {mrv::MainWindow} size_range {933 674 0 0}
+      xywh {630 135 933 673} type Double align 80 resizable
+      class {mrv::MainWindow} size_range {933 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 933 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
@@ -925,7 +925,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar
+          label TopBar selected
           xywh {0 30 933 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -1222,7 +1222,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                   }
                 }
               }
-              Fl_Group uiActionGroup {open
+              Fl_Group uiActionGroup {
                 xywh {0 59 42 501} box FLAT_BOX hide
               } {
                 Fl_Button uiScrub {
@@ -1465,6 +1465,7 @@ settings->setValue( mrv::kPenColorA, a);}
               }
             }
             Fl_Group uiView {
+              label {Main Viewport}
               xywh {42 59 621 501} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class MyViewport
@@ -1487,7 +1488,7 @@ settings->setValue( mrv::kPenColorA, a);}
             }
           }
           Fl_Group uiTimelineGroup {
-            label uiTimelineGroup open
+            label uiTimelineGroup
             xywh {0 560 933 30} box FLAT_BOX color 51 labeltype NO_LABEL
             class {mrv::TimelineGroup}
           } {

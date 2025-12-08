@@ -3,7 +3,7 @@ include(ExternalProject)
 set(OTIO_GIT_REPOSITORY "https://github.com/PixarAnimationStudios/OpenTimelineIO.git")
 set(OTIO_GIT_TAG "v0.18.1")
 
-set(OTIO_DEPENDENCIES Imath)
+set(OTIO_DEPENDENCIES ${Python_DEP} Imath)
 message(STATUS "OTIO DEPENDENCIES=${OTIO_DEPENDENCIES}")
 
 set(OTIO_SHARED_LIBS ON)
@@ -11,11 +11,29 @@ if(NOT BUILD_SHARED_LIBS)
     set(OTIO_SHARED_LIBS OFF)
 endif()
 
+
+set(OTIO_PYTHON_INSTALL ON)
+set(OTIP_INSTALL_PYTHON_MODULES ON)
+
+
+set(OTIO_PATCH "")
+if(WIN32)
+    set(OTIO_PATCH ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/patches/OTIO-patch/src/opentime/timeRange.h
+	${CMAKE_CURRENT_BINARY_DIR}/OTIO/src/OTIO/src/opentime/timeRange.h
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/patches/OTIO-patch/src/opentimelineio/errorStatus.h
+	${CMAKE_CURRENT_BINARY_DIR}/OTIO/src/OTIO/src/opentimelineio/errorStatus.h)
+
+endif()
+
 set(OTIO_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DOTIO_FIND_IMATH=ON
-    -DOTIO_SHARED_LIBS=OFF
-    -DOTIO_PYTHON_INSTALL=${TLRENDER_ENABLE_PYTHON})
+    -DOTIO_INSTALL_COMMANDLINE_TOOLS=OFF
+    -DOTIO_SHARED_LIBS=${OTIO_SHARED_LIBS}
+    -DOTIO_PYTHON_INSTALL=${OTIO_PYTHON_INSTALL}
+    -DOTIO_INSTALL_PYTHON_MODULES=${OTIO_INSTALL_PYTHON_MODULES})
 
 ExternalProject_Add(
     OTIO
@@ -23,5 +41,6 @@ ExternalProject_Add(
     DEPENDS ${OTIO_DEPENDENCIES}
     GIT_REPOSITORY ${OTIO_GIT_REPOSITORY}
     GIT_TAG ${OTIO_GIT_TAG}
+    PATCH_COMMAND ${OTIO_PATCH}
     LIST_SEPARATOR |
     CMAKE_ARGS ${OTIO_ARGS})
