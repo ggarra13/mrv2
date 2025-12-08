@@ -31,6 +31,7 @@ You need to have an internet connection for the license system.
 
 The donationware version when running without a donation, does not have:
 
+    - Saving (available from Solo and later)
     - Annotations (available from Solo and later)
     - Python (available in Standard and later)
     - OpenEXR layer switching (available in Standard and later).
