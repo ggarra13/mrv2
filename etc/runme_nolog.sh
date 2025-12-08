@@ -239,7 +239,9 @@ fi
 if [ -z "$VULKAN_SDK" ]; then
     export VULKAN_SDK=/crapola_of_dir
     if [[ $KERNEL == *Windows* ]]; then
-	export VULKAN_SDK=/C/VulkanSDK
+	vulkan_root=/C/VulkanSDK
+	SDK_VERSION=$(ls -d ${vulkan_root}/* | sort -r | grep -o "$vulkan_root/[0-9]*\..*"| sed -e "s#$vulkan_root/##" | head -1)
+	export VULKAN_SDK=$vulkan_root/$SDK_VERSION/
     elif [[ $KERNEL == *Linux* ]]; then
 	if [[ -d VulkanSDK-Linux ]]; then
 	    vulkan_root=$PWD/VulkanSDK-Linux
