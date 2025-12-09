@@ -24,20 +24,45 @@ unzip vulkan-sdk.zip
 rm -f vulkan-sdk.zip
 
 
-VULKANROOT=InstallVulkan-
+#
+# Prefix of macOS installer
+#
+VULKAN_DOWNLOAD=InstallVulkan-
 
-SDK_VERSION=$(ls -d $VULKANROOT* | grep -o "$VULKAN_ROOT[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | sed -e "s#.app##")
+
+#
+# Get SDK version from macOS installer
+#
+SDK_VERSION=$(ls -d ${VULKAN_DOWNLOAD}* | grep -o "$VULKAN_DOWNLOAD[0-9]*\..*"| sed -e "s#$VULKAN_DOWNLOAD/##" | sed -e "s#.app##")
+
+
+#
+# Go back to mrv2's root dir
+#
+cd -
+
+mkdir -p VulkanSDK-${KERNEL}
+export VULKAN_ROOT=VulkanSDK-${KERNEL}
 
 /tmp/InstallVulkan-${SDK_VERSION}.app/Contents/MacOS/InstallVulkan-${SDK_VERSION} \
-  --root ~/VulkanSDK/${SDK_VERSION} \
+  --root ${VULKAN_ROOT}/${SDK_VERSION} \
   --accept-licenses \
   --default-answer \
   --confirm-command install
 
-rm -rf /tmp/InstallVulkan-*
+rm -rf /tmp/${VULKAN_DOWNLOAD}-*
 
+    
 
-export VULKAN_SDK=~/VulkanSDK/${SDK_VERSION}/macOS
+export VULKAN_SDK=${VULKAN_ROOT}/${SDK_VERSION}/macOS
 export VK_LAYER_PATH=$VULKAN_SDK/lib
 export VK_ICD_FILENAMES=$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json
 export PATH=${VULKAN_SDK}/bin:$PATH
+
+if [[ "$BUILD_VULKAN" == "ON" || "$BUILD_VULKAN" == "1" ]]; then
+    . etc/common/build_vulkan.sh
+else
+    echo "-------------------------------"
+    echo "   Using pre-compiled Vulkan   "
+    echo "-------------------------------"
+fi

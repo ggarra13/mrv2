@@ -30,14 +30,24 @@ ls /tmp
 #
 # Do not use the system VULKAN_SDK, which may be old.
 #
-export VULKAN_SDK="$PWD/VulkanSDK-vmrv2"
-export WINDOWS_VULKAN_SDK=`cygpath -w "${VULKAN_SDK}"`
+export VULKAN_ROOT="$PWD/VulkanSDK-${KERNEL}"
+export WINDOWS_VULKAN_ROOT=`cygpath -w "${VULKAN_ROOT}"`
 
 /tmp/vulkan-sdk.exe \
-    --root "$VULKAN_SDK" \
+    --root "$VULKAN_ROOT" \
     --accept-messages \
     --accept-licenses \
     -da \
     --confirm-command install
 
 rm -f /tmp/vulkan-sdk.exe
+
+if [[ "$VULKAN_COMPILE" == "ON" ]]; then
+    . etc/common/build_vulkan.sh
+else
+    echo "---------------------------------------------"
+    echo "   Using pre-compiled Vulkan for ${KERNEL}   "
+    echo "---------------------------------------------"
+    export VULKAN_SDK=$VULKAN_ROOT
+    export WINDOWS_VULKAN_SDK=$WINDOWS_VULKAN_ROOT
+fi

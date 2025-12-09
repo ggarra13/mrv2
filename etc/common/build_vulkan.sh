@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+. etc/functions.sh
+
+locate_python
+
 if [[ -z "$UNAME_ARCH" ]]; then
     UNAME_ARCH=x86_64
 fi
@@ -70,30 +74,24 @@ try_build()
 }
 
 
-if [[ ! -d VulkanSDK-Linux ]]; then
-    curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.gz"
-
-    echo "After downloading it..."
-    ls /tmp
-
-    mkdir -p VulkanSDK-Linux
-    cd VulkanSDK-Linux
-    tar -xvf /tmp/vulkan-sdk.tar.gz
-    cd ..
+if [[ ! -d VulkanSDK-${KERNEL} ]]; then
+    echo "No VulkanSDK downloaded for Kernel ${KERNEL}"
+    echo "Will not compile it."
+    exit 1
 fi
 
-VULKAN_ROOT=$PWD/VulkanSDK-Linux
+if [[ ! -d $VULKAN_ROOT ]]; then
+    VULKAN_ROOT=$PWD/VulkanSDK-${KERNEL}
+fi
 export SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
 export COMPILE_VERSION=$(echo "$SDK_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*$/\1/')
 
-
-export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
-if [[ -d ${VULKAN_SDK} && ! -d ${VULKAN_SDK}_orig ]]; then
-    mv ${VULKAN_SDK} ${VULKAN_SDK}_orig
+if [[ -z $VULKAN_SDK ]]; then
+    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
 fi
 
 echo "--------------------------------------------------------"
-echo "Compiling Vulkan SDK ${SDK_VERSION} on Linux "
+echo "Compiling Vulkan SDK ${SDK_VERSION} on $KERNEL          "
 echo "--------------------------------------------------------"
 
 mkdir -p compile
@@ -158,7 +156,7 @@ if [[ "$BUILD_SPIRV_TOOLS" == "ON" || "$BUILD_SPIRV_TOOLS" == "1" ]]; then
 
     cd SPIRV-Tools
     try_checkout
-    python3 utils/git-sync-deps
+    ${PYTHON} utils/git-sync-deps
     cmake -G Ninja -B build \
 	  -D SPIRV_SKIP_EXECUTABLES=ON \
 	  -D SPIRV_SKIP_TESTS=ON \
@@ -204,7 +202,7 @@ if [[ "$BUILD_GLSLANG" == "ON" || "$BUILD_GLSLANG" == "1" ]]; then
 
     cd glslang
     try_checkout
-    ./update_glslang_sources.py
+    ${PYTHON} ./update_glslang_sources.py
     cmake -G Ninja -B build \
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \

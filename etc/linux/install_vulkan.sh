@@ -42,17 +42,21 @@ get_kernel
 
 # curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkansdk-linux-x86_64-1.4.328.1.tar.xz"
 
-if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
-    VK_DOWNLOAD=latest
-fi
-
 if [[ "$VK_DOWNLOAD" == "latest" ]]; then
 	curl -L -o /tmp/vulkan-sdk.tar.xz "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"
-
 else
-	curl -L -o /tmp/vulkan-sdk.tar.xz "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkan-sdk-linux-x96_64-${VK_DOWNLOAD}.tar.xz"   
+	curl -L -o /tmp/vulkan-sdk.tar.xz "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkan-sdk-linux-x86_64-${VK_DOWNLOAD}.tar.xz"   
 fi
 
+#
+#
+#
+if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
+    if [ -z $VULKAN_COMPILE ]; then
+	export VULKAN_COMPILE=ON
+    fi
+fi
+    
 #
 # If download failed, use latest (version is not available)
 #
@@ -65,31 +69,29 @@ fi
 echo "After downloading it..."
 ls /tmp
 
-mkdir -p VulkanSDK-Linux
-cd VulkanSDK-Linux
+mkdir -p VulkanSDK-${KERNEL}
+cd VulkanSDK-${KERNEL}
 tar -xvf /tmp/vulkan-sdk.tar.xz
 
 cd ..
 
-VULKAN_ROOT=$PWD/VulkanSDK-Linux
+export VULKAN_ROOT=$PWD/VulkanSDK-${KERNEL}
 export SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
 export COMPILE_VERSION=$(echo "$SDK_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*$/\1/')
 
 
 export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
-
-    
-if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
-    . etc/linux/build_vulkan.sh
-else
-    echo "-------------------------------"
-    echo "   Using pre-compiled Vulkan   "
-    echo "-------------------------------"
-fi
-
 export VK_LAYER_PATH=$VULKAN_SDK/lib
 export PATH=${VULKAN_SDK}/bin:$PATH
 
 ls $VULKAN_SDK
 
 rm -f /tmp/vulkan-sdk.tar.gz
+
+if [[ "$BUILD_VULKAN" == "ON" || "$BUILD_VULKAN" == "1" ]]; then
+    . etc/common/build_vulkan.sh
+else
+    echo "-------------------------------"
+    echo "   Using pre-compiled Vulkan   "
+    echo "-------------------------------"
+fi
