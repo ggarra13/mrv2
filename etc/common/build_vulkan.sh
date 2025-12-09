@@ -364,5 +364,3 @@ cd ..
 # Clean up disk space
 #
 rm -rf compile
-
-export VULKAN_SDK=

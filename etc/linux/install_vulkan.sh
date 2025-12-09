@@ -72,7 +72,6 @@ fi
 if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
     if [ -z $VULKAN_COMPILE ]; then
 	export VULKAN_COMPILE=ON
-	UNAME_ARCH=x86_64
     fi
 fi
 
@@ -90,6 +89,16 @@ export VULKAN_ROOT=$PWD/VulkanSDK-${KERNEL}
 export SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
 export COMPILE_VERSION=$(echo "$SDK_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*$/\1/')
 
+if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
+    if [ -z $BUILD_VULKAN ]; then
+	export BUILD_VULKAN=ON
+    fi
+
+    if [[ -d $VULKAN_ROOT/$SDK_VERSION/x86_64 ]]; then
+	cd $VULKAN_ROOT/$SDK_VERSION
+	mv x86_64 $UNAME_ARCH
+    fi
+fi
 
 export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
 export VK_LAYER_PATH=$VULKAN_SDK/lib
