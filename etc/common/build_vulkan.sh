@@ -33,7 +33,7 @@ if [[ -z "$BUILD_SPIRV_HEADERS" ]]; then
 fi
 
 if [[ -z "$BUILD_VULKAN_EXTENSIONLAYER" ]]; then
-    BUILD_VULKAN_EXTENSIONLAYER=ON
+    BUILD_VULKAN_EXTENSIONLAYER=OFF  # broken on Linux
 fi
 
 if [[ -z "$BUILD_VULKAN_PROFILES" ]]; then
@@ -47,6 +47,7 @@ fi
 if [[ -z "$BUILD_SHADERC" ]]; then
     BUILD_SHADERC=ON
 fi
+
 
 #
 # Function used to try to checkout the correct SDK version or as close to it
@@ -162,6 +163,7 @@ if [[ "$BUILD_SPIRV_TOOLS" == "ON" || "$BUILD_SPIRV_TOOLS" == "1" ]]; then
 	  -D SPIRV_SKIP_TESTS=ON \
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
+	  -D CMAKE_INSTALL_LIBDIR=${VULKAN_SDK}/lib
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK}
     try_build
 
@@ -182,6 +184,7 @@ if [[ "$BUILD_SPIRV_CROSS" == "ON" || "$BUILD_SPIRV_CROSS" == "1" ]]; then
     cmake -G Ninja -B build \
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
+	  -D CMAKE_INSTALL_LIBDIR=${VULKAN_SDK}/lib \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK} \
 	  -D SPIRV_CROSS_ENABLE_C_API=OFF \
 	  -D SPIRV_CROSS_CLI=OFF \
@@ -206,6 +209,7 @@ if [[ "$BUILD_GLSLANG" == "ON" || "$BUILD_GLSLANG" == "1" ]]; then
     cmake -G Ninja -B build \
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
+	  -D CMAKE_INSTALL_LIBDIR=${VULKAN_SDK}/lib \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK} \
 	  -D ALLOW_EXTERNAL_SPIRV_TOOLS=ON \
 	  -D BUILD_EXTERNAL=OFF
@@ -247,6 +251,7 @@ if [[ "$BUILD_VULKAN_EXTENSIONLAYER" == "ON" || \
 	  -D BUILD_WERROR=${BUILD_WERROR} \
 	  -D BUILD_TESTS=OFF \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
+	  -D CMAKE_INSTALL_LIBDIR=${VULKAN_SDK}/lib \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK} \
 	  -D CMAKE_BUILD_TYPE=Release
     try_build
@@ -269,6 +274,7 @@ if [[ "$BUILD_VULKAN_PROFILES" == "ON" || \
 	  -D BUILD_WERROR=${BUILD_WERROR} \
 	  -D BUILD_TESTS=OFF \
 	  -D CMAKE_PREFIX_PATH=${VULKAN_SDK} \
+	  -D CMAKE_INSTALL_LIBDIR=${VULKAN_SDK}/lib \
 	  -D CMAKE_INSTALL_PREFIX=${VULKAN_SDK} \
 	  -D CMAKE_BUILD_TYPE=Release
     try_build
@@ -294,6 +300,7 @@ if [[ "$BUILD_VULKAN_VALIDATIONLAYERS" == "ON" || \
 	  -D BUILD_WSI_XCB_SUPPORT=OFF \
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_PREFIX_PATH=$VULKAN_SDK \
+	  -D CMAKE_INSTALL_LIBDIR=${VULKAN_SDK}/lib \
 	  -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
 
     try_build
@@ -321,6 +328,7 @@ if [[ "$BUILD_SHADERC" == "ON" || "$BUILD_SHADERC" == "1" ]]; then
 	  -D SHADERC_SKIP_EXECUTABLES=ON \
 	  -D CMAKE_BUILD_TYPE=Release \
 	  -D CMAKE_PREFIX_PATH=$VULKAN_SDK \
+	  -D CMAKE_INSTALL_LIBDIR=${VULKAN_SDK}/lib \
 	  -D CMAKE_INSTALL_PREFIX=$VULKAN_SDK
 
     try_build
