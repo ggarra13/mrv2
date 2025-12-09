@@ -54,6 +54,8 @@ ls /tmp
 export VULKAN_ROOT="$PWD/VulkanSDK-${KERNEL}"
 export WINDOWS_VULKAN_ROOT=`cygpath -w "${VULKAN_ROOT}"`
 
+export SDK_VERSION=${VK_DOWNLOAD}
+
 $EXE \
     --root "$VULKAN_ROOT" \
     --accept-messages \
@@ -63,14 +65,17 @@ $EXE \
 
 rm -f $EXE
 
+export VULKAN_SDK=$VULKAN_ROOT
+
+# Same as Vulkan_SDK but with forward slashes for powershell
+export WINDOWS_VULKAN_SDK=$WINDOWS_VULKAN_ROOT
+    
 if [[ "$BUILD_VULKAN" == "ON" ]]; then
     . etc/common/build_vulkan.sh
 else
     echo "---------------------------------------------"
     echo "   Using pre-compiled Vulkan for ${KERNEL}   "
     echo "---------------------------------------------"
-    export VULKAN_SDK=$VULKAN_ROOT
-    export WINDOWS_VULKAN_SDK=$WINDOWS_VULKAN_ROOT
 fi
 
 
