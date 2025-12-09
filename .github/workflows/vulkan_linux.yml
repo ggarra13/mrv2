@@ -65,6 +65,8 @@ jobs:
         
     # Install Vulkan SDK
     - name: Install Vulkan
+      env:
+        BUILD_VULKAN: ON
       run: |
         ./etc/linux/install_vulkan.sh
       shell: bash
@@ -107,7 +109,6 @@ jobs:
     - name: Build vmrv2
       env:
         BUILD_PYTHON: ON
-        BULLD_VULKAN: OFF
         MRV2_PYFLTK: ON
         MRV2_PYBIND11: ON
         MRV2_NETWORK: ON

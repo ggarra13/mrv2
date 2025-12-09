@@ -40,23 +40,32 @@ jobs:
         
     - name: Install pyFLTK dependencies
       run: brew install swig
-        
-    # Download and install Vulkan SDK with MoltenVK
-    - name: Install Vulkan SDK
-      run: |
-        brew install vulkan-loader
-        brew install molten-vk
-        brew install vulkan-tools
-        brew install shaderc
-        brew install glslang
-        brew install vulkan-profiles
-        brew install spirv-tools
 
-    # Verify Vulkan installation
-    - name: Verify Vulkan
+      
+    # Install Vulkan SDK manually
+    - name: Install Vulkan
+      env:
+        BUILD_VULKAN: ON
       run: |
-        export VK_LAYER_DEBUG=all
-        vulkaninfo --summary
+        ./etc/macos/install_vulkan.sh
+      shell: bash
+      
+    # Download and install Vulkan SDK with MoltenVK from brew
+    # - name: Install Vulkan SDK
+    #   run: |
+    #     brew install vulkan-loader
+    #     brew install molten-vk
+    #     brew install vulkan-tools
+    #     brew install shaderc
+    #     brew install glslang
+    #     brew install vulkan-profiles
+    #     brew install spirv-tools
+
+    # # Verify Vulkan installation
+    # - name: Verify Vulkan
+    #   run: |
+    #     export VK_LAYER_DEBUG=all
+    #     vulkaninfo --summary
         
     - name: Remove system OpenEXR and Imath
       run: |
@@ -96,7 +105,6 @@ jobs:
     - name: Build vmrv2
       env:
         BUILD_PYTHON: ON
-        BUILD_VULKAN: OFF
         MRV2_PYFLTK: ON
         MRV2_PYBIND11: ON
         MRV2_NETWORK: ON

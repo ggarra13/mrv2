@@ -76,6 +76,8 @@ jobs:
     
     # Install Vulkan SDK
     - name: Install Vulkan SDK
+      env:
+        BUILD_VULKAN: ON
       run: |
 
         . ./etc/windows/install_vulkan.sh

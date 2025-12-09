@@ -76,6 +76,8 @@ jobs:
     
     # Install Vulkan SDK
     - name: Install Vulkan SDK
+      env:
+        BULLD_VULKAN: OFF
       run: |
 
         . ./etc/windows/install_vulkan.sh
@@ -146,9 +148,7 @@ jobs:
         pacman -S --noconfirm rsync
       
     - name: Build vmrv2
-      env:
         BUILD_PYTHON: ON
-        BULLD_VULKAN: OFF
         MRV2_PYFLTK: ON
         MRV2_PYBIND11: ON
         MRV2_NETWORK: ON
