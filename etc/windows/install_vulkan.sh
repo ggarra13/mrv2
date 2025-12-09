@@ -33,6 +33,7 @@ if needs_download && [[ -n "$VK_STRIPPED" ]]; then
 	curl -L -o $EXE "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/warm/vulkansdk-windows-ARM64-${VK_STRIPPED}.exe"
     else
 	curl -L -o $EXE "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/windows/vulkan-sdk-windows-X64-${VK_STRIPPED}.exe"
+    fi
 fi
 
 # 3) Fallback to latest
