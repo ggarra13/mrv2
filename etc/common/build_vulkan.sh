@@ -32,12 +32,16 @@ if [[ -z "$BUILD_SPIRV_HEADERS" ]]; then
     BUILD_SPIRV_HEADERS=ON
 fi
 
+if [[ -z "$BUILD_VULKAN_UTILITY_LIBRARIES" ]]; then
+    BUILD_VULKAN_UTILITY_LIBRARIES=ON
+fi
+
 if [[ -z "$BUILD_VULKAN_EXTENSIONLAYER" ]]; then
     BUILD_VULKAN_EXTENSIONLAYER=OFF  # broken on Linux
 fi
 
 if [[ -z "$BUILD_VULKAN_PROFILES" ]]; then
-    BUILD_VULKAN_PROFILES=ON
+    BUILD_VULKAN_PROFILES=OFF # broken 
 fi
 
 if [[ -z "$BUILD_VULKAN_VALIDATIONLAYERS" ]]; then
@@ -237,7 +241,25 @@ fi
 # LunarG GFXReconstruct source: https://github.com/LunarG/gfxreconstruct
 # Khronos SPIRV-Reflect source: https://github.com/KhronosGroup/SPIRV-Reflect
 
+if [[ "$BUILD_VULKAN_UTILITY_LIBRARIES" == "ON" || \
+	  "$BUILD_VULKAN_UTILITY_LIBRARIES" == "1" ]]; then
+    if [[ ! -d Vulkan-Utility-Libraries ]]; then
+	git clone https://github.com/KhronosGroup/Vulkan-Utility-Libraries
+    fi
 
+    cd Vulkan-Utility-Libraries
+    try_checkout
+    cmake -S . -B build \
+	  -D UPDATE_DEPS=ON \
+	  -D BUILD_WERROR=${BUILD_WERROR} \
+	  -D BUILD_TESTS=OFF \
+	  -D CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} \
+	  -D CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
+	  -D CMAKE_BUILD_TYPE=Release
+    try_build
+    cd ..
+fi
+    
 #####################################
 # Vulkan-ExternsionLayer (needed?)  #
 #####################################
