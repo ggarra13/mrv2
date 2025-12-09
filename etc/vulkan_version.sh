@@ -12,7 +12,7 @@ export VK_STRIPPED=$VK_DOWNLOAD
 
 if [[ $VK_DOWNLOAD =~ ^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
     # Remove the last ".NUMBER"
-    VK_STRIPPED=${VK_DOWNLOAD%.*}
+    VK_STRIPPED=${VK_DOWNLOAD%.*}.0
 else
     # Leave it unchanged
     VK_STRIPPED=$VK_DOWNLOAD

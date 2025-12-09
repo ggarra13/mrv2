@@ -5,6 +5,11 @@
 
 . etc/vulkan_version.sh
 
+. etc/functions.sh
+
+get_kernel
+
+rm -rf /tmp/vulkansdk-macOS-*
 
 ZIP=/tmp/vulkan-sdk.zip
 rm -rf $ZIP
@@ -34,8 +39,8 @@ if needs_download; then
 fi
 
 cd /tmp
-unzip vulkan-sdk.zip
-rm -f vulkan-sdk.zip
+unzip -o $ZIP
+rm -f $ZIP
 
 
 #
@@ -47,8 +52,8 @@ VULKAN_DOWNLOAD=vulkansdk-macOS-
 #
 # Get SDK version from macOS installer
 #
-SDK_VERSION=$(ls -d ${VULKAN_DOWNLOAD}* | grep -o "$VULKAN_DOWNLOAD[0-9]*\..*"| sed -e "s#$VULKAN_DOWNLOAD/##" | sed -e "s#.app##")
-
+vk_dir=$(ls -d ${VULKAN_DOWNLOAD}*)
+SDK_VERSION=$(echo $vk_dir | sed -e "s#$VULKAN_DOWNLOAD##" | sed -e "s#.app##")
 
 #
 # Go back to mrv2's root dir
@@ -56,9 +61,9 @@ SDK_VERSION=$(ls -d ${VULKAN_DOWNLOAD}* | grep -o "$VULKAN_DOWNLOAD[0-9]*\..*"| 
 cd -
 
 mkdir -p VulkanSDK-${KERNEL}
-export VULKAN_ROOT=VulkanSDK-${KERNEL}
+export VULKAN_ROOT=$PWD/VulkanSDK-${KERNEL}
 
-/tmp/InstallVulkan-${SDK_VERSION}.app/Contents/MacOS/InstallVulkan-${SDK_VERSION} \
+run_cmd /tmp/vulkansdk-macOS-$SDK_VERSION.app/Contents/MacOS/vulkansdk-macOS-${SDK_VERSION} \
   --root ${VULKAN_ROOT}/${SDK_VERSION} \
   --accept-licenses \
   --default-answer \
