@@ -260,9 +260,10 @@ if [ -z "$VULKAN_SDK" ]; then
 	    if [ -d "$vulkan_root" ]; then
 		SDK_VERSION=$(ls -d ${vulkan_root}/* | sort -r | grep -o "$vulkan_root/[0-9]*\..*"| sed -e "s#$vulkan_root/##" | head -1)
 		export VULKAN_SDK=$vulkan_root/$SDK_VERSION/macOS
-	    else
 	    fi
-	else
+	fi
+
+	if [ -z $VULKAN_SDK ]; then
 	    if [[ -d /usr/local/include/vulkan ]]; then
 		export VULKAN_SDK=/usr/local/
 	    else

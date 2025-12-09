@@ -148,6 +148,7 @@ jobs:
         pacman -S --noconfirm rsync
       
     - name: Build vmrv2
+      env:
         BUILD_PYTHON: ON
         MRV2_PYFLTK: ON
         MRV2_PYBIND11: ON

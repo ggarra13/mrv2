@@ -293,7 +293,7 @@ locate_python() {
     # Clear previous exports to ensure a clean slate
     unset PYTHONDIR PYTHONEXE PYTHONPATH PYTHONHOME PYTHON PYTHON_VERSION PYTHON_SITEDIR PYTHON_USER_SITEDIR PYTHON_LIBDIR
 
-    local executables=("python.sh" "py.exe" "python3.13" "python3.12" "python3.11" "py.exe")
+    local executables=("python.sh" "py.exe" "python3.13" "python3.12" "python3.11" "python3" "python")
     local locations
     
     # Check if BUILD_DIR exists and is a directory

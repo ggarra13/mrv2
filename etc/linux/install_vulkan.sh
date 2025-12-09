@@ -54,6 +54,7 @@ fi
 if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
     if [ -z $VULKAN_COMPILE ]; then
 	export VULKAN_COMPILE=ON
+	UNAME_ARCH=x86_64
     fi
 fi
     
