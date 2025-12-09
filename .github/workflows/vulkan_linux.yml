@@ -69,7 +69,10 @@ jobs:
         BUILD_VULKAN: ON
       run: |
         ./etc/linux/install_vulkan.sh
-      shell: bash
+        
+        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+        echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
         
     - name: Synchronize clock
       run: |

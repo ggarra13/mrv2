@@ -53,7 +53,7 @@ VULKAN_DOWNLOAD=vulkansdk-macOS-
 # Get SDK version from macOS installer
 #
 vk_dir=$(ls -d ${VULKAN_DOWNLOAD}*)
-SDK_VERSION=$(echo $vk_dir | sed -e "s#$VULKAN_DOWNLOAD##" | sed -e "s#.app##")
+export SDK_VERSION=$(echo $vk_dir | sed -e "s#$VULKAN_DOWNLOAD##" | sed -e "s#.app##")
 
 #
 # Go back to mrv2's root dir
@@ -85,3 +85,14 @@ else
     echo "   Using pre-compiled Vulkan   "
     echo "-------------------------------"
 fi
+
+
+echo "VULKAN_SDK=$VULKAN_SDK"
+echo "----------------------"
+echo
+echo "Contains..."
+echo
+ls $VULKAN_SDK
+echo
+echo "VK_LAYER_PATH=$VULKAN_SDK/lib"
+echo "PATH=${VULKAN_SDK}/bin:$PATH"

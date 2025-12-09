@@ -80,3 +80,6 @@ echo
 echo "Contains..."
 echo
 ls $VULKAN_SDK
+echo
+echo "VK_LAYER_PATH=$VULKAN_SDK/lib"
+echo "PATH=${VULKAN_SDK}/bin:$PATH"

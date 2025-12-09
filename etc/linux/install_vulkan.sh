@@ -66,15 +66,6 @@ if needs_download; then
     curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"xs
 fi
 
-#
-#
-#
-if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
-    if [ -z $VULKAN_COMPILE ]; then
-	export VULKAN_COMPILE=ON
-    fi
-fi
-
 
 echo "After downloading it..."
 ls /tmp
@@ -86,21 +77,28 @@ tar -xvf $TAR_XZ
 cd ..
 
 export VULKAN_ROOT=$PWD/VulkanSDK-${KERNEL}
-export SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-export COMPILE_VERSION=$(echo "$SDK_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*$/\1/')
+echo "VULKAN_ROOT=$VULKAN_ROOT"
+
+export SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sed -e "s#$VULKAN_ROOT/##" | sed -e "s#/##")
+echo "SDK_VERSION=$SDK_VERSION"
 
 if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
-    if [ -z $BUILD_VULKAN ]; then
-	export BUILD_VULKAN=ON
-    fi
-
+    # There's no aarch SDK yet, so we just move the x86_64 to aarch64
+    export BUILD_VULKAN=ON  # and we re-build on top (\@todo: ugly)
     if [[ -d $VULKAN_ROOT/$SDK_VERSION/x86_64 ]]; then
 	cd $VULKAN_ROOT/$SDK_VERSION
-	mv x86_64 $UNAME_ARCH
+	mv -f x86_64 $UNAME_ARCH
     fi
 fi
 
 export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
+
+if [[ ! -d $VULKAN_SDK ]]; then
+    echo "Vulkan SDK $VULKAN_SDK does not exist!"
+    exit 1
+fi
+
+echo "VULKAN_SDK=$VULKAN_SDK"
 export VK_LAYER_PATH=$VULKAN_SDK/lib
 export PATH=${VULKAN_SDK}/bin:$PATH
 
@@ -120,3 +118,6 @@ echo
 echo "Contains..."
 echo
 ls $VULKAN_SDK
+echo
+echo "VK_LAYER_PATH=$VULKAN_SDK/lib"
+echo "PATH=${VULKAN_SDK}/bin:$PATH"

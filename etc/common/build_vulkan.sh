@@ -85,19 +85,17 @@ if [[ ! -d VulkanSDK-${KERNEL} ]]; then
     exit 1
 fi
 
-if [[ ! -d $VULKAN_ROOT ]]; then
-    VULKAN_ROOT=$PWD/VulkanSDK-${KERNEL}
-fi
-export SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sort -r | grep -o "$VULKAN_ROOT/[0-9]*\..*"| sed -e "s#$VULKAN_ROOT/##" | head -1)
-export COMPILE_VERSION=$(echo "$SDK_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*$/\1/')
-
 if [[ -z $VULKAN_SDK ]]; then
-    export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
+    echo "No VULKAN_SDK set cannot compile it."
 fi
+
+export COMPILE_VERSION=$(echo "$SDK_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*$/\1/')
 
 echo "--------------------------------------------------------"
 echo "Compiling Vulkan SDK ${SDK_VERSION} on $KERNEL          "
-echo "VULKAN_SDK will be ${VULKAN_SDK}"
+echo "VULKAN_SDK is ${VULKAN_SDK}"
+echo "SDK_VERSION is ${SDK_VERSION}"
+echo "Alternative COMPILE_VERSION is ${COMPILE_VERSION}"
 echo "--------------------------------------------------------"
 
 mkdir -p compile

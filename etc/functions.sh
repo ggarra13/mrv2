@@ -217,6 +217,9 @@ get_kernel()
 	    export ARCH=i386
 	fi
     fi
+
+    echo "ARCH=${ARCH}"
+    echo "UNAME_ARCH=${UNAME_ARCH}"
 }
 
 #
