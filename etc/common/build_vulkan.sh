@@ -33,7 +33,7 @@ if [[ -z "$BUILD_SPIRV_HEADERS" ]]; then
 fi
 
 if [[ -z "$BUILD_VULKAN_EXTENSIONLAYER" ]]; then
-    BUILD_VULKAN_EXTENSIONLAYER=ON
+    BUILD_VULKAN_EXTENSIONLAYER=OFF
 fi
 
 if [[ -z "$BUILD_VULKAN_PROFILES" ]]; then
@@ -54,7 +54,7 @@ fi
 #
 try_checkout()
 {
-    checkouts="v$SDK_VERSION vulkan-sdk-v$SDK_VERSION sdk-$SDK_VERSION v$COMPILE_VERSION vulkan-sdk-v$COMPILE_VERSION sdk-$COMPILE_VERSION"
+    checkouts="v$SDK_VERSION vulkan-sdk-v$SDK_VERSION sdk-$SDK_VERSION v$COMPILE_VERSION vulkan-sdk-v$COMPILE_VERSION sdk-$COMPILE_VERSION main master"
     for checkout in $checkouts; do
 	cmd=`git checkout $checkout &> /dev/null`
 	if [[ $? == 0 ]]; then
@@ -65,7 +65,7 @@ try_checkout()
 
 try_build()
 {
-    cmake --build build -j $(nproc)
+    cmake --build build
     if [[ $? != 0 ]]; then
 	echo "************ COMPILATION FAILED *****************"
 	exit 1
