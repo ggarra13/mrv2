@@ -5,18 +5,32 @@
 
 . etc/vulkan_version.sh
 
-rm -rf /mtp/vulkan-sdk.zip
 
-if [[ "$VK_DOWNLOAD" != "latest" ]]; then
-    curl -L -o /tmp/vulkan-sdk.zip "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/mac/vulkansdk-macos-${VK_DOWNLOAD}.zip"
+ZIP=/tmp/vulkan-sdk.zip
+rm -rf $ZIP
+
+needs_download() {
+    # return 0 (true) if file does not exist OR is smaller than 8192 bytes
+    [[ ! -e "$ZIP" ]] || (( $(wc -c <"$ZIP") < 8192 ))
+}
+
+# 1) Try full version (unless "latest")
+if [[ "$VK_DOWNLOAD" != "latest" ]] && needs_download; then
+    curl -L -o "$ZIP" \
+        "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/mac/vulkansdk-macos-${VK_DOWNLOAD}.zip"
 fi
 
-#
-# If download failed, version is prolaly not available.  Use latest.
-#
-if [[ ! -e /tmp/vulkan-sdk.zip ]]; then
+# 2) Try stripped version if still too small
+if needs_download && [[ -n "$VK_STRIPPED" ]]; then
+    curl -L -o "$ZIP" \
+        "https://sdk.lunarg.com/sdk/download/${VK_STRIPPED}/mac/vulkansdk-macos-${VK_STRIPPED}.zip"
+fi
+
+# 3) Fallback to latest
+if needs_download; then
     echo "Vulkan version ${VK_DOWNLOAD} not found! Downloading latest"
-    curl -L -o /tmp/vulkan-sdk.zip "https://sdk.lunarg.com/sdk/download/latest/mac/vulkan-sdk.zip"
+    curl -L -o "$ZIP" \
+        "https://sdk.lunarg.com/sdk/download/latest/mac/vulkan-sdk.zip"
 fi
 
 cd /tmp
@@ -27,7 +41,7 @@ rm -f vulkan-sdk.zip
 #
 # Prefix of macOS installer
 #
-VULKAN_DOWNLOAD=InstallVulkan-
+VULKAN_DOWNLOAD=vulkansdk-macOS-
 
 
 #

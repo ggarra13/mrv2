@@ -70,7 +70,7 @@ try_checkout()
 
 try_build()
 {
-    cmake --build build
+    cmake --build build --parallel
     if [[ $? != 0 ]]; then
 	echo "************ COMPILATION FAILED *****************"
 	exit 1
@@ -97,6 +97,7 @@ fi
 
 echo "--------------------------------------------------------"
 echo "Compiling Vulkan SDK ${SDK_VERSION} on $KERNEL          "
+echo "VULKAN_SDK will be ${VULKAN_SDK}"
 echo "--------------------------------------------------------"
 
 mkdir -p compile
@@ -363,3 +364,5 @@ cd ..
 # Clean up disk space
 #
 rm -rf compile
+
+export VULKAN_SDK=

@@ -10,18 +10,38 @@
 . etc/build_dir.sh
 . etc/vulkan_version.sh
 
-if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
-    curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/warm/vulkansdk-windows-ARM64-${VK_DOWNLOAD}.exe"
-else
-    curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/windows/vulkan-sdk-windows-X64-${VK_DOWNLOAD}.exe"
+EXE=/tmp/vulkan-sdk.exe
+rm -rf $EXE
+
+needs_download() {
+    # return 0 (true) if file does not exist OR is smaller than 8192 bytes
+    [[ ! -e "$EXE" ]] || (( $(wc -c <"$EXE") < 8192 ))
+}
+
+# 1) Try full version (unless "latest")
+if [[ "$VK_DOWNLOAD" != "latest" ]] && needs_download; then
+    if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
+	curl -L -o $EXE "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/warm/vulkansdk-windows-ARM64-${VK_DOWNLOAD}.exe"
+    else
+	curl -L -o $EXE "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/windows/vulkan-sdk-windows-X64-${VK_DOWNLOAD}.exe"
+    fi
 fi
 
-if [[ ! -e /tmp/vulkan-sdk.exe ]]; then
+# 2) Try stripped version if still too small
+if needs_download && [[ -n "$VK_STRIPPED" ]]; then
+    if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
+	curl -L -o $EXE "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/warm/vulkansdk-windows-ARM64-${VK_STRIPPED}.exe"
+    else
+	curl -L -o $EXE "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/windows/vulkan-sdk-windows-X64-${VK_STRIPPED}.exe"
+fi
+
+# 3) Fallback to latest
+if needs_download; then
     echo "VK_DOWNLOAD ${VK_DOWNLOAD} version not found.  Downloading latest."
     if [[ $ARCH == *aarch64* || $ARCH == *arm64* ]]; then
-        curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/latest/warm/vulkan-sdk.exe"
+        curl -L -o $EXE "https://sdk.lunarg.com/sdk/download/latest/warm/vulkan-sdk.exe"
     else
-	curl -L -o /tmp/vulkan-sdk.exe "https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe"
+	curl -L -o $EXE "https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe"
     fi
 fi
 
@@ -33,14 +53,14 @@ ls /tmp
 export VULKAN_ROOT="$PWD/VulkanSDK-${KERNEL}"
 export WINDOWS_VULKAN_ROOT=`cygpath -w "${VULKAN_ROOT}"`
 
-/tmp/vulkan-sdk.exe \
+$EXE \
     --root "$VULKAN_ROOT" \
     --accept-messages \
     --accept-licenses \
     -da \
     --confirm-command install
 
-rm -f /tmp/vulkan-sdk.exe
+rm -f $EXE
 
 if [[ "$VULKAN_COMPILE" == "ON" ]]; then
     . etc/common/build_vulkan.sh
@@ -51,3 +71,11 @@ else
     export VULKAN_SDK=$VULKAN_ROOT
     export WINDOWS_VULKAN_SDK=$WINDOWS_VULKAN_ROOT
 fi
+
+
+echo "VULKAN_SDK=$VULKAN_SDK"
+echo "----------------------"
+echo
+echo "Contains..."
+echo
+ls $VULKAN_SDK

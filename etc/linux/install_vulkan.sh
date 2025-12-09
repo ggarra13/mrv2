@@ -42,10 +42,28 @@ get_kernel
 
 # curl -L -o /tmp/vulkan-sdk.tar.gz "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkansdk-linux-x86_64-1.4.328.1.tar.xz"
 
-if [[ "$VK_DOWNLOAD" == "latest" ]]; then
-	curl -L -o /tmp/vulkan-sdk.tar.xz "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"
-else
-	curl -L -o /tmp/vulkan-sdk.tar.xz "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkan-sdk-linux-x86_64-${VK_DOWNLOAD}.tar.xz"   
+TAR_XZ=/tmp/vulkan-sdk.tar.xz
+rm -rf $TAR_XZ
+
+needs_download() {
+    # return 0 (true) if file does not exist OR is smaller than 8192 bytes
+    [[ ! -e "$TAR_XZ" ]] || (( $(wc -c <"$TAR_XZ") < 8192 ))
+}
+
+# 1) Try full version (unless "latest")
+if [[ "$VK_DOWNLOAD" != "latest" ]] && needs_download; then
+    curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkan-sdk-linux-x86_64-${VK_DOWNLOAD}.tar.xz"   
+fi
+
+# 2) Try stripped version if still too small
+if needs_download && [[ -n "$VK_STRIPPED" ]]; then
+    curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkan-sdk-linux-x86_64-${VK_STRIPPED}.tar.xz"  
+fi
+
+# 3) Fallback to latest
+if needs_download; then
+    echo "Vulkan version ${VK_DOWNLOAD} not found! Downloading latest"
+    curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"xs
 fi
 
 #
@@ -57,14 +75,6 @@ if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
 	UNAME_ARCH=x86_64
     fi
 fi
-    
-#
-# If download failed, use latest (version is not available)
-#
-if [[ ! -e /tmp/vulkan-sdk.tar.xz ]]; then
-    echo "Vulkan version ${VK_DOWNLOAD} not found! Downloading latest"
-    curl -L -o /tmp/vulkan-sdk.tar.xz "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"
-fi
 
 
 echo "After downloading it..."
@@ -72,7 +82,7 @@ ls /tmp
 
 mkdir -p VulkanSDK-${KERNEL}
 cd VulkanSDK-${KERNEL}
-tar -xvf /tmp/vulkan-sdk.tar.xz
+tar -xvf $TAR_XZ
 
 cd ..
 
@@ -85,9 +95,7 @@ export VULKAN_SDK=$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH
 export VK_LAYER_PATH=$VULKAN_SDK/lib
 export PATH=${VULKAN_SDK}/bin:$PATH
 
-ls $VULKAN_SDK
-
-rm -f /tmp/vulkan-sdk.tar.gz
+rm -f $TAR_XZ
 
 if [[ "$BUILD_VULKAN" == "ON" || "$BUILD_VULKAN" == "1" ]]; then
     . etc/common/build_vulkan.sh
@@ -96,3 +104,10 @@ else
     echo "   Using pre-compiled Vulkan   "
     echo "-------------------------------"
 fi
+
+echo "VULKAN_SDK=$VULKAN_SDK"
+echo "----------------------"
+echo
+echo "Contains..."
+echo
+ls $VULKAN_SDK
