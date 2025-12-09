@@ -317,14 +317,6 @@ else()
 	    CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
 	list(PREPEND CPACK_PRE_BUILD_SCRIPTS ${MRV2_ROOT}/cmake/copy_pdbs.cmake )
     endif()
-
-
-    if (MRV2_HDR)
-	install(FILES
-	    C:/Windows/System32/vulkan-1.dll
-	    DESTINATION bin
-	    COMPONENT applications)
-    endif()
     
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "${mrv2_NAME}-v${mrv2_VERSION}" )
     

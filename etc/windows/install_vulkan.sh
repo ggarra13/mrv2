@@ -63,7 +63,7 @@ $EXE \
 
 rm -f $EXE
 
-if [[ "$VULKAN_COMPILE" == "ON" ]]; then
+if [[ "$BUILD_VULKAN" == "ON" ]]; then
     . etc/common/build_vulkan.sh
 else
     echo "---------------------------------------------"
