@@ -752,10 +752,10 @@ namespace mrv
         {
             cmd = "gsettings get org.gnome.shell.extensions.tiling-assistant toggle-always-on-top";
         }
-        else if (compositor == "kwin")
-        {
-            cmd = "kreadconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" | awk -F',' '{print $1}'";
-        }
+        // else if (compositor == "kwin")
+        // {
+        //     cmd = "kreadconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" | awk -F',' '{print $1}'";
+        // }
         else
         {
             LOG_INFO("Compositor not known");
@@ -798,20 +798,20 @@ namespace mrv
                   "toggle-always-on-top \"['" +
                   hotkey + "']\"";
         }
-        else if (compositor == "kwin")
-        {
-            size_t startPos = 0;
-            while (startPos = hotkey.find('<') != std::string::npos)
-            {
-                hotkey.replace(startPos, 1, "");
-            }
-            while (startPos = hotkey.find('>') != std::string::npos)
-            {
-                hotkey.replace(startPos, 1, "+");
-            }
-            cmd = "kwriteconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" ";
-            cmd += hotkey;
-        }
+        // else if (compositor == "kwin")
+        // {
+        //     size_t startPos = 0;
+        //     while (startPos = hotkey.find('<') != std::string::npos)
+        //     {
+        //         hotkey.replace(startPos, 1, "");
+        //     }
+        //     while (startPos = hotkey.find('>') != std::string::npos)
+        //     {
+        //         hotkey.replace(startPos, 1, "+");
+        //     }
+        //     cmd = "kwriteconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" ";
+        //     cmd += hotkey;
+        // }
         else
         {
             // Not defined yet.
