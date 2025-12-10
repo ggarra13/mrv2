@@ -66,7 +66,7 @@ jobs:
     # Install Vulkan SDK
     - name: Install Vulkan
       env:
-        BUILD_VULKAN: ON
+        BUILD_VULKAN: OFF  # optional
       run: |
         ./etc/linux/install_vulkan.sh
         
