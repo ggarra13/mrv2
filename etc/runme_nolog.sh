@@ -270,7 +270,13 @@ if [ -z "$VULKAN_SDK" ]; then
 	    fi
 	fi
     fi
-    echo "Guessed VULKAN_SDK to ${VULKAN_SDK}"
+    if [[ -e "$VULKAN_SDK/include/vulkan/vulkan.h" ]]; then
+	echo "Guessed VULKAN_SDK to ${VULKAN_SDK}"
+    else
+	unset VULKAN_SDK
+	export TLRENDER_VK=OFF
+	export MRV2_HDR=OFF
+    fi
 else
     echo "Using VULKAN_SDK from environment: ${VULKAN_SDK}"
 fi
@@ -279,27 +285,12 @@ if [ -z "$TLRENDER_VK" ]; then
     export TLRENDER_VK=OFF
     if [ -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
 	export TLRENDER_VK=ON
-	echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
+	echo "Vulkan FOUND at ${VULKAN_SDK}/include/"
     else
 	export MRV2_HDR=OFF
-	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
-    fi
-else
-    if [ ! -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]; then
-	echo "Vulkan NOT FOUND at ${VULKAN_SDK}/include/vulkan"
-	export TLRENDER_VK=OFF
-	export MRV2_HDR=OFF
-	exit 1
-    else
-	if [[ "$TLRENDER_VK" == "ON" || "$TLRENDER_VK" == "1" ]]; then
-	    echo "Vulkan FOUND at ${VULKAN_SDK}/include/vulkan"
-	    export MRV2_HDR=ON
-	else
-	    export MRV2_HDR=OFF
-	fi
+	echo "Vulkan NOT FOUND!"
     fi
 fi
-
     
 if [ -z "$TLRENDER_VPX" ]; then
     export TLRENDER_VPX=ON
