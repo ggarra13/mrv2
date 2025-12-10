@@ -237,7 +237,6 @@ if [ -z "$TLRENDER_USD" ]; then
 fi
 
 if [ -z "$VULKAN_SDK" ]; then
-    export VULKAN_SDK=/crapola_of_dir
     if [[ $KERNEL == *Windows* ]]; then
 	vulkan_root=/C/VulkanSDK
 	if [[ -d $vulkan_root ]]; then
