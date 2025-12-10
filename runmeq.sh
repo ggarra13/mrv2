@@ -65,6 +65,7 @@ if [[ ! -e $translation ]]; then
     
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t pot
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t mo
+    run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
     cd -
 else
