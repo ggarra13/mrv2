@@ -68,6 +68,7 @@ function( is_system_lib TARGET ISSYSLIB )
     )
 
     if (APPLE)
+	# On Apple we must distribute libvulkan and libMoltenVK
 	list(APPEND _vulkan_libs
 	    libMoltenVK
 	    libvulkan)
@@ -245,9 +246,9 @@ function( is_system_lib TARGET ISSYSLIB )
 	libudev
 	libutil          # was accepted before
 	libstdc
-	libvulkan
+	libvulkan        # On Linux, we don't distribute libvulkan
 	libz
-	vulkan-
+	vulkan-          # On Windows, we don't distribute vulkan-1.dll
 	${_audio_libs}
 	${_kde_libs}
 	${_gnome_libs}
