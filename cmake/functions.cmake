@@ -245,7 +245,9 @@ function( is_system_lib TARGET ISSYSLIB )
 	libudev
 	libutil          # was accepted before
 	libstdc
+	libvulkan
 	libz
+	vulkan-
 	${_audio_libs}
 	${_kde_libs}
 	${_gnome_libs}
