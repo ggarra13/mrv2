@@ -18,7 +18,7 @@ set(SOURCE
     TextureAtlas.cpp
     Util.cpp)
 
-find_package(Vulkan REQUIRED COMPONENTS glslang shaderc_combined SPIRV-Tools)  
+find_package(Vulkan REQUIRED)  
 find_package(FLTK CONFIG REQUIRED)
 
 set(LIBRARIES tlCore Vulkan::Vulkan)

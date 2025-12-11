@@ -19,6 +19,8 @@ if(TLRENDER_LIBPLACEBO)
     list(APPEND LIBRARIES_PRIVATE libplacebo) 
 endif()
 
+find_package(Vulkan REQUIRED)
+set(LIBRARIES_PRIVATE Vulkan::Vulkan)
 
 add_library(tlTimelineVk ${HEADERS} ${PRIVATE_HEADERS} ${SOURCE})
 set_source_files_properties(Render.cpp PROPERTIES
