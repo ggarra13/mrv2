@@ -852,11 +852,12 @@ namespace mrv
 
         Fl_Preferences video(base, "opengl");
 
-#ifdef VULKAN_BACKEND
-        uiPrefs->uiPrefsOpenGLVsync->value(1);
-#else
+        // VSync: 0 None, 1 = Always, 2 = Presentation
         video.get("vsync", tmp, 2);
+#ifdef __linux__
+        tmp = 1;  // \@bug: Linux must have Always VSync for now (NVidia bug?)
 #endif
+        uiPrefs->uiPrefsOpenGLVsync->value(tmp);
 
         video.get("color_buffers_accuracy", tmp, 0);
         uiPrefs->uiPrefsColorAccuracy->value(tmp);
@@ -1584,9 +1585,7 @@ namespace mrv
             (int)uiPrefs->uiPrefsRaiseLogWindowOnFFmpegError->value());
 
         Fl_Preferences video(base, "opengl");
-#ifdef OPENGL_BACKEND
         video.set("vsync", (int)uiPrefs->uiPrefsOpenGLVsync->value());
-#endif
         video.set(
             "color_buffers_accuracy",
             (int)uiPrefs->uiPrefsColorAccuracy->value());

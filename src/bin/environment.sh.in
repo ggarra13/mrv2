@@ -44,7 +44,7 @@ if [[ "@BUILD_PYTHON@" == "ON" ]]; then
 fi
 
 
-#export __NV_DISABLE_EXPLICIT_SYNC=1  # lagacy, don't use
+export __NV_DISABLE_EXPLICIT_SYNC=1
     
 
 #
