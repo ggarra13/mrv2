@@ -1277,8 +1277,7 @@ namespace mrv
             patch = VK_API_VERSION_PATCH(v);
             build = 0;
             
-#ifdef _WIN32
-            // On Windows NVIDIA uses a custom encoding:
+            // NVIDIA uses a custom encoding:
             if (deviceName.find("NVIDIA") != std::string::npos)
             {
                 major = (v >> 22) & 0x3ff;
@@ -1286,7 +1285,7 @@ namespace mrv
                 patch = (v >> 6) & 0xff;
                 build = v & 0x3f;
             }
-#endif
+
             o << "\tDriver version: "
               << major << "." << minor << "." << patch
               << build

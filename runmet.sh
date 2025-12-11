@@ -7,7 +7,7 @@
 
 #
 #
-# Wrap up script to compile FLTK, tlRender and mrv2
+# Wrap up script to compile FLTK, pyFLTK, tlRender and mrv2
 #
 #
 
