@@ -43,6 +43,9 @@ if [[ "@BUILD_PYTHON@" == "ON" ]]; then
     export PYTHONPATH="${dir}/lib/python@MRV2_PYTHON_VERSION@:${dir}/lib/python@MRV2_PYTHON_VERSION@/lib-dynload:${dir}/lib/python@MRV2_PYTHON_VERSION@/site-packages:${HOME}/.local/lib/python@MRV2_PYTHON_VERSION@/site_packages:${PYTHONPATH}"
 fi
 
+if [[ "@MRV2_BACKEND@" == "GL" ]]; then
+    export FLTK_BACKEND=x11
+fi
 
 export __NV_DISABLE_EXPLICIT_SYNC=1
     

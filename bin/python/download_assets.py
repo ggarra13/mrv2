@@ -107,11 +107,9 @@ def download_url(base_url, dest_dir, mrv2_prefix):
             response.raise_for_status()  # Raise an error for bad status codes
 
             print(f"Downloading {filename}...")
-            
-            try:
-                os.remove(output_path)
-            except FileNotFoundError:
-                pass   # Ignore if it doesn't exist
+
+            if os.path.exists(output_path):
+                continue
 
 
             # Save the binary content
