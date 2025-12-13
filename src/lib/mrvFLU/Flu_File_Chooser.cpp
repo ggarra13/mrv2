@@ -809,9 +809,14 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     clear_history();
 
-    tl::file::Path path(pathname);
-    std::string directory = path.getDirectory();
-    std::string fileName = path.get(-1, tl::file::PathType::FileName);
+    // Note: patname may be a valid C format sequence, like picture.%04d.exr
+    //       we convert it to picture.0001.exr.
+    char tmp[1024];
+    snprintf(tmp, 1024, pathname, 1);
+
+    tl::file::Path path(tmp);
+    const std::string directory = path.getDirectory();
+    const std::string fileName = path.get(-1, tl::file::PathType::FileName);
 
     if (!directory.empty())
         cd(directory.c_str());
@@ -2600,9 +2605,13 @@ int Flu_File_Chooser::count()
 
 void Flu_File_Chooser::value(const char* v)
 {
-    cd(v);
     if (!v)
         return;
+    
+    tl::file::Path path(v);
+    const std::string directory = path.getDirectory();
+    
+    cd(directory.c_str());
     // try to find the file and select it
     const char* slash = strrchr(v, '/');
     if (slash)
@@ -2646,7 +2655,7 @@ const char* Flu_File_Chooser::value(int n)
             n--;
             if (n == 0)
             {
-                std::string s = e->toTLRender();
+                const std::string s = e->toTLRender();
                 filename.value(s.c_str());
                 filename.insert_position(filename.size());
                 return value();
@@ -3516,9 +3525,9 @@ void Flu_File_Chooser::cd(const char* path)
         if (currentDir[strlen(currentDir.c_str()) - 1] != '/')
             currentDir += "/";
 #ifdef _WIN32
-        if (filename.value()[1] != ':')
+        if (filename.value()[1] == ':')
 #else
-        if (filename.value()[0] != '/')
+        if (filename.value()[0] == '/')
 #endif
         {
             if (!(type() & static_cast<int>(ChooserType::SAVING)))
@@ -3576,7 +3585,6 @@ void Flu_File_Chooser::cd(const char* path)
     else
 #endif
     {
-
         location->input.value(currentDir.c_str());
 #ifdef _WIN32
         std::string treePath =
@@ -3600,7 +3608,9 @@ void Flu_File_Chooser::cd(const char* path)
                 break;
         }
         if (i && i->label() != currentDir)
+        {
             location->tree.insert_above(i, currentDir.c_str());
+        }
 #endif
     }
 
