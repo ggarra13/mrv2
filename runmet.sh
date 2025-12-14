@@ -13,9 +13,13 @@
 
 set +e
 
+
+
 . $PWD/etc/build_dir.sh
 
+
 rm -rf $BUILD_DIR/install/include/FL
+
 
 dir=$BUILD_DIR/deps/FLTK/src/FLTK-build/
 if [[ ! -d $dir ]]; then
@@ -33,7 +37,7 @@ cd $dir
 #  Rebuild latest FLTK
 #
 
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install &> /dev/null
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 if [[ $? != 0 ]]; then
     echo "COMPILATON of FLTK failed"
     cd -

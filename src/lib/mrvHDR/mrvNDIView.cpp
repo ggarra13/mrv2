@@ -1258,10 +1258,6 @@ void main() {
         TLRENDER_P();
 
         VkCommandBuffer cmd = getCurrentCommandBuffer();
-        if (!m_swapchain || !cmd || !isFrameActive())
-        {
-            return;
-        }
         
         // Clear the frame
         begin_render_pass(cmd);

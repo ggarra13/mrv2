@@ -47,7 +47,10 @@ if [[ "@MRV2_BACKEND@" == "GL" ]]; then
     export FLTK_BACKEND=x11
 fi
 
-export __NV_DISABLE_EXPLICIT_SYNC=1
+#
+# Use old NVidia implicit sync (GNOME48 and earlier)
+#
+#export __NV_DISABLE_EXPLICIT_SYNC=1
     
 
 #

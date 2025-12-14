@@ -159,18 +159,10 @@ namespace tl
             std::map<std::string, std::vector<uint8_t> > fontData;
             FT_Library ftLibrary = nullptr;
             std::map<std::string, FT_Face> ftFaces;
-#ifdef USE_CODECVT
-            void measure(
-                const std::basic_string<tl_char_t>& utf32, const FontInfo&,
-                int maxLineWidth, math::Size2i&,
-                std::vector<math::Box2i>* = nullptr);
-            std::wstring_convert<std::codecvt_utf8<tl_char_t>, tl_char_t> utf32Convert;
-#else
             void measure(
                 const std::u32string& utf32, const FontInfo&,
                 int maxLineWidth, math::Size2i&,
                 std::vector<math::Box2i>* = nullptr);
-#endif
             memory::LRUCache<GlyphInfo, std::shared_ptr<Glyph> > glyphCache;
         };
 
@@ -326,11 +318,7 @@ namespace tl
             math::Size2i out;
             try
             {
-#ifdef USE_CODECVT
-                 const auto utf32 = p.utf32Convert.from_bytes(text);
-#else
                  const auto utf32 = utf8_to_utf32(text);
-#endif
                  p.measure(utf32, fontInfo, maxLineWidth, out);
             }
             catch (const std::exception& e)
@@ -347,11 +335,7 @@ namespace tl
             std::vector<math::Box2i> out;
             try
             {
-#ifdef USE_CODECVT
-                const auto utf32 = p.utf32Convert.from_bytes(text);
-#else
                 const auto utf32 = utf8_to_utf32(text);
-#endif
                 math::Size2i size;
                 p.measure(utf32, fontInfo, maxLineWidth, size, &out);
             }
@@ -369,11 +353,7 @@ namespace tl
             std::vector<std::shared_ptr<Glyph> > out;
             try
             {
-#ifdef USE_CODECVT
-                const auto utf32 = p.utf32Convert.from_bytes(text);
-#else
                 const auto utf32 = utf8_to_utf32(text);
-#endif
                 for (const auto& i : utf32)
                 {
                     out.push_back(p.getGlyph(i, fontInfo));
@@ -461,18 +441,12 @@ namespace tl
                 return '\n' == c || '\r' == c;
             }
         } // namespace
-#ifdef USE_CODECVT
-        void FontSystem::Private::measure(
-            const std::basic_string<tl_char_t>& utf32, const FontInfo& fontInfo,
-            int maxLineWidth, math::Size2i& size,
-            std::vector<math::Box2i>* glyphGeom)
-#else
+
         // Defined in C++ 11
         void FontSystem::Private::measure(
             const std::u32string& utf32, const FontInfo& fontInfo,
             int maxLineWidth, math::Size2i& size,
             std::vector<math::Box2i>* glyphGeom)
-#endif
         {
             const auto i = ftFaces.find(fontInfo.family);
             if (i != ftFaces.end())
