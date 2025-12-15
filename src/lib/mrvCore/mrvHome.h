@@ -23,6 +23,9 @@ namespace mrv
     //! the online documentation.
     std::string docspath();
 
+    //! Path to the mrv2 license.  If not set, it will look in studiopath
+    std::string licensepath();
+
     //! Path to a studio defined directory
     std::string studiopath();
 

@@ -152,6 +152,13 @@ namespace mrv
         return iconroot;
     }
 
+    std::string licensepath()
+    {
+        const char* c = fl_getenv("MRV2_LICENSEPATH");
+        if (!c || strlen(c) == 0) return "";
+        return c;
+    }
+
     std::string studiopath()
     {
         const char* c = fl_getenv("MRV2_STUDIOPATH");

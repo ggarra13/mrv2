@@ -303,11 +303,7 @@ namespace mrv
         machine_id = get_machine_id();
         master_key = ""; // Only used on floating licenses
 
-        std::string license_file = studiopath() + "/mrv2_licenses.lic";
-        if (!file::isReadable(license_file))
-        {
-            license_file = prefspath() + "/mrv2_licenses.lic";
-        }
+        const std::string license_file = licensepath() + "/mrv2_licenses.lic";
         
         if (file::isReadable(license_file))
         {

@@ -1076,28 +1076,6 @@ namespace tl
             {
                 switch (p.format)
                 {
-#ifdef __APPLE__
-                case VK_FORMAT_R8G8B8_UNORM:
-                    p.internalFormat = VK_FORMAT_R8G8B8A8_UNORM;
-                    p.info.pixelType = image::PixelType::RGBA_U8;
-                    p.needPadRgbToRgba = true;
-                    break;
-                case VK_FORMAT_R16G16B16_UNORM:
-                    p.internalFormat = VK_FORMAT_R16G16B16A16_UNORM;
-                    p.info.pixelType = image::PixelType::RGBA_U16;
-                    p.needPadRgbToRgba = true;
-                    break;
-                case VK_FORMAT_R16G16B16_SFLOAT:
-                    p.internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
-                    p.info.pixelType = image::PixelType::RGBA_F16;
-                    p.needPadRgbToRgba = true;
-                    break;
-                case VK_FORMAT_R32G32B32_SFLOAT:
-                    p.internalFormat = VK_FORMAT_R32G32B32A32_SFLOAT;      
-                    p.info.pixelType = image::PixelType::RGBA_F32;
-                    p.needPadRgbToRgba = true;
-                    break;
-#else
                 case VK_FORMAT_R8G8B8_UNORM:
                     p.internalFormat = VK_FORMAT_R8G8B8A8_UNORM;
                     p.info.pixelType = image::PixelType::RGBA_U8;
@@ -1118,7 +1096,6 @@ namespace tl
                     p.info.pixelType = image::PixelType::RGB_F32;
                     p.needPadRgbToRgba = false;
                     break;
-#endif
                 default:
                     std::string err = "tl::vlk::Texture Invalid VK_FORMAT: ";
                     throw std::runtime_error(err + string_VkFormat(p.format));
