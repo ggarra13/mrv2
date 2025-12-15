@@ -84,8 +84,9 @@ ChangeLog
 - Fixed a number of issues with aarch64 compilations.  Previous builds seem to have been AMD64 stubs.
 - Added shipping Python opentimelineio modules within mrv2/vmrv2.
 - Fixed FLU file requester's on Linux putting the filename in the directory path after one save.
-- Sped up Vulkan's playback of RGB_F16 and RGB_F32 sequences to 30 FPS,
-  from 15FPS.
+- Sped up Vulkan's playback of RGB_F16 and RGB_F32 sequences to 35 FPS,
+  from 15FPS.  Still work to do to reach 60FPS, like OpenGL.
+  
 
 
 v1.4.6
