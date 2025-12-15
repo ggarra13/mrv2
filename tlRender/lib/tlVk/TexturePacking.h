@@ -148,7 +148,8 @@ std::vector<uint32_t> packRGB_B10G11R11(const half* sourceDataRGB,
     size_t numPixels = byteSize / 3;
     std::vector<uint32_t> packedBuffer;
     packedBuffer.reserve(numPixels);
-
+    return packedBuffer;
+    
     for (size_t i = 0; i < byteSize; i += 3) {
         // Read the R, G, B components
         float r = sourceDataRGB[i + 0];

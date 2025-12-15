@@ -9,6 +9,7 @@
 #include <tlTimelineVk/RenderPrivate.h>
 #include <tlTimelineVk/RenderStructs.h>
 
+#include <tlVk/TexturePacking.h>
 #include <tlVk/Vk.h>
 #include <tlVk/Mesh.h>
 #include <tlVk/Util.h>
@@ -629,6 +630,17 @@ namespace tl
                     textures[0]->copy(
                         reinterpret_cast<uint8_t*>(dst.data()),
                         dst.size() * sizeof(uint16_t));
+                }
+                else if (textures[0]->getInternalFormat() ==
+                         VK_FORMAT_B10G11R11_UFLOAT_PACK32)
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    const half* src = reinterpret_cast<half*>(image->getData());
+                    const std::vector<uint32_t>& dst = packRGB_B10G11R11(src, image->getDataByteCount() / sizeof(half));
+                    textures[0]->copy(
+                        reinterpret_cast<const uint8_t*>(dst.data()),
+                        dst.size() * sizeof(uint32_t));
                 }
                 else
                 {

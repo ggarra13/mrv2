@@ -3,7 +3,6 @@
 // Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
-#include <tlVk/TexturePacking.h>
 #include <tlVk/Texture.h>
 #include <tlVk/Vk.h>
 
@@ -109,6 +108,7 @@ namespace tl
             case VK_FORMAT_R32G32B32A32_SFLOAT:
                 out = 4 * w * h * d * sizeof(float);
                 break;
+            // For RGB FLOAT
             case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
                 out = w * h * d * sizeof(uint32_t);
                 break;
@@ -231,7 +231,6 @@ namespace tl
 
             bool hostVisible = true;
             bool needPadRgbToRgba = false;
-            bool needPacking = false;
         };
 
         void
@@ -735,6 +734,7 @@ namespace tl
             TLRENDER_P();
 
             uint8_t* data = const_cast<uint8_t*>(upload);
+            std::size_t dataSize = size;
             
             // Assuming 'data' is a pointer to your tightly packed
             // source pixel data
@@ -744,29 +744,6 @@ namespace tl
             if (p.info.pixelType == image::PixelType::RGB_U10)
             {
                 pixel_size = sizeof(uint32_t);
-            }
-            
-            if (p.internalFormat = VK_FORMAT_B10G11R11_UFLOAT_PACK32)
-            {
-                switch (p.info.pixelType)
-                {
-                case image::PixelType::RGB_F16:
-                {
-                    std::vector<uint32_t> packed =
-                        packRGB_B10G11R11(reinterpret_cast<const half*>(data), size);
-                    data = reinterpret_cast<uint8_t*>(packed.data());
-                    break;
-                }
-                case image::PixelType::RGB_F32:
-                {
-                    std::vector<uint32_t> packed =
-                        packRGB_B10G11R11(reinterpret_cast<const float*>(data), size);
-                    data = reinterpret_cast<uint8_t*>(packed.data());
-                    break;
-                }
-                default:
-                    throw std::runtime_error("Unknow unpacking format");
-                }
             }
 
             VkDevice device = ctx.device;
@@ -800,13 +777,13 @@ namespace tl
 #ifdef MRV2_NO_VMA
                     // Host-visible upload (like glTexSubImage2D)
                     VK_CHECK(
-                        vkMapMemory(device, p.memory, 0, size, 0, &mapped));
-                    std::memcpy(mapped, data, size);
+                        vkMapMemory(device, p.memory, 0, dataSize, 0, &mapped));
+                    std::memcpy(mapped, data, dataSize);
                     vkUnmapMemory(device, p.memory);
 #else
                     // Host-visible upload (like glTexSubImage2D)
                     VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation, &mapped));
-                    std::memcpy(mapped, data, size);
+                    std::memcpy(mapped, data, dataSize);
                     vmaUnmapMemory(ctx.allocator, p.allocation);
                     vmaFlushAllocation(ctx.allocator, p.allocation, 0,
                                        VK_WHOLE_SIZE); // Ensure flush
@@ -856,7 +833,7 @@ namespace tl
                                 d[i * 4 + 0] = s[i * 3 + 0]; // R
                                 d[i * 4 + 1] = s[i * 3 + 1]; // G
                                 d[i * 4 + 2] = s[i * 3 + 2]; // B
-                                d[i * 4 + 3] = 0x3C00;         // A
+                                d[i * 4 + 3] = 0x3C00;       // A
                             }
                             break;
                         }
@@ -1064,8 +1041,6 @@ namespace tl
         void Texture::copy(const uint8_t* data, const image::Info& info,
                            const int rowPitch)
         {
-            TLRENDER_P();
-
             const size_t size = image::getDataByteCount(info);
             copy(data, size, rowPitch);
         }
@@ -1114,13 +1089,13 @@ namespace tl
                     p.needPadRgbToRgba = true;
                     break;
                 case VK_FORMAT_R16G16B16_SFLOAT:
-                    p.internalFormat = VK_FORMAT_B10G11R11_UFLOAT_PACK32;
-                    p.info.pixelType = image::PixelType::RGB_F16;
+                    p.internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
+                    p.info.pixelType = image::PixelType::RGBA_F16;
                     p.needPadRgbToRgba = true;
                     break;
                 case VK_FORMAT_R32G32B32_SFLOAT:
-                    p.internalFormat = VK_FORMAT_B10G11R11_UFLOAT_PACK32;
-                    p.info.pixelType = image::PixelType::RGB_F32;
+                    p.internalFormat = VK_FORMAT_R32G32B32A32_SFLOAT;      
+                    p.info.pixelType = image::PixelType::RGBA_F32;
                     p.needPadRgbToRgba = true;
                     break;
 #else
