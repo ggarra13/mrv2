@@ -703,7 +703,7 @@ namespace mrv
         
         if (App::license_type == LicenseType::kDemo)
         {
-            //out = validate_node_locked(expiration_date);
+            out = validate_node_locked(expiration_date);
             if (out == License::kValid || out == License::kExpired)
             {
                 App::license_type = LicenseType::kNodeLocked;
