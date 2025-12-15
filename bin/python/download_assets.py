@@ -106,11 +106,10 @@ def download_url(base_url, dest_dir, mrv2_prefix):
                                     allow_redirects=True, stream=True)
             response.raise_for_status()  # Raise an error for bad status codes
 
-            print(f"Downloading {filename}...")
-
             if os.path.exists(output_path):
                 continue
-
+            
+            print(f"Downloading {filename}...")
 
             # Save the binary content
             with open(output_path, 'wb') as f:
@@ -123,6 +122,7 @@ def download_url(base_url, dest_dir, mrv2_prefix):
 
         except requests.exceptions.RequestException as e:
             print(f"Error downloading: {e}")
+            os.remove(output_path)
             exit(1)
 
     print("✅ All download attempts completed.")
