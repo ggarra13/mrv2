@@ -12,6 +12,7 @@
 namespace fs = std::filesystem;
 
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvLicense.h"
 #include "mrvCore/mrvSignalHandler.h"
 #include "mrvCore/mrvStackTrace.h"
 
@@ -33,6 +34,8 @@ namespace mrv
         std::cerr << "GOT SIGNAL " << signal << std::endl;
 
         printStackTrace();
+
+        release_license();
 
         exit(signal);
     }

@@ -194,7 +194,8 @@ namespace mrv
         static bool supports_python;
         static bool supports_saving;
         static bool supports_voice;
-        
+
+        static std::string session_id;
         static LicenseType license_type;
         
         static bool unsaved_annotations;

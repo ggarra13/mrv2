@@ -4,6 +4,12 @@
 
 #pragma once
 
+#include <tlCore/Util.h>
+
+#include <nlohmann/json.hpp>
+
+#include <vector>
+
 namespace mrv
 {
     //! License Status.

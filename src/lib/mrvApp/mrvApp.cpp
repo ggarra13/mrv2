@@ -145,7 +145,7 @@ namespace mrv
 #endif
     namespace
     {
-        const float kLicenseTimeout = 110;
+        const float kLicenseTimeout = 90; // 1min 30. 
     }
 
     struct Options
@@ -259,6 +259,7 @@ namespace mrv
     App* App::app = nullptr;
     bool App::demo_mode = true;
 
+    std::string App::session_id = "";
     LicenseType App::license_type = LicenseType::kDemo;
 
     bool App::supports_saving = false;
@@ -280,21 +281,12 @@ namespace mrv
 
     static void beat_cb(void* data)
     {
-        static int counter = 0;
         License ok = license_beat();
-        if (ok != License::kValid)
+        if (ok != License::kValid ||
+            App::license_type == LicenseType::kFloating)
         {
-            ++counter;
-            if (counter == 3)
-            {
-                fl_alert("%s", _("Floating license time for demo exceeded"));
-                Fl::check();
-                exit_cb(nullptr, App::ui);
-                exit(0);
-            }
+            Fl::repeat_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, data);
         }
-        
-        Fl::repeat_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, data);
     }
 
     namespace
@@ -658,12 +650,9 @@ namespace mrv
 
         License ok = license_beat();
 
-#ifdef VULKAN_BACKEND
-        // Vulkan backend or floating licenses will pop up the license_helper
-        // three times.
+        // Floating licenses will do a beat every
         if (license_type == LicenseType::kFloating)
             Fl::add_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, this);
-#endif
         
         DBG;
         std::string version = "mrv2 v";

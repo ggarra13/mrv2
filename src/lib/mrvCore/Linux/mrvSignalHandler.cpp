@@ -8,6 +8,8 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+
+#include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvSignalHandler.h"
 #include "mrvCore/mrvStackTrace.h"
@@ -16,9 +18,9 @@ namespace mrv
 {
     static void signal_callback(int signal)
     {
-        std::cerr << "GOT SIGNAL " << signal << std::endl;
-
         printStackTrace();
+
+        release_license();
 
         exit(signal);
     }
@@ -40,9 +42,7 @@ namespace mrv
 
         std::signal(SIGABRT, signal_callback);
         std::signal(SIGBUS, signal_callback);
-#ifndef NDEBUG
         std::signal(SIGINT, signal_callback);
-#endif
     }
 
     void SignalHandler::restore_signal_handler() {}

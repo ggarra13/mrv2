@@ -182,17 +182,19 @@ std::string homepath()
     return path;
 }
 
-std::string studiopath()
+std::string licensepath()
 {
     std::string out;
-    const char* c = fl_getenv("MRV2_STUDIOPATH");
+    const char* c = fl_getenv("MRV2_LICENSEPATH");
     if (!c || strlen(c) == 0)
-        c = fl_getenv("STUDIOPATH");
-    if (!c || strlen(c) == 0)
+    {
         out = homepath();
+        out += "/.filmaura/";
+    }
     else
+    {
         out = c;
-    out += "/.filmaura/";
+    }
     return out;
 }
 
@@ -209,6 +211,26 @@ static void exit_cb(Fl_Widget* b, void* data)
     exit(1);
 }
 
+Fl_Multiline_Input* master_key;
+
+static void install_cb(Fl_Widget* b, void* data)
+{
+    std::string key = master_key->value(); 
+    if (key.empty())
+    {
+        fl_alert("Please fill in the master key with the one you got.");
+        return;
+    }
+
+    std::string prefs_file = licensepath() + "/mrv2_licenses.lic";
+
+    std::ofstream s(prefs_file);
+    s << key << std::endl;
+
+    fl_alert("Saved master key file to %s\n\nMove it some place safe and set the environment variable MRV2_LICENSEPATH pointing to it on each machine.", prefs_file.c_str());
+    
+    exit(0);
+}
 
 
 int main(int argc, char** argv)
@@ -359,6 +381,26 @@ You need an Internet connection to use.)TEXT");
     } // node_locked contents
             
 
+    }
+
+    {
+        Fl_Group* floating = new Fl_Group(20, 60, 600-20, 320,
+                                          "Floating Licenses");
+        
+        Fl_Box*    box = new Fl_Box(20, 60, 580, 80);
+        box->label("Please enter your master key for your facility you "
+                   "got from ggarra13@@gmail.com");
+
+        master_key = new Fl_Multiline_Input(20, 150, 580, 140, "Master Key");
+        master_key->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
+        
+        Fl_Button* install = new Fl_Button(340, 300, 250, 40, "Install");
+        install->callback((Fl_Callback*)install_cb, nullptr);
+        
+        Fl_Button* demo = new Fl_Button(80, 300, 220, 40, "Demo");
+        demo->callback((Fl_Callback*)exit_cb, nullptr);
+    
+        floating->end();
     }
 
     {

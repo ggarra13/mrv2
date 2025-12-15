@@ -300,13 +300,14 @@ namespace mrv
     {
         server = "srv1037957.hstgr.cloud";
         port = 443;
+
         machine_id = get_machine_id();
         master_key = ""; // Only used on floating licenses
 
         const std::string license_file = licensepath() + "/mrv2_licenses.lic";
         
         if (file::isReadable(license_file))
-        {
+        {   
             // Open the file for reading
             std::ifstream file_stream(license_file);
 
@@ -324,7 +325,6 @@ namespace mrv
 
             // Fix the string to be valid JSON by replacing single quotes
             std::replace(master_key.begin(), master_key.end(), '\'', '\"');
-
         }
     }
     
@@ -416,7 +416,7 @@ namespace mrv
                 LOG_ERROR("Server is down or your internet connection is failing.");
                 return nlohmann::json();
             }
-            
+
             nlohmann::json json_data = nlohmann::json::parse(respStr);
             
             if (response.getStatus() != HTTPResponse::HTTP_OK)
@@ -427,6 +427,7 @@ namespace mrv
                 } else {
                     LOG_ERROR(respStr);
                 }
+                return "";
             }
         
             return json_data;
@@ -476,8 +477,9 @@ namespace mrv
         // Build the request object programmatically.
         nlohmann::json request_body_json;
 
-        // Add the machine_id
+        // Add the machine_id and session_id
         request_body_json["machine_id"] = machine_id;
+        request_body_json["session_id"] = App::session_id;
 
         // Parse the corrected master key string and add it as a nested object
         request_body_json["master_key"] = nlohmann::json::parse(master_key);
@@ -494,6 +496,7 @@ namespace mrv
         
         if (json_data["status"] == "renewed")
         {
+            LOG_INFO("Renewed license");
             return true;
         }
         
@@ -518,6 +521,7 @@ namespace mrv
 
         // Add the machine_id
         request_body_json["machine_id"] = machine_id;
+        request_body_json["session_id"] = "";
 
         // Parse the corrected master key string and add it as a nested object
         request_body_json["master_key"] = nlohmann::json::parse(master_key);
@@ -544,6 +548,14 @@ namespace mrv
         const nlohmann::ordered_json& payload_json = json_data.at("payload");
         const std::string expires_at = payload_json.at("expires_at").get<std::string>();
         const std::string plan = payload_json.at("plan").get<std::string>();
+        const int active_seats = payload_json.at("active_seats").get<int>();
+        const int license_limit = payload_json.at("license_limit").get<int>();
+        App::session_id = payload_json.at("session_id").get<std::string>();
+
+        std::string msg = string::Format(_("{0} Active Licenses from {1}.")).
+                          arg(active_seats).
+                          arg(license_limit);
+        LOG_STATUS(msg);
         
         // -------------------------
         // Verify license
@@ -657,6 +669,7 @@ namespace mrv
         
         // Add the machine_id
         request_body_json["machine_id"] = machine_id;
+        request_body_json["session_id"] = App::session_id;
 
         // Parse the corrected master key string and add it as a nested object
         request_body_json["master_key"] = nlohmann::json::parse(master_key);
@@ -670,7 +683,10 @@ namespace mrv
                                                         "/release_license",
                                                         requestBody);
         if (json_data.is_null() || !json_data.contains("status"))
+        {
+            LOG_ERROR(_("Could not release floating license"));
             return false;
+        }
         
         if (json_data["status"] == "released")
         {
@@ -687,7 +703,7 @@ namespace mrv
         
         if (App::license_type == LicenseType::kDemo)
         {
-            out = validate_node_locked(expiration_date);
+            //out = validate_node_locked(expiration_date);
             if (out == License::kValid || out == License::kExpired)
             {
                 App::license_type = LicenseType::kNodeLocked;
@@ -751,60 +767,63 @@ namespace mrv
             Fl::check();
         }
 
+        if (App::demo_mode)
+        {
 #ifdef _WIN32
-        std::string helper = rootpath() + "/bin/license_helper.exe";
+            std::string helper = rootpath() + "/bin/license_helper.exe";
 #else
-        std::string helper = rootpath() + "/bin/license_helper";
+            std::string helper = rootpath() + "/bin/license_helper";
 #endif
 #ifdef __APPLE__
-        // This is needed for macOS installed bundle.
-        if (!file::isReadable(helper))
-        {
-            helper = rootpath() + "/../Resources/bin/license_helper";
-        }
-#endif
-        int ret = os::exec_command(helper);
-        if (ret != 0)
-        {
-            App::demo_mode = true;
-
-            App::supports_annotations = false;
-            App::supports_editing = false;
-            App::supports_hdr = true;
-            App::supports_layers = false;
-            App::supports_voice = false;
-        }
-        else
-        {
-            // License helper ran, validate license again.
-            License ok = validate_license(expiration);
-            if (ok == License::kInvalid)
+            // This is needed for macOS installed bundle.
+            if (!file::isReadable(helper))
             {
-                fl_alert("%s", _("Invalid license. Entering demo mode"));
-                Fl::check();
-                
-                App::demo_mode = true;
-                
-                App::supports_annotations = false;
-                App::supports_editing = false;
-                App::supports_layers = false;
-                App::supports_voice = false;
+                helper = rootpath() + "/../Resources/bin/license_helper";
             }
-            else if (ok == License::kExpired)
+#endif
+            int ret = os::exec_command(helper);
+            if (ret != 0)
             {
-                fl_alert("%s", _("License expired. Entering demo mode"));
-                Fl::check();
-                
-                App::demo_mode = true;
+                App::demo_mode = false;
 
                 App::supports_annotations = false;
                 App::supports_editing = false;
+                App::supports_hdr = true;
                 App::supports_layers = false;
                 App::supports_voice = false;
             }
             else
             {
-                App::demo_mode = false;
+                // License helper ran, validate license again.
+                License ok = validate_license(expiration);
+                if (ok == License::kInvalid)
+                {
+                    fl_alert("%s", _("Invalid license. Entering demo mode"));
+                    Fl::check();
+                
+                    App::demo_mode = true;
+                
+                    App::supports_annotations = false;
+                    App::supports_editing = false;
+                    App::supports_layers = false;
+                    App::supports_voice = false;
+                }
+                else if (ok == License::kExpired)
+                {
+                    fl_alert("%s", _("License expired. Entering demo mode"));
+                    Fl::check();
+                
+                    App::demo_mode = true;
+
+                    App::supports_annotations = false;
+                    App::supports_editing = false;
+                    App::supports_layers = false;
+                    App::supports_voice = false;
+                }
+                else
+                {
+                    App::demo_mode = false;
+                }
             }
         }
         return ok;
