@@ -331,8 +331,8 @@ Pro+ (Monthly)
 Annotations and Saving only for a year
 Solo + OpenEXR layers + Python
 Standard + Editing
-Edit + Voice Annotations
-Pro + change your machine[s] as you want
+Edit + Voice and Link Annotations
+All of Pro + change your machine[s] as you want
 )TEXT"));
                 what->end();
                 prices->fixed(what, what->h());
