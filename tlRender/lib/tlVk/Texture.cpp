@@ -800,7 +800,6 @@ namespace tl
                     VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation,
                                           &mapped));
 #endif
-                    
 
                     const uint32_t src_row_pitch = rowPitch > 0 ? rowPitch : (p.info.size.w * pixel_size);
                     const uint32_t dst_row_size = p.info.size.w * pixel_size;
@@ -1112,10 +1111,12 @@ namespace tl
                 case VK_FORMAT_R16G16B16_SFLOAT:
                     p.internalFormat = VK_FORMAT_B10G11R11_UFLOAT_PACK32;
                     p.info.pixelType = image::PixelType::RGB_F16;
+                    p.needPadRgbToRgba = false;
                     break;
                 case VK_FORMAT_R32G32B32_SFLOAT:
                     p.internalFormat = VK_FORMAT_B10G11R11_UFLOAT_PACK32;
                     p.info.pixelType = image::PixelType::RGB_F32;
+                    p.needPadRgbToRgba = false;
                     break;
 #endif
                 default:

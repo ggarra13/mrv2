@@ -637,7 +637,51 @@ namespace tl
                     const std::size_t w = info.size.w;
                     const std::size_t h = info.size.h;
                     const half* src = reinterpret_cast<half*>(image->getData());
-                    const std::vector<uint32_t>& dst = packRGB_B10G11R11(src, image->getDataByteCount() / sizeof(half));
+                    const std::size_t dataSize = image->getDataByteCount() / sizeof(half);
+                    const std::vector<uint32_t>& dst = vlk::packRGB_B10G11R11(src, dataSize);
+                    textures[0]->copy(
+                        reinterpret_cast<const uint8_t*>(dst.data()),
+                        dst.size() * sizeof(uint32_t));
+                }
+                else
+                {
+                    textures[0]->copy(image);
+                }
+                break;
+            }
+            case image::PixelType::RGB_F32:
+            {
+                if (textures[0]->getInternalFormat() ==
+                    VK_FORMAT_R32G32B32A32_SFLOAT)
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    const float* src = reinterpret_cast<float*>(image->getData());
+                    std::vector<float> dst(w * h * 4);
+                    float* out = dst.data();
+                    for (std::size_t y = 0; y < h; ++y)
+                    {
+                        for (std::size_t x = 0; x < w; ++x)
+                        {
+                            *out++ = *src++;
+                            *out++ = *src++;
+                            *out++ = *src++;
+
+                            *out++ = 1.0; // 1.0 in IEEE 754
+                        }
+                    }
+                    textures[0]->copy(
+                        reinterpret_cast<uint8_t*>(dst.data()),
+                        dst.size() * sizeof(float));
+                }
+                else if (textures[0]->getInternalFormat() ==
+                         VK_FORMAT_B10G11R11_UFLOAT_PACK32)
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    const float* src = reinterpret_cast<float*>(image->getData());
+                    const std::size_t dataSize = image->getDataByteCount() / sizeof(float);
+                    const std::vector<uint32_t>& dst = vlk::packRGB_B10G11R11(src, dataSize);
                     textures[0]->copy(
                         reinterpret_cast<const uint8_t*>(dst.data()),
                         dst.size() * sizeof(uint32_t));
