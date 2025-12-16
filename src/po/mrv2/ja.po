@@ -1569,9 +1569,6 @@ msgstr "キャンセル"
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - チャンネル: {1} {2} {3}"
 
-msgid "Floating license time for demo exceeded"
-msgstr "Tiempo de uso excedido"
-
 msgid "Play timelines, movies, and image sequences."
 msgstr "動画や音楽を再生します"
 
@@ -1978,6 +1975,21 @@ msgstr "{0} {1}をストリーミング中..."
 
 msgid "Stop streaming"
 msgstr "ストリーミング"
+
+msgid "Renderer"
+msgstr "レンダラー"
+
+msgid "Complexity"
+msgstr "難易度"
+
+msgid "Draw Mode"
+msgstr "描画モード"
+
+msgid "Stage Cache"
+msgstr "キャッシュ"
+
+msgid "Disk Cache in GB"
+msgstr "ディスクキャッシュ"
 
 msgid "Toggle other eye stereo image."
 msgstr "右 - 左ステレオ画像"
@@ -2965,31 +2977,39 @@ msgstr "HAP プロファイルには .mov 拡張子が必要です。.mov に変
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新しいファイル {0} はすでに存在します！上書きできません。"
 
+msgid "Rotated image info: {0}"
+msgstr "回転された画像情報: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "スケーリングされた画像情報: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: ライタープラグインを開けません。"
 
 msgid "Image info: {0} {1}"
 msgstr "画像情報: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "スケーリングされた画像情報: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"画像が大きすぎてアノテーションを保存できません。ビューポートサイズに拡大縮小"
+"します。"
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "ビューポートサイズ: {0} - X={1}, Y={2}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr ""
 "ライタープラグインが出力情報を取得しませんでした。デフォルトの {0} に設定しま"
 "す"
 
+msgid "Output info: {0} {1}"
+msgstr "出力情報: {0} {1}"
+
 msgid "Using profile {0}, pixel format {1}."
 msgstr "プロファイル {0}、ピクセル形式 {1} を使用しています。"
 
 msgid "Using preset {0}."
 msgstr "プリセット{0}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "オフスクリーンバッファ情報: {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "出力情報: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "オーディオなしでムービーを保存しています %<PRId64> - %<PRId64>"
@@ -3006,14 +3026,32 @@ msgstr "オーディオなしで画像を保存しています %<PRId64> - %<PRI
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "しかし、どこかへ行こうとしているわけじゃない。"
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: 無効な OpenGL 形式とタイプ"
+
+msgid "OpenGL info: {0}"
+msgstr "OpenGL 情報: {0}"
+
 msgid "Saving... {0}"
 msgstr "保存中... {0}"
 
-msgid "Could not read image data from view"
-msgstr "ビューから画像データを読み取れませんでした"
+msgid "Unsupported output format"
+msgstr "サポートされていない出力形式: %1%"
+
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
 
 msgid "Render size: {0}"
 msgstr "レンダーサイズ: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "画像レイヤー '{0}' 情報: {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "オフスクリーンバッファ情報: {0}"
+
+msgid "Unsupported output format: "
+msgstr "サポートされていない出力形式: %1%"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3772,8 +3810,8 @@ msgstr "フレーム {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "彼らが都を守ってくれます"
 
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "ビューポートサイズ: {0} - X={1}, Y={2}"
+msgid "Could not read image data from view"
+msgstr "ビューから画像データを読み取れませんでした"
 
 msgid "Link/Open"
 msgstr "リンク/開く"
@@ -3918,23 +3956,14 @@ msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr "HDRモニターが見つかりました。"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDRモニターが見つからないか、設定されていません。"
-
-msgid "Vulkan color space is {0}"
-msgstr "Vulkanの色空間は{0}です"
-
-msgid "Vulkan format is {0}"
-msgstr "Vulkanのフォーマットは{0}です"
-
 msgid "Edit Text"
 msgstr "テキストを編集"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' はファイル、ディレクトリ、またはURLではありません。"
+
+msgid "Invalid font for text drawing"
+msgstr "フォントファイル情報が無効です。"
 
 msgid "Could not convert message to shape: "
 msgstr "ベクター図形に変換"
@@ -7418,6 +7447,14 @@ msgstr "ライセンスの有効期限が切れています"
 msgid "{0} is not readable. Using system default."
 msgstr "{0} は読み取れません。システムのデフォルトを使用します。"
 
+#, fuzzy, c++-format
+msgid "{0} Active Licenses from {1}."
+msgstr "\"{1}\" から {0} 個の ocio プリセットをロードしました。"
+
+#, fuzzy
+msgid "Could not release floating license"
+msgstr "フローティングライセンスを解放しました"
+
 msgid "Released Floating License"
 msgstr "フローティングライセンスを解放しました"
 
@@ -7877,9 +7914,6 @@ msgstr "スクラブ モード"
 msgid "Area Selection Mode"
 msgstr "エリア選択モード"
 
-msgid "Draw Mode"
-msgstr "描画モード"
-
 msgid "Erase Mode"
 msgstr "消去モード"
 
@@ -7982,51 +8016,24 @@ msgstr "ホットキーウィンドウを切り替え"
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
 
+#~ msgid "Floating license time for demo exceeded"
+#~ msgstr "Tiempo de uso excedido"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "HDRモニターが見つかりました。"
+
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDRモニターが見つからないか、設定されていません。"
+
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Vulkanの色空間は{0}です"
+
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Vulkanのフォーマットは{0}です"
+
 #, fuzzy
 #~ msgid "Roll Editing Tool."
 #~ msgstr "Alternar Modo de Edición"
-
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "回転された画像情報: {0}"
-
-#~ msgid ""
-#~ "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr ""
-#~ "画像が大きすぎてアノテーションを保存できません。ビューポートサイズに拡大縮"
-#~ "小します。"
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: 無効な OpenGL 形式とタイプ"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "OpenGL 情報: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "サポートされていない出力形式: %1%"
-
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
-
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "画像レイヤー '{0}' 情報: {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "サポートされていない出力形式: %1%"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "フォントファイル情報が無効です。"
-
-#~ msgid "Renderer"
-#~ msgstr "レンダラー"
-
-#~ msgid "Complexity"
-#~ msgstr "難易度"
-
-#~ msgid "Stage Cache"
-#~ msgstr "キャッシュ"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "ディスクキャッシュ"
 
 #~ msgid "Trim Edit Tool"
 #~ msgstr "トリム編集ツール"
