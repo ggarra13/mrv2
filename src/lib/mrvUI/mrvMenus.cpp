@@ -1239,19 +1239,19 @@ namespace mrv
             _("Timeline/Thumbnails/Small"), thumbnails_small,
             (Fl_Callback*)timeline_thumbnails_small_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 100)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 50)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails/Medium"), 0,
             (Fl_Callback*)timeline_thumbnails_medium_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 200)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 100)
             item->set();
         idx = menu->add(
             _("Timeline/Thumbnails/Large"), 0,
             (Fl_Callback*)timeline_thumbnails_large_cb, ui, mode);
         item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 300)
+        if (displayOptions.thumbnails && displayOptions.thumbnailHeight == 150)
             item->set();
 
         mode = FL_MENU_TOGGLE;
