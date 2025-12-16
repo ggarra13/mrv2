@@ -135,12 +135,12 @@ jobs:
         TLRENDER_STB: ON
         TLRENDER_SVTAV1: ON
         TLRENDER_TIFF: ON
-        TLRENDER_USD: ON
+        TLRENDER_USD: OFF
         TLRENDER_VPX: ON
         TLRENDER_YASM: ON
         
       run: |
-        ./etc/runme_nolog.sh -t package -vk clean
+        ./etc/runme_nolog.sh -t package -vk
       
     - name: Upload binaries
       run: |
