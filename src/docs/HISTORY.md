@@ -1,5 +1,6 @@
-v1.4.7
+v1.4.8
 ======
+
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
@@ -40,6 +41,15 @@ The donationware version when running without a donation, does not have:
     - Move license to a new machine (available in Pro monthly)
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+- Fixed thumbnail menu not displaying the current size correctly.
+
+
+v1.4.7
+======
 
 ChangeLog
 ---------
