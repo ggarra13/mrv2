@@ -108,10 +108,7 @@ namespace tl
             case VK_FORMAT_R32G32B32A32_SFLOAT:
                 out = 4 * w * h * d * sizeof(float);
                 break;
-            // For RGB FLOAT
-            case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
-                out = w * h * d * sizeof(uint32_t);
-                break;
+
             default:
                 break;
             }
@@ -231,6 +228,7 @@ namespace tl
 
             bool hostVisible = true;
             bool needPadRgbToRgba = false;
+
         };
 
         void
@@ -734,7 +732,6 @@ namespace tl
             TLRENDER_P();
 
             uint8_t* data = const_cast<uint8_t*>(upload);
-            std::size_t dataSize = size;
             
             // Assuming 'data' is a pointer to your tightly packed
             // source pixel data
@@ -745,7 +742,7 @@ namespace tl
             {
                 pixel_size = sizeof(uint32_t);
             }
-
+            
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
             VkQueue queue = ctx.queue();
@@ -777,13 +774,13 @@ namespace tl
 #ifdef MRV2_NO_VMA
                     // Host-visible upload (like glTexSubImage2D)
                     VK_CHECK(
-                        vkMapMemory(device, p.memory, 0, dataSize, 0, &mapped));
-                    std::memcpy(mapped, data, dataSize);
+                        vkMapMemory(device, p.memory, 0, size, 0, &mapped));
+                    std::memcpy(mapped, data, size);
                     vkUnmapMemory(device, p.memory);
 #else
                     // Host-visible upload (like glTexSubImage2D)
                     VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation, &mapped));
-                    std::memcpy(mapped, data, dataSize);
+                    std::memcpy(mapped, data, size);
                     vmaUnmapMemory(ctx.allocator, p.allocation);
                     vmaFlushAllocation(ctx.allocator, p.allocation, 0,
                                        VK_WHOLE_SIZE); // Ensure flush
@@ -800,6 +797,7 @@ namespace tl
                     VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation,
                                           &mapped));
 #endif
+                    
 
                     const uint32_t src_row_pitch = rowPitch > 0 ? rowPitch : (p.info.size.w * pixel_size);
                     const uint32_t dst_row_size = p.info.size.w * pixel_size;
@@ -832,7 +830,7 @@ namespace tl
                                 d[i * 4 + 0] = s[i * 3 + 0]; // R
                                 d[i * 4 + 1] = s[i * 3 + 1]; // G
                                 d[i * 4 + 2] = s[i * 3 + 2]; // B
-                                d[i * 4 + 3] = 0x3C00;       // A
+                                d[i * 4 + 3] = 0x3C00;         // A
                             }
                             break;
                         }
@@ -1043,7 +1041,7 @@ namespace tl
             const size_t size = image::getDataByteCount(info);
             copy(data, size, rowPitch);
         }
-    
+
         void Texture::copy(const std::shared_ptr<image::Image>& data)
         {
             TLRENDER_P();
@@ -1087,14 +1085,14 @@ namespace tl
                     p.needPadRgbToRgba = true;
                     break;
                 case VK_FORMAT_R16G16B16_SFLOAT:
-                    p.internalFormat = VK_FORMAT_B10G11R11_UFLOAT_PACK32;
-                    p.info.pixelType = image::PixelType::RGB_F16;
-                    p.needPadRgbToRgba = false;
+                    p.internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
+                    p.info.pixelType = image::PixelType::RGBA_F16;
+                    p.needPadRgbToRgba = true;
                     break;
                 case VK_FORMAT_R32G32B32_SFLOAT:
-                    p.internalFormat = VK_FORMAT_B10G11R11_UFLOAT_PACK32;
-                    p.info.pixelType = image::PixelType::RGB_F32;
-                    p.needPadRgbToRgba = false;
+                    p.internalFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
+                    p.info.pixelType = image::PixelType::RGBA_F32;
+                    p.needPadRgbToRgba = true;
                     break;
                 default:
                     std::string err = "tl::vlk::Texture Invalid VK_FORMAT: ";
