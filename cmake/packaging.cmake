@@ -207,7 +207,10 @@ elseif(UNIX)
     #
     # Linux generators
     #
-    set(CPACK_GENERATOR DEB RPM TGZ)
+    set(CPACK_GENERATOR $ENV{CPACK_GENERATOR})
+    if (NOT CPACK_GENERATOR)
+	set(CPACK_GENERATOR DEB RPM TGZ)
+    endif()
     
     #
     # Linux icon and .desktop shortcut

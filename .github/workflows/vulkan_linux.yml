@@ -64,9 +64,6 @@ jobs:
     - name: Install Vulkan drivers
       run: sudo apt install -y mesa-vulkan-drivers
       
-    # - name: Install Vulkan
-    #   run: sudo apt install -y libvulkan-dev glslang-dev libshaderc-dev spirv-tools
-
     # Install Vulkan SDK
     - name: Install Vulkan
       env:
