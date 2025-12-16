@@ -54,12 +54,13 @@ if [[ "$CMAKE_TARGET" == doc* ]]; then
     cd -
 fi
 
-translation=${BUILD_DIR}/install/share/locale/en/LC_MESSAGES/mrv2-v${mrv2_VERSION}.mo
-
-if [[ ! -e $translation ]]; then
+if [[ "$CMAKE_TARGET" == "package" ]]; then
     
     clean_mo_files
+    
+    echo
     echo ".mo files not found."
+    echo
     
     cd $dir
     
@@ -68,9 +69,8 @@ if [[ ! -e $translation ]]; then
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
     cd -
-else
-    echo ".mo files already found."
 fi
+
 
 
 if [[ "$CMAKE_TARGET" == "package" ]]; then

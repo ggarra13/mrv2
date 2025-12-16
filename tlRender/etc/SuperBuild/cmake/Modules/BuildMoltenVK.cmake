@@ -1,8 +1,7 @@
 include(ExternalProject)
 
 set(MoltenVK_GIT_REPOSITORY "https://github.com/KhronosGroup/MoltenVK")
-#set(MoltenVK_GIT_TAG v1.4.0)  # August 20
-set(MoltenVK_GIT_TAG c2e5c5ecea0f5bdafad2d9a6eb21f0c33bb2e995) # Oct. 22
+set(MoltenVK_GIT_TAG v1.4.1)
 
 ExternalProject_Add(
     MoltenVK
