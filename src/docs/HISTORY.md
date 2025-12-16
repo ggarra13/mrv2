@@ -46,6 +46,7 @@ ChangeLog
 ---------
 
 - Fixed thumbnail menu not displaying the current size correctly.
+- Fixed OpenColorIO's for RGB32F textures on Vulkan build.
 
 
 v1.4.7
