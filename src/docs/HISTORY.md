@@ -44,6 +44,7 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
+- Re-release v1.4.7 on 12-16-2025 due to problems with OpenColorIO.
 - Made blue pixel color of Pixel Color Bar more readable against the black
   background.
 - Fixed compilation without libplacebo when BUILD_PYTHON is off.
