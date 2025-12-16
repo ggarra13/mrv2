@@ -49,12 +49,12 @@ The source forge site also hosts beta builds (nightly builds with the latest cha
 [SourceForge Betas](https://sourceforge.net/projects/mrv2/files/beta)
 
 The Linux releases are built on Rocky Linux 8.10 using SCL.
-The Linux beta builds are built on Ubuntu 22.04.  The preferred OS for
-installation on Linux, however is one supporting GNOME 48.
+The Linux beta builds are built on Ubuntu 24.04.  The preferred OS for
+installation on Linux, however is one supporting GNOME 48+.
 
 ## Compatibility
 
-mrv2 binaries run on Windows 10+, RedHat 8.10+ or Ubuntu 22.04+, and macOS 11.0+.
+mrv2 binaries run on Windows 10+, RedHat 10+ or Ubuntu 24.04+, and macOS 11.0+.
 
 ## Notes on installation
 
