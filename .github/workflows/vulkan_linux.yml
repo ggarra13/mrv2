@@ -14,9 +14,7 @@ jobs:
   #                                 #
   ###################################
   linux-vulkan-full-build:
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: write   # Needed to update releases
+    runs-on: ubuntu-latest
 
     steps:
     
