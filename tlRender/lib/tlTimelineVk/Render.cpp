@@ -1551,18 +1551,36 @@ namespace tl
                         "The OCIO texture values are missing");
                 }
 
-                VkFormat imageFormat = VK_FORMAT_R32G32B32_SFLOAT;
+                VkFormat imageFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
                 const uint32_t width = edgelen;
                 const uint32_t height = edgelen;
                 const uint32_t depth = edgelen;
-                const uint16_t channels = 3;
+                const uint16_t channels = 4;
 
+                float* newvalues = new float[width * height * depth * channels];
+                float* n = newvalues;
+                for (int d = 0; d < depth; ++d)
+                {
+                    for (int h = 0; h < height; ++h)
+                    {
+                        for (int w = 0; w < width; ++w)
+                        {
+                            for (int j = 0; j < 3; ++j)
+                            {
+                                    *n++ = *values++;
+                            }
+                            *n++ = 1.F;
+                        }
+                    }
+                }
+                
                 auto texture = vlk::Texture::create(
                     ctx, VK_IMAGE_TYPE_3D, width, height, depth, imageFormat,
                     samplerName);
                 texture->copy(
-                    reinterpret_cast<const uint8_t*>(values),
+                    reinterpret_cast<const uint8_t*>(newvalues),
                     width * height * depth * channels * sizeof(float));
+                delete [] newvalues;
                 texture->transitionToShaderRead(p.cmd);
                 textures.push_back(texture);
             }
@@ -1602,8 +1620,15 @@ namespace tl
                 VkFormat imageFormat = VK_FORMAT_R32G32B32_SFLOAT;
                 if (OCIO::GpuShaderCreator::TEXTURE_RED_CHANNEL == channel)
                 {
+                    std::cerr << i << " Texture1D VK_FORMAT_R32_SFLOAT"
+                              << std::endl;
                     channels = 1;
                     imageFormat = VK_FORMAT_R32_SFLOAT;
+                }
+                else
+                {
+                    std::cerr << i << " Texture1D VK_FORMAT_R32_SFLOAT"
+                              << std::endl;
                 }
 
                 VkImageType imageType;
