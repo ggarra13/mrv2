@@ -45,6 +45,8 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
+A quick release to fix some problems of v1.4.7.
+
 - Fixed thumbnail menu not displaying the current size correctly.
 - Fixed OpenColorIO's for RGB32F textures on Vulkan build.
 
