@@ -94,6 +94,8 @@ namespace tl
             //! Copy image data to the texture.
             ///@{
 
+            void setRGBToRGBA(bool t);
+            
             void copy(const std::shared_ptr<image::Image>&);
             void copy(const uint8_t*, const image::Info&,
                       const int rowPitch = 0);

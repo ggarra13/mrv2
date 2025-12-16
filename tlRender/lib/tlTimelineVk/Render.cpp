@@ -564,6 +564,7 @@ namespace tl
                             *out++ = 255;
                         }
                     }
+                    textures[0]->setRGBToRGBA(false);
                     textures[0]->copy(dst.data(), dst.size());
                 }
                 else
@@ -594,6 +595,7 @@ namespace tl
                             *out++ = 65535;
                         }
                     }
+                    textures[0]->setRGBToRGBA(false);
                     textures[0]->copy(
                         reinterpret_cast<uint8_t*>(dst.data()),
                         dst.size() * sizeof(uint16_t));
@@ -626,6 +628,7 @@ namespace tl
                             *out++ = 0x3C00; // 1.0 in IEEE 754
                         }
                     }
+                    textures[0]->setRGBToRGBA(false);
                     textures[0]->copy(
                         reinterpret_cast<uint8_t*>(dst.data()),
                         dst.size() * sizeof(uint16_t));
@@ -658,6 +661,7 @@ namespace tl
                             *out++ = 1.0; // 1.0 in IEEE 754
                         }
                     }
+                    textures[0]->setRGBToRGBA(false);
                     textures[0]->copy(
                         reinterpret_cast<uint8_t*>(dst.data()),
                         dst.size() * sizeof(float));

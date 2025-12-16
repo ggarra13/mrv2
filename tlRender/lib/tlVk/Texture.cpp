@@ -509,6 +509,12 @@ namespace tl
                        VK_ACCESS_SHADER_READ_BIT, 0,
                        VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0);
         }
+
+        void Texture::setRGBToRGBA(bool value)
+        {
+            TLRENDER_P();
+            p.needPadRgbToRgba = value;
+        }
         
         void Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
         {
