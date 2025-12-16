@@ -137,11 +137,11 @@ jobs:
         TLRENDER_YASM: ON
         
       run: |
-        ./etc/runme_nolog.sh reldeb -t package -vk
+        ./etc/runme_nolog.sh -t package -vk
       
     - name: Upload binaries
       run: |
-        ./bin/release/upload_sourceforge.sh reldeb -vk
+        ./bin/release/upload_sourceforge.sh -vk
     
     # - name: Upload Beta Release
     #   uses: softprops/action-gh-release@v2
