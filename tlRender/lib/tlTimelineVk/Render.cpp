@@ -1216,14 +1216,14 @@ namespace tl
                 p.shaders["wipe"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["wipe"]);
             }
-            if (!p.shaders["rgbf16_to_rgbaf16"])
+            if (!p.compute["rgbf16_to_rgbaf16"])
             {
-                p.shaders["rgbf16_to_rgbaf16"] = vlk::Shader::create(ctx,
+                p.compute["rgbf16_to_rgbaf16"] = vlk::Shader::create(ctx,
                                                                      computeRGB16FToRGBAF16(),
                                                                      "rgbf16_to_rgbaf16");
-                p.shaders["rgbf16_to_rgbaf16"]->addStorageBuffer("inputBuffer");
-                p.shaders["rgbf16_to_rgbaf16"]->addStorageImage("outputImage");
-                _createBindingSet(p.shaders["rgbf16_to_rgbaf16"]);
+                p.compute["rgbf16_to_rgbaf16"]->addStorageBuffer("inputBuffer");
+                p.compute["rgbf16_to_rgbaf16"]->addStorageImage("outputImage");
+                _createBindingSet(p.compute["rgbf16_to_rgbaf16"]);
             }
             
             
@@ -1525,6 +1525,13 @@ namespace tl
                     i.second->bind(p.frameIndex);
                     i.second->setUniform("transform.mvp", p.transform,
                                          vlk::kShaderVertex);
+                }
+            }
+            for(auto& i : p.compute)
+            {
+                if (i.second)
+                {
+                    i.second->bind(p.frameIndex);
                 }
             }
         }

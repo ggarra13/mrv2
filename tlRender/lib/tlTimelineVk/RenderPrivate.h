@@ -168,7 +168,8 @@ namespace tl
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
 
-            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;
+            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex/Fragment shaders
+            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute shaders
             std::unordered_map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
                 buffers;
             std::unordered_map<std::string, VkPipelineLayout> pipelineLayouts;
