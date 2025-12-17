@@ -71,7 +71,7 @@ namespace tl
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
                 const std::string& computeSource,
-                const std::string& name = "");
+                const std::string& name);
             
             //! Create a new shader.
             static std::shared_ptr<Shader> create(
@@ -84,7 +84,7 @@ namespace tl
                 Fl_Vk_Context& ctx,
                 const std::string& vertexSource,
                 const std::string& fragmentSource,
-                const std::string& name = "");
+                const std::string& name);
             
             //! Create a new shader.
             static std::shared_ptr<Shader> create(

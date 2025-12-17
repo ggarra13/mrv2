@@ -1216,6 +1216,17 @@ namespace tl
                 p.shaders["wipe"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["wipe"]);
             }
+            if (!p.shaders["rgbf16_to_rgbaf16"])
+            {
+                p.shaders["rgbf16_to_rgbaf16"] = vlk::Shader::create(ctx,
+                                                                     computeRGB16FToRGBAF16(),
+                                                                     "rgbf16_to_rgbaf16");
+                p.shaders["rgbf16_to_rgbaf16"]->addStorageBuffer("inputBuffer");
+                p.shaders["rgbf16_to_rgbaf16"]->addStorageImage("outputImage");
+                _createBindingSet(p.shaders["rgbf16_to_rgbaf16"]);
+            }
+            
+            
             _displayShader();
 
 

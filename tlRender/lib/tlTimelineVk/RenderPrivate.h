@@ -51,6 +51,9 @@ namespace tl
         std::string textureFragmentSource();
         std::string differenceFragmentSource();
 
+        // For pixel conversions
+        std::string computeRGB16FToRGBAF16();
+        
         // For annotations
         std::string softFragmentSource();
         std::string hardFragmentSource();

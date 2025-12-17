@@ -165,6 +165,18 @@ namespace tl
             _createVertexShader();
             _createFragmentShader();
         }
+        
+        void Shader::_init(const std::string& computeSource,
+                           const std::string& name)
+        {
+            TLRENDER_P();
+
+            p.computeSource = computeSource;
+
+            shaderName = name;
+            
+            _createComputeShader();
+        }
 
         Shader::Shader(Fl_Vk_Context& context) :
             _p(new Private),
@@ -194,6 +206,15 @@ namespace tl
             activeBindingSet.reset();
         }
 
+        std::shared_ptr<Shader> Shader::create(
+            Fl_Vk_Context& ctx, const std::string& computeSource,
+            const std::string& name)
+        {
+            auto out = std::make_shared<Shader>(ctx);
+            out->_init(computeSource, name);
+            return out;
+        }
+        
         std::shared_ptr<Shader> Shader::create(
             Fl_Vk_Context& ctx, const std::string& vertexSource,
             const std::string& fragmentSource, const std::string& name)
