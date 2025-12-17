@@ -28,6 +28,7 @@ namespace tl
         enum ShaderFlags {
             kShaderVertex = 1,
             kShaderFragment = 2,
+            kShaderCompute = 3,
         };
 
         inline VkShaderStageFlags getVulkanShaderFlags(ShaderFlags stageFlags)
@@ -38,6 +39,8 @@ namespace tl
                                               : 0);
             out |=
                 (stageFlags & kShaderVertex ? VK_SHADER_STAGE_VERTEX_BIT : 0);
+            out |=
+                (stageFlags & kShaderCompute ? VK_SHADER_STAGE_COMPUTE_BIT : 0);
             return out;
         }
 
@@ -50,6 +53,8 @@ namespace tl
             Shader(Fl_Vk_Context& ctx);
             ~Shader();
             
+            void _init(const std::string& computeSource,
+                       const std::string& name);
             void _init(const std::string& vertexSource,
                        const std::string& fragmentSource,
                        const std::string& name);
@@ -62,6 +67,18 @@ namespace tl
                        const std::string& name);
 
 
+            //! Create a new shader.
+            static std::shared_ptr<Shader> create(
+                Fl_Vk_Context& ctx,
+                const std::string& computeSource,
+                const std::string& name = "");
+            
+            //! Create a new shader.
+            static std::shared_ptr<Shader> create(
+                Fl_Vk_Context& ctx,
+                const uint32_t* computeBytes,
+                const uint32_t computeLength);
+            
             //! Create a new shader.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
@@ -168,6 +185,25 @@ namespace tl
                 const std::shared_ptr<OffscreenBuffer>&,
                 const ShaderFlags stageFlags = kShaderFragment);
 
+            //! Add a Storage Buffer to shader.
+            void addStorageBuffer(const std::string& name, 
+                                  const ShaderFlags stageFlags = kShaderCompute);
+
+            //! Attach an FBO and updata shader parameters.
+            void setStorageBuffer(
+                const std::string& name,
+                VkBuffer buffer,
+                VkDeviceSize size);
+            
+            //! Add a Storage Image to shader.
+            void addStorageImage(const std::string& name, 
+                                 const ShaderFlags stageFlags = kShaderCompute);
+            
+            //! Attach and upload a texture to shader parameters.
+            void setStorageImage(
+                const std::string& name,
+                const std::shared_ptr<Texture>& texture);
+            
             //! Create desciptor set bindings for all frames
             void createDescriptorSets();
 
@@ -193,6 +229,7 @@ namespace tl
         private:
             void _createVertexShader();
             void _createFragmentShader();
+            void _createComputeShader();
             
             Fl_Vk_Context& ctx;
             
@@ -224,6 +261,13 @@ namespace tl
             typedef ShaderBindingSet::FBOParameter FBOBinding;
             std::map<std::string, FBOBinding> fboBindings;
 
+            // Add these maps to your Shader class members
+            typedef ShaderBindingSet::StorageBufferParameter StorageBufferBinding;
+            std::map<std::string, StorageBufferBinding> storageBufferBindings;
+            
+            typedef ShaderBindingSet::StorageImageParameter StorageImageBinding;
+            std::map<std::string, StorageImageBinding> storageImageBindings;
+            
             std::shared_ptr<ShaderBindingSet> activeBindingSet;
 
             TLRENDER_PRIVATE();

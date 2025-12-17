@@ -53,6 +53,18 @@ namespace tl
             };
             std::map<std::string, FBOParameter> fbos;
 
+            struct StorageBufferParameter {
+                uint32_t binding;
+                VkShaderStageFlags stageFlags;
+            };
+            std::map<std::string, StorageBufferParameter> storageBuffers;
+
+            struct StorageImageParameter {
+                uint32_t binding;
+                VkShaderStageFlags stageFlags;
+            };
+            std::map<std::string, StorageImageParameter> storageImages;
+            
 #ifdef MRV2_NO_VMA
             VkDevice device;
             
@@ -80,6 +92,18 @@ namespace tl
                     destroy();
                 }
 
+        
+            void updateStorageBuffer(
+                const std::string& name,
+                VkDescriptorSet descriptorSet,
+                VkBuffer buffer,
+                VkDeviceSize size);
+            
+            void updateStorageImage(
+                const std::string& name,
+                VkDescriptorSet descriptorSet,
+                const std::shared_ptr<Texture>& texture);
+            
             void updateUniform(
                 const std::string& name, const void* data,
                 size_t size, size_t frameIndex)

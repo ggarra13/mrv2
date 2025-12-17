@@ -23,8 +23,11 @@ namespace tl
         {
             std::string vertexSource = "Compiled SPIRV code";
             std::string fragmentSource = "Compiled SPIRV code";
+            std::string computeSource = "Compiled SPIRV code";
+            
             VkShaderModule vertex = VK_NULL_HANDLE;
             VkShaderModule fragment = VK_NULL_HANDLE;
+            VkShaderModule compute = VK_NULL_HANDLE;
         };
 
         void Shader::_createVertexShader()
@@ -85,6 +88,37 @@ namespace tl
                     std::cerr << i++ << ": " << line << std::endl;
                 }
                 p.fragment = VK_NULL_HANDLE;
+                throw e;
+            }
+        }
+        
+        void Shader::_createComputeShader()
+        {
+            TLRENDER_P();
+
+            try
+            {
+                std::vector<uint32_t> spirv = compile_glsl_to_spirv(
+                    p.computeSource,
+                    shaderc_compute_shader, // Shader type
+                    "compute_shader.glsl"       // Filename for error reporting
+                );
+
+                // Assuming you have a VkDevice 'device' already created
+                p.compute = create_shader_module(ctx.device, spirv);
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << shaderName << " failed fragment compilation " << std::endl
+                          << e.what() << " for " << std::endl;
+                auto lines = tl::string::split(
+                    p.computeSource, '\n', string::SplitOptions::KeepEmpty);
+                uint32_t i = 1;
+                for (const auto& line : lines)
+                {
+                    std::cerr << i++ << ": " << line << std::endl;
+                }
+                p.compute = VK_NULL_HANDLE;
                 throw e;
             }
         }
@@ -249,6 +283,24 @@ namespace tl
         void Shader::bind(uint64_t value)
         {
             frameIndex = value;
+        }
+
+        void Shader::addStorageBuffer(
+            const std::string& name, const ShaderFlags stageFlags)
+        {
+            StorageBufferBinding t;
+            t.binding = current_binding_index++;
+            t.stageFlags = getVulkanShaderFlags(stageFlags);
+            storageBufferBindings.insert(std::make_pair(name, t));
+        }
+
+        void Shader::addStorageImage(
+            const std::string& name, const ShaderFlags stageFlags)
+        {
+            StorageImageBinding t;
+            t.binding = current_binding_index++;
+            t.stageFlags = getVulkanShaderFlags(stageFlags);
+            storageImageBindings.insert(std::make_pair(name, t));
         }
 
         void Shader::addTexture(
@@ -479,7 +531,33 @@ namespace tl
             
             std::vector<VkDescriptorSetLayoutBinding> bindings;
             std::vector<VkDescriptorPoolSize> poolSizes;
-            
+
+            // StorageBuffers
+            for (const auto& [name, sb] : storageBufferBindings) {
+                VkDescriptorSetLayoutBinding layoutBinding = {};
+                layoutBinding.binding = sb.binding;
+                layoutBinding.descriptorCount = 1;
+                layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+                layoutBinding.stageFlags = sb.stageFlags;
+                bindings.push_back(layoutBinding);
+
+                VkDescriptorPoolSize poolSize = {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, MAX_FRAMES_IN_FLIGHT};
+                poolSizes.push_back(poolSize);
+            }
+
+            // StorageImages
+            for (const auto& [name, si] : storageImageBindings) {
+                VkDescriptorSetLayoutBinding layoutBinding = {};
+                layoutBinding.binding = si.binding;
+                layoutBinding.descriptorCount = 1;
+                layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+                layoutBinding.stageFlags = si.stageFlags;
+                bindings.push_back(layoutBinding);
+
+                VkDescriptorPoolSize poolSize = {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, MAX_FRAMES_IN_FLIGHT};
+                poolSizes.push_back(poolSize);
+            }
+
             // UBOs
             for (const auto& [_, ubo] : ubos)
             {

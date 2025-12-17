@@ -21,7 +21,58 @@ namespace tl
         {
             destroy();
         }
+        
+        void ShaderBindingSet::updateStorageBuffer(
+            const std::string& name,
+            VkDescriptorSet descriptorSet,
+            VkBuffer buffer,
+            VkDeviceSize size)
+        {
+            auto it = storageBuffers.find(name); // You'll need to define this map in ShaderBindingSet
+            if (it == storageBuffers.end()) throw std::runtime_error("Storage Buffer not found: " + name);
 
+    
+            VkDescriptorBufferInfo bufferInfo{};
+            bufferInfo.buffer = buffer;
+            bufferInfo.offset = 0;
+            bufferInfo.range = size;
+
+            VkWriteDescriptorSet write{};
+            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet = descriptorSet;
+            write.dstBinding = it->second.binding;
+            write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+            write.descriptorCount = 1;
+            write.pBufferInfo = &bufferInfo;
+
+            vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+        }
+            
+        void ShaderBindingSet::updateStorageImage(
+            const std::string& name,
+            VkDescriptorSet descriptorSet,
+            const std::shared_ptr<Texture>& texture)
+        {
+            auto it = storageImages.find(name);
+            if (it == storageImages.end()) throw std::runtime_error("Storage Image not found: " + name);
+
+            VkDescriptorImageInfo imageInfo{};
+            imageInfo.imageView   = texture->getImageView();
+            // Storage images do not use samplers in the shader (imageStore/imageLoad)
+            imageInfo.sampler     = VK_NULL_HANDLE; 
+            imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL; 
+
+            VkWriteDescriptorSet write{};
+            write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet          = descriptorSet;
+            write.dstBinding      = it->second.binding;
+            write.descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+            write.descriptorCount = 1;
+            write.pImageInfo      = &imageInfo;
+
+            vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+        }
+        
         void ShaderBindingSet::updateUniform(
             const std::string& name, const void* data,
             size_t size, size_t frameIndex)
