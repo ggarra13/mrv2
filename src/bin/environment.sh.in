@@ -50,7 +50,7 @@ fi
 #
 # Use old NVidia implicit sync (GNOME48 and earlier)
 #
-export __NV_DISABLE_EXPLICIT_SYNC=1
+#export __NV_DISABLE_EXPLICIT_SYNC=1
     
 
 #
