@@ -1221,8 +1221,8 @@ namespace tl
                 p.compute["rgbf16_to_rgbaf16"] = vlk::Shader::create(ctx,
                                                                      computeRGB16FToRGBAF16(),
                                                                      "rgbf16_to_rgbaf16");
-                p.compute["rgbf16_to_rgbaf16"]->addStorageBuffer("inputBuffer");
-                p.compute["rgbf16_to_rgbaf16"]->addStorageImage("outputImage");
+                p.compute["rgbf16_to_rgbaf16"]->addStorageBuffer("inputBuffer", vlk::kShaderCompute);
+                p.compute["rgbf16_to_rgbaf16"]->addStorageImage("outputImage", vlk::kShaderCompute);
                 _createBindingSet(p.compute["rgbf16_to_rgbaf16"]);
             }
             

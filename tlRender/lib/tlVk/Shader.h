@@ -212,6 +212,15 @@ namespace tl
 
             //! Bind a ShaderBindingSet to this shader.
             void useBindingSet(const std::shared_ptr<ShaderBindingSet>);
+
+            //! Create a pipelineLayout
+            void createPipelineLayout();
+            
+            //! Create a compute pipeline from this shader.  Must be called after createBindingSet.
+            void createComputePipeline();
+
+            //! Dispatch compute shader.
+            void dispatch(VkCommandBuffer cmd, uint32_t width, uint32_t height);
             
             //! Print out a list of descriptor set bindings for vertex shader.
             void debugVertexDescriptorSets();

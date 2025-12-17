@@ -23,10 +23,12 @@ namespace tl
         {
             std::string vertexSource = "Compiled SPIRV code";
             std::string fragmentSource = "Compiled SPIRV code";
-            std::string computeSource = "Compiled SPIRV code";
-            
             VkShaderModule vertex = VK_NULL_HANDLE;
             VkShaderModule fragment = VK_NULL_HANDLE;
+            
+            std::string computeSource = "Compiled SPIRV code";
+            VkPipeline computePipeline = VK_NULL_HANDLE;
+            VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
             VkShaderModule compute = VK_NULL_HANDLE;
         };
 
@@ -195,7 +197,16 @@ namespace tl
 
             if (p.vertex != VK_NULL_HANDLE)
                 vkDestroyShaderModule(device, p.vertex, nullptr);
+            
+            if (p.compute != VK_NULL_HANDLE)
+                vkDestroyShaderModule(device, p.compute, nullptr);
 
+            if (p.computePipeline != VK_NULL_HANDLE)
+                vkDestroyPipeline(device, p.computePipeline, nullptr);
+
+            if (p.pipelineLayout != VK_NULL_HANDLE)
+                vkDestroyPipelineLayout(device, p.pipelineLayout, nullptr);
+            
             if (descriptorSetLayout != VK_NULL_HANDLE)
             {
                 vkDestroyDescriptorSetLayout(
@@ -535,6 +546,89 @@ namespace tl
                 std::cerr << "------------------------------------" << std::endl;
                 std::cerr << "pushSize = " << pushSize << std::endl;
             }
+        }
+        
+        void Shader::createPipelineLayout()
+        {
+            TLRENDER_P();
+            VkDevice device = ctx.device;
+
+            if (descriptorSetLayout == VK_NULL_HANDLE)
+                throw std::runtime_error("Descriptor set layout must be created before pipeline layout.");
+
+            VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
+            pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+            pipelineLayoutInfo.setLayoutCount = 1;
+            pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
+
+            // If you use push constants, define them here
+            if (pushSize > 0)
+            {
+                VkPushConstantRange pushConstantRange = {};
+                pushConstantRange.stageFlags = pushStageFlags;
+                pushConstantRange.offset = 0;
+                pushConstantRange.size = static_cast<uint32_t>(pushSize);
+        
+                pipelineLayoutInfo.pushConstantRangeCount = 1;
+                pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
+            }
+
+            if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &p.pipelineLayout) != VK_SUCCESS)
+            {
+                throw std::runtime_error("Failed to create pipeline layout!");
+            }
+        }
+        
+
+        void Shader::createComputePipeline()
+        {
+            TLRENDER_P();
+            VkDevice device = ctx.device;
+
+            if (p.compute == VK_NULL_HANDLE)
+                throw std::runtime_error("Compute shader module not initialized.");
+
+            // Ensure layout exists
+            if (p.pipelineLayout == VK_NULL_HANDLE)
+                createPipelineLayout();
+
+            // 1. Define the shader stage
+            VkComputePipelineCreateInfo pipelineInfo = {};
+            pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
+            pipelineInfo.stage.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+            pipelineInfo.stage.stage = VK_SHADER_STAGE_COMPUTE_BIT;
+            pipelineInfo.stage.module = p.compute;
+            pipelineInfo.stage.pName = "main"; // Entry point in your GLSL
+
+            // 2. Link the layout
+            pipelineInfo.layout = p.pipelineLayout; 
+
+            // 3. Create the pipeline
+            if (vkCreateComputePipelines(
+                    device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &p.computePipeline) != VK_SUCCESS)
+            {
+                throw std::runtime_error("Failed to create compute pipeline!");
+            }
+        }
+        
+        void Shader::dispatch(VkCommandBuffer cmd, uint32_t width, uint32_t height)
+        {
+            TLRENDER_P();
+            
+            // Bind the compute pipeline
+            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, p.computePipeline);
+
+            // Bind the descriptor set for the current frame
+            VkDescriptorSet ds = getDescriptorSet();
+            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, p.pipelineLayout, 
+                                    0, 1, &ds, 0, nullptr);
+
+            // Calculate group counts (rounding up)
+            uint32_t groupCountX = (width + 15) / 16;
+            uint32_t groupCountY = (height + 15) / 16;
+
+            // Run the shader
+            vkCmdDispatch(cmd, groupCountX, groupCountY, 1);
         }
         
         std::shared_ptr<ShaderBindingSet> Shader::createBindingSet()
