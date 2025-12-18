@@ -4,8 +4,9 @@
 
 #include <tlCore/String.h>
 
+#include <FL/fl_utf8.h>
+
 #include <algorithm>
-#include <codecvt>
 #include <locale>
 
 namespace tl
@@ -389,14 +390,52 @@ namespace tl
 
         std::wstring toWide(const std::string& value)
         {
-            std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-            return converter.from_bytes(value);
+            if (value.empty()) return L"";
+
+            // 1. Prepare a buffer for the wide string. 
+            // In the worst case, the number of wide chars is equal to the number of UTF-8 bytes.
+            std::wstring result;
+            result.reserve(value.length());
+
+            const char* p = value.c_str();
+            const char* end = p + value.length();
+
+            while (p < end) {
+                int len;
+                // fl_utf8decode returns the Unicode scalar value (UCS-4)
+                unsigned int ucs = fl_utf8decode(p, end, &len);
+        
+                if (len <= 0) {
+                    // Handle invalid UTF-8 sequences (skip 1 byte or use a replacement char)
+                    p++; 
+                    continue;
+                }
+
+                result.push_back(static_cast<wchar_t>(ucs));
+                p += len;
+            }
+
+            return result;
         }
 
         std::string fromWide(const std::wstring& value)
         {
-            std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-            return converter.to_bytes(value);
+            if (value.empty()) return "";
+
+            std::string result;
+            // A UTF-8 character can be up to 6 bytes (though usually 4 max)
+            char buffer[6]; 
+            
+            for (wchar_t wch : value) {
+                // fl_utf8encode returns the number of bytes written to the buffer
+                int len = fl_utf8encode(static_cast<unsigned int>(wch), buffer);
+        
+                if (len > 0) {
+                    result.append(buffer, len);
+                }
+            }
+
+            return result;
         }
 
         std::string escape(const std::string& value)

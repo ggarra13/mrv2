@@ -17,8 +17,9 @@
 #include <stdlib.h>
 #include <VersionHelpers.h>
 
+#include <FL/fl_utf8.h>
+
 #include <array>
-#include <codecvt>
 #include <cstdlib>
 #include <locale>
 #include <thread>
@@ -106,42 +107,27 @@ namespace tl
 
         bool getEnv(const std::string& name, std::string& out)
         {
-            size_t size = 0;
-            wchar_t* p = 0;
-            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>
-                utf16;
-            if (0 == _wdupenv_s(&p, &size, utf16.from_bytes(name).c_str()))
+            const char* var = fl_getenv(name.c_str());
+            if (var)
             {
-                if (p)
-                {
-                    out = utf16.to_bytes(p);
-                    free(p);
-                    return true;
-                }
-            }
-            if (p)
-            {
-                free(p);
+                out = var;
+                return true;
             }
             return false;
         }
 
         bool setEnv(const std::string& name, const std::string& value)
         {
-            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>
-                utf16;
-            return _wputenv_s(
-                       utf16.from_bytes(name).c_str(),
-                       utf16.from_bytes(value).c_str()) == 0;
+            const std::string envString = name + "=" + value;
+            // fl_putenv returns 0 on success
+            return fl_putenv(envString.c_str()) == 0;
         }
 
         bool delEnv(const std::string& name)
         {
-            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>
-                utf16;
-            return _wputenv_s(
-                       utf16.from_bytes(name).c_str(),
-                       utf16.from_bytes(std::string()).c_str()) == 0;
+            // On Windows, deleting an env var is done by "NAME="
+            std::string envString = name + "=";
+            return fl_putenv(envString.c_str()) == 0;
         }
     } // namespace os
 } // namespace tl
