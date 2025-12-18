@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <tlVk/Buffer.h>
 #include <tlVk/Texture.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Vk.h>
@@ -30,7 +31,7 @@ namespace tl
                 std::vector<VkBuffer> buffers;
                 std::vector<VkDescriptorBufferInfo> infos;
                 VkDescriptorSetLayoutBinding layoutBinding;
-                size_t size = 0;
+                std::size_t size = 0;
 #ifndef MRV2_NO_VMA
                 std::vector<VmaAllocation> allocation;
 #else
@@ -54,8 +55,13 @@ namespace tl
             std::map<std::string, FBOParameter> fbos;
 
             struct StorageBufferParameter {
+                std::vector<std::shared_ptr<vlk::Buffer> > buffers;
                 uint32_t binding;
                 VkShaderStageFlags stageFlags;
+
+                // Track the current allocated size per frame to
+                // avoid unnecessary reallocation.
+                std::vector<VkDeviceSize> currentSizes;
             };
             std::map<std::string, StorageBufferParameter> storageBuffers;
 
@@ -93,29 +99,44 @@ namespace tl
                 }
 
             void updateStorageBuffer(
+                Fl_Vk_Context& ctx,
                 const std::string& name,
-                VkDescriptorSet descriptorSet,
-                VkBuffer buffer,
-                VkDeviceSize size)
+                const uint8_t* data,
+                const std::size_t size,
+                const uint32_t frameIndex)
                 {
                     auto it = storageBuffers.find(name); // You'll need to define this map in ShaderBindingSet
-                    if (it == storageBuffers.end()) throw std::runtime_error("Storage Buffer not found: " + name + " buffers.size()=" + std::to_string(storageBuffers.size()));
+                    if (it == storageBuffers.end()) throw std::runtime_error("Storage Buffer not found: " + name);
 
-    
-                    VkDescriptorBufferInfo bufferInfo{};
-                    bufferInfo.buffer = buffer;
-                    bufferInfo.offset = 0;
-                    bufferInfo.range = size;
+                    auto& param = it->second;
 
-                    VkWriteDescriptorSet write{};
-                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                    write.dstSet = descriptorSet;
-                    write.dstBinding = it->second.binding;
-                    write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-                    write.descriptorCount = 1;
-                    write.pBufferInfo = &bufferInfo;
+                    // 1. Check if we need to (re)allocate
+                    if (!param.buffers[frameIndex] ||
+                        param.currentSizes[frameIndex] < size)
+                    {
+                        // Recreate the buffer with the new, larger size
+                        param.buffers[frameIndex] = vlk::Buffer::create(ctx, size);
+                        param.currentSizes[frameIndex] = size;
 
-                    vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+                        // 2. CRITICAL: Because the VkBuffer handle changed, 
+                        // we MUST update the Descriptor Set for this frame.
+                        VkDescriptorBufferInfo bufferInfo{};
+                        bufferInfo.buffer = param.buffers[frameIndex]->getBuffer();
+                        bufferInfo.offset = 0;
+                        bufferInfo.range  = size; // Or VK_WHOLE_SIZE
+
+                        VkWriteDescriptorSet write = { VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+                        write.dstSet = descriptorSets[frameIndex];
+                        write.dstBinding = param.binding;
+                        write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+                        write.descriptorCount = 1;
+                        write.pBufferInfo = &bufferInfo;
+
+                        vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+                    }
+
+                    // 3. Upload the data (this handles the map/memcpy/unmap internally)
+                    param.buffers[frameIndex]->upload(data);
                 }
                                    
             void updateStorageImage(
@@ -273,6 +294,14 @@ namespace tl
                                 vmaDestroyBuffer(allocator, ubo.buffers[i],
                                                  ubo.allocation[i]);
 #endif
+                        }
+                    }
+                    
+                    for (auto& [_, sb] : storageBuffers)
+                    {
+                        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+                        {
+                            sb.buffers[i].reset();
                         }
                     }
 

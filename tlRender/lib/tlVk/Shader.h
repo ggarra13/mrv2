@@ -192,8 +192,8 @@ namespace tl
             //! Attach an FBO and updata shader parameters.
             void setStorageBuffer(
                 const std::string& name,
-                VkBuffer buffer,
-                VkDeviceSize size);
+                const uint8_t* data,
+                const std::size_t size);
             
             //! Add a Storage Image to shader.
             void addStorageImage(const std::string& name, 

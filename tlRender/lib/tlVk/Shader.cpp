@@ -390,20 +390,18 @@ namespace tl
 
         
         void Shader::setStorageBuffer(
-            const std::string& name, 
-            VkBuffer buffer, 
-            VkDeviceSize size)
+            const std::string& name,
+            const uint8_t* data,
+            const std::size_t size)
         {
             if (!activeBindingSet)
                 throw std::runtime_error("No activeBindingSet for Shader " + name);
     
-            // We pass the specific buffer and size to the binding set
-            activeBindingSet->updateStorageBuffer(name, 
-                                                  activeBindingSet->getDescriptorSet(frameIndex), 
-                                                  buffer, 
-                                                  size);
+            // We pass the specific data and size to the binding set
+            activeBindingSet->updateStorageBuffer(ctx, name, data, size, frameIndex);
         }
 
+        
         void Shader::setStorageImage(
             const std::string& name, 
             const std::shared_ptr<Texture>& texture)
@@ -674,14 +672,14 @@ namespace tl
             
             std::vector<VkDescriptorSetLayoutBinding> bindings;
             std::vector<VkDescriptorPoolSize> poolSizes;
-
+            
             // StorageBuffers
-            for (const auto& [name, sb] : storageBufferBindings) {
+            for (const auto& [name, sbb] : storageBufferBindings) {
                 VkDescriptorSetLayoutBinding layoutBinding = {};
-                layoutBinding.binding = sb.binding;
+                layoutBinding.binding = sbb.binding;
                 layoutBinding.descriptorCount = 1;
                 layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-                layoutBinding.stageFlags = sb.stageFlags;
+                layoutBinding.stageFlags = sbb.stageFlags;
                 bindings.push_back(layoutBinding);
 
                 VkDescriptorPoolSize poolSize = {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, MAX_FRAMES_IN_FLIGHT};
@@ -898,7 +896,20 @@ namespace tl
                 bindingSet->uniforms[name] = std::move(ubo);
             }
 
-            // Step 4: Texture bindings
+            // Step 4: storageBufferBindings
+            for (const auto& [name, sbb] : storageBufferBindings)
+            {
+                ShaderBindingSet::StorageBufferParameter sb;
+                sb.binding = sbb.binding;
+                sb.stageFlags = sbb.stageFlags;
+
+                sb.buffers.resize(MAX_FRAMES_IN_FLIGHT, nullptr);
+                sb.currentSizes.resize(MAX_FRAMES_IN_FLIGHT, 0);
+
+                bindingSet->storageBuffers[name] = std::move(sb);
+            }
+
+            // Step 5: Texture bindings
             for (const auto& [name, texBinding] : textureBindings)
             {
                 ShaderBindingSet::TextureParameter textureInfo;
@@ -907,22 +918,13 @@ namespace tl
                 bindingSet->textures[name] = textureInfo;
             }
             
-            // Step 5: FBO bindings
+            // Step 6: FBO bindings
             for (const auto& [name, fboBinding] : fboBindings)
             {
                 ShaderBindingSet::FBOParameter fboInfo;
                 fboInfo.binding = fboBinding.binding;
                 fboInfo.stageFlags = fboBinding.stageFlags;
                 bindingSet->fbos[name] = fboInfo;
-            }
-            
-            // Step 6: Storage Buffer bindings
-            for (const auto& [name, storageBinding] : storageBufferBindings)
-            {
-                ShaderBindingSet::StorageBufferParameter storageInfo;
-                storageInfo.binding = storageBinding.binding;
-                storageInfo.stageFlags = storageBinding.stageFlags;
-                bindingSet->storageBuffers[name] = storageInfo;
             }
             
             // Step 7: Storage Image bindings

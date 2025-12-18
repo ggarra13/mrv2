@@ -48,7 +48,7 @@ namespace tl
             VkPhysicalDevice gpu = ctx.gpu;
             
             VkBufferCreateInfo bufferInfo = { VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
-            bufferInfo.size = bufferSize;
+            bufferInfo.size = p.bufferSize = bufferSize;
             bufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
             bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 

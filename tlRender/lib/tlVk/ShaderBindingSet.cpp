@@ -45,6 +45,14 @@ namespace tl
                 }
             }
 
+            for (auto& [_, sb] : storageBuffers)
+            {
+                for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+                {
+                    sb.buffers[i].reset();
+                }
+            }
+            
             for (auto& pool : descriptorPools)
             {
                 if (pool != VK_NULL_HANDLE)
@@ -56,7 +64,9 @@ namespace tl
 
             descriptorSets.clear();
             descriptorPools.clear();
-                    
+
+            storageBuffers.clear();
+            storageImages.clear();
             uniforms.clear();
             textures.clear();
             fbos.clear();

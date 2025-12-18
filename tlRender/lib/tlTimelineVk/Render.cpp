@@ -51,16 +51,16 @@ namespace
     void computeRGBToRGBA(
         VkCommandBuffer cmd,
         const std::shared_ptr<tl::vlk::Shader> shader,
-        VkBuffer inputBuffer,
-        VkDeviceSize inputBufferSize,
+        const uint8_t* data,
+        const std::size_t size,
         std::shared_ptr<tl::vlk::Texture> outputRGBA)
     {
         uint32_t width = outputRGBA->getWidth();
         uint32_t height = outputRGBA->getHeight();
 
         // 1. Update Descriptor Set with the specific resources
-        shader->setStorageBuffer("inputBuffer", inputBuffer, inputBufferSize);
-        // shader->setStorageImage("outputImage", outputRGBA);
+        shader->setStorageBuffer("inputBuffer", data, size);
+        shader->setStorageImage("outputImage", outputRGBA);
 
         // 2. Barrier: Transition Output Image to GENERAL layout for writing
         VkImageMemoryBarrier beginBarrier = { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
@@ -663,12 +663,9 @@ namespace tl
                     const std::size_t w = info.size.w;
                     const std::size_t h = info.size.h;
 #if 1
-                    auto input = vlk::Buffer::create(ctx,
-                                                     w * h * 3 * sizeof(uint16_t));
-                    input->upload(image->getData());
                     _createBindingSet(p.compute["rgbf16_to_rgbaf16"]);
                     computeRGBToRGBA(p.cmd, p.compute["rgbf16_to_rgbaf16"],
-                                     input->getBuffer(), input->getBufferSize(),
+                                     image->getData(), image->getDataByteCount(),
                                      textures[0]);
                     textures[0]->setRGBToRGBA(false);
 #else
