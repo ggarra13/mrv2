@@ -149,8 +149,8 @@ Enjoy!
 
 -----------------------------------------------------------------
 
-Donation Prices for v1.4.7
---------------------------
+Donation Prices
+---------------
 
 Donationware prices of binary licenses through PayPal:
 
@@ -181,8 +181,10 @@ https://sourceforge.net/projects/mrv2/files/beta/vulkan
 directory are versions for you to evaluate mrv2 or vmrv2 before a donation and report bugs or performance issues.
 Currently, when run as demo these versions don't have:
 
+	   - Saving
 	   - Annotations
 	   - OpenEXR Layer switching
+	   - Editing
 	   - NDI support
 
 EOF
@@ -246,7 +248,7 @@ In order to get HDR, you currently need to have the KWin6 or GNOME48 compositors
 
 It will likely work with any NVidia RTX 3080+, but it will require you to choose and test your hardware carefully.
 
-The preferred NVidia driver tested for best performance is nvidia-driver-580+ (default on Ubuntu 25.04 with GNOME48).
+The preferred NVidia driver tested for best performance is nvidia-driver-580+ (default on Ubuntu 25.04 with GNOME48+).
 
 Notes about Vulkan on macOS Intel
 ---------------------------------

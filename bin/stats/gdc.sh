@@ -24,7 +24,7 @@ locate_python
 
 export LD_LIBRARY_PATH=$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib:$OLD_LIBRRARY_PATH
 
-if [[ ! -d $PYTHON_SITEDIR/requests || ! -d $PYTHON_SITEDIR/pytz ]];
+if [[ ! -d $PYTHON_SITEDIR/curl_cffi || ! -d $PYTHON_SITEDIR/pytz ]];
 then
     if [[ $PYTHON != *$BUILD_DIR* ]]; then
 	if [ ! -d .venv ]; then
@@ -38,7 +38,7 @@ then
 	fi
 	export PYTHON=python
     fi
-    $PYTHON -m pip install requests pytz
+    $PYTHON -m pip install curl_cffi pytz
 fi
 
 export TAG=$1

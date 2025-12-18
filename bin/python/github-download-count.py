@@ -4,17 +4,20 @@ import itertools
 import re
 from datetime import datetime, timezone, timedelta
 import argparse
-import csv
-from io import StringIO
+import time
 
 # --- Third-Party Imports ---
 try:
-    import requests
+    from curl_cffi import requests
 except ImportError:
-    print("Error: requests is not installed")
-    print("Installing Requests is simple with pip:\n  pip install requests")
+    print("Error: curl_cffi is not installed")
+    print("Installing Requests is simple with pip:\n  pip install curl_cffi")
     print("More info: http://docs.python-requests.org/en/latest/")
     sys.exit(1)
+
+# --- Standard Library Imports (Modernized) ---
+import json
+from io import StringIO
 
 # Assuming 'functions' is a file you have that contains 'format_number'
 try:
@@ -27,23 +30,20 @@ except ImportError:
 
 # --- Global Configuration and Authentication ---
 full_names = []
-headers = {
-    "User-Agent": (
-        "Mozilla/5.0 (X11; Linux x86_64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/120.0 Safari/537.36"
-    ),
-    "Accept": "application/json",
-}
+headers = {}
 
 if "GITHUB_TOKEN" in os.environ:
     headers["Authorization"] = "token %s" % os.environ["GITHUB_TOKEN"]
 
 
+BROWSER_IMPERSONATE='safari15_5'
 
+    
 # --- GLOBAL TRACKERS FOR GRAND TOTALS ---
+# These will accumulate downloads for each product across all sources (GitHub + SourceForge)
 mrv2_grand_total = 0
 vmrv2_grand_total = 0
+
 # ----------------------------------------
 
 def get_date_arguments():
@@ -58,10 +58,6 @@ def get_date_arguments():
     parser.add_argument('start_date', type=str, default='2014-10-29',
                         help='Start Date (YYYY-MM-DD format). Defaults to 2014-10-29.')
     parser.add_argument('end_date', type=str, nargs='?', default=None, help='End Date (YYYY-MM-DD format, optional)')
-    
-    # NEW ARGUMENT: For specifying the SourceForge local CSV file path
-    parser.add_argument('--sf_csv_path', type=str, default=None, 
-                        help='Path to the manually downloaded SourceForge CSV log file.')
 
     return parser.parse_args()
 
@@ -87,7 +83,7 @@ def parse_and_process_dates(args):
             return dt
         except ValueError:
             pass # Fall through to the next attempt
-            
+        
         # 2. Try to parse the simple YYYY-MM-DD format (as required by the original script)
         try:
             dt_naive = datetime.strptime(date_str, '%Y-%m-%d')
@@ -97,7 +93,7 @@ def parse_and_process_dates(args):
             else:
                 dt = dt_naive.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=timezone.utc)
             return dt
-            
+        
         except ValueError:
             # If neither format works, raise the final error
             raise ValueError(f"Invalid date format '{date_str}'. Please use either 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS +/-ZZZZ'.")
@@ -121,7 +117,7 @@ def parse_and_process_dates(args):
 
     # 3. Compare and flip dates if necessary
     if end_dt < start_dt:
-        print(f"\n⚠️ **Warning:** End date ({end_dt.strftime('%Y-%m-%d')}) is before start date ({start_dt.strftime('%Y-%m-%d')}).")
+        print(f"\n **Warning:** End date ({end_dt.strftime('%Y-%m-%d')}) is before start date ({start_dt.strftime('%Y-%m-%d')}).")
         print("  **Dates have been flipped** to ensure a valid range.")
         start_dt, end_dt = end_dt, start_dt
         
@@ -146,7 +142,7 @@ def parse_and_process_dates(args):
     start_date_str = start_dt.strftime("%Y-%m-%d")
     end_date_str = end_dt.strftime("%Y-%m-%d")
 
-    return start_date_str, end_date_str, args.user, args.repo, args.tag, args.sf_csv_path
+    return start_date_str, end_date_str, args.user, args.repo, args.tag
 
 def get_github_downloads(user, repo, tag):
     """
@@ -162,11 +158,12 @@ def get_github_downloads(user, repo, tag):
 
     mrv2_total_count = 0
     vmrv2_total_count = 0
+    
     try:
         PER_PAGE = 100
         for page in itertools.count(1):
             url = f'https://api.github.com/repos/{full_name}/releases?per_page={PER_PAGE}&page={page}'
-            response = requests.get(url, headers=headers, timeout=15)
+            response = requests.get(url, impersonate="chrome120")
             response.raise_for_status()
             releases = response.json()
 
@@ -192,7 +189,7 @@ def get_github_downloads(user, repo, tag):
                         mrv2_total_count += downloads
                     elif asset['name'].startswith('vmrv2'):
                         vmrv2_total_count += downloads
-                        
+                    
                     asset_date = asset['updated_at'].split('T')[0]
                     print('{:>5} Asset: {:<40} Date: {}'.format(
                         format_number(asset['download_count'], 5),
@@ -211,35 +208,249 @@ def get_github_downloads(user, repo, tag):
         sys.exit(1)
 
     print("-----------------------------------------------------------------------")
-    
+
     formatted_mrv2_total = format_number(mrv2_total_count, 5)
     print(f'{formatted_mrv2_total} Total mrv2 Downloads (GitHub)')
-    
+
     formatted_vmrv2_total = format_number(vmrv2_total_count, 5)
     print(f'{formatted_vmrv2_total} Total vmrv2 Downloads (GitHub)')
 
     total_count = mrv2_total_count + vmrv2_total_count
     formatted_total = format_number(total_count, 5)
     print(f'{formatted_total} Total Downloads for GitHub repo {full_name}')
-    
+
+    # Return separate counts
     return mrv2_total_count, vmrv2_total_count
 
+import time
+from curl_cffi import requests
+
+# Create a session to maintain cookies and connection state
+session = requests.Session()
+# At the start of your script, before any API calls:
+session.get("https://sourceforge.net/projects/mrv2/",
+            impersonate=BROWSER_IMPERSONATE)
+time.sleep(2)
+
+def get_file_stats(repo, file_path, start_date, end_date):
+    """Fetches download stats for a specific SourceForge file path with improved anti-detection."""
+    urls_to_try = [
+        f"https://sourceforge.net/projects/{repo}/files/{file_path}/stats/json?start_date={start_date}&end_date={end_date}"
+    ]
+
+
+    for url in urls_to_try:
+        try:
+            # Longer delay to avoid rate limiting
+            time.sleep(1.5)
+            
+            # Use impersonate without custom headers - let curl_cffi handle everything
+            response = session.get(url,
+                                   impersonate=BROWSER_IMPERSONATE,
+                                   allow_redirects=True)
+            r = response.json()
+            if 'oses' in r:
+                return r['oses']    
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 403:
+                print(f"Warning: Access forbidden for {url} {str(e)}")
+            continue
+        except requests.exceptions.Timeout:
+            print(f"Warning: Timeout fetching stats for {url}")
+            continue
+        except Exception as e:
+            continue
+    
+    return None
+
+
+def count_sourceforge(repo, folder_name, end_date, start_date):
+    """
+    Fetches and sums SourceForge download counts for a folder.
+    Returns: (mrv2_total_count, vmrv2_total_count)
+    """
+    print()
+    print(f"\tCount {folder_name} from {start_date} to {end_date}")
+
+    is_detailed_stats_folder = not any(key in folder_name.lower() for key in ['beta/', 'archive'])
+
+    mrv2_downloads = 0
+    vmrv2_downloads = 0
+
+    if is_detailed_stats_folder:
+        # Detailed file-level counting
+        detailed_stats = {}
+        version = folder_name.split('/')[-1] if '/' in folder_name else folder_name
+        
+        packages = ['mrv2', 'vmrv2']
+        file_patterns = [
+            "-Windows-amd64.exe", "-Windows-amd64.zip",
+            "-Windows-aarch64.exe", "-Windows-aarch64.zip",
+            "-Darwin-amd64.dmg", "-Darwin-arm64.dmg",
+            "-Linux-amd64.deb", "-Linux-amd64.rpm", "-Linux-amd64.tar.gz",
+            "-Linux-aarch64.deb", "-Linux-aarch64.rpm", "-Linux-aarch64.tar.gz",
+        ]
+        
+        for package in packages:
+            for pattern in file_patterns:
+                file_name = f"{package}-{version}{pattern}"
+                file_path = f"{folder_name}/{file_name}"
+                
+                oses_stats = get_file_stats(repo, file_path, start_date, end_date)
+                
+                if oses_stats:
+                    for _, count_str in oses_stats:
+                        try:
+                            count = int(count_str)
+                            
+                            if package == 'mrv2':
+                                mrv2_downloads += count
+                            elif package == 'vmrv2':
+                                vmrv2_downloads += count
+                            
+                            import re
+                            match = re.search(r'-(Windows|Darwin|Linux)-([a-zA-Z0-9]+)', pattern)
+                            
+                            if match:
+                                os_type = match.group(1)
+                                arch = match.group(2)
+                                
+                                if os_type == 'Darwin':
+                                    arch_spec = 'Intel' if arch == 'amd64' else 'M1+' if arch == 'arm64' else arch
+                                    os_spec = f"Darwin {arch} ({arch_spec})" 
+                                else:
+                                    os_spec = f"{os_type} {arch}"
+                                
+                                key = (package, os_spec)
+                                detailed_stats[key] = detailed_stats.get(key, 0) + count
+                        
+                        except ValueError:
+                            continue
+        
+        if detailed_stats:
+            sorted_keys = sorted(detailed_stats.keys(), key=lambda x: (x[1], x[0]))
+            os_group_totals = {}
+            for package, os_spec in sorted_keys:
+                count = detailed_stats[(package, os_spec)]
+                os_group_totals[os_spec] = os_group_totals.get(os_spec, 0) + count
+
+            for os_spec, os_total in os_group_totals.items():
+                print('{:>5}  OS: {}'.format(os_total, os_spec))
+                for package in packages:
+                    key = (package, os_spec)
+                    count = detailed_stats.get(key, 0)
+                    if count > 0:
+                        print('        - File: {:<5} {:>5}'.format(package, count))
+
+            from functions import format_number
+            total_downloads = mrv2_downloads + vmrv2_downloads
+            formatted_total = format_number(total_downloads, 5)
+            print('{:>5} Total Downloads for SourceForge {}'.
+                  format(formatted_total, f'{repo}/{folder_name} (File Breakdown)'))
+            
+            return mrv2_downloads, vmrv2_downloads
+
+    # Aggregated folder stats
+    base_url = f"https://sourceforge.net/projects/{repo}/files/{folder_name}/stats/json?start_date={start_date}&end_date={end_date}"
+    archive_url = f"https://sourceforge.net/projects/{repo}/files/archive/{folder_name}/stats/json?start_date={start_date}&end_date={end_date}"
+
+    r = None
+    try:
+        time.sleep(1.5)
+        response = session.get(
+            base_url, 
+            impersonate=BROWSER_IMPERSONATE,
+            timeout=30,
+            allow_redirects=True
+        )
+        response.raise_for_status()
+        r = response.json()
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 403:
+            print(f'Warning: Access forbidden for folder {url}. Trying archive path...')
+        try:
+            time.sleep(1.5)
+            response = session.get(
+                archive_url, 
+                impersonate=BROWSER_IMPERSONATE,
+                timeout=30,
+                allow_redirects=True
+            )
+            response.raise_for_status()
+            r = response.json()
+        except Exception as e:
+            print(f'Could not get info for folder {folder_name}: {e}')
+            return 0, 0
+    except Exception as e:
+        print(f'General error getting info for folder {folder_name}: {e}')
+        return 0, 0
+
+    if r and 'oses' in r:
+        prefix = ''
+        if 'opengl' in folder_name.lower():
+            prefix = 'mrv2'
+        elif 'vulkan' in folder_name.lower():
+            prefix = 'vmrv2'
+        
+        for item in r['oses']:
+            try:
+                num = int(item[1])
+                
+                if prefix == 'mrv2':
+                    mrv2_downloads += num
+                elif prefix == 'vmrv2':
+                    vmrv2_downloads += num
+                
+                print('{:>5}  {:<5} OS: {:<40}'.format(num, prefix, item[0]))
+            except (ValueError, IndexError):
+                print(f"Warning: Could not parse SourceForge data item: {item}")
+                continue
+
+    from functions import format_number
+    total_downloads = mrv2_downloads + vmrv2_downloads
+    formatted_total = format_number(total_downloads, 5)
+    print('{:>5} Total Downloads for SourceForge {}'.
+          format(formatted_total, f'{repo}/{folder_name} (Aggregated)'))
+
+    return mrv2_downloads, vmrv2_downloads
 
 # --- Main Execution ---
 if __name__ == "__main__":
     args = get_date_arguments()
 
-    # The function now handles the date flipping and parses the new sf_csv_path argument
-    start_date_str, end_date_str, user, repo, tag, sf_csv_path = parse_and_process_dates(args)
+    # The function now handles the date flipping
+    start_date_str, end_date_str, user, repo, tag = parse_and_process_dates(args)
 
     # 1. Get GitHub Totals
     mrv2_github_total, vmrv2_github_total = get_github_downloads(user, repo, tag)
     mrv2_grand_total += mrv2_github_total
     vmrv2_grand_total += vmrv2_github_total
+
+    if not repo or not args.tag:
+        print("\nSkipping SourceForge downloads: Both repository (SourceForge project name) and tag (folder name) must be provided.")
+        sys.exit(0)
+
+    print(f"\n--- SourceForge Downloads for Project: {repo} ---")
+
+    # 2. Get SourceForge Released Totals
+    mrv2_sf_released_total, vmrv2_sf_released_total = count_sourceforge(repo, args.tag, end_date_str, start_date_str)
+    mrv2_grand_total += mrv2_sf_released_total
+    vmrv2_grand_total += vmrv2_sf_released_total
+
+    # 3. Get SourceForge Beta OpenGL Totals
+    mrv2_sf_beta_opengl_total, vmrv2_sf_beta_opengl_total = count_sourceforge(repo, 'beta/opengl', end_date_str, start_date_str)
+    mrv2_grand_total += mrv2_sf_beta_opengl_total
+    vmrv2_grand_total += vmrv2_sf_beta_opengl_total
+
+    # 4. Get SourceForge Beta Vulkan Totals
+    mrv2_sf_beta_vulkan_total, vmrv2_sf_beta_vulkan_total = count_sourceforge(repo, 'beta/vulkan', end_date_str, start_date_str)
+    mrv2_grand_total += mrv2_sf_beta_vulkan_total
+    vmrv2_grand_total += vmrv2_sf_beta_vulkan_total
+
     final_grand_total = mrv2_grand_total + vmrv2_grand_total
-    
+
     print("\n=======================================================================")
-    
+
     # Print separate totals
     formatted_mrv2_grand_total = format_number(mrv2_grand_total, 5)
     formatted_vmrv2_grand_total = format_number(vmrv2_grand_total, 5)
@@ -247,6 +458,10 @@ if __name__ == "__main__":
 
     print(f'{formatted_mrv2_grand_total} Grand Total mrv2 Downloads (GitHub + SourceForge)')
     print(f'{formatted_vmrv2_grand_total} Grand Total vmrv2 Downloads (GitHub + SourceForge)')
-    
+
     print("-----------------------------------------------------------------------")
     print(f'{formatted_final_grand_total} Grand Total (GitHub + SourceForge)')
+
+
+
+

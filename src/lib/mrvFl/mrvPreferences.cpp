@@ -854,9 +854,9 @@ namespace mrv
 
         // VSync: 0 None, 1 = Always, 2 = Presentation
         video.get("vsync", tmp, 2);
-#ifdef __linux__
-        tmp = 1;  // \@bug: Linux must have Always VSync for now (NVidia bug?)
-#endif
+// #ifdef __linux__
+//         tmp = 1;  // \@bug: Linux must have Always VSync for now (NVidia bug?)
+// #endif
         uiPrefs->uiPrefsOpenGLVsync->value(tmp);
 
         video.get("color_buffers_accuracy", tmp, 0);
