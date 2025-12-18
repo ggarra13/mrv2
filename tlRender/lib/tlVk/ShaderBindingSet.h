@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <tlVk/Buffer.h>
 #include <tlVk/Texture.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Vk.h>
@@ -30,7 +31,7 @@ namespace tl
                 std::vector<VkBuffer> buffers;
                 std::vector<VkDescriptorBufferInfo> infos;
                 VkDescriptorSetLayoutBinding layoutBinding;
-                size_t size = 0;
+                std::size_t size = 0;
 #ifndef MRV2_NO_VMA
                 std::vector<VmaAllocation> allocation;
 #else
@@ -53,6 +54,23 @@ namespace tl
             };
             std::map<std::string, FBOParameter> fbos;
 
+            struct StorageBufferParameter {
+                std::vector<std::shared_ptr<vlk::Buffer> > buffers;
+                uint32_t binding;
+                VkShaderStageFlags stageFlags;
+
+                // Track the current allocated size per frame to
+                // avoid unnecessary reallocation.
+                std::vector<VkDeviceSize> currentSizes;
+            };
+            std::map<std::string, StorageBufferParameter> storageBuffers;
+
+            struct StorageImageParameter {
+                uint32_t binding;
+                VkShaderStageFlags stageFlags;
+            };
+            std::map<std::string, StorageImageParameter> storageImages;
+            
 #ifdef MRV2_NO_VMA
             VkDevice device;
             
@@ -78,6 +96,72 @@ namespace tl
             ~ShaderBindingSet()
                 {
                     destroy();
+                }
+
+            void updateStorageBuffer(
+                Fl_Vk_Context& ctx,
+                const std::string& name,
+                const uint8_t* data,
+                const std::size_t size,
+                const uint32_t frameIndex)
+                {
+                    auto it = storageBuffers.find(name); // You'll need to define this map in ShaderBindingSet
+                    if (it == storageBuffers.end()) throw std::runtime_error("Storage Buffer not found: " + name);
+
+                    auto& param = it->second;
+
+                    // 1. Check if we need to (re)allocate
+                    if (!param.buffers[frameIndex] ||
+                        param.currentSizes[frameIndex] < size)
+                    {
+                        // Recreate the buffer with the new, larger size
+                        param.buffers[frameIndex] = vlk::Buffer::create(ctx, size);
+                        param.currentSizes[frameIndex] = size;
+
+                        // 2. CRITICAL: Because the VkBuffer handle changed, 
+                        // we MUST update the Descriptor Set for this frame.
+                        VkDescriptorBufferInfo bufferInfo{};
+                        bufferInfo.buffer = param.buffers[frameIndex]->getBuffer();
+                        bufferInfo.offset = 0;
+                        bufferInfo.range  = size; // Or VK_WHOLE_SIZE
+
+                        VkWriteDescriptorSet write = { VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+                        write.dstSet = descriptorSets[frameIndex];
+                        write.dstBinding = param.binding;
+                        write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+                        write.descriptorCount = 1;
+                        write.pBufferInfo = &bufferInfo;
+
+                        vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+                    }
+
+                    // 3. Upload the data (this handles the map/memcpy/unmap internally)
+                    param.buffers[frameIndex]->upload(data);
+                }
+                                   
+            void updateStorageImage(
+                const std::string& name,
+                VkDescriptorSet descriptorSet,
+                const std::shared_ptr<Texture>& texture)
+                {
+                    auto it = storageImages.find(name);
+                    if (it == storageImages.end()) throw std::runtime_error("Storage Image not found: " + name + " storeImages.size()=" + std::to_string(storageImages.size()));
+
+                    VkDescriptorImageInfo imageInfo{};
+                    imageInfo.imageView   = texture->getImageView();
+                    // Storage images do not use samplers in the shader (imageStore/imageLoad)
+                    imageInfo.sampler     = VK_NULL_HANDLE; 
+                    imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL; 
+
+                    VkWriteDescriptorSet write{};
+                    write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    write.dstSet          = descriptorSet;
+                    write.dstBinding      = it->second.binding;
+                    write.descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+                    write.descriptorCount = 1;
+                    write.pImageInfo      = &imageInfo;
+
+                    vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
                 }
 
             void updateUniform(
@@ -210,6 +294,14 @@ namespace tl
                                 vmaDestroyBuffer(allocator, ubo.buffers[i],
                                                  ubo.allocation[i]);
 #endif
+                        }
+                    }
+                    
+                    for (auto& [_, sb] : storageBuffers)
+                    {
+                        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+                        {
+                            sb.buffers[i].reset();
                         }
                     }
 

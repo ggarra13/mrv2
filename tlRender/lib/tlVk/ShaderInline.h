@@ -52,6 +52,6 @@ namespace tl
             pushSize = sizeof(T);
             pushStageFlags = getVulkanShaderFlags(stageFlags);
         }
-        
+
     } // namespace vlk
 } // namespace tl

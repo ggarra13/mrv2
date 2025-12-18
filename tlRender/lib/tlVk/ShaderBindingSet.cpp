@@ -21,108 +21,7 @@ namespace tl
         {
             destroy();
         }
-
-        void ShaderBindingSet::updateUniform(
-            const std::string& name, const void* data,
-            size_t size, size_t frameIndex)
-        {
-            auto it = uniforms.find(name);
-            if (it == uniforms.end())
-            {
-                throw std::runtime_error("Uniform Parameter not found: " + name);
-            }
-            if (it->second.size != size)
-                throw std::runtime_error("Uniform size mismatch");
-
-            void* mapped;
-            vkMapMemory(
-                device, it->second.memories[frameIndex], 0, size, 0,
-                &mapped);
-            memcpy(mapped, data, size);
-            vkUnmapMemory(device, it->second.memories[frameIndex]);
-                
-            // We need to update the bufferInfo in the descriptor set for the
-            // current frame. Alternatively, you could use dynamic uniform
-            // buffers.
-
-            auto descriptorSet = descriptorSets[frameIndex]; // Update the set for this frame
-            // For this approach, we re-write the descriptor set for this
-            // binding and frame
-            VkDescriptorBufferInfo bufferInfo = it->second.infos[frameIndex];
-                
-            VkWriteDescriptorSet write{};
-            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet = descriptorSet;
-            write.dstBinding = it->second.layoutBinding.binding;
-            write.dstArrayElement = 0;
-            write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            write.descriptorCount = 1;
-            write.pBufferInfo = &bufferInfo;
-
-            vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
-        }
-
-        void ShaderBindingSet::updateTexture(
-            const std::string& name,
-            VkDescriptorSet descriptorSet,
-            const std::shared_ptr<Texture>& texture)
-        {
-            auto it = textures.find(name);
-            if (it == textures.end())
-                throw std::runtime_error(
-                    "Texture binding not found: " + name);
-            if (!texture)
-                throw std::runtime_error("Null texture for: " + name);
-
-            VkDescriptorImageInfo imageInfo{};
-            imageInfo.imageView = texture->getImageView();
-            imageInfo.sampler = texture->getSampler();
-            imageInfo.imageLayout = texture->getImageLayout();
-
-            VkWriteDescriptorSet write{};
-            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet = descriptorSet;
-            write.dstBinding = it->second.binding;
-            write.dstArrayElement = 0;
-            write.descriptorType =
-                VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            write.descriptorCount = 1;
-            write.pImageInfo = &imageInfo;
-
-            vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
-        }
-
-        void ShaderBindingSet::updateFBO(const std::string& name,
-                       VkDescriptorSet descriptorSet,
-                       const std::shared_ptr<OffscreenBuffer>& fbo)
-        {
-            auto it = fbos.find(name);
-            if (it == fbos.end())
-                throw std::runtime_error("FBO binding not found: " + name);
-            if (!fbo)
-                throw std::runtime_error("Null texture for: " + name);
-
-            uint32_t binding = it->second.binding;
-
-            VkDescriptorImageInfo imageInfo{};
-            imageInfo.sampler = fbo->getSampler();
-            imageInfo.imageView = fbo->getImageView();
-            imageInfo.imageLayout =
-                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-
-            VkWriteDescriptorSet write{};
-            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet = descriptorSet;
-            write.dstBinding = binding;
-            write.dstArrayElement = 0;
-            write.descriptorType =
-                VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            write.descriptorCount = 1;
-            write.pImageInfo = &imageInfo;
-
-            vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
-        }
-            
+        
         void ShaderBindingSet::destroy()
         {
             for (auto& [_, ubo] : uniforms)
@@ -146,6 +45,14 @@ namespace tl
                 }
             }
 
+            for (auto& [_, sb] : storageBuffers)
+            {
+                for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+                {
+                    sb.buffers[i].reset();
+                }
+            }
+            
             for (auto& pool : descriptorPools)
             {
                 if (pool != VK_NULL_HANDLE)
@@ -157,7 +64,9 @@ namespace tl
 
             descriptorSets.clear();
             descriptorPools.clear();
-                    
+
+            storageBuffers.clear();
+            storageImages.clear();
             uniforms.clear();
             textures.clear();
             fbos.clear();

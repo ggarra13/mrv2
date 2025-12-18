@@ -51,6 +51,10 @@ namespace tl
         std::string textureFragmentSource();
         std::string differenceFragmentSource();
 
+        // For pixel conversions
+        std::string computeRGB_F16_To_RGBA_F16();
+        std::string computeRGB_F32_To_RGBA_F32();
+        
         // For annotations
         std::string softFragmentSource();
         std::string hardFragmentSource();
@@ -66,11 +70,6 @@ namespace tl
 
         std::vector<std::shared_ptr<vlk::Texture> > getTextures(
             Fl_Vk_Context&, const image::Info&, const timeline::ImageFilters&,
-            size_t offset = 0);
-
-        void copyTextures(
-            const std::shared_ptr<image::Image>&,
-            const std::vector<std::shared_ptr<vlk::Texture> >&,
             size_t offset = 0);
 
         void setActiveTextures(
@@ -165,7 +164,8 @@ namespace tl
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
 
-            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;
+            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex / Fragment
+            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute
             std::unordered_map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
                 buffers;
             std::unordered_map<std::string, VkPipelineLayout> pipelineLayouts;

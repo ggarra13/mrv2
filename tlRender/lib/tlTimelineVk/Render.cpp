@@ -9,6 +9,7 @@
 #include <tlTimelineVk/RenderPrivate.h>
 #include <tlTimelineVk/RenderStructs.h>
 
+#include <tlVk/Buffer.h>
 #include <tlVk/Vk.h>
 #include <tlVk/Mesh.h>
 #include <tlVk/Util.h>
@@ -46,7 +47,53 @@ namespace
             ((x << 8)  & 0x00FF0000) |
             ((x << 24) & 0xFF000000);
     }
-        
+
+    void computeRGBToRGBA(
+        VkCommandBuffer cmd,
+        const std::shared_ptr<tl::vlk::Shader> shader,
+        const uint8_t* data,
+        const std::size_t size,
+        std::shared_ptr<tl::vlk::Texture> outputRGBA)
+    {
+        uint32_t width = outputRGBA->getWidth();
+        uint32_t height = outputRGBA->getHeight();
+
+        // 1. Update Descriptor Set with the specific resources
+        shader->setStorageBuffer("inputBuffer", data, size);
+        shader->setStorageImage("outputImage", outputRGBA);
+
+        // 2. Barrier: Transition Output Image to GENERAL layout for writing
+        VkImageMemoryBarrier beginBarrier = { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+        beginBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        beginBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL; // Required for storage images
+        beginBarrier.srcAccessMask = 0;
+        beginBarrier.dstAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+        beginBarrier.image = outputRGBA->getImage();
+        beginBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+
+        vkCmdPipelineBarrier(cmd, 
+                             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 
+                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 
+                             0, 0, nullptr, 0, nullptr, 1, &beginBarrier);
+
+        // 3. Dispatch the Compute Shader
+        shader->dispatch(cmd, width, height);
+
+        // 4. Barrier: Transition Output Image to SHADER_READ_ONLY for the Fragment Shader
+        VkImageMemoryBarrier endBarrier = { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+        endBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
+        endBarrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        endBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+        endBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+        endBarrier.image = outputRGBA->getImage();
+        endBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+
+        vkCmdPipelineBarrier(cmd, 
+                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 
+                             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 
+                             0, 0, nullptr, 0, nullptr, 1, &endBarrier);
+    }
+    
     // Convert from R10G10B10A2 to Vulkan A2R10G10B10 (ChatGPT)
     void convert_R10G10B10A2_to_A2R10G10B10(
         // DPX buffer (R10G10B10A2) - big endian
@@ -325,11 +372,13 @@ namespace tl
             return out;
         }
 
-        void copyTextures(
+        void Render::copyTextures(
             const std::shared_ptr<image::Image>& image,
             const std::vector<std::shared_ptr<vlk::Texture> >& textures,
             size_t offset)
         {
+            TLRENDER_P();
+            
             const auto& info = image->getInfo();
             switch (info.pixelType)
             {
@@ -613,25 +662,11 @@ namespace tl
                 {
                     const std::size_t w = info.size.w;
                     const std::size_t h = info.size.h;
-                    const uint16_t* src =
-                        reinterpret_cast<uint16_t*>(image->getData());
-                    std::vector<uint16_t> dst(w * h * 4);
-                    uint16_t* out = dst.data();
-                    for (std::size_t y = 0; y < h; ++y)
-                    {
-                        for (std::size_t x = 0; x < w; ++x)
-                        {
-                            *out++ = *src++;
-                            *out++ = *src++;
-                            *out++ = *src++;
-
-                            *out++ = 0x3C00; // 1.0 in IEEE 754
-                        }
-                    }
+                    _createBindingSet(p.compute["rgbf16_to_rgbaf16"]);
+                    computeRGBToRGBA(p.cmd, p.compute["rgbf16_to_rgbaf16"],
+                                     image->getData(), image->getDataByteCount(),
+                                     textures[0]);
                     textures[0]->setRGBToRGBA(false);
-                    textures[0]->copy(
-                        reinterpret_cast<uint8_t*>(dst.data()),
-                        dst.size() * sizeof(uint16_t));
                 }
                 else
                 {
@@ -644,27 +679,11 @@ namespace tl
                 if (textures[0]->getInternalFormat() ==
                     VK_FORMAT_R32G32B32A32_SFLOAT)
                 {
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    const float* src =
-                        reinterpret_cast<float*>(image->getData());
-                    std::vector<float> dst(w * h * 4);
-                    float* out = dst.data();
-                    for (std::size_t y = 0; y < h; ++y)
-                    {
-                        for (std::size_t x = 0; x < w; ++x)
-                        {
-                            *out++ = *src++;
-                            *out++ = *src++;
-                            *out++ = *src++;
-
-                            *out++ = 1.0; // 1.0 in IEEE 754
-                        }
-                    }
+                    _createBindingSet(p.compute["rgbf32_to_rgbaf32"]);
+                    computeRGBToRGBA(p.cmd, p.compute["rgbf32_to_rgbaf32"],
+                                     image->getData(), image->getDataByteCount(),
+                                     textures[0]);
                     textures[0]->setRGBToRGBA(false);
-                    textures[0]->copy(
-                        reinterpret_cast<uint8_t*>(dst.data()),
-                        dst.size() * sizeof(float));
                 }
                 else
                 {
@@ -1216,6 +1235,42 @@ namespace tl
                 p.shaders["wipe"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["wipe"]);
             }
+            if (!p.compute["rgbf16_to_rgbaf16"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.compute["rgbf16_to_rgbaf16"] = vlk::Shader::create(ctx,
+                                                                     rgbf16_to_rgbaf16_Compute_spv,
+                                                                     rgbf16_to_rgbaf16_Compute_spv_len,
+                                                                     "rgbf16_to_rgbaf16");
+#else
+                p.compute["rgbf16_to_rgbaf16"] = vlk::Shader::create(ctx,
+                                                                     computeRGB_F16_To_RGBA_F16(),
+                                                                     "rgbf16_to_rgbaf16");
+#endif
+                p.compute["rgbf16_to_rgbaf16"]->addStorageBuffer("inputBuffer", vlk::kShaderCompute);
+                p.compute["rgbf16_to_rgbaf16"]->addStorageImage("outputImage", vlk::kShaderCompute);
+                _createBindingSet(p.compute["rgbf16_to_rgbaf16"]);
+                p.compute["rgbf16_to_rgbaf16"]->createComputePipeline();
+            }
+            if (!p.compute["rgbf32_to_rgbaf32"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.compute["rgbf32_to_rgbaf32"] = vlk::Shader::create(ctx,
+                                                                     rgbf32_to_rgbaf32_Compute_spv,
+                                                                     rgbf32_to_rgbaf32_Compute_spv_len,
+                                                                     "rgbf32_to_rgbaf32");
+#else
+                p.compute["rgbf32_to_rgbaf32"] = vlk::Shader::create(ctx,
+                                                                     computeRGB_F32_To_RGBA_F32(),
+                                                                     "rgbf32_to_rgbaf32");
+#endif
+                p.compute["rgbf32_to_rgbaf32"]->addStorageBuffer("inputBuffer", vlk::kShaderCompute);
+                p.compute["rgbf32_to_rgbaf32"]->addStorageImage("outputImage", vlk::kShaderCompute);
+                _createBindingSet(p.compute["rgbf32_to_rgbaf32"]);
+                p.compute["rgbf32_to_rgbaf32"]->createComputePipeline();
+            }
+            
+            
             _displayShader();
 
 
@@ -1514,6 +1569,13 @@ namespace tl
                     i.second->bind(p.frameIndex);
                     i.second->setUniform("transform.mvp", p.transform,
                                          vlk::kShaderVertex);
+                }
+            }
+            for(auto& i : p.compute)
+            {
+                if (i.second)
+                {
+                    i.second->bind(p.frameIndex);
                 }
             }
         }
