@@ -179,7 +179,6 @@ namespace tl
             
             _createComputeShader();
         }
-
         
         void Shader::_init(const uint32_t* computeBytes,
                            const uint32_t  computeLength,
