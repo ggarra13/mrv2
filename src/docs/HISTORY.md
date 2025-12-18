@@ -1,3 +1,22 @@
+v1.4.9
+======
+
+mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
+
+mrv2 ships now in two compiled versions:
+
+   - mrv2 with OpenGL backend  (free and donationware)   
+   - vmrv2 with Vulkan backend (free and donationware)
+
+It also ships for many more architectures, so be careful to download the correct one.
+It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).
+
+ChangeLog
+---------
+
+- Improved performance of Vulkan playback of RGB_F16 and RGB_F32 images.
+
+
 v1.4.8
 ======
 
