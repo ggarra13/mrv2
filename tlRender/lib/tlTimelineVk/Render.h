@@ -69,6 +69,13 @@ namespace tl
             //! Get the texture cache.
             const std::shared_ptr<TextureCache>& getTextureCache() const;
 
+            //! Copy textures.
+            void copyTextures(
+                const std::shared_ptr<image::Image>&,
+                const std::vector<std::shared_ptr<vlk::Texture> >&,
+                size_t offset = 0);
+
+
             //! Overriden begin function
             void begin(
                 const math::Size2i&, const timeline::RenderOptions& =

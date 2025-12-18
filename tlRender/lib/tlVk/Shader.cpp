@@ -388,6 +388,34 @@ namespace tl
         {
         }
 
+        
+        void Shader::setStorageBuffer(
+            const std::string& name, 
+            VkBuffer buffer, 
+            VkDeviceSize size)
+        {
+            if (!activeBindingSet)
+                throw std::runtime_error("No activeBindingSet for Shader " + name);
+    
+            // We pass the specific buffer and size to the binding set
+            activeBindingSet->updateStorageBuffer(name, 
+                                                  activeBindingSet->getDescriptorSet(frameIndex), 
+                                                  buffer, 
+                                                  size);
+        }
+
+        void Shader::setStorageImage(
+            const std::string& name, 
+            const std::shared_ptr<Texture>& texture)
+        {
+            if (!activeBindingSet)
+                throw std::runtime_error("No activeBindingSet for Shader " + name);
+    
+            activeBindingSet->updateStorageImage(name, 
+                                                 activeBindingSet->getDescriptorSet(frameIndex), 
+                                                 texture);
+        }
+
         void Shader::debugVertexDescriptorSets()
         {
 
@@ -886,6 +914,24 @@ namespace tl
                 fboInfo.binding = fboBinding.binding;
                 fboInfo.stageFlags = fboBinding.stageFlags;
                 bindingSet->fbos[name] = fboInfo;
+            }
+            
+            // Step 6: Storage Buffer bindings
+            for (const auto& [name, storageBinding] : storageBufferBindings)
+            {
+                ShaderBindingSet::StorageBufferParameter storageInfo;
+                storageInfo.binding = storageBinding.binding;
+                storageInfo.stageFlags = storageBinding.stageFlags;
+                bindingSet->storageBuffers[name] = storageInfo;
+            }
+            
+            // Step 7: Storage Image bindings
+            for (const auto& [name, imageBinding] : storageImageBindings)
+            {
+                ShaderBindingSet::StorageImageParameter imageInfo;
+                imageInfo.binding = imageBinding.binding;
+                imageInfo.stageFlags = imageBinding.stageFlags;
+                bindingSet->storageImages[name] = imageInfo;
             }
 
             // Make this set active

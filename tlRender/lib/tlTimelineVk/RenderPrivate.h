@@ -71,11 +71,6 @@ namespace tl
             Fl_Vk_Context&, const image::Info&, const timeline::ImageFilters&,
             size_t offset = 0);
 
-        void copyTextures(
-            const std::shared_ptr<image::Image>&,
-            const std::vector<std::shared_ptr<vlk::Texture> >&,
-            size_t offset = 0);
-
         void setActiveTextures(
             const image::Info& info,
             const std::vector<std::shared_ptr<vlk::Texture> >&,
@@ -168,8 +163,8 @@ namespace tl
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
 
-            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex/Fragment shaders
-            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute shaders
+            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex / Fragment
+            std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute
             std::unordered_map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
                 buffers;
             std::unordered_map<std::string, VkPipelineLayout> pipelineLayouts;

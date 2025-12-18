@@ -9,6 +9,7 @@
 #include <tlTimelineVk/RenderPrivate.h>
 #include <tlTimelineVk/RenderStructs.h>
 
+#include <tlVk/Buffer.h>
 #include <tlVk/Vk.h>
 #include <tlVk/Mesh.h>
 #include <tlVk/Util.h>
@@ -46,7 +47,53 @@ namespace
             ((x << 8)  & 0x00FF0000) |
             ((x << 24) & 0xFF000000);
     }
-        
+
+    void computeRGBToRGBA(
+        VkCommandBuffer cmd,
+        const std::shared_ptr<tl::vlk::Shader> shader,
+        VkBuffer inputBuffer,
+        VkDeviceSize inputBufferSize,
+        std::shared_ptr<tl::vlk::Texture> outputRGBA)
+    {
+        uint32_t width = outputRGBA->getWidth();
+        uint32_t height = outputRGBA->getHeight();
+
+        // 1. Update Descriptor Set with the specific resources
+        shader->setStorageBuffer("inputBuffer", inputBuffer, inputBufferSize);
+        // shader->setStorageImage("outputImage", outputRGBA);
+
+        // 2. Barrier: Transition Output Image to GENERAL layout for writing
+        VkImageMemoryBarrier beginBarrier = { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+        beginBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        beginBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL; // Required for storage images
+        beginBarrier.srcAccessMask = 0;
+        beginBarrier.dstAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+        beginBarrier.image = outputRGBA->getImage();
+        beginBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+
+        vkCmdPipelineBarrier(cmd, 
+                             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 
+                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 
+                             0, 0, nullptr, 0, nullptr, 1, &beginBarrier);
+
+        // 3. Dispatch the Compute Shader
+        shader->dispatch(cmd, width, height);
+
+        // 4. Barrier: Transition Output Image to SHADER_READ_ONLY for the Fragment Shader
+        VkImageMemoryBarrier endBarrier = { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+        endBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
+        endBarrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        endBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+        endBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+        endBarrier.image = outputRGBA->getImage();
+        endBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+
+        vkCmdPipelineBarrier(cmd, 
+                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 
+                             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 
+                             0, 0, nullptr, 0, nullptr, 1, &endBarrier);
+    }
+    
     // Convert from R10G10B10A2 to Vulkan A2R10G10B10 (ChatGPT)
     void convert_R10G10B10A2_to_A2R10G10B10(
         // DPX buffer (R10G10B10A2) - big endian
@@ -325,11 +372,13 @@ namespace tl
             return out;
         }
 
-        void copyTextures(
+        void Render::copyTextures(
             const std::shared_ptr<image::Image>& image,
             const std::vector<std::shared_ptr<vlk::Texture> >& textures,
             size_t offset)
         {
+            TLRENDER_P();
+            
             const auto& info = image->getInfo();
             switch (info.pixelType)
             {
@@ -613,6 +662,16 @@ namespace tl
                 {
                     const std::size_t w = info.size.w;
                     const std::size_t h = info.size.h;
+#if 1
+                    auto input = vlk::Buffer::create(ctx,
+                                                     w * h * 3 * sizeof(uint16_t));
+                    input->upload(image->getData());
+                    _createBindingSet(p.compute["rgbf16_to_rgbaf16"]);
+                    computeRGBToRGBA(p.cmd, p.compute["rgbf16_to_rgbaf16"],
+                                     input->getBuffer(), input->getBufferSize(),
+                                     textures[0]);
+                    textures[0]->setRGBToRGBA(false);
+#else
                     const uint16_t* src =
                         reinterpret_cast<uint16_t*>(image->getData());
                     std::vector<uint16_t> dst(w * h * 4);
@@ -632,6 +691,7 @@ namespace tl
                     textures[0]->copy(
                         reinterpret_cast<uint8_t*>(dst.data()),
                         dst.size() * sizeof(uint16_t));
+#endif
                 }
                 else
                 {
@@ -1224,6 +1284,7 @@ namespace tl
                 p.compute["rgbf16_to_rgbaf16"]->addStorageBuffer("inputBuffer", vlk::kShaderCompute);
                 p.compute["rgbf16_to_rgbaf16"]->addStorageImage("outputImage", vlk::kShaderCompute);
                 _createBindingSet(p.compute["rgbf16_to_rgbaf16"]);
+                p.compute["rgbf16_to_rgbaf16"]->createComputePipeline();
             }
             
             

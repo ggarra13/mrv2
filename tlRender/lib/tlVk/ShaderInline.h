@@ -53,34 +53,5 @@ namespace tl
             pushStageFlags = getVulkanShaderFlags(stageFlags);
         }
 
-        inline
-        void Shader::setStorageBuffer(
-            const std::string& name, 
-            VkBuffer buffer, 
-            VkDeviceSize size)
-        {
-            if (!activeBindingSet)
-                throw std::runtime_error("No activeBindingSet for Shader " + name);
-    
-            // We pass the specific buffer and size to the binding set
-            activeBindingSet->updateStorageBuffer(name, 
-                                                  activeBindingSet->getDescriptorSet(frameIndex), 
-                                                  buffer, 
-                                                  size);
-        }
-
-        inline
-        void Shader::setStorageImage(
-            const std::string& name, 
-            const std::shared_ptr<Texture>& texture)
-        {
-            if (!activeBindingSet)
-                throw std::runtime_error("No activeBindingSet for Shader " + name);
-    
-            activeBindingSet->updateStorageImage(name, 
-                                                 activeBindingSet->getDescriptorSet(frameIndex), 
-                                                 texture);
-        }
-        
     } // namespace vlk
 } // namespace tl

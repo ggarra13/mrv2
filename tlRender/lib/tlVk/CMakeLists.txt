@@ -1,4 +1,5 @@
 set(HEADERS
+    Buffer.h
     Init.h
     Mesh.h
     OffscreenBuffer.h
@@ -10,6 +11,7 @@ set(HEADERS
 set(PRIVATE_HEADERS)
 
 set(SOURCE
+    Buffer.cpp
     Init.cpp
     Mesh.cpp
     OffscreenBuffer.cpp
