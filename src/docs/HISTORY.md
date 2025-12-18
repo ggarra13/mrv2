@@ -15,6 +15,8 @@ ChangeLog
 ---------
 
 - Improved performance of Vulkan playback of RGB_F16 and RGB_F32 images.
+  While it still does not achieve quite 60FPS, you'll get 35-40FPS with an old
+  card, currently surpassing the OpenGL backend.
 
 
 v1.4.8
