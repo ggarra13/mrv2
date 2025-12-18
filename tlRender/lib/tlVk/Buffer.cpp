@@ -2,6 +2,8 @@
 #include <tlVk/Buffer.h>
 #include <tlVk/Vk.h>
 
+#include <FL/Fl_Vk_Utils.H>
+
 #include <memory>
 #include <stdexcept>
 #include <cstring>
@@ -20,6 +22,8 @@ namespace tl
 #else
             VmaAllocation allocation = VK_NULL_HANDLE;
 #endif
+            
+            void* mappedPtr = nullptr;
         };
 
         Buffer::~Buffer()
@@ -31,7 +35,14 @@ namespace tl
 
 #ifdef MRV2_NO_VMA
             if (p.buffer != VK_NULL_HANDLE)
+            {
                 vkDestroyBuffer(device, p.buffer, nullptr);
+            }
+            
+            if (p.bufferMemory != VK_NULL_HANDLE)
+            {
+                vkFreeMemory(device, p.bufferMemory, nullptr);
+            }
 #else            
             if (p.buffer != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
             {
@@ -56,6 +67,21 @@ namespace tl
             if (vkCreateBuffer(device, &bufferInfo, nullptr, &p.buffer) != VK_SUCCESS)
                 throw std::runtime_error("Failed to create persistent vertex buffer");
 
+            VkMemoryRequirements memRequirements;
+            vkGetBufferMemoryRequirements(device, p.buffer, &memRequirements);
+            
+            VkMemoryAllocateInfo allocInfo{};
+            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.allocationSize = memRequirements.size;
+            allocInfo.memoryTypeIndex = findMemoryType(
+                gpu, memRequirements.memoryTypeBits,
+                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+            if (vkAllocateMemory(device, &allocInfo, nullptr, &p.bufferMemory) != VK_SUCCESS)
+                throw std::runtime_error("Failed to allocate persistent vertex memory");
+
+            vkBindBufferMemory(device, p.buffer, p.bufferMemory, 0);
 #else
             VmaAllocationCreateInfo allocCreateInfo = {};
             allocCreateInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU; // Maps to Host Visible + Coherent
@@ -65,6 +91,12 @@ namespace tl
                                 &p.allocation, &allocInfo) != VK_SUCCESS)
             {
                 throw std::runtime_error("Failed to create vertex buffer with VMA");
+            }
+            
+            p.mappedPtr = allocInfo.pMappedData;
+            if (!p.mappedPtr)
+            {
+                throw std::runtime_error("Failed to get mapped pointer from VMA");
             }
 #endif
         }
@@ -100,9 +132,9 @@ namespace tl
             void* mapped = nullptr;
 #ifdef MRV2_NO_VMA
             // Host-visible upload (like glTexSubImage2D)
-            VK_CHECK(vkMapMemory(device, p.memory, 0, size, 0, &mapped));
+            VK_CHECK(vkMapMemory(device, p.bufferMemory, 0, size, 0, &mapped));
             std::memcpy(mapped, data, size);
-            vkUnmapMemory(device, p.memory);
+            vkUnmapMemory(device, p.bufferMemory);
 #else
             // Host-visible upload (like glTexSubImage2D)
             VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation, &mapped));
