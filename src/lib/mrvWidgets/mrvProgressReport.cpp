@@ -79,16 +79,21 @@ namespace mrv
     void ProgressReport::set_start(int64_t value)
     {
         _frame = _start = value;
+        if (progress)
+            progress->minimum(value);
     }
     
     void ProgressReport::set_end(int64_t value)
     {
         _end = value;
+        if (progress)
+            progress->maximum(value);
     }
 
     void ProgressReport::set_title(const char* title)
     {
-        progress->copy_label(title);
+        if (progress)
+            progress->copy_label(title);
     }
     
     void ProgressReport::show()
@@ -109,6 +114,9 @@ namespace mrv
 
     void ProgressReport::set_value(const int64_t value)
     {
+        if (!progress)
+            return;
+        _frame = value;
         progress->value(value);
         tick();
     }
@@ -139,6 +147,8 @@ namespace mrv
         int64_t frame_diff = _end - _frame;
         if (frame_diff > 0 && _actualFrameRate > 0)
             r = frame_diff / _actualFrameRate * 1000.0;
+        else
+            r = frame_diff * 1000;
 
         to_hour_min_sec(r, hour, min, sec, ms);
 
@@ -146,32 +156,28 @@ namespace mrv
         remain->value(buf);
 
         //
-        // Calculate our actual frame rate, averaged over several frames.
+        // Calculate our actual frame rate.
         //
+        std::chrono::duration<float> diff = now - _lastFpsFrameTime;
 
-        if (_framesSinceLastFpsFrame >= 24)
-        {
-            std::chrono::duration<float> diff = now - _lastFpsFrameTime;
+        float t = diff.count();
+        if (t > 0)
+            _actualFrameRate = 1 / t;
 
-            float t = diff.count();
-            if (t > 0)
-                _actualFrameRate = _framesSinceLastFpsFrame / t;
-
-            _framesSinceLastFpsFrame = 0;
-
-            snprintf(buf, 120, " %3.2f", _actualFrameRate);
-            fps->value(buf);
-        }
+        snprintf(buf, 120, " %3.2f", _actualFrameRate);
+        fps->value(buf);
 
         if (_framesSinceLastFpsFrame == 0)
             _lastFpsFrameTime = now;
-
-        ++_framesSinceLastFpsFrame;
 
         if (w && !w->visible())
         {
             delete w;
             w = nullptr;
+            progress = nullptr;
+            fps = nullptr;
+            remain = nullptr;
+            elapsed = nullptr;
             return false;
         }
 

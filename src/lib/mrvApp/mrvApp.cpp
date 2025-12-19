@@ -1393,67 +1393,51 @@ namespace mrv
     {
         TLRENDER_P();
         const timeline::Playback& playback = p.options.playback;
-        const auto& time = p.player->currentTime();    
+        const auto& time = p.player->currentTime();
+        const auto& cache = p.player->player()->observeCacheOptions()->get();
+        const auto& rate = time.rate();
+        const auto& timeRange = p.player->inOutRange();
+
+        // Rescale ahead/behind to current rate
+        const auto readAhead = cache.readAhead.rescaled_to(rate);
+        const auto readBehind = cache.readBehind.rescaled_to(rate);
 
         if (playback != timeline::Playback::Reverse)
         {
-            const auto& cache =
-                p.player->player()->observeCacheOptions()->get();
-            const auto& rate = time.rate();
-            const auto& readAhead =
-                cache.readAhead.rescaled_to(rate);
-            const auto& readBehind =
-                cache.readBehind.rescaled_to(rate);
-            const auto& timeRange = p.player->inOutRange();
-
+            // FORWARD: We care about the current time plus readAhead
             startTime = time;
             endTime = time + readAhead;
-            if (endTime >= timeRange.end_time_exclusive())
-            {
-                endTime = timeRange.end_time_exclusive();
-            }
 
-            // Avoid rounding errors
-            endTime = endTime.floor();
-            startTime = startTime.ceil();
+            if (endTime >= timeRange.end_time_exclusive())
+                endTime = timeRange.end_time_exclusive();
         }
         else
         {
-            const auto& cache =
-                p.player->player()->observeCacheOptions()->get();
-            const auto& rate = time.rate();
-            const auto& readAhead =
-                cache.readAhead.rescaled_to(rate);
-            const auto& readBehind =
-                cache.readBehind.rescaled_to(rate);
-            const auto& timeRange = p.player->inOutRange();
+            // REVERSE: The "Future" is actually the past (lower frame numbers)
+            // Note: tlRender's reverse cache usually fills from 'time' backwards
+            startTime = time - readAhead;
+            endTime = time; 
 
-            startTime = time + readBehind;
-            endTime = time - readAhead;
-            if (endTime < timeRange.start_time())
+            if (startTime < timeRange.start_time())
             {
-                auto diff = timeRange.start_time() - endTime;
+                // Calculate how much we went past the start
+                auto overflow = timeRange.start_time() - startTime;
+            
+                // Wrap to the end of the timeline
                 endTime = timeRange.end_time_exclusive();
-                startTime = endTime - diff;
-
-                // Check in case of negative frames
-                if (startTime > endTime)
-                    startTime = endTime;
+                startTime = endTime - overflow;
             }
-
-            // Sanity check just in case
-            if (endTime < startTime)
-            {
-                const auto tmp = endTime;
-                endTime = startTime;
-                startTime = tmp;
-            }
-
-            // Avoid rounding errors
-            endTime = endTime.floor();
-            startTime = startTime.ceil();
         }
-        
+
+        // Crucial: Floor/Ceil BEFORE returning to ensure integer frame boundaries
+        // We want the start to be the very beginning of the frame and 
+        // the end to be the very end of the range.
+        startTime = startTime.floor();
+        endTime = endTime.ceil();
+    
+        // Final Clamp to ensure we never exceed physical timeline limits
+        if (startTime < timeRange.start_time()) startTime = timeRange.start_time();
+        if (endTime > timeRange.end_time_exclusive()) endTime = timeRange.end_time_exclusive();
     }
     
     void App::startPlayback()
@@ -1520,41 +1504,51 @@ namespace mrv
 
                             otime::RationalTime startTime, endTime;
                             _calculateCacheTimes(startTime, endTime);
-                            
-                            // std::cerr << "in line " << __LINE__
-                            //           << " "
-                            //           << value.videoFrames.size()
-                            //           << std::endl;
-                            
-                            
-                            // Keep UI responsive
-                            if (p.progress)
-                            {
-                                if (!p.progress->tick())
-                                {
-                                    delete p.progress;
-                                    p.progress = nullptr;
-                                    ui->uiView->setPlayback(playback);
-                                    p.cacheInfoObserver.reset();
-                                    return;
-                                }
-                            }
-                            else
-                            {
-                                Fl::check();
-                            }
 
+                            // 1. Calculate the total duration we are waiting for
+                            // We use the rate of the startTime to ensure we are working in frame units
+                            double totalFrames = (endTime - startTime).to_frames();
+                            
+                            // 2. Calculate how much of that specific range is actually cached
+                            double cachedFramesInRange = 0;
                             for (const auto& t : value.videoFrames)
                             {
-                                if (t.start_time() <= startTime &&
-                                    t.end_time_exclusive() >= endTime)
-                                {
-                                    delete p.progress;
-                                    p.progress = nullptr;
-                                    ui->uiView->setPlayback(playback);
-                                    p.cacheInfoObserver.reset();
-                                    return;
+                                // Clip the cached segment to our specific start/end window
+                                otime::TimeRange cachedRange = t;
+                                if (cachedRange.start_time() <= startTime) {
+                                    // adjust start
+                                    auto diff = startTime - cachedRange.start_time();
+                                    cachedRange = otime::TimeRange(startTime, cachedRange.duration() - diff);
                                 }
+                                if (cachedRange.end_time_exclusive() >= endTime) {
+                                    // adjust end
+                                    auto newDuration = endTime - cachedRange.start_time();
+                                    cachedRange = otime::TimeRange(cachedRange.start_time(), newDuration);
+                                }
+
+                                // If the resulting range is valid, add its duration to our count
+                                if (cachedRange.duration().value() > 0) {
+                                    cachedFramesInRange += cachedRange.duration().to_frames();
+                                }
+                            }
+
+                           // 3. Update the progress bar
+                            if (p.progress) {
+                                // Set the range if your progress bar allows it, 
+                                // or map cachedFramesInRange / totalFrames to a 0-100 scale
+                                p.progress->set_start(0);
+                                p.progress->set_end(static_cast<int64_t>(totalFrames));
+                                p.progress->set_value(static_cast<int64_t>(cachedFramesInRange));
+                            }
+
+                            // If the number of cached frames meets or exceeds the requested range
+                            if (cachedFramesInRange >= totalFrames)
+                            {
+                                delete p.progress;
+                                p.progress = nullptr;
+                                ui->uiView->setPlayback(playback);
+                                p.cacheInfoObserver.reset();
+                                return;
                             }
                         });
         }
@@ -1570,35 +1564,69 @@ namespace mrv
                             
                             otime::RationalTime startTime, endTime;
                             _calculateCacheTimes(startTime, endTime);
+
+                            // 1. Calculate the total duration we are waiting for
+                            // We use the rate of the startTime to ensure we are working in frame units
+                            double totalFrames = std::abs((endTime - startTime).to_frames());
+                            if (totalFrames == 0) totalFrames = 1; // Prevent division by zero
+
+                            std::cerr << "totalFrames = " << totalFrames << std::endl;
                             
-                            // Keep UI responsive
-                            if (p.progress)
-                            {
-                                if (!p.progress->tick())   
-                                {
-                                    delete p.progress;
-                                    p.progress = nullptr;
-                                    ui->uiView->setPlayback(playback);
-                                    p.cacheInfoObserver.reset();
-                                    return;
+                            // Ensure we always have a valid range to compare against, regardless of direction
+                            otime::TimeRange targetRange = otime::TimeRange::range_from_start_end_time(
+                                std::min(startTime, endTime), 
+                                std::max(startTime, endTime)
+);
+                            // 3. Define the ranges to check
+                            // We use a vector because in a wrap-around, there are two segments
+                            std::vector<otime::TimeRange> searchRanges;
+
+                            if (startTime <= endTime) {
+                                // Linear case (Forward or simple Reverse)
+                                searchRanges.push_back(otime::TimeRange::range_from_start_end_time(startTime, endTime));
+                            } else {
+                                // Wrap-around case (Reverse playback hit the start and jumped to end)
+                                const auto& timeRange = p.player->inOutRange();
+    
+                                // Segment A: from the start of the timeline to the current "end" (which is actually the playhead)
+                                searchRanges.push_back(otime::TimeRange::range_from_start_end_time(timeRange.start_time(), endTime));
+                                
+                                // Segment B: from the calculated "start" to the end of the timeline
+                                searchRanges.push_back(otime::TimeRange::range_from_start_end_time(startTime, timeRange.end_time_exclusive()));
+                            }
+                            
+                            // 3. Count cached frames in all active segments
+                            double cachedFramesInRange = 0;
+                            for (const auto& targetRange : searchRanges) {
+                                for (const auto& t : value.videoFrames) {
+                                    if (t.intersects(targetRange)) {
+                                        auto overlapStart = std::max(t.start_time(), targetRange.start_time());
+                                        auto overlapEnd = std::min(t.end_time_exclusive(), targetRange.end_time_exclusive());
+                                        
+                                        if (overlapEnd > overlapStart) {
+                                            cachedFramesInRange += (overlapEnd - overlapStart).to_frames();
+                                        }
+                                    }
                                 }
                             }
-                            else
-                            {
-                                Fl::check();
+
+                           // 3. Update the progress bar
+                            if (p.progress) {
+                                // Set the range if your progress bar allows it, 
+                                // or map cachedFramesInRange / totalFrames to a 0-100 scale
+                                p.progress->set_start(0);
+                                p.progress->set_end(static_cast<int64_t>(totalFrames));
+                                p.progress->set_value(static_cast<int64_t>(cachedFramesInRange));
                             }
-                            
-                            for (const auto& t : value.videoFrames)
+
+                            // If the number of cached frames meets or exceeds the requested range
+                            if (cachedFramesInRange >= totalFrames)
                             {
-                                if (t.start_time() <= startTime &&
-                                    t.end_time_exclusive() >= endTime)
-                                {
-                                    delete p.progress;
-                                    p.progress = nullptr;
-                                    ui->uiView->setPlayback(playback);
-                                    p.cacheInfoObserver.reset();
-                                    break;
-                                }
+                                delete p.progress;
+                                p.progress = nullptr;
+                                ui->uiView->setPlayback(playback);
+                                p.cacheInfoObserver.reset();
+                                return;
                             }
                         });
         }
