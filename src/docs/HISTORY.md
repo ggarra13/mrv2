@@ -15,8 +15,9 @@ ChangeLog
 ---------
 
 - Improved performance of Vulkan playback of RGB_F16 and RGB_F32 images.
-  While it still does not achieve quite 60FPS, you'll get 35-40FPS with an old
-  card, currently surpassing the OpenGL backend which achieves 7-15PFS.
+  While it still does not achieve quite 60FPS, you'll get 35-40FPS.
+  If you want 60FPS or more, you should stick to playing RGBA_F16 or RGBA_F32
+  sequences.
 
 
 v1.4.8
