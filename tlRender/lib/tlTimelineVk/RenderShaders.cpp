@@ -507,11 +507,6 @@ vec4 softClipFunc(vec4 value, float softClip)
     return value;
 }
 
-float knee(float value, float f)
-{
-    return log(value * f + 1.0) / f;
-}
-
 vec4 normalizeFunc(vec4 value, Normalize data)
 {
     value[0] = (value[0] - data.minimum[0]) / 
