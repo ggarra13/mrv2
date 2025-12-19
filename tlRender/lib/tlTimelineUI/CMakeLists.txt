@@ -1,5 +1,6 @@
 set(HEADERS
     AudioClipItem.h
+    EffectItem.h
     GapItem.h
     IBasicItem.h
     IItem.h
@@ -14,6 +15,7 @@ set(HEADERS_PRIVATE
 
 set(SOURCE
     AudioClipItem.cpp
+    EffectItem.cpp
     GapItem.cpp
     IBasicItem.cpp
     IItem.cpp

@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
 #pragma once
 
 #include <tlTimelineUI/ThumbnailSystem.h>
 #include <tlTimelineUI/TimelineItem.h>
+#include <tlTimelineUI/EffectItem.h>
 #include <tlTimelineUI/TransitionItem.h>
 
 #include <tlUI/Label.h>
@@ -39,10 +41,16 @@ namespace tl
                 otime::TimeRange timeRange;
                 std::shared_ptr<ui::Label> label;
                 std::shared_ptr<ui::Label> durationLabel;
+
                 std::vector<std::shared_ptr<IItem> > items;
                 std::vector<int> otioIndexes;
+                
+                std::map<int, std::vector<std::shared_ptr<EffectItem> > > effects;
+                
+
                 std::vector<std::shared_ptr<TransitionItem> > transitions;
                 std::vector<int> otioTransitionIndexes;
+
                 math::Size2i size;
                 int clipHeight = 0;
             };

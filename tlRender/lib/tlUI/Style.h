@@ -71,6 +71,7 @@ namespace tl
             AudioClip,
             AudioGap,
             Transition,
+            Effect,
 
             Red,
             Green,

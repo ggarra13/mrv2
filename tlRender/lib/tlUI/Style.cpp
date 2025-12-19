@@ -73,6 +73,7 @@ namespace tl
             "AudioClip",
             "AudioGap",
             "Transition",
+            "Effect",
 
             "Red", "Green", "Blue", "Cyan", "Magenta", "Yellow");
         TLRENDER_ENUM_SERIALIZE_IMPL(ColorRole);
@@ -105,6 +106,7 @@ namespace tl
             out[ColorRole::AudioClip] = image::Color4f(.3F, .25F, .4F);
             out[ColorRole::AudioGap] = image::Color4f(.25F, .24F, .3F);
             out[ColorRole::Transition] = image::Color4f(.4F, .3F, .3F);
+            out[ColorRole::Effect] = image::Color4f(.3F, .3F, .4F);
 
             out[ColorRole::Red] = image::Color4f(.6F, .3F, .3F);
             out[ColorRole::Green] = image::Color4f(.3F, .6F, .3F);

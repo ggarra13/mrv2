@@ -18,6 +18,8 @@ ChangeLog
   While it still does not achieve quite 60FPS, you'll get 35-40FPS.
   If you want 60FPS or more, you should stick to playing RGBA_F16 or RGBA_F32
   sequences.
+- Added support for Darby's toucan:Dissolves.
+- Fixed Roll and Trim being reversed.
 
 
 v1.4.8

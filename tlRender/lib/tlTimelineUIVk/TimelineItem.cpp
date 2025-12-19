@@ -8,6 +8,7 @@
 #include <tlTimelineUIVk/AudioClipItem.h>
 #include <tlTimelineUIVk/GapItem.h>
 #include <tlTimelineUIVk/VideoClipItem.h>
+#include <tlTimelineUIVk/EffectItem.h>
 
 #include <tlUI/DrawUtil.h>
 #include <tlUI/ScrollArea.h>
@@ -121,6 +122,24 @@ namespace tl
                                 break;
                             }
                             track.otioIndexes.push_back(otioIndex);
+
+                            auto effects = clip->effects();
+                            std::vector<std::shared_ptr<EffectItem> > effectItems;
+
+                            otio::Item* item = clip;
+                            
+                            effectItems.reserve(effects.size());
+                            for (const auto effect : effects)
+                            {
+                                effectItems.push_back(EffectItem::create(
+                                                          effect, item, scale, options, displayOptions,
+                                                          itemData, context, shared_from_this()));
+                            }
+
+                            if (!effectItems.empty())
+                            {
+                                track.effects[otioIndex] = effectItems;
+                            }
                         }
                         else if (
                             auto gap =
@@ -311,6 +330,31 @@ namespace tl
                                 _scale,
                         y + std::max(labelSizeHint.h, durationSizeHint.h),
                         sizeHint.w, track.clipHeight));
+
+                    for (auto index : track.otioIndexes)
+                    {
+                        auto i = track.effects.find(index);
+                        if (i == track.effects.end())
+                            continue;
+
+                        auto effects = i->second;
+                        int effectsY = y;
+                        for (const auto& effect : effects)
+                        {
+                            const math::Size2i& sizeHint = effect->getSizeHint();
+                        
+                            const otime::TimeRange& timeRange =
+                                effect->getTimeRange();
+                            effect->setGeometry(math::Box2i(
+                                                    _geometry.min.x + timeRange.start_time()
+                                                    .rescaled_to(1.0)
+                                                    .value() *
+                                                    _scale,
+                                                    effectsY, sizeHint.w, sizeHint.h));
+
+                            effectsY += sizeHint.h;
+                        }
+                    }
                 }
 
                 if (visible)
