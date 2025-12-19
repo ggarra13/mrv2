@@ -15,6 +15,9 @@
 #include <Shlobj.h>
 #include <shellapi.h>
 
+
+#include <FL/fl_utf8.h>
+
 #include <locale>
 
 namespace tl
