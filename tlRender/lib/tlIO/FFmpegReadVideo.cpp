@@ -228,12 +228,14 @@ namespace tl
 
             //
             // If we are potentially reading a .webp sequence, add a format
-            // specifier to it.
+            // specifier to it to read a sequence of frames if available.
             // 
             std::string formatFileName = fileName;
             file::Path path(fileName);
             const std::string& extension = path.getExtension();
-            if (extension == ".webp" && !path.getNumber().empty())
+            if (string::compare(extension, ".webp",
+                                string::CaseInsensitive) &&
+                !path.getNumber().empty())
             {
                 char buf[4096];
                 const std::string& directory = path.getDirectory();

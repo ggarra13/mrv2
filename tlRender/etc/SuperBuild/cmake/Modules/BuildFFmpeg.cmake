@@ -3,6 +3,8 @@ include(ExternalProject)
 include(ProcessorCount)
 ProcessorCount(NPROCS)
 
+set(FFmpeg_VERSION 8.0)
+
 set(FFmpeg_DEPENDENCIES ZLIB ${OpenSSL_DEP})
 if(NOT WIN32)
     list(APPEND FFmpeg_DEPENDENCIES NASM)
@@ -575,24 +577,32 @@ else()
     set(FFmpeg_INSTALL make install)
     list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
 endif()
-
-set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
-
+#
 # Ensure the directory exists
+#
 message(STATUS "Creating directory ${CMAKE_CURRENT_BINARY_DIR}/")
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/")
+
+#
+# Create the ffmpeg_configure.sh file (used only on Windows for now)
+#
 message(STATUS "Creating ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/")
+
+set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh
     ${FFmpeg_CONFIGURE_CONTENTS}
 )
 
+#
+# Print out FFmpeg's Dependencies
+#
 message(STATUS "FFmpeg DEPENDENCIES=${FFmpeg_DEPENDENCIES}")
 
 ExternalProject_Add(
     FFmpeg
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg
     DEPENDS ${FFmpeg_DEPENDENCIES}
-    URL https://ffmpeg.org/releases/ffmpeg-8.0.tar.bz2
+    URL https://ffmpeg.org/releases/ffmpeg-${FFmpeg_VERSION}.tar.bz2
     PATCH_COMMAND ${FFmpeg_PATCH}
     CONFIGURE_COMMAND ${FFmpeg_CONFIGURE}
     BUILD_COMMAND ${FFmpeg_BUILD}
