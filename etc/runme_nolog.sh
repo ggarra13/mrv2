@@ -178,8 +178,8 @@ if [ -z "$TLRENDER_LIBPLACEBO" ]; then
     fi
 fi
 
-if [ -z "$TLRENDER_LOCAL" ]; then
-    export TLRENDER_LOCAL=OFF
+if [ -z "$TLRENDER_LIBWEBP" ]; then
+    export TLRENDER_LIBWEBP=OFF
 fi
 
 if [ -z "$TLRENDER_NDI_SDK" ]; then
@@ -411,6 +411,7 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     fi
     echo "    HAP/Snappy codec support ....... ${TLRENDER_HAP} 	(TLRENDER_HAP)"
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
+    echo "    WebP codec support ............. ${TLRENDER_LIBWEBP}		(TLRENDER_LIBWEBP)"
     echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
     echo "    libplacebo support ............. ${TLRENDER_LIBPLACEBO}         (TLRENDER_LIBPLACEBO)"
 fi
@@ -503,6 +504,7 @@ cmd="cmake -G 'Ninja'
            -D TLRENDER_HAP=${TLRENDER_HAP}
            -D TLRENDER_JPEG=${TLRENDER_JPEG}
            -D TLRENDER_LIBPLACEBO=${TLRENDER_LIBPLACEBO}
+	   -D TLRENDER_LIBWEBP=${TLRENDER_LIBWEBP}
 	   -D TLRENDER_NDI=${TLRENDER_NDI}
 	   -D TLRENDER_NET=${TLRENDER_NET}
 	   -D TLRENDER_NFD=OFF

@@ -226,14 +226,36 @@ namespace tl
                 _avFormatContext->pb = _avIOContext;
             }
 
+            //
+            // If we are potentially reading a .webp sequence, add a format
+            // specifier to it.
+            // 
+            std::string formatFileName = fileName;
+            file::Path path(fileName);
+            const std::string& extension = path.getExtension();
+            if (extension == ".webp")
+            {
+                char buf[4096];
+                const std::string& directory = path.getDirectory();
+                const std::string& baseName  = path.getBaseName();
+                const std::string& extension = path.getExtension();
+                const int padding = path.getPadding();
+                sprintf(buf, "%s%s%%0%dd%s",
+                        directory.c_str(),
+                        baseName.c_str(),
+                        padding,
+                        extension.c_str());
+                formatFileName = buf;
+            }
+
             int r = avformat_open_input(
                 &_avFormatContext,
-                !_avFormatContext ? fileName.c_str() : nullptr, nullptr,
+                !_avFormatContext ? formatFileName.c_str() : nullptr, nullptr,
                 nullptr);
             if (r < 0)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(fileName)
+                                             .arg(formatFileName)
                                              .arg(getErrorLabel(r)));
             }
 
@@ -291,6 +313,7 @@ namespace tl
                     }
                 }
             }
+
             std::string timecode = getTimecodeFromDataStream(_avFormatContext);
             if (_avStream != -1)
             {
@@ -361,6 +384,7 @@ namespace tl
                         string::Format("{0}: Cannot allocate context")
                             .arg(fileName));
                 }
+
                 r = avcodec_parameters_to_context(
                     _avCodecContext[_avStream], _avCodecParameters[_avStream]);
                 if (r < 0)
@@ -407,8 +431,12 @@ namespace tl
                 _avInputPixelFormat = static_cast<AVPixelFormat>(
                     _avCodecParameters[_avStream]->format);
 
-                _tags["FFmpeg Pixel Format"] =
-                    av_get_pix_fmt_name(_avInputPixelFormat);
+                const char* pixel_format = av_get_pix_fmt_name(_avInputPixelFormat);
+                if (pixel_format)
+                    _tags["FFmpeg Pixel Format"] = pixel_format;
+                else
+                    _tags["FFmpeg Pixel Format"] = "Unknown";
+                    
 
                 // LibVPX returns AV_PIX_FMT_YUV420P with metadata
                 // "alpha_mode" set to 1.
@@ -798,6 +826,11 @@ namespace tl
                         sequenceSize = av_rescale_q(
                             _avFormatContext->duration, av_get_time_base_q(),
                             swap(_avSpeed));
+                    }
+                    else
+                    {
+                        // If all fails, assume a single frame
+                        sequenceSize = 1;
                     }
 
                     while (
@@ -1401,6 +1434,17 @@ namespace tl
         void ReadVideo::_copy(std::shared_ptr<image::Image>& image,
                               std::shared_ptr<AVFrame> avFrame)
         {
+            // Check if avFrame changed image size (can happen when reading a
+            // sequence of .webp) 
+            if (avFrame->width != _info.size.w &&
+                avFrame->width > 0)
+                _info.size.w = avFrame->width;
+            
+            if (avFrame->height != _info.size.h &&
+                avFrame->height > 0)
+                _info.size.h = avFrame->height;
+            
+            
             const std::size_t w = _info.size.w;
             const std::size_t h = _info.size.h;
 

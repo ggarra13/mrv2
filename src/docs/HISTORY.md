@@ -20,6 +20,8 @@ ChangeLog
   sequences.
 - Added support for Darby's toucan:Dissolves.
 - Fixed Roll and Trim being reversed.
+- Added support for .webp images and image sequences.  Note that animated .webp
+  pictures are not supported.
 
 
 v1.4.8

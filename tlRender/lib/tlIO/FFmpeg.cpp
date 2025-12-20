@@ -424,6 +424,7 @@ namespace tl
                  {".vp9", io::FileType::Movie},
                  {".y4m", io::FileType::Movie},
                  {".webm", io::FileType::Movie},
+                 {".webp", io::FileType::Movie},
                  {".wmv", io::FileType::Movie},
 
                  // Audio Formats

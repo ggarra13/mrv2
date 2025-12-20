@@ -300,6 +300,9 @@ if(TLRENDER_FFMPEG_MINIMAL)
         --enable-demuxer=v210
         --enable-demuxer=v210x
         --enable-demuxer=wav
+	--enable-demuxer=image2
+	--enable-demuxer=image2pipe
+	--enable-demuxer=image_webp_pipe
         --enable-demuxer=yuv4mpegpipe
 
         --disable-muxers
@@ -348,6 +351,7 @@ if(TLRENDER_FFMPEG_MINIMAL)
         --enable-muxer=truehd
         --enable-muxer=wav
 	--enable-muxer=webm
+	--enable-muxer=webp
         --enable-muxer=yuv4mpegpipe
 
         --disable-parsers
@@ -369,6 +373,7 @@ if(TLRENDER_FFMPEG_MINIMAL)
         --enable-parser=vorbis
         --enable-parser=vp8
         --enable-parser=vp9
+	--enable-parser=webp
 	
         --disable-protocols
         --enable-protocol=crypto
@@ -386,6 +391,14 @@ if(TLRENDER_FFMPEG_MINIMAL)
 	    --enable-encoder=pcm_mulaw_at
 	    --enable-decoder=pcm_mulaw_at)
     endif()
+endif()
+
+if(TLRENDER_LIBWEBP)
+    list(APPEND FFmpeg_DEPENDENCIES LibWebP)
+    list(APPEND FFmpeg_CONFIGURE_ARGS
+	--enable-libwebp
+        --enable-encoder=libwebp
+        --enable-encoder=libwebp_anim)
 endif()
 
 if(TLRENDER_VPX)
@@ -557,7 +570,7 @@ if(WIN32)
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swresample.lib ${INSTALL_PREFIX}/lib"
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swscale.lib ${INSTALL_PREFIX}/lib")
 else()
-    set(FFmpeg_CONFIGURE ./configure ${FFmpeg_CONFIGURE_ARGS})
+    set(FFmpeg_CONFIGURE export PKG_CONFIG_PATH="${INSTALL_PREFIX}/lib/pkgconfig:\$PKG_CONFIG_PATH" && ./configure ${FFmpeg_CONFIGURE_ARGS})
     set(FFmpeg_BUILD make -j ${NPROCS})
     set(FFmpeg_INSTALL make install)
     list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
