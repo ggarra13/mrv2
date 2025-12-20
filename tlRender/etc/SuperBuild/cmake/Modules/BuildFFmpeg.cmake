@@ -20,8 +20,11 @@ endif()
 set(FFmpeg_PATCH )
 if(WIN32)
     set(FFmpeg_PATCH ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure
-        ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure)
+        ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure
+        ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure.bak
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure
+	${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure)
 endif()
 
 set(FFmpeg_SHARED_LIBS ON)
@@ -73,6 +76,9 @@ set(FFmpeg_CONFIGURE_ARGS
     --disable-avfoundation
     --disable-bzlib
     --disable-coreimage
+    --disable-d3d11va
+    --disable-d3d12va
+    --disable-dxva2
     --disable-iconv
     --disable-libxcb
     --disable-libxcb-shm
@@ -186,6 +192,7 @@ if(TLRENDER_FFMPEG_MINIMAL)
         --enable-decoder=vp8
         --enable-decoder=vp9
         --enable-decoder=yuv4
+        --enable-decoder=webp
         --enable-decoder=wmalossless
         --enable-decoder=wmapro
         --enable-decoder=wmav1
