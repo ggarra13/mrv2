@@ -234,7 +234,7 @@ namespace tl
             file::Path path(fileName);
             const std::string& extension = path.getExtension();
             if (string::compare(extension, ".webp",
-                                string::CaseInsensitive) &&
+                                string::Compare::CaseInsensitive) &&
                 !path.getNumber().empty())
             {
                 char buf[4096];
@@ -242,11 +242,21 @@ namespace tl
                 const std::string& baseName  = path.getBaseName();
                 const std::string& extension = path.getExtension();
                 const int padding = path.getPadding();
-                sprintf(buf, "%s%s%%0%dd%s",
-                        directory.c_str(),
-                        baseName.c_str(),
-                        padding,
-                        extension.c_str());
+                if (padding == 0)
+                {
+                    sprintf(buf, "%s%s%%d%s",
+                            directory.c_str(),
+                            baseName.c_str(),
+                            extension.c_str());
+                }
+                else
+                {
+                    sprintf(buf, "%s%s%%0%dd%s",
+                            directory.c_str(),
+                            baseName.c_str(),
+                            padding,
+                            extension.c_str());
+                }
                 formatFileName = buf;
             }
 
