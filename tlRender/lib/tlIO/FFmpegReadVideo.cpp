@@ -233,7 +233,7 @@ namespace tl
             std::string formatFileName = fileName;
             file::Path path(fileName);
             const std::string& extension = path.getExtension();
-            if (extension == ".webp")
+            if (extension == ".webp" && !path.getNumber().empty())
             {
                 char buf[4096];
                 const std::string& directory = path.getDirectory();
