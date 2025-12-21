@@ -248,7 +248,8 @@ namespace tl
 
                             otime::TimeRange gapRange;
                             int otioGapIndex = 0;
-                            if (timeRange.start_time() > origRange.start_time())
+                            if (p.mouse.side == Private::MouseClick::Left &&
+                                timeRange.start_time() > origRange.start_time())
                             {
                                 gapRange = otime::TimeRange(
                                     otime::RationalTime(0,
@@ -258,7 +259,8 @@ namespace tl
                                 otio::Gap* gap = new otio::Gap(gapRange);
                                 otioTrack->insert_child(otioGapIndex, gap);
                             }
-                            else if (timeRange.duration() < origRange.duration())
+                            else if (p.mouse.side == Private::MouseClick::Right &&
+                                     timeRange.duration() < origRange.duration())
                             {
                                 gapRange = otime::TimeRange(
                                     otime::RationalTime(0,

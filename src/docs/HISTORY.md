@@ -54,6 +54,8 @@ ChangeLog
 - Fixed Roll and Trim being reversed.
 - Added support for .webp images and image sequences.  Note that animated .webp
   pictures are NOT supported.
+- Move, Trim and Roll commands on the Edit version of mrv2/vmrv2 are now fully
+  functional.
 
 
 v1.4.8
