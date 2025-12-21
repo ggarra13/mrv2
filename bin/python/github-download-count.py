@@ -242,7 +242,7 @@ def get_file_stats(repo, file_path, start_date, end_date):
     for url in urls_to_try:
         try:
             # Longer delay to avoid rate limiting
-            time.sleep(1.5)
+            #time.sleep(1.5)
             
             # Use impersonate without custom headers - let curl_cffi handle everything
             response = session.get(url,

@@ -142,6 +142,7 @@ It does not support NDI® on any platform.
 
 It works on Windows 10+, Ubuntu 22.04 LTS+, macOS 15 (amd64) and macOS M1+ (arm64).
 It may work (untested) on Windows 11 ARM64 and Linux ARM64.
+Note that beta binaries perform about 15% slower than the final releases.
 
 It may contain bugs, new untested features and more.
 

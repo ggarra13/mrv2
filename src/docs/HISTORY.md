@@ -1,32 +1,6 @@
 v1.4.9
 ======
 
-mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
-
-mrv2 ships now in two compiled versions:
-
-   - mrv2 with OpenGL backend  (free and donationware)   
-   - vmrv2 with Vulkan backend (free and donationware)
-
-It also ships for many more architectures, so be careful to download the correct one.
-It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).
-
-ChangeLog
----------
-
-- Improved performance of Vulkan playback of RGB_F16 and RGB_F32 images.
-  While it still does not achieve quite 60FPS, you'll get 35-40FPS.
-  If you want 60FPS or more, you should stick to playing RGBA_F16 or RGBA_F32
-  sequences.
-- Added support for Darby's toucan:Dissolves.
-- Fixed Roll and Trim being reversed.
-- Added support for .webp images and image sequences.  Note that animated .webp
-  pictures are not supported.
-
-
-v1.4.8
-======
-
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
@@ -67,6 +41,23 @@ The donationware version when running without a donation, does not have:
     - Move license to a new machine (available in Pro monthly)
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+- Improved performance of Vulkan playback of RGB_F16 and RGB_F32 images.
+  While it still does not achieve quite 60FPS on my card, I get 35-40FPS.
+  My beta-testers do report 60 FPS on their cards, thou.
+  If you want 60FPS with any card, you should stick to playing RGBA_F16 or
+  RGBA_F32 sequences.
+- Added support for Darby's toucan:Dissolves.
+- Fixed Roll and Trim being reversed.
+- Added support for .webp images and image sequences.  Note that animated .webp
+  pictures are NOT supported.
+
+
+v1.4.8
+======
 
 ChangeLog
 ---------
