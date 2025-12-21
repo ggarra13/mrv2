@@ -42,6 +42,8 @@ namespace tl
                     markerGlyphs;
             };
             DrawData draw;
+
+            const otio::Item* otioItem = nullptr;
         };
 
         void IBasicItem::_init(
@@ -69,7 +71,8 @@ namespace tl
             p.label = label;
             p.colorRole = colorRole;
             p.markers = getMarkers(item.value);
-
+            p.otioItem = item.value;
+            
             _textUpdate();
         }
 
@@ -83,6 +86,11 @@ namespace tl
         std::string IBasicItem::getLabel() const
         {
             return _p->label;
+        }
+
+        const otio::Item* IBasicItem::getOtioItem() const
+        {
+            return _p->otioItem;
         }
         
         void IBasicItem::setDisplayOptions(const DisplayOptions& value)

@@ -38,6 +38,8 @@ namespace tl
             void clipEvent(const math::Box2i&, bool) override;
             void drawEvent(const math::Box2i&, const ui::DrawEvent&) override;
 
+            const otio::Item* getOtioItem() const;
+            
         protected:
             int _getMargin() const;
             int _getLineHeight() const;

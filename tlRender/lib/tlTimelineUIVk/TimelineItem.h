@@ -14,6 +14,8 @@
 
 #include <FL/Fl_Vk_Context.H>
 
+#include <opentimelineio/item.h>
+
 #include <vector>
 
 namespace tl
@@ -104,6 +106,8 @@ namespace tl
         private:
             bool _isTrackVisible(int) const;
 
+            otio::Item* _getOtioItem(int trackIndex, int itemIndex);
+            
             void _mouseMoveEventFill(ui::MouseMoveEvent&);
             void _mouseMoveEventMove(ui::MouseMoveEvent&);
             void _mouseMoveEventRipple(ui::MouseMoveEvent&);
