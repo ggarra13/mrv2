@@ -56,6 +56,8 @@ ChangeLog
   pictures are NOT supported.
 - Move, Trim and Roll commands on the Edit version of mrv2/vmrv2 are now fully
   functional.
+- Fixed a mutex bug in Vulkan's vmrv2.
+- Fixed progress bar on loading a movie file or sequence of frames.
 
 
 v1.4.8
