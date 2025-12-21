@@ -579,7 +579,7 @@ if(WIN32)
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swresample.lib ${INSTALL_PREFIX}/lib"
         COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swscale.lib ${INSTALL_PREFIX}/lib")
 else()
-    set(FFmpeg_CONFIGURE export PKG_CONFIG_PATH="${INSTALL_PREFIX}/lib/pkgconfig:\$PKG_CONFIG_PATH" && ./configure ${FFmpeg_CONFIGURE_ARGS})
+    set(FFmpeg_CONFIGURE export PKG_CONFIG_PATH=${INSTALL_PREFIX}/lib/pkgconfig:\$PKG_CONFIG_PATH && ./configure ${FFmpeg_CONFIGURE_ARGS})
     set(FFmpeg_BUILD make -j ${NPROCS})
     set(FFmpeg_INSTALL make install)
     list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
