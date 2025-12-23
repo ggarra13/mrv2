@@ -924,7 +924,7 @@ namespace tl
                 ShaderBindingSet::StorageBufferParameter sb;
                 sb.binding = sbb.binding;
                 sb.stageFlags = sbb.stageFlags;
-
+                    
                 sb.buffers.resize(MAX_FRAMES_IN_FLIGHT, nullptr);
                 sb.currentSizes.resize(MAX_FRAMES_IN_FLIGHT, 0);
 

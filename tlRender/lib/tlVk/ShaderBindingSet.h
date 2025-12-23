@@ -145,7 +145,8 @@ namespace tl
                 const std::shared_ptr<Texture>& texture)
                 {
                     auto it = storageImages.find(name);
-                    if (it == storageImages.end()) throw std::runtime_error("Storage Image not found: " + name + " storeImages.size()=" + std::to_string(storageImages.size()));
+                    if (it == storageImages.end()) throw std::runtime_error("Storage Image not found: " + name +
+                                                                            " storeImages.size()=" + std::to_string(storageImages.size()));
 
                     VkDescriptorImageInfo imageInfo{};
                     imageInfo.imageView   = texture->getImageView();
@@ -192,7 +193,7 @@ namespace tl
 #endif
                 
                 // We need to update the bufferInfo in the descriptor set for the
-                // current frame Alternatively, you could use dynamic uniform
+                // current frame.  Alternatively, you could use dynamic uniform
                 // buffers.
 
                 auto descriptorSet = descriptorSets[frameIndex]; // Update the set for this frame
@@ -313,10 +314,12 @@ namespace tl
 
                     descriptorSets.clear();
                     descriptorPools.clear();
-                    
+
                     uniforms.clear();
                     textures.clear();
                     fbos.clear();
+                    storageBuffers.clear();
+                    storageImages.clear();
                 }
             
             VkDescriptorPool getDescriptorPool(size_t frameIndex) const

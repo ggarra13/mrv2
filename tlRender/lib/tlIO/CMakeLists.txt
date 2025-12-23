@@ -65,7 +65,7 @@ endif()
 if(TLRENDER_EXR)
     list(APPEND HEADERS_PRIVATE OpenEXR.h Normalize.h)
     list(APPEND SOURCE OpenEXR.cpp OpenEXRRead.cpp
-	               OpenEXRWrite.cpp)
+	OpenEXRWrite.cpp)
     list(APPEND LIBRARIES_PRIVATE OpenEXR::OpenEXR)
 endif()
 if(TLRENDER_FFMPEG)
@@ -115,6 +115,9 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 	$<$<CXX_COMPILER_ID:GNU,Clang>:-O3>
     )
     target_compile_definitions(tlIO PRIVATE _CRT_SECURE_NO_WARNINGS)
+    if(MRV2_BACKEND STREQUAL "VK")
+	target_compile_definitions(tlIO PRIVATE VULKAN_BACKEND)
+    endif()
 endif()
 
 install(TARGETS tlIO

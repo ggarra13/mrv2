@@ -713,7 +713,7 @@ namespace tl
             VkPhysicalDeviceProperties props;
             vkGetPhysicalDeviceProperties(gpu, &props);
             VkDeviceSize memAlign   = memRequirements.alignment;
-            VkDeviceSize vertAlign  = props.limits.minUniformBufferOffsetAlignment;;
+            VkDeviceSize vertAlign  = props.limits.minUniformBufferOffsetAlignment;
             VkDeviceSize atomSize   = props.limits.nonCoherentAtomSize;
             p.alignment             = std::max(std::max(memAlign, vertAlign),
                                                atomSize);

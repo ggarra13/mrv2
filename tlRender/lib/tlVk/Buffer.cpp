@@ -22,6 +22,8 @@ namespace tl
 #else
             VmaAllocation allocation = VK_NULL_HANDLE;
 #endif
+
+            void* mappedPtr = nullptr;
         };
 
         Buffer::~Buffer()
@@ -52,7 +54,7 @@ namespace tl
         void Buffer::createBuffer(VkDeviceSize bufferSize)
         {
             TLRENDER_P();
-
+            
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
             
@@ -77,18 +79,30 @@ namespace tl
                 VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
             if (vkAllocateMemory(device, &allocInfo, nullptr, &p.bufferMemory) != VK_SUCCESS)
-                throw std::runtime_error("Failed to allocate persistent vertex memory");
+                throw std::runtime_error("Failed to allocate persistent buffer memory");
 
             vkBindBufferMemory(device, p.buffer, p.bufferMemory, 0);
+            
+            // Persistently map
+            if (vkMapMemory(device, p.bufferMemory, 0, memRequirements.size, 0,
+                            &p.mappedPtr) != VK_SUCCESS)
+                throw std::runtime_error("Failed to map persistent mapped ptr");
 #else
             VmaAllocationCreateInfo allocCreateInfo = {};
             allocCreateInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU; // Maps to Host Visible + Coherent
+            allocCreateInfo.flags = VMA_ALLOCATION_CREATE_MAPPED_BIT; // Persistent mapping
 
             VmaAllocationInfo allocInfo = {};
             if (vmaCreateBuffer(ctx.allocator, &bufferInfo, &allocCreateInfo, &p.buffer,
                                 &p.allocation, &allocInfo) != VK_SUCCESS)
             {
                 throw std::runtime_error("Failed to create vertex buffer with VMA");
+            }
+
+            p.mappedPtr = allocInfo.pMappedData;
+            if (!p.mappedPtr)
+            {
+                throw std::runtime_error("Failed to get mapped pointer from VMA");
             }
 #endif
         }
@@ -121,18 +135,25 @@ namespace tl
             VkDevice device = ctx.device;
             const VkDeviceSize size = p.bufferSize;
             
-            void* mapped = nullptr;
+            // Host-visible upload (like glTexSubImage2D)
+            std::memcpy(p.mappedPtr, data, size);
 #ifdef MRV2_NO_VMA
-            // Host-visible upload (like glTexSubImage2D)
-            VK_CHECK(vkMapMemory(device, p.bufferMemory, 0, size, 0, &mapped));
-            std::memcpy(mapped, data, size);
-            vkUnmapMemory(device, p.bufferMemory);
+            VkMappedMemoryRange range = {};
+            range.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+            range.memory = p.bufferMemory;
+            range.offset = 0;
+            range.size = size;
+
+            VkResult result = vkFlushMappedMemoryRanges(device, 1, &range);
+            if (result != VK_SUCCESS)
+                throw std::runtime_error("vkFlushMappedMemoryRanges failed on macOS");
 #else
-            // Host-visible upload (like glTexSubImage2D)
-            VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation, &mapped));
-            std::memcpy(mapped, data, size);
             vmaUnmapMemory(ctx.allocator, p.allocation);
-            vmaFlushAllocation(ctx.allocator, p.allocation, 0, VK_WHOLE_SIZE); // Ensure flush
+            if (vmaFlushAllocation(ctx.allocator, p.allocation, 0, size) !=
+                VK_SUCCESS)
+            {
+                throw std::runtime_error("vmaFlushAllocation failed");
+            }
 #endif
         }
         

@@ -46,18 +46,15 @@ ChangeLog
 ---------
 
 - Improved performance of Vulkan playback of RGB_F16 and RGB_F32 images.
-  While it still does not achieve quite 60FPS on my card, I get 35-40FPS.
-  My beta-testers do report 60 FPS on their cards, thou.
-  If you want 60FPS with any card, you should stick to playing RGBA_F16 or
-  RGBA_F32 sequences.
+  Now you can achieve 60 FPS with any card, at the cost of some memory.
 - Added support for Darby's toucan:Dissolves.
 - Fixed Roll and Trim being reversed.
-- Added support for .webp images and image sequences.  Note that animated .webp
-  pictures are NOT supported.
+- Added support for .webp images and image sequences.  Note that animated .webp pictures are NOT supported.
 - Move, Trim and Roll commands on the Edit version of mrv2/vmrv2 are now fully
   functional.
 - Fixed a mutex bug in Vulkan's vmrv2.
 - Fixed progress bar on loading a movie file or sequence of frames.
+- Fixed a memory leak when dealing with storage images and storage buffers on Vulkan.
 
 
 v1.4.8

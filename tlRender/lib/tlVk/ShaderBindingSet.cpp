@@ -21,56 +21,6 @@ namespace tl
         {
             destroy();
         }
-        
-        void ShaderBindingSet::destroy()
-        {
-            for (auto& [_, ubo] : uniforms)
-            {
-                for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-                {
-                    if (ubo.buffers[i] != VK_NULL_HANDLE)
-                    {
-                        vkDestroyBuffer(device,
-                                        ubo.buffers[i],
-                                        nullptr);
-                        ubo.buffers[i] = VK_NULL_HANDLE;
-                    }
-                    if (ubo.memories[i] != VK_NULL_HANDLE)
-                    {
-                        vkFreeMemory(device,
-                                     ubo.memories[i],
-                                     nullptr);
-                        ubo.memories[i] = VK_NULL_HANDLE;
-                    }
-                }
-            }
-
-            for (auto& [_, sb] : storageBuffers)
-            {
-                for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-                {
-                    sb.buffers[i].reset();
-                }
-            }
-            
-            for (auto& pool : descriptorPools)
-            {
-                if (pool != VK_NULL_HANDLE)
-                {
-                    vkDestroyDescriptorPool(device, pool, nullptr);
-                    pool = VK_NULL_HANDLE;
-                }
-            }
-
-            descriptorSets.clear();
-            descriptorPools.clear();
-
-            storageBuffers.clear();
-            storageImages.clear();
-            uniforms.clear();
-            textures.clear();
-            fbos.clear();
-        }            
 
     } // namespace vlk
 } // namespace tl

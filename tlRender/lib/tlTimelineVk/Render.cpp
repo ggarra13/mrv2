@@ -1682,15 +1682,8 @@ namespace tl
                 VkFormat imageFormat = VK_FORMAT_R32G32B32_SFLOAT;
                 if (OCIO::GpuShaderCreator::TEXTURE_RED_CHANNEL == channel)
                 {
-                    std::cerr << i << " Texture1D VK_FORMAT_R32_SFLOAT"
-                              << std::endl;
                     channels = 1;
                     imageFormat = VK_FORMAT_R32_SFLOAT;
-                }
-                else
-                {
-                    std::cerr << i << " Texture1D VK_FORMAT_R32_SFLOAT"
-                              << std::endl;
                 }
 
                 VkImageType imageType;

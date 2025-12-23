@@ -646,14 +646,24 @@ namespace tl
     
                     Imf::LineOrder lineOrder = header.lineOrder();
 
-                    image::Info imageInfo = _info.video[layer];
-                    out.image = image::Image::create(imageInfo);
+                    const image::Info& imageInfo = _info.video[layer];
+                    
+                    image::Info vulkanInfo = imageInfo;
+                    
+#ifdef VULKAN_BACKEND
+                    if (vulkanInfo.pixelType == image::PixelType::RGB_F16)
+                        vulkanInfo.pixelType = image::PixelType::RGBA_F16;
+                    if (vulkanInfo.pixelType == image::PixelType::RGB_F32)
+                        vulkanInfo.pixelType = image::PixelType::RGBA_F32;
+#endif
+                    out.image = image::Image::create(vulkanInfo);
+
+                    const size_t vulkanChannels = image::getChannelCount(vulkanInfo.pixelType);
                     const size_t channels =
                         image::getChannelCount(imageInfo.pixelType);
                     const size_t channelByteCount =
                         image::getBitDepth(imageInfo.pixelType) / 8;
-                    const size_t cb = channels * channelByteCount;
-
+                    const size_t cb = vulkanChannels * channelByteCount;
 
                     bool YBYRY = false;
                     bool needTemp = !_ignoreDisplayWindow && (_displayWindow != _dataWindow);
@@ -708,6 +718,15 @@ namespace tl
                                 _layers[layer].channels[c].pixelType,
                                 sliceBase + (c * channelByteCount),
                                 cb, scb, sampling.x, sampling.y, 0.F));
+                    }
+                    if (channels == 3)
+                    {
+                        frameBuffer.insert(
+                            "fakeA",
+                            Imf::Slice(
+                                _layers[layer].channels[0].pixelType,
+                                sliceBase + (3 * channelByteCount),
+                                cb, scb, 1, 1, 1.F));
                     }
                     tiledInputPart.setFrameBuffer(frameBuffer);
 
@@ -887,7 +906,7 @@ namespace tl
                             }
                         }
 
-                        switch (imageInfo.pixelType)
+                        switch (vulkanInfo.pixelType)
                         {
                         case image::PixelType::RGB_F16:
                         case image::PixelType::RGBA_F16:
@@ -982,14 +1001,28 @@ namespace tl
                     else
                     {
                         // Case 3: Scanline read
-                        out.image = image::Image::create(imageInfo);
                         const size_t channels =
-                            image::getChannelCount(imageInfo.pixelType);
+                            image::getChannelCount(imageInfo.pixelType);  // Real channels in file
+
+                        image::Info vulkanInfo = imageInfo;
+
+#ifdef VULKAN_BACKEND
+                        // Use RGBA_* channels for tighly packing in Vulkan
+                        if (vulkanInfo.pixelType == image::PixelType::RGB_F16)
+                            vulkanInfo.pixelType = image::PixelType::RGBA_F16;
+                        if (vulkanInfo.pixelType == image::PixelType::RGB_F32)
+                            vulkanInfo.pixelType = image::PixelType::RGBA_F32;
+#endif
+                        
+                        out.image = image::Image::create(vulkanInfo);  // Vulkan channels in used image
+
+                        const size_t vulkanChannels = image::getChannelCount(vulkanInfo.pixelType);
                         const size_t channelByteCount =
                             image::getBitDepth(imageInfo.pixelType) / 8;
-                        const size_t cb = channels * channelByteCount;
+                        const size_t cb = vulkanChannels * channelByteCount;
                         const size_t scb =
-                            imageInfo.size.w * channels * channelByteCount;
+                            vulkanInfo.size.w * vulkanChannels * channelByteCount;
+                        
                         if (_fast)
                         {
                             Imf::FrameBuffer frameBuffer;
@@ -1010,6 +1043,17 @@ namespace tl
                                             out.image->getData()) +
                                             (c * channelByteCount),
                                         cb, scb, sampling.x, sampling.y, 0.F));
+                            }
+                            if (channels == 3)
+                            {
+                                frameBuffer.insert(
+                                    "fakeA",
+                                    Imf::Slice(
+                                        _layers[layer].channels[0].pixelType,
+                                        reinterpret_cast<char*>(
+                                            out.image->getData()) +
+                                            (3 * channelByteCount),
+                                        cb, scb, 1, 1, 1.F));
                             }
                             Imf::InputPart in(
                                 *_f.get(), _layers[layer].partNumber);
@@ -1038,6 +1082,18 @@ namespace tl
                                             (c * channelByteCount),
                                         cb, 0, sampling.x, sampling.y, 0.F));
                             }
+                            if (channels == 3)
+                            {
+                                frameBuffer.insert(
+                                    "fakeA",
+                                    Imf::Slice(
+                                        _layers[layer].channels[0].pixelType,
+                                        reinterpret_cast<char*>(
+                                            out.image->getData()) +
+                                            (3 * channelByteCount),
+                                        cb, scb, 1, 1, 1.F));
+                            }
+                            
                             Imf::InputPart in(
                                 *_f.get(), _layers[layer].partNumber);
                             in.setFrameBuffer(frameBuffer);
@@ -1121,7 +1177,7 @@ namespace tl
                                     sampling.x == 2 && sampling.y == 2)
                                 {
 
-                                    switch (imageInfo.pixelType)
+                                    switch (vulkanInfo.pixelType)
                                     {
                                     case image::PixelType::RGB_F16:
                                     case image::PixelType::RGBA_F16:
@@ -1129,7 +1185,7 @@ namespace tl
                                         half* src =
                                             reinterpret_cast<half*>(origPtr);
                                         upscaleRYBY(
-                                            src, c, channels, dstWidth,
+                                            src, c, vulkanChannels, dstWidth,
                                             dstHeight);
                                         break;
                                     }
@@ -1139,7 +1195,7 @@ namespace tl
                                         float* src =
                                             reinterpret_cast<float*>(origPtr);
                                         upscaleRYBY(
-                                            src, c, channels, dstWidth,
+                                            src, c, vulkanChannels, dstWidth,
                                             dstHeight);
                                         break;
                                     }
@@ -1149,20 +1205,21 @@ namespace tl
                                 }
                             }
 
-                            switch (imageInfo.pixelType)
+                            
+                            switch (vulkanInfo.pixelType)
                             {
                             case image::PixelType::RGB_F16:
                             case image::PixelType::RGBA_F16:
                             {
                                 half* src = reinterpret_cast<half*>(origPtr);
-                                ycToRgb(src, channels, dstWidth, dstHeight);
+                                ycToRgb(src, vulkanChannels, dstWidth, dstHeight);
                                 break;
                             }
                             case image::PixelType::RGB_F32:
                             case image::PixelType::RGBA_F32:
                             {
                                 float* src = reinterpret_cast<float*>(origPtr);
-                                ycToRgb(src, channels, dstWidth, dstHeight);
+                                ycToRgb(src, vulkanChannels, dstWidth, dstHeight);
                                 break;
                             }
                             default:
@@ -1173,7 +1230,7 @@ namespace tl
                         if (!_ignoreChromaticities && useChromaticities())
                         {
                             applyChromaticities(
-                                out.image, imageInfo, minX, maxX, minY, maxY);
+                                out.image, vulkanInfo, minX, maxX, minY, maxY);
                         }
                     }
 
