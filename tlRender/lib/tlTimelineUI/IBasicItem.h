@@ -30,11 +30,15 @@ namespace tl
         public:
             virtual ~IBasicItem() = 0;
 
+            std::string getLabel() const;
+
             void setDisplayOptions(const DisplayOptions&) override;
 
             void sizeHintEvent(const ui::SizeHintEvent&) override;
             void clipEvent(const math::Box2i&, bool) override;
             void drawEvent(const math::Box2i&, const ui::DrawEvent&) override;
+
+            const otio::Item* getOtioItem() const;
 
         protected:
             int _getMargin() const;

@@ -189,11 +189,10 @@ namespace tl
                     otime::TimeRange timeRange = item->p->getTimeRange();
                     otime::TimeRange origRange = timeRange;
                                         
+                    math::Size2i size = g.getSize();
                     if (p.mouse.side == Private::MouseClick::Left)
                     {
-                        math::Size2i size = g.getSize();
                         size.w -= offset;
-                        
                         move = math::Box2i(
                             g.min + _mouse.pos - _mouse.pressPos,
                             size );
@@ -201,7 +200,6 @@ namespace tl
                     }
                     else if (p.mouse.side == Private::MouseClick::Right)
                     {
-                        math::Size2i size = g.getSize();
                         size.w += offset;
                         move = math::Box2i(g.min, size);
                     }
@@ -213,13 +211,6 @@ namespace tl
                     startTime -= _timeRange.start_time();
                     timeRange = otime::TimeRange(startTime, duration);
 
-                    // Clamp on clips.
-                    if (duration.value() < 1.F)
-                    {
-                        duration  = otime::RationalTime(1.F, duration.rate());
-                        timeRange = otime::TimeRange(startTime, duration);   
-                    }
-                    
                     const auto startOffset = timeRange.start_time() - origRange.start_time();
                     const auto durationOffset = timeRange.duration() - origRange.duration();
                     
@@ -227,6 +218,7 @@ namespace tl
                     const int itemIndex = item->index;
                     const int otioItemIndex = p.tracks[trackIndex].otioIndexes[itemIndex];
 
+                    otio::ErrorStatus status;
                     const auto& child = otioTimeline->tracks()->children()[trackIndex];
                     if (auto otioTrack = otio::dynamic_retainer_cast<otio::Track>(child))
                     {
@@ -234,30 +226,50 @@ namespace tl
                         if (auto otioItem = otio::dynamic_retainer_cast<otio::Clip>(otioChild))
                         {
                             origRange = otioItem->source_range().value();
-                            timeRange = otime::TimeRange(origRange.start_time() + startOffset,
-                                                         origRange.duration() + durationOffset);
+
+                            const auto& availableRange = otioItem->available_range(&status);            
+                            auto startTime = origRange.start_time() + startOffset;
+                            auto duration  = origRange.duration() + durationOffset;
+                            timeRange = otime::TimeRange(startTime, duration);
+
+                            // Clamp to available range if present
+                            if (!otio::is_error(status))
+                            {
+                                timeRange = timeRange.clamped(availableRange);
+                            }
+                            else
+                            {
+                                timeRange = timeRange.clamped(otime::TimeRange(
+                                                                  otime::RationalTime(0.F, startTime.rate()),
+                                                                  otime::RationalTime(1.F, duration.rate())));
+                            }
+                            
                             otioItem->set_source_range(timeRange);
 
                             otime::TimeRange gapRange;
                             int otioGapIndex = 0;
-                            if (p.mouse.side == Private::MouseClick::Right)
-                            {
-                                gapRange = otime::TimeRange(
-                                    otime::RationalTime(0,
-                                                        timeRange.duration().rate()),
-                                    -durationOffset);
-                                otioGapIndex = otioItemIndex + 1;
-                            }
-                            else
+                            if (p.mouse.side == Private::MouseClick::Left &&
+                                timeRange.start_time() > origRange.start_time())
                             {
                                 gapRange = otime::TimeRange(
                                     otime::RationalTime(0,
                                                         timeRange.duration().rate()),
                                     -durationOffset);
                                 otioGapIndex = otioItemIndex;
+                                otio::Gap* gap = new otio::Gap(gapRange);
+                                otioTrack->insert_child(otioGapIndex, gap);
                             }
-                            otio::Gap* gap = new otio::Gap(gapRange);
-                            otioTrack->insert_child(otioGapIndex, gap);
+                            else if (p.mouse.side == Private::MouseClick::Right &&
+                                     timeRange.duration() < origRange.duration())
+                            {
+                                gapRange = otime::TimeRange(
+                                    otime::RationalTime(0,
+                                                        timeRange.duration().rate()),
+                                    -durationOffset);
+                                otioGapIndex = otioItemIndex + 1;
+                                otio::Gap* gap = new otio::Gap(gapRange);
+                                otioTrack->insert_child(otioGapIndex, gap);
+                            }
                         }
                     }
                 }

@@ -36,6 +36,7 @@ namespace tl
                     const math::Box2i& g = item->geometry;
                     auto clip = static_cast<IBasicItem*>(item->p.get());
                     otime::TimeRange timeRange = clip->getTimeRange();
+                    const otio::Item* otioItem = clip->getOtioItem();
 
                     if (p.mouse.side == Private::MouseClick::Left)
                     {
@@ -53,14 +54,26 @@ namespace tl
                         move = math::Box2i(g.min, size);
                     }
 
-                    const otime::RationalTime& startTime = posToTime(move.x());
-                    const otime::RationalTime& duration  = posToTime(move.x() + move.w()) - startTime;
                         
-                    timeRange = otime::TimeRange(startTime - _timeRange.start_time(), duration);
+                    otime::RationalTime startTime = posToTime(move.x());
+                    otime::RationalTime duration  = posToTime(move.x() + move.w()) - startTime;
+                    startTime -= _timeRange.start_time();
 
                     // Clamp on clips.
-                    if (duration.value() <= 1.F)
+                    otio::ErrorStatus status;
+                    const auto& availableRange = otioItem->available_range(&status);
+                    if (!otio::is_error(status))
                     {
+                        if (startTime < availableRange.start_time())
+                            continue;
+                        if (duration > availableRange.duration())
+                            continue;
+                    }
+                    else
+                    {
+                        if (startTime < otime::RationalTime(0, startTime.rate()))
+                            continue;
+                        if (duration.value() <= 1.F)
                         continue;
                     }
                     
@@ -125,16 +138,6 @@ namespace tl
 
                     startTime -= _timeRange.start_time();
                     timeRange = otime::TimeRange(startTime, duration);
-#if DEBUG_TIME_RANGES
-                    std::cerr << __LINE__ << " shifted time range=" << timeRange << std::endl;
-#endif
-
-                    // Clamp on clips.
-                    if (duration.value() < 1.F)
-                    {
-                        duration  = otime::RationalTime(1.F, duration.rate());
-                        timeRange = otime::TimeRange(startTime, duration);   
-                    }
                     
                     const auto startOffset = timeRange.start_time() - origRange.start_time();
                     const auto durationOffset = timeRange.duration() - origRange.duration();
@@ -143,6 +146,7 @@ namespace tl
                     const int itemIndex = item->index;
                     const int otioItemIndex = p.tracks[trackIndex].otioIndexes[itemIndex];
 
+                    otio::ErrorStatus status;
                     const auto& child = otioTimeline->tracks()->children()[trackIndex];
                     if (auto otioTrack = otio::dynamic_retainer_cast<otio::Track>(child))
                     {
@@ -150,8 +154,24 @@ namespace tl
                         if (auto otioItem = otio::dynamic_retainer_cast<otio::Clip>(otioChild))
                         {
                             origRange = otioItem->source_range().value();
-                            timeRange = otime::TimeRange(origRange.start_time() + startOffset,
-                                                         origRange.duration() + durationOffset);
+                            
+                            const auto& availableRange = otioItem->available_range(&status);              
+                            auto startTime = origRange.start_time() + startOffset;
+                            auto duration  = origRange.duration() + durationOffset;
+                            timeRange = otime::TimeRange(startTime, duration);
+
+                            // Clamp to available range if present
+                            if (!otio::is_error(status))
+                            {
+                                timeRange = timeRange.clamped(availableRange);
+                            }
+                            else
+                            {
+                                timeRange = timeRange.clamped(otime::TimeRange(
+                                                                  otime::RationalTime(0.F, startTime.rate()),
+                                                                  otime::RationalTime(1.F, duration.rate())));
+                            }
+                            
                             otioItem->set_source_range(timeRange);
                         }
                     }

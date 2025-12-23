@@ -42,6 +42,8 @@ namespace tl
                     markerGlyphs;
             };
             DrawData draw;
+
+            const otio::Item* otioItem = nullptr;
         };
 
         void IBasicItem::_init(
@@ -69,6 +71,7 @@ namespace tl
             p.label = label;
             p.colorRole = colorRole;
             p.markers = getMarkers(item.value);
+            p.otioItem = item.value;
 
             _textUpdate();
         }
@@ -80,6 +83,16 @@ namespace tl
 
         IBasicItem::~IBasicItem() {}
 
+        std::string IBasicItem::getLabel() const
+        {
+            return _p->label;
+        }
+
+        const otio::Item* IBasicItem::getOtioItem() const
+        {
+            return _p->otioItem;
+        }
+        
         void IBasicItem::setDisplayOptions(const DisplayOptions& value)
         {
             const bool changed = value != _displayOptions;
@@ -304,6 +317,7 @@ namespace tl
                 event.render->drawText(textInfo, math::Vector2i(),
                                        event.style->getColorRole(ui::ColorRole::Text));
             }
+            
         }
 
         int IBasicItem::_getMargin() const
