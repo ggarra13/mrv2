@@ -332,7 +332,17 @@ namespace mrv
     {
         std::tm tm = {};
         std::istringstream ss(expires_at);
-        ss >> std::get_time(&tm, "%Y-%m-%d");
+
+        if (!(ss >> std::get_time(&tm, "%Y-%m-%d"))) {
+            LOG_ERROR(_("Invalid expiration date"));
+            return License::kExpired;
+        }
+
+        // expire at END of day
+        tm.tm_hour = 23;
+        tm.tm_min  = 59;
+        tm.tm_sec  = 59;
+        
         std::time_t exp_time = std::mktime(&tm);
 
         std::time_t now = std::time(nullptr);
