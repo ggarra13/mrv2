@@ -366,6 +366,7 @@ namespace tl
                     ChannelGrouping channelGrouping,
                     const bool ignoreDisplayWindow,
                     const bool ignoreChromaticities, const bool autoNormalize,
+                    const bool useRGBOnly,
                     const int xLevel, const int yLevel,
                     const std::weak_ptr<log::System>& logSystem) :
                     _fileName(fileName),
@@ -373,6 +374,7 @@ namespace tl
                     _ignoreDisplayWindow(ignoreDisplayWindow),
                     _ignoreChromaticities(ignoreChromaticities),
                     _autoNormalize(autoNormalize),
+                    _useRGBOnly(useRGBOnly),
                     _xLevel(xLevel),
                     _yLevel(yLevel),
                     logSystemWeak(logSystem)
@@ -651,10 +653,13 @@ namespace tl
                     image::Info vulkanInfo = imageInfo;
                     
 #ifdef VULKAN_BACKEND
-                    if (vulkanInfo.pixelType == image::PixelType::RGB_F16)
-                        vulkanInfo.pixelType = image::PixelType::RGBA_F16;
-                    if (vulkanInfo.pixelType == image::PixelType::RGB_F32)
-                        vulkanInfo.pixelType = image::PixelType::RGBA_F32;
+                    if (!_useRGBOnly)
+                    {
+                        if (vulkanInfo.pixelType == image::PixelType::RGB_F16)
+                            vulkanInfo.pixelType = image::PixelType::RGBA_F16;
+                        if (vulkanInfo.pixelType == image::PixelType::RGB_F32)
+                            vulkanInfo.pixelType = image::PixelType::RGBA_F32;
+                    }
 #endif
                     out.image = image::Image::create(vulkanInfo);
 
@@ -719,15 +724,20 @@ namespace tl
                                 sliceBase + (c * channelByteCount),
                                 cb, scb, sampling.x, sampling.y, 0.F));
                     }
-                    if (channels == 3)
+#ifdef VULKAN_BACKEND
+                    if (!_useRGBOnly)
                     {
-                        frameBuffer.insert(
-                            "fakeA",
-                            Imf::Slice(
-                                _layers[layer].channels[0].pixelType,
-                                sliceBase + (3 * channelByteCount),
-                                cb, scb, 1, 1, 1.F));
+                        if (channels == 3)
+                        {
+                            frameBuffer.insert(
+                                "fakeA",
+                                Imf::Slice(
+                                    _layers[layer].channels[0].pixelType,
+                                    sliceBase + (3 * channelByteCount),
+                                    cb, scb, 1, 1, 1.F));
+                        }
                     }
+#endif
                     tiledInputPart.setFrameBuffer(frameBuffer);
 
                     int tx = tiledInputPart.numXTiles(_xLevel);
@@ -1007,11 +1017,14 @@ namespace tl
                         image::Info vulkanInfo = imageInfo;
 
 #ifdef VULKAN_BACKEND
-                        // Use RGBA_* channels for tighly packing in Vulkan
-                        if (vulkanInfo.pixelType == image::PixelType::RGB_F16)
-                            vulkanInfo.pixelType = image::PixelType::RGBA_F16;
-                        if (vulkanInfo.pixelType == image::PixelType::RGB_F32)
-                            vulkanInfo.pixelType = image::PixelType::RGBA_F32;
+                        if (!_useRGBOnly)
+                        {
+                            // Use RGBA_* channels for tighly packing in Vulkan
+                            if (vulkanInfo.pixelType == image::PixelType::RGB_F16)
+                                vulkanInfo.pixelType = image::PixelType::RGBA_F16;
+                            if (vulkanInfo.pixelType == image::PixelType::RGB_F32)
+                                vulkanInfo.pixelType = image::PixelType::RGBA_F32;
+                        }
 #endif
                         
                         out.image = image::Image::create(vulkanInfo);  // Vulkan channels in used image
@@ -1044,17 +1057,22 @@ namespace tl
                                             (c * channelByteCount),
                                         cb, scb, sampling.x, sampling.y, 0.F));
                             }
-                            if (channels == 3)
+#ifdef VULKAN_BACKEND
+                            if (!_useRGBOnly)
                             {
-                                frameBuffer.insert(
-                                    "fakeA",
-                                    Imf::Slice(
-                                        _layers[layer].channels[0].pixelType,
-                                        reinterpret_cast<char*>(
-                                            out.image->getData()) +
+                                if (channels == 3)
+                                {
+                                    frameBuffer.insert(
+                                        "fakeA",
+                                        Imf::Slice(
+                                            _layers[layer].channels[0].pixelType,
+                                            reinterpret_cast<char*>(
+                                                out.image->getData()) +
                                             (3 * channelByteCount),
-                                        cb, scb, 1, 1, 1.F));
+                                            cb, scb, 1, 1, 1.F));
+                                }
                             }
+#endif
                             Imf::InputPart in(
                                 *_f.get(), _layers[layer].partNumber);
                             in.setFrameBuffer(frameBuffer);
@@ -1082,18 +1100,22 @@ namespace tl
                                             (c * channelByteCount),
                                         cb, 0, sampling.x, sampling.y, 0.F));
                             }
-                            if (channels == 3)
+#ifdef VULKAN_BACKEND
+                            if (!_useRGBOnly)
                             {
-                                frameBuffer.insert(
-                                    "fakeA",
-                                    Imf::Slice(
-                                        _layers[layer].channels[0].pixelType,
-                                        reinterpret_cast<char*>(
-                                            out.image->getData()) +
+                                if (channels == 3)
+                                {
+                                    frameBuffer.insert(
+                                        "fakeA",
+                                        Imf::Slice(
+                                            _layers[layer].channels[0].pixelType,
+                                            reinterpret_cast<char*>(
+                                                out.image->getData()) +
                                             (3 * channelByteCount),
-                                        cb, scb, 1, 1, 1.F));
+                                            cb, scb, 1, 1, 1.F));
+                                }
                             }
-                            
+#endif                      
                             Imf::InputPart in(
                                 *_f.get(), _layers[layer].partNumber);
                             in.setFrameBuffer(frameBuffer);
@@ -1284,6 +1306,7 @@ namespace tl
                 bool _autoNormalize = false;
                 bool _ignoreDisplayWindow = false;
                 bool _ignoreChromaticities = false;
+                bool _useRGBOnly = false;
                 int _xLevel;
                 int _yLevel;
                 std::weak_ptr<log::System> logSystemWeak;
@@ -1318,6 +1341,13 @@ namespace tl
             if (option != options.end())
             {
                 _ignoreDisplayWindow =
+                    static_cast<bool>(std::atoi(option->second.c_str()));
+            }
+            
+            option = options.find("OpenEXR/UseRGBOnly");
+            if (option != options.end())
+            {
+                _useRGBOnly =
                     static_cast<bool>(std::atoi(option->second.c_str()));
             }
 
@@ -1385,7 +1415,7 @@ namespace tl
             io::Info out =
                 File(
                     fileName, memory, _channelGrouping, _ignoreDisplayWindow,
-                    false, false, 0, 0, _logSystem.lock())
+                    false, false, false, 0, 0, _logSystem.lock())
                     .getInfo();
             float speed = _defaultSpeed;
             auto i = out.tags.find("Frame Per Second");
@@ -1416,8 +1446,8 @@ namespace tl
         {
             return File(
                        fileName, memory, _channelGrouping, _ignoreDisplayWindow,
-                       _ignoreChromaticities, _autoNormalize, _xLevel, _yLevel,
-                       _logSystem)
+                       _ignoreChromaticities, _autoNormalize, _useRGBOnly,
+                       _xLevel, _yLevel, _logSystem)
                 .read(fileName, time, options);
         }
     } // namespace exr

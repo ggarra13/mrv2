@@ -12,6 +12,8 @@
 
 #include "mrvApp/mrvPlaylistsModel.h"
 
+#include "mrvCore/mrvBackend.h"
+
 #include <FL/Fl_Widget.H> // For Fl_Callback
 
 class Fl_Group;
@@ -101,7 +103,6 @@ namespace mrv
     void rotate_plus_90_cb(Fl_Menu_* m, ViewerUI* ui);
     void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui);
 
-        
     //! HDR callbacks
     void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
@@ -112,6 +113,11 @@ namespace mrv
     void hdr_data_from_file_cb(Fl_Menu_* m, ViewerUI* ui);
     void hdr_data_inactive_cb(Fl_Menu_* m, ViewerUI* ui);
     void hdr_data_active_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Vulkan specific callbacks
+#ifdef VULKAN_BACKEND
+    void toggle_use_rgb_only_cb(Fl_Menu_* m, ViewerUI* ui);
+#endif
 
     //! Channel callbacks
     void toggle_red_channel_cb(Fl_Menu_* m, ViewerUI* ui);

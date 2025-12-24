@@ -1989,6 +1989,8 @@ namespace mrv
             string::Format("{0}").arg(ui->uiView->getIgnoreDisplayWindow());
         out["IgnoreChromaticities"] =
             string::Format("{0}").arg(p.displayOptions.ignoreChromaticities);
+        out["OpenEXR/UseRGBOnly"] =
+            string::Format("{0}").arg(p.displayOptions.useRGBOnly);
 #endif
 #if defined(TLRENDER_EXR) || defined(TLRENDER_STB)
         out["AutoNormalize"] =

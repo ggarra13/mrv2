@@ -398,6 +398,10 @@ namespace mrv
         // HDR
         //
         Fl_Preferences hdr(gui, "hdr");
+        
+        hdr.get("vulkan_use_rgb", tmp, 0);
+        uiPrefs->uiPrefsVulkanUseRGB->value(tmp);
+        
         hdr.get("chromaticities", tmp, 0);
         uiPrefs->uiPrefsChromaticities->value(tmp);
         
@@ -1358,6 +1362,7 @@ namespace mrv
         view.set("zoom_speed", (int)uiPrefs->uiPrefsZoomSpeed->value());
 
         Fl_Preferences hdr(gui, "hdr");
+        hdr.set("vulkan_use_rgb", uiPrefs->uiPrefsVulkanUseRGB->value());
         hdr.set("chromaticities", uiPrefs->uiPrefsChromaticities->value());
         hdr.set("hdr_data", uiPrefs->uiPrefsHDRInfo->value());
         hdr.set("tonemap_algorithm",
@@ -1944,6 +1949,7 @@ namespace mrv
         displayOptions.hdrInfo =
             static_cast<timeline::HDRInformation>(
                 uiPrefs->uiPrefsHDRInfo->value());
+        displayOptions.useRGBOnly = uiPrefs->uiPrefsVulkanUseRGB->value();
         app->setDisplayOptions(displayOptions);
         
         timeline::HDROptions hdrOptions = ui->uiView->getHDROptions();

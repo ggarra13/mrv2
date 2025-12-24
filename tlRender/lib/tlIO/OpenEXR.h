@@ -61,6 +61,7 @@ namespace tl
 
         private:
             ChannelGrouping _channelGrouping = ChannelGrouping::Known;
+            bool _useRGBOnly = false;
             bool _ignoreDisplayWindow = false;
             bool _ignoreChromaticities = false;
             bool _autoNormalize = false;

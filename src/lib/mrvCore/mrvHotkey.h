@@ -139,6 +139,7 @@ namespace mrv
     extern Hotkey kIgnoreChromaticities;
     extern Hotkey kAutoNormalize;
     extern Hotkey kInvalidValues;
+    extern Hotkey kUseRGBOnly;
     
     extern Hotkey kHDRDataFromFile;
     extern Hotkey kHDRDataFalse;

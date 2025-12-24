@@ -93,8 +93,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 853 466} type Double hide resizable
-      code0 {main = m;}
+      xywh {879 434 853 466} type Double resizable
+      code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -427,16 +427,29 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label HDR
-              xywh {298 28 555 369} box EMBOSSED_BOX align 5 hide
+              label HDR open
+              xywh {298 28 555 369} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label HDR open
-                xywh {310 71 530 304} box ROUNDED_BOX
+                xywh {310 80 530 304} box ROUNDED_BOX
               } {
+                Fl_Choice uiPrefsVulkanUseRGB {
+                  label {Prefer RGB (Vulkan)} open
+                  tooltip {When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is and convert them with a compute shader.  When is off, Vulkan will decode RGBA_F16 and RGBA_F32 frames.} xywh {524 116 135 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label {Use RGBA}
+                    xywh {40 40 100 20}
+                  }
+                  MenuItem {} {
+                    label {Use RGB} selected
+                    xywh {50 50 100 20}
+                  }
+                }
                 Fl_Choice uiPrefsChromaticities {
                   label Chromaticities
-                  xywh {526 141 135 25} down_box BORDER_BOX
+                  xywh {526 181 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Ignore
@@ -449,7 +462,7 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Choice uiPrefsHDRInfo {
                   label {HDR Data}
-                  xywh {526 180 135 25} down_box BORDER_BOX
+                  xywh {526 220 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label {From File}
@@ -465,8 +478,8 @@ If you try to open several mrv2s with different images, all these images will be
                   }
                 }
                 Fl_Choice uiPrefsTonemapAlgorithm {
-                  label {Tonemap Algorithm} open
-                  xywh {526 219 135 25} down_box BORDER_BOX
+                  label {Tonemap Algorithm}
+                  xywh {526 259 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label ST2094_40
@@ -522,8 +535,8 @@ If you try to open several mrv2s with different images, all these images will be
                   }
                 }
                 Fl_Choice uiPrefsGamutMapping {
-                  label {Gamut Mapping} open
-                  xywh {526 258 135 25} down_box BORDER_BOX
+                  label {Gamut Mapping}
+                  xywh {526 298 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Auto
@@ -853,15 +866,15 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Render
+              label Render open
               xywh {288 35 555 369} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
-                label Render
+                label Render open
                 xywh {298 68 535 320} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsVideoLevels {
-                  label {Video Levels} open
+                  label {Video Levels}
                   xywh {514 157 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
@@ -1796,8 +1809,8 @@ v->uiOCIO_Display_View->do_callback();}
               }
             }
             Fl_Group {} {
-              label {Voice Annotations} open
-              tooltip {Voice Annotation Preferences.} xywh {298 47 555 361} box EMBOSSED_BOX align 5
+              label {Voice Annotations}
+              tooltip {Voice Annotation Preferences.} xywh {298 47 555 361} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Voice Annotations} open
@@ -1815,7 +1828,7 @@ v->uiOCIO_Display_View->do_callback();}
 std::string r = mrv::open_directory(uiPrefs->uiPrefsVoiceOverPath->value());
 if ( r.empty() ) return;
 
-uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );} selected
+uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
                   tooltip {Pick a directory from disk to save voice overs..} xywh {760 114 55 31}
                 }
                 Fl_Choice uiPrefsVoiceOverSpeed {

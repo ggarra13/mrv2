@@ -134,6 +134,7 @@ namespace tl
             image::VideoLevels videoLevels = image::VideoLevels::FullRange;
             Normalize normalize;
             HDRInformation   hdrInfo = HDRInformation::FromFile;
+            bool useRGBOnly = false;
             bool ignoreChromaticities = false;
             bool invalidValues = false;
 
