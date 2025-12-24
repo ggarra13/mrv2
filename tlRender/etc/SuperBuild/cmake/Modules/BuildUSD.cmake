@@ -5,29 +5,58 @@ set(USD_DEPENDENCIES ${PYTHON_DEP})
 message(STATUS "USD DEPENDENCIES=${USD_DEPENDENCIES}")
 
 set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
-                        # v24.08 works
-set(USD_GIT_TAG v25.02a) # v25.02a works
-#set(USD_GIT_TAG v25.08) # latest - broken on Windows and Linux assembler.
+
+include(functions/detect_new_linux_distro)
+
+set(IS_NEW_LINUX FALSE)
+detect_new_linux_distro(IS_NEW_LINUX)
+
+# v25.11 latest (stops on TBB compilation with and without --onetbb)
+if (IS_NEW_LINUX)
+    set(USD_GIT_TAG v25.02a) # v25.02a works
+else()
+    set(USD_GIT_TAG v25.11) # v25.02a works
+endif()
+
+message(STATUS "Is new Linux=${IS_NEW_LINUX} Compiling USD: ${USD_GIT_TAG}")
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} cmake_build_type)
 
-set(USD_PATCH_COMMAND )
+set(USD_PATCH_COMMAND
+)
 
 if( "${cmake_build_type}" STREQUAL "relwithdebinfo" )
     set(cmake_build_type relwithdebuginfo)
 endif()
 
 set(USD_ARGS --build-variant ${cmake_build_type})
-if(CMAKE_OSX_DEPLOYMENT_TARGET)
+if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
     list(APPEND USD_ARGS --build-args)
     list(APPEND USD_ARGS USD,"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
     list(APPEND USD_ARGS OpenSubdiv,"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
     list(APPEND USD_ARGS MaterialX,"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-    #list(APPEND USD_ARGS TBB,"CFLAGS=-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} CXXFLAGS=-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+    list(APPEND USD_ARGS
+        oneTBB,-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
+        oneTBB,-DCMAKE_CXX_OSX_DEPLOYMENT_TARGET_FLAG:STRING="-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}"
+        oneTBB,-DCMAKE_C_OSX_DEPLOYMENT_TARGET_FLAG:STRING="-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+elseif(UNIX AND NOT APPLE)
+    #
+    # Pixar's repository distributes code without <cstdint> which will
+    # choke on modern compilers.  This is a bandaid fix to include
+    # <cstdint> on all files compiled.
+    #
+    list(APPEND USD_ARGS --build-args)
+    set(_include_bandaid "-include cstdint")
+    list(APPEND USD_ARGS USD,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
+    list(APPEND USD_ARGS OpenSubdiv,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
+    list(APPEND USD_ARGS MaterialX,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
 endif()
 
 list(APPEND USD_ARGS --no-python --no-examples --no-tutorials --no-tools)
-list(APPEND USD_ARGS --generator Ninja --verbose)
+if (NOT IS_NEW_LINUX)
+    list(APPEND USD_ARGS --onetbb)
+endif()
+list(APPEND USD_ARGS --generator Ninja -v)  # repeat -v up to three times for more verbose
 
 set(USD_INSTALL_COMMAND )
 if(WIN32)

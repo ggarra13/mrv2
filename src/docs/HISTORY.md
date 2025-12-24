@@ -55,6 +55,7 @@ ChangeLog
 - Fixed a mutex bug in Vulkan's vmrv2.
 - Fixed progress bar on loading a movie file or sequence of frames.
 - Fixed a memory leak when dealing with storage images and storage buffers on Vulkan.
+- Made OpenUSD compile on Modern Linux distros like Ubuntu 25.10.
 
 
 v1.4.8
