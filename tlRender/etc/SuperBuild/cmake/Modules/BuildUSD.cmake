@@ -9,7 +9,9 @@ set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
 include(functions/detect_new_linux_distro)
 
 set(IS_NEW_LINUX FALSE)
-detect_new_linux_distro(IS_NEW_LINUX)
+if (UNIX AND NOT APPLE)
+    detect_new_linux_distro(IS_NEW_LINUX)
+endif()
 
 # v25.11 latest (stops on TBB compilation with and without --onetbb)
 if (IS_NEW_LINUX)
