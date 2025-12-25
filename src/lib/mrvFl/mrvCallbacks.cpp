@@ -1429,7 +1429,7 @@ namespace mrv
         ui->uiView->setHDROptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {        
         MyViewport* view = ui->uiView;

@@ -46,6 +46,11 @@ fi
 
 cd -
 
+
+echo
+echo "Compilation of FLTK succeeded"
+echo
+
 #
 #  Rebuild latest pyFLTK
 #

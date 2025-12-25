@@ -8,11 +8,12 @@ include( ExternalProject )
 include(ProcessorCount)
 ProcessorCount(NPROCS)
 
-set( Python_VERSION 3.11 )
-set( Python_TINY    9 )
+set( Python_REPOSITORY https://github.com/python/cpython)
 
-set( Python_URL https://www.python.org/ftp/python/${Python_VERSION}.${Python_TINY}/Python-${Python_VERSION}.${Python_TINY}.tar.xz )
+set( Python_VERSION 3.12 )  # was 3.11.9
+set( Python_TINY    12 )
 
+set( Python_GIT_TAG v${Python_VERSION}.${Python_TINY})
 
 set( Python_DEPENDENCIES ${OpenSSL_DEP} )
 
@@ -73,7 +74,7 @@ if(APPLE)
 elseif(UNIX)
     
     set(Python_LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH})
-    set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
+    set(Python_C_FLAGS "${CMAKE_C_FLAGS} -fPIC" )
     set(Python_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
     set(Python_LD_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" )
 
@@ -127,17 +128,6 @@ else()
     set(Python_SCRIPT "-DPATH=${Python_PATH_STR}" -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -P ${PROJECT_SOURCE_DIR}/cmake/build_python_windows.cmake
     )
 
-    set(Python_PATCH
-	COMMAND
-	${CMAKE_COMMAND} -E copy_if_different
-	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/PC/layout/main.py"
-	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/PC/layout"
-	COMMAND
-	${CMAKE_COMMAND} -E copy_if_different
-	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/PCbuild/find_python.bat"
-	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/PCbuild/"
-    )
-
 
     set(Python_BUILD ${CMAKE_COMMAND} -D Python_COMMAND=build
 	-D Python_PLATFORM=${platform})
@@ -151,7 +141,8 @@ endif()
 
 ExternalProject_Add(
     Python
-    URL ${Python_URL}
+    GIT_REPOSITORY ${Python_REPOSITORY}
+    GIT_TAG ${Python_GIT_TAG}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/Python
 
     DEPENDS ${Python_DPENDENCIES}

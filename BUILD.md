@@ -137,6 +137,14 @@ that has less than 20 characters, like:
 
 ## Building mrv2
 
+If on Windows, enable long paths:
+
+Open the Start Menu, search for PowerShell, right-click it, and select Run as Administrator.
+
+New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+
+
+
 Clone the repository:
 ```
 cd some_dir
@@ -145,6 +153,8 @@ cd some_dir
 # Clone the latest cutting-edge build (might be unstable).
 #
 git clone https://github.com/ggarra13/mrv2.git
+
+git config --global core.longpaths true
 
 cd mrv2
 ./runme.sh
