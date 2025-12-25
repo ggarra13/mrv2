@@ -63,6 +63,7 @@ ChangeLog
 - Made OpenUSD compile on Modern Linux distros like Ubuntu 25.10.
 - Updated OpenUSD to v25.11 on the OpenGL backend.
 - Updated Python to v3.12.12.
+- Fixed OpenEXR layer switching on Standard and later licenses.
 
 
 v1.4.8
