@@ -141,6 +141,7 @@ set( _pythonSiteModules
     mpmath*
     numpy*
     networkx*
+    pkg_resources*
     pillow*
     PIL*
     polib*

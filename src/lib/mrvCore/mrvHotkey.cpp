@@ -72,7 +72,6 @@ namespace mrv
     Hotkey kIgnoreChromaticities(false, false, false, false, 0);
     Hotkey kAutoNormalize(false, false, false, false, 0);
     Hotkey kInvalidValues(false, false, false, false, 0);
-    Hotkey kUseRGBOnly(false, false, false, false, 0);
 
     
     Hotkey kHDRDataFromFile(false, false, false, false, 0);
@@ -445,7 +444,6 @@ namespace mrv
         HotkeyEntry(_("Ignore Chromaticities"), &kIgnoreChromaticities),
         HotkeyEntry(_("Auto Normalize"), &kAutoNormalize),
         HotkeyEntry(_("Invalid Values"), &kInvalidValues),
-        HotkeyEntry(_("Use RGB Only"), &kUseRGBOnly),
         HotkeyEntry(_("HDR Data From File"), &kHDRDataFromFile),
         HotkeyEntry(_("HDR Data Inactive"), &kHDRDataFalse),
         HotkeyEntry(_("HDR Data Active"), &kHDRDataTrue),
