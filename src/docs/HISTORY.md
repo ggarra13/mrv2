@@ -25,7 +25,7 @@ I use the email information to contact you privately.  I don't sell your informa
 - u$  50 for a Standard node-locked standard license for one year.
 - u$  75 for a Edit node-locked license with annotations and editing tools for one year.
 - u$ 150 for a Pro node-locked license to own.
-- u% 200 for a Pro+ node-locked license to own monthly.
+- u$ 300 for a Pro+ node-locked license to own (monthly).
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
@@ -64,6 +64,8 @@ ChangeLog
 - Updated OpenUSD to v25.11 on the OpenGL backend.
 - Updated Python to v3.12.12.
 - Fixed OpenEXR layer switching on Standard and later licenses.
+- \@todo:
+	- Fix Overlay .otio timelines on Vulkan backend.
 
 
 v1.4.8

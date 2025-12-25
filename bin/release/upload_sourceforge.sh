@@ -187,6 +187,7 @@ Currently, when run as demo these versions don't have:
 	   - OpenEXR Layer switching
 	   - Editing
 	   - NDI support
+	   - Performance as good as the release builds
 
 EOF
 
