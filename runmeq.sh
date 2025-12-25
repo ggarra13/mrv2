@@ -92,7 +92,7 @@ if [[ $STATUS -eq 0 ]]; then
     . etc/build_end.sh
     exit 0
 else
-    $nsis_output=$PWD/$BUILD_DIR/mrv2/src/mrv2-build/_CPack_Packages/win64/NSIS/NSISOutput.log 
+    nsis_output=$PWD/$BUILD_DIR/mrv2/src/mrv2-build/_CPack_Packages/win64/NSIS/NSISOutput.log 
     if [[ -e $nsis_output ]]; then
 	echo "Contents of NSISOutput.log"
 	echo "--------------------------"
