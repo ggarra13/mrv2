@@ -138,7 +138,7 @@ extern "C"
 #endif
 
 #ifdef TLRENDER_USD
-#    include <tbb/tbb_stddef.h>
+#    include <oneapi/tbb/version.h>
 #    include <MaterialXCore/Util.h>
 #    include <pxr/pxr.h>
 #endif

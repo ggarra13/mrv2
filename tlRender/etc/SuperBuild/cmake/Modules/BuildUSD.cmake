@@ -6,21 +6,8 @@ message(STATUS "USD DEPENDENCIES=${USD_DEPENDENCIES}")
 
 set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
 
-include(functions/detect_new_linux_distro)
+set(USD_GIT_TAG v25.11) # v25.02a works with Ninja, v25.11 does not
 
-set(IS_NEW_LINUX FALSE)
-if (UNIX AND NOT APPLE)
-    detect_new_linux_distro(IS_NEW_LINUX)
-endif()
-
-# v25.11 latest (stops on TBB compilation with and without --onetbb)
-if (IS_NEW_LINUX)
-    set(USD_GIT_TAG v25.02a) # v25.02a works
-else()
-    set(USD_GIT_TAG v25.11) # v25.02a works
-endif()
-
-message(STATUS "Is new Linux=${IS_NEW_LINUX} Compiling USD: ${USD_GIT_TAG}")
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} cmake_build_type)
 
@@ -31,7 +18,7 @@ if( "${cmake_build_type}" STREQUAL "relwithdebinfo" )
     set(cmake_build_type relwithdebuginfo)
 endif()
 
-set(USD_ARGS --build-variant ${cmake_build_type})
+set(USD_ARGS -v --build-variant ${cmake_build_type})
 if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
     list(APPEND USD_ARGS --build-args)
     list(APPEND USD_ARGS USD,"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
@@ -52,13 +39,12 @@ elseif(UNIX AND NOT APPLE)
     list(APPEND USD_ARGS USD,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
     list(APPEND USD_ARGS OpenSubdiv,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
     list(APPEND USD_ARGS MaterialX,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
+    list(APPEND USD_ARGS oneTBB,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
 endif()
 
 list(APPEND USD_ARGS --no-python --no-examples --no-tutorials --no-tools)
-if (NOT IS_NEW_LINUX)
-    list(APPEND USD_ARGS --onetbb)
-endif()
-list(APPEND USD_ARGS --generator Ninja -v)  # repeat -v up to three times for more verbose
+list(APPEND USD_ARGS --onetbb)
+list(APPEND USD_ARGS --verbose)
 
 set(USD_INSTALL_COMMAND )
 if(WIN32)
