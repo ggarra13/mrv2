@@ -250,6 +250,8 @@ if(BUILD_PYTHON AND TLRENDER_USD)
     add_dependencies(USD ${PYTHON_DEP} ${Gettext_DEP})
 endif()
 
+add_dependencies(OTIO ${PYTHON_DEP})
+
 # OpenSSL must be built before Python and pyFLTK to use the right path when
 # building Python's _ssl module.
 if(BUILD_PYTHON AND TLRENDER_NET)
