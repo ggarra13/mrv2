@@ -137,6 +137,17 @@ that has less than 20 characters, like:
 
 ## Building mrv2
 
+If on Windows, enable long paths:
+
+Open the Start Menu, search for PowerShell, right-click it, and select Run as Administrator.
+
+New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+
+Then from cmd.exe, Msys2 shell or Powershell run:
+
+git config --global core.longpaths true
+
+
 Clone the repository:
 ```
 cd some_dir

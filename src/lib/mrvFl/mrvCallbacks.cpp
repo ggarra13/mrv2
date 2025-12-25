@@ -1430,17 +1430,6 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
-#ifdef VULKAN_BACKEND
-    void toggle_use_rgb_only_cb(Fl_Menu_* m, ViewerUI* ui)
-    {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.useRGBOnly = !o.useRGBOnly;
-        ui->app->setDisplayOptions(o);
-        refresh_media_cb(m, ui);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-    }
-#endif
-
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
     {        
         MyViewport* view = ui->uiView;

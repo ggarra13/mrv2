@@ -47,6 +47,11 @@ ChangeLog
 
 - Improved performance of Vulkan playback of RGB_F16 and RGB_F32 images.
   Now you can achieve 60 FPS with any card, at the cost of some memory.
+  If your card supports fast compute shaders, you can keep working with
+  RGB_F16 and RGB_F32 images.  Just set:
+
+             Preferences->HDR->Prefer RGB->Use RGB.
+	  
 - Added support for Darby's toucan:Dissolves.
 - Fixed Roll and Trim being reversed.
 - Added support for .webp images and image sequences.  Note that animated .webp pictures are NOT supported.
@@ -56,6 +61,8 @@ ChangeLog
 - Fixed progress bar on loading a movie file or sequence of frames.
 - Fixed a memory leak when dealing with storage images and storage buffers on Vulkan.
 - Made OpenUSD compile on Modern Linux distros like Ubuntu 25.10.
+- Updated OpenUSD to v25.11 on the OpenGL backend.
+- Updated Python to v3.12.12
 
 
 v1.4.8

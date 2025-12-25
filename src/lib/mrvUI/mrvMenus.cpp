@@ -912,19 +912,6 @@ namespace mrv
                     item->set();
                 ++gammut;
             }
-            
-            mode = FL_MENU_RADIO;
-            if (numFiles == 0)
-                mode |= FL_MENU_INACTIVE;
-
-#ifdef VULKAN_BACKEND
-            idx = menu->add(
-                _("Render/Use RGB Only"), kUseRGBOnly.hotkey(),
-                (Fl_Callback*)toggle_use_rgb_only_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.useRGBOnly)
-                item->set();
-#endif
         }
             
 

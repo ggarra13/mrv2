@@ -1990,7 +1990,7 @@ namespace mrv
         out["IgnoreChromaticities"] =
             string::Format("{0}").arg(p.displayOptions.ignoreChromaticities);
         out["OpenEXR/UseRGBOnly"] =
-            string::Format("{0}").arg(p.displayOptions.useRGBOnly);
+            string::Format("{0}").arg(ui->uiPrefs->uiPrefsVulkanUseRGB->value());
 #endif
 #if defined(TLRENDER_EXR) || defined(TLRENDER_STB)
         out["AutoNormalize"] =

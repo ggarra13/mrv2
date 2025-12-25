@@ -1949,7 +1949,6 @@ namespace mrv
         displayOptions.hdrInfo =
             static_cast<timeline::HDRInformation>(
                 uiPrefs->uiPrefsHDRInfo->value());
-        displayOptions.useRGBOnly = uiPrefs->uiPrefsVulkanUseRGB->value();
         app->setDisplayOptions(displayOptions);
         
         timeline::HDROptions hdrOptions = ui->uiView->getHDROptions();

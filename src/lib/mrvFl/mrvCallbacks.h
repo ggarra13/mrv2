@@ -114,11 +114,6 @@ namespace mrv
     void hdr_data_inactive_cb(Fl_Menu_* m, ViewerUI* ui);
     void hdr_data_active_cb(Fl_Menu_* m, ViewerUI* ui);
 
-    //! Vulkan specific callbacks
-#ifdef VULKAN_BACKEND
-    void toggle_use_rgb_only_cb(Fl_Menu_* m, ViewerUI* ui);
-#endif
-
     //! Channel callbacks
     void toggle_red_channel_cb(Fl_Menu_* m, ViewerUI* ui);
     void toggle_green_channel_cb(Fl_Menu_* m, ViewerUI* ui);
