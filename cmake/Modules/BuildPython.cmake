@@ -74,7 +74,7 @@ if(APPLE)
 elseif(UNIX)
     
     set(Python_LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH})
-    set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
+    set(Python_C_FLAGS "${CMAKE_C_FLAGS} -fPIC" )
     set(Python_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
     set(Python_LD_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" )
 

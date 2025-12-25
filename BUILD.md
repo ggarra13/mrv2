@@ -143,9 +143,6 @@ Open the Start Menu, search for PowerShell, right-click it, and select Run as Ad
 
 New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
 
-Then from cmd.exe, Msys2 shell or Powershell run:
-
-git config --global core.longpaths true
 
 
 Clone the repository:
@@ -156,6 +153,8 @@ cd some_dir
 # Clone the latest cutting-edge build (might be unstable).
 #
 git clone https://github.com/ggarra13/mrv2.git
+
+git config --global core.longpaths true
 
 cd mrv2
 ./runme.sh

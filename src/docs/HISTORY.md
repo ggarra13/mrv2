@@ -62,7 +62,7 @@ ChangeLog
 - Fixed a memory leak when dealing with storage images and storage buffers on Vulkan.
 - Made OpenUSD compile on Modern Linux distros like Ubuntu 25.10.
 - Updated OpenUSD to v25.11 on the OpenGL backend.
-- Updated Python to v3.12.12
+- Updated Python to v3.12.12.
 
 
 v1.4.8

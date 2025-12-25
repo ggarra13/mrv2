@@ -8,17 +8,24 @@ set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
 
 set(USD_GIT_TAG v25.11) # v25.02a works with Ninja, v25.11 does not
 
+#
+# If you are building a new USD version, make sure to run:
+#
+#    bin/helpers/clean_usd.sh
+#
+# to start with a fresh USD directory.
+#
 
-string(TOLOWER ${CMAKE_BUILD_TYPE} cmake_build_type)
+string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_LC)
 
 set(USD_PATCH_COMMAND
 )
 
-if( "${cmake_build_type}" STREQUAL "relwithdebinfo" )
-    set(cmake_build_type relwithdebuginfo)
+if( "${CMAKE_BUILD_TYPE_LC}" STREQUAL "relwithdebinfo" )
+    set(CMAKE_BUILD_TYPE_LC relwithdebuginfo)
 endif()
 
-set(USD_ARGS -v --build-variant ${cmake_build_type})
+set(USD_ARGS -v --build-variant ${CMAKE_BUILD_TYPE_LC})
 if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
     list(APPEND USD_ARGS --build-args)
     list(APPEND USD_ARGS USD,"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
