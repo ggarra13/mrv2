@@ -72,7 +72,6 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
 fi
 
 
-
 if [[ "$CMAKE_TARGET" == "package" ]]; then
     
     cd $dir
