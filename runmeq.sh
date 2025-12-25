@@ -84,31 +84,26 @@ fi
 
 cd $dir
 
-MAX_RETRIES=3
-if [[ $CMAKE_TARGET != "package" ]]; then
-    MAX_RETRIES=1
-fi
-COUNT=1
+cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t "${CMAKE_TARGET}"
+STATUS=$?
 
-while (( COUNT <= MAX_RETRIES )); do
-    echo "Build attempt $COUNT of $MAX_RETRIES..."
+cd -
 
-    cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t "${CMAKE_TARGET}"
-    STATUS=$?
-    
-    if [[ $STATUS -eq 0 ]]; then
-        echo "Build succeeded on attempt $COUNT"
-
-	cd -
-
-	. etc/build_end.sh
-
-        exit 0
+if [[ $STATUS -eq 0 ]]; then
+    . etc/build_end.sh
+    exit 0
+else
+    $nsis_output=$PWD/$BUILD_DIR/mrv2/src/mrv2-build/_CPack_Packages/win64/NSIS/NSISOutput.log 
+    if [[ -e $nsis_output ]]; then
+	echo "Contents of NSISOutput.log"
+	echo "--------------------------"
+	cat $nsis_output
+    else
+	echo "No NSISOutput.log at ${nsis_output}"
     fi
+    exit 1
+fi
 
-    echo "Build failed (attempt $COUNT)."
-    (( COUNT++ ))
-done
 
 
 
