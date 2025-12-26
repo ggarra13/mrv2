@@ -1,7 +1,6 @@
 v1.4.9
 ======
 
-
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
 mrv2 ships now in two compiled versions:
@@ -42,6 +41,7 @@ The donationware version when running without a donation, does not have:
 but has:
 
    - OpenEXR layer switching.
+   - A donation / license unlocking window on start up.
 
 Prices might change (go up or down) depending on competition and new features.
 
@@ -67,9 +67,6 @@ ChangeLog
 - Updated OpenUSD to v25.11 on the OpenGL backend.
 - Updated Python to v3.12.12.
 - Fixed OpenEXR layer switching on Standard and later licenses.
-- \@todo:
-	- Fix Overlay .otio timelines on Vulkan backend.
-
 
 v1.4.8
 ======
