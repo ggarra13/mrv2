@@ -55,7 +55,7 @@ namespace tl
             const std::shared_ptr<image::Image>& image, const Options& options)
         {
             _writeVideo(
-                _path.get(static_cast<int>(time.value())), time, image,
+                _path.getFrame(static_cast<int>(time.value())), time, image,
                 merge(options, _options));
         }
     } // namespace io

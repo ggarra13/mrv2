@@ -1840,7 +1840,7 @@ namespace mrv
         }
 
         file::PathOptions pathOptions;
-        pathOptions.maxNumberDigits =
+        pathOptions.seqMaxDigits =
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits");
 
         if (!file::isDirectory(fileName) && !file::isReadable(fileName))
@@ -2129,7 +2129,7 @@ namespace mrv
             p.settings->getValue<int>("Performance/AudioRequestCount");
 
         options.ioOptions = _getIOOptions();
-        options.pathOptions.maxNumberDigits = std::min(
+        options.pathOptions.seqMaxDigits = std::min(
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits"), 255);
 
         otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;

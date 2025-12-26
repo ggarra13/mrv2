@@ -25,10 +25,12 @@
 //! Required includes:
 //! * string
 //! * vector
-#define TLRENDER_ENUM(ENUM)                                                    \
-    std::vector<ENUM> get##ENUM##Enums();                                      \
-    std::vector<std::string> get##ENUM##Labels();                              \
-    std::string getLabel(ENUM)
+#define TLRENDER_ENUM(ENUM)                                             \
+    std::vector<ENUM> get##ENUM##Enums();                               \
+    std::vector<std::string> get##ENUM##Labels();                       \
+    std::string getLabel(ENUM);                                         \
+    std::string to_string(ENUM);                                        \
+    bool from_string(const std::string&, ENUM&);                        
 
 //! Implementation macro for enum utilities.
 //!
@@ -53,9 +55,33 @@
                                                                                \
     std::string getLabel(ENUM value)                                           \
     {                                                                          \
-        const std::array<std::string, static_cast<std::size_t>(ENUM::Count)>   \
-            data = {__VA_ARGS__};                                              \
-        return data[static_cast<std::size_t>(value)];                          \
+        const std::array<std::string, static_cast<std::size_t>(ENUM::Count)> \
+            data = {__VA_ARGS__};                                       \
+        return data[static_cast<std::size_t>(value)];                   \
+    }                                                                   \
+                                                                        \
+    std::string to_string(ENUM value)                                   \
+    {                                                                   \
+        return getLabel(value);                                         \
+    }                                                                   \
+                                                                        \
+    bool from_string(const std::string& s, ENUM& value)                 \
+    {                                                                   \
+        bool out = false;                                               \
+        const auto& labels = get##ENUM##Labels();                       \
+        const auto i = std::find_if(                                    \
+            labels.begin(),                                             \
+            labels.end(),                                               \
+            [s](const std::string& value)                               \
+                {                                                       \
+                    return string::compare(s, value, string::Compare::CaseInsensitive); \
+                });                                                     \
+        if (i != labels.end())                                          \
+        {                                                               \
+            value = static_cast<ENUM>(i - labels.begin());              \
+            out = true;                                                 \
+        }                                                               \
+        return out;                                                     \
     }
 
 //! Convenience macro for serializing enums.

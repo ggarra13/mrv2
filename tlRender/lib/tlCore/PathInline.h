@@ -1,111 +1,166 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2024 Darby Johnston
-// All rights reserved.
+// Copyright Contributors to the tlRender and feather-tk project.
 
 namespace tl
 {
     namespace file
     {
-        inline bool isPathSeparator(char value)
+        
+        inline bool isDotFile(const std::string& fileName)
         {
-            return value == pathSeparators[0] || value == pathSeparators[1];
+            return !fileName.empty() && '.' == fileName[0];
         }
 
-        constexpr bool PathOptions::operator==(const PathOptions& other) const
+        inline const PathOptions& Path::getOptions()
         {
-            return maxNumberDigits == other.maxNumberDigits;
+            return _options;
         }
 
-        constexpr bool PathOptions::operator!=(const PathOptions& other) const
+        inline const std::string& Path::get() const
         {
-            return !(*this == other);
-        }
-
-        inline const std::string& Path::getProtocol() const
-        {
-            return _protocol;
-        }
-
-        inline const std::string& Path::getProtocolName() const
-        {
-            return _protocolName;
-        }
-
-        inline bool Path::isFileProtocol() const
-        {
-            return _protocolName.empty() || "file:" == _protocolName;
-        }
-
-        inline const std::string& Path::getDirectory() const
-        {
-            return _directory;
-        }
-
-        inline const std::string& Path::getBaseName() const
-        {
-            return _baseName;
-        }
-
-        inline const std::string& Path::getNumber() const
-        {
-            return _number;
-        }
-
-        inline size_t Path::getPadding() const
-        {
-            return _padding;
-        }
-
-        inline const math::IntRange& Path::getSequence() const
-        {
-            return _sequence;
-        }
-
-        inline bool Path::sequence(const Path& value) const
-        {
-            return !_number.empty() && !value._number.empty() &&
-                   _directory == value._directory &&
-                   _baseName == value._baseName &&
-                   (_padding == value._padding ||
-                    _padding == value._numberDigits ||
-                    _numberDigits == value._padding) &&
-                   _extension == value._extension && _request == value._request;
-        }
-
-        inline bool Path::isSequence() const
-        {
-            return _sequence.getMin() != _sequence.getMax();
-        }
-
-        inline const std::string& Path::getExtension() const
-        {
-            return _extension;
-        }
-
-        inline const std::string& Path::getRequest() const
-        {
-            return _request;
+            return _path;
         }
 
         inline bool Path::isEmpty() const
         {
-            return _protocol.empty() && _directory.empty() &&
-                   _baseName.empty() && _number.empty() && _extension.empty() &&
-                   _request.empty();
+            return _path.empty();
         }
 
-        inline bool Path::operator==(const Path& other) const
+        inline bool Path::hasProtocol() const
         {
-            return _protocol == other._protocol &&
-                   _directory == other._directory &&
-                   _baseName == other._baseName && _number == other._number &&
-                   _sequence == other._sequence && _padding == other._padding &&
-                   _extension == other._extension && _request == other._request;
+            return _protocol != _invalid;
         }
 
-        inline bool Path::operator!=(const Path& other) const
+        inline bool Path::hasDirectory() const
+        {
+            return _dir != _invalid;
+        }
+
+        inline bool Path::hasBaseName() const
+        {
+            return _base != _invalid;
+        }
+
+        inline bool Path::hasNumber() const
+        {
+            return _num != _invalid;
+        }
+
+        inline bool Path::hasExtension() const
+        {
+            return _ext != _invalid;
+        }
+
+        inline bool Path::hasRequest() const
+        {
+            return _request != _invalid;
+        }
+
+        inline std::string Path::getProtocol() const
+        {
+            return _protocol != _invalid ?
+                _path.substr(_protocol.first, _protocol.second) :
+                std::string();
+        }
+
+        inline std::string Path::getDirectory() const
+        {
+            return _dir != _invalid ?
+                _path.substr(_dir.first, _dir.second) :
+                std::string();
+        }
+
+        inline std::string Path::getBaseName() const
+        {
+            return _base != _invalid ?
+                _path.substr(_base.first, _base.second) :
+                std::string();
+        }
+
+        inline std::string Path::getNumber() const
+        {
+            return _num != _invalid ?
+                _path.substr(_num.first, _num.second) :
+                std::string();
+        }
+
+        inline int Path::getPadding() const
+        {
+            return _pad;
+        }
+
+        inline std::string Path::getExtension() const
+        {
+            return _ext != _invalid ?
+                _path.substr(_ext.first, _ext.second) :
+                std::string();
+        }
+
+        inline std::string Path::getRequest() const
+        {
+            return _request != _invalid ?
+                _path.substr(_request.first, _request.second) :
+                std::string();
+        }
+
+        inline std::string Path::getFileName(bool dir) const
+        {
+            return dir ?
+                getDirectory() + getBaseName() + getNumber() + getExtension() :
+                getBaseName() + getNumber() + getExtension();
+        }
+
+        inline const std::optional<math::Int64Range>& Path::getFrames() const
+        {
+            return _frames;
+        }
+
+        inline bool Path::isSequence() const
+        {
+            return hasNumber() && _frames.has_value() &&
+                !_frames.value().equal();
+        }
+
+        inline bool Path::hasSeqWildcard() const
+        {
+            return "#" == getNumber();
+        }
+
+        inline std::string Path::getFrame(int64_t frame, bool dir) const
+        {
+            return _num != _invalid ?
+                ((dir ? getDirectory() : std::string()) + getBaseName() + toString(frame, _pad) + getExtension()) :
+                ((dir ? getDirectory() : std::string()) + getBaseName() + getExtension());
+        }
+
+        inline std::string Path::getFrameRange() const
+        {
+            return _frames.has_value() ?
+                !_frames.value().equal() ?
+                toString(_frames.value().getMin(), _pad) + "-" + toString(_frames.value().getMax(), _pad) :
+                toString(_frames.value().getMin(), _pad) :
+                std::string();
+        }
+
+        inline bool Path::sequence(const Path& other) const
+        {
+            return
+                (hasNumber() || "#" == getNumber()) &&
+                other.hasNumber() &&
+                _dir == other._dir &&
+                _base == other._base &&
+                getExtension() == other.getExtension();
+        }
+        
+        inline bool Path::operator == (const Path& other) const
+        {
+            return _path == other._path && _frames == other._frames;
+        }
+
+        inline bool Path::operator != (const Path& other) const
         {
             return !(*this == other);
         }
-    } // namespace file
-} // namespace tl
+        
+    }
+}

@@ -111,7 +111,7 @@ namespace mrv
                     std::vector<tl::file::FileInfo> list;
                     tl::file::ListOptions listOptions;
                     listOptions.sequenceExtensions = { path.getExtension() };
-                    listOptions.maxNumberDigits = options.pathOptions.maxNumberDigits;
+                    listOptions.maxNumberDigits = options.pathOptions.seqMaxDigits;
                     tl::file::list(path.getDirectory(), list, listOptions);
                     const auto i = std::find_if(
                         list.begin(),
@@ -157,7 +157,7 @@ namespace mrv
                     else
                     {
                         videoClip->set_media_reference(new otio::ExternalReference(
-                                                           path.get(-1, tl::file::PathType::Full),
+                                                           path.get(),
                                                            info.videoTime));
                     }
                     videoTrack->append_child(videoClip, &errorStatus);
@@ -177,7 +177,7 @@ namespace mrv
                     auto audioClip = new otio::Clip;
                     audioClip->set_source_range(info.audioTime);
                     audioClip->set_media_reference(new otio::ExternalReference(
-                                                       path.get(-1, tl::file::PathType::Full),
+                                                       path.get(),
                                                        info.audioTime));
                     audioTrack->append_child(audioClip, &errorStatus);
                     if (otio::is_error(errorStatus))

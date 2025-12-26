@@ -51,7 +51,7 @@ namespace tl
                 itemData->options.pathOptions);
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
-                                      : path.get(-1, file::PathType::FileName),
+                : path.getFileName(false),
                 ui::ColorRole::AudioClip, "tl::timelineui::AudioClipItem",
                 clip.value, scale, options, displayOptions, itemData, context,
                 parent);

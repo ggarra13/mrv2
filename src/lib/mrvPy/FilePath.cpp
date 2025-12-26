@@ -13,7 +13,7 @@ void mrv2_filepath(py::module& m)
     py::class_<tl::file::PathOptions>(m, "PathOptions")
         .def(py::init<>())
         .def_readwrite(
-            "maxNumberDigits", &tl::file::PathOptions::maxNumberDigits);
+            "maxNumberDigits", &tl::file::PathOptions::seqMaxDigits);
 
     py::class_<tl::file::Path>(m, "Path")
         .def(
@@ -26,14 +26,7 @@ void mrv2_filepath(py::module& m)
             py::arg("path"), py::arg("value"),
             py::arg("options") = tl::file::PathOptions())
         .def(
-            py::init<
-                const std::string&, const std::string&, const std::string&,
-                uint8_t, const std::string&>(),
-            py::arg("directory"), py::arg("baseName"), py::arg("number"),
-            py::arg("padding"), py::arg("exetension"))
-        .def(
-            "get", &tl::file::Path::get, "Returns the path",
-            py::arg("idx") = -1, py::arg("directoru") = true)
+            "get", &tl::file::Path::get, "Returns the path")
         .def("getDirectory", &tl::file::Path::getDirectory)
         .def("getBaseName", &tl::file::Path::getBaseName)
         .def("getNumber", &tl::file::Path::getNumber)

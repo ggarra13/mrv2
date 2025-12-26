@@ -1,364 +1,660 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2024 Darby Johnston
-// All rights reserved.
+// Copyright Contributors to the tlRender and feather-tk project.
 
 #include <tlCore/Path.h>
 
 #include <tlCore/Error.h>
-#include <tlCore/Math.h>
 #include <tlCore/String.h>
-#include <tlCore/StringFormat.h>
 
 #include <algorithm>
 #include <array>
-#include <iomanip>
+#include <list>
 #include <sstream>
 
 namespace tl
 {
     namespace file
     {
-        Path::Path() {}
-
-        Path::Path(const std::string& value, const PathOptions& options)
+        std::vector<std::string> split(std::filesystem::path path)
         {
-            if (!value.empty())
+            std::list<std::string> out;
+            const std::filesystem::path root = path.root_path();
+            while (!path.empty() && path != root)
             {
-                // Find the request.
-                const size_t size = value.size();
-                size_t i = size - 1;
-                for (; i > 0 && value[i] != '?'; --i)
-                    ;
-                if (i > 0 && '?' == value[i])
+                if (!path.filename().empty())
                 {
-                    _request = value.substr(i, size - i);
+                    out.push_front(path.filename().u8string());
                 }
-                else
-                {
-                    i = size;
-                }
-
-                // Find the extension.
-                size_t j = i;
-                for (; i > 0 && value[i] != '.' && !isPathSeparator(value[i]);
-                     --i)
-                    ;
-                if (i > 0 && '.' == value[i] && '.' != value[i - 1] &&
-                    !isPathSeparator(value[i - 1]))
-                {
-                    _extension = value.substr(i, j - i);
-                }
-                else
-                {
-                    i = size;
-                }
-
-                // Find the number.
-                j = i;
-                for (; i > 0 && value[i - 1] >= '0' && value[i - 1] <= '9'; --i)
-                    ;
-                if (value[i] >= '0' && value[i] <= '9' &&
-                    options.maxNumberDigits > 0 &&
-                    (j - i) <= options.maxNumberDigits)
-                {
-                    _number = value.substr(i, j - i);
-                }
-                else
-                {
-                    i = j;
-                }
-
-                // Find the directory.
-                j = i;
-                for (; i > 0 && !isPathSeparator(value[i]); --i)
-                    ;
-                size_t k = 0;
-                if (isPathSeparator(value[i]))
-                {
-                    // Find the protocol.
-                    //
-                    //! \bug Should this be case-insensitive?
-                    size_t l = i;
-                    for (; l > 0 && value[l] != ':'; --l)
-                        ;
-                    if (':' == value[l] && 4 == l && 'f' == value[0] &&
-                        'i' == value[1] && 'l' == value[2] && 'e' == value[3] &&
-                        l < size - 4 && '/' == value[l + 1] &&
-                        '/' == value[l + 2] && '/' == value[l + 3])
-                    {
-                        _protocol = value.substr(0, l + 3);
-                        l += 3;
-                    }
-                    else if (
-                        ':' == value[l] && 4 == l && 'f' == value[0] &&
-                        'i' == value[1] && 'l' == value[2] && 'e' == value[3] &&
-                        l < size - 4 && '/' == value[l + 1] &&
-                        '/' == value[l + 2] && '/' == value[l + 3])
-                    {
-                        _protocol = value.substr(0, l + 3);
-                        l += 3;
-                    }
-                    else if (
-                        ':' == value[l] && 4 == l && 'f' == value[0] &&
-                        'i' == value[1] && 'l' == value[2] && 'e' == value[3] &&
-                        l < size - 3 && '/' == value[l + 1] &&
-                        '/' == value[l + 2])
-                    {
-                        _protocol = value.substr(0, l + 3);
-                        l += 3;
-                    }
-                    else if (
-                        ':' == value[l] && 4 == l && 'f' == value[0] &&
-                        'i' == value[1] && 'l' == value[2] && 'e' == value[3] &&
-                        l < size - 2 && '/' == value[l + 1])
-                    {
-                        _protocol = value.substr(0, l + 1);
-                        l += 1;
-                    }
-                    else if (
-                        ':' == value[l] && 4 == l && 'f' == value[0] &&
-                        'i' == value[1] && 'l' == value[2] && 'e' == value[3])
-                    {
-                        _protocol = value.substr(0, l + 1);
-                    }
-                    else if (
-                        ':' == value[l] && l > 1 && l < size - 3 &&
-                        '/' == value[l + 1] && '/' == value[l + 2])
-                    {
-                        _protocol = value.substr(0, l + 3);
-                        l += 3;
-                    }
-                    else
-                    {
-                        l = 0;
-                    }
-
-                    _directory = value.substr(l, (i - l) + 1);
-                    k = i + 1;
-                }
-
-                // Find the base name.
-                if (k < j)
-                {
-                    _baseName = value.substr(k, j - k);
-                }
-
-                // Special case for Windows drive letters.
-                //
-                //! \bug Should this be case-insensitive?
-                if (_directory.empty() && 2 == _baseName.size() &&
-                    _baseName[0] >= 'A' && _baseName[0] <= 'Z' &&
-                    ':' == _baseName[1])
-                {
-                    _directory.swap(_baseName);
-                }
-
-                _protocolUpdate();
-                _numberUpdate();
+                path = path.parent_path();
             }
-        }
-
-        Path::Path(
-            const std::string& directory, const std::string& value,
-            const PathOptions& options) :
-            Path(appendSeparator(directory) + value, options)
-        {
-            _protocolUpdate();
-            _numberUpdate();
-        }
-
-        Path::Path(
-            const std::string& directory, const std::string& baseName,
-            const std::string& number, size_t padding,
-            const std::string& extension, const std::string& protocol,
-            const std::string& request) :
-            _protocol(protocol),
-            _directory(directory),
-            _baseName(baseName),
-            _number(number),
-            _padding(padding),
-            _extension(extension),
-            _request(request)
-        {
-            _protocolUpdate();
-            _numberUpdate();
-        }
-
-        std::string Path::get(int number, PathType type) const
-        {
-            std::stringstream ss;
-            switch (type)
+            if (!path.empty())
             {
-            case PathType::Full:
-                ss << _protocol;
-            case PathType::Path:
-                ss << _directory;
-                break;
-            default:
-                break;
+                out.push_front(path.u8string());
             }
-            ss << _baseName;
-            if (number != -1)
-            {
-                ss << std::setfill('0') << std::setw(_padding) << number;
-            }
-            else
-            {
-                ss << _number;
-            }
-            ss << _extension;
-            ss << _request;
-            return ss.str();
-        }
-
-        void Path::setProtocol(const std::string& value)
-        {
-            if (value == _protocol)
-                return;
-            _protocol = value;
-            _protocolUpdate();
-        }
-
-        void Path::setDirectory(const std::string& value)
-        {
-            _directory = value;
-        }
-
-        void Path::setBaseName(const std::string& value)
-        {
-            _baseName = value;
-        }
-
-        void Path::setNumber(const std::string& value)
-        {
-            if (value == _number)
-                return;
-            _number = value;
-            _numberUpdate();
-        }
-
-        void Path::setPadding(size_t value)
-        {
-            _padding = value;
-        }
-
-        void Path::setSequence(const math::IntRange& value)
-        {
-            _sequence = value;
-        }
-
-        std::string Path::getSequenceString() const
-        {
-            std::string out;
-            if (isSequence())
-            {
-                out = string::Format("{0}-{1}")
-                          .arg(_sequence.getMin(), _padding, '0')
-                          .arg(_sequence.getMax(), _padding, '0');
-            }
-            return out;
-        }
-
-        void Path::setExtension(const std::string& value)
-        {
-            _extension = value;
-        }
-
-        void Path::setRequest(const std::string& value)
-        {
-            _request = value;
-        }
-
-        bool Path::isAbsolute() const
-        {
-            const std::size_t size = _directory.size();
-            if (size > 0 && isPathSeparator(_directory[0]))
-            {
-                return true;
-            }
-            if (size > 1 && _directory[0] >= 'A' && _directory[0] <= 'Z' &&
-                ':' == _directory[1])
-            {
-                return true;
-            }
-            return false;
-        }
-
-        void Path::_protocolUpdate()
-        {
-            if (!_protocol.empty())
-            {
-                const auto i = _protocol.find_first_of(':');
-                if (i != std::string::npos)
-                {
-                    _protocolName = string::toLower(_protocol.substr(0, i + 1));
-                }
-            }
-            else
-            {
-                _protocolName = std::string();
-            }
-        }
-
-        void Path::_numberUpdate()
-        {
-            _numberValue = std::atoi(_number.c_str());
-            _numberDigits = math::digits(_numberValue);
-            _sequence = math::IntRange(_numberValue, _numberValue);
-            if (_number.size() > 1 && '0' == _number[0])
-            {
-                _padding = _number.size();
-            }
+            return std::vector<std::string>(out.begin(), out.end());
         }
 
         std::string appendSeparator(const std::string& value)
         {
             std::string out = value;
-            const size_t size = out.size();
-            char separator = pathSeparator;
-            for (size_t i = 0; i < size; ++i)
-            {
-                if (out[i] == pathSeparators[0])
-                {
-                    separator = pathSeparators[0];
-                    break;
-                }
-                else if (out[i] == pathSeparators[1])
-                {
-                    separator = pathSeparators[1];
-                    break;
-                }
-            }
-            if (size > 0 && !isPathSeparator(out[size - 1]))
-            {
-                out += separator;
-            }
-            return out;
-        }
 
-        std::string getParent(const std::string& value)
-        {
-            char startSeparator = 0;
-            if (!value.empty() && isPathSeparator(value[0]))
+            auto pos = out.find_first_of('/');
+            if (pos != std::string::npos)
             {
-                startSeparator = value[0];
+                if (!out.empty() && out.back() != '/')
+                {
+                    out.push_back('/');
+                }
             }
-            auto v = string::split(value, pathSeparators);
-            if (startSeparator || v.size() > 1)
+            else
             {
-                v.pop_back();
+                pos = out.find_first_of('\\');
+                if (pos != std::string::npos)
+                {
+                    if (!out.empty() && out.back() != '\\')
+                    {
+                        out.push_back('\\');
+                    }
+                }
+                else
+                {
+                    if (!out.empty() && out.back() != '/')
+                        out.push_back('/');
+                }
             }
-            std::string out;
-            if (startSeparator)
-            {
-                out += startSeparator;
-            }
-            out += string::join(v, pathSeparator);
             return out;
         }
 
         TLRENDER_ENUM_IMPL(
-            UserPath, "Home", "Desktop", "Documents", "Downloads");
-        TLRENDER_ENUM_SERIALIZE_IMPL(UserPath);
-    } // namespace file
-} // namespace tl
+            UserPath,
+            "Home",
+            "Desktop",
+            "Documents",
+            "Downloads");
+
+        std::string toString(int64_t frame, int pad)
+        {
+            std::stringstream ss;
+            if (pad > 0)
+            {
+                ss << std::setfill('0');
+                ss << std::setw(pad);
+            }
+            ss << frame;
+            return ss.str();
+        }
+
+        bool PathOptions::operator == (const PathOptions& other) const
+        {
+            return
+                seqNegative == other.seqNegative &&
+                seqMaxDigits == other.seqMaxDigits;
+        }
+
+        bool PathOptions::operator != (const PathOptions& other) const
+        {
+            return !(*this == other);
+        }
+
+        Path::Path(
+            const std::string& value,
+            const PathOptions& options) :
+            _path(value),
+            _options(options)
+        {
+            _parse(options);
+        }
+
+        Path::Path(
+            const std::string& dir,
+            const std::string& fileName,
+            const PathOptions& options) :
+            _path(appendSeparator(dir) + fileName),
+            _options(options)
+        {
+            _parse(options);
+        }
+
+        void Path::setOptions(const PathOptions& value)
+        {
+            _options = value;
+            _parse(_options);
+        }
+
+        void Path::setProtocol(const std::string& value)
+        {
+            _path = value + getDirectory() + getBaseName() + getNumber() + getExtension() + getRequest();
+            const std::optional<math::Int64Range> tmp = _frames;
+            _parse(_options);
+            _frames = tmp;
+        }
+
+        void Path::setDirectory(const std::string& value)
+        {
+            _path = getProtocol() + value + getBaseName() + getNumber() + getExtension() + getRequest();
+            const std::optional<math::Int64Range> tmp = _frames;
+            _parse(_options);
+            _frames = tmp;
+        }
+
+        void Path::setBaseName(const std::string& value)
+        {
+            _path = getProtocol() + getDirectory() + value + getNumber() + getExtension() + getRequest();
+            const std::optional<math::Int64Range> tmp = _frames;
+            _parse(_options);
+            _frames = tmp;
+        }
+
+        void Path::setNumber(const std::string& value)
+        {
+            _path = getProtocol() + getDirectory() + getBaseName() + value + getExtension() + getRequest();
+            const std::optional<math::Int64Range> tmp = _frames;
+            _parse(_options);
+            _frames = tmp;
+        }
+
+        void Path::setPadding(int value)
+        {
+            _pad = value;
+            std::string num = getNumber();
+            if (!num.empty())
+            {
+                num = toString(std::atoi(num.c_str()), _pad);
+            }
+            _path = getProtocol() + getDirectory() + getBaseName() + num + getExtension() + getRequest();
+            const std::optional<math::Int64Range> tmp = _frames;
+            _parse(_options);
+            _frames = tmp;
+        }
+
+        void Path::setExtension(const std::string& value)
+        {
+            _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + value + getRequest();
+            const std::optional<math::Int64Range> tmp = _frames;
+            _parse(_options);
+            _frames = tmp;
+        }
+
+        void Path::setRequest(const std::string& value)
+        {
+            _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + getExtension() + value;
+            const std::optional<math::Int64Range> tmp = _frames;
+            _parse(_options);
+            _frames = tmp;
+        }
+
+        void Path::setFileName(const std::string& value)
+        {
+            _path = getProtocol() + getDirectory() + value + getRequest();
+            const std::optional<math::Int64Range> tmp = _frames;
+            _parse(_options);
+            _frames = tmp;
+        }
+
+        void Path::setFrames(const math::Int64Range& value)
+        {
+            _frames = value;
+        }
+
+        bool Path::addSeq(const Path& other)
+        {
+            bool out = sequence(other);
+            if (out)
+            {
+                const std::optional<math::Int64Range> frames = _frames.has_value() && other._frames.has_value() ?
+                                                               math::expand(_frames.value(), other._frames.value()) :
+                                                       other._frames;
+                const int pad = std::max(_pad, other._pad);
+                if (frames != _frames || pad != _pad || hasSeqWildcard())
+                {
+                    _frames = frames;
+                    _pad = pad;
+                    if (_frames.has_value())
+                    {
+                        setNumber(toString(_frames.value().getMin(), _pad));
+                    }
+                }
+            }
+            return out;
+        }
+
+        bool Path::isAbsolute() const
+        {
+            bool out = false;
+            if (hasDirectory())
+            {
+                const std::string dir = getDirectory();
+                if (pathSeparators.find_first_of(dir[0]) != std::string::npos)
+                {
+                    out = true;
+                }
+                else if (dir.size() > 1 &&
+                         dir[0] >= 'A' &&
+                         dir[0] <= 'Z' &&
+                         ':' == dir[1])
+                {
+                    out = true;
+                }
+            }
+            return out;
+        }
+
+        bool Path::testExt(const std::vector<std::string>& exts) const
+        {
+            return !exts.empty() ?
+                std::find(exts.begin(), exts.end(),
+                          string::toLower(getExtension())) != exts.end() :
+                true;
+        }
+
+        const std::string Path::numbers = "0123456789#";
+        const std::string Path::pathSeparators = "/\\";
+
+        void Path::_parse(const PathOptions& options)
+        {
+            // Find the request.
+            size_t size = _path.size();
+            size_t requestPos = std::string::npos;
+            if (size > 0)
+            {
+                for (int i = 0; i < size; ++i)
+                {
+                    if ('?' == _path[i])
+                    {
+                        requestPos = i;
+                        break;
+                    }
+                }
+            }
+            if (requestPos != std::string::npos)
+            {
+                const size_t sizeTmp = size - requestPos;
+                _request = std::pair<size_t, size_t>(requestPos, sizeTmp);
+                size -= sizeTmp;
+            }
+
+            // Find the protocol.
+            size_t protocolEnd = std::string::npos;
+            size_t protocolSize = 0;
+            if (size > 2)
+            {
+                for (int i = 0; i < size - 3; ++i)
+                {
+                    if (':' == _path[i] &&
+                        '/' == _path[i + 1] &&
+                        '/' == _path[i + 2])
+                    {
+                        protocolEnd = i + 2;
+                        protocolSize = protocolEnd + 1;
+                        break;
+                    }
+                }
+            }
+            if (protocolEnd != std::string::npos)
+            {
+                _protocol = std::pair<size_t, size_t>(0, protocolSize);
+            }
+
+            // Find the directory.
+            size_t dirEnd = std::string::npos;
+            size_t dirSize = 0;
+            if (size > 0)
+            {
+                for (int i = size - 1; i >= static_cast<int>(protocolSize); --i)
+                {
+                    if (pathSeparators.find(_path[i]) != std::string::npos)
+                    {
+                        dirEnd = i;
+                        dirSize = dirEnd + 1 - protocolSize;
+                        break;
+                    }
+                }
+            }
+            if (std::string::npos == dirEnd &&
+                size > 1 &&
+                _path[0] >= 'A' && _path[0] <= 'Z' &&
+                ':' == _path[1])
+            {
+                dirEnd = 1;
+                dirSize = 2;
+                _dir = std::pair<size_t, size_t>(0, dirSize);
+            }
+            else if (dirEnd != std::string::npos)
+            {
+                _dir = std::pair<size_t, size_t>(protocolSize, dirSize);
+            }
+            const size_t protocolDirSize = protocolSize + dirSize;
+
+            // Find the extension.
+            size_t extPos = std::string::npos;
+            if (size > 0)
+            {
+                for (int i = size - 1; i >= static_cast<int>(protocolDirSize); --i)
+                {
+                    if ('.' == _path[i])
+                    {
+                        extPos = i;
+                        break;
+                    }
+                }
+            }
+            if (extPos != std::string::npos &&
+                extPos > protocolDirSize &&
+                extPos < size - 1)
+            {
+                const size_t sizeTmp = size - extPos;
+                _ext = std::pair<size_t, size_t>(extPos, sizeTmp);
+                size -= sizeTmp;
+            }
+
+            // Find the number.
+            size_t numPos = std::string::npos;
+            if (size > 0)
+            {
+                for (int i = size - 1; i >= static_cast<int>(protocolDirSize); --i)
+                {
+                    if (numbers.find(_path[i]) != std::string::npos)
+                    {
+                        numPos = i;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if (numPos != std::string::npos &&
+                    size - numPos > options.seqMaxDigits)
+                {
+                    numPos = std::string::npos;
+                }
+                if (options.seqNegative &&
+                    numPos != std::string::npos &&
+                    numPos > protocolDirSize &&
+                    '-' == _path[numPos - 1])
+                {
+                    --numPos;
+                }
+            }
+            if (numPos != std::string::npos)
+            {
+                const size_t sizeTmp = size - numPos;
+                _num = std::pair<size_t, size_t>(numPos, sizeTmp);
+                if ('0' == _path[numPos])
+                {
+                    _pad = sizeTmp;
+                }
+                else if ('#' == _path[numPos])
+                {
+                    _pad = sizeTmp;
+                }
+                if (options.seqNegative &&
+                    '-' == _path[numPos] &&
+                    numPos < size - 1 &&
+                    '0' == _path[numPos + 1])
+                {
+                    _pad = sizeTmp - 1;
+                }
+                if (_path[numPos] != '#')
+                {
+                    const int64_t frame = std::atoi(getNumber().c_str());
+                    _frames = math::Int64Range(frame, frame);
+                }
+                size -= sizeTmp;
+            }
+
+            // Find the base name.
+            if (size - protocolDirSize > 0)
+            {
+                _base = std::pair<size_t, size_t>(
+                    protocolDirSize,
+                    size - protocolDirSize);
+            }
+        }
+
+        const std::pair<size_t, size_t> Path:: _invalid(std::string::npos, std::string::npos);
+
+        TLRENDER_ENUM_IMPL(
+            DirListSort,
+            "Name",
+            "Extension",
+            "Size",
+            "Time");
+
+        bool DirListOptions::operator == (const DirListOptions& other) const
+        {
+            return
+                sort == other.sort &&
+                sortReverse == other.sortReverse &&
+                filter == other.filter &&
+                filterFiles == other.filterFiles &&
+                filterExt == other.filterExt &&
+                seq == other.seq &&
+                seqExts == other.seqExts &&
+                seqNegative == other.seqNegative &&
+                seqMaxDigits == other.seqMaxDigits &&
+                hidden == other.hidden;
+        }
+
+        bool DirListOptions::operator != (const DirListOptions& other) const
+        {
+            return !(*this == other);
+        }
+
+        bool DirEntry::operator == (const DirEntry& other) const
+        {
+            return
+                path == other.path &&
+                isDir == other.isDir &&
+                size == other.size &&
+                time == other.time;
+        }
+
+        bool DirEntry::operator != (const DirEntry& other) const
+        {
+            return !(*this == other);
+        }
+
+        std::vector<DirEntry> dirList(
+            const std::filesystem::path& path,
+            const DirListOptions& options)
+        {
+            std::vector<DirEntry> out;
+            PathOptions pathOptions;
+            pathOptions.seqNegative = options.seqNegative;
+            pathOptions.seqMaxDigits = options.seqMaxDigits;
+            try
+            {
+                for (const auto& i : std::filesystem::directory_iterator(path))
+                {
+                    const Path path(i.path().u8string(), pathOptions);
+                    const std::string fileName = i.path().filename().u8string();
+
+                    // Apply filters.
+                    bool keep = true;
+                    if (keep && !options.hidden && isDotFile(fileName))
+                    {
+                        keep = false;
+                    }
+                    const bool isDir = std::filesystem::is_directory(i.path());
+                    if (keep && !isDir && !options.filterExt.empty())
+                    {
+                        keep = std::find(
+                            options.filterExt.begin(),
+                            options.filterExt.end(),
+                            string::toLower(path.getExtension())) !=
+                               options.filterExt.end();
+                    }
+                    if (keep && !options.filter.empty())
+                    {
+                        keep = string::contains(
+                            fileName,
+                            options.filter,
+                            string::Compare::CaseInsensitive);
+                    }
+                    if (keep && options.filterFiles && !isDir)
+                    {
+                        keep = false;
+                    }
+
+                    if (keep)
+                    {
+                        // Check for sequences.
+                        bool seq = false;
+                        if (!isDir && options.seq && path.testExt(options.seqExts))
+                        {
+                            for (auto& j : out)
+                            {
+                                if (j.path.addSeq(path))
+                                {
+                                    seq = true;
+                                    j.size += std::filesystem::file_size(i.path());
+                                    j.time = std::max(
+                                        j.time,
+                                        std::filesystem::last_write_time(i.path()));
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!seq)
+                        {
+                            // Add the entry.
+                            out.push_back({
+                                    path,
+                                    isDir,
+                                    isDir ? 0 : std::filesystem::file_size(i.path()),
+                                    std::filesystem::last_write_time(i.path()) });
+                        }
+                    }
+                }
+            }
+            catch (const std::exception&)
+            {}
+
+            // Sort the entries.
+            std::function<int(const DirEntry& a, const DirEntry& b)> sort;
+            switch (options.sort)
+            {
+            case DirListSort::Name:
+                sort = [](const DirEntry& a, const DirEntry& b)
+                    {
+                        return a.path.getFileName() < b.path.getFileName();
+                    };
+                break;
+            case DirListSort::Extension:
+                sort = [](const DirEntry& a, const DirEntry& b)
+                    {
+                        return a.path.getExtension() < b.path.getExtension();
+                    };
+                break;
+            case DirListSort::Size:
+                sort = [](const DirEntry& a, const DirEntry& b)
+                    {
+                        return a.size < b.size;
+                    };
+                break;
+            case DirListSort::Time:
+                sort = [](const DirEntry& a, const DirEntry& b)
+                    {
+                        return a.time < b.time;
+                    };
+                break;
+            default: break;
+            }
+            if (sort)
+            {
+                if (options.sortReverse)
+                {
+                    std::sort(out.rbegin(), out.rend(), sort);
+                }
+                else
+                {
+                    std::sort(out.begin(), out.end(), sort);
+                }
+            }
+
+            // Sort the directories.
+            std::stable_sort(
+                out.begin(),
+                out.end(),
+                [](const DirEntry& a, const DirEntry& b)
+                    {
+                        return a.isDir > b.isDir;
+                    });
+
+            return out;
+        }
+
+        Path expandSeq(
+            const Path& path,
+            const PathOptions& pathOptions)
+        {
+            Path out = path;
+            if (out.hasNumber() && !out.isSequence() || out.hasSeqWildcard())
+            {
+                // Find matching sequence files.
+                bool init = true;
+                const std::filesystem::path stdpath = std::filesystem::u8path(out.get());
+                for (const auto& i : std::filesystem::directory_iterator(stdpath.parent_path()))
+                {
+                    const Path entry(i.path().u8string(), pathOptions);
+                    const bool isDir = std::filesystem::is_directory(i.path());
+                    if (init && !isDir)
+                    {
+                        if (out.sequence(entry))
+                        {
+                            init = false;
+                            out = entry;
+                        }
+                    }
+                    if (!init)
+                    {
+                        out.addSeq(entry);
+                    }
+                }
+            }
+            return out;
+        }
+
+        void to_json(nlohmann::json& json, const PathOptions& value)
+        {
+            json["SeqNegative"] = value.seqNegative;
+            json["SeqMaxDigits"] = value.seqMaxDigits;
+        }
+
+        void to_json(nlohmann::json& json, const DirListOptions& value)
+        {
+            json["Sort"] = to_string(value.sort);
+            json["SortReverse"] = value.sortReverse;
+            json["Filter"] = value.filter;
+            json["FilterFiles"] = value.filterFiles;
+            json["FilterExt"] = value.filterExt;
+            json["Seq"] = value.seq;
+            json["SeqExts"] = value.seqExts;
+            json["SeqNegative"] = value.seqNegative;
+            json["SeqMaxDigits"] = value.seqMaxDigits;
+            json["Hidden"] = value.hidden;
+        }
+
+        void from_json(const nlohmann::json& json, PathOptions& value)
+        {
+            json.at("SeqNegative").get_to(value.seqNegative);
+            json.at("SeqMaxDigits").get_to(value.seqMaxDigits);
+        }
+
+        void from_json(const nlohmann::json& json, DirListOptions& value)
+        {
+            from_string(json.at("Sort").get<std::string>(), value.sort);
+            json.at("SortReverse").get_to(value.sortReverse);
+            json.at("Filter").get_to(value.filter);
+            json.at("FilterFiles").get_to(value.filterFiles);
+            json.at("FilterExt").get_to(value.filterExt);
+            json.at("Seq").get_to(value.seq);
+            json.at("SeqExts").get_to(value.seqExts);
+            json.at("SeqNegative").get_to(value.seqNegative);
+            json.at("SeqMaxDigits").get_to(value.seqMaxDigits);
+            json.at("Hidden").get_to(value.hidden);
+        }
+
+    }
+}

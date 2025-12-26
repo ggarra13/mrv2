@@ -238,9 +238,6 @@ namespace tl
         TLRENDER_ENUM(Key);
         TLRENDER_ENUM_SERIALIZE(Key);
 
-        //! Get a keyboard shortcut label.
-        std::string getLabel(Key, int modifiers = 0);
-
         //! Key event.
         struct KeyEvent
         {

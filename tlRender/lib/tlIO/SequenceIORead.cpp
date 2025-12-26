@@ -35,7 +35,7 @@ namespace tl
                 }
                 else
                 {
-                    const math::IntRange& sequence = path.getSequence();
+                    const math::Int64Range& sequence = path.getFrames().value();
                     _startFrame = sequence.getMin();
                     _endFrame = sequence.getMax();
                 }
@@ -62,7 +62,8 @@ namespace tl
                     try
                     {
                         p.info = _getInfo(
-                            path.get(-1, file::PathType::Path),
+                            path.get(),
+                            //path.get(-1, file::PathType::Path),
                             !_memory.empty() ? &_memory[0] : nullptr);
                         p.addTags(p.info);
                         _thread();
@@ -237,16 +238,15 @@ namespace tl
 
                     bool seq = false;
                     std::string fileName;
-                    if (!_path.getNumber().empty())
+                    if (_path.hasNumber())
                     {
                         seq = true;
-                        fileName = _path.get(
-                            static_cast<int>(request->time.value()),
-                            file::PathType::Path);
+                        fileName = _path.getFrame(
+                            static_cast<int>(request->time.value()), true);
                     }
                     else
                     {
-                        fileName = _path.get(-1, file::PathType::Path);
+                        fileName = _path.getFileName(true);
                     }
                     const otio::RationalTime time = request->time;
                     const Options options = request->options;

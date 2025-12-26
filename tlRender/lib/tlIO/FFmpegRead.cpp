@@ -140,10 +140,8 @@ namespace tl
                     try
                     {
                         p.readVideo = std::make_shared<ReadVideo>(
-                            path.get(
-                                -1, path.isFileProtocol()
-                                        ? file::PathType::Path
-                                        : file::PathType::Full),
+                            path.hasProtocol() ?
+                            path.get() : path.getFileName(true),
                             _memory, _logSystem, p.options);
                         const auto& videoInfo = p.readVideo->getInfo();
                         if (videoInfo.isValid())
@@ -156,10 +154,8 @@ namespace tl
                         try
                         {
                             p.readAudio = std::make_shared<ReadAudio>(
-                                path.get(
-                                    -1, path.isFileProtocol()
-                                    ? file::PathType::Path
-                                    : file::PathType::Full),
+                                path.hasProtocol() ?
+                                path.get() : path.getFileName(true),
                                 _memory, p.info.videoTime.duration().rate(),
                                 p.options);
                             p.info.audio = p.readAudio->getInfo();

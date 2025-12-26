@@ -129,21 +129,6 @@ namespace tl
             "RightSuper");
         TLRENDER_ENUM_SERIALIZE_IMPL(Key);
 
-        std::string getLabel(Key key, int modifiers)
-        {
-            std::stringstream ss;
-            if (key != Key::Unknown)
-            {
-                if (modifiers)
-                {
-                    ss << getKeyModifierLabel(modifiers);
-                    ss << "+";
-                }
-                ss << key;
-            }
-            return ss.str();
-        }
-
         KeyEvent::KeyEvent() {}
 
         KeyEvent::KeyEvent(Key key, int modifiers, const math::Vector2i& pos) :

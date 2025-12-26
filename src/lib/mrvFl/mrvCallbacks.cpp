@@ -510,7 +510,7 @@ namespace mrv
 
         file::Path path(lastSavedFile);
         auto currentTime = player->currentTime();
-        std::string file = path.get(currentTime.value());
+        std::string file = path.getFrame(currentTime.value());
 
         save_single_frame(file, ui, lastSavedOptions);
     }

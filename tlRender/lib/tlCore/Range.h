@@ -31,6 +31,9 @@ namespace tl
             void zero();
 
             //! Does the range contain the given number?
+            constexpr bool equal() const;
+            
+            //! Does the range contain the given number?
             constexpr bool contains(T) const;
 
             //! Does the range interset the given range?
@@ -52,6 +55,9 @@ namespace tl
 
         //! This typedef provides an integer range.
         typedef Range<int> IntRange;
+        
+        //! This typedef provides an integer range.
+        typedef Range<int64_t> Int64Range;
 
         //! This typedef provides a size_t range.
         typedef Range<std::size_t> SizeTRange;
@@ -62,25 +68,45 @@ namespace tl
         //! This typedef provides a double precision floating point range.
         typedef Range<double> DoubleRange;
 
+        //! Does the range contain the given number?
+        template<typename T>
+        bool contains(const Range<T>&, T);
+
+        //! Does the range interset the given range?
+        template<typename T>
+        bool intersects(const Range<T>&, const Range<T>&);
+
+        //! Expand the range to include the given number.
+        template<typename T>
+        Range<T> expand(const Range<T>&, T);
+        
+        //! Expand the range to include the given range.
+        template<typename T>
+        Range<T> expand(const Range<T>&, const Range<T>&);
+        
         //! \name Serialize
         ///@{
 
         void to_json(nlohmann::json&, const IntRange&);
+        void to_json(nlohmann::json&, const Int64Range&);
         void to_json(nlohmann::json&, const SizeTRange&);
         void to_json(nlohmann::json&, const FloatRange&);
         void to_json(nlohmann::json&, const DoubleRange&);
 
         void from_json(const nlohmann::json&, IntRange&);
+        void from_json(const nlohmann::json&, Int64Range&);
         void from_json(const nlohmann::json&, SizeTRange&);
         void from_json(const nlohmann::json&, FloatRange&);
         void from_json(const nlohmann::json&, DoubleRange&);
 
         std::ostream& operator<<(std::ostream&, const IntRange&);
+        std::ostream& operator<<(std::ostream&, const Int64Range&);
         std::ostream& operator<<(std::ostream&, const SizeTRange&);
         std::ostream& operator<<(std::ostream&, const FloatRange&);
         std::ostream& operator<<(std::ostream&, const DoubleRange&);
 
         std::istream& operator>>(std::istream&, IntRange&);
+        std::istream& operator>>(std::istream&, Int64Range&);
         std::istream& operator>>(std::istream&, SizeTRange&);
         std::istream& operator>>(std::istream&, FloatRange&);
         std::istream& operator>>(std::istream&, DoubleRange&);

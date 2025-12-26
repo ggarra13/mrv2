@@ -58,7 +58,7 @@ namespace tl
                 itemData->options.pathOptions);
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
-                                      : path.get(-1, file::PathType::FileName),
+                                      : path.getFileName(false),
                 ui::ColorRole::VideoClip, "tl::timelineui_vk::VideoClipItem",
                 clip.value, scale, options, displayOptions, itemData, context,
                 parent);

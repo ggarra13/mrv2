@@ -79,7 +79,7 @@ namespace tl
                 }
                 lines.push_back(
                     string::Format("    Path max number digits: {0}")
-                        .arg(options.pathOptions.maxNumberDigits));
+                    .arg(options.pathOptions.seqMaxDigits));
                 logSystem->print(
                     string::Format("tl::timeline::Timeline {0}").arg(this),
                     string::join(lines, "\n"));

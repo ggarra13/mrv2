@@ -17,6 +17,11 @@ namespace tl
         {
             json = {value.getMin(), value.getMax()};
         }
+        
+        void to_json(nlohmann::json& json, const Int64Range& value)
+        {
+            json = {value.getMin(), value.getMax()};
+        }
 
         void to_json(nlohmann::json& json, const SizeTRange& value)
         {
@@ -40,6 +45,15 @@ namespace tl
             json.at(0).get_to(min);
             json.at(1).get_to(max);
             value = IntRange(min, max);
+        }
+        
+        void from_json(const nlohmann::json& json, Int64Range& value)
+        {
+            int64_t min = 0;
+            int64_t max = 0;
+            json.at(0).get_to(min);
+            json.at(1).get_to(max);
+            value = Int64Range(min, max);
         }
 
         void from_json(const nlohmann::json& json, SizeTRange& value)
@@ -70,6 +84,12 @@ namespace tl
         }
 
         std::ostream& operator<<(std::ostream& os, const IntRange& value)
+        {
+            os << value.getMin() << "-" << value.getMax();
+            return os;
+        }
+        
+        std::ostream& operator<<(std::ostream& os, const Int64Range& value)
         {
             os << value.getMin() << "-" << value.getMax();
             return os;
@@ -116,6 +136,30 @@ namespace tl
             return is;
         }
 
+
+        std::istream& operator>>(std::istream& is, Int64Range& value)
+        {
+            std::string s;
+            is >> s;
+            auto split = string::split(s, '-');
+            if (split.size() != 2)
+            {
+                throw error::ParseError();
+            }
+            int64_t min = 0;
+            int64_t max = 0;
+            {
+                std::stringstream ss(split[0]);
+                ss >> min;
+            }
+            {
+                std::stringstream ss(split[1]);
+                ss >> max;
+            }
+            value = Int64Range(min, max);
+            return is;
+        }
+        
         std::istream& operator>>(std::istream& is, SizeTRange& value)
         {
             std::string s;

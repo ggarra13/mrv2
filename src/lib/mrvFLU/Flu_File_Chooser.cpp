@@ -816,7 +816,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     tl::file::Path path(tmp);
     const std::string directory = path.getDirectory();
-    const std::string fileName = path.get(-1, tl::file::PathType::FileName);
+    const std::string fileName = path.getFileName();
 
     if (!directory.empty())
         cd(directory.c_str());

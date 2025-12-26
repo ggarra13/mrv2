@@ -13,6 +13,7 @@
 #include <tlCore/File.h>
 #include <tlCore/FileInfo.h>
 #include <tlCore/StringFormat.h>
+#include <tlCore/URL.h>
 
 #include <opentimelineio/externalReference.h>
 #include <opentimelineio/imageSequenceReference.h>
@@ -83,7 +84,7 @@ namespace tl
                         path.getDirectory(), fileSequenceAudioDirectory,
                         pathOptions);
                     file::ListOptions listOptions;
-                    listOptions.maxNumberDigits = pathOptions.maxNumberDigits;
+                    listOptions.maxNumberDigits = pathOptions.seqMaxDigits;
                     std::vector<file::FileInfo> list;
                     file::list(directoryPath.get(), list, listOptions);
                     for (const auto& fileInfo : list)
@@ -263,7 +264,7 @@ namespace tl
                                     clip->media_reference()))
                         {
                             const std::string mediaFileName =
-                                file::Path(externalReference->target_url())
+                                file::Path(url::decode(externalReference->target_url()))
                                     .get();
 
                             int32_t err = mz_zip_reader_locate_entry(
@@ -308,12 +309,11 @@ namespace tl
                                               ->number_of_images_in_sequence();
                                  ++number)
                             {
-                                const std::string mediaFileName =
-                                    file::Path(
-                                        imageSequenceReference
-                                            ->target_url_for_image_number(
-                                                number))
-                                        .get();
+                                const std::string mediaFileName = file::Path(
+                                    url::decode(imageSequenceReference
+                                                ->target_url_for_image_number(
+                                                    number)))
+                                    .get();
 
                                 int32_t err = mz_zip_reader_locate_entry(
                                     zipReader.reader, mediaFileName.c_str(), 0);
@@ -440,7 +440,7 @@ namespace tl
                         file::ListOptions listOptions;
                         listOptions.sequenceExtensions = {path.getExtension()};
                         listOptions.maxNumberDigits =
-                            options.pathOptions.maxNumberDigits;
+                            options.pathOptions.seqMaxDigits;
                         file::list(path.getDirectory(), list, listOptions);
                         const auto i = std::find_if(
                             list.begin(), list.end(),
@@ -482,10 +482,7 @@ namespace tl
                         {
                             auto mediaReference =
                                 new otio::ImageSequenceReference(
-                                    path.isFileProtocol()
-                                        ? std::string()
-                                        : (path.getProtocol() +
-                                           path.getDirectory()),
+                                    "",  // \@bug: not path.getDirectory()?
                                     path.getBaseName(), path.getExtension(),
                                     info.videoTime.start_time().value(), 1,
                                     info.videoTime.duration().rate(),
@@ -502,10 +499,7 @@ namespace tl
                             }
                             videoClip->set_media_reference(
                                 new otio::ExternalReference(
-                                    path.get(
-                                        -1, path.isFileProtocol()
-                                                ? file::PathType::FileName
-                                                : file::PathType::Full),
+                                    path.getFileName(),
                                     info.videoTime));
                         }
                         videoTrack = new otio::Track(
@@ -523,9 +517,8 @@ namespace tl
                         if (auto audioRead =
                                 ioSystem->read(audioPath, options.ioOptions))
                         {
-                            bool protocol = audioPath.isFileProtocol();
-                            if (file::exists(
-                                    audioPath.get(-1, file::PathType::Full)))
+                            bool protocol = audioPath.hasProtocol();
+                            if (file::exists(audioPath.get()))
                                 protocol = false;
                             const std::string cwd = file::getCWD();
                             if (file::exists(cwd + audioPath.get()))
@@ -540,9 +533,8 @@ namespace tl
                             audioClip->set_source_range(audioInfo.audioTime);
                             audioClip->set_media_reference(
                                 new otio::ExternalReference(
-                                    audioPath.get(
-                                        -1, protocol ? file::PathType::FileName
-                                                     : file::PathType::Full),
+                                    protocol ? audioPath.get() :
+                                    audioPath.getFileName(),
                                     audioInfo.audioTime));
 
                             audioTrack = new otio::Track(
@@ -566,10 +558,7 @@ namespace tl
                         audioClip->set_source_range(info.audioTime);
                         audioClip->set_media_reference(
                             new otio::ExternalReference(
-                                path.get(
-                                    -1, path.isFileProtocol()
-                                            ? file::PathType::FileName
-                                            : file::PathType::Full),
+                                path.getFileName(),
                                 info.audioTime));
 
                         audioTrack = new otio::Track(

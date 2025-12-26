@@ -14,6 +14,7 @@
 #include <tlCore/PathMapping.h>
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
+#include <tlCore/URL.h>
 
 #include <opentimelineio/clip.h>
 #include <opentimelineio/externalReference.h>
@@ -280,10 +281,9 @@ namespace tl
             {
                 auto ioSystem = context->getSystem<io::System>();
                 file::ListOptions listOptions;
-                listOptions.maxNumberDigits = pathOptions.maxNumberDigits;
+                listOptions.maxNumberDigits = pathOptions.seqMaxDigits;
                 std::vector<file::FileInfo> list;
-                file::list(
-                    path.get(-1, file::PathType::Path), list, listOptions);
+                file::list(path.getFileName(true), list, listOptions);
                 for (const auto& fileInfo : list)
                 {
                     const file::Path& path = fileInfo.getPath();
@@ -318,8 +318,8 @@ namespace tl
             const std::string& url, const std::string& directory,
             const file::PathOptions& pathOptions)
         {
-            file::Path out(url, pathOptions);
-            if (out.isFileProtocol() && !out.isAbsolute())
+            file::Path out(url::decode(url), pathOptions);
+            if (!out.hasProtocol() && !out.isAbsolute())
             {
                 out.setDirectory(
                     file::appendSeparator(directory) + out.getDirectory());
@@ -332,12 +332,12 @@ namespace tl
             file::PathOptions pathOptions)
         {
             std::string url;
-            math::IntRange sequence;
+            math::Int64Range sequence;
             if (auto externalRef =
                     dynamic_cast<const otio::ExternalReference*>(ref))
             {
                 url = externalRef->target_url();
-                pathOptions.maxNumberDigits = 0;
+                pathOptions.seqMaxDigits = 0;
             }
             else if (
                 auto imageSequenceRef =
@@ -350,7 +350,7 @@ namespace tl
                    << imageSequenceRef->start_frame()
                    << imageSequenceRef->name_suffix();
                 url = ss.str();
-                sequence = math::IntRange(
+                sequence = math::Int64Range(
                     imageSequenceRef->start_frame(),
                     imageSequenceRef->end_frame());
             }
@@ -359,14 +359,14 @@ namespace tl
                     dynamic_cast<const RawMemoryReference*>(ref))
             {
                 url = rawMemoryRef->target_url();
-                pathOptions.maxNumberDigits = 0;
+                pathOptions.seqMaxDigits = 0;
             }
             else if (
                 auto sharedMemoryRef =
                     dynamic_cast<const SharedMemoryReference*>(ref))
             {
                 url = sharedMemoryRef->target_url();
-                pathOptions.maxNumberDigits = 0;
+                pathOptions.seqMaxDigits = 0;
             }
             else if (
                 auto rawMemorySequenceRef =
@@ -386,9 +386,9 @@ namespace tl
 
             file::Path out =
                 timeline::getPath(local_url, directory, pathOptions);
-            if (sequence.getMin() != sequence.getMax())
+            if (!sequence.equal())
             {
-                out.setSequence(sequence);
+                out.setFrames(sequence);
             }
             return out;
         }
@@ -517,7 +517,7 @@ namespace tl
                          frame < ref->start_frame() + range.duration().value();
                          ++frame)
                     {
-                        const auto fileName = path.get(frame);
+                        const auto fileName = path.getFrame(frame);
                         auto fileIO =
                             file::FileIO::create(fileName, file::Mode::Read);
                         const size_t size = fileIO->getSize();
@@ -673,7 +673,7 @@ namespace tl
                              ref->start_frame() + range.duration().value();
                              ++frame)
                         {
-                            const std::string mediaFileName = path.get(frame);
+                            const std::string mediaFileName = path.getFrame(frame);
                             const std::string fileNameInZip =
                                 _getFileNameInZip(mediaFileName);
                             mediaFilesNames[mediaFileName] = fileNameInZip;

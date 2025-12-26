@@ -2115,7 +2115,7 @@ namespace mrv
 
                 add_text(
                     _("Audio Filename"), _("Filename of the audio clip"),
-                    audioPath.get(-1, tl::file::PathType::FileName));
+                    audioPath.getFileName(false));
             }
 
             ++group;

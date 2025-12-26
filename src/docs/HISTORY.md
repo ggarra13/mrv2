@@ -1,6 +1,5 @@
-v1.4.9
+v1.5.0
 ======
-
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
 mrv2 ships now in two compiled versions:
@@ -44,6 +43,14 @@ but has:
    - A donation / license unlocking window on start up.
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+
+
+v1.4.9
+======
 
 ChangeLog
 ---------

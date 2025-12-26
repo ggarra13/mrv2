@@ -812,9 +812,12 @@ namespace mrv
                     (p.actionMode != ActionMode::kScrub ||
                      p.lastEvent != FL_DRAG))
                 {
+                    const otime::TimeRange& range = player->timeRange();
+                    const int64_t maxFrames = range.duration().to_frames();
+                
                     // Calculate skipped frames
                     int64_t absdiff = std::abs(time.value() - p.lastFrame);
-                    if (absdiff > 1 && absdiff < 30)
+                    if (absdiff > 1 && absdiff < 30 && absdiff < maxFrames - 1)
                         p.droppedFrames += absdiff - 1;
 
                     // Calculate elapsed time

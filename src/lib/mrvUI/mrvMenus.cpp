@@ -1301,7 +1301,7 @@ namespace mrv
         {
             const auto& files = model->observeFiles()->get();
             const auto& path = files[aIndex]->path;
-            std::string fileName = path.get(-1);
+            std::string fileName = path.get();
 
             if (isOtio)
             {

@@ -521,7 +521,7 @@ namespace tl
                 if (infoRequest)
                 {
                     const std::string fileName =
-                        infoRequest->path.get(-1, file::PathType::Path);
+                        infoRequest->path.getFileName(true);
                     Private::StageCacheItem stageCacheItem;
                     if (!p.thread.stageCache.get(fileName, stageCacheItem))
                     {
@@ -670,7 +670,7 @@ namespace tl
                     {
                         // Check the stage cache for a previously opened stage.
                         const std::string fileName =
-                            request->path.get(-1, file::PathType::Path);
+                            request->path.getFileName(true);
                         Private::StageCacheItem stageCacheItem;
                         if (!p.thread.stageCache.get(fileName, stageCacheItem))
                         {

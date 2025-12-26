@@ -1366,8 +1366,8 @@ namespace mrv
                 otio::Clip* audioClip = new otio::Clip;
                 audioClip->set_source_range(info.audioTime);
                 audioClip->set_media_reference(new otio::ExternalReference(
-                    audioPath.get(-1, tl::file::PathType::Full),
-                    info.audioTime));
+                                                   audioPath.get(),
+                                                   info.audioTime));
 
                 if (audioIndex < 0 || audioIndex >= track->children().size())
                 {

@@ -61,6 +61,7 @@ set(HEADERS
     Time.h
     TimeInline.h
     Timer.h
+    URL.h
     Util.h
     ValueObserver.h
     ValueObserverInline.h
@@ -101,6 +102,7 @@ set(SOURCE
     StringFormat.cpp
     Time.cpp
     Timer.cpp
+    URL.cpp
     Vector.cpp)
 if (WIN32)
     list(APPEND SOURCE

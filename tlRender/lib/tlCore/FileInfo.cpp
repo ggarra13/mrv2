@@ -29,19 +29,8 @@ namespace tl
 
         void FileInfo::sequence(const FileInfo& value)
         {
-            if (!_path.getNumber().empty() &&
-                !value._path.getNumber().empty() &&
-                (_path.getPadding() == value._path.getPadding() ||
-                 _path.getPadding() == value._path.getNumber().size() ||
-                 _path.getNumber().size() == value._path.getPadding()))
+            if (_path.addSeq(value._path))
             {
-                _path.setPadding(
-                    std::max(_path.getPadding(), value._path.getPadding()));
-                math::IntRange sequence = _path.getSequence();
-                const math::IntRange& otherSequence = value._path.getSequence();
-                sequence.expand(otherSequence.getMin());
-                sequence.expand(otherSequence.getMax());
-                _path.setSequence(sequence);
                 _size += value._size;
                 _permissions = std::min(_permissions, value._permissions);
                 _time = std::max(_time, value._time);
@@ -94,12 +83,12 @@ namespace tl
             std::vector<FileInfo>& out, const ListOptions& options)
         {
             PathOptions pathOptions;
-            pathOptions.maxNumberDigits =
+            pathOptions.seqMaxDigits =
                 options.sequence ? options.maxNumberDigits : 0;
             const Path p(path, fileName, pathOptions);
             const FileInfo f(p);
             bool sequence = false;
-            if (options.sequence && !p.getNumber().empty() &&
+            if (options.sequence && p.hasNumber() &&
                 f.getType() != Type::Directory)
             {
                 bool sequenceExtension = true;
