@@ -22,7 +22,7 @@ namespace tl
                 break;
             case Private::MouseMode::Transition:
             {
-                _mouseMoveEventTrim(event);                
+                _mouseMoveEventMove(event);                
                 break;
             }
             case Private::MouseMode::Item:
@@ -181,7 +181,7 @@ namespace tl
             }
             case Private::MouseMode::Transition:
             {
-                _mouseReleaseEventTrim(event);
+                _mouseReleaseEventMove(event);
             }
             }   
         }
