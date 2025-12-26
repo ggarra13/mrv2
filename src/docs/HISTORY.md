@@ -35,10 +35,13 @@ The donationware version when running without a donation, does not have:
     - Saving (available from Solo and later)
     - Annotations (available from Solo and later)
     - Python (available in Standard and later)
-    - OpenEXR layer switching (available in Standard and later).
     - Editing (available in Edit and later)
     - Voice Annotations (available in Pro)
     - Move license to a new machine (available in Pro monthly)
+
+but has:
+
+   - OpenEXR layer switching.
 
 Prices might change (go up or down) depending on competition and new features.
 

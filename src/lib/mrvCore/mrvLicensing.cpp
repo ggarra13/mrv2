@@ -199,7 +199,7 @@ namespace
         {
             mrv::App::supports_annotations = false;
             mrv::App::supports_editing = false;
-            mrv::App::supports_layers = false;
+            mrv::App::supports_layers = true;
             mrv::App::supports_python = false;
             mrv::App::supports_saving = false;
             mrv::App::supports_voice = false;
@@ -799,7 +799,7 @@ namespace mrv
                 App::supports_annotations = false;
                 App::supports_editing = false;
                 App::supports_hdr = true;
-                App::supports_layers = false;
+                App::supports_layers = true;
                 App::supports_voice = false;
             }
             else
@@ -827,7 +827,7 @@ namespace mrv
 
                     App::supports_annotations = false;
                     App::supports_editing = false;
-                    App::supports_layers = false;
+                    App::supports_layers = true;
                     App::supports_voice = false;
                 }
                 else
