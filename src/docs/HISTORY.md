@@ -47,6 +47,7 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
+- Improved Vulkan's Text Editor.
 
 
 v1.4.9
