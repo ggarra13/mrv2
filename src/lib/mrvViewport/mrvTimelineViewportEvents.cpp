@@ -1082,8 +1082,8 @@ namespace mrv
                 {
                     const math::Vector2i pos = _getRaster();
                     auto widget = p.multilineText->box.min;
-                    if (pos.x >= widget.x && pos.x <= widget.x + 10 &&
-                        pos.y >= widget.y && pos.y <= widget.y + 10)
+                    if (pos.x >= widget.x && pos.x <= widget.x + 15 &&
+                        pos.y >= widget.y && pos.y <= widget.y + 15)
                     {
                         return acceptMultilineInput();
                     }

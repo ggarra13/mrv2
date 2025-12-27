@@ -277,6 +277,11 @@ namespace mrv
                     vkshape->mult = resolutionMultiplier;
                     vkshape->draw(render, vk.lines);
                 }
+                else if (auto vkshape = dynamic_cast<VKTextShape*>(shape.get()))
+                {
+                    vkshape->mult = resolutionMultiplier;
+                    vkshape->draw(render, vk.lines);
+                }
                 else if (auto vkshape = dynamic_cast<VKPathShape*>(shape.get()))
                 {
                     vkshape->draw(render, vk.lines);

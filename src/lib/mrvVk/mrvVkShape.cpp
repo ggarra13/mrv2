@@ -536,7 +536,7 @@ namespace mrv
 
     unsigned VKTextShape::line_start(unsigned c)
     {
-        const char* start   = text.c_str();
+        const char* start = text.c_str();
         const char* pos = start + c;
         while (*pos != '\n' && pos > start)
         {
@@ -946,8 +946,8 @@ namespace mrv
         std::string txt = text;
 
         int x = pts[0].x;
-        int y = pts[0].y;
-        math::Vector2i cursor_pos(x, y);
+        int y = pts[0].y + descender;
+        math::Vector2i cursor_pos(x, y - ascender);
         math::Vector2i pnt(x, y);
         std::size_t pos = txt.find('\n');
         std::vector<timeline::TextInfo> textInfos;
@@ -1000,13 +1000,11 @@ namespace mrv
         }
 
         const image::Color4f cursorColor(.8F, 0.8F, 0.8F);
-        math::Box2i cursorBox(cursor_pos.x,
-                              cursor_pos.y - ascender + descender, 2, fontSize);
+        math::Box2i cursorBox(cursor_pos.x, cursor_pos.y, 2, fontSize);
             
         if (editing)
         {
-            box = math::Box2i(pts[0].x, pts[0].y - fontSize / 2,
-                              70, fontSize / 2);
+            box = math::Box2i(pts[0].x, pts[0].y + descender, 70, 0);
             for (const auto& textInfo : textInfos)
             {
                 for (const auto& v : textInfo.mesh.v)
@@ -1047,14 +1045,21 @@ namespace mrv
             image::Color4f crossColor(0.F, 1.F, 0.F);
             if (text.empty())
                 crossColor = image::Color4f(1.F, 0.F, 0.F);
+
+            int cross_size = kCrossSize * mult / 3;
+            if (cross_size < kCrossSize / 2) cross_size = kCrossSize / 2;
             
+            int line_size = 2 * mult / 3;
+            if (line_size < 2) line_size = 2;
+
             math::Vector2i start(box.min.x, box.min.y);
-            math::Vector2i end(box.min.x + kCrossSize, box.min.y + kCrossSize);
-            lines->drawLine(render, start, end, crossColor, 2);
+            math::Vector2i end(box.min.x + cross_size,
+                               box.min.y + cross_size);
+            lines->drawLine(render, start, end, crossColor, line_size);
             
-            start = math::Vector2i(box.min.x + kCrossSize, box.min.y);
-            end = math::Vector2i(box.min.x, box.min.y + kCrossSize);
-            lines->drawLine(render, start, end, crossColor, 2);
+            start = math::Vector2i(box.min.x + cross_size, box.min.y);
+            end = math::Vector2i(box.min.x, box.min.y + cross_size);
+            lines->drawLine(render, start, end, crossColor, line_size);
 
         }
         

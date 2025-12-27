@@ -194,6 +194,7 @@ namespace mrv
         unsigned cursor = 0;
         math::Vector2f pos;
         math::Box2i    box;
+        float mult     = 1.F;
         float viewZoom = 1.F;
         std::shared_ptr<image::FontSystem> fontSystem;
     };
