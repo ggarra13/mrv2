@@ -131,11 +131,11 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {open
-  xywh {64 75 952 56} hide resizable
-  class Fl_Double_Window
+  xywh {0 0 952 56} resizable
+  class Fl_Double_Window visible
 } {
   Fl_Group {} {open
-    xywh {0 0 933 30} box FLAT_BOX color 56
+    xywh {0 0 933 30} box FLAT_BOX color 96
   } {
     Fl_Menu_Button uiZoom {
       label x1
@@ -233,12 +233,12 @@ ui->uiView->centerView();}
         xywh {5 5 100 20}
       }
     }
-    Fl_Group {} {
-      xywh {36 1 897 28} box FLAT_BOX color 56
+    Fl_Group {} {open
+      xywh {36 1 897 28} color 96
     } {
       Fl_Output uiCoord {
         label XY
-        tooltip {Image coordinate of pixel under mouse.} xywh {61 3 90 25} box FLAT_BOX color 56 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
+        tooltip {Image coordinate of pixel under mouse.} xywh {61 3 90 25} box FLAT_BOX color 96 labelfont 4 labelsize 10 labelcolor 17 textsize 10 textcolor 7
       }
       Fl_Group {} {open
         xywh {151 1 782 28}
@@ -269,20 +269,20 @@ ui->uiView->centerView();}
                 xywh {5 5 100 20}
               }
             }
-            Fl_Group {} {
+            Fl_Group {} {open
               xywh {199 3 271 25}
             } {
               Fl_Output uiPixelR {
-                tooltip {Red value of image pixel under mouse.} xywh {199 3 67 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 1
+                tooltip {Red value of image pixel under mouse.} xywh {199 3 67 25} box FLAT_BOX color 96 align 56 textsize 12 textcolor 1
               }
               Fl_Output uiPixelG {
-                tooltip {Green value of image pixel under mouse.} xywh {266 3 68 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 2
+                tooltip {Green value of image pixel under mouse.} xywh {266 3 68 25} box FLAT_BOX color 96 align 56 textsize 12 textcolor 2
               }
               Fl_Output uiPixelB {
-                tooltip {Blue value of image pixel under mouse.} xywh {334 3 68 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 4
+                tooltip {Blue value of image pixel under mouse.} xywh {334 3 68 25} box FLAT_BOX color 96 align 56 textsize 12 textcolor 4
               }
               Fl_Output uiPixelA {
-                tooltip {Alpha value of image pixel under mouse.} xywh {402 3 68 25} box FLAT_BOX color 56 align 56 textsize 12 textcolor 55
+                tooltip {Alpha value of image pixel under mouse.} xywh {402 3 68 25} box FLAT_BOX color 96 align 56 textsize 12 textcolor 55
               }
             }
           }
@@ -349,13 +349,13 @@ ui->uiView->redraw();}
               }
             }
             Fl_Output uiPixelH {
-              tooltip {Hue value of image pixel under mouse.} xywh {579 3 68 25} box FLAT_BOX color 56 align 48 textsize 12 textcolor 3
+              tooltip {Hue value of image pixel under mouse.} xywh {579 3 68 25} box FLAT_BOX color 96 align 48 textsize 12 textcolor 3
             }
-            Fl_Output uiPixelS {
-              tooltip {Saturation value of image pixel under mouse.} xywh {647 3 67 25} box FLAT_BOX color 56 align 48 textsize 12 textcolor 3
+            Fl_Output uiPixelS {selected
+              tooltip {Saturation value of image pixel under mouse.} xywh {647 3 67 25} box FLAT_BOX color 96 align 48 textsize 12 textcolor 3
             }
             Fl_Output uiPixelV {
-              tooltip {Value (Intensity) of image pixel under mouse.} xywh {714 3 68 25} box FLAT_BOX color 56 align 48 textsize 12 textcolor 3
+              tooltip {Value (Intensity) of image pixel under mouse.} xywh {714 3 68 25} box FLAT_BOX color 96 align 48 textsize 12 textcolor 3
             }
           }
           Fl_Menu_Button uiPixelValue {
@@ -420,7 +420,7 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
               }
             }
             Fl_Output uiPixelL {
-              tooltip {Luminance of image pixel under mouse.} xywh {820 3 102 25} box FLAT_BOX color 56 align 36 textsize 12 textcolor 55
+              tooltip {Luminance of image pixel under mouse.} xywh {820 3 102 25} box FLAT_BOX color 96 align 36 textsize 12 textcolor 55
             }
           }
         }
@@ -441,7 +441,7 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class TimelineClass {
+widget_class TimelineClass {open
   xywh {0 0 933 56} box NO_BOX hide resizable
   class Fl_Double_Window
 } {
@@ -857,7 +857,7 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {open private
+  Function {make_window()} {private
   } {
     code {uiPrefs = new PreferencesUI(this);
 uiHotkey = new HotkeyUI(this);
@@ -868,9 +868,9 @@ uiSecondary = nullptr;} {}
       user_data this user_data_type {ViewerUI*}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
-    exit_cb( o, v );} open
-      xywh {630 135 933 673} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {933 674 0 0} visible
+    exit_cb( o, v );}
+      xywh {0 0 933 673} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {933 674 0 0}
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 933 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
@@ -925,7 +925,7 @@ else
           }
         }
         Fl_Group uiTopBar {
-          label TopBar selected
+          label TopBar
           xywh {0 30 933 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {

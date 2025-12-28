@@ -21,10 +21,10 @@ theme "Default"
     cmap 1 255 0 0		# red: red tty errors
     cmap 2 0 255 0		# grn: jobs 'Continue' button border color
     cmap 3 255 255 0		# yel
-    cmap 4 0   40   255	# blue pixel bar color
-    cmap 5 255 0 255		# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
+    cmap 4 0   40   255	        # blue pixel bar color
+    cmap 5 255 0 255		# mag: 
     cmap 6 0 255 255
-    cmap 7 255 255 255		# bg color of some input fields (Try, Add..)
+    cmap 7 255 255 255		# bg color of some input fields (timecode, etc)
     cmap 8 85 85 85
     cmap 9 198 113 113		# Dump button red
     cmap 10 113 198 113
@@ -108,13 +108,13 @@ theme "Default"
     cmap 87  191 255 0
     cmap 88  255 0   0
     cmap 89  255 36  0
-    cmap 90  255 73  0		# Die/Pause orange
+    cmap 90  255 73  0
     cmap 91  255 109 0
     cmap 92  255 146 0
     cmap 93  255 182 0
     cmap 94  255 219 0
     cmap 95  255 255 0		# text selection color
-    cmap 96  0   0   64
+    cmap 96  0   0   0          # Pixel Information Background color
     cmap 97  0   36  64
     cmap 98  0   73  64
     cmap 99  0   109 64
@@ -274,10 +274,6 @@ theme "Default"
     cmap 253 255 182 255
     cmap 254 255 219 255
     cmap 255 255 255 255
-    # RE-PROGRAMMED COLORS
-    #     We have to force these off the normal ramps
-    #     for the interface to look right..
-    #
 }
 
 theme "Dark Grey"
@@ -289,7 +285,7 @@ theme "Dark Grey"
     cmap 4 0   40   255	# blue pixel bar color
     cmap 5 180 0 180	# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0 180 180
-    cmap 7 50 50 50	# bg color of some input fields (Try, Add, etc)
+    cmap 7 50 50 50	# bg color of some input fields (Timecode, etc)
     cmap 8 100 100 100
     cmap 9 150 90 90	# Dump button red
     cmap 10 90 150 90
@@ -322,204 +318,16 @@ theme "Dark Grey"
     cmap 54 122 122 122
     cmap 55 180 180 180
     cmap 56 0 0 0
-#   cmap 57 0 36 0
-#   cmap 58 0 72 0
     cmap 59 30 140 30		# Done green
-#   cmap 60 0 145 0
-#   cmap 61 0 182 0
     cmap 62 0 255 0
     cmap 63 0 180 0
-#   cmap 64 63 0 0
-#   cmap 65 63 36 0
-#   cmap 66 63 72 0
-#   cmap 67 63 109 0
-#   cmap 68 63 145 0
-#   cmap 69 63 182 0
-#   cmap 70 63 218 0
     cmap 71 0 180 0
-#   cmap 72 127 0 0
-#   cmap 73 127 36 0
-#   cmap 74 127 72 0
-#   cmap 75 127 109 0
-#   cmap 76 127 145 0
-#   cmap 77 127 182 0
-#   cmap 78 127 218 0
-#   cmap 79 127 255 0
-#   cmap 80 191 0 0
-#   cmap 81 191 36 0
-#   cmap 82 191 72 0
-#   cmap 83 191 109 0
-#   cmap 84 191 145 0
-#   cmap 85 191 182 0
-#   cmap 86 191 218 0
-#   cmap 87 191 255 0
     cmap 88 180 0 0
-#   cmap 89 255 36 0
-    cmap 90 200 72 60		# Die/Pause orange
+    cmap 90 200 72 60
     cmap 91 180 120 0
-#   cmap 92 255 145 0
-#   cmap 93 255 182 0
-#   cmap 94 255 218 0
     cmap 95 180 180 0		# text selection color
-#   cmap 96 0 0 63
-#   cmap 97 0 36 63
-#   cmap 98 0 72 63
-#   cmap 99 0 109 63
-#   cmap 100 0 145 63
-#   cmap 101 0 182 63
-#   cmap 102 0 218 63
-#   cmap 103 0 255 63
-#   cmap 104 63 0 63
-#   cmap 105 63 36 63
-#   cmap 106 63 72 63
-#   cmap 107 63 109 63
-#   cmap 108 63 145 63
-#   cmap 109 63 182 63
-#   cmap 110 63 218 63
-#   cmap 111 63 255 63
-#   cmap 112 127 0 63
-#   cmap 113 127 36 63
-#   cmap 114 127 72 63
-#   cmap 115 127 109 63
-#   cmap 116 127 145 63
-#   cmap 117 127 182 63
-#   cmap 118 127 218 63
-#   cmap 119 127 255 63
-#   cmap 120 191 0 63
-#   cmap 121 191 36 63
-#   cmap 122 191 72 63
-#   cmap 123 191 109 63
+    cmap 96  0   0   0          # Pixel Information Background color
     cmap 124 191 145 63
-#   cmap 125 191 182 63
-#   cmap 126 191 218 63
-#   cmap 127 191 255 63
-#   cmap 128 255 0 63
-#   cmap 129 255 36 63
-#   cmap 130 255 72 63
-#   cmap 131 255 109 63
-#   cmap 132 255 145 63
-#   cmap 133 255 182 63
-#   cmap 134 255 218 63
-#   cmap 135 255 255 63
-#   cmap 136 0 0 127
-#   cmap 137 0 36 127
-#   cmap 138 0 72 127
-#   cmap 139 0 109 127
-#   cmap 140 0 145 127
-#   cmap 141 0 182 127
-#   cmap 142 0 218 127
-#   cmap 143 0 255 127
-#   cmap 144 63 0 127
-#   cmap 145 63 36 127
-#   cmap 146 63 72 127
-#   cmap 147 63 109 127
-#   cmap 148 63 145 127
-#   cmap 149 63 182 127
-#   cmap 150 63 218 127
-#   cmap 151 63 255 127
-#   cmap 152 127 0 127
-#   cmap 153 127 36 127
-#   cmap 154 127 72 127
-#   cmap 155 127 109 127
-#   cmap 156 127 145 127
-#   cmap 157 127 182 127
-#   cmap 158 127 218 127
-#   cmap 159 127 255 127
-#   cmap 160 191 0 127
-#   cmap 161 191 36 127
-#   cmap 162 191 72 127
-#   cmap 163 191 109 127
-#   cmap 164 191 145 127
-#   cmap 165 191 182 127
-#   cmap 166 191 218 127
-#   cmap 167 191 255 127
-#   cmap 168 255 0 127
-#   cmap 169 255 36 127
-#   cmap 170 255 72 127
-#   cmap 171 255 109 127
-#   cmap 172 255 145 127
-#   cmap 173 255 182 127
-#   cmap 174 255 218 127
-#   cmap 175 255 255 127
-#   cmap 176 0 0 191
-#   cmap 177 0 36 191
-#   cmap 178 0 72 191
-#   cmap 179 0 109 191
-#   cmap 180 0 145 191
-#   cmap 181 0 182 191
-#   cmap 182 0 218 191
-#   cmap 183 0 255 191
-#   cmap 184 63 0 191
-#   cmap 185 63 36 191
-#   cmap 186 63 72 191
-#   cmap 187 63 109 191
-#   cmap 188 63 145 191
-#   cmap 189 63 182 191
-#   cmap 190 63 218 191
-#   cmap 191 63 255 191
-#   cmap 192 127 0 191
-#   cmap 193 127 36 191
-#   cmap 194 127 72 191
-#   cmap 195 127 109 191
-#   cmap 196 127 145 191
-#   cmap 197 127 182 191
-#   cmap 198 127 218 191
-#   cmap 199 127 255 191
-#   cmap 200 191 0 191
-#   cmap 201 191 36 191
-#   cmap 202 191 72 191
-#   cmap 203 191 109 191
-#   cmap 204 191 145 191
-#   cmap 205 191 182 191
-#   cmap 206 191 218 191
-#   cmap 207 191 255 191
-#   cmap 208 255 0 191
-#   cmap 209 255 36 191
-#   cmap 210 255 72 191
-#   cmap 211 255 109 191
-#   cmap 212 255 145 191
-#   cmap 213 255 182 191
-#   cmap 214 255 218 191
-#   cmap 215 255 255 191
-#   cmap 216 0 0 255
-#   cmap 217 0 36 255
-#   cmap 218 0 72 255
-#   cmap 219 0 109 255
-#   cmap 220 0 145 255
-#   cmap 221 0 182 255
-#   cmap 222 0 218 255
-#   cmap 223 0 255 255
-#   cmap 224 63 0 255
-#   cmap 225 63 36 255
-#   cmap 226 63 72 255
-#   cmap 227 63 109 255
-#   cmap 228 63 145 255
-#   cmap 229 63 182 255
-#   cmap 230 63 218 255
-#   cmap 231 63 255 255
-#   cmap 232 127 0 255
-#   cmap 233 127 36 255
-#   cmap 234 127 72 255
-#   cmap 235 127 109 255
-#   cmap 236 127 145 255
-#   cmap 237 127 182 255
-#   cmap 238 127 218 255
-#   cmap 239 127 255 255
-#   cmap 240 191 0 255
-#   cmap 241 191 36 255
-#   cmap 242 191 72 255
-#   cmap 243 191 109 255
-#   cmap 244 191 145 255
-#   cmap 245 191 182 255
-#   cmap 246 191 218 255
-#   cmap 247 191 255 255
-#   cmap 248 255 0 255
-#   cmap 249 255 36 255
-#   cmap 250 255 72 255
-#   cmap 251 255 109 255
-#   cmap 252 255 145 255
-#   cmap 253 255 182 255
-#   cmap 254 255 218 255
     # RE-PROGRAMMED COLORS
     #     We have to force these off the normal ramps
     #     for the interface to look right..
@@ -538,7 +346,7 @@ theme "Tan"
     cmap 4 0   40   255		# blue pixel bar color
     cmap 5 255 0 255		# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0 255 255
-    cmap 7 255 255 255		# bg color of some input fields (Try, Add..)
+    cmap 7 255 255 255		# bg color of some input fields (Timecode, etc)
     cmap 8 85 85 85
     cmap 9 198 113 113		# Dump button red
     cmap 10 113 198 113
@@ -605,13 +413,13 @@ theme "Tan"
     cmap 87  191 255 0
     cmap 88  255 0   0
     cmap 89  255 36  0
-    cmap 90  255 73  0		# Die/Pause orange
+    cmap 90  255 73  0
     cmap 91  255 109 0
     cmap 92  255 146 0
     cmap 93  255 182 0
     cmap 94  255 219 0		# report button 'running a command'
     cmap 95  255 255 0		# text selection color
-    cmap 96  0   0   64
+    cmap 96  0   0   0          # Pixel Information Background color
     cmap 97  0   36  64
     cmap 98  0   73  64
     cmap 99  0   109 64
@@ -870,13 +678,13 @@ theme "Plain Gray"
     cmap 87  191 255 0
     cmap 88  255 0   0
     cmap 89  255 36  0
-    cmap 90  255 73  0		# Die/Pause orange
+    cmap 90  255 73  0
     cmap 91  255 109 0
     cmap 92  255 146 0
     cmap 93  255 182 0
     cmap 94  255 219 0
     cmap 95  255 255 0		# text selection color
-    cmap 96  0   0   64
+    cmap 96  0   0   0          # Pixel Information Background color
     cmap 97  0   36  64
     cmap 98  0   73  64
     cmap 99  0   109 64
@@ -1117,7 +925,7 @@ theme "Black"
     cmap 4 0   40   255		# blue pixel bar color
     cmap 5 120 0   120		# mag LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0   120 120		# cyn
-    cmap 7 152 168 168		# color of background of input fields
+    cmap 7 152 168 168		# color of background of input fields (Timecode)
     cmap 8 100 100 100		# desaturated black
     cmap 9 100 0  0             # desaturated red
     cmap 10 0 100 0		# desaturated grn
@@ -1210,7 +1018,7 @@ theme "Black"
     cmap 93  110 79  0
     cmap 94  110 94  0
     cmap 95  110 110 0		# text selection color (bg)
-    cmap 96  0   0   28
+    cmap 96  0   0   0          # Pixel Information Background color
     cmap 97  0   16  28
     cmap 98  0   31  28
     cmap 99  0   47  28
@@ -1370,23 +1178,4 @@ theme "Black"
     cmap 253 110 79  110
     cmap 254 110 94  110
     cmap 255 110 110 110
-
-    # RE-PROGRAMMED COLORS
-    #     We have to force these off the normal ramps
-    #     for the interface to look right..
-    #
-    # cmap 0   140 140 140	# black: color of most label text
-    # cmap 1   180   40  40       # red: selection of preferences/file browser
-    # cmap 2   0   180 0          # grn: jobs 'Continue' button border color
-    # cmap 4   0 0     180	# blu (label color for "Reports", "Current Job", "Run/Busy" state..)
-    # cmap 5   160 60  160	# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
-    # cmap 9   100 0   0		# Dump button red
-    # cmap 13  60  20  60		# desaturated magenta: color for the 'enabled' search box
-    # cmap 59  40 140  40		# "Done" green
-    # cmap 90  160 120 40		# Die/Pause orange
-    # cmap 94  120 80  20		# report button 'running a command'
-    # cmap 95  140 140 100	# text selection color
-    # cmap 124 90  68  30		# "End" and "Add Nevercpu" button color (orange)
-    # cmap 254 50  70  70		# bgcolor of 'current jobid' lines in tty browse
-    # cmap 255 70  70  70		# FL_WHITE -- tty browser bg color
 }
