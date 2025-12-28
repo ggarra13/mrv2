@@ -351,6 +351,34 @@ namespace tl
             size_t numPos = std::string::npos;
             if (size > 0)
             {
+                // It must end in 'd', start with '%', and have only digits in between.
+                if (size > 1 && 'd' == _path[size - 1])
+                {
+                    for (int i = size - 2; i >= static_cast<int>(protocolDirSize); --i)
+                    {
+                        if ('%' == _path[i])
+                        {
+                            bool isPrintf = true;
+                            // Ensure everything between % and d is a digit
+                            for (int j = i + 1; j < size - 1; ++j)
+                            {
+                                if (!isdigit(_path[j]))
+                                {
+                                    isPrintf = false;
+                                    break;
+                                }
+                            }
+
+                            if (isPrintf)
+                            {
+                                numPos = i;
+                            }
+                            // Once we hit a %, we stop searching backwards regardless of validity
+                            // to avoid misinterpreting earlier % signs.
+                            break;
+                        }
+                    }
+                }
                 for (int i = size - 1; i >= static_cast<int>(protocolDirSize); --i)
                 {
                     if (numbers.find(_path[i]) != std::string::npos)
@@ -386,6 +414,18 @@ namespace tl
                 else if ('#' == _path[numPos])
                 {
                     _pad = sizeTmp;
+                }
+                else if ('%' == _path[numPos])
+                {
+                    if (sizeTmp > 2)
+                    {
+                        std::string widthStr = _path.substr(numPos + 1, sizeTmp - 2);
+                        _pad = std::atoi(widthStr.c_str());
+                    }
+                    else
+                    {
+                        _pad = 0; // case for %d
+                    }
                 }
                 if (options.seqNegative &&
                     '-' == _path[numPos] &&
