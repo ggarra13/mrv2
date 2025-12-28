@@ -49,6 +49,7 @@ ChangeLog
 
 - Improved Vulkan's Text Editor.
 - Besides test.0001.exr, added support for sequences as test.%04d.exr and test.####.exr.
+- Improved Vulkan performance on macOS Intel and macOS M1+.
 
 
 v1.4.9
