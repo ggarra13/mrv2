@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <stddef.h>
 
+
 namespace tl
 {
     namespace vlk
@@ -527,7 +528,7 @@ namespace tl
             VkDevice device = ctx.device;
             VkQueue queue = ctx.queue();
 
-#ifdef MRV2_NO_VMA    
+#ifdef MRV2_NO_VMA
             // Create staging buffer
             VkBuffer stagingBuffer;
             VkDeviceMemory stagingMemory;
@@ -663,6 +664,8 @@ namespace tl
             }
             else
             {
+                // This info.layout.alignment is wrong.  It just checks
+                // tlRender's alignment, but we should also check Vulkan's.
                 if (info.layout.alignment == 1) {
                     std::memcpy(mapped, srcData, size);
                 } else {
@@ -714,8 +717,10 @@ namespace tl
 
             // Transition to shader-readable
             transition(cmd,
-                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_TRANSFER_WRITE_BIT,
-                       VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
+                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                       VK_ACCESS_TRANSFER_WRITE_BIT,
+                       VK_PIPELINE_STAGE_TRANSFER_BIT,
+                       VK_ACCESS_SHADER_READ_BIT,
                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
             {
@@ -757,11 +762,14 @@ namespace tl
             VkMemoryRequirements memReqs;
             vkGetImageMemoryRequirements(device, p.image, &memReqs);
 
-            VkMemoryPropertyFlags memFlags =
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+            
+            // Fast-path condition: 
+            // - Memory must be Host Visible
+            // - Tiling must be Linear (Optimal tiling cannot be memcpied directly)
+            bool canDirectMap = (p.memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) && 
+                                (p.options.tiling == VK_IMAGE_TILING_LINEAR);
 
-            if ((p.memoryFlags & memFlags) == memFlags)
+            if (canDirectMap)
             {
                 VkImageSubresource subresource = {};
                 subresource.aspectMask =
@@ -774,8 +782,7 @@ namespace tl
                     device, p.image, &subresource, &subresourceLayout);
 
                 void* mapped;
-                if (rowPitch == 0 && size == subresourceLayout.size &&
-                    !p.needPadRgbToRgba)
+                if (rowPitch == 0 && size == subresourceLayout.size)
                 {
 #ifdef MRV2_NO_VMA
                     // Host-visible upload (like glTexSubImage2D)
@@ -810,7 +817,7 @@ namespace tl
                     
                     if (p.needPadRgbToRgba)
                     {
-                        size_t pixelCount = static_cast<size_t>(p.info.size.w) * p.info.size.h;
+                        const size_t pixelCount = static_cast<size_t>(p.info.size.w) * p.info.size.h;
 
                         switch(p.info.pixelType)
                         {
@@ -878,22 +885,6 @@ namespace tl
                             void* dst_row = static_cast<uint8_t*>(mapped) + y * subresourceLayout.rowPitch;
                             std::memcpy(dst_row, src_row, dst_row_size);
                         }
-                    }
-     
-                    for (uint32_t y = 0;
-                         y < static_cast<uint32_t>(p.info.size.h); ++y)
-                    {
-                        // Source row start in your tightly packed data
-                        const void* src_row = static_cast<const uint8_t*>(data) + y * src_row_pitch;
-
-                        // Destination row start in the mapped memory, using the
-                        // rowPitch
-                        void* dst_row = static_cast<uint8_t*>(mapped) +
-                                        y * subresourceLayout.rowPitch;
-
-                        // Copy the actual pixel data for this row (excluding
-                        // padding)
-                        std::memcpy(dst_row, src_row, dst_row_size);
                     }
                     
 #ifdef MRV2_NO_VMA
