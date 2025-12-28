@@ -651,11 +651,7 @@ namespace tl
             uint32_t frameIndex = 0;
 
             VkBuffer vertexBuffer = VK_NULL_HANDLE;
-#ifdef MRV2_NO_VMA
-            VkDeviceMemory vertexMemory = VK_NULL_HANDLE;
-#else
             VmaAllocation allocation = VK_NULL_HANDLE;
-#endif
             
             void* mappedPtr = nullptr;
 
@@ -683,11 +679,6 @@ namespace tl
                                VK_BUFFER_USAGE_TRANSFER_DST_BIT;
             bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-#ifdef MRV2_NO_VMA
-            if (vkCreateBuffer(device, &bufferInfo, nullptr, &p.vertexBuffer) != VK_SUCCESS)
-                throw std::runtime_error("Failed to create persistent vertex buffer");
-
-#else
             VmaAllocationCreateInfo allocCreateInfo = {};
             allocCreateInfo.usage = VMA_MEMORY_USAGE_AUTO;
             allocCreateInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
@@ -699,55 +690,39 @@ namespace tl
             {
                 throw std::runtime_error("Failed to create vertex buffer with VMA");
             }
-            
+
+            VkPhysicalDeviceProperties props;
+            vkGetPhysicalDeviceProperties(ctx.gpu, &props);
+    
+            VkMemoryRequirements memReqs;
+            vkGetBufferMemoryRequirements(ctx.device, p.vertexBuffer, &memReqs);
+
+            // 1. Memory alignment (from the driver)
+            // 2. Atom size (required for flushing non-coherent memory)
+            // We use the max of these to ensure every "slot" in our ring buffer is safe to flush.
+            p.alignment = std::max(memReqs.alignment, props.limits.nonCoherentAtomSize);
+    
+            // Note: minUniformBufferOffsetAlignment is NOT required for Vertex Buffers, 
+            // but p.alignment must be at least 1.
+            p.alignment = std::max(p.alignment, (size_t)1);
+
+            const VkDeviceSize totalSize = DYNAMIC_VERTEX_BUFFER_SIZE;
+            const VkDeviceSize frameCount = MAX_FRAMES_IN_FLIGHT;
+    
+            // Ensure each frame's start is aligned to p.alignment
+            p.regionSize = (totalSize / frameCount);
+            p.regionSize = (p.regionSize / p.alignment) * p.alignment;
+
+            if (p.regionSize == 0) throw std::runtime_error("Buffer too small");
+    
             p.mappedPtr = allocInfo.pMappedData;
             if (!p.mappedPtr)
             {
-                throw std::runtime_error("Failed to get mapped pointer from VMA");
+                if (vmaMapMemory(ctx.allocator, p.allocation, &p.mappedPtr) != VK_SUCCESS)
+                {
+                    throw std::runtime_error("Failed to map VMA memory");
+                }
             }
-#endif
-            
-            VkMemoryRequirements memRequirements;
-            vkGetBufferMemoryRequirements(device, p.vertexBuffer, &memRequirements);
-
-            VkPhysicalDeviceProperties props;
-            vkGetPhysicalDeviceProperties(gpu, &props);
-            VkDeviceSize memAlign   = memRequirements.alignment;
-            VkDeviceSize vertAlign  = props.limits.minUniformBufferOffsetAlignment;
-            VkDeviceSize atomSize   = props.limits.nonCoherentAtomSize;
-            p.alignment             = std::max(std::max(memAlign, vertAlign),
-                                               atomSize);
-
-            // Now carve equal regions, rounded down to p.alignment:
-            const VkDeviceSize totalSize  = memRequirements.size;
-            const VkDeviceSize frameCount = MAX_FRAMES_IN_FLIGHT;
-            const VkDeviceSize regionSize = totalSize / frameCount;
-            p.regionSize = (totalSize / frameCount / p.alignment) * p.alignment;
-            if (!p.regionSize)
-                throw std::runtime_error("Per-frame region too small for required alignment");
-            if (p.regionSize > regionSize)
-                throw std::runtime_error("Per-frame region too big with required alignment");
-            if (p.regionSize * frameCount > totalSize)
-                throw std::runtime_error("Per-frame region * MAX_FRAMES_IN_FLIGHT too big with required alignment");
-
-#ifdef MRV2_NO_VMA
-            VkMemoryAllocateInfo allocInfo{};
-            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-            allocInfo.allocationSize = memRequirements.size;
-            allocInfo.memoryTypeIndex = findMemoryType(
-                gpu, memRequirements.memoryTypeBits,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-            if (vkAllocateMemory(device, &allocInfo, nullptr, &p.vertexMemory) != VK_SUCCESS)
-                throw std::runtime_error("Failed to allocate persistent vertex memory");
-
-            vkBindBufferMemory(device, p.vertexBuffer, p.vertexMemory, 0);
-
-            // Persistently map
-            if (vkMapMemory(device, p.vertexMemory, 0, memRequirements.size, 0, &p.mappedPtr) != VK_SUCCESS)
-                throw std::runtime_error("Failed to map persistent vertex buffer");
-#endif
         }
 
         VAO::VAO(Fl_Vk_Context& context) :
@@ -762,20 +737,10 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-#ifdef MRV2_NO_VMA
-            if (p.vertexBuffer != VK_NULL_HANDLE)
-                vkDestroyBuffer(device, p.vertexBuffer, nullptr);
-            if (p.vertexMemory != VK_NULL_HANDLE)
-            {
-                vkUnmapMemory(device, p.vertexMemory);
-                vkFreeMemory(device, p.vertexMemory, nullptr);
-            }
-#else            
             if (p.vertexBuffer != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
             {
                 vmaDestroyBuffer(ctx.allocator, p.vertexBuffer, p.allocation);
             }
-#endif
         }
 
         std::shared_ptr<VAO> VAO::create(Fl_Vk_Context& context)
@@ -799,41 +764,38 @@ namespace tl
         {
             TLRENDER_P();
             const size_t dataSize = vertexData.size();
-            const std::size_t startRegion = p.frameIndex * p.regionSize;
+            const std::size_t absOffset = (p.frameIndex * p.regionSize) + p.relativeOffset;
 
+            // Check for overflow within the frame region
+            if (p.relativeOffset + dataSize > p.regionSize) {
+                throw std::runtime_error("VAO: Frame region overflow! Increase DYNAMIC_VERTEX_BUFFER_SIZE.");
+            }
             // Compute absolute offset in the big buffer:
             // per-frame region + relative
-            size_t absOffset = startRegion + p.relativeOffset;
             void* dst = reinterpret_cast<uint8_t*>(p.mappedPtr) + absOffset;
             memcpy(dst, vertexData.data(), dataSize);
 
-            // Increase the relative offset
-            p.relativeOffset += dataSize;
+            // IMPORTANT: Flush must be aligned to nonCoherentAtomSize
+            // We align the size of the flush to p.alignment (which includes atomSize)
+            size_t alignedFlushSize = (dataSize + p.alignment - 1) & ~(p.alignment - 1);
+    
+            // Don't flush past the allocated buffer size
+            if (absOffset + alignedFlushSize > (DYNAMIC_VERTEX_BUFFER_SIZE)) {
+                alignedFlushSize = DYNAMIC_VERTEX_BUFFER_SIZE - absOffset;
+            }
             
-            // Align relativeOffset for the next upload
-            p.relativeOffset = (p.relativeOffset + p.alignment - 1) & ~(p.alignment - 1);
-
-#ifdef MRV2_NO_VMA
-            VkDevice device = ctx.device;
-            VkMappedMemoryRange range = {};
-            range.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-            range.memory = p.vertexMemory;
-            range.offset = absOffset;
-            range.size = VK_WHOLE_SIZE;
-
-            VkResult result = vkFlushMappedMemoryRanges(device, 1, &range);
-            if (result != VK_SUCCESS)
-                throw std::runtime_error("vkFlushMappedMemoryRanges failed on macOS");
-#else
-            VmaAllocationInfo allocInfo;
-            vmaGetAllocationInfo(ctx.allocator, p.allocation, &allocInfo);
-            if (vmaFlushAllocation(ctx.allocator, p.allocation, absOffset, dataSize) != VK_SUCCESS)
+            if (vmaFlushAllocation(ctx.allocator, p.allocation, absOffset, alignedFlushSize) != VK_SUCCESS)
             {
                 throw std::runtime_error("vmaFlushAllocation failed");
             }
-#endif
 
-            return absOffset;
+            size_t currentUploadOffset = absOffset;
+
+            // Advance and align the relative offset for the NEXT upload
+            p.relativeOffset += dataSize;
+            p.relativeOffset = (p.relativeOffset + p.alignment - 1) & ~(p.alignment - 1);
+
+            return currentUploadOffset;
         }
 
         void VAO::draw(VkCommandBuffer& cmd, const std::size_t vertexCount,
@@ -852,15 +814,12 @@ namespace tl
         }
 
         VkBuffer VAO::getBuffer() const { return _p->vertexBuffer; }
+
         VkDeviceMemory VAO::getDeviceMemory() const
         {
-#ifdef MRV2_NO_VMA
-            return _p->vertexMemory;
-#else
             VmaAllocationInfo allocInfo;
             vmaGetAllocationInfo(ctx.allocator, _p->allocation, &allocInfo);
             return allocInfo.deviceMemory;
-#endif
         }
         
     } // namespace vlk
