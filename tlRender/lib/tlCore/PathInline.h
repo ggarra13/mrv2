@@ -123,7 +123,9 @@ namespace tl
 
         inline bool Path::hasSeqWildcard() const
         {
-            return "#" == getNumber();
+            const std::string& number = getNumber();
+            if (number.empty()) return false;
+            return (number[0] == '#' || number[0] == '%');
         }
 
         inline std::string Path::getFrame(int64_t frame, bool dir) const
@@ -145,7 +147,7 @@ namespace tl
         inline bool Path::sequence(const Path& other) const
         {
             return
-                (hasNumber() || "#" == getNumber()) &&
+                (hasNumber() || hasSeqWildcard()) &&
                 other.hasNumber() &&
                 _dir == other._dir &&
                 _base == other._base &&

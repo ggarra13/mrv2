@@ -1843,7 +1843,8 @@ namespace mrv
         pathOptions.seqMaxDigits =
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits");
 
-        if (!file::isDirectory(fileName) && !file::isReadable(fileName))
+        if (!filePath.hasSeqWildcard() &&
+            !file::isDirectory(fileName) && !file::isReadable(fileName))
         {
             /* xgettext:c-format */
             const std::string err =
