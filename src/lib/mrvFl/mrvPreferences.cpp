@@ -1610,6 +1610,17 @@ namespace mrv
         vulkan.set("gpu_timeline",
                    (int)uiPrefs->uiPrefsTimelineGPU->value());
 
+        //
+        // Voice Overs
+        //
+        Fl_Preferences voice(base, "voice");
+        
+        voice.set("path", uiPrefs->uiPrefsVoiceOverPath->value());
+        voice.set("speed", uiPrefs->uiPrefsVoiceOverSpeed->value());
+        voice.set("microphone", uiPrefs->uiPrefsVoiceOverMicrophone->value());
+        voice.set("volume", uiPrefs->uiPrefsVoiceOverSpeed->value());
+
+        
         Fl_Preferences ComfyUI(base, "comfyUI");
         ComfyUI.set("input_pipe", (int)uiPrefs->uiPrefsUseComfyUIPipe->value());
 
