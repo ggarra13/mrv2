@@ -80,9 +80,14 @@ namespace mrv2
             out = player->getAnnotationTimes();
             return out;
         }
-        
+
+        /** 
+         * Get a list of .wav voice annotations for the current frame.
+         * 
+         * @return list of .wav files
+         */
         std::vector<std::string >
-        getVoiceAnnotations(const otime::RationalTime& time)
+        getVoiceAnnotations()
         {
             std::vector<std::string > out;
         
@@ -92,11 +97,55 @@ namespace mrv2
             auto annotations = player->getVoiceAnnotations();
             for (auto annotation : annotations)
             {
-                for (auto voice : annotation->voices )
+                for (auto voice : annotation->voices)
                 {
                     out.push_back(voice->getFileName());
                 }
             }
+            return out;
+        }
+
+        /** 
+         * Return a JSON string with the list of all voice annotations for the
+         * current time.
+         * 
+         * @return JSON output.
+         */
+        std::string
+        getVoiceAnnotationsJSON()
+        {
+            std::string out;
+        
+            auto player = App::ui->uiView->getTimelinePlayer();
+            if (!player) return out;
+
+            nlohmann::json j;
+
+            auto annotations = player->getVoiceAnnotations();
+            std::vector<nlohmann::json > voiceAnnotations;
+            for (auto annotation : annotations)
+            {
+                nlohmann::json a;
+                a["time"] = annotation->time;
+
+                std::vector<nlohmann::json > voices;
+                for (auto voice : annotation->voices)
+                {
+                    nlohmann::json v;
+                    v["voice"] = voice->getFileName();
+                    v["mouse"] = voice->mouse;
+                    voices.push_back(v);
+                }
+                a["voices"] = voices;
+                voiceAnnotations.push_back(a);
+            }
+            j["voiceAnnotations"] = voiceAnnotations;
+
+            // Voice over recordings are always done at 30 FPS.
+            // Maybe this should use player's default speed instead?
+            j["FPS"] = 30.F;  
+
+            out = j.dump(4);
             return out;
         }
         
@@ -137,5 +186,8 @@ Contains all functions and classes related to the annotationss.
         _("Get all times for annotations."));
     annotations.def(
         "getVoiceAnnotations", &mrv2::annotations::getVoiceAnnotations,
-        _("Get all voice annotations for current frame."));
+        _("Get all .wav voice annotations for current frame."));
+    annotations.def(
+        "getVoiceAnnotationsJSON", &mrv2::annotations::getVoiceAnnotationsJSON,
+        _("Get all voice and mouse directions for current frame as a JSON file."));
 }

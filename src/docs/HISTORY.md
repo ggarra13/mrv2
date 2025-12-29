@@ -50,6 +50,8 @@ ChangeLog
 - Improved Vulkan's Text Editor.
 - Besides test.0001.exr, added support for sequences as test.%04d.exr and test.####.exr.
 - Improved Vulkan performance on macOS Intel and macOS M1+.
+- Removed the time parameter from Python's getVoiceAnnotations as it was not used.
+- Fixed Pro's Voice Over preferences not getting saved. 
 
 
 v1.4.9
