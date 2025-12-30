@@ -684,12 +684,8 @@ namespace tl
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
 
-#ifdef MRV2_NO_VMA
-            auto bindingSet = std::make_shared<ShaderBindingSet>(device);
-#else
             auto bindingSet = std::make_shared<ShaderBindingSet>(device,
                                                                  ctx.allocator);
-#endif
             bindingSet->shaderName = shaderName;
             
             std::vector<VkDescriptorSetLayoutBinding> bindings;
@@ -857,11 +853,7 @@ namespace tl
 
                 ubo.buffers.resize(MAX_FRAMES_IN_FLIGHT);
                 ubo.infos.resize(MAX_FRAMES_IN_FLIGHT);
-#ifdef MRV2_NO_VMA
-                ubo.memories.resize(MAX_FRAMES_IN_FLIGHT);
-#else
                 ubo.allocation.resize(MAX_FRAMES_IN_FLIGHT);
-#endif
 
                 for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
                 {
@@ -871,33 +863,23 @@ namespace tl
                     bufferInfo.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
                     bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-#ifdef MRV2_NO_VMA
-                    VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &ubo.buffers[i]));
 
-                    VkMemoryRequirements memReqs;
-                    vkGetBufferMemoryRequirements(device, ubo.buffers[i], &memReqs);
-
-                    VkMemoryAllocateInfo allocInfo = {};
-                    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                    allocInfo.allocationSize = memReqs.size;
-                    allocInfo.memoryTypeIndex = findMemoryType(
-                        gpu,
-                        memReqs.memoryTypeBits,
-                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                        VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-            
-                    VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &ubo.memories[i]));
-                    VK_CHECK(vkBindBufferMemory(device, ubo.buffers[i], ubo.memories[i], 0));
-#else
                     VmaAllocationCreateInfo allocInfo = {};
-                    allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;  // or VMA_MEMORY_USAGE_AUTO_PREFER_HOST
+                    allocInfo.usage = VMA_MEMORY_USAGE_AUTO;
+
+                    // This flag ensures the memory is accessible by the CPU
+                    // for writing.
+                    allocInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT;
+                    // Ensure the memory is coherent. 
+                    // This forces VMA to select a memory type that doesn't
+                    // require manual flushing.
+                    allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
                     
                     VmaAllocation allocation;
                     vmaCreateBuffer(ctx.allocator, &bufferInfo, &allocInfo,
                                     &ubo.buffers[i], &allocation,
                                     nullptr);
                     ubo.allocation[i] = allocation;
-#endif
                     ubo.infos[i].buffer = ubo.buffers[i];
                     ubo.infos[i].offset = 0;
                     ubo.infos[i].range = ubo.size;
