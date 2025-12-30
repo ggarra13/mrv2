@@ -894,6 +894,28 @@ namespace tl
                     vmaFlushAllocation(ctx.allocator, p.allocation, 0, VK_WHOLE_SIZE);
 #endif
                 }
+                
+                // We must transition the image layout so the shader can
+                // read it.
+                // Even though we wrote the data via CPU, the GPU state machine 
+                // still thinks the image is UNDEFINED.
+                
+                VkCommandBuffer cmd = beginSingleTimeCommands(device, p.commandPool);
+                
+                transition(cmd,
+                           VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                           VK_ACCESS_HOST_WRITE_BIT, // We just wrote to it from Host
+                           VK_PIPELINE_STAGE_HOST_BIT,  // From the Host stage
+                           VK_ACCESS_SHADER_READ_BIT,
+                           VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+
+                {
+                    std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                    endSingleTimeCommands(cmd, device, p.commandPool, queue);
+                }
+                
+                // Update the tracked layout state
+                p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             }
             else
             {
