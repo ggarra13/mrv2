@@ -681,6 +681,8 @@ namespace tl
                 }
             }
             vmaUnmapMemory(ctx.allocator, stagingAllocation);
+            vmaFlushAllocation(ctx.allocator, stagingAllocation, 0,
+                               VK_WHOLE_SIZE);
 #endif
             // Begin command buffer
             VkCommandBuffer cmd = beginSingleTimeCommands(device,
@@ -994,6 +996,8 @@ namespace tl
                 vkUnmapMemory(device, stagingMemory);
 #else
                 vmaUnmapMemory(ctx.allocator, stagingAllocation);
+                vmaFlushAllocation(ctx.allocator, stagingAllocation, 0,
+                                   VK_WHOLE_SIZE);
 #endif
 
                 // Transition image for copy
