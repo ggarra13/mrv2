@@ -119,21 +119,35 @@ namespace mrv2
             auto player = App::ui->uiView->getTimelinePlayer();
             if (!player) return out;
 
+            const auto& viewportSize = App::ui->uiView->getViewportSize();
+            const auto& renderSize = App::ui->uiView->getRenderSize();
+            const float viewZoom = App::ui->uiView->viewZoom();
+
+            // Calculate resolution multiplier.
+            float resolutionMultiplier = renderSize.w * 6 / 4096.0 / viewZoom;
+            resolutionMultiplier = std::clamp(resolutionMultiplier, 1.F, 10.F);
+            
             nlohmann::json j;
+            j["viewportSize"] = viewportSize;
+            j["renderSize"] = renderSize;
+            j["viewZoom"] = viewZoom;
 
             auto annotations = player->getVoiceAnnotations();
             std::vector<nlohmann::json > voiceAnnotations;
             for (auto annotation : annotations)
             {
                 nlohmann::json a;
-                a["time"] = annotation->time;
+                a["time"] = annotation->time.floor();
+                a["allFrames"] = annotation->allFrames;
 
                 std::vector<nlohmann::json > voices;
                 for (auto voice : annotation->voices)
                 {
                     nlohmann::json v;
+                    v["center"] = voice->getCenter();
                     v["voice"] = voice->getFileName();
                     v["mouse"] = voice->mouse;
+                    v["multiplier"] = resolutionMultiplier;
                     voices.push_back(v);
                 }
                 a["voices"] = voices;

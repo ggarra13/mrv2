@@ -54,7 +54,8 @@ ChangeLog
 - Improved Vulkan performance on macOS Intel and macOS M1+.
 - Improved Vulkan performance on Linux and Windows.
 - Removed the time parameter from Python's getVoiceAnnotations as it was not used.
-- Fixed Pro's Voice Over preferences not getting saved. 
+- Fixed Pro's Voice Over preferences not getting saved.
+- Added Python's getVoiceOverAnnotationsJSON to get voice over data and mouse moves as a simple JSON file.
 
 
 v1.4.9
