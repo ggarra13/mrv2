@@ -188,6 +188,12 @@ Currently, when run as demo these versions don't have:
 	   - NDI support
 	   - Performance as good as the release builds
 
+They do have, however:
+
+	   - Tone-mapping (OpenGL) and HDR (Vulkan)
+	   - OpenEXR layer switching
+	   - A Window for donations and unlocking of features at the start
+
 EOF
 
 HISTORY=../../../src/docs/HISTORY.md
