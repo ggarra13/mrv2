@@ -1468,8 +1468,13 @@ msgstr ""
 msgid "Get all times for annotations."
 msgstr "Erhalten Sie alle Zeiten für Anmerkungen."
 
-msgid "Get all voice annotations for current frame."
-msgstr "Alle Sprachkommentare für den aktuellen Frame abrufen."
+msgid "Get all .wav voice annotations for current frame."
+msgstr "Alle .wav-Sprachkommentare für den aktuellen Frame abrufen."
+
+msgid "Get all voice and mouse directions for current frame as a JSON file."
+msgstr ""
+"Alle Sprach- und Mausbewegungen für den aktuellen Frame als JSON-Datei "
+"abrufen."
 
 msgid "Open with Audio"
 msgstr "Mit Audio ffnen"
@@ -2864,6 +2869,7 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "Die entfernte Datei {0} entspricht dem Dateinamen {1} aber nicht dem Pfad."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Die entfernte Datei {0} entspricht nicht dem lokalen Dateinamen."
 
@@ -2930,15 +2936,18 @@ msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 "Die neue Datei {0} existiert bereits! Sie kann nicht berschrieben werden."
 
+#. ++-format
 msgid "Rotated image info: {0}"
 msgstr "Informationen zum gedrehten Bild: {0}"
 
+#. ++-format
 msgid "Scaled image info: {0}"
 msgstr "Skalierte Bildinformation: {0}"
 
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Das Schreiber-Plugin kann nicht geffnet werden."
 
+#. ++-format
 msgid "Image info: {0} {1}"
 msgstr "Bildinformation: {0} {1}"
 
@@ -2947,6 +2956,7 @@ msgstr ""
 "Bild zu groß für das Speichern von Anmerkungen. Es wird auf die "
 "Ansichtsgröße skaliert."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Ansichtsgre: {0} - X={1}, Y={2}"
 
@@ -2959,6 +2969,7 @@ msgstr "Ausgabeinfos: {0} {1}"
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Verwendung von Profil {0}, Pixelformat {1}."
 
+#. ++-format
 msgid "Using preset {0}."
 msgstr "Verwendung von voreingestellten {0}."
 
@@ -2981,9 +2992,11 @@ msgstr ""
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Ungültiges OpenGL-Format und -Typ"
 
+#. ++-format
 msgid "OpenGL info: {0}"
 msgstr "OpenGL-Informationen: {0}"
 
+#. ++-format
 msgid "Saving... {0}"
 msgstr "Speichern... {0}"
 
@@ -2993,9 +3006,11 @@ msgstr "Nicht unterstütztes Ausgabeformat"
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Leere Videodaten zur Zeit {0}. Wiederholungsbild."
 
+#. ++-format
 msgid "Render size: {0}"
 msgstr "Rendergröße: {0}"
 
+#. ++-format
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Bildebenen-Informationen '{0}': {1} {2}"
 
@@ -3069,9 +3084,11 @@ msgstr "Einstellung von OCIO config aus Einstellungen."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Einstellung von OCIO config aus der Umgebungsvariable OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Pfad-Mappings wurden aus \"{0}{1}\" geladen."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Hotkeys von \"{0}{1}.prefs\" werden geladen."
 
@@ -3084,6 +3101,7 @@ msgstr "Pfad-Mappings wurden in \"{0}{1}\" gespeichert."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys wurden auf \"{0}{1}.prefs\" gespeichert."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Einstellungen wurden gespeichert auf: \"{0}{1}\"."
 
@@ -3135,6 +3153,7 @@ msgstr "Keine Standardansicht für die Anzeige '{0}'. Gibt es die Anzeige?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Einstellung OCIO Preset '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preset '{0}' nicht gefunden."
 
@@ -3723,6 +3742,7 @@ msgstr "Kann nicht {0} einfgen. Fehler {1}."
 msgid "Could not save .otio file: {0}"
 msgstr "Die.otio-Datei kann nicht gespeichert werden: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Fehler beim Speichern von {0}. {1}"
 
@@ -3738,6 +3758,7 @@ msgstr "Sie knnen Clips nur zu einer.otio EDL Wiedergabeliste hinzufgen."
 msgid "Unknown media reference"
 msgstr "Unbekannte Medienreferenz"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Gleis #{0} - {1}"
 
@@ -3911,6 +3932,7 @@ msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "Edit Text"
 msgstr "Text bearbeiten"
 
+#. ++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' ist keine Datei, kein Verzeichnis und keine URL."
 
@@ -3929,6 +3951,7 @@ msgstr "Wiedergabe nicht möglich – Audioanmerkung ist leer"
 msgid "Status is not saved"
 msgstr "Status ist nicht gespeichert"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Die Audioanmerkungsdatei {0} fehlt oder existiert nicht!"
 

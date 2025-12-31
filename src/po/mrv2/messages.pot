@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.4.9\n"
+"Project-Id-Version: mrv2 v1.5.0\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -1277,7 +1277,10 @@ msgstr ""
 msgid "Get all times for annotations."
 msgstr ""
 
-msgid "Get all voice annotations for current frame."
+msgid "Get all .wav voice annotations for current frame."
+msgstr ""
+
+msgid "Get all voice and mouse directions for current frame as a JSON file."
 msgstr ""
 
 msgid "Open with Audio"
@@ -2616,6 +2619,7 @@ msgstr ""
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr ""
 
@@ -2675,21 +2679,25 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
+#. ++-format
 msgid "Rotated image info: {0}"
 msgstr ""
 
+#. ++-format
 msgid "Scaled image info: {0}"
 msgstr ""
 
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
+#. ++-format
 msgid "Image info: {0} {1}"
 msgstr ""
 
 msgid "Image too big for Save Annotations.  Will scale to the viewport size."
 msgstr ""
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
@@ -2702,6 +2710,7 @@ msgstr ""
 msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
+#. ++-format
 msgid "Using preset {0}."
 msgstr ""
 
@@ -2723,9 +2732,11 @@ msgstr ""
 msgid "{0}: Invalid OpenGL format and type"
 msgstr ""
 
+#. ++-format
 msgid "OpenGL info: {0}"
 msgstr ""
 
+#. ++-format
 msgid "Saving... {0}"
 msgstr ""
 
@@ -2735,9 +2746,11 @@ msgstr ""
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr ""
 
+#. ++-format
 msgid "Render size: {0}"
 msgstr ""
 
+#. ++-format
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr ""
 
@@ -2807,9 +2820,11 @@ msgstr ""
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr ""
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
@@ -2822,6 +2837,7 @@ msgstr ""
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr ""
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr ""
 
@@ -2873,6 +2889,7 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr ""
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr ""
 
@@ -3426,6 +3443,7 @@ msgstr ""
 msgid "Could not save .otio file: {0}"
 msgstr ""
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr ""
 
@@ -3441,6 +3459,7 @@ msgstr ""
 msgid "Unknown media reference"
 msgstr ""
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr ""
 
@@ -3610,6 +3629,7 @@ msgstr ""
 msgid "Edit Text"
 msgstr ""
 
+#. ++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr ""
 
@@ -3628,6 +3648,7 @@ msgstr ""
 msgid "Status is not saved"
 msgstr ""
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr ""
 
