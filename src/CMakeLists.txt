@@ -402,7 +402,7 @@ add_compile_definitions(GIT_BRANCH_NAME="${GIT_BRANCH}")
 add_compile_definitions(GIT_SHORT_HASH="${GIT_SHORT_HASH}")
 
 #
-# Use UTF-8
+# Use UTF-8 with Microsoft's compiler
 #
 if(MSVC)
     add_compile_options(/utf-8)

@@ -184,7 +184,6 @@ Currently, when run as demo these versions don't have:
 
 	   - Saving
 	   - Annotations
-	   - OpenEXR Layer switching
 	   - Editing
 	   - NDI support
 	   - Performance as good as the release builds
