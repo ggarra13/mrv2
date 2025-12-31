@@ -523,6 +523,7 @@ namespace mrv
                     string::Format("{0}").arg(p.options.port)),
 #endif
 
+                app::CmdLineHeader::create({}, _("Miscellaneous:")),
                 app::CmdLineFlagOption::create(
                     p.options.displayVersion, {"-version", "-v"},
                     _("Return the version and exit."))});

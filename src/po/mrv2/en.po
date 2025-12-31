@@ -1674,6 +1674,9 @@ msgid ""
 msgstr ""
 "Port number for the server to listen to or for the client to connect to."
 
+msgid "Miscellaneous:"
+msgstr "Miscellaneous:"
+
 msgid "Return the version and exit."
 msgstr "Return the version and exit."
 
@@ -2891,7 +2894,6 @@ msgstr "Remote files are less than local files."
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Remote file {0} matches file name {1} but not path."
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Remote file {0} does not match local filename."
 
@@ -2956,25 +2958,21 @@ msgstr "HAP profile needs a .mov extension.  Changing it to .mov"
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "New file {0} already exist!  Cannot overwrite it."
 
-#. ++-format
 msgid "Rotated image info: {0}"
 msgstr "Rotated image info: {0}"
 
-#. ++-format
 msgid "Scaled image info: {0}"
 msgstr "Scaled image info: {0}"
 
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Cannot open writer plugin."
 
-#. ++-format
 msgid "Image info: {0} {1}"
 msgstr "Image info: {0} {1}"
 
 msgid "Image too big for Save Annotations.  Will scale to the viewport size."
 msgstr "Image too big for Save Annotations.  Will scale to the viewport size."
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Viewport Size: {0} - X={1}, Y={2}"
 
@@ -2987,7 +2985,6 @@ msgstr "Output info: {0} {1}"
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Using profile {0}, pixel format {1}."
 
-#. ++-format
 msgid "Using preset {0}."
 msgstr "Using preset {0}."
 
@@ -3009,11 +3006,9 @@ msgstr "Audio only in timeline, but not trying to save audio."
 msgid "{0}: Invalid OpenGL format and type"
 msgstr "{0}: Invalid OpenGL format and type"
 
-#. ++-format
 msgid "OpenGL info: {0}"
 msgstr "OpenGL info: {0}"
 
-#. ++-format
 msgid "Saving... {0}"
 msgstr "Saving... {0}"
 
@@ -3023,11 +3018,9 @@ msgstr "Unsupported output format"
 msgid "Empty video data at time {0}.  Repeating frame."
 msgstr "Empty video data at time {0}.  Repeating frame."
 
-#. ++-format
 msgid "Render size: {0}"
 msgstr "Render size: {0}"
 
-#. ++-format
 msgid "Image Layer '{0}' info: {1} {2}"
 msgstr "Image Layer '{0}' info: {1} {2}"
 
@@ -3103,11 +3096,9 @@ msgstr "Setting OCIO config from preferences."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Setting OCIO config from OCIO environment variable."
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Path mappings have been loaded from \"{0}{1}\"."
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
 
@@ -3120,7 +3111,6 @@ msgstr "Path mappings have been saved to \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys have been saved to \"{0}{1}.prefs\"."
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Preferences have been saved to: \"{0}{1}\"."
 
@@ -3172,7 +3162,6 @@ msgstr "No default view for display '{0}'.  Does display exist?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Setting OCIO Preset '{0}'."
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preset '{0}' not found."
 
@@ -3757,7 +3746,6 @@ msgstr "Could not paste {0}.  Error {1}."
 msgid "Could not save .otio file: {0}"
 msgstr "Could not save .otio file: {0}"
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error saving {0}. {1}"
 
@@ -3773,7 +3761,6 @@ msgstr "You can only add clips to an .otio EDL playlist."
 msgid "Unknown media reference"
 msgstr "Unknown media reference"
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Track #{0} - {1}"
 
@@ -3947,7 +3934,6 @@ msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "Edit Text"
 msgstr "Edit Text"
 
-#. ++-format
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' is not a file, directory or url."
 
@@ -3966,7 +3952,6 @@ msgstr "Cannot play - audio annotation is empty"
 msgid "Status is not saved"
 msgstr "Status is not saved"
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Audio annotation file {0} is missing or not exists!"
 
@@ -6030,7 +6015,7 @@ msgid "Fast"
 msgstr "Fast"
 
 msgid "Use RGBA"
-msgstr "RGBA"
+msgstr "Use RGBA"
 
 msgid "Use RGB"
 msgstr "Use RGB"
