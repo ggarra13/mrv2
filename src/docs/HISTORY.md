@@ -37,10 +37,12 @@ The donationware version when running without a donation, does not have:
     - Voice Annotations (available in Pro)
     - Move license to a new machine (available in Pro monthly)
 
-but has:
 
-   - OpenEXR layer switching.
-   - A donation / license unlocking window on start up.
+They do have, however:
+
+    - Tone-mapping (OpenGL) and HDR (Vulkan)
+    - OpenEXR layer switching
+    - A Window for donations and unlocking of features at the start
 
 Prices might change (go up or down) depending on competition and new features.
 
