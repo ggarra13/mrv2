@@ -540,8 +540,27 @@ namespace tl
         {
             IWidget::mousePressEvent(event);
             TLRENDER_P();
-            if (_options.inputEnabled && 0 == event.button &&
-                0 == event.modifiers)
+
+            bool doSelection = false;
+            if (p.editMode == timeline::EditMode::Select)
+            {
+                doSelection = true;
+                if (0 == event.button)
+                {
+                    if (0 == event.modifiers)
+                    {
+                        p.mouse.items.clear();
+                    }
+                }
+            }
+            else
+            {
+                if (_options.inputEnabled && 0 == event.button &&
+                    0 == event.modifiers)
+                    doSelection = true;
+            }
+            
+            if (doSelection)
             {
                 takeKeyFocus();
 
