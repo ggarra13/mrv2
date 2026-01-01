@@ -242,7 +242,7 @@ namespace tl
         } // namespace
 
         TLRENDER_ENUM_IMPL(
-            EditMode, "None", "Fill", "Move", "Ripple", "Roll",
+            EditMode, "None", "Fill", "Move", "Ripple", "Roll", "Select",
             "Slice", "Slip", "Slide", "Trim");
         TLRENDER_ENUM_SERIALIZE_IMPL(EditMode);
         

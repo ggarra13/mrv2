@@ -786,6 +786,9 @@ namespace mrv
 
             p.buffer.reset();
 
+            if (p.draggingClip)
+                toOtioFile(p.player, p.ui);
+
             repositionThumbnail();
         }
 

@@ -839,6 +839,9 @@ namespace mrv
             _sizeHintEvent();
             _setGeometry();
             _clipEvent();
+            
+            if (p.draggingClip)
+                toOtioFile(p.player, p.ui);
 
             repositionThumbnail();
         }

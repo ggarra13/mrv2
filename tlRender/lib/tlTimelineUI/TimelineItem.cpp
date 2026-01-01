@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlTimelineUI/TimelineItemPrivate.h>
@@ -90,7 +91,6 @@ namespace tl
                     track.durationLabel->setMarginRole(
                         ui::SizeRole::MarginInside);
 
-                    otio::Item* item = nullptr;
                     for (const auto& child : otioTrack->children())
                     {
                         if (auto clip =
@@ -500,11 +500,18 @@ namespace tl
             TLRENDER_P();
             switch(p.editMode)
             {
+            case timeline::EditMode::kNone:
+            case timeline::EditMode::Select:
+                return;
             case timeline::EditMode::Fill:
                 _mouseMoveEventFill(event);
                 break;
+            case timeline::EditMode::Insert:
+                break;
             case timeline::EditMode::Move:
                 _mouseMoveEventMove(event);
+                break;
+            case timeline::EditMode::Overwrite:
                 break;
             case timeline::EditMode::Ripple:
                 _mouseMoveEventRipple(event);
@@ -649,11 +656,18 @@ namespace tl
             p.scrub->setIfChanged(false);
             switch(p.editMode)
             {
+            case timeline::EditMode::kNone:
+            case timeline::EditMode::Select:
+                return;
             case timeline::EditMode::Fill:
                 _mouseReleaseEventFill(event);
                 break;
+            case timeline::EditMode::Insert:
+                break;
             case timeline::EditMode::Move:
                 _mouseReleaseEventMove(event);
+                break;
+            case timeline::EditMode::Overwrite:
                 break;
             case timeline::EditMode::Ripple:
                 _mouseReleaseEventRipple(event);
@@ -683,7 +697,9 @@ namespace tl
         bool TimelineItem::isDraggingClip() const
         {
             TLRENDER_P();
-            return p.mouse.mode == Private::MouseMode::Item;
+            return (p.mouse.mode == Private::MouseMode::Item &&
+                    p.editMode == timeline::EditMode::Move &&
+                    !p.mouse.items.empty());
         }
 
         void TimelineItem::setMoveCallback(

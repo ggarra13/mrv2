@@ -130,11 +130,11 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {open
+widget_class PixelToolBarClass {
   xywh {0 0 952 56} resizable
   class Fl_Double_Window visible
 } {
-  Fl_Group {} {open
+  Fl_Group {} {
     xywh {0 0 933 30} box FLAT_BOX color 96
   } {
     Fl_Menu_Button uiZoom {
@@ -351,7 +351,7 @@ ui->uiView->redraw();}
             Fl_Output uiPixelH {
               tooltip {Hue value of image pixel under mouse.} xywh {579 3 68 25} box FLAT_BOX color 96 align 48 textsize 12 textcolor 3
             }
-            Fl_Output uiPixelS {selected
+            Fl_Output uiPixelS {
               tooltip {Saturation value of image pixel under mouse.} xywh {647 3 67 25} box FLAT_BOX color 96 align 48 textsize 12 textcolor 3
             }
             Fl_Output uiPixelV {
@@ -441,7 +441,7 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class TimelineClass {open
+widget_class TimelineClass {
   xywh {0 0 933 56} box NO_BOX hide resizable
   class Fl_Double_Window
 } {
@@ -857,7 +857,7 @@ class ViewerUI {open
   }
   decl {mrv::SecondaryWindow* uiSecondary;} {public local
   }
-  Function {make_window()} {private
+  Function {make_window()} {open private
   } {
     code {uiPrefs = new PreferencesUI(this);
 uiHotkey = new HotkeyUI(this);
@@ -868,7 +868,7 @@ uiSecondary = nullptr;} {}
       user_data this user_data_type {ViewerUI*}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
-    exit_cb( o, v );}
+    exit_cb( o, v );} open
       xywh {0 0 933 673} type Double align 80 hide resizable
       class {mrv::MainWindow} size_range {933 674 0 0}
     } {
@@ -879,7 +879,7 @@ if (reason == FL_REASON_CLOSED)
           label MenuBar open
           xywh {0 0 933 30} box FLAT_BOX labeltype NO_LABEL
         } {
-          Fl_Group {} {open
+          Fl_Group {} {open selected
             xywh {0 0 892 30}
           } {
             Fl_Menu_Bar uiMenuBar {open
@@ -1157,52 +1157,52 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
               Fl_Group uiEditGroup {open
                 xywh {0 59 42 501} box FLAT_BOX
               } {
+                Fl_Button uiSelect {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Select );}
+                  image {../../icons/EditSelect.svg} compress_image 1 xywh {2 60 40 50} down_box DOWN_BOX selection_color 95
+                  class {mrv::Button}
+                }
                 Fl_Button uiMove {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Move );}
-                  image {../../../../../applications/mrv2/src/icons/EditMove.svg} compress_image 1 xywh {2 60 40 50} down_box DOWN_BOX value 1 selection_color 95
+                  image {../../../../../applications/mrv2/src/icons/EditMove.svg} compress_image 1 xywh {1 110 40 50} down_box DOWN_BOX value 1 selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiRoll {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Roll );}
-                  image {../../icons/EditRoll.svg} compress_image 1 xywh {2 110 40 50} down_box DOWN_BOX selection_color 95
+                  image {../../icons/EditRoll.svg} compress_image 1 xywh {1 160 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiTrim {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Trim );}
-                  image {../../icons/EditTrim.svg} compress_image 1 xywh {2 160 40 50} down_box DOWN_BOX selection_color 95
+                  image {../../icons/EditTrim.svg} compress_image 1 xywh {1 210 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiSlip {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Slip );}
-                  image {../../icons/EditSlip.svg} compress_image 1 xywh {2 210 40 50} down_box DOWN_BOX selection_color 95 hide
+                  image {../../icons/EditSlip.svg} compress_image 1 xywh {1 260 40 50} down_box DOWN_BOX selection_color 95 hide
                   class {mrv::Button}
                 }
                 Fl_Button uiSlide {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Slide );}
-                  image {../../icons/EditSlide.svg} compress_image 1 xywh {2 260 40 50} down_box DOWN_BOX selection_color 95 hide
+                  image {../../icons/EditSlide.svg} compress_image 1 xywh {1 310 40 50} down_box DOWN_BOX selection_color 95 hide
                   class {mrv::Button}
                 }
                 Fl_Button uiRipple {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Ripple );}
-                  image {../../icons/EditRipple.svg} compress_image 1 xywh {2 310 40 50} down_box DOWN_BOX selection_color 95 hide
+                  image {../../icons/EditRipple.svg} compress_image 1 xywh {1 360 40 50} down_box DOWN_BOX selection_color 95 hide
                   class {mrv::Button}
                 }
                 Fl_Button uiSlice {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Slice );}
-                  image {../../icons/EditSlice.svg} compress_image 1 xywh {2 360 40 50} down_box DOWN_BOX selection_color 95 hide
-                  class {mrv::Button}
-                }
-                Fl_Button uiFill {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Fill );}
-                  image {../../icons/EditFill.svg} compress_image 1 xywh {2 410 40 50} down_box DOWN_BOX selection_color 95 hide
+                  image {../../icons/EditSlice.svg} compress_image 1 xywh {1 410 40 50} down_box DOWN_BOX selection_color 95 hide
                   class {mrv::Button}
                 }
                 Fl_Group {} {open

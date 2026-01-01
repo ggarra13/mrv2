@@ -27,11 +27,12 @@ namespace tl
             Move,
             Overwrite,
             Ripple,
-            Roll,    // Slides One clip to the side, expanding its neighbor
+            Roll,   
+            Select,
             Slice,
             Slip,
             Slide,
-            Trim,   // Moves clip's side leaving a mew gap
+            Trim,  
             
             Count,
             First = Move
