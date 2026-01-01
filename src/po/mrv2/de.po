@@ -1632,6 +1632,9 @@ msgstr "Portnummer fr den Server zum Anhren oder zum Verbinden des Clients."
 msgid "Miscellaneous:"
 msgstr "Verschiedenes:"
 
+msgid "Open the application as if no license was present."
+msgstr "Anwendung so öffnen, als ob keine Lizenz vorhanden wäre."
+
 msgid "Return the version and exit."
 msgstr "Geben Sie die Version zurck und beenden Sie."
 
@@ -3805,6 +3808,9 @@ msgstr "Erneut aufnehmen"
 
 msgid "Delete"
 msgstr "Lschen"
+
+msgid "Select"
+msgstr "Auswählen"
 
 msgid "Move"
 msgstr "Verschieben"

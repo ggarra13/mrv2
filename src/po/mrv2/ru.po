@@ -1688,6 +1688,9 @@ msgstr ""
 msgid "Miscellaneous:"
 msgstr "Разное:"
 
+msgid "Open the application as if no license was present."
+msgstr "Открыть приложение так, как если бы лицензия отсутствовала."
+
 msgid "Return the version and exit."
 msgstr "Верните версию и уйдите."
 
@@ -3844,6 +3847,9 @@ msgstr "Записать снова"
 
 msgid "Delete"
 msgstr "Исключить"
+
+msgid "Select"
+msgstr "Выбрать"
 
 msgid "Move"
 msgstr "Перемещение"

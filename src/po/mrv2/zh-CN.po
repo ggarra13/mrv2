@@ -1658,6 +1658,9 @@ msgstr "服务器监听或客户端连接的端口号"
 msgid "Miscellaneous:"
 msgstr "杂项:"
 
+msgid "Open the application as if no license was present."
+msgstr "在没有许可证的情况下打开应用程序。"
+
 msgid "Return the version and exit."
 msgstr "返回版本并退出"
 
@@ -3754,6 +3757,9 @@ msgstr "重新录制"
 
 msgid "Delete"
 msgstr "删除"
+
+msgid "Select"
+msgstr "选择"
 
 msgid "Move"
 msgstr "移动"

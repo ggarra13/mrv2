@@ -1654,6 +1654,9 @@ msgstr "Nmero de porta para o servidor ouvir ou para o cliente se conectar."
 msgid "Miscellaneous:"
 msgstr "Diversos:"
 
+msgid "Open the application as if no license was present."
+msgstr "Abrir o aplicativo como se não houvesse licença presente."
+
 msgid "Return the version and exit."
 msgstr "Devolver a verso e sair."
 
@@ -3804,6 +3807,9 @@ msgstr "Gravar novamente"
 
 msgid "Delete"
 msgstr "Excluir"
+
+msgid "Select"
+msgstr "Selecionar"
 
 msgid "Move"
 msgstr "Mover"

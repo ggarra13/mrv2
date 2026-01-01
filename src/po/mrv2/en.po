@@ -1677,6 +1677,9 @@ msgstr ""
 msgid "Miscellaneous:"
 msgstr "Miscellaneous:"
 
+msgid "Open the application as if no license was present."
+msgstr "Open the application as if no license was present."
+
 msgid "Return the version and exit."
 msgstr "Return the version and exit."
 
@@ -3820,6 +3823,9 @@ msgstr "Record Again"
 
 msgid "Delete"
 msgstr "Delete"
+
+msgid "Select"
+msgstr "Select"
 
 msgid "Move"
 msgstr "Move"
