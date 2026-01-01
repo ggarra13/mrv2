@@ -195,6 +195,15 @@ namespace
             mrv::App::supports_saving = true;
             mrv::App::supports_voice = false;
         }
+        else if (plan == "Demo")
+        {
+            mrv::App::supports_annotations = false;
+            mrv::App::supports_editing = false;
+            mrv::App::supports_layers = true;
+            mrv::App::supports_python = false;
+            mrv::App::supports_saving = false;
+            mrv::App::supports_voice = false;
+        }
         else
         {
             mrv::App::supports_annotations = false;
@@ -763,6 +772,13 @@ namespace mrv
 
     License license_beat()
     {
+        if (App::force_demo)
+        {
+            App::demo_mode = false;
+            return License::kInvalid;
+        }
+
+        
         std::string expiration;
         License ok = validate_license(expiration);
         if (ok == License::kValid)

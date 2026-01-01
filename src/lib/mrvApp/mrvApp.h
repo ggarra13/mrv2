@@ -186,6 +186,7 @@ namespace mrv
         static App* app;
 
         static bool demo_mode;
+        static bool force_demo;
 
         static bool supports_annotations;
         static bool supports_layers;

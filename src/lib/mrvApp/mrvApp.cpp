@@ -258,6 +258,7 @@ namespace mrv
     ViewerUI* App::ui = nullptr;
     App* App::app = nullptr;
     bool App::demo_mode = true;
+    bool App::force_demo = false;
 
     std::string App::session_id = "";
     LicenseType App::license_type = LicenseType::kDemo;
@@ -524,6 +525,9 @@ namespace mrv
 #endif
 
                 app::CmdLineHeader::create({}, _("Miscellaneous:")),
+                app::CmdLineFlagOption::create(
+                    App::force_demo, {"-demo"},
+                    _("Open the application as if no license was present.")),
                 app::CmdLineFlagOption::create(
                     p.options.displayVersion, {"-version", "-v"},
                     _("Return the version and exit."))});
