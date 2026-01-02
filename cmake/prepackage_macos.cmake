@@ -12,6 +12,7 @@ endfunction()
 function(install_mrv2_lib_glob _libglob)
     file(GLOB _libs "${_libglob}")
     foreach( _lib ${_libs} )
+	message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib")
 	file(COPY ${_lib}
 	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib)
     endforeach()
@@ -258,7 +259,14 @@ if (EXISTS ${CPACK_PREPACKAGE}/bin/python.sh)
     install_mrv2_bin_glob("${CPACK_PREPACKAGE}/bin/pip*")
 endif()
 
-install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libMoltenVK*")	
+#
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libfltk*")
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libglslang*")
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libintl*")
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libomp*")
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libz*")
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libMoltenVK*")
 
 file(COPY ${CPACK_PREPACKAGE}/certs
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
