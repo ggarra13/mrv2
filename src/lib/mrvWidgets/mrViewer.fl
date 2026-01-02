@@ -879,7 +879,7 @@ if (reason == FL_REASON_CLOSED)
           label MenuBar open
           xywh {0 0 933 30} box FLAT_BOX labeltype NO_LABEL
         } {
-          Fl_Group {} {open selected
+          Fl_Group {} {open
             xywh {0 0 892 30}
           } {
             Fl_Menu_Bar uiMenuBar {open
@@ -1177,7 +1177,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                 }
                 Fl_Button uiTrim {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Trim );}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Trim );} selected
                   image {../../icons/EditTrim.svg} compress_image 1 xywh {1 210 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }

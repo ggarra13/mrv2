@@ -314,7 +314,8 @@ namespace tl
                         p.mouse.items.begin(), p.mouse.items.end(),
                         [item](const std::shared_ptr<Private::MouseItemData>&
                                    value) { return item == value->p; });
-                    if (i != p.mouse.items.end())
+                    if (i != p.mouse.items.end() &&
+                        p.editMode != timeline::EditMode::Select)
                     {
                         continue;
                     }
@@ -371,7 +372,8 @@ namespace tl
                             p.mouse.items.begin(), p.mouse.items.end(),
                             [item](const std::shared_ptr<Private::MouseItemData>&
                                    value) { return item == value->p; });
-                        if (i != p.mouse.items.end())
+                        if (i != p.mouse.items.end() &&
+                            p.editMode != timeline::EditMode::Select)
                         {
                             continue;
                         }
