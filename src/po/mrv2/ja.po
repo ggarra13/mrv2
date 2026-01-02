@@ -3384,17 +3384,17 @@ msgstr "Alternar Modo de Edición"
 
 msgid ""
 "Roll Edit Tool.\n"
-"Moves the ending or beginning and adds gaps."
+"Moves the ending or beginning without adding gaps."
 msgstr ""
-"ロール編集ツール。\n"
-"終わりまたは始まりを移動し、ギャップを追加します。"
+"ロール編集ツール\n"
+"ギャップを作らずに終了点または開始点を移動します。"
 
 msgid ""
 "Trim Edit Tool\n"
-"Moves the ending or beginning without adding gaps"
+"Moves the ending or beginning adding gaps"
 msgstr ""
 "トリム編集ツール\n"
-"終わりまたは始まりを移動しますが、ギャップは追加しません。"
+"ギャップを作りながら終了点または開始点を移動します"
 
 msgid "Undo Edit"
 msgstr "Edición"
@@ -3689,6 +3689,15 @@ msgstr "EDL 項目 '{0}' はロードされなくなりました。元に戻す�
 
 msgid "Could not paste {0}.  Error {1}."
 msgstr "{0} を貼り付けられませんでした。エラー {1}。"
+
+msgid "Items selected must be on the same track."
+msgstr "選択されたアイテムは同じトラック上にある必要があります。"
+
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr "選択されたアイテムはトラック上で連続している必要があります。左 {0}、右 {0}。"
+
+msgid "Please select two or four contiguous items.  Selected {0}."
+msgstr "連続する2つまたは4つのアイテムを選択してください。選択済み: {0}"
 
 msgid "Could not save .otio file: {0}"
 msgstr ".otio ファイルを保存できませんでした: {0}"
@@ -4332,6 +4341,9 @@ msgstr "編集/オーディオギャップ/挿入"
 
 msgid "Edit/Audio Gap/Remove"
 msgstr "編集/オーディオギャップ/削除"
+
+msgid "Edit/Add Transition"
+msgstr "編集/トランジションを追加"
 
 msgid "Edit/Slice"
 msgstr "編集/スライス"
@@ -7589,6 +7601,9 @@ msgstr "オーディオギャップを挿入"
 msgid "Remove Audio Gap"
 msgstr "オーディオギャップを削除"
 
+msgid "Edit - Add Transition"
+msgstr "編集 - トランジションを追加"
+
 msgid "Edit - Fill Tool"
 msgstr "編集 - 塗りつぶしツール"
 
@@ -7837,6 +7852,13 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
+
+#~ msgid ""
+#~ "Roll Edit Tool.\n"
+#~ "Moves the ending or beginning and adds gaps."
+#~ msgstr ""
+#~ "ロール編集ツール。\n"
+#~ "終わりまたは始まりを移動し、ギャップを追加します。"
 
 #~ msgid "HDR monitor found."
 #~ msgstr "HDRモニターが見つかりました。"

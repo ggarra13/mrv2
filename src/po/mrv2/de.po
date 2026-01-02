@@ -3416,17 +3416,17 @@ msgstr "Verschiebe-Bearbeitungswerkzeug"
 
 msgid ""
 "Roll Edit Tool.\n"
-"Moves the ending or beginning and adds gaps."
+"Moves the ending or beginning without adding gaps."
 msgstr ""
-"Roll-Edit-Werkzeug.\n"
-"Verschiebt das Ende oder den Anfang und fügt Lücken hinzu."
+"Rollen-Bearbeitungswerkzeug.\n"
+"Verschiebt das Ende oder den Anfang, ohne Lücken hinzuzufügen."
 
 msgid ""
 "Trim Edit Tool\n"
-"Moves the ending or beginning without adding gaps"
+"Moves the ending or beginning adding gaps"
 msgstr ""
-"Trim-Edit-Werkzeug\n"
-"Verschiebt das Ende oder den Anfang, ohne Lücken hinzuzufügen."
+"Trimmen-Bearbeitungswerkzeug\n"
+"Verschiebt das Ende oder den Anfang und fügt Lücken hinzu"
 
 msgid "Undo Edit"
 msgstr "Bearbeitung rückgängig"
@@ -3730,6 +3730,19 @@ msgstr "EDL-Element '{0}' kann nicht mehr geladen werden."
 
 msgid "Could not paste {0}.  Error {1}."
 msgstr "Kann nicht {0} einfgen. Fehler {1}."
+
+msgid "Items selected must be on the same track."
+msgstr "Ausgewählte Elemente müssen sich auf derselben Spur befinden."
+
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr ""
+"Ausgewählte Elemente müssen auf der Spur nebeneinander liegen. Links {0}. "
+"Rechts {0}."
+
+msgid "Please select two or four contiguous items.  Selected {0}."
+msgstr ""
+"Bitte wählen Sie zwei oder vier aufeinanderfolgende Elemente aus. "
+"Ausgewählt: {0}."
 
 msgid "Could not save .otio file: {0}"
 msgstr "Die.otio-Datei kann nicht gespeichert werden: {0}"
@@ -4377,6 +4390,9 @@ msgstr "Bearbeiten/Audio-Gap/Einfgen"
 
 msgid "Edit/Audio Gap/Remove"
 msgstr "Bearbeiten/Audio-Gap/Entfernen"
+
+msgid "Edit/Add Transition"
+msgstr "Bearbeiten/Übergang hinzufügen"
 
 msgid "Edit/Slice"
 msgstr "Bearbeiten/Schnitt"
@@ -7787,6 +7803,9 @@ msgstr "Audio Gap einfgen"
 msgid "Remove Audio Gap"
 msgstr "Audio Gap entfernen"
 
+msgid "Edit - Add Transition"
+msgstr "Bearbeiten - Übergang hinzufügen"
+
 msgid "Edit - Fill Tool"
 msgstr "Bearbeiten – Füllwerkzeug"
 
@@ -8035,6 +8054,13 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid ""
+#~ "Roll Edit Tool.\n"
+#~ "Moves the ending or beginning and adds gaps."
+#~ msgstr ""
+#~ "Roll-Edit-Werkzeug.\n"
+#~ "Verschiebt das Ende oder den Anfang und fügt Lücken hinzu."
 
 #~ msgid "HDR monitor found."
 #~ msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."

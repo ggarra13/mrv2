@@ -305,7 +305,8 @@ namespace tl
                         p.mouse.items.begin(), p.mouse.items.end(),
                         [item](const std::shared_ptr<Private::MouseItemData>&
                                    value) { return item == value->p; });
-                    if (i != p.mouse.items.end())
+                    if (i != p.mouse.items.end() &&
+                        p.editMode != timeline::EditMode::Select)
                     {
                         continue;
                     }
@@ -362,7 +363,8 @@ namespace tl
                             p.mouse.items.begin(), p.mouse.items.end(),
                             [item](const std::shared_ptr<Private::MouseItemData>&
                                    value) { return item == value->p; });
-                        if (i != p.mouse.items.end())
+                        if (i != p.mouse.items.end() &&
+                            p.editMode != timeline::EditMode::Select)
                         {
                             continue;
                         }
@@ -1252,6 +1254,20 @@ namespace tl
             }
             return out;
         }
+
+        std::vector<const otio::Item*> TimelineItem::getSelectedItems() const
+        {
+            TLRENDER_P();
+            
+            std::vector<const otio::Item*> out;
+            for (const auto& item : p.mouse.items)
+            {
+                if (auto clip = dynamic_cast<const IBasicItem*>(item->p.get()))
+                    out.push_back(clip->getOtioItem());
+            }
+            return out;
+        }
+        
 
         
         TimelineItem::Private::MouseItemData::MouseItemData() {}

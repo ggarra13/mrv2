@@ -315,7 +315,7 @@ namespace mrv
             _p->style = style;
             _styleUpdate();
         }
-
+        
         void TimelineWidget::hideThumbnail()
         {
             TLRENDER_P();
@@ -330,6 +330,11 @@ namespace mrv
             Fl::remove_timeout(timerEvent_cb, this);
         }
 
+        std::vector<const otio::Item* > TimelineWidget::getSelectedItems() const
+        {
+            return _p->timelineWidget->getSelectedItems();
+        }
+        
         bool TimelineWidget::isEditable() const
         {
             return _p->timelineWidget->isEditable();
@@ -785,9 +790,6 @@ namespace mrv
             _clipEvent();
 
             p.buffer.reset();
-
-            if (p.draggingClip)
-                toOtioFile(p.player, p.ui);
 
             repositionThumbnail();
         }

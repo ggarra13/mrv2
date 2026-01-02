@@ -3374,17 +3374,17 @@ msgstr "移动编辑工具"
 
 msgid ""
 "Roll Edit Tool.\n"
-"Moves the ending or beginning and adds gaps."
+"Moves the ending or beginning without adding gaps."
 msgstr ""
 "滚动编辑工具。\n"
-"移动结尾或开头并添加间隙。"
+"移动结束或开始位置而不产生间隙。"
 
 msgid ""
 "Trim Edit Tool\n"
-"Moves the ending or beginning without adding gaps"
+"Moves the ending or beginning adding gaps"
 msgstr ""
 "修剪编辑工具\n"
-"移动结尾或开头但不添加间隙。"
+"移动结束或开始位置并产生间隙"
 
 msgid "Undo Edit"
 msgstr "撤销编辑"
@@ -3679,6 +3679,15 @@ msgstr "EDL 项目 '{0}' 不再装入。 无法撤消或重做"
 
 msgid "Could not paste {0}.  Error {1}."
 msgstr "无法粘贴 {0}  错误 {1}"
+
+msgid "Items selected must be on the same track."
+msgstr "所选项目必须在同一轨道上。"
+
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr "所选项目在轨道上必须是连续的。左侧 {0}。右侧 {0}。"
+
+msgid "Please select two or four contiguous items.  Selected {0}."
+msgstr "请选择两个或四个连续的项目。已选 {0}。"
 
 msgid "Could not save .otio file: {0}"
 msgstr "无法保存. otio 文件: {0}"
@@ -4322,6 +4331,9 @@ msgstr "编辑/音频Gap/插入"
 
 msgid "Edit/Audio Gap/Remove"
 msgstr "编辑/音频Gap/删除"
+
+msgid "Edit/Add Transition"
+msgstr "编辑/添加过渡"
 
 msgid "Edit/Slice"
 msgstr "编辑/切片"
@@ -7599,6 +7611,9 @@ msgstr "插入音频差"
 msgid "Remove Audio Gap"
 msgstr "删除音频差"
 
+msgid "Edit - Add Transition"
+msgstr "编辑 - 添加过渡"
+
 msgid "Edit - Fill Tool"
 msgstr "编辑 — 填充工具"
 
@@ -7847,6 +7862,13 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid ""
+#~ "Roll Edit Tool.\n"
+#~ "Moves the ending or beginning and adds gaps."
+#~ msgstr ""
+#~ "滚动编辑工具。\n"
+#~ "移动结尾或开头并添加间隙。"
 
 #~ msgid "HDR monitor found."
 #~ msgstr "发现HDR显示器。"

@@ -26,7 +26,6 @@ namespace tl
 
         //! Timeline item.
         //!
-        //! \todo Add a selection model.
         //! \todo Add support for dragging clips to different tracks.
         class TimelineItem : public IItem
         {
@@ -96,6 +95,9 @@ namespace tl
             // void keyPressEvent(ui::KeyEvent&) override;
             // void keyReleaseEvent(ui::KeyEvent&) override;
 
+            std::vector<const otio::Item*> getSelectedItems() const;
+            
+            
         protected:
             void _timeUnitsUpdate() override;
 

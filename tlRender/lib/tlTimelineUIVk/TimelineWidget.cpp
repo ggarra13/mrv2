@@ -767,5 +767,16 @@ namespace tl
                 }
             }
         }
+        
+        std::vector<const otio::Item*> TimelineWidget::getSelectedItems() const
+        {
+            TLRENDER_P();
+            
+            std::vector<const otio::Item* > out;
+            if (p.timelineItem)
+                out = p.timelineItem->getSelectedItems();
+            return out;
+        }
+        
     } // namespace timelineui_vk
 } // namespace tl

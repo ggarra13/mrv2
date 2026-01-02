@@ -133,6 +133,8 @@ namespace mrv
 
             void continuePlaying();
 
+            std::vector<const otio::Item* > getSelectedItems() const;
+            
         protected:
 
             const float pixelRatio() const;

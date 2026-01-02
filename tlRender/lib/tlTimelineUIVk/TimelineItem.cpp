@@ -1261,6 +1261,19 @@ namespace tl
             }
             return out;
         }
+        
+        std::vector<const otio::Item*> TimelineItem::getSelectedItems() const
+        {
+            TLRENDER_P();
+            
+            std::vector<const otio::Item*> out;
+            for (const auto& item : p.mouse.items)
+            {
+                if (auto clip = dynamic_cast<const IBasicItem*>(item->p.get()))
+                    out.push_back(clip->getOtioItem());
+            }
+            return out;
+        }
 
         
         TimelineItem::Private::MouseItemData::MouseItemData() {}

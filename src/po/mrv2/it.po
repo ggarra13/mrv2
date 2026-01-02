@@ -3451,17 +3451,17 @@ msgstr "Strumento di Editing Sposta"
 
 msgid ""
 "Roll Edit Tool.\n"
-"Moves the ending or beginning and adds gaps."
+"Moves the ending or beginning without adding gaps."
 msgstr ""
-"Strumento di Roll Edit.\n"
-"Sposta la fine o l'inizio e aggiunge degli spazi."
+"Strumento Roll Edit.\n"
+"Sposta la fine o l'inizio senza aggiungere spazi vuoti."
 
 msgid ""
 "Trim Edit Tool\n"
-"Moves the ending or beginning without adding gaps"
+"Moves the ending or beginning adding gaps"
 msgstr ""
-"Strumento di Trim Edit\n"
-"Sposta la fine o l'inizio senza aggiungere spazi."
+"Strumento Trim Edit\n"
+"Sposta la fine o l'inizio aggiungendo spazi vuoti"
 
 msgid "Undo Edit"
 msgstr "Annulla Editing"
@@ -3765,6 +3765,17 @@ msgstr ""
 
 msgid "Could not paste {0}.  Error {1}."
 msgstr "Impossibile incollare {0}. Errore {1}."
+
+msgid "Items selected must be on the same track."
+msgstr "Gli elementi selezionati devono essere sulla stessa traccia."
+
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr ""
+"Gli elementi selezionati devono essere contigui sulla traccia. Sinistra {0}."
+" Destra {0}."
+
+msgid "Please select two or four contiguous items.  Selected {0}."
+msgstr "Selezionare due o quattro elementi contigui. Selezionati {0}."
 
 msgid "Could not save .otio file: {0}"
 msgstr "Impossibile salvare il file.otio: {0}"
@@ -4412,6 +4423,9 @@ msgstr "Modifica/Lacuna audio/Inserisci"
 
 msgid "Edit/Audio Gap/Remove"
 msgstr "Modifica/Lacuna audio/Rimuovi"
+
+msgid "Edit/Add Transition"
+msgstr "Modifica/Aggiungi transizione"
 
 msgid "Edit/Slice"
 msgstr "Modifica/Trancia"
@@ -7833,6 +7847,9 @@ msgstr "Inserisci gap audio"
 msgid "Remove Audio Gap"
 msgstr "Rimuovi il gap audio"
 
+msgid "Edit - Add Transition"
+msgstr "Modifica - Aggiungi transizione"
+
 msgid "Edit - Fill Tool"
 msgstr "Editing - Strumento Riempi"
 
@@ -8081,6 +8098,13 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
+
+#~ msgid ""
+#~ "Roll Edit Tool.\n"
+#~ "Moves the ending or beginning and adds gaps."
+#~ msgstr ""
+#~ "Strumento di Roll Edit.\n"
+#~ "Sposta la fine o l'inizio e aggiunge degli spazi."
 
 #~ msgid "HDR monitor found."
 #~ msgstr "Monitor HDR trovato."

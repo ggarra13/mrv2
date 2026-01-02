@@ -3459,17 +3459,17 @@ msgstr "Инструмент перемещения"
 
 msgid ""
 "Roll Edit Tool.\n"
-"Moves the ending or beginning and adds gaps."
+"Moves the ending or beginning without adding gaps."
 msgstr ""
-"Инструмент ролл-редактирования.\n"
-"Перемещает конец или начало и добавляет промежутки."
+"Инструмент монтажа со сдвигом (Roll).\n"
+"Перемещает конец или начало без добавления разрывов."
 
 msgid ""
 "Trim Edit Tool\n"
-"Moves the ending or beginning without adding gaps"
+"Moves the ending or beginning adding gaps"
 msgstr ""
-"Инструмент трим-редактирования\n"
-"Перемещает конец или начало без добавления промежутков."
+"Инструмент подрезки (Trim)\n"
+"Перемещает конец или начало с добавлением разрывов"
 
 msgid "Undo Edit"
 msgstr "Отменить правку"
@@ -3769,6 +3769,16 @@ msgstr ""
 
 msgid "Could not paste {0}.  Error {1}."
 msgstr "Невозможно вставить {0}. Ошибка {1}."
+
+msgid "Items selected must be on the same track."
+msgstr "Выбранные элементы должны находиться на одной дорожке."
+
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr ""
+"Выбранные элементы на дорожке должны быть смежными. Слева {0}. Справа {0}."
+
+msgid "Please select two or four contiguous items.  Selected {0}."
+msgstr "Пожалуйста, выберите два или четыре смежных элемента. Выбрано {0}."
 
 msgid "Could not save .otio file: {0}"
 msgstr "Невозможно сохранить файл.otio: {0}"
@@ -4416,6 +4426,9 @@ msgstr "Правка/Пробел звука/Вставить"
 
 msgid "Edit/Audio Gap/Remove"
 msgstr "Правка/Пробел звука/Удалить"
+
+msgid "Edit/Add Transition"
+msgstr "Правка/Добавить переход"
 
 msgid "Edit/Slice"
 msgstr "Правка/Кусочек"
@@ -7816,6 +7829,9 @@ msgstr "Вставить проем звука"
 msgid "Remove Audio Gap"
 msgstr "Удалить звуковой пробел"
 
+msgid "Edit - Add Transition"
+msgstr "Правка - Добавить переход"
+
 msgid "Edit - Fill Tool"
 msgstr "Редактирование — инструмент заполнения"
 
@@ -8064,6 +8080,13 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
+
+#~ msgid ""
+#~ "Roll Edit Tool.\n"
+#~ "Moves the ending or beginning and adds gaps."
+#~ msgstr ""
+#~ "Инструмент ролл-редактирования.\n"
+#~ "Перемещает конец или начало и добавляет промежутки."
 
 #~ msgid "HDR monitor found."
 #~ msgstr "HDR-монитор найден."

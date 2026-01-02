@@ -1476,6 +1476,9 @@ namespace mrv
                     _("Edit/Audio Gap/Remove"), kEditRemoveAudioGap.hotkey(),
                     (Fl_Callback*)edit_remove_audio_gap_cb, ui);
 
+                menu->add(_("Edit/Add Transition"), kEditAddTransition.hotkey(),
+                          (Fl_Callback*)edit_add_transition_cb, ui);
+                
                 menu->add(
                     _("Edit/Slice"), kEditSliceClip.hotkey(),
                     (Fl_Callback*)edit_slice_clip_cb, ui);

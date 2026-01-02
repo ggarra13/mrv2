@@ -3416,17 +3416,17 @@ msgstr "Ferramenta de Edição Mover"
 
 msgid ""
 "Roll Edit Tool.\n"
-"Moves the ending or beginning and adds gaps."
+"Moves the ending or beginning without adding gaps."
 msgstr ""
-"Ferramenta de edição roll.\n"
-"Move o final ou o início e adiciona lacunas."
+"Ferramenta de Edição Roll.\n"
+"Move o final ou o início sem adicionar espaços vazios."
 
 msgid ""
 "Trim Edit Tool\n"
-"Moves the ending or beginning without adding gaps"
+"Moves the ending or beginning adding gaps"
 msgstr ""
-"Ferramenta de edição trim\n"
-"Move o final ou o início sem adicionar lacunas."
+"Ferramenta de Edição Trim\n"
+"Move o final ou o início adicionando espaços vazios"
 
 msgid "Undo Edit"
 msgstr "Desfazer Edição"
@@ -3729,6 +3729,18 @@ msgstr "O item EDL '{0}' j no est carregado. No  possvel desfazer ou refazer."
 
 msgid "Could not paste {0}.  Error {1}."
 msgstr "No foi possvel colar {0}. Erro {1}."
+
+msgid "Items selected must be on the same track."
+msgstr "Os itens selecionados devem estar na mesma faixa."
+
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr ""
+"Os itens selecionados devem ser contíguos na faixa. Esquerda {0}. Direita "
+"{0}."
+
+msgid "Please select two or four contiguous items.  Selected {0}."
+msgstr ""
+"Por favor, selecione dois ou quatro itens contíguos. Selecionados {0}."
 
 msgid "Could not save .otio file: {0}"
 msgstr "No foi possvel salvar o ficheiro.otio: {0}"
@@ -4376,6 +4388,9 @@ msgstr "Editar/Lacuna de udio/Inserir"
 
 msgid "Edit/Audio Gap/Remove"
 msgstr "Editar/Lacuna de udio/Remover"
+
+msgid "Edit/Add Transition"
+msgstr "Editar/Adicionar Transição"
 
 msgid "Edit/Slice"
 msgstr "Editar/Pedaos"
@@ -7782,6 +7797,9 @@ msgstr "Inserir a lacuna de udio"
 msgid "Remove Audio Gap"
 msgstr "Remover a Lacuna de udio"
 
+msgid "Edit - Add Transition"
+msgstr "Editar - Adicionar Transição"
+
 msgid "Edit - Fill Tool"
 msgstr "Edição - Ferramenta Preencher"
 
@@ -8030,6 +8048,13 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
+
+#~ msgid ""
+#~ "Roll Edit Tool.\n"
+#~ "Moves the ending or beginning and adds gaps."
+#~ msgstr ""
+#~ "Ferramenta de edição roll.\n"
+#~ "Move o final ou o início e adiciona lacunas."
 
 #~ msgid "HDR monitor found."
 #~ msgstr "Monitor HDR encontrado."

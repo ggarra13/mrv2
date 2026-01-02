@@ -1135,6 +1135,7 @@ namespace mrv
         tcp->pushMessage("Edit/Frame/Insert", time);
     }
 
+    
     void edit_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1682,6 +1683,105 @@ namespace mrv
         ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Audio Gap/Remove", time);
+    }
+
+    void _addTransition(const otio::Item* left,
+                        const otio::Item* right)
+    {
+        auto track = left->parent();
+        if (track != right->parent())
+        {
+            LOG_ERROR(_("Items selected must be on the same track."));
+            return;
+        }
+
+        const auto left_range =  left->trimmed_range_in_parent().value();
+        const auto right_range = right->trimmed_range_in_parent().value();
+        
+        if (left_range.end_time_exclusive() != right_range.start_time())
+        {
+            std::string err = string::Format(
+                _("Items selected must be contiguous on the track. "
+                  "Left {0}.  Right {0}."))
+                              .arg(left_range)
+                              .arg(right_range);
+            LOG_ERROR(err);
+            return;
+        }
+        
+        int left_index = track->index_of_child(left);
+        if (left_index < 0 || left_index >= track->children().size())
+        {
+            throw std::runtime_error("Internal error: left item not in track!");
+        }
+        
+        int right_index = track->index_of_child(right);
+        if (right_index < 0 || right_index >= track->children().size())
+        {
+            throw std::runtime_error("Internal error: right item not in track!");
+        }
+
+        double left_rate = left_range.duration().rate();
+        double right_rate = right_range.duration().rate();
+        
+        auto in_offset = RationalTime(std::max(1.0, left_range.duration().value() /
+                                               2.0), left_rate);
+        auto out_offset = RationalTime(std::max(1.0, right_range.duration().value() /
+                                               2.0), right_rate);
+
+        otio::Transition* transition =
+            new otio::Transition("", "SMPTE_Dissolve", in_offset, out_offset);
+        track->insert_child(left_index + 1, transition);
+    }
+    
+    void edit_add_transition_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+
+        makePathsAbsolute(timeline, ui);
+
+        
+        auto selection = ui->uiTimeline->getSelectedItems();
+        if (selection.size() != 2 && selection.size() != 4)
+        {
+            std::string err =
+                string::Format(_("Please select two or four contiguous items.  "
+                                 "Selected {0}.")).arg(selection.size());
+            LOG_ERROR(err);
+            return;
+        }
+
+        const otio::Item* left, *right;
+
+        if (selection.size() == 2)
+        {
+            left = selection[0];
+            right = selection[1];
+            _addTransition(left, right);
+        }
+        else
+        {
+            // Video
+            left = selection[0];
+            right = selection[2];
+            _addTransition(left, right);
+
+            // Audio
+            left = selection[1];
+            right = selection[3];
+            _addTransition(left, right);
+        }
+        
+        const auto& time = getTime(player);
+        updateTimeline(timeline, time, ui);
+        toOtioFile(timeline, ui);
     }
     
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)

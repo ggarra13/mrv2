@@ -3496,17 +3496,17 @@ msgstr "Herramienta de Edición Mover"
 
 msgid ""
 "Roll Edit Tool.\n"
-"Moves the ending or beginning and adds gaps."
+"Moves the ending or beginning without adding gaps."
 msgstr ""
-"Herramienta de edición de roll.\n"
-"Mueve el final o el principio y añade huecos."
+"Herramienta de edición de desplazamiento (Roll).\n"
+"Mueve el final o el principio sin añadir huecos."
 
 msgid ""
 "Trim Edit Tool\n"
-"Moves the ending or beginning without adding gaps"
+"Moves the ending or beginning adding gaps"
 msgstr ""
-"Herramienta de edición de recorte\n"
-"Mueve el final o el principio sin añadir huecos."
+"Herramienta de edición de recorte (Trim)\n"
+"Mueve el final o el principio añadiendo huecos"
 
 msgid "Undo Edit"
 msgstr "Deshacer Edición"
@@ -3807,6 +3807,18 @@ msgstr "Item de EDL '{0}' ya no está cargado.  No puedo deshacer ni rehacer."
 
 msgid "Could not paste {0}.  Error {1}."
 msgstr "No pude pegar {0}.  Error {1}."
+
+msgid "Items selected must be on the same track."
+msgstr "Los elementos seleccionados deben estar en la misma pista."
+
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr ""
+"Los elementos seleccionados deben ser contiguos en la pista. Izquierda {0}. "
+"Derecha {0}."
+
+msgid "Please select two or four contiguous items.  Selected {0}."
+msgstr ""
+"Por favor, seleccione dos o cuatro elementos contiguos. Seleccionados {0}."
 
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
@@ -4454,6 +4466,9 @@ msgstr "Editar/Brecha/Insertar"
 
 msgid "Edit/Audio Gap/Remove"
 msgstr "Editar/Brecha/Remover"
+
+msgid "Edit/Add Transition"
+msgstr "Editar/Añadir transición"
 
 msgid "Edit/Slice"
 msgstr "Editar/Rebanar"
@@ -7856,6 +7871,9 @@ msgstr "Insertar Breach de Audio"
 msgid "Remove Audio Gap"
 msgstr "Remover Brecha de Audio"
 
+msgid "Edit - Add Transition"
+msgstr "Editar - Añadir transición"
+
 msgid "Edit - Fill Tool"
 msgstr "Edición - Herramienta Rellenar"
 
@@ -8104,6 +8122,13 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid ""
+#~ "Roll Edit Tool.\n"
+#~ "Moves the ending or beginning and adds gaps."
+#~ msgstr ""
+#~ "Herramienta de edición de roll.\n"
+#~ "Mueve el final o el principio y añade huecos."
 
 #~ msgid "HDR monitor found."
 #~ msgstr "Monitor HDR no encontrado."

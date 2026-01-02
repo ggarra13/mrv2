@@ -811,18 +811,21 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     // Note: patname may be a valid C format sequence, like picture.%04d.exr
     //       we convert it to picture.0001.exr.
-    char tmp[1024];
-    snprintf(tmp, 1024, pathname, 1);
+    if (pathname)
+    {
+        char tmp[1024];
+        snprintf(tmp, 1024, pathname, 1);
 
-    tl::file::Path path(tmp);
-    const std::string directory = path.getDirectory();
-    const std::string fileName = path.getFileName();
+        tl::file::Path path(tmp);
+        const std::string directory = path.getDirectory();
+        const std::string fileName = path.getFileName();
 
-    if (!directory.empty())
-        cd(directory.c_str());
+        if (!directory.empty())
+            cd(directory.c_str());
 
-    // if pathname does not start with "/" or "~", set the filename to it
-    filename.value(fileName.c_str());
+        // if pathname does not start with "/" or "~", set the filename to it
+        filename.value(fileName.c_str());
+    }
 }
 
 void Flu_File_Chooser::initFileTypes()

@@ -3435,14 +3435,14 @@ msgstr "Move Edit Tool"
 
 msgid ""
 "Roll Edit Tool.\n"
-"Moves the ending or beginning and adds gaps."
+"Moves the ending or beginning without adding gaps."
 msgstr ""
-"Roll Edit Tool.\n"
-"Moves the ending or beginning and adds gaps."
+"Trim Edit Tool\n"
+"Moves the ending or beginning without adding gaps"
 
 msgid ""
 "Trim Edit Tool\n"
-"Moves the ending or beginning without adding gaps"
+"Moves the ending or beginning adding gaps"
 msgstr ""
 "Trim Edit Tool\n"
 "Moves the ending or beginning without adding gaps"
@@ -3745,6 +3745,15 @@ msgstr "EDL item '{0}' no longer loaded.  Cannot undo or redo."
 
 msgid "Could not paste {0}.  Error {1}."
 msgstr "Could not paste {0}.  Error {1}."
+
+msgid "Items selected must be on the same track."
+msgstr ""
+
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr ""
+
+msgid "Please select two or four contiguous items.  Selected {0}."
+msgstr ""
 
 msgid "Could not save .otio file: {0}"
 msgstr "Could not save .otio file: {0}"
@@ -4392,6 +4401,9 @@ msgstr "Edit/Audio Gap/Insert"
 
 msgid "Edit/Audio Gap/Remove"
 msgstr "Edit/Audio Gap/Remove"
+
+msgid "Edit/Add Transition"
+msgstr "Show Transitions"
 
 msgid "Edit/Slice"
 msgstr "Edit/Slice"
@@ -7778,6 +7790,9 @@ msgstr "Insert Audio Gap"
 msgid "Remove Audio Gap"
 msgstr "Remove Audio Gap"
 
+msgid "Edit - Add Transition"
+msgstr ""
+
 msgid "Edit - Fill Tool"
 msgstr "Edit - Fill Tool"
 
@@ -8026,6 +8041,13 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid ""
+#~ "Roll Edit Tool.\n"
+#~ "Moves the ending or beginning and adds gaps."
+#~ msgstr ""
+#~ "Roll Edit Tool.\n"
+#~ "Moves the ending or beginning and adds gaps."
 
 #~ msgid "HDR monitor found."
 #~ msgstr "HDR monitor found."

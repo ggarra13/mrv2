@@ -188,6 +188,8 @@ namespace tl
             void scrollEvent(ui::ScrollEvent&) override;
             void keyPressEvent(ui::KeyEvent&) override;
             void keyReleaseEvent(ui::KeyEvent&) override;
+            
+            std::vector<const otio::Item*> getSelectedItems() const;
 
         protected:
             void _releaseMouse() override;

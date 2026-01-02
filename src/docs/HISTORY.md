@@ -56,6 +56,9 @@ ChangeLog
 - Removed the time parameter from Python's getVoiceAnnotations as it was not used.
 - Fixed Pro's Voice Over preferences not getting saved.
 - Added Python's getVoiceOverAnnotationsJSON to get voice over data and mouse moves as a simple JSON file.
+- Improved performance of OTIO timeline, getting refreshed unneedlessly.
+- Fixed OTIO saving from the UI which had gotten broken.  Python saving was fine.
+- Added adding of transitions to the Edit edition of mrv2/vmrv2.
 
 
 v1.4.9

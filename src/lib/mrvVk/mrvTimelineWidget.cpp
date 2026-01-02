@@ -336,6 +336,11 @@ namespace mrv
             Fl::remove_timeout(timerEvent_cb, this);
         }
 
+        std::vector<const otio::Item* > TimelineWidget::getSelectedItems() const
+        {
+            return _p->timelineWidget->getSelectedItems();
+        }
+        
         bool TimelineWidget::isEditable() const
         {
             return _p->timelineWidget->isEditable();

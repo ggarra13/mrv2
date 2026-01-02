@@ -96,6 +96,8 @@ namespace tl
             // void keyPressEvent(ui::KeyEvent&) override;
             // void keyReleaseEvent(ui::KeyEvent&) override;
 
+            std::vector<const otio::Item*> getSelectedItems() const;
+            
         protected:
             void _timeUnitsUpdate() override;
 
@@ -105,8 +107,6 @@ namespace tl
             
         private:
             bool _isTrackVisible(int) const;
-
-            otio::Item* _getOtioItem(int trackIndex, int itemIndex);
             
             void _mouseMoveEventFill(ui::MouseMoveEvent&);
             void _mouseMoveEventMove(ui::MouseMoveEvent&);

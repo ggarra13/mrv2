@@ -84,6 +84,9 @@ namespace mrv
     //! Menu function to remove audio gap at current time.
     void edit_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
 
+    //! Menu function to add a transition between two selected items.
+    void edit_add_transition_cb(Fl_Menu_* m, ViewerUI* ui);
+    
     //! Menu function to undo an edit or annotation.
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui);
 

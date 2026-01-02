@@ -265,6 +265,8 @@ namespace mrv
     Hotkey kEditInsertAudioGap(false, false, false, false, 0);
     Hotkey kEditRemoveAudioGap(false, false, false, false, 0);
 
+    Hotkey kEditAddTransition(false, false, false, false, 0);
+
     Hotkey kEditFill(false, false, false, false, 0);
     Hotkey kEditMove(false, false, false, false, 0);
     Hotkey kEditTrim(false, false, false, false, 0);
@@ -534,7 +536,10 @@ namespace mrv
         HotkeyEntry(_("Insert Audio Gap"), &kEditInsertAudioGap),
         HotkeyEntry(_("Remove Audio Gap"), &kEditRemoveAudioGap),
 
+        HotkeyEntry(_("Edit - Add Transition"), &kEditAddTransition),
+
         HotkeyEntry(_("Edit - Fill Tool"), &kEditFill),
+        
         HotkeyEntry(_("Edit - Move Tool"), &kEditMove),
         HotkeyEntry(_("Edit - Trim Tool"), &kEditTrim),
         HotkeyEntry(_("Edit - Ripple Tool"), &kEditRipple),
