@@ -19,7 +19,7 @@ if [[ $MRV2_BACKEND == "VK" ]]; then
     mrv2_NAME=vmrv2
 fi
 
-NSIS_INSTALLER="${PWD}/packages/${mrv2_NAME}-v${mrv2_VERSION}-Windows-amd64.exe"
+NSIS_INSTALLER="${PWD}/packages/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
 
 AZURE_HTTP="http://timestamp.comodoca.com/authenticode"
 
@@ -37,6 +37,5 @@ if [[ "$USER" == "User-PC" || "$GITHUB_ACTIONS" == "true" ]]; then
         sign_installer
     else
         echo "Error: Installer not found at ${NSIS_INSTALLER}"
-        exit 1
     fi
 fi
