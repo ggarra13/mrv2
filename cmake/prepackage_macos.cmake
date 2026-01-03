@@ -311,6 +311,7 @@ install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libz*" )
     
 if (MRV2_BACKEND STREQUAL "VK")
     install_vulkan_lib_glob("libglslang*" vmrv2)
+    install_vulkan_lib_glob("libSPIRV*" vmrv2)
     install_vulkan_lib_glob("libMoltenVK*" vmrv2)
     install_vulkan_lib_glob("libvulkan*" vmrv2)
     install_vulkan_icd_filenames(vmrv2)
@@ -344,14 +345,15 @@ if (EXISTS ${CPACK_PREPACKAGE}/hdr.app)
     # Common libraries
     #
     install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libfltk*")
-    install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libglslang*")
     install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libintl*")
     install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libndi*")
     install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
     install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libz*")
-    install_hdr_lib_glob("${CPACK_PREPACKAGE}/lib/libMoltenVK*")
 
     # Vulkan libraries For Apple Silicon or Intel machines
+    install_vulkan_lib_glob("libglslang*" hdr)
+    install_vulkan_lib_glob("libSPIRV*" hdr)
+    install_vulkan_lib_glob("libMoltenVK*" hdr)
     install_vulkan_lib_glob("libvulkan*" hdr)
     
     install_vulkan_icd_filenames(hdr)
