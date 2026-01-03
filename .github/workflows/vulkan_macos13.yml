@@ -62,7 +62,7 @@ jobs:
             brew install glslang
             brew install vulkan-profiles
             brew install spirv-tools
-            brek link --overwrite molten-vk
+            brew link --overwrite molten-vk
         fi
 
     # # Verify Vulkan installation
