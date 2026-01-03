@@ -27,7 +27,16 @@ sign_installer() {
     run_cmd "$SIGNTOOL_PATH" sign -v -f "$PFX_FILE" -fd SHA256 -t "${AZURE_HTTP}" "$NSIS_INSTALLER"
 }
 
+#
 # Call the function to sign the NSIS installer
-if [[ "$USER" == "User-PC" && -e "${NSIS_INSTALLER}" ]]; then
-    sign_installer
+# if I am USER-PC or on GITHUB_ACTIONS.
+#
+if [[ "$USER" == "User-PC" || "$GITHUB_ACTIONS" == "true" ]]; then
+    if [[ -e "${NSIS_INSTALLER}" ]]; then
+        echo "Installer found. Starting signing process..."
+        sign_installer
+    else
+        echo "Error: Installer not found at ${NSIS_INSTALLER}"
+        exit 1
+    fi
 fi
