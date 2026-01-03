@@ -256,6 +256,9 @@ int main(int argc, char** argv)
         Fl_Box* plan_features = nullptr;
      Fl_Flex* info = nullptr;
          Fl_Flex* buttons = nullptr;
+         Fl_Output* machine = nullptr;
+         Fl_Button* demo = nullptr;
+         Fl_Button* donate = nullptr;
         
     { // node_locker
         node_locked = new Fl_Flex(20, 60, 600, tabs->h() - 90,
@@ -350,22 +353,24 @@ You need an Internet connection to use.)TEXT");
 
 
             {
-                info = new Fl_Flex(0, 0, 0, 120);
+                info = new Fl_Flex(0, message->y() +
+                                   message->h(), 0, 120);
                 info->type(Fl_Flex::VERTICAL);
+                info->gap(10);
                 info->box(FL_ENGRAVED_BOX);
 
-                Fl_Output* machine = new Fl_Output(20, 0, 600, 40, "Machine ID");
+                machine = new Fl_Output(20, 0, 600, 40, "Machine ID");
                 machine->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
                 machine->value(machine_id.c_str());
 
-                buttons = new Fl_Flex(180, 0, 100, 40);
+                buttons = new Fl_Flex(180, info->y() + 50, 100, 40);
                 buttons->type(Fl_Flex::HORIZONTAL);
                 buttons->gap(10);
         
-                Fl_Button* demo = new Fl_Button(180, 280, 100, 40, "Demo");
+                demo = new Fl_Button(180, 280, 100, 40, "Demo");
                 demo->callback((Fl_Callback*)exit_cb, nullptr);
                 
-                Fl_Button* donate = new Fl_Button(300, 280, 100, 40, "Donate");
+                donate = new Fl_Button(300, 280, 100, 40, "Donate");
                 donate->callback((Fl_Callback*)donate_cb, nullptr);
                 
                 buttons->end();
@@ -378,8 +383,9 @@ You need an Internet connection to use.)TEXT");
             node_locked->fixed(message, message->h());
             node_locked->fixed(info, info->h());
             node_locked->end();
-    } // node_locked contents
-            
+        } // node_locked contents
+
+        Fl::focus(demo);
 
     }
 
