@@ -59,6 +59,7 @@ ChangeLog
 - Improved performance of OTIO timeline, getting refreshed unneedlessly.
 - Fixed OTIO saving from the UI which had gotten broken.  Python saving was fine.
 - Added adding of transitions to the Edit edition of mrv2/vmrv2.
+- Fixed macOS vmrv2 macOS Intel and M1 installers.
 
 
 v1.4.9

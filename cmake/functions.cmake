@@ -283,7 +283,7 @@ set(INSTALLED_LIBRARIES "" CACHE INTERNAL "List of installed libraries")
 #
 # Function used to install a library  with all .so dependencies
 #
-function(install_library_with_deps LIBRARY)
+function(install_library_with_links LIBRARY)
     list(FIND INSTALLED_LIBRARIES "${LIBRARY}" already_installed)
     if (already_installed GREATER -1)
         message(STATUS "SKIPPED (already installed) ${LIBRARY}")
@@ -334,7 +334,7 @@ function( get_runtime_dependencies TARGET )
 
 			is_system_lib (${dep_filename} sys_lib)
 			if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
-			    install_library_with_deps( ${dep_filename} )
+			    install_library_with_links( ${dep_filename} )
 			endif()
                     endif()
 		else()
@@ -351,32 +351,44 @@ function( get_runtime_dependencies TARGET )
 
 endfunction()
 
-#
-# Function used to get runtime dependencies as cmake GET_RUNTIME_DEPENDENCIES is
-# broken.
-#
-function( get_macos_runtime_dependencies TARGET )
-
-    set(DEPENDENCIES  )
-    foreach (exe ${TARGET})
-	if ( EXISTS ${exe} )
-	    execute_process(COMMAND otool -L ${exe} OUTPUT_VARIABLE ldd_out)
+function( install_macos_target_with_deps TARGET )
+    message(STATUS "TARGETS=${TARGET}")
+    foreach (_target ${TARGET})
+	message(STATUS "\tCHECKING ${_target}")
+	if ( EXISTS "${_target}" )
+	    execute_process(COMMAND otool -L "${_target}" OUTPUT_VARIABLE ldd_out)
 	    string (REPLACE "\n" ";" ldd_out_lines ${ldd_out})
 	    foreach (line ${ldd_out_lines})
-		string (REGEX REPLACE " \(.*\)" "" pruned ${line})
-		string (STRIP ${pruned} dep_filename)
-		if (IS_ABSOLUTE ${dep_filename})
-		    is_macos_system_lib (${dep_filename} sys_lib)
+		string(REGEX REPLACE " \(.*\)" "" pruned ${line})
+		string(REGEX REPLACE ":$" "" pruned ${pruned})
+		string(STRIP ${pruned} dep_filename)
+		if ("${dep_filename}" STREQUAL "${_target}")
+		    continue()
+		endif()
+		message(STATUS "\t\tDEPENDENCY ${dep_filename}")
+		if (IS_ABSOLUTE "${dep_filename}")
+		    is_macos_system_lib ("${dep_filename}" sys_lib)
 		    if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
-                        string( REGEX REPLACE ".framework/.*$" ".framework" framework ${dep_filename} )
-			install_library_with_deps( ${framework} )
+                        string( REGEX REPLACE ".framework/.*$" ".framework" framework "${dep_filename}" )
+			install_library_with_links( "${framework}" )
+			if ("${framework}" STREQUAL "${dep_filename}")
+			    install_macos_target_with_deps( "${framework}" )
+			endif()
 		    endif()
 		endif()
 	    endforeach()
 	else()
-	    message( WARNING "Executable ${exe} does not exist!" )
+	    message( WARNING "TARGET ${_target} does not exist!" )
 	endif()
     endforeach()
+endfunction()
+
+#
+# Function used to get macos runtime dependencies as cmake
+# GET_RUNTIME_DEPENDENCIES is broken.
+#
+function( get_macos_runtime_dependencies TARGET )
+    install_macos_target_with_deps( "${TARGET}" )
 endfunction()
 
 

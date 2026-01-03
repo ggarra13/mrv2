@@ -15,6 +15,7 @@ function(install_mrv2_lib_glob _libglob)
 	message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib")
 	file(COPY ${_lib}
 	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib)
+	install_macos_target_with_deps( ${_lib} )
     endforeach()
 endfunction()
 
@@ -28,7 +29,7 @@ function(copy_mo_files SRC TARGET)
 	file(MAKE_DIRECTORY ${dst_mo_dir})
 	if (NOT EXISTS "${src_mo_file}")
 	    message(STATUS "FAILED: ${src_mo_file} does not exist!")
-	    message(FATAL_ERROR ".mo generation must have failed.")
+	    message(FATAL_ERROR ".mo generations must have failed.")
 	else()
 	    message(STATUS "Copying ${src_mo_file} to ${dst_mo_dir}")
 	    file(COPY ${src_mo_file} DESTINATION ${dst_mo_dir} )
@@ -259,15 +260,6 @@ if (EXISTS ${CPACK_PREPACKAGE}/bin/python.sh)
     install_mrv2_bin_glob("${CPACK_PREPACKAGE}/bin/pip*")
 endif()
 
-#
-install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libfltk*")
-install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libglslang*")
-install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libintl*")
-install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libomp*")
-install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
-install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libz*")
-install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libMoltenVK*")
-
 file(COPY ${CPACK_PREPACKAGE}/certs
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
 file(COPY ${CPACK_PREPACKAGE}/colors
@@ -309,7 +301,17 @@ file(COPY ${CPACK_PREPACKAGE}/bin/launcher
 file(RENAME ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/launcher
     ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/${mrv2_NAME})
 
+    
+#
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libfltk*")
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libintl*")
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libomp*")
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
+install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libz*" )
+    
 if (MRV2_BACKEND STREQUAL "VK")
+    install_vulkan_lib_glob("libglslang*" vmrv2)
+    install_vulkan_lib_glob("libMoltenVK*" vmrv2)
     install_vulkan_lib_glob("libvulkan*" vmrv2)
     install_vulkan_icd_filenames(vmrv2)
 endif()
@@ -326,6 +328,7 @@ if (EXISTS ${CPACK_PREPACKAGE}/hdr.app)
 	foreach( _lib ${_libs} )
 	    file(COPY ${_lib}
 		DESTINATION ${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/lib)
+	    install_macos_target_with_deps( ${_lib} )
 	endforeach()
     endfunction()
     
