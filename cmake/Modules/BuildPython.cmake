@@ -67,8 +67,10 @@ if(APPLE)
     set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
     )
     set( Python_BUILD make -j ${NPROCS} )
+
+    # Install must NOT be run with -j ${NPROCS} or can run into a race issue.
     set( Python_INSTALL
-	COMMAND make -j ${NPROCS} install
+	COMMAND make install
 	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade)
 
 elseif(UNIX)
@@ -105,8 +107,9 @@ elseif(UNIX)
     )
     
     # Existing INSTALL commands (Use Python_ENV as defined above)
+    # Install must NOT be run with -j ${NPROCS}
     set( Python_INSTALL
-        COMMAND ${Python_ENV} make -j ${NPROCS} install
+        COMMAND ${Python_ENV} make install
         COMMAND ${Python_INSTALL_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade 
         COMMAND ${Python_INSTALL_ENV} ${Python_EXECUTABLE} -m pip install meson
     )

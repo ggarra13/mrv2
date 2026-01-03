@@ -1,0 +1,11 @@
+#|/usr/bin/env bash
+
+
+brew install vulkan-loader
+brew install molten-vk
+brew install vulkan-tools
+brew install shaderc
+brew install glslang
+brew install vulkan-profiles
+brew install spirv-tools
+brew link --overwrite molten-vk
