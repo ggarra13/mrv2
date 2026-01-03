@@ -271,69 +271,10 @@ cat <<EOF > INSTALLATION_NOTES.md
 
 ## Notes on installation
 
-- On macOS you install it by opening the .dmg file, and dragging the ${mrv2_NAME}
-  icon to the Applications directory.  If there's already a ${mrv2_NAME} version,
-  we recommend you overwrite it.
-  The macOS application is currently not notarized, so when you launch it you
-  will not be able to run it as macOS will warn you that the file is not secure
-  as it was downloaded from internet.
-  To avoid that, you need to open the Apple Logo->Settings->Privacy and Security
-  and go to Security and allow "Opening Anyway".
-  Alternatively, you can do it from the Terminal, by:
-  
-\`\`\`
-  sudo xattr -rd com.apple.quarantine /Applications/${mrv2_NAME}.app/
-\`\`\`
+- For installation on each platform, please refer to:
 
-- Windows and Chrome, like macOS, also protect you from installing files
-  from the Internet.  When you first download it with Chrome it may warn
-  you that it is not an usual archive to be downloaded.  Make sure to click
-  on the right up arrow menu to Save it anyway.
-  You cannot open the .exe from Chrome directly.  You will need to open
-  Windows Explorer and go to the Downloads directory.  You should then
-  run it from there.
-  Then Windows will popup a Blue box telling you Windows SmartScreen
-  prevented the start of an unknown application and that you can place your
-  PC at risk.
-  Click on the More Information text and a Button that says Run anyway or
-  similar should appear.  Click on it and follow the standard instructions
-  to any Windows installer.
-  One note about the Windows install.  When asked if you want to add ${mrv2_NAME} to
-  your PATH, it is recommended to answer No to it, as it avoids DLLs conflicts
-  with other applications that use common libraries like FFmpeg or OpenUSD.
+  https://github.com/ggarra13/mrv2?tab=readme-ov-file#notes-on-installation
 
-
-- On Linux, in order to install the .rpm or .deb packages requires your user to
-  have sudo permissions.
-
-  On Debian (Ubuntu, etc) systems, you would install with:
-
-\`\`\`
-  sudo dpkg -i ${mrv2_NAME}-${branch}-Linux-amd64.deb
-\`\`\`
-
-  On Fedora, you would install it with:
-  
-\`\`\`
-  sudo rpm -i ${mrv2_NAME}-${branch}-Linux-amd64.rpm
-\`\`\`
-
-  Once you install it, you can run mrv2 by just typing ${mrv2_NAME} in the shell, as
-  a symlink to the executable is placed in /usr/bin.  The installers will also
-  associate file extensions and install an icon for easy starting up in the
-  Desktop icon of the user that installed it.  For running ${mrv2_NAME} with the icon,
-  you need to select it and use the right mouse button to open the menu and
-  choose Allow Launch.
-  
-  If you lack sudo permissions in your organization, you should download the
-  .tar.gz file and you can uncompress it with:
-  
-\`\`\`
-  tar -xf ${mrv2_NAME}-${branch}-Linux-amd64.tar.gz
-\`\`\`
-
-  That will create a folder in the directory you uncompress it from.  You can
-  then run ${mrv2_NAME} by using the mrv2.sh shell script in the bin/ subdirectory.
 
 EOF
 

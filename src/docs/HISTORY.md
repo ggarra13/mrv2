@@ -62,6 +62,7 @@ ChangeLog
 - Fixed macOS' vmrv2 macOS Intel and M1 installers not working.
 - Fixed license_helper's buttons sometimes requiring two presses.
 - For installation on each platform, please refer to:
+
 	https://github.com/ggarra13/mrv2?tab=readme-ov-file#notes-on-installation
 	
 
