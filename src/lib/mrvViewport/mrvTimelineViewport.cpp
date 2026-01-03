@@ -280,8 +280,17 @@ namespace mrv
 
             switch(mode)
             {
+            case timeline::EditMode::Count:
             case timeline::EditMode::kNone:
                 p.ui->uiEditStatus->copy_label(_("None"));
+                break;
+            case timeline::EditMode::Fill:
+                // p.ui->uiFill->value(1);
+                p.ui->uiEditStatus->copy_label(_("Fill"));
+                break;
+            case timeline::EditMode::Insert:
+                // p.ui->uiInsert->value(1);
+                p.ui->uiEditStatus->copy_label(_("Insert"));
                 break;
             case timeline::EditMode::Select:
                 p.ui->uiSelect->value(1);
@@ -290,6 +299,10 @@ namespace mrv
             case timeline::EditMode::Move:
                 p.ui->uiMove->value(1);
                 p.ui->uiEditStatus->copy_label(_("Move"));
+                break;
+            case timeline::EditMode::Overwrite:
+                // p.ui->uiOverwrite->value(1);
+                p.ui->uiEditStatus->copy_label(_("Overwrite"));
                 break;
             case timeline::EditMode::Trim:
                 p.ui->uiTrim->value(1);
@@ -314,10 +327,6 @@ namespace mrv
             case timeline::EditMode::Roll:
                 p.ui->uiRoll->value(1);
                 p.ui->uiEditStatus->copy_label(_("Roll"));
-                break;
-            case timeline::EditMode::Fill:
-                // p.ui->uiFill->value(1);
-                p.ui->uiEditStatus->copy_label(_("Fill"));
                 break;
             }
             

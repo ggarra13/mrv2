@@ -84,8 +84,6 @@ message(STATUS "FLTK DEPENDENCIES=${FLTK_DEPENDENCIES}")
 #
 # Determine whether to build fltk-gl
 #
-#set(FLTK_BUILD_GL ${TLRENDER_GL})
-
 # We always build GL for pyFLTK that uses it.
 set(FLTK_BUILD_GL ON)
 if (FLTK_BUILD_GL)

@@ -3838,11 +3838,20 @@ msgstr "Erneut aufnehmen"
 msgid "Delete"
 msgstr "Lschen"
 
+msgid "Fill"
+msgstr "Füllen"
+
+msgid "Insert"
+msgstr "Einfgen"
+
 msgid "Select"
 msgstr "Auswählen"
 
 msgid "Move"
 msgstr "Verschieben"
+
+msgid "Overwrite"
+msgstr "berschreiben"
 
 msgid "Trim"
 msgstr "Trimmung"
@@ -3861,9 +3870,6 @@ msgstr "Rippig"
 
 msgid "Roll"
 msgstr "Walzwerk"
-
-msgid "Fill"
-msgstr "Füllen"
 
 msgid "Scrub"
 msgstr "Schrubben"
@@ -7365,9 +7371,6 @@ msgstr "ScrollLock"
 
 msgid "Pause"
 msgstr "Pause"
-
-msgid "Insert"
-msgstr "Einfgen"
 
 msgid "PageUp"
 msgstr "Seite nach oben"

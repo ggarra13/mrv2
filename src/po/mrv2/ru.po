@@ -3864,11 +3864,20 @@ msgstr "Записать снова"
 msgid "Delete"
 msgstr "Исключить"
 
+msgid "Fill"
+msgstr "Заполнение"
+
+msgid "Insert"
+msgstr "Вставить"
+
 msgid "Select"
 msgstr "Выбрать"
 
 msgid "Move"
 msgstr "Перемещение"
+
+msgid "Overwrite"
+msgstr "Превышение"
 
 msgid "Trim"
 msgstr "Трим"
@@ -3887,9 +3896,6 @@ msgstr "Риппл"
 
 msgid "Roll"
 msgstr "Поворачивай."
-
-msgid "Fill"
-msgstr "Заполнение"
 
 msgid "Scrub"
 msgstr "Скреб"
@@ -7373,9 +7379,6 @@ msgstr "Блокировка прокрутки"
 
 msgid "Pause"
 msgstr "Приостановить"
-
-msgid "Insert"
-msgstr "Вставить"
 
 msgid "PageUp"
 msgstr "Стр."

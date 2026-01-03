@@ -3823,11 +3823,20 @@ msgstr "Gravar novamente"
 msgid "Delete"
 msgstr "Excluir"
 
+msgid "Fill"
+msgstr "Preencher"
+
+msgid "Insert"
+msgstr "Inserir"
+
 msgid "Select"
 msgstr "Selecionar"
 
 msgid "Move"
 msgstr "Mover"
+
+msgid "Overwrite"
+msgstr "Sobreposio"
 
 msgid "Trim"
 msgstr "Trim"
@@ -3846,9 +3855,6 @@ msgstr "Ripple"
 
 msgid "Roll"
 msgstr "Rolo"
-
-msgid "Fill"
-msgstr "Preencher"
 
 msgid "Scrub"
 msgstr "Esfregar"
@@ -7337,9 +7343,6 @@ msgstr "Bloqueio de Pergaminho"
 
 msgid "Pause"
 msgstr "Pausa"
-
-msgid "Insert"
-msgstr "Inserir"
 
 msgid "PageUp"
 msgstr "Subir a pgina"

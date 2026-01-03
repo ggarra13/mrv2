@@ -3899,11 +3899,20 @@ msgstr "Grabar De Nuevo"
 msgid "Delete"
 msgstr "Borrar"
 
+msgid "Fill"
+msgstr "Rellenar"
+
+msgid "Insert"
+msgstr "Insertar"
+
 msgid "Select"
 msgstr "Seleccionar"
 
 msgid "Move"
 msgstr "Mover"
+
+msgid "Overwrite"
+msgstr "Reemplazar"
 
 msgid "Trim"
 msgstr "Recortar"
@@ -3922,9 +3931,6 @@ msgstr "Ondulación"
 
 msgid "Roll"
 msgstr "Rodar"
-
-msgid "Fill"
-msgstr "Rellenar"
 
 msgid "Scrub"
 msgstr "Fregar"
@@ -7411,9 +7417,6 @@ msgstr "Bloq.Despl."
 
 msgid "Pause"
 msgstr "Pausa"
-
-msgid "Insert"
-msgstr "Insertar"
 
 msgid "PageUp"
 msgstr "Re.Pág."

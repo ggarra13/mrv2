@@ -3863,11 +3863,20 @@ msgstr "Registra di nuovo"
 msgid "Delete"
 msgstr "Cancella"
 
+msgid "Fill"
+msgstr "Riempi"
+
+msgid "Insert"
+msgstr "Inserisci"
+
 msgid "Select"
 msgstr "Seleziona"
 
 msgid "Move"
 msgstr "Sposta"
+
+msgid "Overwrite"
+msgstr "Sovravvicinamento"
 
 msgid "Trim"
 msgstr "Taglio"
@@ -3886,9 +3895,6 @@ msgstr "Innesto"
 
 msgid "Roll"
 msgstr "Rotolo"
-
-msgid "Fill"
-msgstr "Riempi"
 
 msgid "Scrub"
 msgstr "Spruzzo"
@@ -7390,9 +7396,6 @@ msgstr "Bloccare lo scorrimento"
 
 msgid "Pause"
 msgstr "Pausa"
-
-msgid "Insert"
-msgstr "Inserisci"
 
 msgid "PageUp"
 msgstr "Pagina in alto"

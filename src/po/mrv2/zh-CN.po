@@ -3762,11 +3762,20 @@ msgstr "重新录制"
 msgid "Delete"
 msgstr "删除"
 
+msgid "Fill"
+msgstr "填充"
+
+msgid "Insert"
+msgstr "插入"
+
 msgid "Select"
 msgstr "选择"
 
 msgid "Move"
 msgstr "移动"
+
+msgid "Overwrite"
+msgstr "覆盖"
 
 msgid "Trim"
 msgstr "Trim"
@@ -3785,9 +3794,6 @@ msgstr "Ripple"
 
 msgid "Roll"
 msgstr "Roll"
-
-msgid "Fill"
-msgstr "填充"
 
 msgid "Scrub"
 msgstr "Scrub"
@@ -7171,9 +7177,6 @@ msgstr "滚动锁定"
 
 msgid "Pause"
 msgstr "暂停"
-
-msgid "Insert"
-msgstr "插入"
 
 msgid "PageUp"
 msgstr "上页"

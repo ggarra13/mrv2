@@ -3788,11 +3788,20 @@ msgstr "फिर से रिकॉर्ड करें"
 msgid "Delete"
 msgstr "मिटाएँ"
 
+msgid "Fill"
+msgstr "भरें"
+
+msgid "Insert"
+msgstr "प्रविष्ट"
+
 msgid "Select"
 msgstr "चुनें"
 
 msgid "Move"
 msgstr "मूव"
+
+msgid "Overwrite"
+msgstr "ओवरराइड"
 
 msgid "Trim"
 msgstr "ट्रिग"
@@ -3811,9 +3820,6 @@ msgstr "लहरें"
 
 msgid "Roll"
 msgstr "फेंकें"
-
-msgid "Fill"
-msgstr "भरें"
 
 msgid "Scrub"
 msgstr "स्क्रैप"
@@ -7232,9 +7238,6 @@ msgstr "स्क्रॉल- लॉक"
 
 msgid "Pause"
 msgstr "ठहरें"
-
-msgid "Insert"
-msgstr "प्रविष्ट"
 
 msgid "PageUp"
 msgstr "पेज- अप"

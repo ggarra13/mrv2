@@ -3827,11 +3827,20 @@ msgstr "もう一度録音"
 msgid "Delete"
 msgstr "削除"
 
+msgid "Fill"
+msgstr "塗りつぶし"
+
+msgid "Insert"
+msgstr "挿入"
+
 msgid "Select"
 msgstr "選択"
 
 msgid "Move"
 msgstr "移動"
+
+msgid "Overwrite"
+msgstr "オーバーライド"
 
 msgid "Trim"
 msgstr "削除"
@@ -3850,9 +3859,6 @@ msgstr "リップル"
 
 msgid "Roll"
 msgstr "ロール"
-
-msgid "Fill"
-msgstr "塗りつぶし"
 
 msgid "Scrub"
 msgstr "スクラブ"
@@ -7307,9 +7313,6 @@ msgstr "スクロールロック"
 
 msgid "Pause"
 msgstr "一時停止"
-
-msgid "Insert"
-msgstr "挿入"
 
 msgid "PageUp"
 msgstr "ページアップ"

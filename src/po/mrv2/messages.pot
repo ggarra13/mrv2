@@ -3480,10 +3480,19 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+msgid "Fill"
+msgstr ""
+
+msgid "Insert"
+msgstr ""
+
 msgid "Select"
 msgstr ""
 
 msgid "Move"
+msgstr ""
+
+msgid "Overwrite"
 msgstr ""
 
 msgid "Trim"
@@ -3502,9 +3511,6 @@ msgid "Ripple"
 msgstr ""
 
 msgid "Roll"
-msgstr ""
-
-msgid "Fill"
 msgstr ""
 
 msgid "Scrub"
@@ -6715,9 +6721,6 @@ msgid "ScrollLock"
 msgstr ""
 
 msgid "Pause"
-msgstr ""
-
-msgid "Insert"
 msgstr ""
 
 msgid "PageUp"
