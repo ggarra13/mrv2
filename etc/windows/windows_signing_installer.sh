@@ -23,7 +23,7 @@ NSIS_INSTALLER="${PWD}/packages/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windo
 
 AZURE_HTTP="http://timestamp.comodoca.com/authenticode"
 
-# Define your password variable (ideally as an Environment Variable)
+# Define password variable
 PASS="secretsalt1973!"
 
 sign_installer() {
