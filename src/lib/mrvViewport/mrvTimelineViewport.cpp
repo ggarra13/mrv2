@@ -2443,19 +2443,6 @@ namespace mrv
 
                     if (!secondary)
                     {
-                        // Fullscreen does not update immediately on Linux, so we
-                        // need to force a resize.  On macOS, I am not sure, but
-                        // we'll also leave it.
-                        // On Windows, we should not call screen_xywh as it may
-                        // be wrong for scaling factors like 115%.
-                        
-// #ifndef _WIN32
-//                         int X, Y, W, H;
-//                         int screen_num = w->screen_num();
-//                         Fl::screen_xywh(X, Y, W, H, screen_num);
-//                         w->resize(X, Y, W, H);
-// #endif
-
                         // When fullscreen happens, the tool group bar also resizes
                         // on width, so we need to bring it back to its originazl
                         // size.
