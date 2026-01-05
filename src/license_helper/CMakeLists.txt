@@ -16,6 +16,11 @@ set(SOURCES
     mrvString.cpp
 )
 
+lic_files_to_absolute_paths()
+
+set( PO_LIC_SOURCES ${PO_LIC_SOURCES} PARENT_SCOPE)
+set( PO_LIC_ABS_SOURCES ${PO_LIC_ABS_SOURCES} PARENT_SCOPE)
+
 if (APPLE)
     list(APPEND SOURCES mrvMainWindow.mm)
 else()

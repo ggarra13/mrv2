@@ -1,5 +1,6 @@
 
-#define _(x) x  // for now
+//#include <libintl.h>
+#define _(x) x
 
 #include "mrvFile.h"
 #include "mrvMainWindow.h"

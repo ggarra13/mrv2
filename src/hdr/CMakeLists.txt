@@ -70,21 +70,6 @@ install(TARGETS hdr
     LIBRARY DESTINATION lib COMPONENT libraries
     ARCHIVE DESTINATION lib COMPONENT libraries )
 
-#
-# Handle translations
-#
-# include( ../../cmake/translations.cmake )
-
-#
-# Handle documentation
-# 
-# include( ../../cmake/documentation.cmake )
-
-
-#
-# Handle install
-#
-# include(InstallRequiredSystemLibraries)
 
 
 if(TLRENDER_NDI)

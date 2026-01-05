@@ -425,10 +425,11 @@ macro( files_to_absolute_paths )
 	    string( REGEX REPLACE ".*/lib/" "" _short_name ${_abs_file} )
 	endif()
 	set( PO_FILES ${_short_name} ${PO_FILES} )
-        set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
         set( PO_ABS_FILES ${_abs_file} ${PO_ABS_FILES}  )
-        set( PO_ABS_SOURCES ${PO_ABS_FILES} ${PO_ABS_SOURCES} PARENT_SCOPE)
     endforeach()
+    
+    set( PO_SOURCES ${PO_FILES} ${PO_SOURCES} PARENT_SCOPE)
+    set( PO_ABS_SOURCES ${PO_ABS_FILES} ${PO_ABS_SOURCES} PARENT_SCOPE)
 endmacro()
 
 #
@@ -459,12 +460,40 @@ macro( hdr_files_to_absolute_paths )
 	    string( REGEX REPLACE ".*/lib/" "" _short_name ${_abs_file} )
 	endif()
 	set( PO_HDR_FILES ${_short_name} ${PO_HDR_FILES} )
-        set( PO_HDR_SOURCES ${PO_HDR_FILES} ${PO_HDR_SOURCES} PARENT_SCOPE)
         set( PO_HDR_ABS_FILES ${_abs_file} ${PO_HDR_ABS_FILES}  )
-        set( PO_HDR_ABS_SOURCES
-	    ${PO_HDR_ABS_FILES}
-	    ${PO_HDR_ABS_SOURCES} PARENT_SCOPE)
     endforeach()
+    
+    set( PO_HDR_SOURCES ${PO_HDR_FILES} ${PO_HDR_SOURCES} PARENT_SCOPE)
+    set( PO_HDR_ABS_SOURCES ${PO_HDR_ABS_FILES} ${PO_HDR_ABS_SOURCES} PARENT_SCOPE)
+endmacro()
+
+macro( lic_files_to_absolute_paths )
+    set( PO_LIC_FILES )
+    set( _exclude_regex "\\.mm" ) # macOS .mm files are not considered
+    set( _no_short_name_regex "\\.cxx" ) # .cxx are fluid generated files
+    set( PO_LIC_ABS_FILES  )
+    foreach( filename ${SOURCES} ${HEADERS} )
+	file(REAL_PATH ${filename} _abs_file )
+	set( _matched )
+	string( REGEX MATCH ${_exclude_regex} _matched ${_abs_file} )
+	if ( _matched )
+            continue()
+	endif()
+	set( _short_name ${_abs_file} )
+	set( _matched )
+	foreach( match ${_no_short_name_regex} )
+	    string( REGEX MATCH ${match} _matched ${_abs_file} )
+	endforeach()
+	if ( NOT _matched )
+	    string( REGEX REPLACE ".*/license_helper/" "" _short_name ${_abs_file} )
+	endif()
+	set( PO_LIC_FILES ${_short_name} ${PO_LIC_FILES} )
+        set( PO_LIC_ABS_FILES ${_abs_file} ${PO_LIC_ABS_FILES}  )
+    endforeach()
+    set( PO_LIC_SOURCES ${PO_LIC_FILES} ${PO_LIC_SOURCES})
+    set( PO_LIC_ABS_SOURCES ${PO_LIC_ABS_FILES}  ${PO_LIC_ABS_SOURCES})
+    set( PO_LIC_SOURCES ${PO_LIC_SOURCES} PARENT_SCOPE)
+    set( PO_LIC_ABS_SOURCES ${PO_LIC_ABS_SOURCES} PARENT_SCOPE)
 endmacro()
 
 #

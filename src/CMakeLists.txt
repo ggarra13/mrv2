@@ -376,10 +376,16 @@ set( PO_SOURCES )
 set( PO_ABS_SOURCES )
 
 #
-#
+# HDR PO sources
 #
 set( PO_HDR_SOURCES )
 set( PO_HDR_ABS_SOURCES )
+
+#
+# Licenser helper PO sources
+#
+set( PO_LIC_SOURCES )
+set( PO_LIC_ABS_SOURCES )
 
 # Retrieve the current Git branch name
 execute_process(
@@ -414,15 +420,6 @@ endif()
 add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/lib )
 
 #
-# Add main source
-#
-add_subdirectory(main)
-
-if (APPLE)
-    add_subdirectory(launcher)
-endif()
-
-#
 # Add license_helper for licensing
 #
 add_subdirectory(license_helper)
@@ -432,6 +429,15 @@ add_subdirectory(license_helper)
 #
 if (TLRENDER_NDI AND TLRENDER_VK AND MRV2_HDR)
     add_subdirectory(hdr)
+endif()
+
+#
+# Add main source
+#
+add_subdirectory(main)
+
+if (APPLE)
+    add_subdirectory(launcher)
 endif()
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")

@@ -14,6 +14,10 @@ set( LANGUAGES de en es fr hi_IN it ja pt ru zh-CN )
 
 function(create_translation_for TARGET SOURCES)
 
+    if (NOT SOURCES)
+	message(FATAL_ERROR "create_translation_for got no sources for target ${TARGET}")
+    endif()
+    
     set( ROOT_DIR ${PROJECT_SOURCE_DIR} )
     
     # Create dir to place human translation files
@@ -193,7 +197,7 @@ endfunction()
 set( pot_files )
 set( po_files )
 set( mo_files )
-    
+
 create_translation_for(mrv2 "${PO_SOURCES}")
 
 set(hdr_pot_target )
@@ -202,11 +206,12 @@ if (TLRENDER_NDI AND TLRENDER_VK AND MRV2_HDR)
     set(hdr_pot_target hdr_pot)
 endif()
 
+create_translation_for(license_helper "${PO_LIC_ABS_SOURCES}")
 
 
 add_custom_target(
     pot
-    DEPENDS ${pot_files} mrv2_pot ${hdr_pot_target}
+    DEPENDS ${pot_files} mrv2_pot ${hdr_pot_target} license_helper_pot
 )
 
 add_custom_target(
@@ -217,5 +222,5 @@ add_custom_target(
 
 add_custom_target(
     mo
-    DEPENDS ${mo_files} po mrv2_pot ${hdr_pot_target}
+    DEPENDS ${mo_files} po mrv2_pot ${hdr_pot_target} license_helper_pot
     )
