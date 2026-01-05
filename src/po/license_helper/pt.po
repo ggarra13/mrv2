@@ -1,4 +1,4 @@
-	# Portuguese translations for license_helper package.
+# Portuguese translations for license_helper package.
 # This file is distributed under the same license as the license_helper package.
 # Automatically generated, 2026.
 #
@@ -26,8 +26,8 @@ msgid ""
 "If you submitted a valid donation, you will get a message in the mail "
 "activating your license plan."
 msgstr ""
-"Se você enviou uma doação válida, receberá uma mensagem por e-mail "
-"ativando o seu plano de licença."
+"Se você enviou uma doação válida, receberá uma mensagem por e-mail ativando "
+"o seu plano de licença."
 
 msgid "License helper"
 msgstr "Assistente de licença"
@@ -39,8 +39,8 @@ msgid ""
 "To unlock features, please submit the machine id below with your Paypal "
 "donation of:"
 msgstr ""
-"Para desbloquear recursos, envie o ID da máquina abaixo com sua doação "
-"via Paypal de:"
+"Para desbloquear recursos, envie o ID da máquina abaixo com sua doação via "
+"Paypal de:"
 
 msgid ""
 "Only the listed amounts unlock features; all others are regular donations."
@@ -96,6 +96,7 @@ msgstr ""
 "para Remoto - Desenvolvimento Personalizado de Código Fechado.\n"
 "\n"
 "USD $100000\n"
-"para Comprar o código-fonte como está e interromper seu desenvolvimento Open Source.\n"
+"para Comprar o código-fonte como está e interromper seu desenvolvimento Open "
+"Source.\n"
 "\n"
 "Contato: ggarra13@@gmail.com"

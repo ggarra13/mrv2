@@ -314,10 +314,15 @@ namespace mrv
         machine_id = get_machine_id();
         master_key = ""; // Only used on floating licenses
 
-        const std::string license_file = licensepath() + "/mrv2_licenses.lic";
+        const std::string path = license_path();
+        const std::string license_file = path + "/mrv2_licenses.lic";
         
         if (file::isReadable(license_file))
-        {   
+        {
+            std::string msg = string::Format(_("Found floating license at '{0}'"))
+                              .arg(license_file);
+            LOG_STATUS(msg);
+            
             // Open the file for reading
             std::ifstream file_stream(license_file);
 
@@ -335,6 +340,15 @@ namespace mrv
 
             // Fix the string to be valid JSON by replacing single quotes
             std::replace(master_key.begin(), master_key.end(), '\'', '\"');
+        }
+        else
+        {
+            if (!path.empty())
+            {
+                std::string msg = string::Format(_("Did not find floating license at '{0}'"))
+                                  .arg(path);
+                LOG_STATUS(msg);
+            }
         }
     }
     
@@ -536,6 +550,7 @@ namespace mrv
         if (master_key.empty())
             return License::kInvalid;
 
+        
         // Build the request object programmatically.
         nlohmann::json request_body_json;
 
