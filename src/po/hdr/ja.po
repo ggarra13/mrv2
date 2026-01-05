@@ -15,6 +15,183 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgid "\tDesktop Environment: "
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "\tKernel Info: "
+msgstr ""
+
+msgid "\tDistribution: "
+msgstr ""
+
+msgid "English"
+msgstr ""
+
+msgid "Spanish"
+msgstr ""
+
+msgid "German"
+msgstr ""
+
+msgid "Hindi"
+msgstr ""
+
+msgid "Chinese Simplified"
+msgstr ""
+
+msgid "Portuguese"
+msgstr ""
+
+msgid "French"
+msgstr ""
+
+msgid "Russian"
+msgstr ""
+
+msgid "Japanese"
+msgstr ""
+
+msgid "Set Language to {0}, Numbers to {1}"
+msgstr ""
+
+msgid "Arabic"
+msgstr ""
+
+msgid "Armenian"
+msgstr ""
+
+msgid "Basque"
+msgstr ""
+
+msgid "Belarusian"
+msgstr ""
+
+msgid "Bengali"
+msgstr ""
+
+msgid "Bulgarian"
+msgstr ""
+
+msgid "Catalan"
+msgstr ""
+
+msgid "Chinese"
+msgstr ""
+
+msgid "Czech"
+msgstr ""
+
+msgid "Danish"
+msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+msgid "Finnish"
+msgstr ""
+
+msgid "Galician"
+msgstr ""
+
+msgid "Greek"
+msgstr ""
+
+msgid "Hebrew"
+msgstr ""
+
+msgid "Icelandic"
+msgstr ""
+
+msgid "Indonesian"
+msgstr ""
+
+msgid "Italian"
+msgstr ""
+
+msgid "Irish"
+msgstr ""
+
+msgid "Korean"
+msgstr ""
+
+msgid "Norwegan"
+msgstr ""
+
+msgid "Persian"
+msgstr ""
+
+msgid "Polish"
+msgstr ""
+
+msgid "Tibetan"
+msgstr ""
+
+msgid "Romanian"
+msgstr ""
+
+msgid "Serbian"
+msgstr ""
+
+msgid "Slovenian"
+msgstr ""
+
+msgid "Swedish"
+msgstr ""
+
+msgid "Thai"
+msgstr ""
+
+msgid "Turkish"
+msgstr ""
+
+msgid "Vietnamese"
+msgstr ""
+
+msgid "Welsh"
+msgstr ""
+
+msgid "Yiddish"
+msgstr ""
+
+msgid "Zulu"
+msgstr ""
+
+msgid "Play NDI input streams."
+msgstr ""
+
+msgid "Reset settings to defaults."
+msgstr ""
+
+msgid "Reset hotkeys to defaults."
+msgstr ""
+
+msgid "Return the version and exit."
+msgstr ""
+
+msgid "Cannot create window"
+msgstr ""
+
+msgid "About hdr"
+msgstr ""
+
+msgid "Hide hdr"
+msgstr ""
+
+msgid "Hide Others"
+msgstr ""
+
+msgid "Services"
+msgstr ""
+
+msgid "Show All"
+msgstr ""
+
+msgid "Quit hdr"
+msgstr ""
+
 msgid "HDR monitor found."
 msgstr "HDRモニターが見つかりました。"
 
