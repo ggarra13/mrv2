@@ -1,4 +1,4 @@
-mrv2 v1.4.8
+mrv2 v1.5.0
 =======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.
@@ -51,7 +51,7 @@ https://www.github.com/ggarra13/mrv2
 
 -------------------------------------------------------------------------------
 
-(v)mrv2 v1.4.8
+(v)mrv2 v1.5.0
 
 Open source professional players and review tools for VFX, animation and CGI for Windows, Linux and macOS has a new version.
 

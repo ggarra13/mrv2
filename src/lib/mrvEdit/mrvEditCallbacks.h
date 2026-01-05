@@ -79,6 +79,12 @@ namespace mrv
     void edit_remove_audio_clip_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to insert an audio gap at current time.
+    void edit_insert_video_gap_cb(Fl_Menu_* m, ViewerUI* ui);
+
+    //! Menu function to remove audio gap at current time.
+    void edit_remove_video_gap_cb(Fl_Menu_* m, ViewerUI* ui);
+    
+    //! Menu function to insert an audio gap at current time.
     void edit_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to remove audio gap at current time.

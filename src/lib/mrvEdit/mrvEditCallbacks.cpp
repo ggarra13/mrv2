@@ -1436,10 +1436,10 @@ namespace mrv
         if (!timeline)
             return;
 
-        // Find first video clip at current time.
-        int clipIndex = -1;
+        // Find first video item at current time.
+        int itemIndex = -1;
         otio::ErrorStatus errorStatus;
-        otio::Clip* clip = nullptr;
+        otio::Item* item = nullptr;
         for (auto composition : compositions)
         {
             auto track = dynamic_cast<otio::Track*>(composition);
@@ -1450,22 +1450,22 @@ namespace mrv
             if (track->kind() != otio::Track::Kind::video)
                 continue;
 
-            clip = otio::dynamic_retainer_cast<Clip>(
+            item = otio::dynamic_retainer_cast<Item>(
                 track->child_at_time(time, &errorStatus));
-            if (!clip)
+            if (!item)
                 continue;
 
-            clipIndex = track->index_of_child(clip);
+            itemIndex = track->index_of_child(item);
             break;
         }
 
-        if (!clip || clipIndex < 0)
+        if (!item || itemIndex < 0)
             return;
 
         edit_store_undo(player, ui);
 
-        auto clipRange = clip->trimmed_range();
-        auto range = clip->trimmed_range_in_parent().value();
+        auto itemRange = item->trimmed_range();
+        auto range = item->trimmed_range_in_parent().value();
 
         // Check if no audio tracks.  If that's the case, add one audio track
         bool hasAudioTrack = false;
@@ -1535,8 +1535,8 @@ namespace mrv
 
             int audioIndex = track->index_of_child(audioItem);
             auto audioClipRange = otime::TimeRange(
-                clipRange.start_time().rescaled_to(sampleRate),
-                clipRange.duration().rescaled_to(sampleRate));
+                itemRange.start_time().rescaled_to(sampleRate),
+                itemRange.duration().rescaled_to(sampleRate));
             otio::Gap* gap = new Gap(audioClipRange);
             if (audioIndex < 0 || audioIndex >= track->children().size())
             {
@@ -1684,6 +1684,179 @@ namespace mrv
 
         tcp->pushMessage("Edit/Audio Gap/Remove", time);
     }
+    
+    void edit_insert_video_gap_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& time = getTime(player);
+        auto compositions = getTracks(player);
+
+        auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+
+        // Find first video clip at current time.
+        int clipIndex = -1;
+        otio::ErrorStatus errorStatus;
+        otio::Clip* clip = nullptr;
+        for (auto composition : compositions)
+        {
+            auto track = dynamic_cast<otio::Track*>(composition);
+            if (!track)
+                continue;
+
+            // Find first video track
+            if (track->kind() != otio::Track::Kind::video)
+                continue;
+
+            clip = otio::dynamic_retainer_cast<Clip>(
+                track->child_at_time(time, &errorStatus));
+            if (!clip)
+                continue;
+
+            clipIndex = track->index_of_child(clip);
+            break;
+        }
+
+        if (!clip || clipIndex < 0)
+            return;
+
+        edit_store_undo(player, ui);
+
+        auto clipRange = clip->trimmed_range();
+        auto range = clip->trimmed_range_in_parent().value();
+
+        bool modified = false;
+        
+        for (auto composition : compositions)
+        {
+            auto track = dynamic_cast<otio::Track*>(composition);
+            if (!track)
+                continue;
+
+            if (track->kind() != otio::Track::Kind::video)
+                continue;
+
+            auto rate = track->trimmed_range().duration().rate();
+
+            auto rangeInTrack = otime::TimeRange(
+                range.start_time().rescaled_to(rate),
+                range.duration().rescaled_to(rate));
+
+            auto videoItem = otio::dynamic_retainer_cast<Item>(
+                track->child_at_time(time, &errorStatus));
+
+            if (videoItem)
+            {
+                // If already a gap in the range, skip it.
+                auto videoRange = videoItem->trimmed_range_in_parent().value();
+                if (videoRange == rangeInTrack &&
+                    otio::dynamic_retainer_cast<otio::Gap>(videoItem))
+                    continue;
+            }
+
+            modified = true;
+
+            int videoIndex = track->index_of_child(videoItem);
+            auto videoClipRange = otime::TimeRange(
+                clipRange.start_time().rescaled_to(rate),
+                clipRange.duration().rescaled_to(rate));
+            otio::Gap* gap = new Gap(videoClipRange);
+            if (videoIndex < 0 || videoIndex >= track->children().size())
+            {
+                track->append_child(gap, &errorStatus);
+                if (is_error(errorStatus))
+                {
+                    LOG_DEBUG("track->append_child(gap) failed with:");
+                    LOG_ERROR(errorStatus.full_description);
+                }
+            }
+            else
+            {
+                track->insert_child(videoIndex, gap, &errorStatus);
+                if (is_error(errorStatus))
+                {
+                    LOG_DEBUG(
+                        "track->insert_child(gap) " << videoIndex
+                                                    << " failed with:");
+                    LOG_ERROR(errorStatus.full_description);
+                }
+            }
+        }
+
+        updateTimeline(timeline, time, ui);
+
+        toOtioFile(timeline, ui);
+
+        if (modified)
+            edit_clear_redo(ui);
+
+        panel::redrawThumbnails();
+
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
+        
+        tcp->pushMessage("Edit/Video Gap/Insert", time);
+    }
+
+    
+    void edit_remove_video_gap_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& time = getTime(player);
+        auto compositions = getTracks(player);
+
+        auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+
+        edit_store_undo(player, ui);
+
+        bool modified = false;
+        otio::ErrorStatus errorStatus;
+        for (auto composition : compositions)
+        {
+            auto track = dynamic_cast<otio::Track*>(composition);
+            if (!track)
+                continue;
+
+            // Find first video track
+            if (track->kind() != otio::Track::Kind::video)
+                continue;
+
+            auto gap = otio::dynamic_retainer_cast<Gap>(
+                track->child_at_time(time, &errorStatus));
+            if (!gap)
+                continue;
+
+            int gapIndex = track->index_of_child(gap);
+            if (gapIndex < 0 || gapIndex >= track->children().size())
+                continue;
+
+            modified = true;
+            track->remove_child(gapIndex);
+        }
+
+        updateTimeline(timeline, time, ui);
+
+        toOtioFile(timeline, ui);
+
+        if (modified)
+            edit_clear_redo(ui);
+
+        panel::redrawThumbnails();
+
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
+
+        tcp->pushMessage("Edit/Video Gap/Remove", time);
+    }
 
     void _addTransition(const otio::Item* left,
                         const otio::Item* right)
@@ -1695,8 +1868,18 @@ namespace mrv
             return;
         }
 
-        const auto left_range =  left->trimmed_range_in_parent().value();
-        const auto right_range = right->trimmed_range_in_parent().value();
+        auto left_range =  left->trimmed_range_in_parent().value();
+        auto right_range = right->trimmed_range_in_parent().value();
+        if (left_range.start_time() > right_range.start_time())
+        {
+            const  auto tmp = left;
+            left = right;
+            right = tmp;
+
+            const auto tmp_range = left_range;
+            left_range = right_range;
+            right_range = tmp_range;
+        }
         
         if (left_range.end_time_exclusive() != right_range.start_time())
         {
@@ -1724,10 +1907,12 @@ namespace mrv
         double left_rate = left_range.duration().rate();
         double right_rate = right_range.duration().rate();
         
-        auto in_offset = RationalTime(std::max(1.0, left_range.duration().value() /
-                                               2.0), left_rate);
-        auto out_offset = RationalTime(std::max(1.0, right_range.duration().value() /
-                                               2.0), right_rate);
+        auto in_offset = RationalTime(std::min(
+                                          std::max(1.0, left_range.duration().value() /
+                                                   2.0), left_rate / 2.0), left_rate);
+        auto out_offset = RationalTime(std::min(
+                                           std::max(1.0, right_range.duration().value() /
+                                                    2.0), right_rate / 2.0), right_rate);
 
         otio::Transition* transition =
             new otio::Transition("", "SMPTE_Dissolve", in_offset, out_offset);
@@ -1758,25 +1943,53 @@ namespace mrv
             return;
         }
 
-        const otio::Item* left, *right;
+        const otio::Item* left_video = nullptr;
+        const otio::Item* right_video = nullptr;
+        const otio::Item* left_audio = nullptr;
+        const otio::Item* right_audio = nullptr;
 
         if (selection.size() == 2)
         {
-            left = selection[0];
-            right = selection[1];
-            _addTransition(left, right);
+            left_video = selection[0];
+            right_video = selection[1];
+            _addTransition(left_video, right_video);
         }
         else
         {
             // Video
-            left = selection[0];
-            right = selection[2];
-            _addTransition(left, right);
+            for (auto& item : selection)
+            {
+                auto composition = item->parent();
+                auto track = dynamic_cast<otio::Track*>(composition);
+                if (!track)
+                    continue;
 
-            // Audio
-            left = selection[1];
-            right = selection[3];
-            _addTransition(left, right);
+                if (track->kind() == otio::Track::Kind::video)
+                {
+                    if (!left_video) left_video = item;
+                    else right_video = item;
+                }
+                else if (track->kind() == otio::Track::Kind::audio)
+                {
+                    if (!left_audio) left_audio = item;
+                    else right_audio = item;
+                }
+            }
+
+            if (left_video == nullptr || right_video == nullptr)
+            {
+                LOG_ERROR(_("Please select two contiguous video clips."));
+                return;
+            }
+
+            if (left_audio == nullptr || right_audio == nullptr)
+            {
+                LOG_ERROR(_("Please select two contiguous audio clips."));
+                return;
+            }
+
+            _addTransition(left_video, right_video);
+            _addTransition(left_audio, right_audio);
         }
         
         const auto& time = getTime(player);

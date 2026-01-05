@@ -1425,6 +1425,14 @@ namespace mrv
             {
                 edit_remove_audio_gap_cb(nullptr, ui);
             }
+            else if (c == "Edit/Video Gap/Insert")
+            {
+                edit_insert_video_gap_cb(nullptr, ui);
+            }
+            else if (c == "Edit/Video Gap/Remove")
+            {
+                edit_remove_video_gap_cb(nullptr, ui);
+            }
             else if (c == "Edit/Slice")
             {
                 edit_slice_clip_cb(nullptr, ui);

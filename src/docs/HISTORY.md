@@ -1,5 +1,6 @@
-v1.5.0
+v1.5.1
 ======
+
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
 mrv2 ships now in two compiled versions:
@@ -45,6 +46,17 @@ They do have, however:
     - A Window for donations and unlocking of features at the start
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+- Added Edit/Video Gap/Insert to mimic the audio gaps.
+- Added Edit/Remove Gap/Insert to mimic the audio gaps.
+- Made it possible to insert gaps even when the other track also had a gap instead of a clip.
+
+
+v1.5.0
+======
 
 ChangeLog
 ---------

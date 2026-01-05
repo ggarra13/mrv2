@@ -262,6 +262,8 @@ namespace mrv
     Hotkey kEditRemoveClip(false, false, false, false, 0);
     Hotkey kEditInsertAudioClip(false, false, false, false, 0);
     Hotkey kEditRemoveAudioClip(false, false, false, false, 0);
+    Hotkey kEditInsertVideoGap(false, false, false, false, 0);
+    Hotkey kEditRemoveVideoGap(false, false, false, false, 0);
     Hotkey kEditInsertAudioGap(false, false, false, false, 0);
     Hotkey kEditRemoveAudioGap(false, false, false, false, 0);
 
@@ -533,6 +535,8 @@ namespace mrv
         HotkeyEntry(_("Remove Clip"), &kEditRemoveClip),
         HotkeyEntry(_("Insert Audio Clip"), &kEditInsertAudioClip),
         HotkeyEntry(_("Remove Audio Clip"), &kEditRemoveAudioClip),
+        HotkeyEntry(_("Insert Video Gap"), &kEditInsertVideoGap),
+        HotkeyEntry(_("Remove Video Gap"), &kEditRemoveVideoGap),
         HotkeyEntry(_("Insert Audio Gap"), &kEditInsertAudioGap),
         HotkeyEntry(_("Remove Audio Gap"), &kEditRemoveAudioGap),
 
