@@ -332,9 +332,9 @@ Pro+ (Monthly)
                 plan_features->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                 plan_features->label(_(R"TEXT(
 Annotations and Saving only for a year
-Solo + OpenEXR layers + Python
+Solo + Python
 Standard + Editing
-Edit + Voice and Link Annotations
+Editing + Voice and Link Annotations
 All of Pro + change your machine[s] as you want
 )TEXT"));
                 what->end();

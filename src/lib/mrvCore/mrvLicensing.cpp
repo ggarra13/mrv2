@@ -206,6 +206,7 @@ namespace
         }
         else
         {
+            // Unknown license plan
             mrv::App::supports_annotations = false;
             mrv::App::supports_editing = false;
             mrv::App::supports_layers = true;
