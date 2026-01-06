@@ -55,6 +55,8 @@ ChangeLog
 - Made it possible to insert gaps even when the other track also had a gap instead of a clip.
 - Fixed Dissolves on both the OpenGL and Vulkan using wrong blending flags leading to mid-dark transitions.
 - Fixed Overlay.otio and multiple tracks drawing on Vulkan backend.
+- Made Roll and Trim work properly when no available ranges are set in the clip.
+- Made Roll work properly with transitions.
 
 
 v1.5.0

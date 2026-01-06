@@ -167,12 +167,28 @@ namespace tl
                             }
                             else
                             {
-                                timeRange = timeRange.clamped(otime::TimeRange(
-                                                                  otime::RationalTime(0.F, startTime.rate()),
-                                                                  otime::RationalTime(1.F, duration.rate())));
+                                if (startTime.value() < 0.F)
+                                    startTime = otime::RationalTime(0.F, startTime.rate());
+                                if (duration.value() < 1.F)
+                                    duration = otime::RationalTime(1.F, duration.rate());
+                                timeRange = otime::TimeRange(startTime, duration);
                             }
                             
                             otioItem->set_source_range(timeRange);
+                        }
+                        else if (auto otioGap = otio::dynamic_retainer_cast<otio::Gap>(otioChild))
+                        {         
+                            auto startTime = origRange.start_time() + startOffset;
+                            auto duration  = origRange.duration() + durationOffset;
+
+                            if (startTime.value() < 0.F)
+                                startTime = otime::RationalTime(0.F, startTime.rate());
+                            if (duration.value() < 1.F)
+                                duration = otime::RationalTime(1.F, duration.rate());
+                            
+                            timeRange = otime::TimeRange(startTime, duration);
+                            
+                            otioGap->set_source_range(timeRange);
                         }
                     }
                 }

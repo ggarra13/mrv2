@@ -2839,6 +2839,10 @@ namespace mrv
         
         edit_store_undo(player, ui);
 
+        // If an undo only operation, return immediately.
+        if (moves.size() == 1 && moves[0].type == tl::timeline::MoveType::UndoOnly)
+            return;
+
         const auto& startTimeOpt = timeline->global_start_time();
         otime::RationalTime startTime(0.0, timeline->duration().rate());
         if (startTimeOpt.has_value())
@@ -2854,8 +2858,6 @@ namespace mrv
         
         for (const auto& move : moves)
         {
-            if (move.type == tl::timeline::MoveType::UndoOnly)
-                continue;
             if (move.type == tl::timeline::MoveType::Transition)
             {
                 if (auto track = otio::dynamic_retainer_cast<otio::Track>(

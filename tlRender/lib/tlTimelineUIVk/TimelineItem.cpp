@@ -1425,5 +1425,93 @@ namespace tl
             }
             return out;
         }
+
+        bool TimelineItem::_clampRangeToNeighborTransitions(const otio::Item* item,
+                                                            const otime::TimeRange& proposedRange,
+                                                            otime::TimeRange& clampedRange)
+        {
+            if (!item) {
+                return false;
+            }
+
+            const auto* track = dynamic_cast<const otio::Track*>(item->parent());
+            if (!track) {
+                return false;
+            }
+
+            int index = track->index_of_child(item);
+            if (index < 0) {
+                return false;
+            }
+
+            otime::RationalTime proposed_start = proposedRange.start_time();
+            otime::RationalTime proposed_duration = proposedRange.duration();
+            otime::RationalTime proposed_end_excl = proposed_start + proposed_duration;
+            std::cerr << "PROPOSED = " << proposed_start << " to " << proposed_end_excl << std::endl;
+
+
+            // We need the CURRENT range to understand where the transition boundaries are
+            // in the parent's coordinate space.
+            const otime::TimeRange currentRange = track->range_of_child(item);
+            otime::RationalTime current_start = currentRange.start_time();
+            otime::RationalTime current_duration = currentRange.duration();
+            otime::RationalTime current_end_excl = current_start + current_duration;
+
+            otime::RationalTime clamped_start = proposed_start;
+            otime::RationalTime clamped_end_excl = proposed_end_excl;
+
+            // ---------------------------------------------------
+            // Incoming transition (at the start of the item)
+            // ---------------------------------------------------
+            otime::RationalTime transition_end = proposed_end_excl;
+            otime::RationalTime transition_out_offset(0, proposed_start.rate());
+            otime::RationalTime transition_start = proposed_start;
+            otime::RationalTime transition_in_offset(0, proposed_start.rate());
+            
+            if (index > 0) {
+                if (auto prevTransition = otio::dynamic_retainer_cast<otio::Transition>(track->children()[index - 1])) {
+                    transition_out_offset = prevTransition->out_offset();
+                    transition_end = current_start + transition_out_offset;
+                }
+            }
+
+            // ---------------------------------------------------
+            // Outgoing transition (at the end of the item)
+            // ---------------------------------------------------
+            if (index + 1 < static_cast<int>(track->children().size())) {
+                if (auto nextTransition = otio::dynamic_retainer_cast<otio::Transition>(track->children()[index + 1])) {
+                    transition_in_offset = nextTransition->in_offset();
+                    transition_start = current_end_excl - transition_in_offset;
+                }
+            }
+
+            //
+            // These checks are fine for a transition on one end only.
+            // However, we don't check the case where there's a transition on each end of the clip
+            // and those transitions may overlap.  Fix this, please.
+            //
+            if (proposed_end_excl < transition_start) {
+                clamped_end_excl = proposed_end_excl = transition_start;
+            }
+            if (proposed_start > transition_start) {
+                clamped_start = proposed_start = transition_start;
+            }
+    
+            if (proposed_start > transition_end) {
+                clamped_start = proposed_start = transition_end;
+            }
+            if (proposed_end_excl < transition_end) {
+                clamped_end_excl = proposed_end_excl = transition_end;
+            }
+
+            otime::RationalTime clamped_duration = clamped_end_excl - clamped_start;
+
+            std::cerr << "CURRENT  = " << current_start << " to " << current_end_excl << std::endl;
+            std::cerr << "CLAMPED  = " << clamped_start << " to " << clamped_end_excl << std::endl;
+            clampedRange = otime::TimeRange(clamped_start, clamped_duration);
+
+            return !(clampedRange == proposedRange);
+        }
+        
     } // namespace timelineui_vk
 } // namespace tl

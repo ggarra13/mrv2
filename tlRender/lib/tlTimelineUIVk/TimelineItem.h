@@ -15,6 +15,7 @@
 #include <FL/Fl_Vk_Context.H>
 
 #include <opentimelineio/item.h>
+#include <opentimelineio/transition.h>
 
 #include <vector>
 
@@ -125,7 +126,11 @@ namespace tl
             void _mouseReleaseEventSlide(ui::MouseClickEvent&);
             void _mouseReleaseEventSlip(ui::MouseClickEvent&);
             void _mouseReleaseEventTrim(ui::MouseClickEvent&);
-            
+
+            bool _clampRangeToNeighborTransitions(const otio::Item* item,
+                                                  const otime::TimeRange& proposedRange,
+                                                  otime::TimeRange& clampedRange);
+
             void _drawInOutPoints(const math::Box2i&, const ui::DrawEvent&);
             math::Size2i
             _getLabelMaxSize(const std::shared_ptr<image::FontSystem>&) const;

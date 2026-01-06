@@ -867,38 +867,6 @@ namespace tl
                     i < displayOptions.size() ? displayOptions[i] : timeline::DisplayOptions());
             }
         }
-
-        namespace
-        {
-            float knee(float x, float f)
-            {
-                return logf(x * f + 1.F) / f;
-            }
-
-            float knee2(float x, float y)
-            {
-                float f0 = 0.F;
-                float f1 = 1.F;
-                while (knee(x, f1) > y)
-                {
-                    f0 = f1;
-                    f1 = f1 * 2.F;
-                }
-                for (size_t i = 0; i < 30; ++i)
-                {
-                    const float f2 = (f0 + f1) / 2.F;
-                    if (knee(x, f2) < y)
-                    {
-                        f1 = f2;
-                    }
-                    else
-                    {
-                        f0 = f2;
-                    }
-                }
-                return (f0 + f1) / 2.F;
-            }
-        } // namespace
         
         void Render::_drawVideo(
             std::shared_ptr<vlk::OffscreenBuffer>& fbo,
