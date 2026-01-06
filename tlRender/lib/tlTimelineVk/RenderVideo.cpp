@@ -963,7 +963,7 @@ namespace tl
                                 auto dissolveImageOptions = imageOptions.get() ?
                                                             *imageOptions :
                                                             layer.imageOptions;
-                                dissolveImageOptions.alphaBlend = timeline::AlphaBlend::Straight;
+                                dissolveImageOptions.alphaBlend = timeline::AlphaBlend::kNone;
                                 drawImage(
                                     p.buffers["dissolve"], layer.image,
                                     image::getBox(layer.image->getAspect(),
@@ -975,7 +975,7 @@ namespace tl
                             {
                                 float v = d2 = layer.transitionValue;
                                 auto dissolveImageOptions = imageOptions.get() ? *imageOptions : layer.imageOptionsB;
-                                dissolveImageOptions.alphaBlend = timeline::AlphaBlend::Straight;
+                                dissolveImageOptions.alphaBlend = timeline::AlphaBlend::kNone;
                                 drawImage(
                                     p.buffers["dissolve2"], layer.imageB,
                                     image::getBox(layer.imageB->getAspect(),
@@ -1004,12 +1004,16 @@ namespace tl
                                 std::string pipelineDissolveName = pipelineNameBase + "_Pass1_NoBlend";
 
                                 // Create or find a pipeline without blending
-                                bool enableBlending = false;
+                                bool enableBlending = true;
                                 createPipeline(p.buffers["video"],
                                                pipelineDissolveName,
                                                pipelineLayoutName,
                                                shaderName, meshName,
-                                               enableBlending);
+                                               enableBlending,
+                                               VK_BLEND_FACTOR_SRC_ALPHA,
+                                               VK_BLEND_FACTOR_ZERO,
+                                               VK_BLEND_FACTOR_ONE,
+                                               VK_BLEND_FACTOR_ONE);
                                 
                                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -1046,7 +1050,7 @@ namespace tl
                                     pipelineLayoutName, shaderName, meshName,
                                     enableBlending,
                                     VK_BLEND_FACTOR_SRC_ALPHA,
-                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                    VK_BLEND_FACTOR_ONE,
                                     VK_BLEND_FACTOR_ONE,
                                     VK_BLEND_FACTOR_ONE,
                                     VK_BLEND_OP_ADD,

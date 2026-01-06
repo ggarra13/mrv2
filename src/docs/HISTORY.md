@@ -53,6 +53,7 @@ ChangeLog
 - Added Edit/Video Gap/Insert to mimic the audio gaps.
 - Added Edit/Remove Gap/Insert to mimic the audio gaps.
 - Made it possible to insert gaps even when the other track also had a gap instead of a clip.
+- Fixed Dissolves on both the OpenGL and Vulkan using wrong blending flags leading to mid-dark transitions.
 
 
 v1.5.0

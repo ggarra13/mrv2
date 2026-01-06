@@ -689,7 +689,7 @@ namespace tl
                                     imageOptions.get() ? *imageOptions
                                                        : layer.imageOptions;
                                 dissolveImageOptions.alphaBlend =
-                                    timeline::AlphaBlend::Straight;
+                                    timeline::AlphaBlend::kNone;
                                 drawImage(
                                     layer.image,
                                     image::getBox(
@@ -714,7 +714,7 @@ namespace tl
                                     imageOptions.get() ? *imageOptions
                                                        : layer.imageOptionsB;
                                 dissolveImageOptions.alphaBlend =
-                                    timeline::AlphaBlend::Straight;
+                                    timeline::AlphaBlend::kNone;
                                 drawImage(
                                     layer.imageB,
                                     image::getBox(
@@ -728,7 +728,7 @@ namespace tl
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                             {
                                 glBlendFuncSeparate(
-                                    GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+                                    GL_SRC_ALPHA, GL_ZERO, GL_ONE,
                                     GL_ONE);
 
                                 p.shaders["dissolve"]->bind();
@@ -762,6 +762,9 @@ namespace tl
                                         p.vbos["video"]->getSize());
                                 }
 
+                                glBlendFuncSeparate(
+                                    GL_SRC_ALPHA, GL_ONE, GL_ONE,
+                                    GL_ONE);
                                 glBindTexture(
                                     GL_TEXTURE_2D,
                                     p.buffers["dissolve2"]->getColorID());
