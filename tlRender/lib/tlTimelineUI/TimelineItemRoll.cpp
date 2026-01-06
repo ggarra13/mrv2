@@ -103,6 +103,9 @@ namespace tl
                 const int offset = _mouse.pos.x - _mouse.pressPos.x;
                 math::Box2i move;
                 
+                //
+                // Store an undo in callback
+                //
                 std::vector<timeline::MoveData> moveData;
                 moveData.push_back(
                     {
@@ -139,8 +142,8 @@ namespace tl
                     startTime -= _timeRange.start_time();
                     timeRange = otime::TimeRange(startTime, duration);
                     
-                    const auto startOffset = timeRange.start_time() - origRange.start_time();
-                    const auto durationOffset = timeRange.duration() - origRange.duration();
+                    auto startOffset = timeRange.start_time() - origRange.start_time();
+                    auto durationOffset = timeRange.duration() - origRange.duration();
                     
                     const int trackIndex = item->track;
                     const int itemIndex = item->index;
@@ -151,11 +154,30 @@ namespace tl
                     if (auto otioTrack = otio::dynamic_retainer_cast<otio::Track>(child))
                     {
                         const auto& otioChild = otioTrack->children()[otioItemIndex];
-                        if (auto otioItem = otio::dynamic_retainer_cast<otio::Clip>(otioChild))
+                        auto otioItem = otio::dynamic_retainer_cast<otio::Item>(otioChild);
+
+                        
+                        auto parentRange = otioItem->trimmed_range_in_parent().value();
+                        auto proposedRange = otio::TimeRange(parentRange.start_time() + startOffset,
+                                                             parentRange.duration() + durationOffset);
+                        otime::TimeRange clampedRange;
+
+                        _clampRangeToNeighborTransitions(otioItem, proposedRange, clampedRange);
+
+                        // 2. Calculate the "Correction" applied by the clamp
+                        // If the clamp moved the start by +2 frames, we need to subtract that from our offset
+                        auto startCorrection = clampedRange.start_time() - proposedRange.start_time();
+                        auto durationCorrection = clampedRange.duration() - proposedRange.duration();
+
+                       // 3. Apply the correction to your offsets
+                        startOffset += startCorrection;
+                        durationOffset += durationCorrection;
+                        
+                        if (auto otioClip = otio::dynamic_retainer_cast<otio::Clip>(otioChild))
                         {
-                            origRange = otioItem->source_range().value();
+                            origRange = otioClip->source_range().value();
                             
-                            const auto& availableRange = otioItem->available_range(&status);              
+                            const auto& availableRange = otioClip->available_range(&status);              
                             auto startTime = origRange.start_time() + startOffset;
                             auto duration  = origRange.duration() + durationOffset;
                             timeRange = otime::TimeRange(startTime, duration);
@@ -174,7 +196,7 @@ namespace tl
                                 timeRange = otime::TimeRange(startTime, duration);
                             }
                             
-                            otioItem->set_source_range(timeRange);
+                            otioClip->set_source_range(timeRange);
                         }
                         else if (auto otioGap = otio::dynamic_retainer_cast<otio::Gap>(otioChild))
                         {         

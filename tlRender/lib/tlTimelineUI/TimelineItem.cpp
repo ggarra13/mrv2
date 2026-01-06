@@ -1268,8 +1268,7 @@ namespace tl
             return out;
         }
         
-
-        
+    
         TimelineItem::Private::MouseItemData::MouseItemData() {}
 
         TimelineItem::Private::MouseItemData::MouseItemData(
@@ -1417,5 +1416,90 @@ namespace tl
             }
             return out;
         }
+
+        bool TimelineItem::_clampRangeToNeighborTransitions(const otio::Item* item,
+                                                            const otime::TimeRange& proposedRange,
+                                                            otime::TimeRange& clampedRange)
+        {
+            if (!item) {
+                return false;
+            }
+
+            const auto* track = dynamic_cast<const otio::Track*>(item->parent());
+            if (!track) {
+                return false;
+            }
+
+            int index = track->index_of_child(item);
+            if (index < 0) {
+                return false;
+            }
+
+            otime::RationalTime proposed_start = proposedRange.start_time();
+            otime::RationalTime proposed_duration = proposedRange.duration();
+            otime::RationalTime proposed_end_excl = proposed_start + proposed_duration;
+
+            // We need the CURRENT range to understand where the transition boundaries are
+            // in the parent's coordinate space.
+            const otime::TimeRange currentRange = track->range_of_child(item);
+            otime::RationalTime current_duration = currentRange.duration();
+
+            otime::RationalTime clamped_start = proposed_start;
+            otime::RationalTime clamped_end_excl = proposed_end_excl;
+
+            // ---------------------------------------------------
+            // Incoming transition (at the start of the item)
+            // ---------------------------------------------------
+            otime::RationalTime transition_end = proposed_end_excl;
+            otime::RationalTime transition_out_offset(0, proposed_start.rate());
+            otime::RationalTime transition_start = proposed_start;
+            otime::RationalTime transition_in_offset(0, proposed_start.rate());
+            
+            if (index > 0) {
+                if (auto prevTransition = otio::dynamic_retainer_cast<otio::Transition>(track->children()[index - 1])) {
+                    transition_out_offset = prevTransition->out_offset();
+                    transition_end = currentRange.start_time() + transition_out_offset;
+                }
+            }
+
+            // ---------------------------------------------------
+            // Outgoing transition (at the end of the item)
+            // ---------------------------------------------------
+            if (index + 1 < static_cast<int>(track->children().size())) {
+                if (auto nextTransition = otio::dynamic_retainer_cast<otio::Transition>(track->children()[index + 1])) {
+                    transition_in_offset = nextTransition->in_offset();
+                    transition_start = currentRange.end_time_exclusive() - transition_in_offset;
+                }
+            }
+
+            //
+            // These checks are fine for a transition on one end only.
+            //
+            if (proposed_end_excl < transition_start) {
+                clamped_end_excl = proposed_end_excl = transition_start;
+            }
+            if (proposed_start > transition_start) {
+                clamped_start = proposed_start = transition_start;
+            }
+    
+            if (proposed_start > transition_end) {
+                clamped_start = proposed_start = transition_end;
+            }
+            if (proposed_end_excl < transition_end) {
+                clamped_end_excl = proposed_end_excl = transition_end;
+            }
+
+            // Check overlapping transitions
+            if (clamped_start + transition_out_offset > clamped_end_excl - transition_in_offset)
+            {
+                clamped_end_excl = clamped_start + transition_in_offset + transition_out_offset;
+            }
+
+            otime::RationalTime clamped_duration = clamped_end_excl - clamped_start;
+            clampedRange = otime::TimeRange(clamped_start, clamped_duration);
+
+            return !(clampedRange == proposedRange);
+        }
+        
     } // namespace timelineui
 } // namespace tl
