@@ -689,7 +689,7 @@ namespace tl
                                     imageOptions.get() ? *imageOptions
                                                        : layer.imageOptions;
                                 dissolveImageOptions.alphaBlend =
-                                    timeline::AlphaBlend::kNone;
+                                    timeline::AlphaBlend::Straight;
                                 drawImage(
                                     layer.image,
                                     image::getBox(
@@ -714,7 +714,7 @@ namespace tl
                                     imageOptions.get() ? *imageOptions
                                                        : layer.imageOptionsB;
                                 dissolveImageOptions.alphaBlend =
-                                    timeline::AlphaBlend::kNone;
+                                    timeline::AlphaBlend::Straight;
                                 drawImage(
                                     layer.imageB,
                                     image::getBox(
@@ -728,8 +728,8 @@ namespace tl
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                             {
                                 glBlendFuncSeparate(
-                                    GL_SRC_ALPHA, GL_ZERO, GL_ONE,
-                                    GL_ONE);
+                                    GL_ONE, GL_ZERO, GL_ONE,
+                                    GL_ZERO);
 
                                 p.shaders["dissolve"]->bind();
                                 p.shaders["dissolve"]->setUniform(
@@ -763,8 +763,8 @@ namespace tl
                                 }
 
                                 glBlendFuncSeparate(
-                                    GL_SRC_ALPHA, GL_ONE, GL_ONE,
-                                    GL_ONE);
+                                   GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+                                   GL_ONE_MINUS_SRC_ALPHA);
                                 glBindTexture(
                                     GL_TEXTURE_2D,
                                     p.buffers["dissolve2"]->getColorID());

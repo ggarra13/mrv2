@@ -963,7 +963,7 @@ namespace tl
                                 auto dissolveImageOptions = imageOptions.get() ?
                                                             *imageOptions :
                                                             layer.imageOptions;
-                                dissolveImageOptions.alphaBlend = timeline::AlphaBlend::kNone;
+                                dissolveImageOptions.alphaBlend = timeline::AlphaBlend::Straight;
                                 drawImage(
                                     p.buffers["dissolve"], layer.image,
                                     image::getBox(layer.image->getAspect(),
@@ -975,7 +975,7 @@ namespace tl
                             {
                                 float v = d2 = layer.transitionValue;
                                 auto dissolveImageOptions = imageOptions.get() ? *imageOptions : layer.imageOptionsB;
-                                dissolveImageOptions.alphaBlend = timeline::AlphaBlend::kNone;
+                                dissolveImageOptions.alphaBlend = timeline::AlphaBlend::Straight;
                                 drawImage(
                                     p.buffers["dissolve2"], layer.imageB,
                                     image::getBox(layer.imageB->getAspect(),
@@ -1010,10 +1010,10 @@ namespace tl
                                                pipelineLayoutName,
                                                shaderName, meshName,
                                                enableBlending,
-                                               VK_BLEND_FACTOR_SRC_ALPHA,
+                                               VK_BLEND_FACTOR_ONE,
                                                VK_BLEND_FACTOR_ZERO,
                                                VK_BLEND_FACTOR_ONE,
-                                               VK_BLEND_FACTOR_ONE);
+                                               VK_BLEND_FACTOR_ZERO);
                                 
                                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -1049,12 +1049,10 @@ namespace tl
                                     pipelineDissolveName,
                                     pipelineLayoutName, shaderName, meshName,
                                     enableBlending,
-                                    VK_BLEND_FACTOR_SRC_ALPHA,
                                     VK_BLEND_FACTOR_ONE,
+                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                                     VK_BLEND_FACTOR_ONE,
-                                    VK_BLEND_FACTOR_ONE,
-                                    VK_BLEND_OP_ADD,
-                                    VK_BLEND_OP_ADD);
+                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
                                                    p.shaders["dissolve"]->getPushStageFlags(), 0,
                                                    sizeof(color), &color);
