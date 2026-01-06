@@ -992,7 +992,6 @@ namespace tl
                                 p.buffers["video"]->transitionToColorAttachment(p.cmd);
 
                                 // --- Common Setup ---
-                                std::shared_ptr<vlk::ShaderBindingSet> bindingSet;
                                 const auto transform = math::ortho(0.F, static_cast<float>(box.w()), 0.F,
                                                                    static_cast<float>(box.h()), -1.F, 1.F);
                                 const image::Color4f color(1.F, 1.F, 1.F);

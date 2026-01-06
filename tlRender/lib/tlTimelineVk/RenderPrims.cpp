@@ -709,7 +709,7 @@ namespace tl
                 break;
             }
 
-            fbo->beginClearRenderPass(p.cmd);
+            fbo->beginLoadRenderPass(p.cmd);
             if (p.vbos["image"])
             {
                 p.vbos["image"]->copy(
