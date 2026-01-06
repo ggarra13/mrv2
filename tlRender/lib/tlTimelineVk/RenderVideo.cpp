@@ -936,7 +936,8 @@ namespace tl
             {
                 p.buffers["video"]->beginClearRenderPass(p.cmd);
                 p.buffers["video"]->endRenderPass(p.cmd);
-                
+
+                bool clearRenderPass = true;
                 for (const auto& layer : videoData.layers)
                 {
                     switch (layer.transition)
@@ -969,7 +970,8 @@ namespace tl
                                     image::getBox(layer.image->getAspect(),
                                                   math::Box2i(0, 0, offscreenBufferSize.w,
                                                               offscreenBufferSize.h)),
-                                    image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions);
+                                    image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions,
+                                    clearRenderPass);
                             }
                             if (p.buffers["dissolve2"])
                             {
@@ -981,7 +983,8 @@ namespace tl
                                     image::getBox(layer.imageB->getAspect(),
                                                   math::Box2i(0, 0, offscreenBufferSize.w,
                                                               offscreenBufferSize.h)),
-                                    image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions);
+                                    image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions,
+                                    clearRenderPass);
                             }
                             
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
@@ -1107,6 +1110,7 @@ namespace tl
                         }
                         break;
                     }
+                    clearRenderPass = false;
                 }
             }
 

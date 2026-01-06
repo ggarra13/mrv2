@@ -588,7 +588,8 @@ namespace tl
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::shared_ptr<image::Image>& image, const math::Box2i& box,
             const image::Color4f& color,
-            const timeline::ImageOptions& imageOptions)
+            const timeline::ImageOptions& imageOptions,
+            const bool clearRenderPass)
         {
             TLRENDER_P();
             ++(p.currentStats.images);
@@ -709,7 +710,14 @@ namespace tl
                 break;
             }
 
-            fbo->beginLoadRenderPass(p.cmd);
+            if (clearRenderPass)
+            {
+                fbo->beginClearRenderPass(p.cmd);
+            }
+            else
+            {
+                fbo->beginLoadRenderPass(p.cmd);
+            }
             if (p.vbos["image"])
             {
                 p.vbos["image"]->copy(
@@ -859,6 +867,8 @@ namespace tl
                 break;
             }
 
+            // This is used in the timeline, so we need to use a load
+            // render pass.
             p.fbo->beginLoadRenderPass(p.cmd);
             if (p.vbos["image"])
             {

@@ -728,8 +728,8 @@ namespace tl
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                             {
                                 glBlendFuncSeparate(
-                                    GL_ONE, GL_ZERO, GL_ONE,
-                                    GL_ZERO);
+                                    GL_ONE, GL_ONE, GL_ONE,
+                                    GL_ONE);
 
                                 p.shaders["dissolve"]->bind();
                                 p.shaders["dissolve"]->setUniform(
@@ -763,8 +763,8 @@ namespace tl
                                 }
 
                                 glBlendFuncSeparate(
-                                   GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
-                                   GL_ONE_MINUS_SRC_ALPHA);
+                                   GL_ONE, GL_ONE, GL_ONE,
+                                   GL_ONE);
                                 glBindTexture(
                                     GL_TEXTURE_2D,
                                     p.buffers["dissolve2"]->getColorID());
