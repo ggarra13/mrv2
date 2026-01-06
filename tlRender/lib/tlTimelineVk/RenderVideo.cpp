@@ -1006,16 +1006,12 @@ namespace tl
                                 std::string pipelineDissolveName = pipelineNameBase + "_Pass1_NoBlend";
 
                                 // Create or find a pipeline without blending
-                                bool enableBlending = true;
+                                bool enableBlending = false;
                                 createPipeline(p.buffers["video"],
                                                pipelineDissolveName,
                                                pipelineLayoutName,
                                                shaderName, meshName,
-                                               enableBlending,
-                                               VK_BLEND_FACTOR_ONE,
-                                               VK_BLEND_FACTOR_ZERO,
-                                               VK_BLEND_FACTOR_ONE,
-                                               VK_BLEND_FACTOR_ZERO);
+                                               enableBlending);
                                 
                                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -1052,9 +1048,9 @@ namespace tl
                                     pipelineLayoutName, shaderName, meshName,
                                     enableBlending,
                                     VK_BLEND_FACTOR_ONE,
-                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                                     VK_BLEND_FACTOR_ONE,
-                                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+                                    VK_BLEND_FACTOR_ONE,
+                                    VK_BLEND_FACTOR_ONE);
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
                                                    p.shaders["dissolve"]->getPushStageFlags(), 0,
                                                    sizeof(color), &color);

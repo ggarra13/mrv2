@@ -727,9 +727,11 @@ namespace tl
                             }
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                             {
-                                glBlendFuncSeparate(
-                                    GL_ONE, GL_ZERO, GL_ONE,
-                                    GL_ZERO);
+                                glDisable(GL_BLEND);
+                                
+                                // glBlendFuncSeparate(
+                                //     GL_ONE, GL_ZERO, GL_ONE,
+                                //     GL_ZERO);
 
                                 p.shaders["dissolve"]->bind();
                                 p.shaders["dissolve"]->setUniform(
@@ -762,9 +764,12 @@ namespace tl
                                         p.vbos["video"]->getSize());
                                 }
 
-                                glBlendFuncSeparate(
-                                   GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
-                                   GL_ONE_MINUS_SRC_ALPHA);
+                                glEnable(GL_BLEND);
+                                glBlendFunc(GL_ONE, GL_ONE);
+                                
+                                // glBlendFuncSeparate(
+                                //    GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+                                //    GL_ONE_MINUS_SRC_ALPHA);
                                 glBindTexture(
                                     GL_TEXTURE_2D,
                                     p.buffers["dissolve2"]->getColorID());
