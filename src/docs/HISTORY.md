@@ -31,18 +31,17 @@ You need to have an internet connection for the license system.
 
 The donationware version when running without a donation, does not have:
 
-    - Saving (available from Solo and later)
     - Annotations (available from Solo and later)
     - Python (available in Standard and later)
     - Editing (available in Edit and later)
     - Voice Annotations (available in Pro)
     - Move license to a new machine (available in Pro monthly)
 
-
 They do have, however:
 
     - Tone-mapping (OpenGL) and HDR (Vulkan)
     - OpenEXR layer switching
+    - Saving
     - A Window for donations and unlocking of features at the start
 
 Prices might change (go up or down) depending on competition and new features.
@@ -56,7 +55,7 @@ ChangeLog
 - Fixed Dissolves on both the OpenGL and Vulkan using wrong blending flags leading to mid-dark transitions.
 - Fixed Overlay.otio and multiple tracks drawing on Vulkan backend.
 - Made Roll and Trim work properly when no available ranges are set in the clip.
-- Made Roll work properly with transitions.
+- Made Roll to work properly with transitions.
 
 
 v1.5.0
