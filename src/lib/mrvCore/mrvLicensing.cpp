@@ -201,7 +201,7 @@ namespace
             mrv::App::supports_editing = false;
             mrv::App::supports_layers = true;
             mrv::App::supports_python = false;
-            mrv::App::supports_saving = false;
+            mrv::App::supports_saving = true;
             mrv::App::supports_voice = false;
         }
         else
@@ -211,7 +211,7 @@ namespace
             mrv::App::supports_editing = false;
             mrv::App::supports_layers = true;
             mrv::App::supports_python = false;
-            mrv::App::supports_saving = false;
+            mrv::App::supports_saving = true;
             mrv::App::supports_voice = false;
             
             const std::string msg =

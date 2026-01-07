@@ -182,7 +182,6 @@ https://sourceforge.net/projects/mrv2/files/beta/vulkan
 directory are versions for you to evaluate mrv2 or vmrv2 before a donation and report bugs or performance issues.
 Currently, when run as demo these versions don't have:
 
-	   - Saving
 	   - Annotations
 	   - Editing
 	   - NDI support
@@ -192,6 +191,7 @@ They do have, however:
 
 	   - Tone-mapping (OpenGL) and HDR (Vulkan)
 	   - OpenEXR layer switching
+	   - Saving
 	   - A Window for donations and unlocking of features at the start
 
 EOF
