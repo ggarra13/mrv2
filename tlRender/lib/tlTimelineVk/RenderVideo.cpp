@@ -938,8 +938,7 @@ namespace tl
                                     image::getBox(layer.image->getAspect(),
                                                   math::Box2i(0, 0, offscreenBufferSize.w,
                                                               offscreenBufferSize.h)),
-                                    image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions,
-                                    clearRenderPass);
+                                    image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions);
                             }
                             if (p.buffers["dissolve2"])
                             {
@@ -951,8 +950,7 @@ namespace tl
                                     image::getBox(layer.imageB->getAspect(),
                                                   math::Box2i(0, 0, offscreenBufferSize.w,
                                                               offscreenBufferSize.h)),
-                                    image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions,
-                                    clearRenderPass);
+                                    image::Color4f(1.F, 1.F, 1.F, v), dissolveImageOptions);
                             }
                             
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
@@ -1053,14 +1051,16 @@ namespace tl
                             drawImage(
                                 p.buffers["video"], layer.image,
                                 image::getBox(layer.image->getAspect(), math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h)),
-                                image::Color4f(1.F, 1.F, 1.F, 1.F - layer.transitionValue), imageOptions.get() ? *imageOptions : layer.imageOptions);
+                                image::Color4f(1.F, 1.F, 1.F, 1.F - layer.transitionValue), imageOptions.get() ? *imageOptions : layer.imageOptions,
+                                clearRenderPass);
                         }
                         else if (layer.imageB)
                         {
                             drawImage(
                                 p.buffers["video"], layer.imageB,
                                 image::getBox(layer.imageB->getAspect(), math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h)),
-                                image::Color4f(1.F, 1.F, 1.F, layer.transitionValue), imageOptions.get() ? *imageOptions : layer.imageOptionsB);
+                                image::Color4f(1.F, 1.F, 1.F, layer.transitionValue), imageOptions.get() ? *imageOptions : layer.imageOptionsB,
+                                clearRenderPass);
                         }
                         break;
                     }
@@ -1070,7 +1070,7 @@ namespace tl
                             drawImage(
                                 p.buffers["video"], layer.image,
                                 image::getBox(layer.image->getAspect(), math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h)),
-                                image::Color4f(1.F, 1.F, 1.F), imageOptions.get() ? *imageOptions : layer.imageOptions);
+                                image::Color4f(1.F, 1.F, 1.F), imageOptions.get() ? *imageOptions : layer.imageOptions, clearRenderPass);
                         }
                         break;
                     }
