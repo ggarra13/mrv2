@@ -982,8 +982,12 @@ namespace tl
                                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
                                                    p.shaders["dissolve"]->getPushStageFlags(), 0, sizeof(color), &color);
-                                
-                                p.buffers["video"]->beginClearRenderPass(p.cmd);
+
+                                if (clearRenderPass)
+                                    p.buffers["video"]->beginClearRenderPass(p.cmd);
+                                else
+                                    p.buffers["video"]->beginLoadRenderPass(p.cmd);
+                                    
 
                                 _createBindingSet(p.shaders["dissolve"]);
 
