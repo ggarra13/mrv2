@@ -124,7 +124,7 @@ namespace tl
             TLRENDER_P();
 
             _timeRange = timeRange;
-            _trimmedRange = trimmedRange;
+            _trimmedRange = trimmedRange;            
             _scale = scale;
             _options = options;
             _displayOptions = displayOptions;
@@ -152,6 +152,20 @@ namespace tl
             if (_timeRange == value)
                 return;
             _timeRange = value;
+            _updates |= ui::Update::Size;
+            _updates |= ui::Update::Draw;
+        }
+        
+        const otime::TimeRange& IItem::getTrimmedRange() const
+        {
+            return _trimmedRange;
+        }
+
+        void IItem::setTrimmedRange(const otime::TimeRange& value)
+        {
+            if (_trimmedRange == value)
+                return;
+            _trimmedRange = value;
             _updates |= ui::Update::Size;
             _updates |= ui::Update::Draw;
         }

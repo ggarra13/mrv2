@@ -1164,23 +1164,31 @@ namespace mrv
         if (numFiles == 0)
             mode |= FL_MENU_INACTIVE;
 
-        idx = menu->add(
-            _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
-            (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        bool editable = ui->uiTimeline->isEditable();
-        if (editable)
-            item->set();
-
         const auto& itemOptions = ui->uiTimeline->getItemOptions();
         const auto& displayOptions = ui->uiTimeline->getDisplayOptions();
-        idx = menu->add(
-            _("Timeline/Edit Associated Clips"),
-            kToggleEditAssociatedClips.hotkey(),
-            (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui, mode);
-        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-        if (itemOptions.editAssociatedClips)
-            item->set();
+            
+        if (App::supports_editing)
+        {
+            idx = menu->add(
+                _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
+                (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            bool editable = ui->uiTimeline->isEditable();
+            if (editable)
+                item->set();
+
+            idx = menu->add(
+                _("Timeline/Edit Associated Clips"),
+                kToggleEditAssociatedClips.hotkey(),
+                (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (itemOptions.editAssociatedClips)
+                item->set();
+        }
+        else
+        {
+            ui->uiTimeline->setEditable(false);
+        }
 
         mode = 0;
         if (numFiles == 0)

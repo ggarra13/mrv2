@@ -155,6 +155,20 @@ namespace tl
             _updates |= ui::Update::Size;
             _updates |= ui::Update::Draw;
         }
+        
+        const otime::TimeRange& IItem::getTrimmedRange() const
+        {
+            return _trimmedRange;
+        }
+
+        void IItem::setTrimmedRange(const otime::TimeRange& value)
+        {
+            if (_trimmedRange == value)
+                return;
+            _trimmedRange = value;
+            _updates |= ui::Update::Size;
+            _updates |= ui::Update::Draw;
+        }
 
         void IItem::setScale(double value)
         {

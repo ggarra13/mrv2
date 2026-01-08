@@ -252,7 +252,7 @@ namespace tl
                         p.path, p.memoryRead, p.ioOptions);
                 }
             }
-
+ 
             const int thumbnailWidth =
                 (_displayOptions.thumbnails && p.ioInfo &&
                  !p.ioInfo->video.empty())
@@ -283,7 +283,7 @@ namespace tl
                                         _timeRange.duration().value(),
                                 _timeRange.duration().rate())
                                 .floor();
-                        const otime::RationalTime mediaTime =
+                        const otime::RationalTime mediaTime = 
                             timeline::toVideoMediaTime(
                                 time, _timeRange, _trimmedRange,
                                 p.ioInfo->videoTime.duration().rate());
@@ -295,6 +295,7 @@ namespace tl
                         {
                             if (i->second)
                             {
+                                
                                 timeline::VideoData videoData;
                                 videoData.size = i->second->getSize();
                                 videoData.layers.push_back({i->second});

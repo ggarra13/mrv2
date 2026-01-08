@@ -538,6 +538,11 @@ namespace mrv
         tooltip = _("Trim Edit Tool\nMoves the ending or beginning adding gaps");
         tooltip += addHotkey(kEditTrim);
         ui->uiTrim->copy_tooltip(tooltip.c_str());
+
+        tooltip = _("Slip Edit Tool\nSlips the in point of the clip without modifying others or its duration.");
+        tooltip += addHotkey(kEditSlip);
+        ui->uiSlip->copy_tooltip(tooltip.c_str());
+        
         
         tooltip = _("Undo Edit");
         tooltip += addHotkey(kEditUndo);

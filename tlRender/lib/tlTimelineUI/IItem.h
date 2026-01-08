@@ -128,6 +128,12 @@ namespace tl
 
             //! Set the item time range.
             void setTimeRange(const otime::TimeRange&);
+
+            //! Get the item trimmed range.
+            const otime::TimeRange& getTrimmedRange() const;
+
+            //! Set the itme trimmed range.
+            void setTrimmedRange(const otime::TimeRange&);
             
             //! Set the item scale.
             virtual void setScale(double);

@@ -1495,9 +1495,7 @@ namespace tl
                 }
             }
 
-            //
-            // These checks are fine for a transition on one end only.
-            //
+            // Check start and ending transitions
             if (proposed_end_excl < transition_start) {
                 clamped_end_excl = proposed_end_excl = transition_start;
             }

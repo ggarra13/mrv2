@@ -131,7 +131,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {164 187 952 56} resizable
+  xywh {0 0 952 56} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -435,14 +435,14 @@ where Yn is the white reference (usually 1).} xywh {5 5 100 20}
   }
 }
 
-decl {class HotkeyUI;} {selected public global
+decl {class HotkeyUI;} {public global
 }
 
 decl {class AboutUI;} {public global
 }
 
 widget_class TimelineClass {
-  xywh {216 239 933 56} box NO_BOX resizable
+  xywh {0 0 933 56} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -869,7 +869,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {979 390 933 673} type Double align 80 resizable
+      xywh {0 0 933 673} type Double align 80 resizable
       class {mrv::MainWindow} size_range {933 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -1181,16 +1181,16 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                   image {../../icons/EditTrim.svg} compress_image 1 xywh {1 210 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
-                Fl_Button uiRipple {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Ripple );}
-                  image {../../../../../applications/mrv2/src/icons/EditRipple.svg} compress_image 1 xywh {1 260 40 50} down_box DOWN_BOX selection_color 95
-                  class {mrv::Button}
-                }
                 Fl_Button uiSlip {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Slip );}
-                  image {../../icons/EditSlip.svg} compress_image 1 xywh {1 310 40 50} down_box DOWN_BOX selection_color 95 hide
+                  image {../../icons/EditSlip.svg} compress_image 1 xywh {1 260 40 50} down_box DOWN_BOX selection_color 95
+                  class {mrv::Button}
+                }
+                Fl_Button uiRipple {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Ripple );} selected
+                  image {../../../../../applications/mrv2/src/icons/EditRipple.svg} compress_image 1 xywh {1 310 40 50} down_box DOWN_BOX selection_color 95 hide
                   class {mrv::Button}
                 }
                 Fl_Button uiSlide {
