@@ -151,6 +151,9 @@ namespace tl
             //! Convert a time to a position.
             int timeToPos(const otime::RationalTime&) const;
 
+            //! Schedule a redraw
+            void redraw();
+
         protected:
             static math::Box2i _getClipRect(const math::Box2i&, double scale);
 

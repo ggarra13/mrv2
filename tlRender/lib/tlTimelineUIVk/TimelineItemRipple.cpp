@@ -24,11 +24,6 @@ namespace tl
                 break;
             case Private::MouseMode::Item:
             {
-                _mouse.pos.y = _mouse.pressPos.y;
-                // const int offset = _mouse.pos.x - _mouse.pressPos.x;
-                math::Box2i move;
-                    
-                const auto otioTimeline = p.player->getTimeline()->getTimeline();
                 for (const auto& item : p.mouse.items)
                 {
                     const math::Box2i& g = item->geometry;
@@ -39,17 +34,12 @@ namespace tl
 
                     // Move the start and duration to clip time from timeline time.
                     otime::RationalTime startTime = posToTime(_mouse.pressPos.x);
-                    otime::RationalTime   endTime = posToTime(_mouse.pos.x);
-                    otime::RationalTime   offset  = endTime - startTime;
-
-                    std::cerr << "startTime=" << startTime << std::endl;
-                    std::cerr << "  endTime=" << endTime << std::endl; 
-                    std::cerr << "   offset=" << offset << std::endl;
-
+                    const otime::RationalTime   endTime = posToTime(_mouse.pos.x);
+                    const otime::RationalTime   offset  = endTime - startTime;
                      
                     auto itemRange = otioItem->trimmed_range();
                     startTime = itemRange.start_time() + offset;
-                    auto duration = itemRange.duration() + offset;
+                    auto duration = itemRange.duration();
                     
                     // Clamp on available range if present.
                     otio::ErrorStatus status;
@@ -81,10 +71,11 @@ namespace tl
                     {
                         gap->set_source_range(newTimeRange);
                     }
+
+                    clip->redraw();
                 }
 
-                //p.player->getTimeline()->setTimeline(otioTimeline);
-
+                redraw();
             }
             break;
             }

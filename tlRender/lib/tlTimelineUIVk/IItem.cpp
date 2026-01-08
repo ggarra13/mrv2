@@ -241,6 +241,11 @@ namespace tl
                 _data->timeUnitsModel->getLabel(rescaled));
         }
 
+        void IItem::redraw()
+        {
+            _updates |= ui::Update::Draw;
+        }
+        
         void IItem::_timeUnitsUpdate() {}
     } // namespace timelineui_vk
 } // namespace tl
