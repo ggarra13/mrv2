@@ -34,7 +34,7 @@ The donationware version when running without a donation, does not have:
     - Annotations (available from Solo and later)
     - Python (available in Standard and later)
     - Editing (available in Edit and later)
-    - Voice Annotations (available in Pro)
+    - Voice and Link Annotations (available in Pro)
     - Move license to a new machine (available in Pro monthly)
 
 They do have, however:
@@ -55,6 +55,8 @@ ChangeLog
 - Fixed Overlay.otio and multiple tracks drawing on Vulkan backend.
 - Made Roll and Trim work properly when no available ranges are set in the clip.
 - Made Roll to work properly with transitions.
+- Added Slip Edit tool to modify clips' start times in place.
+- Created a nice web page for easier downloading as GitHub was collapsing all the files and leading users to not download the Vulkan vmrv2.
 - Removed the annoying start up Donationware license_helper window at the start.
   Now, for unlocking features, you should go to:
   

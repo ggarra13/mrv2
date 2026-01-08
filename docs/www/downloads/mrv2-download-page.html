@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Download mrv2 / vmrv2</title>
+  <meta name="description" content="Download mrv2 (OpenGL) and vmrv2 (Vulkan) – professional open‑source media viewers." />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      margin: 0;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    header {
+      padding: 4rem 1rem 3rem;
+      text-align: center;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+    }
+    header h1 {
+      font-size: 2.6rem;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: #c7d2fe;
+    }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1rem;
+    }
+    h2 {
+      margin-top: 3rem;
+    }
+    .downloads {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .downloads {
+        grid-template-columns: 1fr;
+      }
+    }
+    .card {
+      background: #020617;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      text-align: center;
+    }
+    .card h3 {
+      margin-top: 0;
+    }
+    .card p {
+      color: #9ca3af;
+      font-size: 0.95rem;
+    }
+    .card a.download {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .card a.download:hover {
+      background: #1d4ed8;
+    }
+    .donate {
+      margin-top: 4rem;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      background: #020617;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .donate h2 {
+      margin-top: 0;
+    }
+    .donate p {
+      max-width: 650px;
+      margin: 0.75rem auto 1.5rem;
+      color: #9ca3af;
+    }
+    .donate a {
+      display: inline-block;
+      padding: 0.9rem 1.8rem;
+      border-radius: 999px;
+      background: #ffc439;
+      color: #111827;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .donate a:hover {
+      background: #fbbf24;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #6b7280;
+      border-top: 1px solid #1f2933;
+      margin-top: 4rem;
+    }
+    footer a { color: #93c5fd; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>mrv2 & vmrv2</h1>
+  <p>
+    Professional open‑source media viewers for VFX, animation and film.
+    Built for speed, color accuracy and modern pipelines.
+  </p>
+</header>
+
+<main>
+
+  <!-- mrv2 -->
+  <h2>mrv2 - OpenGL backend (v1.5.0)</h2>
+  <div class="downloads">
+    <div class="card">
+      <h3>Windows (64‑bit)</h3>
+      <p>Installer (.exe)</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/mrv2-v1.5.0-Windows-amd64.exe">Download</a>
+    </div>
+
+    <div class="card">
+      <h3>macOS Intel</h3>
+      <p>x86_64 (.dmg)</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/mrv2-v1.5.0-Darwin-amd64.dmg">Download</a>
+    </div>
+
+    <div class="card">
+      <h3>macOS Apple Silicon</h3>
+      <p>arm64 (.dmg)</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/mrv2-v1.5.0-Darwin-arm64.dmg">Download</a>
+    </div>
+
+    <div class="card">
+      <h3>Linux (.deb)</h3>
+      <p>Debian / Ubuntu</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/mrv2-v1.5.0-Linux-amd64.deb">Download</a>
+    </div>
+
+    <div class="card">
+      <h3>Linux (.rpm)</h3>
+      <p>RHEL / Fedora</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/mrv2-v1.5.0-Linux-amd64.rpm">Download</a>
+    </div>
+
+    <div class="card">
+      <h3>Linux (tar.gz)</h3>
+      <p>Generic binary package</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/mrv2-v1.5.0-Linux-amd64.tar.gz">Download</a>
+    </div>
+  </div>
+
+  <!-- vmrv2 -->
+  <h2>vmrv2 - Vulkan Backend (v1.5.0)</h2>
+  <div class="downloads">
+    <div class="card">
+      <h3>Windows (64‑bit)</h3>
+      <p>Installer (.exe)</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/vmrv2-v1.5.0-Windows-amd64.exe">Download</a>
+    </div>
+
+    <div class="card">
+      <h3>macOS Intel</h3>
+      <p>x86_64 (.dmg)</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/vmrv2-v1.5.0-Darwin-amd64.dmg">Download</a>
+    </div>
+
+    <div class="card">
+      <h3>macOS Apple Silicon</h3>
+      <p>arm64 (.dmg)</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/vmrv2-v1.5.0-Darwin-arm64.dmg">Download</a>
+    </div>
+
+    <div class="card">
+      <h3>Linux (.deb)</h3>
+      <p>Debian / Ubuntu</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/vmrv2-v1.5.0-Linux-amd64.deb">Download</a>
+    </div>
+
+    <div class="card">
+      <h3>Linux (.rpm)</h3>
+      <p>RHEL / Fedora</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/vmrv2-v1.5.0-Linux-amd64.rpm">Download</a>
+    </div>
+
+    <div class="card">
+      <h3>Linux (tar.gz)</h3>
+      <p>Generic binary package</p>
+      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.0/vmrv2-v1.5.0-Linux-amd64.tar.gz">Download</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>
+    © 2026 Gonzalo Garramuno ·
+    <a href="https://github.com/ggarra13/mrv2">GitHub</a> ·
+    <a href="https://sourceforge.net/projects/mrv2/">SourceForge</a>
+  </p>
+</footer>
+
+</body>
+</html>
