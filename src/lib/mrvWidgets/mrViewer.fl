@@ -1169,27 +1169,27 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                   image {../../../../../applications/mrv2/src/icons/EditMove.svg} compress_image 1 xywh {1 110 40 50} down_box DOWN_BOX value 1 selection_color 95
                   class {mrv::Button}
                 }
-                Fl_Button uiRoll {
-                  user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );}
-                  image {../../icons/EditRoll.svg} compress_image 1 xywh {1 160 40 50} down_box DOWN_BOX selection_color 95
-                  class {mrv::Button}
-                }
                 Fl_Button uiTrim {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Trim );}
-                  image {../../icons/EditTrim.svg} compress_image 1 xywh {1 210 40 50} down_box DOWN_BOX selection_color 95
+                  image {../../icons/EditTrim.svg} compress_image 1 xywh {1 160 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiSlip {
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setEditMode( tl::timeline::EditMode::Slip );}
-                  image {../../icons/EditSlip.svg} compress_image 1 xywh {1 260 40 50} down_box DOWN_BOX selection_color 95
+                  image {../../icons/EditSlip.svg} compress_image 1 xywh {1 210 40 50} down_box DOWN_BOX selection_color 95
+                  class {mrv::Button}
+                }
+                Fl_Button uiRoll {
+                  user_data this user_data_type {ViewerUI*}
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );} selected
+                  image {../../icons/EditRoll.svg} compress_image 1 xywh {1 260 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }
                 Fl_Button uiRipple {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Ripple );} selected
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Ripple );}
                   image {../../../../../applications/mrv2/src/icons/EditRipple.svg} compress_image 1 xywh {1 310 40 50} down_box DOWN_BOX selection_color 95 hide
                   class {mrv::Button}
                 }

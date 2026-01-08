@@ -1969,21 +1969,6 @@ msgstr "Сверкает {0} {1}..."
 msgid "Stop streaming"
 msgstr "Прекратить поток"
 
-msgid "Renderer"
-msgstr "Редактор"
-
-msgid "Complexity"
-msgstr "Сложность"
-
-msgid "Draw Mode"
-msgstr "Режим рисования"
-
-msgid "Stage Cache"
-msgstr "Сценический кэш"
-
-msgid "Disk Cache in GB"
-msgstr "Дисковый кэш в GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Настроить другой стереоизображение."
 
@@ -2979,37 +2964,29 @@ msgstr "Профиль HAP требует расширения.mov."
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "Новый файл {0} уже существует! Не может переписать его."
 
-msgid "Rotated image info: {0}"
-msgstr "Информация о поворачиваемых изображениях: {0}"
-
-msgid "Scaled image info: {0}"
-msgstr "Расширенная информация об изображениях: {0}"
-
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Не удаётся открыть пиджак."
 
 msgid "Image info: {0} {1}"
 msgstr "Фотография: {0} {1}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-"Фотография слишком большая, чтобы сохранить аннотации. Расширится до размера"
-" смотрового портала."
-
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
+msgid "Scaled image info: {0}"
+msgstr "Расширенная информация об изображениях: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Писатель не получил информацию о выходе. По умолчанию {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "Результаты: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Используя профиль {0}, пиксельный формат {1}."
 
 msgid "Using preset {0}."
 msgstr "Использование предварительного оборудования {0}."
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Информация о буфере вне экрана: {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Результаты: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Спасение фильма без звука %<PRId64> - %<PRId64>"
@@ -3026,32 +3003,14 @@ msgstr "Securing Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Звук только в хронологии, но не в попытке сохранить звук."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Неверный формат и тип OpenGL"
-
-msgid "OpenGL info: {0}"
-msgstr "Информация OpenGL: {0}"
-
 msgid "Saving... {0}"
 msgstr "Спасаю... {0}"
 
-msgid "Unsupported output format"
-msgstr "Неподдерживаемый формат вывода"
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
+msgid "Could not read image data from view"
+msgstr "Не удалось прочитать данные изображения с вида"
 
 msgid "Render size: {0}"
 msgstr "Размер рендеринга: {0}"
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "Информация о слое изображения '{0}': {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Информация о буфере вне экрана: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Неподдерживаемый формат вывода: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3459,17 +3418,24 @@ msgstr "Инструмент перемещения"
 
 msgid ""
 "Roll Edit Tool.\n"
-"Moves the ending or beginning without adding gaps."
+"Moves the ending or beginning adding gaps."
 msgstr ""
-"Инструмент монтажа со сдвигом (Roll).\n"
-"Перемещает конец или начало без добавления разрывов."
+"Инструмент редактирования Roll.\n"
+"Перемещает начало или конец, добавляя промежутки."
 
 msgid ""
 "Trim Edit Tool\n"
-"Moves the ending or beginning adding gaps"
+"Moves the ending or beginning without adding gaps"
 msgstr ""
-"Инструмент подрезки (Trim)\n"
-"Перемещает конец или начало с добавлением разрывов"
+"Инструмент редактирования Trim\n"
+"Перемещает начало или конец без добавления промежутков."
+
+msgid ""
+"Slip Edit Tool\n"
+"Slips the in point of the clip without modifying others or its duration."
+msgstr ""
+"Инструмент редактирования Slip\n"
+"Смещает точку входа клипа, не изменяя другие клипы и его длительность."
 
 msgid "Undo Edit"
 msgstr "Отменить правку"
@@ -3780,6 +3746,12 @@ msgstr ""
 msgid "Please select two or four contiguous items.  Selected {0}."
 msgstr "Пожалуйста, выберите два или четыре смежных элемента. Выбрано {0}."
 
+msgid "Please select two contiguous video clips."
+msgstr "Пожалуйста, выберите два смежных видеоклипа."
+
+msgid "Please select two contiguous audio clips."
+msgstr "Пожалуйста, выберите два смежных аудиоклипа."
+
 msgid "Could not save .otio file: {0}"
 msgstr "Невозможно сохранить файл.otio: {0}"
 
@@ -3822,8 +3794,8 @@ msgstr "Рамка {0} - ТС: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Слишком большое изображение, сохранит размер смотрового портала."
 
-msgid "Could not read image data from view"
-msgstr "Не удалось прочитать данные изображения с вида"
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
 
 msgid "Link/Open"
 msgstr "Связать/Открыть"
@@ -3977,14 +3949,23 @@ msgstr "   Впереди   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR-монитор найден."
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR-монитор не найден или не настроен."
+
+msgid "Vulkan color space is {0}"
+msgstr "Цветовое пространство Vulkan: {0}"
+
+msgid "Vulkan format is {0}"
+msgstr "Формат Vulkan: {0}"
+
 msgid "Edit Text"
 msgstr "Изменить текст"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' не является файлом, каталогом или URL."
-
-msgid "Invalid font for text drawing"
-msgstr "Неверный шрифт для текстового рисунка"
 
 msgid "Could not convert message to shape: "
 msgstr "Невозможно преобразовать сообщение в форму:"
@@ -4427,6 +4408,12 @@ msgstr "Правка/Аудиовизуальный скачок/Вставит�
 msgid "Edit/Audio Clip/Remove"
 msgstr "Правка/Аудиовизуальный скачок/Удалить"
 
+msgid "Edit/Video Gap/Insert"
+msgstr "Правка/Видеопромежуток/Вставить"
+
+msgid "Edit/Video Gap/Remove"
+msgstr "Правка/Видеопромежуток/Удалить"
+
 msgid "Edit/Audio Gap/Insert"
 msgstr "Правка/Пробел звука/Вставить"
 
@@ -4542,6 +4529,9 @@ msgid ""
 msgstr ""
 "В'{0} ожидала функции тюльпан, содержащий функцию Python и строку с опциями "
 "меню."
+
+msgid "Help/Unlock Features"
+msgstr "Справка/Разблокировать функции"
 
 msgid "Help/Documentation"
 msgstr "Справка/Документация"
@@ -7532,12 +7522,6 @@ msgstr "Плавающая лицензия освобождена"
 msgid "Your {0} license will expire on {1}."
 msgstr "Ваша лицензия {0} истекает {1}."
 
-msgid "Invalid license. Entering demo mode"
-msgstr "Недействительная лицензия. Переход в демонстрационный режим"
-
-msgid "License expired. Entering demo mode"
-msgstr "Срок действия лицензии истек. Переход в демонстрационный режим"
-
 msgid "Open Directory"
 msgstr "Открыть каталог"
 
@@ -7832,6 +7816,12 @@ msgstr "Вставить скачок звука"
 msgid "Remove Audio Clip"
 msgstr "Удалить скачок звука"
 
+msgid "Insert Video Gap"
+msgstr "Вставить видеопромежуток"
+
+msgid "Remove Video Gap"
+msgstr "Удалить видеопромежуток"
+
 msgid "Insert Audio Gap"
 msgstr "Вставить проем звука"
 
@@ -7988,6 +7978,9 @@ msgstr "Режим скруба"
 msgid "Area Selection Mode"
 msgstr "Режим выделения области"
 
+msgid "Draw Mode"
+msgstr "Режим рисования"
+
 msgid "Erase Mode"
 msgstr "Стереть режим"
 
@@ -8090,17 +8083,52 @@ msgstr "Переключить окно горячих клавиш"
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR-монитор найден."
+#~ msgid "Renderer"
+#~ msgstr "Редактор"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR-монитор не найден или не настроен."
+#~ msgid "Complexity"
+#~ msgstr "Сложность"
 
-#~ msgid "Vulkan color space is {0}"
-#~ msgstr "Цветовое пространство Vulkan: {0}"
+#~ msgid "Stage Cache"
+#~ msgstr "Сценический кэш"
 
-#~ msgid "Vulkan format is {0}"
-#~ msgstr "Формат Vulkan: {0}"
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Дисковый кэш в GB"
+
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "Информация о поворачиваемых изображениях: {0}"
+
+#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr ""
+#~ "Фотография слишком большая, чтобы сохранить аннотации. Расширится до размера"
+#~ " смотрового портала."
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Неверный формат и тип OpenGL"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "Информация OpenGL: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Неподдерживаемый формат вывода"
+
+#~ msgid "Empty video data at time {0}.  Repeating frame."
+#~ msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
+
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "Информация о слое изображения '{0}': {1} {2}"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Неподдерживаемый формат вывода: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Неверный шрифт для текстового рисунка"
+
+#~ msgid "Invalid license. Entering demo mode"
+#~ msgstr "Недействительная лицензия. Переход в демонстрационный режим"
+
+#~ msgid "License expired. Entering demo mode"
+#~ msgstr "Срок действия лицензии истек. Переход в демонстрационный режим"
 
 #~ msgid ""
 #~ "Roll Edit Tool.\n"
