@@ -41,8 +41,7 @@ They do have, however:
 
     - Tone-mapping (OpenGL) and HDR (Vulkan)
     - OpenEXR layer switching
-    - Saving
-    - A Window for donations and unlocking of features at the start
+    - Saving Images and Movies with Audio
 
 Prices might change (go up or down) depending on competition and new features.
 
@@ -56,6 +55,10 @@ ChangeLog
 - Fixed Overlay.otio and multiple tracks drawing on Vulkan backend.
 - Made Roll and Trim work properly when no available ranges are set in the clip.
 - Made Roll to work properly with transitions.
+- Removed the annoying start up Donationware license_helper window at the start.
+  Now, for unlocking features, you should go to:
+  
+       Help->Unlock Features.
 
 
 v1.5.0

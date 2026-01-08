@@ -104,15 +104,9 @@ namespace tl
                 math::Box2i move;
 
                 //
-                // Store an undo in callback
+                // Store an undo in before modifying timeline.
                 //
-                std::vector<timeline::MoveData> moveData;
-                moveData.push_back(
-                    {
-                        timeline::MoveType::UndoOnly
-                    });
-                if (p.moveCallback)
-                    p.moveCallback(moveData);
+                _storeUndo();
                 
                 const auto otioTimeline = p.player->getTimeline()->getTimeline();
                 for (const auto& item : p.mouse.items)
@@ -164,12 +158,12 @@ namespace tl
 
                         _clampRangeToNeighborTransitions(otioItem, proposedRange, clampedRange);
 
-                        // 2. Calculate the "Correction" applied by the clamp
+                        // Calculate the "Correction" applied by the clamp
                         // If the clamp moved the start by +2 frames, we need to subtract that from our offset
                         auto startCorrection = clampedRange.start_time() - proposedRange.start_time();
                         auto durationCorrection = clampedRange.duration() - proposedRange.duration();
 
-                       // 3. Apply the correction to your offsets
+                        // Apply the correction.
                         startOffset += startCorrection;
                         durationOffset += durationCorrection;
                         
@@ -214,7 +208,7 @@ namespace tl
                         }
                     }
                 }
-                p.player->getTimeline()->setTimeline(otioTimeline);
+                p.player->setTimeline(otioTimeline);
                 break;
             }
             case Private::MouseMode::Transition:

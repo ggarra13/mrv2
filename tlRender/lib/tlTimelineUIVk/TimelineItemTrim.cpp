@@ -118,6 +118,7 @@ namespace tl
                     const math::Box2i& g = item->geometry;
                     auto clip = static_cast<IBasicItem*>(item->p.get());
                     otime::TimeRange timeRange = clip->getTimeRange();
+                    const otio::Item* otioItem = clip->getOtioItem();
 
                     if (p.mouse.side == Private::MouseClick::Left)
                     {
@@ -135,15 +136,31 @@ namespace tl
                         move = math::Box2i(g.min, size);
                     }
 
-                    const otime::RationalTime& startTime = posToTime(move.x());
+                    otime::RationalTime startTime = posToTime(move.x());
                     const otime::RationalTime& duration  = posToTime(move.x() + move.w()) - startTime;
-                        
-                    timeRange = otime::TimeRange(startTime - _timeRange.start_time(), duration);
 
-                    // Clamp on clips.
-                    if (duration.value() <= 1.F)
+                    // Set start time to local time, not timeline units.
+                    startTime -= _timeRange.start_time();
+
+                    // Create new time range.
+                    timeRange = otime::TimeRange(startTime, duration);
+
+                    // Clamp on available range if present.
+                    otio::ErrorStatus status;
+                    const auto& availableRange = otioItem->available_range(&status);
+                    if (!otio::is_error(status))
                     {
-                        continue;
+                        if (startTime < availableRange.start_time())
+                            continue;
+                        if (duration > availableRange.duration())
+                            continue;
+                    }
+                    else
+                    {
+                        if (startTime < otime::RationalTime(0, startTime.rate()))
+                            continue;
+                        if (duration.value() <= 1.F)
+                            continue;
                     }
                     
                     item->p->setGeometry(move);
@@ -173,15 +190,13 @@ namespace tl
                 _mouse.pos.y = _mouse.pressPos.y;
                 const int offset = _mouse.pos.x - _mouse.pressPos.x;
                 math::Box2i move;
-                std::vector<timeline::MoveData> moveData;
                 
+                //
+                // Store an undo in before modifying timeline.
+                //
+                _storeUndo();
+
                 const auto otioTimeline = p.player->getTimeline()->getTimeline();
-                moveData.push_back(
-                    {
-                        timeline::MoveType::UndoOnly
-                    });
-                if (p.moveCallback)
-                    p.moveCallback(moveData);
 
                 for (const auto& item : p.mouse.items)
                 {
@@ -273,7 +288,7 @@ namespace tl
                         }
                     }
                 }
-                p.player->getTimeline()->setTimeline(otioTimeline);
+                p.player->setTimeline(otioTimeline);
                 break;
             }
             case Private::MouseMode::Transition:
@@ -407,7 +422,7 @@ namespace tl
                     p.moveCallback(moveData);
                 auto otioTimeline = timeline::move(
                     p.player->getTimeline()->getTimeline().value, moveData);
-                p.player->getTimeline()->setTimeline(otioTimeline);
+                p.player->setTimeline(otioTimeline);
             }
             }   
         }

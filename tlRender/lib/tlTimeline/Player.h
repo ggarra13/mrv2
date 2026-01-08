@@ -92,6 +92,10 @@ namespace tl
             //! Get the timeline.
             const std::shared_ptr<Timeline>& getTimeline() const;
 
+            //! Set the OpenTimelineIO timeline, resetting in/out points.
+            void setTimeline(
+                const otio::SerializableObject::Retainer<otio::Timeline>&);
+            
             //! Get the path.
             const file::Path& getPath() const;
 

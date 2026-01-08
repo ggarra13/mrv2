@@ -685,16 +685,7 @@ namespace tl
 
             if (saveUndo)
             {
-                //
-                // Store an undo in callback
-                //
-                std::vector<timeline::MoveData> moveData;
-                moveData.push_back(
-                    {
-                        timeline::MoveType::UndoOnly
-                    });
-                if (p.moveCallback)
-                    p.moveCallback(moveData);
+                 _storeUndo();
             }
         }
 
@@ -1445,6 +1436,19 @@ namespace tl
             return out;
         }
 
+        void TimelineItem::_storeUndo()
+        {
+            TLRENDER_P();
+            
+            std::vector<timeline::MoveData> moveData;
+            moveData.push_back(
+                {
+                    timeline::MoveType::UndoOnly
+                });
+            if (p.moveCallback)
+                p.moveCallback(moveData);
+        }
+        
         bool TimelineItem::_clampRangeToNeighborTransitions(const otio::Item* item,
                                                             const otime::TimeRange& proposedRange,
                                                             otime::TimeRange& clampedRange)

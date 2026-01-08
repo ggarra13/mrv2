@@ -155,6 +155,7 @@ namespace tl
                                        const otime::TimeRange& timeRange);
             void _tracksUpdate();
             void _textUpdate();
+            void _storeUndo();
 
             TLRENDER_PRIVATE();
         };

@@ -1063,6 +1063,18 @@ namespace tl
             p.mutex.clearCache = true;
         }
 
+        void Player::setTimeline(
+            const otio::SerializableObject::Retainer<otio::Timeline>& value)
+        {
+            TLRENDER_P();
+            
+            p.timeline->setTimeline(value);
+            if (!p.timeline)
+                return;
+            p.speed->setIfChanged(p.timeline->getTimeRange().duration().rate());
+            p.inOutRange->setIfChanged(p.timeline->getTimeRange());
+        }
+    
         void Player::tick()
         {
             TLRENDER_P();

@@ -106,13 +106,7 @@ namespace tl
                 //
                 // Store an undo in callback
                 //
-                std::vector<timeline::MoveData> moveData;
-                moveData.push_back(
-                    {
-                        timeline::MoveType::UndoOnly
-                    });
-                if (p.moveCallback)
-                    p.moveCallback(moveData);
+                _storeUndo();
                 
                 const auto otioTimeline = p.player->getTimeline()->getTimeline();
                 for (const auto& item : p.mouse.items)
@@ -214,7 +208,7 @@ namespace tl
                         }
                     }
                 }
-                p.player->getTimeline()->setTimeline(otioTimeline);
+                p.player->setTimeline(otioTimeline);
                 break;
             }
             case Private::MouseMode::Transition:

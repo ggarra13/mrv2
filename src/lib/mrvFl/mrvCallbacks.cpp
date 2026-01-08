@@ -2883,6 +2883,28 @@ namespace mrv
         image_version_cb(ui, 1, true);
     }
 
+    void unlock_features_cb(Fl_Menu_*, ViewerUI* ui)
+    {        
+#ifdef _WIN32
+        std::string helper = rootpath() + "/bin/license_helper.exe";
+#else
+        std::string helper = rootpath() + "/bin/license_helper";
+#endif
+#ifdef __APPLE__
+        // This is needed for macOS installed bundle.
+        if (!file::isReadable(helper))
+        {
+            helper = rootpath() + "/../Resources/bin/license_helper";
+        }
+#endif
+        int ret = os::exec_command(helper);
+        if (ret != 0) return;
+        
+
+        std::string expiration;
+        validate_license(expiration);
+    }
+    
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui)
     {
         const std::string& docs = docspath();

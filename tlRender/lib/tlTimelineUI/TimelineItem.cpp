@@ -542,7 +542,7 @@ namespace tl
         {
             IWidget::mousePressEvent(event);
             TLRENDER_P();
-
+            bool saveUndo = false;
             bool doSelection = false;
             if (p.editMode == timeline::EditMode::Select)
             {
@@ -560,6 +560,11 @@ namespace tl
                 if (_options.inputEnabled && 0 == event.button &&
                     0 == event.modifiers)
                     doSelection = true;
+            }
+            
+            if (p.editMode == timeline::EditMode::Ripple)
+            {
+                saveUndo = true;
             }
             
             if (doSelection)
@@ -667,6 +672,11 @@ namespace tl
                         p.mouse.side = Private::MouseClick::Right;
                     }
                 }
+            }
+
+            if (saveUndo)
+            {
+                 _storeUndo();
             }
         }
 
@@ -1417,6 +1427,19 @@ namespace tl
             return out;
         }
 
+        void TimelineItem::_storeUndo()
+        {
+            TLRENDER_P();
+            
+            std::vector<timeline::MoveData> moveData;
+            moveData.push_back(
+                {
+                    timeline::MoveType::UndoOnly
+                });
+            if (p.moveCallback)
+                p.moveCallback(moveData);
+        }
+        
         bool TimelineItem::_clampRangeToNeighborTransitions(const otio::Item* item,
                                                             const otime::TimeRange& proposedRange,
                                                             otime::TimeRange& clampedRange)

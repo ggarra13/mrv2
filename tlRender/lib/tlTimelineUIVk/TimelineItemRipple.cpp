@@ -33,9 +33,9 @@ namespace tl
                     
 
                     // Move the start and duration to clip time from timeline time.
-                    otime::RationalTime startTime = posToTime(_mouse.pressPos.x);
-                    const otime::RationalTime   endTime = posToTime(_mouse.pos.x);
-                    const otime::RationalTime   offset  = endTime - startTime;
+                    otime::RationalTime startTime = posToTime(event.prev.x);
+                    const otime::RationalTime endTime = posToTime(event.pos.x);
+                    const otime::RationalTime offset  = endTime - startTime;
                      
                     auto itemRange = otioItem->trimmed_range();
                     startTime = itemRange.start_time() + offset;
@@ -48,6 +48,7 @@ namespace tl
                     {
                         if (startTime < availableRange.start_time())
                             startTime = availableRange.start_time();
+
                         if (duration > availableRange.duration())
                             duration = availableRange.duration();
                     }
@@ -63,6 +64,8 @@ namespace tl
                     }
 
                     const otime::TimeRange newTimeRange(startTime, duration);
+                    clip->setTimeRange(newTimeRange);
+                    
                     if (auto clip = dynamic_cast<otio::Clip*>(otioItem))
                     {
                         clip->set_source_range(newTimeRange);
@@ -71,11 +74,7 @@ namespace tl
                     {
                         gap->set_source_range(newTimeRange);
                     }
-
-                    clip->redraw();
                 }
-
-                redraw();
             }
             break;
             }
@@ -95,9 +94,9 @@ namespace tl
                 break;
             }
             case Private::MouseMode::Item:
-            {              
-                const auto otioTimeline = p.player->getTimeline()->getTimeline();
-                p.player->getTimeline()->setTimeline(otioTimeline);
+            {
+                const auto& otioTimeline = p.player->getTimeline()->getTimeline();
+                p.player->setTimeline(otioTimeline);
                 break;
             }
             }

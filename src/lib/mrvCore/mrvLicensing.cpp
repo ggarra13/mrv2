@@ -793,81 +793,9 @@ namespace mrv
             App::demo_mode = false;
             return License::kInvalid;
         }
-
         
         std::string expiration;
         License ok = validate_license(expiration);
-        if (ok == License::kValid)
-        {
-            App::demo_mode = false;
-            return ok;
-        }
-        else if (ok == License::kExpired)
-        {
-            fl_alert("License expired on %s. Please enter new license.",
-                     expiration.c_str());
-            Fl::check();
-        }
-
-        if (App::demo_mode)
-        {
-#ifdef _WIN32
-            std::string helper = rootpath() + "/bin/license_helper.exe";
-#else
-            std::string helper = rootpath() + "/bin/license_helper";
-#endif
-#ifdef __APPLE__
-            // This is needed for macOS installed bundle.
-            if (!file::isReadable(helper))
-            {
-                helper = rootpath() + "/../Resources/bin/license_helper";
-            }
-#endif
-            int ret = os::exec_command(helper);
-            if (ret != 0)
-            {
-                App::demo_mode = false;
-
-                App::supports_annotations = false;
-                App::supports_editing = false;
-                App::supports_hdr = true;
-                App::supports_layers = true;
-                App::supports_voice = false;
-            }
-            else
-            {
-                // License helper ran, validate license again.
-                License ok = validate_license(expiration);
-                if (ok == License::kInvalid)
-                {
-                    fl_alert("%s", _("Invalid license. Entering demo mode"));
-                    Fl::check();
-                
-                    App::demo_mode = true;
-                
-                    App::supports_annotations = false;
-                    App::supports_editing = false;
-                    App::supports_layers = false;
-                    App::supports_voice = false;
-                }
-                else if (ok == License::kExpired)
-                {
-                    fl_alert("%s", _("License expired. Entering demo mode"));
-                    Fl::check();
-                
-                    App::demo_mode = true;
-
-                    App::supports_annotations = false;
-                    App::supports_editing = false;
-                    App::supports_layers = true;
-                    App::supports_voice = false;
-                }
-                else
-                {
-                    App::demo_mode = false;
-                }
-            }
-        }
         return ok;
     }
 }

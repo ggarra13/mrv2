@@ -269,6 +269,9 @@ namespace mrv
     void next_image_version_cb(Fl_Menu_*, ViewerUI* ui);
     void last_image_version_cb(Fl_Menu_*, ViewerUI* ui);
 
+    //! Unlock features
+    void unlock_features_cb(Fl_Menu_*, ViewerUI* ui);
+    
     //! Call the browser with documentation.
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui);
 

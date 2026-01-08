@@ -1997,7 +1997,10 @@ namespace mrv
                 (void*)&pythonMenus.at(entry), mode);
         }
 #endif
-        
+
+        menu->add(
+            _("Help/Unlock Features"), 0,
+            (Fl_Callback*) unlock_features_cb, ui, FL_MENU_DIVIDER);
         menu->add(
             _("Help/Documentation"), 0, (Fl_Callback*)help_documentation_cb,
             ui);

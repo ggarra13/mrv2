@@ -4,6 +4,11 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 # Define the directory where you want to start the search
 
+#
+# This script uploads the documentation online, after updating the version
+# number in all pages.
+#
+
 . etc/build_dir.sh
 
 extract_version
