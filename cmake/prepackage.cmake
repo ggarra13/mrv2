@@ -32,28 +32,6 @@ message( STATUS "mrv2 ROOT_DIR=${ROOT_DIR}" )
 include( "${ROOT_DIR}/cmake/version.cmake" )
 include( "${ROOT_DIR}/cmake/functions.cmake" )
 
-
-# Function to remove __pycache__ directories
-function(remove_pycache_directories dir)
-    file(GLOB_RECURSE pycache_dirs RELATIVE ${dir} "__pycache__")
-
-    foreach(pycache_dir IN LISTS pycache_dirs)
-        file(REMOVE_RECURSE "${dir}/${pycache_dir}")
-    endforeach()
-endfunction()
-
-# Function to remove python directories and modules
-function(remove_python_directories _dirs)
-    if ( NOT "${_dirs}" STREQUAL "" )
-	foreach( _dir ${_dirs} )
-	    remove_pycache_directories(${_dir})
-	    message(STATUS "Removing ${_dir}")
-	endforeach()
-	
-	file( REMOVE_RECURSE ${_dirs} )
-    endif()
-endfunction()
-
 if( UNIX AND NOT APPLE )
     #
     # \@bug: Linux CMAKE_INSTALL_PREFIX is broken and not pointing to
@@ -254,9 +232,9 @@ elseif(WIN32)
     endif()
     
     
-    set(MRV2_PYTHON_APP_LIB_DIR "${MRV2_APP_DIR}/bin/Lib")
+    set(MRV2_PYTHON_LIB_DIR "${MRV2_APP_DIR}/bin/Lib")
     set(MRV2_PYTHON_SITE_PACKAGES_DIR
-	"${MRV2_PYTHON_APP_LIB_DIR}/site-packages")
+	"${MRV2_PYTHON_LIB_DIR}/site-packages")
     
     #
     # Don't pack sphinx and other auxiliary documentation libs in .exe
@@ -264,20 +242,36 @@ elseif(WIN32)
 
     set(MRV2_PYTHON_GLOBS 
 	"${MRV2_APP_DIR}/lib/Lib/")
-    foreach( _dir ${_pythonBuiltinModules} )
-	set(MRV2_PYTHON_GLOBS
-	    ${MRV2_PYTHON_GLOBS}
-	    "${MRV2_PYTHON_APP_LIB_DIR}/${_dir}")
-    endforeach()
+
+    # 1. Collect all paths into one list first
+    set(DIRS_TO_DELETE "")
     
-    foreach( _dir ${_pythonSiteModules} )
-	set(MRV2_PYTHON_GLOBS
-	    ${MRV2_PYTHON_GLOBS}
-	    "${MRV2_PYTHON_SITE_PACKAGES_DIR}/${_dir}")
+    list(APPEND DIRS_TO_DELETE "${MRV2_APP_DIR}/bin/DLLs/*.pdb")
+
+    foreach(_mod ${_pythonBuiltinModules})
+	list(APPEND DIRS_TO_DELETE "${MRV2_PYTHON_LIB_DIR}/${_mod}")
     endforeach()
+
+    foreach(_mod ${_pythonSiteModules})
+	list(APPEND DIRS_TO_DELETE "${MRV2_PYTHON_SITE_PACKAGES_DIR}/${_mod}")
+    endforeach()
+
+    # 2. Use GLOB once for the patterns that actually need it (the ones with *)
+    file(GLOB MATCHED_DIRS ${DIRS_TO_DELETE})
+
+    # 3. Batch remove everything in one go
+    if(MATCHED_DIRS)
+	message(STATUS "Cleaning up NSIS application's Python modules...")
+	foreach (_dir ${MATCHED_DIRS})
+	    message(STATUS ${_dir})
+	endforeach()
+	file(REMOVE_RECURSE ${MATCHED_DIRS})
+    endif()
+
+    # 4. Final pycache sweep (one single scan)
+    file(GLOB_RECURSE ALL_PYCACHE "${CPACK_PREPACKAGE}/**/__pycache__")
+    file(REMOVE_RECURSE ${ALL_PYCACHE})
     
-    file(GLOB MRV2_UNUSED_PYTHON_DIRS ${MRV2_PYTHON_GLOBS})
-    remove_python_directories( "${MRV2_UNUSED_PYTHON_DIRS}" )
     
     #
     # Set python's site-packages and lib dir for .zip.
@@ -295,23 +289,35 @@ endif()
 # Don't pack sphinx and other auxiliary documentation libs nor the tests
 # for the libraries.
 #
-set(MRV2_PYTHON_GLOBS )
 
-foreach( _dir ${_pythonBuiltinModules} )
-    set(MRV2_PYTHON_GLOBS
-	${MRV2_PYTHON_GLOBS}
-	"${MRV2_PYTHON_LIB_DIR}/${_dir}")
-endforeach()
-    
-foreach( _dir ${_pythonSiteModules} )
-    set(MRV2_PYTHON_GLOBS
-	${MRV2_PYTHON_GLOBS}
-	"${MRV2_PYTHON_SITE_PACKAGES_DIR}/${_dir}")
+# 1. Collect all paths into one list first
+set(DIRS_TO_DELETE "")
+
+list(APPEND DIRS_TO_DELETE "${CPACK_PREPACKAGE}/bin/DLLs/*.pdb")
+
+foreach(_mod ${_pythonBuiltinModules})
+    list(APPEND DIRS_TO_DELETE "${MRV2_PYTHON_LIB_DIR}/${_mod}")
 endforeach()
 
-file(GLOB MRV2_UNUSED_PYTHON_DIRS ${MRV2_PYTHON_GLOBS})
-remove_python_directories( "${MRV2_UNUSED_PYTHON_DIRS}" )
+foreach(_mod ${_pythonSiteModules})
+    list(APPEND DIRS_TO_DELETE "${MRV2_PYTHON_SITE_PACKAGES_DIR}/${_mod}")
+endforeach()
 
+# 2. Use GLOB once for the patterns that actually need it (the ones with *)
+file(GLOB MATCHED_DIRS ${DIRS_TO_DELETE})
+
+# 3. Batch remove everything in one go
+if(MATCHED_DIRS)
+    message(STATUS "Cleaning up ZIP's Python modules...")
+    foreach (_dir ${MATCHED_DIRS})
+	message(STATUS ${_dir})
+    endforeach()
+    file(REMOVE_RECURSE ${MATCHED_DIRS})
+endif()
+
+# 4. Final pycache sweep (one single scan)
+file(GLOB_RECURSE ALL_PYCACHE "${CPACK_PREPACKAGE}/**/__pycache__")
+file(REMOVE_RECURSE ${ALL_PYCACHE})
 
 if (APPLE)
     include( "${ROOT_DIR}/cmake/prepackage_macos.cmake" )

@@ -1,6 +1,5 @@
-v1.5.1
+v1.5.2
 ======
-
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
 If you are unsure what binary to choose, go to:
@@ -48,6 +47,15 @@ They do have, however:
     - Saving Images and Movies with Audio
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+- Made installer's smaller on Windows by getting rid of .pdb files.
+- Made creating package installers on Windows faster.
+
+v1.5.1
+======
 
 ChangeLog
 ---------
