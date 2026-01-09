@@ -9,10 +9,15 @@
 # online documentation.
 #
 
+NOARGS=1
 . etc/build_dir.sh
 
 
 latest_tag=$(git ls-remote --tags --sort="v:refname" https://github.com/ggarra13/mrv2.git | tail -n1 | sed 's#.*/##')
+
+if [[ "$1" != "" ]]; then
+    latest_tag=$1
+fi
 
 echo "UPDATING web pages to ${latest_tag}"
 
