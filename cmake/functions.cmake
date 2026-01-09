@@ -496,16 +496,6 @@ macro( lic_files_to_absolute_paths )
     set( PO_LIC_ABS_SOURCES ${PO_LIC_ABS_SOURCES} PARENT_SCOPE)
 endmacro()
 
-#
-# This function is to be used to link against libstdc++fs on 
-#
-function( set_required_build_settings_for_GCC8 )
-    # Always link with libstdc++fs.a when using GCC 8.
-    # Note: This command makes sure that this option comes pretty late on the cmdline.
-    link_libraries( "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:-lstdc++fs>" )
-endfunction()
-
-
 function(copy_pdbs_to_install PDB_FILE INSTALL_DIR)
     if (${PDB_FILE} MATCHES ".*_CPack_Packages.*")
 	message(STATUS "SKIPPING CPack_Package ${PDB_FILE}")

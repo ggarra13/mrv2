@@ -23,7 +23,7 @@ download_site="https://sourceforge.net/projects/${project}/files/${release}"
 platforms=("windows" "mac" "linux")
 files=(
     "${vmrv2}-${release}-Windows-amd64.exe"
-    "${mrv2}-${release}-Darwin-amd64.dmg"
+    "${vmrv2}-${release}-Darwin-arm64.dmg"
     "${vmrv2}-${release}-Linux-amd64.deb"
 )
 
