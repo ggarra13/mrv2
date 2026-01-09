@@ -54,13 +54,21 @@ all_tags=$(git ls-remote --tags --refs 2> /dev/null | grep -E 'v[0-9]+\.[0-9]+\.
 next_tag=$(echo "$all_tags" | grep -A1 "^$TAG$" | tail -n1)
 
 # If the next tag is the same as the current tag, there is no next tag
+# FORCE UTC for all date calculations to prevent timezone shifting
+# ... (previous tag logic remains the same)
+
+# FORCE UTC and format as 'YYYY-MM-DD HH:MM:SS +0000'
 if [[ "$next_tag" == "$TAG" || -z "$next_tag" ]]; then
-    next_tag_date=$(date +'%F %T')
+    # Current time in UTC, formatted for your Python script
+    next_tag_date=$(date -u +'%Y-%m-%d %H:%M:%S +0000')
 else
-    next_tag_date=$(git for-each-ref --format="%(creatordate:iso)" refs/tags/$next_tag)
+    # Get tag date, convert to UTC, and reformat to remove the 'T'
+    # we use 'iso' instead of 'iso-strict' to get the space separator
+    next_tag_date=$(git for-each-ref --format="%(creatordate:iso)" refs/tags/"$next_tag")
 fi
 
-date_created=$(git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG)
+# Get the creation date of the current tag
+date_created=$(git for-each-ref --format="%(creatordate:iso)" refs/tags/"$TAG")
 if [[ "$date_created" == "" ]]; then
     git pull
     date_created=$(git for-each-ref --format="%(creatordate:iso)" refs/tags/$TAG)
@@ -71,6 +79,8 @@ if [[ "$date_created" == "" ]]; then
     exit 1
 fi
 
+echo "DATE CREATED: ${date_created}"
+echo "NEXT DATE   : ${next_tag_date}"
 $PYTHON bin/python/github-download-count.py ggarra13 mrv2 $TAG "$date_created" "$next_tag_date"
 
 rm -rf venv
