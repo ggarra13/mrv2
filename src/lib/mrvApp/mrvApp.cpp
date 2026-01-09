@@ -263,7 +263,7 @@ namespace mrv
     std::string App::session_id = "";
     LicenseType App::license_type = LicenseType::kDemo;
 
-    bool App::supports_saving = false;
+    bool App::supports_saving = true;   // DJV supports saving
     bool App::supports_layers = true;   // DJV supports layers
     bool App::supports_annotations = false;
     bool App::supports_editing = false;

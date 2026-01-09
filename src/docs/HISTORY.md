@@ -3,6 +3,10 @@ v1.5.1
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
+If you are unsure what binary to choose, go to:
+
+https://mrv2.sourceforge.io/downloads/mrv2-download-page.html
+
 mrv2 ships now in two compiled versions:
 
    - mrv2 with OpenGL backend  (free and donationware)   

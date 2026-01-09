@@ -1,4 +1,4 @@
-mrv2 v1.5.0
+mrv2 v1.5.1
 =======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.
@@ -6,8 +6,6 @@ mrv2 and vmrv2 are open source professional players and review tools for VFX, an
 It ships now in two compiled versions:
    - mrv2 with OpenGL backend  (both free and donationware)
    - vmrv2 with Vulkan backend (both free and donationware)
-
-By popular demand free version without me being evil.  I apologyze for getting too greedy.  Now there's more plans depending on what you want or need.
 
 Donationware licenses are paid through PayPal:
 
@@ -35,14 +33,13 @@ List of features available based on donation plan:
 
 Prices might change depending on competition and new features.  Act now for cheaper prices or access to more features.
 
-Main Web page (with links to videos, donations and online documentation):
+Main Web page (with links to videos and online documentation):
 https://mrv2.sourceforge.io
 
-Release History and Binaries:
-https://github.com/ggarra13/mrv2/releases/
-https://sourceforge.net/projects/mrv2/files/
+Main Binaries:
+https://mrv2.sourceforge.io/downloads/mrv2-download-page.html
 
-Source code, donations and build instructions:
+Source code, donations, more binaries and build instructions:
 https://www.github.com/ggarra13/mrv2
 
 
