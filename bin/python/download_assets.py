@@ -107,6 +107,7 @@ def download_url(base_url, dest_dir, mrv2_prefix):
             response.raise_for_status()  # Raise an error for bad status codes
 
             if os.path.exists(output_path):
+                print(f'Skipping already existing {filename}')
                 continue
             
             print(f"Downloading {filename}...")
