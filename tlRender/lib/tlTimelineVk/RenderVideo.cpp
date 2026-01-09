@@ -971,13 +971,17 @@ namespace tl
 
                                 std::string pipelineDissolveName = pipelineNameBase + "_Pass1_NoBlend";
 
-                                // Create or find a pipeline without blending
-                                bool enableBlending = false;
+                                // Create or find a pipeline
+                                bool enableBlending = !clearRenderPass;
                                 createPipeline(p.buffers["video"],
                                                pipelineDissolveName,
                                                pipelineLayoutName,
                                                shaderName, meshName,
-                                               enableBlending);
+                                               enableBlending,
+                                               VK_BLEND_FACTOR_ONE,
+                                               VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                               VK_BLEND_FACTOR_ONE,
+                                               VK_BLEND_FACTOR_ONE);
                                 
                                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -1012,15 +1016,32 @@ namespace tl
 
                                 pipelineDissolveName = pipelineNameBase + "_Pass2_BlendColorForceAlpha";
                                 enableBlending = true;
-                                createPipeline(
-                                    p.buffers["video"],
-                                    pipelineDissolveName,
-                                    pipelineLayoutName, shaderName, meshName,
-                                    enableBlending,
-                                    VK_BLEND_FACTOR_ONE,
-                                    VK_BLEND_FACTOR_ONE,
-                                    VK_BLEND_FACTOR_ONE,
-                                    VK_BLEND_FACTOR_ONE);
+                                if (clearRenderPass)
+                                {
+                                    createPipeline(
+                                        p.buffers["video"],
+                                        pipelineDissolveName,
+                                        pipelineLayoutName, shaderName,
+                                        meshName,
+                                        enableBlending,
+                                        VK_BLEND_FACTOR_ONE,
+                                        VK_BLEND_FACTOR_ONE,
+                                        VK_BLEND_FACTOR_ONE,
+                                        VK_BLEND_FACTOR_ONE);
+                                }
+                                else
+                                {
+                                    createPipeline(
+                                        p.buffers["video"],
+                                        pipelineDissolveName,
+                                        pipelineLayoutName, shaderName,
+                                        meshName,
+                                        enableBlending,
+                                        VK_BLEND_FACTOR_ONE,
+                                        VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                        VK_BLEND_FACTOR_ONE,
+                                        VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+                                }
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
                                                    p.shaders["dissolve"]->getPushStageFlags(), 0,
                                                    sizeof(color), &color);

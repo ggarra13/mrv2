@@ -649,6 +649,7 @@ namespace tl
                 glClearColor(0.F, 0.F, 0.F, 0.F);
                 glClear(GL_COLOR_BUFFER_BIT);
 
+                bool clearRenderPass = true;
                 for (const auto& layer : videoData.layers)
                 {
                     switch (layer.transition)
@@ -727,11 +728,18 @@ namespace tl
                             }
                             if (p.buffers["dissolve"] && p.buffers["dissolve2"])
                             {
-                                glDisable(GL_BLEND);
-                                
-                                // glBlendFuncSeparate(
-                                //     GL_ONE, GL_ZERO, GL_ONE,
-                                //     GL_ZERO);
+                                if (clearRenderPass)
+                                {
+                                    glDisable(GL_BLEND);
+                                }
+                                else
+                                {
+                                    glEnable(GL_BLEND);
+                                    
+                                    glBlendFuncSeparate(
+                                        GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+                                        GL_ONE);
+                                }
 
                                 p.shaders["dissolve"]->bind();
                                 p.shaders["dissolve"]->setUniform(
@@ -765,11 +773,16 @@ namespace tl
                                 }
 
                                 glEnable(GL_BLEND);
-                                glBlendFunc(GL_ONE, GL_ONE);
-                                
-                                // glBlendFuncSeparate(
-                                //    GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
-                                //    GL_ONE_MINUS_SRC_ALPHA);
+                                if (clearRenderPass)
+                                {
+                                    glBlendFunc(GL_ONE, GL_ONE);
+                                }
+                                else
+                                {
+                                    glBlendFuncSeparate(
+                                        GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+                                        GL_ONE_MINUS_SRC_ALPHA);
+                                }
                                 glBindTexture(
                                     GL_TEXTURE_2D,
                                     p.buffers["dissolve2"]->getColorID());
@@ -838,6 +851,7 @@ namespace tl
                         }
                         break;
                     }
+                    clearRenderPass = false;
                 }
             }
 
