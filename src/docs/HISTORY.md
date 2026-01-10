@@ -53,6 +53,7 @@ ChangeLog
 
 - Made installer's smaller on Windows by getting rid of .pdb files.
 - Made creating package installers on Windows faster.
+- Fixed a regresion on FLTK Windows resizing.
 
 v1.5.1
 ======

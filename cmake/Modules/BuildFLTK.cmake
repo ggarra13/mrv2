@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v1.4.6)  # was v1.4.4 on vmrv2-v1.4.9.
+set(FLTK_GIT_TAG v1.4.9)  # v1.4.8 is broken on Windows
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_test) # Testing branch

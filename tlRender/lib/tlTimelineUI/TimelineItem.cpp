@@ -562,7 +562,7 @@ namespace tl
                     doSelection = true;
             }
             
-            if (p.editMode == timeline::EditMode::Ripple)
+            if (p.editMode == timeline::EditMode::Slip)
             {
                 saveUndo = true;
             }
