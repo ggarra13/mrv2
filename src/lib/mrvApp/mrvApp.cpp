@@ -57,8 +57,9 @@ namespace py = pybind11;
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrvNetwork/mrvDummyClient.h"
-#include "mrvNetwork/mrvDisplayOptions.h"
-#include "mrvNetwork/mrvLUTOptions.h"
+
+#include "mrvOptions/mrvDisplayOptions.h"
+#include "mrvOptions/mrvLUTOptions.h"
 
 #ifdef MRV2_NETWORK
 #    include "mrvNetwork/mrvCommandInterpreter.h"

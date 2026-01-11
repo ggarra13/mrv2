@@ -12,7 +12,8 @@
 #include "mrvFl/mrvSession.h"
 
 #include "mrvNetwork/mrvTCP.h"
-#include "mrvNetwork/mrvCompareOptions.h"
+
+#include "mrvOptions/mrvCompareOptions.h"
 
 #include "mrvIcons/Mute.h"
 #include "mrvIcons/Audio.h"

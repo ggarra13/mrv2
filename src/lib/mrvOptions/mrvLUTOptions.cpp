@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvNetwork/mrvLUTOptions.h"
+#include "mrvOptions/mrvLUTOptions.h"
 
 namespace tl
 {

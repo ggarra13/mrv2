@@ -4,28 +4,18 @@
 
 set(HEADERS
     mrvCypher.h
-    mrvCompareOptions.h
-    mrvDisplayOptions.h
     mrvDummyClient.h
     mrvFilesModelItem.h
     mrvFilePath.h
-    mrvImageOptions.h
-    mrvLUTOptions.h
     mrvTCP.h
-    mrvTimelineItemOptions.h
     mrvMessage.h
 )
 
 set(SOURCES
     mrvCypher.cpp
-    mrvCompareOptions.cpp
-    mrvDisplayOptions.cpp
     mrvFilesModelItem.cpp
     mrvFilePath.cpp
-    mrvImageOptions.cpp
-    mrvLUTOptions.cpp
     mrvTCP.cpp
-    mrvTimelineItemOptions.cpp
 )
 
 set( LIBRARIES mrvFl)

@@ -8,10 +8,11 @@
 
 #include "mrvEdit/mrvEditCallbacks.h"
 
-#include "mrvNetwork/mrvCompareOptions.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 #include "mrvNetwork/mrvConnectionHandler.h"
+
+#include "mrvOptions/mrvCompareOptions.h"
 
 namespace mrv
 {

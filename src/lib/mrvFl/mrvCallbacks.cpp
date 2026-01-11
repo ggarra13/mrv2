@@ -52,7 +52,8 @@
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvCypher.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
-#include "mrvNetwork/mrvTimelineItemOptions.h"
+
+#include "mrvOptions/mrvTimelineItemOptions.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvApp.h"
