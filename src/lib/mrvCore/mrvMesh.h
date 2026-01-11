@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2023 Darby Johnston
+// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #pragma once
