@@ -34,7 +34,7 @@ set(SOURCES
 add_library(mrvOptions ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set(LIBRARIES mrvCore )
+set(LIBRARIES mrvCore Vulkan::Vulkan )
 set(LIBRARIES_PRIVATE )
 
 if(TLRENDER_USD)
