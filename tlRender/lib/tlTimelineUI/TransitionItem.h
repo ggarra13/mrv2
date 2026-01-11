@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include <tlTimelineUI/IBasicItem.h>
+#include "IBasicItem.h"
 
 #include <opentimelineio/transition.h>
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         //! Transition item.
         class TransitionItem : public IItem
@@ -48,5 +48,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

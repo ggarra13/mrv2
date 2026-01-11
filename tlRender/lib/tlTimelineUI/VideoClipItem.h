@@ -4,18 +4,18 @@
 
 #pragma once
 
-#include <tlTimelineUI/IBasicItem.h>
+#include "IBasicItem.h"
 
 #include <opentimelineio/clip.h>
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         class ThumbnailGenerator;
     }
 
-    namespace timelineui
+    namespace TIMELINEUI
     {
         //! Video clip item.
         class VideoClipItem : public IBasicItem
@@ -58,5 +58,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

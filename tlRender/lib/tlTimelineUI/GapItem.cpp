@@ -2,11 +2,11 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/GapItem.h>
+#include "GapItem.h"
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         void GapItem::_init(
             ui::ColorRole colorRole,
@@ -19,7 +19,7 @@ namespace tl
         {
             IBasicItem::_init(
                 !gap->name().empty() ? gap->name() : "Gap", colorRole,
-                "tl::timelineui::GapItem", gap.value, scale, options,
+                "tl::TIMELINEUI::GapItem", gap.value, scale, options,
                 displayOptions, itemData, context, parent);
         }
 
@@ -42,5 +42,5 @@ namespace tl
                 context, parent);
             return out;
         }
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

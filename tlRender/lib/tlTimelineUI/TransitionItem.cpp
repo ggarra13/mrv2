@@ -2,7 +2,7 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/TransitionItem.h>
+#include "TransitionItem.h"
 
 #include <tlUI/DrawUtil.h>
 
@@ -11,7 +11,7 @@
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         struct TransitionItem::Private
         {
@@ -73,7 +73,7 @@ namespace tl
             }
 
             IItem::_init(
-                "tl::timelineui::TransitionItem", timeRange, trimmedRange,
+                "tl::TIMELINEUI::TransitionItem", timeRange, trimmedRange,
                 scale, options, displayOptions, itemData, context, parent);
         }
 
@@ -242,5 +242,5 @@ namespace tl
             _updates |= ui::Update::Size;
             _updates |= ui::Update::Draw;
         }
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

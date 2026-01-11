@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include <tlTimelineUI/IItem.h>
+#include "IItem.h"
 
 #include <opentimelineio/gap.h>
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         //! Base class for clips, gaps, and other items.
         class IBasicItem : public IItem
@@ -52,5 +52,5 @@ namespace tl
 
             TLRENDER_PRIVATE();
         };
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

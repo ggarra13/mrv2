@@ -2,27 +2,37 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/ThumbnailSystem.h>
-
-#include <tlTimelineGL/Render.h>
+#include "ThumbnailSystem.h"
 
 #include <tlTimeline/Timeline.h>
 
 #include <tlIO/System.h>
 
-#include <tlGL/GL.h>
-#include <tlGL/GLFWWindow.h>
-#include <tlGL/OffscreenBuffer.h>
+#ifdef OPENGL_BACKEND
+#    include <tlTimelineGL/Render.h>
+#    include <tlGL/GL.h>
+#    include <tlGL/GLFWWindow.h>
+#    include <tlGL/OffscreenBuffer.h>
+#endif
+
+#ifdef VULKAN_BACKEND
+#    include <tlTimelineVk/Render.h>
+#    include <tlVk/Vk.h>
+#    include <tlVk/OffscreenBuffer.h>
+#    include <FL/Fl_Vk_Utils.H>
+#    include <FL/Fl.H>
+#endif
 
 #include <tlCore/AudioResample.h>
 #include <tlCore/LRUCache.h>
 #include <tlCore/StringFormat.h>
 
+
 #include <sstream>
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         namespace
         {
@@ -226,7 +236,9 @@ namespace tl
         {
             std::weak_ptr<system::Context> context;
             std::shared_ptr<ThumbnailCache> cache;
+#ifdef OPENGL_BACKEND
             std::shared_ptr<gl::GLFWWindow> window;
+#endif
             uint64_t requestId = 0;
 
             struct InfoRequest
@@ -294,8 +306,17 @@ namespace tl
 
             struct ThumbnailThread
             {
+#ifdef OPENGL_BACKEND
                 std::shared_ptr<timeline_gl::Render> render;
                 std::shared_ptr<gl::OffscreenBuffer> buffer;
+#endif
+#ifdef VULKAN_BACKEND
+                std::shared_ptr<timeline_vlk::Render> render;
+                std::shared_ptr<vlk::OffscreenBuffer> buffer;
+                VkCommandBuffer cmd = VK_NULL_HANDLE; 
+                VkCommandPool commandPool = VK_NULL_HANDLE;
+                uint32_t frameIndex = 0;
+#endif
                 memory::LRUCache<std::string, std::shared_ptr<io::IRead> >
                     ioCache;
                 std::condition_variable cv;
@@ -315,6 +336,7 @@ namespace tl
             WaveformThread waveformThread;
         };
 
+#ifdef OPENGL_BACKEND
         void ThumbnailGenerator::_init(
             const std::shared_ptr<ThumbnailCache>& cache,
             const std::shared_ptr<system::Context>& context,
@@ -330,10 +352,22 @@ namespace tl
             if (!p.window)
             {
                 p.window = gl::GLFWWindow::create(
-                    "tl::timelineui::ThumbnailGenerator", math::Size2i(1, 1), context,
+                    "tl::TIMELINEUI::ThumbnailGenerator", math::Size2i(1, 1), context,
                     static_cast<int>(gl::GLFWWindowOptions::kNone));
             }
 
+            _startThreads();
+        }
+
+        ThumbnailGenerator::ThumbnailGenerator() :
+            _p(new Private)
+        {
+        }
+        
+        void ThumbnailGenerator::_startThreads()
+        {
+            TLRENDER_P();
+            
             p.infoThread.running = true;
             p.infoThread.thread = std::thread(
                 [this]
@@ -395,13 +429,114 @@ namespace tl
                     _waveformCancel();
                 });
         }
+#endif
 
-        ThumbnailGenerator::ThumbnailGenerator() :
+#ifdef VULKAN_BACKEND
+        
+        void ThumbnailGenerator::_init(
+            const std::shared_ptr<ThumbnailCache>& cache,
+            const std::shared_ptr<system::Context>& context)
+        {
+            TLRENDER_P();
+
+            p.context = context;
+
+            p.cache = cache;
+
+            _startThreads();
+            
+        }
+        
+        void ThumbnailGenerator::_startThreads()
+        {
+            TLRENDER_P();
+
+            p.infoThread.running = true;
+            p.infoThread.thread = std::thread(
+                [this]
+                    {
+                        TLRENDER_P();
+                        while (p.infoThread.running)
+                        {
+                            _infoRun();
+                        }
+                        {
+                            std::unique_lock<std::mutex> lock(p.infoMutex.mutex);
+                            p.infoMutex.stopped = true;
+                        }
+                        _infoCancel();
+                    });
+
+            p.thumbnailThread.ioCache.setMax(ioCacheMax);
+            p.thumbnailThread.running = true;
+            p.thumbnailThread.thread = std::thread(
+                [this]
+                    {
+                        TLRENDER_P();
+
+                        while (p.thumbnailThread.running)
+                        {
+                            _thumbnailRun();
+                        }
+
+                        {
+                            std::unique_lock<std::mutex> lock(
+                                p.thumbnailMutex.mutex);
+                            p.thumbnailMutex.stopped = true;
+                        }
+                        VkDevice device = ctx.device;
+                        if (device != VK_NULL_HANDLE &&
+                            p.thumbnailThread.commandPool != VK_NULL_HANDLE)
+                        {
+                            VkCommandPool& commandPool = p.thumbnailThread.commandPool;
+
+                            vkFreeCommandBuffers(device, commandPool, 1, &p.thumbnailThread.cmd);
+                            p.thumbnailThread.cmd = VK_NULL_HANDLE;
+
+                            vkDestroyCommandPool(device,
+                                                 p.thumbnailThread.commandPool,
+                                                 nullptr);
+                            p.thumbnailThread.commandPool = VK_NULL_HANDLE;
+
+                        }
+                        p.thumbnailThread.buffer.reset();
+                        p.thumbnailThread.render.reset();
+                        _thumbnailCancel();
+                    });
+
+            p.waveformThread.ioCache.setMax(ioCacheMax);
+            p.waveformThread.running = true;
+            p.waveformThread.thread = std::thread(
+                [this]
+                    {
+                        TLRENDER_P();
+
+                        while (p.waveformThread.running)
+                        {
+                            _waveformRun();
+                        }
+                        {
+                            std::unique_lock<std::mutex> lock(
+                                p.waveformMutex.mutex);
+                            p.waveformMutex.stopped = true;
+                        }
+                        _waveformCancel();
+                    });
+        }
+        
+        ThumbnailGenerator::ThumbnailGenerator(Fl_Vk_Context& ctx) :
+            ctx(ctx),
             _p(new Private)
         {
         }
-
+        
+#endif
         ThumbnailGenerator::~ThumbnailGenerator()
+        {
+            _exitThreads();
+        }
+
+        void ThumbnailGenerator::_exitThreads()
         {
             TLRENDER_P();
 
@@ -439,6 +574,7 @@ namespace tl
             }
         }
 
+#ifdef OPENGL_BACKEND
         std::shared_ptr<ThumbnailGenerator> ThumbnailGenerator::create(
             const std::shared_ptr<ThumbnailCache>& cache,
             const std::shared_ptr<system::Context>& context,
@@ -449,6 +585,20 @@ namespace tl
             out->_init(cache, context, window);
             return out;
         }
+#endif
+
+#ifdef VULKAN_BACKEND
+        std::shared_ptr<ThumbnailGenerator> ThumbnailGenerator::create(
+            const std::shared_ptr<ThumbnailCache>& cache,
+            const std::shared_ptr<system::Context>& context,
+            Fl_Vk_Context& ctx)
+        {
+            auto out =
+                std::shared_ptr<ThumbnailGenerator>(new ThumbnailGenerator(ctx));
+            out->_init(cache, context);
+            return out;
+        }
+#endif
 
         InfoRequest ThumbnailGenerator::getInfo(
             const file::Path& path, const io::Options& options)
@@ -733,6 +883,7 @@ namespace tl
                 return;
             }
             
+#ifdef OPENGL_BACKEND
             std::shared_ptr<image::Image> image;
             const std::string key = ThumbnailCache::getThumbnailKey(
                 request->height, request->path, request->time,
@@ -875,6 +1026,278 @@ namespace tl
             }
             request->promise.set_value(image);
             p.cache->addThumbnail(key, image);
+#endif
+
+#ifdef VULKAN_BACKEND
+            // 1. Check Vulkan context
+            if (ctx.queue() == VK_NULL_HANDLE ||
+                ctx.device == VK_NULL_HANDLE ||
+                ctx.instance == VK_NULL_HANDLE)
+            {
+                // Context is not ready, fail the request and return
+                request->promise.set_value(nullptr);
+                return;
+            }
+
+            // 2. Check and initialize renderer
+            if (!p.thumbnailThread.render)
+            {
+                if (auto context = p.context.lock())
+                {
+                    p.thumbnailThread.render =
+                        timeline_vlk::Render::create(ctx, context);
+
+                    VkDevice device = ctx.device;
+
+                    // Create command pool
+                    if (p.thumbnailThread.commandPool == VK_NULL_HANDLE)
+                    {
+                        VkCommandPoolCreateInfo cmd_pool_info = {};
+                        cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+                        cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
+                        cmd_pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+                        vkCreateCommandPool(device, &cmd_pool_info, nullptr,
+                                            &p.thumbnailThread.commandPool);
+                    }
+
+                    if (p.thumbnailThread.cmd == VK_NULL_HANDLE)
+                    {
+                        VkCommandBufferAllocateInfo allocInfo = {};
+                        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+                        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+                        allocInfo.commandPool = p.thumbnailThread.commandPool;
+                        allocInfo.commandBufferCount = 1;
+
+                        vkAllocateCommandBuffers(device, &allocInfo, &p.thumbnailThread.cmd);
+                    }
+                }
+                else
+                {
+                    // System context is gone, fail the request
+                    request->promise.set_value(nullptr);
+                    return;
+                }
+            }
+    
+
+            // --- Process the Request ---
+            std::shared_ptr<image::Image> image;
+            const std::string key = ThumbnailCache::getThumbnailKey(
+                request->height, request->path, request->time,
+                request->options);
+            if (!p.cache->getThumbnail(key, image))
+            {
+                if (auto context = p.context.lock())
+                {
+                    auto ioSystem = context->getSystem<io::System>();
+                    try
+                    {
+                        const std::string& fileName = request->path.get();
+                        // std::cout << "thumbnail request: " << fileName
+                        //           << " " << request->time << std::endl;
+                        std::shared_ptr<io::IRead> read;
+                        if (!p.thumbnailThread.ioCache.get(fileName, read))
+                        {
+                            auto ioSystem =
+                                context->getSystem<io::System>();
+                            read = ioSystem->read(
+                                request->path, request->memoryRead,
+                                request->options);
+                            p.thumbnailThread.ioCache.add(fileName, read);
+                        }
+                        if (read)
+                        {
+                            const io::Info info = read->getInfo().get();
+                            math::Size2i size;
+                            if (!info.video.empty())
+                            {
+                                size.w = request->height *
+                                         info.video[0].size.getAspect();
+                                size.h = request->height;
+                            }
+                            vlk::OffscreenBufferOptions options;
+                            options.colorType = image::PixelType::RGBA_U8;
+                            options.pbo = true;
+                            if (vlk::doCreate(
+                                    p.thumbnailThread.buffer, size,
+                                    options))
+                            {
+                                p.thumbnailThread.buffer =
+                                    vlk::OffscreenBuffer::create(ctx,
+                                                                 size, options);
+                            }
+                            const otime::RationalTime time =
+                                request->time != time::invalidTime
+                                ? request->time
+                                : info.videoTime.start_time();
+                            const auto videoData =
+                                read->readVideo(time, request->options)
+                                .get();
+                            if (p.thumbnailThread.render &&
+                                p.thumbnailThread.buffer && videoData.image)
+                            {
+                                image = image::Image::create(
+                                    size.w, size.h,
+                                    image::PixelType::RGBA_U8);
+
+                                VkCommandBuffer& cmd = p.thumbnailThread.cmd;
+                                vkResetCommandBuffer(cmd, 0);
+                        
+                                VkCommandBufferBeginInfo beginInfo = {};
+                                beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+                                beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+                        
+                                vkBeginCommandBuffer(cmd, &beginInfo);
+                        
+                                p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+                        
+                                timeline::RenderOptions renderOptions;
+                                renderOptions.clear = true;
+                                p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
+                                                                p.thumbnailThread.frameIndex, size,
+                                                                renderOptions);
+
+                                const math::Matrix4x4f ortho = math::ortho(
+                                    0.F, static_cast<float>(size.w),
+                                    0.F, static_cast<float>(size.h),
+                                    -1.F, 1.F);
+                                p.thumbnailThread.render->setTransform(ortho);
+                        
+                                p.thumbnailThread.render->drawImage(
+                                    videoData.image,
+                                    {math::Box2i(0, 0, size.w, size.h)});
+
+                                p.thumbnailThread.render->end();
+
+                                p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+
+                                p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
+                                                                     size.h);
+                                    
+                                vkEndCommandBuffer(cmd);
+                
+                                p.thumbnailThread.buffer->submitReadback(cmd);
+                                    
+                                void* imageData = nullptr;
+                                while (! (imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
+                                    ;
+                                        
+                                    
+                                std::memcpy(image->getData(), imageData,
+                                            image->getDataByteCount());
+                                    
+                                p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+                            }
+                        }
+                        else if (
+                            string::compare(
+                                ".otio", request->path.getExtension(),
+                                string::Compare::CaseInsensitive) ||
+                            string::compare(
+                                ".otioz", request->path.getExtension(),
+                                string::Compare::CaseInsensitive))
+                        {
+                            otime::RationalTime offsetTime =
+                                time::invalidTime;
+                            timeline::Options timelineOptions;
+                            timelineOptions.ioOptions = request->options;
+                            auto timeline = timeline::Timeline::create(
+                                request->path, context, offsetTime,
+                                timelineOptions);
+                            const auto info = timeline->getIOInfo();
+                            // const auto videoData = timeline->getVideo(
+                            //     timeline->getTimeRange().start_time()).future.get();
+                            const auto videoData =
+                                timeline->getVideo(request->time)
+                                .future.get();
+                            math::Size2i size;
+                            if (!info.video.empty())
+                            {
+                                size.w =
+                                    request->height *
+                                    info.video.front().size.getAspect();
+                                size.h = request->height;
+                            }
+                            if (size.isValid())
+                            {
+                                vlk::OffscreenBufferOptions options;
+                                options.colorType =
+                                    image::PixelType::RGBA_U8;
+                                options.pbo = true;
+                                if (vlk::doCreate(
+                                        p.thumbnailThread.buffer, size,
+                                        options))
+                                {
+                                    p.thumbnailThread.buffer =
+                                        vlk::OffscreenBuffer::create(ctx,
+                                                                     size, options);
+                                }
+                                if (p.thumbnailThread.render &&
+                                    p.thumbnailThread.buffer)
+                                {
+                                    image = image::Image::create(
+                                        size.w, size.h,
+                                        image::PixelType::RGBA_U8);
+                                        
+                                    VkCommandBuffer& cmd = p.thumbnailThread.cmd;
+                                    vkResetCommandBuffer(cmd, 0);
+                                    
+                                    VkCommandBufferBeginInfo beginInfo = {};
+                                    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+                                    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+   
+                                    vkBeginCommandBuffer(cmd, &beginInfo);
+                            
+                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+                            
+                                    timeline::RenderOptions renderOptions;
+                                    renderOptions.clear = true;
+                                    p.thumbnailThread.render->begin(cmd,
+                                                                    p.thumbnailThread.buffer,
+                                                                    p.thumbnailThread.frameIndex,
+                                                                    size, renderOptions);
+
+                                    const math::Matrix4x4f ortho = math::ortho(
+                                        0.F, static_cast<float>(size.w),
+                                        0.F, static_cast<float>(size.h), 
+                                        -1.F, 1.F);
+                                    p.thumbnailThread.render->setTransform(ortho);
+                                    p.thumbnailThread.render->drawVideo(
+                                        {videoData},
+                                        {math::Box2i(
+                                                0, 0, size.w, size.h)});
+                                    p.thumbnailThread.render->end();
+                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+                            
+                                    p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
+                                                                         size.h);
+                                    
+                                    vkEndCommandBuffer(cmd);
+                
+                                    p.thumbnailThread.buffer->submitReadback(cmd);
+
+
+                                    void* imageData = nullptr;
+                                    while (! (imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
+                                        ;
+
+                                    std::memcpy(image->getData(), imageData, image->getDataByteCount());
+                                        
+                                    vkEndCommandBuffer(cmd);
+
+                                    p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+                                }
+                            }
+                        }
+                    }
+                    catch (const std::exception&)
+                    {
+                    }
+                }
+            }
+            request->promise.set_value(image);
+            p.cache->addThumbnail(key, image);
+#endif
             
         }
 
@@ -1160,18 +1583,25 @@ namespace tl
         void
         ThumbnailSystem::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::timelineui::ThumbnailSystem", context);
+            ISystem::_init("tl::TIMELINEUI::ThumbnailSystem", context);
             TLRENDER_P();
             p.cache = ThumbnailCache::create(context);
+#ifdef OPENGL_BACKEND
             p.generator = ThumbnailGenerator::create(p.cache, context);
+#endif
+#ifdef VULKAN_BACKEND
+            p.generator = ThumbnailGenerator::create(p.cache, context, ctx);
+#endif
         }
 
+        ThumbnailSystem::~ThumbnailSystem() {}
+
+
+#ifdef OPENGL_BACKEND
         ThumbnailSystem::ThumbnailSystem() :
             _p(new Private)
         {
         }
-
-        ThumbnailSystem::~ThumbnailSystem() {}
 
         std::shared_ptr<ThumbnailSystem>
         ThumbnailSystem::create(const std::shared_ptr<system::Context>& context)
@@ -1180,6 +1610,24 @@ namespace tl
             out->_init(context);
             return out;
         }
+#endif
+
+#ifdef VULKAN_BACKEND
+        ThumbnailSystem::ThumbnailSystem(Fl_Vk_Context& ctx) :
+            ctx(ctx),
+            _p(new Private)
+        {
+        }
+
+        std::shared_ptr<ThumbnailSystem>
+        ThumbnailSystem::create(const std::shared_ptr<system::Context>& context,
+                                Fl_Vk_Context& ctx)
+        {
+            auto out = std::shared_ptr<ThumbnailSystem>(new ThumbnailSystem(ctx));
+            out->_init(context);
+            return out;
+        }
+#endif
 
         InfoRequest ThumbnailSystem::getInfo(
             const file::Path& path, const io::Options& ioOptions)
@@ -1210,5 +1658,5 @@ namespace tl
         {
             return _p->cache;
         }
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

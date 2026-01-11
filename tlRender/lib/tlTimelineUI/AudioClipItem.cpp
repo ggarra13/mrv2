@@ -2,8 +2,8 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/AudioClipItem.h>
-#include <tlTimelineUI/ThumbnailSystem.h>
+#include "AudioClipItem.h"
+#include "ThumbnailSystem.h"
 
 #include <tlUI/DrawUtil.h>
 
@@ -17,7 +17,7 @@
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         struct AudioClipItem::Private
         {
@@ -32,9 +32,9 @@ namespace tl
             };
             SizeData size;
 
-            timelineui::InfoRequest infoRequest;
+            TIMELINEUI::InfoRequest infoRequest;
             std::shared_ptr<io::Info> ioInfo;
-            std::map<otime::RationalTime, timelineui::WaveformRequest> waveformRequests;
+            std::map<otime::RationalTime, TIMELINEUI::WaveformRequest> waveformRequests;
         };
 
         void AudioClipItem::_init(
@@ -42,7 +42,7 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<timelineui::ThumbnailGenerator> thumbnailGenerator,
+            const std::shared_ptr<TIMELINEUI::ThumbnailGenerator> thumbnailGenerator,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
@@ -52,7 +52,7 @@ namespace tl
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
                 : path.getFileName(false),
-                ui::ColorRole::AudioClip, "tl::timelineui::AudioClipItem",
+                ui::ColorRole::AudioClip, "tl::TIMELINEUI::AudioClipItem",
                 clip.value, scale, options, displayOptions, itemData, context,
                 parent);
             TLRENDER_P();
@@ -86,7 +86,7 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<timelineui::ThumbnailGenerator> thumbnailGenerator,
+            const std::shared_ptr<TIMELINEUI::ThumbnailGenerator> thumbnailGenerator,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
@@ -311,7 +311,7 @@ namespace tl
             if (p.infoRequest.future.valid())
             {
                 ids.push_back(p.infoRequest.id);
-                p.infoRequest = timelineui::InfoRequest();
+                p.infoRequest = TIMELINEUI::InfoRequest();
             }
             for (const auto& i : p.waveformRequests)
             {
@@ -320,5 +320,5 @@ namespace tl
             p.waveformRequests.clear();
             p.thumbnailGenerator->cancelRequests(ids);
         }
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "Namespace.h"
+
 #include <tlIO/IO.h>
 
 #include <tlCore/Context.h>
@@ -17,12 +19,15 @@
 
 namespace tl
 {
+
+#ifdef OPENGL_BACKEND
     namespace gl
     {
         class GLFWWindow;
     }
+#endif
 
-    namespace timelineui
+    namespace TIMELINEUI
     {
         //! Information request.
         struct InfoRequest
@@ -135,21 +140,41 @@ namespace tl
             : public std::enable_shared_from_this<ThumbnailGenerator>
         {
         protected:
+#ifdef OPENGL_BACKEND
             void _init(
                 const std::shared_ptr<ThumbnailCache>&,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<gl::GLFWWindow>&);
 
             ThumbnailGenerator();
+#endif
 
+#ifdef VULKAN_BACKEND
+            void _init(
+                const std::shared_ptr<ThumbnailCache>&,
+                const std::shared_ptr<system::Context>&);
+
+            ThumbnailGenerator(Fl_Vk_Context& ctx);
+#endif
+            
         public:
             ~ThumbnailGenerator();
 
+#ifdef OPENGL_BACKEND
             //! Create a new thumbnail generator.
             static std::shared_ptr<ThumbnailGenerator> create(
                 const std::shared_ptr<ThumbnailCache>&,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<gl::GLFWWindow>& = nullptr);
+#endif
+
+#ifdef VULKAN_BACKEND
+            //! Create a new thumbnail generator.
+            static std::shared_ptr<ThumbnailGenerator> create(
+                const std::shared_ptr<ThumbnailCache>&,
+                const std::shared_ptr<system::Context>&,
+                Fl_Vk_Context&);
+#endif
 
             //! Get information.
             InfoRequest
@@ -195,7 +220,12 @@ namespace tl
             void _infoCancel();
             void _thumbnailCancel();
             void _waveformCancel();
+            void _startThreads();
+            void _exitThreads();
 
+#ifdef VULKAN_BACKEND
+            Fl_Vk_Context& ctx;
+#endif
             TLRENDER_PRIVATE();
         };
 
@@ -205,14 +235,29 @@ namespace tl
         protected:
             void _init(const std::shared_ptr<system::Context>&);
 
+#ifdef OPENGL_BACKEND
             ThumbnailSystem();
+#endif
+
+#ifdef VULKAN_BACKEND
+            ThumbnailSystem(Fl_Vk_Context&);
+#endif
 
         public:
             ~ThumbnailSystem();
 
+#ifdef OPENGL_BACKEND
             //! Create a new system.
             static std::shared_ptr<ThumbnailSystem>
             create(const std::shared_ptr<system::Context>&);
+#endif
+
+#ifdef VULKAN_BACKEND
+            //! Create a new system.
+            static std::shared_ptr<ThumbnailSystem>
+            create(const std::shared_ptr<system::Context>&,
+                   Fl_Vk_Context& ctx);
+#endif
 
             //! Get information.
             InfoRequest
@@ -237,7 +282,11 @@ namespace tl
             const std::shared_ptr<ThumbnailCache>& getCache() const;
 
         private:
+#ifdef VULKAN_BACKEND
+            Fl_Vk_Context& ctx;
+#endif
+            
             TLRENDER_PRIVATE();
         };
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

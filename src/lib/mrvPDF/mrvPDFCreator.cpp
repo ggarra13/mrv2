@@ -21,9 +21,7 @@
 #    include <tlGL/Init.h>
 #endif
 
-#ifdef VULKAN_BACKEND
-#    include <tlTimelineUIVk/ThumbnailSystem.h>
-#endif
+#include <tlTimelineUI/ThumbnailSystem.h>
 
 #include <tlIO/System.h>
 

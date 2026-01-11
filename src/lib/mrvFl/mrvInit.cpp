@@ -8,13 +8,7 @@
 
 #include <tlTimeline/Init.h>
 
-#ifdef OPENGL_BACKEND
 #include <tlTimelineUI/Init.h>
-#endif
-
-#ifdef VULKAN_BACKEND
-#include <tlTimelineUIVk/Init.h>
-#endif
 
 #ifdef TLRENDER_NDI
 #    include <tlDevice/Init.h>
@@ -26,13 +20,7 @@ namespace mrv
     {
         using namespace tl;
 
-#ifdef OPENGL_BACKEND
-        timelineui::init(context);
-#endif
-
-#ifdef VULKAN_BACKEND
-        timelineui_vk::init(context);
-#endif
+        TIMELINEUI::init(context);
 
 #ifdef TLRENDER_NDI
         device::init(context);

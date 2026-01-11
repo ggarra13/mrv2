@@ -8,14 +8,7 @@
 
 #include "mrvPanelWidget.h"
 
-#ifdef OPENGL_BACKEND
 #include <tlTimelineUI/ThumbnailSystem.h>
-// #include <tlTimelineUI/TimelineWidget.h>
-#endif
-
-#ifdef VULKAN_BACKEND
-#include <tlTimelineUIVk/ThumbnailSystem.h>
-#endif
 
 #include <tlCore/Time.h>
 #include <tlCore/Path.h>

@@ -2,7 +2,7 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/IBasicItem.h>
+#include "IBasicItem.h"
 
 #include <tlUI/DrawUtil.h>
 
@@ -10,7 +10,7 @@
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         struct IBasicItem::Private
         {
@@ -349,5 +349,5 @@ namespace tl
             _updates |= ui::Update::Size;
             _updates |= ui::Update::Draw;
         }
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

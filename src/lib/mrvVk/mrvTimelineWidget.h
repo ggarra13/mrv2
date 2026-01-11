@@ -10,7 +10,7 @@
 
 #include <tlTimeline/Edit.h>
 
-#include <tlTimelineUIVk/IItem.h>
+#include <tlTimelineUI/IItem.h>
 
 #include "mrvVk/mrvVkWindow.h"
 

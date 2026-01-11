@@ -3,14 +3,14 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#include <tlTimelineUI/TimelineItem.h>
-#include <tlTimelineUI/TimelineItemPrivate.h>
+#include "TimelineItem.h"
+#include "TimelineItemPrivate.h"
 
 #include <opentimelineio/gap.h>
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         
         void TimelineItem::_mouseMoveEventRoll(ui::MouseMoveEvent& event)

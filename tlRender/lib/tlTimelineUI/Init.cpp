@@ -2,8 +2,8 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/ThumbnailSystem.h>
-#include <tlTimelineUI/Init.h>
+#include "ThumbnailSystem.h"
+#include "Init.h"
 
 #include <tlUI/Init.h>
 
@@ -11,16 +11,21 @@
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         void init(const std::shared_ptr<system::Context>& context)
         {
             tl::timeline::init(context);
             tl::ui::init(context);
-            if (!context->getSystem<timelineui::ThumbnailSystem>())
+
+#ifdef OPENGL_BACKEND
+            // We cannot init the Vulkan thumbnail system here as we need
+            // the FLTK context
+            if (!context->getSystem<TIMELINEUI::ThumbnailSystem>())
             {
-                context->addSystem(timelineui::ThumbnailSystem::create(context));
+                context->addSystem(TIMELINEUI::ThumbnailSystem::create(context));
             }
+#endif
         }
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

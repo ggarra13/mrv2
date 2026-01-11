@@ -25,15 +25,7 @@
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 
-
-
-#ifdef OPENGL_BACKEND
 #include <tlTimelineUI/ThumbnailSystem.h>
-#endif
-
-#ifdef VULKAN_BACKEND
-#include <tlTimelineUIVk/ThumbnailSystem.h>
-#endif
 
 #include <tlTimeline/Timeline.h>
 

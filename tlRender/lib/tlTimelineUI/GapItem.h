@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include <tlTimelineUI/IBasicItem.h>
+#include "IBasicItem.h"
 
 #include <opentimelineio/gap.h>
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         //! Gap item.
         class GapItem : public IBasicItem
@@ -38,5 +38,5 @@ namespace tl
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
         };
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

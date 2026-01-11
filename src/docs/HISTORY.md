@@ -54,6 +54,7 @@ ChangeLog
 - Made installer's smaller on Windows by getting rid of .pdb files.
 - Made creating package installers on Windows faster.
 - Fixed a regresion on FLTK Windows resizing.
+- Consolidated tltimelineui for both Vulkan and OpenGL under a single code base. 
 
 v1.5.1
 ======

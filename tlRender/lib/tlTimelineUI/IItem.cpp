@@ -2,7 +2,7 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/IItem.h>
+#include "IItem.h"
 
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
@@ -12,7 +12,7 @@
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         bool ItemOptions::operator==(const ItemOptions& other) const
         {
@@ -256,5 +256,5 @@ namespace tl
         }
 
         void IItem::_timeUnitsUpdate() {}
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

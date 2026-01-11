@@ -2,16 +2,18 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlTimelineUI/TimelineWidget.h>
+#include <TimelineWidget.h>
 
 #include <tlUI/ScrollWidget.h>
 
-#include <tlGL/GL.h>
-#include <tlGL/GLFWWindow.h>
+#ifdef OPENGL_BACKEND
+#    include <tlGL/GL.h>
+#    include <tlGL/GLFWWindow.h>
+#endif
 
 namespace tl
 {
-    namespace timelineui
+    namespace TIMELINEUI
     {
         namespace
         {
@@ -41,8 +43,10 @@ namespace tl
             double scale = 500.0;
             bool sizeInit = true;
 
+#ifdef OPENGL_BACKEND
             std::shared_ptr<gl::GLFWWindow> window;
-
+#endif
+            
             std::shared_ptr<ui::ScrollWidget> scrollWidget;
             std::shared_ptr<TimelineItem> timelineItem;
 
@@ -93,22 +97,25 @@ namespace tl
             p.itemOptions = observer::Value<ItemOptions>::create();
             p.displayOptions = observer::Value<DisplayOptions>::create();
 
+#ifdef OPENGL_BACKEND
             p.window = gl::GLFWWindow::create(
-                "tl::timelineui::TimelineWidget", math::Size2i(1, 1), context,
+                "tl::TIMELINEUI::TimelineWidget", math::Size2i(1, 1), context,
                 static_cast<int>(gl::GLFWWindowOptions::kNone));
-
+#endif
+            
             p.scrollWidget = ui::ScrollWidget::create(
                 context, ui::ScrollType::Both, shared_from_this());
             p.scrollWidget->setScrollEventsEnabled(false);
             p.scrollWidget->setBorder(false);
         }
 
+        TimelineWidget::~TimelineWidget() {}
+
+#ifdef OPENGL_BACKEND
         TimelineWidget::TimelineWidget() :
             _p(new Private)
         {
         }
-
-        TimelineWidget::~TimelineWidget() {}
 
         std::shared_ptr<TimelineWidget> TimelineWidget::create(
             const std::shared_ptr<timeline::ITimeUnitsModel>& timeUnitsModel,
@@ -119,7 +126,27 @@ namespace tl
             out->_init(timeUnitsModel, context, parent);
             return out;
         }
+#endif
 
+#ifdef VULKAN_BACKEND        
+        TimelineWidget::TimelineWidget(Fl_Vk_Context& ctx) :
+            ctx(ctx),
+            _p(new Private)
+        {
+        }
+
+        std::shared_ptr<TimelineWidget> TimelineWidget::create(
+            const std::shared_ptr<timeline::ITimeUnitsModel>& timeUnitsModel,
+            Fl_Vk_Context& ctx,
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<IWidget>& parent)
+        {
+            auto out = std::shared_ptr<TimelineWidget>(new TimelineWidget(ctx));
+            out->_init(timeUnitsModel, context, parent);
+            return out;
+        }
+#endif
+        
         double TimelineWidget::getScale() const
         {
             TLRENDER_P();
@@ -743,11 +770,20 @@ namespace tl
                     p.itemData->speed = p.player->getDefaultSpeed();
                     p.itemData->directory = p.player->getPath().getDirectory();
                     p.itemData->options = p.player->getOptions();
+#ifdef OPENGL_BACKEND
                     p.timelineItem = TimelineItem::create(
                         p.player,
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
                         p.itemData, p.window, context);
+#endif
+#ifdef VULKAN_BACKEND
+                    p.timelineItem = TimelineItem::create(
+                        p.player,
+                        p.player->getTimeline()->getTimeline()->tracks(),
+                        p.scale, p.itemOptions->get(), p.displayOptions->get(),
+                        p.itemData, ctx, context);
+#endif
                     p.timelineItem->setEditable(p.editable->get());
                     p.timelineItem->setEditMode(p.editMode->get());
                     p.timelineItem->setStopOnScrub(p.stopOnScrub->get());
@@ -782,5 +818,5 @@ namespace tl
                 out = p.timelineItem->getSelectedItems();
             return out;
         }
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl

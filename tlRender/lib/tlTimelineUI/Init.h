@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "Namespace.h"
+
 #include <memory>
 
 namespace tl
@@ -14,9 +16,9 @@ namespace tl
     }
 
     //! Timeline user interface
-    namespace timelineui
+    namespace TIMELINEUI
     {
         //! Initialize the library.
         void init(const std::shared_ptr<system::Context>&);
-    } // namespace timelineui
+    } // namespace TIMELINEUI
 } // namespace tl
