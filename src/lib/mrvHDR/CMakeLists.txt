@@ -25,7 +25,7 @@ set(LIBRARIES
     libplacebo
     mrvHDRWidgets
     NDI
-    tlRender
+    tlRender::tlVk
     ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES} 
     ${Intl_LIBRARIES}
 )
