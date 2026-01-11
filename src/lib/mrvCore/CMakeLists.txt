@@ -16,7 +16,7 @@ set(HEADERS
     mrvHome.h
     mrvHotkey.h
     mrvI8N.h
-    mrvImage.h
+    mrvImageOps.h
     mrvLicensing.h
     mrvLocale.h
     mrvMedia.h
@@ -43,7 +43,7 @@ set(SOURCES
     mrvFonts.cpp
     mrvHome.cpp
     mrvHotkey.cpp
-    mrvImage.cpp
+    mrvImageOps.cpp
     mrvLicensing.cpp
     mrvLocale.cpp
     mrvMedia.cpp

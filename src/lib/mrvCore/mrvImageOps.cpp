@@ -4,7 +4,7 @@
 
 #include "mrvFl/mrvIO.h"
 
-#include "mrvCore/mrvImage.h"
+#include "mrvCore/mrvImageOps.h"
 
 namespace
 {

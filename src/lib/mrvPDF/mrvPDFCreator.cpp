@@ -13,7 +13,7 @@
 
 #include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvImage.h"
+#include "mrvCore/mrvImageOps.h"
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvWait.h"
 

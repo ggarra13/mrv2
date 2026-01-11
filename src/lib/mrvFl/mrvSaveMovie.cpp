@@ -17,7 +17,7 @@
 
 #include "mrvWidgets/mrvProgressReport.h"
 
-#include "mrvCore/mrvImage.h"
+#include "mrvCore/mrvImageOps.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
