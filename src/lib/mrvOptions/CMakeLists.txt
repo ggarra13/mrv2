@@ -34,7 +34,7 @@ set(SOURCES
 add_library(mrvOptions ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set(LIBRARIES mrvCore Vulkan::Vulkan )
+set(LIBRARIES mrvCore )
 set(LIBRARIES_PRIVATE )
 
 if(TLRENDER_USD)
@@ -49,7 +49,7 @@ if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL")
 endif()
 
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
-    list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
+    list(APPEND LIBRARIES ${FLTK_vk_LIBRARY} Vulkan::Vulkan)
 endif()
 
 
