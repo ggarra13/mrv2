@@ -68,7 +68,7 @@ else()
 endif()
 
 set(vcpkg_ARCH x64)
-if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+if ("$ENV{ARCH}" MATCHES ".*aarch64.*" OR "$ENV{ARCH}" MATCHES ".*arm64.*")
     set(vcpkg_ARCH arm64)
 endif()
     

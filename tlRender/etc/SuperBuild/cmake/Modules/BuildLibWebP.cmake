@@ -8,7 +8,7 @@ message(STATUS "LibWebP DEPENDENCIES=${LibWebP_DEPENDENCIES}")
 
 
 set(WEBP_ENABLE_SIMD ON)
-if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+if ("$ENV{ARCH}" MATCHES ".*aarch64.*" OR "$ENV{ARCH}" MATCHES ".*arm64.*")
     set(WEBP_ENABLE_SIMD OFF)
 endif()
 

@@ -46,14 +46,31 @@ docs/sphinx/*/_images
 docs/sphinx/*/_sources
 docs/sphinx/*/conf.py
 docs/sphinx/*/document.py
-packages
+packages*
+releases*
+talks*
 *#
 *~
 .git
 .DS_Store
 
+#
+# Project files
+#
+stargazers*
+*.log
 
 #
 # Git files
 #
 .githooks/*
+docs/codesign_macOS/package.cmake
+docs/codesign_macOS/package2.cmake
+helpers/compare_dirs.sh
+src/bin/set_usd_env.sh
+src/bin/set_usd_python_env.sh
+src/etc/Linux/packaging/vlc_snapcraft.yaml
+src/etc/Linux/packaging/snap/snapcraft.yaml
+src/etc/Linux/packaging/snap/gui/mrv2.desktop
+src/etc/Linux/packaging/snap/gui/mrv2.png
+src/lib/mrvWidgets/mrViewer.new.fl.txt
