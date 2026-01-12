@@ -97,8 +97,7 @@ echo "mrv2 VERSION=$mrv2_VERSION"
 #
 # Go to packages directory
 #
-package_dir=packages/$BUILD_DIR
-echo "Looking for files in ${package_dir}"
+package_dir=paquetes/$BUILD_DIR
 mkdir -p $package_dir
 cd $package_dir
 

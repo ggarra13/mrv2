@@ -170,49 +170,49 @@ namespace
     {
         if (plan == "Pro" || plan == "Pro+")
         {
-            mrv::App::supports_annotations = true;
-            mrv::App::supports_editing = true;
-            mrv::App::supports_layers = true;
-            mrv::App::supports_python = true;
-            mrv::App::supports_saving = true;
-            mrv::App::supports_voice = true;
+            mrv::App::soporta_annotations = true;
+            mrv::App::soporta_editing = true;
+            mrv::App::soporta_layers = true;
+            mrv::App::soporta_python = true;
+            mrv::App::soporta_saving = true;
+            mrv::App::soporta_voice = true;
         }
         else if (plan == "Standard")
         {
-            mrv::App::supports_annotations = true;
-            mrv::App::supports_editing = false;
-            mrv::App::supports_layers = true;
-            mrv::App::supports_python = true;
-            mrv::App::supports_saving = true;
-            mrv::App::supports_voice = false;
+            mrv::App::soporta_annotations = true;
+            mrv::App::soporta_editing = false;
+            mrv::App::soporta_layers = true;
+            mrv::App::soporta_python = true;
+            mrv::App::soporta_saving = true;
+            mrv::App::soporta_voice = false;
         }
         else if (plan == "Solo")
         {
-            mrv::App::supports_annotations = true;
-            mrv::App::supports_editing = false;
-            mrv::App::supports_layers = true;
-            mrv::App::supports_python = false;
-            mrv::App::supports_saving = true;
-            mrv::App::supports_voice = false;
+            mrv::App::soporta_annotations = true;
+            mrv::App::soporta_editing = false;
+            mrv::App::soporta_layers = true;
+            mrv::App::soporta_python = false;
+            mrv::App::soporta_saving = true;
+            mrv::App::soporta_voice = false;
         }
         else if (plan == "Demo")
         {
-            mrv::App::supports_annotations = false;
-            mrv::App::supports_editing = false;
-            mrv::App::supports_layers = true;
-            mrv::App::supports_python = false;
-            mrv::App::supports_saving = true;
-            mrv::App::supports_voice = false;
+            mrv::App::soporta_annotations = false;
+            mrv::App::soporta_editing = false;
+            mrv::App::soporta_layers = true;
+            mrv::App::soporta_python = false;
+            mrv::App::soporta_saving = true;
+            mrv::App::soporta_voice = false;
         }
         else
         {
             // Unknown license plan
-            mrv::App::supports_annotations = false;
-            mrv::App::supports_editing = false;
-            mrv::App::supports_layers = true;
-            mrv::App::supports_python = false;
-            mrv::App::supports_saving = true;
-            mrv::App::supports_voice = false;
+            mrv::App::soporta_annotations = false;
+            mrv::App::soporta_editing = false;
+            mrv::App::soporta_layers = true;
+            mrv::App::soporta_python = false;
+            mrv::App::soporta_saving = true;
+            mrv::App::soporta_voice = false;
             
             const std::string msg =
                 tl::string::Format(_("Unknown licese plan '{0}'")).arg(plan);
@@ -220,15 +220,15 @@ namespace
         }
         std::string msg = tl::string::Format(_("License plan '{0}'")).arg(plan);
         LOG_STATUS(msg);
-        msg = tl::string::Format(_("Supports annotations '{0}'")).arg(mrv::App::supports_annotations);
+        msg = tl::string::Format(_("Supports annotations '{0}'")).arg(mrv::App::soporta_annotations);
         LOG_INFO(msg);
-        msg = tl::string::Format(_("Supports editing '{0}'")).arg(mrv::App::supports_editing);
+        msg = tl::string::Format(_("Supports editing '{0}'")).arg(mrv::App::soporta_editing);
         LOG_INFO(msg);
-        msg = tl::string::Format(_("Supports layers '{0}'")).arg(mrv::App::supports_layers);
+        msg = tl::string::Format(_("Supports layers '{0}'")).arg(mrv::App::soporta_layers);
         LOG_INFO(msg);
-        msg = tl::string::Format(_("Supports python '{0}'")).arg(mrv::App::supports_python);
+        msg = tl::string::Format(_("Supports python '{0}'")).arg(mrv::App::soporta_python);
         LOG_INFO(msg);
-        msg = tl::string::Format(_("Supports voice annotations '{0}'")).arg(mrv::App::supports_voice);
+        msg = tl::string::Format(_("Supports voice annotations '{0}'")).arg(mrv::App::soporta_voice);
         LOG_INFO(msg);
     }
 }

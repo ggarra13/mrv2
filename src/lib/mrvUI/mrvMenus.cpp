@@ -120,7 +120,7 @@ namespace mrv
 
         auto player = ui->uiView->getTimelinePlayer();
 
-        if (App::supports_saving)
+        if (App::soporta_saving)
         {
             menu->add(
                 _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
@@ -1167,7 +1167,7 @@ namespace mrv
         const auto& itemOptions = ui->uiTimeline->getItemOptions();
         const auto& displayOptions = ui->uiTimeline->getDisplayOptions();
             
-        if (App::supports_editing)
+        if (App::soporta_editing)
         {
             idx = menu->add(
                 _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
@@ -1456,7 +1456,7 @@ namespace mrv
                 }
             }
 
-            if (App::supports_editing)
+            if (App::soporta_editing)
             {
                 menu->add(
                     _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),

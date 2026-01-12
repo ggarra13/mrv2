@@ -258,20 +258,7 @@ namespace mrv
 
     ViewerUI* App::ui = nullptr;
     App* App::app = nullptr;
-    bool App::demo_mode = true;
-    bool App::force_demo = false;
 
-    std::string App::session_id = "";
-    LicenseType App::license_type = LicenseType::kDemo;
-
-    bool App::supports_saving = true;   // DJV supports saving
-    bool App::supports_layers = true;   // DJV supports layers
-    bool App::supports_annotations = false;
-    bool App::supports_editing = false;
-    bool App::supports_hdr = true;
-    bool App::supports_python = false;
-    bool App::supports_voice = false;
-    
     bool App::unsaved_annotations = false;
     bool App::unsaved_edits = false;
 
@@ -994,7 +981,7 @@ namespace mrv
         bool showUI = true;
 
 #ifdef MRV2_PYBIND11
-        if (App::supports_python && !p.options.pythonScript.empty())
+        if (App::soporta_python && !p.options.pythonScript.empty())
         {
             showUI = false;
         }
@@ -1159,7 +1146,7 @@ namespace mrv
         }
 
 #ifdef MRV2_PYBIND11
-        if (!p.options.noPython && App::supports_python)
+        if (!p.options.noPython && App::soporta_python)
         {
             // Import the mrv2 python module so we read all python
             // plug-ins.

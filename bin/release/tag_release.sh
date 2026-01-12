@@ -3,6 +3,8 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+set -e
+
 . ./etc/functions.sh
 
 #
@@ -21,84 +23,71 @@ extract_version
 # SOME DEFINES
 #
 export GIT_EXECUTABLE=git
-
-
-add_local_tag()
-{
-    tag=$1
-    export has_tag=`${GIT_EXECUTABLE} tag -l | grep "${tag}"`
-    if [[ $has_tag != "" ]]; then
-	#
-	# Delete local tag if available
-	#
-	echo "Remove local tag '${tag}'"
-	${GIT_EXECUTABLE} tag -d "${tag}"
-    fi
-    
-    #
-    # Mark current repository with a new tag
-    #
-    ${GIT_EXECUTABLE} tag "${tag}"
-}
-
-add_remote_tag()
-{
-    input='y'
-    export has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep "${tag}"`
-    echo "has_tag? $has_tag"
-    if [[ $has_tag != "" ]]; then
-        echo "-------------------------------------------------------"
-        echo "  WARNING! Tag '${tag}' already in remote repository."
-        echo ""
-        echo "Are you sure you want to continue? (y/n)"
-        read input
-        if [[ $input != y* && $input != Y* ]]; then
-	    exit 1
-        fi
-
-        #
-        # Delete remote tag if available
-        #
-        echo "Remove remote tag ${tag}"
-        ${GIT_EXECUTABLE} push --delete origin "${tag}"
-    else
-        echo "Tag '${tag}' does not exist in remote"
-        echo ""
-        echo "Are you sure you want to continue? (y/n)"
-        read input
-        if [[ $input != y* && $input != Y* ]]; then
-	    exit 1
-        fi
-    fi
-
-    #
-    # Send new tag to repository
-    #
-    echo "Create remote tag ${tag}"
-    ${GIT_EXECUTABLE} push origin "${tag}"
-}
-
-#
-# Prepare the git repository for release
-#
-
-#
-# Pull last changes
-#
 export tag="v${mrv2_VERSION}"
+export release_branch="release/${mrv2_VERSION}"
+
+# ---------------------------------------------
+# Sanity checks
+# ---------------------------------------------
+if ! ${GIT_EXECUTABLE} diff --quiet; then
+    echo "ERROR: Working tree is dirty. Commit or stash changes first."
+    exit 1
+fi
+
+# ---------------------------------------------
+# Find previous release tag (if any)
+# ---------------------------------------------
+prev_tag=$(${GIT_EXECUTABLE} tag --sort=-version:refname | grep '^v' | head -n 1)
 
 echo "--------------------------------"
-echo "  Will release local ${tag} in mrv2"
+echo " Preparing release ${tag}"
+echo " Release branch: ${release_branch}"
+echo " Previous tag: ${prev_tag:-<none>}"
 echo "--------------------------------"
 
-add_local_tag $tag
+# ---------------------------------------------
+# Create release branch from current HEAD
+# ---------------------------------------------
+if ${GIT_EXECUTABLE} show-ref --verify --quiet refs/heads/${release_branch}; then
+    echo "ERROR: Release branch ${release_branch} already exists."
+    exit 1
+fi
 
-echo "---------------------------------------"
-echo "  Will release remote ${tag} in mrv2"
-echo "---------------------------------------"
+${GIT_EXECUTABLE} checkout -b "${release_branch}"
 
-add_remote_tag $tag
+# ---------------------------------------------
+# Squash commits since previous release
+# ---------------------------------------------
+if [[ -n "${prev_tag}" ]]; then
+    echo "Squashing commits since ${prev_tag}"
+    ${GIT_EXECUTABLE} reset --soft "${prev_tag}"
+else
+    echo "No previous tag found — initial release"
+fi
 
-cd ..
+${GIT_EXECUTABLE} commit -m "Release ${mrv2_VERSION}"
 
+# ---------------------------------------------
+# Tag the release (local)
+# ---------------------------------------------
+if ${GIT_EXECUTABLE} rev-parse "${tag}" >/dev/null 2>&1; then
+    echo "Removing existing local tag ${tag}"
+    ${GIT_EXECUTABLE} tag -d "${tag}"
+fi
+
+${GIT_EXECUTABLE} tag -a "${tag}" -m "mrv2 ${mrv2_VERSION}"
+
+# ---------------------------------------------
+# Push release branch + tag
+# ---------------------------------------------
+echo "--------------------------------"
+echo " Pushing ${release_branch} and ${tag}"
+echo "--------------------------------"
+
+${GIT_EXECUTABLE} push origin "${release_branch}"
+${GIT_EXECUTABLE} push origin "${tag}"
+
+echo "--------------------------------"
+echo " Release ${tag} complete"
+echo "--------------------------------"
 

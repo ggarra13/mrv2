@@ -188,13 +188,13 @@ namespace mrv
         static bool demo_mode;
         static bool force_demo;
 
-        static bool supports_annotations;
-        static bool supports_layers;
-        static bool supports_editing;
-        static bool supports_hdr;
-        static bool supports_python;
-        static bool supports_saving;
-        static bool supports_voice;
+        static bool soporta_annotations;
+        static bool soporta_layers;
+        static bool soporta_editing;
+        static bool soporta_hdr;
+        static bool soporta_python;
+        static bool soporta_saving;
+        static bool soporta_voice;
 
         static std::string session_id;
         static LicenseType license_type;
