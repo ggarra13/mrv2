@@ -23,6 +23,9 @@ namespace mrv
     public:
         StatusBar(int X, int Y, int W, int H, const char* L = 0);
 
+        //! Handle event (for opening Log panel when clicked on it)
+        int handle(int event) override;
+        
         void timeout(float seconds);
 
         //! Save the current color scheme of the widget.  Used at creation
