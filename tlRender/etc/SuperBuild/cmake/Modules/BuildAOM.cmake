@@ -15,7 +15,7 @@ list(APPEND AOM_ARGS
     -DENABLE_TOOLS=OFF
 )
 if (WIN32)
-    if ($ENV{ARCH} MATCHES ".*aarch64.*")
+    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
 	list(APPEND AOM_ARGS
 	    -DAOM_TARGET_CPU=generic)
     else()

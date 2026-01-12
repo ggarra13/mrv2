@@ -532,7 +532,7 @@ if(FFmpeg_DEBUG)
         --assert-level=2)
 endif()
 if(WIN32)
-    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
 	list(APPEND FFmpeg_CONFIGURE_ARGS
             --enable-asm
 
