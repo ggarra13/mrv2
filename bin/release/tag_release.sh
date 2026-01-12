@@ -84,8 +84,8 @@ echo "--------------------------------"
 echo " Pushing ${release_branch} and ${tag}"
 echo "--------------------------------"
 
-${GIT_EXECUTABLE} push origin "${release_branch}"
-${GIT_EXECUTABLE} push origin "${tag}"
+${GIT_EXECUTABLE} push --force origin "${release_branch}"
+${GIT_EXECUTABLE} push --force origin "${tag}"
 
 echo "--------------------------------"
 echo " Release ${tag} complete"

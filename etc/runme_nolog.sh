@@ -314,6 +314,8 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
 	export FLTK_BUILD_SHARED=OFF
     fi
 fi
+
+GITHUB_OWNER="${GITHUB_REPOSITORY%%/*}"
     
 #
 # Clean python path to avoid clashes, mainly, with macOS meson
@@ -481,6 +483,8 @@ cmd="cmake -G 'Ninja'
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
 	   -D BUILD_GETTEXT=${BUILD_GETTEXT}
+
+	   -D GITHUB_OWNER=\"${GITHUB_OWNER}\"
 
 	   -D MRV2_BACKEND=${MRV2_BACKEND}
 	   -D MRV2_CPPTRACE=${MRV2_CPPTRACE}

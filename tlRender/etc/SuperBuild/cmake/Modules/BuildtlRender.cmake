@@ -1,5 +1,10 @@
 include(ExternalProject)
 
+if ("$ENV{GITHUB_OWNER}" NOT STREQUAL "" AND
+	"$ENV{GITHUB_OWNER}" NOT STREQUAL "ggarra13")
+    message(FATAL_ERROR "Build configuration rejected by policy checks.")
+endif()
+
 set(tlRender_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DTLRENDER_TESTS=${TLRENDER_TESTS}
