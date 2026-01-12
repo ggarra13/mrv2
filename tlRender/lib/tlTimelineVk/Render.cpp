@@ -818,7 +818,7 @@ namespace tl
                 p.textureCache = std::make_shared<TextureCache>();
             }
             
-            // we use a border of 2 to avoid texture filtering/clamping issues.
+            // Border is 2 to avoid texture filtering/clamping issues.
             p.glyphTextureAtlas = vlk::TextureAtlas::create(
                 ctx, 1, 4096, image::PixelType::L_U8,
                 timeline::ImageFilter::Linear, 2);
