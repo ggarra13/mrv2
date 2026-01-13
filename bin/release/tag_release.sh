@@ -54,8 +54,8 @@ ${GIT_EXECUTABLE} tag -a "${tag}" -m "mrv2 ${mrv2_VERSION}"
 # 4. Push Main and Tag
 # ---------------------------------------------
 echo "Pushing ${main_branch} and ${tag} to origin..."
-${GIT_EXECUTABLE} push origin "${main_branch}"
-${GIT_EXECUTABLE} push origin "${tag}"
+${GIT_EXECUTABLE} push origin "${main_branch}" --force-with-lease
+${GIT_EXECUTABLE} push origin "${tag}" --force
 
 # ---------------------------------------------
 # 5. Synchronize "peace" branch (The Reset)
