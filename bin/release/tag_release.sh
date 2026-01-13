@@ -1,71 +1,77 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 release script
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
 
-set -euo pipefail
-
-DEV_BRANCH="peace"
-MAIN_BRANCH="main"
+set -e
 
 . ./etc/functions.sh
+
 extract_version
 
-TAG="v${mrv2_VERSION}"
+# DEFINES
+export GIT_EXECUTABLE=git
+export tag="v${mrv2_VERSION}"
+export source_branch="peace"
+export main_branch="main"
 
 # ---------------------------------------------
-# Safety checks
+# 1. Sanity checks
 # ---------------------------------------------
-current_branch=$(git symbolic-ref --short HEAD)
-
-if [[ "${current_branch}" != "${DEV_BRANCH}" ]]; then
-    echo "ERROR: You must run this script from '${DEV_BRANCH}'."
+if ! ${GIT_EXECUTABLE} diff --quiet; then
+    echo "ERROR: Working tree is dirty. Commit or stash changes first."
     exit 1
 fi
 
-if ! git diff --quiet; then
-    echo "ERROR: Working tree is dirty."
-    exit 1
+# Ensure we have the latest from the server
+${GIT_EXECUTABLE} fetch origin
+
+# ---------------------------------------------
+# 2. Squash onto Main
+# ---------------------------------------------
+echo "Merging and squashing ${source_branch} onto ${main_branch}..."
+
+${GIT_EXECUTABLE} checkout "${main_branch}"
+${GIT_EXECUTABLE} pull origin "${main_branch}"
+
+# Stage all changes from peace as a single set of changes
+${GIT_EXECUTABLE} merge --squash "${source_branch}"
+
+# Create the single "Squashed" commit
+${GIT_EXECUTABLE} commit -m "Release ${mrv2_VERSION} (Squashed merge from ${source_branch})"
+
+# ---------------------------------------------
+# 3. Tagging
+# ---------------------------------------------
+if ${GIT_EXECUTABLE} rev-parse "${tag}" >/dev/null 2>&1; then
+    echo "Removing existing local tag ${tag}"
+    ${GIT_EXECUTABLE} tag -d "${tag}"
 fi
 
-# Ensure main has NOT been merged into
-if git merge-base --is-ancestor "${DEV_BRANCH}" "${MAIN_BRANCH}" 2>/dev/null; then
-    echo "ERROR: ${MAIN_BRANCH} contains ${DEV_BRANCH} history."
-    echo "This breaks the release model. Aborting."
-    exit 1
-fi
+${GIT_EXECUTABLE} tag -a "${tag}" -m "mrv2 ${mrv2_VERSION}"
 
 # ---------------------------------------------
-# Determine previous release tag
+# 4. Push Main and Tag
 # ---------------------------------------------
-PREV_TAG=$(git tag --sort=-version:refname | grep '^v' | head -n 1 || true)
-
-echo "--------------------------------"
-echo " Releasing ${TAG}"
-echo " From branch ${DEV_BRANCH}"
-echo " Previous tag: ${PREV_TAG:-<none>}"
-echo "--------------------------------"
+echo "Pushing ${main_branch} and ${tag} to origin..."
+${GIT_EXECUTABLE} push origin "${main_branch}"
+${GIT_EXECUTABLE} push origin "${tag}"
 
 # ---------------------------------------------
-# Create snapshot on main
+# 5. Synchronize "peace" branch (The Reset)
 # ---------------------------------------------
-git checkout "${MAIN_BRANCH}" 2>/dev/null || git checkout -b "${MAIN_BRANCH}"
+echo "Synchronizing ${source_branch} with ${main_branch}..."
 
-git reset --soft "${PREV_TAG:-HEAD}"
-git commit -m "Release ${mrv2_VERSION}"
+${GIT_EXECUTABLE} checkout "${source_branch}"
 
-git tag -a "${TAG}" -m "mrv2 ${mrv2_VERSION}"
+# This makes 'peace' identical to 'main', effectively "clearing" 
+# the history that was just squashed.
+${GIT_EXECUTABLE} reset --hard "${main_branch}"
 
-# ---------------------------------------------
-# Push snapshot + tag
-# ---------------------------------------------
-git push -f origin "${MAIN_BRANCH}"
-git push -f origin "${TAG}"
-
-# ---------------------------------------------
-# Return to dev branch
-# ---------------------------------------------
-git checkout "${DEV_BRANCH}"
+# Force push the reset to the remote so others see the synchronized state
+${GIT_EXECUTABLE} push --force origin "${source_branch}"
 
 echo "--------------------------------"
-echo " Release ${TAG} completed"
+echo " Release ${tag} complete."
+echo " ${main_branch} is updated and ${source_branch} is synchronized."
 echo "--------------------------------"
