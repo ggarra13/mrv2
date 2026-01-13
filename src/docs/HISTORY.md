@@ -54,9 +54,11 @@ ChangeLog
 - Made installer's smaller on Windows by getting rid of .pdb files.
 - Made creating package installers on Windows faster.
 - Fixed a regresion on FLTK Windows resizing.
-- Consolidated tltimelineui for both Vulkan and OpenGL under a single code base.- Refactored all Options classes in mrvNetwork to mrvOptions.
+- Consolidated tltimelineui for both Vulkan and OpenGL under a single code base.
+- Refactored all Options classes in mrvNetwork to mrvOptions.
 - Made clicking twice on the Status Bar bring up the Logs panel to the front.
 - Fixed fonts on Vulkan backend showing some garbage at the edges.
+- Fixed Edit->Audio Gap->Insert.
 
 
 v1.5.1
