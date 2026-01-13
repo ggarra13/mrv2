@@ -818,7 +818,6 @@ namespace tl
                 p.textureCache = std::make_shared<TextureCache>();
             }
             
-            // Border is 4 to avoid texture filtering/clamping issues.
             p.glyphTextureAtlas = vlk::TextureAtlas::create(
                 ctx, 1, 4096, image::PixelType::L_U8,
                 timeline::ImageFilter::Linear);
