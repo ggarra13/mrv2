@@ -57,20 +57,6 @@ echo "Pushing ${main_branch} and ${tag} to origin..."
 ${GIT_EXECUTABLE} push origin "${main_branch}" --force-with-lease
 ${GIT_EXECUTABLE} push origin "${tag}" --force
 
-# ---------------------------------------------
-# 5. Synchronize "peace" branch (The Reset)
-# ---------------------------------------------
-echo "Synchronizing ${source_branch} with ${main_branch}..."
-
-${GIT_EXECUTABLE} checkout "${source_branch}"
-
-# This makes 'peace' identical to 'main', effectively "clearing" 
-# the history that was just squashed.
-${GIT_EXECUTABLE} reset --hard "${main_branch}"
-
-# Force push the reset to the remote so others see the synchronized state
-${GIT_EXECUTABLE} push --force origin "${source_branch}"
-
 echo "--------------------------------"
 echo " Release ${tag} complete."
 echo " ${main_branch} is updated and ${source_branch} is synchronized."
