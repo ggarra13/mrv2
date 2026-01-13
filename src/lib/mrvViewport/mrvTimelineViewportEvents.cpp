@@ -1306,12 +1306,14 @@ namespace mrv
                             {
                                 found = true;
                                 
-                                int X = Fl::event_x_root() - p.ui->uiMain->x_root();
-                                int Y = Fl::event_y_root() - p.ui->uiMain->y_root();
+                                // int X = Fl::event_x_root() - p.ui->uiMain->x_root();
+                                // int Y = Fl::event_y_root() - p.ui->uiMain->y_root();
+                                int X = Fl::event_x_root();
+                                int Y = Fl::event_y_root();
                                     
                                 if (!p.tooltip)
                                 {
-                                    Fl_Group::current(p.ui->uiMain);
+                                    Fl_Group::current(0);
                                     p.tooltip = new Tooltip(X, Y, 120, 40);
                                 }
 

@@ -58,6 +58,7 @@ ChangeLog
 - Made clicking twice on the Status Bar bring up the Logs panel to the front.
 - Fixed fonts on Vulkan backend showing some garbage at the edges.
 - Fixed Edit/Audio Gap/Insert.
+- Fixed tooltip showing the title of Link Annotations on Windows.
 
 
 v1.5.1
