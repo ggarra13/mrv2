@@ -178,6 +178,13 @@ namespace mrv
         int kf_copy_cut();
         int kf_paste();
         void to_cursor();
+        int handle_insert(const char* new_text, int len, int del);
+        int handle_delete();
+        int handle_backspace();
+        int handle_move_up();
+        int handle_move_down();
+        int handle_move_right();
+        int handle_move_left();
         unsigned line_start(unsigned utf8);
         unsigned line_end(unsigned utf8);
         unsigned current_line();
