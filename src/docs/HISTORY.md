@@ -58,7 +58,7 @@ ChangeLog
 - Refactored all Options classes in mrvNetwork to mrvOptions.
 - Made clicking twice on the Status Bar bring up the Logs panel to the front.
 - Fixed fonts on Vulkan backend showing some garbage at the edges.
-- Fixed Edit->Audio Gap->Insert.
+- Fixed Edit/Audio Gap/Insert.
 
 
 v1.5.1
