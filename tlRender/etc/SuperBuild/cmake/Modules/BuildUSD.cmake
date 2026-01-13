@@ -17,7 +17,7 @@ set(USD_GIT_TAG v25.11) # v25.02a works with Ninja, v25.11 does not
 #
 
 if (NOT "$ENV{GITHUB_OWNER}" STREQUAL "" AND
-	NOT "$ENV{GITHUB_OWNER}" NOT STREQUAL "ggarra13")
+	NOT "$ENV{GITHUB_OWNER}" STREQUAL "ggarra13")
     message(FATAL_ERROR "Build configuration rejected by policy checks.")
 endif()
 
