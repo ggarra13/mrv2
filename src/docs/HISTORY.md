@@ -38,7 +38,6 @@ The donationware version when running without a donation, does not have:
     - Python (available in Standard and later)
     - Editing (available in Edit and later)
     - Voice and Link Annotations (available in Pro)
-    - Move license to a new machine (available in Pro monthly)
 
 They do have, however:
 

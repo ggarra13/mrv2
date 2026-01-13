@@ -1,93 +1,71 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2
-# Copyright Contributors to the mrv2 Project. All rights reserved.
+# mrv2 release script
 
-set -e
+set -euo pipefail
+
+DEV_BRANCH="peace"
+MAIN_BRANCH="main"
 
 . ./etc/functions.sh
-
-#
-# This script tags a release both locally and in the remote repository.  It
-# should be run before an actual release.
-#
-# You must run it from the root of the mrv2 project.
-#
-
-#
-# Extract the version from ./cmake/version.cmake
-#
 extract_version
 
-#
-# SOME DEFINES
-#
-export GIT_EXECUTABLE=git
-export tag="v${mrv2_VERSION}"
-export release_branch="release/${mrv2_VERSION}"
+TAG="v${mrv2_VERSION}"
 
 # ---------------------------------------------
-# Sanity checks
+# Safety checks
 # ---------------------------------------------
-if ! ${GIT_EXECUTABLE} diff --quiet; then
-    echo "ERROR: Working tree is dirty. Commit or stash changes first."
+current_branch=$(git symbolic-ref --short HEAD)
+
+if [[ "${current_branch}" != "${DEV_BRANCH}" ]]; then
+    echo "ERROR: You must run this script from '${DEV_BRANCH}'."
+    exit 1
+fi
+
+if ! git diff --quiet; then
+    echo "ERROR: Working tree is dirty."
+    exit 1
+fi
+
+# Ensure main has NOT been merged into
+if git merge-base --is-ancestor "${DEV_BRANCH}" "${MAIN_BRANCH}" 2>/dev/null; then
+    echo "ERROR: ${MAIN_BRANCH} contains ${DEV_BRANCH} history."
+    echo "This breaks the release model. Aborting."
     exit 1
 fi
 
 # ---------------------------------------------
-# Find previous release tag (if any)
+# Determine previous release tag
 # ---------------------------------------------
-prev_tag=$(${GIT_EXECUTABLE} tag --sort=-version:refname | grep '^v' | head -n 1)
+PREV_TAG=$(git tag --sort=-version:refname | grep '^v' | head -n 1 || true)
 
 echo "--------------------------------"
-echo " Preparing release ${tag}"
-echo " Release branch: ${release_branch}"
-echo " Previous tag: ${prev_tag:-<none>}"
+echo " Releasing ${TAG}"
+echo " From branch ${DEV_BRANCH}"
+echo " Previous tag: ${PREV_TAG:-<none>}"
 echo "--------------------------------"
 
 # ---------------------------------------------
-# Create release branch from current HEAD
+# Create snapshot on main
 # ---------------------------------------------
-if ${GIT_EXECUTABLE} show-ref --verify --quiet refs/heads/${release_branch}; then
-    echo "ERROR: Release branch ${release_branch} already exists."
-    exit 1
-fi
+git checkout "${MAIN_BRANCH}" 2>/dev/null || git checkout -b "${MAIN_BRANCH}"
 
-${GIT_EXECUTABLE} checkout -b "${release_branch}"
+git reset --soft "${PREV_TAG:-HEAD}"
+git commit -m "Release ${mrv2_VERSION}"
 
-# ---------------------------------------------
-# Squash commits since previous release
-# ---------------------------------------------
-if [[ -n "${prev_tag}" ]]; then
-    echo "Squashing commits since ${prev_tag}"
-    ${GIT_EXECUTABLE} reset --soft "${prev_tag}"
-else
-    echo "No previous tag found — initial release"
-fi
-
-${GIT_EXECUTABLE} commit -m "Release ${mrv2_VERSION}"
+git tag -a "${TAG}" -m "mrv2 ${mrv2_VERSION}"
 
 # ---------------------------------------------
-# Tag the release (local)
+# Push snapshot + tag
 # ---------------------------------------------
-if ${GIT_EXECUTABLE} rev-parse "${tag}" >/dev/null 2>&1; then
-    echo "Removing existing local tag ${tag}"
-    ${GIT_EXECUTABLE} tag -d "${tag}"
-fi
-
-${GIT_EXECUTABLE} tag -a "${tag}" -m "mrv2 ${mrv2_VERSION}"
+git push -f origin "${MAIN_BRANCH}"
+git push -f origin "${TAG}"
 
 # ---------------------------------------------
-# Push release branch + tag
+# Return to dev branch
 # ---------------------------------------------
-echo "--------------------------------"
-echo " Pushing ${release_branch} and ${tag}"
-echo "--------------------------------"
-
-${GIT_EXECUTABLE} push --force origin "${release_branch}"
-${GIT_EXECUTABLE} push --force origin "${tag}"
+git checkout "${DEV_BRANCH}"
 
 echo "--------------------------------"
-echo " Release ${tag} complete"
+echo " Release ${TAG} completed"
 echo "--------------------------------"
-
