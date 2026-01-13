@@ -20,6 +20,8 @@
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvLaserFadeData.h"
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvViewport/mrvTimelineViewport.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
@@ -1305,16 +1307,25 @@ namespace mrv
                             if (box.contains(pos))
                             {
                                 found = true;
+
+                                int X, Y;
                                 
-                                // int X = Fl::event_x_root() - p.ui->uiMain->x_root();
-                                // int Y = Fl::event_y_root() - p.ui->uiMain->y_root();
-                                int X = Fl::event_x_root();
-                                int Y = Fl::event_y_root();
+                                X = Fl::event_x_root(); 
+                                Y = Fl::event_y_root();
+
+                                if (desktop::Wayland())
+                                {
+                                    X -= p.ui->uiMain->x_root();
+                                    Y -= p.ui->uiMain->y_root();
+                                }
                                     
                                 if (!p.tooltip)
                                 {
-                                    Fl_Group::current(0);
-                                    p.tooltip = new Tooltip(X, Y, 120, 40);
+                                    if (desktop::Wayland())
+                                        Fl_Group::current(p.ui->uiMain);
+                                    else
+                                        Fl_Group::current(0);
+                                    p.tooltip = new Tooltip(X, Y, 160, 40);
                                 }
 
                                 p.tooltip->position(X, Y);
