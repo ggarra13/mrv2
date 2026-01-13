@@ -140,13 +140,6 @@ namespace mrv
             return timeline;
         }
 
-        // \@todo: darby needs to provide this from timelineUI
-        std::vector<Item*> getSelectedItems()
-        {
-            std::vector<Item*> out;
-            return out;
-        }
-
         int getIndex(const otio::Composable* composable)
         {
             auto parent = composable->parent();
@@ -1509,6 +1502,7 @@ namespace mrv
             if (track->kind() != otio::Track::Kind::audio)
                 continue;
 
+
             auto sampleRate = track->trimmed_range().duration().rate();
 
             auto rangeInTrack = otime::TimeRange(
@@ -1519,18 +1513,15 @@ namespace mrv
                 track->child_at_time(time, &errorStatus));
 
             if (audioItem)
-            {
+            {            
                 auto audioRange = audioItem->trimmed_range_in_parent().value();
                 if (audioRange == rangeInTrack &&
                     otio::dynamic_retainer_cast<otio::Gap>(audioItem))
                     continue;
-
-                if (audioRange == rangeInTrack)
-                    continue;
             }
 
             modified = true;
-
+            
             int audioIndex = track->index_of_child(audioItem);
             auto audioClipRange = otime::TimeRange(
                 itemRange.start_time().rescaled_to(sampleRate),
@@ -1588,6 +1579,9 @@ namespace mrv
 
         edit_store_undo(player, ui);
 
+        auto selected = ui->uiTimeline->getSelectedItems();
+
+        
         bool modified = false;
         otio::ErrorStatus errorStatus;
         for (auto composition : compositions)
@@ -1605,10 +1599,26 @@ namespace mrv
             if (!clip)
                 continue;
 
+            if (!selected.empty())
+            {
+                bool found = false;
+                for (auto& item : selected)
+                {
+                    if (item == otio::dynamic_retainer_cast<Item>(clip))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) continue;
+            }
+
+
             int clipIndex = track->index_of_child(clip);
             if (clipIndex < 0 || clipIndex >= track->children().size())
                 continue;
-
+            
             modified = true;
             track->remove_child(clipIndex);
         }
@@ -1643,6 +1653,8 @@ namespace mrv
 
         edit_store_undo(player, ui);
 
+        auto selected = ui->uiTimeline->getSelectedItems();
+
         bool modified = false;
         otio::ErrorStatus errorStatus;
         for (auto composition : compositions)
@@ -1660,6 +1672,21 @@ namespace mrv
             if (!gap)
                 continue;
 
+            if (!selected.empty())
+            {
+                bool found = false;
+                for (auto& item : selected)
+                {
+                    if (item == otio::dynamic_retainer_cast<Item>(gap))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) continue;
+            }
+            
             int gapIndex = track->index_of_child(gap);
             if (gapIndex < 0 || gapIndex >= track->children().size())
                 continue;
@@ -1816,6 +1843,8 @@ namespace mrv
 
         edit_store_undo(player, ui);
 
+        auto selected = ui->uiTimeline->getSelectedItems();
+        
         bool modified = false;
         otio::ErrorStatus errorStatus;
         for (auto composition : compositions)
@@ -1837,6 +1866,22 @@ namespace mrv
             if (gapIndex < 0 || gapIndex >= track->children().size())
                 continue;
 
+
+            if (!selected.empty())
+            {
+                bool found = false;
+                for (auto& item : selected)
+                {
+                    if (item == otio::dynamic_retainer_cast<Item>(gap))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) continue;
+            }
+            
             modified = true;
             track->remove_child(gapIndex);
         }
@@ -1916,6 +1961,7 @@ namespace mrv
             new otio::Transition("", "SMPTE_Dissolve", in_offset, out_offset);
         track->insert_child(left_index + 1, transition);
     }
+
     
     void edit_add_transition_cb(Fl_Menu_* m, ViewerUI* ui)
     {

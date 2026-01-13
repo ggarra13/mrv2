@@ -7,68 +7,41 @@ set -e
 
 . ./etc/functions.sh
 
-#
-# This script tags a release both locally and in the remote repository.  It
-# should be run before an actual release.
-#
-# You must run it from the root of the mrv2 project.
-#
-
-#
-# Extract the version from ./cmake/version.cmake
-#
 extract_version
 
-#
-# SOME DEFINES
-#
+# DEFINES
 export GIT_EXECUTABLE=git
 export tag="v${mrv2_VERSION}"
-export release_branch="release/${mrv2_VERSION}"
+export source_branch="peace"
+export main_branch="main"
 
 # ---------------------------------------------
-# Sanity checks
+# 1. Sanity checks
 # ---------------------------------------------
 if ! ${GIT_EXECUTABLE} diff --quiet; then
     echo "ERROR: Working tree is dirty. Commit or stash changes first."
     exit 1
 fi
 
-# ---------------------------------------------
-# Find previous release tag (if any)
-# ---------------------------------------------
-prev_tag=$(${GIT_EXECUTABLE} tag --sort=-version:refname | grep '^v' | head -n 1)
-
-echo "--------------------------------"
-echo " Preparing release ${tag}"
-echo " Release branch: ${release_branch}"
-echo " Previous tag: ${prev_tag:-<none>}"
-echo "--------------------------------"
+# Ensure we have the latest from the server
+${GIT_EXECUTABLE} fetch origin
 
 # ---------------------------------------------
-# Create release branch from current HEAD
+# 2. Squash onto Main
 # ---------------------------------------------
-if ${GIT_EXECUTABLE} show-ref --verify --quiet refs/heads/${release_branch}; then
-    echo "ERROR: Release branch ${release_branch} already exists."
-    exit 1
-fi
+echo "Merging and squashing ${source_branch} onto ${main_branch}..."
 
-${GIT_EXECUTABLE} checkout -b "${release_branch}"
+${GIT_EXECUTABLE} checkout "${main_branch}"
+${GIT_EXECUTABLE} pull origin "${main_branch}"
 
-# ---------------------------------------------
-# Squash commits since previous release
-# ---------------------------------------------
-if [[ -n "${prev_tag}" ]]; then
-    echo "Squashing commits since ${prev_tag}"
-    ${GIT_EXECUTABLE} reset --soft "${prev_tag}"
-else
-    echo "No previous tag found — initial release"
-fi
+# Stage all changes from peace as a single set of changes
+${GIT_EXECUTABLE} merge --squash "${source_branch}"
 
-${GIT_EXECUTABLE} commit -m "Release ${mrv2_VERSION}"
+# Create the single "Squashed" commit
+${GIT_EXECUTABLE} commit -m "Release ${mrv2_VERSION} (Squashed merge from ${source_branch})"
 
 # ---------------------------------------------
-# Tag the release (local)
+# 3. Tagging
 # ---------------------------------------------
 if ${GIT_EXECUTABLE} rev-parse "${tag}" >/dev/null 2>&1; then
     echo "Removing existing local tag ${tag}"
@@ -78,16 +51,27 @@ fi
 ${GIT_EXECUTABLE} tag -a "${tag}" -m "mrv2 ${mrv2_VERSION}"
 
 # ---------------------------------------------
-# Push release branch + tag
+# 4. Push Main and Tag
 # ---------------------------------------------
-echo "--------------------------------"
-echo " Pushing ${release_branch} and ${tag}"
-echo "--------------------------------"
+echo "Pushing ${main_branch} and ${tag} to origin..."
+${GIT_EXECUTABLE} push origin "${main_branch}"
+${GIT_EXECUTABLE} push origin "${tag}"
 
-${GIT_EXECUTABLE} push --force origin "${release_branch}"
-${GIT_EXECUTABLE} push --force origin "${tag}"
+# ---------------------------------------------
+# 5. Synchronize "peace" branch (The Reset)
+# ---------------------------------------------
+echo "Synchronizing ${source_branch} with ${main_branch}..."
+
+${GIT_EXECUTABLE} checkout "${source_branch}"
+
+# This makes 'peace' identical to 'main', effectively "clearing" 
+# the history that was just squashed.
+${GIT_EXECUTABLE} reset --hard "${main_branch}"
+
+# Force push the reset to the remote so others see the synchronized state
+${GIT_EXECUTABLE} push --force origin "${source_branch}"
 
 echo "--------------------------------"
-echo " Release ${tag} complete"
+echo " Release ${tag} complete."
+echo " ${main_branch} is updated and ${source_branch} is synchronized."
 echo "--------------------------------"
-

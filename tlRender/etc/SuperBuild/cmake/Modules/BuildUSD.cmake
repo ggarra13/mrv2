@@ -16,8 +16,8 @@ set(USD_GIT_TAG v25.11) # v25.02a works with Ninja, v25.11 does not
 # to start with a fresh USD directory.
 #
 
-if ("$ENV{GITHUB_OWNER}" NOT STREQUAL "" AND
-	"$ENV{GITHUB_OWNER}" NOT STREQUAL "ggarra13")
+if (NOT "$ENV{GITHUB_OWNER}" STREQUAL "" AND
+	NOT "$ENV{GITHUB_OWNER}" STREQUAL "ggarra13")
     message(FATAL_ERROR "Build configuration rejected by policy checks.")
 endif()
 
