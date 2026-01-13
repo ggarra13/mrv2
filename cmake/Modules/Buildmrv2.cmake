@@ -4,8 +4,8 @@
 
 include(ExternalProject)
 
-if ("$ENV{GITHUB_OWNER}" NOT STREQUAL "" AND
-	"$ENV{GITHUB_OWNER}" NOT STREQUAL "ggarra13")
+if ( NOT "$ENV{GITHUB_OWNER}" STREQUAL "" AND
+	NOT "$ENV{GITHUB_OWNER}" STREQUAL "ggarra13")
     message(FATAL_ERROR "Build configuration rejected by policy checks.")
 endif()
 
