@@ -59,6 +59,8 @@ ChangeLog
 - Fixed fonts on Vulkan backend showing some garbage at the edges.
 - Fixed Edit/Audio Gap/Insert.
 - Fixed tooltip showing the title of Link Annotations on Windows.
+- Upgraded to OpenColorIO v2.5.1.
+- Upgraded to OpenEXR v3.4.4.
 
 
 v1.5.1
