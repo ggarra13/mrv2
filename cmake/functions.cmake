@@ -290,12 +290,6 @@ function(install_library_with_links LIBRARY)
         return()
     endif()
     
-    is_system_lib (${LIBRARY} sys_lib)
-    if ( ${sys_lib} EQUAL 1 )
-	message( STATUS "SKIPPED installing ${LIBRARY}" )
-	return()
-    endif()
-    
     file(INSTALL
 	DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
 	TYPE SHARED_LIBRARY
@@ -303,6 +297,7 @@ function(install_library_with_links LIBRARY)
 	FILES "${LIBRARY}"
     )
 
+    message(STATUS "Install ${LIBRARY} in ${CMAKE_INSTALL_PREFIX}")
     list(APPEND INSTALLED_LIBRARIES "${LIBRARY}")
     set(INSTALLED_LIBRARIES "${INSTALLED_LIBRARIES}" CACHE INTERNAL "List of installed libraries")
 
