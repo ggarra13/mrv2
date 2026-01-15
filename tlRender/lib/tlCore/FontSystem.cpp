@@ -445,32 +445,46 @@ namespace tl
                     
                     if (auto ftGlyphIndex = FT_Get_Char_Index(i->second, code))
                     {
-                        FT_UInt load_flags = 0;
+                        FT_UInt base_flags = 0;
+                        if (FT_IS_SCALABLE(i->second))
+                        {
+                            base_flags |= FT_LOAD_FORCE_AUTOHINT;
+                        }
+
+                        bool tried_color = false;
+                        FT_UInt load_flags = base_flags;
 
                         if (FT_HAS_COLOR(i->second))
                         {
                             load_flags |= FT_LOAD_COLOR;
+                            tried_color = true;
                         }
 
-                        if (FT_IS_SCALABLE(i->second))
+                        FT_Error ftError = FT_Load_Glyph(i->second, code,
+                                                         load_flags);
+
+                        if (ftError == FT_Err_Unimplemented_Feature &&
+                            tried_color)
                         {
-                            load_flags |= FT_LOAD_FORCE_AUTOHINT;
+                            // Fallback: retry without color (likely old FreeType + COLR font)
+                            load_flags = base_flags;  // remove FT_LOAD_COLOR
+                            ftError = FT_Load_Glyph(i->second, code, load_flags);
+                            // Do not retry further – accept any remaining error or proceed
                         }
-                        
-                        ftError = FT_Load_Glyph(i->second, ftGlyphIndex,
-                                                load_flags);
+
                         if (ftError)
                         {
-                            throw std::runtime_error("Cannot load glyph. "
-                                                     "Error:" +
-                                                     std::to_string(ftError));
+                            // Optional: only throw for severe errors, or return empty glyph
+                            // throw std::runtime_error("Cannot load glyph (error: " + std::to_string(ftError) + ")");
+                            return out;  // missing glyph
                         }
-                        FT_Render_Mode renderMode = FT_RENDER_MODE_NORMAL;
-                        uint8_t renderModeChannels = 1;
-                        ftError = FT_Render_Glyph(i->second->glyph, renderMode);
+
+                        // Proceed to FT_Render_Glyph as before (always call it)
+                        ftError = FT_Render_Glyph(i->second->glyph,
+                                                  FT_RENDER_MODE_NORMAL);
                         if (ftError)
                         {
-                            throw std::runtime_error("Cannot render glyph");
+                            return out;
                         }
                         
                         out = std::make_shared<Glyph>();
