@@ -74,8 +74,11 @@ namespace
         return utf8;
     }
     
-    FT_Error setFacePixelSize(FT_Face face, unsigned int size)
+    FT_Error setFacePixelSize(FT_Face face, unsigned int size,
+                              float& scale)
     {
+        scale = 1.F;
+        
         // If the font is scalable (TrueType/OpenType outlines), use the
         // requested size directly.
         if (FT_IS_SCALABLE(face))
@@ -107,20 +110,11 @@ namespace
                 {
                     minDiff = diff;
                     bestIndex = i;
+                    scale = static_cast<float>(size) / static_cast<float>(sizeToCompare);                                  
                 }
             }
-        
-            FT_Error err = FT_Select_Size(face, bestIndex);
-        
-            // Debug output to see what size was selected
-            if (!err)
-            {
-                std::cerr << "Selected bitmap size: " 
-                          << face->available_sizes[bestIndex].width << "x"
-                          << face->available_sizes[bestIndex].height 
-                          << " (requested: " << size << ")" << std::endl;
-            }
-        
+            
+            FT_Error err = FT_Select_Size(face, bestIndex);        
             return err;
         }
 
@@ -181,7 +175,7 @@ namespace tl
 #include <Fonts/NotoSans-Regular.font>
 #include <Fonts/NotoSans-Bold.font>
         } // namespace
-// Add this helper function to scale bitmaps
+
         std::shared_ptr<image::Image> scaleBitmap(
             const std::shared_ptr<image::Image>& source,
             int targetWidth, int targetHeight)
@@ -403,7 +397,8 @@ namespace tl
             const auto i = p.ftFaces.find(info.family);
             if (i != p.ftFaces.end())
             {
-                FT_Error ftError = setFacePixelSize(i->second, info.size);
+                float scale;
+                FT_Error ftError = setFacePixelSize(i->second, info.size, scale);
                 if (ftError)
                 {
                     _log("Cannot set font size for metrics", log::Type::Error);
@@ -480,8 +475,9 @@ namespace tl
                 const auto i = ftFaces.find(fontInfo.family);
                 if (i != ftFaces.end())
                 {
+                    float scale;
                     FT_Error ftError = setFacePixelSize(i->second,
-                                                        fontInfo.size);
+                                                        fontInfo.size, scale);
                     if (ftError)
                     {
                         throw std::runtime_error("setFacePixelSize failed");
@@ -631,7 +627,7 @@ namespace tl
         
                                 // Adjust metrics proportionally
                                 out->offset.x = static_cast<int>(out->offset.x * scale);
-                                out->offset.y = static_cast<int>(out->offset.y * scale);
+                                out->offset.y = static_cast<int>(actualHeight - out->offset.y * scale);
                                 out->advance = static_cast<int>(out->advance * scale);
                             }
                         }
@@ -665,8 +661,9 @@ namespace tl
             if (i != ftFaces.end())
             {
                 math::Vector2i pos;
+                float scale;
                 FT_Error ftError = setFacePixelSize(
-                    i->second, static_cast<int>(fontInfo.size));
+                    i->second, static_cast<int>(fontInfo.size), scale);
                 if (ftError)
                 {
                     throw std::runtime_error("Cannot set pixel sizes");
@@ -782,6 +779,24 @@ namespace tl
                               return (a.filename().string() <
                                       b.filename().string());
                       });
+            return out;
+        }
+
+        file::Path emojiFont()
+        {
+            file::Path out;
+            const auto& fonts = discoverSystemFonts();
+            for (const auto& font : fonts)
+            {
+                const std::string baseName = font.stem().string();
+                if (baseName == "NotoColorEmoji" ||
+                    baseName == "Apple Color Emoji" ||
+                    baseName == "seguiemj")
+                {
+                    out = file::Path(font.u8string());
+                    break;
+                }
+            }
             return out;
         }
 
