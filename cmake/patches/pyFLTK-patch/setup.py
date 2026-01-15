@@ -140,7 +140,7 @@ elif sys.platform == 'darwin':
         osx_arch = "ppc"
 
     compile_arg_list=['-arch', osx_arch, '-std=c++17']
-    link_arg_list=['-stdlib=libc++', '-arch', osx_arch, '-framework','ApplicationServices','-framework','Carbon','-framework', 'Cocoa', '-framework','OpenGL','-framework','AGL','-rpath', fltk_lib_dir]
+    link_arg_list=['-stdlib=libc++', '-arch', osx_arch, '-framework','ApplicationServices','-framework','Carbon','-framework', 'Cocoa', '-framework','OpenGL','-rpath', fltk_lib_dir]
 
 else:
     print("Platform not officially supported!")
