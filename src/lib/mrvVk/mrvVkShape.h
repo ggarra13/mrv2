@@ -193,7 +193,8 @@ namespace mrv
         
     public:
         std::string fontPath;
-        std::string text = "🎃";
+        //std::string text = "🎃";
+        std::string text;
         uint16_t fontSize;
         bool editing = true;
         Fl_Font font;

@@ -63,6 +63,7 @@ ChangeLog
 - Fixed Color Chooser on Vulkan not refreshing when dragging the mouse.	  
 - Upgraded to OpenColorIO v2.5.1.
 - Upgraded to OpenEXR v3.4.4.
+- Added emoji support to Vulkan's Text Annotation widget.
 
 
 v1.5.1
