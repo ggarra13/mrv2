@@ -299,10 +299,44 @@ namespace tl
             const auto i = p.ftFaces.find(info.family);
             if (i != p.ftFaces.end())
             {
-                FT_Error ftError = FT_Set_Pixel_Sizes(i->second, 0, info.size);
+                FT_Error ftError;
+                if (FT_IS_SCALABLE(i->second))
+                {
+                    ftError = FT_Set_Pixel_Sizes(i->second, 0, info.size);
+                    if (ftError)
+                    {
+                        _log("Cannot set pixel sizes for scalable font",
+                             log::Type::Error);
+                    }
+                }
+                else if (i->second->num_fixed_sizes > 0)
+                {
+                    // Bitmap-only fonts (e.g. older CBDT/CBLC color emoji fonts with fixed strikes)
+                    // Find and select the strike closest to the requested size
+                    int bestIndex = 0;
+                    int bestDiff = std::abs(i->second->available_sizes[0].height -
+                                            info.size);
+
+                    for (int k = 1; k < i->second->num_fixed_sizes; ++k)
+                    {
+                        int diff = std::abs(i->second->available_sizes[k].height -
+                                            info.size);
+                        if (diff < bestDiff)
+                        {
+                            bestDiff = diff;
+                            bestIndex = k;
+                        }
+                    }
+
+                    ftError = FT_Select_Size(i->second, bestIndex);
+                }
+                
+                // If neither scalable nor has fixed sizes → rare/error case, metrics will remain default/zero
+
                 if (ftError)
                 {
-                    _log("Cannot set pixel sizes", log::Type::Error);
+                    _log("Cannot set font size for metrics", log::Type::Error);
+                    // Optional: fall back to face defaults or return zeroed metrics
                 }
                 out.ascender = i->second->size->metrics.ascender / 64;
                 out.descender = i->second->size->metrics.descender / 64;
@@ -375,19 +409,61 @@ namespace tl
                 const auto i = ftFaces.find(fontInfo.family);
                 if (i != ftFaces.end())
                 {
-                    FT_Error ftError = FT_Set_Pixel_Sizes(
-                        i->second, 0, static_cast<int>(fontInfo.size));
-                    if (ftError)
+                    FT_Error ftError;
+                    if (FT_IS_SCALABLE(i->second))
                     {
-                        throw std::runtime_error("Cannot set pixel sizes");
-                    }
-                    if (auto ftGlyphIndex = FT_Get_Char_Index(i->second, code))
-                    {
-                        ftError = FT_Load_Glyph(
-                            i->second, ftGlyphIndex, FT_LOAD_FORCE_AUTOHINT);
+                        ftError = FT_Set_Pixel_Sizes(
+                            i->second, 0, static_cast<int>(fontInfo.size));
                         if (ftError)
                         {
-                            throw std::runtime_error("Cannot load glyph");
+                            throw std::runtime_error("Cannot set pixel sizes");
+                        }
+                    }
+                    else if (i->second->num_fixed_sizes > 0)
+                    {
+                        // Find the bitmap strike closest to requested size
+                        int bestIndex = 0;
+                        int bestDiff = std::abs(i->second->available_sizes[0].height - fontInfo.size);
+
+                        for (int k = 1; k < i->second->num_fixed_sizes; ++k)
+                        {
+                            int diff = std::abs(i->second->available_sizes[k].height - fontInfo.size);
+                            if (diff < bestDiff)
+                            {
+                                bestDiff = diff;
+                                bestIndex = k;
+                            }
+                        }
+
+                        ftError = FT_Select_Size(i->second, bestIndex);
+                    }
+                    else
+                    {
+                        // Rare case: no scalable, no fixed sizes → use default (size 0)
+                        ftError = FT_Select_Size(i->second, 0);
+                    }
+                    
+                    if (auto ftGlyphIndex = FT_Get_Char_Index(i->second, code))
+                    {
+                        FT_UInt load_flags = 0;
+
+                        if (FT_HAS_COLOR(i->second))
+                        {
+                            load_flags |= FT_LOAD_COLOR;
+                        }
+
+                        if (FT_IS_SCALABLE(i->second))
+                        {
+                            load_flags |= FT_LOAD_FORCE_AUTOHINT;
+                        }
+                        
+                        ftError = FT_Load_Glyph(i->second, ftGlyphIndex,
+                                                load_flags);
+                        if (ftError)
+                        {
+                            throw std::runtime_error("Cannot load glyph. "
+                                                     "Error:" +
+                                                     std::to_string(ftError));
                         }
                         FT_Render_Mode renderMode = FT_RENDER_MODE_NORMAL;
                         uint8_t renderModeChannels = 1;
@@ -396,14 +472,23 @@ namespace tl
                         {
                             throw std::runtime_error("Cannot render glyph");
                         }
-
+                        
                         out = std::make_shared<Glyph>();
                         out->info = GlyphInfo(code, fontInfo);
                         auto ftBitmap = i->second->glyph->bitmap;
                         const image::Info imageInfo(
                             ftBitmap.width, ftBitmap.rows,
                             image::PixelType::L_U8);
+
+                        std::cerr << "Pixel Type="
+                                  << ftBitmap.pixel_mode << std::endl
+                                  << ftBitmap.width << "x"
+                                  << ftBitmap.rows
+                                  << std::endl;
+                            
                         out->image = image::Image::create(imageInfo);
+                        // \@todo: add code for BGRA and MONO if Freetype
+                        //         does not do the converson itself.
                         for (size_t y = 0; y < ftBitmap.rows; ++y)
                         {
                             uint8_t* dataP =
@@ -452,11 +537,14 @@ namespace tl
             if (i != ftFaces.end())
             {
                 math::Vector2i pos;
-                FT_Error ftError = FT_Set_Pixel_Sizes(
-                    i->second, 0, static_cast<int>(fontInfo.size));
-                if (ftError)
+                if (FT_IS_SCALABLE(i->second))
                 {
-                    throw std::runtime_error("Cannot set pixel sizes");
+                    FT_Error ftError = FT_Set_Pixel_Sizes(
+                        i->second, 0, static_cast<int>(fontInfo.size));
+                    if (ftError)
+                    {
+                        throw std::runtime_error("Cannot set pixel sizes");
+                    }
                 }
 
                 const int h = i->second->size->metrics.height / 64;
