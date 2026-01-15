@@ -154,11 +154,11 @@ namespace mrv
                     w->redraw();
 #endif
 
-#ifdef VULKAN_BACKEND                    
+#ifdef VULKAN_BACKEND
+                    settings->setValue(kTextFont, font);
                     auto w = view->getMultilineInput();
                     if (!w)
                         return;
-                    settings->setValue(kTextFont, font);
                     const Fl_Menu_Item* item = c->mvalue();
                     std::string fontName = item->label();
                     

@@ -250,6 +250,7 @@ int Flmm_HueBox::handle(int e) {
     if (fabs(S-is) < 3*1.0/h()) S = is;
     if (Fl::event_state(FL_CTRL)) H = ih;
     if (c->hsv(H, S, c->value(),c->a())) c->do_callback();
+    redraw();
     } return 1;
   case FL_FOCUS :
   case FL_UNFOCUS :
@@ -612,6 +613,8 @@ Flmm_ColorA_Chooser::Flmm_ColorA_Chooser(int X, int Y, int W, int H, const char*
   choice.callback(mode_cb);
   choice.box(FL_THIN_UP_BOX);
   choice.textfont(FL_HELVETICA_BOLD_ITALIC);
+  choice.value(0);
+  choice.do_callback();
 }
 
 ////////////////////////////////////////////////////////////////
