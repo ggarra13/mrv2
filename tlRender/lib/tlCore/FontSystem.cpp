@@ -474,16 +474,15 @@ namespace tl
 
                         if (ftError)
                         {
-                            // Optional: only throw for severe errors, or return empty glyph
-                            // throw std::runtime_error("Cannot load glyph (error: " + std::to_string(ftError) + ")");
-                            return out;  // missing glyph
+                            throw std::runtime_error("Cannot load glyph (error: " + std::to_string(ftError) + ")");
                         }
 
-                        // Proceed to FT_Render_Glyph as before (always call it)
+                        // Proceed to FT_Render_Glyph as before
                         ftError = FT_Render_Glyph(i->second->glyph,
                                                   FT_RENDER_MODE_NORMAL);
                         if (ftError)
                         {
+                            throw std::runtime_error("Render glyph (error: " + std::to_string(ftError) + ")");
                             return out;
                         }
                         
