@@ -4,10 +4,10 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v1.4.9)  # v1.4.8 is broken on Windows
+set(FLTK_GIT_TAG v1.5.0)  # v1.4.9 was latest mrv2 v1.5.1 release
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
-#set(FLTK_GIT_TAG vk_test) # Testing branch
+#set(FLTK_GIT_TAG vk_merge) # Testing branch
 
 if(MRV2_VK)
     message(STATUS "Using ggarra13's private FLTK branch")
