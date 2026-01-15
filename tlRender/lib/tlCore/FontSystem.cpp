@@ -627,7 +627,7 @@ namespace tl
         
                                 // Adjust metrics proportionally
                                 out->offset.x = static_cast<int>(out->offset.x * scale);
-                                out->offset.y = static_cast<int>(actualHeight - out->offset.y * scale);
+                                out->offset.y = static_cast<int>(out->offset.y * scale);
                                 out->advance = static_cast<int>(out->advance * scale);
                             }
                         }

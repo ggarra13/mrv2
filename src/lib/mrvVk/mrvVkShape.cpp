@@ -890,7 +890,6 @@ namespace mrv
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::shared_ptr<vulkan::Lines> lines)
     {
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         //
         // Add selected font.
         //
@@ -901,7 +900,6 @@ namespace mrv
             fontSystem->addFont(fontPath);
         }
         
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         //
         // Add emoji font.
         //
@@ -912,7 +910,6 @@ namespace mrv
             fontSystem->addFont(emojiPath.get());
         }
         
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         //
         // Get metrics for selected font.
         // 
@@ -924,7 +921,6 @@ namespace mrv
         //
         // Get metrics for emoji font.
         //
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         const image::FontInfo emojiInfo(emojiFamily, fontSize);
         const image::FontMetrics emojiMetrics = fontSystem->getMetrics(emojiInfo);
         int emojiAscender = emojiMetrics.ascender;
@@ -963,8 +959,7 @@ namespace mrv
                 }
                 render->appendText(textInfos, glyphs, pnt);
             };
-            
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+        
         for (; pos != std::string::npos; y += fontSize, pos = txt.find('\n'))
         {
             const std::string line = txt.substr(0, pos);
@@ -1030,7 +1025,7 @@ namespace mrv
         if (!txt.empty())
         {
             std::string line = txt;
-            int currentDrawX = x; 
+            currentDrawX = x; 
 
             // Buffers for batching
             std::string currentRun;
@@ -1074,20 +1069,6 @@ namespace mrv
             {
                 flushRun(currentRun, runIsEmoji);
             }
-            // pnt.y = y;
-            // const auto& glyphs = fontSystem->getGlyphs(txt, fontInfo);
-            // for (const auto& glyph : glyphs)
-            // {
-            //     if (glyph)
-            //     {
-            //         if (cursor_count < cursor)
-            //         {
-            //             cursor_pos.x += glyph->advance;
-            //         }
-            //     }
-            //     ++cursor_count;
-            // }
-            // render->appendText(textInfos, glyphs, pnt);
         }
  
 

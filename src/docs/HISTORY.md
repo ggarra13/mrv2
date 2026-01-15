@@ -59,10 +59,11 @@ ChangeLog
 - Fixed fonts on Vulkan backend showing some garbage at the edges.
 - Fixed Edit/Audio Gap/Insert.
 - Fixed tooltip showing the title of Link Annotations on Windows.
-- Fixed macOS distribution linking against libfltk_vk.dylib on the OpenGL backend. em
+- Fixed macOS distribution linking against libfltk_vk.dylib on the OpenGL backend. 
 - Fixed Color Chooser on Vulkan not refreshing when dragging the mouse.	  
 - Upgraded to OpenColorIO v2.5.1.
 - Upgraded to OpenEXR v3.4.4.
+- Added emoji support to Vulkan's Text Annotation widget.
 
 
 v1.5.1
