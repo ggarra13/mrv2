@@ -64,6 +64,7 @@ ChangeLog
 - Upgraded to OpenColorIO v2.5.1.
 - Upgraded to OpenEXR v3.4.4.
 - Added emoji support to Vulkan's Text Annotation widget.
+- Added emoji support to OpenGL's Text Annotation widget.  It does not quite work as good as Vulkan's and it currently is broken on Linux.
 
 
 v1.5.1
