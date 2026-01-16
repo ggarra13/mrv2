@@ -65,8 +65,9 @@ ChangeLog
 - Upgraded to OpenEXR v3.4.4.
 - Added emoji support to Vulkan's Text Annotation widget.
 - Added emoji support to OpenGL's Text Annotaiton widget on Windows and macOS.
-- Added version of FLTK Vulkan fork in About window.
+- Added version of FLTK Vulkan fork in About window.  It does not quite work as good as Vulkan's and it currently is broken on Linux.
 - Updated to FLTK Vulkan version v1.5.0.
+- Added emoji support to OpenGL's Text Annotation widget.  
 
 
 v1.5.1
