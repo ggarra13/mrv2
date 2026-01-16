@@ -3695,6 +3695,9 @@ msgstr "Выбрать цвет"
 msgid "Pick Draw Color and Alpha"
 msgstr "Выберите цвет рисунка и Альфа"
 
+msgid "Install is broken.  Missing license_helper"
+msgstr "Установка повреждена. Отсутствует license_helper"
+
 msgid "Media"
 msgstr "Средства массовой информации"
 

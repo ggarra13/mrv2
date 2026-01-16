@@ -6,6 +6,7 @@
 
 #include <tlCore/ISystem.h>
 #include <tlCore/Image.h>
+#include <tlCore/Path.h>
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -137,7 +138,12 @@ namespace tl
             TLRENDER_PRIVATE();
         };
 
+        //! Return the list of all fonts found in the current OS. 
         std::vector<fs::path> discoverSystemFonts();
+
+        //! Return an installed emoji font is available.
+        file::Path emojiFont();
+        
     } // namespace image
 } // namespace tl
 

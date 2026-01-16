@@ -7,9 +7,10 @@
 #include "mrViewer.h"
 
 #include "mrvNetwork/mrvFilesModelItem.h"
-#include "mrvNetwork/mrvTimelineItemOptions.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 #include "mrvNetwork/mrvConnectionHandler.h"
+
+#include "mrvOptions/mrvTimelineItemOptions.h"
 
 namespace mrv
 {

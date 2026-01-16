@@ -3,20 +3,30 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
+    mrvCompareOptions.h
+    mrvDisplayOptions.h
     mrvEnums.h
     mrvEnvironmentMapOptions.h
     mrvEnvironmentMapOptionsInline.h
     mrvFilesPanelOptions.h
     mrvFilesPanelOptionsInline.h
+    mrvImageOptions.h
+    mrvLUTOptions.h
     mrvStereo3DOptions.h
     mrvStereo3DOptionsInline.h
+    mrvTimelineItemOptions.h
     mrvUSD.h
 )
 
 set(SOURCES
+    mrvCompareOptions.cpp
+    mrvDisplayOptions.cpp
     mrvEnvironmentMapOptions.cpp
     mrvFilesPanelOptions.cpp
+    mrvImageOptions.cpp
+    mrvLUTOptions.cpp
     mrvStereo3DOptions.cpp
+    mrvTimelineItemOptions.cpp
     mrvUSD.cpp
     mrvUSDInline.cpp
 )
@@ -39,7 +49,7 @@ if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL")
 endif()
 
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
-    list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
+    list(APPEND LIBRARIES ${FLTK_vk_LIBRARY} Vulkan::Vulkan)
 endif()
 
 

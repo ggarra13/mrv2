@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 set(OpenColorIO_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/OpenColorIO.git")
-set(OpenColorIO_GIT_TAG "v2.5.0") # was v2.4.2
+set(OpenColorIO_GIT_TAG "v2.5.1") # was v2.5.0
 
 set(OpenColorIO_DEPENDENCIES Imath yaml-cpp expat pystring minizip-ng ZLIB)
 message(STATUS "OpenColorIO DEPENDENCIES=${OpenColorIO_DEPENDENCIES}")

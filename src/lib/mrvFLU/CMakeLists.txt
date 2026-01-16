@@ -29,6 +29,7 @@ set(SOURCES
     Flu_Combo_List.cpp
     Flu_Combo_Tree.cpp
     Flu_Entry.cpp
+    Flu_Flags.cpp
     Flu_Label.cpp
     Flu_File_Chooser.cpp
     Flu_Pack.cpp

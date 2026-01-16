@@ -27,8 +27,8 @@ namespace mrv
     void Tooltip::copy_label(const std::string& label)
     {
         std::string t = label;
-        if (t.size() > 10)
-            t = t.substr(0, 10) + "...";
+        if (t.size() > 15)
+            t = t.substr(0, 15) + "...";
                                 
         box->copy_label(t.c_str());
     }

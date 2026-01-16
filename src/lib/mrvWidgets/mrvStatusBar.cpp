@@ -2,10 +2,14 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvOS.h"
+#include "mrvApp/mrvApp.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvWidgets/mrvStatusBar.h"
+
+#include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvOS.h"
 
 namespace mrv
 {
@@ -107,4 +111,22 @@ namespace mrv
         Fl::add_timeout(seconds_ * 2, (Fl_Timeout_Handler)all_ok_cb, this);
     }
 
+    int StatusBar::handle(int event)
+    {
+        if (event == FL_PUSH)
+        {
+            if (Fl::event_button1())
+            {
+                if (Fl::event_clicks() > 0)
+                {
+                    panel::logs_panel_cb(nullptr, App::ui);
+                    Fl::event_clicks(0);
+                }
+                return 1;
+            }
+        }
+        
+        return Fl_Group::handle(event);
+    }
+    
 } // namespace mrv

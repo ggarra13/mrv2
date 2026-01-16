@@ -3620,6 +3620,9 @@ msgstr "色を選ぶ"
 msgid "Pick Draw Color and Alpha"
 msgstr "Color and Alpha"
 
+msgid "Install is broken.  Missing license_helper"
+msgstr "インストールが破損しています。license_helper が見つかりません"
+
 msgid "Media"
 msgstr "メディア"
 

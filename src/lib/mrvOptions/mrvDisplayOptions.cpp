@@ -2,8 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvNetwork/mrvImageOptions.h"
-#include "mrvNetwork/mrvDisplayOptions.h"
+#include "mrvOptions/mrvImageOptions.h"
+#include "mrvOptions/mrvDisplayOptions.h"
 
 namespace tl
 {

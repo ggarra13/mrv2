@@ -52,7 +52,8 @@
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvCypher.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
-#include "mrvNetwork/mrvTimelineItemOptions.h"
+
+#include "mrvOptions/mrvTimelineItemOptions.h"
 
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvApp.h"
@@ -2897,12 +2898,14 @@ namespace mrv
             helper = rootpath() + "/../Resources/bin/license_helper";
         }
 #endif
+
+        if (!file::isReadable(helper))
+        {
+            LOG_ERROR(_("Install is broken.  Missing license_helper"));
+        }
+        
         int ret = os::exec_command(helper);
         if (ret != 0) return;
-        
-
-        std::string expiration;
-        validate_license(expiration);
     }
     
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui)

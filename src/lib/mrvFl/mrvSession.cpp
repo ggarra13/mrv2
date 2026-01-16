@@ -16,11 +16,12 @@
 
 #include "mrvNetwork/mrvMessage.h"
 #include "mrvNetwork/mrvCypher.h"
-#include "mrvNetwork/mrvCompareOptions.h"
-#include "mrvNetwork/mrvDisplayOptions.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
-#include "mrvNetwork/mrvImageOptions.h"
-#include "mrvNetwork/mrvTimelineItemOptions.h"
+
+#include "mrvOptions/mrvCompareOptions.h"
+#include "mrvOptions/mrvDisplayOptions.h"
+#include "mrvOptions/mrvImageOptions.h"
+#include "mrvOptions/mrvTimelineItemOptions.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"

@@ -3672,6 +3672,9 @@ msgstr "Pick Color"
 msgid "Pick Draw Color and Alpha"
 msgstr "Pick Draw Color and Alpha"
 
+msgid "Install is broken.  Missing license_helper"
+msgstr ""
+
 msgid "Media"
 msgstr "Media"
 

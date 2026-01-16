@@ -177,7 +177,7 @@ function(create_translation_for TARGET SOURCES)
     endif()
     add_custom_target(
 	${_pot_target}
-	COMMAND xgettext --package-name=${TARGET} --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d ${TARGET} -c++ -k_ ${SOURCES} -o "${_absPotFile}"
+	COMMAND xgettext --from-code=UTF-8 --package-name=${TARGET} --package-version="v${mrv2_VERSION}" --copyright-holder="Contributors to the mrv2 Project" --msgid-bugs-address="ggarra13@gmail.com" -d ${TARGET} -c++ -k_ ${SOURCES} -o "${_absPotFile}"
 	WORKING_DIRECTORY "${ROOT_DIR}/lib"
 	COMMENT Running xgettext for ${TARGET}_pot target
 	DEPENDS ${_abspot_dep}

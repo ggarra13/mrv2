@@ -817,7 +817,7 @@ namespace tl
             {
                 p.textureCache = std::make_shared<TextureCache>();
             }
-
+            
             p.glyphTextureAtlas = vlk::TextureAtlas::create(
                 ctx, 1, 4096, image::PixelType::L_U8,
                 timeline::ImageFilter::Linear);

@@ -3,9 +3,11 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#include "mrvNetwork/mrvFilePath.h"
-#include "mrvNetwork/mrvLUTOptions.h"
 #include "mrvApp/mrvFilesModel.h"
+
+#include "mrvNetwork/mrvFilePath.h"
+
+#include "mrvOptions/mrvLUTOptions.h"
 
 #include <tlDraw/Annotation.h>
 

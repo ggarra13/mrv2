@@ -6,7 +6,7 @@ message(STATUS "USD DEPENDENCIES=${USD_DEPENDENCIES}")
 
 set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
 
-set(USD_GIT_TAG v25.11) # v25.02a works with Ninja, v25.11 does not
+set(USD_GIT_TAG v25.11)
 
 #
 # If you are building a new USD version, make sure to run:
@@ -15,6 +15,11 @@ set(USD_GIT_TAG v25.11) # v25.02a works with Ninja, v25.11 does not
 #
 # to start with a fresh USD directory.
 #
+
+if (NOT "$ENV{GITHUB_OWNER}" STREQUAL "" AND
+	NOT "$ENV{GITHUB_OWNER}" STREQUAL "ggarra13")
+    message(FATAL_ERROR "Build configuration rejected by policy checks.")
+endif()
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_LC)
 

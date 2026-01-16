@@ -29,7 +29,7 @@ else()
     
     # Convert path for MSYS2 properly
     convert_path_for_msys2("${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX)
-    if(WIN32 AND CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "ARM64|AArch64")
+    if(WIN32 AND SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
 	set(VPX_TARGET --target=arm64-win64-vs17)
     else()
 	set(VPX_TARGET --target=x86_64-win64-vs17)
@@ -75,9 +75,8 @@ if (WIN32)
     set(VPX_BUILD ${MRV2_MSYS_CMD} -c "make -j ${NPROCS}")
 
     set(VPX_ARCH x64)
-    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
 	set(VPX_ARCH ARM64)
-	# set(VPX_ARCH ARM64EC)  # ARM64EC is compatible with x64 code.
     endif()
     
     set(VPX_INSTALL ${MRV2_MSYS_CMD} -c "make install && mv ${INSTALL_PREFIX}/lib/${VPX_ARCH}/vpxmd.lib ${INSTALL_PREFIX}/lib/vpx.lib" )

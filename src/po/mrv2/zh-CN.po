@@ -3610,6 +3610,9 @@ msgstr "选择颜色"
 msgid "Pick Draw Color and Alpha"
 msgstr "选择绘图颜色和透明度"
 
+msgid "Install is broken.  Missing license_helper"
+msgstr "安装已损坏。缺少 license_helper"
+
 msgid "Media"
 msgstr "媒体"
 

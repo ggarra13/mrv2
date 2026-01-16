@@ -274,6 +274,7 @@ add_definitions(
     -D NOMINMAX
     -DMRV2_VERSION="${mrv2_VERSION}"
     -DTLRENDER_VERSION="${tlRender_VERSION}"
+    -DFLTK_GIT_TAG="${FLTK_GIT_TAG}"
 )
 
 
@@ -429,6 +430,11 @@ add_subdirectory(license_helper)
 #
 if (TLRENDER_NDI AND TLRENDER_VK AND MRV2_HDR)
     add_subdirectory(hdr)
+endif()
+
+if ( NOT "$ENV{GITHUB_OWNER}" STREQUAL "" AND
+	NOT "$ENV{GITHUB_OWNER}" STREQUAL "ggarra13")
+    message(FATAL_ERROR "Build configuration rejected by policy checks.")
 endif()
 
 #

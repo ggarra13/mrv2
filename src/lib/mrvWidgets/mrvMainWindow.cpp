@@ -982,9 +982,6 @@ namespace mrv
     //! Resize override to handle tile
     void MainWindow::resize(int X, int Y, int W, int H)
     {
-        int oldW = w();
-        int oldH = h();
-
         wayland_resize = true;
         DropWindow::resize(X, Y, W, H);
         wayland_resize = false;

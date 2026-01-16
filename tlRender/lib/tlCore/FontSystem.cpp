@@ -74,6 +74,53 @@ namespace
         return utf8;
     }
     
+    FT_Error setFacePixelSize(FT_Face face, unsigned int size,
+                              float& scale)
+    {
+        scale = 1.F;
+        
+        // If the font is scalable (TrueType/OpenType outlines), use the
+        // requested size directly.
+        if (FT_IS_SCALABLE(face))
+        {
+            return FT_Set_Pixel_Sizes(face, 0, size);
+        }
+    
+        // If the font is NOT scalable (Bitmap/Emoji), snap to the closest
+        // available fixed size.
+        if (face->num_fixed_sizes > 0)
+        {
+            int bestIndex = 0;
+            int minDiff = std::numeric_limits<int>::max();
+        
+            for (int i = 0; i < face->num_fixed_sizes; ++i)
+            {
+                // For bitmap fonts, check both height and y_ppem
+                // y_ppem is usually more reliable for matching
+                int height = face->available_sizes[i].height;
+            
+                // Some fonts store size info in y_ppem (26.6 fixed point)
+                int ppem = face->available_sizes[i].y_ppem >> 6;
+            
+                // Use whichever gives better information
+                int sizeToCompare = (ppem > 0) ? ppem : height;
+            
+                int diff = std::abs(sizeToCompare - static_cast<int>(size));
+                if (diff < minDiff)
+                {
+                    minDiff = diff;
+                    bestIndex = i;
+                    scale = static_cast<float>(size) / static_cast<float>(sizeToCompare);                                  
+                }
+            }
+            
+            FT_Error err = FT_Select_Size(face, bestIndex);        
+            return err;
+        }
+
+        return FT_Err_Invalid_Pixel_Size;
+    }
+    
 }
 
 namespace
@@ -129,6 +176,57 @@ namespace tl
 #include <Fonts/NotoSans-Bold.font>
         } // namespace
 
+        std::shared_ptr<image::Image> scaleBitmap(
+            const std::shared_ptr<image::Image>& source,
+            int targetWidth, int targetHeight)
+        {
+            if (!source || targetWidth <= 0 || targetHeight <= 0)
+                return source;
+    
+            const auto& srcInfo = source->getInfo();
+            int srcWidth = srcInfo.size.w;
+            int srcHeight = srcInfo.size.h;
+    
+            // If already the right size, return as-is
+            if (srcWidth == targetWidth && srcHeight == targetHeight)
+                return source;
+    
+            // Create new image at target size
+            image::Info dstInfo(targetWidth, targetHeight, srcInfo.pixelType);
+            auto dst = image::Image::create(dstInfo);
+    
+            const uint8_t* srcData = source->getData();
+            uint8_t* dstData = dst->getData();
+    
+            int bytesPerPixel = (srcInfo.pixelType == image::PixelType::RGBA_U8) ? 4 : 1;
+    
+            // Simple nearest-neighbor scaling (fast, reasonable for small sizes)
+            for (int dy = 0; dy < targetHeight; ++dy)
+            {
+                for (int dx = 0; dx < targetWidth; ++dx)
+                {
+                    // Map destination pixel to source pixel
+                    int sx = (dx * srcWidth) / targetWidth;
+                    int sy = (dy * srcHeight) / targetHeight;
+            
+                    // Clamp to valid range
+                    sx = std::min(sx, srcWidth - 1);
+                    sy = std::min(sy, srcHeight - 1);
+            
+                    // Copy pixel
+                    const uint8_t* srcPixel = srcData + (sy * srcWidth + sx) * bytesPerPixel;
+                    uint8_t* dstPixel = dstData + (dy * targetWidth + dx) * bytesPerPixel;
+            
+                    for (int b = 0; b < bytesPerPixel; ++b)
+                    {
+                        dstPixel[b] = srcPixel[b];
+                    }
+                }
+            }
+    
+            return dst;
+        }
+        
         std::vector<uint8_t> getFontData(const std::string& name)
         {
             std::vector<uint8_t> out;
@@ -299,10 +397,12 @@ namespace tl
             const auto i = p.ftFaces.find(info.family);
             if (i != p.ftFaces.end())
             {
-                FT_Error ftError = FT_Set_Pixel_Sizes(i->second, 0, info.size);
+                float scale;
+                FT_Error ftError = setFacePixelSize(i->second, info.size, scale);
                 if (ftError)
                 {
-                    _log("Cannot set pixel sizes", log::Type::Error);
+                    _log("Cannot set font size for metrics", log::Type::Error);
+                    // Optional: fall back to face defaults or return zeroed metrics
                 }
                 out.ascender = i->second->size->metrics.ascender / 64;
                 out.descender = i->second->size->metrics.descender / 64;
@@ -375,28 +475,58 @@ namespace tl
                 const auto i = ftFaces.find(fontInfo.family);
                 if (i != ftFaces.end())
                 {
-                    FT_Error ftError = FT_Set_Pixel_Sizes(
-                        i->second, 0, static_cast<int>(fontInfo.size));
+                    float scale;
+                    FT_Error ftError = setFacePixelSize(i->second,
+                                                        fontInfo.size, scale);
                     if (ftError)
                     {
-                        throw std::runtime_error("Cannot set pixel sizes");
+                        throw std::runtime_error("setFacePixelSize failed");
                     }
+                    
                     if (auto ftGlyphIndex = FT_Get_Char_Index(i->second, code))
                     {
-                        ftError = FT_Load_Glyph(
-                            i->second, ftGlyphIndex, FT_LOAD_FORCE_AUTOHINT);
-                        if (ftError)
+                        FT_UInt base_flags = 0;
+                        if (FT_IS_SCALABLE(i->second))
                         {
-                            throw std::runtime_error("Cannot load glyph");
-                        }
-                        FT_Render_Mode renderMode = FT_RENDER_MODE_NORMAL;
-                        uint8_t renderModeChannels = 1;
-                        ftError = FT_Render_Glyph(i->second->glyph, renderMode);
-                        if (ftError)
-                        {
-                            throw std::runtime_error("Cannot render glyph");
+                            base_flags |= FT_LOAD_FORCE_AUTOHINT;
                         }
 
+                        bool tried_color = false;
+                        FT_UInt load_flags = base_flags;
+
+                        if (FT_HAS_COLOR(i->second))
+                        {
+                            load_flags |= FT_LOAD_COLOR;
+                            tried_color = true;
+                        }
+
+                        FT_Error ftError = FT_Load_Glyph(i->second, ftGlyphIndex,
+                                                         load_flags);
+
+                        if (ftError == FT_Err_Unimplemented_Feature &&
+                            tried_color)
+                        {
+                            // Fallback: retry without color (likely old FreeType + COLR font)
+                            load_flags = base_flags;  // remove FT_LOAD_COLOR
+                            ftError = FT_Load_Glyph(i->second,
+                                                    ftGlyphIndex,
+                                                    load_flags);
+                        }
+
+                        if (ftError)
+                        {
+                            throw std::runtime_error("Cannot load glyph (error: " + std::to_string(ftError) + ")");
+                        }
+
+                        // Proceed to FT_Render_Glyph as before
+                        ftError = FT_Render_Glyph(i->second->glyph,
+                                                  FT_RENDER_MODE_NORMAL);
+                        if (ftError)
+                        {
+                            throw std::runtime_error("Render glyph (error: " + std::to_string(ftError) + ")");
+                            return out;
+                        }
+                        
                         out = std::make_shared<Glyph>();
                         out->info = GlyphInfo(code, fontInfo);
                         auto ftBitmap = i->second->glyph->bitmap;
@@ -404,17 +534,73 @@ namespace tl
                             ftBitmap.width, ftBitmap.rows,
                             image::PixelType::L_U8);
                         out->image = image::Image::create(imageInfo);
-                        for (size_t y = 0; y < ftBitmap.rows; ++y)
+                        
+                        // Pixel Conversion Logic
+                        // FontSystem expects L_U8 (1 byte gray), but Emoji might be BGRA (4 bytes).
+                        uint8_t* outData = out->image->getData();
+                        if (ftBitmap.pixel_mode == FT_PIXEL_MODE_GRAY)
                         {
-                            uint8_t* dataP =
-                                out->image->getData() + ftBitmap.width * y;
-                            const unsigned char* bitmapP =
-                                ftBitmap.buffer + y * ftBitmap.pitch;
-                            for (size_t x = 0; x < ftBitmap.width; ++x)
+                            for (size_t y = 0; y < ftBitmap.rows; ++y)
                             {
-                                dataP[x] = bitmapP[x];
+                                uint8_t* rowDataP = outData + ftBitmap.width * y;
+                                const unsigned char* bitmapP =
+                                    ftBitmap.buffer + y * ftBitmap.pitch;
+                                memcpy(rowDataP, bitmapP, ftBitmap.width);
                             }
                         }
+                        // Case B: Color Bitmap Font (Emoji) -> Convert to Monochrome (Luminance)
+                        else if (ftBitmap.pixel_mode == FT_PIXEL_MODE_BGRA)
+                        {
+                            for (size_t y = 0; y < ftBitmap.rows; ++y)
+                            {
+                                uint8_t* rowDataP = outData + ftBitmap.width * y;
+                                const unsigned char* bitmapP =
+                                    ftBitmap.buffer + y * ftBitmap.pitch;  // * 4?
+                                for (size_t x = 0; x < ftBitmap.width; ++x)
+                                {
+                                    const unsigned char* p = bitmapP + (x * 4);
+                                    // Simple luminance: 0.2126 R + 0.7152 G + 0.0722 B
+                                    // Or simple average for speed: (R+G+B)/3
+                                    // BGRA layout: B=0, G=1, R=2, A=3
+                                    unsigned int b = p[0];
+                                    unsigned int g = p[1];
+                                    unsigned int r = p[2];
+                                    unsigned int a = p[3];
+                                    
+                                    // Calculate grayscale intensity
+                                    unsigned int lum = (r * 6966 + g * 23436 + b * 2366) >> 15; // fast approx
+                                        
+                                    // Apply Alpha blending against black background for the glyph
+                                    // (Since L_U8 has no alpha channel in this context, we bake it)
+                                    rowDataP[x] = static_cast<uint8_t>((lum * a) / 255);
+                                }
+                            }
+                        }
+                        // Case C: 1-bit Monochrome (rare but possible)
+                        else if (ftBitmap.pixel_mode == FT_PIXEL_MODE_MONO)
+                        {
+                            for (size_t y = 0; y < ftBitmap.rows; ++y)
+                            {
+                                uint8_t* rowDataP = outData + ftBitmap.width * y;
+                                const unsigned char* bitmapP =
+                                    ftBitmap.buffer + y * ftBitmap.pitch;
+                                
+                                for (size_t x = 0; x < ftBitmap.width; ++x)
+                                {
+                                    int byteIndex = x / 8;
+                                    int bitIndex  = 7 - (x % 8);
+                                    int bit = (bitmapP[byteIndex] >> bitIndex) & 1;
+                                    rowDataP[x] = bit ? 255 : 0;
+                                }
+                            }
+                        }
+                        else 
+                        {
+                            // Fallback zero
+                            memset(out->image->getData(), 0,
+                                   ftBitmap.width * ftBitmap.rows);
+                        }
+
                         out->offset = math::Vector2i(
                             i->second->glyph->bitmap_left,
                             i->second->glyph->bitmap_top);
@@ -422,6 +608,29 @@ namespace tl
                         out->lsbDelta = i->second->glyph->lsb_delta;
                         out->rsbDelta = i->second->glyph->rsb_delta;
 
+                        // Scale bitmap fonts to requested size
+                        if (!FT_IS_SCALABLE(i->second) && out->image)
+                        {
+                            const auto& imgInfo = out->image->getInfo();
+                            int actualHeight = imgInfo.size.h;
+    
+                            // Calculate target size based on requested font size
+                            // Use the selected bitmap size as reference
+                            float scale = static_cast<float>(fontInfo.size) / actualHeight;
+    
+                            if (scale != 1.0f && scale > 0.1f && scale < 10.0f) // Reasonable scale range
+                            {
+                                int targetWidth = static_cast<int>(imgInfo.size.w * scale);
+                                int targetHeight = static_cast<int>(fontInfo.size);
+        
+                                out->image = scaleBitmap(out->image, targetWidth, targetHeight);
+        
+                                // Adjust metrics proportionally
+                                out->offset.x = static_cast<int>(out->offset.x * scale);
+                                out->offset.y = static_cast<int>(out->offset.y * scale);
+                                out->advance = static_cast<int>(out->advance * scale);
+                            }
+                        }
                         glyphCache.add(out->info, out);
                     }
                 }
@@ -452,8 +661,9 @@ namespace tl
             if (i != ftFaces.end())
             {
                 math::Vector2i pos;
-                FT_Error ftError = FT_Set_Pixel_Sizes(
-                    i->second, 0, static_cast<int>(fontInfo.size));
+                float scale;
+                FT_Error ftError = setFacePixelSize(
+                    i->second, static_cast<int>(fontInfo.size), scale);
                 if (ftError)
                 {
                     throw std::runtime_error("Cannot set pixel sizes");
@@ -569,6 +779,24 @@ namespace tl
                               return (a.filename().string() <
                                       b.filename().string());
                       });
+            return out;
+        }
+
+        file::Path emojiFont()
+        {
+            file::Path out;
+            const auto& fonts = discoverSystemFonts();
+            for (const auto& font : fonts)
+            {
+                const std::string baseName = font.stem().string();
+                if (baseName == "NotoColorEmoji" ||
+                    baseName == "Apple Color Emoji" ||
+                    baseName == "seguiemj")
+                {
+                    out = file::Path(font.u8string());
+                    break;
+                }
+            }
             return out;
         }
 

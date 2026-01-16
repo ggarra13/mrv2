@@ -328,13 +328,18 @@ namespace tl
                         p.id = p.id + 1;
                         node2->id = p.id;
 
-                        //! \todo Do we need to zero out the old data?
-                        // auto zero =
-                        // Image::Data::create(Image::Info(data->getSize() +
-                        // p.border * 2, p.textureType)); zero->zero();
-                        // p.textures[node2->texture]->copy(zero,
-                        // node2->box.min);
-
+                        if (p.border > 0)
+                        {
+                            // Clean the full size of the texture if we have a border,
+                            // so we don't get stray pixels.
+                            image::Info info(image->getSize(), p.textureType);
+                            auto zero = image::Image::create(info);
+                            zero->zero();
+                            p.textures[node2->textureIndex]->copy(zero,
+                                                                  node2->box.min.x,
+                                                                  node2->box.min.y);
+                        }
+                        
                         p.textures[node2->textureIndex]->copy(
                             image, node2->box.min.x + p.border,
                             node2->box.min.y + p.border);
@@ -408,16 +413,23 @@ namespace tl
             out.w = node->box.w();
             out.h = node->box.h();
             out.textureIndex = node->textureIndex;
+
+            // Use a 0.5f offset to sample the center of the texel.
+            // This prevents rounding errors during window resizing from 
+            // picking up pixels in the 'border'/gap area.
+            const float offset = 0.5f;
+            const float fSize = static_cast<float>(textureSize);
+            const float fBorder = static_cast<float>(border);
+
             out.textureU = math::FloatRange(
-                (node->box.min.x + static_cast<float>(border)) /
-                    static_cast<float>(textureSize),
-                (node->box.max.x - static_cast<float>(border) + 1.F) /
-                    static_cast<float>(textureSize));
+                (static_cast<float>(node->box.min.x) + fBorder + offset) / fSize,
+                (static_cast<float>(node->box.max.x) - fBorder + 1.0f - offset) / fSize
+                );
+
             out.textureV = math::FloatRange(
-                (node->box.min.y + static_cast<float>(border)) /
-                static_cast<float>(textureSize),
-                (node->box.max.y - static_cast<float>(border) + 1.F) /
-                static_cast<float>(textureSize));
+                (static_cast<float>(node->box.min.y) + fBorder + offset) / fSize,
+                (static_cast<float>(node->box.max.y) - fBorder + 1.0f - offset) / fSize
+                );
         }
 
         void TextureAtlas::Private::removeFromAtlas(

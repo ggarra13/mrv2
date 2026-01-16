@@ -8,7 +8,7 @@ message(STATUS "OpenJPH DEPENDENCIES=${OpenJPH_DEPENDENCIES}")
 
 # \@todo: Revisit after each release of OpenJPH
 set(OpenJPH_DISABLE_SIMD OFF)
-if ($ENV{ARCH} MATCHES ".*aarch64.*")
+if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
     set(OpenJPH_DISABLE_SIMD ON)
 endif()
     

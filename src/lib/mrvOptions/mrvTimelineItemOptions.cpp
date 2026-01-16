@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#include "mrvNetwork/mrvTimelineItemOptions.h"
+#include "mrvOptions/mrvTimelineItemOptions.h"
 
 namespace tl
 {

@@ -54,7 +54,7 @@ set(LibRaw_DEPENDENCIES LibRaw_cmake jasper LCMS2 ZLIB)
 if(TLRENDER_JPEG)
     list(APPEND LibRaw_DEPENDENCIES libjpeg-turbo)
 endif()
-message(STATUS "LibRaw DPEENDENCIES=${LibRaw_DEPENDENCIES}")
+message(STATUS "LibRaw DEPENDENCIES=${LibRaw_DEPENDENCIES}")
     
 ExternalProject_Add(
      LibRaw

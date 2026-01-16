@@ -3655,6 +3655,9 @@ msgstr "Escolher a cor"
 msgid "Pick Draw Color and Alpha"
 msgstr "Escolha Desenhar Cor e Alfa"
 
+msgid "Install is broken.  Missing license_helper"
+msgstr "A instalação está corrompida. license_helper ausente"
+
 msgid "Media"
 msgstr "Mdia"
 

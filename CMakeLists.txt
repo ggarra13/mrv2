@@ -46,11 +46,6 @@ list(PREPEND CMAKE_MODULE_PATH
     ${MODULE_PATH4}
 )
 
-#
-# Fetch the tlRender library as a submodule with git.
-#
-find_package(Git REQUIRED)
-
 # Omit superfluous "Up-to-date" messages.
 if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
@@ -67,8 +62,10 @@ else()
     set(VCPKG vcpkg)
 endif()
 
+string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSTEM_PROCESSOR_LC)
+
 set(vcpkg_ARCH x64)
-if ("$ENV{ARCH}" MATCHES ".*aarch64.*" OR "$ENV{ARCH}" MATCHES ".*arm64.*")
+if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
     set(vcpkg_ARCH arm64)
 endif()
     

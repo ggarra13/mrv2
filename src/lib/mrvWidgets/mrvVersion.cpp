@@ -834,7 +834,7 @@ namespace mrv
         o << "Flmm Color Picker (modified)" << endl
           << "Copyright (c) 2002 - 2004 Matthias Melcher" << endl
           << endl;
-        o << "FLTK v1.4" << endl
+        o << "FLTK v1.5 Vulkan fork - " << FLTK_GIT_TAG << endl
           << "http://www.fltk.org/" << endl
           << "Copyright (c) 2000-Present Bill Spitzak & others" << endl
           << endl;
@@ -877,7 +877,7 @@ namespace mrv
         o << "libintl/gettext v0.22.3" << endl
           << endl
           << "libjpeg-turbo v" << AV_STRINGIFY(LIBJPEG_TURBO_VERSION) << endl
-          << "Copyright (c) 2009-2020 D. R. Commander.  All Rights Reserved."
+          << "Copyright (c) 2009-2020 D. R. Commaznder.  All Rights Reserved."
           << endl
           << "Copyright (c) 2015 Viktor Szathmáry.  All Rights Reserved."
           << endl

@@ -212,6 +212,10 @@ if [ -z "$TLRENDER_OPENJPH" ]; then
     export TLRENDER_OPENJPH=ON
 fi
 
+if [ -z "$TLRENDER_PNG" ]; then
+    export TLRENDER_PNG=ON
+fi
+
 if [ -z "$TLRENDER_RAW" ]; then
     export TLRENDER_RAW=ON
 fi
@@ -314,6 +318,8 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
 	export FLTK_BUILD_SHARED=OFF
     fi
 fi
+
+export GITHUB_OWNER="${GITHUB_REPOSITORY%%/*}"
     
 #
 # Clean python path to avoid clashes, mainly, with macOS meson
@@ -509,6 +515,7 @@ cmd="cmake -G 'Ninja'
 	   -D TLRENDER_NET=${TLRENDER_NET}
 	   -D TLRENDER_NFD=OFF
 	   -D TLRENDER_OPENJPH=${TLRENDER_OPENJPH}
+           -D TLRENDER_PNG=${TLRENDER_PNG}
 	   -D TLRENDER_RAW=${TLRENDER_RAW}
            -D TLRENDER_SSL=${TLRENDER_SSL}
            -D TLRENDER_STB=${TLRENDER_STB}

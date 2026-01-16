@@ -37,7 +37,7 @@ if(WIN32)
 	message(FATAL_ERROR "Could not find Strawberry Perl. Please ensure that the 'PERL_EXE' CMake variable STRAWBERRY_PERL_ROOT is set correctly, or that Strawberry Perl is installed to the default location.")
     endif()
     
-    if ($ENV{ARCH} MATCHES ".*aarch64.*" OR $ENV{ARCH} MATCHES ".*arm64.*")
+    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
 	set(OpenSSL_CONFIGURE
 	    ${PERL_EXE} Configure VC-WIN64-ARM
 	    --prefix=${CMAKE_INSTALL_PREFIX}
@@ -47,7 +47,7 @@ if(WIN32)
 	    no-unit-test)
 	set(OpenSSL_BUILD nmake install)
 	set(OpenSSL_INSTALL nmake install)
-    elseif ($ENV{ARCH} MATCHES ".*amd64.*")
+    elseif(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
 	set(OpenSSL_CONFIGURE
 	    ${PERL_EXE} Configure VC-WIN64A
 	    --prefix=${CMAKE_INSTALL_PREFIX}
