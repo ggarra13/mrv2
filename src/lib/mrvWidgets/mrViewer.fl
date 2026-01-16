@@ -118,7 +118,7 @@ decl {\#include "mrvApp/mrvApp.h"} {public global
 decl {\#include "mrvAboutUI.h"} {public global
 }
 
-decl {\#include "mrvHotkeyUI.h"} {private local
+decl {\#include "mrvHotkeyUI.h"} {selected private local
 }
 
 decl {\#include "mrvPreferencesUI.h"} {public global
@@ -131,7 +131,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {0 63 952 56} resizable
+  xywh {0 63 934 56} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -442,7 +442,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class TimelineClass {
-  xywh {29 92 933 56} box NO_BOX resizable
+  xywh {30 325 934 56} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -868,8 +868,8 @@ uiSecondary = nullptr;} {}
       user_data this user_data_type {ViewerUI*}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
-    exit_cb( o, v );} open selected
-      xywh {410 95 934 675} type Double align 80 resizable
+    exit_cb( o, v );} open
+      xywh {596 158 935 676} type Double align 80 resizable
       class {mrv::MainWindow} size_range {934 675 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -1222,7 +1222,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                   }
                 }
               }
-              Fl_Group uiActionGroup {
+              Fl_Group uiActionGroup {open
                 xywh {0 59 42 501} box FLAT_BOX
               } {
                 Fl_Button uiScrub {
