@@ -11,16 +11,19 @@
 #
 # You must run it from the root of the mrv2 project.
 #
+#
+# SOME DEFINES
+#
+export GIT_EXECUTABLE=git
+
+
+${GIT_EXECUTABLE} switch peace
+
 
 #
 # Extract the version from ./cmake/version.cmake
 #
 extract_version
-
-#
-# SOME DEFINES
-#
-export GIT_EXECUTABLE=git
 
 
 add_local_tag()
@@ -84,6 +87,7 @@ add_remote_tag()
 ${GIT_EXECUTABLE} switch main
 ${GIT_EXECUTABLE} merge peace --squash
 ${GIT_EXECUTABLE} commit
+${GIT_EXECUTABLE} push --force origin main
 
 #
 # Prepare the git repository for release
