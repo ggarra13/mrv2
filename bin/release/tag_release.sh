@@ -3,61 +3,102 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-set -e
-
 . ./etc/functions.sh
 
+#
+# This script tags a release both locally and in the remote repository.  It
+# should be run before an actual release.
+#
+# You must run it from the root of the mrv2 project.
+#
+
+#
+# Extract the version from ./cmake/version.cmake
+#
 extract_version
 
-# DEFINES
+#
+# SOME DEFINES
+#
 export GIT_EXECUTABLE=git
+
+
+add_local_tag()
+{
+    tag=$1
+    export has_tag=`${GIT_EXECUTABLE} tag -l | grep "${tag}"`
+    if [[ $has_tag != "" ]]; then
+	#
+	# Delete local tag if available
+	#
+	echo "Remove local tag '${tag}'"
+	${GIT_EXECUTABLE} tag -d "${tag}"
+    fi
+    
+    #
+    # Mark current repository with a new tag
+    #
+    ${GIT_EXECUTABLE} tag "${tag}"
+}
+
+add_remote_tag()
+{
+    input='y'
+    export has_tag=`${GIT_EXECUTABLE} ls-remote --tags origin | grep "${tag}"`
+    echo "has_tag? $has_tag"
+    if [[ $has_tag != "" ]]; then
+        echo "-------------------------------------------------------"
+        echo "  WARNING! Tag '${tag}' already in remote repository."
+        echo ""
+        echo "Are you sure you want to continue? (y/n)"
+        read input
+        if [[ $input != y* && $input != Y* ]]; then
+	    exit 1
+        fi
+
+        #
+        # Delete remote tag if available
+        #
+        echo "Remove remote tag ${tag}"
+        ${GIT_EXECUTABLE} push --delete origin "${tag}"
+    else
+        echo "Tag '${tag}' does not exist in remote"
+        echo ""
+        echo "Are you sure you want to continue? (y/n)"
+        read input
+        if [[ $input != y* && $input != Y* ]]; then
+	    exit 1
+        fi
+    fi
+
+    #
+    # Send new tag to repository
+    #
+    echo "Create remote tag ${tag}"
+    ${GIT_EXECUTABLE} push origin "${tag}"
+}
+
+#
+# Prepare the git repository for release
+#
+
+#
+# Pull last changes
+#
 export tag="v${mrv2_VERSION}"
-export source_branch="peace"
-export main_branch="main"
-
-# ---------------------------------------------
-# 1. Sanity checks
-# ---------------------------------------------
-if ! ${GIT_EXECUTABLE} diff --quiet; then
-    echo "ERROR: Working tree is dirty. Commit or stash changes first."
-    exit 1
-fi
-
-# Ensure we have the latest from the server
-${GIT_EXECUTABLE} fetch origin
-
-# ---------------------------------------------
-# 2. Squash onto Main
-# ---------------------------------------------
-echo "Merging and squashing ${source_branch} onto ${main_branch}..."
-
-${GIT_EXECUTABLE} checkout "${main_branch}"
-${GIT_EXECUTABLE} pull origin "${main_branch}"
-
-# Stage all changes from peace as a single set of changes
-${GIT_EXECUTABLE} merge --squash "${source_branch}"
-
-# Create the single "Squashed" commit
-${GIT_EXECUTABLE} commit -m "Release ${mrv2_VERSION} (Squashed merge from ${source_branch})"
-
-# ---------------------------------------------
-# 3. Tagging
-# ---------------------------------------------
-if ${GIT_EXECUTABLE} rev-parse "${tag}" >/dev/null 2>&1; then
-    echo "Removing existing local tag ${tag}"
-    ${GIT_EXECUTABLE} tag -d "${tag}"
-fi
-
-${GIT_EXECUTABLE} tag -a "${tag}" -m "mrv2 ${mrv2_VERSION}"
-
-# ---------------------------------------------
-# 4. Push Main and Tag
-# ---------------------------------------------
-echo "Pushing ${main_branch} and ${tag} to origin..."
-${GIT_EXECUTABLE} push origin "${main_branch}" --force-with-lease
-${GIT_EXECUTABLE} push origin "${tag}" --force
 
 echo "--------------------------------"
-echo " Release ${tag} complete."
-echo " ${main_branch} is updated and ${source_branch} is synchronized."
+echo "  Will release local ${tag} in mrv2"
 echo "--------------------------------"
+
+add_local_tag $tag
+
+echo "---------------------------------------"
+echo "  Will release remote ${tag} in mrv2"
+echo "---------------------------------------"
+
+add_remote_tag $tag
+
+cd ..
+
+
