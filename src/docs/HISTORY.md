@@ -67,6 +67,7 @@ ChangeLog
 - Added emoji support to OpenGL's Text Annotaiton widget on Windows and macOS.
 - Added version of FLTK Vulkan fork in About window.  It does not quite work as good as Vulkan's and it currently is broken on Linux.
 - Updated to FLTK Vulkan version v1.5.0.
+- Apple broke OpenGL on MacOS Tahoe 26.x.  It is recommended not to update.
 
 
 v1.5.1
