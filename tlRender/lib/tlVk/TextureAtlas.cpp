@@ -328,14 +328,17 @@ namespace tl
                         p.id = p.id + 1;
                         node2->id = p.id;
 
-                        //! \todo Do we need to zero out the old data?
-
-                        image::Info info(image->getSize(), p.textureType);
-                        auto zero = image::Image::create(info);
-                        zero->zero();
-                        p.textures[node2->textureIndex]->copy(zero,
-                                                              node2->box.min.x,
-                                                              node2->box.min.y);
+                        if (p.border > 0)
+                        {
+                            // Clean the full size of the texture if we have a border,
+                            // so we don't get stray pixels.
+                            image::Info info(image->getSize(), p.textureType);
+                            auto zero = image::Image::create(info);
+                            zero->zero();
+                            p.textures[node2->textureIndex]->copy(zero,
+                                                                  node2->box.min.x,
+                                                                  node2->box.min.y);
+                        }
                         
                         p.textures[node2->textureIndex]->copy(
                             image, node2->box.min.x + p.border,

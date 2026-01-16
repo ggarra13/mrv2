@@ -12,7 +12,7 @@ endfunction()
 function(install_mrv2_lib_glob _libglob)
     file(GLOB _libs "${_libglob}")
     foreach( _lib ${_libs} )
-	message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib")
+	message(STATUS "Copying ${_lib} to ${mrv2_NAME}")
 	file(COPY ${_lib}
 	    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib)
 	install_macos_target_with_deps( ${_lib} )
@@ -43,10 +43,12 @@ function(install_vulkan_lib_glob _libglob APPNAME)
 	set(_vulkan_found FALSE)
 	file(GLOB _libs "${VULKAN_SDK}/lib/${_libglob}.dylib")
 	foreach( _lib ${_libs} )
-	    file(COPY ${_lib}
-		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
-		FOLLOW_SYMLINK_CHAIN)
-	    set(_vulkan_found TRUE)
+	    if (EXISTS ${_lib})
+		file(COPY ${_lib}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
+		    FOLLOW_SYMLINK_CHAIN)
+		set(_vulkan_found TRUE)
+	    endif()
 	endforeach()
 	if(NOT _vulkan_found)
 	    message(FATAL_ERROR "FAILED: VULKAN_SDK set to ${VULKAN_SDK} but ${_libglob} not found")
@@ -56,18 +58,22 @@ function(install_vulkan_lib_glob _libglob APPNAME)
     set(_vulkan_found FALSE)
     file(GLOB _libs "/opt/homebrew/lib/${_libglob}.dylib")
     foreach( _lib ${_libs} )
-	file(COPY ${_lib}
-	    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
-	    FOLLOW_SYMLINK_CHAIN)
-	set(_vulkan_found TRUE)
-    endforeach()
-    if (NOT _vulkan_found)
-	file(GLOB _libs "/usr/local/lib/${_libglob}.dylib")
-	foreach( _lib ${_libs} )
+	if (EXISTS ${_lib})
 	    file(COPY ${_lib}
 		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
 		FOLLOW_SYMLINK_CHAIN)
-	endforeach()
+	    set(_vulkan_found TRUE)
+	endif()
+    endforeach()
+    if (NOT _vulkan_found)
+	file(GLOB _libs "/usr/local/lib/${_libglob}.dylib")
+	if (EXISTS ${_lib})
+	    foreach( _lib ${_libs} )
+		file(COPY ${_lib}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
+		    FOLLOW_SYMLINK_CHAIN)
+	    endforeach()
+	endif()
     endif()
 endfunction()
 
@@ -81,11 +87,14 @@ function(install_vulkan_icd_filenames APPNAME)
 	    "${VULKAN_SDK}/etc/vulkan*"
 	    "${VULKAN_SDK}/../etc/vulkan*")
 	foreach( _lib ${_libs} )
-	    message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc")
-	    file(COPY ${_lib}
-		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc
-		FOLLOW_SYMLINK_CHAIN)
-	    set(_vulkan_found TRUE)
+	    if (EXISTS ${_lib})
+		message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc")
+		file(COPY ${_lib}
+		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc
+		    FOLLOW_SYMLINK_CHAIN)
+		
+		set(_vulkan_found TRUE)
+	    endif()
 	endforeach()
 	if(NOT _vulkan_found)
 	    message(FATAL_ERROR "FAILED: VULKAN_SDK set to ${VULKAN_SDK} but ${VULKAN_SDK}/etc/vulkan/icd.d/*.json not found")
@@ -100,11 +109,13 @@ function(install_vulkan_icd_filenames APPNAME)
     file(GLOB _libs
 	"/opt/homebrew/etc/vulkan*")
     foreach( _lib ${_libs} )
-	message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/")
-	file(COPY ${_lib}
-	    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/
-	    FOLLOW_SYMLINK_CHAIN)
-	set(_vulkan_found TRUE)
+	if (EXISTS ${_lib})
+	    message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/")
+	    file(COPY ${_lib}
+		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/
+		FOLLOW_SYMLINK_CHAIN)
+	    set(_vulkan_found TRUE)
+	endif()
     endforeach()
     if(_vulkan_found)
 	return()
@@ -132,11 +143,13 @@ function(install_vulkan_icd_filenames APPNAME)
 	"${HOME}/etc/vulkan*"
 	"${HOME}/share/vulkan*")
     foreach( _lib ${_libs} )
-	message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc")
-	file(COPY ${_lib}
-	    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/
-	    FOLLOW_SYMLINK_CHAIN)
-	set(_vulkan_found TRUE)
+	if (EXISTS ${_lib})
+	    message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc")
+	    file(COPY ${_lib}
+		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/
+		FOLLOW_SYMLINK_CHAIN)
+	    set(_vulkan_found TRUE)
+	endif()
     endforeach()
     if(_vulkan_found)
 	return()
@@ -327,6 +340,7 @@ if (EXISTS ${CPACK_PREPACKAGE}/hdr.app)
     function(install_hdr_lib_glob _libglob)
 	file(GLOB _libs "${_libglob}")
 	foreach( _lib ${_libs} )
+	    message(STATUS "Copying ${_lib} to hdr")
 	    file(COPY ${_lib}
 		DESTINATION ${CPACK_PREPACKAGE}/hdr.app/Contents/Resources/lib)
 	    install_macos_target_with_deps( ${_lib} )
@@ -363,6 +377,13 @@ if (EXISTS ${CPACK_PREPACKAGE}/hdr.app)
     # Install .mo translation files
     #
     copy_mo_files(hdr hdr)
+endif()
+
+if ("${mrv2_NAME}" STREQUAL "mrv2")
+    file(GLOB _files
+	"${CPACK_PREPACKAGE}/lib/libfltk_vk*"
+	"${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/lib/libfltk_vk*")
+    file(REMOVE ${_files})
 endif()
 
 #

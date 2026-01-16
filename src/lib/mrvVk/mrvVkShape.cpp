@@ -658,189 +658,150 @@ namespace mrv
         return 0;
     }
     
+    int VKTextShape::handle_backspace() {
+        if (utf8_pos == 0) return 1;
+        
+        const char* start = text.c_str();
+        const char* pos = fl_utf8back(start + utf8_pos - 1, start, start + utf8_pos);
+        unsigned prev = pos - start;
+        unsigned len = utf8_pos - prev;
+
+        text.erase(prev, len);
+        utf8_pos = prev;
+    
+        Fl::compose_reset();
+        to_cursor();
+        return 1;
+    }
+    
+    int VKTextShape::handle_move_up() {
+        unsigned row = current_line();
+        if (row == 0)
+            return 1;
+        unsigned column = current_column();
+        unsigned start = line_start(utf8_pos);
+        start = line_start(start-2);  // 2 to skip \n
+        const char* pos = advance_to_column(start, column);
+        utf8_pos = pos - text.c_str();
+        Fl::compose_reset();
+        to_cursor();
+        return 1; 
+    }
+
+    int VKTextShape::handle_move_down() {
+        unsigned column = current_column();
+        unsigned end = line_end(utf8_pos);
+        if (end == text.size())
+            return 1;
+        unsigned start = line_start(end+1);
+        const char* pos = advance_to_column(start, column);
+        utf8_pos = pos - text.c_str();
+        Fl::compose_reset();
+        to_cursor();
+        return 1;
+    }
+    
+    int VKTextShape::handle_insert(const char* new_text, int len,
+                                   int del_back) {
+        if (del_back > 0 && utf8_pos >= (unsigned)del_back) {
+            utf8_pos -= del_back;
+            text.erase(utf8_pos, del_back);
+        }
+    
+        if (new_text && len > 0) {
+            text.insert(utf8_pos, new_text, len);
+            utf8_pos += len;
+        }
+        Fl::compose_reset();
+    
+        to_cursor();
+        return 1;
+    }
+    
     int VKTextShape::handle(int e)
     {
+     
+        if (e == FL_PASTE) return kf_paste();
+        if (e != FL_KEYBOARD) return 0;
+
         unsigned rawkey = Fl::event_key();
-        if ((rawkey == FL_KP_Enter || rawkey == FL_Enter) &&
-            Fl::event_shift())
-        {
+        int mods = Fl::event_state() & (FL_META | FL_CTRL | FL_ALT);
+        bool shift = Fl::event_state() & FL_SHIFT;
+
+        // Handle "Accept" shortcut (Shift+Enter)
+        if ((rawkey == FL_Enter || rawkey == FL_KP_Enter) && shift) {
             return accept();
         }
-        
-        int mods = Fl::event_state() & (FL_META|FL_CTRL|FL_ALT);
-        unsigned int shift = Fl::event_state() & FL_SHIFT;
-             
-        switch(e)
-        {
-        case FL_PASTE:
-        {
-            return kf_paste();
-            break;
-        }
-        case FL_KEYBOARD:
-        {
-            int del = 0;
-            if (!Fl::compose(del))
-            {
-                switch(rawkey)
-                {
-                case FL_Insert:
-                    if (mods == 0 && shift) return kf_paste();
-                    if (mods == FL_CTRL)    return kf_copy();
-                    return 0;
-                case FL_Escape:
-                    text = "";
-                    return accept();
-                    break; 
-                case FL_Delete:
-                {
-                    if (utf8_pos >= text.size())
-                        break;
-                    const char* current = text.c_str() + utf8_pos;
-                    const char* start = current;
-                    const char* end = start + text.size() - utf8_pos;
-                    const char* pos = fl_utf8fwd(current + 1, start, end);
-                    unsigned next = pos - text.c_str();
-                    std::string left;
-                    std::string right;
-                    if (utf8_pos > 0)
-                        left = text.substr(0, utf8_pos);
-                    if (next < text.size())
-                        right = text.substr(next, text.size());
-                    text = left + right;
-                    break;
-                }
-                case FL_BackSpace:
-                {
-                    if (utf8_pos == 0)
-                        break;
-                    unsigned last = utf8_pos;
-                    const char* current = text.c_str() + utf8_pos;
-                    const char* start = text.c_str();
-                    const char* end = current;
-                    const char* pos = fl_utf8back(current - 1, start, end);
-                    utf8_pos = pos - text.c_str();
-                    std::string left;
-                    std::string right;
-                    if (utf8_pos > 0)
-                        left = text.substr(0, utf8_pos);
-                    if (last < text.size())
-                        right = text.substr(last, text.size());
-                    text = left + right;
-                    Fl::compose_reset();
-                    break;
-                }
-                case FL_Up:
-                {
-                    unsigned row = current_line();
-                    if (row == 0)
-                        break;
-                    unsigned column = current_column();
-                    unsigned start = line_start(utf8_pos);
-                    start = line_start(start-2);  // 2 to skip \n
-                    const char* pos = advance_to_column(start, column);
-                    utf8_pos = pos - text.c_str();
-                    Fl::compose_reset();
-                    break;
-                }
-                case FL_Down:
-                {
-                    unsigned column = current_column();
-                    unsigned end = line_end(utf8_pos);
-                    if (end == text.size())
-                        break;
-                    unsigned start = line_start(end+1);
-                    const char* pos = advance_to_column(start, column);
-                    utf8_pos = pos - text.c_str();
-                    Fl::compose_reset();
-                    break;
-                }
-                case FL_Left:
-                {
-                    if (utf8_pos == 0)
-                        break;
-                    const char* current = text.c_str() + utf8_pos;
-                    const char* start = text.c_str();
-                    const char* end = current;
-                    const char* pos = fl_utf8back(current - 1, start, end);
-                    utf8_pos = pos - text.c_str();
-                    Fl::compose_reset();
-                    break;
-                }
-                case FL_Right:
-                {
-                    if (utf8_pos >= text.size())
-                        break;
-                    const char* current = text.c_str() + utf8_pos;
-                    const char* start = current;
-                    const char* end = start + text.size() - utf8_pos;
-                    const char* pos = fl_utf8fwd(current + 1, start, end);
-                    utf8_pos = pos - text.c_str();
-                    Fl::compose_reset();
-                    break;
-                }
-                case FL_Enter:
-                case FL_KP_Enter:
-                {
-                    std::string left;
-                    std::string right;
-                    if (utf8_pos > 0)
-                        left = text.substr(0, utf8_pos); 
 
-                    const char* current = text.c_str() + utf8_pos;
-                    const char* start = current;
-                    const char* end = start + text.size() - utf8_pos;
-                    const char* pos = fl_utf8fwd(current + 1, start, end);
-                    if (utf8_pos < text.size())
-                        right = text.substr(utf8_pos, text.size());
-                
-                    text = left + '\n' + right;
-                    utf8_pos += Fl::event_length();
-                    Fl::compose_reset();
-                    break;
-                }
-                case 'x':
-                    if (mods==FL_COMMAND) return kf_copy_cut();
-                    break;
-                case 'c':
-                    if (mods==FL_COMMAND) return kf_copy();
-                    break;
-                case 'v':
-                    if (mods==FL_COMMAND) return kf_paste();
-                    break;
-                default:
-                    break;
-                }
+        int del = 0;
+        if (Fl::compose(del)) {
+            if (del > 0 || (Fl::event_text() && Fl::event_length() > 0)) {
+                handle_insert(Fl::event_text(), Fl::event_length(), del);
             }
-            else
-            {
-                int len = Fl::event_length();
-                std::string key(Fl::event_text(), len);
-                if (del > 0 || Fl::event_text() && len > 0)
-                {
-                    std::string left;
-                    std::string right;
-                    if (utf8_pos > 0)
-                        left = text.substr(0, utf8_pos - del); 
-                    
-                    const char* current = text.c_str() + utf8_pos;
-                    const char* start = current;
-                    const char* end = start + text.size() - utf8_pos;
-                    const char* pos = fl_utf8fwd(current + 1, start, end);
-                    
-                    if (utf8_pos < text.size())
-                        right = text.substr(utf8_pos, text.size());
-                    
-                    text = left + key + right;
-                    utf8_pos += len - del;
-                }
-            }
-            to_cursor();
             return 1;
-            break;
         }
+
+        // Command shortcuts
+        if (mods & FL_COMMAND) {
+            switch (tolower(rawkey)) {
+            case 'c': return kf_copy();
+            case 'v': return kf_paste();
+            case 'x': return kf_copy_cut();
+            case 'a': return kf_select_all();
+            }
         }
+
+        // Navigation and Editing
+        switch (rawkey) {
+        case FL_BackSpace: return handle_backspace();
+        case FL_Delete:    return handle_delete();
+        case FL_Left:      return handle_move_left();
+        case FL_Right:     return handle_move_right();
+        case FL_Up:        return handle_move_up();
+        case FL_Down:      return handle_move_down();
+        case FL_Enter:
+        case FL_KP_Enter:  return handle_insert("\n", 1, 0);
+        case FL_Escape:    text = ""; return accept();
+        }
+
         return 0;
+    }
+    
+    int VKTextShape::handle_move_left() {
+        if (utf8_pos > 0) {
+            const char* start = text.c_str();
+            const char* pos = fl_utf8back(start + utf8_pos - 1, start, start + utf8_pos);
+            utf8_pos = pos - start;
+        }
+        Fl::compose_reset();
+        to_cursor();
+        return 1;
+    }
+    
+    int VKTextShape::handle_move_right() {
+        if (utf8_pos < text.size()) {
+            const char* start = text.c_str();
+            const char* pos = fl_utf8fwd(start + utf8_pos + 1, start + utf8_pos, start + text.size());
+            utf8_pos = pos - start;
+        }
+        Fl::compose_reset();
+        
+        to_cursor();
+        return 1;
+    }
+    
+    int VKTextShape::handle_delete()
+    {
+        if (utf8_pos >= text.size()) return 1;
+
+        const char* start = text.c_str();
+        const char* current = start + utf8_pos;
+        const char* next_pos = fl_utf8fwd(current + 1, current, start + text.size());
+        
+        text.erase(utf8_pos, next_pos - current);
+        
+        to_cursor();
+        return 1;
     }
     
     int VKTextShape::handle_mouse_click(int event, const math::Vector2i& local)
@@ -890,7 +851,6 @@ namespace mrv
                 {
                     cursor_pos.x = x;
                     cursor_pos.y += fontSize;
-                    // --- Update utf8_pos for the newline ('\n') ---
                     if (text_it < text_end && *text_it == '\n')
                     {
                         utf8_pos += 1;
@@ -930,17 +890,41 @@ namespace mrv
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::shared_ptr<vulkan::Lines> lines)
     {
-        file::Path path(fontPath);
+        //
+        // Add selected font.
+        //
+        const file::Path path(fontPath);
         const std::string fontFamily = path.getBaseName();
         if (!fontSystem->hasFont(fontFamily))
         {
             fontSystem->addFont(fontPath);
         }
         
+        //
+        // Add emoji font.
+        //
+        const file::Path emojiPath = image::emojiFont();
+        const std::string emojiFamily = emojiPath.getBaseName();
+        if (!fontSystem->hasFont(emojiFamily))
+        {
+            fontSystem->addFont(emojiPath.get());
+        }
+        
+        //
+        // Get metrics for selected font.
+        // 
         const image::FontInfo fontInfo(fontFamily, fontSize);
         const image::FontMetrics fontMetrics = fontSystem->getMetrics(fontInfo);
         int ascender = fontMetrics.ascender;
         int descender = fontMetrics.descender;
+
+        //
+        // Get metrics for emoji font.
+        //
+        const image::FontInfo emojiInfo(emojiFamily, fontSize);
+        const image::FontMetrics emojiMetrics = fontSystem->getMetrics(emojiInfo);
+        int emojiAscender = emojiMetrics.ascender;
+        int emojiDescender = emojiMetrics.descender;
 
         // Copy the text to process it line by line
         std::string txt = text;
@@ -952,24 +936,80 @@ namespace mrv
         std::size_t pos = txt.find('\n');
         std::vector<timeline::TextInfo> textInfos;
         unsigned cursor_count = 0;
+        int currentDrawX = x;
+
+        // Helper to flush the current accumulated run
+        auto flushRun = [&](const std::string& run, bool isEmoji) 
+            {
+                if (run.empty()) return;
+                
+                const auto& activeInfo = isEmoji ? emojiInfo : fontInfo;
+                const auto& glyphs = fontSystem->getGlyphs(run, activeInfo);
+                math::Vector2i pnt(currentDrawX, y);
+        
+                for (const auto& glyph : glyphs)
+                {
+                    if (glyph)
+                    {
+                        if (cursor_count < cursor)
+                            cursor_pos.x += glyph->advance;
+                        currentDrawX += glyph->advance;
+                    }
+                    ++cursor_count;
+                }
+                render->appendText(textInfos, glyphs, pnt);
+            };
+        
         for (; pos != std::string::npos; y += fontSize, pos = txt.find('\n'))
         {
-            pnt.y = y;
-            
             const std::string line = txt.substr(0, pos);
-            const auto& glyphs = fontSystem->getGlyphs(line, fontInfo);
-            for (const auto& glyph : glyphs)
+            
+            currentDrawX = x; 
+
+            // Buffers for batching
+            std::string currentRun;
+            bool runIsEmoji = false;
+
+            for (size_t i = 0; i < line.size(); )
             {
-                if (glyph)
+                // fl_utf8len returns the length of the UTF-8 sequence (1 to 4 bytes)
+                int len = fl_utf8len(line[i]);
+        
+                // Safety fallback: if FLTK returns < 1 for some reason, assume 1 byte to prevent infinite loops
+                if (len < 1) len = 1; 
+
+                std::string charStr = line.substr(i, len);
+        
+                // Check main font first
+                bool isEmojiChar = false;
+                auto mainGlyphs = fontSystem->getGlyphs(charStr, fontInfo);
+        
+                // If the main font returns no glyphs or a "null" glyph, mark
+                // as emoji
+                if (mainGlyphs.empty() || !mainGlyphs[0]) 
                 {
-                    if (cursor_count < cursor)
-                    {
-                        cursor_pos.x += glyph->advance;
-                    }
+                    isEmojiChar = true;
                 }
-                ++cursor_count;
+
+                // Mode switch: Flush buffer if font type changed
+                if (isEmojiChar != runIsEmoji && !currentRun.empty())
+                {
+                    flushRun(currentRun, runIsEmoji);
+                    currentRun.clear();
+                }
+
+                runIsEmoji = isEmojiChar;
+                currentRun += charStr;
+                i += len; // Advance by the UTF-8 length
             }
-            render->appendText(textInfos, glyphs, pnt);
+
+            // Flush remaining buffer at end of line
+            if (!currentRun.empty())
+            {
+                flushRun(currentRun, runIsEmoji);
+            }
+            
+
             if (txt.size() > pos)
             {
                 txt = txt.substr(pos + 1, txt.size());
@@ -981,30 +1021,63 @@ namespace mrv
                 }
             }
         }
+
         if (!txt.empty())
         {
-            pnt.y = y;
-            const auto& glyphs = fontSystem->getGlyphs(txt, fontInfo);
-            for (const auto& glyph : glyphs)
+            std::string line = txt;
+            currentDrawX = x; 
+
+            // Buffers for batching
+            std::string currentRun;
+            bool runIsEmoji = false;
+            
+            for (size_t i = 0; i < line.size(); )
             {
-                if (glyph)
+                // fl_utf8len returns the length of the UTF-8 sequence (1 to 4 bytes)
+                int len = fl_utf8len(line[i]);
+        
+                // Safety fallback: if FLTK returns < 1 for some reason, assume 1 byte to prevent infinite loops
+                if (len < 1) len = 1; 
+
+                std::string charStr = line.substr(i, len);
+        
+                // Check main font first
+                bool isEmojiChar = false;
+                auto mainGlyphs = fontSystem->getGlyphs(charStr, fontInfo);
+        
+                // If the main font returns no glyphs or a "null" glyph, mark
+                // as emoji
+                if (mainGlyphs.empty() || !mainGlyphs[0]) 
                 {
-                    if (cursor_count < cursor)
-                    {
-                        cursor_pos.x += glyph->advance;
-                    }
+                    isEmojiChar = true;
                 }
-                ++cursor_count;
+
+                // Mode switch: Flush buffer if font type changed
+                if (isEmojiChar != runIsEmoji && !currentRun.empty())
+                {
+                    flushRun(currentRun, runIsEmoji);
+                    currentRun.clear();
+                }
+
+                runIsEmoji = isEmojiChar;
+                currentRun += charStr;
+                i += len; // Advance by the UTF-8 length
             }
-            render->appendText(textInfos, glyphs, pnt);
+
+            // Flush remaining buffer at end of line
+            if (!currentRun.empty())
+            {
+                flushRun(currentRun, runIsEmoji);
+            }
         }
+ 
 
         const image::Color4f cursorColor(.8F, 0.8F, 0.8F);
         math::Box2i cursorBox(cursor_pos.x, cursor_pos.y, 2, fontSize);
             
         if (editing)
         {
-            box = math::Box2i(pts[0].x, pts[0].y + descender, 70, 0);
+            box = math::Box2i(pts[0].x, pts[0].y + descender - ascender, 70, 0);
             for (const auto& textInfo : textInfos)
             {
                 for (const auto& v : textInfo.mesh.v)

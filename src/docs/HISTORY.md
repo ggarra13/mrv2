@@ -58,6 +58,18 @@ ChangeLog
 - Made clicking twice on the Status Bar bring up the Logs panel to the front.
 - Fixed fonts on Vulkan backend showing some garbage at the edges.
 - Fixed Edit/Audio Gap/Insert.
+- Fixed tooltip showing the title of Link Annotations on Windows.
+- Fixed macOS distribution linking against libfltk_vk.dylib on the OpenGL backend and not allowing it to start.
+- Fixed Color Chooser on Vulkan not refreshing when dragging the mouse.
+- Upgraded to OpenColorIO v2.5.1.
+- Upgraded to OpenEXR v3.4.4.
+- Added emoji support to Vulkan's Text Annotation widget.
+- Added emoji support to OpenGL's Text Annotaiton widget.
+- Added version of FLTK Vulkan fork in About window.  It does not quite work as good as Vulkan's and it currently is broken on Linux.
+- Updated to FLTK Vulkan version v1.5.0.
+- Fixed .rpm and .deb Vulkan installers not cleaning up properly on uninstall.
+- Apple broke OpenGL on MacOS Tahoe 26.x.  To fix it, you need to go to:
+	System Settings->Accesibility->Motion and turn on Reduce Motion.
 
 
 v1.5.1

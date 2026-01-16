@@ -3734,6 +3734,9 @@ msgstr "Elegir Color"
 msgid "Pick Draw Color and Alpha"
 msgstr "Elegir Color y Opacidad de Dibujo"
 
+msgid "Install is broken.  Missing license_helper"
+msgstr "La instalación está dañada. Falta license_helper"
+
 msgid "Media"
 msgstr "Medios"
 

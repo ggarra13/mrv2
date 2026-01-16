@@ -23,7 +23,7 @@ endif()
 
 list(APPEND LIBRARIES mrvApp)
 
-if(TLRENDER_VK)
+if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
     list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
 endif()
 
