@@ -31,7 +31,8 @@ if [[ @mrv2_NAME@ == "vmrv2" ]]; then
     mrv2="@CPACK_INSTALL_PREFIX@/bin/mrv2"
     vmrv2="@CPACK_INSTALL_PREFIX@/bin/@mrv2_NAME@"
     if [[ -e $vmrv2 ]]; then
-	mv $vmrv2 $mrv2
+	rm -rf $vmrv2
+	touch $mrv2
     fi
 fi
 
