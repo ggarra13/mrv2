@@ -79,6 +79,13 @@ add_remote_tag()
 }
 
 #
+# 
+#
+${GIT_EXECUTABLE} switch main
+${GIT_EXECUTABLE} merge peace --squash
+${GIT_EXECUTABLE} commit
+
+#
 # Prepare the git repository for release
 #
 
