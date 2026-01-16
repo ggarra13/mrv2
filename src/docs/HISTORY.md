@@ -60,10 +60,13 @@ ChangeLog
 - Fixed Edit/Audio Gap/Insert.
 - Fixed tooltip showing the title of Link Annotations on Windows.
 - Fixed macOS distribution linking against libfltk_vk.dylib on the OpenGL backend and not allowing it to start.
-- Fixed Color Chooser on Vulkan not refreshing when dragging the mouse.	  
+- Fixed Color Chooser on Vulkan not refreshing when dragging the mouse.
 - Upgraded to OpenColorIO v2.5.1.
 - Upgraded to OpenEXR v3.4.4.
 - Added emoji support to Vulkan's Text Annotation widget.
+- Added emoji support to OpenGL's Text Annotaiton widget on Windows and macOS.
+- Added version of FLTK Vulkan fork in About window.
+- Updated to FLTK Vulkan version v1.5.0.
 
 
 v1.5.1

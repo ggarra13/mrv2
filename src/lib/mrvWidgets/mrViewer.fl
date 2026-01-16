@@ -131,7 +131,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {0 0 952 56} resizable
+  xywh {0 63 952 56} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {
@@ -442,7 +442,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class TimelineClass {
-  xywh {0 0 933 56} box NO_BOX resizable
+  xywh {29 92 933 56} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -869,7 +869,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 933 673} type Double align 80 resizable
+      xywh {460 144 934 675} type Double align 80 resizable
       class {mrv::MainWindow} size_range {933 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -913,7 +913,7 @@ else
     if (value) mrv::editMode = mrv::EditMode::kFull;
     else       mrv::editMode = mrv::EditMode::kNone;
     mrv::toggle_timeline_bar(nullptr, v);
-}}
+}} selected
               tooltip {Toggle Edit Mode.} xywh {813 0 79 30} down_box DOWN_BOX selection_color 95 labelsize 12 align 192
             }
           }
@@ -1183,7 +1183,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                 }
                 Fl_Button uiRoll {
                   user_data this user_data_type {ViewerUI*}
-                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );} selected
+                  callback {uiView->setEditMode( tl::timeline::EditMode::Roll );}
                   image {../../icons/EditRoll.svg} compress_image 1 xywh {1 260 40 50} down_box DOWN_BOX selection_color 95
                   class {mrv::Button}
                 }

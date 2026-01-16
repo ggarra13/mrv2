@@ -297,7 +297,6 @@ function(install_library_with_links LIBRARY)
 	FILES "${LIBRARY}"
     )
 
-    message(STATUS "Install ${LIBRARY} in ${CMAKE_INSTALL_PREFIX}")
     list(APPEND INSTALLED_LIBRARIES "${LIBRARY}")
     set(INSTALLED_LIBRARIES "${INSTALLED_LIBRARIES}" CACHE INTERNAL "List of installed libraries")
 
