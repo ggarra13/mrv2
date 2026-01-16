@@ -110,6 +110,6 @@ echo "---------------------------------------"
 
 add_remote_tag $tag
 
-cd ..
 
-
+${GIT_EXECUTABLE} switch peace
+${GIT_EXECUTABLE} merge main

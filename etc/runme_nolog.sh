@@ -320,6 +320,13 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
 fi
 
 export GITHUB_OWNER="${GITHUB_REPOSITORY%%/*}"
+if [ -n "$GITHUB_REPOSITORY" ]; then
+    export GITHUB_REPO="${GITHUB_REPOSITORY##*/}"
+else
+    export GITHUB_REPO=$(basename -s .git "$(git config --get remote.origin.url)")
+fi
+
+echo "Repository Name: $GITHUB_REPO"
     
 #
 # Clean python path to avoid clashes, mainly, with macOS meson

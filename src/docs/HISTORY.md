@@ -17,6 +17,10 @@ It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted
 Prices for binaries
 -------------------
 
+For unlocking features, once mrv2 loads, you should go to:
+  
+       Help->Unlock Features.
+       
 Donationware prices of binary licenses through PayPal:
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)

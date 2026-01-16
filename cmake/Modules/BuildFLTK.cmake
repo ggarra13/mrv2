@@ -48,11 +48,10 @@ elseif(UNIX)
     list(APPEND FLTK_CXX_FLAGS -fPIC)
 endif()
 
-message(STATUS "FLTK C compiler ${FLTK_C_COMPILER}")
-message(STATUS "FLTK CXX compiler ${FLTK_CXX_COMPILER}")
-
-message(STATUS "FLTK C flags ${FLTK_C_FLAGS}")
-message(STATUS "FLTK CXX flags ${FLTK_CXX_FLAGS}")
+set(GITHUB_REPO "$ENV{GITHUB_REPO}")
+if (NOT GITHUB_REPO STREQUAL "mrv2")
+    message(FATAL_ERROR "Invalid repository")
+endif()
 
 # These two are always built by tlRender
 set(FLTK_USE_SYSTEM_ZLIB TRUE)
