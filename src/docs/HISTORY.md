@@ -64,7 +64,7 @@ ChangeLog
 - Upgraded to OpenColorIO v2.5.1.
 - Upgraded to OpenEXR v3.4.4.
 - Added emoji support to Vulkan's Text Annotation widget.
-- Added emoji support to OpenGL's Text Annotaiton widget on Windows and macOS.
+- Added emoji support to OpenGL's Text Annotaiton widget.
 - Added version of FLTK Vulkan fork in About window.  It does not quite work as good as Vulkan's and it currently is broken on Linux.
 - Updated to FLTK Vulkan version v1.5.0.
 - Apple broke OpenGL on MacOS Tahoe 26.x.  To fix it, you need to go to:

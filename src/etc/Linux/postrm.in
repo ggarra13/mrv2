@@ -28,11 +28,9 @@ if [[ -L /usr/bin/@mrv2_NAME@ ]]; then
 fi
 
 if [[ @mrv2_NAME@ == "vmrv2" ]]; then
-    mrv2="@CPACK_INSTALL_PREFIX@/bin/mrv2"
     vmrv2="@CPACK_INSTALL_PREFIX@/bin/@mrv2_NAME@"
     if [[ -e $vmrv2 ]]; then
-	rm -rf $vmrv2
-	touch $mrv2
+	rm -f $vmrv2
     fi
 fi
 
