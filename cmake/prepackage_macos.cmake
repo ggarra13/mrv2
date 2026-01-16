@@ -323,7 +323,6 @@ install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libz*" )
     
 if (MRV2_BACKEND STREQUAL "VK")
-    install_vulkan_lib_glob("libfltk_vk*" vmrv2)
     install_vulkan_lib_glob("libglslang*" vmrv2)
     install_vulkan_lib_glob("libSPIRV*" vmrv2)
     install_vulkan_lib_glob("libMoltenVK*" vmrv2)
