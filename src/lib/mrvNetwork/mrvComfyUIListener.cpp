@@ -2,7 +2,16 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <tlCore/Image.h>
+
+
+#include "mrvNetwork/mrvComfyUIListener.h"
+
+#include "mrvApp/mrvApp.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvIO.h"
 
 #include <Poco/Net/SocketAddress.h>
 #include <Poco/Net/StreamSocket.h>
@@ -11,14 +20,7 @@
 #include <Poco/Net/TCPServerConnection.h>
 #include <Poco/Exception.h>
 
-#include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvCallbacks.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvNetwork/mrvComfyUIListener.h"
-
-#include "mrViewer.h"
+#include <tlCore/Image.h>
 
 namespace
 {

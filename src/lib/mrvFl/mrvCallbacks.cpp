@@ -167,24 +167,6 @@ namespace mrv
             }
         }
 
-        // void clear_timeline_player(ViewerUI* ui, TimelinePlayer* player)
-        // {
-        //     ui->uiView->setTimelinePlayer(nullptr);
-        //     if (ui->uiSecondary && ui->uiSecondary->window()->visible())
-        //         ui->uiSecondary->viewport()->setTimelinePlayer(nullptr);
-        //     player->setTimeline(nullptr);
-        // }
-
-        // void set_timeline_player(
-        //     const ViewerUI* ui, TimelinePlayer* player,
-        //     const otio::SerializableObject::Retainer<otio::Timeline>&
-        //     timeline)
-        // {
-        //     player->setTimeline(timeline);
-        //     ui->uiView->setTimelinePlayer(player);
-        //     if (ui->uiSecondary && ui->uiSecondary->window()->visible())
-        //         ui->uiSecondary->viewport()->setTimelinePlayer(player);
-        // }
     } // namespace
 
     void open_files_cb(const std::vector< std::string >& files, ViewerUI* ui)

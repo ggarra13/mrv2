@@ -10,12 +10,6 @@
 #endif
 
 
-#include <tlIO/System.h>
-
-#include <tlCore/StringFormat.h>
-#include <tlCore/AudioSystem.h>
-
-#include <tlTimeline/Util.h>
 
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
@@ -24,6 +18,25 @@ namespace py = pybind11;
 #    include "mrvPy/Plugin.h"
 #    include "mrvPy/PyStdErrOutRedirect.h"
 #endif
+
+#include "mrvApp/mrvApp.h"
+#include "mrvApp/mrvGlobals.h"
+#include "mrvApp/mrvPlaylistsModel.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvMainControl.h"
+#include "mrvApp/mrvOpenSeparateAudioDialog.h"
+#include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvFl/mrvContextObject.h"
+#include "mrvFl/mrvInit.h"
+#include "mrvFl/mrvLanguages.h"
+#include "mrvFl/mrvPreferences.h"
+#include "mrvFl/mrvSession.h"
+#include "mrvFl/mrvTimelinePlayer.h"
+
+#include "mrvWidgets/mrvLogDisplay.h"
+#include "mrvWidgets/mrvProgressReport.h"
+#include "mrvWidgets/mrvPythonOutput.h"
 
 #include "mrvCore/mrvOS.h" // do not move up
 #include "mrvCore/mrvMemory.h"
@@ -37,30 +50,32 @@ namespace py = pybind11;
 #  include "mrvCore/mrvSignalHandler.h"
 #endif
 
-#include "mrvFl/mrvContextObject.h"
-#include "mrvFl/mrvInit.h"
-#include "mrvFl/mrvLanguages.h"
-#include "mrvFl/mrvPreferences.h"
-#include "mrvFl/mrvSession.h"
-#include "mrvFl/mrvTimelinePlayer.h"
+#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
+#    include <tlDevice/DevicesModel.h>
+#endif
 
-#include "mrvWidgets/mrvLogDisplay.h"
-#include "mrvWidgets/mrvProgressReport.h"
-#include "mrvWidgets/mrvPythonOutput.h"
+#ifdef TLRENDER_BMD
+#    include <tlDevice/BMD/BMDOutputDevice.h>
+#endif
 
-#if defined(TLRENDER_USD)
-#    include "mrvOptions/mrvUSD.h"
-#endif // TLRENDER_USD
+#ifdef TLRENDER_NDI
+#    include <tlDevice/NDI/NDIOutputDevice.h>
+#endif
+
+#include <tlTimeline/Util.h>
+
+#include <tlIO/System.h>
+
+#include <tlCore/StringFormat.h>
+#include <tlCore/AudioSystem.h>
+
+
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrvNetwork/mrvDummyClient.h"
-
-#include "mrvOptions/mrvDisplayOptions.h"
-#include "mrvOptions/mrvLUTOptions.h"
-
 #ifdef MRV2_NETWORK
 #    include "mrvNetwork/mrvCommandInterpreter.h"
 #    include "mrvNetwork/mrvClient.h"
@@ -70,6 +85,14 @@ namespace py = pybind11;
 #    include "mrvNetwork/mrvParseHost.h"
 #endif
 
+#include "mrvOptions/mrvDisplayOptions.h"
+#include "mrvOptions/mrvLUTOptions.h"
+
+#if defined(TLRENDER_USD)
+#    include "mrvOptions/mrvUSD.h"
+#endif // TLRENDER_USD
+
+
 #include "mrvEdit/mrvEditUtil.h"
 #include "mrvEdit/mrvCreateEDLFromFiles.h"
 
@@ -77,12 +100,6 @@ namespace py = pybind11;
 #    include "mrvPy/mrvPythonArgs.h"
 #endif
 
-#include "mrvApp/mrvApp.h"
-#include "mrvApp/mrvPlaylistsModel.h"
-#include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvMainControl.h"
-#include "mrvApp/mrvOpenSeparateAudioDialog.h"
-#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvPreferencesUI.h"
 #include "mrViewer.h"
@@ -106,17 +123,6 @@ namespace py = pybind11;
 
 #include "mrvFl/mrvIO.h"
 
-#if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)
-#    include <tlDevice/DevicesModel.h>
-#endif
-
-#ifdef TLRENDER_BMD
-#    include <tlDevice/BMD/BMDOutputDevice.h>
-#endif
-
-#ifdef TLRENDER_NDI
-#    include <tlDevice/NDI/NDIOutputDevice.h>
-#endif
 
 namespace
 {
@@ -272,7 +278,7 @@ namespace mrv
     {
         License ok = license_beat();
         if (ok != License::kValid ||
-            App::license_type == LicenseType::kFloating)
+            app::license_type == LicenseType::kFloating)
         {
             Fl::repeat_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, data);
         }
@@ -514,7 +520,7 @@ namespace mrv
 
                 app::CmdLineHeader::create({}, _("Miscellaneous:")),
                 app::CmdLineFlagOption::create(
-                    App::force_demo, {"-demo"},
+                    app::force_demo, {"-demo"},
                     _("Open the application as if no license was present.")),
                 app::CmdLineFlagOption::create(
                     p.options.displayVersion, {"-version", "-v"},
@@ -644,7 +650,7 @@ namespace mrv
         License ok = license_beat();
 
         // Floating licenses will do a beat every
-        if (license_type == LicenseType::kFloating)
+        if (app::license_type == LicenseType::kFloating)
             Fl::add_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, this);
         
         DBG;
@@ -981,7 +987,7 @@ namespace mrv
         bool showUI = true;
 
 #ifdef MRV2_PYBIND11
-        if (App::soporta_python && !p.options.pythonScript.empty())
+        if (app::soporta_python && !p.options.pythonScript.empty())
         {
             showUI = false;
         }
@@ -1146,7 +1152,7 @@ namespace mrv
         }
 
 #ifdef MRV2_PYBIND11
-        if (!p.options.noPython && App::soporta_python)
+        if (!p.options.noPython && app::soporta_python)
         {
             // Import the mrv2 python module so we read all python
             // plug-ins.

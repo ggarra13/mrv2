@@ -1,4 +1,4 @@
-v1.5.2
+v1.5.3
 ======
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
@@ -50,6 +50,16 @@ They do have, however:
     - Saving Images and Movies with Audio
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+- Improved the look of Text Annotation Widget on Vulkan backend.
+- Major refactoring to improve compilation performance.
+
+
+v1.5.2
+======
 
 ChangeLog
 ---------

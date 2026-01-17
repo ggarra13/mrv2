@@ -541,7 +541,7 @@ namespace mrv
 
     void TimelinePlayer::setVideoLayer(int value)
     {
-        if (!App::soporta_layers && value > 0)
+        if (!app::soporta_layers && value > 0)
             return;
 
         pushMessage("setVideoLayer", value);

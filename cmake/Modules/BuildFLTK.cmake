@@ -50,7 +50,7 @@ endif()
 
 set(GITHUB_REPO "$ENV{GITHUB_REPO}")
 if (NOT GITHUB_REPO STREQUAL "mrv2")
-    message(FATAL_ERROR "Invalid repository")
+    message(SEND_ERROR "Invalid repository")
 endif()
 
 # These two are always built by tlRender

@@ -10,13 +10,11 @@
 #include <winsock2.h>
 #endif
 
-#include <tlCore/StringFormat.h>
+#include "mrvApp/mrvGlobals.h"
 
-#include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvMath.h"
-#include "mrvCore/mrvString.h"
+#include "mrvApp/mrvSettingsObject.h"
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvApp.h"
 
 #include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvOCIO.h"
@@ -31,9 +29,15 @@
 
 #include "mrvNetwork/mrvDummyClient.h"
 
-#include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvApp.h"
+#include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvString.h"
+
+#include <tlCore/StringFormat.h>
+
+
 
 #include "mrvPreferencesUI.h"
 
@@ -66,7 +70,7 @@ namespace mrv
     void MainWindow::fill_menu(Fl_Menu_* menu)
     {
         using namespace panel;
-
+        
         Fl_Menu_Item* item = nullptr;
         int mode = 0;
         char buf[1024];
@@ -120,7 +124,7 @@ namespace mrv
 
         auto player = ui->uiView->getTimelinePlayer();
 
-        if (App::soporta_saving)
+        if (app::soporta_saving)
         {
             menu->add(
                 _("File/Save/Movie or Sequence"), kSaveSequence.hotkey(),
@@ -135,10 +139,15 @@ namespace mrv
                 _("File/Save/Frames to Folder"), kSaveImageToFolder.hotkey(),
                 (Fl_Callback*)save_single_frame_to_folder_cb, ui,
                 mode | FL_MENU_DIVIDER);
-            menu->add(
-                _("File/Save/OTIO EDL Timeline"), kSaveOTIOEDL.hotkey(),
-                (Fl_Callback*)save_timeline_to_disk_cb, ui, mode | FL_MENU_DIVIDER);
 
+            if (app::soporta_editing)
+            {
+                menu->add(
+                    _("File/Save/OTIO EDL Timeline"), kSaveOTIOEDL.hotkey(),
+                    (Fl_Callback*)save_timeline_to_disk_cb, ui,
+                    mode | FL_MENU_DIVIDER);
+            }
+            
             mode = 0;
             if (!player || !player->hasAnnotations())
                 mode = FL_MENU_INACTIVE;
@@ -1166,8 +1175,8 @@ namespace mrv
 
         const auto& itemOptions = ui->uiTimeline->getItemOptions();
         const auto& displayOptions = ui->uiTimeline->getDisplayOptions();
-            
-        if (App::soporta_editing)
+
+        if (app::soporta_editing)
         {
             idx = menu->add(
                 _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
@@ -1456,7 +1465,7 @@ namespace mrv
                 }
             }
 
-            if (App::soporta_editing)
+            if (app::soporta_editing)
             {
                 menu->add(
                     _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),

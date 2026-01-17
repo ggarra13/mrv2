@@ -33,6 +33,7 @@ BUILD-*
 Qt5
 Qt6
 packages
+paquetes
 doc/doxygen
 talks/
 examples/mrv2

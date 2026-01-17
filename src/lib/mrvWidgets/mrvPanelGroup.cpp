@@ -2,11 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <cassert>
 
-#include <FL/Fl.H>
-
-#include "mrvCore/mrvI8N.h"
+#include "mrvApp/mrvApp.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvWidgets/mrvDockGroup.h"
 #include "mrvWidgets/mrvDropWindow.h"
@@ -17,9 +15,11 @@
 #include "mrvUI/mrvDesktop.h"
 #include "mrvUI/mrvUtil.h"
 
-#include "mrvApp/mrvSettingsObject.h"
+#include "mrvCore/mrvI8N.h"
 
-#include "mrViewer.h"
+#include <FL/Fl.H>
+
+#include <cassert>
 
 namespace
 {

@@ -2,8 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrViewer.h"
-
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
 
@@ -19,12 +17,9 @@
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvI8N.h"
 
-#include <opentimelineio/item.h>
-#include <opentimelineio/stack.h>
-#include <opentimelineio/timeline.h>
-#include <opentimelineio/track.h>
-
 #include <tlCore/Vector.h>
+
+#include <opentimelineio/timeline.h>
 
 #include <FL/Fl.H>
 #include <FL/Fl_Menu_Button.H>

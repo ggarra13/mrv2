@@ -2,20 +2,22 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <iostream>
-#include <vector>
 
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Rect.H>
-#include <FL/Fl.H>
-#include <stdlib.h>
+#include "mrvApp/mrvApp.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvWidgets/mrvTile.h"
 #include "mrvWidgets/mrvTimelineGroup.h"
 
-#include "mrvEdit/mrvEditCallbacks.h"
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Rect.H>
+#include <FL/Fl.H>
 
-#include "mrViewer.h"
+#include <cstdlib>
+#include <iostream>
+#include <vector>
+
 
 namespace
 {

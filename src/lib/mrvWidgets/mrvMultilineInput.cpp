@@ -2,13 +2,15 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <cmath>
+
+#include "mrvMultilineInput.h"
+
+#include "mrViewer.h"
 
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 
-#include "mrvMultilineInput.h"
-#include "mrViewer.h"
+#include <cmath>
 
 namespace mrv
 {

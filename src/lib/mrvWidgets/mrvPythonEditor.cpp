@@ -6,10 +6,6 @@
 
 #include "mrViewer.h"
 
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvFl/mrvIO.h"
-
 #include <string>
 #include <cstring>
 
@@ -378,10 +374,6 @@ namespace mrv
 
         if (!m_variable.empty())
             m_variable += "\n";
-
-        DBGM0("|CODE|" << m_code << "|");
-        DBGM0("|EVAL|" << m_eval << "|");
-        DBGM0("|VAR |" << m_variable << "|");
 
         free(text);
     }

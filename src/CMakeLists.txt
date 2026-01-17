@@ -271,7 +271,7 @@ endif()
 # Add some defines
 #
 add_definitions(
-    -D NOMINMAX
+    -DNOMINMAX
     -DMRV2_VERSION="${mrv2_VERSION}"
     -DTLRENDER_VERSION="${tlRender_VERSION}"
     -DFLTK_GIT_TAG="${FLTK_GIT_TAG}"
