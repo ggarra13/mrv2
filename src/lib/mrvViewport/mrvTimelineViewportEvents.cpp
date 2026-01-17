@@ -6,6 +6,8 @@
 
 #include "mrViewer.h"
 
+#include "mrvViewport/mrvTimelineViewport.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 
 #ifdef VULKAN_BACKEND
@@ -16,21 +18,16 @@
 #    include "mrvGL/mrvGLShape.h"
 #endif
 
-#include "mrvFl/mrvCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 #include "mrvFl/mrvLaserFadeData.h"
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvViewport/mrvTimelineViewport.h"
-
-#include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
 #include "mrvWidgets/mrvTooltip.h"
 
 #include "mrvNetwork/mrvTCP.h"
 
-#include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvUtil.h"

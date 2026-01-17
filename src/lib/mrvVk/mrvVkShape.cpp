@@ -1173,7 +1173,7 @@ namespace mrv
             // Draw background which will be darker
             //
             const image::Color4f bgcolor(0.F, 0.F, 0.F, 0.5F);
-            render->drawMesh("mesh", "mesh", "mesh", roundedBox,
+            render->drawMesh("annotation", "rect", "rect", "mesh", roundedBox,
                              math::Vector2i(), bgcolor);
 
             //

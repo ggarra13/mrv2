@@ -5,19 +5,18 @@
 
 #include "mrViewer.h"
 
-#include <FL/Fl_Button.H>
-#include <FL/Fl.H>
-
-#include "mrvWidgets/mrvPanelConstants.h"
-#include "mrvWidgets/mrvPanelWindow.h"
-#include "mrvWidgets/mrvPanelGroup.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrvPanels/mrvPanelsAux.h"
 
-#include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvApp.h"
+#include "mrvWidgets/mrvPanelConstants.h"
+#include "mrvWidgets/mrvPanelWindow.h"
+#include "mrvWidgets/mrvPanelGroup.h"
+
+#include <FL/Fl_Button.H>
+#include <FL/Fl.H>
 
 #include <cassert>
 #include <algorithm>

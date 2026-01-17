@@ -16,6 +16,9 @@ decl {\#ifdef _WIN32
 decl {\#include "FL/Fl_Flex.H"} {public global
 }
 
+decl {\#include "mrvApp/mrvApp.h"} {public global
+}
+
 decl {\#include "mrvApp/mrvGlobals.h"} {public global
 }
 
@@ -73,6 +76,9 @@ decl {\#include "mrvWidgets/mrvStateButton.h"} {public global
 decl {\#include "mrvWidgets/mrvStatusBar.h"} {public global
 }
 
+decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
+}
+
 decl {\#include "mrvWidgets/mrvTile.h"} {public global
 }
 
@@ -94,16 +100,13 @@ decl {\#include "mrvFl/mrvPreferences.h"} {public global
 decl {\#include "mrvUI/mrvUtil.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
-}
-
 decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvColorSpaces.h"} {public global
+decl {\#include "mrvCore/mrvColorSpaces.h"} {selected private local
 }
 
-decl {\#include "mrvCore/mrvMath.h"} {public global
+decl {\#include "mrvCore/mrvMath.h"} {private global
 }
 
 decl {\#include "mrvCore/mrvI8N.h"} {public global
@@ -112,16 +115,10 @@ decl {\#include "mrvCore/mrvI8N.h"} {public global
 decl {\#include "mrvApp/mrvSettingsObject.h"} {private local
 }
 
-decl {\#include "mrvUI/mrvUtil.h"} {public global
-}
-
-decl {\#include "mrvApp/mrvApp.h"} {public global
-}
-
 decl {\#include "mrvAboutUI.h"} {public global
 }
 
-decl {\#include "mrvHotkeyUI.h"} {selected private local
+decl {\#include "mrvHotkeyUI.h"} {private global
 }
 
 decl {\#include "mrvPreferencesUI.h"} {public global
@@ -134,8 +131,8 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {0 63 934 56} resizable
-  class Fl_Double_Window visible
+  xywh {0 0 934 56} hide resizable
+  class Fl_Double_Window
 } {
   Fl_Group {} {
     xywh {0 0 933 30} box FLAT_BOX color 96
@@ -445,8 +442,8 @@ decl {class AboutUI;} {public global
 }
 
 widget_class TimelineClass {
-  xywh {30 325 934 56} box NO_BOX resizable
-  class Fl_Double_Window visible
+  xywh {0 0 934 56} box NO_BOX hide resizable
+  class Fl_Double_Window
 } {
   Fl_Group {} {open
     xywh {0 0 933 29} box FLAT_BOX
@@ -872,8 +869,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {596 158 935 676} type Double align 80 resizable
-      class {mrv::MainWindow} size_range {934 675 0 0} visible
+      xywh {0 0 935 676} type Double align 80 hide resizable
+      class {mrv::MainWindow} size_range {934 675 0 0}
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 933 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }

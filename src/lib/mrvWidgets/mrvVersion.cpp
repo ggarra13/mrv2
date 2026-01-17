@@ -160,6 +160,10 @@ extern "C"
 namespace OCIO = OCIO_NAMESPACE;
 #endif
 
+#ifdef TLRENDER_EXR
+#   include <OpenEXR/ImfVersion.h>
+#endif
+
 #include <zlib.h>
 
 #ifdef TLRENDER_FFMPEG
@@ -179,20 +183,19 @@ extern "C"
 #    pragma warning(disable : 4275)
 #endif
 
-#include <tlCore/String.h>
-
-#include "mrvCore/mrvOS.h"
-#include "mrvCore/mrvI8N.h"
-
-#include "mrvCore/mrvCPU.h"
-
-#include "mrvWidgets/mrvVersion.h"
-
-
 #include "mrViewer.h"
 #undef snprintf
 
 #include "mrvFl/mrvIO.h"
+
+#include "mrvWidgets/mrvVersion.h"
+
+#include "mrvCore/mrvOS.h"
+#include "mrvCore/mrvCPU.h"
+
+
+#include <tlCore/String.h>
+
 
 #ifdef TLRENDER_RAW
 #    define __STDC_VERSION__ 201112L // Avoid compiler warning

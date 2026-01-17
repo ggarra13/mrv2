@@ -9,7 +9,9 @@
 #ifdef _WIN32
 #include <winsock2.h>
 #endif
+
 #include "mrvApp/mrvGlobals.h"
+
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
@@ -68,7 +70,7 @@ namespace mrv
     void MainWindow::fill_menu(Fl_Menu_* menu)
     {
         using namespace panel;
-
+        
         Fl_Menu_Item* item = nullptr;
         int mode = 0;
         char buf[1024];
@@ -1173,7 +1175,7 @@ namespace mrv
 
         const auto& itemOptions = ui->uiTimeline->getItemOptions();
         const auto& displayOptions = ui->uiTimeline->getDisplayOptions();
-            
+
         if (app::soporta_editing)
         {
             idx = menu->add(

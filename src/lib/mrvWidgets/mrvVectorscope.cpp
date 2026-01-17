@@ -2,21 +2,24 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/Enumerations.H>
-#include <FL/fl_draw.H>
 
-#include <Imath/ImathMatrix.h>
-#include <Imath/ImathVec.h>
-
-#include <tlCore/Image.h>
-#include <tlCore/Math.h>
 
 #include "mrvWidgets/mrvVectorscope.h"
 
 #include "mrViewer.h"
 
+#include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvColor.h"
-#include "mrvCore/mrvI8N.h"
+
+#include <tlCore/Image.h>
+#include <tlCore/Math.h>
+
+#include <Imath/ImathMatrix.h>
+#include <Imath/ImathVec.h>
+
+#include <FL/Enumerations.H>
+#include <FL/fl_draw.H>
+
 
 namespace mrv
 {
