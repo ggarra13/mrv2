@@ -31,9 +31,74 @@ namespace
 
 namespace
 {
+
+    using namespace tl;
+
     using tl::geom::Triangle2;
     using tl::math::Vector2f;
 
+
+    geom::TriangleMesh2 createRoundedRect(const math::Box2f& bbox,
+                                          float radius, int segments = 8)
+    {
+        geom::TriangleMesh2 mesh;
+    
+        // Ensure radius doesn't exceed half the dimensions
+        float maxR = std::min(bbox.w(), bbox.h()) * 0.5f;
+        radius = std::clamp(radius, 0.0f, maxR);
+
+        // If radius is 0, just return a standard rectangle mesh
+        if (radius <= 0.0f) {
+            // Simplified: push 4 corners and 2 triangles
+            return mesh; 
+        }
+
+        // Helper to add vertices and triangles
+        // We create a center vertex to fan out triangles for each corner
+        size_t centerIdx = mesh.v.size();
+    
+        // Points for the 4 arc centers
+        math::Vector2f centers[4] = {
+            { bbox.max.x - radius, bbox.min.y + radius }, // Top Right
+            { bbox.max.x - radius, bbox.max.y - radius }, // Bottom Right
+            { bbox.min.x + radius, bbox.max.y - radius }, // Bottom Left
+            { bbox.min.x + radius, bbox.min.y + radius }  // Top Left
+        };
+
+        float angles[4] = { 3.0f*M_PI/2.0f, 0.f, M_PI/2.0f, M_PI };
+
+        // 1. Generate Vertices
+        // Add a central vertex for a clean fill (or build as a strip)
+        mesh.v.push_back(bbox.getCenter());
+
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j <= segments; ++j) {
+                float theta = angles[i] + (j / (float)segments) * (M_PI / 2.0f);
+                math::Vector2f p(
+                    centers[i].x + radius * cos(theta),
+                    centers[i].y + radius * sin(theta)
+                    );
+                mesh.v.push_back(p);
+            }
+        }
+
+        // 3. Generate Triangles
+        // Indices in tlRender are 1-based.
+        // Index 1 is our center. The perimeter starts at Index 2.
+        size_t numPerimeterVertex = mesh.v.size() - 1; 
+
+        for (size_t i = 0; i < numPerimeterVertex; ++i) {
+            geom::Triangle2 tri;
+            tri.v[0].v = 1;                             // Center
+            tri.v[1].v = i + 2;                         // Current perimeter point
+            tri.v[2].v = (i + 1 < numPerimeterVertex) ? (i + 3) : 2; // Next point (wrap to start)
+
+            mesh.triangles.push_back(tri);
+        }
+    
+        return mesh;
+    }
+    
     // Check if vertex i in the polygon is an ear
     bool isEar(
         const std::vector<Vector2f>& points, const std::vector<int>& poly,
@@ -97,12 +162,12 @@ namespace
         }
     }
 
-    std::vector<Triangle2>
+    std::vector<geom::Triangle2>
     triangulatePolygon(std::vector<Vector2f>& points, std::vector<int>& poly)
     {
-        std::vector<Triangle2> triangles;
+        std::vector<geom::Triangle2> triangles;
 
-        Triangle2 triangle;
+        geom::Triangle2 triangle;
 
         ensureCounterClockwise(poly, points);
 
@@ -1077,40 +1142,39 @@ namespace mrv
             
         if (editing)
         {
-            box = math::Box2i(pts[0].x, pts[0].y + descender - ascender, 70, 0);
+            auto boxf = math::Box2f(pts[0].x, pts[0].y + descender - ascender, 70, 0);
             for (const auto& textInfo : textInfos)
             {
                 for (const auto& v : textInfo.mesh.v)
                 {
-                    if (v.x < box.min.x)
-                        box.min.x = v.x;
-                    if (v.y < box.min.y)
-                        box.min.y = v.y;
-                    if (v.x > box.max.x)
-                        box.max.x = v.x;
-                    if (v.y > box.max.y)
-                        box.max.y = v.y;
+                    if (v.x < boxf.min.x)
+                        boxf.min.x = v.x;
+                    if (v.y < boxf.min.y)
+                        boxf.min.y = v.y;
+                    if (v.x > boxf.max.x)
+                        boxf.max.x = v.x;
+                    if (v.y > boxf.max.y)
+                        boxf.max.y = v.y;
                 }
             }
 
             //
             // Make room in box for cursor
             //
-            box.expand(cursorBox);
-
+            boxf.expand(math::Box2f(cursorBox.min.x,
+                                    cursorBox.min.y,
+                                    cursorBox.w(),
+                                    cursorBox.h()));
+            boxf = boxf.margin(8);
+            
+            auto roundedBox = createRoundedRect(boxf, 10);
+                
             //
             // Draw background which will be darker
             //
             const image::Color4f bgcolor(0.F, 0.F, 0.F, 0.5F);
-            box = box.margin(4);
-            render->drawRect(box, bgcolor);
-
-            //
-            // Draw second background (lighter)
-            //
-            box = box.margin(4);
-            box.expand(cursorBox);
-            render->drawRect(box, bgcolor);
+            render->drawMesh("mesh", "mesh", "mesh", roundedBox,
+                             math::Vector2i(), bgcolor);
 
             //
             // Draw cross
@@ -1125,15 +1189,16 @@ namespace mrv
             int line_size = 2 * mult / 3;
             if (line_size < 2) line_size = 2;
 
-            math::Vector2i start(box.min.x, box.min.y);
-            math::Vector2i end(box.min.x + cross_size,
-                               box.min.y + cross_size);
+            math::Vector2i start(boxf.min.x, boxf.min.y);
+            math::Vector2i end(boxf.min.x + cross_size,
+                               boxf.min.y + cross_size);
             lines->drawLine(render, start, end, crossColor, line_size);
             
-            start = math::Vector2i(box.min.x + cross_size, box.min.y);
-            end = math::Vector2i(box.min.x, box.min.y + cross_size);
+            start = math::Vector2i(boxf.min.x + cross_size, boxf.min.y);
+            end = math::Vector2i(boxf.min.x, boxf.min.y + cross_size);
             lines->drawLine(render, start, end, crossColor, line_size);
 
+            box = math::Box2i(boxf.x(), boxf.y(), boxf.w(), boxf.h());
         }
         
         //
