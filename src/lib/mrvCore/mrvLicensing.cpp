@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvApp/mrvApp.h"
+#include "mrvApp/mrvGlobals.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -11,7 +11,6 @@
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvOS.h"
 
 #ifdef MRV2_NETWORK
@@ -45,7 +44,9 @@
 #    include <openssl/ssl.h>
 #    include <openssl/x509_vfy.h>
 #endif
+
 #include <tlCore/StringFormat.h>
+#include <tlCore/Error.h>
 
 #include <FL/Fl.H>
 #include <FL/fl_ask.H>
@@ -170,49 +171,49 @@ namespace
     {
         if (plan == "Pro" || plan == "Pro+")
         {
-            mrv::App::soporta_annotations = true;
-            mrv::App::soporta_editing = true;
-            mrv::App::soporta_layers = true;
-            mrv::App::soporta_python = true;
-            mrv::App::soporta_saving = true;
-            mrv::App::soporta_voice = true;
+            mrv::app::soporta_annotations = true;
+            mrv::app::soporta_editing = true;
+            mrv::app::soporta_layers = true;
+            mrv::app::soporta_python = true;
+            mrv::app::soporta_saving = true;
+            mrv::app::soporta_voice = true;
         }
         else if (plan == "Standard")
         {
-            mrv::App::soporta_annotations = true;
-            mrv::App::soporta_editing = false;
-            mrv::App::soporta_layers = true;
-            mrv::App::soporta_python = true;
-            mrv::App::soporta_saving = true;
-            mrv::App::soporta_voice = false;
+            mrv::app::soporta_annotations = true;
+            mrv::app::soporta_editing = false;
+            mrv::app::soporta_layers = true;
+            mrv::app::soporta_python = true;
+            mrv::app::soporta_saving = true;
+            mrv::app::soporta_voice = false;
         }
         else if (plan == "Solo")
         {
-            mrv::App::soporta_annotations = true;
-            mrv::App::soporta_editing = false;
-            mrv::App::soporta_layers = true;
-            mrv::App::soporta_python = false;
-            mrv::App::soporta_saving = true;
-            mrv::App::soporta_voice = false;
+            mrv::app::soporta_annotations = true;
+            mrv::app::soporta_editing = false;
+            mrv::app::soporta_layers = true;
+            mrv::app::soporta_python = false;
+            mrv::app::soporta_saving = true;
+            mrv::app::soporta_voice = false;
         }
         else if (plan == "Demo")
         {
-            mrv::App::soporta_annotations = false;
-            mrv::App::soporta_editing = false;
-            mrv::App::soporta_layers = true;
-            mrv::App::soporta_python = false;
-            mrv::App::soporta_saving = true;
-            mrv::App::soporta_voice = false;
+            mrv::app::soporta_annotations = false;
+            mrv::app::soporta_editing = false;
+            mrv::app::soporta_layers = true;
+            mrv::app::soporta_python = false;
+            mrv::app::soporta_saving = true;
+            mrv::app::soporta_voice = false;
         }
         else
         {
             // Unknown license plan
-            mrv::App::soporta_annotations = false;
-            mrv::App::soporta_editing = false;
-            mrv::App::soporta_layers = true;
-            mrv::App::soporta_python = false;
-            mrv::App::soporta_saving = true;
-            mrv::App::soporta_voice = false;
+            mrv::app::soporta_annotations = false;
+            mrv::app::soporta_editing = false;
+            mrv::app::soporta_layers = true;
+            mrv::app::soporta_python = false;
+            mrv::app::soporta_saving = true;
+            mrv::app::soporta_voice = false;
             
             const std::string msg =
                 tl::string::Format(_("Unknown licese plan '{0}'")).arg(plan);
@@ -220,15 +221,15 @@ namespace
         }
         std::string msg = tl::string::Format(_("License plan '{0}'")).arg(plan);
         LOG_STATUS(msg);
-        msg = tl::string::Format(_("Supports annotations '{0}'")).arg(mrv::App::soporta_annotations);
+        msg = tl::string::Format(_("Supports annotations '{0}'")).arg(mrv::app::soporta_annotations);
         LOG_INFO(msg);
-        msg = tl::string::Format(_("Supports editing '{0}'")).arg(mrv::App::soporta_editing);
+        msg = tl::string::Format(_("Supports editing '{0}'")).arg(mrv::app::soporta_editing);
         LOG_INFO(msg);
-        msg = tl::string::Format(_("Supports layers '{0}'")).arg(mrv::App::soporta_layers);
+        msg = tl::string::Format(_("Supports layers '{0}'")).arg(mrv::app::soporta_layers);
         LOG_INFO(msg);
-        msg = tl::string::Format(_("Supports python '{0}'")).arg(mrv::App::soporta_python);
+        msg = tl::string::Format(_("Supports python '{0}'")).arg(mrv::app::soporta_python);
         LOG_INFO(msg);
-        msg = tl::string::Format(_("Supports voice annotations '{0}'")).arg(mrv::App::soporta_voice);
+        msg = tl::string::Format(_("Supports voice annotations '{0}'")).arg(mrv::app::soporta_voice);
         LOG_INFO(msg);
     }
 }
@@ -513,7 +514,7 @@ namespace mrv
 
         // Add the machine_id and session_id
         request_body_json["machine_id"] = machine_id;
-        request_body_json["session_id"] = App::session_id;
+        request_body_json["session_id"] = app::session_id;
 
         // Parse the corrected master key string and add it as a nested object
         request_body_json["master_key"] = nlohmann::json::parse(master_key);
@@ -585,7 +586,7 @@ namespace mrv
         const std::string plan = payload_json.at("plan").get<std::string>();
         const int active_seats = payload_json.at("active_seats").get<int>();
         const int license_limit = payload_json.at("license_limit").get<int>();
-        App::session_id = payload_json.at("session_id").get<std::string>();
+        app::session_id = payload_json.at("session_id").get<std::string>();
 
         std::string msg = string::Format(_("{0} Active Licenses from {1}.")).
                           arg(active_seats).
@@ -685,7 +686,7 @@ namespace mrv
 
     bool release_license()
     {
-        if (App::license_type != LicenseType::kFloating)
+        if (app::license_type != LicenseType::kFloating)
             return true;
         
         // --- Configuration ---
@@ -704,7 +705,7 @@ namespace mrv
         
         // Add the machine_id
         request_body_json["machine_id"] = machine_id;
-        request_body_json["session_id"] = App::session_id;
+        request_body_json["session_id"] = app::session_id;
 
         // Parse the corrected master key string and add it as a nested object
         request_body_json["master_key"] = nlohmann::json::parse(master_key);
@@ -736,18 +737,18 @@ namespace mrv
     {
         License out = License::kInvalid;
         
-        if (App::license_type == LicenseType::kDemo)
+        if (app::license_type == LicenseType::kDemo)
         {
             out = validate_node_locked(expiration_date);
             if (out == License::kValid || out == License::kExpired)
             {
-                App::license_type = LicenseType::kNodeLocked;
+                app::license_type = LicenseType::kNodeLocked;
             }
         }
 
-        if (App::license_type != LicenseType::kNodeLocked)
+        if (app::license_type != LicenseType::kNodeLocked)
         {
-            if (App::license_type == LicenseType::kFloating)
+            if (app::license_type == LicenseType::kFloating)
             {
                 if (send_heartbeat())
                     return License::kValid;
@@ -759,26 +760,26 @@ namespace mrv
                 out = validate_floating(expiration_date);
                 if (out == License::kValid)
                 {
-                    App::license_type = LicenseType::kFloating;
+                    app::license_type = LicenseType::kFloating;
                 }
             }
         }
 
         if (out == License::kValid)
         {
-            App::demo_mode = false;
+            app::demo_mode = false;
         }
         else
         {
-            App::demo_mode = true;
+            app::demo_mode = true;
         }
 
-        if (App::license_type != LicenseType::kDemo)
+        if (app::license_type != LicenseType::kDemo)
         {
             /* xgettext:c++-format */
             std::string msg =
                 string::Format(_("Your {0} license will expire on {1}."))
-                .arg(App::license_type)
+                .arg(app::license_type)
                 .arg(expiration_date);
             LOG_STATUS(msg);
         }
@@ -788,9 +789,9 @@ namespace mrv
 
     License license_beat()
     {
-        if (App::force_demo)
+        if (app::force_demo)
         {
-            App::demo_mode = false;
+            app::demo_mode = false;
             return License::kInvalid;
         }
         

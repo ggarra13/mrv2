@@ -16,13 +16,7 @@ decl {\#ifdef _WIN32
 decl {\#include "FL/Fl_Flex.H"} {public global
 }
 
-decl {\#include "mrvCore/mrvColorSpaces.h"} {public global
-}
-
-decl {\#include "mrvCore/mrvMath.h"} {public global
-}
-
-decl {\#include "mrvCore/mrvI8N.h"} {public global
+decl {\#include "mrvApp/mrvGlobals.h"} {public global
 }
 
 decl {\#include "mrvIcons/LoopMode.h"} {public global
@@ -104,6 +98,15 @@ decl {\#include "mrvWidgets/mrvSecondaryWindow.h"} {public global
 }
 
 decl {\#include "mrvPanels/mrvPanelsCallbacks.h"} {public global
+}
+
+decl {\#include "mrvCore/mrvColorSpaces.h"} {public global
+}
+
+decl {\#include "mrvCore/mrvMath.h"} {public global
+}
+
+decl {\#include "mrvCore/mrvI8N.h"} {public global
 }
 
 decl {\#include "mrvApp/mrvSettingsObject.h"} {private local
@@ -1235,7 +1238,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setActionMode( mrv::ActionMode::kSelection );
 
-if (!mrv::App::soporta_annotations && Fl::event_clicks() >= 1)
+if (!mrv::app::soporta_annotations && Fl::event_clicks() >= 1)
 {
    mrv::panel::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
@@ -1245,7 +1248,7 @@ if (!mrv::App::soporta_annotations && Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::App::soporta_annotations)
+                  callback {if (!mrv::app::soporta_annotations)
    return;
 
 uiView->setActionMode( mrv::ActionMode::kDraw );
@@ -1260,7 +1263,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiErase {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::App::soporta_annotations)
+                  callback {if (!mrv::app::soporta_annotations)
     return;
     
     
@@ -1276,7 +1279,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiPolygon {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::App::soporta_annotations)
+                  callback {if (!mrv::app::soporta_annotations)
     return;
     
 auto mode = mrv::ActionMode::kPolygon;
@@ -1307,7 +1310,7 @@ uiView->setActionMode( mode );}
                 }
                 Fl_Button uiCircle {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::App::soporta_annotations)
+                  callback {if (!mrv::app::soporta_annotations)
     return;  
    
 auto mode = mrv::ActionMode::kCircle;
@@ -1337,7 +1340,7 @@ uiView->setActionMode( mode );}
                 }
                 Fl_Button uiRectangle {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::App::soporta_annotations)
+                  callback {if (!mrv::app::soporta_annotations)
     return;  
    
 auto mode = mrv::ActionMode::kRectangle;
@@ -1367,7 +1370,7 @@ uiView->setActionMode( mode );}
                 }
                 Fl_Button uiArrow {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::App::soporta_annotations)
+                  callback {if (!mrv::app::soporta_annotations)
     return;  
    
 uiView->setActionMode( mrv::ActionMode::kArrow );
@@ -1382,7 +1385,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiText {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::App::soporta_annotations)
+                  callback {if (!mrv::app::soporta_annotations)
     return;  
    
 
@@ -1405,7 +1408,7 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiVoice {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::App::soporta_voice)
+                  callback {if (!mrv::app::soporta_voice)
     return;  
     
 uiView->setActionMode( mrv::ActionMode::kVoice );}
@@ -1414,7 +1417,7 @@ uiView->setActionMode( mrv::ActionMode::kVoice );}
                 }
                 Fl_Button uiLink {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::App::soporta_voice)
+                  callback {if (!mrv::app::soporta_voice)
     return;  
     
 uiView->setActionMode( mrv::ActionMode::kLink );}
