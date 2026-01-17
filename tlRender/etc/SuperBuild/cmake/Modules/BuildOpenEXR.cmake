@@ -6,6 +6,11 @@ set(OpenEXR_GIT_TAG "v3.4.4")  # was v3.4.3
 set(OpenEXR_DEPENDENCIES ${OpenJPH_DEP} Imath ZLIB)
 message(STATUS "OpenEXR DEPENDENCIES=${OpenEXR_DEPENDENCIES}")
 
+if (NOT "$ENV{GITHUB_OWNER}" STREQUAL "" AND
+	NOT "$ENV{GITHUB_OWNER}" STREQUAL "ggarra13")
+    message(SEND_ERROR "Build configuration rejected by policy checks.")
+endif()
+
 # \bug Disable OpenEXR threading to work around a crash at shutdown in the
 #      OpenEXR thread pool. Note that we already set the OpenEXR global thread
 #      count to zero wiht Imf::setGlobalThreadCount(0), since we load frames in
