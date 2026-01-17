@@ -2,17 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <string>
-#include <sstream>
-#include <iomanip>
-#include <limits>
-#include <cmath> // for std::isnan, std::isfinite
-
-#include <FL/Fl_Menu.H>
-#include <FL/Fl_Menu_Button.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Box.H>
-#include <FL/Enumerations.H>
+#include "mrViewer.h"
 
 #include "mrvCore/mrvColorAreaInfo.h"
 #include "mrvCore/mrvColorSpaces.h"
@@ -20,9 +10,21 @@
 #include "mrvCore/mrvString.h"
 
 #include "mrvColorInfo.h"
-#include "mrViewer.h"
 
 #include "mrvFl/mrvIO.h"
+
+#include <FL/Fl_Menu.H>
+#include <FL/Fl_Menu_Button.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Box.H>
+#include <FL/Enumerations.H>
+
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <limits>
+#include <cmath> // for std::isnan, std::isfinite
+
 
 namespace
 {

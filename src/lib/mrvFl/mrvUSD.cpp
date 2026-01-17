@@ -4,11 +4,14 @@
 
 #ifdef TLRENDER_USD
 
-#    include <tlCore/StringFormat.h>
+#pragma once
+
 
 #    include "mrvOptions/mrvUSD.h"
 
 #    include "mrViewer.h"
+
+#    include <tlCore/StringFormat.h>
 
 namespace mrv
 {

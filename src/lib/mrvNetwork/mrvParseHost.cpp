@@ -2,8 +2,6 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrViewer.h"
-
 #include "mrvApp/mrvApp.h"
 #include "mrvApp/mrvSettingsObject.h"
 
@@ -29,7 +27,7 @@ namespace mrv
 
     void store_port(const uint16_t port)
     {
-        App* app = App::ui->app;
+        App* app = App::app;
         auto settings = app->settings();
         char buf[64];
         snprintf(buf, 64, "%d", port);
