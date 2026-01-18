@@ -427,11 +427,11 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label HDR open
-              xywh {298 28 555 369} box EMBOSSED_BOX align 5
+              label HDR
+              xywh {298 28 555 369} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
-                label HDR open
+                label HDR
                 xywh {310 80 530 304} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsVulkanUseRGB {
@@ -443,7 +443,7 @@ If you try to open several mrv2s with different images, all these images will be
                     xywh {40 40 100 20}
                   }
                   MenuItem {} {
-                    label {Use RGB} selected
+                    label {Use RGB}
                     xywh {50 50 100 20}
                   }
                 }
@@ -582,8 +582,8 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {Language and Colors}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label {Language and Colors} open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label UI open
@@ -656,14 +656,14 @@ v->refresh();}
                 }
               }
               Fl_Group {} {
-                label View
+                label View open
                 xywh {358 285 410 88} box ROUNDED_BOX
               } {
                 Fl_Button uiPrefsViewBG {
                   label Background
                   callback {uchar r, g, b;
 Fl::get_color(o->color(),r,g,b);
-if (!fl_color_chooser("Pick View Background Color", r,g,b)) return;
+if (!fl_color_chooser(_("Pick View Background Color"), r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
 o->redraw();}
                   tooltip {Selects the background color of areas outside the current image.} xywh {535 301 25 20} box EMBOSSED_BOX labelsize 11 align 4
@@ -673,7 +673,7 @@ o->redraw();}
                   user_data this user_data_type {PreferencesUI*}
                   callback {uchar r, g, b;
 Fl::get_color(o->color(),r,g,b);
-if (!fl_color_chooser("Pick View Text Overlay Color", r,g,b)) return;
+if (!fl_color_chooser(_("Pick View Text Overlay Color"), r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
 o->redraw();}
                   tooltip {Selects the color of text overlays printed over the current image.} xywh {535 338 25 20} box EMBOSSED_BOX labelsize 11 align 4
@@ -683,7 +683,7 @@ o->redraw();}
                   user_data this user_data_type {PreferencesUI*}
                   callback {uchar r, g, b;
 Fl::get_color(o->color(),r,g,b);
-if (!fl_color_chooser("Pick View Selection Color", r,g,b)) return;
+if (!fl_color_chooser(_("Pick View Selection Color"), r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
 o->redraw();}
                   tooltip {Selects the color of the selection rectangle over the current image.} xywh {650 301 25 20} box EMBOSSED_BOX labelsize 11 align 4
@@ -693,9 +693,9 @@ o->redraw();}
                   user_data this user_data_type {PreferencesUI*}
                   callback {uchar r, g, b;
 Fl::get_color(o->color(),r,g,b);
-if (!fl_color_chooser("Pick HUD Color", r,g,b)) return;
+if (!fl_color_chooser(_("Pick HUD Color"), r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
-o->redraw();}
+o->redraw();} selected
                   tooltip {Selects the color of HUD overlays.} xywh {654 338 21 20} box EMBOSSED_BOX align 4
                 }
               }

@@ -1986,6 +1986,21 @@ msgstr "Flujo {0} {1}..."
 msgid "Stop streaming"
 msgstr "Deja de transmitir"
 
+msgid "Renderer"
+msgstr "Renderizador"
+
+msgid "Complexity"
+msgstr "Complejidad"
+
+msgid "Draw Mode"
+msgstr "Modo de Dibujar"
+
+msgid "Stage Cache"
+msgstr "Cache del Escenario"
+
+msgid "Disk Cache in GB"
+msgstr "Cache en Disco en GB"
+
 msgid "Toggle other eye stereo image."
 msgstr "Alternar el otro ojo de la imagen estéreo."
 
@@ -3001,29 +3016,37 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "El archivo {0} ya existe.  Por seguridad, no lo sobreescribiré."
 
+msgid "Rotated image info: {0}"
+msgstr "Información de Imagen Rotada: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "Información de Imagen Escalada: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: No puedo abrir plugin de escritura."
 
 msgid "Image info: {0} {1}"
 msgstr "Información de Imagen: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "Información de Imagen Escalada: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Imagen demasiado grande para guardar anotaciones. Se escalará al tamaño de "
+"la vista."
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "El plugin de Escritura no obtuvo información de salida.  Usando {0}."
+
+msgid "Output info: {0} {1}"
+msgstr "Información de Salida: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Usando perfil {0}, formato de pixel {1}."
 
 msgid "Using preset {0}."
 msgstr "Usando preseteo {0}."
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Información del Buffer: {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "Información de Salida: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
@@ -3040,14 +3063,32 @@ msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Solo audio en la línea de tiempo, pero no intenta grabar audio."
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Formato y tipo de OpenGL inválidos"
+
+msgid "OpenGL info: {0}"
+msgstr "Información de OpenGL: {0}"
+
 msgid "Saving... {0}"
 msgstr "Grabando... {0}."
 
-msgid "Could not read image data from view"
-msgstr "No pude leer los datos de la imagen de la vista"
+msgid "Unsupported output format"
+msgstr "Formato de salida no soportado"
+
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
 
 msgid "Render size: {0}"
 msgstr "Tamaño de renderizado: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Información de la capa de imagen '{0}': {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Información del Buffer: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Formato de salida no soportado: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3837,8 +3878,8 @@ msgstr "Cuadro {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagen demasiado grande.  Guardaré el tamaño de la vista."
 
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
+msgid "Could not read image data from view"
+msgstr "No pude leer los datos de la imagen de la vista"
 
 msgid "Link/Open"
 msgstr "Enlace/Abrir"
@@ -3992,23 +4033,14 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
-msgid "HDR monitor found."
-msgstr "Monitor HDR no encontrado."
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR no encontrado o no configurado."
-
-msgid "Vulkan color space is {0}"
-msgstr "Espacio de color de Vulkan es {0}"
-
-msgid "Vulkan format is {0}"
-msgstr "Formato de Vulkan es {0}"
-
 msgid "Edit Text"
 msgstr "Editar Texto"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' no es un archivo, directorio ni URL."
+
+msgid "Invalid font for text drawing"
+msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -6181,6 +6213,18 @@ msgstr "gleam"
 msgid "oxy"
 msgstr "oxy"
 
+msgid "Pick View Background Color"
+msgstr "Seleccionar color de fondo de la vista"
+
+msgid "Pick View Text Overlay Color"
+msgstr "Seleccionar color del texto superpuesto de la vista"
+
+msgid "Pick View Selection Color"
+msgstr "Seleccionar color de selección de la vista"
+
+msgid "Pick HUD Color"
+msgstr "Seleccionar color del HUD"
+
 msgid "Float Values"
 msgstr "Valores Coma Flotante"
 
@@ -8023,9 +8067,6 @@ msgstr "Modo de Fregado"
 msgid "Area Selection Mode"
 msgstr "Modo de Selección de Área"
 
-msgid "Draw Mode"
-msgstr "Modo de Dibujar"
-
 msgid "Erase Mode"
 msgstr "Modo de Borrar"
 
@@ -8128,46 +8169,17 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "Renderer"
-#~ msgstr "Renderizador"
+#~ msgid "HDR monitor found."
+#~ msgstr "Monitor HDR no encontrado."
 
-#~ msgid "Complexity"
-#~ msgstr "Complejidad"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "Monitor HDR no encontrado o no configurado."
 
-#~ msgid "Stage Cache"
-#~ msgstr "Cache del Escenario"
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Espacio de color de Vulkan es {0}"
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache en Disco en GB"
-
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Información de Imagen Rotada: {0}"
-
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr ""
-#~ "Imagen demasiado grande para guardar anotaciones. Se escalará al tamaño de "
-#~ "la vista."
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Formato y tipo de OpenGL inválidos"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Información de OpenGL: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "Formato de salida no soportado"
-
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
-
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "Información de la capa de imagen '{0}': {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "Formato de salida no soportado: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Fuente inválida para dibujar texto"
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Formato de Vulkan es {0}"
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "Licencia inválida.  Entrando a modo demo."
