@@ -2,7 +2,7 @@
 Licencias
 #########
 
-Si corres la versión de OpenGL (mrv2) o Vulkan (vmrv2) a partir de la versión v1.4.1, como es un producto comercial, debés obtener una licencia para tu computadora.
+Si corres la versión de OpenGL (mrv2) o Vulkan (vmrv2) a partir de la versión v1.5.3, como es un producto comercial, debés obtener una licencia para tu computadora.
 
 Cuando comenzas mrv2, si no hay una licencia válida, aparecerá el ayudante de
 licencias con la ID de tu máquina.

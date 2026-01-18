@@ -6,17 +6,17 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>usd module &mdash; documentación de mrv2 - v1.4.1</title>
+  <title>usd module &mdash; documentación de mrv2 - v1.5.3</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=752cef67"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/documentation_options.js?v=9779ab4d"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/translations.js?v=f85f4cfb"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -63,7 +63,21 @@
 <li class="toctree-l2"><a class="reference internal" href="sistema-de-plugins.html">Sistema de Plug-ins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timeline.html">Módulo timeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ui.html">Módulo ui</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">usd module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">usd module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.usd.renderOptions"><code class="docutils literal notranslate"><span class="pre">renderOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.usd.setRenderOptions"><code class="docutils literal notranslate"><span class="pre">setRenderOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.usd.DrawMode"><code class="docutils literal notranslate"><span class="pre">DrawMode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.usd.RenderOptions"><code class="docutils literal notranslate"><span class="pre">RenderOptions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.usd.RenderOptions.renderWidth"><code class="docutils literal notranslate"><span class="pre">RenderOptions.renderWidth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.usd.RenderOptions.complexity"><code class="docutils literal notranslate"><span class="pre">RenderOptions.complexity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.usd.RenderOptions.drawMode"><code class="docutils literal notranslate"><span class="pre">RenderOptions.drawMode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.usd.RenderOptions.enableLighting"><code class="docutils literal notranslate"><span class="pre">RenderOptions.enableLighting</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.usd.RenderOptions.stageCache"><code class="docutils literal notranslate"><span class="pre">RenderOptions.stageCache</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mrv2.usd.RenderOptions.diskCache"><code class="docutils literal notranslate"><span class="pre">RenderOptions.diskCache</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -93,8 +107,78 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="usd-module">
-<h1>usd module<a class="headerlink" href="#usd-module" title="Link to this heading"></a></h1>
+  <section id="module-mrv2.usd">
+<span id="usd-module"></span><h1>usd module<a class="headerlink" href="#module-mrv2.usd" title="Link to this heading"></a></h1>
+<p>Módulo de USD.</p>
+<p>Contiene todas las classes y enums relativas a USD (Univesal Scene Description).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.usd.renderOptions">
+<span class="sig-prename descclassname"><span class="pre">mrv2.usd.</span></span><span class="sig-name descname"><span class="pre">renderOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mrv2.usd.RenderOptions" title="mrv2.usd.RenderOptions"><span class="pre">mrv2.usd.RenderOptions</span></a></span></span><a class="headerlink" href="#mrv2.usd.renderOptions" title="Link to this definition"></a></dt>
+<dd><p>Obtener Opciones de Render de USD.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.usd.setRenderOptions">
+<span class="sig-prename descclassname"><span class="pre">mrv2.usd.</span></span><span class="sig-name descname"><span class="pre">setRenderOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">renderOptions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mrv2.usd.RenderOptions" title="mrv2.usd.RenderOptions"><span class="pre">mrv2.usd.RenderOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mrv2.usd.setRenderOptions" title="Link to this definition"></a></dt>
+<dd><p>Setear las opciones de Render de USD.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.usd.DrawMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.usd.</span></span><span class="sig-name descname"><span class="pre">DrawMode</span></span><a class="headerlink" href="#mrv2.usd.DrawMode" title="Link to this definition"></a></dt>
+<dd><p>Members:</p>
+<p>Points</p>
+<p>Wireframe</p>
+<p>WireframeOnSurface</p>
+<p>ShadedFlat</p>
+<p>ShadedSmooth</p>
+<p>GeomOnly</p>
+<p>GeomFlat</p>
+<p>GeomSmooth</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mrv2.usd.RenderOptions">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.usd.</span></span><span class="sig-name descname"><span class="pre">RenderOptions</span></span><a class="headerlink" href="#mrv2.usd.RenderOptions" title="Link to this definition"></a></dt>
+<dd><p>Opciones de Render de USD.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.usd.RenderOptions.renderWidth">
+<span class="sig-name descname"><span class="pre">renderWidth</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></span><a class="headerlink" href="#mrv2.usd.RenderOptions.renderWidth" title="Link to this definition"></a></dt>
+<dd><p>Ancho de Render</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.usd.RenderOptions.complexity">
+<span class="sig-name descname"><span class="pre">complexity</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.usd.RenderOptions.complexity" title="Link to this definition"></a></dt>
+<dd><p>Complejidad de los Modelos.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.usd.RenderOptions.drawMode">
+<span class="sig-name descname"><span class="pre">drawMode</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.usd.DrawMode</span></span><a class="headerlink" href="#mrv2.usd.RenderOptions.drawMode" title="Link to this definition"></a></dt>
+<dd><p>Modo de dibujo <a class="reference internal" href="#mrv2.usd.DrawMode" title="mrv2.usd.DrawMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.usd.DrawMode</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.usd.RenderOptions.enableLighting">
+<span class="sig-name descname"><span class="pre">enableLighting</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.usd.RenderOptions.enableLighting" title="Link to this definition"></a></dt>
+<dd><p>Activar Iluminación</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.usd.RenderOptions.stageCache">
+<span class="sig-name descname"><span class="pre">stageCache</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></span><a class="headerlink" href="#mrv2.usd.RenderOptions.stageCache" title="Link to this definition"></a></dt>
+<dd><p>Cache del Escenario</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mrv2.usd.RenderOptions.diskCache">
+<span class="sig-name descname"><span class="pre">diskCache</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></span><a class="headerlink" href="#mrv2.usd.RenderOptions.diskCache" title="Link to this definition"></a></dt>
+<dd><p>Conteo en Bytes de Cache en Disco</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
