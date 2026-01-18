@@ -16,4 +16,9 @@ namespace mrv
 
     //! Create an environment cube triangle mesh.
     geom::TriangleMesh3 createEnvCube(const float size = 1.0F, const bool flipped = false);
+
+    geom::TriangleMesh2 createRoundedRect(const math::Box2f& bbox,
+                                          float radius, int segments = 8);
+    
+
 } // namespace mrv

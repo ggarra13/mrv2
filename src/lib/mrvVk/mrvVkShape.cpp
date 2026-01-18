@@ -15,6 +15,7 @@
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvMath.h"
+#include "mrvCore/mrvMesh.h"
 
 #include <tlVk/Shader.h>
 #include <tlVk/Util.h>
@@ -37,67 +38,6 @@ namespace
     using tl::geom::Triangle2;
     using tl::math::Vector2f;
 
-
-    geom::TriangleMesh2 createRoundedRect(const math::Box2f& bbox,
-                                          float radius, int segments = 8)
-    {
-        geom::TriangleMesh2 mesh;
-    
-        // Ensure radius doesn't exceed half the dimensions
-        float maxR = std::min(bbox.w(), bbox.h()) * 0.5f;
-        radius = std::clamp(radius, 0.0f, maxR);
-
-        // If radius is 0, just return a standard rectangle mesh
-        if (radius <= 0.0f) {
-            // Simplified: push 4 corners and 2 triangles
-            return mesh; 
-        }
-
-        // Helper to add vertices and triangles
-        // We create a center vertex to fan out triangles for each corner
-        size_t centerIdx = mesh.v.size();
-    
-        // Points for the 4 arc centers
-        math::Vector2f centers[4] = {
-            { bbox.max.x - radius, bbox.min.y + radius }, // Top Right
-            { bbox.max.x - radius, bbox.max.y - radius }, // Bottom Right
-            { bbox.min.x + radius, bbox.max.y - radius }, // Bottom Left
-            { bbox.min.x + radius, bbox.min.y + radius }  // Top Left
-        };
-
-        float angles[4] = { 3.0f*M_PI/2.0f, 0.f, M_PI/2.0f, M_PI };
-
-        // 1. Generate Vertices
-        // Add a central vertex for a clean fill (or build as a strip)
-        mesh.v.push_back(bbox.getCenter());
-
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j <= segments; ++j) {
-                float theta = angles[i] + (j / (float)segments) * (M_PI / 2.0f);
-                math::Vector2f p(
-                    centers[i].x + radius * cos(theta),
-                    centers[i].y + radius * sin(theta)
-                    );
-                mesh.v.push_back(p);
-            }
-        }
-
-        // 3. Generate Triangles
-        // Indices in tlRender are 1-based.
-        // Index 1 is our center. The perimeter starts at Index 2.
-        size_t numPerimeterVertex = mesh.v.size() - 1; 
-
-        for (size_t i = 0; i < numPerimeterVertex; ++i) {
-            geom::Triangle2 tri;
-            tri.v[0].v = 1;                             // Center
-            tri.v[1].v = i + 2;                         // Current perimeter point
-            tri.v[2].v = (i + 1 < numPerimeterVertex) ? (i + 3) : 2; // Next point (wrap to start)
-
-            mesh.triangles.push_back(tri);
-        }
-    
-        return mesh;
-    }
     
     // Check if vertex i in the polygon is an ear
     bool isEar(

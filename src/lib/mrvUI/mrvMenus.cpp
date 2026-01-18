@@ -884,7 +884,11 @@ namespace mrv
             
 
             const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
-            int selected = static_cast<int>(hdrOptions.algorithm);
+
+            int selected;
+            
+#ifdef OPENGL_BACKEND
+            selected = static_cast<int>(hdrOptions.algorithm);
             mode = FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
@@ -902,6 +906,7 @@ namespace mrv
                     item->set();
                 ++tonemap;
             }
+#endif
             
             selected = static_cast<int>(hdrOptions.gamutMapping);
             mode = FL_MENU_RADIO;
