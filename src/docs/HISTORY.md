@@ -58,6 +58,7 @@ ChangeLog
 - Major refactoring to improve compilation performance.
 - Removed Render->HDR->Tonemapping menu from Vulkan backend as it was confusing, since Vulkan does not support tone mapping.
 - Upgraded to LibRaw v0.22.0
+- Documented mrv2.colors file.  You can create one in $HOME/.filmaura to take over the defaults.
 
 
 v1.5.2
