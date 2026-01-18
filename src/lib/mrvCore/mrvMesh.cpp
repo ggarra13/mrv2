@@ -4,6 +4,8 @@
 
 #include <mrvCore/mrvMesh.h>
 
+#include <tlCore/Math.h>
+
 namespace mrv
 {
 
@@ -211,7 +213,7 @@ namespace mrv
             { bbox.min.x + radius, bbox.min.y + radius }  // Top Left
         };
 
-        float angles[4] = { 3.0f*M_PI/2.0f, 0.f, M_PI/2.0f, M_PI };
+        float angles[4] = { 3.0f*math::pi/2.0f, 0.f, math::pi/2.0f, math::pi };
 
         // 1. Generate Vertices
         // Add a central vertex for a clean fill (or build as a strip)
@@ -219,7 +221,7 @@ namespace mrv
 
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j <= segments; ++j) {
-                float theta = angles[i] + (j / (float)segments) * (M_PI / 2.0f);
+                float theta = angles[i] + (j / (float)segments) * (math::pi / 2.0f);
                 math::Vector2f p(
                     centers[i].x + radius * cos(theta),
                     centers[i].y + radius * sin(theta)
