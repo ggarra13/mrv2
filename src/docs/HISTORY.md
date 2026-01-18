@@ -56,7 +56,8 @@ ChangeLog
 
 - Improved the look of Text Annotation Widget on Vulkan backend.
 - Major refactoring to improve compilation performance.
-- Removed Render->HDR->Tonemapping menu from Vulkan backend as it was confusing, since Vulkan does not support tone mapping. 
+- Removed Render->HDR->Tonemapping menu from Vulkan backend as it was confusing, since Vulkan does not support tone mapping.
+- Upgraded to LibRaw v0.22.0
 
 
 v1.5.2

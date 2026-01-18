@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 
-set(LibRaw_URL "https://www.libraw.org/data/LibRaw-0.21.1.tar.gz")
+set(LibRaw_URL "https://www.libraw.org/data/LibRaw-0.22.0.tar.gz")  # was 0.21.1
 set(LibRaw_TAG )
 
 set(LibRaw_cmake_URL "https://github.com/LibRaw/LibRaw-cmake")

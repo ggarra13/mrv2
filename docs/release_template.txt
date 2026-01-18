@@ -3,11 +3,9 @@ mrv2 v1.5.2
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.
 
-NEWS:  License helper is now run only on demand and Saving is now available on the demo license.
-
 It ships now in two compiled versions:
-   - mrv2 with OpenGL backend  (both free and donationware)
-   - vmrv2 with Vulkan backend (both free and donationware)
+ - mrv2 with OpenGL backend (both free and donationware)
+ - vmrv2 with Vulkan backend (both free and donationware)
 
 Donationware licenses are paid through PayPal:
 
@@ -27,13 +25,17 @@ You need to have an internet connection for the license system.
 List of features available based on donation plan:
 
 - Annotations (available from Solo and later)
-- Saving (available from Solo and later)
 - Python (available in Standard and later)
-- OpenEXR layer switching (available in Standard and later).
 - Edit (available in Edit and later)
 - Voice Annotations (available in Pro)
 
-Prices might change depending on competition and new features.  Act now for cheaper prices or access to more features.
+Demo version supports:
+
+- Static tone-mapping (OpenGL) and dynamic HDR (Vulkan)
+- OpenEXR layer switching
+- Saving Images and Movies with Audio 
+
+Prices might change depending on competition and new features. Act now for cheaper prices or access to more features.
 
 Main Web page (with links to videos and online documentation):
 https://mrv2.sourceforge.io
