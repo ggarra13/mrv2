@@ -196,7 +196,7 @@ namespace mrv
                 CHECK_GL;
             }
 
-            return _projectionMatrix();
+            return projectionMatrix();
         }
 
     } // namespace opengl

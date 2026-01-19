@@ -6,17 +6,17 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>image module &mdash; mrv2 v1.4.1 documentation</title>
+  <title>image module &mdash; mrv2 v1.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=cebe732b"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/documentation_options.js?v=2ceb3701"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -51,14 +51,8 @@
 <li class="toctree-l2"><a class="reference internal" href="annotations.html">annotations module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html">cmd module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">image module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.AlphaBlend"><code class="docutils literal notranslate"><span class="pre">AlphaBlend</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.AlphaBlend.name"><code class="docutils literal notranslate"><span class="pre">AlphaBlend.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Background"><code class="docutils literal notranslate"><span class="pre">Background</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Background.name"><code class="docutils literal notranslate"><span class="pre">Background.name</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.AlphaBlend"><code class="docutils literal notranslate"><span class="pre">AlphaBlend</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Background"><code class="docutils literal notranslate"><span class="pre">Background</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.BackgroundOptions"><code class="docutils literal notranslate"><span class="pre">BackgroundOptions</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.BackgroundOptions.checkersColor0"><code class="docutils literal notranslate"><span class="pre">BackgroundOptions.checkersColor0</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.BackgroundOptions.checkersColor1"><code class="docutils literal notranslate"><span class="pre">BackgroundOptions.checkersColor1</span></code></a></li>
@@ -66,10 +60,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.BackgroundOptions.type"><code class="docutils literal notranslate"><span class="pre">BackgroundOptions.type</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Channels"><code class="docutils literal notranslate"><span class="pre">Channels</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Channels.name"><code class="docutils literal notranslate"><span class="pre">Channels.name</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Channels"><code class="docutils literal notranslate"><span class="pre">Channels</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.EXRDisplay"><code class="docutils literal notranslate"><span class="pre">EXRDisplay</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EXRDisplay.defog"><code class="docutils literal notranslate"><span class="pre">EXRDisplay.defog</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EXRDisplay.enabled"><code class="docutils literal notranslate"><span class="pre">EXRDisplay.enabled</span></code></a></li>
@@ -78,42 +69,15 @@
 <li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EXRDisplay.kneeLow"><code class="docutils literal notranslate"><span class="pre">EXRDisplay.kneeLow</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.EnvironmentMapType"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapType</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.EnvironmentMapType.name"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapType.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ImageFilter"><code class="docutils literal notranslate"><span class="pre">ImageFilter</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.ImageFilter.name"><code class="docutils literal notranslate"><span class="pre">ImageFilter.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.InputVideoLevels"><code class="docutils literal notranslate"><span class="pre">InputVideoLevels</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.InputVideoLevels.name"><code class="docutils literal notranslate"><span class="pre">InputVideoLevels.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.LUTOrder"><code class="docutils literal notranslate"><span class="pre">LUTOrder</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.LUTOrder.name"><code class="docutils literal notranslate"><span class="pre">LUTOrder.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.PixelType"><code class="docutils literal notranslate"><span class="pre">PixelType</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.PixelType.name"><code class="docutils literal notranslate"><span class="pre">PixelType.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Stereo3DInput"><code class="docutils literal notranslate"><span class="pre">Stereo3DInput</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Stereo3DInput.name"><code class="docutils literal notranslate"><span class="pre">Stereo3DInput.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Stereo3DOutput"><code class="docutils literal notranslate"><span class="pre">Stereo3DOutput</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.Stereo3DOutput.name"><code class="docutils literal notranslate"><span class="pre">Stereo3DOutput.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.VideoLevels"><code class="docutils literal notranslate"><span class="pre">VideoLevels</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.VideoLevels.name"><code class="docutils literal notranslate"><span class="pre">VideoLevels.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.YUVCoefficients"><code class="docutils literal notranslate"><span class="pre">YUVCoefficients</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.image.YUVCoefficients.name"><code class="docutils literal notranslate"><span class="pre">YUVCoefficients.name</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.EnvironmentMapType"><code class="docutils literal notranslate"><span class="pre">EnvironmentMapType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ImageFilter"><code class="docutils literal notranslate"><span class="pre">ImageFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.InputVideoLevels"><code class="docutils literal notranslate"><span class="pre">InputVideoLevels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.LUTOrder"><code class="docutils literal notranslate"><span class="pre">LUTOrder</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.PixelType"><code class="docutils literal notranslate"><span class="pre">PixelType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Stereo3DInput"><code class="docutils literal notranslate"><span class="pre">Stereo3DInput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.Stereo3DOutput"><code class="docutils literal notranslate"><span class="pre">Stereo3DOutput</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.VideoLevels"><code class="docutils literal notranslate"><span class="pre">VideoLevels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.image.YUVCoefficients"><code class="docutils literal notranslate"><span class="pre">YUVCoefficients</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.backgroundOptions"><code class="docutils literal notranslate"><span class="pre">backgroundOptions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioConfig"><code class="docutils literal notranslate"><span class="pre">ocioConfig()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.image.ocioIcs"><code class="docutils literal notranslate"><span class="pre">ocioIcs()</span></code></a></li>
@@ -256,58 +220,58 @@
 <p>Contains all classes and enums related to image controls.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.AlphaBlend">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">AlphaBlend</span></span><a class="headerlink" href="#mrv2.image.AlphaBlend" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">AlphaBlend</span></span><a class="headerlink" href="#mrv2.image.AlphaBlend" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>kNone</p>
 <p>Straight</p>
 <p>Premultiplied</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.AlphaBlend.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.AlphaBlend.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">AlphaBlend.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.Background">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Background</span></span><a class="headerlink" href="#mrv2.image.Background" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Background</span></span><a class="headerlink" href="#mrv2.image.Background" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>Transparent</p>
 <p>Solid</p>
 <p>Checkers</p>
 <p>Gradient</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.Background.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.Background.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Background.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.BackgroundOptions">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">BackgroundOptions</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">BackgroundOptions</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions" title="Link to this definition"></a></dt>
 <dd><p>Background options.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="mrv2.image.BackgroundOptions.checkersColor0">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">checkersColor0</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.checkersColor0" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">checkersColor0</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.checkersColor0" title="Link to this definition"></a></dt>
 <dd><p>Checkers Color0 <a class="reference internal" href="#mrv2.image.Color4f" title="mrv2.image.Color4f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Color4f</span></code></a>..</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mrv2.image.BackgroundOptions.checkersColor1">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">checkersColor1</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.checkersColor1" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">checkersColor1</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.checkersColor1" title="Link to this definition"></a></dt>
 <dd><p>Checkers Color1 <a class="reference internal" href="#mrv2.image.Color4f" title="mrv2.image.Color4f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Color4f</span></code></a>..</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mrv2.image.BackgroundOptions.checkersSize">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">checkersSize</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.checkersSize" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">checkersSize</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.checkersSize" title="Link to this definition"></a></dt>
 <dd><p>Checkers Size <a class="reference internal" href="math.html#mrv2.math.Size2i" title="mrv2.math.Size2i"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.math.Size2i</span></code></a>..</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mrv2.image.BackgroundOptions.type">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.type" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#mrv2.image.BackgroundOptions.type" title="Link to this definition"></a></dt>
 <dd><p>Background type <a class="reference internal" href="#mrv2.image.Background" title="mrv2.image.Background"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Background</span></code></a>..</p>
 </dd></dl>
 
@@ -315,7 +279,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.Channels">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Channels</span></span><a class="headerlink" href="#mrv2.image.Channels" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Channels</span></span><a class="headerlink" href="#mrv2.image.Channels" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>Color</p>
 <p>Red</p>
@@ -324,43 +288,43 @@
 <p>Alpha</p>
 <p>Lumma</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.Channels.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.Channels.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Channels.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.EXRDisplay">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">EXRDisplay</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">EXRDisplay</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay" title="Link to this definition"></a></dt>
 <dd><p>EXR display values.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="mrv2.image.EXRDisplay.defog">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">defog</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay.defog" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">defog</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay.defog" title="Link to this definition"></a></dt>
 <dd><p>Defog value.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mrv2.image.EXRDisplay.enabled">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay.enabled" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay.enabled" title="Link to this definition"></a></dt>
 <dd><p>Enabled EXR display.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mrv2.image.EXRDisplay.exposure">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exposure</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay.exposure" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">exposure</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay.exposure" title="Link to this definition"></a></dt>
 <dd><p>Exposure value.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mrv2.image.EXRDisplay.kneeHigh">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kneeHigh</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay.kneeHigh" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">kneeHigh</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay.kneeHigh" title="Link to this definition"></a></dt>
 <dd><p>kneeHigh value.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mrv2.image.EXRDisplay.kneeLow">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kneeLow</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay.kneeLow" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">kneeLow</span></span><a class="headerlink" href="#mrv2.image.EXRDisplay.kneeLow" title="Link to this definition"></a></dt>
 <dd><p>kneeLow value.</p>
 </dd></dl>
 
@@ -368,61 +332,61 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapType">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">EnvironmentMapType</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapType" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">EnvironmentMapType</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapType" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>None</p>
 <p>Spherical</p>
 <p>Cubic</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.EnvironmentMapType.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapType.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EnvironmentMapType.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.ImageFilter">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ImageFilter</span></span><a class="headerlink" href="#mrv2.image.ImageFilter" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ImageFilter</span></span><a class="headerlink" href="#mrv2.image.ImageFilter" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>Nearest</p>
 <p>Linear</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.ImageFilter.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.ImageFilter.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">ImageFilter.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.InputVideoLevels">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">InputVideoLevels</span></span><a class="headerlink" href="#mrv2.image.InputVideoLevels" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">InputVideoLevels</span></span><a class="headerlink" href="#mrv2.image.InputVideoLevels" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>FromFile</p>
 <p>FullRange</p>
 <p>LegalRange</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.InputVideoLevels.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.InputVideoLevels.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">InputVideoLevels.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.LUTOrder">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">LUTOrder</span></span><a class="headerlink" href="#mrv2.image.LUTOrder" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">LUTOrder</span></span><a class="headerlink" href="#mrv2.image.LUTOrder" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>PostColorConfig</p>
 <p>PreColorConfig</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.LUTOrder.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.LUTOrder.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">LUTOrder.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.PixelType">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">PixelType</span></span><a class="headerlink" href="#mrv2.image.PixelType" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">PixelType</span></span><a class="headerlink" href="#mrv2.image.PixelType" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>kNone</p>
 <p>L_U8</p>
@@ -452,28 +416,28 @@
 <p>YUV_422P_U16</p>
 <p>YUV_444P_U16</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.PixelType.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.PixelType.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">PixelType.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.Stereo3DInput">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Stereo3DInput</span></span><a class="headerlink" href="#mrv2.image.Stereo3DInput" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Stereo3DInput</span></span><a class="headerlink" href="#mrv2.image.Stereo3DInput" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>kNone</p>
 <p>Image</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.Stereo3DInput.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.Stereo3DInput.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Stereo3DInput.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.Stereo3DOutput">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Stereo3DOutput</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOutput" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Stereo3DOutput</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOutput" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>Anaglyph</p>
 <p>Scanlines</p>
@@ -481,34 +445,34 @@
 <p>Checkerboard</p>
 <p>Glasses</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.Stereo3DOutput.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOutput.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Stereo3DOutput.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.VideoLevels">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">VideoLevels</span></span><a class="headerlink" href="#mrv2.image.VideoLevels" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">VideoLevels</span></span><a class="headerlink" href="#mrv2.image.VideoLevels" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>FullRange</p>
 <p>LegalRange</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.VideoLevels.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.VideoLevels.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">VideoLevels.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.YUVCoefficients">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">YUVCoefficients</span></span><a class="headerlink" href="#mrv2.image.YUVCoefficients" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">YUVCoefficients</span></span><a class="headerlink" href="#mrv2.image.YUVCoefficients" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>REC709</p>
 <p>BT2020</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.image.YUVCoefficients.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.image.YUVCoefficients.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">YUVCoefficients.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -593,29 +557,29 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.Color4f">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Color4f</span></span><a class="headerlink" href="#mrv2.image.Color4f" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Color4f</span></span><a class="headerlink" href="#mrv2.image.Color4f" title="Link to this definition"></a></dt>
 <dd><p>Image mirroring.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color4f.r">
-<span class="sig-name descname"><span class="pre">r</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Color4f.r" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">r</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Color4f.r" title="Link to this definition"></a></dt>
 <dd><p>Red Channel.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color4f.g">
-<span class="sig-name descname"><span class="pre">g</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Color4f.g" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">g</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Color4f.g" title="Link to this definition"></a></dt>
 <dd><p>Green Channel.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color4f.b">
-<span class="sig-name descname"><span class="pre">b</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Color4f.b" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">b</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Color4f.b" title="Link to this definition"></a></dt>
 <dd><p>Blue Channel.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color4f.a">
-<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Color4f.a" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">a</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Color4f.a" title="Link to this definition"></a></dt>
 <dd><p>Alpha Channel.</p>
 </dd></dl>
 
@@ -623,17 +587,17 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.Mirror">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Mirror</span></span><a class="headerlink" href="#mrv2.image.Mirror" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Mirror</span></span><a class="headerlink" href="#mrv2.image.Mirror" title="Link to this definition"></a></dt>
 <dd><p>Image mirroring.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Mirror.x">
-<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Mirror.x" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">x</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.image.Mirror.x" title="Link to this definition"></a></dt>
 <dd><p>Flip image on X.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Mirror.y">
-<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Mirror.y" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">y</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.image.Mirror.y" title="Link to this definition"></a></dt>
 <dd><p>Flip image on Y.</p>
 </dd></dl>
 
@@ -641,47 +605,47 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.Color">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Color</span></span><a class="headerlink" href="#mrv2.image.Color" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Color</span></span><a class="headerlink" href="#mrv2.image.Color" title="Link to this definition"></a></dt>
 <dd><p>Color values.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color.enabled">
-<span class="sig-name descname"><span class="pre">enabled</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Color.enabled" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">enabled</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.image.Color.enabled" title="Link to this definition"></a></dt>
 <dd><p>Enabled Levels.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color.add">
-<span class="sig-name descname"><span class="pre">add</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.math.Vector3f</span></em><a class="headerlink" href="#mrv2.image.Color.add" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.math.Vector3f</span></span><a class="headerlink" href="#mrv2.image.Color.add" title="Link to this definition"></a></dt>
 <dd><p>Add a <a class="reference internal" href="math.html#mrv2.math.Vector3f" title="mrv2.math.Vector3f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.math.Vector3f</span></code></a> to image.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color.brightness">
-<span class="sig-name descname"><span class="pre">brightness</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.math.Vector3f</span></em><a class="headerlink" href="#mrv2.image.Color.brightness" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">brightness</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.math.Vector3f</span></span><a class="headerlink" href="#mrv2.image.Color.brightness" title="Link to this definition"></a></dt>
 <dd><p>Change a <a class="reference internal" href="math.html#mrv2.math.Vector3f" title="mrv2.math.Vector3f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.math.Vector3f</span></code></a> of brightness to image.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color.contrast">
-<span class="sig-name descname"><span class="pre">contrast</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.math.Vector3f</span></em><a class="headerlink" href="#mrv2.image.Color.contrast" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">contrast</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.math.Vector3f</span></span><a class="headerlink" href="#mrv2.image.Color.contrast" title="Link to this definition"></a></dt>
 <dd><p>Change a <a class="reference internal" href="math.html#mrv2.math.Vector3f" title="mrv2.math.Vector3f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.math.Vector3f</span></code></a> of contrast to image.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color.saturation">
-<span class="sig-name descname"><span class="pre">saturation</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.math.Vector3f</span></em><a class="headerlink" href="#mrv2.image.Color.saturation" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">saturation</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.math.Vector3f</span></span><a class="headerlink" href="#mrv2.image.Color.saturation" title="Link to this definition"></a></dt>
 <dd><p>Change a <a class="reference internal" href="math.html#mrv2.math.Vector3f" title="mrv2.math.Vector3f"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.math.Vector3f</span></code></a> of saturation to image.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color.tint">
-<span class="sig-name descname"><span class="pre">tint</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Color.tint" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">tint</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Color.tint" title="Link to this definition"></a></dt>
 <dd><p>Change tint of image to image between 0 and 1.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Color.invert">
-<span class="sig-name descname"><span class="pre">invert</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Color.invert" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">invert</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.image.Color.invert" title="Link to this definition"></a></dt>
 <dd><p>Invert the color values.</p>
 </dd></dl>
 
@@ -689,41 +653,41 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.Levels">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Levels</span></span><a class="headerlink" href="#mrv2.image.Levels" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Levels</span></span><a class="headerlink" href="#mrv2.image.Levels" title="Link to this definition"></a></dt>
 <dd><p>Levels values.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Levels.enabled">
-<span class="sig-name descname"><span class="pre">enabled</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Levels.enabled" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">enabled</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.image.Levels.enabled" title="Link to this definition"></a></dt>
 <dd><p>Enabled Levels.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Levels.inLow">
-<span class="sig-name descname"><span class="pre">inLow</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Levels.inLow" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">inLow</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Levels.inLow" title="Link to this definition"></a></dt>
 <dd><p>In Low Level value.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Levels.inHigh">
-<span class="sig-name descname"><span class="pre">inHigh</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Levels.inHigh" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">inHigh</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Levels.inHigh" title="Link to this definition"></a></dt>
 <dd><p>In High Level value.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Levels.gamma">
-<span class="sig-name descname"><span class="pre">gamma</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Levels.gamma" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gamma</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Levels.gamma" title="Link to this definition"></a></dt>
 <dd><p>Gamma Level value.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Levels.outLow">
-<span class="sig-name descname"><span class="pre">outLow</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Levels.outLow" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">outLow</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Levels.outLow" title="Link to this definition"></a></dt>
 <dd><p>Out Low Level value.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Levels.outHigh">
-<span class="sig-name descname"><span class="pre">outHigh</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Levels.outHigh" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">outHigh</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Levels.outHigh" title="Link to this definition"></a></dt>
 <dd><p>Out High Level value.</p>
 </dd></dl>
 
@@ -731,17 +695,17 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.ImageFilters">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ImageFilters</span></span><a class="headerlink" href="#mrv2.image.ImageFilters" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ImageFilters</span></span><a class="headerlink" href="#mrv2.image.ImageFilters" title="Link to this definition"></a></dt>
 <dd><p>Image filters.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.ImageFilters.minify">
-<span class="sig-name descname"><span class="pre">minify</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.ImageFilter</span></em><a class="headerlink" href="#mrv2.image.ImageFilters.minify" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">minify</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.ImageFilter</span></span><a class="headerlink" href="#mrv2.image.ImageFilters.minify" title="Link to this definition"></a></dt>
 <dd><p>Minify filter <a class="reference internal" href="#mrv2.image.ImageFilter" title="mrv2.image.ImageFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.ImageFilter</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.ImageFilters.magnify">
-<span class="sig-name descname"><span class="pre">magnify</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.ImageFilter</span></em><a class="headerlink" href="#mrv2.image.ImageFilters.magnify" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">magnify</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.ImageFilter</span></span><a class="headerlink" href="#mrv2.image.ImageFilters.magnify" title="Link to this definition"></a></dt>
 <dd><p>Magnify filter <a class="reference internal" href="#mrv2.image.ImageFilter" title="mrv2.image.ImageFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.ImageFilter</span></code></a>.</p>
 </dd></dl>
 
@@ -749,17 +713,17 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.SoftClip">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">SoftClip</span></span><a class="headerlink" href="#mrv2.image.SoftClip" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">SoftClip</span></span><a class="headerlink" href="#mrv2.image.SoftClip" title="Link to this definition"></a></dt>
 <dd><p>Soft clip value.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.SoftClip.enabled">
-<span class="sig-name descname"><span class="pre">enabled</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.SoftClip.enabled" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">enabled</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.image.SoftClip.enabled" title="Link to this definition"></a></dt>
 <dd><p>Enabled Soft Clip.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.SoftClip.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.SoftClip.value" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">value</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.SoftClip.value" title="Link to this definition"></a></dt>
 <dd><p>Soft clip value.</p>
 </dd></dl>
 
@@ -767,35 +731,35 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.DisplayOptions">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">DisplayOptions</span></span><a class="headerlink" href="#mrv2.image.DisplayOptions" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">DisplayOptions</span></span><a class="headerlink" href="#mrv2.image.DisplayOptions" title="Link to this definition"></a></dt>
 <dd><p>Display options.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.DisplayOptions.channels">
-<span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Channels</span></em><a class="headerlink" href="#mrv2.image.DisplayOptions.channels" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Channels</span></span><a class="headerlink" href="#mrv2.image.DisplayOptions.channels" title="Link to this definition"></a></dt>
 <dd><p>Color channels <a class="reference internal" href="#mrv2.image.Channels" title="mrv2.image.Channels"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Channels</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.DisplayOptions.mirror">
-<span class="sig-name descname"><span class="pre">mirror</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Mirror</span></em><a class="headerlink" href="#mrv2.image.DisplayOptions.mirror" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mirror</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Mirror</span></span><a class="headerlink" href="#mrv2.image.DisplayOptions.mirror" title="Link to this definition"></a></dt>
 <dd><p>Mirror on X, Y or both <a class="reference internal" href="#mrv2.image.Mirror" title="mrv2.image.Mirror"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Mirror</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.DisplayOptions.color">
-<span class="sig-name descname"><span class="pre">color</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Color</span></em><a class="headerlink" href="#mrv2.image.DisplayOptions.color" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Color</span></span><a class="headerlink" href="#mrv2.image.DisplayOptions.color" title="Link to this definition"></a></dt>
 <dd><p>Color options <a class="reference internal" href="#mrv2.image.Color" title="mrv2.image.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Color</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.DisplayOptions.levels">
-<span class="sig-name descname"><span class="pre">levels</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Levels</span></em><a class="headerlink" href="#mrv2.image.DisplayOptions.levels" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">levels</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Levels</span></span><a class="headerlink" href="#mrv2.image.DisplayOptions.levels" title="Link to this definition"></a></dt>
 <dd><p>Levels options <a class="reference internal" href="#mrv2.image.Levels" title="mrv2.image.Levels"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.Levels</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.DisplayOptions.softClip">
-<span class="sig-name descname"><span class="pre">softClip</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.SoftClip</span></em><a class="headerlink" href="#mrv2.image.DisplayOptions.softClip" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">softClip</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.SoftClip</span></span><a class="headerlink" href="#mrv2.image.DisplayOptions.softClip" title="Link to this definition"></a></dt>
 <dd><p>Soft Clip options <a class="reference internal" href="#mrv2.image.SoftClip" title="mrv2.image.SoftClip"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.SoftClip</span></code></a>..</p>
 </dd></dl>
 
@@ -803,17 +767,17 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.LUTOptions">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">LUTOptions</span></span><a class="headerlink" href="#mrv2.image.LUTOptions" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">LUTOptions</span></span><a class="headerlink" href="#mrv2.image.LUTOptions" title="Link to this definition"></a></dt>
 <dd><p>LUT options.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.LUTOptions.fileName">
-<span class="sig-name descname"><span class="pre">fileName</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">str</span></em><a class="headerlink" href="#mrv2.image.LUTOptions.fileName" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fileName</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">str</span></span><a class="headerlink" href="#mrv2.image.LUTOptions.fileName" title="Link to this definition"></a></dt>
 <dd><p>LUT filename.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.LUTOptions.order">
-<span class="sig-name descname"><span class="pre">order</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.LUTOrder</span></em><a class="headerlink" href="#mrv2.image.LUTOptions.order" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">order</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.LUTOrder</span></span><a class="headerlink" href="#mrv2.image.LUTOptions.order" title="Link to this definition"></a></dt>
 <dd><p>LUT transformation order.</p>
 </dd></dl>
 
@@ -821,23 +785,23 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.ImageOptions">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ImageOptions</span></span><a class="headerlink" href="#mrv2.image.ImageOptions" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">ImageOptions</span></span><a class="headerlink" href="#mrv2.image.ImageOptions" title="Link to this definition"></a></dt>
 <dd><p>Image options.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.ImageOptions.videoLevels">
-<span class="sig-name descname"><span class="pre">videoLevels</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.InputVideoLevels</span></em><a class="headerlink" href="#mrv2.image.ImageOptions.videoLevels" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">videoLevels</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.InputVideoLevels</span></span><a class="headerlink" href="#mrv2.image.ImageOptions.videoLevels" title="Link to this definition"></a></dt>
 <dd><p>Video Levels.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.ImageOptions.alphaBlend">
-<span class="sig-name descname"><span class="pre">alphaBlend</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.AlphaBlend</span></em><a class="headerlink" href="#mrv2.image.ImageOptions.alphaBlend" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">alphaBlend</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.AlphaBlend</span></span><a class="headerlink" href="#mrv2.image.ImageOptions.alphaBlend" title="Link to this definition"></a></dt>
 <dd><p>Alpha blending algorithm</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.ImageOptions.imageFilters">
-<span class="sig-name descname"><span class="pre">imageFilters</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.ImageFilters</span></em><a class="headerlink" href="#mrv2.image.ImageOptions.imageFilters" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">imageFilters</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.ImageFilters</span></span><a class="headerlink" href="#mrv2.image.ImageOptions.imageFilters" title="Link to this definition"></a></dt>
 <dd><p>Image Filters</p>
 </dd></dl>
 
@@ -845,59 +809,59 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">EnvironmentMapOptions</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">EnvironmentMapOptions</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions" title="Link to this definition"></a></dt>
 <dd><p>EnvironmentMap options.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.type">
-<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.EnvironmentMapType</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.type" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">type</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.EnvironmentMapType</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.type" title="Link to this definition"></a></dt>
 <dd><p>Environment Map type.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.horizontalAperture">
-<span class="sig-name descname"><span class="pre">horizontalAperture</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.horizontalAperture" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">horizontalAperture</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.horizontalAperture" title="Link to this definition"></a></dt>
 <dd><p>Horizontal aperture</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.verticalAperture">
-<span class="sig-name descname"><span class="pre">verticalAperture</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.verticalAperture" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">verticalAperture</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.verticalAperture" title="Link to this definition"></a></dt>
 <dd><p>Vertical aperture</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.focalLength">
-<span class="sig-name descname"><span class="pre">focalLength</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.focalLength" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">focalLength</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.focalLength" title="Link to this definition"></a></dt>
 <dd><p>Focal Length</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.rotateX">
-<span class="sig-name descname"><span class="pre">rotateX</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.rotateX" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rotateX</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.rotateX" title="Link to this definition"></a></dt>
 <dd><p>Rotation on X</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.rotateY">
-<span class="sig-name descname"><span class="pre">rotateY</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.rotateY" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rotateY</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.rotateY" title="Link to this definition"></a></dt>
 <dd><p>Rotation on Y</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.subdivisionX">
-<span class="sig-name descname"><span class="pre">subdivisionX</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.subdivisionX" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">subdivisionX</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.subdivisionX" title="Link to this definition"></a></dt>
 <dd><p>Subdivision on X</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.subdivisionY">
-<span class="sig-name descname"><span class="pre">subdivisionY</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.subdivisionY" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">subdivisionY</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.subdivisionY" title="Link to this definition"></a></dt>
 <dd><p>Subdivision on Y</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.EnvironmentMapOptions.spin">
-<span class="sig-name descname"><span class="pre">spin</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.spin" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">spin</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.image.EnvironmentMapOptions.spin" title="Link to this definition"></a></dt>
 <dd><p>Spin</p>
 </dd></dl>
 
@@ -905,29 +869,29 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.image.Stereo3DOptions">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Stereo3DOptions</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOptions" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.image.</span></span><span class="sig-name descname"><span class="pre">Stereo3DOptions</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOptions" title="Link to this definition"></a></dt>
 <dd><p>Stereo3D options.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Stereo3DOptions.input">
-<span class="sig-name descname"><span class="pre">input</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Stereo3DInput</span></em><a class="headerlink" href="#mrv2.image.Stereo3DOptions.input" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">input</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Stereo3DInput</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOptions.input" title="Link to this definition"></a></dt>
 <dd><p>Stereo 3d input <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.StereoInput</span></code>..</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Stereo3DOptions.output">
-<span class="sig-name descname"><span class="pre">output</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Stereo3DOutput</span></em><a class="headerlink" href="#mrv2.image.Stereo3DOptions.output" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">output</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.image.Stereo3DOutput</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOptions.output" title="Link to this definition"></a></dt>
 <dd><p>Stereo 3d output <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.image.StereoOutput</span></code>..</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Stereo3DOptions.eyeSeparation">
-<span class="sig-name descname"><span class="pre">eyeSeparation</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.image.Stereo3DOptions.eyeSeparation" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">eyeSeparation</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOptions.eyeSeparation" title="Link to this definition"></a></dt>
 <dd><p>Separation between left and right eye.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.image.Stereo3DOptions.swapEyes">
-<span class="sig-name descname"><span class="pre">swapEyes</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.image.Stereo3DOptions.swapEyes" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">swapEyes</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.image.Stereo3DOptions.swapEyes" title="Link to this definition"></a></dt>
 <dd><p>Swap left and right eye</p>
 </dd></dl>
 

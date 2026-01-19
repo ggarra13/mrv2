@@ -860,7 +860,7 @@ namespace mrv
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
 
-            math::Matrix4x4f mvp = _projectionMatrix();
+            math::Matrix4x4f mvp = projectionMatrix();
             mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
             gl.render->setTransform(mvp);
 
@@ -1216,7 +1216,7 @@ namespace mrv
             box.min.y = -(renderSize.h - box.min.y);
             box.max.y = -(renderSize.h - box.max.y);
 
-            math::Matrix4x4f mvp = _projectionMatrix();
+            math::Matrix4x4f mvp = projectionMatrix();
             mvp = mvp * math::scale(math::Vector3f(1.F, -1.F, 1.F));
             gl.render->setTransform(mvp);
             

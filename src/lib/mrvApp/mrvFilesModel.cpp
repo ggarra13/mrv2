@@ -192,6 +192,13 @@ namespace mrv
 
                 p.active->setIfChanged(_getActive());
                 p.layers->setIfChanged(_getLayers());
+                
+                if (files.size() <= 1)
+                {
+                    auto compareOptions = p.compareOptions->get();
+                    compareOptions.mode = tl::timeline::CompareMode::A;
+                    p.compareOptions->setIfChanged(compareOptions);
+                }
             }
         }
     }
@@ -548,7 +555,7 @@ namespace mrv
         
         if (p.compareOptions->setIfChanged(value))
         {
-            switch (p.compareOptions->get().mode)
+            switch (value.mode)
             {
             case timeline::CompareMode::A:
             case timeline::CompareMode::B:

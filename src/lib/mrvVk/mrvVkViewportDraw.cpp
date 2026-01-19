@@ -37,7 +37,7 @@ namespace
 {
     const char* kModule = "draw";
     const unsigned kFPSAverageFrames = 10;
-    const std::string kFontFamily = "NotoSans-Regular";
+    const std::string kFontFamily = "NotoSans-Bold";
 }
 
 namespace mrv
@@ -548,7 +548,7 @@ namespace mrv
                 selection.max.x++;
                 selection.max.y++;
             }
-            const math::Matrix4x4f mvp = _projectionMatrix();
+            const math::Matrix4x4f& mvp = projectionMatrix();
             _drawRectangleOutline("selection", mvp, selection, color);
         }
         
@@ -622,7 +622,7 @@ namespace mrv
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
 
-            const math::Matrix4x4f mvp = _projectionMatrix();
+            const math::Matrix4x4f& mvp = projectionMatrix();
             const VkRenderPass oldRenderPass = vk.render->getRenderPass();
             const math::Matrix4x4f oldTransform = vk.render->getTransform();
 
@@ -993,7 +993,7 @@ namespace mrv
             std::stringstream ss(dw);
             ss >> box;
 
-            const math::Matrix4x4f mvp = _projectionMatrix();
+            const math::Matrix4x4f& mvp = projectionMatrix();
             const VkRenderPass oldRenderPass = vk.render->getRenderPass();
             const math::Matrix4x4f oldTransform = vk.render->getTransform();
 

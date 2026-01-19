@@ -6,17 +6,17 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>io Module &mdash; mrv2 v1.4.1 documentation</title>
+  <title>io Module &mdash; mrv2 v1.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=cebe732b"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/documentation_options.js?v=2ceb3701"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -52,18 +52,9 @@
 <li class="toctree-l2"><a class="reference internal" href="cmd.html">cmd module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="image.html">image module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">io Module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.io.AudioCodec"><code class="docutils literal notranslate"><span class="pre">AudioCodec</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.io.AudioCodec.name"><code class="docutils literal notranslate"><span class="pre">AudioCodec.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.io.Contents"><code class="docutils literal notranslate"><span class="pre">Contents</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.io.Contents.name"><code class="docutils literal notranslate"><span class="pre">Contents.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#mrv2.io.Resolution"><code class="docutils literal notranslate"><span class="pre">Resolution</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mrv2.io.Resolution.name"><code class="docutils literal notranslate"><span class="pre">Resolution.name</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.io.AudioCodec"><code class="docutils literal notranslate"><span class="pre">AudioCodec</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.io.Contents"><code class="docutils literal notranslate"><span class="pre">Contents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.io.Resolution"><code class="docutils literal notranslate"><span class="pre">Resolution</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.io.Profile"><code class="docutils literal notranslate"><span class="pre">Profile</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.io.Compression"><code class="docutils literal notranslate"><span class="pre">Compression</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.io.SaveOptions"><code class="docutils literal notranslate"><span class="pre">SaveOptions</span></code></a><ul>
@@ -121,7 +112,7 @@
 <span id="io-module"></span><h1>io Module<a class="headerlink" href="#module-mrv2.io" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.io.AudioCodec">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">AudioCodec</span></span><a class="headerlink" href="#mrv2.io.AudioCodec" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">AudioCodec</span></span><a class="headerlink" href="#mrv2.io.AudioCodec" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>kNone</p>
 <p>AAC</p>
@@ -133,42 +124,42 @@
 <p>VORBIS</p>
 <p>PCM_S16LE</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.io.AudioCodec.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.io.AudioCodec.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">AudioCodec.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.io.Contents">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">Contents</span></span><a class="headerlink" href="#mrv2.io.Contents" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">Contents</span></span><a class="headerlink" href="#mrv2.io.Contents" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>Display_Window</p>
 <p>Data_Window</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.io.Contents.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.io.Contents.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Contents.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.io.Resolution">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">Resolution</span></span><a class="headerlink" href="#mrv2.io.Resolution" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">Resolution</span></span><a class="headerlink" href="#mrv2.io.Resolution" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>Same_Size</p>
 <p>Half_Size</p>
 <p>Quarter_Size</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="mrv2.io.Resolution.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#mrv2.io.Resolution.name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Resolution.name</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.io.Profile">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">Profile</span></span><a class="headerlink" href="#mrv2.io.Profile" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">Profile</span></span><a class="headerlink" href="#mrv2.io.Profile" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>kNone</p>
 <p>ProRes</p>
@@ -184,7 +175,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.io.Compression">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">Compression</span></span><a class="headerlink" href="#mrv2.io.Compression" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">Compression</span></span><a class="headerlink" href="#mrv2.io.Compression" title="Link to this definition"></a></dt>
 <dd><p>Members:</p>
 <p>None</p>
 <p>RLE</p>
@@ -200,35 +191,35 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.io.SaveOptions">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">SaveOptions</span></span><a class="headerlink" href="#mrv2.io.SaveOptions" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.io.</span></span><span class="sig-name descname"><span class="pre">SaveOptions</span></span><a class="headerlink" href="#mrv2.io.SaveOptions" title="Link to this definition"></a></dt>
 <dd><p>Saving options.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.io.SaveOptions.annotations">
-<span class="sig-name descname"><span class="pre">annotations</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></em><a class="headerlink" href="#mrv2.io.SaveOptions.annotations" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">annotations</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.io.SaveOptions.annotations" title="Link to this definition"></a></dt>
 <dd><p>Save annotations.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.io.SaveOptions.ffmpegProfile">
-<span class="sig-name descname"><span class="pre">ffmpegProfile</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.io.Profile</span></em><a class="headerlink" href="#mrv2.io.SaveOptions.ffmpegProfile" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ffmpegProfile</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.io.Profile</span></span><a class="headerlink" href="#mrv2.io.SaveOptions.ffmpegProfile" title="Link to this definition"></a></dt>
 <dd><p>FFmpeg Profile.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.io.SaveOptions.exrCompression">
-<span class="sig-name descname"><span class="pre">exrCompression</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.io.Compression</span></em><a class="headerlink" href="#mrv2.io.SaveOptions.exrCompression" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">exrCompression</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.io.Compression</span></span><a class="headerlink" href="#mrv2.io.SaveOptions.exrCompression" title="Link to this definition"></a></dt>
 <dd><p>OpenEXR’s Compression.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.io.SaveOptions.zipCompressionLevel">
-<span class="sig-name descname"><span class="pre">zipCompressionLevel</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></em><a class="headerlink" href="#mrv2.io.SaveOptions.zipCompressionLevel" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">zipCompressionLevel</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></span><a class="headerlink" href="#mrv2.io.SaveOptions.zipCompressionLevel" title="Link to this definition"></a></dt>
 <dd><p>OpenEXR’s Zip Compression Level.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.io.SaveOptions.dwaCompressionLevel">
-<span class="sig-name descname"><span class="pre">dwaCompressionLevel</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></em><a class="headerlink" href="#mrv2.io.SaveOptions.dwaCompressionLevel" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dwaCompressionLevel</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.io.SaveOptions.dwaCompressionLevel" title="Link to this definition"></a></dt>
 <dd><p>OpenEXR’s DWA Compression Level.</p>
 </dd></dl>
 

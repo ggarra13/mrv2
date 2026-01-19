@@ -6,17 +6,17 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo de anotaciones &mdash; documentación de mrv2 - v1.4.1</title>
+  <title>Módulo de anotaciones &mdash; documentación de mrv2 - v1.5.3</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=752cef67"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/documentation_options.js?v=9779ab4d"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/translations.js?v=f85f4cfb"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -52,6 +52,8 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Módulo de anotaciones</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.annotations.add"><code class="docutils literal notranslate"><span class="pre">add()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mrv2.annotations.getTimes"><code class="docutils literal notranslate"><span class="pre">getTimes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.annotations.getVoiceAnnotations"><code class="docutils literal notranslate"><span class="pre">getVoiceAnnotations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mrv2.annotations.getVoiceAnnotationsJSON"><code class="docutils literal notranslate"><span class="pre">getVoiceAnnotationsJSON()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cmd.html">Módulo cmd</a></li>
@@ -124,6 +126,18 @@
 <dt class="sig sig-object py" id="mrv2.annotations.getTimes">
 <span class="sig-prename descclassname"><span class="pre">mrv2.annotations.</span></span><span class="sig-name descname"><span class="pre">getTimes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="mrv2.html#mrv2.RationalTime" title="mrv2.RationalTime"><span class="pre">mrv2.RationalTime</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.annotations.getTimes" title="Link to this definition"></a></dt>
 <dd><p>Consigue todos los tiempos para anotaciones.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.annotations.getVoiceAnnotations">
+<span class="sig-prename descclassname"><span class="pre">mrv2.annotations.</span></span><span class="sig-name descname"><span class="pre">getVoiceAnnotations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.annotations.getVoiceAnnotations" title="Link to this definition"></a></dt>
+<dd><p>Obtener todas las anotaciones de voz .wav del fotograma actual.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mrv2.annotations.getVoiceAnnotationsJSON">
+<span class="sig-prename descclassname"><span class="pre">mrv2.annotations.</span></span><span class="sig-name descname"><span class="pre">getVoiceAnnotationsJSON</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.annotations.getVoiceAnnotationsJSON" title="Link to this definition"></a></dt>
+<dd><p>Obtener todas las direcciones de voz y del ratón del fotograma actual como un archivo JSON.</p>
 </dd></dl>
 
 </section>

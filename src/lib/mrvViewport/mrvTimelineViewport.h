@@ -424,6 +424,9 @@ namespace mrv
 
             //! Append audio and mouse movements to current voice over.
             void voiceOverAppend();
+
+            //! Get the full projection matrix.
+            const math::Matrix4x4f projectionMatrix() const noexcept;
             
         protected:
             void _init();
@@ -451,9 +454,6 @@ namespace mrv
             
             //! Get the render projection matrix.
             math::Matrix4x4f _renderProjectionMatrix() const noexcept;
-
-            //! Get the full projection matrix.
-            math::Matrix4x4f _projectionMatrix() const noexcept;
 
             //! Get the matrix to pixel (raster) coordinates of image.
             math::Matrix4x4f _pixelMatrix() const noexcept;

@@ -1969,6 +1969,21 @@ msgstr "Сверкает {0} {1}..."
 msgid "Stop streaming"
 msgstr "Прекратить поток"
 
+msgid "Renderer"
+msgstr "Редактор"
+
+msgid "Complexity"
+msgstr "Сложность"
+
+msgid "Draw Mode"
+msgstr "Режим рисования"
+
+msgid "Stage Cache"
+msgstr "Сценический кэш"
+
+msgid "Disk Cache in GB"
+msgstr "Дисковый кэш в GB"
+
 msgid "Toggle other eye stereo image."
 msgstr "Настроить другой стереоизображение."
 
@@ -2964,29 +2979,37 @@ msgstr "Профиль HAP требует расширения.mov."
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "Новый файл {0} уже существует! Не может переписать его."
 
+msgid "Rotated image info: {0}"
+msgstr "Информация о поворачиваемых изображениях: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "Расширенная информация об изображениях: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Не удаётся открыть пиджак."
 
 msgid "Image info: {0} {1}"
 msgstr "Фотография: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "Расширенная информация об изображениях: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Фотография слишком большая, чтобы сохранить аннотации. Расширится до размера"
+" смотрового портала."
+
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Писатель не получил информацию о выходе. По умолчанию {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Результаты: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Используя профиль {0}, пиксельный формат {1}."
 
 msgid "Using preset {0}."
 msgstr "Использование предварительного оборудования {0}."
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Информация о буфере вне экрана: {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "Результаты: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Спасение фильма без звука %<PRId64> - %<PRId64>"
@@ -3003,14 +3026,32 @@ msgstr "Securing Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Звук только в хронологии, но не в попытке сохранить звук."
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Неверный формат и тип OpenGL"
+
+msgid "OpenGL info: {0}"
+msgstr "Информация OpenGL: {0}"
+
 msgid "Saving... {0}"
 msgstr "Спасаю... {0}"
 
-msgid "Could not read image data from view"
-msgstr "Не удалось прочитать данные изображения с вида"
+msgid "Unsupported output format"
+msgstr "Неподдерживаемый формат вывода"
+
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
 
 msgid "Render size: {0}"
 msgstr "Размер рендеринга: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Информация о слое изображения '{0}': {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Информация о буфере вне экрана: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Неподдерживаемый формат вывода: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3797,8 +3838,8 @@ msgstr "Рамка {0} - ТС: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Слишком большое изображение, сохранит размер смотрового портала."
 
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
+msgid "Could not read image data from view"
+msgstr "Не удалось прочитать данные изображения с вида"
 
 msgid "Link/Open"
 msgstr "Связать/Открыть"
@@ -3952,23 +3993,14 @@ msgstr "   Впереди   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
-msgstr "HDR-монитор найден."
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR-монитор не найден или не настроен."
-
-msgid "Vulkan color space is {0}"
-msgstr "Цветовое пространство Vulkan: {0}"
-
-msgid "Vulkan format is {0}"
-msgstr "Формат Vulkan: {0}"
-
 msgid "Edit Text"
 msgstr "Изменить текст"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' не является файлом, каталогом или URL."
+
+msgid "Invalid font for text drawing"
+msgstr "Неверный шрифт для текстового рисунка"
 
 msgid "Could not convert message to shape: "
 msgstr "Невозможно преобразовать сообщение в форму:"
@@ -6146,6 +6178,18 @@ msgstr "Сияние"
 msgid "oxy"
 msgstr "oxy"
 
+msgid "Pick View Background Color"
+msgstr "Выбрать цвет фона вида"
+
+msgid "Pick View Text Overlay Color"
+msgstr "Выбрать цвет наложенного текста вида"
+
+msgid "Pick View Selection Color"
+msgstr "Выбрать цвет выделения вида"
+
+msgid "Pick HUD Color"
+msgstr "Выбрать цвет HUD"
+
 msgid "Float Values"
 msgstr "Значения поплавка"
 
@@ -7981,9 +8025,6 @@ msgstr "Режим скруба"
 msgid "Area Selection Mode"
 msgstr "Режим выделения области"
 
-msgid "Draw Mode"
-msgstr "Режим рисования"
-
 msgid "Erase Mode"
 msgstr "Стереть режим"
 
@@ -8086,46 +8127,17 @@ msgstr "Переключить окно горячих клавиш"
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
 
-#~ msgid "Renderer"
-#~ msgstr "Редактор"
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR-монитор найден."
 
-#~ msgid "Complexity"
-#~ msgstr "Сложность"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR-монитор не найден или не настроен."
 
-#~ msgid "Stage Cache"
-#~ msgstr "Сценический кэш"
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Цветовое пространство Vulkan: {0}"
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Дисковый кэш в GB"
-
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Информация о поворачиваемых изображениях: {0}"
-
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr ""
-#~ "Фотография слишком большая, чтобы сохранить аннотации. Расширится до размера"
-#~ " смотрового портала."
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Неверный формат и тип OpenGL"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Информация OpenGL: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "Неподдерживаемый формат вывода"
-
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "Пустые видеоданные в момент {0} Повторяю рамку."
-
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "Информация о слое изображения '{0}': {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "Неподдерживаемый формат вывода: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Неверный шрифт для текстового рисунка"
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Формат Vulkan: {0}"
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "Недействительная лицензия. Переход в демонстрационный режим"

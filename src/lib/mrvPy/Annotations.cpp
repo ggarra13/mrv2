@@ -120,6 +120,7 @@ namespace mrv2
             const auto& viewportSize = App::ui->uiView->getViewportSize();
             const auto& renderSize = App::ui->uiView->getRenderSize();
             const float viewZoom = App::ui->uiView->viewZoom();
+            const math::Matrix4x4f& mvp = App::ui->uiView->projectionMatrix();
 
             // Calculate resolution multiplier.
             float resolutionMultiplier = renderSize.w * 6 / 4096.0 / viewZoom;
@@ -129,6 +130,7 @@ namespace mrv2
             j["viewportSize"] = viewportSize;
             j["renderSize"] = renderSize;
             j["viewZoom"] = viewZoom;
+            j["mvp"] = mvp;
 
             auto annotations = player->getVoiceAnnotations();
             std::vector<nlohmann::json > voiceAnnotations;

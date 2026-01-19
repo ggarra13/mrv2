@@ -12,7 +12,8 @@ set(HEADERS
     SequenceIO.h
     STB.h
     System.h
-    SystemInline.h)
+    SystemInline.h
+    ZFile.h)
 set(HEADERS_PRIVATE
     SequenceIOReadPrivate.h)
 
@@ -39,7 +40,10 @@ set(SOURCE
     STBWrite.cpp
     SequenceIORead.cpp
     SequenceIOWrite.cpp
-    System.cpp)
+    System.cpp
+    ZFile.cpp
+    ZFileRead.cpp
+)
 
 set(LIBRARIES)
 set(LIBRARIES_PRIVATE)
@@ -84,10 +88,10 @@ if(TLRENDER_USD)
 	list(APPEND SOURCE USDRender.cpp)
 	list(APPEND LIBRARIES_PRIVATE usdImagingGL usdAppUtils hd)
     elseif(MRV2_BACKEND STREQUAL "VK")
-	list(APPEND LIBRARIES_PRIVATE tf usd usdGeom)
-	list(APPEND HEADERS USDVulkan.h)
-	#list(APPEND SOURCE USDVKRender.cpp)
-	list(APPEND LIBRARIES_PRIVATE usdAppUtils hd)
+	# list(APPEND LIBRARIES_PRIVATE tf usd usdGeom)
+	# list(APPEND HEADERS USDVulkan.h)
+	# #list(APPEND SOURCE USDVKRender.cpp)
+	# list(APPEND LIBRARIES_PRIVATE usdAppUtils hd)
     endif()
 endif()
 if(TLRENDER_RAW)

@@ -18,8 +18,8 @@
 theme "Default"
 {
     cmap 0 0 0 0		# black: color of most label text
-    cmap 1 255 0 0		# red: red tty errors
-    cmap 2 0 255 0		# grn: jobs 'Continue' button border color
+    cmap 1 255 0 0		# red  pixel bar color
+    cmap 2 0 255 0		# grn: pixel bar color
     cmap 3 255 255 0		# yel
     cmap 4 0   40   255	        # blue pixel bar color
     cmap 5 255 0 255		# mag: 
@@ -32,7 +32,6 @@ theme "Default"
     cmap 12 113 113 198
     cmap 13 142 56 142		# desaturated magenta: color for the 'enabled' search box
     cmap 14 56 142 142
-    cmap 15 0 0 0		# checks in checkboxes (Edit|Preferences..)
     cmap 16 168 168 152
     cmap 17 232 232 216
     cmap 18 104 104 88
@@ -279,8 +278,8 @@ theme "Default"
 theme "Dark Grey"
 {
     cmap 0 200 200 200	# black: color of most label text
-    cmap 1 150 30 30	# red: red tty errors
-    cmap 2 0 180 0      # grn: jobs 'Continue' button border color
+    cmap 1 150 30 30	# red  pixel bar color
+    cmap 2 0 180 0      # grn: pixel bar color
     cmap 3 180 180 0	# yel
     cmap 4 0   40   255	# blue pixel bar color
     cmap 5 180 0 180	# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
@@ -292,7 +291,7 @@ theme "Dark Grey"
     cmap 11 150 150 90
     cmap 12 90 90 150
     cmap 13 150 90 150	# desaturated magenta: color for the 'enabled' search box
-    cmap 14 90 150 150
+    cmap 14 90 150 150  # desaturatad cyan: button selection color.
     cmap 32 5 5 5
     cmap 33 10 10 10
     cmap 34 16 16 16
@@ -340,8 +339,8 @@ theme "Dark Grey"
 theme "Tan"
 {
     cmap 0 0 0 0		# black: color of most label text
-    cmap 1 255 0 0		# red: red tty errors
-    cmap 2 0 255 0		# grn: jobs 'Continue' button border color
+    cmap 1 255 0 0		# red: pixel bar color
+    cmap 2 0 255 0		# grn: pixel bar color
     cmap 3 255 255 0		# yel
     cmap 4 0   40   255		# blue pixel bar color
     cmap 5 255 0 255		# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
@@ -353,7 +352,7 @@ theme "Tan"
     cmap 11 142 142 56
     cmap 12 113 113 198
     cmap 13 200 150 200		# desaturated magenta: color for the 'enabled' search box
-    cmap 14 56 142 142
+    cmap 14 56 142 142         # desaturated cyan: button selection color
     cmap 32 0   0   0
     cmap 33 114 100 46
     cmap 34 120 107 56
@@ -589,8 +588,8 @@ theme "Tan"
 theme "Plain Gray"
 {
     cmap 0 0 0 0		# black: color of most label text
-    cmap 1 255 0 0		# red: red tty errors
-    cmap 2 0 255 0		# grn: jobs 'Continue' button border color
+    cmap 1 255 0 0		# red: pixel bar color
+    cmap 2 0 255 0		# grn: pixel bar color
     cmap 3 255 255 0		# yel
     cmap 4 0   40   255		# blue pixel bar color
     cmap 5 255 0 255		# mag: LOGFILE: jobdonecommand.log, jobdumpcommand.log
@@ -602,7 +601,7 @@ theme "Plain Gray"
     cmap 11 142 142 56
     cmap 12 113 113 198
     cmap 13 142 56 142		# desaturated magenta: color for the 'enabled' search box
-    cmap 14 56 142 142
+    cmap 14 56 142 142          # desaturated cyan (button selection color)
 #   cmap 16 168 168 152
 #   cmap 17 232 232 216
 #   cmap 18 104 104 88
@@ -854,10 +853,10 @@ theme "Plain Gray"
 theme "Shake"
 {
     cmap 0   0  0  0		# (BLK) color of most label text
-    cmap 1 162 48 48		# (RED) "Fail"
-    cmap 2 90 180 0		# (GRN) jobs 'Continue' button border color
+    cmap 1 162 48 48		# (RED) pixel bar color
+    cmap 2 90 180 0		# (GRN) pixel bar color
     cmap 3 255 255 0		# (YEL)
-    cmap 4 0   40   255		# blue pixel bar color
+    cmap 4 0   40   255		# (BLU) pixel bar color
     cmap 5 180 0 180		# (MAG) LOGFILE: jobdonecommand.log, jobdumpcommand.log
     cmap 6 0 180 180		# (CYN)
     cmap 7 220 220 220		# (WHT) alpha/lumma color in pixel bar
@@ -867,7 +866,7 @@ theme "Shake"
     cmap 11 150 150 90		# (MUTED YEL)
     cmap 12 110 123 145		# (MUTED BLU) column header bg color
     cmap 13 150 90 150		# (MUTED MAG) color for the 'enabled' search box
-    cmap 14 90 150 150		# (MUTED CYN)
+    cmap 14 90 150 150		# (MUTED CYN) button selection color
     cmap 32 3 3 3		# 24 level grayscale ramp
     cmap 33 5 5 5
     cmap 34 8 8 8
@@ -919,8 +918,8 @@ theme "Black"
     #     and black/white brightnesses are inverted.
     #
     cmap 0 140 140 140		# black: color of most label text
-    cmap 1 180 0   0            # red: selection of preferences/file requester
-    cmap 2 0  180  0            # grn: jobs 'Continue' button border color
+    cmap 1 180 0   0            # red: pixel bar color
+    cmap 2 0  180  0            # grn: pixel bar color
     cmap 3 120 120 0		# yel
     cmap 4 0   40   255		# blue pixel bar color
     cmap 5 120 0   120		# mag LOGFILE: jobdonecommand.log, jobdumpcommand.log
@@ -932,7 +931,7 @@ theme "Black"
     cmap 11 100 100 0		# desaturated yel
     cmap 12 0 0 100		# desaturated blu
     cmap 13 100 0 100		# desaturated mag color
-    cmap 14 0 100 100		# desaturated cyn
+    cmap 14 0 100 100		# desaturated cyn (button selection color)
 
     # Gray scale ramp.
     #     We've inverted and muted it to 180 max for the Black color theme

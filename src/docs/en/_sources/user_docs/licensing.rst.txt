@@ -2,7 +2,7 @@
 Licensing
 #########
 
-If running the OpenGL (mrv2) or Vulkan version (vmrv2) after v1.4.1, as it is a commercial product, you need to license it for your computer.
+If running the OpenGL (mrv2) or Vulkan version (vmrv2) after v1.5.3, as it is a commercial product, you need to license it for your computer.
 
 When you start mrv2, if there's no license it will popup a license helper with
 an ID for your machine.
