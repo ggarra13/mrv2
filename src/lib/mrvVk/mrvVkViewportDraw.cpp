@@ -37,7 +37,7 @@ namespace
 {
     const char* kModule = "draw";
     const unsigned kFPSAverageFrames = 10;
-    const std::string kFontFamily = "NotoSans-Regular";
+    const std::string kFontFamily = "NotoSans-Bold";
 }
 
 namespace mrv
