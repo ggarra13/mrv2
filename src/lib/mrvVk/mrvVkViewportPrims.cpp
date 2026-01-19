@@ -195,7 +195,7 @@ namespace mrv
                 prepare_pipeline();
             }
 
-            return _projectionMatrix();
+            return projectionMatrix();
         }
 
     } // namespace vulkan

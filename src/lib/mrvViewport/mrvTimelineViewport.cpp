@@ -3872,7 +3872,8 @@ namespace mrv
         }
 
         
-        math::Matrix4x4f TimelineViewport::_projectionMatrix() const noexcept
+        const math::Matrix4x4f
+        TimelineViewport::projectionMatrix() const noexcept
         {
             TLRENDER_P();
 
