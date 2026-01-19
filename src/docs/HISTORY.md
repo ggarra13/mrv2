@@ -62,6 +62,7 @@ ChangeLog
 - Changed HUD font for better readability.
 - Fixed a resizing bug on Windows when using two monitors with different scaling factors.
 - Added support for Pixar's Renderman .z shadow map files.
+- Fixed the OpenGL bug in macOS.  There's no longer any need to change your System Settings.
 
 
 v1.5.2
