@@ -61,8 +61,8 @@ ChangeLog
 - Documented mrv2.colors file.  You can create one in $HOME/.filmaura to take over the defaults.
 - Changed HUD font for better readability.
 - Fixed a resizing bug on Windows when using two monitors with different scaling factors.
-- Added support for Pixar's Renderman .z shadow map files.
-- Fixed the OpenGL bug in macOS.  There's no longer any need to change your System Settings.
+- Added support for Pixar's Renderman .z or .zfile shadow map files.
+- Fixed the OpenGL bug in macOS mrv2.  There's no longer any need to change your System Settings.
 
 
 v1.5.2
