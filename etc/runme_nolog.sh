@@ -312,6 +312,10 @@ if [ -z "$TLRENDER_X11" ]; then
     export TLRENDER_X11=${BUILD_X11}
 fi
 
+if [ -z "$TLRENDER_ZFILE" ]; then
+    export TLRENDER_ZFILE=ON
+fi
+
 if [ -z "$FLTK_BUILD_SHARED" ]; then
     export FLTK_BUILD_SHARED=${MRV2_PYFLTK}
     if [ -z "$FLTK_BUILD_SHARED" ]; then
@@ -452,6 +456,7 @@ echo "SSL support ........................ ${TLRENDER_SSL} 	(TLRENDER_SSL)"
 echo "TIFF support ....................... ${TLRENDER_TIFF} 	(TLRENDER_TIFF)"
 echo "tlRender API ....................... ${TLRENDER_API} 	(TLRENDER_API)"
 echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
+echo "ZFile support ...................... ${TLRENDER_ZFILE} 	(TLRENDER_ZFILE)"
 
 if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
@@ -545,6 +550,7 @@ cmd="cmake -G 'Ninja'
 	   -D TLRENDER_USD_PYTHON=\"${TLRENDER_USD_PYTHON}\"
 	   -D TLRENDER_QT6=OFF
 	   -D TLRENDER_QT5=OFF
+	   -D TLRENDER_ZFILE=${TLRENDER_ZFILE}
 	   
 	   -D TLRENDER_NDI_SDK=\"${TLRENDER_NDI_SDK}\"
 

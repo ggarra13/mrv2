@@ -61,6 +61,7 @@ ChangeLog
 - Documented mrv2.colors file.  You can create one in $HOME/.filmaura to take over the defaults.
 - Changed HUD font for better readability.
 - Fixed a resizing bug on Windows when using two monitors with different scaling factors.
+- Added support for Pixar's Renderman .z shadow map files.
 
 
 v1.5.2

@@ -12,7 +12,8 @@ set(HEADERS
     SequenceIO.h
     STB.h
     System.h
-    SystemInline.h)
+    SystemInline.h
+    ZFile.h)
 set(HEADERS_PRIVATE
     SequenceIOReadPrivate.h)
 
@@ -39,7 +40,10 @@ set(SOURCE
     STBWrite.cpp
     SequenceIORead.cpp
     SequenceIOWrite.cpp
-    System.cpp)
+    System.cpp
+    ZFile.cpp
+    ZFileRead.cpp
+)
 
 set(LIBRARIES)
 set(LIBRARIES_PRIVATE)

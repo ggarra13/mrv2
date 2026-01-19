@@ -35,6 +35,9 @@
 #if defined(TLRENDER_RAW)
 #    include <tlIO/RAW.h>
 #endif // TLRENDER_RAW
+#if defined(TLRENDER_ZFILE)
+#    include <tlIO/ZFile.h>
+#endif
 
 #include <tlCore/Context.h>
 #include <tlCore/File.h>
@@ -93,6 +96,9 @@ namespace tl
 #endif // TLRENDER_USD
 #if defined(TLRENDER_RAW)
                 _plugins.push_back(raw::Plugin::create(p.cache, logSystem));
+#endif // TLRENDER_RAW
+#if defined(TLRENDER_ZFILE)
+                _plugins.push_back(zfile::Plugin::create(p.cache, logSystem));
 #endif // TLRENDER_RAW
             }
 
