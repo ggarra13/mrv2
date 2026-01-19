@@ -125,7 +125,9 @@ def parse_and_process_dates(args):
         # and the new end_dt is at the end of its day for clean API calls.
         start_dt = start_dt.replace(hour=0, minute=0, second=0, microsecond=0)
         end_dt = end_dt.replace(hour=23, minute=59, second=59, microsecond=999999)
-
+    # Calculate beta_start_dt as start_dt + 1 day.
+    beta_start_dt = start_dt + timedelta(days=1)
+        
     # 4. Correctly Calculate Difference (must be done AFTER any potential swap)
     time_difference = end_dt - start_dt
     days = time_difference.days
@@ -141,8 +143,9 @@ def parse_and_process_dates(args):
     # Format dates to 'YYYY-MM-DD' strings for use in API calls
     start_date_str = start_dt.strftime("%Y-%m-%d")
     end_date_str = end_dt.strftime("%Y-%m-%d")
+    beta_start_date_str = beta_start_dt.strftime("%Y-%m-%d")
 
-    return start_date_str, end_date_str, args.user, args.repo, args.tag
+    return beta_start_date_str, start_date_str, end_date_str, args.user, args.repo, args.tag
 
 def get_github_downloads(user, repo, tag):
     """
@@ -419,7 +422,7 @@ if __name__ == "__main__":
     args = get_date_arguments()
 
     # The function now handles the date flipping
-    start_date_str, end_date_str, user, repo, tag = parse_and_process_dates(args)
+    beta_start_date_str, start_date_str, end_date_str, user, repo, tag = parse_and_process_dates(args)
 
     # 1. Get GitHub Totals
     mrv2_github_total, vmrv2_github_total = get_github_downloads(user, repo, tag)
@@ -438,15 +441,16 @@ if __name__ == "__main__":
     vmrv2_grand_total += vmrv2_sf_released_total
 
     # 3. Get SourceForge Beta OpenGL Totals
-    # mrv2_sf_beta_opengl_total, vmrv2_sf_beta_opengl_total = count_sourceforge(repo, 'beta/opengl', end_date_str, start_date_str)
-    # mrv2_grand_total += mrv2_sf_beta_opengl_total
-    # vmrv2_grand_total += vmrv2_sf_beta_opengl_total
+    mrv2_sf_beta_opengl_total, vmrv2_sf_beta_opengl_total = count_sourceforge(repo, 'beta/opengl', end_date_str, beta_start_date_str)
+    mrv2_grand_total += mrv2_sf_beta_opengl_total
 
-    # # 4. Get SourceForge Beta Vulkan Totals
-    # mrv2_sf_beta_vulkan_total, vmrv2_sf_beta_vulkan_total = count_sourceforge(repo, 'beta/vulkan', end_date_str, start_date_str)
-    # mrv2_grand_total += mrv2_sf_beta_vulkan_total
-    # vmrv2_grand_total += vmrv2_sf_beta_vulkan_total
+    # 4. Get SourceForge Beta Vulkan Totals
+    mrv2_sf_beta_vulkan_total, vmrv2_sf_beta_vulkan_total = count_sourceforge(repo, 'beta/vulkan', end_date_str, beta_start_date_str)
+    vmrv2_grand_total += vmrv2_sf_beta_vulkan_total
 
+    #
+    # 5. Add all of them up
+    #
     final_grand_total = mrv2_grand_total + vmrv2_grand_total
 
     print("\n=======================================================================")
