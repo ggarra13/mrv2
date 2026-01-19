@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v1.5.0)  # v1.4.9 was latest mrv2 v1.5.1 release
+set(FLTK_GIT_TAG v1.5.1)  # was v1.4.9
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_merge) # Testing branch
