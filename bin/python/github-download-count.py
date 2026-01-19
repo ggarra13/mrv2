@@ -438,14 +438,14 @@ if __name__ == "__main__":
     vmrv2_grand_total += vmrv2_sf_released_total
 
     # 3. Get SourceForge Beta OpenGL Totals
-    mrv2_sf_beta_opengl_total, vmrv2_sf_beta_opengl_total = count_sourceforge(repo, 'beta/opengl', end_date_str, start_date_str)
-    mrv2_grand_total += mrv2_sf_beta_opengl_total
-    vmrv2_grand_total += vmrv2_sf_beta_opengl_total
+    # mrv2_sf_beta_opengl_total, vmrv2_sf_beta_opengl_total = count_sourceforge(repo, 'beta/opengl', end_date_str, start_date_str)
+    # mrv2_grand_total += mrv2_sf_beta_opengl_total
+    # vmrv2_grand_total += vmrv2_sf_beta_opengl_total
 
-    # 4. Get SourceForge Beta Vulkan Totals
-    mrv2_sf_beta_vulkan_total, vmrv2_sf_beta_vulkan_total = count_sourceforge(repo, 'beta/vulkan', end_date_str, start_date_str)
-    mrv2_grand_total += mrv2_sf_beta_vulkan_total
-    vmrv2_grand_total += vmrv2_sf_beta_vulkan_total
+    # # 4. Get SourceForge Beta Vulkan Totals
+    # mrv2_sf_beta_vulkan_total, vmrv2_sf_beta_vulkan_total = count_sourceforge(repo, 'beta/vulkan', end_date_str, start_date_str)
+    # mrv2_grand_total += mrv2_sf_beta_vulkan_total
+    # vmrv2_grand_total += vmrv2_sf_beta_vulkan_total
 
     final_grand_total = mrv2_grand_total + vmrv2_grand_total
 
