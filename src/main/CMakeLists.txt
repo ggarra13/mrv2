@@ -19,9 +19,9 @@ set(LIBRARIES )
 
 if(MRV2_PYBIND11)
     list(APPEND LIBRARIES mrvPy)
+else()
+    list(APPEND LIBRARIES mrvApp)
 endif()
-
-list(APPEND LIBRARIES mrvApp)
 
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
     list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
