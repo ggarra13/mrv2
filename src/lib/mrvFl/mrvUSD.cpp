@@ -4,8 +4,6 @@
 
 #ifdef TLRENDER_USD
 
-#pragma once
-
 
 #    include "mrvOptions/mrvUSD.h"
 
