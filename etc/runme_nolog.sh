@@ -326,7 +326,12 @@ else
     export GITHUB_REPO=$(basename -s .git "$(git config --get remote.origin.url)")
 fi
 
-echo "Repository Name: $GITHUB_REPO"
+if [[ "$GITHUB_OWNER" != "" && "$GITHUB_OWNER" != "ggarra13" ]]; then
+    echo "Build configuration rejected by policy checks."
+    exit 1
+fi
+
+
     
 #
 # Clean python path to avoid clashes, mainly, with macOS meson
