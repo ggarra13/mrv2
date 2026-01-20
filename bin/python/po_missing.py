@@ -103,6 +103,16 @@ def find_missing_msgstr(lang):
     missing = POMissingTranslations(lang)
     missing.find_missing_msgstr(main_po, out_po)
     
+    main_po = f'src/po/license_helper/{lang}.po'
+    out_po = f'src/po/license_helper/{lang}_missing.po'
+    missing = POMissingTranslations(lang)
+    missing.find_missing_msgstr(main_po, out_po)
+    
+    main_po = f'src/po/hdr/{lang}.po'
+    out_po = f'src/po/hdr/{lang}_missing.po'
+    missing = POMissingTranslations(lang)
+    missing.find_missing_msgstr(main_po, out_po)
+    
     cwd = os.getcwd()
     os.chdir('src/po/python/plug-ins/locale/')
     plugins = glob.glob('*.pot')

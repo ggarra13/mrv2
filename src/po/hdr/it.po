@@ -16,181 +16,181 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "\tDesktop Environment: "
-msgstr ""
+msgstr "\tAmbiente desktop: "
 
 msgid "Unknown"
-msgstr ""
+msgstr "Sconosciuto"
 
 msgid "\tKernel Info: "
-msgstr ""
+msgstr "\tInformazioni sul kernel: "
 
 msgid "\tDistribution: "
-msgstr ""
+msgstr "\tDistribuzione: "
 
 msgid "English"
-msgstr ""
+msgstr "Inglese"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Spagnolo"
 
 msgid "German"
-msgstr ""
+msgstr "Tedesco"
 
 msgid "Hindi"
-msgstr ""
+msgstr "Hindi"
 
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "Cinese semplificato"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "Portoghese"
 
 msgid "French"
-msgstr ""
+msgstr "Francese"
 
 msgid "Russian"
-msgstr ""
+msgstr "Russo"
 
 msgid "Japanese"
-msgstr ""
+msgstr "Giapponese"
 
 msgid "Set Language to {0}, Numbers to {1}"
-msgstr ""
+msgstr "Imposta la lingua su {0}, i numeri su {1}"
 
 msgid "Arabic"
-msgstr ""
+msgstr "Arabo"
 
 msgid "Armenian"
-msgstr ""
+msgstr "Armeno"
 
 msgid "Basque"
-msgstr ""
+msgstr "Basco"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Bielorusso"
 
 msgid "Bengali"
-msgstr ""
+msgstr "Bengalese"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulgaro"
 
 msgid "Catalan"
-msgstr ""
+msgstr "Catalano"
 
 msgid "Chinese"
-msgstr ""
+msgstr "Cinese"
 
 msgid "Czech"
-msgstr ""
+msgstr "Ceco"
 
 msgid "Danish"
-msgstr ""
+msgstr "Danese"
 
 msgid "Dutch"
-msgstr ""
+msgstr "Olandese"
 
 msgid "Finnish"
-msgstr ""
+msgstr "Finlandese"
 
 msgid "Galician"
-msgstr ""
+msgstr "Galiziano"
 
 msgid "Greek"
-msgstr ""
+msgstr "Greco"
 
 msgid "Hebrew"
-msgstr ""
+msgstr "Ebraico"
 
 msgid "Icelandic"
-msgstr ""
+msgstr "Islandese"
 
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesiano"
 
 msgid "Italian"
-msgstr ""
+msgstr "Italiano"
 
 msgid "Irish"
-msgstr ""
+msgstr "Irlandese"
 
 msgid "Korean"
-msgstr ""
+msgstr "Coreano"
 
 msgid "Norwegan"
-msgstr ""
+msgstr "Norvegese"
 
 msgid "Persian"
-msgstr ""
+msgstr "Persiano"
 
 msgid "Polish"
-msgstr ""
+msgstr "Polacco"
 
 msgid "Tibetan"
-msgstr ""
+msgstr "Tibetano"
 
 msgid "Romanian"
-msgstr ""
+msgstr "Rumeno"
 
 msgid "Serbian"
-msgstr ""
+msgstr "Serbo"
 
 msgid "Slovenian"
-msgstr ""
+msgstr "Sloveno"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Svedese"
 
 msgid "Thai"
-msgstr ""
+msgstr "Tailandese"
 
 msgid "Turkish"
-msgstr ""
+msgstr "Turco"
 
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamita"
 
 msgid "Welsh"
-msgstr ""
+msgstr "Gallese"
 
 msgid "Yiddish"
-msgstr ""
+msgstr "Yiddish"
 
 msgid "Zulu"
-msgstr ""
+msgstr "Zulu"
 
 msgid "Play NDI input streams."
-msgstr ""
+msgstr "Riproduci flussi di ingresso NDI."
 
 msgid "Reset settings to defaults."
-msgstr ""
+msgstr "Ripristina le impostazioni predefinite."
 
 msgid "Reset hotkeys to defaults."
-msgstr ""
+msgstr "Ripristina i tasti di scelta rapida predefiniti."
 
 msgid "Return the version and exit."
-msgstr ""
+msgstr "Mostra la versione ed esci."
 
 msgid "Cannot create window"
-msgstr ""
+msgstr "Impossibile creare la finestra"
 
 msgid "About hdr"
-msgstr ""
+msgstr "Informazioni su hdr"
 
 msgid "Hide hdr"
-msgstr ""
+msgstr "Nascondi hdr"
 
 msgid "Hide Others"
-msgstr ""
+msgstr "Nascondi altre"
 
 msgid "Services"
-msgstr ""
+msgstr "Servizi"
 
 msgid "Show All"
-msgstr ""
+msgstr "Mostra tutto"
 
 msgid "Quit hdr"
-msgstr ""
+msgstr "Esci da hdr"
 
 msgid "HDR monitor found."
 msgstr "Monitor HDR trovato."

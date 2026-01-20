@@ -15,181 +15,181 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "\tDesktop Environment: "
-msgstr ""
+msgstr "\t桌面环境："
 
 msgid "Unknown"
-msgstr ""
+msgstr "未知"
 
 msgid "\tKernel Info: "
-msgstr ""
+msgstr "\t内核信息："
 
 msgid "\tDistribution: "
-msgstr ""
+msgstr "\t发行版："
 
 msgid "English"
-msgstr ""
+msgstr "英语"
 
 msgid "Spanish"
-msgstr ""
+msgstr "西班牙语"
 
 msgid "German"
-msgstr ""
+msgstr "德语"
 
 msgid "Hindi"
-msgstr ""
+msgstr "印地语"
 
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "简体中文"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "葡萄牙语"
 
 msgid "French"
-msgstr ""
+msgstr "法语"
 
 msgid "Russian"
-msgstr ""
+msgstr "俄语"
 
 msgid "Japanese"
-msgstr ""
+msgstr "日语"
 
 msgid "Set Language to {0}, Numbers to {1}"
-msgstr ""
+msgstr "将语言设置为 {0}，数字格式设置为 {1}"
 
 msgid "Arabic"
-msgstr ""
+msgstr "阿拉伯语"
 
 msgid "Armenian"
-msgstr ""
+msgstr "亚美尼亚语"
 
 msgid "Basque"
-msgstr ""
+msgstr "巴斯克语"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "白俄罗斯语"
 
 msgid "Bengali"
-msgstr ""
+msgstr "孟加拉语"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "保加利亚语"
 
 msgid "Catalan"
-msgstr ""
+msgstr "加泰罗尼亚语"
 
 msgid "Chinese"
-msgstr ""
+msgstr "中文"
 
 msgid "Czech"
-msgstr ""
+msgstr "捷克语"
 
 msgid "Danish"
-msgstr ""
+msgstr "丹麦语"
 
 msgid "Dutch"
-msgstr ""
+msgstr "荷兰语"
 
 msgid "Finnish"
-msgstr ""
+msgstr "芬兰语"
 
 msgid "Galician"
-msgstr ""
+msgstr "加利西亚语"
 
 msgid "Greek"
-msgstr ""
+msgstr "希腊语"
 
 msgid "Hebrew"
-msgstr ""
+msgstr "希伯来语"
 
 msgid "Icelandic"
-msgstr ""
+msgstr "冰岛语"
 
 msgid "Indonesian"
-msgstr ""
+msgstr "印度尼西亚语"
 
 msgid "Italian"
-msgstr ""
+msgstr "意大利语"
 
 msgid "Irish"
-msgstr ""
+msgstr "爱尔兰语"
 
 msgid "Korean"
-msgstr ""
+msgstr "韩语"
 
 msgid "Norwegan"
-msgstr ""
+msgstr "挪威语"
 
 msgid "Persian"
-msgstr ""
+msgstr "波斯语"
 
 msgid "Polish"
-msgstr ""
+msgstr "波兰语"
 
 msgid "Tibetan"
-msgstr ""
+msgstr "藏语"
 
 msgid "Romanian"
-msgstr ""
+msgstr "罗马尼亚语"
 
 msgid "Serbian"
-msgstr ""
+msgstr "塞尔维亚语"
 
 msgid "Slovenian"
-msgstr ""
+msgstr "斯洛文尼亚语"
 
 msgid "Swedish"
-msgstr ""
+msgstr "瑞典语"
 
 msgid "Thai"
-msgstr ""
+msgstr "泰语"
 
 msgid "Turkish"
-msgstr ""
+msgstr "土耳其语"
 
 msgid "Vietnamese"
-msgstr ""
+msgstr "越南语"
 
 msgid "Welsh"
-msgstr ""
+msgstr "威尔士语"
 
 msgid "Yiddish"
-msgstr ""
+msgstr "意第绪语"
 
 msgid "Zulu"
-msgstr ""
+msgstr "祖鲁语"
 
 msgid "Play NDI input streams."
-msgstr ""
+msgstr "播放 NDI 输入流。"
 
 msgid "Reset settings to defaults."
-msgstr ""
+msgstr "将设置重置为默认值。"
 
 msgid "Reset hotkeys to defaults."
-msgstr ""
+msgstr "将快捷键重置为默认值。"
 
 msgid "Return the version and exit."
-msgstr ""
+msgstr "显示版本并退出。"
 
 msgid "Cannot create window"
-msgstr ""
+msgstr "无法创建窗口"
 
 msgid "About hdr"
-msgstr ""
+msgstr "关于 hdr"
 
 msgid "Hide hdr"
-msgstr ""
+msgstr "隐藏 hdr"
 
 msgid "Hide Others"
-msgstr ""
+msgstr "隐藏其他"
 
 msgid "Services"
-msgstr ""
+msgstr "服务"
 
 msgid "Show All"
-msgstr ""
+msgstr "全部显示"
 
 msgid "Quit hdr"
-msgstr ""
+msgstr "退出 hdr"
 
 msgid "HDR monitor found."
 msgstr "已找到 HDR 显示器。"

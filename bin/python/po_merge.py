@@ -94,6 +94,18 @@ def merge_missing(lang):
     missing_po = f'src/po/mrv2/{lang}_missing.po'
     missing = POMergeMissing()
     missing.merge(merged_po, main_po, missing_po)
+
+    main_po = f'src/po/hdr/{lang}.po'
+    merged_po = f'src/po/hdr/{lang}.po'
+    missing_po = f'src/po/hdr/{lang}_missing.po'
+    missing = POMergeMissing()
+    missing.merge(merged_po, main_po, missing_po)
+    
+    main_po = f'src/po/license_helper/{lang}.po'
+    merged_po = f'src/po/license_helper/{lang}.po'
+    missing_po = f'src/po/license_helper/{lang}_missing.po'
+    missing = POMergeMissing()
+    missing.merge(merged_po, main_po, missing_po)
     
     cwd = os.getcwd()
     os.chdir('src/python/plug-ins')
