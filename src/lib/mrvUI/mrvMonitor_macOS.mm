@@ -11,8 +11,93 @@
 #import <IOKit/graphics/IOGraphicsLib.h>
 #import <IOKit/IOKitLib.h>
 
+bool getDisplayNameForDispID(CGDirectDisplayID dispID,
+                             std::string& out)
+{
+    bool bRes = false;
+    
+    out.clear();
+    
+    NSArray *screens = [NSScreen screens];
+            
+    for (NSScreen *screen in screens)
+    {
+        NSRect screenFrame = [screen frame];
+        CGRect cgDisplayBounds = CGDisplayBounds(dispID);
+
+        // We match by bound rectangle as matching by display id did not work.
+        if (CGRectEqualToRect(NSRectToCGRect(screenFrame),
+                              cgDisplayBounds))
+        {
+            //Got it
+            NSString* pName = [screen localizedName];
+                    
+            out.assign([pName UTF8String], [pName lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+                    
+            bRes = true;
+                    
+            break;
+        }
+    }    
+            
+    return bRes;
+}
+
 namespace mrv {
     namespace monitor {
+
+        
+        HDRCapabilities displaySupportsHDR(CGDirectDisplayID cgDisplayID) {
+            HDRCapabilities out;
+            io_iterator_t iter;
+            io_service_t service = 0;
+
+            CFMutableDictionaryRef match = IOServiceMatching("IODisplayConnect");
+            if (IOServiceGetMatchingServices(kIOMasterPortDefault, match, &iter) != KERN_SUCCESS)
+                return out;
+
+            while ((service = IOIteratorNext(iter))) {
+                CFDictionaryRef info = IODisplayCreateInfoDictionary(service, kIODisplayOnlyPreferredName);
+                if (!info) {
+                    IOObjectRelease(service);
+                    continue;
+                }
+
+                CFNumberRef vendorRef = (CFNumberRef)CFDictionaryGetValue(info, CFSTR(kDisplayVendorID));
+                CFNumberRef productRef = (CFNumberRef)CFDictionaryGetValue(info, CFSTR(kDisplayProductID));
+
+                uint32_t vendor = 0, product = 0;
+                if (vendorRef) CFNumberGetValue(vendorRef, kCFNumberIntType, &vendor);
+                if (productRef) CFNumberGetValue(productRef, kCFNumberIntType, &product);
+
+                CFRelease(info);
+
+                // Match against CoreGraphics display info
+                uint32_t cgVendor = CGDisplayVendorNumber(cgDisplayID);
+                uint32_t cgProduct = CGDisplayModelNumber(cgDisplayID);
+
+                if (vendor == cgVendor && product == cgProduct) {
+                    CFDataRef edid = (CFDataRef)IORegistryEntryCreateCFProperty(service, CFSTR("IODisplayEDID"), kCFAllocatorDefault, 0);
+
+                    if (edid) {
+                        const UInt8* bytes = CFDataGetBytePtr(edid);
+                        CFIndex length = CFDataGetLength(edid);
+                        out = parseEDIDLuminance(bytes, length);
+                        CFRelease(edid);
+                    }
+
+                    IOObjectRelease(service);
+                    IOObjectRelease(iter);
+                    return out;
+                }
+
+                IOObjectRelease(service);
+            }
+
+            IOObjectRelease(iter);
+            return out;
+        }
+
 
         // Helper to get capabilities for a specific ID
         HDRCapabilities getCapabilitiesForDisplay(CGDirectDisplayID displayID) {
@@ -66,36 +151,6 @@ namespace mrv {
     } // namespace monitor
 } // namespace mrv
 
-// bool getDisplayNameForDispID(CGDirectDisplayID dispID,
-//                              std::string& out)
-// {
-//     bool bRes = false;
-    
-//     out.clear();
-    
-//     NSArray *screens = [NSScreen screens];
-
-//     for (NSScreen *screen in screens)
-//     {
-//         NSRect screenFrame = [screen frame];
-//         CGRect cgDisplayBounds = CGDisplayBounds(dispID);
-
-//         // We match by bound rectangle as matching by display id did not work.
-//         if (CGRectEqualToRect(NSRectToCGRect(screenFrame), cgDisplayBounds))
-//         {
-//             //Got it
-//             NSString* pName = [screen localizedName];
-                    
-//             out.assign([pName UTF8String], [pName lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-                    
-//             bRes = true;
-                    
-//             break;
-//         }
-//     }    
-
-//     return bRes;
-// }
 
 
 // bool builtInDisplaySupportsHDR(CGDirectDisplayID cgDisplayID) {
