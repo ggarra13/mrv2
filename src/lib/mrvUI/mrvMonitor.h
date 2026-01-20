@@ -23,7 +23,7 @@ namespace mrv
             return std::string(vendorId);
         }
 
-        // Function to decode edidManufactureId to a three-letter code
+        //! Function to decode edidManufactureId to a three-letter code
         inline std::string decodeEdidManufactureId(uint16_t edidUint)
         {
             const unsigned char* edid =
@@ -32,9 +32,19 @@ namespace mrv
         }
 
         std::string getManufacturerName(const char* vendorId);
+        
+        struct HDRCapabilities {
+            bool supported = false;
+            float max_nits = 0.0f;
+            float min_nits = 0.0f;
+        };
 
+        HDRCapabilities parseEDIDLuminance(const uint8_t* edid, size_t length);
+        
         std::string getName(int monitorIndex, int numMonitors);
 
-        bool is_hdr_active(int screen = -1, const bool silent = true);
+        HDRCapabilities get_hdr_capabilities(int screen = -1);
+
+        
     } // namespace monitor
 } // namespace mrv

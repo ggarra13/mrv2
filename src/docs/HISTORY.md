@@ -65,6 +65,8 @@ ChangeLog
 - Switch to A Compare Mode if only a single file is left open.
 - Python command to getVoiceAnnotationsJSON now returns the projection matrix.
 - Fixed macOS Intel versions crashing when playing a movie with Google's VPX codec.
+- Improved HDR detection on Linux, macOS and Windows.
+- Monitor's minLuminance and maxLuminance are now returned. This can make HDR more pleasing if your monitor has less than 1000 nits (400, for example, which is common in game and laptop monitors which have 400 nits).
 
 
 v1.5.2

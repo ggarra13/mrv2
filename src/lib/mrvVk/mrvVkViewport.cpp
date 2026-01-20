@@ -378,10 +378,17 @@ namespace mrv
             
             std::string msg;
 
-            if (valid_colorspace && monitor::is_hdr_active())
+            auto capabilities = monitor::get_hdr_capabilities(this->screen_num());
+            if (valid_colorspace && capabilities.supported)
             {
                 p.hdrMonitorFound = true;
                 LOG_STATUS(_("HDR monitor found."));
+                std::string msg = string::Format(_("HDR monitor min. nits = {0}")).
+                                  arg(capabilities.min_nits);
+                LOG_STATUS(msg);
+                msg = string::Format(_("HDR monitor max. nits = {0}")).
+                      arg(capabilities.max_nits);
+                LOG_STATUS(msg);
             }
             else
             {
@@ -530,9 +537,18 @@ namespace mrv
                     context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
                 }
                 
+
+                // Get monitor's max nits
+                auto capabilities = monitor::get_hdr_capabilities(this->screen_num());
+
+                // Set the renderers's max nits
                 vk.render = timeline_vlk::Render::create(ctx, context);
+                vk.render->setMonitorHDRSupported(capabilities.supported);
+                vk.render->setMonitorMinNits(capabilities.min_nits);
+                vk.render->setMonitorMaxNits(capabilities.max_nits);
 
                 vk.annotationRender = timeline_vlk::Render::create(ctx, context);
+
                 
                 p.fontSystem = image::FontSystem::create(context);
 

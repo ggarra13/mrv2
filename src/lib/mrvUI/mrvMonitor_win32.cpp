@@ -178,8 +178,11 @@ namespace mrv
             return out;
         }
 
-        bool is_hdr_active(int screen_index, const bool silent)
+        // On Windows, we don't need to parse EDID as it provides a good API for it.
+        HDRCapabilities get_hdr_capabilities(int screen)
         {
+            HDRCapabilities out;  // SDR
+            
             IDXGIFactory6* factory = nullptr;
             HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory));
             if (FAILED(hr))
@@ -187,10 +190,11 @@ namespace mrv
                 if (!silent)
                     std::cerr << "Error: Could not create DXGI Factory: "
                               << hr << std::endl;
-                return false;
+                return 1000.F;
             }
 
             bool hdr_found = false;
+            int current_monitor_index = 0;
             IDXGIAdapter1* adapter = nullptr;
             for (UINT i = 0;
                  factory->EnumAdapters1(i, &adapter) != DXGI_ERROR_NOT_FOUND;
@@ -201,16 +205,18 @@ namespace mrv
                 for (UINT j = 0; adapter->EnumOutputs(j, &output) !=
                               DXGI_ERROR_NOT_FOUND; ++j)
                 {
-                    // If you need to target a specific screen by index, you'd add logic here.
-                    // For example, if 'screen_index' means the j-th output of the i-th adapter:
-                    // if (i == target_adapter_index && j == screen_index) { ... }
-                    // Or if screen_index is a global index:
-                    // if (global_output_counter == screen_index) { ... }
-                    // For now, let's assume 'screen_index' is not strictly tied to the j-th output and
-                    // we're checking if *any* display has HDR. If 'screen_index' is meant to be a direct
-                    // target, more complex matching via GetDesc().Monitor or similar is needed.
-
+                    // If we are looking for a specific index and this isn't it, skip logic but increment counter
+                    if (screen_index != -1 && current_monitor_index != screen_index)
+                    {
+                        current_monitor_index++;
+                        SafeRelease(output);
+                        continue;
+                    }
+                    
+                    // We are at the target monitor, or scanning all (-1)
                     IDXGIOutput6* output6 = nullptr;
+                    HDRCapabilities local_hdr;
+                    
                     if (SUCCEEDED(output->QueryInterface(IID_PPV_ARGS(&output6))))
                     {
                         DXGI_OUTPUT_DESC1 desc;
@@ -223,7 +229,9 @@ namespace mrv
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_G2084_LEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_GHLG_TOPLEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_FULL_GHLG_TOPLEFT_P2020:
-                                hdr_found = true;
+                                local_hdr.supported = true;
+                                local.hdr.min_nits = desc.MinLuminance;
+                                local.hdr.max_nits = desc.MaxLuminance;
                                 break;
                             default:
                                 break;
@@ -232,20 +240,37 @@ namespace mrv
                         SafeRelease(output6); // Release output6 after use
                     }
                     SafeRelease(output); // Release output after use
-                    if (hdr_found && screen_index <= 0)
+
+                    // Logic handling based on search mode
+                    if (screen_index != -1)
                     {
-                        SafeRelease(output);
-                        SafeRelease(adapter);
+                        // TARGET MODE: We found the specific monitor index.
+                        // Return exactly what this monitor's state is.
+                        out = local_hdr;
+                        SafeRelease(adapter); // Clean up before jumping
                         goto cleanup;
                     }
+                    else
+                    {
+                        // ANY MODE: If this monitor is HDR, we are done (result is true).
+                        // If not, we continue searching the next monitor.
+                        if (local_hdr.supported)
+                        {
+                            out = local_hdr;
+                            SafeRelease(adapter);
+                            goto cleanup;
+                        }
+                    }
+
+                    current_monitor_index++;
                 }
                 SafeRelease(adapter); // Release adapter after its outputs are processed
             }
-
+            
         cleanup:
             SafeRelease(factory); // Release factory at the very end
 
-            return hdr_found;
+            return out;
         }
         
     } // namespace monitor
