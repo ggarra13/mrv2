@@ -1958,21 +1958,6 @@ msgstr "Streaming {0} {1}..."
 msgid "Stop streaming"
 msgstr "Stop streaming"
 
-msgid "Renderer"
-msgstr "Renderer"
-
-msgid "Complexity"
-msgstr "Complexity"
-
-msgid "Draw Mode"
-msgstr "Draw Mode"
-
-msgid "Stage Cache"
-msgstr "Stage Cache"
-
-msgid "Disk Cache in GB"
-msgstr "Disk Cache in GB"
-
 msgid "Toggle other eye stereo image."
 msgstr "Toggle other eye stereo image."
 
@@ -2961,35 +2946,29 @@ msgstr "HAP profile needs a .mov extension.  Changing it to .mov"
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "New file {0} already exist!  Cannot overwrite it."
 
-msgid "Rotated image info: {0}"
-msgstr "Rotated image info: {0}"
-
-msgid "Scaled image info: {0}"
-msgstr "Scaled image info: {0}"
-
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Cannot open writer plugin."
 
 msgid "Image info: {0} {1}"
 msgstr "Image info: {0} {1}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr "Image too big for Save Annotations.  Will scale to the viewport size."
-
-msgid "Viewport Size: {0} - X={1}, Y={2}"
-msgstr "Viewport Size: {0} - X={1}, Y={2}"
+msgid "Scaled image info: {0}"
+msgstr "Scaled image info: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer plugin did not get output info.  Defaulting to {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "Output info: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Using profile {0}, pixel format {1}."
 
 msgid "Using preset {0}."
 msgstr "Using preset {0}."
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Offscreen Buffer info: {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Output info: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -3006,32 +2985,14 @@ msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Audio only in timeline, but not trying to save audio."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Invalid OpenGL format and type"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL info: {0}"
-
 msgid "Saving... {0}"
 msgstr "Saving... {0}"
 
-msgid "Unsupported output format"
-msgstr "Unsupported output format"
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr "Empty video data at time {0}.  Repeating frame."
+msgid "Could not read image data from view"
+msgstr "Could not read image data from view"
 
 msgid "Render size: {0}"
 msgstr "Render size: {0}"
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "Image Layer '{0}' info: {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Offscreen Buffer info: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Unsupported output format: "
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -3451,6 +3412,8 @@ msgid ""
 "Slip Edit Tool\n"
 "Slips the in point of the clip without modifying others or its duration."
 msgstr ""
+"Slip Edit Tool\n"
+"Slips the in point of the clip without modifying others or its duration."
 
 msgid "Undo Edit"
 msgstr "Undo Edit"
@@ -3712,7 +3675,7 @@ msgid "Pick Draw Color and Alpha"
 msgstr "Pick Draw Color and Alpha"
 
 msgid "Install is broken.  Missing license_helper"
-msgstr ""
+msgstr "Install is broken.  Missing license_helper"
 
 msgid "Media"
 msgstr "Media"
@@ -3811,8 +3774,8 @@ msgstr "Frame {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image too big.  Will save the viewport size."
 
-msgid "Could not read image data from view"
-msgstr "Could not read image data from view"
+msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgstr "Viewport Size: {0} - X={1}, Y={2}"
 
 msgid "Link/Open"
 msgstr "Link/Open"
@@ -3966,14 +3929,29 @@ msgstr "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor found."
+msgstr "HDR monitor found."
+
+msgid "HDR monitor min. nits = {0}"
+msgstr "HDR monitor min. nits = {0}"
+
+msgid "HDR monitor max. nits = {0}"
+msgstr "HDR monitor max. nits = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR monitor not found or not configured."
+
+msgid "Vulkan color space is {0}"
+msgstr "Vulkan color space is {0}"
+
+msgid "Vulkan format is {0}"
+msgstr "Vulkan format is {0}"
+
 msgid "Edit Text"
 msgstr "Edit Text"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' is not a file, directory or url."
-
-msgid "Invalid font for text drawing"
-msgstr "Invalid font for text drawing"
 
 msgid "Could not convert message to shape: "
 msgstr "Could not convert message to shape: "
@@ -4539,7 +4517,7 @@ msgstr ""
 "string with menu options in it."
 
 msgid "Help/Unlock Features"
-msgstr ""
+msgstr "Help/Unlock Features"
 
 msgid "Help/Documentation"
 msgstr "Help/Documentation"
@@ -6149,13 +6127,13 @@ msgid "oxy"
 msgstr "oxy"
 
 msgid "Pick View Background Color"
-msgstr ""
+msgstr "Pick View Background Color"
 
 msgid "Pick View Text Overlay Color"
 msgstr "Text Overlay"
 
 msgid "Pick View Selection Color"
-msgstr ""
+msgstr "Pick View Selection Color"
 
 msgid "Pick HUD Color"
 msgstr "Pick Color"
@@ -7984,6 +7962,9 @@ msgstr "Scrub Mode"
 msgid "Area Selection Mode"
 msgstr "Area Selection Mode"
 
+msgid "Draw Mode"
+msgstr "Draw Mode"
+
 msgid "Erase Mode"
 msgstr "Erase Mode"
 
@@ -8086,17 +8067,44 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "HDR monitor found."
-#~ msgstr "HDR monitor found."
+#~ msgid "Renderer"
+#~ msgstr "Renderer"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR monitor not found or not configured."
+#~ msgid "Complexity"
+#~ msgstr "Complexity"
 
-#~ msgid "Vulkan color space is {0}"
-#~ msgstr "Vulkan color space is {0}"
+#~ msgid "Stage Cache"
+#~ msgstr "Stage Cache"
 
-#~ msgid "Vulkan format is {0}"
-#~ msgstr "Vulkan format is {0}"
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Disk Cache in GB"
+
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "Rotated image info: {0}"
+
+#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr "Image too big for Save Annotations.  Will scale to the viewport size."
+
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Invalid OpenGL format and type"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL info: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Unsupported output format"
+
+#~ msgid "Empty video data at time {0}.  Repeating frame."
+#~ msgstr "Empty video data at time {0}.  Repeating frame."
+
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "Image Layer '{0}' info: {1} {2}"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Unsupported output format: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Invalid font for text drawing"
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "Invalid license. Entering demo mode"

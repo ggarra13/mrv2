@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/"
-"rt.rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/rt."
+"rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -1707,21 +1707,6 @@ msgstr ""
 msgid "Stop streaming"
 msgstr ""
 
-msgid "Renderer"
-msgstr ""
-
-msgid "Complexity"
-msgstr ""
-
-msgid "Draw Mode"
-msgstr ""
-
-msgid "Stage Cache"
-msgstr ""
-
-msgid "Disk Cache in GB"
-msgstr ""
-
 msgid "Toggle other eye stereo image."
 msgstr ""
 
@@ -2684,34 +2669,28 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
-msgid "Rotated image info: {0}"
-msgstr ""
-
-msgid "Scaled image info: {0}"
-msgstr ""
-
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
 msgid "Image info: {0} {1}"
 msgstr ""
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-
-msgid "Viewport Size: {0} - X={1}, Y={2}"
+msgid "Scaled image info: {0}"
 msgstr ""
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
-msgstr ""
-
-msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
 msgid "Using preset {0}."
+msgstr ""
+
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -2729,31 +2708,13 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr ""
-
-msgid "OpenGL info: {0}"
-msgstr ""
-
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Unsupported output format"
-msgstr ""
-
-msgid "Empty video data at time {0}.  Repeating frame."
+msgid "Could not read image data from view"
 msgstr ""
 
 msgid "Render size: {0}"
-msgstr ""
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr ""
-
-msgid "Offscreen Buffer info: {0}"
-msgstr ""
-
-msgid "Unsupported output format: "
 msgstr ""
 
 msgid ""
@@ -3497,7 +3458,7 @@ msgstr ""
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
-msgid "Could not read image data from view"
+msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
 msgid "Link/Open"
@@ -3648,13 +3609,28 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
+msgid "HDR monitor found."
+msgstr ""
+
+msgid "HDR monitor min. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor max. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor not found or not configured."
+msgstr ""
+
+msgid "Vulkan color space is {0}"
+msgstr ""
+
+msgid "Vulkan format is {0}"
+msgstr ""
+
 msgid "Edit Text"
 msgstr ""
 
 msgid "'{0}' is not a file, directory or url."
-msgstr ""
-
-msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -6412,8 +6388,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -7413,6 +7389,9 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
+msgstr ""
+
+msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"
