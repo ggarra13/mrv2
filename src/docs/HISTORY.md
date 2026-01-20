@@ -30,8 +30,8 @@ I use the email information to contact you privately.  I don't sell your informa
 - u$  25 for a Solo node-locked license for one year.
 - u$  50 for a Standard node-locked standard license for one year.
 - u$  75 for a Edit node-locked license with annotations and editing tools for one year.
-- u$ 150 for a Pro node-locked license to own.
-- u$ 300 for a Pro+ node-locked license to own (monthly).
+- u$ 150 for a Pro node-locked license for one year.
+- u$ 300 for a Pro+ node-locked license to own (allows changing machine).
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
@@ -65,6 +65,7 @@ ChangeLog
 - Fixed the OpenGL bug in macOS mrv2.  There's no longer any need to change your System Settings.
 - Switch to A Compare Mode if only a single file is left open.
 - Python command to getVoiceAnnotationsJSON now returns the projection matrix.
+- Fixed macOS Intel versions crashing when playing a movie with Google's VPX codec.
 
 
 v1.5.2
