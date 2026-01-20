@@ -49,6 +49,11 @@ namespace tl
                                          timeline::RenderOptions()) override;
             void end() override;
 
+            //! Tone-map functions
+            void setMonitorHDRSupported(bool);
+            void setMonitorMinNits(float);
+            void setMonitorMaxNits(float);
+
             math::Size2i getRenderSize() const override;
             void setRenderSize(const math::Size2i&) override;
             math::Box2i getViewport() const override;

@@ -2245,6 +2245,7 @@ namespace tl
                     {
                         dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                         dst_colorspace.transfer = PL_COLOR_TRC_PQ;
+                        dst_colorspace.hdr.min_luma = p.monitorMinNits;
                         dst_colorspace.hdr.max_luma = p.monitorMaxNits;
                         
                         if (ctx.colorSpace ==

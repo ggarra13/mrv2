@@ -179,7 +179,7 @@ namespace mrv
         }
 
         // On Windows, we don't need to parse EDID as it provides a good API for it.
-        HDRCapabilities get_hdr_capabilities(int screen)
+        HDRCapabilities get_hdr_capabilities(int screen_index)
         {
             HDRCapabilities out;  // SDR
             
@@ -187,10 +187,7 @@ namespace mrv
             HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory));
             if (FAILED(hr))
             {
-                if (!silent)
-                    std::cerr << "Error: Could not create DXGI Factory: "
-                              << hr << std::endl;
-                return 1000.F;
+                return out;
             }
 
             bool hdr_found = false;
@@ -215,7 +212,7 @@ namespace mrv
                     
                     // We are at the target monitor, or scanning all (-1)
                     IDXGIOutput6* output6 = nullptr;
-                    HDRCapabilities local_hdr;
+                    HDRCapabilities local_cap;
                     
                     if (SUCCEEDED(output->QueryInterface(IID_PPV_ARGS(&output6))))
                     {
@@ -229,9 +226,9 @@ namespace mrv
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_G2084_LEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_GHLG_TOPLEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_FULL_GHLG_TOPLEFT_P2020:
-                                local_hdr.supported = true;
-                                local.hdr.min_nits = desc.MinLuminance;
-                                local.hdr.max_nits = desc.MaxLuminance;
+                                local_cap.supported = true;
+                                local_cap.min_nits = desc.MinLuminance;
+                                local_cap.max_nits = desc.MaxLuminance;
                                 break;
                             default:
                                 break;
@@ -246,7 +243,7 @@ namespace mrv
                     {
                         // TARGET MODE: We found the specific monitor index.
                         // Return exactly what this monitor's state is.
-                        out = local_hdr;
+                        out = local_cap;
                         SafeRelease(adapter); // Clean up before jumping
                         goto cleanup;
                     }
@@ -254,9 +251,9 @@ namespace mrv
                     {
                         // ANY MODE: If this monitor is HDR, we are done (result is true).
                         // If not, we continue searching the next monitor.
-                        if (local_hdr.supported)
+                        if (local_cap.supported)
                         {
-                            out = local_hdr;
+                            out = local_cap;
                             SafeRelease(adapter);
                             goto cleanup;
                         }

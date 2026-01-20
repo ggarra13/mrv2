@@ -126,6 +126,10 @@ namespace tl
             timeline::HDROptions hdrOptions;
             timeline::RenderOptions renderOptions;
 
+            bool hdrMonitorFound = false;
+            float monitorMinNits = 0.005F;
+            float monitorMaxNits = 1000.F;
+
 #if defined(TLRENDER_OCIO)
             //! \todo Add a cache for OpenColorIO data.
             std::unique_ptr<OCIOData> ocioData;

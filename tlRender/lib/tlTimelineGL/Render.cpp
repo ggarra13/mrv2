@@ -773,6 +773,16 @@ namespace tl
                 }
             }
         }
+        
+        void Render::setMonitorMinNits(float value)
+        {
+            _p->monitorMinNits = value;
+        }
+        
+        void Render::setMonitorMaxNits(float value)
+        {
+            _p->monitorMaxNits = value;
+        }
 
         math::Size2i Render::getRenderSize() const
         {
