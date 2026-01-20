@@ -16,181 +16,181 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "\tDesktop Environment: "
-msgstr ""
+msgstr "\tデスクトップ環境: "
 
 msgid "Unknown"
-msgstr ""
+msgstr "不明"
 
 msgid "\tKernel Info: "
-msgstr ""
+msgstr "\tカーネル情報: "
 
 msgid "\tDistribution: "
-msgstr ""
+msgstr "\tディストリビューション: "
 
 msgid "English"
-msgstr ""
+msgstr "英語"
 
 msgid "Spanish"
-msgstr ""
+msgstr "スペイン語"
 
 msgid "German"
-msgstr ""
+msgstr "ドイツ語"
 
 msgid "Hindi"
-msgstr ""
+msgstr "ヒンディー語"
 
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "中国語（簡体字）"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "ポルトガル語"
 
 msgid "French"
-msgstr ""
+msgstr "フランス語"
 
 msgid "Russian"
-msgstr ""
+msgstr "ロシア語"
 
 msgid "Japanese"
-msgstr ""
+msgstr "日本語"
 
 msgid "Set Language to {0}, Numbers to {1}"
-msgstr ""
+msgstr "言語を {0} に、数値を {1} に設定"
 
 msgid "Arabic"
-msgstr ""
+msgstr "アラビア語"
 
 msgid "Armenian"
-msgstr ""
+msgstr "アルメニア語"
 
 msgid "Basque"
-msgstr ""
+msgstr "バスク語"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "ベラルーシ語"
 
 msgid "Bengali"
-msgstr ""
+msgstr "ベンガル語"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "ブルガリア語"
 
 msgid "Catalan"
-msgstr ""
+msgstr "カタルーニャ語"
 
 msgid "Chinese"
-msgstr ""
+msgstr "中国語"
 
 msgid "Czech"
-msgstr ""
+msgstr "チェコ語"
 
 msgid "Danish"
-msgstr ""
+msgstr "デンマーク語"
 
 msgid "Dutch"
-msgstr ""
+msgstr "オランダ語"
 
 msgid "Finnish"
-msgstr ""
+msgstr "フィンランド語"
 
 msgid "Galician"
-msgstr ""
+msgstr "ガリシア語"
 
 msgid "Greek"
-msgstr ""
+msgstr "ギリシャ語"
 
 msgid "Hebrew"
-msgstr ""
+msgstr "ヘブライ語"
 
 msgid "Icelandic"
-msgstr ""
+msgstr "アイスランド語"
 
 msgid "Indonesian"
-msgstr ""
+msgstr "インドネシア語"
 
 msgid "Italian"
-msgstr ""
+msgstr "イタリア語"
 
 msgid "Irish"
-msgstr ""
+msgstr "アイルランド語"
 
 msgid "Korean"
-msgstr ""
+msgstr "韓国語"
 
 msgid "Norwegan"
-msgstr ""
+msgstr "ノルウェー語"
 
 msgid "Persian"
-msgstr ""
+msgstr "ペルシャ語"
 
 msgid "Polish"
-msgstr ""
+msgstr "ポーランド語"
 
 msgid "Tibetan"
-msgstr ""
+msgstr "チベット語"
 
 msgid "Romanian"
-msgstr ""
+msgstr "ルーマニア語"
 
 msgid "Serbian"
-msgstr ""
+msgstr "セルビア語"
 
 msgid "Slovenian"
-msgstr ""
+msgstr "スロベニア語"
 
 msgid "Swedish"
-msgstr ""
+msgstr "スウェーデン語"
 
 msgid "Thai"
-msgstr ""
+msgstr "タイ語"
 
 msgid "Turkish"
-msgstr ""
+msgstr "トルコ語"
 
 msgid "Vietnamese"
-msgstr ""
+msgstr "ベトナム語"
 
 msgid "Welsh"
-msgstr ""
+msgstr "ウェールズ語"
 
 msgid "Yiddish"
-msgstr ""
+msgstr "イディッシュ語"
 
 msgid "Zulu"
-msgstr ""
+msgstr "ズールー語"
 
 msgid "Play NDI input streams."
-msgstr ""
+msgstr "NDI 入力ストリームを再生します。"
 
 msgid "Reset settings to defaults."
-msgstr ""
+msgstr "設定をデフォルトにリセットします。"
 
 msgid "Reset hotkeys to defaults."
-msgstr ""
+msgstr "ホットキーをデフォルトにリセットします。"
 
 msgid "Return the version and exit."
-msgstr ""
+msgstr "バージョンを表示して終了します。"
 
 msgid "Cannot create window"
-msgstr ""
+msgstr "ウィンドウを作成できません"
 
 msgid "About hdr"
-msgstr ""
+msgstr "hdr について"
 
 msgid "Hide hdr"
-msgstr ""
+msgstr "hdr を隠す"
 
 msgid "Hide Others"
-msgstr ""
+msgstr "ほかを隠す"
 
 msgid "Services"
-msgstr ""
+msgstr "サービス"
 
 msgid "Show All"
-msgstr ""
+msgstr "すべてを表示"
 
 msgid "Quit hdr"
-msgstr ""
+msgstr "hdr を終了"
 
 msgid "HDR monitor found."
 msgstr "HDRモニターが見つかりました。"
