@@ -56,7 +56,6 @@ ChangeLog
 
 - Improved the look of Text Annotation Widget on Vulkan backend.
 - Major refactoring to improve compilation performance.
-- Removed Render->HDR->Tonemapping menu from Vulkan backend as it was confusing, since Vulkan does not support tone mapping.
 - Upgraded to LibRaw v0.22.0
 - Documented mrv2.colors file.  You can create one in $HOME/.filmaura to take over the defaults.
 - Changed HUD font for better readability.
