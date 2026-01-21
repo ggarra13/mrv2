@@ -70,6 +70,7 @@ ChangeLog
 - On the VUlkan version of mrv2, the monitor's min and max nits are now reported.
 - Note that the OpenGL version will still suffer from too saturated colors.
 - Fixed license server to automatically restart in case of failure or exit.
+- Added support for emojis with multiple Unicode code points thanks to ManoloFLTK on the OpenGL backend.  The Vulkan backend supports only single code point glyphs.
 
 
 v1.5.2
