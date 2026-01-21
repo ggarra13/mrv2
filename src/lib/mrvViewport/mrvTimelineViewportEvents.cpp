@@ -1255,15 +1255,7 @@ namespace mrv
                 return 1;
             }
             case FL_MOVE:
-            {
-                // Track moving from one screen to the next so that Vulkan
-                // recreates HDR / SDR swapchain properly.
-                if (p.screen_index != this->screen_num())
-                {
-                    p.changed_screen = true;
-                    p.screen_index = this->screen_num();
-                }
-                
+            {                
                 updateCoords();
                 // If we are drawing or erasing, draw the cursor
                 if (p.actionMode != ActionMode::kScrub &&

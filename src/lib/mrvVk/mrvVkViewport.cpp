@@ -617,14 +617,22 @@ namespace mrv
 
             // If we changed screen from an HDR to an SDR one, recreate the
             // Vulkan swapchain.
-            if (p.changed_screen)
+            bool changed_screen = false;
+            if (p.screen_index != this->screen_num())
             {
-                p.changed_screen = false;
-                
+                p.screen_index = this->screen_num();
+                changed_screen = true;
+            }
+
+            if (changed_screen)
+            {
                 auto hdrCapabilities = monitor::get_hdr_capabilities(this->screen_num());
-                //if (hdrCapabilities.supported != p.hdrCapabilities.supported)
+                if (hdrCapabilities.supported != p.hdrCapabilities.supported)
+                {
                     m_swapchain_needs_recreation = true;
-                return;
+                    redraw();
+                    return;
+                }
             }
 
             // Get the command buffer started for the current frame.

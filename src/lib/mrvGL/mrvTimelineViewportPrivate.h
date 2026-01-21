@@ -196,10 +196,6 @@ namespace mrv
 
             //! Tooltip.
             Tooltip* tooltip = nullptr;
-            
-            // HDR monitor tracking.
-            int screen_index = 0;
-            bool changed_screen = false;
         };
     }  // namespace opengl
 } // namespace mrv

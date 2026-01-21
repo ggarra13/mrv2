@@ -205,7 +205,6 @@ namespace mrv
 
             // HDR monitor tracking.
             int screen_index = 0;
-            bool changed_screen = false;
             monitor::HDRCapabilities hdrCapabilities;
         };
 
