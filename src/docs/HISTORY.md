@@ -69,6 +69,7 @@ ChangeLog
 - Monitor's minLuminance and maxLuminance are now returned. This can make HDR more pleasing if your monitor has less than 1000 nits (common in game and laptop monitors which have 200-400 nits).
 - On the VUlkan version of mrv2, the monitor's min and max nits are now reported.
 - Note that the OpenGL version will still suffer from too saturated colors.
+- Fixed license server to automatically restart in case of failure or exit.
 
 
 v1.5.2
