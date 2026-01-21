@@ -1,15 +1,21 @@
 
 #include "mrvUI/mrvMonitor.h"
-
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 #import <CoreGraphics/CoreGraphics.h>
 #import <IOKit/graphics/IOGraphicsLib.h>
 #import <IOKit/IOKitLib.h>
+
+#import <iostream>
+#import <string>
+#import <sstream>
+#import <cstring>
+#import <vector>
 
 bool getDisplayNameForDispID(CGDirectDisplayID dispID,
                              std::string& out)
