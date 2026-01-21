@@ -12,8 +12,7 @@ set(HEADERS
     SequenceIO.h
     STB.h
     System.h
-    SystemInline.h
-    ZFile.h)
+    SystemInline.h)
 set(HEADERS_PRIVATE
     SequenceIOReadPrivate.h)
 
@@ -41,8 +40,6 @@ set(SOURCE
     SequenceIORead.cpp
     SequenceIOWrite.cpp
     System.cpp
-    ZFile.cpp
-    ZFileRead.cpp
 )
 
 set(LIBRARIES)
@@ -73,7 +70,7 @@ if(TLRENDER_EXR)
     list(APPEND LIBRARIES_PRIVATE OpenEXR::OpenEXR)
 endif()
 if(TLRENDER_FFMPEG)
-    list(APPEND HEADERS_PRIVATE FFmpeg.h FFmpegMacros.h FFmpegReadPrivate.h)
+    list(APPEND HEADERS FFmpeg.h FFmpegMacros.h FFmpegReadPrivate.h)
     list(APPEND SOURCE FFmpeg.cpp FFmpegRead.cpp FFmpegReadAudio.cpp
         FFmpegReadVideo.cpp FFmpegWrite.cpp)
     list(APPEND LIBRARIES_PRIVATE FFmpeg)
@@ -87,11 +84,13 @@ if(TLRENDER_USD)
 	list(APPEND LIBRARIES_PRIVATE tf usd usdGeom)
 	list(APPEND SOURCE USDRender.cpp)
 	list(APPEND LIBRARIES_PRIVATE usdImagingGL usdAppUtils hd)
+	list(APPEND LIBRARIES tlGL tlCore)
     elseif(MRV2_BACKEND STREQUAL "VK")
 	# list(APPEND LIBRARIES_PRIVATE tf usd usdGeom)
 	# list(APPEND HEADERS USDVulkan.h)
 	# #list(APPEND SOURCE USDVKRender.cpp)
 	# list(APPEND LIBRARIES_PRIVATE usdAppUtils hd)
+	list(APPEND LIBRARIES tlCore)
     endif()
 endif()
 if(TLRENDER_RAW)
@@ -104,7 +103,15 @@ if(TLRENDER_NDI AND TLRENDER_FFMPEG)
     list(APPEND SOURCE NDI.cpp NDIRead.cpp NDIReadVideo.cpp NDIReadAudio.cpp )
     list(APPEND LIBRARIES_PRIVATE NDI)
 endif()
-list(APPEND LIBRARIES tlGL tlCore)
+if(TLRENDER_ZFILE)
+    list(APPEND SOURCE ZFile.cpp ZFileRead.cpp)
+    list(APPEND HEADERS_PRIVATE ZFile.h)
+endif()
+if(MRV2_BACKEND STREQUAL "GL")
+    list(APPEND LIBRARIES tlGL tlCore)
+elseif(MRV2_BACKEND STREQUAL "VK")
+    list(APPEND LIBRARIES tlCore)
+endif()
 
 add_library(tlIO ${HEADERS} ${HEADERS_PRIVATE} ${SOURCE})
 target_link_libraries(tlIO PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
@@ -129,7 +136,7 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 	target_compile_definitions(tlIO PRIVATE VULKAN_BACKEND)
     endif()
 endif()
-
+    
 install(TARGETS tlIO
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
