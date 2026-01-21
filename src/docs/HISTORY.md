@@ -71,6 +71,8 @@ ChangeLog
 - Note that the OpenGL version will still suffer from too saturated colors.
 - Fixed license server to automatically restart in case of failure or exit.
 - Added support for emojis with multiple Unicode code points thanks to ManoloFLTK on the OpenGL backend.  The Vulkan backend supports only single code point glyphs.
+- Fixed pyFLTK that had gotten broken due to a swig update somewhere along the way.
+- Added support for multiple monitors switching from SDR to HDR and viceversa if they are of different types on the Vulkan backend.
 
 
 v1.5.2

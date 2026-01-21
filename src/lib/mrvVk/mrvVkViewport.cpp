@@ -378,26 +378,21 @@ namespace mrv
             
             std::string msg;
 
-            auto capabilities = monitor::get_hdr_capabilities(this->screen_num());
-            if (valid_colorspace && capabilities.supported)
+            p.hdrCapabilities = monitor::get_hdr_capabilities(this->screen_num());
+            if (valid_colorspace && p.hdrCapabilities.supported)
             {
                 p.hdrMonitorFound = true;
                 LOG_STATUS(_("HDR monitor found."));
                 std::string msg = string::Format(_("HDR monitor min. nits = {0}")).
-                                  arg(capabilities.min_nits);
+                                  arg(p.hdrCapabilities.min_nits);
                 LOG_STATUS(msg);
                 msg = string::Format(_("HDR monitor max. nits = {0}")).
-                      arg(capabilities.max_nits);
+                      arg(p.hdrCapabilities.max_nits);
                 LOG_STATUS(msg);
             }
             else
             {
                 LOG_STATUS(_("HDR monitor not found or not configured."));
-                // msg = string::Format(_("Vulkan color space capable of {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
-                // LOG_STATUS(msg);
-                // msg = string::Format(_("Vulkan format capable of {0}")).arg(string_VkFormat(format()));
-                // LOG_STATUS(msg);
-
                 colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                 format() = VK_FORMAT_B8G8R8A8_UNORM;
             }
@@ -619,6 +614,18 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
+
+            // If we changed screen from an HDR to an SDR one, recreate the
+            // Vulkan swapchain.
+            if (p.changed_screen)
+            {
+                p.changed_screen = false;
+                
+                auto hdrCapabilities = monitor::get_hdr_capabilities(this->screen_num());
+                //if (hdrCapabilities.supported != p.hdrCapabilities.supported)
+                    m_swapchain_needs_recreation = true;
+                return;
+            }
 
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();

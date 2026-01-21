@@ -750,38 +750,30 @@ PyObject * Fl_remove_check(PyObject *self, PyObject *args)
                        &sigaction_old, NULL ))                          \
         BARF("sigaction-restore failed"); 
 
-   static int run(bool default_handler = true)
+   static int run_with_default_sigint_handler()
    {
      int result = 1;
 #if defined(LINUX)
      struct sigaction sigaction_old = {};
-     if (!default_handler) {
        SET_SIGINT();
-     }
 #endif
      result = Fl::run();
 #if defined(LINUX)
-     if (!default_handler) {
        RESET_SIGINT();
-     }
 #endif
      return result;
    }
 
-   static int wait(double time, bool default_handler = true)
+   static int wait_with_default_sigint_handler(double time)
    {
      int result = 1;
 #if defined(LINUX)
      struct sigaction sigaction_old = {};
-     if (!default_handler) {
        SET_SIGINT();
-     }
 #endif
      result = Fl::wait(time);
 #if defined(LINUX)
-     if (!default_handler) {
        RESET_SIGINT();
-     }
 #endif
      return result;
    }

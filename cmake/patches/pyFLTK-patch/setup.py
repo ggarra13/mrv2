@@ -402,7 +402,7 @@ setuptools.setup (cmdclass={
         'swig': PySwigCommand,
        },
        name = 'pyfltk',
-       version = '1.4.2.0',
+       version = '1.5.0',
        #setup_requires=['wheel'],
        ext_modules = [module1],
        packages = ['fltk','fltk.test'],
