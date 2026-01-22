@@ -73,6 +73,7 @@ ChangeLog
 - Added support for emojis with multiple Unicode code points thanks to ManoloFLTK on the OpenGL backend.  The Vulkan backend supports only single code point glyphs.
 - Fixed pyFLTK that had gotten broken due to a swig update somewhere along the way.
 - Added support for multiple monitors switching from SDR to HDR and viceversa if they are of different types on the Vulkan backend.
+- Improved the download page to use two menu pulldowns for easily downloading the version you want without cluttering your screen.
 
 
 v1.5.2
