@@ -27,78 +27,73 @@
       color: #c7d2fe;
     }
     main {
-      max-width: 1100px;
+      max-width: 800px;
       margin: 0 auto;
       padding: 3rem 1rem;
     }
-    h2 {
-      margin-top: 3rem;
-    }
-    .downloads {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-    @media (max-width: 768px) {
-      .downloads {
-        grid-template-columns: 1fr;
-      }
-    }
-    .card {
+    .download-container {
       background: #020617;
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
       text-align: center;
     }
-    .card h3 {
-      margin-top: 0;
+    .selectors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-bottom: 2rem;
     }
-    .card p {
-      color: #9ca3af;
-      font-size: 0.95rem;
+    .select-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
     }
-    .card a.download {
-      display: inline-block;
+    label {
+      font-weight: 600;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    select {
+      background: #1e293b;
+      color: white;
+      border: 1px solid #334155;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      min-width: 220px;
+      cursor: pointer;
+      outline: none;
+    }
+    select:focus {
+      border-color: #2563eb;
+    }
+    .download-action {
       margin-top: 1rem;
-      padding: 0.75rem 1.5rem;
+    }
+    .download-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
       border-radius: 999px;
       background: #2563eb;
       color: white;
       text-decoration: none;
-      font-weight: 600;
-    }
-    .card a.download:hover {
-      background: #1d4ed8;
-    }
-    .donate {
-      margin-top: 4rem;
-      padding: 2.5rem 1.5rem;
-      text-align: center;
-      background: #020617;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    }
-    .donate h2 {
-      margin-top: 0;
-    }
-    .donate p {
-      max-width: 650px;
-      margin: 0.75rem auto 1.5rem;
-      color: #9ca3af;
-    }
-    .donate a {
-      display: inline-block;
-      padding: 0.9rem 1.8rem;
-      border-radius: 999px;
-      background: #ffc439;
-      color: #111827;
-      text-decoration: none;
       font-weight: 700;
+      font-size: 1.1rem;
+      transition: transform 0.2s, background 0.2s;
     }
-    .donate a:hover {
-      background: #fbbf24;
+    .download-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+    .file-info {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #64748b;
     }
     footer {
       text-align: center;
@@ -114,93 +109,43 @@
 
 <header>
   <h1>mrv2 & vmrv2</h1>
-  <p>
-    Professional open‑source media viewers for VFX, animation and film.
-    Built for speed, color accuracy and modern pipelines.
+  <p>Professional open‑source media viewers for VFX, animation and film.
+  </p>
+  <p>Built for speed, color accuracy and modern pipelines.
   </p>
 </header>
 
 <main>
-  <!-- vmrv2 -->
-  <h2>vmrv2 - Vulkan Backend (v1.5.2)</h2>
-  <div class="downloads">
-    <div class="card">
-      <h3>Windows (64‑bit)</h3>
-      <p>Installer (.exe)</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/vmrv2-v1.5.2-Windows-amd64.exe">Download</a>
+  <div class="download-container">
+    <h2>Get the latest version (v1.5.2)</h2>
+    
+    <div class="selectors">
+      <div class="select-group">
+        <label for="backend">1. Choose Backend</label>
+        <select id="backend" onchange="updateLink()">
+          <option value="vmrv2">vmrv2 (Vulkan)</option>
+          <option value="mrv2">mrv2 (OpenGL)</option>
+        </select>
+      </div>
+
+      <div class="select-group">
+        <label for="platform">2. Choose Platform</label>
+        <select id="platform" onchange="updateLink()">
+          <option value="Windows-amd64.exe">Windows (64-bit Installer)</option>
+          <option value="Darwin-amd64.dmg">macOS Intel (x86_64)</option>
+          <option value="Darwin-arm64.dmg">macOS Apple Silicon (arm64)</option>
+          <option value="Linux-amd64.deb">Linux (Debian / Ubuntu .deb)</option>
+          <option value="Linux-amd64.rpm">Linux (RHEL / Fedora .rpm)</option>
+          <option value="Linux-amd64.tar.gz">Linux (Generic .tar.gz)</option>
+        </select>
+      </div>
     </div>
 
-    <div class="card">
-      <h3>macOS Intel</h3>
-      <p>x86_64 (.dmg)</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/vmrv2-v1.5.2-Darwin-amd64.dmg">Download</a>
-    </div>
-
-    <div class="card">
-      <h3>macOS Apple Silicon</h3>
-      <p>arm64 (.dmg)</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/vmrv2-v1.5.2-Darwin-arm64.dmg">Download</a>
-    </div>
-
-    <div class="card">
-      <h3>Linux (.deb)</h3>
-      <p>Debian / Ubuntu</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/vmrv2-v1.5.2-Linux-amd64.deb">Download</a>
-    </div>
-
-    <div class="card">
-      <h3>Linux (.rpm)</h3>
-      <p>RHEL / Fedora</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/vmrv2-v1.5.2-Linux-amd64.rpm">Download</a>
-    </div>
-
-    <div class="card">
-      <h3>Linux (tar.gz)</h3>
-      <p>Generic binary package</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/vmrv2-v1.5.2-Linux-amd64.tar.gz">Download</a>
+    <div class="download-action">
+      <a id="downloadLink" class="download-btn" href="#">Download Now</a>
+      <p class="file-info" id="filename">mrv2-v1.5.2-Windows-amd64.exe</p>
     </div>
   </div>
-  
-  <!-- mrv2 -->
-  <h2>mrv2 - OpenGL backend (v1.5.2)</h2>
-  <div class="downloads">
-    <div class="card">
-      <h3>Windows (64‑bit)</h3>
-      <p>Installer (.exe)</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/mrv2-v1.5.2-Windows-amd64.exe">Download</a>
-    </div>
-
-    <div class="card">
-      <h3>macOS Intel</h3>
-      <p>x86_64 (.dmg)</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/mrv2-v1.5.2-Darwin-amd64.dmg">Download</a>
-    </div>
-
-    <div class="card">
-      <h3>macOS Apple Silicon</h3>
-      <p>arm64 (.dmg)</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/mrv2-v1.5.2-Darwin-arm64.dmg">Download</a>
-    </div>
-
-    <div class="card">
-      <h3>Linux (.deb)</h3>
-      <p>Debian / Ubuntu</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/mrv2-v1.5.2-Linux-amd64.deb">Download</a>
-    </div>
-
-    <div class="card">
-      <h3>Linux (.rpm)</h3>
-      <p>RHEL / Fedora</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/mrv2-v1.5.2-Linux-amd64.rpm">Download</a>
-    </div>
-
-    <div class="card">
-      <h3>Linux (tar.gz)</h3>
-      <p>Generic binary package</p>
-      <a class="download" href="https://github.com/ggarra13/mrv2/releases/download/v1.5.2/mrv2-v1.5.2-Linux-amd64.tar.gz">Download</a>
-    </div>
-  </div>
-
 </main>
 
 <footer>
@@ -210,6 +155,29 @@
     <a href="https://sourceforge.net/projects/mrv2/">SourceForge</a>
   </p>
 </footer>
+
+<script>
+  function updateLink() {
+    const version = "v1.5.2";
+    const backend = document.getElementById('backend').value;
+    const platform = document.getElementById('platform').value;
+    const downloadBtn = document.getElementById('downloadLink');
+    const fileLabel = document.getElementById('filename');
+    
+    // Construct the filename
+    const filename = `${backend}-${version}-${platform}`;
+    
+    // Construct the GitHub URL
+    const url = `https://github.com/ggarra13/mrv2/releases/download/${version}/${filename}`;
+    
+    // Update the UI
+    downloadBtn.href = url;
+    fileLabel.textContent = filename;
+  }
+
+  // Initialize link on load
+  window.onload = updateLink;
+</script>
 
 </body>
 </html>
