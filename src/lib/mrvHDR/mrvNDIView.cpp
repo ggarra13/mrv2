@@ -29,7 +29,7 @@
 #include "mrvCore/mrvI8N.h"
 
 #include "mrvHDR/mrvNDICallbacks.h"
-#include "mrvHDR/mrvHDRMonitor.h"
+#include "mrvHDR/mrvMonitor.h"
 
 #include "hdr/mrvHDRApp.h"
 #include "mrvNDIView.h"
@@ -365,6 +365,9 @@ namespace mrv
         // FLTK state variables
         bool useHDRMetadata = false;
 
+        // HDR monitor variables
+        monitor::HDRCapabilities hdrCapabilities;
+
         NDIlib_find_instance_t NDI_find = nullptr;
         NDIlib_recv_instance_t NDI_recv = nullptr;
 
@@ -485,6 +488,7 @@ namespace mrv
         switch (colorSpace())
         {
         case VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT:
+        case VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT:
         case VK_COLOR_SPACE_HDR10_ST2084_EXT:
         case VK_COLOR_SPACE_HDR10_HLG_EXT:
         case VK_COLOR_SPACE_DOLBYVISION_EXT:
@@ -494,10 +498,17 @@ namespace mrv
             break;
         }
 
-        if (valid_colorspace && is_hdr_display_active())
+        p.hdrCapabilities = monitor::get_hdr_capabilities(window()->screen_num());
+        if (valid_colorspace && p.hdrCapabilities.supported)
         {
             p.hdrMonitorFound = true;
             LOG_STATUS(_("HDR monitor found."));
+            std::string msg = string::Format(_("HDR monitor min. nits = {0}")).
+                              arg(p.hdrCapabilities.min_nits);
+            LOG_STATUS(msg);
+            msg = string::Format(_("HDR monitor max. nits = {0}")).
+                  arg(p.hdrCapabilities.max_nits);
+            LOG_STATUS(msg);
         }
         else
         {
@@ -1686,6 +1697,9 @@ void main() {
         {
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             dst_colorspace.transfer = PL_COLOR_TRC_PQ;
+            dst_colorspace.hdr.min_luma = p.hdrCapabilities.min_nits;
+            dst_colorspace.hdr.max_luma = p.hdrCapabilities.max_nits;
+            
             if (colorSpace() == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
             {
                 dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;

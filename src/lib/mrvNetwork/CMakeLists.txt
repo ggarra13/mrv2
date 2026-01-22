@@ -57,4 +57,5 @@ install(TARGETS mrvNetwork
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
+    PUBLIC_HEADER DESTINATION include/mrvOptions
     COMPONENT libraries)

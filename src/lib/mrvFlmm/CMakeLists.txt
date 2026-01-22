@@ -25,4 +25,5 @@ install(TARGETS mrvFlmm
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
+    PUBLIC_HEADER DESTINATION include/mrvFlmm
     COMPONENT libraries)
