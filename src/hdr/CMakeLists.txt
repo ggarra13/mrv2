@@ -54,21 +54,17 @@ list(APPEND LIBRARIES_PRIVATE Vulkan::Vulkan)
 
 if(WIN32)
     list(APPEND LIBRARIES dxgi)
-endif()
-
-if( APPLE )
+elseif(APPLE)
     set(OSX_FRAMEWORKS "-framework IOKit")
     list(APPEND LIBRARIES ${OSX_FRAMEWORKS})
-    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
 endif()
 
 add_executable(hdr WIN32 ${SOURCES} ${HEADERS})
-
-target_include_directories( hdr BEFORE PRIVATE . )
-
+target_include_directories(hdr BEFORE PRIVATE . )
 target_link_libraries(hdr PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
-target_link_directories( hdr BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
+target_link_directories(hdr
+    BEFORE
+    PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /opt/homebrew/lib /usr/local/lib )
 
 install(TARGETS hdr
     RUNTIME DESTINATION bin COMPONENT applications

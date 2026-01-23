@@ -76,6 +76,7 @@ ChangeLog
 - Improved the download page to use two menu pulldowns for easily downloading the version you want without cluttering your screen.
 - Upgraded to NDI SDK Advanced v6.3.
 - Fixed hdr utility to also use the new HDR algorithm.
+- Fixed building hdr utility on macOS Silicon.
 
 
 
