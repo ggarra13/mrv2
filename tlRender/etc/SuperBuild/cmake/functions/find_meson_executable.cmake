@@ -5,29 +5,17 @@ function(find_meson_executable TARGET)
     set(_LOCAL_PYTHONPATH "")
 
     if(NOT BUILD_PYTHON)
-        find_program(_LOCAL_MESON NAMES meson meson.exe)
+        find_program(_LOCAL_MESON
+	    NAMES
+	    meson meson.exe
+	    /opt/homebrew/bin
+	    /usr/local/bin
+	)
         if(NOT _LOCAL_MESON)
             message(FATAL_ERROR "Meson build system not found!")
         endif()
     else()
-        if (APPLE)
-            # Try to find it first before trying to install
-            find_program(_LOCAL_MESON NAMES meson)
-            
-            if(NOT _LOCAL_MESON)
-                message(STATUS "Meson not found, attempting brew install...")
-                execute_process(COMMAND brew install meson RESULT_VARIABLE BREW_RESULT)
-                
-                # Search again specifically in brew paths
-                find_program(_LOCAL_MESON NAMES meson PATHS /opt/homebrew/bin /usr/local/bin NO_DEFAULT_PATH)
-            endif()
-
-            if (NOT _LOCAL_MESON)
-                message(FATAL_ERROR "meson not found after brew attempt")
-            endif()
-            set(_LOCAL_PYTHONPATH "PYTHONPATH=")
-
-        elseif(WIN32)
+	if(WIN32)
             set(_LOCAL_MESON "${CMAKE_INSTALL_PREFIX}/Bin/Scripts/meson")
         else()
             set(_LOCAL_MESON "${CMAKE_INSTALL_PREFIX}/bin/meson")
