@@ -249,6 +249,15 @@ endif()
 
 if(BUILD_PYTHON)
     add_dependencies(OTIO ${PYTHON_DEP})
+    if (TLRENDER_AV1)
+	add_dependencies(dav1d ${PYTHON_DEP})
+    endif()
+    if (TLRENDER_LIBPLACEBO)
+	add_dependencies(libplacebo ${PYTHON_DEP})
+    endif()
+    if (MRV2_BACKEND STREQUAL "VK")
+	add_dependencies(harfbuzz ${PYTHON_DEP})
+    endif()
 endif()
 
 # OpenSSL must be built before Python and pyFLTK to use the right path when

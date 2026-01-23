@@ -8,8 +8,10 @@ function(find_meson_executable TARGET)
         find_program(_LOCAL_MESON
 	    NAMES
 	    meson meson.exe
+	    PATHS
 	    /opt/homebrew/bin
 	    /usr/local/bin
+	    $ENV{PATH}
 	)
         if(NOT _LOCAL_MESON)
             message(FATAL_ERROR "Meson build system not found!")
@@ -22,7 +24,7 @@ function(find_meson_executable TARGET)
             set(_LOCAL_PYTHONPATH "PYTHONPATH=${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/site-packages")
         endif()
     endif()
-
+    
     # 2. Lift the final values to PARENT_SCOPE
     set(MESON_EXECUTABLE "${_LOCAL_MESON}" PARENT_SCOPE)
     set(${TARGET}_PYTHONPATH "${_LOCAL_PYTHONPATH}" PARENT_SCOPE)
