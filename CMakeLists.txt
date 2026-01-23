@@ -109,6 +109,7 @@ string(REPLACE ";" "|" CMAKE_MODULE_PATH_TMP "${CMAKE_MODULE_PATH}")
     
 #
 # Python cannot be built with asan dependencies
+#
 set(PYTHON_DEP )
 if(BUILD_PYTHON)
     set(Python_EXECUTABLE "$ENV{PYTHON}")
@@ -179,20 +180,6 @@ if (NOT BUILD_PYTHON)
     endif()
 endif()
 
-# if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
-#     # Check for Clang or GCC compiler  (\@todo: add Microsoft support)
-#     if (TLRENDER_ASAN AND
-# 	    ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR
-# 		(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")))
-# 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-# 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-# 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
-# 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
-# 	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fsanitize=address")
-#     endif()
-# endif()
-
-
 
 set(cpptrace_DEP )
 if(NOT APPLE AND MRV2_CPPTRACE)
@@ -213,27 +200,8 @@ set(VMA_DEP )
 #     include(cmake/Modules/BuildVMA.cmake)
 # endif()
 
-#
-# We build Wayland protocols
-#
-set(WAYLAND_PROTOCOLS_DEP )
-# if (UNIX AND NOT APPLE)
-#     if ($ENV{ARCH} MATCHES ".*aarch64.*")
-# 	include(cmake/Modules/Buildprotocols.cmake)	
-# endif()
-
-
 set(SHADERC_DEP )
 
-#
-# We build shaderc in build_vulkan.sh for
-# Linux ARM64 mainly
-#
-# if(TLRENDER_VK)
-#     if (UNIX AND NOT APPLE)
-# 	include(cmake/Modules/Buildshaderc.cmake)
-#     endif()
-# endif()
 
 add_subdirectory(tlRender/etc/SuperBuild)
 
@@ -241,25 +209,6 @@ set(FLTK_DEP )
 if(BUILD_FLTK)
     include(cmake/Modules/BuildFLTK.cmake)
     add_dependencies(tlRender ${FLTK_DEP})
-endif()
-
-if(BUILD_PYTHON AND TLRENDER_USD)
-    add_dependencies(USD ${PYTHON_DEP} ${Gettext_DEP})
-endif()
-
-if(BUILD_PYTHON)
-    add_dependencies(OTIO ${PYTHON_DEP})
-    if (TLRENDER_AV1)
-	add_dependencies(dav1d ${PYTHON_DEP})
-    endif()
-    if (TLRENDER_LIBPLACEBO)
-	add_dependencies(libplacebo ${PYTHON_DEP})
-    endif()
-    if (WIN32 OR APPLE)
-	if (MRV2_BACKEND STREQUAL "VK")
-	    add_dependencies(harfbuzz ${PYTHON_DEP})
-	endif()
-    endif()
 endif()
 
 # OpenSSL must be built before Python and pyFLTK to use the right path when
