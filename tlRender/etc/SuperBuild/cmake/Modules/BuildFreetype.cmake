@@ -6,10 +6,7 @@ set(Freetype_GIT_TAG "VER-2-13-3")
 set(Freetype_DEPENDENCIES PNG ZLIB)
 message(STATUS "Freetype_DEPENDENCIES=${Freetype_DEPENDENCIES}")
 
-set(Freetype_DISABLE_HARFBUZZ OFF)
-if (APPLE)
-    set(Freetype_DISABLE_HARFBUZZ ON)
-endif()
+set(Freetype_DISABLE_HARFBUZZ ON)
 
 
 set(Freetype_ARGS

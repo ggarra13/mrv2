@@ -1,5 +1,8 @@
 include(ExternalProject)
 
+include(functions/find_meson_executable)
+find_meson_executable(dav1d)
+
 
 set(dav1d_GIT_TAG 1.3.0)
 
@@ -13,45 +16,6 @@ message(STATUS "dav1d DEPENDENCIES=${dav1d_DEPENDENCIES}")
 set(CLANG_ENV )
 if(WIN32)
     set(CLANG_ENV CC=clang CXX=clang)
-endif()
-
-set(dav1d_PYTHONPATH )
-if(NOT BUILD_PYTHON)
-    find_program(MESON_EXECUTABLE NAMES meson meson.exe)
-    if(NOT MESON_EXECUTABLE)
-	message(FATAL_ERROR "Meson build system not found!")
-    endif()
-else()
-    if (APPLE)
-	# Try to install meson via brew if not found
-	execute_process(COMMAND brew install meson
-            RESULT_VARIABLE BREW_RESULT
-            OUTPUT_QUIET ERROR_QUIET)
-	    
-	if(NOT BREW_RESULT EQUAL 0)
-	    message(FATAL_ERROR "Failed to install meson with Homebrew.")
-	endif()
-
-	# Try to find it again after installation
-	find_program(MESON_EXECUTABLE NAMES meson
-	    PATHS
-	    /opt/homebrew/bin        # M1 default
-	    /usr/local/bin           # Intel default
-	    $ENV{PATH}
-	)
-	
-	if (NOT MESON_EXECUTABLE)
-	    message(FATAL_ERROR "meson not found in PATH")
-	else()
-	    message(STATUS "meson found at ${MESON_EXECUTABLE}")
-	    set(dav1d_PYTHONPATH "PYTHONPATH=")
-	endif()
-    elseif(WIN32)
-	set(MESON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/Bin/Scripts/meson)
-    else()
-	set(MESON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/meson)
-	set(dav1d_PYTHONPATH "PYTHONPATH=${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/site-packages:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/lib-dynload")
-    endif()
 endif()
 
 if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)

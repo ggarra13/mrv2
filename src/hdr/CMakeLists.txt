@@ -44,6 +44,11 @@ set(LIBRARIES
 
 find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
 
+if (WIN32 OR APPLE)
+    find_package(harfbuzz REQUIRED)
+    list(APPEND LIBRARIES_PRIVATE harfbuzz::harfbuzz)
+endif()
+
 list(APPEND LIBRARIES ${FLTK_LIBRARIES})
 list(APPEND LIBRARIES_PRIVATE Vulkan::Vulkan)
 

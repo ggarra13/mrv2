@@ -170,7 +170,6 @@ namespace
         }
         paths.emplace_back("/usr/share/fonts/");
         paths.emplace_back("/usr/local/share/fonts/");
-
 #endif
 
         return paths;

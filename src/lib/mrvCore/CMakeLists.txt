@@ -66,7 +66,7 @@ if (TLRENDER_NET)
     find_package(OpenSSL REQUIRED)
 endif()
 
-set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath ${FLTK_LIBRARIES})
+set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath harfbuzz::harfbuzz ${FLTK_LIBRARIES})
 
 if (MRV2_NETWORK)
     set(LIBRARIES_PRIVATE
