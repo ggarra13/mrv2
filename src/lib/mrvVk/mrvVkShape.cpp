@@ -37,7 +37,14 @@ namespace
 
     using tl::geom::Triangle2;
     using tl::math::Vector2f;
-
+    
+   //! Helper function to check if a codepoint is inherently an emoji
+    bool detectIsEmoji(unsigned int cp) {
+        return (cp >= 0x1F300 && cp <= 0x1F9FF) || // Misc Symbols, Pictographs, Emoticons
+            (cp >= 0x2600 && cp <= 0x26FF)   || // Misc Symbols
+            (cp >= 0x2700 && cp <= 0x27BF)   || // Dingbats
+            (cp >= 0x1F1E6 && cp <= 0x1F1FF);   // Flags
+    }
     
     // Check if vertex i in the polygon is an ear
     bool isEar(
@@ -974,6 +981,8 @@ namespace mrv
             // Buffers for batching
             std::string currentRun;
             bool runIsEmoji = false;
+            bool prevWasZWJ = false;
+            bool firstChar = true;
 
             for (size_t i = 0; i < line.size(); )
             {
@@ -985,24 +994,31 @@ namespace mrv
 
                 std::string charStr = line.substr(i, len);
         
-                // Check main font first
-                bool isEmojiChar = false;
-                auto mainGlyphs = fontSystem->getGlyphs(charStr, fontInfo);
-        
-                // If the main font returns no glyphs or a "null" glyph, mark
-                // as emoji
-                if (mainGlyphs.empty() || !mainGlyphs[0]) 
+                // Decode the codepoint to check for ZWJ/Variation Selectors
+                unsigned int codepoint = fl_utf8decode(charStr.c_str(), nullptr, &len);
+                
+                // Check if emoji
+                bool isEmojiChar = detectIsEmoji(codepoint);
+                
+                // Define "Sticky" characters that should not break a run
+                bool isZWJ = (codepoint == 0x200D);
+                bool isVS = (codepoint >= 0xFE00 && codepoint <= 0xFE0F);
+                bool isSticky = isZWJ || isVS || prevWasZWJ;
+                
+                // Update runIsEmoji immediately if it's the very first character
+                if (firstChar)
                 {
-                    isEmojiChar = true;
+                    runIsEmoji = isEmojiChar;
+                    firstChar = false;
                 }
-
-                // Mode switch: Flush buffer if font type changed
-                if (isEmojiChar != runIsEmoji && !currentRun.empty())
+                // Standard run-switching logic
+                else if (!isSticky && isEmojiChar != runIsEmoji && !currentRun.empty())
                 {
                     flushRun(currentRun, runIsEmoji);
                     currentRun.clear();
+                    runIsEmoji = isEmojiChar;
                 }
-
+    
                 runIsEmoji = isEmojiChar;
                 currentRun += charStr;
                 i += len; // Advance by the UTF-8 length
@@ -1030,41 +1046,47 @@ namespace mrv
         if (!txt.empty())
         {
             std::string line = txt;
-            currentDrawX = x; 
 
-            // Buffers for batching
+            currentDrawX = x;
+
             std::string currentRun;
             bool runIsEmoji = false;
+            bool firstChar = true;
+            bool prevWasZWJ = false;
             
             for (size_t i = 0; i < line.size(); )
             {
-                // fl_utf8len returns the length of the UTF-8 sequence (1 to 4 bytes)
                 int len = fl_utf8len(line[i]);
-        
-                // Safety fallback: if FLTK returns < 1 for some reason, assume 1 byte to prevent infinite loops
                 if (len < 1) len = 1; 
 
                 std::string charStr = line.substr(i, len);
-        
-                // Check main font first
-                bool isEmojiChar = false;
-                auto mainGlyphs = fontSystem->getGlyphs(charStr, fontInfo);
-        
-                // If the main font returns no glyphs or a "null" glyph, mark
-                // as emoji
-                if (mainGlyphs.empty() || !mainGlyphs[0]) 
-                {
-                    isEmojiChar = true;
-                }
 
-                // Mode switch: Flush buffer if font type changed
-                if (isEmojiChar != runIsEmoji && !currentRun.empty())
+                // Decode the codepoint to check for ZWJ/Variation Selectors
+                unsigned int codepoint = fl_utf8decode(charStr.c_str(), nullptr, &len);
+    
+                // Check main font first
+                bool isEmojiChar = detectIsEmoji(codepoint);
+        
+                // Define "Sticky" characters that should not break a run
+                bool isZWJ = (codepoint == 0x200D);
+                bool isVS = (codepoint >= 0xFE00 && codepoint <= 0xFE0F);
+                bool isSticky = isZWJ || isVS || prevWasZWJ;
+
+                // Update runIsEmoji immediately if it's the very first character
+                if (firstChar)
+                {
+                    runIsEmoji = isEmojiChar;
+                    firstChar = false;
+                }
+                // Only switch runs if it's NOT a sticky character
+                else if (!isSticky && isEmojiChar != runIsEmoji &&
+                    !currentRun.empty())
                 {
                     flushRun(currentRun, runIsEmoji);
                     currentRun.clear();
+                    runIsEmoji = isEmojiChar;
                 }
 
-                runIsEmoji = isEmojiChar;
                 currentRun += charStr;
                 i += len; // Advance by the UTF-8 length
             }

@@ -124,8 +124,15 @@ else()
 endif()
 
 find_package(FLTK CONFIG REQUIRED)
+
+set(HARFBUZZ_LIB )
+if (MRV2_BACKEND STREQUAL "VK")
+    find_package(harfbuzz CONFIG REQUIRED)
+    set(HARFBUZZ_LIB harfbuzz::harfbuzz)
+endif()
+
 set(LIBRARIES OTIO::opentimelineio fltk::fltk-shared Imath::Imath nlohmann_json::nlohmann_json)
-set(LIBRARIES_PRIVATE Freetype::Freetype MINIZIP::minizip-ng ZLIB::ZLIB)
+set(LIBRARIES_PRIVATE ${HARFBUZZ_LIB} Freetype::Freetype MINIZIP::minizip-ng ZLIB::ZLIB)
 if(TLRENDER_OCIO)
     list(APPEND LIBRARIES OpenColorIO::OpenColorIO)
 endif()

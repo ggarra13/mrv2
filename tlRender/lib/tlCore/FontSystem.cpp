@@ -8,6 +8,9 @@
 #include <tlCore/LRUCache.h>
 #include <tlCore/Path.h>
 
+#include <harfbuzz/hb.h>
+#include <harfbuzz/hb-ft.h>
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
@@ -36,8 +39,6 @@
 #endif
 
 namespace fs = std::filesystem;
-
-#define USE_HARFBUZZ 1
 
 namespace
 {
@@ -264,7 +265,6 @@ namespace tl
 
         struct FontSystem::Private
         {
-            std::shared_ptr<Glyph> getGlyph(uint32_t code, const FontInfo&);
             std::shared_ptr<Glyph> getGlyphByIndex(uint32_t glyphIndex,
                                                    const FontInfo&);
             FT_Face getFTFace(const FontInfo&);
@@ -432,11 +432,6 @@ namespace tl
             return out;
         }
 
-#ifdef USE_HARFBUZZ
-
-#include <harfbuzz/hb.h>
-#include <harfbuzz/hb-ft.h>
-
         struct ShapedGlyph
         {
             hb_codepoint_t glyphIndex = 0;
@@ -452,8 +447,23 @@ namespace tl
                                            FT_Face face)
         {
             hb_font_t* hbFont = hb_ft_font_create_referenced(face);
+
+            // Set load flags for HarfBuzz to match FreeType's color handling
+            FT_UInt load_flags = FT_LOAD_DEFAULT;
+            if (FT_IS_SCALABLE(face))
+            {
+                load_flags |= FT_LOAD_FORCE_AUTOHINT;
+            }
+            if (FT_HAS_COLOR(face))
+            {
+                load_flags |= FT_LOAD_COLOR;
+            }
+            hb_ft_font_set_load_flags(hbFont, load_flags);
+    
             
             hb_buffer_t* buf = hb_buffer_create();
+            hb_buffer_set_cluster_level(buf,
+                                        HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES);
             hb_buffer_add_utf32(buf, (const uint32_t*)text.data(), text.size(), 0, text.size());
     
             hb_buffer_guess_segment_properties(buf);
@@ -591,105 +601,7 @@ namespace tl
 
             size.w = max_w;
             size.h = pos_y;
-        }
-        
-#else
-        void FontSystem::Private::measure(
-            const std::u32string& utf32, const FontInfo& fontInfo,
-            int maxLineWidth, math::Size2i& size,
-            std::vector<math::Box2i>* glyphGeom)
-        {
-            FT_Face face = getFTFace(fontInfo);
-            
-            math::Vector2i pos;
-            float scale;
-            FT_Error ftError = setFacePixelSize(
-                face, static_cast<int>(fontInfo.size), scale);
-            if (ftError)
-            {
-                throw std::runtime_error("Cannot set pixel sizes");
-            }
-
-            const int h = face->size->metrics.height / 64;
-            pos.y = h;
-            auto textLine = utf32.end();
-            int textLineX = 0;
-            int32_t rsbDeltaPrev = 0;
-            for (auto j = utf32.begin(); j != utf32.end(); ++j)
-            {
-                const auto glyph = getGlyph(*j, fontInfo);
-                if (glyphGeom)
-                {
-                    math::Box2i box;
-                    if (glyph)
-                    {
-                        box = math::Box2i(
-                            pos.x, pos.y - h, glyph->advance, h);
-                    }
-                    glyphGeom->push_back(box);
-                }
-
-                int32_t x = 0;
-                math::Vector2i posAndSize;
-                if (glyph)
-                {
-                    x = glyph->advance;
-                    if (rsbDeltaPrev - glyph->lsbDelta > 32)
-                    {
-                        x -= 1;
-                    }
-                    else if (rsbDeltaPrev - glyph->lsbDelta < -31)
-                    {
-                        x += 1;
-                    }
-                    rsbDeltaPrev = glyph->rsbDelta;
-                }
-                else
-                {
-                    rsbDeltaPrev = 0;
-                }
-
-                if (isNewline(*j))
-                {
-                    size.w = std::max(size.w, pos.x);
-                    pos.x = 0;
-                    pos.y += h;
-                    rsbDeltaPrev = 0;
-                }
-                else if (
-                    maxLineWidth > 0 && pos.x > 0 &&
-                    pos.x + (!isSpace(*j) ? x : 0) >= maxLineWidth)
-                {
-                    if (textLine != utf32.end())
-                    {
-                        j = textLine;
-                        textLine = utf32.end();
-                        size.w = std::max(size.w, textLineX);
-                        pos.x = 0;
-                        pos.y += h;
-                    }
-                    else
-                    {
-                        size.w = std::max(size.w, pos.x);
-                        pos.x = x;
-                        pos.y += h;
-                    }
-                    rsbDeltaPrev = 0;
-                }
-                else
-                {
-                    if (isSpace(*j) && j != utf32.begin())
-                    {
-                        textLine = j;
-                        textLineX = pos.x;
-                    }
-                    pos.x += x;
-                }
-            }
-            size.w = std::max(size.w, pos.x);
-            size.h = pos.y;
-        }
-#endif
+        }        
         
         std::vector<math::Box2i> FontSystem::getBox(
             const std::string& text, const FontInfo& fontInfo, int maxLineWidth)
@@ -734,7 +646,6 @@ namespace tl
             try
             {
                 const auto utf32 = utf8_to_utf32(text);
-#ifdef USE_HARFBUZZ
                 FT_Face face = p.getFTFace(fontInfo);
 
                 float scale;
@@ -746,21 +657,8 @@ namespace tl
                 for (const auto& sg : shaped) {
                     auto glyph = p.getGlyphByIndex(sg.glyphIndex,
                                                    fontInfo); 
-        
-                    // Store the offsets provided by HarfBuzz for correct emoji positioning
-                    // \@bug from Grok: this makes the text be placed half to
-                    //                  the bottom.
-                    // glyph->offset.x = sg.xOffset;
-                    // glyph->offset.y = sg.yOffset;
-                    // glyph->advance = sg.xAdvance;
                     out.push_back(glyph);
                 }
-#else
-                for (const auto& i : utf32)
-                {
-                    out.push_back(p.getGlyph(i, fontInfo));
-                }
-#endif
             }
             catch (const std::exception& e)
             {
@@ -769,176 +667,6 @@ namespace tl
             return out;
         }
 
-        std::shared_ptr<Glyph>
-        FontSystem::Private::getGlyph(uint32_t code, const FontInfo& fontInfo)
-        {
-            std::shared_ptr<Glyph> out;
-            if (!glyphCache.get(GlyphInfo(code, fontInfo), out))
-            {
-                FT_Face face = getFTFace(fontInfo);
-
-                float scale;
-                FT_Error ftError = setFacePixelSize(face,
-                                                    fontInfo.size, scale);
-                if (ftError)
-                {
-                    throw std::runtime_error("setFacePixelSize failed");
-                }
-                    
-                if (auto ftGlyphIndex = FT_Get_Char_Index(face, code))
-                {
-                    FT_UInt base_flags = 0;
-                    if (FT_IS_SCALABLE(face))
-                    {
-                        base_flags |= FT_LOAD_FORCE_AUTOHINT;
-                    }
-
-                    bool tried_color = false;
-                    FT_UInt load_flags = base_flags;
-
-                    if (FT_HAS_COLOR(face))
-                    {
-                        load_flags |= FT_LOAD_COLOR;
-                        tried_color = true;
-                    }
-
-                    FT_Error ftError = FT_Load_Glyph(face,
-                                                     ftGlyphIndex,
-                                                     load_flags);
-
-                    if (ftError == FT_Err_Unimplemented_Feature &&
-                        tried_color)
-                    {
-                        // Fallback: retry without color (likely old FreeType + COLR font)
-                        load_flags = base_flags;  // remove FT_LOAD_COLOR
-                        ftError = FT_Load_Glyph(face,
-                                                ftGlyphIndex,
-                                                load_flags);
-                    }
-
-                    if (ftError)
-                    {
-                        throw std::runtime_error("Cannot load glyph (error: " + std::to_string(ftError) + ")");
-                    }
-
-                    // Proceed to FT_Render_Glyph as before
-                    ftError = FT_Render_Glyph(face->glyph,
-                                              FT_RENDER_MODE_NORMAL);
-                    if (ftError)
-                    {
-                        throw std::runtime_error("Render glyph (error: " + std::to_string(ftError) + ")");
-                        return out;
-                    }
-                        
-                    out = std::make_shared<Glyph>();
-                    out->info = GlyphInfo(code, fontInfo);
-                    auto ftBitmap = face->glyph->bitmap;
-                    const image::Info imageInfo(
-                        ftBitmap.width, ftBitmap.rows,
-                        image::PixelType::L_U8);
-                    out->image = image::Image::create(imageInfo);
-                        
-                    // Pixel Conversion Logic
-                    // FontSystem expects L_U8 (1 byte gray), but Emoji might be BGRA (4 bytes).
-                    uint8_t* outData = out->image->getData();
-                    if (ftBitmap.pixel_mode == FT_PIXEL_MODE_GRAY)
-                    {
-                        for (size_t y = 0; y < ftBitmap.rows; ++y)
-                        {
-                            uint8_t* rowDataP = outData + ftBitmap.width * y;
-                            const unsigned char* bitmapP =
-                                ftBitmap.buffer + y * ftBitmap.pitch;
-                            memcpy(rowDataP, bitmapP, ftBitmap.width);
-                        }
-                    }
-                    // Case B: Color Bitmap Font (Emoji) -> Convert to Monochrome (Luminance)
-                    else if (ftBitmap.pixel_mode == FT_PIXEL_MODE_BGRA)
-                    {
-                        for (size_t y = 0; y < ftBitmap.rows; ++y)
-                        {
-                            uint8_t* rowDataP = outData + ftBitmap.width * y;
-                            const unsigned char* bitmapP =
-                                ftBitmap.buffer + y * ftBitmap.pitch;  // * 4?
-                            for (size_t x = 0; x < ftBitmap.width; ++x)
-                            {
-                                const unsigned char* p = bitmapP + (x * 4);
-                                // Simple luminance: 0.2126 R + 0.7152 G + 0.0722 B
-                                // Or simple average for speed: (R+G+B)/3
-                                // BGRA layout: B=0, G=1, R=2, A=3
-                                unsigned int b = p[0];
-                                unsigned int g = p[1];
-                                unsigned int r = p[2];
-                                unsigned int a = p[3];
-                                    
-                                // Calculate grayscale intensity
-                                unsigned int lum = (r * 6966 + g * 23436 + b * 2366) >> 15; // fast approx
-                                        
-                                // Apply Alpha blending against black background for the glyph
-                                // (Since L_U8 has no alpha channel in this context, we bake it)
-                                rowDataP[x] = static_cast<uint8_t>((lum * a) / 255);
-                            }
-                        }
-                    }
-                    // Case C: 1-bit Monochrome (rare but possible)
-                    else if (ftBitmap.pixel_mode == FT_PIXEL_MODE_MONO)
-                    {
-                        for (size_t y = 0; y < ftBitmap.rows; ++y)
-                        {
-                            uint8_t* rowDataP = outData + ftBitmap.width * y;
-                            const unsigned char* bitmapP =
-                                ftBitmap.buffer + y * ftBitmap.pitch;
-                                
-                            for (size_t x = 0; x < ftBitmap.width; ++x)
-                            {
-                                int byteIndex = x / 8;
-                                int bitIndex  = 7 - (x % 8);
-                                int bit = (bitmapP[byteIndex] >> bitIndex) & 1;
-                                rowDataP[x] = bit ? 255 : 0;
-                            }
-                        }
-                    }
-                    else 
-                    {
-                        // Fallback zero
-                        memset(out->image->getData(), 0,
-                               ftBitmap.width * ftBitmap.rows);
-                    }
-
-                    out->offset = math::Vector2i(
-                        face->glyph->bitmap_left,
-                        face->glyph->bitmap_top);
-                    out->advance = face->glyph->advance.x / 64;
-                    out->lsbDelta = face->glyph->lsb_delta;
-                    out->rsbDelta = face->glyph->rsb_delta;
-
-                    // Scale bitmap fonts to requested size
-                    if (!FT_IS_SCALABLE(face) && out->image)
-                    {
-                        const auto& imgInfo = out->image->getInfo();
-                        int actualHeight = imgInfo.size.h;
-    
-                        // Calculate target size based on requested font size
-                        // Use the selected bitmap size as reference
-                        float scale = static_cast<float>(fontInfo.size) / actualHeight;
-    
-                        if (scale != 1.0f && scale > 0.1f && scale < 10.0f) // Reasonable scale range
-                        {
-                            int targetWidth = static_cast<int>(imgInfo.size.w * scale);
-                            int targetHeight = static_cast<int>(fontInfo.size);
-        
-                            out->image = scaleBitmap(out->image, targetWidth, targetHeight);
-        
-                            // Adjust metrics proportionally
-                            out->offset.x = static_cast<int>(out->offset.x * scale);
-                            out->offset.y = static_cast<int>(out->offset.y * scale);
-                            out->advance = static_cast<int>(out->advance * scale);
-                        }
-                    }
-                    glyphCache.add(out->info, out);
-                }
-            }
-            return out;
-        }
 
         std::shared_ptr<Glyph> 
         FontSystem::Private::getGlyphByIndex(uint32_t ftGlyphIndex,

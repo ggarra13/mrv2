@@ -108,6 +108,7 @@ if(TLRENDER_PNG)
     list(APPEND TLRENDER_EXTERNAL_DEPS PNG)  # Must come before Freetype
 endif()
 list(APPEND TLRENDER_EXTERNAL_DEPS Freetype)
+list(APPEND TLRENDER_EXTERNAL_DEPS Harfbuzz)
 if(TLRENDER_GL)
     find_package(OpenGL REQUIRED)
 endif()
