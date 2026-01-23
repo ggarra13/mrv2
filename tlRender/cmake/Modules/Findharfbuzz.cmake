@@ -23,23 +23,14 @@ if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
 	HINTS
 	${CMAKE_INSTALL_PREFIX}/lib
     )
-    find_library(harfbuzz_subset_LIBRARY
-        NAMES harfbuzzd-subset harfbuzz-subset
-	HINTS
-	${CMAKE_INSTALL_PREFIX}/lib)
 else()
     find_library(harfbuzz_LIBRARY
         NAMES harfbuzz
 	HINTS
 	${CMAKE_INSTALL_PREFIX}/lib)
-    find_library(harfbuzz_subset_LIBRARY
-        NAMES harfbuzz-subset
-	HINTS
-	${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 set(harfbuzz_LIBRARIES
-    ${harfbuzz_LIBRARY}
-    ${harfbuzz_subset_LIBRARY})
+    ${harfbuzz_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
@@ -47,9 +38,7 @@ find_package_handle_standard_args(
     REQUIRED_VARS
     harfbuzz_INCLUDE_DIR
     harfbuzz_LIBRARY
-    harfbuzz_subset_LIBRARY
 )
-mark_as_advanced(harfbuzz_INCLUDE_DIR harfbuzz_LIBRARIES)
 
 if(harfbuzz_FOUND AND NOT TARGET harfbuzz::harfbuzz)
     add_library(harfbuzz::harfbuzz UNKNOWN IMPORTED)

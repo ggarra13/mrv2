@@ -66,13 +66,11 @@ if (TLRENDER_NET)
     find_package(OpenSSL REQUIRED)
 endif()
 
-set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath harfbuzz::harfbuzz ${FLTK_LIBRARIES})
+set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath ${FLTK_LIBRARIES})
 
-if (WIN32 OR APPLE)
-    if (MRV2_BACKEND STREQUAL "VK")
-	find_package(harfbuzz REQUIRED)
-	list(APPEND LIBRARIES_PRIVATE harfbuzz::harfbuzz)
-    endif()
+if (MRV2_BACKEND STREQUAL "VK")
+    find_package(harfbuzz REQUIRED)
+    list(APPEND LIBRARIES harfbuzz::harfbuzz)
 endif()
 
 if (MRV2_NETWORK)
