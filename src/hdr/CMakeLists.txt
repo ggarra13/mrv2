@@ -42,13 +42,7 @@ set(LIBRARIES
     mrvHDR
     ${Intl_LIBRARIES})
 
-find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
-
-if (MRV2_BACKEND STREQUAL "VK")
-    find_package(harfbuzz REQUIRED)
-    list(APPEND LIBRARIES_PRIVATE harfbuzz::harfbuzz)
-endif()
-    
+find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)   
 list(APPEND LIBRARIES ${FLTK_LIBRARIES})
 list(APPEND LIBRARIES_PRIVATE Vulkan::Vulkan)
 

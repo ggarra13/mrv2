@@ -68,11 +68,6 @@ endif()
 
 set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath ${FLTK_LIBRARIES})
 
-if (MRV2_BACKEND STREQUAL "VK")
-    find_package(harfbuzz REQUIRED)
-    list(APPEND LIBRARIES harfbuzz::harfbuzz)
-endif()
-
 if (MRV2_NETWORK)
     set(LIBRARIES_PRIVATE
 	Poco::Net
