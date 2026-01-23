@@ -132,6 +132,7 @@ if (WIN32 OR APPLE)
 	set(HARFBUZZ_LIB harfbuzz::harfbuzz)
     endif()
 endif()
+message(FATAL_ERROR "harfbuzz ${HARFBUZZ_LIB}")
 
 set(LIBRARIES OTIO::opentimelineio fltk::fltk-shared ${HARFBUZZ_LIB} Imath::Imath nlohmann_json::nlohmann_json)
 set(LIBRARIES_PRIVATE Freetype::Freetype MINIZIP::minizip-ng ZLIB::ZLIB)
