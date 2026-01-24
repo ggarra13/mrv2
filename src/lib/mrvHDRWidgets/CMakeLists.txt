@@ -37,4 +37,5 @@ install(TARGETS mrvHDRWidgets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
+    PUBLIC_HEADER DESTINATION include/mrvHDRWidgets
     COMPONENT libraries)

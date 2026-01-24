@@ -173,6 +173,12 @@ namespace mrv
         int handle_mouse_click(int event, const math::Vector2i& pos);
 
     protected:
+        void _drawLine(
+            const std::shared_ptr<timeline_vlk::Render>& render,
+            const std::string& line, int x, int y,
+            std::vector<timeline::TextInfo>& textInfos,
+            unsigned& cursor_count,
+            math::Vector2i& cursor_pos);
         int kf_select_all();
         int kf_copy();
         int kf_copy_cut();

@@ -10,7 +10,7 @@ ProcessorCount(NPROCS)
 
 set( Python_REPOSITORY https://github.com/python/cpython)
 
-set( Python_VERSION 3.12 )  # was 3.11.9
+set( Python_VERSION 3.12 ) 
 set( Python_TINY    12 )
 
 set( Python_GIT_TAG v${Python_VERSION}.${Python_TINY})
@@ -71,7 +71,8 @@ if(APPLE)
     # Install must NOT be run with -j ${NPROCS} or can run into a race issue.
     set( Python_INSTALL
 	COMMAND make install
-	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade)
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m pip install meson)
 
 elseif(UNIX)
     

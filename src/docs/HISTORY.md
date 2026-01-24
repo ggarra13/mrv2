@@ -30,8 +30,8 @@ I use the email information to contact you privately.  I don't sell your informa
 - u$  25 for a Solo node-locked license for one year.
 - u$  50 for a Standard node-locked standard license for one year.
 - u$  75 for a Edit node-locked license with annotations and editing tools for one year.
-- u$ 150 for a Pro node-locked license to own.
-- u$ 300 for a Pro+ node-locked license to own (monthly).
+- u$ 150 for a Pro node-locked license for one year.
+- u$ 300 for a Pro+ node-locked license to own (allows changing machine).
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
@@ -56,7 +56,6 @@ ChangeLog
 
 - Improved the look of Text Annotation Widget on Vulkan backend.
 - Major refactoring to improve compilation performance.
-- Removed Render->HDR->Tonemapping menu from Vulkan backend as it was confusing, since Vulkan does not support tone mapping.
 - Upgraded to LibRaw v0.22.0
 - Documented mrv2.colors file.  You can create one in $HOME/.filmaura to take over the defaults.
 - Changed HUD font for better readability.
@@ -65,6 +64,22 @@ ChangeLog
 - Fixed the OpenGL bug in macOS mrv2.  There's no longer any need to change your System Settings.
 - Switch to A Compare Mode if only a single file is left open.
 - Python command to getVoiceAnnotationsJSON now returns the projection matrix.
+- Fixed macOS Intel versions crashing when playing a movie with Google's VPX codec.
+- Improved HDR detection on Linux, macOS and Windows. This makes colors more pleasing instead of being too much saturated.
+- Monitor's minLuminance and maxLuminance are now returned. This can make HDR more pleasing if your monitor has less than 1000 nits (common in game and laptop monitors which have 200-400 nits).
+- On the VUlkan version of mrv2, the monitor's min and max nits are now reported.
+- Note that the OpenGL version will still suffer from too saturated colors.
+- Fixed license server to automatically restart in case of failure or exit.
+- Added support for emojis with multiple Unicode code points thanks on the OpenGL and Vulkan backends.  The Vulkan backend displays emojis in grayscale.  The OpenGL backend displays them as monochrome.
+- Fixed pyFLTK that had gotten broken due to a swig update somewhere along the way.
+- Added support for multiple monitors switching from SDR to HDR and viceversa if they are of different types on the Vulkan backend.
+- Improved the download page to use two menu pulldowns for easily downloading the version you want without cluttering your screen.
+- Upgraded to NDI SDK Advanced v6.3.
+- Fixed hdr utility to also use the new HDR algorithm.
+- Fixed building hdr utility on macOS Silicon.
+- Fixed a font error when loading a clip on the Vulkan backend.
+- Fixed .jpg loading on the Vulkan backend on macOS Intel.
+
 
 
 v1.5.2

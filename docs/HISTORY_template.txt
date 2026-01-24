@@ -1,110 +1,67 @@
-v1.4.1
+v1.5.3
 ======
+mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
 
-mrv2 and vmrv2 are an open source professional players and review tools for vfx, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
+If you are unsure what binary to choose, go to:
 
-This is the first donationware version of binaries for mrv2 and vmrv2.
+https://mrv2.sourceforge.io/downloads/mrv2-download-page.html
 
-It ships now in two compiled versions:
+mrv2 ships now in two compiled versions:
 
-- mrv2 with OpenGL backend  (free up to version 1.4.0,
-     	       	      	     donationware afterwards)
-- vmrv2 with Vulkan backend (donationware)
+   - mrv2 with OpenGL backend  (free and donationware)   
+   - vmrv2 with Vulkan backend (free and donationware)
 
-Difference between OpenGL and Vulkan
-------------------------------------
-
-Vulkan is a new open source API, compared to OpenGL that it might get deprecated on some platforms like macOS. It supports true HDR (High Dynamic Range), it is about 20% to 50% faster than the OpenGL version (on Windows, macOS M1+ and it is the same speed for Linux's GNOME 48 and later) but it does not support OpenUSD.
-
-OpenGL's main benefit at this point is that it supports OpenUSD and works better on old CPUs (macOS Intel and older Wayland compositors).
+It also ships for many more architectures, so be careful to download the correct one.
+It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).
 
 Prices for binaries
 -------------------
 
+For unlocking features, once mrv2 loads, you should go to:
+  
+       Help->Unlock Features.
+       
 Donationware prices of binary licenses through PayPal:
 
-https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
 
-I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
+I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you if you run into issues.
 
-- u$  50 for a node-lock license for one year.
-- u$ 150 for a node-lock license to own.
-- The prices are cumulative.  If you donate, say u$5 in 10 months, you can access the node-lock license for one year.
+- u$  25 for a Solo node-locked license for one year.
+- u$  50 for a Standard node-locked standard license for one year.
+- u$  75 for a Edit node-locked license with annotations and editing tools for one year.
+- u$ 150 for a Pro node-locked license to own.
+- u$ 300 for a Pro+ node-locked license to own (monthly).
 
 License works for both mrv2 and vmrv2 (you can have both installed).
+You need to have an internet connection for the license system.
+
+The donationware version when running without a donation, does not have:
+
+    - Annotations (available from Solo and later)
+    - Python (available in Standard and later)
+    - Editing (available in Edit and later)
+    - Voice and Link Annotations (available in Pro)
+
+They do have, however:
+
+    - Tone-mapping (OpenGL) and HDR (Vulkan)
+    - OpenEXR layer switching
+    - Saving Images and Movies with Audio
+
+Prices might change (go up or down) depending on competition and new features.
 
 ChangeLog
 ---------
 
-- Improved FPS reporting to not flicker so much or, on Wayland + Vulkan, be double its value on Presentation mode.
-- Fixed starting of mrv2/vmrv2 on Windows when the installation directory has international characters like üí etc.
-- Reverted to use FIFO instead of MAILBOX presentation mode in Vulkan.
-- Some Unicode (UTF-8) fixes.
-- Fixed shortcuts on Windows installer without having to modify the PATH variable.
-- Fixed OpenGL backend with HDR to tonemap properly to 100nits.
-- Fixed Vulkan SDR backend with HDR to tonemap properly to 100nits.
-- Added missing Hable tonemap to Preferences->Render->Tonemap->Algorithm.
-- Added VSync support to Vulkan backend (so that FIFO/MAILBOX can be chosen).
-- Added Stereo 3D Scanlines, Columns and Checkerboard for Vulkan.
-- Added Render->HDR->Gamut Mapping controls.
-- Split Preferences->Render into Render and HDR.
-- Added Preferences->HDR->Gamut Mapping controls.
-- Fixed Stereo 3D Checkerboard on OpenGL due to deprecation of GL_POINTS.
-- Fixed hiding of pixel bar on Vulkan backend after opening/closing Preference Window.
-- Fixed some movies's play rate not being valid for timecode due to minor rounding errors.
-- Made Stereo 3D Anaglyph work on MacOS.
-- Updated Frame/Seconds Entry Widgets to allow calculations, so that you can
-  type, for example:
-  	  10 + 5 and get 15.
-- Updated compile to work with cmake 4.1.1.
-- Updated to OpenEXR v3.4 (from 3.3.5).
-- Added reading and writing of colorInteropId attribute, but no interpretation
-  of the parameter yet.
-- Updated to use Imath v3.2.1 (from 3.1.9)	
-- Updated to use cpptrace v1.0.4
-- Updated to use FFmpeg v8.0 (from v7.0.1)
-- Updated beta builds to build OpenUSD on Windows and macOS 13, as disk space is no longer an issue (Thank you Microsoft!).
-- Refactored mrvGL/mrvTimelineViewport.cpp and mrvVk/mrvTimelineViewport.cpp to common classes in mrvCommonBackend/mrvTimelineViewport.cpp
-- Refactored also mrvTimelineViewportEvents.cpp.
-- Flipped Y coordinate of pixel toolbar on the Vulkan backend to make it consistent with the OpenGL backend and OpenEXR which also has 0, 0 at the bottom left corner.
-- Fixed PDF thumbnail creation under Vulkan backend.
-- Improved focus on Timecode widgets.  Now entering them will draw the cursor and leaving a timecode widget, will not throw focus.  This makes the whole
-  UI much more friendly.
-- Added .po translations to hdr utility.
-- Fixed switching languages on Linux and macOS.
-- Made demo mode pop up a license request every 5 minutes of use.
-- Made demo mode not allow clicking twice on draw actions.
-- Fixed dpkg and rpm uninstallers failing due to a syntax error on bash script.
-- Removed deprecated is_valid_timecode_rate from OTIO pybind11's rationalTime.
-- Fixed audio saving to also store the duration of each frame.
-- Fixed HDR data also potentially being added to audio streams when saving a movie.
-- Improved locate_python in etc/functions.sh.
-- Added expiration date reporting on licenses.
-- Put a work around on Wayland Panel Windows to avoid having them go off-screen.
-  Note that they may still flicker and due to limitations of Wayland at 4k with
-  60 FPS.
-- Fixed current frame in timeline not updating on 4K videos sometimes on the
-  OpenGL backend.
-- Added Voice Over Annotations (new icon at the bottom of the toolbar).  How to use it:
-  	* Select the microphone icon.
-	* Click somewhere on the canvas. 
-	  You are now recording your mouse positions, LMB presses, and your
-	  voice on the default microphone (you can change it in the
-	  Preferences->Voice Over section)
-	* Click on the button again to stop recording.  It will change to a
-	  stop button in yellow.
-	* Click again on the button to replay the mouse moves and the audio.
-- Voice Annotations can now be saved in the session.  Note that voice over
-  audios are saved to the specified temp directory and should not be removed
-  for playback.
-- Voice Annotations are now saved and played in stereo.
-- Added blinking recording button for Voice Annotation.
-- Fixed incorrect resizing of window when being in fullscreen and loading a
-  smaller clip than the window one.
-- Added a -np (-noPython) flag for faster start ups.
-- Fixed saving of single OpenEXR images failing on some cases on Vulkan backend.
-- Fixed scaling of single OpenEXR images.
-- Made UI more responsive when loading images (specially from the command-line).
-- Added Vulkan install instructions to vmrv2 documentation for Ubuntu and
-  Red Hat / Fedora 42 / Rocky Linux.
-
+- Improved the look of Text Annotation Widget on Vulkan backend.
+- Major refactoring to improve compilation performance.
+- Removed Render->HDR->Tonemapping menu from Vulkan backend as it was confusing, since Vulkan does not support tone mapping.
+- Upgraded to LibRaw v0.22.0
+- Documented mrv2.colors file.  You can create one in $HOME/.filmaura to take over the defaults.
+- Changed HUD font for better readability.
+- Fixed a resizing bug on Windows when using two monitors with different scaling factors.
+- Added support for Pixar's Renderman .z or .zfile shadow map files.
+- Fixed the OpenGL bug in macOS mrv2.  There's no longer any need to change your System Settings.
+- Switch to A Compare Mode if only a single file is left open.
+- Python command to getVoiceAnnotationsJSON now returns the projection matrix.

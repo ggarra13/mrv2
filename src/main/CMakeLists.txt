@@ -19,9 +19,9 @@ set(LIBRARIES )
 
 if(MRV2_PYBIND11)
     list(APPEND LIBRARIES mrvPy)
+else()
+    list(APPEND LIBRARIES mrvApp)
 endif()
-
-list(APPEND LIBRARIES mrvApp)
 
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
     list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
@@ -49,19 +49,6 @@ target_link_directories(mrv2 BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/loca
 set(PRUNE_SYMBOLS )
 set(EXCLUDE_LIBRARIES )
 
-#
-# For Vulkan development we turn off strip symbols
-#
-# if(WIN32)
-#     set(PRUNE_SYMBOLS "/OPT:REF" "/OPT:ICF")
-# elseif(APPLE)
-#     set(PRUNE_SYMBOLS "-Wl,-dead_strip")
-# else(UNIX)
-#     set(PRUNE_SYMBOLS "-Wl,--gc-sections")
-#     set(EXCLUDE_LIBRARIES "-Wl,--exclude-libs=ALL")
-# endif()
-# target_link_options(mrv2 PUBLIC ${EXCLUDE_LIBRARIES} PRIVATE ${PRUNE_SYMBOLS})
-
 install(TARGETS mrv2
     RUNTIME DESTINATION bin COMPONENT applications
     LIBRARY DESTINATION lib COMPONENT libraries
@@ -77,18 +64,6 @@ include( ../../cmake/translations.cmake )
 # Handle documentation
 #
 include( ../../cmake/documentation.cmake )
-
-
-#
-# Handle install of DLLs for mrv2
-#
-# if (WIN32)
-#     add_custom_command(TARGET mrv2 POST_BUILD
-# 	COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:mrv2> $<TARGET_RUNTIME_DLLS:mrv2>
-# 	COMMAND_EXPAND_LISTS
-#     )
-# endif()
-
 
 #
 # Extract python version

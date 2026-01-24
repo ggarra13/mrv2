@@ -10,9 +10,6 @@ graphical user interfaces."
 %module(docstring=DOCSTRING, directors="1", package="fltk._fltk") fltk
 
 
-// 3. Your module definition follows...
-%module mymodule
-
 %feature("director");
 
 //%feature("nodirector") Fl_Valuator;
@@ -22,6 +19,7 @@ graphical user interfaces."
 %feature("nodirector") Fl_Copy_Surface_Driver;
 %feature("nodirector") Fl_SVG_File_Surface;
 %feature("nodirector") Fl_EPS_File_Surface;
+%feature("nodirector") Fl_Display_Device;
 
 %feature("compactdefaultargs");
 
@@ -352,3 +350,8 @@ if sys.version > '3':
 
 // polymorphism patches (python code)
 %include pyFinalize.i
+
+%pythoncode {
+pyfltk_features = dict(run_and_wait_available_with_default_sigint_handler = True,
+                       valuator_format_can_return_buffer                  = True)
+}

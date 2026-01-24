@@ -6,6 +6,8 @@
 
 #include <deque>
 
+#include "mrvUI/mrvMonitor.h"
+
 #include "mrvCore/mrvString.h"
 
 #include <tlTimeline/BackgroundOptions.h>
@@ -200,6 +202,10 @@ namespace mrv
 
             //! Tooltip.
             Tooltip* tooltip = nullptr;
+
+            // HDR monitor tracking.
+            int screen_index = 0;
+            monitor::HDRCapabilities hdrCapabilities;
         };
 
     }  // namespace vlk

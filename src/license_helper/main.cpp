@@ -302,7 +302,7 @@ Solo
 Standard
 Edit
 Pro
-Pro+ (Monthly)
+Pro+
 )TEXT");
                     plans->end();
                 }
@@ -327,16 +327,16 @@ Solo
 Standard
 Edit
 Pro
-Pro+ (Monthly)
+Pro+
 )TEXT");
                 plan_features = new Fl_Box(320, 20, 300, 100);
                 plan_features->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                 plan_features->label(_(R"TEXT(
 Annotations and Saving only for a year
-Solo + Python
-Standard + Editing
-Editing + Voice and Link Annotations
-All of Pro + change your machine[s] as you want
+Solo + Python for one year
+Standard + Editing for one year
+Editing + Voice and Link Annotations for one year
+All of Pro but without expiration date (you own it).
 )TEXT"));
                 what->end();
                 prices->fixed(what, what->h());

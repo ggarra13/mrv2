@@ -2,6 +2,9 @@
 # mrv2 
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+# Note: mrvMonitor_x11.cpp, mrvMonitor_wayland.cpp, mrvMonitor_macOS.cpp/.h,
+#       mrvMonitor_win32.cpp, mrvMonitor_linux.cpp
+#       are opened by a #ifdef in mrvMonitor.cpp
 set(HEADERS
     mrvAsk.h
     mrvDesktop.h
@@ -48,4 +51,5 @@ install(TARGETS mrvUI
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
+    PUBLIC_HEADER DESTINATION include/mrvUI
     COMPONENT libraries)

@@ -5,16 +5,16 @@
 set(HEADERS
     mrvNDICallbacks.h
     mrvNDIView.h
-    mrvHDRMonitor.h
+    mrvMonitor.h
 )
 
 set(SOURCES
     mrvNDICallbacks.cpp
     mrvNDIView.cpp
-    mrvHDRMonitor.cpp
+    mrvMonitor.cpp
 )
 if(APPLE)
-    list(APPEND SOURCES mrvHDRMonitor.mm)
+    list(APPEND SOURCES mrvMonitor_macOS.mm)
 endif()
 
 find_package(libplacebo REQUIRED)
@@ -42,4 +42,5 @@ install(TARGETS mrvHDR
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
+    PUBLIC_HEADER DESTINATION include/mrvHDR
     COMPONENT libraries )
