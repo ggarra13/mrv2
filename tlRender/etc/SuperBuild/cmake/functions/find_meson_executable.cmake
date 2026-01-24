@@ -20,11 +20,23 @@ function(find_meson_executable TARGET)
 	if(WIN32)
             set(_LOCAL_MESON "${CMAKE_INSTALL_PREFIX}/Bin/Scripts/meson")
         else()
-            set(_LOCAL_MESON "${CMAKE_INSTALL_PREFIX}/bin/meson")
+	    # Try to find it again after installation
+	    find_program(_LOCAL_MESON NAMES
+		meson
+		PATHS
+		"${CMAKE_INSTALL_PREFIX}/bin"
+		/opt/homebrew/bin        # M1 default
+		/usr/local/bin           # Intel default
+		$ENV{PATH}
+	    )
             set(_LOCAL_PYTHONPATH "PYTHONPATH=${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/site-packages")
         endif()
     endif()
     
+    if (NOT EXISTS "${_LOCAL_MESON}")
+	message(FATAL_ERROR "Could not locate meson in ${CMAKE_INSTALL_PREFIX}/bin nor in PATH")
+    endif()
+	    
     # 2. Lift the final values to PARENT_SCOPE
     set(MESON_EXECUTABLE "${_LOCAL_MESON}" PARENT_SCOPE)
     set(${TARGET}_PYTHONPATH "${_LOCAL_PYTHONPATH}" PARENT_SCOPE)
