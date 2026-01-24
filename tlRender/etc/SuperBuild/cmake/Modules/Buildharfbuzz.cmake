@@ -7,8 +7,7 @@ include(ExternalProject)
 set(harfbuzz_GIT_REPOSITORY "https://github.com/harfbuzz/harfbuzz.git")
 set(harfbuzz_GIT_TAG "12.3.1")
 
-set(harfbuzz_DEPENDENCIES ${PYTHON_DEP})
-list(APPEND harfbuzz_DEPENDENCIES Freetype)
+set(harfbuzz_DEPENDENCIES Freetype)
 
 message(STATUS "harfbuzz DEPENDENCIES=${harfbuzz_DEPENDENCIES}")
 
