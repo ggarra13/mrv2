@@ -1217,7 +1217,8 @@ namespace mrv
                     {
                         if (cursor_count < cursor)
                             cursor_pos.x += glyph->advance;
-                        currentDrawX += glyph->advance;
+                        if (glyph->info.code != 0x003)
+                            currentDrawX += glyph->advance;
                     }
                     ++cursor_count;
                 }

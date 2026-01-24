@@ -244,18 +244,18 @@ namespace tl
                 const int padding = path.getPadding();
                 if (padding == 0)
                 {
-                    sprintf(buf, "%s%s%%d%s",
-                            directory.c_str(),
-                            baseName.c_str(),
-                            extension.c_str());
+                    snprintf(buf, 4096, "%s%s%%d%s",
+                             directory.c_str(),
+                             baseName.c_str(),
+                             extension.c_str());
                 }
                 else
                 {
-                    sprintf(buf, "%s%s%%0%dd%s",
-                            directory.c_str(),
-                            baseName.c_str(),
-                            padding,
-                            extension.c_str());
+                    snprintf(buf, 4096, "%s%s%%0%dd%s",
+                             directory.c_str(),
+                             baseName.c_str(),
+                             padding,
+                             extension.c_str());
                 }
                 formatFileName = buf;
             }
