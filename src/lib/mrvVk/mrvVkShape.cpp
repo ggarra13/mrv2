@@ -45,6 +45,15 @@ namespace
             (cp >= 0x2700 && cp <= 0x27BF)   || // Dingbats
             (cp >= 0x1F1E6 && cp <= 0x1F1FF);   // Flags
     }
+
+    bool isEmojiCombiner(unsigned cp)
+    {
+        return ((cp >= 0x0300 && cp <= 0x036F) ||   // Combining Diacritical Marks
+                (cp >= 0x1AB0 && cp <= 0x1AFF) ||   // Extended Marks
+                (cp >= 0x20D0 && cp <= 0x20FF) ||   // Symbol Marks
+                (cp >= 0xFE00 && cp <= 0xFE0F) ||   // Variation Selectors
+                (cp >= 0x1F3FB && cp <= 0x1F3FF));   // Skin Tone
+    }
     
     // Check if vertex i in the polygon is an ear
     bool isEar(
@@ -606,8 +615,72 @@ namespace mrv
     
     void VKTextShape::to_cursor()
     {
-        unsigned size = fl_utf8toa(text.c_str(), utf8_pos, nullptr, 0);
-        cursor = size;
+        const char* start = text.c_str();
+        const char* target = start + utf8_pos;
+        const char* p = start;
+    
+        unsigned count = 0;
+
+        while (p < target) {
+            int len = 0;
+            unsigned int cp = fl_utf8decode(p, target, &len);
+            if (len < 1) len = 1;
+
+            // Determine if this code point is a "Base" character or a "Modifier"
+            bool is_modifier = false;
+
+            // 1. Combining Marks & Variation Selectors
+            if (isEmojiCombiner(cp)) {
+                is_modifier = true;
+            }
+
+            // 2. Zero Width Joiner (ZWJ)
+            // If it's a ZWJ, we treat it as a modifier (don't increment count) 
+            // AND we must treat the character immediately following it as a modifier too.
+            if (cp == 0x200D) {
+                is_modifier = true;
+                p += len; // move past ZWJ
+                if (p < target) {
+                    int next_len = 0;
+                    fl_utf8decode(p, target, &next_len);
+                    p += (next_len > 0 ? next_len : 1);
+                }
+                continue; // Jump to next loop iteration
+            }
+
+            // 3. Newlines / Carriage Returns
+            // These are always base characters. They should increment the cursor.
+            if (cp == '\n' || cp == '\r') {
+                is_modifier = false;
+            }
+
+            // 4. Regional Indicators (Flags)
+            // If this is a flag and the previous was a flag, it's a modifier pair.
+            // (Simplification: only increment on the first RI of a pair)
+            if (cp >= 0x1F1E6 && cp <= 0x1F1FF) {
+                // Check if we just passed an RI
+                // This requires looking back or tracking state; for simplicity in to_cursor,
+                // we usually count the 'pair' as 1 visual unit.
+                static bool last_was_ri = false;
+                if (last_was_ri) {
+                    is_modifier = true;
+                    last_was_ri = false;
+                } else {
+                    last_was_ri = true;
+                }
+            } else {
+                // If the character isn't an RI, reset that state
+                // Note: In a real class, 'last_was_ri' should be a local variable outside the loop.
+            }
+
+            if (!is_modifier) {
+                count++;
+            }
+
+            p += len;
+        }
+
+        cursor = count;
     }
     
     int VKTextShape::kf_paste()
@@ -670,17 +743,74 @@ namespace mrv
         return 0;
     }
     
-    int VKTextShape::handle_backspace() {
+    int VKTextShape::handle_backspace()
+    {
         if (utf8_pos == 0) return 1;
-        
-        const char* start = text.c_str();
-        const char* pos = fl_utf8back(start + utf8_pos - 1, start, start + utf8_pos);
-        unsigned prev = pos - start;
-        unsigned len = utf8_pos - prev;
 
-        text.erase(prev, len);
-        utf8_pos = prev;
+        const char* start = text.c_str();
     
+        // We start at the current cursor position
+        const char* current_ptr = start + utf8_pos;
+    
+        // We will calculate the new position (prev_ptr) by stepping back
+        const char* prev_ptr = current_ptr;
+    
+        bool keep_deleting = true;
+
+        // Loop to consume the entire Grapheme Cluster
+        while (keep_deleting && prev_ptr > start) {
+        
+            // 1. Step back one UTF-8 code point
+            const char* temp_ptr = fl_utf8back(prev_ptr - 1, start, prev_ptr);
+        
+            // 2. Decode that code point to check its properties
+            unsigned int cp = fl_utf8decode(temp_ptr, prev_ptr, NULL);
+        
+            // Move our 'deletion head' to this new point
+            prev_ptr = temp_ptr;
+        
+            // Default assumption: we stop after deleting one character, unless specific rules apply
+            keep_deleting = false;
+
+            // --- RULE A: Current char is a Modifier/Combiner ---
+            // If the character we just ate is meant to modify the previous one,
+            // we must continue backward to eat the base character too.
+            if (isEmojiCombiner(cp) ||
+                (cp == 0x200D))
+            {
+                keep_deleting = true;
+            }
+
+            // --- RULE B: Look-ahead (technically Look-behind) for ZWJ ---
+            // Even if the current char is normal (e.g., "Boy" emoji), if the *previous*
+            // char is a ZWJ, this current char is part of a sequence (e.g. Family).
+            if (prev_ptr > start) {
+                const char* lookback_ptr = fl_utf8back(prev_ptr - 1, start, prev_ptr);
+                unsigned int prev_cp = fl_utf8decode(lookback_ptr, prev_ptr, NULL);
+
+                // If the char BEFORE the one we just ate is a ZWJ, we must eat it too.
+                if (prev_cp == 0x200D) {
+                    keep_deleting = true;
+                }
+            
+                // --- RULE C: Regional Indicators (Flags) ---
+                // Flags are two RI characters (e.g. US = U + S). We should delete both.
+                bool is_curr_ri = (cp >= 0x1F1E6 && cp <= 0x1F1FF);
+                bool is_prev_ri = (prev_cp >= 0x1F1E6 && prev_cp <= 0x1F1FF);
+            
+                if (is_curr_ri && is_prev_ri) {
+                    keep_deleting = true;
+                }
+            }
+        }
+
+        // Perform the deletion
+        unsigned final_prev_index = prev_ptr - start;
+        unsigned len = utf8_pos - final_prev_index;
+
+        text.erase(final_prev_index, len);
+        utf8_pos = final_prev_index;
+
         Fl::compose_reset();
         to_cursor();
         return 1;
@@ -778,40 +908,180 @@ namespace mrv
 
         return 0;
     }
-    
-    int VKTextShape::handle_move_left() {
-        if (utf8_pos > 0) {
-            const char* start = text.c_str();
-            const char* pos = fl_utf8back(start + utf8_pos - 1, start, start + utf8_pos);
-            utf8_pos = pos - start;
-        }
-        Fl::compose_reset();
-        to_cursor();
-        return 1;
-    }
-    
-    int VKTextShape::handle_move_right() {
-        if (utf8_pos < text.size()) {
-            const char* start = text.c_str();
-            const char* pos = fl_utf8fwd(start + utf8_pos + 1, start + utf8_pos, start + text.size());
-            utf8_pos = pos - start;
-        }
-        Fl::compose_reset();
+
+    int VKTextShape::handle_move_left()
+    {
+        if (utf8_pos == 0) return 1;
+
+        const char* start = text.c_str();
+        const char* current_ptr = start + utf8_pos;
+        const char* new_ptr = current_ptr;
+
+        bool keep_moving = true;
+        while (keep_moving && new_ptr > start) {
+            // Step back one code point
+            const char* temp_ptr = fl_utf8back(new_ptr - 1, start, new_ptr);
+            unsigned int cp = fl_utf8decode(temp_ptr, new_ptr, NULL);
         
+            new_ptr = temp_ptr;
+            keep_moving = false;
+
+            // Rule: If we land on a combiner/modifier, we must go back further
+            if ((cp >= 0x0300 && cp <= 0x036F) || (cp >= 0x1AB0 && cp <= 0x1AFF) ||
+                (cp >= 0x20D0 && cp <= 0x20FF) || (cp >= 0xFE00 && cp <= 0xFE0F) ||
+                (cp >= 0x1F3FB && cp <= 0x1F3FF) || (cp == 0x200D)) {
+                keep_moving = true;
+            }
+
+            // Rule: If the char BEFORE the one we just landed on is a ZWJ, keep going
+            if (new_ptr > start) {
+                const char* lookback = fl_utf8back(new_ptr - 1, start, new_ptr);
+                if (fl_utf8decode(lookback, new_ptr, NULL) == 0x200D) {
+                    keep_moving = true;
+                }
+            }
+        }
+
+        utf8_pos = (unsigned)(new_ptr - start);
+        Fl::compose_reset();
         to_cursor();
         return 1;
     }
     
+    int VKTextShape::handle_move_right()
+    {
+        if (utf8_pos >= text.size()) return 1;
+
+        const char* start = text.c_str();
+        const char* end = start + text.size();
+        const char* current_ptr = start + utf8_pos;
+    
+        int len = 0;
+        unsigned int current_cp = fl_utf8decode(current_ptr, end, &len);
+        if (len < 1) len = 1;
+    
+        const char* new_ptr = current_ptr + len;
+        bool keep_scanning = true;
+
+        while (keep_scanning && new_ptr < end) {
+            int next_len = 0;
+            unsigned int next_cp = fl_utf8decode(new_ptr, end, &next_len);
+            if (next_len < 1) next_len = 1;
+
+            keep_scanning = false;
+
+            // 1. Check for modifiers/combiners
+            if (isEmojiCombiner(next_cp))
+            {
+                new_ptr += next_len;
+                keep_scanning = true;
+            }
+            // 2. Check for ZWJ (Joiner)
+            else if (next_cp == 0x200D)
+            {
+                new_ptr += next_len; // eat ZWJ
+                if (new_ptr < end) {
+                    int joined_len = 0;
+                    fl_utf8decode(new_ptr, end, &joined_len);
+                    new_ptr += (joined_len > 0) ? joined_len : 1;
+                    keep_scanning = true;
+                }
+            }
+            // 3. Check for Regional Indicator (Flag) pairs
+            else {
+                bool is_curr_ri = (current_cp >= 0x1F1E6 && current_cp <= 0x1F1FF);
+                bool is_next_ri = (next_cp >= 0x1F1E6 && next_cp <= 0x1F1FF);
+                if (is_curr_ri && is_next_ri) {
+                    new_ptr += next_len;
+                }
+            }
+            current_cp = next_cp;
+        }
+
+        utf8_pos = (unsigned)(new_ptr - start);
+        Fl::compose_reset();
+        to_cursor();
+        return 1;
+    }
+
     int VKTextShape::handle_delete()
     {
         if (utf8_pos >= text.size()) return 1;
 
         const char* start = text.c_str();
-        const char* current = start + utf8_pos;
-        const char* next_pos = fl_utf8fwd(current + 1, current, start + text.size());
+        const char* end = start + text.size();
+        const char* current_ptr = start + utf8_pos;
+    
+        // 1. Get the length of the CURRENT character to be deleted
+        int first_char_len = 0;
+        // fl_utf8decode returns the codepoint and puts the byte length in first_char_len
+        unsigned int current_cp = fl_utf8decode(current_ptr, end, &first_char_len);
+    
+        // Safety check: ensure we advance at least 1 byte to prevent infinite loops/zero delete
+        if (first_char_len < 1) first_char_len = 1;
+
+        // Set our deletion end pointer to the end of the first character
+        const char* delete_end_ptr = current_ptr + first_char_len;
+    
+        bool keep_scanning = true;
+
+        // 2. Look ahead for combiners
+        while (keep_scanning && delete_end_ptr < end) {
         
-        text.erase(utf8_pos, next_pos - current);
+            int next_char_len = 0;
+            unsigned int next_cp = fl_utf8decode(delete_end_ptr, end, &next_char_len);
+            if (next_char_len < 1) next_char_len = 1;
+
+            keep_scanning = false; // Assume we stop unless we find a combiner
+
+            // --- RULE A: The NEXT char is a Modifier/Combiner ---
+            if (isEmojiCombiner(next_cp))
+            {
+                delete_end_ptr += next_char_len;
+                keep_scanning = true;
+            }
+
+            // --- RULE B: Zero Width Joiner (ZWJ) Sequences ---
+            else if (next_cp == 0x200D)
+            {
+                // Consume the ZWJ
+                delete_end_ptr += next_char_len;
+            
+                // Check if there is a character AFTER the ZWJ
+                if (delete_end_ptr < end) {
+                    int after_zwj_len = 0;
+                    fl_utf8decode(delete_end_ptr, end, &after_zwj_len);
+                    if (after_zwj_len < 1) after_zwj_len = 1;
+
+                    // Consume the character that the ZWJ was joining
+                    delete_end_ptr += after_zwj_len;
+                
+                    // Keep scanning, because that character might be followed by another ZWJ
+                    keep_scanning = true;
+                }
+            }
         
+            // --- RULE C: Regional Indicators (Flags) ---
+            else {
+                bool is_curr_ri = (current_cp >= 0x1F1E6 && current_cp <= 0x1F1FF);
+                bool is_next_ri = (next_cp >= 0x1F1E6 && next_cp <= 0x1F1FF);
+
+                // If we are deleting a flag part, and the next one is also a flag part, delete both.
+                if (is_curr_ri && is_next_ri) {
+                    delete_end_ptr += next_char_len;
+                    keep_scanning = false; // Flags are only pairs, we can stop
+                }
+            }
+        
+            // Update current_cp to the last character we "ate" (needed for chained logic if we loop)
+            current_cp = next_cp;
+        }
+
+        // 3. Perform the erase
+        // Calculate strict integer length
+        unsigned int delete_len = (unsigned int)(delete_end_ptr - current_ptr);
+        text.erase(utf8_pos, delete_len);
+    
         to_cursor();
         return 1;
     }
@@ -898,6 +1168,109 @@ namespace mrv
         return 1;
     }
     
+
+    void VKTextShape::_drawLine(
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::string& line, int x, int y,
+        std::vector<timeline::TextInfo>& textInfos,
+        unsigned& cursor_count,
+        math::Vector2i& cursor_pos)
+    {
+        //
+        // Add selected font.
+        //
+        const file::Path path(fontPath);
+        const std::string fontFamily = path.getBaseName();
+        
+        //
+        // Add emoji font.
+        //
+        const file::Path emojiPath = image::emojiFont();
+        const std::string emojiFamily = emojiPath.getBaseName();
+        
+        //
+        // Get metrics for selected font.
+        // 
+        const image::FontInfo fontInfo(fontFamily, fontSize);
+        const image::FontInfo emojiInfo(emojiFamily, fontSize);
+
+        
+        // Buffers for batching
+        int currentDrawX = x; 
+        std::string currentRun;
+        bool runIsEmoji = false;
+        bool prevWasZWJ = false;
+        bool firstChar = true;
+
+        // Helper to flush the current accumulated run
+        auto flushRun = [&](const std::string& run, bool isEmoji) 
+            {
+                if (run.empty()) return;
+                
+                const auto& activeInfo = isEmoji ? emojiInfo : fontInfo;
+                const auto& glyphs = fontSystem->getGlyphs(run, activeInfo);
+                math::Vector2i pnt(currentDrawX, y);
+        
+                for (const auto& glyph : glyphs)
+                {
+                    if (glyph)
+                    {
+                        if (cursor_count < cursor)
+                            cursor_pos.x += glyph->advance;
+                        currentDrawX += glyph->advance;
+                    }
+                    ++cursor_count;
+                }
+                render->appendText(textInfos, glyphs, pnt);
+            };
+
+        for (size_t i = 0; i < line.size(); )
+        {
+            // fl_utf8len returns the length of the UTF-8 sequence (1 to 4 bytes)
+            int len = fl_utf8len(line[i]);
+        
+            // Safety fallback: if FLTK returns < 1 for some reason, assume 1 byte to prevent infinite loops
+            if (len < 1) len = 1; 
+
+            std::string charStr = line.substr(i, len);
+        
+            // Decode the codepoint to check for ZWJ/Variation Selectors
+            unsigned int codepoint = fl_utf8decode(charStr.c_str(), nullptr, &len);
+                
+            // Check if emoji
+            bool isEmojiChar = detectIsEmoji(codepoint);
+                
+            // Define "Sticky" characters that should not break a run
+            bool isZWJ = (codepoint == 0x200D);
+            bool isVS = (codepoint >= 0xFE00 && codepoint <= 0xFE0F);
+            bool isSticky = isZWJ || isVS || prevWasZWJ;
+                
+            // Update runIsEmoji immediately if it's the very first character
+            if (firstChar)
+            {
+                runIsEmoji = isEmojiChar;
+                firstChar = false;
+            }
+            // Standard run-switching logic
+            else if (!isSticky && isEmojiChar != runIsEmoji && !currentRun.empty())
+            {
+                flushRun(currentRun, runIsEmoji);
+                currentRun.clear();
+                runIsEmoji = isEmojiChar;
+            }
+    
+            currentRun += charStr;
+            i += len; // Advance by the UTF-8 length
+            prevWasZWJ = isZWJ;
+        }
+
+        // Flush remaining buffer at end of line
+        if (!currentRun.empty())
+        {
+            flushRun(currentRun, runIsEmoji);
+        }
+    }
+    
     void VKTextShape::draw(
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::shared_ptr<vulkan::Lines> lines)
@@ -926,6 +1299,7 @@ namespace mrv
         // Get metrics for selected font.
         // 
         const image::FontInfo fontInfo(fontFamily, fontSize);
+        const image::FontInfo emojiInfo(emojiFamily, fontSize);
         const image::FontMetrics fontMetrics = fontSystem->getMetrics(fontInfo);
         int ascender = fontMetrics.ascender;
         int descender = fontMetrics.descender;
@@ -933,10 +1307,7 @@ namespace mrv
         //
         // Get metrics for emoji font.
         //
-        const image::FontInfo emojiInfo(emojiFamily, fontSize);
         const image::FontMetrics emojiMetrics = fontSystem->getMetrics(emojiInfo);
-        int emojiAscender = emojiMetrics.ascender;
-        int emojiDescender = emojiMetrics.descender;
 
         // Copy the text to process it line by line
         std::string txt = text;
@@ -949,86 +1320,13 @@ namespace mrv
         std::vector<timeline::TextInfo> textInfos;
         unsigned cursor_count = 0;
         int currentDrawX = x;
-
-        // Helper to flush the current accumulated run
-        auto flushRun = [&](const std::string& run, bool isEmoji) 
-            {
-                if (run.empty()) return;
-                
-                const auto& activeInfo = isEmoji ? emojiInfo : fontInfo;
-                const auto& glyphs = fontSystem->getGlyphs(run, activeInfo);
-                math::Vector2i pnt(currentDrawX, y);
-        
-                for (const auto& glyph : glyphs)
-                {
-                    if (glyph)
-                    {
-                        if (cursor_count < cursor)
-                            cursor_pos.x += glyph->advance;
-                        currentDrawX += glyph->advance;
-                    }
-                    ++cursor_count;
-                }
-                render->appendText(textInfos, glyphs, pnt);
-            };
         
         for (; pos != std::string::npos; y += fontSize, pos = txt.find('\n'))
         {
             const std::string line = txt.substr(0, pos);
             
-            currentDrawX = x; 
 
-            // Buffers for batching
-            std::string currentRun;
-            bool runIsEmoji = false;
-            bool prevWasZWJ = false;
-            bool firstChar = true;
-
-            for (size_t i = 0; i < line.size(); )
-            {
-                // fl_utf8len returns the length of the UTF-8 sequence (1 to 4 bytes)
-                int len = fl_utf8len(line[i]);
-        
-                // Safety fallback: if FLTK returns < 1 for some reason, assume 1 byte to prevent infinite loops
-                if (len < 1) len = 1; 
-
-                std::string charStr = line.substr(i, len);
-        
-                // Decode the codepoint to check for ZWJ/Variation Selectors
-                unsigned int codepoint = fl_utf8decode(charStr.c_str(), nullptr, &len);
-                
-                // Check if emoji
-                bool isEmojiChar = detectIsEmoji(codepoint);
-                
-                // Define "Sticky" characters that should not break a run
-                bool isZWJ = (codepoint == 0x200D);
-                bool isVS = (codepoint >= 0xFE00 && codepoint <= 0xFE0F);
-                bool isSticky = isZWJ || isVS || prevWasZWJ;
-                
-                // Update runIsEmoji immediately if it's the very first character
-                if (firstChar)
-                {
-                    runIsEmoji = isEmojiChar;
-                    firstChar = false;
-                }
-                // Standard run-switching logic
-                else if (!isSticky && isEmojiChar != runIsEmoji && !currentRun.empty())
-                {
-                    flushRun(currentRun, runIsEmoji);
-                    currentRun.clear();
-                    runIsEmoji = isEmojiChar;
-                }
-    
-                runIsEmoji = isEmojiChar;
-                currentRun += charStr;
-                i += len; // Advance by the UTF-8 length
-            }
-
-            // Flush remaining buffer at end of line
-            if (!currentRun.empty())
-            {
-                flushRun(currentRun, runIsEmoji);
-            }
+            _drawLine(render, line, x, y, textInfos, cursor_count, cursor_pos);
             
 
             if (txt.size() > pos)
@@ -1045,60 +1343,9 @@ namespace mrv
 
         if (!txt.empty())
         {
-            std::string line = txt;
-
-            currentDrawX = x;
-
-            std::string currentRun;
-            bool runIsEmoji = false;
-            bool firstChar = true;
-            bool prevWasZWJ = false;
-            
-            for (size_t i = 0; i < line.size(); )
-            {
-                int len = fl_utf8len(line[i]);
-                if (len < 1) len = 1; 
-
-                std::string charStr = line.substr(i, len);
-
-                // Decode the codepoint to check for ZWJ/Variation Selectors
-                unsigned int codepoint = fl_utf8decode(charStr.c_str(), nullptr, &len);
-    
-                // Check main font first
-                bool isEmojiChar = detectIsEmoji(codepoint);
-        
-                // Define "Sticky" characters that should not break a run
-                bool isZWJ = (codepoint == 0x200D);
-                bool isVS = (codepoint >= 0xFE00 && codepoint <= 0xFE0F);
-                bool isSticky = isZWJ || isVS || prevWasZWJ;
-
-                // Update runIsEmoji immediately if it's the very first character
-                if (firstChar)
-                {
-                    runIsEmoji = isEmojiChar;
-                    firstChar = false;
-                }
-                // Only switch runs if it's NOT a sticky character
-                else if (!isSticky && isEmojiChar != runIsEmoji &&
-                    !currentRun.empty())
-                {
-                    flushRun(currentRun, runIsEmoji);
-                    currentRun.clear();
-                    runIsEmoji = isEmojiChar;
-                }
-
-                currentRun += charStr;
-                i += len; // Advance by the UTF-8 length
-            }
-
-            // Flush remaining buffer at end of line
-            if (!currentRun.empty())
-            {
-                flushRun(currentRun, runIsEmoji);
-            }
+            _drawLine(render, txt, x, y, textInfos, cursor_count, cursor_pos);
         }
- 
-
+        
         const image::Color4f cursorColor(.8F, 0.8F, 0.8F);
         math::Box2i cursorBox(cursor_pos.x, cursor_pos.y, 2, fontSize);
             

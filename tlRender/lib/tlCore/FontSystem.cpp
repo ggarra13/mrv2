@@ -416,6 +416,10 @@ namespace tl
         {
             TLRENDER_P();
             FontMetrics out;
+
+            if (fontInfo.family.empty())
+                return out;
+            
             FT_Face face = p.getFTFace(fontInfo);
             
             float scale;
@@ -497,6 +501,8 @@ namespace tl
             std::vector<math::Box2i>* glyphGeom)
         {
             size = math::Size2i(0, 0);
+            if (fontInfo.family.empty())
+                return;
             if (utf32.empty())
             {
                 return;
@@ -642,6 +648,8 @@ namespace tl
         {
             TLRENDER_P();
             std::vector<std::shared_ptr<Glyph> > out;
+            if (fontInfo.family.empty())
+                return out;
             try
             {
                 const auto utf32 = utf8_to_utf32(text);
@@ -673,6 +681,9 @@ namespace tl
         {
             std::shared_ptr<Glyph> out;
 
+            if (fontInfo.family.empty())
+                return out;
+            
             GlyphInfo key(ftGlyphIndex, fontInfo); 
             if (!glyphCache.get(key, out))
             {
