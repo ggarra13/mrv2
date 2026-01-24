@@ -71,7 +71,8 @@ if(APPLE)
     # Install must NOT be run with -j ${NPROCS} or can run into a race issue.
     set( Python_INSTALL
 	COMMAND make install
-	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade)
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m ensurepip --upgrade
+	COMMAND ${Python_ENV} ${Python_EXECUTABLE} -m pip install meson)
 
 elseif(UNIX)
     
