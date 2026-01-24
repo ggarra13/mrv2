@@ -82,6 +82,7 @@ set(tlRender_INCLUDE_DIRS
     ${tlRender_INCLUDE_DIR}
     ${Imath_INCLUDE_DIRS}
     ${nlohmann_json_INCLUDE_DIRS}
+    ${harfbuzz_INCLUDE_DIRS}
     ${FREETYPE_INCLUDE_DIRS}
     ${OTIO_INCLUDE_DIRS}
     ${glfw3_INCLUDE_DIRS})
@@ -192,7 +193,7 @@ mark_as_advanced(
     tlRender_tlVk_LIBRARY
     tlRender_glad_LIBRARY)
 
-set(tlRender_tlCore_LIBRARIES "OTIO::opentimelineio;Imath::Imath;nlohmann_json::nlohmann_json" )
+set(tlRender_tlCore_LIBRARIES "OTIO::opentimelineio;harfbuzz::harfbuzz;Imath::Imath;nlohmann_json::nlohmann_json" )
 set(tlRender_tlDraw_LIBRARIES "tlRender::tlCore")
 if (OpenColorIO_FOUND)
     list(APPEND tlRender_tlCore_LIBRARIES OpenColorIO::OpenColorIO)
