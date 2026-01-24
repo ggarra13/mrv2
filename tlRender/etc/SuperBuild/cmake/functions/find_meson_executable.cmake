@@ -32,10 +32,6 @@ function(find_meson_executable TARGET)
             set(_LOCAL_PYTHONPATH "PYTHONPATH=${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/site-packages")
         endif()
     endif()
-    
-    if (NOT EXISTS "${_LOCAL_MESON}")
-	message(FATAL_ERROR "Could not locate meson in ${CMAKE_INSTALL_PREFIX}/bin nor in PATH")
-    endif()
 	    
     # 2. Lift the final values to PARENT_SCOPE
     set(MESON_EXECUTABLE "${_LOCAL_MESON}" PARENT_SCOPE)
