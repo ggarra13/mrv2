@@ -54,7 +54,7 @@ installation on Linux, however is one supporting GNOME 48+.
 
 ## Compatibility
 
-mrv2 binaries run on Windows 10+, RedHat 10+ or Ubuntu 24.04+, and macOS 11.0+.
+mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 10+ or Ubuntu 23.04+, and macOS 11.0+.
 
 ## Notes on installation
 
@@ -110,12 +110,12 @@ mrv2 binaries run on Windows 10+, RedHat 10+ or Ubuntu 24.04+, and macOS 11.0+.
   sudo rpm -i mrv2-v1.0.0-Linux-amd64.rpm
 ```
 
-  Once you install it, you can run mrv2 by just typing mrv2 in the shell, as
-  a symlink to the executable is placed in /usr/bin.  The installers will also
-  associate file extensions and install an icon for easy starting up in the
-  Desktop icon of the user that installed it.  For running mrv2 with the icon,
-  you need to select it and use the right mouse button to open the menu and
-  choose Allow Launch.
+  Once you install it, you can run mrv2 by just typing mrv2 or vmrv2 in the 
+  shell, as a symlink to the executable is placed in /usr/bin.  The installers
+  will also associate file extensions and install an icon for easy starting 
+  up in the Desktop icon of the user that installed it.  For running mrv2 
+  with the icon, you need to select it and use the right mouse button to open
+  the menu and choose Allow Launch.
   
   If you lack sudo permissions in your organization, you should download the
   .tar.gz file and you can uncompress it with:
@@ -135,8 +135,7 @@ The core of the playback engine is a custom version of tlRender (www.github.com/
 Currently supported:
 
 - Movie files (H264, MP4, VPX, WEBM, AV1, etc.)
-- Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP,
-  	     	       	PSD)
+- Image file sequences (Cineon, DPX, JPEG, OpenEXR, PNG, PPM, TIFF, TGA, BMP, PSD)
 - RAW Camera Formats (CR2, CR3, X3F, etc).
 - Multi-channel audio
 - Color management
