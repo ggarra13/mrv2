@@ -78,6 +78,7 @@ ChangeLog
 - Fixed hdr utility to also use the new HDR algorithm.
 - Fixed building hdr utility on macOS Silicon.
 - Fixed a font error when loading a clip on the Vulkan backend.
+- Fixed .jpg loading on the Vulkan backend on macOS Intel.
 
 
 

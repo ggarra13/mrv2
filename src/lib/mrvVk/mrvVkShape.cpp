@@ -915,32 +915,8 @@ namespace mrv
 
         const char* start = text.c_str();
         const char* current_ptr = start + utf8_pos;
-        const char* new_ptr = current_ptr;
-
-        bool keep_moving = true;
-        while (keep_moving && new_ptr > start) {
-            // Step back one code point
-            const char* temp_ptr = fl_utf8back(new_ptr - 1, start, new_ptr);
-            unsigned int cp = fl_utf8decode(temp_ptr, new_ptr, NULL);
-        
-            new_ptr = temp_ptr;
-            keep_moving = false;
-
-            // Rule: If we land on a combiner/modifier, we must go back further
-            if ((cp >= 0x0300 && cp <= 0x036F) || (cp >= 0x1AB0 && cp <= 0x1AFF) ||
-                (cp >= 0x20D0 && cp <= 0x20FF) || (cp >= 0xFE00 && cp <= 0xFE0F) ||
-                (cp >= 0x1F3FB && cp <= 0x1F3FF) || (cp == 0x200D)) {
-                keep_moving = true;
-            }
-
-            // Rule: If the char BEFORE the one we just landed on is a ZWJ, keep going
-            if (new_ptr > start) {
-                const char* lookback = fl_utf8back(new_ptr - 1, start, new_ptr);
-                if (fl_utf8decode(lookback, new_ptr, NULL) == 0x200D) {
-                    keep_moving = true;
-                }
-            }
-        }
+        const char* new_ptr = fl_utf8_previous_composed_char(current_ptr,
+                                                             start);
 
         utf8_pos = (unsigned)(new_ptr - start);
         Fl::compose_reset();
@@ -955,48 +931,8 @@ namespace mrv
         const char* start = text.c_str();
         const char* end = start + text.size();
         const char* current_ptr = start + utf8_pos;
-    
-        int len = 0;
-        unsigned int current_cp = fl_utf8decode(current_ptr, end, &len);
-        if (len < 1) len = 1;
-    
-        const char* new_ptr = current_ptr + len;
-        bool keep_scanning = true;
-
-        while (keep_scanning && new_ptr < end) {
-            int next_len = 0;
-            unsigned int next_cp = fl_utf8decode(new_ptr, end, &next_len);
-            if (next_len < 1) next_len = 1;
-
-            keep_scanning = false;
-
-            // 1. Check for modifiers/combiners
-            if (isEmojiCombiner(next_cp))
-            {
-                new_ptr += next_len;
-                keep_scanning = true;
-            }
-            // 2. Check for ZWJ (Joiner)
-            else if (next_cp == 0x200D)
-            {
-                new_ptr += next_len; // eat ZWJ
-                if (new_ptr < end) {
-                    int joined_len = 0;
-                    fl_utf8decode(new_ptr, end, &joined_len);
-                    new_ptr += (joined_len > 0) ? joined_len : 1;
-                    keep_scanning = true;
-                }
-            }
-            // 3. Check for Regional Indicator (Flag) pairs
-            else {
-                bool is_curr_ri = (current_cp >= 0x1F1E6 && current_cp <= 0x1F1FF);
-                bool is_next_ri = (next_cp >= 0x1F1E6 && next_cp <= 0x1F1FF);
-                if (is_curr_ri && is_next_ri) {
-                    new_ptr += next_len;
-                }
-            }
-            current_cp = next_cp;
-        }
+        
+        const char* new_ptr = fl_utf8_next_composed_char(current_ptr, end);
 
         utf8_pos = (unsigned)(new_ptr - start);
         Fl::compose_reset();
@@ -1011,75 +947,10 @@ namespace mrv
         const char* start = text.c_str();
         const char* end = start + text.size();
         const char* current_ptr = start + utf8_pos;
-    
-        // 1. Get the length of the CURRENT character to be deleted
-        int first_char_len = 0;
-        // fl_utf8decode returns the codepoint and puts the byte length in first_char_len
-        unsigned int current_cp = fl_utf8decode(current_ptr, end, &first_char_len);
-    
-        // Safety check: ensure we advance at least 1 byte to prevent infinite loops/zero delete
-        if (first_char_len < 1) first_char_len = 1;
 
-        // Set our deletion end pointer to the end of the first character
-        const char* delete_end_ptr = current_ptr + first_char_len;
-    
-        bool keep_scanning = true;
-
-        // 2. Look ahead for combiners
-        while (keep_scanning && delete_end_ptr < end) {
+        const char* new_ptr = fl_utf8_next_composed_char(current_ptr, end);
+        unsigned int delete_len = (unsigned int)(new_ptr - current_ptr);
         
-            int next_char_len = 0;
-            unsigned int next_cp = fl_utf8decode(delete_end_ptr, end, &next_char_len);
-            if (next_char_len < 1) next_char_len = 1;
-
-            keep_scanning = false; // Assume we stop unless we find a combiner
-
-            // --- RULE A: The NEXT char is a Modifier/Combiner ---
-            if (isEmojiCombiner(next_cp))
-            {
-                delete_end_ptr += next_char_len;
-                keep_scanning = true;
-            }
-
-            // --- RULE B: Zero Width Joiner (ZWJ) Sequences ---
-            else if (next_cp == 0x200D)
-            {
-                // Consume the ZWJ
-                delete_end_ptr += next_char_len;
-            
-                // Check if there is a character AFTER the ZWJ
-                if (delete_end_ptr < end) {
-                    int after_zwj_len = 0;
-                    fl_utf8decode(delete_end_ptr, end, &after_zwj_len);
-                    if (after_zwj_len < 1) after_zwj_len = 1;
-
-                    // Consume the character that the ZWJ was joining
-                    delete_end_ptr += after_zwj_len;
-                
-                    // Keep scanning, because that character might be followed by another ZWJ
-                    keep_scanning = true;
-                }
-            }
-        
-            // --- RULE C: Regional Indicators (Flags) ---
-            else {
-                bool is_curr_ri = (current_cp >= 0x1F1E6 && current_cp <= 0x1F1FF);
-                bool is_next_ri = (next_cp >= 0x1F1E6 && next_cp <= 0x1F1FF);
-
-                // If we are deleting a flag part, and the next one is also a flag part, delete both.
-                if (is_curr_ri && is_next_ri) {
-                    delete_end_ptr += next_char_len;
-                    keep_scanning = false; // Flags are only pairs, we can stop
-                }
-            }
-        
-            // Update current_cp to the last character we "ate" (needed for chained logic if we loop)
-            current_cp = next_cp;
-        }
-
-        // 3. Perform the erase
-        // Calculate strict integer length
-        unsigned int delete_len = (unsigned int)(delete_end_ptr - current_ptr);
         text.erase(utf8_pos, delete_len);
     
         to_cursor();
