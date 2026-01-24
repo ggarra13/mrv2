@@ -669,45 +669,18 @@ namespace mrv
     {
         return 0;
     }
-
+    
     int VKTextShape::handle_backspace() {
         if (utf8_pos == 0) return 1;
-
+        
         const char* start = text.c_str();
-        const char* end = start + utf8_pos;
-        const char* pos = end;
-
-        // 1. Move back at least one code point
-        pos = fl_utf8back(pos, start, end);
-
-        // 2. Continue moving back if we encounter "Joiners" or "Modifiers"
-        // This handles ZWJ (U+200D), Variation Selectors, and Skin Tone Modifiers
-        while (pos > start) {
-            unsigned int cp = fl_utf8decode(pos, end, nullptr);
-        
-            // If the current code point is a Zero Width Joiner...
-            if (cp == 0x200D) {
-                // ...we must also delete the character preceding the joiner
-                pos = fl_utf8back(pos, start, end);
-                pos = fl_utf8back(pos, start, end);
-                continue;
-            }
-        
-            // Handle Emoji Modifiers (Skin tones: U+1F3FB - U+1F3FF)
-            if (cp >= 0x1F3FB && cp <= 0x1F3FF) {
-                pos = fl_utf8back(pos, start, end);
-                continue;
-            }
-
-            break; 
-        }
-
-        unsigned prev = (unsigned)(pos - start);
+        const char* pos = fl_utf8back(start + utf8_pos - 1, start, start + utf8_pos);
+        unsigned prev = pos - start;
         unsigned len = utf8_pos - prev;
 
         text.erase(prev, len);
         utf8_pos = prev;
-
+    
         Fl::compose_reset();
         to_cursor();
         return 1;
@@ -834,49 +807,11 @@ namespace mrv
         if (utf8_pos >= text.size()) return 1;
 
         const char* start = text.c_str();
-        const char* text_end = start + text.size();
         const char* current = start + utf8_pos;
-    
-        // 1. Start by moving forward one code point
-        const char* next_pos = fl_utf8fwd(current, start, text_end);
-
-        // 2. Look ahead to see if subsequent code points are joined to this one
-        while (next_pos < text_end) {
-            int len;
-            unsigned int cp = fl_utf8decode(next_pos, text_end, &len);
-
-            // If the next character is a Zero Width Joiner...
-            if (cp == 0x200D) {
-                // Move past the ZWJ
-                next_pos += len;
-                // And move past the actual character being joined
-                if (next_pos < text_end) {
-                    next_pos = fl_utf8fwd(next_pos, start, text_end);
-                }
-                continue;
-            }
-
-            // If the next character is a Skin Tone Modifier (U+1F3FB - U+1F3FF)
-            if (cp >= 0x1F3FB && cp <= 0x1F3FF) {
-                next_pos += len;
-                continue;
-            }
-
-            // If the next character is a Variation Selector (U+FE00 - U+FE0F)
-            // Often used to tell a character to render as an emoji
-            if (cp >= 0xFE00 && cp <= 0xFE0F) {
-                next_pos += len;
-                continue;
-            }
-
-            break;
-        }
-
-        // Erase the entire calculated range
+        const char* next_pos = fl_utf8fwd(current + 1, current, start + text.size());
+        
         text.erase(utf8_pos, next_pos - current);
-    
-        // Reset compose state in case a sequence was mid-construction
-        Fl::compose_reset();
+        
         to_cursor();
         return 1;
     }
@@ -948,6 +883,7 @@ namespace mrv
                     {
                         cursor_pos.x += glyph->advance;
                         
+                        // --- Update utf8_pos using 3-parameter fl_utf8fwd ---
                         if (text_it < text_end)
                         {
                             const char* old_it = text_it;
