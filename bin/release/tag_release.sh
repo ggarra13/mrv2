@@ -11,19 +11,16 @@
 #
 # You must run it from the root of the mrv2 project.
 #
-#
-# SOME DEFINES
-#
-export GIT_EXECUTABLE=git
-
-
-${GIT_EXECUTABLE} switch peace
-
 
 #
 # Extract the version from ./cmake/version.cmake
 #
 extract_version
+
+#
+# SOME DEFINES
+#
+export GIT_EXECUTABLE=git
 
 
 add_local_tag()
@@ -82,24 +79,6 @@ add_remote_tag()
 }
 
 #
-# 
-#
-# 1. Move to main
-${GIT_EXECUTABLE} switch main
-
-# 2. Reset local main to match the server exactly
-# This clears any "divergence" before you start the release
-${GIT_EXECUTABLE} fetch origin
-${GIT_EXECUTABLE} reset --hard origin/main
-
-# 3. Perform the squash merge
-${GIT_EXECUTABLE} merge peace --squash
-
-# 4. Commit and Push
-${GIT_EXECUTABLE} commit -m "Release ${tag}"
-${GIT_EXECUTABLE} push origin main
-
-#
 # Prepare the git repository for release
 #
 
@@ -120,6 +99,6 @@ echo "---------------------------------------"
 
 add_remote_tag $tag
 
+cd ..
 
-${GIT_EXECUTABLE} switch peace
-${GIT_EXECUTABLE} merge main
+
