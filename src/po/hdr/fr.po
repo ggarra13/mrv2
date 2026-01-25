@@ -195,6 +195,12 @@ msgstr "Quitter hdr"
 msgid "HDR monitor found."
 msgstr "Moniteur HDR trouvé."
 
+msgid "HDR monitor min. nits = {0}"
+msgstr "Moniteur HDR min. nits = {0}"
+
+msgid "HDR monitor max. nits = {0}"
+msgstr "Moniteur HDR max. nits = {0}"
+
 msgid "HDR monitor not found or not configured."
 msgstr "Moniteur HDR non trouvé ou non configuré."
 

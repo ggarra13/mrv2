@@ -195,6 +195,12 @@ msgstr "hdr を終了"
 msgid "HDR monitor found."
 msgstr "HDRモニターが見つかりました。"
 
+msgid "HDR monitor min. nits = {0}"
+msgstr "HDR モニターの最小輝度（ニト）= {0}"
+
+msgid "HDR monitor max. nits = {0}"
+msgstr "HDR モニターの最大輝度（ニト）= {0}"
+
 msgid "HDR monitor not found or not configured."
 msgstr "HDRモニターが見つからないか、設定されていません。"
 

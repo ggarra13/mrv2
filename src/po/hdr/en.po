@@ -1,7 +1,7 @@
 # English translations for hdr package.
 # This file is distributed under the same license as the hdr package.
 # Automatically generated, 2025.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: hdr v1.3.7\n"
@@ -194,6 +194,12 @@ msgstr "Quit hdr"
 
 msgid "HDR monitor found."
 msgstr "HDR monitor found."
+
+msgid "HDR monitor min. nits = {0}"
+msgstr "HDR monitor min. nits = {0}"
+
+msgid "HDR monitor max. nits = {0}"
+msgstr "HDR monitor max. nits = {0}"
 
 msgid "HDR monitor not found or not configured."
 msgstr "HDR monitor not found or not configured."

@@ -194,6 +194,12 @@ msgstr "退出 hdr"
 msgid "HDR monitor found."
 msgstr "已找到 HDR 显示器。"
 
+msgid "HDR monitor min. nits = {0}"
+msgstr "HDR 显示器最小亮度（尼特）= {0}"
+
+msgid "HDR monitor max. nits = {0}"
+msgstr "HDR 显示器最大亮度（尼特）= {0}"
+
 msgid "HDR monitor not found or not configured."
 msgstr "未找到 HDR 显示器或未配置。"
 

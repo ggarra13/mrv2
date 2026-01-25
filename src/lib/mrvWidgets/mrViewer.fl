@@ -46,10 +46,10 @@ decl {\#include "mrvWidgets/mrvBackend.h"} {public global
 decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvDockGroup.h"} {selected public global
+decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvFPSInput.h"} {selected public global
+decl {\#include "mrvWidgets/mrvFPSInput.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
@@ -868,16 +868,16 @@ uiSecondary = nullptr;} {}
       user_data this user_data_type {ViewerUI*}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
-    exit_cb( o, v );} open
-      xywh {34 57 934 675} type Double color 3 align 80 hide resizable
-      class {mrv::MainWindow} size_range {934 675 0 0}
+    exit_cb( o, v );} open selected
+      xywh {34 57 934 674} type Double color 3 align 80 hide resizable
+      class {mrv::MainWindow} size_range {934 674 0 0}
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 934 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
           label MenuBar open
-          xywh {0 0 933 30} box FLAT_BOX labeltype NO_LABEL
+          xywh {0 0 934 30} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
             xywh {0 0 892 30}
@@ -926,7 +926,7 @@ else
         }
         Fl_Group uiTopBar {
           label TopBar
-          xywh {0 30 933 29} box ENGRAVED_BOX labeltype NO_LABEL
+          xywh {0 30 934 29} box ENGRAVED_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
             label Layers
@@ -1137,16 +1137,16 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
         }
         Fl_Tile uiTileGroup {
           label TileGroup open
-          xywh {0 59 933 531} labeltype NO_LABEL
+          xywh {0 59 934 531} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
         } {
           Fl_Box uiTimelineLimit {
-            xywh {0 86 933 474} labeltype NO_LABEL hide resizable
+            xywh {0 86 934 474} labeltype NO_LABEL hide resizable
           }
           Fl_Pack uiViewGroup {
             label ViewGroup open
-            xywh {0 59 933 501} type HORIZONTAL box FLAT_BOX labeltype NO_LABEL
+            xywh {0 59 934 501} type HORIZONTAL box FLAT_BOX labeltype NO_LABEL
             code0 {o->fixed( uiToolsGroup, uiToolsGroup->w() );}
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
@@ -1466,21 +1466,21 @@ settings->setValue( mrv::kPenColorA, a);}
             }
             Fl_Group uiView {
               label {Main Viewport}
-              xywh {42 59 621 501} color 56 labeltype NO_LABEL resizable
+              xywh {42 59 622 501} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class MyViewport
             } {}
             Fl_Group uiDockGroup {open
-              xywh {663 59 270 501} box FLAT_BOX hide
+              xywh {664 59 270 501} box FLAT_BOX hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {
               Fl_Box uiResizableBar {
-                xywh {663 59 10 501} box ENGRAVED_BOX
+                xywh {664 59 10 501} box ENGRAVED_BOX
                 class {mrv::ResizableBar}
               }
               Fl_Group uiDock {
                 label DockGroup open
-                xywh {673 59 260 501} box FLAT_BOX labeltype NO_LABEL resizable
+                xywh {674 59 260 501} box FLAT_BOX labeltype NO_LABEL resizable
                 code0 {o->set_window( uiMain );}
                 code1 {uiMain->set_dock(o);}
                 class {mrv::DockGroup}
@@ -1489,19 +1489,19 @@ settings->setValue( mrv::kPenColorA, a);}
           }
           Fl_Group uiTimelineGroup {
             label uiTimelineGroup
-            xywh {0 560 933 30} box FLAT_BOX color 51 labeltype NO_LABEL
+            xywh {0 560 934 30} box FLAT_BOX color 51 labeltype NO_LABEL
             class {mrv::TimelineGroup}
           } {
             Fl_Group uiTimeline {
               label uiTimeline
-              xywh {0 568 933 22} box FLAT_BOX color 6 labeltype NO_LABEL resizable
+              xywh {0 568 934 22} box FLAT_BOX color 6 labeltype NO_LABEL resizable
               class MyTimelineWidget
             } {}
           }
         }
         Fl_Group uiBottomBar {
           label BottomBar open
-          xywh {0 590 933 29} box FLAT_BOX labeltype NO_LABEL
+          xywh {0 590 934 29} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group uiTimeWindow {open
             xywh {0 590 933 29} box FLAT_BOX color 87 resizable
@@ -1512,7 +1512,7 @@ settings->setValue( mrv::kPenColorA, a);}
         }
         Fl_Group uiPixelBar {
           label PixelBar open
-          xywh {0 619 933 30} box FLAT_BOX color 56 labeltype NO_LABEL labelcolor 17
+          xywh {0 619 934 30} box FLAT_BOX color 56 labeltype NO_LABEL labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
             xywh {0 619 933 30} box FLAT_BOX color 56 resizable
@@ -1522,7 +1522,7 @@ settings->setValue( mrv::kPenColorA, a);}
         }
         Fl_Group uiStatusGroup {
           label StatusBar open
-          xywh {0 649 933 25} color 0 labeltype NO_LABEL
+          xywh {0 649 934 25} color 0 labeltype NO_LABEL
         } {
           Fl_Group uiStatusBar {open
             xywh {0 649 933 25} box FLAT_BOX labelsize 10 align 84
