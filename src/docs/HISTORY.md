@@ -1,4 +1,4 @@
-v1.5.4
+v1.5.3
 ======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
@@ -56,14 +56,6 @@ ChangeLog
 ---------
 
 - Fixed a bug in Presentation mode where one pixel lines would appear at the right and at the bottom of the window.
-
-
-v1.5.3
-======
-
-ChangeLog
----------
-
 - Improved the look of Text Annotation Widget on Vulkan backend.
 - Major refactoring to improve compilation performance.
 - Documented mrv2.colors file.  You can create one in $HOME/.filmaura to take over the defaults.
