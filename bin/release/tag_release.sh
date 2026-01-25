@@ -84,10 +84,20 @@ add_remote_tag()
 #
 # 
 #
+# 1. Move to main
 ${GIT_EXECUTABLE} switch main
+
+# 2. Reset local main to match the server exactly
+# This clears any "divergence" before you start the release
+${GIT_EXECUTABLE} fetch origin
+${GIT_EXECUTABLE} reset --hard origin/main
+
+# 3. Perform the squash merge
 ${GIT_EXECUTABLE} merge peace --squash
-${GIT_EXECUTABLE} commit
-${GIT_EXECUTABLE} push --force origin main
+
+# 4. Commit and Push
+${GIT_EXECUTABLE} commit -m "Release ${tag}"
+${GIT_EXECUTABLE} push origin main
 
 #
 # Prepare the git repository for release
