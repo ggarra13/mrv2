@@ -27,6 +27,8 @@ try:
     from fltk import *
     import fltk as Fl
 except Exception as e:
+    print('pyFLTK raised an exception:')
+    print(e)
     pass
 
 try:

@@ -93,6 +93,11 @@ namespace tl
             VkCommandBuffer getCommandBuffer() const;
             uint32_t getFrameIndex() const;
 
+            // HDR functions
+            void setMonitorHDRSupported(bool);
+            void setMonitorMinNits(float);
+            void setMonitorMaxNits(float);
+            
             // Main entry pipeline creation function
             void createPipeline(const std::string& pipelineName,
                                 const std::string& pipelineLayoutName,

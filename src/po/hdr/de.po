@@ -1,4 +1,4 @@
-# German translations for hdr package.	
+# German translations for hdr package.
 # This file is distributed under the same license as the hdr package.
 # Automatically generated, 2025.
 #
@@ -16,181 +16,181 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "\tDesktop Environment: "
-msgstr ""
+msgstr "\tDesktop-Umgebung: "
 
 msgid "Unknown"
-msgstr ""
+msgstr "Unbekannt"
 
 msgid "\tKernel Info: "
-msgstr ""
+msgstr "\tKernel-Informationen: "
 
 msgid "\tDistribution: "
-msgstr ""
+msgstr "\tDistribution: "
 
 msgid "English"
-msgstr ""
+msgstr "Englisch"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Spanisch"
 
 msgid "German"
-msgstr ""
+msgstr "Deutsch"
 
 msgid "Hindi"
-msgstr ""
+msgstr "Hindi"
 
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "Chinesisch (vereinfacht)"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "Portugiesisch"
 
 msgid "French"
-msgstr ""
+msgstr "Französisch"
 
 msgid "Russian"
-msgstr ""
+msgstr "Russisch"
 
 msgid "Japanese"
-msgstr ""
+msgstr "Japanisch"
 
 msgid "Set Language to {0}, Numbers to {1}"
-msgstr ""
+msgstr "Sprache auf {0} setzen, Zahlen auf {1}"
 
 msgid "Arabic"
-msgstr ""
+msgstr "Arabisch"
 
 msgid "Armenian"
-msgstr ""
+msgstr "Armenisch"
 
 msgid "Basque"
-msgstr ""
+msgstr "Baskisch"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Belarussisch"
 
 msgid "Bengali"
-msgstr ""
+msgstr "Bengalisch"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulgarisch"
 
 msgid "Catalan"
-msgstr ""
+msgstr "Katalanisch"
 
 msgid "Chinese"
-msgstr ""
+msgstr "Chinesisch"
 
 msgid "Czech"
-msgstr ""
+msgstr "Tschechisch"
 
 msgid "Danish"
-msgstr ""
+msgstr "Dänisch"
 
 msgid "Dutch"
-msgstr ""
+msgstr "Niederländisch"
 
 msgid "Finnish"
-msgstr ""
+msgstr "Finnisch"
 
 msgid "Galician"
-msgstr ""
+msgstr "Galicisch"
 
 msgid "Greek"
-msgstr ""
+msgstr "Griechisch"
 
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebräisch"
 
 msgid "Icelandic"
-msgstr ""
+msgstr "Isländisch"
 
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesisch"
 
 msgid "Italian"
-msgstr ""
+msgstr "Italienisch"
 
 msgid "Irish"
-msgstr ""
+msgstr "Irisch"
 
 msgid "Korean"
-msgstr ""
+msgstr "Koreanisch"
 
 msgid "Norwegan"
-msgstr ""
+msgstr "Norwegisch"
 
 msgid "Persian"
-msgstr ""
+msgstr "Persisch"
 
 msgid "Polish"
-msgstr ""
+msgstr "Polnisch"
 
 msgid "Tibetan"
-msgstr ""
+msgstr "Tibetisch"
 
 msgid "Romanian"
-msgstr ""
+msgstr "Rumänisch"
 
 msgid "Serbian"
-msgstr ""
+msgstr "Serbisch"
 
 msgid "Slovenian"
-msgstr ""
+msgstr "Slowenisch"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Schwedisch"
 
 msgid "Thai"
-msgstr ""
+msgstr "Thailändisch"
 
 msgid "Turkish"
-msgstr ""
+msgstr "Türkisch"
 
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamesisch"
 
 msgid "Welsh"
-msgstr ""
+msgstr "Walisisch"
 
 msgid "Yiddish"
-msgstr ""
+msgstr "Jiddisch"
 
 msgid "Zulu"
-msgstr ""
+msgstr "Zulu"
 
 msgid "Play NDI input streams."
-msgstr ""
+msgstr "NDI-Eingabestreams abspielen."
 
 msgid "Reset settings to defaults."
-msgstr ""
+msgstr "Einstellungen auf Standardwerte zurücksetzen."
 
 msgid "Reset hotkeys to defaults."
-msgstr ""
+msgstr "Tastenkürzel auf Standardwerte zurücksetzen."
 
 msgid "Return the version and exit."
-msgstr ""
+msgstr "Version ausgeben und beenden."
 
 msgid "Cannot create window"
-msgstr ""
+msgstr "Fenster kann nicht erstellt werden"
 
 msgid "About hdr"
-msgstr ""
+msgstr "Über hdr"
 
 msgid "Hide hdr"
-msgstr ""
+msgstr "hdr ausblenden"
 
 msgid "Hide Others"
-msgstr ""
+msgstr "Andere ausblenden"
 
 msgid "Services"
-msgstr ""
+msgstr "Dienste"
 
 msgid "Show All"
-msgstr ""
+msgstr "Alle einblenden"
 
 msgid "Quit hdr"
-msgstr ""
+msgstr "hdr beenden"
 
 msgid "HDR monitor found."
 msgstr "HDR-Monitor gefunden."

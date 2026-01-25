@@ -1255,7 +1255,7 @@ namespace mrv
                 return 1;
             }
             case FL_MOVE:
-            {
+            {                
                 updateCoords();
                 // If we are drawing or erasing, draw the cursor
                 if (p.actionMode != ActionMode::kScrub &&

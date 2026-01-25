@@ -5,7 +5,7 @@
 include(ExternalProject)
 
 set(pyFLTK_GIT_REPOSITORY "git://git.code.sf.net/p/pyfltk/git-code")
-set(pyFLTK_GIT_TAG 759d811302ef6de5830bb7d5facefab97449ff99)
+set(pyFLTK_GIT_TAG master)
 
 
 
@@ -35,11 +35,17 @@ endif()
 #
 # Commands
 #
-set(pyFLTK_PATCH
+set(pyFLTK_PATCH 
     # For avoiding the show(argv) messing mrv2's color palette.
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/WindowShowTypemap.i"
+    "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
+
+    # For box types
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/Enumerations.i"
     "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
 
     # For avoiding fl_xid_ wrapping on Vulkan

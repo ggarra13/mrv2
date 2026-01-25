@@ -1426,7 +1426,22 @@ namespace tl
         {
             return _p->frameIndex;
         }
+        
+        void Render::setMonitorHDRSupported(bool value)
+        {
+            _p->hdrMonitorFound = value;
+        }
 
+        void Render::setMonitorMinNits(float value)
+        {
+            _p->monitorMinNits = value;
+        }
+        
+        void Render::setMonitorMaxNits(float value)
+        {
+            _p->monitorMaxNits = value;
+        }
+        
         Fl_Vk_Context& Render::getContext() const
         {
             return ctx;
@@ -2230,6 +2245,9 @@ namespace tl
                     {
                         dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                         dst_colorspace.transfer = PL_COLOR_TRC_PQ;
+                        dst_colorspace.hdr.min_luma = p.monitorMinNits;
+                        dst_colorspace.hdr.max_luma = p.monitorMaxNits;
+                        
                         if (ctx.colorSpace ==
                             VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
                         {

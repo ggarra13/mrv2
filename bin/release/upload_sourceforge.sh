@@ -161,9 +161,10 @@ I use the email information to contact you privately.  I don't sell your informa
 - u\$  25 for a Solo license for a year.
 - u\$  50 for a Standard license for a year.
 - u\$  75 for an Edit license for a year.
-- u\$ 150 for a Pro license to own.
-- u\$ 300 for a Pro license to own (allowing changing machine id -
-      	      	    	       	   useful for trying Linux distros) 
+- u\$ 150 for a Pro license for a year.
+- u\$ 300 for a Pro license to own (also allowing changing machine id -
+      	      	    	       	   useful for trying Linux distros or
+				   upgrading machines) 
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 
@@ -191,7 +192,8 @@ They do have, however:
 	   - Tone-mapping (OpenGL) and HDR (Vulkan)
 	   - OpenEXR layer switching
 	   - Saving
-	   - A Window for donations and unlocking of features at the start
+	   - A Menu Option (Help->Unlock Features) to unlock features
+	     based on donations.
 
 EOF
 

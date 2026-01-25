@@ -604,12 +604,12 @@ namespace mrv
                 {
 #ifdef TLRENDER_FFMPEG
                     if (annotations.empty() && voannotations.empty())
-                        mvp = _projectionMatrix();
+                        mvp = projectionMatrix();
                     else
                         mvp = _createTexturedRectangle();
 #else
                     if (annotations.empty())
-                        mvp = _projectionMatrix();
+                        mvp = projectionMatrix();
                     else
                         mvp = _createTexturedRectangle();
 #endif

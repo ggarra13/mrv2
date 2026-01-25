@@ -15,181 +15,181 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "\tDesktop Environment: "
-msgstr ""
+msgstr "\tडेस्कटॉप परिवेश: "
 
 msgid "Unknown"
-msgstr ""
+msgstr "अज्ञात"
 
 msgid "\tKernel Info: "
-msgstr ""
+msgstr "\tकर्नेल जानकारी: "
 
 msgid "\tDistribution: "
-msgstr ""
+msgstr "\tवितरण: "
 
 msgid "English"
-msgstr ""
+msgstr "अंग्रेज़ी"
 
 msgid "Spanish"
-msgstr ""
+msgstr "स्पेनिश"
 
 msgid "German"
-msgstr ""
+msgstr "जर्मन"
 
 msgid "Hindi"
-msgstr ""
+msgstr "हिंदी"
 
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "चीनी (सरलीकृत)"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "पुर्तगाली"
 
 msgid "French"
-msgstr ""
+msgstr "फ़्रेंच"
 
 msgid "Russian"
-msgstr ""
+msgstr "रूसी"
 
 msgid "Japanese"
-msgstr ""
+msgstr "जापानी"
 
 msgid "Set Language to {0}, Numbers to {1}"
-msgstr ""
+msgstr "भाषा को {0} पर सेट करें, संख्याएँ {1} पर"
 
 msgid "Arabic"
-msgstr ""
+msgstr "अरबी"
 
 msgid "Armenian"
-msgstr ""
+msgstr "आर्मेनियाई"
 
 msgid "Basque"
-msgstr ""
+msgstr "बास्क"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "बेलारूसी"
 
 msgid "Bengali"
-msgstr ""
+msgstr "बंगाली"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "बुल्गारियाई"
 
 msgid "Catalan"
-msgstr ""
+msgstr "कैटलन"
 
 msgid "Chinese"
-msgstr ""
+msgstr "चीनी"
 
 msgid "Czech"
-msgstr ""
+msgstr "चेक"
 
 msgid "Danish"
-msgstr ""
+msgstr "डैनिश"
 
 msgid "Dutch"
-msgstr ""
+msgstr "डच"
 
 msgid "Finnish"
-msgstr ""
+msgstr "फ़िनिश"
 
 msgid "Galician"
-msgstr ""
+msgstr "गैलिशियन"
 
 msgid "Greek"
-msgstr ""
+msgstr "ग्रीक"
 
 msgid "Hebrew"
-msgstr ""
+msgstr "हिब्रू"
 
 msgid "Icelandic"
-msgstr ""
+msgstr "आइसलैंडिक"
 
 msgid "Indonesian"
-msgstr ""
+msgstr "इंडोनेशियाई"
 
 msgid "Italian"
-msgstr ""
+msgstr "इतालवी"
 
 msgid "Irish"
-msgstr ""
+msgstr "आयरिश"
 
 msgid "Korean"
-msgstr ""
+msgstr "कोरियाई"
 
 msgid "Norwegan"
-msgstr ""
+msgstr "नॉर्वेजियन"
 
 msgid "Persian"
-msgstr ""
+msgstr "फ़ारसी"
 
 msgid "Polish"
-msgstr ""
+msgstr "पोलिश"
 
 msgid "Tibetan"
-msgstr ""
+msgstr "तिब्बती"
 
 msgid "Romanian"
-msgstr ""
+msgstr "रोमानियाई"
 
 msgid "Serbian"
-msgstr ""
+msgstr "सर्बियाई"
 
 msgid "Slovenian"
-msgstr ""
+msgstr "स्लोवेनियाई"
 
 msgid "Swedish"
-msgstr ""
+msgstr "स्वीडिश"
 
 msgid "Thai"
-msgstr ""
+msgstr "थाई"
 
 msgid "Turkish"
-msgstr ""
+msgstr "तुर्की"
 
 msgid "Vietnamese"
-msgstr ""
+msgstr "वियतनामी"
 
 msgid "Welsh"
-msgstr ""
+msgstr "वेल्श"
 
 msgid "Yiddish"
-msgstr ""
+msgstr "यिद्दिश"
 
 msgid "Zulu"
-msgstr ""
+msgstr "ज़ुलु"
 
 msgid "Play NDI input streams."
-msgstr ""
+msgstr "NDI इनपुट स्ट्रीम चलाएँ।"
 
 msgid "Reset settings to defaults."
-msgstr ""
+msgstr "सेटिंग्स को डिफ़ॉल्ट पर रीसेट करें।"
 
 msgid "Reset hotkeys to defaults."
-msgstr ""
+msgstr "हॉटकीज़ को डिफ़ॉल्ट पर रीसेट करें।"
 
 msgid "Return the version and exit."
-msgstr ""
+msgstr "संस्करण दिखाएँ और बाहर निकलें।"
 
 msgid "Cannot create window"
-msgstr ""
+msgstr "विंडो नहीं बनाई जा सकती"
 
 msgid "About hdr"
-msgstr ""
+msgstr "hdr के बारे में"
 
 msgid "Hide hdr"
-msgstr ""
+msgstr "hdr छिपाएँ"
 
 msgid "Hide Others"
-msgstr ""
+msgstr "अन्य छिपाएँ"
 
 msgid "Services"
-msgstr ""
+msgstr "सेवाएँ"
 
 msgid "Show All"
-msgstr ""
+msgstr "सभी दिखाएँ"
 
 msgid "Quit hdr"
-msgstr ""
+msgstr "hdr से बाहर निकलें"
 
 msgid "HDR monitor found."
 msgstr "HDR मॉनिटर मिला।"

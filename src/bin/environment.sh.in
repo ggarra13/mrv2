@@ -51,7 +51,11 @@ fi
 # Use old NVidia implicit sync (GNOME48 and earlier)
 #
 #export __NV_DISABLE_EXPLICIT_SYNC=1
-    
+
+#
+# Debug libraries loaded on macOS
+#
+# export DYLD_PRINT_LIBRARIES=1
 
 #
 # Make Kwin use libdecor to allow dragging subwindows outside main window.

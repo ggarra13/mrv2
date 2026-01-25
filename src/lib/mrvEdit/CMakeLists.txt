@@ -30,4 +30,5 @@ install(TARGETS mrvEdit
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
+    PUBLIC_HEADER DESTINATION include/mrvEdit
     COMPONENT libraries)

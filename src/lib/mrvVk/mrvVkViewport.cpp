@@ -378,19 +378,21 @@ namespace mrv
             
             std::string msg;
 
-            if (valid_colorspace && monitor::is_hdr_active())
+            p.hdrCapabilities = monitor::get_hdr_capabilities(this->screen_num());
+            if (valid_colorspace && p.hdrCapabilities.supported)
             {
                 p.hdrMonitorFound = true;
                 LOG_STATUS(_("HDR monitor found."));
+                std::string msg = string::Format(_("HDR monitor min. nits = {0}")).
+                                  arg(p.hdrCapabilities.min_nits);
+                LOG_STATUS(msg);
+                msg = string::Format(_("HDR monitor max. nits = {0}")).
+                      arg(p.hdrCapabilities.max_nits);
+                LOG_STATUS(msg);
             }
             else
             {
                 LOG_STATUS(_("HDR monitor not found or not configured."));
-                // msg = string::Format(_("Vulkan color space capable of {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
-                // LOG_STATUS(msg);
-                // msg = string::Format(_("Vulkan format capable of {0}")).arg(string_VkFormat(format()));
-                // LOG_STATUS(msg);
-
                 colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                 format() = VK_FORMAT_B8G8R8A8_UNORM;
             }
@@ -530,9 +532,18 @@ namespace mrv
                     context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
                 }
                 
+
+                // Get monitor's max nits
+                auto capabilities = monitor::get_hdr_capabilities(this->screen_num());
+
+                // Set the renderers's max nits
                 vk.render = timeline_vlk::Render::create(ctx, context);
+                vk.render->setMonitorHDRSupported(capabilities.supported);
+                vk.render->setMonitorMinNits(capabilities.min_nits);
+                vk.render->setMonitorMaxNits(capabilities.max_nits);
 
                 vk.annotationRender = timeline_vlk::Render::create(ctx, context);
+
                 
                 p.fontSystem = image::FontSystem::create(context);
 
@@ -603,6 +614,26 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
+
+            // If we changed screen from an HDR to an SDR one, recreate the
+            // Vulkan swapchain.
+            bool changed_screen = false;
+            if (p.screen_index != this->screen_num())
+            {
+                p.screen_index = this->screen_num();
+                changed_screen = true;
+            }
+
+            if (changed_screen)
+            {
+                auto hdrCapabilities = monitor::get_hdr_capabilities(this->screen_num());
+                if (hdrCapabilities.supported != p.hdrCapabilities.supported)
+                {
+                    m_swapchain_needs_recreation = true;
+                    redraw();
+                    return;
+                }
+            }
 
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();

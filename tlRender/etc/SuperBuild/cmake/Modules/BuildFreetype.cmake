@@ -6,10 +6,7 @@ set(Freetype_GIT_TAG "VER-2-13-3")
 set(Freetype_DEPENDENCIES PNG ZLIB)
 message(STATUS "Freetype_DEPENDENCIES=${Freetype_DEPENDENCIES}")
 
-set(Freetype_DISABLE_HARFBUZZ OFF)
-if (APPLE)
-    set(Freetype_DISABLE_HARFBUZZ ON)
-endif()
+set(Freetype_DISABLE_HARFBUZZ ON)
 
 
 set(Freetype_ARGS
@@ -21,16 +18,6 @@ set(Freetype_ARGS
     -DFT_DISABLE_HARFBUZZ=${Freetype_DISABLE_HARFBUZZ}
     -DFT_DISABLE_BROTLI=ON
 )
-
-# set(Freetype_ARGS
-#     ${TLRENDER_EXTERNAL_ARGS}
-#     -DCMAKE_INSTALL_LIBDIR=lib
-#     -DFT_WITH_ZLIB=ON # wrong
-#     -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-#     -DCMAKE_DISABLE_FIND_PACKAGE_BZip2=TRUE
-#     -DCMAKE_DISABLE_FIND_PACKAGE_PNG=TRUE
-#     -DCMAKE_DISABLE_FIND_PACKAGE_HarfBuzz=TRUE
-#     -DCMAKE_DISABLE_FIND_PACKAGE_BrotliDec=TRUE)
 
 ExternalProject_Add(
     Freetype

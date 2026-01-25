@@ -23,6 +23,9 @@ Contents:
 
 # Building
 
+You are adviced to build the programs as detailed in these instructions and not
+on the Cloud.
+
 ## Dependencies
 
 ### RedHat
