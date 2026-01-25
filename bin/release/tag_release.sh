@@ -86,7 +86,7 @@ add_remote_tag()
 #
 ${GIT_EXECUTABLE} switch main
 ${GIT_EXECUTABLE} merge peace --squash
-${GIT_EXECUTABLE} commit
+${GIT_EXECUTABLE} commit -m "Release ${tag}"
 ${GIT_EXECUTABLE} push --force origin main
 
 #
