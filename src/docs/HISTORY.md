@@ -68,7 +68,7 @@ ChangeLog
 - Fixed macOS Intel versions crashing when playing a movie with Google's VPX codec.
 - Improved HDR detection on Linux, macOS and Windows. This makes colors more pleasing instead of being too much saturated.
 - Monitor's minLuminance and maxLuminance are now returned. This can make HDR more pleasing if your monitor has less than 1000 nits (common in game and laptop monitors which have 200-400 nits).
-- On the VUlkan version of mrv2, the monitor's min and max nits are now reported.
+- On the Vulkan version of mrv2, the monitor's min and max nits are now reported.
 - Note that the OpenGL version will still suffer from too saturated colors.
 - Fixed license server to automatically restart in case of failure or exit.
 - Added support for emojis with multiple Unicode code points thanks on the OpenGL and Vulkan backends.  The Vulkan backend displays emojis in grayscale.  The OpenGL backend displays them as monochrome.
