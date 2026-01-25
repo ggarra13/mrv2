@@ -23,7 +23,8 @@ set(SOURCES
     mrvVkLines.cpp        
     mrvVkShaders.cpp        
     mrvVkShape.cpp        
-    mrvVkTextEdit.cpp       
+    mrvVkTextEdit.cpp
+    mrvVkTextShape.cpp
     mrvVkUtil.cpp        
     mrvVkViewport.cpp
     mrvVkViewportDraw.cpp

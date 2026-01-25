@@ -56,7 +56,6 @@ ChangeLog
 
 - Improved the look of Text Annotation Widget on Vulkan backend.
 - Major refactoring to improve compilation performance.
-- Upgraded to LibRaw v0.22.0
 - Documented mrv2.colors file.  You can create one in $HOME/.filmaura to take over the defaults.
 - Changed HUD font for better readability.
 - Fixed a resizing bug on Windows when using two monitors with different scaling factors.
@@ -74,11 +73,16 @@ ChangeLog
 - Fixed pyFLTK that had gotten broken due to a swig update somewhere along the way.
 - Added support for multiple monitors switching from SDR to HDR and viceversa if they are of different types on the Vulkan backend.
 - Improved the download page to use two menu pulldowns for easily downloading the version you want without cluttering your screen.
-- Upgraded to NDI SDK Advanced v6.3.
 - Fixed hdr utility to also use the new HDR algorithm.
 - Fixed building hdr utility on macOS Silicon.
 - Fixed a font error when loading a clip on the Vulkan backend.
 - Fixed .jpg loading on the Vulkan backend on macOS Intel.
+- Fixed Text Annotations being incorrectly rotated when the image had a rotation (like one from a cell phone).
+- Library Updates:
+      * NDI SDK Advanced v6.3.
+      * LibRaw v0.22.0
+      * harfbuzz v12.3.1 added as a dependency on Windows and macOS builds
+      * FLTK Vulkan v1.5.6
 
 
 

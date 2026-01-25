@@ -1,54 +1,46 @@
-mrv2 v1.5.2
-=======
+mrv2 v1.5.3: Professional VFX Review for Everyone
+================================
 
-mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.
+I'm excited to announce the latest update to mrv2 and vmrv2 -- the open-source, high-performance professional players and review tools for the VFX, Animation and CG communities.
 
-It ships now in two compiled versions:
- - mrv2 with OpenGL backend (both free and donationware)
- - vmrv2 with Vulkan backend (both free and donationware)
+Whether you are working on Windows, Linux or macOS, mrv2 is designed to handle demanding workflows with ease.
 
-Donationware licenses are paid through PayPal:
+Two Engines, One Goal
+-------------------------
 
-https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW
+We now ship in two specialized versions to fit your hardware:
 
-I use the email information to contact you privately and ask you for your machine ID.
+* mrv2 (OpenGL): Robust, reliable and widely compatible
+* vmrv2 (Vulkan): Cutting-edge performance with support for Dynamic HDR.
 
-u$ 25 for a Solo node-locked license for one year.
-u$ 50 for a Standard node-locked standard license for one year.
-u$ 75 for a Edit node-locked license with annotations and editing tools for one year.
-u$ 150 for a Pro node-locked license to own.
-u$ 300 for a Pro node-locked license to own but change machine whenever you want.
+Choose your Tier
+------------------
 
-License works for both mrv2 and vmrv2 (you can have both installed).
-You need to have an internet connection for the license system.
+While mrv2 remains open-source, we offer Donationware Licenses to unlock	professional grade features and support further development.
 
-List of features available based on donation plan:
+Pricing & Licenses
+------------------
 
-- Annotations (available from Solo and later)
-- Python (available in Standard and later)
-- Edit (available in Edit and later)
-- Voice Annotations (available in Pro)
+Solo ($25/yr): Essential review tools (Annotations).
+Standard ($50/yr): Adds Python power for pipeline integration.
+Edit ($75/yr): Adds an editing suite.
+Pro ($150 - $300): Perpetual "to own" licenses with advanced voice tools and machine flexibility.
 
-Demo version supports:
+Get Started
+------------
 
-- Static tone-mapping (OpenGL) and dynamic HDR (Vulkan)
-- OpenEXR layer switching
-- Saving Images and Movies with Audio 
+Explore the documentation, watch tutorials, and download the latest binaries:
 
-Prices might change depending on competition and new features. Act now for cheaper prices or access to more features.
+Main Site: https://mrv2.sourceforge.io
 
-Main Web page (with links to videos and online documentation):
-https://mrv2.sourceforge.io
+Downloads: https://mrv2.sourceforge.io/downloads/mrv2-download-page.html
 
-Main Binaries:
-https://mrv2.sourceforge.io/downloads/mrv2-download-page.html
+GitHub: https://github.com/ggarra13/mrv2
 
-Source code, donations, more binaries and build instructions:
-https://www.github.com/ggarra13/mrv2
+Support the project via PayPal to receive your license key.
 
 
-#player #movie #flipbook #usd #openusd #opentimelineio #mrv2 #mrViewer #mrViewer2 #vp9 #av1 #h264 #mp4 #mov #avi #ndi #webm #prores #prores4444 #cfhd #cineform #gopro #vpx #vfx #vr #animation #games #filmmaking #opensource #environmentmaps #stereo #windows #macos #linux
-
+#VFX #Animation #OpenSource #ComputerGraphics #OpenUSD #OpenTimelineIO #VideoPlayer #Pipeline #CG
 
 -------------------------------------------------------------------------------
 

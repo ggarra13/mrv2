@@ -6,7 +6,10 @@
 #
 # Get the auxiliary functions
 #
-. etc/functions.sh
+
+if [[ "$BUILD_DIR" == "" ]]; then
+    . etc/build_dir.sh
+fi
 
 extract_version
 
@@ -19,7 +22,7 @@ if [[ $MRV2_BACKEND == "VK" ]]; then
     mrv2_NAME=vmrv2
 fi
 
-NSIS_INSTALLER="${PWD}/packages/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
+NSIS_INSTALLER="${PWD}/paquetes/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
 
 AZURE_HTTP="http://timestamp.comodoca.com/authenticode"
 

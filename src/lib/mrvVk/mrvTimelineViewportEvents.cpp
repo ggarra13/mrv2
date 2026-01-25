@@ -586,7 +586,7 @@ namespace mrv
                 double pct = renderSize.h / 1024.F;
                 if (pct < 1.0) pct = 1.0;
                 int font_size = settings->getValue<int>(kFontSize);
-                double fontSize = font_size * pct / pixels_unit;
+                double fontSize = font_size * pct * pixels_unit;
                 math::Vector2f pos(_getRasterf());
                 if (shape)
                 {

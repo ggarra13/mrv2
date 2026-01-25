@@ -381,7 +381,38 @@ namespace mrv
                 {
                     if (alphamult <= 0.001F)
                         continue;
-                    
+
+                    if (auto s = dynamic_cast<VKTextShape*>(shape.get()))
+                    {
+                        // 1. Get the current view rotation and the text's raster position
+                        const float rotationAngle = _getRotation();
+                        const math::Vector3f textPos(s->pts[0].x, s->pts[0].y, 0.F);
+
+                        // 2. Create the "Pivot" components
+                        // Move text anchor to origin
+                        const math::Matrix4x4f toOrigin =
+                            math::translate(math::Vector3f(-textPos.x, -textPos.y, 0.F));
+
+                        // Rotate inversely (negative angle) to keep text upright
+                        const math::Matrix4x4f inverseRotation = math::rotateZ(-rotationAngle);
+
+                        // Move text back to its spot
+                        const math::Matrix4x4f backToPos = math::translate(textPos);
+
+                        // 3. Combine to form the Text Model Matrix
+                        // Order: We apply toOrigin first (right-most), then rotate, then move back.
+                        const math::Matrix4x4f textModelMatrix = backToPos * inverseRotation * toOrigin;
+
+                        // 4. Calculate the final MVP for the text
+                        // The text correction happens *before* the global projection is applied.
+                        const math::Matrix4x4f textMVP = projectionMatrix() * textModelMatrix;
+                      
+                        render->setTransform(textMVP);
+                    }
+                    else
+                    {
+                        render->setTransform(renderMVP);
+                    }
                     _drawShape(render, shape, alphamult, resolutionMultiplier);
                 }
             }
