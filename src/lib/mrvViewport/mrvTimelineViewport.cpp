@@ -3871,7 +3871,7 @@ namespace mrv
             return renderMVP; // correct
         }
 
-        
+
         const math::Matrix4x4f
         TimelineViewport::projectionMatrix() const noexcept
         {
