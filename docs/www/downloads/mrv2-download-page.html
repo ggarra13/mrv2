@@ -72,8 +72,21 @@
     select:focus {
       border-color: #2563eb;
     }
+    /* New styles for the description box */
+    .description-box {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #1e293b;
+      border-radius: 12px;
+      border-left: 4px solid #2563eb;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      text-align: left;
+      display: inline-block;
+      min-width: 80%;
+    }
     .download-action {
-      margin-top: 1rem;
+      margin-top: 2rem;
     }
     .download-btn {
       display: inline-block;
@@ -109,10 +122,8 @@
 
 <header>
   <h1>mrv2 & vmrv2</h1>
-  <p>Professional open‑source media viewers for VFX, animation and film.
-  </p>
-  <p>Built for speed, color accuracy and modern pipelines.
-  </p>
+  <p>Professional open‑source media viewers for VFX, animation and film.</p>
+  <p>Built for speed, color accuracy and modern pipelines.</p>
 </header>
 
 <main>
@@ -141,6 +152,10 @@
       </div>
     </div>
 
+    <div id="backend-desc" class="description-box">
+      <strong>vmrv2 (Vulkan):</strong> Cutting-edge performance with support for Dynamic HDR.
+    </div>
+
     <div class="download-action">
       <a id="downloadLink" class="download-btn" href="#">Download Now</a>
       <p class="file-info" id="filename">mrv2-v1.5.3-Windows-amd64.exe</p>
@@ -163,7 +178,15 @@
     const platform = document.getElementById('platform').value;
     const downloadBtn = document.getElementById('downloadLink');
     const fileLabel = document.getElementById('filename');
+    const descBox = document.getElementById('backend-desc');
     
+    // Update the description text based on backend
+    if (backend === "mrv2") {
+      descBox.innerHTML = "<strong>mrv2 (OpenGL):</strong> Robust, reliable and widely compatible";
+    } else {
+      descBox.innerHTML = "<strong>vmrv2 (Vulkan):</strong> Cutting-edge performance with support for Dynamic HDR.";
+    }
+
     // Construct the filename
     const filename = `${backend}-${version}-${platform}`;
     

@@ -139,7 +139,7 @@ ${date}.
 
 It does not support NDI® on any platform.
 
-It works on Windows 10+, Ubuntu 22.04 LTS+, macOS 15 (amd64) and macOS M1+ (arm64).
+It works on Windows 10+, Ubuntu 24.04 LTS+, macOS 15 (amd64) and macOS M1+ (arm64).
 It may work (untested) on Windows 11 ARM64 and Linux ARM64.
 Note that beta binaries perform about 15% slower than the final releases.
 
@@ -263,7 +263,7 @@ Notes about Vulkan on macOS Intel
 
 - Only up to Vulkan 1.3 is currently supported.
 - HDR on macOS needs a MacBook Pro.
-  MacBook Pro Intel will give you up to 1000 Nits of HDR depending on model.
+  MacBook Pro Intel will give you up to 200 Nits of HDR.
 - MacBook Pro Silicon should work with any M1 device up to HDR+.
 
 EOF
