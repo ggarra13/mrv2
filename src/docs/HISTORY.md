@@ -58,7 +58,8 @@ ChangeLog
 - Fixed some HDR clipping issues when displaying HDR content on an SDR monitor.
 - Improved emoji multipoint support and cleaned up code.
 - Fixed deleting and moving among Emoji flags.
-- Fixed a bug where Presentation mode did not cover the whole screen completely, leaving a one pixel gap to the right of the screen (at least on Windows).
+- Fixed a bug where Presentation mode did not cover the whole screen completely, leaving a one pixel gap to the right of the screen on Windows.
+- Upgraded OpenJPH to v0.26.0.
 
 
 v1.5.3
