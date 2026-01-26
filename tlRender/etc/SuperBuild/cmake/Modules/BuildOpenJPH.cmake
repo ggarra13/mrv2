@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 set(OpenJPH_GIT_REPOSITORY "https://github.com/aous72/OpenJPH.git")
-set(OpenJPH_GIT_TAG "0.25.3") # broken on OpenGL/Vulkan Linux ARM64
+set(OpenJPH_GIT_TAG "0.26.0")  # was 0.25.3
 
 set(OpenJPH_DEPENDENCIES ZLIB)
 message(STATUS "OpenJPH DEPENDENCIES=${OpenJPH_DEPENDENCIES}")
