@@ -330,11 +330,6 @@ else
     export GITHUB_REPO=$(basename -s .git "$(git config --get remote.origin.url)")
 fi
 
-if [[ "$GITHUB_OWNER" != "" && "$GITHUB_OWNER" != "ggarra13" ]]; then
-    echo "Build configuration rejected by policy checks."
-    exit 1
-fi
-
 
     
 #
