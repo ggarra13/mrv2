@@ -74,17 +74,6 @@ jobs:
       run: |
         echo "Machine name: $RUNNER_NAME"
 
-    # \@bug: Install Vulkan SDK (must be installed to prevent a copy of
-    #        vulkan-1.dll into C:/Windows/System32/vulkan-1.dll
-    # - name: Install Vulkan SDK
-    #   run: |
-
-    #     . ./etc/windows/install_vulkan.sh
-        
-    #     # Persist environment variables for subsequent steps
-    #     echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-    #     echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-
     - name: Setup environment
       run: mkdir -p ssh
       
@@ -152,18 +141,3 @@ jobs:
     - name: Upload binaries 
       run: |
         ./bin/release/upload_sourceforge.sh
-
-    # - name: Upload Beta Release
-    #   uses: softprops/action-gh-release@v2
-    #   with:
-    #     tag_name: betas
-    #     name: Betas Builds
-    #     body: |
-    #       Latest beta build - auto-updated.
-    #       Built on: ${{ github.event.head_commit.message }}
-    #     prerelease: true
-    #     files: |
-    #       packages/BUILD-Windows-amd64/Release/mrv2-beta-Windows-amd64.exe
-    #       packages/BUILD-Windows-amd64/Release/mrv2-beta-Windows-amd64.zip
-    #     overwrite_files: true   # THIS IS KEY
-    #     token: ${{ secrets.GITHUB_TOKEN }}
