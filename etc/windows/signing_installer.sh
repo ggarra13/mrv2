@@ -40,6 +40,8 @@ sign_installer() {
     "$SIGNTOOL_PATH" sign -v -f "$PFX_FILE" -p "$PASS" -fd SHA256 -t "${AZURE_HTTP}" "$NSIS_INSTALLER"
     if [ $? != 0 ]; then
 	echo "Signing failed"
+	rm -f "$NSIS_INSTALLER"
+	exit 1
     fi
 }
 
