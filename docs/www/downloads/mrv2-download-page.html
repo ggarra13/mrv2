@@ -13,7 +13,7 @@
       color: #e5e7eb;
     }
     header {
-      padding: 4rem 1rem 3rem;
+      padding: 1.25rem 1rem 1.25rem;
       text-align: center;
       background: linear-gradient(135deg, #2563eb, #1e40af);
     }
@@ -72,7 +72,6 @@
     select:focus {
       border-color: #2563eb;
     }
-    /* New styles for the description box */
     .description-box {
       margin-top: 2rem;
       padding: 1rem;
@@ -84,6 +83,18 @@
       text-align: left;
       display: inline-block;
       min-width: 80%;
+    }
+    .best-box {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #291e3b;
+      border-radius: 12px;
+      border-left: 4px;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      text-align: center;
+      display: inline-block;
+      min-width: 60%;
     }
     .download-action {
       margin-top: 2rem;
@@ -155,6 +166,10 @@
     <div id="backend-desc" class="description-box">
       <strong>vmrv2 (Vulkan):</strong> Cutting-edge performance with support for Dynamic HDR.
     </div>
+    
+    <div id="best-for" class="best-box">
+      Windows 10 compatible.  Best for Windows 11.
+    </div>
 
     <div class="download-action">
       <a id="downloadLink" class="download-btn" href="#">Download Now</a>
@@ -179,12 +194,37 @@
     const downloadBtn = document.getElementById('downloadLink');
     const fileLabel = document.getElementById('filename');
     const descBox = document.getElementById('backend-desc');
-    
+    const bestFor = document.getElementById('best-for');
+
     // Update the description text based on backend
     if (backend === "mrv2") {
-      descBox.innerHTML = "<strong>mrv2 (OpenGL):</strong> Robust, reliable and widely compatible";
+	descBox.innerHTML = "<strong>mrv2 (OpenGL):</strong> Robust, reliable and widely compatible";
+	if (/Windows/.test(platform)) {
+	    bestFor.innerHTML = "Best for Windows 10 and Windows 11";
+	}
+	else if (/Linux/.test(platform)) {
+	    bestFor.innerHTML = "GNOME 46+ / Kwin 5+";
+	}
+	else if (/Darwin-amd64/.test(platform)) {
+	    bestFor.innerHTML = "Best for macBook Pro Intel";
+	}
+	else if (/Darwin-arm64/.test(platform)) {
+	    bestFor.innerHTML = "Best for macBook M1+";
+	}
     } else {
       descBox.innerHTML = "<strong>vmrv2 (Vulkan):</strong> Cutting-edge performance with support for Dynamic HDR.";
+	if (/Windows/.test(platform)) {
+	    bestFor.innerHTML = "Windows 10 compatible.  Best for Windows 11.";
+	}
+	else if (/Linux/.test(platform)) {
+	    bestFor.innerHTML = "Best for GNOME 47+ / Kwin 6.4+";
+	}
+	else if (/Darwin-amd64/.test(platform)) {
+	    bestFor.innerHTML = "Best for macBook Pro Intel 2022 (not recommended)";
+	}
+	else if (/Darwin-arm64/.test(platform)) {
+	    bestFor.innerHTML = "Best for macOS M3+";
+	}
     }
 
     // Construct the filename
