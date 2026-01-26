@@ -268,57 +268,9 @@ namespace mrv
         const char* current_ptr = start + utf8_pos;
     
         // We will calculate the new position (prev_ptr) by stepping back
-        const char* prev_ptr = current_ptr;
-    
-        bool keep_deleting = true;
-
-        // Loop to consume the entire Grapheme Cluster
-        while (keep_deleting && prev_ptr > start) {
+        const char* prev_ptr = fl_utf8_previous_composed_char(current_ptr,
+                                                              start);
         
-            // 1. Step back one UTF-8 code point
-            const char* temp_ptr = fl_utf8back(prev_ptr - 1, start, prev_ptr);
-        
-            // 2. Decode that code point to check its properties
-            unsigned int cp = fl_utf8decode(temp_ptr, prev_ptr, NULL);
-        
-            // Move our 'deletion head' to this new point
-            prev_ptr = temp_ptr;
-        
-            // Default assumption: we stop after deleting one character, unless specific rules apply
-            keep_deleting = false;
-
-            // --- RULE A: Current char is a Modifier/Combiner ---
-            // If the character we just ate is meant to modify the previous one,
-            // we must continue backward to eat the base character too.
-            if (isEmojiCombiner(cp) ||
-                (cp == 0x200D))
-            {
-                keep_deleting = true;
-            }
-
-            // --- RULE B: Look-ahead (technically Look-behind) for ZWJ ---
-            // Even if the current char is normal (e.g., "Boy" emoji), if the *previous*
-            // char is a ZWJ, this current char is part of a sequence (e.g. Family).
-            if (prev_ptr > start) {
-                const char* lookback_ptr = fl_utf8back(prev_ptr - 1, start, prev_ptr);
-                unsigned int prev_cp = fl_utf8decode(lookback_ptr, prev_ptr, NULL);
-
-                // If the char BEFORE the one we just ate is a ZWJ, we must eat it too.
-                if (prev_cp == 0x200D) {
-                    keep_deleting = true;
-                }
-            
-                // --- RULE C: Regional Indicators (Flags) ---
-                // Flags are two RI characters (e.g. US = U + S). We should delete both.
-                bool is_curr_ri = (cp >= 0x1F1E6 && cp <= 0x1F1FF);
-                bool is_prev_ri = (prev_cp >= 0x1F1E6 && prev_cp <= 0x1F1FF);
-            
-                if (is_curr_ri && is_prev_ri) {
-                    keep_deleting = true;
-                }
-            }
-        }
-
         // Perform the deletion
         unsigned final_prev_index = prev_ptr - start;
         unsigned len = utf8_pos - final_prev_index;
