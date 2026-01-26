@@ -97,7 +97,12 @@ echo "mrv2 VERSION=$mrv2_VERSION"
 #
 # Go to packages directory
 #
-package_dir=paquetes/$BUILD_DIR
+if [[ "$GITHUB_REPOSITORY" != "" ]]; then
+    package_dir=$PWD/paquetes/$BUILD_DIR
+else
+    package_dir=$PWD/packages/$BUILD_DIR
+fi
+
 mkdir -p $package_dir
 cd $package_dir
 

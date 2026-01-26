@@ -369,7 +369,11 @@ send_to_packages()
     local stage=$PWD/$BUILD_DIR/mrv2/src/mrv2-build
     local package=$stage/$1
     if [[ "$CMAKE_TARGET" != "" ]]; then
-	package_dir=$PWD/paquetes/$BUILD_DIR
+	if [[ "$GITHUB_REPOSITORY" != "" ]]; then
+	    package_dir=$PWD/paquetes/$BUILD_DIR
+	else
+	    package_dir=$PWD/packages/$BUILD_DIR
+	fi
 	mkdir -p $package_dir
 	if [[ -e $package ]]; then
 	    echo "mv $package $PWD/packages/$BUILD_DIR"
