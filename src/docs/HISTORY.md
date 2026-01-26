@@ -56,6 +56,7 @@ ChangeLog
 ---------
 
 - Fixed some HDR clipping issues when displaying HDR content on an SDR monitor.
+- Improved emoji multipoint support and cleaned up code.
 
 
 v1.5.3
