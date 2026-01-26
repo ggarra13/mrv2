@@ -2317,8 +2317,6 @@ namespace tl
                             case timeline::HDRTonemapAlgorithm::Reinhard:
                                 cmap.tone_mapping_function =
                                     &pl_tone_map_reinhard;
-                                // Try values between 0.2 and 0.5
-                                cmap.tone_mapping_param = 0.24f; 
                                 break;
                             case timeline::HDRTonemapAlgorithm::Mobius:
                                 cmap.tone_mapping_function =
