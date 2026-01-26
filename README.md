@@ -54,7 +54,7 @@ installation on Linux, however is one supporting GNOME 48+.
 
 ## Compatibility
 
-mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 10+ or Ubuntu 23.04+, and macOS 11.0+.
+mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 10+ or Ubuntu 22.04+, and macOS 11.0+ Intel or Silicon.
 
 ## Notes on installation
 
