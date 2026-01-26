@@ -23,18 +23,24 @@ if [[ $MRV2_BACKEND == "VK" ]]; then
 fi
 
 if [[ "$GITHUB_REPOSITORY" != "" ]]; then
-    NSIS_INSTALLER="${PWD}/packages/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
-else
     NSIS_INSTALLER="${PWD}/paquetes/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
+else
+    NSIS_INSTALLER="${PWD}/packages/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
 fi
 
 AZURE_HTTP="http://timestamp.comodoca.com/authenticode"
 
 # Define password variable
-PASS="secretsalt1973!"
+if [[ $USER == "User-PC" || $USER == "ggarra13" || $USER == "gga" ||
+	  $GITHUB_OWNER == "ggarra13" ]]; then
+    PASS="secretsalt1973!"
+fi
 
 sign_installer() {
-    run_cmd "$SIGNTOOL_PATH" sign -v -f "$PFX_FILE" -p "$PASS" -fd SHA256 -t "${AZURE_HTTP}" "$NSIS_INSTALLER"
+    "$SIGNTOOL_PATH" sign -v -f "$PFX_FILE" -p "$PASS" -fd SHA256 -t "${AZURE_HTTP}" "$NSIS_INSTALLER"
+    if [ $? != 0 ]; then
+	echo "Signing failed"
+    fi
 }
 
 #
