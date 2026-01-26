@@ -2124,6 +2124,9 @@ namespace tl
                     pl_shader_reset(p.placeboData->shader, &shader_params);
 
                     pl_color_map_params cmap = pl_color_map_high_quality_params;
+                    // cmap.desaturation_strength = 0.75f; 
+                    // cmap.desaturation_exponent = 1.5f;
+                    // cmap.desaturation_margin = 0.15f;
 
                     // defaults, generates LUTs if state is set.
                     cmap.gamut_mapping = &pl_gamut_map_perceptual;
@@ -2231,9 +2234,7 @@ namespace tl
                     else
                     {
                         src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-
-                        // SDR uses sRGB-like gamma
-                        src_colorspace.transfer = PL_COLOR_TRC_SRGB; // right?
+                        src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
                     }
 
                     pl_color_space_infer(&src_colorspace);
@@ -2316,6 +2317,8 @@ namespace tl
                             case timeline::HDRTonemapAlgorithm::Reinhard:
                                 cmap.tone_mapping_function =
                                     &pl_tone_map_reinhard;
+                                // Try values between 0.2 and 0.5
+                                cmap.tone_mapping_param = 0.24f; 
                                 break;
                             case timeline::HDRTonemapAlgorithm::Mobius:
                                 cmap.tone_mapping_function =

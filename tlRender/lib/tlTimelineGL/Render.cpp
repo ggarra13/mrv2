@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (C) 2025-Present Gonzalo Garramuño.
 // All rights reserved.
 
 #include <tlTimelineGL/RenderPrivate.h>
@@ -1769,6 +1770,7 @@ namespace tl
                         break;
                     case timeline::HDRTonemapAlgorithm::Reinhard:
                         cmap.tone_mapping_function = &pl_tone_map_reinhard;
+                        cmap.tone_mapping_param = 0.24f;
                         break;
                     case timeline::HDRTonemapAlgorithm::Mobius:
                         cmap.tone_mapping_function = &pl_tone_map_mobius;

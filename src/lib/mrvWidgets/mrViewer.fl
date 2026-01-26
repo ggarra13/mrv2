@@ -43,7 +43,7 @@ decl {\#include "mrvWidgets/mrvAudioButton.h"} {public global
 decl {\#include "mrvWidgets/mrvBackend.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvButton.h"} {public global
+decl {\#include "mrvWidgets/mrvButton.h"} {selected public global
 }
 
 decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
@@ -868,15 +868,15 @@ uiSecondary = nullptr;} {}
       user_data this user_data_type {ViewerUI*}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
-    exit_cb( o, v );} open selected
-      xywh {34 57 934 674} type Double color 3 align 80 hide resizable
+    exit_cb( o, v );} open
+      xywh {34 57 934 674} type Double color 1 align 80 hide resizable
       class {mrv::MainWindow} size_range {934 674 0 0}
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 934 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
       } {
         Fl_Group uiMenuGroup {
-          label MenuBar open
+          label MenuBar
           xywh {0 0 934 30} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group {} {
@@ -1151,7 +1151,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {open
+            Fl_Group uiToolsGroup {
               xywh {0 59 42 501}
             } {
               Fl_Group uiEditGroup {open
@@ -1205,7 +1205,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                   image {../../icons/EditSlice.svg} compress_image 1 xywh {1 410 40 50} down_box DOWN_BOX selection_color 14 hide
                   class {mrv::Button}
                 }
-                Fl_Group {} {open
+                Fl_Group {} {
                   xywh {0 460 42 100}
                 } {
                   Fl_Button uiUndoEdit {
@@ -1465,7 +1465,7 @@ settings->setValue( mrv::kPenColorA, a);}
               }
             }
             Fl_Group uiView {
-              label {Main Viewport}
+              label {Main Viewport} open
               xywh {42 59 622 501} color 56 labeltype NO_LABEL resizable
               code0 {o->main( this );}
               class MyViewport
