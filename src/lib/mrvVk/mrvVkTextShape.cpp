@@ -87,45 +87,49 @@ namespace mrv
         return c;
     }
     
-    unsigned VKTextShape::current_column()
-    {
-        unsigned size = fl_utf8toa(text.c_str(), utf8_pos, nullptr, 0);
-        
-        char* dst = new char[size+1];
-        fl_utf8toa(text.c_str(), utf8_pos, dst, size + 1);
 
-        unsigned column = 0;
-        char* c = dst;
-        for (; *c; ++c)
-        {
-            if (*c != '\n')
-                ++column;
-            else
-                column = 0;
-        }
-
-        delete [] dst;
-        
-        return column;
-    }
-    
     unsigned VKTextShape::current_line()
     {
-        unsigned size = fl_utf8toa(text.c_str(), utf8_pos, nullptr, 0);
-
-        char* dst = new char[size+1];
-        fl_utf8toa(text.c_str(), utf8_pos, dst, size + 1);
-
         unsigned line = 0;
-        char* c = dst;
-        for (; *c; ++c)
+        const char* p = text.c_str();
+    
+        // Iterate directly up to utf8_pos. 
+        // No need to copy/convert the string for line counting.
+        for (unsigned i = 0; i < utf8_pos && p[i]; ++i)
         {
-            if (*c == '\n')
+            if (p[i] == '\n')
                 ++line;
         }
-        
-        delete [] dst;
+    
         return line;
+    }
+
+    unsigned VKTextShape::current_column()
+    {
+        unsigned column = 0;
+        const char* start = text.c_str();
+        const char* curr = start + utf8_pos;
+
+        // Iterate backwards from the cursor position
+        while (curr > start)
+        {
+            // Helper returns the start of the previous "grapheme cluster" (composed char)
+            const char* prev = fl_utf8_previous_composed_char(curr, start);
+
+            // Safety check: if it fails to move back, stop to avoid infinite loop
+            if (prev >= curr) break;
+
+            // If we hit a newline, we've reached the start of the current line
+            if (*prev == '\n') {
+                break; 
+            }
+
+            // Move the cursor back and count this as 1 visible column
+            curr = prev;
+            column++;
+        }
+
+        return column;
     }
     
     void VKTextShape::to_cursor()
@@ -228,20 +232,57 @@ namespace mrv
         
         return 1;
     }
-    
-    const char* VKTextShape::advance_to_column(unsigned start,
-                                               unsigned column)
+
+    // Helper to advance a pointer by N visual columns (graphemes)
+    // Stops at newline or end of text.
+    const char* VKTextShape::advance_to_column(unsigned start, unsigned column)
     {
-        const char* current = text.c_str() + start;
-        const char* pos = current;
-        for (unsigned i = 0; *pos != '\n' && i < column; ++i)
+        const char* base = text.c_str();
+        const char* p = base + start;
+        const char* end = base + text.size();
+        unsigned col = 0;
+
+        // Use fl_utf8_next_compose_character to iterate forward by visual characters
+        while (p < end && *p != '\n' && col < column)
         {
-            int len = fl_utf8len(pos[0]);
-            if (len < 1) len = 1;
-            pos += len;
+            const char* next = fl_utf8_next_composed_char(p, end);
+        
+            // Safety: If next returns null or doesn't advance, break to avoid infinite loop
+            if (!next || next <= p) break;
+        
+            p = next;
+            col++;
         }
-        return pos;
+        return p;
     }
+
+    int VKTextShape::handle_move_up() {
+        unsigned row = current_line();
+        if (row == 0)
+            return 1;
+        unsigned column = current_column();
+        unsigned start = line_start(utf8_pos);
+        start = line_start(start-2);  // 2 to skip \n
+        const char* pos = advance_to_column(start, column);
+        utf8_pos = pos - text.c_str();
+        Fl::compose_reset();
+        to_cursor();
+        return 1; 
+    }
+
+    int VKTextShape::handle_move_down() {
+        unsigned column = current_column();
+        unsigned end = line_end(utf8_pos);
+        if (end == text.size())
+            return 1;
+        unsigned start = line_start(end+1);
+        const char* pos = advance_to_column(start, column);
+        utf8_pos = pos - text.c_str();
+        Fl::compose_reset();
+        to_cursor();
+        return 1;
+    }
+    
 
     int VKTextShape::kf_select_all()
     {
@@ -278,33 +319,6 @@ namespace mrv
         text.erase(final_prev_index, len);
         utf8_pos = final_prev_index;
 
-        Fl::compose_reset();
-        to_cursor();
-        return 1;
-    }
-    
-    int VKTextShape::handle_move_up() {
-        unsigned row = current_line();
-        if (row == 0)
-            return 1;
-        unsigned column = current_column();
-        unsigned start = line_start(utf8_pos);
-        start = line_start(start-2);  // 2 to skip \n
-        const char* pos = advance_to_column(start, column);
-        utf8_pos = pos - text.c_str();
-        Fl::compose_reset();
-        to_cursor();
-        return 1; 
-    }
-
-    int VKTextShape::handle_move_down() {
-        unsigned column = current_column();
-        unsigned end = line_end(utf8_pos);
-        if (end == text.size())
-            return 1;
-        unsigned start = line_start(end+1);
-        const char* pos = advance_to_column(start, column);
-        utf8_pos = pos - text.c_str();
         Fl::compose_reset();
         to_cursor();
         return 1;
