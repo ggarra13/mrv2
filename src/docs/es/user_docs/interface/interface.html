@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>La interfaz de mrv2 &mdash; documentación de mrv2 - v1.5.3</title>
+  <title>La interfaz de mrv2 &mdash; documentación de mrv2 - v1.5.4</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=9779ab4d"></script>
+      <script src="../../_static/documentation_options.js?v=5cf03b80"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/translations.js?v=f85f4cfb"></script>
@@ -193,10 +193,12 @@ elegirlo desde el menú de zoom en la barra de Pixel.</p>
 <h2>La Barra Superior<a class="headerlink" href="#la-barra-superior" title="Link to this heading"></a></h2>
 <p>La Barra Superior de mrv2, contiene los controles de capas o canales de la imágen (usualmente OpenEXR).</p>
 <p>La ganancia (controlada con el deslizador) y/o exposición, manejada con las flechas y alternada con el botón que muestra el F-stop (f/8 por defecto).</p>
+<p>The siguiente control es la Saturacion «S» y su botón para alternar en dos estados.
+Finalmente, el último control es el de gama que se controla con el deslizador y se alterna entre dos valores con el botón marcado con «Y».</p>
+<p>La Barra Superior tiene dos modos, que cambian con la tecla “t” por defecto.  Cuando se cambia, la barra mostrará los botones de OpenColorIO que se detallan a continuación:</p>
 <p>El Espacio de Entrada de Color está a su lado.  Este es el Control de OpenColorIO (OCIO) de la imágen.</p>
 <p>Junto a él, está el control de OpenColorIO (OCIO) del display y de la vista.</p>
-<p>El siguiente botón marcado con «L» es el controls de «Looks» de OpenColorIO (OCIO).  Permite agregar un look artístico a la imagen sobre el ya aplicado ACES, por ejemplo.</p>
-<p>Finalmente, el último control es el de gama que se controla con el deslizador y se alterna entre dos valores con el botón marcado con «Y».</p>
+<p>Finalmente está controls de «Looks» de OpenColorIO (OCIO).  Permite agregar un look artístico a la imagen sobre el ya aplicado ACES, por ejemplo.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Los controles de OpenColorIO (OCIO) son derivados de tu archivo de configuración, que es especificado en <strong>Ventana-&gt;Preferencias-&gt;OCIO</strong>.  Por defecto, el archivo de configuración de OCIO usado es el de cg-config.  mrv2 incluye también el de nuke-default y el de studio-config.

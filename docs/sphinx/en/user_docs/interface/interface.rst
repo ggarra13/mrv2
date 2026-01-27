@@ -70,13 +70,18 @@ mrv2's Top Bar contains the controls of layers or image channels (usually from a
 
 The gain (controlled by the slider) and/or exposure, driven by the arrows and toggled by the button that shows the F-stop (f/8 by default).
 
-The Input Color Space is right next to it.  This is the OpenColorIO (OCIO) control of the image.
+The next control is the Saturation "S" button.
 
-Coming next, is the view and display control of OpenColorIO (OCIO).
+The last control is the gamma one which is driven by the slider and is toggled between two previous values with the "Y" button.
 
-The "L" button brings up the OpenColorIO Looks, which allow adding an artistic look to the image, besides the normal ACES workflow. 
+The Top Bar has two modes, which are switch with the 't' hotkey by default.  When switched, the toolbar will change to the OpenColorIO menu buttons.
 
-Finally, the last control is the gamma one which is driven by the slider and is toggled between two previous values with the "Y" button.
+The Input Color Space is the first one.  This is the OpenColorIO (OCIO) control of the image.
+
+Coming next, are the View and Display control of OpenColorIO (OCIO).
+
+Finally, there's the Look OCIO control.
+
 
 .. note::
 

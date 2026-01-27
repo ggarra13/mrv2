@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The mrv2 Interface &mdash; mrv2 v1.5.3 documentation</title>
+  <title>The mrv2 Interface &mdash; mrv2 v1.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=2ceb3701"></script>
+      <script src="../../_static/documentation_options.js?v=e762a7cc"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -192,10 +192,12 @@ choose it from the pull-down menu on the pixel toolbar.</p>
 <h2>The Top Bar<a class="headerlink" href="#the-top-bar" title="Link to this heading"></a></h2>
 <p>mrv2’s Top Bar contains the controls of layers or image channels (usually from an OpenEXR).</p>
 <p>The gain (controlled by the slider) and/or exposure, driven by the arrows and toggled by the button that shows the F-stop (f/8 by default).</p>
-<p>The Input Color Space is right next to it.  This is the OpenColorIO (OCIO) control of the image.</p>
-<p>Coming next, is the view and display control of OpenColorIO (OCIO).</p>
-<p>The “L” button brings up the OpenColorIO Looks, which allow adding an artistic look to the image, besides the normal ACES workflow.</p>
-<p>Finally, the last control is the gamma one which is driven by the slider and is toggled between two previous values with the “Y” button.</p>
+<p>The next control is the Saturation “S” button.</p>
+<p>The last control is the gamma one which is driven by the slider and is toggled between two previous values with the “Y” button.</p>
+<p>The Top Bar has two modes, which are switch with the ‘t’ hotkey by default.  When switched, the toolbar will change to the OpenColorIO menu buttons.</p>
+<p>The Input Color Space is the first one.  This is the OpenColorIO (OCIO) control of the image.</p>
+<p>Coming next, are the View and Display control of OpenColorIO (OCIO).</p>
+<p>Finally, there’s the Look OCIO control.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The OpenColorIO (OCIO) controls are derived from your configuration file, which is specified in <strong>Window-&gt;Preferences-&gt;OCIO</strong>.  By default, the OCIO configuration file used is the cg-config one.  mrv2 ships also with the nuke-default and with the studio-config ones.

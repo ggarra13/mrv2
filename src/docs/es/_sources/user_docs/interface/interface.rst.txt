@@ -70,13 +70,16 @@ La Barra Superior de mrv2, contiene los controles de capas o canales de la imág
 
 La ganancia (controlada con el deslizador) y/o exposición, manejada con las flechas y alternada con el botón que muestra el F-stop (f/8 por defecto).
 
+The siguiente control es la Saturacion "S" y su botón para alternar en dos estados.
+Finalmente, el último control es el de gama que se controla con el deslizador y se alterna entre dos valores con el botón marcado con "Y".
+
+La Barra Superior tiene dos modos, que cambian con la tecla 't' por defecto.  Cuando se cambia, la barra mostrará los botones de OpenColorIO que se detallan a continuación: 
+
 El Espacio de Entrada de Color está a su lado.  Este es el Control de OpenColorIO (OCIO) de la imágen.
 
 Junto a él, está el control de OpenColorIO (OCIO) del display y de la vista.
 
-El siguiente botón marcado con "L" es el controls de "Looks" de OpenColorIO (OCIO).  Permite agregar un look artístico a la imagen sobre el ya aplicado ACES, por ejemplo.
-
-Finalmente, el último control es el de gama que se controla con el deslizador y se alterna entre dos valores con el botón marcado con "Y".
+Finalmente está controls de "Looks" de OpenColorIO (OCIO).  Permite agregar un look artístico a la imagen sobre el ya aplicado ACES, por ejemplo.
 
 .. note::
 
