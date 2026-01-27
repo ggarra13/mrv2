@@ -381,6 +381,9 @@ namespace mrv
             int screen_num = this->screen_num();
 
 #ifdef __linux__
+            // On Linux, the screen index may not correspond to the actual
+            // EDID connection.  As such, if we have a single monitor, we
+            // make it match any EDID device connection.
             if (Fl::screen_count() == 1)
                 screen_num = -1;
 #endif
@@ -542,6 +545,9 @@ namespace mrv
 
                 int screen_num = this->screen_num();
 #ifdef __linux__
+                // On Linux, the screen index may not correspond to the actual
+                // EDID connection.  As such, if we have a single monitor, we
+                // make it match any EDID device connection.
                 if (Fl::screen_count() == 1)
                     screen_num = -1;
 #endif
