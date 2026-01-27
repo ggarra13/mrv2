@@ -3,7 +3,7 @@ name: Vulkan MacOS M1
 on:
   push:
     branches-ignore:
-      - beta
+      - main
     tags-ignore:
       - '**'
 

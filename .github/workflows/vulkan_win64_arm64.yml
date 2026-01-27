@@ -3,7 +3,7 @@ name: Vulkan Win64 ARM64
 on:
   push:
     branches-ignore:
-      - beta
+      - main
     tags-ignore:
       - '**'
       

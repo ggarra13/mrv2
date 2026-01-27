@@ -3,7 +3,7 @@ name: Vulkan Linux
 on:
   push:
     branches-ignore:
-      - beta
+      - main
     tags-ignore:
       - '**'
 

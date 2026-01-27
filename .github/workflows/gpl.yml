@@ -3,8 +3,7 @@ name: GPL Builds
 on:
   push:
     branches-ignore:
-      - beta
-      - vulkan
+      - main
     tags-ignore:
       - '**'
 

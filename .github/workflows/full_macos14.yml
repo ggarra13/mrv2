@@ -3,7 +3,7 @@ name: OpenGL MacOS M1
 on:
   push:
     branches-ignore:
-      - vulkan
+      - main
     tags-ignore:
       - '**'
 

@@ -3,7 +3,7 @@ name: OpenGL Linux
 on:
   push:
     branches-ignore:
-      - vulkan
+      - main
     tags-ignore:
       - '**'
 
