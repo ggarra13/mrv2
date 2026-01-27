@@ -62,6 +62,7 @@ ChangeLog
 - Fixed a bug where Presentation mode did not cover the whole screen completely, leaving a one pixel gap to the right of the screen on Windows.
 - Further improved the look of the Vulkan Text Widget.
 - Added translations to hdr utility and license_helper.
+- Fixed parsing EDID on Linux which could mis-detect HDR monitor.
 - Upgraded OpenJPH to v0.26.0.
 
 
