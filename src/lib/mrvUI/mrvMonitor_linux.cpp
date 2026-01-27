@@ -55,6 +55,11 @@ namespace mrv
         HDRCapabilities get_hdr_capabilities(int screen_index)
         {
             HDRCapabilities out;
+
+#ifdef FLTK_USE_X11
+            if (fl_x11_display())
+                return out;
+#endif
             
             int current_monitor_index = 0;
             const std::string drm_path = "/sys/class/drm/";
