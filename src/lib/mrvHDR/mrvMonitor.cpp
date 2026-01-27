@@ -60,12 +60,12 @@ namespace mrv
 
                         // Tag 7 + Extended Tag 6 = HDR Static Metadata Block
                         if (tag == 0x07 && len >= 3 && ext[j + 1] == 0x06) {
-
-                           // Byte j+3: Static Metadata Descriptor Type
+                            
+                            // Byte j+3: Static Metadata Descriptor Type
                             // We only know how to parse Type 1 (0x00).
                             uint8_t type = ext[j + 3];
-                            if (type == 0x00) {
-                            caps.supported = true;
+                            if (type == 0x01) {
+                                caps.supported = true;
 
                             // Byte j+4: Desired Content Max Luminance
                             if (len >= 4) {
