@@ -24,6 +24,9 @@ msgid ""
 "activating your license plan."
 msgstr "如果您已提交有效的捐赠，您将收到一封激活许可计划的电子邮件。"
 
+msgid "Please fill in the master key with the one you got."
+msgstr "请输入您收到的主密钥。"
+
 msgid "License helper"
 msgstr "许可助手"
 

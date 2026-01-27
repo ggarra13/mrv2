@@ -29,6 +29,9 @@ msgstr ""
 "Si usted envió una donación válida, recibirá un mensaje en el correo "
 "activando su plan de licencia."
 
+msgid "Please fill in the master key with the one you got."
+msgstr "Por favor complete con la llave maestra que obtuvo."
+
 msgid "License helper"
 msgstr "Utilidad de Licencia"
 

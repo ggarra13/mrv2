@@ -29,6 +29,9 @@ msgstr ""
 "Se hai effettuato una donazione valida, riceverai un messaggio via e-mail "
 "per attivare il tuo piano di licenza."
 
+msgid "Please fill in the master key with the one you got."
+msgstr "Inserisci la chiave master che hai ricevuto."
+
 msgid "License helper"
 msgstr "Assistente licenza"
 
@@ -96,7 +99,6 @@ msgstr ""
 "per Sviluppo personalizzato Closed Source remoto.\n"
 "\n"
 "USD $100000\n"
-"per l'acquisto del codice sorgente così com'è e l'interruzione del suo "
-"sviluppo Open Source.\n"
+"per l'acquisto del codice sorgente così com'è e l'interruzione del suo sviluppo Open Source.\n"
 "\n"
 "Contatto: ggarra13@@gmail.com"

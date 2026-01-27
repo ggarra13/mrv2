@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: license_helper v1.5.3\n"
+"Project-Id-Version: license_helper v1.5.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -23,6 +23,9 @@ msgstr ""
 msgid ""
 "If you submitted a valid donation, you will get a message in the mail "
 "activating your license plan."
+msgstr ""
+
+msgid "Please fill in the master key with the one you got."
 msgstr ""
 
 msgid "License helper"

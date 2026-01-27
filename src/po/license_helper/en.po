@@ -29,6 +29,9 @@ msgstr ""
 "If you submitted a valid donation, you will get a message in the mail "
 "activating your license plan."
 
+msgid "Please fill in the master key with the one you got."
+msgstr "Please fill in the master key with the one you got."
+
 msgid "License helper"
 msgstr "License helper"
 
