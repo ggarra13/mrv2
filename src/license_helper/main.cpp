@@ -1,9 +1,9 @@
-
-//#include <libintl.h>
-#define _(x) x
-
+#include "mrvLanguages.h"
 #include "mrvFile.h"
+#include "mrvHome.h"
+#include "mrvI8N.h"
 #include "mrvMainWindow.h"
+#include "mrvRoot.h"
 #include "mrvOS.h"
 
 #include <FL/fl_ask.H>
@@ -104,92 +104,13 @@ std::string get_machine_id() {
 }
 
 
-std::string homepath()
-{
-    std::string path;
-    char* e = nullptr;
-
-#ifdef _WIN32
-    if ((e = fl_getenv("HOME")))
-    {
-        path = e;
-        size_t pos = path.rfind("Documents");
-        if (pos != std::string::npos)
-        {
-            path = path.replace(pos, path.size(), "");
-        }
-        if (fs::is_directory(path))
-            return path;
-    }
-    if ((e = fl_getenv("USERPROFILE")))
-    {
-        path = e;
-        if (fs::is_directory(path))
-            return path;
-    }
-    if ((e = fl_getenv("HOMEDRIVE")))
-    {
-        path = e;
-        e = fl_getenv("HOMEPATH");
-        if (e)
-            path += e;
-        path += "/";
-        e = fl_getenv("USERNAME");
-        if (e)
-            path += e;
-        if (fs::is_directory(path))
-            return path;
-    }
-#else
-    if ((e = fl_getenv("HOME")))
-    {
-        path = e;
-        size_t pos = path.rfind("Documents");
-        if (pos != std::string::npos)
-        {
-            path = path.replace(pos, path.size(), "");
-        }
-        if (fs::is_directory(path))
-            return path;
-    }
-    else
-    {
-        e = getpwuid(getuid())->pw_dir;
-        if (e)
-        {
-            path = e;
-            return path;
-        }
-    }
-#endif
-
-    e = fl_getenv("TMP");
-    if (e)
-    {
-        path = e;
-    }
-    else
-    {
-        e = fl_getenv("TEMP");
-        if (e)
-        {
-            path = e;
-        }
-        else
-        {
-            path = "/var/tmp";
-        }
-    }
-    return path;
-}
-
 std::string licensepath()
 {
     std::string out;
     const char* c = fl_getenv("MRV2_LICENSEPATH");
     if (!c || strlen(c) == 0)
     {
-        out = homepath();
+        out = mrv::homepath();
         out += "/.filmaura/";
     }
     else
@@ -201,10 +122,10 @@ std::string licensepath()
 
 static void donate_cb(Fl_Widget* b, void* data)
 {
-    fl_alert(_("Check your browser for a valid donation.  Send your machine id in the comment."));
+    fl_alert("%s", _("Check your browser for a valid donation.  Send your machine id in the comment."));
     
     fl_open_uri("https://www.paypal.com/donate/?hosted_button_id=PSYEULZG24QHY");
-    fl_alert(_("If you submitted a valid donation, you will get a message in the mail activating your license plan."));
+    fl_alert("%s", _("If you submitted a valid donation, you will get a message in the mail activating your license plan."));
 }
 
 static void exit_cb(Fl_Widget* b, void* data)
@@ -236,6 +157,11 @@ static void install_cb(Fl_Widget* b, void* data)
 
 int main(int argc, char** argv)
 {
+    mrv::set_root_path(argc, argv);
+
+    std::string msg = mrv::setLanguageLocale();
+    std::cout << msg << std::endl;
+        
     const std::string machine_id = get_machine_id();
     
     MainWindow win(640, 660, _("License helper"));

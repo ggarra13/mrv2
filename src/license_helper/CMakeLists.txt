@@ -4,15 +4,24 @@
 
 
 set(HEADERS
+    mrvEnv.h
     mrvFile.h
+    mrvHome.h
+    mrvI8N.h
+    mrvLanguages.h
     mrvMainWindow.h
     mrvOS.h
+    mrvRoot.h
     mrvString.h
 )
 set(SOURCES
     main.cpp
+    mrvEnv.cpp
     mrvFile.cpp
+    mrvHome.cpp
+    mrvLanguages.cpp
     mrvOS.cpp
+    mrvRoot.cpp
     mrvString.cpp
 )
 

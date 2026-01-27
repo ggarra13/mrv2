@@ -117,6 +117,7 @@ namespace mrv
         // open_console();
 
         const std::string& msg = setLanguageLocale();
+        std::cout << msg << std::endl;
 
         BaseApp::_init(
             app::convert(argc, argv), context, "hdr",
