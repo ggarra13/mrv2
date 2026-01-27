@@ -388,8 +388,10 @@ namespace mrv
                     monitor::getName(screen_num, screen_count);
                 const std::string connector =
                     string::split(monitorName, ':')[0];
+#ifdef FLTK_USE_WAYLAND
                 p.hdrCapabilities =
                     monitor::get_hdr_capabilities_by_name(connector);
+#endif
             }
             else
             {
@@ -559,8 +561,10 @@ namespace mrv
                         monitor::getName(screen_num, screen_count);
                     const std::string connector =
                         string::split(monitorName, ':')[0];
+#ifdef FLTK_USE_WAYLAND
                     capabilities =
                         monitor::get_hdr_capabilities_by_name(connector);
+#endif
                 }
                 else
                 {
