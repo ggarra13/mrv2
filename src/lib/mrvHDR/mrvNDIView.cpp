@@ -498,7 +498,13 @@ namespace mrv
             break;
         }
 
-        p.hdrCapabilities = monitor::get_hdr_capabilities(window()->screen_num());
+        int screen_num = this->screen_num();
+        if (Fl::screen_count() == 1)
+            screen_num = -1;
+            
+         // Get monitor's max nits
+        p.hdrCapabilities = monitor::get_hdr_capabilities(screen_num);
+        
         if (valid_colorspace && p.hdrCapabilities.supported)
         {
             p.hdrMonitorFound = true;

@@ -378,7 +378,11 @@ namespace mrv
             
             std::string msg;
 
-            p.hdrCapabilities = monitor::get_hdr_capabilities(this->screen_num());
+            int screen_num = this->screen_num();
+            if (Fl::screen_count() == 1)
+                screen_num = -1;
+            
+            p.hdrCapabilities = monitor::get_hdr_capabilities(screen_num);
             if (valid_colorspace && p.hdrCapabilities.supported)
             {
                 p.hdrMonitorFound = true;
@@ -533,8 +537,12 @@ namespace mrv
                 }
                 
 
+                int screen_num = this->screen_num();
+                if (Fl::screen_count() == 1)
+                    screen_num = -1;
+            
                 // Get monitor's max nits
-                auto capabilities = monitor::get_hdr_capabilities(this->screen_num());
+                auto capabilities = monitor::get_hdr_capabilities(screen_num);
 
                 // Set the renderers's max nits
                 vk.render = timeline_vlk::Render::create(ctx, context);

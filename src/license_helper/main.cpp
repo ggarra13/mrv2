@@ -140,7 +140,7 @@ static void install_cb(Fl_Widget* b, void* data)
     std::string key = master_key->value(); 
     if (key.empty())
     {
-        fl_alert("Please fill in the master key with the one you got.");
+        fl_alert("%s", _("Please fill in the master key with the one you got."));
         return;
     }
 
