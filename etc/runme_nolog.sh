@@ -381,8 +381,12 @@ if [[ $KERNEL == *Windows* ]]; then
     else
 	nsis_exe="/C/Program Files (x86)/NSIS/bin/makensis"
     fi
-    nsis_version=`"${nsis_exe}" -version`
-    echo "NSIS ${nsis_version}"
+    if command -v "$nsis_exe" >/dev/null 2>&1; then
+	nsis_version=`"${nsis_exe}" -version`
+	echo "NSIS ${nsis_version}"
+    else
+	echo "NSIS not found"
+    fi
 fi
 
 
