@@ -43,6 +43,8 @@ namespace mrv
         
         std::string getName(int monitorIndex, int numMonitors);
 
+        HDRCapabilities get_hdr_capabilities_by_name(
+            const std::string& target_connector);
         HDRCapabilities get_hdr_capabilities(int screen = -1);
 
         

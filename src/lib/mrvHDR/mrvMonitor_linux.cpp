@@ -15,7 +15,17 @@ namespace fs = std::filesystem;
 namespace mrv
 {
     namespace monitor
-    {        
+    {
+        /** 
+         * \@bug: This function is wrong.  While it can match an HDR monitor
+         * if passed a screen_index of -1, there's no guarantee that an index
+         * for 0 or more will match the connector name correctly, as both
+         * GNOME and KWin number monitors in different order than Wayland.
+         * 
+         * @param screen_index screen index (0 or more). -1 to match any. 
+         * 
+         * @return HDR capabilities struct
+         */
         HDRCapabilities get_hdr_capabilities(int screen_index)
         {
             HDRCapabilities out;
@@ -74,6 +84,47 @@ namespace mrv
                 }
             }
 
+            return out;
+        }
+
+        HDRCapabilities get_hdr_capabilities_by_name(const std::string& target)
+        {
+            HDRCapabilities out;
+            const std::string drm_path = "/sys/class/drm/";
+
+            for (const auto& card_entry : fs::directory_iterator(drm_path)) {
+                std::string card_name = card_entry.path().filename().string();
+                if (card_name.find("card") == std::string::npos || card_name.find("-") != std::string::npos)
+                    continue;
+
+                for (const auto& conn_entry : fs::directory_iterator(drm_path)) {
+                    std::string conn_full_name = conn_entry.path().filename().string();
+            
+                    // Extract the connector part: "card1-DP-1" -> "DP-1"
+                    std::string conn_name = conn_full_name.substr(card_name.length() + 1);
+
+                    if (conn_full_name.find(card_name + "-") == 0) {
+                        // Match the FLTK label to the DRM connector name
+                        if (conn_name != target) continue;
+
+                        std::ifstream status_file(conn_entry.path() / "status");
+                        std::string status;
+                        status_file >> status;
+                        if (status != "connected") continue;
+
+                        // 3. Read EDID and Parse
+                        std::ifstream edid_file(conn_entry.path() / "edid", std::ios::binary);
+                        std::vector<uint8_t> edid_data((std::istreambuf_iterator<char>(edid_file)),
+                                                       std::istreambuf_iterator<char>());
+
+                        if (!edid_data.empty()) {
+                            out = monitor::parseEDIDLuminance(edid_data.data(), edid_data.size());
+                        }
+                        
+                        return out;
+                    }
+                }
+            }
             return out;
         }
         
