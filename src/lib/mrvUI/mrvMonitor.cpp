@@ -146,34 +146,6 @@ namespace mrv
             return std::string(edidCode);
         }
 
-        // Parse EDID to detect HDR static metadata support
-        bool parseEDIDForHDR(const uint8_t* edid, size_t length) {
-            if (length < 128) return false;
-
-            uint8_t numExtensions = edid[126];
-            const uint8_t* ext = edid + 128;
-
-            for (int i = 0; i < numExtensions && (ext + 128 <= edid + length); ++i) {
-                if (ext[0] == 0x02 && ext[1] == 0x03) {  // CTA-861 Extension Block
-                    uint8_t dtdStart = ext[2];
-                    if (dtdStart == 0 || dtdStart > 127) dtdStart = 127;
-
-                    for (int j = 4; j < dtdStart - 4;) {
-                        uint8_t tag = (ext[j] & 0xE0) >> 5;
-                        uint8_t len = ext[j] & 0x1F;
-                        if (tag == 0x07 && ext[j + 1] == 0x06) {
-                            std::cout << "→ HDR static metadata block found in EDID\n";
-                            return true;
-                        }
-                        j += len + 1;
-                    }
-                }
-                ext += 128;
-            }
-
-            return false;
-        }
-
         HDRCapabilities parseEDIDLuminance(const uint8_t* edid, size_t length) {
             HDRCapabilities caps;
             caps.supported = false; // Initialize to false
@@ -205,8 +177,8 @@ namespace mrv
                         // Tag 7 + Extended Tag 6 = HDR Static Metadata Block
                         if (tag == 0x07 && len >= 3 && ext[j + 1] == 0x06) {
 
-                           // Byte j+3: Static Metadata Descriptor Type
-                            // We only know how to parse Type 1 (0x00).
+                            // Byte j+3: Static Metadata Descriptor Type
+                            // We only know how to parse Type 1 (0x01).
                             uint8_t type = ext[j + 3];
                             if (type & 0x01) {
                                 caps.supported = true;
