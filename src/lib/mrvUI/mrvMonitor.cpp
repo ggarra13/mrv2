@@ -185,14 +185,13 @@ namespace mrv
             uint8_t numExtensions = edid[126];
             const uint8_t* ext = edid + 128;
 
-            for (int i = 0; i < numExtensions && (ext + 127 <= edid + length); ++i) {
+            for (int i = 0; i < numExtensions && (ext + 128 <= edid + length); ++i) {
                 if (ext[0] == 0x02 && ext[1] == 0x03) { // CTA-861 Extension Block
                     uint8_t dtdStart = ext[2];
 
                     // dtdStart should not exceed the block size (usually 128)
                     // or point before the data block collection starts (byte 4)
-                    if (dtdStart == 0) dtdStart = 127;
-                    if (dtdStart < 4 || dtdStart > 127) continue;
+                    if (dtdStart > 127 || dtdStart < 4) dtdStart = 127;
             
                     for (int j = 4; j < dtdStart;) {
                         if (j + 1 > dtdStart) break; // Safety check

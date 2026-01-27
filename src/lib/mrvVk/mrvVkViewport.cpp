@@ -377,10 +377,13 @@ namespace mrv
             }
             
             std::string msg;
-
+            
             int screen_num = this->screen_num();
+
+#ifdef __linux__
             if (Fl::screen_count() == 1)
                 screen_num = -1;
+#endif
             
             p.hdrCapabilities = monitor::get_hdr_capabilities(screen_num);
             if (valid_colorspace && p.hdrCapabilities.supported)
@@ -538,8 +541,10 @@ namespace mrv
                 
 
                 int screen_num = this->screen_num();
+#ifdef __linux__
                 if (Fl::screen_count() == 1)
                     screen_num = -1;
+#endif
             
                 // Get monitor's max nits
                 auto capabilities = monitor::get_hdr_capabilities(screen_num);
