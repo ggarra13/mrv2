@@ -40,7 +40,7 @@ endif()
 # Use static FLTK
 #
 set(LIBRARIES )
-list(APPEND LIBRARIES fltk::fltk) # Use static FLTK, not shared one
+list(APPEND LIBRARIES fltk::fltk ${Intl_LIBRARIES}) # Use static FLTK, not shared one
 
 add_executable(license_helper WIN32 ${SOURCES} ${HEADERS})
 
