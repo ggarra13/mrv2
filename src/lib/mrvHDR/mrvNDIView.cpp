@@ -499,9 +499,12 @@ namespace mrv
         }
 
         int screen_num = this->screen_num();
+
+#ifdef __linux__
         if (Fl::screen_count() == 1)
             screen_num = -1;
-            
+#endif
+        
          // Get monitor's max nits
         p.hdrCapabilities = monitor::get_hdr_capabilities(screen_num);
         
