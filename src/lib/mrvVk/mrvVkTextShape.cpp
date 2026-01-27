@@ -796,11 +796,11 @@ namespace mrv
             //
             boxf.expand(math::Box2f(cursorBox.min.x,
                                     cursorBox.min.y,
-                                    cursorBox.w(),
+                                    cursorBox.w() * mult,
                                     cursorBox.h()));
             boxf = boxf.margin(8);
             
-            auto roundedBox = createRoundedRect(boxf, 10);
+            auto roundedBox = createRoundedRect(boxf, 5 * mult);
                 
             //
             // Draw background which will be darker

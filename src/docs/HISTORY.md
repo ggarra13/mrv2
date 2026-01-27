@@ -59,6 +59,7 @@ ChangeLog
 - Improved emoji multipoint support and cleaned up code.
 - Fixed deleting and moving among Emoji flags.
 - Fixed a bug where Presentation mode did not cover the whole screen completely, leaving a one pixel gap to the right of the screen on Windows.
+- Further improved the look of the Vulkan Text Widget.
 - Upgraded OpenJPH to v0.26.0.
 
 

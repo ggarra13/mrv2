@@ -72,11 +72,6 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 10+ or U
   sudo xattr -rd com.apple.quarantine /Applications/mrv2.app/
 ```
 
-  If you are running macOS Tahoe 26.2 or similar, you may run into an
-  OpenGL bug where subwindows "leak" outside the main window.
-  To fix it you need to:
-     System Settings->Accesibility->Motion and turn on Reduce Motion.
-
 - Windows and Chrome, like macOS, also protect you from installing files
   from the Internet.  When you first download it with Chrome it may warn
   you that it is not an usual archive to be downloaded.  Make sure to click
