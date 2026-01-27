@@ -56,6 +56,7 @@ ChangeLog
 ---------
 
 - Fixed some HDR clipping issues when displaying HDR content on an SDR monitor.
+- Same fix added to hdr utility.
 - Improved emoji multipoint support and cleaned up code.
 - Fixed deleting and moving among Emoji flags.
 - Fixed a bug where Presentation mode did not cover the whole screen completely, leaving a one pixel gap to the right of the screen on Windows.

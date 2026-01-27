@@ -1683,9 +1683,7 @@ void main() {
         else
         {
             src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-
-            // SDR uses sRGB-like gamma
-            src_colorspace.transfer = PL_COLOR_TRC_SRGB;
+            src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
         }
 
         pl_color_space_infer(&src_colorspace);
@@ -1726,7 +1724,7 @@ void main() {
             }
             else
             {
-                cmap.tone_mapping_function = &pl_tone_map_hable;
+                cmap.tone_mapping_function = &pl_tone_map_spline;
             }
         }
         else
