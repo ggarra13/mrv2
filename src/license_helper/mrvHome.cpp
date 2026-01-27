@@ -110,8 +110,9 @@ namespace mrv
         if ((e = fl_getenv("HOMEDRIVE")))
         {
             path = e;
-            path += os::sgetenv("HOMEPATH");
-            path += "/" + os::sgetenv("USERNAME");
+            path += fl_getenv("HOMEPATH");
+            path += "/";
+            path += fl_getenv("USERNAME");
             if (fs::is_directory(path))
                 return path;
         }

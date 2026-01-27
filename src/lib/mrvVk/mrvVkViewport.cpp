@@ -31,6 +31,7 @@
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvSequence.h"
+#include "mrvCore/mrvString.h"
 #include "mrvCore/mrvI8N.h"
 
 #include <tlTimelineVk/RenderShadersBinary.h>
@@ -379,16 +380,22 @@ namespace mrv
             std::string msg;
             
             int screen_num = this->screen_num();
+            int screen_count = Fl::screen_count();
 
-#ifdef __linux__
-            // On Linux, the screen index may not correspond to the actual
-            // EDID connection.  As such, if we have a single monitor, we
-            // make it match any EDID device connection.
-            if (Fl::screen_count() == 1)
-                screen_num = -1;
-#endif
+            if (desktop::Wayland())
+            {
+                const std::string& monitorName =
+                    monitor::getName(screen_num, screen_count);
+                const std::string connector =
+                    string::split(monitorName, ':')[0];
+                p.hdrCapabilities =
+                    monitor::get_hdr_capabilities_by_name(connector);
+            }
+            else
+            {
+                p.hdrCapabilities = monitor::get_hdr_capabilities(screen_num);
+            }
             
-            p.hdrCapabilities = monitor::get_hdr_capabilities(screen_num);
             if (valid_colorspace && p.hdrCapabilities.supported)
             {
                 p.hdrMonitorFound = true;
@@ -542,19 +549,24 @@ namespace mrv
                     context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
                 }
                 
-
                 int screen_num = this->screen_num();
-#ifdef __linux__
-                // On Linux, the screen index may not correspond to the actual
-                // EDID connection.  As such, if we have a single monitor, we
-                // make it match any EDID device connection.
-                if (Fl::screen_count() == 1)
-                    screen_num = -1;
-#endif
-            
-                // Get monitor's max nits
-                auto capabilities = monitor::get_hdr_capabilities(screen_num);
+                int screen_count = Fl::screen_count();
 
+                monitor::HDRCapabilities capabilities;
+                if (desktop::Wayland())
+                {
+                    const std::string& monitorName =
+                        monitor::getName(screen_num, screen_count);
+                    const std::string connector =
+                        string::split(monitorName, ':')[0];
+                    capabilities =
+                        monitor::get_hdr_capabilities_by_name(connector);
+                }
+                else
+                {
+                    capabilities = monitor::get_hdr_capabilities(screen_num);
+                }
+                
                 // Set the renderers's max nits
                 vk.render = timeline_vlk::Render::create(ctx, context);
                 vk.render->setMonitorHDRSupported(capabilities.supported);

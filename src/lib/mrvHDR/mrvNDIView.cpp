@@ -499,14 +499,21 @@ namespace mrv
         }
 
         int screen_num = this->screen_num();
+        int screen_count = Fl::screen_count();
 
 #ifdef __linux__
-        if (Fl::screen_count() == 1)
-            screen_num = -1;
+        if (fl_wl_display())
+        {
+            const std::string& monitorName =
+                monitor::getName(screen_num, screen_count);
+            const std::string connector = string::split(monitorName, ':')[0];
+            p.hdrCapabilities = monitor::get_hdr_capabilities_by_name(connector);
+        }
+        else
 #endif
-        
-         // Get monitor's max nits
-        p.hdrCapabilities = monitor::get_hdr_capabilities(screen_num);
+        {
+            p.hdrCapabilities = monitor::get_hdr_capabilities(screen_num);
+        }
         
         if (valid_colorspace && p.hdrCapabilities.supported)
         {
