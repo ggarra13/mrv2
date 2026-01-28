@@ -146,6 +146,7 @@ namespace mrv
             HDRCapabilities out;
             const std::string drm_path = "/sys/class/drm/";
 
+            std::cerr << "target connector = " << target_connector << std::endl;
             bool activeMonitorFound = false;
             std::vector<std::string> connections;
             
@@ -156,6 +157,7 @@ namespace mrv
 
                 for (const auto& conn_entry : fs::directory_iterator(drm_path + card_name)) {
                     std::string conn_full_name = conn_entry.path().filename().string();
+                    std::cerr << "checking " << conn_full_name << std::endl;
             
                     if (conn_full_name.find("DP-") == std::string::npos &&
                         conn_full_name.find("HDMI-") == std::string::npos &&
@@ -176,16 +178,24 @@ namespace mrv
                         std::string status;
                         status_file >> status;
                         if (status != "connected") continue;
-
-                        activeMonitorFound = true;
                         
                         // 3. Read EDID and Parse
-//                        std::ifstream edid_file(conn_entry.path() / "edid", std::ios::binary);
-                        std::ifstream edid_file("test_edid.bin", std::ios::binary);
+                        // std::ifstream edid_file(conn_entry.path() / "edid", std::ios::binary);
+                        std::ifstream edid_file(conn_entry.path() / "edid", std::ios::binary);
+                        if (!edid_file.is_open())
+                        {
+                            std::cerr << "Failed to open "
+                                      << (conn_entry.path() / "edid")
+                                      << std::endl;
+                            continue;
+                        }
+
+                        activeMonitorFound = true;
                         std::vector<uint8_t> edid_data((std::istreambuf_iterator<char>(edid_file)),
                                                        std::istreambuf_iterator<char>());
 
-                        if (!edid_data.empty()) {
+                        if (!edid_data.empty())
+                        {
                             out = monitor::parseEDIDLuminance(edid_data.data(), edid_data.size());
                         }
                         

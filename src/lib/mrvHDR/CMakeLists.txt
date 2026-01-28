@@ -30,6 +30,10 @@ set(LIBRARIES
     ${Intl_LIBRARIES}
 )
 
+if (UNIX)
+    list(APPEND LIBRARIES_PRIVATE display-info)
+endif()
+
 add_library(mrvHDR ${SOURCES} ${HEADERS})
 hdr_files_to_absolute_paths()
 

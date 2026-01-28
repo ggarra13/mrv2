@@ -40,6 +40,10 @@ if(TLRENDER_WAYLAND)
     list(APPEND LIBRARIES_PRIVATE wayland-client)
 endif()
 
+if (UNIX)
+    list(APPEND LIBRARIES_PRIVATE display-info)
+endif()
+
 if (WIN32)
     list(APPEND LIBRARIES_PRIVATE dxgi)
 endif()

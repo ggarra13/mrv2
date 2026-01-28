@@ -73,6 +73,7 @@ namespace mrv
                 if (!names.empty())
                 {
                     connector = names[0];
+                    std::cerr << "got connector " << connector << std::endl;
                     out = monitor::get_hdr_capabilities_by_name(connector);
                 }
                 else
@@ -414,7 +415,6 @@ namespace mrv
             int screen_count = Fl::screen_count();
 
             p.hdrCapabilities = getHDRCapabilities(screen_num, screen_count);
-            
             if (valid_colorspace && p.hdrCapabilities.supported)
             {
                 p.hdrMonitorFound = true;
