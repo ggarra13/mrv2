@@ -473,6 +473,10 @@ namespace mrv
 
                 _getMonitorNits(false);    
             }
+            else
+            {
+                LOG_STATUS(_("HDR monitor not found or not configured."));
+            }
             
             msg = string::Format(_("Vulkan color space is {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
             LOG_STATUS(msg);
