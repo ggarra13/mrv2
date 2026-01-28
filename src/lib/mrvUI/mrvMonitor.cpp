@@ -229,10 +229,6 @@ namespace mrv
                                 
                                 return caps;
                             }
-                            else
-                            {
-                                std::cerr << "\tNOT type 0x01" << std::endl;
-                            }
                         }
                         j += len + 1;
                     }

@@ -213,24 +213,5 @@ namespace mrv
             return out;
         }
 
-        
-        /**
-         * @brief Reads the raw EDID data from a sysfs file path.
-         * @param edid_path The std::filesystem::path to the monitor's EDID file.
-         * @return std::vector<unsigned char> A vector containing the raw EDID bytes. Returns an empty vector on failure.
-         */
-        std::vector<unsigned char> GetEdidFromSysfs(const fs::path& edid_path) {
-            // Open the EDID file in binary mode
-            std::ifstream file(edid_path, std::ios::binary);
-            if (!file) {
-                std::cerr << "  [Error] Failed to open EDID file: " << edid_path << std::endl;
-                return {};
-            }
-
-            // Read the entire file into a vector
-            return std::vector<unsigned char>((std::istreambuf_iterator<char>(file)),
-                                              std::istreambuf_iterator<char>());
-        }
-        
     } // namespace monitor
 } // namespace mrv
