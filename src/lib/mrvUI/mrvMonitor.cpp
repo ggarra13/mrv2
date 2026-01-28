@@ -176,6 +176,11 @@ namespace mrv
                 
                         // Tag 7 + Extended Tag 6 = HDR Static Metadata Block
                         if (tag == 0x07 && len >= 3 && ext[j + 1] == 0x06) {
+
+                            uint8_t eotf = ext[j + 2];
+                            if ((eotf & 0x0E) == 0) { // No HDR bits set
+                                return caps; // Keep supported=false
+                            }
                             
                             // Byte j+3: Static Metadata Descriptor Type
                             // We only know how to parse Type 1 (0x01).
@@ -187,15 +192,9 @@ namespace mrv
                             {
                                 caps.supported = true;
                             }
-                                
-                            // Found HDR. Assume a good monitor.
-                            caps.supported = true;
-                            caps.min_nits = 0.005F;
-                            caps.max_nits = 1000.F;
 
                             // Now, try to get the real min/max nits.
                             if (caps.supported) {
-                                caps.supported = true;
                                 
                                 // Byte j+4: Desired Content Max Luminance
                                 if (len >= 4) {
@@ -210,7 +209,7 @@ namespace mrv
                                     uint8_t min_cv = ext[j + 6];
                                     if (min_cv > 0 && caps.max_nits > 0) {
                                         // Formula for min luminance is slightly different in CTA-861
-                                        caps.min_nits = (caps.max_nits * powf((float)min_cv / 255.0f, 2.0f));
+                                        caps.min_nits = (caps.max_nits * powf((float)min_cv / 255.0f, 2.0f)) / 100.0F;
                                     }
                                 }
                                 
