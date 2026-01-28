@@ -458,40 +458,6 @@ namespace mrv
                 wArgs.push_back(wSession);
             }
 
-            // // Allocate newArgv with exact size
-            // size_t argCount = wArgs.size() + 1; // +1 for nullptr
-            // newArgv = new LPWSTR[argCount];
-            // for (size_t i = 0; i < wArgs.size(); ++i)
-            // {
-            //     if (wcschr(wArgs[i].c_str(), L' ') != nullptr)
-            //     {
-            //         wArgs[i] = L"\"" + wArgs[i] + L"\""; // Quote if spaces
-            //     }
-            //     newArgv[i] = const_cast<LPWSTR>(wArgs[i].c_str()); // Safe: wArgs lives until execv
-            // }
-            // newArgv[argCount - 1] = nullptr;
-            // // Call _wexecv
-            // LPWSTR cmd = wExe;  // command must be unquoted
-            // unsetenv(L"MRV2_ROOT"); // Remove MRV2_ROOT from environment
-            // int result = _wexecv(wExe, newArgv);
-            // if (result == -1)
-            // {
-            //     LOG_ERROR("'_wexecv' failed with errno: " + std::to_string(errno));
-            //     std::wcerr << L"Command: " << cmd;
-            //     for (int i = 1; i < argc; ++i)
-            //     {
-            //         std::wcerr << L" " << newArgv[i];
-            //     }
-            //     std::wcerr << std::endl;
-            // }
-            //
-            // // Cleanup
-            // delete[] newArgv;
-            // if (argv) LocalFree(argv);
-            //
-            // return result == -1 ? EXIT_FAILURE : 0;
-
-
             // Build the command line string for CreateProcess
             std::wstring cmdLine;
             for (size_t i = 0; i < wArgs.size(); ++i)
