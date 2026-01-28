@@ -191,10 +191,6 @@ namespace mrv
                             if (type & 0x01)
                             {
                                 caps.supported = true;
-                            }
-
-                            // Now, try to get the real min/max nits.
-                            if (caps.supported) {
                                 
                                 // Byte j+4: Desired Content Max Luminance
                                 if (len >= 4) {
@@ -208,7 +204,8 @@ namespace mrv
                                 if (len >= 6) {
                                     uint8_t min_cv = ext[j + 6];
                                     if (min_cv > 0 && caps.max_nits > 0) {
-                                        // Formula for min luminance is slightly different in CTA-861
+                                        // Must divide by 100 contrary to
+                                        // what Gemini an ChatGPT say.
                                         caps.min_nits = (caps.max_nits * powf((float)min_cv / 255.0f, 2.0f)) / 100.0F;
                                     }
                                 }
