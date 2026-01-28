@@ -232,17 +232,30 @@ namespace
 
 namespace mrv
 {
+    namespace desktop
+    {
+        bool Wayland()
+        {
+            bool out = false;
 
+            fl_open_display();
+#ifdef __linux__
+#    ifdef FLTK_USE_WAYLAND
+            if (fl_wl_display())
+            {
+                out = true;
+            }
+#    endif
+#endif
+            return out;
+        }
+    }
+    
     monitor::HDRCapabilities
     getHDRCapabilities(int screen_num, int screen_count)
     {
         monitor::HDRCapabilities out;
-#if __linux__
-        if (screen_count == 1)
-        {
-            out = monitor::get_hdr_capabilities(-1);
-        }
-        else if (fl_wl_display())
+        if (desktop::Wayland())
         {
             const std::string& monitorName =
                 monitor::getName(screen_num, screen_count);
@@ -257,11 +270,11 @@ namespace mrv
             }
             else
             {
+                // Last resort, use any hdr monitor if present
                 out = monitor::get_hdr_capabilities(-1);
             }
         }
         else
-#endif
         {
             out = monitor::get_hdr_capabilities(screen_num);
         }

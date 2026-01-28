@@ -73,9 +73,7 @@ namespace mrv
                 if (!names.empty())
                 {
                     connector = names[0];
-#ifdef FLTK_USE_WAYLAND
                     out = monitor::get_hdr_capabilities_by_name(connector);
-#endif
                 }
                 else
                 {
@@ -666,7 +664,8 @@ namespace mrv
 
             if (changed_screen)
             {
-                auto hdrCapabilities = monitor::get_hdr_capabilities(this->screen_num());
+                auto hdrCapabilities = getHDRCapabilities(this->screen_num(),
+                                                          Fl::screen_count());
                 if (hdrCapabilities.supported != p.hdrCapabilities.supported)
                 {
                     m_swapchain_needs_recreation = true;

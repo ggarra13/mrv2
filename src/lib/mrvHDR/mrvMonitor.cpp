@@ -94,6 +94,14 @@ namespace mrv
             }
             return caps;
         }
+
+#ifndef __linux__
+        HDRCapabilities get_hdr_capabilities_by_name(const std::string& target_connector)
+        {
+            HDRCapabilities out;
+            return out;
+        }
+#endif
         
     } // namespace monitor
 } // namespace mrv

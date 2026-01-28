@@ -195,6 +195,10 @@ namespace mrv
                             {
                                 std::cerr << "Got HDR supported" << std::endl;
                                 caps.supported = true;
+                            }
+
+                            // Now, try to get the real min/max nits.
+                            if (caps.supported) {
                                 
                                 // Byte j+4: Desired Content Max Luminance
                                 if (len >= 4) {
@@ -228,6 +232,15 @@ namespace mrv
             }
             return caps;
         }
+
+#ifndef  __linux__
+        HDRCapabilities get_hdr_capabilities_by_name(
+            const std::string& target_connector)
+        {
+            HDRCapabilities out;
+            return out;
+        }
+#endif
         
     } // namespace monitor
 } // namespace mrv

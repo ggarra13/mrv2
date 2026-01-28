@@ -8,6 +8,8 @@
 #    include "mrvHDR/mrvMonitor_wayland.cpp"
 #endif
 
+#include "mrvCore/mrvI8N.h"
+
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -89,6 +91,9 @@ namespace mrv
         {
             HDRCapabilities out;
             const std::string drm_path = "/sys/class/drm/";
+
+            bool activeMonitorFound = false;
+            std::vector<std::string> connections;
             
             for (const auto& card_entry : fs::directory_iterator(drm_path)) {
                 std::string card_name = card_entry.path().filename().string();
@@ -106,7 +111,8 @@ namespace mrv
                 
                     // Extract the connector part: "card1-DP-1" -> "DP-1"
                     std::string conn_name = conn_full_name.substr(card_name.length() + 1);
-
+                    connections.push_back(conn_name);
+                    
                     if (conn_full_name.find(card_name + "-") == 0) {
                         // Match the FLTK label to the DRM connector name
                         conn_name = normalize_connector(conn_name);
@@ -117,6 +123,8 @@ namespace mrv
                         status_file >> status;
                         if (status != "connected") continue;
 
+                        activeMonitorFound = true;
+                        
                         // 3. Read EDID and Parse
                         std::ifstream edid_file(conn_entry.path() / "edid", std::ios::binary);
                         std::vector<uint8_t> edid_data((std::istreambuf_iterator<char>(edid_file)),
@@ -128,6 +136,17 @@ namespace mrv
                         
                         return out;
                     }
+                }
+            }
+
+            if (!activeMonitorFound)
+            {
+                std::cerr << _("Failed to find a monitor with connection ")
+                          << target_connector << std::endl;
+                std::cerr << "Valid connections:" << std::endl;
+                for (auto& connection : connections)
+                {
+                    std::cerr << connection << std::endl;
                 }
             }
             return out;

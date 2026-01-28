@@ -43,22 +43,6 @@ namespace mrv
             return out;
         }
 
-        bool Wayland()
-        {
-            bool out = false;
-
-            fl_open_display();
-#ifdef __linux__
-#    ifdef FLTK_USE_WAYLAND
-            if (fl_wl_display())
-            {
-                out = true;
-            }
-#    endif
-#endif
-            return out;
-        }
-
         bool XWayland()
         {
             bool out = false;
