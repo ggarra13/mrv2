@@ -64,20 +64,23 @@ namespace mrv
         getHDRCapabilities(int screen_num, int screen_count)
         {
             monitor::HDRCapabilities out;
-            if (desktop::Wayland())
+#if __linux__
+            if (screen_count == 1)
             {
-                std::cerr << "get monitor name" << std::endl;
+                out = monitor::get_hdr_capabilities(-1);
+            }
+            else if (desktop::Wayland())
+            {
                 const std::string& monitorName =
                     monitor::getName(screen_num, screen_count);
-                std::cerr << "got monitor name " << monitorName << std::endl;
                 const std::string connector =
                     string::split(monitorName, ':')[0];
 #ifdef FLTK_USE_WAYLAND
-                std::cerr << "connector " << connector << std::endl;
                 out = monitor::get_hdr_capabilities_by_name(connector);
 #endif
             }
             else
+#endif
             {
                 out = monitor::get_hdr_capabilities(screen_num);
             }

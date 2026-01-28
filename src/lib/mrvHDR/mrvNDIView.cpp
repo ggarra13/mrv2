@@ -233,6 +233,33 @@ namespace
 namespace mrv
 {
 
+    monitor::HDRCapabilities
+    getHDRCapabilities(int screen_num, int screen_count)
+    {
+        monitor::HDRCapabilities out;
+#if __linux__
+        if (screen_count == 1)
+        {
+            out = monitor::get_hdr_capabilities(-1);
+        }
+        else if (fl_wl_display())
+        {
+            const std::string& monitorName =
+                monitor::getName(screen_num, screen_count);
+            const std::string connector =
+                string::split(monitorName, ':')[0];
+#ifdef FLTK_USE_WAYLAND
+            out = monitor::get_hdr_capabilities_by_name(connector);
+#endif
+        }
+        else
+#endif
+        {
+            out = monitor::get_hdr_capabilities(screen_num);
+        }
+        return out;
+    }
+
     void NDIView::addGPUTextures(const pl_shader_res* res)
     {
         for (unsigned i = 0; i < res->num_descriptors; ++i)
@@ -500,20 +527,7 @@ namespace mrv
 
         int screen_num = this->screen_num();
         int screen_count = Fl::screen_count();
-
-#ifdef __linux__
-        if (fl_wl_display())
-        {
-            const std::string& monitorName =
-                monitor::getName(screen_num, screen_count);
-            const std::string connector = string::split(monitorName, ':')[0];
-            p.hdrCapabilities = monitor::get_hdr_capabilities_by_name(connector);
-        }
-        else
-#endif
-        {
-            p.hdrCapabilities = monitor::get_hdr_capabilities(screen_num);
-        }
+        p.hdrCapabilities = getHDRCapabilities(screen_num, screen_count);
         
         if (valid_colorspace && p.hdrCapabilities.supported)
         {
