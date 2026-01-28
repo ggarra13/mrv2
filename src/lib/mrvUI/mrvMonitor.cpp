@@ -182,14 +182,26 @@ namespace mrv
                             std::cerr << "\tExtension " << i
                                       << " tag 07 + extended tag 6"
                                       << std::endl;
-
+                            
                             // Byte j+3: Static Metadata Descriptor Type
                             // We only know how to parse Type 1 (0x01).
+
+                            // ChatGPT tells me to compare type agains 0
+                            // Gemini tells me to compare against byte 0x01
                             uint8_t type = ext[j + 3];
-                            if (type & 0x01) {
+                            std::cerr << "got type " << (int)type << std::endl;
+                            if (type & 0x01)
+                            {
+                                caps.supported = true;
+                            }
+                                
+                            
+                            caps.supported = true;
+
+                            if (caps.supported) {
                                 caps.supported = true;
                                 
-                                std::cerr << "\tGot type 0x01" << std::endl;
+                                std::cerr << "\tGot HDR" << std::endl;
 
                                 // Byte j+4: Desired Content Max Luminance
                                 if (len >= 4) {
@@ -218,7 +230,7 @@ namespace mrv
                         j += len + 1;
                     }
                 }
-                std::cerr << "\tNEXT EXTENSION" << std::endl;
+                std::cerr << "---------------------------------" << std::endl;
                 ext += 128;
             }
             return caps;

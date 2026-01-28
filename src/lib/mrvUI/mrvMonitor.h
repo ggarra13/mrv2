@@ -11,6 +11,7 @@ namespace mrv
 {
     namespace monitor
     {
+        //! Function to decode edidManufactureId to a three-letter char
         inline std::string decodeEdidManufacturerId(const unsigned char* edid)
         {
             char vendorId[4];
@@ -45,9 +46,11 @@ namespace mrv
 
         HDRCapabilities get_hdr_capabilities(int screen = -1);
 
+#ifdef FLTK_USE_WAYLAND
         HDRCapabilities
         get_hdr_capabilities_by_name(const std::string& target_connector);
-
+#endif
+        
         
     } // namespace monitor
 } // namespace mrv
