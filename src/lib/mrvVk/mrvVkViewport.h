@@ -189,6 +189,7 @@ namespace mrv
 
             void _mapBuffer();
             void _unmapBuffer();
+            void _getMonitorNits(bool quiet = true);
             
         private:
             struct VKPrivate;

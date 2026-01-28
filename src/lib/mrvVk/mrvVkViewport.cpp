@@ -64,10 +64,9 @@ namespace mrv
         getHDRCapabilities(int screen_num, int screen_count)
         {
             monitor::HDRCapabilities out;
-            if (1) //desktop::Wayland())
+            if (desktop::Wayland())
             {
-                const std::string& monitorName =
-                    monitor::getName(screen_num, screen_count);
+                const std::string& monitorName = desktop::monitorName(screen_num);
                 const auto names = string::split(monitorName, ':');
                 std::string connector;
                 if (!names.empty())
@@ -77,6 +76,7 @@ namespace mrv
                 }
                 else
                 {
+                    LOG_WARNING("Could not determine monitor connector.  Using first connector on list.");
                     // Last resort, use any hdr monitor if present
                     out = monitor::get_hdr_capabilities(-1);
                 }
@@ -385,6 +385,56 @@ namespace mrv
             return out;
         }
         
+        void Viewport::_getMonitorNits(bool quiet)
+        {
+            TLRENDER_P();
+            
+            if (!p.hdrCapabilities.supported)
+            {
+#ifdef __linux__
+                if (!quiet)
+                {
+                    LOG_WARNING(_("Could not determine monitor's nits."));
+                }
+                if (p.hdrMonitorFound)
+                {
+                    p.hdrCapabilities.min_nits = 0.F;
+                    p.hdrCapabilities.max_nits = 1000.F;
+                }
+                else
+                {
+                    p.hdrCapabilities.min_nits = 0.F;
+                    p.hdrCapabilities.max_nits = 100.F;
+                }
+#else
+                p.hdrMonitorFound = false;
+#endif
+            }
+            
+            if (!p.hdrMonitorFound)
+            {
+                LOG_STATUS(_("HDR monitor not found or not configured."));
+                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                format() = VK_FORMAT_B8G8R8A8_UNORM;
+            }
+            else
+            {
+                if (!quiet)
+                {
+                    std::string msg =
+                        string::Format(_("HDR monitor min. nits = {0}")).
+                        arg(p.hdrCapabilities.min_nits);
+                
+                    LOG_STATUS(msg);
+                
+                    msg = string::Format(_("HDR monitor max. nits = {0}")).
+                          arg(p.hdrCapabilities.max_nits);
+                    LOG_STATUS(msg);
+                }
+            }
+        }
+            
+        
         void Viewport::init_colorspace()
         {
             TLRENDER_P();
@@ -394,6 +444,8 @@ namespace mrv
             // Look for HDR10 or HLG if present
             p.hdrMonitorFound = false;
 
+            // First check if Wayland returned a valid color space for this
+            // monitor.
             bool valid_colorspace = false;
             switch (colorSpace())
             {
@@ -414,22 +466,12 @@ namespace mrv
             int screen_count = Fl::screen_count();
 
             p.hdrCapabilities = getHDRCapabilities(screen_num, screen_count);
-            if (valid_colorspace && p.hdrCapabilities.supported)
+            if (valid_colorspace)
             {
                 p.hdrMonitorFound = true;
                 LOG_STATUS(_("HDR monitor found."));
-                std::string msg = string::Format(_("HDR monitor min. nits = {0}")).
-                                  arg(p.hdrCapabilities.min_nits);
-                LOG_STATUS(msg);
-                msg = string::Format(_("HDR monitor max. nits = {0}")).
-                      arg(p.hdrCapabilities.max_nits);
-                LOG_STATUS(msg);
-            }
-            else
-            {
-                LOG_STATUS(_("HDR monitor not found or not configured."));
-                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-                format() = VK_FORMAT_B8G8R8A8_UNORM;
+
+                _getMonitorNits(false);    
             }
             
             msg = string::Format(_("Vulkan color space is {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
@@ -570,15 +612,13 @@ namespace mrv
                 int screen_num = this->screen_num();
                 int screen_count = Fl::screen_count();
 
-                monitor::HDRCapabilities capabilities =
-                    getHDRCapabilities(screen_num, screen_count);
-                
                 // Set the renderers's max nits
                 vk.render = timeline_vlk::Render::create(ctx, context);
-                vk.render->setMonitorHDRSupported(capabilities.supported);
-                vk.render->setMonitorMinNits(capabilities.min_nits);
-                vk.render->setMonitorMaxNits(capabilities.max_nits);
 
+                vk.render->setMonitorHDRSupported(p.hdrMonitorFound);
+                vk.render->setMonitorMinNits(p.hdrCapabilities.min_nits);
+                vk.render->setMonitorMaxNits(p.hdrCapabilities.max_nits);                
+                
                 vk.annotationRender = timeline_vlk::Render::create(ctx, context);
 
                 

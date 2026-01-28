@@ -149,8 +149,8 @@ namespace mrv
             if (out.empty())
             {
                 // Unknown OS, or could not retrieve monitor name.
-                // Just return Monitor
-                out = _("Monitor ") + std::to_string(monitorIndex +1) + ":";
+                // Just assume HDMI-
+                out = "HDMI-" + std::to_string(monitorIndex +1) + ":";
             }
 
             return out;

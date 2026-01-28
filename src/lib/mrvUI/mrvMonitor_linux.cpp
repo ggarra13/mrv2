@@ -146,7 +146,6 @@ namespace mrv
             HDRCapabilities out;
             const std::string drm_path = "/sys/class/drm/";
 
-            bool activeMonitorFound = false;
             std::vector<std::string> connections;
             
             for (const auto& card_entry : fs::directory_iterator(drm_path)) {
@@ -191,24 +190,20 @@ namespace mrv
 
                         if (!edid_data.empty())
                         {
-                            activeMonitorFound = false;
-                            out = monitor::parseEDIDLuminance(edid_data.data(), edid_data.size());
+                            out = monitor::parseEDIDLuminance(edid_data.data(),  edid_data.size());
+                            return out;
                         }
                         
-                        return out;
                     }
                 }
             }
-            
-            if (!activeMonitorFound)
+
+            std::cerr << _("Failed to find a monitor with connector ")
+                      << target_connector << std::endl;
+            std::cerr << "Valid connections:" << std::endl;
+            for (auto& connection : connections)
             {
-                std::cerr << _("Failed to find a monitor with connection ")
-                          << target_connector << std::endl;
-                std::cerr << "Valid connections:" << std::endl;
-                for (auto& connection : connections)
-                {
-                    std::cerr << connection << std::endl;
-                }
+                std::cerr << connection << std::endl;
             }
             return out;
         }
