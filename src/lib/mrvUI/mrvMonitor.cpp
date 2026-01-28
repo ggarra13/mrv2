@@ -195,9 +195,12 @@ namespace mrv
                                 caps.supported = true;
                             }
                                 
-                            
+                            // Found HDR. Assume a good monitor.
                             caps.supported = true;
+                            caps.min_nits = 0.005F;
+                            caps.max_nits = 1000.F;
 
+                            // Now, try to get the real min/max nits.
                             if (caps.supported) {
                                 caps.supported = true;
                                 

@@ -68,7 +68,7 @@ namespace mrv
             {
                 const std::string& monitorName =
                     monitor::getName(screen_num, screen_count);
-                auto names = string::split(monitorName, ':');
+                const auto names = string::split(monitorName, ':');
                 std::string connector;
                 if (!names.empty())
                 {
