@@ -211,6 +211,8 @@ namespace mrv
                                     uint8_t max_cv = ext[j + 4];
                                     if (max_cv > 0) {
                                         caps.max_nits = 50.0f * powf(2.0f, (float)max_cv / 32.0f);
+                                        std::cerr << "\t\tGOT max nits"
+                                                  << std::endl;
                                     }
                                 }
 
@@ -218,6 +220,8 @@ namespace mrv
                                 if (len >= 6) {
                                     uint8_t min_cv = ext[j + 6];
                                     if (min_cv > 0 && caps.max_nits > 0) {
+                                        std::cerr << "\t\tGOT min nits"
+                                                  << std::endl;
                                         // Formula for min luminance is slightly different in CTA-861
                                         caps.min_nits = (caps.max_nits * powf((float)min_cv / 255.0f, 2.0f));
                                     }

@@ -83,7 +83,8 @@ namespace mrv
                     out = monitor::get_hdr_capabilities(-1);
                 }
             }
-            else            {
+            else
+            {
                 out = monitor::get_hdr_capabilities(screen_num);
             }
             return out;
