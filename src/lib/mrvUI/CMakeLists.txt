@@ -33,15 +33,24 @@ set(LIBRARIES mrvWidgets)
 set(LIBRARIES_PRIVATE )
 
 if(TLRENDER_X11)
-    list(APPEND LIBRARIES_PRIVATE Xrandr)
+    find_library(XRANDR_LIBRARY
+	NAMES
+	Xrandr)
+    list(APPEND LIBRARIES_PRIVATE ${XRANDR_LIBRARY})
 endif()
 
 if(TLRENDER_WAYLAND)
-    list(APPEND LIBRARIES_PRIVATE wayland-client)
+    find_library(WAYLAND_CLIENT_LIBRARY
+	NAMES
+	wayland-client)
+    list(APPEND LIBRARIES_PRIVATE ${WAYLAND_CLIENT_LIBRARY})
 endif()
 
 if (UNIX AND NOT APPLE)
-    list(APPEND LIBRARIES_PRIVATE display-info)
+    find_library(DISPLAY_INFO
+	NAMES
+	display-info)
+    list(APPEND LIBRARIES_PRIVATE ${DISPLAY_INFO})
 endif()
 
 if (WIN32)

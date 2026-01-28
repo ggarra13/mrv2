@@ -64,7 +64,7 @@ namespace mrv
         getHDRCapabilities(int screen_num, int screen_count)
         {
             monitor::HDRCapabilities out;
-            if (desktop::Wayland())
+            if (1) //desktop::Wayland())
             {
                 const std::string& monitorName =
                     monitor::getName(screen_num, screen_count);
@@ -73,7 +73,6 @@ namespace mrv
                 if (!names.empty())
                 {
                     connector = names[0];
-                    std::cerr << "got connector " << connector << std::endl;
                     out = monitor::get_hdr_capabilities_by_name(connector);
                 }
                 else

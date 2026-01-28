@@ -21,7 +21,7 @@
 #    include "mrvMonitor_macOS.cpp"
 #endif
 
-#ifdef __limux__
+#ifdef __linux__
 extern "C" {
    #include <libdisplay-info/info.h>
 }

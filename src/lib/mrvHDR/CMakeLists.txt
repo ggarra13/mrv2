@@ -31,12 +31,14 @@ set(LIBRARIES
 )
 
 if (UNIX AND NOT APPLE)
-    list(APPEND LIBRARIES_PRIVATE display-info)
+    find_library(DISPLAY_INFO
+	NAMES
+	display-info)
+    list(APPEND LIBRARIES_PRIVATE ${DISPLAY_INFO})
 endif()
 
 add_library(mrvHDR ${SOURCES} ${HEADERS})
 hdr_files_to_absolute_paths()
-
 
 target_link_libraries(mrvHDR PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvHDR PROPERTIES FOLDER lib)
