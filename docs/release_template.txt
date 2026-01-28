@@ -1,4 +1,4 @@
-mrv2 v1.5.3: Professional VFX Review for Everyone
+mrv2 v1.5.4: Professional VFX Review for Everyone
 ================================
 
 I'm excited to announce the latest update to mrv2 and vmrv2 -- the open-source, high-performance professional players and review tools for the VFX, Animation and CG communities.
