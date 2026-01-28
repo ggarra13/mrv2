@@ -251,7 +251,7 @@ namespace mrv
     std::vector<std::string> get_machine_ids() {
         std::vector<std::string> out;
         std::string output;
-        
+        std::string errors;
         
 #if defined(_WIN32)
         //
