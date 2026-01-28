@@ -50,14 +50,11 @@ std::string get_machine_id() {
     try
     {
         mrv::os::exec_command("powershell \"Get-CimInstance -ClassName Win32_ComputerSystemProduct | Select-Object -ExpandProperty UUID\"", out, errors);
-        size_t pos = out.find("\r\n");
-        if (pos != std::string::npos)
-        {
-            out = out.substr(pos + 2);
-        }
     }
     catch(const std::exception& e)
     {
+        std::cout << out << std::endl;
+        std::cerr << errors << std::endl;
     }
 #elif defined(__APPLE__)
     std::array<char, 128> buffer;

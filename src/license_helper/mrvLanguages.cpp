@@ -304,8 +304,6 @@ namespace mrv
 
         char buf[256];
         snprintf(buf, 256, "license_helper-v%s", mrv::version());
-        std::cerr << buf << std::endl;
-        std::cerr << path << std::endl;
         bindtextdomain(buf, path.c_str());
         bind_textdomain_codeset(buf, "UTF-8");
         textdomain(buf);
