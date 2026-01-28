@@ -15,6 +15,13 @@
 #    include <fcntl.h>
 #endif
 
+#include "mrvHome.h"
+
+#include <tlCore/OS.h>
+#include <tlCore/String.h>
+
+#include <FL/Fl.H>
+
 #include <algorithm>
 #include <array>
 #include <iostream>
@@ -24,40 +31,6 @@
 #include <string>
 #include <thread>
 #include <vector>
-
-#include <tlCore/OS.h>
-#include <tlCore/String.h>
-
-#include <FL/Fl.H>
-
-#include "mrvApp/mrvApp.h"
-
-#include "mrvCore/mrvBackend.h"
-#include "mrvCore/mrvEnv.h"
-#include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvString.h"
-#include "mrvCore/mrvOS.h"
-
-#include "mrvFl/mrvIO.h"
-
-#include "mrvUI/mrvDesktop.h"
-
-#ifdef OPENGL_BACKEND
-#    include <tlGL/Init.h>
-#    include <FL/gl.h>
-#endif
-
-#ifdef VULKAN_BACKEND
-#    include "mrvWidgets/mrvVersion.h"
-#endif
-
-#include <string>
-#include <vector>
-#include <stdexcept>
-#include <array>
-#include <memory>
 
 namespace
 {
