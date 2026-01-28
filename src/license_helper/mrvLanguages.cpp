@@ -217,7 +217,7 @@ namespace mrv
             wchar_t wlanguage[32];
             fl_utf8towc(langcode, strlen(langcode), wlanguage, 32);
             setenv(L"LANGUAGE", wlanguage, 1);
-            mrv::os::execv();
+            //mrv::os::execv();
         }
 #else
         // Needed for Linux and OSX.  See above for windows.
