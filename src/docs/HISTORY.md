@@ -65,6 +65,7 @@ ChangeLog
 - Fixed parsing EDID on Linux which could mis-detect HDR monitor.
 - Fixed detecting HDR on Linux under Wayland correctly, even on multiple monitor setups.
 - Fixed device name on Windows and Linux which could not map the order in FLTK.
+- Added support for the .heif and .heic movie / picture formats.
 - Upgraded OpenJPH to v0.26.0.
 
 

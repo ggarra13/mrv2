@@ -409,6 +409,8 @@ namespace tl
                  {".dv", io::FileType::Movie},
                  {".flv", io::FileType::Movie},
                  {".gif", io::FileType::Movie},
+                 {".heic", io::FileType::Movie},
+                 {".heif", io::FileType::Movie},
                  {".m4v", io::FileType::Movie},
                  {".mkv", io::FileType::Movie},
                  {".mk3d", io::FileType::Movie},
@@ -426,7 +428,7 @@ namespace tl
                  {".webm", io::FileType::Movie},
                  {".webp", io::FileType::Movie},
                  {".wmv", io::FileType::Movie},
-
+                 
                  // Audio Formats
                  {".aiff", io::FileType::Audio},
                  {".mka", io::FileType::Audio},
