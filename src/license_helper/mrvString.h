@@ -15,7 +15,7 @@ namespace mrv
     namespace string
     {
         using namespace tl::string;
-
+        
         /**
          * Split a string on a char delimiter
          *

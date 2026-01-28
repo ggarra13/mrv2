@@ -17,9 +17,6 @@
 
 #include "mrvHome.h"
 
-#include <tlCore/OS.h>
-#include <tlCore/String.h>
-
 #include <FL/Fl.H>
 
 #include <algorithm>
