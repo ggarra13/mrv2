@@ -58,6 +58,33 @@ namespace
 
 namespace mrv
 {
+    namespace
+    {
+        monitor::HDRCapabilities
+        getHDRCapabilities(int screen_num, int screen_count)
+        {
+            monitor::HDRCapabilities out;
+            if (desktop::Wayland())
+            {
+                std::cerr << "get monitor name" << std::endl;
+                const std::string& monitorName =
+                    monitor::getName(screen_num, screen_count);
+                std::cerr << "got monitor name " << monitorName << std::endl;
+                const std::string connector =
+                    string::split(monitorName, ':')[0];
+#ifdef FLTK_USE_WAYLAND
+                std::cerr << "connector " << connector << std::endl;
+                out = monitor::get_hdr_capabilities_by_name(connector);
+#endif
+            }
+            else
+            {
+                out = monitor::get_hdr_capabilities(screen_num);
+            }
+            return out;
+        }
+    }
+
     using namespace tl;
 
     namespace vulkan
@@ -382,21 +409,7 @@ namespace mrv
             int screen_num = this->screen_num();
             int screen_count = Fl::screen_count();
 
-            if (desktop::Wayland())
-            {
-                const std::string& monitorName =
-                    monitor::getName(screen_num, screen_count);
-                const std::string connector =
-                    string::split(monitorName, ':')[0];
-#ifdef FLTK_USE_WAYLAND
-                p.hdrCapabilities =
-                    monitor::get_hdr_capabilities_by_name(connector);
-#endif
-            }
-            else
-            {
-                p.hdrCapabilities = monitor::get_hdr_capabilities(screen_num);
-            }
+            p.hdrCapabilities = getHDRCapabilities(screen_num, screen_count);
             
             if (valid_colorspace && p.hdrCapabilities.supported)
             {
@@ -554,22 +567,8 @@ namespace mrv
                 int screen_num = this->screen_num();
                 int screen_count = Fl::screen_count();
 
-                monitor::HDRCapabilities capabilities;
-                if (desktop::Wayland())
-                {
-                    const std::string& monitorName =
-                        monitor::getName(screen_num, screen_count);
-                    const std::string connector =
-                        string::split(monitorName, ':')[0];
-#ifdef FLTK_USE_WAYLAND
-                    capabilities =
-                        monitor::get_hdr_capabilities_by_name(connector);
-#endif
-                }
-                else
-                {
-                    capabilities = monitor::get_hdr_capabilities(screen_num);
-                }
+                monitor::HDRCapabilities capabilities =
+                    getHDRCapabilities(screen_num, screen_count);
                 
                 // Set the renderers's max nits
                 vk.render = timeline_vlk::Render::create(ctx, context);

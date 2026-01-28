@@ -159,6 +159,8 @@ namespace mrv
 
             for (int i = 0; i < numExtensions && (ext + 128 <= edid + length); ++i) {
                 if (ext[0] == 0x02 && ext[1] == 0x03) { // CTA-861 Extension Block
+                    std::cerr << "Extension " << i << " GOT CTA-861"
+                              << std::endl;
                     uint8_t dtdStart = ext[2];
 
                     // dtdStart should not exceed the block size (usually 128)
@@ -176,12 +178,18 @@ namespace mrv
                 
                         // Tag 7 + Extended Tag 6 = HDR Static Metadata Block
                         if (tag == 0x07 && len >= 3 && ext[j + 1] == 0x06) {
+                            
+                            std::cerr << "\tExtension " << i
+                                      << " tag 07 + extended tag 6"
+                                      << std::endl;
 
                             // Byte j+3: Static Metadata Descriptor Type
                             // We only know how to parse Type 1 (0x01).
                             uint8_t type = ext[j + 3];
                             if (type & 0x01) {
                                 caps.supported = true;
+                                
+                                std::cerr << "\tGot type 0x01" << std::endl;
 
                                 // Byte j+4: Desired Content Max Luminance
                                 if (len >= 4) {
@@ -202,10 +210,15 @@ namespace mrv
                                 
                                 return caps;
                             }
+                            else
+                            {
+                                std::cerr << "\tNOT type 0x01" << std::endl;
+                            }
                         }
                         j += len + 1;
                     }
                 }
+                std::cerr << "\tNEXT EXTENSION" << std::endl;
                 ext += 128;
             }
             return caps;

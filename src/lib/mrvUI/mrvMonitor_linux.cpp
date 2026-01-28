@@ -97,6 +97,8 @@ namespace mrv
         {
             HDRCapabilities out;
             const std::string drm_path = "/sys/class/drm/";
+            std::cerr << "TARGET CONNECTOR: " << target_connector
+                      << std::endl;
             
             for (const auto& card_entry : fs::directory_iterator(drm_path)) {
                 std::string card_name = card_entry.path().filename().string();
@@ -118,6 +120,7 @@ namespace mrv
                     if (conn_full_name.find(card_name + "-") == 0) {
                         // Match the FLTK label to the DRM connector name
                         conn_name = normalize_connector(conn_name);
+                        std::cerr << "Checking against Connector: " << conn_name << std::endl;
                         if (conn_name != target_connector) continue;
                         
                         std::ifstream status_file(conn_entry.path() / "status");
