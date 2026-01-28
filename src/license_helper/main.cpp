@@ -43,46 +43,21 @@ std::string get_machine_id() {
         
         
 #if defined(_WIN32)
-#  if defined(_M_X64) || defined(_M_AMD64)
     //
     // Due to legacy issues, on AMD64 we relied on wmic for the license.
     //
-    const std::string wmic_exe = "C:/Windows/System32/wbem/WMIC.exe";
-    if (mrv::file::isReadable(wmic_exe))
+    std::string errors;
+    try
     {
-        std::string errors;
-        try
+        mrv::os::exec_command("powershell \"Get-CimInstance -ClassName Win32_ComputerSystemProduct | Select-Object -ExpandProperty UUID\"", out, errors);
+        size_t pos = out.find("\r\n");
+        if (pos != std::string::npos)
         {
-            mrv::os::exec_command("wmic csproduct get uuid", out,
-                                  errors);
-            size_t pos = out.find("\r\n");
-            if (pos != std::string::npos)
-            {
-                out = out.substr(pos + 2);
-            }
-        }
-        catch(const std::exception& e)
-        {
+            out = out.substr(pos + 2);
         }
     }
-#  endif
-    if (out.empty())
+    catch(const std::exception& e)
     {
-        HKEY hKey;
-        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
-                          "SOFTWARE\\Microsoft\\Cryptography",
-                          0, KEY_READ, &hKey) == ERROR_SUCCESS)
-        {
-            char value[256];
-            DWORD value_length = sizeof(value);
-            if (RegGetValueA(hKey, nullptr, "MachineGuid",
-                             RRF_RT_REG_SZ, nullptr,
-                             &value, &value_length) == ERROR_SUCCESS)
-            {
-                out = value;
-            }
-            RegCloseKey(hKey);
-        }
     }
 #elif defined(__APPLE__)
     std::array<char, 128> buffer;

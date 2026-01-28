@@ -34,7 +34,7 @@ namespace mrv
     TLRENDER_ENUM_SERIALIZE(LicenseType);
 
     
-    std::string get_machine_id();
+    std::vector<std::string> get_machine_ids();
 
     bool release_license();
     License validate_license(std::string& expiration_date);

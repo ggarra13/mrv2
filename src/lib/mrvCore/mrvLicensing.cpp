@@ -232,6 +232,15 @@ namespace
         msg = tl::string::Format(_("Supports voice annotations '{0}'")).arg(mrv::app::soporta_voice);
         LOG_INFO(msg);
     }
+
+    inline std::string stripOutput(const std::string& output)
+    {
+        std::string out = output;
+        out.erase(remove(out.begin(), out.end(), '\n'), out.end());
+        out.erase(remove(out.begin(), out.end(), '\r'), out.end());
+        out.erase(remove(out.begin(), out.end(), ' '), out.end());
+        return out;
+    }
 }
 
 namespace mrv
@@ -239,80 +248,69 @@ namespace mrv
     TLRENDER_ENUM_IMPL(LicenseType, _("Demo"), _("Node-Locked"), _("Floating"));
     TLRENDER_ENUM_SERIALIZE_IMPL(LicenseType);
     
-    std::string get_machine_id() {
-        std::string out;
+    std::vector<std::string> get_machine_ids() {
+        std::vector<std::string> out;
+        std::string output;
+        
         
 #if defined(_WIN32)
-#  if defined(_M_X64) || defined(_M_AMD64)
         //
         // Due to legacy issues, on AMD64 we relied on wmic for the license.
-        //
-        const std::string wmic_exe = "C:/Windows/System32/wbem/WMIC.exe";
-        if (file::isReadable(wmic_exe))
+        //        std::string errors;
+        try
         {
-            std::string errors;
-            try
-            {
-                mrv::os::exec_command("wmic csproduct get uuid", out,
-                                      errors);
-                size_t pos = out.find("\r\n");
-                if (pos != std::string::npos)
-                {
-                    out = out.substr(pos + 2);
-                }
-            }
-            catch(const std::exception& e)
-            {
-                LOG_ERROR(e.what());
-                LOG_ERROR(errors);
-            }
+            mrv::os::exec_command("powershell \"Get-CimInstance -ClassName Win32_ComputerSystemProduct | Select-Object -ExpandProperty UUID\"", output, errors);
+            // mrv::os::exec_command("wmic csproduct get uuid", output,
+            //                       errors);
+            out.push_back(stripOutput(output));
         }
-#  endif
-        if (out.empty())
+        catch(const std::exception& e)
         {
-            HKEY hKey;
-            if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
-                              "SOFTWARE\\Microsoft\\Cryptography",
-                              0, KEY_READ, &hKey) == ERROR_SUCCESS)
-            {
-                char value[256];
-                DWORD value_length = sizeof(value);
-                if (RegGetValueA(hKey, nullptr, "MachineGuid",
-                                 RRF_RT_REG_SZ, nullptr,
-                                 &value, &value_length) == ERROR_SUCCESS)
-                {
-                    out = value;
-                }
-                RegCloseKey(hKey);
-            }
+            LOG_ERROR(e.what());
+            LOG_ERROR(errors);
         }
+        HKEY hKey;
+        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+                          "SOFTWARE\\Microsoft\\Cryptography",
+                          0, KEY_READ, &hKey) == ERROR_SUCCESS)
+        {
+            char value[256];
+            DWORD value_length = sizeof(value);
+            if (RegGetValueA(hKey, nullptr, "MachineGuid",
+                             RRF_RT_REG_SZ, nullptr,
+                             &value, &value_length) == ERROR_SUCCESS)
+            {
+                out.push_back(stripOutput(value));
+            }
+            RegCloseKey(hKey);
+        }
+        
 #elif defined(__APPLE__)
         std::array<char, 128> buffer;
         std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(
                                                           "ioreg -rd1 -c IOPlatformExpertDevice | grep IOPlatformUUID | cut -d '\"' -f4", "r"), pclose);
         if (pipe) {
             while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-                out += buffer.data();
+                output += buffer.data();
             }
+            out.push_back(stripOutput(output));
         }
 #else
         std::ifstream f("/etc/machine-id");
-        std::getline(f, out);
+        std::getline(f, output);
+        out.push_back(stripOutput(output));
 #endif
-        out.erase(remove(out.begin(), out.end(), '\n'), out.end());
-        out.erase(remove(out.begin(), out.end(), '\r'), out.end());
-        out.erase(remove(out.begin(), out.end(), ' '), out.end());
         return out;
     }
 
     void get_network_configuration(std::string& server, int& port,
-                                   std::string& machine_id,
+                                   std::vector<std::string>& machine_ids,
                                    std::string& master_key)
     {
         server = "srv1037957.hstgr.cloud";
         port = 443;
 
-        machine_id = get_machine_id();
+        machine_ids = get_machine_ids();
         master_key = ""; // Only used on floating licenses
 
         const std::string path = licensepath();
@@ -499,9 +497,9 @@ namespace mrv
         // --- Configuration ---
         std::string serverHost;
         int serverPort;
-        std::string machine_id;
+        std::vector<std::string> machine_ids;
         std::string master_key;
-        get_network_configuration(serverHost, serverPort, machine_id,
+        get_network_configuration(serverHost, serverPort, machine_ids,
                                   master_key);
 
         if (master_key.empty())
@@ -513,7 +511,7 @@ namespace mrv
         nlohmann::json request_body_json;
 
         // Add the machine_id and session_id
-        request_body_json["machine_id"] = machine_id;
+        request_body_json["machine_id"] = machine_ids[0];
         request_body_json["session_id"] = app::session_id;
 
         // Parse the corrected master key string and add it as a nested object
@@ -543,9 +541,9 @@ namespace mrv
         // --- Configuration ---
         std::string serverHost;
         int serverPort;
-        std::string machine_id;
+        std::vector<std::string> machine_ids;
         std::string master_key;
-        get_network_configuration(serverHost, serverPort, machine_id,
+        get_network_configuration(serverHost, serverPort, machine_ids,
                                   master_key);
         
         if (master_key.empty())
@@ -556,7 +554,7 @@ namespace mrv
         nlohmann::json request_body_json;
 
         // Add the machine_id
-        request_body_json["machine_id"] = machine_id;
+        request_body_json["machine_id"] = machine_ids[0];
         request_body_json["session_id"] = "";
 
         // Parse the corrected master key string and add it as a nested object
@@ -615,26 +613,39 @@ namespace mrv
         // --- Configuration ---
         std::string serverHost;
         int serverPort;
-        std::string machine_id;
+        std::vector<std::string> machine_ids;
         std::string master_key;
-        get_network_configuration(serverHost, serverPort, machine_id,
+        get_network_configuration(serverHost, serverPort, machine_ids,
                                   master_key);
             
         // --- Build JSON request ---
-        const std::string requestVersion = mrv::version();  // unused - legacy
-        const std::string requestBody = "{\"machine_id\":\"" +
-                                        machine_id + "\",\"plan\":\""
-                                        + requestVersion + "\"}";
+        std::string machine_id;
+        nlohmann::json json_data;
+        for (const auto& id : machine_ids)
+        {
+            const std::string requestVersion = mrv::version();  // unused - legacy
+            const std::string requestBody = "{\"machine_id\":\"" +
+                                            id + "\",\"plan\":\""
+                                            + requestVersion + "\"}";
 
-        // --- HTTP POST to /node_locked_license ---
-        nlohmann::json json_data = post_request(serverHost, serverPort,
-                                                "/node_locked_license",
-                                                requestBody);
-        if (json_data.is_null() ||
-            !json_data.contains("signature") ||
-            !json_data.contains("payload"))
+            // --- HTTP POST to /node_locked_license ---
+            json_data = post_request(serverHost, serverPort,
+                                     "/node_locked_license",
+                                     requestBody);
+            if (json_data.is_null() ||
+                !json_data.contains("signature") ||
+                !json_data.contains("payload"))
+                continue;
+
+            machine_id = id;
+            break;
+        }
+
+        if (machine_id.empty())
+        {
             return License::kInvalid;
-
+        }
+        
         // --- Parse JSON response with nlohmann::json ---
             
         // Extract the 'signature' string
@@ -692,9 +703,9 @@ namespace mrv
         // --- Configuration ---
         std::string serverHost;
         int serverPort;
-        std::string machine_id;
+        std::vector<std::string> machine_ids;
         std::string master_key;
-        get_network_configuration(serverHost, serverPort, machine_id,
+        get_network_configuration(serverHost, serverPort, machine_ids,
                                   master_key);
         
         if (master_key.empty())
@@ -704,7 +715,7 @@ namespace mrv
         nlohmann::json request_body_json;
         
         // Add the machine_id
-        request_body_json["machine_id"] = machine_id;
+        request_body_json["machine_id"] = machine_ids[0];
         request_body_json["session_id"] = app::session_id;
 
         // Parse the corrected master key string and add it as a nested object

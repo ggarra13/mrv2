@@ -198,7 +198,7 @@
 
     // Update the description text based on backend
     if (backend === "mrv2") {
-	descBox.innerHTML = "<strong>mrv2 (OpenGL):</strong> Robust, reliable and widely compatible";
+	descBox.innerHTML = "<strong>mrv2 (OpenGL):</strong> Robust, reliable and widely compatible.  OpenUSD support.";
 	if (/Windows/.test(platform)) {
 	    bestFor.innerHTML = "Best for Windows 10 and Windows 11";
 	}
@@ -223,7 +223,7 @@
 	    bestFor.innerHTML = "Best for macBook Pro Intel 2022 (not recommended)";
 	}
 	else if (/Darwin-arm64/.test(platform)) {
-	    bestFor.innerHTML = "Best for macOS M3+";
+	    bestFor.innerHTML = "M1+ Compatible (40 FPS at 4K).  Best for macOS M3+ (60 FPS at 4K)";
 	}
     }
 
