@@ -159,8 +159,6 @@ namespace mrv
 
             for (int i = 0; i < numExtensions && (ext + 128 <= edid + length); ++i) {
                 if (ext[0] == 0x02 && ext[1] == 0x03) { // CTA-861 Extension Block
-                    std::cerr << "Extension " << i << " GOT CTA-861"
-                              << std::endl;
                     uint8_t dtdStart = ext[2];
 
                     // dtdStart should not exceed the block size (usually 128)
@@ -179,17 +177,12 @@ namespace mrv
                         // Tag 7 + Extended Tag 6 = HDR Static Metadata Block
                         if (tag == 0x07 && len >= 3 && ext[j + 1] == 0x06) {
                             
-                            std::cerr << "\tExtension " << i
-                                      << " tag 07 + extended tag 6"
-                                      << std::endl;
-                            
                             // Byte j+3: Static Metadata Descriptor Type
                             // We only know how to parse Type 1 (0x01).
 
                             // ChatGPT tells me to compare type agains 0
                             // Gemini tells me to compare against byte 0x01
                             uint8_t type = ext[j + 3];
-                            std::cerr << "got type " << (int)type << std::endl;
                             if (type & 0x01)
                             {
                                 caps.supported = true;
@@ -204,15 +197,11 @@ namespace mrv
                             if (caps.supported) {
                                 caps.supported = true;
                                 
-                                std::cerr << "\tGot HDR" << std::endl;
-
                                 // Byte j+4: Desired Content Max Luminance
                                 if (len >= 4) {
                                     uint8_t max_cv = ext[j + 4];
                                     if (max_cv > 0) {
                                         caps.max_nits = 50.0f * powf(2.0f, (float)max_cv / 32.0f);
-                                        std::cerr << "\t\tGOT max nits"
-                                                  << std::endl;
                                     }
                                 }
 
@@ -220,8 +209,6 @@ namespace mrv
                                 if (len >= 6) {
                                     uint8_t min_cv = ext[j + 6];
                                     if (min_cv > 0 && caps.max_nits > 0) {
-                                        std::cerr << "\t\tGOT min nits"
-                                                  << std::endl;
                                         // Formula for min luminance is slightly different in CTA-861
                                         caps.min_nits = (caps.max_nits * powf((float)min_cv / 255.0f, 2.0f));
                                     }
@@ -233,7 +220,6 @@ namespace mrv
                         j += len + 1;
                     }
                 }
-                std::cerr << "---------------------------------" << std::endl;
                 ext += 128;
             }
             return caps;
