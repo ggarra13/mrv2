@@ -235,6 +235,8 @@ if(BUILD_PYTHON)
 	message(STATUS "Add dependency ${PYTHON_DEP} to libplacebo")
 	add_dependencies(libplacebo ${PYTHON_DEP})
     endif()
+    message(STATUS "Add dependency ${PYTHON_DEP} to libdisplay-info")
+    add_dependencies(libdisplay-info ${PYTHON_DEP})
 endif()
 
 set(pyFLTK_DEP )
