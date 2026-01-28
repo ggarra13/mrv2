@@ -40,7 +40,7 @@ if(TLRENDER_WAYLAND)
     list(APPEND LIBRARIES_PRIVATE wayland-client)
 endif()
 
-if (UNIX)
+if (UNIX AND NOT APPLE)
     list(APPEND LIBRARIES_PRIVATE display-info)
 endif()
 

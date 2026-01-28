@@ -143,14 +143,7 @@ namespace mrv
         path = tmppath();
         return path;
     }
-
-    std::string iconpath()
-    {
-        std::string iconroot = rootpath();
-        iconroot += "/icons/";
-        return iconroot;
-    }
-
+    
     std::string studiopath()
     {
         const char* c = fl_getenv("MRV2_STUDIOPATH");
@@ -168,78 +161,6 @@ namespace mrv
         std::string prefs = mrv::homepath();
         prefs += "/.filmaura/";
         return prefs;
-    }
-
-    std::string pythonpath()
-    {
-        std::string path = mrv::rootpath();
-        path += "/python/demos/";
-        return path;
-    }
-
-    std::string presetspath()
-    {
-        std::string path = studiopath() + "/presets/";
-        if (!fs::is_directory(path))
-            path = mrv::rootpath() + "/presets/";
-        return path;
-    }
-
-    std::vector<std::string> python_plugin_paths()
-    {
-        std::vector<std::string> out;
-        const char* c = fl_getenv("MRV2_PYTHON_PLUGINS");
-        if (!c)
-            return out;
-
-#ifdef _WIN32
-        out = string::split(c, ';');
-#else
-        out = string::split(c, ':');
-#endif
-        return out;
-    }
-
-    const char* docs_list[] = {"en", "es", nullptr};
-
-    std::string docspath()
-    {
-        std::string docs;
-
-        const char* language = fl_getenv("LANGUAGE");
-        if (!language || strlen(language) == 0)
-            language = "en";
-
-        // Just the language code "es" without the "es_AR.UTF-8" if any.
-        std::string code = language;
-        code = code.substr(0, 2);
-
-        bool found = false;
-        const char** d = docs_list;
-        for (; *d; ++d)
-        {
-            if (code == *d)
-            {
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-            code = "en";
-
-        std::string local_docs =
-            mrv::rootpath() + "/docs/" + code + "/index.html";
-        if (file::isReadable(local_docs))
-        {
-            docs = "file://" + local_docs;
-        }
-        else
-        {
-            std::string online_docs =
-                "mrv2.sourceforge.io/docs/" + code + "/index.html";
-            docs = "https://" + online_docs;
-        }
-        return docs;
     }
 
 

@@ -30,7 +30,7 @@ set(LIBRARIES
     ${Intl_LIBRARIES}
 )
 
-if (UNIX)
+if (UNIX AND NOT APPLE)
     list(APPEND LIBRARIES_PRIVATE display-info)
 endif()
 
