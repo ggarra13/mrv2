@@ -3,12 +3,14 @@
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 set(HEADERS
+    mrvDesktop.h
     mrvNDICallbacks.h
     mrvNDIView.h
     mrvMonitor.h
 )
 
 set(SOURCES
+    mrvDesktop.cpp
     mrvNDICallbacks.cpp
     mrvNDIView.cpp
     mrvMonitor.cpp

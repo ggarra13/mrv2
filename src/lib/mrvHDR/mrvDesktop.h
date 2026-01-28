@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <string>
+
 namespace mrv
 {
     namespace desktop
@@ -13,5 +15,11 @@ namespace mrv
         bool XWayland();
         bool Windows();
         bool macOS();
+
+        std::string WaylandCompositor();
+
+        std::string getManufacturerName(const char* edidCode);
+        std::string monitorName(int monitorIndex);
+
     } // namespace desktop
 } // namespace mrv

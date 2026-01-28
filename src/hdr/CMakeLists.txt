@@ -5,7 +5,6 @@
 
 set(HEADERS
     mrvContextObject.h
-    mrvDesktop.h
     mrvEnv.h
     mrvFile.h
     mrvHDRApp.h
@@ -18,7 +17,6 @@ set(HEADERS
 )
 set(SOURCES
     mrvContextObject.cpp
-    mrvDesktop.cpp
     mrvEnv.cpp
     mrvFile.cpp
     mrvHDRApp.cpp

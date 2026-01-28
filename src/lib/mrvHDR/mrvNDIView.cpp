@@ -2,17 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-//
-//
-//
-
-#include <atomic>
-#include <chrono>
-#include <condition_variable>
-#include <limits>
-#include <mutex>
-#include <regex>
-#include <thread>
+#define LOG_WARNING(x) std::cerr << x << std::endl;
 
 #include <Imath/half.h>
 
@@ -26,10 +16,11 @@
 
 #include <tlDevice/NDI/NDI.h>
 
-#include "mrvCore/mrvI8N.h"
-
+#include "mrvHDR/mrvDesktop.h"
 #include "mrvHDR/mrvNDICallbacks.h"
 #include "mrvHDR/mrvMonitor.h"
+
+#include "mrvCore/mrvI8N.h"
 
 #include "hdr/mrvHDRApp.h"
 #include "mrvNDIView.h"
@@ -52,6 +43,14 @@ extern "C"
 #include <FL/Fl_Vk_Utils.H>
 #include <FL/Fl_Menu_.H>
 #include <FL/Fl_Menu_Button.H>
+
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <limits>
+#include <mutex>
+#include <regex>
+#include <thread>
 
 #define LOG_STATUS(x) std::cout << x << std::endl;
 
@@ -231,45 +230,24 @@ namespace
 } // namespace
 
 namespace mrv
-{
-    namespace desktop
-    {
-        bool Wayland()
-        {
-            bool out = false;
-
-            fl_open_display();
-#ifdef __linux__
-#    ifdef FLTK_USE_WAYLAND
-            if (fl_wl_display())
-            {
-                out = true;
-            }
-#    endif
-#endif
-            return out;
-        }
-    }
-    
+{    
     monitor::HDRCapabilities
     getHDRCapabilities(int screen_num, int screen_count)
     {
         monitor::HDRCapabilities out;
         if (desktop::Wayland())
         {
-            const std::string& monitorName =
-                monitor::getName(screen_num, screen_count);
+            const std::string& monitorName = desktop::monitorName(screen_num);
             const auto names = string::split(monitorName, ':');
             std::string connector;
             if (!names.empty())
             {
                 connector = names[0];
-#ifdef FLTK_USE_WAYLAND
                 out = monitor::get_hdr_capabilities_by_name(connector);
-#endif
             }
             else
             {
+                LOG_WARNING("Could not determine monitor connector.  Using first connector on list.");
                 // Last resort, use any hdr monitor if present
                 out = monitor::get_hdr_capabilities(-1);
             }

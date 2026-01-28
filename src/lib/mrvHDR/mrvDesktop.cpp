@@ -3,18 +3,13 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#include "mrvOS.h"
-#include "mrvString.h"
 
-#include "mrvUI/mrvMonitor.h"
-
-#undef Status
-#undef None
-#include "mrvFl/mrvIO.h"
+#include "mrvHDR/mrvMonitor.h"
 
 #include <FL/Fl.H>
 #include <FL/platform.H>
 
+#include <iostream>
 #include <string>
 
 namespace
@@ -35,6 +30,22 @@ namespace mrv
 #ifdef __linux__
 #    ifdef FLTK_USE_X11
             if (fl_x11_display())
+            {
+                out = true;
+            }
+#    endif
+#endif
+            return out;
+        }
+
+        bool Wayland()
+        {
+            bool out = false;
+
+            fl_open_display();
+#ifdef __linux__
+#    ifdef FLTK_USE_WAYLAND
+            if (fl_wl_display())
             {
                 out = true;
             }
@@ -88,5 +99,27 @@ namespace mrv
         }
         
 
+        std::string monitorName(int monitorIndex)
+        {
+            std::string out;
+            try
+            {
+                out = monitor::getName(monitorIndex, Fl::screen_count());
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << e.what() << std::endl;
+            }
+
+            if (out.empty())
+            {
+                // Unknown OS, or could not retrieve monitor name.
+                // Just assume HDMI-
+                out = "HDMI-" + std::to_string(monitorIndex +1) + ":";
+            }
+
+            return out;
+        }
+        
     } // namespace desktop
 } // namespace mrv
