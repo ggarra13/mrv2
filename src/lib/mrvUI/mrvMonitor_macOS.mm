@@ -60,7 +60,9 @@ namespace mrv {
 
             CFMutableDictionaryRef match = IOServiceMatching("IODisplayConnect");
             if (IOServiceGetMatchingServices(kIOMasterPortDefault, match, &iter) != KERN_SUCCESS)
+            {
                 return out;
+            }
 
             while ((service = IOIteratorNext(iter))) {
                 CFDictionaryRef info = IODisplayCreateInfoDictionary(service, kIODisplayOnlyPreferredName);
@@ -83,7 +85,13 @@ namespace mrv {
                 uint32_t cgProduct = CGDisplayModelNumber(cgDisplayID);
 
                 if (vendor == cgVendor && product == cgProduct) {
-                    CFDataRef edid = (CFDataRef)IORegistryEntryCreateCFProperty(service, CFSTR("IODisplayEDID"), kCFAllocatorDefault, 0);
+                    CFDataRef edid = (CFDataRef)IORegistryEntrySearchCFProperty(
+                        service, 
+                        kIOServicePlane, 
+                        CFSTR("IODisplayEDID"), 
+                        kCFAllocatorDefault, 
+                        kIORegistryIterateRecursively | kIORegistryIterateParents
+                        );
 
                     if (edid) {
                         const UInt8* bytes = CFDataGetBytePtr(edid);

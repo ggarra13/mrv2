@@ -159,6 +159,7 @@ namespace mrv
 
             for (int i = 0; i < numExtensions && (ext + 128 <= edid + length); ++i) {
                 if (ext[0] == 0x02 && ext[1] == 0x03) { // CTA-861 Extension Block
+                    std::cerr << "Got CTA-861" << std::endl;
                     uint8_t dtdStart = ext[2];
 
                     // dtdStart should not exceed the block size (usually 128)
@@ -177,6 +178,8 @@ namespace mrv
                         // Tag 7 + Extended Tag 6 = HDR Static Metadata Block
                         if (tag == 0x07 && len >= 3 && ext[j + 1] == 0x06) {
 
+                            std::cerr << "Got HDR" << std::endl;
+                    
                             uint8_t eotf = ext[j + 2];
                             if ((eotf & 0x0E) == 0) { // No HDR bits set
                                 return caps; // Keep supported=false
@@ -190,12 +193,15 @@ namespace mrv
                             uint8_t type = ext[j + 3];
                             if (type & 0x01)
                             {
+                                std::cerr << "Got HDR supported" << std::endl;
                                 caps.supported = true;
                                 
                                 // Byte j+4: Desired Content Max Luminance
                                 if (len >= 4) {
                                     uint8_t max_cv = ext[j + 4];
                                     if (max_cv > 0) {
+                                        std::cerr << "got max nits"
+                                                  << std::endl;
                                         caps.max_nits = 50.0f * powf(2.0f, (float)max_cv / 32.0f);
                                     }
                                 }
@@ -206,6 +212,8 @@ namespace mrv
                                     if (min_cv > 0 && caps.max_nits > 0) {
                                         // Must divide by 100 contrary to
                                         // what Gemini an ChatGPT say.
+                                        std::cerr << "got min nits"
+                                                  << std::endl;
                                         caps.min_nits = (caps.max_nits * powf((float)min_cv / 255.0f, 2.0f)) / 100.0F;
                                     }
                                 }
