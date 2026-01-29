@@ -85,6 +85,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libavutil
 	libcairo
 	libcrypto
+	libdisplay-info
 	liblcms2
 	libMaterial
 	libmd
