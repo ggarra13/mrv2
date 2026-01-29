@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.5.3\n"
+"Project-Id-Version: mrv2 v1.5.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -3609,7 +3609,10 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
-msgid "HDR monitor found."
+msgid "Could not determine monitor's nits."
+msgstr ""
+
+msgid "HDR monitor not found or not configured."
 msgstr ""
 
 msgid "HDR monitor min. nits = {0}"
@@ -3618,7 +3621,7 @@ msgstr ""
 msgid "HDR monitor max. nits = {0}"
 msgstr ""
 
-msgid "HDR monitor not found or not configured."
+msgid "HDR monitor found."
 msgstr ""
 
 msgid "Vulkan color space is {0}"
@@ -4199,9 +4202,6 @@ msgid "Help/Documentation"
 msgstr ""
 
 msgid "Help/About"
-msgstr ""
-
-msgid "Monitor "
 msgstr ""
 
 msgid "Favorites"

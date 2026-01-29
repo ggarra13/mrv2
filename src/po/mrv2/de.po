@@ -3916,7 +3916,10 @@ msgstr "    Vorne    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor found."
+msgid "Could not determine monitor's nits."
+msgstr "Der aktuelle Pfad kann nicht gefunden werden."
+
+msgid "HDR monitor not found or not configured."
 msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
 
 msgid "HDR monitor min. nits = {0}"
@@ -3925,7 +3928,7 @@ msgstr "HDR-Monitor min. nits = {0}"
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR-Monitor max. nits = {0}"
 
-msgid "HDR monitor not found or not configured."
+msgid "HDR monitor found."
 msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
 
 msgid "Vulkan color space is {0}"
@@ -4511,9 +4514,6 @@ msgstr "Hilfe/Dokumentation"
 
 msgid "Help/About"
 msgstr "Hilfe/ber"
-
-msgid "Monitor "
-msgstr "berwachung"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -8077,6 +8077,9 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "Monitor "
+#~ msgstr "berwachung"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
