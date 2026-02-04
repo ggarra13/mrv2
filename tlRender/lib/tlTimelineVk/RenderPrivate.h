@@ -51,6 +51,9 @@ namespace tl
         std::string textureFragmentSource();
         std::string differenceFragmentSource();
 
+        // For HDR peak detection
+        std::string computeHDRPeakDetection();
+        
         // For pixel conversions
         std::string computeRGB_F16_To_RGBA_F16();
         std::string computeRGB_F32_To_RGBA_F32();

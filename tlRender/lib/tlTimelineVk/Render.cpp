@@ -1254,6 +1254,24 @@ namespace tl
                 p.compute["rgbf32_to_rgbaf32"]->createComputePipeline();
             }
             
+            if (!p.compute["hdr_peak_detection"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.compute["hdr_peak_detection"] = vlk::Shader::create(ctx,
+                                                                     hdr_peak_detection_Compute_spv,
+                                                                     hdr_peak_detection_Compute_spv_len,
+                                                                     "hdr_peak_detection");
+#else
+                p.compute["hdr_peak_detection"] = vlk::Shader::create(ctx,
+                                                                      computeHDRPeakDetection(),
+                                                                      "hdr_peak_detection");
+#endif
+                //p.compute["hdr_peak_detection"]->addSSBO("PeakData", vlk::kShaderCompute);
+                p.compute["hdr_peak_detection"]->addTexture("img", vlk::kShaderCompute);
+                _createBindingSet(p.compute["hdr_peak_detection"]);
+                p.compute["hdr_peak_detection"]->createComputePipeline();
+            }
+            
             
             _displayShader();
 
@@ -2416,10 +2434,7 @@ namespace tl
 
                     std::stringstream s;
 
-                    // std::cerr << "num_vertex_attribs=" <<
-                    // res->num_vertex_attribs
-                    //           << std::endl
-                    //           << "num_descriptors="
+                    // std::cerr << "num_descriptors="
                     //           << res->num_descriptors << std::endl
                     //           << "num_variables=" << res->num_variables
                     //           << std::endl
@@ -2487,7 +2502,8 @@ namespace tl
                       << "//" << std::endl
                       << std::endl;
 
-                    _parseVariables(s, pushSize, res, ctx.gpu_props.limits.maxPushConstantsSize);
+                    _parseVariables(s, pushSize, res,
+                                    ctx.gpu_props.limits.maxPushConstantsSize);
                     
                     s << std::endl
                       << "//" << std::endl
