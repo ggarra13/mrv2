@@ -77,7 +77,10 @@ namespace
                              0, 0, nullptr, 0, nullptr, 1, &beginBarrier);
 
         // 3. Dispatch the Compute Shader
-        shader->dispatch(cmd, width, height);
+        uint32_t groupCountX = (width + 15) / 16;
+        uint32_t groupCountY = (height + 15) / 16;
+            
+        shader->dispatch(cmd, groupCountX, groupCountY);
 
         // 4. Barrier: Transition Output Image to SHADER_READ_ONLY for the Fragment Shader
         VkImageMemoryBarrier endBarrier = { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
@@ -726,7 +729,9 @@ namespace tl
 #endif // TLRENDER_OCIO
 
 #if defined(TLRENDER_LIBPLACEBO)
-        LibPlaceboData::LibPlaceboData()
+        LibPlaceboData::LibPlaceboData(Fl_Vk_Context& ctx,
+                                       const bool peak_detection) :
+            ctx(ctx)
         {
             log = pl_log_create(PL_API_VER, NULL);
             if (!log)
@@ -790,13 +795,42 @@ namespace tl
                 
             state = nullptr;
             res = nullptr;
+
+            if (peak_detection)
+            {
+                VkCommandPoolCreateInfo pool_info = {VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
+                pool_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+                pool_info.queueFamilyIndex = ctx.queueFamilyIndex;  // Use compute queue if available
+                vkCreateCommandPool(ctx.device, &pool_info, nullptr, &ssboCmdPool);
+
+                // Allocate e.g., 2 buffers for double-buffering
+                VkCommandBufferAllocateInfo alloc_info = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
+                alloc_info.commandPool = ssboCmdPool;
+                alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+                alloc_info.commandBufferCount = vlk::MAX_FRAMES_IN_FLIGHT;
+
+                ssboCmds.resize(vlk::MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+                vkAllocateCommandBuffers(ctx.device, &alloc_info, ssboCmds.data());
+
+                ssboFences.resize(vlk::MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+                for (int i = 0; i < ssboFences.size(); ++i)
+                {
+                    VkFenceCreateInfo fenceInfo{
+                        VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
+                    fenceInfo.flags =
+                        VK_FENCE_CREATE_SIGNALED_BIT; // allow reuse on first frame
+                    vkCreateFence(ctx.device, &fenceInfo, nullptr,
+                                  &ssboFences[i]);
+                }
+            }
         }
 
         LibPlaceboData::~LibPlaceboData()
         {
             pl_shader_free(&shader);
             res = nullptr;
-            if (state) {
+            if (state)
+            {
                 pl_shader_obj_destroy(&state);
                 state = nullptr;
             }
@@ -805,6 +839,28 @@ namespace tl
             pcUBOSize = 0;
             pl_gpu_dummy_destroy(&gpu);
             pl_log_destroy(&log);
+            
+            for (int i = 0; i < ssboCmds.size(); ++i)
+            {
+                if (ssboCmds[i] != VK_NULL_HANDLE)
+                {
+                    vkFreeCommandBuffers(ctx.device, ssboCmdPool, 1, &ssboCmds[i]);
+                }
+            }
+
+            for (int i = 0; i < ssboFences.size(); ++i)
+            {
+                if (ssboFences[i] != VK_NULL_HANDLE)
+                {
+                    vkResetFences(ctx.device, 1, &ssboFences[i]);
+                    vkDestroyFence(ctx.device, ssboFences[i], nullptr);
+                }
+            }
+
+            if (ssboCmdPool != VK_NULL_HANDLE)
+            {
+                vkDestroyCommandPool(ctx.device, ssboCmdPool, nullptr);
+            }
         }
 #endif // TLRENDER_LIBPLACEBO
 
@@ -1256,20 +1312,45 @@ namespace tl
             
             if (!p.compute["hdr_peak_detection"])
             {
+                try
+                {
 #if USE_PRECOMPILED_SHADERS
-                p.compute["hdr_peak_detection"] = vlk::Shader::create(ctx,
-                                                                     hdr_peak_detection_Compute_spv,
-                                                                     hdr_peak_detection_Compute_spv_len,
-                                                                     "hdr_peak_detection");
+#if __APPLE__
+                    p.compute["hdr_peak_detection"] = vlk::Shader::create(ctx,
+                                                                          hdr_peak_detection_Compute_spv,
+                                                                          hdr_peak_detection_Compute_spv_len,
+                                                                          "hdr_peak_detection");
 #else
-                p.compute["hdr_peak_detection"] = vlk::Shader::create(ctx,
-                                                                      computeHDRPeakDetection(),
-                                                                      "hdr_peak_detection");
+                    try
+                    {
+                        p.compute["hdr_peak_detection"] = vlk::Shader::create(ctx,
+                                                                              hdr_peak_detection_NVidia_Compute_spv,
+                                                                              hdr_peak_detection_NVidia_Compute_spv_len,
+                                                                              "hdr_peak_detection");
+                    }
+                    catch(const std::exception& e)
+                    {
+                        p.compute["hdr_peak_detection"] = vlk::Shader::create(ctx,
+                                                                              hdr_peak_detection_Compute_spv,
+                                                                              hdr_peak_detection_Compute_spv_len,
+                                                                              "hdr_peak_detection");
+                    }
 #endif
-                //p.compute["hdr_peak_detection"]->addSSBO("PeakData", vlk::kShaderCompute);
-                p.compute["hdr_peak_detection"]->addTexture("img", vlk::kShaderCompute);
-                _createBindingSet(p.compute["hdr_peak_detection"]);
-                p.compute["hdr_peak_detection"]->createComputePipeline();
+                
+#else
+                    p.compute["hdr_peak_detection"] = vlk::Shader::create(ctx,
+                                                                          computeHDRPeakDetection(),
+                                                                          "hdr_peak_detection");
+#endif
+                    hdr::PeakData peakData;
+                    p.compute["hdr_peak_detection"]->addFBO("img", vlk::kShaderCompute);
+                    p.compute["hdr_peak_detection"]->addSSBO("PeakData", peakData, vlk::kShaderCompute);
+                    _createBindingSet(p.compute["hdr_peak_detection"]);
+                    p.compute["hdr_peak_detection"]->createComputePipeline();
+                }
+                catch(const std::exception& e)
+                {
+                }
             }
             
             
@@ -2074,7 +2155,6 @@ namespace tl
                 return;
 
 #if defined(TLRENDER_OCIO)
-            //wait_device();
             p.lutData.reset();
 #endif // TLRENDER_OCIO
 
@@ -2146,25 +2226,155 @@ namespace tl
         {
             TLRENDER_P();
             if (value == p.hdrOptions &&
-                value.passthru == p.hdrOptions.passthru)
+                value.passthru == p.hdrOptions.passthru &&
+                !value.peak_detection)
                 return;
+
+            bool recreateDisplayShader = true;
 
             p.hdrOptions = value;
             p.hdrOptions.passthru = value.passthru;
-
+            
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.passthru || p.hdrOptions.tonemap)
             {
-                p.placeboData.reset(new LibPlaceboData);
+                // Persistent states
+                static float previous_avg = 0.F;
+                static float current_avg = PL_COLOR_SDR_WHITE;
+                static float current_peak = PL_COLOR_SDR_WHITE;
+                static bool peak_detection = false;
+                
+                if (p.hdrOptions.peak_detection != peak_detection ||
+                    !p.placeboData)
+                {
+                    peak_detection = p.hdrOptions.peak_detection;
+                    p.placeboData.reset(new LibPlaceboData(ctx, peak_detection));
+                    previous_avg = 0.F;
+                }
+                image::HDRData& data = p.hdrOptions.hdrData;
+                bool hasHDR = false;
+                switch (data.eotf)
+                {
+                case image::EOTFType::EOTF_BT2100_PQ: // PQ (HDR10)
+                case image::EOTFType::EOTF_BT2020:    // PQ (HDR10)
+                case image::EOTFType::EOTF_BT2100_HLG: // HLG
+                    hasHDR = true;
+                    break;
+                default:
+                    break;
+                }
+
+                if (hasHDR)
+                {
+                    if (peak_detection && p.buffers["video"])
+                    {
+                        const std::string shaderName = "hdr_peak_detection";
+                        const auto shader = p.compute[shaderName];
+                        const auto img = p.buffers["video"];
+                                        
+                        _createBindingSet(shader);
+
+                        shader->bind(p.frameIndex);
+                        shader->setFBO("img", img);
+                        
+                        const std::string pipelineLayoutName = shaderName;
+                        _bindComputeDescriptorSets(pipelineLayoutName,
+                                                   shaderName);
+
+                        VkCommandBuffer cmd = p.placeboData->ssboCmds[p.frameIndex];
+                        vkResetCommandBuffer(cmd, 0);
+                        
+                        VkCommandBufferBeginInfo beginInfo = {};
+                        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+                        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+                        vkBeginCommandBuffer(cmd, &beginInfo);
+                            
+                        img->transitionToShaderRead(cmd);
+                        
+                        shader->clearSSBO(cmd, "PeakData");
+
+                        
+                        const size_t width = p.fbo->getWidth();
+                        const size_t height = p.fbo->getHeight();
+                        const uint32_t groupCountX = (width + 15) / 16;
+                        const uint32_t groupCountY = (height + 15) / 16;
+                        shader->dispatch(cmd, groupCountX, groupCountY);
+
+                        vkResetFences(ctx.device, 1, &p.placeboData->ssboFences[p.frameIndex]);
+                        
+                        img->transitionToColorAttachment(cmd);
+
+                        vkEndCommandBuffer(cmd);
+
+
+                        VkPipelineStageFlags pipe_stage_flags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                        VkSubmitInfo submitInfo = {};
+                        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+                        submitInfo.waitSemaphoreCount = 0;
+                        submitInfo.pWaitDstStageMask = &pipe_stage_flags;
+                        submitInfo.commandBufferCount = 1;
+                        submitInfo.pCommandBuffers = &cmd;
+                        submitInfo.signalSemaphoreCount = 0;
+                            
+                        {
+                            std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                            vkQueueSubmit(ctx.queue(), 1, &submitInfo,
+                                          p.placeboData->ssboFences[p.frameIndex]);
+                        }
+
+
+                        const float percentile = 99.F;
+                        const float smoothing_period = 40.F;
+                        hdr::process_peak_data(shader,
+                                               percentile, smoothing_period,
+                                               current_avg, current_peak);
+
+                        // Avoid div-by-zero or log issues (add small epsilon if avgs can
+                        // be zero, though unlikely)
+                        const float ratio = current_avg / (previous_avg + 1e-6f);
+                        const float delta_db = 20 * log10(ratio);
+
+                        const float kShotThreshold = 15.F;
+                        static float previous_peak = 0.F;
+                        
+                        if (std::fabs(delta_db) > kShotThreshold)
+                        {
+                            // std::cerr << "------------------ NEW SHOT" << std::endl;
+                            // fprintf(stderr, "current avg=%g previous_avg=%g delta=%g\n",
+                            //         current_avg, previous_avg, delta_db);
+
+                            float v = (current_peak + previous_peak) / 2.F;
+                            data.sceneMax[0] = v;
+                            data.sceneMax[1] = v;
+                            data.sceneMax[2] = v;
+                            data.sceneAvg = (current_avg + previous_avg) / 2.F;
+                        }
+                        else
+                        {
+                            recreateDisplayShader = false;
+                        }
+                        previous_avg = current_avg;
+                        previous_peak = current_peak;
+                    }
+                    else
+                    {
+                        data.sceneMax[0] = data.sceneMax[1] =
+                        data.sceneMax[2] = 0.F;
+                        data.sceneAvg = 0.F;
+                    }
+                }
             }
             else
             {
                 p.placeboData.reset();
             }
 #endif // TLRENDER_LIBPLACEBO
-            
-            p.shaders["display"].reset();
-            _displayShader();
+
+            if (recreateDisplayShader || !p.shaders["display"])
+            {
+                p.shaders["display"].reset();
+                _displayShader();
+            }
         }
 
         void Render::_displayShader()
@@ -2219,7 +2429,7 @@ namespace tl
                     cmap.gamut_mapping = nullptr;
                     cmap.tone_mapping_function = nullptr;
 
-                    const image::HDRData& data = p.hdrOptions.hdrData;
+                    image::HDRData& data = p.hdrOptions.hdrData;
 
                     pl_color_space src_colorspace;
                     memset(&src_colorspace, 0, sizeof(pl_color_space));

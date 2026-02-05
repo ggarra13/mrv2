@@ -23,19 +23,23 @@ namespace tl
         struct ShaderBindingSet
         {
             std::string shaderName;
+            
+            // MAX_FRAMES_PER_FLIGHT objects
             std::vector<VkDescriptorSet> descriptorSets;
             std::vector<VkDescriptorPool> descriptorPools;
 
             struct UniformParameter
             {
+                // MAX_FRAMES_PER_FLIGHT objects
                 std::vector<VkBuffer> buffers;
                 std::vector<VkDescriptorBufferInfo> infos;
+                std::vector<VmaAllocation> allocation;
+                
                 VkDescriptorSetLayoutBinding layoutBinding;
                 std::size_t size = 0;
-                std::vector<VmaAllocation> allocation;
             };
             std::map<std::string, UniformParameter> uniforms;
-
+            
             struct TextureParameter
             {
                 uint32_t binding;
@@ -67,6 +71,16 @@ namespace tl
             };
             std::map<std::string, StorageImageParameter> storageImages;
             
+            struct SSBOParameter
+            {
+                std::vector<VkBuffer> buffers;
+                std::vector<VkDescriptorBufferInfo> infos;
+                VkDescriptorSetLayoutBinding layoutBinding;
+                std::size_t size = 0;
+                std::vector<VmaAllocation> allocation;
+            };
+            std::map<std::string, SSBOParameter> ssbos;
+
             VkDevice device;
             VmaAllocator allocator;
             
@@ -189,6 +203,48 @@ namespace tl
                 vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
             }
 
+            void updateSSBO(
+                const std::string& name,
+                const void* data,
+                const size_t size,
+                const size_t frameIndex)
+                {
+                    auto it = ssbos.find(name);
+                    if (it == ssbos.end())
+                    {
+                        throw std::runtime_error("SSBO Parameter not found: " + name);
+                    }
+                    if (it->second.size != size)
+                    {
+                        throw std::runtime_error("SSBO size mismatch");
+                    }
+
+                    void* mapped;
+                    vmaMapMemory(
+                        allocator, it->second.allocation[frameIndex], &mapped);
+                    memcpy(mapped, data, size);
+                    vmaUnmapMemory(allocator,
+                                   it->second.allocation[frameIndex]);
+                
+                    auto descriptorSet = descriptorSets[frameIndex];
+
+                    // Update the set for this frame
+                    // For this approach, we re-write the descriptor set for this
+                    // binding and frame
+                    VkDescriptorBufferInfo bufferInfo = it->second.infos[frameIndex];
+                
+                    VkWriteDescriptorSet write{};
+                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    write.dstSet = descriptorSet;
+                    write.dstBinding = it->second.layoutBinding.binding;
+                    write.dstArrayElement = 0;
+                    write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+                    write.descriptorCount = 1;
+                    write.pBufferInfo = &bufferInfo;
+
+                    vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+                }
+
             void updateTexture(
                 const std::string& name,
                 VkDescriptorSet descriptorSet,
@@ -270,6 +326,17 @@ namespace tl
                             sb.buffers[i].reset();
                         }
                     }
+                    
+                    for (auto& [_, ssbo] : ssbos)
+                    {
+                        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+                        {
+                            if (ssbo.buffers[i] != VK_NULL_HANDLE &&
+                                ssbo.allocation[i] != VK_NULL_HANDLE)
+                                vmaDestroyBuffer(allocator, ssbo.buffers[i],
+                                                 ssbo.allocation[i]);
+                        }
+                    }
 
                     for (auto& pool : descriptorPools)
                     {
@@ -286,6 +353,70 @@ namespace tl
                     storageBuffers.clear();
                     storageImages.clear();
                 }
+
+            void clearSSBO(VkCommandBuffer cmd,
+                           const std::string& name,
+                           const int frameIndex)
+                {
+                    auto it = ssbos.find(name);
+                    if (it == ssbos.end())
+                    {
+                        throw std::runtime_error("SSBO Parameter not found: " + name);
+                    }
+
+                    VkBuffer ssbo_buffer = it->second.buffers[frameIndex];
+                    
+                    // Reset SSBO to zero
+                    VkBufferMemoryBarrier barrier = {
+                        VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER};
+                    barrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;  // If you uploaded via map
+                    barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+                    barrier.buffer = ssbo_buffer;  // Your VkBuffer for PeakData
+                    barrier.size = VK_WHOLE_SIZE;
+                    vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_HOST_BIT,
+                                         VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0,
+                                         nullptr, 1, &barrier, 0, nullptr);
+
+                    // Fill with zeros
+                    vkCmdFillBuffer(cmd, ssbo_buffer, 0, VK_WHOLE_SIZE, 0);
+
+                    // Barrier to make it available for compute
+                    barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+                    barrier.dstAccessMask =
+                        VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+                    vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                                         0, 0, nullptr, 1, &barrier, 0,
+                                         nullptr);
+                }
+            
+            void* mapSSBO(const std::string& name,
+                          const int frameIndex)
+                {
+                    auto it = ssbos.find(name);
+                    if (it == ssbos.end())
+                    {
+                        throw std::runtime_error("SSBO Parameter not found: " + name);
+                    }
+                    void* ptr = nullptr;
+                    vmaMapMemory(allocator,
+                                 it->second.allocation[frameIndex],
+                                 &ptr);
+                    return ptr;
+                }
+            
+            void unmapSSBO(const std::string& name,
+                           const int frameIndex)
+                {
+                    auto it = ssbos.find(name);
+                    if (it == ssbos.end())
+                    {
+                        throw std::runtime_error("SSBO Parameter not found: " + name);
+                    }
+                    vmaUnmapMemory(allocator,
+                                   it->second.allocation[frameIndex]);
+                }
+            
             
             VkDescriptorPool getDescriptorPool(size_t frameIndex) const
             {

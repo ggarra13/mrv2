@@ -4151,6 +4151,24 @@ msgstr "Render/Alpha Blend/Straight"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Alpha Blend/Premultiplied"
 
+msgid "Render/HDR Data/From File"
+msgstr "Render/HDR Data/From File"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Render/HDR Data/Inactive"
+
+msgid "Render/HDR Data/Active"
+msgstr "Render/HDR Data/Active"
+
+msgid "Render/HDR/Enable Peak Detection"
+msgstr "Render/HDR/Enable Peak Detectionx"
+
+msgid "Render/HDR/Tonemap"
+msgstr "Render/HDR/Tonemap"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Render/HDR/Gamut Mapping"
+
 msgid "Render/Minify Filter/Nearest"
 msgstr "Render/Minify Filter/Nearest"
 
@@ -4171,21 +4189,6 @@ msgstr "Render/HDR/Invalid Values"
 
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Render/HDR/Ignore Chromaticities"
-
-msgid "Render/HDR Data/From File"
-msgstr "Render/HDR Data/From File"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "Render/HDR Data/Inactive"
-
-msgid "Render/HDR Data/Active"
-msgstr "Render/HDR Data/Active"
-
-msgid "Render/HDR/Tonemap"
-msgstr "Render/HDR/Tonemap"
-
-msgid "Render/HDR/Gamut Mapping"
-msgstr "Render/HDR/Gamut Mapping"
 
 msgid "Playback/Stop"
 msgstr "Playback/Stop"
@@ -6051,14 +6054,14 @@ msgstr "Ignore"
 msgid "Apply"
 msgstr "Apply"
 
-msgid "From File"
-msgstr "From File"
-
 msgid "Inactive"
 msgstr "Inactive"
 
 msgid "Active"
 msgstr "Active"
+
+msgid "From File"
+msgstr "From File"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6538,6 +6541,9 @@ msgstr ""
 
 msgid "Chromaticities"
 msgstr "Chromaticities"
+
+msgid "HDR Peak Detection"
+msgstr "HDR Peak Detection"
 
 msgid "HDR Data"
 msgstr "HDR Data"

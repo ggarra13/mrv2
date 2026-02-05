@@ -4091,6 +4091,24 @@ msgstr "レンダー/アルファブレンド/ストレート"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "レンダー/アルファブレンド/プリマルチプライド"
 
+msgid "Render/HDR Data/From File"
+msgstr "レンダー/HDRデータ/ファイルから"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "レンダー/HDRデータ/非アクティブ"
+
+msgid "Render/HDR Data/Active"
+msgstr "レンダー/HDRデータ/アクティブ"
+
+msgid "Render/HDR/Enable Peak Detection"
+msgstr "Render/HDR/ピーク検出を有効化"
+
+msgid "Render/HDR/Tonemap"
+msgstr "レンダー/HDR/トーンマップ"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "レンダー/HDR/色域マッピング"
+
 msgid "Render/Minify Filter/Nearest"
 msgstr "レンダー/ミニファイフィルター/最寄り"
 
@@ -4111,21 +4129,6 @@ msgstr "レンダー/HDR/無効な値"
 
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "レンダー/HDR/色度を無視"
-
-msgid "Render/HDR Data/From File"
-msgstr "レンダー/HDRデータ/ファイルから"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "レンダー/HDRデータ/非アクティブ"
-
-msgid "Render/HDR Data/Active"
-msgstr "レンダー/HDRデータ/アクティブ"
-
-msgid "Render/HDR/Tonemap"
-msgstr "レンダー/HDR/トーンマップ"
-
-msgid "Render/HDR/Gamut Mapping"
-msgstr "レンダー/HDR/色域マッピング"
 
 msgid "Playback/Stop"
 msgstr "再生/停止"
@@ -5940,14 +5943,14 @@ msgstr "無視"
 msgid "Apply"
 msgstr "適用"
 
-msgid "From File"
-msgstr "ファイルから"
-
 msgid "Inactive"
 msgstr "非アクティブ"
 
 msgid "Active"
 msgstr "アクティブ"
+
+msgid "From File"
+msgstr "ファイルから"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6406,6 +6409,9 @@ msgstr ""
 
 msgid "Chromaticities"
 msgstr "色度"
+
+msgid "HDR Peak Detection"
+msgstr "HDR ピーク検出"
 
 msgid "HDR Data"
 msgstr "HDRデータ"

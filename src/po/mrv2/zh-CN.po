@@ -4081,6 +4081,24 @@ msgstr "渲染/Alpha混合/Straight"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "渲染/Alpha混合/Premultiplied"
 
+msgid "Render/HDR Data/From File"
+msgstr "渲染/HDR 数据/来自文件"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "渲染/HDR 数据/未激活"
+
+msgid "Render/HDR Data/Active"
+msgstr "渲染/HDR 数据/活动"
+
+msgid "Render/HDR/Enable Peak Detection"
+msgstr "渲染/HDR/启用峰值检测"
+
+msgid "Render/HDR/Tonemap"
+msgstr "招标/HDR/时针映射"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "招标/HDR/色域映射"
+
 msgid "Render/Minify Filter/Nearest"
 msgstr "渲染/最小过滤器/Nearest"
 
@@ -4101,21 +4119,6 @@ msgstr "渲染/HDR/无效值"
 
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "招标/HDR/忽略颜色"
-
-msgid "Render/HDR Data/From File"
-msgstr "渲染/HDR 数据/来自文件"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "渲染/HDR 数据/未激活"
-
-msgid "Render/HDR Data/Active"
-msgstr "渲染/HDR 数据/活动"
-
-msgid "Render/HDR/Tonemap"
-msgstr "招标/HDR/时针映射"
-
-msgid "Render/HDR/Gamut Mapping"
-msgstr "招标/HDR/色域映射"
 
 msgid "Playback/Stop"
 msgstr "播放/停止"
@@ -5963,14 +5966,14 @@ msgstr "忽略"
 msgid "Apply"
 msgstr "应用"
 
-msgid "From File"
-msgstr "从文件"
-
 msgid "Inactive"
 msgstr "未激活"
 
 msgid "Active"
 msgstr "活动"
+
+msgid "From File"
+msgstr "从文件"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6425,6 +6428,9 @@ msgstr ""
 
 msgid "Chromaticities"
 msgstr "色度"
+
+msgid "HDR Peak Detection"
+msgstr "HDR 峰值检测"
 
 msgid "HDR Data"
 msgstr "HDR 数据"

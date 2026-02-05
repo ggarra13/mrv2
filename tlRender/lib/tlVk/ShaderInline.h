@@ -65,7 +65,7 @@ namespace tl
             const ShaderFlags stageFlags)
         {
             if (!activeBindingSet)
-                throw std::runtime_error("No activeBindingSet for Shader " + name);
+                throw std::runtime_error("No activeBindingSet for Shader " + shaderName + " parameter " + name);
             activeBindingSet->updateUniform(name, &value, sizeof(value), frameIndex);
         }
         
@@ -74,7 +74,7 @@ namespace tl
             const ShaderFlags stageFlags)
         {
             if (!activeBindingSet)
-                throw std::runtime_error("No activeBindingSet for Shader " + name);
+                throw std::runtime_error("No activeBindingSet for Shader " + shaderName + " parameter " + name);
             activeBindingSet->updateUniform(name, data, size, frameIndex);
         }
 
@@ -85,6 +85,40 @@ namespace tl
         {
             pushSize = sizeof(T);
             pushStageFlags = getVulkanShaderFlags(stageFlags);
+        }
+        
+        //! Attach a SSBO (Shader Storage Buffer Object).
+        template <typename T>
+        void Shader::addSSBO(const std::string& name,
+                             const T& value,
+                             const ShaderFlags stageFlags)
+        {
+            auto it = ssbos.find(name);
+            if (it != ssbos.end())
+            {
+                throw std::runtime_error(
+                    "SSBO " + name + " for shader " + shaderName + " already created.");
+            }
+
+            SSBOBinding ssbo;
+            ssbo.size = sizeof(value);
+
+            ssbo.layoutBinding.binding = current_binding_index++;
+            ssbo.layoutBinding.descriptorCount = 1;
+            ssbo.layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+            ssbo.layoutBinding.stageFlags = getVulkanShaderFlags(stageFlags);
+            ssbo.layoutBinding.pImmutableSamplers = nullptr;
+
+            ssbos[name] = ssbo;
+        }
+
+        //! Set a SSBO (Shader Storage Buffer Object) initial value.
+        template <typename T>
+        void Shader::setSSBO(const std::string& name, const T& value)
+        {
+            if (!activeBindingSet)
+                throw std::runtime_error("No activeBindingSet for Shader " + shaderName + " parameter " + name);
+            activeBindingSet->updateSSBO(name, &value, sizeof(value), frameIndex);
         }
 
     } // namespace vlk

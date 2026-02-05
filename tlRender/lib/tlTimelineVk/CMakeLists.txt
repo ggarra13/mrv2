@@ -2,10 +2,12 @@ set(HEADERS
     Render.h
     RenderShadersBinary.h)
 set(PRIVATE_HEADERS
+    HDRPeakDetection.h
     RenderPrivate.h
     RenderStructs.h)
 
 set(SOURCE
+    HDRPeakDetection.cpp
     Render.cpp
     RenderAnaglyph.cpp
     RenderPrims.cpp

@@ -201,7 +201,7 @@ namespace tl
             void addStorageBuffer(const std::string& name, 
                                   const ShaderFlags stageFlags = kShaderCompute);
 
-            //! Attach an FBO and updata shader parameters.
+            //! Attach an Storage Buffer and updata shader parameters.
             void setStorageBuffer(
                 const std::string& name,
                 const uint8_t* data,
@@ -215,10 +215,28 @@ namespace tl
             void setStorageImage(
                 const std::string& name,
                 const std::shared_ptr<Texture>& texture);
-            
-            //! Create desciptor set bindings for all frames
-            void createDescriptorSets();
 
+            //! Attach a SSBO (Shader Storage Buffer Object).
+            template <typename T>
+            void addSSBO(const std::string& name,
+                         const T& value,
+                         const ShaderFlags stageFlags = kShaderCompute);
+
+            //! Set a SSBO (Shader Storage Buffer Object) initial value.
+            template <typename T>
+            void setSSBO(const std::string& name, const T& value);
+
+            //! Clear SSBO values to 0
+            void clearSSBO(
+                VkCommandBuffer cmd,
+                const std::string& name);
+
+            //! Map the SSBO data.
+            void* mapSSBO(const std::string& name);
+
+            //! Unmap the SSBO data.
+            void unmapSSBO(const std::string& name);
+            
             //! Create a new shader binding set.
             std::shared_ptr<ShaderBindingSet> createBindingSet();
 
@@ -228,11 +246,14 @@ namespace tl
             //! Create a pipelineLayout
             void createPipelineLayout();
             
-            //! Create a compute pipeline from this shader.  Must be called after createBindingSet.
+            //! Create a compute pipeline from this shader.
+            //! Must be called after createBindingSet.
             void createComputePipeline();
 
             //! Dispatch compute shader.
-            void dispatch(VkCommandBuffer cmd, uint32_t width, uint32_t height);
+            void dispatch(VkCommandBuffer cmd,
+                          uint32_t groupCountX, uint32_t groupCountY,
+                          uint32_t groupCountZ = 1);
             
             //! Print out a list of descriptor set bindings for vertex shader.
             void debugVertexDescriptorSets();
@@ -288,6 +309,9 @@ namespace tl
             
             typedef ShaderBindingSet::StorageImageParameter StorageImageBinding;
             std::map<std::string, StorageImageBinding> storageImageBindings;
+
+            typedef ShaderBindingSet::SSBOParameter SSBOBinding;
+            std::map<std::string, SSBOBinding> ssbos;
             
             std::shared_ptr<ShaderBindingSet> activeBindingSet;
 

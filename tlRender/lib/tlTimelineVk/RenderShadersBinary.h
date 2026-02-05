@@ -6,6 +6,7 @@
 
 // Compute shaders
 #include "shaders/hdr_peak_detection_Compute.spv.h"
+#include "shaders/hdr_peak_detection_NVidia_Compute.spv.h"
 #include "shaders/rgbf16_to_rgbaf16_Compute.spv.h"
 #include "shaders/rgbf32_to_rgbaf32_Compute.spv.h"
 

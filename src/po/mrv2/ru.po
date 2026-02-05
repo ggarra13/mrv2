@@ -4174,6 +4174,24 @@ msgstr "Редакция/Альфа Бленд/Прямо"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Редакция/Альфа Бленд/Предмногочисленные"
 
+msgid "Render/HDR Data/From File"
+msgstr "Рендеринг/Данные HDR/Из файла"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Рендеринг/Данные HDR/Неактивно"
+
+msgid "Render/HDR Data/Active"
+msgstr "Рендеринг/Данные HDR/Активные"
+
+msgid "Render/HDR/Enable Peak Detection"
+msgstr "Render/HDR/Включить обнаружение пиков"
+
+msgid "Render/HDR/Tonemap"
+msgstr "Редакция/HDR/Тональность"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Редакция/HDR/Сопоставление гаммы"
+
 msgid "Render/Minify Filter/Nearest"
 msgstr "Редакция/Минимизация фильтра/Ближайший"
 
@@ -4194,21 +4212,6 @@ msgstr "Редакция/HDR/Неверные значения"
 
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Редакция/HDR/Игнорировать хроматизм"
-
-msgid "Render/HDR Data/From File"
-msgstr "Рендеринг/Данные HDR/Из файла"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "Рендеринг/Данные HDR/Неактивно"
-
-msgid "Render/HDR Data/Active"
-msgstr "Рендеринг/Данные HDR/Активные"
-
-msgid "Render/HDR/Tonemap"
-msgstr "Редакция/HDR/Тональность"
-
-msgid "Render/HDR/Gamut Mapping"
-msgstr "Редакция/HDR/Сопоставление гаммы"
 
 msgid "Playback/Stop"
 msgstr "Воспроизведение/Стой."
@@ -6077,14 +6080,14 @@ msgstr "Игнорировать"
 msgid "Apply"
 msgstr "Применить"
 
-msgid "From File"
-msgstr "Из файла"
-
 msgid "Inactive"
 msgstr "Неактивно"
 
 msgid "Active"
 msgstr "Активные"
+
+msgid "From File"
+msgstr "Из файла"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6563,6 +6566,9 @@ msgstr ""
 
 msgid "Chromaticities"
 msgstr "Хроматичности"
+
+msgid "HDR Peak Detection"
+msgstr "Обнаружение пиков HDR"
 
 msgid "HDR Data"
 msgstr "Данные HDR"

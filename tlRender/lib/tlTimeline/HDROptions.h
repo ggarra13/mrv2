@@ -50,6 +50,7 @@ namespace tl
         {
             bool passthru = false;
             bool tonemap = false;
+            bool peak_detection = false;
             HDRGamutMapping     gamutMapping = HDRGamutMapping::Auto;
             HDRTonemapAlgorithm algorithm = HDRTonemapAlgorithm::Hable;
             image::HDRData hdrData;

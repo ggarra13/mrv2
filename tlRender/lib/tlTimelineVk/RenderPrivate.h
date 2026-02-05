@@ -13,6 +13,7 @@ extern "C"
 }
 #endif
 
+#include <tlTimelineVk/HDRPeakDetection.h>
 #include <tlTimelineVk/RenderOptions.h>
 #include <tlTimelineVk/Render.h>
 
@@ -112,18 +113,27 @@ namespace tl
 #if defined(TLRENDER_LIBPLACEBO)
         struct LibPlaceboData
         {
-            LibPlaceboData();
+            LibPlaceboData(Fl_Vk_Context& ctx,
+                           const bool peak_detection = false);
             ~LibPlaceboData();
 
+            // Libplacebo variables
             pl_log log;
             pl_gpu gpu;
             pl_shader shader;
             pl_shader_obj state = nullptr;
             const pl_shader_res* res = nullptr;
-
+            
             std::vector<pl_shader_var> pcUBOvars;
             void* pcUBOData = nullptr;
             size_t pcUBOSize = 0;
+
+            // Vulkan variables
+            Fl_Vk_Context& ctx;
+            std::vector<VkFence> ssboFences;
+            std::vector<VkCommandBuffer> ssboCmds;
+            VkCommandPool ssboCmdPool = VK_NULL_HANDLE;
+            
             std::vector<std::shared_ptr<vlk::Texture> > textures;
         };
 #endif
@@ -150,7 +160,6 @@ namespace tl
             timeline::RenderOptions renderOptions;
 
 #if defined(TLRENDER_OCIO)
-            //! \todo Add a cache for OpenColorIO data.
             std::unique_ptr<OCIOData> ocioData;
             std::unique_ptr<OCIOLUTData> lutData;
 #endif // TLRENDER_OCIO

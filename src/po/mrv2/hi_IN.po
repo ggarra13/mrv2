@@ -4135,6 +4135,24 @@ msgstr "रेंडर/अल्फा ब्लेंड/स्ट्रेट
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "रेंडर/अल्फा ब्लेंड/पूर्वगुणित"
 
+msgid "Render/HDR Data/From File"
+msgstr "रेंडर/HDR डेटा/फ़ाइल से"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "रेंडर/HDR डेटा/निष्क्रिय"
+
+msgid "Render/HDR Data/Active"
+msgstr "रेंडर/HDR डेटा/सक्रिय"
+
+msgid "Render/HDR/Enable Peak Detection"
+msgstr "रेंडर/HDR/पीक डिटेक्शन सक्षम करें"
+
+msgid "Render/HDR/Tonemap"
+msgstr "रेंडर/HDR/टोनमैप"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "रेंडर/HDR/सरगम मानचित्रण"
+
 msgid "Render/Minify Filter/Nearest"
 msgstr "रेंडर/न्यूनतमीकरण फ़िल्टर/निकटस्थ"
 
@@ -4155,21 +4173,6 @@ msgstr "रेंडर/HDR/अवैध मान"
 
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "रेंडर/HDR/टॉगलिकता अनदेखा करें"
-
-msgid "Render/HDR Data/From File"
-msgstr "रेंडर/HDR डेटा/फ़ाइल से"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "रेंडर/HDR डेटा/निष्क्रिय"
-
-msgid "Render/HDR Data/Active"
-msgstr "रेंडर/HDR डेटा/सक्रिय"
-
-msgid "Render/HDR/Tonemap"
-msgstr "रेंडर/HDR/टोनमैप"
-
-msgid "Render/HDR/Gamut Mapping"
-msgstr "रेंडर/HDR/सरगम मानचित्रण"
 
 msgid "Playback/Stop"
 msgstr "प्लेबैक/रूकें"
@@ -6013,14 +6016,14 @@ msgstr "अनदेखा करें"
 msgid "Apply"
 msgstr "लागू करें"
 
-msgid "From File"
-msgstr "फ़ाइल से"
-
 msgid "Inactive"
 msgstr "निष्क्रिय"
 
 msgid "Active"
 msgstr "सक्रिय"
+
+msgid "From File"
+msgstr "फ़ाइल से"
 
 msgid "ST2094_40"
 msgstr "एसटी2094_40"
@@ -6503,6 +6506,9 @@ msgstr ""
 
 msgid "Chromaticities"
 msgstr "रंगमिति"
+
+msgid "HDR Peak Detection"
+msgstr "HDR पीक डिटेक्शन"
 
 msgid "HDR Data"
 msgstr "HDR डेटा"

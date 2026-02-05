@@ -301,9 +301,13 @@ namespace tl
 
             VkDevice device = ctx.device;
 
+            vkDeviceWaitIdle(device); // needed
+            
             if (p.imageView != VK_NULL_HANDLE)
+            {
                 vkDestroyImageView(device, p.imageView, nullptr);
-
+            }
+            
             if (p.image != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
                 vmaDestroyImage(ctx.allocator, p.image, p.allocation);
             

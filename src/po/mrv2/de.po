@@ -4138,6 +4138,24 @@ msgstr "Render/Alpha-Mischung/gerade"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Alpha Blend/Vorvervielfacht"
 
+msgid "Render/HDR Data/From File"
+msgstr "Rendern/HDR-Daten/Aus Datei"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Rendern/HDR-Daten/Inaktiv"
+
+msgid "Render/HDR Data/Active"
+msgstr "Rendern/HDR-Daten/Aktiv"
+
+msgid "Render/HDR/Enable Peak Detection"
+msgstr "Render/HDR/Spitzlichterkennung aktivieren"
+
+msgid "Render/HDR/Tonemap"
+msgstr "Render/HDR/Tonkarte"
+
+msgid "Render/HDR/Gamut Mapping"
+msgstr "Render/HDR/Gamut-Mapping"
+
 msgid "Render/Minify Filter/Nearest"
 msgstr "Render/Filter verkleinern/Nchstgelegen"
 
@@ -4158,21 +4176,6 @@ msgstr "Render/HDR/Ungltige Werte"
 
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Render/HDR/Chromatizitäten ignorieren"
-
-msgid "Render/HDR Data/From File"
-msgstr "Rendern/HDR-Daten/Aus Datei"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "Rendern/HDR-Daten/Inaktiv"
-
-msgid "Render/HDR Data/Active"
-msgstr "Rendern/HDR-Daten/Aktiv"
-
-msgid "Render/HDR/Tonemap"
-msgstr "Render/HDR/Tonkarte"
-
-msgid "Render/HDR/Gamut Mapping"
-msgstr "Render/HDR/Gamut-Mapping"
 
 msgid "Playback/Stop"
 msgstr "Wiedergabe/Anhalten"
@@ -6038,14 +6041,14 @@ msgstr "Ignorieren"
 msgid "Apply"
 msgstr "Anwenden"
 
-msgid "From File"
-msgstr "Aus Datei"
-
 msgid "Inactive"
 msgstr "Inaktiv"
 
 msgid "Active"
 msgstr "Aktiv"
+
+msgid "From File"
+msgstr "Aus Datei"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6534,6 +6537,9 @@ msgstr ""
 
 msgid "Chromaticities"
 msgstr "Farbtemperatur"
+
+msgid "HDR Peak Detection"
+msgstr "HDR-Spitzlichterkennung"
 
 msgid "HDR Data"
 msgstr "HDR-Daten"

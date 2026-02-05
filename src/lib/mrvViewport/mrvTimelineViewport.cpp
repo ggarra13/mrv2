@@ -1047,6 +1047,7 @@ namespace mrv
                 return;
             p.hdrOptions.algorithm = value.algorithm;
             p.hdrOptions.gamutMapping = value.gamutMapping;
+            p.hdrOptions.peak_detection = value.peak_detection;
             redrawWindows();
         }
 

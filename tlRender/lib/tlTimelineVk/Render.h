@@ -302,6 +302,9 @@ namespace tl
             void _bindDescriptorSets(
                 const std::string& pipelineLayoutName,
                 const std::string& shaderName);
+            void _bindComputeDescriptorSets(
+                const std::string& pipelineLayoutName,
+                const std::string& shaderName);
             void _vkDraw(const std::string& meshName);
 
             void wait_device();

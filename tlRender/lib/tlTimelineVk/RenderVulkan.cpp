@@ -275,6 +275,26 @@ namespace tl
                 &descriptorSet, 0, nullptr);
         }
         
+        void Render::_bindComputeDescriptorSets(
+            const std::string& pipelineLayoutName, const std::string& shaderName)
+        {
+            TLRENDER_P();
+            
+            VkDescriptorSet descriptorSet = p.compute[shaderName]->getDescriptorSet();
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            if (!pipelineLayout)
+            {
+                pipelineLayout = _createPipelineLayout(pipelineLayoutName,
+                                                       p.compute[shaderName]);
+            }
+            
+            vkCmdBindDescriptorSets(
+                p.cmd, VK_PIPELINE_BIND_POINT_COMPUTE,
+                p.pipelineLayouts[pipelineLayoutName], 0, 1,
+                &descriptorSet, 0, nullptr);
+        }
+        
+
         void Render::_vkDraw(const std::string& meshName)
         {
             TLRENDER_P();

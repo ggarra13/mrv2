@@ -243,7 +243,7 @@ namespace tl
                 vkDestroyRenderPass(device, p.loadRenderPass, nullptr);
 
             if (p.imageView != VK_NULL_HANDLE)
-                vkDestroyImageView(device, p.imageView, nullptr);
+                vkDestroyImageView(device, p.imageView, nullptr);            
             if (p.image != VK_NULL_HANDLE)
                 vkDestroyImage(device, p.image, nullptr);
             if (p.imageMemory != VK_NULL_HANDLE)

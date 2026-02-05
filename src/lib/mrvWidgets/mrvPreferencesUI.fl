@@ -93,8 +93,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {879 434 853 466} type Double resizable
-      code0 {main = m;} visible
+      xywh {0 0 853 466} type Double hide resizable
+      code0 {main = m;}
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -427,16 +427,16 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label HDR
-              xywh {298 28 555 369} box EMBOSSED_BOX align 5 hide
+              label HDR open selected
+              xywh {298 28 555 369} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
-                label HDR
+                label HDR open
                 xywh {310 80 530 304} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsVulkanUseRGB {
                   label {Prefer RGB (Vulkan)} open
-                  tooltip {When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is and convert them with a compute shader.  When is off, Vulkan will decode RGBA_F16 and RGBA_F32 frames.} xywh {524 116 135 25} down_box BORDER_BOX
+                  tooltip {When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is and convert them with a compute shader.  When is off, Vulkan will decode RGBA_F16 and RGBA_F32 frames.} xywh {569 116 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label {Use RGBA}
@@ -449,7 +449,7 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Choice uiPrefsChromaticities {
                   label Chromaticities
-                  xywh {526 181 135 25} down_box BORDER_BOX
+                  xywh {569 216 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Ignore
@@ -460,9 +460,22 @@ If you try to open several mrv2s with different images, all these images will be
                     xywh {40 40 100 20}
                   }
                 }
+                Fl_Choice uiPrefsHDRPeakDetection {
+                  label {HDR Peak Detection} open
+                  xywh {569 176 135 25} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label Inactive
+                    xywh {40 40 100 20}
+                  }
+                  MenuItem {} {
+                    label Active
+                    xywh {50 50 100 20}
+                  }
+                }
                 Fl_Choice uiPrefsHDRInfo {
                   label {HDR Data}
-                  xywh {526 220 135 25} down_box BORDER_BOX
+                  xywh {569 255 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label {From File}
@@ -479,7 +492,7 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Choice uiPrefsTonemapAlgorithm {
                   label {Tonemap Algorithm}
-                  xywh {526 259 135 25} down_box BORDER_BOX
+                  xywh {569 294 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label ST2094_40
@@ -536,7 +549,7 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Choice uiPrefsGamutMapping {
                   label {Gamut Mapping}
-                  xywh {526 298 135 25} down_box BORDER_BOX
+                  xywh {569 333 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Auto
@@ -583,7 +596,7 @@ If you try to open several mrv2s with different images, all these images will be
             }
             Fl_Group {} {
               label {Language and Colors} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label UI open
@@ -695,7 +708,7 @@ o->redraw();}
 Fl::get_color(o->color(),r,g,b);
 if (!fl_color_chooser(_("Pick HUD Color"), r,g,b)) return;
 o->color( fl_rgb_color( r, g, b ) );
-o->redraw();} selected
+o->redraw();}
                   tooltip {Selects the color of HUD overlays.} xywh {654 338 21 20} box EMBOSSED_BOX align 4
                 }
               }

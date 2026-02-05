@@ -401,6 +401,9 @@ namespace mrv
         
         hdr.get("vulkan_use_rgb", tmp, 0);
         uiPrefs->uiPrefsVulkanUseRGB->value(tmp);
+
+        hdr.get("peak_detection", tmp, 0);
+        uiPrefs->uiPrefsHDRPeakDetection->value(tmp);
         
         hdr.get("chromaticities", tmp, 0);
         uiPrefs->uiPrefsChromaticities->value(tmp);
@@ -1363,6 +1366,7 @@ namespace mrv
 
         Fl_Preferences hdr(gui, "hdr");
         hdr.set("vulkan_use_rgb", uiPrefs->uiPrefsVulkanUseRGB->value());
+        hdr.set("peak_detection", uiPrefs->uiPrefsHDRPeakDetection->value());
         hdr.set("chromaticities", uiPrefs->uiPrefsChromaticities->value());
         hdr.set("hdr_data", uiPrefs->uiPrefsHDRInfo->value());
         hdr.set("tonemap_algorithm",
@@ -1967,6 +1971,7 @@ namespace mrv
             static_cast<timeline::HDRTonemapAlgorithm>(uiPrefs->uiPrefsTonemapAlgorithm->value());
         hdrOptions.gamutMapping =
             static_cast<timeline::HDRGamutMapping>(uiPrefs->uiPrefsGamutMapping->value());
+        hdrOptions.peak_detection = uiPrefs->uiPrefsHDRPeakDetection->value();
         ui->uiView->setHDROptions(hdrOptions);
 
         //

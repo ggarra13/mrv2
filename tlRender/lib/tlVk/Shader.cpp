@@ -405,11 +405,6 @@ namespace tl
                                         activeBindingSet->getDescriptorSet(frameIndex),
                                         fbo);
         }
-
-        void Shader::createDescriptorSets()
-        {
-        }
-
         
         void Shader::setStorageBuffer(
             const std::string& name,
@@ -507,15 +502,16 @@ namespace tl
 
         void Shader::debugDescriptorSets()
         {
-            if (ubos.empty() && textureBindings.empty() && fboBindings.empty())
+            if (ubos.empty() && textureBindings.empty() && fboBindings.empty()
+                && ssbos.empty())
             {
-                std::cerr << "Shader (" << this << "): has NO bindings"
+                std::cerr << "Shader (" << shaderName << "): has NO bindings"
                           << std::endl;
                 return;
             }
             else
             {
-                std::cerr << "Shader (" << this << "): has these bindings"
+                std::cerr << "Shader (" << shaderName << "): has these bindings"
                           << std::endl;
             }
 
@@ -528,11 +524,15 @@ namespace tl
                 std::cerr << "\t        "
                           << (ubo.layoutBinding.stageFlags &
                                       VK_SHADER_STAGE_VERTEX_BIT
-                                  ? "vertex"
+                                  ? "vertex "
                                   : " ")
                           << (ubo.layoutBinding.stageFlags &
                                       VK_SHADER_STAGE_FRAGMENT_BIT
-                                  ? "fragment"
+                                  ? "fragment "
+                                  : " ")
+                          << (ubo.layoutBinding.stageFlags &
+                                      VK_SHADER_STAGE_COMPUTE_BIT
+                                  ? "compute "
                                   : " ")
                           << std::endl;
             }
@@ -545,10 +545,13 @@ namespace tl
                           << " = COMBINED_IMAGE_SAMPLER" << std::endl;
                 std::cerr << "\t        "
                           << (texture.stageFlags & VK_SHADER_STAGE_VERTEX_BIT
-                                  ? "vertex"
+                                  ? "vertex "
                                   : " ")
                           << (texture.stageFlags & VK_SHADER_STAGE_FRAGMENT_BIT
-                                  ? "fragment"
+                                  ? "fragment "
+                                  : " ")
+                          << (texture.stageFlags & VK_SHADER_STAGE_COMPUTE_BIT
+                                  ? "compute "
                                   : " ")
                           << std::endl;
             }
@@ -561,10 +564,35 @@ namespace tl
                           << " = COMBINED_IMAGE_SAMPLER" << std::endl;
                 std::cerr << "\t        "
                           << (fbo.stageFlags & VK_SHADER_STAGE_VERTEX_BIT
-                                  ? "vertex"
+                                  ? "vertex "
                                   : " ")
                           << (fbo.stageFlags & VK_SHADER_STAGE_FRAGMENT_BIT
-                                  ? "fragment"
+                                  ? "fragment "
+                                  : " ")
+                          << (fbo.stageFlags & VK_SHADER_STAGE_COMPUTE_BIT
+                                  ? "compute "
+                                  : " ")
+                          << std::endl;
+            }
+            
+            // SSBOs
+            for (const auto& [name, ssbo] : ssbos)
+            {
+                std::cerr << name << std::endl;
+                std::cerr << "\tbinding " << ssbo.layoutBinding.binding
+                          << " = SSBO" << std::endl;
+                std::cerr << "\t        "
+                          << (ssbo.layoutBinding.stageFlags &
+                              VK_SHADER_STAGE_VERTEX_BIT
+                                  ? "vertex "
+                                  : " ")
+                          << (ssbo.layoutBinding.stageFlags &
+                              VK_SHADER_STAGE_FRAGMENT_BIT
+                                  ? "fragment "
+                                  : " ")
+                          << (ssbo.layoutBinding.stageFlags &
+                              VK_SHADER_STAGE_COMPUTE_BIT
+                                  ? "compute "
                                   : " ")
                           << std::endl;
             }
@@ -659,24 +687,40 @@ namespace tl
             }
         }
         
-        void Shader::dispatch(VkCommandBuffer cmd, uint32_t width, uint32_t height)
+        void Shader::dispatch(VkCommandBuffer cmd,
+                              uint32_t groupCountX,
+                              uint32_t groupCountY,
+                              uint32_t groupCountZ)
         {
             TLRENDER_P();
             
             // Bind the compute pipeline
-            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, p.computePipeline);
+            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE,
+                              p.computePipeline);
 
             // Bind the descriptor set for the current frame
             VkDescriptorSet ds = getDescriptorSet();
-            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, p.pipelineLayout, 
+            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_COMPUTE,
+                                    p.pipelineLayout, 
                                     0, 1, &ds, 0, nullptr);
-
-            // Calculate group counts (rounding up)
-            uint32_t groupCountX = (width + 15) / 16;
-            uint32_t groupCountY = (height + 15) / 16;
-
+            
             // Run the shader
-            vkCmdDispatch(cmd, groupCountX, groupCountY, 1);
+            vkCmdDispatch(cmd, groupCountX, groupCountY, groupCountZ);
+        }
+
+        void* Shader::mapSSBO(const std::string& name)
+        {
+            return activeBindingSet->mapSSBO(name, frameIndex);
+        }
+        
+        void Shader::clearSSBO(VkCommandBuffer cmd, const std::string& name)
+        {
+            activeBindingSet->clearSSBO(cmd, name, frameIndex);
+        }
+        
+        void Shader::unmapSSBO(const std::string& name)
+        {
+            activeBindingSet->unmapSSBO(name, frameIndex);
         }
         
         std::shared_ptr<ShaderBindingSet> Shader::createBindingSet()
@@ -770,7 +814,17 @@ namespace tl
                 poolSize.descriptorCount = MAX_FRAMES_IN_FLIGHT;
                 poolSizes.push_back(poolSize);
             }
-
+            
+            // SSBOs
+            for (const auto& [_, ssbo] : ssbos)
+            {
+                bindings.push_back(ssbo.layoutBinding);
+                VkDescriptorPoolSize poolSize = {};
+                poolSize.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+                poolSize.descriptorCount = MAX_FRAMES_IN_FLIGHT;
+                poolSizes.push_back(poolSize);
+            }
+            
             // Create descriptor pool. (One pool per frame)
             // maxSets should be 1 if allocating 1 set per pool.
             VkDescriptorPoolCreateInfo poolInfo = {};
@@ -851,7 +905,7 @@ namespace tl
                 ubo.size = uboTemplate.size;
                 ubo.layoutBinding = uboTemplate.layoutBinding;
 
-                ubo.buffers.resize(MAX_FRAMES_IN_FLIGHT);
+                ubo.buffers.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
                 ubo.infos.resize(MAX_FRAMES_IN_FLIGHT);
                 ubo.allocation.resize(MAX_FRAMES_IN_FLIGHT);
 
@@ -940,6 +994,67 @@ namespace tl
                 bindingSet->storageImages[name] = imageInfo;
             }
 
+            // Step 8: populate SSBOs for each uniform
+            for (const auto& [name, ssboTemplate] : ssbos)
+            {
+                ShaderBindingSet::SSBOParameter ssbo;
+                ssbo.size = ssboTemplate.size;
+                ssbo.layoutBinding = ssboTemplate.layoutBinding;
+
+                ssbo.buffers.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+                ssbo.infos.resize(MAX_FRAMES_IN_FLIGHT);
+                ssbo.allocation.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+              
+                
+
+                for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+                {
+                    VkBufferCreateInfo bufferInfo = {};
+                    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+                    bufferInfo.size = ssbo.size;
+                    bufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
+                                       VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
+                                       VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+
+
+                    VmaAllocationCreateInfo allocInfo = {};
+                    allocInfo.usage = VMA_MEMORY_USAGE_AUTO;
+
+                    // This flag ensures the memory is accessible by the CPU
+                    // for writing.
+                    allocInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+                                      VMA_ALLOCATION_CREATE_MAPPED_BIT;
+                    
+                    // Ensure the memory is coherent. 
+                    // This forces VMA to select a memory type that doesn't
+                    // require manual flushing.
+                    allocInfo.requiredFlags = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+                    
+                    VmaAllocation allocation;
+                    vmaCreateBuffer(ctx.allocator, &bufferInfo, &allocInfo,
+                                    &ssbo.buffers[i], &allocation,
+                                    nullptr);
+                    ssbo.allocation[i] = allocation;
+                    ssbo.infos[i].buffer = ssbo.buffers[i];
+                    ssbo.infos[i].offset = 0;
+                    ssbo.infos[i].range = ssbo.size;
+
+                    // Descriptor write to binding
+                    VkWriteDescriptorSet write{};
+                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    write.dstSet = bindingSet->descriptorSets[i];
+                    write.dstBinding = ssbo.layoutBinding.binding;
+                    write.dstArrayElement = 0;
+                    write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+                    write.descriptorCount = 1;
+                    write.pBufferInfo = &ssbo.infos[i];
+
+                    vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+                }
+
+                bindingSet->ssbos[name] = std::move(ssbo);
+            }
+            
             // Make this set active
             activeBindingSet = bindingSet;
             
