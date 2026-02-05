@@ -44,13 +44,10 @@ if [[ "@BUILD_PYTHON@" == "ON" ]]; then
 fi
 
 if [[ "@MRV2_BACKEND@" == "GL" ]]; then
+    # Note: This makes mrv2 run under XWayland.  Since mrv2 uses Xrandr
+    #       functions that XWayland does not translate you might get errors.
     export FLTK_BACKEND=x11
 fi
-
-#
-# Use old NVidia implicit sync (GNOME48 and earlier)
-#
-#export __NV_DISABLE_EXPLICIT_SYNC=1
 
 #
 # Debug libraries loaded on macOS

@@ -777,30 +777,6 @@ namespace mrv
             if (imageOptions.alphaBlend == timeline::AlphaBlend::Premultiplied)
                 item->set();
 
-            mode = FL_MENU_RADIO;
-            if (numFiles == 0)
-                mode |= FL_MENU_INACTIVE;
-            
-            idx = menu->add(
-                _("Render/HDR Data/From File"), kHDRDataFromFile.hotkey(),
-                (Fl_Callback*)hdr_data_from_file_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.hdrInfo == timeline::HDRInformation::FromFile)
-                item->set();
-            
-            idx = menu->add(
-                _("Render/HDR Data/Inactive"), kHDRDataFalse.hotkey(),
-                (Fl_Callback*)hdr_data_inactive_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.hdrInfo == timeline::HDRInformation::Inactive)
-                item->set();
-            
-            idx = menu->add(
-                _("Render/HDR Data/Active"), kHDRDataTrue.hotkey(),
-                (Fl_Callback*)hdr_data_active_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.hdrInfo == timeline::HDRInformation::Active)
-                item->set();
             
 
             const timeline::HDROptions& hdrOptions = uiView->getHDROptions();
@@ -810,7 +786,8 @@ namespace mrv
             mode = FL_MENU_TOGGLE;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
-            idx = menu->add(_("Render/HDR/Enable Peak Detection"), 0,
+            idx = menu->add(_("Render/HDR/Enable Peak Detection"),
+                            kToggleHDRPeakDetection.hotkey(),
                             (Fl_Callback*) toggle_hdr_peak_detection_cb, ui,
                             mode);
             if (hdrOptions.peak_detection)
@@ -857,6 +834,31 @@ namespace mrv
                 ++gammut;
             }
 
+            mode = FL_MENU_RADIO;
+            if (numFiles == 0)
+                mode |= FL_MENU_INACTIVE;
+            
+            idx = menu->add(
+                _("Render/HDR Data/From File"), kHDRDataFromFile.hotkey(),
+                (Fl_Callback*)hdr_data_from_file_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.hdrInfo == timeline::HDRInformation::FromFile)
+                item->set();
+            
+            idx = menu->add(
+                _("Render/HDR Data/Inactive"), kHDRDataFalse.hotkey(),
+                (Fl_Callback*)hdr_data_inactive_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.hdrInfo == timeline::HDRInformation::Inactive)
+                item->set();
+            
+            idx = menu->add(
+                _("Render/HDR Data/Active"), kHDRDataTrue.hotkey(),
+                (Fl_Callback*)hdr_data_active_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.hdrInfo == timeline::HDRInformation::Active)
+                item->set();
+            
             mode = FL_MENU_RADIO;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;

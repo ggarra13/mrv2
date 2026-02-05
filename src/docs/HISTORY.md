@@ -1,4 +1,4 @@
-v1.5.4
+v1.5.5
 ======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
@@ -15,8 +15,8 @@ mrv2 ships now in two compiled versions:
 It also ships for many more architectures, so be careful to download the correct one.
 It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).
 
-Prices for binaries
--------------------
+Unlocking Features
+------------------
 
 For unlocking features, once mrv2 loads, you should go to:
   
@@ -25,14 +25,6 @@ For unlocking features, once mrv2 loads, you should go to:
 Donationware prices of binary licenses through PayPal:
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
-
-I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you if you run into issues.
-
-- u$  25 for a Solo node-locked license for one year.
-- u$  50 for a Standard node-locked standard license for one year.
-- u$  75 for a Edit node-locked license with annotations and editing tools for one year.
-- u$ 150 for a Pro node-locked license for one year.
-- u$ 300 for a Pro+ node-locked license to own (allows changing machine).
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
@@ -51,6 +43,14 @@ They do have, however:
     - Saving Images and Movies with Audio
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+- Added HDR peak detection (it is currently bad, as mpv's old --vo=gpu method).	
+
+v1.5.4
+======
 
 ChangeLog
 ---------

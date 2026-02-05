@@ -999,8 +999,14 @@ namespace mrv
                     p.hdr = i->second;
 
                     // Parse the JSON string back into a nlohmann::json object
+                    float sceneMax = p.hdrOptions.hdrData.sceneMax[0];
+                    float sceneAvg = p.hdrOptions.hdrData.sceneAvg;
                     nlohmann::json j = nlohmann::json::parse(p.hdr);
                     p.hdrOptions.hdrData = j.get<image::HDRData>();
+                    p.hdrOptions.hdrData.sceneMax[0] = sceneMax;
+                    p.hdrOptions.hdrData.sceneMax[1] = sceneMax;
+                    p.hdrOptions.hdrData.sceneMax[2] = sceneMax;
+                    p.hdrOptions.hdrData.sceneAvg = sceneAvg;
                 }
                 else
                 {
@@ -3744,8 +3750,14 @@ namespace mrv
                         p.hdr = i->second;
                         
                         // Parse the JSON string back 
+                        const float sceneMax = p.hdrOptions.hdrData.sceneMax[0];
+                        const float sceneAvg = p.hdrOptions.hdrData.sceneAvg;
                         nlohmann::json j = nlohmann::json::parse(p.hdr);
                         p.hdrOptions.hdrData = j.get<image::HDRData>();
+                        p.hdrOptions.hdrData.sceneMax[0] = sceneMax;
+                        p.hdrOptions.hdrData.sceneMax[1] = sceneMax;
+                        p.hdrOptions.hdrData.sceneMax[2] = sceneMax;
+                        p.hdrOptions.hdrData.sceneAvg = sceneAvg;
                     }
                 }
             }

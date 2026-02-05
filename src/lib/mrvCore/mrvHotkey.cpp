@@ -80,6 +80,8 @@ namespace mrv
     
     Hotkey kToggleHDRTonemap(false, false, false, false, 0);
 
+    Hotkey kToggleHDRPeakDetection(false, false, false, false, 0);
+
     Hotkey kDisplayWindow(true, false, false, false, 'd');
     Hotkey kDataWindow(false, false, false, false, 'd');
 
@@ -452,6 +454,7 @@ namespace mrv
         HotkeyEntry(_("HDR Data Inactive"), &kHDRDataFalse),
         HotkeyEntry(_("HDR Data Active"), &kHDRDataTrue),
         HotkeyEntry(_("Toggle HDR tonemap"), &kToggleHDRTonemap),
+        HotkeyEntry(_("Toggle HDR Peak Detection"), &kToggleHDRPeakDetection),
         HotkeyEntry(_("Display Window"), &kDisplayWindow),
         HotkeyEntry(_("Data Window"), &kDataWindow),
         HotkeyEntry(_("Compare None"), &kCompareNone),
