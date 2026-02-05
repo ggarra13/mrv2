@@ -31,7 +31,6 @@ namespace mrv
             static float rotation;
             static bool resizeWindow;
 
-            static std::string hdr;
             static float pixelAspectRatio;
 
             //! Ghosting options
@@ -42,7 +41,7 @@ namespace mrv
         
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
-            timeline::HDROptions hdrOptions;
+            static timeline::HDROptions hdrOptions;
 
             std::vector<tl::timeline::ImageOptions> imageOptions;
             std::vector<tl::timeline::DisplayOptions> displayOptions;

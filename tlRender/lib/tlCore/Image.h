@@ -5,6 +5,7 @@
 #pragma once
 
 #include <tlCore/Box.h>
+#include <tlCore/HDR.h>
 #include <tlCore/Memory.h>
 #include <tlCore/Range.h>
 #include <tlCore/Util.h>
@@ -327,6 +328,12 @@ namespace tl
             //! Is the image valid?
             bool isValid() const;
 
+            //! Get the image _hdr information.
+            const HDRData& getHDR() const;
+
+            //! Set the image _hdr information.
+            void setHDR(const HDRData&);
+
             //! Get the image tags.
             const Tags& getTags() const;
 
@@ -370,6 +377,7 @@ namespace tl
         private:
             Info _info;
             Tags _tags;
+            HDRData  _hdr;
             
             std::shared_ptr<AVFrame> _avFrame;
             const uint8_t* _planes[3] = { nullptr, nullptr, nullptr };

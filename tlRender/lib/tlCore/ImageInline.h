@@ -184,6 +184,16 @@ namespace tl
             return _tags;
         }
 
+        inline const HDRData& Image::getHDR() const
+        {
+            return _hdr;
+        }
+
+        inline void Image::setHDR(const HDRData& hdr)
+        {
+            _hdr = hdr;
+        }
+                
         inline size_t Image::getDataByteCount() const
         {
             return _dataByteCount;

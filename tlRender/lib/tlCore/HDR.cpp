@@ -101,6 +101,10 @@ namespace tl
             return out;
         }
 
+        std::string primariesName(const std::array<math::Vector2f, HDRPrimaries::Count> primaries)
+        {
+            return primariesName(primaries[0], primaries[1], primaries[2], primaries[3]);
+        }
         
         void to_json(nlohmann::json& json, const HDRBezier& value)
         {

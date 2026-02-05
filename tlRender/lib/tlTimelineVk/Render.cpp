@@ -2252,19 +2252,23 @@ namespace tl
                     previous_avg = 0.F;
                 }
                 image::HDRData& data = p.hdrOptions.hdrData;
-                bool hasHDR = false;
+                bool isHDRPlus = false;
                 switch (data.eotf)
                 {
                 case image::EOTFType::EOTF_BT2100_PQ: // PQ (HDR10)
                 case image::EOTFType::EOTF_BT2020:    // PQ (HDR10)
                 case image::EOTFType::EOTF_BT2100_HLG: // HLG
-                    hasHDR = true;
+                    if (data.sceneAvg != 0.F ||
+                        data.sceneMax[0] != 0.F ||
+                        data.sceneMax[1] != 0.F ||
+                        data.sceneMax[2] != 0.F)
+                        isHDRPlus = true;
                     break;
                 default:
                     break;
                 }
 
-                if (hasHDR)
+                if (!isHDRPlus)
                 {
                     if (peak_detection && p.buffers["video"])
                     {
@@ -2355,12 +2359,6 @@ namespace tl
                         }
                         previous_avg = current_avg;
                         previous_peak = current_peak;
-                    }
-                    else
-                    {
-                        data.sceneMax[0] = data.sceneMax[1] =
-                        data.sceneMax[2] = 0.F;
-                        data.sceneAvg = 0.F;
                     }
                 }
             }

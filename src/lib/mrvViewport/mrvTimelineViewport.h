@@ -406,7 +406,7 @@ namespace mrv
 
             //! Get current frame/video tags
             image::Tags getTags() const noexcept;
-
+            
             //! Record the mouse position callback.
             void recordMousePosition();
 
@@ -549,6 +549,7 @@ namespace mrv
             float _getZoomSpeedValue() const noexcept;
 
             void _getTags() noexcept;
+            void _getHDR() noexcept;
 
             void _startVoiceRecording(const std::shared_ptr<voice::VoiceOver> voice);
             void _startVoicePlaying(const std::shared_ptr<voice::VoiceOver> voice);

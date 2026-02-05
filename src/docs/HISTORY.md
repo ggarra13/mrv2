@@ -47,7 +47,12 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
-- Added HDR peak detection (it is currently bad, as mpv's old --vo=gpu method).	
+- Added HDR peak detection (it is currently bad, as mpv's old --vo=gpu method).
+- Improved performance of dynamic HDR Data on the Vulkan backend.
+- Added primaries name to Media Information Panel for easier reading of the values.
+- Improved performance of Media Information Panel's Video Tab.
+- Added HDR10+ variables to Media Informtion Panel's Video Tab.
+- Added Dolby Vision variables to Media Information Panel's Video Tab.
 
 v1.5.4
 ======

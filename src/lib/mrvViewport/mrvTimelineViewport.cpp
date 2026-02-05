@@ -103,7 +103,7 @@ namespace mrv
         
         using namespace tl;
 
-        std::string TimelineViewport::Private::hdr;
+        timeline::HDROptions TimelineViewport::Private::hdrOptions;
         EnvironmentMapOptions TimelineViewport::Private::environmentMapOptions;
         math::Box2i TimelineViewport::Private::selection =
             math::Box2i(0, 0, -1, -1);
@@ -990,31 +990,7 @@ namespace mrv
             
             const auto& d = p.displayOptions[0];
 
-            if (d.hdrInfo != timeline::HDRInformation::Inactive)
-            {
-                auto i = p.tagData.find("hdr");
-                if (i != p.tagData.end())
-                {
-                    p.hdrOptions.tonemap = app::soporta_hdr;
-                    p.hdr = i->second;
-
-                    // Parse the JSON string back into a nlohmann::json object
-                    float sceneMax = p.hdrOptions.hdrData.sceneMax[0];
-                    float sceneAvg = p.hdrOptions.hdrData.sceneAvg;
-                    nlohmann::json j = nlohmann::json::parse(p.hdr);
-                    p.hdrOptions.hdrData = j.get<image::HDRData>();
-                    p.hdrOptions.hdrData.sceneMax[0] = sceneMax;
-                    p.hdrOptions.hdrData.sceneMax[1] = sceneMax;
-                    p.hdrOptions.hdrData.sceneMax[2] = sceneMax;
-                    p.hdrOptions.hdrData.sceneAvg = sceneAvg;
-                }
-                else
-                {
-                    if (d.hdrInfo == timeline::HDRInformation::Active)
-                        p.hdrOptions.tonemap = app::soporta_hdr;
-                }
-            }
-            else
+            if (d.hdrInfo == timeline::HDRInformation::Inactive)
             {
                 p.hdrOptions.tonemap = false;
             }
@@ -1093,8 +1069,6 @@ namespace mrv
             {
                 p.videoData.clear();
             }
-
-            p.hdr.clear();
 
             refreshWindows(); // needed We need to refresh, as the new
             // video data may have different sizes.
@@ -1513,8 +1487,14 @@ namespace mrv
                 if (i != p.tagData.end())
                     metadataRefresh = true;
 
-                i = p.tagData.find("hdr");
-                if (i != p.tagData.end())
+                const auto& hdr = p.hdrOptions.hdrData;
+                bool hasHDR = false;
+                if (hdr.eotf != image::EOTF_BT709 &&
+                    hdr.eotf != image::EOTF_BT601 &&
+                    hdr.sceneAvg != 0.F)
+                    hasHDR = true;
+                    
+                if (hasHDR)
                 {
                     videoRefresh = true;
                 }
@@ -3691,6 +3671,14 @@ namespace mrv
             return _p->tagData;
         }
 
+        void TimelineViewport::_getHDR() noexcept
+        {
+            TLRENDER_P();
+            
+            p.hdrOptions.hdrData = p.videoData[0].layers[0].image->getHDR();
+            p.hdrOptions.tonemap = true;
+        }
+        
         void TimelineViewport::_getTags() noexcept
         {
             TLRENDER_P();
@@ -3716,6 +3704,20 @@ namespace mrv
             if (!p.videoData.empty() && !p.videoData[0].layers.empty() &&
                 p.videoData[0].layers[0].image)
             {
+                if (p.displayOptions.empty() ||
+                    p.displayOptions[0].hdrInfo ==
+                    timeline::HDRInformation::Inactive)
+                {
+                    p.hdrOptions.hdrData = image::HDRData();
+                    p.hdrOptions.tonemap = false;
+                }
+                else
+                {
+                    if (p.displayOptions[0].hdrInfo ==
+                        timeline::HDRInformation::FromFile)
+                        _getHDR();
+                }
+                
                 const auto& tags = p.videoData[0].layers[0].image->getTags();
                 for (const auto& tag : tags)
                 {
@@ -3732,39 +3734,6 @@ namespace mrv
                 s >> videoRotation;
             }
             _setVideoRotation(videoRotation);
-
-            i = p.tagData.find("hdr");
-            if (i != p.tagData.end())
-            {
-                if (p.displayOptions.empty() ||
-                    p.displayOptions[0].hdrInfo ==
-                    timeline::HDRInformation::Inactive)
-                {
-                    p.hdrOptions.hdrData = image::HDRData();
-                }
-                else
-                {
-                    p.hdrOptions.tonemap = true;
-                    if (p.hdr != i->second)
-                    {
-                        p.hdr = i->second;
-                        
-                        // Parse the JSON string back 
-                        const float sceneMax = p.hdrOptions.hdrData.sceneMax[0];
-                        const float sceneAvg = p.hdrOptions.hdrData.sceneAvg;
-                        nlohmann::json j = nlohmann::json::parse(p.hdr);
-                        p.hdrOptions.hdrData = j.get<image::HDRData>();
-                        p.hdrOptions.hdrData.sceneMax[0] = sceneMax;
-                        p.hdrOptions.hdrData.sceneMax[1] = sceneMax;
-                        p.hdrOptions.hdrData.sceneMax[2] = sceneMax;
-                        p.hdrOptions.hdrData.sceneAvg = sceneAvg;
-                    }
-                }
-            }
-            else
-            {
-                p.hdrOptions.tonemap = false;
-            }
 
             // \@bug: Apple (macOS Intel at least) is too slow and goes black.
 #ifndef __APPLE__

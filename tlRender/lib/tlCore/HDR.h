@@ -83,10 +83,15 @@ namespace tl
             bool operator!=(const HDRData&) const;
         };
 
+        bool isHDR(const HDRData&);
+        bool isHDRPlus(const HDRData&);
+        bool isHDRDolby(const HDRData&);
+        
         std::string primariesName(const math::Vector2f& red,
                                   const math::Vector2f& green,
                                   const math::Vector2f& blue,
                                   const math::Vector2f& white);
+        std::string primariesName(const std::array<math::Vector2f, HDRPrimaries::Count> primaries);
         
         //! \name Serialize
         ///@{

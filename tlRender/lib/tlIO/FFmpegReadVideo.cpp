@@ -946,17 +946,13 @@ namespace tl
                     _tags["Video Speed"] = ss.str();
                 }
 
-                bool hasHDR = toHDRData(avVideoStream, _hdr);
+                toHDRData(avVideoStream, _hdr);
                 _hdr.eotf = toEOTF(_avColorTRC);
-                if (_hdr.eotf != image::EOTF_BT709 &&
-                    _hdr.eotf != image::EOTF_BT601)
+                if (image::isHDR(_hdr))
                 {
-                    hasHDR = true;
                     setPrimariesFromAVColorPrimaries(params->color_primaries,
                                                      _hdr);
                 }
-                if (hasHDR)
-                    _tags["hdr"] = nlohmann::json(_hdr).dump();
             }
         }
 
@@ -1406,17 +1402,15 @@ namespace tl
                         tags[tag->key] = tag->value;
                     }
                     
-                    if (_hdr.eotf != image::EOTF_BT709 &&
-                        _hdr.eotf != image::EOTF_BT601)
+                    _hdr.eotf = toEOTF(_avFrame->color_trc);
+                    if (image::isHDR(_hdr))
                     {
                         const auto params = _avCodecParameters[_avStream];
                         setPrimariesFromAVColorPrimaries(_avFrame->color_primaries,
                                                          _hdr);
-                        _hdr.eotf = toEOTF(_avFrame->color_trc);
-                        bool hasHDR = toHDRData(_avFrame, _hdr);
-                        if (hasHDR)
-                            tags["hdr"] = nlohmann::json(_hdr).dump();
+                        toHDRData(_avFrame, _hdr);
                     }
+                    image->setHDR(_hdr);
                     image->setTags(tags);
                     
                     _buffer.push_back(image);
