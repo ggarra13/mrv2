@@ -14,6 +14,10 @@
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 
+#ifdef TLRENDER_DOVI
+#include <libdovi/rpu_parser.h>
+#endif
+
 extern "C"
 {
 #include <libavutil/channel_layout.h>
@@ -145,20 +149,65 @@ namespace tl
                 }
             }
 
-#ifdef DEBUG_STATIC_HDR
-            std::cerr << "mrv2 STATIC HDR="
-                      << std::endl
-                      << hdr << std::endl;
-#endif
-
             return out;
         }
 
-        inline void *get_side_data_raw(const AVFrame *frame,
+        inline void* get_side_data_raw(const AVFrame *frame,
                                        enum AVFrameSideDataType type)
         {
             const AVFrameSideData *sd = av_frame_get_side_data(frame, type);
             return sd ? (void *) sd->data : NULL;
+        }
+
+        void hdr_metadata_from_dovi_rpu(image::HDRData& hdr,
+                                        const uint8_t* buf, size_t size)
+        {
+#ifdef TLRENDER_DOVI
+            if (buf && size)
+            {
+                DoviRpuOpaque* rpu = dovi_parse_unspec62_nalu(buf, size);
+                const DoviRpuDataHeader* header = dovi_rpu_get_header(rpu);
+
+                if (header && header->vdr_dm_metadata_present_flag)
+                {
+                    if (header->guessed_profile == 4)
+                    {
+                        goto done;
+                    }
+
+                    const DoviVdrDmData* vdr_dm_data = dovi_rpu_get_vdr_dm_data(rpu);
+                    if (vdr_dm_data->dm_data.level1)
+                    {
+                        const DoviExtMetadataBlockLevel1* l1 = vdr_dm_data->dm_data.level1;
+                        hdr.maxPQY = l1->max_pq / 4095.0f;
+                        hdr.avgPQY = l1->avg_pq / 4095.0f;
+                    }
+
+                    dovi_rpu_free_vdr_dm_data(vdr_dm_data);
+                }
+            done:
+                dovi_rpu_free_header(header);
+                dovi_rpu_free(rpu);
+            }
+#endif
+        }
+        
+        float dolby_rescale(float x)
+        {
+            static const float PQ_M1 = 2610./4096 * 1./4,
+                               PQ_M2 = 2523./4096 * 128,
+                               PQ_C1 = 3424./4096,
+                               PQ_C2 = 2413./4096 * 32,
+                               PQ_C3 = 2392./4096 * 32;
+            if (!x)
+                return x;
+            x = fmaxf(x, 0.F);
+            x = powf(x, 1.F / PQ_M2);
+            x = fmaxf(x - PQ_C1, 0.F) / (PQ_C2 - PQ_C3 * x);
+            x = powf(x, 1.F / PQ_M1);
+            x *= 10000.F;
+            x /= 203.F;
+            return x;
         }
         
         bool
@@ -239,17 +288,35 @@ namespace tl
                 }
             }
         }
-        // Maybe in the future?  For now, we'll have to use libdovi
-        // raw = get_side_data_raw(frame, AV_FRAME_DATA_DOVI_METADATA):
-        // if (raw)
-        // {
-        // out = true;
-        // }
+        raw = get_side_data_raw(frame, AV_FRAME_DATA_DOVI_METADATA);
+        if (raw)
+        {
+            out = true;
 
-#ifdef DEBUG_DYNAMIC_HDR
-        std::cerr << "mrv2 DYNAMIC HDR:" << std::endl
-                  << hdr << std::endl;
-#endif
+            const AVDOVIMetadata* metadata = reinterpret_cast<AVDOVIMetadata *>(raw);
+            const AVDOVIRpuDataHeader* header = av_dovi_get_header(metadata);
+            if (header->disable_residual_flag)
+            {
+                const AVDOVIColorMetadata *dovi_color;
+                dovi_color = av_dovi_get_color(metadata);
+                hdr.eotf = image::EOTF_BT2020;
+                float min_luma = dolby_rescale(dovi_color->source_min_pq / 4095.0f);
+                float max_luma = dolby_rescale(dovi_color->source_max_pq / 4095.0f);
+                hdr.displayMasteringLuminance = math::FloatRange(min_luma, max_luma);
+                const AVDOVIDmData *dovi_ext;
+                if ((dovi_ext = av_dovi_find_level(metadata, 1))) {
+                    hdr.maxPQY = dovi_ext->l1.max_pq / 4095.0f;
+                    hdr.avgPQY = dovi_ext->l1.avg_pq / 4095.0f;
+                }
+            }
+
+            AVFrameSideData* sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DOVI_RPU_BUFFER);
+            if (sd)
+            {
+                hdr_metadata_from_dovi_rpu(hdr, sd->buf->data, sd->buf->size);
+            }
+        }
+
         return out;
     }
 

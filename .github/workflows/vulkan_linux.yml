@@ -43,6 +43,9 @@ jobs:
     - name: Install PulseAudio dev
       run: sudo apt-get install -y libpulse-dev
 
+    - name: Install libdovi dev
+      run: sudo apt install libdovi-dev
+      
     - name: Install Pango dev
       run: sudo apt-get install -y libpango1.0-dev
 

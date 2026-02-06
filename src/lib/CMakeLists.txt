@@ -2,7 +2,7 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-add_subdirectory(mrvCore)        # tlRender Imath::Imath FLTK cpptrace
+add_subdirectory(mrvCore)        # tlRender::tlIO tlRender::tlCore Imath::Imath FLTK cpptrace
 add_subdirectory(mrvIcons)
 add_subdirectory(mrvOptions)     # mrvCore + USD libraries
 add_subdirectory(mrvFlmm)        # FLTK
@@ -30,7 +30,7 @@ add_subdirectory(mrvEdit)    # mrvViewerport, mrvWidgets, mrvNetwork
 add_subdirectory(mrvFl)      # mrvEdit, mrvUI, mrvGL, mrvVk, mrvPDF
 add_subdirectory(mrvNetwork) # mrvFl, Poco::Net
 add_subdirectory(mrvPanels)  # mrvFl, mrvEdit
-add_subdirectory(mrvBaseApp) # tlBaseApp, tlCore, RtAudio, freetype, Imath::Imath
+add_subdirectory(mrvBaseApp) # tlBaseApp, tlCore, freetype
 add_subdirectory(mrvApp)  # mrvBaseApp, mrvPanels, mrvFLU, mrvOptions
                           # tlRender::tlDevice
 if(MRV2_PYBIND11)

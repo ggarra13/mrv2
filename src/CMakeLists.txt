@@ -103,6 +103,8 @@ find_package(nlohmann_json REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(minizip REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(dovi REQUIRED)
+list(APPEND LIBRARIES dovi::dovi)
 
 if (WIN32 OR APPLE)
     if (MRV2_BACKEND STREQUAL "VK")

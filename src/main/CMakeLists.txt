@@ -16,7 +16,7 @@ if (WIN32)
 endif()
 
 set(LIBRARIES )
-
+    
 if(MRV2_PYBIND11)
     list(APPEND LIBRARIES mrvPy)
 else()
@@ -27,7 +27,11 @@ if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
     list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
 endif()
 
-list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES})
+list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} tlRender::tlIO)
+if(UNIX AND NOT APPLE)
+    list(APPEND LIBRARIES tlRender::tlIO -ldovi)
+endif()
+
 
 
 if( APPLE )

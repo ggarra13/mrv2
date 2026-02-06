@@ -6,6 +6,11 @@ from datetime import datetime, timezone, timedelta
 import argparse
 import time
 
+windows_re = re.compile(R"(?:Windows|Unknown)")
+linux_re = re.compile(R"Linux")
+macos_re = re.compile(R"(?:Darwin|Macintosh)")
+    
+
 # --- Third-Party Imports ---
 try:
     from curl_cffi import requests
@@ -43,6 +48,14 @@ BROWSER_IMPERSONATE='safari15_5'
 # These will accumulate downloads for each product across all sources (GitHub + SourceForge)
 mrv2_grand_total = 0
 vmrv2_grand_total = 0
+
+mrv2_windows_grand_total = 0
+mrv2_linux_grand_total = 0
+mrv2_macos_grand_total = 0
+
+vmrv2_windows_grand_total = 0
+vmrv2_linux_grand_total = 0
+vmrv2_macos_grand_total = 0
 
 # ----------------------------------------
 
@@ -150,7 +163,10 @@ def parse_and_process_dates(args):
 def get_github_downloads(user, repo, tag):
     """
     Fetches and sums GitHub release asset download counts.
-    Returns: (mrv2_total_count, vmrv2_total_count)
+    Returns: (mrv2_total_count, vmrv2_total_count,
+    mrv2_windows_total_count, vmrv2_windows_total_count,
+    mrv2_linux_total_count, vmrv2_linux_total_count,
+    mrv2_macos_total_count, vmrv2_macos_total_count)
     """
     if not user or not repo:
         print("Skipping GitHub downloads: Both user and repository must be provided.")
@@ -162,6 +178,15 @@ def get_github_downloads(user, repo, tag):
     mrv2_total_count = 0
     vmrv2_total_count = 0
     
+    mrv2_windows_total_count = 0
+    vmrv2_windows_total_count = 0
+    
+    mrv2_linux_total_count = 0
+    vmrv2_linux_total_count = 0
+    
+    mrv2_macos_total_count = 0
+    vmrv2_macos_total_count = 0
+
     try:
         PER_PAGE = 100
         for page in itertools.count(1):
@@ -188,11 +213,25 @@ def get_github_downloads(user, repo, tag):
                             continue
 
                     downloads = asset['download_count']
-                    if asset['name'].startswith('mrv2'):
+                    name = asset['name']
+                    if name.startswith('mrv2'):
                         mrv2_total_count += downloads
-                    elif asset['name'].startswith('vmrv2'):
+                        if windows_re.search(name):
+                            mrv2_windows_total_count += downloads
+                        if linux_re.search(name):
+                            mrv2_linux_total_count += downloads
+                        if macos_re.search(name):
+                            mrv2_macos_total_count += downloads
+                            
+                    elif name.startswith('vmrv2'):
                         vmrv2_total_count += downloads
-                    
+                        if windows_re.search(name):
+                            vmrv2_windows_total_count += downloads
+                        if linux_re.search(name):
+                            vmrv2_linux_total_count += downloads
+                        if macos_re.search(name):
+                            vmrv2_macos_total_count += downloads
+                            
                     asset_date = asset['updated_at'].split('T')[0]
                     print('{:>5} Asset: {:<40} Date: {}'.format(
                         format_number(asset['download_count'], 5),
@@ -212,18 +251,39 @@ def get_github_downloads(user, repo, tag):
 
     print("-----------------------------------------------------------------------")
 
+    formatted_mrv2_windows_total = format_number(mrv2_windows_total_count, 5)
+    print(f'{formatted_mrv2_windows_total} mrv2 Windows Downloads (All Archs)')
+    formatted_mrv2_linux_total = format_number(mrv2_linux_total_count, 5)
+    print(f'{formatted_mrv2_linux_total} mrv2 Linux Downloads (All Archs)')
+    formatted_mrv2_macos_total = format_number(mrv2_macos_total_count, 5)
+    print(f'{formatted_mrv2_macos_total} mrv2 MacOS Downloads (All Archs)')
+    print()
+
+    formatted_vmrv2_windows_total = format_number(vmrv2_windows_total_count, 5)
+    print(f'{formatted_vmrv2_windows_total} vmrv2 Windows Downloads (All Archs)')
+    formatted_vmrv2_linux_total = format_number(vmrv2_linux_total_count, 5)
+    print(f'{formatted_vmrv2_linux_total} vmrv2 Linux Downloads (All Archs)')
+    formatted_vmrv2_macos_total = format_number(vmrv2_macos_total_count, 5)
+    print(f'{formatted_mrv2_macos_total} vmrv2 MacOS Downloads (All Archs)')
+
+    
+    print()
     formatted_mrv2_total = format_number(mrv2_total_count, 5)
     print(f'{formatted_mrv2_total} Total mrv2 Downloads (GitHub)')
-
     formatted_vmrv2_total = format_number(vmrv2_total_count, 5)
     print(f'{formatted_vmrv2_total} Total vmrv2 Downloads (GitHub)')
 
+    print("=======================================================================")
     total_count = mrv2_total_count + vmrv2_total_count
     formatted_total = format_number(total_count, 5)
     print(f'{formatted_total} Total Downloads for GitHub repo {full_name}')
 
     # Return separate counts
-    return mrv2_total_count, vmrv2_total_count
+    return (mrv2_total_count, vmrv2_total_count,
+            mrv2_windows_total_count, vmrv2_windows_total_count,
+            mrv2_linux_total_count, vmrv2_linux_total_count,
+            mrv2_macos_total_count, vmrv2_macos_total_count)
+
 
 import time
 from curl_cffi import requests
@@ -240,8 +300,7 @@ def get_file_stats(repo, file_path, start_date, end_date):
     urls_to_try = [
         f"https://sourceforge.net/projects/{repo}/files/{file_path}/stats/json?start_date={start_date}&end_date={end_date}"
     ]
-
-
+    
     for url in urls_to_try:
         try:
             # Longer delay to avoid rate limiting
@@ -278,7 +337,14 @@ def count_sourceforge(repo, folder_name, end_date, start_date):
     is_detailed_stats_folder = not any(key in folder_name.lower() for key in ['beta/', 'archive'])
 
     mrv2_downloads = 0
+    mrv2_windows_downloads = 0
+    mrv2_linux_downloads = 0
+    mrv2_macos_downloads = 0
+    
     vmrv2_downloads = 0
+    vmrv2_windows_downloads = 0
+    vmrv2_linux_downloads = 0
+    vmrv2_macos_downloads = 0
 
     if is_detailed_stats_folder:
         # Detailed file-level counting
@@ -326,7 +392,25 @@ def count_sourceforge(repo, folder_name, end_date, start_date):
                                 
                                 key = (package, os_spec)
                                 detailed_stats[key] = detailed_stats.get(key, 0) + count
-                        
+
+                                if os_type == 'Windows' or os_type == 'Unknown':
+                                    if package == 'mrv2':
+                                        mrv2_windows_downloads += count
+                                    elif package == 'vmrv2':
+                                        vmrv2_windows_downloads += count
+                                        
+                                if os_type == 'Linux':
+                                    if package == 'mrv2':
+                                        mrv2_linux_downloads += count
+                                    elif package == 'vmrv2':
+                                        vmrv2_linux_downloads += count
+                                        
+                                if os_type == 'Darwin':
+                                    if package == 'mrv2':
+                                        mrv2_macos_downloads += count
+                                    elif package == 'vmrv2':
+                                        vmrv2_macos_downloads += count
+                                
                         except ValueError:
                             continue
         
@@ -351,7 +435,10 @@ def count_sourceforge(repo, folder_name, end_date, start_date):
             print('{:>5} Total Downloads for SourceForge {}'.
                   format(formatted_total, f'{repo}/{folder_name} (File Breakdown)'))
             
-            return mrv2_downloads, vmrv2_downloads
+            return (mrv2_downloads, vmrv2_downloads,
+                    mrv2_windows_downloads, vmrv2_windows_downloads,
+                    mrv2_linux_downloads, vmrv2_linux_downloads,
+                    mrv2_macos_downloads, vmrv2_macos_downloads)
 
     # Aggregated folder stats
     base_url = f"https://sourceforge.net/projects/{repo}/files/{folder_name}/stats/json?start_date={start_date}&end_date={end_date}"
@@ -397,12 +484,25 @@ def count_sourceforge(repo, folder_name, end_date, start_date):
         
         for item in r['oses']:
             try:
+                os = item[0]
                 num = int(item[1])
                 
                 if prefix == 'mrv2':
                     mrv2_downloads += num
+                    if windows_re.search(os):
+                        mrv2_windows_downloads += num
+                    elif linux_re.search(os):
+                        mrv2_linux_downloads += num
+                    elif macos_re.search(os):
+                        mrv2_macos_downloads += num
                 elif prefix == 'vmrv2':
                     vmrv2_downloads += num
+                    if windows_re.search(os):
+                        vmrv2_windows_downloads += num
+                    elif linux_re.search(os):
+                        vmrv2_linux_downloads += num
+                    elif macos_re.search(os):
+                        vmrv2_macos_downloads += num
                 
                 print('{:>5}  {:<5} OS: {:<40}'.format(num, prefix, item[0]))
             except (ValueError, IndexError):
@@ -415,7 +515,10 @@ def count_sourceforge(repo, folder_name, end_date, start_date):
     print('{:>5} Total Downloads for SourceForge {}'.
           format(formatted_total, f'{repo}/{folder_name} (Aggregated)'))
 
-    return mrv2_downloads, vmrv2_downloads
+    return (mrv2_downloads, vmrv2_downloads,
+            mrv2_windows_downloads, vmrv2_windows_downloads,
+            mrv2_linux_downloads, vmrv2_linux_downloads,
+            mrv2_macos_downloads, vmrv2_macos_downloads)
 
 # --- Main Execution ---
 if __name__ == "__main__":
@@ -425,9 +528,22 @@ if __name__ == "__main__":
     beta_start_date_str, start_date_str, end_date_str, user, repo, tag = parse_and_process_dates(args)
 
     # 1. Get GitHub Totals
-    mrv2_github_total, vmrv2_github_total = get_github_downloads(user, repo, tag)
+    (mrv2_github_total, vmrv2_github_total,
+     mrv2_windows_total, vmrv2_windows_total,
+     mrv2_linux_total, vmrv2_linux_total,
+     mrv2_macos_total, vmrv2_macos_total) = get_github_downloads(user, repo, tag)
+
     mrv2_grand_total += mrv2_github_total
     vmrv2_grand_total += vmrv2_github_total
+
+    mrv2_windows_grand_total += mrv2_windows_total
+    vmrv2_windows_grand_total += vmrv2_windows_total
+    
+    mrv2_linux_grand_total += mrv2_linux_total
+    vmrv2_linux_grand_total += vmrv2_linux_total
+
+    mrv2_macos_grand_total += mrv2_macos_total
+    vmrv2_macos_grand_total += vmrv2_macos_total
 
     if not repo or not args.tag:
         print("\nSkipping SourceForge downloads: Both repository (SourceForge project name) and tag (folder name) must be provided.")
@@ -436,18 +552,51 @@ if __name__ == "__main__":
     print(f"\n--- SourceForge Downloads for Project: {repo} ---")
 
     # 2. Get SourceForge Released Totals
-    mrv2_sf_released_total, vmrv2_sf_released_total = count_sourceforge(repo, args.tag, end_date_str, start_date_str)
+    (mrv2_sf_released_total, vmrv2_sf_released_total,
+    mrv2_sf_windows_total, vmrv2_sf_windows_total,
+    mrv2_sf_linux_total, vmrv2_sf_linux_total,
+    mrv2_sf_macos_total, vmrv2_sf_macos_total) = count_sourceforge(repo, args.tag, end_date_str, start_date_str)
     mrv2_grand_total += mrv2_sf_released_total
     vmrv2_grand_total += vmrv2_sf_released_total
+    
+    mrv2_windows_grand_total += mrv2_sf_windows_total
+    mrv2_linux_grand_total += mrv2_sf_linux_total
+    mrv2_macos_grand_total += mrv2_sf_macos_total
+    
+    vmrv2_windows_grand_total += vmrv2_sf_windows_total
+    vmrv2_linux_grand_total += vmrv2_sf_linux_total
+    vmrv2_macos_grand_total += vmrv2_sf_macos_total
 
     # 3. Get SourceForge Beta OpenGL Totals
-    mrv2_sf_beta_opengl_total, vmrv2_sf_beta_opengl_total = count_sourceforge(repo, 'beta/opengl', end_date_str, beta_start_date_str)
+    (mrv2_sf_beta_opengl_total, vmrv2_sf_beta_opengl_total,
+     mrv2_sf_windows_total, vmrv2_sf_windows_total,
+     mrv2_sf_linux_total, vmrv2_sf_linux_total,
+     mrv2_sf_macos_total, vmrv2_sf_macos_total) = count_sourceforge(repo, 'beta/opengl', end_date_str, beta_start_date_str)
+
     mrv2_grand_total += mrv2_sf_beta_opengl_total
+    
+    mrv2_windows_grand_total += mrv2_sf_windows_total
+    mrv2_linux_grand_total += mrv2_sf_linux_total
+    mrv2_macos_grand_total += mrv2_sf_macos_total
+    
+    vmrv2_windows_grand_total += vmrv2_sf_windows_total
+    vmrv2_linux_grand_total += vmrv2_sf_linux_total
+    vmrv2_macos_grand_total += vmrv2_sf_macos_total
 
     # 4. Get SourceForge Beta Vulkan Totals
-    mrv2_sf_beta_vulkan_total, vmrv2_sf_beta_vulkan_total = count_sourceforge(repo, 'beta/vulkan', end_date_str, beta_start_date_str)
+    (mrv2_sf_beta_vulkan_total, vmrv2_sf_beta_vulkan_total,
+     mrv2_sf_windows_total, vmrv2_sf_windows_total,
+     mrv2_sf_linux_total, vmrv2_sf_linux_total,
+     mrv2_sf_macos_total, vmrv2_sf_macos_total) = count_sourceforge(repo, 'beta/vulkan', end_date_str, beta_start_date_str)
     vmrv2_grand_total += vmrv2_sf_beta_vulkan_total
 
+    mrv2_windows_grand_total += mrv2_sf_windows_total
+    mrv2_linux_grand_total += mrv2_sf_linux_total
+    mrv2_macos_grand_total += mrv2_sf_macos_total
+    
+    vmrv2_windows_grand_total += vmrv2_sf_windows_total
+    vmrv2_linux_grand_total += vmrv2_sf_linux_total
+    vmrv2_macos_grand_total += vmrv2_sf_macos_total
     #
     # 5. Add all of them up
     #
@@ -457,9 +606,27 @@ if __name__ == "__main__":
 
     # Print separate totals
     formatted_mrv2_grand_total = format_number(mrv2_grand_total, 5)
+    
+    formatted_mrv2_windows_grand_total = format_number(mrv2_windows_grand_total, 5)
+    formatted_mrv2_linux_grand_total = format_number(mrv2_linux_grand_total, 5)
+    formatted_mrv2_macos_grand_total = format_number(mrv2_macos_grand_total, 5)
+    
     formatted_vmrv2_grand_total = format_number(vmrv2_grand_total, 5)
+
+    formatted_vmrv2_windows_grand_total = format_number(vmrv2_windows_grand_total, 5)    
+    formatted_vmrv2_linux_grand_total = format_number(vmrv2_linux_grand_total, 5)
+    formatted_vmrv2_macos_grand_total = format_number(vmrv2_macos_grand_total, 5)
+
     formatted_final_grand_total = format_number(final_grand_total, 5)
 
+    print(f'{formatted_mrv2_windows_grand_total} Grand Total mrv2 Windows Downloads (GitHub + SourceForge)')
+    print(f'{formatted_mrv2_linux_grand_total} Grand Total mrv2 Linux Downloads (GitHub + SourceForge)')
+    print(f'{formatted_mrv2_macos_grand_total} Grand Total mrv2 macOS Downloads (GitHub + SourceForge)')
+    print()
+    print(f'{formatted_vmrv2_windows_grand_total} Grand Total vmrv2 Windows Downloads (GitHub + SourceForge)')
+    print(f'{formatted_vmrv2_linux_grand_total} Grand Total vmrv2 Linux Downloads (GitHub + SourceForge)')
+    print(f'{formatted_vmrv2_macos_grand_total} Grand Total vmrv2 macOS Downloads (GitHub + SourceForge)')
+    print()
     print(f'{formatted_mrv2_grand_total} Grand Total mrv2 Downloads (GitHub + SourceForge)')
     print(f'{formatted_vmrv2_grand_total} Grand Total vmrv2 Downloads (GitHub + SourceForge)')
 
@@ -469,3 +636,4 @@ if __name__ == "__main__":
 
 
 
+    

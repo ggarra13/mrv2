@@ -2347,7 +2347,7 @@ namespace tl
 
                     if (std::fabs(delta_db) > p.hdrOptions.peak_high_limit)
                     {
-                        // std::cerr << "------------------ NEW SHOT" << std::endl;
+                        // std::cerr << "----- NEW SHOT" << std::endl;
                         
                         // fprintf(stderr,
                         //         "current avg=%g previous_avg=%g delta=%g\n",
@@ -2580,6 +2580,9 @@ namespace tl
                         hdr.ootf.num_anchors = data.ootf.numAnchors;
                         for (int i = 0; i < hdr.ootf.num_anchors; i++)
                             hdr.ootf.anchors[i] = data.ootf.anchors[i];
+
+                        hdr.max_pq_y = data.maxPQY;
+                        hdr.avg_pq_y = data.avgPQY;
                     }  // hasHDR
                     else
                     {
