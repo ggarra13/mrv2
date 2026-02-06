@@ -128,6 +128,11 @@ namespace tl
             void* pcUBOData = nullptr;
             size_t pcUBOSize = 0;
 
+            // Peak detection variables
+            float sceneMax = 0;
+            float sceneAvg = 0;
+            
+            
             // Vulkan variables
             Fl_Vk_Context& ctx;
             std::vector<VkFence> ssboFences;
