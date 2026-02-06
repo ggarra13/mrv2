@@ -85,7 +85,7 @@ namespace tl
 
         bool isHDR(const HDRData&);
         bool isHDRPlus(const HDRData&);
-        bool isHDRDolby(const HDRData&);
+        bool isHDRDolbyVision(const HDRData&);
         
         std::string primariesName(const math::Vector2f& red,
                                   const math::Vector2f& green,

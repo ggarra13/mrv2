@@ -1123,7 +1123,7 @@ namespace mrv
             
             int screen = this->screen_num();
             
-            if (!p.hdrOptions.passthru)
+            if (!p.hdrOptions.tonemap)
             {
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
 

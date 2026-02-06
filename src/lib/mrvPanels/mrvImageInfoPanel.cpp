@@ -2038,7 +2038,7 @@ namespace mrv
                             snprintf(buf, 256, "%g", hdr.sceneAvg);
                             add_text(_("HDR10+ sceneAvg"), _("HDR10+ sceneAvg"), buf);
                         }
-                        if (isHDRDolby(hdr))
+                        if (isHDRDolbyVision(hdr))
                         {
                             snprintf(buf, 256, "%g", hdr.maxPQY);
                             add_text(_("Dolby maxPQY"), _("Dolby maxPQY"), buf);

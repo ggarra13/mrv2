@@ -994,6 +994,10 @@ namespace mrv
             {
                 p.hdrOptions.tonemap = false;
             }
+            else
+            {
+                p.hdrOptions.tonemap = true;
+            }
             
             redraw();
         }
@@ -1488,11 +1492,7 @@ namespace mrv
                     metadataRefresh = true;
 
                 const auto& hdr = p.hdrOptions.hdrData;
-                bool hasHDR = false;
-                if (hdr.eotf != image::EOTF_BT709 &&
-                    hdr.eotf != image::EOTF_BT601 &&
-                    hdr.sceneAvg != 0.F)
-                    hasHDR = true;
+                bool hasHDR = image::isHDR(hdr);
                     
                 if (hasHDR)
                 {
@@ -3674,7 +3674,7 @@ namespace mrv
         void TimelineViewport::_getHDR() noexcept
         {
             TLRENDER_P();
-            
+
             p.hdrOptions.hdrData = p.videoData[0].layers[0].image->getHDR();
             p.hdrOptions.tonemap = true;
         }
@@ -3705,17 +3705,13 @@ namespace mrv
                 p.videoData[0].layers[0].image)
             {
                 if (p.displayOptions.empty() ||
-                    p.displayOptions[0].hdrInfo ==
-                    timeline::HDRInformation::Inactive)
+                    p.displayOptions[0].hdrInfo == timeline::HDRInformation::Inactive)
                 {
-                    p.hdrOptions.hdrData = image::HDRData();
                     p.hdrOptions.tonemap = false;
                 }
                 else
                 {
-                    if (p.displayOptions[0].hdrInfo ==
-                        timeline::HDRInformation::FromFile)
-                        _getHDR();
+                    _getHDR();
                 }
                 
                 const auto& tags = p.videoData[0].layers[0].image->getTags();

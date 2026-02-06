@@ -71,7 +71,7 @@ namespace tl
                     o.sceneAvg != 0.F);
         }
         
-        inline bool isHDRDolby(const HDRData& o)
+        inline bool isHDRDolbyVision(const HDRData& o)
         {
             return (o.eotf == image::EOTF_BT2100_PQ &&
                     (o.maxPQY != 0.F || o.avgPQY != 0.F));

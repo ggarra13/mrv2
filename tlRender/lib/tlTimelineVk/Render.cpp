@@ -2226,52 +2226,46 @@ namespace tl
         {
             TLRENDER_P();
             if (value == p.hdrOptions &&
-                value.passthru == p.hdrOptions.passthru &&
-                !value.peak_detection)
+                value.tonemap == p.hdrOptions.tonemap &&
+                value.peak_detection == p.hdrOptions.peak_detection)
                 return;
 
+            static bool oldIsHDR = false;
             bool recreateDisplayShader = true;
 
             p.hdrOptions = value;
-            p.hdrOptions.passthru = value.passthru;
+            p.hdrOptions.tonemap = value.tonemap;
+            p.hdrOptions.peak_detection = value.peak_detection;
             
 #if defined(TLRENDER_LIBPLACEBO)
-            if (p.hdrOptions.passthru || p.hdrOptions.tonemap)
+            if (p.hdrOptions.tonemap)
             {
+                image::HDRData& data = p.hdrOptions.hdrData;
+
+                // Check metadata
+                const bool isHDRPlus = image::isHDRPlus(data);
+                const bool isHDRDolbyVision = image::isHDRDolbyVision(data);
+
                 // Persistent states
                 static float previous_avg = 0.F;
                 static float current_avg = PL_COLOR_SDR_WHITE;
                 static float current_peak = PL_COLOR_SDR_WHITE;
                 static bool peak_detection = false;
+                peak_detection = p.hdrOptions.peak_detection;
+                if (isHDRPlus || isHDRDolbyVision)
+                {
+                    peak_detection = false;
+                }
                 
-                if (p.hdrOptions.peak_detection != peak_detection ||
-                    !p.placeboData)
-                {
-                    peak_detection = p.hdrOptions.peak_detection;
-                    p.placeboData.reset(new LibPlaceboData(ctx, peak_detection));
-                    previous_avg = 0.F;
-                }
-                image::HDRData& data = p.hdrOptions.hdrData;
-                bool isHDRPlus = false;
-                switch (data.eotf)
-                {
-                case image::EOTFType::EOTF_BT2100_PQ: // PQ (HDR10)
-                case image::EOTFType::EOTF_BT2020:    // PQ (HDR10)
-                case image::EOTFType::EOTF_BT2100_HLG: // HLG
-                    if (data.sceneAvg != 0.F ||
-                        data.sceneMax[0] != 0.F ||
-                        data.sceneMax[1] != 0.F ||
-                        data.sceneMax[2] != 0.F)
-                        isHDRPlus = true;
-                    break;
-                default:
-                    break;
-                }
-
-                if (!isHDRPlus)
+                p.placeboData.reset(new LibPlaceboData(ctx, peak_detection));
+                previous_avg = 0.F;
+                
+                if (!isHDRPlus && !isHDRDolbyVision)
                 {
                     if (peak_detection && p.buffers["video"])
                     {
+                        recreateDisplayShader = false;
+
                         const std::string shaderName = "hdr_peak_detection";
                         const auto shader = p.compute[shaderName];
                         const auto img = p.buffers["video"];
@@ -2352,10 +2346,7 @@ namespace tl
                             data.sceneMax[1] = v;
                             data.sceneMax[2] = v;
                             data.sceneAvg = (current_avg + previous_avg) / 2.F;
-                        }
-                        else
-                        {
-                            recreateDisplayShader = false;
+                            recreateDisplayShader = true;
                         }
                         previous_avg = current_avg;
                         previous_peak = current_peak;
@@ -2367,11 +2358,12 @@ namespace tl
                 p.placeboData.reset();
             }
 #endif // TLRENDER_LIBPLACEBO
-
+            
             if (recreateDisplayShader || !p.shaders["display"])
             {
                 p.shaders["display"].reset();
                 _displayShader();
+                p.hdrOptions = value;
             }
         }
 
