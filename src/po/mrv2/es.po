@@ -2418,6 +2418,12 @@ msgstr "Espacio de Color"
 msgid "Color Transfer Space"
 msgstr "Espacio de Transferencia del Color"
 
+msgid "Primaries Name"
+msgstr "Nombre de las Primarias"
+
+msgid "PrimariesName"
+msgstr "Nombre de Primarias"
+
 msgid "HDR Red Primaries"
 msgstr "Primarias rojas HDR"
 
@@ -2438,6 +2444,18 @@ msgstr "HDR maxCLL"
 
 msgid "HDR maxFALL"
 msgstr "HDR maxFALL"
+
+msgid "HDR10+ sceneMax"
+msgstr "HDR10+ sceneMax"
+
+msgid "HDR10+ sceneAvg"
+msgstr "HDR10+ sceneAvg"
+
+msgid "Dolby maxPQY"
+msgstr "Dolby maxPQY"
+
+msgid "Dolby avgPQY"
+msgstr "Dolby avgPQY"
 
 msgid "FFmpeg Pixel Format"
 msgstr "Formato de Pixel de FFmpeg."
@@ -4214,15 +4232,6 @@ msgstr "Render/Mezcla Alfa/Derecha"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Mezcla Alfa/Premultiplicada"
 
-msgid "Render/HDR Data/From File"
-msgstr "Render/Datos de HDR/Del Archivo"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "Render/Datos de HDR/Inactivos"
-
-msgid "Render/HDR Data/Active"
-msgstr "Render/Datos de HDR/Activos"
-
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Active Deteccíon de Umbral"
 
@@ -4231,6 +4240,15 @@ msgstr "Render/HDR/Mapeo de Tonos"
 
 msgid "Render/HDR/Gamut Mapping"
 msgstr "Render/HDR/Mapeo de Gama"
+
+msgid "Render/HDR Data/From File"
+msgstr "Render/Datos de HDR/Del Archivo"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Render/Datos de HDR/Inactivos"
+
+msgid "Render/HDR Data/Active"
+msgstr "Render/Datos de HDR/Activos"
 
 msgid "Render/Minify Filter/Nearest"
 msgstr "Render/Filtro Minificación/Cercanía"
@@ -6611,8 +6629,24 @@ msgstr ""
 msgid "Chromaticities"
 msgstr "Cromáticidades"
 
+msgid "HDR Shot/Scene Peak Detection"
+msgstr "Detección de Umbral de HDR"
+
+msgid ""
+"Limit for considering a shot/scene change when HDR Peak Detection is on."
+msgstr ""
+"Límite a considerar para cambio de toma o escena cuando Deteccion de Umbral "
+"de HDR está activo."
+
 msgid "HDR Peak Detection"
 msgstr "Detección de Umbral de HDR"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr ""
+"Cuando el video clip no es HDR10+ o Dolby Vision, permite umbrales dinámicos"
+" por cuadro."
 
 msgid "HDR Data"
 msgstr "Datos de HDR"
@@ -7695,6 +7729,9 @@ msgstr "Datos de HDR Activos"
 
 msgid "Toggle HDR tonemap"
 msgstr "Alternar mapeo de tonos de HDR"
+
+msgid "Toggle HDR Peak Detection"
+msgstr "Permutar Detección de Umbral de HDR"
 
 msgid "Compare None"
 msgstr "Comparar Nada"

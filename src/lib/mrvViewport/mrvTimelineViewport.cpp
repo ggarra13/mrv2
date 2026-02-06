@@ -1031,9 +1031,13 @@ namespace mrv
             
             if (value == p.hdrOptions)
                 return;
+
+            // \@note:  we don't just copy p.hdrOptions = value as that would
+            //          eliminate hdrData.x
             p.hdrOptions.algorithm = value.algorithm;
             p.hdrOptions.gamutMapping = value.gamutMapping;
             p.hdrOptions.peak_detection = value.peak_detection;
+            p.hdrOptions.peak_high_limit = value.peak_high_limit;
             redrawWindows();
         }
 

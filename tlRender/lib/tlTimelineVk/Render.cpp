@@ -2345,10 +2345,7 @@ namespace tl
                     const float ratio = current_avg / (previous_avg + 1e-6f);
                     const float delta_db = 20 * log10(ratio);
 
-                    const float kShotThreshold = 10.F;
-
-                        
-                    if (std::fabs(delta_db) > kShotThreshold)
+                    if (std::fabs(delta_db) > p.hdrOptions.peak_high_limit)
                     {
                         // std::cerr << "------------------ NEW SHOT" << std::endl;
                         

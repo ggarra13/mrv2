@@ -2347,6 +2347,12 @@ msgstr "色空間"
 msgid "Color Transfer Space"
 msgstr "色を移植"
 
+msgid "Primaries Name"
+msgstr "原色名"
+
+msgid "PrimariesName"
+msgstr "原色名"
+
 msgid "HDR Red Primaries"
 msgstr "HDR赤色原色"
 
@@ -2367,6 +2373,18 @@ msgstr "HDR maxCLL"
 
 msgid "HDR maxFALL"
 msgstr "HDR maxFALL"
+
+msgid "HDR10+ sceneMax"
+msgstr "HDR10+ シーン最大値"
+
+msgid "HDR10+ sceneAvg"
+msgstr "HDR10+ シーン平均値"
+
+msgid "Dolby maxPQY"
+msgstr "Dolby maxPQY"
+
+msgid "Dolby avgPQY"
+msgstr "Dolby avgPQY"
 
 msgid "FFmpeg Pixel Format"
 msgstr "FFmpeg ピクセルフォーマット"
@@ -4091,15 +4109,6 @@ msgstr "レンダー/アルファブレンド/ストレート"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "レンダー/アルファブレンド/プリマルチプライド"
 
-msgid "Render/HDR Data/From File"
-msgstr "レンダー/HDRデータ/ファイルから"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "レンダー/HDRデータ/非アクティブ"
-
-msgid "Render/HDR Data/Active"
-msgstr "レンダー/HDRデータ/アクティブ"
-
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/ピーク検出を有効化"
 
@@ -4108,6 +4117,15 @@ msgstr "レンダー/HDR/トーンマップ"
 
 msgid "Render/HDR/Gamut Mapping"
 msgstr "レンダー/HDR/色域マッピング"
+
+msgid "Render/HDR Data/From File"
+msgstr "レンダー/HDRデータ/ファイルから"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "レンダー/HDRデータ/非アクティブ"
+
+msgid "Render/HDR Data/Active"
+msgstr "レンダー/HDRデータ/アクティブ"
 
 msgid "Render/Minify Filter/Nearest"
 msgstr "レンダー/ミニファイフィルター/最寄り"
@@ -6410,8 +6428,20 @@ msgstr ""
 msgid "Chromaticities"
 msgstr "色度"
 
+msgid "HDR Shot/Scene Peak Detection"
+msgstr "HDR ショット／シーン ピーク検出"
+
+msgid ""
+"Limit for considering a shot/scene change when HDR Peak Detection is on."
+msgstr "HDR ピーク検出が有効な場合に、ショット／シーンの切り替えと判断するためのしきい値。"
+
 msgid "HDR Peak Detection"
 msgstr "HDR ピーク検出"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr "ビデオクリップが HDR10+ または Dolby Vision でない場合、フレームごとの動的なしきい値を許可します。"
 
 msgid "HDR Data"
 msgstr "HDRデータ"
@@ -7427,6 +7457,9 @@ msgstr "HDRデータ アクティブ"
 
 msgid "Toggle HDR tonemap"
 msgstr "HDR トーンマップの切り替え"
+
+msgid "Toggle HDR Peak Detection"
+msgstr "HDR ピーク検出を切り替え"
 
 msgid "Compare None"
 msgstr "比べるものがない"

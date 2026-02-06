@@ -2399,6 +2399,12 @@ msgstr "Цветовое пространство"
 msgid "Color Transfer Space"
 msgstr "Пространство для передачи цветов"
 
+msgid "Primaries Name"
+msgstr "Название первичных цветов"
+
+msgid "PrimariesName"
+msgstr "Название первичных цветов"
+
 msgid "HDR Red Primaries"
 msgstr "&lt; Красные первенства &gt;"
 
@@ -2420,6 +2426,18 @@ msgstr "HDR maxCLL"
 
 msgid "HDR maxFALL"
 msgstr "Максимум FALL"
+
+msgid "HDR10+ sceneMax"
+msgstr "HDR10+ максимум сцены"
+
+msgid "HDR10+ sceneAvg"
+msgstr "HDR10+ среднее по сцене"
+
+msgid "Dolby maxPQY"
+msgstr "Dolby maxPQY"
+
+msgid "Dolby avgPQY"
+msgstr "Dolby avgPQY"
 
 msgid "FFmpeg Pixel Format"
 msgstr "FFmpeg Pixel Формат"
@@ -4174,15 +4192,6 @@ msgstr "Редакция/Альфа Бленд/Прямо"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Редакция/Альфа Бленд/Предмногочисленные"
 
-msgid "Render/HDR Data/From File"
-msgstr "Рендеринг/Данные HDR/Из файла"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "Рендеринг/Данные HDR/Неактивно"
-
-msgid "Render/HDR Data/Active"
-msgstr "Рендеринг/Данные HDR/Активные"
-
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Включить обнаружение пиков"
 
@@ -4191,6 +4200,15 @@ msgstr "Редакция/HDR/Тональность"
 
 msgid "Render/HDR/Gamut Mapping"
 msgstr "Редакция/HDR/Сопоставление гаммы"
+
+msgid "Render/HDR Data/From File"
+msgstr "Рендеринг/Данные HDR/Из файла"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Рендеринг/Данные HDR/Неактивно"
+
+msgid "Render/HDR Data/Active"
+msgstr "Рендеринг/Данные HDR/Активные"
 
 msgid "Render/Minify Filter/Nearest"
 msgstr "Редакция/Минимизация фильтра/Ближайший"
@@ -6567,8 +6585,24 @@ msgstr ""
 msgid "Chromaticities"
 msgstr "Хроматичности"
 
+msgid "HDR Shot/Scene Peak Detection"
+msgstr "Определение пиков HDR по кадрам/сценам"
+
+msgid ""
+"Limit for considering a shot/scene change when HDR Peak Detection is on."
+msgstr ""
+"Порог для определения смены кадра или сцены при включённом определении пиков"
+" HDR."
+
 msgid "HDR Peak Detection"
 msgstr "Обнаружение пиков HDR"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr ""
+"Если видеоклип не является HDR10+ или Dolby Vision, разрешает динамические "
+"пороги для каждого кадра."
 
 msgid "HDR Data"
 msgstr "Данные HDR"
@@ -7653,6 +7687,9 @@ msgstr "Данные HDR Активно"
 
 msgid "Toggle HDR tonemap"
 msgstr "Скриншот"
+
+msgid "Toggle HDR Peak Detection"
+msgstr "Включить/выключить определение пиков HDR"
 
 msgid "Compare None"
 msgstr "сравнить ни один"

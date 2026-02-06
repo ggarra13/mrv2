@@ -2367,6 +2367,12 @@ msgstr "रंग जगह"
 msgid "Color Transfer Space"
 msgstr "रंग ट्रांसफर जगह"
 
+msgid "Primaries Name"
+msgstr "प्राइमरी रंगों का नाम"
+
+msgid "PrimariesName"
+msgstr "प्राइमरी रंग नाम"
+
 msgid "HDR Red Primaries"
 msgstr "डीएसआर लाल आदिम"
 
@@ -2387,6 +2393,18 @@ msgstr "HDR maxCLL"
 
 msgid "HDR maxFALL"
 msgstr "HDR maxFALL"
+
+msgid "HDR10+ sceneMax"
+msgstr "HDR10+ दृश्य अधिकतम"
+
+msgid "HDR10+ sceneAvg"
+msgstr "HDR10+ दृश्य औसत"
+
+msgid "Dolby maxPQY"
+msgstr "Dolby maxPQY"
+
+msgid "Dolby avgPQY"
+msgstr "Dolby avgPQY"
 
 msgid "FFmpeg Pixel Format"
 msgstr "एफ़एफएमपी पिक्सेल प्रारूप"
@@ -4135,15 +4153,6 @@ msgstr "रेंडर/अल्फा ब्लेंड/स्ट्रेट
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "रेंडर/अल्फा ब्लेंड/पूर्वगुणित"
 
-msgid "Render/HDR Data/From File"
-msgstr "रेंडर/HDR डेटा/फ़ाइल से"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "रेंडर/HDR डेटा/निष्क्रिय"
-
-msgid "Render/HDR Data/Active"
-msgstr "रेंडर/HDR डेटा/सक्रिय"
-
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "रेंडर/HDR/पीक डिटेक्शन सक्षम करें"
 
@@ -4152,6 +4161,15 @@ msgstr "रेंडर/HDR/टोनमैप"
 
 msgid "Render/HDR/Gamut Mapping"
 msgstr "रेंडर/HDR/सरगम मानचित्रण"
+
+msgid "Render/HDR Data/From File"
+msgstr "रेंडर/HDR डेटा/फ़ाइल से"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "रेंडर/HDR डेटा/निष्क्रिय"
+
+msgid "Render/HDR Data/Active"
+msgstr "रेंडर/HDR डेटा/सक्रिय"
 
 msgid "Render/Minify Filter/Nearest"
 msgstr "रेंडर/न्यूनतमीकरण फ़िल्टर/निकटस्थ"
@@ -6507,8 +6525,22 @@ msgstr ""
 msgid "Chromaticities"
 msgstr "रंगमिति"
 
+msgid "HDR Shot/Scene Peak Detection"
+msgstr "HDR शॉट/दृश्य पीक डिटेक्शन"
+
+msgid ""
+"Limit for considering a shot/scene change when HDR Peak Detection is on."
+msgstr "HDR पीक डिटेक्शन चालू होने पर शॉट/दृश्य परिवर्तन माने जाने की सीमा।"
+
 msgid "HDR Peak Detection"
 msgstr "HDR पीक डिटेक्शन"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr ""
+"जब वीडियो क्लिप HDR10+ या Dolby Vision नहीं होता है, तो प्रति फ़्रेम "
+"डायनेमिक सीमा की अनुमति देता है।"
 
 msgid "HDR Data"
 msgstr "HDR डेटा"
@@ -7579,6 +7611,9 @@ msgstr "HDR डेटा सक्रिय"
 
 msgid "Toggle HDR tonemap"
 msgstr "HDR वर्तनीमैप टॉगल करें"
+
+msgid "Toggle HDR Peak Detection"
+msgstr "HDR पीक डिटेक्शन चालू/बंद करें"
 
 msgid "Compare None"
 msgstr "तुलना करें कोई नहीं"

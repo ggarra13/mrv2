@@ -2345,6 +2345,12 @@ msgstr "Farbraum"
 msgid "Color Transfer Space"
 msgstr "Farbbertragungsraum"
 
+msgid "Primaries Name"
+msgstr "Name der Primärfarben"
+
+msgid "PrimariesName"
+msgstr "Primärfarbenname"
+
 msgid "HDR Red Primaries"
 msgstr "HDR-Rote Grundlinien"
 
@@ -2365,6 +2371,18 @@ msgstr "HDR maxCLL"
 
 msgid "HDR maxFALL"
 msgstr "HDR maxFALL"
+
+msgid "HDR10+ sceneMax"
+msgstr "HDR10+ Szenen-Maximum"
+
+msgid "HDR10+ sceneAvg"
+msgstr "HDR10+ Szenen-Durchschnitt"
+
+msgid "Dolby maxPQY"
+msgstr "Dolby maxPQY"
+
+msgid "Dolby avgPQY"
+msgstr "Dolby avgPQY"
 
 msgid "FFmpeg Pixel Format"
 msgstr "FFmpeg Pixelformat"
@@ -4138,15 +4156,6 @@ msgstr "Render/Alpha-Mischung/gerade"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Alpha Blend/Vorvervielfacht"
 
-msgid "Render/HDR Data/From File"
-msgstr "Rendern/HDR-Daten/Aus Datei"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "Rendern/HDR-Daten/Inaktiv"
-
-msgid "Render/HDR Data/Active"
-msgstr "Rendern/HDR-Daten/Aktiv"
-
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Spitzlichterkennung aktivieren"
 
@@ -4155,6 +4164,15 @@ msgstr "Render/HDR/Tonkarte"
 
 msgid "Render/HDR/Gamut Mapping"
 msgstr "Render/HDR/Gamut-Mapping"
+
+msgid "Render/HDR Data/From File"
+msgstr "Rendern/HDR-Daten/Aus Datei"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Rendern/HDR-Daten/Inaktiv"
+
+msgid "Render/HDR Data/Active"
+msgstr "Rendern/HDR-Daten/Aktiv"
 
 msgid "Render/Minify Filter/Nearest"
 msgstr "Render/Filter verkleinern/Nchstgelegen"
@@ -6538,8 +6556,24 @@ msgstr ""
 msgid "Chromaticities"
 msgstr "Farbtemperatur"
 
+msgid "HDR Shot/Scene Peak Detection"
+msgstr "HDR-Peak-Erkennung für Aufnahmen/Szenen"
+
+msgid ""
+"Limit for considering a shot/scene change when HDR Peak Detection is on."
+msgstr ""
+"Schwellenwert zur Erkennung eines Aufnahme-/Szenenwechsels, wenn die HDR-"
+"Peak-Erkennung aktiviert ist."
+
 msgid "HDR Peak Detection"
 msgstr "HDR-Spitzlichterkennung"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr ""
+"Wenn der Videoclip kein HDR10+ oder Dolby Vision ist, werden dynamische "
+"Schwellenwerte pro Einzelbild erlaubt."
 
 msgid "HDR Data"
 msgstr "HDR-Daten"
@@ -7627,6 +7661,9 @@ msgstr "HDR-Daten Aktiv"
 
 msgid "Toggle HDR tonemap"
 msgstr "HDR-Tonkarte umschalten"
+
+msgid "Toggle HDR Peak Detection"
+msgstr "HDR-Peak-Erkennung umschalten"
 
 msgid "Compare None"
 msgstr "Vergleich Keine"

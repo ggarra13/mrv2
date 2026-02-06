@@ -93,8 +93,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 853 466} type Double hide resizable
-      code0 {main = m;}
+      xywh {0 0 853 466} type Double resizable
+      code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -195,7 +195,7 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {View Window}
+              label {View Window} open
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -427,16 +427,16 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label HDR open selected
-              xywh {298 28 555 369} box EMBOSSED_BOX align 5
+              label HDR open
+              xywh {298 28 555 369} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label HDR open
-                xywh {310 80 530 304} box ROUNDED_BOX
+                xywh {302 52 526 324} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsVulkanUseRGB {
-                  label {Prefer RGB (Vulkan)} open
-                  tooltip {When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is and convert them with a compute shader.  When is off, Vulkan will decode RGBA_F16 and RGBA_F32 frames.} xywh {569 116 135 25} down_box BORDER_BOX
+                  label {Prefer RGB (Vulkan)}
+                  tooltip {When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is and convert them with a compute shader.  When is off, Vulkan will decode RGBA_F16 and RGBA_F32 frames.} xywh {557 78 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label {Use RGBA}
@@ -449,7 +449,7 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Choice uiPrefsChromaticities {
                   label Chromaticities
-                  xywh {569 216 135 25} down_box BORDER_BOX
+                  xywh {557 208 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Ignore
@@ -460,9 +460,13 @@ If you try to open several mrv2s with different images, all these images will be
                     xywh {40 40 100 20}
                   }
                 }
+                Fl_Value_Input uiPrefsHDRPeakHighLimit {
+                  label {HDR Shot/Scene Peak Detection}
+                  tooltip {Limit for considering a shot/scene change when HDR Peak Detection is on.} xywh {628 117 64 28} minimum 0.1 maximum 100 step 1 value 10 textcolor 56
+                }
                 Fl_Choice uiPrefsHDRPeakDetection {
-                  label {HDR Peak Detection} open
-                  xywh {569 176 135 25} down_box BORDER_BOX
+                  label {HDR Peak Detection}
+                  tooltip {When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds per frame.} xywh {557 159 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Inactive
@@ -475,7 +479,7 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Choice uiPrefsHDRInfo {
                   label {HDR Data}
-                  xywh {569 255 135 25} down_box BORDER_BOX
+                  xywh {557 247 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label {From File}
@@ -492,7 +496,7 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Choice uiPrefsTonemapAlgorithm {
                   label {Tonemap Algorithm}
-                  xywh {569 294 135 25} down_box BORDER_BOX
+                  xywh {557 286 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label ST2094_40
@@ -549,7 +553,7 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Choice uiPrefsGamutMapping {
                   label {Gamut Mapping}
-                  xywh {569 333 135 25} down_box BORDER_BOX
+                  xywh {557 325 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
                     label Auto
@@ -880,7 +884,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label Render open
-              xywh {288 35 555 369} box EMBOSSED_BOX align 5 hide
+              xywh {288 35 555 369} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label Render open
@@ -904,7 +908,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   }
                 }
                 Fl_Choice uiPrefsAlphaBlend {
-                  label {Alpha Blend}
+                  label {Alpha Blend} selected
                   xywh {514 187 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {

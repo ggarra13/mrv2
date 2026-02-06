@@ -2386,6 +2386,12 @@ msgstr "Color Space"
 msgid "Color Transfer Space"
 msgstr "Color Transfer Space"
 
+msgid "Primaries Name"
+msgstr "Preset Name"
+
+msgid "PrimariesName"
+msgstr "Preset Name"
+
 msgid "HDR Red Primaries"
 msgstr "HDR Red Primaries"
 
@@ -2406,6 +2412,18 @@ msgstr "HDR maxCLL"
 
 msgid "HDR maxFALL"
 msgstr "HDR maxFALL"
+
+msgid "HDR10+ sceneMax"
+msgstr ""
+
+msgid "HDR10+ sceneAvg"
+msgstr ""
+
+msgid "Dolby maxPQY"
+msgstr ""
+
+msgid "Dolby avgPQY"
+msgstr ""
 
 msgid "FFmpeg Pixel Format"
 msgstr "FFmpeg Pixel Format"
@@ -4151,15 +4169,6 @@ msgstr "Render/Alpha Blend/Straight"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Alpha Blend/Premultiplied"
 
-msgid "Render/HDR Data/From File"
-msgstr "Render/HDR Data/From File"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "Render/HDR Data/Inactive"
-
-msgid "Render/HDR Data/Active"
-msgstr "Render/HDR Data/Active"
-
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Enable Peak Detectionx"
 
@@ -4168,6 +4177,15 @@ msgstr "Render/HDR/Tonemap"
 
 msgid "Render/HDR/Gamut Mapping"
 msgstr "Render/HDR/Gamut Mapping"
+
+msgid "Render/HDR Data/From File"
+msgstr "Render/HDR Data/From File"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Render/HDR Data/Inactive"
+
+msgid "Render/HDR Data/Active"
+msgstr "Render/HDR Data/Active"
 
 msgid "Render/Minify Filter/Nearest"
 msgstr "Render/Minify Filter/Nearest"
@@ -6542,8 +6560,20 @@ msgstr ""
 msgid "Chromaticities"
 msgstr "Chromaticities"
 
+msgid "HDR Shot/Scene Peak Detection"
+msgstr "HDR Peak Detection"
+
+msgid ""
+"Limit for considering a shot/scene change when HDR Peak Detection is on."
+msgstr ""
+
 msgid "HDR Peak Detection"
 msgstr "HDR Peak Detection"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr ""
 
 msgid "HDR Data"
 msgstr "HDR Data"
@@ -7616,6 +7646,9 @@ msgstr "HDR Data Active"
 
 msgid "Toggle HDR tonemap"
 msgstr "Toggle HDR tonemap"
+
+msgid "Toggle HDR Peak Detection"
+msgstr "HDR Peak Detection"
 
 msgid "Compare None"
 msgstr "Compare None"

@@ -11,6 +11,7 @@ namespace tl
             // passthru is ignored on purpose
             return (tonemap == other.tonemap &&
                     peak_detection == other.peak_detection &&
+                    peak_high_limit == other.peak_high_limit &&
                     gamutMapping == other.gamutMapping &&
                     algorithm == other.algorithm &&
                     hdrData == other.hdrData);

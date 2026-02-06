@@ -48,9 +48,9 @@ namespace tl
         //! Tonemap options.
         struct HDROptions
         {
-            bool passthru = false;
             bool tonemap = false;
             bool peak_detection = false;
+            float peak_high_limit = 10.F;
             HDRGamutMapping     gamutMapping = HDRGamutMapping::Auto;
             HDRTonemapAlgorithm algorithm = HDRTonemapAlgorithm::Hable;
             image::HDRData hdrData;

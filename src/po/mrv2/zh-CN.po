@@ -2351,6 +2351,12 @@ msgstr "色彩空间"
 msgid "Color Transfer Space"
 msgstr "色彩转换空间"
 
+msgid "Primaries Name"
+msgstr "原色名称"
+
+msgid "PrimariesName"
+msgstr "原色名称"
+
 msgid "HDR Red Primaries"
 msgstr "HDR 红色原始资料"
 
@@ -2371,6 +2377,18 @@ msgstr "HDR 最大CLL"
 
 msgid "HDR maxFALL"
 msgstr "HDR 最大FALL"
+
+msgid "HDR10+ sceneMax"
+msgstr "HDR10+ 场景最大值"
+
+msgid "HDR10+ sceneAvg"
+msgstr "HDR10+ 场景平均值"
+
+msgid "Dolby maxPQY"
+msgstr "Dolby maxPQY"
+
+msgid "Dolby avgPQY"
+msgstr "Dolby avgPQY"
 
 msgid "FFmpeg Pixel Format"
 msgstr "FFmpeg 像素格式"
@@ -4081,15 +4099,6 @@ msgstr "渲染/Alpha混合/Straight"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "渲染/Alpha混合/Premultiplied"
 
-msgid "Render/HDR Data/From File"
-msgstr "渲染/HDR 数据/来自文件"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "渲染/HDR 数据/未激活"
-
-msgid "Render/HDR Data/Active"
-msgstr "渲染/HDR 数据/活动"
-
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "渲染/HDR/启用峰值检测"
 
@@ -4098,6 +4107,15 @@ msgstr "招标/HDR/时针映射"
 
 msgid "Render/HDR/Gamut Mapping"
 msgstr "招标/HDR/色域映射"
+
+msgid "Render/HDR Data/From File"
+msgstr "渲染/HDR 数据/来自文件"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "渲染/HDR 数据/未激活"
+
+msgid "Render/HDR Data/Active"
+msgstr "渲染/HDR 数据/活动"
 
 msgid "Render/Minify Filter/Nearest"
 msgstr "渲染/最小过滤器/Nearest"
@@ -6429,8 +6447,20 @@ msgstr ""
 msgid "Chromaticities"
 msgstr "色度"
 
+msgid "HDR Shot/Scene Peak Detection"
+msgstr "HDR 镜头/场景峰值检测"
+
+msgid ""
+"Limit for considering a shot/scene change when HDR Peak Detection is on."
+msgstr "在启用 HDR 峰值检测时，用于判断镜头或场景切换的阈值。"
+
 msgid "HDR Peak Detection"
 msgstr "HDR 峰值检测"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr "当视频片段不是 HDR10+ 或 Dolby Vision 时，允许逐帧使用动态阈值。"
 
 msgid "HDR Data"
 msgstr "HDR 数据"
@@ -7437,6 +7467,9 @@ msgstr "HDR 数据 激活"
 
 msgid "Toggle HDR tonemap"
 msgstr "切换 HRD 音速映射"
+
+msgid "Toggle HDR Peak Detection"
+msgstr "切换 HDR 峰值检测"
 
 msgid "Compare None"
 msgstr "比较没有一个"

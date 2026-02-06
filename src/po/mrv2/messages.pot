@@ -2122,6 +2122,12 @@ msgstr ""
 msgid "Color Transfer Space"
 msgstr ""
 
+msgid "Primaries Name"
+msgstr ""
+
+msgid "PrimariesName"
+msgstr ""
+
 msgid "HDR Red Primaries"
 msgstr ""
 
@@ -2141,6 +2147,18 @@ msgid "HDR maxCLL"
 msgstr ""
 
 msgid "HDR maxFALL"
+msgstr ""
+
+msgid "HDR10+ sceneMax"
+msgstr ""
+
+msgid "HDR10+ sceneAvg"
+msgstr ""
+
+msgid "Dolby maxPQY"
+msgstr ""
+
+msgid "Dolby avgPQY"
 msgstr ""
 
 msgid "FFmpeg Pixel Format"
@@ -3831,15 +3849,6 @@ msgstr ""
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr ""
 
-msgid "Render/HDR Data/From File"
-msgstr ""
-
-msgid "Render/HDR Data/Inactive"
-msgstr ""
-
-msgid "Render/HDR Data/Active"
-msgstr ""
-
 msgid "Render/HDR/Enable Peak Detection"
 msgstr ""
 
@@ -3847,6 +3856,15 @@ msgid "Render/HDR/Tonemap"
 msgstr ""
 
 msgid "Render/HDR/Gamut Mapping"
+msgstr ""
+
+msgid "Render/HDR Data/From File"
+msgstr ""
+
+msgid "Render/HDR Data/Inactive"
+msgstr ""
+
+msgid "Render/HDR Data/Active"
 msgstr ""
 
 msgid "Render/Minify Filter/Nearest"
@@ -6044,7 +6062,19 @@ msgstr ""
 msgid "Chromaticities"
 msgstr ""
 
+msgid "HDR Shot/Scene Peak Detection"
+msgstr ""
+
+msgid ""
+"Limit for considering a shot/scene change when HDR Peak Detection is on."
+msgstr ""
+
 msgid "HDR Peak Detection"
+msgstr ""
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds "
+"per frame."
 msgstr ""
 
 msgid "HDR Data"
@@ -7044,6 +7074,9 @@ msgid "HDR Data Active"
 msgstr ""
 
 msgid "Toggle HDR tonemap"
+msgstr ""
+
+msgid "Toggle HDR Peak Detection"
 msgstr ""
 
 msgid "Compare None"

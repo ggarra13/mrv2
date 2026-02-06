@@ -2382,6 +2382,12 @@ msgstr "Spazio a colori"
 msgid "Color Transfer Space"
 msgstr "Spazio di trasferimento dei colori"
 
+msgid "Primaries Name"
+msgstr "Nome delle primarie"
+
+msgid "PrimariesName"
+msgstr "Nome primarie"
+
 msgid "HDR Red Primaries"
 msgstr "Primarie rosse HDR"
 
@@ -2402,6 +2408,18 @@ msgstr "HDR maxCLL"
 
 msgid "HDR maxFALL"
 msgstr "HDR maxFALL"
+
+msgid "HDR10+ sceneMax"
+msgstr "HDR10+ massimo di scena"
+
+msgid "HDR10+ sceneAvg"
+msgstr "HDR10+ media di scena"
+
+msgid "Dolby maxPQY"
+msgstr "Dolby maxPQY"
+
+msgid "Dolby avgPQY"
+msgstr "Dolby avgPQY"
 
 msgid "FFmpeg Pixel Format"
 msgstr "Formato FFmpeg Pixel"
@@ -4171,15 +4189,6 @@ msgstr "Render/Miscelazione alfa/Dritto"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Miscelazione alfa/Premultiplicato"
 
-msgid "Render/HDR Data/From File"
-msgstr "Rendering/Dati HDR/Da file"
-
-msgid "Render/HDR Data/Inactive"
-msgstr "Rendering/Dati HDR/Inattivo"
-
-msgid "Render/HDR Data/Active"
-msgstr "Rendering/Dati HDR/Attivo"
-
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Abilita rilevamento dei picchi"
 
@@ -4188,6 +4197,15 @@ msgstr "Render/HDR/Mappa dei toni"
 
 msgid "Render/HDR/Gamut Mapping"
 msgstr "Render/HDR/Mappa della gamma"
+
+msgid "Render/HDR Data/From File"
+msgstr "Rendering/Dati HDR/Da file"
+
+msgid "Render/HDR Data/Inactive"
+msgstr "Rendering/Dati HDR/Inattivo"
+
+msgid "Render/HDR Data/Active"
+msgstr "Rendering/Dati HDR/Attivo"
 
 msgid "Render/Minify Filter/Nearest"
 msgstr "Render/Minimizzare il filtro/Più vicino"
@@ -6574,8 +6592,24 @@ msgstr ""
 msgid "Chromaticities"
 msgstr "Ignora le cromaticità"
 
+msgid "HDR Shot/Scene Peak Detection"
+msgstr "Rilevamento del picco HDR per inquadrature/scene"
+
+msgid ""
+"Limit for considering a shot/scene change when HDR Peak Detection is on."
+msgstr ""
+"Soglia per considerare un cambio di inquadratura o scena quando il "
+"rilevamento del picco HDR è attivo."
+
 msgid "HDR Peak Detection"
 msgstr "Rilevamento dei picchi HDR"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr ""
+"Quando il clip video non è HDR10+ o Dolby Vision, consente soglie dinamiche "
+"per fotogramma."
 
 msgid "HDR Data"
 msgstr "Dati HDR"
@@ -7671,6 +7705,9 @@ msgstr "Rendering/Dati HDR/Attivo"
 
 msgid "Toggle HDR tonemap"
 msgstr "Commuta mappa tonale HDR"
+
+msgid "Toggle HDR Peak Detection"
+msgstr "Attiva/disattiva il rilevamento del picco HDR"
 
 msgid "Compare None"
 msgstr "Confronta Nessuna"
