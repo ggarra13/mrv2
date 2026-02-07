@@ -41,14 +41,6 @@ jobs:
         override: true
         profile: minimal
         
-    - name: Verify
-      run: |
-        rustc -Vv
-        cargo -V
-        
-    - name: Install cargo-c
-      run: cargo install cargo-c
-
     - name: Install Visual C++ Redistributable 2022 (ARM64)
       run: |
         $vc_redist_url_2022_arm64 = "https://aka.ms/vs/17/release/vc_redist.arm64.exe"
@@ -91,6 +83,15 @@ jobs:
         msystem: CLANGARM64
         install: >-
           base-devel
+
+    - name: Verify
+      run: |
+        rustc -Vv
+        cargo -V
+        
+    - name: Install cargo-c
+      run: cargo install cargo-c
+
 
     - name: Create msys_cmd.bat wrapper
       run: |
