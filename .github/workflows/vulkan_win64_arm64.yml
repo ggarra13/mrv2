@@ -89,6 +89,9 @@ jobs:
         rustc -Vv
         cargo -V
         
+    - name: Fix linker shadowing
+      run: mv /usr/bin/link.exe /usr/bin/link_msys.exe
+      
     - name: Install cargo-c
       run: cargo install cargo-c
 
