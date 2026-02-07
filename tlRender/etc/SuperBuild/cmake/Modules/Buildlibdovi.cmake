@@ -7,6 +7,7 @@ set(libdovi_GIT_TAG libdovi-3.3.2)
 set(libdovi_DEPENDENCIES )
 message(STATUS "dovi DEPENDENCIES=${libdovi_DEPENDENCIES}")
 
+
 if (WIN32)
     include(functions/Msys2)
 endif()
