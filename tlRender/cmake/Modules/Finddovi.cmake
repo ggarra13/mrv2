@@ -29,7 +29,7 @@ mark_as_advanced(
     dovi_LIBRARY)
 
 if(dovi_FOUND AND NOT TARGET dovi::dovi)
-    add_library(dovi::dovi SHARED IMPORTED GLOBAL)
+    add_library(dovi::dovi UNKNOWN IMPORTED)
     # or STATIC if libdovi.a
     set_target_properties(dovi::dovi PROPERTIES
         IMPORTED_LOCATION "${dovi_LIBRARY}"
