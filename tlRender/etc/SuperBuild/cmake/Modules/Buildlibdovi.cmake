@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 
-set(libdovi_GIT_REPO "https://github.com/quietvoid/libdovi_tool.git")
+set(libdovi_GIT_REPO "https://github.com/quietvoid/dovi_tool.git")
 set(libdovi_GIT_TAG libdovi-3.3.2)
 
 set(libdovi_DEPENDENCIES )
