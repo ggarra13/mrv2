@@ -34,10 +34,10 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libdovi
     GIT_REPOSITORY ${libdovi_GIT_REPO}
     GIT_TAG ${libdovi_GIT_TAG}
-    DEPENDS ${libdovi_DEPENDENCIES}
-    CONFIGURE_COMMAND ${libdovi_CONFIGURE}
+
+    CONFIGURE_COMMAND ""
     PATCH_COMMAND ${libdovi_PATCH}
-    BUILD_COMMAND ${libdovi_BUILD}
+    BUILD_COMMAND ""
     INSTALL_COMMAND ${libdovi_INSTALL}
     BUILD_IN_SOURCE 1
 )
