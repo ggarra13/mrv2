@@ -555,12 +555,10 @@ if(WIN32)
     
     set(FFmpeg_OPENSSL_COPY)
 
-    if(WIN32)
-	convert_path_for_msys2("${CMAKE_CURRENT_BINARY_DIR}" BINARY_DIR)
-        set(FFmpeg_OPENSSL_COPY
-            "cp ${BINARY_DIR}/ffmpeg_configure.sh ${BINARY_DIR}/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
-    endif()
-
+    convert_path_for_msys2("${CMAKE_CURRENT_BINARY_DIR}" BINARY_DIR)
+    set(FFmpeg_OPENSSL_COPY
+        "cp ${BINARY_DIR}/ffmpeg_configure.sh ${BINARY_DIR}/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
+	
     set(PKG_CONFIG_PATH_MSys2 "${INSTALL_PREFIX}/lib/pkgconfig")
     
     # Ensure PKG_CONFIG_PATH is set within the MSYS2 shell command
