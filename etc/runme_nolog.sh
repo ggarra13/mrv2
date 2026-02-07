@@ -187,7 +187,7 @@ if [ -z "$TLRENDER_LIBPLACEBO" ]; then
 fi
 
 if [ -z "$TLRENDER_LIBWEBP" ]; then
-    export TLRENDER_LIBWEBP=ON
+    export TLRENDER_LIBWEBP=OFF
 fi
 
 if [ -z "$TLRENDER_NDI_SDK" ]; then
@@ -440,7 +440,7 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     fi
     echo "    HAP/Snappy codec support ....... ${TLRENDER_HAP} 	(TLRENDER_HAP)"
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
-    echo "    WebP codec support ............. ${TLRENDER_LIBWEBP}	(TLRENDER_LIBWEBP)"
+    echo "    WebP encoder support ........... ${TLRENDER_LIBWEBP}	(TLRENDER_LIBWEBP)"
     echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
     echo "    libdovi    support ............. ${TLRENDER_LIBDOVI}         (TLRENDER_LIBDOVI)"
 
