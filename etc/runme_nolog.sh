@@ -170,6 +170,14 @@ if [ -z "$TLRENDER_FFMPEG_MINIMAL" ]; then
     export TLRENDER_FFMPEG_MINIMAL=ON
 fi
 
+if [ -z "$TLRENDER_LIBDOVI" ]; then
+    if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
+	export TLRENDER_LIBDOVI=ON
+    else
+	export TLRENDER_LIBDOVI=OFF
+    fi
+fi
+
 if [ -z "$TLRENDER_LIBPLACEBO" ]; then
     if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
 	export TLRENDER_LIBPLACEBO=ON
@@ -400,7 +408,7 @@ fi
 
 echo "mrv2 Options"
 echo
-echo "Build vcpkg......................... ${BUILD_VCPKG}		(BUILD_VCPKG)"
+echo "Build vcpkg......................... ${BUILD_VCPKG}	(BUILD_VCPKG)"
 echo "Build Python........................ ${BUILD_PYTHON} 	(BUILD_PYTHON)"
 if [[ ${BUILD_PYTHON} == OFF || ${BUILD_PYTHON} == 0 ]]; then
     echo "Python location: ${MRV2_PYTHON}"
@@ -432,8 +440,10 @@ if [[ $TLRENDER_FFMPEG == ON || $TLRENDER_FFMPEG == 1 ]]; then
     fi
     echo "    HAP/Snappy codec support ....... ${TLRENDER_HAP} 	(TLRENDER_HAP)"
     echo "    VPX codec support .............. ${TLRENDER_VPX} 	(TLRENDER_VPX)"
-    echo "    WebP codec support ............. ${TLRENDER_LIBWEBP}		(TLRENDER_LIBWEBP)"
+    echo "    WebP codec support ............. ${TLRENDER_LIBWEBP}	(TLRENDER_LIBWEBP)"
     echo "    X264 codec support ............. ${TLRENDER_X264} 	(Use -gpl flag)"
+    echo "    libdovi    support ............. ${TLRENDER_LIBDOVI}         (TLRENDER_LIBDOVI)"
+
     echo "    libplacebo support ............. ${TLRENDER_LIBPLACEBO}         (TLRENDER_LIBPLACEBO)"
 fi
 echo
@@ -525,6 +535,7 @@ cmd="cmake -G 'Ninja'
 	   -D TLRENDER_GL=${TLRENDER_GL}
            -D TLRENDER_HAP=${TLRENDER_HAP}
            -D TLRENDER_JPEG=${TLRENDER_JPEG}
+	   -D TLRENDER_LIBDOVI=${TLRENDER_LIBDOVI}
            -D TLRENDER_LIBPLACEBO=${TLRENDER_LIBPLACEBO}
 	   -D TLRENDER_LIBWEBP=${TLRENDER_LIBWEBP}
 	   -D TLRENDER_NDI=${TLRENDER_NDI}
