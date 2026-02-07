@@ -10,6 +10,8 @@
 . etc/build_dir.sh
 . etc/vulkan_version.sh
 
+set +e
+
 EXE=/tmp/vulkan-sdk.exe
 rm -rf $EXE
 

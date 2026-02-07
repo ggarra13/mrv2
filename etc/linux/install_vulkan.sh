@@ -5,6 +5,8 @@
 
 . etc/functions.sh
 
+set +e
+
 get_kernel
 
 # SDK docs from:

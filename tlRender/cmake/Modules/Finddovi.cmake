@@ -16,7 +16,12 @@ find_path(dovi_INCLUDE_DIR
     NAMES libdovi/rpu_parser.h)
 
 find_library(dovi_LIBRARY
-    NAMES dovi)
+    NAMES dovi
+    PATHS
+    ${CMAKE_INSTALL_PREFIX}/lib/
+)
+
+message(STATUS "dovi is ${dovi_LIBRARY}")
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(dovi
@@ -30,7 +35,6 @@ mark_as_advanced(
 
 if(dovi_FOUND AND NOT TARGET dovi::dovi)
     add_library(dovi::dovi UNKNOWN IMPORTED)
-    # or STATIC if libdovi.a
     set_target_properties(dovi::dovi PROPERTIES
         IMPORTED_LOCATION "${dovi_LIBRARY}"
         INTERFACE_INCLUDE_DIRECTORIES "${dovi_INCLUDE_DIR}")

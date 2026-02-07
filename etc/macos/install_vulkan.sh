@@ -11,6 +11,8 @@ get_kernel
 
 rm -rf /tmp/vulkansdk-macOS-*
 
+set +e
+
 ZIP=/tmp/vulkan-sdk.zip
 rm -rf $ZIP
 
