@@ -77,6 +77,14 @@ jobs:
         override: true
         profile: minimal
         
+    - name: Verify
+      run: |
+        rustc -Vv
+        cargo -V
+        
+    - name: Install cargo-c
+      run: cargo install cargo-c
+      
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"

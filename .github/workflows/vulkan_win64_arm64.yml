@@ -40,6 +40,14 @@ jobs:
         target: aarch64-pc-windows-msvc
         override: true
         profile: minimal
+        
+    - name: Verify
+      run: |
+        rustc -Vv
+        cargo -V
+        
+    - name: Install cargo-c
+      run: cargo install cargo-c
 
     - name: Install Visual C++ Redistributable 2022 (ARM64)
       run: |
