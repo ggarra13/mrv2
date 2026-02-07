@@ -79,7 +79,6 @@ jobs:
         
     - name: Verify
       run: |
-        rustc -Vv
         cargo -V
         
     - name: Install cargo-c
