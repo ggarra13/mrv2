@@ -110,12 +110,6 @@ namespace tl
             //! Get the shader name.
             const std::string& getName() const;
 
-            //! Get the vertex shader source.
-            const std::string& getVertexSource() const;
-
-            //! Get the fragment shader source.
-            const std::string& getFragmentSource() const;
-
             //! Get the Vulkan vertex module.
             const VkShaderModule& getVertex() const;
 
@@ -265,13 +259,10 @@ namespace tl
             //! types.
             void debugDescriptorSets();
 
-            //! Print out all debug info.
-            void debug();
-
         private:
-            void _createVertexShader();
-            void _createFragmentShader();
-            void _createComputeShader();
+            void _createVertexShader(const std::string&);
+            void _createFragmentShader(const std::string&);
+            void _createComputeShader(const std::string&);
             
             Fl_Vk_Context& ctx;
             

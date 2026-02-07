@@ -42,7 +42,7 @@ namespace tl
             void start(
                 const std::chrono::microseconds&,
                 const std::function<void(
-                    const std::chrono::steady_clock::time_point&,
+                    const std::chrono::high_resolution_clock::time_point&,
                     const std::chrono::microseconds&)>&);
 
             //! Stop the timer.

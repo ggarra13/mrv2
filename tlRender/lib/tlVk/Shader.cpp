@@ -21,25 +21,22 @@ namespace tl
     {
         struct Shader::Private
         {
-            std::string vertexSource = "Compiled SPIRV code";
-            std::string fragmentSource = "Compiled SPIRV code";
             VkShaderModule vertex = VK_NULL_HANDLE;
             VkShaderModule fragment = VK_NULL_HANDLE;
             
-            std::string computeSource = "Compiled SPIRV code";
             VkPipeline computePipeline = VK_NULL_HANDLE;
             VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
             VkShaderModule compute = VK_NULL_HANDLE;
         };
 
-        void Shader::_createVertexShader()
+        void Shader::_createVertexShader(const std::string& source)
         {
             TLRENDER_P();
 
             try
             {
                 std::vector<uint32_t> spirv = compile_glsl_to_spirv(
-                    p.vertexSource,
+                    source,
                     shaderc_vertex_shader, // Shader type
                     "vertex_shader.glsl"       // Filename for error reporting
                 );
@@ -52,7 +49,7 @@ namespace tl
                 std::cerr << shaderName << " failed vertex compilation " << std::endl
                           << e.what() << " for " << std::endl;
                 auto lines = tl::string::split(
-                    p.vertexSource, '\n', string::SplitOptions::KeepEmpty);
+                    source, '\n', string::SplitOptions::KeepEmpty);
                 uint32_t i = 1;
                 for (const auto& line : lines)
                 {
@@ -63,14 +60,14 @@ namespace tl
             }
         }
         
-        void Shader::_createFragmentShader()
+        void Shader::_createFragmentShader(const std::string& source)
         {
             TLRENDER_P();
 
             try
             {
                 std::vector<uint32_t> spirv = compile_glsl_to_spirv(
-                    p.fragmentSource,
+                    source,
                     shaderc_fragment_shader, // Shader type
                     "frag_shader.glsl"       // Filename for error reporting
                 );
@@ -83,7 +80,7 @@ namespace tl
                 std::cerr << shaderName << " failed fragment compilation " << std::endl
                           << e.what() << " for " << std::endl;
                 auto lines = tl::string::split(
-                    p.fragmentSource, '\n', string::SplitOptions::KeepEmpty);
+                    source, '\n', string::SplitOptions::KeepEmpty);
                 uint32_t i = 1;
                 for (const auto& line : lines)
                 {
@@ -94,14 +91,14 @@ namespace tl
             }
         }
         
-        void Shader::_createComputeShader()
+        void Shader::_createComputeShader(const std::string& source)
         {
             TLRENDER_P();
 
             try
             {
                 std::vector<uint32_t> spirv = compile_glsl_to_spirv(
-                    p.computeSource,
+                    source,
                     shaderc_compute_shader, // Shader type
                     "compute_shader.glsl"       // Filename for error reporting
                 );
@@ -114,7 +111,7 @@ namespace tl
                 std::cerr << shaderName << " failed fragment compilation " << std::endl
                           << e.what() << " for " << std::endl;
                 auto lines = tl::string::split(
-                    p.computeSource, '\n', string::SplitOptions::KeepEmpty);
+                    source, '\n', string::SplitOptions::KeepEmpty);
                 uint32_t i = 1;
                 for (const auto& line : lines)
                 {
@@ -133,11 +130,9 @@ namespace tl
             TLRENDER_P();
             
             p.vertex = create_shader_module(ctx.device, vertexBytes, vertexLength);
-
-            p.fragmentSource = fragmentSource;
             shaderName = name;
             
-            _createFragmentShader();
+            _createFragmentShader(fragmentSource);
         }
         
         void Shader::_init(const uint32_t* vertexBytes,
@@ -159,13 +154,10 @@ namespace tl
         {
             TLRENDER_P();
 
-            p.vertexSource = vertexSource;
-            p.fragmentSource = fragmentSource;
-
             shaderName = name;
             
-            _createVertexShader();
-            _createFragmentShader();
+            _createVertexShader(vertexSource);
+            _createFragmentShader(fragmentSource);
         }
         
         void Shader::_init(const std::string& computeSource,
@@ -173,11 +165,9 @@ namespace tl
         {
             TLRENDER_P();
 
-            p.computeSource = computeSource;
-
             shaderName = name;
             
-            _createComputeShader();
+            _createComputeShader(computeSource);
         }
         
         void Shader::_init(const uint32_t* computeBytes,
@@ -298,16 +288,6 @@ namespace tl
         const VkShaderModule& Shader::getFragment() const
         {
             return _p->fragment;
-        }
-
-        const std::string& Shader::getVertexSource() const
-        {
-            return _p->vertexSource;
-        }
-
-        const std::string& Shader::getFragmentSource() const
-        {
-            return _p->fragmentSource;
         }
 
         void Shader::useBindingSet(const std::shared_ptr<ShaderBindingSet> value)
@@ -604,26 +584,7 @@ namespace tl
             pushSize = size;
             pushStageFlags = getVulkanShaderFlags(stageFlags);
         }
-        
-        void Shader::debug()
-        {
-            TLRENDER_P();
-
-            std::cerr << shaderName
-                      << " ================================" << std::endl;
-            std::cerr << getVertexSource() << std::endl;
-            debugVertexDescriptorSets();
-            std::cerr << "------------------------------------" << std::endl;
-            std::cerr << getFragmentSource() << std::endl;
-            std::cerr << "------------------------------------" << std::endl;
-            debugFragmentDescriptorSets();
-            if (pushSize > 0)
-            {
-                std::cerr << "------------------------------------" << std::endl;
-                std::cerr << "pushSize = " << pushSize << std::endl;
-            }
-        }
-        
+                
         void Shader::createPipelineLayout()
         {
             TLRENDER_P();

@@ -17,10 +17,10 @@ namespace tl
             std::chrono::microseconds timeout;
             std::function<void(void)> callback;
             std::function<void(
-                const std::chrono::steady_clock::time_point&,
+                const std::chrono::high_resolution_clock::time_point&,
                 const std::chrono::microseconds&)>
                 callback2;
-            std::chrono::steady_clock::time_point start;
+            std::chrono::high_resolution_clock::time_point start;
         };
 
         void Timer::_init(const std::shared_ptr<system::Context>& context)
@@ -65,20 +65,20 @@ namespace tl
             p.active = true;
             p.timeout = timeout;
             p.callback = callback;
-            p.start = std::chrono::steady_clock::now();
+            p.start = std::chrono::high_resolution_clock::now();
         }
 
         void Timer::start(
             const std::chrono::microseconds& timeout,
             const std::function<void(
-                const std::chrono::steady_clock::time_point&,
+                const std::chrono::high_resolution_clock::time_point&,
                 const std::chrono::microseconds&)>& callback)
         {
             TLRENDER_P();
             p.active = true;
             p.timeout = timeout;
             p.callback2 = callback;
-            p.start = std::chrono::steady_clock::now();
+            p.start = std::chrono::high_resolution_clock::now();
         }
 
         void Timer::stop()
@@ -99,7 +99,7 @@ namespace tl
         void Timer::tick()
         {
             TLRENDER_P();
-            const auto now = std::chrono::steady_clock::now();
+            const auto now = std::chrono::high_resolution_clock::now();
             if (now >= (p.start + p.timeout))
             {
                 if (p.callback)
