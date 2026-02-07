@@ -169,6 +169,7 @@ namespace tl
             std::unique_ptr<OCIOLUTData> lutData;
 #endif // TLRENDER_OCIO
 
+            std::string toneMapDef;
 #if defined(TLRENDER_LIBPLACEBO)
             std::unique_ptr<LibPlaceboData> placeboData;
 #endif

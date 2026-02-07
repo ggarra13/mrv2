@@ -246,7 +246,7 @@ namespace tl
             void endRenderPass() override;
             
         private:
-            void _displayShader();
+            void _displayShader(bool recreate = true);
 
             void _drawBackground(
                 const std::vector<math::Box2i>&,
