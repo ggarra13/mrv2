@@ -54,6 +54,7 @@ ChangeLog
 - Added HDR10+ variables to Media Informtion Panel's Video Tab.
 - Added Dolby Vision variables to Media Information Panel's Video Tab.
 - Added Dolby Vision support on all platforms.
+- Fixed libwebp support which had incorrectly been turned off.
 
 v1.5.4
 ======

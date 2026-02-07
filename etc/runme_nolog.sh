@@ -187,7 +187,7 @@ if [ -z "$TLRENDER_LIBPLACEBO" ]; then
 fi
 
 if [ -z "$TLRENDER_LIBWEBP" ]; then
-    export TLRENDER_LIBWEBP=OFF
+    export TLRENDER_LIBWEBP=ON
 fi
 
 if [ -z "$TLRENDER_NDI_SDK" ]; then
