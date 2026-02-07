@@ -53,6 +53,7 @@ ChangeLog
 - Improved performance of Media Information Panel's Video Tab.
 - Added HDR10+ variables to Media Informtion Panel's Video Tab.
 - Added Dolby Vision variables to Media Information Panel's Video Tab.
+- Added Dolby Vision support on all platforms.
 
 v1.5.4
 ======
