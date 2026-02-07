@@ -18,10 +18,10 @@ endif()
 
 set(libdovi_PATCH )
 if (WIN32)
-    set(libdovi_CONFIGURE ${MRV2_MSYS_CMD} -c "cd dolby_vision && cargo install cargo-c")
+    set(libdovi_CONFIGURE )
     set(libdovi_INSTALL ${MRV2_MSYS_CMD} -c "cd dolby_vision && cargo cinstall --release --prefix ${INSTALL_PREFIX}")
 else()
-    set(libdovi_CONFIGURE cd dolby_vision && cargo install cargo-c)
+    set(libdovi_CONFIGURE )
     set(libdovi_INSTALL cd dolby_vision && cargo cinstall --release --prefix "${INSTALL_PREFIX}")
 endif()
 

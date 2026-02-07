@@ -26,6 +26,16 @@ jobs:
       run: |
         echo "Machine name: $RUNNER_NAME"
 
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        profile: minimal
+        
+    - name: Install cargo-c
+      run: cargo install cargo-c
+          
     - name: Update repos
       run: |
         sudo add-apt-repository universe -y

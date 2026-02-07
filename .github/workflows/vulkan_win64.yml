@@ -70,6 +70,13 @@ jobs:
         update: true
         path-type: inherit
         
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        profile: minimal
+        
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"

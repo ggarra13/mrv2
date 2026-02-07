@@ -31,6 +31,19 @@ jobs:
       run: |
         echo "Machine name: $RUNNER_NAME"
 
+    - name: Install Rust (ARM64)
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        profile: minimal
+
+    - name: Verify
+      run: rustc -Vv
+      
+    - name: Install cargo-c
+      run: cargo install cargo-c
+      
     - name: Install ninja-build
       run: brew install ninja
       
