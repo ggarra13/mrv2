@@ -2332,7 +2332,8 @@ namespace tl
 
                     bool allow_delayed = true;
 
-                    // This calls shader->mapSSO("PeakData") to read the histogram values
+                    // This calls shader->mapSSO("PeakData") to read the
+                    // histogram values
                     hdr::process_peak_data(
                         shader,
                         p.hdrOptions.peak_percentile,
@@ -2346,9 +2347,10 @@ namespace tl
 
                     previous_avg = current_avg;
 
+                    p.placeboData->maxPeak = current_peak / 10000.F;
+                    p.placeboData->avgPeak = current_avg / 10000.F;
+                    
                     updateDisplayShader = true;
-                    p.placeboData->maxPeak = current_peak;
-                    p.placeboData->avgPeak = current_avg;
                 }
                 else
                 {
@@ -2529,16 +2531,11 @@ namespace tl
                     hdr.prim.blue.y = data.primaries[image::HDRPrimaries::Blue][1];
                     hdr.prim.white.x = data.primaries[image::HDRPrimaries::White][0];
                     hdr.prim.white.y = data.primaries[image::HDRPrimaries::White][1];
-                    if (p.placeboData->maxPeak > 0.F)
-                    {
-                        hdr.max_cll = p.placeboData->maxPeak;
-                        hdr.max_fall = p.placeboData->avgPeak;
-                    }
-                    else
-                    {
-                        hdr.max_cll = data.maxCLL;
-                        hdr.max_fall = data.maxFALL;
-                    }
+                    hdr.scene_max[0] = data.sceneMax[0];
+                    hdr.scene_max[1] = data.sceneMax[1];
+                    hdr.scene_max[2] = data.sceneMax[2];
+                    hdr.scene_avg = data.sceneAvg;
+
                     hdr.ootf.target_luma = data.ootf.targetLuma;
                     hdr.ootf.knee_x = data.ootf.kneeX;
                     hdr.ootf.knee_y = data.ootf.kneeY;
@@ -2546,8 +2543,17 @@ namespace tl
                     for (int i = 0; i < hdr.ootf.num_anchors; i++)
                         hdr.ootf.anchors[i] = data.ootf.anchors[i];
                     
-                    hdr.max_pq_y = data.maxPQY;
-                    hdr.avg_pq_y = data.avgPQY;
+                    if (p.placeboData->maxPeak > 0.F)
+                    {
+                        hdr.max_pq_y = p.placeboData->maxPeak;
+                        hdr.avg_pq_y = p.placeboData->avgPeak;
+                    }
+                    else
+                    {
+                        hdr.max_pq_y = data.maxPQY;
+                        hdr.avg_pq_y = data.avgPQY;
+                    }                    
+
                 }  // hasHDR
                 else
                 {
