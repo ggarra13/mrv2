@@ -6121,6 +6121,78 @@ msgstr "Medio"
 msgid "Fast"
 msgstr "Rápido"
 
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "gleam"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Pick View Background Color"
+msgstr "Seleccionar color de fondo de la vista"
+
+msgid "Pick View Text Overlay Color"
+msgstr "Seleccionar color del texto superpuesto de la vista"
+
+msgid "Pick View Selection Color"
+msgstr "Seleccionar color de selección de la vista"
+
+msgid "Pick HUD Color"
+msgstr "Seleccionar color del HUD"
+
+msgid "Float Values"
+msgstr "Valores Coma Flotante"
+
+msgid "Hex Values"
+msgstr "Valores Hex"
+
+msgid "8-bit Values"
+msgstr "Valores 8-bit"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Lut, Gama y Ganancia"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Original sin Gama, Gain o Lut"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "From File"
+msgstr "Del Archivo"
+
+msgid "Full Range"
+msgstr "Rango Completo"
+
+msgid "Legal Range"
+msgstr "Rango Legal"
+
+msgid "Straight"
+msgstr "Derecho"
+
+msgid "Premultiplied"
+msgstr "Premultiplicado"
+
+msgid "Nearest"
+msgstr "Cercanía"
+
+msgid "Small"
+msgstr "Pequeño"
+
+msgid "Large"
+msgstr "Grande"
+
 msgid "Use RGBA"
 msgstr "Usar RGBA"
 
@@ -6138,9 +6210,6 @@ msgstr "Inactivo"
 
 msgid "Active"
 msgstr "Activo"
-
-msgid "From File"
-msgstr "Del Archivo"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6192,75 +6261,6 @@ msgstr "Oscurecer"
 
 msgid "Highlight"
 msgstr "Destacar"
-
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "gleam"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Pick View Background Color"
-msgstr "Seleccionar color de fondo de la vista"
-
-msgid "Pick View Text Overlay Color"
-msgstr "Seleccionar color del texto superpuesto de la vista"
-
-msgid "Pick View Selection Color"
-msgstr "Seleccionar color de selección de la vista"
-
-msgid "Pick HUD Color"
-msgstr "Seleccionar color del HUD"
-
-msgid "Float Values"
-msgstr "Valores Coma Flotante"
-
-msgid "Hex Values"
-msgstr "Valores Hex"
-
-msgid "8-bit Values"
-msgstr "Valores 8-bit"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "Lut, Gama y Ganancia"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Original sin Gama, Gain o Lut"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "Full Range"
-msgstr "Rango Completo"
-
-msgid "Legal Range"
-msgstr "Rango Legal"
-
-msgid "Straight"
-msgstr "Derecho"
-
-msgid "Premultiplied"
-msgstr "Premultiplicado"
-
-msgid "Nearest"
-msgstr "Cercanía"
-
-msgid "Small"
-msgstr "Pequeño"
-
-msgid "Large"
-msgstr "Grande"
 
 msgid "OpenGL only"
 msgstr "Sólo OpenGL"
@@ -6611,52 +6611,6 @@ msgstr "Paneles"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Setea la tipografía para usar en los paneles. (No funciona aún)"
 
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Prefer RGB (Vulkan)"
-msgstr "Preferir RGB (Vulkan)"
-
-msgid ""
-"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
-"and convert them with a compute shader.  When is off, Vulkan will decode "
-"RGBA_F16 and RGBA_F32 frames."
-msgstr ""
-"Cuando esta opción está activada, Vulkan intentará usar RGB_F16 y RGB_F32 "
-"tal como están y convertirlos mediante un shader de cómputo. Cuando está "
-"desactivada, Vulkan decodificará fotogramas RGBA_F16 y RGBA_F32."
-
-msgid "Chromaticities"
-msgstr "Cromáticidades"
-
-msgid "HDR Shot/Scene Peak Detection"
-msgstr "Detección de Umbral de HDR"
-
-msgid ""
-"Limit for considering a shot/scene change when HDR Peak Detection is on."
-msgstr ""
-"Límite a considerar para cambio de toma o escena cuando Deteccion de Umbral "
-"de HDR está activo."
-
-msgid "HDR Peak Detection"
-msgstr "Detección de Umbral de HDR"
-
-msgid ""
-"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
-" per frame."
-msgstr ""
-"Cuando el video clip no es HDR10+ o Dolby Vision, permite umbrales dinámicos"
-" por cuadro."
-
-msgid "HDR Data"
-msgstr "Datos de HDR"
-
-msgid "Tonemap Algorithm"
-msgstr "Algoritmo de Mapeo de Tonos"
-
-msgid "Gamut Mapping"
-msgstr "Mapeo de Gama"
-
 msgid "Language and Colors"
 msgstr "Lenguaje y Colores"
 
@@ -6835,6 +6789,73 @@ msgstr "Marco de inicio de vídeo"
 
 msgid "Start value in the timeline where video starts."
 msgstr "Inicie el valor en la línea de tiempo donde comienza el vídeo."
+
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Prefer RGB (Vulkan)"
+msgstr "Preferir RGB (Vulkan)"
+
+msgid ""
+"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
+"and convert them with a compute shader.  When is off, Vulkan will decode "
+"RGBA_F16 and RGBA_F32 frames."
+msgstr ""
+"Cuando esta opción está activada, Vulkan intentará usar RGB_F16 y RGB_F32 "
+"tal como están y convertirlos mediante un shader de cómputo. Cuando está "
+"desactivada, Vulkan decodificará fotogramas RGBA_F16 y RGBA_F32."
+
+msgid "Chromaticities"
+msgstr "Cromáticidades"
+
+msgid "HDR Data"
+msgstr "Datos de HDR"
+
+msgid "Tonemap Algorithm"
+msgstr "Algoritmo de Mapeo de Tonos"
+
+msgid "Gamut Mapping"
+msgstr "Mapeo de Gama"
+
+msgid "HDR Peak Detection"
+msgstr "Detección de Umbral de HDR"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr ""
+"Cuando el video clip no es HDR10+ o Dolby Vision, permite umbrales dinámicos"
+" por cuadro."
+
+msgid "HDR Percentile"
+msgstr "Percentil HDR"
+
+msgid ""
+"When less than 100, helps find the peak brightness ignoring the top 1% "
+"outliers."
+msgstr ""
+"Cuando es menor que 100, ayuda a encontrar el brillo máximo ignorando el 1 %"
+" superior de valores atípicos."
+
+msgid "Smoothing Period"
+msgstr "Período de suavizado"
+
+msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
+msgstr ""
+"Cuánto tiempo tarda la detección de brillo en adaptarse a una nueva escena."
+
+msgid "Low Peak Detection"
+msgstr "Detección de pico bajo"
+
+msgid "Low Limit to smooth out frames in the same scene."
+msgstr ""
+"Límite inferior para suavizar los fotogramas dentro de la misma escena."
+
+msgid "High Peak Detection Limit"
+msgstr "Límite superior de detección de picos"
+
+msgid "High Limit to determine scene change."
+msgstr "Límite superior para determinar un cambio de escena."
 
 msgid "Playback"
 msgstr "Reproducir"
@@ -7270,9 +7291,6 @@ msgstr "Interfaz del Usuario/Buscador de Archivos"
 
 msgid "User Interface/Fonts"
 msgstr "Interfaz del Usuario/Tipografías"
-
-msgid "User Interface/HDR"
-msgstr "Interfaz del Usuario/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "Interfaz del Usuario/Lenguaje y Colores"
@@ -8188,6 +8206,18 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "Detección de Umbral de HDR"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr ""
+#~ "Límite a considerar para cambio de toma o escena cuando Deteccion de Umbral "
+#~ "de HDR está activo."
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Interfaz del Usuario/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "Monitor "

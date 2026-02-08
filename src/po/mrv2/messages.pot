@@ -5590,6 +5590,78 @@ msgstr ""
 msgid "Fast"
 msgstr ""
 
+msgid "base"
+msgstr ""
+
+msgid "plastic"
+msgstr ""
+
+msgid "gtk+"
+msgstr ""
+
+msgid "gleam"
+msgstr ""
+
+msgid "oxy"
+msgstr ""
+
+msgid "Pick View Background Color"
+msgstr ""
+
+msgid "Pick View Text Overlay Color"
+msgstr ""
+
+msgid "Pick View Selection Color"
+msgstr ""
+
+msgid "Pick HUD Color"
+msgstr ""
+
+msgid "Float Values"
+msgstr ""
+
+msgid "Hex Values"
+msgstr ""
+
+msgid "8-bit Values"
+msgstr ""
+
+msgid "Full Lut, Gamma and Gain"
+msgstr ""
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr ""
+
+msgid "CIE XYZ"
+msgstr ""
+
+msgid "CIE xyY"
+msgstr ""
+
+msgid "From File"
+msgstr ""
+
+msgid "Full Range"
+msgstr ""
+
+msgid "Legal Range"
+msgstr ""
+
+msgid "Straight"
+msgstr ""
+
+msgid "Premultiplied"
+msgstr ""
+
+msgid "Nearest"
+msgstr ""
+
+msgid "Small"
+msgstr ""
+
+msgid "Large"
+msgstr ""
+
 msgid "Use RGBA"
 msgstr ""
 
@@ -5606,9 +5678,6 @@ msgid "Inactive"
 msgstr ""
 
 msgid "Active"
-msgstr ""
-
-msgid "From File"
 msgstr ""
 
 msgid "ST2094_40"
@@ -5660,75 +5729,6 @@ msgid "Darken"
 msgstr ""
 
 msgid "Highlight"
-msgstr ""
-
-msgid "base"
-msgstr ""
-
-msgid "plastic"
-msgstr ""
-
-msgid "gtk+"
-msgstr ""
-
-msgid "gleam"
-msgstr ""
-
-msgid "oxy"
-msgstr ""
-
-msgid "Pick View Background Color"
-msgstr ""
-
-msgid "Pick View Text Overlay Color"
-msgstr ""
-
-msgid "Pick View Selection Color"
-msgstr ""
-
-msgid "Pick HUD Color"
-msgstr ""
-
-msgid "Float Values"
-msgstr ""
-
-msgid "Hex Values"
-msgstr ""
-
-msgid "8-bit Values"
-msgstr ""
-
-msgid "Full Lut, Gamma and Gain"
-msgstr ""
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr ""
-
-msgid "CIE XYZ"
-msgstr ""
-
-msgid "CIE xyY"
-msgstr ""
-
-msgid "Full Range"
-msgstr ""
-
-msgid "Legal Range"
-msgstr ""
-
-msgid "Straight"
-msgstr ""
-
-msgid "Premultiplied"
-msgstr ""
-
-msgid "Nearest"
-msgstr ""
-
-msgid "Small"
-msgstr ""
-
-msgid "Large"
 msgstr ""
 
 msgid "OpenGL only"
@@ -6047,45 +6047,6 @@ msgstr ""
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr ""
 
-msgid "HDR"
-msgstr ""
-
-msgid "Prefer RGB (Vulkan)"
-msgstr ""
-
-msgid ""
-"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
-"and convert them with a compute shader.  When is off, Vulkan will decode "
-"RGBA_F16 and RGBA_F32 frames."
-msgstr ""
-
-msgid "Chromaticities"
-msgstr ""
-
-msgid "HDR Shot/Scene Peak Detection"
-msgstr ""
-
-msgid ""
-"Limit for considering a shot/scene change when HDR Peak Detection is on."
-msgstr ""
-
-msgid "HDR Peak Detection"
-msgstr ""
-
-msgid ""
-"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds "
-"per frame."
-msgstr ""
-
-msgid "HDR Data"
-msgstr ""
-
-msgid "Tonemap Algorithm"
-msgstr ""
-
-msgid "Gamut Mapping"
-msgstr ""
-
 msgid "Language and Colors"
 msgstr ""
 
@@ -6244,6 +6205,65 @@ msgid "Video Start Frame"
 msgstr ""
 
 msgid "Start value in the timeline where video starts."
+msgstr ""
+
+msgid "HDR"
+msgstr ""
+
+msgid "Prefer RGB (Vulkan)"
+msgstr ""
+
+msgid ""
+"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
+"and convert them with a compute shader.  When is off, Vulkan will decode "
+"RGBA_F16 and RGBA_F32 frames."
+msgstr ""
+
+msgid "Chromaticities"
+msgstr ""
+
+msgid "HDR Data"
+msgstr ""
+
+msgid "Tonemap Algorithm"
+msgstr ""
+
+msgid "Gamut Mapping"
+msgstr ""
+
+msgid "HDR Peak Detection"
+msgstr ""
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds "
+"per frame."
+msgstr ""
+
+msgid "HDR Percentile"
+msgstr ""
+
+msgid ""
+"When less than 100, helps find the peak brightness ignoring the top "
+"1% outliers."
+msgstr ""
+
+msgid "Smoothing Period"
+msgstr ""
+
+msgid ""
+"How long it takes for brightness detection to \"catch up\" to a new scene."
+msgstr ""
+
+msgid "Low Peak Detection"
+msgstr ""
+
+msgid "Low Limit to smooth out frames in the same scene."
+msgstr ""
+
+msgid "High Peak Detection Limit"
+msgstr ""
+
+msgid "High Limit to determine scene change."
 msgstr ""
 
 msgid "Playback"
@@ -6618,9 +6638,6 @@ msgid "User Interface/File Requester"
 msgstr ""
 
 msgid "User Interface/Fonts"
-msgstr ""
-
-msgid "User Interface/HDR"
 msgstr ""
 
 msgid "User Interface/Language and Colors"

@@ -6060,6 +6060,78 @@ msgstr "Medium"
 msgid "Fast"
 msgstr "Fast"
 
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "gleam"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Pick View Background Color"
+msgstr "Pick View Background Color"
+
+msgid "Pick View Text Overlay Color"
+msgstr "Text Overlay"
+
+msgid "Pick View Selection Color"
+msgstr "Pick View Selection Color"
+
+msgid "Pick HUD Color"
+msgstr "Pick Color"
+
+msgid "Float Values"
+msgstr "Float Values"
+
+msgid "Hex Values"
+msgstr "Hex Values"
+
+msgid "8-bit Values"
+msgstr "8-bit Values"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "Full Lut, Gamma and Gain"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "Original without Gamma, Gain or Lut"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "From File"
+msgstr "From File"
+
+msgid "Full Range"
+msgstr "Full Range"
+
+msgid "Legal Range"
+msgstr "Legal Range"
+
+msgid "Straight"
+msgstr "Straight"
+
+msgid "Premultiplied"
+msgstr "Premultiplied"
+
+msgid "Nearest"
+msgstr "Nearest"
+
+msgid "Small"
+msgstr "Small"
+
+msgid "Large"
+msgstr "Large"
+
 msgid "Use RGBA"
 msgstr "Use RGBA"
 
@@ -6077,9 +6149,6 @@ msgstr "Inactive"
 
 msgid "Active"
 msgstr "Active"
-
-msgid "From File"
-msgstr "From File"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6131,75 +6200,6 @@ msgstr "Darken"
 
 msgid "Highlight"
 msgstr "Highlight"
-
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "gleam"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Pick View Background Color"
-msgstr "Pick View Background Color"
-
-msgid "Pick View Text Overlay Color"
-msgstr "Text Overlay"
-
-msgid "Pick View Selection Color"
-msgstr "Pick View Selection Color"
-
-msgid "Pick HUD Color"
-msgstr "Pick Color"
-
-msgid "Float Values"
-msgstr "Float Values"
-
-msgid "Hex Values"
-msgstr "Hex Values"
-
-msgid "8-bit Values"
-msgstr "8-bit Values"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "Full Lut, Gamma and Gain"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "Original without Gamma, Gain or Lut"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "Full Range"
-msgstr "Full Range"
-
-msgid "Legal Range"
-msgstr "Legal Range"
-
-msgid "Straight"
-msgstr "Straight"
-
-msgid "Premultiplied"
-msgstr "Premultiplied"
-
-msgid "Nearest"
-msgstr "Nearest"
-
-msgid "Small"
-msgstr "Small"
-
-msgid "Large"
-msgstr "Large"
 
 msgid "OpenGL only"
 msgstr "OpenGL only"
@@ -6542,48 +6542,6 @@ msgstr "Panels"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Sets the font to use in panels. (Not yet working)"
 
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Prefer RGB (Vulkan)"
-msgstr "Prefer RGB (Vulkan)"
-
-msgid ""
-"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
-"and convert them with a compute shader.  When is off, Vulkan will decode "
-"RGBA_F16 and RGBA_F32 frames."
-msgstr ""
-"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
-"and convert them with a compute shader.  When is off, Vulkan will decode "
-"RGBA_F16 and RGBA_F32 frames."
-
-msgid "Chromaticities"
-msgstr "Chromaticities"
-
-msgid "HDR Shot/Scene Peak Detection"
-msgstr "HDR Peak Detection"
-
-msgid ""
-"Limit for considering a shot/scene change when HDR Peak Detection is on."
-msgstr ""
-
-msgid "HDR Peak Detection"
-msgstr "HDR Peak Detection"
-
-msgid ""
-"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
-" per frame."
-msgstr ""
-
-msgid "HDR Data"
-msgstr "HDR Data"
-
-msgid "Tonemap Algorithm"
-msgstr "Tonemap Algorithm"
-
-msgid "Gamut Mapping"
-msgstr "Gamut Mapping"
-
 msgid "Language and Colors"
 msgstr "Language and Colors"
 
@@ -6759,6 +6717,72 @@ msgstr "Video Start Frame"
 
 msgid "Start value in the timeline where video starts."
 msgstr "Start value in the timeline where video starts."
+
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Prefer RGB (Vulkan)"
+msgstr "Prefer RGB (Vulkan)"
+
+msgid ""
+"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
+"and convert them with a compute shader.  When is off, Vulkan will decode "
+"RGBA_F16 and RGBA_F32 frames."
+msgstr ""
+"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
+"and convert them with a compute shader.  When is off, Vulkan will decode "
+"RGBA_F16 and RGBA_F32 frames."
+
+msgid "Chromaticities"
+msgstr "Chromaticities"
+
+msgid "HDR Data"
+msgstr "HDR Data"
+
+msgid "Tonemap Algorithm"
+msgstr "Tonemap Algorithm"
+
+msgid "Gamut Mapping"
+msgstr "Gamut Mapping"
+
+msgid "HDR Peak Detection"
+msgstr "HDR Peak Detection"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+
+msgid "HDR Percentile"
+msgstr "HDR Percentile"
+
+msgid ""
+"When less than 100, helps find the peak brightness ignoring the top 1% "
+"outliers."
+msgstr ""
+"When less than 100, helps find the peak brightness ignoring the top 1% "
+"outliers."
+
+msgid "Smoothing Period"
+msgstr ""
+
+msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
+msgstr ""
+"How long it takes for brightness detection to \"catch up\" to a new scene."
+
+msgid "Low Peak Detection"
+msgstr "Low Peak Detection"
+
+msgid "Low Limit to smooth out frames in the same scene."
+msgstr "Low Limit to smooth out frames in the same scene."
+
+msgid "High Peak Detection Limit"
+msgstr "High Peak Detection Limit"
+
+msgid "High Limit to determine scene change."
+msgstr "High Limit to determine scene change."
 
 msgid "Playback"
 msgstr "Playback"
@@ -7187,9 +7211,6 @@ msgstr "User Interface/File Requester"
 
 msgid "User Interface/Fonts"
 msgstr "User Interface/Fonts"
-
-msgid "User Interface/HDR"
-msgstr "User Interface/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "User Interface/Language and Colors"
@@ -8105,6 +8126,12 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "HDR Peak Detection"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "User Interface/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "Monitor "

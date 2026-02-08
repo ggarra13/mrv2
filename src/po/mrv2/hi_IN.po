@@ -6022,6 +6022,78 @@ msgstr "मध्यम"
 msgid "Fast"
 msgstr "तेज"
 
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "गहरा लाल रंग"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Pick View Background Color"
+msgstr "दृश्य की पृष्ठभूमि का रंग चुनें"
+
+msgid "Pick View Text Overlay Color"
+msgstr "दृश्य के टेक्स्ट ओवरले का रंग चुनें"
+
+msgid "Pick View Selection Color"
+msgstr "दृश्य के चयन का रंग चुनें"
+
+msgid "Pick HUD Color"
+msgstr "HUD का रंग चुनें"
+
+msgid "Float Values"
+msgstr "फ्लोट मूल्य"
+
+msgid "Hex Values"
+msgstr "हेक्साक मान"
+
+msgid "8-bit Values"
+msgstr "8- बिट मूल्य"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "पूरा लूत, गामा और गेन"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "मूल बिना गामा, प्राप्ति या लूत के बगैर"
+
+msgid "CIE XYZ"
+msgstr "सीआई एक्सवाय"
+
+msgid "CIE xyY"
+msgstr "सीआईआई एक्सy"
+
+msgid "From File"
+msgstr "फ़ाइल से"
+
+msgid "Full Range"
+msgstr "पूरा सीमा"
+
+msgid "Legal Range"
+msgstr "लीगल सीमा"
+
+msgid "Straight"
+msgstr "सीधा"
+
+msgid "Premultiplied"
+msgstr "प्री- एम्प्टीज़"
+
+msgid "Nearest"
+msgstr "निकटस्थ"
+
+msgid "Small"
+msgstr "छोटा"
+
+msgid "Large"
+msgstr "बड़ा"
+
 msgid "Use RGBA"
 msgstr "RGBA का उपयोग करें"
 
@@ -6039,9 +6111,6 @@ msgstr "निष्क्रिय"
 
 msgid "Active"
 msgstr "सक्रिय"
-
-msgid "From File"
-msgstr "फ़ाइल से"
 
 msgid "ST2094_40"
 msgstr "एसटी2094_40"
@@ -6093,75 +6162,6 @@ msgstr "गहरा करें"
 
 msgid "Highlight"
 msgstr "हाइलाइट करें"
-
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "गहरा लाल रंग"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Pick View Background Color"
-msgstr "दृश्य की पृष्ठभूमि का रंग चुनें"
-
-msgid "Pick View Text Overlay Color"
-msgstr "दृश्य के टेक्स्ट ओवरले का रंग चुनें"
-
-msgid "Pick View Selection Color"
-msgstr "दृश्य के चयन का रंग चुनें"
-
-msgid "Pick HUD Color"
-msgstr "HUD का रंग चुनें"
-
-msgid "Float Values"
-msgstr "फ्लोट मूल्य"
-
-msgid "Hex Values"
-msgstr "हेक्साक मान"
-
-msgid "8-bit Values"
-msgstr "8- बिट मूल्य"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "पूरा लूत, गामा और गेन"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "मूल बिना गामा, प्राप्ति या लूत के बगैर"
-
-msgid "CIE XYZ"
-msgstr "सीआई एक्सवाय"
-
-msgid "CIE xyY"
-msgstr "सीआईआई एक्सy"
-
-msgid "Full Range"
-msgstr "पूरा सीमा"
-
-msgid "Legal Range"
-msgstr "लीगल सीमा"
-
-msgid "Straight"
-msgstr "सीधा"
-
-msgid "Premultiplied"
-msgstr "प्री- एम्प्टीज़"
-
-msgid "Nearest"
-msgstr "निकटस्थ"
-
-msgid "Small"
-msgstr "छोटा"
-
-msgid "Large"
-msgstr "बड़ा"
 
 msgid "OpenGL only"
 msgstr "केवल OpenGL"
@@ -6507,50 +6507,6 @@ msgstr "फलक"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "फलक में उपयोग हेतु फ़ॉन्ट सेट करता है. (अभी कार्य नहीं)"
 
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Prefer RGB (Vulkan)"
-msgstr "RGB को प्राथमिकता दें (Vulkan)"
-
-msgid ""
-"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
-"and convert them with a compute shader.  When is off, Vulkan will decode "
-"RGBA_F16 and RGBA_F32 frames."
-msgstr ""
-"जब यह सेटिंग चालू होती है, तो Vulkan RGB_F16 और RGB_F32 को जैसा है वैसा "
-"उपयोग करने की कोशिश करेगा और उन्हें एक कंप्यूट शेडर के साथ परिवर्तित करेगा। "
-"जब यह बंद होती है, तो Vulkan RGBA_F16 और RGBA_F32 फ्रेम्स को डिकोड करेगा।"
-
-msgid "Chromaticities"
-msgstr "रंगमिति"
-
-msgid "HDR Shot/Scene Peak Detection"
-msgstr "HDR शॉट/दृश्य पीक डिटेक्शन"
-
-msgid ""
-"Limit for considering a shot/scene change when HDR Peak Detection is on."
-msgstr "HDR पीक डिटेक्शन चालू होने पर शॉट/दृश्य परिवर्तन माने जाने की सीमा।"
-
-msgid "HDR Peak Detection"
-msgstr "HDR पीक डिटेक्शन"
-
-msgid ""
-"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
-" per frame."
-msgstr ""
-"जब वीडियो क्लिप HDR10+ या Dolby Vision नहीं होता है, तो प्रति फ़्रेम "
-"डायनेमिक सीमा की अनुमति देता है।"
-
-msgid "HDR Data"
-msgstr "HDR डेटा"
-
-msgid "Tonemap Algorithm"
-msgstr "टोनमैप एल्गोरिदम"
-
-msgid "Gamut Mapping"
-msgstr "गेमट मैपिंग"
-
 msgid "Language and Colors"
 msgstr "भाषा और रंग"
 
@@ -6724,6 +6680,71 @@ msgstr "वीडियो प्रारंभ फ्रेम"
 
 msgid "Start value in the timeline where video starts."
 msgstr "समय रेखा में आरंभ करें जहाँ वीडियो प्रारंभ होता है."
+
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Prefer RGB (Vulkan)"
+msgstr "RGB को प्राथमिकता दें (Vulkan)"
+
+msgid ""
+"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
+"and convert them with a compute shader.  When is off, Vulkan will decode "
+"RGBA_F16 and RGBA_F32 frames."
+msgstr ""
+"जब यह सेटिंग चालू होती है, तो Vulkan RGB_F16 और RGB_F32 को जैसा है वैसा "
+"उपयोग करने की कोशिश करेगा और उन्हें एक कंप्यूट शेडर के साथ परिवर्तित करेगा। "
+"जब यह बंद होती है, तो Vulkan RGBA_F16 और RGBA_F32 फ्रेम्स को डिकोड करेगा।"
+
+msgid "Chromaticities"
+msgstr "रंगमिति"
+
+msgid "HDR Data"
+msgstr "HDR डेटा"
+
+msgid "Tonemap Algorithm"
+msgstr "टोनमैप एल्गोरिदम"
+
+msgid "Gamut Mapping"
+msgstr "गेमट मैपिंग"
+
+msgid "HDR Peak Detection"
+msgstr "HDR पीक डिटेक्शन"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr ""
+"जब वीडियो क्लिप HDR10+ या Dolby Vision नहीं होता है, तो प्रति फ़्रेम "
+"डायनेमिक सीमा की अनुमति देता है।"
+
+msgid "HDR Percentile"
+msgstr "HDR प्रतिशतक"
+
+msgid ""
+"When less than 100, helps find the peak brightness ignoring the top 1% "
+"outliers."
+msgstr ""
+"जब मान 100 से कम होता है, तो यह शीर्ष 1% असामान्य मानों को अनदेखा करके "
+"अधिकतम चमक खोजने में मदद करता है।"
+
+msgid "Smoothing Period"
+msgstr "स्मूदिंग अवधि"
+
+msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
+msgstr "चमक पहचान को नई दृश्य के अनुसार अनुकूलित होने में लगने वाला समय।"
+
+msgid "Low Peak Detection"
+msgstr "निम्न पीक पहचान"
+
+msgid "Low Limit to smooth out frames in the same scene."
+msgstr "एक ही दृश्य के भीतर फ़्रेमों को स्मूद करने के लिए न्यूनतम सीमा।"
+
+msgid "High Peak Detection Limit"
+msgstr "उच्च पीक पहचान सीमा"
+
+msgid "High Limit to determine scene change."
+msgstr "दृश्य परिवर्तन निर्धारित करने के लिए उच्च सीमा।"
 
 msgid "Playback"
 msgstr "प्लेबैक"
@@ -7152,9 +7173,6 @@ msgstr "प्रयोक्ता अंतरफलक/फ़ाइल नि
 
 msgid "User Interface/Fonts"
 msgstr "प्रयोक्ता अंतरफलक/फ़ॉन्ट्स"
-
-msgid "User Interface/HDR"
-msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "उपयोक्ता इंटरफेस/ भाषा तथा रंग"
@@ -8070,6 +8088,16 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "HDR शॉट/दृश्य पीक डिटेक्शन"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr "HDR पीक डिटेक्शन चालू होने पर शॉट/दृश्य परिवर्तन माने जाने की सीमा।"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "मॉनीटर"

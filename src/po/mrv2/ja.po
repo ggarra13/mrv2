@@ -5949,6 +5949,78 @@ msgstr "中間"
 msgid "Fast"
 msgstr "速い"
 
+msgid "base"
+msgstr "base"
+
+msgid "plastic"
+msgstr "plastic"
+
+msgid "gtk+"
+msgstr "gtk+"
+
+msgid "gleam"
+msgstr "gleam"
+
+msgid "oxy"
+msgstr "oxy"
+
+msgid "Pick View Background Color"
+msgstr "ビューの背景色を選択"
+
+msgid "Pick View Text Overlay Color"
+msgstr "ビューのテキストオーバーレイ色を選択"
+
+msgid "Pick View Selection Color"
+msgstr "ビューの選択色を選択"
+
+msgid "Pick HUD Color"
+msgstr "HUDの色を選択"
+
+msgid "Float Values"
+msgstr "浮動小数値"
+
+msgid "Hex Values"
+msgstr "16進数値"
+
+msgid "8-bit Values"
+msgstr "8ビット値"
+
+msgid "Full Lut, Gamma and Gain"
+msgstr "フルLUT、ガンマ、ゲイン"
+
+msgid "Original without Gamma, Gain or Lut"
+msgstr "ガンマ、ゲイン、LUTなしの元の状態"
+
+msgid "CIE XYZ"
+msgstr "CIE XYZ"
+
+msgid "CIE xyY"
+msgstr "CIE xyY"
+
+msgid "From File"
+msgstr "ファイルから"
+
+msgid "Full Range"
+msgstr "フルレンジ"
+
+msgid "Legal Range"
+msgstr "法的レンジ"
+
+msgid "Straight"
+msgstr "ストレート"
+
+msgid "Premultiplied"
+msgstr "事前乗算済み"
+
+msgid "Nearest"
+msgstr "最も近い"
+
+msgid "Small"
+msgstr "小さい"
+
+msgid "Large"
+msgstr "大きい"
+
 msgid "Use RGBA"
 msgstr "RGBA を使用"
 
@@ -5966,9 +6038,6 @@ msgstr "非アクティブ"
 
 msgid "Active"
 msgstr "アクティブ"
-
-msgid "From File"
-msgstr "ファイルから"
 
 msgid "ST2094_40"
 msgstr "ST2094_40"
@@ -6020,75 +6089,6 @@ msgstr "暗くする"
 
 msgid "Highlight"
 msgstr "ハイライト"
-
-msgid "base"
-msgstr "base"
-
-msgid "plastic"
-msgstr "plastic"
-
-msgid "gtk+"
-msgstr "gtk+"
-
-msgid "gleam"
-msgstr "gleam"
-
-msgid "oxy"
-msgstr "oxy"
-
-msgid "Pick View Background Color"
-msgstr "ビューの背景色を選択"
-
-msgid "Pick View Text Overlay Color"
-msgstr "ビューのテキストオーバーレイ色を選択"
-
-msgid "Pick View Selection Color"
-msgstr "ビューの選択色を選択"
-
-msgid "Pick HUD Color"
-msgstr "HUDの色を選択"
-
-msgid "Float Values"
-msgstr "浮動小数値"
-
-msgid "Hex Values"
-msgstr "16進数値"
-
-msgid "8-bit Values"
-msgstr "8ビット値"
-
-msgid "Full Lut, Gamma and Gain"
-msgstr "フルLUT、ガンマ、ゲイン"
-
-msgid "Original without Gamma, Gain or Lut"
-msgstr "ガンマ、ゲイン、LUTなしの元の状態"
-
-msgid "CIE XYZ"
-msgstr "CIE XYZ"
-
-msgid "CIE xyY"
-msgstr "CIE xyY"
-
-msgid "Full Range"
-msgstr "フルレンジ"
-
-msgid "Legal Range"
-msgstr "法的レンジ"
-
-msgid "Straight"
-msgstr "ストレート"
-
-msgid "Premultiplied"
-msgstr "事前乗算済み"
-
-msgid "Nearest"
-msgstr "最も近い"
-
-msgid "Small"
-msgstr "小さい"
-
-msgid "Large"
-msgstr "大きい"
 
 msgid "OpenGL only"
 msgstr "OpenGL のみ"
@@ -6410,48 +6410,6 @@ msgstr "パネル"
 msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "パネルで使用するフォントを設定します。（まだ動作していません）"
 
-msgid "HDR"
-msgstr "HDR"
-
-msgid "Prefer RGB (Vulkan)"
-msgstr "RGB を優先（Vulkan）"
-
-msgid ""
-"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
-"and convert them with a compute shader.  When is off, Vulkan will decode "
-"RGBA_F16 and RGBA_F32 frames."
-msgstr ""
-"この設定がオンの場合、Vulkan は RGB_F16 および RGB_F32 "
-"をそのまま使用し、コンピュートシェーダーで変換しようとします。オフの場合、Vulkan は RGBA_F16 および RGBA_F32 "
-"フレームをデコードします。"
-
-msgid "Chromaticities"
-msgstr "色度"
-
-msgid "HDR Shot/Scene Peak Detection"
-msgstr "HDR ショット／シーン ピーク検出"
-
-msgid ""
-"Limit for considering a shot/scene change when HDR Peak Detection is on."
-msgstr "HDR ピーク検出が有効な場合に、ショット／シーンの切り替えと判断するためのしきい値。"
-
-msgid "HDR Peak Detection"
-msgstr "HDR ピーク検出"
-
-msgid ""
-"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
-" per frame."
-msgstr "ビデオクリップが HDR10+ または Dolby Vision でない場合、フレームごとの動的なしきい値を許可します。"
-
-msgid "HDR Data"
-msgstr "HDRデータ"
-
-msgid "Tonemap Algorithm"
-msgstr "トゥーンマップ アルゴリズム"
-
-msgid "Gamut Mapping"
-msgstr "色域マッピング"
-
 msgid "Language and Colors"
 msgstr "言語とカラー"
 
@@ -6616,6 +6574,67 @@ msgstr "ビデオ開始フレーム"
 
 msgid "Start value in the timeline where video starts."
 msgstr "ビデオが開始されるタイムラインの開始値。"
+
+msgid "HDR"
+msgstr "HDR"
+
+msgid "Prefer RGB (Vulkan)"
+msgstr "RGB を優先（Vulkan）"
+
+msgid ""
+"When this setting is on, Vulkan will try to use RGB_F16 and RGB_F32 as is "
+"and convert them with a compute shader.  When is off, Vulkan will decode "
+"RGBA_F16 and RGBA_F32 frames."
+msgstr ""
+"この設定がオンの場合、Vulkan は RGB_F16 および RGB_F32 "
+"をそのまま使用し、コンピュートシェーダーで変換しようとします。オフの場合、Vulkan は RGBA_F16 および RGBA_F32 "
+"フレームをデコードします。"
+
+msgid "Chromaticities"
+msgstr "色度"
+
+msgid "HDR Data"
+msgstr "HDRデータ"
+
+msgid "Tonemap Algorithm"
+msgstr "トゥーンマップ アルゴリズム"
+
+msgid "Gamut Mapping"
+msgstr "色域マッピング"
+
+msgid "HDR Peak Detection"
+msgstr "HDR ピーク検出"
+
+msgid ""
+"When the video clip is not HDR10+ or Dolby Vision, allows dynamic thresholds"
+" per frame."
+msgstr "ビデオクリップが HDR10+ または Dolby Vision でない場合、フレームごとの動的なしきい値を許可します。"
+
+msgid "HDR Percentile"
+msgstr "HDRパーセンタイル"
+
+msgid ""
+"When less than 100, helps find the peak brightness ignoring the top 1% "
+"outliers."
+msgstr "100未満の場合、上位1％の外れ値を無視してピーク輝度を検出するのに役立ちます。"
+
+msgid "Smoothing Period"
+msgstr "平滑化期間"
+
+msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
+msgstr "輝度検出が新しいシーンに追従するまでにかかる時間。"
+
+msgid "Low Peak Detection"
+msgstr "低ピーク検出"
+
+msgid "Low Limit to smooth out frames in the same scene."
+msgstr "同一シーン内のフレームを平滑化するための下限値。"
+
+msgid "High Peak Detection Limit"
+msgstr "高ピーク検出上限"
+
+msgid "High Limit to determine scene change."
+msgstr "シーン変更を判定するための上限値。"
 
 msgid "Playback"
 msgstr "再生"
@@ -7000,9 +7019,6 @@ msgstr "ユーザーインターフェース/ファイルリクエスター"
 
 msgid "User Interface/Fonts"
 msgstr "ユーザーインターフェース/フォント"
-
-msgid "User Interface/HDR"
-msgstr "ユーザーインターフェース/HDR"
 
 msgid "User Interface/Language and Colors"
 msgstr "ユーザーインターフェース/言語とカラー"
@@ -7916,6 +7932,16 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "HDR ショット／シーン ピーク検出"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr "HDR ピーク検出が有効な場合に、ショット／シーンの切り替えと判断するためのしきい値。"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "ユーザーインターフェース/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "監視 "
