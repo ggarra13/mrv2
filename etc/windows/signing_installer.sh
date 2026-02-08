@@ -28,7 +28,7 @@ else
     NSIS_INSTALLER="${PWD}/packages/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
 fi
 
-AZURE_HTTP="https://timestamp.digicert.com/authenticode"
+AZURE_HTTP="http://timestamp.sectigo.com/"
 
 # Define password variable
 if [[ $USER == "User-PC" || $USER == "ggarra13" || $USER == "gga" ||
@@ -37,7 +37,14 @@ if [[ $USER == "User-PC" || $USER == "ggarra13" || $USER == "gga" ||
 fi
 
 sign_installer() {
-    "$SIGNTOOL_PATH" sign -v -f "$PFX_FILE" -p "$PASS" -fd SHA256 -tr "${AZURE_HTTP}" -td SHA256 "$NSIS_INSTALLER"
+    "$SIGNTOOL_PATH" sign \
+		     -v \
+		     -f "$PFX_FILE" \
+		     -p "$PASS" \
+		     -fd SHA256 \
+		     -tr "${AZURE_HTTP}" \
+		     -td SHA256 \
+		     "$NSIS_INSTALLER"
     if [ $? != 0 ]; then
 	echo "Signing failed"
 	rm -f "$NSIS_INSTALLER"
