@@ -37,19 +37,23 @@ if [[ $USER == "User-PC" || $USER == "ggarra13" || $USER == "gga" ||
 fi
 
 sign_installer() {
-    "$SIGNTOOL_PATH" sign \
-		     -v \
-		     -f "$PFX_FILE" \
-		     -p "$PASS" \
-		     -fd SHA256 \
-		     -tr "${AZURE_HTTP}" \
-		     -td SHA256 \
-		     "$NSIS_INSTALLER"
-    if [ $? != 0 ]; then
-	echo "Signing failed"
-	rm -f "$NSIS_INSTALLER"
-	exit 1
-    fi
+    for i in 1 2 3; do
+	"$SIGNTOOL_PATH" sign \
+			 -v \
+			 -f "$PFX_FILE" \
+			 -p "$PASS" \
+			 -fd SHA256 \
+			 -tr "${AZURE_HTTP}" \
+			 -td SHA256 \
+			 "$NSIS_INSTALLER" && return 0
+
+	echo "Timestamp attempt $i failed, retrying."
+	sleep 5
+    done
+    
+    echo "Signing failed after retries"
+    rm -f "$NSIS_INSTALLER"
+    exit 1
 }
 
 #
