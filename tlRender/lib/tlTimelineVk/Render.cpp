@@ -1353,8 +1353,9 @@ namespace tl
                 }
             }
             
-            
-            _displayShader();
+
+            if (!p.shaders["display"])
+                _displayShader();
 
 
             //
@@ -2264,7 +2265,6 @@ namespace tl
                 {
                     // Persistent states
                     static float previous_avg = 0.F;
-                    static float previous_peak = 0.F;
                     static float current_avg = PL_COLOR_SDR_WHITE;
                     static float current_peak = PL_COLOR_SDR_WHITE;
 
@@ -2274,7 +2274,6 @@ namespace tl
                     if (peakDetectionChanged || hdrDataChanged)
                     {
                         previous_avg = 0.F;
-                        previous_peak = 0.F;
                     }
                     
                     const image::HDRData& data = p.hdrOptions.hdrData;
@@ -2334,34 +2333,24 @@ namespace tl
                     }
                     
 
-                    const float percentile = 99.F;
-                    const float smoothing_period = 40.F;
-                    hdr::process_peak_data(shader,
-                                           percentile, smoothing_period,
-                                           current_avg, current_peak);
-
-                    // Avoid div-by-zero or log issues (add small epsilon
-                    // if avgs can be zero, though unlikely)
-                    const float ratio = current_avg / (previous_avg + 1e-6f);
-                    const float delta_db = 20 * log10(ratio);
-
-                    if (std::fabs(delta_db) > p.hdrOptions.peak_high_limit)
-                    {
-                        // std::cerr << "----- NEW SHOT" << std::endl;
-                        
-                        // fprintf(stderr,
-                        //         "current avg=%g previous_avg=%g delta=%g\n",
-                        //         current_avg, previous_avg, delta_db);
-                        
-                        float v = (current_peak + previous_peak) / 2.F;
-                        p.placeboData->sceneMax = v;
-                        p.placeboData->sceneAvg = (current_avg + previous_avg) / 2.F;
-                        recreateDisplayShader = true;
-                    }
+                    float percentile = 100.F;
+                    float smoothing_period = 20.F;
+                    float scene_threshold_low = 1.F;
+                    float scene_threshold_high = 3.F;
+                    bool allow_delayed = true;
+                    
+                    recreateDisplayShader = hdr::process_peak_data(
+                        shader,
+                        p.hdrOptions.peak_percentile,
+                        p.hdrOptions.peak_smoothing_period,
+                        p.hdrOptions.peak_scene_low_limit,
+                        p.hdrOptions.peak_scene_high_limit,
+                        allow_delayed,
+                        previous_avg,
+                        current_avg,
+                        current_peak);
                     
                     previous_avg = current_avg;
-                    previous_peak = current_peak;
-
                 }
             }
             else
@@ -2373,9 +2362,7 @@ namespace tl
             
             if (recreateDisplayShader || !p.shaders["display"])
             {
-                //p.shaders["display"].reset();
                 _displayShader();
-
             }
         }
 
@@ -2805,23 +2792,6 @@ namespace tl
             if (!p.shaders["display"] || p.toneMapDef != toneMapDef)
             {
                 recreateShader = true;
-                std::cerr << "changed" << std::endl;
-                
-                if (p.pipelines.count("display") != 0)
-                {
-                    auto pair = p.pipelines["display"];
-                    p.garbage[p.frameIndex].pipelines.push_back(pair.second);
-                
-
-                    vlk::PipelineCreationState pipelineState;
-                    pair = std::make_pair(pipelineState, VK_NULL_HANDLE);
-                    p.pipelines["display"] = pair;
-                }
-                if (p.pipelineLayouts["display"])
-                {
-                    p.garbage[p.frameIndex].pipelineLayouts.push_back(p.pipelineLayouts["display"]);
-                    p.pipelineLayouts["display"] = VK_NULL_HANDLE;
-                }
             }
                 
             p.toneMapDef = toneMapDef;
@@ -2846,6 +2816,24 @@ namespace tl
 
             if (recreateShader)
             {
+                // Stage pipeline and pipeline layouts for cleanup.
+                if (p.pipelines.count("display") != 0)
+                {
+                    auto pair = p.pipelines["display"];
+                    p.garbage[p.frameIndex].pipelines.push_back(pair.second);
+                
+
+                    vlk::PipelineCreationState pipelineState;
+                    pair = std::make_pair(pipelineState, VK_NULL_HANDLE);
+                    p.pipelines["display"] = pair;
+                }
+                if (p.pipelineLayouts["display"])
+                {
+                    p.garbage[p.frameIndex].pipelineLayouts.push_back(p.pipelineLayouts["display"]);
+                    p.pipelineLayouts["display"] = VK_NULL_HANDLE;
+                }
+
+                // Recreate display shader
 #if USE_PRECOMPILED_SHADERS
                 p.shaders["display"] =
                     vlk::Shader::create(ctx, Vertex3_spv, Vertex3_spv_len,

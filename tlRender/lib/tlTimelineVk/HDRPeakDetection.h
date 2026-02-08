@@ -31,12 +31,16 @@ namespace tl
             };// PQ EOTF function (linear light from PQ, scaled)
             
             //! Function to process the mapped SSBO data
-            void process_peak_data(
+            bool process_peak_data(
                 const std::shared_ptr<vlk::Shader> shader,
-                float percentile, float smoothing_period,
+                const float percentile,
+                const float smoothing_period,
+                const float scene_threshold_low,
+                const float scene_threshold_high,
+                const bool allow_delayed,
+                const float previous_avg_nits,
                 float& current_avg_nits,
                 float& current_peak_nits);
-
         }
 
 

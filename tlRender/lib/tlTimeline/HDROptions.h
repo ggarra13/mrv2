@@ -50,7 +50,10 @@ namespace tl
         {
             bool tonemap = false;
             bool peak_detection = false;
-            float peak_high_limit = 10.F;
+            float peak_percentile = 100.F;
+            float peak_smoothing_period = 20.F;
+            float peak_scene_low_limit = 1.F;
+            float peak_scene_high_limit = 3.F;
             HDRGamutMapping     gamutMapping = HDRGamutMapping::Auto;
             HDRTonemapAlgorithm algorithm = HDRTonemapAlgorithm::Hable;
             image::HDRData hdrData;

@@ -402,14 +402,27 @@ namespace mrv
         hdr.get("vulkan_use_rgb", tmp, 0);
         uiPrefs->uiPrefsVulkanUseRGB->value(tmp);
 
+        hdr.get("chromaticities", tmp, 0);
+        uiPrefs->uiPrefsChromaticities->value(tmp);
+        
+
+        //
+        // HDR Peak Detection
+        //
         hdr.get("peak_detection", tmp, 0);
         uiPrefs->uiPrefsHDRPeakDetection->value(tmp);
         
-        hdr.get("peak_detection_high_limit", tmpF, 10.F);
-        uiPrefs->uiPrefsHDRPeakHighLimit->value(tmpF);
+        hdr.get("peak_detection_percentile", tmpF, 100.F);
+        uiPrefs->uiPrefsHDRPeakPercentile->value(tmpF);
         
-        hdr.get("chromaticities", tmp, 0);
-        uiPrefs->uiPrefsChromaticities->value(tmp);
+        hdr.get("peak_detection_smoothing_period", tmpF, 20.F);
+        uiPrefs->uiPrefsHDRPeakSmoothingPeriod->value(tmpF);
+        
+        hdr.get("peak_detection_low_limit", tmpF, 1.F);
+        uiPrefs->uiPrefsHDRPeakLowLimit->value(tmpF);
+        
+        hdr.get("peak_detection_high_limit", tmpF, 3.F);
+        uiPrefs->uiPrefsHDRPeakHighLimit->value(tmpF);
         
         hdr.get("hdr_data", tmp, 0);
         uiPrefs->uiPrefsHDRInfo->value(tmp);
@@ -1369,10 +1382,21 @@ namespace mrv
 
         Fl_Preferences hdr(gui, "hdr");
         hdr.set("vulkan_use_rgb", uiPrefs->uiPrefsVulkanUseRGB->value());
-        hdr.set("peak_detection", uiPrefs->uiPrefsHDRPeakDetection->value());
-        hdr.set("peak_detection_high_limit",
-                uiPrefs->uiPrefsHDRPeakHighLimit->value());
         hdr.set("chromaticities", uiPrefs->uiPrefsChromaticities->value());
+
+        // HDR Peak detection
+        hdr.set("peak_detection", uiPrefs->uiPrefsHDRPeakDetection->value());
+
+        
+        hdr.set("peak_detection_percentile",
+                uiPrefs->uiPrefsHDRPeakPercentile->value());
+        hdr.set("peak_detection_smoothing_period",
+                uiPrefs->uiPrefsHDRPeakSmoothingPeriod->value());
+        hdr.set("peak_detection_low_limit",
+                uiPrefs->uiPrefsHDRPeakLowLimit->value());
+        hdr.set("peak_detection_high_limit", 
+                uiPrefs->uiPrefsHDRPeakHighLimit->value());
+        
         hdr.set("hdr_data", uiPrefs->uiPrefsHDRInfo->value());
         hdr.set("tonemap_algorithm",
                 uiPrefs->uiPrefsTonemapAlgorithm->value());
@@ -1977,7 +2001,10 @@ namespace mrv
         hdrOptions.gamutMapping =
             static_cast<timeline::HDRGamutMapping>(uiPrefs->uiPrefsGamutMapping->value());
         hdrOptions.peak_detection = uiPrefs->uiPrefsHDRPeakDetection->value();
-        hdrOptions.peak_high_limit = uiPrefs->uiPrefsHDRPeakHighLimit->value();
+        hdrOptions.peak_percentile = uiPrefs->uiPrefsHDRPeakPercentile->value();
+        hdrOptions.peak_smoothing_period = uiPrefs->uiPrefsHDRPeakSmoothingPeriod->value();
+        hdrOptions.peak_scene_high_limit = uiPrefs->uiPrefsHDRPeakHighLimit->value();
+        hdrOptions.peak_scene_low_limit = uiPrefs->uiPrefsHDRPeakLowLimit->value();
         ui->uiView->setHDROptions(hdrOptions);
 
         //
