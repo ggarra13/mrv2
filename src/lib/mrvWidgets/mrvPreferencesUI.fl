@@ -1046,19 +1046,19 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                 }
                 Fl_Value_Input uiPrefsHDRPeakPercentile {
                   label {HDR Percentile}
-                  tooltip {When less than 100, helps find the peak brightness ignoring the top 1% outliers.} xywh {629 162 64 28} minimum 0.1 maximum 100 step 1 value 100 textcolor 56
+                  tooltip {When less than 100, helps find the peak brightness ignoring the top 1% outliers.} xywh {629 162 64 28} minimum 0.1 maximum 100 step 0.1 value 100 textcolor 56
                 }
                 Fl_Value_Input uiPrefsHDRPeakSmoothingPeriod {
-                  label {Smoothing Period} selected
-                  tooltip {How long it takes for brightness detection to "catch up" to a new scene.} xywh {627 203 64 28} minimum 0.1 maximum 100 step 1 value 20 textcolor 56
+                  label {Smoothing Period}
+                  tooltip {How long it takes for brightness detection to "catch up" to a new scene.} xywh {627 203 64 28} minimum 0.1 maximum 100 step 0.1 value 20 textcolor 56
                 }
                 Fl_Value_Input uiPrefsHDRPeakLowLimit {
                   label {Low Peak Detection}
-                  tooltip {Low Limit to smooth out frames in the same scene.} xywh {627 264 64 28} minimum 0.1 maximum 100 step 1 value 1 textcolor 56
+                  tooltip {Low Limit to smooth out frames in the same scene.} xywh {627 264 64 28} minimum 0.1 maximum 100 step 0.1 value 1 textcolor 56
                 }
                 Fl_Value_Input uiPrefsHDRPeakHighLimit {
-                  label {High Peak Detection Limit}
-                  tooltip {High Limit to determine scene change.} xywh {627 309 64 28} minimum 0.1 maximum 100 step 1 value 3 textcolor 56
+                  label {High Peak Detection Limit} selected
+                  tooltip {High Limit to determine scene change.} xywh {627 309 64 28} minimum 0.1 maximum 100 step 0.1 value 3 textcolor 56
                 }
               }
             }

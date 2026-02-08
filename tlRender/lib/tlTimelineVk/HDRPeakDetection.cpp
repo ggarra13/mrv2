@@ -16,7 +16,7 @@ namespace tl
                 return y * 10000.0f;  // To absolute nits
             }
 
-            static bool process_peak_data(const PeakData& data,
+            static void process_peak_data(const PeakData& data,
                                           const float percentile,
                                           const float smoothing_period,
                                           const float scene_threshold_low,
@@ -91,33 +91,25 @@ namespace tl
 
                 float coeff = (smoothing_period > 0.0f) ? 1.0f - std::exp(-1.0f / smoothing_period) : 1.0f;
 
-                bool out = false;
                 if (abs_delta > scene_threshold_high)
                 {
                     // Full reset for strong change
                     coeff = 1.0f;
-                    out = true;
                 }
                 else if (abs_delta > scene_threshold_low)
                 {
                     // Gradual reset: Scale coeff down linearly
                     float scale = (scene_threshold_high - abs_delta) / (scene_threshold_high - scene_threshold_low);
                     coeff *= scale;
-                    out = true;
                 }  // Else: Normal smoothing
-                else
-                {
-                    out = false;
-                }
                 
                 // Apply smoothing (or reset)
                 current_avg_nits += coeff * (avg_nits - current_avg_nits);
                 current_peak_nits += coeff * (max_nits - current_peak_nits);
-                return out;
             }
 
             // Function to process the mapped SSBO data
-            bool process_peak_data(const std::shared_ptr<vlk::Shader> shader,
+            void process_peak_data(const std::shared_ptr<vlk::Shader> shader,
                                    const float percentile,
                                    const float smoothing_period,
                                    const float scene_threshold_low,
@@ -133,11 +125,11 @@ namespace tl
                 std::memcpy(&data, mapped, sizeof(PeakData));
                 shader->unmapSSBO("PeakData");
                 
-                return process_peak_data(data, percentile, smoothing_period,
-                                         scene_threshold_low,
-                                         scene_threshold_high,
-                                         allow_delayed, previous_avg_nits,
-                                         current_avg_nits, current_peak_nits);
+                process_peak_data(data, percentile, smoothing_period,
+                                  scene_threshold_low,
+                                  scene_threshold_high,
+                                  allow_delayed, previous_avg_nits,
+                                  current_avg_nits, current_peak_nits);
             }
         }
     }

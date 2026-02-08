@@ -804,7 +804,7 @@ void main() {
         
         std::string computeHDRPeakDetection()
         {
-#if __APPLE__
+#ifdef __APPLE__
             // macOS compatible version
             return R"(
 #version 450
@@ -814,8 +814,8 @@ void main() {
 #define PQ_BITS 14
 #define PQ_MAX ((1 << PQ_BITS) - 1)
 #define HIST_BITS 7
-#define HIST_BIAS (1 << (HIST_BITS - 1))
-#define HIST_BINS ((1 << HIST_BITS) - HIST_BIAS)
+#define HIST_BIAS 64
+#define HIST_BINS 64
 
             layout(local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
 
@@ -957,6 +957,9 @@ layout(std430, set = 0, binding = 1) buffer PeakBuffer {
     PeakData data;
 };
 
+// Luma coefficients (libplacebo style)
+const vec3 LUMA_COEFFS = vec3(0.2627, 0.6780, 0.0593);
+
 // Use shared memory for workgroup-wide reduction
 shared uint wg_sum;
 shared uint wg_max;
@@ -991,8 +994,9 @@ void main() {
     bool is_active = false;
 
     if (within_bounds) {
-        vec3 color = texture(img, vec2(pos) / vec2(img_size)).rgb;
+        vec3 color = vec3(1,1,1); //texture(img, vec2(pos) / vec2(img_size)).rgb;
         // RTX 3080 handles max() extremely fast
+        // float luma = dot(color, LUMA_COEFFS);  // Weighted for accuracy
         float luma = max(color.r, max(color.g, color.b));
         
         // Fast PQ OETF approximation or full precision

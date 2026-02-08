@@ -13,8 +13,8 @@ namespace tl
             constexpr uint32_t PQ_BITS = 14;
             constexpr uint32_t PQ_MAX = (1 << PQ_BITS) - 1;
             constexpr uint32_t HIST_BITS = 7;
-            constexpr uint32_t HIST_BIAS = (1 << (HIST_BITS - 1));
-            constexpr uint32_t HIST_BINS = ((1 << HIST_BITS) - HIST_BIAS);
+            constexpr uint32_t HIST_BIAS = 64;
+            constexpr uint32_t HIST_BINS = 64;
         
             constexpr float PQ_M1 = 0.1593017578125f;
             constexpr float PQ_M2 = 78.84375f;
@@ -31,7 +31,7 @@ namespace tl
             };// PQ EOTF function (linear light from PQ, scaled)
             
             //! Function to process the mapped SSBO data
-            bool process_peak_data(
+            void process_peak_data(
                 const std::shared_ptr<vlk::Shader> shader,
                 const float percentile,
                 const float smoothing_period,

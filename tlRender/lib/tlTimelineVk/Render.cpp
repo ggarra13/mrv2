@@ -2232,19 +2232,15 @@ namespace tl
            const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
            const bool peakDetectionChanged = (value.peak_detection != p.hdrOptions.peak_detection);
 
-           // 2. Optimization: Initialize recreate flag based on Option changes
-           bool recreateDisplayShader = (tonemapChanged || hdrDataChanged ||
+           // 2. Optimization: Initialize update flag based on Option changes
+           bool updateDisplayShader = (tonemapChanged || hdrDataChanged ||
                                          peakDetectionChanged);
            
-            p.hdrOptions = value;
+           p.hdrOptions = value;
                                                                    
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.tonemap)
             {
-                // --- LOGIC A: Manage LibPlaceboData Lifecycle ---
-                // We need LibPlaceboData if Tone Mapping is ON, regardless of
-                // Peak Detection.
-                
                 // Determine if we should run Peak Detection
                 // Requirement: Tonemap ON, Peak Detection ON, and
                 // NOT HDR10+/Dolby
@@ -2275,8 +2271,6 @@ namespace tl
                     {
                         previous_avg = 0.F;
                     }
-                    
-                    const image::HDRData& data = p.hdrOptions.hdrData;
 
                     const std::string shaderName = "hdr_peak_detection";
                     const auto shader = p.compute[shaderName];
@@ -2300,7 +2294,8 @@ namespace tl
                     vkBeginCommandBuffer(cmd, &beginInfo);
                             
                     img->transitionToShaderRead(cmd);
-                        
+
+                    // This seems to not entirely clear the data alwayss
                     shader->clearSSBO(cmd, "PeakData");
 
                         
@@ -2309,13 +2304,12 @@ namespace tl
                     const uint32_t groupCountX = (width + 15) / 16;
                     const uint32_t groupCountY = (height + 15) / 16;
                     shader->dispatch(cmd, groupCountX, groupCountY);
-
-                    vkResetFences(ctx.device, 1, &p.placeboData->ssboFences[p.frameIndex]);
                         
                     img->transitionToColorAttachment(cmd);
 
                     vkEndCommandBuffer(cmd);
 
+                    vkResetFences(ctx.device, 1, &p.placeboData->ssboFences[p.frameIndex]);
                     
                     VkPipelineStageFlags pipe_stage_flags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
                     VkSubmitInfo submitInfo = {};
@@ -2332,14 +2326,14 @@ namespace tl
                                       p.placeboData->ssboFences[p.frameIndex]);
                     }
                     
+                    vkWaitForFences(ctx.device, 1,
+                                    &p.placeboData->ssboFences[p.frameIndex],
+                                    VK_TRUE, UINT64_MAX);
 
-                    float percentile = 100.F;
-                    float smoothing_period = 20.F;
-                    float scene_threshold_low = 1.F;
-                    float scene_threshold_high = 3.F;
                     bool allow_delayed = true;
-                    
-                    recreateDisplayShader = hdr::process_peak_data(
+
+                    // This calls shader->mapSSO("PeakData") to read the histogram values
+                    hdr::process_peak_data(
                         shader,
                         p.hdrOptions.peak_percentile,
                         p.hdrOptions.peak_smoothing_period,
@@ -2349,8 +2343,16 @@ namespace tl
                         previous_avg,
                         current_avg,
                         current_peak);
-                    
+
                     previous_avg = current_avg;
+
+                    updateDisplayShader = true;
+                    p.placeboData->maxPeak = current_peak;
+                    p.placeboData->avgPeak = current_avg;
+                }
+                else
+                {
+                    p.placeboData->maxPeak = p.placeboData->avgPeak = 0.F;
                 }
             }
             else
@@ -2360,13 +2362,13 @@ namespace tl
             }
 #endif // TLRENDER_LIBPLACEBO
             
-            if (recreateDisplayShader || !p.shaders["display"])
+            if (updateDisplayShader || !p.shaders["display"])
             {
                 _displayShader();
             }
         }
 
-        void Render::_displayShader(bool recreate)
+        void Render::_displayShader()
         {
             TLRENDER_P();
 
@@ -2400,7 +2402,7 @@ namespace tl
                 cmap.gamut_mapping = nullptr;
                 cmap.tone_mapping_function = nullptr;
 
-                image::HDRData& data = p.hdrOptions.hdrData;
+                const image::HDRData& data = p.hdrOptions.hdrData;
 
                 pl_color_space src_colorspace;
                 memset(&src_colorspace, 0, sizeof(pl_color_space));
@@ -2527,21 +2529,15 @@ namespace tl
                     hdr.prim.blue.y = data.primaries[image::HDRPrimaries::Blue][1];
                     hdr.prim.white.x = data.primaries[image::HDRPrimaries::White][0];
                     hdr.prim.white.y = data.primaries[image::HDRPrimaries::White][1];
-                    hdr.max_cll = data.maxCLL;
-                    hdr.max_fall = data.maxFALL;
-                    if (p.placeboData->sceneMax > 0.F)
+                    if (p.placeboData->maxPeak > 0.F)
                     {
-                        hdr.scene_max[0] = p.placeboData->sceneMax;
-                        hdr.scene_max[1] = p.placeboData->sceneMax;
-                        hdr.scene_max[2] = p.placeboData->sceneMax;
-                        hdr.scene_avg = p.placeboData->sceneAvg;
+                        hdr.max_cll = p.placeboData->maxPeak;
+                        hdr.max_fall = p.placeboData->avgPeak;
                     }
                     else
                     {
-                        hdr.scene_max[0] = data.sceneMax[0];
-                        hdr.scene_max[1] = data.sceneMax[1];
-                        hdr.scene_max[2] = data.sceneMax[2];
-                        hdr.scene_avg = data.sceneAvg;
+                        hdr.max_cll = data.maxCLL;
+                        hdr.max_fall = data.maxFALL;
                     }
                     hdr.ootf.target_luma = data.ootf.targetLuma;
                     hdr.ootf.knee_x = data.ootf.kneeX;
@@ -2549,7 +2545,7 @@ namespace tl
                     hdr.ootf.num_anchors = data.ootf.numAnchors;
                     for (int i = 0; i < hdr.ootf.num_anchors; i++)
                         hdr.ootf.anchors[i] = data.ootf.anchors[i];
-
+                    
                     hdr.max_pq_y = data.maxPQY;
                     hdr.avg_pq_y = data.avgPQY;
                 }  // hasHDR
@@ -2892,7 +2888,7 @@ namespace tl
 #endif // TLRENDER_OCIO
 
 #if defined(TLRENDER_LIBPLACEBO)
-                // This UBO must be added last for binding insdex to be correct.
+                // This UBO must be added last for binding index to be correct.
                 if (p.placeboData && p.placeboData->pcUBOSize > 0)
                 {
                     const size_t size = p.placeboData->pcUBOSize;

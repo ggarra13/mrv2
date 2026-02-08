@@ -129,8 +129,8 @@ namespace tl
             size_t pcUBOSize = 0;
 
             // Peak detection variables
-            float sceneMax = 0;
-            float sceneAvg = 0;
+            float maxPeak = 0;
+            float avgPeak = 0;
             
             
             // Vulkan variables
