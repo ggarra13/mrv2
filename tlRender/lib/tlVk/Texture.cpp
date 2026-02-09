@@ -264,8 +264,27 @@ namespace tl
             p.options = options;
             p.name = name;
 
+            // This is CRITICAL for Texture::copy logic to work with Staging Buffers.
+            switch(format)
+            {
+            case VK_FORMAT_R32_SFLOAT:
+                p.info.pixelType = image::PixelType::L_F32; // Assuming L_F32 maps to a single channel float in your enum
+                break;
+            case VK_FORMAT_R32G32B32A32_SFLOAT:
+                p.info.pixelType = image::PixelType::RGBA_F32;
+                break;
+            case VK_FORMAT_R8_UNORM:
+                p.info.pixelType = image::PixelType::L_U8;
+                break;
+                // Add other cases if OCIO uses them, but R32 and RGBA32 are the main ones here.
+            default:
+                p.info.pixelType = image::PixelType::RGBA_F32; 
+                break;
+            }
+            
             switch(p.imageType)
             {
+                //case VK_IMAGE_TYPE_2D: // [Fix 4] Allow 2D textures to be Optimal too
             case VK_IMAGE_TYPE_3D:
             case VK_IMAGE_TYPE_1D:
                 p.options.tiling = VK_IMAGE_TILING_OPTIMAL;

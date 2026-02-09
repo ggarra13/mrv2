@@ -324,6 +324,10 @@ namespace tl
 #endif
 
 #if defined(TLRENDER_OCIO)
+            std::string
+            _getOCIOUniforms(const OCIO::GpuShaderDescRcPtr&);
+            void _createOCIOUniforms(const OCIO::GpuShaderDescRcPtr&);
+            void _updateOCIOUniforms(const OCIO::GpuShaderDescRcPtr&);
             void _addTextures(
                 std::vector<std::shared_ptr<vlk::Texture >>& textures,
                 const OCIO::GpuShaderDescRcPtr& shaderDesc);

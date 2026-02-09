@@ -164,12 +164,15 @@ namespace tl
             unsigned bindingIndex = 7;
             timeline::RenderOptions renderOptions;
 
+            //! Variable to cache source code to avoid recreation of shader
+            //! when possible
+            std::string oldSourceCode;
+
 #if defined(TLRENDER_OCIO)
             std::unique_ptr<OCIOData> ocioData;
             std::unique_ptr<OCIOLUTData> lutData;
 #endif // TLRENDER_OCIO
 
-            std::string toneMapDef;
 #if defined(TLRENDER_LIBPLACEBO)
             std::unique_ptr<LibPlaceboData> placeboData;
 #endif

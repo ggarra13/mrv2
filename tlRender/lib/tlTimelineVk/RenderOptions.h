@@ -36,4 +36,8 @@
 //
 #define DEBUG_DISPLAY_SHADER 0
 
+// Use OCIO's Vulkan backend
+#define USE_OCIO_VULKAN 1
+
+
 #include <tlTimelineVk/RenderShadersBinary.h>

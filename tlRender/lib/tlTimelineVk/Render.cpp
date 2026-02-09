@@ -130,9 +130,10 @@ namespace
         }
     }
 
+#if 1
     std::string
     replaceUniformSampler(const std::string& input, unsigned& bindingIndex)
-    {
+     {
         std::string output = input;
         std::string target = "uniform sampler";
         size_t pos = 0;
@@ -144,10 +145,95 @@ namespace
                 target;
             output.replace(pos, target.length(), replacement);
             pos += replacement.length(); // move past the inserted text
-        }
+         }
 
+         return output;
+     }
+
+#else
+    
+    
+    std::string replaceLut1DLookUp(const std::string& input, const std::string& lutMatch)
+    {
+        std::regex re(lutMatch);
+            
+        // $& means "insert the whole match here"
+        // We then append .r to it
+        return std::regex_replace(input, re, "$&.r");
+    }
+    
+    std::string replaceLut1DLookUps(const std::string& input,
+                                    const std::vector<std::string>& luts1DMatches)
+    {
+        std::string output = input;
+        for (const auto& lutMatch : luts1DMatches)
+        {
+            output = replaceLut1DLookUp(output, lutMatch);
+        }
         return output;
     }
+    
+    std::string replaceUniformSampler(const std::string& input, unsigned& bindingIndex)
+    {
+        // Regex matches: uniform sampler <name>(1d|2d|3d)Sampler
+        // Group 1: ([a-zA-Z0-9_]+) -> The variable name prefix
+        // Group 2: (1d|2d|3d)       -> The dimension suffix
+        static std::regex samplerRegex(R"(\buniform\s+sampler(?:1D|2D|3D)?\s+([a-zA-Z0-9_]+)(1d|2d|3d)(_[0-9]+)(Sampler\s*;)?)");
+
+        std::string output;
+        output.reserve(input.size());
+
+        auto it = std::sregex_iterator(input.begin(), input.end(), samplerRegex);
+        auto end = std::sregex_iterator();
+
+        std::vector<std::string> luts1D;
+        
+        size_t lastPos = 0;
+        for (; it != end; ++it)
+        {
+            const std::smatch& match = *it;
+            std::string namePrefix = match[1].str();
+            std::string dim = match[2].str(); // "1d", "2d", or "3d"
+            std::string nameIndex = match[3].str();
+            std::string nameSuffix = match[4].str();
+
+            // Append the text before the match
+            output.append(input.substr(lastPos, match.position() - lastPos));
+
+            // 1. Add Vulkan Layout Binding
+            output.append("layout(binding=");
+            output.append(std::to_string(bindingIndex++));
+            output.append(") ");
+
+            // 2. Add 'uniform sampler'
+            output.append("uniform ");
+
+            const std::string samplerName = namePrefix + dim + nameIndex + nameSuffix;
+            
+            // 3. Convert suffix to GLSL type (1d -> sampler1D, etc.)
+            if (dim == "1d")
+            {
+                // This results in: (?:prefix3d_computePos\(outColor.[a-z]+\))
+                const std::string lutName = "(?:" + namePrefix + dim + nameIndex +
+                                            R"(_computePos\(outColor.[a-z]+\)))";
+                luts1D.push_back(lutName);
+                output.append("sampler1D ");
+            }
+            else if (dim == "2d") output.append("sampler2D ");
+            else if (dim == "3d") output.append("sampler3D ");
+
+            // 4. Reconstruct the variable name
+            output.append(samplerName);
+            
+            lastPos = match.position() + match.length();
+        }
+
+        output.append(input.substr(lastPos));
+
+        output = replaceLut1DLookUps(output, luts1D);
+        return output;
+    }
+#endif
 
 #if defined(TLRENDER_LIBPLACEBO)
     VkFormat to_vk_format(pl_fmt fmt)
@@ -1680,14 +1766,125 @@ namespace tl
         }
 
 #if defined(TLRENDER_OCIO)
+        std::string Render::_getOCIOUniforms(const OCIO::GpuShaderDescRcPtr& shaderDesc)
+        {
+            std::stringstream s;
+            const unsigned numUniforms = shaderDesc->getNumUniforms();
+            for (unsigned i = 0; i < numUniforms; ++i)
+            {
+                OCIO::GpuShaderDesc::UniformData data;
+                const char* name = shaderDesc->getUniform(i, data);
+        
+                switch (data.m_type)
+                {
+                case OCIO::UNIFORM_DOUBLE:
+                    s << "uniform float " << name << ";\n";
+                    break;
+                case OCIO::UNIFORM_BOOL:
+                    s << "uniform bool " << name << ";\n";
+                    break;
+                    // Handle other types as needed by your OCIO version
+                default:
+                    break;
+                }
+            }
+            return s.str();
+        }
+        
 
+        void
+        Render::_updateOCIOUniforms(const OCIO::GpuShaderDescRcPtr& shaderDesc)
+        {
+            TLRENDER_P();
+            
+            const unsigned numUniforms = shaderDesc->getNumUniforms();
+            for (unsigned i = 0; i < numUniforms; ++i)
+            {
+                OCIO::GpuShaderDesc::UniformData data;
+                const char* name = shaderDesc->getUniform(i, data);
+        
+                if (data.m_type == OCIO::UNIFORM_DOUBLE)
+                {
+                    // Note: OCIO uses double, but GLSL usually uses float
+                    float value = static_cast<float>(data.m_getDouble());
+                    p.shaders["display"]->setUniform(name, value);
+                }
+                else if (data.m_type == OCIO::UNIFORM_BOOL)
+                {
+                    int value = data.m_getBool() ? 1 : 0;
+                    p.shaders["display"]->setUniform(name, value);
+                }
+                else if (data.m_type == OCIO::UNIFORM_FLOAT3)
+                {
+                    const OCIO::Float3 value = data.m_getFloat3();
+                    p.shaders["display"]->setUniform(name, value);
+                }
+                else if (data.m_type == OCIO::UNIFORM_VECTOR_INT)
+                {
+                    const size_t size = data.m_vectorInt.m_getSize();
+                    const int* value = data.m_vectorInt.m_getVector();
+                }
+                else if (data.m_type == OCIO::UNIFORM_VECTOR_FLOAT)
+                {
+                    const size_t size = data.m_vectorFloat.m_getSize();
+                    const float* value = data.m_vectorFloat.m_getVector();
+                }
+            }
+        }
+        
+        void
+        Render::_createOCIOUniforms(const OCIO::GpuShaderDescRcPtr& shaderDesc)
+        {
+            TLRENDER_P();
+            const unsigned numUniforms = shaderDesc->getNumUniforms();
+            for (unsigned i = 0; i < numUniforms; ++i)
+            {
+                OCIO::GpuShaderDesc::UniformData data;
+                const char* name = shaderDesc->getUniform(i, data);
+        
+                if (data.m_type == OCIO::UNIFORM_DOUBLE)
+                {
+                    // Note: OCIO uses double, but GLSL usually uses float
+                    float value = static_cast<float>(data.m_getDouble());
+                    p.shaders["display"]->createUniform(name, value); 
+                }
+                else if (data.m_type == OCIO::UNIFORM_BOOL)
+                {
+                    int value = data.m_getBool() ? 1 : 0;
+                    p.shaders["display"]->createUniform(name, value);
+                }
+                else if (data.m_type == OCIO::UNIFORM_FLOAT3)
+                {
+                    OCIO::Float3 value = data.m_getFloat3();
+                    p.shaders["display"]->createUniform(name, value);
+                }
+                else if (data.m_type == OCIO::UNIFORM_VECTOR_INT)
+                {
+                    const size_t size = data.m_vectorInt.m_getSize();
+                    const int* value = data.m_vectorInt.m_getVector();
+                }
+                else if (data.m_type == OCIO::UNIFORM_VECTOR_FLOAT)
+                {
+                    const size_t size = data.m_vectorFloat.m_getSize();
+                    const float* value = data.m_vectorFloat.m_getVector();
+                }
+            }
+        }
+        
         void Render::_addTextures(
             std::vector<std::shared_ptr<vlk::Texture> >& textures,
             const OCIO::GpuShaderDescRcPtr& shaderDesc)
         {
             TLRENDER_P();
 
-            // Create 3D textures.
+            // Use a map to automatically sort textures by their OCIO index (0, 1, 2...)
+            // This ensures they align with Binding 6, 7, 8, etc.
+            std::map<int, std::shared_ptr<vlk::Texture>> sortedTextures;
+
+            vlk::TextureOptions options;
+            options.tiling = VK_IMAGE_TILING_OPTIMAL; // Always use Optimal for performance
+
+            // --- Process 3D Textures ---
             const unsigned num3DTextures = shaderDesc->getNum3DTextures();
             for (unsigned i = 0; i < num3DTextures; ++i)
             {
@@ -1695,58 +1892,67 @@ namespace tl
                 const char* samplerName = nullptr;
                 unsigned edgelen = 0;
                 OCIO::Interpolation interpolation = OCIO::INTERP_LINEAR;
-                shaderDesc->get3DTexture(
-                    i, textureName, samplerName, edgelen, interpolation);
-                if (!textureName || !*textureName || !samplerName ||
-                    !*samplerName || 0 == edgelen)
-                {
-                    throw std::runtime_error(
-                        "The OCIO texture data is corrupted");
-                }
+                shaderDesc->get3DTexture(i, textureName, samplerName, edgelen, interpolation);
+
+                if (!textureName || !*textureName || !samplerName || !*samplerName || 0 == edgelen) continue;
 
                 const float* values = nullptr;
                 shaderDesc->get3DTextureValues(i, values);
-                if (!values)
+                if (!values) continue;
+
+                // Set filters based on interpolation
+                if (interpolation == OCIO::INTERP_NEAREST) {
+                    options.filters.minify = timeline::ImageFilter::Nearest;
+                    options.filters.magnify = timeline::ImageFilter::Nearest;
+                }
+                else
                 {
-                    throw std::runtime_error(
-                        "The OCIO texture values are missing");
+                    options.filters.minify = timeline::ImageFilter::Linear;
+                    options.filters.magnify = timeline::ImageFilter::Linear;
                 }
 
+                // 3D Texture Creation
                 VkFormat imageFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
+                // OCIO 3D LUTs are RGB, we pad to RGBA
                 const uint32_t width = edgelen;
                 const uint32_t height = edgelen;
                 const uint32_t depth = edgelen;
-                const uint16_t channels = 4;
-
-                float* newvalues = new float[width * height * depth * channels];
-                float* n = newvalues;
-                for (int d = 0; d < depth; ++d)
-                {
-                    for (int h = 0; h < height; ++h)
-                    {
-                        for (int w = 0; w < width; ++w)
-                        {
-                            for (int j = 0; j < 3; ++j)
-                            {
-                                    *n++ = *values++;
-                            }
-                            *n++ = 1.F;
-                        }
-                    }
+        
+                // Pad data to RGBA
+                std::vector<float> newvalues(width * height * depth * 4);
+                const float* v = values;
+                float* n = newvalues.data();
+                for (size_t k = 0; k < width * height * depth; ++k) {
+                    *n++ = *v++; // R
+                    *n++ = *v++; // G
+                    *n++ = *v++; // B
+                    *n++ = 1.0f; // A
                 }
-                
+
                 auto texture = vlk::Texture::create(
                     ctx, VK_IMAGE_TYPE_3D, width, height, depth, imageFormat,
-                    samplerName);
-                texture->copy(
-                    reinterpret_cast<const uint8_t*>(newvalues),
-                    width * height * depth * channels * sizeof(float));
-                delete [] newvalues;
+                    samplerName, options);
+            
+                texture->copy(reinterpret_cast<const uint8_t*>(newvalues.data()), newvalues.size() * sizeof(float));
                 texture->transitionToShaderRead(p.cmd);
-                textures.push_back(texture);
+
+                // Parse index from name "ocio_lut3d_XSampler" to sort correctly
+                int index = 0;
+                std::string sName = samplerName;
+                size_t lastUnderscore = sName.find_last_of('_');
+                if (lastUnderscore != std::string::npos) {
+                    // Extract number between last underscore and 'Sampler'
+                    // Format is usually ocio_lut3d_<INDEX>Sampler
+                    std::string numPart = sName.substr(lastUnderscore + 1);
+                    // Remove "Sampler" suffix if present to get just the number
+                    size_t samplerPos = numPart.find("Sampler");
+                    if (samplerPos != std::string::npos) numPart = numPart.substr(0, samplerPos);
+                    try { index = std::stoi(numPart); } catch(...) {}
+                }
+                sortedTextures[index] = texture;
             }
 
-            // Create 1D textures.
+            // --- Process 1D Textures ---
             const unsigned numTextures = shaderDesc->getNumTextures();
             for (unsigned i = 0; i < numTextures; ++i)
             {
@@ -1754,61 +1960,85 @@ namespace tl
                 unsigned height = 0;
                 const char* textureName = nullptr;
                 const char* samplerName = nullptr;
-                OCIO::GpuShaderDesc::TextureType channel =
-                    OCIO::GpuShaderDesc::TEXTURE_RGB_CHANNEL;
-                OCIO::GpuShaderCreator::TextureDimensions dimensions =
-                    OCIO::GpuShaderDesc::TEXTURE_1D;
+                OCIO::GpuShaderDesc::TextureType channel = OCIO::GpuShaderDesc::TEXTURE_RED_CHANNEL;
+                OCIO::GpuShaderCreator::TextureDimensions dimensions = OCIO::GpuShaderDesc::TEXTURE_1D;
                 OCIO::Interpolation interpolation = OCIO::INTERP_LINEAR;
-                shaderDesc->getTexture(
-                    i, textureName, samplerName, width, height, channel,
-                    dimensions, interpolation);
-                if (!textureName || !*textureName || !samplerName ||
-                    !*samplerName || width == 0)
-                {
-                    throw std::runtime_error(
-                        "The OCIO texture data is corrupted");
-                }
+        
+                shaderDesc->getTexture(i, textureName, samplerName, width, height, channel, dimensions, interpolation);
+
+                if (!textureName || !*textureName || !samplerName || !*samplerName || width == 0) continue;
 
                 const float* values = nullptr;
                 shaderDesc->getTextureValues(i, values);
-                if (!values)
-                {
-                    throw std::runtime_error(
-                        "The OCIO texture values are missing");
+                if (!values) continue;
+
+                if (interpolation == OCIO::INTERP_NEAREST) {
+                    options.filters.minify = timeline::ImageFilter::Nearest;
+                    options.filters.magnify = timeline::ImageFilter::Nearest;
+                } else {
+                    options.filters.minify = timeline::ImageFilter::Linear;
+                    options.filters.magnify = timeline::ImageFilter::Linear;
                 }
 
-                uint16_t channels = 3;
-                VkFormat imageFormat = VK_FORMAT_R32G32B32_SFLOAT;
-                if (OCIO::GpuShaderCreator::TEXTURE_RED_CHANNEL == channel)
+                VkFormat imageFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
+                VkImageType imageType = VK_IMAGE_TYPE_2D; // OCIO 1D LUTs are often 2D packed
+                int channels = 4;
+        
+                std::vector<float> paddedValues;
+                const void* dataPtr = values;
+                size_t dataSize = 0;
+
+                if (channel == OCIO::GpuShaderDesc::TEXTURE_RED_CHANNEL)
                 {
-                    channels = 1;
                     imageFormat = VK_FORMAT_R32_SFLOAT;
+                    channels = 1;
+                    dataSize = width * height * sizeof(float);
+                    dataPtr = values;
                 }
-
-                VkImageType imageType;
-                switch (dimensions)
+                else
                 {
-                case OCIO::GpuShaderDesc::TEXTURE_1D:
-                    imageType = VK_IMAGE_TYPE_1D;
-                    if (height == 0)
-                        height = 1;
-                    break;
-                case OCIO::GpuShaderDesc::TEXTURE_2D:
-                    imageType = VK_IMAGE_TYPE_2D;
-                    break;
-                default:
-                    throw std::runtime_error("Unknown OCIO image type");
+                    // TEXTURE_RGB_CHANNEL (0) -> Convert RGB to RGBA
+                    // Note: Even if OCIO implies RGB, we upload as RGBA for Vulkan compatibility
+                    paddedValues.resize(width * height * 4);
+                    const float* v = values;
+                    float* n = paddedValues.data();
+                    for (size_t k = 0; k < width * height; ++k) {
+                        *n++ = *v++; // R
+                        *n++ = *v++; // G
+                        *n++ = *v++; // B
+                        *n++ = 1.0f; // A
+                    }
+                    dataPtr = paddedValues.data();
+                    dataSize = paddedValues.size() * sizeof(float);
                 }
 
+                // NOTE: We use the 'height' returned by OCIO. Do NOT force it to 1.
                 auto texture = vlk::Texture::create(
-                    ctx, imageType, width, height, 0, imageFormat, samplerName);
-                texture->copy(
-                    reinterpret_cast<const uint8_t*>(values),
-                    width * height * channels * sizeof(float));
+                    ctx, imageType, width, height, 1, imageFormat,
+                    samplerName, options);
+
+                texture->copy(reinterpret_cast<const uint8_t*>(dataPtr), dataSize);
                 texture->transitionToShaderRead(p.cmd);
-                textures.push_back(texture);
+
+                // Parse index and store in map
+                int index = 0;
+                std::string sName = samplerName;
+                size_t lastUnderscore = sName.find_last_of('_');
+                if (lastUnderscore != std::string::npos) {
+                    std::string numPart = sName.substr(lastUnderscore + 1);
+                    size_t samplerPos = numPart.find("Sampler");
+                    if (samplerPos != std::string::npos) numPart = numPart.substr(0, samplerPos);
+                    try { index = std::stoi(numPart); } catch(...) {}
+                }
+                sortedTextures[index] = texture;
+            }
+
+            // Finally, push them into the output vector in the correct Binding Order
+            for (auto const& [index, tex] : sortedTextures) {
+                textures.push_back(tex);
             }
         }
+
 #endif // TLRENDER_OCIO
 
 #if defined(TLRENDER_LIBPLACEBO)
@@ -2063,8 +2293,13 @@ namespace tl
                             "Cannot create OCIO ICS shader description");
                     }
 
+#if USE_OCIO_VULKAN
+                    p.ocioData->icsDesc->setLanguage(
+                        OCIO::GPU_LANGUAGE_GLSL_VK_4_6);
+#else
                     p.ocioData->icsDesc->setLanguage(
                         OCIO::GPU_LANGUAGE_GLSL_4_0);
+#endif
                     p.ocioData->icsDesc->setFunctionName("ocioICSFunc");
                     p.ocioData->icsDesc->setResourcePrefix("ocioICS"); // ocio?
                     p.ocioData->gpuProcessor->extractGpuShaderInfo(
@@ -2125,8 +2360,11 @@ namespace tl
                         throw std::runtime_error(
                             "Cannot create OCIO shader description");
                     }
-                    p.ocioData->shaderDesc->setLanguage(
-                        OCIO::GPU_LANGUAGE_GLSL_4_0);
+#if USE_OCIO_VULKAN
+                    p.ocioData->shaderDesc->setLanguage(OCIO::GPU_LANGUAGE_GLSL_VK_4_6);
+#else
+                    p.ocioData->shaderDesc->setLanguage(OCIO::GPU_LANGUAGE_GLSL_4_0);
+#endif
                     p.ocioData->shaderDesc->setFunctionName("ocioDisplayFunc");
                     p.ocioData->shaderDesc->setResourcePrefix("ocio");
                     p.ocioData->gpuProcessor->extractGpuShaderInfo(
@@ -2145,7 +2383,9 @@ namespace tl
             }
 #endif // TLRENDER_OCIO
 
-            p.shaders["display"].reset();
+            // OCIO is moving to support dynamic data, so we no longer clear
+            // the display shader here.
+            //p.shaders["display"].reset();
             _displayShader();
         }
 
@@ -2203,7 +2443,11 @@ namespace tl
                     throw std::runtime_error(
                         "Cannot create OCIO shader description");
                 }
+#if USE_OCIO_VULKAN
+                p.lutData->shaderDesc->setLanguage(OCIO::GPU_LANGUAGE_GLSL_VK_4_6);
+#else
                 p.lutData->shaderDesc->setLanguage(OCIO::GPU_LANGUAGE_GLSL_4_0);
+#endif
                 p.lutData->shaderDesc->setFunctionName("lutFunc");
                 p.lutData->shaderDesc->setResourcePrefix("lut");
                 p.lutData->gpuProcessor->extractGpuShaderInfo(p.lutData->shaderDesc);
@@ -2736,16 +2980,6 @@ namespace tl
                 s << res->glsl << std::endl;
                 toneMapDef = s.str();
                 
-                try
-                {
-                    _addTextures(p.placeboData->textures, res);
-                }
-                catch (const std::exception& e)
-                {
-                    std::cerr << e.what() << std::endl;
-                    p.placeboData.reset();
-                    throw e;
-                }
                 toneMap = "outColor = ";
                 toneMap += res->name;
                 toneMap += "(outColor);\n";
@@ -2771,10 +3005,12 @@ namespace tl
             }
             if (p.ocioData && p.ocioData->shaderDesc)
             {
+                ocioDef = _getOCIOUniforms(p.ocioData->shaderDesc); 
                 ocioDef = p.ocioData->shaderDesc->getShaderText();
                 ocioDef = replaceUniformSampler(ocioDef, p.bindingIndex);
                 ocio = "outColor = ocioDisplayFunc(outColor);";
             }
+            
             if (p.lutData && p.lutData->shaderDesc)
             {
                 lutDef = p.lutData->shaderDesc->getShaderText();
@@ -2791,12 +3027,12 @@ namespace tl
 #endif
                 
             bool recreateShader = false;
-            if (!p.shaders["display"] || p.toneMapDef != toneMapDef)
+            if (!p.shaders["display"] || p.oldSourceCode != source)
             {
                 recreateShader = true;
             }
                 
-            p.toneMapDef = toneMapDef;
+            p.oldSourceCode = source;
 
 #if defined(TLRENDER_LIBPLACEBO)
             try
@@ -2849,9 +3085,25 @@ namespace tl
                     "transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->addFBO("textureSampler");
 
+#if defined(TLRENDER_OCIO)
+                if (p.ocioData && p.ocioData->icsDesc)
+                {
+                    _createOCIOUniforms(p.ocioData->icsDesc);
+                }
+                if (p.ocioData && p.ocioData->shaderDesc)
+                {
+                    _createOCIOUniforms(p.ocioData->shaderDesc);
+                }
+                if (p.lutData && p.lutData->shaderDesc)
+                {
+                    _createOCIOUniforms(p.lutData->shaderDesc);
+                }
+#endif
+                
                 UBOLevels uboLevels;
                 p.shaders["display"]->createUniform("uboLevels", uboLevels);
 
+                
                 // \@unused in mrv2 (used to keep reference of gain UI)
                 // timeline::EXRDisplay exrDisplay;
                 // p.shaders["display"]->createUniform(

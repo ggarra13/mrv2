@@ -55,6 +55,7 @@ ChangeLog
 - Added Dolby Vision variables to Media Information Panel's Video Tab.
 - Added Dolby Vision support on all platforms.
 - Added HDR Peak Detection controls to Prefences->HDR Peak Detection.
+- Fixed OpenColorIO's 1D Luts on Vulkan backend.
 
 v1.5.4
 ======

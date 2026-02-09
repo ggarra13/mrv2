@@ -1216,6 +1216,21 @@ namespace tl
                 }
 #endif
 
+#if defined(TLRENDER_OCIO)
+                if (p.ocioData && p.ocioData->icsDesc)
+                {
+                    _updateOCIOUniforms(p.ocioData->icsDesc);
+                }
+                if (p.ocioData && p.ocioData->shaderDesc)
+                {
+                    _updateOCIOUniforms(p.ocioData->shaderDesc);
+                }
+                if (p.lutData && p.lutData->shaderDesc)
+                {
+                    _updateOCIOUniforms(p.lutData->shaderDesc);
+                }
+#endif
+
                 UBOLevels uboLevels;
                 uboLevels.enabled = displayOptions.levels.enabled;
                 uboLevels.inLow = displayOptions.levels.inLow;
