@@ -5,7 +5,8 @@ on:
     branches-ignore:
       - main
     tags-ignore:
-      - '**'
+      - "**"
+  workflow_dispatch:
 
 jobs:
   ###################################
@@ -17,138 +18,157 @@ jobs:
     runs-on: macos-15-intel
 
     steps:
-    
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        
-    - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
-        profile: minimal
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ${{ runner.os }}-ccache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-
 
-    - name: Verify
-      run: rustc -Vv
-      
-    - name: Install cargo-c
-      run: cargo install cargo-c
-      
-    - name: Get machine name
-      run: |
-        echo "Machine name: $RUNNER_NAME"
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
 
-    - name: Install ninja-build
-      run: brew install ninja
-      
-    - name: Install automake
-      run: brew install automake curl rsync
+      - name: Verify
+        run: rustc -Vv
 
-    - name: Install GNU sed
-      run: brew install gnu-sed
-      
-    - name: Install Python dependencies
-      run: brew install libb2 libffi readline sqlite3 xz zlib
-        
-    - name: Install pyFLTK dependencies
-      run: brew install swig
+      - name: Install cargo-c
+        run: cargo install cargo-c
 
-      
-    # Install Vulkan SDK manually
-    - name: Install/Build Vulkan SDK
-      env:
-        BUILD_VULKAN: OFF
-      shell: bash
-      run: |
-        if [[ "$BUILD_VULKAN" == "ON" ]]; then
-            ./etc/macos/install_vulkan.sh
-            
-            echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-            echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-            echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
-        else
-            brew install vulkan-loader
-            brew install molten-vk
-            brew install vulkan-tools
-            brew install shaderc
-            brew install glslang
-            brew install vulkan-profiles
-            brew install spirv-tools
-            brew link --overwrite molten-vk
-        fi
+      - name: Get machine name
+        run: |
+          echo "Machine name: $RUNNER_NAME"
 
-    # # Verify Vulkan installation
-    # - name: Verify Vulkan
-    #   run: |
-    #     export VK_LAYER_DEBUG=all
-    #     vulkaninfo --summary
-        
-    - name: Remove system OpenEXR and Imath
-      run: |
-        brew uninstall --ignore-dependencies openexr imath || true
+      - name: Install ninja-build
+        run: brew install ninja
 
-    - name: Setup environment
-      run: mkdir -p ssh
+      - name: Install automake
+        run: brew install automake curl rsync
 
-    - name: Decode SSH key
-      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
-      shell: bash
-  
-    - name: Set permissions on SSH key
-      run: chmod 600 ssh/id_rsa
+      - name: Install GNU sed
+        run: brew install gnu-sed
 
-    - name: Decode FLTK SSH key
-      run: |
+      - name: Install Python dependencies
+        run: brew install libb2 libffi readline sqlite3 xz zlib
+
+      - name: Install pyFLTK dependencies
+        run: brew install swig
+
+      - name: Cache Vulkan SDK
+        id: cache-vulkan-sdk
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/lib
+          key: ${{ runner.os }}-macos-intel-vulkan-${{ hashFiles('**/install_vulkan.sh') }}
+
+      # Install Vulkan SDK manually
+      - name: Install/Build Vulkan SDK
+        if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
+        env:
+          BUILD_VULKAN: OFF
+        shell: bash
+        run: |
+          if [[ "$BUILD_VULKAN" == "ON" ]]; then
+              ./etc/macos/install_vulkan.sh
+
+              echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+              echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+              echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
+          else
+              brew install vulkan-loader
+              brew install molten-vk
+              brew install vulkan-tools
+              brew install shaderc
+              brew install glslang
+              brew install vulkan-profiles
+              brew install spirv-tools
+              brew link --overwrite molten-vk
+          fi
+
+      # # Verify Vulkan installation
+      - name: Verify Vulkan installation
+        run: |
+          if command -v vulkaninfo &> /dev/null; then
+            echo "✓ Vulkan tools available"
+            vulkaninfo --summary || true
+          fi      # # Verify Vulkan installation
+      # - name: Verify Vulkan
+      #   run: |
+      #     export VK_LAYER_DEBUG=all
+      #     vulkaninfo --summary
+
+      - name: Remove system OpenEXR and Imath
+        run: |
+          brew uninstall --ignore-dependencies openexr imath || true
+
+      - name: Setup environment
+        run: mkdir -p ssh
+
+      - name: Decode SSH key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+        shell: bash
+
+      - name: Set permissions on SSH key
+        run: chmod 600 ssh/id_rsa
+
+      - name: Decode FLTK SSH key
+        run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-      
-    - name: Add SourceForge to known_hosts
-      shell: bash
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
 
-    - name: Set executable permissions
-      run: |
-        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+      - name: Add SourceForge to known_hosts
+        shell: bash
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
 
-    - name: List disk space
-      run: |
-        df -k
-        
-    - name: Build vmrv2
-      env:
-        BUILD_PYTHON: ON
-        MRV2_PYFLTK: ON
-        MRV2_PYBIND11: ON
-        MRV2_NETWORK: ON
-        MRV2_PDF: ON
-        TLRENDER_AV1: ON
-        TLRENDER_EXR: ON
-        TLRENDER_FFMPEG: ON
-        TLRENDER_FFMPEG_MINIMAL: ON
-        TLRENDER_GL: OFF
-        TLRENDER_HAP: ON
-        TLRENDER_JPEG: ON
-        TLRENDER_NDI: OFF
-        TLRENDER_NET: ON
-        TLRENDER_OPENJPH: ON
-        TLRENDER_RAW: ON
-        TLRENDER_SGI: ON
-        TLRENDER_STB: ON
-        TLRENDER_SVTAV1: ON
-        TLRENDER_TIFF: ON
-        TLRENDER_USD: OFF
-        TLRENDER_VPX: ON
-        TLRENDER_YASM: ON
-        
-      run: |
-        ./etc/runme_nolog.sh -t package -vk clean
-      
-    - name: Upload binaries  # Conditional step
-      run: |
-        ./bin/release/upload_sourceforge.sh -vk
-        
+      - name: Set executable permissions
+        run: |
+          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+
+      - name: List disk space
+        run: |
+          df -k
+
+      - name: Build vmrv2
+        env:
+          BUILD_PYTHON: ON
+          MRV2_PYFLTK: ON
+          MRV2_PYBIND11: ON
+          MRV2_NETWORK: ON
+          MRV2_PDF: ON
+          TLRENDER_AV1: ON
+          TLRENDER_EXR: ON
+          TLRENDER_FFMPEG: ON
+          TLRENDER_FFMPEG_MINIMAL: ON
+          TLRENDER_GL: OFF
+          TLRENDER_HAP: ON
+          TLRENDER_JPEG: ON
+          TLRENDER_NDI: OFF
+          TLRENDER_NET: ON
+          TLRENDER_OPENJPH: ON
+          TLRENDER_RAW: ON
+          TLRENDER_SGI: ON
+          TLRENDER_STB: ON
+          TLRENDER_SVTAV1: ON
+          TLRENDER_TIFF: ON
+          TLRENDER_USD: OFF
+          TLRENDER_VPX: ON
+          TLRENDER_YASM: ON
+
+        run: |
+          ./etc/runme_nolog.sh -t package -vk clean
+
+      - name: Upload binaries  # Conditional step
+        run: |
+          ./bin/release/upload_sourceforge.sh -vk
+

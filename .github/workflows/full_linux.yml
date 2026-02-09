@@ -19,10 +19,16 @@ jobs:
       contents: write   # Needed to update releases
 
     steps:
-    
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+        fetch-depth: 1
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ runner.os }}-ccache-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-ccache-
 
     - name: Get machine name
       run: |
@@ -32,7 +38,7 @@ jobs:
       run: |
         sudo add-apt-repository universe -y
         sudo apt-get update || { echo "apt-get update failed"; exit 1; }
-      
+
     - name: Install OpenGL dev
       run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
 
@@ -53,16 +59,16 @@ jobs:
 
     - name: Install curl and openssl
       run: sudo apt-get install -y curl openssl rsync libunistring-dev
-      
+
     - name: Install ninja-build
       run: sudo apt-get install -y ninja-build
-      
+
     - name: Install gettext
       run: sudo apt-get install -y gettext
       
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
-      
+
     # - name: Install vulkan
     #   if: github.ref_name == 'vulkan'
     #   run: |
@@ -72,9 +78,9 @@ jobs:
     #   if: github.ref_name == 'vulkan'
     #   run: |
     #     sudo apt-get install -y glslang-dev spirv-tools spirv-headers
-        
+
     # Install Vulkan SDK
-    
+
     # - name: Install Vulkan SDK
     #   if: github.ref_name == 'vulkan'
     #   run: |
@@ -85,7 +91,7 @@ jobs:
     #     echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
     #     echo "VK_LAYER_PATH=$VK_LAYER_PATH" >> $GITHUB_ENV
     #     echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-        
+
     - name: Synchronize clock
       run: |
         sudo apt-get install -y ntp
@@ -96,7 +102,7 @@ jobs:
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
-      
+
     - name: Set permissions on SSH key
       run: chmod 600 ssh/id_rsa
       
@@ -106,17 +112,17 @@ jobs:
           echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          
+
     - name: Add SourceForge to known_hosts
       shell: bash
       run: |
         mkdir -p ~/.ssh
         ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
-      
+
     - name: Set executable permissions
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
-        
+
     - name: List disk space
       run: |
         df -k
@@ -146,10 +152,10 @@ jobs:
         TLRENDER_USD: ON
         TLRENDER_VPX: ON
         TLRENDER_YASM: ON
-        
+
       run: |
         ./etc/runme_nolog.sh -t package clean
-      
+
     - name: Upload binaries 
       run: |
         ./bin/release/upload_sourceforge.sh 

@@ -17,14 +17,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+        fetch-depth: 1
 
-    - name: Get machine name
-      run: |
-        echo "Machine name: $RUNNER_NAME"
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ runner.os }}-ccache-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-ccache-
 
     - name: Install Rust
       uses: actions-rs/toolchain@v1
@@ -32,7 +35,7 @@ jobs:
         toolchain: stable
         override: true
         profile: minimal
-        
+
     - name: Install cargo-c
       run: cargo install cargo-c
           
@@ -40,7 +43,7 @@ jobs:
       run: |
         sudo add-apt-repository universe -y
         sudo apt-get update || { echo "apt-get update failed"; exit 1; }
-      
+
     - name: Install OpenGL dev
       run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
 
@@ -53,9 +56,6 @@ jobs:
     - name: Install PulseAudio dev
       run: sudo apt-get install -y libpulse-dev
 
-    # - name: Install libdovi dev
-    #   run: sudo apt install libdovi-dev
-      
     - name: Install Pango dev
       run: sudo apt-get install -y libpango1.0-dev
 
@@ -64,30 +64,72 @@ jobs:
 
     - name: Install curl and openssl
       run: sudo apt-get install -y curl openssl rsync libunistring-dev
-      
+
     - name: Install ninja-build
       run: sudo apt-get install -y ninja-build
-      
+
     - name: Install gettext
       run: sudo apt-get install -y gettext
-      
+
     - name: Install python dependencies
       run: sudo apt-get install -y libssl-dev libffi-dev python3
 
     - name: Install Vulkan drivers
       run: sudo apt install -y mesa-vulkan-drivers
-      
+
     # Install Vulkan SDK
     - name: Install Vulkan
+      if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
       env:
         BUILD_VULKAN: OFF  # optional
       run: |
         ./etc/linux/install_vulkan.sh
-        
-        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-        echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
-        
+
+    # Set Vulkan environment variables (always, even if cached)
+    - name: Set Vulkan environment variables
+      run: |
+        # Debug: show current directory and contents
+        echo "Current directory: $(pwd)"
+        echo "Looking for VulkanSDK-* directories..."
+
+        # Find Vulkan SDK installation in workspace
+        VULKAN_DIR=$(find . -maxdepth 1 -type d -name "VulkanSDK-*" 2>/dev/null | head -1)
+
+        if [ -z "$VULKAN_DIR" ]; then
+          echo "Error: Vulkan SDK directory not found (VulkanSDK-*)"
+          echo "Available directories:"
+          ls -ld */ 2>/dev/null || echo "No directories found"
+          exit 1
+        fi
+
+        if [ -d "$VULKAN_DIR" ]; then
+          echo "Found Vulkan SDK directory: $VULKAN_DIR"
+
+          # Find the version directory inside
+          VULKAN_VERSION=$(ls -1 "$VULKAN_DIR" | head -1)
+          echo "Version directory: $VULKAN_VERSION"
+
+          VULKAN_SDK="$VULKAN_DIR/$VULKAN_VERSION/x86_64"
+
+          if [ -d "$VULKAN_SDK" ]; then
+            # Convert to absolute path
+            VULKAN_SDK=$(cd "$VULKAN_SDK" && pwd)
+
+            echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+            echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+            echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
+            echo "Vulkan SDK configured: $VULKAN_SDK"
+          else
+            echo "Error: Vulkan SDK architecture directory not found: $VULKAN_SDK"
+            echo "Contents of $VULKAN_DIR/$VULKAN_VERSION:"
+            ls -la "$VULKAN_DIR/$VULKAN_VERSION" || echo "Directory not accessible"
+            exit 1
+          fi
+        else
+          echo "Error: Vulkan SDK directory exists but is not accessible: $VULKAN_DIR"
+          exit 1
+        fi
+
     - name: Synchronize clock
       run: |
         sudo apt-get install -y ntp
@@ -98,27 +140,27 @@ jobs:
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
-      
+
     - name: Set permissions on SSH key
       run: chmod 600 ssh/id_rsa
-      
+
     - name: Decode FLTK SSH key
       run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          
+
     - name: Add SourceForge to known_hosts
       shell: bash
       run: |
         mkdir -p ~/.ssh
         ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
-      
+
     - name: Set executable permissions
       run: |
         chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
-        
+
     - name: List disk space
       run: |
         df -k
@@ -148,11 +190,11 @@ jobs:
         TLRENDER_USD: OFF
         TLRENDER_VPX: ON
         TLRENDER_YASM: ON
-        
+
       run: |
         ./etc/runme_nolog.sh -t package -vk
-      
+
     - name: Upload binaries
       run: |
         ./bin/release/upload_sourceforge.sh -vk
-    
+

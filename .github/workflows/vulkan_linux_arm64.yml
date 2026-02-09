@@ -5,7 +5,8 @@ on:
     branches-ignore:
       - main
     tags-ignore:
-      - '**'
+      - "**"
+  workflow_dispatch:
 
 jobs:
   ###################################
@@ -17,146 +18,200 @@ jobs:
     runs-on: ubuntu-24.04-arm
 
     steps:
-    
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ${{ runner.os }}-ccache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-
 
-    - name: Install Rust (ARM64)
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
-        profile: minimal
+      - name: Install Rust (ARM64)
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
 
-    - name: Verify
-      run: |
-        rustc -Vv
-        cargo -V
-          
-    - name: Install cargo-c
-      run: cargo install cargo-c
-      
-    - name: Get machine name
-      run: |
-        echo "Machine name: $RUNNER_NAME"
+      - name: Verify
+        run: |
+          rustc -Vv
+          cargo -V
 
-    - name: Update repos
-      run: |
-        sudo add-apt-repository universe -y
-        sudo apt-get update || { echo "apt-get update failed"; exit 1; }
+      - name: Install cargo-c
+        run: cargo install cargo-c
 
-    - name: Install OpenGL dev
-      run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
+      - name: Get machine name
+        run: |
+          echo "Machine name: $RUNNER_NAME"
 
-    - name: Install X11 dev
-      run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
-      
-    - name: Install ALSA dev
-      run: sudo apt-get install -y libasound2-dev
+      - name: Update repos
+        run: |
+          sudo add-apt-repository universe -y
+          sudo apt-get update || { echo "apt-get update failed"; exit 1; }
 
-    - name: Install PulseAudio dev
-      run: sudo apt-get install -y libpulse-dev
+      - name: Install OpenGL dev
+        run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
 
-    # - name: Install libdovi dev
-    #   run: sudo apt install libdovi-dev
-      
-    - name: Install Pango dev
-      run: sudo apt-get install -y libpango1.0-dev
+      - name: Install X11 dev
+        run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
 
-    - name: Install Wayland
-      run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev libglu-dev
+      - name: Install ALSA dev
+        run: sudo apt-get install -y libasound2-dev
 
-    - name: Install curl and openssl
-      run: sudo apt-get install -y curl openssl rsync libunistring-dev
-      
-    - name: Install ninja-build
-      run: sudo apt-get install -y ninja-build
-      
-    - name: Install gettext
-      run: sudo apt-get install -y gettext
-      
-    - name: Install python dependencies
-      run: sudo apt-get install -y libssl-dev libffi-dev python3
-      
-    - name: Install Vulkan drivers
-      run: sudo apt install -y mesa-vulkan-drivers
-            
-    # Install Vulkan SDK
-    - name: Install/Build Vulkan SDK
-      env:
-        BUILD_VULKAN: ON   # needed
-      run: |
-        ./etc/linux/install_vulkan.sh
-        
-        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-        echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-        echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
-        
-    - name: Synchronize clock
-      run: |
-        sudo apt-get install -y ntp
+      - name: Install PulseAudio dev
+        run: sudo apt-get install -y libpulse-dev
 
-    - name: Setup environment
-      run: mkdir -p ssh
+      - name: Install Pango dev
+        run: sudo apt-get install -y libpango1.0-dev
 
-    - name: Decode SSH key
-      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
-      shell: bash
-      
-    - name: Set permissions on SSH key
-      run: chmod 600 ssh/id_rsa
-      
-    - name: Decode FLTK SSH key
-      run: |
+      - name: Install Wayland
+        run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev libglu-dev
+
+      - name: Install curl and openssl
+        run: sudo apt-get install -y curl openssl rsync libunistring-dev
+
+      - name: Install ninja-build
+        run: sudo apt-get install -y ninja-build
+
+      - name: Install gettext
+        run: sudo apt-get install -y gettext
+
+      - name: Install python dependencies
+        run: sudo apt-get install -y libssl-dev libffi-dev python3
+
+      - name: Install Vulkan drivers
+        if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
+        run: sudo apt install -y mesa-vulkan-drivers
+
+      - name: Cache Vulkan SDK
+        id: cache-vulkan-sdk
+        uses: actions/cache@v4
+        with:
+          path: VulkanSDK-*
+          key: ${{ runner.os }}-linux-arm64-vulkan-${{ hashFiles('**/install_vulkan.sh') }}
+
+      # Install Vulkan SDK
+      - name: Install/Build Vulkan SDK
+        if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
+        env:
+          BUILD_VULKAN: ON # needed
+        run: |
+          ./etc/linux/install_vulkan.sh
+
+      # Set Vulkan environment variables (always, even if cached)
+      - name: Set Vulkan environment variables
+        run: |
+          # Debug: show current directory and contents
+          echo "Current directory: $(pwd)"
+          echo "Looking for VulkanSDK-* directories..."
+
+          # Find Vulkan SDK installation in workspace
+          VULKAN_DIR=$(find . -maxdepth 1 -type d -name "VulkanSDK-*" 2>/dev/null | head -1)
+
+          if [ -z "$VULKAN_DIR" ]; then
+            echo "Error: Vulkan SDK directory not found (VulkanSDK-*)"
+            echo "Available directories:"
+            ls -ld */ 2>/dev/null || echo "No directories found"
+            exit 1
+          fi
+
+          if [ -d "$VULKAN_DIR" ]; then
+            echo "Found Vulkan SDK directory: $VULKAN_DIR"
+
+            # Find the version directory inside
+            VULKAN_VERSION=$(ls -1 "$VULKAN_DIR" | head -1)
+            echo "Version directory: $VULKAN_VERSION"
+
+            # For ARM64, the architecture directory is aarch64
+            VULKAN_SDK="$VULKAN_DIR/$VULKAN_VERSION/aarch64"
+
+            if [ -d "$VULKAN_SDK" ]; then
+              # Convert to absolute path
+              VULKAN_SDK=$(cd "$VULKAN_SDK" && pwd)
+
+              echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+              echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+              echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
+              echo "Vulkan SDK configured: $VULKAN_SDK"
+            else
+              echo "Error: Vulkan SDK architecture directory not found: $VULKAN_SDK"
+              echo "Contents of $VULKAN_DIR/$VULKAN_VERSION:"
+              ls -la "$VULKAN_DIR/$VULKAN_VERSION" || echo "Directory not accessible"
+              exit 1
+            fi
+          else
+            echo "Error: Vulkan SDK directory exists but is not accessible: $VULKAN_DIR"
+            exit 1
+          fi
+
+      - name: Synchronize clock
+        run: |
+          sudo apt-get install -y ntp
+
+      - name: Setup environment
+        run: mkdir -p ssh
+
+      - name: Decode SSH key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+        shell: bash
+
+      - name: Set permissions on SSH key
+        run: chmod 600 ssh/id_rsa
+
+      - name: Decode FLTK SSH key
+        run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          
-    - name: Add SourceForge to known_hosts
-      shell: bash
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
-      
-    - name: Set executable permissions
-      run: |
-        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
-        
-    - name: List disk space
-      run: |
-        df -k
 
-    - name: Build vmrv2
-      env:
-        BUILD_PYTHON: ON
-        MRV2_PYFLTK: ON
-        MRV2_PYBIND11: ON
-        MRV2_NETWORK: ON
-        MRV2_PDF: ON
-        TLRENDER_AV1: ON
-        TLRENDER_EXR: ON
-        TLRENDER_FFMPEG: ON
-        TLRENDER_FFMPEG_MINIMAL: ON
-        TLRENDER_GL: OFF
-        TLRENDER_HAP: ON
-        TLRENDER_JPEG: ON
-        TLRENDER_NDI: OFF
-        TLRENDER_NET: ON
-        TLRENDER_OPENJPH: ON
-        TLRENDER_RAW: ON
-        TLRENDER_SGI: ON
-        TLRENDER_STB: ON
-        TLRENDER_SVTAV1: ON
-        TLRENDER_TIFF: ON
-        TLRENDER_USD: OFF
-        TLRENDER_VPX: ON
-        TLRENDER_YASM: ON
-        
-      run: |
-        ./etc/runme_nolog.sh -t package -vk
-      
-    - name: Upload binaries
-      run: |
-        ./bin/release/upload_sourceforge.sh -vk
+      - name: Add SourceForge to known_hosts
+        shell: bash
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+
+      - name: Set executable permissions
+        run: |
+          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+
+      - name: List disk space
+        run: |
+          df -k
+
+      - name: Build vmrv2
+        env:
+          BUILD_PYTHON: ON
+          MRV2_PYFLTK: ON
+          MRV2_PYBIND11: ON
+          MRV2_NETWORK: ON
+          MRV2_PDF: ON
+          TLRENDER_AV1: ON
+          TLRENDER_EXR: ON
+          TLRENDER_FFMPEG: ON
+          TLRENDER_FFMPEG_MINIMAL: ON
+          TLRENDER_GL: OFF
+          TLRENDER_HAP: ON
+          TLRENDER_JPEG: ON
+          TLRENDER_NDI: OFF
+          TLRENDER_NET: ON
+          TLRENDER_OPENJPH: ON
+          TLRENDER_RAW: ON
+          TLRENDER_SGI: ON
+          TLRENDER_STB: ON
+          TLRENDER_SVTAV1: ON
+          TLRENDER_TIFF: ON
+          TLRENDER_USD: OFF
+          TLRENDER_VPX: ON
+          TLRENDER_YASM: ON
+
+        run: |
+          ./etc/runme_nolog.sh -t package -vk
+
+      - name: Upload binaries
+        run: |
+          ./bin/release/upload_sourceforge.sh -vk

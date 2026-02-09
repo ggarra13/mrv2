@@ -19,11 +19,19 @@ jobs:
     #   contents: write   # Needed to update releases
 
     steps:
-    
+
     - uses: actions/checkout@v4
       with:
         submodules: recursive
-        
+        fetch-depth: 1
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ runner.os }}-ccache-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-ccache-
+
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
@@ -33,16 +41,16 @@ jobs:
 
     - name: Install gettext
       run: brew install gettext
-      
+
     - name: Install automake and other network utils
       run: brew install automake curl rsync wget
 
     - name: Install GNU sed
       run: brew install gnu-sed
-      
+
     - name: Install Python dependencies
       run: brew install libb2 libffi readline sqlite3 xz zlib
-        
+
     - name: Install pyFLTK dependencies
       run: brew install swig
 
@@ -52,14 +60,14 @@ jobs:
 
     - name: Checkout git tag type
       run: git ls-remote --tags https://github.com/ggarra13/fltk.git | grep v1.2.2
-        
+
     - name: Setup environment
       run: mkdir -p ssh
 
     - name: Decode SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
       shell: bash
-  
+
     - name: Set permissions on SSH key
       run: chmod 600 ssh/id_rsa
 
@@ -69,7 +77,7 @@ jobs:
           echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-      
+
     - name: Add SourceForge to known_hosts
       shell: bash
       run: |
@@ -110,10 +118,10 @@ jobs:
         TLRENDER_VK: OFF
         TLRENDER_VPX: ON
         TLRENDER_YASM: ON
-        
+
       run: |
         ./etc/runme_nolog.sh -t package clean
-      
+
     - name: Upload binaries
       run: |
         ./bin/release/upload_sourceforge.sh

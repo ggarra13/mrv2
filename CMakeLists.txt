@@ -28,6 +28,23 @@ include(cmake/version.cmake )
 include(cmake/options.cmake )
 include(cmake/functions.cmake )
 
+# Use ccache if available to speed up rebuilds
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    message(STATUS "Found ccache: ${CCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+
+    if(MSVC)
+	# Replace /Zi or /ZI with /Z7 for ccache compatibility
+	string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_DEBUG
+	    "${CMAKE_CXX_FLAGS_DEBUG}")
+	string(REPLACE "/ZI" "/Z7" CMAKE_CXX_FLAGS_DEBUG
+	    "${CMAKE_CXX_FLAGS_DEBUG}")
+	string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_DEBUG
+	    "${CMAKE_C_FLAGS_DEBUG}")
+    endif()
+endif()
 
 # Determine a repository root based on the current source directory.
 get_filename_component(REPO_ROOT "${PROJECT_SOURCE_DIR}/tlRender" ABSOLUTE)

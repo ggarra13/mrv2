@@ -8,25 +8,27 @@ on:
       - '**'
 
 jobs:
-  ###################################
-  #                                 #
-  # FULL BUILDS                     #
-  #                                 #
-  ###################################
   macos-14-vulkan-full-build:
     runs-on: macos-14
     permissions:
-      contents: write   # Needed to update releases
+      contents: write
 
     env:
       CMAKE_OSX_DEPLOYMENT_TARGET: 14.0
-      
+
     steps:
-    
     - uses: actions/checkout@v4
       with:
         submodules: recursive
-        
+        fetch-depth: 1
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ runner.os }}-ccache-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-ccache-
+
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
@@ -40,85 +42,82 @@ jobs:
 
     - name: Verify
       run: rustc -Vv
-      
+
     - name: Install cargo-c
       run: cargo install cargo-c
-      
+
     - name: Install ninja-build
       run: brew install ninja
-      
+
     - name: Install automake
       run: brew install automake curl rsync
 
     - name: Install GNU sed
       run: brew install gnu-sed
-      
+
     - name: Install Python dependencies
       run: brew install libb2 libffi readline sqlite3 xz zlib
-        
+
     - name: Install pyFLTK dependencies
       run: brew install swig
 
-    # Install Vulkan SDK manually
+    - name: Cache Vulkan SDK
+      id: cache-vulkan-sdk
+      uses: actions/cache@v4
+      with:
+        path: |
+          /opt/homebrew/lib/libvulkan*
+          /opt/homebrew/lib/libMoltenVK*
+          /opt/homebrew/lib/libshaderc*
+        key: ${{ runner.os }}-vulkan-sdk-homebrew-m1
+
     - name: Install Vulkan
+      if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
       env:
         BUILD_VULKAN: OFF
       shell: bash
       run: |
-        
         if [[ "$BUILD_VULKAN" == "ON" ]]; then
-            ./etc/macos/install_vulkan.sh
-            
-            echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-            echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-            echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
+          . ./etc/macos/install_vulkan.sh
+          echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+          echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+          echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
         else
-            brew install vulkan-loader
-            brew install molten-vk
-            brew install vulkan-tools
-            brew install shaderc
-            brew install glslang
-            brew install vulkan-profiles
-            brew install spirv-tools
-            brew link --overwrite molten-vk
+          brew install vulkan-loader molten-vk vulkan-tools shaderc glslang vulkan-profiles spirv-tools
+          brew link --overwrite molten-vk
         fi
-        
-    # # Verify Vulkan installation
-    # - name: Verify Vulkan
-    #   run: |
-    #     export VK_LAYER_DEBUG=all
-    #     vulkaninfo --summary
-        
-    - name: Setup environment
-      run: mkdir -p ssh
+
+    - name: Verify Vulkan installation
+      run: |
+        if command -v vulkaninfo &> /dev/null; then
+          echo "✓ Vulkan tools available"
+          vulkaninfo --summary || true
+        fi
+
+    - name: Setup SSH Directory
+      run: mkdir -p ~/.ssh
 
     - name: Decode SSH key
-      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
       shell: bash
-  
-    - name: Set permissions on SSH key
-      run: chmod 600 ssh/id_rsa
 
     - name: Decode FLTK SSH key
       run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-      
+        echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
     - name: Add SourceForge to known_hosts
       shell: bash
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
 
     - name: Set executable permissions
-      run: |
-        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
-        
+      run: chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+
     - name: List disk space
-      run: |
-        df -k
+      run: df -k
 
     - name: Build vmrv2
       env:
@@ -145,10 +144,7 @@ jobs:
         TLRENDER_USD: OFF
         TLRENDER_VPX: ON
         TLRENDER_YASM: ON
-        
-      run: |
-        ./etc/runme_nolog.sh -t package -vk clean
+      run: ./etc/runme_nolog.sh -t package -vk clean
 
     - name: Upload binaries
-      run: |
-        ./bin/release/upload_sourceforge.sh -vk
+      run: ./bin/release/upload_sourceforge.sh -vk
