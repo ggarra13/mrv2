@@ -26,9 +26,9 @@ jobs:
     - name: Setup ccache
       uses: hendrikmuhs/ccache-action@v1.2
       with:
-        key: ${{ runner.os }}-ccache-${{ github.sha }}
+        key: ${{ runner.os }}-amd64-OpenGL-ccache-${{ github.sha }}
         restore-keys: |
-          ${{ runner.os }}-ccache-
+          ${{ runner.os }}-amd64-OpenGL-ccache-
 
     - name: Get machine name
       run: |

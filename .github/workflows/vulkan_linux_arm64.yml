@@ -22,12 +22,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 1
+
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: ${{ runner.os }}-ccache-${{ github.sha }}
+          key: ${{ runner.os }}-arm64-Vulkan-ccache-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-ccache-
+            ${{ runner.os }}-arm64-Vulkan-ccache-
 
       - name: Install Rust (ARM64)
         uses: actions-rs/toolchain@v1
