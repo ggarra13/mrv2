@@ -894,7 +894,8 @@ namespace tl
             for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
             {
                 p.garbage[i].pipelines.reserve(20);
-                p.garbage[i].bindingSets.reserve(30);
+                p.garbage[i].pipelineLayouts.reserve(20);
+                p.garbage[i].bindingSets.reserve(20);
             }
         }
 
@@ -922,7 +923,7 @@ namespace tl
             {
                 vkDestroyPipeline(device, pipeline.second, nullptr);
             }
-
+            
             for (auto& [_, pipelineLayout] : p.pipelineLayouts)
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
@@ -1821,7 +1822,7 @@ namespace tl
 
             // --- Process 3D Textures ---
             const unsigned num3DTextures = shaderDesc->getNum3DTextures();
-            int index = 0;
+            int index = 5;
             for (unsigned i = 0; i < num3DTextures; ++i)
             {
                 const char* textureName = nullptr;
@@ -1847,13 +1848,25 @@ namespace tl
                     options.filters.magnify = timeline::ImageFilter::Linear;
                 }
 
+                // Set filters based on interpolation
+                if (interpolation == OCIO::INTERP_NEAREST) {
+                    options.filters.minify = timeline::ImageFilter::Nearest;
+                    options.filters.magnify = timeline::ImageFilter::Nearest;
+                }
+                else
+                {
+                    options.filters.minify = timeline::ImageFilter::Linear;
+                    options.filters.magnify = timeline::ImageFilter::Linear;
+                }
+
                 // 3D Texture Creation
                 VkFormat imageFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
                 // OCIO 3D LUTs are RGB, we pad to RGBA
                 const uint32_t width = edgelen;
                 const uint32_t height = edgelen;
                 const uint32_t depth = edgelen;
-        
+                const uint16_t channels = 4;
+
                 // Pad data to RGBA
                 std::vector<float> newvalues(width * height * depth * 4);
                 const float* v = values;
@@ -1872,7 +1885,7 @@ namespace tl
                 texture->copy(reinterpret_cast<const uint8_t*>(newvalues.data()), newvalues.size() * sizeof(float));
                 texture->transitionToShaderRead(p.cmd);
                 index = ocioIndexFromSamplerName(samplerName, index);
-                sortedTextures[index] = texture;
+                sortedTextures[index].push_back(texture);
            }
 
             // --- Process 1D Textures ---
@@ -1903,8 +1916,15 @@ namespace tl
                     options.filters.magnify = timeline::ImageFilter::Linear;
                 }
 
+                if (interpolation == OCIO::INTERP_NEAREST) {
+                    options.filters.minify = timeline::ImageFilter::Nearest;
+                    options.filters.magnify = timeline::ImageFilter::Nearest;
+                } else {
+                    options.filters.minify = timeline::ImageFilter::Linear;
+                    options.filters.magnify = timeline::ImageFilter::Linear;
+                }
+
                 VkFormat imageFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
-                VkImageType imageType = VK_IMAGE_TYPE_2D; // OCIO 1D LUTs are often 2D packed
                 int channels = 4;
         
                 std::vector<float> paddedValues;
@@ -1934,6 +1954,22 @@ namespace tl
                     dataPtr = paddedValues.data();
                     dataSize = paddedValues.size() * sizeof(float);
                 }
+                else
+                {
+                    // TEXTURE_RGB_CHANNEL (0) -> Convert RGB to RGBA
+                    // Note: Even if OCIO implies RGB, we upload as RGBA for Vulkan compatibility
+                    paddedValues.resize(width * height * 4);
+                    const float* v = values;
+                    float* n = paddedValues.data();
+                    for (size_t k = 0; k < width * height; ++k) {
+                        *n++ = *v++; // R
+                        *n++ = *v++; // G
+                        *n++ = *v++; // B
+                        *n++ = 1.0f; // A
+                    }
+                    dataPtr = paddedValues.data();
+                    dataSize = paddedValues.size() * sizeof(float);
+                }
 
                 // NOTE: We use the 'height' returned by OCIO. Do NOT force it to 1.
                 auto texture = vlk::Texture::create(
@@ -1943,12 +1979,14 @@ namespace tl
                 texture->copy(reinterpret_cast<const uint8_t*>(dataPtr), dataSize);
                 texture->transitionToShaderRead(p.cmd);
                 index = ocioIndexFromSamplerName(samplerName, index);
-                sortedTextures[index] = texture;
+                
+                sortedTextures[index].push_back(texture);
             }
 
-            for (const auto& [_, texture] : sortedTextures)
+            for (const auto& [_, textureList] : sortedTextures)
             {
-                textures.push_back(texture);
+                for (const auto& texture: textureList)
+                    textures.push_back(texture);
             }
         }
 
@@ -2214,7 +2252,7 @@ namespace tl
                         OCIO::GPU_LANGUAGE_GLSL_4_0);
 #endif
                     p.ocioData->icsDesc->setFunctionName("ocioICSFunc");
-                    p.ocioData->icsDesc->setResourcePrefix("ocioICS"); // ocio?
+                    p.ocioData->icsDesc->setResourcePrefix("ocioICS");
                     p.ocioData->gpuProcessor->extractGpuShaderInfo(
                         p.ocioData->icsDesc);
                     try
@@ -2940,12 +2978,12 @@ namespace tl
 #endif
                 
             bool recreateShader = false;
-            if (!p.shaders["display"] || p.oldSourceCode != source)
+            if (!p.shaders["display"] || p.oldSource != source)
             {
                 recreateShader = true;
             }
                 
-            p.oldSourceCode = source;
+            p.oldSource = source;
 
 #if defined(TLRENDER_LIBPLACEBO)
             try
@@ -2972,7 +3010,6 @@ namespace tl
                 {
                     auto pair = p.pipelines["display"];
                     p.garbage[p.frameIndex].pipelines.push_back(pair.second);
-                
 
                     vlk::PipelineCreationState pipelineState;
                     pair = std::make_pair(pipelineState, VK_NULL_HANDLE);
@@ -3016,7 +3053,6 @@ namespace tl
                 UBOLevels uboLevels;
                 p.shaders["display"]->createUniform("uboLevels", uboLevels);
 
-                
                 // \@unused in mrv2 (used to keep reference of gain UI)
                 // timeline::EXRDisplay exrDisplay;
                 // p.shaders["display"]->createUniform(
@@ -3080,6 +3116,9 @@ namespace tl
 #endif
                 p.shaders["display"]->createPush("libplacebo", pushSize, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["display"]);
+#if DEBUG_DISPLAY_DESCRIPTOR_SETS
+                p.shaders["display"]->debugDescriptorSets();
+#endif
             } // recreateShader
                 
         }

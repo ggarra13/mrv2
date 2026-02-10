@@ -9,31 +9,6 @@ namespace tl
     namespace vlk
     {
 
-        template <typename T>
-        void Shader::createUniform(
-            const std::string& name, const T& value,
-            const ShaderFlags stageFlags)
-        {
-            auto it = ubos.find(name);
-            if (it != ubos.end())
-            {
-                throw std::runtime_error(
-                    name + " for shader " + shaderName + " already created.");
-            }
-
-            UBOBinding ubo;
-            ubo.size = sizeof(value);
-
-            ubo.layoutBinding.binding = current_binding_index++;
-            ubo.layoutBinding.descriptorCount = 1;
-            ubo.layoutBinding.descriptorType =
-                VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            ubo.layoutBinding.stageFlags = getVulkanShaderFlags(stageFlags);
-            ubo.layoutBinding.pImmutableSamplers = nullptr;
-
-            ubos[name] = ubo;
-        }
-
         void Shader::createUniformData(
             const std::string& name, const size_t size,
             const ShaderFlags stageFlags)
@@ -58,6 +33,20 @@ namespace tl
             ubos[name] = ubo;
         }
 
+        template <typename T>
+        void Shader::createUniform(
+            const std::string& name, const T& value,
+            const ShaderFlags stageFlags)
+        {
+            auto it = ubos.find(name);
+            if (it != ubos.end())
+            {
+                throw std::runtime_error(
+                    name + " for shader " + shaderName + " already created.");
+            }
+
+            createUniformData(name, sizeof(value), stageFlags);
+        }
         
         template <typename T>
         void Shader::setUniform(

@@ -740,8 +740,7 @@ namespace mrv
                             "transform.mvp", pm, vlk::kShaderVertex);
                         p.shader->addFBO("textureSampler");
                         p.shader->addPush("opacity", 1.0, vlk::kShaderFragment);
-                        auto bindingSet = p.shader->createBindingSet();
-                        p.shader->useBindingSet(bindingSet);
+                        p.shader->createBindingSet();
                     }
                 }
                 catch (const std::exception& e)

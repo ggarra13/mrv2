@@ -163,6 +163,8 @@ namespace tl
             timeline::HDROptions hdrOptions;
             unsigned bindingIndex = 7;
             timeline::RenderOptions renderOptions;
+            std::string oldSource;
+
 
             //! Variable to cache source code to avoid recreation of shader
             //! when possible

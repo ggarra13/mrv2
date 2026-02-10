@@ -1136,7 +1136,7 @@ namespace tl
                                                       VK_COLOR_COMPONENT_A_BIT;
                
                 cb.attachments.push_back(colorBlendAttachment);
-                            
+                
                 createPipeline(pipelineName,
                                pipelineLayoutName,
                                fbo->getLoadRenderPass(),
@@ -1271,14 +1271,14 @@ namespace tl
                 {
                     for (const auto& texture : p.ocioData->textures)
                     {
-                        p.shaders["display"]->setTexture(texture->getName(), texture);
+                        p.shaders["display"]->setTextureAllFrames(texture->getName(), texture);
                     }
                 }
                 if (p.lutData)
                 {
                     for (const auto& texture : p.lutData->textures)
                     {
-                        p.shaders["display"]->setTexture(texture->getName(), texture);
+                        p.shaders["display"]->setTextureAllFrames(texture->getName(), texture);
                     }
                 }
 #endif // TLRENDER_OCIO
@@ -1287,7 +1287,7 @@ namespace tl
                 {
                     for (const auto& texture : p.placeboData->textures)
                     {
-                        p.shaders["display"]->setTexture(texture->getName(), texture);
+                        p.shaders["display"]->setTextureAllFrames(texture->getName(), texture);
                     }
                 }
 #endif // TLRENDER_LIBPLACEBO
@@ -1296,7 +1296,8 @@ namespace tl
 
                 if (p.vbos["video"])
                 {
-                    p.vbos["video"]->copy(convert(geom::box(box, false), p.vbos["video"]->getType()));
+                    p.vbos["video"]->copy(convert(geom::box(box, false),
+                                                  p.vbos["video"]->getType()));
                 }
 
                 // Enable clipping (scissor)

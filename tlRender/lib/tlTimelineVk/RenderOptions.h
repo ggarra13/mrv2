@@ -10,6 +10,10 @@
 //
 #define USE_CONSTANTS 0
 
+// When 1, these will output when a pipeline and layout is created.
+#define DEBUG_PIPELINE_USE 0
+#define DEBUG_PIPELINE_LAYOUT_USE 0
+
 //
 // Use 1 for faster startups.
 //
@@ -36,7 +40,14 @@
 //
 #define DEBUG_DISPLAY_SHADER 0
 
-// Use OCIO's Vulkan backend
+//
+// Use 1 to output display descriptor sets for "display" shader.
+//
+#define DEBUG_DISPLAY_DESCRIPTOR_SETS 0
+
+//
+// Use 1 to use Vulkan shader code.
+//
 #define USE_OCIO_VULKAN 1
 
 

@@ -8,6 +8,7 @@
 #include <tlVk/Texture.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/ShaderBindingSet.h>
+#include <tlVk/DescriptorSetLayout.h>
 #include <tlVk/Vk.h>
 
 #include <tlCore/Color.h>
@@ -179,6 +180,12 @@ namespace tl
                 const std::string& name,
                 const std::shared_ptr<Texture>& texture,
                 const ShaderFlags stageFlags = kShaderFragment);
+            
+            //! Attach and upload a texture to shader parameters.
+            void setTextureAllFrames(
+                const std::string& name,
+                const std::shared_ptr<Texture>& texture,
+                const ShaderFlags stageFlags = kShaderFragment);
 
             //! Add and FBO to list of shader parameters.
             void addFBO(
@@ -248,7 +255,7 @@ namespace tl
             void dispatch(VkCommandBuffer cmd,
                           uint32_t groupCountX, uint32_t groupCountY,
                           uint32_t groupCountZ = 1);
-            
+
             //! Print out a list of descriptor set bindings for vertex shader.
             void debugVertexDescriptorSets();
 
@@ -272,7 +279,7 @@ namespace tl
             uint32_t current_binding_index = 0;
 
             //! Descriptor set layout shared across sets and pools.
-            VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
+            std::shared_ptr<DescriptorSetLayout> activeLayout;
 
             //! Internal variable used to point all resources to the right
             //! frame in flight.

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <tlVk/Buffer.h>
+#include <tlVk/DescriptorSetLayout.h>
 #include <tlVk/Texture.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Vk.h>
@@ -23,6 +24,8 @@ namespace tl
         struct ShaderBindingSet
         {
             std::string shaderName;
+            
+            std::shared_ptr<vlk::DescriptorSetLayout> descriptorSetLayout;
             
             // MAX_FRAMES_PER_FLIGHT objects
             std::vector<VkDescriptorSet> descriptorSets;
@@ -257,6 +260,10 @@ namespace tl
                 if (!texture)
                     throw std::runtime_error("Null texture for: " + name);
 
+                // std::cerr << "\tupdateTexture " << name
+                //           << " at " << it->second.binding
+                //           << std::endl;
+                
                 VkDescriptorImageInfo imageInfo{};
                 imageInfo.imageView = texture->getImageView();
                 imageInfo.sampler = texture->getSampler();

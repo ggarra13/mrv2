@@ -208,13 +208,6 @@ namespace tl
             if (p.pipelineLayout != VK_NULL_HANDLE)
                 vkDestroyPipelineLayout(device, p.pipelineLayout, nullptr);
             
-            if (descriptorSetLayout != VK_NULL_HANDLE)
-            {
-                vkDestroyDescriptorSetLayout(
-                    device, descriptorSetLayout, nullptr);
-                descriptorSetLayout = VK_NULL_HANDLE;
-            }
-
             activeBindingSet.reset();
         }
 
@@ -304,7 +297,11 @@ namespace tl
         
         const VkDescriptorSetLayout Shader::getDescriptorSetLayout() const
         {
-            return descriptorSetLayout;
+            if (activeLayout->handle == VK_NULL_HANDLE)
+            {
+                throw std::runtime_error("No active getDescriptorSetLayout.  Cann createBindingSet first");
+            }
+            return activeLayout->handle;
         }
 
         const VkDescriptorPool Shader::getDescriptorPool() const
@@ -357,6 +354,20 @@ namespace tl
                                             texture);
         }
 
+        void Shader::setTextureAllFrames(
+            const std::string& name,
+            const std::shared_ptr<Texture>& texture,
+            const ShaderFlags stageFlags)
+        {
+            uint64_t savedFrame = frameIndex;
+            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+            {
+                frameIndex = i;
+                setTexture(name, texture, stageFlags);
+            }
+            frameIndex = savedFrame;
+        }
+        
         void
         Shader::addFBO(const std::string& name, const ShaderFlags stageFlags)
         {
@@ -584,19 +595,20 @@ namespace tl
             pushSize = size;
             pushStageFlags = getVulkanShaderFlags(stageFlags);
         }
-                
+
+        /** 
+         * Used by compute only.
+         * 
+         */
         void Shader::createPipelineLayout()
         {
             TLRENDER_P();
             VkDevice device = ctx.device;
 
-            if (descriptorSetLayout == VK_NULL_HANDLE)
-                throw std::runtime_error("Descriptor set layout must be created before pipeline layout.");
-
             VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
             pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
             pipelineLayoutInfo.setLayoutCount = 1;
-            pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
+            pipelineLayoutInfo.pSetLayouts = &activeLayout->handle;
 
             // If you use push constants, define them here
             if (pushSize > 0)
@@ -688,7 +700,7 @@ namespace tl
         {
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
-
+    
             auto bindingSet = std::make_shared<ShaderBindingSet>(device,
                                                                  ctx.allocator);
             bindingSet->shaderName = shaderName;
@@ -809,17 +821,11 @@ namespace tl
             // Create descriptor set layout. (Layout can be shared across
             // frames)
             VkDescriptorSetLayoutCreateInfo layout_info = {};
-            layout_info.sType =
-                VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+            layout_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
             layout_info.bindingCount = static_cast<uint32_t>(bindings.size());
             layout_info.pBindings = bindings.data();
 
-            if (descriptorSetLayout != VK_NULL_HANDLE)
-            {
-                vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
-                descriptorSetLayout = VK_NULL_HANDLE;
-            }
-            
+            VkDescriptorSetLayout descriptorSetLayout;
             if (vkCreateDescriptorSetLayout(
                     device, &layout_info, nullptr, &descriptorSetLayout) !=
                 VK_SUCCESS)
@@ -828,10 +834,15 @@ namespace tl
                     "failed to create descriptor set layout!");
             }
 
+            activeLayout = std::make_shared<vlk::DescriptorSetLayout>(device,
+                                                                      descriptorSetLayout);
+            
             // Allocate descriptor sets for each frame, from their respective
             // pools
             std::vector<VkDescriptorSetLayout> layouts(
                 MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
+
+            
             VkDescriptorSetAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
             allocInfo.descriptorSetCount = 1; // Allocating one set at a time
@@ -1015,6 +1026,9 @@ namespace tl
 
                 bindingSet->ssbos[name] = std::move(ssbo);
             }
+
+            // Copy the descriptorSetLayout
+            bindingSet->descriptorSetLayout = activeLayout;
             
             // Make this set active
             activeBindingSet = bindingSet;

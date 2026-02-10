@@ -7,8 +7,6 @@
 #include <iostream>
 #include <string>
 
-#define DEBUG_PIPELINE_USE 0
-#define DEBUG_PIPELINE_LAYOUT_USE 0
 
 #if DEBUG_PIPELINE_USE
 #define DEBUG_PIPELINE(x) std::cerr << x << std::endl;
@@ -29,7 +27,7 @@ namespace tl
         void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
         {
             TLRENDER_P();
-
+            
             auto bindingSet = shader->createBindingSet();
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
         }
@@ -41,10 +39,10 @@ namespace tl
         {
             TLRENDER_P();
 
-            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-            if (pipelineLayout)
+            VkPipelineLayout oldLayout = p.pipelineLayouts[pipelineLayoutName];
+            if (oldLayout)
             {
-                p.garbage[p.frameIndex].pipelineLayouts.push_back(pipelineLayout);
+                p.garbage[p.frameIndex].pipelineLayouts.push_back(oldLayout);
             }
             
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
@@ -67,6 +65,7 @@ namespace tl
             
             VkResult result = vkCreatePipelineLayout(ctx.device, &pPipelineLayoutCreateInfo, NULL, &pipelineLayout);
             VK_CHECK(result);
+            
             p.pipelineLayouts[pipelineLayoutName] = pipelineLayout;
             return pipelineLayout;
         }
@@ -88,10 +87,6 @@ namespace tl
                 DEBUG_PIPELINE_LAYOUT("CREATING   pipelineLayout " << pipelineLayoutName);
                 pipelineLayout = _createPipelineLayout(pipelineLayoutName,
                                                        shader);
-            }
-            else
-            {
-                DEBUG_PIPELINE_LAYOUT("REUSING    pipelineLayout " << pipelineLayoutName);
             }
 
             VkDevice device = ctx.device;
@@ -185,7 +180,6 @@ namespace tl
                 }
                 else
                 {
-                    DEBUG_PIPELINE("REUSING    pipeline " << pipelineName);
                     pipeline = pair.second;
                 }
             }
