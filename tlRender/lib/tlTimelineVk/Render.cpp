@@ -2422,6 +2422,16 @@ namespace tl
            const bool tonemapChanged = (value.tonemap != p.hdrOptions.tonemap);
            const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
            const bool peakDetectionChanged = (value.peak_detection != p.hdrOptions.peak_detection);
+           const bool algorithmChanged = (value.algorithm != p.hdrOptions.algorithm);
+
+           if (tonemapChanged || algorithmChanged)
+           {
+               if (p.placeboData && p.placeboData->state)
+               {
+                   pl_shader_obj_destroy(&p.placeboData->state);
+                   p.placeboData->state = NULL;
+               }
+           }
 
            // 2. Optimization: Initialize update flag based on Option changes
            bool updateDisplayShader = (tonemapChanged || hdrDataChanged ||
@@ -2822,10 +2832,6 @@ namespace tl
                 color_map_args.dst = dst_colorspace;
                 color_map_args.prelinearized = false;
                     
-                if (p.placeboData->state) {
-                    pl_shader_obj_destroy(&p.placeboData->state);
-                    p.placeboData->state = NULL;
-                }
                 color_map_args.state = &(p.placeboData->state);
                     
                 pl_shader_color_map_ex(p.placeboData->shader, &cmap,

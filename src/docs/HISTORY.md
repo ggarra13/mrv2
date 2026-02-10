@@ -57,6 +57,9 @@ ChangeLog
 - Added HDR Peak Detection controls to Prefences->HDR Peak Detection.
 - Fixed OpenColorIO's 1D Luts on Vulkan backend.
 - Fixed ordering of OpenColorIO's textures on the Vulkan backend.
+- Improved performance of HDR playback by keeping the state.
+- Made libplacebo work better with OCIO on HDR monitors.
+
 
 v1.5.4
 ======
