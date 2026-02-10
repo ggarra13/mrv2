@@ -2332,9 +2332,7 @@ namespace tl
             }
 #endif // TLRENDER_OCIO
 
-            // OCIO is moving to support dynamic data, so we no longer clear
-            // the display shader here.
-            //p.shaders["display"].reset();
+            p.shaders["display"].reset();
             _displayShader();
         }
 
@@ -2724,6 +2722,9 @@ namespace tl
                     hdr.prim.blue.y = data.primaries[image::HDRPrimaries::Blue][1];
                     hdr.prim.white.x = data.primaries[image::HDRPrimaries::White][0];
                     hdr.prim.white.y = data.primaries[image::HDRPrimaries::White][1];
+                    hdr.max_cll = data.maxCLL;
+                    hdr.max_fall = data.maxFALL;
+
                     hdr.scene_max[0] = data.sceneMax[0];
                     hdr.scene_max[1] = data.sceneMax[1];
                     hdr.scene_max[2] = data.sceneMax[2];
@@ -2929,6 +2930,24 @@ namespace tl
                 s << res->glsl << std::endl;
                 toneMapDef = s.str();
                 
+#if defined(TLRENDER_LIBPLACEBO)
+            try
+            {
+                if (p.placeboData)
+                {
+                    p.placeboData->textures.clear();
+                    _addTextures(p.placeboData->textures,
+                                 p.placeboData->res);
+                }
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << e.what() << std::endl;
+                p.placeboData.reset();
+                throw e;
+            }
+#endif
+            
                 toneMap = "outColor = ";
                 toneMap += res->name;
                 toneMap += "(outColor);\n";
@@ -2983,23 +3002,6 @@ namespace tl
                 
             p.oldSource = source;
 
-#if defined(TLRENDER_LIBPLACEBO)
-            try
-            {
-                if (p.placeboData)
-                {
-                    p.placeboData->textures.clear();
-                    _addTextures(p.placeboData->textures,
-                                 p.placeboData->res);
-                }
-            }
-            catch (const std::exception& e)
-            {
-                std::cerr << e.what() << std::endl;
-                p.placeboData.reset();
-                throw e;
-            }
-#endif
 
             if (recreateShader)
             {
