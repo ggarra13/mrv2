@@ -130,7 +130,6 @@ namespace
         }
     }
 
-#if 1
     std::string
     replaceUniformSampler(const std::string& input, unsigned& bindingIndex)
      {
@@ -150,90 +149,6 @@ namespace
          return output;
      }
 
-#else
-    
-    
-    std::string replaceLut1DLookUp(const std::string& input, const std::string& lutMatch)
-    {
-        std::regex re(lutMatch);
-            
-        // $& means "insert the whole match here"
-        // We then append .r to it
-        return std::regex_replace(input, re, "$&.r");
-    }
-    
-    std::string replaceLut1DLookUps(const std::string& input,
-                                    const std::vector<std::string>& luts1DMatches)
-    {
-        std::string output = input;
-        for (const auto& lutMatch : luts1DMatches)
-        {
-            output = replaceLut1DLookUp(output, lutMatch);
-        }
-        return output;
-    }
-    
-    std::string replaceUniformSampler(const std::string& input, unsigned& bindingIndex)
-    {
-        // Regex matches: uniform sampler <name>(1d|2d|3d)Sampler
-        // Group 1: ([a-zA-Z0-9_]+) -> The variable name prefix
-        // Group 2: (1d|2d|3d)       -> The dimension suffix
-        static std::regex samplerRegex(R"(\buniform\s+sampler(?:1D|2D|3D)?\s+([a-zA-Z0-9_]+)(1d|2d|3d)(_[0-9]+)(Sampler\s*;)?)");
-
-        std::string output;
-        output.reserve(input.size());
-
-        auto it = std::sregex_iterator(input.begin(), input.end(), samplerRegex);
-        auto end = std::sregex_iterator();
-
-        std::vector<std::string> luts1D;
-        
-        size_t lastPos = 0;
-        for (; it != end; ++it)
-        {
-            const std::smatch& match = *it;
-            std::string namePrefix = match[1].str();
-            std::string dim = match[2].str(); // "1d", "2d", or "3d"
-            std::string nameIndex = match[3].str();
-            std::string nameSuffix = match[4].str();
-
-            // Append the text before the match
-            output.append(input.substr(lastPos, match.position() - lastPos));
-
-            // 1. Add Vulkan Layout Binding
-            output.append("layout(binding=");
-            output.append(std::to_string(bindingIndex++));
-            output.append(") ");
-
-            // 2. Add 'uniform sampler'
-            output.append("uniform ");
-
-            const std::string samplerName = namePrefix + dim + nameIndex + nameSuffix;
-            
-            // 3. Convert suffix to GLSL type (1d -> sampler1D, etc.)
-            if (dim == "1d")
-            {
-                // This results in: (?:prefix3d_computePos\(outColor.[a-z]+\))
-                const std::string lutName = "(?:" + namePrefix + dim + nameIndex +
-                                            R"(_computePos\(outColor.[a-z]+\)))";
-                luts1D.push_back(lutName);
-                output.append("sampler1D ");
-            }
-            else if (dim == "2d") output.append("sampler2D ");
-            else if (dim == "3d") output.append("sampler3D ");
-
-            // 4. Reconstruct the variable name
-            output.append(samplerName);
-            
-            lastPos = match.position() + match.length();
-        }
-
-        output.append(input.substr(lastPos));
-
-        output = replaceLut1DLookUps(output, luts1D);
-        return output;
-    }
-#endif
 
 #if defined(TLRENDER_LIBPLACEBO)
     VkFormat to_vk_format(pl_fmt fmt)
@@ -1870,6 +1785,25 @@ namespace tl
                 }
             }
         }
+
+        // Parse index from name "ocio_lut3d_XSampler" to sort correctly
+        int ocioIndexFromSamplerName(const std::string& samplerName,
+                                     const int previousIndex)
+        {
+            int index = previousIndex + 1; // Just for safety
+            std::string sName = samplerName;
+            size_t lastUnderscore = sName.find_last_of('_');
+            if (lastUnderscore != std::string::npos) {
+                // Extract number between last underscore and 'Sampler'
+                // Format is usually ocio_lut3d_<INDEX>Sampler
+                std::string numPart = sName.substr(lastUnderscore + 1);
+                // Remove "Sampler" suffix if present to get just the number
+                size_t samplerPos = numPart.find("Sampler");
+                if (samplerPos != std::string::npos) numPart = numPart.substr(0, samplerPos);
+                try { index = std::stoi(numPart); } catch(...) {}
+            }
+            return index;
+        }
         
         void Render::_addTextures(
             std::vector<std::shared_ptr<vlk::Texture> >& textures,
@@ -1877,7 +1811,8 @@ namespace tl
         {
             TLRENDER_P();
 
-            // Use a map to automatically sort textures by their OCIO index (0, 1, 2...)
+            // Use a map to automatically sort textures by their OCIO index
+            // (0, 1, 2...)
             // This ensures they align with Binding 6, 7, 8, etc.
             std::map<int, std::shared_ptr<vlk::Texture>> sortedTextures;
 
@@ -1886,6 +1821,7 @@ namespace tl
 
             // --- Process 3D Textures ---
             const unsigned num3DTextures = shaderDesc->getNum3DTextures();
+            int index = 0;
             for (unsigned i = 0; i < num3DTextures; ++i)
             {
                 const char* textureName = nullptr;
@@ -1935,22 +1871,9 @@ namespace tl
             
                 texture->copy(reinterpret_cast<const uint8_t*>(newvalues.data()), newvalues.size() * sizeof(float));
                 texture->transitionToShaderRead(p.cmd);
-
-                // Parse index from name "ocio_lut3d_XSampler" to sort correctly
-                int index = 0;
-                std::string sName = samplerName;
-                size_t lastUnderscore = sName.find_last_of('_');
-                if (lastUnderscore != std::string::npos) {
-                    // Extract number between last underscore and 'Sampler'
-                    // Format is usually ocio_lut3d_<INDEX>Sampler
-                    std::string numPart = sName.substr(lastUnderscore + 1);
-                    // Remove "Sampler" suffix if present to get just the number
-                    size_t samplerPos = numPart.find("Sampler");
-                    if (samplerPos != std::string::npos) numPart = numPart.substr(0, samplerPos);
-                    try { index = std::stoi(numPart); } catch(...) {}
-                }
+                index = ocioIndexFromSamplerName(samplerName, index);
                 sortedTextures[index] = texture;
-            }
+           }
 
             // --- Process 1D Textures ---
             const unsigned numTextures = shaderDesc->getNumTextures();
@@ -2019,23 +1942,13 @@ namespace tl
 
                 texture->copy(reinterpret_cast<const uint8_t*>(dataPtr), dataSize);
                 texture->transitionToShaderRead(p.cmd);
-
-                // Parse index and store in map
-                int index = 0;
-                std::string sName = samplerName;
-                size_t lastUnderscore = sName.find_last_of('_');
-                if (lastUnderscore != std::string::npos) {
-                    std::string numPart = sName.substr(lastUnderscore + 1);
-                    size_t samplerPos = numPart.find("Sampler");
-                    if (samplerPos != std::string::npos) numPart = numPart.substr(0, samplerPos);
-                    try { index = std::stoi(numPart); } catch(...) {}
-                }
+                index = ocioIndexFromSamplerName(samplerName, index);
                 sortedTextures[index] = texture;
             }
 
-            // Finally, push them into the output vector in the correct Binding Order
-            for (auto const& [index, tex] : sortedTextures) {
-                textures.push_back(tex);
+            for (const auto& [_, texture] : sortedTextures)
+            {
+                textures.push_back(texture);
             }
         }
 
