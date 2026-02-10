@@ -274,7 +274,7 @@ if [ -z "$VULKAN_SDK" ]; then
 	    fi
 	fi
 
-	if [ -z $VULKAN_SDK ]; then
+	if [ ! -d $VULKAN_SDK ]; then
 	    if [[ -d /usr/local/include/vulkan ]]; then
 		export VULKAN_SDK=/usr/local/
 	    else
