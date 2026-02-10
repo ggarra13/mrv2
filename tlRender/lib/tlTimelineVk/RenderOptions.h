@@ -48,7 +48,7 @@
 //
 // Use 1 to use Vulkan shader code.
 //
-#define USE_OCIO_VULKAN 1
+#define USE_OCIO_VULKAN 0
 
 
 #include <tlTimelineVk/RenderShadersBinary.h>
