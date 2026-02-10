@@ -353,20 +353,6 @@ namespace tl
                                             activeBindingSet->getDescriptorSet(frameIndex),
                                             texture);
         }
-
-        void Shader::setTextureAllFrames(
-            const std::string& name,
-            const std::shared_ptr<Texture>& texture,
-            const ShaderFlags stageFlags)
-        {
-            uint64_t savedFrame = frameIndex;
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-            {
-                frameIndex = i;
-                setTexture(name, texture, stageFlags);
-            }
-            frameIndex = savedFrame;
-        }
         
         void
         Shader::addFBO(const std::string& name, const ShaderFlags stageFlags)

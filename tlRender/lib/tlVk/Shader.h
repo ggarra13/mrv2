@@ -181,12 +181,6 @@ namespace tl
                 const std::shared_ptr<Texture>& texture,
                 const ShaderFlags stageFlags = kShaderFragment);
             
-            //! Attach and upload a texture to shader parameters.
-            void setTextureAllFrames(
-                const std::string& name,
-                const std::shared_ptr<Texture>& texture,
-                const ShaderFlags stageFlags = kShaderFragment);
-
             //! Add and FBO to list of shader parameters.
             void addFBO(
                 const std::string& name,
