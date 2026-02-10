@@ -39,10 +39,10 @@ namespace tl
         {
             TLRENDER_P();
 
-            VkPipelineLayout oldLayout = p.pipelineLayouts[pipelineLayoutName];
-            if (oldLayout)
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            if (pipelineLayout)
             {
-                p.garbage[p.frameIndex].pipelineLayouts.push_back(oldLayout);
+                p.garbage[p.frameIndex].pipelineLayouts.push_back(pipelineLayout);
             }
             
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};

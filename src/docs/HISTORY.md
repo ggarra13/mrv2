@@ -56,6 +56,7 @@ ChangeLog
 - Added Dolby Vision support on all platforms.
 - Added HDR Peak Detection controls to Prefences->HDR Peak Detection.
 - Fixed OpenColorIO's 1D Luts on Vulkan backend.
+- Fixed ordering of OpenColorIO's textures on the Vulkan backend.
 
 v1.5.4
 ======

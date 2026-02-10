@@ -1815,7 +1815,8 @@ namespace tl
             // Use a map to automatically sort textures by their OCIO index
             // (0, 1, 2...)
             // This ensures they align with Binding 6, 7, 8, etc.
-            std::map<int, std::shared_ptr<vlk::Texture>> sortedTextures;
+            std::map<int, std::vector<std::shared_ptr<vlk::Texture > > >
+                sortedTextures;
 
             vlk::TextureOptions options;
             options.tiling = VK_IMAGE_TILING_OPTIMAL; // Always use Optimal for performance
@@ -1954,23 +1955,20 @@ namespace tl
                     dataPtr = paddedValues.data();
                     dataSize = paddedValues.size() * sizeof(float);
                 }
-                else
-                {
-                    // TEXTURE_RGB_CHANNEL (0) -> Convert RGB to RGBA
-                    // Note: Even if OCIO implies RGB, we upload as RGBA for Vulkan compatibility
-                    paddedValues.resize(width * height * 4);
-                    const float* v = values;
-                    float* n = paddedValues.data();
-                    for (size_t k = 0; k < width * height; ++k) {
-                        *n++ = *v++; // R
-                        *n++ = *v++; // G
-                        *n++ = *v++; // B
-                        *n++ = 1.0f; // A
-                    }
-                    dataPtr = paddedValues.data();
-                    dataSize = paddedValues.size() * sizeof(float);
-                }
 
+                VkImageType imageType;
+                switch(dimensions)
+                {
+                    case OCIO::GpuShaderDesc::TEXTURE_1D:
+                        imageType = VK_IMAGE_TYPE_1D;
+                        break;
+                    case OCIO::GpuShaderDesc::TEXTURE_2D:
+                        imageType = VK_IMAGE_TYPE_2D;
+                        break;
+                default:
+                    throw std::runtime_error("Unknown OCIO dimension");
+                }
+                
                 // NOTE: We use the 'height' returned by OCIO. Do NOT force it to 1.
                 auto texture = vlk::Texture::create(
                     ctx, imageType, width, height, 1, imageFormat,
