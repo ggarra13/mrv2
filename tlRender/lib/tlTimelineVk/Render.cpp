@@ -2600,7 +2600,7 @@ namespace tl
                 pl_color_space src_colorspace;
                 memset(&src_colorspace, 0, sizeof(pl_color_space));
 
-                bool hasHDR = false;
+                bool isHDRVideo = false;
                 src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                 src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
                     
@@ -2610,12 +2610,12 @@ namespace tl
                 case image::EOTFType::EOTF_BT2020:    // PQ (HDR10)
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                     src_colorspace.transfer = PL_COLOR_TRC_PQ;
-                    hasHDR = true;
+                    isHDRVideo = true;
                     break;
                 case image::EOTFType::EOTF_BT2100_HLG: // HLG
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                     src_colorspace.transfer = PL_COLOR_TRC_HLG;
-                    hasHDR = true;
+                    isHDRVideo = true;
                     break;
                 case image::EOTFType::EOTF_BT709:
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
@@ -2628,7 +2628,7 @@ namespace tl
                     break;
                 }
 
-                if (hasHDR)
+                if (isHDRVideo)
                 {
                     // defaults, generates LUTs if state is set.
                     cmap.gamut_mapping = &pl_gamut_map_perceptual;
@@ -2748,9 +2748,10 @@ namespace tl
                         hdr.avg_pq_y = data.avgPQY;
                     }                    
 
-                }  // hasHDR
+                }  // isHDRVideo
                 else
                 {
+                    // SDR video - do not do any gamut or tone mapping
                     cmap.gamut_mapping = nullptr;
                     cmap.tone_mapping_function = nullptr;
                 }
@@ -2762,16 +2763,32 @@ namespace tl
 
                 if (p.hdrMonitorFound)
                 {
-                    dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-                    dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-                    dst_colorspace.hdr.min_luma = p.monitorMinNits;
-                    dst_colorspace.hdr.max_luma = p.monitorMaxNits;
+                    if (p.ocioData && p.ocioData->icsDesc)
+                    {
+                        // If user has an OpenColorIO's Input Color Space
+                        // transform, convert to linear space.
+                        dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+                        dst_colorspace.transfer = PL_COLOR_TRC_LINEAR;
+                        dst_colorspace.hdr.min_luma = 0.F;
+                        dst_colorspace.hdr.max_luma = src_colorspace.hdr.max_luma;
                         
+                        cmap.gamut_mapping = nullptr;
+                        cmap.tone_mapping_function = nullptr;
+                    }
+                    else
+                    {
+                        dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+                        dst_colorspace.transfer = PL_COLOR_TRC_PQ;
+                        dst_colorspace.hdr.min_luma = p.monitorMinNits;
+                        dst_colorspace.hdr.max_luma = p.monitorMaxNits;
+                    }
+                    
                     if (ctx.colorSpace ==
                         VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
                     {
                         dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
-                        dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                        // dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                        dst_colorspace.transfer = PL_COLOR_TRC_SRGB;
                     }
                     else if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
                     {
