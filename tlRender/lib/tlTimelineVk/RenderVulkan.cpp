@@ -40,6 +40,12 @@ namespace tl
             const std::shared_ptr<vlk::Shader> shader)
         {
             TLRENDER_P();
+
+            VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
+            if (pipelineLayout)
+            {
+                p.garbage[p.frameIndex].pipelineLayouts.push_back(pipelineLayout);
+            }
             
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
             pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -59,7 +65,6 @@ namespace tl
                 pPipelineLayoutCreateInfo.pPushConstantRanges = &pushConstantRange;
             }
             
-            VkPipelineLayout pipelineLayout;
             VkResult result = vkCreatePipelineLayout(ctx.device, &pPipelineLayoutCreateInfo, NULL, &pipelineLayout);
             VK_CHECK(result);
             p.pipelineLayouts[pipelineLayoutName] = pipelineLayout;
