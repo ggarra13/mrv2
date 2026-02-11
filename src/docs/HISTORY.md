@@ -60,6 +60,7 @@ ChangeLog
 - Improved performance of HDR playback by keeping the state.
 - Made libplacebo work better with OCIO on HDR monitors.
 - Added sending HDR metadata for proper HDR when using OCIO and not just movies.
+- Fixed color picker toolbar always showing solid alpha channel for images with it on the Vulkan backend.
 
 
 v1.5.4
