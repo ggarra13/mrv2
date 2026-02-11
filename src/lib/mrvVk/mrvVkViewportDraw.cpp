@@ -28,8 +28,10 @@
 
 #include <tlIO/System.h>
 
-#include <tlCore/String.h>
+#include <tlCore/HDR.h>
 #include <tlCore/Mesh.h>
+#include <tlCore/String.h>
+
 
 #include <FL/Fl_PNG_Image.H>
 
@@ -1123,7 +1125,7 @@ namespace mrv
             
             int screen = this->screen_num();
             
-            if (!p.hdrOptions.tonemap)
+            if (!p.hdrOptions.tonemap || !p.hdrMonitorFound)
             {
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
 
@@ -1136,14 +1138,43 @@ namespace mrv
                 // Max display capability
                 m_hdr_metadata.maxLuminance = 100.F;
                 m_hdr_metadata.minLuminance = 0.1F;
-                m_hdr_metadata.maxContentLightLevel = 100.F;
+                m_hdr_metadata.maxContentLightLevel = 203.F;
                 m_hdr_metadata.maxFrameAverageLightLevel = 100.F;
             }
             else
             {
-                // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
-                const image::HDRData& data = p.hdrOptions.hdrData;
+                const int screen_index = this->screen_num();
+                const timeline::OCIOOptions& ocio = getOCIOOptions(screen_index);
+                image::HDRData data;
+                if (!ocio.display.empty() && !ocio.view.empty())
+                {
+                    data = image::nameToPrimaries(ocio.display);
+                    if (ocio.view.find("SDR") == std::string::npos)
+                    {
+                        float peak = 1000.0f;
+                        if (ocio.view.find("10000") != std::string::npos)     peak = 10000.F;
+                        else if (ocio.view.find("4000") != std::string::npos) peak = 4000.F;
+                        else if (ocio.view.find("2000") != std::string::npos) peak = 2000.F;
+                        else if (ocio.view.find("1000") != std::string::npos) peak = 1000.F;
+                        data.displayMasteringLuminance = math::FloatRange(0, peak);
+                        data.maxCLL = peak;
+                        data.maxFALL = peak * 0.4F; // prevents crushing mid-tones
 
+                        std::cerr << "--------------------------------------" << std::endl;
+                        std::cerr << data << std::endl;
+                    }
+                    else
+                    {
+                        data.displayMasteringLuminance = math::FloatRange(0, 100.F);
+                        data.maxCLL = 203.F;
+                        data.maxFALL = 100.F;
+                    }
+                }
+                else
+                {
+                    data = p.hdrOptions.hdrData;
+                }
+                
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
                 m_hdr_metadata.displayPrimaryRed = {
                     data.primaries[image::HDRPrimaries::Red][0],

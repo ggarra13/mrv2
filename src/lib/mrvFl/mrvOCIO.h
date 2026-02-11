@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include <string>
-
 #ifdef TLRENDER_OCIO
 #    include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 #endif
+
+#include <string>
 
 namespace mrv
 {
@@ -77,6 +77,6 @@ namespace mrv
 
         //! Save OCIO presets to disk.
         bool savePresets(const std::string& fileName);
-
+        
     } // namespace ocio
 } // namespace mrv

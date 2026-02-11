@@ -18,6 +18,105 @@ namespace tl
         TLRENDER_ENUM_IMPL(HDRPrimaries, "Red", "Green", "Blue", "White");
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRPrimaries);
 
+        HDRData nameToPrimaries(const std::string input)
+        {
+            HDRData out;
+            const std::string& name = string::toUpper(input);
+            if (name.find("P3") != std::string::npos)
+            {
+                out.primaries[Red].x = 0.680F;
+                out.primaries[Red].y = 0.320F;
+                out.primaries[Green].x = 0.265F;
+                out.primaries[Green].y = 0.690F;
+                out.primaries[Blue].x = 0.150F;
+                out.primaries[Blue].y = 0.060F;
+                out.primaries[White].x = 0.3140F;
+                out.primaries[White].y = 0.3510F;
+                    
+                if (name.find("DCI") != std::string::npos)
+                {
+                    out.primaries[White].x = 0.3140F;
+                    out.primaries[White].y = 0.3510F;
+                }
+                else if (name.find("D65") != std::string::npos)
+                {
+                    out.primaries[White].x = 0.3127F;
+                    out.primaries[White].y = 0.3290F;
+                }
+            }
+            else if (name.find("2020") != std::string::npos ||
+                     name.find("2100") != std::string::npos )
+            {
+                out.primaries[Red].x = 0.708F;
+                out.primaries[Red].y = 0.292F;
+                out.primaries[Green].x = 0.170F;
+                out.primaries[Green].y = 0.797F;
+                out.primaries[Blue].x = 0.131F;
+                out.primaries[Blue].y = 0.040F;
+                out.primaries[White].x = 0.3127F;
+                out.primaries[White].y = 0.3290F;
+            }
+            else if (name.find("Film") != std::string::npos)
+            {
+                out.primaries[Red].x = 0.681F;
+                out.primaries[Red].y = 0.319F;
+                out.primaries[Green].x = 0.243F;
+                out.primaries[Green].y = 0.692F;
+                out.primaries[Blue].x = 0.145F;
+                out.primaries[Blue].y = 0.049F;
+                out.primaries[White].x = 0.310F;
+                out.primaries[White].y = 0.316F;
+            }
+            else if (name.find("709") != std::string::npos ||
+                     name.find("SDR") != std::string::npos)
+            {
+                out.primaries[Red].x = 0.640F;
+                out.primaries[Red].y = 0.330F;
+                out.primaries[Green].x = 0.300F;
+                out.primaries[Green].y = 0.600F;
+                out.primaries[Blue].x = 0.150F;
+                out.primaries[Blue].y = 0.060F;
+                out.primaries[White].x = 0.3127F;
+                out.primaries[White].y = 0.3290F;
+            }
+            else if (name.find("NTSC") != std::string::npos ||
+                     name.find("PAL") != std::string::npos ||
+                     name.find("SECAM") != std::string::npos)
+            {
+                out.primaries[Red].x = 0.640F;
+                out.primaries[Red].y = 0.330F;
+                out.primaries[Green].x = 0.290F;
+                out.primaries[Green].y = 0.600F;
+                out.primaries[Blue].x = 0.150F;
+                out.primaries[Blue].y = 0.060F;
+                out.primaries[White].x = 0.3127F;
+                out.primaries[White].y = 0.3290F;
+            }
+            else if (name.find("SMPTE240M") != std::string::npos)
+            {
+                out.primaries[Red].x = 0.681F;
+                out.primaries[Red].y = 0.340F;
+                out.primaries[Green].x = 0.310F;
+                out.primaries[Green].y = 0.595F;
+                out.primaries[Blue].x = 0.155F;
+                out.primaries[Blue].y = 0.070F;
+                out.primaries[White].x = 0.3127F;
+                out.primaries[White].y = 0.3290F;
+            }
+            else if (name.find("BT470M") != std::string::npos)
+            {
+                out.primaries[Red].x = 0.670F;
+                out.primaries[Red].y = 0.330F;
+                out.primaries[Green].x = 0.210F;
+                out.primaries[Green].y = 0.710F;
+                out.primaries[Blue].x = 0.140F;
+                out.primaries[Blue].y = 0.080F;
+                out.primaries[White].x = 0.310F;
+                out.primaries[White].y = 0.316F;
+            }
+            return out;
+        }
+        
         std::string primariesName(const math::Vector2f& r,
                                   const math::Vector2f& g,
                                   const math::Vector2f& b,
