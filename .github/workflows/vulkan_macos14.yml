@@ -66,8 +66,8 @@ jobs:
         BUILD_VULKAN: OFF
       shell: bash
       run: |
-        
-      # Install Vulkan SDK manually
+
+        # Install Vulkan SDK manually
       - name: Install/Build Vulkan SDK
         env:
           BUILD_VULKAN: OFF
@@ -75,7 +75,7 @@ jobs:
         run: |
           if [[ "$BUILD_VULKAN" == "ON" ]]; then
             ./etc/macos/install_vulkan.sh
-             
+
             echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
             echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
             echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
@@ -89,7 +89,7 @@ jobs:
             brew install spirv-tools
             brew link --overwrite molten-vk
           fi
-        
+
     - name: Verify Vulkan installation
       run: |
         if command -v vulkaninfo &> /dev/null; then
