@@ -59,6 +59,7 @@ ChangeLog
 - Fixed ordering of OpenColorIO's textures on the Vulkan backend.
 - Improved performance of HDR playback by keeping the state.
 - Made libplacebo work better with OCIO on HDR monitors.
+- Added sending HDR metadata for proper HDR when using OCIO and not just movies.
 
 
 v1.5.4
