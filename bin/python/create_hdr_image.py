@@ -11,32 +11,39 @@ width = 768
 height = 256
 patch_width = 256
 
-# Create float32 image (will be saved as half-float)
+# Create float32 image
 img = np.zeros((height, width, 3), dtype=np.float32)
 
-# Left patch: middle gray → ~14.5 nits
+# Left patch: middle gray
 img[:, 0:patch_width] = 0.18
 
-# Middle patch: reference white → ~106.6 nits
+# Middle patch: reference white
 img[:, patch_width:2*patch_width] = 1.0
 
-# Right patch: HDR peak → 1000 nits
+# Right patch: HDR peak
 img[:, 2*patch_width:3*patch_width] = 1000.0
 
 # ------------------- Write EXR (half-float) -------------------
 header = OpenEXR.Header(width, height)
-pt = Imath.PixelType(Imath.PixelType.HALF)
-header['channels'] = {'R': pt, 'G': pt, 'B': pt}
+# Even though we want a HALF file, the Python wrapper needs FLOAT buffers
+pt = Imath.PixelType(Imath.PixelType.FLOAT)
+header['channels'] = {
+    'R': Imath.Channel(pt),
+    'G': Imath.Channel(pt),
+    'B': Imath.Channel(pt)
+}
 
-# Optional: mark it as ACEScg (many tools respect this)
+# Optional: Add chromaticities or colorSpace if needed
 # header['colorSpace'] = 'ACEScg'
 
 out = OpenEXR.OutputFile(filename, header)
 
+# CRITICAL FIX: Use float32 tobytes(). 
+# The library converts this to HALF based on the header definition.
 data = {
-    'R': img[:, :, 0].astype(np.float16).tobytes(),
-    'G': img[:, :, 1].astype(np.float16).tobytes(),
-    'B': img[:, :, 2].astype(np.float16).tobytes()
+    'R': img[:, :, 0].astype(np.float32).tobytes(),
+    'G': img[:, :, 1].astype(np.float32).tobytes(),
+    'B': img[:, :, 2].astype(np.float32).tobytes()
 }
 
 out.writePixels(data)
