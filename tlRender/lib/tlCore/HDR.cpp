@@ -56,7 +56,7 @@ namespace tl
                 out.primaries[White].x = 0.3127F;
                 out.primaries[White].y = 0.3290F;
             }
-            else if (name.find("Film") != std::string::npos)
+            else if (name.find("FILM") != std::string::npos)
             {
                 out.primaries[Red].x = 0.681F;
                 out.primaries[Red].y = 0.319F;
