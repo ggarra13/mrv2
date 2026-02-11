@@ -93,7 +93,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: VulkanSDK-*
-          key: ${{ runner.os }}-linux-arm64-vulkan-sdk-${{ hashFiles('**/install_vulkan.sh') }}
+          key: ${{ runner.os }}-arm64-vulkan-sdk-${{ hashFiles('**/install_vulkan.sh') }}
 
       # Install Vulkan SDK
       - name: Install/Build Vulkan SDK
