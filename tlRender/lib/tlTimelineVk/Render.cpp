@@ -2423,8 +2423,19 @@ namespace tl
            const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
            const bool peakDetectionChanged = (value.peak_detection != p.hdrOptions.peak_detection);
            const bool algorithmChanged = (value.algorithm != p.hdrOptions.algorithm);
+           const bool oldIsHDRPlus = image::isHDRPlus(p.hdrOptions.hdrData);
+           const bool oldIsDolby = image::isHDRDolbyVision(p.hdrOptions.hdrData);
+           
+           // Determine if we should run Peak Detection
+           // Requirement: Tonemap ON, Peak Detection ON, and
+           // NOT HDR10+/Dolby
+           const bool isHDRPlus = image::isHDRPlus(value.hdrData);
+           const bool isDolby = image::isHDRDolbyVision(value.hdrData);
 
-           if (tonemapChanged || algorithmChanged)
+           const bool metadataChanged = (isHDRPlus != oldIsHDRPlus) ||
+                                        (isDolby != oldIsDolby);
+
+           if (tonemapChanged || algorithmChanged || metadataChanged)
            {
                if (p.placeboData && p.placeboData->state)
                {
@@ -2442,11 +2453,6 @@ namespace tl
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.tonemap)
             {
-                // Determine if we should run Peak Detection
-                // Requirement: Tonemap ON, Peak Detection ON, and
-                // NOT HDR10+/Dolby
-                const bool isHDRPlus = image::isHDRPlus(p.hdrOptions.hdrData);
-                const bool isDolby = image::isHDRDolbyVision(p.hdrOptions.hdrData);
                 const bool effectivePeakDetection =
                     p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
                 
