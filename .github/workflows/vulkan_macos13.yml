@@ -22,7 +22,7 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 1
-          
+
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
@@ -87,7 +87,7 @@ jobs:
       shell: bash
       run: |
         echo "VULKAN_SDK=/usr/local/" >> $GITHUB_ENV
-        
+
       # # Verify Vulkan installation
       - name: Verify Vulkan installation
         run: |
