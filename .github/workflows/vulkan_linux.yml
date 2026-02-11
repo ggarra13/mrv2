@@ -38,7 +38,7 @@ jobs:
 
     - name: Install cargo-c
       run: cargo install cargo-c
-          
+
     - name: Update repos
       run: |
         sudo add-apt-repository universe -y
