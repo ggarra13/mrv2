@@ -288,9 +288,15 @@ if [ -z "$VULKAN_SDK" ]; then
 	unset VULKAN_SDK
 	export TLRENDER_VK=OFF
 	export MRV2_HDR=OFF
+	echo "Coukd not guess VULKAN_SDK, last guess ${VULKAN_SDK}"
+	exit 1
     fi
 else
     echo "Using VULKAN_SDK from environment: ${VULKAN_SDK}"
+    if [[ ! -e "${VULKAN_SDK}/include/vulkan.h" ]]; then
+	echo "Could not find vulkan.h in ${VULKAN_SDK}/include"
+	exit 1
+    fi
 fi
     
 if [ -z "$TLRENDER_VK" ]; then
