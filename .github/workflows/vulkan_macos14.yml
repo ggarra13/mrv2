@@ -67,28 +67,28 @@ jobs:
       shell: bash
       run: |
 
-        # Install Vulkan SDK manually
-      - name: Install/Build Vulkan SDK
-        env:
-          BUILD_VULKAN: OFF
-        shell: bash
-        run: |
-          if [[ "$BUILD_VULKAN" == "ON" ]]; then
-            ./etc/macos/install_vulkan.sh
+    # Install Vulkan SDK manually
+    - name: Install/Build Vulkan SDK
+      env:
+        BUILD_VULKAN: OFF
+      shell: bash
+      run: |
+        if [[ "$BUILD_VULKAN" == "ON" ]]; then
+          ./etc/macos/install_vulkan.sh
 
-            echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-            echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-            echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
-          else
-            brew install vulkan-loader
-            brew install molten-vk
-            brew install vulkan-tools
-            brew install shaderc
-            brew install glslang
-            brew install vulkan-profiles
-            brew install spirv-tools
-            brew link --overwrite molten-vk
-          fi
+          echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+          echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+          echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
+        else
+          brew install vulkan-loader
+          brew install molten-vk
+          brew install vulkan-tools
+          brew install shaderc
+          brew install glslang
+          brew install vulkan-profiles
+          brew install spirv-tools
+          brew link --overwrite molten-vk
+        fi
 
     - name: Verify Vulkan installation
       run: |
