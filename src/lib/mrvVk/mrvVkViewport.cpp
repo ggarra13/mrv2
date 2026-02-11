@@ -954,12 +954,6 @@ namespace mrv
                     }
 
                     timeline::BackgroundOptions backgroundOptions = getBackgroundOptions();        
-                    if (transparent)
-                    {
-                        backgroundOptions.type = timeline::Background::Solid;
-                        backgroundOptions.color0 = image::Color4f(r, g, b, a);
-                    }
-            
                     vk.render->setLUTOptions(p.lutOptions);
                     vk.render->setHDROptions(p.hdrOptions);
                     if (p.missingFrame &&
