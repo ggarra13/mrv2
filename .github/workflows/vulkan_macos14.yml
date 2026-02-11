@@ -61,19 +61,7 @@ jobs:
     - name: Install pyFLTK dependencies
       run: brew install swig
 
-    - name: Cache Vulkan SDK
-      id: cache-vulkan-sdk
-      uses: actions/cache@v4
-      with:
-        path: |
-          /opt/homebrew/include/vulkan/*
-          /opt/homebrew/lib/libvulkan*
-          /opt/homebrew/lib/libMoltenVK*
-          /opt/homebrew/lib/libshaderc*
-        key: ${{ runner.os }}-vulkan-sdk-homebrew-m1
-
     - name: Install Vulkan
-      if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
       env:
         BUILD_VULKAN: OFF
       shell: bash
@@ -83,12 +71,6 @@ jobs:
         echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
         echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
         
-    - name: Setup Vulkan SDK environment variable
-      if: steps.cache-vulkan-sdk.outputs.cache-hit == 'true'
-      shell: bash
-      run: |
-        echo "VULKAN_SDK=/opt/homebrew/" >> $GITHUB_ENV
-
     - name: Verify Vulkan installation
       run: |
         if command -v vulkaninfo &> /dev/null; then
