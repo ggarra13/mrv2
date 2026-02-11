@@ -6783,7 +6783,7 @@ msgid ""
 "outliers."
 msgstr ""
 "Lorsqu’il est inférieur à 100, permet de déterminer la luminosité maximale "
-"en ignorant les 1 % de valeurs aberrantes les plus élevées."
+"en ignorant les 1% de valeurs aberrantes les plus élevées."
 
 msgid "Smoothing Period"
 msgstr "Période de lissage"

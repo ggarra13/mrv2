@@ -6764,7 +6764,7 @@ msgid ""
 "outliers."
 msgstr ""
 "Bei Werten unter 100 hilft dies, die Spitzenhelligkeit zu ermitteln, indem "
-"die obersten 1 % der Ausreißer ignoriert werden."
+"die obersten 1% der Ausreißer ignoriert werden."
 
 msgid "Smoothing Period"
 msgstr "Glättungszeitraum"

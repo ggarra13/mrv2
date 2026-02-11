@@ -2414,16 +2414,16 @@ msgid "HDR maxFALL"
 msgstr "HDR maxFALL"
 
 msgid "HDR10+ sceneMax"
-msgstr ""
+msgstr "HDR10+ sceneMax"
 
 msgid "HDR10+ sceneAvg"
-msgstr ""
+msgstr "HDR10+ sceneAvg"
 
 msgid "Dolby maxPQY"
-msgstr ""
+msgstr "Dolby maxPQY"
 
 msgid "Dolby avgPQY"
-msgstr ""
+msgstr "Dolby avgPQY"
 
 msgid "FFmpeg Pixel Format"
 msgstr "FFmpeg Pixel Format"
@@ -6766,7 +6766,7 @@ msgstr ""
 "outliers."
 
 msgid "Smoothing Period"
-msgstr ""
+msgstr "Smoothing Period"
 
 msgid "How long it takes for brightness detection to \"catch up\" to a new scene."
 msgstr ""
