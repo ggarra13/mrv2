@@ -606,9 +606,13 @@ Flmm_ColorA_Chooser::Flmm_ColorA_Chooser(int X, int Y, int W, int H, const char*
   choice.add("hsv");
   choice.menu_end();
   set_valuators();
+  rvalue.textcolor(FL_BLACK);
   rvalue.callback(rgba_cb);
+  gvalue.textcolor(FL_BLACK);
   gvalue.callback(rgba_cb);
+  bvalue.textcolor(FL_BLACK);
   bvalue.callback(rgba_cb);
+  avalue.textcolor(FL_BLACK);
   avalue.callback(rgba_cb);
   choice.callback(mode_cb);
   choice.box(FL_THIN_UP_BOX);
