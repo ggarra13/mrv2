@@ -1159,9 +1159,6 @@ namespace mrv
                         data.displayMasteringLuminance = math::FloatRange(0, peak);
                         data.maxCLL = peak;
                         data.maxFALL = peak * 0.4F; // prevents crushing mid-tones
-
-                        std::cerr << "--------------------------------------" << std::endl;
-                        std::cerr << data << std::endl;
                     }
                     else
                     {
