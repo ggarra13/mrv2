@@ -66,8 +66,12 @@ jobs:
         id: cache-vulkan-sdk
         uses: actions/cache@v4
         with:
-          path: /usr/local/lib
-          key: ${{ runner.os }}-macos-intel-vulkan-${{ hashFiles('**/install_vulkan.sh') }}
+          path: 
+            /usr/local/include/vulkan/*
+            /usr/local/lib/libvulkan*
+            /usr/local/lib/libMoltenVK*
+            /usr/local/lib/libshaderc*
+        key: ${{ runner.os }}-macos-intel-vulkan-${{ hashFiles('**/install_vulkan.sh') }}
 
       # Install Vulkan SDK manually
       - name: Install/Build Vulkan SDK
@@ -81,10 +85,10 @@ jobs:
           echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
           echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
           echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
-
-      - name: Setup Vulkan SDK environment variable
+          
+      # Install Vulkan SDK manually
+      - name: Set up Vulkan SDK environment variable
         if: steps.cache-vulkan-sdk.outputs.cache-hit == 'true'
-        shell: bash
         run: |
           echo "VULKAN_SDK=/usr/local/" >> $GITHUB_ENV
 

@@ -66,6 +66,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
+          /opt/homebrew/include/vulkan/*
           /opt/homebrew/lib/libvulkan*
           /opt/homebrew/lib/libMoltenVK*
           /opt/homebrew/lib/libshaderc*
