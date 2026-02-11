@@ -293,7 +293,7 @@ if [ -z "$VULKAN_SDK" ]; then
     fi
 else
     echo "Using VULKAN_SDK from environment: ${VULKAN_SDK}"
-    if [[ ! -e "${VULKAN_SDK}/include/vulkan.h" ]]; then
+    if [[ ! -e "${VULKAN_SDK}/include/vulkan/vulkan.h" ]]; then
 	echo "Could not find vulkan.h in ${VULKAN_SDK}/include"
 	exit 1
     fi
