@@ -85,6 +85,7 @@ jobs:
         else
           brew install vulkan-loader molten-vk vulkan-tools shaderc glslang vulkan-profiles spirv-tools
           brew link --overwrite molten-vk
+          echo "VULKAN_SDK=/opt/homebrew" >> $GITHUB_ENV
         fi
 
     - name: Verify Vulkan installation

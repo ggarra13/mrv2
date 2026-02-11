@@ -76,7 +76,7 @@ jobs:
         shell: bash
         run: |
           if [[ "$BUILD_VULKAN" == "ON" ]]; then
-              ./etc/macos/install_vulkan.sh
+              . ./etc/macos/install_vulkan.sh
 
               echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
               echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
@@ -90,6 +90,8 @@ jobs:
               brew install vulkan-profiles
               brew install spirv-tools
               brew link --overwrite molten-vk
+              
+              echo "VULKAN_SDK=/usr/local" >> $GITHUB_ENV
           fi
 
       # # Verify Vulkan installation
