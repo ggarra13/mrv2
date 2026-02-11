@@ -274,7 +274,7 @@ if [ -z "$VULKAN_SDK" ]; then
 	    fi
 	fi
 
-	if [ ! -d $VULKAN_SDK ]; then
+	if [ ! -d "$VULKAN_SDK" ]; then
 	    if [[ -d /usr/local/include/vulkan ]]; then
 		export VULKAN_SDK=/usr/local/
 	    else
@@ -285,10 +285,10 @@ if [ -z "$VULKAN_SDK" ]; then
     if [[ -e "$VULKAN_SDK/include/vulkan/vulkan.h" ]]; then
 	echo "Guessed VULKAN_SDK to ${VULKAN_SDK}"
     else
+	echo "Coukd not guess VULKAN_SDK, last guess ${VULKAN_SDK}"
 	unset VULKAN_SDK
 	export TLRENDER_VK=OFF
 	export MRV2_HDR=OFF
-	echo "Coukd not guess VULKAN_SDK, last guess ${VULKAN_SDK}"
 	exit 1
     fi
 else
