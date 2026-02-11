@@ -77,6 +77,13 @@ jobs:
     - name: Install Vulkan drivers
       run: sudo apt install -y mesa-vulkan-drivers
 
+      - name: Cache Vulkan SDK
+        id: cache-vulkan-sdk
+        uses: actions/cache@v4
+        with:
+          path: VulkanSDK-*
+          key: ${{ runner.os }}-amd64-vulkan-sdk-${{ hashFiles('**/install_vulkan.sh') }}
+
     # Install Vulkan SDK
     - name: Install Vulkan
       if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
