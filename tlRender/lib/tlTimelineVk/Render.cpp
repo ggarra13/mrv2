@@ -2782,7 +2782,7 @@ namespace tl
                     if (p.ocioData && p.ocioData->icsDesc)
                     {
                         src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-                        src_colorspace.transfer = PL_COLOR_TRC_BT_LINEAR;
+                        src_colorspace.transfer = PL_COLOR_TRC_LINEAR;
                 
                         dst_colorspace.primaries = src_colorspace.primaries;
                         dst_colorspace.transfer = src_colorspace.transfer;

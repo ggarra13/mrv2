@@ -1148,7 +1148,7 @@ namespace mrv
                 image::HDRData data;
                 if (!ocio.display.empty() && !ocio.view.empty())
                 {
-                    data = image::nameToPrimaries(ocio.display);
+                    data = image::nameToPrimaries(ocio.display + ocio.view);
                     if (ocio.view.find("SDR") == std::string::npos)
                     {
                         float peak = 1000.0f;
