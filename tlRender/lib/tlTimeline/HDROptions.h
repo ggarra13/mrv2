@@ -48,12 +48,22 @@ namespace tl
         //! Tonemap options.
         struct HDROptions
         {
+            //! Debug HDR
+            bool debug = false;
+            
             bool tonemap = false;
+
+            //! Trick for Windows HDR by sending it BT709 chromaticities.
+            bool ScRGB = false;
+
+            //! Peak detection variables.
             bool peak_detection = false;
             float peak_percentile = 100.F;
             float peak_smoothing_period = 20.F;
             float peak_scene_low_limit = 1.F;
             float peak_scene_high_limit = 3.F;
+
+            //! Tone mapping data.
             HDRGamutMapping     gamutMapping = HDRGamutMapping::Auto;
             HDRTonemapAlgorithm algorithm = HDRTonemapAlgorithm::Hable;
             image::HDRData hdrData;

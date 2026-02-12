@@ -1034,13 +1034,18 @@ namespace mrv
 
             // \@note:  we don't just copy p.hdrOptions = value as that would
             //          eliminate p.hdrOptions.hdrData.
-            p.hdrOptions.algorithm = value.algorithm;
-            p.hdrOptions.gamutMapping = value.gamutMapping;
+            p.hdrOptions.debug = value.debug;
+
+            p.hdrOptions.ScRGB = value.ScRGB;
+
             p.hdrOptions.peak_detection = value.peak_detection;
             p.hdrOptions.peak_percentile = value.peak_percentile;
             p.hdrOptions.peak_smoothing_period = value.peak_smoothing_period;
             p.hdrOptions.peak_scene_low_limit = value.peak_scene_low_limit;
             p.hdrOptions.peak_scene_high_limit = value.peak_scene_high_limit;
+            
+            p.hdrOptions.algorithm = value.algorithm;
+            p.hdrOptions.gamutMapping = value.gamutMapping;
             redrawWindows();
         }
 

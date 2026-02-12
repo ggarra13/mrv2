@@ -174,18 +174,13 @@ namespace mrv
             // Check for HDR presence (supported if any HDR-related EOTF is true)
             bool has_hdr = hdr->traditional_hdr || hdr->pq || hdr->hlg || hdr->type1;
 
-#if 0       // \@note:  remove
             out.supported = has_hdr;
             
             // Retrieve min and max nits (0.0 if unset)
             out.min_nits = hdr->desired_content_min_luminance;
             out.max_nits = hdr->desired_content_max_luminance;
             //float max_frame_avg_nits = hdr->desired_content_max_frame_avg_luminance;  // Optional: frame-average max
-#else
-            out.supported = true;
-            out.min_nits = 0.F;
-            out.max_nits = 1000.F;
-#endif
+
             di_info_destroy(info);
             return out;
         }

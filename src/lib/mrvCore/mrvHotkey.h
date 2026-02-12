@@ -145,7 +145,7 @@ namespace mrv
     extern Hotkey kHDRDataTrue;
 
     extern Hotkey kToggleHDRPeakDetection;
-    extern Hotkey kToggleHDRTonemap;
+    extern Hotkey kToggleHDRScRGB;
 
     extern Hotkey kDisplayWindow;
     extern Hotkey kDataWindow;

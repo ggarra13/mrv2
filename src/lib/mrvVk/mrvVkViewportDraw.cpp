@@ -1125,9 +1125,11 @@ namespace mrv
             
             int screen = this->screen_num();
             
-            if (!p.hdrOptions.tonemap || !p.hdrMonitorFound)
+            if (!p.hdrOptions.tonemap || !p.hdrMonitorFound ||
+                p.hdrOptions.ScRGB)
             {
-                LOG_STATUS("Sending SDR BT709 primaries");
+                if (p.hdrOptions.debug)
+                    LOG_STATUS("Sending SDR BT709 primaries");
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
 
                 // Primaries
@@ -1144,12 +1146,15 @@ namespace mrv
             }
             else
             {
-                LOG_STATUS("Sending HDR primaries");
+                if (p.hdrOptions.debug)
+                    LOG_STATUS("Sending HDR primaries");
                 const int screen_index = this->screen_num();
                 const timeline::OCIOOptions& ocio = getOCIOOptions(screen_index);
                 image::HDRData data;
                 if (!ocio.display.empty() && !ocio.view.empty())
                 {
+                    if (p.hdrOptions.debug)
+                        LOG_STATUS("Sending OCIO image metadata");
                     data = image::nameToPrimaries(ocio.display + ocio.view);
                     if (ocio.view.find("SDR") == std::string::npos)
                     {
@@ -1168,11 +1173,11 @@ namespace mrv
                         data.maxCLL = 203.F;
                         data.maxFALL = 100.F;
                     }
-                    LOG_STATUS("Sending OCIO image metadata");
                 }
                 else
                 {
-                    LOG_STATUS("Sending HDR video metadata");
+                    if (p.hdrOptions.debug)
+                        LOG_STATUS("Sending HDR video metadata");
                     data = p.hdrOptions.hdrData;
                 }
                 
@@ -1200,7 +1205,10 @@ namespace mrv
                     data.displayMasteringLuminance.getMin();
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
-                LOG_STATUS("HDR= primaries" << image::primariesName(data.primaries) << std::endl << data);
+                if (p.hdrOptions.debug)
+                    LOG_STATUS("HDR= primaries '"
+                               << image::primariesName(data.primaries) << "'"
+                               << std::endl << data);
             }
 
 

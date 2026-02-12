@@ -9,7 +9,9 @@ namespace tl
         inline bool HDROptions::operator==(const HDROptions& other) const
         {
             // passthru is ignored on purpose
-            return (tonemap == other.tonemap &&
+            return (debug == other.debug &&
+                    tonemap == other.tonemap &&
+                    ScRGB == other.ScRGB &&
                     peak_detection == other.peak_detection &&
                     peak_percentile == other.peak_percentile &&
                     peak_smoothing_period == other.peak_smoothing_period &&
