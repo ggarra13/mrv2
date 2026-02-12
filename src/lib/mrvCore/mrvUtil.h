@@ -48,8 +48,8 @@ namespace mrv
         }
         else
         {
-            snprintf(buf, 24, " %7.4f", x);
-            return buf + strlen(buf) - 8;
+            snprintf(buf, 24, " %8.4f", x);
+            return buf + strlen(buf) - 9;
         }
     }
 
