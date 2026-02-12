@@ -248,6 +248,7 @@ namespace tl
                 {"sceneMax2", value.sceneMax[2]},
                 {"sceneAvg", value.sceneAvg},
                 {"ootf", value.ootf},
+                {"isDolbyVision", value.isDolbyVision},
                 {"maxPQY", value.maxPQY},
                 {"avgPQY", value.avgPQY},
             };
@@ -266,6 +267,7 @@ namespace tl
             json.at("sceneMax2").get_to(value.sceneMax[2]);
             json.at("sceneAvg").get_to(value.sceneAvg);
             json.at("ootf").get_to(value.ootf);
+            json.at("isDolbyVision").get_to(value.isDolbyVision);
             json.at("maxPQY").get_to(value.maxPQY);
             json.at("avgPQY").get_to(value.avgPQY);
         }
