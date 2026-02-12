@@ -289,7 +289,6 @@ if [ -z "$VULKAN_SDK" ]; then
 	unset VULKAN_SDK
 	export TLRENDER_VK=OFF
 	export MRV2_HDR=OFF
-	exit 1
     fi
 else
     echo "Using VULKAN_SDK from environment: ${VULKAN_SDK}"
