@@ -2446,7 +2446,9 @@ namespace tl
 
            // 2. Optimization: Initialize update flag based on Option changes
            bool updateDisplayShader = (tonemapChanged || hdrDataChanged ||
-                                         peakDetectionChanged);
+                                       peakDetectionChanged ||
+                                       algorithmChanged ||
+                                       metadataChanged);
            
            p.hdrOptions = value;
                                                                    
@@ -2456,9 +2458,11 @@ namespace tl
                 const bool effectivePeakDetection =
                     p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
                 
-                if (!p.placeboData || peakDetectionChanged || hdrDataChanged)
+                if (!p.placeboData || peakDetectionChanged || hdrDataChanged ||
+                    metadataChanged)
                 {
-                    // This ensures we have a valid object even if 'effectivePeakDetection' is false
+                    // This ensures we have a valid object even if
+                    // 'effectivePeakDetection' is false
                     p.placeboData.reset(new LibPlaceboData(ctx, effectivePeakDetection));
                 }
 

@@ -76,6 +76,7 @@ namespace tl
             HDRBezier ootf;
 
             //! HDR CieY Metadata (DolbyVision)
+            bool  isDolbyVision = false;
             float maxPQY = 0.F;
             float avgPQY = 0.F;
 

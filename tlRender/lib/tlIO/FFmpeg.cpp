@@ -300,6 +300,7 @@ namespace tl
                 const AVDOVIColorMetadata *dovi_color;
                 dovi_color = av_dovi_get_color(metadata);
                 hdr.eotf = image::EOTF_BT2020;
+                hdr.isDolbyVision = true;
                 float min_luma = dolby_rescale(dovi_color->source_min_pq / 4095.0f);
                 float max_luma = dolby_rescale(dovi_color->source_max_pq / 4095.0f);
                 hdr.displayMasteringLuminance = math::FloatRange(min_luma, max_luma);
@@ -313,6 +314,7 @@ namespace tl
             AVFrameSideData* sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DOVI_RPU_BUFFER);
             if (sd)
             {
+                hdr.isDolbyVision = true;
                 hdr_metadata_from_dovi_rpu(hdr, sd->buf->data, sd->buf->size);
             }
         }

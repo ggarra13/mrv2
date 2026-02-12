@@ -44,14 +44,15 @@ namespace tl
         inline bool HDRData::operator==(const HDRData& other) const
         {
             return eotf == other.eotf && primaries == other.primaries &&
-                   displayMasteringLuminance ==
-                       other.displayMasteringLuminance &&
-                   maxCLL == other.maxCLL && maxFALL == other.maxFALL &&
-                   sceneMax[0] == other.sceneMax[0] &&
-                   sceneMax[1] == other.sceneMax[1] &&
+                displayMasteringLuminance ==
+                other.displayMasteringLuminance &&
+                maxCLL == other.maxCLL && maxFALL == other.maxFALL &&
+                sceneMax[0] == other.sceneMax[0] &&
+                sceneMax[1] == other.sceneMax[1] &&
                    sceneMax[2] == other.sceneMax[2] && ootf == other.ootf &&
-                   sceneAvg == other.sceneAvg && maxPQY == other.maxPQY &&
-                   avgPQY == other.avgPQY;
+                sceneAvg == other.sceneAvg && maxPQY == other.maxPQY &&
+                isDolbyVision == other.isDolbyVision &&
+                avgPQY == other.avgPQY;
         }
 
         inline bool HDRData::operator!=(const HDRData& other) const
@@ -73,8 +74,7 @@ namespace tl
         
         inline bool isHDRDolbyVision(const HDRData& o)
         {
-            return (o.eotf == image::EOTF_BT2100_PQ &&
-                    (o.maxPQY != 0.F || o.avgPQY != 0.F));
+            return (o.eotf == image::EOTF_BT2020 && o.isDolbyVision);
         }
         
         inline std::ostream& operator<<(std::ostream& s, const HDRData& o)
