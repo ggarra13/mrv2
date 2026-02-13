@@ -222,22 +222,8 @@ namespace tl
             {
                 if (layer.image)
                 {
-                    const auto& tags = layer.image->getTags();
-                    const auto k = tags.find("hdr");
-                    if (k != tags.end())
-                    {
-                        out =
-                            std::shared_ptr<image::HDRData>(new image::HDRData);
-                        try
-                        {
-                            auto json = nlohmann::json::parse(k->second);
-                            from_json(json, *out);
-                        }
-                        catch (const std::exception&)
-                        {
-                        }
-                        break;
-                    }
+                    out = std::shared_ptr<image::HDRData>(new image::HDRData);
+                    *out = layer.image->getHDR();
                 }
             }
             return out;

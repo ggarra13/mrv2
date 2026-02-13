@@ -267,9 +267,18 @@ namespace tl
             json.at("sceneMax2").get_to(value.sceneMax[2]);
             json.at("sceneAvg").get_to(value.sceneAvg);
             json.at("ootf").get_to(value.ootf);
-            json.at("isDolbyVision").get_to(value.isDolbyVision);
-            json.at("maxPQY").get_to(value.maxPQY);
-            json.at("avgPQY").get_to(value.avgPQY);
+            if (json.contains("isDolbyVision"))
+            {
+                json.at("isDolbyVision").get_to(value.isDolbyVision);
+                json.at("maxPQY").get_to(value.maxPQY);
+                json.at("avgPQY").get_to(value.avgPQY);
+            }
+            else
+            {
+                value.isDolbyVision = false;
+                value.maxPQY = 0.F;
+                value.avgPQY = 0.F;
+            }
         }
     } // namespace image
 } // namespace tl
