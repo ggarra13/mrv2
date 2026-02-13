@@ -151,6 +151,11 @@ namespace mrv
         {
             if (Flu_File_Chooser::window)
                 return;
+            
+            if (oldMsg == c)
+                return;
+
+            oldMsg = c;
 
             std::cerr << c;
 
@@ -175,6 +180,11 @@ namespace mrv
             if (Flu_File_Chooser::window)
                 return;
 
+            if (oldMsg == c)
+                return;
+
+            oldMsg = c;
+            
             if (out.is_open())
             {
                 out << c << std::flush;

@@ -42,6 +42,8 @@ namespace mrv
             virtual int sync();
 
             virtual void print(const char* c) = 0;
+
+            std::string oldMsg;
         };
 
         struct errorbuffer : public logbuffer

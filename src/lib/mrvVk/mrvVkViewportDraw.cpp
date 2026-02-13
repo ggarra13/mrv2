@@ -1129,7 +1129,7 @@ namespace mrv
                 p.hdrOptions.ScRGB)
             {
                 if (p.hdrOptions.debug)
-                    LOG_STATUS("Sending SDR BT709 primaries");
+                    LOG_WARNING("Sending SDR BT709 primaries");
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
 
                 // Primaries
@@ -1147,14 +1147,14 @@ namespace mrv
             else
             {
                 if (p.hdrOptions.debug)
-                    LOG_STATUS("Sending HDR primaries");
+                    LOG_WARNING("Sending HDR primaries");
                 const int screen_index = this->screen_num();
                 const timeline::OCIOOptions& ocio = getOCIOOptions(screen_index);
                 image::HDRData data;
                 if (!ocio.display.empty() && !ocio.view.empty())
                 {
                     if (p.hdrOptions.debug)
-                        LOG_STATUS("Sending OCIO image metadata");
+                        LOG_WARNING("Sending OCIO image metadata");
                     data = image::nameToPrimaries(ocio.display + ocio.view);
                     if (ocio.view.find("SDR") == std::string::npos)
                     {
@@ -1177,7 +1177,7 @@ namespace mrv
                 else
                 {
                     if (p.hdrOptions.debug)
-                        LOG_STATUS("Sending HDR video metadata");
+                        LOG_WARNING("Sending HDR video metadata");
                     data = p.hdrOptions.hdrData;
                 }
                 
@@ -1206,9 +1206,9 @@ namespace mrv
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
                 if (p.hdrOptions.debug)
-                    LOG_STATUS("HDR= primaries '"
-                               << image::primariesName(data.primaries) << "'"
-                               << std::endl << data);
+                    LOG_WARNING("HDR= primaries '"
+                                << image::primariesName(data.primaries) << "'"
+                                << std::endl << data);
             }
 
 
