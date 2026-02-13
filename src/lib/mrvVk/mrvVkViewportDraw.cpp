@@ -1141,7 +1141,7 @@ namespace mrv
                 // Max display capability
                 m_hdr_metadata.maxLuminance = 100.F;
                 m_hdr_metadata.minLuminance = 0.1F;
-                m_hdr_metadata.maxContentLightLevel = 203.F;
+                m_hdr_metadata.maxContentLightLevel = 100.F;
                 m_hdr_metadata.maxFrameAverageLightLevel = 100.F;
             }
             else
