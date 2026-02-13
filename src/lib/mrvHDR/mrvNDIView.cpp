@@ -327,6 +327,13 @@ namespace mrv
 
         pl_log log;
         pl_gpu gpu;
+        pl_shader shader;
+        pl_shader_obj state = nullptr;
+        const pl_shader_res* res = nullptr;
+        
+        std::vector<pl_shader_var> pcUBOvars;
+        void* pcUBOData = nullptr;
+        size_t pcUBOSize = 0;
     };
 
     LibPlaceboData::LibPlaceboData()
@@ -381,6 +388,17 @@ namespace mrv
 
     LibPlaceboData::~LibPlaceboData()
     {
+        pl_shader_free(&shader);
+        res = nullptr;
+        if (state)
+        {
+            pl_shader_obj_destroy(&state);
+            state = nullptr;
+        }
+        pcUBOvars.clear();
+        free(pcUBOData);
+        pcUBOSize = 0;
+            
         pl_gpu_dummy_destroy(&gpu);
         pl_log_destroy(&log);
     }
@@ -393,6 +411,8 @@ namespace mrv
         // HDR monitor variables
         int screen_index = 0;
         monitor::HDRCapabilities hdrCapabilities;
+        const pl_shader_res* res = nullptr;
+        pl_shader_obj state = nullptr;
 
         NDIlib_find_instance_t NDI_find = nullptr;
         NDIlib_recv_instance_t NDI_recv = nullptr;
@@ -1261,6 +1281,22 @@ void main() {
             if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
                 m_hdr_metadata_changed = true; // Mark as changed
         }
+        else
+        {
+            m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
+
+            // Primaries
+            m_hdr_metadata.displayPrimaryRed = { 0.640F, 0.330F };
+            m_hdr_metadata.displayPrimaryGreen = { 0.300F, 0.600F };
+            m_hdr_metadata.displayPrimaryBlue = { 0.15F, 0.060F };
+            m_hdr_metadata.whitePoint = { 0.3127F, 0.3290F };
+                
+            // Max display capability
+            m_hdr_metadata.maxLuminance = 100.F;
+            m_hdr_metadata.minLuminance = 0.1F;
+            m_hdr_metadata.maxContentLightLevel = 100.F;
+            m_hdr_metadata.maxFrameAverageLightLevel = 100.F;
+        }
 
         if (!p.image)
             return;
@@ -1729,8 +1765,9 @@ void main() {
         shader_params.gpu = p.placeboData->gpu;
         shader_params.dynamic_constants = false;
 
-        pl_shader shader = pl_shader_alloc(p.placeboData->log, &shader_params);
-        if (!shader)
+        p.placeboData->shader =
+            pl_shader_alloc(p.placeboData->log, &shader_params);
+        if (!p.placeboData->shader)
         {
             throw std::runtime_error("pl_shader_alloc failed!");
         }
@@ -1777,6 +1814,8 @@ void main() {
             hdr.ootf.num_anchors = data.ootf.numAnchors;
             for (int i = 0; i < hdr.ootf.num_anchors; i++)
                 hdr.ootf.anchors[i] = data.ootf.anchors[i];
+            hdr.max_pq_y = data.maxPQY;
+            hdr.avg_pq_y = data.avgPQY;
         }
         else
         {
@@ -1835,7 +1874,7 @@ void main() {
             dst_colorspace.hdr.max_luma = 203.0F; // SDR peak
                             
             if (p.hasHDR)
-                cmap.tone_mapping_function = &pl_tone_map_hable;
+                cmap.tone_mapping_function = &pl_tone_map_spline;
             else
                 cmap.tone_mapping_function = nullptr;
         }
@@ -1848,16 +1887,17 @@ void main() {
         color_map_args.src = src_colorspace;
         color_map_args.dst = dst_colorspace;
         color_map_args.prelinearized = false;
+        
+        // Reuse results if possible
+        color_map_args.state = &p.placeboData->state;
 
-        pl_shader_obj state = NULL;
-        color_map_args.state = &state; // with NULL and tonemap_clip works
+        pl_shader_color_map_ex(p.placeboData->shader, &cmap, &color_map_args);
 
-        pl_shader_color_map_ex(shader, &cmap, &color_map_args);
-
-        const pl_shader_res* res = pl_shader_finalize(shader);
-        if (!res)
+        p.placeboData->res = pl_shader_finalize(p.placeboData->shader);
+        const pl_shader_res* res = p.placeboData->res;
+        if (!p.placeboData->res)
         {
-            pl_shader_free(&shader);
+            pl_shader_free(&p.placeboData->shader);
             throw std::runtime_error("pl_shader_finalize failed!");
         }
 
@@ -2049,7 +2089,8 @@ void main() {
         catch (const std::exception& e)
         {
             std::cerr << e.what() << std::endl;
-            pl_shader_free(&shader);
+            pl_shader_free(&p.placeboData->shader);
+            p.placeboData->shader = nullptr;
             return;
         }
 
@@ -2058,8 +2099,6 @@ void main() {
             p.hdrColors += res->name;
             p.hdrColors += "(tmp);\n";
         }
-
-        pl_shader_free(&shader);
     }
 
     void NDIView::setNDISource(const std::string& source)
