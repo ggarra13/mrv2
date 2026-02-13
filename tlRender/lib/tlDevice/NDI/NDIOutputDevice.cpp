@@ -241,6 +241,25 @@ namespace tl
 #ifdef OPENGL_BACKEND
                     p.window->doneCurrent();
 #endif
+#ifdef VULKAN_BACKEND
+                    VkDevice device = ctx.device;
+                    if (device != VK_NULL_HANDLE)
+                    {
+                        if (p.thread.cmd != VK_NULL_HANDLE)
+                        {
+                            vkFreeCommandBuffers(device, p.thread.commandPool, 1, &p.thread.cmd);
+                            p.thread.cmd = VK_NULL_HANDLE;
+                        }
+                        if (p.thread.commandPool != VK_NULL_HANDLE)
+                        {
+                            vkDestroyCommandPool(device,
+                                                 p.thread.commandPool,
+                                                 nullptr);
+                            p.thread.commandPool = VK_NULL_HANDLE;
+                        }
+                    }
+#endif
+     
                 });
         }
 
@@ -973,8 +992,8 @@ namespace tl
 #ifdef VULKAN_BACKEND
             vkDeviceWaitIdle(ctx.device);
 #endif
-            p.thread.offscreenBuffer.reset();
             p.thread.render.reset();
+            p.thread.offscreenBuffer.reset();
 
             // Free the video frame
             free(p.thread.NDI_video_frame.p_data);
@@ -1979,17 +1998,12 @@ namespace tl
             
             p.thread.offscreenBuffer->submitReadback(p.thread.cmd);
 
-            {
-                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
-                vkQueueWaitIdle(ctx.queue());
-            }
+            void* data = nullptr;
+            while ( p.thread.running && ! (data = p.thread.offscreenBuffer->getLatestReadPixels()) )
+                continue;
 
-            const void* data = p.thread.offscreenBuffer->getLatestReadPixels();
             if (!data)
                 return;
-            
-            vkFreeCommandBuffers(ctx.device, p.thread.commandPool, 1, &p.thread.cmd);
-            p.thread.cmd = VK_NULL_HANDLE;
             
             p.thread.frameIndex = (p.thread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                     
