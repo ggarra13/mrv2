@@ -62,6 +62,8 @@ ChangeLog
 - Added sending HDR metadata for proper HDR when using OCIO and not just movies.
 - Fixed color picker toolbar always showing solid alpha channel for images with it on the Vulkan backend.
 - Fixed color toolbar to support values with 4 digits, like 10000.000 for HDR lookups.
+- Removed Vulkan validation errors from NDI's Panel -> NDI Output Stream.
+- Sped up NDI Output Stream and hdr utility.
 
 
 v1.5.4

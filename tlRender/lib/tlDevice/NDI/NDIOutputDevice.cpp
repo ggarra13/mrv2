@@ -2001,11 +2001,13 @@ namespace tl
             void* data = nullptr;
             while ( p.thread.running && ! (data = p.thread.offscreenBuffer->getLatestReadPixels()) )
                 continue;
-
+  
             if (!data)
                 return;
+
             
             p.thread.frameIndex = (p.thread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+
                                     
             copyPackPixels(video_frame.p_data, data, p.thread.size,
                            p.thread.outputPixelType);

@@ -1250,6 +1250,15 @@ namespace mrv
     void App::cleanResources()
     {
         TLRENDER_P();
+
+#ifdef TLRENDER_NDI
+        endNDIOutputStream();
+#endif
+
+#ifdef TLRENDER_BMD
+        endBMDOutputStream();
+#endif
+        
         
         delete p.mainControl;
         p.mainControl = nullptr;
