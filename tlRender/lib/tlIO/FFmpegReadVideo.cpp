@@ -948,11 +948,8 @@ namespace tl
 
                 toHDRData(avVideoStream, _hdr);
                 _hdr.eotf = toEOTF(_avColorTRC);
-                if (image::isHDR(_hdr))
-                {
-                    setPrimariesFromAVColorPrimaries(params->color_primaries,
-                                                     _hdr);
-                }
+                setPrimariesFromAVColorPrimaries(params->color_primaries,
+                                                 _hdr);
             }
         }
 
@@ -1403,14 +1400,13 @@ namespace tl
                     }
                     
                     _hdr.eotf = toEOTF(_avFrame->color_trc);
+                    setPrimariesFromAVColorPrimaries(_avFrame->color_primaries,
+                                                     _hdr);
                     if (image::isHDR(_hdr))
                     {
-                        const auto params = _avCodecParameters[_avStream];
-                        setPrimariesFromAVColorPrimaries(_avFrame->color_primaries,
-                                                         _hdr);
                         toHDRData(_avFrame, _hdr);
+                        image->setHDR(_hdr);
                     }
-                    image->setHDR(_hdr);
                     image->setTags(tags);
                     
                     _buffer.push_back(image);

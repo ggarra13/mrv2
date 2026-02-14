@@ -328,10 +328,10 @@ namespace tl
             //! Is the image valid?
             bool isValid() const;
 
-            //! Get the image _hdr information.
-            const HDRData& getHDR() const;
+            //! Get the image HDR information.
+            const std::shared_ptr<HDRData>& getHDR() const;
 
-            //! Set the image _hdr information.
+            //! Set the image HDR information.
             void setHDR(const HDRData&);
 
             //! Get the image tags.
@@ -377,7 +377,7 @@ namespace tl
         private:
             Info _info;
             Tags _tags;
-            HDRData  _hdr;
+            std::shared_ptr<HDRData>  _hdr;
             
             std::shared_ptr<AVFrame> _avFrame;
             const uint8_t* _planes[3] = { nullptr, nullptr, nullptr };

@@ -184,14 +184,14 @@ namespace tl
             return _tags;
         }
 
-        inline const HDRData& Image::getHDR() const
+        inline const std::shared_ptr<HDRData>& Image::getHDR() const
         {
             return _hdr;
         }
 
         inline void Image::setHDR(const HDRData& hdr)
         {
-            _hdr = hdr;
+            _hdr.reset(new HDRData(hdr));
         }
                 
         inline size_t Image::getDataByteCount() const

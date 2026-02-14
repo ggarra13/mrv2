@@ -222,8 +222,7 @@ namespace tl
             {
                 if (layer.image)
                 {
-                    out = std::shared_ptr<image::HDRData>(new image::HDRData);
-                    *out = layer.image->getHDR();
+                    out = layer.image->getHDR();
                 }
             }
             return out;

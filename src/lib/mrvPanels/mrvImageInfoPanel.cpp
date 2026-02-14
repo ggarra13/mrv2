@@ -2498,7 +2498,11 @@ namespace mrv
                 {
                     tagData[tag.first] = tag.second;
                 }
-                hdr = videoData[0].layers[0].image->getHDR();
+                auto hdrData = videoData[0].layers[0].image->getHDR();
+                if (hdrData)
+                    hdr = *hdrData;
+                else
+                    hdr.eotf = image::EOTF_BT709;
             }
         }
     } // namespace panel

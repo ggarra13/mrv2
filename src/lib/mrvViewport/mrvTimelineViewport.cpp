@@ -3687,8 +3687,17 @@ namespace mrv
         {
             TLRENDER_P();
 
-            p.hdrOptions.hdrData = p.videoData[0].layers[0].image->getHDR();
-            p.hdrOptions.tonemap = true;
+            auto hdrData = p.videoData[0].layers[0].image->getHDR();
+            if (hdrData)
+            {
+                p.hdrOptions.hdrData = *hdrData;
+                p.hdrOptions.tonemap = true;
+            }
+            else
+            {
+                p.hdrOptions.tonemap = false;
+                p.hdrOptions.hdrData = image::HDRData();
+            }
         }
         
         void TimelineViewport::_getTags() noexcept
