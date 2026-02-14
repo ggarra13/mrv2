@@ -1856,7 +1856,7 @@ void main() {
             // into HDR
             if (!p.hasHDR)
             {
-                cmap.tone_mapping_function = &pl_tone_map_st2094_40;
+                cmap.tone_mapping_function = &pl_tone_map_spline;
                 cmap.metadata = PL_HDR_METADATA_NONE; // Simplify
             }
             else
