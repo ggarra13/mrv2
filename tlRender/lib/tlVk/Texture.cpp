@@ -320,7 +320,10 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-            vkDeviceWaitIdle(device); // needed
+            {
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                vkDeviceWaitIdle(device); // needed
+            }
             
             if (p.imageView != VK_NULL_HANDLE)
             {

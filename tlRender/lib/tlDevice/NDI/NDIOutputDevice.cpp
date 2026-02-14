@@ -40,6 +40,7 @@
 #include <iostream>
 #include <list>
 #include <mutex>
+#include <thread>
 #include <tuple>
 
 namespace tl
@@ -242,6 +243,7 @@ namespace tl
                     p.window->doneCurrent();
 #endif
 #ifdef VULKAN_BACKEND
+                    // Cleanup
                     VkDevice device = ctx.device;
                     if (device != VK_NULL_HANDLE)
                     {
@@ -990,10 +992,13 @@ namespace tl
 #endif
 
 #ifdef VULKAN_BACKEND
-            vkDeviceWaitIdle(ctx.device);
+            {
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                vkDeviceWaitIdle(ctx.device); // needed
+            }
 #endif
-            p.thread.render.reset();
             p.thread.offscreenBuffer.reset();
+            p.thread.render.reset();
 
             // Free the video frame
             free(p.thread.NDI_video_frame.p_data);
@@ -1998,13 +2003,19 @@ namespace tl
             
             p.thread.offscreenBuffer->submitReadback(p.thread.cmd);
 
-            void* data = nullptr;
-            while ( p.thread.running && ! (data = p.thread.offscreenBuffer->getLatestReadPixels()) )
-                continue;
-  
+            {
+                // This is needed.  Do not remove.
+                std::lock_guard<std::mutex> lock(ctx.queue_mutex());
+                vkQueueWaitIdle(ctx.queue());
+            }
+
+            const void* data = p.thread.offscreenBuffer->getLatestReadPixels();
+
+            vkFreeCommandBuffers(ctx.device, p.thread.commandPool, 1, &p.thread.cmd);
+            p.thread.cmd = VK_NULL_HANDLE;
+
             if (!data)
                 return;
-
             
             p.thread.frameIndex = (p.thread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
 

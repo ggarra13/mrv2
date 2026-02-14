@@ -1218,9 +1218,7 @@ namespace tl
 
             {
                 std::lock_guard<std::mutex> lock(ctx.queue_mutex());
-                VkQueue queue = ctx.queue();
-
-                result = vkQueueSubmit(queue, 1, &submitInfo,
+                result = vkQueueSubmit(ctx.queue(), 1, &submitInfo,
                                        p.pboRing[p.writeIndex].fence);
             }
             
