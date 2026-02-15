@@ -3731,11 +3731,10 @@ namespace mrv
                     peak = std::stof(match[1].str());
                 }
 
-                p.hdrOptions.hdrData.displayMasteringLuminance = math::FloatRange(0.0f, peak);
+                p.hdrOptions.hdrData.displayMasteringLuminance =
+                    math::FloatRange(0.001f, peak);
                 p.hdrOptions.hdrData.maxCLL = peak;
-            
-                // 15% is a much safer real-world limit for maxFALL to prevent severe ABL dimming
-                p.hdrOptions.hdrData.maxFALL = peak * 0.15f;
+                p.hdrOptions.hdrData.maxFALL = peak * 0.4f;
             }
             else
             {

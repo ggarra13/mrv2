@@ -93,6 +93,7 @@ namespace tl
                                   const math::Vector2f& blue,
                                   const math::Vector2f& white);
         std::string primariesName(const std::array<math::Vector2f, HDRPrimaries::Count> primaries);
+        std::string primariesName(const HDRData&);
 
         HDRData nameToPrimaries(const std::string& name);
         

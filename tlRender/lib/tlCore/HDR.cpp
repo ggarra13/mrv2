@@ -43,7 +43,7 @@ namespace tl
 
                 out.primaries[Red]   = {0.708F, 0.292F};
                 out.primaries[Green] = {0.170F, 0.797F};
-                out.primaries[Blue]  = {0.131F, 0.040F};
+                out.primaries[Blue]  = {0.131F, 0.046F};
                 out.primaries[White] = {0.3127F, 0.3290F};
             }
             // --- 2. DCI-P3 / Display P3 ---
@@ -114,7 +114,7 @@ namespace tl
             }
 
             return out;
-        }        
+        }
         
         std::string primariesName(const math::Vector2f& r,
                                   const math::Vector2f& g,
@@ -202,6 +202,17 @@ namespace tl
         std::string primariesName(const std::array<math::Vector2f, HDRPrimaries::Count> primaries)
         {
             return primariesName(primaries[0], primaries[1], primaries[2], primaries[3]);
+        }
+
+        std::string primariesName(const HDRData& value)
+        {
+            std::string out;
+            out = primariesName(value.primaries);
+            if (value.eotf == EOTF_BT2100_HLG)
+                out = "Rec. 2100-HLG";
+            else if (value.eotf == EOTF_BT2100_PQ)
+                out = "Rec. 2100-PQ";
+            return out;
         }
         
         void to_json(nlohmann::json& json, const HDRBezier& value)

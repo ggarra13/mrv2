@@ -1138,19 +1138,23 @@ namespace mrv
                 
                 // Max display capability
                 m_hdr_metadata.maxLuminance = 100.F;
-                m_hdr_metadata.minLuminance = 0.01F;
+                m_hdr_metadata.minLuminance = 0.1F;
                 m_hdr_metadata.maxContentLightLevel = 100.F;
                 m_hdr_metadata.maxFrameAverageLightLevel = 100.F;
             }
             else
             {
- 
+
+                const int screen_index = this->screen_num();
+                const timeline::OCIOOptions& ocio = getOCIOOptions(screen_index);
                 const image::HDRData& data = p.hdrOptions.hdrData;
 
                 if (p.hdrOptions.debug)
                     LOG_WARNING("Sending HDR primaries '"
                                 << image::primariesName(data.primaries) << "'"
-                                << std::endl << data);
+                                << std::endl << data
+                                << " for OCIO " << ocio.display << " / "
+                                << ocio.view);
 
                 
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;

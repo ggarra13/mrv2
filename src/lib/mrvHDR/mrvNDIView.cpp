@@ -62,7 +62,6 @@ namespace
 
 namespace
 {
-    // \@bug: not needed?
     float apply_inverse_pq(float x)
     {
         float m1 = 0.8359375f;
@@ -610,10 +609,10 @@ namespace mrv
                     float R, G, B;
 
                     float Y_linear = Yf;
-                    // if (p.hasHDR)
-                    //     Y_linear = apply_inverse_pq(Yf);
-                    // else
-                    //     Y_linear = Yf;
+                    if (p.hasHDR)
+                        Y_linear = apply_inverse_pq(Yf);
+                    else
+                        Y_linear = Yf;
 
                     if (useBT709)
                     {
@@ -670,10 +669,10 @@ namespace mrv
                     float R, G, B;
 
                     float Y_linear = Yf;
-                    // if (p.hasHDR)
-                    //     Y_linear = apply_inverse_pq(Yf);
-                    // else
-                    //     Y_linear = Yf;
+                    if (p.hasHDR)
+                        Y_linear = apply_inverse_pq(Yf);
+                    else
+                        Y_linear = Yf;
 
                     if (useBT709)
                     {
@@ -723,7 +722,7 @@ namespace mrv
 
         VkResult result;
         m_textures.reserve(16);  // reserve up to 16 textures for libplacebo.
-
+        
         uint32_t tex_width = 1, tex_height = 1;
         image::Info info;
         if (p.image)
@@ -1572,11 +1571,11 @@ void main() {
                                         nlohmann::json::parse(jsonString);
 
                                     hdrData = j.get<image::HDRData>();
-                                    // if (!image::isHDR(hdrData))
-                                    // {
-                                    //     p.hasHDR = false;
-                                    //     init = true;
-                                    // }
+                                    if (!image::isHDR(hdrData))
+                                    {
+                                        p.hasHDR = false;
+                                        init = true;
+                                    }
                                 }
                                 else
                                 {
@@ -1607,6 +1606,8 @@ void main() {
                         }
                         catch (const std::exception& e)
                         {
+                            std::cerr << "hdr error: " << e.what()
+                                      << std::endl;
                         }
                     }
                     else
@@ -1616,24 +1617,26 @@ void main() {
                         p.hasHDR = false;
                     }
 
-                    if (init)
                     {
                         std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
-                        p.info.size.w = video_frame.xres;
-                        p.info.size.h = video_frame.yres;
-                        p.info.size.pixelAspectRatio = pixelAspectRatio;
-                        p.info.layout.mirror.y = true;
-                        p.info.pixelType = image::PixelType::RGBA_F16;
-                        p.info.videoLevels = image::VideoLevels::FullRange;
-                        p.fourCC = video_frame.FourCC;
-                        p.image = image::Image::create(p.info);
-                        m_swapchain_needs_recreation = true;
-                    }
+                        if (init)
+                        {
+                            p.info.size.w = video_frame.xres;
+                            p.info.size.h = video_frame.yres;
+                            p.info.size.pixelAspectRatio = pixelAspectRatio;
+                            p.info.layout.mirror.y = true;
+                            p.info.pixelType = image::PixelType::RGBA_F16;
+                            p.info.videoLevels = image::VideoLevels::FullRange;
+                            p.fourCC = video_frame.FourCC;
+                            p.image = image::Image::create(p.info);
+                            m_swapchain_needs_recreation = true;
+                        }
 
-                    if (video_frame.p_data && !init)
-                    {
-                        _copy(video_frame.p_data);
-                        redraw();
+                        if (video_frame.p_data)
+                        {
+                            _copy(video_frame.p_data);
+                            redraw();
+                        }
                     }
 
                     NDIlib_recv_free_video(p.NDI_recv, &video_frame);
