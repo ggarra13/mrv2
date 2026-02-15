@@ -3693,6 +3693,7 @@ namespace mrv
             {
                 p.hdrOptions.hdrData = *hdrData;
                 p.hdrOptions.tonemap = true;
+                return;
             }
             
             const int screen_index = this->screen_num();
