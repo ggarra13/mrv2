@@ -1122,9 +1122,7 @@ namespace mrv
         void Viewport::_updateHDRMetadata()
         {
             TLRENDER_P();
-            
-            int screen = this->screen_num();
-            
+                        
             if (!p.hdrOptions.tonemap || !p.hdrMonitorFound ||
                 p.hdrOptions.ScRGB)
             {
@@ -1140,46 +1138,20 @@ namespace mrv
                 
                 // Max display capability
                 m_hdr_metadata.maxLuminance = 100.F;
-                m_hdr_metadata.minLuminance = 0.1F;
+                m_hdr_metadata.minLuminance = 0.01F;
                 m_hdr_metadata.maxContentLightLevel = 100.F;
                 m_hdr_metadata.maxFrameAverageLightLevel = 100.F;
             }
             else
             {
+ 
+                const image::HDRData& data = p.hdrOptions.hdrData;
+
                 if (p.hdrOptions.debug)
-                    LOG_WARNING("Sending HDR primaries");
-                const int screen_index = this->screen_num();
-                const timeline::OCIOOptions& ocio = getOCIOOptions(screen_index);
-                image::HDRData data;
-                if (!ocio.display.empty() && !ocio.view.empty())
-                {
-                    if (p.hdrOptions.debug)
-                        LOG_WARNING("Sending OCIO image metadata");
-                    data = image::nameToPrimaries(ocio.display + ocio.view);
-                    if (ocio.view.find("SDR") == std::string::npos)
-                    {
-                        float peak = 1000.0f;
-                        if (ocio.view.find("10000") != std::string::npos)     peak = 10000.F;
-                        else if (ocio.view.find("4000") != std::string::npos) peak = 4000.F;
-                        else if (ocio.view.find("2000") != std::string::npos) peak = 2000.F;
-                        else if (ocio.view.find("1000") != std::string::npos) peak = 1000.F;
-                        data.displayMasteringLuminance = math::FloatRange(0, peak);
-                        data.maxCLL = peak;
-                        data.maxFALL = peak * 0.4F; // prevents crushing mid-tones
-                    }
-                    else
-                    {
-                        data.displayMasteringLuminance = math::FloatRange(0, 100.F);
-                        data.maxCLL = 203.F;
-                        data.maxFALL = 100.F;
-                    }
-                }
-                else
-                {
-                    if (p.hdrOptions.debug)
-                        LOG_WARNING("Sending HDR video metadata");
-                    data = p.hdrOptions.hdrData;
-                }
+                    LOG_WARNING("Sending HDR primaries '"
+                                << image::primariesName(data.primaries) << "'"
+                                << std::endl << data);
+
                 
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
                 m_hdr_metadata.displayPrimaryRed = {
@@ -1205,10 +1177,6 @@ namespace mrv
                     data.displayMasteringLuminance.getMin();
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
-                if (p.hdrOptions.debug)
-                    LOG_WARNING("HDR= primaries '"
-                                << image::primariesName(data.primaries) << "'"
-                                << std::endl << data);
             }
 
 

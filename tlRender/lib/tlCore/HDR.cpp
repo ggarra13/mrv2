@@ -18,7 +18,7 @@ namespace tl
         TLRENDER_ENUM_IMPL(HDRPrimaries, "Red", "Green", "Blue", "White");
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRPrimaries);
 
-        HDRData nameToPrimaries(const std::string input)
+        HDRData nameToPrimaries(const std::string& input)
         {
             HDRData out;
             const std::string& name = string::toUpper(input);
@@ -113,6 +113,17 @@ namespace tl
                 out.primaries[Blue].y = 0.080F;
                 out.primaries[White].x = 0.310F;
                 out.primaries[White].y = 0.316F;
+            }
+            else
+            {
+                out.primaries[Red].x = 0.640F;
+                out.primaries[Red].y = 0.330F;
+                out.primaries[Green].x = 0.300F;
+                out.primaries[Green].y = 0.600F;
+                out.primaries[Blue].x = 0.150F;
+                out.primaries[Blue].y = 0.060F;
+                out.primaries[White].x = 0.3127F;
+                out.primaries[White].y = 0.3290F;
             }
             return out;
         }
