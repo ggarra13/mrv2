@@ -5,7 +5,6 @@
 #include "mrViewer.h"
 
 #include "mrvApp/mrvSettingsObject.h"
-
 #include "mrvWidgets/mrvMultilineInput.h"
 
 #include "mrvVk/mrvVkDefines.h"
@@ -34,6 +33,8 @@
 
 
 #include <FL/Fl_PNG_Image.H>
+
+#include <cmath>
 
 namespace
 {
@@ -1176,9 +1177,11 @@ namespace mrv
                 };
                 // Max display capability
                 m_hdr_metadata.maxLuminance =
-                    data.displayMasteringLuminance.getMax();
-                m_hdr_metadata.minLuminance =
-                    data.displayMasteringLuminance.getMin();
+                    std::max(p.hdrCapabilities.max_nits,
+                             data.displayMasteringLuminance.getMax());
+                m_hdr_metadata.minLuminance = 
+                    std::min(p.hdrCapabilities.min_nits,
+                             data.displayMasteringLuminance.getMin());
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
             }

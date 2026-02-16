@@ -811,19 +811,19 @@ namespace mrv
                 item->set();
             }
             
-            mode = FL_MENU_TOGGLE;
-            if (numFiles == 0)
-                mode |= FL_MENU_INACTIVE;
+            // mode = FL_MENU_TOGGLE;
+            // if (numFiles == 0)
+            //     mode |= FL_MENU_INACTIVE;
 
-            idx = menu->add(_("Render/HDR/Enable ScRGB"),
-                            kToggleHDRScRGB.hotkey(),
-                            (Fl_Callback*) toggle_hdr_ScRGB_cb, ui,
-                            mode);
-            if (hdrOptions.ScRGB)
-            {
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                item->set();
-            }
+            // idx = menu->add(_("Render/HDR/Enable ScRGB"),
+            //                 kToggleHDRScRGB.hotkey(),
+            //                 (Fl_Callback*) toggle_hdr_ScRGB_cb, ui,
+            //                 mode);
+            // if (hdrOptions.ScRGB)
+            // {
+            //     item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            //     item->set();
+            // }
 #endif
             
             mode = FL_MENU_RADIO;

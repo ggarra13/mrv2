@@ -54,8 +54,11 @@ namespace tl
             bool tonemap = false;
 
             //! Trick for Windows HDR by sending it BT709 chromaticities.
+#ifdef _WIN32
+            bool ScRGB = true;
+#else
             bool ScRGB = false;
-
+#endif
             //! Peak detection variables.
             bool peak_detection = false;
             float peak_percentile = 100.F;
