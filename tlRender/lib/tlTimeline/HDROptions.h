@@ -54,7 +54,7 @@ namespace tl
             bool tonemap = false;
 
             //! Trick for Windows HDR by sending it BT709 chromaticities.
-#ifdef _WIN32
+#if defined(_WINDOWS)
             bool ScRGB = true;
 #else
             bool ScRGB = false;
