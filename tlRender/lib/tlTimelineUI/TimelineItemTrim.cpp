@@ -215,6 +215,8 @@ namespace tl
             {
                 _mouseReleaseEventTrim(event);
             }
+            default:
+                break;
             }   
         }
 
