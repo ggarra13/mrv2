@@ -2122,12 +2122,6 @@ msgstr ""
 msgid "Color Transfer Space"
 msgstr ""
 
-msgid "Primaries Name"
-msgstr ""
-
-msgid "PrimariesName"
-msgstr ""
-
 msgid "HDR Red Primaries"
 msgstr ""
 
@@ -3847,6 +3841,9 @@ msgid "Render/Alpha Blend/Straight"
 msgstr ""
 
 msgid "Render/Alpha Blend/Premultiplied"
+msgstr ""
+
+msgid "Render/HDR/Debug"
 msgstr ""
 
 msgid "Render/HDR/Enable Peak Detection"

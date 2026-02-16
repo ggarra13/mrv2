@@ -2386,12 +2386,6 @@ msgstr "Color Space"
 msgid "Color Transfer Space"
 msgstr "Color Transfer Space"
 
-msgid "Primaries Name"
-msgstr "Preset Name"
-
-msgid "PrimariesName"
-msgstr "Preset Name"
-
 msgid "HDR Red Primaries"
 msgstr "HDR Red Primaries"
 
@@ -4168,6 +4162,9 @@ msgstr "Render/Alpha Blend/Straight"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Alpha Blend/Premultiplied"
+
+msgid "Render/HDR/Debug"
+msgstr "Render/HDR/Debug"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Enable Peak Detectionx"
@@ -8127,11 +8124,23 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "HDR Shot/Scene Peak Detection"
-#~ msgstr "HDR Peak Detection"
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "Toggle HDR tonemap"
+
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Enable Peak Detectionx"
 
 #~ msgid "User Interface/HDR"
 #~ msgstr "User Interface/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Preset Name"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Preset Name"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "HDR Peak Detection"
 
 #~ msgid "Monitor "
 #~ msgstr "Monitor "

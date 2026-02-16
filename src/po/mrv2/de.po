@@ -2345,12 +2345,6 @@ msgstr "Farbraum"
 msgid "Color Transfer Space"
 msgstr "Farbbertragungsraum"
 
-msgid "Primaries Name"
-msgstr "Name der Primärfarben"
-
-msgid "PrimariesName"
-msgstr "Primärfarbenname"
-
 msgid "HDR Red Primaries"
 msgstr "HDR-Rote Grundlinien"
 
@@ -4155,6 +4149,9 @@ msgstr "Render/Alpha-Mischung/gerade"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Alpha Blend/Vorvervielfacht"
+
+msgid "Render/HDR/Debug"
+msgstr "Rendern/HDR/Debug"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Spitzlichterkennung aktivieren"
@@ -6763,8 +6760,8 @@ msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
 msgstr ""
-"Bei Werten unter 100 hilft dies, die Spitzenhelligkeit zu ermitteln, indem "
-"die obersten 1% der Ausreißer ignoriert werden."
+"Wenn der Wert unter 100 liegt, hilft dies, die Spitzenhelligkeit zu "
+"ermitteln, indem die obersten 1 % der Ausreißer ignoriert werden."
 
 msgid "Smoothing Period"
 msgstr "Glättungszeitraum"
@@ -8139,6 +8136,23 @@ msgstr "Hotkeys-Fenster umschalten"
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
 
+#, fuzzy
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "HDR-Tonkarte umschalten"
+
+#, fuzzy
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Spitzlichterkennung aktivieren"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Benutzeroberfläche/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Name der Primärfarben"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Primärfarbenname"
+
 #~ msgid "HDR Shot/Scene Peak Detection"
 #~ msgstr "HDR-Peak-Erkennung für Aufnahmen/Szenen"
 
@@ -8147,9 +8161,6 @@ msgstr "Fenster umschalten"
 #~ msgstr ""
 #~ "Schwellenwert zur Erkennung eines Aufnahme-/Szenenwechsels, wenn die HDR-"
 #~ "Peak-Erkennung aktiviert ist."
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Benutzeroberfläche/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "berwachung"

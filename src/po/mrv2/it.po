@@ -2382,12 +2382,6 @@ msgstr "Spazio a colori"
 msgid "Color Transfer Space"
 msgstr "Spazio di trasferimento dei colori"
 
-msgid "Primaries Name"
-msgstr "Nome delle primarie"
-
-msgid "PrimariesName"
-msgstr "Nome primarie"
-
 msgid "HDR Red Primaries"
 msgstr "Primarie rosse HDR"
 
@@ -4188,6 +4182,9 @@ msgstr "Render/Miscelazione alfa/Dritto"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Miscelazione alfa/Premultiplicato"
+
+msgid "Render/HDR/Debug"
+msgstr "Rendering/HDR/Debug"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Abilita rilevamento dei picchi"
@@ -6801,8 +6798,8 @@ msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
 msgstr ""
-"Quando è inferiore a 100, aiuta a individuare la luminosità di picco "
-"ignorando l’1% superiore dei valori anomali."
+"Quando il valore è inferiore a 100, aiuta a determinare la luminosità "
+"massima ignorando l'1 % dei valori anomali più elevati."
 
 msgid "Smoothing Period"
 msgstr "Periodo di smoothing"
@@ -8184,6 +8181,23 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
 
+#, fuzzy
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "Commuta mappa tonale HDR"
+
+#, fuzzy
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Abilita rilevamento dei picchi"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Interfaccia utente/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Nome delle primarie"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Nome primarie"
+
 #~ msgid "HDR Shot/Scene Peak Detection"
 #~ msgstr "Rilevamento del picco HDR per inquadrature/scene"
 
@@ -8192,9 +8206,6 @@ msgstr "Commuta la finestra"
 #~ msgstr ""
 #~ "Soglia per considerare un cambio di inquadratura o scena quando il "
 #~ "rilevamento del picco HDR è attivo."
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Interfaccia utente/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "Monitoraggio"

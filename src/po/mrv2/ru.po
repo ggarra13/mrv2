@@ -2399,12 +2399,6 @@ msgstr "Цветовое пространство"
 msgid "Color Transfer Space"
 msgstr "Пространство для передачи цветов"
 
-msgid "Primaries Name"
-msgstr "Название первичных цветов"
-
-msgid "PrimariesName"
-msgstr "Название первичных цветов"
-
 msgid "HDR Red Primaries"
 msgstr "&lt; Красные первенства &gt;"
 
@@ -4191,6 +4185,9 @@ msgstr "Редакция/Альфа Бленд/Прямо"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Редакция/Альфа Бленд/Предмногочисленные"
+
+msgid "Render/HDR/Debug"
+msgstr "Рендер/HDR/Отладка"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Включить обнаружение пиков"
@@ -6790,8 +6787,8 @@ msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
 msgstr ""
-"При значении менее 100 помогает определить пиковую яркость, игнорируя "
-"верхний 1 % выбросов."
+"Если значение меньше 100, это помогает определить пиковую яркость, игнорируя"
+" верхний 1 % выбросов."
 
 msgid "Smoothing Period"
 msgstr "Период сглаживания"
@@ -8164,6 +8161,23 @@ msgstr "Переключить окно горячих клавиш"
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
 
+#, fuzzy
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "Скриншот"
+
+#, fuzzy
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Включить обнаружение пиков"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Интерфейс пользователя/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Название первичных цветов"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Название первичных цветов"
+
 #~ msgid "HDR Shot/Scene Peak Detection"
 #~ msgstr "Определение пиков HDR по кадрам/сценам"
 
@@ -8172,9 +8186,6 @@ msgstr "Закладка о окне"
 #~ msgstr ""
 #~ "Порог для определения смены кадра или сцены при включённом определении пиков"
 #~ " HDR."
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Интерфейс пользователя/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "Монитор"

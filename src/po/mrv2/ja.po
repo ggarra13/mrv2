@@ -2347,12 +2347,6 @@ msgstr "色空間"
 msgid "Color Transfer Space"
 msgstr "色を移植"
 
-msgid "Primaries Name"
-msgstr "原色名"
-
-msgid "PrimariesName"
-msgstr "原色名"
-
 msgid "HDR Red Primaries"
 msgstr "HDR赤色原色"
 
@@ -4108,6 +4102,9 @@ msgstr "レンダー/アルファブレンド/ストレート"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "レンダー/アルファブレンド/プリマルチプライド"
+
+msgid "Render/HDR/Debug"
+msgstr "レンダー/HDR/デバッグ"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/ピーク検出を有効化"
@@ -6616,7 +6613,7 @@ msgstr "HDRパーセンタイル"
 msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
-msgstr "100未満の場合、上位1％の外れ値を無視してピーク輝度を検出するのに役立ちます。"
+msgstr "値が100未満の場合、上位1％の外れ値を無視してピーク輝度を特定するのに役立ちます。"
 
 msgid "Smoothing Period"
 msgstr "平滑化期間"
@@ -7933,15 +7930,29 @@ msgstr "ホットキーウィンドウを切り替え"
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
 
+#, fuzzy
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "HDR トーンマップの切り替え"
+
+#, fuzzy
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/ピーク検出を有効化"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "ユーザーインターフェース/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "原色名"
+
+#~ msgid "PrimariesName"
+#~ msgstr "原色名"
+
 #~ msgid "HDR Shot/Scene Peak Detection"
 #~ msgstr "HDR ショット／シーン ピーク検出"
 
 #~ msgid ""
 #~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
 #~ msgstr "HDR ピーク検出が有効な場合に、ショット／シーンの切り替えと判断するためのしきい値。"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "ユーザーインターフェース/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "監視 "
