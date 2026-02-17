@@ -2363,12 +2363,6 @@ msgstr "Espao de cores"
 msgid "Color Transfer Space"
 msgstr "Espao de Transferncia de Cores"
 
-msgid "Primaries Name"
-msgstr "Nome das primárias"
-
-msgid "PrimariesName"
-msgstr "Nome das primárias"
-
 msgid "HDR Red Primaries"
 msgstr "Primarias vermelhas HDR"
 
@@ -4107,52 +4101,55 @@ msgid "Unknown menu entry "
 msgstr "Incio de menu desconhecido"
 
 msgid "Render/Color Channel"
-msgstr "Renncia/Canal de cores"
+msgstr "Renderizar/Canal de cores"
 
 msgid "Render/Red Channel"
-msgstr "Renncia/Canal Vermelho"
+msgstr "Renderizar/Canal Vermelho"
 
 msgid "Render/Green Channel "
-msgstr "Renncia/Canal Verde"
+msgstr "Renderizar/Canal Verde"
 
 msgid "Render/Blue Channel"
-msgstr "Renncia/Canal Azul"
+msgstr "Renderizar/Canal Azul"
 
 msgid "Render/Alpha Channel"
-msgstr "Renncia/Canal Alfa"
+msgstr "Renderizar/Canal Alfa"
 
 msgid "Render/Lumma"
 msgstr "Renderizar/Lumma"
 
 msgid "Render/Mirror X"
-msgstr "Renncia/Espelho X"
+msgstr "Renderizar/Espelho X"
 
 msgid "Render/Mirror Y"
-msgstr "Renncia/Espelho Y"
+msgstr "Renderizar/Espelho Y"
 
 msgid "Render/Rotate/-90 Degrees"
-msgstr "Renncia/Rotao/-90 graus"
+msgstr "Renderizar/Rotao/-90 graus"
 
 msgid "Render/Rotate/+90 Degrees"
-msgstr "Renncia/Rotao/+90 graus"
+msgstr "Renderizar/Rotao/+90 graus"
 
 msgid "Render/Video Levels/From File"
-msgstr "Renncia/Nveis de vdeo/A partir do Ficheiro"
+msgstr "Renderizar/Nveis de vdeo/A partir do Ficheiro"
 
 msgid "Render/Video Levels/Legal Range"
-msgstr "Renncia/Nveis de vdeo/Intervalo Legal"
+msgstr "Renderizar/Nveis de vdeo/Intervalo Legal"
 
 msgid "Render/Video Levels/Full Range"
-msgstr "Renncia/Nveis de vdeo/Intervalo completo"
+msgstr "Renderizar/Nveis de vdeo/Intervalo completo"
 
 msgid "Render/Alpha Blend/None"
-msgstr "Renncia/Mistura Alfa/Nenhuma"
+msgstr "Renderizar/Mistura Alfa/Nenhuma"
 
 msgid "Render/Alpha Blend/Straight"
-msgstr "Renncia/Mistura Alfa/Direto"
+msgstr "Renderizar/Mistura Alfa/Direto"
 
 msgid "Render/Alpha Blend/Premultiplied"
-msgstr "Renncia/Mistura Alfa/Pr-multiplicado"
+msgstr "Renderizar/Mistura Alfa/Pr-multiplicado"
+
+msgid "Render/HDR/Debug"
+msgstr "Renderizar/HDR/Depuração"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Ativar detecção de picos"
@@ -4173,22 +4170,22 @@ msgid "Render/HDR Data/Active"
 msgstr "Renderização/Dados HDR/Ativo"
 
 msgid "Render/Minify Filter/Nearest"
-msgstr "Renncia/Minimizar o Filtro/Mais perto"
+msgstr "Renderizar/Minimizar o Filtro/Mais perto"
 
 msgid "Render/Minify Filter/Linear"
-msgstr "Renncia/Minimizar o Filtro/Linear"
+msgstr "Renderizar/Minimizar o Filtro/Linear"
 
 msgid "Render/Magnify Filter/Nearest"
-msgstr "Renncia/Aumentar o Filtro/Mais perto"
+msgstr "Renderizar/Aumentar o Filtro/Mais perto"
 
 msgid "Render/Magnify Filter/Linear"
-msgstr "Renncia/Aumentar o Filtro/Linear"
+msgstr "Renderizar/Aumentar o Filtro/Linear"
 
 msgid "Render/HDR/Auto Normalize"
-msgstr "Renncia/HDR/Normalizar automaticamente"
+msgstr "Renderizar/HDR/Normalizar automaticamente"
 
 msgid "Render/HDR/Invalid Values"
-msgstr "Renncia/HDR/Valores invlidos"
+msgstr "Renderizar/HDR/Valores invlidos"
 
 msgid "Render/HDR/Ignore Chromaticities"
 msgstr "Renúncia/HDR/Ignorar as Cromáticas"
@@ -6643,7 +6640,7 @@ msgstr ""
 "Tamanho Fixo dependendo do que deseja salvar."
 
 msgid "Render"
-msgstr "Renncia"
+msgstr "Renderizar"
 
 msgid "Alpha Blend"
 msgstr "Mistura Alfa"
@@ -6758,8 +6755,8 @@ msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
 msgstr ""
-"Quando inferior a 100, ajuda a encontrar o brilho máximo ignorando o 1 % "
-"superior de valores atípicos."
+"Quando o valor é inferior a 100, ajuda a determinar o brilho máximo "
+"ignorando o 1% superior de valores atípicos."
 
 msgid "Smoothing Period"
 msgstr "Período de suavização"
@@ -7227,7 +7224,7 @@ msgid "User Interface/Positioning"
 msgstr "Interface do Usurio/Posio"
 
 msgid "User Interface/Render"
-msgstr "Interface do Usurio/Renncia"
+msgstr "Interface do Usurio/Renderizar"
 
 msgid "User Interface/Thumbnails"
 msgstr "Interface do Usurio/Thumbnails"
@@ -8132,6 +8129,23 @@ msgstr "Alternar a janela de teclas instantneas"
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
 
+#, fuzzy
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "Comutar o mapa de tons do HDR"
+
+#, fuzzy
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Ativar detecção de picos"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Interface do Usuário/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Nome das primárias"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Nome das primárias"
+
 #~ msgid "HDR Shot/Scene Peak Detection"
 #~ msgstr "Detecção de pico HDR por tomada/cena"
 
@@ -8140,9 +8154,6 @@ msgstr "Alternar Sobre a Janela"
 #~ msgstr ""
 #~ "Limite para considerar uma mudança de tomada ou cena quando a detecção de "
 #~ "pico HDR estiver ativada."
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Interface do Usuário/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "Monitor "

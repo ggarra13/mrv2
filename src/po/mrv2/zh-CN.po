@@ -2351,12 +2351,6 @@ msgstr "色彩空间"
 msgid "Color Transfer Space"
 msgstr "色彩转换空间"
 
-msgid "Primaries Name"
-msgstr "原色名称"
-
-msgid "PrimariesName"
-msgstr "原色名称"
-
 msgid "HDR Red Primaries"
 msgstr "HDR 红色原始资料"
 
@@ -4098,6 +4092,9 @@ msgstr "渲染/Alpha混合/Straight"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "渲染/Alpha混合/Premultiplied"
+
+msgid "Render/HDR/Debug"
+msgstr "渲染/HDR/调试"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "渲染/HDR/启用峰值检测"
@@ -6630,7 +6627,7 @@ msgstr "HDR 百分位"
 msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
-msgstr "当数值小于 100 时，通过忽略最高 1% 的异常值来帮助确定峰值亮度。"
+msgstr "当该值小于 100 时，有助于在忽略最高 1% 异常值的情况下确定峰值亮度。"
 
 msgid "Smoothing Period"
 msgstr "平滑周期"
@@ -7943,15 +7940,29 @@ msgstr "开关热键窗口"
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
 
+#, fuzzy
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "切换 HRD 音速映射"
+
+#, fuzzy
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "渲染/HDR/启用峰值检测"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "用户界面/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "原色名称"
+
+#~ msgid "PrimariesName"
+#~ msgstr "原色名称"
+
 #~ msgid "HDR Shot/Scene Peak Detection"
 #~ msgstr "HDR 镜头/场景峰值检测"
 
 #~ msgid ""
 #~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
 #~ msgstr "在启用 HDR 峰值检测时，用于判断镜头或场景切换的阈值。"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "用户界面/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "监视器"

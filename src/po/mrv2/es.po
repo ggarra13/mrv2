@@ -2418,12 +2418,6 @@ msgstr "Espacio de Color"
 msgid "Color Transfer Space"
 msgstr "Espacio de Transferencia del Color"
 
-msgid "Primaries Name"
-msgstr "Nombre de las Primarias"
-
-msgid "PrimariesName"
-msgstr "Nombre de Primarias"
-
 msgid "HDR Red Primaries"
 msgstr "Primarias rojas HDR"
 
@@ -4231,6 +4225,9 @@ msgstr "Render/Mezcla Alfa/Derecha"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Mezcla Alfa/Premultiplicada"
+
+msgid "Render/HDR/Debug"
+msgstr "Render/HDR/Depurar"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Active Deteccíon de Umbral"
@@ -8207,6 +8204,21 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "Alternar mapeo de tonos de HDR"
+
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Active Deteccíon de Umbral"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Interfaz del Usuario/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Nombre de las Primarias"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Nombre de Primarias"
+
 #~ msgid "HDR Shot/Scene Peak Detection"
 #~ msgstr "Detección de Umbral de HDR"
 
@@ -8215,9 +8227,6 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 #~ msgstr ""
 #~ "Límite a considerar para cambio de toma o escena cuando Deteccion de Umbral "
 #~ "de HDR está activo."
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Interfaz del Usuario/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "Monitor "

@@ -2367,12 +2367,6 @@ msgstr "रंग जगह"
 msgid "Color Transfer Space"
 msgstr "रंग ट्रांसफर जगह"
 
-msgid "Primaries Name"
-msgstr "प्राइमरी रंगों का नाम"
-
-msgid "PrimariesName"
-msgstr "प्राइमरी रंग नाम"
-
 msgid "HDR Red Primaries"
 msgstr "डीएसआर लाल आदिम"
 
@@ -4152,6 +4146,9 @@ msgstr "रेंडर/अल्फा ब्लेंड/स्ट्रेट
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "रेंडर/अल्फा ब्लेंड/पूर्वगुणित"
+
+msgid "Render/HDR/Debug"
+msgstr "रेंडर/HDR/डीबग"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "रेंडर/HDR/पीक डिटेक्शन सक्षम करें"
@@ -6725,8 +6722,8 @@ msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
 msgstr ""
-"जब मान 100 से कम होता है, तो यह शीर्ष 1% असामान्य मानों को अनदेखा करके "
-"अधिकतम चमक खोजने में मदद करता है।"
+"जब मान 100 से कम हो, तो यह शीर्ष 1% अपवादों को अनदेखा करते हुए अधिकतम चमक "
+"निर्धारित करने में सहायता करता है।"
 
 msgid "Smoothing Period"
 msgstr "स्मूदिंग अवधि"
@@ -8089,15 +8086,29 @@ msgstr "यदि आप विंडो को बन्द करना चा
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
 
+#, fuzzy
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "HDR वर्तनीमैप टॉगल करें"
+
+#, fuzzy
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "रेंडर/HDR/पीक डिटेक्शन सक्षम करें"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "प्राइमरी रंगों का नाम"
+
+#~ msgid "PrimariesName"
+#~ msgstr "प्राइमरी रंग नाम"
+
 #~ msgid "HDR Shot/Scene Peak Detection"
 #~ msgstr "HDR शॉट/दृश्य पीक डिटेक्शन"
 
 #~ msgid ""
 #~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
 #~ msgstr "HDR पीक डिटेक्शन चालू होने पर शॉट/दृश्य परिवर्तन माने जाने की सीमा।"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "उपयोगकर्ता इंटरफ़ेस/HDR"
 
 #~ msgid "Monitor "
 #~ msgstr "मॉनीटर"
