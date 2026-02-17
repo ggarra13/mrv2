@@ -1125,7 +1125,7 @@ namespace mrv
         void Viewport::_updateHDRMetadata()
         {
             TLRENDER_P();
-                        
+            
             if (!p.hdrOptions.tonemap || !p.hdrMonitorFound)
             {
                 if (p.hdrOptions.debug)

@@ -3693,7 +3693,11 @@ namespace mrv
             }
             else
             {
+#if defined(_WINDOWS)
                 p.hdrOptions.tonemap = false;
+#else
+                p.hdrOptions.tonemap = true;
+#endif
                 p.hdrOptions.hdrData = image::HDRData();
             }
         }
