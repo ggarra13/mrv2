@@ -180,7 +180,6 @@ namespace mrv
             out.min_nits = hdr->desired_content_min_luminance;
             out.max_nits = hdr->desired_content_max_luminance;
             //float max_frame_avg_nits = hdr->desired_content_max_frame_avg_luminance;  // Optional: frame-average max
-
             di_info_destroy(info);
             return out;
         }
