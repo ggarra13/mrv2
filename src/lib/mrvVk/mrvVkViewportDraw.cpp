@@ -1219,11 +1219,9 @@ namespace mrv
                 };
                 // Max display capability
                 m_hdr_metadata.maxLuminance =
-                    std::max(p.hdrCapabilities.max_nits,
-                             data.displayMasteringLuminance.getMax());
+                    data.displayMasteringLuminance.getMax();
                 m_hdr_metadata.minLuminance = 
-                    std::min(p.hdrCapabilities.min_nits,
-                             data.displayMasteringLuminance.getMin());
+                    data.displayMasteringLuminance.getMin();
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
             }
