@@ -1128,7 +1128,8 @@ namespace mrv
                         
             if (!p.hdrOptions.tonemap || !p.hdrMonitorFound)
             {
-                LOG_WARNING("Sending SDR BT709 primaries");
+                if (p.hdrOptions.debug)
+                    LOG_WARNING("Sending SDR BT709 primaries");
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
 
                 // Primaries
@@ -1186,14 +1187,17 @@ namespace mrv
                         data.maxCLL = 203.F;
                         data.maxFALL = 100.F;
                     }
-                    LOG_WARNING("Sending OCIO metadata primaries="
-                                << image::primariesName(data.primaries) << std::endl << data);
+                    if (p.hdrOptions.debug)
+                        LOG_WARNING("Sending OCIO metadata primaries="
+                                    << image::primariesName(data.primaries) << std::endl << data);
                 }
                 else
                 {
                     data = p.hdrOptions.hdrData;
-                    LOG_WARNING("Sending HDR video metadata primaries="
-                                << image::primariesName(data.primaries) << std::endl << data);
+                    if (p.hdrOptions.debug)
+                        LOG_WARNING("Sending HDR video metadata primaries="
+                                    << image::primariesName(data.primaries)
+                                    << std::endl << data);
                 }
                 
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
