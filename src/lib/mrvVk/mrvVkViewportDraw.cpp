@@ -35,6 +35,9 @@
 
 #include <FL/Fl_PNG_Image.H>
 
+#include <cmath>
+#include <regex>
+
 namespace
 {
     const char* kModule = "draw";
@@ -1123,10 +1126,7 @@ namespace mrv
         {
             TLRENDER_P();
             
-            int screen = this->screen_num();
-            
-            if (!p.hdrOptions.tonemap || !p.hdrMonitorFound ||
-                p.hdrOptions.ScRGB)
+            if (!p.hdrOptions.tonemap || !p.hdrMonitorFound)
             {
                 if (p.hdrOptions.debug)
                     LOG_WARNING("Sending SDR BT709 primaries");
@@ -1146,23 +1146,37 @@ namespace mrv
             }
             else
             {
-                if (p.hdrOptions.debug)
-                    LOG_WARNING("Sending HDR primaries");
                 const int screen_index = this->screen_num();
                 const timeline::OCIOOptions& ocio = getOCIOOptions(screen_index);
                 image::HDRData data;
                 if (!ocio.display.empty() && !ocio.view.empty())
                 {
-                    if (p.hdrOptions.debug)
-                        LOG_WARNING("Sending OCIO image metadata");
                     data = image::nameToPrimaries(ocio.display + ocio.view);
                     if (ocio.view.find("SDR") == std::string::npos)
                     {
                         float peak = 1000.0f;
-                        if (ocio.view.find("10000") != std::string::npos)     peak = 10000.F;
-                        else if (ocio.view.find("4000") != std::string::npos) peak = 4000.F;
-                        else if (ocio.view.find("2000") != std::string::npos) peak = 2000.F;
-                        else if (ocio.view.find("1000") != std::string::npos) peak = 1000.F;
+                        std::string viewName = string::toUpper(ocio.view);
+
+                       // Regex explanation:
+                       // ([0-9]+) -> Capture group 1: one or more digits
+                       // \s* -> Zero or more whitespace characters
+                       // NITS* -> The literal "NIT" followed by zero or more "S"
+                        std::regex nitRegex(R"(([0-9]+)\s*NITS*)");
+                        std::smatch match;
+
+                        if (std::regex_search(viewName, match, nitRegex)) {
+                            // match[0] is the whole string (e.g., "1000 NITS")
+                            // match[1] is just the first capture group (e.g., "1000")
+                            try {
+                                peak = std::stof(match[1].str());
+                            } catch (const std::exception& e) {
+                                // Fallback for parsing errors
+                                peak = 100.0f; 
+                            }
+                        } else {
+                            // Default fallback if no nits pattern is found
+                            peak = 100.0f; 
+                        }
                         data.displayMasteringLuminance = math::FloatRange(0, peak);
                         data.maxCLL = peak;
                         data.maxFALL = peak * 0.4F; // prevents crushing mid-tones
@@ -1173,12 +1187,17 @@ namespace mrv
                         data.maxCLL = 203.F;
                         data.maxFALL = 100.F;
                     }
+                    if (p.hdrOptions.debug)
+                        LOG_WARNING("Sending OCIO metadata primaries="
+                                    << image::primariesName(data.primaries) << std::endl << data);
                 }
                 else
                 {
-                    if (p.hdrOptions.debug)
-                        LOG_WARNING("Sending HDR video metadata");
                     data = p.hdrOptions.hdrData;
+                    if (p.hdrOptions.debug)
+                        LOG_WARNING("Sending HDR video metadata primaries="
+                                    << image::primariesName(data.primaries)
+                                    << std::endl << data);
                 }
                 
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
@@ -1201,14 +1220,10 @@ namespace mrv
                 // Max display capability
                 m_hdr_metadata.maxLuminance =
                     data.displayMasteringLuminance.getMax();
-                m_hdr_metadata.minLuminance =
+                m_hdr_metadata.minLuminance = 
                     data.displayMasteringLuminance.getMin();
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
-                if (p.hdrOptions.debug)
-                    LOG_WARNING("HDR= primaries '"
-                                << image::primariesName(data.primaries) << "'"
-                                << std::endl << data);
             }
 
 
