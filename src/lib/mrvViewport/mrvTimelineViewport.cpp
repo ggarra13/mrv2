@@ -2236,6 +2236,9 @@ namespace mrv
                 p.videoData[0].layers[0].image)
                 _getHDR();
 
+            if (o.enabled)
+                p.hdrOptions.tonemap = true;
+            
             redrawWindows();
         }
 
@@ -3693,17 +3696,12 @@ namespace mrv
             if (hdrData)
             {
                 p.hdrOptions.hdrData = *hdrData;
+                p.hdrOptions.tonemap = true;
             }
             else
             {
-                if (p.hdrMonitorFound)
-                {
-                    p.hdrOptions.hdrData = image::nameToPrimaries("BT2020 PQ");
-                }
-                else
-                {
-                    p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
-                }
+                p.hdrOptions.tonemap = false;
+                p.hdrOptions.hdrData = image::HDRData();
             }
         }
         
