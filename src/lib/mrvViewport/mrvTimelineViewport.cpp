@@ -1036,11 +1036,14 @@ namespace mrv
             //          eliminate p.hdrOptions.hdrData.
             p.hdrOptions.algorithm = value.algorithm;
             p.hdrOptions.gamutMapping = value.gamutMapping;
+            p.hdrOptions.debug = value.debug;
+
             p.hdrOptions.peak_detection = value.peak_detection;
             p.hdrOptions.peak_percentile = value.peak_percentile;
             p.hdrOptions.peak_smoothing_period = value.peak_smoothing_period;
             p.hdrOptions.peak_scene_low_limit = value.peak_scene_low_limit;
             p.hdrOptions.peak_scene_high_limit = value.peak_scene_high_limit;
+            
             redrawWindows();
         }
 
@@ -2228,6 +2231,10 @@ namespace mrv
             {
                 setOCIOOptions(screen, o);
             }
+
+            if (!p.videoData.empty() && !p.videoData[0].layers.empty() &&
+                p.videoData[0].layers[0].image)
+                _getHDR();
 
             redrawWindows();
         }
@@ -3682,8 +3689,12 @@ namespace mrv
         {
             TLRENDER_P();
 
-            p.hdrOptions.hdrData = p.videoData[0].layers[0].image->getHDR();
-            p.hdrOptions.tonemap = true;
+            auto hdrData = p.videoData[0].layers[0].image->getHDR();
+            if (hdrData)
+            {
+                p.hdrOptions.hdrData = *hdrData;
+                p.hdrOptions.tonemap = true;
+            }
         }
         
         void TimelineViewport::_getTags() noexcept
