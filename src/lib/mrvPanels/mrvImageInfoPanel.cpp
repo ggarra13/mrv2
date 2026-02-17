@@ -1982,10 +1982,6 @@ namespace mrv
                             colorSpace);
                     }
 
-
-                    const std::string& primariesName = image::primariesName(hdr.primaries);
-                    add_text(_("Primaries Name"), _("PrimariesName"), primariesName.c_str());
-
                     if (image::isHDR(hdr))
                     {
                         math::Vector2f& v =
