@@ -270,10 +270,9 @@ namespace mrv
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_G2084_LEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_GHLG_TOPLEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_FULL_GHLG_TOPLEFT_P2020:
-                            default:  // \@note:  remove thisx
                                 local_cap.supported = true;
-                                local_cap.min_nits = 0.F;  //desc1.MinLuminance;
-                                local_cap.max_nits = 1000.F; //desc1.MaxLuminance;
+                                local_cap.min_nits = desc1.MinLuminance;
+                                local_cap.max_nits = desc1.MaxLuminance;
                                 break;
                             default:
                                 break;
