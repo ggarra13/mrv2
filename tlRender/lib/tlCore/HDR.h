@@ -60,7 +60,7 @@ namespace tl
         //! HDR data.
         struct HDRData
         {
-            uint8_t eotf = EOTFType::EOTF_BT709;
+            uint8_t eotf = EOTFType::EOTF_BT2020;
             //! Default Rec. 2020 color primaries (red, green, blue, white).
             std::array<math::Vector2f, HDRPrimaries::Count> primaries = {
                 math::Vector2f(.708F, .292F), math::Vector2f(.170F, .797F),
@@ -93,8 +93,9 @@ namespace tl
                                   const math::Vector2f& blue,
                                   const math::Vector2f& white);
         std::string primariesName(const std::array<math::Vector2f, HDRPrimaries::Count> primaries);
+        std::string primariesName(const HDRData&);
 
-        HDRData nameToPrimaries(const std::string name);
+        HDRData nameToPrimaries(const std::string& name);
         
         //! \name Serialize
         ///@{

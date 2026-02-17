@@ -18,102 +18,152 @@ namespace tl
         TLRENDER_ENUM_IMPL(HDRPrimaries, "Red", "Green", "Blue", "White");
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRPrimaries);
 
-        HDRData nameToPrimaries(const std::string input)
+        HDRData nameToPrimaries(const std::string& input)
         {
             HDRData out;
-            const std::string& name = string::toUpper(input);
-            if (name.find("P3") != std::string::npos)
+            std::string name = string::toUpper(input);
+
+            // Extract view gamut if present (e.g., "(P3 D65)")
+            std::string viewGamut;
+            size_t start = name.rfind('(');
+            size_t end = name.rfind(')');
+            if (start != std::string::npos && end != std::string::npos &&
+                end > start)
             {
-                out.primaries[Red].x = 0.680F;
-                out.primaries[Red].y = 0.320F;
-                out.primaries[Green].x = 0.265F;
-                out.primaries[Green].y = 0.690F;
-                out.primaries[Blue].x = 0.150F;
-                out.primaries[Blue].y = 0.060F;
-                out.primaries[White].x = 0.3140F;
-                out.primaries[White].y = 0.3510F;
-                    
+                viewGamut = name.substr(start + 1, end - start - 1);
+                // Remove the extracted part from name to avoid interference
+                name = name.substr(0, start) + name.substr(end + 1);
+            }
+
+            // Trim any extra spaces
+            auto trim = [](std::string& s) {
+                s.erase(0, s.find_first_not_of(" \t"));
+                s.erase(s.find_last_not_of(" \t") + 1);
+            };
+            trim(name);
+            trim(viewGamut);
+
+
+            if (name.find("SDR") != std::string::npos)
+            {
+                out.eotf = EOTF_BT709;
+                out.primaries[Red]   = {0.640F, 0.330F};
+                out.primaries[Green] = {0.300F, 0.600F};
+                out.primaries[Blue]  = {0.150F, 0.060F};
+                out.primaries[White] = {0.3127F, 0.3290F};
+            }                         
+            // --- 1. Wide Gamut / HDR (BT.2020 and BT.2100) ---
+            else if (name.find("2020") != std::string::npos ||
+                     name.find("2100") != std::string::npos ||
+                     name.find("HDR") != std::string::npos)
+            {
+                // Default to 2020 SDR curve
+                out.eotf = EOTF_BT2020; 
+
+                // Check for specific HDR Transfer Functions
+                if (name.find("PQ") != std::string::npos ||
+                    name.find("ST2084") != std::string::npos)
+                {
+                    out.eotf = EOTF_BT2100_PQ;
+                }
+                else if (name.find("HLG") != std::string::npos)
+                {
+                    out.eotf = EOTF_BT2100_HLG;
+                }
+
+                out.primaries[Red]   = {0.708F, 0.292F};
+                out.primaries[Green] = {0.170F, 0.797F};
+                out.primaries[Blue]  = {0.131F, 0.046F};
+                out.primaries[White] = {0.3127F, 0.3290F};
+            }
+            // --- 2. DCI-P3 / Display P3 ---
+            else if (name.find("P3") != std::string::npos)
+            {
+                // P3 is usually SDR (Gamma 2.6 for DCI or sRGB-like for Display P3)
+                // Since the enum lacks Gamma 2.6, BT709 is the closest "SDR" curve.
+                out.eotf = EOTF_BT709; 
+
+                if (name.find("PQ") != std::string::npos ||
+                    name.find("ST2084") != std::string::npos)
+                    out.eotf = EOTF_BT2100_PQ;
+                else if (name.find("HLG") != std::string::npos)
+                    out.eotf = EOTF_BT2100_HLG;
+
+                out.primaries[Red]   = {0.680F, 0.320F};
+                out.primaries[Green] = {0.265F, 0.690F};
+                out.primaries[Blue]  = {0.150F, 0.060F};
+        
                 if (name.find("DCI") != std::string::npos)
                 {
-                    out.primaries[White].x = 0.3140F;
-                    out.primaries[White].y = 0.3510F;
+                    out.primaries[White] = {0.3140F, 0.3510F};
                 }
-                else if (name.find("D65") != std::string::npos)
+                else // D65 (Display P3)
                 {
-                    out.primaries[White].x = 0.3127F;
-                    out.primaries[White].y = 0.3290F;
+                    out.primaries[White] = {0.3127F, 0.3290F};
                 }
             }
-            else if (name.find("2020") != std::string::npos ||
-                     name.find("2100") != std::string::npos )
+            // --- 3. Standard Definition (Legacy) ---
+            else if (name.find("NTSC") != std::string::npos || 
+                     name.find("PAL")  != std::string::npos || 
+                     name.find("601")  != std::string::npos)
             {
-                out.primaries[Red].x = 0.708F;
-                out.primaries[Red].y = 0.292F;
-                out.primaries[Green].x = 0.170F;
-                out.primaries[Green].y = 0.797F;
-                out.primaries[Blue].x = 0.131F;
-                out.primaries[Blue].y = 0.040F;
-                out.primaries[White].x = 0.3127F;
-                out.primaries[White].y = 0.3290F;
+                out.eotf = EOTF_BT601;
+                out.primaries[Red]   = {0.640F, 0.330F};
+                out.primaries[Green] = {0.290F, 0.600F};
+                out.primaries[Blue]  = {0.150F, 0.060F};
+                out.primaries[White] = {0.3127F, 0.3290F};
             }
-            else if (name.find("FILM") != std::string::npos)
+            // --- 4. HD SDR (BT.709) ---
+            else if (name.find("709") != std::string::npos)
             {
-                out.primaries[Red].x = 0.681F;
-                out.primaries[Red].y = 0.319F;
-                out.primaries[Green].x = 0.243F;
-                out.primaries[Green].y = 0.692F;
-                out.primaries[Blue].x = 0.145F;
-                out.primaries[Blue].y = 0.049F;
-                out.primaries[White].x = 0.310F;
-                out.primaries[White].y = 0.316F;
+                out.eotf = EOTF_BT709;
+                out.primaries[Red]   = {0.640F, 0.330F};
+                out.primaries[Green] = {0.300F, 0.600F};
+                out.primaries[Blue]  = {0.150F, 0.060F};
+                out.primaries[White] = {0.3127F, 0.3290F};
             }
-            else if (name.find("709") != std::string::npos ||
-                     name.find("SDR") != std::string::npos)
+            // --- 5. Custom / Film / Others ---
+            else if (name.find("FILM") != std::string::npos ||
+                     name.find("BT470M") != std::string::npos)
             {
-                out.primaries[Red].x = 0.640F;
-                out.primaries[Red].y = 0.330F;
-                out.primaries[Green].x = 0.300F;
-                out.primaries[Green].y = 0.600F;
-                out.primaries[Blue].x = 0.150F;
-                out.primaries[Blue].y = 0.060F;
-                out.primaries[White].x = 0.3127F;
-                out.primaries[White].y = 0.3290F;
+                out.eotf = EOTF_BT601;
+                out.primaries[Red]   = { 0.670F, 0.330F };
+                out.primaries[Green] = { 0.210F, 0.710F };
+                out.primaries[Blue]  = { 0.140F, 0.080F };
+                out.primaries[White] = { 0.310F, 0.316F };
             }
-            else if (name.find("NTSC") != std::string::npos ||
-                     name.find("PAL") != std::string::npos ||
-                     name.find("SECAM") != std::string::npos)
+            // --- 6. SDR Rec. 1886 ---
+            else if (name.find("1886") != std::string::npos)
             {
-                out.primaries[Red].x = 0.640F;
-                out.primaries[Red].y = 0.330F;
-                out.primaries[Green].x = 0.290F;
-                out.primaries[Green].y = 0.600F;
-                out.primaries[Blue].x = 0.150F;
-                out.primaries[Blue].y = 0.060F;
-                out.primaries[White].x = 0.3127F;
-                out.primaries[White].y = 0.3290F;
+                out.eotf = EOTF_BT709;
+                out.primaries[Red]   = {0.640F, 0.330F};
+                out.primaries[Green] = {0.300F, 0.600F};
+                out.primaries[Blue]  = {0.150F, 0.060F};
+                out.primaries[White] = {0.3127F, 0.3290F};
             }
-            else if (name.find("SMPTE240M") != std::string::npos)
+            // --- Default Fallback (Standard sRGB/Rec709) ---
+            else
             {
-                out.primaries[Red].x = 0.681F;
-                out.primaries[Red].y = 0.340F;
-                out.primaries[Green].x = 0.310F;
-                out.primaries[Green].y = 0.595F;
-                out.primaries[Blue].x = 0.155F;
-                out.primaries[Blue].y = 0.070F;
-                out.primaries[White].x = 0.3127F;
-                out.primaries[White].y = 0.3290F;
+                out.eotf = EOTF_BT709;
+                out.primaries[Red]   = {0.640F, 0.330F};
+                out.primaries[Green] = {0.300F, 0.600F};
+                out.primaries[Blue]  = {0.150F, 0.060F};
+                out.primaries[White] = {0.3127F, 0.3290F};
             }
-            else if (name.find("BT470M") != std::string::npos)
+
+            // Override primaries with view gamut if present and matched
+            if (!viewGamut.empty())
             {
-                out.primaries[Red].x = 0.670F;
-                out.primaries[Red].y = 0.330F;
-                out.primaries[Green].x = 0.210F;
-                out.primaries[Green].y = 0.710F;
-                out.primaries[Blue].x = 0.140F;
-                out.primaries[Blue].y = 0.080F;
-                out.primaries[White].x = 0.310F;
-                out.primaries[White].y = 0.316F;
+                // Recursively apply matching to viewGamut
+                // (without EOTF override)
+                HDRData viewData = nameToPrimaries(viewGamut);
+                out.primaries[Red]   = viewData.primaries[Red];
+                out.primaries[Green] = viewData.primaries[Green];
+                out.primaries[Blue]  = viewData.primaries[Blue];
+                out.primaries[White] = viewData.primaries[White];
+                // EOTF remains from display (container)
             }
+
             return out;
         }
         
@@ -197,12 +247,24 @@ namespace tl
                      fuzzyCompare(w.x, 0.310F) &&
                      fuzzyCompare(w.y, 0.316F))
                 out = "Film";
+
             return out;
         }
 
         std::string primariesName(const std::array<math::Vector2f, HDRPrimaries::Count> primaries)
         {
             return primariesName(primaries[0], primaries[1], primaries[2], primaries[3]);
+        }
+
+        std::string primariesName(const HDRData& value)
+        {
+            std::string out;
+            out = primariesName(value.primaries);
+            if (value.eotf == EOTF_BT2100_HLG)
+                out = "Rec. 2100-HLG";
+            else if (value.eotf == EOTF_BT2100_PQ)
+                out = "Rec. 2100-PQ";
+            return out;
         }
         
         void to_json(nlohmann::json& json, const HDRBezier& value)
