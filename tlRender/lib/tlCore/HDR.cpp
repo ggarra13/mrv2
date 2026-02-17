@@ -21,11 +21,41 @@ namespace tl
         HDRData nameToPrimaries(const std::string& input)
         {
             HDRData out;
-            const std::string& name = string::toUpper(input);
+            std::string name = string::toUpper(input);
 
+            // Extract view gamut if present (e.g., "(P3 D65)")
+            std::string viewGamut;
+            size_t start = name.rfind('(');
+            size_t end = name.rfind(')');
+            if (start != std::string::npos && end != std::string::npos &&
+                end > start)
+            {
+                viewGamut = name.substr(start + 1, end - start - 1);
+                // Remove the extracted part from name to avoid interference
+                name = name.substr(0, start) + name.substr(end + 1);
+            }
+
+            // Trim any extra spaces
+            auto trim = [](std::string& s) {
+                s.erase(0, s.find_first_not_of(" \t"));
+                s.erase(s.find_last_not_of(" \t") + 1);
+            };
+            trim(name);
+            trim(viewGamut);
+
+
+            if (name.find("SDR") != std::string::npos)
+            {
+                out.eotf = EOTF_BT709;
+                out.primaries[Red]   = {0.640F, 0.330F};
+                out.primaries[Green] = {0.300F, 0.600F};
+                out.primaries[Blue]  = {0.150F, 0.060F};
+                out.primaries[White] = {0.3127F, 0.3290F};
+            }                         
             // --- 1. Wide Gamut / HDR (BT.2020 and BT.2100) ---
-            if (name.find("2020") != std::string::npos ||
-                name.find("2100") != std::string::npos)
+            else if (name.find("2020") != std::string::npos ||
+                     name.find("2100") != std::string::npos ||
+                     name.find("HDR") != std::string::npos)
             {
                 // Default to 2020 SDR curve
                 out.eotf = EOTF_BT2020; 
@@ -84,8 +114,7 @@ namespace tl
                 out.primaries[White] = {0.3127F, 0.3290F};
             }
             // --- 4. HD SDR (BT.709) ---
-            else if (name.find("709") != std::string::npos ||
-                     name.find("SDR") != std::string::npos)
+            else if (name.find("709") != std::string::npos)
             {
                 out.eotf = EOTF_BT709;
                 out.primaries[Red]   = {0.640F, 0.330F};
@@ -103,6 +132,15 @@ namespace tl
                 out.primaries[Blue]  = { 0.140F, 0.080F };
                 out.primaries[White] = { 0.310F, 0.316F };
             }
+            // --- 6. SDR Rec. 1886 ---
+            else if (name.find("1886") != std::string::npos)
+            {
+                out.eotf = EOTF_BT709;
+                out.primaries[Red]   = {0.640F, 0.330F};
+                out.primaries[Green] = {0.300F, 0.600F};
+                out.primaries[Blue]  = {0.150F, 0.060F};
+                out.primaries[White] = {0.3127F, 0.3290F};
+            }
             // --- Default Fallback (Standard sRGB/Rec709) ---
             else
             {
@@ -112,6 +150,21 @@ namespace tl
                 out.primaries[Blue]  = {0.150F, 0.060F};
                 out.primaries[White] = {0.3127F, 0.3290F};
             }
+
+            // Override primaries with view gamut if present and matched
+            if (!viewGamut.empty())
+            {
+                // Recursively apply matching to viewGamut
+                // (without EOTF override)
+                HDRData viewData = nameToPrimaries(viewGamut);
+                out.primaries[Red]   = viewData.primaries[Red];
+                out.primaries[Green] = viewData.primaries[Green];
+                out.primaries[Blue]  = viewData.primaries[Blue];
+                out.primaries[White] = viewData.primaries[White];
+                // EOTF remains from display (container)
+            }
+
+
 
             return out;
         }
@@ -196,6 +249,7 @@ namespace tl
                      fuzzyCompare(w.x, 0.310F) &&
                      fuzzyCompare(w.y, 0.316F))
                 out = "Film";
+
             return out;
         }
 

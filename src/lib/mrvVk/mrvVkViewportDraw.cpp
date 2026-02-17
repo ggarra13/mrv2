@@ -36,6 +36,7 @@
 #include <FL/Fl_PNG_Image.H>
 
 #include <cmath>
+#include <regex>
 
 namespace
 {
@@ -1153,10 +1154,28 @@ namespace mrv
                     if (ocio.view.find("SDR") == std::string::npos)
                     {
                         float peak = 1000.0f;
-                        if (ocio.view.find("10000") != std::string::npos)     peak = 10000.F;
-                        else if (ocio.view.find("4000") != std::string::npos) peak = 4000.F;
-                        else if (ocio.view.find("2000") != std::string::npos) peak = 2000.F;
-                        else if (ocio.view.find("1000") != std::string::npos) peak = 1000.F;
+                        std::string viewName = string::toUpper(ocio.view);
+
+                       // Regex explanation:
+                       // ([0-9]+) -> Capture group 1: one or more digits
+                       // \s* -> Zero or more whitespace characters
+                       // NITS* -> The literal "NIT" followed by zero or more "S"
+                        std::regex nitRegex(R"(([0-9]+)\s*NITS*)");
+                        std::smatch match;
+
+                        if (std::regex_search(viewName, match, nitRegex)) {
+                            // match[0] is the whole string (e.g., "1000 NITS")
+                            // match[1] is just the first capture group (e.g., "1000")
+                            try {
+                                peak = std::stof(match[1].str());
+                            } catch (const std::exception& e) {
+                                // Fallback for parsing errors
+                                peak = 100.0f; 
+                            }
+                        } else {
+                            // Default fallback if no nits pattern is found
+                            peak = 100.0f; 
+                        }
                         data.displayMasteringLuminance = math::FloatRange(0, peak);
                         data.maxCLL = peak;
                         data.maxFALL = peak * 0.4F; // prevents crushing mid-tones
