@@ -104,11 +104,11 @@ namespace mrv
     void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! HDR callbacks
+    void toggle_hdr_debug_cb(Fl_Menu_* m, ViewerUI* ui);
+    
     void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_hdr_peak_detection_cb(Fl_Menu_* w, ViewerUI* ui);
-    void toggle_hdr_ScRGB_cb(Fl_Menu_* m, ViewerUI* ui);
-    void toggle_hdr_debug_cb(Fl_Menu_* m, ViewerUI* ui);
     void select_hdr_tonemap_cb(Fl_Menu_* w, ViewerUI* ui);
     void select_hdr_gamut_mapping_cb(Fl_Menu_* m, ViewerUI* ui);
     

@@ -1036,8 +1036,6 @@ namespace mrv
             //          eliminate p.hdrOptions.hdrData.
             p.hdrOptions.debug = value.debug;
 
-            p.hdrOptions.ScRGB = value.ScRGB;
-
             p.hdrOptions.peak_detection = value.peak_detection;
             p.hdrOptions.peak_percentile = value.peak_percentile;
             p.hdrOptions.peak_smoothing_period = value.peak_smoothing_period;
