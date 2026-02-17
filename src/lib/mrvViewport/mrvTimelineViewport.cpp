@@ -1034,8 +1034,6 @@ namespace mrv
 
             // \@note:  we don't just copy p.hdrOptions = value as that would
             //          eliminate p.hdrOptions.hdrData.
-            p.hdrOptions.algorithm = value.algorithm;
-            p.hdrOptions.gamutMapping = value.gamutMapping;
             p.hdrOptions.debug = value.debug;
 
             p.hdrOptions.peak_detection = value.peak_detection;
@@ -1044,6 +1042,8 @@ namespace mrv
             p.hdrOptions.peak_scene_low_limit = value.peak_scene_low_limit;
             p.hdrOptions.peak_scene_high_limit = value.peak_scene_high_limit;
             
+            p.hdrOptions.algorithm = value.algorithm;
+            p.hdrOptions.gamutMapping = value.gamutMapping;
             redrawWindows();
         }
 
@@ -2231,13 +2231,6 @@ namespace mrv
             {
                 setOCIOOptions(screen, o);
             }
-
-            if (!p.videoData.empty() && !p.videoData[0].layers.empty() &&
-                p.videoData[0].layers[0].image)
-                _getHDR();
-
-            if (o.enabled)
-                p.hdrOptions.tonemap = true;
             
             redrawWindows();
         }
