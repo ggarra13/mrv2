@@ -3738,7 +3738,6 @@ namespace mrv
                 else
                 {
                     _getHDR();
-                    p.hdrOptions.tonemap = true;
                 }
                 
                 const auto& tags = p.videoData[0].layers[0].image->getTags();
