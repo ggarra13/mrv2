@@ -1144,7 +1144,6 @@ namespace mrv
             }
             else
             {
-                LOG_WARNING("Sending HDR primaries");
                 const int screen_index = this->screen_num();
                 const timeline::OCIOOptions& ocio = getOCIOOptions(screen_index);
                 image::HDRData data;

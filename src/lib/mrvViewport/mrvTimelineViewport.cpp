@@ -3699,50 +3699,6 @@ namespace mrv
                 p.hdrOptions.tonemap = true;
                 return;
             }
-            
-            const int screen_index = this->screen_num();
-            const timeline::OCIOOptions& ocio = getOCIOOptions(screen_index);
-            image::HDRData& data = p.hdrOptions.hdrData;
-
-            if (!p.hdrMonitorFound || ocio.display.empty() || ocio.view.empty())
-            {
-                p.hdrOptions.tonemap = false;
-                p.hdrOptions.hdrData = image::nameToPrimaries("709");
-                data.displayMasteringLuminance = math::FloatRange(0, 100.F);
-                data.maxCLL = 203.F;
-                data.maxFALL = 100.F;
-                return;
-            }
-            
-            p.hdrOptions.tonemap = true;
-
-            data = image::nameToPrimaries(ocio.display + " " + ocio.view);
-
-            const std::string viewName = string::toUpper(ocio.view);
-            if (viewName.find("SDR") == std::string::npos)
-            {
-                float peak = 1000.0f; // Safe HDR default
-            
-                // Regex to catch standard ACES/OCIO naming conventions like "1000NIT", "1000 NITS", "1000NITS"
-                std::regex nitRegex("([0-9]+)\\s*NITS?");
-                std::smatch match;
-                if (std::regex_search(viewName, match, nitRegex))
-                {
-                    peak = std::stof(match[1].str());
-                }
-
-                p.hdrOptions.hdrData.displayMasteringLuminance =
-                    math::FloatRange(0.001f, peak);
-                p.hdrOptions.hdrData.maxCLL = peak;
-                p.hdrOptions.hdrData.maxFALL = peak * 0.4f;
-            }
-            else
-            {
-                data.displayMasteringLuminance = math::FloatRange(0, 100.F);
-                data.maxCLL = 203.F;
-                data.maxFALL = 100.F;
-                p.hdrOptions.tonemap = false;
-            }            
         }
         
         void TimelineViewport::_getTags() noexcept
