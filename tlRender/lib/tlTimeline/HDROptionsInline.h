@@ -11,7 +11,6 @@ namespace tl
             // passthru is ignored on purpose
             return (debug == other.debug &&
                     tonemap == other.tonemap &&
-                    ScRGB == other.ScRGB &&
                     peak_detection == other.peak_detection &&
                     peak_percentile == other.peak_percentile &&
                     peak_smoothing_period == other.peak_smoothing_period &&

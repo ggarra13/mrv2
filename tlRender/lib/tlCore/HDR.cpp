@@ -164,8 +164,6 @@ namespace tl
                 // EOTF remains from display (container)
             }
 
-
-
             return out;
         }
         
