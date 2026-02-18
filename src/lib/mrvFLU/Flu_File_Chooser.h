@@ -35,14 +35,12 @@
 struct ThumbnailData;
 using namespace tl;
 
-typedef std::vector< std::string > FluStringVector;
-
 FLU_EXPORT const char* flu_file_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
     const char* pattern, const char* filename, const bool compact_files = true);
 FLU_EXPORT size_t flu_multi_file_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
-    const char* pattern, const char* filename, FluStringVector& filelist,
+    const char* pattern, const char* filename, std::vector<std::string >& filelist,
     const bool compact_files = true);
 FLU_EXPORT const char* flu_save_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
@@ -606,9 +604,9 @@ public:
 
     std::string formatDate(const char* d);
 
-    void recursiveScan(const char* dir, FluStringVector* files);
+    void recursiveScan(const char* dir, std::vector<std::string >& files);
 
-    bool stripPatterns(std::string s, FluStringVector* patterns);
+    bool stripPatterns(std::string s, std::vector<std::string >& patterns);
 
     int popupContextMenu(Flu_Entry* entry);
 
@@ -642,7 +640,7 @@ public:
         fileEditing;
     int sortMethod;
 
-    FluStringVector patterns;
+    std::vector<std::string > patterns;
 
     static std::vector<FileTypeInfo> types;
 

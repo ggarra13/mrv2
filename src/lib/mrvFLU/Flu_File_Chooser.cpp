@@ -805,10 +805,6 @@ Flu_File_Chooser::Flu_File_Chooser(
     pattern(pat);
     default_file_icon(&default_file);
 
-    cd(nullptr); // prime with the current directory
-
-    clear_history();
-
     // Note: patname may be a valid C format sequence, like picture.%04d.exr
     //       we convert it to picture.0001.exr.
     if (pathname)
@@ -826,6 +822,12 @@ Flu_File_Chooser::Flu_File_Chooser(
         // if pathname does not start with "/" or "~", set the filename to it
         filename.value(fileName.c_str());
     }
+    else
+    {
+        cd(nullptr); // prime with the current directory
+    }
+
+    clear_history();
 }
 
 void Flu_File_Chooser::initFileTypes()
@@ -1216,7 +1218,8 @@ void Flu_File_Chooser::newFolderCB()
     }
 }
 
-void Flu_File_Chooser::recursiveScan(const char* dir, FluStringVector* files)
+void Flu_File_Chooser::recursiveScan(const char* dir,
+                                     std::vector<std::string >& files)
 {
     dirent** e;
     char* name;
@@ -1241,9 +1244,9 @@ void Flu_File_Chooser::recursiveScan(const char* dir, FluStringVector* files)
         if (fl_filename_isdir(fullpath.c_str()))
             recursiveScan(fullpath.c_str(), files);
 
-        files->push_back(fullpath);
+        files.push_back(fullpath);
     }
-    files->push_back(dir);
+    files.push_back(dir);
 
     fl_filename_free_list(&e, num);
 }
@@ -1374,8 +1377,8 @@ void Flu_File_Chooser::trashCB(bool recycle)
                         Fl::check();
                         // recursively build a list of all files that will be
                         // deleted
-                        FluStringVector files;
-                        recursiveScan(name.c_str(), &files);
+                        std::vector<std::string > files;
+                        recursiveScan(name.c_str(), files);
                         // delete all the files
                         label->label("Deleting files...");
                         for (unsigned int i = 0; i < files.size(); i++)
@@ -1746,7 +1749,6 @@ void Flu_File_Chooser::filenameCB()
     else
     {
         filenameEnterCallback = true;
-        // cd( filename.value() );
         okCB();
     }
 }
@@ -1805,6 +1807,7 @@ void Flu_File_Chooser::okCB()
         {
             if (strlen(filename.value()) != 0)
                 cd(filename.value());
+
             filename.value(currentDir.c_str());
             filename.insert_position(filename.size());
         }
@@ -1814,7 +1817,7 @@ void Flu_File_Chooser::okCB()
     else
     {
         const char* file = filename.value();
-        if (strlen(file) != 0)
+        if (file && strlen(file) != 0)
         {
             if (mrv::file::isDirectory(file))
             {
@@ -3107,7 +3110,8 @@ void Flu_File_Chooser::addToHistory()
 // treating the string as a '|' or ';' delimited sequence of patterns, strip
 // them out and place in patterns return whether it is likely that "s"
 // represents a regexp file-matching pattern
-bool Flu_File_Chooser::stripPatterns(std::string s, FluStringVector* patterns)
+bool Flu_File_Chooser::stripPatterns(std::string s,
+                                     std::vector<std::string >& patterns)
 {
     if (s.size() == 0)
         return false;
@@ -3119,7 +3123,7 @@ bool Flu_File_Chooser::stripPatterns(std::string s, FluStringVector* patterns)
         tokens++;
         if (tok[0] == ' ')
             tok++; // skip whitespace
-        patterns->push_back(tok);
+        patterns.push_back(tok);
         tok = strtok(nullptr, "|;");
     }
 
@@ -3130,7 +3134,7 @@ bool Flu_File_Chooser::stripPatterns(std::string s, FluStringVector* patterns)
         return true;
     else if (tokens == 1)
     {
-        patterns->clear();
+        patterns.clear();
         return false;
     }
     else
@@ -3261,6 +3265,7 @@ void Flu_File_Chooser::cd(const char* path)
 
     buildLocationCombo();
 
+    filename.value("");
     filename.take_focus();
 
     trashBtn->deactivate();
@@ -3632,7 +3637,7 @@ void Flu_File_Chooser::cd(const char* path)
     pathbase = currentDir;
 
     // take the current pattern and make a list of filter pattern strings
-    FluStringVector currentPatterns;
+    std::vector<std::string > currentPatterns;
     {
         std::string pat = patterns[filePattern->list.value() - 1];
         while (pat.size())
@@ -3658,11 +3663,11 @@ void Flu_File_Chooser::cd(const char* path)
     }
 
     // add any user-defined patterns
-    FluStringVector userPatterns;
+    std::vector<std::string > userPatterns;
     // if the user just hit <Tab> but the filename input area is empty,
     // then use the current patterns
     if (!filenameTabCallback || currentFile != "*")
-        stripPatterns(currentFile, &userPatterns);
+        stripPatterns(currentFile, userPatterns);
 
     typedef std::vector< std::string > Directories;
     Directories dirs;
@@ -4166,7 +4171,7 @@ std::string Flu_File_Chooser::commonStr()
 static const char* _flu_file_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
     const char* pattern, const char* filename, int type,
-    FluStringVector& filelist, const bool compact_files = true)
+    std::vector<std::string >& filelist, const bool compact_files = true)
 {
     static std::string lastFile;
     if (!lastFile.empty()) filename = lastFile.c_str();
@@ -4218,7 +4223,7 @@ static const char* _flu_file_chooser(
 
 size_t flu_multi_file_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
-    const char* pattern, const char* filename, FluStringVector& filelist,
+    const char* pattern, const char* filename, std::vector<std::string >& filelist,
     const bool compact_files)
 {
     _flu_file_chooser(
@@ -4233,7 +4238,7 @@ const char* flu_file_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
     const char* pattern, const char* filename, const bool compact_files)
 {
-    FluStringVector filelist;
+    std::vector<std::string > filelist;
     return _flu_file_chooser(
         context, message, pattern, filename,
         static_cast<int>(ChooserType::SINGLE) |
@@ -4246,7 +4251,7 @@ const char* flu_save_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
     const char* pattern, const char* filename, const bool compact_files)
 {
-    FluStringVector filelist;
+    std::vector<std::string > filelist;
     return _flu_file_chooser(
         context, message, pattern, filename,
         static_cast<int>(ChooserType::SINGLE) |
@@ -4258,7 +4263,7 @@ const char* flu_dir_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
     const char* filename)
 {
-    FluStringVector filelist;
+    std::vector<std::string > filelist;
     return _flu_file_chooser(
         context, message, "*", filename,
         static_cast<int>(ChooserType::DIRECTORY), filelist);
@@ -4268,7 +4273,7 @@ const char* flu_dir_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
     const char* filename, bool showFiles)
 {
-    FluStringVector filelist;
+    std::vector<std::string > filelist;
     if (showFiles)
         return _flu_file_chooser(
             context, message, "*", filename,
@@ -4283,7 +4288,7 @@ const char* flu_file_and_dir_chooser(
     const std::shared_ptr<tl::system::Context>& context, const char* message,
     const char* filename)
 {
-    FluStringVector filelist;
+    std::vector<std::string > filelist;
     return _flu_file_chooser(
         context, message, "*", filename,
         static_cast<int>(ChooserType::STDFILE), filelist);
