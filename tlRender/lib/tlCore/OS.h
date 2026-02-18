@@ -36,11 +36,11 @@ namespace tl
         const std::vector<char> envListSeparators = {':', ';'};
 
         //! Environment variable list separator.
-#if defined(_WINDOWS)
+#if defined(_WIN32)
         const char envListSeparator = ';';
-#else  // _WINDOWS
+#else  // _WIN32
         const char envListSeparator = ':';
-#endif // _WINDOWS
+#endif // _WIN32
 
         //! Get an environment variable.
         //!

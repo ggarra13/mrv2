@@ -8,9 +8,9 @@
 
 #include <tlCore/AudioResample.h>
 
-#if defined(_WINDOWS)
+#if defined(_WIN32)
 #    include <atlbase.h>
-#endif // _WINDOWS
+#endif // _WIN32
 
 namespace tl
 {
@@ -45,11 +45,11 @@ namespace tl
             struct VideoThread
             {
                 std::shared_ptr<DLVideoFrameWrapper> videoFrame;
-#if defined(_WINDOWS)
+#if defined(_WIN32)
                 CComPtr<IDeckLinkVideoConversion> frameConverter;
-#else  // _WINDOWS
+#else  // _WIN32
                 DLFrameConversionWrapper frameConverter;
-#endif // _WINDOWS
+#endif // _WIN32
                 uint64_t frameCount = 0;
                 std::chrono::steady_clock::time_point t;
             };
@@ -93,20 +93,20 @@ namespace tl
             p.audioInfo = audioInfo;
             p.refCount = 1;
 
-#if defined(_WINDOWS)
+#if defined(_WIN32)
             HRESULT r = p.videoThread.frameConverter.CoCreateInstance(
                 CLSID_CDeckLinkVideoConversion, nullptr, CLSCTX_ALL);
             if (r != S_OK)
             {
                 throw std::runtime_error("Cannot create video frame converter");
             }
-#else  // _WINDOWS
+#else  // _WIN32
             p.videoThread.frameConverter.p = CreateVideoConversionInstance();
             if (!p.videoThread.frameConverter.p)
             {
                 throw std::runtime_error("Cannot create video frame converter");
             }
-#endif // _WINDOWS
+#endif // _WIN32
 
             IDeckLinkProfileAttributes* dlProfileAttributes = nullptr;
             if (dlOutput->QueryInterface(

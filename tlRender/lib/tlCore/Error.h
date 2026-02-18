@@ -11,10 +11,10 @@ namespace tl
     //! Errors
     namespace error
     {
-#if defined(_WINDOWS)
+#if defined(_WIN32)
         //! Get an error string from a Windows system call.
         std::string getLastError();
-#endif // _WINDOWS
+#endif // _WIN32
 
         //! Parse error.
         class ParseError : public std::invalid_argument

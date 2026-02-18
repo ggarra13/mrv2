@@ -3693,7 +3693,7 @@ namespace mrv
             }
             else
             {
-#if defined(_WINDOWS)
+#if defined(_WIN32)
                 p.hdrOptions.tonemap = false;
 #else
                 p.hdrOptions.tonemap = true;

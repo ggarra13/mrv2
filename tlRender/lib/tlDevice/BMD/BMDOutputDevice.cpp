@@ -24,9 +24,9 @@
 #include <mutex>
 #include <tuple>
 
-#if defined(_WINDOWS)
+#if defined(_WIN32)
 #    include <atlbase.h>
-#endif // _WINDOWS
+#endif // _WIN32
 
 namespace tl
 {
