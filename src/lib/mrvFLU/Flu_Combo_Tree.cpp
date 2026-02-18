@@ -32,7 +32,7 @@ Flu_Combo_Tree ::Flu_Combo_Tree(int X, int Y, int W, int H, const char* l) :
     tree.showroot(false);
     tree.showcollapse(false);
     tree.label("/"); // this does not work
-    tree.item_labelfgcolor(fl_contrast(FL_WHITE, tree.item_labelbgcolor()));
+    tree.item_labelfgcolor(FL_BLACK);
     set_combo_widget(&tree);
 }
 
