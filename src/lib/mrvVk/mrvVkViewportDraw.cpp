@@ -1179,7 +1179,7 @@ namespace mrv
                         }
                         data.displayMasteringLuminance = math::FloatRange(0, peak);
                         data.maxCLL = peak;
-                        data.maxFALL = peak * 0.4F; // prevents crushing mid-tones
+                        data.maxFALL = 100.F; // prevents crushing mid-tones
                     }
                     else
                     {

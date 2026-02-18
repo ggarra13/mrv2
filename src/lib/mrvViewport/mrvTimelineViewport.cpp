@@ -3699,6 +3699,7 @@ namespace mrv
                 p.hdrOptions.tonemap = true;
 #endif
                 p.hdrOptions.hdrData = image::HDRData();
+                p.hdrOptions.hdrData.eotf = image::EOTFType::EOTF_BT709;
             }
         }
         
