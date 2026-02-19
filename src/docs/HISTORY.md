@@ -64,6 +64,8 @@ ChangeLog
 - Fixed color toolbar to support values with 4 digits, like 10000.000 for HDR lookups.
 - Removed Vulkan validation errors from NDI's Panel -> NDI Output Stream.
 - Sped up NDI Output Stream and hdr utility.
+- Made NDI Output Stream not pass metadata when OpenColorIO is enabled.
+- Fixed NDI some core dumps.
 
 
 v1.5.4

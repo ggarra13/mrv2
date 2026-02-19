@@ -2038,7 +2038,7 @@ namespace tl
                 break;
             }
 
-            if (hdrData && !config.noMetadata)
+            if (hdrData && !config.noMetadata && !p.mutex.ocioOptions.enabled)
             {
                 std::string primariesName = "bt_2020";
                 std::string transferName = "bt_2020";

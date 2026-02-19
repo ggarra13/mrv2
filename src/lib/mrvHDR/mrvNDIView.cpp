@@ -1280,22 +1280,22 @@ void main() {
             if (!is_equal_hdr_metadata(m_hdr_metadata, m_previous_hdr_metadata))
                 m_hdr_metadata_changed = true; // Mark as changed
         }
-        // else
-        // {
-        //     m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
+        else
+        {
+            m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
 
-        //     // Primaries
-        //     m_hdr_metadata.displayPrimaryRed = { 0.640F, 0.330F };
-        //     m_hdr_metadata.displayPrimaryGreen = { 0.300F, 0.600F };
-        //     m_hdr_metadata.displayPrimaryBlue = { 0.15F, 0.060F };
-        //     m_hdr_metadata.whitePoint = { 0.3127F, 0.3290F };
+            // Primaries
+            m_hdr_metadata.displayPrimaryRed = { 0.640F, 0.330F };
+            m_hdr_metadata.displayPrimaryGreen = { 0.300F, 0.600F };
+            m_hdr_metadata.displayPrimaryBlue = { 0.15F, 0.060F };
+            m_hdr_metadata.whitePoint = { 0.3127F, 0.3290F };
                 
-        //     // Max display capability
-        //     m_hdr_metadata.maxLuminance = 100.F;
-        //     m_hdr_metadata.minLuminance = 0.1F;
-        //     m_hdr_metadata.maxContentLightLevel = 100.F;
-        //     m_hdr_metadata.maxFrameAverageLightLevel = 100.F;
-        // }
+            // Max display capability
+            m_hdr_metadata.maxLuminance = 100.F;
+            m_hdr_metadata.minLuminance = 0.1F;
+            m_hdr_metadata.maxContentLightLevel = 100.F;
+            m_hdr_metadata.maxFrameAverageLightLevel = 100.F;
+        }
 
         if (!p.image)
             return;

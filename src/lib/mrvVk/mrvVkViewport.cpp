@@ -712,6 +712,7 @@ namespace mrv
                     hdr.max_nits != p.hdrCapabilities.max_nits)
                 {
                     m_swapchain_needs_recreation = true;
+                    init_colorspace();
                     redraw();
                     return;
                 }
