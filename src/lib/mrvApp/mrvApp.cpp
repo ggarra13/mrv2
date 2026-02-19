@@ -1729,7 +1729,8 @@ namespace mrv
             p.outputDevice->setEnabled(false);
         
         // \@todo: Remove.  Needed to refresh the viewport annotations
-        ui->uiView->redraw();
+        if (ui && ui->uiView)
+            ui->uiView->redraw();
         
         Fl::remove_timeout((Fl_Timeout_Handler)_timer_update_cb, this);
     }
