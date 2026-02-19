@@ -454,6 +454,7 @@ namespace tl
                 "FFmpeg",
                 {// Video Formats
                  {".avi", io::FileType::Movie},
+                 {".avif", io::FileType::Movie},
                  {".divx", io::FileType::Movie},
                  {".dv", io::FileType::Movie},
                  {".flv", io::FileType::Movie},

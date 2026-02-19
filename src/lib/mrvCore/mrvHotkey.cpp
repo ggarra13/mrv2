@@ -82,7 +82,6 @@ namespace mrv
 
     Hotkey kToggleHDRPeakDetection(false, false, false, false, 0);
 
-
     Hotkey kDisplayWindow(true, false, false, false, 'd');
     Hotkey kDataWindow(false, false, false, false, 'd');
 

@@ -94,12 +94,12 @@ namespace tl
                     }
                     else
                     {
-#if defined(_WINDOWS)
+#if defined(_WIN32)
                         _tiff.p =
                             TIFFOpenW(string::toWide(fileName).c_str(), "r");
-#else  // _WINDOWS
+#else  // _WIN32
                         _tiff.p = TIFFOpen(fileName.c_str(), "r");
-#endif // _WINDOWS
+#endif // _WIN32
                     }
                     if (!_tiff.p)
                     {

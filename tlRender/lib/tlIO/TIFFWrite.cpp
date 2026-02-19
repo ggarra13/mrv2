@@ -24,11 +24,11 @@ namespace tl
                     const std::string& fileName,
                     const std::shared_ptr<image::Image>& image)
                 {
-#if defined(_WINDOWS)
+#if defined(_WIN32)
                     _tiff.p = TIFFOpenW(string::toWide(fileName).c_str(), "w");
-#else  // _WINDOWS
+#else  // _WIN32
                     _tiff.p = TIFFOpen(fileName.c_str(), "w");
-#endif // _WINDOWS
+#endif // _WIN32
                     if (!_tiff.p)
                     {
                         throw std::runtime_error(

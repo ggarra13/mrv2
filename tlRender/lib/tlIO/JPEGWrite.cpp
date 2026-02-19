@@ -103,16 +103,16 @@ namespace tl
                         throw std::runtime_error(
                             string::Format("{0}: Cannot open").arg(fileName));
                     }
-#if defined(_WINDOWS)
+#if defined(_WIN32)
                     if (_wfopen_s(
                             &_f.p, string::toWide(fileName).c_str(), L"wb") !=
                         0)
                     {
                         _f.p = nullptr;
                     }
-#else  // _WINDOWS
+#else  // _WIN32
                     _f.p = fopen(fileName.c_str(), "wb");
-#endif // _WINDOWS
+#endif // _WIN32
                     if (!_f.p)
                     {
                         throw std::runtime_error(

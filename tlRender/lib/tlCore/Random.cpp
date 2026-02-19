@@ -72,11 +72,11 @@ namespace tl
             TLRENDER_P();
             const std::time_t t = std::time(nullptr);
             std::tm tm;
-#if defined(_WINDOWS)
+#if defined(_WIN32)
             localtime_s(&tm, &t);
-#else  // _WINDOWS
+#else  // _WIN32
             localtime_r(&t, &tm);
-#endif // _WINDOWS
+#endif // _WIN32
             setSeed(tm.tm_sec);
         }
     } // namespace math
