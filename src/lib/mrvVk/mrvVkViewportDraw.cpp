@@ -1171,11 +1171,11 @@ namespace mrv
                                 peak = std::stof(match[1].str());
                             } catch (const std::exception& e) {
                                 // Fallback for parsing errors
-                                peak = 100.0f; 
+                                peak = 1000.0F; 
                             }
                         } else {
                             // Default fallback if no nits pattern is found
-                            peak = 100.0f; 
+                            peak = 1000.0F; 
                         }
                         data.displayMasteringLuminance = math::FloatRange(0, peak);
                         data.maxCLL = peak;
