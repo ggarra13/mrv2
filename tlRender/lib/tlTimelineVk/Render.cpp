@@ -2783,7 +2783,8 @@ namespace tl
 
                 if (p.hdrMonitorFound)
                 {
-                    if (p.ocioData && p.ocioData->icsDesc)
+                    if (p.ocioData &&
+                        (p.ocioData->icsDesc || p.ocioData->shaderDesc))
                     {
                         src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                         src_colorspace.transfer = PL_COLOR_TRC_LINEAR;
