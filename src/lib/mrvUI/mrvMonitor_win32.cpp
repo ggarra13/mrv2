@@ -268,7 +268,7 @@ namespace mrv
                             local_cap.max_nits = desc1.MaxLuminance;
                             
                             // Set supported based on capability (not current enablement)
-                            local_cap.supported = (desc1.MaxLuminance > 0.0f);
+                            local_cap.supported = (desc1.MaxLuminance > 100.0f);
                             
                             // Check if HDR is active based on current color space
                             bool enabled = false;
