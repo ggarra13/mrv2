@@ -1038,15 +1038,9 @@ void main() {
         pipelineCacheCreateInfo.sType =
             VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 
-        result = vkCreatePipelineCache(
-            device(), &pipelineCacheCreateInfo, NULL, &pipelineCache);
-        VK_CHECK(result);
-
         result = vkCreateGraphicsPipelines(
             device(), pipelineCache, 1, &pipeline, NULL, &m_pipeline);
         VK_CHECK(result);
-
-        vkDestroyPipelineCache(device(), pipelineCache, NULL);
     }
 
     void NDIView::prepare_descriptor_layout()
