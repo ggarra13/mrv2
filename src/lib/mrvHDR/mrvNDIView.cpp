@@ -1270,9 +1270,12 @@ namespace mrv
         begin_render_pass(cmd);
         end_render_pass(cmd);
 
-        update_texture(cmd);
-        _fillVariables(cmd, p.placeboData->res);
 
+        {
+            std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
+            update_texture(cmd);
+            _fillVariables(cmd, p.placeboData->res);
+        }
         
         begin_render_pass(cmd);
 
