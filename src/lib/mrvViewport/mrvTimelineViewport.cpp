@@ -9,12 +9,13 @@
 #include <winsock2.h>
 #endif
 
+#include "mrvCore/mrvBackend.h"
+
 #include "mrViewer.h"
 
-#include <tlDevice/IOutput.h>
-
-#include <tlCore/HDR.h>
-#include <tlCore/Matrix.h>
+#ifdef VULKAN_BACKEND
+#  include "mrvVk/mrvVkUtil.h"
+#endif
 
 #include "mrvApp/mrvSettingsObject.h"
 
@@ -55,6 +56,11 @@
 #include "mrvCore/mrvWait.h"
 
 #include "mrvFl/mrvIO.h"
+
+#include <tlDevice/IOutput.h>
+
+#include <tlCore/HDR.h>
+#include <tlCore/Matrix.h>
 
 #include <FL/Fl.H>
 
@@ -3693,20 +3699,43 @@ namespace mrv
             }
             else
             {
+                // Set hdrData to BT2020's defaults
+                p.hdrOptions.hdrData = image::HDRData();
 #if defined(_WIN32)
-                p.hdrOptions.tonemap = false;
+
+#    ifdef VULKAN_BACKEND
+                const std::string gpu = util::gpuName(0);
+
+                if (gpu.find("NVIDIA") != std::string::npos)
+                {
+                    // NVidia on Windows must not tonemap.  We will pass
+                    // BT709 metadata which "tricks" DXGI's DWM into an scRGB
+                    // pipeline.
+                    p.hdrOptions.tonemap = false;
+                    p.hdrOptions.hdrData.eotf = image::EOTFType::EOTF_BT709;
+                }
+                else if (gpu.find("AMD") != std::string::npos)
+                {
+                    // AMD ignores metadata, and just lets Windows decide.
+                    p.hdrOptions.tonemap = true;
+                }
+                else if (gpu.find("INTEL") != std::string::npos)
+                {
+                    // Intel is currently broken.
+                    p.hdrOptions.tonemap = true;
+                }
+#    endif  // Vulkan Backend
+                
 #else
                 p.hdrOptions.tonemap = true;
 #endif
-                p.hdrOptions.hdrData = image::HDRData();
-                p.hdrOptions.hdrData.eotf = image::EOTFType::EOTF_BT709;
             }
         }
         
         void TimelineViewport::_getTags() noexcept
         {
             TLRENDER_P();
-
+            
             p.tagData.clear();
 
             if (!p.player)

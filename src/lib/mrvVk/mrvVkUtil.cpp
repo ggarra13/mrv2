@@ -2,14 +2,11 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <cassert>
 
-#include "mrvFl/mrvIO.h"
+#include "mrViewer.h"
 
 #include "mrvVk/mrvVkShaders.h"
 #include "mrvVk/mrvVkUtil.h"
-
-#include "mrvCore/mrvI8N.h"
 
 #include <tlTimelineVk/RenderPrivate.h>
 
@@ -18,6 +15,10 @@
 #include <tlVk/Util.h>
 
 #include <tlCore/StringFormat.h>
+#include <tlCore/String.h>
+
+#include <map>
+#include <string>
 
 namespace
 {
@@ -72,6 +73,46 @@ namespace mrv
                              mesh, pos, color, enableBlending);
         }
 
+        std::map<int, std::string> gpuNames;
+
+        std::string gpuName(int index)
+        {
+            std::string out;
+            
+            VkInstance instance = App::ui->uiView->instance();
+            if (instance == VK_NULL_HANDLE)
+                return out;
+
+            if (gpuNames.empty())
+            {
+                uint32_t deviceCount = 0;
+                vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+                std::vector<VkPhysicalDevice> devices(deviceCount);
+                vkEnumeratePhysicalDevices(instance, &deviceCount,
+                                           devices.data());
+                for (int i = 0; i < deviceCount; i++)
+                {
+                    VkPhysicalDeviceIDPropertiesKHR id_props = {};
+                    id_props.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES_KHR;
+
+                    VkPhysicalDeviceProperties2 prop = {};
+                    prop.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+                    prop.pNext = &id_props;
+            
+                    vkGetPhysicalDeviceProperties2(devices[i], &prop);
+                    VkPhysicalDeviceType t = prop.properties.deviceType;
+                    const std::string deviceName = prop.properties.deviceName;
+                    gpuNames[i] = string::toUpper(deviceName);
+                }
+            }
+
+            auto i = gpuNames.find(index);
+            if (i != gpuNames.end())
+            {
+                out = i->second;
+            }
+            return out;
+        }
 
     } // namespace util
     

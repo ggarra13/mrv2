@@ -83,6 +83,8 @@ namespace mrv
             const math::Vector2i& center, const float radius,
             const image::Color4f& color, const bool soft = false);
 
+        std::string gpuName(int index = 0);
+        
     }  // namespace util
     
 } // namespace mrv
