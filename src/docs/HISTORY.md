@@ -68,6 +68,7 @@ ChangeLog
 - Fixed NDI some core dumps.
 - Fixed NDI's hdr utility crashes on Windows.
 - Improved performance of NDI's hdr utility with changing metadata.
+- Added code to handle OpenColorIO properly on Linux.  Still untested.
 
 
 v1.5.4
