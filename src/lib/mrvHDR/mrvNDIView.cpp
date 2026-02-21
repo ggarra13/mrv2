@@ -4,6 +4,12 @@
 
 #define LOG_WARNING(x) std::cerr << x << std::endl;
 
+#ifdef NDEBUG
+#  define LOG_DEBUG(x)
+#else
+#  define LOG_DEBUG(x) std::cerr << x << std::endl;
+#endif
+
 #include <Imath/half.h>
 
 #include <tlCore/Image.h>
@@ -1504,7 +1510,13 @@ namespace mrv
                                 if (p.hdrData != hdrData)
                                 {
                                     p.hdrData = hdrData;
-                                    init = true;
+                                    if (!init)
+                                    {
+                                        vkDeviceWaitIdle(ctx.device);
+                                        prepare_shader();
+                                        redraw();
+                                    }
+
                                 }
                             }
                             else
@@ -1635,18 +1647,9 @@ namespace mrv
     {
         TLRENDER_P();
 
-        if (m_frag_shader_module != VK_NULL_HANDLE)
-        {
-            vkDestroyShaderModule(device(), m_frag_shader_module, NULL);
-            m_frag_shader_module = VK_NULL_HANDLE;
-        }
 
-        if (m_vert_shader_module != VK_NULL_HANDLE)
-        {
-            vkDestroyShaderModule(device(), m_vert_shader_module, NULL);
-            m_vert_shader_module = VK_NULL_HANDLE;
-        }
-
+        p.shader.reset();
+        
         p.vao.reset();
         p.vbo.reset();
 
@@ -2013,7 +2016,7 @@ namespace mrv
         {
             if (m_textures.size() > 1)
             {
-                // Remove all ements but the first
+                // Remove all ements but the first, main image
                 m_textures.resize(1);
             }
             addGPUTextures(res);
@@ -2288,9 +2291,7 @@ void main() {
      vec4 tmp = texture(inTexture, inTexCoord, 0.0);
      {1}
 }
-)")
-                                           .arg(p.hdrColorsDef)
-                                           .arg(p.hdrColors);
+)").arg(p.hdrColorsDef).arg(p.hdrColors);
         return fragShader;
     }
 
