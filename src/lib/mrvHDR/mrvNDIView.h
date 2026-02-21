@@ -120,6 +120,7 @@ namespace mrv
         void _findThread();
         void _videoThread();
         void _audioThread();
+        std::string _fragmentSource();
 
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();

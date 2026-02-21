@@ -228,10 +228,25 @@ namespace
         return VK_FORMAT_UNDEFINED;
     }
 
+    std::string vertexSource()
+    {
+        return R"(
+ #version 450
+ layout(location = 0) in vec2 inPos;
+ layout(location = 1) in vec2 inTexCoord;
+ layout(location = 0) out vec2 outTexCoord;
+
+ void main() {
+      gl_Position = vec4(inPos, 0.0, 1.0);
+      outTexCoord = inTexCoord;
+ }
+ )";
+    }
 } // namespace
 
 namespace mrv
-{    
+{
+    
     monitor::HDRCapabilities getHDRCapabilities(int screen_num)
     {
         monitor::HDRCapabilities out;
@@ -403,7 +418,7 @@ namespace mrv
         pl_gpu_dummy_destroy(&gpu);
         pl_log_destroy(&log);
     }
-
+    
     struct NDIView::Private
     {
         // FLTK state variables
@@ -478,6 +493,8 @@ namespace mrv
         bool hasHDR = false;
         image::HDRData hdrData;
 
+        std::string oldShaderSource;
+
         NDIlib_FourCC_video_type_e fourCC = NDIlib_FourCC_type_UYVY;
 
         // Vulkan variables
@@ -497,6 +514,7 @@ namespace mrv
         std::shared_ptr<tl::vlk::VBO> vbo;
         std::shared_ptr<tl::vlk::VAO> vao;
     };
+
 
     NDIView::~NDIView()
     {
@@ -851,17 +869,7 @@ namespace mrv
         if (m_vert_shader_module != VK_NULL_HANDLE)
             return m_vert_shader_module;
 
-        std::string vertex_shader_glsl = R"(
- #version 450
- layout(location = 0) in vec2 inPos;
- layout(location = 1) in vec2 inTexCoord;
- layout(location = 0) out vec2 outTexCoord;
-
- void main() {
-      gl_Position = vec4(inPos, 0.0, 1.0);
-      outTexCoord = inTexCoord;
- }
- )";
+        std::string vertex_shader_glsl = vertexSource();
 
         try
         {
@@ -885,33 +893,22 @@ namespace mrv
     {
         TLRENDER_P();
 
+        const std::string source = _fragmentSource();
+
         // Example GLSL vertex shader
-        std::string frag_shader_glsl = tl::string::Format(R"(
-#version 450
-
-// Input from vertex shader
-layout(location = 0) in vec2 inTexCoord;
-
-// Output color
-layout(location = 0) out vec4 outColor;
-
-// Main image to display
-layout(binding = 0) uniform sampler2D inTexture;
-{0}
-
-void main() {
-     vec4 tmp = texture(inTexture, inTexCoord, 0.0);
-     {1}
-}
-)")
-                                           .arg(p.hdrColorsDef)
-                                           .arg(p.hdrColors);
+        if (p.oldShaderSource == source &&
+            m_frag_shader_module != VK_NULL_HANDLE)
+        {
+            return m_frag_shader_module;
+        }
+        p.oldShaderSource = source;
+        
         // Compile to SPIR-V
         try
         {
             // std::cerr << frag_shader_glsl << std::endl;
             std::vector<uint32_t> spirv = compile_glsl_to_spirv(
-                frag_shader_glsl,
+                source,
                 shaderc_fragment_shader, // Shader type
                 "frag_shader.glsl"       // Filename for error reporting
             );
@@ -1585,8 +1582,7 @@ void main() {
                             p.image = image::Image::create(p.info);
                             m_swapchain_needs_recreation = true;
                         }
-
-                        if (video_frame.p_data)
+                        else if (video_frame.p_data)
                         {
                             _copy(video_frame.p_data);
                             redraw();
@@ -1931,8 +1927,6 @@ void main() {
           << "// Variables" << std::endl
           << "//" << std::endl
           << std::endl;
-        // \@todo: add uniform bindings instead of using constants
-        // s << "layout(binding = 2) uniform UBO {\n";
         for (int i = 0; i < res->num_variables; ++i)
         {
             const struct pl_shader_var shader_var = res->variables[i];
@@ -2198,6 +2192,33 @@ void main() {
         {
             ui->uiMain->fullscreen();
         }
+    }
+
+    std::string NDIView::_fragmentSource()
+    {
+        TLRENDER_P();
+        
+        std::string fragShader = tl::string::Format(R"(
+#version 450
+
+// Input from vertex shader
+layout(location = 0) in vec2 inTexCoord;
+
+// Output color
+layout(location = 0) out vec4 outColor;
+
+// Main image to display
+layout(binding = 0) uniform sampler2D inTexture;
+{0}
+
+void main() {
+     vec4 tmp = texture(inTexture, inTexCoord, 0.0);
+     {1}
+}
+)")
+                                           .arg(p.hdrColorsDef)
+                                           .arg(p.hdrColors);
+        return fragShader;
     }
 
 } // namespace mrv
