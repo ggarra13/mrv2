@@ -349,7 +349,7 @@ namespace mrv
 
         pl_log log;
         pl_gpu gpu;
-        pl_shader shader;
+        pl_shader shader = nullptr;
         pl_shader_obj state = nullptr;
         const pl_shader_res* res = nullptr;
         
@@ -638,10 +638,12 @@ namespace mrv
                     float R, G, B;
 
                     float Y_linear = Yf;
-                    if (p.hasHDR)
-                        Y_linear = apply_inverse_pq(Yf);
-                    else
-                        Y_linear = Yf;
+
+                    // apply_inverse_pq is not needed
+                    // if (p.hasHDR)
+                    //     Y_linear = apply_inverse_pq(Yf);
+                    // else
+                    //     Y_linear = Yf;
 
                     if (useBT709)
                     {
@@ -698,10 +700,12 @@ namespace mrv
                     float R, G, B;
 
                     float Y_linear = Yf;
-                    if (p.hasHDR)
-                        Y_linear = apply_inverse_pq(Yf);
-                    else
-                        Y_linear = Yf;
+
+                     // apply_inverse_pq is not needed
+                    // if (p.hasHDR)
+                    //     Y_linear = apply_inverse_pq(Yf);
+                    // else
+                    //     Y_linear = Yf;
 
                     if (useBT709)
                     {
@@ -1763,6 +1767,9 @@ namespace mrv
 
         if (!p.placeboData)
             p.placeboData.reset(new LibPlaceboData);
+
+        if (p.placeboData->shader)
+            pl_shader_free(&p.placeboData->shader);
         
         pl_shader_params shader_params;
         memset(&shader_params, 0, sizeof(pl_shader_params));
