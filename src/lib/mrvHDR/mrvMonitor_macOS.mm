@@ -5,11 +5,15 @@
 #include <string>
 #include <vector>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 #import <CoreGraphics/CoreGraphics.h>
-#import <IOKit/graphics/IOGraphicsLib.h>
 #import <IOKit/IOKitLib.h>
+
+#pragma clang diagnostic pop
 
 #import <iostream>
 #import <string>
@@ -52,65 +56,11 @@ bool getDisplayNameForDispID(CGDirectDisplayID dispID,
 namespace mrv {
     namespace monitor {
 
-        
-        HDRCapabilities displaySupportsHDR(CGDirectDisplayID cgDisplayID) {
-            HDRCapabilities out;
-            io_iterator_t iter;
-            io_service_t service = 0;
-
-            CFMutableDictionaryRef match = IOServiceMatching("IODisplayConnect");
-            if (IOServiceGetMatchingServices(kIOMasterPortDefault, match, &iter) != KERN_SUCCESS)
-                return out;
-
-            while ((service = IOIteratorNext(iter))) {
-                CFDictionaryRef info = IODisplayCreateInfoDictionary(service, kIODisplayOnlyPreferredName);
-                if (!info) {
-                    IOObjectRelease(service);
-                    continue;
-                }
-
-                CFNumberRef vendorRef = (CFNumberRef)CFDictionaryGetValue(info, CFSTR(kDisplayVendorID));
-                CFNumberRef productRef = (CFNumberRef)CFDictionaryGetValue(info, CFSTR(kDisplayProductID));
-
-                uint32_t vendor = 0, product = 0;
-                if (vendorRef) CFNumberGetValue(vendorRef, kCFNumberIntType, &vendor);
-                if (productRef) CFNumberGetValue(productRef, kCFNumberIntType, &product);
-
-                CFRelease(info);
-
-                // Match against CoreGraphics display info
-                uint32_t cgVendor = CGDisplayVendorNumber(cgDisplayID);
-                uint32_t cgProduct = CGDisplayModelNumber(cgDisplayID);
-
-                if (vendor == cgVendor && product == cgProduct) {
-                    CFDataRef edid = (CFDataRef)IORegistryEntryCreateCFProperty(service, CFSTR("IODisplayEDID"), kCFAllocatorDefault, 0);
-
-                    if (edid) {
-                        const UInt8* bytes = CFDataGetBytePtr(edid);
-                        CFIndex length = CFDataGetLength(edid);
-                        out = parseEDIDLuminance(bytes, length);
-                        CFRelease(edid);
-                    }
-
-                    IOObjectRelease(service);
-                    IOObjectRelease(iter);
-                    return out;
-                }
-
-                IOObjectRelease(service);
-            }
-
-            IOObjectRelease(iter);
-            return out;
-        }
 
 
         // Helper to get capabilities for a specific ID
         HDRCapabilities getCapabilitiesForDisplay(CGDirectDisplayID displayID) {
             HDRCapabilities caps;
-    
-            // 1. Try to get hardware info via EDID (via IOKit)
-            caps = displaySupportsHDR(displayID);
 
             // 2. Supplement/Override with NSScreen headroom if available
             // macOS EDR (Extended Dynamic Range) is a multiplier of SDR (usually 100 nits)

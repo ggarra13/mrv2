@@ -7,18 +7,27 @@
 #include <sstream>
 #include <string>
 
-#include "mrvMonitor.h"
+#include "mrvUI/mrvMonitor.h"
+
+#include "mrvFl/mrvIO.h"
+
+
+namespace
+{
+    const char* kModule = "mntr";
+}
+
 
 #ifdef _WIN32
-#    include "mrvMonitor_win32.cpp"
+#    include "mrvUI/mrvMonitor_win32.cpp"
 #endif
 
 #ifdef __linux__
-#    include "mrvMonitor_linux.cpp"
+#    include "mrvUI/mrvMonitor_linux.cpp"
 #endif
 
 #ifdef __APPLE__
-#    include "mrvMonitor_macOS.cpp"
+#    include "mrvUI/mrvMonitor_macOS.cpp"
 #endif
 
 #ifdef __linux__
@@ -27,16 +36,12 @@ extern "C" {
 }
 #endif
 
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <cstdint>
-#include <cmath>
+#include "mrvCore/mrvI8N.h"
 
-namespace
-{
-    const char* kModule = "monitor";
-}
+#undef Status
+#undef None
+#include "mrvFl/mrvIO.h"
+
 
 namespace mrv
 {
@@ -152,18 +157,8 @@ namespace mrv
             return std::string(edidCode);
         }
 
-#ifdef _WIN32
-        // \@note: on Windows we don't parse EDID, we use Windows API
-        HDRCapabilities parseEDIDLuminance(const uint8_t* edid, size_t length) {
-            HDRCapabilities out;
-            return out;
-        }
-#endif
-
 #ifdef __linux__
-        
-        HDRCapabilities parseEDIDLuminance(const uint8_t* raw, size_t size)
-        {
+        HDRCapabilities parseEDIDLuminance(const uint8_t* raw, size_t size) {
             HDRCapabilities out;
             struct di_info *info;
             
@@ -174,7 +169,7 @@ namespace mrv
             }
             
             // Get HDR static metadata
-            const struct di_hdr_static_metadata *hdr = di_info_get_hdr_static_metadata(info);
+            const struct di_hdr_static_metadata* hdr = di_info_get_hdr_static_metadata(info);
 
             // Check for HDR presence (supported if any HDR-related EOTF is true)
             bool has_hdr = hdr->traditional_hdr || hdr->pq || hdr->hlg || hdr->type1;
@@ -184,8 +179,7 @@ namespace mrv
             // Retrieve min and max nits (0.0 if unset)
             out.min_nits = hdr->desired_content_min_luminance;
             out.max_nits = hdr->desired_content_max_luminance;
-            //out.max_frame_avg_nits = hdr->desired_content_max_frame_avg_luminance;  // Optional: frame-average max
-
+            //float max_frame_avg_nits = hdr->desired_content_max_frame_avg_luminance;  // Optional: frame-average max
             di_info_destroy(info);
             return out;
         }
@@ -202,7 +196,6 @@ namespace mrv
 
             for (int i = 0; i < numExtensions && (ext + 128 <= edid + length); ++i) {
                 if (ext[0] == 0x02 && ext[1] == 0x03) { // CTA-861 Extension Block
-                    std::cerr << "Got CTA-861" << std::endl;
                     uint8_t dtdStart = ext[2];
 
                     // dtdStart should not exceed the block size (usually 128)
@@ -220,8 +213,6 @@ namespace mrv
                 
                         // Tag 7 + Extended Tag 6 = HDR Static Metadata Block
                         if (tag == 0x07 && len >= 3 && ext[j + 1] == 0x06) {
-
-                            std::cerr << "Got HDR" << std::endl;
                     
                             uint8_t eotf = ext[j + 2];
                             if ((eotf & 0x0E) == 0) { // No HDR bits set
@@ -231,8 +222,8 @@ namespace mrv
                             // Byte j+3: Static Metadata Descriptor Type
                             // We only know how to parse Type 1 (0x01).
 
-                            // ChatGPT tells me to compare type agains 0
-                            // Gemini tells me to compare against byte 0x01
+                            // ChatGPT tells me to compare type agains 0, which
+                            // is obviously wrong.  Gemini and Grok do know.x
                             uint8_t type = ext[j + 3];
                             if (type & 0x01 || (eotf & 0x0E))
                             {

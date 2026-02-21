@@ -30,10 +30,5 @@ namespace mrv
             return out;
         }
         
-        float getMaxNits(int screen = -1, const bool silent = true)
-        {
-            float out = 1000.F;
-            return out;
-        }
     } // namespace monitor
 } // namespace mrv

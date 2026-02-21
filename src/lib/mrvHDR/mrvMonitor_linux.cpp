@@ -4,16 +4,20 @@
 
 #include <FL/platform.H>
 
-#ifdef FLTK_USE_WAYLAND
-#    include "mrvHDR/mrvMonitor_wayland.cpp"
+#include "mrvCore/mrvI8N.h"
+
+#ifdef FLTK_USE_X11
+#    include "mrvUI/mrvMonitor_x11.cpp"
 #endif
 
-#include "mrvCore/mrvI8N.h"
+#ifdef FLTK_USE_WAYLAND
+#    include "mrvUI/mrvMonitor_wayland.cpp"
+#endif
 
 #include <filesystem>
 #include <fstream>
-#include <string>
 #include <regex>
+#include <string>
 #include <vector>
 #include <map>
 
@@ -21,15 +25,25 @@ namespace fs = std::filesystem;
 
 namespace
 {
-    std::string normalize_connector(std::string name) {
+    
+    std::string remove_card_prefix(std::string name) {
         // 1. Remove the "cardX-" prefix
         // Matches "card" followed by digits and a dash at the start of the string
         name = std::regex_replace(name, std::regex(R"(^card\d+-)"), "");
+        return name;
+    }
+    
+    std::string normalize_connector(std::string name) {
 
-        // 2. Remove technical sub-types (HDMI-A-1 -> HDMI-1, DVI-I-1 -> DVI-1)
+        // 1. Remove technical sub-types (HDMI-A-1 -> HDMI-1, DVI-I-1 -> DVI-1)
         // Matches (HDMI or DVI) followed by a dash, a single letter, and another dash
         // We use a capture group ($1) to keep the "HDMI" or "DVI" part
-        name = std::regex_replace(name, std::regex(R"((HDMI|DVI)-[A-Z]-)"), "$1-");
+        name = std::regex_replace(name, std::regex(R"((HDMI|DVI|DP|eDP)-[A-Z]-)"), "$1-");
+        
+        // 2. Keep technical sub-types (HDMI-A-1 -> HDMI-1, DVI-I-1 -> DVI-1)
+        // Matches (HDMI or DVI) followed by a dash, a single letter, and another dash
+        // We use a capture group ($1) to keep the "HDMI-A" or "DVI-I" part
+        name = std::regex_replace(name, std::regex(R"((HDMI|DVI|DP|eDP)-[A-Z]-)"), "$1-");
 
         return name;
     }
@@ -53,6 +67,10 @@ namespace mrv
                 return names[monitorIndex];
             }
             
+#ifdef FLTK_USE_X11
+            if (fl_x11_display())
+                out = getX11Name(monitorIndex);
+#endif
 #ifdef FLTK_USE_WAYLAND
             if (fl_wl_display())
                 out = getWaylandName(monitorIndex, numMonitors);
@@ -64,27 +82,73 @@ namespace mrv
         }
 
         /** 
-         * Don't use this function as it is unreliable on linux.  Use
-         *
+         * This function is unreliable but it is kept to handle a single
+         * monitor or old Linux distros that do not return any names.
          * 
-         * @param screen_index 
+         * @param screen_index -1 for any, 0+ for corresponding monitor
          * 
-         * @return 
+         * @return HDRCapabilities struct.
          */
         HDRCapabilities get_hdr_capabilities(int screen_index)
         {
             HDRCapabilities out;
+            
+            int current_monitor_index = 0;
+            const std::string drm_path = "/sys/class/drm/";
 
-#ifdef FLTK_USE_X11
-            if (fl_x11_display())
-                return out;
-#endif
-            out.supported = true;
-            out.min_nits = 0;
-            out.max_nits = 1000.F;
+            // 1. Iterate through cards (card0, card1, etc.)
+            for (const auto& card_entry : fs::directory_iterator(drm_path)) {
+                std::string card_name = card_entry.path().filename().string();
+        
+                // Skip render nodes (renderD128) and only look at cards
+                if (card_name.find("card") == std::string::npos ||
+                    card_name.find("-") != std::string::npos)
+                    continue;
+
+                // 2. Iterate through connectors belonging to this card
+                // These look like card1-DP-1, card1-HDMI-A-1
+                for (const auto& conn_entry : fs::directory_iterator(drm_path)) {
+                    std::string conn_name = conn_entry.path().filename().string();
+            
+                    // Match connectors to the current card (e.g., card1 matches card1-DP-1)
+                    if (conn_name.find(card_name + "-") == 0) {
+                
+                        // Check if a monitor is actually plugged in
+                        std::ifstream status_file(conn_entry.path() / "status");
+                        std::string status;
+                        status_file >> status;
+                        if (status != "connected") continue;
+
+                        // If we are looking for a specific index and this isn't it, skip
+                        if (screen_index != -1 && current_monitor_index != screen_index) {
+                            current_monitor_index++;
+                            continue;
+                        }
+
+                        // 3. Read EDID and Parse
+                        std::ifstream edid_file(conn_entry.path() / "edid", std::ios::binary);
+                        std::vector<uint8_t> edid_data((std::istreambuf_iterator<char>(edid_file)),
+                                                       std::istreambuf_iterator<char>());
+
+                        if (!edid_data.empty()) {
+                            out = monitor::parseEDIDLuminance(edid_data.data(), edid_data.size());
+                        }
+
+                        if (screen_index != -1) {
+                            // Target Mode: Return this specific monitor's status
+                            return out;
+                        } else if (out.supported) {
+                            // Any Mode: Found one HDR monitor, we are done
+                            return out;
+                        }
+
+                        current_monitor_index++;
+                    }
+                }
+            }
+
             return out;
         }
-        
 
         HDRCapabilities get_hdr_capabilities_by_name(
             const std::string& target_connector)
@@ -92,7 +156,7 @@ namespace mrv
             HDRCapabilities out;
             const std::string drm_path = "/sys/class/drm/";
 
-            bool activeMonitorFound = false;
+
             std::vector<std::string> connections;
             
             for (const auto& card_entry : fs::directory_iterator(drm_path)) {
@@ -102,7 +166,6 @@ namespace mrv
 
                 for (const auto& conn_entry : fs::directory_iterator(drm_path + card_name)) {
                     std::string conn_full_name = conn_entry.path().filename().string();
-            
                     if (conn_full_name.find("DP-") == std::string::npos &&
                         conn_full_name.find("HDMI-") == std::string::npos &&
                         conn_full_name.find("eDP-") == std::string::npos &&
@@ -115,39 +178,58 @@ namespace mrv
                     
                     if (conn_full_name.find(card_name + "-") == 0) {
                         // Match the FLTK label to the DRM connector name
-                        conn_name = normalize_connector(conn_name);
-                        if (conn_name != target_connector) continue;
+                        conn_name = remove_card_prefix(conn_name);
+                        std::string normalized = normalize_connector(conn_name);
+
+                        connections.push_back(normalized);
+                    
+                        if (conn_name != target_connector &&
+                            normalized != target_connector) continue;
                         
                         std::ifstream status_file(conn_entry.path() / "status");
+                        if (!status_file.is_open())
+                        {
+                            LOG_ERROR("Failed to open "
+                                      << (conn_entry.path() / "status"));
+                            continue;
+                        }
                         std::string status;
                         status_file >> status;
-                        if (status != "connected") continue;
-
-                        activeMonitorFound = true;
+                        if (status != "connected")
+                        {
+                            LOG_ERROR("Target connector " << target_connector << " is not connected");
+                            continue;
+                        }
                         
                         // 3. Read EDID and Parse
                         std::ifstream edid_file(conn_entry.path() / "edid", std::ios::binary);
+                        if (!edid_file.is_open())
+                        {
+                            std::cerr << "Failed to open "
+                                      << (conn_entry.path() / "edid")
+                                      << std::endl;
+                            continue;
+                        }
+
                         std::vector<uint8_t> edid_data((std::istreambuf_iterator<char>(edid_file)),
                                                        std::istreambuf_iterator<char>());
 
-                        if (!edid_data.empty()) {
-                            out = monitor::parseEDIDLuminance(edid_data.data(), edid_data.size());
+                        if (!edid_data.empty())
+                        {
+                            out = monitor::parseEDIDLuminance(edid_data.data(),  edid_data.size());
+                            return out;
                         }
                         
-                        return out;
                     }
                 }
             }
 
-            if (!activeMonitorFound)
+            std::cerr << _("Failed to find a monitor with connector ")
+                      << target_connector << std::endl;
+            std::cerr << "Valid connections:" << std::endl;
+            for (auto& connection : connections)
             {
-                std::cerr << _("Failed to find a monitor with connection ")
-                          << target_connector << std::endl;
-                std::cerr << "Valid connections:" << std::endl;
-                for (auto& connection : connections)
-                {
-                    std::cerr << connection << std::endl;
-                }
+                std::cerr << connection << std::endl;
             }
             return out;
         }
