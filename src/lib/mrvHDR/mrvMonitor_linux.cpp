@@ -2,20 +2,24 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
 #include <FL/platform.H>
 
 #include "mrvCore/mrvI8N.h"
 
+#define LOG_ERROR(x) std::cerr << x << std::endl;
+
 #ifdef FLTK_USE_X11
-#    include "mrvUI/mrvMonitor_x11.cpp"
+#    include "mrvHDR/mrvMonitor_x11.cpp"
 #endif
 
 #ifdef FLTK_USE_WAYLAND
-#    include "mrvUI/mrvMonitor_wayland.cpp"
+#    include "mrvHDR/mrvMonitor_wayland.cpp"
 #endif
 
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <regex>
 #include <string>
 #include <vector>

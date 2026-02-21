@@ -7,27 +7,18 @@
 #include <sstream>
 #include <string>
 
-#include "mrvUI/mrvMonitor.h"
-
-#include "mrvFl/mrvIO.h"
-
-
-namespace
-{
-    const char* kModule = "mntr";
-}
-
+#include "mrvHDR/mrvMonitor.h"
 
 #ifdef _WIN32
-#    include "mrvUI/mrvMonitor_win32.cpp"
+#    include "mrvHDR/mrvMonitor_win32.cpp"
 #endif
 
 #ifdef __linux__
-#    include "mrvUI/mrvMonitor_linux.cpp"
+#    include "mrvHDR/mrvMonitor_linux.cpp"
 #endif
 
 #ifdef __APPLE__
-#    include "mrvUI/mrvMonitor_macOS.cpp"
+#    include "mrvHDR/mrvMonitor_macOS.cpp"
 #endif
 
 #ifdef __linux__
@@ -37,10 +28,6 @@ extern "C" {
 #endif
 
 #include "mrvCore/mrvI8N.h"
-
-#undef Status
-#undef None
-#include "mrvFl/mrvIO.h"
 
 
 namespace mrv

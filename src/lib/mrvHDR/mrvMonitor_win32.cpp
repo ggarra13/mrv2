@@ -2,6 +2,9 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrvCore/mrvI8N.h"
+
+#include <tlCore/StringFormat.h>
 
 #ifdef _WIN32
 #    include <winsock2.h>
@@ -10,21 +13,15 @@
 #endif
 
 #include <iostream>
-#include <unordered_map>
 #include <sstream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <codecvt>
 #include <windows.h>
 
+#define LOG_ERROR(x) std::cerr << x << std::endl;
 
-#include "mrvUI/mrvDesktop.h"
-
-#include "mrvFl/mrvIO.h"
-
-#include "mrvCore/mrvI8N.h"
-
-#include <tlCore/StringFormat.h>
 
 namespace
 {

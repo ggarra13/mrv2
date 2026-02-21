@@ -33,12 +33,31 @@ set(LIBRARIES
     ${Intl_LIBRARIES}
 )
 
+if(TLRENDER_X11)
+    find_library(XRANDR_LIBRARY
+	NAMES
+	Xrandr)
+    list(APPEND LIBRARIES_PRIVATE ${XRANDR_LIBRARY})
+endif()
+
+if(TLRENDER_WAYLAND)
+    find_library(WAYLAND_CLIENT_LIBRARY
+	NAMES
+	wayland-client)
+    list(APPEND LIBRARIES_PRIVATE ${WAYLAND_CLIENT_LIBRARY})
+endif()
+
 if (UNIX AND NOT APPLE)
     find_library(DISPLAY_INFO
 	NAMES
 	display-info)
     list(APPEND LIBRARIES_PRIVATE ${DISPLAY_INFO})
 endif()
+
+if (WIN32)
+    list(APPEND LIBRARIES_PRIVATE dxgi)
+endif()
+
 
 add_library(mrvHDR ${SOURCES} ${HEADERS})
 hdr_files_to_absolute_paths()
