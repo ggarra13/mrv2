@@ -1510,13 +1510,7 @@ namespace mrv
                                 if (p.hdrData != hdrData)
                                 {
                                     p.hdrData = hdrData;
-                                    if (!init)
-                                    {
-                                        vkDeviceWaitIdle(ctx.device);
-                                        prepare_shader();
-                                        redraw();
-                                    }
-
+                                    init = true;
                                 }
                             }
                             else
