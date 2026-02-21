@@ -66,6 +66,8 @@ ChangeLog
 - Sped up NDI Output Stream and hdr utility.
 - Made NDI Output Stream not pass metadata when OpenColorIO is enabled.
 - Fixed NDI some core dumps.
+- Fixed NDI's hdr utility crashes on Windows.
+- Improved performance of NDI's hdr utility with changing metadata.
 
 
 v1.5.4
