@@ -264,15 +264,20 @@ namespace mrv
                         DXGI_OUTPUT_DESC1 desc1;
                         if (SUCCEEDED(output6->GetDesc1(&desc1))) {
                             HDRCapabilities local_cap;
+                            local_cap.min_nits = desc1.MinLuminance;
+                            local_cap.max_nits = desc1.MaxLuminance;
+                            
+                            // Set supported based on capability (not current enablement)
+                            local_cap.supported = (desc1.MaxLuminance > 100.0f);
+                            
                             // Check if HDR is active based on current color space
+                            bool enabled = false;
                             switch (desc1.ColorSpace) {
                             case DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_G2084_LEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_GHLG_TOPLEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_FULL_GHLG_TOPLEFT_P2020:
-                                local_cap.supported = true;
-                                local_cap.min_nits = desc1.MinLuminance;
-                                local_cap.max_nits = desc1.MaxLuminance;
+                                enabled = true;
                                 break;
                             default:
                                 break;
@@ -281,8 +286,8 @@ namespace mrv
                             if (targetIndex != -1) {
                                 // Specific index: Return this monitor's caps
                                 out = local_cap;
-                                SafeRelease(output6);
                                 matchedMonitor = true;
+                                SafeRelease(output6);
                                 goto cleanup;
                             } else if (local_cap.supported) {
                                 // Any mode: Found an HDR monitor, return its caps
@@ -309,7 +314,7 @@ namespace mrv
             if (!matchedMonitor)
             {
                 std::string msg = tl::string::Format(_("Did not match any monitor at {0}.")).arg(screen_index);
-                std::cerr << msg << std::endl;
+                LOG_ERROR(msg);
             }
             return out;
         }

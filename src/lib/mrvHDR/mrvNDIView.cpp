@@ -11,6 +11,8 @@
 #include <tlCore/StringFormat.h>
 
 #include <tlVk/Mesh.h>
+#include <tlVk/PipelineCreationState.h>
+#include <tlVk/Shader.h>
 
 #include <rapidxml/rapidxml.hpp>
 
@@ -480,6 +482,7 @@ namespace mrv
 
         // Vulkan variables
         VkColorSpaceKHR lastColorSpace;
+        vlk::PipelineCreationState pipelineState;
 
         // tlRender variables
         image::Info info;
@@ -880,9 +883,6 @@ namespace mrv
 
     VkShaderModule NDIView::prepare_fs()
     {
-        if (m_frag_shader_module != VK_NULL_HANDLE)
-            return m_frag_shader_module;
-
         TLRENDER_P();
 
         // Example GLSL vertex shader
@@ -932,115 +932,75 @@ void main() {
         VkGraphicsPipelineCreateInfo pipeline = {};
         VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
 
-        VkPipelineVertexInputStateCreateInfo vi = {};
-        VkPipelineInputAssemblyStateCreateInfo ia = {};
-        VkPipelineRasterizationStateCreateInfo rs = {};
-        VkPipelineColorBlendStateCreateInfo cb = {};
-        VkPipelineDepthStencilStateCreateInfo ds = {};
-        VkPipelineViewportStateCreateInfo vp = {};
-        VkPipelineMultisampleStateCreateInfo ms = {};
-        VkDynamicState dynamicStateEnables[(
-            VK_DYNAMIC_STATE_STENCIL_REFERENCE - VK_DYNAMIC_STATE_VIEWPORT +
-            1)];
-        VkPipelineDynamicStateCreateInfo dynamicState = {};
+        vlk::VertexInputStateInfo vi;
+        vi.bindingDescriptions = p.vbo->getBindingDescription();
+        vi.attributeDescriptions = p.vbo->getAttributes();
+            
+        // Defaults are fine
+        vlk::InputAssemblyStateInfo ia;
+        
+        // Defaults are fine
+        vlk::RasterizationStateInfo rs;
+        
+        // Defaults are fine
+        vlk::ViewportStateInfo vp;
+        
+        // Defaults are fine
+        vlk::DynamicStateInfo dynamicState;
+        dynamicState.dynamicStates = {
+            VK_DYNAMIC_STATE_VIEWPORT,
+            VK_DYNAMIC_STATE_SCISSOR
+        };
+        
+        vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+        colorBlendAttachment.blendEnable = VK_FALSE;
+        
+        vlk::ColorBlendStateInfo cb;
+        cb.attachments.push_back(colorBlendAttachment);
+        
+        vlk::DepthStencilStateInfo ds;
+        ds.depthTestEnable = mode() & FL_DEPTH ? VK_TRUE : VK_FALSE;
+        ds.depthWriteEnable = mode() & FL_DEPTH ? VK_TRUE : VK_FALSE;
+        ds.stencilTestEnable = mode() & FL_STENCIL ? VK_TRUE : VK_FALSE;
+
+        vlk::MultisampleStateInfo ms;
+        ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
         VkResult result;
 
-        memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);
-        dynamicState.sType =
-            VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-        dynamicState.pDynamicStates = dynamicStateEnables;
-
-        pipeline.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-        pipeline.layout = m_pipeline_layout;
-
-        vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        vi.vertexBindingDescriptionCount =
-            p.vbo->getBindingDescription().size();
-        vi.pVertexBindingDescriptions = p.vbo->getBindingDescription().data();
-        vi.vertexAttributeDescriptionCount = p.vbo->getAttributes().size();
-        vi.pVertexAttributeDescriptions = p.vbo->getAttributes().data();
-
-        ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-        // ia.primitiveRestartEnable = VK_FALSE;
-
-        rs.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-        rs.polygonMode = VK_POLYGON_MODE_FILL;
-        rs.cullMode = VK_CULL_MODE_NONE;
-        rs.frontFace = VK_FRONT_FACE_CLOCKWISE;
-        rs.depthClampEnable = VK_FALSE;
-        rs.rasterizerDiscardEnable = VK_FALSE;
-        rs.depthBiasEnable = VK_FALSE;
-        rs.lineWidth = 1.0f;
-
-        cb.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-        VkPipelineColorBlendAttachmentState att_state[1];
-        memset(att_state, 0, sizeof(att_state));
-        att_state[0].colorWriteMask = 0xf;
-        att_state[0].blendEnable = VK_FALSE;
-        cb.attachmentCount = 1;
-        cb.pAttachments = att_state;
-
-        vp.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-        vp.viewportCount = 1;
-        dynamicStateEnables[dynamicState.dynamicStateCount++] =
-            VK_DYNAMIC_STATE_VIEWPORT;
-        vp.scissorCount = 1;
-        dynamicStateEnables[dynamicState.dynamicStateCount++] =
-            VK_DYNAMIC_STATE_SCISSOR;
-
-        ds.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-        ds.depthTestEnable = VK_FALSE;
-        ds.depthWriteEnable = VK_FALSE;
-        ds.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
-        ds.depthBoundsTestEnable = VK_FALSE;
-        ds.stencilTestEnable = VK_FALSE;
-        ds.back.failOp = VK_STENCIL_OP_KEEP;
-        ds.back.passOp = VK_STENCIL_OP_KEEP;
-        ds.back.compareOp = VK_COMPARE_OP_ALWAYS;
-        ds.front = ds.back;
-
-        ms.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-        ms.pSampleMask = NULL;
-        ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-
-        // Two stages: vs and fs
-        pipeline.stageCount = 2;
-        VkPipelineShaderStageCreateInfo shaderStages[2];
-        memset(&shaderStages, 0, 2 * sizeof(VkPipelineShaderStageCreateInfo));
-
-        shaderStages[0].sType =
-            VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+        // Get the vertex and fragment shaders
+        std::vector<vlk::PipelineCreationState::ShaderStageInfo>
+            shaderStages(2);
+            
         shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+        shaderStages[0].name = "hdr_vertex";
         shaderStages[0].module = prepare_vs();
-        shaderStages[0].pName = "main";
+        shaderStages[0].entryPoint = "main";
 
-        shaderStages[1].sType =
-            VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+        shaderStages[0].name = "hdr_frag";
         shaderStages[1].module = prepare_fs();
-        shaderStages[1].pName = "main";
+        shaderStages[1].entryPoint = "main";
 
-        pipeline.pVertexInputState = &vi;
-        pipeline.pInputAssemblyState = &ia;
-        pipeline.pRasterizationState = &rs;
-        pipeline.pColorBlendState = &cb;
-        pipeline.pMultisampleState = &ms;
-        pipeline.pViewportState = &vp;
-        pipeline.pDepthStencilState = &ds;
-        pipeline.pStages = shaderStages;
-        pipeline.renderPass = m_renderPass;
-        pipeline.pDynamicState = &dynamicState;
+        vlk::PipelineCreationState pipelineState;
+        pipelineState.vertexInputState = vi;
+        pipelineState.inputAssemblyState = ia;
+        pipelineState.colorBlendState = cb;
+        pipelineState.rasterizationState = rs;
+        pipelineState.depthStencilState = ds;
+        pipelineState.viewportState = vp;
+        pipelineState.multisampleState = ms;
+        pipelineState.dynamicState = dynamicState;
+        pipelineState.stages = shaderStages;
+        pipelineState.renderPass = m_renderPass;
+        pipelineState.layout = m_pipeline_layout;
 
-        VkPipelineCache pipelineCache;
-
-        pipelineCacheCreateInfo.sType =
-            VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-
-        result = vkCreateGraphicsPipelines(
-            device(), pipelineCache, 1, &pipeline, NULL, &m_pipeline);
-        VK_CHECK(result);
+        if (pipelineState != p.pipelineState)
+        {
+            VkDevice device = ctx.device;
+            m_pipeline = pipelineState.create(device);
+            p.pipelineState = pipelineState;
+        }
     }
 
     void NDIView::prepare_descriptor_layout()
