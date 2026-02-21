@@ -1551,7 +1551,6 @@ namespace mrv
                                 if (p.hdrData != hdrData)
                                 {
                                     p.hdrData = hdrData;
-                                    init = true;
                                 }
                             }
                             else
