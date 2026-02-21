@@ -121,7 +121,11 @@ namespace mrv
         void _videoThread();
         void _audioThread();
         std::string _fragmentSource();
-
+        void _parseVariables(std::stringstream& s,
+                             std::size_t& currentOffset,
+                             const struct pl_shader_res* res,
+                             const std::size_t pushConstantsMaxSize);
+        
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();
 

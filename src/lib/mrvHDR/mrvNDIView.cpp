@@ -494,6 +494,8 @@ namespace mrv
         image::HDRData hdrData;
 
         std::string oldShaderSource;
+        unsigned bindingIndex = 1;
+        std::shared_ptr<vlk::Shader> shader;
 
         NDIlib_FourCC_video_type_e fourCC = NDIlib_FourCC_type_UYVY;
 
@@ -864,63 +866,6 @@ namespace mrv
         VK_CHECK(result);
     }
 
-    VkShaderModule NDIView::prepare_vs()
-    {
-        if (m_vert_shader_module != VK_NULL_HANDLE)
-            return m_vert_shader_module;
-
-        std::string vertex_shader_glsl = vertexSource();
-
-        try
-        {
-            std::vector<uint32_t> spirv = compile_glsl_to_spirv(
-                vertex_shader_glsl,
-                shaderc_vertex_shader, // Shader type
-                "vertex_shader.glsl"   // Filename for error reporting
-            );
-
-            m_vert_shader_module = create_shader_module(device(), spirv);
-        }
-        catch (const std::exception& e)
-        {
-            std::cerr << e.what() << std::endl;
-            m_vert_shader_module = VK_NULL_HANDLE;
-        }
-        return m_vert_shader_module;
-    }
-
-    VkShaderModule NDIView::prepare_fs()
-    {
-        TLRENDER_P();
-
-        const std::string source = _fragmentSource();
-
-        // Example GLSL vertex shader
-        if (p.oldShaderSource == source &&
-            m_frag_shader_module != VK_NULL_HANDLE)
-        {
-            return m_frag_shader_module;
-        }
-        p.oldShaderSource = source;
-        
-        // Compile to SPIR-V
-        try
-        {
-            // std::cerr << frag_shader_glsl << std::endl;
-            std::vector<uint32_t> spirv = compile_glsl_to_spirv(
-                source,
-                shaderc_fragment_shader, // Shader type
-                "frag_shader.glsl"       // Filename for error reporting
-            );
-            m_frag_shader_module = create_shader_module(device(), spirv);
-        }
-        catch (const std::exception& e)
-        {
-            std::cerr << e.what() << std::endl;
-            m_frag_shader_module = VK_NULL_HANDLE;
-        }
-        return m_frag_shader_module;
-    }
 
     void NDIView::prepare_pipeline()
     {
@@ -968,15 +913,15 @@ namespace mrv
         // Get the vertex and fragment shaders
         std::vector<vlk::PipelineCreationState::ShaderStageInfo>
             shaderStages(2);
-            
+        
         shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-        shaderStages[0].name = "hdr_vertex";
-        shaderStages[0].module = prepare_vs();
+        shaderStages[0].name = p.shader->getName();
+        shaderStages[0].module = p.shader->getVertex();
         shaderStages[0].entryPoint = "main";
 
         shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-        shaderStages[0].name = "hdr_frag";
-        shaderStages[1].module = prepare_fs();
+        shaderStages[0].name = p.shader->getName();
+        shaderStages[1].module = p.shader->getFragment();
         shaderStages[1].entryPoint = "main";
 
         vlk::PipelineCreationState pipelineState;
@@ -1712,6 +1657,94 @@ namespace mrv
         }
     }
 
+    void NDIView::_parseVariables(std::stringstream& s,
+                                  std::size_t& currentOffset,
+                                  const struct pl_shader_res* res,
+                                  const std::size_t pushConstantsMaxSize)
+    {
+        TLRENDER_P();
+            
+        // Collect non-floats and floats separately to optimize push constants
+        std::vector<struct pl_shader_var> non_floats;
+        std::vector<struct pl_shader_var> floats;
+    
+        for (int i = 0; i < res->num_variables; ++i) {
+            const struct pl_shader_var shader_var = res->variables[i];
+            const struct pl_var var = shader_var.var;
+            const std::string glsl_type = pl_var_glsl_type_name(var);
+            const bool is_float = (glsl_type == "float");
+        
+            if (is_float) {
+                floats.push_back(shader_var);
+            } else {
+                non_floats.push_back(shader_var);
+            }
+        }
+    
+        // Combine into a grouped list: non-floats first, then floats
+        std::vector<struct pl_shader_var> all_grouped;
+        all_grouped.reserve(non_floats.size() + floats.size());
+        all_grouped.insert(all_grouped.end(), non_floats.begin(), non_floats.end());
+        all_grouped.insert(all_grouped.end(), floats.begin(), floats.end());
+    
+        // Now pack into push constants until we can't fit more
+        std::vector<struct pl_shader_var> push_vars;
+        std::vector<struct pl_shader_var> ubo_vars;
+    
+        for (const auto &shader_var : all_grouped)
+        {
+            const struct pl_var var = shader_var.var;
+            const struct pl_var_layout layout = pl_std430_layout(currentOffset,
+                                                                 &var);
+        
+            if (layout.offset + layout.size > pushConstantsMaxSize) {
+                ubo_vars.push_back(shader_var);
+            } else {
+                push_vars.push_back(shader_var);
+                currentOffset = layout.offset + layout.size;
+            }
+        }
+    
+        // Generate push constant block if there are variables for it
+        if (!push_vars.empty())
+        {
+            s << "layout(std430, push_constant) uniform PushC {\n";
+            size_t offset = 0;
+            for (const auto &shader_var : push_vars)
+            {
+                const struct pl_var var = shader_var.var;
+                const std::string glsl_type = pl_var_glsl_type_name(var);
+                const struct pl_var_layout layout = pl_std430_layout(offset, &var);
+                s << "\tlayout(offset=" << layout.offset << ") " << glsl_type << " " << var.name << ";\n";
+                offset = layout.offset + layout.size;
+            }
+            s << "};\n";
+        }
+    
+        // Generate UBO block if there are remaining variables
+        if (!ubo_vars.empty())
+        {
+            s << "layout(std140, binding=" << p.bindingIndex++ << ") uniform pcUBO {\n";
+            size_t offset = 0;
+            for (const auto &shader_var : ubo_vars) {
+                const struct pl_var var = shader_var.var;
+                const std::string glsl_type = pl_var_glsl_type_name(var);
+                const struct pl_var_layout layout = pl_std140_layout(offset, &var);
+                s << "\tlayout(offset=" << layout.offset << ") " << glsl_type << " "
+                  << var.name << ";\n";
+                offset = layout.offset + layout.size;
+            }
+            s << "};\n";
+
+            // Create a unifor pcUBO parameter
+            // if (p.shader)
+            //     p.shader->createUniformData("pcUBO", offset);
+            p.placeboData->pcUBOData = malloc(offset);
+            p.placeboData->pcUBOSize = offset;
+            memset(p.placeboData->pcUBOData, 0, offset);
+        }
+    }
+            
     void NDIView::prepare_shader()
     {
         TLRENDER_P();
@@ -1927,6 +1960,9 @@ namespace mrv
           << "// Variables" << std::endl
           << "//" << std::endl
           << std::endl;
+        
+        // _parseVariables(s, pushSize, res,
+        //                 ctx.gpu_props.limits.maxPushConstantsSize);
         for (int i = 0; i < res->num_variables; ++i)
         {
             const struct pl_shader_var shader_var = res->variables[i];
@@ -2040,6 +2076,11 @@ namespace mrv
 
         try
         {
+            if (m_textures.size() > 1)
+            {
+                // Remove all ements but the first
+                m_textures.resize(1);
+            }
             addGPUTextures(res);
         }
         catch (const std::exception& e)
@@ -2054,6 +2095,31 @@ namespace mrv
             p.hdrColors = "outColor = ";
             p.hdrColors += res->name;
             p.hdrColors += "(tmp);\n";
+        }
+
+        const std::string source = _fragmentSource();
+
+        bool recreateShader = false;
+        if (!p.shader || p.oldShaderSource != source)
+        {
+            recreateShader = true;
+        }
+        p.oldShaderSource = source;
+
+        if (recreateShader)
+        {
+            p.shader = vlk::Shader::create(ctx, vertexSource(), source, "hdr");
+            for (const auto& texture : m_textures)
+            {
+                p.shader->addTexture(texture->getName());
+            }
+            
+            auto bindingSet = p.shader->createBindingSet();
+
+            for (const auto& texture : m_textures)
+            {
+                p.shader->setTexture(texture->getName(), texture);
+            }
         }
     }
 
