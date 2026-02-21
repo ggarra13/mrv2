@@ -125,6 +125,7 @@ namespace mrv
                              std::size_t& currentOffset,
                              const struct pl_shader_res* res,
                              const std::size_t pushConstantsMaxSize);
+        void _fillVariables(VkCommandBuffer cmd, const struct pl_shader_res* res);
         
         VkShaderModule prepare_vs();
         VkShaderModule prepare_fs();

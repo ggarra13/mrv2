@@ -987,6 +987,18 @@ namespace mrv
         pipelineLayoutInfo.setLayoutCount = 1;
         pipelineLayoutInfo.pSetLayouts = &m_desc_layout;
 
+        VkPushConstantRange pushConstantRange = {};
+        std::size_t pushSize = p.shader->getPushSize();
+        if (pushSize > 0)
+        {
+            pushConstantRange.stageFlags = p.shader->getPushStageFlags();
+            pushConstantRange.offset = 0;
+            pushConstantRange.size = pushSize;
+            
+            pipelineLayoutInfo.pushConstantRangeCount = 1;
+            pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
+        }
+            
         result = vkCreatePipelineLayout(
             device(), &pipelineLayoutInfo, nullptr, &m_pipeline_layout);
         VK_CHECK(result);
@@ -1253,6 +1265,8 @@ namespace mrv
         end_render_pass(cmd);
 
         update_texture(cmd);
+        _fillVariables(cmd, p.placeboData->res);
+
         
         begin_render_pass(cmd);
 
@@ -1737,8 +1751,6 @@ namespace mrv
             s << "};\n";
 
             // Create a unifor pcUBO parameter
-            // if (p.shader)
-            //     p.shader->createUniformData("pcUBO", offset);
             p.placeboData->pcUBOData = malloc(offset);
             p.placeboData->pcUBOSize = offset;
             memset(p.placeboData->pcUBOData, 0, offset);
@@ -1960,88 +1972,11 @@ namespace mrv
           << "// Variables" << std::endl
           << "//" << std::endl
           << std::endl;
-        
-        // _parseVariables(s, pushSize, res,
-        //                 ctx.gpu_props.limits.maxPushConstantsSize);
-        for (int i = 0; i < res->num_variables; ++i)
-        {
-            const struct pl_shader_var shader_var = res->variables[i];
-            const struct pl_var var = shader_var.var;
-            std::string glsl_type = pl_var_glsl_type_name(var);
-            s << "const " << glsl_type << " " << var.name;
-            if (!shader_var.data)
-            {
-                s << ";" << std::endl;
-            }
-            else
-            {
-                int dim_v = var.dim_v;
-                int dim_m = var.dim_m;
-                switch (var.type)
-                {
-                case PL_VAR_SINT:
-                {
-                    int* m = (int*)shader_var.data;
-                    s << " = " << m[0] << ";" << std::endl;
-                    break;
-                }
-                case PL_VAR_UINT:
-                {
-                    unsigned* m = (unsigned*)shader_var.data;
-                    s << " = " << m[0] << ";" << std::endl;
-                    break;
-                }
-                case PL_VAR_FLOAT:
-                {
-                    float* m = (float*)shader_var.data;
-                    if (dim_m > 1 && dim_v > 1)
-                    {
-                        s << " = " << glsl_type << "(";
-                        for (int c = 0; c < dim_v; ++c)
-                        {
-                            for (int r = 0; r < dim_m; ++r)
-                            {
-                                int index = c * dim_m + r;
-                                s << m[index];
 
-                                // Check if it's the last element
-                                if (!(r == dim_m - 1 && c == dim_v - 1))
-                                {
-                                    s << ", ";
-                                }
-                            }
-                        }
-                        s << ");" << std::endl;
-                    }
-                    else if (dim_v > 1)
-                    {
-                        s << " = " << glsl_type << "(";
-                        for (int c = 0; c < dim_v; ++c)
-                        {
-                            s << m[c];
+        size_t pushSize = 0;
+        _parseVariables(s, pushSize, res,
+                         ctx.gpu_props.limits.maxPushConstantsSize);
 
-                            // Check if it's the last element
-                            if (!(c == dim_v - 1))
-                            {
-                                s << ", ";
-                            }
-                        }
-                        s << ");" << std::endl;
-                    }
-                    else
-                    {
-                        s << " = " << m[0] << ";" << std::endl;
-                    }
-                    break;
-                }
-                default:
-                    break;
-                }
-            }
-        }
-
-        // \@todo: add uniform bindings, instead of using constants
-        // s << "};" << std::endl;
         s << std::endl
           << "//" << std::endl
           << "// Constants" << std::endl
@@ -2113,6 +2048,10 @@ namespace mrv
             {
                 p.shader->addTexture(texture->getName());
             }
+
+            if (p.shader && p.placeboData->pcUBOSize > 0)
+                 p.shader->createUniformData("pcUBO", p.placeboData->pcUBOSize);
+
             
             auto bindingSet = p.shader->createBindingSet();
 
@@ -2120,6 +2059,74 @@ namespace mrv
             {
                 p.shader->setTexture(texture->getName(), texture);
             }
+
+            p.shader->createPush("libplacebo", pushSize, vlk::kShaderFragment);
+        }
+    }
+    
+    void NDIView::_fillVariables(VkCommandBuffer cmd, const struct pl_shader_res* res)
+    {
+        TLRENDER_P();
+        
+        if (!res)
+            return;
+        
+        size_t pushSize = p.shader->getPushSize();
+        if (pushSize > 0)
+        {
+            std::vector<uint8_t> pushData(pushSize, 0);
+
+            VkPipelineLayout pipelineLayout = m_pipeline_layout;
+            std::size_t currentOffset = 0;
+            const pl_shader_res* res = p.placeboData->res;
+            for (int j = 0; j < 2; ++j)
+            {
+                for (int i = 0; i < res->num_variables; ++i)
+                {
+                    const struct pl_shader_var& shader_var = res->variables[i];
+                    const struct pl_var& var = shader_var.var;
+                    const std::string glsl_type = pl_var_glsl_type_name(var);
+                    const bool is_float = (glsl_type == "float");
+                    if (j == 0 && is_float)
+                        continue;
+                    if (j == 1 && !is_float)
+                        continue;
+                            
+                    // Ensure the variable type is float-based
+                    if (var.type != PL_VAR_FLOAT)
+                    {
+                        throw std::runtime_error("libplacebo created a variable that is not float");
+                    }
+                            
+                    const struct pl_var_layout& dst_layout = pl_std430_layout(currentOffset, &var);
+                    const struct pl_var_layout& src_layout = pl_var_host_layout(0, &var);
+                            
+                    memcpy_layout(pushData.data(), dst_layout, shader_var.data, src_layout);
+                    currentOffset = dst_layout.offset + dst_layout.size;
+                }
+            }
+                    
+            vkCmdPushConstants(cmd, pipelineLayout,
+                               VK_SHADER_STAGE_FRAGMENT_BIT, 0,
+                               pushData.size(), pushData.data());
+        }
+
+        if (p.placeboData && p.placeboData->pcUBOSize > 0)
+        {
+            std::size_t currentOffset = 0;
+            for (const auto &shader_var : p.placeboData->pcUBOvars)
+            {
+                const struct pl_var var = shader_var.var;
+                const struct pl_var_layout dst_layout = pl_std140_layout(currentOffset, &var);
+                const struct pl_var_layout& src_layout = pl_var_host_layout(0, &var);
+
+                memcpy_layout(p.placeboData->pcUBOData, dst_layout,
+                              shader_var.data, src_layout);
+
+                currentOffset = dst_layout.offset + dst_layout.size;
+            }
+                
+            p.shader->setUniformData("pcUBO", p.placeboData->pcUBOData, p.placeboData->pcUBOSize);
         }
     }
 
