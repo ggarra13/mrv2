@@ -1758,6 +1758,9 @@ namespace mrv
     {
         TLRENDER_P();
 
+        if (!p.placeboData)
+            p.placeboData.reset(new LibPlaceboData);
+        
         pl_shader_params shader_params;
         memset(&shader_params, 0, sizeof(pl_shader_params));
 
@@ -1897,7 +1900,7 @@ namespace mrv
         const pl_shader_res* res = p.placeboData->res;
         if (!p.placeboData->res)
         {
-            pl_shader_free(&p.placeboData->shader);
+            p.placeboData.reset();
             throw std::runtime_error("pl_shader_finalize failed!");
         }
 
@@ -2018,8 +2021,7 @@ namespace mrv
         catch (const std::exception& e)
         {
             std::cerr << e.what() << std::endl;
-            pl_shader_free(&p.placeboData->shader);
-            p.placeboData->shader = nullptr;
+            p.placeboData.reset();
             return;
         }
 
@@ -2057,7 +2059,7 @@ namespace mrv
                 p.shader->setTexture(texture->getName(), texture);
             }
 
-            p.shader->createPush("libplacebo", pushSize, vlk::kShaderFragment);
+            p.shader->createPush("placeboPC", pushSize, vlk::kShaderFragment);
         }
     }
     
@@ -2098,7 +2100,8 @@ namespace mrv
                     const struct pl_var_layout& dst_layout = pl_std430_layout(currentOffset, &var);
                     const struct pl_var_layout& src_layout = pl_var_host_layout(0, &var);
                             
-                    memcpy_layout(pushData.data(), dst_layout, shader_var.data, src_layout);
+                    memcpy_layout(pushData.data(), dst_layout,
+                                  shader_var.data, src_layout);
                     currentOffset = dst_layout.offset + dst_layout.size;
                 }
             }
@@ -2123,7 +2126,8 @@ namespace mrv
                 currentOffset = dst_layout.offset + dst_layout.size;
             }
                 
-            p.shader->setUniformData("pcUBO", p.placeboData->pcUBOData, p.placeboData->pcUBOSize);
+            p.shader->setUniformData("pcUBO", p.placeboData->pcUBOData,
+                                     p.placeboData->pcUBOSize);
         }
     }
 
