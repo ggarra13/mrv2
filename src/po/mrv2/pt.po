@@ -8129,11 +8129,9 @@ msgstr "Alternar a janela de teclas instantneas"
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
 
-#, fuzzy
 #~ msgid "Toggle HDR ScRGB"
 #~ msgstr "Comutar o mapa de tons do HDR"
 
-#, fuzzy
 #~ msgid "Render/HDR/Enable ScRGB"
 #~ msgstr "Render/HDR/Ativar detecção de picos"
 

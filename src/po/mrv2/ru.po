@@ -8161,11 +8161,9 @@ msgstr "Переключить окно горячих клавиш"
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
 
-#, fuzzy
 #~ msgid "Toggle HDR ScRGB"
 #~ msgstr "Скриншот"
 
-#, fuzzy
 #~ msgid "Render/HDR/Enable ScRGB"
 #~ msgstr "Render/HDR/Включить обнаружение пиков"
 

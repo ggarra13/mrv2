@@ -8086,11 +8086,9 @@ msgstr "यदि आप विंडो को बन्द करना चा
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
 
-#, fuzzy
 #~ msgid "Toggle HDR ScRGB"
 #~ msgstr "HDR वर्तनीमैप टॉगल करें"
 
-#, fuzzy
 #~ msgid "Render/HDR/Enable ScRGB"
 #~ msgstr "रेंडर/HDR/पीक डिटेक्शन सक्षम करें"
 

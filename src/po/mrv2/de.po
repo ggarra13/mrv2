@@ -8136,11 +8136,9 @@ msgstr "Hotkeys-Fenster umschalten"
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
 
-#, fuzzy
 #~ msgid "Toggle HDR ScRGB"
 #~ msgstr "HDR-Tonkarte umschalten"
 
-#, fuzzy
 #~ msgid "Render/HDR/Enable ScRGB"
 #~ msgstr "Render/HDR/Spitzlichterkennung aktivieren"
 

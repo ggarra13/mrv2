@@ -7930,11 +7930,9 @@ msgstr "ホットキーウィンドウを切り替え"
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
 
-#, fuzzy
 #~ msgid "Toggle HDR ScRGB"
 #~ msgstr "HDR トーンマップの切り替え"
 
-#, fuzzy
 #~ msgid "Render/HDR/Enable ScRGB"
 #~ msgstr "Render/HDR/ピーク検出を有効化"
 

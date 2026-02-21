@@ -8181,11 +8181,9 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
 
-#, fuzzy
 #~ msgid "Toggle HDR ScRGB"
 #~ msgstr "Commuta mappa tonale HDR"
 
-#, fuzzy
 #~ msgid "Render/HDR/Enable ScRGB"
 #~ msgstr "Render/HDR/Abilita rilevamento dei picchi"
 

@@ -8169,14 +8169,6 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
 
-#, fuzzy
-#~ msgid "Toggle HDR ScRGB"
-#~ msgstr "Commutation de la carte de tons HDR"
-
-#, fuzzy
-#~ msgid "Render/HDR/Enable ScRGB"
-#~ msgstr "Rendu/HDR/Activer la détection des pics"
-
 #~ msgid "User Interface/HDR"
 #~ msgstr "Interface utilisateur/HDR"
 

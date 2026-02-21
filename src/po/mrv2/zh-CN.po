@@ -7940,11 +7940,9 @@ msgstr "开关热键窗口"
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
 
-#, fuzzy
 #~ msgid "Toggle HDR ScRGB"
-#~ msgstr "切换 HRD 音速映射"
+#~ msgstr "切换 HDR 音速映射"
 
-#, fuzzy
 #~ msgid "Render/HDR/Enable ScRGB"
 #~ msgstr "渲染/HDR/启用峰值检测"
 
