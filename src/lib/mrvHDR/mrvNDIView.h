@@ -79,25 +79,21 @@ namespace mrv
         std::vector<const char*> get_device_extensions() FL_OVERRIDE;
 
     protected:
-        //! Shaders used in GLFW demo
-        VkShaderModule m_vert_shader_module;
-        VkShaderModule m_frag_shader_module;
-
         //! This is for holding the textures
         std::vector<std::shared_ptr<vlk::Texture> > m_textures;
 
         //! This is for swapchain pipeline layout.
-        VkPipelineLayout      m_pipeline_layout;
+        VkPipelineLayout      m_pipeline_layout = VK_NULL_HANDLE;
 
         //! Memory for descriptor sets.
-        VkDescriptorPool      m_desc_pool;
+        VkDescriptorPool      m_desc_pool = VK_NULL_HANDLE;
 
         //! Describe texture bindings whithin desc. set  
-        VkDescriptorSetLayout m_desc_layout;
+        VkDescriptorSetLayout m_desc_layout = VK_NULL_HANDLE;
         
         //! Actual data bound to shaders like texture or
         //! uniform buffers
-        VkDescriptorSet       m_desc_set; 
+        VkDescriptorSet       m_desc_set = VK_NULL_HANDLE; 
 
         void init_colorspace() FL_OVERRIDE;
 

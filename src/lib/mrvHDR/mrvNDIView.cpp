@@ -124,14 +124,14 @@ namespace
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16_UINT
-                                              : VK_FORMAT_R8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16_UINT
+                       : VK_FORMAT_R8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16_SINT
-                                              : VK_FORMAT_R8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16_SINT
+                       : VK_FORMAT_R8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
@@ -146,87 +146,87 @@ namespace
             if (fmt->type == PL_FMT_FLOAT)
             {
                 return size == 2 ? VK_FORMAT_R16G16_SFLOAT
-                                 : VK_FORMAT_R32G32_SFLOAT;
+                    : VK_FORMAT_R32G32_SFLOAT;
             }
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16G16_UINT
-                                              : VK_FORMAT_R8G8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16G16_UINT
+                       : VK_FORMAT_R8G8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16G16_SINT
-                                              : VK_FORMAT_R8G8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16G16_SINT
+                       : VK_FORMAT_R8G8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16_UNORM
-                                 : VK_FORMAT_R8G8_UNORM;
+                    : VK_FORMAT_R8G8_UNORM;
             }
             else if (fmt->type == PL_FMT_SNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16_SNORM
-                                 : VK_FORMAT_R8G8_SNORM;
+                    : VK_FORMAT_R8G8_SNORM;
             }
             break;
         case 3:
             if (fmt->type == PL_FMT_FLOAT)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16_SFLOAT
-                                 : VK_FORMAT_R32G32B32_SFLOAT;
+                    : VK_FORMAT_R32G32B32_SFLOAT;
             }
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16_UINT
-                                              : VK_FORMAT_R8G8B8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16_UINT
+                       : VK_FORMAT_R8G8B8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16_SINT
-                                              : VK_FORMAT_R8G8B8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16_SINT
+                       : VK_FORMAT_R8G8B8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16_UNORM
-                                 : VK_FORMAT_R8G8B8_UNORM;
+                    : VK_FORMAT_R8G8B8_UNORM;
             }
             else if (fmt->type == PL_FMT_SNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16_SNORM
-                                 : VK_FORMAT_R8G8B8_SNORM;
+                    : VK_FORMAT_R8G8B8_SNORM;
             }
             break;
         case 4:
             if (fmt->type == PL_FMT_FLOAT)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16A16_SFLOAT
-                                 : VK_FORMAT_R32G32B32A32_SFLOAT;
+                    : VK_FORMAT_R32G32B32A32_SFLOAT;
             }
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32A32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16A16_UINT
-                                              : VK_FORMAT_R8G8B8A8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16A16_UINT
+                       : VK_FORMAT_R8G8B8A8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32A32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16A16_SINT
-                                              : VK_FORMAT_R8G8B8A8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16A16_SINT
+                       : VK_FORMAT_R8G8B8A8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16A16_UNORM
-                                 : VK_FORMAT_R8G8B8A8_UNORM;
+                    : VK_FORMAT_R8G8B8A8_UNORM;
             }
             else if (fmt->type == PL_FMT_SNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16A16_SNORM
-                                 : VK_FORMAT_R8G8B8A8_SNORM;
+                    : VK_FORMAT_R8G8B8A8_SNORM;
             }
             break;
         }
@@ -326,7 +326,7 @@ namespace mrv
                 // Determine image type
                 VkImageType imageType = (dims == 1)   ? VK_IMAGE_TYPE_1D
                                         : (dims == 2) ? VK_IMAGE_TYPE_2D
-                                                      : VK_IMAGE_TYPE_3D;
+                                        : VK_IMAGE_TYPE_3D;
 
                 auto texture = vlk::Texture::create(ctx, imageType, width,
                                                     height, depth, imageFormat,
@@ -406,11 +406,25 @@ namespace mrv
         {
             throw std::runtime_error("pl_gpu_dummy_create failed!");
         }
+        
+        pl_shader_params shader_params;
+        memset(&shader_params, 0, sizeof(pl_shader_params));
+
+        shader_params.id = 1;
+        shader_params.gpu = gpu;
+        shader_params.dynamic_constants = false;
+
+        shader = pl_shader_alloc(log, &shader_params);
+        if (!shader)
+        {
+            throw std::runtime_error("pl_shader_alloc failed!");
+        }
     }
 
     LibPlaceboData::~LibPlaceboData()
     {
         pl_shader_free(&shader);
+        shader = nullptr;
         res = nullptr;
         if (state)
         {
@@ -441,7 +455,7 @@ namespace mrv
 
         std::shared_ptr<observer::List<std::string> > NDISources;
         std::shared_ptr<observer::ListObserver<std::string> >
-            NDISourcesObserver;
+        NDISourcesObserver;
         std::string currentNDISource;
 
         bool init = false;
@@ -701,7 +715,7 @@ namespace mrv
 
                     float Y_linear = Yf;
 
-                     // apply_inverse_pq is not needed
+                    // apply_inverse_pq is not needed
                     // if (p.hasHDR)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
@@ -833,6 +847,9 @@ namespace mrv
     // creates m_renderPass
     void NDIView::prepare_render_pass()
     {
+        if (m_renderPass != VK_NULL_HANDLE)
+            return;
+        
         VkAttachmentDescription attachments[2];
         attachments[0] = VkAttachmentDescription();
         attachments[0].format = ctx.format;
@@ -950,6 +967,12 @@ namespace mrv
         if (pipelineState != p.pipelineState)
         {
             VkDevice device = ctx.device;
+
+            if (m_pipeline != VK_NULL_HANDLE)
+            {
+                vkDestroyPipeline(device, m_pipeline, nullptr);
+            }
+            
             m_pipeline = pipelineState.create(device);
             p.pipelineState = pipelineState;
         }
@@ -959,6 +982,11 @@ namespace mrv
     {
         TLRENDER_P();
 
+        if (m_desc_layout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(device(), m_desc_layout, nullptr);
+            m_desc_layout = VK_NULL_HANDLE;
+        }
+        
         std::vector<VkDescriptorSetLayoutBinding> bindings;
 
         // Main texture at binding 0
@@ -1016,6 +1044,12 @@ namespace mrv
 
     void NDIView::prepare_descriptor_pool()
     {
+        if (m_desc_pool != VK_NULL_HANDLE)
+        {
+            vkDestroyDescriptorPool(device(), m_desc_pool, nullptr);
+            m_desc_pool = VK_NULL_HANDLE;
+        }
+        
         VkDescriptorPoolSize poolSize = {};
         poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         poolSize.descriptorCount =
@@ -1034,6 +1068,7 @@ namespace mrv
 
     void NDIView::prepare_descriptor_set()
     {
+        
         VkDescriptorSetAllocateInfo allocInfo = {};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         allocInfo.descriptorPool = m_desc_pool;
@@ -1088,8 +1123,6 @@ namespace mrv
         m_clearColor = {2.F, 2.F, 2.F, 0.F};
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
-        m_vert_shader_module = VK_NULL_HANDLE;
-        m_frag_shader_module = VK_NULL_HANDLE;
 
         if (!NDIlib_initialize())
             throw std::runtime_error("Could not initialize NDI library");
@@ -1101,26 +1134,26 @@ namespace mrv
         p.NDISourcesObserver = observer::ListObserver<std::string>::create(
             this->observeNDISources(),
             [this](const std::vector<std::string>& sources)
-            {
-                TLRENDER_P();
+                {
+                    TLRENDER_P();
 
-                fill_menu(HDRApp::ui->uiMenuBar);
-            },
+                    fill_menu(HDRApp::ui->uiMenuBar);
+                },
             observer::CallbackAction::Suppress);
 
         p.findThread.running = true;
         p.findThread.thread = std::thread(
             [this]
-            {
-                try
                 {
-                    _findThread();
-                }
-                catch (const std::exception& e)
-                {
-                    std::cerr << e.what() << std::endl;
-                }
-            });
+                    try
+                    {
+                        _findThread();
+                    }
+                    catch (const std::exception& e)
+                    {
+                        std::cerr << e.what() << std::endl;
+                    }
+                });
     }
 
     std::shared_ptr<observer::IList<std::string> >
@@ -1145,6 +1178,7 @@ namespace mrv
 
         {
             std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
+            m_textures.clear();
             prepare_main_texture();
             prepare_shader();
         }
@@ -1768,22 +1802,17 @@ namespace mrv
         if (!p.placeboData)
             p.placeboData.reset(new LibPlaceboData);
 
-        if (p.placeboData->shader)
-            pl_shader_free(&p.placeboData->shader);
+        // if (p.placeboData->shader)
+        //     pl_shader_free(&p.placeboData->shader);
         
         pl_shader_params shader_params;
         memset(&shader_params, 0, sizeof(pl_shader_params));
-
+                
         shader_params.id = 1;
         shader_params.gpu = p.placeboData->gpu;
         shader_params.dynamic_constants = false;
-
-        p.placeboData->shader =
-            pl_shader_alloc(p.placeboData->log, &shader_params);
-        if (!p.placeboData->shader)
-        {
-            throw std::runtime_error("pl_shader_alloc failed!");
-        }
+            
+        pl_shader_reset(p.placeboData->shader, &shader_params);        
 
         pl_color_map_params cmap = pl_color_map_high_quality_params;
 
