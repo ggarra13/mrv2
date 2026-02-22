@@ -3694,6 +3694,7 @@ namespace mrv
             auto hdrData = p.videoData[0].layers[0].image->getHDR();
             if (hdrData)
             {
+                // When we have video data, we must tonemap it.
                 p.hdrOptions.hdrData = *hdrData;
                 p.hdrOptions.tonemap = true;
             }
@@ -3707,9 +3708,9 @@ namespace mrv
                 // BT2020 PQ conversion.
                 p.hdrOptions.hdrData.eotf = image::EOTFType::EOTF_BT709;
                 
-#if defined(_WIN32)
+#ifdef VULKAN_BACKEND
+#    if defined(_WIN32)
 
-#    ifdef VULKAN_BACKEND
                 const std::string gpu = util::gpuName(0);
 
                 if (gpu.find("NVIDIA") != std::string::npos)
@@ -3721,20 +3722,27 @@ namespace mrv
                 }
                 else if (gpu.find("AMD") != std::string::npos)
                 {
-                    // AMD ignores metadata, and just lets Windows decide.
+                    // AMD ignores metadata, and just lets Windows decide,
+                    // based on HDR On/Off switch.
                     p.hdrOptions.tonemap = false;
                 }
                 else if (gpu.find("INTEL") != std::string::npos)
                 {
                     // Intel is currently broken.
-                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.tonemap = false;
                 }
-#    endif  // Vulkan Backend
                 
-#else
+#     else
                 // Linux and macOS, set tonemap to false, too.
                 // We will tonemap with OpenColorIO.
                 p.hdrOptions.tonemap = false;
+#    endif
+#endif  // Vulkan Backend
+
+                
+#ifdef OPENGL_BACKEND
+                // With OpenGL we must always tonemap.
+                p.hdrOptions.tonemap = true;
 #endif
             }
         }
