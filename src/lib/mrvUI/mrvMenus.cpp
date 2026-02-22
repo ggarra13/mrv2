@@ -783,6 +783,8 @@ namespace mrv
             int selected = static_cast<int>(hdrOptions.algorithm);
 
 #ifdef VULKAN_BACKEND
+
+#if 0
             mode = FL_MENU_TOGGLE;
             if (numFiles == 0)
                 mode |= FL_MENU_INACTIVE;
@@ -796,6 +798,7 @@ namespace mrv
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);
                 item->set();
             }
+#endif
             
             mode = FL_MENU_TOGGLE;
             if (numFiles == 0)

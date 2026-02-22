@@ -3701,6 +3701,12 @@ namespace mrv
             {
                 // Set hdrData to BT2020's defaults
                 p.hdrOptions.hdrData = image::HDRData();
+
+                // Set the eotf to bt709 so that libplacebo does not do
+                // a full HDR tonemap.  Just BT709 S1886 to
+                // BT2020 PQ conversion.
+                p.hdrOptions.hdrData.eotf = image::EOTFType::EOTF_BT709;
+                
 #if defined(_WIN32)
 
 #    ifdef VULKAN_BACKEND
@@ -3712,12 +3718,11 @@ namespace mrv
                     // BT709 metadata which "tricks" DXGI's DWM into an scRGB
                     // pipeline.
                     p.hdrOptions.tonemap = false;
-                    p.hdrOptions.hdrData.eotf = image::EOTFType::EOTF_BT709;
                 }
                 else if (gpu.find("AMD") != std::string::npos)
                 {
                     // AMD ignores metadata, and just lets Windows decide.
-                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.tonemap = false;
                 }
                 else if (gpu.find("INTEL") != std::string::npos)
                 {
@@ -3727,7 +3732,9 @@ namespace mrv
 #    endif  // Vulkan Backend
                 
 #else
-                p.hdrOptions.tonemap = true;
+                // Linux and macOS, set tonemap to false, too.
+                // We will tonemap with OpenColorIO.
+                p.hdrOptions.tonemap = false;
 #endif
             }
         }
