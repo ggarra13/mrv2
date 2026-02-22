@@ -84,8 +84,9 @@ function( is_system_lib TARGET ISSYSLIB )
 	libavformat
 	libavutil
 	libcairo
-	libcrypto
-	libdisplay-info
+	libcryp
+	libdisplay-infoto
+	libdovi
 	liblcms2
 	libMaterial
 	libmd
