@@ -57,7 +57,6 @@ ChangeLog
 - Fixed OpenColorIO's 1D Luts on Vulkan backend.
 - Fixed ordering of OpenColorIO's textures on the Vulkan backend.
 - Improved performance of HDR playback by keeping the state.
-- Made libplacebo work better with OCIO on HDR monitors.
 - Added sending HDR metadata for proper HDR when using OCIO and not just movies.
 - Fixed color picker toolbar always showing solid alpha channel for images with it on the Vulkan backend.
 - Fixed color toolbar to support values with 4 digits, like 10000.000 for HDR lookups.
@@ -70,7 +69,7 @@ ChangeLog
 - Added code to handle OpenColorIO properly on Linux with HDR.
   Still untested as NVidia drivers are still in beta and compositors like
   Mutter or Kwin are just finishing up their HDR paths.
-- Fixed stride 
+- Fixed stride in NDI's hdr utility which could cause incorrect displays with odd resolutions.
 
 
 v1.5.4
