@@ -38,18 +38,12 @@ namespace
     }
     
     std::string normalize_connector(std::string name) {
-
-        // 1. Remove technical sub-types (HDMI-A-1 -> HDMI-1, DVI-I-1 -> DVI-1)
-        // Matches (HDMI or DVI) followed by a dash, a single letter, and another dash
-        // We use a capture group ($1) to keep the "HDMI" or "DVI" part
-        name = std::regex_replace(name, std::regex(R"((HDMI|DVI|DP|eDP)-[A-Z]-)"), "$1-");
-        
-        // 2. Keep technical sub-types (HDMI-A-1 -> HDMI-1, DVI-I-1 -> DVI-1)
-        // Matches (HDMI or DVI) followed by a dash, a single letter, and another dash
-        // We use a capture group ($1) to keep the "HDMI-A" or "DVI-I" part
-        name = std::regex_replace(name, std::regex(R"((HDMI|DVI|DP|eDP)-[A-Z]-)"), "$1-");
-
-        return name;
+        // This matches the Prefix, the middle letter + dash (if it exists), 
+        // and captures the prefix and the trailing number.
+        // Example: HDMI-A-1 -> HDMI-1
+        // Example: DVI-I-3  -> DVI-3
+        // Example: eDP-1    -> eDP-1 (No change)
+        return std::regex_replace(name, std::regex(R"((HDMI|DVI|DP|eDP|VGA)-[A-Z]-(\d+))"), "$1-$2");
     }
 }
 
