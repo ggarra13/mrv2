@@ -608,7 +608,7 @@ namespace mrv
         p.lastColorSpace = colorSpace();
     }
 
-    void NDIView::_copy(const uint8_t* video_frame)
+    void NDIView::_copy(const uint8_t* video_frame, int stride_in_bytes)
     {
         TLRENDER_P();
 
@@ -622,9 +622,10 @@ namespace mrv
         {
         case NDIlib_FourCC_type_PA16:
         {
+            const int stride_words = stride_in_bytes / 2;
             uint16_t* p_y = (uint16_t*)video_frame;
-            const uint16_t* p_uv = p_y + w * h;
-            const uint16_t* p_alpha = p_uv + w * h;
+            const uint16_t* p_uv = p_y + h * stride_words;
+            const uint16_t* p_alpha = p_uv + h * stride_words;
 
             // Determine BT.601 or BT.709 based on resolution
             bool useBT709 = (w >= 1280 && h >= 720);
@@ -636,47 +637,40 @@ namespace mrv
 
             for (int y = 0; y < h; ++y)
             {
+                // Calculate base pointers for the current row
+                const uint16_t* row_y = p_y + (y * stride_words);
+                const uint16_t* row_uv = p_uv + (y * stride_words);
+                const uint16_t* row_alpha = p_alpha + (y * stride_words);
+        
                 for (int x = 0; x < w; ++x)
                 {
-                    const int yw = y * w;
-                    int index_y = yw + x;
-                    int index_uv = yw + (x / 2) * 2;
-                    int index_alpha = index_y;
+                    // Extract Y and Alpha
+                    float Yf = row_y[x] / 65535.0f;
+                    float A = row_alpha[x] / 65535.0f;
 
-                    // Extract Y, U, V, and Alpha
-                    float Yf = p_y[index_y] / 65535.0f;
-                    float Uf = (p_uv[index_uv] - 32768) / 65535.0f;
-                    float Vf = (p_uv[index_uv + 1] - 32768) / 65535.0f;
-                    float A = p_alpha[index_alpha] / 65535.0f;
+                    // Extract U and V (4:2:2 interleaved means 1 UV pair per 2 pixels)
+                    int uv_idx = (x / 2) * 2;
+                    float Uf = (row_uv[uv_idx] - 32768) / 65535.0f;
+                    float Vf = (row_uv[uv_idx + 1] - 32768) / 65535.0f;
 
                     float R, G, B;
-
                     float Y_linear = Yf;
-
-                    // apply_inverse_pq is not needed
-                    // if (p.hasHDR)
-                    //     Y_linear = apply_inverse_pq(Yf);
-                    // else
-                    //     Y_linear = Yf;
 
                     if (useBT709)
                     {
-                        // BT.709 typical multipliers
-                        // (Exact values differ slightly in various references)
                         R = Y_linear + 1.5748f * Vf;
                         G = Y_linear - 0.1873f * Uf - 0.4681f * Vf;
                         B = Y_linear + 1.8556f * Uf;
                     }
                     else
                     {
-                        // BT.601
                         R = Y_linear + 1.402f * Vf;
                         G = Y_linear - 0.344f * Uf - 0.714f * Vf;
                         B = Y_linear + 1.772f * Uf;
                     }
 
                     // Store as RGBA float
-                    int rgba_index = index_y * 4;
+                    int rgba_index = (y * w + x) * 4; 
                     rgba[rgba_index] = R;
                     rgba[rgba_index + 1] = G;
                     rgba[rgba_index + 2] = B;
@@ -687,9 +681,11 @@ namespace mrv
         }
         case NDIlib_FourCC_type_P216:
         {
+            std::cerr << "P216" << std::endl;
+            const int stride_words = stride_in_bytes / 2;
             uint16_t* p_y = (uint16_t*)video_frame;
-            const uint16_t* p_uv = p_y + w * h;
-
+            const uint16_t* p_uv = p_y + h * stride_words;            
+            
             // Determine BT.601 or BT.709 based on resolution
             bool useBT709 = (w >= 1280 && h >= 720);
 
@@ -700,17 +696,20 @@ namespace mrv
 
             for (int y = 0; y < h; ++y)
             {
+                // Calculate base pointers for the current row
+                const uint16_t* row_y = p_y + (y * stride_words);
+                const uint16_t* row_uv = p_uv + (y * stride_words);
+        
                 for (int x = 0; x < w; ++x)
                 {
-                    const int yw = y * w;
-                    int index_y = yw + x;
-                    int index_uv = yw + (x / 2) * 2;
-
-                    // Extract Y, U, V, and Alpha
-                    float Yf = p_y[index_y] / 65535.0f;
-                    float Uf = (p_uv[index_uv] - 32768) / 65535.0f;
-                    float Vf = (p_uv[index_uv + 1] - 32768) / 65535.0f;
-
+                    // Extract Y and Alpha
+                    float Yf = row_y[x] / 65535.0f;
+                    
+                    // Extract U and V (4:2:2 interleaved means 1 UV pair per 2 pixels)
+                    int uv_idx = (x / 2) * 2;
+                    float Uf = (row_uv[uv_idx] - 32768) / 65535.0f;
+                    float Vf = (row_uv[uv_idx + 1] - 32768) / 65535.0f;
+                    
                     float R, G, B;
 
                     float Y_linear = Yf;
@@ -738,7 +737,7 @@ namespace mrv
                     }
 
                     // Store as RGBA float
-                    int rgba_index = index_y * 4;
+                    int rgba_index = (y * w + x) * 4;
                     rgba[rgba_index] = R;
                     rgba[rgba_index + 1] = G;
                     rgba[rgba_index + 2] = B;
@@ -1589,7 +1588,8 @@ namespace mrv
                         }
                         else if (video_frame.p_data)
                         {
-                            _copy(video_frame.p_data);
+                            _copy(video_frame.p_data,
+                                  video_frame.line_stride_in_bytes);
                             redraw();
                         }
                     }

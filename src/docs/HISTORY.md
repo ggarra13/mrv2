@@ -67,7 +67,10 @@ ChangeLog
 - Fixed NDI some core dumps.
 - Fixed NDI's hdr utility crashes on Windows.
 - Improved performance of NDI's hdr utility with changing metadata.
-- Added code to handle OpenColorIO properly on Linux.  Still untested.
+- Added code to handle OpenColorIO properly on Linux with HDR.
+  Still untested as NVidia drivers are still in beta and compositors like
+  Mutter or Kwin are just finishing up their HDR paths.
+- Fixed stride 
 
 
 v1.5.4

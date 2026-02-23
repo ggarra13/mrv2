@@ -110,7 +110,7 @@ namespace mrv
 
     private:
         void _init();
-        void _copy(const uint8_t* video_frame);
+        void _copy(const uint8_t* video_frame, int stride_in_bytes);
         void _startThreads();
         void _exitThreads();
         void _findThread();
