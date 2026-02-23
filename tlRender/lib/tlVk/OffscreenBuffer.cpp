@@ -190,9 +190,28 @@ namespace tl
             const math::Size2i& size, const OffscreenBufferOptions& options)
         {
             TLRENDER_P();
+            
+            OffscreenBufferOptions offscreenBufferOptions = options;
+            switch(offscreenBufferOptions.colorType)
+            {
+            case image::PixelType::RGB_U8:
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_U8;
+                break;
+            case image::PixelType::RGB_U16:
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_U16;
+                break;
+            case image::PixelType::RGB_F16:
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_F16;
+                break;
+            case image::PixelType::RGB_F32:
+                offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
+                break;
+            default:
+                break;
+            };
 
             p.size = size;
-            p.options = options;
+            p.options = offscreenBufferOptions;
             p.colorFormat = getTextureFormat(p.options.colorType);
             p.depthFormat =
                 getBufferInternalFormat(p.options.depth, p.options.stencil);
