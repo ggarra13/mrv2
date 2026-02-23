@@ -50,7 +50,8 @@ namespace tl
         {
             //! Debug HDR
             bool debug = false;
-            
+
+            //! Use libplacebo tonemapping (used for videos mainly)
             bool tonemap = false;
 
             //! Peak detection variables.
@@ -60,7 +61,7 @@ namespace tl
             float peak_scene_low_limit = 1.F;
             float peak_scene_high_limit = 3.F;
 
-            //! Tone mapping data.
+            //! Tone mapping data for libplacebo.
             HDRGamutMapping     gamutMapping = HDRGamutMapping::Auto;
             HDRTonemapAlgorithm algorithm = HDRTonemapAlgorithm::Hable;
             image::HDRData hdrData;

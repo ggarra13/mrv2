@@ -3694,56 +3694,21 @@ namespace mrv
             auto hdrData = p.videoData[0].layers[0].image->getHDR();
             if (hdrData)
             {
-                // When we have video data, we must tonemap it.
+                // When we have video data, we must tonemap it with libplacebo.
                 p.hdrOptions.hdrData = *hdrData;
                 p.hdrOptions.tonemap = true;
             }
             else
             {
-                // Set hdrData to BT2020's defaults
-                p.hdrOptions.hdrData = image::HDRData();
-
-                // Set the eotf to bt709 so that libplacebo does not do
-                // a full HDR tonemap.  Just BT709 S1886 to
-                // BT2020 PQ conversion.
-                p.hdrOptions.hdrData.eotf = image::EOTFType::EOTF_BT709;
-                
-#ifdef VULKAN_BACKEND
-#    if defined(_WIN32)
-
-                const std::string gpu = util::gpuName(0);
-
-                if (gpu.find("NVIDIA") != std::string::npos)
-                {
-                    // NVidia on Windows must not tonemap.  We will pass
-                    // BT709 metadata which "tricks" DXGI's DWM into an scRGB
-                    // pipeline.
-                    p.hdrOptions.tonemap = false;
-                }
-                else if (gpu.find("AMD") != std::string::npos)
-                {
-                    // AMD ignores metadata, and just lets Windows decide,
-                    // based on HDR On/Off switch.
-                    p.hdrOptions.tonemap = false;
-                }
-                else if (gpu.find("INTEL") != std::string::npos)
-                {
-                    // Intel is currently broken.
-                    p.hdrOptions.tonemap = false;
-                }
-                
-#     else
-                // Linux and macOS, set tonemap to false, too.
-                // We will tonemap with OpenColorIO.
+                // When we have BT709 or OpenEXR linear data we must tonemap
+                // it with OpenColorIO and not use libplacebo.
                 p.hdrOptions.tonemap = false;
-#    endif
-#endif  // Vulkan Backend
-
                 
-#ifdef OPENGL_BACKEND
-                // With OpenGL we must always tonemap.
-                p.hdrOptions.tonemap = true;
-#endif
+                //
+                // We set hdrData to BT2020's defaults and will change it
+                // later based on what OCIO Display/View the user sets up.
+                //
+                p.hdrOptions.hdrData = image::HDRData();
             }
         }
         
