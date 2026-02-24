@@ -50,6 +50,7 @@ ChangeLog
 - Fixed EDID connector to support Asahi Linux eDP-1 in mrvMonitor_linux.cpp.
 - Fixed NDI's hdr utility hanging on Debug builds on Linux.
 - Made NDI's hdr utility thread safe, as it was potentially stomping on FLTK.
+- Fixed NDI Input streaming inside mrv2 / vmrv2 to not bring up the progress bar.
 
 v1.5.5
 ======

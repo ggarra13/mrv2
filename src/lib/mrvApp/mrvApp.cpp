@@ -1468,6 +1468,11 @@ namespace mrv
                 use_progress = true;
             if (video.size.w > 2048)
                 use_progress = true;
+            const auto player = p.player->player();
+            const auto extension = string::toUpper(player->getPath().getExtension());
+            if (extension == ".NDI")
+                use_progress = false;
+            
         }
         // Calculate start and end time used in progress report
         otime::RationalTime startTime, endTime;
