@@ -3,6 +3,8 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #define LOG_WARNING(x) std::cerr << x << std::endl;
+#define LOG_ERROR(x) std::cerr << x << std::endl;
+#define LOG_STATUS(x) std::cout << x << std::endl;
 
 #ifdef NDEBUG
 #  define LOG_DEBUG(x)
@@ -59,8 +61,6 @@ extern "C"
 #include <mutex>
 #include <regex>
 #include <thread>
-
-#define LOG_STATUS(x) std::cout << x << std::endl;
 
 
 namespace
@@ -681,7 +681,8 @@ namespace mrv
         }
         case NDIlib_FourCC_type_P216:
         {
-            std::cerr << "P216" << std::endl;
+            LOG_DEBUG("P216");
+            
             const int stride_words = stride_in_bytes / 2;
             uint16_t* p_y = (uint16_t*)video_frame;
             const uint16_t* p_uv = p_y + h * stride_words;            
@@ -748,16 +749,16 @@ namespace mrv
         }
         case NDIlib_FourCC_type_UYVY:
         {
-            std::cerr << "UYVY" << std::endl;
+            LOG_DEBUG("UYVY");
             break;
         }
         case NDIlib_FourCC_type_UYVA:
         {
-            std::cerr << "UYVA" << std::endl;
+            LOG_DEBUG("UYVA");
             break;
         }
         default:
-            std::cerr << "Unknown format" << std::endl;
+            LOG_ERROR("Unknown format");
             break;
         }
     }
@@ -1122,6 +1123,7 @@ namespace mrv
         m_clearColor = {2.F, 2.F, 2.F, 0.F};
 
         mode(FL_RGB | FL_DOUBLE | FL_ALPHA);
+        
 
         if (!NDIlib_initialize())
             throw std::runtime_error("Could not initialize NDI library");
@@ -1173,7 +1175,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        vkDeviceWaitIdle(device()); // waits for all queue on the device
+        // vkDeviceWaitIdle(device()); // waits for all queue on the device
 
         {
             std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
@@ -1187,8 +1189,6 @@ namespace mrv
         prepare_pipeline();
         prepare_descriptor_pool();
         prepare_descriptor_set();
-
-        m_swapchain_needs_recreation = false;
     }
 
     void NDIView::update_texture(VkCommandBuffer cmd)
@@ -1471,8 +1471,11 @@ namespace mrv
                         try
                         {
                             rapidxml::xml_document<> doc;
-                            doc.parse<0>((char*)video_frame.p_metadata);
-
+                            
+                            // Copy the read-only memory to a mutable string
+                            std::string meta_copy((const char*)video_frame.p_metadata);
+                            doc.parse<0>(&meta_copy[0]);
+                            
                             // Get root node
                             rapidxml::xml_node<>* root =
                                 doc.first_node("ndi_color_info");
@@ -1586,12 +1589,13 @@ namespace mrv
                             p.image = image::Image::create(p.info);
                             m_swapchain_needs_recreation = true;
                         }
-                        else if (video_frame.p_data)
-                        {
-                            _copy(video_frame.p_data,
-                                  video_frame.line_stride_in_bytes);
-                            redraw();
-                        }
+                    }
+                    
+                    if (!init && video_frame.p_data)
+                    {
+                        _copy(video_frame.p_data,
+                              video_frame.line_stride_in_bytes);
+                        redraw();
                     }
 
                     NDIlib_recv_free_video(p.NDI_recv, &video_frame);
@@ -1614,6 +1618,31 @@ namespace mrv
 
         // Destroy the receiver
         NDIlib_recv_destroy(p.NDI_recv);
+    }
+
+    struct FindData
+    {
+        NDIView* self = nullptr;
+        std::vector<std::string> NDIsources;
+    };
+
+    static void foundSources(void* data)
+    {
+        FindData* findData = reinterpret_cast<FindData*>(data);
+        findData->self->updateSources(findData->NDIsources);
+        delete findData;
+    }
+
+    void NDIView::updateSources(const std::vector<std::string>& NDIsources)
+    {
+        TLRENDER_P();
+        
+        p.NDISources->setIfChanged(NDIsources);
+
+        if (NDIsources.size() == 1)
+        {
+            setNDISource(NDIsources[0]);
+        }
     }
 
     void NDIView::_findThread()
@@ -1650,25 +1679,23 @@ namespace mrv
             {
                 sources =
                     NDIlib_find_get_current_sources(p.NDI_find, &no_sources);
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
 
             static std::regex kRemoteRegex(
                 ".*REMOTE.*", std::regex_constants::icase);
 
-            std::vector<std::string> NDIsources;
+            FindData* find_data = new FindData;
+            find_data->self = this;
+            
             for (int i = 0; i < no_sources; ++i)
             {
                 if (std::regex_match(sources[i].p_ndi_name, kRemoteRegex))
                     continue;
-                NDIsources.push_back(sources[i].p_ndi_name);
+                find_data->NDIsources.push_back(sources[i].p_ndi_name);
             }
 
-            p.NDISources->setIfChanged(NDIsources);
-
-            if (NDIsources.size() == 1)
-            {
-                setNDISource(NDIsources[0]);
-            }
+            Fl::awake((Fl_Awake_Handler)foundSources, find_data);
         }
     }
 

@@ -69,6 +69,9 @@ namespace mrv
         
         //! Toggle Fullscreen.
         void toggle_fullscreen();
+
+        //! Update list of NDI sources.
+        void updateSources(const std::vector<std::string>&);
         
         
         void prepare() FL_OVERRIDE;
@@ -107,7 +110,7 @@ namespace mrv
         void prepare_descriptor_set();
 
         void update_texture(VkCommandBuffer);
-
+        
     private:
         void _init();
         void _copy(const uint8_t* video_frame, int stride_in_bytes);
