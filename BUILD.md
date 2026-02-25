@@ -23,9 +23,6 @@ Contents:
 
 # Building
 
-You are adviced to build the programs as detailed in these instructions and not
-on the Cloud.
-
 ## Dependencies
 
 ### RedHat
@@ -63,6 +60,13 @@ sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel \
 	       swig
 
+sudo dnf install glslang-devel spirv-tools spirv-headers
+
+#
+# You may need to compile the following package from source
+#
+sudo dnf install libshaderc-devel
+
 sudo dnf install gcc-toolset-14
 
 scl enable gcc-toolset-14 bash
@@ -97,11 +101,13 @@ sudo apt -y install curl build-essential perl git cmake ninja-build \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
                     doxygen tk-dev libxt-dev swig
 
+sudo apt -y install glslang-dev spirv-tools spirv-headers libshaderc-dev
+
 # Install cpanminus and IPC::Cmd non-interactively
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 
 #
-# rustup for cargo
+# rustup for cargo (needed for libdovi)
 #
 curl https://sh.rustup.rs -sSf | sh
 source "$HOME/.cargo/env"
@@ -129,7 +135,7 @@ xcode-select --install
 brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite3 xz zlib
 
 #
-# rustup for cargo
+# rustup for cargo (needed for libdovi)
 #
 curl https://sh.rustup.rs -sSf | sh
 source "$HOME/.cargo/env"
@@ -145,7 +151,7 @@ cargo install cargo-c
 - [Git](https://git-scm.com/downloads)
 - [CMake 3.26.2 or later](https://cmake.org/download/)
 - [Python 3.10 or later](https://www.python.org/downloads/)
-- [cargo and cargo-c](https://www.rust-lang.org/tools/install)
+- [cargo and cargo-c](https://www.rust-lang.org/tools/install) - for libdovi
 - [NSIS Installer for Packaging](https://nsis.sourceforge.io/Download) - Optional
 
 Additional dependencies are downloaded and built automatically by the CMake
@@ -167,11 +173,11 @@ If on Windows, enable long paths:
 
 Open the Start Menu, search for PowerShell, right-click it, and select Run as Administrator.
 
+```
 New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+```
 
-
-
-Clone the repository:
+On an the MSys terminal, clone the repository:
 ```
 cd some_dir
 
@@ -181,6 +187,11 @@ cd some_dir
 git clone https://github.com/ggarra13/mrv2.git
 
 git config --global core.longpaths true
+
+#
+# Build cargo-c
+#
+cargo install cargo-c
 
 cd mrv2
 ./runme.sh
