@@ -28,12 +28,6 @@ if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
 endif()
 
 list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} tlRender::tlIO)
-if(UNIX AND NOT APPLE)
-    if (MRV2_BACKEND STREQUAL "VK")
-	find_package(dovi)
-	list(APPEND LIBRARIES dovi::dovi)
-    endif()
-endif()
 
 
 
