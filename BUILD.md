@@ -60,7 +60,7 @@ sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel \
 	       swig
 
-sudo dnf install glslang-devel spirv-tools spirv-headers
+sudo dnf install vulkan-headers vulkan-loader-devel glslang-devel spirv-tools spirv-headers
 
 #
 # You may need to compile the following package from source
@@ -101,7 +101,7 @@ sudo apt -y install curl build-essential perl git cmake ninja-build \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
                     doxygen tk-dev libxt-dev swig
 
-sudo apt -y install glslang-dev spirv-tools spirv-headers libshaderc-dev
+sudo apt -y install libvulkan-dev glslang-dev spirv-tools spirv-headers libshaderc-dev
 
 # Install cpanminus and IPC::Cmd non-interactively
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
