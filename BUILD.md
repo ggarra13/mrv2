@@ -67,6 +67,14 @@ sudo dnf install gcc-toolset-14
 
 scl enable gcc-toolset-14 bash
 
+#
+# rustup for cargo
+#
+curl https://sh.rustup.rs -sSf | sh
+source "$HOME/.cargo/env"
+
+cargo install cargo-c
+
 ```
 
 ### Ubuntu
@@ -92,6 +100,14 @@ sudo apt -y install curl build-essential perl git cmake ninja-build \
 # Install cpanminus and IPC::Cmd non-interactively
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 
+#
+# rustup for cargo
+#
+curl https://sh.rustup.rs -sSf | sh
+source "$HOME/.cargo/env"
+
+cargo install cargo-c
+
 ```
 
 ### macOS
@@ -112,6 +128,14 @@ xcode-select --install
 #
 brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite3 xz zlib
 
+#
+# rustup for cargo
+#
+curl https://sh.rustup.rs -sSf | sh
+source "$HOME/.cargo/env"
+
+cargo install cargo-c
+
 ```
 
 ### Windows
@@ -121,6 +145,7 @@ brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite
 - [Git](https://git-scm.com/downloads)
 - [CMake 3.26.2 or later](https://cmake.org/download/)
 - [Python 3.10 or later](https://www.python.org/downloads/)
+- [cargo and cargo-c](https://www.rust-lang.org/tools/install)
 - [NSIS Installer for Packaging](https://nsis.sourceforge.io/Download) - Optional
 
 Additional dependencies are downloaded and built automatically by the CMake
