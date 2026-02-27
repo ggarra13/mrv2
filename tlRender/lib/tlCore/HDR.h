@@ -50,11 +50,12 @@ namespace tl
         ///@}
 
         enum EOTFType : uint8_t {
-            EOTF_BT601 = 0,
-            EOTF_BT709 = 1,
-            EOTF_BT2020 = 2,
-            EOTF_BT2100_HLG = 3,
-            EOTF_BT2100_PQ = 4
+            EOTF_SRGB = 0,
+            EOTF_BT601 = 1,
+            EOTF_BT709 = 2,
+            EOTF_BT2020 = 3,
+            EOTF_BT2100_HLG = 4,
+            EOTF_BT2100_PQ = 5
         };
 
         //! HDR data.
