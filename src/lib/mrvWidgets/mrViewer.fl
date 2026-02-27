@@ -43,7 +43,7 @@ decl {\#include "mrvWidgets/mrvAudioButton.h"} {public global
 decl {\#include "mrvWidgets/mrvBackend.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvButton.h"} {selected public global
+decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvDockGroup.h"} {public global
@@ -130,11 +130,11 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {
+widget_class PixelToolBarClass {open
   xywh {0 0 934 56} hide resizable
   class Fl_Double_Window
 } {
-  Fl_Group {} {
+  Fl_Group {} {open
     xywh {0 0 933 30} box FLAT_BOX color 96
   } {
     Fl_Menu_Button uiZoom {
@@ -250,7 +250,7 @@ ui->uiView->centerView();}
             xywh {151 3 319 25}
           } {
             Fl_Menu_Button uiAColorType {
-              label RGBA user_data_type {void*}
+              label RGBA
               callback {ui->uiView->updatePixelBar();}
               tooltip {Switch RGBA display between floating point, hexadecimal (0..0xff) and decimal (0..255).} xywh {151 3 45 24} labelsize 9 align 48
               code0 {o->disable_glyph();}
@@ -359,10 +359,10 @@ ui->uiView->redraw();}
             }
           }
           Fl_Menu_Button uiPixelValue {
-            label F user_data_type {void*}
+            label F
             callback {select_character(uiPixelValue);
 ui->uiView->updatePixelBar();
-ui->uiView->redraw();}
+ui->uiView->redraw();} open selected
             tooltip {Displays:
 * Full Pixel Values (Gamma, Gain and LUT)
 * Original (No Gamma, No Gain, No Lut)} xywh {474 3 27 25} align 48
@@ -371,10 +371,14 @@ ui->uiView->redraw();}
           } {
             MenuItem {} {
               label Full
-              xywh {5 5 100 20}
+              xywh {15 15 100 20}
             }
             MenuItem {} {
               label Original
+              xywh {5 5 100 20}
+            }
+            MenuItem {} {
+              label Nits
               xywh {5 5 100 20}
             }
           }

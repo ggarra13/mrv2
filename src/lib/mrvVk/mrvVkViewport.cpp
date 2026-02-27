@@ -60,6 +60,23 @@ namespace mrv
 {
     namespace
     {
+        float pqToNits(float v) {
+            if (v <= 0.0f) return 0.0f;
+    
+            const float m1 = 0.1593017578125f;
+            const float m2 = 78.84375f;
+            const float c1 = 0.8359375f;
+            const float c2 = 18.8515625f;
+            const float c3 = 18.6875f;
+
+            float v_pow = powf(v, 1.0f / m2);
+            float num = fmaxf(v_pow - c1, 0.0f);
+            float den = c2 - c3 * v_pow;
+    
+            return 10000.0f * powf(num / den, 1.0f / m1);
+        }
+
+        
         monitor::HDRCapabilities
         getHDRCapabilities(int screen_num)
         {
@@ -1545,7 +1562,8 @@ namespace mrv
             info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b =
                 info.hsv.mean.a = 0.F;
 
-            if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull)
+            if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull ||
+                p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kNits)
                 _calculateColorAreaFullValues(info);
             else
                 _calculateColorAreaRawValues(info);
@@ -1559,7 +1577,7 @@ namespace mrv
 
             math::Vector2i pos = _getRaster();
 
-            if (p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kFull)
+            if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kOriginal)
             {
                 if (_isEnvironmentMap())
                     return;
@@ -1644,6 +1662,13 @@ namespace mrv
 
                     const auto options = vk.buffer->getOptions();
                     rgba = color::fromVoidPtr(data, options.colorType);
+                    
+                    if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kNits)
+                    {
+                        rgba.r = pqToNits(rgba.r);
+                        rgba.g = pqToNits(rgba.g);
+                        rgba.b = pqToNits(rgba.b);
+                    }
                     return;
                 }
             }
