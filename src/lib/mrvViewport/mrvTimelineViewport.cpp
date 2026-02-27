@@ -3713,7 +3713,9 @@ namespace mrv
 #else
                 auto path = p.player->player()->getPath();
                 auto extension = path.getExtension();
-                if (file::isMovie(extension) || file::isSRGB(extension))
+                if (file::isMovie(extension) ||
+                    file::isSRGB(extension) ||
+                    file::isOTIO(path))
                 {
                     p.hdrOptions.tonemap = true;
                     p.hdrOptions.hdrData = image::nameToPrimaries("709");

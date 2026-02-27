@@ -54,6 +54,7 @@ ChangeLog
 - Fixed FLTK reporsitory to make Vulkan backend on MacOS match the scores of the Linux counterpart to select:
      VK_COLOR_SPACE_HDR10_ST2084_EXT
  for proper HDR, instead of DISPLAY_P3.
+ - Made common sRGB formats tonemap automatically under Vulkan.  Linear or floating point images need to use the proper OpenColorIO transforms.
 
 v1.5.5
 ======
