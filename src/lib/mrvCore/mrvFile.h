@@ -69,17 +69,17 @@ namespace mrv
         
         /**
          * Given a lowercase filename extension, return whether the extension is
-         * from an Rec.709 image format.
+         * from an sRGBB image format.
          *
          * @param ext Filename extension.
          *
          * @return true if a valis Rec.709 image format.
          */
-        bool isBT709(const std::string& ext);
+        bool isSRGB(const std::string& ext);
 
-        inline bool isBT709(const Path& path)
+        inline bool issSRGB(const Path& path)
         {
-            return isBT709(tl::string::toLower(path.getExtension()));
+            return isSRGB(tl::string::toLower(path.getExtension()));
         }
 
         /**

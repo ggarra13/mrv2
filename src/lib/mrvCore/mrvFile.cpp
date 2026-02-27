@@ -83,23 +83,14 @@ namespace mrv
                 ioSystem->getFileType(extension) == tl::io::FileType::Movie);
         }
 
-        bool isBT709(const std::string& ext)
+        
+        bool isSRGB(const std::string& ext)
         {
             static const std::unordered_set<std::string> extensions = {
-                ".bmp", ".png", ".tga", ".sgi", ".rgb",
-                ".jpg", ".jpeg", ".ppm",
+                ".bmp", ".tga", ".sgi", ".ico", ".rgb",
+                ".jpg", ".jpeg", ".ppm", ".png",
                 ".usd", ".usda", ".usdc", ".usdz",
-                ".tif", ".tiff", ".hdr", ".psd",
-
-                // RAW formats
-                ".3fr", ".arw", ".bay", ".bmq", ".cap", ".cine",
-                ".cr2", ".cr3", ".crw", ".cs1", ".dc2", ".dcr",
-                ".dng", ".drf", ".dsc", ".erf", ".fff", ".ia",
-                ".iiq", ".k25", ".kc2", ".kdc", ".mdc", ".mef",
-                ".mos", ".mrw", ".nef", ".nrw", ".orf", ".pef",
-                ".ptx", ".pxn", ".qtk", ".raf", ".raw", ".rdc",
-                ".rw2", ".rwl", ".rwz", ".sr2", ".srf", ".srw",
-                ".sti", ".x3f"
+                ".tif", ".tiff", ".psd",
             };
                 
             std::string extension = string::toLower(ext);
