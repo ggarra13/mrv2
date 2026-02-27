@@ -3700,6 +3700,7 @@ namespace mrv
             }
             else
             {
+#if _WIN32
                 // When we have BT709 or OpenEXR linear data we must tonemap
                 // it with OpenColorIO and not use libplacebo.
                 p.hdrOptions.tonemap = false;
@@ -3709,6 +3710,20 @@ namespace mrv
                 // later based on what OCIO Display/View the user sets up.
                 //
                 p.hdrOptions.hdrData = image::HDRData();
+#else
+                auto path = p.player->player()->getPath();
+                auto extension = path.getExtension();
+                if (file::isMovie(extension) || file::isBT709(extension))
+                {
+                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.hdrData = image::nameToPrimaries("709");
+                }
+                else
+                {
+                    p.hdrOptions.tonemap = false;
+                    p.hdrOptions.hdrData = image::HDRData();
+                }
+#endif
             }
         }
         

@@ -66,6 +66,21 @@ namespace mrv
         {
             return isMovie(tl::string::toLower(path.getExtension()));
         }
+        
+        /**
+         * Given a lowercase filename extension, return whether the extension is
+         * from an Rec.709 image format.
+         *
+         * @param ext Filename extension.
+         *
+         * @return true if a valis Rec.709 image format.
+         */
+        bool isBT709(const std::string& ext);
+
+        inline bool isBT709(const Path& path)
+        {
+            return isBT709(tl::string::toLower(path.getExtension()));
+        }
 
         /**
          * Given a lowercase filename extension, return whether the extension is

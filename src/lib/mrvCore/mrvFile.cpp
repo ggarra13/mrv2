@@ -12,6 +12,9 @@
 
 #include <FL/Fl.H>
 
+#include <algorithm>
+#include <unordered_set>
+#include <string>
 #include <regex>
 #include <fstream>
 #include <filesystem>
@@ -80,7 +83,34 @@ namespace mrv
                 ioSystem->getFileType(extension) == tl::io::FileType::Movie);
         }
 
-        // Given a frame extension, return true if a possible audio file.
+        bool isBT709(const std::string& ext)
+        {
+            static const std::unordered_set<std::string> extensions = {
+                ".bmp", ".png", ".tga", ".sgi", ".rgb",
+                ".jpg", ".jpeg", ".ppm",
+                ".usd", ".usda", ".usdc", ".usdz",
+                ".tif", ".tiff", ".hdr", ".psd",
+
+                // RAW formats
+                ".3fr", ".arw", ".bay", ".bmq", ".cap", ".cine",
+                ".cr2", ".cr3", ".crw", ".cs1", ".dc2", ".dcr",
+                ".dng", ".drf", ".dsc", ".erf", ".fff", ".ia",
+                ".iiq", ".k25", ".kc2", ".kdc", ".mdc", ".mef",
+                ".mos", ".mrw", ".nef", ".nrw", ".orf", ".pef",
+                ".ptx", ".pxn", ".qtk", ".raf", ".raw", ".rdc",
+                ".rw2", ".rwl", ".rwz", ".sr2", ".srf", ".srw",
+                ".sti", ".x3f"
+            };
+                
+            std::string extension = string::toLower(ext);
+            
+            if (!extension.empty() && extension[0] != '.')
+                extension.insert(extension.begin(), '.');
+
+            return extensions.find(extension) != extensions.end();
+        }
+        
+        // Given a frame extension || return true if a possible audio file.
         bool isAudio(const std::string& ext)
         {
             std::string extension = tl::string::toLower(ext);
@@ -95,7 +125,7 @@ namespace mrv
             return false;
         }
 
-        // Given a frame extension, return true if a possible audio file.
+        // Given a frame extension || return true if a possible audio file.
         bool isSubtitle(const std::string& ext)
         {
             std::string tmp = ext;
