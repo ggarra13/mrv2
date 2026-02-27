@@ -78,22 +78,6 @@ namespace
 namespace
 {
     
-    inline float pqToNits(float v) {
-        if (v <= 0.0f) return 0.0f;
-    
-        const float m1 = 0.1593017578125f;
-        const float m2 = 78.84375f;
-        const float c1 = 0.8359375f;
-        const float c2 = 18.8515625f;
-        const float c3 = 18.6875f;
-
-        float v_pow = powf(v, 1.0f / m2);
-        float num = fmaxf(v_pow - c1, 0.0f);
-        float den = c2 - c3 * v_pow;
-    
-        return 10000.0f * powf(num / den, 1.0f / m1);
-    }
-    
     inline uint32_t byteSwap32(uint32_t x)
     {
         return ((x >> 24) & 0x000000FF) |
@@ -2037,9 +2021,9 @@ namespace mrv
 #ifdef VULKAN_BACKEND
             if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kNits)
             {
-                nits.r = pqToNits(rgba.r);
-                nits.g = pqToNits(rgba.g);
-                nits.b = pqToNits(rgba.b);
+                nits.r = color::pqToNits(rgba.r);
+                nits.g = color::pqToNits(rgba.g);
+                nits.b = color::pqToNits(rgba.b);
             }
 #endif
             

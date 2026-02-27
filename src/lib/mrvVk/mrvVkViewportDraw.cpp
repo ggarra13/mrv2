@@ -1157,6 +1157,7 @@ namespace mrv
             }
             else
             {
+                float monitorPeak = p.hdrCapabilities.max_nits;
                 // On Linux at least, we must send the real metadata over,
                 // so we translate OCIO to proper HDRData.
                 // If no OCIO is active, assume it is a movie and send the stored
@@ -1169,7 +1170,7 @@ namespace mrv
                     data = image::nameToPrimaries(ocio.display + ocio.view);
                     if (ocio.view.find("SDR") == std::string::npos)
                     {
-                        float peak = 1000.0f;
+                        float ocioPeak = 1000.0f;
                         std::string viewName = string::toUpper(ocio.view);
 
                        // Regex explanation:
@@ -1183,20 +1184,20 @@ namespace mrv
                             // match[0] is the whole string (e.g., "1000 NITS")
                             // match[1] is just the first capture group (e.g., "1000")
                             try {
-                                peak = std::stof(match[1].str());
+                                ocioPeak = std::stof(match[1].str());
                             } catch (const std::exception& e) {
                                 // Fallback for parsing errors
-                                peak = 1000.0F; 
+                                ocioPeak = 1000.0F; 
                             }
                         } else {
                             // Default fallback if no nits pattern is found
-                            peak = 1000.0F; 
+                            ocioPeak = 1000.0F; 
                         }
-                        data.displayMasteringLuminance = math::FloatRange(0, peak);
-                        data.maxCLL = peak;
-                        data.maxFALL = 100.F; // prevents crushing mid-tones
+                        data.displayMasteringLuminance = math::FloatRange(0, ocioPeak);
+                        data.maxCLL = std::min(ocioPeak, monitorPeak);
+                        data.maxFALL = std::min(100.F, data.maxCLL * 0.1F); 
                     }
-                    else
+                    else  // is SDR view
                     {
                         data.displayMasteringLuminance = math::FloatRange(0, 100.F);
                         data.maxCLL = 203.F;

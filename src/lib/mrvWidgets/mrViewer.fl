@@ -365,7 +365,8 @@ ui->uiView->updatePixelBar();
 ui->uiView->redraw();} open selected
             tooltip {Displays:
 * Full Pixel Values (Gamma, Gain and LUT)
-* Original (No Gamma, No Gain, No Lut)} xywh {474 3 27 25} align 48
+* Original (No Gamma, No Gain, No Lut)
+* Nits Pixel Values (Monitor units in Vulkan)} xywh {474 3 27 25} align 48
             code0 {o->enable_character(); o->disable_glyph(); o->value(0);}
             class {mrv::PopupMenu}
           } {
