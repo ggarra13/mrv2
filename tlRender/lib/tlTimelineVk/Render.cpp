@@ -2623,31 +2623,39 @@ namespace tl
                 bool isHDRVideo = false;
                 src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                 src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
-                    
+
                 switch (data.eotf)
                 {
-                case image::EOTFType::EOTF_BT2100_PQ: // PQ (HDR10)
-                case image::EOTFType::EOTF_BT2020:    // PQ (HDR10)
+                case image::EOTFType::EOTF_BT2100_PQ: 
+                case image::EOTFType::EOTF_BT2020:    
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                     src_colorspace.transfer = PL_COLOR_TRC_PQ;
                     isHDRVideo = true;
                     break;
-                case image::EOTFType::EOTF_BT2100_HLG: // HLG
+
+                case image::EOTFType::EOTF_BT2100_HLG:
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                     src_colorspace.transfer = PL_COLOR_TRC_HLG;
                     isHDRVideo = true;
                     break;
+
                 case image::EOTFType::EOTF_BT709:
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                     src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
                     break;
+
                 case image::EOTFType::EOTF_BT601:
+                    src_colorspace.primaries = PL_COLOR_PRIM_BT_601_525;
+                    src_colorspace.transfer = PL_COLOR_TRC_BT_1886; 
+                    break;
+
+                case image::EOTFType::EOTF_SRGB: 
                 default:
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                     src_colorspace.transfer = PL_COLOR_TRC_SRGB;
                     break;
                 }
-
+                
                 if (isHDRVideo)
                 {
                     // defaults, generates LUTs if state is set.
@@ -2774,6 +2782,9 @@ namespace tl
                     // SDR video - do not do any gamut or tone mapping
                     cmap.gamut_mapping = nullptr;
                     cmap.tone_mapping_function = nullptr;
+                    
+                    // Kepp hdr max_luma at 100.F
+                    src_colorspace.hdr.max_luma = 100.0f;
                 }
 
                 pl_color_space_infer(&src_colorspace);
@@ -2793,7 +2804,7 @@ namespace tl
                         dst_colorspace.transfer = src_colorspace.transfer;
                         
                         dst_colorspace.hdr.min_luma = 0.F;
-                        dst_colorspace.hdr.max_luma = src_colorspace.hdr.max_luma > 0 ? src_colorspace.hdr.max_luma : 10000.0f;
+                        dst_colorspace.hdr.max_luma = src_colorspace.hdr.max_luma > 0 ? src_colorspace.hdr.max_luma : p.monitorMaxNits;
                         
                         cmap.gamut_mapping = nullptr;
                         cmap.tone_mapping_function = nullptr;

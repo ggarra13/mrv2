@@ -3713,13 +3713,15 @@ namespace mrv
 #else
                 auto path = p.player->player()->getPath();
                 auto extension = path.getExtension();
-                if (file::isMovie(extension) || file::isBT709(extension))
+                if (file::isMovie(extension) || file::isSRGB(extension))
                 {
                     p.hdrOptions.tonemap = true;
                     p.hdrOptions.hdrData = image::nameToPrimaries("709");
+                    p.hdrOptions.hdrData.eotf = image::EOTFType::EOTF_SRGB;
                 }
                 else
                 {
+                    // A linear or HDR image.  Do not tonemap with libplacebo-
                     p.hdrOptions.tonemap = false;
                     p.hdrOptions.hdrData = image::HDRData();
                 }

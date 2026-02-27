@@ -1725,32 +1725,47 @@ namespace tl
 
                     pl_color_space src_colorspace;
                     memset(&src_colorspace, 0, sizeof(pl_color_space));
-                    src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-                    src_colorspace.transfer = PL_COLOR_TRC_PQ;
+                    
+                    bool isHDRVideo = false;
+                    
+                    src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+                    src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
 
-                    bool hasHDR = false;
                     switch (data.eotf)
                     {
-                    case image::EOTFType::EOTF_BT2100_PQ: // PQ (HDR10)
-                    case image::EOTFType::EOTF_BT2020:    // PQ (HDR10)
+                    case image::EOTFType::EOTF_BT2100_PQ: 
+                    case image::EOTFType::EOTF_BT2020:    
+                        src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                         src_colorspace.transfer = PL_COLOR_TRC_PQ;
-                        hasHDR = true;
+                        isHDRVideo = true;
                         break;
-                    case image::EOTFType::EOTF_BT2100_HLG: // HLG
+
+                    case image::EOTFType::EOTF_BT2100_HLG:
+                        src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                         src_colorspace.transfer = PL_COLOR_TRC_HLG;
-                        hasHDR = true;
+                        isHDRVideo = true;
                         break;
+
                     case image::EOTFType::EOTF_BT709:
+                        src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                         src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
                         break;
+
                     case image::EOTFType::EOTF_BT601:
+                        src_colorspace.primaries = PL_COLOR_PRIM_BT_601_525;
+                        src_colorspace.transfer = PL_COLOR_TRC_BT_1886; 
+                        break;
+
+                    case image::EOTFType::EOTF_SRGB: 
                     default:
+                        src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                         src_colorspace.transfer = PL_COLOR_TRC_SRGB;
                         break;
                     }
+                
 
 
-                    if (hasHDR)
+                    if (isHDRVideo)
                     {
                         // defaults, generates LUTs if state is set.
                         switch (p.hdrOptions.gamutMapping)
@@ -1852,7 +1867,7 @@ namespace tl
                         hdr.ootf.num_anchors = data.ootf.numAnchors;
                         for (int i = 0; i < hdr.ootf.num_anchors; i++)
                             hdr.ootf.anchors[i] = data.ootf.anchors[i];
-                    } // hasHDR
+                    } // isHDRVideo
                     else
                     {
                         cmap.gamut_mapping = nullptr;
