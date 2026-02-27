@@ -3711,19 +3711,21 @@ namespace mrv
                 //
                 p.hdrOptions.hdrData = image::HDRData();
 #else
-                auto path = p.player->player()->getPath();
-                auto extension = path.getExtension();
-                if (file::isMovie(extension) ||
-                    file::isSRGB(extension) ||
-                    file::isOTIO(path))
+                const auto path = p.player->player()->getPath();
+                const auto extension = path.getExtension();
+                if (file::isMovie(extension) || file::isOTIO(path))
                 {
                     p.hdrOptions.tonemap = true;
-                    p.hdrOptions.hdrData = image::nameToPrimaries("709");
-                    p.hdrOptions.hdrData.eotf = image::EOTFType::EOTF_SRGB;
+                    p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
+                }
+                else if (file::isSRGB(extension))
+                {
+                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.hdrData = image::nameToPrimaries("SRGB");
                 }
                 else
                 {
-                    // A linear or HDR image.  Do not tonemap with libplacebo-
+                    // A linear or HDR image.  Do not tonemap with libplacebo.
                     p.hdrOptions.tonemap = false;
                     p.hdrOptions.hdrData = image::HDRData();
                 }

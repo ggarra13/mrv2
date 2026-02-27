@@ -122,7 +122,16 @@ namespace tl
                 out.primaries[Blue]  = {0.150F, 0.060F};
                 out.primaries[White] = {0.3127F, 0.3290F};
             }
-            // --- 5. Custom / Film / Others ---
+            // --- 5. SRGB ---
+            else if (name.find("SRGB") != std::string::npos)
+            {
+                out.eotf = EOTF_SRGB;
+                out.primaries[Red]   = {0.640F, 0.330F};
+                out.primaries[Green] = {0.300F, 0.600F};
+                out.primaries[Blue]  = {0.150F, 0.060F};
+                out.primaries[White] = {0.3127F, 0.3290F};
+            }
+            // --- 6. Custom / Film / Others ---
             else if (name.find("FILM") != std::string::npos ||
                      name.find("BT470M") != std::string::npos)
             {
@@ -132,7 +141,7 @@ namespace tl
                 out.primaries[Blue]  = { 0.140F, 0.080F };
                 out.primaries[White] = { 0.310F, 0.316F };
             }
-            // --- 6. SDR Rec. 1886 ---
+            // --- 7. SDR Rec. 1886 ---
             else if (name.find("1886") != std::string::npos)
             {
                 out.eotf = EOTF_BT709;
