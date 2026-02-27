@@ -2782,9 +2782,6 @@ namespace tl
                     // SDR video - do not do any gamut or tone mapping
                     cmap.gamut_mapping = nullptr;
                     cmap.tone_mapping_function = nullptr;
-                    
-                    // Kepp hdr max_luma at 100.F
-                    src_colorspace.hdr.max_luma = 100.0f;
                 }
 
                 pl_color_space_infer(&src_colorspace);
