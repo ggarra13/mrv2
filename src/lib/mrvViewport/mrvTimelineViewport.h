@@ -492,7 +492,7 @@ namespace mrv
             void _togglePixelBar() const noexcept;
 
             void _updatePixelBar() noexcept;
-            void _updatePixelBar(image::Color4f& rgba) const noexcept;
+            void _updatePixelBar(const image::Color4f& rgba) const noexcept;
             bool _shouldUpdatePixelBar() const noexcept;
             bool _isPlaybackStopped() const noexcept;
             bool _isSingleFrame() const noexcept;
