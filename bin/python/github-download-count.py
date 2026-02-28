@@ -470,10 +470,16 @@ def count_sourceforge(repo, folder_name, end_date, start_date):
             r = response.json()
         except Exception as e:
             print(f'Could not get info for folder {folder_name}: {e}')
-            return 0, 0
+            return (mrv2_downloads, vmrv2_downloads,
+                    mrv2_windows_downloads, vmrv2_windows_downloads,
+                    mrv2_linux_downloads, vmrv2_linux_downloads,
+                    mrv2_macos_downloads, vmrv2_macos_downloads)
     except Exception as e:
         print(f'General error getting info for folder {folder_name}: {e}')
-        return 0, 0
+        return (mrv2_downloads, vmrv2_downloads,
+                mrv2_windows_downloads, vmrv2_windows_downloads,
+                mrv2_linux_downloads, vmrv2_linux_downloads,
+                mrv2_macos_downloads, vmrv2_macos_downloads)
 
     if r and 'oses' in r:
         prefix = ''
