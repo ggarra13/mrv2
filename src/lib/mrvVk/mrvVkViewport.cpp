@@ -1553,6 +1553,29 @@ namespace mrv
                 _calculateColorAreaRawValues(info);
         }
 
+        image::Color4f Viewport::_pq_to_nits(const image::Color4f& rgba) const
+        {
+            image::Color4f out = rgba;
+            if (colorSpace() != VK_COLOR_SPACE_HDR10_ST2084_EXT)
+                return out;
+            out.r = color::pqToNits(rgba.r);
+            out.g = color::pqToNits(rgba.g);
+            out.b = color::pqToNits(rgba.b);
+            return out;
+        }
+        
+        image::Color4f Viewport::_pq_to_linear(const image::Color4f& rgba) const
+        {
+            image::Color4f out = rgba;
+            if (colorSpace() != VK_COLOR_SPACE_HDR10_ST2084_EXT)
+                return out;
+            out.r = color::pqToLinear(rgba.r);
+            out.g = color::pqToLinear(rgba.g);
+            out.b = color::pqToLinear(rgba.b);
+            return out;
+        }
+
+        
         void Viewport::_readPixel(image::Color4f& rgba)
         {
 
@@ -1561,7 +1584,8 @@ namespace mrv
 
             math::Vector2i pos = _getRaster();
 
-            if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kOriginal)
+            if (p.ui->uiPixelWindow->uiPixelValue->value() ==
+                PixelValue::kOriginal)
             {
                 if (_isEnvironmentMap())
                     return;
@@ -1619,6 +1643,10 @@ namespace mrv
                 if (_isEnvironmentMap())
                 {
                     pos = _getFocus();
+                    //
+                    // \@todo: On Vulkan, we cannot get the pixel values of the
+                    //         front buffer (ie. the swapchain image).
+                    //
                     // glBindFramebuffer(GL_FRAMEBUFFER, 0);
                     // glReadBuffer(GL_FRONT);
                     // glReadPixels(pos.x, pos.y, 1, 1, GL_RGBA, type,

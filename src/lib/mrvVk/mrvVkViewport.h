@@ -129,6 +129,8 @@ namespace mrv
             void _pushAnnotationShape(const std::string& cmd) const override;
 
             void _readPixel(image::Color4f& rgba) override;
+            image::Color4f _pq_to_nits(const image::Color4f& rgba) const override;
+            image::Color4f _pq_to_linear(const image::Color4f& rgba) const override;
 
             void _drawHelpText() const noexcept;
 

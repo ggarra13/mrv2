@@ -2016,38 +2016,41 @@ namespace mrv
             TLRENDER_P();
 
             image::Color4f rgba = in;
-            image::Color4f nits = rgba;
+            image::Color4f rgba_display = rgba;
 
-#ifdef VULKAN_BACKEND
-            if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kNits)
+            switch(p.ui->uiPixelWindow->uiPixelValue->value())
             {
-                nits.r = color::pqToNits(rgba.r);
-                nits.g = color::pqToNits(rgba.g);
-                nits.b = color::pqToNits(rgba.b);
+            case PixelValue::kLinear:
+                rgba_display = _pq_to_linear(rgba);
+                break;
+            case PixelValue::kNits:
+                rgba_display = _pq_to_nits(rgba);
+                break;
+            default:
+                break;
             }
-#endif
             
             PixelToolBarClass* c = p.ui->uiPixelWindow;
             char buf[24];
             switch (c->uiAColorType->value())
             {
             case kRGBA_Float:
-                c->uiPixelR->value(float_printf(buf, nits.r));
-                c->uiPixelG->value(float_printf(buf, nits.g));
-                c->uiPixelB->value(float_printf(buf, nits.b));
-                c->uiPixelA->value(float_printf(buf, nits.a));
+                c->uiPixelR->value(float_printf(buf, rgba_display.r));
+                c->uiPixelG->value(float_printf(buf, rgba_display.g));
+                c->uiPixelB->value(float_printf(buf, rgba_display.b));
+                c->uiPixelA->value(float_printf(buf, rgba_display.a));
                 break;
             case kRGBA_Hex:
-                c->uiPixelR->value(hex_printf(buf, nits.r));
-                c->uiPixelG->value(hex_printf(buf, nits.g));
-                c->uiPixelB->value(hex_printf(buf, nits.b));
-                c->uiPixelA->value(hex_printf(buf, nits.a));
+                c->uiPixelR->value(hex_printf(buf, rgba_display.r));
+                c->uiPixelG->value(hex_printf(buf, rgba_display.g));
+                c->uiPixelB->value(hex_printf(buf, rgba_display.b));
+                c->uiPixelA->value(hex_printf(buf, rgba_display.a));
                 break;
             case kRGBA_Decimal:
-                c->uiPixelR->value(dec_printf(buf, nits.r));
-                c->uiPixelG->value(dec_printf(buf, nits.g));
-                c->uiPixelB->value(dec_printf(buf, nits.b));
-                c->uiPixelA->value(dec_printf(buf, nits.a));
+                c->uiPixelR->value(dec_printf(buf, rgba_display.r));
+                c->uiPixelG->value(dec_printf(buf, rgba_display.g));
+                c->uiPixelB->value(dec_printf(buf, rgba_display.b));
+                c->uiPixelA->value(dec_printf(buf, rgba_display.a));
                 break;
             }
 

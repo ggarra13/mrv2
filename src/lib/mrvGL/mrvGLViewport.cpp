@@ -1119,10 +1119,16 @@ namespace mrv
             info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b = info.hsv.mean.a =
                               0.F;
 
-            if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull)
+            switch(p.ui->uiPixelWindow->uiPixelValue->value())
+            {
+            case PixelValue::kFull:
+            case PixelValue::kLinear:
+            case PixelValue::kNits:
                 _calculateColorAreaFullValues(info);
-            else
+                break;
+            default:
                 _calculateColorAreaRawValues(info);
+            }
         }
 
         void Viewport::_mapBuffer() const noexcept
@@ -1253,7 +1259,8 @@ namespace mrv
 
             math::Vector2i pos = _getRaster();
 
-            if (p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kFull)
+            if (p.ui->uiPixelWindow->uiPixelValue->value() ==
+                PixelValue::kOriginal)
             {
                 if (_isEnvironmentMap())
                     return;

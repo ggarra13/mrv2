@@ -60,6 +60,12 @@ namespace mrv
     
             return 10000.0f * powf(num / den, 1.0f / m1);
         }
+
+        inline float pqToLinear(float v, const float reference_white = 100.F)
+        {
+            float nits = pqToNits(v);
+            return nits / reference_white;
+        }
         
         extern Imath::V3f kD50_whitePoint;
         extern Imath::V3f kD65_whitePoint;

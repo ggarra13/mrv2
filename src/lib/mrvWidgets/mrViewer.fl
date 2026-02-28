@@ -362,8 +362,9 @@ ui->uiView->redraw();}
             label F
             callback {select_character(uiPixelValue);
 ui->uiView->updatePixelBar();
-ui->uiView->redraw();} open selected
+ui->uiView->redraw();} open
             tooltip {Displays:
+* Linear (Gamma, Gain and LUT in a linear scale where 1.0 is SDR white).    
 * Full Pixel Values (Gamma, Gain and LUT)
 * Original (No Gamma, No Gain, No Lut)
 * Nits Pixel Values (Monitor units in Vulkan)} xywh {474 3 27 25} align 48
@@ -371,8 +372,12 @@ ui->uiView->redraw();} open selected
             class {mrv::PopupMenu}
           } {
             MenuItem {} {
-              label Full
+              label Linear selected
               xywh {15 15 100 20}
+            }
+            MenuItem {} {
+              label Full
+              xywh {25 25 100 20}
             }
             MenuItem {} {
               label Original

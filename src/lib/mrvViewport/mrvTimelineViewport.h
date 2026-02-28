@@ -434,6 +434,8 @@ namespace mrv
             void _updateDevices() const noexcept;
 
             virtual void _readPixel(image::Color4f& rgba) = 0;
+            virtual image::Color4f _pq_to_nits(const image::Color4f& rgba) const { return rgba; }
+            virtual image::Color4f _pq_to_linear(const image::Color4f& rgba) const { return rgba; }
             math::Vector2i _getViewportCenter() const noexcept;
 
             math::Vector2i _getFocus(int X, int Y) const noexcept;
