@@ -264,7 +264,7 @@ def get_github_downloads(user, repo, tag):
     formatted_vmrv2_linux_total = format_number(vmrv2_linux_total_count, 5)
     print(f'{formatted_vmrv2_linux_total} vmrv2 Linux Downloads (All Archs)')
     formatted_vmrv2_macos_total = format_number(vmrv2_macos_total_count, 5)
-    print(f'{formatted_mrv2_macos_total} vmrv2 MacOS Downloads (All Archs)')
+    print(f'{formatted_vmrv2_macos_total} vmrv2 MacOS Downloads (All Archs)')
 
     
     print()
