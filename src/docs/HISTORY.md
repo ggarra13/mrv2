@@ -57,6 +57,7 @@ ChangeLog
  - Made common sRGB formats tonemap automatically under Vulkan.  Linear or floating point images need to use the proper OpenColorIO transforms.
  - Added isOTIO to the list of sRGB formats to tonemap automatically under Vulkan.
  - Added NITS to one of the Pixel Color Values you can display in the Pixel Bar besides Full and Original.
+ - Fixed Channel switching (ie. Red, Green, Blue, Luma) on OpenEXRs which had gotten broken on Vulkan backend.
  
 
 v1.5.5

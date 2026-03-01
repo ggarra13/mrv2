@@ -1003,7 +1003,9 @@ namespace mrv
             }
             else
             {
-                p.hdrOptions.tonemap = true;
+                if (!p.videoData.empty() && !p.videoData[0].layers.empty() &&
+                    p.videoData[0].layers[0].image)
+                    _getHDR();
             }
             
             redraw();
