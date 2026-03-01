@@ -6,7 +6,7 @@ message(STATUS "USD DEPENDENCIES=${USD_DEPENDENCIES}")
 
 set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
 
-set(USD_GIT_TAG v25.11)
+set(USD_GIT_TAG v26.03)  # was v25.11
 
 #
 # If you are building a new USD version, make sure to run:
