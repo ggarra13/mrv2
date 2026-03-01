@@ -60,10 +60,15 @@ namespace mrv
     
     void Vectorscope::resize(int X, int Y, int W, int H)
     {
+        TLRENDER_P();
+        
         W = std::min(W, H);
         H = W;
         if (W < 270) W = 270;
         if (H < 270) H = 270;
+        
+        p.diameter = H;
+
         Fl_Group::resize(X, Y, W, H);
     }
 
@@ -72,10 +77,6 @@ namespace mrv
     {
         TLRENDER_P();
         fl_rectf(x(), y(), w(), h(), 0, 0, 0);
-
-        p.diameter = h();
-        if (w() < p.diameter)
-            p.diameter = w();
 
         draw_grid();
         if (p.image)
@@ -163,7 +164,16 @@ namespace mrv
         const uint8_t r = color.r * 255.F;
         const uint8_t g = color.g * 255.F;
         const uint8_t b = color.b * 255.F;
-        fl_rectf(pos.x, pos.y, 1, 1, r, g, b);
+        int pixel_size = p.diameter / 270;
+        if (pixel_size <= 1)
+        {
+            fl_rectf(pos.x, pos.y, 1, 1, r, g, b);
+        }
+        else
+        {
+            fl_rectf(pos.x - pixel_size / 2, pos.y - pixel_size / 2,
+                     pixel_size, pixel_size, r, g, b);
+        }
     }
 
     void Vectorscope::draw_pixels() const noexcept
