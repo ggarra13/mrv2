@@ -1003,9 +1003,7 @@ namespace mrv
             }
             else
             {
-                if (!p.videoData.empty() && !p.videoData[0].layers.empty() &&
-                    p.videoData[0].layers[0].image)
-                    _getHDR();
+                _getHDR();
             }
             
             redraw();
@@ -3708,6 +3706,12 @@ namespace mrv
         {
             TLRENDER_P();
 
+            if (p.videoData.empty() || p.videoData[0].layers.empty() ||
+                !p.videoData[0].layers[0].image)
+            {
+                return;
+            }
+                    
             auto hdrData = p.videoData[0].layers[0].image->getHDR();
             if (hdrData)
             {
