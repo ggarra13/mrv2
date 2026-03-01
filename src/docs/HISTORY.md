@@ -60,6 +60,7 @@ ChangeLog
  - Fixed Channel switching (ie. Red, Green, Blue, Luma) on OpenEXRs which had gotten broken.
  - Fixed Vectorscope placing colors in the wrong direction.
  - Improved Vectorscope by allowing it to be resizable.
+ - Made current time in timeline reposition itself if it would clip outside the window.
  
 
 v1.5.5
