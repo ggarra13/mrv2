@@ -57,6 +57,16 @@ namespace mrv
     {
         return _p->ui;
     }
+    
+    void Vectorscope::resize(int X, int Y, int W, int H)
+    {
+        W = std::min(W, H);
+        H = W;
+        if (W < 270) W = 270;
+        if (H < 270) H = 270;
+        Fl_Group::resize(X, Y, W, H);
+    }
+
 
     void Vectorscope::draw()
     {

@@ -59,6 +59,7 @@ ChangeLog
  - Added NITS to one of the Pixel Color Values you can display in the Pixel Bar besides Full and Original.
  - Fixed Channel switching (ie. Red, Green, Blue, Luma) on OpenEXRs which had gotten broken.
  - Fixed Vectorscope placing colors in the wrong direction.
+ - Improved Vectorscope by allowing it to be resizable.
  
 
 v1.5.5
