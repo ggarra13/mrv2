@@ -51,6 +51,7 @@ export CMAKE_FLAGS=""
 export BUILD_PYTHON=OFF   # needed for meson install
 
 export MRV2_CPPTRACE=ON
+export MRV2_VK=OFF
 
 export TLRENDER_AOM=OFF
 export TLRENDER_AV1=OFF
