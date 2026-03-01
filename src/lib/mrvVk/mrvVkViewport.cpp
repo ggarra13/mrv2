@@ -1546,11 +1546,16 @@ namespace mrv
             info.hsv.mean.r = info.hsv.mean.g = info.hsv.mean.b =
                 info.hsv.mean.a = 0.F;
 
-            if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull ||
-                p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kNits)
+            switch(p.ui->uiPixelWindow->uiPixelValue->value())
+            {
+            case PixelValue::kLinear:
+            case PixelValue::kFull:
+            case PixelValue::kNits:
                 _calculateColorAreaFullValues(info);
-            else
+                break;
+            default:
                 _calculateColorAreaRawValues(info);
+            }
         }
 
         image::Color4f Viewport::_pq_to_nits(const image::Color4f& rgba) const
@@ -1683,9 +1688,12 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-            
-            if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull ||
-                p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kNits)
+
+            switch(p.ui->uiPixelWindow->uiPixelValue->value())
+            {
+            case PixelValue::kLinear:
+            case PixelValue::kFull:
+            case PixelValue::kNits:
             {
                     
                 const math::Box2i box = p.colorAreaInfo.box;
@@ -1719,11 +1727,14 @@ namespace mrv
                 }
                 
                 p.rawImage = false;
+                break;
             }
-            else
+            default:
             {
                 _unmapBuffer();
                 TimelineViewport::_mapBuffer();
+                break;
+            }
             }
         }
 

@@ -124,33 +124,23 @@ namespace mrv
         if (color.b > 1.F)
             color.b = 1.F;
 
-#ifdef VULKAN_BACKEND
-        const uint8_t r = color.r * 255.F;
-        const uint8_t g = color.g * 255.F;
-        const uint8_t b = color.b * 255.F;
-#elif OPENGL_BACKEND
-        const uint8_t b = color.r * 255.F;
-        const uint8_t g = color.g * 255.F;
-        const uint8_t r = color.b * 255.F;
-#else
-        const uint8_t r = color.r * 255.F;
-        const uint8_t g = color.g * 255.F;
-        const uint8_t b = color.b * 255.F;
-#endif
-
         image::Color4f hsv = color::rgb::to_hsv(color);
 
         int W = p.diameter / 2;
         int H = p.diameter / 2;
-
-#ifdef __linux__
+        
         M44f m;
 
         // Translate to center
         m.translate(V3f(x() + W, y() + H, 0));
 
-        // Rotate base on hue
-        m.rotate(V3f(0, 0, math::deg2rad(-15.0 - hsv.r * 360.0f)));
+        // Rotate based on hue
+        // m.rotate(V3f(0, 0, math::deg2rad(105.0F + hsv.r * 360.0F)));
+
+        constexpr float kOffset = 7.0f * M_PI / 12.0f;   // 105°
+        constexpr float kFullTurn = 2.0f * M_PI;         // 360°
+
+        m.rotate(V3f(0, 0, kOffset + hsv.r * kFullTurn));
 
         // Scale based on saturation
         float s = hsv.g * 0.375f;
@@ -160,27 +150,10 @@ namespace mrv
 
         pos = pos * m;
 
+        const uint8_t r = color.r * 255.F;
+        const uint8_t g = color.g * 255.F;
+        const uint8_t b = color.b * 255.F;
         fl_rectf(pos.x, pos.y, 1, 1, r, g, b);
-#else
-        fl_push_matrix();
-
-        // Position at center of circle
-        fl_translate(x() + W, y() + H);
-
-        // Rotate base on hue
-        fl_rotate(15.0 + hsv.r * 360.0f);
-
-        // Scale based on saturation
-        float s = hsv.g * 0.375f;
-        fl_scale(s, s);
-
-        fl_color(r, g, b);
-        fl_begin_points();
-        fl_vertex(0, p.diameter);
-        fl_end_points();
-
-        fl_pop_matrix();
-#endif
     }
 
     void Vectorscope::draw_pixels() const noexcept
