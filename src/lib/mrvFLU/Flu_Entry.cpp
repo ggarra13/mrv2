@@ -770,9 +770,10 @@ void Flu_Entry::inputCB()
         // build the total old filename and new filename
         std::string oldName = chooser->currentDir + filename,
                     newName = chooser->currentDir + value();
+
         // see if new name already exists
-        int result = fs::exists(newName);
-        if (result == 0)
+        bool result = fs::exists(newName);
+        if (result)
         {
             mrv::fl_alert(
                 Flu_File_Chooser::fileExistsErrTxt.c_str(), newName.c_str());

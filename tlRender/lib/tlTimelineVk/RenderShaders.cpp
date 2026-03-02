@@ -155,9 +155,9 @@ void main()
         }
 
         const std::string videoLevels = R"(
-              // enum tl::image::VideoLevels
-              const uint VideoLevels_FullRange  = 0;
-              const uint VideoLevels_LegalRange = 1;
+// enum tl::image::VideoLevels
+const uint VideoLevels_FullRange  = 0;
+const uint VideoLevels_LegalRange = 1;
 )";
 
         std::string imageFragmentSource()
@@ -478,9 +478,12 @@ vec4 levelsFunc(vec4 value, Levels data)
 {
     vec4 tmp;
     float levelsRange = data.inHigh - data.inLow;
-    tmp[0] = clamp((value[0] - data.inLow) / levelsRange, 0, 1);
-    tmp[1] = clamp((value[1] - data.inLow) / levelsRange, 0, 1);
-    tmp[2] = clamp((value[2] - data.inLow) / levelsRange, 0, 1);
+    if (levelsRange > 0)
+    {
+      tmp[0] = clamp((value[0] - data.inLow) / levelsRange, 0, 1);
+      tmp[1] = clamp((value[1] - data.inLow) / levelsRange, 0, 1);
+      tmp[2] = clamp((value[2] - data.inLow) / levelsRange, 0, 1);
+   }
     if (tmp[0] >= 0.0)
         tmp[0] = pow(tmp[0], data.gamma);
     if (tmp[1] >= 0.0)

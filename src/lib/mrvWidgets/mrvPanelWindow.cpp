@@ -328,6 +328,9 @@ namespace mrv
             }
             else
             {
+                if (label == _("Vectorscope"))
+                {
+                }
                 settings->setValue(key, 0);
             }
 

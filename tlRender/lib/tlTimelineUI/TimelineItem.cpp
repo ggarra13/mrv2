@@ -1242,13 +1242,30 @@ namespace tl
 
                 const std::string label =
                     _data->timeUnitsModel->getLabel(p.currentTime);
+                
+                math::Vector2i labelPos(
+                    pos.x + p.size.border * 2 + p.size.margin,
+                    pos.y + p.size.margin + p.size.fontMetrics.ascender);
+
+                // Re-position time label to the left it its size would go out of
+                // the window.
+                const math::Size2i labelSize = event.fontSystem->getSize(label, p.size.fontInfo);
+                if (labelPos.x + labelSize.w > g.max.x)
+                {
+                    const math::Vector2i labelPos2(
+                        pos.x - p.size.border * 2 - p.size.margin - labelSize.w,
+                        pos.y + p.size.margin + p.size.fontMetrics.ascender);
+                    if (labelPos2.x > g.min.x)
+                    {
+                        labelPos = labelPos2;
+                    }
+                }
+                
                 std::vector<timeline::TextInfo> textInfos;
                 event.render->appendText(textInfos,
                                          event.fontSystem->getGlyphs(
                                              label, p.size.fontInfo),
-                                         math::Vector2i(
-                                             pos.x + p.size.border * 2 + p.size.margin,
-                                             pos.y + p.size.margin + p.size.fontMetrics.ascender));
+                                         labelPos);
                             
                 for (const auto& textInfo : textInfos)
                 {

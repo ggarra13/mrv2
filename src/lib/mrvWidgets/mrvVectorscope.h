@@ -28,6 +28,8 @@ namespace mrv
 
         void update(const area::Info& info);
 
+        void resize(int X, int Y, int W, int H) override;
+        
         void main(ViewerUI* m);
         ViewerUI* main();
 

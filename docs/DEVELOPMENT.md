@@ -108,29 +108,47 @@ Development Instructions
 src/icons
 	Original SVG icons in .svg format.
 
+tlRender/lib/
+	tlCore		   - Core tlRender classes.
+	tlDevice  	   - Device classes (NDI)
+	tlDraw        	   - Annotation Drawing classes.
+	tlGL	       	   - Base OpenGL classes
+	tlIO	       	   - I/O Plugin classes.
+	tlTimeline     	   - OpenTimelineIO Timeline classes.
+	tlTimelineGL	   - OpenGL Timeline drawing and tonemapping classes.
+	tlTimelineUI	   - OpenGL and Vulkan Timeline drawing/editing classes.
+	tlTimelineVK	   - Vulkan Timeline drawing and HDR classes.
+	tlUI               - Legacy GLFW drawing classes (may be removed)
+	tlVk		   - Base Vulkan classes
+	
+
 src/lib:
 
-	mrvApp     - Main application, command-line parsing and settings.
-	mrvCore    - Core functionality.
-	mrvDraw    - Annotation Drawing classes.
-	mrvEdit    - Editing callbacks and functions.
-	mrvIcons   - Binary SVG icons for faster loading.
-	mrvFl      - mrv2's classes for different functions 
-	             (needs refactoring).
-	mrvFlmm    - Mathias Melcher's Flmm_ColorA_Chooser.
-	mrvFLU     - mrv2's custom file chooser (based on origina FLU
-	             file chooser).  Needs refactoring and code cleanup.
-	mrvGL      - OpenGL driver classes.
-	mrvNetwork - Network classes.
-	mrvOptions - Options classes for mrv2's custom code.
-	mrvPanels  - All of mrv2's Docking Panels/Windows.
-	mrvPDF     - PDF exporting classes.  Needs updating to FLTK's new
-		         PDF classes (don't work under Windows 8.1 thou)?
-	mrvPy      - Python (pybind11) code.  Must remove mrv2 namespace.
-	mrvUI      - Menus, Desktop and SVG loading functions.
-	mrvViewport- Viewport functions common to all backends.
-	mrvWidgets - FLTK custom widgets and main fluid UI (.fl) files.
-	             .fl files should be refactored to mrvUI?
+	mrvApp		- Main application, command-line parsing and settings.
+	mrvCore    	- Core functionality.
+	mrvEdit    	- Editing callbacks and functions.
+	mrvIcons   	- Binary SVG icons for faster loading.
+	mrvFl      	- mrv2's classes for different functions 
+	             	(needs refactoring).
+	mrvFlmm    	- Mathias Melcher's Flmm_ColorA_Chooser.
+	mrvFLU     	- mrv2's custom file chooser (based on origina FLU
+	             	file chooser).  Needs refactoring and code cleanup.
+	mrvGL      	- OpenGL driver classes.
+	mrvHDR		- HDR support libraries for 'hdr' utility.
+	mrvHDRWidgets   - Main UI of 'hdr' utility.
+	mrvNetwork 	- Network classes.
+	mrvOptions 	- Options classes for mrv2's custom code.
+	mrvPanels  	- All of mrv2's Docking Panels/Windows.
+	mrvPDF     	- PDF exporting classes.  Needs updating to FLTK's new
+		          PDF classes.
+	mrvPy		- Python (pybind11) code.  Must remove mrv2 namespace.
+	mrvUI      	- Menus, Desktop and SVG loading functions.
+	mrvViewport	- Viewport functions common to all backends.
+	mrvWidgets 	- FLTK custom widgets and main fluid UI (.fl) files.
+	             	.fl files should be refactored to mrvUI?
+
+src/hdr:
+	Main entry point for 'hdr' NDI utility.
 
 src/main:
 

@@ -1003,7 +1003,7 @@ namespace mrv
             }
             else
             {
-                p.hdrOptions.tonemap = true;
+                _getHDR();
             }
             
             redraw();
@@ -3706,6 +3706,12 @@ namespace mrv
         {
             TLRENDER_P();
 
+            if (p.videoData.empty() || p.videoData[0].layers.empty() ||
+                !p.videoData[0].layers[0].image)
+            {
+                return;
+            }
+                    
             auto hdrData = p.videoData[0].layers[0].image->getHDR();
             if (hdrData)
             {
@@ -3715,7 +3721,7 @@ namespace mrv
             }
             else
             {
-#if _WIN32
+#ifdef _WIN32
                 // When we have BT709 or OpenEXR linear data we must tonemap
                 // it with OpenColorIO and not use libplacebo.
                 p.hdrOptions.tonemap = false;
@@ -3740,9 +3746,12 @@ namespace mrv
                 }
                 else
                 {
-                    // A linear or HDR image.  Do not tonemap with libplacebo.
+                    // A linear or log image.  Do not tonemap with libplacebo.
                     p.hdrOptions.tonemap = false;
-                    p.hdrOptions.hdrData = image::HDRData();
+
+                    // We pass BT709 metadata unless OCIO changes it in
+                    // Viewport::_updateHDRMetadata().
+                    p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
                 }
 #endif
             }

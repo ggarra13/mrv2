@@ -66,7 +66,7 @@ namespace mrv
             r.vectorscope = new Vectorscope(X, Y, 270, 270);
             r.vectorscope->main(p.ui);
 
-            g->resizable(g);
+            g->resizable(r.vectorscope);
         }
 
         void VectorscopePanel::update(const area::Info& info)
