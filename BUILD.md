@@ -77,8 +77,6 @@ scl enable gcc-toolset-14 bash
 curl https://sh.rustup.rs -sSf | sh
 source "$HOME/.cargo/env"
 
-cargo install cargo-c
-
 ```
 
 ### Ubuntu
@@ -112,8 +110,6 @@ sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 curl https://sh.rustup.rs -sSf | sh
 source "$HOME/.cargo/env"
 
-cargo install cargo-c
-
 ```
 
 ### macOS
@@ -139,8 +135,6 @@ brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite
 #
 curl https://sh.rustup.rs -sSf | sh
 source "$HOME/.cargo/env"
-
-cargo install cargo-c
 
 ```
 
@@ -192,7 +186,7 @@ git config --global core.longpaths true
 # Build cargo-c
 #
 cargo install cargo-c
-
+ 
 cd mrv2
 ./runme.sh
 ```

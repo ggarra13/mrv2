@@ -1,4 +1,4 @@
-mrv2 v1.5.5: Professional VFX Review for Everyone
+mrv2 v1.5.6: Professional VFX Review for Everyone
 ================================
 
 I'm excited to announce the latest update to mrv2 and vmrv2 -- the open-source, high-performance professional players and review tools for the VFX, Animation and CG communities.
@@ -10,7 +10,7 @@ Two Engines, One Goal
 
 We now ship in two specialized versions to fit your hardware:
 
-* mrv2 (OpenGL): Robust, reliable and widely compatible
+* mrv2 (OpenGL): Robust, reliable and widely compatible.
 * vmrv2 (Vulkan): Cutting-edge performance with support for Dynamic HDR.
 
 Choose your Tier
