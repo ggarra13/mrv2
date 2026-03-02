@@ -255,8 +255,8 @@ namespace tl
                             otime::RationalTime(
                                 _timeRange.start_time().value() +
                                     (w > 0 ? (x / static_cast<double>(w)) : 0) *
-                                        _timeRange.duration().value(),
-                                _timeRange.duration().rate())
+                                _timeRange.duration().rescaled_to(_timeRange.start_time()).value(),
+                                _timeRange.start_time().rate())
                                 .round();
                         const otime::RationalTime time2 =
                             otime::RationalTime(
@@ -265,14 +265,24 @@ namespace tl
                                                _displayOptions.waveformWidth) /
                                               static_cast<double>(w))
                                            : 0) *
-                                        _timeRange.duration().value(),
-                                _timeRange.duration().rate())
+                                _timeRange.duration().rescaled_to(_timeRange.start_time()).value(),
+                                _timeRange.start_time().rate())
                                 .round();
+                        otime::TimeRange trimmedRange = _trimmedRange;
+                        if (trimmedRange.start_time() < p.ioInfo->audioTime.start_time())
+                        {
+                            //! \bug If the trimmed range is less than the media time,
+                            //! assume the media time is wrong (e.g., ALab trailer) and
+                            //! compensate for it.
+                            trimmedRange = otime::TimeRange(
+                                p.ioInfo->audioTime.start_time() + trimmedRange.start_time(),
+                                trimmedRange.duration());
+                        }
                         const otime::TimeRange mediaRange =
                             timeline::toAudioMediaTime(
                                 otime::TimeRange::range_from_start_end_time(
                                     time, time2),
-                                _timeRange, _trimmedRange,
+                                _timeRange, trimmedRange,
                                 p.ioInfo->audio.sampleRate);
 
                         const std::string cacheKey = io::getAudioCacheKey(
