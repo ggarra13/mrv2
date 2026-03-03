@@ -175,6 +175,8 @@ Open the Start Menu, search for PowerShell, right-click it, and select Run as Ad
 
 ```
 New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+
+winget install -e --id Ccache.Ccache
 ```
 
 On an the MSys terminal, clone the repository:
