@@ -170,7 +170,7 @@ def get_github_downloads(user, repo, tag):
     """
     if not user or not repo:
         print("Skipping GitHub downloads: Both user and repository must be provided.")
-        return 0, 0
+        return 0, 0, 0, 0, 0, 0, 0, 0
 
     full_name = f"{user}/{repo}"
     print(f"--- GitHub Downloads for {full_name} ---")

@@ -80,8 +80,8 @@ namespace tl
             if (auto composition =
                     dynamic_cast<const otio::Composition*>(composable))
             {
-                if (!composition->enabled())
-                    return false;
+                // if (!composition->enabled())
+                //     return false;
 
                 for (const auto& child : composition->children())
                 {
@@ -691,20 +691,6 @@ namespace tl
                     io::Options options = ioOptions;
                     options["SequenceIO/DefaultSpeed"] =
                         string::Format("{0}").arg(timeRange.duration().rate());
-                    otio::ErrorStatus error;
-                    otime::RationalTime startTime = time::invalidTime;
-                    const otime::TimeRange availableRange =
-                        clip->available_range(&error);
-                    if (!otio::is_error(error))
-                    {
-                        startTime = availableRange.start_time();
-                    }
-                    else if (clip->source_range().has_value())
-                    {
-                        startTime = clip->source_range().value().start_time();
-                    }
-                    options["FFmpeg/StartTime"] =
-                        string::Format("{0}").arg(startTime);
                     const auto ioSystem = context->getSystem<io::System>();
                     out = ioSystem->read(path, memoryRead, options);
                     readCache.add(key, out);
@@ -746,8 +732,18 @@ namespace tl
             if (read && timeRangeOpt.has_value())
             {
                 const io::Info& ioInfo = read->getInfo().get();
+                otime::TimeRange trimmedRange = clip->trimmed_range();
+                if (trimmedRange.start_time() < ioInfo.audioTime.start_time())
+                {
+                    //! \bug If the trimmed range is less than the media time,
+                    //! assume the media time is wrong (e.g., ALab trailer) and
+                    //! compensate for it.
+                    trimmedRange = OTIO_NS::TimeRange(
+                        ioInfo.audioTime.start_time() + trimmedRange.start_time(),
+                        trimmedRange.duration());
+                }
                 const auto mediaRange = timeline::toAudioMediaTime(
-                    timeRange, timeRangeOpt.value(), clip->trimmed_range(),
+                    timeRange, timeRangeOpt.value(), trimmedRange,
                     ioInfo.audio.sampleRate);
                 out = read->readAudio(mediaRange, optionsMerged);
             }

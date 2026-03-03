@@ -1,4 +1,4 @@
-v1.5.6
+v1.5.7
 ======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
@@ -43,6 +43,17 @@ They do have, however:
     - Saving Images and Movies with Audio
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+- Upgraded to OpenUSD v26.03.
+- Upgraded to OpenEXR v3.4.6.
+- Fixed audio playback of ALab .otio trailer.
+
+
+v1.5.6
+======
 
 ChangeLog
 ---------
