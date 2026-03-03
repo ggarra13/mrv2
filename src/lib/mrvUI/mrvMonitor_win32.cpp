@@ -271,13 +271,13 @@ namespace mrv
                             local_cap.supported = (desc1.MaxLuminance > 100.0f);
                             
                             // Check if HDR is active based on current color space
-                            bool enabled = false;
+                            local_cap.enabled = false;
                             switch (desc1.ColorSpace) {
                             case DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_G2084_LEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_GHLG_TOPLEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_FULL_GHLG_TOPLEFT_P2020:
-                                enabled = true;
+                                local_cap.enabled = true;
                                 break;
                             default:
                                 break;

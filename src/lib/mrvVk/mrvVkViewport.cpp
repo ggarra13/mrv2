@@ -465,7 +465,7 @@ namespace mrv
             
             p.screen_index = this->screen_num();
             p.hdrCapabilities = getHDRCapabilities(p.screen_index);
-            if (valid_colorspace)
+            if (valid_colorspace && p.hdrCapabilities.enabled)
             {
                 p.hdrMonitorFound = true;
                 LOG_STATUS(_("HDR monitor found."));
@@ -708,7 +708,8 @@ namespace mrv
                 // If we changed screen from an HDR to an SDR one, or one with
                 // different nits settings, recreate the Vulkan swapchain.
                 auto hdr = getHDRCapabilities(this->screen_num());
-                if (hdr.supported != p.hdrCapabilities.supported ||
+                if (hdr.enabled != p.hdrCapabilities.enabled ||
+                    hdr.supported != p.hdrCapabilities.supported ||
                     hdr.min_nits != p.hdrCapabilities.min_nits ||
                     hdr.max_nits != p.hdrCapabilities.max_nits)
                 {

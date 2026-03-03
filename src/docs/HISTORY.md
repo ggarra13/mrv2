@@ -50,6 +50,7 @@ ChangeLog
 - Upgraded to OpenUSD v26.03.
 - Upgraded to OpenEXR v3.4.6.
 - Fixed audio playback of ALab .otio trailer.
+- Fixed colors of playing SDR videos on Windows when HDR was enabled.
 
 
 v1.5.6

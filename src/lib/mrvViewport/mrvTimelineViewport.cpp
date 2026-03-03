@@ -3721,17 +3721,6 @@ namespace mrv
             }
             else
             {
-#ifdef _WIN32
-                // When we have BT709 or OpenEXR linear data we must tonemap
-                // it with OpenColorIO and not use libplacebo.
-                p.hdrOptions.tonemap = false;
-                
-                //
-                // We set hdrData to BT2020's defaults and will change it
-                // later based on what OCIO Display/View the user sets up.
-                //
-                p.hdrOptions.hdrData = image::HDRData();
-#else
                 const auto path = p.player->player()->getPath();
                 const auto extension = path.getExtension();
                 if (file::isMovie(extension) || file::isOTIO(path))
@@ -3753,7 +3742,6 @@ namespace mrv
                     // Viewport::_updateHDRMetadata().
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
                 }
-#endif
             }
         }
         

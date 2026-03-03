@@ -75,6 +75,7 @@ namespace mrv {
                     // If the multiplier is > 1.0, it's an HDR-capable display
                     if (headroom > 1.0) {
                         caps.supported = true;
+                        caps.enabled = true;
                         // Only override EDID if EDID failed to provide a max_nits value
                         if (caps.max_nits <= 0.0f) {
                             caps.max_nits = headroom * 100.0f; 

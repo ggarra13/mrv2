@@ -589,7 +589,7 @@ namespace mrv
         p.screen_index = this->screen_num();
         p.hdrCapabilities = getHDRCapabilities(p.screen_index);
         
-        if (valid_colorspace && p.hdrCapabilities.supported)
+        if (valid_colorspace && p.hdrCapabilities.enabled)
         {
             p.hdrMonitorFound = true;
             LOG_STATUS(_("HDR monitor found."));

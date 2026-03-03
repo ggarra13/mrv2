@@ -127,6 +127,12 @@ namespace mrv
                         if (!edid_data.empty()) {
                             out = monitor::parseEDIDLuminance(edid_data.data(), edid_data.size());
                         }
+                        
+                        // \@todo: How to check HDR is enabled?
+                        if (out.supported)
+                        {
+                            out.enabled = out.supported;
+                        }
 
                         if (screen_index != -1) {
                             // Target Mode: Return this specific monitor's status
