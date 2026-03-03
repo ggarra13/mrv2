@@ -58,7 +58,7 @@ sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
 	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel \
-	       swig
+	       swig ccache
 
 sudo dnf install vulkan-headers vulkan-loader-devel glslang-devel spirv-tools spirv-headers
 
@@ -99,7 +99,7 @@ sudo apt -y install curl build-essential perl git cmake ninja-build \
 		    libpulse-dev libssl-dev libffi-dev \
 		    libwayland-dev wayland-protocols libdbus-1-dev \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
-                    doxygen tk-dev libxt-dev swig
+                    doxygen tk-dev libxt-dev swig ccache
 
 sudo apt -y install libvulkan-dev glslang-dev spirv-tools spirv-headers libshaderc-dev
 
@@ -132,7 +132,7 @@ xcode-select --install
 #
 # Install dependencies
 #
-brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite3 xz zlib
+brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite3 xz zlib ccache
 
 #
 # rustup for cargo (needed for libdovi)
