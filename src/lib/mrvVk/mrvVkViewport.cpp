@@ -115,7 +115,7 @@ namespace mrv
 
         int Viewport::log_level() const
         {
-            return 6;
+            return 0;
         }
 
         void Viewport::setSaveOverlay(bool value)
