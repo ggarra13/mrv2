@@ -221,6 +221,10 @@ namespace mrv
                         if (!edid_data.empty())
                         {
                             out = monitor::parseEDIDLuminance(edid_data.data(),  edid_data.size());
+
+                            // \@bug: howw to handle enabled here
+                            out.enabled = out.supported;
+                            
                             return out;
                         }
                         
