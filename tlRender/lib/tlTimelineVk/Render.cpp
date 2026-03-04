@@ -2836,6 +2836,14 @@ namespace tl
                     {
                         dst_colorspace.transfer = PL_COLOR_TRC_PQ;
                     }
+                    
+                    const struct pl_raw_primaries* raw =
+                        pl_raw_primaries_get(PL_COLOR_PRIM_DISPLAY_P3);
+
+                    dst_colorspace.hdr.prim.red = raw->red;
+                    dst_colorspace.hdr.prim.green = raw->green;
+                    dst_colorspace.hdr.prim.blue = raw->blue;
+                    dst_colorspace.hdr.prim.white = raw->white;
                 }
                 else
                 {

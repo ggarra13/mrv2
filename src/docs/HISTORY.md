@@ -53,6 +53,7 @@ ChangeLog
 - Fixed colors of playing SDR videos on Windows when HDR was enabled.
 - Added a convenient option, mainly for HDR, in Preferences->OCIO->No OCIO on Videos or SDR/RGB data to turn off OCIO automatically, mainly when playing videos or showing sRGB images.
 - On Vulkan on Linux, when swapchain is VK_COLOR_SPACE_SRGB_NONLINEAR_KHR, try to use the best format like VK_FORMAT_A2R10G10B10_UNORM_PACK32 if possible.
+- Windows Vulkan now uses P3 color primitives by default, until we extract them from EDID or DXGI.
 
 
 v1.5.6
