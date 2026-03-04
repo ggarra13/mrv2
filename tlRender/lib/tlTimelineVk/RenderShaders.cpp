@@ -398,6 +398,7 @@ layout(location = 0) out vec4 outColor;
 
 
 layout(binding = 1) uniform sampler2D textureSampler;
+layout(binding = 2) uniform sampler2D blueNoiseSampler;
 
 {0}
 
@@ -419,7 +420,7 @@ struct Levels
     float outHigh;
 };
 
-layout(set = 0, binding = 2, std140) uniform LevelsUBO
+layout(set = 0, binding = 3, std140) uniform LevelsUBO
 {
   Levels data;
 } uboLevels;
@@ -431,7 +432,7 @@ struct Normalize
     vec4 maximum;
 };
 
-layout(set = 0, binding = 3, std140) uniform NormalizeUBO
+layout(set = 0, binding = 4, std140) uniform NormalizeUBO
 {
   Normalize data;
 } uboNormalize;
@@ -444,7 +445,7 @@ struct Color
     bool  invert;
 };
 
-layout(set = 0, binding = 4, std140) uniform ColorUBO
+layout(set = 0, binding = 5, std140) uniform ColorUBO
 {
    Color data;
 } uboColor;
@@ -452,11 +453,12 @@ layout(set = 0, binding = 4, std140) uniform ColorUBO
 // Video Levels
 {1}
 
-layout(set = 0, binding = 5, std140) uniform UBO
+layout(set = 0, binding = 6, std140) uniform UBO
 {
     int        channels;
     int        mirrorX;
     int        mirrorY;
+    int        dither;
     float      softClip;
     int        videoLevels;
     int        invalidValues;
@@ -524,6 +526,23 @@ vec4 normalizeFunc(vec4 value, Normalize data)
     return value;
 }
 
+vec4 ditherFunc(vec4 value, int screenSize)
+{
+   // Sample blue noise (tile over screen)
+   vec2 noiseUV = fract(gl_FragCoord.xy / 128);
+
+   // Center around zero
+   float threshold = texture(blueNoiseSampler, noiseUV).r - 0.5;
+
+   float ditherAmount = threshold / (screenSize / 128);
+
+   // Apply dither by adding to color
+   value.rgb += vec3(ditherAmount);
+
+   return value;
+}
+
+
 // ocioICSDef
 {2}
 
@@ -561,10 +580,7 @@ void main()
     {5}
     {6}
 
-    // Call libplacebo tonemapping
-    {7}
-
-    // Apply color transformations.
+    // Apply color transformations in linear space.
     if (uboColor.data.enabled)
     {
         outColor = colorFunc(outColor, uboColor.data.add, uboColor.data.matrix);
@@ -580,8 +596,17 @@ void main()
         outColor = softClipFunc(outColor, ubo.softClip);
     }
 
+    // Call libplacebo tonemapping (may go to PQ space after this)
+    {7}
+
     // Apply OCIO Display/View.
     {8}
+
+    // Apply dithering.
+    if (ubo.dither > 0)
+    {
+        outColor = ditherFunc(outColor, ubo.dither);
+    }
 
     if (uboLevels.data.enabled)
     {
@@ -603,6 +628,7 @@ void main()
            outColor.b *= 0.5f;
         }
     }
+
     // Swizzle for the channels display.
     if (Channels_Red == ubo.channels)
     {

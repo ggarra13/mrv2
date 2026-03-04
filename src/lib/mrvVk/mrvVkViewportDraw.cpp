@@ -1125,19 +1125,8 @@ namespace mrv
         void Viewport::_updateHDRMetadata()
         {
             TLRENDER_P();
-
-            bool bt709_primaries = !p.hdrMonitorFound;
-
-#ifdef _WIN32
-            // On Windows, NVvidia drivers get tricked by sending "SDR" metadata
-            // evne if the data is HDR.
-            // AMD drivers disregard metadata and let the OS choose.
-            // Intel drivers are supposedly broken.
-            if (!p.hdrOptions.tonemap)
-                bt709_primaries = true;
-#endif
             
-            if (bt709_primaries)
+            if (!p.hdrMonitorFound)
             {
                 if (p.hdrOptions.debug)
                     LOG_WARNING("Sending SDR BT709 primaries");
@@ -1160,12 +1149,12 @@ namespace mrv
                 float monitorPeak = p.hdrCapabilities.max_nits;
                 // On Linux at least, we must send the real metadata over,
                 // so we translate OCIO to proper HDRData.
-                // If no OCIO is active, assume it is a movie and send the stored
-                // HDRData
+                // If no OCIO is active, assume it is a movie and send the
+                // stored HDRData (which can be sRGB, BT. 709 or HDR.
                 const int screen_idx = this->screen_num();
                 const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
                 image::HDRData data;
-                if (!ocio.display.empty() && !ocio.view.empty())
+                if (ocio.enabled && !ocio.display.empty() && !ocio.view.empty())
                 {
                     data = image::nameToPrimaries(ocio.display + ocio.view);
                     if (ocio.view.find("SDR") == std::string::npos)

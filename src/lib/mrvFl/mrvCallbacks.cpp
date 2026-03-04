@@ -1185,6 +1185,24 @@ namespace mrv
         ui->uiColorChannel->do_callback();
     }
 
+    void dithering_none_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.dithering = timeline::Dithering::kNone;
+        ui->app->setDisplayOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->redrawWindows();
+    }
+    
+    void dithering_blue_noise_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::DisplayOptions o = ui->app->displayOptions();
+        o.dithering = timeline::Dithering::BlueNoise;
+        ui->app->setDisplayOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+        ui->uiView->redrawWindows();
+    }    
+
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::DisplayOptions o = ui->app->displayOptions();

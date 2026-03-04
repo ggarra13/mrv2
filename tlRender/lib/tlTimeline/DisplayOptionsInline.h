@@ -77,7 +77,8 @@ namespace tl
                    videoLevels == other.videoLevels &&
                    normalize == other.normalize &&
                    ignoreChromaticities == other.ignoreChromaticities &&
-                   invalidValues == other.invalidValues;
+                   invalidValues == other.invalidValues &&
+                   dithering == other.dithering;
         }
 
         inline bool

@@ -21,6 +21,10 @@ namespace tl
         TLRENDER_ENUM_IMPL(
             HDRInformation, "From File", "Inactive", "Active");
         TLRENDER_ENUM_SERIALIZE_IMPL(HDRInformation);
+        
+        TLRENDER_ENUM_IMPL(
+            Dithering, "None", "Blue Noise");
+        TLRENDER_ENUM_SERIALIZE_IMPL(Dithering);
 
         math::Matrix4x4f brightness(const math::Vector3f& value)
         {

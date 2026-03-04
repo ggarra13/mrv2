@@ -2,11 +2,14 @@ set(HEADERS
     Render.h
     RenderShadersBinary.h)
 set(PRIVATE_HEADERS
+    BlueNoiseData.h 
+    BlueNoiseTexture.h
     HDRPeakDetection.h
     RenderPrivate.h
     RenderStructs.h)
 
 set(SOURCE
+    BlueNoiseTexture.cpp
     HDRPeakDetection.cpp
     Render.cpp
     RenderAnaglyph.cpp

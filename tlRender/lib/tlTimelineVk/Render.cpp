@@ -8,6 +8,7 @@
 
 #include <tlTimelineVk/RenderPrivate.h>
 #include <tlTimelineVk/RenderStructs.h>
+#include <tlTimelineVk/BlueNoiseTexture.h>
 
 #include <tlVk/Buffer.h>
 #include <tlVk/Vk.h>
@@ -132,7 +133,7 @@ namespace
 
     std::string
     replaceUniformSampler(const std::string& input, unsigned& bindingIndex)
-     {
+    {
         std::string output = input;
         std::string target = "uniform sampler";
         size_t pos = 0;
@@ -144,10 +145,10 @@ namespace
                 target;
             output.replace(pos, target.length(), replacement);
             pos += replacement.length(); // move past the inserted text
-         }
+        }
 
-         return output;
-     }
+        return output;
+    }
 
 
 #if defined(TLRENDER_LIBPLACEBO)
@@ -165,14 +166,14 @@ namespace
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16_UINT
-                                              : VK_FORMAT_R8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16_UINT
+                       : VK_FORMAT_R8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16_SINT
-                                              : VK_FORMAT_R8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16_SINT
+                       : VK_FORMAT_R8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
@@ -187,87 +188,87 @@ namespace
             if (fmt->type == PL_FMT_FLOAT)
             {
                 return size == 2 ? VK_FORMAT_R16G16_SFLOAT
-                                 : VK_FORMAT_R32G32_SFLOAT;
+                    : VK_FORMAT_R32G32_SFLOAT;
             }
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16G16_UINT
-                                              : VK_FORMAT_R8G8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16G16_UINT
+                       : VK_FORMAT_R8G8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16G16_SINT
-                                              : VK_FORMAT_R8G8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16G16_SINT
+                       : VK_FORMAT_R8G8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16_UNORM
-                                 : VK_FORMAT_R8G8_UNORM;
+                    : VK_FORMAT_R8G8_UNORM;
             }
             else if (fmt->type == PL_FMT_SNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16_SNORM
-                                 : VK_FORMAT_R8G8_SNORM;
+                    : VK_FORMAT_R8G8_SNORM;
             }
             break;
         case 3:
             if (fmt->type == PL_FMT_FLOAT)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16_SFLOAT
-                                 : VK_FORMAT_R32G32B32_SFLOAT;
+                    : VK_FORMAT_R32G32B32_SFLOAT;
             }
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16_UINT
-                                              : VK_FORMAT_R8G8B8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16_UINT
+                       : VK_FORMAT_R8G8B8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16_SINT
-                                              : VK_FORMAT_R8G8B8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16_SINT
+                       : VK_FORMAT_R8G8B8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16_UNORM
-                                 : VK_FORMAT_R8G8B8_UNORM;
+                    : VK_FORMAT_R8G8B8_UNORM;
             }
             else if (fmt->type == PL_FMT_SNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16_SNORM
-                                 : VK_FORMAT_R8G8B8_SNORM;
+                    : VK_FORMAT_R8G8B8_SNORM;
             }
             break;
         case 4:
             if (fmt->type == PL_FMT_FLOAT)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16A16_SFLOAT
-                                 : VK_FORMAT_R32G32B32A32_SFLOAT;
+                    : VK_FORMAT_R32G32B32A32_SFLOAT;
             }
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32A32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16A16_UINT
-                                              : VK_FORMAT_R8G8B8A8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16A16_UINT
+                       : VK_FORMAT_R8G8B8A8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32A32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16A16_SINT
-                                              : VK_FORMAT_R8G8B8A8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16A16_SINT
+                       : VK_FORMAT_R8G8B8A8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16A16_UNORM
-                                 : VK_FORMAT_R8G8B8A8_UNORM;
+                    : VK_FORMAT_R8G8B8A8_UNORM;
             }
             else if (fmt->type == PL_FMT_SNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16A16_SNORM
-                                 : VK_FORMAT_R8G8B8A8_SNORM;
+                    : VK_FORMAT_R8G8B8A8_SNORM;
             }
             break;
         }
@@ -867,7 +868,8 @@ namespace tl
 
         void Render::_init(
             const std::shared_ptr<system::Context>& context,
-            const std::shared_ptr<TextureCache>& textureCache)
+            const std::shared_ptr<TextureCache>& textureCache,
+            const bool createBlueNoiseTexture)
         {
             IRender::_init(context);
             TLRENDER_P();
@@ -881,6 +883,9 @@ namespace tl
             p.glyphTextureAtlas = vlk::TextureAtlas::create(
                 ctx, 1, 4096, image::PixelType::L_U8,
                 timeline::ImageFilter::Linear);
+
+            if (createBlueNoiseTexture)
+                p.blueNoiseTexture = vlk::create_blue_noise_texture(ctx);
 
             p.logTimer = std::chrono::steady_clock::now();
         }
@@ -945,10 +950,11 @@ namespace tl
         std::shared_ptr<Render> Render::create(
             Fl_Vk_Context& vulkanContext,
             const std::shared_ptr<system::Context>& context,
-            const std::shared_ptr<TextureCache>& textureCache)
+            const std::shared_ptr<TextureCache>& textureCache,
+            const bool createBlueNoiseTexture)
         {
             auto out = std::shared_ptr<Render>(new Render(vulkanContext));
-            out->_init(context, textureCache);
+            out->_init(context, textureCache, createBlueNoiseTexture);
             return out;
         }
 
@@ -2594,9 +2600,10 @@ namespace tl
             std::string lut;
             std::string toneMap;
 
-            // Start of binding index (0 to 5 are the standard UBOs in
+            // Start of binding index (1, 2 for main textures)
+            // (3 to 6 are the standard UBOs in
             // tlRender).
-            p.bindingIndex = 6;
+            p.bindingIndex = 7;
             std::size_t pushSize = 0;
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.placeboData)
@@ -3077,6 +3084,7 @@ namespace tl
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->addFBO("textureSampler");
+                p.shaders["display"]->addTexture("blueNoiseSampler");
 
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData && p.ocioData->icsDesc)

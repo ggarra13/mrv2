@@ -203,6 +203,7 @@ namespace tl
                 pipelines;
             std::shared_ptr<TextureCache> textureCache;
             std::shared_ptr<vlk::TextureAtlas> glyphTextureAtlas;
+            std::shared_ptr<vlk::Texture> blueNoiseTexture;
             std::map<image::GlyphInfo, vlk::TextureAtlasID> glyphIDs;
             std::unordered_map<std::string, std::shared_ptr<vlk::VBO> > vbos;
             std::unordered_map<std::string, std::shared_ptr<vlk::VAO> > vaos;

@@ -1336,7 +1336,7 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
                   tooltip {When this option is on, and your config.ocio has a default display and view, it will be used to be set as default.} xywh {421 236 288 24}
                 }
                 Fl_Light_Button uiOCIONotOnVideos {
-                  label {No OCIO on Videos or sRGB /BT709 data}
+                  label {No OCIO on Videos or sRGB/BT709 data}
                   tooltip {If playing a video or showing an SDR image, OCIO will be turned off automatically.} xywh {421 314 288 28}
                 }
                 Fl_Light_Button uiOCIOUseActiveViews {

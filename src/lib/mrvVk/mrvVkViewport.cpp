@@ -551,9 +551,10 @@ namespace mrv
 
             wait_device();
 
-            // Destroy main renders
+            // Destroy main renderers
             vk.render.reset();
             vk.annotationRender.reset();
+            vk.overlayRender.reset();
 
             // Destroy auxiliary render classes
             vk.lines.reset();
@@ -622,13 +623,18 @@ namespace mrv
                 }
                 
                 // Set the renderers's max nits
-                vk.render = timeline_vlk::Render::create(ctx, context);
+                bool createBlueNoiseTexture = true;
+                if (!vk.render)
+                    vk.render = timeline_vlk::Render::create(ctx, context,
+                                                             nullptr,
+                                                             createBlueNoiseTexture);
 
                 vk.render->setMonitorHDRSupported(p.hdrMonitorFound);
                 vk.render->setMonitorMinNits(p.hdrCapabilities.min_nits);
                 vk.render->setMonitorMaxNits(p.hdrCapabilities.max_nits);                
                 
-                vk.annotationRender = timeline_vlk::Render::create(ctx, context);
+                if (!vk.annotationRender)
+                    vk.annotationRender = timeline_vlk::Render::create(ctx, context);
 
                 
                 p.fontSystem = image::FontSystem::create(context);
@@ -946,21 +952,26 @@ namespace mrv
                 if (p.showVideo)
                 {
                     int screen = this->screen_num();
+                    auto ocio = p.ocioOptions;
+                    
+                    if (!p.ui->uiPrefs->uiOCIONotOnVideos->value() &&
+                        p.hdrOptions.tonemap)
+                        ocio.enabled = false;
+                            
                     if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
                         screen < p.monitorOCIOOptions.size())
                     {
-                        timeline::OCIOOptions o = p.ocioOptions;
-                        o.display = p.monitorOCIOOptions[screen].display;
-                        o.view = p.monitorOCIOOptions[screen].view;
-                        vk.render->setOCIOOptions(o);
+                        ocio.display = p.monitorOCIOOptions[screen].display;
+                        ocio.view = p.monitorOCIOOptions[screen].view;
+                        vk.render->setOCIOOptions(ocio);
 
-                        _updateMonitorDisplayView(screen, o);
                     }
                     else
                     {
-                        vk.render->setOCIOOptions(p.ocioOptions);
-                        _updateMonitorDisplayView(screen, p.ocioOptions);
+                        vk.render->setOCIOOptions(ocio);
                     }
+                    
+                    _updateMonitorDisplayView(screen, ocio);
 
                     timeline::BackgroundOptions backgroundOptions = getBackgroundOptions();        
                     vk.render->setLUTOptions(p.lutOptions);

@@ -725,6 +725,20 @@ namespace mrv
                 (Fl_Callback*)rotate_plus_90_cb, ui, mode);
 
             mode = FL_MENU_RADIO;
+            
+            idx = menu->add(
+                _("Render/Dithering/None"), kDitheringNone.hotkey(),
+                (Fl_Callback*)dithering_none_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.dithering == timeline::Dithering::kNone)
+                item->set();
+
+            idx = menu->add(
+                _("Render/Dithering/Blue Noise"), kDitheringBlueNoise.hotkey(),
+                (Fl_Callback*)dithering_blue_noise_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (displayOptions.dithering == timeline::Dithering::BlueNoise)
+                item->set();
 
             idx = menu->add(
                 _("Render/Video Levels/From File"), kVideoLevelsFile.hotkey(),

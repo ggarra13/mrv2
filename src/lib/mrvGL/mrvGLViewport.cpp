@@ -354,7 +354,7 @@ namespace mrv
                             int screen = this->screen_num();
                             auto ocio = p.ocioOptions;
 
-                            if (p.ui->uiPrefs->uiOCIONotOnVideos->value() &&
+                            if (!p.ui->uiPrefs->uiOCIONotOnVideos->value() &&
                                 p.hdrOptions.tonemap)
                                 ocio.enabled = false;
                     

@@ -54,7 +54,8 @@ namespace tl
         protected:
             void _init(
                 const std::shared_ptr<system::Context>&,
-                const std::shared_ptr<TextureCache>&);
+                const std::shared_ptr<TextureCache>&,
+                const bool createBlueNoiseTexture);
 
             Render(Fl_Vk_Context& ctx);
 
@@ -64,7 +65,8 @@ namespace tl
             //! Create a new renderer.
             static std::shared_ptr<Render> create(
                 Fl_Vk_Context& ctx, const std::shared_ptr<system::Context>&,
-                const std::shared_ptr<TextureCache>& = nullptr);
+                const std::shared_ptr<TextureCache>& = nullptr,
+                const bool createBlueNoiseTexture = false);
 
             //! Get the texture cache.
             const std::shared_ptr<TextureCache>& getTextureCache() const;
@@ -79,7 +81,7 @@ namespace tl
             //! Overriden begin function
             void begin(
                 const math::Size2i&, const timeline::RenderOptions& =
-                                         timeline::RenderOptions()) override;
+                timeline::RenderOptions()) override;
 
             //! Proper Vulkan begin function
             void begin(
