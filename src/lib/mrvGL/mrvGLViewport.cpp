@@ -352,21 +352,26 @@ namespace mrv
                         if (p.showVideo)
                         {
                             int screen = this->screen_num();
+                            auto ocio = p.ocioOptions;
+
+                            if (p.ui->uiPrefs->uiOCIONotOnVideos->value() &&
+                                p.hdrOptions.tonemap)
+                                ocio.enabled = false;
+                    
                             if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
                                 screen < p.monitorOCIOOptions.size())
                             {
-                                timeline::OCIOOptions o = p.ocioOptions;
-                                o.display = p.monitorOCIOOptions[screen].display;
-                                o.view = p.monitorOCIOOptions[screen].view;
-                                gl.render->setOCIOOptions(o);
+                                ocio.display = p.monitorOCIOOptions[screen].display;
+                                ocio.view = p.monitorOCIOOptions[screen].view;
+                                gl.render->setOCIOOptions(ocio);
 
-                                _updateMonitorDisplayView(screen, o);
                             }
                             else
                             {
-                                gl.render->setOCIOOptions(p.ocioOptions);
-                                _updateMonitorDisplayView(screen, p.ocioOptions);
+                                gl.render->setOCIOOptions(ocio);
                             }
+
+                            _updateMonitorDisplayView(screen, ocio);
 
                             gl.render->setLUTOptions(p.lutOptions);
                             gl.render->setHDROptions(p.hdrOptions);

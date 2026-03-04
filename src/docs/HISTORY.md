@@ -51,6 +51,8 @@ ChangeLog
 - Upgraded to OpenEXR v3.4.6.
 - Fixed audio playback of ALab .otio trailer.
 - Fixed colors of playing SDR videos on Windows when HDR was enabled.
+- Added a convenient option, mainly for HDR, in Preferences->OCIO->No OCIO on Videos or SDR/RGB data to turn off OCIO automatically, mainly when playing videos or showing sRGB images.
+- On Vulkan on Linux, when swapchain is VK_COLOR_SPACE_SRGB_NONLINEAR_KHR, try to use the best format like VK_FORMAT_A2R10G10B10_UNORM_PACK32 if possible.
 
 
 v1.5.6

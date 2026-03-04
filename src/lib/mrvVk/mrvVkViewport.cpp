@@ -415,8 +415,11 @@ namespace mrv
             if (!p.hdrMonitorFound)
             {
                 LOG_STATUS(_("HDR monitor not found or not configured."));
-                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-                format() = VK_FORMAT_B8G8R8A8_UNORM;
+                if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                {
+                    colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                    format() = VK_FORMAT_B8G8R8A8_UNORM;
+                }
             }
             else
             {
@@ -474,8 +477,11 @@ namespace mrv
             }
             else
             {
-                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-                format() = VK_FORMAT_B8G8R8A8_UNORM;
+                if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                {
+                    colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                    format() = VK_FORMAT_B8G8R8A8_UNORM;
+                }
                 LOG_STATUS(_("HDR monitor not found or not configured."));
             }
             
@@ -694,7 +700,7 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-
+            
             // Check if the window changed screen.
             bool changed_screen = false;
             if (p.screen_index != this->screen_num())

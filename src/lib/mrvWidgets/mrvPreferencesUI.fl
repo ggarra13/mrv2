@@ -47,7 +47,7 @@ decl {\#include "make_ocio_chooser.h"} {public global
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
+decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {selected public global
 }
 
 decl {\#include "mrvFl/mrvOCIO.h"} {private global
@@ -93,7 +93,7 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 853 466} type Double resizable
+      xywh {33 55 853 466} type Double resizable
       code0 {main = m;} visible
     } {
       Fl_Group {} {open
@@ -1025,10 +1025,10 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label {HDR Peak Detection} open
-              xywh {280 38 573 369} box EMBOSSED_BOX align 5
+              xywh {280 38 573 369} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
-                label {HDR Peak Detection} open
+                label {HDR Peak Detection}
                 xywh {303 82 530 304} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsHDRPeakDetection {
@@ -1057,7 +1057,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   tooltip {Low Limit to smooth out frames in the same scene.} xywh {627 264 64 28} minimum 0.1 maximum 100 step 0.1 value 1 textcolor 56
                 }
                 Fl_Value_Input uiPrefsHDRPeakHighLimit {
-                  label {High Peak Detection Limit} selected
+                  label {High Peak Detection Limit}
                   tooltip {High Limit to determine scene change.} xywh {627 309 64 28} minimum 0.1 maximum 100 step 0.1 value 3 textcolor 56
                 }
               }
@@ -1270,8 +1270,8 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label OCIO
-              xywh {288 37 555 361} box EMBOSSED_BOX align 5 hide
+              label OCIO open
+              xywh {288 37 555 361} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label OCIO open
@@ -1334,6 +1334,10 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
                 Fl_Light_Button uiOCIOUseDefaultDisplayView {
                   label {Use Default Display and View}
                   tooltip {When this option is on, and your config.ocio has a default display and view, it will be used to be set as default.} xywh {421 236 288 24}
+                }
+                Fl_Light_Button uiOCIONotOnVideos {
+                  label {No OCIO on Videos or sRGB /BT709 data}
+                  tooltip {If playing a video or showing an SDR image, OCIO will be turned off automatically.} xywh {421 314 288 28}
                 }
                 Fl_Light_Button uiOCIOUseActiveViews {
                   label {Use Active Views and Active Displays}
