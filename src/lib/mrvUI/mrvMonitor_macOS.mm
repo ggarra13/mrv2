@@ -84,10 +84,7 @@ namespace mrv {
                     if (headroom > 1.0) {
                         caps.hdr_supported = true;
                         caps.hdr_enabled = true;
-                        // Only override EDID if EDID failed to provide a max_nits value
-                        if (caps.max_nits <= 0.0f) {
-                            caps.max_nits = headroom * 100.0f; 
-                        }
+                        caps.max_nits = headroom * 100.0f; 
                     }
                     break;
                 }
