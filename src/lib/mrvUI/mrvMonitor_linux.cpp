@@ -83,7 +83,7 @@ namespace mrv
          * 
          * @param screen_index -1 for any, 0+ for corresponding monitor
          * 
-         * @return HDRCapabilities struct.
+         * @return Capabilities struct.
          */
         Capabilities get_hdr_capabilities(int screen_index)
         {
@@ -131,15 +131,15 @@ namespace mrv
                         }
                         
                         // \@todo: How to check HDR is enabled?
-                        if (out.supported)
+                        if (out.hdr_supported)
                         {
-                            out.enabled = out.supported;
+                            out.hdr_enabled = out.hdr_supported;
                         }
 
                         if (screen_index != -1) {
                             // Target Mode: Return this specific monitor's status
                             return out;
-                        } else if (out.supported) {
+                        } else if (out.hdr_supported) {
                             // Any Mode: Found one HDR monitor, we are done
                             return out;
                         }
@@ -152,10 +152,10 @@ namespace mrv
             return out;
         }
 
-        HDRCapabilities get_hdr_capabilities_by_name(
+        Capabilities get_hdr_capabilities_by_name(
             const std::string& target_connector)
         {
-            HDRCapabilities out;
+            Capabilities out;
             const std::string drm_path = "/sys/class/drm/";
 
 
@@ -221,9 +221,9 @@ namespace mrv
                             out = monitor::parseEDIDLuminance(edid_data.data(),  edid_data.size());
 
                             // \@todo: How to check HDR is enabled?
-                            if (out.supported)
+                            if (out.hdr_supported)
                             {
-                                out.enabled = out.supported;
+                                out.hdr_enabled = out.hdr_supported;
                             }
                         
                             return out;

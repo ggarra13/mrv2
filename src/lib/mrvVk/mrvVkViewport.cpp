@@ -392,24 +392,9 @@ namespace mrv
             
             if (!p.monitor.hdr_enabled)
             {
-#ifdef __linux__
-                if (!quiet)
-                {
-                    LOG_WARNING(_("Could not determine monitor's nits."));
-                }
-                if (p.monitor.hdr_supported)
-                {
-                    p.hdrCapabilities.min_nits = 0.F;
-                    p.hdrCapabilities.max_nits = 1000.F;
-                }
-                else
-                {
-                    p.hdrCapabilities.min_nits = 0.F;
-                    p.hdrCapabilities.max_nits = 100.F;
-                }
-#else
                 p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
-#endif
+                p.monitor.min_nits = 0.F;
+                p.monitor.max_nits = 100.F;
             }
             
             if (!p.monitor.hdr_enabled)

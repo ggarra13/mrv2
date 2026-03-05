@@ -38,13 +38,6 @@ namespace mrv
 
         std::string getManufacturerName(const char* vendorId);
         
-        struct HDRCapabilities {
-            bool enabled = false;
-            bool supported = false;
-            float max_nits = 0.0f;
-            float min_nits = 0.0f;
-        };
-
         Capabilities parseEDIDLuminance(const uint8_t* edid, size_t length);
         
         std::string getName(int monitorIndex, int numMonitors);
