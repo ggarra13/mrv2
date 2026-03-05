@@ -724,9 +724,24 @@ namespace tl
                 switch (params->color_space)
                 {
                 case AVCOL_SPC_BT2020_NCL:
+                case AVCOL_SPC_BT2020_CL:
                     _info.yuvCoefficients = image::YUVCoefficients::BT2020;
                     break;
+                    // Standard Dynamic Range (SDR)
+                case AVCOL_SPC_BT709:
+                    _info.yuvCoefficients = image::YUVCoefficients::REC709;
+                    break;
+
+                    // Standard Definition (Optional, depending on your needs)
+                case AVCOL_SPC_SMPTE170M:
+                case AVCOL_SPC_BT470BG:
+                    _info.yuvCoefficients = image::YUVCoefficients::BT601;
+                    break;
+
                 default:
+                    // A safe default is usually Rec.709, though strictly speaking 
+                        // you might want to guess based on video resolution.
+                        _info.yuvCoefficients = image::YUVCoefficients::REC709; 
                     break;
                 }
 
