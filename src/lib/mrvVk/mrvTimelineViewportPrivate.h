@@ -37,8 +37,6 @@ namespace mrv
             static short ghostPrevious;
             static short ghostNext;
 
-            bool hdrMonitorFound = false;
-        
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
             static timeline::HDROptions hdrOptions;
@@ -204,7 +202,7 @@ namespace mrv
 
             // HDR monitor tracking.
             int screen_index = 0;
-            monitor::HDRCapabilities hdrCapabilities;
+            monitor::Capabilities monitor;
         };
 
     }  // namespace vlk

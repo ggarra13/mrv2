@@ -95,6 +95,7 @@ namespace mrv
 {
     namespace monitor
     {
+        using tl::monitor::Capabilities;
         
         const char* kModule = "mntr";
         
@@ -207,8 +208,8 @@ namespace mrv
             return TRUE;
         }
 
-        HDRCapabilities get_hdr_capabilities(int screen_index) {
-            HDRCapabilities out;  // Default to SDR
+        Capabilities get_hdr_capabilities(int screen_index) {
+            Capabilities out;  // Default to SDR
 
             // Step 1: Enumerate monitors in logical (FLTK-matching) order using EnumDisplayMonitors
             std::vector<MonitorInfo> logicalMonitors;
@@ -263,21 +264,29 @@ namespace mrv
                     if (SUCCEEDED(output->QueryInterface(IID_PPV_ARGS(&output6)))) {
                         DXGI_OUTPUT_DESC1 desc1;
                         if (SUCCEEDED(output6->GetDesc1(&desc1))) {
-                            HDRCapabilities local_cap;
+                            Capabilities local_cap;
                             local_cap.min_nits = desc1.MinLuminance;
                             local_cap.max_nits = desc1.MaxLuminance;
+                            local_cap.red.x = desc1.RedPrimary[0];
+                            local_cap.red.y = desc1.RedPrimary[1];
+                            local_cap.green.x = desc1.GreenPrimary[0];
+                            local_cap.green.y = desc1.GreenPrimary[1];
+                            local_cap.blue.x = desc1.BluePrimary[0];
+                            local_cap.blue.y = desc1.BluePrimary[1];
+                            local_cap.white.x = desc1.WhitePoint[0];
+                            local_cap.white.y = desc1.WhitePoint[1];
                             
                             // Set supported based on capability (not current enablement)
-                            local_cap.supported = (desc1.MaxLuminance > 100.0f);
+                            local_cap.hdr_supported = (desc1.MaxLuminance > 100.0f);
                             
                             // Check if HDR is active based on current color space
-                            local_cap.enabled = false;
+                            local_cap.hdr_enabled = false;
                             switch (desc1.ColorSpace) {
                             case DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_G2084_LEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_GHLG_TOPLEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_FULL_GHLG_TOPLEFT_P2020:
-                                local_cap.enabled = true;
+                                local_cap.hdr_enabled = true;
                                 break;
                             default:
                                 break;
@@ -289,7 +298,7 @@ namespace mrv
                                 matchedMonitor = true;
                                 SafeRelease(output6);
                                 goto cleanup;
-                            } else if (local_cap.supported) {
+                            } else if (local_cap.hdr_enabled) {
                                 // Any mode: Found an HDR monitor, return its caps
                                 out = local_cap;
                                 foundAnyHDR = true;

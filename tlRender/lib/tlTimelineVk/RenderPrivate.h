@@ -153,9 +153,7 @@ namespace tl
             // Current frame in the swapchain
             int32_t frameIndex; // must be an int32_t not an uint32_t.
 
-            bool hdrMonitorFound = false;
-            float monitorMinNits = 0.005F;
-            float monitorMaxNits = 1000.F;
+            monitor::Capabilities monitor;
 
             math::Size2i renderSize;
             timeline::OCIOOptions ocioOptions;

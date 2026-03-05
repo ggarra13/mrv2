@@ -1126,7 +1126,7 @@ namespace mrv
         {
             TLRENDER_P();
             
-            if (!p.hdrMonitorFound)
+            if (!p.monitor.hdr_enabled)
             {
                 if (p.hdrOptions.debug)
                     LOG_WARNING("Sending SDR BT709 primaries");
@@ -1146,7 +1146,7 @@ namespace mrv
             }
             else
             {
-                float monitorPeak = p.hdrCapabilities.max_nits;
+                float monitorPeak = p.monitor.max_nits;
                 // On Linux at least, we must send the real metadata over,
                 // so we translate OCIO to proper HDRData.
                 // If no OCIO is active, assume it is a movie and send the

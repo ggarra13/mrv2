@@ -14,6 +14,7 @@
 #include <tlVk/Texture.h>
 
 #include <tlCore/LRUCache.h>
+#include <tlCore/Monitor.h>
 
 #if defined(TLRENDER_OCIO)
 #    include <OpenColorIO/OpenColorIO.h>
@@ -96,9 +97,7 @@ namespace tl
             uint32_t getFrameIndex() const;
 
             // HDR functions
-            void setMonitorHDRSupported(bool);
-            void setMonitorMinNits(float);
-            void setMonitorMaxNits(float);
+            void setMonitorCapabilities(const monitor::Capabilities&);
             
             // Main entry pipeline creation function
             void createPipeline(const std::string& pipelineName,

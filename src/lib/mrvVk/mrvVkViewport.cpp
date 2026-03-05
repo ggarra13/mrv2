@@ -61,10 +61,10 @@ namespace mrv
     namespace
     {
         
-        monitor::HDRCapabilities
+        tl::monitor::Capabilities
         getHDRCapabilities(int screen_num)
         {
-            monitor::HDRCapabilities out;
+            tl::monitor::Capabilities out;
             if (desktop::Wayland())
             {
                 const std::string& monitorName = desktop::monitorName(screen_num);
@@ -390,14 +390,14 @@ namespace mrv
         {
             TLRENDER_P();
             
-            if (!p.hdrCapabilities.supported)
+            if (!p.monitor.hdr_enabled)
             {
 #ifdef __linux__
                 if (!quiet)
                 {
                     LOG_WARNING(_("Could not determine monitor's nits."));
                 }
-                if (p.hdrMonitorFound)
+                if (p.monitor.hdr_supported)
                 {
                     p.hdrCapabilities.min_nits = 0.F;
                     p.hdrCapabilities.max_nits = 1000.F;
@@ -408,11 +408,11 @@ namespace mrv
                     p.hdrCapabilities.max_nits = 100.F;
                 }
 #else
-                p.hdrMonitorFound = false;
+                p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
 #endif
             }
             
-            if (!p.hdrMonitorFound)
+            if (!p.monitor.hdr_enabled)
             {
                 LOG_STATUS(_("HDR monitor not found or not configured."));
                 if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
@@ -427,12 +427,12 @@ namespace mrv
                 {
                     std::string msg =
                         string::Format(_("HDR monitor min. nits = {0}")).
-                        arg(p.hdrCapabilities.min_nits);
+                        arg(p.monitor.min_nits);
                 
                     LOG_STATUS(msg);
                 
                     msg = string::Format(_("HDR monitor max. nits = {0}")).
-                          arg(p.hdrCapabilities.max_nits);
+                          arg(p.monitor.max_nits);
                     LOG_STATUS(msg);
                 }
             }
@@ -446,10 +446,7 @@ namespace mrv
             // This call will try to set colorSpace() to the best color space
             // possible based on what Vulkan returns.
             Fl_Vk_Window::init_colorspace();
-
-            // Look for HDR10 or HLG if present
-            p.hdrMonitorFound = false;
-
+            
             // First check if Wayland returned a valid color space for this
             // monitor.
             bool valid_colorspace = false;
@@ -467,10 +464,9 @@ namespace mrv
             }
             
             p.screen_index = this->screen_num();
-            p.hdrCapabilities = getHDRCapabilities(p.screen_index);
-            if (valid_colorspace && p.hdrCapabilities.enabled)
+            p.monitor = getHDRCapabilities(p.screen_index);
+            if (valid_colorspace && p.monitor.hdr_enabled)
             {
-                p.hdrMonitorFound = true;
                 LOG_STATUS(_("HDR monitor found."));
 
                 _getMonitorNits(false);
@@ -629,9 +625,8 @@ namespace mrv
                                                              nullptr,
                                                              createBlueNoiseTexture);
 
-                vk.render->setMonitorHDRSupported(p.hdrMonitorFound);
-                vk.render->setMonitorMinNits(p.hdrCapabilities.min_nits);
-                vk.render->setMonitorMaxNits(p.hdrCapabilities.max_nits);                
+                vk.render->setMonitorCapabilities(p.monitor);
+         
                 
                 if (!vk.annotationRender)
                     vk.annotationRender = timeline_vlk::Render::create(ctx, context);
@@ -719,11 +714,11 @@ namespace mrv
             {
                 // If we changed screen from an HDR to an SDR one, or one with
                 // different nits settings, recreate the Vulkan swapchain.
-                auto hdr = getHDRCapabilities(this->screen_num());
-                if (hdr.enabled != p.hdrCapabilities.enabled ||
-                    hdr.supported != p.hdrCapabilities.supported ||
-                    hdr.min_nits != p.hdrCapabilities.min_nits ||
-                    hdr.max_nits != p.hdrCapabilities.max_nits)
+                const auto monitor = getHDRCapabilities(this->screen_num());
+                if (monitor.hdr_enabled != p.monitor.hdr_enabled ||
+                    monitor.hdr_supported != p.monitor.hdr_supported ||
+                    monitor.min_nits != p.monitor.min_nits ||
+                    monitor.max_nits != p.monitor.max_nits)
                 {
                     m_swapchain_needs_recreation = true;
                     init_colorspace();

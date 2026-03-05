@@ -18,6 +18,7 @@
 #include <tlCore/Assert.h>
 #include <tlCore/Context.h>
 #include <tlCore/Error.h>
+#include <tlCore/Monitor.h>
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 
@@ -1519,19 +1520,9 @@ namespace tl
             return _p->frameIndex;
         }
         
-        void Render::setMonitorHDRSupported(bool value)
+        void Render::setMonitorCapabilities(const monitor::Capabilities& value)
         {
-            _p->hdrMonitorFound = value;
-        }
-
-        void Render::setMonitorMinNits(float value)
-        {
-            _p->monitorMinNits = value;
-        }
-        
-        void Render::setMonitorMaxNits(float value)
-        {
-            _p->monitorMaxNits = value;
+            _p->monitor = value;
         }
         
         Fl_Vk_Context& Render::getContext() const
@@ -2796,7 +2787,7 @@ namespace tl
                 pl_color_space dst_colorspace;
                 memset(&dst_colorspace, 0, sizeof(pl_color_space));
 
-                if (p.hdrMonitorFound)
+                if (p.monitor.hdr_enabled)
                 {
                     if (p.ocioData &&
                         (p.ocioData->icsDesc || p.ocioData->shaderDesc))
@@ -2808,7 +2799,7 @@ namespace tl
                         dst_colorspace.transfer = src_colorspace.transfer;
                         
                         dst_colorspace.hdr.min_luma = 0.F;
-                        dst_colorspace.hdr.max_luma = src_colorspace.hdr.max_luma > 0 ? src_colorspace.hdr.max_luma : p.monitorMaxNits;
+                        dst_colorspace.hdr.max_luma = src_colorspace.hdr.max_luma > 0 ? src_colorspace.hdr.max_luma : p.monitor.max_nits;
                         
                         cmap.gamut_mapping = nullptr;
                         cmap.tone_mapping_function = nullptr;
@@ -2817,8 +2808,8 @@ namespace tl
                     {
                         dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                         dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-                        dst_colorspace.hdr.min_luma = p.monitorMinNits;
-                        dst_colorspace.hdr.max_luma = p.monitorMaxNits;
+                        dst_colorspace.hdr.min_luma = p.monitor.min_nits;
+                        dst_colorspace.hdr.max_luma = p.monitor.max_nits;
                     }
                     
                     if (ctx.colorSpace ==
@@ -2836,14 +2827,28 @@ namespace tl
                     {
                         dst_colorspace.transfer = PL_COLOR_TRC_PQ;
                     }
-                    
-                    const struct pl_raw_primaries* raw =
-                        pl_raw_primaries_get(PL_COLOR_PRIM_DISPLAY_P3);
 
-                    dst_colorspace.hdr.prim.red = raw->red;
-                    dst_colorspace.hdr.prim.green = raw->green;
-                    dst_colorspace.hdr.prim.blue = raw->blue;
-                    dst_colorspace.hdr.prim.white = raw->white;
+                    if (p.monitor.red.x > 0)
+                    {
+                        dst_colorspace.hdr.prim.red.x = p.monitor.red.x;
+                        dst_colorspace.hdr.prim.red.y = p.monitor.red.y;
+                        dst_colorspace.hdr.prim.green.x = p.monitor.green.x;
+                        dst_colorspace.hdr.prim.green.y = p.monitor.green.y;
+                        dst_colorspace.hdr.prim.blue.x = p.monitor.blue.x;
+                        dst_colorspace.hdr.prim.blue.y = p.monitor.blue.y;
+                        dst_colorspace.hdr.prim.white.x = p.monitor.white.x;
+                        dst_colorspace.hdr.prim.white.y = p.monitor.white.y;
+                    }
+                    else
+                    {
+                        const struct pl_raw_primaries* raw =
+                            pl_raw_primaries_get(PL_COLOR_PRIM_DISPLAY_P3);
+
+                        dst_colorspace.hdr.prim.red = raw->red;
+                        dst_colorspace.hdr.prim.green = raw->green;
+                        dst_colorspace.hdr.prim.blue = raw->blue;
+                        dst_colorspace.hdr.prim.white = raw->white;
+                    }
                 }
                 else
                 {

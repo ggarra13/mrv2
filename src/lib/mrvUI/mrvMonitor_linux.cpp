@@ -47,6 +47,8 @@ namespace mrv
 {
     namespace monitor
     {
+        using tl::monitor::Capabilities;
+        
         // We cache the names as getting them from X11 can be slow
         std::map<int, std::string> names;
         
@@ -83,9 +85,9 @@ namespace mrv
          * 
          * @return HDRCapabilities struct.
          */
-        HDRCapabilities get_hdr_capabilities(int screen_index)
+        Capabilities get_hdr_capabilities(int screen_index)
         {
-            HDRCapabilities out;
+            Capabilities out;
             
             int current_monitor_index = 0;
             const std::string drm_path = "/sys/class/drm/";
