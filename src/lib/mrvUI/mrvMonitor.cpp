@@ -248,11 +248,13 @@ namespace mrv
                             uint8_t type = ext[j + 3];
                             if (type & 0x01 || (eotf & 0x0E))
                             {
-                                out.supported = true;
+                                out.hdr_supported = true;
                             }
 
                             // Now, try to get the real min/max nits.
-                            if (out.supported) {
+                            if (out.hdr_supported) {
+
+                                out.hdr_enabled = true;
                                 
                                 // Byte j+4: Desired Content Max Luminance
                                 if (len >= 4) {

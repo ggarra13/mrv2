@@ -47,13 +47,15 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
+- First, the good news: the powers that be allowed me to buy an HDR monitor, so I am now squashing bugs right and left.
 - Upgraded to OpenUSD v26.03.
 - Upgraded to OpenEXR v3.4.6.
 - Fixed audio playback of ALab .otio trailer.
 - Fixed colors of playing SDR videos on Windows when HDR was enabled.
 - Added a convenient option, mainly for HDR, in Preferences->OCIO->No OCIO on Videos or SDR/RGB data to turn off OCIO automatically, mainly when playing videos or showing sRGB images.
 - On Vulkan on Linux, when swapchain is VK_COLOR_SPACE_SRGB_NONLINEAR_KHR, try to use the best format like VK_FORMAT_A2R10G10B10_UNORM_PACK32 if possible.
-- Windows Vulkan now uses P3 color primitives by default, until we extract them from EDID or DXGI.
+- On Vulkan we now extract the monitor's primaries from EDID on Linux and with DXGI on Windows and with the corresponding functions on macOS.
+- Fixed a Vulkan HDR cyan color clamping and bad matrix calculation inherited from tlRender.
 
 
 v1.5.6
