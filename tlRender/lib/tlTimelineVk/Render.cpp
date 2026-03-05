@@ -3010,10 +3010,11 @@ namespace tl
                 throw e;
             }
 #endif
-            
-                toneMap = "outColor = ";
+
+                toneMap =  "outColor.rgb = max(outColor.rgb, vec3(0.0));\n";
+                toneMap += "outColor = clamp(";
                 toneMap += res->name;
-                toneMap += "(outColor);\n";
+                toneMap += "(outColor), 0.0, 1.0);\n";
 
 #if DEBUG_TONEMAPPING
                 std::cerr << "toneMapDef="

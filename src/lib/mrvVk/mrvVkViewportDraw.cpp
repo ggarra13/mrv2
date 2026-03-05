@@ -1182,13 +1182,13 @@ namespace mrv
                             // Default fallback if no nits pattern is found
                             ocioPeak = 1000.0F; 
                         }
-                        data.displayMasteringLuminance = math::FloatRange(0, ocioPeak);
+                        data.displayMasteringLuminance = math::FloatRange(0.001F, ocioPeak);
                         data.maxCLL = std::min(ocioPeak, monitorPeak);
                         data.maxFALL = std::min(100.F, data.maxCLL * 0.1F); 
                     }
                     else  // is SDR view
                     {
-                        data.displayMasteringLuminance = math::FloatRange(0, 100.F);
+                        data.displayMasteringLuminance = math::FloatRange(0.001F, 100.F);
                         data.maxCLL = 203.F;
                         data.maxFALL = 100.F;
                     }
@@ -1199,10 +1199,27 @@ namespace mrv
                 else
                 {
                     data = p.hdrOptions.hdrData;
+                    if (p.monitor.red.x > 0)
+                    {
+                        data.primaries[image::Red].x = p.monitor.red.x;
+                        data.primaries[image::Red].y = p.monitor.red.y;
+                        data.primaries[image::Green].x = p.monitor.green.x;
+                        data.primaries[image::Green].y = p.monitor.green.y;
+                        data.primaries[image::Blue].x = p.monitor.blue.x;
+                        data.primaries[image::Blue].y = p.monitor.blue.y;
+                    }
+                    if (p.monitor.white.x > 0)
+                    {
+                        data.primaries[image::White].x = p.monitor.white.x;
+                        data.primaries[image::White].y = p.monitor.white.y;
+                    }
+                    data.displayMasteringLuminance =
+                        math::FloatRange(std::max(p.monitor.min_nits, 0.001F),
+                                         p.monitor.max_nits);
+                    data.maxCLL = p.monitor.max_nits;
+                    data.maxFALL = p.monitor.max_nits;
                     if (p.hdrOptions.debug)
-                        LOG_WARNING("Sending HDR video metadata primaries="
-                                    << image::primariesName(data.primaries)
-                                    << std::endl << data);
+                        LOG_WARNING("Metadata sent to Vulkan=" << data);
                 }
                 
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
