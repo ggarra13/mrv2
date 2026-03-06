@@ -3061,10 +3061,10 @@ namespace tl
             switch(p.shaderOptions.debanding)
             {
             case timeline::Debanding::High:
-                debandingDef = debandingFragmentSource(200.F, 32.F, 4, 128);
+                debandingDef = debandingFragmentSource(200.F, 32.F, 4, 96);
                 break;
             case timeline::Debanding::Medium:
-                debandingDef = debandingFragmentSource(100.F, 24.F, 2, 64);
+                debandingDef = debandingFragmentSource(100.F, 24.F, 1, 64);
                 break;
             case timeline::Debanding::Low:
                 debandingDef = debandingFragmentSource(48.F, 16.F, 1, 32);

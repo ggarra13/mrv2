@@ -381,42 +381,36 @@ float mod289(float x) { return x - floor(x / 289.0) * 289.0; }
 float permute(float x) { return mod289((34.0 * x + 1.0) * x); }
 float rand(float x) { return fract(x / 41.0); }
 
-// Compute stochastic average of 4 neighbors
-vec4 average(sampler2D tex, vec2 pos, float range, inout float h) {
-    // Step 1: Generate random distance (0 to range) and direction (0 to 2π)
-    float dist = rand(h) * range; h = permute(h);
-    float dir = rand(h) * 6.2831853; h = permute(h);
-
-    // Step 2: Compute offset vector
-    ivec2 imageSize = textureSize(tex, 0);  // LOD 0 for base level
-    vec2 pt = dist / vec2(imageSize.x, imageSize.y);  // Normalize to texture space
-    vec2 o = vec2(cos(dir), sin(dir));
-
-    // Step 3: Sample 4 points at 90-degree intervals around the pixel
-    vec4 ref[4];
-    ref[0] = texture(tex, pos + pt * vec2(o.x, o.y));   // SE
-    ref[1] = texture(tex, pos + pt * vec2(-o.y, o.x));  // NE
-    ref[2] = texture(tex, pos + pt * vec2(-o.x, -o.y)); // NW
-    ref[3] = texture(tex, pos + pt * vec2(o.y, -o.x));  // SW
-
-    // Step 4: Return normalized average
-    return (ref[0] + ref[1] + ref[2] + ref[3]) / 4.0;
-}
-
 // Main sampling function per pixel
 vec4 deband(sampler2D tex, vec2 pos) {
-    // Step 5: Initialize PRNG with pixel position + global random seed
-    float h;
     vec3 m = vec3(pos, rand(pos.x + pos.y)) + vec3(1.0);
-    h = permute(permute(permute(m.x) + m.y) + m.z);
+    float h = permute(permute(permute(m.x) + m.y) + m.z);
 
-    // Step 6: Sample original pixel color
+    ivec2 imageSize = textureSize(tex, 0);  // LOD 0 for base level
+    vec2 invImageSize = vec2(1.0 / imageSize.x, 1.0 / imageSize.y);
+
     vec4 col = texture(tex, pos);
 
-    // Step 7: Perform iterative smoothing
     for (int i = 1; i <= kITERATIONS; i++) {
         // Compute local average with increasing range (i * kRANGE)
-        vec4 avg = average(tex, pos, i * kRANGE, h);
+        float range = i * kRANGE;
+
+        float dist = rand(h) * range; h = permute(h);
+        float dir = rand(h) * 6.2831853; h = permute(h);
+
+        // Compute offset vector
+        vec2 pt = dist * invImageSize;  // Normalize to texture space
+        vec2 o = vec2(cos(dir), sin(dir));
+
+        // Sample 4 points at 90-degree intervals around the pixel
+        vec4 ref[4];
+        ref[0] = texture(tex, pos + pt * vec2(o.x, o.y));   // SE
+        ref[1] = texture(tex, pos + pt * vec2(-o.y, o.x));  // NE
+        ref[2] = texture(tex, pos + pt * vec2(-o.x, -o.y)); // NW
+        ref[3] = texture(tex, pos + pt * vec2(o.y, -o.x));  // SW
+
+        // Average them
+        vec4 avg = (ref[0] + ref[1] + ref[2] + ref[3]) / 4.0;
 
         // Compute absolute difference
         vec4 diff = abs(col - avg);
@@ -424,17 +418,17 @@ vec4 deband(sampler2D tex, vec2 pos) {
         // Dynamic threshold decreases per iteration for finer control
         float iter_threshold = kTHRESHOLD / (i * 16384.0);
 
-        // Step 8: If diff <= threshold, blend toward average (smooth); else preserve original
         col = mix(avg, col, greaterThan(diff, vec4(iter_threshold)));
     }
 
-    // Step 9: Optional grain addition to mask residuals
     if (kGRAIN > 0) {
-        vec3 noise;
-        noise.x = rand(h); h = permute(h);
-        noise.y = rand(h); h = permute(h);
-        noise.z = rand(h); h = permute(h);
-        col.rgb += (kGRAIN / 8192.0) * (noise - vec3(0.5));  // Centered noise
+        // Generate a 3D noise vector cheaply
+        vec3 noise = vec3(
+            fract(h * 1.234),
+            fract(h * 2.345),
+            fract(h * 3.456)
+        );
+        col.rgb += (kGRAIN * (1.0 / 8192.0)) * (noise - 0.5);
     }
 
     return col;
