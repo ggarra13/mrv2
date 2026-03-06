@@ -996,6 +996,8 @@ namespace mrv
         if (showUI)
         {
             ui->uiMain->show();
+            ui->uiMain->wait_for_expose();
+            ui->uiView->wait_for_expose();
             ui->uiView->take_focus();
 
             // Fix for always on top on Linux
@@ -1508,9 +1510,7 @@ namespace mrv
             ui->uiView->setPlayback(playback);
         }
 
-        if (use_progress &&
-            (playback == timeline::Playback::Forward ||
-             playback == timeline::Playback::Stop))
+        if (use_progress && playback == timeline::Playback::Forward)
         {
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
@@ -1518,7 +1518,7 @@ namespace mrv
                     [this, playback](const timeline::PlayerCacheInfo& value)
                         {
                             TLRENDER_P();
-                            
+
                             otime::RationalTime startTime, endTime;
                             _calculateCacheTimes(startTime, endTime);
 

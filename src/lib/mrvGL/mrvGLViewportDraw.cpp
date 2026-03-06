@@ -923,14 +923,19 @@ namespace mrv
             if (!p.fontSystem || p.videoData.empty() || !p.player)
                 return;
 
-            const auto& viewportSize = getViewportSize();
             Viewport* self = const_cast< Viewport* >(this);
+            const auto& viewportSize = getViewportSize();
+            const auto& renderSize = getRenderSize();
+            
+            // Calculate resolution multiplier.
             uint16_t fontSize = 12 * self->pixels_per_unit();
             if (viewportSize.w > 2048)
                 fontSize *=2;
             else if (viewportSize.w > 3840)
                 fontSize *= 3;
             const image::FontInfo fontInfo(kFontFamily, fontSize);
+
+
             const image::FontMetrics fontMetrics =
                 p.fontSystem->getMetrics(fontInfo);
             
