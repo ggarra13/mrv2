@@ -395,10 +395,7 @@ namespace mrv
                 p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
                 p.monitor.min_nits = 0.F;
                 p.monitor.max_nits = 100.F;
-            }
-            
-            if (!p.monitor.hdr_enabled)
-            {
+                
                 LOG_STATUS(_("HDR monitor not found or not configured."));
                 if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
                 {
@@ -448,11 +445,12 @@ namespace mrv
             }
             
             p.screen_index = this->screen_num();
-            p.monitor = getHDRCapabilities(p.screen_index);
-            if (valid_colorspace && p.monitor.hdr_enabled)
+            if (valid_colorspace)
             {
                 LOG_STATUS(_("HDR monitor found."));
 
+                p.monitor = getHDRCapabilities(p.screen_index);
+                
                 _getMonitorNits(false);
             }
             else

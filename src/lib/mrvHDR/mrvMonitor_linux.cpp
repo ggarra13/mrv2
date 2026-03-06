@@ -87,9 +87,9 @@ namespace mrv
          * 
          * @return HDRCapabilities struct.
          */
-        HDRCapabilities get_hdr_capabilities(int screen_index)
+        Capabilities get_hdr_capabilities(int screen_index)
         {
-            HDRCapabilities out;
+            Capabilities out;
             
             int current_monitor_index = 0;
             const std::string drm_path = "/sys/class/drm/";
@@ -133,15 +133,15 @@ namespace mrv
                         }
 
                         // \@todo: How to check HDR is enabled?
-                        if (out.supported)
+                        if (out.hdr_supported)
                         {
-                            out.enabled = out.supported;
+                            out.hdr_enabled = out.hdr_supported;
                         }
                         
                         if (screen_index != -1) {
                             // Target Mode: Return this specific monitor's status
                             return out;
-                        } else if (out.supported) {
+                        } else if (out.hdr_enabled) {
                             // Any Mode: Found one HDR monitor, we are done
                             return out;
                         }
@@ -154,10 +154,10 @@ namespace mrv
             return out;
         }
 
-        HDRCapabilities get_hdr_capabilities_by_name(
+        Capabilities get_hdr_capabilities_by_name(
             const std::string& target_connector)
         {
-            HDRCapabilities out;
+            Capabilities out;
             const std::string drm_path = "/sys/class/drm/";
 
 
@@ -223,7 +223,7 @@ namespace mrv
                             out = monitor::parseEDIDLuminance(edid_data.data(),  edid_data.size());
 
                             // \@bug: howw to handle enabled here
-                            out.enabled = out.supported;
+                            out.hdr_enabled = out.hdr_supported;
                             
                             return out;
                         }
