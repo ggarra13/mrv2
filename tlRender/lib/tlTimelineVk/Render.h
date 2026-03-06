@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <tlTimeline/ShaderOptions.h>
 #include <tlTimeline/IRender.h>
 
 #include <tlVk/Mesh.h>

@@ -57,6 +57,7 @@ ChangeLog
 - On Vulkan we now extract the monitor's primaries from EDID on Linux and with DXGI on Windows and with the corresponding functions on macOS.
 - Fixed a Vulkan HDR cyan color clamping and bad matrix calculation inherited from tlRender.
 - On VUlkan, added debanding of main image to smooth out gradients.  You control it with "Render->Debanding" and Preferences->Render Debanding to make it permanent.
+- Made HUD display scale up to make it more readable when the viewport resolution is too big.
 
 
 v1.5.6

@@ -27,6 +27,7 @@
 #include <tlTimeline/BackgroundOptions.h>
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/PlayerOptions.h>
+#include <tlTimeline/ShaderOptions.h>
 
 #include <tlDraw/Shape.h>
 

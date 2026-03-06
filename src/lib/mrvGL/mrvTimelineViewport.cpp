@@ -82,6 +82,22 @@ namespace mrv
             }
         }
 
+        const timeline::ShaderOptions& TimelineViewport::getShaderOptions() const noexcept
+        {
+            return _p->shaderOptions;
+        }
+
+        void TimelineViewport::setShaderOptions(const timeline::ShaderOptions& value) noexcept
+        {
+            TLRENDER_P();
+            
+            if (value == p.shaderOptions)
+                return;
+            
+            p.shaderOptions = value;
+            redrawWindows();
+        }
+
         void TimelineViewport::_showPixelBar() const noexcept
         {
             TLRENDER_P();

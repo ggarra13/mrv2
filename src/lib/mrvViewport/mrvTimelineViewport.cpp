@@ -111,11 +111,7 @@ namespace mrv
         using namespace tl;
 
         timeline::HDROptions TimelineViewport::Private::hdrOptions;
-
-#ifdef VULKAN_BACKEND
-        timeline::ShaderOptions TimelineViewport::Private::shaderOptions;
-#endif
-        
+        timeline::ShaderOptions TimelineViewport::Private::shaderOptions;        
         EnvironmentMapOptions TimelineViewport::Private::environmentMapOptions;
         math::Box2i TimelineViewport::Private::selection =
             math::Box2i(0, 0, -1, -1);

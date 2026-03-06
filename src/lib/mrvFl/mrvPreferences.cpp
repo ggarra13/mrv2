@@ -376,7 +376,7 @@ namespace mrv
         view.get("ocio_in_top_bar", tmp, 0);
         uiPrefs->uiPrefsOCIOInTopBar->value((bool)tmp);
 
-        view.get("debanding", tmp, 0);
+        view.get("debanding", tmp, 2);
         uiPrefs->uiPrefsDebanding->value(tmp);
         
         view.get("video_levels", tmp, 0);
