@@ -1510,7 +1510,9 @@ namespace mrv
             ui->uiView->setPlayback(playback);
         }
 
-        if (use_progress && playback == timeline::Playback::Forward)
+        if (use_progress &&
+            (playback == timeline::Playback::Forward ||
+             playback == timeline::Playback::Stop))
         {
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
@@ -1673,8 +1675,9 @@ namespace mrv
                 if (p.options.playback == timeline::Playback::Count)
                     p.options.playback = timeline::Playback::Forward;
 
+                // Must be 0.5 to prevent display not showing up.
                 Fl::add_timeout(
-                    0.0, (Fl_Timeout_Handler)start_playback_cb, this);
+                    0.5, (Fl_Timeout_Handler)start_playback_cb, this);
             }
         }
         p.running = true;
