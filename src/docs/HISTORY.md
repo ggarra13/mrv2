@@ -61,7 +61,9 @@ ChangeLog
 - On Vulkan, added debanding of main image to smooth out gradients.  You control it with "Render->Debanding" and Preferences->Render Debanding to make it permanent.  There's None, Low, Medium and High settings.
 - Made HUD display scale up to make it more readable when the viewport resolution is too big.
 - Implemented "Playback/Go to/Next 10 Seconds" and "Playback/Go to/Previous 10 Seconds".  The default shortcut hotkeys are CTRL+Left Arrow and CTRL+Right Arrow.
-- Fixed OS's screen scaling not being taken into account in the hdr utility. 
+- Fixed OS's screen scaling not being taken into account in the hdr utility.
+- Fixed a hanging on Vulkan when loading a 4K video from the command-line on
+KDE.
 
 
 v1.5.6
