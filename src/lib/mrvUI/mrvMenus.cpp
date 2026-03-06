@@ -725,21 +725,40 @@ namespace mrv
                 (Fl_Callback*)rotate_plus_90_cb, ui, mode);
 
             mode = FL_MENU_RADIO;
+
+#ifdef VULKAN_BACKEND
+            const timeline::ShaderOptions& shaderOptions =
+                uiView->getShaderOptions();
             
             idx = menu->add(
-                _("Render/Dithering/None"), kDitheringNone.hotkey(),
-                (Fl_Callback*)dithering_none_cb, ui, mode);
+                _("Render/Debanding/None"), kDebandingNone.hotkey(),
+                (Fl_Callback*)debanding_none_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.dithering == timeline::Dithering::kNone)
+            if (shaderOptions.debanding == timeline::Debanding::kNone)
                 item->set();
 
             idx = menu->add(
-                _("Render/Dithering/Blue Noise"), kDitheringBlueNoise.hotkey(),
-                (Fl_Callback*)dithering_blue_noise_cb, ui, mode);
+                _("Render/Debanding/Small"), kDebandingLow.hotkey(),
+                (Fl_Callback*)debanding_low_cb, ui, mode);
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (displayOptions.dithering == timeline::Dithering::BlueNoise)
+            if (shaderOptions.debanding == timeline::Debanding::Low)
+                item->set();
+            
+            idx = menu->add(
+                _("Render/Debanding/Medium"), kDebandingMedium.hotkey(),
+                (Fl_Callback*)debanding_medium_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (shaderOptions.debanding == timeline::Debanding::Medium)
                 item->set();
 
+            idx = menu->add(
+                _("Render/Debanding/High"), kDebandingHigh.hotkey(),
+                (Fl_Callback*)debanding_high_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (shaderOptions.debanding == timeline::Debanding::High)
+                item->set();
+#endif
+            
             idx = menu->add(
                 _("Render/Video Levels/From File"), kVideoLevelsFile.hotkey(),
                 (Fl_Callback*)video_levels_from_file_cb, ui, mode);

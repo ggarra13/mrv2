@@ -172,8 +172,10 @@ namespace mrv
     extern Hotkey kRotatePlus90;
     extern Hotkey kRotateMinus90;
 
-    extern Hotkey kDitheringNone;
-    extern Hotkey kDitheringBlueNoise;
+    extern Hotkey kDebandingNone;
+    extern Hotkey kDebandingLow;
+    extern Hotkey kDebandingMedium;
+    extern Hotkey kDebandingHigh;
     
     extern Hotkey kVideoLevelsFile;
     extern Hotkey kVideoLevelsLegalRange;

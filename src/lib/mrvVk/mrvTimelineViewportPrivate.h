@@ -39,8 +39,9 @@ namespace mrv
 
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
+            static timeline::ShaderOptions shaderOptions;
             static timeline::HDROptions hdrOptions;
-
+            
             std::vector<tl::timeline::ImageOptions> imageOptions;
             std::vector<tl::timeline::DisplayOptions> displayOptions;
             timeline::CompareOptions compareOptions;
@@ -103,7 +104,7 @@ namespace mrv
             static std::string helpText;
             static float helpTextFade;
 
-            //! HUD display flags (ORed together).
+            //! HUD display flags (OR-ed together).
             static bool hudActive;
             static HudDisplay hud;
 

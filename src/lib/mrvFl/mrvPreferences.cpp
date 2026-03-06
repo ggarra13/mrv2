@@ -376,6 +376,9 @@ namespace mrv
         view.get("ocio_in_top_bar", tmp, 0);
         uiPrefs->uiPrefsOCIOInTopBar->value((bool)tmp);
 
+        view.get("debanding", tmp, 0);
+        uiPrefs->uiPrefsDebanding->value(tmp);
+        
         view.get("video_levels", tmp, 0);
         uiPrefs->uiPrefsVideoLevels->value(tmp);
 
@@ -1058,6 +1061,12 @@ namespace mrv
 
         ui->uiView->setBackgroundOptions(backgroundOptions);
 
+        // Handle Shader Options
+        timeline::ShaderOptions shaderOptions;
+        shaderOptions.debanding =
+            static_cast<timeline::Debanding>(uiPrefs->uiPrefsDebanding->value());
+        ui->uiView->setShaderOptions(shaderOptions);
+        
         // Handle Dockgroup size (based on percentage)
         float pct = settings->getValue<float>("gui/DockGroup/Width");
         if (pct < 0.2F)
@@ -1377,6 +1386,8 @@ namespace mrv
         view.set("safe_areas", uiPrefs->uiPrefsSafeAreas->value());
         view.set("ocio_in_top_bar", uiPrefs->uiPrefsOCIOInTopBar->value());
         view.set("video_levels", uiPrefs->uiPrefsVideoLevels->value());
+        view.set("debanding", uiPrefs->uiPrefsDebanding->value());
+
         view.set("alpha_blend", uiPrefs->uiPrefsAlphaBlend->value());
         view.set("minify_filter", uiPrefs->uiPrefsMinifyFilter->value());
         view.set("magnify_filter", uiPrefs->uiPrefsMagnifyFilter->value());

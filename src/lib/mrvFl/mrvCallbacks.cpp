@@ -1185,24 +1185,40 @@ namespace mrv
         ui->uiColorChannel->do_callback();
     }
 
-    void dithering_none_cb(Fl_Menu_* m, ViewerUI* ui)
+#ifdef VULKAN_BACKEND
+    void debanding_none_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.dithering = timeline::Dithering::kNone;
-        ui->app->setDisplayOptions(o);
+        timeline::ShaderOptions o = ui->uiView->getShaderOptions();
+        o.debanding = timeline::Debanding::kNone;
+        ui->uiView->setShaderOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redrawWindows();
+    }
+
+    void debanding_low_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::ShaderOptions o = ui->uiView->getShaderOptions();
+        o.debanding = timeline::Debanding::Low;
+        ui->uiView->setShaderOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+        
+    void debanding_medium_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::ShaderOptions o = ui->uiView->getShaderOptions();
+        o.debanding = timeline::Debanding::Medium;
+        ui->uiView->setShaderOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
     
-    void dithering_blue_noise_cb(Fl_Menu_* m, ViewerUI* ui)
+    void debanding_high_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.dithering = timeline::Dithering::BlueNoise;
-        ui->app->setDisplayOptions(o);
+        timeline::ShaderOptions o = ui->uiView->getShaderOptions();
+        o.debanding = timeline::Debanding::High;
+        ui->uiView->setShaderOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        ui->uiView->redrawWindows();
-    }    
-
+    }
+#endif
+    
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::DisplayOptions o = ui->app->displayOptions();

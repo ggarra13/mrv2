@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <tlTimeline/ShaderOptions.h>
 #include <tlTimeline/IRender.h>
 
 #include <tlVk/Mesh.h>
@@ -55,8 +56,7 @@ namespace tl
         protected:
             void _init(
                 const std::shared_ptr<system::Context>&,
-                const std::shared_ptr<TextureCache>&,
-                const bool createBlueNoiseTexture);
+                const std::shared_ptr<TextureCache>&);
 
             Render(Fl_Vk_Context& ctx);
 
@@ -66,8 +66,7 @@ namespace tl
             //! Create a new renderer.
             static std::shared_ptr<Render> create(
                 Fl_Vk_Context& ctx, const std::shared_ptr<system::Context>&,
-                const std::shared_ptr<TextureCache>& = nullptr,
-                const bool createBlueNoiseTexture = false);
+                const std::shared_ptr<TextureCache>& = nullptr);
 
             //! Get the texture cache.
             const std::shared_ptr<TextureCache>& getTextureCache() const;
@@ -139,6 +138,7 @@ namespace tl
             math::Matrix4x4f getTransform() const override;
             void setTransform(const math::Matrix4x4f&) override;
             void applyTransforms();
+            void setShaderOptions(const timeline::ShaderOptions&);
             void setOCIOOptions(const timeline::OCIOOptions&) override;
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;

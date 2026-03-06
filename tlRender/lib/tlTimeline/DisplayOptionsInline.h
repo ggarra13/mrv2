@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2025-Present Gonzalo Garramuño.
 // All rights reserved.
 
 namespace tl
@@ -77,8 +78,7 @@ namespace tl
                    videoLevels == other.videoLevels &&
                    normalize == other.normalize &&
                    ignoreChromaticities == other.ignoreChromaticities &&
-                   invalidValues == other.invalidValues &&
-                   dithering == other.dithering;
+                   invalidValues == other.invalidValues;
         }
 
         inline bool

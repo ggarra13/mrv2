@@ -361,32 +361,121 @@ void main()
 })";
         }
 
+        std::string debandingFragmentSource(
+            const float threshold,
+            const float range,
+            const int iterations,
+            const float grain
+            )
+        {
+            return string::Format(R"(
+// Simplified pseudocode representation of the deband algorithm
+
+const float kTHRESHOLD = {0};
+const float kRANGE = {1};
+const int kITERATIONS = {2};
+const float kGRAIN = {3};
+
+// PRNG helpers for randomness
+float mod289(float x) { return x - floor(x / 289.0) * 289.0; }
+float permute(float x) { return mod289((34.0 * x + 1.0) * x); }
+float rand(float x) { return fract(x / 41.0); }
+
+// Compute stochastic average of 4 neighbors
+vec4 average(sampler2D tex, vec2 pos, float range, inout float h) {
+    // Step 1: Generate random distance (0 to range) and direction (0 to 2π)
+    float dist = rand(h) * range; h = permute(h);
+    float dir = rand(h) * 6.2831853; h = permute(h);
+
+    // Step 2: Compute offset vector
+    ivec2 imageSize = textureSize(tex, 0);  // LOD 0 for base level
+    vec2 pt = dist / vec2(imageSize.x, imageSize.y);  // Normalize to texture space
+    vec2 o = vec2(cos(dir), sin(dir));
+
+    // Step 3: Sample 4 points at 90-degree intervals around the pixel
+    vec4 ref[4];
+    ref[0] = texture(tex, pos + pt * vec2(o.x, o.y));   // SE
+    ref[1] = texture(tex, pos + pt * vec2(-o.y, o.x));  // NE
+    ref[2] = texture(tex, pos + pt * vec2(-o.x, -o.y)); // NW
+    ref[3] = texture(tex, pos + pt * vec2(o.y, -o.x));  // SW
+
+    // Step 4: Return normalized average
+    return (ref[0] + ref[1] + ref[2] + ref[3]) / 4.0;
+}
+
+// Main sampling function per pixel
+vec4 deband(sampler2D tex, vec2 pos) {
+    // Step 5: Initialize PRNG with pixel position + global random seed
+    float h;
+    vec3 m = vec3(pos, rand(pos.x + pos.y)) + vec3(1.0);
+    h = permute(permute(permute(m.x) + m.y) + m.z);
+
+    // Step 6: Sample original pixel color
+    vec4 col = texture(tex, pos);
+
+    // Step 7: Perform iterative smoothing
+    for (int i = 1; i <= kITERATIONS; i++) {
+        // Compute local average with increasing range (i * kRANGE)
+        vec4 avg = average(tex, pos, i * kRANGE, h);
+
+        // Compute absolute difference
+        vec4 diff = abs(col - avg);
+
+        // Dynamic threshold decreases per iteration for finer control
+        float iter_threshold = kTHRESHOLD / (i * 16384.0);
+
+        // Step 8: If diff <= threshold, blend toward average (smooth); else preserve original
+        col = mix(avg, col, greaterThan(diff, vec4(iter_threshold)));
+    }
+
+    // Step 9: Optional grain addition to mask residuals
+    if (kGRAIN > 0) {
+        vec3 noise;
+        noise.x = rand(h); h = permute(h);
+        noise.y = rand(h); h = permute(h);
+        noise.z = rand(h); h = permute(h);
+        col.rgb += (kGRAIN / 8192.0) * (noise - vec3(0.5));  // Centered noise
+    }
+
+    return col;
+}
+)")
+                .arg(threshold)
+                .arg(range)
+                .arg(iterations)
+                .arg(grain);
+        }
+        
         std::string displayFragmentSource(
             const std::string& ocioICSDef, const std::string& ocioICS,
             const std::string& ocioDef, const std::string& ocio,
             const std::string& lutDef, const std::string& lut,
             timeline::LUTOrder lutOrder, const std::string& toneMapDef,
-            const std::string& toneMap)
+            const std::string& toneMap,
+            const std::string& debandingDef,
+            const std::string& debanding)
         {
             std::vector<std::string> args;
-            args.push_back(toneMapDef);  // 0
-            args.push_back(videoLevels); // 1
-            args.push_back(ocioICSDef);  // 2
-            args.push_back(ocioDef);     // 3
-            args.push_back(lutDef);      // 4
+            args.push_back(toneMapDef);   // 0
+            args.push_back(videoLevels);  // 1
+            args.push_back(ocioICSDef);   // 2
+            args.push_back(ocioDef);      // 3
+            args.push_back(lutDef);       // 4
+            args.push_back(debandingDef); // 5
+            args.push_back(debanding);    // 6
             switch (lutOrder)
             {
             case timeline::LUTOrder::PreColorConfig:
-                args.push_back(lut);     // 5
-                args.push_back(ocioICS); // 6
-                args.push_back(toneMap); // 7
-                args.push_back(ocio);    // 8
+                args.push_back(lut);     // 7
+                args.push_back(ocioICS); // 8
+                args.push_back(toneMap); // 9
+                args.push_back(ocio);    // 10
                 break;
             case timeline::LUTOrder::PostColorConfig:
-                args.push_back(ocioICS); // 5
-                args.push_back(lut);     // 6
-                args.push_back(toneMap); // 7
-                args.push_back(ocio);    // 8
+                args.push_back(ocioICS); // 7
+                args.push_back(lut);     // 8
+                args.push_back(toneMap); // 9
+                args.push_back(ocio);    // 10
                 break;
             default:
                 break;
@@ -398,7 +487,6 @@ layout(location = 0) out vec4 outColor;
 
 
 layout(binding = 1) uniform sampler2D textureSampler;
-layout(binding = 2) uniform sampler2D blueNoiseSampler;
 
 {0}
 
@@ -420,7 +508,7 @@ struct Levels
     float outHigh;
 };
 
-layout(set = 0, binding = 3, std140) uniform LevelsUBO
+layout(set = 0, binding = 2, std140) uniform LevelsUBO
 {
   Levels data;
 } uboLevels;
@@ -432,7 +520,7 @@ struct Normalize
     vec4 maximum;
 };
 
-layout(set = 0, binding = 4, std140) uniform NormalizeUBO
+layout(set = 0, binding = 3, std140) uniform NormalizeUBO
 {
   Normalize data;
 } uboNormalize;
@@ -445,7 +533,7 @@ struct Color
     bool  invert;
 };
 
-layout(set = 0, binding = 5, std140) uniform ColorUBO
+layout(set = 0, binding = 4, std140) uniform ColorUBO
 {
    Color data;
 } uboColor;
@@ -453,7 +541,7 @@ layout(set = 0, binding = 5, std140) uniform ColorUBO
 // Video Levels
 {1}
 
-layout(set = 0, binding = 6, std140) uniform UBO
+layout(set = 0, binding = 5, std140) uniform UBO
 {
     int        channels;
     int        mirrorX;
@@ -526,22 +614,6 @@ vec4 normalizeFunc(vec4 value, Normalize data)
     return value;
 }
 
-vec4 ditherFunc(vec4 value, int screenSize)
-{
-   // Sample blue noise (tile over screen)
-   vec2 noiseUV = fract(gl_FragCoord.xy / 128);
-
-   // Center around zero
-   float threshold = texture(blueNoiseSampler, noiseUV).r - 0.5;
-
-   float ditherAmount = threshold / (screenSize / 128);
-
-   // Apply dither by adding to color
-   value.rgb += vec3(ditherAmount);
-
-   return value;
-}
-
 
 // ocioICSDef
 {2}
@@ -551,6 +623,10 @@ vec4 ditherFunc(vec4 value, int screenSize)
 
 // lutDef
 {4}
+
+// DefandingDef
+{5}
+
 
 void main()
 {
@@ -564,7 +640,8 @@ void main()
         t.y = 1.0 - t.y;
     }
 
-    outColor = texture(textureSampler, t);
+    // Read texture with or without debanding.
+    {6}
 
     // Video levels.
     if (VideoLevels_LegalRange == ubo.videoLevels)
@@ -577,8 +654,8 @@ void main()
     }
 
     // Apply color tranform to linear space and LUT (or vicecersa).
-    {5}
-    {6}
+    {7}
+    {8}
 
     // Apply color transformations in linear space.
     if (uboColor.data.enabled)
@@ -597,16 +674,10 @@ void main()
     }
 
     // Call libplacebo tonemapping (may go to PQ space after this)
-    {7}
+    {9}
 
     // Apply OCIO Display/View.
-    {8}
-
-    // Apply dithering.
-    if (ubo.dither > 0)
-    {
-        outColor = ditherFunc(outColor, ubo.dither);
-    }
+    {10}
 
     if (uboLevels.data.enabled)
     {
@@ -667,7 +738,9 @@ void main()
                 .arg(args[5])
                 .arg(args[6])
                 .arg(args[7])
-                .arg(args[8]);
+                .arg(args[8])
+                .arg(args[9])
+                .arg(args[10]);
         }
 
         std::string differenceFragmentSource()

@@ -107,10 +107,17 @@ namespace mrv
             //! Return the current video image in BGRA order after drawing it.
             const image::Color4f* image() const;
 
+            //! Get the shader options.
+            const timeline::ShaderOptions&
+            getShaderOptions() const noexcept;
+
+            //! Set the shader options.
+            void setShaderOptions(const timeline::ShaderOptions& value) noexcept;
+            
             //! Get the background options.
             const timeline::BackgroundOptions&
             getBackgroundOptions() const noexcept;
-
+            
             //! Observe the background options.
             std::shared_ptr<observer::IValue<timeline::BackgroundOptions> >
             observeBackgroundOptions() const;

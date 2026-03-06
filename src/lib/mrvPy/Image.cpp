@@ -90,8 +90,7 @@ namespace tl
         operator<<(std::ostream& o, const DisplayOptions& a)
         {
             o << "<mrv2.image.DisplayOptions channels" << a.channels
-              << " mirror=" << a.mirror << " dithering="
-              << a.dithering << " color=" << a.color
+              << " mirror=" << a.mirror << " color=" << a.color
               << " levels=" << a.levels << " softClip=" << a.softClip
               << " imageFilters=" << a.imageFilters
               << " videoLevels=" << a.videoLevels << ">";
@@ -376,9 +375,6 @@ Contains all classes and enums related to image controls.
         .def_readwrite(
             "softClip", &timeline::DisplayOptions::softClip,
             _("Soft Clip options :class:`mrv2.image.SoftClip`.."))
-        .def_readwrite(
-            "dithering", &timeline::DisplayOptions::dithering,
-            _("Dithering for Display Options.."))
         .def(
             "__repr__",
             [](const timeline::DisplayOptions& o)

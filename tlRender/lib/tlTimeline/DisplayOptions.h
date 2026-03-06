@@ -120,17 +120,6 @@ namespace tl
         };
         TLRENDER_ENUM(HDRInformation);
         TLRENDER_ENUM_SERIALIZE(HDRInformation);
-
-        enum class Dithering {
-            kNone,
-            BlueNoise,
-
-            Count,
-            First = kNone
-        };
-        
-        TLRENDER_ENUM(Dithering);
-        TLRENDER_ENUM_SERIALIZE(Dithering);
         
         //! Display options.
         struct DisplayOptions
@@ -147,7 +136,6 @@ namespace tl
             HDRInformation   hdrInfo = HDRInformation::FromFile;
             bool ignoreChromaticities = false;
             bool invalidValues = false;
-            Dithering dithering = Dithering::kNone;
 
             bool operator==(const DisplayOptions&) const;
             bool operator!=(const DisplayOptions&) const;

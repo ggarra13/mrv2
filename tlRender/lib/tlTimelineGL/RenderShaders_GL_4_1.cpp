@@ -354,7 +354,9 @@ vec4 sampleTexture(
             const std::string& ocioDef, const std::string& ocio,
             const std::string& lutDef, const std::string& lut,
             timeline::LUTOrder lutOrder, const std::string& toneMapDef,
-            const std::string& toneMap)
+            const std::string& toneMap,
+            const std::string& debandingDef,
+            const std::string& debanding)
         {
             std::vector<std::string> args;
             args.push_back(videoLevels); // 0

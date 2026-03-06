@@ -1196,7 +1196,6 @@ namespace tl
                 p.shaders["display"]->bind(p.frameIndex);
                 p.shaders["display"]->setUniform("transform.mvp", oldTransform, vlk::kShaderVertex);
                 p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
-                p.shaders["display"]->setTexture("blueNoiseSampler", p.blueNoiseTexture);
 
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData && p.placeboData->pcUBOSize > 0)
@@ -1264,12 +1263,6 @@ namespace tl
                 ubo.channels = static_cast<int>(displayOptions.channels);
                 ubo.mirrorX = displayOptions.mirror.x;
                 ubo.mirrorY = displayOptions.mirror.y;
-                if (static_cast<int>(displayOptions.dithering))
-                {
-                    ubo.dither = p.fbo->getWidth();
-                }
-                if (!p.blueNoiseTexture)
-                    ubo.dither = 0;
                 ubo.softClip = displayOptions.softClip.enabled ? displayOptions.softClip.value : 0.F;
                 ubo.videoLevels = static_cast<int>(displayOptions.videoLevels);
                 ubo.invalidValues = displayOptions.invalidValues;

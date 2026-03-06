@@ -604,11 +604,8 @@ namespace mrv
                 }
                 
                 // Set the renderers's max nits
-                bool createBlueNoiseTexture = true;
                 if (!vk.render)
-                    vk.render = timeline_vlk::Render::create(ctx, context,
-                                                             nullptr,
-                                                             createBlueNoiseTexture);
+                    vk.render = timeline_vlk::Render::create(ctx, context);
 
                 vk.render->setMonitorCapabilities(p.monitor);
          
@@ -953,7 +950,8 @@ namespace mrv
                     
                     _updateMonitorDisplayView(screen, ocio);
 
-                    timeline::BackgroundOptions backgroundOptions = getBackgroundOptions();        
+                    timeline::BackgroundOptions backgroundOptions = getBackgroundOptions();
+                    vk.render->setShaderOptions(p.shaderOptions);
                     vk.render->setLUTOptions(p.lutOptions);
                     vk.render->setHDROptions(p.hdrOptions);
                     if (p.missingFrame &&

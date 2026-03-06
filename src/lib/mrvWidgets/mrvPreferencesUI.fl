@@ -47,7 +47,7 @@ decl {\#include "make_ocio_chooser.h"} {public global
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {selected public global
+decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvOCIO.h"} {private global
@@ -93,7 +93,7 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {33 55 853 466} type Double resizable
+      xywh {0 0 853 466} type Double resizable
       code0 {main = m;} visible
     } {
       Fl_Group {} {open
@@ -711,28 +711,49 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label Render
-              xywh {288 35 555 369} box EMBOSSED_BOX align 5 hide
+              label Render open
+              xywh {288 35 555 369} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label Render open
                 xywh {298 68 535 320} box ROUNDED_BOX
               } {
-                Fl_Choice uiPrefsVideoLevels {
-                  label {Video Levels}
-                  xywh {514 157 135 25} down_box BORDER_BOX
+                Fl_Choice uiPrefsDebanding {
+                  label {Debanding (Vulkan)} open selected
+                  tooltip {Makes gradients smoother on video files.} xywh {514 99 135 25} down_box BORDER_BOX
                 } {
                   MenuItem {} {
-                    label {From File}
+                    label None
+                    xywh {0 0 100 20}
+                  }
+                  MenuItem {} {
+                    label Small
+                    xywh {10 10 100 20}
+                  }
+                  MenuItem {} {
+                    label Medium
                     xywh {20 20 100 20}
                   }
                   MenuItem {} {
+                    label High
+                    xywh {30 30 100 20}
+                  }
+                }
+                Fl_Choice uiPrefsVideoLevels {
+                  label {Video Levels}
+                  xywh {514 155 135 24} down_box BORDER_BOX
+                } {
+                  MenuItem {} {
+                    label {From File}
+                    xywh {30 30 100 20}
+                  }
+                  MenuItem {} {
                     label {Full Range}
-                    xywh {40 40 100 20}
+                    xywh {50 50 100 20}
                   }
                   MenuItem {} {
                     label {Legal Range}
-                    xywh {30 30 100 20}
+                    xywh {40 40 100 20}
                   }
                 }
                 Fl_Choice uiPrefsAlphaBlend {
@@ -1271,7 +1292,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Group {} {
               label OCIO open
-              xywh {288 37 555 361} box EMBOSSED_BOX align 5
+              xywh {288 37 555 361} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label OCIO open

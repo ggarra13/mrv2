@@ -56,6 +56,7 @@ ChangeLog
 - On Vulkan on Linux, when swapchain is VK_COLOR_SPACE_SRGB_NONLINEAR_KHR, try to use the best format like VK_FORMAT_A2R10G10B10_UNORM_PACK32 if possible.
 - On Vulkan we now extract the monitor's primaries from EDID on Linux and with DXGI on Windows and with the corresponding functions on macOS.
 - Fixed a Vulkan HDR cyan color clamping and bad matrix calculation inherited from tlRender.
+- On VUlkan, added debanding of main image to smooth out gradients.  You control it with Render->Debanding->None/Low/Medium/High.
 
 
 v1.5.6

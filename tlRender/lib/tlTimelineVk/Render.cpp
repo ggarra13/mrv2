@@ -8,7 +8,6 @@
 
 #include <tlTimelineVk/RenderPrivate.h>
 #include <tlTimelineVk/RenderStructs.h>
-#include <tlTimelineVk/BlueNoiseTexture.h>
 
 #include <tlVk/Buffer.h>
 #include <tlVk/Vk.h>
@@ -869,8 +868,7 @@ namespace tl
 
         void Render::_init(
             const std::shared_ptr<system::Context>& context,
-            const std::shared_ptr<TextureCache>& textureCache,
-            const bool createBlueNoiseTexture)
+            const std::shared_ptr<TextureCache>& textureCache)
         {
             IRender::_init(context);
             TLRENDER_P();
@@ -884,9 +882,6 @@ namespace tl
             p.glyphTextureAtlas = vlk::TextureAtlas::create(
                 ctx, 1, 4096, image::PixelType::L_U8,
                 timeline::ImageFilter::Linear);
-
-            if (createBlueNoiseTexture)
-                p.blueNoiseTexture = vlk::create_blue_noise_texture(ctx);
 
             p.logTimer = std::chrono::steady_clock::now();
         }
@@ -951,11 +946,10 @@ namespace tl
         std::shared_ptr<Render> Render::create(
             Fl_Vk_Context& vulkanContext,
             const std::shared_ptr<system::Context>& context,
-            const std::shared_ptr<TextureCache>& textureCache,
-            const bool createBlueNoiseTexture)
+            const std::shared_ptr<TextureCache>& textureCache)
         {
             auto out = std::shared_ptr<Render>(new Render(vulkanContext));
-            out->_init(context, textureCache, createBlueNoiseTexture);
+            out->_init(context, textureCache);
             return out;
         }
 
@@ -2411,6 +2405,18 @@ namespace tl
             _displayShader();
         }
 
+        void Render::setShaderOptions(const timeline::ShaderOptions& value)
+        {
+            TLRENDER_P();
+            if (value == p.shaderOptions)
+                return;
+
+            p.shaderOptions = value;
+            
+            p.shaders["display"].reset();
+            _displayShader();
+        }
+
         void Render::setHDROptions(const timeline::HDROptions& value)
         {
             TLRENDER_P();
@@ -2591,10 +2597,10 @@ namespace tl
             std::string lut;
             std::string toneMap;
 
-            // Start of binding index (1, 2 for main textures)
-            // (3 to 6 are the standard UBOs in
-            // tlRender).
-            p.bindingIndex = 7;
+            // Start of binding index (1 is for main texture)
+            // (2 to 5 are the standard UBOs in tlRender).
+            // (6 and more are for libplacebo and OCIO).
+            p.bindingIndex = 6;
             std::size_t pushSize = 0;
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.placeboData)
@@ -3050,10 +3056,36 @@ namespace tl
                 lut = "outColor = lutFunc(outColor);";
             }
 #endif // TLRENDER_OCIO
-                
+
+            std::string debandingDef, debanding;
+            switch(p.shaderOptions.debanding)
+            {
+            case timeline::Debanding::High:
+                debandingDef = debandingFragmentSource(200.F, 32.F, 4, 128);
+                break;
+            case timeline::Debanding::Medium:
+                debandingDef = debandingFragmentSource(100.F, 24.F, 2, 64);
+                break;
+            case timeline::Debanding::Low:
+                debandingDef = debandingFragmentSource(48.F, 16.F, 1, 32);
+                break;
+            case timeline::Debanding::kNone:
+                break;
+            }
+
+            if (p.shaderOptions.debanding != timeline::Debanding::kNone)
+            {
+                debanding = "outColor = deband(textureSampler, t);\n";
+            }
+            else
+            {
+                debanding = "outColor = texture(textureSampler, t);\n";
+            }
+            
             const std::string source = displayFragmentSource(
                 ocioICSDef, ocioICS, ocioDef, ocio, lutDef, lut,
-                p.lutOptions.order, toneMapDef, toneMap);
+                p.lutOptions.order, toneMapDef, toneMap,
+                debandingDef, debanding);
 #if DEBUG_DISPLAY_SHADER
             std::cerr << source << std::endl;
 #endif
@@ -3098,7 +3130,6 @@ namespace tl
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->addFBO("textureSampler");
-                p.shaders["display"]->addTexture("blueNoiseSampler");
 
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData && p.ocioData->icsDesc)

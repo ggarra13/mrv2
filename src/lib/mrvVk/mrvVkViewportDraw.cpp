@@ -35,6 +35,7 @@
 
 #include <FL/Fl_PNG_Image.H>
 
+#include <algorithm>
 #include <cmath>
 #include <regex>
 
@@ -725,9 +726,16 @@ namespace mrv
                 return;
 
             Viewport* self = const_cast< Viewport* >(this);
-            const uint16_t fontSize = 12 * self->pixels_per_unit();
-            const image::FontInfo fontInfo(kFontFamily, fontSize);
             const auto& viewportSize = getViewportSize();
+            const auto& renderSize = getRenderSize();
+            
+            // Calculate resolution multiplier.
+            uint16_t fontSize = 12 * self->pixels_per_unit();
+            if (viewportSize.w > 2048)
+                fontSize *=2;
+            else if (viewportSize.w > 3840)
+                fontSize *= 3;
+            const image::FontInfo fontInfo(kFontFamily, fontSize);
 
 
             const image::FontMetrics fontMetrics =

@@ -243,9 +243,11 @@ namespace mrv
     void monitor_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
     void all_monitors_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
 
-    // Dithering callbacks
-    void dithering_none_cb(Fl_Menu_*, ViewerUI* ui);
-    void dithering_blue_noise_cb(Fl_Menu_*, ViewerUI* ui);
+    // Debanding callbacks
+    void debanding_none_cb(Fl_Menu_*, ViewerUI* ui);
+    void debanding_low_cb(Fl_Menu_*, ViewerUI* ui);
+    void debanding_medium_cb(Fl_Menu_*, ViewerUI* ui);
+    void debanding_high_cb(Fl_Menu_*, ViewerUI* ui);
     
     // Video levels callbacks
     void video_levels_from_file_cb(Fl_Menu_*, ViewerUI* ui);

@@ -286,8 +286,10 @@ namespace mrv
     Hotkey kRotatePlus90(false, false, false, false, '+');
     Hotkey kRotateMinus90(false, false, false, false, '-');
 
-    Hotkey kDitheringNone(false, false, false, false, 0);
-    Hotkey kDitheringBlueNoise(false, false, false, false, 0);
+    Hotkey kDebandingNone(false, false, false, false, 0);
+    Hotkey kDebandingLow(false, false, false, false, 0);
+    Hotkey kDebandingMedium(false, false, false, false, 0);
+    Hotkey kDebandingHigh(false, false, false, false, 0);
 
     Hotkey kVideoLevelsFile(false, false, false, false, 0);
     Hotkey kVideoLevelsLegalRange(false, false, false, false, 0);
@@ -479,8 +481,10 @@ namespace mrv
         HotkeyEntry(_("Rotate Images +90 Degrees"), &kRotatePlus90),
         HotkeyEntry(_("Rotate Images -90 Degrees"), &kRotateMinus90),
 
-        HotkeyEntry(_("Dithering None"), &kDitheringNone),
-        HotkeyEntry(_("Dithering Blue Noise"), &kDitheringBlueNoise),
+        HotkeyEntry(_("Debanding None"), &kDebandingNone),
+        HotkeyEntry(_("Debanding Small"), &kDebandingLow),
+        HotkeyEntry(_("Debanding Medium"), &kDebandingMedium),
+        HotkeyEntry(_("Debanding High"), &kDebandingHigh),
 
         HotkeyEntry(_("Video Levels from File"), &kVideoLevelsFile),
         HotkeyEntry(_("Video Levels Legal Range"), &kVideoLevelsLegalRange),
