@@ -4004,9 +4004,6 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
-msgid "Could not determine monitor's nits."
-msgstr "No pude determinar la luminancia del monitor."
-
 msgid "HDR monitor not found or not configured."
 msgstr "Monitor HDR no encontrado o no configurado."
 
@@ -4208,6 +4205,18 @@ msgstr "Render/Rotar/-90 Grados"
 msgid "Render/Rotate/+90 Degrees"
 msgstr "Render/Rotar/+90 Grados"
 
+msgid "Render/Debanding/None"
+msgstr "Render/Debanding/Ninguno"
+
+msgid "Render/Debanding/Small"
+msgstr "Render/Debanding/Bajo"
+
+msgid "Render/Debanding/Medium"
+msgstr "Render/Debanding/Medio"
+
+msgid "Render/Debanding/High"
+msgstr "Render/Debanding/Alto"
+
 msgid "Render/Video Levels/From File"
 msgstr "Render/Niveles de Vídeo/Del Archivo"
 
@@ -4312,6 +4321,12 @@ msgstr "Reproducir/Ir A/Cuadro Previo"
 
 msgid "Playback/Go to/Next Frame"
 msgstr "Reproducir/Ir A/Cuadro Próximo"
+
+msgid "Playback/Go to/Previous 10 seconds"
+msgstr "Reproducción/Ir a/10 segundos anteriores"
+
+msgid "Playback/Go to/Next 10 seconds"
+msgstr "Reproducción/Ir a/10 segundos siguientes"
 
 msgid "Playback/Go to/Previous Clip"
 msgstr "Reproducir/Ir A/Clip Previo"
@@ -6173,6 +6188,12 @@ msgstr "CIE XYZ"
 msgid "CIE xyY"
 msgstr "CIE xyY"
 
+msgid "Small"
+msgstr "Pequeño"
+
+msgid "High"
+msgstr "Alto"
+
 msgid "From File"
 msgstr "Del Archivo"
 
@@ -6190,9 +6211,6 @@ msgstr "Premultiplicado"
 
 msgid "Nearest"
 msgstr "Cercanía"
-
-msgid "Small"
-msgstr "Pequeño"
 
 msgid "Large"
 msgstr "Grande"
@@ -6725,6 +6743,12 @@ msgstr ""
 msgid "Render"
 msgstr "Render"
 
+msgid "Debanding (Vulkan)"
+msgstr "Debanding (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "Hace que los degradados en archivos de video sean más suaves."
+
 msgid "Alpha Blend"
 msgstr "Mezcla Alfa"
 
@@ -6983,6 +7007,16 @@ msgid ""
 msgstr ""
 "Cuando esta opción está activada, y tu config.ocio tiene un display y "
 "vistapor defector, será usado al comenzar."
+
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "Sin OCIO en videos o datos sRGB/BT709"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr ""
+"Si se reproduce un video o se muestra una imagen SDR, OCIO se desactivará "
+"automáticamente."
 
 msgid "Use Active Views and Active Displays"
 msgstr "Use Vistas Activas y Displays Activos"
@@ -7806,6 +7840,18 @@ msgstr "Rotar las imágenes +90 grados"
 msgid "Rotate Images -90 Degrees"
 msgstr "Rotar las imágenes -90 grados"
 
+msgid "Debanding None"
+msgstr "Debanding Ninguno"
+
+msgid "Debanding Small"
+msgstr "Debanding Bajo"
+
+msgid "Debanding Medium"
+msgstr "Debanding Medio"
+
+msgid "Debanding High"
+msgstr "Debanding Alto"
+
 msgid "Video Levels from File"
 msgstr "Niveles de Vídeo Del Archivo"
 
@@ -8210,6 +8256,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "No pude determinar la luminancia del monitor."
 
 #~ msgid "Toggle HDR ScRGB"
 #~ msgstr "Alternar mapeo de tonos de HDR"

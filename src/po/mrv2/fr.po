@@ -3933,9 +3933,6 @@ msgstr "Avant V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Derrière V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "Could not determine monitor's nits."
-msgstr "Impossible de déterminer les nits du moniteur."
-
 msgid "HDR monitor not found or not configured."
 msgstr "Moniteur HDR non trouvé ou non configuré."
 
@@ -4138,6 +4135,18 @@ msgstr "Rendre/Rotation/-90 Degrés"
 msgid "Render/Rotate/+90 Degrees"
 msgstr "Rendre/Rotation/+90 Degrés"
 
+msgid "Render/Debanding/None"
+msgstr "Rendu/Debanding/Aucun"
+
+msgid "Render/Debanding/Small"
+msgstr "Rendu/Debanding/Faible"
+
+msgid "Render/Debanding/Medium"
+msgstr "Rendu/Debanding/Moyen"
+
+msgid "Render/Debanding/High"
+msgstr "Rendu/Debanding/Élevé"
+
 msgid "Render/Video Levels/From File"
 msgstr "Rendre/Niveaux vidéo/À partir du fichier"
 
@@ -4242,6 +4251,12 @@ msgstr "Remise en ligne/Allez-y./Cadre précédent"
 
 msgid "Playback/Go to/Next Frame"
 msgstr "Remise en ligne/Allez-y./Cadre suivant"
+
+msgid "Playback/Go to/Previous 10 seconds"
+msgstr "Lecture/Aller à/10 secondes précédentes"
+
+msgid "Playback/Go to/Next 10 seconds"
+msgstr "Lecture/Aller à/10 secondes suivantes"
 
 msgid "Playback/Go to/Previous Clip"
 msgstr "Remise en ligne/Allez-y./Clip précédent"
@@ -6109,6 +6124,12 @@ msgstr "CIE XYZ"
 msgid "CIE xyY"
 msgstr "CIE xyY"
 
+msgid "Small"
+msgstr "Petite"
+
+msgid "High"
+msgstr "Élevé"
+
 msgid "From File"
 msgstr "À partir du fichier"
 
@@ -6126,9 +6147,6 @@ msgstr "Prémultiplication"
 
 msgid "Nearest"
 msgstr "Le plus proche"
-
-msgid "Small"
-msgstr "Petite"
 
 msgid "Large"
 msgstr "Grandes"
@@ -6673,6 +6691,12 @@ msgstr ""
 msgid "Render"
 msgstr "Rendre"
 
+msgid "Debanding (Vulkan)"
+msgstr "Debanding (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "Rend les dégradés plus lisses dans les fichiers vidéo."
+
 msgid "Alpha Blend"
 msgstr "Mélange Alpha"
 
@@ -6787,8 +6811,8 @@ msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
 msgstr ""
-"Lorsqu’elle est inférieure à 100, aide à trouver la luminosité maximale en "
-"ignorant le 1 % supérieur des valeurs aberrantes."
+"Lorsque la valeur est inférieure à 100, aide à trouver la luminosité "
+"maximale en ignorant le 1 % supérieur de valeurs aberrantes."
 
 msgid "Smoothing Period"
 msgstr "Période de lissage"
@@ -6935,6 +6959,16 @@ msgid ""
 msgstr ""
 "Lorsque cette option est activée, et que votre config.ocio a un affichage et"
 " une vue par défaut, elle sera utilisée pour être définie par défaut."
+
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "Pas d’OCIO pour les vidéos ou les données sRGB/BT709"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr ""
+"Lors de la lecture d’une vidéo ou de l’affichage d’une image SDR, OCIO sera "
+"désactivé automatiquement."
 
 msgid "Use Active Views and Active Displays"
 msgstr "Utiliser les Vues actives et les Affichages actifs"
@@ -7772,6 +7806,18 @@ msgstr "Tourner les images +90 Degrés"
 msgid "Rotate Images -90 Degrees"
 msgstr "Tourner les images -90 Degrés"
 
+msgid "Debanding None"
+msgstr "Debanding Aucun"
+
+msgid "Debanding Small"
+msgstr "Debanding Faible"
+
+msgid "Debanding Medium"
+msgstr "Debanding Moyen"
+
+msgid "Debanding High"
+msgstr "Debanding Élevé"
+
 msgid "Video Levels from File"
 msgstr "Niveaux vidéo à partir du fichier"
 
@@ -8176,6 +8222,9 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Impossible de déterminer les nits du moniteur."
 
 #~ msgid "User Interface/HDR"
 #~ msgstr "Interface utilisateur/HDR"

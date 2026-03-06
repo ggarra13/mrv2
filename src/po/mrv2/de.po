@@ -3928,9 +3928,6 @@ msgstr "    Vorne    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "Could not determine monitor's nits."
-msgstr "Der aktuelle Pfad kann nicht gefunden werden."
-
 msgid "HDR monitor not found or not configured."
 msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
 
@@ -4132,6 +4129,18 @@ msgstr "Render/Drehen/-90 Grad"
 msgid "Render/Rotate/+90 Degrees"
 msgstr "Render/Drehen/+90 Grad"
 
+msgid "Render/Debanding/None"
+msgstr "Render/Debanding/Keine"
+
+msgid "Render/Debanding/Small"
+msgstr "Render/Debanding/Gering"
+
+msgid "Render/Debanding/Medium"
+msgstr "Render/Debanding/Mittel"
+
+msgid "Render/Debanding/High"
+msgstr "Render/Debanding/Hoch"
+
 msgid "Render/Video Levels/From File"
 msgstr "Render/Video-Ebenen/Aus Datei"
 
@@ -4236,6 +4245,12 @@ msgstr "Wiedergabe/Gehen Sie zu/Vorheriger Rahmen"
 
 msgid "Playback/Go to/Next Frame"
 msgstr "Wiedergabe/Gehen Sie zu/Nchster Rahmen"
+
+msgid "Playback/Go to/Previous 10 seconds"
+msgstr "Wiedergabe/Gehe zu/Vorherige 10 Sekunden"
+
+msgid "Playback/Go to/Next 10 seconds"
+msgstr "Wiedergabe/Gehe zu/Nächste 10 Sekunden"
 
 msgid "Playback/Go to/Previous Clip"
 msgstr "Wiedergabe/Gehen Sie zu/Vorheriger Clip"
@@ -6099,6 +6114,12 @@ msgstr "CIE XYZ"
 msgid "CIE xyY"
 msgstr "CIE XYY"
 
+msgid "Small"
+msgstr "Klein"
+
+msgid "High"
+msgstr "Hoch"
+
 msgid "From File"
 msgstr "Aus Datei"
 
@@ -6116,9 +6137,6 @@ msgstr "Vervielfacht"
 
 msgid "Nearest"
 msgstr "Nchstgelegen"
-
-msgid "Small"
-msgstr "Klein"
 
 msgid "Large"
 msgstr "Gro"
@@ -6654,6 +6672,12 @@ msgstr ""
 msgid "Render"
 msgstr "Render"
 
+msgid "Debanding (Vulkan)"
+msgstr "Debanding (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "Macht Farbverläufe in Videodateien glatter."
+
 msgid "Alpha Blend"
 msgstr "Alpha-Mischung"
 
@@ -6915,6 +6939,16 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist und Ihre config.ocio eine Standardanzeige "
 "und Ansicht hat, wird sie als Standardeinstellung verwendet."
+
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "Kein OCIO bei Videos oder sRGB/BT709-Daten"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr ""
+"Beim Abspielen eines Videos oder Anzeigen eines SDR-Bildes wird OCIO "
+"automatisch deaktiviert."
 
 msgid "Use Active Views and Active Displays"
 msgstr "Aktive Ansichten und aktive Displays verwenden"
@@ -7738,6 +7772,18 @@ msgstr "Drehen von Bildern +90 Grad"
 msgid "Rotate Images -90 Degrees"
 msgstr "Drehen von Bildern -90 Grad"
 
+msgid "Debanding None"
+msgstr "Debanding Keine"
+
+msgid "Debanding Small"
+msgstr "Debanding Gering"
+
+msgid "Debanding Medium"
+msgstr "Debanding Mittel"
+
+msgid "Debanding High"
+msgstr "Debanding Hoch"
+
 msgid "Video Levels from File"
 msgstr "Video-Levels aus der Datei"
 
@@ -8142,6 +8188,9 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Der aktuelle Pfad kann nicht gefunden werden."
 
 #~ msgid "Toggle HDR ScRGB"
 #~ msgstr "HDR-Tonkarte umschalten"
