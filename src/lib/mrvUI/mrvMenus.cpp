@@ -1104,7 +1104,16 @@ namespace mrv
         menu->add(
             _("Playback/Go to/Next Frame"), kFrameStepFwd.hotkey(),
             (Fl_Callback*)next_frame_cb, ui, FL_MENU_DIVIDER | mode);
+        
+        menu->add(
+            _("Playback/Go to/Previous 10 seconds"), kFrameStepFPSBack.hotkey(),
+            (Fl_Callback*)previous_second_cb, ui, mode);
+        menu->add(
+            _("Playback/Go to/Next 10 seconds"), kFrameStepFPSFwd.hotkey(),
+            (Fl_Callback*)next_second_cb, ui, FL_MENU_DIVIDER | mode);
 
+        
+        
         if (player)
         {
             mode = 0;

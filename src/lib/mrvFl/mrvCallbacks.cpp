@@ -2332,6 +2332,26 @@ namespace mrv
     {
         ui->uiView->framePrev();
     }
+    
+    void next_second_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+        auto time = player->currentTime();
+        time += otime::RationalTime(10.0, 1.0).rescaled_to(time.rate());
+        player->seek(time);
+    }
+
+    void previous_second_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+        auto time = player->currentTime();
+        time -= otime::RationalTime(10.0, 1.0).rescaled_to(time.rate());
+        player->seek(time);
+    }
 
     void toggle_otio_clip_in_out_cb(Fl_Menu_*, ViewerUI* ui)
     {

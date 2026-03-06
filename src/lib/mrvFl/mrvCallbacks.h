@@ -204,6 +204,9 @@ namespace mrv
 
     void next_frame_cb(Fl_Menu_*, ViewerUI* ui);
     void previous_frame_cb(Fl_Menu_*, ViewerUI* ui);
+    
+    void next_second_cb(Fl_Menu_*, ViewerUI* ui);
+    void previous_second_cb(Fl_Menu_*, ViewerUI* ui);
 
     void next_annotation_cb(Fl_Menu_*, ViewerUI* ui);
     void previous_annotation_cb(Fl_Menu_*, ViewerUI* ui);

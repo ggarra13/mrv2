@@ -60,6 +60,7 @@ ChangeLog
 - Fixed a Vulkan HDR cyan color clamping and bad matrix calculation inherited from tlRender.
 - On Vulkan, added debanding of main image to smooth out gradients.  You control it with "Render->Debanding" and Preferences->Render Debanding to make it permanent.  There's None, Low, Medium and High settings.
 - Made HUD display scale up to make it more readable when the viewport resolution is too big.
+- Implemented "Playback/Go to/Next 10 Seconds" and "Playback/Go to/Previous 10 Seconds".  The default shortcut hotkeys are CTRL+Left Arrow and CTRL+Right Arrow.
 
 
 v1.5.6
