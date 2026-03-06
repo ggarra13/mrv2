@@ -446,9 +446,12 @@ namespace mrv
         // HDR monitor variables
         int screen_index = 0;
         tl::monitor::Capabilities monitor;
+
+        // Libplacebo variables
         const pl_shader_res* res = nullptr;
         pl_shader_obj state = nullptr;
 
+        // NDI variables
         NDIlib_find_instance_t NDI_find = nullptr;
         NDIlib_recv_instance_t NDI_recv = nullptr;
 
@@ -1492,35 +1495,6 @@ namespace mrv
                                     init = true;
                                 p.hasHDR = true;
 
-                                rapidxml::xml_attribute<>* attr_transfer =
-                                    root->first_attribute("transfer");
-                                if (attr_transfer)
-                                {
-                                    p.transferName = attr_transfer->value();
-
-                                    if (p.monitor.hdr_enabled &&
-                                        colorSpace() !=
-                                            VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
-                                    {
-                                        if (p.transferName == "bt_2100_hlg")
-                                        {
-                                            colorSpace() =
-                                                VK_COLOR_SPACE_HDR10_HLG_EXT;
-                                        }
-                                        else
-                                        {
-                                            colorSpace() =
-                                                VK_COLOR_SPACE_HDR10_ST2084_EXT;
-                                        }
-
-                                        if (p.lastColorSpace != colorSpace())
-                                        {
-                                            p.lastColorSpace = colorSpace();
-                                            m_swapchain_needs_recreation = true;
-                                        }
-                                    }
-                                }
-
                                 image::HDRData hdrData;
                                 if (attr_mrv2)
                                 {
@@ -1540,11 +1514,15 @@ namespace mrv
                                 }
                                 else
                                 {
+                                    rapidxml::xml_attribute<>* attr_transfer =
+                                        root->first_attribute("transfer");
+                                    
                                     rapidxml::xml_attribute<>* attr_matrix =
                                         root->first_attribute("matrix");
                                     rapidxml::xml_attribute<>* attr_primaries =
                                         root->first_attribute("primaries");
-
+                                    if (attr_transfer)
+                                        p.transferName = attr_transfer->value();
                                     if (attr_matrix)
                                         p.matrixName = attr_matrix->value();
                                     if (attr_primaries)
