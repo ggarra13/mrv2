@@ -413,7 +413,6 @@ namespace mrv
                     std::string msg =
                         string::Format(_("HDR monitor min. nits = {0}")).
                         arg(p.monitor.min_nits);
-                
                     LOG_STATUS(msg);
                 
                     msg = string::Format(_("HDR monitor max. nits = {0}")).

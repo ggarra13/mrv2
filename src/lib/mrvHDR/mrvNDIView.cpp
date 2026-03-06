@@ -25,7 +25,6 @@
 #include <rapidxml/rapidxml.hpp>
 
 #include <tlDevice/NDI/NDI.h>
-
 #include "mrvHDR/mrvDesktop.h"
 #include "mrvHDR/mrvNDICallbacks.h"
 #include "mrvHDR/mrvMonitor.h"
@@ -253,9 +252,9 @@ namespace
 namespace mrv
 {
     
-    monitor::HDRCapabilities getHDRCapabilities(int screen_num)
+    monitor::Capabilities getHDRCapabilities(int screen_num)
     {
-        monitor::HDRCapabilities out;
+        monitor::Capabilities out;
         if (desktop::Wayland())
         {
             const std::string& monitorName = desktop::monitorName(screen_num);
@@ -446,7 +445,7 @@ namespace mrv
 
         // HDR monitor variables
         int screen_index = 0;
-        monitor::HDRCapabilities hdrCapabilities;
+        tl::monitor::Capabilities monitor;
         const pl_shader_res* res = nullptr;
         pl_shader_obj state = nullptr;
 
@@ -507,9 +506,6 @@ namespace mrv
         std::string matrixName;
 
         // Full mrv2 image data (we try to use this)
-        bool hdrMonitorFound = false;
-        bool isP3Display = false;
-
         bool hasHDR = false;
         image::HDRData hdrData;
 
@@ -569,9 +565,6 @@ namespace mrv
         
         Fl_Vk_Window::init_colorspace();
 
-        // Look for HDR10 or HLG if present
-        p.hdrMonitorFound = false;
-
         bool valid_colorspace = false;
         switch (colorSpace())
         {
@@ -587,11 +580,10 @@ namespace mrv
         }
 
         p.screen_index = this->screen_num();
-        p.hdrCapabilities = getHDRCapabilities(p.screen_index);
+        p.monitor = getHDRCapabilities(p.screen_index);
         
-        if (valid_colorspace && p.hdrCapabilities.enabled)
+        if (valid_colorspace && p.monitor.hdr_enabled)
         {
-            p.hdrMonitorFound = true;
             LOG_STATUS(_("HDR monitor found."));
             
             _getMonitorNits(false);
@@ -1200,11 +1192,32 @@ namespace mrv
 
         VkResult result;
 
-        if (p.hdrMonitorFound && p.hasHDR && p.useHDRMetadata)
+        if (p.monitor.hdr_enabled && p.useHDRMetadata)
         {
-            // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
-            const image::HDRData& data = p.hdrData;
+            // Start with the video metadata in case monitor primaries are
+            // missing.
+            image::HDRData data = p.hdrData;
             auto m_previous_hdr_metadata = m_hdr_metadata;
+            
+            if (p.monitor.red.x > 0)
+            {
+                data.primaries[image::Red].x = p.monitor.red.x;
+                data.primaries[image::Red].y = p.monitor.red.y;
+                data.primaries[image::Green].x = p.monitor.green.x;
+                data.primaries[image::Green].y = p.monitor.green.y;
+                data.primaries[image::Blue].x = p.monitor.blue.x;
+                data.primaries[image::Blue].y = p.monitor.blue.y;
+            }
+            if (p.monitor.white.x > 0)
+            {
+                data.primaries[image::White].x = p.monitor.white.x;
+                data.primaries[image::White].y = p.monitor.white.y;
+            }
+            data.displayMasteringLuminance =
+                math::FloatRange(std::max(p.monitor.min_nits, 0.001F),
+                                 p.monitor.max_nits);
+            data.maxCLL = p.monitor.max_nits;
+            data.maxFALL = p.monitor.max_nits;
 
             m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
             m_hdr_metadata.displayPrimaryRed = {
@@ -1273,7 +1286,7 @@ namespace mrv
     bool NDIView::vk_draw_begin()
     {
         // Change background color here
-        m_clearColor = {0.0, 0.0, 0.0, 0.0};
+        m_clearColor = {0.0, 0.0, 0.0, 1.0};
         return Fl_Vk_Window::vk_draw_begin();
     }
 
@@ -1294,11 +1307,14 @@ namespace mrv
             // If we changed screen from an HDR to an SDR one, or one with
             // different nits settings, recreate the Vulkan swapchain.
             auto hdr = getHDRCapabilities(this->screen_num());
-            if (hdr.supported != p.hdrCapabilities.supported ||
-                hdr.min_nits != p.hdrCapabilities.min_nits ||
-                hdr.max_nits != p.hdrCapabilities.max_nits)
+            const auto monitor = getHDRCapabilities(this->screen_num());
+            if (monitor.hdr_enabled != p.monitor.hdr_enabled ||
+                monitor.hdr_supported != p.monitor.hdr_supported ||
+                monitor.min_nits != p.monitor.min_nits ||
+                monitor.max_nits != p.monitor.max_nits)
             {
                 m_swapchain_needs_recreation = true;
+                init_colorspace();
                 redraw();
                 return;
             }
@@ -1309,7 +1325,6 @@ namespace mrv
         // Clear the frame
         begin_render_pass(cmd);
         end_render_pass(cmd);
-
 
         {
             std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
@@ -1325,15 +1340,15 @@ namespace mrv
             &m_desc_set, 0, nullptr);
 
         VkViewport viewport = {};
-        viewport.width = static_cast<float>(w());
-        viewport.height = static_cast<float>(h());
+        viewport.width = static_cast<float>(pixel_w());
+        viewport.height = static_cast<float>(pixel_h());
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
         vkCmdSetViewport(cmd, 0, 1, &viewport);
 
         VkRect2D scissor = {};
-        scissor.extent.width = w();
-        scissor.extent.height = h();
+        scissor.extent.width = pixel_w();
+        scissor.extent.height = pixel_h();
         vkCmdSetScissor(cmd, 0, 1, &scissor);
 
         // Draw the rectangle
@@ -1368,30 +1383,14 @@ namespace mrv
     {
         TLRENDER_P();
             
-        if (!p.hdrCapabilities.supported)
+        if (!p.monitor.hdr_enabled)
         {
-#ifdef __linux__
-            if (!quiet)
-            {
-                std::cerr << _("Could not determine monitor's nits.")
-                          << std::endl;
-            }
-            if (p.hdrMonitorFound)
-            {
-                p.hdrCapabilities.min_nits = 0.F;
-                p.hdrCapabilities.max_nits = 1000.F;
-            }
-            else
-            {
-                p.hdrCapabilities.min_nits = 0.F;
-                p.hdrCapabilities.max_nits = 100.F;
-            }
-#else
-            p.hdrMonitorFound = false;
-#endif
+            p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
+            p.monitor.min_nits = 0.F;
+            p.monitor.max_nits = 100.F;
         }
             
-        if (!p.hdrMonitorFound)
+        if (!p.monitor.hdr_enabled)
         {
             std::cout << _("HDR monitor not found or not configured.")
                       << std::endl;
@@ -1404,12 +1403,12 @@ namespace mrv
             {
                 std::string msg =
                     string::Format(_("HDR monitor min. nits = {0}")).
-                    arg(p.hdrCapabilities.min_nits);
-                std::cout << msg << std::endl;
+                    arg(p.monitor.min_nits);
+                LOG_STATUS(msg);
                 
                 msg = string::Format(_("HDR monitor max. nits = {0}")).
-                      arg(p.hdrCapabilities.max_nits);
-                std::cout << msg << std::endl;
+                      arg(p.monitor.max_nits);
+                LOG_STATUS(msg);
             }
         }
     }
@@ -1499,7 +1498,7 @@ namespace mrv
                                 {
                                     p.transferName = attr_transfer->value();
 
-                                    if (p.hdrMonitorFound &&
+                                    if (p.monitor.hdr_enabled &&
                                         colorSpace() !=
                                             VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
                                     {
@@ -1899,12 +1898,33 @@ namespace mrv
         pl_color_space dst_colorspace;
         memset(&dst_colorspace, 0, sizeof(pl_color_space));
 
-        if (p.hdrMonitorFound)
+        if (p.monitor.hdr_enabled)
         {
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-            dst_colorspace.hdr.min_luma = p.hdrCapabilities.min_nits;
-            dst_colorspace.hdr.max_luma = p.hdrCapabilities.max_nits;
+            dst_colorspace.hdr.min_luma = p.monitor.min_nits;
+            dst_colorspace.hdr.max_luma = p.monitor.max_nits;
+            if (p.monitor.red.x > 0)
+            {
+                dst_colorspace.hdr.prim.red.x = p.monitor.red.x;
+                dst_colorspace.hdr.prim.red.y = p.monitor.red.y;
+                dst_colorspace.hdr.prim.green.x = p.monitor.green.x;
+                dst_colorspace.hdr.prim.green.y = p.monitor.green.y;
+                dst_colorspace.hdr.prim.blue.x = p.monitor.blue.x;
+                dst_colorspace.hdr.prim.blue.y = p.monitor.blue.y;
+                dst_colorspace.hdr.prim.white.x = p.monitor.white.x;
+                dst_colorspace.hdr.prim.white.y = p.monitor.white.y;
+            }
+            else
+            {
+                const struct pl_raw_primaries* raw =
+                    pl_raw_primaries_get(PL_COLOR_PRIM_DISPLAY_P3);
+
+                dst_colorspace.hdr.prim.red = raw->red;
+                dst_colorspace.hdr.prim.green = raw->green;
+                dst_colorspace.hdr.prim.blue = raw->blue;
+                dst_colorspace.hdr.prim.white = raw->white;
+            }
             
             if (colorSpace() == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
             {
@@ -2300,7 +2320,7 @@ namespace mrv
         p.useHDRMetadata = !p.useHDRMetadata;
         m_swapchain_needs_recreation = true;
 
-        if (p.useHDRMetadata && !p.isP3Display)
+        if (p.useHDRMetadata)
         {
             if (p.transferName == "bt_2100_hlg")
             {

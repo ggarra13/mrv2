@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <tlCore/Monitor.h>
+
 #include <cstdint>
 #include <string>
 
@@ -11,6 +13,8 @@ namespace mrv
 {
     namespace monitor
     {
+        using tl::monitor::Capabilities;
+       
         //! Function to decode edidManufactureId to a three-letter char
         inline std::string decodeEdidManufacturerId(const unsigned char* edid)
         {
@@ -34,20 +38,13 @@ namespace mrv
 
         std::string getManufacturerName(const char* vendorId);
         
-        struct HDRCapabilities {
-            bool enabled = false;
-            bool supported = false;
-            float max_nits = 0.0f;
-            float min_nits = 0.0f;
-        };
-
-        HDRCapabilities parseEDIDLuminance(const uint8_t* edid, size_t length);
+        Capabilities parseEDIDLuminance(const uint8_t* edid, size_t length);
         
         std::string getName(int monitorIndex, int numMonitors);
 
-        HDRCapabilities get_hdr_capabilities(int screen = -1);
+        Capabilities get_hdr_capabilities(int screen = -1);
 
-        HDRCapabilities
+        Capabilities
         get_hdr_capabilities_by_name(const std::string& target_connector);
         
         
