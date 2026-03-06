@@ -59,7 +59,7 @@ namespace mrv
         fps->set_output(); // needed so no selection appears
         g->end();
         w->resizable(w);
-        w->set_modal();
+        w->set_non_modal();
         w->end();
 
         _startTime = std::chrono::steady_clock::now();
@@ -180,10 +180,7 @@ namespace mrv
             elapsed = nullptr;
             return false;
         }
-
-        // This must come after w->visible() check to avoid progress reports
-        // when loading multiple small movies.
-        Fl::check();
+        
         ++_frame;
         
         return true;
