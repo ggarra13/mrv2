@@ -927,11 +927,8 @@ namespace mrv
             const auto& viewportSize = getViewportSize();
             
             // Calculate resolution multiplier.
-            uint16_t fontSize = 12 * self->pixels_per_unit();
-            if (viewportSize.w > 2048)
-                fontSize *= 2;
-            else if (viewportSize.w > 3600)
-                fontSize *= 3;
+            uint16_t fontSize = p.ui->uiPrefs->uiPrefsHudFontSize->value() *
+                                self->pixels_per_unit();
             const image::FontInfo fontInfo(kFontFamily, fontSize);
 
 

@@ -691,6 +691,9 @@ namespace mrv
         hud.get("attributes", tmp, 0);
         uiPrefs->uiPrefsHudAttributes->value((bool)tmp);
 
+        hud.get("font_size", tmp, 12);
+        uiPrefs->uiPrefsHudFontSize->value(tmp);
+        
         Fl_Preferences win(view, "window");
 
         win.get("always_save_on_exit", tmp, 0);
@@ -1484,6 +1487,7 @@ namespace mrv
         hud.set("cache", uiPrefs->uiPrefsHudCache->value());
         hud.set("memory", uiPrefs->uiPrefsHudMemory->value());
         hud.set("attributes", uiPrefs->uiPrefsHudAttributes->value());
+        hud.set("font_size", uiPrefs->uiPrefsHudFontSize->value());
 
         {
             Fl_Preferences win(view, "window");

@@ -313,13 +313,13 @@ namespace mrv
             const std::vector<std::shared_ptr<voice::Annotation> >& voannotations,
             const math::Size2i& renderSize)
 #else
-        void Viewport::_drawAnnotations(
-            const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
-            const std::shared_ptr<tl::timeline_vlk::Render>& render,
-            const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
-            const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
-            const std::vector<std::shared_ptr<bool> >& voannotations,
-            const math::Size2i& renderSize)
+            void Viewport::_drawAnnotations(
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
+                const std::shared_ptr<tl::timeline_vlk::Render>& render,
+                const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
+                const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
+                const std::vector<std::shared_ptr<bool> >& voannotations,
+                const math::Size2i& renderSize)
 #endif  
         {
             TLRENDER_P();
@@ -728,16 +728,9 @@ namespace mrv
             Viewport* self = const_cast< Viewport* >(this);
             auto viewportSize = getViewportSize();
             
-            const float scale = Fl::screen_scale(p.screen_index) * 2;
-            viewportSize.w *= scale;
-            viewportSize.h *= scale;
-            
             // Calculate resolution multiplier.
-            uint16_t fontSize = 12 * scale;
-            if (viewportSize.w > 2048)
-                fontSize *= 2;
-            else if (viewportSize.w > 3680)
-                fontSize *= 3;
+            uint16_t fontSize = p.ui->uiPrefs->uiPrefsHudFontSize->value() *
+                                self->pixels_per_unit();
             const image::FontInfo fontInfo(kFontFamily, fontSize);
 
 
