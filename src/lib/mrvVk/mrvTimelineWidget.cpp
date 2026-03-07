@@ -1062,13 +1062,15 @@ namespace mrv
                     region.srcSubresource.baseArrayLayer = 0;
                     region.srcSubresource.layerCount = 1;
                     region.srcOffsets[0] = {0, 0, 0};
-                    region.srcOffsets[1] = {pixel_w(), pixel_h(), 1};
+                    int32_t W = pixel_w();
+                    int32_t H = pixel_h();
+                    region.srcOffsets[1] = {W, H, 1};
                     region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
                     region.dstSubresource.mipLevel = 0;
                     region.dstSubresource.baseArrayLayer = 0;
                     region.dstSubresource.layerCount = 1;
                     region.dstOffsets[0] = {0, 0, 0};
-                    region.dstOffsets[1] = {pixel_w(), pixel_h(), 1};
+                    region.dstOffsets[1] = {W, H, 1};
                     vkCmdBlitImage(
                         cmd,
                         srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,

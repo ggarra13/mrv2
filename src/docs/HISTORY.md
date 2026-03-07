@@ -64,6 +64,8 @@ ChangeLog
 - Fixed OS's screen scaling not being taken into account in the hdr utility.
 - Fixed a hanging on Vulkan when loading a 4K video from the command-line on
 KDE.
+- Changed font in the timeline to make it a little bit more readable.
+- Fixed a sporadic Wayland buffer size crash on the Vulkan backend.
 
 
 v1.5.6

@@ -792,8 +792,8 @@ namespace mrv
 
         using namespace tl;
 
-        const math::Size2i viewportSize = {pixel_w(), pixel_h()};
-        image::Size renderSize = {pixel_w(), pixel_h()};
+        const math::Size2i viewportSize = {(int)pixel_w(), (int)pixel_h()};
+        image::Size renderSize = {(int)pixel_w(), (int)pixel_h()};
 
         if (p.image)
         {
