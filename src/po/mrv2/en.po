@@ -4143,16 +4143,16 @@ msgid "Render/Rotate/+90 Degrees"
 msgstr "Render/Rotate/+90 Degrees"
 
 msgid "Render/Debanding/None"
-msgstr "Render/Alpha Blend/None"
+msgstr "Render/Debanding/None"
 
 msgid "Render/Debanding/Small"
-msgstr "Render/Red Channel"
+msgstr "Render/Debanding/Small"
 
 msgid "Render/Debanding/Medium"
-msgstr ""
+msgstr "Render/Debanding/Medium"
 
 msgid "Render/Debanding/High"
-msgstr ""
+msgstr "Render/Debanding/High"
 
 msgid "Render/Video Levels/From File"
 msgstr "Render/Video Levels/From File"
