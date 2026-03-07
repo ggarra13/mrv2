@@ -1831,13 +1831,91 @@ namespace mrv
 
         if (p.hasHDR)
         {
-            src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-            src_colorspace.transfer = PL_COLOR_TRC_PQ;
-            if (p.transferName == "bt_2100_hlg")
+            // ================================================================
+            // FIX BUG #3: Set primaries from HDRData instead of hardcoding
+            // ================================================================
+            const auto& prims = data.primaries;
+            
+            // Detect primaries from received data
+            bool isP3 = 
+                std::abs(prims[0].x - 0.680F) < 0.001F &&
+                std::abs(prims[0].y - 0.320F) < 0.001F &&
+                std::abs(prims[1].x - 0.265F) < 0.001F &&
+                std::abs(prims[1].y - 0.690F) < 0.001F &&
+                std::abs(prims[2].x - 0.150F) < 0.001F &&
+                std::abs(prims[2].y - 0.060F) < 0.001F;
+            
+            bool isBT709 =
+                std::abs(prims[0].x - 0.640F) < 0.001F &&
+                std::abs(prims[0].y - 0.330F) < 0.001F &&
+                std::abs(prims[1].x - 0.300F) < 0.001F &&
+                std::abs(prims[1].y - 0.600F) < 0.001F &&
+                std::abs(prims[2].x - 0.150F) < 0.001F &&
+                std::abs(prims[2].y - 0.060F) < 0.001F;
+            
+            bool isBT2020 =
+                std::abs(prims[0].x - 0.708F) < 0.001F &&
+                std::abs(prims[0].y - 0.292F) < 0.001F &&
+                std::abs(prims[1].x - 0.170F) < 0.001F &&
+                std::abs(prims[1].y - 0.797F) < 0.001F &&
+                std::abs(prims[2].x - 0.131F) < 0.001F &&
+                std::abs(prims[2].y - 0.046F) < 0.001F;
+            
+            if (isP3)
             {
+                // Check white point to differentiate P3 D65 vs DCI P3
+                if (std::abs(prims[3].x - 0.3127F) < 0.001F &&
+                    std::abs(prims[3].y - 0.3290F) < 0.001F)
+                {
+                    src_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3; // P3 D65
+                }
+                else if (std::abs(prims[3].x - 0.3140F) < 0.001F &&
+                         std::abs(prims[3].y - 0.3510F) < 0.001F)
+                {
+                    src_colorspace.primaries = PL_COLOR_PRIM_DCI_P3; // DCI P3
+                }
+                else
+                {
+                    src_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3; // Default to D65
+                }
+            }
+            else if (isBT709)
+            {
+                src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+            }
+            else if (isBT2020)
+            {
+                src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+            }
+            else
+            {
+                // Unknown primaries - default to BT.2020
+                src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+            }
+            
+            // Set transfer function from HDRData EOTF
+            switch (data.eotf)
+            {
+            case image::EOTF_SRGB:
+                src_colorspace.transfer = PL_COLOR_TRC_SRGB;
+                break;
+            case image::EOTF_BT601:
+            case image::EOTF_BT709:
+            case image::EOTF_BT2020:
+                src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                break;
+            case image::EOTF_BT2100_HLG:
                 src_colorspace.transfer = PL_COLOR_TRC_HLG;
+                break;
+            case image::EOTF_BT2100_PQ:
+                src_colorspace.transfer = PL_COLOR_TRC_PQ;
+                break;
+            default:
+                src_colorspace.transfer = PL_COLOR_TRC_PQ;
+                break;
             }
 
+            // Set HDR metadata
             cmap.metadata = PL_HDR_METADATA_ANY;
             pl_hdr_metadata& hdr = src_colorspace.hdr;
             hdr.min_luma = data.displayMasteringLuminance.getMin();
@@ -1950,6 +2028,40 @@ namespace mrv
 
         pl_color_space_infer(&dst_colorspace);
 
+        if (p.hasHDR && data.isDisplayReferred)
+        {
+                        // Display-referred content is already color-graded for a specific
+            // display. Check if source matches destination.
+            
+            bool primariesMatch = (src_colorspace.primaries == dst_colorspace.primaries);
+            bool transferMatch = (src_colorspace.transfer == dst_colorspace.transfer);
+            bool luminanceMatch = 
+                std::abs(src_colorspace.hdr.max_luma - dst_colorspace.hdr.max_luma) < 100.0F;
+            
+            if (primariesMatch && transferMatch && luminanceMatch)
+            {
+                // Perfect match - disable all transformations for 1:1 pass-through
+                cmap.tone_mapping_function = nullptr;
+                
+                LOG_DEBUG("Display-referred: Perfect match, 1:1 pass-through");
+            }
+            else if (primariesMatch && transferMatch && !luminanceMatch)
+            {
+                // Same primaries/transfer, different luminance - only tone map
+                cmap.tone_mapping_function = &pl_tone_map_spline;
+                
+                LOG_DEBUG("Display-referred: Luminance mismatch, tone mapping enabled");
+            }
+            else
+            {
+                // Primaries or transfer differ - let libplacebo handle gamut mapping
+                cmap.tone_mapping_function = &pl_tone_map_spline;
+                
+                LOG_DEBUG("Display-referred: Primaries/transfer mismatch, "
+                         "gamut mapping enabled");
+            }
+        }
+        
         pl_color_map_args color_map_args;
         memset(&color_map_args, 0, sizeof(pl_color_map_args));
 
