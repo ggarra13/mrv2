@@ -6479,6 +6479,9 @@ msgstr "मेमोरी"
 msgid "Attributes"
 msgstr "गुणधर्म"
 
+msgid "Font Size"
+msgstr "फ़ॉन्ट आकार"
+
 msgid "File Requester"
 msgstr "फ़ाइल निवेदनर"
 

@@ -6387,6 +6387,9 @@ msgstr "メモリ"
 msgid "Attributes"
 msgstr "属性"
 
+msgid "Font Size"
+msgstr "フォントサイズ"
+
 msgid "File Requester"
 msgstr "ファイルリクエスタ"
 

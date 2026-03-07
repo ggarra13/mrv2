@@ -6540,6 +6540,9 @@ msgstr "Память"
 msgid "Attributes"
 msgstr "Атрибуты"
 
+msgid "Font Size"
+msgstr "Размер шрифта"
+
 msgid "File Requester"
 msgstr "Запрашиватель файла"
 
@@ -7804,7 +7807,7 @@ msgid "Debanding Small"
 msgstr "Дебандинг: низкий"
 
 msgid "Debanding Medium"
-msgstr ""
+msgstr "Debanding средний"
 
 msgid "Debanding High"
 msgstr "Дебандинг: высокий"

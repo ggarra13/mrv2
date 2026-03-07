@@ -6507,6 +6507,9 @@ msgstr "Memria"
 msgid "Attributes"
 msgstr "Atributos"
 
+msgid "Font Size"
+msgstr "Tamanho da fonte"
+
 msgid "File Requester"
 msgstr "Solicitante de Ficheiro"
 

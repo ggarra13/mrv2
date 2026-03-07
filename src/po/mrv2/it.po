@@ -6547,6 +6547,9 @@ msgstr "Memoria"
 msgid "Attributes"
 msgstr "Attributi"
 
+msgid "Font Size"
+msgstr "Dimensione del carattere"
+
 msgid "File Requester"
 msgstr "Richiedente file"
 
@@ -7827,7 +7830,7 @@ msgid "Debanding Medium"
 msgstr "Debanding Medio"
 
 msgid "Debanding High"
-msgstr ""
+msgstr "Debanding alto"
 
 msgid "Video Levels from File"
 msgstr "Livelli video dal file"

@@ -6407,6 +6407,9 @@ msgstr "内存"
 msgid "Attributes"
 msgstr "属性"
 
+msgid "Font Size"
+msgstr "字体大小"
+
 msgid "File Requester"
 msgstr "文件请求器"
 

@@ -6583,6 +6583,9 @@ msgstr "Memoria"
 msgid "Attributes"
 msgstr "Atributos"
 
+msgid "Font Size"
+msgstr "Tamaño Texto:"
+
 msgid "File Requester"
 msgstr "Buscador de Archivos"
 

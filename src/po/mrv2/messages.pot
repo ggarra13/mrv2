@@ -6023,6 +6023,9 @@ msgstr ""
 msgid "Attributes"
 msgstr ""
 
+msgid "Font Size"
+msgstr ""
+
 msgid "File Requester"
 msgstr ""
 

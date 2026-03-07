@@ -6508,6 +6508,9 @@ msgstr "Speicher"
 msgid "Attributes"
 msgstr "Attribute"
 
+msgid "Font Size"
+msgstr "Schriftgröße"
+
 msgid "File Requester"
 msgstr "Datei-Anfrager"
 

@@ -6524,6 +6524,9 @@ msgstr "Mémoire"
 msgid "Attributes"
 msgstr "Attributs"
 
+msgid "Font Size"
+msgstr "Taille de la police"
+
 msgid "File Requester"
 msgstr "Demandeur de fichier"
 
