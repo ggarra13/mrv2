@@ -2030,7 +2030,7 @@ namespace mrv
 
         if (p.hasHDR && data.isDisplayReferred)
         {
-                        // Display-referred content is already color-graded for a specific
+            // Display-referred content is already color-graded for a specific
             // display. Check if source matches destination.
             
             bool primariesMatch = (src_colorspace.primaries == dst_colorspace.primaries);

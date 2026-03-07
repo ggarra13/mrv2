@@ -1164,7 +1164,7 @@ namespace mrv
                     if (!ocio.view.empty() && ocio.view != "Default" && 
                         ocio.view != "(default)" && ocio.view != "None")
                     {
-                        displayView += " (" + ocio.view + ")";
+                        displayView += " / " + ocio.view;
                     }
                     data = image::nameToPrimaries(displayView);
                     if (ocio.view.find("SDR") == std::string::npos)

@@ -2040,7 +2040,7 @@ namespace tl
                     if (!ocio.view.empty() && ocio.view != "Default" && 
                         ocio.view != "(default)" && ocio.view != "None")
                     {
-                        displayView += " (" + ocio.view + ")";
+                        displayView += " / " + ocio.view;
                     }
 
                     hdrData.reset(new image::HDRData(image::nameToPrimaries(ocio.display + ocio.view)));
