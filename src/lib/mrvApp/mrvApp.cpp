@@ -997,7 +997,7 @@ namespace mrv
         {
             ui->uiMain->show();
             ui->uiMain->wait_for_expose();
-            ui->uiView->wait_for_expose();
+
             ui->uiView->take_focus();
 
             // Fix for always on top on Linux
@@ -1675,9 +1675,14 @@ namespace mrv
                 if (p.options.playback == timeline::Playback::Count)
                     p.options.playback = timeline::Playback::Forward;
 
-                // Must be 0.5 to prevent display not showing up.
+#ifdef __linux__
+                // Must be 0.75 to prevent display not showing up.
                 Fl::add_timeout(
-                    0.5, (Fl_Timeout_Handler)start_playback_cb, this);
+                    0.75, (Fl_Timeout_Handler)start_playback_cb, this);
+#else
+                Fl::add_timeout(
+                    0.01, (Fl_Timeout_Handler)start_playback_cb, this);
+#endif
             }
         }
         p.running = true;
