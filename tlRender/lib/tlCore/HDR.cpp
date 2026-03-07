@@ -322,6 +322,7 @@ namespace tl
                 {"isDolbyVision", value.isDolbyVision},
                 {"maxPQY", value.maxPQY},
                 {"avgPQY", value.avgPQY},
+                {"isDisplayReferred", value.isDisplayReferred}
             };
         }
 
@@ -349,6 +350,15 @@ namespace tl
                 value.isDolbyVision = false;
                 value.maxPQY = 0.F;
                 value.avgPQY = 0.F;
+            }
+            // Add safe parsing for the new flag
+            if (json.contains("isDisplayReferred"))
+            {
+                json.at("isDisplayReferred").get_to(value.isDisplayReferred);
+            }
+            else
+            {
+                value.isDisplayReferred = false;
             }
         }
     } // namespace image

@@ -52,7 +52,8 @@ namespace tl
                    sceneMax[2] == other.sceneMax[2] && ootf == other.ootf &&
                 sceneAvg == other.sceneAvg && maxPQY == other.maxPQY &&
                 isDolbyVision == other.isDolbyVision &&
-                avgPQY == other.avgPQY;
+                avgPQY == other.avgPQY &&
+                isDisplayReferred == other.isDisplayReferred;
         }
 
         inline bool HDRData::operator!=(const HDRData& other) const
