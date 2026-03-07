@@ -726,14 +726,17 @@ namespace mrv
                 return;
 
             Viewport* self = const_cast< Viewport* >(this);
-            const auto& viewportSize = getViewportSize();
-            const auto& renderSize = getRenderSize();
+            auto viewportSize = getViewportSize();
+            
+            const float scale = Fl::screen_scale(p.screen_index) * 2;
+            viewportSize.w *= scale;
+            viewportSize.h *= scale;
             
             // Calculate resolution multiplier.
-            uint16_t fontSize = 12 * self->pixels_per_unit();
+            uint16_t fontSize = 12 * scale;
             if (viewportSize.w > 2048)
-                fontSize *=2;
-            else if (viewportSize.w > 3840)
+                fontSize *= 2;
+            else if (viewportSize.w > 3680)
                 fontSize *= 3;
             const image::FontInfo fontInfo(kFontFamily, fontSize);
 
