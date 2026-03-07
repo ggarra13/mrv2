@@ -2037,27 +2037,41 @@ namespace tl
                 if (!hdrData && !config.noMetadata && ocio.enabled)
                 {
                     std::string displayView = ocio.display;
-                    if (!ocio.view.empty() && ocio.view != "Default" && 
-                        ocio.view != "(default)" && ocio.view != "None")
+                    const std::string& view = ocio.view;
+                    if (!view.empty() && view != "Default" && 
+                        view != "(default)" && view != "None")
                     {
-                        displayView += " / " + ocio.view;
+                        displayView += " / " + view;
                     }
 
                     hdrData.reset(new image::HDRData(image::nameToPrimaries(ocio.display + ocio.view)));
                     hdrData->isDisplayReferred = true;
 
-                    // FIX BUG #2: Set mastering display luminance
+                    float peak = 1000.F;
+                    if (view.find("10000") != std::string::npos)
+                    {
+                        peak = 10000.F;
+                    }
+                    else if (view.find("1000") != std::string::npos)
+                    {
+                        peak = 1000.F;
+                    }
+                    else if (view.find("100") != std::string::npos)
+                    {
+                        peak = 100.F;
+                    }
+                    
                     switch (hdrData->eotf)
                     {
                     case image::EOTF_BT2100_PQ:
-                        hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 10000.0F);
-                        hdrData->maxCLL = 10000.0F;
-                        hdrData->maxFALL = 4000.0F;
+                        hdrData->displayMasteringLuminance = math::FloatRange(0.0F, peak);
+                        hdrData->maxCLL = peak;
+                        hdrData->maxFALL = peak * 0.4;
                         break;
                     case image::EOTF_BT2100_HLG:
                         hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 1000.0F);
-                        hdrData->maxCLL = 1000.0F;
-                        hdrData->maxFALL = 400.0F;
+                        hdrData->maxCLL = peak;
+                        hdrData->maxFALL = peak * 0.4;
                         break;
                     default: // SDR
                         hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 100.0F);

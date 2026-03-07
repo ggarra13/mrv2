@@ -1158,13 +1158,15 @@ namespace mrv
                 const int screen_idx = this->screen_num();
                 const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
                 image::HDRData data;
-                if (ocio.enabled && !ocio.display.empty() && !ocio.view.empty())
+                const std::string& display = ocio.display;
+                const std::string& view = ocio.view;
+                if (ocio.enabled && !display.empty() && !view.empty())
                 {
-                    std::string displayView = ocio.display;
-                    if (!ocio.view.empty() && ocio.view != "Default" && 
-                        ocio.view != "(default)" && ocio.view != "None")
+                    std::string displayView = display;
+                    if (!view.empty() && view != "Default" && 
+                        view != "(default)" && view != "None")
                     {
-                        displayView += " / " + ocio.view;
+                        displayView += " / " + view;
                     }
                     data = image::nameToPrimaries(displayView);
                     if (ocio.view.find("SDR") == std::string::npos)
@@ -1194,7 +1196,7 @@ namespace mrv
                         }
                         data.displayMasteringLuminance = math::FloatRange(0.001F, ocioPeak);
                         data.maxCLL = std::min(ocioPeak, monitorPeak);
-                        data.maxFALL = std::min(100.F, data.maxCLL * 0.1F); 
+                        data.maxFALL = std::min(100.F, data.maxCLL * 0.4F); 
                     }
                     else  // is SDR view
                     {
