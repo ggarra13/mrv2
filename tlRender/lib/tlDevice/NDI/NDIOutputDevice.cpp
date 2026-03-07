@@ -1915,7 +1915,6 @@ namespace tl
                 }
                 if (!p.thread.videoData.empty())
                 {
-                    // This is almost fine
                     p.thread.render->setTransform(
                         pm * centerTranslationMatrix * resizeScaleMatrix *
                         translateMatrix * zoomMatrix * offsetTransformMatrix *
@@ -2034,51 +2033,56 @@ namespace tl
                     return;
                 const auto ocio = p.mutex.ocioOptions; 
                 hdrData = device::getHDRData(p.thread.videoData[0]);
-                if (!hdrData && !config.noMetadata && ocio.enabled)
+                if (!hdrData && !config.noMetadata)
                 {
-                    std::string displayView = ocio.display;
+                    const std::string& display = ocio.display;
                     const std::string& view = ocio.view;
-                    if (!view.empty() && view != "Default" && 
-                        view != "(default)" && view != "None")
+                    if (ocio.enabled && !display.empty() && !view.empty())
                     {
-                        displayView += " / " + view;
-                    }
+                        std::string displayView = ocio.display;
+                        if (!view.empty() && view != "Default" && 
+                            view != "(default)" && view != "None")
+                        {
+                            displayView += " / " + view;
+                        }
 
-                    hdrData.reset(new image::HDRData(image::nameToPrimaries(ocio.display + ocio.view)));
-                    hdrData->isDisplayReferred = true;
-
-                    float peak = 1000.F;
-                    if (view.find("10000") != std::string::npos)
-                    {
-                        peak = 10000.F;
-                    }
-                    else if (view.find("1000") != std::string::npos)
-                    {
-                        peak = 1000.F;
-                    }
-                    else if (view.find("100") != std::string::npos)
-                    {
-                        peak = 100.F;
-                    }
+                        hdrData.reset(new image::HDRData(image::nameToPrimaries(displayView)));
+                        hdrData->isDisplayReferred = true;
+                        
+                        float peak = 1000.F;
+                        if (view.find("10000") != std::string::npos)
+                        {
+                            peak = 10000.F;
+                        }
+                        else if (view.find("1000") != std::string::npos)
+                        {
+                            peak = 1000.F;
+                        }
+                        else if (view.find("100") != std::string::npos)
+                        {
+                            peak = 100.F;
+                        }
                     
-                    switch (hdrData->eotf)
-                    {
-                    case image::EOTF_BT2100_PQ:
-                        hdrData->displayMasteringLuminance = math::FloatRange(0.0F, peak);
-                        hdrData->maxCLL = peak;
-                        hdrData->maxFALL = peak * 0.4;
-                        break;
-                    case image::EOTF_BT2100_HLG:
-                        hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 1000.0F);
-                        hdrData->maxCLL = peak;
-                        hdrData->maxFALL = peak * 0.4;
-                        break;
-                    default: // SDR
-                        hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 100.0F);
-                        hdrData->maxCLL = 100.0F;
-                        hdrData->maxFALL = 80.0F;
-                        break;
+                        switch (hdrData->eotf)
+                        {
+                        case image::EOTF_BT2100_PQ:
+                            hdrData->displayMasteringLuminance = math::FloatRange(0.0F, peak);
+                            hdrData->maxCLL = peak;
+                            hdrData->maxFALL = peak * 0.4;
+                            break;
+                        case image::EOTF_BT2100_HLG:
+                            hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 1000.0F);
+                            hdrData->maxCLL = peak;
+                            hdrData->maxFALL = peak * 0.4;
+                            break;
+                        default: // SDR
+                            hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 100.0F);
+                            hdrData->maxCLL = 100.0F;
+                            hdrData->maxFALL = 80.0F;
+                            break;
+                        }
                     }
+
                 }
                 break;
             }

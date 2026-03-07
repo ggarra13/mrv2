@@ -460,8 +460,6 @@ namespace mrv
         NDISourcesObserver;
         std::string currentNDISource;
 
-        bool init = false;
-
         struct FindMutex
         {
             std::mutex mutex;
@@ -509,7 +507,7 @@ namespace mrv
         std::string matrixName;
 
         // Full mrv2 image data (we try to use this)
-        bool hasHDR = false;
+        bool hasHDRData = false;
         image::HDRData hdrData;
 
         std::string oldShaderSource;
@@ -583,11 +581,12 @@ namespace mrv
         }
 
         p.screen_index = this->screen_num();
-        p.monitor = getHDRCapabilities(p.screen_index);
         
-        if (valid_colorspace && p.monitor.hdr_enabled)
+        if (valid_colorspace)
         {
             LOG_STATUS(_("HDR monitor found."));
+            
+            p.monitor = getHDRCapabilities(p.screen_index);
             
             _getMonitorNits(false);
         }
@@ -714,7 +713,7 @@ namespace mrv
                     float Y_linear = Yf;
 
                     // apply_inverse_pq is not needed
-                    // if (p.hasHDR)
+                    // if (p.hasHDRData)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
                     //     Y_linear = Yf;
@@ -1457,18 +1456,12 @@ namespace mrv
                 case NDIlib_frame_type_video:
                 {
                     bool init = false;
+                    bool hasHDRData = false;
 
                     float pixelAspectRatio = 1.F;
                     if (video_frame.picture_aspect_ratio == 0.F)
                         pixelAspectRatio =
                             1.F / (video_frame.xres * video_frame.yres);
-
-                    if (p.info.size.w != video_frame.xres ||
-                        p.info.size.h != video_frame.yres ||
-                        p.info.size.pixelAspectRatio != pixelAspectRatio)
-                    {
-                        init = true;
-                    }
 
                     if (video_frame.p_metadata)
                     {
@@ -1491,10 +1484,6 @@ namespace mrv
                                 rapidxml::xml_attribute<>* attr_mrv2 =
                                     root->first_attribute("mrv2");
 
-                                if (!p.hasHDR)
-                                    init = true;
-                                p.hasHDR = true;
-
                                 image::HDRData hdrData;
                                 if (attr_mrv2)
                                 {
@@ -1506,10 +1495,13 @@ namespace mrv
                                         nlohmann::json::parse(jsonString);
 
                                     hdrData = j.get<image::HDRData>();
-                                    if (!image::isHDR(hdrData))
+                                    if (image::isHDR(hdrData))
                                     {
-                                        p.hasHDR = false;
-                                        init = true;
+                                        hasHDRData = true;
+                                    }
+                                    else
+                                    {
+                                        hasHDRData = false;
                                     }
                                 }
                                 else
@@ -1537,9 +1529,7 @@ namespace mrv
                             }
                             else
                             {
-                                if (p.hasHDR)
-                                    init = true;
-                                p.hasHDR = false;
+                                hasHDRData = false;
                             }
                         }
                         catch (const std::exception& e)
@@ -1550,15 +1540,22 @@ namespace mrv
                     }
                     else
                     {
-                        if (p.hasHDR)
-                            init = true;
-                        p.hasHDR = false;
+                        hasHDRData = false;
+                    }
+
+                    if (hasHDRData != p.hasHDRData ||
+                        p.info.size.w != video_frame.xres ||
+                        p.info.size.h != video_frame.yres ||
+                        p.info.size.pixelAspectRatio != pixelAspectRatio)
+                    {
+                        init = true;
                     }
 
                     {
                         std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
                         if (init)
                         {
+                            p.hasHDRData = hasHDRData;
                             p.info.size.w = video_frame.xres;
                             p.info.size.h = video_frame.yres;
                             p.info.size.pixelAspectRatio = pixelAspectRatio;
@@ -1829,11 +1826,8 @@ namespace mrv
         pl_color_space src_colorspace;
         memset(&src_colorspace, 0, sizeof(pl_color_space));
 
-        if (p.hasHDR)
+        if (p.hasHDRData)
         {
-            // ================================================================
-            // FIX BUG #3: Set primaries from HDRData instead of hardcoding
-            // ================================================================
             const auto& prims = data.primaries;
             
             // Detect primaries from received data
@@ -1982,26 +1976,9 @@ namespace mrv
                 dst_colorspace.hdr.prim.white = raw->white;
             }
             
-            if (colorSpace() == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
-            {
-                dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
-                dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
-            }
-            else if (colorSpace() == VK_COLOR_SPACE_HDR10_HLG_EXT)
-            {
-                dst_colorspace.transfer = PL_COLOR_TRC_HLG;
-            }
-            else if (colorSpace() == VK_COLOR_SPACE_DOLBYVISION_EXT)
-            {
-                // \@todo:  How to handle this? PL_COLOR_TRC_DOLBYVISION does
-                //          not exist.
-                // dst_colorspace.transfer = ???
-                dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-            }
-
             // For SDR content on HDR monitor, enable tone mapping to fit SDR
             // into HDR
-            if (!p.hasHDR)
+            if (!p.hasHDRData)
             {
                 cmap.tone_mapping_function = &pl_tone_map_spline;
                 cmap.metadata = PL_HDR_METADATA_NONE; // Simplify
@@ -2020,7 +1997,7 @@ namespace mrv
             dst_colorspace.hdr.min_luma = 0.F;
             dst_colorspace.hdr.max_luma = 203.0F; // SDR peak
                             
-            if (p.hasHDR)
+            if (p.hasHDRData)
                 cmap.tone_mapping_function = &pl_tone_map_spline;
             else
                 cmap.tone_mapping_function = nullptr;
@@ -2028,7 +2005,7 @@ namespace mrv
 
         pl_color_space_infer(&dst_colorspace);
 
-        if (p.hasHDR && data.isDisplayReferred)
+        if (p.hasHDRData && data.isDisplayReferred)
         {
             // Display-referred content is already color-graded for a specific
             // display. Check if source matches destination.
@@ -2043,22 +2020,22 @@ namespace mrv
                 // Perfect match - disable all transformations for 1:1 pass-through
                 cmap.tone_mapping_function = nullptr;
                 
-                LOG_DEBUG("Display-referred: Perfect match, 1:1 pass-through");
+                LOG_STATUS("Display-referred: Perfect match, 1:1 pass-through");
             }
             else if (primariesMatch && transferMatch && !luminanceMatch)
             {
                 // Same primaries/transfer, different luminance - only tone map
                 cmap.tone_mapping_function = &pl_tone_map_spline;
                 
-                LOG_DEBUG("Display-referred: Luminance mismatch, tone mapping enabled");
+                LOG_STATUS("Display-referred: Luminance mismatch, tone mapping enabled");
             }
             else
             {
                 // Primaries or transfer differ - let libplacebo handle gamut mapping
                 cmap.tone_mapping_function = &pl_tone_map_spline;
                 
-                LOG_DEBUG("Display-referred: Primaries/transfer mismatch, "
-                         "gamut mapping enabled");
+                LOG_STATUS("Display-referred: Primaries/transfer mismatch, "
+                           "gamut mapping enabled");
             }
         }
         
@@ -2409,24 +2386,6 @@ namespace mrv
         TLRENDER_P();
         p.useHDRMetadata = !p.useHDRMetadata;
         m_swapchain_needs_recreation = true;
-
-        if (p.useHDRMetadata)
-        {
-            if (p.transferName == "bt_2100_hlg")
-            {
-                colorSpace() = VK_COLOR_SPACE_HDR10_HLG_EXT;
-            }
-            else
-            {
-                colorSpace() = VK_COLOR_SPACE_HDR10_ST2084_EXT;
-            }
-        }
-
-        if (p.lastColorSpace != colorSpace())
-        {
-            p.lastColorSpace = colorSpace();
-        }
-
         redraw();
     }
 

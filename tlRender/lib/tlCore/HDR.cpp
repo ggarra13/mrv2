@@ -351,7 +351,6 @@ namespace tl
                 value.maxPQY = 0.F;
                 value.avgPQY = 0.F;
             }
-            // Add safe parsing for the new flag
             if (json.contains("isDisplayReferred"))
             {
                 json.at("isDisplayReferred").get_to(value.isDisplayReferred);
