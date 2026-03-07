@@ -66,6 +66,8 @@ ChangeLog
 KDE.
 - Changed font in the timeline to make it a little bit more readable.
 - Fixed a sporadic Wayland buffer size crash on the Vulkan backend.
+- Improved performance of resizing the Window on Vulkan.
+- Added HUD font size to Preferences->User Interface->View Window.
 
 
 v1.5.6
