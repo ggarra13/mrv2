@@ -4260,10 +4260,10 @@ msgid "Playback/Go to/Next Frame"
 msgstr "Playback/Go to/Next Frame"
 
 msgid "Playback/Go to/Previous 10 seconds"
-msgstr "Playback/Go to/Previous Frame"
+msgstr "Playback/Go to/Previous 10 seconds"
 
 msgid "Playback/Go to/Next 10 seconds"
-msgstr "Playback/Go to/Next Frame"
+msgstr "Playback/Go to/Next 10 seconds"
 
 msgid "Playback/Go to/Previous Clip"
 msgstr "Playback/Go to/Previous Clip"
@@ -6131,7 +6131,7 @@ msgid "Small"
 msgstr "Small"
 
 msgid "High"
-msgstr "In High"
+msgstr "High"
 
 msgid "From File"
 msgstr "From File"
@@ -6673,10 +6673,10 @@ msgid "Render"
 msgstr "Render"
 
 msgid "Debanding (Vulkan)"
-msgstr ""
+msgstr "Debanding (Vulkan)"
 
 msgid "Makes gradients smoother on video files."
-msgstr ""
+msgstr "Makes gradients smoother on video files."
 
 msgid "Alpha Blend"
 msgstr "Alpha Blend"
@@ -6934,12 +6934,14 @@ msgstr ""
 " it will be used to be set as default."
 
 msgid "No OCIO on Videos or sRGB/BT709 data"
-msgstr ""
+msgstr "No OCIO on Videos or sRGB/BT709 data"
 
 msgid ""
 "If playing a video or showing an SDR image, OCIO will be turned off "
 "automatically."
 msgstr ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
 
 msgid "Use Active Views and Active Displays"
 msgstr "Use Active Views and Active Displays"
@@ -7759,16 +7761,16 @@ msgid "Rotate Images -90 Degrees"
 msgstr "Rotate Images -90 Degrees"
 
 msgid "Debanding None"
-msgstr ""
+msgstr "Debanding None"
 
 msgid "Debanding Small"
-msgstr ""
+msgstr "Debanding Small"
 
 msgid "Debanding Medium"
-msgstr ""
+msgstr "Debanding Medium"
 
 msgid "Debanding High"
-msgstr ""
+msgstr "Debanding High"
 
 msgid "Video Levels from File"
 msgstr "Video Levels from File"
