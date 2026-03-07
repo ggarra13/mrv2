@@ -2029,16 +2029,51 @@ namespace tl
             {
             case device::HDRMode::FromFile:
             case device::HDRMode::Custom:
+            {
                 if (p.thread.videoData.empty())
                     return;
+                const auto ocio = p.mutex.ocioOptions; 
                 hdrData = device::getHDRData(p.thread.videoData[0]);
+                if (!hdrData && !config.noMetadata && ocio.enabled)
+                {
+                    std::string displayView = ocio.display;
+                    if (!ocio.view.empty() && ocio.view != "Default" && 
+                        ocio.view != "(default)" && ocio.view != "None")
+                    {
+                        displayView += " (" + ocio.view + ")";
+                    }
+
+                    hdrData.reset(new image::HDRData(image::nameToPrimaries(ocio.display + ocio.view)));
+                    hdrData->isDisplayReferred = true;
+
+                    // FIX BUG #2: Set mastering display luminance
+                    switch (hdrData->eotf)
+                    {
+                    case image::EOTF_BT2100_PQ:
+                        hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 10000.0F);
+                        hdrData->maxCLL = 10000.0F;
+                        hdrData->maxFALL = 4000.0F;
+                        break;
+                    case image::EOTF_BT2100_HLG:
+                        hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 1000.0F);
+                        hdrData->maxCLL = 1000.0F;
+                        hdrData->maxFALL = 400.0F;
+                        break;
+                    default: // SDR
+                        hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 100.0F);
+                        hdrData->maxCLL = 100.0F;
+                        hdrData->maxFALL = 80.0F;
+                        break;
+                    }
+                }
                 break;
+            }
             case device::HDRMode::Count:
             case device::HDRMode::kNone:
                 break;
             }
 
-            if (hdrData && !config.noMetadata && !p.mutex.ocioOptions.enabled)
+            if (hdrData && !config.noMetadata)
             {
                 std::string primariesName = "bt_2020";
                 std::string transferName = "bt_2020";
