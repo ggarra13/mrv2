@@ -68,7 +68,7 @@ namespace tl
             bool transitions = false;
             bool markers = false;
             std::string regularFont = "NotoSans-Regular";
-            std::string monoFont = "NotoMono-Regular";
+            std::string monoFont = "NotoSans-Bold";
             int fontSize = 12;
             float clipRectScale = 2.F;
             timeline::OCIOOptions ocio;
