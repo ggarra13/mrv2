@@ -68,6 +68,7 @@ KDE.
 - Fixed a sporadic Wayland buffer size crash on the Vulkan backend.
 - Improved performance of resizing the Window on Vulkan.
 - Added HUD font size to Preferences->User Interface->View Window.
+- Bug fixed switching from one monitor with HDR to one without.
 
 
 v1.5.6

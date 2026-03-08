@@ -1516,7 +1516,15 @@ namespace tl
         
         void Render::setMonitorCapabilities(const monitor::Capabilities& value)
         {
-            _p->monitor = value;
+            TLRENDER_P();
+            
+            if (p.monitor == value)
+                return;
+            
+            p.monitor = value;
+
+            p.shaders["display"].reset();
+            _displayShader();
         }
         
         Fl_Vk_Context& Render::getContext() const
@@ -2458,6 +2466,7 @@ namespace tl
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.tonemap)
             {
+                std::cerr << "DO TONEMAPPING" << std::endl;
                 const bool effectivePeakDetection =
                     p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
                 
@@ -2573,6 +2582,8 @@ namespace tl
             }
             else
             {
+                std::cerr << "DON'T DO TONEMAPPING updateDisplay="
+                          << updateDisplayShader << std::endl;
                 // Only destroy data if Tone Mapping is completely OFF
                 p.placeboData.reset();
             }
@@ -2862,11 +2873,19 @@ namespace tl
                     dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
                         
                     dst_colorspace.hdr.min_luma = 0.F;
-
                     // SDR peak in nits
                     // See ITU-R Report BT.2408 for more information.
                     // or libplacebo's colorspace.h
                     dst_colorspace.hdr.max_luma = 203.F; 
+                    
+                    const struct pl_raw_primaries* raw =
+                        pl_raw_primaries_get(PL_COLOR_PRIM_BT_709);
+
+                    dst_colorspace.hdr.prim.red = raw->red;
+                    dst_colorspace.hdr.prim.green = raw->green;
+                    dst_colorspace.hdr.prim.blue = raw->blue;
+                    dst_colorspace.hdr.prim.white = raw->white;
+
                 }
 
                 pl_color_space_infer(&dst_colorspace);

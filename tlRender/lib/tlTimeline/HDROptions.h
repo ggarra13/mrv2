@@ -3,6 +3,7 @@
 // All rights reserved.
 
 #include <tlCore/HDR.h>
+#include <tlCore/Monitor.h>
 
 namespace tl
 {
@@ -47,7 +48,7 @@ namespace tl
 
         //! Tonemap options.
         struct HDROptions
-        {
+        {            
             //! Use libplacebo tonemapping (used for videos mainly)
             bool tonemap = false;
 

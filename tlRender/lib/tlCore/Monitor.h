@@ -20,6 +20,11 @@ namespace tl
             math::Vector2f green;
             math::Vector2f blue;
             math::Vector2f white;
+            
+            bool operator==(const Capabilities&) const;
+            bool operator!=(const Capabilities&) const;
         };
     }
 }
+
+#include <tlCore/MonitorInline.h>
