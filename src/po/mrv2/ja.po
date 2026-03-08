@@ -3890,14 +3890,20 @@ msgstr "HDR モニターの最小輝度（ニト）= {0}"
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR モニターの最大輝度（ニト）= {0}"
 
-msgid "HDR monitor found."
-msgstr "HDRモニターが見つかりました。"
-
 msgid "Vulkan color space is {0}"
 msgstr "Vulkanの色空間は{0}です"
 
 msgid "Vulkan format is {0}"
 msgstr "Vulkanのフォーマットは{0}です"
+
+msgid "HDR active monitor at index {0}"
+msgstr "インデックス {0} のHDRアクティブモニター"
+
+msgid "HDR supported but inactive monitor at index {0}"
+msgstr "インデックス {0} のHDR対応だが非アクティブなモニター"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "インデックス {0} のSDRモニターに変更しました"
 
 msgid "Edit Text"
 msgstr "テキストを編集"
@@ -4111,9 +4117,6 @@ msgstr "レンダー/アルファブレンド/ストレート"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "レンダー/アルファブレンド/プリマルチプライド"
-
-msgid "Render/HDR/Debug"
-msgstr "レンダー/HDR/デバッグ"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/ピーク検出を有効化"
@@ -7984,34 +7987,6 @@ msgstr "ホットキーウィンドウを切り替え"
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
 
-#~ msgid "Could not determine monitor's nits."
-#~ msgstr "モニターのニット値を判別できませんでした。"
-
-#~ msgid "Toggle HDR ScRGB"
-#~ msgstr "HDR トーンマップの切り替え"
-
-#~ msgid "Render/HDR/Enable ScRGB"
-#~ msgstr "Render/HDR/ピーク検出を有効化"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "ユーザーインターフェース/HDR"
-
-#~ msgid "Primaries Name"
-#~ msgstr "原色名"
-
-#~ msgid "PrimariesName"
-#~ msgstr "原色名"
-
-#~ msgid "HDR Shot/Scene Peak Detection"
-#~ msgstr "HDR ショット／シーン ピーク検出"
-
-#~ msgid ""
-#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
-#~ msgstr "HDR ピーク検出が有効な場合に、ショット／シーンの切り替えと判断するためのしきい値。"
-
-#~ msgid "Monitor "
-#~ msgstr "監視 "
-
 #~ msgid "Renderer"
 #~ msgstr "レンダラー"
 
@@ -8050,6 +8025,40 @@ msgstr "バージョン情報ウィンドウを切り替え"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "フォントファイル情報が無効です。"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "HDRモニターが見つかりました。"
+
+#~ msgid "Render/HDR/Debug"
+#~ msgstr "レンダー/HDR/デバッグ"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "モニターのニット値を判別できませんでした。"
+
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "HDR トーンマップの切り替え"
+
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/ピーク検出を有効化"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "ユーザーインターフェース/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "原色名"
+
+#~ msgid "PrimariesName"
+#~ msgstr "原色名"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "HDR ショット／シーン ピーク検出"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr "HDR ピーク検出が有効な場合に、ショット／シーンの切り替えと判断するためのしきい値。"
+
+#~ msgid "Monitor "
+#~ msgstr "監視 "
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "無効なライセンスです。デモモードに切り替えます"

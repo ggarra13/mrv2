@@ -198,9 +198,6 @@ msgstr "HDR monitor found."
 msgid "HDR monitor not found or not configured."
 msgstr "HDR monitor not found or not configured."
 
-msgid "Could not determine monitor's nits."
-msgstr "Could not determine monitor's nits."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR monitor min. nits = {0}"
 
@@ -215,3 +212,6 @@ msgstr "Window/Fullscreen"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/Pass through Metadata to Display"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Could not determine monitor's nits."

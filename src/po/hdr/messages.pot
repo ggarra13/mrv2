@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: hdr v1.5.6\n"
+"Project-Id-Version: hdr v1.5.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -196,9 +196,6 @@ msgid "HDR monitor found."
 msgstr ""
 
 msgid "HDR monitor not found or not configured."
-msgstr ""
-
-msgid "Could not determine monitor's nits."
 msgstr ""
 
 msgid "HDR monitor min. nits = {0}"

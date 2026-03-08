@@ -198,9 +198,6 @@ msgstr "Monitor HDR encontrado."
 msgid "HDR monitor not found or not configured."
 msgstr "Monitor HDR não encontrado ou não configurado."
 
-msgid "Could not determine monitor's nits."
-msgstr "Não foi possível determinar os nits do monitor."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "Brilho mínimo do monitor HDR (nits) = {0}"
 
@@ -215,3 +212,6 @@ msgstr "Janela/Tela Cheia"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/Passar Metadados para o Monitor"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Não foi possível determinar os nits do monitor."

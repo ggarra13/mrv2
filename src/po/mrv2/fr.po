@@ -3942,14 +3942,20 @@ msgstr "Luminosité minimale du moniteur HDR (nits) = {0}"
 msgid "HDR monitor max. nits = {0}"
 msgstr "Luminosité maximale du moniteur HDR (nits) = {0}"
 
-msgid "HDR monitor found."
-msgstr "Moniteur HDR trouvé."
-
 msgid "Vulkan color space is {0}"
 msgstr "L’espace colorimétrique Vulkan est {0}"
 
 msgid "Vulkan format is {0}"
 msgstr "Le format Vulkan est {0}"
+
+msgid "HDR active monitor at index {0}"
+msgstr "Moniteur HDR actif à l’indice {0}"
+
+msgid "HDR supported but inactive monitor at index {0}"
+msgstr "HDR pris en charge mais moniteur inactif à l’indice {0}"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Passé au moniteur SDR à l’indice {0}"
 
 msgid "Edit Text"
 msgstr "Modifier le texte"
@@ -4164,9 +4170,6 @@ msgstr "Rendre/Mélange Alpha/Droite"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Rendre/Mélange Alpha/Prémultiplication"
-
-msgid "Render/HDR/Debug"
-msgstr "Rendu/HDR/Débogage"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Rendu/HDR/Activer la détection des pics"
@@ -6814,8 +6817,8 @@ msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
 msgstr ""
-"Lorsque la valeur est inférieure à 100, aide à trouver la luminosité "
-"maximale en ignorant le 1 % supérieur de valeurs aberrantes."
+"Lorsqu’elle est inférieure à 100, cette valeur aide à déterminer la "
+"luminosité maximale en ignorant les 1 % de valeurs aberrantes."
 
 msgid "Smoothing Period"
 msgstr "Période de lissage"
@@ -8226,30 +8229,6 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
 
-#~ msgid "Could not determine monitor's nits."
-#~ msgstr "Impossible de déterminer les nits du moniteur."
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Interface utilisateur/HDR"
-
-#~ msgid "Primaries Name"
-#~ msgstr "Nom des primaires"
-
-#~ msgid "PrimariesName"
-#~ msgstr "Nom des primaires"
-
-#~ msgid "HDR Shot/Scene Peak Detection"
-#~ msgstr "Détection de pic HDR par plan/scène"
-
-#~ msgid ""
-#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
-#~ msgstr ""
-#~ "Seuil permettant de considérer un changement de plan ou de scène lorsque la "
-#~ "détection de pic HDR est activée."
-
-#~ msgid "Monitor "
-#~ msgstr "Surveiller"
-
 #~ msgid "Renderer"
 #~ msgstr "Rendeur"
 
@@ -8290,6 +8269,36 @@ msgstr "Commutation à propos de la fenêtre"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Police invalide pour le dessin de texte"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "Moniteur HDR trouvé."
+
+#~ msgid "Render/HDR/Debug"
+#~ msgstr "Rendu/HDR/Débogage"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Impossible de déterminer les nits du moniteur."
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Interface utilisateur/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Nom des primaires"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Nom des primaires"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "Détection de pic HDR par plan/scène"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr ""
+#~ "Seuil permettant de considérer un changement de plan ou de scène lorsque la "
+#~ "détection de pic HDR est activée."
+
+#~ msgid "Monitor "
+#~ msgstr "Surveiller"
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "Licence invalide. Passage en mode démo"

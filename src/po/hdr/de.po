@@ -198,9 +198,6 @@ msgstr "HDR-Monitor gefunden."
 msgid "HDR monitor not found or not configured."
 msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
 
-msgid "Could not determine monitor's nits."
-msgstr "Der aktuelle Pfad kann nicht gefunden werden."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR-Monitor min. nits = {0}"
 
@@ -215,3 +212,6 @@ msgstr "Fenster/Vollbild"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/Metadaten an das Display weiterleiten"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Der aktuelle Pfad kann nicht gefunden werden."

@@ -4013,14 +4013,20 @@ msgstr "Brillo mínimo del monitor HDR (nits) = {0}"
 msgid "HDR monitor max. nits = {0}"
 msgstr "Brillo máximo del monitor HDR (nits) = {0}"
 
-msgid "HDR monitor found."
-msgstr "Monitor HDR no encontrado."
-
 msgid "Vulkan color space is {0}"
 msgstr "Espacio de color de Vulkan es {0}"
 
 msgid "Vulkan format is {0}"
 msgstr "Formato de Vulkan es {0}"
+
+msgid "HDR active monitor at index {0}"
+msgstr "Monitor HDR activo en índice {0}"
+
+msgid "HDR supported but inactive monitor at index {0}"
+msgstr "HDR soportado pero monitor inactivo en índice {0}"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Cambié a monitor SDR en índice {0}"
 
 msgid "Edit Text"
 msgstr "Editar Texto"
@@ -4234,9 +4240,6 @@ msgstr "Render/Mezcla Alfa/Derecha"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Mezcla Alfa/Premultiplicada"
-
-msgid "Render/HDR/Debug"
-msgstr "Render/HDR/Depurar"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Active Deteccíon de Umbral"
@@ -8260,36 +8263,6 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "Could not determine monitor's nits."
-#~ msgstr "No pude determinar la luminancia del monitor."
-
-#~ msgid "Toggle HDR ScRGB"
-#~ msgstr "Alternar mapeo de tonos de HDR"
-
-#~ msgid "Render/HDR/Enable ScRGB"
-#~ msgstr "Render/HDR/Active Deteccíon de Umbral"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Interfaz del Usuario/HDR"
-
-#~ msgid "Primaries Name"
-#~ msgstr "Nombre de las Primarias"
-
-#~ msgid "PrimariesName"
-#~ msgstr "Nombre de Primarias"
-
-#~ msgid "HDR Shot/Scene Peak Detection"
-#~ msgstr "Detección de Umbral de HDR"
-
-#~ msgid ""
-#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
-#~ msgstr ""
-#~ "Límite a considerar para cambio de toma o escena cuando Deteccion de Umbral "
-#~ "de HDR está activo."
-
-#~ msgid "Monitor "
-#~ msgstr "Monitor "
-
 #~ msgid "Renderer"
 #~ msgstr "Renderizador"
 
@@ -8330,6 +8303,42 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Fuente inválida para dibujar texto"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "Monitor HDR no encontrado."
+
+#~ msgid "Render/HDR/Debug"
+#~ msgstr "Render/HDR/Depurar"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "No pude determinar la luminancia del monitor."
+
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "Alternar mapeo de tonos de HDR"
+
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Active Deteccíon de Umbral"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Interfaz del Usuario/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Nombre de las Primarias"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Nombre de Primarias"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "Detección de Umbral de HDR"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr ""
+#~ "Límite a considerar para cambio de toma o escena cuando Deteccion de Umbral "
+#~ "de HDR está activo."
+
+#~ msgid "Monitor "
+#~ msgstr "Monitor "
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "Licencia inválida.  Entrando a modo demo."

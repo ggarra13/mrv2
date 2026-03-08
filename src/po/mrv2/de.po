@@ -3937,14 +3937,20 @@ msgstr "HDR-Monitor min. nits = {0}"
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR-Monitor max. nits = {0}"
 
-msgid "HDR monitor found."
-msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
-
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan-Farbraum ist {0}"
 
 msgid "Vulkan format is {0}"
 msgstr "Vulkan-Format ist {0}"
+
+msgid "HDR active monitor at index {0}"
+msgstr "HDR-aktiver Monitor am Index {0}"
+
+msgid "HDR supported but inactive monitor at index {0}"
+msgstr "HDR wird unterstützt, aber der Monitor am Index {0} ist nicht aktiv"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Zum SDR-Monitor am Index {0} gewechselt"
 
 msgid "Edit Text"
 msgstr "Text bearbeiten"
@@ -4158,9 +4164,6 @@ msgstr "Render/Alpha-Mischung/gerade"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Alpha Blend/Vorvervielfacht"
-
-msgid "Render/HDR/Debug"
-msgstr "Rendern/HDR/Debug"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Spitzlichterkennung aktivieren"
@@ -8192,36 +8195,6 @@ msgstr "Hotkeys-Fenster umschalten"
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
 
-#~ msgid "Could not determine monitor's nits."
-#~ msgstr "Der aktuelle Pfad kann nicht gefunden werden."
-
-#~ msgid "Toggle HDR ScRGB"
-#~ msgstr "HDR-Tonkarte umschalten"
-
-#~ msgid "Render/HDR/Enable ScRGB"
-#~ msgstr "Render/HDR/Spitzlichterkennung aktivieren"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Benutzeroberfläche/HDR"
-
-#~ msgid "Primaries Name"
-#~ msgstr "Name der Primärfarben"
-
-#~ msgid "PrimariesName"
-#~ msgstr "Primärfarbenname"
-
-#~ msgid "HDR Shot/Scene Peak Detection"
-#~ msgstr "HDR-Peak-Erkennung für Aufnahmen/Szenen"
-
-#~ msgid ""
-#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
-#~ msgstr ""
-#~ "Schwellenwert zur Erkennung eines Aufnahme-/Szenenwechsels, wenn die HDR-"
-#~ "Peak-Erkennung aktiviert ist."
-
-#~ msgid "Monitor "
-#~ msgstr "berwachung"
-
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
 
@@ -8262,6 +8235,42 @@ msgstr "Fenster umschalten"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Ungültige Schriftart für die Texterstellung"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
+
+#~ msgid "Render/HDR/Debug"
+#~ msgstr "Rendern/HDR/Debug"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Der aktuelle Pfad kann nicht gefunden werden."
+
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "HDR-Tonkarte umschalten"
+
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Spitzlichterkennung aktivieren"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Benutzeroberfläche/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Name der Primärfarben"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Primärfarbenname"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "HDR-Peak-Erkennung für Aufnahmen/Szenen"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr ""
+#~ "Schwellenwert zur Erkennung eines Aufnahme-/Szenenwechsels, wenn die HDR-"
+#~ "Peak-Erkennung aktiviert ist."
+
+#~ msgid "Monitor "
+#~ msgstr "berwachung"
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "Ungültige Lizenz. Wechsle in den Demomodus"

@@ -198,9 +198,6 @@ msgstr "Monitor HDR encontrado."
 msgid "HDR monitor not found or not configured."
 msgstr "Monitor HDR no encontrado o no configurado."
 
-msgid "Could not determine monitor's nits."
-msgstr "No pude determinar la luminancia del monitor."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "Monitor HDR min. nits = {0}"
 
@@ -215,3 +212,6 @@ msgstr "Ventana/Pantalla Completa"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/Pasar los Metadatos a la Pantalla"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "No pude determinar la luminancia del monitor."

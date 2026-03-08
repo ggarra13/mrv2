@@ -3630,13 +3630,19 @@ msgstr ""
 msgid "HDR monitor max. nits = {0}"
 msgstr ""
 
-msgid "HDR monitor found."
-msgstr ""
-
 msgid "Vulkan color space is {0}"
 msgstr ""
 
 msgid "Vulkan format is {0}"
+msgstr ""
+
+msgid "HDR active monitor at index {0}"
+msgstr ""
+
+msgid "HDR supported but inactive monitor at index {0}"
+msgstr ""
+
+msgid "Changed to SDR monitor at index {0}"
 msgstr ""
 
 msgid "Edit Text"
@@ -3850,9 +3856,6 @@ msgid "Render/Alpha Blend/Straight"
 msgstr ""
 
 msgid "Render/Alpha Blend/Premultiplied"
-msgstr ""
-
-msgid "Render/HDR/Debug"
 msgstr ""
 
 msgid "Render/HDR/Enable Peak Detection"

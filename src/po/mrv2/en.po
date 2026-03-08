@@ -3950,14 +3950,20 @@ msgstr "HDR monitor min. nits = {0}"
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR monitor max. nits = {0}"
 
-msgid "HDR monitor found."
-msgstr "HDR monitor found."
-
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan color space is {0}"
 
 msgid "Vulkan format is {0}"
 msgstr "Vulkan format is {0}"
+
+msgid "HDR active monitor at index {0}"
+msgstr "HDR monitor max. nits = {0}"
+
+msgid "HDR supported but inactive monitor at index {0}"
+msgstr ""
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr ""
 
 msgid "Edit Text"
 msgstr "Edit Text"
@@ -4171,9 +4177,6 @@ msgstr "Render/Alpha Blend/Straight"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Alpha Blend/Premultiplied"
-
-msgid "Render/HDR/Debug"
-msgstr "Render/HDR/Debug"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Enable Peak Detection"
@@ -8218,6 +8221,12 @@ msgstr "Toggle About Window"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Invalid font for text drawing"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR monitor found."
+
+#~ msgid "Render/HDR/Debug"
+#~ msgstr "Render/HDR/Debug"
 
 #~ msgid "Could not determine monitor's nits."
 #~ msgstr "Could not determine monitor's nits."

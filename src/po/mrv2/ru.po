@@ -3973,14 +3973,20 @@ msgstr "Минимальная яркость HDR-монитора (нит) = {0
 msgid "HDR monitor max. nits = {0}"
 msgstr "Максимальная яркость HDR-монитора (нит) = {0}"
 
-msgid "HDR monitor found."
-msgstr "HDR-монитор найден."
-
 msgid "Vulkan color space is {0}"
 msgstr "Цветовое пространство Vulkan: {0}"
 
 msgid "Vulkan format is {0}"
 msgstr "Формат Vulkan: {0}"
+
+msgid "HDR active monitor at index {0}"
+msgstr "HDR-активный монитор с индексом {0}"
+
+msgid "HDR supported but inactive monitor at index {0}"
+msgstr "HDR поддерживается, но монитор с индексом {0} неактивен"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Переключено на SDR-монитор с индексом {0}"
 
 msgid "Edit Text"
 msgstr "Изменить текст"
@@ -4194,9 +4200,6 @@ msgstr "Редакция/Альфа Бленд/Прямо"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Редакция/Альфа Бленд/Предмногочисленные"
-
-msgid "Render/HDR/Debug"
-msgstr "Рендер/HDR/Отладка"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Включить обнаружение пиков"
@@ -6821,7 +6824,7 @@ msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
 msgstr ""
-"Если значение меньше 100, помогает определить пиковую яркость, игнорируя "
+"Когда значение меньше 100, помогает определить пиковую яркость, игнорируя "
 "верхний 1 % выбросов."
 
 msgid "Smoothing Period"
@@ -8217,36 +8220,6 @@ msgstr "Переключить окно горячих клавиш"
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
 
-#~ msgid "Could not determine monitor's nits."
-#~ msgstr "Не удалось определить яркость монитора в нитах."
-
-#~ msgid "Toggle HDR ScRGB"
-#~ msgstr "Скриншот"
-
-#~ msgid "Render/HDR/Enable ScRGB"
-#~ msgstr "Render/HDR/Включить обнаружение пиков"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Интерфейс пользователя/HDR"
-
-#~ msgid "Primaries Name"
-#~ msgstr "Название первичных цветов"
-
-#~ msgid "PrimariesName"
-#~ msgstr "Название первичных цветов"
-
-#~ msgid "HDR Shot/Scene Peak Detection"
-#~ msgstr "Определение пиков HDR по кадрам/сценам"
-
-#~ msgid ""
-#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
-#~ msgstr ""
-#~ "Порог для определения смены кадра или сцены при включённом определении пиков"
-#~ " HDR."
-
-#~ msgid "Monitor "
-#~ msgstr "Монитор"
-
 #~ msgid "Renderer"
 #~ msgstr "Редактор"
 
@@ -8287,6 +8260,42 @@ msgstr "Закладка о окне"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Неверный шрифт для текстового рисунка"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR-монитор найден."
+
+#~ msgid "Render/HDR/Debug"
+#~ msgstr "Рендер/HDR/Отладка"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Не удалось определить яркость монитора в нитах."
+
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "Скриншот"
+
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Включить обнаружение пиков"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Интерфейс пользователя/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Название первичных цветов"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Название первичных цветов"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "Определение пиков HDR по кадрам/сценам"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr ""
+#~ "Порог для определения смены кадра или сцены при включённом определении пиков"
+#~ " HDR."
+
+#~ msgid "Monitor "
+#~ msgstr "Монитор"
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "Недействительная лицензия. Переход в демонстрационный режим"
