@@ -2043,7 +2043,7 @@ namespace tl
                         if (!view.empty() && view != "Default" && 
                             view != "(default)" && view != "None")
                         {
-                            displayView += " / " + view;
+                            displayView += "/" + view;
                         }
 
                         hdrData.reset(new image::HDRData(image::nameToPrimaries(displayView)));

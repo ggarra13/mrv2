@@ -48,9 +48,6 @@ namespace tl
         //! Tonemap options.
         struct HDROptions
         {
-            //! Debug HDR
-            bool debug = false;
-
             //! Use libplacebo tonemapping (used for videos mainly)
             bool tonemap = false;
 

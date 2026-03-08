@@ -1129,11 +1129,21 @@ namespace mrv
         void Viewport::_updateHDRMetadata()
         {
             TLRENDER_P();
+
+#define DEBUG_METADATA 0
             
-            if (!p.monitor.hdr_enabled)
+            // On Linux at least, we must send the real metadata over,
+            // so we translate OCIO to proper HDRData.
+            // If no OCIO is active, assume it is a movie and send the
+            // stored HDRData (which can be sRGB, BT. 709 or HDR.
+            const int screen_idx = this->screen_num();
+            const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
+                
+            if (!p.monitor.hdr_enabled || (!ocio.enabled && !p.hdrOptions.tonemap))
             {
-                if (p.hdrOptions.debug)
-                    LOG_WARNING("Sending SDR BT709 primaries");
+#if DEBUG_METADATA
+                LOG_WARNING("Sending SDR BT709 primaries");
+#endif
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
 
                 // Primaries
@@ -1151,22 +1161,14 @@ namespace mrv
             else
             {
                 float monitorPeak = p.monitor.max_nits;
-                // On Linux at least, we must send the real metadata over,
-                // so we translate OCIO to proper HDRData.
-                // If no OCIO is active, assume it is a movie and send the
-                // stored HDRData (which can be sRGB, BT. 709 or HDR.
-                const int screen_idx = this->screen_num();
-                const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
                 image::HDRData data;
-                const std::string& display = ocio.display;
-                const std::string& view = ocio.view;
-                if (ocio.enabled && !display.empty() && !view.empty())
+                if (ocio.enabled && !ocio.display.empty() && !ocio.view.empty())
                 {
-                    std::string displayView = display;
-                    if (!view.empty() && view != "Default" && 
-                        view != "(default)" && view != "None")
+                    std::string displayView = ocio.display;
+                    if (!ocio.view.empty() && ocio.view != "Default" && 
+                        ocio.view != "(default)" && ocio.view != "None")
                     {
-                        displayView += " / " + view;
+                        displayView += "/" + ocio.view;
                     }
                     data = image::nameToPrimaries(displayView);
                     if (ocio.view.find("SDR") == std::string::npos)
@@ -1196,7 +1198,7 @@ namespace mrv
                         }
                         data.displayMasteringLuminance = math::FloatRange(0.001F, ocioPeak);
                         data.maxCLL = std::min(ocioPeak, monitorPeak);
-                        data.maxFALL = std::min(100.F, data.maxCLL * 0.4F); 
+                        data.maxFALL = std::min(100.F, data.maxCLL * 0.1F); 
                     }
                     else  // is SDR view
                     {
@@ -1204,9 +1206,10 @@ namespace mrv
                         data.maxCLL = 203.F;
                         data.maxFALL = 100.F;
                     }
-                    if (p.hdrOptions.debug)
+#if DEBUG_METADATA
                         LOG_WARNING("Sending OCIO metadata primaries="
                                     << image::primariesName(data.primaries) << std::endl << data);
+#endif
                 }  // ocio.display.empty() || ocio.view.empty()
                 else
                 {
@@ -1230,8 +1233,9 @@ namespace mrv
                                          p.monitor.max_nits);
                     data.maxCLL = p.monitor.max_nits;
                     data.maxFALL = p.monitor.max_nits;
-                    if (p.hdrOptions.debug)
-                        LOG_WARNING("Metadata sent to Vulkan=" << data);
+#if DEBUG_METADATA
+                    LOG_WARNING("Sending HDR Monitor metadata=" << data);
+#endif
                 }
                 
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;

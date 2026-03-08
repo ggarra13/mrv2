@@ -202,6 +202,7 @@ namespace mrv
             Tooltip* tooltip = nullptr;
 
             // HDR monitor tracking.
+            bool monitor_first_run = true;
             int screen_index = 0;
             monitor::Capabilities monitor;
         };

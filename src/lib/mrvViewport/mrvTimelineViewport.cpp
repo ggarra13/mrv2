@@ -1036,13 +1036,14 @@ namespace mrv
         TimelineViewport::setHDROptions(const timeline::HDROptions& value) noexcept
         {
             TLRENDER_P();
-            
-            if (value == p.hdrOptions)
-                return;
 
             // \@note:  we don't just copy p.hdrOptions = value as that would
             //          eliminate p.hdrOptions.hdrData.
-            p.hdrOptions.debug = value.debug;
+            //          Also, the comparison below does not compare hdrData for changes
+            //          either.
+            
+            if (value == p.hdrOptions)
+                return;
 
             p.hdrOptions.peak_detection = value.peak_detection;
             p.hdrOptions.peak_percentile = value.peak_percentile;
@@ -3706,7 +3707,7 @@ namespace mrv
         void TimelineViewport::_getHDR() noexcept
         {
             TLRENDER_P();
-
+            
             if (p.videoData.empty() || p.videoData[0].layers.empty() ||
                 !p.videoData[0].layers[0].image)
             {

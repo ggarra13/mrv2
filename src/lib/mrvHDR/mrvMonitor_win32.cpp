@@ -21,6 +21,7 @@
 #include <windows.h>
 
 #define LOG_ERROR(x) std::cerr << x << std::endl;
+#define LOG_INFO(x) std::cout << x << std::endl;
 
 
 namespace
@@ -256,6 +257,8 @@ namespace mrv
 
                 auto it = outputMap.find(logicalMonitors[idx].deviceName);
                 if (it != outputMap.end()) {
+                    LOG_INFO("Check monitor idx " << idx << " against "
+                             << targetIndex);
                     IDXGIOutput* output = it->second;
                     IDXGIOutput6* output6 = nullptr;
                     if (SUCCEEDED(output->QueryInterface(IID_PPV_ARGS(&output6)))) {
@@ -274,8 +277,9 @@ namespace mrv
                             local_cap.white.y = desc1.WhitePoint[1];
                             
                             // Set supported based on capability (not current enablement)
-                            local_cap.hdr_supported = (desc1.MaxLuminance > 100.0f);
-                            
+                            local_cap.hdr_supported = (desc1.MaxLuminance > 300.0f);                            
+                            // Check if HDR is active based on current color space
+                            // \@bug: Windows makes all monitors be stuck in
                             // Check if HDR is active based on current color space
                             local_cap.hdr_enabled = false;
                             switch (desc1.ColorSpace) {
@@ -283,7 +287,8 @@ namespace mrv
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_G2084_LEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_STUDIO_GHLG_TOPLEFT_P2020:
                             case DXGI_COLOR_SPACE_YCBCR_FULL_GHLG_TOPLEFT_P2020:
-                                local_cap.hdr_enabled = true;
+                                if (local_cap.hdr_supported)
+                                    local_cap.hdr_enabled = true;
                                 break;
                             default:
                                 break;

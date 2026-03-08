@@ -115,6 +115,7 @@ namespace mrv
 
         int Viewport::log_level() const
         {
+            // Set to 3 to debug color space and format interaction.
             return 0;
         }
 
@@ -389,15 +390,15 @@ namespace mrv
         void Viewport::_getMonitorNits(bool quiet)
         {
             TLRENDER_P();
-            
+                
             if (!p.monitor.hdr_enabled)
             {
                 p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
-                p.monitor.min_nits = 0.F;
+                p.monitor.min_nits = 0.001F;
                 p.monitor.max_nits = 100.F;
                 
                 LOG_STATUS(_("HDR monitor not found or not configured."));
-                if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                //if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
                 {
                     colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                     format() = VK_FORMAT_B8G8R8A8_UNORM;
@@ -405,17 +406,14 @@ namespace mrv
             }
             else
             {
-                if (!quiet)
-                {
-                    std::string msg =
-                        string::Format(_("HDR monitor min. nits = {0}")).
-                        arg(p.monitor.min_nits);
-                    LOG_STATUS(msg);
+                std::string msg =
+                    string::Format(_("HDR monitor min. nits = {0}")).
+                    arg(p.monitor.min_nits);
+                LOG_STATUS(msg);
                 
-                    msg = string::Format(_("HDR monitor max. nits = {0}")).
-                          arg(p.monitor.max_nits);
-                    LOG_STATUS(msg);
-                }
+                msg = string::Format(_("HDR monitor max. nits = {0}")).
+                      arg(p.monitor.max_nits);
+                LOG_STATUS(msg);
             }
         }
             
@@ -447,11 +445,13 @@ namespace mrv
             p.screen_index = this->screen_num();
             if (valid_colorspace)
             {
-                LOG_STATUS(_("HDR monitor found."));
-
-                p.monitor = getHDRCapabilities(p.screen_index);
+                if (p.monitor_first_run)
+                {
+                    p.monitor = getHDRCapabilities(p.screen_index);
+                    p.monitor_first_run = false;
+                }
                 
-                _getMonitorNits(false);
+                _getMonitorNits();
             }
             else
             {
@@ -460,6 +460,11 @@ namespace mrv
                     colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                     format() = VK_FORMAT_B8G8R8A8_UNORM;
                 }
+                
+                p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
+                p.monitor.min_nits = 0.001F;
+                p.monitor.max_nits = 100.F;
+                
                 LOG_STATUS(_("HDR monitor not found or not configured."));
             }
             
@@ -693,12 +698,37 @@ namespace mrv
             {
                 // If we changed screen from an HDR to an SDR one, or one with
                 // different nits settings, recreate the Vulkan swapchain.
-                const auto monitor = getHDRCapabilities(this->screen_num());
+                const auto monitor = getHDRCapabilities(p.screen_index);
                 if (monitor.hdr_enabled != p.monitor.hdr_enabled ||
                     monitor.hdr_supported != p.monitor.hdr_supported ||
                     monitor.min_nits != p.monitor.min_nits ||
                     monitor.max_nits != p.monitor.max_nits)
                 {
+                    std::string msg;
+                    if (monitor.hdr_enabled)
+                    { 
+                        msg =
+                            string::Format(_("HDR active monitor at index {0}")).
+                            arg(p.screen_index);
+                        LOG_STATUS(msg);
+                    }
+                    else
+                    {
+                        if (monitor.hdr_supported)
+                        {                            
+                            msg = string::Format(_("HDR supported but inactive monitor "
+                                                   "at index {0}")).
+                                arg(p.screen_index);
+                            LOG_STATUS(msg);
+                        }
+                        else
+                        {
+                            msg = string::Format(_("Changed to SDR monitor at index {0}")).
+                                  arg(p.screen_index);
+                            LOG_STATUS(msg);
+                        }
+                    }
+                    p.monitor = monitor;
                     m_swapchain_needs_recreation = true;
                     init_colorspace();
                     redraw();

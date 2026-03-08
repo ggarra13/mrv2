@@ -816,22 +816,6 @@ namespace mrv
             int selected = static_cast<int>(hdrOptions.algorithm);
 
 #ifdef VULKAN_BACKEND
-
-#if 0
-            mode = FL_MENU_TOGGLE;
-            if (numFiles == 0)
-                mode |= FL_MENU_INACTIVE;
-            
-            idx = menu->add(_("Render/HDR/Debug"),
-                            0,
-                            (Fl_Callback*) toggle_hdr_debug_cb, ui,
-                            mode);
-            if (hdrOptions.debug)
-            {
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                item->set();
-            }
-#endif
             
             mode = FL_MENU_TOGGLE;
             if (numFiles == 0)
