@@ -70,6 +70,7 @@ KDE.
 - Added HUD font size to Preferences->User Interface->View Window.
 - Bug fixed switching from one monitor with HDR to one without.
 - Bug fixed menus showing up in the wrong place when you had two monitors of different resolutions (like one 4K and another FullHD).
+- A warning about Performance on Linux: currently fractional scaling (like 150%) of large mmonitors makes both players slower.  It is recommended you stick to 100% or 200% percentages.
 
 
 v1.5.6
