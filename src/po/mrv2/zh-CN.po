@@ -3871,14 +3871,14 @@ msgstr "    前    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    后    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor not found or not configured."
-msgstr "未找到HDR显示器或未配置。"
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR 显示器最小亮度（尼特）= {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR 显示器最大亮度（尼特）= {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "未找到HDR显示器或未配置。"
 
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan 颜色空间为 {0}"
@@ -3886,11 +3886,11 @@ msgstr "Vulkan 颜色空间为 {0}"
 msgid "Vulkan format is {0}"
 msgstr "Vulkan 格式为 {0}"
 
-msgid "HDR active monitor at index {0}"
-msgstr "索引 {0} 的 HDR 活动显示器"
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "已切换到索引 {0} 的活动 HDR 显示器"
 
-msgid "HDR supported but inactive monitor at index {0}"
-msgstr "索引 {0} 的显示器支持 HDR，但当前未启用"
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "已切换到索引 {0} 的支持 HDR 但未激活的显示器"
 
 msgid "Changed to SDR monitor at index {0}"
 msgstr "已切换到索引 {0} 的 SDR 显示器"
@@ -6664,7 +6664,7 @@ msgstr "HDR 百分位"
 msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
-msgstr "当该值小于 100 时，可在忽略最高 1% 异常值的情况下帮助找到峰值亮度。"
+msgstr "当小于 100 时，可在忽略最高 1% 异常值的情况下帮助找到峰值亮度。"
 
 msgid "Smoothing Period"
 msgstr "平滑周期"
@@ -7996,6 +7996,9 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "索引 {0} 的 HDR 活动显示器"
 
 #~ msgid "Renderer"
 #~ msgstr "渲染器"

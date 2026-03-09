@@ -3928,14 +3928,14 @@ msgstr "    Vorne    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor not found or not configured."
-msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR-Monitor min. nits = {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR-Monitor max. nits = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
 
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan-Farbraum ist {0}"
@@ -3943,11 +3943,12 @@ msgstr "Vulkan-Farbraum ist {0}"
 msgid "Vulkan format is {0}"
 msgstr "Vulkan-Format ist {0}"
 
-msgid "HDR active monitor at index {0}"
-msgstr "HDR-aktiver Monitor am Index {0}"
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Zum aktiven HDR-Monitor am Index {0} gewechselt"
 
-msgid "HDR supported but inactive monitor at index {0}"
-msgstr "HDR wird unterstützt, aber der Monitor am Index {0} ist nicht aktiv"
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr ""
+"Zu einem HDR-unterstützenden, aber inaktiven Monitor am Index {0} gewechselt"
 
 msgid "Changed to SDR monitor at index {0}"
 msgstr "Zum SDR-Monitor am Index {0} gewechselt"
@@ -6798,7 +6799,7 @@ msgid ""
 "outliers."
 msgstr ""
 "Wenn der Wert unter 100 liegt, hilft dies, die Spitzenhelligkeit zu "
-"bestimmen, wobei die obersten 1 % der Ausreißer ignoriert werden."
+"ermitteln, wobei die obersten 1 % der Ausreißer ignoriert werden."
 
 msgid "Smoothing Period"
 msgstr "Glättungszeitraum"
@@ -8194,6 +8195,9 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "HDR-aktiver Monitor am Index {0}"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"

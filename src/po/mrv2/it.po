@@ -3961,14 +3961,14 @@ msgstr "Prima V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Dietro V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR non trovato o non configurato."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "Luminosità minima del monitor HDR (nit) = {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "Luminosità massima del monitor HDR (nit) = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR non trovato o non configurato."
 
 msgid "Vulkan color space is {0}"
 msgstr "Lo spazio colore Vulkan è {0}"
@@ -3976,11 +3976,11 @@ msgstr "Lo spazio colore Vulkan è {0}"
 msgid "Vulkan format is {0}"
 msgstr "Il formato Vulkan è {0}"
 
-msgid "HDR active monitor at index {0}"
-msgstr "Monitor HDR attivo all'indice {0}"
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Passato al monitor HDR attivo all'indice {0}"
 
-msgid "HDR supported but inactive monitor at index {0}"
-msgstr "HDR supportato ma monitor inattivo all'indice {0}"
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "Passato al monitor con supporto HDR ma inattivo all'indice {0}"
 
 msgid "Changed to SDR monitor at index {0}"
 msgstr "Passato al monitor SDR all'indice {0}"
@@ -8239,6 +8239,9 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "Monitor HDR attivo all'indice {0}"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"

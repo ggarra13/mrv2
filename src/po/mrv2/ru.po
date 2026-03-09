@@ -3964,14 +3964,14 @@ msgstr "   Впереди   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor not found or not configured."
-msgstr "HDR-монитор не найден или не настроен."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "Минимальная яркость HDR-монитора (нит) = {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "Максимальная яркость HDR-монитора (нит) = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR-монитор не найден или не настроен."
 
 msgid "Vulkan color space is {0}"
 msgstr "Цветовое пространство Vulkan: {0}"
@@ -3979,11 +3979,12 @@ msgstr "Цветовое пространство Vulkan: {0}"
 msgid "Vulkan format is {0}"
 msgstr "Формат Vulkan: {0}"
 
-msgid "HDR active monitor at index {0}"
-msgstr "HDR-активный монитор с индексом {0}"
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Переключено на активный HDR-монитор с индексом {0}"
 
-msgid "HDR supported but inactive monitor at index {0}"
-msgstr "HDR поддерживается, но монитор с индексом {0} неактивен"
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr ""
+"Переключено на монитор с поддержкой HDR, но неактивный, с индексом {0}"
 
 msgid "Changed to SDR monitor at index {0}"
 msgstr "Переключено на SDR-монитор с индексом {0}"
@@ -6824,7 +6825,7 @@ msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
 msgstr ""
-"Когда значение меньше 100, помогает определить пиковую яркость, игнорируя "
+"Если значение меньше 100, помогает определить пиковую яркость, игнорируя "
 "верхний 1 % выбросов."
 
 msgid "Smoothing Period"
@@ -8219,6 +8220,9 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "HDR-активный монитор с индексом {0}"
 
 #~ msgid "Renderer"
 #~ msgstr "Редактор"

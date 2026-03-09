@@ -3621,13 +3621,13 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
 msgid "HDR monitor min. nits = {0}"
 msgstr ""
 
 msgid "HDR monitor max. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor not found or not configured."
 msgstr ""
 
 msgid "Vulkan color space is {0}"
@@ -3636,10 +3636,10 @@ msgstr ""
 msgid "Vulkan format is {0}"
 msgstr ""
 
-msgid "HDR active monitor at index {0}"
+msgid "Changed to HDR active monitor at index {0}"
 msgstr ""
 
-msgid "HDR supported but inactive monitor at index {0}"
+msgid "Changed to HDR supported but inactive monitor at index {0}"
 msgstr ""
 
 msgid "Changed to SDR monitor at index {0}"

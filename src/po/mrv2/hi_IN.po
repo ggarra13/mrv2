@@ -3925,14 +3925,14 @@ msgstr "     आगे     V: % 4<PRIu64>     A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "      पीछे    V: % 4<PRIu64>     A: % 4<PRIu64>"
 
-msgid "HDR monitor not found or not configured."
-msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR मॉनिटर की न्यूनतम ब्राइटनेस (निट्स) = {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR मॉनिटर की अधिकतम ब्राइटनेस (निट्स) = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
 
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan रंग स्थान {0} है"
@@ -3940,11 +3940,11 @@ msgstr "Vulkan रंग स्थान {0} है"
 msgid "Vulkan format is {0}"
 msgstr "Vulkan फ़ॉर्मेट {0} है"
 
-msgid "HDR active monitor at index {0}"
-msgstr "इंडेक्स {0} पर HDR सक्रिय मॉनिटर"
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "इंडेक्स {0} पर सक्रिय HDR मॉनिटर पर बदला गया"
 
-msgid "HDR supported but inactive monitor at index {0}"
-msgstr "इंडेक्स {0} पर HDR समर्थित लेकिन निष्क्रिय मॉनिटर"
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "इंडेक्स {0} पर HDR समर्थित लेकिन निष्क्रिय मॉनिटर पर बदला गया"
 
 msgid "Changed to SDR monitor at index {0}"
 msgstr "इंडेक्स {0} पर SDR मॉनिटर में बदला गया"
@@ -8144,6 +8144,9 @@ msgstr "यदि आप विंडो को बन्द करना चा
 
 msgid "Toggle About Window"
 msgstr "विंडो के बारे में टॉगल करें"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "इंडेक्स {0} पर HDR सक्रिय मॉनिटर"
 
 #~ msgid "Renderer"
 #~ msgstr "रेंडरर"

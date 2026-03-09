@@ -3933,14 +3933,14 @@ msgstr "Avant V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Derrière V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "HDR monitor not found or not configured."
-msgstr "Moniteur HDR non trouvé ou non configuré."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "Luminosité minimale du moniteur HDR (nits) = {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "Luminosité maximale du moniteur HDR (nits) = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "Moniteur HDR non trouvé ou non configuré."
 
 msgid "Vulkan color space is {0}"
 msgstr "L’espace colorimétrique Vulkan est {0}"
@@ -3948,11 +3948,11 @@ msgstr "L’espace colorimétrique Vulkan est {0}"
 msgid "Vulkan format is {0}"
 msgstr "Le format Vulkan est {0}"
 
-msgid "HDR active monitor at index {0}"
-msgstr "Moniteur HDR actif à l’indice {0}"
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Basculé vers le moniteur HDR actif à l’indice {0}"
 
-msgid "HDR supported but inactive monitor at index {0}"
-msgstr "HDR pris en charge mais moniteur inactif à l’indice {0}"
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "Basculé vers un moniteur compatible HDR mais inactif à l’indice {0}"
 
 msgid "Changed to SDR monitor at index {0}"
 msgstr "Passé au moniteur SDR à l’indice {0}"
@@ -6817,8 +6817,8 @@ msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
 msgstr ""
-"Lorsqu’elle est inférieure à 100, cette valeur aide à déterminer la "
-"luminosité maximale en ignorant les 1 % de valeurs aberrantes."
+"Lorsqu’elle est inférieure à 100, aide à déterminer la luminosité maximale "
+"en ignorant le 1 % supérieur de valeurs aberrantes."
 
 msgid "Smoothing Period"
 msgstr "Période de lissage"
@@ -8228,6 +8228,9 @@ msgstr "Activer la fenêtre des touches d'amorçage"
 
 msgid "Toggle About Window"
 msgstr "Commutation à propos de la fenêtre"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "Moniteur HDR actif à l’indice {0}"
 
 #~ msgid "Renderer"
 #~ msgstr "Rendeur"

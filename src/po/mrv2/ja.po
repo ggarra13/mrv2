@@ -3881,14 +3881,14 @@ msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor not found or not configured."
-msgstr "HDRモニターが見つからないか、設定されていません。"
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR モニターの最小輝度（ニト）= {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR モニターの最大輝度（ニト）= {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDRモニターが見つからないか、設定されていません。"
 
 msgid "Vulkan color space is {0}"
 msgstr "Vulkanの色空間は{0}です"
@@ -3896,11 +3896,11 @@ msgstr "Vulkanの色空間は{0}です"
 msgid "Vulkan format is {0}"
 msgstr "Vulkanのフォーマットは{0}です"
 
-msgid "HDR active monitor at index {0}"
-msgstr "インデックス {0} のHDRアクティブモニター"
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "インデックス {0} のアクティブなHDRモニターに切り替えました"
 
-msgid "HDR supported but inactive monitor at index {0}"
-msgstr "インデックス {0} のHDR対応だが非アクティブなモニター"
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "インデックス {0} のHDR対応だが非アクティブなモニターに切り替えました"
 
 msgid "Changed to SDR monitor at index {0}"
 msgstr "インデックス {0} のSDRモニターに変更しました"
@@ -6650,7 +6650,7 @@ msgstr "HDRパーセンタイル"
 msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
-msgstr "100未満の場合、上位1%の外れ値を無視してピーク輝度を見つけるのに役立ちます。"
+msgstr "100未満の場合、上位1％の外れ値を無視してピーク輝度を見つけるのに役立ちます。"
 
 msgid "Smoothing Period"
 msgstr "平滑化期間"
@@ -7986,6 +7986,9 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "インデックス {0} のHDRアクティブモニター"
 
 #~ msgid "Renderer"
 #~ msgstr "レンダラー"
