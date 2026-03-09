@@ -2582,8 +2582,6 @@ namespace tl
             }
             else
             {
-                std::cerr << "DON'T DO TONEMAPPING updateDisplay="
-                          << updateDisplayShader << std::endl;
                 // Only destroy data if Tone Mapping is completely OFF
                 p.placeboData.reset();
             }
