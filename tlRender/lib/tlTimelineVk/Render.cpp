@@ -2466,7 +2466,6 @@ namespace tl
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.tonemap)
             {
-                std::cerr << "DO TONEMAPPING" << std::endl;
                 const bool effectivePeakDetection =
                     p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
                 
