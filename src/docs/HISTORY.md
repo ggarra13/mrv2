@@ -69,6 +69,7 @@ KDE.
 - Improved performance of resizing the Window on Vulkan.
 - Added HUD font size to Preferences->User Interface->View Window.
 - Bug fixed switching from one monitor with HDR to one without.
+- Bug fixed menus showing up in the wrong place on 4K and larger monitors.
 
 
 v1.5.6
