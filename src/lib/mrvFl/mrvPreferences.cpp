@@ -376,7 +376,11 @@ namespace mrv
         view.get("ocio_in_top_bar", tmp, 0);
         uiPrefs->uiPrefsOCIOInTopBar->value((bool)tmp);
 
+#ifdef __APPLE__
+        view.get("debanding", tmp, 0);
+#else
         view.get("debanding", tmp, 2);
+#endif
         uiPrefs->uiPrefsDebanding->value(tmp);
         
         view.get("video_levels", tmp, 0);

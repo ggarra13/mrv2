@@ -3086,6 +3086,7 @@ namespace tl
                 debandingDef = debandingFragmentSource(48.F, 16.F, 1, 32);
                 break;
             case timeline::Debanding::kNone:
+            case timeline::Debanding::Count:
                 break;
             }
 
