@@ -361,32 +361,115 @@ void main()
 })";
         }
 
+        std::string debandingFragmentSource(
+            const float threshold,
+            const float range,
+            const int iterations,
+            const float grain
+            )
+        {
+            return string::Format(R"(
+// Simplified pseudocode representation of the deband algorithm
+
+const float kTHRESHOLD = {0};
+const float kRANGE = {1};
+const int kITERATIONS = {2};
+const float kGRAIN = {3};
+
+// PRNG helpers for randomness
+float mod289(float x) { return x - floor(x / 289.0) * 289.0; }
+float permute(float x) { return mod289((34.0 * x + 1.0) * x); }
+float rand(float x) { return fract(x / 41.0); }
+
+// Main sampling function per pixel
+vec4 deband(sampler2D tex, vec2 pos) {
+    vec3 m = vec3(pos, rand(pos.x + pos.y)) + vec3(1.0);
+    float h = permute(permute(permute(m.x) + m.y) + m.z);
+
+    ivec2 imageSize = textureSize(tex, 0);  // LOD 0 for base level
+    vec2 invImageSize = vec2(1.0 / imageSize.x, 1.0 / imageSize.y);
+
+    vec4 col = texture(tex, pos);
+
+    for (int i = 1; i <= kITERATIONS; i++) {
+        // Compute local average with increasing range (i * kRANGE)
+        float range = i * kRANGE;
+
+        float dist = rand(h) * range; h = permute(h);
+        float dir = rand(h) * 6.2831853; h = permute(h);
+
+        // Compute offset vector
+        vec2 pt = dist * invImageSize;  // Normalize to texture space
+        vec2 o = vec2(cos(dir), sin(dir));
+
+        // Sample 4 points at 90-degree intervals around the pixel
+        vec4 ref[4];
+        ref[0] = texture(tex, pos + pt * vec2(o.x, o.y));   // SE
+        ref[1] = texture(tex, pos + pt * vec2(-o.y, o.x));  // NE
+        ref[2] = texture(tex, pos + pt * vec2(-o.x, -o.y)); // NW
+        ref[3] = texture(tex, pos + pt * vec2(o.y, -o.x));  // SW
+
+        // Average them
+        vec4 avg = (ref[0] + ref[1] + ref[2] + ref[3]) / 4.0;
+
+        // Compute absolute difference
+        vec4 diff = abs(col - avg);
+
+        // Dynamic threshold decreases per iteration for finer control
+        float iter_threshold = kTHRESHOLD / (i * 16384.0);
+
+        col = mix(avg, col, greaterThan(diff, vec4(iter_threshold)));
+    }
+
+    if (kGRAIN > 0) {
+        // Generate a 3D noise vector cheaply
+        vec3 noise = vec3(
+            fract(h * 1.234),
+            fract(h * 2.345),
+            fract(h * 3.456)
+        );
+        col.rgb += (kGRAIN * (1.0 / 8192.0)) * (noise - 0.5);
+    }
+
+    return col;
+}
+)")
+                .arg(threshold)
+                .arg(range)
+                .arg(iterations)
+                .arg(grain);
+        }
+        
         std::string displayFragmentSource(
             const std::string& ocioICSDef, const std::string& ocioICS,
             const std::string& ocioDef, const std::string& ocio,
             const std::string& lutDef, const std::string& lut,
             timeline::LUTOrder lutOrder, const std::string& toneMapDef,
-            const std::string& toneMap)
+            const std::string& toneMap,
+            const std::string& debandingDef,
+            const std::string& debanding)
         {
             std::vector<std::string> args;
-            args.push_back(toneMapDef);  // 0
-            args.push_back(videoLevels); // 1
-            args.push_back(ocioICSDef);  // 2
-            args.push_back(ocioDef);     // 3
-            args.push_back(lutDef);      // 4
+            args.push_back(toneMapDef);   // 0
+            args.push_back(videoLevels);  // 1
+            args.push_back(ocioICSDef);   // 2
+            args.push_back(ocioDef);      // 3
+            args.push_back(lutDef);       // 4
+            args.push_back(debandingDef); // 5
+            args.push_back(debanding);    // 6
             switch (lutOrder)
             {
             case timeline::LUTOrder::PreColorConfig:
-                args.push_back(lut);     // 5
-                args.push_back(ocioICS); // 6
-                args.push_back(toneMap); // 7
-                args.push_back(ocio);    // 8
+                args.push_back(lut);     // 7
+                args.push_back(ocioICS); // 8
+                args.push_back(toneMap); // 9
+                args.push_back(ocio);    // 10
                 break;
             case timeline::LUTOrder::PostColorConfig:
-                args.push_back(ocioICS); // 5
-                args.push_back(lut);     // 6
-                args.push_back(toneMap); // 7
-                args.push_back(ocio);    // 8
+                args.push_back(ocioICS); // 7
+                args.push_back(lut);     // 8
+                args.push_back(toneMap); // 9
+                args.push_back(ocio);    // 10
                 break;
             default:
                 break;
@@ -457,6 +540,7 @@ layout(set = 0, binding = 5, std140) uniform UBO
     int        channels;
     int        mirrorX;
     int        mirrorY;
+    int        dither;
     float      softClip;
     int        videoLevels;
     int        invalidValues;
@@ -524,6 +608,7 @@ vec4 normalizeFunc(vec4 value, Normalize data)
     return value;
 }
 
+
 // ocioICSDef
 {2}
 
@@ -532,6 +617,10 @@ vec4 normalizeFunc(vec4 value, Normalize data)
 
 // lutDef
 {4}
+
+// DefandingDef
+{5}
+
 
 void main()
 {
@@ -545,7 +634,8 @@ void main()
         t.y = 1.0 - t.y;
     }
 
-    outColor = texture(textureSampler, t);
+    // Read texture with or without debanding.
+    {6}
 
     // Video levels.
     if (VideoLevels_LegalRange == ubo.videoLevels)
@@ -558,13 +648,10 @@ void main()
     }
 
     // Apply color tranform to linear space and LUT (or vicecersa).
-    {5}
-    {6}
-
-    // Call libplacebo tonemapping
     {7}
+    {8}
 
-    // Apply color transformations.
+    // Apply color transformations in linear space.
     if (uboColor.data.enabled)
     {
         outColor = colorFunc(outColor, uboColor.data.add, uboColor.data.matrix);
@@ -580,8 +667,11 @@ void main()
         outColor = softClipFunc(outColor, ubo.softClip);
     }
 
+    // Call libplacebo tonemapping (may go to PQ space after this)
+    {9}
+
     // Apply OCIO Display/View.
-    {8}
+    {10}
 
     if (uboLevels.data.enabled)
     {
@@ -603,6 +693,7 @@ void main()
            outColor.b *= 0.5f;
         }
     }
+
     // Swizzle for the channels display.
     if (Channels_Red == ubo.channels)
     {
@@ -641,7 +732,9 @@ void main()
                 .arg(args[5])
                 .arg(args[6])
                 .arg(args[7])
-                .arg(args[8]);
+                .arg(args[8])
+                .arg(args[9])
+                .arg(args[10]);
         }
 
         std::string differenceFragmentSource()

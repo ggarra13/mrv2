@@ -47,6 +47,8 @@ namespace mrv
 {
     namespace monitor
     {
+        using tl::monitor::Capabilities;
+        
         std::string getManufacturerName(const char* edidCode)
         {
             if (strcmp(edidCode, "AAA") == 0)
@@ -158,8 +160,8 @@ namespace mrv
         }
 
 #ifdef __linux__
-        HDRCapabilities parseEDIDLuminance(const uint8_t* raw, size_t size) {
-            HDRCapabilities out;
+        Capabilities parseEDIDLuminance(const uint8_t* raw, size_t size) {
+            Capabilities out;
             struct di_info *info;
             
             info = di_info_parse_edid(raw, size);
@@ -174,20 +176,39 @@ namespace mrv
             // Check for HDR presence (supported if any HDR-related EOTF is true)
             bool has_hdr = hdr->traditional_hdr || hdr->pq || hdr->hlg || hdr->type1;
 
-            out.supported = has_hdr;
+            out.hdr_supported = has_hdr;
+            out.hdr_enabled = out.hdr_supported;
             
             // Retrieve min and max nits (0.0 if unset)
             out.min_nits = hdr->desired_content_min_luminance;
             out.max_nits = hdr->desired_content_max_luminance;
-            //float max_frame_avg_nits = hdr->desired_content_max_frame_avg_luminance;  // Optional: frame-average max
+
+            const struct di_color_primaries* p = di_info_get_default_color_primaries(info);
+            if (p->has_primaries)
+            {
+                out.red.x = p->primary[0].x;
+                out.red.y = p->primary[0].y;
+                out.green.x = p->primary[1].x;
+                out.green.y = p->primary[1].y;
+                out.blue.x = p->primary[2].x;
+                out.blue.y = p->primary[2].y;
+            }
+
+            if (p->has_default_white_point)
+            {
+                out.white.x = p->default_white.x;
+                out.white.y = p->default_white.y;
+            }
+            
+            // float max_frame_avg_nits = hdr->desired_content_max_frame_avg_luminance;  // Optional: frame-average max
             di_info_destroy(info);
             return out;
         }
 #endif
 
 #ifdef __APPLE__
-        HDRCapabilities parseEDIDLuminance(const uint8_t* edid, size_t length) {
-            HDRCapabilities out;
+        Capabilities parseEDIDLuminance(const uint8_t* edid, size_t length) {
+            Capabilities out;
             
             if (length < 128) return out;
 
@@ -227,11 +248,13 @@ namespace mrv
                             uint8_t type = ext[j + 3];
                             if (type & 0x01 || (eotf & 0x0E))
                             {
-                                out.supported = true;
+                                out.hdr_supported = true;
                             }
 
                             // Now, try to get the real min/max nits.
-                            if (out.supported) {
+                            if (out.hdr_supported) {
+
+                                out.hdr_enabled = true;
                                 
                                 // Byte j+4: Desired Content Max Luminance
                                 if (len >= 4) {
@@ -264,10 +287,10 @@ namespace mrv
 #endif
 
 #ifndef  __linux__
-        HDRCapabilities get_hdr_capabilities_by_name(
+        Capabilities get_hdr_capabilities_by_name(
             const std::string& target_connector)
         {
-            HDRCapabilities out;
+            Capabilities out;
             return out;
         }
 #endif

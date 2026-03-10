@@ -104,8 +104,6 @@ namespace mrv
     void rotate_minus_90_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! HDR callbacks
-    void toggle_hdr_debug_cb(Fl_Menu_* m, ViewerUI* ui);
-    
     void toggle_normalize_image_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_invalid_values_cb(Fl_Menu_* w, ViewerUI* ui);
     void toggle_hdr_peak_detection_cb(Fl_Menu_* w, ViewerUI* ui);
@@ -204,6 +202,9 @@ namespace mrv
 
     void next_frame_cb(Fl_Menu_*, ViewerUI* ui);
     void previous_frame_cb(Fl_Menu_*, ViewerUI* ui);
+    
+    void next_second_cb(Fl_Menu_*, ViewerUI* ui);
+    void previous_second_cb(Fl_Menu_*, ViewerUI* ui);
 
     void next_annotation_cb(Fl_Menu_*, ViewerUI* ui);
     void previous_annotation_cb(Fl_Menu_*, ViewerUI* ui);
@@ -243,6 +244,12 @@ namespace mrv
     void monitor_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
     void all_monitors_ocio_view_cb(Fl_Menu_*, ViewerUI* ui);
 
+    // Debanding callbacks
+    void debanding_none_cb(Fl_Menu_*, ViewerUI* ui);
+    void debanding_low_cb(Fl_Menu_*, ViewerUI* ui);
+    void debanding_medium_cb(Fl_Menu_*, ViewerUI* ui);
+    void debanding_high_cb(Fl_Menu_*, ViewerUI* ui);
+    
     // Video levels callbacks
     void video_levels_from_file_cb(Fl_Menu_*, ViewerUI* ui);
     void video_levels_legal_range_cb(Fl_Menu_*, ViewerUI* ui);

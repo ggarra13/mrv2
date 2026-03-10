@@ -198,9 +198,6 @@ msgstr "HDRモニターが見つかりました。"
 msgid "HDR monitor not found or not configured."
 msgstr "HDRモニターが見つからないか、設定されていません。"
 
-msgid "Could not determine monitor's nits."
-msgstr "モニターのニット値を判別できませんでした。"
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR モニターの最小輝度（ニト）= {0}"
 
@@ -215,3 +212,6 @@ msgstr "ウィンドウ/フルスクリーン"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/メタデータをディスプレイにパススルー"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "モニターのニット値を判別できませんでした。"

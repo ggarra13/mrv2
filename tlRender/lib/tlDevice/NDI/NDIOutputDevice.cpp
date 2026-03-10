@@ -1915,7 +1915,6 @@ namespace tl
                 }
                 if (!p.thread.videoData.empty())
                 {
-                    // This is almost fine
                     p.thread.render->setTransform(
                         pm * centerTranslationMatrix * resizeScaleMatrix *
                         translateMatrix * zoomMatrix * offsetTransformMatrix *
@@ -2029,16 +2028,70 @@ namespace tl
             {
             case device::HDRMode::FromFile:
             case device::HDRMode::Custom:
+            {
                 if (p.thread.videoData.empty())
                     return;
+                const auto ocio = p.mutex.ocioOptions; 
                 hdrData = device::getHDRData(p.thread.videoData[0]);
+                if (!hdrData && !config.noMetadata)
+                {
+                    const std::string& display = ocio.display;
+                    const std::string& view = ocio.view;
+                    if (ocio.enabled && !display.empty() && !view.empty())
+                    {
+                        std::string displayView = ocio.display;
+                        if (!view.empty() && view != "Default" && 
+                            view != "(default)" && view != "None")
+                        {
+                            displayView += "/" + view;
+                        }
+
+                        hdrData.reset(new image::HDRData(image::nameToPrimaries(displayView)));
+                        hdrData->isDisplayReferred = true;
+                        
+                        float peak = 1000.F;
+                        if (view.find("10000") != std::string::npos)
+                        {
+                            peak = 10000.F;
+                        }
+                        else if (view.find("1000") != std::string::npos)
+                        {
+                            peak = 1000.F;
+                        }
+                        else if (view.find("100") != std::string::npos)
+                        {
+                            peak = 100.F;
+                        }
+                    
+                        switch (hdrData->eotf)
+                        {
+                        case image::EOTF_BT2100_PQ:
+                            hdrData->displayMasteringLuminance = math::FloatRange(0.0F, peak);
+                            hdrData->maxCLL = peak;
+                            hdrData->maxFALL = peak * 0.4;
+                            break;
+                        case image::EOTF_BT2100_HLG:
+                            hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 1000.0F);
+                            hdrData->maxCLL = peak;
+                            hdrData->maxFALL = peak * 0.4;
+                            break;
+                        default: // SDR
+                            hdrData->displayMasteringLuminance = math::FloatRange(0.0F, 100.0F);
+                            hdrData->maxCLL = 100.0F;
+                            hdrData->maxFALL = 80.0F;
+                            break;
+                        }
+                    }
+
+                }
                 break;
+            }
             case device::HDRMode::Count:
             case device::HDRMode::kNone:
                 break;
             }
 
-            if (hdrData && !config.noMetadata && !p.mutex.ocioOptions.enabled)
+            if (hdrData && !config.noMetadata)
             {
                 std::string primariesName = "bt_2020";
                 std::string transferName = "bt_2020";

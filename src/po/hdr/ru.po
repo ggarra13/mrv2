@@ -199,9 +199,6 @@ msgstr "HDR-монитор найден."
 msgid "HDR monitor not found or not configured."
 msgstr "HDR-монитор не найден или не настроен."
 
-msgid "Could not determine monitor's nits."
-msgstr "Не удалось определить яркость монитора в нитах."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "Минимальная яркость HDR-монитора (нит) = {0}"
 
@@ -216,3 +213,6 @@ msgstr "Окно/Полный экран"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/Передача метаданных на дисплей"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Не удалось определить яркость монитора в нитах."

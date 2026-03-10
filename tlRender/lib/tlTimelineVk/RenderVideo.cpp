@@ -12,6 +12,8 @@
 
 #include <tlCore/Math.h>
 
+#include <random>
+
 namespace tl
 {
     namespace timeline_vlk

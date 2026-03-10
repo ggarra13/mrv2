@@ -693,6 +693,7 @@ namespace mrv
                 {
                     if (!progress.tick())
                         break;
+                    Fl::check();
                 }
                 else
                 {

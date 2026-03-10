@@ -32,7 +32,7 @@ namespace
 {
     const char* kModule = "draw";
     const unsigned kFPSAverageFrames = 10;
-    const std::string kFontFamily = "NotoSans-Regular";
+    const std::string kFontFamily = "NotoSans-Bold";
 }
 
 namespace mrv
@@ -924,9 +924,13 @@ namespace mrv
                 return;
 
             Viewport* self = const_cast< Viewport* >(this);
-            const uint16_t fontSize = 12 * self->pixels_per_unit();
-            const image::FontInfo fontInfo(kFontFamily, fontSize);
             const auto& viewportSize = getViewportSize();
+            
+            // Calculate resolution multiplier.
+            uint16_t fontSize = p.ui->uiPrefs->uiPrefsHudFontSize->value() *
+                                self->pixels_per_unit();
+            const image::FontInfo fontInfo(kFontFamily, fontSize);
+
 
             const image::FontMetrics fontMetrics =
                 p.fontSystem->getMetrics(fontInfo);

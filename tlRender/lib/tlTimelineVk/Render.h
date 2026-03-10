@@ -14,6 +14,7 @@
 #include <tlVk/Texture.h>
 
 #include <tlCore/LRUCache.h>
+#include <tlCore/Monitor.h>
 
 #if defined(TLRENDER_OCIO)
 #    include <OpenColorIO/OpenColorIO.h>
@@ -79,7 +80,7 @@ namespace tl
             //! Overriden begin function
             void begin(
                 const math::Size2i&, const timeline::RenderOptions& =
-                                         timeline::RenderOptions()) override;
+                timeline::RenderOptions()) override;
 
             //! Proper Vulkan begin function
             void begin(
@@ -94,9 +95,7 @@ namespace tl
             uint32_t getFrameIndex() const;
 
             // HDR functions
-            void setMonitorHDRSupported(bool);
-            void setMonitorMinNits(float);
-            void setMonitorMaxNits(float);
+            void setMonitorCapabilities(const monitor::Capabilities&);
             
             // Main entry pipeline creation function
             void createPipeline(const std::string& pipelineName,
@@ -138,6 +137,7 @@ namespace tl
             math::Matrix4x4f getTransform() const override;
             void setTransform(const math::Matrix4x4f&) override;
             void applyTransforms();
+            void setShaderOptions(const timeline::ShaderOptions&);
             void setOCIOOptions(const timeline::OCIOOptions&) override;
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;

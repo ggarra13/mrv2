@@ -111,6 +111,7 @@ namespace mrv
         using namespace tl;
 
         timeline::HDROptions TimelineViewport::Private::hdrOptions;
+        timeline::ShaderOptions TimelineViewport::Private::shaderOptions;        
         EnvironmentMapOptions TimelineViewport::Private::environmentMapOptions;
         math::Box2i TimelineViewport::Private::selection =
             math::Box2i(0, 0, -1, -1);
@@ -1035,13 +1036,14 @@ namespace mrv
         TimelineViewport::setHDROptions(const timeline::HDROptions& value) noexcept
         {
             TLRENDER_P();
-            
-            if (value == p.hdrOptions)
-                return;
 
             // \@note:  we don't just copy p.hdrOptions = value as that would
             //          eliminate p.hdrOptions.hdrData.
-            p.hdrOptions.debug = value.debug;
+            //          Also, the comparison below does not compare hdrData for changes
+            //          either.
+            
+            if (value == p.hdrOptions)
+                return;
 
             p.hdrOptions.peak_detection = value.peak_detection;
             p.hdrOptions.peak_percentile = value.peak_percentile;
@@ -3705,7 +3707,7 @@ namespace mrv
         void TimelineViewport::_getHDR() noexcept
         {
             TLRENDER_P();
-
+            
             if (p.videoData.empty() || p.videoData[0].layers.empty() ||
                 !p.videoData[0].layers[0].image)
             {
@@ -3721,17 +3723,6 @@ namespace mrv
             }
             else
             {
-#ifdef _WIN32
-                // When we have BT709 or OpenEXR linear data we must tonemap
-                // it with OpenColorIO and not use libplacebo.
-                p.hdrOptions.tonemap = false;
-                
-                //
-                // We set hdrData to BT2020's defaults and will change it
-                // later based on what OCIO Display/View the user sets up.
-                //
-                p.hdrOptions.hdrData = image::HDRData();
-#else
                 const auto path = p.player->player()->getPath();
                 const auto extension = path.getExtension();
                 if (file::isMovie(extension) || file::isOTIO(path))
@@ -3753,7 +3744,6 @@ namespace mrv
                     // Viewport::_updateHDRMetadata().
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
                 }
-#endif
             }
         }
         

@@ -376,6 +376,9 @@ namespace mrv
         view.get("ocio_in_top_bar", tmp, 0);
         uiPrefs->uiPrefsOCIOInTopBar->value((bool)tmp);
 
+        view.get("debanding", tmp, 2);
+        uiPrefs->uiPrefsDebanding->value(tmp);
+        
         view.get("video_levels", tmp, 0);
         uiPrefs->uiPrefsVideoLevels->value(tmp);
 
@@ -630,6 +633,9 @@ namespace mrv
 
         ocio.get("use_active_views", tmp, 1);
         uiPrefs->uiOCIOUseActiveViews->value(tmp);
+        
+        ocio.get("not_on_videos", tmp, 0);
+        uiPrefs->uiOCIONotOnVideos->value(tmp);
 
         Fl_Preferences ics(ocio, "ICS");
         {
@@ -685,6 +691,9 @@ namespace mrv
         hud.get("attributes", tmp, 0);
         uiPrefs->uiPrefsHudAttributes->value((bool)tmp);
 
+        hud.get("font_size", tmp, 12);
+        uiPrefs->uiPrefsHudFontSize->value(tmp);
+        
         Fl_Preferences win(view, "window");
 
         win.get("always_save_on_exit", tmp, 0);
@@ -1055,6 +1064,12 @@ namespace mrv
 
         ui->uiView->setBackgroundOptions(backgroundOptions);
 
+        // Handle Shader Options
+        timeline::ShaderOptions shaderOptions;
+        shaderOptions.debanding =
+            static_cast<timeline::Debanding>(uiPrefs->uiPrefsDebanding->value());
+        ui->uiView->setShaderOptions(shaderOptions);
+        
         // Handle Dockgroup size (based on percentage)
         float pct = settings->getValue<float>("gui/DockGroup/Width");
         if (pct < 0.2F)
@@ -1374,6 +1389,8 @@ namespace mrv
         view.set("safe_areas", uiPrefs->uiPrefsSafeAreas->value());
         view.set("ocio_in_top_bar", uiPrefs->uiPrefsOCIOInTopBar->value());
         view.set("video_levels", uiPrefs->uiPrefsVideoLevels->value());
+        view.set("debanding", uiPrefs->uiPrefsDebanding->value());
+
         view.set("alpha_blend", uiPrefs->uiPrefsAlphaBlend->value());
         view.set("minify_filter", uiPrefs->uiPrefsMinifyFilter->value());
         view.set("magnify_filter", uiPrefs->uiPrefsMagnifyFilter->value());
@@ -1435,6 +1452,8 @@ namespace mrv
                 uiPrefs->uiOCIOUseDefaultDisplayView->value());
             ocio.set(
                 "use_active_views", uiPrefs->uiOCIOUseActiveViews->value());
+            ocio.set(
+                "not_on_videos", uiPrefs->uiOCIONotOnVideos->value());
 
             Fl_Preferences ics(ocio, "ICS");
             {
@@ -1468,6 +1487,7 @@ namespace mrv
         hud.set("cache", uiPrefs->uiPrefsHudCache->value());
         hud.set("memory", uiPrefs->uiPrefsHudMemory->value());
         hud.set("attributes", uiPrefs->uiPrefsHudAttributes->value());
+        hud.set("font_size", uiPrefs->uiPrefsHudFontSize->value());
 
         {
             Fl_Preferences win(view, "window");

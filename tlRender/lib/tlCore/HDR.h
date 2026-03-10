@@ -81,6 +81,9 @@ namespace tl
             float maxPQY = 0.F;
             float avgPQY = 0.F;
 
+            //! HDR data is display deferred.
+            bool isDisplayReferred = false;
+
             bool operator==(const HDRData&) const;
             bool operator!=(const HDRData&) const;
         };

@@ -61,7 +61,7 @@ namespace tl
             "ARGB_4444_Premult");
         TLRENDER_ENUM_SERIALIZE_IMPL(PixelType);
 
-        TLRENDER_ENUM_IMPL(YUVCoefficients, "REC709", "BT2020");
+        TLRENDER_ENUM_IMPL(YUVCoefficients, "REC709", "BT2020", "BT601");
         TLRENDER_ENUM_SERIALIZE_IMPL(YUVCoefficients);
 
         math::Vector4f getYUVCoefficients(YUVCoefficients value)
@@ -91,7 +91,9 @@ namespace tl
                 math::Vector4f, static_cast<size_t>(YUVCoefficients::Count)>
                 data = {
                     math::Vector4f(1.5748, 0.468124273, 0.187324273, 1.8556),
-                    math::Vector4f(1.4746, 0.6780, 0.0593, 1.8814)};
+                    math::Vector4f(1.4746, 0.56138, 0.16455, 1.8814),
+                    math::Vector4f(1.402f,  0.714136f, 0.344136f, 1.772f),
+            };
             return data[static_cast<size_t>(value)];
         }
 

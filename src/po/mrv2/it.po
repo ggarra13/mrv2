@@ -3961,26 +3961,29 @@ msgstr "Prima V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Dietro V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "Could not determine monitor's nits."
-msgstr "Impossibile determinare i nit del monitor."
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR non trovato o non configurato."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "Luminosità minima del monitor HDR (nit) = {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "Luminosità massima del monitor HDR (nit) = {0}"
 
-msgid "HDR monitor found."
-msgstr "Monitor HDR trovato."
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR non trovato o non configurato."
 
 msgid "Vulkan color space is {0}"
 msgstr "Lo spazio colore Vulkan è {0}"
 
 msgid "Vulkan format is {0}"
 msgstr "Il formato Vulkan è {0}"
+
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Passato al monitor HDR attivo all'indice {0}"
+
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "Passato al monitor con supporto HDR ma inattivo all'indice {0}"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Passato al monitor SDR all'indice {0}"
 
 msgid "Edit Text"
 msgstr "Modifica testo"
@@ -4165,6 +4168,18 @@ msgstr "Render/Ruotare/-90 Gradi"
 msgid "Render/Rotate/+90 Degrees"
 msgstr "Render/Ruotare/+90 Gradi"
 
+msgid "Render/Debanding/None"
+msgstr "Render/Debanding/Nessuno"
+
+msgid "Render/Debanding/Small"
+msgstr "Render/Debanding/Basso"
+
+msgid "Render/Debanding/Medium"
+msgstr "Render/Debanding/Medio"
+
+msgid "Render/Debanding/High"
+msgstr "Render/Debanding/Alto"
+
 msgid "Render/Video Levels/From File"
 msgstr "Render/Livelli video/Dal file"
 
@@ -4182,9 +4197,6 @@ msgstr "Render/Miscelazione alfa/Dritto"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Miscelazione alfa/Premultiplicato"
-
-msgid "Render/HDR/Debug"
-msgstr "Rendering/HDR/Debug"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Abilita rilevamento dei picchi"
@@ -4269,6 +4281,12 @@ msgstr "Riproduzione/Vai a/Cornice precedente"
 
 msgid "Playback/Go to/Next Frame"
 msgstr "Riproduzione/Vai a/Cornice successiva"
+
+msgid "Playback/Go to/Previous 10 seconds"
+msgstr "Riproduzione/Vai a/10 secondi precedenti"
+
+msgid "Playback/Go to/Next 10 seconds"
+msgstr "Riproduzione/Vai a/10 secondi successivi"
 
 msgid "Playback/Go to/Previous Clip"
 msgstr "Riproduzione/Vai a/Clip precedente"
@@ -6132,6 +6150,12 @@ msgstr "CIE XYZ"
 msgid "CIE xyY"
 msgstr "CIE xyY"
 
+msgid "Small"
+msgstr "Piccolo"
+
+msgid "High"
+msgstr "Alto"
+
 msgid "From File"
 msgstr "Dal file"
 
@@ -6149,9 +6173,6 @@ msgstr "Premultiplicato"
 
 msgid "Nearest"
 msgstr "Più vicino"
-
-msgid "Small"
-msgstr "Piccolo"
 
 msgid "Large"
 msgstr "Grande"
@@ -6529,6 +6550,9 @@ msgstr "Memoria"
 msgid "Attributes"
 msgstr "Attributi"
 
+msgid "Font Size"
+msgstr "Dimensione del carattere"
+
 msgid "File Requester"
 msgstr "Richiedente file"
 
@@ -6690,6 +6714,12 @@ msgstr ""
 
 msgid "Render"
 msgstr "Render"
+
+msgid "Debanding (Vulkan)"
+msgstr "Debanding (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "Rende i gradienti più uniformi nei file video."
 
 msgid "Alpha Blend"
 msgstr "Miscelazione alfa"
@@ -6954,6 +6984,16 @@ msgstr ""
 "Quando questa opzione è accesa, e il vostro config.ocio ha una "
 "visualizzazione e una vista predefinite, sarà usato per essere impostato "
 "come predefinito."
+
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "Nessun OCIO su video o dati sRGB/BT709"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr ""
+"Se si riproduce un video o si mostra un’immagine SDR, OCIO verrà disattivato"
+" automaticamente."
 
 msgid "Use Active Views and Active Displays"
 msgstr "Utilizza le viste attive e le visualizzazioni attive"
@@ -7783,6 +7823,18 @@ msgstr "Ruota immagini +90 gradi"
 msgid "Rotate Images -90 Degrees"
 msgstr "Ruotare le immagini -90 gradi"
 
+msgid "Debanding None"
+msgstr "Debanding Nessuno"
+
+msgid "Debanding Small"
+msgstr "Debanding Basso"
+
+msgid "Debanding Medium"
+msgstr "Debanding Medio"
+
+msgid "Debanding High"
+msgstr "Debanding alto"
+
 msgid "Video Levels from File"
 msgstr "Livelli video dal file"
 
@@ -8188,32 +8240,8 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
 
-#~ msgid "Toggle HDR ScRGB"
-#~ msgstr "Commuta mappa tonale HDR"
-
-#~ msgid "Render/HDR/Enable ScRGB"
-#~ msgstr "Render/HDR/Abilita rilevamento dei picchi"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Interfaccia utente/HDR"
-
-#~ msgid "Primaries Name"
-#~ msgstr "Nome delle primarie"
-
-#~ msgid "PrimariesName"
-#~ msgstr "Nome primarie"
-
-#~ msgid "HDR Shot/Scene Peak Detection"
-#~ msgstr "Rilevamento del picco HDR per inquadrature/scene"
-
-#~ msgid ""
-#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
-#~ msgstr ""
-#~ "Soglia per considerare un cambio di inquadratura o scena quando il "
-#~ "rilevamento del picco HDR è attivo."
-
-#~ msgid "Monitor "
-#~ msgstr "Monitoraggio"
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "Monitor HDR attivo all'indice {0}"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
@@ -8255,6 +8283,42 @@ msgstr "Commuta la finestra"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Tipo di carattere non valido per il disegno di testo"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "Monitor HDR trovato."
+
+#~ msgid "Render/HDR/Debug"
+#~ msgstr "Rendering/HDR/Debug"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Impossibile determinare i nit del monitor."
+
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "Commuta mappa tonale HDR"
+
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Abilita rilevamento dei picchi"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Interfaccia utente/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Nome delle primarie"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Nome primarie"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "Rilevamento del picco HDR per inquadrature/scene"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr ""
+#~ "Soglia per considerare un cambio di inquadratura o scena quando il "
+#~ "rilevamento del picco HDR è attivo."
+
+#~ msgid "Monitor "
+#~ msgstr "Monitoraggio"
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "Licenza non valida. Passaggio alla modalità demo"

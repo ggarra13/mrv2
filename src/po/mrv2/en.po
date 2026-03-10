@@ -3941,26 +3941,29 @@ msgstr "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "Could not determine monitor's nits."
-msgstr "Could not determine monitor's nits."
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR monitor not found or not configured."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR monitor min. nits = {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR monitor max. nits = {0}"
 
-msgid "HDR monitor found."
-msgstr "HDR monitor found."
+msgid "HDR monitor not found or not configured."
+msgstr "HDR monitor not found or not configured."
 
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan color space is {0}"
 
 msgid "Vulkan format is {0}"
 msgstr "Vulkan format is {0}"
+
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Changed to HDR active monitor at index {0}"
+
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "Changed to HDR suppoted but inactive monitor at index {0}"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Chaged to SDR monitor at index {0}"
 
 msgid "Edit Text"
 msgstr "Edit Text"
@@ -4145,6 +4148,18 @@ msgstr "Render/Rotate/-90 Degrees"
 msgid "Render/Rotate/+90 Degrees"
 msgstr "Render/Rotate/+90 Degrees"
 
+msgid "Render/Debanding/None"
+msgstr "Render/Debanding/None"
+
+msgid "Render/Debanding/Small"
+msgstr "Render/Debanding/Small"
+
+msgid "Render/Debanding/Medium"
+msgstr "Render/Debanding/Medium"
+
+msgid "Render/Debanding/High"
+msgstr "Render/Debanding/High"
+
 msgid "Render/Video Levels/From File"
 msgstr "Render/Video Levels/From File"
 
@@ -4163,11 +4178,8 @@ msgstr "Render/Alpha Blend/Straight"
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Alpha Blend/Premultiplied"
 
-msgid "Render/HDR/Debug"
-msgstr "Render/HDR/Debug"
-
 msgid "Render/HDR/Enable Peak Detection"
-msgstr "Render/HDR/Enable Peak Detectionx"
+msgstr "Render/HDR/Enable Peak Detection"
 
 msgid "Render/HDR/Tonemap"
 msgstr "Render/HDR/Tonemap"
@@ -4249,6 +4261,12 @@ msgstr "Playback/Go to/Previous Frame"
 
 msgid "Playback/Go to/Next Frame"
 msgstr "Playback/Go to/Next Frame"
+
+msgid "Playback/Go to/Previous 10 seconds"
+msgstr "Playback/Go to/Previous 10 seconds"
+
+msgid "Playback/Go to/Next 10 seconds"
+msgstr "Playback/Go to/Next 10 seconds"
 
 msgid "Playback/Go to/Previous Clip"
 msgstr "Playback/Go to/Previous Clip"
@@ -5656,7 +5674,7 @@ msgid ""
 "* Nits Pixel Values (Monitor units in Vulkan)"
 msgstr ""
 "Displays:\n"
-"* Linear (Gamma, Gain and LUT in a linear scale where 1.0 is SDR white).\n"
+"* Linear (Gamma, Gain and LUT in a linear scale where 1.0 is SDR white).    \n"
 "* Full Pixel Values (Gamma, Gain and LUT)\n"
 "* Original (No Gamma, No Gain, No Lut)\n"
 "* Nits Pixel Values (Monitor units in Vulkan)"
@@ -6083,13 +6101,13 @@ msgid "Pick View Background Color"
 msgstr "Pick View Background Color"
 
 msgid "Pick View Text Overlay Color"
-msgstr "Text Overlay"
+msgstr "Pick View Text Overlay Color"
 
 msgid "Pick View Selection Color"
 msgstr "Pick View Selection Color"
 
 msgid "Pick HUD Color"
-msgstr "Pick Color"
+msgstr "Pick HUD Color"
 
 msgid "Float Values"
 msgstr "Float Values"
@@ -6112,6 +6130,12 @@ msgstr "CIE XYZ"
 msgid "CIE xyY"
 msgstr "CIE xyY"
 
+msgid "Small"
+msgstr "Small"
+
+msgid "High"
+msgstr "High"
+
 msgid "From File"
 msgstr "From File"
 
@@ -6129,9 +6153,6 @@ msgstr "Premultiplied"
 
 msgid "Nearest"
 msgstr "Nearest"
-
-msgid "Small"
-msgstr "Small"
 
 msgid "Large"
 msgstr "Large"
@@ -6498,6 +6519,9 @@ msgstr "Memory"
 msgid "Attributes"
 msgstr "Attributes"
 
+msgid "Font Size"
+msgstr "Font Size"
+
 msgid "File Requester"
 msgstr "File Requester"
 
@@ -6653,6 +6677,12 @@ msgstr ""
 
 msgid "Render"
 msgstr "Render"
+
+msgid "Debanding (Vulkan)"
+msgstr "Debanding (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "Makes gradients smoother on video files."
 
 msgid "Alpha Blend"
 msgstr "Alpha Blend"
@@ -6908,6 +6938,16 @@ msgid ""
 msgstr ""
 "When this option is on, and your config.ocio has a default display and view,"
 " it will be used to be set as default."
+
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "No OCIO on Videos or sRGB/BT709 data"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
 
 msgid "Use Active Views and Active Displays"
 msgstr "Use Active Views and Active Displays"
@@ -7673,7 +7713,7 @@ msgid "Toggle HDR tonemap"
 msgstr "Toggle HDR tonemap"
 
 msgid "Toggle HDR Peak Detection"
-msgstr "HDR Peak Detection"
+msgstr "Toggle HDR Peak Detection"
 
 msgid "Compare None"
 msgstr "Compare None"
@@ -7725,6 +7765,18 @@ msgstr "Rotate Images +90 Degrees"
 
 msgid "Rotate Images -90 Degrees"
 msgstr "Rotate Images -90 Degrees"
+
+msgid "Debanding None"
+msgstr "Debanding None"
+
+msgid "Debanding Small"
+msgstr "Debanding Small"
+
+msgid "Debanding Medium"
+msgstr "Debanding Medium"
+
+msgid "Debanding High"
+msgstr "Debanding High"
 
 msgid "Video Levels from File"
 msgstr "Video Levels from File"
@@ -8131,27 +8183,6 @@ msgstr "Toggle Hotkeys Window"
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
 
-#~ msgid "Toggle HDR ScRGB"
-#~ msgstr "Toggle HDR tonemap"
-
-#~ msgid "Render/HDR/Enable ScRGB"
-#~ msgstr "Render/HDR/Enable Peak Detectionx"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "User Interface/HDR"
-
-#~ msgid "Primaries Name"
-#~ msgstr "Preset Name"
-
-#~ msgid "PrimariesName"
-#~ msgstr "Preset Name"
-
-#~ msgid "HDR Shot/Scene Peak Detection"
-#~ msgstr "HDR Peak Detection"
-
-#~ msgid "Monitor "
-#~ msgstr "Monitor "
-
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
 
@@ -8190,6 +8221,36 @@ msgstr "Toggle About Window"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Invalid font for text drawing"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR monitor found."
+
+#~ msgid "Render/HDR/Debug"
+#~ msgstr "Render/HDR/Debug"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Could not determine monitor's nits."
+
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "Toggle HDR ScRGB"
+
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Enable ScRGB"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "User Interface/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Primaries Name"
+
+#~ msgid "PrimariesName"
+#~ msgstr "PrimariesName"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "HDR Shot/Scene Peak Detection"
+
+#~ msgid "Monitor "
+#~ msgstr "Monitor "
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "Invalid license. Entering demo mode"

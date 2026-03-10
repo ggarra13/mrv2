@@ -152,7 +152,7 @@ namespace mrv
 #endif
     namespace
     {
-        const float kLicenseTimeout = 90; // 1min 30. 
+        const float kLicenseTimeout = 90; // 1min 30.
     }
 
     struct Options
@@ -201,7 +201,7 @@ namespace mrv
     struct App::Private
     {
         Options options;
-        
+
         ContextObject* contextObject = nullptr;
         std::shared_ptr<timeline::TimeUnitsModel> timeUnitsModel;
         SettingsObject* settings = nullptr;
@@ -313,7 +313,7 @@ namespace mrv
         _p(new Private)
     {
         TLRENDER_P();
-        
+
         // Establish MRV2_ROOT environment variable
         set_root_path(argc, argv);
         mrv::init(context);
@@ -337,7 +337,7 @@ namespace mrv
         ViewerUI::app = this;
 
         open_console();
-        
+
         const std::string& msg = setLanguageLocale();
 
         BaseApp::_init(
@@ -538,7 +538,7 @@ namespace mrv
         // For macOS, to read command-line arguments
         fl_open_callback(osx_open_cb);
 #endif
-        
+
         DBG;
         file::Path lastPath;
         const auto& unusedArgs = getUnusedArgs();
@@ -585,8 +585,8 @@ namespace mrv
 #ifdef VULKAN_BACKEND
         Fl::use_high_res_VK(true);
 #endif
-        
-        
+
+
         Fl::set_fonts("-*");
         DBG;
         Fl::lock(); // needed for NDI and multithreaded logging
@@ -596,7 +596,7 @@ namespace mrv
         p.settings = new SettingsObject();
 
         DBG;
-        
+
         // Create the interface.
         ui = new ViewerUI();
         if (!ui)
@@ -611,7 +611,7 @@ namespace mrv
 #ifdef MRV2_NETWORK
         Poco::Net::initializeSSL();
 #endif
-        
+
         // Classes used to handle network connections
 #ifdef MRV2_NETWORK
         p.commandInterpreter = new CommandInterpreter(ui);
@@ -652,7 +652,7 @@ namespace mrv
         // Floating licenses will do a beat every
         if (app::license_type == LicenseType::kFloating)
             Fl::add_timeout(kLicenseTimeout, (Fl_Timeout_Handler)beat_cb, this);
-        
+
         DBG;
         std::string version = "mrv2 v";
         version += mrv::version();
@@ -662,7 +662,7 @@ namespace mrv
         version += mrv::build_date();
         LOG_STATUS(version);
         LOG_STATUS(msg);
-        
+
         DBG;
 
         {
@@ -692,13 +692,13 @@ namespace mrv
             LOG_STATUS(_("Studio Location: "));
             LOG_STATUS("\t" << mrv::studiopath());
         }
-        
+
         LOG_STATUS(_("Preferences Location: "));
         if (file::isReadable(mrv::studiopath() + "/mrv2.prefs"))
             LOG_STATUS("\t" << mrv::studiopath());
         else
             LOG_STATUS("\t" << mrv::prefspath());
-        
+
         LOG_STATUS(_("Temp Location: "));
         LOG_STATUS("\t" << mrv::tmppath());
 
@@ -978,7 +978,7 @@ namespace mrv
         Fl_Group::current(0);
         outputDisplay = new PythonOutput(0, 0, 400, 400);
 #endif
-        
+
         //
         // Show the UI if no python script was fed in (when Python is supported).
         // We make sure the UI is visible when we feed a filename.
@@ -996,6 +996,8 @@ namespace mrv
         if (showUI)
         {
             ui->uiMain->show();
+            ui->uiMain->wait_for_expose();
+
             ui->uiView->take_focus();
 
             // Fix for always on top on Linux
@@ -1005,7 +1007,7 @@ namespace mrv
             {
                 ui->uiMain->always_on_top(value);
             }
-        }            
+        }
 
         if (!p.options.fileNames.empty())
         {
@@ -1258,8 +1260,8 @@ namespace mrv
 #ifdef TLRENDER_BMD
         endBMDOutputStream();
 #endif
-        
-        
+
+
         delete p.mainControl;
         p.mainControl = nullptr;
 
@@ -1424,13 +1426,13 @@ namespace mrv
             // REVERSE: The "Future" is actually the past (lower frame numbers)
             // Note: tlRender's reverse cache usually fills from 'time' backwards
             startTime = time - readAhead;
-            endTime = time; 
+            endTime = time;
 
             if (startTime < timeRange.start_time())
             {
                 // Calculate how much we went past the start
                 auto overflow = timeRange.start_time() - startTime;
-            
+
                 // Wrap to the end of the timeline
                 endTime = timeRange.end_time_exclusive();
                 startTime = endTime - overflow;
@@ -1438,20 +1440,20 @@ namespace mrv
         }
 
         // Crucial: Floor/Ceil BEFORE returning to ensure integer frame boundaries
-        // We want the start to be the very beginning of the frame and 
+        // We want the start to be the very beginning of the frame and
         // the end to be the very end of the range.
         startTime = startTime.floor();
         endTime = endTime.ceil();
-    
+
         // Final Clamp to ensure we never exceed physical timeline limits
         if (startTime < timeRange.start_time()) startTime = timeRange.start_time();
         if (endTime > timeRange.end_time_exclusive()) endTime = timeRange.end_time_exclusive();
     }
-    
+
     void App::startPlayback()
     {
         TLRENDER_P();
-        
+
 
         p.player->setPlayback(timeline::Playback::Stop);
 
@@ -1472,27 +1474,30 @@ namespace mrv
             const auto extension = string::toUpper(player->getPath().getExtension());
             if (extension == ".NDI")
                 use_progress = false;
-            
+
         }
+        
         // Calculate start and end time used in progress report
         otime::RationalTime startTime, endTime;
         _calculateCacheTimes(startTime, endTime);
-        
+
         const timeline::Playback& playback = p.options.playback;
 
-        int64_t start = std::floor(startTime.to_seconds());
-        int64_t end   = std::ceil(endTime.to_seconds());
-
+        // Calculate the total duration we are waiting for
+        // We use the rate of the startTime to ensure we are working in frame
+        // units
+        double totalFrames = (endTime - startTime).to_frames();
+                            
         if (!p.progress)
         {
             p.progress = new ProgressReport(ui->uiMain,
-                                            start, end,
+                                            0, totalFrames,
                                             _("Caching..."));
         }
         else
         {
-            p.progress->set_start(start);
-            p.progress->set_end(end);
+            p.progress->set_start(0);
+            p.progress->set_end(totalFrames);
         }
         if (use_progress)
         {
@@ -1505,8 +1510,9 @@ namespace mrv
             ui->uiView->setPlayback(playback);
         }
 
-        if (playback == timeline::Playback::Forward ||
-            playback == timeline::Playback::Stop)
+        if (use_progress &&
+            (playback == timeline::Playback::Forward ||
+             playback == timeline::Playback::Stop))
         {
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
@@ -1521,7 +1527,7 @@ namespace mrv
                             // 1. Calculate the total duration we are waiting for
                             // We use the rate of the startTime to ensure we are working in frame units
                             double totalFrames = (endTime - startTime).to_frames();
-                            
+
                             // 2. Calculate how much of that specific range is actually cached
                             double cachedFramesInRange = 0;
                             for (const auto& t : value.videoFrames)
@@ -1547,7 +1553,7 @@ namespace mrv
 
                            // 3. Update the progress bar
                             if (p.progress) {
-                                // Set the range if your progress bar allows it, 
+                                // Set the range if your progress bar allows it,
                                 // or map cachedFramesInRange / totalFrames to a 0-100 scale
                                 p.progress->set_start(0);
                                 p.progress->set_end(static_cast<int64_t>(totalFrames));
@@ -1565,7 +1571,7 @@ namespace mrv
                             }
                         });
         }
-        else if (playback == timeline::Playback::Reverse)
+        else if (use_progress && playback == timeline::Playback::Reverse)
         {
 
             p.cacheInfoObserver =
@@ -1574,7 +1580,7 @@ namespace mrv
                     [this, playback](const timeline::PlayerCacheInfo& value)
                         {
                             TLRENDER_P();
-                            
+
                             otime::RationalTime startTime, endTime;
                             _calculateCacheTimes(startTime, endTime);
 
@@ -1583,11 +1589,9 @@ namespace mrv
                             double totalFrames = std::abs((endTime - startTime).to_frames());
                             if (totalFrames == 0) totalFrames = 1; // Prevent division by zero
 
-                            std::cerr << "totalFrames = " << totalFrames << std::endl;
-                            
                             // Ensure we always have a valid range to compare against, regardless of direction
                             otime::TimeRange targetRange = otime::TimeRange::range_from_start_end_time(
-                                std::min(startTime, endTime), 
+                                std::min(startTime, endTime),
                                 std::max(startTime, endTime)
 );
                             // 3. Define the ranges to check
@@ -1600,14 +1604,14 @@ namespace mrv
                             } else {
                                 // Wrap-around case (Reverse playback hit the start and jumped to end)
                                 const auto& timeRange = p.player->inOutRange();
-    
+
                                 // Segment A: from the start of the timeline to the current "end" (which is actually the playhead)
                                 searchRanges.push_back(otime::TimeRange::range_from_start_end_time(timeRange.start_time(), endTime));
-                                
+
                                 // Segment B: from the calculated "start" to the end of the timeline
                                 searchRanges.push_back(otime::TimeRange::range_from_start_end_time(startTime, timeRange.end_time_exclusive()));
                             }
-                            
+
                             // 3. Count cached frames in all active segments
                             double cachedFramesInRange = 0;
                             for (const auto& targetRange : searchRanges) {
@@ -1615,7 +1619,7 @@ namespace mrv
                                     if (t.intersects(targetRange)) {
                                         auto overlapStart = std::max(t.start_time(), targetRange.start_time());
                                         auto overlapEnd = std::min(t.end_time_exclusive(), targetRange.end_time_exclusive());
-                                        
+
                                         if (overlapEnd > overlapStart) {
                                             cachedFramesInRange += (overlapEnd - overlapStart).to_frames();
                                         }
@@ -1625,11 +1629,12 @@ namespace mrv
 
                            // 3. Update the progress bar
                             if (p.progress) {
-                                // Set the range if your progress bar allows it, 
+                                // Set the range if your progress bar allows it,
                                 // or map cachedFramesInRange / totalFrames to a 0-100 scale
                                 p.progress->set_start(0);
                                 p.progress->set_end(static_cast<int64_t>(totalFrames));
                                 p.progress->set_value(static_cast<int64_t>(cachedFramesInRange));
+                                Fl::check();
                             }
 
                             // If the number of cached frames meets or exceeds the requested range
@@ -1643,6 +1648,7 @@ namespace mrv
                             }
                         });
         }
+        
     }
 
     int App::run()
@@ -1668,13 +1674,19 @@ namespace mrv
                 // make sure to show all frames
                 if (p.options.playback == timeline::Playback::Count)
                     p.options.playback = timeline::Playback::Forward;
-            
+
+#ifdef __linux__
+                // Must be 0.75 to prevent display not showing up.
                 Fl::add_timeout(
-                    0.0, (Fl_Timeout_Handler)start_playback_cb, this);
+                    0.75, (Fl_Timeout_Handler)start_playback_cb, this);
+#else
+                Fl::add_timeout(
+                    0.01, (Fl_Timeout_Handler)start_playback_cb, this);
+#endif
             }
         }
         p.running = true;
-            
+
         return Fl::run();
     }
 
@@ -1692,7 +1704,7 @@ namespace mrv
     {
         return _p->outputDevice;
     }
-    
+
 #if defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
     void App::_timer_update_cb(App* self)
     {
@@ -1722,7 +1734,7 @@ namespace mrv
             p.outputDevice->setPlayer(p.player ? p.player->player() : nullptr);
             p.outputDevice->setEnabled(true);
         }
-        
+
         Fl::add_timeout(kTimeout, (Fl_Timeout_Handler)_timer_update_cb, this);
     }
 
@@ -1732,11 +1744,11 @@ namespace mrv
 
         if (p.outputDevice)
             p.outputDevice->setEnabled(false);
-        
+
         // \@todo: Remove.  Needed to refresh the viewport annotations
         if (ui && ui->uiView)
             ui->uiView->redraw();
-        
+
         Fl::remove_timeout((Fl_Timeout_Handler)_timer_update_cb, this);
     }
 #endif // defined(TLRENDER_BMD) || defined(TLRENDER_NDI)
@@ -1868,7 +1880,7 @@ namespace mrv
             LOG_ERROR(err);
             return;
         }
-    
+
 
         for (const auto& path :
                  timeline::getPaths(filePath, pathOptions, _context) )
@@ -2194,7 +2206,7 @@ namespace mrv
         TLRENDER_P();
 
         DBG;
-        
+
         std::shared_ptr<TimelinePlayer> player;
         if (!p.activeFiles.empty() && isRunning() && p.player)
         {
@@ -2271,7 +2283,7 @@ namespace mrv
                             if (!file::isTemporaryEDL(item->path) &&
                                 autoPlayback && isRunning())
                             {
-                                
+
                                 // If we have autoplayback on and auto hide
                                 // pixel bar, do so here.
                                 const int autoHide =
@@ -2370,7 +2382,7 @@ namespace mrv
 #endif // TLRENDER_BMD
 
         DBG;
-        
+
         _layersUpdate(p.filesModel->observeLayers()->get());
 
         if (ui)

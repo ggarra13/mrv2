@@ -37,12 +37,11 @@ namespace mrv
             static short ghostPrevious;
             static short ghostNext;
 
-            bool hdrMonitorFound = false;
-        
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
+            static timeline::ShaderOptions shaderOptions;
             static timeline::HDROptions hdrOptions;
-
+            
             std::vector<tl::timeline::ImageOptions> imageOptions;
             std::vector<tl::timeline::DisplayOptions> displayOptions;
             timeline::CompareOptions compareOptions;
@@ -105,7 +104,7 @@ namespace mrv
             static std::string helpText;
             static float helpTextFade;
 
-            //! HUD display flags (ORed together).
+            //! HUD display flags (OR-ed together).
             static bool hudActive;
             static HudDisplay hud;
 
@@ -203,8 +202,9 @@ namespace mrv
             Tooltip* tooltip = nullptr;
 
             // HDR monitor tracking.
+            bool monitor_first_run = true;
             int screen_index = 0;
-            monitor::HDRCapabilities hdrCapabilities;
+            monitor::Capabilities monitor;
         };
 
     }  // namespace vlk

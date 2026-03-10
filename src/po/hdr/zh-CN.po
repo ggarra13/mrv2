@@ -197,9 +197,6 @@ msgstr "已找到 HDR 显示器。"
 msgid "HDR monitor not found or not configured."
 msgstr "未找到 HDR 显示器或未配置。"
 
-msgid "Could not determine monitor's nits."
-msgstr "无法确定显示器的尼特亮度。"
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR 显示器最小亮度（尼特）= {0}"
 
@@ -214,3 +211,6 @@ msgstr "窗口/全屏"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/将元数据传递到显示器"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "无法确定显示器的尼特亮度。"

@@ -1185,6 +1185,40 @@ namespace mrv
         ui->uiColorChannel->do_callback();
     }
 
+#ifdef VULKAN_BACKEND
+    void debanding_none_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::ShaderOptions o = ui->uiView->getShaderOptions();
+        o.debanding = timeline::Debanding::kNone;
+        ui->uiView->setShaderOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void debanding_low_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::ShaderOptions o = ui->uiView->getShaderOptions();
+        o.debanding = timeline::Debanding::Low;
+        ui->uiView->setShaderOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+        
+    void debanding_medium_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::ShaderOptions o = ui->uiView->getShaderOptions();
+        o.debanding = timeline::Debanding::Medium;
+        ui->uiView->setShaderOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
+    void debanding_high_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        timeline::ShaderOptions o = ui->uiView->getShaderOptions();
+        o.debanding = timeline::Debanding::High;
+        ui->uiView->setShaderOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+#endif
+    
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::DisplayOptions o = ui->app->displayOptions();
@@ -1371,14 +1405,6 @@ namespace mrv
     {
         timeline::HDROptions o = ui->uiView->getHDROptions();
         o.peak_detection ^= 1;
-        ui->uiView->setHDROptions(o);
-        ui->uiMain->fill_menu(ui->uiMenuBar);
-    }
-    
-    void toggle_hdr_debug_cb(Fl_Menu_* w, ViewerUI* ui)
-    {
-        timeline::HDROptions o = ui->uiView->getHDROptions();
-        o.debug ^= 1;
         ui->uiView->setHDROptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
@@ -2297,6 +2323,26 @@ namespace mrv
     void previous_frame_cb(Fl_Menu_*, ViewerUI* ui)
     {
         ui->uiView->framePrev();
+    }
+    
+    void next_second_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+        auto time = player->currentTime();
+        time += otime::RationalTime(10.0, 1.0).rescaled_to(time.rate());
+        player->seek(time);
+    }
+
+    void previous_second_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+        auto time = player->currentTime();
+        time -= otime::RationalTime(10.0, 1.0).rescaled_to(time.rate());
+        player->seek(time);
     }
 
     void toggle_otio_clip_in_out_cb(Fl_Menu_*, ViewerUI* ui)

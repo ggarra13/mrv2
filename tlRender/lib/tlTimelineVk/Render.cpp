@@ -17,6 +17,7 @@
 #include <tlCore/Assert.h>
 #include <tlCore/Context.h>
 #include <tlCore/Error.h>
+#include <tlCore/Monitor.h>
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 
@@ -132,7 +133,7 @@ namespace
 
     std::string
     replaceUniformSampler(const std::string& input, unsigned& bindingIndex)
-     {
+    {
         std::string output = input;
         std::string target = "uniform sampler";
         size_t pos = 0;
@@ -144,10 +145,10 @@ namespace
                 target;
             output.replace(pos, target.length(), replacement);
             pos += replacement.length(); // move past the inserted text
-         }
+        }
 
-         return output;
-     }
+        return output;
+    }
 
 
 #if defined(TLRENDER_LIBPLACEBO)
@@ -165,14 +166,14 @@ namespace
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16_UINT
-                                              : VK_FORMAT_R8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16_UINT
+                       : VK_FORMAT_R8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16_SINT
-                                              : VK_FORMAT_R8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16_SINT
+                       : VK_FORMAT_R8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
@@ -187,87 +188,87 @@ namespace
             if (fmt->type == PL_FMT_FLOAT)
             {
                 return size == 2 ? VK_FORMAT_R16G16_SFLOAT
-                                 : VK_FORMAT_R32G32_SFLOAT;
+                    : VK_FORMAT_R32G32_SFLOAT;
             }
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16G16_UINT
-                                              : VK_FORMAT_R8G8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16G16_UINT
+                       : VK_FORMAT_R8G8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16G16_SINT
-                                              : VK_FORMAT_R8G8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16G16_SINT
+                       : VK_FORMAT_R8G8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16_UNORM
-                                 : VK_FORMAT_R8G8_UNORM;
+                    : VK_FORMAT_R8G8_UNORM;
             }
             else if (fmt->type == PL_FMT_SNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16_SNORM
-                                 : VK_FORMAT_R8G8_SNORM;
+                    : VK_FORMAT_R8G8_SNORM;
             }
             break;
         case 3:
             if (fmt->type == PL_FMT_FLOAT)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16_SFLOAT
-                                 : VK_FORMAT_R32G32B32_SFLOAT;
+                    : VK_FORMAT_R32G32B32_SFLOAT;
             }
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16_UINT
-                                              : VK_FORMAT_R8G8B8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16_UINT
+                       : VK_FORMAT_R8G8B8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16_SINT
-                                              : VK_FORMAT_R8G8B8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16_SINT
+                       : VK_FORMAT_R8G8B8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16_UNORM
-                                 : VK_FORMAT_R8G8B8_UNORM;
+                    : VK_FORMAT_R8G8B8_UNORM;
             }
             else if (fmt->type == PL_FMT_SNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16_SNORM
-                                 : VK_FORMAT_R8G8B8_SNORM;
+                    : VK_FORMAT_R8G8B8_SNORM;
             }
             break;
         case 4:
             if (fmt->type == PL_FMT_FLOAT)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16A16_SFLOAT
-                                 : VK_FORMAT_R32G32B32A32_SFLOAT;
+                    : VK_FORMAT_R32G32B32A32_SFLOAT;
             }
             else if (fmt->type == PL_FMT_UINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32A32_UINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16A16_UINT
-                                              : VK_FORMAT_R8G8B8A8_UINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16A16_UINT
+                       : VK_FORMAT_R8G8B8A8_UINT);
             }
             else if (fmt->type == PL_FMT_SINT)
             {
                 return size == 4 ? VK_FORMAT_R32G32B32A32_SINT
-                                 : (size == 2 ? VK_FORMAT_R16G16B16A16_SINT
-                                              : VK_FORMAT_R8G8B8A8_SINT);
+                    : (size == 2 ? VK_FORMAT_R16G16B16A16_SINT
+                       : VK_FORMAT_R8G8B8A8_SINT);
             }
             else if (fmt->type == PL_FMT_UNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16A16_UNORM
-                                 : VK_FORMAT_R8G8B8A8_UNORM;
+                    : VK_FORMAT_R8G8B8A8_UNORM;
             }
             else if (fmt->type == PL_FMT_SNORM)
             {
                 return size == 2 ? VK_FORMAT_R16G16B16A16_SNORM
-                                 : VK_FORMAT_R8G8B8A8_SNORM;
+                    : VK_FORMAT_R8G8B8A8_SNORM;
             }
             break;
         }
@@ -1513,19 +1514,17 @@ namespace tl
             return _p->frameIndex;
         }
         
-        void Render::setMonitorHDRSupported(bool value)
+        void Render::setMonitorCapabilities(const monitor::Capabilities& value)
         {
-            _p->hdrMonitorFound = value;
-        }
+            TLRENDER_P();
+            
+            if (p.monitor == value)
+                return;
+            
+            p.monitor = value;
 
-        void Render::setMonitorMinNits(float value)
-        {
-            _p->monitorMinNits = value;
-        }
-        
-        void Render::setMonitorMaxNits(float value)
-        {
-            _p->monitorMaxNits = value;
+            p.shaders["display"].reset();
+            _displayShader();
         }
         
         Fl_Vk_Context& Render::getContext() const
@@ -2414,6 +2413,18 @@ namespace tl
             _displayShader();
         }
 
+        void Render::setShaderOptions(const timeline::ShaderOptions& value)
+        {
+            TLRENDER_P();
+            if (value == p.shaderOptions)
+                return;
+
+            p.shaderOptions = value;
+            
+            p.shaders["display"].reset();
+            _displayShader();
+        }
+
         void Render::setHDROptions(const timeline::HDROptions& value)
         {
             TLRENDER_P();
@@ -2594,8 +2605,9 @@ namespace tl
             std::string lut;
             std::string toneMap;
 
-            // Start of binding index (0 to 5 are the standard UBOs in
-            // tlRender).
+            // Start of binding index (1 is for main texture)
+            // (2 to 5 are the standard UBOs in tlRender).
+            // (6 and more are for libplacebo and OCIO).
             p.bindingIndex = 6;
             std::size_t pushSize = 0;
 #if defined(TLRENDER_LIBPLACEBO)
@@ -2789,7 +2801,7 @@ namespace tl
                 pl_color_space dst_colorspace;
                 memset(&dst_colorspace, 0, sizeof(pl_color_space));
 
-                if (p.hdrMonitorFound)
+                if (p.monitor.hdr_enabled)
                 {
                     if (p.ocioData &&
                         (p.ocioData->icsDesc || p.ocioData->shaderDesc))
@@ -2801,7 +2813,7 @@ namespace tl
                         dst_colorspace.transfer = src_colorspace.transfer;
                         
                         dst_colorspace.hdr.min_luma = 0.F;
-                        dst_colorspace.hdr.max_luma = src_colorspace.hdr.max_luma > 0 ? src_colorspace.hdr.max_luma : p.monitorMaxNits;
+                        dst_colorspace.hdr.max_luma = src_colorspace.hdr.max_luma > 0 ? src_colorspace.hdr.max_luma : p.monitor.max_nits;
                         
                         cmap.gamut_mapping = nullptr;
                         cmap.tone_mapping_function = nullptr;
@@ -2810,8 +2822,8 @@ namespace tl
                     {
                         dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                         dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-                        dst_colorspace.hdr.min_luma = p.monitorMinNits;
-                        dst_colorspace.hdr.max_luma = p.monitorMaxNits;
+                        dst_colorspace.hdr.min_luma = p.monitor.min_nits;
+                        dst_colorspace.hdr.max_luma = p.monitor.max_nits;
                     }
                     
                     if (ctx.colorSpace ==
@@ -2829,6 +2841,28 @@ namespace tl
                     {
                         dst_colorspace.transfer = PL_COLOR_TRC_PQ;
                     }
+
+                    if (p.monitor.red.x > 0)
+                    {
+                        dst_colorspace.hdr.prim.red.x = p.monitor.red.x;
+                        dst_colorspace.hdr.prim.red.y = p.monitor.red.y;
+                        dst_colorspace.hdr.prim.green.x = p.monitor.green.x;
+                        dst_colorspace.hdr.prim.green.y = p.monitor.green.y;
+                        dst_colorspace.hdr.prim.blue.x = p.monitor.blue.x;
+                        dst_colorspace.hdr.prim.blue.y = p.monitor.blue.y;
+                        dst_colorspace.hdr.prim.white.x = p.monitor.white.x;
+                        dst_colorspace.hdr.prim.white.y = p.monitor.white.y;
+                    }
+                    else
+                    {
+                        const struct pl_raw_primaries* raw =
+                            pl_raw_primaries_get(PL_COLOR_PRIM_DISPLAY_P3);
+
+                        dst_colorspace.hdr.prim.red = raw->red;
+                        dst_colorspace.hdr.prim.green = raw->green;
+                        dst_colorspace.hdr.prim.blue = raw->blue;
+                        dst_colorspace.hdr.prim.white = raw->white;
+                    }
                 }
                 else
                 {
@@ -2836,11 +2870,19 @@ namespace tl
                     dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
                         
                     dst_colorspace.hdr.min_luma = 0.F;
-
                     // SDR peak in nits
                     // See ITU-R Report BT.2408 for more information.
                     // or libplacebo's colorspace.h
                     dst_colorspace.hdr.max_luma = 203.F; 
+                    
+                    const struct pl_raw_primaries* raw =
+                        pl_raw_primaries_get(PL_COLOR_PRIM_BT_709);
+
+                    dst_colorspace.hdr.prim.red = raw->red;
+                    dst_colorspace.hdr.prim.green = raw->green;
+                    dst_colorspace.hdr.prim.blue = raw->blue;
+                    dst_colorspace.hdr.prim.white = raw->white;
+
                 }
 
                 pl_color_space_infer(&dst_colorspace);
@@ -2990,10 +3032,11 @@ namespace tl
                 throw e;
             }
 #endif
-            
-                toneMap = "outColor = ";
+
+                toneMap =  "outColor.rgb = max(outColor.rgb, vec3(0.0));\n";
+                toneMap += "outColor = clamp(";
                 toneMap += res->name;
-                toneMap += "(outColor);\n";
+                toneMap += "(outColor), 0.0, 1.0);\n";
 
 #if DEBUG_TONEMAPPING
                 std::cerr << "toneMapDef="
@@ -3029,10 +3072,36 @@ namespace tl
                 lut = "outColor = lutFunc(outColor);";
             }
 #endif // TLRENDER_OCIO
-                
+
+            std::string debandingDef, debanding;
+            switch(p.shaderOptions.debanding)
+            {
+            case timeline::Debanding::High:
+                debandingDef = debandingFragmentSource(200.F, 32.F, 4, 96);
+                break;
+            case timeline::Debanding::Medium:
+                debandingDef = debandingFragmentSource(100.F, 24.F, 1, 64);
+                break;
+            case timeline::Debanding::Low:
+                debandingDef = debandingFragmentSource(48.F, 16.F, 1, 32);
+                break;
+            case timeline::Debanding::kNone:
+                break;
+            }
+
+            if (p.shaderOptions.debanding != timeline::Debanding::kNone)
+            {
+                debanding = "outColor = deband(textureSampler, t);\n";
+            }
+            else
+            {
+                debanding = "outColor = texture(textureSampler, t);\n";
+            }
+            
             const std::string source = displayFragmentSource(
                 ocioICSDef, ocioICS, ocioDef, ocio, lutDef, lut,
-                p.lutOptions.order, toneMapDef, toneMap);
+                p.lutOptions.order, toneMapDef, toneMap,
+                debandingDef, debanding);
 #if DEBUG_DISPLAY_SHADER
             std::cerr << source << std::endl;
 #endif

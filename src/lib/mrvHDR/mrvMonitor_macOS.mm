@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 #import <CoreGraphics/CoreGraphics.h>
+#import <ApplicationServices/ApplicationServices.h> // For ColorSync
 #import <IOKit/IOKitLib.h>
 
 #pragma clang diagnostic pop
@@ -21,6 +22,16 @@
 #import <sstream>
 #import <cstring>
 #import <vector>
+
+// Helper to decode ICC s15Fixed16Number to standard float
+static float decode_s15Fixed16(const uint8_t* bytes) {
+    // ICC profiles are Big-Endian
+    int32_t val = (bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3];
+    return val / 65536.0f;
+}
+
+using tl::monitor::Capabilities;
+
 
 bool getDisplayNameForDispID(CGDirectDisplayID dispID,
                              std::string& out)
@@ -58,10 +69,8 @@ namespace mrv {
     namespace monitor {
 
 
-
-        // Helper to get capabilities for a specific ID
-        HDRCapabilities getCapabilitiesForDisplay(CGDirectDisplayID displayID) {
-            HDRCapabilities caps;
+        Capabilities getCapabilitiesForDisplay(CGDirectDisplayID displayID) {
+            Capabilities caps;
 
             // 2. Supplement/Override with NSScreen headroom if available
             // macOS EDR (Extended Dynamic Range) is a multiplier of SDR (usually 100 nits)
@@ -74,11 +83,60 @@ namespace mrv {
             
                     // If the multiplier is > 1.0, it's an HDR-capable display
                     if (headroom > 1.0) {
-                        caps.supported = true;
-                        // Only override EDID if EDID failed to provide a max_nits value
-                        if (caps.max_nits <= 0.0f) {
+                        caps.hdr_supported = true;
+                        caps.hdr_enabled = true;
                             caps.max_nits = headroom * 100.0f; 
                         }
+                    break;
+                }
+            }
+
+            
+            // 3. Extract Primaries and White Point via ColorSync
+            for (NSScreen* screen in [NSScreen screens]) {
+                NSNumber* screenNumber = [[screen deviceDescription] objectForKey:@"NSScreenNumber"];
+                if (screenNumber && [screenNumber unsignedIntValue] == displayID) {
+            
+                    CGColorSpaceRef colorSpace = screen.colorSpace.CGColorSpace;
+                    if (!colorSpace) break;
+            
+                    // Extract the raw ICC profile data
+                    CFDataRef iccData = CGColorSpaceCopyICCData(colorSpace);
+                    if (iccData) {
+                        CFErrorRef err = NULL;
+                        ColorSyncProfileRef profile = ColorSyncProfileCreate(iccData, &err);
+                
+                        if (profile) {
+                            // Lambda to read an XYZ tag and convert it to x,y chromaticity
+                            auto extractXY = ^(CFStringRef tag, float *outX, float *outY) {
+                                CFDataRef tagData = ColorSyncProfileCopyTag(profile, tag);
+                                // XYZType tags are exactly 20 bytes long
+                                if (tagData && CFDataGetLength(tagData) >= 20) {
+                                    const uint8_t* b = CFDataGetBytePtr(tagData);
+                            
+                                    // Bytes 8-19 contain X, Y, Z
+                                    float X = decode_s15Fixed16(b + 8);
+                                    float Y = decode_s15Fixed16(b + 12);
+                                    float Z = decode_s15Fixed16(b + 16);
+                            
+                                    float sum = X + Y + Z;
+                                    if (sum > 0.0f) {
+                                        *outX = X / sum;
+                                        *outY = Y / sum;
+                                    }
+                                    CFRelease(tagData);
+                                }
+                            };
+
+                            // Extract using standard ICC tag signatures
+                            extractXY(CFSTR("rXYZ"), &caps.red.x, &caps.red.y);
+                            extractXY(CFSTR("gXYZ"), &caps.green.x, &caps.green.y);
+                            extractXY(CFSTR("bXYZ"), &caps.blue.x, &caps.blue.y);
+                            extractXY(CFSTR("wtpt"), &caps.white.x, &caps.white.y);
+
+                            CFRelease(profile);
+                        }
+                        CFRelease(iccData);
                     }
                     break;
                 }
@@ -88,7 +146,7 @@ namespace mrv {
         }
 
         // Optimized version to return the full struct instead of just a bool
-        HDRCapabilities get_hdr_capabilities(int screen_index) {
+        Capabilities get_hdr_capabilities(int screen_index) {
             uint32_t displayCount;
             CGGetActiveDisplayList(0, NULL, &displayCount);
     
@@ -101,7 +159,7 @@ namespace mrv {
             }
 
             // Default return (not found or invalid index)
-            HDRCapabilities empty;
+            Capabilities empty;
             return empty;
         }
 

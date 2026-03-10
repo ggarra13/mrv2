@@ -193,6 +193,8 @@ namespace mrv
             void _unmapBuffer();
             void _getMonitorNits(bool quiet = true);
             
+            // Helper function to diagnose current state
+            void _diagnoseColorSpaceState() const;
         private:
             struct VKPrivate;
             std::unique_ptr<VKPrivate> _vk;

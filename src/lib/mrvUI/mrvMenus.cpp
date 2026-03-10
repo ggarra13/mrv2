@@ -726,6 +726,39 @@ namespace mrv
 
             mode = FL_MENU_RADIO;
 
+#ifdef VULKAN_BACKEND
+            const timeline::ShaderOptions& shaderOptions =
+                uiView->getShaderOptions();
+            
+            idx = menu->add(
+                _("Render/Debanding/None"), kDebandingNone.hotkey(),
+                (Fl_Callback*)debanding_none_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (shaderOptions.debanding == timeline::Debanding::kNone)
+                item->set();
+
+            idx = menu->add(
+                _("Render/Debanding/Small"), kDebandingLow.hotkey(),
+                (Fl_Callback*)debanding_low_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (shaderOptions.debanding == timeline::Debanding::Low)
+                item->set();
+            
+            idx = menu->add(
+                _("Render/Debanding/Medium"), kDebandingMedium.hotkey(),
+                (Fl_Callback*)debanding_medium_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (shaderOptions.debanding == timeline::Debanding::Medium)
+                item->set();
+
+            idx = menu->add(
+                _("Render/Debanding/High"), kDebandingHigh.hotkey(),
+                (Fl_Callback*)debanding_high_cb, ui, mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (shaderOptions.debanding == timeline::Debanding::High)
+                item->set();
+#endif
+            
             idx = menu->add(
                 _("Render/Video Levels/From File"), kVideoLevelsFile.hotkey(),
                 (Fl_Callback*)video_levels_from_file_cb, ui, mode);
@@ -783,22 +816,6 @@ namespace mrv
             int selected = static_cast<int>(hdrOptions.algorithm);
 
 #ifdef VULKAN_BACKEND
-
-#if 0
-            mode = FL_MENU_TOGGLE;
-            if (numFiles == 0)
-                mode |= FL_MENU_INACTIVE;
-            
-            idx = menu->add(_("Render/HDR/Debug"),
-                            0,
-                            (Fl_Callback*) toggle_hdr_debug_cb, ui,
-                            mode);
-            if (hdrOptions.debug)
-            {
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                item->set();
-            }
-#endif
             
             mode = FL_MENU_TOGGLE;
             if (numFiles == 0)
@@ -1071,7 +1088,16 @@ namespace mrv
         menu->add(
             _("Playback/Go to/Next Frame"), kFrameStepFwd.hotkey(),
             (Fl_Callback*)next_frame_cb, ui, FL_MENU_DIVIDER | mode);
+        
+        menu->add(
+            _("Playback/Go to/Previous 10 seconds"), kFrameStepFPSBack.hotkey(),
+            (Fl_Callback*)previous_second_cb, ui, mode);
+        menu->add(
+            _("Playback/Go to/Next 10 seconds"), kFrameStepFPSFwd.hotkey(),
+            (Fl_Callback*)next_second_cb, ui, FL_MENU_DIVIDER | mode);
 
+        
+        
         if (player)
         {
             mode = 0;

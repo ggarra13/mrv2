@@ -35,6 +35,7 @@
 
 #include <FL/Fl_PNG_Image.H>
 
+#include <algorithm>
 #include <cmath>
 #include <regex>
 
@@ -312,13 +313,13 @@ namespace mrv
             const std::vector<std::shared_ptr<voice::Annotation> >& voannotations,
             const math::Size2i& renderSize)
 #else
-        void Viewport::_drawAnnotations(
-            const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
-            const std::shared_ptr<tl::timeline_vlk::Render>& render,
-            const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
-            const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
-            const std::vector<std::shared_ptr<bool> >& voannotations,
-            const math::Size2i& renderSize)
+            void Viewport::_drawAnnotations(
+                const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
+                const std::shared_ptr<tl::timeline_vlk::Render>& render,
+                const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
+                const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
+                const std::vector<std::shared_ptr<bool> >& voannotations,
+                const math::Size2i& renderSize)
 #endif  
         {
             TLRENDER_P();
@@ -725,9 +726,12 @@ namespace mrv
                 return;
 
             Viewport* self = const_cast< Viewport* >(this);
-            const uint16_t fontSize = 12 * self->pixels_per_unit();
+            auto viewportSize = getViewportSize();
+            
+            // Calculate resolution multiplier.
+            uint16_t fontSize = p.ui->uiPrefs->uiPrefsHudFontSize->value() *
+                                self->pixels_per_unit();
             const image::FontInfo fontInfo(kFontFamily, fontSize);
-            const auto& viewportSize = getViewportSize();
 
 
             const image::FontMetrics fontMetrics =
@@ -1126,21 +1130,20 @@ namespace mrv
         {
             TLRENDER_P();
 
-            bool bt709_primaries = !p.hdrMonitorFound;
-
-#ifdef _WIN32
-            // On Windows, NVvidia drivers get tricked by sending "SDR" metadata
-            // evne if the data is HDR.
-            // AMD drivers disregard metadata and let the OS choose.
-            // Intel drivers are supposedly broken.
-            if (!p.hdrOptions.tonemap)
-                bt709_primaries = true;
-#endif
+#define DEBUG_METADATA 0
             
-            if (bt709_primaries)
+            // On Linux at least, we must send the real metadata over,
+            // so we translate OCIO to proper HDRData.
+            // If no OCIO is active, assume it is a movie and send the
+            // stored HDRData (which can be sRGB, BT. 709 or HDR.
+            const int screen_idx = this->screen_num();
+            const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
+                
+            if (!p.monitor.hdr_enabled || (!ocio.enabled && !p.hdrOptions.tonemap))
             {
-                if (p.hdrOptions.debug)
-                    LOG_WARNING("Sending SDR BT709 primaries");
+#if DEBUG_METADATA
+                LOG_WARNING("Sending SDR BT709 primaries");
+#endif
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
 
                 // Primaries
@@ -1157,17 +1160,17 @@ namespace mrv
             }
             else
             {
-                float monitorPeak = p.hdrCapabilities.max_nits;
-                // On Linux at least, we must send the real metadata over,
-                // so we translate OCIO to proper HDRData.
-                // If no OCIO is active, assume it is a movie and send the stored
-                // HDRData
-                const int screen_idx = this->screen_num();
-                const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
+                float monitorPeak = p.monitor.max_nits;
                 image::HDRData data;
-                if (!ocio.display.empty() && !ocio.view.empty())
+                if (ocio.enabled && !ocio.display.empty() && !ocio.view.empty())
                 {
-                    data = image::nameToPrimaries(ocio.display + ocio.view);
+                    std::string displayView = ocio.display;
+                    if (!ocio.view.empty() && ocio.view != "Default" && 
+                        ocio.view != "(default)" && ocio.view != "None")
+                    {
+                        displayView += "/" + ocio.view;
+                    }
+                    data = image::nameToPrimaries(displayView);
                     if (ocio.view.find("SDR") == std::string::npos)
                     {
                         float ocioPeak = 1000.0f;
@@ -1193,27 +1196,46 @@ namespace mrv
                             // Default fallback if no nits pattern is found
                             ocioPeak = 1000.0F; 
                         }
-                        data.displayMasteringLuminance = math::FloatRange(0, ocioPeak);
+                        data.displayMasteringLuminance = math::FloatRange(0.001F, ocioPeak);
                         data.maxCLL = std::min(ocioPeak, monitorPeak);
                         data.maxFALL = std::min(100.F, data.maxCLL * 0.1F); 
                     }
                     else  // is SDR view
                     {
-                        data.displayMasteringLuminance = math::FloatRange(0, 100.F);
+                        data.displayMasteringLuminance = math::FloatRange(0.001F, 100.F);
                         data.maxCLL = 203.F;
                         data.maxFALL = 100.F;
                     }
-                    if (p.hdrOptions.debug)
+#if DEBUG_METADATA
                         LOG_WARNING("Sending OCIO metadata primaries="
                                     << image::primariesName(data.primaries) << std::endl << data);
+#endif
                 }  // ocio.display.empty() || ocio.view.empty()
                 else
                 {
                     data = p.hdrOptions.hdrData;
-                    if (p.hdrOptions.debug)
-                        LOG_WARNING("Sending HDR video metadata primaries="
-                                    << image::primariesName(data.primaries)
-                                    << std::endl << data);
+                    if (p.monitor.red.x > 0)
+                    {
+                        data.primaries[image::Red].x = p.monitor.red.x;
+                        data.primaries[image::Red].y = p.monitor.red.y;
+                        data.primaries[image::Green].x = p.monitor.green.x;
+                        data.primaries[image::Green].y = p.monitor.green.y;
+                        data.primaries[image::Blue].x = p.monitor.blue.x;
+                        data.primaries[image::Blue].y = p.monitor.blue.y;
+                    }
+                    if (p.monitor.white.x > 0)
+                    {
+                        data.primaries[image::White].x = p.monitor.white.x;
+                        data.primaries[image::White].y = p.monitor.white.y;
+                    }
+                    data.displayMasteringLuminance =
+                        math::FloatRange(std::max(p.monitor.min_nits, 0.001F),
+                                         p.monitor.max_nits);
+                    data.maxCLL = p.monitor.max_nits;
+                    data.maxFALL = p.monitor.max_nits;
+#if DEBUG_METADATA
+                    LOG_WARNING("Sending HDR Monitor metadata=" << data);
+#endif
                 }
                 
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;

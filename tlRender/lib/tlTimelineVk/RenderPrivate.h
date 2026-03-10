@@ -51,6 +51,10 @@ namespace tl
         std::string textFragmentSource();
         std::string textureFragmentSource();
         std::string differenceFragmentSource();
+        std::string debandingFragmentSource(const float threshold = 48.F,
+                                            const float range = 16.F,
+                                            const int iterations = 1,
+                                            const float grain = 32.F);
 
         // For HDR peak detection
         std::string computeHDRPeakDetection();
@@ -70,7 +74,9 @@ namespace tl
             const std::string& ocioDef, const std::string& ocio,
             const std::string& lutDef, const std::string& lut,
             timeline::LUTOrder, const std::string& toneMapDef,
-            const std::string& toneMap);
+            const std::string& toneMap,
+            const std::string& debandingDef = "",
+            const std::string& debanding = "");
 
         std::vector<std::shared_ptr<vlk::Texture> > getTextures(
             Fl_Vk_Context&, const image::Info&, const timeline::ImageFilters&,
@@ -153,14 +159,13 @@ namespace tl
             // Current frame in the swapchain
             int32_t frameIndex; // must be an int32_t not an uint32_t.
 
-            bool hdrMonitorFound = false;
-            float monitorMinNits = 0.005F;
-            float monitorMaxNits = 1000.F;
+            monitor::Capabilities monitor;
 
             math::Size2i renderSize;
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
             timeline::HDROptions hdrOptions;
+            timeline::ShaderOptions shaderOptions; 
             unsigned bindingIndex = 7;
             timeline::RenderOptions renderOptions;
             std::string oldSource;
@@ -203,6 +208,7 @@ namespace tl
                 pipelines;
             std::shared_ptr<TextureCache> textureCache;
             std::shared_ptr<vlk::TextureAtlas> glyphTextureAtlas;
+            std::shared_ptr<vlk::Texture> blueNoiseTexture;
             std::map<image::GlyphInfo, vlk::TextureAtlasID> glyphIDs;
             std::unordered_map<std::string, std::shared_ptr<vlk::VBO> > vbos;
             std::unordered_map<std::string, std::shared_ptr<vlk::VAO> > vaos;

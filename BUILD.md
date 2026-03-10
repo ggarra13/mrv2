@@ -60,13 +60,12 @@ sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel \
 	       swig ccache
 
-sudo dnf install vulkan-headers vulkan-loader-devel glslang-devel spirv-tools spirv-headers
+# If you are building the Vulkan version of vmrv2, you need to install
+# The Vulkan components
 
 #
-# You may need to compile the following package from source
+# To compile you need a newer compiler than those in Red Hat.
 #
-sudo dnf install libshaderc-devel
-
 sudo dnf install gcc-toolset-14
 
 scl enable gcc-toolset-14 bash
@@ -99,9 +98,10 @@ sudo apt -y install curl build-essential perl git cmake ninja-build \
 		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
                     doxygen tk-dev libxt-dev swig ccache
 
-sudo apt -y install libvulkan-dev glslang-dev spirv-tools spirv-headers libshaderc-dev
+# If you are building the Vulkan version of vmrv2, you need to install
+# The Vulkan components
 
-# Install cpanminus and IPC::Cmd non-interactively
+# Install cpanminus and IPC::Cmd non-interactively for libcrypto building
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 
 #

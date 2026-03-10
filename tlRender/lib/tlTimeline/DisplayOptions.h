@@ -120,7 +120,7 @@ namespace tl
         };
         TLRENDER_ENUM(HDRInformation);
         TLRENDER_ENUM_SERIALIZE(HDRInformation);
-
+        
         //! Display options.
         struct DisplayOptions
         {

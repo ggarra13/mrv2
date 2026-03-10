@@ -44,6 +44,7 @@ set(HEADERS
     MemoryInline.h
     Mesh.h
     MeshInline.h
+    Monitor.h
     OS.h
     Observer.h
     Path.h

@@ -11,6 +11,7 @@
 #include <tlTimeline/LUTOptions.h>
 #include <tlTimeline/OCIOOptions.h>
 #include <tlTimeline/RenderOptions.h>
+#include <tlTimeline/ShaderOptions.h>
 #include <tlTimeline/Video.h>
 
 #include <tlCore/Context.h>

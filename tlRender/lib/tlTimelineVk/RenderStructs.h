@@ -45,12 +45,19 @@ namespace tl
             alignas(16) math::Vector4f minimum = math::Vector4f(0.F, 0.F, 0.F, 0.F);
             alignas(16) math::Vector4f maximum = math::Vector4f(1.F, 1.F, 1.F, 1.F);
         };
+
+        // Dithering
+        struct UBODither
+        {
+            alignas(4) uint32_t enabled = 0;
+        };
         
         struct UBOOptions
         {
             alignas(4) int   channels;
             alignas(4) int   mirrorX;
             alignas(4) int   mirrorY;
+            alignas(4) int   dither;
             alignas(4) float softClip;
             alignas(4) int   videoLevels;
             alignas(4) int   invalidValues;

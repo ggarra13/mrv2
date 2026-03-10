@@ -197,9 +197,6 @@ msgstr "HDR मॉनिटर मिला।"
 msgid "HDR monitor not found or not configured."
 msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया है।"
 
-msgid "Could not determine monitor's nits."
-msgstr "मॉनिटर की निट्स निर्धारित नहीं की जा सकीं।"
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR मॉनिटर की न्यूनतम ब्राइटनेस (निट्स) = {0}"
 
@@ -214,3 +211,6 @@ msgstr "विंडो/पूर्ण स्क्रीन"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/मेटाडेटा को डिस्प्ले पर पास करें"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "मॉनिटर की निट्स निर्धारित नहीं की जा सकीं।"

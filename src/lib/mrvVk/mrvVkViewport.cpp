@@ -61,10 +61,10 @@ namespace mrv
     namespace
     {
         
-        monitor::HDRCapabilities
+        tl::monitor::Capabilities
         getHDRCapabilities(int screen_num)
         {
-            monitor::HDRCapabilities out;
+            tl::monitor::Capabilities out;
             if (desktop::Wayland())
             {
                 const std::string& monitorName = desktop::monitorName(screen_num);
@@ -115,6 +115,7 @@ namespace mrv
 
         int Viewport::log_level() const
         {
+            // Set to 3 to debug color space and format interaction.
             return 0;
         }
 
@@ -389,50 +390,15 @@ namespace mrv
         void Viewport::_getMonitorNits(bool quiet)
         {
             TLRENDER_P();
-            
-            if (!p.hdrCapabilities.supported)
-            {
-#ifdef __linux__
-                if (!quiet)
-                {
-                    LOG_WARNING(_("Could not determine monitor's nits."));
-                }
-                if (p.hdrMonitorFound)
-                {
-                    p.hdrCapabilities.min_nits = 0.F;
-                    p.hdrCapabilities.max_nits = 1000.F;
-                }
-                else
-                {
-                    p.hdrCapabilities.min_nits = 0.F;
-                    p.hdrCapabilities.max_nits = 100.F;
-                }
-#else
-                p.hdrMonitorFound = false;
-#endif
-            }
-            
-            if (!p.hdrMonitorFound)
-            {
-                LOG_STATUS(_("HDR monitor not found or not configured."));
-                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-                format() = VK_FORMAT_B8G8R8A8_UNORM;
-            }
-            else
-            {
-                if (!quiet)
-                {
-                    std::string msg =
-                        string::Format(_("HDR monitor min. nits = {0}")).
-                        arg(p.hdrCapabilities.min_nits);
                 
-                    LOG_STATUS(msg);
+            std::string msg =
+                string::Format(_("HDR monitor min. nits = {0}")).
+                arg(p.monitor.min_nits);
+            LOG_STATUS(msg);
                 
-                    msg = string::Format(_("HDR monitor max. nits = {0}")).
-                          arg(p.hdrCapabilities.max_nits);
-                    LOG_STATUS(msg);
-                }
-            }
+            msg = string::Format(_("HDR monitor max. nits = {0}")).
+                  arg(p.monitor.max_nits);
+            LOG_STATUS(msg);
         }
             
         
@@ -443,10 +409,7 @@ namespace mrv
             // This call will try to set colorSpace() to the best color space
             // possible based on what Vulkan returns.
             Fl_Vk_Window::init_colorspace();
-
-            // Look for HDR10 or HLG if present
-            p.hdrMonitorFound = false;
-
+            
             // First check if Wayland returned a valid color space for this
             // monitor.
             bool valid_colorspace = false;
@@ -462,20 +425,30 @@ namespace mrv
             default:
                 break;
             }
-            
-            p.screen_index = this->screen_num();
-            p.hdrCapabilities = getHDRCapabilities(p.screen_index);
+
+            LOG_STATUS("valid colorspace=" << valid_colorspace);
             if (valid_colorspace)
             {
-                p.hdrMonitorFound = true;
-                LOG_STATUS(_("HDR monitor found."));
-
-                _getMonitorNits(false);
+                if (p.monitor_first_run)
+                {
+                    p.screen_index = this->screen_num();
+                    p.monitor = getHDRCapabilities(p.screen_index);
+                    p.monitor_first_run = false;
+                }
+                _getMonitorNits();
             }
             else
             {
-                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-                format() = VK_FORMAT_B8G8R8A8_UNORM;
+                if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                {
+                    colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                    format() = VK_FORMAT_B8G8R8A8_UNORM;
+                }
+                
+                p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
+                p.monitor.min_nits = 0.001F;
+                p.monitor.max_nits = 100.F;
+                
                 LOG_STATUS(_("HDR monitor not found or not configured."));
             }
             
@@ -545,9 +518,10 @@ namespace mrv
 
             wait_device();
 
-            // Destroy main renders
+            // Destroy main renderers
             vk.render.reset();
             vk.annotationRender.reset();
+            vk.overlayRender.reset();
 
             // Destroy auxiliary render classes
             vk.lines.reset();
@@ -616,13 +590,11 @@ namespace mrv
                 }
                 
                 // Set the renderers's max nits
-                vk.render = timeline_vlk::Render::create(ctx, context);
-
-                vk.render->setMonitorHDRSupported(p.hdrMonitorFound);
-                vk.render->setMonitorMinNits(p.hdrCapabilities.min_nits);
-                vk.render->setMonitorMaxNits(p.hdrCapabilities.max_nits);                
-                
-                vk.annotationRender = timeline_vlk::Render::create(ctx, context);
+                if (!vk.render)
+                    vk.render = timeline_vlk::Render::create(ctx, context);
+        
+                if (!vk.annotationRender)
+                    vk.annotationRender = timeline_vlk::Render::create(ctx, context);
 
                 
                 p.fontSystem = image::FontSystem::create(context);
@@ -694,7 +666,7 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-
+            
             // Check if the window changed screen.
             bool changed_screen = false;
             if (p.screen_index != this->screen_num())
@@ -707,17 +679,44 @@ namespace mrv
             {
                 // If we changed screen from an HDR to an SDR one, or one with
                 // different nits settings, recreate the Vulkan swapchain.
-                auto hdr = getHDRCapabilities(this->screen_num());
-                if (hdr.supported != p.hdrCapabilities.supported ||
-                    hdr.min_nits != p.hdrCapabilities.min_nits ||
-                    hdr.max_nits != p.hdrCapabilities.max_nits)
+                const auto monitor = getHDRCapabilities(p.screen_index);
+                if (monitor != p.monitor)
                 {
+                    std::string msg;
+                    if (monitor.hdr_enabled)
+                    { 
+                        msg =
+                            string::Format(
+                                _("Changed to HDR active monitor at index {0}")).
+                            arg(p.screen_index);
+                        LOG_STATUS(msg);
+                    }
+                    else
+                    {
+                        if (monitor.hdr_supported)
+                        {                            
+                            msg = string::Format(
+                                _("Changed to HDR supported but inactive monitor "
+                                  "at index {0}")).
+                                arg(p.screen_index);
+                            LOG_STATUS(msg);
+                        }
+                        else
+                        {
+                            msg = string::Format(_("Changed to SDR monitor at index {0}")).
+                                  arg(p.screen_index);
+                            LOG_STATUS(msg);
+                        }
+                    }
+                    p.monitor = monitor;
                     m_swapchain_needs_recreation = true;
                     init_colorspace();
                     redraw();
                     return;
                 }
             }
+
+            // _diagnoseColorSpaceState();
 
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
@@ -939,25 +938,32 @@ namespace mrv
                 if (p.showVideo)
                 {
                     int screen = this->screen_num();
+                    auto ocio = p.ocioOptions;
+                    
+                    if (!p.ui->uiPrefs->uiOCIONotOnVideos->value() &&
+                        p.hdrOptions.tonemap)
+                        ocio.enabled = false;
+                            
                     if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
                         screen < p.monitorOCIOOptions.size())
                     {
-                        timeline::OCIOOptions o = p.ocioOptions;
-                        o.display = p.monitorOCIOOptions[screen].display;
-                        o.view = p.monitorOCIOOptions[screen].view;
-                        vk.render->setOCIOOptions(o);
+                        ocio.display = p.monitorOCIOOptions[screen].display;
+                        ocio.view = p.monitorOCIOOptions[screen].view;
+                        vk.render->setOCIOOptions(ocio);
 
-                        _updateMonitorDisplayView(screen, o);
                     }
                     else
                     {
-                        vk.render->setOCIOOptions(p.ocioOptions);
-                        _updateMonitorDisplayView(screen, p.ocioOptions);
+                        vk.render->setOCIOOptions(ocio);
                     }
+                    
+                    _updateMonitorDisplayView(screen, ocio);
 
-                    timeline::BackgroundOptions backgroundOptions = getBackgroundOptions();        
+                    timeline::BackgroundOptions backgroundOptions = getBackgroundOptions();
+                    vk.render->setShaderOptions(p.shaderOptions);
                     vk.render->setLUTOptions(p.lutOptions);
                     vk.render->setHDROptions(p.hdrOptions);
+                    vk.render->setMonitorCapabilities(p.monitor);
                     if (p.missingFrame &&
                         p.missingFrameType != MissingFrameType::kBlackFrame)
                     {
@@ -1920,6 +1926,71 @@ namespace mrv
             result = vkCreateRenderPass(device(), &rp_info, NULL, &vk.loadRenderPass);
             VK_CHECK(result);
         }
+
+        
+        // Helper function to diagnose current state
+        void Viewport::_diagnoseColorSpaceState() const
+        {
+            TLRENDER_P();
+    
+            std::cerr << "\n=== COLOR SPACE DIAGNOSTICS ===" << std::endl;
+    
+            // Monitor info
+            std::cerr << "Monitor Index: " << p.screen_index << std::endl;
+            std::cerr << "Monitor HDR Supported: " << (p.monitor.hdr_supported ? "YES" : "NO") << std::endl;
+            std::cerr << "Monitor HDR Enabled: " << (p.monitor.hdr_enabled ? "YES" : "NO") << std::endl;
+            std::cerr << "Monitor Min Nits: " << p.monitor.min_nits << std::endl;
+            std::cerr << "Monitor Max Nits: " << p.monitor.max_nits << std::endl;
+            std::cerr << "Monitor Red: (" << p.monitor.red.x << ", " << p.monitor.red.y << ")" << std::endl;
+            std::cerr << "Monitor Green: (" << p.monitor.green.x << ", " << p.monitor.green.y << ")" << std::endl;
+            std::cerr << "Monitor Blue: (" << p.monitor.blue.x << ", " << p.monitor.blue.y << ")" << std::endl;
+            std::cerr << "Monitor White: (" << p.monitor.white.x << ", " << p.monitor.white.y << ")" << std::endl;
+    
+            // Vulkan state
+            std::cerr << "\nVulkan Configuration:" << std::endl;
+            std::cerr << "Color Space: " << string_VkColorSpaceKHR(colorSpace()) << std::endl;
+            std::cerr << "Format: " << string_VkFormat(format()) << std::endl;
+            std::cerr << "Swapchain Valid: " << (m_swapchain != VK_NULL_HANDLE ? "YES" : "NO") << std::endl;
+            std::cerr << "Swapchain Needs Recreation: " << (m_swapchain_needs_recreation ? "YES" : "NO") << std::endl;
+    
+            // HDR options
+            std::cerr << "\nHDR Options:" << std::endl;
+            std::cerr << "Tonemapping Enabled: " << (p.hdrOptions.tonemap ? "YES" : "NO") << std::endl;
+            std::cerr << "HDR Data Max CLL: " << p.hdrOptions.hdrData.maxCLL << std::endl;
+            std::cerr << "HDR Data Max FALL: " << p.hdrOptions.hdrData.maxFALL << std::endl;
+            std::cerr << "HDR Data Max Luminance: " << p.hdrOptions.hdrData.displayMasteringLuminance.getMax() << std::endl;
+    
+            // OCIO state
+            const int screen_idx = this->screen_num();
+            const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
+            std::cerr << "\nOCIO Configuration:" << std::endl;
+            std::cerr << "OCIO Enabled: " << (ocio.enabled ? "YES" : "NO") << std::endl;
+            std::cerr << "OCIO Display: " << ocio.display << std::endl;
+            std::cerr << "OCIO View: " << ocio.view << std::endl;
+    
+            // HDR metadata
+            std::cerr << "\nHDR Metadata:" << std::endl;
+            std::cerr << "Max Luminance: " << m_hdr_metadata.maxLuminance << std::endl;
+            std::cerr << "Min Luminance: " << m_hdr_metadata.minLuminance << std::endl;
+            std::cerr << "Max Content Light Level: " << m_hdr_metadata.maxContentLightLevel << std::endl;
+            std::cerr << "Max Frame Average Light Level: " << m_hdr_metadata.maxFrameAverageLightLevel << std::endl;
+            std::cerr << "Display Primary Red: (" 
+                      << m_hdr_metadata.displayPrimaryRed.x << ", " 
+                      << m_hdr_metadata.displayPrimaryRed.y << ")" << std::endl;
+            std::cerr << "Display Primary Green: (" 
+                      << m_hdr_metadata.displayPrimaryGreen.x << ", " 
+                      << m_hdr_metadata.displayPrimaryGreen.y << ")" << std::endl;
+            std::cerr << "Display Primary Blue: (" 
+                      << m_hdr_metadata.displayPrimaryBlue.x << ", " 
+                      << m_hdr_metadata.displayPrimaryBlue.y << ")" << std::endl;
+            std::cerr << "White Point: (" 
+                      << m_hdr_metadata.whitePoint.x << ", " 
+                      << m_hdr_metadata.whitePoint.y << ")" << std::endl;
+            std::cerr << "Metadata Changed: " << (m_hdr_metadata_changed ? "YES" : "NO") << std::endl;
+    
+            std::cerr << "==============================\n" << std::endl;
+        }
+
     } // namespace vulkan
 
 } // namespace mrv

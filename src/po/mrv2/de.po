@@ -3928,19 +3928,13 @@ msgstr "    Vorne    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "Could not determine monitor's nits."
-msgstr "Der aktuelle Pfad kann nicht gefunden werden."
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR-Monitor min. nits = {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR-Monitor max. nits = {0}"
 
-msgid "HDR monitor found."
+msgid "HDR monitor not found or not configured."
 msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
 
 msgid "Vulkan color space is {0}"
@@ -3948,6 +3942,16 @@ msgstr "Vulkan-Farbraum ist {0}"
 
 msgid "Vulkan format is {0}"
 msgstr "Vulkan-Format ist {0}"
+
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Zum aktiven HDR-Monitor am Index {0} gewechselt"
+
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr ""
+"Zu einem HDR-unterstützenden, aber inaktiven Monitor am Index {0} gewechselt"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Zum SDR-Monitor am Index {0} gewechselt"
 
 msgid "Edit Text"
 msgstr "Text bearbeiten"
@@ -4132,6 +4136,18 @@ msgstr "Render/Drehen/-90 Grad"
 msgid "Render/Rotate/+90 Degrees"
 msgstr "Render/Drehen/+90 Grad"
 
+msgid "Render/Debanding/None"
+msgstr "Render/Debanding/Keine"
+
+msgid "Render/Debanding/Small"
+msgstr "Render/Debanding/Gering"
+
+msgid "Render/Debanding/Medium"
+msgstr "Render/Debanding/Mittel"
+
+msgid "Render/Debanding/High"
+msgstr "Render/Debanding/Hoch"
+
 msgid "Render/Video Levels/From File"
 msgstr "Render/Video-Ebenen/Aus Datei"
 
@@ -4149,9 +4165,6 @@ msgstr "Render/Alpha-Mischung/gerade"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "Render/Alpha Blend/Vorvervielfacht"
-
-msgid "Render/HDR/Debug"
-msgstr "Rendern/HDR/Debug"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/Spitzlichterkennung aktivieren"
@@ -4236,6 +4249,12 @@ msgstr "Wiedergabe/Gehen Sie zu/Vorheriger Rahmen"
 
 msgid "Playback/Go to/Next Frame"
 msgstr "Wiedergabe/Gehen Sie zu/Nchster Rahmen"
+
+msgid "Playback/Go to/Previous 10 seconds"
+msgstr "Wiedergabe/Gehe zu/Vorherige 10 Sekunden"
+
+msgid "Playback/Go to/Next 10 seconds"
+msgstr "Wiedergabe/Gehe zu/Nächste 10 Sekunden"
 
 msgid "Playback/Go to/Previous Clip"
 msgstr "Wiedergabe/Gehen Sie zu/Vorheriger Clip"
@@ -6099,6 +6118,12 @@ msgstr "CIE XYZ"
 msgid "CIE xyY"
 msgstr "CIE XYY"
 
+msgid "Small"
+msgstr "Klein"
+
+msgid "High"
+msgstr "Hoch"
+
 msgid "From File"
 msgstr "Aus Datei"
 
@@ -6116,9 +6141,6 @@ msgstr "Vervielfacht"
 
 msgid "Nearest"
 msgstr "Nchstgelegen"
-
-msgid "Small"
-msgstr "Klein"
 
 msgid "Large"
 msgstr "Gro"
@@ -6490,6 +6512,9 @@ msgstr "Speicher"
 msgid "Attributes"
 msgstr "Attribute"
 
+msgid "Font Size"
+msgstr "Schriftgröße"
+
 msgid "File Requester"
 msgstr "Datei-Anfrager"
 
@@ -6654,6 +6679,12 @@ msgstr ""
 msgid "Render"
 msgstr "Render"
 
+msgid "Debanding (Vulkan)"
+msgstr "Debanding (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "Macht Farbverläufe in Videodateien glatter."
+
 msgid "Alpha Blend"
 msgstr "Alpha-Mischung"
 
@@ -6768,7 +6799,7 @@ msgid ""
 "outliers."
 msgstr ""
 "Wenn der Wert unter 100 liegt, hilft dies, die Spitzenhelligkeit zu "
-"bestimmen, wobei die obersten 1 % der Ausreißer ignoriert werden."
+"ermitteln, wobei die obersten 1 % der Ausreißer ignoriert werden."
 
 msgid "Smoothing Period"
 msgstr "Glättungszeitraum"
@@ -6915,6 +6946,16 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist und Ihre config.ocio eine Standardanzeige "
 "und Ansicht hat, wird sie als Standardeinstellung verwendet."
+
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "Kein OCIO bei Videos oder sRGB/BT709-Daten"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr ""
+"Beim Abspielen eines Videos oder Anzeigen eines SDR-Bildes wird OCIO "
+"automatisch deaktiviert."
 
 msgid "Use Active Views and Active Displays"
 msgstr "Aktive Ansichten und aktive Displays verwenden"
@@ -7738,6 +7779,18 @@ msgstr "Drehen von Bildern +90 Grad"
 msgid "Rotate Images -90 Degrees"
 msgstr "Drehen von Bildern -90 Grad"
 
+msgid "Debanding None"
+msgstr "Debanding Keine"
+
+msgid "Debanding Small"
+msgstr "Debanding Gering"
+
+msgid "Debanding Medium"
+msgstr "Debanding Mittel"
+
+msgid "Debanding High"
+msgstr "Debanding Hoch"
+
 msgid "Video Levels from File"
 msgstr "Video-Levels aus der Datei"
 
@@ -8143,32 +8196,8 @@ msgstr "Hotkeys-Fenster umschalten"
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
 
-#~ msgid "Toggle HDR ScRGB"
-#~ msgstr "HDR-Tonkarte umschalten"
-
-#~ msgid "Render/HDR/Enable ScRGB"
-#~ msgstr "Render/HDR/Spitzlichterkennung aktivieren"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "Benutzeroberfläche/HDR"
-
-#~ msgid "Primaries Name"
-#~ msgstr "Name der Primärfarben"
-
-#~ msgid "PrimariesName"
-#~ msgstr "Primärfarbenname"
-
-#~ msgid "HDR Shot/Scene Peak Detection"
-#~ msgstr "HDR-Peak-Erkennung für Aufnahmen/Szenen"
-
-#~ msgid ""
-#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
-#~ msgstr ""
-#~ "Schwellenwert zur Erkennung eines Aufnahme-/Szenenwechsels, wenn die HDR-"
-#~ "Peak-Erkennung aktiviert ist."
-
-#~ msgid "Monitor "
-#~ msgstr "berwachung"
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "HDR-aktiver Monitor am Index {0}"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
@@ -8210,6 +8239,42 @@ msgstr "Fenster umschalten"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Ungültige Schriftart für die Texterstellung"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
+
+#~ msgid "Render/HDR/Debug"
+#~ msgstr "Rendern/HDR/Debug"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "Der aktuelle Pfad kann nicht gefunden werden."
+
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "HDR-Tonkarte umschalten"
+
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/Spitzlichterkennung aktivieren"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "Benutzeroberfläche/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "Name der Primärfarben"
+
+#~ msgid "PrimariesName"
+#~ msgstr "Primärfarbenname"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "HDR-Peak-Erkennung für Aufnahmen/Szenen"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr ""
+#~ "Schwellenwert zur Erkennung eines Aufnahme-/Szenenwechsels, wenn die HDR-"
+#~ "Peak-Erkennung aktiviert ist."
+
+#~ msgid "Monitor "
+#~ msgstr "berwachung"
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "Ungültige Lizenz. Wechsle in den Demomodus"

@@ -3881,26 +3881,29 @@ msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "Could not determine monitor's nits."
-msgstr "モニターのニット値を判別できませんでした。"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDRモニターが見つからないか、設定されていません。"
-
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR モニターの最小輝度（ニト）= {0}"
 
 msgid "HDR monitor max. nits = {0}"
 msgstr "HDR モニターの最大輝度（ニト）= {0}"
 
-msgid "HDR monitor found."
-msgstr "HDRモニターが見つかりました。"
+msgid "HDR monitor not found or not configured."
+msgstr "HDRモニターが見つからないか、設定されていません。"
 
 msgid "Vulkan color space is {0}"
 msgstr "Vulkanの色空間は{0}です"
 
 msgid "Vulkan format is {0}"
 msgstr "Vulkanのフォーマットは{0}です"
+
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "インデックス {0} のアクティブなHDRモニターに切り替えました"
+
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "インデックス {0} のHDR対応だが非アクティブなモニターに切り替えました"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "インデックス {0} のSDRモニターに変更しました"
 
 msgid "Edit Text"
 msgstr "テキストを編集"
@@ -4085,6 +4088,18 @@ msgstr "レンダー/回転/-90度"
 msgid "Render/Rotate/+90 Degrees"
 msgstr "レンダー/回転/+90度"
 
+msgid "Render/Debanding/None"
+msgstr "レンダー/デバンディング/なし"
+
+msgid "Render/Debanding/Small"
+msgstr "レンダー/デバンディング/弱"
+
+msgid "Render/Debanding/Medium"
+msgstr "レンダー/デバンディング/中"
+
+msgid "Render/Debanding/High"
+msgstr "レンダー/デバンディング/強"
+
 msgid "Render/Video Levels/From File"
 msgstr "レンダー/ビデオレベル/ファイルから"
 
@@ -4102,9 +4117,6 @@ msgstr "レンダー/アルファブレンド/ストレート"
 
 msgid "Render/Alpha Blend/Premultiplied"
 msgstr "レンダー/アルファブレンド/プリマルチプライド"
-
-msgid "Render/HDR/Debug"
-msgstr "レンダー/HDR/デバッグ"
 
 msgid "Render/HDR/Enable Peak Detection"
 msgstr "Render/HDR/ピーク検出を有効化"
@@ -4189,6 +4201,12 @@ msgstr "再生/移動/前のフレーム"
 
 msgid "Playback/Go to/Next Frame"
 msgstr "再生/移動/次のフレーム"
+
+msgid "Playback/Go to/Previous 10 seconds"
+msgstr "再生/移動/前の10秒"
+
+msgid "Playback/Go to/Next 10 seconds"
+msgstr "再生/移動/次の10秒"
 
 msgid "Playback/Go to/Previous Clip"
 msgstr "再生/移動/前のクリップ"
@@ -6001,6 +6019,12 @@ msgstr "CIE XYZ"
 msgid "CIE xyY"
 msgstr "CIE xyY"
 
+msgid "Small"
+msgstr "小さい"
+
+msgid "High"
+msgstr "高"
+
 msgid "From File"
 msgstr "ファイルから"
 
@@ -6018,9 +6042,6 @@ msgstr "事前乗算済み"
 
 msgid "Nearest"
 msgstr "最も近い"
-
-msgid "Small"
-msgstr "小さい"
 
 msgid "Large"
 msgstr "大きい"
@@ -6369,6 +6390,9 @@ msgstr "メモリ"
 msgid "Attributes"
 msgstr "属性"
 
+msgid "Font Size"
+msgstr "フォントサイズ"
+
 msgid "File Requester"
 msgstr "ファイルリクエスタ"
 
@@ -6514,6 +6538,12 @@ msgstr ""
 msgid "Render"
 msgstr "レンダリング"
 
+msgid "Debanding (Vulkan)"
+msgstr "デバンディング (Vulkan)"
+
+msgid "Makes gradients smoother on video files."
+msgstr "動画ファイルのグラデーションをより滑らかにします。"
+
 msgid "Alpha Blend"
 msgstr "アルファブレンド"
 
@@ -6620,7 +6650,7 @@ msgstr "HDRパーセンタイル"
 msgid ""
 "When less than 100, helps find the peak brightness ignoring the top 1% "
 "outliers."
-msgstr "100 未満の場合、上位 1% の外れ値を無視してピーク輝度を見つけるのに役立ちます。"
+msgstr "100未満の場合、上位1％の外れ値を無視してピーク輝度を見つけるのに役立ちます。"
 
 msgid "Smoothing Period"
 msgstr "平滑化期間"
@@ -6750,6 +6780,14 @@ msgid ""
 "When this option is on, and your config.ocio has a default display and view,"
 " it will be used to be set as default."
 msgstr "このオプションがオンの場合、config.ocioにデフォルトの表示とビューがある場合、それがデフォルトとして設定されます。"
+
+msgid "No OCIO on Videos or sRGB/BT709 data"
+msgstr "動画または sRGB/BT709 データでは OCIO を使用しない"
+
+msgid ""
+"If playing a video or showing an SDR image, OCIO will be turned off "
+"automatically."
+msgstr "動画を再生している場合、または SDR 画像を表示している場合は、OCIO は自動的に無効になります。"
 
 msgid "Use Active Views and Active Displays"
 msgstr "アクティブビューとアクティブディスプレイを使用"
@@ -7532,6 +7570,18 @@ msgstr "画像を+90度回転"
 msgid "Rotate Images -90 Degrees"
 msgstr "画像を-90度回転"
 
+msgid "Debanding None"
+msgstr "デバンディング なし"
+
+msgid "Debanding Small"
+msgstr "デバンディング 弱"
+
+msgid "Debanding Medium"
+msgstr "デバンディング 中"
+
+msgid "Debanding High"
+msgstr "デバンディング 強"
+
 msgid "Video Levels from File"
 msgstr "ビデオレベルをファイルから"
 
@@ -7937,30 +7987,8 @@ msgstr "ホットキーウィンドウを切り替え"
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
 
-#~ msgid "Toggle HDR ScRGB"
-#~ msgstr "HDR トーンマップの切り替え"
-
-#~ msgid "Render/HDR/Enable ScRGB"
-#~ msgstr "Render/HDR/ピーク検出を有効化"
-
-#~ msgid "User Interface/HDR"
-#~ msgstr "ユーザーインターフェース/HDR"
-
-#~ msgid "Primaries Name"
-#~ msgstr "原色名"
-
-#~ msgid "PrimariesName"
-#~ msgstr "原色名"
-
-#~ msgid "HDR Shot/Scene Peak Detection"
-#~ msgstr "HDR ショット／シーン ピーク検出"
-
-#~ msgid ""
-#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
-#~ msgstr "HDR ピーク検出が有効な場合に、ショット／シーンの切り替えと判断するためのしきい値。"
-
-#~ msgid "Monitor "
-#~ msgstr "監視 "
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "インデックス {0} のHDRアクティブモニター"
 
 #~ msgid "Renderer"
 #~ msgstr "レンダラー"
@@ -8000,6 +8028,40 @@ msgstr "バージョン情報ウィンドウを切り替え"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "フォントファイル情報が無効です。"
+
+#~ msgid "HDR monitor found."
+#~ msgstr "HDRモニターが見つかりました。"
+
+#~ msgid "Render/HDR/Debug"
+#~ msgstr "レンダー/HDR/デバッグ"
+
+#~ msgid "Could not determine monitor's nits."
+#~ msgstr "モニターのニット値を判別できませんでした。"
+
+#~ msgid "Toggle HDR ScRGB"
+#~ msgstr "HDR トーンマップの切り替え"
+
+#~ msgid "Render/HDR/Enable ScRGB"
+#~ msgstr "Render/HDR/ピーク検出を有効化"
+
+#~ msgid "User Interface/HDR"
+#~ msgstr "ユーザーインターフェース/HDR"
+
+#~ msgid "Primaries Name"
+#~ msgstr "原色名"
+
+#~ msgid "PrimariesName"
+#~ msgstr "原色名"
+
+#~ msgid "HDR Shot/Scene Peak Detection"
+#~ msgstr "HDR ショット／シーン ピーク検出"
+
+#~ msgid ""
+#~ "Limit for considering a shot/scene change when HDR Peak Detection is on."
+#~ msgstr "HDR ピーク検出が有効な場合に、ショット／シーンの切り替えと判断するためのしきい値。"
+
+#~ msgid "Monitor "
+#~ msgstr "監視 "
 
 #~ msgid "Invalid license. Entering demo mode"
 #~ msgstr "無効なライセンスです。デモモードに切り替えます"

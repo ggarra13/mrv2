@@ -151,6 +151,7 @@ namespace tl
         enum class YUVCoefficients {
             REC709,
             BT2020,
+            BT601,
 
             Count,
             First = REC709

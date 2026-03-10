@@ -25,7 +25,6 @@
 #include <rapidxml/rapidxml.hpp>
 
 #include <tlDevice/NDI/NDI.h>
-
 #include "mrvHDR/mrvDesktop.h"
 #include "mrvHDR/mrvNDICallbacks.h"
 #include "mrvHDR/mrvMonitor.h"
@@ -253,9 +252,9 @@ namespace
 namespace mrv
 {
     
-    monitor::HDRCapabilities getHDRCapabilities(int screen_num)
+    monitor::Capabilities getHDRCapabilities(int screen_num)
     {
-        monitor::HDRCapabilities out;
+        monitor::Capabilities out;
         if (desktop::Wayland())
         {
             const std::string& monitorName = desktop::monitorName(screen_num);
@@ -446,10 +445,13 @@ namespace mrv
 
         // HDR monitor variables
         int screen_index = 0;
-        monitor::HDRCapabilities hdrCapabilities;
+        tl::monitor::Capabilities monitor;
+
+        // Libplacebo variables
         const pl_shader_res* res = nullptr;
         pl_shader_obj state = nullptr;
 
+        // NDI variables
         NDIlib_find_instance_t NDI_find = nullptr;
         NDIlib_recv_instance_t NDI_recv = nullptr;
 
@@ -457,8 +459,6 @@ namespace mrv
         std::shared_ptr<observer::ListObserver<std::string> >
         NDISourcesObserver;
         std::string currentNDISource;
-
-        bool init = false;
 
         struct FindMutex
         {
@@ -507,10 +507,7 @@ namespace mrv
         std::string matrixName;
 
         // Full mrv2 image data (we try to use this)
-        bool hdrMonitorFound = false;
-        bool isP3Display = false;
-
-        bool hasHDR = false;
+        bool hasHDRData = false;
         image::HDRData hdrData;
 
         std::string oldShaderSource;
@@ -569,9 +566,6 @@ namespace mrv
         
         Fl_Vk_Window::init_colorspace();
 
-        // Look for HDR10 or HLG if present
-        p.hdrMonitorFound = false;
-
         bool valid_colorspace = false;
         switch (colorSpace())
         {
@@ -587,19 +581,22 @@ namespace mrv
         }
 
         p.screen_index = this->screen_num();
-        p.hdrCapabilities = getHDRCapabilities(p.screen_index);
         
-        if (valid_colorspace && p.hdrCapabilities.supported)
+        if (valid_colorspace)
         {
-            p.hdrMonitorFound = true;
             LOG_STATUS(_("HDR monitor found."));
+            
+            p.monitor = getHDRCapabilities(p.screen_index);
             
             _getMonitorNits(false);
         }
         else
         {
-            colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-            format() = VK_FORMAT_B8G8R8A8_UNORM;
+            if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+            {
+                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                format() = VK_FORMAT_B8G8R8A8_UNORM;
+            }
             LOG_STATUS(_("HDR monitor not found or not configured."));
         }
         LOG_STATUS("Vulkan color space is " << string_VkColorSpaceKHR(colorSpace()));
@@ -716,7 +713,7 @@ namespace mrv
                     float Y_linear = Yf;
 
                     // apply_inverse_pq is not needed
-                    // if (p.hasHDR)
+                    // if (p.hasHDRData)
                     //     Y_linear = apply_inverse_pq(Yf);
                     // else
                     //     Y_linear = Yf;
@@ -794,8 +791,8 @@ namespace mrv
 
         using namespace tl;
 
-        const math::Size2i viewportSize = {pixel_w(), pixel_h()};
-        image::Size renderSize = {pixel_w(), pixel_h()};
+        const math::Size2i viewportSize = {(int)pixel_w(), (int)pixel_h()};
+        image::Size renderSize = {(int)pixel_w(), (int)pixel_h()};
 
         if (p.image)
         {
@@ -1197,11 +1194,32 @@ namespace mrv
 
         VkResult result;
 
-        if (p.hdrMonitorFound && p.hasHDR && p.useHDRMetadata)
+        if (p.monitor.hdr_enabled && p.useHDRMetadata)
         {
-            // This will make the FLTK swapchain call vk->SetHDRMetadataEXT();
-            const image::HDRData& data = p.hdrData;
+            // Start with the video metadata in case monitor primaries are
+            // missing.
+            image::HDRData data = p.hdrData;
             auto m_previous_hdr_metadata = m_hdr_metadata;
+            
+            if (p.monitor.red.x > 0)
+            {
+                data.primaries[image::Red].x = p.monitor.red.x;
+                data.primaries[image::Red].y = p.monitor.red.y;
+                data.primaries[image::Green].x = p.monitor.green.x;
+                data.primaries[image::Green].y = p.monitor.green.y;
+                data.primaries[image::Blue].x = p.monitor.blue.x;
+                data.primaries[image::Blue].y = p.monitor.blue.y;
+            }
+            if (p.monitor.white.x > 0)
+            {
+                data.primaries[image::White].x = p.monitor.white.x;
+                data.primaries[image::White].y = p.monitor.white.y;
+            }
+            data.displayMasteringLuminance =
+                math::FloatRange(std::max(p.monitor.min_nits, 0.001F),
+                                 p.monitor.max_nits);
+            data.maxCLL = p.monitor.max_nits;
+            data.maxFALL = p.monitor.max_nits;
 
             m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
             m_hdr_metadata.displayPrimaryRed = {
@@ -1270,7 +1288,7 @@ namespace mrv
     bool NDIView::vk_draw_begin()
     {
         // Change background color here
-        m_clearColor = {0.0, 0.0, 0.0, 0.0};
+        m_clearColor = {0.0, 0.0, 0.0, 1.0};
         return Fl_Vk_Window::vk_draw_begin();
     }
 
@@ -1291,11 +1309,14 @@ namespace mrv
             // If we changed screen from an HDR to an SDR one, or one with
             // different nits settings, recreate the Vulkan swapchain.
             auto hdr = getHDRCapabilities(this->screen_num());
-            if (hdr.supported != p.hdrCapabilities.supported ||
-                hdr.min_nits != p.hdrCapabilities.min_nits ||
-                hdr.max_nits != p.hdrCapabilities.max_nits)
+            const auto monitor = getHDRCapabilities(this->screen_num());
+            if (monitor.hdr_enabled != p.monitor.hdr_enabled ||
+                monitor.hdr_supported != p.monitor.hdr_supported ||
+                monitor.min_nits != p.monitor.min_nits ||
+                monitor.max_nits != p.monitor.max_nits)
             {
                 m_swapchain_needs_recreation = true;
+                init_colorspace();
                 redraw();
                 return;
             }
@@ -1306,7 +1327,6 @@ namespace mrv
         // Clear the frame
         begin_render_pass(cmd);
         end_render_pass(cmd);
-
 
         {
             std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
@@ -1322,15 +1342,15 @@ namespace mrv
             &m_desc_set, 0, nullptr);
 
         VkViewport viewport = {};
-        viewport.width = static_cast<float>(w());
-        viewport.height = static_cast<float>(h());
+        viewport.width = static_cast<float>(pixel_w());
+        viewport.height = static_cast<float>(pixel_h());
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
         vkCmdSetViewport(cmd, 0, 1, &viewport);
 
         VkRect2D scissor = {};
-        scissor.extent.width = w();
-        scissor.extent.height = h();
+        scissor.extent.width = pixel_w();
+        scissor.extent.height = pixel_h();
         vkCmdSetScissor(cmd, 0, 1, &scissor);
 
         // Draw the rectangle
@@ -1365,30 +1385,14 @@ namespace mrv
     {
         TLRENDER_P();
             
-        if (!p.hdrCapabilities.supported)
+        if (!p.monitor.hdr_enabled)
         {
-#ifdef __linux__
-            if (!quiet)
-            {
-                std::cerr << _("Could not determine monitor's nits.")
-                          << std::endl;
-            }
-            if (p.hdrMonitorFound)
-            {
-                p.hdrCapabilities.min_nits = 0.F;
-                p.hdrCapabilities.max_nits = 1000.F;
-            }
-            else
-            {
-                p.hdrCapabilities.min_nits = 0.F;
-                p.hdrCapabilities.max_nits = 100.F;
-            }
-#else
-            p.hdrMonitorFound = false;
-#endif
+            p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
+            p.monitor.min_nits = 0.F;
+            p.monitor.max_nits = 100.F;
         }
             
-        if (!p.hdrMonitorFound)
+        if (!p.monitor.hdr_enabled)
         {
             std::cout << _("HDR monitor not found or not configured.")
                       << std::endl;
@@ -1401,12 +1405,12 @@ namespace mrv
             {
                 std::string msg =
                     string::Format(_("HDR monitor min. nits = {0}")).
-                    arg(p.hdrCapabilities.min_nits);
-                std::cout << msg << std::endl;
+                    arg(p.monitor.min_nits);
+                LOG_STATUS(msg);
                 
                 msg = string::Format(_("HDR monitor max. nits = {0}")).
-                      arg(p.hdrCapabilities.max_nits);
-                std::cout << msg << std::endl;
+                      arg(p.monitor.max_nits);
+                LOG_STATUS(msg);
             }
         }
     }
@@ -1452,18 +1456,12 @@ namespace mrv
                 case NDIlib_frame_type_video:
                 {
                     bool init = false;
+                    bool hasHDRData = false;
 
                     float pixelAspectRatio = 1.F;
                     if (video_frame.picture_aspect_ratio == 0.F)
                         pixelAspectRatio =
                             1.F / (video_frame.xres * video_frame.yres);
-
-                    if (p.info.size.w != video_frame.xres ||
-                        p.info.size.h != video_frame.yres ||
-                        p.info.size.pixelAspectRatio != pixelAspectRatio)
-                    {
-                        init = true;
-                    }
 
                     if (video_frame.p_metadata)
                     {
@@ -1486,39 +1484,6 @@ namespace mrv
                                 rapidxml::xml_attribute<>* attr_mrv2 =
                                     root->first_attribute("mrv2");
 
-                                if (!p.hasHDR)
-                                    init = true;
-                                p.hasHDR = true;
-
-                                rapidxml::xml_attribute<>* attr_transfer =
-                                    root->first_attribute("transfer");
-                                if (attr_transfer)
-                                {
-                                    p.transferName = attr_transfer->value();
-
-                                    if (p.hdrMonitorFound &&
-                                        colorSpace() !=
-                                            VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
-                                    {
-                                        if (p.transferName == "bt_2100_hlg")
-                                        {
-                                            colorSpace() =
-                                                VK_COLOR_SPACE_HDR10_HLG_EXT;
-                                        }
-                                        else
-                                        {
-                                            colorSpace() =
-                                                VK_COLOR_SPACE_HDR10_ST2084_EXT;
-                                        }
-
-                                        if (p.lastColorSpace != colorSpace())
-                                        {
-                                            p.lastColorSpace = colorSpace();
-                                            m_swapchain_needs_recreation = true;
-                                        }
-                                    }
-                                }
-
                                 image::HDRData hdrData;
                                 if (attr_mrv2)
                                 {
@@ -1530,19 +1495,26 @@ namespace mrv
                                         nlohmann::json::parse(jsonString);
 
                                     hdrData = j.get<image::HDRData>();
-                                    if (!image::isHDR(hdrData))
+                                    if (image::isHDR(hdrData))
                                     {
-                                        p.hasHDR = false;
-                                        init = true;
+                                        hasHDRData = true;
+                                    }
+                                    else
+                                    {
+                                        hasHDRData = false;
                                     }
                                 }
                                 else
                                 {
+                                    rapidxml::xml_attribute<>* attr_transfer =
+                                        root->first_attribute("transfer");
+                                    
                                     rapidxml::xml_attribute<>* attr_matrix =
                                         root->first_attribute("matrix");
                                     rapidxml::xml_attribute<>* attr_primaries =
                                         root->first_attribute("primaries");
-
+                                    if (attr_transfer)
+                                        p.transferName = attr_transfer->value();
                                     if (attr_matrix)
                                         p.matrixName = attr_matrix->value();
                                     if (attr_primaries)
@@ -1557,9 +1529,7 @@ namespace mrv
                             }
                             else
                             {
-                                if (p.hasHDR)
-                                    init = true;
-                                p.hasHDR = false;
+                                hasHDRData = false;
                             }
                         }
                         catch (const std::exception& e)
@@ -1570,15 +1540,22 @@ namespace mrv
                     }
                     else
                     {
-                        if (p.hasHDR)
-                            init = true;
-                        p.hasHDR = false;
+                        hasHDRData = false;
+                    }
+
+                    if (hasHDRData != p.hasHDRData ||
+                        p.info.size.w != video_frame.xres ||
+                        p.info.size.h != video_frame.yres ||
+                        p.info.size.pixelAspectRatio != pixelAspectRatio)
+                    {
+                        init = true;
                     }
 
                     {
                         std::unique_lock<std::mutex> lock(p.videoMutex.mutex);
                         if (init)
                         {
+                            p.hasHDRData = hasHDRData;
                             p.info.size.w = video_frame.xres;
                             p.info.size.h = video_frame.yres;
                             p.info.size.pixelAspectRatio = pixelAspectRatio;
@@ -1849,15 +1826,90 @@ namespace mrv
         pl_color_space src_colorspace;
         memset(&src_colorspace, 0, sizeof(pl_color_space));
 
-        if (p.hasHDR)
+        if (p.hasHDRData)
         {
-            src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-            src_colorspace.transfer = PL_COLOR_TRC_PQ;
-            if (p.transferName == "bt_2100_hlg")
+            const auto& prims = data.primaries;
+            
+            // Detect primaries from received data
+            bool isP3 = 
+                std::abs(prims[0].x - 0.680F) < 0.001F &&
+                std::abs(prims[0].y - 0.320F) < 0.001F &&
+                std::abs(prims[1].x - 0.265F) < 0.001F &&
+                std::abs(prims[1].y - 0.690F) < 0.001F &&
+                std::abs(prims[2].x - 0.150F) < 0.001F &&
+                std::abs(prims[2].y - 0.060F) < 0.001F;
+            
+            bool isBT709 =
+                std::abs(prims[0].x - 0.640F) < 0.001F &&
+                std::abs(prims[0].y - 0.330F) < 0.001F &&
+                std::abs(prims[1].x - 0.300F) < 0.001F &&
+                std::abs(prims[1].y - 0.600F) < 0.001F &&
+                std::abs(prims[2].x - 0.150F) < 0.001F &&
+                std::abs(prims[2].y - 0.060F) < 0.001F;
+            
+            bool isBT2020 =
+                std::abs(prims[0].x - 0.708F) < 0.001F &&
+                std::abs(prims[0].y - 0.292F) < 0.001F &&
+                std::abs(prims[1].x - 0.170F) < 0.001F &&
+                std::abs(prims[1].y - 0.797F) < 0.001F &&
+                std::abs(prims[2].x - 0.131F) < 0.001F &&
+                std::abs(prims[2].y - 0.046F) < 0.001F;
+            
+            if (isP3)
             {
+                // Check white point to differentiate P3 D65 vs DCI P3
+                if (std::abs(prims[3].x - 0.3127F) < 0.001F &&
+                    std::abs(prims[3].y - 0.3290F) < 0.001F)
+                {
+                    src_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3; // P3 D65
+                }
+                else if (std::abs(prims[3].x - 0.3140F) < 0.001F &&
+                         std::abs(prims[3].y - 0.3510F) < 0.001F)
+                {
+                    src_colorspace.primaries = PL_COLOR_PRIM_DCI_P3; // DCI P3
+                }
+                else
+                {
+                    src_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3; // Default to D65
+                }
+            }
+            else if (isBT709)
+            {
+                src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+            }
+            else if (isBT2020)
+            {
+                src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+            }
+            else
+            {
+                // Unknown primaries - default to BT.2020
+                src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+            }
+            
+            // Set transfer function from HDRData EOTF
+            switch (data.eotf)
+            {
+            case image::EOTF_SRGB:
+                src_colorspace.transfer = PL_COLOR_TRC_SRGB;
+                break;
+            case image::EOTF_BT601:
+            case image::EOTF_BT709:
+            case image::EOTF_BT2020:
+                src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                break;
+            case image::EOTF_BT2100_HLG:
                 src_colorspace.transfer = PL_COLOR_TRC_HLG;
+                break;
+            case image::EOTF_BT2100_PQ:
+                src_colorspace.transfer = PL_COLOR_TRC_PQ;
+                break;
+            default:
+                src_colorspace.transfer = PL_COLOR_TRC_PQ;
+                break;
             }
 
+            // Set HDR metadata
             cmap.metadata = PL_HDR_METADATA_ANY;
             pl_hdr_metadata& hdr = src_colorspace.hdr;
             hdr.min_luma = data.displayMasteringLuminance.getMin();
@@ -1896,33 +1948,37 @@ namespace mrv
         pl_color_space dst_colorspace;
         memset(&dst_colorspace, 0, sizeof(pl_color_space));
 
-        if (p.hdrMonitorFound)
+        if (p.monitor.hdr_enabled)
         {
             dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
             dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-            dst_colorspace.hdr.min_luma = p.hdrCapabilities.min_nits;
-            dst_colorspace.hdr.max_luma = p.hdrCapabilities.max_nits;
-            
-            if (colorSpace() == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+            dst_colorspace.hdr.min_luma = p.monitor.min_nits;
+            dst_colorspace.hdr.max_luma = p.monitor.max_nits;
+            if (p.monitor.red.x > 0)
             {
-                dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
-                dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                dst_colorspace.hdr.prim.red.x = p.monitor.red.x;
+                dst_colorspace.hdr.prim.red.y = p.monitor.red.y;
+                dst_colorspace.hdr.prim.green.x = p.monitor.green.x;
+                dst_colorspace.hdr.prim.green.y = p.monitor.green.y;
+                dst_colorspace.hdr.prim.blue.x = p.monitor.blue.x;
+                dst_colorspace.hdr.prim.blue.y = p.monitor.blue.y;
+                dst_colorspace.hdr.prim.white.x = p.monitor.white.x;
+                dst_colorspace.hdr.prim.white.y = p.monitor.white.y;
             }
-            else if (colorSpace() == VK_COLOR_SPACE_HDR10_HLG_EXT)
+            else
             {
-                dst_colorspace.transfer = PL_COLOR_TRC_HLG;
-            }
-            else if (colorSpace() == VK_COLOR_SPACE_DOLBYVISION_EXT)
-            {
-                // \@todo:  How to handle this? PL_COLOR_TRC_DOLBYVISION does
-                //          not exist.
-                // dst_colorspace.transfer = ???
-                dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-            }
+                const struct pl_raw_primaries* raw =
+                    pl_raw_primaries_get(PL_COLOR_PRIM_DISPLAY_P3);
 
+                dst_colorspace.hdr.prim.red = raw->red;
+                dst_colorspace.hdr.prim.green = raw->green;
+                dst_colorspace.hdr.prim.blue = raw->blue;
+                dst_colorspace.hdr.prim.white = raw->white;
+            }
+            
             // For SDR content on HDR monitor, enable tone mapping to fit SDR
             // into HDR
-            if (!p.hasHDR)
+            if (!p.hasHDRData)
             {
                 cmap.tone_mapping_function = &pl_tone_map_spline;
                 cmap.metadata = PL_HDR_METADATA_NONE; // Simplify
@@ -1941,7 +1997,7 @@ namespace mrv
             dst_colorspace.hdr.min_luma = 0.F;
             dst_colorspace.hdr.max_luma = 203.0F; // SDR peak
                             
-            if (p.hasHDR)
+            if (p.hasHDRData)
                 cmap.tone_mapping_function = &pl_tone_map_spline;
             else
                 cmap.tone_mapping_function = nullptr;
@@ -1949,6 +2005,40 @@ namespace mrv
 
         pl_color_space_infer(&dst_colorspace);
 
+        if (p.hasHDRData && data.isDisplayReferred)
+        {
+            // Display-referred content is already color-graded for a specific
+            // display. Check if source matches destination.
+            
+            bool primariesMatch = (src_colorspace.primaries == dst_colorspace.primaries);
+            bool transferMatch = (src_colorspace.transfer == dst_colorspace.transfer);
+            bool luminanceMatch = 
+                std::abs(src_colorspace.hdr.max_luma - dst_colorspace.hdr.max_luma) < 100.0F;
+            
+            if (primariesMatch && transferMatch && luminanceMatch)
+            {
+                // Perfect match - disable all transformations for 1:1 pass-through
+                cmap.tone_mapping_function = nullptr;
+                
+                LOG_STATUS("Display-referred: Perfect match, 1:1 pass-through");
+            }
+            else if (primariesMatch && transferMatch && !luminanceMatch)
+            {
+                // Same primaries/transfer, different luminance - only tone map
+                cmap.tone_mapping_function = &pl_tone_map_spline;
+                
+                LOG_STATUS("Display-referred: Luminance mismatch, tone mapping enabled");
+            }
+            else
+            {
+                // Primaries or transfer differ - let libplacebo handle gamut mapping
+                cmap.tone_mapping_function = &pl_tone_map_spline;
+                
+                LOG_STATUS("Display-referred: Primaries/transfer mismatch, "
+                           "gamut mapping enabled");
+            }
+        }
+        
         pl_color_map_args color_map_args;
         memset(&color_map_args, 0, sizeof(pl_color_map_args));
 
@@ -2296,24 +2386,6 @@ namespace mrv
         TLRENDER_P();
         p.useHDRMetadata = !p.useHDRMetadata;
         m_swapchain_needs_recreation = true;
-
-        if (p.useHDRMetadata && !p.isP3Display)
-        {
-            if (p.transferName == "bt_2100_hlg")
-            {
-                colorSpace() = VK_COLOR_SPACE_HDR10_HLG_EXT;
-            }
-            else
-            {
-                colorSpace() = VK_COLOR_SPACE_HDR10_ST2084_EXT;
-            }
-        }
-
-        if (p.lastColorSpace != colorSpace())
-        {
-            p.lastColorSpace = colorSpace();
-        }
-
         redraw();
     }
 

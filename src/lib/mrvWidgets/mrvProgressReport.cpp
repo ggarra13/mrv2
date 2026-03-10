@@ -181,8 +181,6 @@ namespace mrv
             return false;
         }
 
-        // This must come after w->visible() check to avoid progress reports
-        // when loading multiple small movies.
         Fl::check();
         ++_frame;
         
