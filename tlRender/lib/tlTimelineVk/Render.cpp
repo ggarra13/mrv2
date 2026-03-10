@@ -3037,16 +3037,6 @@ namespace tl
                 toneMap += "    outColor = clamp(";
                 toneMap += res->name;
                 toneMap += "(outColor), 0.0, 1.0);\n";
-
-#if DEBUG_TONEMAPPING
-                std::cerr << "toneMapDef="
-                          << std::endl
-                          << toneMapDef
-                          << std::endl;
-                std::cerr << "toneMap=" << std::endl
-                          << toneMap
-                          << std::endl;
-#endif
             }
 #endif
 #if defined(TLRENDER_OCIO)

@@ -31,11 +31,6 @@
 #define USE_DYNAMIC_RGBA_WRITE_MASKS 0
 
 //
-// Use 1 to output tonemapping shader code.
-//
-#define DEBUG_TONEMAPPING 0
-
-//
 // Use 1 to output display shader code.
 //
 #define DEBUG_DISPLAY_SHADER 0
