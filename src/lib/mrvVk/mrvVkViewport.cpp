@@ -941,7 +941,7 @@ namespace mrv
                     auto ocio = p.ocioOptions;
                     
                     if (!p.ui->uiPrefs->uiOCIONotOnVideos->value() &&
-                        p.hdrOptions.tonemap)
+                        image::isHDR(p.hdrOptions.hdrData))
                         ocio.enabled = false;
                             
                     if (screen >= 0 && !p.monitorOCIOOptions.empty() &&

@@ -1000,7 +1000,8 @@ namespace mrv
 
             if (d.hdrInfo == timeline::HDRInformation::Inactive)
             {
-                p.hdrOptions.tonemap = false;
+                p.hdrOptions.tonemap = true;
+                p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
             }
             else
             {
@@ -3775,7 +3776,8 @@ namespace mrv
                 if (p.displayOptions.empty() ||
                     p.displayOptions[0].hdrInfo == timeline::HDRInformation::Inactive)
                 {
-                    p.hdrOptions.tonemap = false;
+                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
                 }
                 else
                 {

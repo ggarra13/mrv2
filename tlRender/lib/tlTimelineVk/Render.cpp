@@ -3034,7 +3034,7 @@ namespace tl
 #endif
 
                 toneMap =  "outColor.rgb = max(outColor.rgb, vec3(0.0));\n";
-                toneMap += "outColor = clamp(";
+                toneMap += "    outColor = clamp(";
                 toneMap += res->name;
                 toneMap += "(outColor), 0.0, 1.0);\n";
 
@@ -3103,14 +3103,14 @@ namespace tl
                 ocioICSDef, ocioICS, ocioDef, ocio, lutDef, lut,
                 p.lutOptions.order, toneMapDef, toneMap,
                 debandingDef, debanding);
-#if DEBUG_DISPLAY_SHADER
-            std::cerr << source << std::endl;
-#endif
                 
             bool recreateShader = false;
             if (!p.shaders["display"] || p.oldSource != source)
             {
                 recreateShader = true;
+#if DEBUG_DISPLAY_SHADER
+                std::cerr << source << std::endl;
+#endif
             }
                 
             p.oldSource = source;
