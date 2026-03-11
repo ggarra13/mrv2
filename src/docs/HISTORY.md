@@ -50,6 +50,7 @@ ChangeLog
 - Fixed toggling off Render->HDR Data->Inactive on HDR monitors which was not working previously.
 - Fixed Vulkan metadata being sent when not tone-mapping and no ocio was set.
 - Fixed one minor validation error on pixel look ups just after loading a video.
+- Fixed showing sRGB pictures (like .png) on Windows on an HDR monitor when the monitor had HDR set to off.
 
 
 v1.5.7

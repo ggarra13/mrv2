@@ -1384,34 +1384,32 @@ namespace mrv
     void NDIView::_getMonitorNits(bool quiet)
     {
         TLRENDER_P();
-            
-        if (!p.monitor.hdr_enabled)
-        {
-            p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
-            p.monitor.min_nits = 0.F;
-            p.monitor.max_nits = 100.F;
-        }
-            
-        if (!p.monitor.hdr_enabled)
-        {
-            std::cout << _("HDR monitor not found or not configured.")
-                      << std::endl;
-            colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-            format() = VK_FORMAT_B8G8R8A8_UNORM;
+        
+
+        if (p.monitor.hdr_enabled)
+        {                
+            std::string msg =
+                string::Format(_("HDR monitor min. nits = {0}")).
+                arg(p.monitor.min_nits);
+            LOG_STATUS(msg);
+                
+            msg = string::Format(_("HDR monitor max. nits = {0}")).
+                  arg(p.monitor.max_nits);
+            LOG_STATUS(msg);
         }
         else
         {
-            if (!quiet)
+            if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
             {
-                std::string msg =
-                    string::Format(_("HDR monitor min. nits = {0}")).
-                    arg(p.monitor.min_nits);
-                LOG_STATUS(msg);
-                
-                msg = string::Format(_("HDR monitor max. nits = {0}")).
-                      arg(p.monitor.max_nits);
-                LOG_STATUS(msg);
+                colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                format() = VK_FORMAT_B8G8R8A8_UNORM;
             }
+                
+            p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
+            p.monitor.min_nits = 0.001F;
+            p.monitor.max_nits = 100.F;
+                
+            LOG_STATUS(_("HDR monitor not found or not configured."));
         }
     }
 
