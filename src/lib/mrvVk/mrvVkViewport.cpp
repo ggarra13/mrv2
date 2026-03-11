@@ -829,6 +829,8 @@ namespace mrv
                 {
                     vk.buffer = vlk::OffscreenBuffer::create(
                         ctx, renderSize, offscreenBufferOptions);
+                    vk.readPixels = false;
+                    
                     // As render resolution might have changed,
                     // we need to reset the quad size.
                     vk.vbo.reset();
@@ -1047,6 +1049,7 @@ namespace mrv
                 {
                     vk.annotation = vlk::OffscreenBuffer::create(
                         ctx, viewportSize, offscreenBufferOptions);
+                    
                     vk.avbo.reset();
                     
                     const auto& mesh = geom::box(math::Box2i(0, 0,
@@ -1098,7 +1101,6 @@ namespace mrv
                         vk.overlay = vlk::OffscreenBuffer::create(ctx,
                                                                   renderSize,
                                                                   offscreenBufferOptions);
-                        
                         if (!vk.overlayRender)
                         {
                             if (auto context = vk.context.lock())
@@ -1297,15 +1299,15 @@ namespace mrv
                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                       VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
                 vk.buffer->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-                                
+                
                 // dstImage barrier (swapchain image)
                 transitionImageLayout(cmd, dstImage,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                       VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
             }
+
+
             
-
-
             if (!m_in_render_pass)
             {
                 VkClearValue clear_values[2];
@@ -1326,6 +1328,7 @@ namespace mrv
                 vkCmdBeginRenderPass(cmd, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
                 m_in_render_pass = true;
             }
+            
 
             
             if (p.showAnnotations &&
@@ -1398,8 +1401,10 @@ namespace mrv
             if (selection.max.x >= 0)
                 _drawAreaSelection();
             
-            end_render_pass();
+            
+            end_render_pass(cmd);
 
+            
             if (selection.max.x >= 0)
             {
                 if (panel::colorAreaPanel || panel::histogramPanel ||
@@ -1425,12 +1430,6 @@ namespace mrv
                     }
                 }
             }
-            
-            // Update the pixel bar from here only if we are playing a movie
-            // and one that is not 1 frames long.                
-            bool update = !_shouldUpdatePixelBar();
-            if (update)
-                updatePixelBar();
 
             if (vk.buffer)
             {
@@ -1440,6 +1439,15 @@ namespace mrv
             {
                 vk.annotation->transitionToColorAttachment(cmd);
             }
+            
+            // Update the pixel bar from here only if we are playing a movie
+            // and one that is not 1 frames long.                
+            bool update = vk.readPixels && !_shouldUpdatePixelBar();
+            if (update)
+                updatePixelBar();
+
+            // After first run, we can read pixels.
+            vk.readPixels = true;
         }
 
         
@@ -1666,6 +1674,7 @@ namespace mrv
                 }
                 else
                 {
+                    
                     VkCommandBuffer cmd =
                         beginSingleTimeCommands(device(), commandPool());
 

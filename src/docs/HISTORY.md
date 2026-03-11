@@ -48,7 +48,8 @@ ChangeLog
 ---------
 
 - Fixed toggling off Render->HDR Data->Inactive on HDR monitors which was not working previously.
-- Fixed Vulkan metadata being sent when not tone-mapping and no ocio was set.  
+- Fixed Vulkan metadata being sent when not tone-mapping and no ocio was set.
+- Fixed one minor validation error on pixel look ups just after loading a video.
 
 
 v1.5.7
