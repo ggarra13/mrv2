@@ -53,8 +53,8 @@ ChangeLog
 - Fixed showing sRGB pictures (like .png) on Windows on an HDR monitor when the monitor had HDR set to off.
 - Made OCIO's "Not on Videos or BT709 Data" the default option.
 - Added Linux's HDR enabled monitor detection code, besides parsing EDID.
-- Fixed Wayland's monitor enumeration to math FLTK's monitor indices.
-
+- Fixed Wayland's monitor enumeration to match FLTK's monitor indices.
+- Made Annotations Panel's Notes text wrap around when reaching the border.
 
 v1.5.7
 ======
