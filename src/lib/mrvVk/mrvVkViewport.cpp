@@ -68,11 +68,14 @@ namespace mrv
             if (desktop::Wayland())
             {
                 const std::string& monitorName = desktop::monitorName(screen_num);
+                std::cerr << "screen_num=" << screen_num << " monitor="
+                          << monitorName << std::endl;
                 const auto names = string::split(monitorName, ':');
                 std::string connector;
                 if (!names.empty())
                 {
                     connector = names[0];
+                    std::cerr << "connector=" << connector << std::endl;
                     out = monitor::get_hdr_capabilities_by_name(connector);
                 }
                 else

@@ -178,6 +178,7 @@ namespace mrv
 
             out.hdr_supported = has_hdr;
             out.hdr_enabled = out.hdr_supported;
+            std::cerr << "has_hdr=" << has_hdr << std::endl;
             
             // Retrieve min and max nits (0.0 if unset)
             out.min_nits = hdr->desired_content_min_luminance;

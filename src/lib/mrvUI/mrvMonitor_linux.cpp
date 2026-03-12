@@ -21,6 +21,12 @@
 #include <vector>
 #include <map>
 
+#include <xf86drm.h>
+#include <xf86drmMode.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <string.h>
+
 namespace fs = std::filesystem;
 
 namespace
@@ -150,8 +156,8 @@ namespace mrv
             }
 
             return out;
-        }
-
+        }            
+        
         Capabilities get_hdr_capabilities_by_name(
             const std::string& target_connector)
         {
@@ -202,7 +208,7 @@ namespace mrv
                             LOG_ERROR("Target connector " << target_connector << " is not connected");
                             continue;
                         }
-                        
+
                         // 3. Read EDID and Parse
                         std::ifstream edid_file(conn_entry.path() / "edid", std::ios::binary);
                         if (!edid_file.is_open())
@@ -219,12 +225,85 @@ namespace mrv
                         if (!edid_data.empty())
                         {
                             out = monitor::parseEDIDLuminance(edid_data.data(),  edid_data.size());
-
-                            // \@todo: How to check HDR is enabled?
                             if (out.hdr_supported)
                             {
-                                out.hdr_enabled = out.hdr_supported;
+                                out.hdr_enabled = false; // Default to false
+                        
+                                // Open the DRM device
+                                std::string drm_device =
+                                    "/dev/dri/" + card_name;
+                                int fd = open(drm_device.c_str(), O_RDWR);
+                                if (fd >= 0)
+                                {
+                                    drmModeRes *resources = drmModeGetResources(fd);
+                                    if (resources)
+                                    {
+                                        // Iterate through all connectors to find the matching one
+                                        for (int i = 0; i < resources->count_connectors; i++)
+                                        {
+                                            drmModeConnector *connector = drmModeGetConnector(fd, 
+                                                                                              resources->connectors[i]);
+                                            if (!connector) continue;
+                                    
+                                            // Build connector name to match against our target
+                                            const char* conn_type_name = drmModeGetConnectorTypeName(
+                                                connector->connector_type);
+                                            if (conn_type_name)
+                                            {
+                                                std::string drm_conn_name = std::string(conn_type_name) + 
+                                                                            "-" + std::to_string(connector->connector_type_id);
+                                        
+                                                // Check if this matches our connector
+                                                if (drm_conn_name == conn_name || 
+                                                    normalize_connector(drm_conn_name) == normalized)
+                                                {
+                                                    // Get connector properties
+                                                    drmModeObjectProperties *props = drmModeObjectGetProperties(fd,
+                                                                                                                connector->connector_id,
+                                                                                                                DRM_MODE_OBJECT_CONNECTOR);
+                                                    if (props)
+                                                    {
+                                                        // Look for HDR_OUTPUT_METADATA property
+                                                        for (uint32_t j = 0; j < props->count_props; j++)
+                                                        {
+                                                            drmModePropertyRes *prop = drmModeGetProperty(fd, 
+                                                                                                          props->props[j]);
+                                                            if (prop)
+                                                            {
+                                                                if (strcmp(prop->name, "HDR_OUTPUT_METADATA") == 0)
+                                                                {
+                                                                    uint64_t value = props->prop_values[j];
+                                                                    // Non-zero blob ID means HDR is active
+                                                                    out.hdr_enabled = (value != 0);
+                                                                }
+                                                                drmModeFreeProperty(prop);
+                                                            }
+                                                        }
+                                                        drmModeFreeObjectProperties(props);
+                                                    }
+                                            
+                                                    drmModeFreeConnector(connector);
+                                                    break; // Found our connector, stop searching
+                                                }
+                                            }
+                                    
+                                            drmModeFreeConnector(connector);
+                                        }
+                                        drmModeFreeResources(resources);
+                                    }
+                                    close(fd);
+                                }
+                                else
+                                {
+                                    LOG_ERROR("Failed to open DRM device " << drm_device 
+                                              << ": " << strerror(errno));
+                                }
                             }
+
+                            std::cerr << "HDR supported=" << out.hdr_supported
+                                      << std::endl;
+                            std::cerr << "HDR enabled=" << out.hdr_enabled
+                                      << std::endl;
                         
                             return out;
                         }

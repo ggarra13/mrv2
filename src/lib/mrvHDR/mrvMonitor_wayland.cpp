@@ -93,10 +93,12 @@ namespace
             wl_display_roundtrip(display);
             
             // Sort the monitors so the primary one (usually at 0,0) is first.
-            std::sort(
-                monitors.begin(), monitors.end(),
-                [](const MonitorData& a, const MonitorData& b)
-                { return std::tie(a.x, a.y) < std::tie(b.x, b.y); });
+            //          not sort monitors.
+            // Sort the monitors so the primary one (usually at 0,0) is first.
+            // std::sort(
+            //     monitors.begin(), monitors.end(),
+            //     [](const MonitorData& a, const MonitorData& b)
+            //     { return std::tie(a.x, a.y) < std::tie(b.x, b.y); });
                         
             initialized = true;
         }

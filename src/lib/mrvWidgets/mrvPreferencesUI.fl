@@ -93,8 +93,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {286 309 853 466} type Double hide resizable
-      code0 {main = m;}
+      xywh {1155 926 847 449} type Double resizable
+      code0 {main = m;} visible
     } {
       Fl_Group {} {open
         xywh {0 0 853 466} box FLAT_BOX
@@ -195,8 +195,8 @@ If you try to open several mrv2s with different images, all these images will be
               }
             }
             Fl_Group {} {
-              label {View Window} open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label {View Window}
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Defaults open
@@ -371,7 +371,7 @@ If you try to open several mrv2s with different images, all these images will be
                   xywh {653 259 20 20} box UP_BOX down_box DOWN_BOX align 8
                 }
                 Fl_Value_Input uiPrefsHudFontSize {
-                  label {Font Size} selected
+                  label {Font Size}
                   xywh {633 343 40 24} align 8 minimum 12 maximum 48 step 1 value 12 textcolor 56
                 }
               }
@@ -1296,7 +1296,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Group {} {
               label OCIO open
-              xywh {288 37 555 361} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 361} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label OCIO open
@@ -1357,16 +1357,16 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
                   tooltip {Pick a config.ocio file from disk.} xywh {751 182 55 31}
                 }
                 Fl_Light_Button uiOCIOUseDefaultDisplayView {
-                  label {Use Default Display and View}
-                  tooltip {When this option is on, and your config.ocio has a default display and view, it will be used to be set as default.} xywh {421 236 288 24}
+                  label {Use Default Display and View} selected
+                  tooltip {When this option is on, and your config.ocio has a default display and view, it will be used to be set as default.} xywh {404 236 350 30}
                 }
                 Fl_Light_Button uiOCIONotOnVideos {
                   label {No OCIO on Videos or sRGB/BT709 data}
-                  tooltip {If playing a video or showing an SDR image, OCIO will be turned off automatically.} xywh {421 314 288 28}
+                  tooltip {If playing a video or showing an SDR image, OCIO will be turned off automatically.} xywh {403 314 350 30}
                 }
                 Fl_Light_Button uiOCIOUseActiveViews {
                   label {Use Active Views and Active Displays}
-                  tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {421 276 288 24}
+                  tooltip {When this option is off, OCIO files with active_views: and active_displays: are not taken into account.} xywh {404 274 350 30}
                 }
               }
             }
