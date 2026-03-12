@@ -638,7 +638,7 @@ namespace mrv
         ocio.get("use_active_views", tmp, 1);
         uiPrefs->uiOCIOUseActiveViews->value(tmp);
         
-        ocio.get("not_on_videos", tmp, 0);
+        ocio.get("not_on_videos", tmp, 1);
         uiPrefs->uiOCIONotOnVideos->value(tmp);
 
         Fl_Preferences ics(ocio, "ICS");

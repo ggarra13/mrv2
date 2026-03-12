@@ -51,6 +51,7 @@ ChangeLog
 - Fixed Vulkan metadata being sent when not tone-mapping and no ocio was set.
 - Fixed one minor validation error on pixel look ups just after loading a video.
 - Fixed showing sRGB pictures (like .png) on Windows on an HDR monitor when the monitor had HDR set to off.
+- Made OCIO's  "Not on Videos or BT709 Data" the default option.
 
 
 v1.5.7

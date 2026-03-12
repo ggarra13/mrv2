@@ -3712,6 +3712,7 @@ namespace mrv
             if (p.videoData.empty() || p.videoData[0].layers.empty() ||
                 !p.videoData[0].layers[0].image)
             {
+                p.ocio_disabled = false;
                 return;
             }
                     
@@ -3721,6 +3722,11 @@ namespace mrv
                 // When we have video data, we must tonemap it with libplacebo.
                 p.hdrOptions.hdrData = *hdrData;
                 p.hdrOptions.tonemap = true;
+                
+                if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
+                    p.ocio_disabled = true;
+                else
+                    p.ocio_disabled = false;
             }
             else
             {
@@ -3730,17 +3736,30 @@ namespace mrv
                 {
                     p.hdrOptions.tonemap = true;
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
+
+                    if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
+                        p.ocio_disabled = true;
+                    else
+                        p.ocio_disabled = false;
                 }
                 else if (file::isSRGB(extension))
                 {
                     p.hdrOptions.tonemap = true;
                     p.hdrOptions.hdrData = image::nameToPrimaries("SRGB");
+                    
+                    if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
+                        p.ocio_disabled = true;
+                    else
+                        p.ocio_disabled = false;
                 }
                 else
                 {
                     // A linear or log image.  Do not tonemap with libplacebo.
                     p.hdrOptions.tonemap = false;
 
+                    // Make sure ocio is enabled.
+                    p.ocio_disabled = false;
+                        
                     // We pass BT709 metadata unless OCIO changes it in
                     // Viewport::_updateHDRMetadata().
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
