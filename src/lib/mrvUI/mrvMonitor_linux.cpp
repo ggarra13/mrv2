@@ -300,11 +300,6 @@ namespace mrv
                                 }
                             }
 
-                            std::cerr << "HDR supported=" << out.hdr_supported
-                                      << std::endl;
-                            std::cerr << "HDR enabled=" << out.hdr_enabled
-                                      << std::endl;
-                        
                             return out;
                         }
                         
