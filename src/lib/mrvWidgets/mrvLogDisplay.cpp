@@ -172,7 +172,7 @@ namespace mrv
 
     int LogDisplay::handle(int e)
     {
-        if (e == FL_PUSH && Fl::event_button3() && buffer()->selected())
+        if (e == FL_PUSH && Fl::event_button3())
         {
             Fl_Group::current(0);
 
@@ -180,10 +180,11 @@ namespace mrv
             menu.type(Fl_Menu_Button::POPUP3);
             menu.clear();
             menu.add(
-                _("Edit/&Copy"), FL_CTRL + 'c', (Fl_Callback*)kf_copy, this);
+                _("Copy"), FL_CTRL + 'c', (Fl_Callback*)kf_copy, this);
             menu.menu_end();
 
-            menu.popup();
+            if (buffer()->selected())
+                menu.popup();
             return 1;
         }
         int ret = Fl_Text_Display::handle(e);
