@@ -55,6 +55,7 @@ ChangeLog
 - Added Linux's HDR enabled monitor detection code, besides parsing EDID.
 - Fixed Wayland's monitor enumeration to match FLTK's monitor indices.
 - Made Annotations Panel's Notes text wrap around when reaching the border.
+- Improved displaying SDR content on HDR monitor on Windows.
 
 v1.5.7
 ======
