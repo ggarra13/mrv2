@@ -195,6 +195,7 @@ namespace mrv
             
             // Helper function to diagnose current state
             void _diagnoseColorSpaceState() const;
+
         private:
             struct VKPrivate;
             std::unique_ptr<VKPrivate> _vk;

@@ -1139,7 +1139,8 @@ namespace mrv
             const int screen_idx = this->screen_num();
             const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
                 
-            if (!p.monitor.hdr_enabled || (!ocio.enabled && !p.hdrOptions.tonemap))
+            // if (!p.monitor.hdr_enabled || (!ocio.enabled && !p.hdrOptions.tonemap))
+            if (!p.monitor.hdr_enabled)
             {
 #if DEBUG_METADATA
                 LOG_WARNING("Sending SDR BT709 primaries");

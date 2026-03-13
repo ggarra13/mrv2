@@ -494,6 +494,7 @@ namespace mrv
             notes->textfont(FL_HELVETICA);
             notes->textsize(16);
             notes->textcolor(FL_BLACK);
+            notes->wrap(true);
             notes->when(FL_WHEN_CHANGED);
             nV->callback(
                 [=](auto o)

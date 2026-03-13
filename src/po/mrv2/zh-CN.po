@@ -3880,6 +3880,9 @@ msgstr "HDR 显示器最大亮度（尼特）= {0}"
 msgid "HDR monitor not found or not configured."
 msgstr "未找到HDR显示器或未配置。"
 
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "Vulkan 或窗口管理器未检测到 HDR 显示器。"
+
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan 颜色空间为 {0}"
 
@@ -7997,9 +8000,6 @@ msgstr "开关热键窗口"
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
 
-#~ msgid "HDR active monitor at index {0}"
-#~ msgstr "索引 {0} 的 HDR 活动显示器"
-
 #~ msgid "Renderer"
 #~ msgstr "渲染器"
 
@@ -8038,6 +8038,9 @@ msgstr "开关关于窗口"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "用于文本绘图的无效字体"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "索引 {0} 的 HDR 活动显示器"
 
 #~ msgid "HDR monitor found."
 #~ msgstr "发现HDR显示器。"

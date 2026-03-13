@@ -48,10 +48,15 @@ if(TLRENDER_WAYLAND)
 endif()
 
 if (UNIX AND NOT APPLE)
-    find_library(DISPLAY_INFO
+    find_library(DISPLAY_INFO_LIBRARY
 	NAMES
 	display-info)
-    list(APPEND LIBRARIES_PRIVATE ${DISPLAY_INFO})
+    list(APPEND LIBRARIES_PRIVATE ${DISPLAY_INFO_LIBRARY})
+
+    find_library(DRM_LIBRARY
+	NAMES
+	drm)
+    list(APPEND LIBRARIES_PRIVATE ${DRM_LIBRARY})
 endif()
 
 if (WIN32)
@@ -64,6 +69,9 @@ hdr_files_to_absolute_paths()
 
 target_link_libraries(mrvHDR PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE} )
 set_target_properties(mrvHDR PROPERTIES FOLDER lib)
+if (UNIX AND NOT APPLE)
+    target_include_directories(mrvHDR PRIVATE /usr/include/libdrm)
+endif()
 
 
 install(TARGETS mrvHDR

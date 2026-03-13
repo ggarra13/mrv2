@@ -35,6 +35,10 @@ namespace mrv
             static short ghostNext;
 
             bool hdrMonitorFound = false;
+            
+            //! Boolean to turn off ocio when playing a video or showing
+            //! BT709 or sRGB images.
+            bool ocio_disabled = false;
         
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;

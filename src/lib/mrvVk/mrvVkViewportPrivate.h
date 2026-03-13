@@ -31,6 +31,10 @@ namespace mrv
             //! Boolean to for creating an overlay offscreenBuffer for
             //! annotation saving.
             bool saveOverlay = false;
+
+            //! Boolean used to turn on dynamic read pixels.
+            //! We must not read pixels when vk.buffer is just created.
+            bool readPixels = false;
             
             //! This is for compositing pipelines
             VkRenderPass     loadRenderPass = VK_NULL_HANDLE;

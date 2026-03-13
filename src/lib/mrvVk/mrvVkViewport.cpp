@@ -390,15 +390,32 @@ namespace mrv
         void Viewport::_getMonitorNits(bool quiet)
         {
             TLRENDER_P();
+
+            if (p.monitor.hdr_enabled)
+            {                
+                std::string msg =
+                    string::Format(_("HDR monitor min. nits = {0}")).
+                    arg(p.monitor.min_nits);
+                LOG_STATUS(msg);
                 
-            std::string msg =
-                string::Format(_("HDR monitor min. nits = {0}")).
-                arg(p.monitor.min_nits);
-            LOG_STATUS(msg);
+                msg = string::Format(_("HDR monitor max. nits = {0}")).
+                      arg(p.monitor.max_nits);
+                LOG_STATUS(msg);
+            }
+            else
+            {
+                if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                {
+                    colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                    format() = VK_FORMAT_B8G8R8A8_UNORM;
+                }
                 
-            msg = string::Format(_("HDR monitor max. nits = {0}")).
-                  arg(p.monitor.max_nits);
-            LOG_STATUS(msg);
+                p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
+                p.monitor.min_nits = 0.001F;
+                p.monitor.max_nits = 100.F;
+                
+                LOG_STATUS(_("HDR monitor not found or not configured."));
+            }
         }
             
         
@@ -426,14 +443,13 @@ namespace mrv
                 break;
             }
 
-            LOG_STATUS("valid colorspace=" << valid_colorspace);
             if (valid_colorspace)
             {
                 if (p.monitor_first_run)
                 {
                     p.screen_index = this->screen_num();
                     p.monitor = getHDRCapabilities(p.screen_index);
-                    p.monitor_first_run = false;
+                    p.monitor_first_run = false; 
                 }
                 _getMonitorNits();
             }
@@ -445,11 +461,12 @@ namespace mrv
                     format() = VK_FORMAT_B8G8R8A8_UNORM;
                 }
                 
+                if (p.monitor.hdr_enabled)
+                    LOG_STATUS(_("HDR monitor not detected by Vulkan or Window Manager."));
+                
                 p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
                 p.monitor.min_nits = 0.001F;
                 p.monitor.max_nits = 100.F;
-                
-                LOG_STATUS(_("HDR monitor not found or not configured."));
             }
             
             std::string msg;
@@ -829,6 +846,8 @@ namespace mrv
                 {
                     vk.buffer = vlk::OffscreenBuffer::create(
                         ctx, renderSize, offscreenBufferOptions);
+                    vk.readPixels = false;
+                    
                     // As render resolution might have changed,
                     // we need to reset the quad size.
                     vk.vbo.reset();
@@ -940,8 +959,7 @@ namespace mrv
                     int screen = this->screen_num();
                     auto ocio = p.ocioOptions;
                     
-                    if (!p.ui->uiPrefs->uiOCIONotOnVideos->value() &&
-                        p.hdrOptions.tonemap)
+                    if (p.ocio_disabled)
                         ocio.enabled = false;
                             
                     if (screen >= 0 && !p.monitorOCIOOptions.empty() &&
@@ -1047,6 +1065,7 @@ namespace mrv
                 {
                     vk.annotation = vlk::OffscreenBuffer::create(
                         ctx, viewportSize, offscreenBufferOptions);
+                    
                     vk.avbo.reset();
                     
                     const auto& mesh = geom::box(math::Box2i(0, 0,
@@ -1098,7 +1117,6 @@ namespace mrv
                         vk.overlay = vlk::OffscreenBuffer::create(ctx,
                                                                   renderSize,
                                                                   offscreenBufferOptions);
-                        
                         if (!vk.overlayRender)
                         {
                             if (auto context = vk.context.lock())
@@ -1297,15 +1315,15 @@ namespace mrv
                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                       VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
                 vk.buffer->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-                                
+                
                 // dstImage barrier (swapchain image)
                 transitionImageLayout(cmd, dstImage,
                                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                       VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
             }
+
+
             
-
-
             if (!m_in_render_pass)
             {
                 VkClearValue clear_values[2];
@@ -1326,6 +1344,7 @@ namespace mrv
                 vkCmdBeginRenderPass(cmd, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
                 m_in_render_pass = true;
             }
+            
 
             
             if (p.showAnnotations &&
@@ -1398,8 +1417,10 @@ namespace mrv
             if (selection.max.x >= 0)
                 _drawAreaSelection();
             
-            end_render_pass();
+            
+            end_render_pass(cmd);
 
+            
             if (selection.max.x >= 0)
             {
                 if (panel::colorAreaPanel || panel::histogramPanel ||
@@ -1425,12 +1446,6 @@ namespace mrv
                     }
                 }
             }
-            
-            // Update the pixel bar from here only if we are playing a movie
-            // and one that is not 1 frames long.                
-            bool update = !_shouldUpdatePixelBar();
-            if (update)
-                updatePixelBar();
 
             if (vk.buffer)
             {
@@ -1440,6 +1455,15 @@ namespace mrv
             {
                 vk.annotation->transitionToColorAttachment(cmd);
             }
+            
+            // Update the pixel bar from here only if we are playing a movie
+            // and one that is not 1 frames long.                
+            bool update = vk.readPixels && !_shouldUpdatePixelBar();
+            if (update)
+                updatePixelBar();
+
+            // After first run, we can read pixels.
+            vk.readPixels = true;
         }
 
         
@@ -1666,6 +1690,7 @@ namespace mrv
                 }
                 else
                 {
+                    
                     VkCommandBuffer cmd =
                         beginSingleTimeCommands(device(), commandPool());
 

@@ -4013,6 +4013,9 @@ msgstr "Brillo máximo del monitor HDR (nits) = {0}"
 msgid "HDR monitor not found or not configured."
 msgstr "Monitor HDR no encontrado o no configurado."
 
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "Monitor HDR no detectado por Vulkan o el Manejador de Ventanas."
+
 msgid "Vulkan color space is {0}"
 msgstr "Espacio de color de Vulkan es {0}"
 
@@ -8263,9 +8266,6 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
 
-#~ msgid "HDR active monitor at index {0}"
-#~ msgstr "Monitor HDR activo en índice {0}"
-
 #~ msgid "Renderer"
 #~ msgstr "Renderizador"
 
@@ -8306,6 +8306,9 @@ msgstr "Alternar Ventana de Acerca de mrv2"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Fuente inválida para dibujar texto"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "Monitor HDR activo en índice {0}"
 
 #~ msgid "HDR monitor found."
 #~ msgstr "Monitor HDR no encontrado."

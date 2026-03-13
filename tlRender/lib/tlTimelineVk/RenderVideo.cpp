@@ -180,6 +180,7 @@ namespace tl
             {
                 int Y = renderSize.h * amountY;
                 math::Box2i box(0, 0, renderSize.w, Y);
+                p.fbo->transitionToColorAttachment(p.cmd);
                 p.fbo->beginLoadRenderPass(p.cmd);
                 drawRect(box, color);
                 box.max.y = renderSize.h;
@@ -191,6 +192,7 @@ namespace tl
             {
                 int X = renderSize.w * amountX;
                 math::Box2i box(0, 0, X, renderSize.h);
+                p.fbo->transitionToColorAttachment(p.cmd);
                 p.fbo->beginLoadRenderPass(p.cmd);
                 drawRect(box, color);
                 box.max.x = renderSize.w;

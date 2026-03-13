@@ -37,6 +37,10 @@ namespace mrv
             static short ghostPrevious;
             static short ghostNext;
 
+            //! Boolean to turn off ocio when playing a video or showing
+            //! BT709 or sRGB images.
+            bool ocio_disabled = false;
+            
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
             static timeline::ShaderOptions shaderOptions;

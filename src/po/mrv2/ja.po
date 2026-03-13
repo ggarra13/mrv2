@@ -3890,6 +3890,9 @@ msgstr "HDR モニターの最大輝度（ニト）= {0}"
 msgid "HDR monitor not found or not configured."
 msgstr "HDRモニターが見つからないか、設定されていません。"
 
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "HDRモニターがVulkanまたはウィンドウマネージャーによって検出されませんでした。"
+
 msgid "Vulkan color space is {0}"
 msgstr "Vulkanの色空間は{0}です"
 
@@ -7987,9 +7990,6 @@ msgstr "ホットキーウィンドウを切り替え"
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
 
-#~ msgid "HDR active monitor at index {0}"
-#~ msgstr "インデックス {0} のHDRアクティブモニター"
-
 #~ msgid "Renderer"
 #~ msgstr "レンダラー"
 
@@ -8028,6 +8028,9 @@ msgstr "バージョン情報ウィンドウを切り替え"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "フォントファイル情報が無効です。"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "インデックス {0} のHDRアクティブモニター"
 
 #~ msgid "HDR monitor found."
 #~ msgstr "HDRモニターが見つかりました。"

@@ -3970,6 +3970,9 @@ msgstr "Luminosità massima del monitor HDR (nit) = {0}"
 msgid "HDR monitor not found or not configured."
 msgstr "Monitor HDR non trovato o non configurato."
 
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "Monitor HDR non rilevato da Vulkan o dal gestore delle finestre."
+
 msgid "Vulkan color space is {0}"
 msgstr "Lo spazio colore Vulkan è {0}"
 
@@ -8240,9 +8243,6 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
 
-#~ msgid "HDR active monitor at index {0}"
-#~ msgstr "Monitor HDR attivo all'indice {0}"
-
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
 
@@ -8283,6 +8283,9 @@ msgstr "Commuta la finestra"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Tipo di carattere non valido per il disegno di testo"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "Monitor HDR attivo all'indice {0}"
 
 #~ msgid "HDR monitor found."
 #~ msgstr "Monitor HDR trovato."

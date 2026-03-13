@@ -3937,6 +3937,9 @@ msgstr "HDR-Monitor max. nits = {0}"
 msgid "HDR monitor not found or not configured."
 msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
 
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "HDR-Monitor wurde von Vulkan oder dem Window Manager nicht erkannt."
+
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan-Farbraum ist {0}"
 
@@ -8196,9 +8199,6 @@ msgstr "Hotkeys-Fenster umschalten"
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
 
-#~ msgid "HDR active monitor at index {0}"
-#~ msgstr "HDR-aktiver Monitor am Index {0}"
-
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
 
@@ -8239,6 +8239,9 @@ msgstr "Fenster umschalten"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Ungültige Schriftart für die Texterstellung"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "HDR-aktiver Monitor am Index {0}"
 
 #~ msgid "HDR monitor found."
 #~ msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."

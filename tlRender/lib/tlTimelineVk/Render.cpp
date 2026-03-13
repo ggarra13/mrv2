@@ -2667,9 +2667,53 @@ namespace tl
                     src_colorspace.transfer = PL_COLOR_TRC_SRGB;
                     break;
                 }
-                
+
+                if (isHDRVideo)
+                {                        
+                    cmap.metadata = PL_HDR_METADATA_ANY;
+
+                    pl_hdr_metadata& hdr = src_colorspace.hdr;
+                    hdr.min_luma = data.displayMasteringLuminance.getMin();
+                    hdr.max_luma = data.displayMasteringLuminance.getMax();
+                    hdr.prim.red.x = data.primaries[image::HDRPrimaries::Red][0];
+                    hdr.prim.red.y = data.primaries[image::HDRPrimaries::Red][1];
+                    hdr.prim.green.x = data.primaries[image::HDRPrimaries::Green][0];
+                    hdr.prim.green.y = data.primaries[image::HDRPrimaries::Green][1];
+                    hdr.prim.blue.x = data.primaries[image::HDRPrimaries::Blue][0];
+                    hdr.prim.blue.y = data.primaries[image::HDRPrimaries::Blue][1];
+                    hdr.prim.white.x = data.primaries[image::HDRPrimaries::White][0];
+                    hdr.prim.white.y = data.primaries[image::HDRPrimaries::White][1];
+                    hdr.max_cll = data.maxCLL;
+                    hdr.max_fall = data.maxFALL;
+
+                    hdr.scene_max[0] = data.sceneMax[0];
+                    hdr.scene_max[1] = data.sceneMax[1];
+                    hdr.scene_max[2] = data.sceneMax[2];
+                    hdr.scene_avg = data.sceneAvg;
+
+                    hdr.ootf.target_luma = data.ootf.targetLuma;
+                    hdr.ootf.knee_x = data.ootf.kneeX;
+                    hdr.ootf.knee_y = data.ootf.kneeY;
+                    hdr.ootf.num_anchors = data.ootf.numAnchors;
+                    for (int i = 0; i < hdr.ootf.num_anchors; i++)
+                        hdr.ootf.anchors[i] = data.ootf.anchors[i];
+                    
+                    if (p.placeboData->maxPeak > 0.F)
+                    {
+                        hdr.max_pq_y = p.placeboData->maxPeak;
+                        hdr.avg_pq_y = p.placeboData->avgPeak;
+                    }
+                    else
+                    {
+                        hdr.max_pq_y = data.maxPQY;
+                        hdr.avg_pq_y = data.avgPQY;
+                    }                    
+
+                }  // isHDRVideo
+
                 if (isHDRVideo)
                 {
+                    
                     // defaults, generates LUTs if state is set.
                     cmap.gamut_mapping = &pl_gamut_map_perceptual;
                     switch (p.hdrOptions.gamutMapping)
@@ -2722,9 +2766,6 @@ namespace tl
                     case timeline::HDRTonemapAlgorithm::BT2446A:
                         cmap.tone_mapping_function = &pl_tone_map_bt2446a;
                         break;
-                    case timeline::HDRTonemapAlgorithm::Spline:
-                        cmap.tone_mapping_function = &pl_tone_map_spline;
-                        break;
                     case timeline::HDRTonemapAlgorithm::Reinhard:
                         cmap.tone_mapping_function = &pl_tone_map_reinhard;
                         break;
@@ -2744,65 +2785,47 @@ namespace tl
                         cmap.tone_mapping_function = &pl_tone_map_linear_light;
                         break;
                     case timeline::HDRTonemapAlgorithm::ST2094_40:
-                    default:
                         cmap.tone_mapping_function = &pl_tone_map_st2094_40;
                         break;
+                    case timeline::HDRTonemapAlgorithm::Spline:
+                    default:
+                        cmap.tone_mapping_function = &pl_tone_map_spline;
+                        break;
                     }
-                        
-                    cmap.metadata = PL_HDR_METADATA_ANY;
-
-                    pl_hdr_metadata& hdr = src_colorspace.hdr;
-                    hdr.min_luma = data.displayMasteringLuminance.getMin();
-                    hdr.max_luma = data.displayMasteringLuminance.getMax();
-                    hdr.prim.red.x = data.primaries[image::HDRPrimaries::Red][0];
-                    hdr.prim.red.y = data.primaries[image::HDRPrimaries::Red][1];
-                    hdr.prim.green.x = data.primaries[image::HDRPrimaries::Green][0];
-                    hdr.prim.green.y = data.primaries[image::HDRPrimaries::Green][1];
-                    hdr.prim.blue.x = data.primaries[image::HDRPrimaries::Blue][0];
-                    hdr.prim.blue.y = data.primaries[image::HDRPrimaries::Blue][1];
-                    hdr.prim.white.x = data.primaries[image::HDRPrimaries::White][0];
-                    hdr.prim.white.y = data.primaries[image::HDRPrimaries::White][1];
-                    hdr.max_cll = data.maxCLL;
-                    hdr.max_fall = data.maxFALL;
-
-                    hdr.scene_max[0] = data.sceneMax[0];
-                    hdr.scene_max[1] = data.sceneMax[1];
-                    hdr.scene_max[2] = data.sceneMax[2];
-                    hdr.scene_avg = data.sceneAvg;
-
-                    hdr.ootf.target_luma = data.ootf.targetLuma;
-                    hdr.ootf.knee_x = data.ootf.kneeX;
-                    hdr.ootf.knee_y = data.ootf.kneeY;
-                    hdr.ootf.num_anchors = data.ootf.numAnchors;
-                    for (int i = 0; i < hdr.ootf.num_anchors; i++)
-                        hdr.ootf.anchors[i] = data.ootf.anchors[i];
-                    
-                    if (p.placeboData->maxPeak > 0.F)
-                    {
-                        hdr.max_pq_y = p.placeboData->maxPeak;
-                        hdr.avg_pq_y = p.placeboData->avgPeak;
-                    }
-                    else
-                    {
-                        hdr.max_pq_y = data.maxPQY;
-                        hdr.avg_pq_y = data.avgPQY;
-                    }                    
-
-                }  // isHDRVideo
+                }
                 else
                 {
-                    // SDR video - do not do any gamut or tone mapping
+                    // SDR video on SDR monitor - do not do any gamut or
+                    // tone mapping
                     cmap.gamut_mapping = nullptr;
                     cmap.tone_mapping_function = nullptr;
                 }
-
-                pl_color_space_infer(&src_colorspace);
 
                 pl_color_space dst_colorspace;
                 memset(&dst_colorspace, 0, sizeof(pl_color_space));
 
                 if (p.monitor.hdr_enabled)
                 {
+                    if (!isHDRVideo)
+                    {
+                        // Strict gamut mapping.
+                        // Maps BT709 exactly to its correct coords in BT.2020
+                        cmap.intent = PL_INTENT_RELATIVE_COLORIMETRIC;
+                        cmap.gamut_mapping = &pl_gamut_map_clip;
+
+                        // Strict SDR passthrough (we need to use spline not
+                        // clip as suggested by Gemini)
+                        cmap.tone_mapping_function = &pl_tone_map_spline;
+                        
+                        // Ensure libplacebo doesn't try to stretch or boost
+                        // the image dynamically
+                        cmap.inverse_tone_mapping = false;
+                        cmap.metadata = PL_HDR_METADATA_NONE;
+                        
+                        src_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE; //203.0;
+                        src_colorspace.hdr.min_luma = 0.0;
+                    }
+                    
                     if (p.ocioData &&
                         (p.ocioData->icsDesc || p.ocioData->shaderDesc))
                     {
@@ -2824,22 +2847,6 @@ namespace tl
                         dst_colorspace.transfer = PL_COLOR_TRC_PQ;
                         dst_colorspace.hdr.min_luma = p.monitor.min_nits;
                         dst_colorspace.hdr.max_luma = p.monitor.max_nits;
-                    }
-                    
-                    if (ctx.colorSpace ==
-                        VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
-                    {
-                        dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
-                        dst_colorspace.transfer = PL_COLOR_TRC_SRGB;
-                    }
-                    else if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_HLG_EXT)
-                    {
-                        dst_colorspace.transfer = PL_COLOR_TRC_HLG;
-                    }
-                    else if (
-                        ctx.colorSpace == VK_COLOR_SPACE_DOLBYVISION_EXT)
-                    {
-                        dst_colorspace.transfer = PL_COLOR_TRC_PQ;
                     }
 
                     if (p.monitor.red.x > 0)
@@ -2873,7 +2880,7 @@ namespace tl
                     // SDR peak in nits
                     // See ITU-R Report BT.2408 for more information.
                     // or libplacebo's colorspace.h
-                    dst_colorspace.hdr.max_luma = 203.F; 
+                    dst_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE; // 203.F; 
                     
                     const struct pl_raw_primaries* raw =
                         pl_raw_primaries_get(PL_COLOR_PRIM_BT_709);
@@ -2885,6 +2892,7 @@ namespace tl
 
                 }
 
+                pl_color_space_infer(&src_colorspace);
                 pl_color_space_infer(&dst_colorspace);
                         
                 pl_color_map_args color_map_args;
@@ -2898,7 +2906,7 @@ namespace tl
                     
                 pl_shader_color_map_ex(p.placeboData->shader, &cmap,
                                        &color_map_args);
-                    
+                
                 const pl_shader_res* res = pl_shader_finalize(p.placeboData->shader);
                 p.placeboData->res = res;
                 if (!res)
@@ -3034,19 +3042,9 @@ namespace tl
 #endif
 
                 toneMap =  "outColor.rgb = max(outColor.rgb, vec3(0.0));\n";
-                toneMap += "outColor = clamp(";
+                toneMap += "    outColor = clamp(";
                 toneMap += res->name;
                 toneMap += "(outColor), 0.0, 1.0);\n";
-
-#if DEBUG_TONEMAPPING
-                std::cerr << "toneMapDef="
-                          << std::endl
-                          << toneMapDef
-                          << std::endl;
-                std::cerr << "toneMap=" << std::endl
-                          << toneMap
-                          << std::endl;
-#endif
             }
 #endif
 #if defined(TLRENDER_OCIO)
@@ -3103,14 +3101,14 @@ namespace tl
                 ocioICSDef, ocioICS, ocioDef, ocio, lutDef, lut,
                 p.lutOptions.order, toneMapDef, toneMap,
                 debandingDef, debanding);
-#if DEBUG_DISPLAY_SHADER
-            std::cerr << source << std::endl;
-#endif
                 
             bool recreateShader = false;
             if (!p.shaders["display"] || p.oldSource != source)
             {
                 recreateShader = true;
+#if DEBUG_DISPLAY_SHADER
+                std::cerr << source << std::endl;
+#endif
             }
                 
             p.oldSource = source;

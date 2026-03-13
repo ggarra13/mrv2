@@ -3950,6 +3950,9 @@ msgstr "HDR monitor max. nits = {0}"
 msgid "HDR monitor not found or not configured."
 msgstr "HDR monitor not found or not configured."
 
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "HDR monitor not found or not configured."
+
 msgid "Vulkan color space is {0}"
 msgstr "Vulkan color space is {0}"
 

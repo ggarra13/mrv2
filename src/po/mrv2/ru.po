@@ -3973,6 +3973,9 @@ msgstr "Максимальная яркость HDR-монитора (нит) = 
 msgid "HDR monitor not found or not configured."
 msgstr "HDR-монитор не найден или не настроен."
 
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "HDR-монитор не обнаружен Vulkan или оконным менеджером."
+
 msgid "Vulkan color space is {0}"
 msgstr "Цветовое пространство Vulkan: {0}"
 
@@ -8221,9 +8224,6 @@ msgstr "Переключить окно горячих клавиш"
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
 
-#~ msgid "HDR active monitor at index {0}"
-#~ msgstr "HDR-активный монитор с индексом {0}"
-
 #~ msgid "Renderer"
 #~ msgstr "Редактор"
 
@@ -8264,6 +8264,9 @@ msgstr "Закладка о окне"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Неверный шрифт для текстового рисунка"
+
+#~ msgid "HDR active monitor at index {0}"
+#~ msgstr "HDR-активный монитор с индексом {0}"
 
 #~ msgid "HDR monitor found."
 #~ msgstr "HDR-монитор найден."

@@ -91,12 +91,14 @@ namespace
             
             // Second roundtrip to ensure we receive all the output-specific events (like name, geometry).
             wl_display_roundtrip(display);
-            
+
+            // \@note:  We don't do this as FLTK's Fl_Window->screen_num() does
+            //          not sort monitors.
             // Sort the monitors so the primary one (usually at 0,0) is first.
-            std::sort(
-                monitors.begin(), monitors.end(),
-                [](const MonitorData& a, const MonitorData& b)
-                { return std::tie(a.x, a.y) < std::tie(b.x, b.y); });
+            // std::sort(
+            //     monitors.begin(), monitors.end(),
+            //     [](const MonitorData& a, const MonitorData& b)
+            //     { return std::tie(a.x, a.y) < std::tie(b.x, b.y); });
                         
             initialized = true;
         }
