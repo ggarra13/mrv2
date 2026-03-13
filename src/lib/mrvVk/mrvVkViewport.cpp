@@ -461,11 +461,12 @@ namespace mrv
                     format() = VK_FORMAT_B8G8R8A8_UNORM;
                 }
                 
+                if (p.monitor.hdr_enabled)
+                    LOG_STATUS(_("HDR monitor not detected by Vulkan or Window Manager."));
+                
                 p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
                 p.monitor.min_nits = 0.001F;
                 p.monitor.max_nits = 100.F;
-                
-                LOG_STATUS(_("HDR monitor not found or not configured."));
             }
             
             std::string msg;
