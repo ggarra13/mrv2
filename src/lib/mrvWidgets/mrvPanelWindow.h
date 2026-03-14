@@ -39,8 +39,13 @@ namespace mrv
         int valid;
 
         int last_x, last_y;
+        
+        // Track current screen for DPI change detection
+        int _current_screen = -1;
+        bool refresh_screen = true;
 
         void set_cursor(int ex, int ey);
+        void handle_screen_change();
 
     public:
         // Normal FLTK constructors

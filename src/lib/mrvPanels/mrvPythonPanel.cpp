@@ -513,6 +513,7 @@ from mrv2 import playlist, timeline, ui, )PYTHON";
             g->begin();
             create_menu();
             g->add(tile);
+            g->resizable(0);
         }
 
         void PythonPanel::run_code()

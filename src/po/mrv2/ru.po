@@ -5026,8 +5026,8 @@ msgstr "Нажмите на окно через ВВ"
 msgid "Window click through OFF"
 msgstr "Окно щелчок через выключатель"
 
-msgid "Edit/&Copy"
-msgstr "Правка/Копировать"
+msgid "Copy"
+msgstr "Копи"
 
 msgid "Reset to default value"
 msgstr "Перезагрузить в значение по умолчанию"
@@ -8223,6 +8223,9 @@ msgstr "Переключить окно горячих клавиш"
 
 msgid "Toggle About Window"
 msgstr "Закладка о окне"
+
+#~ msgid "Edit/&Copy"
+#~ msgstr "Правка/Копировать"
 
 #~ msgid "Renderer"
 #~ msgstr "Редактор"

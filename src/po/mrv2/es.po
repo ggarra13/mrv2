@@ -5064,8 +5064,8 @@ msgstr "Haga clic en la ventana encendido"
 msgid "Window click through OFF"
 msgstr "Haga clic en la ventana a través de OFF"
 
-msgid "Edit/&Copy"
-msgstr "Editar/&Copiar"
+msgid "Copy"
+msgstr "Copiar"
 
 msgid "Reset to default value"
 msgstr "Resetar a su valor estándar."
@@ -8265,6 +8265,9 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+#~ msgid "Edit/&Copy"
+#~ msgstr "Editar/&Copiar"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderizador"
