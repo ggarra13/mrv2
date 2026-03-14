@@ -17,7 +17,7 @@ namespace
     const int kMaxMove = 640;
 
     // Margins of Panel Windows
-    const int kMargin = 3;
+    const int kMargin = 2;
 
     // Width of Panel Buttons
     const int kButtonW = 20;
