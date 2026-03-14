@@ -59,8 +59,6 @@ namespace mrv
 
             int X = g->x();
             int Y = g->y();
-            int W = g->w() - 3;
-            int H = g->h();
 
             // Create a square vectorscope
             r.vectorscope = new Vectorscope(X, Y, 270, 270);
