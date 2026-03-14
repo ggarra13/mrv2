@@ -4929,8 +4929,8 @@ msgstr "ウィンドウクリックスルー ON"
 msgid "Window click through OFF"
 msgstr "ウィンドウクリックスルー OFF"
 
-msgid "Edit/&Copy"
-msgstr "編集/&コピー"
+msgid "Copy"
+msgstr "コピー"
 
 msgid "Reset to default value"
 msgstr "デフォルト値にリセット"
@@ -7989,6 +7989,9 @@ msgstr "ホットキーウィンドウを切り替え"
 
 msgid "Toggle About Window"
 msgstr "バージョン情報ウィンドウを切り替え"
+
+#~ msgid "Edit/&Copy"
+#~ msgstr "編集/&コピー"
 
 #~ msgid "Renderer"
 #~ msgstr "レンダラー"

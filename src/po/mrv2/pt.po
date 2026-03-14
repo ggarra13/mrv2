@@ -4987,8 +4987,8 @@ msgstr "Janela clicar através ACCESSÃO"
 msgid "Window click through OFF"
 msgstr "Janela clicar através de OFF"
 
-msgid "Edit/&Copy"
-msgstr "Editar/Copiado"
+msgid "Copy"
+msgstr "Copiar"
 
 msgid "Reset to default value"
 msgstr "Reiniciar para o valor padro"
@@ -8190,6 +8190,9 @@ msgstr "Alternar a janela de teclas instantneas"
 
 msgid "Toggle About Window"
 msgstr "Alternar Sobre a Janela"
+
+#~ msgid "Edit/&Copy"
+#~ msgstr "Editar/Copiado"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"

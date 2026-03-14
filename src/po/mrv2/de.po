@@ -4989,8 +4989,8 @@ msgstr "Fenster klicken durch EIN"
 msgid "Window click through OFF"
 msgstr "Fenster klicken durch OFF"
 
-msgid "Edit/&Copy"
-msgstr "Bearbeiten/Kopieren"
+msgid "Copy"
+msgstr "Kopieren"
 
 msgid "Reset to default value"
 msgstr "Auf Standardwert zurcksetzen"
@@ -8198,6 +8198,9 @@ msgstr "Hotkeys-Fenster umschalten"
 
 msgid "Toggle About Window"
 msgstr "Fenster umschalten"
+
+#~ msgid "Edit/&Copy"
+#~ msgstr "Bearbeiten/Kopieren"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"

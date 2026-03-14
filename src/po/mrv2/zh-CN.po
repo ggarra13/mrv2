@@ -4925,8 +4925,8 @@ msgstr "窗口通过 OO 点击窗口"
 msgid "Window click through OFF"
 msgstr "窗口通过 OFF 点击窗口"
 
-msgid "Edit/&Copy"
-msgstr "Edit/&Copy"
+msgid "Copy"
+msgstr "复制( C)"
 
 msgid "Reset to default value"
 msgstr "重置为默认值"
@@ -7999,6 +7999,9 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+#~ msgid "Edit/&Copy"
+#~ msgstr "Edit/&Copy"
 
 #~ msgid "Renderer"
 #~ msgstr "渲染器"

@@ -5022,8 +5022,8 @@ msgstr "Fare clic sulla finestra"
 msgid "Window click through OFF"
 msgstr "Fare clic sulla finestra attraverso OFF"
 
-msgid "Edit/&Copy"
-msgstr "Modifica/Copia"
+msgid "Copy"
+msgstr "& Copia"
 
 msgid "Reset to default value"
 msgstr "Ripristina il valore predefinito"
@@ -8242,6 +8242,9 @@ msgstr "Finestra di commutazione di tasti di avviamento"
 
 msgid "Toggle About Window"
 msgstr "Commuta la finestra"
+
+#~ msgid "Edit/&Copy"
+#~ msgstr "Modifica/Copia"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"

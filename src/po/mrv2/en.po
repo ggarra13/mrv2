@@ -4999,8 +4999,8 @@ msgstr "Window click through ON"
 msgid "Window click through OFF"
 msgstr "Window click through OFF"
 
-msgid "Edit/&Copy"
-msgstr "Edit/&Copy"
+msgid "Copy"
+msgstr "Copy"
 
 msgid "Reset to default value"
 msgstr "Reset to default value"
@@ -8185,6 +8185,9 @@ msgstr "Toggle Hotkeys Window"
 
 msgid "Toggle About Window"
 msgstr "Toggle About Window"
+
+#~ msgid "Edit/&Copy"
+#~ msgstr "Edit/&Copy"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"
