@@ -20,12 +20,17 @@ namespace mrv
         TimeUnits units = TimeUnits::Timecode;
     };
 
-    inline void Timecode::_textUpdate() noexcept
+    inline bool Timecode::_textUpdate() noexcept
     {
         TLRENDER_P();
         char buf[24];
         timeToText(buf, p.value, p.units);
-        value(buf);
+        if (strcmp(buf, "--:--:--:--") != 0)
+        {
+            value(buf);
+            return true;
+        }
+        return false;
     }
 
     Timecode::Timecode(int X, int Y, int W, int H, const char* L) :
@@ -68,64 +73,6 @@ namespace mrv
         _textUpdate();
     }
 
-    int Timecode::handle(int e)
-    {
-        TLRENDER_P();
-        
-        switch(e)
-        {
-        case FL_FOCUS:
-            redraw();
-            return 1;
-        case FL_UNFOCUS:
-            redraw();
-            return 1;
-        case FL_ENTER:
-            return 1;
-        case FL_LEAVE:
-            return 1;
-        case FL_KEYBOARD:
-        {
-            unsigned rawkey = Fl::event_key();
-            if (rawkey == FL_Enter ||
-                rawkey == FL_KP_Enter ||
-                rawkey == FL_Tab)
-            {
-                double v;
-                switch(p.units)
-                {
-                case TimeUnits::Frames:
-                    v = eval(value());
-                    p.value = otime::RationalTime(v, p.value.rate());
-                    break;
-                case TimeUnits::Seconds:
-                    v = eval(value());
-                    p.value = otime::RationalTime(v, 1.0);
-                    break;
-                case TimeUnits::Timecode:
-                {
-                    otime::ErrorStatus status;
-                    p.value = otime::RationalTime::from_timecode(value(),
-                                                                 p.value.rate(),
-                                                                 &status);
-                    break;
-                }
-                default:
-                    break;
-                }
-                _textUpdate();
-                do_callback();
-                return 1;
-            }
-            break;
-        }
-        default:
-            break;
-        }
-        
-        return Fl_Input::handle(e);
-    }
-    
     /**
        Evaluate a formula into a double, recursive part.
        \param s remaining text in this formula, must return a pointer to the next
@@ -243,4 +190,138 @@ namespace mrv
         ::free(buf);
         return ret;
     }
+    
+    int Timecode::handle(int e)
+    {
+        TLRENDER_P();
+        
+        switch(e)
+        {
+        case FL_FOCUS:
+            redraw();
+            return 1;
+        case FL_UNFOCUS:
+            redraw();
+            return 1;
+        case FL_ENTER:
+            return 1;
+        case FL_LEAVE:
+            return 1;
+        case FL_PUSH:
+        {
+            int ret = Fl_Input::handle(e);
+            if (p.units == TimeUnits::Timecode)
+            {
+                const char* txt = value();              // text may have changed
+                int pos = insert_position();
+                if (txt && (txt[pos] == ':' || txt[pos] == ';'))
+                    insert_position(pos + 1);
+            }
+            return ret;
+        }
+        case FL_KEYBOARD:
+        {
+            unsigned rawkey = Fl::event_key();
+            if (rawkey == FL_Enter ||
+                rawkey == FL_KP_Enter ||
+                rawkey == FL_Tab)
+            {
+                double v;
+                switch(p.units)
+                {
+                case TimeUnits::Frames:
+                    v = eval(value());
+                    p.value = otime::RationalTime(v, p.value.rate());
+                    break;
+                case TimeUnits::Seconds:
+                    v = eval(value());
+                    p.value = otime::RationalTime(v, 1.0);
+                    break;
+                case TimeUnits::Timecode:
+                {
+                    otime::ErrorStatus status;
+                    p.value = otime::RationalTime::from_timecode(value(),
+                                                                 p.value.rate(),
+                                                                 &status);
+                    break;
+                }
+                default:
+                    break;
+                }
+                if (_textUpdate())
+                    do_callback();
+                return 1;
+            }
+
+            // In Timecode mode, skip the cursor over ':' and ';' separators
+            // automatically so the user only has to type the digit groups.
+            if (p.units == TimeUnits::Timecode)
+            {
+                const char* ev  = Fl::event_text();
+                const char  ch  = ev ? ev[0] : '\0';
+                const char* txt = value();
+                
+                // --- digit typed: let Fl_Input insert/overwrite, then jump forward ---
+                if (isdigit((unsigned char)ch))
+                {
+                    int pos = insert_position();
+                    const char* txt = value();
+
+                    // Skip over any separator under the cursor before overwriting
+                    if (txt && (txt[pos] == ':' || txt[pos] == ';'))
+                    {
+                        insert_position(pos + 1);
+                        pos = insert_position();
+                    }
+
+                    // Select the single character at the cursor so Fl_Input overwrites it
+                    insert_position(pos, pos + 1);
+
+    
+                    int ret = Fl_Input::handle(e);
+                    txt = value();              // text may have changed
+                    pos = insert_position();
+                    if (txt && (txt[pos] == ':' || txt[pos] == ';'))
+                        insert_position(pos + 1);
+                    return ret;
+                }
+
+                // --- Backspace and Delete, skip.
+                if (rawkey == FL_BackSpace || rawkey == FL_Delete)
+                {
+                    return 0;
+                }
+
+                // --- Arrow keys: move, then slide off any separator ---
+                if (rawkey == FL_Right)
+                {
+                    int ret = Fl_Input::handle(e);
+                    int pos = insert_position();
+                    txt = value();
+                    if (txt && (txt[pos] == ':' || txt[pos] == ';'))
+                        insert_position(pos + 1);
+                    return ret;
+                }
+                if (rawkey == FL_Left)
+                {
+                    int ret = Fl_Input::handle(e);
+                    int pos = insert_position();
+                    txt = value();
+                    if (pos > 0 && txt && (txt[pos - 1] == ':' || txt[pos - 1] == ';'))
+                        insert_position(pos - 1);
+                    return ret;
+                }
+                return 0;
+            }
+
+            break;
+        }
+        default:
+            break;
+
+        }
+        
+        return Fl_Input::handle(e);
+    }
+        
 } // namespace mrv
