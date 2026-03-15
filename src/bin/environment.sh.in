@@ -49,13 +49,13 @@ if [[ "@MRV2_BACKEND@" == "GL" ]]; then
     export FLTK_BACKEND=x11
 fi
 
-if [[ "@MRV2_BACKEND@" == "VK" ]]; then
-    # This is currently needed to have Vulkan talk to the
-    # GNOME49/KWin6 compositors at least until FLTK supports
-    # wp_color_management_v1
-    # Note that with AMD/Intel graphic cards this may not be needed.
-    export ENABLE_HDR_WSI=1
-fi
+# if [[ "@MRV2_BACKEND@" == "VK" ]]; then
+#     # This is currently needed to have Vulkan talk to the
+#     # GNOME49/KWin6 compositors at least until FLTK supports
+#     # wp_color_management_v1
+#     # Note that with AMD/Intel graphic cards this may not be needed.
+#     export ENABLE_HDR_WSI=1
+# fi
 
 #
 # Debug libraries loaded on macOS
