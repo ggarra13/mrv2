@@ -39,7 +39,7 @@ namespace mrv
         double eval(uchar *&s, int prio) const;
         double eval(const char *s) const;
 
-        void _textUpdate() noexcept;
+        bool _textUpdate() noexcept;
         void _updateGeometry() noexcept;
 
         TLRENDER_PRIVATE();
