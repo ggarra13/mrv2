@@ -150,6 +150,7 @@ namespace mrv
             size(W - kMargin, H - kMargin); // resize to fit (needed)
             tw->resizable(this);
             tw->resize(X, Y, W, H);
+            std::cerr << "Panel Window undock " << W << "x" << H << std::endl;
             tw->show();     // show floating window
             dock->redraw(); // update the dock, to show the group has gone...
         }

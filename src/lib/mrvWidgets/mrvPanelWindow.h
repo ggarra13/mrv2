@@ -52,7 +52,7 @@ namespace mrv
         PanelWindow(int w, int h, const char* l = 0);
         PanelWindow(int x, int y, int w, int h, const char* l = 0);
 
-        void update_drag();
+        void update_resize();
         
         int newX, newY, newW, newH;
         

@@ -28,12 +28,12 @@ namespace mrv
     
     static bool resizing = false;
 
-    static void drag_idle(void* v)
+    static void resize_idle_cb(void* v)
     {
         PanelWindow* self = static_cast<PanelWindow*>(v);
         if (!resizing) return;
-        self->update_drag(); // compute new position
-        Fl::repeat_timeout(0.0, drag_idle, v);
+        self->update_resize(); // compute new position
+        Fl::repeat_timeout(0.0, resize_idle_cb, v);
     }
     
     // Dummy close button callback
@@ -42,7 +42,7 @@ namespace mrv
         // Just shrug off the close callback...
     }
     
-    void PanelWindow::update_drag()
+    void PanelWindow::update_resize()
     {
         resize(newX, newY, newW, newH);
     }
@@ -161,20 +161,23 @@ namespace mrv
 
     void PanelWindow::resize(int X, int Y, int W, int H)
     {
+        int minX, minY, maxW, maxH;
+        Fl::screen_work_area(minX, minY, maxW, maxH, _current_screen);
+            
         if (App::ui->uiMain->is_wayland_resize())
         {
             W = w();
             H = h();
 
 
+            Fl_Window* top = top_window();
+            int screen_num = top->screen_num();
+            Fl::screen_work_area(minX, minY, maxW, maxH, screen_num);
+
             //
             // Sanity check.  Try to avoid positioning windows outside the
             // screen work area.
             //
-            Fl_Window* top = top_window();
-            int screen_num = top->screen_num();
-            int minX, minY, maxW, maxH;
-            Fl::screen_work_area(minX, minY, maxW, maxH, screen_num);
             
             if (X > minX + maxW)
             {
@@ -185,7 +188,15 @@ namespace mrv
                 Y -= ((Y - maxH) + H);
             }
         }
+        else
+        {
+            if (Y + H > minY + maxH)
+            {
+                H = h();
+            }
+        }
 
+        
         Fl_Double_Window::resize(X, Y, W, H);
         
         // Check for screen changes after resize
@@ -365,8 +376,8 @@ namespace mrv
                     newY = y();
                     newH = kMinHeight;
                 }
-                Fl::add_timeout(0.0, (Fl_Timeout_Handler) drag_idle, this);
                 resizing = true;
+                Fl::add_timeout(0.0, (Fl_Timeout_Handler) resize_idle_cb, this);
             }
             
             last_x = ex;
@@ -410,9 +421,6 @@ namespace mrv
             }
             else
             {
-                if (label == _("Vectorscope"))
-                {
-                }
                 settings->setValue(key, 0);
             }
 

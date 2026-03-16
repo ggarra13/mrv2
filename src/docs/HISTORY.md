@@ -48,6 +48,7 @@ ChangeLog
 ---------
 
 - Improved Timecode input widget skipping over : and ; and prevent an invalid time (ie. --:--:--:--).
+- Fixed Log Panel becoming huge in height when dragging from one Window to another with different scaling factors. 
 
 
 v1.5.8
