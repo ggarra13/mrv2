@@ -188,7 +188,7 @@ namespace mrv
                 tg->undock_grp(false); // undock the window
                 was_docked = true;     // note that we *just now* undocked
 
-#ifdef _WNIN32
+#ifdef _WIN32
                 use_relative = true;
 #endif  
                 int posX, posY;
