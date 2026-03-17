@@ -104,6 +104,7 @@ namespace mrv
             int H = h() + kMargin;
             int X = Fl::event_x_root() - 10;
             int Y = Fl::event_y_root() - 35;
+            int N = 0;
             docked(false); // toolgroup is no longer docked
 
             auto settings = App::app->settings();
@@ -113,6 +114,10 @@ namespace mrv
             std::string key;
 
             std_any value;
+
+            key = prefix + "/Screen";
+            value = settings->getValue<std::any>(key);
+            N = std_any_empty(value) ? 0 : std_any_cast<int>(value);
 
             // If user undocked the window with the undock button,
             // check to see if we have window X and Y saved positions.
@@ -144,6 +149,8 @@ namespace mrv
 
             tw = new PanelWindow(X, Y, W, H);
             tw->end();
+            tw->screen_num(N);
+            
             dock->remove(this);
             tw->add(this);  // move the tool group into the floating window
             position(1, 1); // align group in floating window (needed)
@@ -321,7 +328,7 @@ namespace mrv
     // Constructors for docked/floating window
     // WITH x, y coordinates
     PanelGroup::PanelGroup(
-        DockGroup* dk, int floater, int X, int Y, int W, int H,
+        DockGroup* dk, int floater, int X, int Y, int W, int H, int N,
         const char* lbl) :
         Fl_Group(0, 0, W, H),
         tw(nullptr)
@@ -329,7 +336,7 @@ namespace mrv
         assert(H > 0);
         if ((floater) && (dk)) // create floating
         {
-            create_floating(dk, X, Y, W, H, lbl);
+            create_floating(dk, X, Y, W, H, N, lbl);
         }
         else if (dk) // create docked
         {
@@ -433,7 +440,7 @@ namespace mrv
     }
 
     void PanelGroup::create_floating(
-        DockGroup* dk, int X, int Y, int W, int H, const char* lbl)
+        DockGroup* dk, int X, int Y, int W, int H, int N, const char* lbl)
     {
         // create the group itself
         create_dockable_group(false, lbl);
@@ -445,6 +452,7 @@ namespace mrv
         set_Fl_Group();
         tw = new PanelWindow(X, Y, W, H);
         tw->end();
+        tw->screen_num(N);
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
         this->position(1, 1);

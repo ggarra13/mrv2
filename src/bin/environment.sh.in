@@ -46,7 +46,8 @@ fi
 if [[ "@MRV2_BACKEND@" == "GL" ]]; then
     # Note: This makes mrv2 run under XWayland.  Since mrv2 uses Xrandr
     #       functions that XWayland does not translate you might get errors.
-    export FLTK_BACKEND=x11
+    #export FLTK_BACKEND=x11
+    true
 fi
 
 # if [[ "@MRV2_BACKEND@" == "VK" ]]; then

@@ -58,6 +58,7 @@ namespace mrv
             int Y = dock->y();
             int W = dock->w();
             int H = dg->h();
+            int N = 0;
 
             label = lbl;
             SettingsObject* settings = App::app->settings();
@@ -68,6 +69,10 @@ namespace mrv
 
             if (window)
             {
+                key = prefix + "/Screen";
+                value = settings->getValue<std::any>(key);
+                N = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+                
                 key = prefix + "/WindowX";
                 value = settings->getValue<std::any>(key);
                 X = std_any_empty(value) ? X : std_any_cast<int>(value);
@@ -110,7 +115,7 @@ namespace mrv
                     removePanels(p.ui);
             }
 
-            g = new PanelGroup(dock, window, X, Y, W, H, _(lbl));
+            g = new PanelGroup(dock, window, X, Y, W, H, N, _(lbl));
             g->setLabel(label);
 
             begin_group();
@@ -186,6 +191,9 @@ namespace mrv
             {
                 PanelWindow* w = g->get_window();
 
+                key = prefix + "/Screen";
+                settings->setValue(key, w->screen_num());
+                
                 key = prefix + "/WindowX";
                 settings->setValue(key, w->x());
 

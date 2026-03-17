@@ -114,6 +114,10 @@ namespace mrv
         Fl_Double_Window(x, y, w, h, l)
     {
         allow_expand_outside_parent();
+
+        std::cerr << "X, Y  WxH=" << x << "," << y
+                  << " WxH=" << w << "x" << h << " " << screen_num()
+                  << std::endl;
         
         newX = x;
         newY = y;
@@ -170,7 +174,7 @@ namespace mrv
             H = h();
 
 
-            Fl_Window* top = top_window();
+            Fl_Window* top = App::ui->uiMain;
             int screen_num = top->screen_num();
             Fl::screen_work_area(minX, minY, maxW, maxH, screen_num);
 
@@ -402,6 +406,9 @@ namespace mrv
             std::string prefix = "gui/" + label;
             std::string key;
 
+            key = prefix + "/Screen";
+            settings->setValue(key, this->screen_num());
+
             key = prefix + "/WindowX";
             settings->setValue(key, x_root());
             
@@ -435,4 +442,10 @@ namespace mrv
         }
         return ret;
     }
+
+    void PanelWindow::show()
+    {
+        Fl_Double_Window::show();
+    }
+    
 } // namespace mrv

@@ -144,8 +144,6 @@ namespace mrv
                 update_drag();
                 return 1;
             case FL_RELEASE:
-                dragging = false;
-                use_relative = false;
                 
                 update_drag();
                     
@@ -160,6 +158,9 @@ namespace mrv
                 {
                     hide_dock_group();
                 }
+                
+                dragging = false;
+                use_relative = false;
                 return 1;                    
             default:
                 break; // Ignore other events.

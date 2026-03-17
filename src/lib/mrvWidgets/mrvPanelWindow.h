@@ -58,8 +58,9 @@ namespace mrv
         
         virtual ~PanelWindow();
 
-        int handle(int event) FL_OVERRIDE;
-        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
+        int handle(int event) override;
+        void resize(int X, int Y, int W, int H) override;
+        void show() override;
 
         //! Methods for hiding/showing *all* the floating windows
         static void show_all();
