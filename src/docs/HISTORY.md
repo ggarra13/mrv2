@@ -50,7 +50,7 @@ ChangeLog
 - Improved Timecode input widget skipping over : and ; and prevent an invalid time (ie. --:--:--:--).
 - Fixed Log Panel becoming huge in height when dragging from one Window to another with different scaling factors.
 - Fixed menus in FLTK potentially appearing floating in space with two screens of different scaling factors.
-- Fixed Panels saving and loading positions on multiple screen setups, including Windows.
+- Fixed Panels saving and loading positions on multiple screen setups with different scaling factors on Windows.  Wayland is still buggy.
 
 
 v1.5.8
