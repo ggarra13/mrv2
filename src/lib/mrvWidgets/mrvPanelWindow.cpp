@@ -115,10 +115,6 @@ namespace mrv
     {
         allow_expand_outside_parent();
 
-        std::cerr << "X, Y  WxH=" << x << "," << y
-                  << " WxH=" << w << "x" << h << " " << screen_num()
-                  << std::endl;
-        
         newX = x;
         newY = y;
         newW = w;
@@ -441,11 +437,6 @@ namespace mrv
         }
         }
         return ret;
-    }
-
-    void PanelWindow::show()
-    {
-        Fl_Double_Window::show();
     }
     
 } // namespace mrv

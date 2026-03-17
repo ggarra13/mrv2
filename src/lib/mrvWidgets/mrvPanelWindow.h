@@ -60,8 +60,7 @@ namespace mrv
 
         int handle(int event) override;
         void resize(int X, int Y, int W, int H) override;
-        void show() override;
-
+        
         //! Methods for hiding/showing *all* the floating windows
         static void show_all();
         static void hide_all();
