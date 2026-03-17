@@ -63,11 +63,10 @@ namespace mrv
         TLRENDER_P();
         
         W = std::min(W, H);
+        if (W < 250) W = 250;
         H = W;
-        if (W < 270) W = 270;
-        if (H < 270) H = 270;
         
-        p.diameter = H;
+        p.diameter = W;
 
         Fl_Group::resize(X, Y, W, H);
     }

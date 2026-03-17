@@ -71,11 +71,15 @@ namespace mrv
         case FL_FOCUS:
         case FL_UNFOCUS:
             return 1;
+        case FL_MOVE:
+            window()->cursor(FL_CURSOR_HAND);
+            return 1;
         case FL_ENTER:
-            take_focus();
+            //take_focus();
             return 1;
         case FL_LEAVE:
-            Fl::focus(App::ui->uiView);
+            //Fl::focus(App::ui->uiView);
+
             // If user pressed button3 while dragging, the window would freeze.
             // This should avoid that.
             if (Fl::event_button3())

@@ -61,7 +61,7 @@ namespace mrv
             int Y = g->y();
 
             // Create a square vectorscope
-            r.vectorscope = new Vectorscope(X, Y, 270, 270);
+            r.vectorscope = new Vectorscope(X, Y, g->w(), g->w());
             r.vectorscope->main(p.ui);
 
             g->resizable(r.vectorscope);

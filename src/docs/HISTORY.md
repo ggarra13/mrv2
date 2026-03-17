@@ -47,11 +47,14 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
+- This update concentrates on UI improvements and user friendliness.
 - Improved Timecode input widget skipping over : and ; and prevent an invalid time (ie. --:--:--:--).
-- Fixed Log Panel becoming huge in height when dragging from one Window to another with different scaling factors.
+- Fixed Log Panel becoming huge in height when dragging from one Window to another with different scaling factors.  It was a Windows bug.
 - Fixed menus in FLTK potentially appearing floating in space with two screens of different scaling factors.
 - Fixed Panels saving and loading positions on multiple screen setups with different scaling factors on Windows.
 - Fixed timeline and pixel toolbar stretching outside the main window when there was a window with a bigger scale factor than the window that was running vmrv2 on (Linux Wayland issue)
+- Incremented the margins of floating panels to 4 pixels to make them easier to resize.
+- Made the vectorscope smaller so it fits properly on side panel.
 
 
 v1.5.8

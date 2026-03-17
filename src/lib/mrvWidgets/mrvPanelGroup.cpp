@@ -153,8 +153,8 @@ namespace mrv
             
             dock->remove(this);
             tw->add(this);  // move the tool group into the floating window
-            position(1, 1); // align group in floating window (needed)
-            size(W - kMargin, H - kMargin); // resize to fit (needed)
+            position(kMargin, kMargin); // align group in floating window (needed)
+            size(W - kMargin * 2, H - kMargin * 2); // resize to fit (needed)
             tw->resizable(this);
             tw->resize(X, Y, W, H);
             tw->show();     // show floating window
@@ -455,8 +455,8 @@ namespace mrv
         tw->screen_num(N);
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
-        this->position(1, 1);
-        this->size(W - kMargin, H - kMargin);
+        this->position(kMargin, kMargin);
+        this->size(W - kMargin * 2, H - kMargin * 2);
         tw->resizable(0);
         tw->resize(X, Y, W, H);
         tw->resizable(this);
