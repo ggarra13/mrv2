@@ -2809,8 +2809,6 @@ namespace tl
                     if (!isHDRVideo)
                     {
                         // Strict gamut mapping.
-                        // Maps BT709 exactly to its correct coords in BT.2020
-                        cmap.intent = PL_INTENT_RELATIVE_COLORIMETRIC;
                         cmap.gamut_mapping = &pl_gamut_map_clip;
 
                         // Strict SDR passthrough (we need to use spline not
