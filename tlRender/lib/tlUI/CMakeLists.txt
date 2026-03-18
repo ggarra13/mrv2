@@ -5,7 +5,6 @@ set(HEADERS
     IWidget.h
     IWidgetInline.h
     IWidgetOptions.h
-    IWidgetPopup.h
     IWindow.h
     Init.h
     Label.h
@@ -25,7 +24,6 @@ set(SOURCE
     GridLayout.cpp
     IWidget.cpp
     IWidgetOptions.cpp
-    IWidgetPopup.cpp
     IWindow.cpp
     Init.cpp
     Label.cpp
