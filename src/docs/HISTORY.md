@@ -62,6 +62,7 @@ ChangeLog
 - Fixed a potential hanging on the Vulkan thumbnail system.  If a thumbnail cannot be gotten in two seconds, it will default to black.
 - Made missing media files in session files ask if they want to be changed for another media file with a file requester when loaded and media cannot be read.
 - Cleaned up Darby's tlRender code stripping it to its minimum.  It is now faster, smaller and compiles faster.
+- Fixed resizing of Pixel Bar under X11 (Wayland was OK).
   
 
 v1.5.8

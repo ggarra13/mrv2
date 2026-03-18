@@ -131,7 +131,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {0 0 934 56}
+  xywh {888 938 934 56} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -451,7 +451,7 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class TimelineClass {open selected
+widget_class TimelineClass {open
   xywh {0 0 934 56} box NO_BOX hide resizable
   class Fl_Double_Window
 } {
@@ -879,7 +879,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 934 674} type Double color 1 align 80 resizable
+      xywh {0 65 934 674} type Double color 1 align 80 resizable
       class {mrv::MainWindow} size_range {934 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -1146,7 +1146,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
           }
         }
         Fl_Tile uiTileGroup {
-          label TileGroup open
+          label TileGroup
           xywh {0 59 934 531} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
@@ -1510,7 +1510,7 @@ settings->setValue( mrv::kPenColorA, a);}
           }
         }
         Fl_Group uiBottomBar {
-          label BottomBar open
+          label BottomBar
           xywh {0 590 934 29} box FLAT_BOX labeltype NO_LABEL
         } {
           Fl_Group uiTimeWindow {open
@@ -1521,7 +1521,7 @@ settings->setValue( mrv::kPenColorA, a);}
           } {}
         }
         Fl_Group uiPixelBar {
-          label PixelBar open
+          label PixelBar open selected
           xywh {0 619 934 30} box FLAT_BOX color 56 labeltype NO_LABEL labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
