@@ -480,14 +480,15 @@ namespace mrv
                     replace_path(path);
                     while (!file::isReadable(path))
                     {
-                        std::string prefix = "Sequence";
+                        std::string msg;
                         if (file::isMovie(item.path))
                         {
-                            prefix = "Movie File";
+                            msg = string::Format(_("Movie File '{0}' is not readable.\n\nDo you want to replace it with another?")).arg(path);
                         }
-                        const std::string msg = string::Format(_("{0} '{1}' is not readable.\n\nDo you want to replace it with another?"))
-                                                .arg(prefix)
-                                                .arg(path);
+                        else
+                        {
+                            msg = string::Format(_("Sequence '{0}' is not readable.\n\nDo you want to replace it with another?")).arg(path);
+                        }
                         int ok = fl_choice(msg.c_str(), _("No"), _("Yes"), NULL, NULL);
                         if (ok)
                         {
