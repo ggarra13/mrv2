@@ -50,7 +50,8 @@ namespace mrv
     public:
         // Normal FLTK constructors
         PanelWindow(int w, int h, const char* l = 0);
-        PanelWindow(int x, int y, int w, int h, const char* l = 0);
+        PanelWindow(int x, int y, int w, int h, const char* l = 0,
+                    const bool parented_to_main = true);
 
         void update_resize();
         

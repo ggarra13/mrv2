@@ -87,10 +87,10 @@ namespace mrv
         }
     }
 
-    void PanelGroup::set_Fl_Group()
+    void PanelGroup::set_Fl_Group(const std::string label)
     {
         Fl_Group::current(0);
-        if (desktop::Wayland())
+        if (desktop::Wayland() && label != _("Python"))
         {
             Fl_Group::current(dock->top_window());
         }
@@ -145,9 +145,13 @@ namespace mrv
                 H = H2;
             assert(H != 0);
 
-            set_Fl_Group();
+            set_Fl_Group(label);
 
-            tw = new PanelWindow(X, Y, W, H);
+            bool parented_to_main = true;
+            if (Fl_Group::current() != nullptr)
+                parented_to_main = false;
+            
+            tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
             tw->end();
             tw->screen_num(N);
             
@@ -449,8 +453,13 @@ namespace mrv
 
         // create a floating toolbar window
         // Ensure the window is not created as a child of its own inner group!
-        set_Fl_Group();
-        tw = new PanelWindow(X, Y, W, H);
+        set_Fl_Group(lbl);
+        
+        bool parented_to_main = true;
+        if (Fl_Group::current() != nullptr)
+            parented_to_main = false;
+            
+        tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
         tw->end();
         tw->screen_num(N);
         docked(false); // NOT docked

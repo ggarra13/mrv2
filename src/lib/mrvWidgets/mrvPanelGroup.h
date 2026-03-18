@@ -31,7 +31,7 @@ namespace mrv
         void create_floating(
             DockGroup* d, int x, int y, int w, int h, int n, const char* l);
 
-        void set_Fl_Group();
+        void set_Fl_Group(const std::string label);
         
     protected:
         // Widgets used by the toolbar

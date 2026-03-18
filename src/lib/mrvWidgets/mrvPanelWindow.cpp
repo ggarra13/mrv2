@@ -110,10 +110,12 @@ namespace mrv
     }
     
     // constructors
-    PanelWindow::PanelWindow(int x, int y, int w, int h, const char* l) :
+    PanelWindow::PanelWindow(int x, int y, int w, int h, const char* l,
+                             const bool parented_to_main) :
         Fl_Double_Window(x, y, w, h, l)
     {
-        allow_expand_outside_parent();
+        if (parented_to_main)
+            allow_expand_outside_parent();
 
         newX = x;
         newY = y;
