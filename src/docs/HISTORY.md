@@ -59,6 +59,7 @@ ChangeLog
 - Modified Edit Menu to make it more clear.
 - Move Edit Associated to Edit Menu.
 - Fixed Trim editing of Transitions hanging.
+- Fixed a potential hanging on the Vulkan thumbnail system.  If a thumbnail cannot be gotten in two seconds, it will default to black.
 
 
 v1.5.8
