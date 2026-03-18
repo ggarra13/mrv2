@@ -60,7 +60,8 @@ ChangeLog
 - Move Edit Associated to Edit Menu.
 - Fixed Trim editing of Transitions hanging.
 - Fixed a potential hanging on the Vulkan thumbnail system.  If a thumbnail cannot be gotten in two seconds, it will default to black.
-
+- Made missing media files in session files ask if they want to be changed for another media file with a file requester when loaded and media cannot be read.
+  
 
 v1.5.8
 ======
