@@ -2,7 +2,6 @@ set(HEADERS
     DrawUtil.h
     Event.h
     GridLayout.h
-    IPopup.h
     IWidget.h
     IWidgetInline.h
     IWidgetOptions.h
@@ -24,7 +23,6 @@ set(SOURCE
     DrawUtil.cpp
     Event.cpp
     GridLayout.cpp
-    IPopup.cpp
     IWidget.cpp
     IWidgetOptions.cpp
     IWidgetPopup.cpp

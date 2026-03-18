@@ -4,8 +4,6 @@
 
 #include <tlUI/IWindow.h>
 
-#include <tlUI/IPopup.h>
-
 namespace tl
 {
     namespace ui
@@ -322,16 +320,6 @@ namespace tl
                     {
                         p.mousePress = *i;
                         break;
-                    }
-                }
-
-                // Close popups.
-                auto j = widgets.begin();
-                for (; j != i && j != widgets.end(); ++j)
-                {
-                    if (auto popup = std::dynamic_pointer_cast<IPopup>(*j))
-                    {
-                        popup->close();
                     }
                 }
             }
