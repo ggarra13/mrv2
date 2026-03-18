@@ -1180,7 +1180,7 @@ namespace tl
 
                                 int tries = 0;
                                 void* imageData = nullptr;
-                                while (tries < 10 &&
+                                while (tries < 50 &&
                                        !(imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
                                     ++tries;
                                         
@@ -1283,7 +1283,7 @@ namespace tl
 
                                     int tries = 0;
                                     void* imageData = nullptr;
-                                    while (tries < 10 &&
+                                    while (tries < 50 &&
                                            !(imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
                                         ++tries;
                                         
