@@ -11,14 +11,12 @@ set(HEADERS
     IWidgetPopup.h
     IWindow.h
     
-    IconLibrary.h
-    
     Init.h
     Label.h
     LayoutUtil.h
     ScrollArea.h
     ScrollWidget.h
-    ScrollBar.h      # used in ScrollWidget
+    ScrollBar.h
     Style.h
     StyleInline.h
 )
@@ -35,7 +33,6 @@ set(SOURCE
     IWidgetOptions.cpp
     IWidgetPopup.cpp
     IWindow.cpp
-    IconLibrary.cpp
     Init.cpp
     Label.cpp
     LayoutUtil.cpp

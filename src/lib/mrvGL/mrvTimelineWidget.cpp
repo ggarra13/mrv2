@@ -201,7 +201,6 @@ namespace mrv
             mrv::TimeUnits units = mrv::TimeUnits::Timecode;
 
             std::shared_ptr<ui::Style> style;
-            std::shared_ptr<ui::IconLibrary> iconLibrary;
             std::shared_ptr<image::FontSystem> fontSystem;
             std::shared_ptr<Clipboard> clipboard;
             std::shared_ptr<timeline::IRender> render;
@@ -278,7 +277,6 @@ namespace mrv
             auto settings = ui->app->settings();
 
             p.style = ui::Style::create(context);
-            p.iconLibrary = ui::IconLibrary::create(context);
             p.fontSystem = image::FontSystem::create(context);
             p.clipboard = Clipboard::create(context);
 
@@ -861,7 +859,7 @@ namespace mrv
                         p.render->setOCIOOptions(timeline::OCIOOptions());
                         p.render->setLUTOptions(timeline::LUTOptions());
                         ui::DrawEvent drawEvent(
-                            p.style, p.iconLibrary, p.render, p.fontSystem);
+                            p.style, p.render, p.fontSystem);
                         p.render->setClipRectEnabled(true);
                         _drawEvent(
                             p.timelineWindow, math::Box2i(renderSize), drawEvent);
@@ -1784,7 +1782,7 @@ namespace mrv
         void TimelineWidget::_tickEvent()
         {
             TLRENDER_P();
-            ui::TickEvent tickEvent(p.style, p.iconLibrary, p.fontSystem);
+            ui::TickEvent tickEvent(p.style, p.fontSystem);
             _tickEvent(_p->timelineWindow, true, true, tickEvent);
         }
 
@@ -1826,7 +1824,7 @@ namespace mrv
             TLRENDER_P();
             const float devicePixelRatio = pixelRatio();
             ui::SizeHintEvent sizeHintEvent(
-                p.style, p.iconLibrary, p.fontSystem, devicePixelRatio);
+                p.style, p.fontSystem, devicePixelRatio);
             _sizeHintEvent(p.timelineWindow, sizeHintEvent);
         }
 
