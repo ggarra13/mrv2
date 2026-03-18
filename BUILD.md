@@ -23,6 +23,9 @@ Contents:
 
 # Building
 
+Building mrv2 from scratch with all features can take anywhere from 40 minutes to 2 and a half hours, depending on your machine.
+Building vmrv2 takes about half an hour less.
+
 ## Dependencies
 
 ### RedHat
@@ -61,7 +64,7 @@ sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 	       swig ccache
 
 # If you are building the Vulkan version of vmrv2, you need to install
-# The Vulkan components
+# The VulkanSDK components
 
 #
 # To compile you need a newer compiler than those in Red Hat.
@@ -99,7 +102,7 @@ sudo apt -y install curl build-essential perl git cmake ninja-build \
                     doxygen tk-dev libxt-dev swig ccache
 
 # If you are building the Vulkan version of vmrv2, you need to install
-# The Vulkan components
+# The VulkanSDK components
 
 # Install cpanminus and IPC::Cmd non-interactively for libcrypto building
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
@@ -129,6 +132,10 @@ xcode-select --install
 # Install dependencies
 #
 brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite3 xz zlib ccache
+
+# If you are building the Vulkan version of vmrv2, you need to install
+# The VulkanSDK components.  You don't need to install MoltenVk as it is built
+# from source.
 
 #
 # rustup for cargo (needed for libdovi)
