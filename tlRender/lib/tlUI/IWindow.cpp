@@ -4,7 +4,6 @@
 
 #include <tlUI/IWindow.h>
 
-#include <tlUI/IClipboard.h>
 #include <tlUI/IPopup.h>
 
 namespace tl
@@ -27,7 +26,6 @@ namespace tl
             math::Vector2i dndCursorHotspot;
             std::weak_ptr<IWidget> dndHover;
 
-            std::shared_ptr<IClipboard> clipboard;
         };
 
         IWindow::IWindow() :
@@ -53,16 +51,6 @@ namespace tl
                 widget->keyFocusEvent(true);
                 _updates |= Update::Draw;
             }
-        }
-
-        const std::shared_ptr<IClipboard>& IWindow::getClipboard() const
-        {
-            return _p->clipboard;
-        }
-
-        void IWindow::setClipboard(const std::shared_ptr<IClipboard>& value)
-        {
-            _p->clipboard = value;
         }
 
         void IWindow::setVisible(bool value)

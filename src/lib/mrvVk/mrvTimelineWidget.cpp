@@ -27,7 +27,6 @@
 #include <tlTimelineVk/Render.h>
 #include <tlTimelineVk/RenderShadersBinary.h>
 
-#include <tlUI/IClipboard.h>
 #include <tlUI/IWindow.h>
 
 #include <tlVk/Init.h>
@@ -138,42 +137,6 @@ namespace mrv
             }
         };
 
-        class Clipboard : public ui::IClipboard
-        {
-            TLRENDER_NON_COPYABLE(Clipboard);
-
-        public:
-            void _init(const std::shared_ptr<system::Context>& context)
-            {
-                IClipboard::_init(context);
-            }
-
-            Clipboard() {}
-
-        public:
-            ~Clipboard() override {}
-
-            static std::shared_ptr<Clipboard>
-            create(const std::shared_ptr<system::Context>& context)
-            {
-                auto out = std::shared_ptr<Clipboard>(new Clipboard);
-                out->_init(context);
-                return out;
-            }
-
-            std::string getText() const override
-            {
-                std::string text;
-                if (Fl::event_text())
-                    text = Fl::event_text();
-                return text;
-            }
-
-            void setText(const std::string& value) override
-            {
-                Fl::copy(value.c_str(), value.size());
-            }
-        };
     } // namespace
 
     namespace vulkan
@@ -209,7 +172,6 @@ namespace mrv
             // Render data
             std::shared_ptr<ui::Style> style;
             std::shared_ptr<image::FontSystem> fontSystem;
-            std::shared_ptr<Clipboard> clipboard;
             std::shared_ptr<timeline_vlk::Render> render;
             timelineui_vk::DisplayOptions displayOptions;
             std::shared_ptr<timelineui_vk::TimelineWidget> timelineWidget;
@@ -271,10 +233,8 @@ namespace mrv
 
             p.style = ui::Style::create(context);
             p.fontSystem = image::FontSystem::create(context);
-            p.clipboard = Clipboard::create(context);
 
             p.timelineWindow = TimelineWindow::create(context);
-            p.timelineWindow->setClipboard(p.clipboard);
             
             
             p.timelineWidget =
