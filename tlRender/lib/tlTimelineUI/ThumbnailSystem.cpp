@@ -1177,14 +1177,19 @@ namespace tl
                                 vkEndCommandBuffer(cmd);
                 
                                 p.thumbnailThread.buffer->submitReadback(cmd);
-                                    
+
+                                int tries = 0;
                                 void* imageData = nullptr;
-                                while (! (imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
-                                    ;
+                                while (tries < 10 &&
+                                       !(imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
+                                    ++tries;
                                         
-                                    
-                                std::memcpy(image->getData(), imageData,
-                                            image->getDataByteCount());
+                                if (imageData)
+                                    std::memcpy(image->getData(), imageData,
+                                                image->getDataByteCount());
+                                else
+                                    std::memset(image->getData, 0,
+                                                image->getDataByteCount());
                                     
                                 p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                             }
@@ -1276,12 +1281,18 @@ namespace tl
                 
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
-
+                                    int tries = 0;
                                     void* imageData = nullptr;
-                                    while (! (imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
-                                        ;
-
-                                    std::memcpy(image->getData(), imageData, image->getDataByteCount());
+                                    while (tries < 10 &&
+                                           !(imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
+                                        ++tries;
+                                        
+                                    if (imageData)
+                                        std::memcpy(image->getData(), imageData,
+                                                    image->getDataByteCount());
+                                    else
+                                        std::memset(image->getData, 0,
+                                                    image->getDataByteCount());
                                         
                                     vkEndCommandBuffer(cmd);
 
