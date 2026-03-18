@@ -157,6 +157,9 @@ namespace mrv
 
             // Set the start and end frame
             const double rate = player->defaultSpeed();
+            player->setInOutRange(player->timeRange()); // needed
+            player->setSpeed(rate); // needed
+            
             const auto one_frame = RationalTime(1.0, rate);
             const auto startTime = RationalTime(0.0, rate);
             auto endTime = startTime + timeline->duration() - one_frame;
@@ -2814,6 +2817,8 @@ namespace mrv
                         videoRate = track->trimmed_range().duration().rate();
                 }
             }
+            if (videoRate == 0.F)
+                videoRate = 24.F;
 
             auto annotations = addAnnotations(
                 timelineDuration.rescaled_to(videoRate),
