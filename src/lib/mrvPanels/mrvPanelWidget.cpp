@@ -58,6 +58,7 @@ namespace mrv
             int Y = dock->y();
             int W = dock->w();
             int H = dg->h();
+            int screen = 0;
 
             label = lbl;
             SettingsObject* settings = App::app->settings();
@@ -68,6 +69,10 @@ namespace mrv
 
             if (window)
             {
+                key = prefix + "/Screen";
+                value = settings->getValue<std::any>(key);
+                screen = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+                
                 key = prefix + "/WindowX";
                 value = settings->getValue<std::any>(key);
                 X = std_any_empty(value) ? X : std_any_cast<int>(value);
@@ -83,8 +88,11 @@ namespace mrv
                 key = prefix + "/WindowH";
                 value = settings->getValue<std::any>(key);
                 H = std_any_empty(value) ? H : std_any_cast<int>(value);
+
+                // For panels that resize based on content, we store 0,
+                // and we start with 58.
                 if (H <= 0)
-                    H = 24 + 30;
+                    H = 28 + 30;
 
                 //
                 // Windows' default heights based on images loaded
@@ -110,7 +118,7 @@ namespace mrv
                     removePanels(p.ui);
             }
 
-            g = new PanelGroup(dock, window, X, Y, W, H, _(lbl));
+            g = new PanelGroup(dock, window, X, Y, W, H, screen, _(lbl));
             g->setLabel(label);
 
             begin_group();
@@ -172,10 +180,6 @@ namespace mrv
             std::string key = prefix + "/Window";
             int window = !g->docked();
 
-            // \@bug: Wayland currently cannot store properly the positions of
-            //        panel windows.
-            // if (desktop::Wayland())
-            //     window = 0;
             
             settings->setValue(key, window);
 
@@ -186,6 +190,12 @@ namespace mrv
             {
                 PanelWindow* w = g->get_window();
 
+                key = prefix + "/Screen";
+                settings->setValue(key, w->screen_num());
+                
+                // \@bug: Wayland currently cannot store properly the absolute
+                //        positions of panel windows, but we can use relative
+                //        positions to the main window.
                 key = prefix + "/WindowX";
                 settings->setValue(key, w->x());
 

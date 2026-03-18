@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_linux.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_linux.yml)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_linux_arm64.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_linux_arm64.yml)
-[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_macos13.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_macos15.yml)
+[![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_macos15.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_macos15.yml)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_win64.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_win64.yml)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/full_macos14.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/full_macos14.yml)
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_linux.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_linux.yml)
@@ -54,7 +54,7 @@ installation on Linux, however is one supporting GNOME 48+.
 
 ## Compatibility
 
-mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 10+ or Ubuntu 22.04+, and macOS 11.0+ Intel or Silicon.
+mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ubuntu 22.04+, and macOS 11.0+ Intel or Silicon.
 
 ## Notes on installation
 

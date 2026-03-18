@@ -584,7 +584,7 @@ namespace mrv
             {
                 version_command = "fluxbox --version";
             }
-            else if (wm == "gnome-shell")
+            else if (wm == "gnome-shell" || wm == "mutter")
             {
                 version_command = "gnome-shell --version";
             }

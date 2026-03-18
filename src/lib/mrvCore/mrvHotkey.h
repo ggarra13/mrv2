@@ -354,6 +354,7 @@ namespace mrv
     extern Hotkey kEditRemoveVideoGap;
     extern Hotkey kEditInsertAudioGap;
     extern Hotkey kEditRemoveAudioGap;
+    extern Hotkey kEditRemoveSelected;
 
     extern Hotkey kEditAddTransition;
 

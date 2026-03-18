@@ -93,18 +93,18 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {1155 926 847 449} type Double resizable
-      code0 {main = m;} visible
+      xywh {286 309 847 449} type Double hide resizable
+      code0 {main = m;}
     } {
       Fl_Group {} {open
-        xywh {0 0 853 466} box FLAT_BOX
+        xywh {0 0 847 449} box FLAT_BOX
       } {
         Fl_Group {} {open
-          xywh {280 28 573 428}
+          xywh {280 28 566 420}
         } {
           Fl_Wizard uiWizard {
             label Settings open
-            xywh {280 28 573 380} box PLASTIC_UP_BOX labelcolor 32
+            xywh {280 28 565 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
               label {User Interface}
@@ -895,7 +895,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label HDR
-              xywh {280 28 573 369} box EMBOSSED_BOX align 5 hide
+              xywh {280 28 560 369} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label HDR open
@@ -1049,8 +1049,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
               }
             }
             Fl_Group {} {
-              label {HDR Peak Detection} open
-              xywh {280 38 573 369} box EMBOSSED_BOX align 5 hide
+              label {HDR Peak Detection}
+              xywh {280 38 565 369} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label {HDR Peak Detection}
@@ -1070,8 +1070,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   }
                 }
                 Fl_Value_Input uiPrefsHDRPeakPercentile {
-                  label {HDR Percentile}
-                  tooltip {When less than 100, helps find the peak brightness ignoring the top 1% outliers.} xywh {629 162 64 28} minimum 0.1 maximum 100 step 0.1 value 100 textcolor 56
+                  label {HDR Percentile} selected
+                  tooltip {When less than 100, helps find the peak brightness ignoring the top 1 percent outliers.} xywh {629 162 64 28} minimum 0.1 maximum 100 step 0.1 value 100 textcolor 56
                 }
                 Fl_Value_Input uiPrefsHDRPeakSmoothingPeriod {
                   label {Smoothing Period}
@@ -1245,7 +1245,7 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label Edit
+              label Edit open
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -1296,7 +1296,7 @@ v->uiPrefsFPS->value( g );}
             }
             Fl_Group {} {
               label OCIO open
-              xywh {288 37 555 361} box EMBOSSED_BOX align 5
+              xywh {288 37 555 361} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label OCIO open
@@ -1357,7 +1357,7 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
                   tooltip {Pick a config.ocio file from disk.} xywh {751 182 55 31}
                 }
                 Fl_Light_Button uiOCIOUseDefaultDisplayView {
-                  label {Use Default Display and View} selected
+                  label {Use Default Display and View}
                   tooltip {When this option is on, and your config.ocio has a default display and view, it will be used to be set as default.} xywh {404 236 350 30}
                 }
                 Fl_Light_Button uiOCIONotOnVideos {
@@ -1878,7 +1878,7 @@ v->uiOCIO_Display_View->do_callback();}
             }
             Fl_Group {} {
               label {Voice Annotations}
-              tooltip {Voice Annotation Preferences.} xywh {298 47 555 361} box EMBOSSED_BOX align 5 hide
+              tooltip {Voice Annotation Preferences.} xywh {298 47 545 361} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Voice Annotations} open
@@ -1933,7 +1933,7 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
             }
             Fl_Group {} {
               label ComfyUI
-              tooltip {Here are the current settings to interact with ComfyUI.  It requires installation of mrv2's comfyUI nodes.} xywh {298 47 555 360} box EMBOSSED_BOX align 5 hide
+              tooltip {Here are the current settings to interact with ComfyUI.  It requires installation of mrv2's comfyUI nodes.} xywh {298 47 545 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {352 70 446 313}
@@ -2038,8 +2038,8 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
               }
             }
           }
-          Fl_Group {} {
-            xywh {320 412 470 44}
+          Fl_Group {} {open
+            xywh {324 408 470 40}
           } {
             Fl_Button {} {
               label Default
@@ -2055,21 +2055,21 @@ if (ok)
 // reset and reload preferences
 mrv::Preferences::reset();
 mrv::Preferences::load(false, false);}
-              tooltip {Reset settings to the default.} xywh {333 418 132 31}
+              tooltip {Reset settings to the default.} xywh {337 411 132 31}
             }
             Fl_Button {} {
               label Revert
               user_data this user_data_type {PreferencesUI*}
               callback {// reload preferences
 mrv::Preferences::load(false, false);}
-              tooltip {Revert settings to last saved preferences.} xywh {489 418 132 31}
+              tooltip {Revert settings to last saved preferences.} xywh {493 411 132 31}
             }
             Fl_Button {} {
               label OK
               user_data m user_data_type {ViewerUI*}
               callback {v->uiPrefs->uiMain->hide();
 mrv::Preferences::run();}
-              tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {648 418 132 31}
+              tooltip {Accept settings but don't save.  They will get saved when exiting the program.} xywh {652 411 132 31}
             }
           }
         }

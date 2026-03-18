@@ -29,9 +29,9 @@ namespace mrv
         void create_dockable_group(bool docked, const char* lbl);
         void create_docked(DockGroup* d, const char* lbl);
         void create_floating(
-            DockGroup* d, int x, int y, int w, int h, const char* l);
+            DockGroup* d, int x, int y, int w, int h, int n, const char* l);
 
-        void set_Fl_Group();
+        void set_Fl_Group(const std::string label);
         
     protected:
         // Widgets used by the toolbar
@@ -53,7 +53,8 @@ namespace mrv
     public:
         // Constructors for docked/floating window
         PanelGroup(
-            DockGroup* d, int f, int x, int y, int w, int h, const char* l = 0);
+            DockGroup* d, int f, int x, int y, int w, int h,
+            int n, const char* l = 0);
 
         // Get the toolwindow or null if docked
         DragButton* get_dragger() const { return dragger; }

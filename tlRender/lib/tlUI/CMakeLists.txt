@@ -2,27 +2,18 @@ set(HEADERS
     DrawUtil.h
     Event.h
     GridLayout.h
-    IButton.h
-    IClipboard.h
-    IDialog.h
-    IMenuPopup.h
-    IPopup.h
     IWidget.h
     IWidgetInline.h
     IWidgetOptions.h
-    IWidgetPopup.h
     IWindow.h
-    IconLibrary.h
     Init.h
     Label.h
     LayoutUtil.h
-    RowLayout.h
     ScrollArea.h
     ScrollWidget.h
     ScrollBar.h
     Style.h
     StyleInline.h
-    ToolTip.h
 )
 set(HEADERS_PRIVATE
 )
@@ -31,25 +22,16 @@ set(SOURCE
     DrawUtil.cpp
     Event.cpp
     GridLayout.cpp
-    IButton.cpp
-    IClipboard.cpp
-    IDialog.cpp
-    IMenuPopup.cpp
-    IPopup.cpp
     IWidget.cpp
     IWidgetOptions.cpp
-    IWidgetPopup.cpp
     IWindow.cpp
-    IconLibrary.cpp
     Init.cpp
     Label.cpp
     LayoutUtil.cpp
-    RowLayout.cpp
     ScrollArea.cpp
     ScrollWidget.cpp
     ScrollBar.cpp
     Style.cpp
-    ToolTip.cpp
 )
 
 set(LIBRARIES_PRIVATE)

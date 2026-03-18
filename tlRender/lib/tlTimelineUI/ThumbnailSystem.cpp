@@ -1177,14 +1177,29 @@ namespace tl
                                 vkEndCommandBuffer(cmd);
                 
                                 p.thumbnailThread.buffer->submitReadback(cmd);
-                                    
+
+                                auto start = std::chrono::steady_clock::now();
                                 void* imageData = nullptr;
-                                while (! (imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
-                                    ;
+                                while (!(imageData = p.thumbnailThread.buffer->getLatestReadPixels()))
+                                {
+                                    const auto now = std::chrono::steady_clock::now();
+
+                                    // Calculate the total elapsed duration since start
+                                    std::chrono::duration<float> elapsed_duration = now - start;
+
+                                    // Get elapsed time in milliseconds (long long)
+                                    const auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_duration).count();
+                                    // If more than 2 seconds have passed, exit.
+                                    if (elapsed_ms > 2000)
+                                        break;
+                                }
                                         
-                                    
-                                std::memcpy(image->getData(), imageData,
-                                            image->getDataByteCount());
+                                if (imageData)
+                                    std::memcpy(image->getData(), imageData,
+                                                image->getDataByteCount());
+                                else
+                                    std::memset(image->getData(), 0,
+                                                image->getDataByteCount());
                                     
                                 p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                             }
@@ -1276,12 +1291,29 @@ namespace tl
                 
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
-
+                                    
+                                    auto start = std::chrono::steady_clock::now();
                                     void* imageData = nullptr;
-                                    while (! (imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
-                                        ;
+                                    while (!(imageData = p.thumbnailThread.buffer->getLatestReadPixels()))
+                                    {
+                                        const auto now = std::chrono::steady_clock::now();
 
-                                    std::memcpy(image->getData(), imageData, image->getDataByteCount());
+                                        // Calculate the total elapsed duration since start
+                                        std::chrono::duration<float> elapsed_duration = now - start;
+
+                                        // Get elapsed time in milliseconds (long long)
+                                        const auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_duration).count();
+                                        // If more than 2 seconds have passed, exit.
+                                        if (elapsed_ms > 2000)
+                                            break;
+                                    }
+                                    
+                                    if (imageData)
+                                        std::memcpy(image->getData(), imageData,
+                                                    image->getDataByteCount());
+                                    else
+                                        std::memset(image->getData(), 0,
+                                                    image->getDataByteCount());
                                         
                                     vkEndCommandBuffer(cmd);
 

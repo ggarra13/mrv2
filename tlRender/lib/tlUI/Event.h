@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <tlUI/IconLibrary.h>
 #include <tlUI/Style.h>
 
 #include <tlTimeline/IRender.h>
@@ -32,11 +31,9 @@ namespace tl
             TickEvent();
             TickEvent(
                 const std::shared_ptr<Style>& style,
-                const std::shared_ptr<IconLibrary>& iconLibrary,
                 const std::shared_ptr<image::FontSystem>& fontSystem);
 
             std::shared_ptr<Style> style;
-            std::shared_ptr<IconLibrary> iconLibrary;
             std::shared_ptr<image::FontSystem> fontSystem;
         };
 
@@ -46,12 +43,10 @@ namespace tl
             SizeHintEvent();
             SizeHintEvent(
                 const std::shared_ptr<Style>& style,
-                const std::shared_ptr<IconLibrary>& iconLibrary,
                 const std::shared_ptr<image::FontSystem>& fontSystem,
                 float displayScale);
 
             std::shared_ptr<Style> style;
-            std::shared_ptr<IconLibrary> iconLibrary;
             std::shared_ptr<image::FontSystem> fontSystem;
             float displayScale = 1.F;
         };
@@ -62,12 +57,10 @@ namespace tl
             DrawEvent();
             DrawEvent(
                 const std::shared_ptr<Style>& style,
-                const std::shared_ptr<IconLibrary>& iconLibrary,
                 const std::shared_ptr<timeline::IRender>& render,
                 const std::shared_ptr<image::FontSystem>& fontSystem);
 
             std::shared_ptr<Style> style;
-            std::shared_ptr<IconLibrary> iconLibrary;
             std::shared_ptr<timeline::IRender> render;
             std::shared_ptr<image::FontSystem> fontSystem;
         };

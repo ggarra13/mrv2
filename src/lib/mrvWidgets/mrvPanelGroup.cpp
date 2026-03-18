@@ -87,10 +87,10 @@ namespace mrv
         }
     }
 
-    void PanelGroup::set_Fl_Group()
+    void PanelGroup::set_Fl_Group(const std::string label)
     {
         Fl_Group::current(0);
-        if (desktop::Wayland())
+        if (desktop::Wayland() && label != _("Python"))
         {
             Fl_Group::current(dock->top_window());
         }
@@ -104,6 +104,7 @@ namespace mrv
             int H = h() + kMargin;
             int X = Fl::event_x_root() - 10;
             int Y = Fl::event_y_root() - 35;
+            int N = 0;
             docked(false); // toolgroup is no longer docked
 
             auto settings = App::app->settings();
@@ -113,6 +114,10 @@ namespace mrv
             std::string key;
 
             std_any value;
+
+            key = prefix + "/Screen";
+            value = settings->getValue<std::any>(key);
+            N = std_any_empty(value) ? 0 : std_any_cast<int>(value);
 
             // If user undocked the window with the undock button,
             // check to see if we have window X and Y saved positions.
@@ -140,14 +145,20 @@ namespace mrv
                 H = H2;
             assert(H != 0);
 
-            set_Fl_Group();
+            set_Fl_Group(label);
 
-            tw = new PanelWindow(X, Y, W, H);
+            bool parented_to_main = true;
+            if (Fl_Group::current() != nullptr)
+                parented_to_main = false;
+            
+            tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
             tw->end();
+            tw->screen_num(N);
+            
             dock->remove(this);
             tw->add(this);  // move the tool group into the floating window
-            position(1, 1); // align group in floating window (needed)
-            size(W - kMargin, H - kMargin); // resize to fit (needed)
+            position(kMargin, kMargin); // align group in floating window (needed)
+            size(W - kMargin * 2, H - kMargin * 2); // resize to fit (needed)
             tw->resizable(this);
             tw->resize(X, Y, W, H);
             tw->show();     // show floating window
@@ -321,7 +332,7 @@ namespace mrv
     // Constructors for docked/floating window
     // WITH x, y coordinates
     PanelGroup::PanelGroup(
-        DockGroup* dk, int floater, int X, int Y, int W, int H,
+        DockGroup* dk, int floater, int X, int Y, int W, int H, int N,
         const char* lbl) :
         Fl_Group(0, 0, W, H),
         tw(nullptr)
@@ -329,7 +340,7 @@ namespace mrv
         assert(H > 0);
         if ((floater) && (dk)) // create floating
         {
-            create_floating(dk, X, Y, W, H, lbl);
+            create_floating(dk, X, Y, W, H, N, lbl);
         }
         else if (dk) // create docked
         {
@@ -433,7 +444,7 @@ namespace mrv
     }
 
     void PanelGroup::create_floating(
-        DockGroup* dk, int X, int Y, int W, int H, const char* lbl)
+        DockGroup* dk, int X, int Y, int W, int H, int N, const char* lbl)
     {
         // create the group itself
         create_dockable_group(false, lbl);
@@ -442,13 +453,19 @@ namespace mrv
 
         // create a floating toolbar window
         // Ensure the window is not created as a child of its own inner group!
-        set_Fl_Group();
-        tw = new PanelWindow(X, Y, W, H);
+        set_Fl_Group(lbl);
+        
+        bool parented_to_main = true;
+        if (Fl_Group::current() != nullptr)
+            parented_to_main = false;
+            
+        tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
         tw->end();
+        tw->screen_num(N);
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
-        this->position(1, 1);
-        this->size(W - kMargin, H - kMargin);
+        this->position(kMargin, kMargin);
+        this->size(W - kMargin * 2, H - kMargin * 2);
         tw->resizable(0);
         tw->resize(X, Y, W, H);
         tw->resizable(this);

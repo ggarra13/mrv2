@@ -26,12 +26,6 @@ namespace tl
             //! Set the widget with key focus.
             void setKeyFocus(const std::shared_ptr<IWidget>&);
 
-            //! Get the clipboard.
-            const std::shared_ptr<IClipboard>& getClipboard() const;
-
-            //! Set the clipboard.
-            void setClipboard(const std::shared_ptr<IClipboard>&);
-
             void setVisible(bool) override;
             void tickEvent(
                 bool parentsVisible, bool parentsEnabled,

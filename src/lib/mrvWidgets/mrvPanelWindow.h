@@ -50,17 +50,18 @@ namespace mrv
     public:
         // Normal FLTK constructors
         PanelWindow(int w, int h, const char* l = 0);
-        PanelWindow(int x, int y, int w, int h, const char* l = 0);
+        PanelWindow(int x, int y, int w, int h, const char* l = 0,
+                    const bool parented_to_main = true);
 
-        void update_drag();
+        void update_resize();
         
         int newX, newY, newW, newH;
         
         virtual ~PanelWindow();
 
-        int handle(int event) FL_OVERRIDE;
-        void resize(int X, int Y, int W, int H) FL_OVERRIDE;
-
+        int handle(int event) override;
+        void resize(int X, int Y, int W, int H) override;
+        
         //! Methods for hiding/showing *all* the floating windows
         static void show_all();
         static void hide_all();

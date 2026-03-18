@@ -47,8 +47,24 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
+- This update concentrates on UI improvements and user friendliness.
 - Improved Timecode input widget skipping over : and ; and prevent an invalid time (ie. --:--:--:--).
-
+- Fixed Log Panel becoming huge in height when dragging from one Window to another with different scaling factors.  It was a Windows bug.
+- Fixed menus in FLTK potentially appearing floating in space with two screens of different scaling factors.
+- Fixed Panels saving and loading positions on multiple screen setups with different scaling factors on Windows.
+- Fixed timeline and pixel toolbar stretching outside the main window when there was a window with a bigger scale factor than the window that was running vmrv2 on (Linux Wayland issue)
+- Incremented the margins of floating panels to 4 pixels to make them easier to resize.
+- Made the vectorscope smaller so it fits properly on the side panel.
+- Fixed EDL and Playlist creation which had gotten broken on v1.5.0 in code simplification.
+- Modified Edit Menu to make it more clear.
+- Move Edit Associated to Edit Menu.
+- Fixed Trim editing of Transitions hanging.
+- Fixed a potential hanging on the Vulkan thumbnail system.  If a thumbnail cannot be gotten in two seconds, it will default to black.
+- Made missing media files in session files ask if they want to be changed for another media file with a file requester when loaded and media cannot be read.
+- Cleaned up Darby's tlRender code stripping it to its minimum.  It is now faster, smaller and compiles faster.
+- Fixed resizing of Pixel Bar under X11 (Wayland was OK).
+- Made Python's Panel menus appear on the correct monitor on multiple monitor setups with several scaling factors on Linux Wayland.  The drawback is that the Python Panel can only be docked with the yellow button, not by going to the dock area like all other panels.
+  
 
 v1.5.8
 ======

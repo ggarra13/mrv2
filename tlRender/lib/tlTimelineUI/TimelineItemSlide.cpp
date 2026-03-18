@@ -14,12 +14,48 @@ namespace tl
         void TimelineItem::_mouseMoveEventSlide(ui::MouseMoveEvent& event)
         {
             TLRENDER_P();
+            if (p.mouse.items.empty())
+                return;
+            switch (p.mouse.mode)
+            {
+            case Private::MouseMode::kNone:
+                break;
+            case Private::MouseMode::Transition:
+            {
+                _mouseMoveEventRoll(event);                
+                break;
+            }
+            case Private::MouseMode::Item:
+            {
+                break;
+            }
+            default:
+                break;
+            }
         }
 
         void TimelineItem::_mouseReleaseEventSlide(ui::MouseClickEvent& event)
         {
             TLRENDER_P();
+            if (p.mouse.items.empty())
+                return;
+            switch (p.mouse.mode)
+            {
+            case Private::MouseMode::CurrentTime:
+            {
+                break;
+            }
+            case Private::MouseMode::Item:
+            {
+                break;
+            }
+            case Private::MouseMode::Transition:
+            {
+                _mouseReleaseEventRoll(event);
+            }
+            default:
+                break;
+            }   
         }
-
     }
 }

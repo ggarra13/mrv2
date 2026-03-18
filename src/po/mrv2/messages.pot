@@ -2,9 +2,10 @@
 # This file is distributed under the same license as the mrv2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.5.8\n"
+"Project-Id-Version: mrv2 v1.5.9\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -419,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -2765,6 +2766,24 @@ msgstr ""
 msgid "Failed to load the file '{0}."
 msgstr ""
 
+msgid ""
+"Movie File '{0}' is not readable.\n"
+"\n"
+"Do you want to replace it with another?"
+msgstr ""
+
+msgid ""
+"Sequence '{0}' is not readable.\n"
+"\n"
+"Do you want to replace it with another?"
+msgstr ""
+
+msgid ""
+"Audio File '{0}' is not readable.\n"
+"\n"
+"Do you want to replace it with another?"
+msgstr ""
+
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr ""
 
@@ -4007,9 +4026,6 @@ msgstr ""
 msgid "Timeline/Editable"
 msgstr ""
 
-msgid "Timeline/Edit Associated Clips"
-msgstr ""
-
 msgid "Timeline/Frame View"
 msgstr ""
 
@@ -4097,6 +4113,9 @@ msgstr ""
 msgid "Image/Compare/%s"
 msgstr ""
 
+msgid "Edit/Associated Clips"
+msgstr ""
+
 msgid "Edit/Frame/Cut"
 msgstr ""
 
@@ -4109,31 +4128,34 @@ msgstr ""
 msgid "Edit/Frame/Insert"
 msgstr ""
 
-msgid "Edit/Audio Clip/Insert"
+msgid "Edit/Time/Audio Clip/Insert"
 msgstr ""
 
-msgid "Edit/Audio Clip/Remove"
+msgid "Edit/Time/Audio Clip/Remove"
 msgstr ""
 
-msgid "Edit/Video Gap/Insert"
+msgid "Edit/Time/Video Gap/Insert"
 msgstr ""
 
-msgid "Edit/Video Gap/Remove"
+msgid "Edit/Time/Video Gap/Remove"
 msgstr ""
 
-msgid "Edit/Audio Gap/Insert"
+msgid "Edit/Time/Audio Gap/Insert"
 msgstr ""
 
-msgid "Edit/Audio Gap/Remove"
+msgid "Edit/Time/Audio Gap/Remove"
 msgstr ""
 
-msgid "Edit/Add Transition"
+msgid "Edit/Selected/Add Transition"
 msgstr ""
 
-msgid "Edit/Slice"
+msgid "Edit/Selected/Remove Items"
 msgstr ""
 
-msgid "Edit/Remove"
+msgid "Edit/Time/Remove Clips"
+msgstr ""
+
+msgid "Edit/Time/Slice"
 msgstr ""
 
 msgid "Edit/Undo"
@@ -6278,8 +6300,8 @@ msgid "HDR Percentile"
 msgstr ""
 
 msgid ""
-"When less than 100, helps find the peak brightness ignoring the top "
-"1% outliers."
+"When less than 100, helps find the peak brightness ignoring the top 1 "
+"percent outliers."
 msgstr ""
 
 msgid "Smoothing Period"
@@ -6487,8 +6509,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -7350,6 +7372,9 @@ msgid "Insert Audio Gap"
 msgstr ""
 
 msgid "Remove Audio Gap"
+msgstr ""
+
+msgid "Remove Selected"
 msgstr ""
 
 msgid "Edit - Add Transition"

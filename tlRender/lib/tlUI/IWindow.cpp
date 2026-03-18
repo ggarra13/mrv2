@@ -4,19 +4,10 @@
 
 #include <tlUI/IWindow.h>
 
-#include <tlUI/ToolTip.h>
-#include <tlUI/IClipboard.h>
-
 namespace tl
 {
     namespace ui
     {
-        namespace
-        {
-            std::chrono::milliseconds toolTipTimeout(1000);
-            float toolTipDistance = 10.F;
-        } // namespace
-
         struct IWindow::Private
         {
             math::Vector2i cursorPos;
@@ -33,11 +24,6 @@ namespace tl
             math::Vector2i dndCursorHotspot;
             std::weak_ptr<IWidget> dndHover;
 
-            std::shared_ptr<ToolTip> toolTip;
-            math::Vector2i toolTipPos;
-            std::chrono::steady_clock::time_point toolTipTimer;
-
-            std::shared_ptr<IClipboard> clipboard;
         };
 
         IWindow::IWindow() :
@@ -63,16 +49,6 @@ namespace tl
                 widget->keyFocusEvent(true);
                 _updates |= Update::Draw;
             }
-        }
-
-        const std::shared_ptr<IClipboard>& IWindow::getClipboard() const
-        {
-            return _p->clipboard;
-        }
-
-        void IWindow::setClipboard(const std::shared_ptr<IClipboard>& value)
-        {
-            _p->clipboard = value;
         }
 
         void IWindow::setVisible(bool value)
@@ -123,34 +99,6 @@ namespace tl
             bool parentsVisible, bool parentsEnabled, const TickEvent& event)
         {
             IWidget::tickEvent(parentsVisible, parentsEnabled, event);
-            TLRENDER_P();
-            const auto toolTipTime = std::chrono::steady_clock::now();
-            const auto toolTipDiff =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    toolTipTime - p.toolTipTimer);
-            if (toolTipDiff > toolTipTimeout && !p.toolTip)
-            {
-                if (auto context = _context.lock())
-                {
-                    std::string text;
-                    auto widgets = _getUnderCursor(p.cursorPos);
-                    while (!widgets.empty())
-                    {
-                        text = widgets.front()->getToolTip();
-                        if (!text.empty())
-                        {
-                            break;
-                        }
-                        widgets.pop_front();
-                    }
-                    if (!text.empty())
-                    {
-                        p.toolTip = ToolTip::create(
-                            text, p.cursorPos, shared_from_this(), context);
-                        p.toolTipPos = p.cursorPos;
-                    }
-                }
-            }
         }
 
         void IWindow::drawOverlayEvent(
@@ -352,17 +300,6 @@ namespace tl
             {
                 _updates |= Update::Draw;
             }
-
-            if (math::length(p.cursorPos - p.toolTipPos) > toolTipDistance)
-            {
-                if (p.toolTip)
-                {
-                    p.toolTip->close();
-                    p.toolTip.reset();
-                }
-                p.toolTipTimer = std::chrono::steady_clock::now();
-                p.toolTipPos = p.cursorPos;
-            }
         }
 
         void IWindow::_mouseButton(int button, bool press, int modifiers)
@@ -383,16 +320,6 @@ namespace tl
                     {
                         p.mousePress = *i;
                         break;
-                    }
-                }
-
-                // Close popups.
-                auto j = widgets.begin();
-                for (; j != i && j != widgets.end(); ++j)
-                {
-                    if (auto popup = std::dynamic_pointer_cast<IPopup>(*j))
-                    {
-                        popup->close();
                     }
                 }
             }

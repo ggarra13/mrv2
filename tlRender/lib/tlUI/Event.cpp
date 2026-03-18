@@ -24,10 +24,8 @@ namespace tl
 
         TickEvent::TickEvent(
             const std::shared_ptr<Style>& style,
-            const std::shared_ptr<IconLibrary>& iconLibrary,
             const std::shared_ptr<image::FontSystem>& fontSystem) :
             style(style),
-            iconLibrary(iconLibrary),
             fontSystem(fontSystem)
         {
         }
@@ -36,11 +34,9 @@ namespace tl
 
         SizeHintEvent::SizeHintEvent(
             const std::shared_ptr<Style>& style,
-            const std::shared_ptr<IconLibrary>& iconLibrary,
             const std::shared_ptr<image::FontSystem>& fontSystem,
             float displayScale) :
             style(style),
-            iconLibrary(iconLibrary),
             fontSystem(fontSystem),
             displayScale(displayScale)
         {
@@ -50,11 +46,9 @@ namespace tl
 
         DrawEvent::DrawEvent(
             const std::shared_ptr<Style>& style,
-            const std::shared_ptr<IconLibrary>& iconLibrary,
             const std::shared_ptr<timeline::IRender>& render,
             const std::shared_ptr<image::FontSystem>& fontSystem) :
             style(style),
-            iconLibrary(iconLibrary),
             render(render),
             fontSystem(fontSystem)
         {

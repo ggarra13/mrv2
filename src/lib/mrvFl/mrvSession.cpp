@@ -478,9 +478,67 @@ namespace mrv
                         audioPath = item.audioPath.get();
 
                     replace_path(path);
+                    while (!file::isReadable(path))
+                    {
+                        std::string msg;
+                        if (file::isMovie(item.path))
+                        {
+                            msg = string::Format(_("Movie File '{0}' is not readable.\n\nDo you want to replace it with another?")).arg(path);
+                        }
+                        else
+                        {
+                            msg = string::Format(_("Sequence '{0}' is not readable.\n\nDo you want to replace it with another?")).arg(path);
+                        }
+                        int ok = fl_choice(msg.c_str(), _("No"), _("Yes"), NULL, NULL);
+                        if (ok)
+                        {
+                            char buf[2048];
+                            fl_getcwd(buf, 2048);
+                            auto files = open_image_file(buf, true);
+                            if (!files.empty())
+                            {
+                                path = files[0];
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    
                     if (!audioPath.empty())
+                    {
                         replace_path(audioPath);
-
+                        
+                        while (!file::isReadable(audioPath))
+                        {
+                            const std::string msg = string::Format(_("Audio File '{0}' is not readable.\n\nDo you want to replace it with another?")).arg(audioPath);
+                            int ok = fl_choice(msg.c_str(), _("No"), _("Yes"), NULL, NULL);
+                            if (ok)
+                            {
+                                char buf[2048];
+                                fl_getcwd(buf, 2048);
+                                auto files = open_image_file(audioPath.c_str(), true);
+                                if (!files.empty())
+                                {
+                                    audioPath = files[0];
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    
                     app->open(path, audioPath);
 
                     // Copy annotations to both item and player
