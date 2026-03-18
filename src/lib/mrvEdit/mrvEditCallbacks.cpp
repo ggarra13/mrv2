@@ -152,14 +152,13 @@ namespace mrv
             auto player = ui->uiView->getTimelinePlayer();
             timeline->set_global_start_time(std::nullopt);
             player->setTimeline(timeline);
+            const double rate = player->defaultSpeed();
+            player->setSpeed(rate); // needed
+            player->setInOutRange(player->timeRange()); // needed
             ui->uiTimeline->setTimelinePlayer(player);
             ui->uiTimeline->redraw();
 
             // Set the start and end frame
-            const double rate = player->defaultSpeed();
-            player->setInOutRange(player->timeRange()); // needed
-            player->setSpeed(rate); // needed
-            
             const auto one_frame = RationalTime(1.0, rate);
             const auto startTime = RationalTime(0.0, rate);
             auto endTime = startTime + timeline->duration() - one_frame;

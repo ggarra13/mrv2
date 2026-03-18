@@ -55,7 +55,7 @@ ChangeLog
 - Fixed timeline and pixel toolbar stretching outside the main window when there was a window with a bigger scale factor than the window that was running vmrv2 on (Linux Wayland issue)
 - Incremented the margins of floating panels to 4 pixels to make them easier to resize.
 - Made the vectorscope smaller so it fits properly on the side panel.
-- Fixed EDL and Playlist creation which had gotten broken on newer builds.
+- Fixed EDL and Playlist creation which had gotten broken on v1.5.0 in code simplification.
 
 
 v1.5.8
