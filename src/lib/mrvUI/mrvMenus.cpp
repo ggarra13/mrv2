@@ -1244,14 +1244,6 @@ namespace mrv
             bool editable = ui->uiTimeline->isEditable();
             if (editable)
                 item->set();
-
-            idx = menu->add(
-                _("Timeline/Edit Associated Clips"),
-                kToggleEditAssociatedClips.hotkey(),
-                (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (itemOptions.editAssociatedClips)
-                item->set();
         }
         else
         {
@@ -1526,6 +1518,16 @@ namespace mrv
 
             if (app::soporta_editing)
             {
+                mode = FL_MENU_TOGGLE;
+                idx = menu->add(
+                    _("Edit/Associated Clips"),
+                    kToggleEditAssociatedClips.hotkey(),
+                (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui,
+                    mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (itemOptions.editAssociatedClips)
+                    item->set();
+            
                 menu->add(
                     _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),
                     (Fl_Callback*)edit_cut_frame_cb, ui);
@@ -1540,33 +1542,45 @@ namespace mrv
                     (Fl_Callback*)edit_insert_frame_cb, ui);
 
                 menu->add(
-                    _("Edit/Audio Clip/Insert"), kEditInsertAudioClip.hotkey(),
+                    _("Edit/Time/Audio Clip/Insert"),
+                    kEditInsertAudioClip.hotkey(),
                     (Fl_Callback*)insert_audio_clip_cb, ui);
                 menu->add(
-                    _("Edit/Audio Clip/Remove"), kEditRemoveAudioClip.hotkey(),
+                    _("Edit/Time/Audio Clip/Remove"),
+                    kEditRemoveAudioClip.hotkey(),
                     (Fl_Callback*)edit_remove_audio_clip_cb, ui);
                 menu->add(
-                    _("Edit/Video Gap/Insert"), kEditInsertVideoGap.hotkey(),
+                    _("Edit/Time/Video Gap/Insert"),
+                    kEditInsertVideoGap.hotkey(),
                     (Fl_Callback*)edit_insert_video_gap_cb, ui);
                 menu->add(
-                    _("Edit/Video Gap/Remove"), kEditRemoveVideoGap.hotkey(),
+                    _("Edit/Time/Video Gap/Remove"),
+                    kEditRemoveVideoGap.hotkey(),
                     (Fl_Callback*)edit_remove_video_gap_cb, ui);
                 menu->add(
-                    _("Edit/Audio Gap/Insert"), kEditInsertAudioGap.hotkey(),
+                    _("Edit/Time/Audio Gap/Insert"),
+                    kEditInsertAudioGap.hotkey(),
                     (Fl_Callback*)edit_insert_audio_gap_cb, ui);
                 menu->add(
-                    _("Edit/Audio Gap/Remove"), kEditRemoveAudioGap.hotkey(),
+                    _("Edit/Time/Audio Gap/Remove"),
+                    kEditRemoveAudioGap.hotkey(),
                     (Fl_Callback*)edit_remove_audio_gap_cb, ui);
 
-                menu->add(_("Edit/Add Transition"), kEditAddTransition.hotkey(),
-                          (Fl_Callback*)edit_add_transition_cb, ui);
                 
+                menu->add(_("Edit/Selected/Add Transition"),
+                          kEditAddTransition.hotkey(),
+                          (Fl_Callback*)edit_add_transition_cb, ui);
                 menu->add(
-                    _("Edit/Slice"), kEditSliceClip.hotkey(),
-                    (Fl_Callback*)edit_slice_clip_cb, ui);
+                    _("Edit/Selected/Remove Items"),
+                    kEditRemoveSelected.hotkey(),
+                    (Fl_Callback*)edit_remove_selected_cb, ui);
                 menu->add(
-                    _("Edit/Remove"), kEditRemoveClip.hotkey(),
+                    _("Edit/Time/Remove Clips"), kEditRemoveClip.hotkey(),
                     (Fl_Callback*)edit_remove_clip_cb, ui);
+                menu->add(
+                    _("Edit/Time/Slice"), kEditSliceClip.hotkey(),
+                    (Fl_Callback*)edit_slice_clip_cb, ui);
+
 
                 menu->add(
                     _("Edit/Undo"), kEditUndo.hotkey(),

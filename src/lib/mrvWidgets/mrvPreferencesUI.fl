@@ -93,10 +93,10 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double resizable
-      code0 {main = m;} visible
+      xywh {286 309 847 449} type Double hide resizable
+      code0 {main = m;}
     } {
-      Fl_Group {} {open selected
+      Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
       } {
         Fl_Group {} {open
@@ -1050,7 +1050,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label {HDR Peak Detection}
-              xywh {280 38 565 369} box EMBOSSED_BOX align 5 hide
+              xywh {280 38 565 369} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label {HDR Peak Detection}
@@ -1070,8 +1070,8 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   }
                 }
                 Fl_Value_Input uiPrefsHDRPeakPercentile {
-                  label {HDR Percentile}
-                  tooltip {When less than 100, helps find the peak brightness ignoring the top 1% outliers.} xywh {629 162 64 28} minimum 0.1 maximum 100 step 0.1 value 100 textcolor 56
+                  label {HDR Percentile} selected
+                  tooltip {When less than 100, helps find the peak brightness ignoring the top 1 percent outliers.} xywh {629 162 64 28} minimum 0.1 maximum 100 step 0.1 value 100 textcolor 56
                 }
                 Fl_Value_Input uiPrefsHDRPeakSmoothingPeriod {
                   label {Smoothing Period}
@@ -1933,7 +1933,7 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
             }
             Fl_Group {} {
               label ComfyUI
-              tooltip {Here are the current settings to interact with ComfyUI.  It requires installation of mrv2's comfyUI nodes.} xywh {298 47 545 360} box EMBOSSED_BOX align 5
+              tooltip {Here are the current settings to interact with ComfyUI.  It requires installation of mrv2's comfyUI nodes.} xywh {298 47 545 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
                 xywh {352 70 446 313}

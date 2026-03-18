@@ -1393,6 +1393,10 @@ namespace mrv
                 int Aindex = message["value"];
                 add_clip_to_timeline_cb(Aindex, ui);
             }
+            else if (c == "Edit/Remove Selected")
+            {
+                edit_remove_selected_cb(nullptr, ui);
+            }
             else if (c == "Edit/Frame/Cut")
             {
                 edit_cut_frame_cb(nullptr, ui);

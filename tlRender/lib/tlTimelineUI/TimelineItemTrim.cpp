@@ -213,7 +213,7 @@ namespace tl
             }
             case Private::MouseMode::Transition:
             {
-                _mouseReleaseEventTrim(event);
+                _mouseReleaseEventRoll(event);
             }
             default:
                 break;

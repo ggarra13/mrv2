@@ -1188,7 +1188,7 @@ namespace tl
                                     std::memcpy(image->getData(), imageData,
                                                 image->getDataByteCount());
                                 else
-                                    std::memset(image->getData, 0,
+                                    std::memset(image->getData(), 0,
                                                 image->getDataByteCount());
                                     
                                 p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
@@ -1291,7 +1291,7 @@ namespace tl
                                         std::memcpy(image->getData(), imageData,
                                                     image->getDataByteCount());
                                     else
-                                        std::memset(image->getData, 0,
+                                        std::memset(image->getData(), 0,
                                                     image->getDataByteCount());
                                         
                                     vkEndCommandBuffer(cmd);

@@ -56,6 +56,9 @@ ChangeLog
 - Incremented the margins of floating panels to 4 pixels to make them easier to resize.
 - Made the vectorscope smaller so it fits properly on the side panel.
 - Fixed EDL and Playlist creation which had gotten broken on v1.5.0 in code simplification.
+- Modified Edit Menu to make it more clear.
+- Move Edit Associated to Edit Menu.
+- Fixed Trim editing of Transitions hanging.
 
 
 v1.5.8

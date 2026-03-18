@@ -1199,11 +1199,11 @@ namespace mrv
         edit_store_undo(player, ui);
 
         const auto half_frame = RationalTime(0.4, time.rate());
-
+        
         for (auto track : tracks)
         {
-            // Adjust time by almost half a frame to avoid rounding issues in
-            // the audio tracks.
+            // Adjust time by almost half a frame to avoid rounding issues
+            // in the audio tracks.
             auto trackTime = time + half_frame;
 
             otio::algo::remove(track, trackTime, false);
@@ -1592,7 +1592,7 @@ namespace mrv
             if (!track)
                 continue;
 
-            // Find first video track
+            // Find first audio track
             if (track->kind() != otio::Track::Kind::audio)
                 continue;
 
@@ -1639,6 +1639,69 @@ namespace mrv
 
         tcp->pushMessage("Edit/Audio Clip/Remove", time);
     }
+
+
+    void edit_remove_selected_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player)
+            return;
+
+        const auto& time = getTime(player);
+        auto compositions = getTracks(player);
+
+        auto timeline = player->getTimeline();
+        if (!timeline)
+            return;
+
+        edit_store_undo(player, ui);
+
+        auto selected = ui->uiTimeline->getSelectedItems();
+        if (selected.empty())
+            return;
+
+        bool modified = false;
+        otio::ErrorStatus errorStatus;
+        for (auto& item : selected)
+        {
+            for (auto composition : compositions)
+            {
+                auto track = dynamic_cast<otio::Track*>(composition);
+                if (!track)
+                    continue;
+
+                for (auto& child : track->children())
+                {
+
+                    if (item == otio::dynamic_retainer_cast<Item>(child))
+                    {
+                        modified = true;
+                        int childIndex = track->index_of_child(child);
+                        track->remove_child(childIndex);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!modified)
+            return;
+
+        updateTimeline(timeline, time, ui);
+
+        toOtioFile(timeline, ui);
+
+        if (modified)
+            edit_clear_redo(ui);
+
+        panel::redrawThumbnails();
+
+        App::unsaved_edits = true;
+        ui->uiMain->update_title_bar();
+
+        tcp->pushMessage("Edit/Remove Selected", time);
+    }
+
 
     void edit_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
