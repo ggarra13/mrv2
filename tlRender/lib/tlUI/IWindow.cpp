@@ -4,19 +4,13 @@
 
 #include <tlUI/IWindow.h>
 
-#include <tlUI/ToolTip.h>
 #include <tlUI/IClipboard.h>
+#include <tlUI/IPopup.h>
 
 namespace tl
 {
     namespace ui
     {
-        namespace
-        {
-            std::chrono::milliseconds toolTipTimeout(1000);
-            float toolTipDistance = 10.F;
-        } // namespace
-
         struct IWindow::Private
         {
             math::Vector2i cursorPos;
@@ -32,10 +26,6 @@ namespace tl
             std::shared_ptr<image::Image> dndCursor;
             math::Vector2i dndCursorHotspot;
             std::weak_ptr<IWidget> dndHover;
-
-            std::shared_ptr<ToolTip> toolTip;
-            math::Vector2i toolTipPos;
-            std::chrono::steady_clock::time_point toolTipTimer;
 
             std::shared_ptr<IClipboard> clipboard;
         };
@@ -123,34 +113,6 @@ namespace tl
             bool parentsVisible, bool parentsEnabled, const TickEvent& event)
         {
             IWidget::tickEvent(parentsVisible, parentsEnabled, event);
-            TLRENDER_P();
-            const auto toolTipTime = std::chrono::steady_clock::now();
-            const auto toolTipDiff =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    toolTipTime - p.toolTipTimer);
-            if (toolTipDiff > toolTipTimeout && !p.toolTip)
-            {
-                if (auto context = _context.lock())
-                {
-                    std::string text;
-                    auto widgets = _getUnderCursor(p.cursorPos);
-                    while (!widgets.empty())
-                    {
-                        text = widgets.front()->getToolTip();
-                        if (!text.empty())
-                        {
-                            break;
-                        }
-                        widgets.pop_front();
-                    }
-                    if (!text.empty())
-                    {
-                        p.toolTip = ToolTip::create(
-                            text, p.cursorPos, shared_from_this(), context);
-                        p.toolTipPos = p.cursorPos;
-                    }
-                }
-            }
         }
 
         void IWindow::drawOverlayEvent(
@@ -351,17 +313,6 @@ namespace tl
             if (widget && p.dndCursor)
             {
                 _updates |= Update::Draw;
-            }
-
-            if (math::length(p.cursorPos - p.toolTipPos) > toolTipDistance)
-            {
-                if (p.toolTip)
-                {
-                    p.toolTip->close();
-                    p.toolTip.reset();
-                }
-                p.toolTipTimer = std::chrono::steady_clock::now();
-                p.toolTipPos = p.cursorPos;
             }
         }
 
