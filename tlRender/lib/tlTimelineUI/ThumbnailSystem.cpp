@@ -1178,11 +1178,21 @@ namespace tl
                 
                                 p.thumbnailThread.buffer->submitReadback(cmd);
 
-                                int tries = 0;
+                                auto start = std::chrono::steady_clock::now();
                                 void* imageData = nullptr;
-                                while (tries < 50 &&
-                                       !(imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
-                                    ++tries;
+                                while (!(imageData = p.thumbnailThread.buffer->getLatestReadPixels()))
+                                {
+                                    const auto now = std::chrono::steady_clock::now();
+
+                                    // Calculate the total elapsed duration since start
+                                    std::chrono::duration<float> elapsed_duration = now - start;
+
+                                    // Get elapsed time in milliseconds (long long)
+                                    const auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_duration).count();
+                                    // If more than 2 seconds have passed, exit.
+                                    if (elapsed_ms > 2000)
+                                        break;
+                                }
                                         
                                 if (imageData)
                                     std::memcpy(image->getData(), imageData,
@@ -1281,12 +1291,23 @@ namespace tl
                 
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
-                                    int tries = 0;
+                                    
+                                    auto start = std::chrono::steady_clock::now();
                                     void* imageData = nullptr;
-                                    while (tries < 50 &&
-                                           !(imageData = p.thumbnailThread.buffer->getLatestReadPixels() ) )
-                                        ++tries;
-                                        
+                                    while (!(imageData = p.thumbnailThread.buffer->getLatestReadPixels()))
+                                    {
+                                        const auto now = std::chrono::steady_clock::now();
+
+                                        // Calculate the total elapsed duration since start
+                                        std::chrono::duration<float> elapsed_duration = now - start;
+
+                                        // Get elapsed time in milliseconds (long long)
+                                        const auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_duration).count();
+                                        // If more than 2 seconds have passed, exit.
+                                        if (elapsed_ms > 2000)
+                                            break;
+                                    }
+                                    
                                     if (imageData)
                                         std::memcpy(image->getData(), imageData,
                                                     image->getDataByteCount());
