@@ -64,7 +64,18 @@ if(APPLE)
     )
     
     set( Python_ENV ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_DYLD_LIBRARY_PATH}" -- )
-    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
+    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env
+	"CC=clang"
+	"CXX=clang"
+	"CFLAGS=${Python_C_FLAGS}"
+	"CPPFLAGS=${Python_C_FLAGS}"
+	"CXXFLAGS=${Python_CXX_FLAGS}"
+	"LDFLAGS=${Python_LD_FLAGS}"
+	"CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" --
+	./configure
+	--enable-shared
+	--with-openssl=${_openssl_LOC}
+	--prefix=${CMAKE_INSTALL_PREFIX}
     )
     set( Python_BUILD make -j ${NPROCS} )
 

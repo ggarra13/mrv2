@@ -35,7 +35,7 @@ jobs:
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
-
+   
     - name: Install ninja-build
       run: brew install ninja
 
