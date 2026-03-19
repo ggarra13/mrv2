@@ -73,7 +73,6 @@ if(APPLE)
 	"LDFLAGS=${Python_LD_FLAGS}"
 	"CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" --
 	./configure
-	--enable-optimizations
 	--enable-shared
 	--with-openssl=${_openssl_LOC}
 	--prefix=${CMAKE_INSTALL_PREFIX}
