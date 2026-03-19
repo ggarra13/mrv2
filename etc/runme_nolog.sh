@@ -376,8 +376,20 @@ echo
 echo "CXX COMPILERS"
 echo "-------------"
 echo "Native CXX compiler ${NATIVE_CXX_COMPILER_NAME} version ${NATIVE_CXX_COMPILER_VERSION}"
-echo "Generic CXX with ${GENERIC_CXX_COMPILER_NAME} version ${GENERIC_CXX_COMPILER_VERSION}"
+echo "Generic CXX compiler with ${GENERIC_CXX_COMPILER_NAME} version ${GENERIC_CXX_COMPILER_VERSION}"
 echo "Generic GNU CXX compiler ${GNU_CXX_COMPILER_NAME} ${GNU_CXX_COMPILER_VERSION}"
+echo
+echo "LINKERS"
+echo "-------"
+echo "Native linker ${NATIVE_LINKER_NAME} version ${NATIVE_LINKER_VERSION}"
+echo "Generic linker with ${GENERIC_LINKER_NAME} version ${GENERIC_LINKER_VERSION}"
+echo "Generic GNU linker ${GNU_LINKER_NAME} version ${GNU_LINKER_VERSION}"
+echo
+echo "ARCHIVERS"
+echo "---------"
+echo "Native archiver ${NATIVE_ARCHIVER_NAME} version ${NATIVE_ARCHIVER_VERSION}"
+echo "Generic archiver with ${GENERIC_ARCHIVER_NAME} version ${GENERIC_ARCHIVER_VERSION}"
+echo "Generic arhiver ${GNU_ARCHIVER_NAME} version ${GNU_ARCHIVER_VERSION}"
 echo
 
 
