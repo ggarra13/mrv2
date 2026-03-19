@@ -46,7 +46,14 @@ jobs:
       - name: Get machine name
         run: |
           echo "Machine name: $RUNNER_NAME"
-
+          
+      - name: Setup LLVM
+        run: |
+          brew install llvm
+          echo "/usr/local/opt/llvm/bin" >> $GITHUB_PATH
+          echo "CC=/usr/local/opt/llvm/bin/clang" >> $GITHUB_ENV
+          echo "CXX=/usr/local/opt/llvm/bin/clang++" >> $GITHUB_ENV
+    
       - name: Install ninja-build
         run: brew install ninja
 
