@@ -29,12 +29,23 @@ set( Python_ENV )
 set( Python_PATH $ENV{PATH} )
 
 if(APPLE)
+    
+    execute_process(
+	COMMAND xcrun --show-sdk-path
+	OUTPUT_VARIABLE _sdk_LOC
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+	ERROR_VARIABLE sdk_prefix_error
+    )
+	
+    if(sdk_prefix_error)
+	message(FATAL_ERROR "Could not located macOS 'xcrun'.  Error: ${sdk_prefix_error}")
+    endif()
 
     set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
     set(Python_C_COMPILER ${NATIVE_C_COMPILER})
-    set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
+    set(Python_C_FLAGS "-isysroot '${_sdk_LOC}' ${CMAKE_C_FLAGS}" )
     set(Python_CXX_COMPILER ${NATIVE_CXX_COMPILER})
-    set(Python_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
+    set(Python_CXX_FLAGS "-isysroot '${_sdk_LOC}' ${CMAKE_CXX_FLAGS}" )
     set(Python_LD_FLAGS "-framework Security -framework CoreFoundation ${CMAKE_SHARED_LINKER_FLAGS}" )
     
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
