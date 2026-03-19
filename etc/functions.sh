@@ -275,10 +275,15 @@ get_compiler_version() {
 get_linker_version() {
     local linker="$1"
 
-    # Extract first version string (v optional, digits + optional .digits)
-    "${linker}" --version 2>/dev/null |
-        grep -oE 'v?[0-9]+(\.[0-9]+)*' |
-        head -n1
+    if [[ $KERNEL == *Darwin* ]]; then
+	"${linker}" -v 2>&1 | grep -oE 'version v?[0-9]+(\.[0-9]+)*' |
+	    sed -e 's#version ##' | head -n1
+    else
+	# Extract first version string (v optional, digits + optional .digits)
+	"${linker}" --version 2>/dev/null |
+            grep -oE 'v?[0-9]+(\.[0-9]+)*' |
+            head -n1
+    fi
 }
 
 #
