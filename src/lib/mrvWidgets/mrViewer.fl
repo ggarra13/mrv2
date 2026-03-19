@@ -131,7 +131,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {
-  xywh {888 938 934 56} resizable
+  xywh {410 714 934 56} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -879,7 +879,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 65 934 674} type Double color 1 align 80 resizable
+      xywh {709 145 934 674} type Double color 1 align 80 resizable
       class {mrv::MainWindow} size_range {934 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -1146,7 +1146,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
           }
         }
         Fl_Tile uiTileGroup {
-          label TileGroup
+          label TileGroup open
           xywh {0 59 934 531} labeltype NO_LABEL
           code0 {;}
           class {mrv::Tile}
@@ -1498,13 +1498,13 @@ settings->setValue( mrv::kPenColorA, a);}
             }
           }
           Fl_Group uiTimelineGroup {
-            label uiTimelineGroup
+            label uiTimelineGroup open
             xywh {0 560 934 30} box FLAT_BOX color 51 labeltype NO_LABEL
             class {mrv::TimelineGroup}
           } {
             Fl_Group uiTimeline {
-              label uiTimeline
-              xywh {0 568 934 22} box FLAT_BOX color 6 labeltype NO_LABEL resizable
+              label uiTimeline selected
+              xywh {0 568 934 22} color 6 labeltype NO_LABEL resizable
               class MyTimelineWidget
             } {}
           }
@@ -1521,7 +1521,7 @@ settings->setValue( mrv::kPenColorA, a);}
           } {}
         }
         Fl_Group uiPixelBar {
-          label PixelBar open selected
+          label PixelBar open
           xywh {0 619 934 30} box FLAT_BOX color 56 labeltype NO_LABEL labelcolor 17
         } {
           Fl_Group uiPixelWindow {open
