@@ -818,5 +818,16 @@ namespace tl
                 out = p.timelineItem->getSelectedItems();
             return out;
         }
+        
+        std::vector<const otio::Transition*>
+        TimelineWidget::getSelectedTransitions() const
+        {
+            TLRENDER_P();
+            
+            std::vector<const otio::Transition* > out;
+            if (p.timelineItem)
+                out = p.timelineItem->getSelectedTransitions();
+            return out;
+        }
     } // namespace TIMELINEUI
 } // namespace tl

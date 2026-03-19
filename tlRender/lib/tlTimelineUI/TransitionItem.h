@@ -42,6 +42,8 @@ namespace tl
             void clipEvent(const math::Box2i&, bool) override;
             void drawEvent(const math::Box2i&, const ui::DrawEvent&) override;
 
+            const otio::Transition* getOtioItem() const;
+            
         private:
             void _timeUnitsUpdate() override;
             void _textUpdate();

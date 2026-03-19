@@ -64,7 +64,10 @@ ChangeLog
 - Cleaned up Darby's tlRender code stripping it to its minimum.  It is now faster, smaller and compiles faster.
 - Fixed resizing of Pixel Bar under X11 (Wayland was OK).
 - Made Python's Panel menus appear on the correct monitor on multiple monitor setups with several scaling factors on Linux Wayland.  The drawback is that the Python Panel can only be docked with the yellow button, not by going to the dock area like all other panels.
-  
+- Added multi selecting of transition items and clips.
+- Made Edit->Selected->Remove Items handle removing of both multiple transitions and clips.
+- Made Edit->Selected->Remove Items be run with the Delete key when focus is in the timeline and selection mode is Select.
+
 
 v1.5.8
 ======

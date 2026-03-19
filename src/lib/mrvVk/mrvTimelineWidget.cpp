@@ -186,6 +186,7 @@ namespace mrv
             //! Flags
             bool draggingClip = false;
             bool continueReversePlaying = false;
+            timeline::EditMode editMode = timeline::EditMode::Move;
 
             //! Observers
             std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheInfo> >
@@ -299,6 +300,12 @@ namespace mrv
             return _p->timelineWidget->getSelectedItems();
         }
         
+        std::vector<const otio::Transition* >
+        TimelineWidget::getSelectedTransitions() const
+        {
+            return _p->timelineWidget->getSelectedTransitions();
+        }
+        
         bool TimelineWidget::isEditable() const
         {
             return _p->timelineWidget->isEditable();
@@ -311,6 +318,7 @@ namespace mrv
 
         void TimelineWidget::setEditMode(const timeline::EditMode value)
         {
+            _p->editMode = value;
             _p->timelineWidget->setEditMode(value);
         }
         
@@ -1694,6 +1702,11 @@ namespace mrv
             if (kToggleEditMode.match(key))
             {
                 p.ui->uiEdit->do_callback();
+                return 1;
+            }
+            if (key == FL_Delete && p.editMode == timeline::EditMode::Select)
+            {
+                edit_remove_selected_cb(nullptr, p.ui);
                 return 1;
             }
             bool send = App::ui->uiPrefs->SendTimeline->value();

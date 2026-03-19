@@ -139,6 +139,7 @@ namespace mrv
             void init_colorspace() FL_OVERRIDE;
             
             std::vector<const otio::Item* > getSelectedItems() const;
+            std::vector<const otio::Transition* > getSelectedTransitions() const;
             
         protected:
             const float pixelRatio() const;

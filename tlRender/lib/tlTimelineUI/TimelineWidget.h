@@ -206,6 +206,8 @@ namespace tl
             void keyReleaseEvent(ui::KeyEvent&) override;
 
             std::vector<const otio::Item*> getSelectedItems() const;
+            std::vector<const otio::Transition*> getSelectedTransitions() const;
+            
             
         protected:
             void _releaseMouse() override;
