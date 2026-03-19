@@ -32,7 +32,7 @@ else()
     list(APPEND RtAudio_ARGS -DRTAUDIO_BUILD_STATIC_LIBS=TRUE)
 endif()
 if(APPLE)
-    list(APPEND RtAudio_ARGS RTAUDIO_API_JACK=OFF)
+    list(APPEND RtAudio_ARGS -DRTAUDIO_API_JACK=OFF)
 endif()
 
 ExternalProject_Add(
