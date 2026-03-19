@@ -35,7 +35,7 @@ if(APPLE)
     set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
     set(Python_CXX_COMPILER ${NATIVE_CXX_COMPILER})
     set(Python_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
-    set(Python_LD_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" )
+    set(Python_LD_FLAGS "-framework Security -framework CoreFoundation ${CMAKE_SHARED_LINKER_FLAGS}" )
     
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
 	set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS}")
