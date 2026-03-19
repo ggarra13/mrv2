@@ -42,6 +42,8 @@ namespace tl
                 std::vector<std::shared_ptr<image::Glyph> > durationGlyphs;
             };
             DrawData draw;
+            
+            const otio::Transition* otioTransition = nullptr;
         };
 
         void TransitionItem::_init(
@@ -66,6 +68,7 @@ namespace tl
 
             TLRENDER_P();
 
+            p.otioTransition = transition;
             p.label = transition->name();
             if (p.label.empty())
             {
@@ -100,6 +103,11 @@ namespace tl
             return out;
         }
 
+        const otio::Transition* TransitionItem::getOtioItem() const
+        {
+            return _p->otioTransition;
+        }
+        
         void TransitionItem::setDurationLabel(const std::string& value)
         {
             _p->durationLabel = value;

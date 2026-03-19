@@ -31,7 +31,9 @@ set( Python_PATH $ENV{PATH} )
 if(APPLE)
 
     set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
+    set(Python_C_COMPILER ${NATIVE_C_COMPILER})
     set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
+    set(Python_CXX_COMPILER ${NATIVE_CXX_COMPILER})
     set(Python_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
     set(Python_LD_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" )
     
@@ -64,7 +66,19 @@ if(APPLE)
     )
     
     set( Python_ENV ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_DYLD_LIBRARY_PATH}" -- )
-    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" -- ./configure --enable-optimizations --enable-shared --with-openssl=${_openssl_LOC} --prefix=${CMAKE_INSTALL_PREFIX}
+    set( Python_CONFIGURE ${CMAKE_COMMAND} -E env
+	"CC=${Python_C_COMPILER}"
+	"CXX=${Python_CXX_COMPILER}"
+	"CFLAGS=${Python_C_FLAGS}"
+	"CPPFLAGS=${Python_C_FLAGS}"
+	"CXXFLAGS=${Python_CXX_FLAGS}"
+	"LDFLAGS=${Python_LD_FLAGS}"
+	"CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" --
+	./configure
+	--enable-optimizations
+	--enable-shared
+	--with-openssl=${_openssl_LOC}
+	--prefix=${CMAKE_INSTALL_PREFIX}
     )
     set( Python_BUILD make -j ${NPROCS} )
 

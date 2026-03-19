@@ -597,9 +597,11 @@ namespace tl
             TLRENDER_P();
             bool saveUndo = false;
             bool doSelection = false;
+            bool selectionMode = false;
             if (p.editMode == timeline::EditMode::Select)
             {
                 doSelection = true;
+                selectionMode = true;
                 if (0 == event.button)
                 {
                     if (0 == event.modifiers)
@@ -664,14 +666,14 @@ namespace tl
                                 }
                             }
                         }
-                        if (!p.mouse.items.empty())
+                        if (!selectionMode && !p.mouse.items.empty())
                         {
                             break;
                         }
                     }
                 }
 
-                if (p.mouse.items.empty())
+                if (selectionMode || p.mouse.items.empty())
                 {
                     for (int i = 0; i < p.tracks.size(); ++i)
                     {
@@ -693,7 +695,7 @@ namespace tl
                                 }
                             }
                         }
-                        if (!p.mouse.items.empty())
+                        if (!selectionMode && !p.mouse.items.empty())
                         {
                             break;
                         }
@@ -1335,7 +1337,8 @@ namespace tl
             return out;
         }
 
-        std::vector<const otio::Item*> TimelineItem::getSelectedItems() const
+        std::vector<const otio::Item*>
+        TimelineItem::getSelectedItems() const
         {
             TLRENDER_P();
             
@@ -1344,6 +1347,20 @@ namespace tl
             {
                 if (auto clip = dynamic_cast<const IBasicItem*>(item->p.get()))
                     out.push_back(clip->getOtioItem());
+            }
+            return out;
+        }
+        
+        std::vector<const otio::Transition*>
+        TimelineItem::getSelectedTransitions() const
+        {
+            TLRENDER_P();
+            
+            std::vector<const otio::Transition*> out;
+            for (const auto& item : p.mouse.items)
+            {
+                if (auto transition = dynamic_cast<const TransitionItem*>(item->p.get()))
+                    out.push_back(transition->getOtioItem());
             }
             return out;
         }

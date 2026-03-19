@@ -134,6 +134,7 @@ namespace mrv
             void continuePlaying();
 
             std::vector<const otio::Item* > getSelectedItems() const;
+            std::vector<const otio::Transition* > getSelectedTransitions() const;
             
         protected:
 

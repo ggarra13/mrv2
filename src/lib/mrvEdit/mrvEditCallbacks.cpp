@@ -1656,13 +1656,12 @@ namespace mrv
 
         edit_store_undo(player, ui);
 
-        auto selected = ui->uiTimeline->getSelectedItems();
-        if (selected.empty())
-            return;
-
         bool modified = false;
+        
         otio::ErrorStatus errorStatus;
-        for (auto& item : selected)
+        auto selectedItems = ui->uiTimeline->getSelectedItems();
+
+        for (auto& item : selectedItems)
         {
             for (auto composition : compositions)
             {
@@ -1670,20 +1669,61 @@ namespace mrv
                 if (!track)
                     continue;
 
+                std::vector<int> indices;
                 for (auto& child : track->children())
                 {
-
                     if (item == otio::dynamic_retainer_cast<Item>(child))
                     {
-                        modified = true;
                         int childIndex = track->index_of_child(child);
-                        track->remove_child(childIndex);
-                        break;
+                        indices.push_back(childIndex);
+                        modified = true;
                     }
+                }
+
+                std::sort(indices.begin(), indices.end(), [](int a, int b) {
+                    return a > b;
+                });
+
+                for (auto index : indices)
+                {
+                    track->remove_child(index);
                 }
             }
         }
 
+        auto selectedTransitions = ui->uiTimeline->getSelectedTransitions();
+        
+        for (auto& item : selectedTransitions)
+        {
+            for (auto composition : compositions)
+            {
+                auto track = dynamic_cast<otio::Track*>(composition);
+                if (!track)
+                    continue;
+
+                std::vector<int> indices;
+                for (auto& child : track->children())
+                {
+
+                    if (item == otio::dynamic_retainer_cast<Transition>(child))
+                    {
+                        int childIndex = track->index_of_child(child);
+                        indices.push_back(childIndex);
+                        modified = true;
+                    }
+                }
+
+                std::sort(indices.begin(), indices.end(), [](int a, int b) {
+                    return a > b;
+                });
+
+                for (auto index : indices)
+                {
+                    track->remove_child(index);
+                }
+            }
+        }
+        
         if (!modified)
             return;
 

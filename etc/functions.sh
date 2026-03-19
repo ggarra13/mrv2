@@ -55,67 +55,72 @@ get_kernel()
 	      $KERNEL == *Windows* ]]; then
 	export KERNEL=Windows
 
+	# Native compiler (MSVC)
 	export NATIVE_C_COMPILER=`which cl.exe`
 	export NATIVE_C_COMPILER_NAME="cl.exe"
-
 	export NATIVE_CXX_COMPILER=`which cl.exe`
 	export NATIVE_CXX_COMPILER_NAME="cl.exe"
-	
+
+	# Generic compiler (Clang with MSVC compatibility)
 	export GENERIC_C_COMPILER=`which clang-cl`
 	export GENERIC_C_COMPILER_NAME="clang-cl"
-	
 	export GENERIC_CXX_COMPILER=`which clang-cl`
 	export GENERIC_CXX_COMPILER_NAME="clang-cl"
-	
+
+	# GNU compatible compilers (MinGW/MSys2 style)
 	export GNU_C_COMPILER=`which clang`
 	export GNU_C_COMPILER_NAME="clang"
+	export GNU_CXX_COMPILER=`which clang++`
+	export GNU_CXX_COMPILER_NAME="clang++"
 
-	export GNU_CXX_COMPILER=`which clang`
-	export GNU_CXX_COMPILER_NAME="clang"
-    
+	# Linkers & Archivers
+	export NATIVE_LINKER=`which link.exe`
+	export NATIVE_LINKER_NAME="link.exe"
+	export NATIVE_ARCHIVER=`which lib.exe`
+	export NATIVE_ARCHIVER_NAME="lib.exe"
+
+	export GENERIC_LINKER=`which link.exe`
+	export GENERIC_LINKER_NAME="link.exe"
+
+	export GNU_LINKER=`which ld.exe`
+	export GNU_LINKER_NAME="ld.exe"
+	export GNU_ARCHIVER=`which ar.exe`
+	export GNU_ARCHIVER_NAME="ar.exe"
+
     elif [[ $KERNEL == *Darwin* ]]; then
 	export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string)
 
-	# C Compiler for Darwin
+	# C/C++ Compiler (Xcode Clang)
 	export NATIVE_C_COMPILER=`which clang`
 	export NATIVE_C_COMPILER_NAME="clang"
 	export GENERIC_C_COMPILER=`which cc`
 	export GENERIC_C_COMPILER_NAME="cc"
 
-	# C++ Compiler for Darwin
-	export NATIVE_CXX_COMPILER=`which clang`
-	export NATIVE_CXX_COMPILER_NAME="clang"
-	export GENERIC_CXX_COMPILER=`which cc`
-	export GENERIC_CXX_COMPILER_NAME="cc"
+	export NATIVE_CXX_COMPILER=`which clang++`
+	export NATIVE_CXX_COMPILER_NAME="clang++"
+	export GENERIC_CXX_COMPILER=`which c++`
+	export GENERIC_CXX_COMPILER_NAME="c++"
+
+	# Linker & Archiver
+	export NATIVE_LINKER=`which ld`
+	export NATIVE_LINKER_NAME="ld"
+	export GENERIC_LINKER=`which ld`
+	export GENERIC_LINKER_NAME="ld"
+
+	export NATIVE_ARCHIVER=`which ar`
+	export NATIVE_ARCHIVER_NAME="ar"
+
     else
-	get_linux_id()
-
-	if [[ $LINUX_ID == *debian* ]]; then
-	    export NATIVE_C_COMPILER=`which gcc`
-	    export NATIVE_C_COMPILER_NAME="gcc"
-	    export NATIVE_CXX_COMPILER=`which g++`
-	    export NATIVE_CXX_COMPILER_NAME="g++"
-	elif [[ $LINUX_ID == *rhel* ]]; then
-	    export NATIVE_C_COMPILER=`which cc`
-	    export NATIVE_C_COMPILER_NAME="cc"
-	    export NATIVE_CXX_COMPILER=`which c++`
-	    export NATIVE_CXX_COMPILER_NAME="c++"
-	else
-	    export NATIVE_C_COMPILER=`which gcc`
-	    export NATIVE_C_COMPILER_NAME="gcc"
-	    export NATIVE_CXX_COMPILER=`which g++`
-	    export NATIVE_CXX_COMPILER_NAME="g++"
-	fi
-
+	# Linux logic
+	# get_linux_id() # Leave just in case
+	
 	export NATIVE_C_COMPILER=`which gcc`
 	export NATIVE_C_COMPILER_NAME="gcc"
-
 	export NATIVE_CXX_COMPILER=`which g++`
 	export NATIVE_CXX_COMPILER_NAME="g++"
 
 	export GENERIC_C_COMPILER=`which gcc`
 	export GENERIC_C_COMPILER_NAME="gcc"
-
 	export GENERIC_CXX_COMPILER=`which g++`
 	export GENERIC_CXX_COMPILER_NAME="g++"
 
@@ -123,6 +128,22 @@ get_kernel()
 	export GNU_C_COMPILER_NAME="gcc"
 	export GNU_CXX_COMPILER=`which g++`
 	export GNU_CXX_COMPILER_NAME="g++"
+
+	# Linker & Archiver
+	export NATIVE_LINKER=`which ld`
+	export NATIVE_LINKER_NAME="ld"
+	export NATIVE_ARCHIVER=`which ar`
+	export NATIVE_ARCHIVER_NAME="ar"
+	
+	export GENERIC_LINKER=`which ld`
+	export GENERIC_LINKER_NAME="ld"
+	export GENERIC_ARCHIVER=`which ar`
+	export GENERIC_ARCHIVER_NAME="ar"
+	
+	export GNU_LINKER=`which ld`
+	export GNU_LINKER_NAME="ld"
+	export GNU_ARCHIVER=`which ar`
+	export GNU_ARCHIVER_NAME="ar"
     fi
 
     if [[ -z "$GENERIC_C_COMPILER" ]]; then
@@ -178,15 +199,24 @@ get_kernel()
 	get_msvc_version
 	export NATIVE_C_COMPILER_VERSION=${MSVC_VERSION}
 	export NATIVE_CXX_COMPILER_VERSION=${MSVC_VERSION}
+	export NATIVE_LINKER_VERSION=${MSVC_VERSION}
+	export NATIVE_ARCHIVER_VERSION=${MSVC_VERSION}
     else
 	export NATIVE_C_COMPILER_VERSION=$(get_compiler_version "${NATIVE_C_COMPILER}")
 	export NATIVE_CXX_COMPILER_VERSION=$(get_compiler_version "${NATIVE_CXX_COMPILER}")
+	export NATIVE_LINKER_VERSION=$(get_linker_version ${NATIVE_LINKER})
+	export NATIVE_ARCHIVER_VERSION=$(get_archiver_version ${NATIVE_ARCHIVER})
     fi
     
     export GENERIC_C_COMPILER_VERSION=$(get_compiler_version "${GENERIC_C_COMPILER}")
     export GENERIC_CXX_COMPILER_VERSION=$(get_compiler_version "${GENERIC_CXX_COMPILER}")
+    export GENERIC_LINKER_VERSION=$(get_linker_version ${GENERIC_LINKER})
+    export GENERIC_ARCHIVER_VERSION=$(get_archiver_version ${GENERIC_ARCHIVER})
+    
     export GNU_C_COMPILER_VERSION=$(get_compiler_version "${GNU_C_COMPILER}")
     export GNU_CXX_COMPILER_VERSION=$(get_compiler_version "${GNU_CXX_COMPILER}")
+    export GNU_LINKER_VERSION=$(get_linker_version ${GNU_LINKER})
+    export GNU_ARCHIVER_VERSION=$(get_archiver_version ${GNU_ARCHIVER})
     
     if [[ $ARCH == "" ]]; then
 	export ARCH=`uname -m` # was uname -a
@@ -228,13 +258,37 @@ get_msvc_version()
 }
 
 #
-# Extract compile version passed as first string
+# Extract compiler version passed as first string
 #
 get_compiler_version() {
     local compiler="$1"
 
     # Extract first version string (v optional, digits + optional .digits)
     "${compiler}" --version 2>/dev/null |
+        grep -oE 'v?[0-9]+(\.[0-9]+)*' |
+        head -n1
+}
+
+#
+# Extract linker version passed as first string
+#
+get_linker_version() {
+    local linker="$1"
+
+    # Extract first version string (v optional, digits + optional .digits)
+    "${linker}" --version 2>/dev/null |
+        grep -oE 'v?[0-9]+(\.[0-9]+)*' |
+        head -n1
+}
+
+#
+# Extract linker version passed as first string
+#
+get_archiver_version() {
+    local archiver="$1"
+
+    # Extract first version string (v optional, digits + optional .digits)
+    "${archiver}" --version 2>/dev/null |
         grep -oE 'v?[0-9]+(\.[0-9]+)*' |
         head -n1
 }

@@ -36,8 +36,9 @@ set( FLTK_C_FLAGS ${CMAKE_C_FLAGS})
 set( FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
 if(APPLE)
-    set(FLTK_C_COMPILER /usr/bin/cc)
-    set(FLTK_CXX_COMPILER /usr/bin/c++)
+    # FLTK on macOS chokes with clang on Github.  Still not sure why.
+    set(FLTK_C_COMPILER ${GENERIC_C_COMPILER})
+    set(FLTK_CXX_COMPILER ${GENERIC_CXX_COMPILER})
 elseif(WIN32)
     set(FLTK_C_COMPILER ${NATIVE_C_COMPILER})
     set(FLTK_CXX_COMPILER ${NATIVE_CXX_COMPILER})

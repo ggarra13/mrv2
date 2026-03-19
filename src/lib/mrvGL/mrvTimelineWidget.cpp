@@ -293,6 +293,12 @@ namespace mrv
             return _p->timelineWidget->getSelectedItems();
         }
         
+        std::vector<const otio::Transition* >
+        TimelineWidget::getSelectedTransitions() const
+        {
+            return _p->timelineWidget->getSelectedTransitions();
+        }
+        
         bool TimelineWidget::isEditable() const
         {
             return _p->timelineWidget->isEditable();
