@@ -2447,12 +2447,14 @@ namespace tl
                                         (isDolby != oldIsDolby);
 
            if (tonemapChanged || algorithmChanged || metadataChanged)
-           {
+           {                              
+#if defined(TLRENDER_LIBPLACEBO)
                if (p.placeboData && p.placeboData->state)
                {
                    pl_shader_obj_destroy(&p.placeboData->state);
                    p.placeboData->state = NULL;
                }
+#endif
            }
 
            // 2. Optimization: Initialize update flag based on Option changes
@@ -2653,7 +2655,14 @@ namespace tl
 
                 case image::EOTFType::EOTF_BT709:
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+#ifdef __APPLE___
+                    // BT.1886 is technically correct per spec, but macOS ColorSync
+                    // treats BT.709 SDR content with the sRGB-like curve.
+                    // Use SRGB to match QuickTime's output.
+                    src_colorspace.transfer = PL_COLOR_TRC_SRGB;  // was PL_COLOR_TRC_BT_1886
+#else
                     src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+#endif
                     break;
 
                 case image::EOTFType::EOTF_BT601:
@@ -2708,11 +2717,6 @@ namespace tl
                         hdr.max_pq_y = data.maxPQY;
                         hdr.avg_pq_y = data.avgPQY;
                     }                    
-
-                }  // isHDRVideo
-
-                if (isHDRVideo)
-                {
                     
                     // defaults, generates LUTs if state is set.
                     cmap.gamut_mapping = &pl_gamut_map_perceptual;
@@ -2793,16 +2797,60 @@ namespace tl
                         break;
                     }
                 }
-                else
-                {
-                    // SDR video on SDR monitor - do not do any gamut or
-                    // tone mapping
-                    cmap.gamut_mapping = nullptr;
-                    cmap.tone_mapping_function = nullptr;
-                }
 
                 pl_color_space dst_colorspace;
                 memset(&dst_colorspace, 0, sizeof(pl_color_space));
+
+                // Resolve dst color space from swapchain FIRST, independent
+                // of HDR logic.
+                auto vkColorSpace = ctx.colorSpace; 
+                
+                if (vkColorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+                {
+                    // Non-linear Display P3, sRGB transfer (what macOS/P3 displays expect for SDR)
+                    dst_colorspace.primaries = PL_COLOR_PRIM_DISPLAY_P3;
+                    dst_colorspace.transfer  = PL_COLOR_TRC_SRGB;
+                    dst_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE;
+                    dst_colorspace.hdr.min_luma = p.monitor.min_nits;
+                    const struct pl_raw_primaries* raw =
+                        pl_raw_primaries_get(PL_COLOR_PRIM_DISPLAY_P3);
+                    dst_colorspace.hdr.prim.red   = raw->red;
+                    dst_colorspace.hdr.prim.green = raw->green;
+                    dst_colorspace.hdr.prim.blue  = raw->blue;
+                    dst_colorspace.hdr.prim.white = raw->white;
+                }
+                else if (vkColorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT)
+                {
+                    dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
+                    dst_colorspace.transfer  = PL_COLOR_TRC_PQ;
+                    dst_colorspace.hdr.min_luma = p.monitor.min_nits;
+                    dst_colorspace.hdr.max_luma = p.monitor.max_nits;
+
+                    if (p.monitor.red.x > 0)
+                    {
+                        dst_colorspace.hdr.prim.red.x = p.monitor.red.x;
+                        dst_colorspace.hdr.prim.red.y = p.monitor.red.y;
+                        dst_colorspace.hdr.prim.green.x = p.monitor.green.x;
+                        dst_colorspace.hdr.prim.green.y = p.monitor.green.y;
+                        dst_colorspace.hdr.prim.blue.x = p.monitor.blue.x;
+                        dst_colorspace.hdr.prim.blue.y = p.monitor.blue.y;
+                        dst_colorspace.hdr.prim.white.x = p.monitor.white.x;
+                        dst_colorspace.hdr.prim.white.y = p.monitor.white.y;
+                    }
+                }
+                else // VK_COLOR_SPACE_SRGB_NONLINEAR_KHR — standard SDR fallback
+                {
+                    dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
+                    dst_colorspace.transfer  = PL_COLOR_TRC_BT_1886;
+                    dst_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE;
+                    dst_colorspace.hdr.min_luma = 0.F;
+                    const struct pl_raw_primaries* raw =
+                        pl_raw_primaries_get(PL_COLOR_PRIM_BT_709);
+                    dst_colorspace.hdr.prim.red   = raw->red;
+                    dst_colorspace.hdr.prim.green = raw->green;
+                    dst_colorspace.hdr.prim.blue  = raw->blue;
+                    dst_colorspace.hdr.prim.white = raw->white;
+                }
 
                 if (p.monitor.hdr_enabled)
                 {
@@ -2824,70 +2872,54 @@ namespace tl
                         src_colorspace.hdr.min_luma = 0.0;
                     }
                     
-                    if (p.ocioData &&
-                        (p.ocioData->icsDesc || p.ocioData->shaderDesc))
-                    {
-                        src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-                        src_colorspace.transfer = PL_COLOR_TRC_LINEAR;
-                
-                        dst_colorspace.primaries = src_colorspace.primaries;
-                        dst_colorspace.transfer = src_colorspace.transfer;
-                        
-                        dst_colorspace.hdr.min_luma = 0.F;
-                        dst_colorspace.hdr.max_luma = src_colorspace.hdr.max_luma > 0 ? src_colorspace.hdr.max_luma : p.monitor.max_nits;
-                        
-                        cmap.gamut_mapping = nullptr;
-                        cmap.tone_mapping_function = nullptr;
-                    }
-                    else
-                    {
-                        dst_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
-                        dst_colorspace.transfer = PL_COLOR_TRC_PQ;
-                        dst_colorspace.hdr.min_luma = p.monitor.min_nits;
-                        dst_colorspace.hdr.max_luma = p.monitor.max_nits;
-                    }
-
-                    if (p.monitor.red.x > 0)
-                    {
-                        dst_colorspace.hdr.prim.red.x = p.monitor.red.x;
-                        dst_colorspace.hdr.prim.red.y = p.monitor.red.y;
-                        dst_colorspace.hdr.prim.green.x = p.monitor.green.x;
-                        dst_colorspace.hdr.prim.green.y = p.monitor.green.y;
-                        dst_colorspace.hdr.prim.blue.x = p.monitor.blue.x;
-                        dst_colorspace.hdr.prim.blue.y = p.monitor.blue.y;
-                        dst_colorspace.hdr.prim.white.x = p.monitor.white.x;
-                        dst_colorspace.hdr.prim.white.y = p.monitor.white.y;
-                    }
-                    else
-                    {
-                        const struct pl_raw_primaries* raw =
-                            pl_raw_primaries_get(PL_COLOR_PRIM_DISPLAY_P3);
-
-                        dst_colorspace.hdr.prim.red = raw->red;
-                        dst_colorspace.hdr.prim.green = raw->green;
-                        dst_colorspace.hdr.prim.blue = raw->blue;
-                        dst_colorspace.hdr.prim.white = raw->white;
-                    }
                 }
                 else
                 {
-                    dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
-                    dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                    if (!isHDRVideo)
+                    {
+                        // SDR video on SDR monitor - do not do any gamut or
+                        // tone mapping
+                        
+                        // Explicitly set src luminance so libplacebo doesn't have to infer
+                        src_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE;
+                        src_colorspace.hdr.min_luma = 0.F;
+
+                        if (vkColorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+                        {
+                            // BT.709 is a strict subset of P3, so clip is lossless here.
+                            // But we need something non-null so libplacebo handles the
+                            // primaries remap correctly and doesn't leave gamut undefined.
+                            cmap.gamut_mapping = &pl_gamut_map_clip;
+                            cmap.tone_mapping_function = nullptr; // same luminance range
+                        }
+                        else
+                        {
+                            // sRGB swapchain: src and dst are both BT.709, no conversion needed
+                            cmap.gamut_mapping = nullptr;
+                            cmap.tone_mapping_function = nullptr;
+                        }
+
+                        // Prevent any signal boosting regardless of default params
+                        cmap.inverse_tone_mapping = false;
+                        cmap.metadata = PL_HDR_METADATA_NONE;
+                    }
+                }
+                
+
+                //
+                //  If OCIO is active, do not use libplacebo for tone-mapping.
+                //
+                if (p.ocioData &&
+                    (p.ocioData->icsDesc || p.ocioData->shaderDesc))
+                {
+                    dst_colorspace.primaries = src_colorspace.primaries;
+                    dst_colorspace.transfer = src_colorspace.transfer;
                         
                     dst_colorspace.hdr.min_luma = 0.F;
-                    // SDR peak in nits
-                    // See ITU-R Report BT.2408 for more information.
-                    // or libplacebo's colorspace.h
-                    dst_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE; // 203.F; 
-                    
-                    const struct pl_raw_primaries* raw =
-                        pl_raw_primaries_get(PL_COLOR_PRIM_BT_709);
-
-                    dst_colorspace.hdr.prim.red = raw->red;
-                    dst_colorspace.hdr.prim.green = raw->green;
-                    dst_colorspace.hdr.prim.blue = raw->blue;
-                    dst_colorspace.hdr.prim.white = raw->white;
-
+                    dst_colorspace.hdr.max_luma = src_colorspace.hdr.max_luma > 0 ? src_colorspace.hdr.max_luma : p.monitor.max_nits;
+                        
+                    cmap.gamut_mapping = nullptr;
+                    cmap.tone_mapping_function = nullptr;
                 }
 
                 pl_color_space_infer(&src_colorspace);

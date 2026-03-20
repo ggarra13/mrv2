@@ -391,7 +391,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            if (p.monitor.hdr_enabled && p.monitor.max_nits > 399)
+            if (p.monitor.hdr_enabled)
             {                
                 std::string msg =
                     string::Format(_("HDR monitor min. nits = {0}")).
@@ -404,17 +404,23 @@ namespace mrv
             }
             else
             {
-                if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                if (colorSpace() == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+                {
+                    // Pass it through.
+                }
+                else if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
                 {
                     colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                     format() = VK_FORMAT_B8G8R8A8_UNORM;
+                    
+                    p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
+                    p.monitor.min_nits = 0.001F;
+                    p.monitor.max_nits = 100.F;
+                    
+                    LOG_STATUS(_("HDR monitor not found or not configured."));
                 }
                 
-                p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
-                p.monitor.min_nits = 0.001F;
-                p.monitor.max_nits = 100.F;
                 
-                LOG_STATUS(_("HDR monitor not found or not configured."));
             }
         }
             
@@ -442,7 +448,7 @@ namespace mrv
             default:
                 break;
             }
-
+            
             if (valid_colorspace)
             {
                 if (p.monitor_first_run)
@@ -468,8 +474,8 @@ namespace mrv
                 p.monitor.min_nits = 0.001F;
                 p.monitor.max_nits = 100.F;
             }
-            
-            std::string msg;
+
+            std::string msg;            
             msg = string::Format(_("Vulkan color space is {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
             LOG_STATUS(msg);
                     

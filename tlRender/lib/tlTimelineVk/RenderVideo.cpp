@@ -866,7 +866,7 @@ namespace tl
                     p.fbo, "tile",
                     videoData[i], boxes[i],
                     i < imageOptions.size() ?
-                        std::make_shared<timeline::ImageOptions>(imageOptions[i])
+                    std::make_shared<timeline::ImageOptions>(imageOptions[i])
                     : nullptr,
                     i < displayOptions.size() ? displayOptions[i] : timeline::DisplayOptions());
             }
@@ -1151,13 +1151,14 @@ namespace tl
                 fbo->setupViewportAndScissor(p.cmd);
                 
                 _createBindingSet(p.shaders["display"]);
+
+#if defined(TLRENDER_LIBPLACEBO)
                 std::size_t pushSize = p.shaders["display"]->getPushSize();
                 if (pushSize > 0)
                 {
                     std::vector<uint8_t> pushData(pushSize, 0);
 
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-#if defined(TLRENDER_LIBPLACEBO)
                     std::size_t currentOffset = 0;
                     const pl_shader_res* res = p.placeboData->res;
                     for (int j = 0; j < 2; ++j)
@@ -1319,5 +1320,6 @@ namespace tl
             
             p.transform = oldTransform;
         }
-    } // namespace timeline_vlk
+        
+    }   // namespace timeline_vlk
 } // namespace tl
