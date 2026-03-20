@@ -68,6 +68,7 @@ ChangeLog
 - Made Edit->Selected->Remove Items handle removing of both multiple transitions and clips.
 - Made Edit->Selected->Remove Items be run with the Delete key when focus is in the timeline and selection mode is Select.
 - Fixed Vulkan macOS to check hdr.monitor.max_nits >= 400 for actual HDR support.
+- Bumped macOS deployment version to 12.0 or higher.
 
 
 v1.5.8

@@ -2447,12 +2447,14 @@ namespace tl
                                         (isDolby != oldIsDolby);
 
            if (tonemapChanged || algorithmChanged || metadataChanged)
-           {
+           {                              
+#if defined(TLRENDER_LIBPLACEBO)
                if (p.placeboData && p.placeboData->state)
                {
                    pl_shader_obj_destroy(&p.placeboData->state);
                    p.placeboData->state = NULL;
                }
+#endif
            }
 
            // 2. Optimization: Initialize update flag based on Option changes
