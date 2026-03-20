@@ -63,17 +63,17 @@ fi
 . etc/build_cores.sh
 
 #
-# For Darwin, when building amd64, we make it compatible with macOS 11.0
+# For Darwin, when building amd64, we make it compatible with macOS 12.0
 #
 if [[ -z $CMAKE_OSX_DEPLOYMENT_TARGET ]]; then
-    export CMAKE_OSX_DEPLOYMENT_TARGET=11.0
+    export CMAKE_OSX_DEPLOYMENT_TARGET=12.0
 fi
 
 if [[ $KERNEL == *Darwin* ]]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
     if [[ $ARCH == arm64 || $ARCH == aarch64 ]]; then
 	export CMAKE_OSX_ARCHITECTURES=$ARCH
-	export CMAKE_OSX_DEPLOYMENT_TARGET=11.3
+	export CMAKE_OSX_DEPLOYMENT_TARGET=12.0  # was 11.3
     else
 	export CMAKE_OSX_ARCHITECTURES="x86_64"
     fi
