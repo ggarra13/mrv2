@@ -370,13 +370,17 @@ echo
 echo "C COMPILERS"
 echo "-----------"
 echo "Native C compiler ${NATIVE_C_COMPILER_NAME} version ${NATIVE_C_COMPILER_VERSION}"
+echo "${NATIVE_C_COMPILER}"
 echo "Generic C compiler ${GENERIC_C_COMPILER_NAME} version ${GENERIC_C_COMPILER_VERSION}"
+echo "${GENERIC_C_COMPILER}"
 echo "Generic GNU C compiler ${GNU_C_COMPILER_NAME} ${GNU_C_COMPILER_VERSION}"
 echo
 echo "CXX COMPILERS"
 echo "-------------"
 echo "Native CXX compiler ${NATIVE_CXX_COMPILER_NAME} version ${NATIVE_CXX_COMPILER_VERSION}"
+echo "${NATIVE_CXX_COMPILER}"
 echo "Generic CXX compiler with ${GENERIC_CXX_COMPILER_NAME} version ${GENERIC_CXX_COMPILER_VERSION}"
+echo "${GENERIC_CXX_COMPILER}"
 echo "Generic GNU CXX compiler ${GNU_CXX_COMPILER_NAME} ${GNU_CXX_COMPILER_VERSION}"
 echo
 echo "LINKERS"
