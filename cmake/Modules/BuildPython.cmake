@@ -43,9 +43,9 @@ if(APPLE)
 
     set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
     set(Python_C_COMPILER ${NATIVE_C_COMPILER})
-    set(Python_C_FLAGS "-isysroot ${_sdk_LOC} ${CMAKE_C_FLAGS}" )
+    set(Python_C_FLAGS "-isysroot ${_sdk_LOC} -include Security/Security.h ${CMAKE_C_FLAGS}" )
     set(Python_CXX_COMPILER ${NATIVE_CXX_COMPILER})
-    set(Python_CXX_FLAGS "-isysroot ${_sdk_LOC} ${CMAKE_CXX_FLAGS}" )
+    set(Python_CXX_FLAGS "-isysroot ${_sdk_LOC} -include Security/Security.h ${CMAKE_CXX_FLAGS}" )
     set(Python_LD_FLAGS "-isysroot ${_sdk_LOC} -framework Security -framework CoreFoundation ${CMAKE_SHARED_LINKER_FLAGS}" )
     
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
