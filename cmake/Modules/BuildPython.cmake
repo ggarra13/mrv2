@@ -24,29 +24,20 @@ else()
 endif()
 
     
-set( Python_PATCH )
-set( Python_ENV )
-set( Python_PATH $ENV{PATH} )
+set(Python_PATCH )
+set(Python_ENV )
+set(Python_PATH $ENV{PATH} )
+set(Python_OPTIMIZATIONS --enable-optimizations)
 
 if(APPLE)
-    
-    execute_process(
-	COMMAND xcrun --show-sdk-path
-	OUTPUT_VARIABLE _sdk_LOC
-	OUTPUT_STRIP_TRAILING_WHITESPACE
-	ERROR_VARIABLE sdk_prefix_error
-    )
-	
-    if(sdk_prefix_error)
-	message(FATAL_ERROR "Could not located macOS 'xcrun'.  Error: ${sdk_prefix_error}")
-    endif()
 
+    set(Python_OPTIMIZATIONS )
     set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
     set(Python_C_COMPILER ${NATIVE_C_COMPILER})
-    set(Python_C_FLAGS "-isysroot ${_sdk_LOC} -include System/Library/Frameworks/Security.framework/Headers/Security/Security.h ${CMAKE_C_FLAGS}" )
+    set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
     set(Python_CXX_COMPILER ${NATIVE_CXX_COMPILER})
     set(Python_CXX_FLAGS ${Python_C_FLAGS} )
-    set(Python_LD_FLAGS "-isysroot ${_sdk_LOC} -framework Security -framework CoreFoundation ${CMAKE_SHARED_LINKER_FLAGS}" )
+    set(Python_LD_FLAGS "-framework Security -framework CoreFoundation ${CMAKE_SHARED_LINKER_FLAGS}" )
     
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
 	set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${Python_C_FLAGS}")
@@ -87,7 +78,7 @@ if(APPLE)
 	"LDFLAGS=${Python_LD_FLAGS}"
 	"CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}" --
 	./configure
-	--enable-optimizations
+	${Python_OPTIMIZATIONS}
 	--enable-shared
 	--with-openssl=${_openssl_LOC}
 	--prefix=${CMAKE_INSTALL_PREFIX}
@@ -114,7 +105,7 @@ elseif(UNIX)
     set( Python_ENV ${CMAKE_COMMAND} -E env "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_LD_LIBRARY_PATH}" "PYTHONPATH=${Python_SOURCE_LIB_DIR}" "CFLAGS=${Python_C_FLAGS}" "CPPFLAGS=${Python_C_FLAGS}" "CXXFLAGS=${Python_CXX_FLAGS}" "LDFLAGS=${Python_LD_FLAGS}" -- )
 
     set( Python_CONFIGURE ${Python_ENV} ./configure
-	--enable-optimizations
+	${Python_OPTIMIZATIONS}
 	--enable-shared
         --prefix=${CMAKE_INSTALL_PREFIX}
 	--without-ensurepip
