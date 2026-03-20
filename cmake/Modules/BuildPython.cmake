@@ -49,7 +49,8 @@ if(APPLE)
     set(Python_LD_FLAGS "-framework Security -framework CoreFoundation ${CMAKE_SHARED_LINKER_FLAGS}" )
     
     if(CMAKE_OSX_DEPLOYMENT_TARGET)
-	set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_C_FLAGS}")
+	set( Python_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${Python_C_FLAGS}")
+	set( Python_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} ${Python_CXX_FLAGS}")
     endif()
 
     if(TLRENDER_NET)
