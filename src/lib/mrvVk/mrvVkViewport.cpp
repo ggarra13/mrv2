@@ -391,7 +391,7 @@ namespace mrv
         {
             TLRENDER_P();
 
-            if (p.monitor.hdr_enabled)
+            if (p.monitor.hdr_enabled && p.monitor.max_nits > 399)
             {                
                 std::string msg =
                     string::Format(_("HDR monitor min. nits = {0}")).

@@ -230,13 +230,13 @@ def fltk_config(fltk_dir):
     return (needed_libraries, needed_directories, needed_includes)
 
 ###########################################################################
-all_include_dirs = ['./src', './contrib','/usr/include']
+all_include_dirs = ['./src', './contrib']
 if fltk_dir != "":
-    if (sys.platform == 'win32'):
+    if sys.platform == 'win32':
        all_include_dirs.insert(0, fltk_dir+"/include")
        all_include_dirs.insert(0, os.path.join(fltk_dir,'/include'))
-       #else:
-       #    all_include_dirs.insert(0, fltk_dir)
+if sys.platform != 'darwin':
+    all_include_dirs.append('/usr/include')
 print("ALL_INCLUDE_DIRS=",all_include_dirs)
 ###########################################################################
 
@@ -336,7 +336,8 @@ class PySwigCommand(setuptools.Command):
                     add_incl.append('-I' + m.group(1))
         else:
             print("FLTK not found!")
-    add_incl.append('-I/usr/include')
+    if sys.platform != 'darwin':
+        add_incl.append('-I/usr/include')
     self.include = add_incl
 
   def run(self):
@@ -379,9 +380,8 @@ class PySwigCommand(setuptools.Command):
     #subprocess.check_call(command, cwd='python')
     subprocess.check_call(command)
 
-
 if cxx_flags != '':
-    compile_arg_list.append(cxx_flags)
+    compile_arg_list.extend(cxx_flags.split())
     
 # module declarations
 contrib_sources = []

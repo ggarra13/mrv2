@@ -10,19 +10,44 @@ echo "RUNNING upload_sourceforge.sh......"
 
 upload_file()
 {
+    local src=$1
+    local dest=$2
+    local max_retries=5
+    local attempt=1
+    local success=0
+
     echo
-    echo "Uploading $1 as $2..."
+    echo "Uploading $src as $dest (Attempt $attempt of $max_retries)..."
     echo
 
-    rsync -avz -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" $1 ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$branch/$2
-    if [[ $? -ne 0 ]]; then
-        echo "rsync command failed. Error log:"
-	cat rsync_error.log
+    while [ $attempt -le $max_retries ]; do
+        # --partial: keeps partially transferred files if interrupted
+        # --timeout: prevents rsync from hanging indefinitely
+        # ServerAliveInterval: sends a "ping" through the SSH tunnel to keep it alive
+        rsync -avz --partial --timeout=60 \
+              -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=3" \
+              "$src" "ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$branch/$dest" 2> rsync_error.log
+
+        if [[ $? -eq 0 ]]; then
+            success=1
+            break
+        else
+            echo "Attempt $attempt failed. rsync error log:"
+            cat rsync_error.log
+            echo "Waiting before next attempt..."
+            sleep 15
+            ((attempt++))
+        fi
+    done
+
+    if [[ $success -eq 1 ]]; then
+        echo
+        echo "Upload of $src was successful."
+        echo
+    else
+        echo "Failed to upload $src after $max_retries attempts. Aborting."
         exit 1
     fi
-    echo
-    echo "Upload was successful."
-    echo
 }
 
 #

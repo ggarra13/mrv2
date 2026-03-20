@@ -6,6 +6,7 @@ on:
       - main
     tags-ignore:
       - '**'
+  workflow_dispatch:
 
 jobs:
   macos-14-vulkan-full-build:

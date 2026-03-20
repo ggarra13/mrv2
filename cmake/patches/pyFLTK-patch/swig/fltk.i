@@ -162,6 +162,12 @@ if sys.version > '3':
   }
   %}
 
+%{
+#ifdef __APPLE__
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+%}
+
 #define FL_EXPORT
 
 %include fl_attr.i
