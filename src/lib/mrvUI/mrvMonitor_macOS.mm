@@ -80,8 +80,8 @@ namespace mrv {
                 if (screenNumber && [screenNumber unsignedIntValue] == displayID) {
                     CGFloat headroom = screen.maximumPotentialExtendedDynamicRangeColorComponentValue;
             
-                    // If the multiplier is > 1.0, it's an HDR-capable display
-                    if (headroom > 1.0) {
+                    // If the multiplier is > 2.0, it's an HDR-capable display
+                    if (headroom > 2.0) {
                         caps.hdr_supported = true;
                         caps.hdr_enabled = true;
                         caps.max_nits = headroom * 100.0f; 
