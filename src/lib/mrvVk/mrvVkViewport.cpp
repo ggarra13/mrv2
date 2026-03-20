@@ -404,12 +404,7 @@ namespace mrv
             }
             else
             {
-                if (colorSpace() == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
-                {
-                    // FLTK will return this color space for macOS.
-                    // Accept it as is.
-                }
-                else if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                if (colorSpace() != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
                 {
                     colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                     format() = VK_FORMAT_B8G8R8A8_UNORM;
