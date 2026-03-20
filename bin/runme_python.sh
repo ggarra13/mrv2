@@ -54,6 +54,7 @@ export CMAKE_FLAGS=""
 #
 export BUILD_PYTHON=ON  # needed for libplacebo
 export MRV2_PYBIND11=ON
+export MRV2_PYFLTK=ON
 
 export TLRENDER_AV1=OFF
 export TLRENDER_EXR=ON
@@ -71,7 +72,7 @@ export TLRENDER_WAYLAND=ON
 export TLRENDER_X11=ON
 
 echo
-echo "Saving compile log to $BUILD_DIR/compile.log ..."
+echo "Saving compile log to BUILD-python/Release/compile.log ..."
 echo
-cmd="./etc/runme_nolog.sh --ask $params 2>&1 | tee $BUILD_DIR/compile.log"
+cmd="./etc/runme_nolog.sh --ask $params 2>&1 | tee BUILD-python/Release/compile.log"
 run_cmd $cmd
