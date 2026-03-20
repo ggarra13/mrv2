@@ -31,7 +31,6 @@ set(Python_OPTIMIZATIONS --enable-optimizations)
 
 if(APPLE)
 
-    set(Python_OPTIMIZATIONS )
     set(Python_DYLD_LIBRARY_PATH $ENV{DYLD_LIBRARY_PATH})
     set(Python_C_COMPILER ${NATIVE_C_COMPILER})
     set(Python_C_FLAGS "${CMAKE_C_FLAGS}" )
@@ -66,6 +65,10 @@ if(APPLE)
 	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/configure"
 	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/"
 	COMMAND chmod 0755 "${CMAKE_BINARY_DIR}/deps/Python/src/Python/configure"
+	COMMAND
+	${CMAKE_COMMAND} -E copy_if_different
+	"${PROJECT_SOURCE_DIR}/cmake/patches/Python-patch/Modules/_scproxy.c"
+	"${CMAKE_BINARY_DIR}/deps/Python/src/Python/Modules/_scproxy.c"
     )
     
     set( Python_ENV ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib:${Python_DYLD_LIBRARY_PATH}" -- )
