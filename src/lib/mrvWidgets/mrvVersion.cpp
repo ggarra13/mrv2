@@ -1379,6 +1379,8 @@ Christoph Lohr                                (Color Pipeline Debugging,
 danbradham                                    (UI debugging)
 darkvertext                                   (Environment mapping support)
 dchabashvili                                  (Annotations exporting to movs)
+Denislav Balevski                             (SDR on HDR debugging,
+                                               Open Session improvements)
 dynestudio                                    (OCIO pipeline debugging)
 efleurant                                     (Python script debugging)
 gerroon                                       (Saving suggestion)
