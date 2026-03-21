@@ -129,9 +129,9 @@ set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
 	DeleteRegKey HKCR '${hdr_KEY}'
 
         # Delete for latest versions:
-        DeleteRegKey HKCR 'Applications\\${mrv2_EXE}'
+        DeleteRegKey HKCR 'Applications\\\\${mrv2_EXE}'
         DeleteRegKey HKCR '${mrv2_EXE}'
-        DeleteRegKey HKCR 'Applications\\${hdr_EXE}'
+        DeleteRegKey HKCR 'Applications\\\\${hdr_EXE}'
         DeleteRegKey HKCR '${hdr_EXE}'
 
 	SectionEnd
