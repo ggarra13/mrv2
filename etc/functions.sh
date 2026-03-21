@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# SPDX-License-Identifier: CC BY-NC-ND
-# Filmmaker
-# Copyright 2024 - Gonzalo Garramuño. All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# mrv2
+# Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
 #
@@ -44,17 +44,9 @@ get_linux_id()
     export LINUX_ID=`cat /etc/os-release | grep 'ID_LIKE='`
 }
 
-#
-# Get kernel and architecture and on MacOS, MACOS_BRAND (Intel, M1, M2, etc).
-#
-get_kernel()
+get_compilers()
 {
-    export KERNEL=`uname`
-    export MACOS_BRAND=''
-    if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ||
-	      $KERNEL == *Windows* ]]; then
-	export KERNEL=Windows
-
+    if [[ $KERNEL == *Windows* ]]; then
 	# Native compiler (MSVC)
 	export NATIVE_C_COMPILER=`which cl.exe`
 	export NATIVE_C_COMPILER_NAME="cl.exe"
@@ -82,9 +74,9 @@ get_kernel()
 	export GENERIC_LINKER=`which link.exe`
 	export GENERIC_LINKER_NAME="link.exe"
 
-	export GNU_LINKER=`which ld.exe`
+	export GNU_LINKER=""
 	export GNU_LINKER_NAME="ld.exe"
-	export GNU_ARCHIVER=`which ar.exe`
+	export GNU_ARCHIVER=""
 	export GNU_ARCHIVER_NAME="ar.exe"
 
     elif [[ $KERNEL == *Darwin* ]]; then
@@ -217,7 +209,24 @@ get_kernel()
     export GNU_CXX_COMPILER_VERSION=$(get_compiler_version "${GNU_CXX_COMPILER}")
     export GNU_LINKER_VERSION=$(get_linker_version ${GNU_LINKER})
     export GNU_ARCHIVER_VERSION=$(get_archiver_version ${GNU_ARCHIVER})
-    
+}
+
+#
+# Get kernel and architecture and on MacOS, MACOS_BRAND (Intel, M1, M2, etc).
+#
+get_kernel()
+{
+    export KERNEL=`uname`
+    export MACOS_BRAND=''
+    if [[ $KERNEL == *MSYS* || $KERNEL == *MINGW* ||
+	      $KERNEL == *Windows* ]]; then
+	export KERNEL=Windows
+    elif [[ $KERNEL == *Darwin* ]]; then
+	export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string)
+    else
+	get_linux_id
+    fi
+
     if [[ $ARCH == "" ]]; then
 	export ARCH=`uname -m` # was uname -a
 	export UNAME_ARCH=$ARCH # Store uname architecture to compile properly

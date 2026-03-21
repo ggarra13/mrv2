@@ -43,6 +43,11 @@ get_cmake_version
 get_git_version
 
 #
+# Get the compilers
+#
+get_compilers
+
+#
 # These are some of the expensive mrv2 options
 #
 if [ -z "$MSYS2_INSTALL" ]; then
@@ -373,7 +378,7 @@ echo "Native C compiler ${NATIVE_C_COMPILER_NAME} version ${NATIVE_C_COMPILER_VE
 echo "${NATIVE_C_COMPILER}"
 echo "Generic C compiler ${GENERIC_C_COMPILER_NAME} version ${GENERIC_C_COMPILER_VERSION}"
 echo "${GENERIC_C_COMPILER}"
-echo "Generic GNU C compiler ${GNU_C_COMPILER_NAME} ${GNU_C_COMPILER_VERSION}"
+echo "GNU C compiler ${GNU_C_COMPILER_NAME} ${GNU_C_COMPILER_VERSION}"
 echo
 echo "CXX COMPILERS"
 echo "-------------"
@@ -381,19 +386,19 @@ echo "Native CXX compiler ${NATIVE_CXX_COMPILER_NAME} version ${NATIVE_CXX_COMPI
 echo "${NATIVE_CXX_COMPILER}"
 echo "Generic CXX compiler with ${GENERIC_CXX_COMPILER_NAME} version ${GENERIC_CXX_COMPILER_VERSION}"
 echo "${GENERIC_CXX_COMPILER}"
-echo "Generic GNU CXX compiler ${GNU_CXX_COMPILER_NAME} ${GNU_CXX_COMPILER_VERSION}"
+echo "GNU CXX compiler ${GNU_CXX_COMPILER_NAME} ${GNU_CXX_COMPILER_VERSION}"
 echo
 echo "LINKERS"
 echo "-------"
 echo "Native linker ${NATIVE_LINKER_NAME} version ${NATIVE_LINKER_VERSION}"
 echo "Generic linker with ${GENERIC_LINKER_NAME} version ${GENERIC_LINKER_VERSION}"
-echo "Generic GNU linker ${GNU_LINKER_NAME} version ${GNU_LINKER_VERSION}"
+echo "GNU linker ${GNU_LINKER_NAME} version ${GNU_LINKER_VERSION}"
 echo
 echo "ARCHIVERS"
 echo "---------"
 echo "Native archiver ${NATIVE_ARCHIVER_NAME} version ${NATIVE_ARCHIVER_VERSION}"
 echo "Generic archiver with ${GENERIC_ARCHIVER_NAME} version ${GENERIC_ARCHIVER_VERSION}"
-echo "Generic arhiver ${GNU_ARCHIVER_NAME} version ${GNU_ARCHIVER_VERSION}"
+echo "GNU arhiver ${GNU_ARCHIVER_NAME} version ${GNU_ARCHIVER_VERSION}"
 echo
 
 
