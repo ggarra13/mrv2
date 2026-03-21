@@ -71,6 +71,8 @@ ChangeLog
 - Bumped macOS deployment version to 12.0 or higher.
 - Updated OpenEXR to v3.4.7.	  
 - Updated OpenJPH to v0.26.3.
+- Uninstall on Windows now uninstalls version of mvr2/vmrv2 properly.
+
 
 v1.5.8
 ======

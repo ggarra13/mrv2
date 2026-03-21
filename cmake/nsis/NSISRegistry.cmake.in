@@ -118,7 +118,7 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
 set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
 
         StrCmp '$INSTALL_DESKTOP' '1' 0 +2
-           Delete '$DESKTOP\\\\hdr-64 v${mrv2_VERSION}.lnk'
+        Delete '$DESKTOP\\\\hdr-64 v${mrv2_VERSION}.lnk'
 
         # Delete the versioned application and file association entry.
         DeleteRegKey HKCR 'Applications\\\\${mrv2_KEY}'
@@ -127,6 +127,12 @@ set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
         # Delete the versioned application and file association entry.
         DeleteRegKey HKCR 'Applications\\\\${hdr_KEY}'
 	DeleteRegKey HKCR '${hdr_KEY}'
+
+        # Delete for latest versions:
+        DeleteRegKey HKCR 'Applications\\${mrv2_EXE}'
+        DeleteRegKey HKCR '${mrv2_EXE}'
+        DeleteRegKey HKCR 'Applications\\${hdr_EXE}'
+        DeleteRegKey HKCR '${hdr_EXE}'
 
 	SectionEnd
 	!addincludedir ${PROJECT_SOURCE_DIR}/../cmake/nsis
