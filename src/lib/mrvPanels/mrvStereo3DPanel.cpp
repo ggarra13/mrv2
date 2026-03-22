@@ -136,11 +136,13 @@ namespace mrv
                     continue;
                 lastPath = path;
 
-                const std::string& protocol = path.getProtocol();
-                const std::string& dir = path.getDirectory();
-                const std::string& base = path.getBaseName();
-                const std::string& extension = path.getExtension();
-                const std::string file = base + path.getNumber() + extension;
+                const std::string protocol = path.getProtocol();
+                const std::string dir = path.getDirectory();
+                const std::string base = path.getBaseName();
+                const std::string suffix = path.getSuffix();
+                const std::string extension = path.getExtension();
+                const std::string file = base + path.getNumber() + suffix +
+                                         extension;
                 const std::string fullfile = protocol + dir + file;
 
                 auto bW = new Widget<ClipButton>(
