@@ -8,16 +8,16 @@ set(HEADERS
     mrvFile.h
     mrvHDRApp.h
     mrvHome.h
+    mrvIO.h
     mrvLanguages.h
-    mrvString.h
 )
 set(SOURCES
     mrvContextObject.cpp
     mrvFile.cpp
     mrvHDRApp.cpp
     mrvHome.cpp
+    mrvIO.cpp
     mrvLanguages.cpp
-    mrvString.cpp
     main.cpp)
 
 hdr_files_to_absolute_paths()

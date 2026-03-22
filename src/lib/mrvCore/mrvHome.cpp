@@ -2,19 +2,24 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <stdlib.h>
-#include <filesystem>
-namespace fs = std::filesystem;
+#include "mrvFl/mrvIO.h"
+
+
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvFile.h"
+#include "mrvOS/mrvString.h"
+
+#include "mrvOS/mrvOS.h"
+#include "mrvOS/mrvRoot.h"
+#include "mrvOS/mrvString.h"
 
 #include <FL/filename.H>
 #include <FL/fl_utf8.h>
 
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvString.h"
+#include <stdlib.h>
+#include <filesystem>
+namespace fs = std::filesystem;
 
-#include "mrvOS/mrvOS.h"
-#include "mrvOS/mrvRoot.h"
 
 #if defined(_WIN32) && !defined(_WIN64_)
 #    include <windows.h>
@@ -23,8 +28,6 @@ namespace fs = std::filesystem;
 #    include <sys/types.h>
 #    include <pwd.h>
 #endif
-
-#include "mrvFl/mrvIO.h"
 
 namespace
 {
@@ -69,13 +72,13 @@ namespace mrv
         std::string path;
         if ((e = fl_getenv("TMP")))
         {
-            path = file::normalizePath(e);
+            path = string::normalizePath(e);
             if (fs::is_directory(path))
                 return path;
         }
         if ((e = fl_getenv("TEMP")))
         {
-            path = file::normalizePath(e);
+            path = string::normalizePath(e);
             if (fs::is_directory(path))
                 return path;
         }
@@ -95,7 +98,7 @@ namespace mrv
         char* e = nullptr;
         if ((e = fl_getenv("HOME")))
         {
-            path = file::normalizePath(e);
+            path = string::normalizePath(e);
             size_t pos = path.rfind("Documents");
             if (pos != std::string::npos)
             {
@@ -106,13 +109,13 @@ namespace mrv
         }
         if ((e = fl_getenv("USERPROFILE")))
         {
-            path = file::normalizePath(e);
+            path = string::normalizePath(e);
             if (fs::is_directory(path))
                 return path;
         }
         if ((e = fl_getenv("HOMEDRIVE")))
         {
-            path = file::normalizePath(e);
+            path = string::normalizePath(e);
             path += os::sgetenv("HOMEPATH");
             path += "/" + os::sgetenv("USERNAME");
             if (fs::is_directory(path))
@@ -167,7 +170,7 @@ namespace mrv
             c = fl_getenv("STUDIOPATH");
         if (!c || strlen(c) == 0)
             return "";
-        std::string r = file::normalizePath(c);
+        std::string r = string::normalizePath(c);
         r += "/.filmaura/";
         return r;
     }

@@ -18,7 +18,7 @@
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 #include "mrvOS/mrvOS.h"
 

@@ -7,7 +7,7 @@
 
 #include "mrvUI/mrvMonitor.h"
 
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 #include "mrvOS/mrvOS.h"
 

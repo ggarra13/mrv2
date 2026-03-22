@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include <mrvCore/mrvString.h>
+#include <mrvOS/mrvString.h>
 
 namespace mrv
 {

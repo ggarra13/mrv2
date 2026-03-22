@@ -30,12 +30,6 @@ namespace mrv
 {
     namespace file
     {
-        std::string normalizePath(const std::string& path)
-        {
-            std::string normalized = path;
-            std::replace(normalized.begin(), normalized.end(), '\\', '/');
-            return normalized;
-        }
         
         bool isValidType(const std::string ext)
         {

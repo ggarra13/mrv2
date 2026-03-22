@@ -29,11 +29,11 @@
 
 #include "mrvNetwork/mrvDummyClient.h"
 
-#include "mrvCore/mrvFile.h"
-#include "mrvOS/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
-#include "mrvCore/mrvString.h"
+
+#include "mrvOS/mrvI8N.h"
+#include "mrvOS/mrvString.h"
 
 #include <tlCore/StringFormat.h>
 
@@ -1381,7 +1381,7 @@ namespace mrv
                 }
             }
 
-            fileName = mrv::file::normalizePath(fileName);
+            fileName = mrv::string::normalizePath(fileName);
 
             const std::regex& regex = version_regex(ui, false);
             bool has_version = regex_match(fileName, regex);

@@ -11,15 +11,19 @@ namespace fs = std::filesystem;
 
 #include "mrViewer.h"
 
-#include "mrvCore/mrvSequence.h"
-#include "mrvCore/mrvFile.h"
-
 #include "mrvFl/mrvPathMapping.h"
 #include "mrvFl/mrvVersioning.h"
+#include "mrvFl/mrvIO.h"
 
 #include "mrvEdit/mrvEditCallbacks.h"
 
-#include "mrvFl/mrvIO.h"
+#include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvSequence.h"
+
+#include "mrvOS/mrvString.h"
+
+
+
 
 namespace
 {
@@ -95,7 +99,7 @@ namespace mrv
         unsigned max_tries = ui->uiPrefs->uiPrefsMaxImagesApart->value();
 
         std::string msg;
-        std::string file = mrv::file::normalizePath(path.get());
+        std::string file = string::normalizePath(path.get());
 
         while ((first_or_last || found == false) && tries <= max_tries)
         {

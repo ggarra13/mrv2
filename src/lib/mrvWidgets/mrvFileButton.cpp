@@ -9,7 +9,7 @@
 
 #include <tlCore/Vector.h>
 
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 #include "mrvOS/mrvI8N.h"
 
 #include "mrvFl/mrvCallbacks.h"

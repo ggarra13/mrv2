@@ -8,8 +8,8 @@ ROOT_DIR="${1:-.}"
 
 # Find and replace
 find "$ROOT_DIR" \( -name "*.h" -o -name "*.cpp" -o -name "*.fl" \) -type f | while read -r file; do
-    if grep -q '#include "mrvCore/mrvI8N.h"' "$file"; then
+    if grep -q 'mrvCore/mrvString.h' "$file"; then
         echo "Updating: $file"
-        sed -i 's|#include "mrvCore/mrvI8N.h"|#include "mrvOS/mrvI8N.h"|g' "$file"
+        sed -i 's|#mrvCore/mrvString.h|#mrvOS/mrvString.h|g' "$file"
     fi
 done

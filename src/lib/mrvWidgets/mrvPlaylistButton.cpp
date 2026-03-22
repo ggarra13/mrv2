@@ -14,7 +14,7 @@
 #include "mrvWidgets/mrvPlaylistButton.h"
 #include "mrvWidgets/mrvFileDragger.h"
 
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 #include "mrvOS/mrvI8N.h"
 
 #include <tlCore/Vector.h>

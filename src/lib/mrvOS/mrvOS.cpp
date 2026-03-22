@@ -15,8 +15,6 @@
 #    include <fcntl.h>
 #endif
 
-#include "mrvApp/mrvApp.h"
-
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrvFl/mrvIO.h"
@@ -24,10 +22,10 @@
 #include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
-#include "mrvOS/mrvI8N.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 #include "mrvOS/mrvEnv.h"
+#include "mrvOS/mrvI8N.h"
 #include "mrvOS/mrvOS.h"
 
 

@@ -63,7 +63,7 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvSequence.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 
 #include "mrvIcons/Documents.h"
@@ -421,8 +421,8 @@ Flu_File_Chooser::Flu_File_Chooser(
     // construct the user desktop path
     // userDesktop = userHome + "/" + desktopTxt;
 
-    userDesktop = mrv::file::normalizePath(userDesktop);
-    userDocs = mrv::file::normalizePath(userDocs);
+    userDesktop = mrv::string::normalizePath(userDesktop);
+    userDocs = mrv::string::normalizePath(userDocs);
 
     // make sure they don't end in '/'
     if (userDesktop[userDesktop.size() - 1] == '/')
@@ -2775,7 +2775,7 @@ void Flu_File_Chooser::cleanupPath(std::string& s)
     }
     catch(const fs::filesystem_error& e)
     {
-        s = mrv::file::normalizePath(s);
+        s = mrv::string::normalizePath(s);
     }
     if (!s.empty() && s.back() != '/') s += '/';  // Ensure trailing slash
 }

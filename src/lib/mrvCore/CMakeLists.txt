@@ -20,7 +20,6 @@ set(HEADERS
     mrvOrderedMap.h
     mrvPathMapping.h
     mrvSequence.h
-    mrvString.h
     mrvTimeObject.h
     mrvUtil.h
     mrvWait.h
@@ -39,7 +38,6 @@ set(SOURCES
     mrvMedia.cpp
     mrvMesh.cpp
     mrvPathMapping.cpp
-    mrvString.cpp
     mrvTimeObject.cpp
     mrvUtil.cpp
     mrvWait.cpp

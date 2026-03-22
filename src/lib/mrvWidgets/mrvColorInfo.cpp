@@ -7,7 +7,7 @@
 #include "mrvCore/mrvColorAreaInfo.h"
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvLocale.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 #include "mrvColorInfo.h"
 

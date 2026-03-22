@@ -35,10 +35,9 @@ namespace fs = std::filesystem;
 #    define PATH_MAX 2048
 #endif
 
-#include "mrvCore/mrvFile.h"
-
 #include "mrvOS/mrvEnv.h"
 #include "mrvOS/mrvRoot.h"
+#include "mrvOS/mrvString.h"
 
 namespace
 {
@@ -198,7 +197,7 @@ namespace mrv
         fs::path parent = rootdir.parent_path(); // Skip executable
         rootdir = parent.parent_path();          // Skip bin/ directory
 
-        g_root_path = file::normalizePath(rootdir.u8string());
+        g_root_path = string::normalizePath(rootdir.u8string());
         
         std::wstring root_str = rootdir.wstring();
         if (setenv(L"MRV2_ROOT", root_str.c_str(), 1) != 0)

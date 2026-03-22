@@ -17,7 +17,7 @@ namespace fs = std::filesystem;
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 #include "mrvWidgets/mrvBrowser.h"
 

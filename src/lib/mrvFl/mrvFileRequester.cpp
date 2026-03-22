@@ -18,7 +18,7 @@ namespace fs = std::filesystem;
 #include <FL/Fl_Native_File_Chooser.H>
 
 #include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvPreferences.h"

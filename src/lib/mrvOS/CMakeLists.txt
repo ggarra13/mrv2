@@ -9,6 +9,7 @@ set(HEADERS
     mrvOS.h 
     mrvRoot.h
     mrvStackTrace.h
+    mrvString.h
 )
 
 set(SOURCES
@@ -17,9 +18,10 @@ set(SOURCES
     mrvOS.cpp
     mrvRoot.cpp
     mrvStackTrace.cpp
+    mrvString.cpp
 )
 
-set(LIBRARIES )
+set(LIBRARIES tlRender::tlCore Imath::Imath ${FLTK_LIBRARIES})
 
 if( WIN32 )
     list( APPEND HEADERS

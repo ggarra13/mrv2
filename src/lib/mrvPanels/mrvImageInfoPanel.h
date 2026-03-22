@@ -20,7 +20,7 @@
 #include <FL/Fl_Scroll.H>
 
 #include "mrvCore/mrvMedia.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 #include "mrvWidgets/mrvPopupMenu.h"
 #include "mrvWidgets/mrvBrowser.h"

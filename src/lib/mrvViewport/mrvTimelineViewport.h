@@ -22,7 +22,7 @@
 
 #include "mrvCore/mrvActionMode.h"
 #include "mrvCore/mrvColorAreaInfo.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 #include <tlTimeline/BackgroundOptions.h>
 #include <tlTimeline/IRender.h>

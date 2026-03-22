@@ -9,6 +9,7 @@
 #include <FL/Fl_Window.H>
 
 #include <memory>
+#include <string>
 
 namespace tl
 {

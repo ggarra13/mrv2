@@ -15,7 +15,7 @@
 
 #include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 #include "mrvCore/mrvWait.h"
 
 #ifdef OPENGL_BACKEND

@@ -13,7 +13,7 @@
 #include <tlCore/Path.h>
 #include <tlCore/StringFormat.h>
 
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 #include "mrvCore/mrvUtil.h"
 
 #include "mrvFl/mrvIO.h"

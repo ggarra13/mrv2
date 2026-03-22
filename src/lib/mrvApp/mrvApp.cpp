@@ -1858,7 +1858,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        file::Path filePath(file::normalizePath(fileName));
+        file::Path filePath(string::normalizePath(fileName));
 
         if (filePath.getExtension() == ".mrv2s")
         {
@@ -1889,7 +1889,7 @@ namespace mrv
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
-            item->audioPath = file::Path(file::normalizePath(audioFileName));
+            item->audioPath = file::Path(string::normalizePath(audioFileName));
 
             p.filesModel->add(item);
         }

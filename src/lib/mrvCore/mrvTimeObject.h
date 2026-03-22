@@ -6,7 +6,7 @@
 
 #include <tlCore/Time.h>
 
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 namespace mrv
 {

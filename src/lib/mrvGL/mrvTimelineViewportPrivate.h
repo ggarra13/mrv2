@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 #include <tlTimeline/BackgroundOptions.h>
 #include <tlTimeline/Player.h>

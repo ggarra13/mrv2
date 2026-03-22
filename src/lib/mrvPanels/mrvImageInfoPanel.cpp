@@ -30,7 +30,7 @@
 #include "mrvOS/mrvI8N.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvSequence.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 #include "mrvCore/mrvMath.h"
 
 

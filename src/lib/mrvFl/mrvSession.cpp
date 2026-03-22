@@ -9,7 +9,7 @@
 #include <tlCore/StringFormat.h>
 
 #include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 
 #include "mrvOptions/mrvEnvironmentMapOptions.h"
 #include "mrvOptions/mrvStereo3DOptions.h"

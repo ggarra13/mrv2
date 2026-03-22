@@ -31,7 +31,7 @@
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvSequence.h"
-#include "mrvCore/mrvString.h"
+#include "mrvOS/mrvString.h"
 #include "mrvOS/mrvI8N.h"
 
 #include <tlTimelineVk/RenderShadersBinary.h>
