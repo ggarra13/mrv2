@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <ImfCompression.h>
-#include <ImfChromaticities.h>
+#include <OpenEXR/ImfCompression.h>
+#include <OpenEXR/ImfChromaticities.h>
 
 #include <tlIO/SequenceIO.h>
 
