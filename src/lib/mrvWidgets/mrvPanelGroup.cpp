@@ -148,7 +148,7 @@ namespace mrv
             set_Fl_Group(label);
 
             bool parented_to_main = true;
-            if (Fl_Group::current() != nullptr)
+            if (Fl_Group::current() == nullptr)
                 parented_to_main = false;
             
             tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
@@ -456,9 +456,9 @@ namespace mrv
         set_Fl_Group(lbl);
         
         bool parented_to_main = true;
-        if (Fl_Group::current() != nullptr)
+        if (Fl_Group::current() == nullptr)
             parented_to_main = false;
-            
+        
         tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
         tw->end();
         tw->screen_num(N);
