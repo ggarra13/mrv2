@@ -5,7 +5,6 @@
 set(HEADERS
     mrvCallbacks.h
     mrvColorSchemes.h
-    mrvConvertImage.h
     mrvContextObject.h
     mrvFileRequester.h
     mrvHotkey.h
@@ -28,7 +27,6 @@ set(SOURCES
     mrvCallbacks.cpp
     mrvColorSchemes.cpp
     mrvContextObject.cpp
-    mrvConvertImage.cpp
     mrvFileRequester.cpp
     mrvHotkey.cpp
     mrvInit.cpp
@@ -55,7 +53,7 @@ endif()
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set(LIBRARIES mrvEdit mrvUI tlRender::tlDraw)
+set(LIBRARIES mrvEdit mrvUI mrvImage tlRender::tlDraw)
 
 if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL")
     list(APPEND LIBRARIES mrvGL )

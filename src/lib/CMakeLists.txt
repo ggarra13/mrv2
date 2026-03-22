@@ -9,6 +9,7 @@ add_subdirectory(mrvFlmm)        # FLTK
 add_subdirectory(mrvWidgets)     # mrvFlmm mrvCore FLTK FLTK_gl MINIzip
 add_subdirectory(mrvFLU)         # mrvWidgets, FLTK, Intl
 add_subdirectory(mrvUI)          # mrvWidgets, Xrandr, wayland-client
+add_subdirectory(mrvImage)       
 if(TLRENDER_FFMPEG)
     add_subdirectory(mrvVoice)       # mrvWidgets, RtAudio
 endif()

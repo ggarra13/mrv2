@@ -3,10 +3,10 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#include "mrvFl/mrvConvertImage.h"
 #include "mrvFl/mrvIO.h"
 
-#include "mrvCore/mrvPixelConverter.h"
+#include "mrvImage/mrvConvertImage.h"
+#include "mrvImage/mrvPixelConverter.h"
 
 #include <tlCore/StringFormat.h>
 

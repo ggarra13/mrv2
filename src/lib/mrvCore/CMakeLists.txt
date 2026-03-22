@@ -16,7 +16,6 @@ set(HEADERS
     mrvHome.h
     mrvHotkey.h
     mrvI8N.h
-    mrvImageOps.h
     mrvLicensing.h
     mrvLocale.h
     mrvMedia.h
@@ -25,7 +24,6 @@ set(HEADERS
     mrvOrderedMap.h
     mrvOS.h 
     mrvPathMapping.h
-    mrvPixelConverter.h
     mrvRoot.h
     mrvSequence.h
     mrvStackTrace.h
@@ -43,7 +41,6 @@ set(SOURCES
     mrvFonts.cpp
     mrvHome.cpp
     mrvHotkey.cpp
-    mrvImageOps.cpp
     mrvLicensing.cpp
     mrvLocale.cpp
     mrvMedia.cpp

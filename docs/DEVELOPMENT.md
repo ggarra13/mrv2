@@ -171,8 +171,6 @@ src/lib:
 			  		       gettext / libintl
 					       (why do Windows needs turning
 					       	off macros?)
-			  mrvImageOps.h/cpp  - Functions to operate on images.
-			  		      (refactor to mrvImage/ directory)
 			  mrvLocale.h/cpp    - RAII class to switch locale
 			  		       settings (usually LC_NUMERIC)
 			  mrvMath.h	     - Auxiliary math classes
@@ -191,10 +189,6 @@ src/lib:
 			  		      of insertion.
 			  mrvPathMapping.h/cpp
 					    - Implements path mapping algorithm.
-			  mrvPixelConverter.h
-					    - Template functions to convert
-					      pixels.
-					      (Refactor to mrvImage/)
 			 mrvRoot.h         - Finds root directory from argv[0]
 			 		     and sets MRV2_ROOT environment
 					     variable to it
@@ -231,8 +225,6 @@ src/lib:
 			  			  (refactor to mrvFLTK)
 			  mrvContextObject	- FLTK context object
 			  			  (updates tlRender's observers)
-			  mrvConvertImage       - converts images
-			  			  (refactor to mrvImage)
 			  mrvFileRequester	- FLTK entry point functions
 			  			  for file requester.
 			  			  (refactor to mrvFLTK)

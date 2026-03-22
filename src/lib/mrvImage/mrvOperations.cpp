@@ -4,11 +4,11 @@
 
 #include "mrvFl/mrvIO.h"
 
-#include "mrvCore/mrvImageOps.h"
+#include "mrvImage/mrvOperations.h"
 
 namespace
 {
-    const char* kModule = "img";
+    const char* kModule = "img.";
 }
 
 namespace mrv

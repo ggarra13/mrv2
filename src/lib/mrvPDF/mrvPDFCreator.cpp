@@ -11,9 +11,10 @@
 
 #include "mrViewer.h"
 
+#include "mrvImage/mrvOperations.h"
+
 #include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvImageOps.h"
 #include "mrvCore/mrvString.h"
 #include "mrvCore/mrvWait.h"
 
