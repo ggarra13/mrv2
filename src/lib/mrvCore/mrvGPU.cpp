@@ -10,6 +10,12 @@
 #include "mrvCore/mrvGPU.h"
 #include "mrvOS/mrvI8N.h"
 
+#ifdef OPENGL_BACKEND
+#  include "mrvGL/mrvGLErrors.h" // defines glGetString and GL_VERSION
+#  include <tlGL/Init.h>
+#  include <tlGL/GL.h>
+#endif
+
 namespace mrv
 {
     namespace gpu
@@ -21,7 +27,7 @@ namespace mrv
 #ifdef OPENGL_BACKEND
             tl::gl::initGLAD();
 
-        // Get OpenGL information
+            // Get OpenGL information
             const char* vendorString = (char*)glGetString(GL_VENDOR);
             if (vendorString)
                 out = vendorString;

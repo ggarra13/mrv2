@@ -153,13 +153,8 @@ src/lib:
 			  		       color spaces
 					       (depends on Imf::Chromaticities)
 			  mrvCPU.cpp         - get CPU capabilities
-			  mrvEnv.h/cpp       - Windows wchar versions of Unix
-			  		       setenv and unsetenv.
 			  mrvFile.h/cpp      - Query functions for file types
 			  		       (rename to mrvFileType.h)
-			  mrvFileManager.h/mm/cpp - Open files in default
-			  			    file manager.
-						    (refactor to mrvOS)
 			  mrvFonts.h/cpp     - list and compare fonts
 			  mrvHome.h/cpp      - list paths to several useful
 			 		       directories like preferences,
@@ -167,44 +162,26 @@ src/lib:
 		  	  mrvHotkey.h/cpp    - Hotkey class and HotkeyEntry
 			  		       class to store user's hotkeys
 					       (refactor to mrvUI)
-			  mrvI8N.h	     - Handle internationalization with
-			  		       gettext / libintl
-					       (why do Windows needs turning
-					       	off macros?)
 			  mrvLocale.h/cpp    - RAII class to switch locale
 			  		       settings (usually LC_NUMERIC)
 			  mrvMath.h	     - Auxiliary math classes
 			  mrvMedia.h         - Static strings for ocio ICS
 			  		       defaults (refactor to mrvUI)
-			  mrvMemory.h        - Function used to determine used
-			  		       and virtual memory on all
-					       OSes. (refactor to mrvOS)
 			  mrvMesh.h          - Functions to create auxiliary
 			  		       meshes compatible with tlRender.
-			  mrvOS.h            - Common functions like execv on
-			  		       all platforms.  (Split and
-					       refactor between mrvOS/ and
-					       mrvUI/)
 			  mrvOrderedMap.h   - like std::map but keeps the order
 			  		      of insertion.
 			  mrvPathMapping.h/cpp
 					    - Implements path mapping algorithm.
-			 mrvRoot.h         - Finds root directory from argv[0]
-			 		     and sets MRV2_ROOT environment
-					     variable to it
-					     (refactor to mrvOS/)
-			mrvSequence.h	  - Sorts sequence based on basename,
-					    number, view and extension.
-					    (merge into tlCore/Path.h)
-			mrvSignalHandler.h - Installs signal handler
-					   (refactor to mrvOS/)
-			mrvStackTrace.h	   - Spit out a stack trace
-					     (refactor to mrvOS/)
-			mrvString.h        - String auxiliary functions
-					     (some overlap with tlRender now)
-			mrvTimeObject.h/cpp - Timecode functions.
-			mrvUtil.h	    - Some utils that don't fit anywhere
-			mrvWait.h           - Wait some time in milliseconds
+
+ 			  mrvSequence.h	    - Sorts sequence based on basename,
+			  		      number, view and extension.
+					      (merge into tlCore/Path.h)
+			  mrvString.h          - String auxiliary functions
+					         (some overlap with tlRender now)
+			  mrvTimeObject.h/cpp - Timecode functions.
+			  mrvUtil.h	      - Some utils that don't fit anywhere
+			  mrvWait.h           - Wait some time in milliseconds
 					      refreshing the UI
 					      (refactor to mrvFLTK/)		   
 			  
@@ -257,11 +234,11 @@ src/lib:
 			  			  in OpenEXR files.
 						  (refactor to other layer
 						   file)
-			 mrvTimelinePlayer	 Main timeline player
+		  	  mrvTimelinePlayer	 Main timeline player
 			 			 (where to put it?)
-			 mrvUSD			 Send USD flags
+			  mrvUSD		 Send USD flags
 			 			 (refactor)
-			 mrvVersioning		 Versioning functions
+			  mrvVersioning		 Versioning functions
 			 			 (refactor to mrvUI)
 
 	mrvFlmm    	- Mathias Melcher's Flmm_ColorA_Chooser.
@@ -292,6 +269,31 @@ src/lib:
 		          PDF classes.
 			  Keep as is.
 			  
+	mrvOS		- OS functions common to all platforms.
+
+  			  mrvEnv.*              - Windows wchar versions of Unix
+					         setenv and unsetenv.
+			  mrvFileManager.*      - Open files in default file manager.
+			  mrvI8N.h	        - Handle internationalization with
+			  		          gettext / libintl
+					         (why do Windows needs turning
+					       	  off macros?)
+			  mrvMemory.*		- Get virtual and physical memory
+			  			  total and used.
+			  mrvRoot.*             - Finds root directory from argv[0]
+			 		          and sets MRV2_ROOT environment
+					          variable to it
+			  mrvSignalHandler.h    - Installs signal handler
+			  mrvStackTrace.h       - Spit out a stack trace
+			  
+			  mrvMemory.h           - Function used to determine used
+			  		          and virtual memory on all
+					         OSes.
+			  mrvOS.h               - Common functions like execv on
+			  		          all platforms.  (Split and
+					         refactor between mrvOS/ and
+					         mrvUI/)
+			
 	mrvPy		- Python (pybind11) code.  Must remove mrv2 namespace.
 			  Keep as is.  Some files renaming perhasp.
 			  
