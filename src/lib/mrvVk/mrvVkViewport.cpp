@@ -32,7 +32,7 @@
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvString.h"
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include <tlTimelineVk/RenderShadersBinary.h>
 

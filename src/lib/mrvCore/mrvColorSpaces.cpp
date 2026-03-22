@@ -8,7 +8,7 @@
 
 #include <Imath/ImathFun.h>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 #include "mrvCore/mrvColorSpaces.h"
 
 using tl::image::Color4f;

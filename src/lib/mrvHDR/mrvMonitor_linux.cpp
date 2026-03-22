@@ -5,7 +5,7 @@
 
 #include <FL/platform.H>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #define LOG_ERROR(x) std::cerr << x << std::endl;
 

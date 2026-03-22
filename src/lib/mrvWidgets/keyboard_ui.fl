@@ -13,7 +13,7 @@ decl {\#include <cstdio>} {private local
 decl {\#include "mrvCore/mrvHotkey.h"} {public local
 }
 
-decl {\#include "mrvCore/mrvI8N.h"} {private local
+decl {\#include "mrvOS/mrvI8N.h"} {private local
 }
 
 decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public local

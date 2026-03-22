@@ -11,9 +11,10 @@ namespace fs = std::filesystem;
 
 #include "mrvHome.h"
 #include "mrvFile.h"
-#include "mrvOS.h"
-#include "mrvRoot.h"
 #include "mrvString.h"
+
+#include "mrvOS/mrvOS.h"
+#include "mrvOS/mrvRoot.h"
 
 #if defined(_WIN32) && !defined(_WIN64_)
 #    include <windows.h>

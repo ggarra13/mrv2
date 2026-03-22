@@ -8,8 +8,8 @@ set(HEADERS
 )
 
 set(SOURCES
-    Flmm_ColorA_Button.cxx
-    Flmm_ColorA_Chooser.cxx
+    Flmm_ColorA_Button.cpp
+    Flmm_ColorA_Chooser.cpp
 )
 
 

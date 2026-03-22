@@ -30,7 +30,7 @@
 #include "mrvNetwork/mrvDummyClient.h"
 
 #include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvString.h"

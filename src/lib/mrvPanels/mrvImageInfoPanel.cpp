@@ -27,7 +27,7 @@
 #include "mrvIcons/Info.h"
 
 #include "mrvCore/mrvColorSpaces.h"
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 #include "mrvCore/mrvUtil.h"
 #include "mrvCore/mrvSequence.h"
 #include "mrvCore/mrvString.h"

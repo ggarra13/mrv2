@@ -6,7 +6,7 @@
 
 #include <FL/Fl_Menu_Button.H>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include "mrvWidgets/mrvTextBrowser.h"
 

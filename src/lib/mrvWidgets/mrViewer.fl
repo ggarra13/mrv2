@@ -109,7 +109,7 @@ decl {\#include "mrvCore/mrvColorSpaces.h"} {private local
 decl {\#include "mrvCore/mrvMath.h"} {private global
 }
 
-decl {\#include "mrvCore/mrvI8N.h"} {public global
+decl {\#include "mrvOS/mrvI8N.h"} {public global
 }
 
 decl {\#include "mrvApp/mrvSettingsObject.h"} {private local

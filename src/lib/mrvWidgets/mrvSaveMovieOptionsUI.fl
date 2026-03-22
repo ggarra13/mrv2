@@ -23,7 +23,7 @@ decl {\#include "tlIO/FFmpeg.h"} {public global
 decl {\#include "tlCore/String.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvI8N.h"} {public global
+decl {\#include "mrvOS/mrvI8N.h"} {public global
 }
 
 decl {\#include "mrvCore/mrvHome.h"} {public global

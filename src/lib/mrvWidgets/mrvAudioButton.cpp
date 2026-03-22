@@ -5,7 +5,7 @@
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Menu_Button.H>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include "mrvWidgets/mrvAudioButton.h"
 

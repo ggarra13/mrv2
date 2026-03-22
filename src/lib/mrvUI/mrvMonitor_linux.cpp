@@ -4,7 +4,7 @@
 
 #include <FL/platform.H>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #ifdef FLTK_USE_X11
 #    include "mrvUI/mrvMonitor_x11.cpp"

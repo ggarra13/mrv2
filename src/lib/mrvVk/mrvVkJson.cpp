@@ -3,7 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include "mrvCore/mrvBackend.h"
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include "mrvVk/mrvVkJson.h"
 #include "mrvVk/mrvVkShape.h"

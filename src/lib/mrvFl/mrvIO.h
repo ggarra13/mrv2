@@ -11,7 +11,7 @@
 #include <fstream>
 #include <thread>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include "mrvFl/mrvPreferences.h"
 

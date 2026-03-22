@@ -11,7 +11,7 @@
 
 #include "mrvOptions/mrvLUTOptions.h"
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvString.h"
 

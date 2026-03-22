@@ -11,7 +11,7 @@
 #include <tlTimelineGL/RenderPrivate.h>
 #include <tlGL/Util.h>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include "mrvFl/mrvIO.h"
 

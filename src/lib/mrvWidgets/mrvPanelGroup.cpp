@@ -15,7 +15,7 @@
 #include "mrvUI/mrvDesktop.h"
 #include "mrvUI/mrvUtil.h"
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include <FL/Fl.H>
 

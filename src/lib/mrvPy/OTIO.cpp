@@ -10,7 +10,7 @@
 
 #include <tlCore/StringFormat.h>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 namespace py = pybind11;
 using namespace pybind11::literals;

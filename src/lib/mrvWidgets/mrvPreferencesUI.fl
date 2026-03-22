@@ -35,7 +35,7 @@ decl {\#include "mrvOS/mrvEnv.h"} {public global
 decl {\#include "mrvCore/mrvFonts.h"} {public global
 }
 
-decl {\#include "mrvCore/mrvI8N.h"} {public global
+decl {\#include "mrvOS/mrvI8N.h"} {public global
 }
 
 decl {\#include "mrViewer.h"} {public global

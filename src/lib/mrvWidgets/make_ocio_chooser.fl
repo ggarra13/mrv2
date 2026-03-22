@@ -18,7 +18,7 @@ decl {\#include <string>} {public local
 decl {\#include <iostream>} {public local
 }
 
-decl {\#include "mrvCore/mrvI8N.h"} {private local
+decl {\#include "mrvOS/mrvI8N.h"} {private local
 }
 
 decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global

@@ -8,7 +8,7 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_Input_.H>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include "mrvHorSlider.h"
 

@@ -6,9 +6,11 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
+
 #include "mrvWidgets/mrvStatusBar.h"
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvCore/mrvGPU.h"
+#include "mrvOS/mrvI8N.h"
 
 #include "mrvOS/mrvOS.h"
 
@@ -39,7 +41,7 @@ namespace mrv
     {
         std::string label = _("Everything OK. ");
         label += os::getDesktop();
-        const std::string gpu = os::getGPUVendor();
+        const std::string gpu = gpu::getGPUVendor();
         label += " - " + gpu;
         if (gpu == _("GPU: Unknown"))
             Fl::repeat_timeout(1.0, (Fl_Timeout_Handler)all_ok_cb, this);

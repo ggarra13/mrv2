@@ -7,7 +7,7 @@
 #include "mrvApp/mrvFilesModel.h"
 #include <pybind11/pybind11.h>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include "mrvPy/CmdsAux.h"
 

@@ -6,7 +6,7 @@
 #include "hdr/mrvHDRApp.h"
 #include "hdr/mrvLanguages.h"
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include "mrvOS/mrvRoot.h"
 

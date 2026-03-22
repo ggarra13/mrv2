@@ -6,7 +6,7 @@
 
 #include <FL/Fl.H>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 #include "mrvCore/mrvHotkey.h"
 
 #include "mrvWidgets/mrvHotkeyInput.h"

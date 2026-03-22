@@ -18,7 +18,7 @@ namespace py = pybind11;
 #include <tlTimeline/ImageOptions.h>
 #include <tlTimeline/LUTOptions.h>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 #include "mrvCore/mrvUtil.h"
 
 #include "mrvOptions/mrvStereo3DOptions.h"

@@ -10,9 +10,9 @@ set(HEADERS
     mrvColorSpaces.h
     mrvFile.h
     mrvFonts.h
+    mrvGPU.h
     mrvHome.h
     mrvHotkey.h
-    mrvI8N.h
     mrvLicensing.h
     mrvLocale.h
     mrvMedia.h
@@ -31,6 +31,7 @@ set(SOURCES
     mrvColorSpaces.cpp
     mrvFile.cpp
     mrvFonts.cpp
+    mrvGPU.cpp
     mrvHome.cpp
     mrvHotkey.cpp
     mrvLicensing.cpp

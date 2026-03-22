@@ -7,7 +7,7 @@
 #include <pybind11/pybind11.h>
 namespace py = pybind11;
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #ifdef TLRENDER_USD
 #    include "mrvOptions/mrvUSD.h"

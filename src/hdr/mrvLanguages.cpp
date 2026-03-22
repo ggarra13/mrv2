@@ -13,10 +13,11 @@ namespace fs = std::filesystem;
 #    include <unistd.h>
 #endif
 
-#include "mrvOS.h"
-#include "mrvEnv.h"
 #include "mrvHome.h"
 #include "mrvI8N.h"
+
+#include "mrvOS/mrvOS.h"
+#include "mrvOS/mrvEnv.h"
 
 #ifdef __APPLE__
 #    include <CoreFoundation/CoreFoundation.h>

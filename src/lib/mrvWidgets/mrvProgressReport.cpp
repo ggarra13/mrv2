@@ -6,7 +6,7 @@
 
 #include "mrvWidgets/mrvProgressReport.h"
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Progress.H>

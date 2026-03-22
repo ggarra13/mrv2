@@ -6,7 +6,7 @@
 #include <FL/fl_draw.H>
 #include <FL/fl_utf8.h>
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #include "mrvFl/mrvColorSchemes.h"
 

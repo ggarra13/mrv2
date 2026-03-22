@@ -36,7 +36,7 @@ extern "C" {
 }
 #endif
 
-#include "mrvCore/mrvI8N.h"
+#include "mrvOS/mrvI8N.h"
 
 #undef Status
 #undef None
