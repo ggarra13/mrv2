@@ -62,10 +62,11 @@ namespace tl
     
         //! File path.
         //! 
-        //! Example: file:///tmp/render.0001.exr?user=foo;password=bar
+        //! Example: file:///tmp/render.0001_suf.exr?user=foo;password=bar
         //! * protocol: file://
         //! * dir: /tmp/
         //! * base: render.
+        //! * suffix: _suf
         //! * number: 0001
         //! * padding: 4
         //! * extension: .exr
@@ -101,12 +102,14 @@ namespace tl
             bool hasDirectory() const;
             bool hasBaseName() const;
             bool hasNumber() const;
+            bool hasSuffix() const;
             bool hasExtension() const;
             bool hasRequest() const;
 
             std::string getProtocol() const;
             std::string getDirectory() const;
             std::string getBaseName() const;
+            std::string getSuffix() const;
             std::string getNumber() const;
             int getPadding() const;
             std::string getExtension() const;
@@ -118,6 +121,7 @@ namespace tl
             void setBaseName(const std::string&);
             void setNumber(const std::string&);
             void setPadding(int);
+            void setSuffix(const std::string&);
             void setExtension(const std::string&);
             void setRequest(const std::string&);
             void setFileName(const std::string&);
@@ -181,6 +185,7 @@ namespace tl
             std::pair<size_t, size_t> _protocol = _invalid;
             std::pair<size_t, size_t> _dir = _invalid;
             std::pair<size_t, size_t> _base = _invalid;
+            std::pair<size_t, size_t> _suf = _invalid;
             std::pair<size_t, size_t> _num = _invalid;
             int _pad = 0;
             std::pair<size_t, size_t> _ext = _invalid;

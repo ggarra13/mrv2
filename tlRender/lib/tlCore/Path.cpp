@@ -123,7 +123,7 @@ namespace tl
 
         void Path::setProtocol(const std::string& value)
         {
-            _path = value + getDirectory() + getBaseName() + getNumber() + getExtension() + getRequest();
+            _path = value + getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() + getRequest();
             const std::optional<math::Int64Range> tmp = _frames;
             _parse(_options);
             _frames = tmp;
@@ -131,7 +131,7 @@ namespace tl
 
         void Path::setDirectory(const std::string& value)
         {
-            _path = getProtocol() + value + getBaseName() + getNumber() + getExtension() + getRequest();
+            _path = getProtocol() + value + getBaseName() + getNumber() + getSuffix() + getExtension() + getRequest();
             const std::optional<math::Int64Range> tmp = _frames;
             _parse(_options);
             _frames = tmp;
@@ -139,15 +139,23 @@ namespace tl
 
         void Path::setBaseName(const std::string& value)
         {
-            _path = getProtocol() + getDirectory() + value + getNumber() + getExtension() + getRequest();
+            _path = getProtocol() + getDirectory() + value + getNumber() + getSuffix() + getExtension() + getRequest();
             const std::optional<math::Int64Range> tmp = _frames;
             _parse(_options);
             _frames = tmp;
         }
 
+        void Path::setSuffix(const std::string& value)
+        {
+            _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + value + getExtension() + getRequest();
+            const std::optional<math::Int64Range> tmp = _frames;
+            _parse(_options);
+            _frames = tmp;
+        }
+        
         void Path::setNumber(const std::string& value)
         {
-            _path = getProtocol() + getDirectory() + getBaseName() + value + getExtension() + getRequest();
+            _path = getProtocol() + getDirectory() + getBaseName() + value + getSuffix() + getExtension() + getRequest();
             const std::optional<math::Int64Range> tmp = _frames;
             _parse(_options);
             _frames = tmp;
@@ -161,7 +169,7 @@ namespace tl
             {
                 num = toString(std::atoi(num.c_str()), _pad);
             }
-            _path = getProtocol() + getDirectory() + getBaseName() + num + getExtension() + getRequest();
+            _path = getProtocol() + getDirectory() + getBaseName() + num + getSuffix() + getExtension() + getRequest();
             const std::optional<math::Int64Range> tmp = _frames;
             _parse(_options);
             _frames = tmp;
@@ -169,7 +177,7 @@ namespace tl
 
         void Path::setExtension(const std::string& value)
         {
-            _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + value + getRequest();
+            _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + getSuffix() + value + getRequest();
             const std::optional<math::Int64Range> tmp = _frames;
             _parse(_options);
             _frames = tmp;
@@ -177,7 +185,7 @@ namespace tl
 
         void Path::setRequest(const std::string& value)
         {
-            _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + getExtension() + value;
+            _path = getProtocol() + getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() + value;
             const std::optional<math::Int64Range> tmp = _frames;
             _parse(_options);
             _frames = tmp;
@@ -324,7 +332,7 @@ namespace tl
                 _dir = std::pair<size_t, size_t>(protocolSize, dirSize);
             }
             const size_t protocolDirSize = protocolSize + dirSize;
-
+            
             // Find the extension.
             size_t extPos = std::string::npos;
             if (size > 0)
@@ -347,6 +355,30 @@ namespace tl
                 size -= sizeTmp;
             }
 
+            // Find the suffix (optional non-digit text between the frame number and extension).
+            // Scan backwards past non-digit characters; those become the suffix.
+            // The number detection that follows then operates on the shortened stem.
+            //
+            // Examples:
+            //   render_0001_stable  →  suffix="_stable",  number = "0001"
+            //   render_v003_0001    →  suffix="",         number = "0001"
+            //   render_v003_cap2_0001 → suffix="",        number = "0001"
+            if (size > protocolDirSize)
+            {
+                int i = static_cast<int>(size) - 1;
+                while (i >= static_cast<int>(protocolDirSize) &&
+                       numbers.find(_path[i]) == std::string::npos)
+                {
+                    --i;
+                }
+                const size_t sufPos = static_cast<size_t>(i) + 1;
+                if (sufPos < size)
+                {
+                    _suf = std::pair<size_t, size_t>(sufPos, size - sufPos);
+                    size = sufPos;   // strip suffix so number detection sees a clean stem
+                }
+            }
+            
             // Find the number.
             size_t numPos = std::string::npos;
             if (size > 0)

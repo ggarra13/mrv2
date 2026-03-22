@@ -77,6 +77,13 @@ namespace tl
                 std::string();
         }
 
+        inline std::string Path::getSuffix() const
+        {
+            return _suf != _invalid ?
+                _path.substr(_suf.first, _suf.second) :
+                std::string();
+        }
+        
         inline std::string Path::getNumber() const
         {
             return _num != _invalid ?
@@ -106,8 +113,8 @@ namespace tl
         inline std::string Path::getFileName(bool dir) const
         {
             return dir ?
-                getDirectory() + getBaseName() + getNumber() + getExtension() :
-                getBaseName() + getNumber() + getExtension();
+                getDirectory() + getBaseName() + getNumber() + getSuffix() + getExtension() :
+                getBaseName() + getNumber() + getSuffix() + getExtension();
         }
 
         inline const std::optional<math::Int64Range>& Path::getFrames() const
@@ -121,6 +128,11 @@ namespace tl
                 !_frames.value().equal();
         }
 
+        inline bool Path::hasSuffix() const
+        {
+            return _suf != _invalid;
+        }
+
         inline bool Path::hasSeqWildcard() const
         {
             const std::string& number = getNumber();
@@ -131,8 +143,9 @@ namespace tl
         inline std::string Path::getFrame(int64_t frame, bool dir) const
         {
             return _num != _invalid ?
-                ((dir ? getDirectory() : std::string()) + getBaseName() + toString(frame, _pad) + getExtension()) :
-                ((dir ? getDirectory() : std::string()) + getBaseName() + getExtension());
+                ((dir ? getDirectory() : std::string()) + getBaseName() + toString(frame, _pad) +
+                  getSuffix() + getExtension()) :
+                ((dir ? getDirectory() : std::string()) + getBaseName() + getSuffix() + getExtension());
         }
 
         inline std::string Path::getFrameRange() const
@@ -151,6 +164,7 @@ namespace tl
                 other.hasNumber() &&
                 _dir == other._dir &&
                 _base == other._base &&
+                getSuffix() == other.getSuffix() &&
                 getExtension() == other.getExtension();
         }
         
