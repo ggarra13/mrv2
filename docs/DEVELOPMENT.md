@@ -82,7 +82,7 @@ etc/:
 		Windows' MSys installs and pre-flight compilation runs.
 	functions.sh
 		Auxiliary functions to extract mrv2's version, cmake's version,
-		and python version.
+		and python version and os compilers and linkers.
 	install_cmake.sh
 		Auxiliary function to install cmake.  Not used but kept in case
 		cmake gets broken on GitHub actions as it happened before.
@@ -126,6 +126,78 @@ src/lib:
 
 	mrvApp		- Main application, command-line parsing and settings.
 	mrvCore    	- Core functionality.
+			  ------------------
+			  mrvActionMode.h    - UI Action mode (refactor)
+			  mrvBackend.h       - Defines and namespaces for UI
+			  		       backend
+					       Currently OpenGL and Vulkan.
+			  mrvColorAreaInfo.h - Color area selection information
+			  		       (refactor)
+			  mrvColorSpaces.h   - Transform color among different
+			  		       color spaces
+					       (depends on Imf::Chromaticities)
+			  mrvCPU.cpp         - get CPU capabilities
+			  mrvEnv.h/cpp       - Windows wchar versions of Unix
+			  		       setenv and unsetenv.
+			  mrvFile.h/cpp      - Query functions for file types
+			  		       (rename to mrvFileType.h)
+			  mrvFileManager.h/mm/cpp - Open files in default
+			  			    file manager.
+						    (refactor to mrvOS)
+			  mrvFonts.h/cpp     - list and compare fonts
+			  mrvHome.h/cpp      - list paths to several useful
+			 		       directories like preferences,
+					       user's home, etc.
+		  	  mrvHotkey.h/cpp    - Hotkey class and HotkeyEntry
+			  		       class to store user's hotkeys
+					       (refactor to mrvUI)
+			  mrvI8N.h	     - Handle internationalization with
+			  		       gettext / libintl
+					       (why do Windows needs turning
+					       	off macros?)
+			  mrvImageOps.h/cpp  - Functions to operate on images.
+			  		      (refactor to mrvImage/ directory)
+			  mrvLocale.h/cpp    - RAII class to switch locale
+			  		       settings (usually LC_NUMERIC)
+			  mrvMath.h	     - Auxiliary math classes
+			  mrvMedia.h         - Static strings for ocio ICS
+			  		       defaults (refactor to mrvUI)
+			  mrvMemory.h        - Function used to determine used
+			  		       and virtual memory on all
+					       OSes. (refactor to mrvOS)
+			  mrvMesh.h          - Functions to create auxiliary
+			  		       meshes compatible with tlRender.
+			  mrvOS.h            - Common functions like execv on
+			  		       all platforms.  (Split and
+					       refactor between mrvOS/ and
+					       mrvUI/)
+			  mrvOrderedMap.h   - like std::map but keeps the order
+			  		      of insertion.
+			  mrvPathMapping.h/cpp
+					    - Implements path mapping algorithm.
+			  mrvPixelConverter.h
+					    - Template functions to convert
+					      pixels.
+					      (Refactor to mrvImage/)
+			 mrvRoot.h         - Finds root directory from argv[0]
+			 		     and sets MRV2_ROOT environment
+					     variable to it
+					     (refactor to mrvOS/)
+			mrvSequence.h	  - Sorts sequence based on basename,
+					    number, view and extension.
+					    (merge into tlCore/Path.h)
+			mrvSignalHandler.h - Installs signal handler
+					   (refactor to mrvOS/)
+			mrvStackTrace.h	   - Spit out a stack trace
+					     (refactor to mrvOS/)
+			mrvString.h        - String auxiliary functions
+					     (some overlap with tlRender now)
+			mrvTimeObject.h/cpp - Timecode functions.
+			mrvUtil.h	    - Some utils that don't fit anywhere
+			mrvWait.h           - Wait some time in milliseconds
+					      refreshing the UI
+					      (refactor to mrvFLTK/)		   
+			  
 	mrvEdit    	- Editing callbacks and functions.
 	mrvIcons   	- Binary SVG icons for faster loading.
 	mrvFl      	- mrv2's classes for different functions 
