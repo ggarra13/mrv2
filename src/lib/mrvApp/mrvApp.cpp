@@ -39,16 +39,17 @@ namespace py = pybind11;
 #include "mrvWidgets/mrvProgressReport.h"
 #include "mrvWidgets/mrvPythonOutput.h"
 
-#include "mrvCore/mrvOS.h" // do not move up
-#include "mrvCore/mrvMemory.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvRoot.h"
+
+#include "mrvOS/mrvMemory.h"
+#include "mrvOS/mrvOS.h" // do not move up
+#include "mrvOS/mrvRoot.h"
 
 #ifdef MRV2_CPPTRACE
-#  include "mrvCore/mrvSignalHandler.h"
+#  include "mrvOS/mrvSignalHandler.h"
 #endif
 
 #if defined(TLRENDER_NDI) || defined(TLRENDER_BMD)

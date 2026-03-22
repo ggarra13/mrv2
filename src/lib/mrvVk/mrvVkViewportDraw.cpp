@@ -19,8 +19,9 @@
 #include "mrvUI/mrvMonitor.h"
 
 #include "mrvCore/mrvLocale.h"
-#include "mrvCore/mrvMemory.h"
 #include "mrvCore/mrvUtil.h"
+
+#include "mrvOS/mrvMemory.h"
 
 #include <tlVk/Util.h>
 

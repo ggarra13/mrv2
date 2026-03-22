@@ -190,8 +190,8 @@ extern "C"
 
 #include "mrvWidgets/mrvVersion.h"
 
-#include "mrvCore/mrvOS.h"
-#include "mrvCore/mrvCPU.h"
+#include "mrvOS/mrvOS.h"
+#include "mrvOS/mrvCPU.h"
 
 
 #include <tlCore/String.h>

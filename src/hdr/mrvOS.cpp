@@ -32,12 +32,13 @@
 #include "mrvApp/mrvApp.h"
 
 #include "mrvCore/mrvBackend.h"
-#include "mrvCore/mrvEnv.h"
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvString.h"
-#include "mrvCore/mrvOS.h"
+
+#include "mrvOS/mrvEnv.h"
+#include "mrvOS/mrvOS.h"
 
 #define LOG_ERROR(x) std::cerr << x << std::endl;
 

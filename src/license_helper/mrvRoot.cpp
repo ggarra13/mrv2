@@ -35,9 +35,8 @@ namespace fs = std::filesystem;
 #    define PATH_MAX 2048
 #endif
 
-#include "mrvCore/mrvEnv.h"
-
-#include "mrvRoot.h"
+#include "mrvOS/mrvEnv.h"
+#include "mrvOS/mrvRoot.h"
 
 namespace
 {

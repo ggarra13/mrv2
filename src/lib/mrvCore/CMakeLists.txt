@@ -8,10 +8,7 @@ set(HEADERS
     mrvColor.h
     mrvColorAreaInfo.h
     mrvColorSpaces.h
-    mrvCPU.h
-    mrvEnv.h
     mrvFile.h
-    mrvFileManager.h
     mrvFonts.h
     mrvHome.h
     mrvHotkey.h
@@ -19,14 +16,10 @@ set(HEADERS
     mrvLicensing.h
     mrvLocale.h
     mrvMedia.h
-    mrvMemory.h
     mrvMesh.h
     mrvOrderedMap.h
-    mrvOS.h 
     mrvPathMapping.h
-    mrvRoot.h
     mrvSequence.h
-    mrvStackTrace.h
     mrvString.h
     mrvTimeObject.h
     mrvUtil.h
@@ -36,7 +29,6 @@ set(HEADERS
 set(SOURCES
     mrvColor.cpp
     mrvColorSpaces.cpp
-    mrvCPU.cpp
     mrvFile.cpp
     mrvFonts.cpp
     mrvHome.cpp
@@ -44,12 +36,8 @@ set(SOURCES
     mrvLicensing.cpp
     mrvLocale.cpp
     mrvMedia.cpp
-    mrvMemory.cpp
     mrvMesh.cpp
-    mrvOS.cpp
     mrvPathMapping.cpp
-    mrvRoot.cpp
-    mrvStackTrace.cpp
     mrvString.cpp
     mrvTimeObject.cpp
     mrvUtil.cpp
@@ -63,7 +51,7 @@ if (TLRENDER_NET)
     find_package(OpenSSL REQUIRED)
 endif()
 
-set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath ${FLTK_LIBRARIES})
+set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath mrvOS ${FLTK_LIBRARIES})
 
 if (MRV2_NETWORK)
     set(LIBRARIES_PRIVATE
@@ -77,35 +65,6 @@ if (TLRENDER_NET)
     list(APPEND LIBRARIES_PRIVATE
 	OpenSSL::SSL
 	OpenSSL::Crypto)
-endif()
-
-if( WIN32 )
-    list( APPEND HEADERS
-	mrvEnv.h
-	mrvFileManager.h)
-    list( APPEND SOURCES
-	mrvEnv.cpp
-	mrvFileManager.cpp
-	mrvEnv.cpp)
-    if (MRV2_CPPTRACE)
-	list(APPEND HEADERS
-	    mrvSignalHandler.h)
-	list(APPEND SOURCES
-	    win32/mrvSignalHandler.cpp)
-	list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)
-    endif()
-elseif( APPLE )
-    # macOS has a great a built-in stack trace and signal handler
-    list( APPEND SOURCES
-       mrvFileManager.mm
-    )
-else()
-    list(APPEND SOURCES
-        mrvFileManager.cpp
-	Linux/mrvSignalHandler.cpp)
-    if (MRV2_CPPTRACE)
-	list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)
-    endif()
 endif()
 
 add_library(mrvCore ${SOURCES} ${HEADERS})

@@ -15,34 +15,21 @@
 #    include <fcntl.h>
 #endif
 
-#include <algorithm>
-#include <array>
-#include <iostream>
-#include <fstream>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <thread>
-#include <vector>
-
-#include <tlCore/OS.h>
-#include <tlCore/String.h>
-
-#include <FL/Fl.H>
-
 #include "mrvApp/mrvApp.h"
 
+#include "mrvUI/mrvDesktop.h"
+
+#include "mrvFl/mrvIO.h"
+
 #include "mrvCore/mrvBackend.h"
-#include "mrvCore/mrvEnv.h"
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvI8N.h"
 #include "mrvCore/mrvString.h"
-#include "mrvCore/mrvOS.h"
 
-#include "mrvFl/mrvIO.h"
+#include "mrvOS/mrvEnv.h"
+#include "mrvOS/mrvOS.h"
 
-#include "mrvUI/mrvDesktop.h"
 
 #ifdef OPENGL_BACKEND
 #    include <tlGL/Init.h>
@@ -53,11 +40,21 @@
 #    include "mrvWidgets/mrvVersion.h"
 #endif
 
-#include <string>
-#include <vector>
-#include <stdexcept>
+
+#include <tlCore/OS.h>
+#include <tlCore/String.h>
+
+#include <FL/Fl.H>
+
+#include <algorithm>
 #include <array>
+#include <iostream>
+#include <fstream>
 #include <memory>
+#include <stdexcept>
+#include <string>
+#include <thread>
+#include <vector>
 
 namespace
 {

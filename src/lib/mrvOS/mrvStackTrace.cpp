@@ -4,12 +4,14 @@
 
 #ifdef MRV2_CPPTRACE
 #  ifndef __APPLE__
+
+#    include "mrvOS/mrvStackTrace.h"
+
 #    include <cpptrace/cpptrace.hpp>
 #    include <csignal>
 #    include <iostream>
 #    include <thread>
 #    include <vector>
-#    include "mrvCore/mrvStackTrace.h"
 #  endif
 #endif
 

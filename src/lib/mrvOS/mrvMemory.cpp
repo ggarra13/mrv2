@@ -22,7 +22,7 @@
 #    include <psapi.h>
 #endif
 
-#include "mrvCore/mrvMemory.h"
+#include "mrvOS/mrvMemory.h"
 
 #include "mrvFl/mrvIO.h"
 

@@ -9,7 +9,8 @@
 #include "mrvWidgets/mrvStatusBar.h"
 
 #include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvOS.h"
+
+#include "mrvOS/mrvOS.h"
 
 namespace mrv
 {

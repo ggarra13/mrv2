@@ -2,19 +2,23 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <string>
+
+#include "mrvFl/mrvIO.h"
+
+#include "mrvUI/mrvMonitor.h"
+
+#include "mrvCore/mrvString.h"
+
+#include "mrvOS/mrvOS.h"
 
 #include <FL/Fl.H>
 #include <FL/platform.H>
 
-#include "mrvCore/mrvOS.h"
-#include "mrvCore/mrvString.h"
+#include <string>
 
-#include "mrvUI/mrvMonitor.h"
 
 #undef Status
 #undef None
-#include "mrvFl/mrvIO.h"
 
 namespace
 {

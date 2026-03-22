@@ -13,7 +13,7 @@
 #include "mrViewer.h"
 
 #include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvMemory.h"
+#include "mrvOS/mrvMemory.h"
 
 #include "mrvIcons/Settings.h"
 

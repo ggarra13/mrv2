@@ -2,6 +2,28 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
+#include "mrvApp/mrvApp.h"
+
+#include "mrvFl/mrvCallbacks.h"
+#include "mrvFl/mrvLanguages.h"
+#include "mrvFl/mrvSession.h"
+#include "mrvFl/mrvIO.h"
+
+#include "mrvWidgets/mrvPopupMenu.h"
+
+#include "mrvCore/mrvHome.h"
+
+#include "mrvOS/mrvEnv.h"
+#include "mrvOS/mrvOS.h"
+
+
+#include <FL/fl_ask.H>
+
+#include <tlCore/StringFormat.h>
+
+#include "mrvPreferencesUI.h"
+
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -20,25 +42,6 @@ namespace fs = std::filesystem;
 #include <vector>
 #include <string>
 
-#include <FL/fl_ask.H>
-
-#include <tlCore/StringFormat.h>
-
-#include "mrvCore/mrvEnv.h"
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvOS.h"
-
-#include "mrvWidgets/mrvPopupMenu.h"
-
-#include "mrvFl/mrvCallbacks.h"
-#include "mrvFl/mrvLanguages.h"
-#include "mrvFl/mrvSession.h"
-
-#include "mrvApp/mrvApp.h"
-
-#include "mrvPreferencesUI.h"
-
-#include "mrvFl/mrvIO.h"
 
 namespace
 {

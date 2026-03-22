@@ -2,7 +2,8 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-add_subdirectory(mrvCore)        # tlRender::tlIO tlRender::tlCore Imath::Imath FLTK cpptrace
+add_subdirectory(mrvOS)          # cpptrace
+add_subdirectory(mrvCore)        # tlRender::tlIO tlRender::tlCore Imath::Imath FLTK 
 add_subdirectory(mrvIcons)
 add_subdirectory(mrvOptions)     # mrvCore + USD libraries
 add_subdirectory(mrvFlmm)        # FLTK

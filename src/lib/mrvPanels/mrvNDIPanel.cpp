@@ -25,7 +25,6 @@
 #    include "mrvCore/mrvBackend.h"
 #    include "mrvCore/mrvHome.h"
 #    include "mrvCore/mrvFile.h"
-#    include "mrvCore/mrvMemory.h"
 
 
 

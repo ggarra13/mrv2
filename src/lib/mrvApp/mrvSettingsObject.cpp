@@ -2,12 +2,20 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <vector>
-#include <map>
-#include <unordered_set>
-#include <algorithm>
-#include <filesystem>
-namespace fs = std::filesystem;
+
+#include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvFl/mrvIO.h"
+
+#include "mrvCore/mrvFile.h"
+
+#include "mrvOS/mrvMemory.h"
+#include "mrvOS/mrvOS.h"
+
+
+#if defined(TLRENDER_USD)
+#    include "mrvOptions/mrvUSD.h"
+#endif // TLRENDER_USD
 
 #include <tlCore/Memory.h>
 #include <tlCore/StringFormat.h>
@@ -19,17 +27,12 @@ namespace fs = std::filesystem;
 
 #include <FL/Fl.H>
 
-#include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvMemory.h"
-#include "mrvCore/mrvOS.h"
-
-#include "mrvFl/mrvIO.h"
-
-#if defined(TLRENDER_USD)
-#    include "mrvOptions/mrvUSD.h"
-#endif // TLRENDER_USD
-
-#include "mrvApp/mrvSettingsObject.h"
+#include <vector>
+#include <map>
+#include <unordered_set>
+#include <algorithm>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 namespace mrv
 {

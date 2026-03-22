@@ -29,7 +29,7 @@ decl {\#endif} {private local
 decl {\#include <tlCore/Time.h>} {public global
 }
 
-decl {\#include "mrvCore/mrvEnv.h"} {public global
+decl {\#include "mrvOS/mrvEnv.h"} {public global
 }
 
 decl {\#include "mrvCore/mrvFonts.h"} {public global

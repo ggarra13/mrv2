@@ -2,24 +2,16 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <algorithm>
-#include <filesystem>
-namespace fs = std::filesystem;
+#include "mrvPreferencesUI.h"
+#include "mrvHotkeyUI.h"
 
-#include <tlCore/AudioSystem.h>
-#include <tlCore/StringFormat.h>
+#include "mrvFLU/Flu_File_Chooser.h"
 
-#include <FL/fl_utf8.h>         // for fl_getenv
-#include <FL/Fl_Sys_Menu_Bar.H> // for macOS menus
+#include "mrvApp/mrvSettingsObject.h"
+#include "mrvApp/mrvApp.h"
 
-#include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvHotkey.h"
-#include "mrvCore/mrvLocale.h"
-#include "mrvCore/mrvMedia.h"
-#include "mrvCore/mrvUtil.h"
-
-#include "mrvWidgets/mrvLogDisplay.h"
+#include "mrvFl/mrvIO.h"
+#include "mrvFl/mrvOCIO.h"
 
 #ifdef MRV2_NETWORK
 #    include "mrvNetwork/mrvImageListener.h"
@@ -29,20 +21,29 @@ namespace fs = std::filesystem;
 #include "mrvFl/mrvHotkey.h"
 #include "mrvFl/mrvLanguages.h"
 
+#include "mrvWidgets/mrvLogDisplay.h"
+
 #include "mrvUI/mrvAsk.h"
 #include "mrvUI/mrvMenus.h"
 
-#include "mrvFLU/Flu_File_Chooser.h"
+#include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvHotkey.h"
+#include "mrvCore/mrvLocale.h"
+#include "mrvCore/mrvMedia.h"
+#include "mrvCore/mrvUtil.h"
 
-#include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvApp.h"
+#include "mrvOS/mrvOS.h"
 
-#include "mrvPreferencesUI.h"
-#include "mrvHotkeyUI.h"
+#include <tlCore/AudioSystem.h>
+#include <tlCore/StringFormat.h>
 
-#include "mrvFl/mrvIO.h"
-#include "mrvFl/mrvOCIO.h"
-#include "mrvCore/mrvOS.h"
+#include <FL/fl_utf8.h>         // for fl_getenv
+#include <FL/Fl_Sys_Menu_Bar.H> // for macOS menus
+
+#include <algorithm>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 namespace
 {

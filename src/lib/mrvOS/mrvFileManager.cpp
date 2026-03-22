@@ -14,9 +14,10 @@ namespace fs = std::filesystem;
 
 #include <iostream>
 
-#include "mrvCore/mrvFileManager.h"
 #include "mrvCore/mrvI8N.h"
-#include "mrvCore/mrvOS.h"
+
+#include "mrvOS/mrvFileManager.h"
+#include "mrvOS/mrvOS.h"
 
 
 #ifdef __linux__

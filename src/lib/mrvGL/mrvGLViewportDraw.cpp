@@ -4,19 +4,7 @@
 
 #include "mrViewer.h"
 
-#include <tlIO/System.h>
-
-#include <tlDevice/IOutput.h>
-
-#include <tlCore/String.h>
-#include <tlCore/Mesh.h>
-#include <tlGL/Util.h>
-
-#include "mrvCore/mrvLocale.h"
-#include "mrvCore/mrvMemory.h"
-#include "mrvCore/mrvUtil.h"
-
-#include "mrvWidgets/mrvMultilineInput.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvGL/mrvGLDefines.h"
 #include "mrvGL/mrvGLErrors.h"
@@ -26,7 +14,20 @@
 #include "mrvGL/mrvGLShape.h"
 #include "mrvGL/mrvGLUtil.h"
 
-#include "mrvApp/mrvSettingsObject.h"
+#include "mrvWidgets/mrvMultilineInput.h"
+
+#include "mrvCore/mrvLocale.h"
+#include "mrvCore/mrvUtil.h"
+
+#include "mrvOS/mrvMemory.h"
+
+#include <tlIO/System.h>
+
+#include <tlDevice/IOutput.h>
+
+#include <tlCore/String.h>
+#include <tlCore/Mesh.h>
+#include <tlGL/Util.h>
 
 namespace
 {

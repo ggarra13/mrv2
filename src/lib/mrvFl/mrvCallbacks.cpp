@@ -2,76 +2,18 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#ifdef _WIN32
-#include <winsock2.h>
-#endif
-
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-
-#include <tlIO/System.h>
-
-#include <tlCore/StringFormat.h>
-
-#include <FL/filename.H> // for fl_open_uri()
-
-#include "mrvCore/mrvFileManager.h"
-#include "mrvCore/mrvHome.h"
-#include "mrvCore/mrvLicensing.h"
-#include "mrvCore/mrvOS.h"
-#include "mrvCore/mrvUtil.h"
-
-#include "mrvWidgets/mrvMultilineInput.h"
-#include "mrvWidgets/mrvPanelGroup.h"
-#include "mrvWidgets/mrvSecondaryWindow.h"
-
-#include "mrvFl/mrvSaveOptions.h"
-#include "mrvFl/mrvVersioning.h"
-#include "mrvFl/mrvFileRequester.h"
-#include "mrvFl/mrvOCIO.h"
-#include "mrvFl/mrvSave.h"
-#include "mrvFl/mrvSession.h"
-#include "mrvFl/mrvStereo3DAux.h"
-#include "mrvFl/mrvCallbacks.h"
-
-#include "mrvUI/mrvAsk.h"
-#include "mrvUI/mrvDesktop.h"
-#include "mrvUI/mrvMenus.h"
-
-#include "mrvFlmm/Flmm_ColorA_Chooser.h"
-
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvEdit/mrvEditUtil.h"
-
-#ifdef MRV2_PDF
-#    include "mrvPDF/mrvSavePDF.h"
-#endif
-
-#include "mrvNetwork/mrvTCP.h"
-#include "mrvNetwork/mrvCypher.h"
-#include "mrvNetwork/mrvFilesModelItem.h"
-
-#include "mrvOptions/mrvTimelineItemOptions.h"
-
-#include "mrvApp/mrvSettingsObject.h"
-#include "mrvApp/mrvApp.h"
-
-#include "make_ocio_chooser.h"
-#include "mrvSaveImageOptionsUI.h"
-
-#ifdef TLRENDER_FFMPEG
-#    include "mrvSaveMovieOptionsUI.h"
-#endif
-
 #include "mrvHUDUI.h"
 #include "mrvOCIOPresetsUI.h"
 #include "mrvHotkeyUI.h"
 #include "mrViewer.h"
+#include "make_ocio_chooser.h"
+#include "mrvSaveImageOptionsUI.h"
+#ifdef TLRENDER_FFMPEG
+#    include "mrvSaveMovieOptionsUI.h"
+#endif
 
-#include <FL/Fl.H>
-#include "mrvFl/mrvIO.h"
+#include "mrvApp/mrvSettingsObject.h"
+#include "mrvApp/mrvApp.h"
 
 #ifdef OPENGL_BACKEND
 #include "mrvGL/mrvGLShape.h"
@@ -82,6 +24,68 @@
 #include "mrvVk/mrvVkShape.h"
 #include "mrvVk/mrvVkTextEdit.h"
 #endif
+
+#include "mrvUI/mrvAsk.h"
+#include "mrvUI/mrvDesktop.h"
+#include "mrvUI/mrvMenus.h"
+
+#include "mrvNetwork/mrvTCP.h"
+#include "mrvNetwork/mrvCypher.h"
+#include "mrvNetwork/mrvFilesModelItem.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvFl/mrvSaveOptions.h"
+#include "mrvFl/mrvVersioning.h"
+#include "mrvFl/mrvFileRequester.h"
+#include "mrvFl/mrvOCIO.h"
+#include "mrvFl/mrvSave.h"
+#include "mrvFl/mrvSession.h"
+#include "mrvFl/mrvStereo3DAux.h"
+#include "mrvFl/mrvCallbacks.h"
+
+#include "mrvEdit/mrvEditUtil.h"
+
+#ifdef MRV2_PDF
+#    include "mrvPDF/mrvSavePDF.h"
+#endif
+
+
+#include "mrvFlmm/Flmm_ColorA_Chooser.h"
+
+#include "mrvWidgets/mrvMultilineInput.h"
+#include "mrvWidgets/mrvPanelGroup.h"
+#include "mrvWidgets/mrvSecondaryWindow.h"
+
+
+#include "mrvOptions/mrvTimelineItemOptions.h"
+
+#include "mrvFl/mrvIO.h"
+
+
+
+#include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvLicensing.h"
+#include "mrvCore/mrvUtil.h"
+
+#include "mrvOS/mrvOS.h"
+#include "mrvOS/mrvFileManager.h"
+
+#include <tlIO/System.h>
+
+#include <tlCore/StringFormat.h>
+
+#include <FL/Fl.H>
+#include <FL/filename.H> // for fl_open_uri()
+
+
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 
 namespace
 {
