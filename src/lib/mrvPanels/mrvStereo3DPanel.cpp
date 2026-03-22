@@ -138,13 +138,9 @@ namespace mrv
 
                 const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();
-                const std::string base = path.getBaseName();
-                const std::string suffix = path.getSuffix();
-                const std::string extension = path.getExtension();
-                const std::string file = base + path.getNumber() + suffix +
-                                         extension;
-                const std::string fullfile = protocol + dir + file;
-
+                const bool listdir = false;
+                const std::string file = path.getFileName(listdir);
+                
                 auto bW = new Widget<ClipButton>(
                     g->x(), g->y() + 20 + i * 68, g->w(), 68);
                 ClipButton* b = bW;
@@ -380,11 +376,11 @@ namespace mrv
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
 
-                const std::string& protocol = path.getProtocol();
-                const std::string& dir = path.getDirectory();
-                const std::string file =
-                    path.getBaseName() + path.getNumber() + path.getExtension();
-                const std::string fullfile = protocol + dir + file;
+                const std::string protocol = path.getProtocol();
+                const std::string dir = path.getDirectory();
+                const bool listdir = false;
+                const std::string file = path.getFileName(listdir);
+                
                 ClipButton* b = m.second;
 
                 uint16_t layerId = media->videoLayer;
