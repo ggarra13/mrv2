@@ -50,7 +50,7 @@ namespace mrv
         }
         std::sort(files.begin(), files.end());
 
-        std::string root, frame, view, ext;
+        std::string root, frame, view, suffix, ext;
         SequenceList tmpseqs;
 
         for (const auto& file : files)
@@ -60,6 +60,7 @@ namespace mrv
             const std::string root = path.getBaseName();
             const std::string frame = path.getNumber();
             const std::string view = ""; // @todo: path.getView();
+            const std::string suffix = path.getSuffix();
             const std::string ext = path.getExtension();
             if (file::isMovie(ext))
                 movies.push_back(file);
@@ -71,6 +72,7 @@ namespace mrv
                 s.root = dir + root;
                 s.view = view;
                 s.number = frame;
+                s.suffix = suffix;
                 s.ext = ext;
 
                 tmpseqs.push_back(s);
@@ -94,7 +96,8 @@ namespace mrv
             for (; *s == '0'; ++s)
                 ++z;
 
-            if (i.root != root || i.view != view || i.ext != ext ||
+            if (i.root != root || i.view != view || i.suffix != suffix ||
+                i.ext != ext ||
                 (padding != z && z != padding - 1))
             {
                 // New sequence
@@ -102,11 +105,13 @@ namespace mrv
                 padding = z;
                 number = first = i.number;
                 view = i.view;
+                suffix = i.suffix;
                 ext = i.ext;
 
                 std::string file = root;
                 file += first;
                 file += view;
+                file += suffix;
                 file += ext;
                 sequences.push_back(file);
             }

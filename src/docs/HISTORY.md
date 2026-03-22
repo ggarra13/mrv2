@@ -1,4 +1,4 @@
-v1.5.9
+v1.6.0
 ======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
@@ -44,8 +44,18 @@ They do have, however:
 
 Prices might change (go up or down) depending on competition and new features.
 
-ChangeLog
----------
+Change Log
+----------
+
+- Added support for sequences with a suffix like render_0001_suffix.exr in
+  file requester, drag and drop and command-line.
+
+
+v1.5.9
+======
+
+Change Log
+----------
 
 - This update concentrates on UI improvements and user friendliness.
 - Improved Timecode input widget skipping over : and ; and prevent an invalid time (ie. --:--:--:--).

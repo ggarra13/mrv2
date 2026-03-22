@@ -3777,6 +3777,7 @@ void Flu_File_Chooser::cd(const char* path)
                 const std::string root = path.getBaseName();
                 const std::string frame = path.getNumber();
                 const std::string view = ""; // @todo: path.getView();
+                const std::string suffix = path.getSuffix();
                 const std::string ext = path.getExtension();
 
                 bool is_sequence = mrv::file::isSequence(name);
@@ -3796,6 +3797,7 @@ void Flu_File_Chooser::cd(const char* path)
                 {
                     mrv::Sequence seq;
                     seq.ext = ext;
+                    seq.suffix = suffix;
                     seq.view = view;
                     seq.number = frame;
                     seq.root = root;
@@ -3849,6 +3851,7 @@ void Flu_File_Chooser::cd(const char* path)
             std::string root;
             std::string first;
             std::string number;
+            std::string suffix;
             std::string view;
             std::string ext;
             int zeros = -1;
@@ -3867,6 +3870,7 @@ void Flu_File_Chooser::cd(const char* path)
                         ++z;
 
                     if ((*i).root != root || (*i).view != view ||
+                        (*i).suffix != suffix ||
                         (*i).ext != ext || (zeros != z && z != zeros - 1))
                     {
                         // New sequence
@@ -3879,6 +3883,7 @@ void Flu_File_Chooser::cd(const char* path)
                             {
                                 seq.ext = number;
                             }
+                            seq.suffix = (*i).suffix;
                             seq.view = (*i).view;
                             seqs.push_back(seq);
                         }
@@ -3887,6 +3892,7 @@ void Flu_File_Chooser::cd(const char* path)
                         zeros = z;
                         number = first = (*i).number;
                         view = (*i).view;
+                        suffix = (*i).suffix;
                         ext = (*i).ext;
 
                         seqname = root;
@@ -3906,6 +3912,7 @@ void Flu_File_Chooser::cd(const char* path)
 #endif
                             seqname += "d";
                         }
+                        seqname += suffix;
                         seqname += ext;
                     }
                     else

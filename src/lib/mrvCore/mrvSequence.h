@@ -17,6 +17,7 @@ namespace mrv
         std::string root;
         std::string number;
         std::string view;
+        std::string suffix;
         std::string ext;
     };
 
@@ -32,18 +33,26 @@ namespace mrv
             else if (a.root > b.root)
                 return false;
 
-            if (a.ext < b.ext)
-                return true;
-            else if (a.ext > b.ext)
-                return false;
-
             if (a.view < b.view)
                 return true;
             else if (a.view > b.view)
                 return false;
 
-            if (atoi(a.number.c_str()) < atoi(b.number.c_str()))
+            int anum = atoi(a.number.c_str());
+            int bnum = atoi(b.number.c_str());
+            if (anum < bnum)
                 return true;
+            else if (anum > bnum)
+                return false;
+
+            if (a.suffix < b.suffix)
+                return true;
+            else if(a.suffix > b.suffix)
+                return false;
+
+            if (a.ext < b.ext)
+                return true;
+
             return false;
         }
     };
