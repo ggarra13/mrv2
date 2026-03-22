@@ -143,8 +143,6 @@ namespace mrv
                     continue;
                 lastPath = path;
 
-                const std::string& fullfile = path.get();
-
                 auto cbW = new Widget<PlaylistButton>(
                     g->x(), Y + numValidFiles * 68, g->w(), 68);
                 PlaylistButton* b = cbW;
@@ -165,10 +163,9 @@ namespace mrv
                 _r->map[i] = b;
 
                 const std::string dir = path.getDirectory();
-                const std::string base = path.getBaseName();
-                const std::string extension = path.getExtension();
-                const std::string file = base + path.getNumber() + extension;
-
+                const bool listdir = false;
+                const std::string file = path.getFileName(listdir);
+                
                 std::string text = dir + "\n" + file + "\nColor";
                 b->copy_label(text.c_str());
                 if (i == aIndex)
@@ -274,7 +271,6 @@ namespace mrv
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
 
-                const std::string fullfile = path.get();
                 PlaylistButton* b = m.second;
 
                 b->labelcolor(FL_WHITE);

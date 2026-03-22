@@ -156,12 +156,8 @@ namespace mrv
 
                 const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();
-                const std::string base = path.getBaseName();
-                const std::string suffix = path.getSuffix();
-                const std::string extension = path.getExtension();
-                const std::string file = base + path.getNumber() + suffix +
-                                         extension;
-                const std::string fullfile = protocol + dir + file;
+                const bool listdir = false;
+                const std::string file = path.getFileName(listdir);
 
                 auto bW = new Widget<FileButton>(
                     g->x(), g->y() + 22 + i * size.h + 4, g->w(), size.h + 4);
@@ -291,12 +287,8 @@ namespace mrv
 
                 const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();
-                const std::string base = path.getBaseName();
-                const std::string suffix = path.getSuffix();
-                const std::string extension = path.getExtension();
-                const std::string file = base + path.getNumber() + suffix +
-                                         extension;
-                const std::string fullfile = protocol + dir + file;
+                const bool listdir = false;
+                const std::string file = path.getFileName(listdir);
                 
                 FileButton* b = m.second;
                 uint16_t layerId;

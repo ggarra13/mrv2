@@ -159,14 +159,12 @@ namespace mrv
                     continue;
                 lastPath = path;
 
+
                 const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();
-                const std::string base = path.getBaseName();
-                const std::string suffix = path.getSuffix();
-                const std::string extension = path.getExtension();
-                const std::string file = base + path.getNumber() + suffix +
-                                         extension;
-
+                const bool listdir = false;
+                const std::string file = path.getFileName(listdir);
+                
                 auto bW = new Widget<ClipButton>(
                     g->x(), g->y() + 20 + i * size.h + 4, g->w(), size.h + 4);
                 ClipButton* b = bW;
@@ -548,12 +546,8 @@ namespace mrv
                 
                 const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();
-                const std::string base = path.getBaseName();
-                const std::string suffix = path.getSuffix();
-                const std::string extension = path.getExtension();
-                const std::string file = base + path.getNumber() + suffix +
-                                         extension;
-                const std::string fullfile = protocol + dir + file;
+                const bool listdir = false;
+                const std::string file = path.getFileName(listdir);
 
                 auto m = _r->map.find(i);
                 ClipButton* b = (*m).second;
