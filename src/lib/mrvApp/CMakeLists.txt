@@ -7,7 +7,6 @@ set(HEADERS
     mrvFilesModel.h
     mrvGlobals.h
     mrvMainControl.h
-    mrvOpenSeparateAudioDialog.h
     mrvPlaylistsModel.h
     mrvSettingsObject.h
     mrvStdAnyHelper.h
@@ -17,7 +16,6 @@ set(SOURCES
     mrvFilesModel.cpp
     mrvGlobals.cpp
     mrvMainControl.cpp
-    mrvOpenSeparateAudioDialog.cpp
     mrvPlaylistsModel.cpp
     mrvSettingsObject.cpp
 )

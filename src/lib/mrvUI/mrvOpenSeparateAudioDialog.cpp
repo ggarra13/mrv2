@@ -2,6 +2,13 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+
+#include "mrvUI/mrvOpenSeparateAudioDialog.h"
+
+#include "mrvFl/mrvFileRequester.h"
+
+#include "mrvCore/mrvI8N.h"
+
 #include <tlTimeline/Timeline.h>
 
 #include <tlCore/String.h>
@@ -9,12 +16,6 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Input.H>
-
-#include "mrvApp/mrvOpenSeparateAudioDialog.h"
-
-#include "mrvFl/mrvFileRequester.h"
-
-#include "mrvCore/mrvI8N.h"
 
 namespace mrv
 {

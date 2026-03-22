@@ -10,6 +10,7 @@ set(HEADERS
     mrvDesktop.h
     mrvMenus.h
     mrvMonitor.h
+    mrvOpenSeparateAudioDialog.h
     mrvUtil.h
 )
 
@@ -18,6 +19,7 @@ set(SOURCES
     mrvDesktop.cpp
     mrvMenus.cpp
     mrvMonitor.cpp
+    mrvOpenSeparateAudioDialog.cpp
     mrvUtil.cpp
 )
 

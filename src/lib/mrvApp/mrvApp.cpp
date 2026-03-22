@@ -24,8 +24,9 @@ namespace py = pybind11;
 #include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvMainControl.h"
-#include "mrvApp/mrvOpenSeparateAudioDialog.h"
 #include "mrvApp/mrvSettingsObject.h"
+
+#include "mrvUI/mrvOpenSeparateAudioDialog.h"
 
 #include "mrvFl/mrvContextObject.h"
 #include "mrvFl/mrvInit.h"
