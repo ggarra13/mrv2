@@ -456,7 +456,7 @@ namespace tl
         {
             for (auto dataType :
                  {DataType::S16, DataType::S32, DataType::F32, DataType::F64,
-                  DataType::None})
+                  DataType::kNone})
             {
                 const Info a(2, dataType, 44100);
                 const Info b(1, dataType, 44100);
@@ -466,7 +466,7 @@ namespace tl
                 auto in = Audio::create(a, 44100);
                 auto out = r->process(in);
 #if defined(TLRENDER_FFMPEG)
-                if (dataType != DataType::None)
+                if (dataType != DataType::kNone)
                 {
                     TLRENDER_ASSERT(b == out->getInfo());
                     TLRENDER_ASSERT(44100 == out->getSampleCount());

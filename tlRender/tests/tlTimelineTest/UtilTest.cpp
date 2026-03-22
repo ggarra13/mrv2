@@ -197,7 +197,7 @@ namespace tl
                     file::Path outputPath = entry.getPath();
                     outputPath.setExtension(".otioz");
                     writeOTIOZ(
-                        outputPath.get(-1, file::PathType::FileName), timeline,
+                        outputPath.get(), timeline,
                         TLRENDER_SAMPLE_DATA);
                 }
             }

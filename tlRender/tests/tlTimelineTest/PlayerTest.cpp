@@ -199,6 +199,7 @@ namespace tl
 
         void PlayerTest::_player()
         {
+            otime::RationalTime offsetTime = otime::RationalTime(0, 24);
             // Test timeline players.
             const std::vector<file::Path> paths = {
                 file::Path(TLRENDER_SAMPLE_DATA, "BART_2021-02-07.m4v"),
@@ -213,7 +214,7 @@ namespace tl
                 try
                 {
                     _print(string::Format("Timeline: {0}").arg(path.get()));
-                    auto timeline = Timeline::create(path.get(), _context);
+                    auto timeline = Timeline::create(path.get(), _context, offsetTime);
                     auto player = Player::create(timeline, _context);
                     TLRENDER_ASSERT(player->getTimeline());
                     _player(player);
@@ -229,11 +230,11 @@ namespace tl
                 {
                     _print(
                         string::Format("Memory timeline: {0}").arg(path.get()));
-                    auto otioTimeline = timeline::create(path, _context);
+                    auto otioTimeline = timeline::create(path, _context, offsetTime);
                     toMemoryReferences(
                         otioTimeline, path.getDirectory(),
                         ToMemoryReference::Shared);
-                    auto timeline = Timeline::create(otioTimeline, _context);
+                    auto timeline = Timeline::create(otioTimeline, _context, offsetTime);
                     auto player = Player::create(timeline, _context);
                     _player(player);
                 }

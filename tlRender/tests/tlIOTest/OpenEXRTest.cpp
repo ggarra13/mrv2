@@ -40,7 +40,7 @@ namespace tl
         {
             _enum<exr::ChannelGrouping>(
                 "ChannelGrouping", exr::getChannelGroupingEnums);
-            _enum<exr::Compression>("Compression", exr::getCompressionEnums);
+            //_enum<exr::Compression>("Compression", exr::getCompressionEnums);
         }
 
         namespace

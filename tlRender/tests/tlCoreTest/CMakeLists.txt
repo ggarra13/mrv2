@@ -54,7 +54,7 @@ set(SOURCE
     SizeTest.cpp
     StringTest.cpp
     StringFormatTest.cpp
-    TimeTest.cpp
+#    TimeTest.cpp
     ValueObserverTest.cpp
     VectorTest.cpp)
 

@@ -39,6 +39,8 @@ if(TLRENDER_STB)
     list(APPEND SOURCE STBTest.cpp)
 endif()
 
+find_package(NDI)
+
 add_library(tlIOTest ${SOURCE} ${HEADERS})
-target_link_libraries(tlIOTest tlTestLib tlIO)
+target_link_libraries(tlIOTest tlTestLib tlIO NDI)
 set_target_properties(tlIOTest PROPERTIES FOLDER tests)

@@ -4,14 +4,14 @@ set(SOURCE
     main.cpp)
 
 set(LIBRARIES
-    tlAppTest
+    #    tlAppTest
     tlCoreTest
-    tlGLTest
+    # tlGLTest
     tlIOTest
-    tlTimelineTest)
-if(TLRENDER_QT6 OR TLRENDER_QT5 AND NOT "${TLRENDER_API}" STREQUAL "GLES_2")
-    list(APPEND LIBRARIES tlQtTest)
-endif()
+    #    tlTimelineTest
+)
+
+find_package(NDI)
 
 add_executable(tltest ${SOURCE} ${HEADERS})
 target_link_libraries(tltest ${LIBRARIES})

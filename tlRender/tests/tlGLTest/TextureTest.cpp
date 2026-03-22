@@ -60,12 +60,12 @@ namespace tl
             struct TestData
             {
                 image::Size size;
-                image::PixelType pixelType = image::PixelType::None;
+                image::PixelType pixelType = image::PixelType::kNone;
                 bool pbo = false;
             };
             const std::vector<TestData> dataList = {
-                {image::Size(0, 0), image::PixelType::None, false},
-                {image::Size(0, 0), image::PixelType::None, true},
+                {image::Size(0, 0), image::PixelType::kNone, false},
+                {image::Size(0, 0), image::PixelType::kNone, true},
                 {image::Size(100, 200), image::PixelType::RGBA_U8, false},
                 {image::Size(100, 200), image::PixelType::RGBA_U8, true}};
             for (const auto& data : dataList)
@@ -103,11 +103,11 @@ namespace tl
             {
                 size_t textureCount = 0;
                 int textureSize = 0;
-                image::PixelType textureType = image::PixelType::None;
+                image::PixelType textureType = image::PixelType::kNone;
             };
             const std::vector<TestData> dataList = {
-                {0, 0, image::PixelType::None},
-                {1, 0, image::PixelType::None},
+                {0, 0, image::PixelType::kNone},
+                {1, 0, image::PixelType::kNone},
                 {1, 104, image::PixelType::RGBA_U8}};
             for (const auto& data : dataList)
             {

@@ -69,47 +69,47 @@ namespace tl
             struct TestData
             {
                 math::Size2i size;
-                image::PixelType colorType = image::PixelType::None;
-                OffscreenDepth depth = OffscreenDepth::None;
-                OffscreenStencil stencil = OffscreenStencil::None;
-                OffscreenSampling sampling = OffscreenSampling::None;
+                image::PixelType colorType = image::PixelType::kNone;
+                OffscreenDepth depth = OffscreenDepth::kNone;
+                OffscreenStencil stencil = OffscreenStencil::kNone;
+                OffscreenSampling sampling = OffscreenSampling::kNone;
             };
             const std::vector<TestData> dataList = {
-                {math::Size2i(0, 0), image::PixelType::None,
-                 OffscreenDepth::None, OffscreenStencil::None,
-                 OffscreenSampling::None},
+                {math::Size2i(0, 0), image::PixelType::kNone,
+                 OffscreenDepth::kNone, OffscreenStencil::kNone,
+                 OffscreenSampling::kNone},
                 {math::Size2i(100, 200), offscreenColorDefault,
-                 OffscreenDepth::None, OffscreenStencil::None,
-                 OffscreenSampling::None},
+                 OffscreenDepth::kNone, OffscreenStencil::kNone,
+                 OffscreenSampling::kNone},
                 {math::Size2i(100, 200), offscreenColorDefault,
-                 OffscreenDepth::_16, OffscreenStencil::None,
-                 OffscreenSampling::None},
+                 OffscreenDepth::_16, OffscreenStencil::kNone,
+                 OffscreenSampling::kNone},
                 {math::Size2i(100, 200), offscreenColorDefault,
-                 OffscreenDepth::_24, OffscreenStencil::None,
-                 OffscreenSampling::None},
+                 OffscreenDepth::_24, OffscreenStencil::kNone,
+                 OffscreenSampling::kNone},
                 {math::Size2i(100, 200), offscreenColorDefault,
-                 OffscreenDepth::_32, OffscreenStencil::None,
-                 OffscreenSampling::None},
+                 OffscreenDepth::_32, OffscreenStencil::kNone,
+                 OffscreenSampling::kNone},
                 {math::Size2i(100, 200), offscreenColorDefault,
-                 OffscreenDepth::None, OffscreenStencil::_8,
-                 OffscreenSampling::None},
+                 OffscreenDepth::kNone, OffscreenStencil::_8,
+                 OffscreenSampling::kNone},
                 {math::Size2i(100, 200), offscreenColorDefault,
                  OffscreenDepth::_24, OffscreenStencil::_8,
-                 OffscreenSampling::None},
+                 OffscreenSampling::kNone},
                 {math::Size2i(100, 200), offscreenColorDefault,
                  OffscreenDepth::_32, OffscreenStencil::_8,
-                 OffscreenSampling::None},
+                 OffscreenSampling::kNone},
                 {math::Size2i(100, 200), offscreenColorDefault,
-                 OffscreenDepth::None, OffscreenStencil::None,
+                 OffscreenDepth::kNone, OffscreenStencil::kNone,
                  OffscreenSampling::_2},
                 {math::Size2i(100, 200), offscreenColorDefault,
-                 OffscreenDepth::None, OffscreenStencil::None,
+                 OffscreenDepth::kNone, OffscreenStencil::kNone,
                  OffscreenSampling::_4},
                 {math::Size2i(100, 200), offscreenColorDefault,
-                 OffscreenDepth::None, OffscreenStencil::None,
+                 OffscreenDepth::kNone, OffscreenStencil::kNone,
                  OffscreenSampling::_8},
                 {math::Size2i(100, 200), offscreenColorDefault,
-                 OffscreenDepth::None, OffscreenStencil::None,
+                 OffscreenDepth::kNone, OffscreenStencil::kNone,
                  OffscreenSampling::_16}};
             for (const auto& data : dataList)
             {

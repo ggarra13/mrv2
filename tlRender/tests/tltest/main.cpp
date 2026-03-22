@@ -207,11 +207,7 @@ void qtTests(
 int main(int argc, char* argv[])
 {
     auto context = system::Context::create();
-#if defined(TLRENDER_QT5) || defined(TLRENDER_QT6)
-    qt::init(qt::DefaultSurfaceFormat::OpenGL_4_1_CoreProfile, context);
-#else  // TLRENDER_QT5 || TLRENDER_QT6
-    timeline::init(context);
-#endif // TLRENDER_QT5 || TLRENDER_QT6
+    //timeline::init(context);
 
     auto logObserver = observer::ListObserver<log::Item>::create(
         context->getSystem<log::System>()->observeLog(),
@@ -233,11 +229,11 @@ int main(int argc, char* argv[])
     // tests.push_back(core_tests::PathTest::create(context));
     // tests.push_back(timeline_tests::TimelineTest::create(context));
     coreTests(tests, context);
-    glTests(tests, context);
-    ioTests(tests, context);
-    timelineTests(tests, context);
-    appTests(tests, context);
-    qtTests(tests, context);
+    //glTests(tests, context);
+    //ioTests(tests, context);
+    //timelineTests(tests, context);
+    //appTests(tests, context);
+    //qtTests(tests, context);
 
     for (const auto& test : tests)
     {

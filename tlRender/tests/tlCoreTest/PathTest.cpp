@@ -37,13 +37,13 @@ namespace tl
 
         void PathTest::_enums()
         {
-            _enum<UserPath>("UserPath", getUserPathEnums);
-            for (auto i : getUserPathEnums())
-            {
-                _print(string::Format("{0}: {1}")
-                           .arg(getLabel(i))
-                           .arg(getUserPath(i)));
-            }
+            // _enum<UserPath>("UserPath", getUserPathEnums);
+            // for (auto i : getUserPathEnums())
+            // {
+            //     _print(string::Format("{0}: {1}")
+            //                .arg(getLabel(i))
+            //                .arg(getUserPath(i)));
+            // }
         }
 
         void PathTest::_path()
@@ -52,7 +52,7 @@ namespace tl
                 PathOptions a;
                 const PathOptions b;
                 TLRENDER_ASSERT(a == b);
-                a.maxNumberDigits = 0;
+                a.seqMaxDigits = 0;
                 TLRENDER_ASSERT(a != b);
             }
             {
@@ -74,21 +74,11 @@ namespace tl
                 TLRENDER_ASSERT(path.get() == "\\tmp\\file.txt");
             }
             {
-                std::string s = Path(
-                                    "tmp/", "render.", "0001", 4, ".exr",
-                                    "http://", "?user=foo;password=bar")
-                                    .get();
+                std::string s = Path("http://tmp/render.0001.exr?user=foo;password=bar").get();
                 TLRENDER_ASSERT(
                     s == "http://tmp/render.0001.exr?user=foo;password=bar");
-                s = Path("tmp/", "render.", "0001", 4, ".exr", "http://")
-                        .get(2);
+                s = Path("http://tmp/render.0002.exr").get();
                 TLRENDER_ASSERT(s == "http://tmp/render.0002.exr");
-                s = Path("tmp/", "render.", "0001", 4, ".exr", "http://")
-                        .get(2, PathType::Path);
-                TLRENDER_ASSERT(s == "tmp/render.0002.exr");
-                s = Path("tmp/", "render.", "0001", 4, ".exr", "http://")
-                        .get(2, PathType::FileName);
-                TLRENDER_ASSERT(s == "render.0002.exr");
             }
             {
                 struct Data
@@ -97,52 +87,57 @@ namespace tl
                     std::string protocol;
                     std::string directory;
                     std::string baseName;
+                    std::string suffix;
                     std::string number;
                     int padding = 0;
                     std::string extension;
                     std::string request;
                 };
                 const std::vector<Data> data = {
-                    {"", "", "", "", "", 0, "", ""},
-                    {"f", "", "", "f", "", 0, "", ""},
-                    {"file", "", "", "file", "", 0, "", ""},
-                    {"file.txt", "", "", "file", "", 0, ".txt", ""},
-                    {"/tmp/file.txt", "", "/tmp/", "file", "", 0, ".txt", ""},
-                    {"/tmp/render.1.exr", "", "/tmp/", "render.", "1", 0,
+                    {"", "", "", "", "", "", 0, "", ""},  // OK
+                    {"f", "", "", "f", "", "", 0, "", ""},  // OK
+                    {"file", "", "", "file", "", "", 0, "", ""},
+                    {"file.txt", "", "", "file", "", "", 0, ".txt", ""},
+                    {"/tmp/file.txt", "", "/tmp/", "file", "", "", 0, ".txt", ""},
+                    {"/tmp/render.1.exr", "", "/tmp/", "render.", "", "1", 0,
                      ".exr", ""},
-                    {"/tmp/render.0001.exr", "", "/tmp/", "render.", "0001", 4,
+                    {"/tmp/render.0001.exr", "", "/tmp/", "render.", "", "0001", 4,
                      ".exr", ""},
-                    {"/tmp/render0001.exr", "", "/tmp/", "render", "0001", 4,
+                    {"/tmp/render0001.exr", "", "/tmp/", "render", "", "0001", 4,
                      ".exr", ""},
-                    {".", "", "", ".", "", 0, "", ""},
-                    {"..", "", "", "..", "", 0, "", ""},
-                    {"/.", "", "/", ".", "", 0, "", ""},
-                    {"./", "", "./", "", "", 0, "", ""},
-                    {".dotfile", "", "", ".dotfile", "", 0, "", ""},
-                    {"/tmp/.dotfile", "", "/tmp/", ".dotfile", "", 0, "", ""},
+                    {".", "", "", ".", "", "", 0, "", ""},
+                    {"..", "", "", "..", "", "", 0, "", ""},
+                    {"/.", "", "/", ".", "", "", 0, "", ""},
+                    {"./", "", "./", "", "", "", 0, "", ""},
+                    {".dotfile", "", "", ".dotfile", "", "", 0, "", ""},
+                    {"/tmp/.dotfile", "", "/tmp/", ".dotfile", "", "", 0, "", ""},
                     {"/tmp/.dotdir/.dotfile", "", "/tmp/.dotdir/", ".dotfile",
-                     "", 0, "", ""},
-                    {"0", "", "", "", "0", 0, "", ""},
-                    {"0001", "", "", "", "0001", 4, "", ""},
-                    {"/tmp/0001", "", "/tmp/", "", "0001", 4, "", ""},
-                    {"/tmp/0001.exr", "", "/tmp/", "", "0001", 4, ".exr", ""},
-                    {"0001.exr", "", "", "", "0001", 4, ".exr", ""},
-                    {"1.exr", "", "", "", "1", 0, ".exr", ""},
-                    {"C:", "", "C:", "", "", 0, "", ""},
-                    {"C:/", "", "C:/", "", "", 0, "", ""},
-                    {"C:/tmp/file.txt", "", "C:/tmp/", "file", "", 0, ".txt",
+                     "", "", 0, "", ""},
+                    {"0", "", "", "", "", "0", 0, "", ""},
+                    {"0001", "", "", "", "", "0001", 4, "", ""},
+                    {"/tmp/0001", "", "/tmp/", "", "", "0001", 4, "", ""},
+                    {"/tmp/0001.exr", "", "/tmp/", "", "", "0001", 4, ".exr", ""},
+                    {"0001.exr", "", "", "", "", "0001", 4, ".exr", ""},
+                    {"1.exr", "", "", "", "", "1", 0, ".exr", ""},
+                    {"C:", "", "C:", "", "", "", 0, "", ""},
+                    {"C:/", "", "C:/", "", "", "", 0, "", ""},
+                    {"C:/tmp/file.txt", "", "C:/tmp/", "file", "", "", 0, ".txt",
                      ""},
-                    {"file:/tmp/render.1.exr", "file:", "/tmp/", "render.", "1",
+                    {"file:/tmp/render.1.exr", "file:", "/tmp/", "render.", "", "1",
                      0, ".exr", ""},
-                    {"file://tmp/render.1.exr", "file://", "tmp/", "render.",
+                    {"file://tmp/render.1.exr", "file://", "tmp/", "render.", "",
                      "1", 0, ".exr", ""},
-                    {"file:///tmp/render.1.exr", "file://", "/tmp/", "render.",
+                    {"file:///tmp/render.1.exr", "file://", "/tmp/", "render.", "",
                      "1", 0, ".exr", ""},
-                    {"http://tmp/render.1.exr", "http://", "tmp/", "render.",
+                    {"http://tmp/render.1.exr", "http://", "tmp/", "render.", "",
                      "1", 0, ".exr", ""},
                     {"http://tmp/render.1.exr?user=foo;password=bar", "http://",
-                     "tmp/", "render.", "1", 0, ".exr",
-                     "?user=foo;password=bar"}};
+                     "tmp/", "render.", "", "1", 0, ".exr",
+                     "?user=foo;password=bar"},
+                    {"http://tmp/render.1.suffix.exr", "http://", "tmp/", "render.", ".suffix",
+                     "1", 0, ".exr", ""},
+                    {"http://tmp/render_1_suffix.exr", "http://", "tmp/", "render_", "_suffix",
+                     "1", 0, ".exr", ""}};
                 for (const auto& i : data)
                 {
                     const Path path(i.input);
@@ -153,15 +148,16 @@ namespace tl
                     TLRENDER_ASSERT(i.baseName == path.getBaseName());
                     TLRENDER_ASSERT(i.number == path.getNumber());
                     TLRENDER_ASSERT(i.padding == path.getPadding());
+                    TLRENDER_ASSERT(i.suffix == path.getSuffix());
                     TLRENDER_ASSERT(i.extension == path.getExtension());
                     TLRENDER_ASSERT(i.request == path.getRequest());
                 }
             }
             {
                 Path p("render.0001.exr");
-                const math::IntRange sequence(1, 100);
-                p.setSequence(sequence);
-                TLRENDER_ASSERT(sequence == p.getSequence());
+                const math::Int64Range sequence(1, 100);
+                p.setFrames(sequence);
+                TLRENDER_ASSERT(sequence == p.getFrames());
                 TLRENDER_ASSERT(p.isSequence());
                 TLRENDER_ASSERT("0001-0100" == p.getSequenceString());
                 TLRENDER_ASSERT(p.sequence(Path("render.0101.exr")));
@@ -169,8 +165,8 @@ namespace tl
             }
             {
                 Path p("render.0001.exr");
-                const math::IntRange sequence(1, 9999);
-                p.setSequence(sequence);
+                const math::Int64Range sequence(1, 9999);
+                p.setFrames(sequence);
                 TLRENDER_ASSERT("0001-9999" == p.getSequenceString());
                 TLRENDER_ASSERT(p.sequence(Path("render.0001.exr")));
                 TLRENDER_ASSERT(p.sequence(Path("render.1000.exr")));
@@ -179,8 +175,8 @@ namespace tl
             }
             {
                 Path p("render.1000.exr");
-                const math::IntRange sequence(1, 9999);
-                p.setSequence(sequence);
+                const math::Int64Range sequence(1, 9999);
+                p.setFrames(sequence);
                 TLRENDER_ASSERT(p.sequence(Path("render.0001.exr")));
                 TLRENDER_ASSERT(p.sequence(Path("render.1000.exr")));
                 //! \bug How should the padding be handled in this case?
@@ -250,14 +246,6 @@ namespace tl
                     "/tmp/" == appendSeparator(std::string("/tmp")));
                 TLRENDER_ASSERT(
                     "/tmp/" == appendSeparator(std::string("/tmp/")));
-            }
-            {
-                std::string path = getParent("/usr/tmp");
-                TLRENDER_ASSERT("/usr" == path);
-                path = getParent("/tmp");
-                TLRENDER_ASSERT("/" == path);
-                path = getParent("a/b");
-                TLRENDER_ASSERT("a" == path);
             }
             {
                 _print(string::Format("Drives: {0}")

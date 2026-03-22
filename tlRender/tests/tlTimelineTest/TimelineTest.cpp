@@ -69,7 +69,7 @@ namespace tl
         {
             {
                 TLRENDER_ASSERT(
-                    toTransition(std::string()) == Transition::None);
+                    toTransition(std::string()) == Transition::kNone);
                 TLRENDER_ASSERT(
                     toTransition("SMPTE_Dissolve") == Transition::Dissolve);
             }
@@ -249,6 +249,7 @@ namespace tl
         void TimelineTest::_separateAudio()
         {
 #if defined(TLRENDER_FFMPEG)
+            otime::RationalTime offset = otime::RationalTime(0, 24);
             try
             {
                 const file::Path path(
@@ -280,8 +281,8 @@ namespace tl
                     TLRENDER_SAMPLE_DATA, "Seq/BART_2021-02-07.0001.jpg");
                 _print(string::Format("Path: {0}").arg(path.get()));
                 Options options;
-                options.fileSequenceAudio = FileSequenceAudio::None;
-                auto timeline = Timeline::create(path, _context, options);
+                options.fileSequenceAudio = FileSequenceAudio::kNone;
+                auto timeline = Timeline::create(path, _context, offsetTime, options);
                 const file::Path& audioPath = timeline->getAudioPath();
                 TLRENDER_ASSERT(audioPath.isEmpty());
                 _print(string::Format("Audio path: {0}").arg(audioPath.get()));
@@ -297,7 +298,7 @@ namespace tl
                 _print(string::Format("Path: {0}").arg(path.get()));
                 Options options;
                 options.fileSequenceAudio = FileSequenceAudio::BaseName;
-                auto timeline = Timeline::create(path, _context, options);
+                auto timeline = Timeline::create(path, _context, offsetTime, options);
                 const file::Path& audioPath = timeline->getAudioPath();
                 TLRENDER_ASSERT(!audioPath.isEmpty());
                 _print(string::Format("Audio path: {0}").arg(audioPath.get()));
@@ -316,7 +317,7 @@ namespace tl
                 options.fileSequenceAudioFileName =
                     file::Path(TLRENDER_SAMPLE_DATA, "AudioToneStereo.wav")
                         .get();
-                auto timeline = Timeline::create(path, _context, options);
+                auto timeline = Timeline::create(path, _context, offsetTime, options);
                 const file::Path& audioPath = timeline->getAudioPath();
                 TLRENDER_ASSERT(!audioPath.isEmpty());
                 _print(string::Format("Audio path: {0}").arg(audioPath.get()));
