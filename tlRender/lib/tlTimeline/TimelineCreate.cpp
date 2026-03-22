@@ -483,7 +483,8 @@ namespace tl
                             auto mediaReference =
                                 new otio::ImageSequenceReference(
                                     "",  // \@bug: not path.getDirectory()?
-                                    path.getBaseName(), path.getExtension(),
+                                    path.getBaseName(),
+                                    path.getSuffix() + path.getExtension(),
                                     info.videoTime.start_time().value(), 1,
                                     info.videoTime.duration().rate(),
                                     path.getPadding());
