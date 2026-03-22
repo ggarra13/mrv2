@@ -7,10 +7,10 @@
 
 #include "mrvHome.h"
 #include "mrvFile.h"
-#include "mrvOS.h"
-#include "mrvRoot.h"
 #include "mrvString.h"
 
+#include "mrvOS/mrvOS.h"
+#include "mrvOS/mrvRoot.h"
 
 #include <stdlib.h>
 #include <filesystem>

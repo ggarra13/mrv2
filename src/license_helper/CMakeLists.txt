@@ -4,24 +4,17 @@
 
 
 set(HEADERS
-    mrvEnv.h
     mrvFile.h
     mrvHome.h
-    mrvI8N.h
     mrvLanguages.h
     mrvMainWindow.h
-    mrvOS.h
-    mrvRoot.h
     mrvString.h
 )
 set(SOURCES
     main.cpp
-    mrvEnv.cpp
     mrvFile.cpp
     mrvHome.cpp
     mrvLanguages.cpp
-    mrvOS.cpp
-    mrvRoot.cpp
     mrvString.cpp
 )
 
@@ -40,7 +33,7 @@ endif()
 # Use static FLTK
 #
 set(LIBRARIES )
-list(APPEND LIBRARIES fltk::fltk ${Intl_LIBRARIES}) # Use static FLTK, not shared one
+list(APPEND LIBRARIES fltk::fltk mrvOS ${Intl_LIBRARIES}) # Use static FLTK, not shared one
 
 add_executable(license_helper WIN32 ${SOURCES} ${HEADERS})
 

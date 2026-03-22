@@ -1,10 +1,11 @@
 #include "mrvLanguages.h"
 #include "mrvFile.h"
 #include "mrvHome.h"
-#include "mrvI8N.h"
 #include "mrvMainWindow.h"
-#include "mrvRoot.h"
-#include "mrvOS.h"
+
+#include "mrvOS/mrvI8N.h"
+#include "mrvOS/mrvRoot.h"
+#include "mrvOS/mrvOS.h"
 
 #include <FL/fl_ask.H>
 #include <FL/filename.H>
@@ -265,11 +266,8 @@ You need an Internet connection to use.)TEXT");
                 buttons = new Fl_Flex(180, info->y() + 50, 100, 40);
                 buttons->type(Fl_Flex::HORIZONTAL);
                 buttons->gap(10);
-        
-                demo = new Fl_Button(180, 280, 100, 40, "Demo");
-                demo->callback((Fl_Callback*)exit_cb, nullptr);
                 
-                donate = new Fl_Button(300, 280, 100, 40, "Donate");
+                donate = new Fl_Button(180, buttons->y(), 200, 40, "Donate");
                 donate->callback((Fl_Callback*)donate_cb, nullptr);
                 
                 buttons->end();
