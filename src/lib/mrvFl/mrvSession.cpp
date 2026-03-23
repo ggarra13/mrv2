@@ -4,40 +4,41 @@
 
 #include "mrViewer.h"
 
-#include <fstream>
-
-#include <tlCore/StringFormat.h>
-
-#include "mrvCore/mrvFile.h"
-#include "mrvOS/mrvString.h"
-
-#include "mrvOptions/mrvEnvironmentMapOptions.h"
-#include "mrvOptions/mrvStereo3DOptions.h"
-
-#include "mrvNetwork/mrvMessage.h"
-#include "mrvNetwork/mrvCypher.h"
-#include "mrvNetwork/mrvFilesModelItem.h"
-
-#include "mrvOptions/mrvCompareOptions.h"
-#include "mrvOptions/mrvDisplayOptions.h"
-#include "mrvOptions/mrvImageOptions.h"
-#include "mrvOptions/mrvTimelineItemOptions.h"
-
-#include "mrvFLTK/mrvCallbacks.h"
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvEdit/mrvEditCallbacks.h"
-#include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvSettingsObject.h"
 #include "mrvApp/mrvApp.h"
 
+#include "mrvNetwork/mrvMessage.h"
+#include "mrvNetwork/mrvCypher.h"
+#include "mrvNetwork/mrvFilesModelItem.h"
+
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
 #include "mrvFl/mrvIO.h"
-
-#include "mrvSession.h"
-
 #include "mrvFl/mrvOCIO.h"
+#include "mrvFl/mrvSession.h"
+
+#include "mrvFLTK/mrvCallbacks.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
+#include "mrvEdit/mrvEditUtil.h"
+
+#include "mrvCore/mrvFile.h"
+
+#include "mrvOS/mrvString.h"
+
+#include "mrvOptions/mrvEnvironmentMapOptions.h"
+#include "mrvOptions/mrvStereo3DOptions.h"
+#include "mrvOptions/mrvCompareOptions.h"
+
+
+#include <tlTimelineUI/IItem.h>
+
+#include <tlCore/StringFormat.h>
+
+#include <fstream>
+
 
 namespace
 {

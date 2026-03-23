@@ -58,8 +58,6 @@
 #include "mrvWidgets/mrvSecondaryWindow.h"
 
 
-#include "mrvOptions/mrvTimelineItemOptions.h"
-
 #include "mrvFl/mrvIO.h"
 
 
@@ -70,6 +68,8 @@
 
 #include "mrvOS/mrvOS.h"
 #include "mrvOS/mrvFileManager.h"
+
+#include <tlTimelineUI/IItem.h>
 
 #include <tlIO/System.h>
 

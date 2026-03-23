@@ -9,10 +9,9 @@
 #include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvIO.h"
 
-#include "mrvOptions/mrvLUTOptions.h"
+#include "mrvCore/mrvFile.h"
 
 #include "mrvOS/mrvI8N.h"
-#include "mrvCore/mrvFile.h"
 #include "mrvOS/mrvString.h"
 
 #include "mrViewer.h"

@@ -4,30 +4,22 @@
 
 set(HEADERS
     mrvCompareOptions.h
-    mrvDisplayOptions.h
     mrvEnums.h
     mrvEnvironmentMapOptions.h
     mrvEnvironmentMapOptionsInline.h
     mrvFilesPanelOptions.h
     mrvFilesPanelOptionsInline.h
-    mrvImageOptions.h
-    mrvLUTOptions.h
     mrvSaveOptions.h
     mrvStereo3DOptions.h
     mrvStereo3DOptionsInline.h
-    mrvTimelineItemOptions.h
     mrvUSD.h
 )
 
 set(SOURCES
     mrvCompareOptions.cpp
-    mrvDisplayOptions.cpp
     mrvEnvironmentMapOptions.cpp
     mrvFilesPanelOptions.cpp
-    mrvImageOptions.cpp
-    mrvLUTOptions.cpp
     mrvStereo3DOptions.cpp
-    mrvTimelineItemOptions.cpp
 )
 
 if(TLRENDER_USD)

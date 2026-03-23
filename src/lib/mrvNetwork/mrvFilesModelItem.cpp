@@ -7,8 +7,6 @@
 
 #include "mrvNetwork/mrvFilePath.h"
 
-#include "mrvOptions/mrvLUTOptions.h"
-
 #include <tlDraw/Annotation.h>
 
 #include <tlCore/Time.h>

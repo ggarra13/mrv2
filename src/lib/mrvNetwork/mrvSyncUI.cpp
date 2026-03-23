@@ -10,7 +10,7 @@
 #include "mrvNetwork/mrvProtocolVersion.h"
 #include "mrvNetwork/mrvConnectionHandler.h"
 
-#include "mrvOptions/mrvTimelineItemOptions.h"
+#include <tlTimelineUI/IItem.h>
 
 namespace mrv
 {

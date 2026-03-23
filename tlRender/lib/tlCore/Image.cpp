@@ -455,6 +455,18 @@ namespace tl
             std::memset(_data, 0xFF, _dataByteCount);
         }
 
+        void to_json(nlohmann::json& j, const Mirror& value)
+        {
+            j["x"] = value.x;
+            j["y"] = value.y;
+        }
+
+        void from_json(const nlohmann::json& j, Mirror& value)
+        {
+            j.at("x").get_to(value.x);
+            j.at("y").get_to(value.y);
+        }
+        
         void to_json(nlohmann::json& json, const Size& value)
         {
             json = {value.w, value.h};

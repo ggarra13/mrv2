@@ -25,6 +25,20 @@ namespace tl
         TLRENDER_ENUM_IMPL(LUTOrder, "PostColorConfig", "PreColorConfig");
         TLRENDER_ENUM_SERIALIZE_IMPL(LUTOrder);
 
+        void to_json(nlohmann::json& j, const LUTOptions& value)
+        {
+            j["enabled"] = value.enabled;
+            j["fileName"] = value.fileName;
+            j["order"] = value.order;
+        }
+
+        void from_json(const nlohmann::json& j, LUTOptions& value)
+        {
+            j.at("enabled").get_to(value.enabled);
+            j.at("fileName").get_to(value.fileName);
+            j.at("order").get_to(value.order);
+        }
+        
         std::vector<std::string> getLUTFormatNames()
         {
             std::vector<std::string> out;
@@ -54,5 +68,7 @@ namespace tl
 #endif // TLRENDER_OCIO
             return out;
         }
+
+        
     } // namespace timeline
 } // namespace tl

@@ -16,10 +16,6 @@
 
 #include "mrvNetwork/mrvCommandInterpreter.h"
 #include "mrvOptions/mrvCompareOptions.h"
-#include "mrvOptions/mrvDisplayOptions.h"
-#include "mrvOptions/mrvImageOptions.h"
-#include "mrvOptions/mrvLUTOptions.h"
-#include "mrvOptions/mrvTimelineItemOptions.h"
 
 #if defined(OPENGL_BACKEND)
 #    include "mrvGL/mrvGLJson.h"
@@ -30,6 +26,8 @@
 #endif
 
 #include "mrvCore/mrvFile.h"
+
+#include <tlTimelineUI/IItem.h>
 
 #include <tlDraw/Annotation.h>
 

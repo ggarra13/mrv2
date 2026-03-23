@@ -45,6 +45,10 @@ namespace tl
             bool operator!=(const Color&) const;
         };
 
+        void to_json(nlohmann::json& j, const Color& value);
+
+        void from_json(const nlohmann::json& j, Color& value);
+        
         //! Get a brightness color matrix.
         math::Matrix4x4f brightness(const math::Vector3f&);
 
@@ -74,6 +78,10 @@ namespace tl
             bool operator!=(const Levels&) const;
         };
 
+        void to_json(nlohmann::json& j, const Levels& value);
+
+        void from_json(const nlohmann::json& j, Levels& value);
+        
         //! These values match the ones in exrdisplay for comparison and
         //! testing.
         struct EXRDisplay
@@ -88,6 +96,10 @@ namespace tl
             bool operator!=(const EXRDisplay&) const;
         };
 
+        void to_json(nlohmann::json& j, const EXRDisplay& value);
+
+        void from_json(const nlohmann::json& j, EXRDisplay& value);
+        
         //! Soft clip.
         struct SoftClip
         {
@@ -98,6 +110,10 @@ namespace tl
             bool operator!=(const SoftClip&) const;
         };
 
+        void to_json(nlohmann::json& j, const SoftClip& value);
+
+        void from_json(const nlohmann::json& j, SoftClip& value);
+        
         //! Autonormalize.
         struct Normalize
         {
@@ -109,6 +125,10 @@ namespace tl
             bool operator!=(const Normalize&) const;
         };
 
+        void to_json(nlohmann::json& j, const Normalize& value);
+
+        void from_json(const nlohmann::json& j, Normalize& value);
+        
         //! HDR usage.
         enum class HDRInformation {
             FromFile,
@@ -140,6 +160,11 @@ namespace tl
             bool operator==(const DisplayOptions&) const;
             bool operator!=(const DisplayOptions&) const;
         };
+        
+        void to_json(nlohmann::json& j, const DisplayOptions& value);
+
+        void from_json(const nlohmann::json& j, DisplayOptions& value);
+
     } // namespace timeline
 } // namespace tl
 

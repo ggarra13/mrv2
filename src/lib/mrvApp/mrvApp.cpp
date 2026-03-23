@@ -87,9 +87,6 @@ namespace py = pybind11;
 #    include "mrvNetwork/mrvParseHost.h"
 #endif
 
-#include "mrvOptions/mrvDisplayOptions.h"
-#include "mrvOptions/mrvLUTOptions.h"
-
 #if defined(TLRENDER_USD)
 #    include "mrvOptions/mrvUSD.h"
 #endif // TLRENDER_USD

@@ -48,7 +48,7 @@ if (TLRENDER_NET)
     find_package(OpenSSL REQUIRED)
 endif()
 
-set(LIBRARIES )
+set(LIBRARIES mrvOptions)
 set(LIBRARIES tlRender::tlIO tlRender::tlCore OpenEXR::OpenEXR Imath::Imath mrvOS ${FLTK_LIBRARIES})
 
 if (MRV2_NETWORK)

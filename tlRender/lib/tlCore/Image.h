@@ -224,6 +224,10 @@ namespace tl
             constexpr bool operator!=(const Mirror&) const;
         };
 
+        void to_json(nlohmann::json& j, const Mirror& value);
+
+        void from_json(const nlohmann::json& j, Mirror& value);
+
         //! Image data layout.
         class Layout
         {

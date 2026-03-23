@@ -38,6 +38,10 @@ namespace tl
             bool operator!=(const LUTOptions&) const;
         };
 
+        void to_json(nlohmann::json& j, const LUTOptions& value);
+
+        void from_json(const nlohmann::json& j, LUTOptions& value);
+        
         //! Get the list of LUT format names.
         std::vector<std::string> getLUTFormatNames();
 

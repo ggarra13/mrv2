@@ -45,7 +45,7 @@ endif()
 add_library(mrvFl ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set(LIBRARIES mrvEdit mrvUI mrvImage tlRender::tlDraw)
+set(LIBRARIES mrvUI mrvImage mrvOptions tlRender::tlDevice tlRender::tlDraw)
 
 if(MRV2_PDF)
     list(APPEND LIBRARIES mrvPDF )

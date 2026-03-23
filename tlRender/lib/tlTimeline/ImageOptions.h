@@ -64,6 +64,10 @@ namespace tl
             bool operator!=(const ImageFilters&) const;
         };
 
+        void to_json(nlohmann::json& j, const ImageFilters& value);
+
+        void from_json(const nlohmann::json& j, ImageFilters& value);
+
         //! Image options.
         struct ImageOptions
         {
@@ -75,6 +79,11 @@ namespace tl
             bool operator==(const ImageOptions&) const;
             bool operator!=(const ImageOptions&) const;
         };
+
+        void to_json(nlohmann::json& j, const ImageOptions& value);
+
+        void from_json(const nlohmann::json& j, ImageOptions& value);
+        
     } // namespace timeline
 } // namespace tl
 
