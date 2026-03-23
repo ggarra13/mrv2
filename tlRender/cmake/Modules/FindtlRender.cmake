@@ -42,7 +42,6 @@ find_package(PNG REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(RtAudio)
 
-
 #
 # These may be installed in cmake or not installed if the setting is off
 #
@@ -197,7 +196,7 @@ mark_as_advanced(
     tlRender_tlVk_LIBRARY
     tlRender_glad_LIBRARY)
 
-set(tlRender_tlCore_LIBRARIES "OTIO::opentimelineio;harfbuzz::harfbuzz;Imath::Imath;nlohmann_json::nlohmann_json" )
+set(tlRender_tlCore_LIBRARIES "OTIO::opentimelineio;harfbuzz::harfbuzz;Freetype::Freetype;PNG::PNG;Imath::Imath;nlohmann_json::nlohmann_json" )
 set(tlRender_tlDraw_LIBRARIES "tlRender::tlCore")
 if (OpenColorIO_FOUND)
     list(APPEND tlRender_tlCore_LIBRARIES OpenColorIO::OpenColorIO)

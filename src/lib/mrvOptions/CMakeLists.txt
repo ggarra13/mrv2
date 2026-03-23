@@ -12,6 +12,7 @@ set(HEADERS
     mrvFilesPanelOptionsInline.h
     mrvImageOptions.h
     mrvLUTOptions.h
+    mrvSaveOptions.h
     mrvStereo3DOptions.h
     mrvStereo3DOptionsInline.h
     mrvTimelineItemOptions.h

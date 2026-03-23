@@ -18,7 +18,7 @@ set(SOURCES
     mrvTCP.cpp
 )
 
-set( LIBRARIES mrvFl)
+set( LIBRARIES mrvFLTK)
 
 if(MRV2_NETWORK)
     list(APPEND SOURCES

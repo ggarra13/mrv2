@@ -11,7 +11,7 @@
 
 #include "mrvApp/mrvSettingsObject.h"
 
-#include "mrvFl/mrvFileRequester.h"
+#include "mrvFLTK/mrvFileRequester.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvWidgets/mrvFunctional.h"

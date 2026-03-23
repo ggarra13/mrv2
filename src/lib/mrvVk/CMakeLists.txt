@@ -40,8 +40,8 @@ if(APPLE)
 endif()
 
 set(LIBRARIES mrvUI mrvWidgets mrvCore ${FLTK_vk_LIBRARY} )
+list(APPEND LIBRARIES tlRender::tlTimelineUIVk tlRender::tlDraw tlRender::tlTimelineVk tlRender::tlVk tlRender::tlUI tlRender::tlTimeline  Vulkan::Vulkan)
 set(LIBRARIES_PRIVATE )
-list(APPEND LIBRARIES tlRender::tlDraw Vulkan::Vulkan tlRender::tlVk tlRender::tlTimeline tlRender::tlUI tlRender::tlTimelineUIVk tlRender::tlTimelineVk)
 
 add_library(mrvVk ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

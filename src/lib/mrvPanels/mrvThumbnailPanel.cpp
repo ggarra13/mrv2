@@ -9,7 +9,7 @@
 #include "mrvIcons/NDI.h"
 
 #include "mrvCore/mrvFile.h"
-#include "mrvCore/mrvWait.h"
+#include "mrvFLTK/mrvWait.h"
 
 #include <tlCore/StringFormat.h>
 

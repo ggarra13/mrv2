@@ -2,6 +2,7 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
+                                 # Library Dependencies
 add_subdirectory(mrvOS)          # cpptrace
 add_subdirectory(mrvCore)        # tlRender::tlIO tlRender::tlCore Imath::Imath FLTK 
 add_subdirectory(mrvIcons)
@@ -9,8 +10,8 @@ add_subdirectory(mrvOptions)     # mrvCore + USD libraries
 add_subdirectory(mrvFlmm)        # FLTK
 add_subdirectory(mrvWidgets)     # mrvFlmm mrvCore FLTK FLTK_gl MINIzip
 add_subdirectory(mrvFLU)         # mrvWidgets, FLTK, Intl
-add_subdirectory(mrvUI)          # mrvWidgets, Xrandr, wayland-client
-add_subdirectory(mrvImage)       
+add_subdirectory(mrvUI)          # mrvFLTK, mrvWidgets, Xrandr, wayland-client
+add_subdirectory(mrvImage)
 if(TLRENDER_FFMPEG)
     add_subdirectory(mrvVoice)       # mrvWidgets, RtAudio
 endif()
@@ -28,8 +29,9 @@ add_subdirectory(mrvViewport)    # mrvWidgets
 if(MRV2_PDF)
     add_subdirectory(mrvPDF)     # mrvWidgets
 endif()
+add_subdirectory(mrvFLTK)    # mrvFLTK, mrvGL or mrvVk
 add_subdirectory(mrvEdit)    # mrvViewerport, mrvWidgets, mrvNetwork
-add_subdirectory(mrvFl)      # mrvEdit, mrvUI, mrvGL, mrvVk, mrvPDF
+add_subdirectory(mrvFl)      # mrvEdit, mrvUI, mrvFLTK, mrvPDF
 add_subdirectory(mrvNetwork) # mrvFl, Poco::Net
 add_subdirectory(mrvPanels)  # mrvFl, mrvEdit
 add_subdirectory(mrvBaseApp) # tlBaseApp, tlCore, freetype

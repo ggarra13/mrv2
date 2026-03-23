@@ -25,7 +25,7 @@ namespace fs = std::filesystem;
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvHotkey.h"
-#include "mrvFl/mrvFileRequester.h"
+#include "mrvFLTK/mrvFileRequester.h"
 
 #include "keyboard_ui.h"
 #include "mrvHotkeyUI.h"

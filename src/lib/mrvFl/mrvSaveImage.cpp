@@ -8,8 +8,8 @@
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvFl/mrvSaveOptions.h"
-#include "mrvFl/mrvSave.h"
+#include "mrvOptions/mrvSaveOptions.h"
+#include "mrvFLTK/mrvSave.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvGL/mrvGLErrors.h"

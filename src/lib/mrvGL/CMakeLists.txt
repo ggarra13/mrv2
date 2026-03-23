@@ -43,8 +43,8 @@ endif()
 add_definitions( -DGL_SILENCE_DEPRECATION )
 
 set(LIBRARIES mrvUI mrvWidgets mrvCore ${FLTK_gl_LIBRARY} )
-set(LIBRARIES_PRIVATE )
 list(APPEND LIBRARIES tlRender::tlTimelineGL tlRender::tlTimelineUI tlRender::tlTimeline tlRender::tlGL tlRender::tlDraw)
+set(LIBRARIES_PRIVATE )
 
 add_library(mrvGL ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

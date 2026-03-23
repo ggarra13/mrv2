@@ -53,7 +53,7 @@ decl {\#include "mrvWidgets/mrvPreferencesTree.h"} {public global
 decl {\#include "mrvFl/mrvOCIO.h"} {private global
 }
 
-decl {\#include "mrvFl/mrvFileRequester.h"} {public global
+decl {\#include "mrvFLTK/mrvFileRequester.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global

@@ -98,6 +98,8 @@ else()
     endif()
 endif()
 
+# These ones are required not for building but for getting the include
+# path to their version.h file or similar.
 find_package(tlRender REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(glfw3 REQUIRED)

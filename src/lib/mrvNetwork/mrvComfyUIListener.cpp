@@ -10,7 +10,7 @@
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvFLTK/mrvCallbacks.h"
 #include "mrvFl/mrvIO.h"
 
 #include <Poco/Net/SocketAddress.h>

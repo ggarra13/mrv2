@@ -11,7 +11,7 @@
 
 #include "mrViewer.h"
 
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvFLTK/mrvCallbacks.h"
 #include "mrvFl/mrvTimelinePlayer.h"
 
 #include "mrvWidgets/mrvHorSlider.h"

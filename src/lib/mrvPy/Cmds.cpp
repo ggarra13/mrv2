@@ -10,8 +10,8 @@
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
 
-#include "mrvFl/mrvCallbacks.h"
-#include "mrvFl/mrvSave.h"
+#include "mrvFLTK/mrvCallbacks.h"
+#include "mrvFLTK/mrvSave.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvPDF/mrvSavePDF.h"

@@ -31,13 +31,13 @@ endif()
 set(LIBRARIES
     mrvBaseApp
     mrvHDR
-    mrvOS
-    ${Intl_LIBRARIES})
+    mrvOS)
 
 find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
 
 list(APPEND LIBRARIES ${FLTK_LIBRARIES})
 list(APPEND LIBRARIES_PRIVATE Vulkan::Vulkan)
+list(APPEND LIBRARIES ${Intl_LIBRARIES})
 
 if(WIN32)
     list(APPEND LIBRARIES dxgi)

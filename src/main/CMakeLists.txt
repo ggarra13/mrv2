@@ -16,6 +16,7 @@ if (WIN32)
 endif()
 
 set(LIBRARIES )
+set(LIBRARIES_PRIVATE )
     
 if(MRV2_PYBIND11)
     list(APPEND LIBRARIES mrvPy)
@@ -27,7 +28,7 @@ if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
     list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
 endif()
 
-list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} tlRender::tlIO)
+list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} tlRender::tlIO tlRender::tlCore)
 
 
 

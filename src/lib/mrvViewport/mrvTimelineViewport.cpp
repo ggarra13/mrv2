@@ -33,7 +33,7 @@
 #include "mrvNetwork/mrvTCP.h"
 #include "mrvNetwork/mrvDummyClient.h"
 
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvFLTK/mrvCallbacks.h"
 #include "mrvFl/mrvLaserFadeData.h"
 #include "mrvFl/mrvOCIO.h"
 #include "mrvFl/mrvTimelinePlayer.h"
@@ -53,7 +53,7 @@
 #include "mrvCore/mrvHotkey.h"
 #include "mrvCore/mrvMath.h"
 #include "mrvCore/mrvUtil.h"
-#include "mrvCore/mrvWait.h"
+#include "mrvFLTK/mrvWait.h"
 
 #include "mrvFl/mrvIO.h"
 

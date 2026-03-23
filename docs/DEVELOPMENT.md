@@ -180,10 +180,7 @@ src/lib:
 			  mrvString.h          - String auxiliary functions
 					         (some overlap with tlRender now)
 			  mrvTimeObject.h/cpp - Timecode functions.
-			  mrvUtil.h	      - Some utils that don't fit anywhere
-			  mrvWait.h           - Wait some time in milliseconds
-					      refreshing the UI
-					      (refactor to mrvFLTK/)		   
+			  mrvUtil.h	      - Some utils that don't fit anywhere	   
 			  
 	mrvEdit    	- Editing callbacks and functions.
 			  mrvCreateEDLFromFiles - given a list of files, create

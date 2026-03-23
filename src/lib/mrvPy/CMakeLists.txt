@@ -35,9 +35,10 @@ add_library(mrvPy ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
 
-set(LIBRARIES mrvApp)
+set(LIBRARIES mrvApp mrvFLTK)
+set(LIBRARIES_PRIVATE )
 
-target_link_libraries(mrvPy PUBLIC ${LIBRARIES} )
+target_link_libraries(mrvPy PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 set_target_properties(mrvPy PROPERTIES FOLDER lib)
 
 

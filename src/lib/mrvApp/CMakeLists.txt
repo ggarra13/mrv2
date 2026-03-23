@@ -24,11 +24,12 @@ add_library(mrvApp ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
 
-set(LIBRARIES mrvBaseApp mrvPanels mrvFLU mrvOptions)
+set(LIBRARIES mrvBaseApp)
+list(APPEND LIBRARIES mrvPanels mrvOptions)
+
 if (TLRENDER_NDI)
     list(APPEND LIBRARIES tlRender::tlDevice)
 endif()
-list(APPEND LIBRARIES ${FLTK_LIBRARIES})
 
 target_link_libraries(mrvApp PUBLIC ${LIBRARIES} )
 target_include_directories(mrvApp PUBLIC ${INCLUDES} )

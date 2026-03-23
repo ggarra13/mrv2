@@ -9,7 +9,7 @@
 #include "mrvVoice/mrvVoiceOver.h"
 #include "mrvVoice/mrvAnnotation.h"
 
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvFLTK/mrvCallbacks.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>

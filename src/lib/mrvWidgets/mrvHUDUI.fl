@@ -16,7 +16,7 @@ decl {\#include "mrvWidgets/mrvBackend.h"} {public global
 decl {\#include "mrvWidgets/mrvButton.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvCallbacks.h"} {private local
+decl {\#include "mrvFLTK/mrvCallbacks.h"} {private local
 }
 
 class HUDUI {open

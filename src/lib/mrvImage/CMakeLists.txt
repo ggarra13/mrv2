@@ -14,7 +14,7 @@ set(SOURCES
 )
 
 set(LIBRARIES tlRender::tlCore OpenEXR::OpenEXR Imath::Imath)
-
+set(LIBRARIES_PRIVATE )
 
 add_library(mrvImage ${SOURCES} ${HEADERS})
 

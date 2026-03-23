@@ -12,7 +12,7 @@
 #include "mrvOS/mrvString.h"
 #include "mrvOS/mrvI8N.h"
 
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvFLTK/mrvCallbacks.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvWidgets/mrvFileButton.h"

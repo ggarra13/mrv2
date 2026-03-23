@@ -5,7 +5,7 @@
 #include "mrViewer.h"
 
 #include "mrvFl/mrvOCIO.h"
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvFLTK/mrvCallbacks.h"
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvLaserFadeData.h"
 

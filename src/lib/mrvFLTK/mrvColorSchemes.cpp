@@ -2,17 +2,17 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_utf8.h>
-
-#include "mrvOS/mrvI8N.h"
-
-#include "mrvFl/mrvColorSchemes.h"
+#include "mrvApp/mrvApp.h"
 
 #include "mrvFl/mrvIO.h"
 
-#include "mrvApp/mrvApp.h"
+#include "mrvFLTK/mrvColorSchemes.h"
+
+#include "mrvOS/mrvI8N.h"
+
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/fl_utf8.h>
 
 namespace
 {

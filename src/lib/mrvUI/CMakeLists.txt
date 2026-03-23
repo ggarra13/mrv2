@@ -31,7 +31,7 @@ endif()
 add_library(mrvUI ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
-set(LIBRARIES mrvWidgets)
+set(LIBRARIES mrvFl mrvWidgets mrvFLTK)
 set(LIBRARIES_PRIVATE )
 
 if(TLRENDER_X11)

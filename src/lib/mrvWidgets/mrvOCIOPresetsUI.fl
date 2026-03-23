@@ -16,7 +16,7 @@ decl {\#include "mrViewer.h"} {selected private local
 decl {\#include "mrvFl/mrvOCIO.h"} {selected private local
 }
 
-decl {\#include "mrvFl/mrvCallbacks.h"} {selected private local
+decl {\#include "mrvFLTK/mrvCallbacks.h"} {selected private local
 }
 
 class OCIOPresetsUI {open

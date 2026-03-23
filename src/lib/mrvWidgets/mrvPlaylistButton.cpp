@@ -5,7 +5,7 @@
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvApp.h"
 
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvFLTK/mrvCallbacks.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 

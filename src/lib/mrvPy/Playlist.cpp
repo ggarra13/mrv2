@@ -8,7 +8,7 @@
 
 #include "mrvApp/mrvFilesModel.h"
 
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvFLTK/mrvCallbacks.h"
 
 #include "mrvOS/mrvI8N.h"
 #include "mrvCore/mrvFile.h"

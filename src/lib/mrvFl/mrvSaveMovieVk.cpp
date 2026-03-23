@@ -9,7 +9,7 @@
 #include "mrvUI/mrvDesktop.h"
 
 #include "mrvFl/mrvConvertImage.h"
-#include "mrvFl/mrvSaveOptions.h"
+#include "mrvOptions/mrvSaveOptions.h"
 #include "mrvFl/mrvIO.h"
 
 #include "mrvGL/mrvGLErrors.h"

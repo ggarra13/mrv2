@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include "mrvFl/mrvColorSchemes.h"
+#include "mrvFLTK/mrvColorSchemes.h"
 
 class ViewerUI;
 class PreferencesUI;

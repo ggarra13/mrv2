@@ -91,7 +91,7 @@ decl {\#include "mrvWidgets/mrvTimelineGroup.h"} {public global
 decl {\#include "mrvFl/mrvLanguages.h"} {public global
 }
 
-decl {\#include "mrvFl/mrvCallbacks.h"} {public global
+decl {\#include "mrvFLTK/mrvCallbacks.h"} {public global
 }
 
 decl {\#include "mrvFl/mrvPreferences.h"} {public global

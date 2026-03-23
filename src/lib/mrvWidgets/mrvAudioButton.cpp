@@ -2,16 +2,17 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Menu_Button.H>
 
-#include "mrvOS/mrvI8N.h"
+#include "mrvApp/mrvApp.h"
+
+#include "mrvFLTK/mrvCallbacks.h"
 
 #include "mrvWidgets/mrvAudioButton.h"
 
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvOS/mrvI8N.h"
 
-#include "mrvApp/mrvApp.h"
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Menu_Button.H>
 
 namespace mrv
 {

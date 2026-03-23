@@ -23,7 +23,7 @@
 #include "mrvOptions/mrvImageOptions.h"
 #include "mrvOptions/mrvTimelineItemOptions.h"
 
-#include "mrvFl/mrvCallbacks.h"
+#include "mrvFLTK/mrvCallbacks.h"
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvEdit/mrvEditCallbacks.h"
