@@ -3160,7 +3160,7 @@ namespace tl
                 }
                 if (p.pipelineLayouts["display"])
                 {
-                    p.garbage[p.frameIndex].pipelineLayouts.push_back(p.pipelineLayouts["display"]);
+                    p.garbage[p.frameIndex].pipelineLayouts.push_back(std::move(p.pipelineLayouts["display"]));
                     p.pipelineLayouts["display"] = VK_NULL_HANDLE;
                 }
 
