@@ -40,6 +40,7 @@ find_package(harfbuzz REQUIRED)
 find_package(OpenTimelineIO REQUIRED CONFIG)
 find_package(PNG REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(Freetype REQUIRED)
 find_package(RtAudio)
 
 #
