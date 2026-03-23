@@ -262,6 +262,8 @@ namespace tl
             if (doCreate(p.buffers["wipe_image"], offscreenBufferSize,
                          offscreenBufferOptions))
             {
+                if (p.buffers["wipe_image"])
+                    p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["wipe_image"]));
                 p.buffers["wipe_image"] =
                     vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
                                                  offscreenBufferOptions);
@@ -667,7 +669,10 @@ namespace tl
                 }
                 if (doCreate(p.buffers["overlay"], offscreenBufferSize, offscreenBufferOptions))
                 {
-                    p.buffers["overlay"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
+                    if (p.buffers["overlay"])
+                        p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["overlay"]));
+                    p.buffers["overlay"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
+                                                                        offscreenBufferOptions);
                 }
 
                 p.buffers["overlay"]->transitionToColorAttachment(p.cmd);
@@ -752,6 +757,8 @@ namespace tl
                 }
                 if (doCreate(p.buffers["difference0"], offscreenBufferSize, offscreenBufferOptions))
                 {
+                    if (p.buffers["difference0"])
+                        p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["difference0"]));
                     p.buffers["difference0"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
                 }
                 
@@ -778,6 +785,8 @@ namespace tl
                     }
                     if (doCreate(p.buffers["difference1"], offscreenBufferSize, offscreenBufferOptions))
                     {
+                        if (p.buffers["difference1"])
+                            p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["difference1"]));
                         p.buffers["difference1"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
                     }
 
@@ -898,6 +907,8 @@ namespace tl
             offscreenBufferOptions.colorFilters = displayOptions.imageFilters;
             if (doCreate(p.buffers["video"], offscreenBufferSize, offscreenBufferOptions))
             {
+                if (p.buffers["video"])
+                    p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["video"]));
                 p.buffers["video"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
                                                                   offscreenBufferOptions);
             }
@@ -921,11 +932,15 @@ namespace tl
                             if (doCreate(p.buffers["dissolve"], offscreenBufferSize,
                                          offscreenBufferOptions))
                             {
+                                if (p.buffers["dissolve"])
+                                    p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["dissolve"]));
                                 p.buffers["dissolve"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
                                                                                      offscreenBufferOptions);
                             }
                             if (doCreate(p.buffers["dissolve2"], offscreenBufferSize, offscreenBufferOptions))
                             {
+                                if (p.buffers["dissolve2"])
+                                    p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["dissolve2"]));
                                 p.buffers["dissolve2"] = vlk::OffscreenBuffer::create(ctx,
                                                                                       offscreenBufferSize,
                                                                                       offscreenBufferOptions);

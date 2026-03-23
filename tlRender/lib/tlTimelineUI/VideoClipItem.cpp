@@ -312,10 +312,12 @@ namespace tl
 
                                 const timeline::VideoLayer& layer = videoData.layers[0];
 
-                                if ((!_displayOptions.ocio.enabled ||
-                                     _displayOptions.ocio == timeline::OCIOOptions()) &&
-                                    _displayOptions.lut == timeline::LUTOptions() &&
-                                    _displayOptions.hdr == timeline::HDROptions())
+                                if ((_displayOptions.ocio == timeline::OCIOOptions() ||
+                                     !_displayOptions.ocio.enabled) &&
+                                    (_displayOptions.lut == timeline::LUTOptions() ||
+                                     !_displayOptions.lut.enabled) &&
+                                    (!_displayOptions.hdr.tonemap ||
+                                     _displayOptions.hdr == timeline::HDROptions()))
                                 {
                                     if (!layer.imageB && layer.image)
                                     {

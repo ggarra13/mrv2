@@ -50,8 +50,7 @@ Change Log
 - Added support for sequences with a suffix like render_0001_suffix.exr in
   file requester, drag and drop and command-line.
 - Refactored code.
-- Fixed a Vulkan hang (VK_ERROR_DEVICE_LOST) when creating thumbnails in the Edit timeline window.
-  
+- Fixed a Vulkan hang (VK_ERROR_DEVICE_LOST) when creating thumbnails in the Edit timeline window.  
 
 
 v1.5.9

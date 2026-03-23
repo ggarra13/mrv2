@@ -195,6 +195,7 @@ namespace tl
                 std::vector<VkPipeline> pipelines;
                 std::vector<VkPipelineLayout> pipelineLayouts;
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
+                std::vector<std::shared_ptr<vlk::OffscreenBuffer> > buffers;
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
 

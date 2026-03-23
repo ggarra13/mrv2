@@ -897,6 +897,7 @@ namespace tl
                 p.garbage[i].pipelines.reserve(20);
                 p.garbage[i].pipelineLayouts.reserve(20);
                 p.garbage[i].bindingSets.reserve(20);
+                p.garbage[i].buffers.reserve(20);
             }
         }
 
@@ -1022,6 +1023,7 @@ namespace tl
             g.pipelines.clear();
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
+            g.buffers.clear();
             
             const math::Matrix4x4f transform;
             const image::Color4f color(1.F, 1.F, 1.F);
