@@ -511,8 +511,14 @@ namespace mrv
             overlay->submitReadback(cmd);
 
             wait_queue();
+
+            VkResult result = VK_NOT_READY;
+            void* data = nullptr;
+            while (result == VK_NOT_READY)
+            {
+                result = overlay->getLatestReadPixels(data);
+            }
             
-            const void* data = overlay->getLatestReadPixels();
             if (!data)
                 return;
             

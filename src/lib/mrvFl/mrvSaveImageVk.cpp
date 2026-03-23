@@ -415,7 +415,12 @@ namespace mrv
 
             view->wait_queue();
             
-            const void* imageData = buffer->getLatestReadPixels();
+            VkResult result = VK_NOT_READY;
+            void* imageData = nullptr;
+            while (result == VK_NOT_READY)
+            {
+                result = buffer->getLatestReadPixels(imageData);
+            }
             if (imageData)
             {                            
                 std::memcpy(bufferImage->getData(), imageData,
@@ -450,7 +455,12 @@ namespace mrv
 
                     view->wait_queue();
             
-                    imageData = overlayBuffer->getLatestReadPixels();
+                    VkResult result = VK_NOT_READY;
+                    void* imageData = nullptr;
+                    while (result == VK_NOT_READY)
+                    {
+                        result = buffer->getLatestReadPixels(imageData);
+                    }
                     if (imageData)
                     {
                         std::memcpy(annotationImage->getData(), imageData,

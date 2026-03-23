@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include "ThumbnailSystem.h"
@@ -1169,7 +1170,6 @@ namespace tl
 
                                 p.thumbnailThread.render->end();
 
-                                p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
 
                                 p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
                                                                      size.h);
@@ -1177,29 +1177,18 @@ namespace tl
                                 vkEndCommandBuffer(cmd);
                 
                                 p.thumbnailThread.buffer->submitReadback(cmd);
-
-                                auto start = std::chrono::steady_clock::now();
+                                    
+                                VkResult result = VK_NOT_READY;
                                 void* imageData = nullptr;
-                                while (!(imageData = p.thumbnailThread.buffer->getLatestReadPixels()))
+                                while (result == VK_NOT_READY)
                                 {
-                                    const auto now = std::chrono::steady_clock::now();
-
-                                    // Calculate the total elapsed duration since start
-                                    std::chrono::duration<float> elapsed_duration = now - start;
-
-                                    // Get elapsed time in milliseconds (long long)
-                                    const auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_duration).count();
-                                    // If more than 2 seconds have passed, exit.
-                                    if (elapsed_ms > 2000)
-                                        break;
+                                    result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
                                 }
-                                        
+                                    
                                 if (imageData)
-                                    std::memcpy(image->getData(), imageData,
-                                                image->getDataByteCount());
+                                    std::memcpy(image->getData(), imageData, image->getDataByteCount());
                                 else
-                                    std::memset(image->getData(), 0,
-                                                image->getDataByteCount());
+                                    std::memset(image->getData(), 0, image->getDataByteCount());
                                     
                                 p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                             }
@@ -1222,9 +1211,13 @@ namespace tl
                             const auto info = timeline->getIOInfo();
                             // const auto videoData = timeline->getVideo(
                             //     timeline->getTimeRange().start_time()).future.get();
-                            const auto videoData =
-                                timeline->getVideo(request->time)
-                                .future.get();
+                            const otime::RationalTime time =
+                                request->time != time::invalidTime
+                                ? request->time
+                                : timeline->getTimeRange().start_time();
+
+                            const auto videoData = timeline->getVideo(time)
+                                                   .future.get();
                             math::Size2i size;
                             if (!info.video.empty())
                             {
@@ -1250,6 +1243,7 @@ namespace tl
                                 if (p.thumbnailThread.render &&
                                     p.thumbnailThread.buffer)
                                 {
+                                    std::cerr << size << std::endl;
                                     image = image::Image::create(
                                         size.w, size.h,
                                         image::PixelType::RGBA_U8);
@@ -1282,8 +1276,7 @@ namespace tl
                                         {math::Box2i(
                                                 0, 0, size.w, size.h)});
                                     p.thumbnailThread.render->end();
-                                    p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
-                            
+                                    
                                     p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
                                                                          size.h);
                                     
@@ -1291,31 +1284,19 @@ namespace tl
                 
                                     p.thumbnailThread.buffer->submitReadback(cmd);
 
-                                    
-                                    auto start = std::chrono::steady_clock::now();
+
+                                    VkResult result = VK_NOT_READY;
                                     void* imageData = nullptr;
-                                    while (!(imageData = p.thumbnailThread.buffer->getLatestReadPixels()))
+                                    while (result == VK_NOT_READY)
                                     {
-                                        const auto now = std::chrono::steady_clock::now();
-
-                                        // Calculate the total elapsed duration since start
-                                        std::chrono::duration<float> elapsed_duration = now - start;
-
-                                        // Get elapsed time in milliseconds (long long)
-                                        const auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_duration).count();
-                                        // If more than 2 seconds have passed, exit.
-                                        if (elapsed_ms > 2000)
-                                            break;
+                                        result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
                                     }
                                     
                                     if (imageData)
-                                        std::memcpy(image->getData(), imageData,
-                                                    image->getDataByteCount());
+                                        std::memcpy(image->getData(), imageData, image->getDataByteCount());
                                     else
-                                        std::memset(image->getData(), 0,
-                                                    image->getDataByteCount());
+                                        std::memset(image->getData(), 0, image->getDataByteCount());
                                         
-                                    vkEndCommandBuffer(cmd);
 
                                     p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                 }

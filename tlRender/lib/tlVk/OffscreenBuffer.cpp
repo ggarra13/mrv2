@@ -1198,7 +1198,7 @@ namespace tl
 
             // Transition image to TRANSFER_SRC
             transitionImageLayout(cmd, p.image,
-                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                  p.imageLayout,
                                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
             
             // Setup copy region
@@ -1222,6 +1222,8 @@ namespace tl
             transitionImageLayout(cmd, p.image,
                                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                   VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+
+            p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
 
         void OffscreenBuffer::submitReadback(VkCommandBuffer cmd)
@@ -1252,7 +1254,7 @@ namespace tl
             p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
         }
         
-        void* OffscreenBuffer::getLatestReadPixels()
+        VkResult OffscreenBuffer::getLatestReadPixels(void*& imageData)
         {
             TLRENDER_P();
 
@@ -1274,24 +1276,16 @@ namespace tl
                 memoryRange.size = bufferSize; // The size of the mapped region for this PBO
                 vkInvalidateMappedMemoryRanges(device, 1, &memoryRange);
     
-                void* ptr = pbo.mappedPtr;
+                imageData = pbo.mappedPtr;
 
                 p.readIndex = (p.readIndex + 1) % NUM_PBO_BUFFERS; 
 
-                // Data is ready
-                return pbo.mappedPtr;
+                return VK_SUCCESS;
             }
-            else if (result == VK_NOT_READY)
+            else
             {
-                return nullptr; 
+                return result; 
             }
-            else 
-            {
-                fprintf(stderr, "OffscreenBuffer::getLatestReadPixels pbo=%d fence failed: %s\n",
-                        p.readIndex, string_VkResult(result));
-                return nullptr; 
-            }
-    
         }
 
         

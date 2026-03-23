@@ -1710,7 +1710,13 @@ namespace mrv
                         
                     vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
 
-                    const void* data = vk.buffer->getLatestReadPixels();
+                    VkResult result = VK_NOT_READY;
+                    void* data = nullptr;
+                    while (result == VK_NOT_READY)
+                    {
+                        result = vk.buffer->getLatestReadPixels(data);
+                    }
+                    
                     if (!data)
                         return;
 
@@ -1756,7 +1762,12 @@ namespace mrv
                     p.image = nullptr;
                 }
                 
-                p.image = vk.buffer->getLatestReadPixels();
+                VkResult result = VK_NOT_READY;
+                while (result == VK_NOT_READY)
+                {
+                    result = vk.buffer->getLatestReadPixels(p.image);
+                }
+                    
                 if (!p.image)
                 {
                     LOG_ERROR("Could not get pixel under mouse");

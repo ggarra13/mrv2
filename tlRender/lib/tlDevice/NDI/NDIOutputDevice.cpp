@@ -2008,8 +2008,13 @@ namespace tl
                 vkQueueWaitIdle(ctx.queue());
             }
 
-            const void* data = p.thread.offscreenBuffer->getLatestReadPixels();
-
+            void* data = nullptr;
+            VkResult result = VK_NOT_READY;
+            while (result == VK_NOT_READY)
+            {
+                result = p.thread.offscreenBuffer->getLatestReadPixels(data);
+            }
+            
             vkFreeCommandBuffers(ctx.device, p.thread.commandPool, 1, &p.thread.cmd);
             p.thread.cmd = VK_NULL_HANDLE;
 

@@ -210,7 +210,7 @@ namespace tl
                             int32_t x = 0, int32_t y = 0,
                             uint32_t w = 0, uint32_t h = 0);
             void submitReadback(VkCommandBuffer cmd);
-            void* getLatestReadPixels();
+            VkResult getLatestReadPixels(void*& ptrx);
             
         private:
             Fl_Vk_Context& ctx;
