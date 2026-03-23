@@ -89,8 +89,8 @@ namespace mrv
             (sizeof(kTitleColors) / sizeof(Fl_Color));
 
         static const Fl_Color kRowColors[] = {
-            0x80808000,
             0xa0a0a000,
+            0xb0c0c000,
         };
 
         static const unsigned int kSizeOfRowColors =

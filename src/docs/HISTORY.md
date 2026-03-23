@@ -47,10 +47,11 @@ Prices might change (go up or down) depending on competition and new features.
 Change Log
 ----------
 
-- Added support for sequences with a suffix like render_0001_suffix.exr in
-  file requester, drag and drop and command-line.
+- UI improvement: Improved readability of the Media Information Panel.
+- UI improvement: When using the free version of mrv2/vmrv2, the menu functions supported only on unlocked versions are shown as ghosted instead of just missing.  That way users can tell what vmrv2 / mrv2 **FULLY** supports.
+- Added support for sequences with a suffix like render_0001_suffix.exr in file requester, drag and drop and command-line.
 - Refactored code.
-- Fixed a Vulkan hang (VK_ERROR_DEVICE_LOST) when creating thumbnails in the Edit timeline window.  
+- Fixed a Vulkan hang (VK_ERROR_DEVICE_LOST) when creating thumbnails in the Edit timeline window.  It would happen with .otio timelines.
 
 
 v1.5.9

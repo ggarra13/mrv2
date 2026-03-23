@@ -48,6 +48,13 @@ namespace mrv
 
         typedef std::map< FileButton*, size_t > WidgetIndices;
 
+        enum class PanelSort
+        {
+            Default,
+            Directory,
+            Filename,
+        };
+        
         struct FilesPanel::Private
         {
             std::weak_ptr<system::Context> context;

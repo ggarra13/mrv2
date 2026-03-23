@@ -140,13 +140,16 @@ namespace mrv
                 (Fl_Callback*)save_single_frame_to_folder_cb, ui,
                 mode | FL_MENU_DIVIDER);
 
-            if (app::soporta_editing)
+            if (!app::soporta_editing)
             {
-                menu->add(
-                    _("File/Save/OTIO EDL Timeline"), kSaveOTIOEDL.hotkey(),
-                    (Fl_Callback*)save_timeline_to_disk_cb, ui,
-                    mode | FL_MENU_DIVIDER);
+                mode |= FL_MENU_INACTIVE;
             }
+            
+            menu->add(
+                _("File/Save/OTIO EDL Timeline"), kSaveOTIOEDL.hotkey(),
+                (Fl_Callback*)save_timeline_to_disk_cb, ui,
+                mode | FL_MENU_DIVIDER);
+            
             
             mode = 0;
             if (!player || !player->hasAnnotations())
@@ -1235,20 +1238,19 @@ namespace mrv
         const auto& itemOptions = ui->uiTimeline->getItemOptions();
         const auto& displayOptions = ui->uiTimeline->getDisplayOptions();
 
-        if (app::soporta_editing)
-        {
-            idx = menu->add(
-                _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
-                (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            bool editable = ui->uiTimeline->isEditable();
-            if (editable)
-                item->set();
-        }
-        else
+        if (!app::soporta_editing)
         {
             ui->uiTimeline->setEditable(false);
+            mode |= FL_MENU_INACTIVE;
         }
+        
+        idx = menu->add(
+            _("Timeline/Editable"), kToggleTimelineEditable.hotkey(),
+            (Fl_Callback*)toggle_timeline_editable_cb, ui, mode);
+        item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+        bool editable = ui->uiTimeline->isEditable();
+        if (editable)
+            item->set();
 
         mode = 0;
         if (numFiles == 0)
@@ -1516,87 +1518,89 @@ namespace mrv
                 }
             }
 
-            if (app::soporta_editing)
+            mode = FL_MENU_TOGGLE;
+            if (!app::soporta_editing)
             {
-                mode = FL_MENU_TOGGLE;
-                idx = menu->add(
-                    _("Edit/Associated Clips"),
-                    kToggleEditAssociatedClips.hotkey(),
-                (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui,
-                    mode);
-                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-                if (itemOptions.editAssociatedClips)
-                    item->set();
+                mode |= FL_MENU_INACTIVE;
+            }
             
-                menu->add(
-                    _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),
-                    (Fl_Callback*)edit_cut_frame_cb, ui);
-                menu->add(
-                    _("Edit/Frame/Copy"), kEditCopyFrame.hotkey(),
-                    (Fl_Callback*)edit_copy_frame_cb, ui);
-                menu->add(
-                    _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
-                    (Fl_Callback*)edit_paste_frame_cb, ui);
-                menu->add(
-                    _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
-                    (Fl_Callback*)edit_insert_frame_cb, ui);
+            idx = menu->add(
+                _("Edit/Associated Clips"),
+                kToggleEditAssociatedClips.hotkey(),
+                (Fl_Callback*)toggle_timeline_edit_associated_clips_cb, ui,
+                mode);
+            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            if (itemOptions.editAssociatedClips)
+                item->set();
+            
+            menu->add(
+                _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),
+                (Fl_Callback*)edit_cut_frame_cb, ui);
+            menu->add(
+                _("Edit/Frame/Copy"), kEditCopyFrame.hotkey(),
+                (Fl_Callback*)edit_copy_frame_cb, ui);
+            menu->add(
+                _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
+                (Fl_Callback*)edit_paste_frame_cb, ui);
+            menu->add(
+                _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
+                (Fl_Callback*)edit_insert_frame_cb, ui);
 
-                menu->add(
-                    _("Edit/Time/Audio Clip/Insert"),
-                    kEditInsertAudioClip.hotkey(),
-                    (Fl_Callback*)insert_audio_clip_cb, ui);
-                menu->add(
-                    _("Edit/Time/Audio Clip/Remove"),
-                    kEditRemoveAudioClip.hotkey(),
-                    (Fl_Callback*)edit_remove_audio_clip_cb, ui);
-                menu->add(
-                    _("Edit/Time/Video Gap/Insert"),
-                    kEditInsertVideoGap.hotkey(),
-                    (Fl_Callback*)edit_insert_video_gap_cb, ui);
-                menu->add(
-                    _("Edit/Time/Video Gap/Remove"),
-                    kEditRemoveVideoGap.hotkey(),
-                    (Fl_Callback*)edit_remove_video_gap_cb, ui);
-                menu->add(
-                    _("Edit/Time/Audio Gap/Insert"),
-                    kEditInsertAudioGap.hotkey(),
-                    (Fl_Callback*)edit_insert_audio_gap_cb, ui);
-                menu->add(
-                    _("Edit/Time/Audio Gap/Remove"),
-                    kEditRemoveAudioGap.hotkey(),
-                    (Fl_Callback*)edit_remove_audio_gap_cb, ui);
+            menu->add(
+                _("Edit/Time/Audio Clip/Insert"),
+                kEditInsertAudioClip.hotkey(),
+                (Fl_Callback*)insert_audio_clip_cb, ui);
+            menu->add(
+                _("Edit/Time/Audio Clip/Remove"),
+                kEditRemoveAudioClip.hotkey(),
+                (Fl_Callback*)edit_remove_audio_clip_cb, ui);
+            menu->add(
+                _("Edit/Time/Video Gap/Insert"),
+                kEditInsertVideoGap.hotkey(),
+                (Fl_Callback*)edit_insert_video_gap_cb, ui);
+            menu->add(
+                _("Edit/Time/Video Gap/Remove"),
+                kEditRemoveVideoGap.hotkey(),
+                (Fl_Callback*)edit_remove_video_gap_cb, ui);
+            menu->add(
+                _("Edit/Time/Audio Gap/Insert"),
+                kEditInsertAudioGap.hotkey(),
+                (Fl_Callback*)edit_insert_audio_gap_cb, ui);
+            menu->add(
+                _("Edit/Time/Audio Gap/Remove"),
+                kEditRemoveAudioGap.hotkey(),
+                (Fl_Callback*)edit_remove_audio_gap_cb, ui);
 
                 
-                menu->add(_("Edit/Selected/Add Transition"),
-                          kEditAddTransition.hotkey(),
-                          (Fl_Callback*)edit_add_transition_cb, ui);
-                menu->add(
-                    _("Edit/Selected/Remove Items"),
-                    kEditRemoveSelected.hotkey(),
-                    (Fl_Callback*)edit_remove_selected_cb, ui);
-                menu->add(
-                    _("Edit/Time/Remove Clips"), kEditRemoveClip.hotkey(),
-                    (Fl_Callback*)edit_remove_clip_cb, ui);
-                menu->add(
-                    _("Edit/Time/Slice"), kEditSliceClip.hotkey(),
-                    (Fl_Callback*)edit_slice_clip_cb, ui);
+            menu->add(_("Edit/Selected/Add Transition"),
+                      kEditAddTransition.hotkey(),
+                      (Fl_Callback*)edit_add_transition_cb, ui);
+            menu->add(
+                _("Edit/Selected/Remove Items"),
+                kEditRemoveSelected.hotkey(),
+                (Fl_Callback*)edit_remove_selected_cb, ui);
+            menu->add(
+                _("Edit/Time/Remove Clips"), kEditRemoveClip.hotkey(),
+                (Fl_Callback*)edit_remove_clip_cb, ui);
+            menu->add(
+                _("Edit/Time/Slice"), kEditSliceClip.hotkey(),
+                (Fl_Callback*)edit_slice_clip_cb, ui);
 
 
-                menu->add(
-                    _("Edit/Undo"), kEditUndo.hotkey(),
-                    (Fl_Callback*)edit_undo_cb,
-                    ui);
-                menu->add(
-                    _("Edit/Redo"), kEditRedo.hotkey(),
-                    (Fl_Callback*)edit_redo_cb,
-                    ui);
-            }
+            menu->add(
+                _("Edit/Undo"), kEditUndo.hotkey(),
+                (Fl_Callback*)edit_undo_cb,
+                ui);
+            menu->add(
+                _("Edit/Redo"), kEditRedo.hotkey(),
+                (Fl_Callback*)edit_redo_cb,
+                ui);
         }
 
-        // if ( num > 0 )
-        // {
-        //     idx = menu->add( _("Subtitle/No Subtitle"), 0,
-        //                      (Fl_Callback*)change_subtitle_cb, ui,
+    // if ( num > 0 )
+    // {
+    //     idx = menu->add( _("Subtitle/No Subtitle"), 0,
+    //                      (Fl_Callback*)change_subtitle_cb, ui,
         //                      FL_MENU_TOGGLE  );
         //     Fl_Menu_Item* item = (Fl_Menu_Item*) &(menu->menu()[idx]);
         //     if ( image->subtitle_stream() == -1 )

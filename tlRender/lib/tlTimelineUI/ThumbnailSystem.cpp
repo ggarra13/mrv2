@@ -1243,7 +1243,6 @@ namespace tl
                                 if (p.thumbnailThread.render &&
                                     p.thumbnailThread.buffer)
                                 {
-                                    std::cerr << size << std::endl;
                                     image = image::Image::create(
                                         size.w, size.h,
                                         image::PixelType::RGBA_U8);
