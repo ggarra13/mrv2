@@ -1,0 +1,62 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0500
+i18n_type 1
+i18n_include {<libintl.h>}
+i18n_conditional {}
+i18n_gnu_function gettext
+i18n_gnu_static_function gettext_noop
+header_name {.h}
+code_name {.cxx}
+include_guard {}
+class URLMovieUI {open selected
+} {
+  decl {bool cancel = false;} {public local
+  }
+  Function {make_window()} {open
+  } {
+    Fl_Window uiMain {
+      label {Link Annotation} open
+      xywh {0 0 799 240} type Double modal visible
+    } {
+      Fl_Input uiURL {
+        label URL
+        tooltip {Enter a URL.} xywh {130 24 550 36} color 20 textcolor 56
+        code0 {o->value("https://dpel-assets.aswf.io/asc-stem2/ASC_StEM2_178_2K_24_100nits_Rec709_Stereo.mp4");}
+      }
+      Fl_Input uiUser {
+        label {User Name}
+        tooltip {Enter an optional user name.} xywh {130 76 234 37} color 20 textcolor 56
+      }
+      Fl_Input uiPassword {
+        label Password
+        tooltip {Enter an optional password for the URL.} xywh {440 76 240 37} color 20 textcolor 56
+      }
+      Fl_Input uiSuffix {
+        label Suffix
+        tooltip {Enter a UR.} xywh {130 128 550 36} color 20 textcolor 56
+      }
+      Fl_Group {} {open
+        xywh {192 175 416 54}
+      } {
+        Fl_Button {} {
+          label OK
+          user_data uiMain user_data_type {Fl_Double_Window*}
+          callback {v->hide();}
+          xywh {486 175 122 40}
+        }
+        Fl_Button {} {
+          label Cancel
+          user_data uiMain user_data_type {Fl_Double_Window*}
+          callback {cancel = true;
+v->hide();}
+          xywh {192 175 122 40}
+        }
+      }
+    }
+  }
+  Function {URLMovieUI()} {open
+  } {
+    code {auto window = make_window();
+window->show();} {}
+  }
+}
