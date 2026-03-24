@@ -7,6 +7,8 @@ def copy_msgid_to_msgstr(input_file, copy_all = False):
     # Load the .po file
     po = polib.pofile(input_file)
 
+    print(f"Copying .po msgid to msgstr for {input_file}")
+    
     # Copy msgid to msgstr
     for entry in po:
         if not entry.msgstr or copy_all:
@@ -33,6 +35,9 @@ if __name__ == "__main__":
     copy_msgid_to_msgstr(input_file, copy_all)
     
     input_file = f"src/po/hdr/{lang}.po"
+    copy_msgid_to_msgstr(input_file, copy_all)
+    
+    input_file = f"src/po/license_helper/{lang}.po"
     copy_msgid_to_msgstr(input_file, copy_all)
 
     plugins_glob=f'src/po/python/plug-ins/locale/{lang}/LC_MESSAGES/*.po'

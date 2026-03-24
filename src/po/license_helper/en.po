@@ -15,6 +15,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "ERROR:\t"
+msgstr "ERROR:\t"
+
+msgid "WARN:\t"
+msgstr "WARN:\t"
+
 msgid ""
 "Check your browser for a valid donation.  Send your machine id in the "
 "comment."

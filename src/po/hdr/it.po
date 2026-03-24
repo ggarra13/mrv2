@@ -15,17 +15,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "\tDesktop Environment: "
-msgstr "\tAmbiente desktop: "
+msgid "ERROR:\t"
+msgstr "ERRORE:\t"
 
-msgid "Unknown"
-msgstr "Sconosciuto"
-
-msgid "\tKernel Info: "
-msgstr "\tInformazioni sul kernel: "
-
-msgid "\tDistribution: "
-msgstr "\tDistribuzione: "
+msgid "WARN:\t"
+msgstr "AVVISO:\t"
 
 msgid "English"
 msgstr "Inglese"
@@ -212,6 +206,18 @@ msgstr "Finestra/Schermo intero"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/Passa i metadati al display"
+
+#~ msgid "\tDesktop Environment: "
+#~ msgstr "\tAmbiente desktop: "
+
+#~ msgid "Unknown"
+#~ msgstr "Sconosciuto"
+
+#~ msgid "\tKernel Info: "
+#~ msgstr "\tInformazioni sul kernel: "
+
+#~ msgid "\tDistribution: "
+#~ msgstr "\tDistribuzione: "
 
 #~ msgid "Could not determine monitor's nits."
 #~ msgstr "Impossibile determinare i nit del monitor."

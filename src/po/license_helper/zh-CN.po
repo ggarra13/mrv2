@@ -14,6 +14,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "ERROR:\t"
+msgstr "错误:\t"
+
+msgid "WARN:\t"
+msgstr "警告:\t"
+
 msgid ""
 "Check your browser for a valid donation.  Send your machine id in the "
 "comment."

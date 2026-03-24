@@ -1509,21 +1509,6 @@ msgstr "获取当前帧的所有 .wav 语音注释。"
 msgid "Get all voice and mouse directions for current frame as a JSON file."
 msgstr "将当前帧的所有语音和鼠标方向以 JSON 文件形式获取。"
 
-msgid "Open with Audio"
-msgstr "打开音频"
-
-msgid "Video"
-msgstr "视频"
-
-msgid "Audio"
-msgstr "音频"
-
-msgid "OK"
-msgstr "Ok"
-
-msgid "Cancel"
-msgstr "取消"
-
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
 
@@ -1995,6 +1980,9 @@ msgstr "读后秒数"
 msgid "File Sequences"
 msgstr "文件序列"
 
+msgid "Audio"
+msgstr "音频"
+
 msgid "Audio file name"
 msgstr "音频文件名"
 
@@ -2146,6 +2134,9 @@ msgstr "值"
 
 msgid "Main"
 msgstr "主要"
+
+msgid "Video"
+msgstr "视频"
 
 msgid "Subtitle"
 msgstr "字幕"
@@ -2878,87 +2869,6 @@ msgstr "错误:"
 msgid "WARN:\t"
 msgstr "沃恩: 韦恩:"
 
-msgid "Cannot save an NDI stream"
-msgstr "无法保存 NDI 流"
-
-msgid "Saving movie to {0}."
-msgstr "将影片保存到 {0} 。"
-
-msgid "Saving audio to {0}."
-msgstr "将音频保存到 {0} 。"
-
-msgid "Saving pictures to {0}."
-msgstr "将图片保存到 {0} 。"
-
-msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr "ProRes 配置需要.mov 的格式扩展。 将其修改为.mov 。"
-
-msgid ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
-msgstr "VP9 配置需要一个.mp4,.mkv 或.webm 的格式扩展。 将其修改为. mp4"
-
-msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
-msgstr "AV1 配置需要. mp4 或.mkv 的格式扩展。 将其修改为. mp4"
-
-msgid ""
-"GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
-msgstr "GoPro Cineform 配置需要一个.mkv 的格式扩展。 将其修改为.mkv"
-
-msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr "HAP 配置需要. mov 扩展。 将其修改为. mov"
-
-msgid "New file {0} already exist!  Cannot overwrite it."
-msgstr "新建文件 {0} 已经存在! 无法覆盖它"
-
-msgid "{0}: Cannot open writer plugin."
-msgstr "{0}: 无法打开插件"
-
-msgid "Image info: {0} {1}"
-msgstr "图像信息: {0} {1}"
-
-msgid "Scaled image info: {0}"
-msgstr "缩放图像信息: {0}"
-
-msgid "Writer plugin did not get output info.  Defaulting to {0}"
-msgstr "Writer 插件没有获得输出信息 。 默认为 {0}"
-
-msgid "Using profile {0}, pixel format {1}."
-msgstr "使用 profile {0}, 像素格式 {1} 。"
-
-msgid "Using preset {0}."
-msgstr "使用预设 {0} 。"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "离屏缓冲区信息：{0}"
-
-msgid "Output info: {0} {1}"
-msgstr "输出信息: {0} {1}"
-
-msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
-msgstr "Saving Movie without Audio %<PRId64> - %<PRId64>"
-
-msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
-msgstr "Saving Movie with Audio %<PRId64> - %<PRId64>"
-
-msgid "Saving Audio %<PRId64> - %<PRId64>"
-msgstr "Saving Audio %<PRId64> - %<PRId64>"
-
-msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
-msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
-
-msgid "Audio only in timeline, but not trying to save audio."
-msgstr "Audio only in timeline, but not trying to save audio."
-
-msgid "Saving... {0}"
-msgstr "保存... {0}"
-
-msgid "Could not read image data from view"
-msgstr "无法从视图读取图像数据"
-
-msgid "Render size: {0}"
-msgstr "渲染尺寸：{0}"
-
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
@@ -3001,27 +2911,27 @@ msgid ""
 "\n"
 "Do you want to replace it with another?"
 msgstr ""
-"无法读取视频文件 '{0}'。\n"
+"无法读取影片文件“{0}”。\n"
 "\n"
-"您想用其他文件替换它吗？"
+"是否要用其他文件替换它？"
 
 msgid ""
 "Sequence '{0}' is not readable.\n"
 "\n"
 "Do you want to replace it with another?"
 msgstr ""
-"无法读取序列 '{0}'。\n"
+"无法读取序列“{0}”。\n"
 "\n"
-"您想用其他内容替换它吗？"
+"是否要用其他内容替换它？"
 
 msgid ""
 "Audio File '{0}' is not readable.\n"
 "\n"
 "Do you want to replace it with another?"
 msgstr ""
-"无法读取音频文件 '{0}'。\n"
+"无法读取音频文件“{0}”。\n"
 "\n"
-"您想用其他文件替换它吗？"
+"是否要用其他文件替换它？"
 
 msgid "Reading preferences from \"{0}{1}\"."
 msgstr "读取“ \"{0}{1}\" 的首选项"
@@ -3454,6 +3364,66 @@ msgstr ""
 "\n"
 "0至9到缩放到特定级别。"
 
+msgid "Invalid index for add clip to timeline."
+msgstr "无效索引 添加剪辑到时间表时"
+
+msgid "Could not get current path."
+msgstr "无法获得当前路径"
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr "EDL 项目 '{0}' 不再装入。 无法撤消或重做"
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "无法粘贴 {0}  错误 {1}"
+
+msgid "Items selected must be on the same track."
+msgstr "所选项目必须在同一轨道上。"
+
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr "所选项目在轨道上必须是连续的。左侧 {0}。右侧 {0}。"
+
+msgid "Please select two or four contiguous items.  Selected {0}."
+msgstr "请选择两个或四个连续的项目。已选 {0}。"
+
+msgid "Please select two contiguous video clips."
+msgstr "请选择两个相邻的视频剪辑。"
+
+msgid "Please select two contiguous audio clips."
+msgstr "请选择两个相邻的音频剪辑。"
+
+msgid "Could not save .otio file: {0}"
+msgstr "无法保存. otio 文件: {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "保存 {0} 出错  {1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "空 EDL 文件, 未保存"
+
+msgid "Destination file is invalid."
+msgstr "目的文件无效"
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "您只能将剪辑添加到.otio EDL 播放列表中"
+
+msgid "Unknown media reference"
+msgstr "未知媒体引用未知"
+
+msgid "Track #{0} - {1}"
+msgstr "音轨 #{0} - {1}"
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "无法将. otio 文件归结为. otio 文件"
+
+msgid "Cannot currently concatenate a directory."
+msgstr "无法连接目录"
+
+msgid "Could not append video track {0}"
+msgstr "无法附加视频轨道 {0}"
+
+msgid "Could not append audio track {0}"
+msgstr "无法附加音频轨道 {0}"
+
 msgid "Choose Directory"
 msgstr "选择目录"
 
@@ -3541,15 +3511,15 @@ msgstr "OCIO 配置(*.{)"
 msgid "Load OCIO Config"
 msgstr "加载 OCIO 配置"
 
-msgid "Unhandled buffer format: {0} for output: {1}"
-msgstr "不支持的缓冲区格式：{0}，输出：{1}"
-
 msgid "Default"
 msgstr "默认"
 
 msgid ""
 "You have unsaved changes. Do you want to save the session before closing?"
 msgstr "您有未保存的更改。是否在关闭前保存会话？"
+
+msgid "Cancel"
+msgstr "取消"
 
 msgid "Save"
 msgstr "保存"
@@ -3678,66 +3648,6 @@ msgstr "编辑文本注释"
 msgid "No item selected"
 msgstr "未选中项目"
 
-msgid "Invalid index for add clip to timeline."
-msgstr "无效索引 添加剪辑到时间表时"
-
-msgid "Could not get current path."
-msgstr "无法获得当前路径"
-
-msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr "EDL 项目 '{0}' 不再装入。 无法撤消或重做"
-
-msgid "Could not paste {0}.  Error {1}."
-msgstr "无法粘贴 {0}  错误 {1}"
-
-msgid "Items selected must be on the same track."
-msgstr "所选项目必须在同一轨道上。"
-
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
-msgstr "所选项目在轨道上必须是连续的。左侧 {0}。右侧 {0}。"
-
-msgid "Please select two or four contiguous items.  Selected {0}."
-msgstr "请选择两个或四个连续的项目。已选 {0}。"
-
-msgid "Please select two contiguous video clips."
-msgstr "请选择两个相邻的视频剪辑。"
-
-msgid "Please select two contiguous audio clips."
-msgstr "请选择两个相邻的音频剪辑。"
-
-msgid "Could not save .otio file: {0}"
-msgstr "无法保存. otio 文件: {0}"
-
-msgid "Error saving {0}. {1}"
-msgstr "保存 {0} 出错  {1}"
-
-msgid "Empty EDL file.  Not saving."
-msgstr "空 EDL 文件, 未保存"
-
-msgid "Destination file is invalid."
-msgstr "目的文件无效"
-
-msgid "You can only add clips to an .otio EDL playlist."
-msgstr "您只能将剪辑添加到.otio EDL 播放列表中"
-
-msgid "Unknown media reference"
-msgstr "未知媒体引用未知"
-
-msgid "Track #{0} - {1}"
-msgstr "音轨 #{0} - {1}"
-
-msgid "Cannot currently concatenate an .otio file."
-msgstr "无法将. otio 文件归结为. otio 文件"
-
-msgid "Cannot currently concatenate a directory."
-msgstr "无法连接目录"
-
-msgid "Could not append video track {0}"
-msgstr "无法附加视频轨道 {0}"
-
-msgid "Could not append audio track {0}"
-msgstr "无法附加音频轨道 {0}"
-
 msgid "%s - Page %d"
 msgstr "%s - 第%d页"
 
@@ -3749,6 +3659,9 @@ msgstr "图像太大。 将保存视图的大小 。"
 
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "视图端口大小 : {0} - X={1}, Y={2}"
+
+msgid "Could not read image data from view"
+msgstr "无法从视图读取图像数据"
 
 msgid "Link/Open"
 msgstr "链接/打开"
@@ -3874,6 +3787,84 @@ msgid ""
 "annotation already exists."
 msgstr "无法在此为当前帧创建注释。 已经存在全部帧注释 。"
 
+msgid "Cannot save an NDI stream"
+msgstr "无法保存 NDI 流"
+
+msgid "Saving movie to {0}."
+msgstr "将影片保存到 {0} 。"
+
+msgid "Saving audio to {0}."
+msgstr "将音频保存到 {0} 。"
+
+msgid "Saving pictures to {0}."
+msgstr "将图片保存到 {0} 。"
+
+msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
+msgstr "ProRes 配置需要.mov 的格式扩展。 将其修改为.mov 。"
+
+msgid ""
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
+".mp4"
+msgstr "VP9 配置需要一个.mp4,.mkv 或.webm 的格式扩展。 将其修改为. mp4"
+
+msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
+msgstr "AV1 配置需要. mp4 或.mkv 的格式扩展。 将其修改为. mp4"
+
+msgid ""
+"GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
+msgstr "GoPro Cineform 配置需要一个.mkv 的格式扩展。 将其修改为.mkv"
+
+msgid "HAP profile needs a .mov extension.  Changing it to .mov"
+msgstr "HAP 配置需要. mov 扩展。 将其修改为. mov"
+
+msgid "New file {0} already exist!  Cannot overwrite it."
+msgstr "新建文件 {0} 已经存在! 无法覆盖它"
+
+msgid "{0}: Cannot open writer plugin."
+msgstr "{0}: 无法打开插件"
+
+msgid "Image info: {0} {1}"
+msgstr "图像信息: {0} {1}"
+
+msgid "Scaled image info: {0}"
+msgstr "缩放图像信息: {0}"
+
+msgid "Writer plugin did not get output info.  Defaulting to {0}"
+msgstr "Writer 插件没有获得输出信息 。 默认为 {0}"
+
+msgid "Using profile {0}, pixel format {1}."
+msgstr "使用 profile {0}, 像素格式 {1} 。"
+
+msgid "Using preset {0}."
+msgstr "使用预设 {0} 。"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "离屏缓冲区信息：{0}"
+
+msgid "Output info: {0} {1}"
+msgstr "输出信息: {0} {1}"
+
+msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
+msgstr "Saving Movie without Audio %<PRId64> - %<PRId64>"
+
+msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
+msgstr "Saving Movie with Audio %<PRId64> - %<PRId64>"
+
+msgid "Saving Audio %<PRId64> - %<PRId64>"
+msgstr "Saving Audio %<PRId64> - %<PRId64>"
+
+msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
+msgstr "Saving Pictures without Audio %<PRId64> - %<PRId64>"
+
+msgid "Audio only in timeline, but not trying to save audio."
+msgstr "Audio only in timeline, but not trying to save audio."
+
+msgid "Saving... {0}"
+msgstr "保存... {0}"
+
+msgid "Render size: {0}"
+msgstr "渲染尺寸：{0}"
+
 msgid "2.35"
 msgstr "2.35"
 
@@ -3946,8 +3937,20 @@ msgstr "状态未保存"
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "音频注释文件 {0} 缺失或不存在！"
 
+msgid "Unhandled buffer format: {0} for output: {1}"
+msgstr "不支持的缓冲区格式：{0}，输出：{1}"
+
+msgid "Open with Audio"
+msgstr "打开音频"
+
+msgid "OK"
+msgstr "Ok"
+
 msgid "File/Open/Movie or Sequence"
 msgstr "文件/打开/影片或序列"
+
+msgid "File/Open/URL Movie"
+msgstr "文件/打开/URL 影片"
 
 msgid "File/Open/With Separate Audio"
 msgstr "文件/打开/单独音频"
@@ -5913,11 +5916,35 @@ msgstr "当前正在使用的编辑工具。"
 msgid "Current tool being used."
 msgstr "当前工具正在使用中"
 
-msgid "File"
-msgstr "文件"
-
 msgid "Link Annotation"
 msgstr "链接注释"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Enter a URL."
+msgstr "输入一个 URL。"
+
+msgid "User Name"
+msgstr "用户名"
+
+msgid "Enter an optional user name."
+msgstr "输入可选的用户名。"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Enter an optional password for the URL."
+msgstr "为该 URL 输入可选的密码。"
+
+msgid "Suffix"
+msgstr "后缀"
+
+msgid "Enter a UR."
+msgstr "输入一个 URL。"
+
+msgid "File"
+msgstr "文件"
 
 msgid "Title"
 msgstr "标题"
@@ -7388,15 +7415,6 @@ msgstr "Divide"
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 
-msgid "sysctl failed!"
-msgstr "Sysctl 失败!"
-
-msgid "host_statistics64 failed"
-msgstr "host_statistics64 failed"
-
-msgid "task info failed"
-msgstr "任务信息失败"
-
 msgid "Unknown licese plan '{0}'"
 msgstr "未知的许可计划“{0}”"
 
@@ -7459,6 +7477,9 @@ msgstr "打开目录"
 
 msgid "Open Movie or Sequence"
 msgstr "打开影片或序列"
+
+msgid "Open URL Movie"
+msgstr "打开 URL 影片"
 
 msgid "Open Single Image"
 msgstr "打开单个图像"
@@ -8032,6 +8053,15 @@ msgstr "开关热键窗口"
 
 msgid "Toggle About Window"
 msgstr "开关关于窗口"
+
+msgid "sysctl failed!"
+msgstr "Sysctl 失败!"
+
+msgid "host_statistics64 failed"
+msgstr "host_statistics64 failed"
+
+msgid "task info failed"
+msgstr "任务信息失败"
 
 #~ msgid "Renderer"
 #~ msgstr "渲染器"

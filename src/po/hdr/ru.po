@@ -12,21 +12,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "xLanguage-Team: none\n"
 
-msgid "\tDesktop Environment: "
-msgstr "\tСреда рабочего стола: "
+msgid "ERROR:\t"
+msgstr "ОШИБКА:\t"
 
-msgid "Unknown"
-msgstr "Неизвестно"
-
-msgid "\tKernel Info: "
-msgstr "\tИнформация о ядре: "
-
-msgid "\tDistribution: "
-msgstr "\tДистрибутив: "
+msgid "WARN:\t"
+msgstr "ПРЕДУПРЕЖДЕНИЕ:\t"
 
 msgid "English"
 msgstr "Английский"
@@ -213,6 +206,18 @@ msgstr "Окно/Полный экран"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/Передача метаданных на дисплей"
+
+#~ msgid "\tDesktop Environment: "
+#~ msgstr "\tСреда рабочего стола: "
+
+#~ msgid "Unknown"
+#~ msgstr "Неизвестно"
+
+#~ msgid "\tKernel Info: "
+#~ msgstr "\tИнформация о ядре: "
+
+#~ msgid "\tDistribution: "
+#~ msgstr "\tДистрибутив: "
 
 #~ msgid "Could not determine monitor's nits."
 #~ msgstr "Не удалось определить яркость монитора в нитах."

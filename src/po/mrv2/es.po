@@ -1549,21 +1549,6 @@ msgstr ""
 "Obtener todas las direcciones de voz y del ratón del fotograma actual como "
 "un archivo JSON."
 
-msgid "Open with Audio"
-msgstr "Abrir con Audio"
-
-msgid "Video"
-msgstr "Vídeo"
-
-msgid "Audio"
-msgstr "Audio"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Cancel"
-msgstr "Cancelar"
-
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Canales: {1} {2} {3}"
 
@@ -2046,6 +2031,9 @@ msgstr "Leer Atrás en segundos"
 msgid "File Sequences"
 msgstr "Secuencias de Archivos"
 
+msgid "Audio"
+msgstr "Audio"
+
 msgid "Audio file name"
 msgstr "Nombre del Audio"
 
@@ -2213,6 +2201,9 @@ msgstr "Valor"
 
 msgid "Main"
 msgstr "Principal"
+
+msgid "Video"
+msgstr "Vídeo"
 
 msgid "Subtitle"
 msgstr "Subtítulo"
@@ -2971,96 +2962,6 @@ msgstr "ERROR:\t"
 msgid "WARN:\t"
 msgstr "AVISO:\t"
 
-msgid "Cannot save an NDI stream"
-msgstr "No puedo grabar un flujo de NDI."
-
-msgid "Saving movie to {0}."
-msgstr "Grando película a {0}."
-
-msgid "Saving audio to {0}."
-msgstr "Grando audio a {0}."
-
-msgid "Saving pictures to {0}."
-msgstr "Grabando imágenes a {0}."
-
-msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
-msgstr ""
-"Los perfiles de ProRes necesitan una extensión de película.mov. Cambiándolo "
-"a.mov."
-
-msgid ""
-"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
-".mp4"
-msgstr ""
-"Perfil VP9 necesita una extensión de película .mp4, .mkv o .webm.  Cambiando"
-" a .mp4."
-
-msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
-msgstr ""
-"Perfil AV1 necesita una extension de película .mp4 o .mkv.  Cambiando a "
-".mp4."
-
-msgid ""
-"GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
-msgstr ""
-"Perfil AV1 necesita una extension de película .mp4 o .mkv.  Cambiando a "
-".mp4."
-
-msgid "HAP profile needs a .mov extension.  Changing it to .mov"
-msgstr ""
-"Perfil HAP necesita una extension de película .mov.  Cambiando a .mov."
-
-msgid "New file {0} already exist!  Cannot overwrite it."
-msgstr "El archivo {0} ya existe.  Por seguridad, no lo sobreescribiré."
-
-msgid "{0}: Cannot open writer plugin."
-msgstr "{0}: No puedo abrir plugin de escritura."
-
-msgid "Image info: {0} {1}"
-msgstr "Información de Imagen: {0} {1}"
-
-msgid "Scaled image info: {0}"
-msgstr "Información de Imagen Escalada: {0}"
-
-msgid "Writer plugin did not get output info.  Defaulting to {0}"
-msgstr "El plugin de Escritura no obtuvo información de salida.  Usando {0}."
-
-msgid "Using profile {0}, pixel format {1}."
-msgstr "Usando perfil {0}, formato de pixel {1}."
-
-msgid "Using preset {0}."
-msgstr "Usando preseteo {0}."
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Información del Buffer: {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "Información de Salida: {0} {1}"
-
-msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
-msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
-
-msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
-msgstr "Grabando Película con Audio %<PRId64> - %<PRId64>"
-
-msgid "Saving Audio %<PRId64> - %<PRId64>"
-msgstr "Grabando Audio %<PRId64> - %<PRId64>"
-
-msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
-msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
-
-msgid "Audio only in timeline, but not trying to save audio."
-msgstr "Solo audio en la línea de tiempo, pero no intenta grabar audio."
-
-msgid "Saving... {0}"
-msgstr "Grabando... {0}."
-
-msgid "Could not read image data from view"
-msgstr "No pude leer los datos de la imagen de la vista"
-
-msgid "Render size: {0}"
-msgstr "Tamaño de renderizado: {0}"
-
 msgid ""
 "Regular expression created from {0}.  It is:\n"
 "{1}"
@@ -3107,7 +3008,7 @@ msgid ""
 "\n"
 "Do you want to replace it with another?"
 msgstr ""
-"El archivo de película '{0}' no se puede leer.\n"
+"El archivo de video '{0}' no se puede leer.\n"
 "\n"
 "¿Desea reemplazarlo por otro?"
 
@@ -3576,6 +3477,69 @@ msgstr ""
 "\n"
 "0 a 9 para ampliar a un nivel específico."
 
+msgid "Invalid index for add clip to timeline."
+msgstr "Índice inválido para agregar clip a la linea de tiempo."
+
+msgid "Could not get current path."
+msgstr "No pude obtener el camino actual."
+
+msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
+msgstr "Item de EDL '{0}' ya no está cargado.  No puedo deshacer ni rehacer."
+
+msgid "Could not paste {0}.  Error {1}."
+msgstr "No pude pegar {0}.  Error {1}."
+
+msgid "Items selected must be on the same track."
+msgstr "Los elementos seleccionados deben estar en la misma pista."
+
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgstr ""
+"Los elementos seleccionados deben ser contiguos en la pista. Izquierda {0}. "
+"Derecha {0}."
+
+msgid "Please select two or four contiguous items.  Selected {0}."
+msgstr ""
+"Por favor, seleccione dos o cuatro elementos contiguos. Seleccionados {0}."
+
+msgid "Please select two contiguous video clips."
+msgstr "Por favor seleccione dos clips de vídeo contiguos."
+
+msgid "Please select two contiguous audio clips."
+msgstr "Por favor seleccione dos clips de audio contiguos."
+
+msgid "Could not save .otio file: {0}"
+msgstr "No pude grabar el archivo .otio: {0}"
+
+msgid "Error saving {0}. {1}"
+msgstr "Error grabando {0}. {1}"
+
+msgid "Empty EDL file.  Not saving."
+msgstr "Archivo EDL vacío.  No grabando."
+
+msgid "Destination file is invalid."
+msgstr "Archivo de destino es inválido."
+
+msgid "You can only add clips to an .otio EDL playlist."
+msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
+
+msgid "Unknown media reference"
+msgstr "Referencia de los medios desconocidos"
+
+msgid "Track #{0} - {1}"
+msgstr "Pista #{0} - {1}"
+
+msgid "Cannot currently concatenate an .otio file."
+msgstr "No puedo concatenar un archivo .otio."
+
+msgid "Cannot currently concatenate a directory."
+msgstr "No puedo concatenar un directorio."
+
+msgid "Could not append video track {0}"
+msgstr "No pude agregar pista de video {0}"
+
+msgid "Could not append audio track {0}"
+msgstr "No pude agregar pista de audio {0}"
+
 msgid "Choose Directory"
 msgstr "Elegir directorio"
 
@@ -3663,15 +3627,15 @@ msgstr "OCIO config (*.{"
 msgid "Load OCIO Config"
 msgstr "Cargar Configuración OCIO"
 
-msgid "Unhandled buffer format: {0} for output: {1}"
-msgstr "Formato de buffer no soportado: {0} para salida: {1}."
-
 msgid "Default"
 msgstr "Estándar"
 
 msgid ""
 "You have unsaved changes. Do you want to save the session before closing?"
 msgstr "No ha grabado los cambios.  ¿Quiere grabar la sesión antes de cerrar?"
+
+msgid "Cancel"
+msgstr "Cancelar"
 
 msgid "Save"
 msgstr "Grabar"
@@ -3804,69 +3768,6 @@ msgstr "Editar Anotación de Texto"
 msgid "No item selected"
 msgstr "Ningún item seleccionado"
 
-msgid "Invalid index for add clip to timeline."
-msgstr "Índice inválido para agregar clip a la linea de tiempo."
-
-msgid "Could not get current path."
-msgstr "No pude obtener el camino actual."
-
-msgid "EDL item '{0}' no longer loaded.  Cannot undo or redo."
-msgstr "Item de EDL '{0}' ya no está cargado.  No puedo deshacer ni rehacer."
-
-msgid "Could not paste {0}.  Error {1}."
-msgstr "No pude pegar {0}.  Error {1}."
-
-msgid "Items selected must be on the same track."
-msgstr "Los elementos seleccionados deben estar en la misma pista."
-
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
-msgstr ""
-"Los elementos seleccionados deben ser contiguos en la pista. Izquierda {0}. "
-"Derecha {0}."
-
-msgid "Please select two or four contiguous items.  Selected {0}."
-msgstr ""
-"Por favor, seleccione dos o cuatro elementos contiguos. Seleccionados {0}."
-
-msgid "Please select two contiguous video clips."
-msgstr "Por favor seleccione dos clips de vídeo contiguos."
-
-msgid "Please select two contiguous audio clips."
-msgstr "Por favor seleccione dos clips de audio contiguos."
-
-msgid "Could not save .otio file: {0}"
-msgstr "No pude grabar el archivo .otio: {0}"
-
-msgid "Error saving {0}. {1}"
-msgstr "Error grabando {0}. {1}"
-
-msgid "Empty EDL file.  Not saving."
-msgstr "Archivo EDL vacío.  No grabando."
-
-msgid "Destination file is invalid."
-msgstr "Archivo de destino es inválido."
-
-msgid "You can only add clips to an .otio EDL playlist."
-msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
-
-msgid "Unknown media reference"
-msgstr "Referencia de los medios desconocidos"
-
-msgid "Track #{0} - {1}"
-msgstr "Pista #{0} - {1}"
-
-msgid "Cannot currently concatenate an .otio file."
-msgstr "No puedo concatenar un archivo .otio."
-
-msgid "Cannot currently concatenate a directory."
-msgstr "No puedo concatenar un directorio."
-
-msgid "Could not append video track {0}"
-msgstr "No pude agregar pista de video {0}"
-
-msgid "Could not append audio track {0}"
-msgstr "No pude agregar pista de audio {0}"
-
 msgid "%s - Page %d"
 msgstr "%s - Página %d"
 
@@ -3878,6 +3779,9 @@ msgstr "Imagen demasiado grande.  Guardaré el tamaño de la vista."
 
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
+
+msgid "Could not read image data from view"
+msgstr "No pude leer los datos de la imagen de la vista"
 
 msgid "Link/Open"
 msgstr "Enlace/Abrir"
@@ -4007,6 +3911,93 @@ msgstr ""
 "No puedo crear una anotación aquí para el cuadro actual.  Una anotación para"
 " todos los cuadros ya existe."
 
+msgid "Cannot save an NDI stream"
+msgstr "No puedo grabar un flujo de NDI."
+
+msgid "Saving movie to {0}."
+msgstr "Grando película a {0}."
+
+msgid "Saving audio to {0}."
+msgstr "Grando audio a {0}."
+
+msgid "Saving pictures to {0}."
+msgstr "Grabando imágenes a {0}."
+
+msgid "ProRes profiles need a .mov movie extension.  Changing it to .mov."
+msgstr ""
+"Los perfiles de ProRes necesitan una extensión de película.mov. Cambiándolo "
+"a.mov."
+
+msgid ""
+"VP9 profile needs a .mp4, .mkv or .webm movie extension.  Changing it to "
+".mp4"
+msgstr ""
+"Perfil VP9 necesita una extensión de película .mp4, .mkv o .webm.  Cambiando"
+" a .mp4."
+
+msgid "AV1 profile needs a .mp4 or .mkv movie extension.  Changing it to .mp4"
+msgstr ""
+"Perfil AV1 necesita una extension de película .mp4 o .mkv.  Cambiando a "
+".mp4."
+
+msgid ""
+"GoPro Cineform profile needs a .mkv movie extension.  Changing it to .mkv"
+msgstr ""
+"Perfil AV1 necesita una extension de película .mp4 o .mkv.  Cambiando a "
+".mp4."
+
+msgid "HAP profile needs a .mov extension.  Changing it to .mov"
+msgstr ""
+"Perfil HAP necesita una extension de película .mov.  Cambiando a .mov."
+
+msgid "New file {0} already exist!  Cannot overwrite it."
+msgstr "El archivo {0} ya existe.  Por seguridad, no lo sobreescribiré."
+
+msgid "{0}: Cannot open writer plugin."
+msgstr "{0}: No puedo abrir plugin de escritura."
+
+msgid "Image info: {0} {1}"
+msgstr "Información de Imagen: {0} {1}"
+
+msgid "Scaled image info: {0}"
+msgstr "Información de Imagen Escalada: {0}"
+
+msgid "Writer plugin did not get output info.  Defaulting to {0}"
+msgstr "El plugin de Escritura no obtuvo información de salida.  Usando {0}."
+
+msgid "Using profile {0}, pixel format {1}."
+msgstr "Usando perfil {0}, formato de pixel {1}."
+
+msgid "Using preset {0}."
+msgstr "Usando preseteo {0}."
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Información del Buffer: {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Información de Salida: {0} {1}"
+
+msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
+msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
+
+msgid "Saving Movie with Audio %<PRId64> - %<PRId64>"
+msgstr "Grabando Película con Audio %<PRId64> - %<PRId64>"
+
+msgid "Saving Audio %<PRId64> - %<PRId64>"
+msgstr "Grabando Audio %<PRId64> - %<PRId64>"
+
+msgid "Saving Pictures without Audio %<PRId64> - %<PRId64>"
+msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
+
+msgid "Audio only in timeline, but not trying to save audio."
+msgstr "Solo audio en la línea de tiempo, pero no intenta grabar audio."
+
+msgid "Saving... {0}"
+msgstr "Grabando... {0}."
+
+msgid "Render size: {0}"
+msgstr "Tamaño de renderizado: {0}"
+
 msgid "2.35"
 msgstr "2,35"
 
@@ -4079,8 +4070,20 @@ msgstr "Estatus no es grabado"
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Anotación de audio en archivo {0} está faltante o no existe!"
 
+msgid "Unhandled buffer format: {0} for output: {1}"
+msgstr "Formato de buffer no soportado: {0} para salida: {1}."
+
+msgid "Open with Audio"
+msgstr "Abrir con Audio"
+
+msgid "OK"
+msgstr "OK"
+
 msgid "File/Open/Movie or Sequence"
 msgstr "Archivo/Abrir/Pelídula o Secuencia"
+
+msgid "File/Open/URL Movie"
+msgstr "Archivo/Abrir/Video desde URL"
 
 msgid "File/Open/With Separate Audio"
 msgstr "Archivo/Abrir/Con Audio Separado"
@@ -6062,11 +6065,35 @@ msgstr "Herramienta de edición actualmente en uso."
 msgid "Current tool being used."
 msgstr "Herramienta siendo usada."
 
-msgid "File"
-msgstr "Archivo"
-
 msgid "Link Annotation"
 msgstr "Anotación de enlace"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Enter a URL."
+msgstr "Introduzca una URL."
+
+msgid "User Name"
+msgstr "Nombre de usuario"
+
+msgid "Enter an optional user name."
+msgstr "Introduzca un nombre de usuario opcional."
+
+msgid "Password"
+msgstr "Contraseña"
+
+msgid "Enter an optional password for the URL."
+msgstr "Introduzca una contraseña opcional para la URL."
+
+msgid "Suffix"
+msgstr "Sufijo"
+
+msgid "Enter a UR."
+msgstr "Introduzca una URL."
+
+msgid "File"
+msgstr "Archivo"
 
 msgid "Title"
 msgstr "Título"
@@ -7654,15 +7681,6 @@ msgstr "Dividir"
 msgid "@B12@C7@b@.Remote\t@B12@C7@b@.Local"
 msgstr "@B12@C7@b@.Remoto\t@B12@C7@b@.Local"
 
-msgid "sysctl failed!"
-msgstr "sysctl falló!"
-
-msgid "host_statistics64 failed"
-msgstr "host_statistics64 failed"
-
-msgid "task info failed"
-msgstr "task info falló"
-
 msgid "Unknown licese plan '{0}'"
 msgstr "Plan de licencia desconocido '{0}'"
 
@@ -7725,6 +7743,9 @@ msgstr "Abrir Carpeta"
 
 msgid "Open Movie or Sequence"
 msgstr "Abrir Película o Secuencia"
+
+msgid "Open URL Movie"
+msgstr "Abrir video desde URL"
 
 msgid "Open Single Image"
 msgstr "Abrir una Sola Imagen"
@@ -8298,6 +8319,15 @@ msgstr "Alternar Ventana de Teclas de Manejo"
 
 msgid "Toggle About Window"
 msgstr "Alternar Ventana de Acerca de mrv2"
+
+msgid "sysctl failed!"
+msgstr "sysctl falló!"
+
+msgid "host_statistics64 failed"
+msgstr "host_statistics64 failed"
+
+msgid "task info failed"
+msgstr "task info falló"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderizador"

@@ -14,17 +14,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "\tDesktop Environment: "
-msgstr "\tडेस्कटॉप परिवेश: "
+msgid "ERROR:\t"
+msgstr "त्रुटि:\t"
 
-msgid "Unknown"
-msgstr "अज्ञात"
-
-msgid "\tKernel Info: "
-msgstr "\tकर्नेल जानकारी: "
-
-msgid "\tDistribution: "
-msgstr "\tवितरण: "
+msgid "WARN:\t"
+msgstr "चेतावनी:\t"
 
 msgid "English"
 msgstr "अंग्रेज़ी"
@@ -211,6 +205,18 @@ msgstr "विंडो/पूर्ण स्क्रीन"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/मेटाडेटा को डिस्प्ले पर पास करें"
+
+#~ msgid "\tDesktop Environment: "
+#~ msgstr "\tडेस्कटॉप परिवेश: "
+
+#~ msgid "Unknown"
+#~ msgstr "अज्ञात"
+
+#~ msgid "\tKernel Info: "
+#~ msgstr "\tकर्नेल जानकारी: "
+
+#~ msgid "\tDistribution: "
+#~ msgstr "\tवितरण: "
 
 #~ msgid "Could not determine monitor's nits."
 #~ msgstr "मॉनिटर की निट्स निर्धारित नहीं की जा सकीं।"

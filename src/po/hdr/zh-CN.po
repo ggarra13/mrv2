@@ -14,17 +14,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "\tDesktop Environment: "
-msgstr "\t桌面环境："
+msgid "ERROR:\t"
+msgstr "错误:\t"
 
-msgid "Unknown"
-msgstr "未知"
-
-msgid "\tKernel Info: "
-msgstr "\t内核信息："
-
-msgid "\tDistribution: "
-msgstr "\t发行版："
+msgid "WARN:\t"
+msgstr "警告:\t"
 
 msgid "English"
 msgstr "英语"
@@ -211,6 +205,18 @@ msgstr "窗口/全屏"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/将元数据传递到显示器"
+
+#~ msgid "\tDesktop Environment: "
+#~ msgstr "\t桌面环境："
+
+#~ msgid "Unknown"
+#~ msgstr "未知"
+
+#~ msgid "\tKernel Info: "
+#~ msgstr "\t内核信息："
+
+#~ msgid "\tDistribution: "
+#~ msgstr "\t发行版："
 
 #~ msgid "Could not determine monitor's nits."
 #~ msgstr "无法确定显示器的尼特亮度。"

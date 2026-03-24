@@ -15,17 +15,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "\tDesktop Environment: "
-msgstr "\tDesktop-Umgebung: "
+msgid "ERROR:\t"
+msgstr "FEHLER:\t"
 
-msgid "Unknown"
-msgstr "Unbekannt"
-
-msgid "\tKernel Info: "
-msgstr "\tKernel-Informationen: "
-
-msgid "\tDistribution: "
-msgstr "\tDistribution: "
+msgid "WARN:\t"
+msgstr "WARNUNG:\t"
 
 msgid "English"
 msgstr "Englisch"
@@ -212,6 +206,18 @@ msgstr "Fenster/Vollbild"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/Metadaten an das Display weiterleiten"
+
+#~ msgid "\tDesktop Environment: "
+#~ msgstr "\tDesktop-Umgebung: "
+
+#~ msgid "Unknown"
+#~ msgstr "Unbekannt"
+
+#~ msgid "\tKernel Info: "
+#~ msgstr "\tKernel-Informationen: "
+
+#~ msgid "\tDistribution: "
+#~ msgstr "\tDistribution: "
 
 #~ msgid "Could not determine monitor's nits."
 #~ msgstr "Der aktuelle Pfad kann nicht gefunden werden."

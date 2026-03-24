@@ -15,17 +15,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "\tDesktop Environment: "
-msgstr "\tデスクトップ環境: "
+msgid "ERROR:\t"
+msgstr "エラー:\t"
 
-msgid "Unknown"
-msgstr "不明"
-
-msgid "\tKernel Info: "
-msgstr "\tカーネル情報: "
-
-msgid "\tDistribution: "
-msgstr "\tディストリビューション: "
+msgid "WARN:\t"
+msgstr "警告:\t"
 
 msgid "English"
 msgstr "英語"
@@ -212,6 +206,18 @@ msgstr "ウィンドウ/フルスクリーン"
 
 msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/メタデータをディスプレイにパススルー"
+
+#~ msgid "\tDesktop Environment: "
+#~ msgstr "\tデスクトップ環境: "
+
+#~ msgid "Unknown"
+#~ msgstr "不明"
+
+#~ msgid "\tKernel Info: "
+#~ msgstr "\tカーネル情報: "
+
+#~ msgid "\tDistribution: "
+#~ msgstr "\tディストリビューション: "
 
 #~ msgid "Could not determine monitor's nits."
 #~ msgstr "モニターのニット値を判別できませんでした。"
