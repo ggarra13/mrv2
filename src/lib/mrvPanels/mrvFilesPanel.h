@@ -22,6 +22,13 @@ namespace mrv
 
     namespace panel
     {
+        enum class Sort
+        {
+            Loaded,
+            Directory,
+            FileName,
+        };
+        
         using namespace tl;
         class FilesPanel : public ThumbnailPanel
         {
@@ -33,6 +40,8 @@ namespace mrv
 
             void setFilesPanelOptions(const FilesPanelOptions&);
 
+            void setSort(const Sort);
+            
             void redraw();
             void refresh();
 
