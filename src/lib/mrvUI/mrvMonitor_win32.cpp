@@ -178,7 +178,7 @@ namespace mrv
                 std::string name;
                 char buffer[512];  // or dynamically sized
                 int len = fl_utf8fromwc(buffer, sizeof(buffer),
-                                        targetName.monitorFriendlyDeviceName, -1);
+                                        targetName.monitorFriendlyDeviceName, 64);
                     
                 if (len > 0)
                 {
@@ -197,7 +197,7 @@ namespace mrv
 #ifdef UNICODE
                     char buffer[512];  // or dynamically sized
                     int len = fl_utf8fromwc(buffer, sizeof(buffer),
-                                            displayDevice.DeviceString, -1);
+                                            displayDevice.DeviceString, 128);
                     
                     if (len > 0)
                     {
