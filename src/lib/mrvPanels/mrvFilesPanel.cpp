@@ -114,9 +114,10 @@ namespace mrv
         void FilesPanel::add_controls()
         {
             TLRENDER_P();
+            MRV2_R();
 
-            _r->map.clear();
-            _r->indices.clear();
+            r.map.clear();
+            r.indices.clear();
 
             g->clear();
             g->begin();
@@ -140,15 +141,15 @@ namespace mrv
             file::Path lastPath;
 
             std::vector<int> orders;
-            if (_r->sort == Sort::Loaded)
+            if (r.sort == Sort::Loaded)
             {
                 for (size_t i = 0; i < numFiles; ++i)
                 {
                     orders.push_back(i);
                 } 
             }
-            else if (_r->sort == Sort::FileName ||
-                     _r->sort == Sort::Directory)
+            else if (r.sort == Sort::FileName ||
+                     r.sort == Sort::Directory)
             {
                 std::map<std::string, size_t> fileNames;
                 for (size_t i = 0; i < numFiles; ++i)
@@ -158,10 +159,14 @@ namespace mrv
 
                     const bool listdir = false;
                     std::string key;
-                    if (_r->sort == Sort::FileName)
+                    if (r.sort == Sort::FileName)
                         key = path.getFileName(listdir);
-                    else if (_r->sort == Sort::Directory)
+                    else if (r.sort == Sort::Directory)
                         key = path.getDirectory();
+                    while (fileNames.find(key) != fileNames.end())
+                    {
+                        key += "_1";
+                    }
                     fileNames[key] = i;
                 }
 
@@ -198,20 +203,20 @@ namespace mrv
                     g->x(), g->y() + 22 + i * size.h + 4, g->w(), size.h + 4);
                 FileButton* b = bW;
                 b->setIndex(i);
-                _r->indices[b] = i;
+                r.indices[b] = i;
                 b->tooltip(_("Select main A image."));
                 bW->callback(
                     [=](auto b)
                     {
-                        WidgetIndices::const_iterator it = _r->indices.find(b);
-                        if (it == _r->indices.end())
+                        WidgetIndices::const_iterator it = r.indices.find(b);
+                        if (it == r.indices.end())
                             return;
                         int index = (*it).second;
                         auto model = _p->ui->app->filesModel();
                         model->setA(index);
                     });
 
-                _r->map[i] = b;
+                r.map[i] = b;
 
                 uint16_t layerId;
                 time = media->currentTime;
@@ -303,6 +308,7 @@ namespace mrv
         void FilesPanel::redraw()
         {
             TLRENDER_P();
+            MRV2_R();
 
             otio::RationalTime time = otio::RationalTime(0.0, 1.0);
 
@@ -314,7 +320,7 @@ namespace mrv
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
             
-            for (auto& m : _r->map)
+            for (auto& m : r.map)
             {
                 size_t i = m.first;
                 const auto& media = files->getItem(i);
@@ -329,7 +335,7 @@ namespace mrv
                 uint16_t layerId;
 
                 b->labelcolor(FL_WHITE);
-                WidgetIndices::iterator it = _r->indices.find(b);
+                WidgetIndices::iterator it = r.indices.find(b);
                 time = media->currentTime;
                 if (Aindex != i)
                 {
@@ -353,10 +359,12 @@ namespace mrv
 
         void FilesPanel::setSort(Sort value)
         {
-            if (_r->sort == value)
+            MRV2_R();
+            
+            if (r.sort == value)
                 return;
 
-            _r->sort = value;
+            r.sort = value;
             
             refresh();
         }
