@@ -44,6 +44,7 @@ namespace mrv
     //! File menu callbacks
     void open_file_cb(const std::string& file, ViewerUI* ui);
     void open_cb(Fl_Widget* w, ViewerUI* ui);
+    void open_url_movie_cb(Fl_Widget* w, ViewerUI* ui);
     void open_single_image_cb(Fl_Widget* w, ViewerUI* ui);
     void open_directory_cb(Fl_Widget* w, ViewerUI* ui);
     void open_separate_audio_cb(Fl_Widget* w, ViewerUI* ui);

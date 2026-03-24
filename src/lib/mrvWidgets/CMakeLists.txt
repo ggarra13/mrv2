@@ -14,6 +14,7 @@ set( FL_SOURCES
     mrvPreferencesUI.fl
     mrvSaveImageOptionsUI.fl
     mrvURLLinkUI.fl
+    mrvURLMovieUI.fl
     mrViewer.fl
 )
 

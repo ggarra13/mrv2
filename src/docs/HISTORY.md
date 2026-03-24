@@ -53,6 +53,8 @@ Change Log
 - Added support for sequences with a suffix like render_0001_suffix.exr in file requester, drag and drop and command-line.
 - Majot refactoring of code.
 - Fixed a Vulkan hang (VK_ERROR_DEVICE_LOST) when creating thumbnails in the Edit timeline window.  It would happen with .otio timelines.
+- Fixed a hang and crash on program exit after editing a clip with the Trim tool.
+- Added File->Open->URL Movie to open a movie with an URL.  
 
 
 

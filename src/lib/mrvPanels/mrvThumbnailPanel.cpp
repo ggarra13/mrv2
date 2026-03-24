@@ -40,6 +40,7 @@ namespace mrv
 
         ThumbnailPanel::~ThumbnailPanel()
         {
+            _cancelRequests();
             Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
         }
 

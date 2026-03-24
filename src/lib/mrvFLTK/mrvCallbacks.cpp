@@ -10,6 +10,7 @@
 #include "mrvSaveImageOptionsUI.h"
 #ifdef TLRENDER_FFMPEG
 #    include "mrvSaveMovieOptionsUI.h"
+#    include "mrvURLMovieUI.h"
 #endif
 
 #include "mrvApp/mrvSettingsObject.h"
@@ -209,6 +210,29 @@ namespace mrv
     {
         const std::vector<std::string>& files = open_image_file(NULL, true);
         open_files_cb(files, ui);
+    }
+
+    void open_url_movie_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        // URLMovieUI urlMovie;
+        // while (urlMovie.uiMain->shown())
+        // {
+        //     Fl::check();
+        // }
+        // std::string url = urlMovie.uiURL->value();
+        // std::string user = urlMovie.uiUser->value();
+        // std::string password = urlMovie.uiUser->value();
+        // std::string suffix = urlMovie.uiUser->value();
+        
+        // std::vector<std::string> files;
+        // std::string full = url;
+        // if (!user.empty())
+        //     full += "?user=" + user;
+        // if (!password.empty())
+        //     full += ";password=" + password;
+        // if (!suffix.empty())
+        //     full += suffix;
+        // open_files_cb(files, ui);
     }
 
     void open_single_image_cb(Fl_Widget* w, ViewerUI* ui)
@@ -1055,8 +1079,9 @@ namespace mrv
         App::unsaved_annotations = false;
         
         tcp->lock();
-
-        ui->uiView->stop();
+        
+        // Close all files
+        close_all_cb(w, ui);
 
         // Store window preferences
         if (panel::colorPanel)
@@ -1110,6 +1135,7 @@ namespace mrv
         if (ui->uiSecondary)
             ui->uiSecondary->save();
 
+
         // Save preferences
         Preferences::save();
 
@@ -1120,6 +1146,7 @@ namespace mrv
         ui->uiAbout = nullptr;
         delete ui->uiHotkey;
         ui->uiHotkey = nullptr;
+
 
         // Hide all PanelGroup windows
         PanelGroup::hide_all();
@@ -1142,16 +1169,6 @@ namespace mrv
         panel::ndiPanel = nullptr;
 #endif
 
-        // Close all files
-        close_all_cb(w, ui);
-
-        // Remove thumbnail system.
-#ifdef VULKAN_BACKEND
-        auto context = App::app->getContext();
-        auto system  = context->getSystem<timelineui_vk::ThumbnailSystem>();
-        context->removeSystem(system);
-#endif
-
         // Delete Color Chooser
         delete colorChooser;
 
@@ -1162,8 +1179,16 @@ namespace mrv
         if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
             removeTemporaryEDLs(ui);
 
+
         Fl::hide_all_windows();
         
+        // Remove thumbnail system.
+#ifdef VULKAN_BACKEND
+        auto context = App::app->getContext();
+        auto system  = context->getSystem<timelineui_vk::ThumbnailSystem>();
+        context->removeSystem(system);
+#endif
+
         tcp->unlock();
     }
 
