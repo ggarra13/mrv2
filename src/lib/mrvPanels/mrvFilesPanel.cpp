@@ -32,6 +32,8 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
 
+#include "mrvOS/mrvFile.h"
+
 #include <string>
 #include <vector>
 #include <map>
@@ -149,7 +151,8 @@ namespace mrv
                 } 
             }
             else if (r.sort == Sort::FileName ||
-                     r.sort == Sort::Directory)
+                     r.sort == Sort::Directory ||
+                     r.sort == Sort::User)
             {
                 std::map<std::string, size_t> fileNames;
                 for (size_t i = 0; i < numFiles; ++i)
@@ -160,9 +163,22 @@ namespace mrv
                     const bool listdir = false;
                     std::string key;
                     if (r.sort == Sort::FileName)
+                    {
                         key = path.getFileName(listdir);
+                    }
                     else if (r.sort == Sort::Directory)
+                    {
                         key = path.getDirectory();
+                    }
+                    else if (r.sort == Sort::User)
+                    {
+                        const bool listdir = true;
+                        key = file::get_owner(path.getFileName(listdir));
+                    }
+                    else
+                    {
+                        throw std::runtime_error("Unknown sort type");
+                    }
                     while (fileNames.find(key) != fileNames.end())
                     {
                         key += "_1";

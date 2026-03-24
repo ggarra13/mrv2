@@ -41,19 +41,24 @@ namespace mrv
 {
     using namespace panel;
     
-    void file_sort_loaded_cb(Fl_Menu_*, void*)
+    static void file_sort_loaded_cb(Fl_Menu_*, void*)
     {
         filesPanel->setSort(Sort::Loaded);
     }
     
-    void file_sort_file_name_cb(Fl_Menu_*, void*)
+    static void file_sort_file_name_cb(Fl_Menu_*, void*)
     {
         filesPanel->setSort(Sort::FileName);
     }
     
-    void file_sort_directory_cb(Fl_Menu_*, void*)
+    static void file_sort_directory_cb(Fl_Menu_*, void*)
     {
         filesPanel->setSort(Sort::Directory);
+    }
+    
+    static void file_sort_user_cb(Fl_Menu_*, void*)
+    {
+        filesPanel->setSort(Sort::User);
     }
 
     struct FileButton::Private
@@ -217,6 +222,8 @@ namespace mrv
                          (Fl_Callback*)file_sort_file_name_cb, 0, 0);
                 menu.add("&Order/Directory", 0,
                          (Fl_Callback*)file_sort_directory_cb, 0, 0);
+                menu.add("&Order/User", 0,
+                         (Fl_Callback*)file_sort_user_cb, 0, 0);
 
                 menu.add(
                     _("&Copy/&Filename"), 0, (Fl_Callback*)copy_filename_cb, 0,

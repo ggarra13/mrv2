@@ -5,6 +5,7 @@
 set(HEADERS
     mrvCPU.h
     mrvEnv.h
+    mrvFile.h
     mrvFileManager.h
     mrvOS.h 
     mrvRoot.h
@@ -14,6 +15,7 @@ set(HEADERS
 
 set(SOURCES
     mrvCPU.cpp
+    mrvFile.cpp
     mrvMemory.cpp
     mrvOS.cpp
     mrvRoot.cpp
@@ -42,11 +44,11 @@ elseif( APPLE )
     # macOS has a great a built-in stack trace and signal handler.
     # No need to use cpptrace.
     list( APPEND SOURCES
-       mrvFileManager.mm
+	mrvFileManager.mm
     )
 else()
     list(APPEND SOURCES
-        mrvFileManager.cpp
+	mrvFileManager.cpp
 	Linux/mrvSignalHandler.cpp)
     if (MRV2_CPPTRACE)
 	list(APPEND LIBRARIES_PRIVATE cpptrace::cpptrace)

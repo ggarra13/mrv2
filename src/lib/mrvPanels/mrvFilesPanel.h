@@ -27,6 +27,7 @@ namespace mrv
             Loaded,
             Directory,
             FileName,
+            User,
         };
         
         using namespace tl;
