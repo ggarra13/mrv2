@@ -47,18 +47,13 @@ namespace mrv
     {
 
         typedef std::map< FileButton*, size_t > WidgetIndices;
-
-        enum class PanelSort
-        {
-            Default,
-            Directory,
-            Filename,
-        };
         
         struct FilesPanel::Private
         {
             std::weak_ptr<system::Context> context;
 
+            Sort sort = Sort::Loaded;
+            
             std::map< size_t, FileButton* > map;
             WidgetIndices indices;
 
@@ -143,8 +138,41 @@ namespace mrv
                 time = player->currentTime();
 
             file::Path lastPath;
+
+            std::vector<int> orders;
+            if (_r->sort == Sort::Loaded)
+            {
+                for (size_t i = 0; i < numFiles; ++i)
+                {
+                    orders.push_back(i);
+                } 
+            }
+            else if (_r->sort == Sort::FileName ||
+                     _r->sort == Sort::Directory)
+            {
+                std::map<std::string, size_t> fileNames;
+                for (size_t i = 0; i < numFiles; ++i)
+                {
+                    const auto& media = files->getItem(i);
+                    const auto& path = media->path;
+
+                    const bool listdir = false;
+                    std::string key;
+                    if (_r->sort == Sort::FileName)
+                        key = path.getFileName(listdir);
+                    else if (_r->sort == Sort::Directory)
+                        key = path.getDirectory();
+                    fileNames[key] = i;
+                }
+
+                for (auto& [_, i] : fileNames)
+                {
+                    orders.push_back(i);
+                }
+            }
+
             
-            for (size_t i = 0; i < numFiles; ++i)
+            for (const auto i : orders)
             {
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
@@ -323,6 +351,16 @@ namespace mrv
             }
         }
 
+        void FilesPanel::setSort(Sort value)
+        {
+            if (_r->sort == value)
+                return;
+
+            _r->sort = value;
+            
+            refresh();
+        }
+        
         void FilesPanel::setFilesPanelOptions(const FilesPanelOptions& value)
         {
             refresh();

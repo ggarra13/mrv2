@@ -26,6 +26,8 @@
 
 #include <tlCore/StringFormat.h>
 
+#include <FL/fl_utf8.H>
+
 namespace
 {
     
@@ -172,9 +174,18 @@ namespace mrv
                 out += " ";
                 out += getManufacturerName(vendorId.c_str());
                 out += " ";
-                std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>
-                    utf8_conv;
-                out += utf8_conv.to_bytes(targetName.monitorFriendlyDeviceName);
+
+                std::string name;
+                char buffer[512];  // or dynamically sized
+                int len = fl_utf8fromwc(buffer, sizeof(buffer),
+                                        targetName.monitorFriendlyDeviceName, 64);
+                    
+                if (len > 0)
+                {
+                    name.assign(buffer, len);
+                }
+
+                out += name;
             }
             else
             {
@@ -183,7 +194,18 @@ namespace mrv
 
                 if (EnumDisplayDevices(NULL, monitorIndex, &displayDevice, 0))
                 {
+#ifdef UNICODE
+                    char buffer[512];  // or dynamically sized
+                    int len = fl_utf8fromwc(buffer, sizeof(buffer),
+                                            displayDevice.DeviceString, 128);
+                    
+                    if (len > 0)
+                    {
+                        out.assign(buffer, len);
+                    }
+#else
                     out = displayDevice.DeviceString;
+#endif
                 }
             }
 

@@ -4,13 +4,18 @@
 
 #include "mrViewer.h"
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_Button.H>
 
-#include <tlCore/Vector.h>
+#include "mrvApp/mrvFilesModel.h"
+#include "mrvApp/mrvApp.h"
 
-#include "mrvOS/mrvString.h"
-#include "mrvOS/mrvI8N.h"
+#include "mrvPanels/mrvPanelsCallbacks.h"
+
+#include "mrvFl/mrvIO.h"
+
+#include "mrvUI/mrvDesktop.h"
+
+#include "mrvEdit/mrvEditCallbacks.h"
+
 
 #include "mrvFLTK/mrvCallbacks.h"
 #include "mrvFl/mrvIO.h"
@@ -18,14 +23,13 @@
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvFileDragger.h"
 
-#include "mrvEdit/mrvEditCallbacks.h"
+#include "mrvOS/mrvString.h"
+#include "mrvOS/mrvI8N.h"
 
-#include "mrvUI/mrvDesktop.h"
+#include <tlCore/Vector.h>
 
-#include "mrvPanels/mrvPanelsCallbacks.h"
-
-#include "mrvApp/mrvFilesModel.h"
-#include "mrvApp/mrvApp.h"
+#include <FL/Fl.H>
+#include <FL/Fl_Menu_Button.H>
 
 
 namespace
@@ -36,6 +40,21 @@ namespace
 namespace mrv
 {
     using namespace panel;
+    
+    void file_sort_loaded_cb(Fl_Menu_*, void*)
+    {
+        filesPanel->setSort(Sort::Loaded);
+    }
+    
+    void file_sort_file_name_cb(Fl_Menu_*, void*)
+    {
+        filesPanel->setSort(Sort::FileName);
+    }
+    
+    void file_sort_directory_cb(Fl_Menu_*, void*)
+    {
+        filesPanel->setSort(Sort::Directory);
+    }
 
     struct FileButton::Private
     {
@@ -192,6 +211,13 @@ namespace mrv
                 menu.add(
                     _("&File/&Refresh Cache"), 0,
                     (Fl_Callback*)refresh_file_cache_cb, 0, 0);
+                menu.add("&Order/Loaded", 0,
+                         (Fl_Callback*)file_sort_loaded_cb, 0, 0);
+                menu.add("&Order/File Name", 0,
+                         (Fl_Callback*)file_sort_file_name_cb, 0, 0);
+                menu.add("&Order/Directory", 0,
+                         (Fl_Callback*)file_sort_directory_cb, 0, 0);
+
                 menu.add(
                     _("&Copy/&Filename"), 0, (Fl_Callback*)copy_filename_cb, 0,
                     0);
