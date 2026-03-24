@@ -15,15 +15,9 @@ namespace mrv
     public:
         void insert(const Key& key, const Value& value)
         {
-            // Check if the key already exists in the map
-            if (map_.count(key) == 0)
-            {
-                // Add the key to the vector
+            auto [it, inserted] = map_.insert_or_assign(key, value);
+            if (inserted)
                 keys_.push_back(key);
-            }
-
-            // Insert the key-value pair into the map
-            map_[key] = value;
         }
 
         const Value& at(const Key& key) const { return map_.at(key); }
