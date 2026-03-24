@@ -189,19 +189,18 @@ src/lib:
 			  mrvEditMode		- Editing mode enum class
 			  mrvEditUtil		- Utilities for editing.
 			  
-	mrvIcons   	- Binary SVG icons for faster loading.
+	mrvFLTK	        - FLTK auxiliary functions and callbacks
 	
-	mrvFl      	- mrv2's classes for different functions
-
 			  mrvCallbacks          - FLTK callbacks
-			  			  (refactor to mrvFLTK)
 			  mrvColorSchemes	- FLTK color themes
-			  			  (refactor to mrvFLTK)
-			  mrvContextObject	- FLTK context object
-			  			  (updates tlRender's observers)
 			  mrvFileRequester	- FLTK entry point functions
 			  			  for file requester.
-			  			  (refactor to mrvFLTK)
+			  mrvSave		  FLTK Save entry functions
+			  			 
+	mrvFl      	- mrv2's classes for different functions
+
+			  mrvContextObject	- FLTK context object
+			  			  (updates tlRender's observers)
 			  mrvHotkey		  Hotkey UI functions
 			  			  (refactor to mrvUI)
 			  mrvIO			  Main logging and output.
@@ -216,16 +215,6 @@ src/lib:
 			  mrvPathMapping	  FLTK Path Mapping functions.
 			  mrvPreferences	  Load/Save/Init preferences
 			  			  (refactor to mrvUI)
-			  mrvSave		  FLTK Save entry functions
-			  			  (refactor to mrvFLTK)
-			  mrvSaveImage		  OpenGL save image function
-			  			  (rename to mrvSaveImageGL)
-			  mrvSaveImageVk	  Vulkan save image function
-			  mrvSaveMovie		  OpenGL save movie function
-			  			  (rename to mrvSaveMovieGL)
-			  mrvSaveMovieVk	  Vulkan save movie function
-			  mrvSaveOptions	  Options for saving movies
-			  			  (refactor to mrvOptions)
 			  mrvSession		  Sessions saving and loading
 			  mrvStereo3DAux	  Match one layer to anoter one
 			  			  in OpenEXR files.
@@ -244,7 +233,7 @@ src/lib:
 	mrvFLU     	- mrv2's custom file chooser (based on origina FLU
 	             	  file chooser).  Needs refactoring and code cleanup.
 
-        mrvGL      	- OpenGL driver classes.
+        mrvGL      	- OpenGL classes.
 			  Keep as is
 
         mrvHDR		- HDR support libraries for 'hdr' utility.
@@ -253,6 +242,8 @@ src/lib:
         mrvHDRWidgets   - Main UI of 'hdr' utility.
 			  (refactor to mrvHDR)
 			  
+	mrvIcons   	- Binary SVG icons for faster loading.
+	
 	mrvNetwork 	- Network classes.
 			  Keep as is.
 			  
@@ -303,6 +294,9 @@ src/lib:
 	mrvViewport	- Viewport functions common to all backends.
 			  Keep as is.
 
+        mrvVk      	- Vulkan classes.
+			  Keep as is
+			  
 	mrvWidgets 	- FLTK custom widgets and main fluid UI (.fl) files.
 	             	  .fl files should be refactored to mrvUI?
 			  Keep as is.

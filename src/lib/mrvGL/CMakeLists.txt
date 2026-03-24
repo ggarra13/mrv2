@@ -31,6 +31,8 @@ set(SOURCES
     mrvGLViewportDraw.cpp
     mrvGLViewportPrims.cpp
     mrvGLWindow.cpp
+    mrvSaveImage.cpp
+    mrvSaveMovie.cpp
     mrvTimelineViewportEvents.cpp
     mrvTimelineViewport.cpp
     mrvTimelineWidget.cpp

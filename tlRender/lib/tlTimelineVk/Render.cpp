@@ -3056,21 +3056,21 @@ namespace tl
                 toneMapDef = s.str();
                 
 #if defined(TLRENDER_LIBPLACEBO)
-            try
-            {
-                if (p.placeboData)
+                try
                 {
-                    p.placeboData->textures.clear();
-                    _addTextures(p.placeboData->textures,
-                                 p.placeboData->res);
+                    if (p.placeboData)
+                    {
+                        p.placeboData->textures.clear();
+                        _addTextures(p.placeboData->textures,
+                                     p.placeboData->res);
+                    }
                 }
-            }
-            catch (const std::exception& e)
-            {
-                std::cerr << e.what() << std::endl;
-                p.placeboData.reset();
-                throw e;
-            }
+                catch (const std::exception& e)
+                {
+                    std::cerr << e.what() << std::endl;
+                    p.placeboData.reset();
+                    throw e;
+                }
 #endif
 
                 toneMap =  "outColor.rgb = max(outColor.rgb, vec3(0.0));\n";

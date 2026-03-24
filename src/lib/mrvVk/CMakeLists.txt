@@ -29,7 +29,9 @@ set(SOURCES
     mrvVkViewport.cpp
     mrvVkViewportDraw.cpp
     mrvVkViewportPrims.cpp  
-    mrvVkWindow.cpp        
+    mrvVkWindow.cpp
+    mrvSaveImage.cpp
+    mrvSaveMovie.cpp
     mrvTimelineViewportEvents.cpp        
     mrvTimelineViewport.cpp        
     mrvTimelineWidget.cpp

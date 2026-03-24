@@ -49,9 +49,9 @@ Change Log
 
 - UI improvement: Improved readability of the Media Information Panel.
 - UI improvement: When using the free version of mrv2/vmrv2, the menu functions supported only on unlocked versions are shown as ghosted instead of just missing.  That way users can tell what vmrv2 / mrv2 **FULLY** supports.
-- UI improvement: The Files panel allows changing the sort order of the elements (Loadded, File Name and Directory).
+- UI improvement: The Files panel allows changing the sort order of the elements (Loadded, File Name, Directory and User name).  Just use the RMB on a clip and select Order/File Name.
 - Added support for sequences with a suffix like render_0001_suffix.exr in file requester, drag and drop and command-line.
-- Refactored code.
+- Majot refactoring of code.
 - Fixed a Vulkan hang (VK_ERROR_DEVICE_LOST) when creating thumbnails in the Edit timeline window.  It would happen with .otio timelines.
 
 
