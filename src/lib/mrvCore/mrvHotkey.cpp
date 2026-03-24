@@ -17,12 +17,12 @@ namespace
 
 namespace mrv
 {
-    // on macOS            ctrl, cmd. , alt, shift, key
-    //                     ctrl, meta , alt, shift, key
+    // on macOS           ctrl, cmd. , alt, shift, key, (text)
+    // on Linux/Windows   ctrl, meta , alt, shift, key, (text)
     Hotkey kOpenDirectory(true, false, false, true, 'o');
     Hotkey kOpenSingleImage(false, false, false, false, 0);
     Hotkey kOpenImage(true, false, false, false, 'o');
-    Hotkey kOpenURLMovie(false, false, false, false, false, 0);
+    Hotkey kOpenURLMovie(false, false, false, false, 0);
     Hotkey kOpenSeparateAudio(false, false, false, false, 0);
     Hotkey kOpenSession(false, false, true, false, 'o');
 
@@ -414,7 +414,7 @@ namespace mrv
 
         HotkeyEntry(_("Open Directory"), &kOpenDirectory),
         HotkeyEntry(_("Open Movie or Sequence"), &kOpenImage),
-        // HotkeyEntry(_("Open URL Movie"), &kOpenURLMovie),
+        HotkeyEntry(_("Open URL Movie"), &kOpenURLMovie),
         HotkeyEntry(_("Open Single Image"), &kOpenSingleImage),
         HotkeyEntry(_("Open Session"), &kOpenSession),
         HotkeyEntry(_("Open New Program Instance"), &kOpenNewInstance),

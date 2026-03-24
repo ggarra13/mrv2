@@ -98,9 +98,9 @@ namespace mrv
             _("File/Open/Movie or Sequence"), kOpenImage.hotkey(),
             (Fl_Callback*)open_cb, ui);
         
-        // menu->add(
-        //     _("File/Open/URL Movie"), kOpenURLMovie.hotkey(),
-        //     (Fl_Callback*)open_url_movie_cb, ui);
+        menu->add(
+            _("File/Open/URL Movie"), kOpenURLMovie.hotkey(),
+            (Fl_Callback*)open_url_movie_cb, ui);
 
         menu->add(
             _("File/Open/With Separate Audio"), kOpenSeparateAudio.hotkey(),

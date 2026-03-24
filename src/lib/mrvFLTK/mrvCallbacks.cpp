@@ -214,25 +214,34 @@ namespace mrv
 
     void open_url_movie_cb(Fl_Widget* w, ViewerUI* ui)
     {
-        // URLMovieUI urlMovie;
-        // while (urlMovie.uiMain->shown())
-        // {
-        //     Fl::check();
-        // }
-        // std::string url = urlMovie.uiURL->value();
-        // std::string user = urlMovie.uiUser->value();
-        // std::string password = urlMovie.uiUser->value();
-        // std::string suffix = urlMovie.uiUser->value();
+        URLMovieUI urlMovie;
+        while (urlMovie.uiMain->shown())
+        {
+            Fl::check();
+        }
+        std::string url = urlMovie.uiURL->value();
+        std::string user = urlMovie.uiUser->value();
+        std::string password = urlMovie.uiUser->value();
+        std::string suffix = urlMovie.uiUser->value();
+
+        if (url.substr(0, 8) != "https://" &&
+            url.substr(0, 7) != "http://")
+        {
+            url = "https://" + url;
+        }
         
-        // std::vector<std::string> files;
-        // std::string full = url;
-        // if (!user.empty())
-        //     full += "?user=" + user;
-        // if (!password.empty())
-        //     full += ";password=" + password;
-        // if (!suffix.empty())
-        //     full += suffix;
-        // open_files_cb(files, ui);
+        std::vector<std::string> files;
+        std::string full_url = url;
+        if (!user.empty())
+            full_url += "?user=" + user;
+        if (!password.empty())
+            full_url += ";password=" + password;
+        if (!suffix.empty())
+            full_url += suffix;
+        
+        files.push_back(full_url);
+
+        open_files_cb(files, ui);
     }
 
     void open_single_image_cb(Fl_Widget* w, ViewerUI* ui)

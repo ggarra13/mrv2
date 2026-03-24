@@ -54,7 +54,7 @@ Change Log
 - Majot refactoring of code.
 - Fixed a Vulkan hang (VK_ERROR_DEVICE_LOST) when creating thumbnails in the Edit timeline window.  It would happen with .otio timelines.
 - Fixed a hang and crash on program exit after editing a clip with the Trim tool.
-- Added File->Open->URL Movie to open a movie with an URL.  
+- Added File->Open->URL Movie to open a movie with an URL to allow direct streaming of movies into vmrv2 from an https:// or http:// site.  By default, a sample link is provided for evaluation.
 
 
 
