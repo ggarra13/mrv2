@@ -690,7 +690,10 @@ namespace mrv
         for (const auto& str : p.recentFiles)
         {
             fs::path filePath(str);
-            if (fs::exists(filePath))
+            if (str.substr(0, 6) == "https:" ||
+                str.substr(0, 5) == "http:" ||
+                str.substr(0, 5) == "file:" ||
+                fs::exists(filePath))
             {
                 auto path = fs::absolute(filePath);
                 if (set.find(path.u8string()) == set.end())
