@@ -2842,6 +2842,7 @@ msgstr "远程文件少于本地文件 。"
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "远程文件 {0} 匹配文件名 {1}, 但不是路径 。"
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "远程文件 {0} 不匹配本地文件名 。"
 
@@ -2956,9 +2957,11 @@ msgstr "设置基于偏好的OCIO配置"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "根据OCIO环境变量设置OCIO配置"
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "从 \"{0}{1}\" 导入路径映射图"
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "正在从 \"{0}{1}.prefs\" 导入快捷键"
 
@@ -2971,6 +2974,7 @@ msgstr "路径映射已保存到 \"{0}{1}\"。"
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "快捷键被保存到“ \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "首选项已保存为 \"{0}{1}\"."
 
@@ -3022,6 +3026,7 @@ msgstr "显示“ {0} ” 没有默认视图。 显示是否存在?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "设置 OCIO 预设 '{0}' 。"
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "找不到预设 '{0}' 。"
 
@@ -3394,6 +3399,7 @@ msgstr "请选择两个相邻的音频剪辑。"
 msgid "Could not save .otio file: {0}"
 msgstr "无法保存. otio 文件: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "保存 {0} 出错  {1}"
 
@@ -3409,6 +3415,7 @@ msgstr "您只能将剪辑添加到.otio EDL 播放列表中"
 msgid "Unknown media reference"
 msgstr "未知媒体引用未知"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "音轨 #{0} - {1}"
 
@@ -3657,6 +3664,7 @@ msgstr "帧 {0} - 时间码 : {1} - 秒数: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "图像太大。 将保存视图的大小 。"
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "视图端口大小 : {0} - X={1}, Y={2}"
 
@@ -3934,6 +3942,7 @@ msgstr "无法播放 – 音频注释为空"
 msgid "Status is not saved"
 msgstr "状态未保存"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "音频注释文件 {0} 缺失或不存在！"
 
@@ -5940,8 +5949,8 @@ msgstr "为该 URL 输入可选的密码。"
 msgid "Suffix"
 msgstr "后缀"
 
-msgid "Enter a UR."
-msgstr "输入一个 URL。"
+msgid "Enter a URL suffix"
+msgstr "请输入 URL 后缀。"
 
 msgid "File"
 msgstr "文件"
@@ -8101,6 +8110,9 @@ msgstr "任务信息失败"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "用于文本绘图的无效字体"
+
+#~ msgid "Enter a UR."
+#~ msgstr "输入一个 URL。"
 
 #~ msgid "Timeline/Edit Associated Clips"
 #~ msgstr "时间线/编辑关联序列"

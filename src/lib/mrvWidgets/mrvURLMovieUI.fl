@@ -33,7 +33,7 @@ class URLMovieUI {open selected
       }
       Fl_Input uiSuffix {
         label Suffix
-        tooltip {Enter a UR.} xywh {130 128 550 36} color 20 textcolor 56
+        tooltip {Enter a URL suffix} xywh {130 128 550 36} color 20 textcolor 56
       }
       Fl_Group {} {open
         xywh {192 175 416 54}

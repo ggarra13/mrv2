@@ -1536,69 +1536,74 @@ namespace mrv
             item = (Fl_Menu_Item*)&(menu->menu()[idx]);
             if (itemOptions.editAssociatedClips)
                 item->set();
-            
+
+            mode = 0;
+            if (!app::soporta_editing)
+            {
+                mode |= FL_MENU_INACTIVE;
+            }
             menu->add(
                 _("Edit/Frame/Cut"), kEditCutFrame.hotkey(),
-                (Fl_Callback*)edit_cut_frame_cb, ui);
+                (Fl_Callback*)edit_cut_frame_cb, ui, mode);
             menu->add(
                 _("Edit/Frame/Copy"), kEditCopyFrame.hotkey(),
-                (Fl_Callback*)edit_copy_frame_cb, ui);
+                (Fl_Callback*)edit_copy_frame_cb, ui, mode);
             menu->add(
                 _("Edit/Frame/Paste"), kEditPasteFrame.hotkey(),
-                (Fl_Callback*)edit_paste_frame_cb, ui);
+                (Fl_Callback*)edit_paste_frame_cb, ui, mode);
             menu->add(
                 _("Edit/Frame/Insert"), kEditInsertFrame.hotkey(),
-                (Fl_Callback*)edit_insert_frame_cb, ui);
+                (Fl_Callback*)edit_insert_frame_cb, ui, mode);
 
             menu->add(
                 _("Edit/Time/Audio Clip/Insert"),
                 kEditInsertAudioClip.hotkey(),
-                (Fl_Callback*)insert_audio_clip_cb, ui);
+                (Fl_Callback*)insert_audio_clip_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Audio Clip/Remove"),
                 kEditRemoveAudioClip.hotkey(),
-                (Fl_Callback*)edit_remove_audio_clip_cb, ui);
+                (Fl_Callback*)edit_remove_audio_clip_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Video Gap/Insert"),
                 kEditInsertVideoGap.hotkey(),
-                (Fl_Callback*)edit_insert_video_gap_cb, ui);
+                (Fl_Callback*)edit_insert_video_gap_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Video Gap/Remove"),
                 kEditRemoveVideoGap.hotkey(),
-                (Fl_Callback*)edit_remove_video_gap_cb, ui);
+                (Fl_Callback*)edit_remove_video_gap_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Audio Gap/Insert"),
                 kEditInsertAudioGap.hotkey(),
-                (Fl_Callback*)edit_insert_audio_gap_cb, ui);
+                (Fl_Callback*)edit_insert_audio_gap_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Audio Gap/Remove"),
                 kEditRemoveAudioGap.hotkey(),
-                (Fl_Callback*)edit_remove_audio_gap_cb, ui);
+                (Fl_Callback*)edit_remove_audio_gap_cb, ui, mode);
 
                 
             menu->add(_("Edit/Selected/Add Transition"),
                       kEditAddTransition.hotkey(),
-                      (Fl_Callback*)edit_add_transition_cb, ui);
+                      (Fl_Callback*)edit_add_transition_cb, ui, mode);
             menu->add(
                 _("Edit/Selected/Remove Items"),
                 kEditRemoveSelected.hotkey(),
-                (Fl_Callback*)edit_remove_selected_cb, ui);
+                (Fl_Callback*)edit_remove_selected_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Remove Clips"), kEditRemoveClip.hotkey(),
-                (Fl_Callback*)edit_remove_clip_cb, ui);
+                (Fl_Callback*)edit_remove_clip_cb, ui, mode);
             menu->add(
                 _("Edit/Time/Slice"), kEditSliceClip.hotkey(),
-                (Fl_Callback*)edit_slice_clip_cb, ui);
+                (Fl_Callback*)edit_slice_clip_cb, ui, mode);
 
 
             menu->add(
                 _("Edit/Undo"), kEditUndo.hotkey(),
                 (Fl_Callback*)edit_undo_cb,
-                ui);
+                ui, mode);
             menu->add(
                 _("Edit/Redo"), kEditRedo.hotkey(),
                 (Fl_Callback*)edit_redo_cb,
-                ui);
+                ui, mode);
         }
 
     // if ( num > 0 )

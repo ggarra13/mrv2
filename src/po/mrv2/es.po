@@ -2935,6 +2935,7 @@ msgstr "Archivos remotos son menos que los archivos locales."
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Archivo remoto {0} iguala nombra base {1} pero no la carpeta."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Archivo remoto {0} no es igual al archivo local."
 
@@ -3055,9 +3056,11 @@ msgstr "Seteando OCIO config desde preferencias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Seteando OCIO config de la variable de entorno OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Mapeo de carpetas ha sido cargado de \"{0}{1}\"."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
@@ -3070,6 +3073,7 @@ msgstr "Mapeo de carpetas ha sido grabado en \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Teclas han sido grabadas en: \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Preferencias han sido grabadas en: \"{0}{1}\"."
 
@@ -3121,6 +3125,7 @@ msgstr "No hay vista por defecto para display '{0}'.  ¿Existe el display?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Usando preseteo OCIO '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preseteo '{0}' no encontrado"
 
@@ -3510,6 +3515,7 @@ msgstr "Por favor seleccione dos clips de audio contiguos."
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error grabando {0}. {1}"
 
@@ -3525,6 +3531,7 @@ msgstr "Sólo puede agregar clips a una lista de reproduccion (EDL) de .otio."
 msgid "Unknown media reference"
 msgstr "Referencia de los medios desconocidos"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Pista #{0} - {1}"
 
@@ -3777,6 +3784,7 @@ msgstr "Cuadro {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagen demasiado grande.  Guardaré el tamaño de la vista."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
 
@@ -4067,6 +4075,7 @@ msgstr "No puedo reproducir - la anotación de audio está vacia"
 msgid "Status is not saved"
 msgstr "Estatus no es grabado"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Anotación de audio en archivo {0} está faltante o no existe!"
 
@@ -6089,8 +6098,8 @@ msgstr "Introduzca una contraseña opcional para la URL."
 msgid "Suffix"
 msgstr "Sufijo"
 
-msgid "Enter a UR."
-msgstr "Introduzca una URL."
+msgid "Enter a URL suffix"
+msgstr "Introduzca un sufijo para la URL."
 
 msgid "File"
 msgstr "Archivo"
@@ -8369,6 +8378,9 @@ msgstr "task info falló"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Fuente inválida para dibujar texto"
+
+#~ msgid "Enter a UR."
+#~ msgstr "Introduzca una URL."
 
 #~ msgid "Timeline/Edit Associated Clips"
 #~ msgstr "Línea de Tiempo/Editar Clips Asociados"

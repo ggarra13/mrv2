@@ -2613,6 +2613,7 @@ msgstr ""
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr ""
 
@@ -2718,9 +2719,11 @@ msgstr ""
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr ""
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
@@ -2733,6 +2736,7 @@ msgstr ""
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr ""
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr ""
 
@@ -2784,6 +2788,7 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr ""
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr ""
 
@@ -3136,6 +3141,7 @@ msgstr ""
 msgid "Could not save .otio file: {0}"
 msgstr ""
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr ""
 
@@ -3151,6 +3157,7 @@ msgstr ""
 msgid "Unknown media reference"
 msgstr ""
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr ""
 
@@ -3399,6 +3406,7 @@ msgstr ""
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
@@ -3675,6 +3683,7 @@ msgstr ""
 msgid "Status is not saved"
 msgstr ""
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr ""
 
@@ -5548,7 +5557,7 @@ msgstr ""
 msgid "Suffix"
 msgstr ""
 
-msgid "Enter a UR."
+msgid "Enter a URL suffix"
 msgstr ""
 
 msgid "File"

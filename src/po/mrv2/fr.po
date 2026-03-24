@@ -2870,6 +2870,7 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "Le fichier distant {0} correspond au nom du fichier {1} mais pas au chemin."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Le fichier distant {0} ne correspond pas au nom de fichier local."
 
@@ -2990,9 +2991,11 @@ msgstr ""
 "Configuration de la configuration OCIO à partir de la variable "
 "d'environnement OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Les cartes des chemins ont été chargées à partir de « {0}{1} »."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Chargement des touches raccourcies depuis \"{0}{1}.prefs\"."
 
@@ -3005,6 +3008,7 @@ msgstr "Les cartes des chemins ont été sauvegardées dans « {0}{1} »."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Les hot-keys ont été sauvegardés dans « {0}{1}.prefs »."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Les préférences ont été sauvegardées dans : « {0} {1} »."
 
@@ -3056,6 +3060,7 @@ msgstr "Aucune vue par défaut pour afficher '{0}'. L'affichage existe-t-il?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Réglage OCIO Préréglé « {0} »."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Présélectionner « {0} » pas trouvé."
 
@@ -3443,6 +3448,7 @@ msgstr "Veuillez sélectionner deux clips audio contigus."
 msgid "Could not save .otio file: {0}"
 msgstr "Impossible d'enregistrer le fichier.otio : {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Erreur lors de l'enregistrement {0}. {1}"
 
@@ -3458,6 +3464,7 @@ msgstr "Vous ne pouvez ajouter des clips qu'à une playlist.otio EDL."
 msgid "Unknown media reference"
 msgstr "Référence médiatique inconnue"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Voie #{0} - {1}"
 
@@ -3712,6 +3719,7 @@ msgstr "Cadre {0} - CT: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image trop grande. Enregistrera la taille du viseur."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Taille du point de vue : {0} - X={1}, Y={2}"
 
@@ -3996,6 +4004,7 @@ msgstr "Impossible de lire – l’annotation audio est vide"
 msgid "Status is not saved"
 msgstr "L’état n’est pas enregistré"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Le fichier d’annotation audio {0} est manquant ou n’existe pas !"
 
@@ -6025,8 +6034,8 @@ msgstr "Entrez un mot de passe facultatif pour l'URL."
 msgid "Suffix"
 msgstr "Suffixe"
 
-msgid "Enter a UR."
-msgstr "Entrez une URL."
+msgid "Enter a URL suffix"
+msgstr "Entrez un suffixe d’URL."
 
 msgid "File"
 msgstr "Fichier"
@@ -8335,6 +8344,9 @@ msgstr "l'information de la tâche a échoué"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Police invalide pour le dessin de texte"
+
+#~ msgid "Enter a UR."
+#~ msgstr "Entrez une URL."
 
 #~ msgid "Timeline/Edit Associated Clips"
 #~ msgstr "Échéancier/Modifier les clips associés"
