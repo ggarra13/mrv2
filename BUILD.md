@@ -131,7 +131,7 @@ xcode-select --install
 #
 # Install dependencies
 #
-brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite3 xz zlib ccache
+brew install git gnu-sed swig python cmake ninja gettext openssl readline sqlite3 xz zlib ccache automake autoconf
 
 # If you are building the Vulkan version of vmrv2, you need to install
 # The VulkanSDK components.  You don't need to install MoltenVk as it is built
