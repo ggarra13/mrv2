@@ -14,14 +14,9 @@ list(APPEND AOM_ARGS
     -DENABLE_TESTS=OFF
     -DENABLE_TOOLS=OFF
 )
-if (WIN32)
-    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
-	list(APPEND AOM_ARGS
-	    -DAOM_TARGET_CPU=generic)
-    else()
-	list(APPEND AOM_ARGS
-	    -DENABLE_NASM=ON)
-    endif()
+if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
+    list(APPEND AOM_ARGS
+	-DAOM_TARGET_CPU=generic)
 else()
     list(APPEND AOM_ARGS
 	-DENABLE_NASM=ON)

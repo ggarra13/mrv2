@@ -22,7 +22,6 @@ set(VPX_ENV)
 if (UNIX)
     # We modify PATH so nasm is found.  On windows, it is already in Msys2
     # path.
-    set(VPX_DEPENDENCIES NASM)
     set(VPX_ENV PATH="${CMAKE_INSTALL_PREFIX}/bin:$ENV{PATH}")
     set(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 else()
@@ -61,8 +60,11 @@ set(VPX_CONFIGURE_ARGS
     --enable-vp9-highbitdepth
     --extra-cflags=${VPX_C_FLAGS}
     --extra-cxxflags=${VPX_CXX_FLAGS}
-    --as=nasm
 )
+
+if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
+    list(APPEND VPX_CONFIGURE_ARGS --as=nasm)
+endif()
 
 
 set(VPX_INSTALL make install)

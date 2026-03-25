@@ -15,7 +15,11 @@ list(APPEND SvtAV1_ARGS
 
 set(SvtAV1_DEPENDENCIES )
 if(NOT WIN32)
-    set(SvtAV1_DEPENDENCIES NASM)
+    if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
+	if(UNIX)
+	    list(APPEND SvtAV1_DEPENDENCIES NASM)
+	endif()
+    endif()
 else()
     include(functions/Msys2)
     set(SvtAV1_MSYS2 ${MRV2_MSYS_CMD})

@@ -6,9 +6,13 @@ ProcessorCount(NPROCS)
 set(FFmpeg_VERSION 8.1)
 
 set(FFmpeg_DEPENDENCIES ZLIB ${OpenSSL_DEP})
-if(NOT WIN32)
-    list(APPEND FFmpeg_DEPENDENCIES NASM)
-else()
+if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
+    if(UNIX)
+	list(APPEND FFmpeg_DEPENDENCIES NASM)
+    endif()
+endif()
+
+if(WIN32)
     include(functions/Msys2)
 endif()
 

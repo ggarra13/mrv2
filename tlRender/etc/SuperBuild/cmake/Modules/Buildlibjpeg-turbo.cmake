@@ -6,7 +6,7 @@ set(libjpeg-turbo_GIT_TAG "3.1.0") # was 3.0.0
 set(libjpeg-turbo_DEPENDENCIES ZLIB)
 if(NOT WIN32)
     if(NOT SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
-       set(libjpeg-turbo_DEPENDENCIES ${libjpeg-turbo_DEPENDENCIES}  NASM)
+	list(APPEND libjpeg-turbo_DEPENDENCIES NASM)
     endif()
 endif()		
 message(STATUS "libjpeg-turbo DEPENDENCIES=${libjpeg-turbo_DEPENDENCIES}")
