@@ -514,8 +514,10 @@ if(TLRENDER_SVTAV1)
 endif()
 
 if(NOT WIN32)
-    list(APPEND FFmpeg_CONFIGURE_ARGS
-	--x86asmexe=${CMAKE_INSTALL_PREFIX}/bin/nasm)
+    if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
+	list(APPEND FFmpeg_CONFIGURE_ARGS
+	    --x86asmexe=${CMAKE_INSTALL_PREFIX}/bin/nasm)
+    endif()
 endif()
 if(TLRENDER_NET)
     list(APPEND FFmpeg_CONFIGURE_ARGS
