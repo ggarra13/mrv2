@@ -44,7 +44,7 @@ jobs:
       run: brew install gettext
 
     - name: Install automake and other network utils
-      run: brew install automake curl rsync wget
+      run: brew install automake autoconf curl rsync wget
 
     - name: Install GNU sed
       run: brew install gnu-sed

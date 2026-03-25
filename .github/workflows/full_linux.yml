@@ -38,6 +38,10 @@ jobs:
         sudo add-apt-repository universe -y
         sudo apt-get update || { echo "apt-get update failed"; exit 1; }
 
+    - name: Install build tools
+      run: |
+        sudo apt-get install autoconf automake
+        
     - name: Install OpenGL dev
       run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
 

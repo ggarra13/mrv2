@@ -57,7 +57,7 @@ sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 #
 sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 	       libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-	       dpkg \
+	       dpkg automake \
 	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
 	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
 	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel \
@@ -93,7 +93,7 @@ sudo apt update
 # Install dependencies
 #
 sudo apt -y install curl build-essential perl git cmake ninja-build \
-                    libpango1.0-dev libglu1-mesa-dev \
+                    autoconf automake libpango1.0-dev libglu1-mesa-dev \
 		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
 		    gettext libasound2-dev \
 		    libpulse-dev libssl-dev libffi-dev \
