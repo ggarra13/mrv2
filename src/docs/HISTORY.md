@@ -56,6 +56,7 @@ Change Log
 - Fixed a hang and crash on program exit after editing a clip with the Trim tool.
 - Added File->Open->URL Movie to open a movie with an URL to allow direct streaming of movies into vmrv2 from an https:// or http:// site.  By default, a sample link is provided for evaluation.
 - Updated to FFmpeg 8.1.
+- Updated to NASM 3.02rc3.
 
 
 

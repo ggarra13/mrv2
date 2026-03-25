@@ -1,17 +1,13 @@
 include(ExternalProject)
 
+set(NAMS_GIT_TAG nasm-3.02rc3)
+
 ExternalProject_Add(
     NASM
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/NASM
-    URL https://github.com/netwide-assembler/nasm/archive/refs/tags/nasm-2.16.01.tar.gz
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/patches/NASM-patch/configure
-        ${CMAKE_CURRENT_BINARY_DIR}/NASM/src/NASM/configure
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/patches/NASM-patch/Makefile.in
-        ${CMAKE_CURRENT_BINARY_DIR}/NASM/src/NASM/Makefile.in
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/patches/NASM-patch/config/config.h.in
-        ${CMAKE_CURRENT_BINARY_DIR}/NASM/src/NASM/config/config.h.in
-    CONFIGURE_COMMAND sh configure --prefix=${CMAKE_INSTALL_PREFIX}
+    GIT_REPOSITORY https://github.com/netwide-assembler/nasm
+    GIT_TAG ${NASM_GIT_TAG}
+    CONFIGURE_COMMAND autogen.sh && configure
+    BUILD_COMMAND make
+    INSTALL_COMMAND cp nasm ${CMAKE_INSTALL_PREFIX}/bin
     BUILD_IN_SOURCE 1)
