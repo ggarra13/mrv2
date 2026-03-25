@@ -87,6 +87,8 @@ string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSTEM_PROCESSOR_LC)
 set(vcpkg_ARCH x64)
 if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
     set(vcpkg_ARCH arm64)
+elseif(SYSTEM_PROCESSOR_LC MATCHES ".*(amd64|x86_64).*")
+    set(SYSTEM_PROCESSOR_LC amd64)
 endif()
     
 set(vcpkg_BUILD_TYPE debug)
