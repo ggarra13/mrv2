@@ -63,7 +63,9 @@ set(VPX_CONFIGURE_ARGS
 )
 
 if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
-    list(APPEND VPX_DEPENDENCIES NASM)
+    if(NOT WIN32)
+	list(APPEND VPX_DEPENDENCIES NASM)
+    endif()
     list(APPEND VPX_CONFIGURE_ARGS --as=nasm)
 endif()
 
