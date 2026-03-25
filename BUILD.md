@@ -47,7 +47,7 @@ sudo dnf makecache --refresh
 # Install bundles
 #
 sudo dnf -y groupinstall "Development Tools"
-sudo dnf -y install perl perl-CPAN
+sudo dnf -y install m4 perl perl-CPAN
 
 # Install IPC::Cmd non-interactively
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
@@ -65,6 +65,9 @@ sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
 
 # If you are building the Vulkan version of vmrv2, you need to install
 # The VulkanSDK components
+
+# Also, if you are on RH 8.10, you might need to compile autoconf from
+# source to a newer version.
 
 #
 # To compile you need a newer compiler than those in Red Hat.
