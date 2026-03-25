@@ -3,7 +3,7 @@ include(ExternalProject)
 include(ProcessorCount)
 ProcessorCount(NPROCS)
 
-set(FFmpeg_VERSION 8.0)
+set(FFmpeg_VERSION 8.1)
 
 set(FFmpeg_DEPENDENCIES ZLIB ${OpenSSL_DEP})
 if(NOT WIN32)
