@@ -127,13 +127,6 @@ namespace mrv
         if (color.b < 0)
             color.b = 0;
 
-        if (color.r > 1.F)
-            color.r = 1.F;
-        if (color.g > 1.F)
-            color.g = 1.F;
-        if (color.b > 1.F)
-            color.b = 1.F;
-
         image::Color4f hsv = color::rgb::to_hsv(color);
 
         int W = p.diameter / 2;

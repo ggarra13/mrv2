@@ -79,6 +79,11 @@ namespace
     inline float
     hue(const Color4f& rgb, const float maxV, const float spanV) noexcept
     {
+        // If spanV is practically zero, hue is meaningless (grayscale). 
+        // We catch this in the parent function, but returning 0.0f here is a
+        // safe fallback.
+        if (spanV < 1e-6f) return 0.0f;
+        
         float h;
         if (rgb.r == maxV)
         {
@@ -313,7 +318,7 @@ namespace mrv
             /**
              * @brief Convert a RGB color to HSV
              *
-             * @param rgb RGB color in [0-1] range.
+             * @param rgb RGB color in 0-any range.
              *
              * @return HSV color
              */
@@ -321,13 +326,20 @@ namespace mrv
             {
                 float minV = std::min(rgb.r, std::min(rgb.g, rgb.b));
                 float maxV = std::max(rgb.r, std::max(rgb.g, rgb.b));
-                float h, s, v;
+    
                 float spanV = maxV - minV;
-                v = maxV;
-                s = (maxV != 0.0f) ? (spanV / maxV) : 0.0f;
-                if (s == 0)
-                    h = 0;
-                else
+    
+                float v = maxV; 
+                float h = 0.0f;
+                float s = 0.0f;
+
+                // Use a small epsilon instead of 0.0f to protect against float inaccuracy
+                if (maxV > 1e-6f) 
+                {
+                    s = spanV / maxV;
+                }
+
+                if (s > 1e-6f) // If it has saturation, calculate hue
                 {
                     h = hue(rgb, maxV, spanV);
                 }
