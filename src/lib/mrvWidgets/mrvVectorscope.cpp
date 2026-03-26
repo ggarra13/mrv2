@@ -129,41 +129,43 @@ namespace mrv
 
         image::Color4f hsv = color::rgb::to_hsv(color);
 
-        int W = p.diameter / 2;
-        int H = p.diameter / 2;
-        
-        M44f m;
+        int centerX = x() + p.diameter / 2;
+        int centerY = y() + p.diameter / 2;
 
-        // Translate to center
-        m.translate(V3f(x() + W, y() + H, 0));
+        // Standard vectorscope hue: 0° = Red at ~11 o'clock (counter-clockwise)
+        // Many scopes use ~103.7°-120° for red depending on YIQ/YPbPr reference.
+        // This value (103.5°) puts pure red near the top-leftish (standard "top" position).
+        constexpr float kRedOffsetDegrees = 103.5f;   // Adjust slightly if you prefer exact 11 o'clock
+        constexpr float kFullTurn = 360.0f;
 
-        // Rotate based on hue
-        // m.rotate(V3f(0, 0, math::deg2rad(105.0F + hsv.r * 360.0F)));
+        float hueDegrees = hsv.r * kFullTurn;                     // 0..360
+        float angleDegrees = kRedOffsetDegrees - hueDegrees;      // Counter-clockwise from red
+        float angleRadians = math::deg2rad(angleDegrees);
 
-        constexpr float kOffset = 7.0f * M_PI / 12.0f;   // 105°
-        constexpr float kFullTurn = 2.0f * M_PI;         // 360°
+        // Saturation scaling - tuned so vivid colors reach near the edge
+        // 0.42f works well for most content (you can expose as a preference later)
+        float saturationRadius = hsv.g * 0.42f * (p.diameter / 2.0f);
 
-        m.rotate(V3f(0, 0, kOffset + hsv.r * kFullTurn));
+        // Polar to cartesian
+        float dx = saturationRadius * std::sin(angleRadians);
+        float dy = -saturationRadius * std::cos(angleRadians);   // Negative because FLTK y increases downward
 
-        // Scale based on saturation
-        float s = hsv.g * 0.375f;
-        m.scale(V3f(s, s, 1));
+        int posX = centerX + static_cast<int>(dx);
+        int posY = centerY + static_cast<int>(dy);
 
-        V3f pos(0, p.diameter, 0);
+        const uint8_t r = static_cast<uint8_t>(color.r * 255.0f);
+        const uint8_t g = static_cast<uint8_t>(color.g * 255.0f);
+        const uint8_t b = static_cast<uint8_t>(color.b * 255.0f);
 
-        pos = pos * m;
-
-        const uint8_t r = color.r * 255.F;
-        const uint8_t g = color.g * 255.F;
-        const uint8_t b = color.b * 255.F;
         int pixel_size = p.diameter / 270;
+        i
         if (pixel_size <= 1)
         {
-            fl_rectf(pos.x, pos.y, 1, 1, r, g, b);
+            fl_rectf(posX, posY, 1, 1, r, g, b);
         }
         else
         {
-            fl_rectf(pos.x - pixel_size / 2, pos.y - pixel_size / 2,
+            fl_rectf(posX - pixel_size / 2, posY - pixel_size / 2,
                      pixel_size, pixel_size, r, g, b);
         }
     }
@@ -207,96 +209,60 @@ namespace mrv
     {
         TLRENDER_P();
 
+        int cx = x() + p.diameter / 2;
+        int cy = y() + p.diameter / 2;
+        int radius = p.diameter / 2;
+
+        // Outer circle (white)
         fl_color(255, 255, 255);
         fl_arc(x(), y(), p.diameter, p.diameter, 0, 360);
 
-        fl_line_style(0);
+        // Center cross (subtle)
+        fl_color(200, 200, 200);
+        fl_line(cx - radius, cy, cx + radius, cy);
+        fl_line(cx, cy - radius, cx, cy + radius);
 
-        int R = p.diameter / 2;
-        int W = R;
-        int H = R;
+        // Radial lines to the six color targets (every 60°)
+        fl_color(255, 255, 255);
+        fl_line_style(FL_SOLID, 1);
 
-        float angle = 35;
-        // Draw diagonal center lines
-        for (int i = 0; i < 8; ++i, angle += 90)
+        for (int i = 0; i < 6; ++i)
         {
-            fl_push_matrix();
-            fl_translate(x() + W, y() + H);
-            fl_rotate(angle);
-            fl_begin_line();
-            fl_vertex(0, 4);
-            fl_vertex(0, R);
-            fl_end_line();
-            fl_pop_matrix();
+            float angle = math::deg2rad(103.5f - i * 60.0f);   // Same offset as plotting
+            int x1 = cx + static_cast<int>(std::sin(angle) * (radius * 0.05f));
+            int y1 = cy - static_cast<int>(std::cos(angle) * (radius * 0.05f));
+            int x2 = cx + static_cast<int>(std::sin(angle) * (radius * 0.92f));
+            int y2 = cy - static_cast<int>(std::cos(angle) * (radius * 0.92f));
+
+            fl_line(x1, y1, x2, y2);
         }
 
-        // Draw cross
-        fl_push_matrix();
-        fl_translate(x(), y());
-        fl_begin_line();
-        fl_vertex(W, 0);
-        fl_vertex(W, p.diameter);
-        fl_end_line();
-        fl_begin_line();
-        fl_vertex(0, H);
-        fl_vertex(p.diameter, H);
-        fl_end_line();
-        fl_pop_matrix();
+        // Small boxes at color target positions (approximating 75-100% targets)
+        int boxSize = std::max(4, p.diameter / 60);
+        fl_color(255, 255, 100);   // yellowish for visibility
 
-        int RW = int(p.diameter * 0.05f);
-        int RH = RW;
+        static const char* names[] = { "R", "M", "B", "C", "G", "Y" };
 
-        fl_push_matrix();
-        fl_translate(x() + W, y() + H);
-
-        static const char* names[] = {
-            "B", // B
-            "Y", // C
-            "C", // Y
-            "R", // R
-            "G", // G
-            "M"  // M
-        };
-
-        int B = int(W * 0.75);
-
-        int CX = x() + W;
-        int CY = y() + H;
-
-        const int coords[][2] = {
-            {CX, CY + B},               // B
-            {CX - 10, CY - B},          // Y
-            {CX + B, CY + 10},          // C
-            {CX - B, CY - 40},          // R
-            {CX + B - 20, CY - B + 20}, // G
-            {CX - B + 10, CY + B - 10}, // M
-        };
-
-        // Draw rectangles with letters near them
-        angle = 15;
-        for (int i = 0; i < 6; ++i, angle += 60)
+        for (int i = 0; i < 6; ++i)
         {
-            fl_push_matrix();
-            fl_rotate(angle);
-            fl_translate(0, B);
+            float angle = math::deg2rad(103.5f - i * 60.0f);
+            int tx = cx + static_cast<int>(std::sin(angle) * (radius * 0.85f));
+            int ty = cy - static_cast<int>(std::cos(angle) * (radius * 0.85f));
 
-            fl_color(255, 255, 255);
-            fl_begin_line();
-            fl_vertex(-RW, -RH);
-            fl_vertex(RW, -RH);
-            fl_vertex(RW, RH);
-            fl_vertex(-RW, RH);
-            fl_vertex(-RW, -RH);
-            fl_end_line();
-            fl_pop_matrix();
+            // Small target box
+            fl_rect(tx - boxSize/2, ty - boxSize/2, boxSize, boxSize);
+
+            // Labels - positioned a bit outside the circle
+            int labelOffset = radius * 0.95f;
+            int lx = cx + static_cast<int>(std::sin(angle) * labelOffset);
+            int ly = cy - static_cast<int>(std::cos(angle) * labelOffset) + 5;  // slight vertical tweak
 
             fl_font(FL_HELVETICA, 12);
             fl_color(255, 255, 0);
-
-            fl_draw(names[i], coords[i][0], coords[i][1]);
+            fl_draw(names[i], lx - 6, ly);   // centered roughly
         }
 
-        fl_pop_matrix();
+        fl_line_style(0);  // reset
     }
 
 } // namespace mrv
