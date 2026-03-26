@@ -1296,6 +1296,12 @@ namespace mrv
     {
         TLRENDER_P();
         
+        VkCommandBuffer cmd = getCurrentCommandBuffer();
+        
+        // Clear the frame
+        begin_render_pass(cmd);
+        end_render_pass(cmd);
+        
         // Check if the window changed screen.
         bool changed_screen = false;
         if (p.screen_index != this->screen_num())
@@ -1321,12 +1327,6 @@ namespace mrv
                 return;
             }
         }
-
-        VkCommandBuffer cmd = getCurrentCommandBuffer();
-        
-        // Clear the frame
-        begin_render_pass(cmd);
-        end_render_pass(cmd);
 
         {
             std::unique_lock<std::mutex> lock(p.videoMutex.mutex);

@@ -49,9 +49,9 @@ Change Log
 
 - UI improvement: Improved readability of the Media Information Panel.
 - UI improvement: When using the free version of mrv2/vmrv2, the menu functions supported only on unlocked versions are shown as ghosted instead of just missing.  That way users can tell what vmrv2 / mrv2 **FULLY** supports.
-- UI improvement: The Files panel allows changing the sort order of the elements (Loadded, File Name, Directory and User name).  Just use the RMB on a clip and select Order/File Name.
+- UI improvement: The Files panel allows changing the sort order of the elements (Loaded, File Name, Directory and User name).  Just use the RMB on a clip and select Order/File sName.
 - Added support for sequences with a suffix like render_0001_suffix.exr in file requester, drag and drop and command-line.
-- Majot refactoring of code.
+- Major refactoring of code.
 - Fixed a Vulkan hang (VK_ERROR_DEVICE_LOST) when creating thumbnails in the Edit timeline window.  It would happen with .otio timelines.
 - Fixed a hang and crash on program exit after editing a clip with the Trim tool.
 - Added File->Open->URL Movie to open a movie with an URL to allow direct streaming of movies into vmrv2 from an https:// or http:// site.  By default, a sample link is provided for evaluation.

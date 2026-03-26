@@ -105,6 +105,26 @@ namespace mrv
                 subpass.pPreserveAttachments = NULL;
             }
 
+            VkSubpassDependency dependencies[2] = {};
+
+            // External -> subpass: wait for color attachment output before writing
+            dependencies[0].srcSubpass    = VK_SUBPASS_EXTERNAL;
+            dependencies[0].dstSubpass    = 0;
+            dependencies[0].srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            dependencies[0].dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            dependencies[0].srcAccessMask = 0;
+            dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            dependencies[0].dependencyFlags = 0;
+
+            // Subpass -> external: ensure writes are done before presentation reads
+            dependencies[1].srcSubpass    = 0;
+            dependencies[1].dstSubpass    = VK_SUBPASS_EXTERNAL;
+            dependencies[1].srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            dependencies[1].dstStageMask  = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+            dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            dependencies[1].dstAccessMask = 0;
+            dependencies[1].dependencyFlags = 0;
+
             VkRenderPassCreateInfo rp_info = {};
             rp_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             rp_info.pNext = NULL;
@@ -112,8 +132,8 @@ namespace mrv
             rp_info.pAttachments = attachments;
             rp_info.subpassCount = 1;
             rp_info.pSubpasses = &subpass;
-            rp_info.dependencyCount = 0;
-            rp_info.pDependencies = NULL;
+            rp_info.dependencyCount = 2;
+            rp_info.pDependencies = dependencies;
                     
             VkResult result;
             result = vkCreateRenderPass(device(), &rp_info, NULL, &m_renderPass);

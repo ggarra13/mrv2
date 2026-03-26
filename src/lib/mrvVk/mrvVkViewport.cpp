@@ -690,6 +690,13 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
             
+            // Get the command buffer started for the current frame.
+            VkCommandBuffer cmd = getCurrentCommandBuffer();
+
+            // Clear the frame
+            begin_render_pass(cmd);
+            end_render_pass(cmd);
+            
             // Check if the window changed screen.
             bool changed_screen = false;
             if (p.screen_index != this->screen_num())
@@ -740,13 +747,6 @@ namespace mrv
             }
 
             // _diagnoseColorSpaceState();
-
-            // Get the command buffer started for the current frame.
-            VkCommandBuffer cmd = getCurrentCommandBuffer();
-
-            // Clear the frame
-            begin_render_pass(cmd);
-            end_render_pass(cmd);
 
             // Store command for easy access.
             vk.cmd = cmd;
