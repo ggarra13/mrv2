@@ -234,7 +234,7 @@ namespace mrv
         }
 
         // Small boxes at color target positions (approximating 75-100% targets)
-        int boxSize = std::max(4, p.diameter / 60);
+        int boxSize = std::max(16, p.diameter / 60);
         fl_color(255, 255, 100);   // yellowish for visibility
 
         static const char* names[] = { "R", "M", "B", "C", "G", "Y" };
