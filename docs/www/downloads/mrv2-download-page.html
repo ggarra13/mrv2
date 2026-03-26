@@ -200,16 +200,16 @@
     if (backend === "mrv2") {
 	descBox.innerHTML = "<strong>mrv2 (OpenGL):</strong> Robust, reliable and widely compatible.  OpenUSD support.";
 	if (/Windows/.test(platform)) {
-	    bestFor.innerHTML = "Best for Windows 10 and Windows 11";
+	    bestFor.innerHTML = "Best for Windows 10 and Windows 11.";
 	}
 	else if (/Linux/.test(platform)) {
-	    bestFor.innerHTML = "Compatible with GNOME 46+ / Kwin 5+";
+	    bestFor.innerHTML = "Compatible with GNOME 46+ / Kwin 5+.";
 	}
 	else if (/Darwin-amd64/.test(platform)) {
-	    bestFor.innerHTML = "Best for macBook Pro Intel";
+	    bestFor.innerHTML = "Best for macBook Pro Intel.";
 	}
 	else if (/Darwin-arm64/.test(platform)) {
-	    bestFor.innerHTML = "Best for macBook M1+";
+	    bestFor.innerHTML = "Best for macBook M1+.";
 	}
     } else {
       descBox.innerHTML = "<strong>vmrv2 (Vulkan):</strong> Cutting-edge performance with support for Dynamic HDR.";
@@ -220,10 +220,10 @@
 	    bestFor.innerHTML = "HDR needs GNOME 49+ / Kwin 6.5+ with latest card drivers.";
 	}
 	else if (/Darwin-amd64/.test(platform)) {
-	    bestFor.innerHTML = "Best for macBook Pro Intel 2022 (not recommended)";
+	    bestFor.innerHTML = "Best for macBook Pro Intel 2022.";
 	}
 	else if (/Darwin-arm64/.test(platform)) {
-	    bestFor.innerHTML = "M1+ Compatible (40 FPS at 4K).  Best for macOS M3+ (60 FPS at 4K)";
+	    bestFor.innerHTML = "M1+ Compatible (40 FPS at 4K).  Best for macOS M3+ (60 FPS at 4K).";
 	}
     }
 
