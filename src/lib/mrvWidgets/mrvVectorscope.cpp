@@ -117,13 +117,6 @@ namespace mrv
 
         using namespace Imath;
 
-        if (color.r < 0)
-            color.r = 0;
-        if (color.g < 0)
-            color.g = 0;
-        if (color.b < 0)
-            color.b = 0;
-
         image::Color4f hsv = color::rgb::to_hsv(color);
 
         int centerX = x() + p.diameter / 2;
