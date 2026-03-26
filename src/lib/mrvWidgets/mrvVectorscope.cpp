@@ -132,7 +132,8 @@ namespace mrv
         // Standard vectorscope hue: 0° = Red at ~11 o'clock (counter-clockwise)
         // Many scopes use ~103.7°-120° for red depending on YIQ/YPbPr reference.
         // This value (103.5°) puts pure red near the top-leftish (standard "top" position).
-        constexpr float kRedOffsetDegrees = 103.5f;   // Adjust slightly if you prefer exact 11 o'clock
+        //constexpr float kRedOffsetDegrees = 103.5f;   // Adjust slightly if you prefer exact 11 o'clock
+        constexpr float kRedOffsetDegrees = -16.5f;   // Adjust slightly if you prefer exact 11 o'clock
         constexpr float kFullTurn = 360.0f;
 
         float hueDegrees = hsv.r * kFullTurn;                     // 0..360
@@ -141,7 +142,7 @@ namespace mrv
 
         // Saturation scaling - tuned so vivid colors reach near the edge
         // 0.42f works well for most content (you can expose as a preference later)
-        float saturationRadius = hsv.g * 0.42f * (p.diameter / 2.0f);
+        float saturationRadius = hsv.g * 0.85f * (p.diameter / 2.0f);
 
         // Polar to cartesian
         float dx = saturationRadius * std::sin(angleRadians);
@@ -234,10 +235,10 @@ namespace mrv
         }
 
         // Small boxes at color target positions (approximating 75-100% targets)
-        int boxSize = std::max(12, p.diameter / 60);
+        int boxSize = std::max(12, p.diameter / 30);
         fl_color(255, 255, 100);   // yellowish for visibility
 
-        static const char* names[] = { "R", "M", "B", "C", "G", "Y" };
+        static const char* names[] = { "B", "M", "R", "Y", "G", "C" };
 
         for (int i = 0; i < 6; ++i)
         {
