@@ -158,7 +158,6 @@ namespace mrv
         const uint8_t b = static_cast<uint8_t>(color.b * 255.0f);
 
         int pixel_size = p.diameter / 270;
-        i
         if (pixel_size <= 1)
         {
             fl_rectf(posX, posY, 1, 1, r, g, b);
