@@ -14,9 +14,6 @@
 #include <tlCore/Image.h>
 #include <tlCore/Math.h>
 
-#include <Imath/ImathMatrix.h>
-#include <Imath/ImathVec.h>
-
 #include <FL/Enumerations.H>
 #include <FL/fl_draw.H>
 
