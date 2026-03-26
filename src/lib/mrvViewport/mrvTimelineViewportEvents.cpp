@@ -1737,6 +1737,9 @@ namespace mrv
                 }
                 else if (kScrubMode.match(rawkey))
                 {
+                    // Sect actionMode to selection to make sure it is
+                    // cleared in case it was active.
+                    p.actionMode = ActionMode::kSelection;
                     setActionMode(ActionMode::kScrub);
                     return 1;
                 }
