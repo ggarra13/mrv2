@@ -65,7 +65,7 @@ Change Log
 - Fixed vectorscope on Vulkan and OpenGL as the values were not right.
 - Updated to FFmpeg 8.1.
 - Updated to NASM 3.02rc3.
-
+- v1.6.0 re-release: fix to disappearing HUD after doing a SHIFT + Area selection.
 
 
 v1.5.9
