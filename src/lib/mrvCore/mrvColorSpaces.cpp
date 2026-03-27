@@ -72,7 +72,7 @@ namespace
      * @param rgb         original RGB pixel values
      * @param maxV        The max value of r, g, and b in rgb pixel
      * @param spanV       The (max-min) value between r,g,b channels in rgb
-     * pixel
+     *                     pixel
      *
      * @return a float representing the pixel hue [0..1]
      */
@@ -403,23 +403,28 @@ namespace mrv
             }
 
             //! ITU. 601 or CCIR 601  (Digital PAL and NTSC )
+            //! ITU. 601 (Full Range / YPbPr)
             Color4f to_ITU601(const Color4f& rgb) noexcept
             {
+                // Luma (Y) coefficients for BT.601
+                float y = rgb.r * 0.299f + rgb.g * 0.587f + rgb.b * 0.114f;
+    
                 return Color4f(
-                    16.f + rgb.r * 65.481f + rgb.g * 128.553f + rgb.b * 24.966f,
-                    128.f - rgb.r * 37.797f - rgb.g * 74.203f + rgb.b * 112.0f,
-                    128.f + rgb.r * 112.0f - rgb.g * 93.786f - rgb.b * 18.214f);
+                    y,
+                    (rgb.b - y) * 0.5643f, // Pb: Scales (B-Y) to [-0.5, 0.5]
+                    (rgb.r - y) * 0.7132f  // Pr: Scales (R-Y) to [-0.5, 0.5]
+                    );
             }
-
+            
             //! ITU. 709  (Digital HDTV )
-            Color4f to_ITU709(const Color4f& rgb) noexcept
-            {
+            Color4f to_ITU709(const Color4f& rgb) noexcept {
+                float y = rgb.r * 0.2126f + rgb.g * 0.7152f + rgb.b * 0.0722f;
                 return Color4f(
-                    rgb.r * 0.299f + rgb.g * 0.587f + rgb.b * 0.114f,
-                    -rgb.r * 0.299f - rgb.g * 0.587f + rgb.b * 0.886f,
-                    rgb.r * 0.701f - rgb.g * 0.587f - rgb.b * 0.114f);
+                    y,
+                    (rgb.b - y) / 1.8556f, // Pb
+                    (rgb.r - y) / 1.5748f  // Pr
+                    );
             }
-
         } // namespace rgb
 
         namespace yuv

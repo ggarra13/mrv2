@@ -18,6 +18,8 @@ namespace mrv
 {
     using namespace tl;
 
+    enum class VectorscopeMethod { HSV, ITU601, ITU709 };
+
     class Vectorscope : public Fl_Group
     {
     public:
@@ -33,6 +35,9 @@ namespace mrv
         void main(ViewerUI* m);
         ViewerUI* main();
 
+        void              setMethod(VectorscopeMethod m);
+        VectorscopeMethod method() const;
+        
     protected:
         void draw_grid() noexcept;
         void draw_pixel(image::Color4f& rgb) const noexcept;
