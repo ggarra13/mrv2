@@ -152,7 +152,11 @@ namespace mrv
 
         draw_grid();
         if (p.image)
+        {
+            fl_push_clip(x(), y(), w(), h());
             draw_pixels();
+            fl_pop_clip();
+        }
     }
 
     // ─────────────────────────────────────────────────────────────────────────
