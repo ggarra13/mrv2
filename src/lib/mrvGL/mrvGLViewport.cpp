@@ -1150,7 +1150,7 @@ namespace mrv
             if (p.ui->uiPixelWindow->uiPixelValue->value() !=
                 PixelValue::kOriginal)
             {
-                // For faster access, we muse use BGRA.
+                // For faster access, we use use BGRA.
                 constexpr GLenum format = GL_BGRA;
                 constexpr GLenum type = GL_FLOAT;
 

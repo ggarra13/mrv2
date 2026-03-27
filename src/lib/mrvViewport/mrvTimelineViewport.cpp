@@ -3419,8 +3419,12 @@ namespace mrv
         {
             TLRENDER_P();
 
-            const math::Size2i& renderSize = getRenderSize();
-            unsigned dataSize = renderSize.w * renderSize.h * 4 * sizeof(float);
+            const math::Box2i box = p.colorAreaInfo.box;
+
+            const uint32_t W = box.w();
+            const uint32_t H = box.h();
+                
+            unsigned dataSize = W * H * 4 * sizeof(float);
 
             if (dataSize != p.rawImageSize || !p.image)
             {
@@ -3440,15 +3444,19 @@ namespace mrv
             if (!p.image)
                 return;
 
-            const math::Size2i& renderSize = getRenderSize();
-            unsigned maxY = renderSize.h;
-            unsigned maxX = renderSize.w;
-            for (int Y = 0; Y < maxY; ++Y)
+            const math::Box2i box = p.colorAreaInfo.box;
+
+            const uint32_t x = box.x();
+            const uint32_t y = box.y();
+            const uint32_t w = box.w();
+            const uint32_t h = box.h();
+            
+            for (int Y = y; Y < h; ++Y)
             {
-                for (int X = 0; X < maxX; ++X)
+                for (int X = x; X < w; ++X)
                 {
                     float* data = reinterpret_cast<float*>(p.image);
-                    image::Color4f& rgba = (image::Color4f&)data[(X + maxX * Y) * 4];
+                    image::Color4f& rgba = (image::Color4f&)data[(X + w * Y) * 4];
                     rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
 
                     math::Vector2i pos(X, Y);
