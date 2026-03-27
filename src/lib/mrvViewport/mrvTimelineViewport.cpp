@@ -3451,15 +3451,15 @@ namespace mrv
             const uint32_t w = box.w();
             const uint32_t h = box.h();
             
-            for (int Y = y; Y < h; ++Y)
+            for (int Y = 0; Y < h; ++Y)
             {
-                for (int X = x; X < w; ++X)
+                for (int X = 0; X < w; ++X)
                 {
                     float* data = reinterpret_cast<float*>(p.image);
                     image::Color4f& rgba = (image::Color4f&)data[(X + w * Y) * 4];
                     rgba.r = rgba.g = rgba.b = rgba.a = 0.f;
 
-                    math::Vector2i pos(X, Y);
+                    math::Vector2i pos(X + x, Y + y);
                     for (const auto& video : p.videoData)
                     {
                         for (const auto& layer : video.layers)
@@ -3491,9 +3491,9 @@ namespace mrv
                             rgba.b += pixel.b;
                             rgba.a += pixel.a;
                         }
-                        float tmp = rgba.r;
-                        rgba.r = rgba.b;
-                        rgba.b = tmp;
+#ifdef OPENGL_BACKEND
+                        std::swap(rgba.r, rgba.b);
+#endif
                     }
                 }
             }

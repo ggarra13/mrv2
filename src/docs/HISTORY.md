@@ -62,6 +62,7 @@ Change Log
 - Fixed color::rgb::to_ITU601 conversion to be done in float.
 - Fixed coefficients of color::rgb::to_ITU709.
 - Fixed mrvColor's L_F32, LA_F32 and L_U8 conversions.
+- Fixed vectorscope on Vulkan and OpenGL as the values were not right.
 - Updated to FFmpeg 8.1.
 - Updated to NASM 3.02rc3.
 

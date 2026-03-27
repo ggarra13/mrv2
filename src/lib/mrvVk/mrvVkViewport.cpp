@@ -1415,8 +1415,15 @@ namespace mrv
                 p.colorAreaInfo.box = selection;
 
                 // Copy the pixel type
-                const vlk::OffscreenBufferOptions& options = vk.buffer->getOptions();
-                p.colorAreaInfo.pixelType = options.colorType;
+                if (p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kOriginal)
+                {
+                    const vlk::OffscreenBufferOptions& options = vk.buffer->getOptions();
+                    p.colorAreaInfo.pixelType = options.colorType;
+                }
+                else
+                {
+                    p.colorAreaInfo.pixelType = image::PixelType::RGBA_F32;
+                }
             }
             
                     
@@ -1789,10 +1796,13 @@ namespace mrv
         void Viewport::_unmapBuffer()
         {
             TLRENDER_P();
-            if (!p.rawImage)
+            if (p.image)
             {
-                p.image = nullptr;
-                p.rawImage = true;
+                if (!p.rawImage)
+                {
+                    p.image = nullptr;
+                    p.rawImage = true;
+                }
             }
         }
 
