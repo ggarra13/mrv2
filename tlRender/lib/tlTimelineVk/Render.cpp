@@ -901,20 +901,6 @@ namespace tl
             }
         }
 
-        void Render::wait_queue()
-        {
-            VkQueue queue = ctx.queue();
-            
-            std::lock_guard<std::mutex> lock(ctx.queue_mutex());
-            vkQueueWaitIdle(queue);
-        }
-
-        void Render::wait_device()
-        {
-            VkDevice device = ctx.device;
-            vkDeviceWaitIdle(device);
-        }
-        
         Render::~Render()
         {
             TLRENDER_P();
@@ -1554,11 +1540,6 @@ namespace tl
             _p->viewport = value;
         }
         
-        void Render::createBindingSet(const std::string& shaderName)
-        {
-            _createBindingSet(_p->shaders[shaderName]);
-        }
-
         void Render::beginLoadRenderPass()
         {
             TLRENDER_P();

@@ -90,9 +90,9 @@ namespace mrv
             {
                 VkRenderPass oldRenderPass = render->getRenderPass();
                 render->setRenderPass(getRenderPass());
-                render->drawMesh(pipelineName, shaderName, "mesh",
-                                 mesh, math::Vector2i(0, 0),
-                                 color);
+                render->drawMeshViewport(pipelineName, shaderName, "mesh",
+                                         mesh, math::Vector2i(0, 0),
+                                         color);
                 render->setRenderPass(oldRenderPass);
             }
         }
@@ -196,9 +196,9 @@ namespace mrv
             const image::Color4f& color, const unsigned sides)
         {
             auto mesh = geom::circleFilled(center, radius, sides);
-            render->drawMesh("viewport", "mesh", "mesh",
-                             mesh, math::Vector2i(0, 0),
-                             color);
+            render->drawMeshViewport("viewport", "mesh", "mesh",
+                                     mesh, math::Vector2i(0, 0),
+                                     color);
         }
         
         void Lines::drawCircle(

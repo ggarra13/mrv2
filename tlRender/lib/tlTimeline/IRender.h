@@ -150,11 +150,10 @@ namespace tl
                 const CompareOptions& = CompareOptions(),
                 const BackgroundOptions& = BackgroundOptions()) = 0;
 
-            virtual void createBindingSet(const std::string&) {};
-            virtual void beginRenderPass() {};
-            virtual void beginLoadRenderPass() {};
-            virtual void endRenderPass() {};
-            virtual void setupViewportAndScissor() {};
+            virtual void beginRenderPass() = 0;
+            virtual void beginLoadRenderPass() = 0;
+            virtual void endRenderPass() = 0;
+            virtual void setupViewportAndScissor() = 0;
             
         protected:
             std::weak_ptr<system::Context> _context;

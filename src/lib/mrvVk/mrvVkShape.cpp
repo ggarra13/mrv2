@@ -195,7 +195,7 @@ namespace mrv
         {
             math::Box2i box(
                 pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
-            render->drawRect("annotation", box, color, true, "erase");
+            render->drawRectViewport("annotation", box, color, true, "erase");
 
             if (drawing)
             {
@@ -284,8 +284,8 @@ namespace mrv
         mesh.triangles = triangles;
         
         math::Vector2i pos;
-        render->drawMesh("annotation", "rect", "rect", "mesh", mesh, pos, color,
-                         enableBlending);
+        render->drawMesh("annotation", "rect", "rect", "mesh", mesh,
+                         pos, color, enableBlending);
     }
 
     void VKFilledCircleShape::draw(

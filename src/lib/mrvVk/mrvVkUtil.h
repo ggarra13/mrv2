@@ -64,8 +64,8 @@ namespace mrv
             {
                 VkRenderPass oldRenderPass = render->getRenderPass();
                 render->setRenderPass(renderPass);
-                render->drawMesh(pipelineName, "mesh", "mesh", 
-                                 mesh, pos, color, false);
+                render->drawMeshViewport(pipelineName, "mesh", "mesh", 
+                                         mesh, pos, color, false);
                 render->setRenderPass(oldRenderPass);
             }
             else
