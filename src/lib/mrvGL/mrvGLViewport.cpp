@@ -22,6 +22,7 @@
 #include "mrViewer.h"
 #include "mrvHotkeyUI.h"
 
+#include "mrvCore/mrvColor.h"
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvLocale.h"
 #include "mrvCore/mrvSequence.h"
@@ -755,6 +756,9 @@ namespace mrv
             
                     // Copy it again in case it changed
                     p.colorAreaInfo.box = selection;
+                    
+                    // Hard-code the pixel type as that's what OpenGL will read
+                    p.colorAreaInfo.pixelType = image::PixelType::RGBA_F32;
 
                     if (panel::colorAreaPanel || panel::histogramPanel ||
                         panel::vectorscopePanel)
@@ -1021,52 +1025,53 @@ namespace mrv
             BrightnessType brightness_type = (BrightnessType)c->uiLType->value();
             int hsv_colorspace = c->uiBColorType->value() + 1;
 
-            const int maxX = info.box.max.x;
-            const int maxY = info.box.max.y;
             const auto& renderSize = gl.buffer->getSize();
             
             const uint32_t W = info.box.w();
             const uint32_t H = info.box.h();
+            
+            const uint8_t* ptr = reinterpret_cast<const uint8_t*>(p.image);
+            
+            const int channelCount = image::getChannelCount(info.pixelType);
+            const int byteCount = image::getBitDepth(info.pixelType) / 8;  
+
             const size_t dataSize = W * H;
             
             image::Color4f rgba, hsv;
 
-            for (int Y = info.box.y(); Y <= maxY; ++Y)
+            for (size_t i = 0; i < dataSize; ++i)
             {
-                for (int X = info.box.x(); X <= maxX; ++X)
-                {
-                    rgba.b = p.image[(X + Y * renderSize.w) * 4];
-                    rgba.g = p.image[(X + Y * renderSize.w) * 4 + 1];
-                    rgba.r = p.image[(X + Y * renderSize.w) * 4 + 2];
-                    rgba.a = p.image[(X + Y * renderSize.w) * 4 + 3];
+                rgba = color::fromVoidPtr(ptr, info.pixelType);
+                std::swap(rgba.r, rgba.b);
 
-                    info.rgba.mean.r += rgba.r;
-                    info.rgba.mean.g += rgba.g;
-                    info.rgba.mean.b += rgba.b;
-                    info.rgba.mean.a += rgba.a;
+                info.rgba.mean.r += rgba.r;
+                info.rgba.mean.g += rgba.g;
+                info.rgba.mean.b += rgba.b;
+                info.rgba.mean.a += rgba.a;
 
-                    if (rgba.r < info.rgba.min.r)
-                        info.rgba.min.r = rgba.r;
-                    if (rgba.g < info.rgba.min.g)
-                        info.rgba.min.g = rgba.g;
-                    if (rgba.b < info.rgba.min.b)
-                        info.rgba.min.b = rgba.b;
-                    if (rgba.a < info.rgba.min.a)
-                        info.rgba.min.a = rgba.a;
+                if (rgba.r < info.rgba.min.r)
+                    info.rgba.min.r = rgba.r;
+                if (rgba.g < info.rgba.min.g)
+                    info.rgba.min.g = rgba.g;
+                if (rgba.b < info.rgba.min.b)
+                    info.rgba.min.b = rgba.b;
+                if (rgba.a < info.rgba.min.a)
+                    info.rgba.min.a = rgba.a;
 
-                    if (rgba.r > info.rgba.max.r)
-                        info.rgba.max.r = rgba.r;
-                    if (rgba.g > info.rgba.max.g)
-                        info.rgba.max.g = rgba.g;
-                    if (rgba.b > info.rgba.max.b)
-                        info.rgba.max.b = rgba.b;
-                    if (rgba.a > info.rgba.max.a)
-                        info.rgba.max.a = rgba.a;
+                if (rgba.r > info.rgba.max.r)
+                    info.rgba.max.r = rgba.r;
+                if (rgba.g > info.rgba.max.g)
+                    info.rgba.max.g = rgba.g;
+                if (rgba.b > info.rgba.max.b)
+                    info.rgba.max.b = rgba.b;
+                if (rgba.a > info.rgba.max.a)
+                    info.rgba.max.a = rgba.a;
 
-                    hsv = rgba_to_hsv(hsv_colorspace, rgba);
-                    hsv.a = calculate_brightness(rgba, brightness_type);
-                    hsv_to_info(hsv, info);
-                }
+                hsv = rgba_to_hsv(hsv_colorspace, rgba);
+                hsv.a = calculate_brightness(rgba, brightness_type);
+                hsv_to_info(hsv, info);
+                
+                ptr += channelCount * byteCount;
             }
 
             int num = info.box.w() * info.box.h();

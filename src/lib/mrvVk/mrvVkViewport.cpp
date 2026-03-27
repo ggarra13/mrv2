@@ -1414,7 +1414,7 @@ namespace mrv
                 // Copy it again in case it changed
                 p.colorAreaInfo.box = selection;
 
-                // Copy the pixel type (needed for Vulkan)
+                // Copy the pixel type
                 const vlk::OffscreenBufferOptions& options = vk.buffer->getOptions();
                 p.colorAreaInfo.pixelType = options.colorType;
             }
