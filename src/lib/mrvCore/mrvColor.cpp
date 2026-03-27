@@ -87,18 +87,16 @@ namespace mrv
             case image::PixelType::L_F32:
             {
                 const float* pixels = reinterpret_cast<const float*>(ptr);
-                out.r = static_cast<float>(pixels[0]) / 65535.F;
-                out.g = static_cast<float>(pixels[0]) / 65535.F;
-                out.b = static_cast<float>(pixels[0]) / 65535.F;
+                out.r = out.g = out.b = static_cast<float>(pixels[0]);
                 break;
             }
             case image::PixelType::LA_F32:
             {
                 const float* pixels = reinterpret_cast<const float*>(ptr);
-                out.r = static_cast<float>(pixels[0]) / 65535.F;
-                out.g = static_cast<float>(pixels[0]) / 65535.F;
-                out.b = static_cast<float>(pixels[0]) / 65535.F;
-                out.a = static_cast<float>(pixels[1]) / 65535.F;
+                out.r = static_cast<float>(pixels[0]);
+                out.g = static_cast<float>(pixels[0]);
+                out.b = static_cast<float>(pixels[0]);
+                out.a = static_cast<float>(pixels[1]);
                 break;
             }
             case image::PixelType::L_F16:
@@ -120,7 +118,7 @@ namespace mrv
             }
             case image::PixelType::L_U8:
             {
-                const uint16_t* pixels = reinterpret_cast<const uint16_t*>(ptr);
+                const uint8_t* pixels = reinterpret_cast<const uint8_t*>(ptr);
                 out.r = static_cast<float>(pixels[0]) / 255.F;
                 out.g = static_cast<float>(pixels[0]) / 255.F;
                 out.b = static_cast<float>(pixels[0]) / 255.F;

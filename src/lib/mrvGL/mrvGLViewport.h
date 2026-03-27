@@ -106,7 +106,7 @@ namespace mrv
                 const math::Matrix4x4f& renderMVP,
                 const otime::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
-                const std::vector<std::shared_ptr<bool>& voannotations,
+                const std::vector<bool>& voannotations,
                 const math::Size2i& renderSize);
 #endif
             

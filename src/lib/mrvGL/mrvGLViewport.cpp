@@ -492,7 +492,7 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
             const auto& voannotations = player->getVoiceAnnotations();
 #else
-            const auto std::vector<bool> voannotations;
+            const std::vector<bool> voannotations;
 #endif
             
             MultilineInput* w = getMultilineInput();
@@ -1014,6 +1014,8 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_GL();
+            if (!p.image)
+                return;
 
             PixelToolBarClass* c = p.ui->uiPixelWindow;
             BrightnessType brightness_type = (BrightnessType)c->uiLType->value();
@@ -1140,9 +1142,9 @@ namespace mrv
             MRV2_GL();
             TLRENDER_P();
 
-            if (p.ui->uiPixelWindow->uiPixelValue->value() == PixelValue::kFull)
+            if (p.ui->uiPixelWindow->uiPixelValue->value() !=
+                PixelValue::kOriginal)
             {
-
                 // For faster access, we muse use BGRA.
                 constexpr GLenum format = GL_BGRA;
                 constexpr GLenum type = GL_FLOAT;
@@ -1153,7 +1155,6 @@ namespace mrv
                 gl::OffscreenBufferBinding binding(gl.buffer);
                 const auto& renderSize = gl.buffer->getSize();
 
-                // bool update = _shouldUpdatePixelBar();
                 bool stopped = _isPlaybackStopped();
                 bool single_frame = _isSingleFrame();
 
@@ -1166,18 +1167,21 @@ namespace mrv
                 // If we are a single frame, we do a normal ReadPixels of front
                 // buffer.
 
+                const math::Box2i box = p.colorAreaInfo.box;
+
+                const uint32_t X = box.min.x;
+                const uint32_t Y = box.min.y;
+                const uint32_t W = box.w();
+                const uint32_t H = box.h();
+
                 if (single_frame)
                 {
                     _unmapBuffer();
                     _mallocBuffer();
                     if (!p.image)
                         return;
-                    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                    CHECK_GL;
-                    glReadBuffer(GL_FRONT);
-                    CHECK_GL;
-                    glReadPixels(
-                        0, 0, renderSize.w, renderSize.h, format, type, p.image);
+                    glReadPixels(box.min.x, box.min.y, W, H, format, type,
+                                 p.image);
                     CHECK_GL;
                     return;
                 }
@@ -1190,7 +1194,8 @@ namespace mrv
                         GL_PIXEL_PACK_BUFFER, gl.pboIDs[gl.currentPBOIndex]);
                     CHECK_GL;
 
-                    glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
+                    glReadPixels(box.min.x, box.min.y, W, H, format, type, 0);
+                    // was: glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
                     CHECK_GL;
 
                     // map the PBO to process its data by CPU

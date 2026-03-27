@@ -527,6 +527,7 @@ namespace mrv
             }
         }
 
+#ifdef TLRENDER_FFMPEG
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
             const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
@@ -620,7 +621,78 @@ namespace mrv
 
             gl.render->end();
         }
+#else
+        void Viewport::_drawAnnotations(
+            const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
+            const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
+            const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
+            const std::vector<bool>& voannotations,
+            const math::Size2i& renderSize)
+        {
+            TLRENDER_P();
+            MRV2_GL();
 
+            gl::OffscreenBufferBinding binding(overlay);
+            CHECK_GL;
+
+            timeline::RenderOptions renderOptions;
+            renderOptions.colorBuffer = image::PixelType::RGBA_U8;
+
+            gl.render->begin(renderSize, renderOptions);
+            gl.render->setOCIOOptions(timeline::OCIOOptions());
+            gl.render->setLUTOptions(timeline::LUTOptions());
+
+            // Calculate resolution multiplier.
+            float resolutionMultiplier = renderSize.w * 6 / 4096.0 / p.viewZoom;
+            resolutionMultiplier = std::clamp(resolutionMultiplier, 1.F, 10.F);
+            
+            for (const auto& annotation : annotations)
+            {
+                const auto& annotationTime = annotation->time;
+                float alphamult = 0.F;
+                if (annotation->allFrames || time.floor() == annotationTime.floor())
+                    alphamult = 1.F;
+                else
+                {
+                    if (p.ghostPrevious)
+                    {
+                        for (short i = p.ghostPrevious - 1; i > 0; --i)
+                        {
+                            otime::RationalTime offset(i, time.rate());
+                            if ((time - offset).floor() == annotationTime.floor())
+                            {
+                                alphamult = 1.F - (float)i / p.ghostPrevious;
+                                break;
+                            }
+                        }
+                    }
+                    if (p.ghostNext)
+                    {
+                        for (short i = 1; i < p.ghostNext; ++i)
+                        {
+                            otime::RationalTime offset(i, time.rate());
+                            if ((time + offset).floor() == annotationTime.floor())
+                            {
+                                alphamult = 1.F - (float)i / p.ghostNext;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                const auto& shapes = annotation->shapes;
+                for (const auto& shape : shapes)
+                {
+                    if (alphamult <= 0.001F)
+                        continue;
+                    gl.render->setTransform(renderMVP);
+                    _drawShape(shape, alphamult, resolutionMultiplier);
+                }
+            }
+            
+            gl.render->end();
+        }
+#endif
         void Viewport::_compositeAnnotations(
             const math::Matrix4x4f& mvp, const math::Size2i& viewportSize)
         {

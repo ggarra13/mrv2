@@ -300,9 +300,19 @@ namespace mrv
         {
             for (uint32_t X = 0; X < W; X += stepX)
             {
+#ifdef VULKAN_BACKEND
                 const size_t offset =
                     (X + Y * W) * channelCount * byteCount;
                 rgba = color::fromVoidPtr(p.image + offset, p.pixelType);
+#endif
+
+#ifdef OPENGL_BACKEND
+                const size_t offset =
+                    (X + Y * W) * channelCount * sizeof(float);
+                const uint8_t* ptr = p.image + offset;
+                rgba = *(reinterpret_cast<const image::Color4f*>(ptr));
+                std::swap(rgba.r, rgba.b);  // BGRA -> RGBA
+#endif
                 draw_pixel(rgba);
             }
         }
