@@ -18,7 +18,7 @@ namespace mrv
 {
     using namespace tl;
 
-    enum class VectorscopeMethod { HSV, ITU601, ITU709 };
+    enum class VectorscopeMethod { ITU601, ITU709 };
 
     class Vectorscope : public Fl_Group
     {

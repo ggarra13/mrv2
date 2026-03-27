@@ -71,10 +71,9 @@ namespace mrv
             b = new Fl_Box(X, Y, 120, 20, _("Type"));
             auto cW = new Widget< Fl_Choice >(X + b->w(), Y, W - b->w(), 20);
             c = cW;
-            c->add("HSV");
             c->add("ITU601");
             c->add("ITU709");
-            c->value(2);
+            c->value(1);
             cW->callback(
                 [=](auto o)
                 {

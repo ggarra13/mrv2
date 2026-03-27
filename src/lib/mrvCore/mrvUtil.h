@@ -107,6 +107,7 @@ namespace mrv
         const auto& name = path.getBaseName();
         int64_t frame = time.to_frames();
         const auto& num = path.getNumber();
+        const auto& suffix = path.getSuffix();
         const auto& extension = path.getExtension();
         if (mrv::file::isMovie(extension))
             frame = atoi(num.c_str());
@@ -119,7 +120,7 @@ namespace mrv
             snprintf(buf, 256, "%0*" PRId64, padding, frame);
         }
 
-        return name + buf + extension;
+        return name + buf + suffix + extension;
     }
 
     //! Parse a directory and return all movies, sequences and audios found
