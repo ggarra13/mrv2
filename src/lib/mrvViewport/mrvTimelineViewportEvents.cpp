@@ -1365,15 +1365,19 @@ namespace mrv
                     p.rotDir.x = p.rotDir.y = 0;
 
                     if (p.lastEvent == FL_DRAG &&
-                        Fl::event_button() == FL_LEFT_MOUSE && !Fl::event_shift())
+                        Fl::event_button() == FL_LEFT_MOUSE)
                     {
                         p.lastEvent = 0;
-                        p.isScrubbing = false;
-                        if (!p.player)
-                            return 1;
-                        p.player->setPlayback(p.playbackMode);
-                        
-                        panel::redrawThumbnails();
+
+                        if (!Fl::event_shift())
+                        {
+                            p.isScrubbing = false;
+                            if (!p.player)
+                                return 1;
+                            p.player->setPlayback(p.playbackMode);
+                            
+                            panel::redrawThumbnails();
+                        }
                     }
                     else
                     {
