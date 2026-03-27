@@ -57,7 +57,11 @@ Change Log
 - Added File->Open->URL Movie to open a movie with an URL to allow direct streaming of movies into vmrv2 from an https:// or http:// site.  By default, a sample link is provided for evaluation.
 - Vectorscope no longer clamps values.
 - Fixed Vectorscope layout and improved its performance.
+- Added type to vectorscope to switch from ITU 709, ITU 601 and HSV.
 - Fixed getting out of temporary selection mode by using scrubbing when it was not visible.
+- Fixed color::rgb::to_ITU601 conversion to be done in float.
+- Fixed coefficients of color::rgb::to_ITU709.
+- Fixed mrvColor's L_F32, LA_F32 and L_U8 conversions.
 - Updated to FFmpeg 8.1.
 - Updated to NASM 3.02rc3.
 
