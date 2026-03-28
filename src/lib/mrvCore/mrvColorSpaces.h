@@ -146,6 +146,7 @@ namespace mrv
             image::Color4f to_YDbDr(const image::Color4f& rgb) noexcept;
             image::Color4f to_ITU601(const image::Color4f& rgb) noexcept;
             image::Color4f to_ITU709(const image::Color4f& rgb) noexcept;
+            image::Color4f to_Rec2020(const image::Color4f& rgb) noexcept;
         } // namespace rgb
 
         namespace yuv

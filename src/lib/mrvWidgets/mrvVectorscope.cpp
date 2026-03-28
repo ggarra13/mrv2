@@ -5,19 +5,17 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Changes vs. original
 // ─────────────────────────────────────────────────────────────────────────────
-// • Added VectorscopeMethod enum (HSV | ITU601 | ITU709) 
+// • Added VectorscopeMethod enum (ITU601 | ITU709 | Rec2020)
 // • Private now carries a `method` field (default: ITU709)
-// • setMethod() / method() accessors – declare in mrvVectorscope.h
+// • setMethod() / method() accessors – declared in mrvVectorscope.h
 // • draw_pixel() branches on the active method:
-//     ITU601 – ITU-R BT.601 luma + chroma; plots Cb on X, Cr on Y (broadcast
-//              standard vectorscope convention)
-//     ITU709 – ITU-R BT.709 luma + chroma; plots Cb on X, Cr on Y (broadcast
-//              standard vectorscope convention)
-// • draw_grid() draws method-appropriate target boxes:
-//     ITU601 – boxes should be placed at the *actual* BT.601 Cb/Cr coordinates of the
-//               six primary/secondary colours at 100 % saturation
-//     ITU709 – boxes should be placed at the *actual* BT.709 Cb/Cr coordinates of the
-//               six primary/secondary colours at 100 % saturation
+//     ITU601  – ITU-R BT.601  luma + chroma; plots Cb on X, Cr on Y
+//     ITU709  – ITU-R BT.709  luma + chroma; plots Cb on X, Cr on Y
+//     Rec2020 – ITU-R BT.2020 luma + chroma; plots Cb on X, Cr on Y
+//               HDR pixels (values > 1.0) are Reinhard-tone-mapped before
+//               their dot colour is drawn, preserving hue information.
+// • draw_grid() draws method-appropriate target boxes at the actual Cb/Cr
+//   coordinates of the six primary/secondary colours at 100 % saturation.
 // ─────────────────────────────────────────────────────────────────────────────
 
 #include "mrvWidgets/mrvVectorscope.h"
@@ -38,13 +36,46 @@
 namespace mrv
 {
     // ─────────────────────────────────────────────────────────────────────────
-    // Six colour targets (100 % saturation, BT.601).
-    // Cb/Cr are pre-normalised to [-1 … +1] (divided by 0.5 already).
+    // BT.2020 RGB → YCbCr conversion
+    //
+    // ITU-R BT.2020 primaries: Kr = 0.2627, Kg = 0.6780, Kb = 0.0593
+    //
+    //   Y  =  Kr·R + Kg·G + Kb·B
+    //   Cb = (B − Y) / (2·(1 − Kb))   range [−0.5, +0.5]
+    //   Cr = (R − Y) / (2·(1 − Kr))   range [−0.5, +0.5]
+    //
+    // Returns Color4f{Y, Cb, Cr, alpha}, matching the layout used by
+    // color::rgb::to_ITU709 / to_ITU601.
+    // ─────────────────────────────────────────────────────────────────────────
+    static image::Color4f rgb_to_Rec2020(const image::Color4f& c) noexcept
+    {
+        constexpr float Kr = 0.2627f;
+        constexpr float Kg = 0.6780f;
+        constexpr float Kb = 0.0593f;
+
+        const float Y  = Kr * c.r + Kg * c.g + Kb * c.b;
+        const float Cb = (c.b - Y) / (2.f * (1.f - Kb));  // ÷ 1.8814
+        const float Cr = (c.r - Y) / (2.f * (1.f - Kr));  // ÷ 1.4746
+
+        return image::Color4f{Y, Cb, Cr, c.a};
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Simple per-channel Reinhard tone-map: maps [0, ∞) → [0, 1).
+    // Applied to HDR dot colours so they stay vividly hued on screen.
+    // ─────────────────────────────────────────────────────────────────────────
+    static inline float reinhardTM(float v) noexcept
+    {
+        return v / (1.f + v);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Six colour targets (100 % saturation).
     // ─────────────────────────────────────────────────────────────────────────
     struct ColorTarget
     {
         const char* name;
-        float       r, g, b;       // source colour
+        float       r, g, b;
         uint8_t     labelR, labelG, labelB;
     };
 
@@ -56,24 +87,47 @@ namespace mrv
         { "B",  0.f, 0.f, 1.f,  80,  80,  255 },
         { "M",  1.f, 0.f, 1.f,  255, 80,  255 },
     };
-    // Compute the max chroma vector length across all 6 targets
-    // for the active method, so the outermost colour (G/M in BT.709)
-    // always lands at exactly kScale * R regardless of standard.
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Dispatch helper: convert an RGB colour to YCbCr using the active method.
+    // ─────────────────────────────────────────────────────────────────────────
+    static image::Color4f toYCbCr(const image::Color4f& src,
+                                  VectorscopeMethod     method) noexcept
+    {
+        switch (method)
+        {
+        case VectorscopeMethod::ITU709:
+            return color::rgb::to_ITU709(src);
+        case VectorscopeMethod::Rec2020:
+            return rgb_to_Rec2020(src);
+        case VectorscopeMethod::ITU601:
+        default:
+            return color::rgb::to_ITU601(src);
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Compute the maximum chroma vector length across all six targets for the
+    // active method, so the outermost colour always lands at exactly
+    // kScale * R regardless of standard.
+    //
+    //   BT.601  – max ≈ 0.500  (all targets nearly equidistant)
+    //   BT.709  – max ≈ 0.596  (Green / Magenta reach furthest)
+    //   BT.2020 – max ≈ 0.584  (Green / Magenta reach furthest)
+    // ─────────────────────────────────────────────────────────────────────────
     static float maxChromaRadius(VectorscopeMethod method)
     {
         float maxR = 0.f;
         for (const auto& ct : kColorTargets)
         {
-            image::Color4f src(ct.r, ct.g, ct.b);
-            image::Color4f ycbcr = (method == VectorscopeMethod::ITU709)
-                                   ? color::rgb::to_ITU709(src)
-                                   : color::rgb::to_ITU601(src);
+            const image::Color4f ycbcr =
+                toYCbCr(image::Color4f(ct.r, ct.g, ct.b), method);
 
             // ycbcr.g = Cb, ycbcr.b = Cr
-            float r = std::sqrt(ycbcr.g * ycbcr.g + ycbcr.b * ycbcr.b);
+            const float r = std::sqrt(ycbcr.g * ycbcr.g + ycbcr.b * ycbcr.b);
             if (r > maxR) maxR = r;
         }
-        return maxR;   // ≈ 0.500 for BT.601, ≈ 0.596 for BT.709
+        return maxR;
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -81,14 +135,21 @@ namespace mrv
     // ─────────────────────────────────────────────────────────────────────────
     struct Vectorscope::Private
     {
-        int               diameter   = 250;
+        int               diameter            = 250;
         math::Box2i       box;
         image::PixelType  pixelType;
-        uint8_t*          image      = nullptr;
-        size_t            dataSize   = 0;
-        ViewerUI*         ui         = nullptr;
-        float             chromaNorm = 0.596f; // updated by setMethod
-        VectorscopeMethod method     = VectorscopeMethod::ITU709;
+        uint8_t*          image               = nullptr;
+        size_t            dataSize            = 0;
+        ViewerUI*         ui                  = nullptr;
+        float             chromaNorm          = 0.596f;  // updated by setMethod()
+        VectorscopeMethod method              = VectorscopeMethod::ITU709;
+
+        // HDR swapchain normalisation (Rec2020 only).
+        // referenceWhiteLinear = referenceWhiteNits / 10000.f
+        // Dividing input RGB by this value maps reference-white primaries to
+        // ±0.5 Cb/Cr, which is exactly where the 100 % target boxes sit.
+        float             referenceWhiteNits   = 203.f;
+        float             referenceWhiteLinear = 203.f / 10000.f;
     };
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -114,7 +175,7 @@ namespace mrv
     // ─────────────────────────────────────────────────────────────────────────
     void Vectorscope::setMethod(VectorscopeMethod m)
     {
-        _p->method = m;
+        _p->method     = m;
         _p->chromaNorm = maxChromaRadius(m);
         redraw();
     }
@@ -122,6 +183,22 @@ namespace mrv
     VectorscopeMethod Vectorscope::method() const
     {
         return _p->method;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // HDR reference-white accessors
+    // ─────────────────────────────────────────────────────────────────────────
+    void Vectorscope::setReferenceWhiteNits(float nits)
+    {
+        if (nits <= 0.f) nits = 203.f;     // guard against bad input
+        _p->referenceWhiteNits   = nits;
+        _p->referenceWhiteLinear = nits / 10000.f;
+        redraw();
+    }
+
+    float Vectorscope::referenceWhiteNits() const
+    {
+        return _p->referenceWhiteNits;
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -166,7 +243,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-        MyViewport* view   = p.ui->uiView;
+        MyViewport* view      = p.ui->uiView;
         const void* viewImage = view->image();
         p.box       = info.box;
         p.pixelType = info.pixelType;
@@ -195,61 +272,90 @@ namespace mrv
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // draw_pixel() – dispatches to the active method
+    // draw_pixel() – dispatches to the active method.
+    //
+    // Dot position:
+    //   All three methods map Cb → X and Cr → Y (Cr negated because FLTK Y
+    //   grows downward).  The chroma vector is normalised by chromaNorm so the
+    //   most-saturated target always lands at kScale * R.
+    //
+    // Dot colour:
+    //   SDR methods (ITU601, ITU709) clamp to [0, 1] as before.
+    //   Rec2020 applies a per-channel Reinhard tone-map so that HDR pixels
+    //   (values > 1.0) keep their hue rather than washing out to white.
     // ─────────────────────────────────────────────────────────────────────────
     void Vectorscope::draw_pixel(image::Color4f& color) const noexcept
     {
         TLRENDER_P();
 
-        const int cx = x() + p.diameter / 2;
-        const int cy = y() + p.diameter / 2;
-        const float R = p.diameter / 2.0f;
+        const int   cx = x() + p.diameter / 2;
+        const int   cy = y() + p.diameter / 2;
+        const float R  = p.diameter / 2.0f;
 
-        // ── draw position (filled in by each branch) ──────────────────────
-        float dx = 0.f, dy = 0.f;
-
-        image::Color4f ycbcr;
-
-        switch(p.method)
+        // ── Chroma position ───────────────────────────────────────────────
+        // For Rec2020 on an HDR (PQ) swapchain, scene-linear RGB is normalised
+        // to 10 000 nits = 1.0.  Because Cb/Cr scale linearly with absolute
+        // RGB values, a reference-white primary (≈ 203 nits ≈ 0.0203 linear)
+        // would produce a chroma vector only ~2 % as long as a 10 000-nit
+        // primary — i.e. all dots cluster near the centre.
+        //
+        // We normalise the RGB values by referenceWhiteLinear before the
+        // YCbCr transform so that reference-white primaries land exactly on
+        // the 100 % target boxes.  SDR methods leave color unchanged.
+        image::Color4f chromaInput = color;
+        if (p.method == VectorscopeMethod::Rec2020 &&
+            p.referenceWhiteLinear > 0.f)
         {
-        case VectorscopeMethod::ITU709:
-            ycbcr = color::rgb::to_ITU709(color);
-            break;
-        case VectorscopeMethod::ITU601:
-        default:
-            ycbcr = color::rgb::to_ITU601(color);
-            break;
-        } 
+            const float inv = 1.f / p.referenceWhiteLinear;
+            chromaInput.r *= inv;
+            chromaInput.g *= inv;
+            chromaInput.b *= inv;
+        }
+        const image::Color4f ycbcr = toYCbCr(chromaInput, p.method);
 
-        // Normalise to [−1, +1]
-        float cbNorm = ycbcr.g / p.chromaNorm;   // [−1 … +1]
-        float crNorm = ycbcr.b / p.chromaNorm;   // [−1 … +1]
+        const float cbNorm = ycbcr.g / p.chromaNorm;   // [−1 … +1]
+        const float crNorm = ycbcr.b / p.chromaNorm;   // [−1 … +1]
 
-        // 0.85 keeps vivid colours comfortably inside the outer circle
-        constexpr float kScale = 0.85f;
+        constexpr float kScale = 0.85f;   // keeps targets comfortably inside
 
-        dx =  cbNorm * R * kScale;   // Cb → X
-        dy = -crNorm * R * kScale;   // Cr → Y  (negate: FLTK Y grows down)
+        const int posX = cx + static_cast<int>( cbNorm * R * kScale);
+        const int posY = cy + static_cast<int>(-crNorm * R * kScale);  // Y↑
 
-        const int posX = cx + static_cast<int>(dx);
-        const int posY = cy + static_cast<int>(dy);
+        // ── Dot colour ────────────────────────────────────────────────────
+        // For Rec2020 HDR content, luminance values can greatly exceed 1.0.
+        // Apply a per-channel Reinhard tone-map so the plotted dot retains its
+        // chromatic identity (a bright red HDR pixel still draws red, not
+        // clipped white).  For SDR methods the tone-map is equivalent to the
+        // original clamp because SDR values stay well below 1.0 in practice,
+        // but we keep the explicit branch for clarity.
+        float dr = color.r, dg = color.g, db = color.b;
+        if (p.method == VectorscopeMethod::Rec2020)
+        {
+            dr = reinhardTM(dr);
+            dg = reinhardTM(dg);
+            db = reinhardTM(db);
+        }
+        else
+        {
+            dr = math::clamp(dr, 0.f, 1.f);
+            dg = math::clamp(dg, 0.f, 1.f);
+            db = math::clamp(db, 0.f, 1.f);
+        }
 
-        const uint8_t r = static_cast<uint8_t>(
-            math::clamp(color.r, 0.f, 1.f) * 255.f);
-        const uint8_t g = static_cast<uint8_t>(
-            math::clamp(color.g, 0.f, 1.f) * 255.f);
-        const uint8_t b = static_cast<uint8_t>(
-            math::clamp(color.b, 0.f, 1.f) * 255.f);
+        const uint8_t r8 = static_cast<uint8_t>(dr * 255.f);
+        const uint8_t g8 = static_cast<uint8_t>(dg * 255.f);
+        const uint8_t b8 = static_cast<uint8_t>(db * 255.f);
 
+        // ── Blit ──────────────────────────────────────────────────────────
         const int pixelSize = p.diameter / 270;
         if (pixelSize <= 1)
         {
-            fl_rectf(posX, posY, 1, 1, r, g, b);
+            fl_rectf(posX, posY, 1, 1, r8, g8, b8);
         }
         else
         {
             fl_rectf(posX - pixelSize / 2, posY - pixelSize / 2,
-                     pixelSize, pixelSize, r, g, b);
+                     pixelSize, pixelSize, r8, g8, b8);
         }
     }
 
@@ -291,7 +397,7 @@ namespace mrv
                     (X + Y * W) * channelCount * sizeof(float);
                 const uint8_t* ptr = p.image + offset;
                 rgba = *(reinterpret_cast<const image::Color4f*>(ptr));
-                std::swap(rgba.r, rgba.b);  // BGRA -> RGBA
+                std::swap(rgba.r, rgba.b);  // BGRA → RGBA
 #endif
                 draw_pixel(rgba);
             }
@@ -300,21 +406,28 @@ namespace mrv
 
     // ─────────────────────────────────────────────────────────────────────────
     // draw_grid()
+    //
+    // Outer ring, centre cross, radial guides, 75 % / 100 % target boxes, and
+    // axis labels are drawn for the active colour standard.
+    //
+    // Rec2020 target-box positions are derived from the BT.2020 matrix, so
+    // they will differ slightly from BT.709 — Green / Magenta are a little
+    // closer to the centre (chromaNorm ≈ 0.584 vs. ≈ 0.596 for BT.709).
     // ─────────────────────────────────────────────────────────────────────────
     void Vectorscope::draw_grid() noexcept
     {
         TLRENDER_P();
 
-        const int   cx     = x() + p.diameter / 2;
-        const int   cy     = y() + p.diameter / 2;
-        const float R      = p.diameter / 2.0f;
-        const int   boxSz  = std::max(12, p.diameter / 30);
+        const int   cx    = x() + p.diameter / 2;
+        const int   cy    = y() + p.diameter / 2;
+        const float R     = p.diameter / 2.0f;
+        const int   boxSz = std::max(12, p.diameter / 30);
 
-        // ── Outer circle ─────────────────────────────────────────────────────
+        // ── Outer circle ──────────────────────────────────────────────────
         fl_color(255, 255, 255);
         fl_arc(x(), y(), p.diameter, p.diameter, 0, 360);
 
-        // ── Centre cross ─────────────────────────────────────────────────────
+        // ── Centre cross ──────────────────────────────────────────────────
         fl_color(80, 80, 80);
         fl_line(cx - static_cast<int>(R), cy,
                 cx + static_cast<int>(R), cy);
@@ -323,94 +436,79 @@ namespace mrv
 
         fl_line_style(FL_SOLID, 1);
 
-        constexpr float kScale    = 0.85f;   // must match draw_pixel
-        constexpr float kNorm     = 0.5f;    // max |Cb| or |Cr|
-        constexpr float kTarget75 = 0.75f;   // 75 % colour-bar level
+        constexpr float kScale    = 0.85f;
+        constexpr float kTarget75 = 0.75f;
 
         for (int i = 0; i < 6; ++i)
         {
             const ColorTarget& ct = kColorTargets[i];
 
-            // ── 100 % target position ────────────────────────────────
-            image::Color4f ycbcr = image::Color4f(ct.r, ct.g, ct.b);
+            // ── 100 % target ──────────────────────────────────────────────
+            const image::Color4f src100(ct.r, ct.g, ct.b);
+            const image::Color4f ycbcr100 = toYCbCr(src100, p.method);
 
-            switch(p.method)
-            {
-            case VectorscopeMethod::ITU709:
-                ycbcr = color::rgb::to_ITU709(ycbcr);
-                break;
-            case VectorscopeMethod::ITU601:
-            default:
-                ycbcr = color::rgb::to_ITU601(ycbcr);
-            }
-                
-            float cbN   = ycbcr.g / p.chromaNorm;
-            float crN   = ycbcr.b / p.chromaNorm;
+            const float cbN = ycbcr100.g / p.chromaNorm;
+            const float crN = ycbcr100.b / p.chromaNorm;
 
-            float tx100 = cx + cbN * R * kScale;
-            float ty100 = cy - crN * R * kScale;
+            const float tx100 = cx + cbN * R * kScale;
+            const float ty100 = cy - crN * R * kScale;
 
-            // ── 75 % target position ─────────────────────────────────
-            // 75 % bars: scale source RGB by 0.75 before converting
-            image::Color4f ycbcr75;
-            ycbcr75 = image::Color4f(ct.r * kTarget75,
-                                     ct.g * kTarget75,
-                                     ct.b * kTarget75);
-            switch(p.method)
-            {
-            case VectorscopeMethod::ITU709:
-                ycbcr75 = color::rgb::to_ITU709(ycbcr75);
-                break;
-            case VectorscopeMethod::ITU601:
-            default:
-                ycbcr75 = color::rgb::to_ITU601(ycbcr75);
-            }
-            float cb75N = ycbcr75.g / p.chromaNorm;
-            float cr75N = ycbcr75.b / p.chromaNorm;
+            // ── 75 % target ───────────────────────────────────────────────
+            // Scale source RGB by 0.75 before converting (broadcast 75 % bars).
+            const image::Color4f src75(ct.r * kTarget75,
+                                       ct.g * kTarget75,
+                                       ct.b * kTarget75);
+            const image::Color4f ycbcr75 = toYCbCr(src75, p.method);
 
-            float tx75  = cx + cb75N * R * kScale;
-            float ty75  = cy - cr75N * R * kScale;
+            const float cb75N = ycbcr75.g / p.chromaNorm;
+            const float cr75N = ycbcr75.b / p.chromaNorm;
 
-            // ── Radial guide line (100 % target → centre) ────────────
+            const float tx75 = cx + cb75N * R * kScale;
+            const float ty75 = cy - cr75N * R * kScale;
+
+            // ── Radial guide line ─────────────────────────────────────────
             fl_color(60, 60, 60);
             fl_line(cx, cy,
                     static_cast<int>(tx100),
                     static_cast<int>(ty100));
 
-            // ── 75 % box (yellow, inner, broadcast standard) ──────────
+            // ── 75 % box (yellow) ─────────────────────────────────────────
             fl_color(255, 200, 0);
             fl_rect(static_cast<int>(tx75) - boxSz / 2,
                     static_cast<int>(ty75) - boxSz / 2,
                     boxSz, boxSz);
 
-            // ── 100 % box (white) ─────────────────────────────────────
+            // ── 100 % box (white) ─────────────────────────────────────────
             fl_color(200, 200, 200);
             fl_rect(static_cast<int>(tx100) - boxSz / 2,
                     static_cast<int>(ty100) - boxSz / 2,
                     boxSz, boxSz);
 
-            // ── Label (use the colour's own hue for readability) ──────
-            int labelX = static_cast<int>(
-                cbN * R * kScale * 1.12f) + cx;
-            int labelY = static_cast<int>(
-                -crN * R * kScale * 1.12f) + cy;
+            // ── Label ─────────────────────────────────────────────────────
+            const int labelX = cx + static_cast<int>(cbN * R * kScale * 1.12f);
+            const int labelY = cy + static_cast<int>(-crN * R * kScale * 1.12f);
 
             fl_font(FL_HELVETICA_BOLD, 12);
             fl_color(ct.labelR, ct.labelG, ct.labelB);
             fl_draw(ct.name, labelX - 5, labelY + 5);
         }
 
-        // ── Axis labels (Cb / Cr) ─────────────────────────────────────
+        // ── Axis labels ───────────────────────────────────────────────────
+        // Show the standard name next to the Cb axis so the operator always
+        // knows which colour space the scope is calibrated to.
+        const char* standardTag =
+            (p.method == VectorscopeMethod::ITU601)  ? "BT.601"  :
+            (p.method == VectorscopeMethod::ITU709)  ? "BT.709"  :
+                                                       "BT.2020";
+
         fl_font(FL_HELVETICA, 10);
         fl_color(160, 160, 160);
-        fl_draw("+Cb",  cx + static_cast<int>(R * 0.88f) - 4,
-                cy + 12);
-        fl_draw("-Cb",  cx - static_cast<int>(R * 0.88f) - 14,
-                cy + 12);
-        fl_draw("+Cr",  cx - 14,
-                cy - static_cast<int>(R * 0.88f) + 10);
-        fl_draw("-Cr",  cx - 14,
-                cy + static_cast<int>(R * 0.88f));
+        fl_draw("+Cb",       cx + static_cast<int>(R * 0.88f) - 4, cy + 12);
+        fl_draw("-Cb",       cx - static_cast<int>(R * 0.88f) - 14, cy + 12);
+        fl_draw("+Cr",       cx - 14, cy - static_cast<int>(R * 0.88f) + 10);
+        fl_draw("-Cr",       cx - 14, cy + static_cast<int>(R * 0.88f));
+        fl_draw(standardTag, cx - static_cast<int>(R * 0.88f),
+                             cy + static_cast<int>(R * 0.88f));
 
         fl_line_style(0);  // reset
     }

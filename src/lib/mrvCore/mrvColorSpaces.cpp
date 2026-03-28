@@ -381,7 +381,8 @@ namespace mrv
                 return Color4f(
                     rgb.r * 0.299f + rgb.g * 0.587f + rgb.b * 0.114f,
                     -rgb.r * 0.595716f - rgb.g * 0.274453f - rgb.b * 0.321263f,
-                    rgb.r * 0.211456f - rgb.g * 0.522591f + rgb.b * 0.31135f);
+                    rgb.r * 0.211456f - rgb.g * 0.522591f + rgb.b * 0.31135f,
+                    rgb.a);
             }
 
             //! Analog PAL
@@ -390,7 +391,8 @@ namespace mrv
                 return Color4f(
                     rgb.r * 0.299f + rgb.g * 0.587f + rgb.b * 0.114f,
                     -rgb.r * 0.14713f - rgb.g * 0.28886f + rgb.b * 0.436f,
-                    rgb.r * 0.615f - rgb.g * 0.51499f - rgb.b * 0.10001f);
+                    rgb.r * 0.615f - rgb.g * 0.51499f - rgb.b * 0.10001f,
+                    rgb.a);
             }
 
             //! Analog Secam/PAL-N
@@ -399,7 +401,8 @@ namespace mrv
                 return Color4f(
                     rgb.r * 0.299f + rgb.g * 0.587f + rgb.b * 0.114f,
                     -rgb.r * 0.450f - rgb.g * 0.883f + rgb.b * 1.333f,
-                    -rgb.r * 1.333f + rgb.g * 1.116f + rgb.b * 0.217f);
+                    -rgb.r * 1.333f + rgb.g * 1.116f + rgb.b * 0.217f,
+                    rgb.a);
             }
 
             //! ITU. 601 or CCIR 601  (Digital PAL and NTSC )
@@ -412,7 +415,8 @@ namespace mrv
                 return Color4f(
                     y,
                     (rgb.b - y) * 0.5643f, // Pb: Scales (B-Y) to [-0.5, 0.5]
-                    (rgb.r - y) * 0.7132f  // Pr: Scales (R-Y) to [-0.5, 0.5]
+                    (rgb.r - y) * 0.7132f,  // Pr: Scales (R-Y) to [-0.5, 0.5]
+                    rgb.a
                     );
             }
             
@@ -422,8 +426,22 @@ namespace mrv
                 return Color4f(
                     y,
                     (rgb.b - y) / 1.8556f, // Pb
-                    (rgb.r - y) / 1.5748f  // Pr
+                    (rgb.r - y) / 1.5748f,  // Pr
+                    rgb.a
                     );
+            }
+
+            image::Color4f to_Rec2020(const image::Color4f& c) noexcept
+            {
+                constexpr float Kr = 0.2627f;
+                constexpr float Kg = 0.6780f;
+                constexpr float Kb = 0.0593f;
+
+                const float Y  = Kr * c.r + Kg * c.g + Kb * c.b;
+                const float Cb = (c.b - Y) / (2.f * (1.f - Kb));  // ÷ 1.8814
+                const float Cr = (c.r - Y) / (2.f * (1.f - Kr));  // ÷ 1.4746
+
+                return image::Color4f(Y, Cb, Cr, c.a);
             }
         } // namespace rgb
 
