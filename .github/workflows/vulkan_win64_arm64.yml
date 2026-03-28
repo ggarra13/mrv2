@@ -121,13 +121,13 @@ jobs:
         uses: actions/cache@v4
         with:
           path: VulkanSDK-*
-          key: ${{ runner.os }}-arm64-vulkan-sdk-${{ hashFiles('**/install_vulkan.sh') }}
+          key: ${{ runner.os }}-arm64-vulkan-sdk-${{ hashFiles('etc/vulkan_version.sh', 'etc/windows/install_vulkan.sh') }}
 
       # Install Vulkan SDK
       - name: Install Vulkan SDK
         if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
         env:
-          BUILD_VULKAN: OFF
+          BUILD_VULKAN: OFF  # optional
         run: |
           . ./etc/windows/install_vulkan.sh
 
