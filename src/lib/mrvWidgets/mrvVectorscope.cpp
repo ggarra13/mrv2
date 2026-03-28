@@ -22,6 +22,7 @@
 
 #include "mrViewer.h"
 
+#include "mrvCore/mrvBackend.h"
 #include "mrvCore/mrvColorSpaces.h"
 #include "mrvCore/mrvColor.h"
 
@@ -30,6 +31,10 @@
 
 #include <FL/Enumerations.H>
 #include <FL/fl_draw.H>
+
+#ifdef VULKAN_BACKEND
+#include <FL/vk_enum_string_helper.h>
+#endif
 
 #include <cmath>
 
@@ -257,8 +262,7 @@ namespace mrv
     //
     // Dot colour:
     //   SDR methods (ITU601, ITU709) clamp to [0, 1] as before.
-    //   Rec2020 applies a per-channel Reinhard tone-map so that HDR pixels
-    //   (values > 1.0) keep their hue rather than washing out to white.
+    //   Rec2020 does not clamp.
     // ─────────────────────────────────────────────────────────────────────────
     void Vectorscope::draw_pixel(image::Color4f& color) const noexcept
     {
@@ -269,8 +273,9 @@ namespace mrv
         const float R  = p.diameter / 2.0f;
 
         // ── Chroma position ───────────────────────────────────────────────
-        // For Rec2020 on an HDR (PQ) swapchain, scene-linear RGB is normalised
-        // to 10 000 nits = 1.0.  Because Cb/Cr scale linearly with absolute
+        // For Rec2020 on an HDR (PQ) swapchain, we normalize to scene-linear
+        // first so that to 10 000 nits = 1.0.
+        // Because Cb/Cr scale linearly with absolute
         // RGB values, a reference-white primary (≈ 203 nits ≈ 0.0203 linear)
         // would produce a chroma vector only ~2 % as long as a 10 000-nit
         // primary — i.e. all dots cluster near the centre.
@@ -280,19 +285,30 @@ namespace mrv
         // the 100 % target boxes.  SDR methods leave color unchanged.
         image::Color4f chromaInput = color;
             
+#ifdef VULKAN_BACKEND
         if (p.method == VectorscopeMethod::Rec2020 &&
             p.referenceWhiteLinear > 0.f)
         {
-            // Convert from PQ to Linear (1.0 = 10,000 nits)
-            chromaInput.r = color::inverse_st2084_eotf(chromaInput.r);
-            chromaInput.g = color::inverse_st2084_eotf(chromaInput.g);
-            chromaInput.b = color::inverse_st2084_eotf(chromaInput.b);
+            Fl_Vk_Context& ctx = p.ui->uiView->getContext();
+            if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT)
+            {
+                // Convert from PQ to Linear (1.0 = 10,000 nits)
+                chromaInput.r = color::inverse_st2084_eotf(chromaInput.r);
+                chromaInput.g = color::inverse_st2084_eotf(chromaInput.g);
+                chromaInput.b = color::inverse_st2084_eotf(chromaInput.b);
         
-            const float inv = 1.f / p.referenceWhiteLinear;
-            chromaInput.r *= inv;
-            chromaInput.g *= inv;
-            chromaInput.b *= inv;
+                const float inv = 1.f / p.referenceWhiteLinear;
+                chromaInput.r *= inv;
+                chromaInput.g *= inv;
+                chromaInput.b *= inv;
+            }
+            else if (ctx.colorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+            {
+                // How to handle this?  Pass-through?
+            }
         }
+#endif
+        
         const image::Color4f ycbcr = toYCbCr(chromaInput, p.method);
 
         const float cbNorm = ycbcr.g / p.chromaNorm;   // [−1 … +1]
@@ -304,17 +320,11 @@ namespace mrv
         const int posY = cy + static_cast<int>(-crNorm * R * kScale);  // Y↑
 
         // ── Dot colour ────────────────────────────────────────────────────
-        // For Rec2020 HDR content, luminance values can greatly exceed 1.0.
-        // Apply a per-channel Reinhard tone-map so the plotted dot retains its
-        // chromatic identity (a bright red HDR pixel still draws red, not
-        // clipped white).  For SDR methods the tone-map is equivalent to the
-        // original clamp because SDR values stay well below 1.0 in practice,
-        // but we keep the explicit branch for clarity.
         float dr = color.r, dg = color.g, db = color.b;
         if (p.method == VectorscopeMethod::Rec2020)
         {
-           // Use the already-scaled chromaInput (where 203 nits = 1.0).
-           // Apply a 2.2 gamma correction so the dots look vibrant on an SDR UI.
+            // Use the already-scaled chromaInput (where 203 nits = 1.0).
+            // Apply a 2.2 gamma correction so the dots look vibrant on an SDR UI.
             // We use a simple power function instead of Reinhard to keep 
             // reference white at full brightness.
             dr = std::pow(std::max(0.f, chromaInput.r), 1.f / 2.2f);

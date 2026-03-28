@@ -38,6 +38,26 @@ namespace mrv
     namespace color
     {
 
+        // ─────────────────────────────────────────────────────────────────────────
+        // ST.2084 (PQ) Inverse EOTF: Maps [0, 1] PQ → [0, 1] Linear (1.0 = 10k nits)
+        // ──────────────────────────────────────────────────────────────────────
+        inline float inverse_st2084_eotf(float N) noexcept
+        {
+            if (N <= 0.f) return 0.f;
+    
+            constexpr float m1 = 2610.f / 16384.f;
+            constexpr float m2 = (2523.f / 4096.f) * 128.f;
+            constexpr float c1 = 3424.f / 4096.f;
+            constexpr float c2 = (2413.f / 4096.f) * 32.f;
+            constexpr float c3 = (2392.f / 4096.f) * 32.f;
+
+            float Npw = std::pow(N, 1.f / m2);
+            float num = std::max(Npw - c1, 0.f);
+            float den = c2 - c3 * Npw;
+    
+            return std::pow(num / den, 1.f / m1);
+        }
+        
         /** 
          * Calculates Absolute Nits values from a PQ value.
          * 
@@ -46,19 +66,7 @@ namespace mrv
          * @return nits value (in 0...10000 range).
          */
         inline float pqToNits(float v) {
-            v = std::clamp(v, 0.F, 1.F);
-            
-            const float m1 = 0.1593017578125f;
-            const float m2 = 78.84375f;
-            const float c1 = 0.8359375f;
-            const float c2 = 18.8515625f;
-            const float c3 = 18.6875f;
-
-            float v_pow = powf(v, 1.0f / m2);
-            float num = fmaxf(v_pow - c1, 0.0f);
-            float den = c2 - c3 * v_pow;
-    
-            return 10000.0f * powf(num / den, 1.0f / m1);
+            return 10000.0f * inverse_st2084_eotf(v);
         }
 
         inline float pqToLinear(float v, const float reference_white = 100.F)

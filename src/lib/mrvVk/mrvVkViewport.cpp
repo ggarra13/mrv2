@@ -685,6 +685,11 @@ namespace mrv
             return TimelineViewport::handle(event);
         }
 
+        Fl_Vk_Context& Viewport::getContext()
+        {
+            return ctx;
+        }
+        
         void Viewport::draw()
         {
             TLRENDER_P();
