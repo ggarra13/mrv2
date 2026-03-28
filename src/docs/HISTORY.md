@@ -48,6 +48,7 @@ Change Log
 ----------
 
 - Added Rec2020 support for the Vectorscope.
+- Made BT601 and BT709 in Vectorscope work when the swapchain is VK_COLOR_SPACE_HDR10_ST2084_EXT.  There are some minor floating point issues.
 
 v1.6.0
 ======

@@ -284,28 +284,71 @@ namespace mrv
         // YCbCr transform so that reference-white primaries land exactly on
         // the 100 % target boxes.  SDR methods leave color unchanged.
         image::Color4f chromaInput = color;
-            
+        bool hdrSDRConverted = false;   // set when PQ->BT.709 is done in-place
+        
 #ifdef VULKAN_BACKEND
-        if (p.method == VectorscopeMethod::Rec2020 &&
+        Fl_Vk_Context& ctx = p.ui->uiView->getContext();
+        if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT &&
             p.referenceWhiteLinear > 0.f)
         {
-            Fl_Vk_Context& ctx = p.ui->uiView->getContext();
-            if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT)
+            // ── Step 1: PQ EOTF → linear BT.2020 (0 = 0 nits, 1 = 10 000 nits) ─
+            chromaInput.r = color::inverse_st2084_eotf(chromaInput.r);
+            chromaInput.g = color::inverse_st2084_eotf(chromaInput.g);
+            chromaInput.b = color::inverse_st2084_eotf(chromaInput.b);
+
+            if (p.method == VectorscopeMethod::Rec2020)
             {
-                // Convert from PQ to Linear (1.0 = 10,000 nits)
-                chromaInput.r = color::inverse_st2084_eotf(chromaInput.r);
-                chromaInput.g = color::inverse_st2084_eotf(chromaInput.g);
-                chromaInput.b = color::inverse_st2084_eotf(chromaInput.b);
-        
                 const float inv = 1.f / p.referenceWhiteLinear;
                 chromaInput.r *= inv;
                 chromaInput.g *= inv;
                 chromaInput.b *= inv;
             }
-            else if (ctx.colorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+            else // ITU709 or ITU601 — source content is SDR BT.709
             {
-                // How to handle this?  Pass-through?
+                // ── Step 2: BT.2020 linear primaries → BT.709 linear primaries ──
+                // M = XYZ_to_709 × 2020_to_XYZ  (both at D65).
+                // Each row sums to 1.0 so D65 white is preserved.
+                // BT.2020 linear → BT.709 linear  (D65 white, exact chromaticities)
+                // Use double for the multiply, then store back to float.
+                static constexpr double M[3][3] =
+                    {
+                        {  1.66049100, -0.58764114, -0.07284987 },
+                        { -0.12455047,  1.13288989, -0.00833942 },
+                        { -0.01815076, -0.10057889,  1.11872966 }
+                    };
+                const double r = M[0][0]*chromaInput.r + M[0][1]*chromaInput.g + M[0][2]*chromaInput.b;
+                const double g = M[1][0]*chromaInput.r + M[1][1]*chromaInput.g + M[1][2]*chromaInput.b;
+                const double b = M[2][0]*chromaInput.r + M[2][1]*chromaInput.g + M[2][2]*chromaInput.b;
+                chromaInput.r = static_cast<float>(std::max(0.0, r));
+                chromaInput.g = static_cast<float>(std::max(0.0, g));
+                chromaInput.b = static_cast<float>(std::max(0.0, b));
+
+                // ── Step 3: Normalise – SDR reference white (default 203 nits) → 1.0 ─
+                // libplacebo maps SDR 1.0 → ~203 nits in HDR mode by default.
+                // Adjust referenceWhiteNits if you changed pl_color_map_params.peak_detect
+                // or are using a different reference (e.g. 100 nits).
+                const float inv = 1.f / p.referenceWhiteLinear;
+                chromaInput.r = math::clamp(chromaInput.r * inv, 0.f, 1.f);
+                chromaInput.g = math::clamp(chromaInput.g * inv, 0.f, 1.f);
+                chromaInput.b = math::clamp(chromaInput.b * inv, 0.f, 1.f);
+
+                // ── Step 4: BT.709 OETF – YCbCr matrix is defined for R'G'B', not linear ─
+                auto oetf709 = [](float L) -> float
+                    {                        
+                        return (L < 0.018053968510807f)
+                            ? 4.5f * L
+                            : 1.0993f * std::pow(L, 0.45f) - 0.0993f;
+                    };
+                chromaInput.r = oetf709(chromaInput.r);
+                chromaInput.g = oetf709(chromaInput.g);
+                chromaInput.b = oetf709(chromaInput.b);
+
+                hdrSDRConverted = true; // chromaInput is now BT.709 gamma R'G'B' ∈ [0,1]
             }
+        }
+        else if (ctx.colorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+        {
+            // \@todo: P3 handling
         }
 #endif
         
@@ -320,7 +363,7 @@ namespace mrv
         const int posY = cy + static_cast<int>(-crNorm * R * kScale);  // Y↑
 
         // ── Dot colour ────────────────────────────────────────────────────
-        float dr = color.r, dg = color.g, db = color.b;
+        float dr, dg, db;
         if (p.method == VectorscopeMethod::Rec2020)
         {
             // Use the already-scaled chromaInput (where 203 nits = 1.0).
@@ -336,6 +379,14 @@ namespace mrv
             dr = std::min(dr, 1.0f);
             dg = std::min(dg, 1.0f);
             db = std::min(db, 1.0f);
+        }
+        else if (hdrSDRConverted)
+        {
+            // chromaInput already holds BT.709-gamma R'G'B' ∈ [0,1].
+            // Use it directly – no additional gamma needed.
+            dr = chromaInput.r;
+            dg = chromaInput.g;
+            db = chromaInput.b;
         }
         else
         {
@@ -367,7 +418,7 @@ namespace mrv
     void Vectorscope::draw_pixels() const noexcept
     {
         TLRENDER_P();
-
+        
         if (!p.box.isValid())
             return;
 
