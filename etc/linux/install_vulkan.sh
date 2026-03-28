@@ -65,7 +65,7 @@ fi
 # 3) Fallback to latest
 if needs_download; then
     echo "Vulkan version ${VK_DOWNLOAD} not found! Downloading latest"
-    curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"xs
+    curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"
 fi
 
 

@@ -7,7 +7,7 @@
 #
 # Use latest to use latest download
 #
-export VK_DOWNLOAD=1.4.321.1
+export VK_DOWNLOAD=1.4.341.1   # was 1.4.321.1
 export VK_STRIPPED=$VK_DOWNLOAD
 
 if [[ $VK_DOWNLOAD =~ ^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
