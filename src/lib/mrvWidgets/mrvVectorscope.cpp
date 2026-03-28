@@ -35,30 +35,6 @@
 
 namespace mrv
 {
-    // ─────────────────────────────────────────────────────────────────────────
-    // BT.2020 RGB → YCbCr conversion
-    //
-    // ITU-R BT.2020 primaries: Kr = 0.2627, Kg = 0.6780, Kb = 0.0593
-    //
-    //   Y  =  Kr·R + Kg·G + Kb·B
-    //   Cb = (B − Y) / (2·(1 − Kb))   range [−0.5, +0.5]
-    //   Cr = (R − Y) / (2·(1 − Kr))   range [−0.5, +0.5]
-    //
-    // Returns Color4f{Y, Cb, Cr, alpha}, matching the layout used by
-    // color::rgb::to_ITU709 / to_ITU601.
-    // ─────────────────────────────────────────────────────────────────────────
-    static image::Color4f rgb_to_Rec2020(const image::Color4f& c) noexcept
-    {
-        constexpr float Kr = 0.2627f;
-        constexpr float Kg = 0.6780f;
-        constexpr float Kb = 0.0593f;
-
-        const float Y  = Kr * c.r + Kg * c.g + Kb * c.b;
-        const float Cb = (c.b - Y) / (2.f * (1.f - Kb));  // ÷ 1.8814
-        const float Cr = (c.r - Y) / (2.f * (1.f - Kr));  // ÷ 1.4746
-
-        return image::Color4f{Y, Cb, Cr, c.a};
-    }
 
     // ─────────────────────────────────────────────────────────────────────────
     // Simple per-channel Reinhard tone-map: maps [0, ∞) → [0, 1).
@@ -99,7 +75,7 @@ namespace mrv
         case VectorscopeMethod::ITU709:
             return color::rgb::to_ITU709(src);
         case VectorscopeMethod::Rec2020:
-            return rgb_to_Rec2020(src);
+            return color::rgb::to_Rec2020(src);
         case VectorscopeMethod::ITU601:
         default:
             return color::rgb::to_ITU601(src);
@@ -303,9 +279,15 @@ namespace mrv
         // YCbCr transform so that reference-white primaries land exactly on
         // the 100 % target boxes.  SDR methods leave color unchanged.
         image::Color4f chromaInput = color;
+            
         if (p.method == VectorscopeMethod::Rec2020 &&
             p.referenceWhiteLinear > 0.f)
         {
+            // Convert from PQ to Linear (1.0 = 10,000 nits)
+            chromaInput.r = color::inverse_st2084_eotf(chromaInput.r);
+            chromaInput.g = color::inverse_st2084_eotf(chromaInput.g);
+            chromaInput.b = color::inverse_st2084_eotf(chromaInput.b);
+        
             const float inv = 1.f / p.referenceWhiteLinear;
             chromaInput.r *= inv;
             chromaInput.g *= inv;
