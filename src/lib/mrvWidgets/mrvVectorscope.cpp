@@ -313,9 +313,19 @@ namespace mrv
         float dr = color.r, dg = color.g, db = color.b;
         if (p.method == VectorscopeMethod::Rec2020)
         {
-            dr = reinhardTM(dr);
-            dg = reinhardTM(dg);
-            db = reinhardTM(db);
+           // Use the already-scaled chromaInput (where 203 nits = 1.0).
+           // Apply a 2.2 gamma correction so the dots look vibrant on an SDR UI.
+            // We use a simple power function instead of Reinhard to keep 
+            // reference white at full brightness.
+            dr = std::pow(std::max(0.f, chromaInput.r), 1.f / 2.2f);
+            dg = std::pow(std::max(0.f, chromaInput.g), 1.f / 2.2f);
+            db = std::pow(std::max(0.f, chromaInput.b), 1.f / 2.2f);
+            
+            // Clamp for the 8-bit blit, but highlights (> 203 nits) will correctly 
+            // bloom toward white.
+            dr = std::min(dr, 1.0f);
+            dg = std::min(dg, 1.0f);
+            db = std::min(db, 1.0f);
         }
         else
         {
