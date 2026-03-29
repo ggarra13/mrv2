@@ -435,7 +435,7 @@ namespace mrv
         const int posY = cy + static_cast<int>(-crNorm * R * kScale);  // Y↑
 
         // ── Dot colour ────────────────────────────────────────────────────
-        float dr, dg, db;
+        float dr = color.r, dg = color.g, db = color.b;
         if (p.method == VectorscopeMethod::Rec2020)
         {
             // Use the already-scaled chromaInput (where 203 nits = 1.0).
