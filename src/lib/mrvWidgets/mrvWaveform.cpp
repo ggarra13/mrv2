@@ -133,6 +133,7 @@ namespace mrv
 
         if (dataSize != p.dataSize)
         {
+            free(p.image);
             p.dataSize = dataSize;
             p.image = reinterpret_cast<uint8_t*>(malloc(dataSize));
         }
