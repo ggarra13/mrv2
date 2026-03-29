@@ -1898,6 +1898,27 @@ msgstr "Streaming von {0} {1}..."
 msgid "Stop streaming"
 msgstr "Streaming beenden"
 
+msgid "Renderer"
+msgstr "Renderer"
+
+msgid "Complexity"
+msgstr "Komplexität"
+
+msgid "Draw Mode"
+msgstr "Zeichenmodus"
+
+msgid "Stage Cache"
+msgstr "Stufen-Cache"
+
+msgid "Disk Cache in GB"
+msgstr "Festplatten-Cache in GB"
+
+msgid "Type of Waveform Monitor."
+msgstr "Typ des Waveform-Monitors."
+
+msgid "Type of Vectorscope."
+msgstr "Typ des Vektorskops."
+
 msgid "Toggle other eye stereo image."
 msgstr "Schalten Sie andere Augen Stereo-Bild."
 
@@ -2863,7 +2884,6 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "Die entfernte Datei {0} entspricht dem Dateinamen {1} aber nicht dem Pfad."
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Die entfernte Datei {0} entspricht nicht dem lokalen Dateinamen."
 
@@ -2982,11 +3002,9 @@ msgstr "Einstellung von OCIO config aus Einstellungen."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Einstellung von OCIO config aus der Umgebungsvariable OCIO."
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Pfad-Mappings wurden aus \"{0}{1}\" geladen."
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Hotkeys von \"{0}{1}.prefs\" werden geladen."
 
@@ -2999,7 +3017,6 @@ msgstr "Pfad-Mappings wurden in \"{0}{1}\" gespeichert."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys wurden auf \"{0}{1}.prefs\" gespeichert."
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Einstellungen wurden gespeichert auf: \"{0}{1}\"."
 
@@ -3051,7 +3068,6 @@ msgstr "Keine Standardansicht für die Anzeige '{0}'. Gibt es die Anzeige?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Einstellung OCIO Preset '{0}'."
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preset '{0}' nicht gefunden."
 
@@ -3438,7 +3454,6 @@ msgstr "Bitte wählen Sie zwei zusammenhängende Audioclips aus."
 msgid "Could not save .otio file: {0}"
 msgstr "Die.otio-Datei kann nicht gespeichert werden: {0}"
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Fehler beim Speichern von {0}. {1}"
 
@@ -3454,7 +3469,6 @@ msgstr "Sie knnen Clips nur zu einer.otio EDL Wiedergabeliste hinzufgen."
 msgid "Unknown media reference"
 msgstr "Unbekannte Medienreferenz"
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Gleis #{0} - {1}"
 
@@ -3617,6 +3631,9 @@ msgstr "USD"
 msgid "Vectorscope"
 msgstr "Vektorskop"
 
+msgid "Waveform"
+msgstr "Waveform"
+
 msgid "Hotkeys"
 msgstr "Tastenkombinationen"
 
@@ -3710,7 +3727,6 @@ msgstr "Frame {0} - ZC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Bild zu gro. Speichert die Ansichtsfenstergre."
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Ansichtsgre: {0} - X={1}, Y={2}"
 
@@ -3884,29 +3900,34 @@ msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 "Die neue Datei {0} existiert bereits! Sie kann nicht berschrieben werden."
 
+msgid "Rotated image info: {0}"
+msgstr "Informationen zum gedrehten Bild: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "Skalierte Bildinformation: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Das Schreiber-Plugin kann nicht geffnet werden."
 
 msgid "Image info: {0} {1}"
 msgstr "Bildinformation: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "Skalierte Bildinformation: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Bild zu groß für das Speichern von Anmerkungen. Es wird auf die "
+"Ansichtsgröße skaliert."
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer Plugin bekam keine Ausgabeinformationen. Standardmig auf {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Ausgabeinfos: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Verwendung von Profil {0}, Pixelformat {1}."
 
 msgid "Using preset {0}."
 msgstr "Verwendung von voreingestellten {0}."
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Offscreen-Puffer-Info: {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "Ausgabeinfos: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Speichern von Filmen ohne Audio % <PRId64> - % <PRId64>"
@@ -3924,11 +3945,32 @@ msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 "Audio nur in der Zeitleiste, aber nicht versuchen, Audio zu speichern."
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Ungültiges OpenGL-Format und -Typ"
+
+msgid "OpenGL info: {0}"
+msgstr "OpenGL-Informationen: {0}"
+
 msgid "Saving... {0}"
 msgstr "Speichern... {0}"
 
+msgid "Unsupported output format"
+msgstr "Nicht unterstütztes Ausgabeformat"
+
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Leere Videodaten zur Zeit {0}. Wiederholungsbild."
+
 msgid "Render size: {0}"
 msgstr "Rendergröße: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Bildebenen-Informationen '{0}': {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Offscreen-Puffer-Info: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Nicht unterstütztes Ausgabeformat: "
 
 msgid "2.35"
 msgstr "2,35"
@@ -3954,39 +3996,14 @@ msgstr "    Vorne    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor min. nits = {0}"
-msgstr "HDR-Monitor min. nits = {0}"
-
-msgid "HDR monitor max. nits = {0}"
-msgstr "HDR-Monitor max. nits = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr "HDR-Monitor wurde von Vulkan oder dem Window Manager nicht erkannt."
-
-msgid "Vulkan color space is {0}"
-msgstr "Vulkan-Farbraum ist {0}"
-
-msgid "Vulkan format is {0}"
-msgstr "Vulkan-Format ist {0}"
-
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "Zum aktiven HDR-Monitor am Index {0} gewechselt"
-
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr ""
-"Zu einem HDR-unterstützenden, aber inaktiven Monitor am Index {0} gewechselt"
-
-msgid "Changed to SDR monitor at index {0}"
-msgstr "Zum SDR-Monitor am Index {0} gewechselt"
-
 msgid "Edit Text"
 msgstr "Text bearbeiten"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' ist keine Datei, kein Verzeichnis und keine URL."
+
+msgid "Invalid font for text drawing"
+msgstr "Ungültige Schriftart für die Texterstellung"
 
 msgid "Could not convert message to shape: "
 msgstr "Nachricht kann nicht in Form konvertiert werden:"
@@ -4000,7 +4017,6 @@ msgstr "Wiedergabe nicht möglich – Audioanmerkung ist leer"
 msgid "Status is not saved"
 msgstr "Status ist nicht gespeichert"
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Die Audioanmerkungsdatei {0} fehlt oder existiert nicht!"
 
@@ -4889,6 +4905,9 @@ msgstr "Alle ersetzen"
 msgid "Replace Next"
 msgstr "Nchsten ersetzen"
 
+msgid "Mark an area in the image with SHIFT + the left mouse button"
+msgstr "Markieren Sie einen Bereich im Bild mit SHIFT + der linken Maustaste"
+
 msgid "Build Environment:"
 msgstr "Umgebung aufbauen:"
 
@@ -4945,9 +4964,6 @@ msgstr "Maximale Texturgre:"
 
 msgid "This is a list of contributors to the mrv2 project:"
 msgstr "Dies ist eine Liste der Mitwirkenden des mrv2-Projekts:"
-
-msgid "Mark an area in the image with SHIFT + the left mouse button"
-msgstr "Markieren Sie einen Bereich im Bild mit SHIFT + der linken Maustaste"
 
 msgid "&Copy"
 msgstr "& Kopieren"
@@ -8157,9 +8173,6 @@ msgstr "Scrub-Modus"
 msgid "Area Selection Mode"
 msgstr "Modus fr die Flchenauswahl"
 
-msgid "Draw Mode"
-msgstr "Zeichenmodus"
-
 msgid "Erase Mode"
 msgstr "Lschmodus"
 
@@ -8271,46 +8284,33 @@ msgstr "host_statistik64 fehlgeschlagen"
 msgid "task info failed"
 msgstr "Task-Info fehlgeschlagen"
 
-#~ msgid "Renderer"
-#~ msgstr "Renderer"
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "HDR-Monitor min. nits = {0}"
 
-#~ msgid "Complexity"
-#~ msgstr "Komplexität"
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "HDR-Monitor max. nits = {0}"
 
-#~ msgid "Stage Cache"
-#~ msgstr "Stufen-Cache"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Festplatten-Cache in GB"
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
+#~ msgstr "HDR-Monitor wurde von Vulkan oder dem Window Manager nicht erkannt."
 
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Informationen zum gedrehten Bild: {0}"
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Vulkan-Farbraum ist {0}"
 
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Vulkan-Format ist {0}"
+
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "Zum aktiven HDR-Monitor am Index {0} gewechselt"
+
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
 #~ msgstr ""
-#~ "Bild zu groß für das Speichern von Anmerkungen. Es wird auf die "
-#~ "Ansichtsgröße skaliert."
+#~ "Zu einem HDR-unterstützenden, aber inaktiven Monitor am Index {0} gewechselt"
 
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Ungültiges OpenGL-Format und -Typ"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "OpenGL-Informationen: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "Nicht unterstütztes Ausgabeformat"
-
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "Leere Videodaten zur Zeit {0}. Wiederholungsbild."
-
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "Bildebenen-Informationen '{0}': {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "Nicht unterstütztes Ausgabeformat: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Ungültige Schriftart für die Texterstellung"
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "Zum SDR-Monitor am Index {0} gewechselt"
 
 #~ msgid "Enter a UR."
 #~ msgstr "Geben Sie eine URL ein."

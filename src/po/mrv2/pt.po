@@ -1920,6 +1920,27 @@ msgstr "Fluxo {0} {1}..."
 msgid "Stop streaming"
 msgstr "Pára de transmitir"
 
+msgid "Renderer"
+msgstr "Renderer"
+
+msgid "Complexity"
+msgstr "Complexidade"
+
+msgid "Draw Mode"
+msgstr "Modo de desenho"
+
+msgid "Stage Cache"
+msgstr "Cache em estgio"
+
+msgid "Disk Cache in GB"
+msgstr "Cache de disco em GB"
+
+msgid "Type of Waveform Monitor."
+msgstr "Tipo de monitor de forma de onda."
+
+msgid "Type of Vectorscope."
+msgstr "Tipo de vetorscópio."
+
 msgid "Toggle other eye stereo image."
 msgstr "Comutar outra imagem estreo dos olhos."
 
@@ -2865,7 +2886,6 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "O ficheiro remoto {0} corresponde ao nome do ficheiro {1} mas no ao caminho."
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "O ficheiro remoto {0} no corresponde ao nome do ficheiro local."
 
@@ -2984,11 +3004,9 @@ msgstr "Configurar a configurao OCIO a partir de preferncias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Configurao da configurao OCIO a partir da varivel de ambiente OCIO."
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Os mapeamentos de caminhos foram carregados a partir de \"{0}{1}\"."
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Carregando as teclas acessrias de \"{0}{1}.prefs\"."
 
@@ -3001,7 +3019,6 @@ msgstr "Os mapas dos caminhos foram salvos para \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "As teclas quentes foram salvas para \"{0}{1}.prefs\"."
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "As preferncias foram salvas para: \"{0}{1}\"."
 
@@ -3053,7 +3070,6 @@ msgstr "Nenhuma vista padrão para exibir '{0}'. Existe exibição?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Configurao do OCIO Preset '{0}'."
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Predefinir \"{0}\" no foi encontrado."
 
@@ -3438,7 +3454,6 @@ msgstr "Por favor, selecione dois clipes de áudio contíguos."
 msgid "Could not save .otio file: {0}"
 msgstr "No foi possvel salvar o ficheiro.otio: {0}"
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Erro ao gravar {0}. {1}"
 
@@ -3454,7 +3469,6 @@ msgstr "Voc s pode adicionar clipes a uma lista de reproduo.otio EDL."
 msgid "Unknown media reference"
 msgstr "Referência dos meios de comunicação desconhecidos"
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Pista #{0} - {1}"
 
@@ -3616,6 +3630,9 @@ msgstr "USD"
 msgid "Vectorscope"
 msgstr "Vectorescpio"
 
+msgid "Waveform"
+msgstr "Forma de onda"
+
 msgid "Hotkeys"
 msgstr "Teclas quentes"
 
@@ -3709,7 +3726,6 @@ msgstr "Quadro {0} - CT: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamanho do visor: {0} - X={1}, Y={2}"
 
@@ -3883,29 +3899,34 @@ msgstr "O perfil HAP precisa de uma extenso.mov. Mud-lo para.mov"
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "O novo ficheiro {0} j existe! No  possvel sobrescrev- lo."
 
+msgid "Rotated image info: {0}"
+msgstr "Informaes sobre a imagem rotativa: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "Informao da imagem escalada: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: No foi possvel abrir o plugin do gravador."
 
 msgid "Image info: {0} {1}"
 msgstr "Informao da imagem: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "Informao da imagem escalada: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"Imagem muito grande para salvar anotações. Irá escalar para o tamanho do "
+"viewport."
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "O plugin do Writer no obteve informaes de sada. Por omisso para {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Informaes sobre a sada: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Usando o perfil {0}, o formato de pixel {1}."
 
 msgid "Using preset {0}."
 msgstr "Usando o predefinido {0}."
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Informações do buffer offscreen: {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "Informaes sobre a sada: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Salvar filme sem udio %<PRId64> - %<PRId64>"
@@ -3922,11 +3943,32 @@ msgstr "Gravar imagens sem udio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "udio apenas na linha do tempo, mas no tentando salvar udio."
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: Formato e tipo OpenGL invlidos"
+
+msgid "OpenGL info: {0}"
+msgstr "Informaes do OpenGL: {0}"
+
 msgid "Saving... {0}"
 msgstr "Salvar... {0}"
 
+msgid "Unsupported output format"
+msgstr "Formato de saída não suportado"
+
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "Dados de vídeo vazios no tempo {0}. Repetir o quadro."
+
 msgid "Render size: {0}"
 msgstr "Tamanho de renderização: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "Informações da Camada de Imagem '{0}': {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Informações do buffer offscreen: {0}"
+
+msgid "Unsupported output format: "
+msgstr "Formato de saída não suportado: "
 
 msgid "2.35"
 msgstr "2.35"
@@ -3952,38 +3994,14 @@ msgstr "Antes V: % 4<PRIu64> A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "Atrs de V: % 4<PRIu64> A: % 4<PRIu64>"
 
-msgid "HDR monitor min. nits = {0}"
-msgstr "Brilho mínimo do monitor HDR (nits) = {0}"
-
-msgid "HDR monitor max. nits = {0}"
-msgstr "Brilho máximo do monitor HDR (nits) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "Monitor HDR não encontrado ou não configurado."
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr "Monitor HDR não detectado pelo Vulkan ou pelo gerenciador de janelas."
-
-msgid "Vulkan color space is {0}"
-msgstr "O espaço de cor Vulkan é {0}"
-
-msgid "Vulkan format is {0}"
-msgstr "O formato Vulkan é {0}"
-
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "Alterado para o monitor HDR ativo no índice {0}"
-
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr "Alterado para o monitor com suporte a HDR, mas inativo, no índice {0}"
-
-msgid "Changed to SDR monitor at index {0}"
-msgstr "Alterado para monitor SDR no índice {0}"
-
 msgid "Edit Text"
 msgstr "Editar o Texto"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' não é um arquivo, diretório ou URL."
+
+msgid "Invalid font for text drawing"
+msgstr "Fonte invlida para desenho de texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No foi possvel converter a mensagem para forma:"
@@ -3997,7 +4015,6 @@ msgstr "Não é possível reproduzir – a anotação de áudio está vazia"
 msgid "Status is not saved"
 msgstr "O status não foi salvo"
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "O arquivo de anotação de áudio {0} está ausente ou não existe!"
 
@@ -4886,6 +4903,9 @@ msgstr "Substituir Todos"
 msgid "Replace Next"
 msgstr "Substituir Prxima"
 
+msgid "Mark an area in the image with SHIFT + the left mouse button"
+msgstr "Marque uma rea na imagem com SHIFT + o boto esquerdo do mouse"
+
 msgid "Build Environment:"
 msgstr "Construir Ambiente:"
 
@@ -4942,9 +4962,6 @@ msgstr "Tamanho mximo de textura:"
 
 msgid "This is a list of contributors to the mrv2 project:"
 msgstr "Esta  uma lista de contribuintes para o projeto mrv2:"
-
-msgid "Mark an area in the image with SHIFT + the left mouse button"
-msgstr "Marque uma rea na imagem com SHIFT + o boto esquerdo do mouse"
 
 msgid "&Copy"
 msgstr "& Copiar"
@@ -8149,9 +8166,6 @@ msgstr "Modo de arranque"
 msgid "Area Selection Mode"
 msgstr "Modo de Seleco de reas"
 
-msgid "Draw Mode"
-msgstr "Modo de desenho"
-
 msgid "Erase Mode"
 msgstr "Modo de eliminao"
 
@@ -8263,46 +8277,32 @@ msgstr "falhou o host_statistics64"
 msgid "task info failed"
 msgstr "Falhou a informao da tarefa"
 
-#~ msgid "Renderer"
-#~ msgstr "Renderer"
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "Brilho mínimo do monitor HDR (nits) = {0}"
 
-#~ msgid "Complexity"
-#~ msgstr "Complexidade"
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "Brilho máximo do monitor HDR (nits) = {0}"
 
-#~ msgid "Stage Cache"
-#~ msgstr "Cache em estgio"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "Monitor HDR não encontrado ou não configurado."
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "Cache de disco em GB"
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
+#~ msgstr "Monitor HDR não detectado pelo Vulkan ou pelo gerenciador de janelas."
 
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "Informaes sobre a imagem rotativa: {0}"
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "O espaço de cor Vulkan é {0}"
 
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr ""
-#~ "Imagem muito grande para salvar anotações. Irá escalar para o tamanho do "
-#~ "viewport."
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "O formato Vulkan é {0}"
 
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: Formato e tipo OpenGL invlidos"
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "Alterado para o monitor HDR ativo no índice {0}"
 
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "Informaes do OpenGL: {0}"
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
+#~ msgstr "Alterado para o monitor com suporte a HDR, mas inativo, no índice {0}"
 
-#~ msgid "Unsupported output format"
-#~ msgstr "Formato de saída não suportado"
-
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "Dados de vídeo vazios no tempo {0}. Repetir o quadro."
-
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "Informações da Camada de Imagem '{0}': {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "Formato de saída não suportado: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "Fonte invlida para desenho de texto"
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "Alterado para monitor SDR no índice {0}"
 
 #~ msgid "Enter a UR."
 #~ msgstr "Insira uma URL."

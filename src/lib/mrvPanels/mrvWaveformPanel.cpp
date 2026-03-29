@@ -71,6 +71,7 @@ namespace mrv
             c->add("SDR");
             c->add("HDR");
             c->value(1);
+            c->tooltip(_("Type of Waveform Monitor."));
             cW->callback(
                 [=](auto o)
                 {

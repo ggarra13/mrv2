@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.6.0\n"
+"Project-Id-Version: mrv2 v1.6.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -1692,6 +1692,27 @@ msgstr ""
 msgid "Stop streaming"
 msgstr ""
 
+msgid "Renderer"
+msgstr ""
+
+msgid "Complexity"
+msgstr ""
+
+msgid "Draw Mode"
+msgstr ""
+
+msgid "Stage Cache"
+msgstr ""
+
+msgid "Disk Cache in GB"
+msgstr ""
+
+msgid "Type of Waveform Monitor."
+msgstr ""
+
+msgid "Type of Vectorscope."
+msgstr ""
+
 msgid "Toggle other eye stereo image."
 msgstr ""
 
@@ -2613,7 +2634,6 @@ msgstr ""
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 
-#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr ""
 
@@ -2719,11 +2739,9 @@ msgstr ""
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
-#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr ""
 
-#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
@@ -2736,7 +2754,6 @@ msgstr ""
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr ""
 
-#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr ""
 
@@ -2788,7 +2805,6 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr ""
 
-#. ++-format
 msgid "Preset '{0}' not found."
 msgstr ""
 
@@ -3141,7 +3157,6 @@ msgstr ""
 msgid "Could not save .otio file: {0}"
 msgstr ""
 
-#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr ""
 
@@ -3157,7 +3172,6 @@ msgstr ""
 msgid "Unknown media reference"
 msgstr ""
 
-#. ++-format
 msgid "Track #{0} - {1}"
 msgstr ""
 
@@ -3318,6 +3332,9 @@ msgstr ""
 msgid "Vectorscope"
 msgstr ""
 
+msgid "Waveform"
+msgstr ""
+
 msgid "Hotkeys"
 msgstr ""
 
@@ -3406,7 +3423,6 @@ msgstr ""
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
-#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
@@ -3569,28 +3585,31 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
+msgid "Rotated image info: {0}"
+msgstr ""
+
+msgid "Scaled image info: {0}"
+msgstr ""
+
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
 msgid "Image info: {0} {1}"
 msgstr ""
 
-msgid "Scaled image info: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
 msgstr ""
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
+msgstr ""
+
+msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
 msgid "Using preset {0}."
-msgstr ""
-
-msgid "Offscreen Buffer info: {0}"
-msgstr ""
-
-msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -3608,10 +3627,31 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr ""
+
+msgid "OpenGL info: {0}"
+msgstr ""
+
 msgid "Saving... {0}"
 msgstr ""
 
+msgid "Unsupported output format"
+msgstr ""
+
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr ""
+
 msgid "Render size: {0}"
+msgstr ""
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr ""
+
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+msgid "Unsupported output format: "
 msgstr ""
 
 msgid "2.35"
@@ -3638,37 +3678,13 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
-msgid "HDR monitor min. nits = {0}"
-msgstr ""
-
-msgid "HDR monitor max. nits = {0}"
-msgstr ""
-
-msgid "HDR monitor not found or not configured."
-msgstr ""
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr ""
-
-msgid "Vulkan color space is {0}"
-msgstr ""
-
-msgid "Vulkan format is {0}"
-msgstr ""
-
-msgid "Changed to HDR active monitor at index {0}"
-msgstr ""
-
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr ""
-
-msgid "Changed to SDR monitor at index {0}"
-msgstr ""
-
 msgid "Edit Text"
 msgstr ""
 
 msgid "'{0}' is not a file, directory or url."
+msgstr ""
+
+msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -3683,7 +3699,6 @@ msgstr ""
 msgid "Status is not saved"
 msgstr ""
 
-#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr ""
 
@@ -4566,6 +4581,9 @@ msgstr ""
 msgid "Replace Next"
 msgstr ""
 
+msgid "Mark an area in the image with SHIFT + the left mouse button"
+msgstr ""
+
 msgid "Build Environment:"
 msgstr ""
 
@@ -4621,9 +4639,6 @@ msgid "Max. Texture Size:\t"
 msgstr ""
 
 msgid "This is a list of contributors to the mrv2 project:"
-msgstr ""
-
-msgid "Mark an area in the image with SHIFT + the left mouse button"
 msgstr ""
 
 msgid "&Copy"
@@ -6545,8 +6560,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -7555,9 +7570,6 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
-msgstr ""
-
-msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"

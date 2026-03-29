@@ -74,6 +74,7 @@ namespace mrv
             c->add("BT.601");
             c->add("BT.709");
             c->add("Rec.2020");
+            c->tooltip(_("Type of Vectorscope."));
             c->value(1);
             cW->callback(
                 [=](auto o)
