@@ -1785,10 +1785,7 @@ namespace mrv
                 }
                     
                 if (!p.image)
-                {
-                    LOG_ERROR("Could not get pixel under mouse");
                     return;
-                }
                 
                 p.rawImage = false;
                 break;

@@ -28,6 +28,16 @@ namespace mrv
         void update(const area::Info& info);
 
         void main(ViewerUI* m);
+
+        // HDR waveform support
+        // maxValue: linear-light ceiling (e.g. 12.0 = 12× SDR white)
+        // logScale: true = log2 mapping (recommended), false = linear
+        void  setHDRMode(bool enabled,
+                         float maxValue = 12.f,
+                         bool  logScale = true);
+        bool  isHDRMode()     const;
+        float hdrMaxValue()   const;
+        bool  isHDRLogScale() const;
         
     protected:
         void draw_grid();

@@ -58,11 +58,38 @@ namespace mrv
 
             int X = g->x();
             int Y = g->y();
+            int W = g->w();
 
+            Fl_Group* cg;
+            Fl_Box* b;
+            Fl_Choice* c;
+            cg = new Fl_Group(X, Y, W, 20);
+            cg->begin();
+            b = new Fl_Box(X, Y, 120, 20, _("Type"));
+            auto cW = new Widget< Fl_Choice >(X + b->w(), Y, W - b->w(), 20);
+            c = cW;
+            c->add("SDR");
+            c->add("HDR");
+            c->value(1);
+            cW->callback(
+                [=](auto o)
+                {
+                    bool isSDR = (o->value() == 0);
+                    if (isSDR)
+                    {
+                        _r->waveform->setHDRMode(false);
+                    }
+                    else
+                    {
+                        _r->waveform->setHDRMode(true);
+                    }
+                });
+            cg->end();
+            
             // Create a rectangular waveform
             r.waveform = new Waveform(X, Y, g->w(), g->w());
             r.waveform->main(p.ui);
-
+            
             g->resizable(r.waveform);
         }
 
