@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <FL/Fl_Group.H>
+#include <FL/Fl_Box.H>
 
 #include <tlCore/Util.h>
 #include <tlCore/Color.h>
@@ -46,7 +46,7 @@ namespace mrv
     // hued rather than washing out to white.
     enum class VectorscopeMethod { ITU601, ITU709, Rec2020 };
 
-    class Vectorscope : public Fl_Group
+    class Vectorscope : public Fl_Box
     {
     public:
         Vectorscope(int X, int Y, int W, int H, const char* L = 0);

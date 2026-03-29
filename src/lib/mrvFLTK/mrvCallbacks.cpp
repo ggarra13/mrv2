@@ -146,6 +146,7 @@ namespace mrv
         {_("USD"), (Fl_Callback*)usd_panel_cb},
 #endif
         {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
+        {_("Waveform"), (Fl_Callback*)waveform_panel_cb},
         {_("Hotkeys"), (Fl_Callback*)nullptr},
         {_("Preferences"), (Fl_Callback*)nullptr},
         {_("About"), (Fl_Callback*)nullptr},
@@ -1117,6 +1118,8 @@ namespace mrv
             panel::histogramPanel->save();
         if (panel::vectorscopePanel)
             panel::vectorscopePanel->save();
+        if (panel::waveformPanel)
+            panel::waveformPanel->save();
         if (panel::environmentMapPanel)
             panel::environmentMapPanel->save();
 #ifdef MRV2_PYBIND11

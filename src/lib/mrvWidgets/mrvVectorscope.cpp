@@ -119,7 +119,7 @@ namespace mrv
         int               diameter            = 250;
         math::Box2i       box;
         image::PixelType  pixelType;
-        uint8_t*          image               = nullptr;
+        const uint8_t*    image               = nullptr;
         size_t            dataSize            = 0;
         ViewerUI*         ui                  = nullptr;
         float             chromaNorm          = 0.596f;  // updated by setMethod()
@@ -137,18 +137,15 @@ namespace mrv
     // Construction / destruction
     // ─────────────────────────────────────────────────────────────────────────
     Vectorscope::Vectorscope(int X, int Y, int W, int H, const char* L) :
-        Fl_Group(X, Y, W, H, L),
+        Fl_Box(X, Y, W, H, L),
         _p(new Private)
     {
-        end();
         tooltip(_("Mark an area in the image with SHIFT + the left mouse "
                   "button"));
     }
 
     Vectorscope::~Vectorscope()
     {
-        TLRENDER_P();
-        free(p.image);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -197,7 +194,7 @@ namespace mrv
         H = W;
 
         p.diameter = W;
-        Fl_Group::resize(X, Y, W, H);
+        Fl_Box::resize(X, Y, W, H);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -231,7 +228,7 @@ namespace mrv
 
         if (!viewImage)
         {
-            redraw();
+            p.image = reinterpret_cast<const uint8_t*>(viewImage);
             return;
         }
 
@@ -244,10 +241,8 @@ namespace mrv
         if (dataSize != p.dataSize)
         {
             p.dataSize = dataSize;
-            free(p.image);
-            p.image = reinterpret_cast<uint8_t*>(malloc(dataSize));
+            p.image = reinterpret_cast<const uint8_t*>(viewImage);
         }
-        memcpy(p.image, viewImage, dataSize);
 
         redraw();
     }

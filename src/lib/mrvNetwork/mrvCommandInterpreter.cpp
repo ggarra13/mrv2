@@ -1314,6 +1314,19 @@ namespace mrv
                     (value && !vectorscopePanel))
                     vectorscope_panel_cb(nullptr, ui);
             }
+            else if (c == "Waveform Panel")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                bool value = message["value"];
+                if ((!value && waveformPanel) ||
+                    (value && !waveformPanel))
+                    waveform_panel_cb(nullptr, ui);
+            }
             else if (c == "Stereo 3D Panel")
             {
                 bool receive = prefs->ReceiveUI->value();

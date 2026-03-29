@@ -14,7 +14,7 @@ set(HEADERS
     mrvHistogramPanel.h
     mrvImageInfoPanel.h
     mrvLogsPanel.h
-     mrvPanelsAux.h
+    mrvPanelsAux.h
     mrvPanelsCallbacks.h
     mrvPanelWidget.h
     mrvPlaylistPanel.h
@@ -22,6 +22,7 @@ set(HEADERS
     mrvStereo3DPanel.h
     mrvThumbnailPanel.h
     mrvVectorscopePanel.h
+    mrvWaveformPanel.h
 )
 
 set(SOURCES
@@ -44,6 +45,7 @@ set(SOURCES
     mrvStereo3DPanel.cpp
     mrvThumbnailPanel.cpp
     mrvVectorscopePanel.cpp
+    mrvWaveformPanel.cpp
 )
 	
 if(TLRENDER_USD)

@@ -181,6 +181,7 @@ namespace mrv
 #endif
                 {"Histogram", (histogramPanel != nullptr)},
                 {"Vectorscope", (vectorscopePanel != nullptr)},
+                {"Waveform", (waveformPanel != nullptr)},
                 {"Stereo 3D", (stereo3DPanel != nullptr)},
 #ifdef TLRENDER_USD
                 {"USD", (usdPanel != nullptr)},
@@ -226,6 +227,8 @@ namespace mrv
                 histogramPanel->save();
             if (vectorscopePanel)
                 vectorscopePanel->save();
+            if (waveformPanel)
+                waveformPanel->save();
             if (logsPanel)
                 logsPanel->save();
 

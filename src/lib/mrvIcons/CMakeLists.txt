@@ -86,6 +86,7 @@ set(SOURCES
     USD.cpp
     Vectorscope.cpp
     Volume.cpp
+    Waveform.cpp
     WindowFullScreen.cpp
     WindowSecondary.cpp
 )

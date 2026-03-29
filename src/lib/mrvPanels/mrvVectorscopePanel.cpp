@@ -60,7 +60,7 @@ namespace mrv
 
             int X = g->x();
             int Y = g->y();
-            int W = g->w() - 3;
+            int W = g->w();
             int H = g->h();
             
             Fl_Group* cg;

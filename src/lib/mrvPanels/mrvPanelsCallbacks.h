@@ -24,6 +24,7 @@
 #include "mrvPanels/mrvSettingsPanel.h"
 #include "mrvPanels/mrvStereo3DPanel.h"
 #include "mrvPanels/mrvVectorscopePanel.h"
+#include "mrvPanels/mrvWaveformPanel.h"
 
 #ifdef MRV2_NETWORK
 #    include "mrvPanels/mrvNetworkPanel.h"
@@ -61,6 +62,7 @@ namespace mrv
         extern ImageInfoPanel* imageInfoPanel;
         extern HistogramPanel* histogramPanel;
         extern VectorscopePanel* vectorscopePanel;
+        extern WaveformPanel* waveformPanel;
         extern EnvironmentMapPanel* environmentMapPanel;
         extern Stereo3DPanel* stereo3DPanel;
         extern BackgroundPanel* backgroundPanel;
@@ -119,6 +121,7 @@ namespace mrv
         void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void usd_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void waveform_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui);
         ///@}
     } // namespace panel

@@ -1442,7 +1442,7 @@ namespace mrv
             if (selection.max.x >= 0)
             {
                 if (panel::colorAreaPanel || panel::histogramPanel ||
-                    panel::vectorscopePanel)
+                    panel::vectorscopePanel || panel::waveformPanel)
                 {
                     _mapBuffer();
 
@@ -1460,6 +1460,10 @@ namespace mrv
                         if (panel::vectorscopePanel)
                         {
                             panel::vectorscopePanel->update(p.colorAreaInfo);
+                        }
+                        if (panel::waveformPanel)
+                        {
+                            panel::waveformPanel->update(p.colorAreaInfo);
                         }
                     }
                 }

@@ -516,6 +516,13 @@ namespace mrv
                 else
                     item->clear();
             }
+            else if (tmp == _("Waveform"))
+            {
+                if (waveformPanel)
+                    item->set();
+                else
+                    item->clear();
+            }
             else if (tmp == _("Compare"))
             {
                 if (comparePanel)

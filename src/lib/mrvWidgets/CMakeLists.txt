@@ -76,6 +76,7 @@ set(HEADERS
     mrvVectorscope.h
     mrvVersion.h
     mrvVolumeSlider.h
+    mrvWaveform.h
 )
 
 set(SOURCES
@@ -126,6 +127,7 @@ set(SOURCES
     mrvVectorscope.cpp
     mrvVersion.cpp
     mrvVolumeSlider.cpp
+    mrvWaveform.cpp
 )
 
 

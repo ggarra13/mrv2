@@ -25,6 +25,7 @@ namespace mrv
         ImageInfoPanel* imageInfoPanel = nullptr;
         HistogramPanel* histogramPanel = nullptr;
         VectorscopePanel* vectorscopePanel = nullptr;
+        WaveformPanel* waveformPanel = nullptr;
         Stereo3DPanel* stereo3DPanel = nullptr;
         BackgroundPanel* backgroundPanel = nullptr;
 #ifdef MRV2_PYBIND11
@@ -479,6 +480,26 @@ namespace mrv
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 
+        void waveform_panel_cb(Fl_Widget* w, ViewerUI* ui)
+        {
+            bool send = ui->uiPrefs->SendUI->value();
+            if (send)
+            {
+                tcp->pushMessage(
+                    "Waveform Panel", static_cast<bool>(!waveformPanel));
+            }
+
+            if (waveformPanel)
+            {
+                delete waveformPanel;
+                waveformPanel = nullptr;
+                ui->uiMain->fill_menu(ui->uiMenuBar);
+                return;
+            }
+            waveformPanel = new WaveformPanel(ui);
+            ui->uiMain->fill_menu(ui->uiMenuBar);
+        }
+        
         void environment_map_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
             bool send = ui->uiPrefs->SendUI->value();
@@ -622,6 +643,8 @@ namespace mrv
                     "Histogram Panel", static_cast<bool>(histogramPanel));
                 tcp->pushMessage(
                     "Vectorscope Panel", static_cast<bool>(vectorscopePanel));
+                tcp->pushMessage(
+                    "Waveform Panel", static_cast<bool>(waveformPanel));
             }
         }
 
