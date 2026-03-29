@@ -119,7 +119,7 @@ namespace mrv
         int               diameter            = 250;
         math::Box2i       box;
         image::PixelType  pixelType;
-        const uint8_t*    image               = nullptr;
+        uint8_t*          image               = nullptr;
         size_t            dataSize            = 0;
         ViewerUI*         ui                  = nullptr;
         float             chromaNorm          = 0.596f;  // updated by setMethod()
@@ -146,6 +146,9 @@ namespace mrv
 
     Vectorscope::~Vectorscope()
     {
+        TLRENDER_P();
+        
+        free(p.image);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -228,7 +231,8 @@ namespace mrv
 
         if (!viewImage)
         {
-            p.image = reinterpret_cast<const uint8_t*>(viewImage);
+            free(p.image);
+            p.image = nullptr;
             return;
         }
 
@@ -241,8 +245,9 @@ namespace mrv
         if (dataSize != p.dataSize)
         {
             p.dataSize = dataSize;
-            p.image = reinterpret_cast<const uint8_t*>(viewImage);
+            p.image = reinterpret_cast<uint8_t*>(malloc(dataSize));
         }
+        memcpy(p.image, viewImage, dataSize);
 
         redraw();
     }
@@ -292,7 +297,7 @@ namespace mrv
                 chromaInput.r = color::inverse_st2084_eotf(chromaInput.r);
                 chromaInput.g = color::inverse_st2084_eotf(chromaInput.g);
                 chromaInput.b = color::inverse_st2084_eotf(chromaInput.b);
-
+                
                 if (p.method == VectorscopeMethod::Rec2020)
                 {
                     const float inv = 1.f / p.referenceWhiteLinear;
@@ -403,7 +408,7 @@ namespace mrv
                     chromaInput.g = static_cast<float>(std::max(0.0, g));
                     chromaInput.b = static_cast<float>(std::max(0.0, b));
 
-                    // ── Step 3: BT.709 OETF → R′G′B′ ────────────────────────────────
+                    // ── Step 3: BT.709 OETF → R′G′B′ ────────────────────────
                     // The ITU-R BT.709 / BT.601 YCbCr matrices are defined for
                     // gamma-encoded signals, so we must re-apply the OETF here.
                     auto oetf709 = [](float L) -> float
@@ -441,15 +446,16 @@ namespace mrv
         if (p.method == VectorscopeMethod::Rec2020)
         {
             // Use the already-scaled chromaInput (where 203 nits = 1.0).
-            // Apply a 2.2 gamma correction so the dots look vibrant on an SDR UI.
+            // Apply a 2.2 gamma correction so the dots look vibrant on an SDR
+            // UI.
             // We use a simple power function instead of Reinhard to keep 
             // reference white at full brightness.
             dr = std::pow(std::max(0.f, chromaInput.r), 1.f / 2.2f);
             dg = std::pow(std::max(0.f, chromaInput.g), 1.f / 2.2f);
             db = std::pow(std::max(0.f, chromaInput.b), 1.f / 2.2f);
             
-            // Clamp for the 8-bit blit, but highlights (> 203 nits) will correctly 
-            // bloom toward white.
+            // Clamp for the 8-bit blit, but highlights (> 203 nits) will
+            // correctly bloom toward white.
             dr = std::min(dr, 1.0f);
             dg = std::min(dg, 1.0f);
             db = std::min(db, 1.0f);
@@ -477,7 +483,8 @@ namespace mrv
         const int pixelSize = p.diameter / 270;
         if (pixelSize <= 1)
         {
-            fl_rectf(posX, posY, 1, 1, r8, g8, b8);
+            fl_color(r8, g8, b8);
+            fl_point(posX, posY);
         }
         else
         {

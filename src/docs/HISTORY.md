@@ -49,8 +49,7 @@ Change Log
 
 - Added Rec2020 support for the Vectorscope.
 - Made BT601 and BT709 in Vectorscope work when the swapchain is VK_COLOR_SPACE_HDR10_ST2084_EXT.  There are some minor floating point issues.
-- 10% to 20% Improvement in performance of the Vectorscope.
-- The Vectorscope, on the Vulkan backend, can be used to monitor at 30FPS a 4K image.  The OpenGL backend only reaches 17-18 FPS.
+  - The Vectorscope, on the Vulkan backend, can be used to monitor at 30FPS a 4K image.  The OpenGL backend only reaches 17-18 FPS.
 - Fixed vectorscope to display the proper image values when pixel bar's pixel types is set to Original (O).
 - Added Panel->Waveform Monitor as a new Panel.
 

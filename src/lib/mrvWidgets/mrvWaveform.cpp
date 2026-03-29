@@ -51,7 +51,7 @@ namespace mrv
         ViewerUI*         ui                  = nullptr;
         math::Box2i       box;
         image::PixelType  pixelType;
-        const uint8_t*    image               = nullptr;
+        uint8_t*          image               = nullptr;
         size_t            dataSize            = 0;
         
         // ── HDR display options ──────────────────────────────────────────────
@@ -67,9 +67,9 @@ namespace mrv
         // (luminance == 1.0) so the operator can see where broadcast-legal
         // levels end.
         bool              hdrMode             = true;
-        float             hdrMaxValue         = 12.f;   // e.g. 12 stops above 0
-        bool              hdrLogScale         = true;   // log2 feels more natural
-        //                                                for HDR stop-based work
+        float             hdrMaxValue         = 12.f; // e.g. 12 stops above 0
+        bool              hdrLogScale         = true; // log2 feels more natural
+                                                      // for HDR stop-based work
     };
     
     // ─────────────────────────────────────────────────────────────────────────
@@ -87,6 +87,8 @@ namespace mrv
 
     Waveform::~Waveform()
     {
+        TLRENDER_P();
+        free(p.image);
     }
 
     // ── HDR accessors ────────────────────────────────────────────────────────
@@ -117,7 +119,8 @@ namespace mrv
 
         if (!viewImage)
         {
-            p.image = reinterpret_cast<const uint8_t*>(viewImage);
+            free(p.image);
+            p.image = nullptr;
             redraw();
             return;
         }
@@ -131,8 +134,10 @@ namespace mrv
         if (dataSize != p.dataSize)
         {
             p.dataSize = dataSize;
-            p.image = reinterpret_cast<const uint8_t*>(viewImage);
+            p.image = reinterpret_cast<uint8_t*>(malloc(dataSize));
         }
+        memcpy(p.image, viewImage, dataSize);
+        
         redraw();
     }
     
@@ -145,8 +150,7 @@ namespace mrv
     }
     
     void Waveform::draw_grid()
-    {
-        
+    {        
         TLRENDER_P();
  
         fl_line_style(FL_DASH, 1);
@@ -214,7 +218,7 @@ namespace mrv
         
         X = x() + static_cast<int>(pct * w());
 
-                // ── Waveform Y position ──────────────────────────────────────────────
+        // ── Waveform Y position ──────────────────────────────────────────────
         const float luma = calculate_brightness(rgba, kAsLuminance);
         const float norm = luminanceToNorm(
             luma, p.hdrMode, p.hdrMaxValue, p.hdrLogScale);
@@ -222,7 +226,7 @@ namespace mrv
         // norm == 0 → bottom of widget, norm == 1 → top
         const int Y = y() + wh - static_cast<int>(norm * wh);
 
-        // ── Display colour ───────────────────────────────────────────
+        // ── Display colour ───────────────────────────────────────────────────
         float dr = rgba.r;
         float dg = rgba.g;
         float db = rgba.b;
@@ -251,8 +255,9 @@ namespace mrv
         const uint8_t r8 = static_cast<uint8_t>(dr * 255.f);
         const uint8_t g8 = static_cast<uint8_t>(dg * 255.f);
         const uint8_t b8 = static_cast<uint8_t>(db * 255.f);
-        
-        fl_rectf(X, Y, 1, 1, r8, g8, b8);
+
+        fl_color(r8, g8, b8);
+        fl_point(X, Y);
     }
 
     void Waveform::draw_pixels()
