@@ -18,6 +18,7 @@ if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
 endif()
 
 set(libdisplay_info_CONFIGURE
+    COMMAND rm -rf build
     COMMAND ${CMAKE_COMMAND} -E env
     "CXXFLAGS=${libdisplay_info_CXXFLAGS}"
     "CFLAGS=${libdisplay_info_CFLAGS}"
@@ -25,7 +26,6 @@ set(libdisplay_info_CONFIGURE
     "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib"
     ${libdisplay_info_PYTHONPATH} 
     -- ${MESON_EXECUTABLE} setup
-    --wipe
     --prefix=${CMAKE_INSTALL_PREFIX}
     build)
 
