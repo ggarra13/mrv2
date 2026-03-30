@@ -8,13 +8,10 @@ function(find_meson_executable TARGET)
         find_program(_LOCAL_MESON
 	    NAMES
 	    meson meson.exe
-	    PATHS
-	    /opt/homebrew/bin
-	    /usr/local/bin
-	    $ENV{PATH}
 	)
         if(NOT _LOCAL_MESON)
-            message(FATAL_ERROR "Meson build system not found!")
+            message(WARNING "Meson build system not found! Using meson")
+	    set(_LOCAL_MESON meson)
         endif()
     else()
 	if(WIN32)
