@@ -14,7 +14,7 @@
 # the main executable on BUILD_DIR (by default
 #                                   BUILD-OS-ARCH/BUILD_TYPE/install/bin).
 #
-# The small build does not have Python, USD, PDF, NDI or NETWORK support.
+# This build does not have Python, USD, PDF or NDI support.
 # It is intended for solo artists.
 # 
 #
@@ -57,6 +57,8 @@ export TLRENDER_AV1=OFF
 export TLRENDER_FFMPEG=ON
 export TLRENDER_FFMPEG_MINIMAL=ON
 export TLRENDER_LIBPLACEBO=OFF
+export TLRENDER_NET=ON
+export TLRENDER_SSL=ON
 export TLRENDER_EXR=ON
 export TLRENDER_OPENJPH=ON
 export TLRENDER_WAYLAND=ON
