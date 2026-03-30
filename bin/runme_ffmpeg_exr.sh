@@ -48,7 +48,7 @@ export CMAKE_FLAGS=""
 
 . etc/options_off.sh
 
-export BUILD_PYTHON=OFF   # needed for meson install
+export BUILD_PYTHON=OFF
 
 export MRV2_CPPTRACE=ON
 

@@ -41,11 +41,8 @@ set(SOURCES
     mrvUtil.cpp
 )
 
-if (MRV2_NETWORK)
-    find_package(Poco REQUIRED Net NetSSL JSON Foundation)
-endif()
-if (TLRENDER_NET)
-    find_package(OpenSSL REQUIRED)
+if (TLRENDER_NET OR TLRENDER_SSL)
+    find_package(OpenSSL REQUIRED CONFIG)
 endif()
 
 set(LIBRARIES mrvOptions)
@@ -59,7 +56,7 @@ if (MRV2_NETWORK)
 	Poco::Foundation
     )
 endif()
-if (TLRENDER_NET)
+if (TLRENDER_NET OR TLRENDER_SSL)
     list(APPEND LIBRARIES_PRIVATE
 	OpenSSL::SSL
 	OpenSSL::Crypto)
