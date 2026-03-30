@@ -25,7 +25,7 @@ if(TLRENDER_GL AND MRV2_BACKEND STREQUAL "GL")
     # mrvUI, mrvEdit, mrvWidgets, mrvCore, FLTK_gl
     add_subdirectory(mrvGL)
 endif()
-add_subdirectory(mrvViewport)    # mrvWidgets 
+add_subdirectory(mrvViewport)    # mrvWidgets, mrvFLTK and mrvVoice
 if(MRV2_PDF)
     add_subdirectory(mrvPDF)     # mrvWidgets
 endif()
