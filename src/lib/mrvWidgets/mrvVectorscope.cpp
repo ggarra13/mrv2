@@ -40,7 +40,6 @@
 
 namespace mrv
 {
-
     // ─────────────────────────────────────────────────────────────────────────
     // Simple per-channel Reinhard tone-map: maps [0, ∞) → [0, 1).
     // Applied to HDR dot colours so they stay vividly hued on screen.
@@ -439,8 +438,15 @@ namespace mrv
 
         constexpr float kScale = 0.85f;   // keeps targets comfortably inside
 
-        const int posX = cx + static_cast<int>( cbNorm * R * kScale);
-        const int posY = cy + static_cast<int>(-crNorm * R * kScale);  // Y↑
+        int offX = static_cast<int>( cbNorm * R * kScale);
+        int offY = static_cast<int>(-crNorm * R * kScale);
+
+        // These clamps are needed to avoid FLTK going crazy when drawing.
+        offX = math::clamp(offX, -p.diameter, p.diameter);
+        offY = math::clamp(offY, -p.diameter, p.diameter);
+        
+        const int posX = cx + offX;
+        const int posY = cy + offY;  // Y↑
 
         // ── Dot colour ────────────────────────────────────────────────────
         float dr = color.r, dg = color.g, db = color.b;
@@ -500,6 +506,7 @@ namespace mrv
     void Vectorscope::draw_pixels() const noexcept
     {
         TLRENDER_P();
+
         
         if (!p.box.isValid())
             return;
