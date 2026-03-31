@@ -69,8 +69,14 @@ namespace mrv
             auto cW = new Widget< Fl_Choice >(X + b->w(), Y, W - b->w(), 20);
             c = cW;
             c->add("SDR");
+#ifdef VULKAN_BACKEND
             c->add("HDR");
             c->value(1);
+#endif
+
+#ifdef OPENGL_BACKEND
+            c->value(0);
+#endif
             c->tooltip(_("Type of Waveform Monitor."));
             cW->callback(
                 [=](auto o)

@@ -229,6 +229,8 @@ namespace mrv
 
         // ── Waveform Y position ──────────────────────────────────────────────
         float luma = calculate_brightness(rgba, kAsLuminance);
+        
+#ifdef VULKAN_BACKEND
         if (p.hdrMode)
         {
             if (p.ui->uiPixelWindow->uiPixelValue->value() !=
@@ -236,7 +238,11 @@ namespace mrv
             {
                 Fl_Vk_Context& ctx = p.ui->uiView->getContext();
                 if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT)
-                    luma = color::pqToLinear(luma);
+                {
+                    // Display 2084 Nonlinear uses PQ transfer function.
+                    // We map the non-linear luma back to linear space.
+                    luma = color::pqToLinear(luma, 203.F);
+                }
                 else if (ctx.colorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
                 {
                     // Display P3 Nonlinear uses the sRGB transfer function.
@@ -245,6 +251,7 @@ namespace mrv
                 }
             }
         }
+#endif
         
         const float norm = luminanceToNorm(
             luma, p.hdrMode, p.hdrMaxValue, p.hdrLogScale);
