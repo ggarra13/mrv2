@@ -125,13 +125,14 @@ namespace mrv
 
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
+        const std::string& suffix = path.getSuffix();
         
         std::string number = path.getNumber();
         if (!number.empty()) number = std::to_string(startTime.to_frames());
 
         const std::string& extension = path.getExtension();
 
-        std::string newFile = directory + baseName + number + extension;
+        std::string newFile = directory + baseName + number + suffix + extension;
 
         try
         {
@@ -336,7 +337,7 @@ namespace mrv
                 }
             }
 
-            newFile = directory + baseName + number + newExtension;
+            newFile = directory + baseName + number + suffix + newExtension;
 
             if (newFile != file)
             {
