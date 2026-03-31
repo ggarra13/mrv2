@@ -180,7 +180,6 @@ namespace mrv
     
     extern Hotkey kVideoLevelsFile;
     extern Hotkey kVideoLevelsLegalRange;
-    extern Hotkey kVideoLevelsLegalRangeHDR;
     extern Hotkey kVideoLevelsFullRange;
 
     extern Hotkey kAlphaBlendNone;
