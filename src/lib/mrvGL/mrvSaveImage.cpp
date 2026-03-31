@@ -672,7 +672,7 @@ namespace mrv
         int64_t currentFrame = currentTime.to_frames();
         char filename[4096];
         snprintf(
-            filename, 4096, "%s%s%0*" PRId64 "%s",
+            filename, 4096, "%s%s%0*" PRId64 "%s%s",
             path.getDirectory().c_str(),
             path.getBaseName().c_str(),
             static_cast<int>(path.getPadding()),

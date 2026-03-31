@@ -34,7 +34,7 @@ namespace mrv
         const ViewerUI* ui, SaveOptions options = SaveOptions());
 
     //! Saves a movie or sequence.
-    void save_movie(
+    void save_movie_or_sequence(
         const std::string& file, const ViewerUI* ui,
         SaveOptions options = SaveOptions());
 

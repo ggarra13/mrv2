@@ -59,11 +59,11 @@ namespace mrv
         using namespace tl;
 
         bool found = false;
-
+            
         auto cacheInfoObserver =
             observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                 player->player()->observeCacheInfo(),
-                [&startTime, &found](const timeline::PlayerCacheInfo& value)
+                [&player, &startTime, &found](const timeline::PlayerCacheInfo& value)
                 {
                     for (const auto& t : value.videoFrames)
                     {
@@ -83,7 +83,8 @@ namespace mrv
     }
 
     void
-    save_movie(const std::string& file, const ViewerUI* ui, SaveOptions options)
+    save_movie_or_sequence(const std::string& file, const ViewerUI* ui,
+                           SaveOptions options)
     {
         std::string msg;
         MyViewport* view = ui->uiView;
@@ -959,6 +960,9 @@ namespace mrv
                         player->frameNext();
                     else
                         player->seek(currentTime);
+                    
+                    // We wait for the frame to arrive in cache.
+                    waitForFrame(player, currentTime);
                 }
 
                 frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;

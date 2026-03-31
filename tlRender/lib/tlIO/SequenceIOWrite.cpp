@@ -22,6 +22,7 @@ namespace tl
             std::string baseName;
             std::string number;
             int pad = 0;
+            std::string suffix;
             std::string extension;
 
             float defaultSpeed = sequenceDefaultSpeed;
@@ -54,9 +55,10 @@ namespace tl
             const otime::RationalTime& time,
             const std::shared_ptr<image::Image>& image, const Options& options)
         {
+            const bool listdir = true;
             _writeVideo(
-                _path.getFrame(static_cast<int>(time.value())), time, image,
-                merge(options, _options));
+                _path.getFrame(static_cast<int>(time.value()), listdir), time,
+                image, merge(options, _options));
         }
     } // namespace io
 } // namespace tl

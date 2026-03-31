@@ -575,7 +575,7 @@ namespace mrv
 
         try
         {
-            save_movie(file, ui, options);
+            save_movie_or_sequence(file, ui, options);
         }
         catch (const std::exception& e)
         {
@@ -775,7 +775,7 @@ namespace mrv
         {
             try
             {
-                save_movie(file, ui, options);
+                save_movie_or_sequence(file, ui, options);
             }
             catch (const std::exception& e)
             {
@@ -995,7 +995,7 @@ namespace mrv
         {
             try
             {
-                save_movie(file, ui, options);
+                save_movie_or_sequence(file, ui, options);
             }
             catch (const std::exception& e)
             {

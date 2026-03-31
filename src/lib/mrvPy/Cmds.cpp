@@ -406,7 +406,7 @@ namespace mrv2
         void
         save(const std::string& file, const SaveOptions opts = SaveOptions())
         {
-            save_movie(file, App::ui, opts);
+            save_movie_or_sequence(file, App::ui, opts);
         }
 
         /**

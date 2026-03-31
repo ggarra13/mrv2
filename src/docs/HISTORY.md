@@ -55,6 +55,7 @@ Change Log
 - Made waveform display the proper image values when pixel bar's pixel type is set to Original (O).
 - Fixed some bugs in color formulas.
 - Fixed a huge bug from v1.6.0 where it would not allow saving movie files.
+- Fixed a huge bug when saving image sequences in Vulkan backend.
 
 v1.6.0
 ======

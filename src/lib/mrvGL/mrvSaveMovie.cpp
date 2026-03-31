@@ -81,7 +81,8 @@ namespace mrv
     }
 
     void
-    save_movie(const std::string& file, const ViewerUI* ui, SaveOptions options)
+    save_movie_or_sequence(const std::string& file, const ViewerUI* ui,
+                           SaveOptions options)
     {
         std::string msg;
         MyViewport* view = ui->uiView;
@@ -1089,6 +1090,9 @@ namespace mrv
                         player->frameNext();
                     else if (!hasVideo)
                         player->seek(currentTime);
+
+                    // We wait for the frame to arrive in cache.
+                    waitForFrame(player, currentTime);
                 }
 
 #ifdef VULKAN_BACKEND

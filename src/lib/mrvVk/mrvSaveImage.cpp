@@ -13,8 +13,6 @@
 #include "mrvFLTK/mrvSave.h"
 #include "mrvFl/mrvIO.h"
 
-#include "mrvGL/mrvGLErrors.h"
-
 #include "mrvNetwork/mrvTCP.h"
 
 #include "mrvImage/mrvOperations.h"
@@ -566,7 +564,7 @@ namespace mrv
             waitForFrame(player, time);
 
             _save_single_frame(file, ui, options, frameIndex);
-
+            
             frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
         }
 
@@ -612,6 +610,8 @@ namespace mrv
             waitForFrame(player, time);
 
             _save_single_frame(file, ui, options, frameIndex);
+            
+            frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
         }
 
         view->setFrameView(ui->uiPrefs->uiPrefsAutoFitImage->value());
@@ -662,8 +662,6 @@ namespace mrv
         waitForFrame(player, currentTime);
             
         _save_single_frame(file, ui, options, 0);
-
-        Fl::wait(1);
         
         // Rename file name that got saved with a frame number to the actual
         // frame that the user set.
