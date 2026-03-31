@@ -301,26 +301,15 @@ namespace mrv
             float g = info.rgba.mean.g;
             float b = info.rgba.mean.b;
 
-            if (r > 1.F)
-                r = 1.F;
-            if (g > 1.F)
-                g = 1.F;
-            if (b > 1.F)
-                b = 1.F;
-
-            if (r < 0.F)
-                r = 0.F;
-            if (g < 0.F)
-                g = 0.F;
-            if (b < 0.F)
-                b = 0.F;
-
             if (r <= 0.01f && g <= 0.01f && b <= 0.01f)
                 col = FL_BLACK;
             else
             {
+                float cr = std::clamp(r, 0.F, 1.F);
+                float cg = std::clamp(g, 0.F, 1.F);
+                float cb = std::clamp(b, 0.F, 1.F);
                 col = fl_rgb_color(
-                    (uchar)(r * 255), (uchar)(g * 255), (uchar)(b * 255));
+                    (uchar)(cr * 255), (uchar)(cg * 255), (uchar)(cb * 255));
             }
         }
 

@@ -751,8 +751,6 @@ namespace mrv
                 }
             }
 
-            // _diagnoseColorSpaceState();
-
             // Store command for easy access.
             vk.cmd = cmd;
             
@@ -1406,15 +1404,11 @@ namespace mrv
                 // Check min < max
                 if (selection.min.x > selection.max.x)
                 {
-                    int tmp = selection.max.x;
-                    selection.max.x = selection.min.x;
-                    selection.min.x = tmp;
+                    std::swap(selection.min.x, selection.max.x);
                 }
                 if (selection.min.y > selection.max.y)
                 {
-                    int tmp = selection.max.y;
-                    selection.max.y = selection.min.y;
-                    selection.min.y = tmp;
+                    std::swap(selection.min.y, selection.max.y);
                 }
                 // Copy it again in case it changed
                 p.colorAreaInfo.box = selection;

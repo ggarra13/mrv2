@@ -42,8 +42,7 @@ set(SOURCES
 )
 
 if (TLRENDER_NET OR TLRENDER_SSL)
-    set(OPENSSL_USE_STATIC_LIBS TRUE)
-    find_package(OpenSSL REQUIRED CONFIG)
+    find_package(OpenSSL REQUIRED)
 endif()
 
 set(LIBRARIES mrvOptions)

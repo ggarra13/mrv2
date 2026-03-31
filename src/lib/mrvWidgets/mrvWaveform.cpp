@@ -53,6 +53,10 @@ namespace mrv
         image::PixelType  pixelType;
         uint8_t*          image               = nullptr;
         size_t            dataSize            = 0;
+
+
+        
+        float            st2084PeakNits       = 1000.f;
         
         // ── HDR display options ──────────────────────────────────────────────
         // When hdrMode is false the waveform behaves exactly as before:
@@ -220,7 +224,10 @@ namespace mrv
         X = x() + static_cast<int>(pct * w());
 
         // ── Waveform Y position ──────────────────────────────────────────────
-        const float luma = calculate_brightness(rgba, kAsLuminance);
+        float luma = calculate_brightness(rgba, kAsLuminance);
+        if (p.hdrMode)
+            luma = color::pqToLinear(luma);
+        
         const float norm = luminanceToNorm(
             luma, p.hdrMode, p.hdrMaxValue, p.hdrLogScale);
  
