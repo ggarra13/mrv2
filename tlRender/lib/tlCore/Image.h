@@ -140,7 +140,6 @@ namespace tl
         enum class VideoLevels {
             FullRange,
             LegalRange,
-            LegalRangeHDR,
 
             Count,
             First = FullRange

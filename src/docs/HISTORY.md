@@ -54,8 +54,7 @@ Change Log
 - Fixed a bad redraw issue with Vectorscope at Rec2020.
 - Made waveform display the proper image values when pixel bar's pixel type is set to Original (O).
 - Fixed some bugs in color formulas.
-- Added Render->Video Levels->Legal Range HDR to handle Rec2020.
-
+- Fixed a huge bug from v1.6.0 where it would not allow saving movie files.
 
 v1.6.0
 ======

@@ -793,14 +793,14 @@ namespace mrv
                 item->set();
 
 #ifdef VULKAN_BACKEND
-            idx = menu->add(
-                _("Render/Video Levels/Legal Range HDR"),
-                kVideoLevelsLegalRangeHDR.hotkey(),
-                (Fl_Callback*)video_levels_legal_range_hdr_cb, ui, mode);
-            item = (Fl_Menu_Item*)&(menu->menu()[idx]);
-            if (imageOptions.videoLevels ==
-                timeline::InputVideoLevels::LegalRangeHDR)
-                item->set();
+            // idx = menu->add(
+            //     _("Render/Video Levels/Legal Range HDR"),
+            //     kVideoLevelsLegalRangeHDR.hotkey(),
+            //     (Fl_Callback*)video_levels_legal_range_hdr_cb, ui, mode);
+            // item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+            // if (displayOptions.videoLevels ==
+            //     image::VideoLevels::LegalRangeHDR)
+            //     item->set();
 #endif
             
             idx = menu->add(

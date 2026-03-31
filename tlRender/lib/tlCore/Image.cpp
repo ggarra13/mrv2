@@ -97,8 +97,7 @@ namespace tl
             return data[static_cast<size_t>(value)];
         }
 
-        TLRENDER_ENUM_IMPL(VideoLevels, "FullRange", "LegalRange",
-                           "LegalRange HDR");
+        TLRENDER_ENUM_IMPL(VideoLevels, "FullRange", "LegalRange");
         TLRENDER_ENUM_SERIALIZE_IMPL(VideoLevels);
 
         int getChannelCount(PixelType value)

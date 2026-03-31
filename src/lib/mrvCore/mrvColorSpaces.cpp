@@ -516,18 +516,18 @@ namespace mrv
                 yuv.g -= 0.5f;
                 yuv.b -= 0.5f;
             }
-            else if (videoLevels == image::VideoLevels::LegalRangeHDR)
-            {
-                // BT.2020 / SMPTE ST.2084 — 10-bit legal range, normalised to [0, 1]
-                constexpr float kLumaMin     = 64.0f  / 1023.0f;
-                constexpr float kLumaScale   = 1023.0f / 876.0f;   // span = 940 - 64
-                constexpr float kChromaMin   = 64.0f  / 1023.0f;
-                constexpr float kChromaScale = 1023.0f / 896.0f;   // span = 960 - 64
+            // else if (videoLevels == image::VideoLevels::LegalRangeHDR)
+            // {
+            //     // BT.2020 / SMPTE ST.2084 — 10-bit legal range, normalised to [0, 1]
+            //     constexpr float kLumaMin     = 64.0f  / 1023.0f;
+            //     constexpr float kLumaScale   = 1023.0f / 876.0f;   // span = 940 - 64
+            //     constexpr float kChromaMin   = 64.0f  / 1023.0f;
+            //     constexpr float kChromaScale = 1023.0f / 896.0f;   // span = 960 - 64
 
-                yuv.r =  (yuv.r - kLumaMin)   * kLumaScale;
-                yuv.g = ((yuv.g - kChromaMin) * kChromaScale) - 0.5f;
-                yuv.b = ((yuv.b - kChromaMin) * kChromaScale) - 0.5f;
-            }
+            //     yuv.r =  (yuv.r - kLumaMin)   * kLumaScale;
+            //     yuv.g = ((yuv.g - kChromaMin) * kChromaScale) - 0.5f;
+            //     yuv.b = ((yuv.b - kChromaMin) * kChromaScale) - 0.5f;
+            // }
             else if (videoLevels == image::VideoLevels::LegalRange)
             {
                 // BT.601 / BT.709 SDR limited range, expressed as normalised floats.

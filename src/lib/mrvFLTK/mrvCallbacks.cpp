@@ -2304,6 +2304,11 @@ namespace mrv
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::FromFile;
         app->setImageOptions(o);
+        
+        timeline::DisplayOptions d = app->displayOptions();
+        d.videoLevels = image::VideoLevels::FullRange;
+        app->setDisplayOptions(d);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void video_levels_legal_range_cb(Fl_Menu_*, ViewerUI* ui)
@@ -2312,14 +2317,24 @@ namespace mrv
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::LegalRange;
         app->setImageOptions(o);
+
+        timeline::DisplayOptions d = app->displayOptions();
+        d.videoLevels = image::VideoLevels::LegalRange;
+        app->setDisplayOptions(d);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
     
     void video_levels_legal_range_hdr_cb(Fl_Menu_*, ViewerUI* ui)
     {
         App* app = ui->app;
         timeline::ImageOptions o = app->imageOptions();
-        o.videoLevels = timeline::InputVideoLevels::LegalRangeHDR;
+        o.videoLevels = timeline::InputVideoLevels::LegalRange;
         app->setImageOptions(o);
+
+        timeline::DisplayOptions d = app->displayOptions();
+        d.videoLevels = image::VideoLevels::LegalRange;
+        app->setDisplayOptions(d);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void video_levels_full_range_cb(Fl_Menu_*, ViewerUI* ui)
@@ -2328,6 +2343,11 @@ namespace mrv
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::FullRange;
         app->setImageOptions(o);
+        
+        timeline::DisplayOptions d = app->displayOptions();
+        d.videoLevels = image::VideoLevels::FullRange;
+        app->setDisplayOptions(d);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void alpha_blend_none_cb(Fl_Menu_*, ViewerUI* ui)

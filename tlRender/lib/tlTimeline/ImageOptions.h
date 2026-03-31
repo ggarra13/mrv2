@@ -21,7 +21,6 @@ namespace tl
             FromFile,
             FullRange,
             LegalRange,
-            LegalRangeHDR,
 
             Count,
             First = FromFile

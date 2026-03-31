@@ -175,23 +175,28 @@ const uint PixelType_L_U16             = 2;
 const uint PixelType_L_U32             = 3;
 const uint PixelType_L_F16             = 4;
 const uint PixelType_L_F32             = 5;
+
 const uint PixelType_LA_U8             = 6;
 const uint PixelType_LA_U32            = 7;
 const uint PixelType_LA_U16            = 8;
 const uint PixelType_LA_F16            = 9;
 const uint PixelType_LA_F32            = 10;
+
 const uint PixelType_RGB_U8            = 11;
 const uint PixelType_RGB_U10           = 12;
 const uint PixelType_RGB_U16           = 13;
 const uint PixelType_RGB_U32           = 14;
 const uint PixelType_RGB_F16           = 15;
 const uint PixelType_RGB_F32           = 16;
+
 const uint PixelType_RGBA_U8           = 17;
 const uint PixelType_RGBA_U16          = 18;
 const uint PixelType_RGBA_U32          = 19;
 const uint PixelType_RGBA_F16          = 20;
 const uint PixelType_RGBA_F32          = 21;
-const uint PixelType_YUV_420P_U8       = 22;
+
+const uint PixelTy
+pe_YUV_420P_U8       = 22;
 const uint PixelType_YUV_422P_U8       = 23;
 const uint PixelType_YUV_444P_U8       = 24;
 
@@ -234,6 +239,10 @@ float getBitDepth(int pixelType)
     {
         return 16.0;
     }
+    else if (pixelType == PixelType_ARGB_4444_Premult)
+    {
+        return 4.0;
+    }
     else // U8 fallback
     {
         return 8.0;
@@ -252,7 +261,7 @@ vec4 sampleTexture(
 {
        vec4 c;
 
-       if ((pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_444P_U16))
+       if ((pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_ARGB_4444_Premult))
        {
 
           float y  = texture(s0, textureCoord).r;
@@ -304,23 +313,24 @@ vec4 sampleTexture(
             cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
             cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
           }
-          else if (videoLevels == VideoLevels_LegalRangeHDR)
-          {            float bitDepth = getBitDepth(pixelType);
-            float maxValue = pow(2.0, bitDepth) - 1.0;
-            float range    = pow(2.0, bitDepth - 10.0); // HDR reference is 10-bit, not 8-bit
+          // else if (videoLevels == VideoLevels_LegalRangeHDR)
+          // {
+          //   float bitDepth = getBitDepth(pixelType);
+          //   float maxValue = pow(2.0, bitDepth) - 1.0;
+          //   float range    = pow(2.0, bitDepth - 10.0); // HDR reference is 10-bit, not 8-bit
 
-            // HDR legal range (SMPTE ST.2084 / BT.2020)
-            // Luma:   [64, 940] scaled by bit-depth range
-            // Chroma: [64, 960] scaled by bit-depth range
-            float yMin = 64.0 * range;
-            float yMax = 940.0 * range;
-            float cMin = 64.0 * range;
-            float cMax = 960.0 * range;
+          //   // HDR legal range (SMPTE ST.2084 / BT.2020)
+          //   // Luma:   [64, 940] scaled by bit-depth range
+          //   // Chroma: [64, 960] scaled by bit-depth range
+          //   float yMin = 64.0 * range;
+          //   float yMax = 940.0 * range;
+          //   float cMin = 64.0 * range;
+          //   float cMax = 960.0 * range;
 
-            y  = clamp((y  * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
-            cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
-            cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
-          }
+          //   y  = clamp((y  * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
+          //   cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+          //   cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+          // }
 
           c.r = y + (yuvCoefficients.x * cr);
           c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
@@ -338,17 +348,17 @@ vec4 sampleTexture(
            c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
            c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
         }
-        else if (VideoLevels_LegalRangeHDR == videoLevels)
-        {
-           float kLumaMin     = 64.0f  / 1023.0f;
-           float kLumaScale   = 1023.0f / 876.0f;   // span = 940 - 64
-           float kChromaMin   = 64.0f  / 1023.0f;
-           float kChromaScale = 1023.0f / 896.0f;   // span = 960 - 64
+        // else if (VideoLevels_LegalRangeHDR == videoLevels)
+        // {
+        //    float kLumaMin     = 64.0f  / 1023.0f;
+        //    float kLumaScale   = 1023.0f / 876.0f;   // span = 940 - 64
+        //    float kChromaMin   = 64.0f  / 1023.0f;
+        //    float kChromaScale = 1023.0f / 896.0f;   // span = 960 - 64
 
-           c.r =  (c.r - kLumaMin)   * kLumaScale;
-           c.g = ((c.g - kChromaMin) * kChromaScale) - 0.5f;
-           c.b = ((c.b - kChromaMin) * kChromaScale) - 0.5f;
-        }
+        //    c.r =  (c.r - kLumaMin)   * kLumaScale;
+        //    c.g = ((c.g - kChromaMin) * kChromaScale) - 0.5f;
+        //    c.b = ((c.b - kChromaMin) * kChromaScale) - 0.5f;
+        // }
       }
       return c;
 }
