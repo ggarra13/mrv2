@@ -51,6 +51,10 @@ Change Log
 - Made BT601 and BT709 in Vectorscope work when the swapchain is VK_COLOR_SPACE_HDR10_ST2084_EXT.  There are some minor floating point issues.
 - Fixed vectorscope to display the proper image values when pixel bar's pixel types is set to Original (O).
 - Added Panel->Waveform Monitor as a new Panel.
+- Fixed a bad redraw issue with Vectorscope at Rec2020.
+- Made waveform display the proper image values when pixel bar's pixel type is set to Original (O).
+- Fixed some bugs in color formulas.
+- Added Render->Video Levels->Legal Range HDR to handle Rec2020.
 
 
 v1.6.0

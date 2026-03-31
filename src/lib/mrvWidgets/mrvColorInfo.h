@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Box.H>
-
 #include "mrvCore/mrvColorAreaInfo.h"
 
 #include "mrvWidgets/mrvBrowser.h"
 #include "mrvWidgets/mrvPopupMenu.h"
+
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Box.H>
 
 namespace mrv
 {
@@ -29,6 +29,8 @@ namespace mrv
         void update(const area::Info& info);
 
     protected:
+        void convertColor(const image::Color4f& rgba);
+        
         ColorWidget* dcol;
         Fl_Box* area;
         ColorBrowser* browser;

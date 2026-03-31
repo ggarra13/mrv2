@@ -2706,19 +2706,6 @@ namespace mrv
         image::Color4f TimelineViewport::rgba_to_hsv(
             int hsv_colorspace, image::Color4f& rgba) const noexcept
         {
-            if (rgba.r < 0.F)
-                rgba.r = 0.F;
-            else if (rgba.r > 1.F)
-                rgba.r = 1.F;
-            if (rgba.g < 0.F)
-                rgba.g = 0.F;
-            else if (rgba.g > 1.F)
-                rgba.g = 1.F;
-            if (rgba.b < 0.F)
-                rgba.b = 0.F;
-            else if (rgba.b > 1.F)
-                rgba.b = 1.F;
-
             image::Color4f hsv;
 
             switch (hsv_colorspace)

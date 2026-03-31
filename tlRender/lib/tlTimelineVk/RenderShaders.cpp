@@ -158,6 +158,7 @@ void main()
 // enum tl::image::VideoLevels
 const uint VideoLevels_FullRange  = 0;
 const uint VideoLevels_LegalRange = 1;
+const uint VideoLevels_LegalRangeHDR = 2;
 )";
 
         std::string imageFragmentSource()
@@ -211,6 +212,7 @@ const uint PixelType_ARGB_4444_Premult = 34;
 // enum tl::image::VideoLevels
 const uint VideoLevels_FullRange  = 0;
 const uint VideoLevels_LegalRange = 1;
+const uint VideoLevels_LegalRangeHDR = 2;
 
 float getBitDepth(int pixelType)
 {
@@ -302,6 +304,23 @@ vec4 sampleTexture(
             cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
             cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
           }
+          else if (videoLevels == VideoLevels_LegalRangeHDR)
+          {            float bitDepth = getBitDepth(pixelType);
+            float maxValue = pow(2.0, bitDepth) - 1.0;
+            float range    = pow(2.0, bitDepth - 10.0); // HDR reference is 10-bit, not 8-bit
+
+            // HDR legal range (SMPTE ST.2084 / BT.2020)
+            // Luma:   [64, 940] scaled by bit-depth range
+            // Chroma: [64, 960] scaled by bit-depth range
+            float yMin = 64.0 * range;
+            float yMax = 940.0 * range;
+            float cMin = 64.0 * range;
+            float cMax = 960.0 * range;
+
+            y  = clamp((y  * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
+            cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+            cr = clamp((cr * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
+          }
 
           c.r = y + (yuvCoefficients.x * cr);
           c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
@@ -318,6 +337,17 @@ vec4 sampleTexture(
            c.r = (c.r - (16.0 / 255.0)) * (255.0 / (235.0 - 16.0));
            c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
            c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
+        }
+        else if (VideoLevels_LegalRangeHDR == videoLevels)
+        {
+           float kLumaMin     = 64.0f  / 1023.0f;
+           float kLumaScale   = 1023.0f / 876.0f;   // span = 940 - 64
+           float kChromaMin   = 64.0f  / 1023.0f;
+           float kChromaScale = 1023.0f / 896.0f;   // span = 960 - 64
+
+           c.r =  (c.r - kLumaMin)   * kLumaScale;
+           c.g = ((c.g - kChromaMin) * kChromaScale) - 0.5f;
+           c.b = ((c.b - kChromaMin) * kChromaScale) - 0.5f;
         }
       }
       return c;

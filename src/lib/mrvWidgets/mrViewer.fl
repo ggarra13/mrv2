@@ -130,8 +130,8 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {
-  xywh {410 714 934 56} resizable
+widget_class PixelToolBarClass {open
+  xywh {0 0 934 56} resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -376,15 +376,15 @@ ui->uiView->redraw();} open
               xywh {15 15 100 20}
             }
             MenuItem {} {
+              label Nits selected
+              xywh {5 5 100 20}
+            }
+            MenuItem {} {
               label Full
               xywh {25 25 100 20}
             }
             MenuItem {} {
               label Original
-              xywh {5 5 100 20}
-            }
-            MenuItem {} {
-              label Nits
               xywh {5 5 100 20}
             }
           }
@@ -879,7 +879,7 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {709 145 934 674} type Double color 1 align 80 resizable
+      xywh {0 0 934 674} type Double color 1 align 80 resizable
       class {mrv::MainWindow} size_range {934 674 0 0} visible
     } {
       Fl_Flex uiRegion {open
@@ -1503,7 +1503,7 @@ settings->setValue( mrv::kPenColorA, a);}
             class {mrv::TimelineGroup}
           } {
             Fl_Group uiTimeline {
-              label uiTimeline selected
+              label uiTimeline
               xywh {0 568 934 22} color 6 labeltype NO_LABEL resizable
               class MyTimelineWidget
             } {}

@@ -15,7 +15,8 @@ namespace tl
     namespace timeline
     {
         TLRENDER_ENUM_IMPL(
-            InputVideoLevels, "FromFile", "FullRange", "LegalRange");
+            InputVideoLevels, "FromFile", "FullRange", "LegalRange",
+            "LegalRangeHDR");
         TLRENDER_ENUM_SERIALIZE_IMPL(InputVideoLevels);
 
         TLRENDER_ENUM_IMPL(AlphaBlend, "None", "Straight", "Premultiplied");

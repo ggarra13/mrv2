@@ -69,12 +69,28 @@ namespace mrv
             return 10000.0f * inverse_st2084_eotf(v);
         }
 
+        inline image::Color4f pqToNits(const image::Color4f& value)
+        {
+            return image::Color4f(pqToNits(value.r),
+                                  pqToNits(value.g),
+                                  pqToNits(value.b),
+                                  value.a);
+        }
+        
         inline float pqToLinear(float v, const float reference_white = 100.F)
         {
             float nits = pqToNits(v);
             return nits / reference_white;
         }
 
+        inline image::Color4f pqToLinear(const image::Color4f& value)
+        {
+            return image::Color4f(pqToLinear(value.r),
+                                  pqToLinear(value.g),
+                                  pqToLinear(value.b),
+                                  value.a);
+        }
+        
         inline float srgbToLinear(float srgb)
         {
             if (srgb <= 0.04045f)
@@ -85,6 +101,14 @@ namespace mrv
             {
                 return std::pow((srgb + 0.055f) / 1.055f, 2.4f);
             }
+        }
+        
+        inline image::Color4f srgbToLinear(const image::Color4f& value)
+        {
+            return image::Color4f(srgbToLinear(value.r),
+                                  srgbToLinear(value.g),
+                                  srgbToLinear(value.b),
+                                  value.a);
         }
         
         extern Imath::V3f kD50_whitePoint;

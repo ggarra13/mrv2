@@ -1510,6 +1510,24 @@ namespace mrv
             {
                 rgba = color::fromVoidPtr(ptr, info.pixelType);
 
+                if (colorSpace() == VK_COLOR_SPACE_HDR10_ST2084_EXT)
+                {
+                    switch(p.ui->uiPixelWindow->uiPixelValue->value())
+                    {
+                    case PixelValue::kLinear:
+                        rgba = color::pqToLinear(rgba);
+                        break;
+                    case PixelValue::kNits:
+                        rgba = color::pqToNits(rgba);
+                        break;
+                    case PixelValue::kFull:
+                        break;
+                    default:
+                        break;
+                    }
+                }
+
+                
                 info.rgba.mean.r += rgba.r;
                 info.rgba.mean.g += rgba.g;
                 info.rgba.mean.b += rgba.b;

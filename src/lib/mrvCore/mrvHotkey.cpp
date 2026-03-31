@@ -295,6 +295,7 @@ namespace mrv
 
     Hotkey kVideoLevelsFile(false, false, false, false, 0);
     Hotkey kVideoLevelsLegalRange(false, false, false, false, 0);
+    Hotkey kVideoLevelsLegalRangeHDR(false, false, false, false, 0);
     Hotkey kVideoLevelsFullRange(false, false, false, false, 0);
 
     Hotkey kAlphaBlendNone(false, false, false, false, 0);
@@ -491,6 +492,8 @@ namespace mrv
 
         HotkeyEntry(_("Video Levels from File"), &kVideoLevelsFile),
         HotkeyEntry(_("Video Levels Legal Range"), &kVideoLevelsLegalRange),
+        HotkeyEntry(_("Video Levels Legal Range HDR"),
+                    &kVideoLevelsLegalRangeHDR),
         HotkeyEntry(_("Video Levels Full Range"), &kVideoLevelsFullRange),
 
         HotkeyEntry(_("Alpha Blend None"), &kAlphaBlendNone),

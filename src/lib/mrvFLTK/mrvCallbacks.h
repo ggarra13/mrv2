@@ -254,6 +254,7 @@ namespace mrv
     // Video levels callbacks
     void video_levels_from_file_cb(Fl_Menu_*, ViewerUI* ui);
     void video_levels_legal_range_cb(Fl_Menu_*, ViewerUI* ui);
+    void video_levels_legal_range_hdr_cb(Fl_Menu_*, ViewerUI* ui);
     void video_levels_full_range_cb(Fl_Menu_*, ViewerUI* ui);
 
     // Alpha blend callbacks

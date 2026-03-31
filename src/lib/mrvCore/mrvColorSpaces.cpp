@@ -260,10 +260,15 @@ namespace mrv
             {
                 Color4f lab(to_xyz(rgb, chroma, Y));
 
-                float Xn = cubeth(lab.r / chroma.white.x);
-                float Yn = cubeth(lab.g / chroma.white.y);
-                float Zn =
-                    cubeth(lab.b / (1.0f - chroma.white.x - chroma.white.y));
+                // Derive XYZ white point from chromaticities
+                const float wy = chroma.white.y;
+                const float Xn_ref = chroma.white.x / wy;
+                const float Yn_ref = 1.0f;
+                const float Zn_ref = (1.0f - chroma.white.x - wy) / wy;
+
+                float Xn = cubeth(lab.r / Xn_ref);
+                float Yn = cubeth(lab.g / Yn_ref);
+                float Zn = cubeth(lab.b / Zn_ref);
 
                 lab.r = (116.0f * Yn - 16.0f);
                 lab.g = (500.0f * (Xn - Yn));
@@ -447,15 +452,18 @@ namespace mrv
 
         namespace yuv
         {
-            //! Analog PAL
+            //! Analog PAL  (full-range float YCbCr)
             Color4f to_rgb(const Color4f& yuv) noexcept
             {
-                float y2 = 1.164f * (yuv.r - 16);
-                Color4f rgb(
-                    y2 + 2.018f * (yuv.g - 128),
-                    y2 - 0.813f * (yuv.b - 128) - 0.391f * (yuv.g - 128),
-                    y2 + 1.596f * (yuv.b - 128));
-                return rgb;
+                const float y  = yuv.r;           // [0, 1]  (or higher for HDR)
+                const float cb = yuv.g;           // [-0.5, 0.5]
+                const float cr = yuv.b;           // [-0.5, 0.5]
+
+                return Color4f(
+                    y                            + 1.402000f * cr,
+                    y - 0.344136f * cb           - 0.714136f * cr,
+                    y + 1.772000f * cb,
+                    yuv.a);
             }
         } // namespace yuv
 
@@ -473,11 +481,8 @@ namespace mrv
                 const image::Color4f& YPbPr,
                 const math::Vector4f& yuvCoefficients) noexcept
             {
-                Color4f c;
+                image::Color4f c;
 
-                c.r = Imath::clamp(YPbPr.r, 0.F, 1.F);
-                c.g = Imath::clamp(YPbPr.g, -0.5F, 0.5F);
-                c.b = Imath::clamp(YPbPr.b, -0.5F, 0.5F);
                 c.a = YPbPr.a;
 
                 const float y = c.r;
@@ -502,22 +507,43 @@ namespace mrv
          * @param videoLevels VideoLevels enum.
          */
         void
-        checkLevels(image::Color4f& yuv, const image::VideoLevels videoLevels)
-        {
+        checkLevels(image::Color4f& yuv,
+                    const image::VideoLevels videoLevels)
+        {            
             if (videoLevels == image::VideoLevels::FullRange)
             {
-                yuv.g = yuv.g - 0.5f;
-                yuv.b = yuv.b - 0.5f;
+                // Chroma is encoded as [0, 1]; re-centre to [-0.5, 0.5]
+                yuv.g -= 0.5f;
+                yuv.b -= 0.5f;
+            }
+            else if (videoLevels == image::VideoLevels::LegalRangeHDR)
+            {
+                // BT.2020 / SMPTE ST.2084 — 10-bit legal range, normalised to [0, 1]
+                constexpr float kLumaMin     = 64.0f  / 1023.0f;
+                constexpr float kLumaScale   = 1023.0f / 876.0f;   // span = 940 - 64
+                constexpr float kChromaMin   = 64.0f  / 1023.0f;
+                constexpr float kChromaScale = 1023.0f / 896.0f;   // span = 960 - 64
+
+                yuv.r =  (yuv.r - kLumaMin)   * kLumaScale;
+                yuv.g = ((yuv.g - kChromaMin) * kChromaScale) - 0.5f;
+                yuv.b = ((yuv.b - kChromaMin) * kChromaScale) - 0.5f;
             }
             else if (videoLevels == image::VideoLevels::LegalRange)
             {
-                yuv.r = (yuv.r - (16.0f / 255.0f)) * (255.0f / (235.0f - 16.0f));
-                // Cb/Cr: scale and center
-                yuv.g = ((yuv.g - (16.0f / 255.0f)) * (255.0f / (240.0f - 16.0f))) - 0.5f;
-                yuv.b = ((yuv.b - (16.0f / 255.0f)) * (255.0f / (240.0f - 16.0f))) - 0.5f;
+                // BT.601 / BT.709 SDR limited range, expressed as normalised floats.
+                // Luma:   [16/255, 235/255]  → span = 219
+                // Chroma: [16/255, 240/255]  → span = 224
+                constexpr float kLumaMin    = 16.0f  / 255.0f;
+                constexpr float kLumaScale  = 255.0f / 219.0f;   // 1 / (235-16)
+                constexpr float kChromaMin  = 16.0f  / 255.0f;
+                constexpr float kChromaScale = 255.0f / 224.0f;  // 1 / (240-16)
+
+                yuv.r =  (yuv.r - kLumaMin)   * kLumaScale;
+                yuv.g = ((yuv.g - kChromaMin) * kChromaScale) - 0.5f;
+                yuv.b = ((yuv.b - kChromaMin) * kChromaScale) - 0.5f;
             }
         }
-
+        
         //! Convert tlRender's layer names to more human readable ones.
         std::string layer(const std::string layerName)
         {

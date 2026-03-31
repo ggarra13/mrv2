@@ -131,6 +131,7 @@ void mrv2_enums(py::module& m)
     py::enum_<image::VideoLevels>(image, "VideoLevels")
         .value("FullRange", image::VideoLevels::FullRange)
         .value("LegalRange", image::VideoLevels::LegalRange)
+        .value("LegalRangeHDR", image::VideoLevels::LegalRangeHDR)
         .export_values();
 
     py::enum_<image::YUVCoefficients>(image, "YUVCoefficients")
@@ -160,6 +161,7 @@ void mrv2_enums(py::module& m)
         .value("FromFile", timeline::InputVideoLevels::FromFile)
         .value("FullRange", timeline::InputVideoLevels::FullRange)
         .value("LegalRange", timeline::InputVideoLevels::LegalRange)
+        .value("LegalRangeHDR", timeline::InputVideoLevels::LegalRangeHDR)
         .export_values();
 
     py::enum_<timeline::AlphaBlend>(image, "AlphaBlend")

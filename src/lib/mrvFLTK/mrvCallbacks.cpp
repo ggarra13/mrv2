@@ -2313,6 +2313,14 @@ namespace mrv
         o.videoLevels = timeline::InputVideoLevels::LegalRange;
         app->setImageOptions(o);
     }
+    
+    void video_levels_legal_range_hdr_cb(Fl_Menu_*, ViewerUI* ui)
+    {
+        App* app = ui->app;
+        timeline::ImageOptions o = app->imageOptions();
+        o.videoLevels = timeline::InputVideoLevels::LegalRangeHDR;
+        app->setImageOptions(o);
+    }
 
     void video_levels_full_range_cb(Fl_Menu_*, ViewerUI* ui)
     {

@@ -25,7 +25,7 @@ namespace mrv
 
     enum PixelDisplay { kRGBA_Float, kRGBA_Hex, kRGBA_Decimal };
 
-    enum PixelValue { kLinear, kFull, kOriginal, kNits };
+    enum PixelValue { kLinear, kNits, kFull, kOriginal };
 
     enum Blit { kNoBlit, kBlit };
 
