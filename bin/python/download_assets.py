@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import subprocess
+import time
 import json
 
 VERSION=1.3
@@ -50,6 +51,106 @@ headers = {
 }
 
 
+KNOWN_SF_MIRRORS = [
+    "ufpr", "netix", "nav", "kent", "nchc", "jaist",
+    "versaweb", "cytranet", "iweb", "tenet"
+]
+
+def resolve_mirror_url(file_url, mirror_name):
+    """Build a direct mirror URL using SF's ?use_mirror param."""
+    return f"{file_url}?use_mirror={mirror_name}"
+
+def benchmark_mirrors(file_url, mirrors, timeout=3):
+    """
+    Time a HEAD request to each mirror and return them sorted fastest-first.
+    """
+    results = []
+    for mirror in mirrors:
+        url = resolve_mirror_url(file_url, mirror)
+        try:
+            start = time.monotonic()
+            r = requests.head(url, headers=headers, allow_redirects=True, timeout=timeout)
+            elapsed = time.monotonic() - start
+            if r.status_code in (200, 206):
+                results.append((elapsed, mirror, r.url))
+                print(f"  {mirror}: {elapsed:.2f}s → {r.url}")
+        except requests.exceptions.RequestException:
+            print(f"  {mirror}: unreachable")
+    results.sort()
+    return results  # [(latency, mirror_name, resolved_url), ...]
+
+def download_with_best_mirror(file_url, output_path, filename):
+    print(f"Benchmarking mirrors for {filename}...")
+    ranked = benchmark_mirrors(file_url, KNOWN_SF_MIRRORS)
+
+    downloaded = False
+    for latency, mirror, final_url in ranked:
+        print(f"Trying mirror '{mirror}' ({latency:.2f}s)...")
+        try:
+            # Check if file exists and get current size for resume
+            resume_pos = 0
+            mode = 'wb'
+            
+            if os.path.exists(output_path):
+                resume_pos = os.path.getsize(output_path)
+                
+                # Check the remote file size using the resolved final URL
+                head_response = requests.head(final_url, headers=headers, allow_redirects=False)
+                if head_response.status_code == 200:
+                    remote_size = int(head_response.headers.get('Content-Length', 0))
+                    
+                    if remote_size > 0 and resume_pos == remote_size:
+                        print(f'✓ Already complete: {filename} ({remote_size} bytes)')
+                        downloaded = True
+                        break
+                    elif resume_pos > 0 and resume_pos < remote_size:
+                        print(f'Resuming {filename} from byte {resume_pos}...')
+                        mode = 'ab'
+                    elif resume_pos > 0:
+                        print(f'Partial file found but size mismatch, restarting: {filename}')
+                        resume_pos = 0
+                else:
+                    print(f'Could not verify remote file size, restarting: {filename}')
+                    resume_pos = 0
+            
+            # Set up headers for resume
+            download_headers = headers.copy()
+            if resume_pos > 0:
+                download_headers['Range'] = f'bytes={resume_pos}-'
+            
+            # Fetch the file from the final URL (no more redirects)
+            response = requests.get(final_url, headers=download_headers,
+                                    allow_redirects=False, stream=True)
+            
+            # Accept both 200 (full content) and 206 (partial content)
+            if response.status_code not in [200, 206]:
+                response.raise_for_status()
+            
+            # If server doesn't support resume (returns 200 instead of 206), start over
+            if resume_pos > 0 and response.status_code == 200:
+                print(f'Server does not support resume, restarting: {filename}')
+                resume_pos = 0
+                mode = 'wb'
+            
+            if resume_pos == 0:
+                print(f"Downloading {filename}...")
+            
+            # Save the binary content
+            with open(output_path, mode) as f:
+                for chunk in response.iter_content(chunk_size=4*1024*1024):
+                    if chunk:
+                        print('*',end='', flush=True)
+                        f.write(chunk)
+
+            print(f"\n✓ Download complete: {os.path.abspath(output_path)} (Size: {os.path.getsize(output_path)} bytes)")
+            downloaded = True
+            
+        except requests.exceptions.RequestException as e:
+            print(f"Mirror '{mirror}' failed: {e}, trying next...")
+
+    if not downloaded:
+        print(f"✗ All mirrors failed for {filename}")
+    
 def parse_sourceforge_page(html_content, base_url):
     """
     Parse SourceForge page and extract file download links.
@@ -105,81 +206,10 @@ def download_url(base_url, dest_dir, mrv2_prefix):
         if not MATCH_REGEX.search(filename):
             print(f"Skipping non-regex file: {filename}")
             continue
-        
+
         output_path = os.path.join(dest_dir, filename)
-
-        try:
-            # First, resolve the redirect chain to get the final download URL
-            # This ensures we use the same mirror for both HEAD and GET requests
-            print(f"Resolving download URL for {filename}...")
-            redirect_response = requests.head(file_url, headers=headers, allow_redirects=True)
-            final_url = redirect_response.url
-            
-            # Check if file exists and get current size for resume
-            resume_pos = 0
-            mode = 'wb'
-            
-            if os.path.exists(output_path):
-                resume_pos = os.path.getsize(output_path)
-                
-                # Check the remote file size using the resolved final URL
-                head_response = requests.head(final_url, headers=headers, allow_redirects=False)
-                if head_response.status_code == 200:
-                    remote_size = int(head_response.headers.get('Content-Length', 0))
-                    
-                    if remote_size > 0 and resume_pos == remote_size:
-                        print(f'✓ Already complete: {filename} ({remote_size} bytes)')
-                        continue
-                    elif resume_pos > 0 and resume_pos < remote_size:
-                        print(f'Resuming {filename} from byte {resume_pos}...')
-                        mode = 'ab'
-                    elif resume_pos > 0:
-                        print(f'Partial file found but size mismatch, restarting: {filename}')
-                        resume_pos = 0
-                else:
-                    print(f'Could not verify remote file size, restarting: {filename}')
-                    resume_pos = 0
-            
-            # Set up headers for resume
-            download_headers = headers.copy()
-            if resume_pos > 0:
-                download_headers['Range'] = f'bytes={resume_pos}-'
-            
-            # Fetch the file from the final URL (no more redirects)
-            response = requests.get(final_url, headers=download_headers,
-                                    allow_redirects=False, stream=True)
-            
-            # Accept both 200 (full content) and 206 (partial content)
-            if response.status_code not in [200, 206]:
-                response.raise_for_status()
-            
-            # If server doesn't support resume (returns 200 instead of 206), start over
-            if resume_pos > 0 and response.status_code == 200:
-                print(f'Server does not support resume, restarting: {filename}')
-                resume_pos = 0
-                mode = 'wb'
-            
-            if resume_pos == 0:
-                print(f"Downloading {filename}...")
-            
-            # Save the binary content
-            with open(output_path, mode) as f:
-                for chunk in response.iter_content(chunk_size=4*1024*1024):
-                    if chunk:
-                        print('*',end='', flush=True)
-                        f.write(chunk)
-
-            print(f"\n✓ Download complete: {os.path.abspath(output_path)} (Size: {os.path.getsize(output_path)} bytes)")
-
-        except requests.exceptions.RequestException as e:
-            print(f"\n✗ Error downloading {filename}: {e}")
-            if 'final_url' in locals():
-                print(f"  Mirror URL: {final_url}")
-            print(f"  Partial file kept at: {output_path}")
-            print(f"  Run script again to resume download")
-            # Continue to next file instead of exiting
-            continue
-
+        download_with_best_mirror(file_url, output_path, filename)
+        
     print("✅ All download attempts completed.")
 
 download_url(VULKAN_URL, VULKAN_DIR, 'vmrv2')

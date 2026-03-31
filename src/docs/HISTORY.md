@@ -53,6 +53,7 @@ Change Log
 - Added Panel->Waveform Monitor as a new Panel.
 - Fixed a bad redraw issue with Vectorscope at Rec2020.
 - Made waveform display the proper image values when pixel bar's pixel type is set to Original (O).
+- Added SDR and HDR settings to Waveform monitor.
 - Fixed some bugs in color formulas.
 - Fixed a huge bug from v1.6.0 where it would not allow saving movie files.
 - Fixed a huge bug when saving image sequences in Vulkan backend.
