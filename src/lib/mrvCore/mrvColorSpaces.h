@@ -74,6 +74,18 @@ namespace mrv
             float nits = pqToNits(v);
             return nits / reference_white;
         }
+
+        inline float srgbToLinear(float srgb)
+        {
+            if (srgb <= 0.04045f)
+            {
+                return srgb / 12.92f;
+            }
+            else
+            {
+                return std::pow((srgb + 0.055f) / 1.055f, 2.4f);
+            }
+        }
         
         extern Imath::V3f kD50_whitePoint;
         extern Imath::V3f kD65_whitePoint;

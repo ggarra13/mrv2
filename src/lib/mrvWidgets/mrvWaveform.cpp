@@ -30,7 +30,7 @@ namespace mrv
             // Original SDR path – clamp to [0, 1].
             return math::clamp(luma, 0.f, 1.f);
         }
- 
+        
         if (hdrLogScale)
         {
             // Map [0, hdrMaxValue] onto [0, 1] in log2 space.
@@ -209,7 +209,11 @@ namespace mrv
         draw_grid();
         
         if (p.image)
+        {
+            fl_push_clip(x(), y(), w(), h());
             draw_pixels();
+            fl_pop_clip();
+        }
     }
 
     void Waveform::draw_pixel(int X, const image::Color4f& rgba)
@@ -218,7 +222,7 @@ namespace mrv
         
         const uint32_t W = p.box.w();
         const float pct = static_cast<float>(X) / W;
-
+        
         const int wh = h();
         
         X = x() + static_cast<int>(pct * w());
@@ -226,7 +230,21 @@ namespace mrv
         // ── Waveform Y position ──────────────────────────────────────────────
         float luma = calculate_brightness(rgba, kAsLuminance);
         if (p.hdrMode)
-            luma = color::pqToLinear(luma);
+        {
+            if (p.ui->uiPixelWindow->uiPixelValue->value() !=
+                PixelValue::kOriginal)
+            {
+                Fl_Vk_Context& ctx = p.ui->uiView->getContext();
+                if (ctx.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT)
+                    luma = color::pqToLinear(luma);
+                else if (ctx.colorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
+                {
+                    // Display P3 Nonlinear uses the sRGB transfer function.
+                    // We map the non-linear luma back to linear space.
+                    luma = color::srgbToLinear(luma);
+                }
+            }
+        }
         
         const float norm = luminanceToNorm(
             luma, p.hdrMode, p.hdrMaxValue, p.hdrLogScale);
