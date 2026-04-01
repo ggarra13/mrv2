@@ -30,15 +30,15 @@ class URLLinkUI {open
   Function {make_window()} {open
   } {
     Fl_Window uiMain {
-      label {Link Annotation} open
-      xywh {216 239 799 176} type Double modal visible
+      label {Link Annotation} open selected
+      xywh {0 0 821 429} type Double when 16 resizable non_modal visible
     } {
       Fl_Input uiTitle {
         label Title
         tooltip {Enter a URL or choose an image file.} xywh {130 24 550 36} color 20 textcolor 56
       }
-      Fl_Group {} {
-        xywh {130 66 652 45}
+      Fl_Group {} {open
+        xywh {130 66 654 274}
       } {
         Fl_Input uiURL {
           label {File / URL}
@@ -65,7 +65,7 @@ else if (type == 1)
 
 if ( files.empty() ) return;
 
-v->value( files[0].c_str() );} open
+v->value( files[0].c_str() );}
           xywh {688 69 90 36}
         } {
           MenuItem {} {
@@ -77,22 +77,26 @@ v->value( files[0].c_str() );} open
             xywh {10 10 100 20}
           }
         }
+        Fl_Input uiAIPrompt {
+          label {AI Prompt}
+          tooltip {AI prompt to feed the image to AI.} xywh {130 120 550 215} type Multiline color 20 textcolor 56
+        }
       }
       Fl_Group {} {
-        xywh {197 121 416 54}
+        xywh {200 345 416 54}
       } {
         Fl_Button {} {
           label OK
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {v->hide();}
-          xywh {491 121 122 40}
+          xywh {494 345 122 40}
         }
         Fl_Button {} {
           label Cancel
           user_data uiMain user_data_type {Fl_Double_Window*}
           callback {cancel = true;
 v->hide();}
-          xywh {197 121 122 40}
+          xywh {200 345 122 40}
         }
       }
     }
@@ -114,6 +118,7 @@ if (!s) return;
 
 uiURL->value(s->url.c_str());
 uiTitle->value(s->title.c_str());
+uiAIPrompt->value(s->ai_prompt.c_str());
 
 w->show();
 while (w->visible())

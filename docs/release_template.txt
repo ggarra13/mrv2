@@ -1,4 +1,4 @@
-mrv2 v1.6.0: Professional VFX Review for Everyone
+mrv2 v1.6.1: Professional VFX Review for Everyone
 ================================
 
 I'm excited to announce the latest update to mrv2 and vmrv2 -- the open-source, high-performance professional players and review tools for the VFX, Animation and CG communities.
@@ -45,7 +45,7 @@ Support the project via PayPal to receive your license key.
 
 -------------------------------------------------------------------------------
 
-(v)mrv2 v1.6.0
+(v)mrv2 v1.6.1
 
 Open source professional players and review tools for VFX, animation and CGI for Windows, Linux and macOS has a new version.
 

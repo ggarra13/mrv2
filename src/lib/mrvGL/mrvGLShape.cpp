@@ -509,6 +509,8 @@ namespace mrv
             url = "http://" + url;
         
         title = linkEdit.uiTitle->value();
+        
+        ai_prompt = linkEdit.uiAIPrompt->value();
         return true;
     }
     
@@ -680,6 +682,7 @@ namespace mrv
         json["type"] = "Link";
         json["url"] = value.url;
         json["title"] = value.title;
+        json["ai_prompt"] = value.ai_prompt;
     }
 
     void from_json(const nlohmann::json& json, GLLinkShape& value)
@@ -688,6 +691,7 @@ namespace mrv
         json.at("url").get_to(value.url);
         json.at("title").get_to(value.title);
         replace_path(value.url);
+        json.at("ai_prompt").get_to(value.ai_prompt);
     }
 
     

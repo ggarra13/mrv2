@@ -4,6 +4,14 @@
 
 #include "mrViewer.h"
 
+#ifdef OPENGL_BACKEND
+#include "mrvGL/mrvGLShape.h"
+#endif
+
+#ifdef VULKAN_BACKEND
+#include "mrvVk/mrvVkShape.h"
+#endif
+
 #include "mrvPy/CmdsAux.h"
 
 #include "mrvVoice/mrvVoiceOver.h"
@@ -163,6 +171,56 @@ namespace mrv2
             return out;
         }
         
+        /** 
+         * Return a JSONxs string with the list of all link annotations for the
+         * current time.
+         * 
+         * @return JSON output.
+         */
+        std::string
+        getLinkAnnotationsJSON()
+        {
+            std::string out;
+        
+            auto player = App::ui->uiView->getTimelinePlayer();
+            if (!player) return out;
+
+            auto annotations = player->getAnnotations();
+            nlohmann::json j;
+            std::vector<nlohmann::json > linkAnnotations;
+            for (auto annotation : annotations)
+            {
+                nlohmann::json s;
+                s["time"] = annotation->time.floor();
+                std::vector<nlohmann::json > shapes;
+                for (auto shape : annotation->shapes)
+                {
+                    nlohmann::json a;
+
+#ifdef OPENGL_BACKEND
+                    GLLinkShape* link;
+                    if (! (link = dynamic_cast<GLLinkShape*>(shape.get())) )
+                        continue;
+                    a["link"] = *link;
+#endif
+
+#ifdef VULKAN_BACKEND
+                    VKLinkShape* link;
+                    if (! (link = dynamic_cast<VKLinkShape*>(shape.get())) )
+                        continue;
+                    a["link"] = *link;
+#endif
+                    shapes.push_back(a);
+                }
+                s["links"] = shapes;
+                linkAnnotations.push_back(s);
+            }
+            j["linkAnnotations"] = linkAnnotations;
+
+            out = j.dump(4);
+            return out;
+        }
+        
     } // namespace annotations
 } // namespace mrv2
 
@@ -204,4 +262,7 @@ Contains all functions and classes related to the annotationss.
     annotations.def(
         "getVoiceAnnotationsJSON", &mrv2::annotations::getVoiceAnnotationsJSON,
         _("Get all voice and mouse directions for current frame as a JSON file."));
+    annotations.def(
+        "getLinkAnnotationsJSON", &mrv2::annotations::getLinkAnnotationsJSON,
+        _("Get all URL/File/AI directions for current frame as a JSON file."));
 }

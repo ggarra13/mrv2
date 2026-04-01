@@ -230,6 +230,7 @@ namespace mrv
     public:
         std::string url;
         std::string title;
+        std::string ai_prompt;
         float mult = 1.F;
     };
 

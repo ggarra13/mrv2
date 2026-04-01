@@ -448,7 +448,7 @@ namespace mrv
     void VKLinkShape::open()
     {
         const char* kModule = "link";
-        
+
         if (url.substr(0, 4) == "http" ||
             url.substr(0, 3) == "ftp")
         {
@@ -501,6 +501,8 @@ namespace mrv
             url = "http://" + url;
         
         title = linkEdit.uiTitle->value();
+
+        ai_prompt = linkEdit.uiAIPrompt->value();
         return true;
     }
     
@@ -564,6 +566,7 @@ namespace mrv
         json["type"] = "Link";
         json["url"] = value.url;
         json["title"] = value.title;
+        json["ai_prompt"] = value.ai_prompt;
     }
 
     void from_json(const nlohmann::json& json, VKLinkShape& value)
@@ -572,6 +575,7 @@ namespace mrv
         json.at("url").get_to(value.url);
         json.at("title").get_to(value.title);
         replace_path(value.url);
+        json.at("ai_prompt").get_to(value.ai_prompt);
     }
     
     void to_json(nlohmann::json& json, const VKCircleShape& value)

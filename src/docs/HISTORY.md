@@ -1,3 +1,57 @@
+v1.6.2
+======
+mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
+
+If you are unsure what binary to choose, go to:
+
+https://mrv2.sourceforge.io/downloads/mrv2-download-page.html
+
+mrv2 ships now in two compiled versions:
+
+   - mrv2 with OpenGL backend  (free and donationware)   
+   - vmrv2 with Vulkan backend (free and donationware)
+
+It also ships for many more architectures, so be careful to download the correct one.
+It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).
+
+Unlocking Features
+------------------
+
+For unlocking features, once mrv2 loads, you should go to:
+  
+       Help->Unlock Features.
+       
+Donationware prices of binary licenses through PayPal:
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
+
+License works for both mrv2 and vmrv2 (you can have both installed).
+You need to have an internet connection for the license system.
+
+The donationware version when running without a donation, does not have:
+
+    - Annotations (available from Solo and later)
+    - Python (available in Standard and later)
+    - Editing (available in Edit and later)
+    - Voice and Link Annotations (available in Pro)
+
+They do have, however:
+
+    - Tone-mapping (OpenGL) and HDR (Vulkan)
+    - OpenEXR layer switching
+    - Saving Images and Movies with Audio
+
+Prices might change (go up or down) depending on competition and new features.
+
+Change Log
+----------
+
+- Fixed a bug with file requester not supporting the file suffix for single files (not sequences).
+- Fixed a bug with Link Annotations exiting as soon as an image was selected.
+- Added support for an AI prompt to Link Annotations.  This is the first step in hooking vmrv2 and mrv2 to modern AI services through Python.
+- Added a new Python command: annotation.getLinkAnnotationsJSON(). 
+
+
 v1.6.1
 ======
 

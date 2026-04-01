@@ -3811,7 +3811,7 @@ void Flu_File_Chooser::cd(const char* path)
                         continue;
                     }
 
-                    std::string tmp = root + frame + ext;
+                    std::string tmp = root + frame + suffix + ext;
                     files.push_back(tmp);
                 }
             }
