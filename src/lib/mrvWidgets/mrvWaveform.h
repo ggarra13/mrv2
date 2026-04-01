@@ -32,11 +32,13 @@ namespace mrv
         // HDR waveform support
         // maxValue: linear-light ceiling (e.g. 12.0 = 12× SDR white)
         // logScale: true = log2 mapping (recommended), false = linear
-        void  setHDRMode(bool enabled,
-                         float maxValue = 12.f,
-                         bool  logScale = true);
+        void  setHDRMode(bool enabled);
         bool  isHDRMode()     const;
+        
         float hdrMaxValue()   const;
+        void setHDRMaxValue(float);
+
+        void  setHDRLogScale(bool);
         bool  isHDRLogScale() const;
         
     protected:

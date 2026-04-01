@@ -4,15 +4,20 @@
 
 #include "mrViewer.h"
 
-#include "mrvCore/mrvColorAreaInfo.h"
-
-#include "mrvIcons/Waveform.h"
-
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvWaveform.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvWaveformPanel.h"
+
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvWaveform.h"
+
+#include "mrvIcons/Waveform.h"
+
+#include "mrvCore/mrvColorAreaInfo.h"
+
+#include "FL/Fl_Check_Button.H"
 
 namespace mrv
 {
@@ -21,6 +26,8 @@ namespace mrv
         struct WaveformPanel::Private
         {
             Waveform* waveform = nullptr;
+            HorSlider* hdrMaxValue = nullptr;
+            Fl_Check_Button* hdrLogScale = nullptr;
         };
 
         WaveformPanel::WaveformPanel(ViewerUI* ui) :
@@ -50,6 +57,8 @@ namespace mrv
             TLRENDER_P();
             MRV2_R();
 
+            SettingsObject* settings = App::app->settings();
+            
             Pack* pack = g->get_pack();
             pack->spacing(5);
 
@@ -60,9 +69,11 @@ namespace mrv
             int Y = g->y();
             int W = g->w();
 
+            std::string key;
             Fl_Group* cg;
             Fl_Box* b;
             Fl_Choice* c;
+            HorSlider* s;
             cg = new Fl_Group(X, Y, W, 20);
             cg->begin();
             b = new Fl_Box(X, Y, 120, 20, _("Type"));
@@ -96,7 +107,43 @@ namespace mrv
             // Create a rectangular waveform
             r.waveform = new Waveform(X, Y, g->w(), g->w());
             r.waveform->main(p.ui);
+
+            auto sV = new Widget< HorSlider >(
+                g->x(), 90, g->w(), 20, _("Max. Value"));
+            r.hdrMaxValue = s = sV;
+            s->tooltip(_("Maximum Value in F-Stops."));
+            s->range(1.f, 30.f);
+            s->step(0.1);
+
+            // Get current value
+            key = "Waveform/HDRMaxValue";
+            float v = settings->getValue<float>(key);
+            s->default_value(12.f);
+            s->value(v);
+            sV->callback(
+                [=](auto w)
+                {
+                    float value = w->value();
+                    settings->setValue("Waveform/HDRMaxValue", value);
+                    _r->waveform->setHDRMaxValue(value);
+                });
             
+            // Get current value
+            key = "Waveform/HDRLogScale";
+            bool bV = settings->getValue<bool>(key);
+            auto cB = new Widget< Fl_Check_Button >(
+                g->x(), 90, g->w(), 20, _("Log Scale"));
+            cB->tooltip(_("Use a Log Scale in HDR."));
+            cB->value(bV);
+            r.hdrLogScale = cB;
+            cB->callback(
+                [=](auto w)
+                {
+                    bool value = w->value();
+                    settings->setValue("Waveform/HDRLogScale", value);
+                    _r->waveform->setHDRLogScale(value);
+                });
+                            
             g->resizable(r.waveform);
         }
 

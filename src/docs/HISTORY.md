@@ -49,7 +49,10 @@ Change Log
 - Fixed a bug with file requester not supporting the file suffix for single files (not sequences).
 - Fixed a bug with Link Annotations exiting as soon as an image was selected.
 - Added support for an AI prompt to Link Annotations.  This is the first step in hooking vmrv2 and mrv2 to modern AI services through Python.
-- Added a new Python command: annotation.getLinkAnnotationsJSON(). 
+- Added a new Python command: annotation.getLinkAnnotationsJSON().
+- UI improvement:  Waveform can change its max value and whether it is shown as
+     		   Log or not.
+- UI improvement:  UI's Waveform now remembers its last settings.
 
 
 v1.6.1

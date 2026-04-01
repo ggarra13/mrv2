@@ -96,18 +96,18 @@ namespace mrv
     }
 
     // ── HDR accessors ────────────────────────────────────────────────────────
-    void Waveform::setHDRMode(bool enabled, float maxValue, bool logScale)
+    void Waveform::setHDRMode(bool enabled)
     {
         TLRENDER_P();
         p.hdrMode     = enabled;
-        p.hdrMaxValue = (maxValue > 1.f) ? maxValue : 12.f;
-        p.hdrLogScale = logScale;
         redraw();
     }
  
     bool  Waveform::isHDRMode()     const { return _p->hdrMode;     }
     float Waveform::hdrMaxValue()   const { return _p->hdrMaxValue; }
+    void  Waveform::setHDRMaxValue(float value)  { _p->hdrMaxValue = value; redraw(); }
     bool  Waveform::isHDRLogScale() const { return _p->hdrLogScale; }
+    void  Waveform::setHDRLogScale(bool value)  { _p->hdrLogScale = value; redraw(); }
     
     // ─────────────────────────────────────────────────────────────────────────
     // update()
