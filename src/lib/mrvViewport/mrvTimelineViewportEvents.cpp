@@ -595,7 +595,7 @@ namespace mrv
                     p.mousePos = _getFocus();
                     math::Vector2i pos = _getRaster();
 
-                    _clipSelectionArea(pos);
+                    _clampSelectionArea(pos);
                     math::Box2i area;
                     area.min = pos;
                     area.max = pos;
@@ -737,7 +737,7 @@ namespace mrv
             p.mousePos = _getFocus();
             math::Vector2i pos = _getRaster();
 
-            _clipSelectionArea(pos);
+            _clampSelectionArea(pos);
 
             math::Box2i area = p.selection;
             area.max = pos;
@@ -2026,7 +2026,7 @@ namespace mrv
 
 
         void
-        TimelineViewport::_clipSelectionArea(math::Vector2i& pos) const noexcept
+        TimelineViewport::_clampSelectionArea(math::Vector2i& pos) const noexcept
         {
             TLRENDER_P();
 
