@@ -103,7 +103,7 @@ namespace mrv
                     }
                 });
             cg->end();
-            
+
             // Create a rectangular waveform
             r.waveform = new Waveform(X, Y, g->w(), g->w());
             r.waveform->main(p.ui);
@@ -117,7 +117,10 @@ namespace mrv
 
             // Get current value
             key = "Waveform/HDRMaxValue";
-            float v = settings->getValue<float>(key);
+
+            std_any any = settings->getValue<std_any>(key);
+            float v = std_any_empty(any) ? 12.F : std_any_cast<float>(any);
+            
             s->default_value(12.f);
             s->value(v);
             sV->callback(
@@ -130,7 +133,9 @@ namespace mrv
             
             // Get current value
             key = "Waveform/HDRLogScale";
-            bool bV = settings->getValue<bool>(key);
+            any = settings->getValue<std_any>(key);
+            bool bV = std_any_empty(any) ? true : std_any_cast<bool>(any);
+
             auto cB = new Widget< Fl_Check_Button >(
                 g->x(), 90, g->w(), 20, _("Log Scale"));
             cB->tooltip(_("Use a Log Scale in HDR."));

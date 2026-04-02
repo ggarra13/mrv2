@@ -73,11 +73,12 @@ namespace mrv
             c = cW;
             c->add("BT.601");
             c->add("BT.709");
+            c->value(1);
 #ifdef VULKAN_BACKEND
             c->add("Rec.2020");
+            c->value(2);
 #endif
             c->tooltip(_("Type of Vectorscope."));
-            c->value(1);
             cW->callback(
                 [=](auto o)
                 {
