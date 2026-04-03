@@ -3119,12 +3119,13 @@ namespace tl
             if (!p.shaders["display"] || p.oldSource != source)
             {
                 recreateShader = true;
+                p.oldSource = source;
+                
 #if DEBUG_DISPLAY_SHADER
                 std::cerr << source << std::endl;
 #endif
             }
                 
-            p.oldSource = source;
 
 
             if (recreateShader)
@@ -3154,7 +3155,7 @@ namespace tl
                 p.shaders["display"] =
                     vlk::Shader::create(ctx, vertexSource(), source, "display");
 #endif
-                    
+                
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->addFBO("textureSampler");

@@ -105,7 +105,7 @@ namespace tl
             IWidget::setGeometry(value);
             TLRENDER_P();
 
-            const math::Box2i g = _geometry.margin(-p.size.margin);
+            const math::Box2i g = math::margin(_geometry, -p.size.margin);
 
             // Get the child size hints.
             std::vector<int> rowSizeHints;

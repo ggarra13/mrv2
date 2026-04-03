@@ -3,8 +3,6 @@
 // All rights reserved.
 
 #include <tlCore/Box.h>
-
-#include <tlCore/Error.h>
 #include <tlCore/String.h>
 
 #include <sstream>
@@ -13,30 +11,99 @@ namespace tl
 {
     namespace math
     {
-        Box2i operator*(const Box2i& a, float b)
+    
+        std::string to_string(const Box2i& value)
         {
-            Box2i out;
-            out.min = a.min * b;
-            out.max = a.max * b;
+            std::stringstream ss;
+            ss << value.min.x << " " <<
+                value.min.y << " " <<
+                value.max.x << " " <<
+                value.max.y;
+            return ss.str();
+        }
+
+        std::string to_string(const Box2f& value)
+        {
+            std::stringstream ss;
+            ss << value.min.x << " " << 
+                value.min.y << " " <<
+                value.max.x << " " <<
+                value.max.y;
+            return ss.str();
+        }
+
+        std::string to_string(const Box3f& value)
+        {
+            std::stringstream ss;
+            ss << value.min.x << " " <<
+                value.min.y << " " <<
+                value.min.z << " " <<
+                value.max.x << " " <<
+                value.max.y << " " <<
+                value.max.z;
+            return ss.str();
+        }
+
+        bool from_string(const std::string& s, Box2i& value)
+        {
+            bool out = false;
+            const auto pieces = string::split(s, ' ');
+            if (4 == pieces.size())
+            {
+                value.min.x = std::atoi(pieces[0].c_str());
+                value.min.y = std::atoi(pieces[1].c_str());
+                value.max.x = std::atoi(pieces[2].c_str());
+                value.max.y = std::atoi(pieces[3].c_str());
+                out = true;
+            }
             return out;
         }
 
-        Box2f operator*(const Box2f& a, float b)
+        bool from_string(const std::string& s, Box2f& value)
         {
-            Box2f out;
-            out.min = a.min * b;
-            out.max = a.max * b;
+            bool out = false;
+            const auto pieces = string::split(s, ' ');
+            if (4 == pieces.size())
+            {
+                value.min.x = std::atof(pieces[0].c_str());
+                value.min.y = std::atof(pieces[1].c_str());
+                value.max.x = std::atof(pieces[2].c_str());
+                value.max.y = std::atof(pieces[3].c_str());
+                out = true;
+            }
+            return out;
+        }
+
+        bool from_string(const std::string& s, Box3f& value)
+        {
+            bool out = false;
+            const auto pieces = string::split(s, ' ');
+            if (6 == pieces.size())
+            {
+                value.min.x = std::atof(pieces[0].c_str());
+                value.min.y = std::atof(pieces[1].c_str());
+                value.min.z = std::atof(pieces[2].c_str());
+                value.max.x = std::atof(pieces[3].c_str());
+                value.max.y = std::atof(pieces[4].c_str());
+                value.max.z = std::atof(pieces[5].c_str());
+                out = true;
+            }
             return out;
         }
 
         void to_json(nlohmann::json& json, const Box2i& value)
         {
-            json = {value.min, value.max};
+            json = { value.min, value.max };
         }
 
         void to_json(nlohmann::json& json, const Box2f& value)
         {
-            json = {value.min, value.max};
+            json = { value.min, value.max };
+        }
+
+        void to_json(nlohmann::json& json, const Box3f& value)
+        {
+            json = { value.min, value.max };
         }
 
         void from_json(const nlohmann::json& json, Box2i& value)
@@ -51,58 +118,10 @@ namespace tl
             json.at(1).get_to(value.max);
         }
 
-        std::ostream& operator<<(std::ostream& os, const Box2i& value)
+        void from_json(const nlohmann::json& json, Box3f& value)
         {
-            os << value.min.x << "," << value.min.y << "*" << value.max.x << ","
-               << value.max.y;
-            return os;
+            json.at(0).get_to(value.min);
+            json.at(1).get_to(value.max);
         }
-
-        std::ostream& operator<<(std::ostream& os, const Box2f& value)
-        {
-            os << value.min.x << "," << value.min.y << "*" << value.max.x << ","
-               << value.max.y;
-            return os;
-        }
-
-        std::istream& operator>>(std::istream& is, Box2i& value)
-        {
-            std::string s;
-            is >> s;
-            auto split = string::split(s, '*');
-            if (split.size() != 2)
-            {
-                throw error::ParseError();
-            }
-            {
-                std::stringstream ss(split[0]);
-                ss >> value.min;
-            }
-            {
-                std::stringstream ss(split[1]);
-                ss >> value.max;
-            }
-            return is;
-        }
-
-        std::istream& operator>>(std::istream& is, Box2f& value)
-        {
-            std::string s;
-            is >> s;
-            auto split = string::split(s, '*');
-            if (split.size() != 2)
-            {
-                throw error::ParseError();
-            }
-            {
-                std::stringstream ss(split[0]);
-                ss >> value.min;
-            }
-            {
-                std::stringstream ss(split[1]);
-                ss >> value.max;
-            }
-            return is;
-        }
-    } // namespace math
-} // namespace tl
+    }
+}

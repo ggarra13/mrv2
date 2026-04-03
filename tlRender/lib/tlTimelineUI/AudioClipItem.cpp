@@ -224,11 +224,11 @@ namespace tl
             const timeline::ClipRectState clipRectState(event.render);
             event.render->setClipRectEnabled(true);
             event.render->setClipRect(
-                box.intersect(clipRectState.getClipRect()));
+                math::intersect(box, clipRectState.getClipRect()));
 
             const math::Box2i clipRect =
                 _getClipRect(drawRect, _displayOptions.clipRectScale);
-            if (g.intersects(clipRect))
+            if (math::intersects(g, clipRect))
             {
                 if (!p.ioInfo && !p.infoRequest.future.valid())
                 {
@@ -249,7 +249,7 @@ namespace tl
                                        : 0),
                         _displayOptions.waveformWidth,
                         _displayOptions.waveformHeight);
-                    if (box.intersects(clipRect))
+                    if (math::intersects(box, clipRect))
                     {
                         const otime::RationalTime time =
                             otime::RationalTime(

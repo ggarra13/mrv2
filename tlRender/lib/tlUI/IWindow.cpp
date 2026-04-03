@@ -371,17 +371,20 @@ namespace tl
             bool clipped)
         {
             const math::Box2i& g = widget->getGeometry();
-            clipped |= !g.intersects(clipRect);
+            clipped |= !math::intersects(g, clipRect);
             clipped |= !widget->isVisible(false);
-            const math::Box2i intersectedClipRect = g.intersect(clipRect);
+            const math::Box2i intersectedClipRect =
+                math::intersect(g, clipRect);
             widget->clipEvent(intersectedClipRect, clipped);
             const math::Box2i childrenClipRect =
-                widget->getChildrenClipRect().intersect(intersectedClipRect);
+                math::intersect(widget->getChildrenClipRect(),
+                                intersectedClipRect);
             for (const auto& child : widget->getChildren())
             {
                 const math::Box2i& childGeometry = child->getGeometry();
                 _clipEventRecursive(
-                    child, childGeometry.intersect(childrenClipRect), clipped);
+                    child, math::intersect(childGeometry, childrenClipRect),
+                    clipped);
             }
         }
 
@@ -401,7 +404,7 @@ namespace tl
             std::list<std::shared_ptr<IWidget> >& out)
         {
             if (!widget->isClipped() && widget->isEnabled() &&
-                widget->getGeometry().contains(pos))
+                math::contains(widget->getGeometry(), pos))
             {
                 for (auto i = widget->getChildren().rbegin();
                      i != widget->getChildren().rend(); ++i)

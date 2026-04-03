@@ -8,268 +8,381 @@ namespace tl
 {
     namespace math
     {
-        template <>
-        constexpr Vector2<int>::Vector2() :
-            x(0),
-            y(0)
+        template<int C, typename T>
+        constexpr Vector<C, T>::Vector()
         {
+            for (int c = 0; c < C; ++c)
+            {
+                e[c] = T(0);
+            }
+        }
+        
+        template<int C, typename T>
+        constexpr Vector<C, T>::Vector(const Size<C, T>& size)
+        {
+            for (int c = 0; c < C; ++c)
+            {
+                e[c] = size[c];
+            }
         }
 
-        template <>
-        constexpr Vector2<float>::Vector2() :
-            x(0.F),
-            y(0.F)
+        template<int C, typename T>
+        constexpr T Vector<C, T>::operator [] (int c) const
         {
+            return e[c];
         }
 
-        template <typename T>
-        constexpr Vector2<T>::Vector2(T x, T y) :
-            x(x),
-            y(y)
+        template<int C, typename T>
+        constexpr T& Vector<C, T>::operator [] (int c)
         {
+            return e[c];
         }
 
-        template <>
-        constexpr Vector3<float>::Vector3() :
-            x(0.F),
-            y(0.F),
-            z(0.F)
+        template<int C, typename T>
+        constexpr const T* Vector<C, T>::data() const
         {
+            return e.data();
         }
 
-        template <typename T>
-        constexpr Vector3<T>::Vector3(T x, T y, T z) :
-            x(x),
-            y(y),
-            z(z)
+        template<int C, typename T>
+        constexpr T* Vector<C, T>::data()
         {
+            return e.data();
         }
 
-        template <>
-        constexpr Vector4<float>::Vector4() :
-            x(0.F),
-            y(0.F),
-            z(0.F),
-            w(0.F)
+        template<typename T>
+        constexpr Vector<2, T>::Vector() :
+            e({ T(0), T(0) })
+        {}
+
+        template<typename T>
+        constexpr Vector<2, T>::Vector(T x, T y) :
+            e({ x, y })
+        {}
+
+        template<typename T>
+        constexpr Vector<2, T>::Vector(const Size<2, T>& size) :
+            e({ size.w, size.h })
+        {}
+
+        template<typename T>
+        constexpr Vector<2, T>::Vector(const Vector<2, T>& v) :
+            e(v.e)
+        {}
+
+        template<typename T>
+        constexpr T Vector<2, T>::operator [] (int c) const
         {
+            return e[c];
         }
 
-        template <typename T>
-        constexpr Vector4<T>::Vector4(T x, T y, T z, T w) :
-            x(x),
-            y(y),
-            z(z),
-            w(w)
+        template<typename T>
+        constexpr T& Vector<2, T>::operator [] (int c)
         {
+            return e[c];
         }
 
-        template <typename T> inline void Vector2<T>::zero()
+        template<typename T>
+        constexpr const T* Vector<2, T>::data() const
         {
-            x = y = T(0);
+            return e.data();
         }
 
-        template <typename T> inline void Vector3<T>::zero()
+        template<typename T>
+        constexpr T* Vector<2, T>::data()
         {
-            x = y = z = T(0);
+            return e.data();
+        }
+            
+        template<typename T>
+        constexpr Vector<2, T>& Vector<2, T>::operator = (const Vector<2, T>& v)
+        {
+            e = v.e;
+            return *this;
         }
 
-        template <typename T> inline void Vector4<T>::zero()
+        template<typename T>
+        constexpr Vector<3, T>::Vector() :
+            e({ T(0), T(0), T(0) })
+        {}
+
+        template<typename T>
+        constexpr Vector<3, T>::Vector(T x, T y, T z) :
+            e({ x, y, z })
+        {}
+
+        template<typename T>
+        constexpr Vector<3, T>::Vector(const Size<3, T>& size) :
+            e({ size.w, size.h, size.d })
+        {}
+
+        template<typename T>
+        constexpr Vector<3, T>::Vector(const Vector<3, T>& v) :
+            e(v.e)
+        {}        
+
+        template<typename T>
+        constexpr T Vector<3, T>::operator [] (int c) const
         {
-            x = y = z = w = T(0);
+            return e[c];
         }
 
-        template <typename T>
-        constexpr T Vector2<T>::operator[](int index) const
+        template<typename T>
+        constexpr T& Vector<3, T>::operator [] (int c)
         {
-            return 0 == index ? x : y;
+            return e[c];
         }
 
-        template <typename T> T& Vector2<T>::operator[](int index)
+        template<typename T>
+        constexpr const T* Vector<3, T>::data() const
         {
-            return 0 == index ? x : y;
+            return e.data();
         }
 
-        template <typename T>
-        constexpr T Vector3<T>::operator[](int index) const
+        template<typename T>
+        constexpr T* Vector<3, T>::data()
         {
-            return 0 == index ? x : (1 == index ? y : z);
+            return e.data();
+        }
+            
+        template<typename T>
+        constexpr Vector<3, T>& Vector<3, T>::operator = (const Vector<3, T>& v)
+        {
+            e = v.e;
+            return *this;
         }
 
-        template <typename T> T& Vector3<T>::operator[](int index)
+        template<typename T>
+        constexpr Vector<4, T>::Vector() :
+            e({ T(0), T(0), T(0), T(0) })
+        {}
+
+        template<typename T>
+        constexpr Vector<4, T>::Vector(T x, T y, T z, T w) :
+            e({ x, y, z, w })
+        {}
+
+        template<typename T>
+        constexpr Vector<4, T>::Vector(const Vector<4, T>& v) :
+            e(v.e)
+        {}        
+
+        template<typename T>
+        constexpr T Vector<4, T>::operator [] (int c) const
         {
-            return 0 == index ? x : (1 == index ? y : z);
+            return e[c];
         }
 
-        template <typename T>
-        constexpr T Vector4<T>::operator[](int index) const
+        template<typename T>
+        constexpr T& Vector<4, T>::operator [] (int c)
         {
-            return 0 == index ? x : (1 == index ? y : (2 == index ? z : w));
+            return e[c];
         }
 
-        template <typename T> T& Vector4<T>::operator[](int index)
+        template<typename T>
+        constexpr const T* Vector<4, T>::data() const
         {
-            return 0 == index ? x : (1 == index ? y : (2 == index ? z : w));
+            return e.data();
         }
 
-        template <typename T>
-        constexpr bool Vector2<T>::operator==(const Vector2<T>& other) const
+        template<typename T>
+        constexpr T* Vector<4, T>::data()
         {
-            return x == other.x && y == other.y;
+            return e.data();
+        }
+            
+        template<typename T>
+        constexpr Vector<4, T>& Vector<4, T>::operator = (const Vector<4, T>& v)
+        {
+            e = v.e;
+            return *this;
         }
 
-        template <typename T>
-        constexpr bool Vector2<T>::operator!=(const Vector2<T>& other) const
+        template<int C, typename T>
+        inline T length(const Vector<C, T>& v)
         {
-            return !(*this == other);
+            T s = T(0);
+            for (int c = 0; c < C; ++c)
+            {
+                s += v[c] * v[c];
+            }
+            return std::sqrt(s);
+        }
+        
+        template<int C, typename T>
+        inline Vector<C, T> normalize(const Vector<C, T>& v)
+        {
+            Vector<C, T> out = v;
+            const T l = length(v);
+            if(l > T(0))
+            {
+                for (int c = 0; c < C; ++c)
+                {
+                    out[c] /= l;
+                }
+            }
+            return out;
         }
 
-        template <typename T>
-        constexpr bool Vector3<T>::operator==(const Vector3<T>& other) const
+        template<int C, typename T>
+        constexpr T dot(const Vector<C, T>& v0, const Vector<C, T>& v1)
         {
-            return x == other.x && y == other.y && z == other.z;
+            T out = T(0);
+            for (int c = 0; c < C; ++c)
+            {
+                out += v0[c] * v1[c];
+            }
+            return out;
         }
 
-        template <typename T>
-        constexpr bool Vector3<T>::operator!=(const Vector3<T>& other) const
+        template<typename T>
+        constexpr Vector<3, T> cross(const Vector<3, T>& a, const Vector<3, T>& b)
         {
-            return !(*this == other);
+            return Vector<3, T>(
+                a.y * b.z - b.y * a.z,
+                a.z * b.x - b.z * a.x,
+                a.x * b.y - b.x * a.y);
         }
 
-        template <typename T>
-        constexpr bool Vector4<T>::operator==(const Vector4<T>& other) const
+        template<typename T>
+        constexpr Vector<2, T> perpCW(const Vector<2, T>& v)
         {
-            return x == other.x && y == other.y && z == other.z && w == other.w;
+            return Vector<2, T>(v[1], -v[0]);
         }
 
-        template <typename T>
-        constexpr bool Vector4<T>::operator!=(const Vector4<T>& other) const
+        template<typename T>
+        constexpr Vector<2, T> perpCCW(const Vector<2, T>& v)
         {
-            return !(*this == other);
+            return Vector<2, T>(-v[1], v[0]);
         }
 
-        template <typename T> inline float length(const Vector2<T>& value)
+        constexpr Vector<2, float> convert(const Vector<2, int>& value)
         {
-            return std::sqrt(value.x * value.x + value.y * value.y);
+            return Vector<2, float>(value.x, value.y);
         }
 
-        template <typename T> inline float length(const Vector3<T>& value)
+        inline Vector<2, float> round(const Vector<2, float>& value)
         {
-            return std::sqrt(
-                value.x * value.x + value.y * value.y + value.z * value.z);
+            return Vector<2, float>(std::round(value.x), std::round(value.y));
         }
 
-        template <typename T>
-        inline Vector2<T> operator+(const Vector2<T>& a, const Vector2<T>& b)
+        inline Vector<2, float> floor(const Vector<2, float>& value)
         {
-            return Vector2<T>(a.x + b.x, a.y + b.y);
+            return Vector<2, float>(std::floor(value.x), std::floor(value.y));
         }
 
-        template <typename T>
-        inline Vector3<T> operator+(const Vector3<T>& a, const Vector3<T>& b)
+        inline Vector<2, float> ceil(const Vector<2, float>& value)
         {
-            return Vector3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
+            return Vector<2, float>(std::ceil(value.x), std::ceil(value.y));
         }
 
-        template <typename T>
-        inline Vector4<T> operator+(const Vector4<T>& a, const Vector4<T>& b)
+        template<int C, typename T>
+        constexpr Vector<C, T> operator + (const Vector<C, T>& v0, const Vector<C, T>& v1)
         {
-            return Vector4<T>(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+            Vector<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = v0[c] + v1[c];
+            }
+            return out;
         }
 
-        template <typename T>
-        inline Vector2<T> operator+(const Vector2<T>& a, T b)
+        template<int C, typename T>
+        constexpr Vector<C, T> operator + (const Vector<C, T>& v, T s)
         {
-            return Vector2<T>(a.x + b, a.y + b);
+            Vector<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = v[c] + s;
+            }
+            return out;
         }
 
-        template <typename T>
-        inline Vector3<T> operator+(const Vector3<T>& a, T b)
+        template<int C, typename T>
+        constexpr Vector<C, T> operator - (const Vector<C, T>& v0, const Vector<C, T>& v1)
         {
-            return Vector3<T>(a.x + b, a.y + b, a.z + b);
+            Vector<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = v0[c] - v1[c];
+            }
+            return out;
         }
 
-        template <typename T>
-        inline Vector4<T> operator+(const Vector4<T>& a, T b)
+        template<int C, typename T>
+        constexpr Vector<C, T> operator - (const Vector<C, T>& v)
         {
-            return Vector4<T>(a.x + b, a.y + b, a.z + b, a.w + b);
+            Vector<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = -v[c];
+            }
+            return out;
         }
 
-        template <typename T>
-        inline Vector2<T> operator-(const Vector2<T>& a, const Vector2<T>& b)
+        template<int C, typename T>
+        constexpr Vector<C, T> operator - (const Vector<C, T>& v, T s)
         {
-            return Vector2<T>(a.x - b.x, a.y - b.y);
+            Vector<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = v[c] - s;
+            }
+            return out;
         }
 
-        template <typename T>
-        inline Vector3<T> operator-(const Vector3<T>& a, const Vector3<T>& b)
+        template<int C, typename T>
+        constexpr Vector<C, T> operator * (const Vector<C, T>& v, float s)
         {
-            return Vector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
+            Vector<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = v[c] * s;
+            }
+            return out;
         }
 
-        template <typename T>
-        inline Vector4<T> operator-(const Vector4<T>& a, const Vector4<T>& b)
+        template<int C, typename T>
+        constexpr Vector<C, T> operator / (const Vector<C, T>& v, float s)
         {
-            return Vector4<T>(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
+            Vector<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = v[c] / s;
+            }
+            return out;
         }
 
-        template <typename T>
-        inline Vector2<T> operator-(const Vector2<T>& a, T b)
+        template<int C, typename T>
+        constexpr bool operator == (const Vector<C, T>& a, const Vector<C, T>& b)
         {
-            return Vector2<T>(a.x - b, a.y - b);
+            bool out = true;
+            for (int c = 0; c < C; ++c)
+            {
+                out &= a[c] == b[c];
+            }
+            return out;
         }
-
-        template <typename T>
-        inline Vector3<T> operator-(const Vector3<T>& a, T b)
+        
+        template<int C, typename T>
+        constexpr bool operator != (const Vector<C, T>& a, const Vector<C, T>& b)
         {
-            return Vector3<T>(a.x - b, a.y - b, a.z - b);
+            return !(a == b);
         }
-
-        template <typename T>
-        inline Vector4<T> operator-(const Vector4<T>& a, T b)
+        
+        template<int C, typename T>
+        inline std::ostream& operator << (std::ostream& os, const Vector<C, T>& v)
         {
-            return Vector4<T>(a.x - b, a.y - b, a.z - b, a.w - b);
+            os << to_string(v);
+            return os;
         }
-
-        inline Vector2i operator*(const Vector2i& a, float b)
+        
+        template<int C, typename T>
+        inline std::istream& operator >> (std::istream& is, Vector<C, T>& v)
         {
-            return Vector2i(
-                static_cast<int>(a.x * b), static_cast<int>(a.y * b));
+            for (int i = 0; i < C; ++i)
+                is >> v[i];
+            return is;
         }
-
-        inline Vector2f operator*(const Vector2f& a, float b)
-        {
-            return Vector2f(a.x * b, a.y * b);
-        }
-
-        inline Vector3f operator*(const Vector3f& a, float b)
-        {
-            return Vector3f(a.x * b, a.y * b, a.z * b);
-        }
-
-        inline Vector4f operator*(const Vector4f& a, float b)
-        {
-            return Vector4f(a.x * b, a.y * b, a.z * b, a.w * b);
-        }
-
-        inline Vector2i operator/(const Vector2i& a, float b)
-        {
-            return Vector2i(
-                static_cast<int>(a.x / b), static_cast<int>(a.y / b));
-        }
-
-        inline Vector2f operator/(const Vector2f& a, float b)
-        {
-            return Vector2f(a.x / b, a.y / b);
-        }
-
-        inline Vector3f operator/(const Vector3f& a, float b)
-        {
-            return Vector3f(a.x / b, a.y / b, a.z / b);
-        }
-
-        inline Vector4f operator/(const Vector4f& a, float b)
-        {
-            return Vector4f(a.x / b, a.y / b, a.z / b, a.w / b);
-        }
-    }; // namespace math
-} // namespace tl
+    }
+}

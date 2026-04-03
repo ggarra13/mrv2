@@ -243,14 +243,14 @@ namespace tl
             const timeline::ClipRectState clipRectState(event.render);
             event.render->setClipRectEnabled(true);
             event.render->setClipRect(
-                box.intersect(clipRectState.getClipRect()));
+                math::intersect(box, clipRectState.getClipRect()));
             event.render->setOCIOOptions(_displayOptions.ocio);
             event.render->setLUTOptions(_displayOptions.lut);
             event.render->setHDROptions(_displayOptions.hdr);
 
             const math::Box2i clipRect =
                 _getClipRect(drawRect, _displayOptions.clipRectScale);
-            if (g.intersects(clipRect))
+            if (math::intersects(g, clipRect))
             {
                 if (!p.ioInfo && !p.infoRequest.future.valid())
                 {
@@ -279,7 +279,7 @@ namespace tl
                                        ? (lineHeight + m * 2)
                                        : 0),
                         thumbnailWidth, _displayOptions.thumbnailHeight);
-                    if (box.intersects(clipRect))
+                    if (math::intersects(box, clipRect))
                     {
                         const otime::RationalTime time =
                             otime::RationalTime(

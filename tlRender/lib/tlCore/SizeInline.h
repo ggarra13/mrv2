@@ -6,112 +6,269 @@ namespace tl
 {
     namespace math
     {
-        template <>
-        constexpr Size2<int>::Size2() :
-            w(0),
-            h(0)
+        template<int C, typename T>
+        inline Size<C, T>::Size()
         {
+            for (int c = 0; c < C; ++c)
+            {
+                e[c] = T(0);
+            }
         }
 
-        template <>
-        constexpr Size2<float>::Size2() :
-            w(0.F),
-            h(0.F)
+        template<int C, typename T>
+        constexpr T Size<C, T>::operator [] (int c) const
         {
+            return e[c];
         }
 
-        template <typename T>
-        constexpr Size2<T>::Size2(T w, T h) :
-            w(w),
-            h(h)
+        template<int C, typename T>
+        constexpr T& Size<C, T>::operator [] (int c)
         {
+            return e[c];
         }
 
-        template <typename T> constexpr bool Size2<T>::isValid() const
+        template<int C, typename T>
+        constexpr const T* Size<C, T>::data() const
         {
-            return w > T(0) && h > T(0);
+            return e.data();
         }
 
-        template <typename T> inline void Size2<T>::zero()
+        template<int C, typename T>
+        constexpr T* Size<C, T>::data()
         {
-            w = T(0);
-            h = T(0);
+            return e.data();
         }
 
-        template <typename T> constexpr float Size2<T>::getArea() const
+        template<int C, typename T>
+        inline bool Size<C, T>::isValid() const
         {
-            return w * h;
+            bool out = true;
+            for (int c = 0; c < C; ++c)
+            {
+                out &= e[c] > 0;
+            }
+            return out;
         }
 
-        template <typename T> constexpr float Size2<T>::getAspect() const
+        template<typename T>
+        constexpr Size<2, T>::Size() :
+            e({ T(0), T(0) })
+        {}
+
+        template<typename T>
+        constexpr Size<2, T>::Size(T w, T h) :
+            e({ w, h })
+        {}
+
+        template<typename T>
+        constexpr Size<2, T>::Size(const Size<2, T>& v) :
+            e(v.e)
+        {}
+
+        template<typename T>
+        constexpr T Size<2, T>::operator [] (int c) const
         {
-            return h > T(0) ? (w / static_cast<float>(h)) : 0.F;
+            return e[c];
         }
 
-        template <typename T>
-        constexpr bool Size2<T>::operator==(const Size2<T>& other) const
+        template<typename T>
+        constexpr T& Size<2, T>::operator [] (int c)
         {
-            return w == other.w && h == other.h;
+            return e[c];
         }
 
-        template <typename T>
-        constexpr bool Size2<T>::operator!=(const Size2<T>& other) const
+        template<typename T>
+        constexpr const T* Size<2, T>::data() const
         {
-            return !(*this == other);
+            return e.data();
         }
 
-        template <typename T>
-        inline bool Size2<T>::operator<(const Size2<T>& other) const
+        template<typename T>
+        constexpr T* Size<2, T>::data()
         {
-            return std::tie(w, h) < std::tie(other.w, other.h);
+            return e.data();
         }
 
-        template <typename T>
-        inline bool Size2<T>::operator>(const Size2<T>& other) const
+        template<typename T>
+        constexpr bool Size<2, T>::isValid() const
         {
-            return std::tie(w, h) > std::tie(other.w, other.h);
+            return e[0] > 0 && e[1] > 0;
         }
 
-        template <typename T>
-        inline Size2<T> operator+(const Size2<T>& a, const Size2<T>& b)
+        template<typename T>
+        constexpr Size<2, T>& Size<2, T>::operator = (const Size<2, T>& v)
         {
-            return Size2<T>(a.w + b.w, a.h + b.h);
+            e = v.e;
+            return *this;
         }
 
-        template <typename T> inline Size2<T> operator+(const Size2<T>& a, T b)
+        template<typename T>
+        constexpr Size<3, T>::Size() :
+            e({ T(0), T(0), T(0) })
+        {}
+
+        template<typename T>
+        constexpr Size<3, T>::Size(T w, T h, T d) :
+            e({ w, h, d })
+        {}
+
+        template<typename T>
+        constexpr Size<3, T>::Size(const Size<3, T>& v) :
+            e(v.e)
+        {}
+
+        template<typename T>
+        constexpr T Size<3, T>::operator [] (int c) const
         {
-            return Size2<T>(a.w + b, a.h + b);
+            return e[c];
         }
 
-        template <typename T>
-        inline Size2<T> operator-(const Size2<T>& a, const Size2<T>& b)
+        template<typename T>
+        constexpr T& Size<3, T>::operator [] (int c)
         {
-            return Size2<T>(a.w - b.w, a.h - b.h);
+            return e[c];
         }
 
-        template <typename T> inline Size2<T> operator-(const Size2<T>& a, T b)
+        template<typename T>
+        constexpr const T* Size<3, T>::data() const
         {
-            return Size2<T>(a.w - b, a.h - b);
+            return e.data();
         }
 
-        inline Size2i operator*(const Size2i& a, float b)
+        template<typename T>
+        constexpr T* Size<3, T>::data()
         {
-            return Size2i(static_cast<int>(a.w * b), static_cast<int>(a.h * b));
+            return e.data();
+        }
+        
+        template<typename T>
+        constexpr bool Size<3, T>::isValid() const
+        {
+            return e[0] > 0 && e[1] > 0 && e[2] > 0;
         }
 
-        inline Size2f operator*(const Size2f& a, float b)
+        template<typename T>
+        constexpr Size<3, T>& Size<3, T>::operator = (const Size<3, T>& v)
         {
-            return Size2f(a.w * b, a.h * b);
+            e = v.e;
+            return *this;
         }
 
-        inline Size2i operator/(const Size2i& a, float b)
+        constexpr float aspectRatio(const Size<2, int>& a)
         {
-            return Size2i(static_cast<int>(a.w / b), static_cast<int>(a.h / b));
+            return a.h > 0 ? (a.w / static_cast<float>(a.h)) : 0.F;
         }
 
-        inline Size2f operator/(const Size2f& a, float b)
+        constexpr float aspectRatio(const Size<2, float>& a)
         {
-            return Size2f(a.w / b, a.h / b);
+            return a.h > 0.F ? (a.w / a.h) : 0.F;
         }
-    } // namespace math
-} // namespace tl
+
+        constexpr float area(const Size<2, int>& a)
+        {
+            return a.w * a.h;
+        }
+
+        constexpr float area(const Size<2, float>& a)
+        {
+            return a.w * a.h;
+        }
+
+        constexpr float volume(const Size<3, float>& a)
+        {
+            return a.w * a.h * a.d;
+        }
+
+        template<int C, typename T>
+        constexpr Size<C, T> margin(const Size<C, T>& a, T b)
+        {
+            return a + (b * 2);
+        }
+
+        template<typename T>
+        constexpr Size<2, T> margin(const Size<2, T>& a, T x, T y)
+        {
+            return Size<2, T>(a.w + x * 2, a.h + y * 2);
+        }
+
+        template<int C, typename T>
+        constexpr Size<C, T> operator + (const Size<C, T>& a, T b)
+        {
+            Size<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = a[c] + b;
+            }
+            return out;
+        }
+        
+        template<int C, typename T>
+        constexpr Size<C, T> operator - (const Size<C, T>& a, T b)
+        {
+            Size<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = a[c] - b;
+            }
+            return out;
+        }
+        
+        template<int C, typename T>
+        constexpr Size<C, T> operator * (const Size<C, T>& a, float b)
+        {
+            Size<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = a[c] * b;
+            }
+            return out;
+        }
+        
+        template<int C, typename T>
+        constexpr Size<C, T> operator / (const Size<C, T>& a, float b)
+        {
+            Size<C, T> out;
+            for (int c = 0; c < C; ++c)
+            {
+                out[c] = a[c] / b;
+            }
+            return out;
+        }
+
+        template<int C, typename T>
+        constexpr bool operator == (const Size<C, T>& a, const Size<C, T>& b)
+        {
+            bool out = true;
+            for (int c = 0; c < C; ++c)
+            {
+                out &= a[c] == b[c];
+            }
+            return out;
+        }
+        
+        template<int C, typename T>
+        constexpr bool operator != (const Size<C, T>& a, const Size<C, T>& b)
+        {
+            return !(a == b);
+        }
+        
+        template<typename T>
+        inline bool operator < (const Size<2, T>& a, const Size<2, T>& b)
+        {
+            return std::tie(a.w, a.h) < std::tie(b.w, b.h);
+        }
+        
+        template<typename T>
+        inline bool operator > (const Size<2, T>& a, const Size<2, T>& b)
+        {
+            return std::tie(a.w, a.h) > std::tie(b.w, b.h);
+        }
+        
+        template<int C, typename T>
+        inline std::ostream& operator << (std::ostream& os, const Size<C, T>& v)
+        {
+            os << to_string(v);
+            return os;
+        }
+    }
+}

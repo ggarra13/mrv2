@@ -475,9 +475,9 @@ namespace mrv
             //! panning and zooming.
             math::Matrix4x4f _pixelMatrixWithTransforms() const noexcept;
 
-            //! Clip the selection area position taking into account
+            //! Clamp the selection area position taking into account
             //! rotation.
-            void _clipSelectionArea(math::Vector2i& pos) const noexcept;
+            void _clampSelectionArea(math::Vector2i& pos) const noexcept;
 
             //! Call redraw and a flush to force a redraw.
             void _refresh() noexcept;

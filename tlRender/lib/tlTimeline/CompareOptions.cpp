@@ -156,7 +156,7 @@ namespace tl
                 box = boxes[0];
                 for (size_t i = 1; i < boxes.size(); ++i)
                 {
-                    box.expand(boxes[i]);
+                    box = expand(box, boxes[i]);
                 }
                 out.w = box.w();
                 out.h = box.h();

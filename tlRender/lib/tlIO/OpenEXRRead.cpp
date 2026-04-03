@@ -213,7 +213,8 @@ namespace tl
                     // Get the display and data windows.
                     _displayWindow = fromImath(header.displayWindow());
                     _dataWindow = fromImath(header.dataWindow());
-                    _intersectedWindow = _displayWindow.intersect(_dataWindow);
+                    _intersectedWindow = math::intersect(_displayWindow,
+                                                         _dataWindow);
                     _fast = _displayWindow == _dataWindow;
 
                     std::string compressionName;
@@ -967,8 +968,8 @@ namespace tl
 
                         _displayWindow = fromImath(displayWindow);
                         _dataWindow = fromImath(dataWindow);
-                        _intersectedWindow =
-                            _displayWindow.intersect(_dataWindow);
+                        _intersectedWindow = math::intersect(_displayWindow,
+                                                             _dataWindow);
 
                         _info.tags["Display Window"] = serialize(displayWindow);
                         _info.tags["Data Window"] = serialize(dataWindow);

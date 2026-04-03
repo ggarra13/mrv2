@@ -296,8 +296,8 @@ namespace tl
                 [](const std::shared_ptr<BoxPackingNode>& a,
                    const std::shared_ptr<BoxPackingNode>& b)
                 {
-                    const int aArea = a->box.getSize().getArea();
-                    const int bArea = b->box.getSize().getArea();
+                    const int aArea = math::area(a->box.getSize());
+                    const int bArea = math::area(b->box.getSize());
                     return std::tie(aArea, a->timestamp) <
                            std::tie(bArea, b->timestamp);
                 });
@@ -360,7 +360,7 @@ namespace tl
                     {
                         if (j->isOccupied())
                         {
-                            used += j->box.getSize().getArea();
+                            used += math::area(j->box.getSize());
                         }
                     }
                     out += static_cast<float>(used);

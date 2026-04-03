@@ -192,7 +192,7 @@ namespace mrv2
             {
                 nlohmann::json s;
                 s["time"] = annotation->time.floor();
-                std::vector<nlohmann::json > shapes;
+                std::vector<nlohmann::json > links;
                 for (auto shape : annotation->shapes)
                 {
                     nlohmann::json a;
@@ -210,9 +210,9 @@ namespace mrv2
                         continue;
                     a["link"] = *link;
 #endif
-                    shapes.push_back(a);
+                    links.push_back(a);
                 }
-                s["links"] = shapes;
+                s["links"] = links;
                 linkAnnotations.push_back(s);
             }
             j["linkAnnotations"] = linkAnnotations;

@@ -733,7 +733,7 @@ namespace mrv
                 return;
 
             Viewport* self = const_cast< Viewport* >(this);
-            auto viewportSize = getViewportSize();
+            const math::Size2i& viewportSize = getViewportSize();
             
             // Calculate resolution multiplier.
             uint16_t fontSize = p.ui->uiPrefs->uiPrefsHudFontSize->value() *
@@ -769,7 +769,7 @@ namespace mrv
             char buf[512];
             if (p.hud & HudDisplay::kDirectory)
             {
-                const auto& directory = path.getDirectory();
+                const std::string& directory = path.getDirectory();
                 _appendText(textInfos, directory, fontInfo, pos, lineHeight);
             }
 

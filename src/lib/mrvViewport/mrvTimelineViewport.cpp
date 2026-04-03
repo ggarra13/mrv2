@@ -1113,9 +1113,14 @@ namespace mrv
             return _p->viewZoom;
         }
 
-        void TimelineViewport::setFrameView(bool active) noexcept
+        void TimelineViewport::setFrameView(bool value) noexcept
         {
-            _p->frameView = active;
+            TLRENDER_P();
+            
+            if (p.frameView == value)
+                return;
+            
+            p.frameView = value;
             _updateDevices();
         }
 
@@ -3871,8 +3876,8 @@ namespace mrv
                     0.F, static_cast<float>(renderSize.w),
                     0.F, static_cast<float>(renderSize.h), -1.F, 1.F);
 
-            const auto renderAspect = renderSize.getAspect();
-            const auto viewportAspect = viewportSize.getAspect();
+            const auto renderAspect = math::aspectRatio(renderSize);
+            const auto viewportAspect = math::aspectRatio(viewportSize);
 
             math::Matrix4x4f renderMVP;
             math::Vector2f transformOffset;
@@ -3940,9 +3945,9 @@ namespace mrv
             TLRENDER_P();
 
             const auto& renderSize = getRenderSize();
-            const auto renderAspect = renderSize.getAspect();
+            const auto renderAspect = math::aspectRatio(renderSize);
             const auto& viewportSize = getViewportSize();
-            const auto viewportAspect = viewportSize.getAspect();
+            const auto viewportAspect = math::aspectRatio(viewportSize);
 
             math::Vector2f transformOffset;
             if (viewportAspect > 1.F)
@@ -3976,9 +3981,9 @@ namespace mrv
             TLRENDER_P();
 
             const auto& renderSize = getRenderSize();
-            const auto renderAspect = renderSize.getAspect();
             const auto& viewportSize = getViewportSize();
-            const auto viewportAspect = viewportSize.getAspect();
+            const auto renderAspect = math::aspectRatio(renderSize);
+            const auto viewportAspect = math::aspectRatio(viewportSize);
 
             math::Vector2f transformOffset;
             if (viewportAspect > 1.F)

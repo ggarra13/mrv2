@@ -166,7 +166,7 @@ namespace tl
                     event.style->getColorRole(colorRole));
             }
 
-            const math::Box2i g2 = g.margin(-p.size.border);
+            const math::Box2i g2 = math::margin(g, -p.size.border);
             event.render->drawMesh(
                 ui::rect(g2, p.size.margin), math::Vector2i(),
                 event.style->getColorRole(ui::ColorRole::Effect));
@@ -178,10 +178,10 @@ namespace tl
                 g.max.x - p.size.margin - p.size.durationSize.w,
                 g.min.y + p.size.margin, p.size.durationSize.w,
                 p.size.lineHeight);
-            const bool labelVisible = drawRect.intersects(labelGeometry);
+            const bool labelVisible = math::intersects(drawRect, labelGeometry);
             const bool durationVisible =
-                drawRect.intersects(durationGeometry) &&
-                !durationGeometry.intersects(labelGeometry);
+                math::intersects(drawRect, durationGeometry) &&
+                !math::intersects(durationGeometry, labelGeometry);
             
             std::vector<timeline::TextInfo> textInfos;
 

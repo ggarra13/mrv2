@@ -217,7 +217,7 @@ namespace mrv
 
         // 1. Generate Vertices
         // Add a central vertex for a clean fill (or build as a strip)
-        out.v.push_back(bbox.getCenter());
+        out.v.push_back(math::center(bbox));
 
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j <= segments; ++j) {

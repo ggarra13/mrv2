@@ -1,95 +1,159 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2021-2024 Darby Johnston
-// All rights reserved.
+// Copyright Contributors to the feather-tk project.
 
 #pragma once
 
 #include <nlohmann/json.hpp>
 
+#include <array>
 #include <iostream>
 
 namespace tl
 {
     namespace math
     {
-        //! Two-dimensional size.
-        template <typename T> class Size2
+        //! \name Sizes
+        ///@{
+        
+        //! Base class for sizes.
+        template<int C, typename T>
+        class Size
         {
         public:
-            constexpr Size2();
-            constexpr Size2(T w, T h);
+            Size();
 
-            T w;
-            T h;
+            constexpr T operator [] (int) const;
+            constexpr T& operator [] (int);
+            
+            constexpr const T* data() const;
+            constexpr T* data();
+            
+            bool isValid() const;
 
-            //! \name Components
-            ///@{
+            std::array<T, C> e;
+        };
+
+        //! Two-dimensional size.
+        template<typename T>
+        class Size<2, T>
+        {
+        public:
+            constexpr Size();
+            constexpr Size(T, T);
+            constexpr Size(const Size<2, T>&);
+
+            constexpr T operator [] (int) const;
+            constexpr T& operator [] (int);
+            
+            constexpr const T* data() const;
+            constexpr T* data();
+
+            union
+            {
+                std::array<T, 2> e;
+                struct
+                {
+                    T w;
+                    T h;
+                };
+            };
+            
+            constexpr bool isValid() const;
+
+            constexpr Size<2, T>& operator = (const Size<2, T>&);
+        };
+
+        //! Three-dimensional size.
+        template<typename T>
+        class Size<3, T>
+        {
+        public:
+            constexpr Size();
+            constexpr Size(T, T, T);
+            constexpr Size(const Size<3, T>&);
+
+            constexpr T operator [] (int) const;
+            constexpr T& operator [] (int);
+            
+            constexpr const T* data() const;
+            constexpr T* data();
+            
+            union
+            {
+                std::array<T, 3> e;
+                struct
+                {
+                    T w;
+                    T h;
+                    T d;
+                };
+            };
 
             constexpr bool isValid() const;
 
-            void zero();
-
-            ///@}
-
-            //! \name Dimensions
-            ///@{
-
-            //! Get the area.
-            constexpr float getArea() const;
-
-            //! Get the aspect ratio.
-            constexpr float getAspect() const;
-
-            ///@}
-
-            constexpr bool operator==(const Size2&) const;
-            constexpr bool operator!=(const Size2&) const;
-            bool operator<(const Size2&) const;
-            bool operator>(const Size2&) const;
+            constexpr Size<3, T>& operator = (const Size<3, T>&);
         };
 
-        //! Two-dimensional integer size.
-        typedef Size2<int> Size2i;
+        typedef Size<2, int> Size2i;
+        typedef Size<2, float> Size2f;
+        typedef Size<3, float> Size3f;
 
-        //! Two-dimensional floating point size.
-        typedef Size2<float> Size2f;
+        //! Get the aspect ratio of the given size.
+        template<typename T>
+        constexpr float aspectRatio(const Size<2, T>&);
+        
+        //! Get the area of the given size.
+        template<typename T>
+        constexpr float area(const Size<2, T>&);
+        
+        //! Get the volume of the given size.
+        template<typename T>
+        constexpr float volume(const Size<3, T>&);
 
-        //! \name Operators
-        ///@{
+        //! Add a margin to a size.
+        template<int C, typename T>
+        constexpr Size<C, T> margin(const Size<C, T>&, T);
 
-        template <typename T>
-        inline Size2<T> operator+(const Size2<T>&, const Size2<T>&);
+        //! Add a margin to a size.
+        template<typename T>
+        constexpr Size<2, T> margin(const Size<2, T>&, T x, T y);
 
-        template <typename T> inline Size2<T> operator+(const Size2<T>&, T);
+        std::string to_string(const Size2i&);
+        std::string to_string(const Size2f&);
+        std::string to_string(const Size3f&);
 
-        template <typename T>
-        inline Size2<T> operator-(const Size2<T>&, const Size2<T>&);
-
-        template <typename T> inline Size2<T> operator-(const Size2<T>&, T);
-
-        Size2i operator*(const Size2i&, float);
-
-        Size2i operator/(const Size2i&, float);
-
-        ///@}
-
-        //! \name Serialize
-        ///@{
+        bool from_string(const std::string&, Size2i&);
+        bool from_string(const std::string&, Size2f&);
+        bool from_string(const std::string&, Size3f&);
 
         void to_json(nlohmann::json&, const Size2i&);
         void to_json(nlohmann::json&, const Size2f&);
+        void to_json(nlohmann::json&, const Size3f&);
 
         void from_json(const nlohmann::json&, Size2i&);
         void from_json(const nlohmann::json&, Size2f&);
+        void from_json(const nlohmann::json&, Size3f&);
 
-        std::ostream& operator<<(std::ostream&, const Size2i&);
-        std::ostream& operator<<(std::ostream&, const Size2f&);
-
-        std::istream& operator>>(std::istream&, Size2i&);
-        std::istream& operator>>(std::istream&, Size2f&);
+        template<int C, typename T>
+        constexpr Size<C, T> operator + (const Size<C, T>&, T);
+        template<int C, typename T>
+        constexpr Size<C, T> operator - (const Size<C, T>&, T);
+        template<int C, typename T>
+        constexpr Size<C, T> operator * (const Size<C, T>&, float);
+        template<int C, typename T>
+        constexpr Size<C, T> operator / (const Size<C, T>&, float);
+        
+        template<int C, typename T>
+        constexpr bool operator == (const Size<C, T>&, const Size<C, T>&);
+        template<int C, typename T>
+        constexpr bool operator != (const Size<C, T>&, const Size<C, T>&);
+        
+        template<int C, typename T>
+        std::ostream& operator << (std::ostream&, const Size<C, T>&);
 
         ///@}
-    } // namespace math
-} // namespace tl
+    }
+}
 
 #include <tlCore/SizeInline.h>
+

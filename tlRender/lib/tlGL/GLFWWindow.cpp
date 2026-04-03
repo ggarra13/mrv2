@@ -310,7 +310,7 @@ namespace tl
                 monitorData.push_back(
                     {i, glfwVidmode->width, glfwVidmode->height,
                      glfwVidmode->refreshRate,
-                     windowBox.intersect(monitorBox)});
+                     math::intersect(windowBox, monitorBox)});
             }
             std::sort(
                 monitorData.begin(), monitorData.end(),

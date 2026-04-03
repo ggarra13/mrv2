@@ -175,6 +175,7 @@ namespace tl
 
             otime::TimeRange _timeRange = time::invalidTimeRange;
             otime::TimeRange _trimmedRange = time::invalidTimeRange;
+            bool _selected = false;
             double _scale = 500.0;
             ItemOptions _options;
             DisplayOptions _displayOptions;

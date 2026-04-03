@@ -239,7 +239,7 @@ namespace tl
         math::Box2i IItem::_getClipRect(const math::Box2i& value, double scale)
         {
             math::Box2i out;
-            const math::Vector2i c = value.getCenter();
+            const math::Vector2i c = math::center(value);
             out.min.x = (value.min.x - c.x) * scale + c.x;
             out.min.y = (value.min.y - c.y) * scale + c.y;
             out.max.x = (value.max.x - c.x) * scale + c.x;

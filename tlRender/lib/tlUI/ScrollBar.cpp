@@ -214,7 +214,7 @@ namespace tl
             IWidget::mousePressEvent(event);
             TLRENDER_P();
             const math::Box2i g = _getHandleGeometry();
-            if (!g.contains(event.pos))
+            if (!math::contains(g, event.pos))
             {
                 int scrollPos = 0;
                 const float s = _getScrollScale();
@@ -261,10 +261,10 @@ namespace tl
             switch (p.orientation)
             {
             case Orientation::Horizontal:
-                out = g.margin(0, p.size.border, 0, 0);
+                out = math::margin(g, 0, p.size.border, 0, 0);
                 break;
             case Orientation::Vertical:
-                out = g.margin(p.size.border, 0, 0, 0);
+                out = math::margin(g, p.size.border, 0, 0, 0);
                 break;
             default:
                 break;
@@ -276,7 +276,8 @@ namespace tl
         {
             TLRENDER_P();
             math::Box2i out;
-            const math::Box2i g = _getBorderGeometry().margin(-p.size.border);
+            const math::Box2i g = math::margin(_getBorderGeometry(),
+                                               -p.size.border);
             switch (p.orientation)
             {
             case Orientation::Horizontal:
@@ -313,7 +314,8 @@ namespace tl
         {
             TLRENDER_P();
             int out = 0;
-            const math::Box2i g = _getBorderGeometry().margin(-p.size.border);
+            const math::Box2i g = math::margin(_getBorderGeometry(),
+                                               -p.size.border);
             switch (p.orientation)
             {
             case Orientation::Horizontal:
@@ -332,7 +334,8 @@ namespace tl
         {
             TLRENDER_P();
             float out = 0.F;
-            const math::Box2i g = _getBorderGeometry().margin(-p.size.border);
+            const math::Box2i g = math::margin(_getBorderGeometry(),
+                                               -p.size.border);
             switch (p.orientation)
             {
             case Orientation::Horizontal:

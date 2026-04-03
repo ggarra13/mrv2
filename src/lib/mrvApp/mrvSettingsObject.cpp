@@ -179,9 +179,6 @@ namespace mrv
         p.defaultValues["NDI/Audio"] = 0;
 #endif
 
-        p.defaultValues["Waveform/HDRMaxValue"] = 12.F;
-        p.defaultValues["Waveform/HDRLogScale"] = true;
-        
         p.defaultValues[kTextFont] = 0;
         p.defaultValues[kFontSize] = 52;
 
