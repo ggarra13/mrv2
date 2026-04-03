@@ -1890,17 +1890,18 @@ namespace mrv
             if (use_maximize && !p.presentation && p.resizeWindow)
             {
                 mw->maximize();
-#ifdef __linux__
-                // On Linux, we wait 100 milliseconds to account for
-                // the main Window's animation when maximize is used.
-                wait::milliseconds(100);
-#endif
             }
             else
             {
                 mw->resize(posX, posY, W, H);
             }
             
+#ifdef __linux__
+            // On Linux, we wait 500 milliseconds to account for
+            // the main Window's animation.  Otherwise when hiding the
+            // timeline, it would appear floating in space.
+            wait::milliseconds(500);
+#endif
             if (frameView)
             {
                 mw->wait_for_expose();
