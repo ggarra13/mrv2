@@ -902,7 +902,8 @@ namespace mrv
                             p.style, p.render, p.fontSystem);
                         p.render->beginLoadRenderPass();
                         _drawEvent(
-                            p.timelineWindow, math::Box2i(renderSize),
+                            p.timelineWindow,
+                            math::Box2i(0, 0, renderSize.w, renderSize.h),
                             drawEvent);
                         p.render->endRenderPass();
                         
@@ -2053,17 +2054,18 @@ namespace mrv
             const math::Box2i& clipRect, bool clipped)
         {
             const math::Box2i& g = widget->getGeometry();
-            clipped |= !g.intersects(clipRect);
+            clipped |= !math::intersects(g, clipRect);
             clipped |= !widget->isVisible(false);
-            const math::Box2i clipRect2 = g.intersect(clipRect);
+            const math::Box2i clipRect2 = math::intersect(g, clipRect);
             widget->clipEvent(clipRect2, clipped);
-            const math::Box2i childrenClipRect =
-                widget->getChildrenClipRect().intersect(clipRect2);
+            const math::Box2i childrenClipRect = math::intersect(
+                widget->getChildrenClipRect(), clipRect2);
             for (const auto& child : widget->getChildren())
             {
                 const math::Box2i& childGeometry = child->getGeometry();
                 _clipEvent(
-                    child, childGeometry.intersect(childrenClipRect), clipped);
+                    child, math::intersect(childGeometry, childrenClipRect),
+                    clipped);
             }
         }
 
@@ -2100,15 +2102,17 @@ namespace mrv
                 event.render->setClipRect(drawRect);
                 widget->drawEvent(drawRect, event);
                 const math::Box2i childrenClipRect =
-                    widget->getChildrenClipRect().intersect(drawRect);
+                    math::intersect(widget->getChildrenClipRect(),
+                                    drawRect);
                 event.render->setClipRect(childrenClipRect);
                 for (const auto& child : widget->getChildren())
                 {
                     const math::Box2i& childGeometry = child->getGeometry();
-                    if (childGeometry.intersects(childrenClipRect))
+                    if (math::intersects(childGeometry, childrenClipRect))
                     {
                         _drawEvent(
-                            child, childGeometry.intersect(childrenClipRect),
+                            child, math::intersect(childGeometry,
+                                                   childrenClipRect),
                             event);
                     }
                 }

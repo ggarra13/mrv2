@@ -6,6 +6,8 @@ set(HEADERS
     IItem.h
     Init.h
     Namespace.h
+    MarkerItem.h
+    # StackItem.h
     ThumbnailSystem.h
     TimelineItem.h
     TimelineWidget.h
@@ -21,6 +23,8 @@ set(SOURCE
     IBasicItem.cpp
     IItem.cpp
     Init.cpp
+    MarkerItem.cpp
+    # StackItem.cpp
     ThumbnailSystem.cpp
     TimelineItem.cpp
     TimelineItemFill.cpp

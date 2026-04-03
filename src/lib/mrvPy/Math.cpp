@@ -27,8 +27,13 @@ Contains all math classes.
     py::class_<math::Vector2i>(math, "Vector2i")
         .def(py::init<>())
         .def(py::init<int, int>(), py::arg("x"), py::arg("y"))
-        .def_readwrite("x", &math::Vector2i::x)
-        .def_readwrite("y", &math::Vector2i::y)
+    .def_property("x",
+                  [](math::Vector2i& v) -> int& { return v.e[0]; },
+                  [](math::Vector2i& v, int val) { v.e[0] = val; })
+    .def_property("y",
+                  [](math::Vector2i& v) -> int& { return v.e[1]; },
+                  [](math::Vector2i& v, int val) { v.e[1] = val; })
+
         .def(
             "__repr__",
             [](const math::Vector2i& o)
@@ -42,8 +47,12 @@ Contains all math classes.
     py::class_<math::Vector2f>(math, "Vector2f")
         .def(py::init<>())
         .def(py::init<float, float>(), py::arg("x"), py::arg("y"))
-        .def_readwrite("x", &math::Vector2f::x)
-        .def_readwrite("y", &math::Vector2f::y)
+        .def_property("x",
+                      [](math::Vector2f& v) -> float& { return v.e[0]; },
+                      [](math::Vector2f& v, float val) { v.e[0] = val; })
+        .def_property("y",
+                      [](math::Vector2f& v) -> float& { return v.e[1]; },
+                      [](math::Vector2f& v, float val) { v.e[1] = val; })
         .def(
             "__repr__",
             [](const math::Vector2f& o)
@@ -59,9 +68,17 @@ Contains all math classes.
         .def(
             py::init<float, float, float>(), py::arg("x"), py::arg("y"),
             py::arg("z"))
-        .def_readwrite("x", &math::Vector3f::x)
-        .def_readwrite("y", &math::Vector3f::y)
-        .def_readwrite("z", &math::Vector3f::z)
+        .def_property("x",
+                      [](math::Vector3f& v) -> float& { return v.e[0]; },
+                      [](math::Vector3f& v, float val) { v.e[0] = val; })
+
+        .def_property("y",
+                      [](math::Vector3f& v) -> float& { return v.e[1]; },
+                      [](math::Vector3f& v, float val) { v.e[1] = val; })
+        
+        .def_property("z",
+                      [](math::Vector3f& v) -> float& { return v.e[2]; },
+                      [](math::Vector3f& v, float val) { v.e[2] = val; })
         .def(
             "__repr__",
             [](const math::Vector3f& o)
@@ -78,10 +95,21 @@ Contains all math classes.
         .def(
             py::init<float, float, float, float>(), py::arg("x"), py::arg("y"),
             py::arg("z"), py::arg("w"))
-        .def_readwrite("x", &math::Vector4f::x)
-        .def_readwrite("y", &math::Vector4f::y)
-        .def_readwrite("z", &math::Vector4f::z)
-        .def_readwrite("w", &math::Vector4f::w)
+        .def_property("x",
+                      [](math::Vector4f& v) -> float& { return v.e[0]; },
+                      [](math::Vector4f& v, float val) { v.e[0] = val; })
+
+        .def_property("y",
+                      [](math::Vector4f& v) -> float& { return v.e[1]; },
+                      [](math::Vector4f& v, float val) { v.e[1] = val; })
+        
+        .def_property("z",
+                      [](math::Vector4f& v) -> float& { return v.e[2]; },
+                      [](math::Vector4f& v, float val) { v.e[2] = val; })
+        
+        .def_property("w",
+                      [](math::Vector4f& v) -> float& { return v.e[2]; },
+                      [](math::Vector4f& v, float val) { v.e[2] = val; })
         .def(
             "__repr__",
             [](const math::Vector4f& o)
@@ -96,8 +124,12 @@ Contains all math classes.
     py::class_<math::Size2i>(math, "Size2i")
         .def(py::init<>())
         .def(py::init<int, int>(), py::arg("w"), py::arg("h"))
-        .def_readwrite("w", &math::Size2i::w)
-        .def_readwrite("h", &math::Size2i::h)
+        .def_property("w",
+                      [](math::Size2i& v) -> int& { return v.w; },
+                      [](math::Size2i& v, int val) { v.w = val; })
+        .def_property("h",
+                      [](math::Size2i& v) -> int& { return v.h; },
+                      [](math::Size2i& v, int val) { v.h = val; })
         .def(
             "__repr__",
             [](const math::Size2i& o)

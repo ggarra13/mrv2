@@ -155,22 +155,6 @@ vec4 sampleTexture(
               c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
           }
               
-             // This was needed in OpenGL, but not for Vulkan
-             // Swizzle for the image channels.
-             // if (1 == imageChannels)
-             // {
-             //     c.g = c.b = c.r;
-             //     c.a = 1.0;
-             // }
-             // else if (2 == imageChannels)
-             // {
-             //     c.a = c.g;
-             //     c.g = c.b = c.r;
-             // }
-             // else if (3 == imageChannels)
-             // {
-             //     c.a = 1.0;
-             // }
        }
       return c;
 }

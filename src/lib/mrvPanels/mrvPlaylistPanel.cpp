@@ -315,7 +315,7 @@ namespace mrv
             if (_r->map.empty())
             {
                 math::Box2i box = global_box();
-                if (box.contains(pos))
+                if (math::contains(box, pos))
                 {
                     validDrop = true;
                 }
@@ -333,7 +333,7 @@ namespace mrv
                     PlaylistButton* b = m.second;
                     const math::Box2i box(
                         b->x() + winX, b->y() + winY, b->w(), b->h());
-                    if (box.contains(pos))
+                    if (math::contains(box, pos))
                     {
                         aIndex = static_cast<int>(m.first);
                         auto model = ui->app->filesModel();

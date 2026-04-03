@@ -1291,14 +1291,16 @@ namespace tl
                 {
                     for (const auto& texture : p.ocioData->textures)
                     {
-                        p.shaders["display"]->setTexture(texture->getName(), texture);
+                        p.shaders["display"]->setTexture(texture->getName(),
+                                                         texture);
                     }
                 }
                 if (p.lutData)
                 {
                     for (const auto& texture : p.lutData->textures)
                     {
-                        p.shaders["display"]->setTexture(texture->getName(), texture);
+                        p.shaders["display"]->setTexture(texture->getName(),
+                                                         texture);
                     }
                 }
 #endif // TLRENDER_OCIO
@@ -1307,7 +1309,8 @@ namespace tl
                 {
                     for (const auto& texture : p.placeboData->textures)
                     {
-                        p.shaders["display"]->setTexture(texture->getName(), texture);
+                        p.shaders["display"]->setTexture(texture->getName(),
+                                                         texture);
                     }
                 }
 #endif // TLRENDER_LIBPLACEBO

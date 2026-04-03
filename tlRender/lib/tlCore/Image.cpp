@@ -22,7 +22,7 @@ namespace tl
         {
             math::Box2i out;
             const math::Size2i boxSize = box.getSize();
-            const float boxAspect = boxSize.getAspect();
+            const float boxAspect = aspectRatio(boxSize);
             if (boxAspect > aspect)
             {
                 out = math::Box2i(

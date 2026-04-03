@@ -651,7 +651,7 @@ namespace mrv
                                         status != voice::RecordStatus::Stopped)
                                         dont_create_annotation = true;
                                     
-                                    if (buttonBox.contains(pos))
+                                    if (math::contains(buttonBox, pos))
                                     {
                                         dont_create_annotation = true;
 
@@ -977,7 +977,7 @@ namespace mrv
                     }
                     else
                     {
-                        if (p.multilineText->box.contains(pos))
+                        if (math::contains(p.multilineText->box, pos))
                             set_cursor(FL_CURSOR_INSERT);
                         else
                             set_cursor(FL_CURSOR_CROSS);
@@ -1009,7 +1009,7 @@ namespace mrv
                 {
                     p.mousePos = _getFocus();
                     const math::Vector2i pos = _getRaster();
-                    if (p.multilineText->box.contains(pos))
+                    if (math::contains(p.multilineText->box, pos))
                     {
                         Fl::paste(*this, 0);
                         return 1;
@@ -1088,7 +1088,7 @@ namespace mrv
                     }
                     else
                     {
-                        if (p.multilineText->box.contains(pos))
+                        if (math::contains(p.multilineText->box, pos))
                         {
                             int ret = p.multilineText->handle_mouse_click(event, pos);
                             redrawWindows();
@@ -1122,7 +1122,7 @@ namespace mrv
                                 continue;
 #endif
                             auto box = s->getBBox(mult);
-                            if (box.contains(pos))
+                            if (math::contains(box, pos))
                             {
                                 if (Fl::event_button1())
                                 {
@@ -1222,7 +1222,7 @@ namespace mrv
                                 {
                                     auto center = voice->getCenter();
                                     auto buttonBox = voice->getBBox(mult);
-                                    if (buttonBox.contains(pos))
+                                    if (math::contains(buttonBox, pos))
                                     {
                                         currentVoiceOver = voice;
                                         p.popupMenu->add(_("Voice Over/Delete"),
@@ -1301,7 +1301,7 @@ namespace mrv
                                 continue;
 #endif
                             auto box = s->getBBox(mult);
-                            if (box.contains(pos))
+                            if (math::contains(box, pos))
                             {
                                 found = true;
 
@@ -1466,7 +1466,7 @@ namespace mrv
                     
 #ifdef VULKAN_BACKEND
                     if (p.multilineText &&
-                        p.multilineText->box.contains(pos))
+                        math::contains(p.multilineText->box, pos))
                     {
                         int ret = p.multilineText->handle_mouse_click(event, pos);
                         if (ret)

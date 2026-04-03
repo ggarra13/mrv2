@@ -794,11 +794,11 @@ namespace mrv
             //
             // Make room in box for cursor
             //
-            boxf.expand(math::Box2f(cursorBox.min.x,
-                                    cursorBox.min.y,
-                                    cursorBox.w() * mult,
-                                    cursorBox.h()));
-            boxf = boxf.margin(8);
+            boxf = math::expand(boxf, math::Box2f(cursorBox.min.x,
+                                           cursorBox.min.y,
+                                           cursorBox.w() * mult,
+                                           cursorBox.h()));
+            boxf = math::margin(boxf, 8.F);
             
             auto roundedBox = createRoundedRect(boxf, 5 * mult);
                 

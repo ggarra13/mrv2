@@ -168,10 +168,12 @@ namespace tl
             // Commenting this line makes text not render.
             // event.render->drawRect(_geometry, image::Color4f(.5F, .5F, .5F));
 
-            const math::Box2i g = align(
-                                      _geometry, _sizeHint, Stretch::Fixed,
-                                      Stretch::Fixed, _hAlign, _vAlign)
-                                      .margin(-p.size.margin);
+            const math::Box2i g = math::margin(align(
+                                                   _geometry, _sizeHint,
+                                                   Stretch::Fixed,
+                                                   Stretch::Fixed,
+                                                   _hAlign, _vAlign),
+                                               -p.size.margin);
 
             if (!p.text.empty() && p.draw.glyphs.empty())
             {

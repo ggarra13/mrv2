@@ -2,10 +2,8 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#include <tlCore/Vector.h>
-
-#include <tlCore/Error.h>
 #include <tlCore/String.h>
+#include <tlCore/Vector.h>
 
 #include <sstream>
 
@@ -13,24 +11,107 @@ namespace tl
 {
     namespace math
     {
+        std::string to_string(const Vector2i& value)
+        {
+            std::stringstream ss;
+            ss << value.x << " " << value.y;
+            return ss.str();
+        }
+
+        std::string to_string(const Vector2f& value)
+        {
+            std::stringstream ss;
+            ss << value.x << " " << value.y;
+            return ss.str();
+        }
+
+        std::string to_string(const Vector3f& value)
+        {
+            std::stringstream ss;
+            ss << value.x << " " << value.y << " " << value.z;
+            return ss.str();
+        }
+
+        std::string to_string(const Vector4f& value)
+        {
+            std::stringstream ss;
+            ss << value.x << " " << value.y << " " << value.z << " " << value.w;
+            return ss.str();
+        }
+
+        bool from_string(const std::string& s, Vector2i& value)
+        {
+            bool out = false;
+            const auto pieces = string::split(s, ' ');
+            if (2 == pieces.size())
+            {
+                value.x = std::atoi(pieces[0].c_str());
+                value.y = std::atoi(pieces[1].c_str());
+                out = true;
+            }
+            return out;
+        }
+
+        bool from_string(const std::string& s, Vector2f& value)
+        {
+            bool out = false;
+            const auto pieces = string::split(s, ' ');
+            if (2 == pieces.size())
+            {
+                value.x = std::atof(pieces[0].c_str());
+                value.y = std::atof(pieces[1].c_str());
+                out = true;
+            }
+            return out;
+        }
+
+        bool from_string(const std::string& s, Vector3f& value)
+        {
+            bool out = false;
+            const auto pieces = string::split(s, ' ');
+            if (3 == pieces.size())
+            {
+                value.x = std::atof(pieces[0].c_str());
+                value.y = std::atof(pieces[1].c_str());
+                value.z = std::atof(pieces[2].c_str());
+                out = true;
+            }
+            return out;
+        }
+
+        bool from_string(const std::string& s, Vector4f& value)
+        {
+            bool out = false;
+            const auto pieces = string::split(s, ' ');
+            if (4 == pieces.size())
+            {
+                value.x = std::atof(pieces[0].c_str());
+                value.y = std::atof(pieces[1].c_str());
+                value.z = std::atof(pieces[2].c_str());
+                value.w = std::atof(pieces[3].c_str());
+                out = true;
+            }
+            return out;
+        }
+
         void to_json(nlohmann::json& json, const Vector2i& value)
         {
-            json = {value.x, value.y};
+            json = { value.x, value.y };
         }
 
         void to_json(nlohmann::json& json, const Vector2f& value)
         {
-            json = {value.x, value.y};
+            json = { value.x, value.y };
         }
 
         void to_json(nlohmann::json& json, const Vector3f& value)
         {
-            json = {value.x, value.y, value.z};
+            json = { value.x, value.y, value.z };
         }
 
         void to_json(nlohmann::json& json, const Vector4f& value)
         {
-            json = {value.x, value.y, value.z, value.w};
+            json = { value.x, value.y, value.z, value.w };
         }
 
         void from_json(const nlohmann::json& json, Vector2i& value)
@@ -59,121 +140,5 @@ namespace tl
             json.at(2).get_to(value.z);
             json.at(3).get_to(value.w);
         }
-
-        std::ostream& operator<<(std::ostream& os, const Vector2i& value)
-        {
-            os << value.x << "," << value.y;
-            return os;
-        }
-
-        std::ostream& operator<<(std::ostream& os, const Vector2f& value)
-        {
-            os << value.x << "," << value.y;
-            return os;
-        }
-
-        std::ostream& operator<<(std::ostream& os, const Vector3f& value)
-        {
-            os << value.x << "," << value.y << "," << value.z;
-            return os;
-        }
-
-        std::ostream& operator<<(std::ostream& os, const Vector4f& value)
-        {
-            os << value.x << "," << value.y << "," << value.z << "," << value.w;
-            return os;
-        }
-
-        std::istream& operator>>(std::istream& is, Vector2i& value)
-        {
-            std::string s;
-            is >> s;
-            auto split = string::split(s, ',');
-            if (split.size() != 2)
-            {
-                throw error::ParseError();
-            }
-            {
-                std::stringstream ss(split[0]);
-                ss >> value.x;
-            }
-            {
-                std::stringstream ss(split[1]);
-                ss >> value.y;
-            }
-            return is;
-        }
-
-        std::istream& operator>>(std::istream& is, Vector2f& value)
-        {
-            std::string s;
-            is >> s;
-            auto split = string::split(s, ',');
-            if (split.size() != 2)
-            {
-                throw error::ParseError();
-            }
-            {
-                std::stringstream ss(split[0]);
-                ss >> value.x;
-            }
-            {
-                std::stringstream ss(split[1]);
-                ss >> value.y;
-            }
-            return is;
-        }
-
-        std::istream& operator>>(std::istream& is, Vector3f& value)
-        {
-            std::string s;
-            is >> s;
-            auto split = string::split(s, ',');
-            if (split.size() != 3)
-            {
-                throw error::ParseError();
-            }
-            {
-                std::stringstream ss(split[0]);
-                ss >> value.x;
-            }
-            {
-                std::stringstream ss(split[1]);
-                ss >> value.y;
-            }
-            {
-                std::stringstream ss(split[2]);
-                ss >> value.z;
-            }
-            return is;
-        }
-
-        std::istream& operator>>(std::istream& is, Vector4f& value)
-        {
-            std::string s;
-            is >> s;
-            auto split = string::split(s, ',');
-            if (split.size() != 4)
-            {
-                throw error::ParseError();
-            }
-            {
-                std::stringstream ss(split[0]);
-                ss >> value.x;
-            }
-            {
-                std::stringstream ss(split[1]);
-                ss >> value.y;
-            }
-            {
-                std::stringstream ss(split[2]);
-                ss >> value.z;
-            }
-            {
-                std::stringstream ss(split[3]);
-                ss >> value.w;
-            }
-            return is;
-        }
-    } // namespace math
-} // namespace tl
+    }
+}

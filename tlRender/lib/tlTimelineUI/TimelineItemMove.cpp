@@ -186,7 +186,8 @@ namespace tl
                     int dropTarget = -1;
                     for (size_t i = 0; i < p.mouse.dropTargets.size(); ++i)
                     {
-                        if (p.mouse.dropTargets[i].mouse.contains(event.pos))
+                        if (math::contains(p.mouse.dropTargets[i].mouse,
+                                           event.pos))
                         {
                             dropTarget = i;
                             break;

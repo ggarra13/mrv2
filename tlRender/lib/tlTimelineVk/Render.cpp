@@ -3154,7 +3154,7 @@ namespace tl
                 p.shaders["display"] =
                     vlk::Shader::create(ctx, vertexSource(), source, "display");
 #endif
-                    
+                
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->addFBO("textureSampler");

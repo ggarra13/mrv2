@@ -192,7 +192,7 @@ namespace mrv
             if (!valid())
             {
                 _initializeGL();
-                CHECK_GL;
+                
 
                 if (p.ui->uiPrefs->uiPrefsOpenGLVsync->value() ==
                     MonitorVSync::kVSyncNone)
@@ -202,7 +202,7 @@ namespace mrv
 
                 valid(1);
             }
-            CHECK_GL;
+            
 
             const auto& viewportSize = getViewportSize();
             const auto& renderSize = getRenderSize();
@@ -218,7 +218,7 @@ namespace mrv
                 hasAlpha ||
                 getBackgroundOptions().type == timeline::Background::Transparent;
 
-            CHECK_GL;
+            
             try
             {
                 if (renderSize.isValid())
@@ -288,7 +288,7 @@ namespace mrv
                         break;
                     }
 
-                    CHECK_GL;
+                    
                     gl::OffscreenBufferOptions offscreenBufferOptions;
                     offscreenBufferOptions.colorType = gl.colorBufferType;
 
@@ -299,17 +299,12 @@ namespace mrv
                     }
                     offscreenBufferOptions.depth = gl::OffscreenDepth::_24;
                     offscreenBufferOptions.stencil = gl::OffscreenStencil::_8;
-                    CHECK_GL;
                     if (gl::doCreate(gl.buffer, renderSize, offscreenBufferOptions))
                     {
-                        CHECK_GL;
                         gl.buffer = gl::OffscreenBuffer::create(
                             renderSize, offscreenBufferOptions);
-                        CHECK_GL;
                         _createPBOs(renderSize);
-                        CHECK_GL;
                     }
-                    CHECK_GL;
 
                     if (can_do(FL_STEREO))
                     {
@@ -321,15 +316,14 @@ namespace mrv
                                 renderSize, offscreenBufferOptions);
                         }
                     }
-                    CHECK_GL;
                 }
                 else
                 {
                     gl.buffer.reset();
                     gl.stereoBuffer.reset();
-                    CHECK_GL;
+                    
                 }
-                CHECK_GL;
+                
 
                 if (gl.buffer && gl.render)
                 {
@@ -410,7 +404,7 @@ namespace mrv
                 gl.buffer.reset();
                 gl.stereoBuffer.reset();
             }
-            CHECK_GL;
+            
 
             float r = 0.F, g = 0.F, b = 0.F, a = 0.F;
 
@@ -465,15 +459,15 @@ namespace mrv
                 }
             }
 
-            CHECK_GL;
+            
             glDrawBuffer(GL_BACK_LEFT);
-            CHECK_GL;
+            
 
             glViewport(0, 0, GLsizei(viewportSize.w), GLsizei(viewportSize.h));
             glClearStencil(0);
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-            CHECK_GL;
+            
 
             const auto& player = getTimelinePlayer();
             if (!player)
@@ -686,9 +680,7 @@ namespace mrv
                     {
                         gl.overlay = gl::OffscreenBuffer::create(
                             renderSize, offscreenBufferOptions);
-                        CHECK_GL;
                         _createOverlayPBO(renderSize);
-                        CHECK_GL;
                     }
                     
                     const math::Matrix4x4f& renderMVP = _renderProjectionMatrix();
@@ -709,7 +701,7 @@ namespace mrv
                     // Wait for the fence to complete before compositing
                     GLenum waitReturn =
                         glClientWaitSync(gl.overlayFence, 0, GL_TIMEOUT_IGNORED);
-                    CHECK_GL;
+                    
                     if (waitReturn == GL_TIMEOUT_EXPIRED)
                     {
                         LOG_ERROR("glClientWaitSync: Timeout occurred!");
@@ -1178,7 +1170,7 @@ namespace mrv
                         return;
                     glReadPixels(box.min.x, box.min.y, W, H, format, type,
                                  p.image);
-                    CHECK_GL;
+                    
                     return;
                 }
                 else
@@ -1188,22 +1180,22 @@ namespace mrv
                     // glReadPixels() should return immediately.
                     glBindBuffer(
                         GL_PIXEL_PACK_BUFFER, gl.pboIDs[gl.currentPBOIndex]);
-                    CHECK_GL;
+                    
 
                     glReadPixels(box.min.x, box.min.y, W, H, format, type, 0);
                     // was: glReadPixels(0, 0, renderSize.w, renderSize.h, format, type, 0);
-                    CHECK_GL;
+                    
 
                     // map the PBO to process its data by CPU
                     glBindBuffer(GL_PIXEL_PACK_BUFFER, gl.pboIDs[gl.nextPBOIndex]);
-                    CHECK_GL;
+                    
 
                     // We are stopped, read the first PBO.
                     if (stopped)
                     {
                         glBindBuffer(
                             GL_PIXEL_PACK_BUFFER, gl.pboIDs[gl.currentPBOIndex]);
-                        CHECK_GL;
+                        
                     }
                 }
 
@@ -1219,12 +1211,12 @@ namespace mrv
                 glClientWaitSync(
                     gl.pboFences[gl.nextPBOIndex], GL_SYNC_FLUSH_COMMANDS_BIT,
                     GL_TIMEOUT_IGNORED);
-                CHECK_GL;
+                
                 glDeleteSync(gl.pboFences[gl.nextPBOIndex]);
-                CHECK_GL;
+                
 
                 p.image = (float*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
-                CHECK_GL;
+                
                 p.rawImage = false;
             }
             else

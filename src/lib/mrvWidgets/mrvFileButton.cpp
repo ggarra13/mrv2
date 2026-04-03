@@ -146,7 +146,7 @@ namespace mrv
                 p.drag = nullptr;
                 selection_color(FL_YELLOW);
 
-                if (box.contains(pos))
+                if (math::contains(box, pos))
                 {
                     add_clip_to_timeline_cb(p.index, ui);
                     panel::redrawThumbnails();
@@ -156,7 +156,7 @@ namespace mrv
                 if (playlistPanel)
                 {
                     const math::Box2i& box = playlistPanel->global_box();
-                    if (box.contains(pos))
+                    if (math::contains(box, pos))
                     {
                         playlistPanel->add(pos, p.index, ui);
                         panel::redrawThumbnails();

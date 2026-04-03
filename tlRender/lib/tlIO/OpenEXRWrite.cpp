@@ -211,7 +211,7 @@ namespace tl
             {
                 std::stringstream s(i->second);
                 math::Box2i box;
-                s >> box;
+                s >> box.min.x >> box.min.y >> box.max.x >> box.max.y;
                 header.displayWindow() = Imath::Box2i(
                     Imath::V2i(box.min.x, box.min.y),
                     Imath::V2i(box.max.x, box.max.y));
@@ -221,7 +221,7 @@ namespace tl
             {
                 std::stringstream s(i->second);
                 math::Box2i box;
-                s >> box;
+                s >> box.min.x >> box.min.y >> box.max.x >> box.max.y;
                 header.dataWindow() = Imath::Box2i(
                     Imath::V2i(box.min.x, box.min.y),
                     Imath::V2i(box.max.x, box.max.y));

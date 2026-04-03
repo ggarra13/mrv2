@@ -640,7 +640,8 @@ namespace tl
                             for (int j = 0; j < items.size(); ++j)
                             {
                                 const auto& item = items[j];
-                                if (item->getGeometry().contains(event.pos))
+                                if (math::contains(item->getGeometry(),
+                                                   event.pos))
                                 {
                                     p.mouse.mode = Private::MouseMode::Item;
                                     p.mouse.items.push_back(
@@ -683,7 +684,8 @@ namespace tl
                             for (int j = 0; j < transitions.size(); ++j)
                             {
                                 const auto& item = transitions[j];
-                                if (item->getGeometry().contains(event.pos))
+                                if (math::contains(item->getGeometry(),
+                                                   event.pos))
                                 {
                                     p.mouse.mode = Private::MouseMode::Transition;
                                     p.mouse.items.push_back(
@@ -1002,7 +1004,7 @@ namespace tl
                             p.size.scrollPos.y + g.min.y + p.size.margin +
                                 p.size.fontMetrics.lineHeight,
                             p.size.border, p.size.margin + p.size.border * 4);
-                        if (box.intersects(drawRect))
+                        if (math::intersects(box, drawRect))
                         {
                             mesh.v.push_back(
                                 math::Vector2f(box.min.x, box.min.y));
@@ -1039,7 +1041,7 @@ namespace tl
                             p.size.scrollPos.y + g.min.y, p.size.border,
                             p.size.margin + p.size.fontMetrics.lineHeight +
                                 p.size.margin + p.size.border * 4);
-                        if (box.intersects(drawRect))
+                        if (math::intersects(box, drawRect))
                         {
                             mesh.v.push_back(
                                 math::Vector2f(box.min.x, box.min.y));
@@ -1078,7 +1080,7 @@ namespace tl
                     p.size.scrollPos.y + g.min.y, p.size.border * 2,
                     p.size.margin + p.size.fontMetrics.lineHeight +
                         p.size.margin + p.size.border * 4);
-                if (g2.intersects(drawRect))
+                if (math::intersects(g2, drawRect))
                 {
                     event.render->drawRect(
                         g2,
@@ -1117,7 +1119,7 @@ namespace tl
                                 p.size.margin,
                                 p.size.scrollPos.y + g.min.y + p.size.margin,
                                 labelMaxSize.w, p.size.fontMetrics.lineHeight);
-                            if (time != p.currentTime && box.intersects(drawRect))
+                            if (time != p.currentTime && math::intersects(box, drawRect))
                             {
                                 const std::string label =
                                     _data->timeUnitsModel->getLabel(time);
@@ -1165,7 +1167,7 @@ namespace tl
                         p.size.scrollPos.y + g.min.y + p.size.margin +
                             p.size.fontMetrics.lineHeight + p.size.margin,
                         x1 - x0 + 1, h);
-                    if (box.intersects(drawRect))
+                    if (math::intersects(box, drawRect))
                     {
                         mesh.v.push_back(math::Vector2f(box.min.x, box.min.y));
                         mesh.v.push_back(
@@ -1202,7 +1204,7 @@ namespace tl
                             p.size.fontMetrics.lineHeight + p.size.margin +
                             p.size.border * 2,
                         x1 - x0 + 1, p.size.border * 2);
-                    if (box.intersects(drawRect))
+                    if (math::intersects(box, drawRect))
                     {
                         mesh.v.push_back(math::Vector2f(box.min.x, box.min.y));
                         mesh.v.push_back(

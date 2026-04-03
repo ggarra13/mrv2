@@ -1150,7 +1150,7 @@ namespace tl
 
                 video_frame.frame_rate_N = numerator;
                 video_frame.frame_rate_D = denominator;
-                video_frame.picture_aspect_ratio = size.getAspect();
+                video_frame.picture_aspect_ratio = math::aspectRatio(size);
                 video_frame.frame_format_type =
                     NDIlib_frame_format_type_progressive;
 
@@ -1810,8 +1810,8 @@ namespace tl
                 math::Vector2i viewPos = p.thread.viewPos;
                 double viewZoom = p.thread.viewZoom;
 
-                const auto renderAspect = renderSize.getAspect();
-                const auto viewportAspect = sourceViewportSize.getAspect();
+                const auto renderAspect = math::aspectRatio(renderSize);
+                const auto viewportAspect = math::aspectRatio(sourceViewportSize);
                 if (viewportAspect > 1.F)
                 {
                     transformOffset.x = renderSize.w / 2.F;

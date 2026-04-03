@@ -75,7 +75,7 @@ namespace tl
             math::Vector2i tmp = value;
             if (clamp)
             {
-                const math::Box2i g = _geometry.margin(-p.size.border);
+                const math::Box2i g = math::margin(_geometry, -p.size.border);
                 tmp = math::Vector2i(
                     math::clamp(tmp.x, 0, std::max(0, p.scrollSize.x - g.w())),
                     math::clamp(tmp.y, 0, std::max(0, p.scrollSize.y - g.h())));
@@ -100,7 +100,7 @@ namespace tl
         math::Box2i ScrollArea::getChildrenClipRect() const
         {
             TLRENDER_P();
-            return _geometry.margin(-p.size.border);
+            return math::margin(_geometry, -p.size.border);
         }
 
         void ScrollArea::setBorder(bool value)
@@ -117,7 +117,7 @@ namespace tl
         {
             IWidget::setGeometry(value);
             TLRENDER_P();
-            const math::Box2i g = value.margin(-p.size.border);
+            const math::Box2i g = math::margin(value, -p.size.border);
 
             math::Vector2i scrollSize;
             for (const auto& child : _children)

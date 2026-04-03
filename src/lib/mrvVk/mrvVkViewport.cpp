@@ -754,8 +754,8 @@ namespace mrv
             // Store command for easy access.
             vk.cmd = cmd;
             
-            const auto& viewportSize = getViewportSize();
-            const auto& renderSize = getRenderSize();
+            const math::Size2i viewportSize = getViewportSize();
+            const math::Size2i renderSize = getRenderSize();
 
             bool hasAlpha = false;
             const float alpha = p.ui->uiMain->get_alpha() / 255.F;
@@ -860,8 +860,6 @@ namespace mrv
                     // As render resolution might have changed,
                     // we need to reset the quad size.
                     vk.vbo.reset();
-                    if (hasFrameView())
-                        _frameView();
                 }
             }
             else

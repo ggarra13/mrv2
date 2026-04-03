@@ -187,14 +187,14 @@ namespace tl
                     event.style->getColorRole(colorRole));
             }
 
-            const math::Box2i g2 = g.margin(-(p.size.border * 2));
+            const math::Box2i g2 = math::margin(g, -(p.size.border * 2));
             event.render->drawRect(g2, event.style->getColorRole(p.colorRole));
 
             const timeline::ClipRectEnabledState clipRectEnabledState(
                 event.render);
             const timeline::ClipRectState clipRectState(event.render);
             event.render->setClipRectEnabled(true);
-            event.render->setClipRect(g2.intersect(drawRect));
+            event.render->setClipRect(math::intersect(g2, drawRect));
             
             std::vector<timeline::TextInfo> textInfos;
 
@@ -203,7 +203,7 @@ namespace tl
                 const math::Box2i labelGeometry(
                     g2.min.x + p.size.margin, g2.min.y + p.size.margin,
                     p.size.labelSize.w, p.size.fontMetrics.lineHeight);
-                if (drawRect.intersects(labelGeometry))
+                if (math::intersects(drawRect, labelGeometry))
                 {
                     if (!p.label.empty() && p.draw.labelGlyphs.empty())
                     {
@@ -224,8 +224,8 @@ namespace tl
                     g2.max.x - p.size.durationSize.w - p.size.margin,
                     g2.min.y + p.size.margin, p.size.durationSize.w,
                     p.size.fontMetrics.lineHeight);
-                if (drawRect.intersects(durationGeometry) &&
-                    !durationGeometry.intersects(labelGeometry))
+                if (math::intersects(drawRect, durationGeometry) &&
+                    !math::intersects(durationGeometry, labelGeometry))
                 {
                     if (!p.durationLabel.empty() &&
                         p.draw.durationGlyphs.empty())
@@ -239,7 +239,7 @@ namespace tl
                         math::Vector2i(
                             durationGeometry.min.x,
                             durationGeometry.min.y +
-                                p.size.fontMetrics.ascender));
+                            p.size.fontMetrics.ascender));
                 }
             }
 
@@ -250,20 +250,20 @@ namespace tl
                 float y = g2.max.y + 1 -
                           (p.size.fontMetrics.lineHeight + p.size.margin * 2 +
                            p.size.border * 2) *
-                              p.markers.size();
+                          p.markers.size();
                 for (size_t i = 0; i < p.markers.size(); ++i)
                 {
                     const int x0 = _geometry.min.x + p.markers[i]
-                                                             .range.start_time()
-                                                             .rescaled_to(1.0)
-                                                             .value() *
-                                                         _scale;
+                                   .range.start_time()
+                                   .rescaled_to(1.0)
+                                   .value() *
+                                   _scale;
                     const int x1 = _geometry.min.x +
                                    p.markers[i]
-                                           .range.end_time_exclusive()
-                                           .rescaled_to(1.0)
-                                           .value() *
-                                       _scale -
+                                   .range.end_time_exclusive()
+                                   .rescaled_to(1.0)
+                                   .value() *
+                                   _scale -
                                    1;
                     math::Box2i mg;
                     mg.min.x = std::max(x0, g2.min.x);
@@ -290,7 +290,7 @@ namespace tl
                     const math::Box2i labelGeometry = math::Box2i(
                         g2.min.x + p.size.margin, y + p.size.margin,
                         p.size.markerSizes[i].w, p.size.fontMetrics.lineHeight);
-                    if (drawRect.intersects(labelGeometry))
+                    if (math::intersects(drawRect, labelGeometry))
                     {
                         if (!p.markers[i].name.empty() &&
                             p.draw.markerGlyphs[i].empty())
@@ -305,7 +305,7 @@ namespace tl
                             math::Vector2i(
                                 labelGeometry.min.x,
                                 labelGeometry.min.y +
-                                    p.size.fontMetrics.ascender));
+                                p.size.fontMetrics.ascender));
                     }
 
                     y += p.size.fontMetrics.lineHeight + p.size.margin * 2;
@@ -332,7 +332,7 @@ namespace tl
 
         math::Box2i IBasicItem::_getInsideGeometry() const
         {
-            return _geometry.margin(-(_p->size.border * 2));
+            return math::margin(_geometry, -(_p->size.border * 2));
         }
 
         void IBasicItem::_timeUnitsUpdate()
