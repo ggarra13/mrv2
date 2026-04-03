@@ -3119,12 +3119,12 @@ namespace tl
             if (!p.shaders["display"] || p.oldSource != source)
             {
                 recreateShader = true;
+                p.oldSource = source;
+                
 #if DEBUG_DISPLAY_SHADER
                 std::cerr << source << std::endl;
 #endif
             }
-                
-            p.oldSource = source;
 
 
             if (recreateShader)
