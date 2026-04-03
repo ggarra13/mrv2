@@ -195,8 +195,7 @@ const uint PixelType_RGBA_U32          = 19;
 const uint PixelType_RGBA_F16          = 20;
 const uint PixelType_RGBA_F32          = 21;
 
-const uint PixelTy
-pe_YUV_420P_U8       = 22;
+const uint PixelType_YUV_420P_U8       = 22;
 const uint PixelType_YUV_422P_U8       = 23;
 const uint PixelType_YUV_444P_U8       = 24;
 
