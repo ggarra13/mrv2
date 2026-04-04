@@ -93,6 +93,7 @@ jobs:
         run: mv /usr/bin/link.exe /usr/bin/link_msys.exe
 
       - name: Install cargo-c
+        shell: cmd
         run: cargo install cargo-c
 
       - name: Get machine name
