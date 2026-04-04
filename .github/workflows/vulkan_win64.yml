@@ -94,7 +94,7 @@ jobs:
 
       - name: Install cargo-c
         shell: cmd
-        run: cargo install cargo-c
+        run: cargo install cargo-c --locked
 
       - name: Get machine name
         run: |

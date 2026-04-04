@@ -102,7 +102,7 @@ jobs:
 
       - name: Install cargo-c
         shell: cmd
-        run: cargo install cargo-c
+        run: cargo install cargo-c --locked
 
 
       - name: Create msys_cmd.bat wrapper
