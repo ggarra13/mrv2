@@ -45,7 +45,7 @@ jobs:
       run: rustc -Vv
 
     - name: Install cargo-c
-      run: cargo install cargo-c
+      run: cargo install cargo-c --locked
 
     - name: Install ninja-build
       run: brew install ninja

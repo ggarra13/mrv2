@@ -38,7 +38,7 @@ jobs:
         profile: minimal
 
     - name: Install cargo-c
-      run: cargo install cargo-c
+      run: cargo install cargo-c --locked
 
     - name: Update repos
       run: |
