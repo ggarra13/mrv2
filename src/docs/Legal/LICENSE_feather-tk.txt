@@ -1,3 +1,5 @@
+Feather-tk does not specify a particular license, albeit it seems BSD-2/3:
+
 Copyright Contributors to the feather-tk project.
 
 Redistribution and use in source and binary forms, with or without
