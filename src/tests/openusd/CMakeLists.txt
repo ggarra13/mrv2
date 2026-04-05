@@ -4,13 +4,13 @@
 
 
 set(HEADERS
-    USD.h
-    USDPrivate.h
+    #USD.h
+    #USDPrivate.h
 )
 set(SOURCES
-    USD.cpp
-    USDRead.cpp
-    USDRender.cpp
+    #USD.cpp
+    #USDRead.cpp
+    #USDRender.cpp
     main.cpp)
     
 find_package(pxr REQUIRED)
