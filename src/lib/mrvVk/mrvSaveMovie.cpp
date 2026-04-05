@@ -358,6 +358,12 @@ namespace mrv
                 extension, ".exr", string::Compare::CaseInsensitive);
             bool saveHDR = string::compare(
                 extension, ".hdr", string::Compare::CaseInsensitive);
+            bool saveJPEG = (string::compare(
+                                 extension, ".jpg",
+                                 string::Compare::CaseInsensitive) ||
+                             string::compare(
+                                 extension, ".jpeg",
+                                 string::Compare::CaseInsensitive));
 
             if (time::compareExact(videoTime, time::invalidTimeRange))
                 videoTime = audioTime;
@@ -504,6 +510,11 @@ namespace mrv
                     outputInfo.pixelType = image::PixelType::RGB_F32;
                     offscreenBufferOptions.colorType =
                         image::PixelType::RGB_F32;
+                }
+                
+                if (saveJPEG)
+                {
+                    outputInfo.pixelType = image::PixelType::RGB_U8;
                 }
 
 #ifdef TLRENDER_EXR

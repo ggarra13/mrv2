@@ -56,6 +56,8 @@ Change Log
 - UI fix:  Changing texture filtering with SHIFT + f does no longer trigger
   Fit ALl.
 - Wayland Vulkan:  Hiding the timeline at start would leave it floating in space upon resizing for 4K videos / images due to the window animation.  Not it is fixed.
+- Fixed saving JPEG image sequences on Vulkan backend.
+- Updated OpenEXR to v3.4.9.
 
 
 v1.6.1

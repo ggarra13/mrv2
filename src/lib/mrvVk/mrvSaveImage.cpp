@@ -74,6 +74,13 @@ namespace mrv
             extension, ".exr", string::Compare::CaseInsensitive);
         bool saveHDR = string::compare(
             extension, ".hdr", string::Compare::CaseInsensitive);
+        bool saveJPEG = (string::compare(
+                             extension, ".jpg",
+                             string::Compare::CaseInsensitive) ||
+                         string::compare(
+                             extension, ".jpeg",
+                             string::Compare::CaseInsensitive));
+
 
         try
         {
@@ -245,7 +252,6 @@ namespace mrv
                       .arg(offscreenBufferOptions.colorType);
                 LOG_STATUS(msg);
             }
-            
 #ifdef TLRENDER_EXR
             if (saveEXR)
             {
@@ -253,7 +259,6 @@ namespace mrv
                 offscreenBufferOptions.colorType =
                     outputInfo.pixelType;
             }
-#endif
             
             math::Box2i displayWindow(0, 0, renderSize.w, renderSize.h);
             math::Box2i dataWindow(0, 0, renderSize.w, renderSize.h);
@@ -277,7 +282,8 @@ namespace mrv
                 outputInfo.size.w = dataWindow.max.x - dataWindow.min.x + 1;
                 outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
             }
-
+#endif
+            
             //
             // Create image buffer (main FBO).
             // 
@@ -321,6 +327,7 @@ namespace mrv
                 .arg(offscreenBufferOptions.colorType);
             LOG_STATUS(msg);
             
+            
             // Turn off hud so it does not get captured by readPixels.
             view->setHudActive(false);
                 
@@ -349,6 +356,11 @@ namespace mrv
                 offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
             }
             
+            if (saveJPEG)
+            {
+                outputInfo.pixelType = image::PixelType::RGB_U8;
+            }
+            
 #ifdef TLRENDER_EXR
             if (saveEXR)
             {
@@ -370,7 +382,7 @@ namespace mrv
             
             ioInfo.videoTime = oneFrameTimeRange;
             ioInfo.video.push_back(outputInfo);
-
+            
             auto writer = writerPlugin->write(path, ioInfo, ioOptions);
             if (!writer)
             {
