@@ -716,26 +716,10 @@ namespace mrv
                     }
                 }
 
-                math::Box2i selection = p.colorAreaInfo.box = p.selection;
-                if (selection.max.x >= 0)
-                {
-                    // Check min < max
-                    if (selection.min.x > selection.max.x)
-                    {
-                        int tmp = selection.max.x;
-                        selection.max.x = selection.min.x;
-                        selection.min.x = tmp;
-                    }
-                    if (selection.min.y > selection.max.y)
-                    {
-                        int tmp = selection.max.y;
-                        selection.max.y = selection.min.y;
-                        selection.min.y = tmp;
-                    }
-            
-                    // Copy it again in case it changed
-                    p.colorAreaInfo.box = selection;
-                    
+                if (p.selection.min.x >= 0)
+                {                    
+                    p.colorAreaInfo.box = p.selection;
+                
                     // Hard-code the pixel type as that's what OpenGL will read
                     p.colorAreaInfo.pixelType = image::PixelType::RGBA_F32;
 
@@ -784,7 +768,7 @@ namespace mrv
                 if (update)
                     updatePixelBar();
 
-                if (p.selection.max.x >= 0)
+                if (p.selection.min.x >= 0)
                 {
                     Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
                     uint8_t r, g, b;

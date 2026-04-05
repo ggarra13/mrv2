@@ -1396,21 +1396,10 @@ namespace mrv
             if (!p.helpText.empty())
                 _drawHelpText();
             
-            math::Box2i selection = p.colorAreaInfo.box = p.selection;
-            if (selection.max.x >= 0)
+            if (p.selection.min.x >= 0)
             {
-                // Check min < max
-                if (selection.min.x > selection.max.x)
-                {
-                    std::swap(selection.min.x, selection.max.x);
-                }
-                if (selection.min.y > selection.max.y)
-                {
-                    std::swap(selection.min.y, selection.max.y);
-                }
-                // Copy it again in case it changed
-                p.colorAreaInfo.box = selection;
-
+                p.colorAreaInfo.box = p.selection;
+            
                 // Copy the pixel type
                 if (p.ui->uiPixelWindow->uiPixelValue->value() != PixelValue::kOriginal)
                 {
@@ -1424,14 +1413,14 @@ namespace mrv
             }
             
                     
-            if (selection.max.x >= 0)
+            if (p.selection.min.x >= 0)
                 _drawAreaSelection();
             
             
             end_render_pass(cmd);
 
             
-            if (selection.max.x >= 0)
+            if (p.selection.min.x >= 0)
             {
                 if (panel::colorAreaPanel || panel::histogramPanel ||
                     panel::vectorscopePanel || panel::waveformPanel)

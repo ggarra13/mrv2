@@ -391,7 +391,7 @@ namespace mrv
             if (mode != ActionMode::kSelection)
             {
                 math::Box2i area;
-                area.max.x = -1; // disable area selection.
+                area.min.x = -1; // disable area selection.
                 setSelectionArea(area);
             }
 
@@ -1368,7 +1368,7 @@ namespace mrv
             p.videoData = values;
 
             // Check to see if we keep area selection.
-            if (p.selection.max.x >= 0)
+            if (p.selection.min.x >= 0)
             {
                 image::Size videoSize;
                 if (!values.empty() && !values[0].layers.empty())
@@ -1383,7 +1383,7 @@ namespace mrv
                 if (p.videoSize != videoSize)
                 {
                     math::Box2i area;
-                    area.max.x = -1;
+                    area.min.x = -1;
                     setSelectionArea(area);
                     p.videoSize = videoSize;
                 }
@@ -3576,8 +3576,19 @@ namespace mrv
             TLRENDER_P();
             if (p.selection == area)
                 return;
-
+                
             p.selection = area;
+
+            // Check min < max
+            if (p.selection.min.x > p.selection.max.x)
+            {
+                std::swap(p.selection.min.x, p.selection.max.x);
+            }
+            if (p.selection.min.y > p.selection.max.y)
+            {
+                std::swap(p.selection.min.y, p.selection.max.y);
+            }
+            
             redrawWindows();
 
             bool send = p.ui->uiPrefs->SendColor->value();
