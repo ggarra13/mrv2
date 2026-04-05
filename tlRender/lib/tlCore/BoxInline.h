@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
+//
+// Some modifications:
+// Copyright Contributors to the feather-tk project.
 
 namespace tl
 {

@@ -53,6 +53,9 @@ Change Log
 - UI improvement:  Waveform can change its max value and whether it is shown as
      		   Log or not.
 - UI improvement:  UI's Waveform now remembers its last settings.
+- UI fix:  Changing texture filtering with SHIFT + f does no longer trigger
+  Fit ALl.
+- Wayland Vulkan:  Hiding the timeline at start would leave it floating in space upon resizing for 4K videos / images due to the window animation.  Not it is fixed.
 
 
 v1.6.1

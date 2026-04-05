@@ -216,10 +216,10 @@ Pro+
                 what = new Fl_Flex(20, 0, 600, 120);
                 what->box(FL_FLAT_BOX);
                 what->type(Fl_Flex::HORIZONTAL);
-                what->margin(80, 0, 190, 0);
+                what->margin(30, 0, 190, 0);
                 what->gap(5);
                 
-                plan_type = new Fl_Box(20, 20, 300, 100);
+                plan_type = new Fl_Box(20, 20, 100, 100);
                 plan_type->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                 plan_type->label(R"TEXT(
 Solo
@@ -228,7 +228,7 @@ Edit
 Pro
 Pro+
 )TEXT");
-                plan_features = new Fl_Box(320, 20, 300, 100);
+                plan_features = new Fl_Box(220, 20, 300, 100);
                 plan_features->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                 plan_features->label(_(R"TEXT(
 Annotations and Saving only for a year
@@ -237,6 +237,7 @@ Standard + Editing for one year
 Editing + Voice and Link Annotations for one year
 All of Pro but without expiration date (you own it).
 )TEXT"));
+                what->fixed(plan_type, plan_type->w());
                 what->end();
                 prices->fixed(what, what->h());
             } // what

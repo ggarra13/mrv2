@@ -1896,12 +1896,21 @@ namespace mrv
                 mw->resize(posX, posY, W, H);
             }
             
-#ifdef __linux__
-            // On Linux, we wait 500 milliseconds to account for
-            // the main Window's animation.  Otherwise when hiding the
-            // timeline, it would appear floating in space.
-            wait::milliseconds(500);
-#endif
+
+            if (desktop::Wayland())
+            {
+                // On Wayland, we wait 500 milliseconds to account for
+                // the main Window's animation on resizing.
+                // Otherwise when hiding the timeline, it would appear
+                // floating in space.
+                if (use_maximize ||
+                    (!uiPrefs->uiPrefsTimeline->value() &&
+                     (W > minW || H > minH)))
+                {
+                    wait::milliseconds(500);
+                }
+            }
+            
             if (frameView)
             {
                 mw->wait_for_expose();

@@ -41,7 +41,7 @@ jobs:
         run: rustc -Vv
 
       - name: Install cargo-c
-        run: cargo install cargo-c
+        run: cargo install cargo-c --locked
 
       - name: Get machine name
         run: |

@@ -44,7 +44,7 @@
 
     h1 {
       margin: 0 0 32px;
-      font-size: clamp(2rem, 4vw, 3rem);
+      font-size: clamp(1.6rem, 3.2vw, 2.4rem);
       font-weight: 700;
       letter-spacing: 0.02em;
       line-height: 1.2;
@@ -61,7 +61,7 @@
 
     .image-wrapper img {
       max-width: 100%;
-      width: 520px;
+      width: 260px;
       border-radius: 16px;
       box-shadow:
         0 16px 32px rgba(0, 0, 0, 0.4),
@@ -76,6 +76,28 @@
         0 0 0 1px rgba(255, 255, 255, 0.12);
     }
 
+    .features {
+      margin-top: 32px;
+      text-align: left;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .features h2 {
+      margin-top: 24px;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+
+    .features ul {
+      padding-left: 20px;
+      margin: 8px 0 16px;
+    }
+
+    .features li {
+      margin-bottom: 6px;
+    }
+
     @media (max-width: 600px) {
       .card {
         padding: 32px 24px 36px;
@@ -85,13 +107,35 @@
 </head>
 <body>
   <main class="card">
-    <h1>How to unlock features of mrv2/vmrv2</h1>
+    <h1>Unlocking features of mrv2/vmrv2</h1>
 
     <div class="image-wrapper">
       <img
         src="licensing.png"
         alt="Licensing menu"
       />
+    </div>
+
+    <div class="features">
+      <h2>Node-Locked Licenses (1 year)</h2>
+      <ul>
+        <li><strong>Solo (USD $25)</strong> → Drawing, storing and saving text and graphical annotations</li>
+        <li><strong>Standard (USD $50)</strong> → Solo + Python with its Editor</li>
+        <li><strong>Edit (USD $100)</strong> → Standard + Edit Video support + Saving .otio files</li>
+        <li><strong>Pro (USD $150)</strong> → Edit + Voice Annotations and URL Link / File Annotations (eventually AI prompt support)</li>
+      </ul>
+
+      <h2>Transferable License</h2>
+      <ul>
+        <li><strong>Pro+ (USD $300)</strong> → All of Pro, but transferable between machines (license ownership retained)</li>
+      </ul>
+
+      <h2>Floating Licenses</h2>
+      <ul>
+        <li>Not locked to any machine, but to your facility</li>
+        <li>Allows multiple users under the same plan</li>
+        <li>Minimum cost equivalent to 5 licenses of the selected tier</li>
+      </ul>
     </div>
   </main>
 </body>
