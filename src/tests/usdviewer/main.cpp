@@ -405,7 +405,6 @@ void usd_window::draw()
         if (gprim.IsA<UsdGeomMesh>())
         {
             UsdGeomMesh out = UsdGeomMesh(gprim);
-            matrix = xformCache.GetLocalToWorldTransform(gprim);
         }
         else if (gprim.IsA<UsdGeomNurbsPatch>())
         {

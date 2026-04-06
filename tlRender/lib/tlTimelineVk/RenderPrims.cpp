@@ -21,6 +21,9 @@ namespace tl
 
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
+            
+            ++(p.currentStats.meshes);
+            p.currentStats.meshTriangles += size;
 
             auto type = vlk::VBOType::Pos3_F32;
             if (!mesh.t.empty() && !mesh.c.empty())
@@ -52,19 +55,39 @@ namespace tl
                 p.vaos[meshName]->bind(p.frameIndex);
             }
         }
-        void Render::_uploadMesh(const std::string& meshName,
-                                 const geom::TriangleMesh2& mesh,
-                                 size_t triangleCount)
+
+        void Render::_create3DMesh(const std::string& meshName,
+                                   const geom::TriangleMesh3& mesh)
         {
             TLRENDER_P();
+
+            const size_t size = mesh.triangles.size();
+            if (size == 0) return;
+            
+            ++(p.currentStats.meshes);
+            p.currentStats.meshTriangles += size;
+
+            auto type = vlk::VBOType::Pos3_F32;
+            if (!mesh.t.empty() && !mesh.c.empty())
+            {
+                throw std::runtime_error("Colored and textured 2D meshes unsupported");
+            }
+            if (!mesh.t.empty())
+            {
+                type = vlk::VBOType::Pos3_F32_UV_U16;
+            }
+            else if (!mesh.c.empty())
+            {
+                type = vlk::VBOType::Pos3_F32_Color_F32;
+            }
+            
             if (!p.vbos[meshName] ||
                 p.vbos[meshName]->getSize() != triangleCount * 3)
             {
-                p.vbos[meshName] = vlk::VBO::create(
-                    triangleCount * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                p.vbos[meshName] = vlk::VBO::create(triangleCount * 3, type);
             }
             if (p.vbos[meshName])
-                p.vbos[meshName]->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
+                p.vbos[meshName]->copy(convert(mesh, type));
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
@@ -72,7 +95,7 @@ namespace tl
                 p.vaos[meshName]->bind(p.frameIndex);
             }
         }
-
+        
         void Render::_emitMeshDraw(const std::string& pipelineLayoutName,
                                    const std::string& shaderName,
                                    const std::string& meshName,
@@ -166,13 +189,9 @@ namespace tl
                               const VkBlendOp alphaBlendOp)
         {
             TLRENDER_P();
-            const size_t size = mesh.triangles.size();
-            if (size == 0) return;
-            ++(p.currentStats.meshes);
-            p.currentStats.meshTriangles += size;
-
+            
             _createBindingSet(p.shaders[shaderName]);
-            _uploadMesh(meshName, mesh, size);
+            _create2DMesh(meshName, mesh);
 
             createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                            shaderName, meshName, enableBlending,
@@ -182,6 +201,36 @@ namespace tl
 
             const auto transform = p.transform *
                                    math::translate(math::Vector3f(position.x, position.y, 0.F));
+            _emitMeshDraw(pipelineLayoutName, shaderName, meshName, transform, color);
+        }
+
+        void Render::draw3DMesh(const std::string& pipelineName,
+                                const std::string& pipelineLayoutName,
+                                const std::string& shaderName,
+                                const std::string& meshName,
+                                const geom::TriangleMesh3& mesh,
+                                const math::Matrix4x4f& matrix,
+                                const image::Color4f& color,
+                                const bool enableBlending,
+                                const VkBlendFactor srcColorBlendFactor,
+                                const VkBlendFactor dstColorBlendFactor,
+                                const VkBlendFactor srcAlphaBlendFactor,
+                                const VkBlendFactor dstAlphaBlendFactor,
+                                const VkBlendOp colorBlendOp,
+                                const VkBlendOp alphaBlendOp)
+        {
+            TLRENDER_P();
+
+            _create3DMesh(meshName, mesh);
+            _createBindingSet(p.shaders[shaderName]);
+
+            createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                           shaderName, meshName, enableBlending,
+                           srcColorBlendFactor, dstColorBlendFactor,
+                           srcAlphaBlendFactor, dstAlphaBlendFactor,
+                           colorBlendOp, alphaBlendOp);
+
+            const auto transform = p.transform * matrix;
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, transform, color);
         }
 
@@ -203,7 +252,7 @@ namespace tl
             if (!shader)
                 throw std::runtime_error("Unknown shader '" + shaderName + "'.");
             _createBindingSet(shader);
-            _uploadMesh(meshName, mesh, size);
+            _create2DMesh(meshName, mesh);
 
             const std::string pipelineLayoutName = shaderName;
             vlk::ColorBlendStateInfo cb;
@@ -292,10 +341,6 @@ namespace tl
             const image::Color4f& color)
         {
             TLRENDER_P();
-            
-            const geom::TriangleMesh2& mesh = info.mesh;
-            const size_t size = mesh.triangles.size();
-            if (size == 0) return;
             
             const auto& textures = p.glyphTextureAtlas->getTextures();
             const unsigned textureIndex = info.textureId;

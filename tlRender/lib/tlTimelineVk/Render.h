@@ -168,6 +168,22 @@ namespace tl
                           const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                           const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
                           const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+            void draw3DMesh(const std::string& pipelineName,
+                            const std::string& pipelineLayoutName,
+                            const std::string& shaderName,
+                            const std::string& meshName,
+                            const geom::TriangleMesh3&,
+                            const math::Matrix4x4f&,
+                            const image::Color4f&,
+                            const bool enableBlending = false,
+                            const VkBlendFactor srcColorBlendFactor =
+                            VK_BLEND_FACTOR_SRC_ALPHA,
+                            const VkBlendFactor dstColorBlendFactor =
+                            VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                            const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                            const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                            const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
+                            const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
 
             //! Creates text meshes to speed up drawing
             void appendText(
@@ -276,10 +292,6 @@ namespace tl
             
         private:
             void _displayShader();
-            
-            void _uploadMesh(const std::string& meshName,
-                             const geom::TriangleMesh2& mesh,
-                             size_t triangleCount);
 
             void _emitMeshDraw(const std::string& pipelineLayoutName,
                                const std::string& shaderName,
