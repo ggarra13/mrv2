@@ -24,8 +24,8 @@ namespace tl
             
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += size;
-
-            auto type = vlk::VBOType::Pos3_F32;
+            
+            auto type = vlk::VBOType::Pos2_F32;
             if (!mesh.t.empty() && !mesh.c.empty())
             {
                 throw std::runtime_error("Colored and textured 2D meshes unsupported");
@@ -48,6 +48,31 @@ namespace tl
             {
                 p.vbos[meshName]->copy(convert(mesh, type));
             }
+
+            if (!p.vaos[meshName] && p.vbos[meshName])
+            {
+                p.vaos[meshName] = vlk::VAO::create(ctx);
+                p.vaos[meshName]->bind(p.frameIndex);
+            }
+        }
+
+        void Render::_uploadMesh(const std::string& meshName,
+                                 const geom::TriangleMesh2& mesh,
+                                 size_t triangleCount)
+        {
+            TLRENDER_P();
+
+            ++(p.currentStats.meshes);
+            p.currentStats.meshTriangles += triangleCount;
+            
+            if (!p.vbos[meshName] ||
+                p.vbos[meshName]->getSize() != triangleCount * 3)
+            {
+                p.vbos[meshName] = vlk::VBO::create(
+                    triangleCount * 3, vlk::VBOType::Pos2_F32_UV_U16);
+            }
+            if (p.vbos[meshName])
+                p.vbos[meshName]->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
@@ -185,9 +210,11 @@ namespace tl
                               const VkBlendOp alphaBlendOp)
         {
             TLRENDER_P();
+            const size_t size = mesh.triangles.size();
+            if (size == 0) return;
             
             _createBindingSet(p.shaders[shaderName]);
-            _create2DMesh(meshName, mesh);
+            _uploadMesh(meshName, mesh, size);
 
             createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                            shaderName, meshName, enableBlending,
@@ -241,14 +268,12 @@ namespace tl
             TLRENDER_P();
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
-            ++(p.currentStats.meshes);
-            p.currentStats.meshTriangles += size;
-
+            
             auto shader = p.shaders[shaderName];
             if (!shader)
                 throw std::runtime_error("Unknown shader '" + shaderName + "'.");
             _createBindingSet(shader);
-            _create2DMesh(meshName, mesh);
+            _uploadMesh(meshName, mesh, size);
 
             const std::string pipelineLayoutName = shaderName;
             vlk::ColorBlendStateInfo cb;
@@ -337,6 +362,10 @@ namespace tl
             const image::Color4f& color)
         {
             TLRENDER_P();
+            
+            const geom::TriangleMesh2& mesh = info.mesh;
+            const size_t size = mesh.triangles.size();
+            if (size == 0) return;
 
             const auto& textures = p.glyphTextureAtlas->getTextures();
             const unsigned textureIndex = info.textureId;
@@ -344,8 +373,7 @@ namespace tl
                 p.transform *
                 math::translate(math::Vector3f(position.x, position.y, 0.F));
 
-            const geom::TriangleMesh2& mesh = info.mesh;
-            _create2DMesh("text", mesh);
+            _uploadMesh("text", mesh, size);
             _createBindingSet(p.shaders["text"]);
             
             vlk::ColorBlendStateInfo cb;

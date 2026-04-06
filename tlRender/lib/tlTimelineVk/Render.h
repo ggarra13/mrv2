@@ -293,6 +293,10 @@ namespace tl
         private:
             void _displayShader();
 
+            void _uploadMesh(const std::string& meshName,
+                             const geom::TriangleMesh2& mesh,
+                             size_t triangleCount);
+
             void _emitMeshDraw(const std::string& pipelineLayoutName,
                                const std::string& shaderName,
                                const std::string& meshName,
