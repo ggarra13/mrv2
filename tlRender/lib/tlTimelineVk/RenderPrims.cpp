@@ -65,7 +65,7 @@ namespace tl
             if (triangleCount == 0) return;
             
             ++(p.currentStats.meshes);
-            p.currentStats.meshTriangles += size;
+            p.currentStats.meshTriangles += triangleCount;
 
             auto type = vlk::VBOType::Pos3_F32;
             if (!mesh.c.empty())
@@ -337,13 +337,14 @@ namespace tl
             const image::Color4f& color)
         {
             TLRENDER_P();
-            
+
             const auto& textures = p.glyphTextureAtlas->getTextures();
             const unsigned textureIndex = info.textureId;
             const math::Matrix4x4f transform =
                 p.transform *
                 math::translate(math::Vector3f(position.x, position.y, 0.F));
 
+            const geom::TriangleMesh2& mesh = info.mesh;
             _create2DMesh("text", mesh);
             _createBindingSet(p.shaders["text"]);
             
