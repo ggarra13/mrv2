@@ -1,25 +1,32 @@
 #define USE_GL 0
 
+#include <OpenEXR/ImfRgbaFile.h>
+#include <OpenEXR/ImfArray.h>
+#include <OpenEXR/ImfHeader.h>
+
 #include <pxr/pxr.h>
 #include <pxr/base/tf/diagnostic.h>
 #include <pxr/base/tf/token.h>
+#include <pxr/base/vt/array.h>
 #include <pxr/usd/usd/timeCode.h>
 #include <pxr/usd/usd/primRange.h>
 #include <pxr/usd/usdGeom/camera.h>
 #include <pxr/usd/usdGeom/bboxCache.h>
 #include <pxr/usd/usdGeom/metrics.h>
+#include <pxr/usd/usdGeom/primvarsAPI.h>
 #include <pxr/usd/usdUtils/pipeline.h>
 #include <pxr/usdImaging/usdAppUtils/api.h>
 #include <pxr/usdImaging/usdAppUtils/camera.h>
 #include <pxr/imaging/hd/renderBuffer.h>
 
 // uses UsdImagingGLEngine *AND* hydra
+// Includes GlMatrix and similar.
 #include <pxr/usdImaging/usdAppUtils/frameRecorder.h>  
 
 
 // these should not be used
-#include <pxr/imaging/hdSt/hioConversions.h>
-#include <pxr/imaging/hdSt/textureUtils.h>
+//#include <pxr/imaging/hdSt/hioConversions.h>
+//#include <pxr/imaging/hdSt/textureUtils.h>
 
 // Not sure about these
 #include <pxr/imaging/hdx/tokens.h>
@@ -28,14 +35,8 @@
 #include <tlCore/Image.h>
 #include <tlCore/Path.h>
 
-#if USE_GL
+#include <iostream>
 
-#include <FL/gl.h>
-#include <FL/Fl_Gl_Window.H>
-
-#define SUPERCLASS Fl_Gl_Window
-
-#else
 
 #include <pxr/usd/usdGeom/basisCurves.h>
 #include <pxr/usd/usdGeom/mesh.h>
@@ -43,15 +44,16 @@
 #include <pxr/usd/usdGeom/nurbsPatch.h>
 #include <pxr/usd/usdGeom/xformCache.h>
 
+#include <tlTimelineVk/Render.h>
+#include <tlTimelineVk/RenderShadersBinary.h>
+
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Shader.h>
 
-#define SUPERCLASS Fl_Vk_Window
+#include <tlCore/Mesh.h>
 
 #include <FL/Fl_Vk_Window.H>
-
-#endif
 
 #include <FL/platform.H>
 #include <FL/Fl.H>
@@ -151,16 +153,12 @@ namespace
 
 } // namespace
 
-#include <OpenEXR/ImfRgbaFile.h>
-#include <OpenEXR/ImfArray.h>
-#include <OpenEXR/ImfHeader.h>
-#include <iostream>
-
-using namespace Imf;
-using namespace Imath;
 
 void saveHalfRGB(const char* filename,
                  const std::shared_ptr<tl::image::Image> image) {
+
+    using namespace Imf;
+    using namespace Imath;
 
     try {
         // 3. Define the header and create the output file
@@ -198,16 +196,33 @@ void saveHalfRGB(const char* filename,
     }
 }
 
-class usd_window : public SUPERCLASS
+using namespace tl;
+
+class usd_window : public Fl_Vk_Window
 {
 public:
     usd_window(int X, int Y, int W, int H);
 
     void draw() override;
-    void prepare() override {};
 
     void setUSDFile(const std::string&);
 
+public:
+    //! Vulkan creation function.
+    void prepare() FL_OVERRIDE;
+
+    //! Vulkan destruction function.
+    void destroy() FL_OVERRIDE;
+
+
+protected:
+    void prepare_render_pass();
+    void prepare_shaders();
+    void prepare_pipeline_layout();
+    void prepare_pipeline();
+
+    math::Matrix4x4f _createTexturedRectangle();
+    
     TLRENDER_PRIVATE();
 };
 
@@ -215,52 +230,401 @@ using namespace tl;
 
 struct usd_window::Private
 {
+    // USD information
     file::Path path;
     UsdStageRefPtr stage = nullptr;
+
+    // Vulkan information.
+    VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
+
+    //! tlRender context
+    std::shared_ptr<system::Context> context;
+    
+    //! Offscreen renderer.
+    std::shared_ptr<timeline_vlk::Render> render;
+    
+    //! Offscreen buffer.
+    std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
+    
+    //! Compositing shader.
+    std::shared_ptr<vlk::Shader> shader;
+    
+    //! Main rectangle mesh. 
+    std::shared_ptr<vlk::VBO> vbo;
+    std::shared_ptr<vlk::VAO> vao;
 };
 
 usd_window::usd_window(int X, int Y, int W, int H) :
-    SUPERCLASS(X, Y, W, H),
+    Fl_Vk_Window(X, Y, W, H),
     _p(new Private)
 {
+    TLRENDER_P();
+    
     mode(FL_RGB | FL_ALPHA | FL_DEPTH | FL_STENCIL | FL_OPENGL3);
+
+    
+    p.context = system::Context::create();
 }
+
+void usd_window::prepare_render_pass()
+{            
+    bool has_depth = mode() & FL_DEPTH;
+    bool has_stencil = mode() & FL_STENCIL;
+
+    VkAttachmentDescription attachments[2];
+    attachments[0] = VkAttachmentDescription();
+    attachments[0].format = format();
+    attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
+    attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; // Start undefined
+    attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
+
+    attachments[1] = VkAttachmentDescription();
+
+
+    VkAttachmentReference color_reference = {};
+    color_reference.attachment = 0;
+    color_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    
+    VkAttachmentReference depth_reference = {};
+    depth_reference.attachment = 1;
+    depth_reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    
+    VkSubpassDescription subpass = {};
+    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpass.flags = 0;
+    subpass.inputAttachmentCount = 0;
+    subpass.pInputAttachments = NULL;
+    subpass.colorAttachmentCount = 1;
+    subpass.pColorAttachments = &color_reference;
+    subpass.pResolveAttachments = NULL;
+
+    if (has_depth || has_stencil)
+    {
+        attachments[1].format = m_depth.format;
+        attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
+        attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        if (has_stencil)
+        {
+            attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        }
+        else
+        {
+            attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        }
+        attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        attachments[1].initialLayout =
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        attachments[1].finalLayout =
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    
+        subpass.pDepthStencilAttachment = &depth_reference;
+        subpass.preserveAttachmentCount = 0;
+        subpass.pPreserveAttachments = NULL;
+    }
+
+    VkSubpassDependency dependencies[2] = {};
+
+    // External -> subpass: wait for color attachment output before writing
+    dependencies[0].srcSubpass    = VK_SUBPASS_EXTERNAL;
+    dependencies[0].dstSubpass    = 0;
+    dependencies[0].srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependencies[0].dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependencies[0].srcAccessMask = 0;
+    dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependencies[0].dependencyFlags = 0;
+
+    // Subpass -> external: ensure writes are done before presentation reads
+    dependencies[1].srcSubpass    = 0;
+    dependencies[1].dstSubpass    = VK_SUBPASS_EXTERNAL;
+    dependencies[1].srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependencies[1].dstStageMask  = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+    dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependencies[1].dstAccessMask = 0;
+    dependencies[1].dependencyFlags = 0;
+
+    VkRenderPassCreateInfo rp_info = {};
+    rp_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    rp_info.pNext = NULL;
+    rp_info.attachmentCount = (has_depth || has_stencil) ? 2: 1;
+    rp_info.pAttachments = attachments;
+    rp_info.subpassCount = 1;
+    rp_info.pSubpasses = &subpass;
+    rp_info.dependencyCount = 2;
+    rp_info.pDependencies = dependencies;
+                    
+    VkResult result;
+    result = vkCreateRenderPass(device(), &rp_info, NULL, &m_renderPass);
+    VK_CHECK(result);
+
+}
+
+
+void usd_window::prepare_shaders()
+{
+    TLRENDER_P();
+    
+    if (!p.render) {
+        p.render = timeline_vlk::Render::create(ctx, p.context);
+    }
+    
+    if (!p.shader)
+    {
+        p.shader = vlk::Shader::create(
+            ctx,
+            timeline_vlk::Vertex3_spv,
+            timeline_vlk::Vertex3_spv_len,
+            timeline_vlk::textureFragment_spv,
+            timeline_vlk::textureFragment_spv_len,
+            "p.shader");
+
+        // Create parameters for shader.
+        math::Matrix4x4f mvp;
+        p.shader->createUniform("transform.mvp", mvp, vlk::kShaderVertex);
+        p.shader->addFBO("textureSampler"); // default is fragment
+        float opacity = 1.F;
+        p.shader->addPush("opacity", opacity, vlk::kShaderFragment);
+        p.shader->createBindingSet();
+                    
+        if (p.pipeline_layout != VK_NULL_HANDLE)
+        {
+            vkDestroyPipelineLayout(device(), p.pipeline_layout, nullptr);
+            p.pipeline_layout = VK_NULL_HANDLE;
+        }
+    }
+
+}
+
+void usd_window::prepare_pipeline_layout()
+{
+    TLRENDER_P();
+
+    // Early return if the layout already exists (avoids recreation on resize)
+    if (p.pipeline_layout != VK_NULL_HANDLE) {
+        return;  // Already created; reuse it
+    }
+            
+    VkResult result;
+
+    //
+    // Prepare main buffer comping layout 
+    //
+
+    VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
+    pPipelineLayoutCreateInfo.sType =
+        VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    pPipelineLayoutCreateInfo.pNext = NULL;
+    pPipelineLayoutCreateInfo.setLayoutCount = 1;
+
+    VkDescriptorSetLayout setLayout = p.shader->getDescriptorSetLayout();
+    pPipelineLayoutCreateInfo.pSetLayouts = &setLayout;
+
+    VkPushConstantRange pushConstantRange = {};
+    std::size_t pushSize = p.shader->getPushSize();
+    if (pushSize > 0)
+    {
+        pushConstantRange.stageFlags = p.shader->getPushStageFlags();
+        pushConstantRange.offset = 0;
+        pushConstantRange.size = pushSize;
+
+        pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
+        pPipelineLayoutCreateInfo.pPushConstantRanges =
+            &pushConstantRange;
+    }
+
+    result = vkCreatePipelineLayout(
+        device(), &pPipelineLayoutCreateInfo, NULL,
+        &p.pipeline_layout);
+}
+
+void usd_window::prepare()
+{
+    std::cerr << __LINE__ << std::endl;
+    prepare_render_pass();
+    prepare_shaders();
+    prepare_pipeline_layout();
+    std::cerr << __LINE__ << std::endl;
+}
+
+math::Matrix4x4f usd_window::_createTexturedRectangle()
+{
+    TLRENDER_P();
+    
+    const math::Size2i renderSize(pixel_w(), pixel_h());
+
+    const auto& mesh =
+        geom::box(math::Box2i(0, 0, renderSize.w, renderSize.h));
+    const size_t numTriangles = mesh.triangles.size();
+    if (!p.vbo || (p.vbo && p.vbo->getSize() != numTriangles * 3))
+    {
+        p.vbo = vlk::VBO::create(
+                    numTriangles * 3, vlk::VBOType::Pos2_F32_UV_U16);
+        p.vao.reset();
+    }
+    if (p.vbo)
+    {
+        p.vbo->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
+    }
+
+    if (!p.vao && p.vbo)
+    {
+        p.vao = vlk::VAO::create(ctx);
+        prepare_pipeline();
+    }
+
+    // \@todo: calculate projectionMatrix
+    math::Matrix4x4f mvp;
+    return mvp;
+}
+
+void usd_window::prepare_pipeline()
+{
+    TLRENDER_P();
+    std::cerr << __LINE__ << std::endl;
+    if (pipeline() != VK_NULL_HANDLE)
+    {
+        vkDestroyPipeline(device(), pipeline(), nullptr);
+        pipeline() = VK_NULL_HANDLE;
+    }
+    if (!p.vbo)
+    {
+        std::cerr << "p.vbo undefined" << std::endl;
+    }
+    if (!p.shader)
+    {
+        std::cerr << "p.shader undefined" << std::endl;
+    }
+    // Elements of new Pipeline (fill with mesh info)
+    vlk::VertexInputStateInfo vi;
+    vi.bindingDescriptions = p.vbo->getBindingDescription();
+    vi.attributeDescriptions = p.vbo->getAttributes();
+            
+    std::cerr << __LINE__ << std::endl;
+    // Defaults are fine
+    vlk::InputAssemblyStateInfo ia;
+
+    // Defaults are fine
+    vlk::RasterizationStateInfo rs;
+            
+    // Defaults are fine
+    vlk::ViewportStateInfo vp;
+            
+    std::cerr << __LINE__ << std::endl;
+    vlk::ColorBlendStateInfo cb;
+    vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
+    colorBlendAttachment.blendEnable = VK_FALSE;
+    cb.attachments.push_back(colorBlendAttachment);
+
+    const bool hasDepth = mode() & FL_DEPTH;
+    const bool hasStencil = mode() & FL_STENCIL;
+            
+    vlk::DepthStencilStateInfo ds;
+    ds.depthTestEnable = hasDepth ? VK_TRUE : VK_FALSE;
+    ds.depthWriteEnable = hasDepth ? VK_TRUE : VK_FALSE;
+    ds.stencilTestEnable = hasStencil ? VK_TRUE : VK_FALSE;
+            
+    vlk::DynamicStateInfo dynamicState;
+    dynamicState.dynamicStates = {
+        VK_DYNAMIC_STATE_VIEWPORT,
+        VK_DYNAMIC_STATE_SCISSOR,
+        VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT,
+    };
+            
+    std::cerr << __LINE__ << std::endl;
+    // Defaults are fine
+    vlk::MultisampleStateInfo ms;
+
+    // Get the vertex and fragment shaders
+    std::vector<vlk::PipelineCreationState::ShaderStageInfo>
+        shaderStages(2);
+
+    shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+    shaderStages[0].name = p.shader->getName();
+    shaderStages[0].module = p.shader->getVertex();
+    shaderStages[0].entryPoint = "main";
+
+    shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+    shaderStages[1].name = p.shader->getName();
+    shaderStages[1].module = p.shader->getFragment();
+    shaderStages[1].entryPoint = "main";
+
+    std::cerr << __LINE__ << std::endl;
+    //
+    // Pass pipeline creation parameters to pipelineState.
+    //
+    vlk::PipelineCreationState pipelineState;
+    pipelineState.vertexInputState = vi;
+    pipelineState.inputAssemblyState = ia;
+    pipelineState.colorBlendState = cb;
+    pipelineState.rasterizationState = rs;
+    pipelineState.depthStencilState = ds;
+    pipelineState.viewportState = vp;
+    pipelineState.multisampleState = ms;
+    pipelineState.dynamicState = dynamicState;
+    pipelineState.stages = shaderStages;
+    pipelineState.renderPass = renderPass();
+    pipelineState.layout = p.pipeline_layout;
+
+    std::cerr << __LINE__ << std::endl;
+    pipeline() = pipelineState.create(device());
+    if (pipeline() == VK_NULL_HANDLE)
+    {
+        throw std::runtime_error("Composition pipeline failed");
+    }
+    std::cerr << __LINE__ << std::endl;
+}
+
+void usd_window::destroy()
+{
+    TLRENDER_P();
+
+    std::cerr << __LINE__ << std::endl;
+    p.vbo.reset();
+    p.vao.reset();
+    
+    if (pipeline() != VK_NULL_HANDLE)
+    {
+        vkDestroyPipeline(device(), pipeline(), nullptr);
+        pipeline() = VK_NULL_HANDLE;
+    }            
+    std::cerr << __LINE__ << std::endl;
+}
+
 
 void usd_window::draw()
 {
     TLRENDER_P();
 
-#if USE_GL
-    if (!valid())
-    {
-        valid(1);
-        glLoadIdentity();
-        glViewport(0,0,pixel_w(),pixel_h());
-    }
-    glClearStencil(0);
-    glClearColor(1.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-#endif
+    VkCommandBuffer cmd = getCurrentCommandBuffer();
+
+    std::cerr << __LINE__ << std::endl;
+    begin_render_pass(cmd);
+    end_render_pass(cmd);
+    
+    std::cerr << __LINE__ << std::endl;
     // const double timeCode = 
     //     request->time.rescaled_to(stage->GetTimeCodesPerSecond()).value();
 
     const double startTimeCode = p.stage->GetStartTimeCode();
-    const double timeCode = startTimeCode;
+    const double time = startTimeCode;
 
-    std::cerr << __LINE__ << std::endl;
     std::string cameraName;
     auto camera = getCamera(p.stage, cameraName);
 
     GfCamera gfCamera;
     if (camera)
     {
-        gfCamera = camera.GetCamera(timeCode);
+        gfCamera = camera.GetCamera(time);
     }
     else
     {
         const TfTokenVector purposes(
             {UsdGeomTokens->default_, UsdGeomTokens->proxy});
-        gfCamera = getCameraToFrameStage(p.stage, timeCode, purposes);
+        gfCamera = getCameraToFrameStage(p.stage, time, purposes);
     }
     
     float aspectRatio = gfCamera.GetAspectRatio();
@@ -275,136 +639,149 @@ void usd_window::draw()
     const size_t renderWidth = pixel_w();
     const size_t renderHeight = renderWidth / aspectRatio;
 
-#if USE_GL
-    const bool gpuEnabled = true;
-    auto engine = std::make_shared<UsdImagingGLEngine>(
-        HdDriver(), TfToken(), gpuEnabled);
-    std::cerr << __LINE__ << std::endl;
-    engine->SetCameraState(frustum.ComputeViewMatrix(),
-                           frustum.ComputeProjectionMatrix());
-    engine->SetRenderViewport(GfVec4d(
-                                  0.0, 0.0, static_cast<double>(renderWidth),
-                                  static_cast<double>(renderHeight)));
-    engine->SetRendererAov(HdAovTokens->color);
-    
-    // Setup a light.
-    GlfSimpleLight cameraLight(GfVec4f(
-                                   cameraPos[0], cameraPos[1], cameraPos[2], 1.F));
-    cameraLight.SetAmbient(GfVec4f(.01F, .01F, .01F, 01.F));
-    const GlfSimpleLightVector lights({cameraLight});
-    
-    // Setup a material.
-    GlfSimpleMaterial material;
-    material.SetAmbient(GfVec4f(0.2f, 0.2f, 0.2f, 1.0));
-    material.SetSpecular(GfVec4f(0.1f, 0.1f, 0.1f, 1.0f));
-    material.SetShininess(32.F);
-    const GfVec4f ambient(0.01f, 0.01f, 0.01f, 1.0f);
-    engine->SetLightingState(lights, material, ambient);
+    vlk::OffscreenBufferOptions offscreenBufferOptions;
+    offscreenBufferOptions.colorType = image::PixelType::RGBA_F16;
 
-    // Options
-    float complexity = 1.0;
-    bool enableLighting = false;
-    bool sRGB = false;
-    
-    // Render the frame.
-    UsdImagingGLRenderParams renderParams;
-    renderParams.frame = timeCode;
-    renderParams.complexity = complexity;
-    renderParams.drawMode = UsdImagingGLDrawMode::DRAW_GEOM_SMOOTH; //toUSD(drawMode);
-    renderParams.enableLighting = enableLighting;
-    renderParams.clearColor = GfVec4f(0.F, 0.F, 0.F, 0.F);
-    renderParams.colorCorrectionMode = sRGB ? HdxColorCorrectionTokens->sRGB
-                                       : HdxColorCorrectionTokens->disabled;
-    const UsdPrim& pseudoRoot = p.stage->GetPseudoRoot();
-    engine->Render(pseudoRoot, renderParams);
+    offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
+    offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
+    offscreenBufferOptions.pbo = true;
 
-    uint32_t sleepTime = 10;
-    while (1)
+    const math::Size2i renderSize(pixel_w(), pixel_h());
+    if (vlk::doCreate(
+            p.buffer, renderSize, offscreenBufferOptions))
     {
-        if (engine->IsConverged())
-        {
-            break;
-        }
-        else
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
-            sleepTime = std::min(100u, sleepTime + 5);
-        }
+        p.buffer = vlk::OffscreenBuffer::create(
+            ctx, renderSize, offscreenBufferOptions);
+                    
+        // As render resolution might have changed,
+        // we need to reset the quad size.
+        p.vbo.reset();
+    }
+
+    
+
+    // locale::SetAndRestore saved;
+    timeline::RenderOptions renderOptions;
+    renderOptions.colorBuffer = image::PixelType::RGBA_F16;
+    
+    if (p.buffer)
+    {
+        p.buffer->transitionToColorAttachment(cmd);
     }
 
     std::cerr << __LINE__ << std::endl;
+    p.render->begin(
+        cmd, p.buffer, m_currentFrameIndex, renderSize,
+        renderOptions);
+    p.render->applyTransforms();
     
-    // Copy the rendered frame.
-    if (engine->GetGPUEnabled())
-    {
-        const auto colorTextureHandle = engine->GetAovTexture(
-            HdAovTokens->color);
-        if (colorTextureHandle)
-        {
-            size_t size = 0;
-            const auto mappedColorTextureBuffer =
-                HdStTextureUtils::HgiTextureReadback(engine->GetHgi(),
-                                                     colorTextureHandle,
-                                                     &size);
-            // std::cout <<
-            // colorTextureHandle->GetDescriptor().format
-            // << std::endl;
-            switch (HdxGetHioFormat(colorTextureHandle->GetDescriptor().format))
-            {
-            case HioFormat::HioFormatFloat16Vec4:
-                image = image::Image::create(
-                    renderWidth, renderHeight,
-                    image::PixelType::RGBA_F16);
-                memcpy(
-                    image->getData(),
-                    mappedColorTextureBuffer.get(),
-                    image->getDataByteCount());
-                break;
-            default:
-                break;
-            }
-        }
-    }
-    else
-    {
-        const auto colorRenderBuffer = engine->GetAovRenderBuffer(
-            HdAovTokens->color);
-        if (colorRenderBuffer)
-        {
-            colorRenderBuffer->Resolve();
-            colorRenderBuffer->Map();
-            switch (HdStHioConversions::GetHioFormat(
-                        colorRenderBuffer->GetFormat()))
-            {
-            case HioFormat::HioFormatFloat16Vec4:
-                image = image::Image::create(
-                    renderWidth, renderHeight,
-                    image::PixelType::RGBA_F16);
-                memcpy(
-                    image->getData(),
-                    colorRenderBuffer->Map(),
-                    image->getDataByteCount());
-                break;
-            default:
-                break;
-            }
-        }
-    }
-#else
+    std::cerr << __LINE__ << std::endl;
     image = image::Image::create(
         renderWidth, renderHeight,
         image::PixelType::RGBA_F16);
 
     GfMatrix4d matrix;
-    UsdGeomXformCache xformCache(timeCode);
+    UsdGeomXformCache xformCache(time);
     for (const auto& gprim : p.stage->Traverse())
     {
-        std::cerr << gprim.GetTypeName() << " " << gprim.GetName() << std::endl;
+        //std::cout << gprim.GetTypeName() << " " << gprim.GetName() << std::endl;
         matrix = xformCache.GetLocalToWorldTransform(gprim);
-        std::cerr << "\t" << matrix << std::endl;
+        //std::cout << "\t" << matrix << std::endl;
         if (gprim.IsA<UsdGeomMesh>())
         {
-            UsdGeomMesh out = UsdGeomMesh(gprim);
+            UsdGeomMesh usdMesh = UsdGeomMesh(gprim);
+
+            // -------------------------
+            // 1. VERTICES (Points)
+            // -------------------------
+            VtArray<GfVec3f> points;
+            usdMesh.GetPointsAttr().Get(&points, time);
+
+            // Faces vertex counts: number vertices per face.
+            VtArray<int> faceVertexCounts;
+            usdMesh.GetFaceVertexCountsAttr().Get(&faceVertexCounts, time);
+            
+            // faceVertexIndices: flat list of vertex indices for all faces
+            VtArray<int> faceVertexIndices;
+            usdMesh.GetFaceVertexIndicesAttr().Get(&faceVertexIndices, time);
+
+            
+            geom::TriangleMesh3 geom;
+
+            // Get points.
+            geom.v.reserve(points.size());
+            for (int i = 0; i < points.size(); ++i)
+            {
+                const auto& p = points[i];
+                geom.v.push_back(math::Vector3f(p[0], p[1], p[2]));
+            }
+
+            // Get Normals.
+            UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
+            UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
+            if (normalsPrimvar.IsDefined()) {
+                
+                VtArray<GfVec3f> normals;
+                normalsPrimvar.ComputeFlattened(&normals, time);
+                
+                TfToken interp = normalsPrimvar.GetInterpolation();
+                std::cout << "Normals count: " << normals.size()
+                          << "  interpolation: " << interp << "\n";
+
+                // walks faceVertexIndices for faceVarying
+                int faceCornerIdx = 0; 
+
+                for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                     ++faceIdx) {
+                    int vertCount = faceVertexCounts[faceIdx];
+                    std::cout << "face[" << faceIdx << "]:\n";
+
+                    for (int i = 0; i < vertCount; ++i) {
+                        int pointIdx = faceVertexIndices[faceCornerIdx + i];
+                        GfVec3f n;
+
+                        if (interp == UsdGeomTokens->faceVarying) {
+                            // One normal per face-corner, in face-winding order
+                            n = normals[faceCornerIdx + i];
+                        } else if (interp == UsdGeomTokens->vertex) {
+                            // Normal indexed the same way as points
+                            n = normals[pointIdx];
+                        } else if (interp == UsdGeomTokens->uniform) {
+                            // One normal for the entire face
+                            n = normals[faceIdx];
+                        } else {
+                            // constant — one normal for the whole mesh
+                            n = normals[0];
+                        }
+
+                        geom.n.push_back(math::Vector3f(n[0], n[1], n[2]));
+                    }
+                    faceCornerIdx += vertCount;
+                }
+            }
+
+            // Get triangles.
+            int indexOffset = 0;
+            for (int vertCount : faceVertexCounts)
+            {
+                // Fan triangulation: anchor at faceVertexIndices[indexOffset]
+                // e.g. a quad [A, B, C, D] → (A,B,C), (A,C,D)
+                for (int i = 1; i < vertCount - 1; ++i)
+                {
+                    geom::Triangle3 triangle;
+                    triangle.v[0] = faceVertexIndices[indexOffset] + 1;
+                    triangle.v[1] = faceVertexIndices[indexOffset + i] + 1;
+                    triangle.v[2] = faceVertexIndices[indexOffset + i + 1] + 1;
+                    geom.triangles.push_back(triangle);
+                }
+                indexOffset += vertCount;
+            }
+
+            std::cerr << __LINE__ << std::endl;
+            math::Matrix4x4f mvp;
+            // p.render->draw3DMesh("mesh", "mesh", "mesh", "mesh", geom,
+            //                      mvp, image::Color4f(1,1,1));
+            std::cerr << __LINE__ << std::endl;
         }
         else if (gprim.IsA<UsdGeomNurbsPatch>())
         {
@@ -419,7 +796,62 @@ void usd_window::draw()
             UsdGeomBasisCurves out = UsdGeomBasisCurves(gprim);
         }
     }
-#endif
+
+    p.render->end();
+
+    math::Matrix4x4f mvp = _createTexturedRectangle();
+
+    
+    std::cerr << __LINE__ << std::endl;
+    begin_render_pass(cmd);
+
+    // Bind the shaders to the current frame index.
+    p.shader->bind(m_currentFrameIndex);
+
+    std::cerr << __LINE__ << std::endl;
+    // Bind the main composition pipeline (created/managed outside this
+    // draw loop)
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                      pipeline());
+            
+    // --- Update Descriptor Set for the SECOND pass (Composition) ---
+    // This updates the descriptor set for the CURRENT frame index on
+    // the CPU.
+    p.shader->setUniform("transform.mvp", mvp, vlk::kShaderVertex);
+    p.shader->setFBO("textureSampler", p.buffer);
+    std::cerr << __LINE__ << std::endl;
+            
+    // --- Bind Descriptor Set for the SECOND pass ---
+    // Record the command to bind the descriptor set for the CURRENT
+    // frame index
+    VkDescriptorSet descriptorSet = p.shader->getDescriptorSet();
+    vkCmdBindDescriptorSets(
+        cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0, 1,
+        &descriptorSet, 0, nullptr);
+
+    float opacity = 1.F;
+    vkCmdPushConstants(
+        cmd, p.pipeline_layout,
+        p.shader->getPushStageFlags(), 0, sizeof(float), &opacity);
+    std::cerr << __LINE__ << std::endl;
+
+    if (p.vao && p.vbo)
+    {
+        const VkColorComponentFlags allMask[] =
+            { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+              VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+        ctx.vkCmdSetColorWriteMaskEXT(cmd, 0, 1, allMask);
+            
+        p.vao->bind(m_currentFrameIndex);
+        p.vao->draw(cmd, p.vbo);
+        std::cerr << __LINE__ << std::endl;
+    }
+                
+    if (p.buffer)
+    {
+        p.buffer->transitionToShaderRead(cmd);
+    }
+    std::cerr << __LINE__ << std::endl;
     
     saveHalfRGB("/home/gga/test.exr", image);
     exit(0);  // \@todo: remove
@@ -436,9 +868,9 @@ void usd_window::setUSDFile(const std::string& fileName)
     
     p.stage = UsdStage::Open(fileName);
     
-    const double startTimeCode = p.stage->GetStartTimeCode();
-    const double endTimeCode = p.stage->GetEndTimeCode();
-    const double timeCodesPerSecond =  p.stage->GetTimeCodesPerSecond();
+    // const double startTimeCode = p.stage->GetStartTimeCode();
+    // const double endTimeCode = p.stage->GetEndTimeCode();
+    // const double timeCodesPerSecond =  p.stage->GetTimeCodesPerSecond();
     
 
 }

@@ -12,13 +12,18 @@ set(SOURCES
     #USDRead.cpp
     #USDRender.cpp
     main.cpp)
-    
+
+find_package(Vulkan REQUIRED)
+
+find_package(libplacebo REQUIRED)  # \@todo: remove
 find_package(pxr REQUIRED)
 add_definitions(-DTLRENDER_USD)
 
 set(LIBRARIES )
-list(APPEND LIBRARIES OpenEXR::OpenEXR tlRender::tlCore tf usd usdGeom usdAppUtils hd)
+list(APPEND LIBRARIES OpenEXR::OpenEXR tlRender::tlTimelineVk tlRender::tlVk tlRender::tlCore libplacebo::libplacebo tf usd usdGeom usdAppUtils hd)
 list(APPEND LIBRARIES ${FLTK_gl_LIBRARY} ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES})
+list(APPEND LIBRARIES Vulkan::Vulkan)
+
 
 if( APPLE )
     set(OSX_FRAMEWORKS "-framework IOKit")
