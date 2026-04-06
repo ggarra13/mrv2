@@ -17,7 +17,7 @@ find_package(pxr REQUIRED)
 add_definitions(-DTLRENDER_USD)
 
 set(LIBRARIES )
-list(APPEND LIBRARIES tlRender::tlCore tf usd usdGeom usdAppUtils hd)
+list(APPEND LIBRARIES OpenEXR::OpenEXR tlRender::tlCore tf usd usdGeom usdAppUtils hd)
 list(APPEND LIBRARIES ${FLTK_gl_LIBRARY} ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES})
 
 if( APPLE )
