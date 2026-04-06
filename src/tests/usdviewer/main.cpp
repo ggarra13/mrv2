@@ -13,9 +13,11 @@
 #include <pxr/usdImaging/usdAppUtils/camera.h>
 #include <pxr/imaging/hd/renderBuffer.h>
 
+// uses UsdImagingGLEngine *AND* hydra
+#include <pxr/usdImaging/usdAppUtils/frameRecorder.h>  
+
 
 // these should not be used
-#include <pxr/usdImaging/usdAppUtils/frameRecorder.h>  // uses UsdImagingGLEngine
 #include <pxr/imaging/hdSt/hioConversions.h>
 #include <pxr/imaging/hdSt/textureUtils.h>
 
@@ -34,6 +36,12 @@
 #define SUPERCLASS Fl_Gl_Window
 
 #else
+
+#include <pxr/usd/usdGeom/basisCurves.h>
+#include <pxr/usd/usdGeom/mesh.h>
+#include <pxr/usd/usdGeom/nurbsCurves.h>
+#include <pxr/usd/usdGeom/nurbsPatch.h>
+#include <pxr/usd/usdGeom/xformCache.h>
 
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
@@ -254,39 +262,31 @@ void usd_window::draw()
             {UsdGeomTokens->default_, UsdGeomTokens->proxy});
         gfCamera = getCameraToFrameStage(p.stage, timeCode, purposes);
     }
-    std::cerr << __LINE__ << std::endl;
-    const bool gpuEnabled = true;
-
-#if USE_GL
-    auto engine = std::make_shared<UsdImagingGLEngine>(
-        HdDriver(), TfToken(), gpuEnabled);
-#else
-    auto engine = std::make_shared<UsdImagingVulkanEngine>(
-        HdDriver(), TfToken(), gpuEnabled);
-#ednif
     
-    std::cerr << __LINE__ << std::endl;
-    const GfFrustum frustum = gfCamera.GetFrustum();
-    const GfVec3d cameraPos = frustum.GetPosition();
-    engine->SetCameraState(frustum.ComputeViewMatrix(),
-                           frustum.ComputeProjectionMatrix());
-    
-    std::cerr << __LINE__ << std::endl;
     float aspectRatio = gfCamera.GetAspectRatio();
     if (GfIsClose(aspectRatio, 0.F, 1e-4))
     {
         aspectRatio = 1.F;
     }
+    const GfFrustum frustum = gfCamera.GetFrustum();
+    const GfVec3d cameraPos = frustum.GetPosition();
+    
+    std::shared_ptr<image::Image> image;
     const size_t renderWidth = pixel_w();
     const size_t renderHeight = renderWidth / aspectRatio;
+
+#if USE_GL
+    const bool gpuEnabled = true;
+    auto engine = std::make_shared<UsdImagingGLEngine>(
+        HdDriver(), TfToken(), gpuEnabled);
     std::cerr << __LINE__ << std::endl;
+    engine->SetCameraState(frustum.ComputeViewMatrix(),
+                           frustum.ComputeProjectionMatrix());
     engine->SetRenderViewport(GfVec4d(
                                   0.0, 0.0, static_cast<double>(renderWidth),
                                   static_cast<double>(renderHeight)));
-    std::cerr << __LINE__ << std::endl;
     engine->SetRendererAov(HdAovTokens->color);
     
-    std::cerr << __LINE__ << std::endl;
     // Setup a light.
     GlfSimpleLight cameraLight(GfVec4f(
                                    cameraPos[0], cameraPos[1], cameraPos[2], 1.F));
@@ -300,7 +300,6 @@ void usd_window::draw()
     material.SetShininess(32.F);
     const GfVec4f ambient(0.01f, 0.01f, 0.01f, 1.0f);
     engine->SetLightingState(lights, material, ambient);
-    std::cerr << __LINE__ << std::endl;
 
     // Options
     float complexity = 1.0;
@@ -317,7 +316,6 @@ void usd_window::draw()
     renderParams.colorCorrectionMode = sRGB ? HdxColorCorrectionTokens->sRGB
                                        : HdxColorCorrectionTokens->disabled;
     const UsdPrim& pseudoRoot = p.stage->GetPseudoRoot();
-    std::cerr << __LINE__ << std::endl;
     engine->Render(pseudoRoot, renderParams);
 
     uint32_t sleepTime = 10;
@@ -335,7 +333,6 @@ void usd_window::draw()
     }
 
     std::cerr << __LINE__ << std::endl;
-    std::shared_ptr<image::Image> image;
     
     // Copy the rendered frame.
     if (engine->GetGPUEnabled())
@@ -393,8 +390,40 @@ void usd_window::draw()
             }
         }
     }
+#else
+    image = image::Image::create(
+        renderWidth, renderHeight,
+        image::PixelType::RGBA_F16);
+
+    GfMatrix4d matrix;
+    UsdGeomXformCache xformCache(timeCode);
+    for (const auto& gprim : p.stage->Traverse())
+    {
+        std::cerr << gprim.GetTypeName() << " " << gprim.GetName() << std::endl;
+        matrix = xformCache.GetLocalToWorldTransform(gprim);
+        std::cerr << "\t" << matrix << std::endl;
+        if (gprim.IsA<UsdGeomMesh>())
+        {
+            UsdGeomMesh out = UsdGeomMesh(gprim);
+            matrix = xformCache.GetLocalToWorldTransform(gprim);
+        }
+        else if (gprim.IsA<UsdGeomNurbsPatch>())
+        {
+            UsdGeomNurbsPatch out = UsdGeomNurbsPatch(gprim);
+        }
+        else if (gprim.IsA<UsdGeomNurbsCurves>())
+        {
+            UsdGeomNurbsCurves out = UsdGeomNurbsCurves(gprim);
+        }
+        else if (gprim.IsA<UsdGeomBasisCurves>())
+        {
+            UsdGeomBasisCurves out = UsdGeomBasisCurves(gprim);
+        }
+    }
+#endif
+    
     saveHalfRGB("/home/gga/test.exr", image);
-    exit(0);
+    exit(0);  // \@todo: remove
 }
 
 void usd_window::setUSDFile(const std::string& fileName)
