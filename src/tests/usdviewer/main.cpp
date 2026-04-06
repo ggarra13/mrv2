@@ -386,8 +386,8 @@ void usd_window::prepare_shaders()
         math::Matrix4x4f mvp;
         p.shader->createUniform("transform.mvp", mvp, vlk::kShaderVertex);
         p.shader->addFBO("textureSampler"); // default is fragment
-        float opacity = 1.F;
-        p.shader->addPush("opacity", opacity, vlk::kShaderFragment);
+        math::Vector4f color(0.F, 0.F, 1.F);
+        p.shader->addPush("color", color, vlk::kShaderFragment);
         p.shader->createBindingSet();
                     
         if (p.pipeline_layout != VK_NULL_HANDLE)
@@ -829,10 +829,10 @@ void usd_window::draw()
         cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0, 1,
         &descriptorSet, 0, nullptr);
 
-    float opacity = 1.F;
+    math::Vector4f color(0.F, 0.F, 1.F);
     vkCmdPushConstants(
         cmd, p.pipeline_layout,
-        p.shader->getPushStageFlags(), 0, sizeof(float), &opacity);
+        p.shader->getPushStageFlags(), 0, sizeof(math::Vector4f), &color);
     std::cerr << __LINE__ << std::endl;
 
     if (p.vao && p.vbo)
@@ -846,6 +846,8 @@ void usd_window::draw()
         p.vao->draw(cmd, p.vbo);
         std::cerr << __LINE__ << std::endl;
     }
+
+    end_render_pass();
                 
     if (p.buffer)
     {
@@ -853,6 +855,24 @@ void usd_window::draw()
     }
     std::cerr << __LINE__ << std::endl;
     
+    VkCommandBuffer tempCmd = beginSingleTimeCommands(device(), commandPool());
+    p.buffer->readPixels(tempCmd, 0, 0, renderSize.w, renderSize.h);
+
+    vkEndCommandBuffer(tempCmd);
+
+    p.buffer->submitReadback(tempCmd);
+    
+    wait_queue();
+                    
+    vkFreeCommandBuffers(device(), commandPool(), 1, &tempCmd);
+    
+    VkResult result = VK_NOT_READY;
+    void* data = reinterpret_cast<void*>(image->getData());
+    while (result == VK_NOT_READY)
+    {
+        result = p.buffer->getLatestReadPixels(data);
+    }
+                    
     saveHalfRGB("/home/gga/test.exr", image);
     exit(0);  // \@todo: remove
 }
