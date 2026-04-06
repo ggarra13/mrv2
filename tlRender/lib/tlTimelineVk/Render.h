@@ -348,6 +348,8 @@ namespace tl
                 const timeline::DisplayOptions&);
             void _create2DMesh(
                 const std::string& meshName, const geom::TriangleMesh2& mesh);
+            void _create3DMesh(
+                const std::string& meshName, const geom::TriangleMesh3& mesh);
             void _createBindingSet(const std::shared_ptr<vlk::Shader>& shaderName);
             VkPipelineLayout _createPipelineLayout(
                 const std::string& pipelineLayoutName,

@@ -61,24 +61,20 @@ namespace tl
         {
             TLRENDER_P();
 
-            const size_t size = mesh.triangles.size();
-            if (size == 0) return;
+            const size_t triangleCount = mesh.triangles.size();
+            if (triangleCount == 0) return;
             
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += size;
 
             auto type = vlk::VBOType::Pos3_F32;
-            if (!mesh.t.empty() && !mesh.c.empty())
+            if (!mesh.c.empty())
             {
-                throw std::runtime_error("Colored and textured 2D meshes unsupported");
+                throw std::runtime_error("Colored meshes unsupported");
             }
             if (!mesh.t.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16;
-            }
-            else if (!mesh.c.empty())
-            {
-                type = vlk::VBOType::Pos3_F32_Color_F32;
             }
             
             if (!p.vbos[meshName] ||
