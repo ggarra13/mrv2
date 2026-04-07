@@ -206,11 +206,20 @@ namespace tl
             
             //! Read-back PBO like functionality.
             void createStagingBuffers();
+
+            //! Read the pixels
             void readPixels(VkCommandBuffer cmd,
                             int32_t x = 0, int32_t y = 0,
                             uint32_t w = 0, uint32_t h = 0);
+
+            //! Submit the read command.
             void submitReadback(VkCommandBuffer cmd);
-            VkResult getLatestReadPixels(void*& ptrx);
+
+            //! Advances the PBO write index.
+            void advanceWriteIndex();
+
+            //! Get back the latest pixels read into ptr.
+            VkResult getLatestReadPixels(void*& ptr);
             
         private:
             Fl_Vk_Context& ctx;

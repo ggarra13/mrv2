@@ -1192,6 +1192,13 @@ namespace tl
             p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
 
+        void OffscreenBuffer::advanceWriteIndex()
+        {
+            TLRENDER_P();
+            
+            p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
+        }
+        
         void OffscreenBuffer::submitReadback(VkCommandBuffer cmd)
         {
             TLRENDER_P();
@@ -1216,9 +1223,10 @@ namespace tl
                         string_VkResult(result));
                 return;
             }
-
-            p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
+            
+            advanceWriteIndex();
         }
+
         
         VkResult OffscreenBuffer::getLatestReadPixels(void*& imageData)
         {
@@ -1232,14 +1240,12 @@ namespace tl
 
             if (result == VK_SUCCESS) 
             {
-                image::Info info(p.size.w, p.size.h, p.options.colorType);
-                VkDeviceSize bufferSize = image::getDataByteCount(info);
-            
                 VkMappedMemoryRange memoryRange = {};
                 memoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
                 memoryRange.memory = pbo.memory;
                 memoryRange.offset = 0; 
-                memoryRange.size = bufferSize; // The size of the mapped region for this PBO
+                memoryRange.size = VK_WHOLE_SIZE;
+                
                 vkInvalidateMappedMemoryRanges(device, 1, &memoryRange);
     
                 imageData = pbo.mappedPtr;
