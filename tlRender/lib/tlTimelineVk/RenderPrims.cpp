@@ -68,10 +68,11 @@ namespace tl
             if (!p.vbos[meshName] ||
                 p.vbos[meshName]->getSize() != triangleCount * 3)
             {
-                p.vbos[meshName] = vlk::VBO::create(triangleCount * 3, type);
+                p.vbos[meshName] = vlk::VBO::create(
+                    triangleCount * 3, vlk::VBOType::Pos2_F32_UV_U16);
             }
             if (p.vbos[meshName])
-                p.vbos[meshName]->copy(convert(mesh, type));
+                p.vbos[meshName]->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
@@ -209,12 +210,11 @@ namespace tl
                               const VkBlendOp alphaBlendOp)
         {
             TLRENDER_P();
-
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
             
             _createBindingSet(p.shaders[shaderName]);
-            _create2DMesh(meshName, mesh);
+            _uploadMesh(meshName, mesh, size);
 
             createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                            shaderName, meshName, enableBlending,
@@ -273,7 +273,7 @@ namespace tl
             if (!shader)
                 throw std::runtime_error("Unknown shader '" + shaderName + "'.");
             _createBindingSet(shader);
-            _create2DMesh(meshName, mesh);
+            _uploadMesh(meshName, mesh, size);
 
             const std::string pipelineLayoutName = shaderName;
             vlk::ColorBlendStateInfo cb;
