@@ -11,6 +11,35 @@ namespace tl
 {
     namespace timeline_vlk
     {
+        std::string vertexDummy()
+        {
+            return R"(#version 450
+layout(location = 0) in vec3 vPos;
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+})";
+        }
+
+        std::string fragmentDummy()
+        {
+            return R"(#version 450
+ layout(location = 0) out vec4 outColor;
+                  
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;       
+                 
+void main()
+{
+     outColor = vec4(1, 1, 1, 1);
+})";
+        }
+        
         std::string vertexSource()
         {
             return R"(#version 450

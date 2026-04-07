@@ -1266,6 +1266,17 @@ namespace tl
                 p.shaders["wipe"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["wipe"]);
             }
+#if USE_DUMMY_SHADER
+            if (!p.shaders["dummy"])
+            {
+                p.shaders["dummy"] = vlk::Shader::create(
+                    ctx, vertexDummy(), fragmentDummy(), "dummy");
+                p.shaders["dummy"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["dummy"]->addPush("color", color, vlk::kShaderFragment);
+                _createBindingSet(p.shaders["dummy"]);
+            }
+#endif
             if (!p.compute["rgbf16_to_rgbaf16"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -1593,6 +1604,10 @@ namespace tl
             // buffer
             vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
             vkCmdEndRenderPass(p.cmd);
+            
+            // Update C++ layout tracking to match render pass
+            //finalLayout
+            p.fbo->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
         }
 
         bool Render::getClipRectEnabled() const

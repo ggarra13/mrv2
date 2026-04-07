@@ -71,27 +71,27 @@ namespace tl
                        const std::string& name);
 
 
-            //! Create a new shader.
+            //! Create a new compute shader.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
                 const std::string& computeSource,
                 const std::string& name);
             
-            //! Create a new shader.
+            //! Create a new compute shader from SPIRV.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
                 const uint32_t* computeBytes,
                 const uint32_t computeLength,
                 const std::string& name);
             
-            //! Create a new shader.
+            //! Create a new vertex and fragment shader from source.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
                 const std::string& vertexSource,
                 const std::string& fragmentSource,
                 const std::string& name);
             
-            //! Create a new shader.
+            //! Create a new vertex shader from SPIRV and fragment from source.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
                 const uint32_t* vertexBytes,
@@ -99,7 +99,7 @@ namespace tl
                 const std::string& fragmentSource,
                 const std::string& name);
             
-            //! Create a new shader.
+            //! Create a new vertex and fragment shaders from SPIRV.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
                 const uint32_t* vertexBytes,

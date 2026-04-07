@@ -76,9 +76,13 @@ if [[ $KERNEL != *Windows* ]]; then
 	    if [ "$MRV2_BACKEND" == "VK" ]; then
 		run_cmd rm -f ~/bin/vmrv2
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/vmrv2
+		run_cmd rm -f ~/bin/usdviewer
+		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/tests/usdviewer ~/bin/usdviewer
 	    else
 		run_cmd rm -f ~/bin/mrv2
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2
+		run_cmd rm -f ~/bin/usdviewer
+		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/tests/usdviewer ~/bin/usdviewer
 	    fi
 	    if [ $has_hdr == 1 ]; then
 		run_cmd rm -f ~/bin/hdr

@@ -14,6 +14,9 @@
 #define DEBUG_PIPELINE_USE 0
 #define DEBUG_PIPELINE_LAYOUT_USE 0
 
+// Use 1 for using the dummy shader for debugging.
+#define USE_DUMMY_SHADER 1
+
 //
 // Use 1 for faster startups.
 //
