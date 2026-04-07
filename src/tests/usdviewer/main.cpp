@@ -111,6 +111,7 @@ struct usd_window::Private
 
     // Vulkan information.
     VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
+    bool readPixels = false;
 
     //! tlRender context
     std::shared_ptr<system::Context> context;
@@ -509,6 +510,8 @@ void usd_window::draw()
         // As render resolution might have changed,
         // we need to reset the quad size.
         p.vbo.reset();
+
+        p.readPixels = false;
     }
 
     
@@ -600,9 +603,7 @@ void usd_window::draw()
     
 #if 1     //<- When I turn this on, I get a validation error.
 
-    static bool first_frame = true;
-    
-    if (p.buffer && !first_frame)
+    if (p.buffer && p.readPixels)
     {
         VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
         p.buffer->readPixels(cmd, 0, 0,
@@ -634,8 +635,12 @@ void usd_window::draw()
                     
         saveHalfRGB("/home/gga/test.exr", image);
     }
+    else
+    {
+        p.readPixels = true;
+        redraw();
+    }
 
-    first_frame = false;
 #endif
     
     //exit(0);  // \@todo: remove
