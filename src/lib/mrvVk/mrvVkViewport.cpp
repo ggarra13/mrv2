@@ -539,6 +539,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
+            // Needed
             wait_device();
 
             // Destroy main renderers
@@ -1419,6 +1420,14 @@ namespace mrv
             
             end_render_pass(cmd);
 
+            if (vk.buffer)
+            {
+                vk.buffer->transitionToColorAttachment(cmd);
+            }
+            if (vk.annotation)
+            {
+                vk.annotation->transitionToColorAttachment(cmd);
+            }
             
             if (p.selection.min.x >= 0)
             {
@@ -1450,14 +1459,6 @@ namespace mrv
                 }
             }
 
-            if (vk.buffer)
-            {
-                vk.buffer->transitionToColorAttachment(cmd);
-            }
-            if (vk.annotation)
-            {
-                vk.annotation->transitionToColorAttachment(cmd);
-            }
             
             // Update the pixel bar from here only if we are playing a movie
             // and one that is not 1 frames long.                
@@ -1753,14 +1754,19 @@ namespace mrv
             case PixelValue::kFull:
             case PixelValue::kNits:
             {
-                    
+                if (!vk.readPixels)
+                    return;
+                
                 const math::Box2i box = p.colorAreaInfo.box;
 
                 const uint32_t W = box.w();
                 const uint32_t H = box.h();
+                
+                VkCommandBuffer cmd = beginSingleTimeCommands(device(),
+                                                              commandPool());
 
-                VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
-
+                vk.buffer->transitionToShaderRead(cmd);
+                
                 vk.buffer->readPixels(cmd, box.min.x, box.min.y, W, H);
 
                 vkEndCommandBuffer(cmd);
@@ -1768,6 +1774,8 @@ namespace mrv
                 vk.buffer->submitReadback(cmd);
 
                 wait_queue();
+                    
+                vk.buffer->transitionToColorAttachment(cmd);
 
                 vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
 
@@ -1782,7 +1790,6 @@ namespace mrv
                 {
                     result = vk.buffer->getLatestReadPixels(p.image);
                 }
-                    
                 if (!p.image)
                     return;
                 
