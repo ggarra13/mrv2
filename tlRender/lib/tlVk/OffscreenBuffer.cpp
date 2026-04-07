@@ -666,49 +666,32 @@ namespace tl
                 attachments.push_back(depthAttachment);
             }
 
-            VkSubpassDependency dependency{};
-            dependency.srcSubpass = 0;
-            dependency.dstSubpass = 0;
+            VkSubpassDependency dep[2] = {};
 
-            // Stages involved:
-            // - Color output
-            // - Depth/stencil tests
-            // - Fragment shader sampling (e.g., input attachments or sampled images)
-            dependency.srcStageMask =
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
-                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT |
-                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            // Acquire: external → subpass 0
+            dep[0].srcSubpass    = VK_SUBPASS_EXTERNAL;
+            dep[0].dstSubpass    = 0;
+            dep[0].srcStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            dep[0].dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            dep[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+            dep[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            dep[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
-            dependency.dstStageMask = dependency.srcStageMask;
-
-            // Access types involved:
-            dependency.srcAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-                VK_ACCESS_SHADER_READ_BIT;
-
-            dependency.dstAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-                VK_ACCESS_SHADER_READ_BIT;
-
-            if (hasDepth() || hasStencil())
-            {
-                dependency.srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-                dependency.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-            }
-
-            // Optional: this can improve performance on tiled GPUs
-            dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
-
+            // Release: subpass 0 → external (for sampling)
+            dep[1].srcSubpass    = 0;
+            dep[1].dstSubpass    = VK_SUBPASS_EXTERNAL;
+            dep[1].srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            dep[1].dstStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            dep[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            dep[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+            dep[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
             VkRenderPassCreateInfo rpInfo{};
             rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             rpInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
             rpInfo.pAttachments = attachments.data();
-            // rpInfo.dependencyCount = 1;
-            // rpInfo.pDependencies = &dependency;
+            rpInfo.dependencyCount = 2;
+            rpInfo.pDependencies = dep;
             rpInfo.subpassCount = 1;
             rpInfo.pSubpasses = &subpass;
 
@@ -776,49 +759,32 @@ namespace tl
                 attachments.push_back(depthAttachment);
             }
 
-            VkSubpassDependency dependency{};
-            dependency.srcSubpass = 0;
-            dependency.dstSubpass = 0;
+            VkSubpassDependency dep[2] = {};
 
-            // Stages involved:
-            // - Color output
-            // - Depth/stencil tests
-            // - Fragment shader sampling (e.g., input attachments or sampled images)
-            dependency.srcStageMask =
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
-                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT |
-                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            // Acquire: external → subpass 0
+            dep[0].srcSubpass    = VK_SUBPASS_EXTERNAL;
+            dep[0].dstSubpass    = 0;
+            dep[0].srcStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            dep[0].dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            dep[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+            dep[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            dep[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
-            dependency.dstStageMask = dependency.srcStageMask;
-
-            // Access types involved:
-            dependency.srcAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-                VK_ACCESS_SHADER_READ_BIT;
-
-            dependency.dstAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-                VK_ACCESS_SHADER_READ_BIT;
-
-            if (hasDepth() || hasStencil())
-            {
-                dependency.srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-                dependency.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-            }
-
-            // Optional: this can improve performance on tiled GPUs
-            dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
-
+            // Release: subpass 0 → external (for sampling)
+            dep[1].srcSubpass    = 0;
+            dep[1].dstSubpass    = VK_SUBPASS_EXTERNAL;
+            dep[1].srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            dep[1].dstStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            dep[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            dep[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+            dep[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
             VkRenderPassCreateInfo rpInfo{};
             rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             rpInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
             rpInfo.pAttachments = attachments.data();
-            // rpInfo.dependencyCount = 1;
-            // rpInfo.pDependencies = &dependency;
+            rpInfo.dependencyCount = 2;
+            rpInfo.pDependencies = dep;
             rpInfo.subpassCount = 1;
             rpInfo.pSubpasses = &subpass;
 
