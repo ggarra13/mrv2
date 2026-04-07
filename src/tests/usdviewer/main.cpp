@@ -108,7 +108,6 @@ struct usd_window::Private
 {
     // USD information
     file::Path path;
-    UsdStageRefPtr stage = nullptr;
 
     // Vulkan information.
     VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
@@ -262,7 +261,7 @@ void usd_window::prepare_shaders()
         math::Matrix4x4f mvp;
         p.shader->createUniform("transform.mvp", mvp, vlk::kShaderVertex);
         p.shader->addFBO("textureSampler"); // default is fragment
-        math::Vector4f color(0.F, 0.F, 1.F);
+        math::Vector4f color(1.F, 1.F, 1.F);
         p.shader->addPush("color", color, vlk::kShaderFragment);
         p.shader->createBindingSet();
                     
@@ -319,11 +318,9 @@ void usd_window::prepare_pipeline_layout()
 
 void usd_window::prepare()
 {
-    std::cerr << __LINE__ << std::endl;
     prepare_render_pass();
     prepare_shaders();
     prepare_pipeline_layout();
-    std::cerr << __LINE__ << std::endl;
 }
 
 math::Matrix4x4f usd_window::_createTexturedRectangle()
@@ -352,7 +349,7 @@ math::Matrix4x4f usd_window::_createTexturedRectangle()
         prepare_pipeline();
     }
 
-    // \@todo: calculate projectionMatrix
+    // \@todo: (okay as is) - no projection matrix needed
     math::Matrix4x4f mvp = math::ortho(0.F, (float)renderSize.w, 0.F, (float)renderSize.h, -1.F, 1.F);
     return mvp;
 }
@@ -360,7 +357,6 @@ math::Matrix4x4f usd_window::_createTexturedRectangle()
 void usd_window::prepare_pipeline()
 {
     TLRENDER_P();
-    std::cerr << __LINE__ << std::endl;
     if (pipeline() != VK_NULL_HANDLE)
     {
         vkDestroyPipeline(device(), pipeline(), nullptr);
@@ -381,7 +377,6 @@ void usd_window::prepare_pipeline()
     // Defaults are fine
     vlk::ViewportStateInfo vp;
             
-    std::cerr << __LINE__ << std::endl;
     vlk::ColorBlendStateInfo cb;
     vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
     colorBlendAttachment.blendEnable = VK_FALSE;
@@ -402,7 +397,6 @@ void usd_window::prepare_pipeline()
         VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT,
     };
             
-    std::cerr << __LINE__ << std::endl;
     // Defaults are fine
     vlk::MultisampleStateInfo ms;
 
@@ -420,7 +414,6 @@ void usd_window::prepare_pipeline()
     shaderStages[1].module = p.shader->getFragment();
     shaderStages[1].entryPoint = "main";
 
-    std::cerr << __LINE__ << std::endl;
     //
     // Pass pipeline creation parameters to pipelineState.
     //
@@ -437,13 +430,11 @@ void usd_window::prepare_pipeline()
     pipelineState.renderPass = renderPass();
     pipelineState.layout = p.pipeline_layout;
 
-    std::cerr << __LINE__ << std::endl;
     pipeline() = pipelineState.create(device());
     if (pipeline() == VK_NULL_HANDLE)
     {
         throw std::runtime_error("Composition pipeline failed");
     }
-    std::cerr << __LINE__ << std::endl;
 }
 
 void usd_window::destroy()
@@ -453,13 +444,11 @@ void usd_window::destroy()
     p.vbo.reset();
     p.vao.reset();
 
-    std::cerr << __LINE__ << std::endl;
     if (pipeline() != VK_NULL_HANDLE)
     {
         vkDestroyPipeline(device(), pipeline(), nullptr);
         pipeline() = VK_NULL_HANDLE;
     }
-    std::cerr << __LINE__ << std::endl;
     
     Fl_Vk_Window::destroy();
 }
@@ -492,39 +481,12 @@ void usd_window::draw()
 
     VkCommandBuffer cmd = getCurrentCommandBuffer();
 
-    std::cerr << __LINE__ << std::endl;
-    begin_render_pass(cmd);
-    end_render_pass(cmd);
+    //begin_render_pass(cmd);
+    //end_render_pass(cmd);
     
-    std::cerr << __LINE__ << std::endl;
     // const double timeCode = 
     //     request->time.rescaled_to(stage->GetTimeCodesPerSecond()).value();
 
-    const double startTimeCode = p.stage->GetStartTimeCode();
-    const double time = startTimeCode;
-
-    std::string cameraName;
-    auto camera = getCamera(p.stage, cameraName);
-
-    GfCamera gfCamera;
-    if (camera)
-    {
-        gfCamera = camera.GetCamera(time);
-    }
-    else
-    {
-        const TfTokenVector purposes(
-            {UsdGeomTokens->default_, UsdGeomTokens->proxy});
-        gfCamera = getCameraToFrameStage(p.stage, time, purposes);
-    }
-    
-    float aspectRatio = gfCamera.GetAspectRatio();
-    if (GfIsClose(aspectRatio, 0.F, 1e-4))
-    {
-        aspectRatio = 1.F;
-    }
-    const GfFrustum frustum = gfCamera.GetFrustum();
-    const GfVec3d cameraPos = frustum.GetPosition();
     
     std::shared_ptr<image::Image> image;
     const size_t renderWidth = pixel_w();
@@ -561,11 +523,12 @@ void usd_window::draw()
         cmd, p.buffer, m_currentFrameIndex, renderSize,
         renderOptions);
     p.render->applyTransforms();
-    p.render->end();
     
     image = image::Image::create(
         renderWidth, renderHeight,
         image::PixelType::RGBA_F16);
+
+    p.render->end();
 
     math::Matrix4x4f mvp = _createTexturedRectangle();
 
@@ -614,7 +577,7 @@ void usd_window::draw()
         cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.pipeline_layout, 0, 1,
         &descriptorSet, 0, nullptr);
 
-    math::Vector4f color(0.F, 0.F, 1.F);
+    math::Vector4f color(1.F, 1.F, 1.F);
     vkCmdPushConstants(
         cmd, p.pipeline_layout,
         p.shader->getPushStageFlags(), 0, sizeof(math::Vector4f), &color);
@@ -632,23 +595,27 @@ void usd_window::draw()
 
     end_render_pass(cmd);
     
-
-#if 0
     if (p.buffer)
+        p.buffer->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+    
+#if 1     //<- When I turn this on, I get a validation error.
+
+    static bool first_frame = true;
+    
+    if (p.buffer && !first_frame)
     {
-        VkCommandBuffer tempCmd = beginSingleTimeCommands(device(), commandPool());
-        //p.buffer->transitionToShaderRead(tempCmd);
-        p.buffer->readPixels(tempCmd, 0, 0,
+        VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
+        p.buffer->readPixels(cmd, 0, 0,
                              image->getWidth(),
                              image->getHeight());
 
-        vkEndCommandBuffer(tempCmd);
+        vkEndCommandBuffer(cmd);
 
-        p.buffer->submitReadback(tempCmd);
+        p.buffer->submitReadback(cmd);
     
         wait_queue();
                     
-        vkFreeCommandBuffers(device(), commandPool(), 1, &tempCmd);
+        vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
     
         VkResult result = VK_NOT_READY;
         void* data = nullptr;
@@ -667,6 +634,8 @@ void usd_window::draw()
                     
         saveHalfRGB("/home/gga/test.exr", image);
     }
+
+    first_frame = false;
 #endif
     
     //exit(0);  // \@todo: remove
@@ -677,11 +646,6 @@ void usd_window::setUSDFile(const std::string& fileName)
     TLRENDER_P();
     
     p.path = file::Path(fileName);
-    
-    TfDiagnosticMgr::GetInstance().SetQuiet(false);
-
-    
-    p.stage = UsdStage::Open(fileName);
 }
 
 int main(int argc, char **argv) {
