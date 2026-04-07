@@ -15,8 +15,6 @@
 
 #include <tlCore/Mesh.h>
 
-#include <FL/Fl_Vk_Window.H>
-
 #include <FL/platform.H>
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
@@ -80,6 +78,8 @@ public:
 
     void draw() override;
     void hide() override;
+
+    void flush() override;
     
     void setUSDFile(const std::string&);
 
@@ -106,12 +106,16 @@ using namespace tl;
 
 struct usd_window::Private
 {
+    // Capture information
+    bool pendingReadback = false;
+    std::shared_ptr<image::Image> captureImage;
+
+    
     // USD information
     file::Path path;
 
     // Vulkan information.
     VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
-    bool readPixels = false;
 
     //! tlRender context
     std::shared_ptr<system::Context> context;
@@ -476,6 +480,37 @@ void usd_window::hide()
     Fl_Vk_Window::hide();
 }
 
+void usd_window::flush()
+{
+    TLRENDER_P();
+
+    // Capture the frame index BEFORE the base flush() advances it.
+    // swap_buffers() will submit the main cmd and signal m_frames[captureFrame].fence.
+    uint32_t captureFrame = m_currentFrameIndex;
+
+    Fl_Vk_Window::flush();  // → draw() records copy into main cmd
+                             // → swap_buffers() submits it and signals the fence
+
+    if (p.pendingReadback && p.buffer && p.captureImage)
+    {
+        p.pendingReadback = false;
+
+        // Wait until the submitted frame (and thus the inline copy) is done on GPU.
+        // This is the same fence FLTK already manages for that frame.
+        vkWaitForFences(device(), 1,
+                        &m_frames[captureFrame].fence,
+                        VK_TRUE, UINT64_MAX);
+
+        void* data = p.buffer->getInlineReadbackPtr();
+        if (data)
+        {
+            memcpy(p.captureImage->getData(), data,
+                   p.captureImage->getDataByteCount());
+            saveHalfRGB("/home/gga/test.exr", p.captureImage);
+        }
+    }
+}
+
 void usd_window::draw()
 {
     TLRENDER_P();
@@ -511,7 +546,6 @@ void usd_window::draw()
         // we need to reset the quad size.
         p.vbo.reset();
 
-        p.readPixels = false;
     }
 
     
@@ -533,6 +567,25 @@ void usd_window::draw()
 
     p.render->end();
 
+    // ── Inline readback ──────────────────────────────────────────────────
+    // Record the image→buffer copy into the MAIN command buffer right here,
+    // while the offscreen image is still in COLOR_ATTACHMENT_OPTIMAL.
+    // The copy will execute on the GPU in the same submission as the render.
+    // flush() waits on the frame fence before reading the mapped pointer.
+    if (p.buffer)
+    {
+        p.captureImage = image::Image::create(
+            renderWidth, renderHeight, image::PixelType::RGBA_F16);
+
+        p.buffer->readPixelsInline(cmd,
+                                   0, 0,
+                                   p.captureImage->getWidth(),
+                                   p.captureImage->getHeight());
+        p.pendingReadback = true;
+    }
+    // ─────────────────────────────────────────────────────────────────────
+
+    
     math::Matrix4x4f mvp = _createTexturedRectangle();
 
     if (p.buffer)
@@ -540,7 +593,6 @@ void usd_window::draw()
         p.buffer->transitionToShaderRead(cmd);
     }
         
-
     uint32_t W = pixel_w();
     uint32_t H = pixel_h();
             
@@ -597,52 +649,7 @@ void usd_window::draw()
     }
 
     end_render_pass(cmd);
-    
-    if (p.buffer)
-        p.buffer->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-    
-#if 1     //<- When I turn this on, I get a validation error.
-
-    if (p.buffer && p.readPixels)
-    {
-        VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
-        p.buffer->readPixels(cmd, 0, 0,
-                             image->getWidth(),
-                             image->getHeight());
-
-        vkEndCommandBuffer(cmd);
-
-        p.buffer->submitReadback(cmd);
-    
-        wait_queue();
-                    
-        vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
-    
-        VkResult result = VK_NOT_READY;
-        void* data = nullptr;
-        while (result == VK_NOT_READY)
-        {
-            result = p.buffer->getLatestReadPixels(data);
-        }
-        if (!data)
-        {
-            std::cerr << "did not get data" << std::endl;
-        }
-        else
-        {
-            memcpy(image->getData(), data, image->getDataByteCount());
-        }
-                    
-        saveHalfRGB("/home/gga/test.exr", image);
-    }
-    else
-    {
-        p.readPixels = true;
-        redraw();
-    }
-
-#endif
-    
+        
     //exit(0);  // \@todo: remove
 }
 

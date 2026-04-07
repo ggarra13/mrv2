@@ -220,6 +220,14 @@ namespace tl
 
             //! Get back the latest pixels read into ptr.
             VkResult getLatestReadPixels(void*& ptr);
+
+            //! Read pixels inline.
+            void readPixelsInline(VkCommandBuffer cmd,
+                                  int32_t x, int32_t y,
+                                  uint32_t w, uint32_t h);
+
+            //! Get pixels from readPixelsInline.
+            void* getInlineReadbackPtr();
             
         private:
             Fl_Vk_Context& ctx;

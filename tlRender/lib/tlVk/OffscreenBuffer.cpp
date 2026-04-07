@@ -666,32 +666,49 @@ namespace tl
                 attachments.push_back(depthAttachment);
             }
 
-            VkSubpassDependency dep[2] = {};
+            VkSubpassDependency dependency{};
+            dependency.srcSubpass = 0;
+            dependency.dstSubpass = 0;
 
-            // Acquire: external → subpass 0
-            dep[0].srcSubpass    = VK_SUBPASS_EXTERNAL;
-            dep[0].dstSubpass    = 0;
-            dep[0].srcStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-            dep[0].dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            dep[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-            dep[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            dep[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+            // Stages involved:
+            // - Color output
+            // - Depth/stencil tests
+            // - Fragment shader sampling (e.g., input attachments or sampled images)
+            dependency.srcStageMask =
+                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT |
+                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
 
-            // Release: subpass 0 → external (for sampling)
-            dep[1].srcSubpass    = 0;
-            dep[1].dstSubpass    = VK_SUBPASS_EXTERNAL;
-            dep[1].srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            dep[1].dstStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-            dep[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            dep[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-            dep[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+            dependency.dstStageMask = dependency.srcStageMask;
+
+            // Access types involved:
+            dependency.srcAccessMask =
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                VK_ACCESS_SHADER_READ_BIT;
+
+            dependency.dstAccessMask =
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                VK_ACCESS_SHADER_READ_BIT;
+
+            if (hasDepth() || hasStencil())
+            {
+                dependency.srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+                dependency.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+            }
+
+            // Optional: this can improve performance on tiled GPUs
+            dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
 
             VkRenderPassCreateInfo rpInfo{};
             rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             rpInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
             rpInfo.pAttachments = attachments.data();
-            rpInfo.dependencyCount = 2;
-            rpInfo.pDependencies = dep;
+            // rpInfo.dependencyCount = 1;
+            // rpInfo.pDependencies = &dependency;
             rpInfo.subpassCount = 1;
             rpInfo.pSubpasses = &subpass;
 
@@ -759,32 +776,49 @@ namespace tl
                 attachments.push_back(depthAttachment);
             }
 
-            VkSubpassDependency dep[2] = {};
+            VkSubpassDependency dependency{};
+            dependency.srcSubpass = 0;
+            dependency.dstSubpass = 0;
 
-            // Acquire: external → subpass 0
-            dep[0].srcSubpass    = VK_SUBPASS_EXTERNAL;
-            dep[0].dstSubpass    = 0;
-            dep[0].srcStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-            dep[0].dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            dep[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-            dep[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            dep[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+            // Stages involved:
+            // - Color output
+            // - Depth/stencil tests
+            // - Fragment shader sampling (e.g., input attachments or sampled images)
+            dependency.srcStageMask =
+                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT |
+                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
 
-            // Release: subpass 0 → external (for sampling)
-            dep[1].srcSubpass    = 0;
-            dep[1].dstSubpass    = VK_SUBPASS_EXTERNAL;
-            dep[1].srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            dep[1].dstStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-            dep[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            dep[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-            dep[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+            dependency.dstStageMask = dependency.srcStageMask;
+
+            // Access types involved:
+            dependency.srcAccessMask =
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                VK_ACCESS_SHADER_READ_BIT;
+
+            dependency.dstAccessMask =
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                VK_ACCESS_SHADER_READ_BIT;
+
+            if (hasDepth() || hasStencil())
+            {
+                dependency.srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+                dependency.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+            }
+
+            // Optional: this can improve performance on tiled GPUs
+            dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
 
             VkRenderPassCreateInfo rpInfo{};
             rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             rpInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
             rpInfo.pAttachments = attachments.data();
-            rpInfo.dependencyCount = 2;
-            rpInfo.pDependencies = dep;
+            // rpInfo.dependencyCount = 1;
+            // rpInfo.pDependencies = &dependency;
             rpInfo.subpassCount = 1;
             rpInfo.pSubpasses = &subpass;
 
@@ -1144,7 +1178,7 @@ namespace tl
                 vkCreateFence(device, &fenceInfo, nullptr, &pbo.fence);
             }
         }
-
+        
         void OffscreenBuffer::readPixels(VkCommandBuffer cmd,
                                          int32_t x, int32_t y,
                                          uint32_t w, uint32_t h)
@@ -1192,13 +1226,6 @@ namespace tl
             p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
 
-        void OffscreenBuffer::advanceWriteIndex()
-        {
-            TLRENDER_P();
-            
-            p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
-        }
-        
         void OffscreenBuffer::submitReadback(VkCommandBuffer cmd)
         {
             TLRENDER_P();
@@ -1223,10 +1250,73 @@ namespace tl
                         string_VkResult(result));
                 return;
             }
-            
-            advanceWriteIndex();
+
+            p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
         }
 
+        
+
+        // In OffscreenBuffer.cpp — add implementations:
+        void OffscreenBuffer::readPixelsInline(VkCommandBuffer cmd,
+                                               int32_t x, int32_t y,
+                                               uint32_t w, uint32_t h)
+        {
+            TLRENDER_P();
+
+            // No fence management here — completion is tracked externally
+            // via FLTK's frame fence (see usd_window::flush()).
+            // The ring still protects against overwriting a slot too quickly
+            // because flush() waits synchronously each frame.
+            auto& pbo = p.pboRing[p.writeIndex];
+
+            // Transition to TRANSFER_SRC
+            transitionImageLayout(cmd, p.image,
+                                  p.imageLayout,
+                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+
+            VkBufferImageCopy region{};
+            region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            region.imageSubresource.mipLevel = 0;
+            region.imageSubresource.baseArrayLayer = 0;
+            region.imageSubresource.layerCount = 1;
+            region.imageOffset = {x, y, 0};
+            if (w == 0) w = p.size.w;
+            if (h == 0) h = p.size.h;
+            region.imageExtent = {w, h, 1};
+
+            vkCmdCopyImageToBuffer(cmd, p.image,
+                                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                   pbo.buffer, 1, &region);
+
+            // Transition back so the image is ready as a shader source next
+            transitionImageLayout(cmd, p.image,
+                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+            p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            // Advance ring — the data will be in the slot we just recorded into
+            p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
+        }
+        
+        void* OffscreenBuffer::getInlineReadbackPtr()
+        {
+            TLRENDER_P();
+            VkDevice device = ctx.device;
+
+            // The last-written slot is one behind the current writeIndex
+            int slot = (p.writeIndex - 1 + NUM_PBO_BUFFERS) % NUM_PBO_BUFFERS;
+            auto& pbo = p.pboRing[slot];
+
+            // Invalidate host cache so we see the GPU's writes
+            VkMappedMemoryRange range{};
+            range.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+            range.memory = pbo.memory;
+            range.offset = 0;
+            range.size   = VK_WHOLE_SIZE;
+            vkInvalidateMappedMemoryRanges(device, 1, &range);
+
+            return pbo.mappedPtr;
+        }
         
         VkResult OffscreenBuffer::getLatestReadPixels(void*& imageData)
         {
@@ -1245,7 +1335,6 @@ namespace tl
                 memoryRange.memory = pbo.memory;
                 memoryRange.offset = 0; 
                 memoryRange.size = VK_WHOLE_SIZE;
-                
                 vkInvalidateMappedMemoryRanges(device, 1, &memoryRange);
     
                 imageData = pbo.mappedPtr;
