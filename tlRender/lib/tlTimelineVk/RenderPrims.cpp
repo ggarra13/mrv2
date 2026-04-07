@@ -86,29 +86,66 @@ namespace tl
         {
             TLRENDER_P();
 
-            const size_t triangleCount = mesh.triangles.size();
+            size_t triangleCount = mesh.triangles.size();
             if (triangleCount == 0) return;
-            
+
+            std::cerr << "\ttriangleCount=" << triangleCount << std::endl;
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += triangleCount;
 
-            auto type = vlk::VBOType::Pos3_F32;
-            if (!mesh.c.empty())
+            vlk::VBOType type = vlk::VBOType::Pos3_F32;
+            if (!mesh.t.empty() && !mesh.n.empty() && !mesh.c.empty())
             {
-                throw std::runtime_error("Colored meshes unsupported");
+                type = vlk::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8;
             }
-            if (!mesh.t.empty())
+            else if (!mesh.t.empty() && !mesh.n.empty() && !mesh.c.empty())
+            {
+                // \todo: How do we this distinguish this type?
+                type = vlk::VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32;
+            }
+            else if (!mesh.t.empty() && !mesh.n.empty())
+            {
+                type = vlk::VBOType::Pos3_F32_UV_U16_Normal_U10;
+            }
+            else if (!mesh.t.empty() && !mesh.n.empty())
+            {
+                // \todo: How do we this distinguish this type?
+                type = vlk::VBOType::Pos3_F32_UV_F32_Normal_F32;
+            }
+            else if (!mesh.t.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16;
             }
+            else if (!mesh.c.empty())
+            {
+                type = vlk::VBOType::Pos3_F32_Color_U8;
+            }
             
+#if 0
             if (!p.vbos[meshName] ||
-                p.vbos[meshName]->getSize() != triangleCount * 3)
+                (p.vbos[meshName] &&
+                 p.vbos[meshName]->getSize() != triangleCount * 3))
             {
                 p.vbos[meshName] = vlk::VBO::create(triangleCount * 3, type);
             }
             if (p.vbos[meshName])
                 p.vbos[meshName]->copy(convert(mesh, type));
+#else
+            const auto sphere = geom::sphere(2.0F, 12, 12);
+            triangleCount = sphere.triangles.size();
+            type = vlk::VBOType::Pos3_F32_UV_U16;
+            if (!p.vbos[meshName] ||
+                p.vbos[meshName]->getSize() != triangleCount * 3)
+            {
+                p.vbos[meshName] = vlk::VBO::create(triangleCount * 3, type);
+                p.vaos[meshName].reset();
+            }
+            if (p.vbos[meshName])
+            {
+                p.vbos[meshName]->copy(convert(geom::sphere(2, 10, 10),
+                                               type));
+            }
+#endif
 
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
@@ -155,8 +192,8 @@ namespace tl
 
             const bool enableBlending = (color.a < 0.95F);
             const std::string pipelineName = enableBlending ? "rect_blending" : "rect";
-            createPipeline(p.fbo, pipelineName, "rect", "rect", "rect", enableBlending);
-
+            createPipeline(p.fbo, pipelineName, "rect", "rect", "rect",
+                           enableBlending);
             _emitMeshDraw("rect", "rect", "rect", p.transform, color);
         }
 
@@ -254,6 +291,7 @@ namespace tl
                            colorBlendOp, alphaBlendOp);
 
             const auto transform = p.transform * matrix;
+            std::cerr << "mesh transform=" << transform << std::endl;
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, transform, color);
         }
 

@@ -42,6 +42,8 @@ namespace tl
     namespace timeline_vlk
     {
         // For drawing
+        std::string vertexDummy();
+        std::string fragmentDummy();
         std::string vertexSource();
         std::string vertex2Source();
         std::string vertex2NoUVsSource();

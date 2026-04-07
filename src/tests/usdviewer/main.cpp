@@ -1,3 +1,28 @@
+#include <pxr/pxr.h>
+#include <pxr/base/tf/diagnostic.h>
+#include <pxr/base/tf/token.h>
+#include <pxr/usd/usd/timeCode.h>
+#include <pxr/usd/usd/primRange.h>
+#include <pxr/usd/usdGeom/camera.h>
+#include <pxr/usd/usdGeom/bboxCache.h>
+#include <pxr/usd/usdGeom/metrics.h>
+#include <pxr/usd/usdUtils/pipeline.h>
+#include <pxr/usdImaging/usdAppUtils/api.h>
+#include <pxr/usdImaging/usdAppUtils/camera.h>
+#include <pxr/usdImaging/usdAppUtils/frameRecorder.h>
+#include <pxr/imaging/hd/renderBuffer.h>
+#include <pxr/imaging/hdSt/hioConversions.h>
+#include <pxr/imaging/hdSt/textureUtils.h>
+#include <pxr/imaging/hdx/tokens.h>
+#include <pxr/imaging/hdx/types.h>
+
+// Primitive types
+#include <pxr/usd/usdGeom/basisCurves.h>
+#include <pxr/usd/usdGeom/mesh.h>
+#include <pxr/usd/usdGeom/nurbsCurves.h>
+#include <pxr/usd/usdGeom/nurbsPatch.h>
+#include <pxr/usd/usdGeom/xformCache.h>
+#include <pxr/usd/usdGeom/primvarsAPI.h>
 
 #include <OpenEXR/ImfRgbaFile.h>
 #include <OpenEXR/ImfArray.h>
@@ -14,6 +39,7 @@
 #include <tlVk/Shader.h>
 
 #include <tlCore/Mesh.h>
+
 
 #include <FL/platform.H>
 #include <FL/Fl.H>
@@ -37,12 +63,6 @@
 #include <iostream>
 
 
-#include <pxr/usd/usdGeom/basisCurves.h>
-#include <pxr/usd/usdGeom/mesh.h>
-#include <pxr/usd/usdGeom/nurbsCurves.h>
-#include <pxr/usd/usdGeom/nurbsPatch.h>
-#include <pxr/usd/usdGeom/xformCache.h>
-
 #include <tlTimelineVk/Render.h>
 #include <tlTimelineVk/RenderShadersBinary.h>
 
@@ -65,10 +85,10 @@
 #include <iostream>
 #include <string>
 
+using namespace PXR_NS;
+
 namespace
-{
-    using namespace pxr;
-    
+{   
     UsdGeomCamera getCamera(
         const UsdStageRefPtr& stage,
         const std::string& name = std::string())
@@ -644,9 +664,6 @@ void usd_window::draw()
 
     VkCommandBuffer cmd = getCurrentCommandBuffer();
 
-    //begin_render_pass(cmd);
-    //end_render_pass(cmd);
-    
     // const double timeCode = 
     //     request->time.rescaled_to(stage->GetTimeCodesPerSecond()).value();
 
@@ -711,15 +728,16 @@ void usd_window::draw()
         cmd, p.buffer, m_currentFrameIndex, renderSize,
         renderOptions);
     p.render->applyTransforms();
+    p.render->beginLoadRenderPass();
+    p.render->setupViewportAndScissor();
     
-
     GfMatrix4d matrix;
     UsdGeomXformCache xformCache(time);
     for (const auto& gprim : p.stage->Traverse())
     {
-        //std::cout << gprim.GetTypeName() << " " << gprim.GetName() << std::endl;
+        std::cout << gprim.GetTypeName() << " " << gprim.GetName() << std::endl;
         matrix = xformCache.GetLocalToWorldTransform(gprim);
-        //std::cout << "\t" << matrix << std::endl;
+        std::cout << "\t" << matrix << std::endl;
         if (gprim.IsA<UsdGeomMesh>())
         {
             UsdGeomMesh usdMesh = UsdGeomMesh(gprim);
@@ -810,11 +828,19 @@ void usd_window::draw()
                 indexOffset += vertCount;
             }
 
-            std::cerr << __LINE__ << std::endl;
-            // math::Matrix4x4f mvp;
-            // p.render->draw3DMesh("mesh", "mesh", "mesh", "mesh", geom,
-            //                      mvp, image::Color4f(1,1,1));
-            std::cerr << __LINE__ << std::endl;
+            p.render->drawRect(math::Box2i(0, 0,
+                                           renderWidth / 2,
+                                           renderHeight / 2),
+                               image::Color4f(1, 0, 0, 1));
+                                           
+            
+            math::Matrix4x4f mvp;
+            std::string pipeline = "dummy";
+            std::string pipelineLayout = "dummy";
+            std::string shader = "dummy";
+            std::string mesh = "mesh3D";
+            p.render->draw3DMesh(pipeline, pipelineLayout, shader, mesh, geom,
+                                 mvp, image::Color4f(1,1,1,1));
         }
         else if (gprim.IsA<UsdGeomNurbsPatch>())
         {
@@ -830,6 +856,7 @@ void usd_window::draw()
         }
     }
 
+    p.render->endRenderPass();
     p.render->end();
 
     // ── Inline readback ──────────────────────────────────────────────────
@@ -915,8 +942,6 @@ void usd_window::draw()
     }
 
     end_render_pass(cmd);
-        
-    //exit(0);  // \@todo: remove
 }
 
 void usd_window::setUSDFile(const std::string& fileName)

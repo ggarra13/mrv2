@@ -57,6 +57,8 @@ Change Log
 - Fixed saving JPEG image sequences on Vulkan backend.
 - Updated OpenEXR to v3.4.9.
 - Improved performance of playback when Waveform or Vectorscope were open and no selection was made.
+- Fixed Vulkan validation errors on Environment Maps switching.
+- Switched to Environment Map creation function to use tlRender's Matrix library instead of depending on Imath.
 
 
 v1.6.1

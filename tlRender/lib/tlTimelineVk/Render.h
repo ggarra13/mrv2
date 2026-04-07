@@ -149,7 +149,8 @@ namespace tl
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;
             
-            //! These functions draw to the internal FBO.
+            //! @{
+            //!     These functions draw to the internal FBO.
             void drawRect(const math::Box2i&, const image::Color4f&,
                           const std::string& shaderName = "") override;
             void drawMesh(const std::string& pipelineName,
@@ -197,7 +198,7 @@ namespace tl
                 const math::Vector2i& position,
                 const image::Color4f&) override;
 
-            //! Draws a mesh to the internal FBO.
+            //! Draws a 2D mesh to the internal FBO.
             void drawMesh(
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&, const std::string& meshName) override;
@@ -207,7 +208,7 @@ namespace tl
                 const geom::TriangleMesh2&, const math::Vector2i& position,
                 const image::Color4f&) override {};
 
-            //! Draws a color mesh to the internal FBO.
+            //! Draws a 2D color mesh to the internal FBO.
             void drawColorMesh(
                 const std::string& pipelineLayoutName,
                 const geom::TriangleMesh2&, const math::Vector2i& position,
