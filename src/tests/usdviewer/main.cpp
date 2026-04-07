@@ -27,6 +27,132 @@
 #include <string>
 
 
+// Not sure about these
+#include <pxr/imaging/hdx/tokens.h>
+#include <pxr/imaging/hdx/types.h>
+
+#include <tlCore/Image.h>
+#include <tlCore/Path.h>
+
+#include <iostream>
+
+
+#include <pxr/usd/usdGeom/basisCurves.h>
+#include <pxr/usd/usdGeom/mesh.h>
+#include <pxr/usd/usdGeom/nurbsCurves.h>
+#include <pxr/usd/usdGeom/nurbsPatch.h>
+#include <pxr/usd/usdGeom/xformCache.h>
+
+#include <tlTimelineVk/Render.h>
+#include <tlTimelineVk/RenderShadersBinary.h>
+
+#include <tlVk/Mesh.h>
+#include <tlVk/OffscreenBuffer.h>
+#include <tlVk/Shader.h>
+
+#include <tlCore/Mesh.h>
+
+#include <FL/Fl_Vk_Window.H>
+
+#include <FL/platform.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/math.h>
+
+#include <FL/Fl_Vk_Window.H>
+#include <FL/Fl_Vk_Utils.H>
+
+#include <iostream>
+#include <string>
+
+namespace
+{
+    using namespace pxr;
+    
+    UsdGeomCamera getCamera(
+        const UsdStageRefPtr& stage,
+        const std::string& name = std::string())
+    {
+        UsdGeomCamera out;
+        if (!name.empty())
+        {
+            out = UsdAppUtilsGetCameraAtPath(stage, SdfPath(name));
+        }
+        if (!out)
+        {
+            const TfToken primaryCameraName =
+                UsdUtilsGetPrimaryCameraName();
+            out = UsdAppUtilsGetCameraAtPath(
+                stage, SdfPath(primaryCameraName));
+        }
+        if (!out)
+        {
+            for (const auto& prim : stage->Traverse())
+            {
+                if (prim.IsA<UsdGeomCamera>())
+                {
+                    out = UsdGeomCamera(prim);
+                    break;
+                }
+            }
+        }
+        return out;
+    }
+
+    GfCamera getCameraToFrameStage(
+        const UsdStagePtr& stage, UsdTimeCode timeCode,
+        const TfTokenVector& includedPurposes)
+    {
+        GfCamera gfCamera;
+        UsdGeomBBoxCache bboxCache(timeCode, includedPurposes, true);
+        const GfBBox3d bbox =
+            bboxCache.ComputeWorldBound(stage->GetPseudoRoot());
+        const GfVec3d center = bbox.ComputeCentroid();
+        const GfRange3d range = bbox.ComputeAlignedRange();
+        const GfVec3d dim = range.GetSize();
+        const TfToken upAxis = UsdGeomGetStageUpAxis(stage);
+
+        GfVec2d planeCorner;
+        if (upAxis == UsdGeomTokens->y)
+        {
+            planeCorner = GfVec2d(dim[0], dim[1]) / 2;
+        }
+        else
+        {
+            planeCorner = GfVec2d(dim[0], dim[2]) / 2;
+        }
+        const float planeRadius = sqrt(GfDot(planeCorner, planeCorner));
+
+        const float halfFov =
+            gfCamera.GetFieldOfView(GfCamera::FOVHorizontal) / 2.0;
+        float distance = planeRadius / tan(GfDegreesToRadians(halfFov));
+
+        if (upAxis == UsdGeomTokens->y)
+        {
+            distance += dim[2] / 2;
+        }
+        else
+        {
+            distance += dim[1] / 2;
+        }
+
+        GfMatrix4d xf;
+        if (upAxis == UsdGeomTokens->y)
+        {
+            xf.SetTranslate(center + GfVec3d(0, 0, distance));
+        }
+        else
+        {
+            xf.SetRotate(GfRotation(GfVec3d(1, 0, 0), 90));
+            xf.SetTranslateOnly(center + GfVec3d(0, -distance, 0));
+        }
+        gfCamera.SetTransform(xf);
+        return gfCamera;
+    }
+
+} // namespace
+
+
 void saveHalfRGB(const char* filename,
                  const std::shared_ptr<tl::image::Image> image) {
 
@@ -113,6 +239,7 @@ struct usd_window::Private
     
     // USD information
     file::Path path;
+    UsdStageRefPtr stage = nullptr;
 
     // Vulkan information.
     VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
@@ -523,6 +650,31 @@ void usd_window::draw()
     // const double timeCode = 
     //     request->time.rescaled_to(stage->GetTimeCodesPerSecond()).value();
 
+    const double startTimeCode = p.stage->GetStartTimeCode();
+    const double time = startTimeCode;
+
+    std::string cameraName;
+    auto camera = getCamera(p.stage, cameraName);
+
+    GfCamera gfCamera;
+    if (camera)
+    {
+        gfCamera = camera.GetCamera(time);
+    }
+    else
+    {
+        const TfTokenVector purposes(
+            {UsdGeomTokens->default_, UsdGeomTokens->proxy});
+        gfCamera = getCameraToFrameStage(p.stage, time, purposes);
+    }
+    
+    float aspectRatio = gfCamera.GetAspectRatio();
+    if (GfIsClose(aspectRatio, 0.F, 1e-4))
+    {
+        aspectRatio = 1.F;
+    }
+    const GfFrustum frustum = gfCamera.GetFrustum();
+    const GfVec3d cameraPos = frustum.GetPosition();
     
     std::shared_ptr<image::Image> image;
     const size_t renderWidth = pixel_w();
@@ -545,7 +697,6 @@ void usd_window::draw()
         // As render resolution might have changed,
         // we need to reset the quad size.
         p.vbo.reset();
-
     }
 
     
@@ -561,9 +712,123 @@ void usd_window::draw()
         renderOptions);
     p.render->applyTransforms();
     
-    image = image::Image::create(
-        renderWidth, renderHeight,
-        image::PixelType::RGBA_F16);
+
+    GfMatrix4d matrix;
+    UsdGeomXformCache xformCache(time);
+    for (const auto& gprim : p.stage->Traverse())
+    {
+        //std::cout << gprim.GetTypeName() << " " << gprim.GetName() << std::endl;
+        matrix = xformCache.GetLocalToWorldTransform(gprim);
+        //std::cout << "\t" << matrix << std::endl;
+        if (gprim.IsA<UsdGeomMesh>())
+        {
+            UsdGeomMesh usdMesh = UsdGeomMesh(gprim);
+
+            // -------------------------
+            // 1. VERTICES (Points)
+            // -------------------------
+            VtArray<GfVec3f> points;
+            usdMesh.GetPointsAttr().Get(&points, time);
+
+            // Faces vertex counts: number vertices per face.
+            VtArray<int> faceVertexCounts;
+            usdMesh.GetFaceVertexCountsAttr().Get(&faceVertexCounts, time);
+            
+            // faceVertexIndices: flat list of vertex indices for all faces
+            VtArray<int> faceVertexIndices;
+            usdMesh.GetFaceVertexIndicesAttr().Get(&faceVertexIndices, time);
+
+            
+            geom::TriangleMesh3 geom;
+
+            // Get points.
+            geom.v.reserve(points.size());
+            for (int i = 0; i < points.size(); ++i)
+            {
+                const auto& p = points[i];
+                geom.v.push_back(math::Vector3f(p[0], p[1], p[2]));
+            }
+
+            // Get Normals.
+            UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
+            UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
+            if (normalsPrimvar.IsDefined()) {
+                
+                VtArray<GfVec3f> normals;
+                normalsPrimvar.ComputeFlattened(&normals, time);
+                
+                TfToken interp = normalsPrimvar.GetInterpolation();
+                std::cout << "Normals count: " << normals.size()
+                          << "  interpolation: " << interp << "\n";
+
+                // walks faceVertexIndices for faceVarying
+                int faceCornerIdx = 0; 
+
+                for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                     ++faceIdx) {
+                    int vertCount = faceVertexCounts[faceIdx];
+                    std::cout << "face[" << faceIdx << "]:\n";
+
+                    for (int i = 0; i < vertCount; ++i) {
+                        int pointIdx = faceVertexIndices[faceCornerIdx + i];
+                        GfVec3f n;
+
+                        if (interp == UsdGeomTokens->faceVarying) {
+                            // One normal per face-corner, in face-winding order
+                            n = normals[faceCornerIdx + i];
+                        } else if (interp == UsdGeomTokens->vertex) {
+                            // Normal indexed the same way as points
+                            n = normals[pointIdx];
+                        } else if (interp == UsdGeomTokens->uniform) {
+                            // One normal for the entire face
+                            n = normals[faceIdx];
+                        } else {
+                            // constant — one normal for the whole mesh
+                            n = normals[0];
+                        }
+
+                        geom.n.push_back(math::Vector3f(n[0], n[1], n[2]));
+                    }
+                    faceCornerIdx += vertCount;
+                }
+            }
+
+            // Get triangles.
+            int indexOffset = 0;
+            for (int vertCount : faceVertexCounts)
+            {
+                // Fan triangulation: anchor at faceVertexIndices[indexOffset]
+                // e.g. a quad [A, B, C, D] → (A,B,C), (A,C,D)
+                for (int i = 1; i < vertCount - 1; ++i)
+                {
+                    geom::Triangle3 triangle;
+                    triangle.v[0] = faceVertexIndices[indexOffset] + 1;
+                    triangle.v[1] = faceVertexIndices[indexOffset + i] + 1;
+                    triangle.v[2] = faceVertexIndices[indexOffset + i + 1] + 1;
+                    geom.triangles.push_back(triangle);
+                }
+                indexOffset += vertCount;
+            }
+
+            std::cerr << __LINE__ << std::endl;
+            // math::Matrix4x4f mvp;
+            // p.render->draw3DMesh("mesh", "mesh", "mesh", "mesh", geom,
+            //                      mvp, image::Color4f(1,1,1));
+            std::cerr << __LINE__ << std::endl;
+        }
+        else if (gprim.IsA<UsdGeomNurbsPatch>())
+        {
+            UsdGeomNurbsPatch out = UsdGeomNurbsPatch(gprim);
+        }
+        else if (gprim.IsA<UsdGeomNurbsCurves>())
+        {
+            UsdGeomNurbsCurves out = UsdGeomNurbsCurves(gprim);
+        }
+        else if (gprim.IsA<UsdGeomBasisCurves>())
+        {
+            UsdGeomBasisCurves out = UsdGeomBasisCurves(gprim);
+        }
+    }
 
     p.render->end();
 
@@ -593,6 +858,7 @@ void usd_window::draw()
         p.buffer->transitionToShaderRead(cmd);
     }
         
+
     uint32_t W = pixel_w();
     uint32_t H = pixel_h();
             
@@ -658,6 +924,17 @@ void usd_window::setUSDFile(const std::string& fileName)
     TLRENDER_P();
     
     p.path = file::Path(fileName);
+    
+    TfDiagnosticMgr::GetInstance().SetQuiet(false);
+
+    
+    p.stage = UsdStage::Open(fileName);
+    
+    // const double startTimeCode = p.stage->GetStartTimeCode();
+    // const double endTimeCode = p.stage->GetEndTimeCode();
+    // const double timeCodesPerSecond =  p.stage->GetTimeCodesPerSecond();
+    
+
 }
 
 int main(int argc, char **argv) {
