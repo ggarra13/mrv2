@@ -539,6 +539,7 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
+            // Needed
             wait_device();
 
             // Destroy main renderers
@@ -1759,7 +1760,8 @@ namespace mrv
                 const uint32_t W = box.w();
                 const uint32_t H = box.h();
 
-                VkCommandBuffer cmd = beginSingleTimeCommands(device(), commandPool());
+                VkCommandBuffer cmd = beginSingleTimeCommands(device(),
+                                                              commandPool());
 
                 vk.buffer->readPixels(cmd, box.min.x, box.min.y, W, H);
 
