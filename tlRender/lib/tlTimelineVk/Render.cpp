@@ -1593,6 +1593,10 @@ namespace tl
             // buffer
             vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
             vkCmdEndRenderPass(p.cmd);
+            
+            // Update C++ layout tracking to match render pass
+            //finalLayout
+            p.fbo->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
         }
 
         bool Render::getClipRectEnabled() const
