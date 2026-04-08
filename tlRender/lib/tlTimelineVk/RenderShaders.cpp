@@ -36,7 +36,7 @@ layout(push_constant) uniform PushConstants {
                  
 void main()
 {
-     outColor = vec4(1, 1, 1, 1);
+     outColor = pc.color;
 })";
         }
         

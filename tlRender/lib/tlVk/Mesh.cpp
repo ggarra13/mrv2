@@ -663,18 +663,26 @@ namespace tl
 
             size_t alignment = 1;
             
+            VkDeviceSize totalSize = 0;
         };
 
-        void VAO::_init()
+        void VAO::setDeviceMemorySize(const std::size_t value)
         {
             TLRENDER_P();
+            
+            p.totalSize = value * 1024 * 1024;
+            
+            if (p.vertexBuffer != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
+            {
+                vmaDestroyBuffer(ctx.allocator, p.vertexBuffer, p.allocation);
+            }
             
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
 
             VkBufferCreateInfo bufferInfo{};
             bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-            bufferInfo.size = DYNAMIC_VERTEX_BUFFER_SIZE;
+            bufferInfo.size = p.totalSize;
             bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
                                VK_BUFFER_USAGE_TRANSFER_DST_BIT;
             bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -688,6 +696,8 @@ namespace tl
             if (vmaCreateBuffer(ctx.allocator, &bufferInfo, &allocCreateInfo, &p.vertexBuffer,
                                 &p.allocation, &allocInfo) != VK_SUCCESS)
             {
+                std::cerr << "Failed to create vertex buffer with VMA "
+                          << p.totalSize << std::endl;
                 throw std::runtime_error("Failed to create vertex buffer with VMA");
             }
 
@@ -706,7 +716,7 @@ namespace tl
             // but p.alignment must be at least 1.
             p.alignment = std::max(p.alignment, (size_t)1);
 
-            const VkDeviceSize totalSize = DYNAMIC_VERTEX_BUFFER_SIZE;
+            const VkDeviceSize totalSize = p.totalSize;
             const VkDeviceSize frameCount = MAX_FRAMES_IN_FLIGHT;
     
             // Ensure each frame's start is aligned to p.alignment
@@ -723,6 +733,11 @@ namespace tl
                     throw std::runtime_error("Failed to map VMA memory");
                 }
             }
+        }
+        
+        void VAO::_init()
+        {
+            setDeviceMemorySize(16);
         }
 
         VAO::VAO(Fl_Vk_Context& context) :
@@ -768,7 +783,12 @@ namespace tl
 
             // Check for overflow within the frame region
             if (p.relativeOffset + dataSize > p.regionSize) {
-                throw std::runtime_error("VAO: Frame region overflow! Increase DYNAMIC_VERTEX_BUFFER_SIZE.");
+                std::cerr << "VAO: Frame region overflow "
+                          << (p.relativeOffset + dataSize) << " > " << p.regionSize
+                          << std::endl;
+                std::cerr << "VAO: call setDeviceMemorySize with more than "
+                          << (p.totalSize / 1024 / 1024) << std::endl;
+                throw std::runtime_error("VAO: Frame region overflow!");
             }
             // Compute absolute offset in the big buffer:
             // per-frame region + relative
@@ -780,8 +800,8 @@ namespace tl
             size_t alignedFlushSize = (dataSize + p.alignment - 1) & ~(p.alignment - 1);
     
             // Don't flush past the allocated buffer size
-            if (absOffset + alignedFlushSize > (DYNAMIC_VERTEX_BUFFER_SIZE)) {
-                alignedFlushSize = DYNAMIC_VERTEX_BUFFER_SIZE - absOffset;
+            if (absOffset + alignedFlushSize > p.totalSize) {
+                alignedFlushSize = p.totalSize - absOffset;
             }
             
             if (vmaFlushAllocation(ctx.allocator, p.allocation, absOffset, alignedFlushSize) != VK_SUCCESS)

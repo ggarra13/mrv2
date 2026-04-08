@@ -11,9 +11,6 @@
 
 #include "mrvCore/mrvMesh.h"
 
-// \@todo: use tlCore/Matrix ?
-#include <Imath/ImathMatrix.h>
-
 #include <tlVk/Mesh.h>
 #include <tlVk/Util.h>
 
@@ -80,9 +77,6 @@ namespace mrv
 
             const auto& renderSize = getRenderSize();
             const auto& viewportSize = getViewportSize();
-
-            const float PI = 3.141592654;
-            const float DEG_TO_RAD = PI / 180.0;
 
             float rotX = p.environmentMapOptions.rotateX;
             float rotY = p.environmentMapOptions.rotateY;
