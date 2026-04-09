@@ -454,9 +454,12 @@ if (APPLE)
     add_subdirectory(launcher)
 endif()
 
-add_subdirectory(tests/usdviewer)
-if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
+
+if (MRV2_BACKEND STREQUAL "VK")
     add_subdirectory(tests)
+else()
+    # Since on GL backend we have OpenUSD *and* Vulkan, compile usdviewer
+    add_subdirectory(tests/usdviewer)
 endif()
 
 #

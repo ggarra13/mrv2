@@ -1,15 +1,26 @@
+
+#include "USDProcessSkeletonRoot.h"
+
+
 #include <pxr/pxr.h>
+
+// math primitives
+#include <pxr/base/gf/matrix4d.h>
+#include <pxr/base/gf/vec3f.h>
+
+// diagnostics
 #include <pxr/base/tf/diagnostic.h>
 #include <pxr/base/tf/token.h>
+
 #include <pxr/usd/usd/timeCode.h>
 #include <pxr/usd/usd/primRange.h>
-#include <pxr/usd/usdGeom/camera.h>
-#include <pxr/usd/usdGeom/bboxCache.h>
-#include <pxr/usd/usdGeom/metrics.h>
+
 #include <pxr/usd/usdUtils/pipeline.h>
+
 #include <pxr/usdImaging/usdAppUtils/api.h>
 #include <pxr/usdImaging/usdAppUtils/camera.h>
 #include <pxr/usdImaging/usdAppUtils/frameRecorder.h>
+
 #include <pxr/imaging/hd/renderBuffer.h>
 #include <pxr/imaging/hdSt/hioConversions.h>
 #include <pxr/imaging/hdSt/textureUtils.h>
@@ -18,12 +29,24 @@
 
 // Primitive types
 #include <pxr/usd/usdGeom/basisCurves.h>
+#include <pxr/usd/usdGeom/bboxCache.h>
+#include <pxr/usd/usdGeom/camera.h>
 #include <pxr/usd/usdGeom/mesh.h>
+#include <pxr/usd/usdGeom/metrics.h>
 #include <pxr/usd/usdGeom/nurbsCurves.h>
 #include <pxr/usd/usdGeom/nurbsPatch.h>
 #include <pxr/usd/usdGeom/sphere.h>
 #include <pxr/usd/usdGeom/xformCache.h>
 #include <pxr/usd/usdGeom/primvarsAPI.h>
+
+// Skeleton types
+#include <pxr/usd/usdSkel/animQuery.h>
+#include <pxr/usd/usdSkel/bakeSkinning.h>
+#include <pxr/usd/usdSkel/bindingAPI.h>
+#include <pxr/usd/usdSkel/cache.h>
+#include <pxr/usd/usdSkel/root.h>
+#include <pxr/usd/usdSkel/skeletonQuery.h>
+#include <pxr/usd/usdSkel/utils.h>
 
 // Material and Shaders
 #include <pxr/usd/usdShade/material.h>
@@ -733,11 +756,18 @@ void usd_window::draw()
     auto oldTransform = p.render->getTransform();
     p.render->setTransform(mvp);
 
+
     
     UsdPrimRange range(p.stage->GetPseudoRoot(),
                        UsdTraverseInstanceProxies());
     
+    // // Bake the all skeletons and bound geometry over the time range.
+    // // \@todo: this is done on the CPU (slow) and it uses a lot of memory.
+    // GfInterval interval(p.time, p.time + 1.0);
+    // UsdSkelBakeSkinning(range, interval);
+    
     GfMatrix4d matrix;
+    UsdSkelCache skelCache;
     UsdGeomXformCache xformCache(time);
     std::string primPath;
 
@@ -752,6 +782,7 @@ void usd_window::draw()
     std::size_t numSkeletons = 0;
     std::size_t numPoints = 0;
     std::size_t numSpheres = 0;
+    
     for (const auto& prim : range)
     {
         primPath = prim.GetPath().GetString();
@@ -795,7 +826,14 @@ void usd_window::draw()
             color.b = colors[0][2];
         }
         
-        if (prim.IsA<UsdGeomMesh>())
+        if (prim.IsA<UsdSkelRoot>())
+        {
+            ++numSkeletons;
+
+            //UsdSkelRoot skelRoot(prim);
+            //usd::ProcessSkeletonRoot(skelRoot, skelCache, time);
+        }
+        else if (prim.IsA<UsdGeomMesh>())
         {
             ++numMeshes;
             UsdGeomMesh usdMesh = UsdGeomMesh(prim);
@@ -932,6 +970,7 @@ void usd_window::draw()
               << " Nurbs Curves = " << numNurbsCurves << std::endl
               << " Basis Curves = " << numBasisCurves << std::endl
               << "       Points = " << numPoints << std::endl
+              << "    Skeletons = " << numSkeletons << std::endl
               << "      Spheres = " << numSpheres << std::endl;
     
     p.render->setTransform(oldTransform);
@@ -1063,6 +1102,17 @@ void usd_window::setUSDFile(const std::string& fileName)
     p.timeCodesPerSecond = p.stage->GetTimeCodesPerSecond();
     p.time = p.startTimeCode;
 
+#if 1
+
+    // Bake the all skeletons and bound geometry over the time range.
+    // \@todo: this is done on the CPU (slow) and it uses a lot of memory.
+    UsdPrimRange range(p.stage->GetPseudoRoot(),
+                       UsdTraverseInstanceProxies());
+    GfInterval interval(p.startTimeCode, p.endTimeCode);
+    UsdSkelBakeSkinning(range, interval);
+
+#endif
+    
     double timeout = 1.0 / p.timeCodesPerSecond;
 
     Fl::add_timeout(timeout, (Fl_Timeout_Handler) increment_timecode_cb, this);

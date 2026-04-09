@@ -55,7 +55,6 @@ void main()
     vec3 finalColor = pc.color.rgb * (ambient + diff);
 
     outColor = vec4(finalColor, pc.color.a);
-    outColor = pc.color;
 })";
         }
         
