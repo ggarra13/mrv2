@@ -25,10 +25,14 @@
 #include <pxr/usd/usdGeom/xformCache.h>
 #include <pxr/usd/usdGeom/primvarsAPI.h>
 
-// Shaders
+// Material and Shaders
 #include <pxr/usd/usdShade/material.h>
 #include <pxr/usd/usdShade/materialBindingAPI.h>
 #include <pxr/usd/usdShade/shader.h>
+
+// Not sure about these
+#include <pxr/imaging/hdx/tokens.h>
+#include <pxr/imaging/hdx/types.h>
 
 
 #include <OpenEXR/ImfRgbaFile.h>
@@ -56,38 +60,9 @@
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
 
-#include <iostream>
-#include <string>
-
-
-// Not sure about these
-#include <pxr/imaging/hdx/tokens.h>
-#include <pxr/imaging/hdx/types.h>
 
 #include <tlCore/Image.h>
 #include <tlCore/Path.h>
-
-#include <iostream>
-
-
-#include <tlTimelineVk/Render.h>
-#include <tlTimelineVk/RenderShadersBinary.h>
-
-#include <tlVk/Mesh.h>
-#include <tlVk/OffscreenBuffer.h>
-#include <tlVk/Shader.h>
-
-#include <tlCore/Mesh.h>
-
-#include <FL/Fl_Vk_Window.H>
-
-#include <FL/platform.H>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/math.h>
-
-#include <FL/Fl_Vk_Window.H>
-#include <FL/Fl_Vk_Utils.H>
 
 #include <iostream>
 #include <string>
@@ -724,9 +699,8 @@ void usd_window::draw()
 
     vlk::OffscreenBufferOptions offscreenBufferOptions;
     offscreenBufferOptions.colorType = image::PixelType::RGBA_F16;
-
-    offscreenBufferOptions.depth = vlk::OffscreenDepth::_24;
-    offscreenBufferOptions.stencil = vlk::OffscreenStencil::_8;
+    offscreenBufferOptions.depth = vlk::OffscreenDepth::_32;
+    offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
     offscreenBufferOptions.pbo = true;
 
     const math::Size2i renderSize(pixel_w(), pixel_h());
@@ -760,14 +734,16 @@ void usd_window::draw()
     p.render->setTransform(mvp);
 
     
+    UsdPrimRange range(p.stage->GetPseudoRoot(),
+                       UsdTraverseInstanceProxies());
     
     GfMatrix4d matrix;
     UsdGeomXformCache xformCache(time);
-    std::string primName;
-    for (const auto& prim : p.stage->Traverse())
+    std::string primPath;
+    for (const auto& prim : range)
     {
-        primName = prim.GetPath().GetString();
-        //std::cout << prim.GetTypeName() << " " << prim.GetName() << std::endl;
+        primPath = prim.GetPath().GetString();
+        //std::cout << prim.GetTypeName() << " " << primPath << std::endl;
         matrix = xformCache.GetLocalToWorldTransform(prim);
         const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1], matrix[0][2],
                                            matrix[0][3],
@@ -899,8 +875,8 @@ void usd_window::draw()
             std::string pipeline = "dummy";
             std::string pipelineLayout = "dummy";
             std::string shader = "dummy";
-            primName = "3DMesh";
-            p.render->draw3DMesh(pipeline, pipelineLayout, shader, primName,
+            primPath = "3DMesh";
+            p.render->draw3DMesh(pipeline, pipelineLayout, shader, primPath,
                                  geom, modelMatrix, color);
         }
         else if (prim.IsA<UsdGeomNurbsPatch>())
@@ -924,8 +900,8 @@ void usd_window::draw()
             std::string pipeline = "dummy";
             std::string pipelineLayout = "dummy";
             std::string shader = "dummy";
-            p.render->draw3DMesh(pipeline, pipelineLayout, shader, primName, geom,
-                                 modelMatrix, color);
+            p.render->draw3DMesh(pipeline, pipelineLayout, shader, primPath,
+                                 geom, modelMatrix, color);
         }
         // \@todo: cylinder
     }
