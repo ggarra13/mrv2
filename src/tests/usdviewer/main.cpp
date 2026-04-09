@@ -740,6 +740,18 @@ void usd_window::draw()
     GfMatrix4d matrix;
     UsdGeomXformCache xformCache(time);
     std::string primPath;
+
+    //
+    // Stats
+    //
+    std::size_t numMeshes = 0;
+    std::size_t numSubdivs = 0;
+    std::size_t numNurbsPatches = 0;
+    std::size_t numNurbsCurves = 0;
+    std::size_t numBasisCurves = 0;
+    std::size_t numSkeletons = 0;
+    std::size_t numPoints = 0;
+    std::size_t numSpheres = 0;
     for (const auto& prim : range)
     {
         primPath = prim.GetPath().GetString();
@@ -785,6 +797,7 @@ void usd_window::draw()
         
         if (prim.IsA<UsdGeomMesh>())
         {
+            ++numMeshes;
             UsdGeomMesh usdMesh = UsdGeomMesh(prim);
 
             // -------------------------
@@ -881,18 +894,22 @@ void usd_window::draw()
         }
         else if (prim.IsA<UsdGeomNurbsPatch>())
         {
+            ++numNurbsPatches; 
             UsdGeomNurbsPatch out = UsdGeomNurbsPatch(prim);
         }
         else if (prim.IsA<UsdGeomNurbsCurves>())
         {
+            ++numNurbsCurves; 
             UsdGeomNurbsCurves out = UsdGeomNurbsCurves(prim);
         }
         else if (prim.IsA<UsdGeomBasisCurves>())
         {
+            ++numBasisCurves; 
             UsdGeomBasisCurves out = UsdGeomBasisCurves(prim);
         }
         else if (prim.IsA<UsdGeomSphere>())
         {
+            ++numSpheres; 
             UsdGeomSphere out = UsdGeomSphere(prim);
             float radius = 1;
             out.GetRadiusAttr().Get(&radius, time);
@@ -908,6 +925,14 @@ void usd_window::draw()
 
     p.render->endRenderPass();
     p.render->end();
+    
+    std::cout << "       Meshes = " << numMeshes << std::endl
+              << "      Subdivs = " << numSubdivs << std::endl
+              << "Nurbs Patches = " << numNurbsPatches << std::endl
+              << " Nurbs Curves = " << numNurbsCurves << std::endl
+              << " Basis Curves = " << numBasisCurves << std::endl
+              << "       Points = " << numPoints << std::endl
+              << "      Spheres = " << numSpheres << std::endl;
     
     p.render->setTransform(oldTransform);
 
