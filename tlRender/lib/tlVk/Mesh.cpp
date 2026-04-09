@@ -666,11 +666,14 @@ namespace tl
             VkDeviceSize totalSize = 0;
         };
 
-        void VAO::setDeviceMemorySize(const std::size_t value)
+        void VAO::setMemorySize(const std::size_t value)
         {
             TLRENDER_P();
+
+            if (value <= p.totalSize)
+                return;
             
-            p.totalSize = value * 1024 * 1024;
+            p.totalSize = value;
             
             if (p.vertexBuffer != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
             {
@@ -737,7 +740,7 @@ namespace tl
         
         void VAO::_init()
         {
-            setDeviceMemorySize(16);
+            setMemorySize(DYNAMIC_VERTEX_BUFFER_SIZE);
         }
 
         VAO::VAO(Fl_Vk_Context& context) :
@@ -786,8 +789,11 @@ namespace tl
                 std::cerr << "VAO: Frame region overflow "
                           << (p.relativeOffset + dataSize) << " > " << p.regionSize
                           << std::endl;
-                std::cerr << "VAO: call setDeviceMemorySize with more than "
-                          << (p.totalSize / 1024 / 1024) << std::endl;
+                std::cerr << "VAO: call setMemorySize with more than "
+                          << p.totalSize
+                          << " region="
+                          << (p.regionSize * vlk::MAX_FRAMES_IN_FLIGHT)
+                          << std::endl;
                 throw std::runtime_error("VAO: Frame region overflow!");
             }
             // Compute absolute offset in the big buffer:

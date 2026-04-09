@@ -24,7 +24,7 @@ if( "${CMAKE_BUILD_TYPE_LC}" STREQUAL "relwithdebinfo" )
     set(CMAKE_BUILD_TYPE_LC relwithdebuginfo)
 endif()
 
-set(USD_ARGS -v --build-variant ${CMAKE_BUILD_TYPE_LC})
+set(USD_ARGS -v --build-variant ${CMAKE_BUILD_TYPE_LC} --generator Ninja -j 8)
 if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
     list(APPEND USD_ARGS --build-args)
     list(APPEND USD_ARGS USD,"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
@@ -41,6 +41,7 @@ elseif(UNIX AND NOT APPLE)
 endif()
 
 list(APPEND USD_ARGS --no-python --no-examples --no-tutorials --no-tools)
+list(APPEND USD_ARGB --no-docs --no-draco --no-mayapy-tests --no-embree --no-usdview --no-ptex)
 list(APPEND USD_ARGS --onetbb)
 list(APPEND USD_ARGS --verbose)
 

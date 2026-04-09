@@ -14,6 +14,13 @@ namespace tl
 {
     namespace timeline_vlk
     {
+        namespace
+        {
+            size_t align_up(size_t x, size_t alignment) {
+                return (x + alignment - 1) & ~(alignment - 1);
+            }
+        }
+        
         void Render::_create2DMesh(
             const std::string& meshName, const geom::TriangleMesh2& mesh)
         {
@@ -132,9 +139,10 @@ namespace tl
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
                 p.vaos[meshName] = vlk::VAO::create(ctx);
-
-                // \@todo: For OpenUSD, we reallocate the memory dynamically.
-                // p.vaos[meshName]->setDeviceMemorySize(1024);
+                
+                // Use a 5 Gb cache \@todo: make it optional
+                size_t size = 5 * memory::gigabyte;
+                p.vaos[meshName]->setMemorySize(size);
                 
                 p.vaos[meshName]->bind(p.frameIndex);
             }

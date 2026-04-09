@@ -124,8 +124,8 @@ namespace tl
             //! Bind the vertex array object.
             void bind(uint32_t frameIndex);
 
-            //! Set and (re)-allocate memory for VAO assets in megabytes.
-            void setDeviceMemorySize(const std::size_t);
+            //! Set memory for VAO assets in bytes.
+            void setMemorySize(const std::size_t);
             
             //! Get Mesh buffer.
             VkBuffer getBuffer() const;

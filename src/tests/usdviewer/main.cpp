@@ -267,6 +267,7 @@ struct usd_window::Private
 
     
     // USD information
+    file::Path path;
     UsdStageRefPtr stage = nullptr;
 
     // Timeline
@@ -765,7 +766,7 @@ void usd_window::draw()
     std::string primName;
     for (const auto& prim : p.stage->Traverse())
     {
-        primName = prim.GetName();
+        primName = prim.GetPath().GetString();
         //std::cout << prim.GetTypeName() << " " << prim.GetName() << std::endl;
         matrix = xformCache.GetLocalToWorldTransform(prim);
         const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1], matrix[0][2],
@@ -808,7 +809,6 @@ void usd_window::draw()
         
         if (prim.IsA<UsdGeomMesh>())
         {
-            std::cerr << "got mesh " << primName << std::endl;
             UsdGeomMesh usdMesh = UsdGeomMesh(prim);
 
             // -------------------------
@@ -829,7 +829,6 @@ void usd_window::draw()
             geom::TriangleMesh3 geom;
 
             // Get points.
-            std::cerr << "\tgot " << points.size() << std::endl;
             geom.v.reserve(points.size());
             for (int i = 0; i < points.size(); ++i)
             {
@@ -841,12 +840,12 @@ void usd_window::draw()
             UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
             UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
             if (normalsPrimvar.IsDefined()) {
-                std::cerr << "\tgot normals" << std::endl;
+                
                 VtArray<GfVec3f> normals;
                 normalsPrimvar.ComputeFlattened(&normals, time);
                 
                 TfToken interp = normalsPrimvar.GetInterpolation();
-                std::cerr << "Normals count: " << normals.size()
+                std::cout << "Normals count: " << normals.size()
                           << "  interpolation: " << interp << "\n";
 
                 // walks faceVertexIndices for faceVarying
@@ -855,7 +854,7 @@ void usd_window::draw()
                 for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
                      ++faceIdx) {
                     int vertCount = faceVertexCounts[faceIdx];
-                    std::cerr << "face[" << faceIdx << "]:\n";
+                    std::cout << "face[" << faceIdx << "]:\n";
 
                     for (int i = 0; i < vertCount; ++i) {
                         int pointIdx = faceVertexIndices[faceCornerIdx + i];
@@ -881,9 +880,7 @@ void usd_window::draw()
                 }
             }
 
-            // Get triangles
-            std::cerr << "\tgot faces " << faceVertexCounts.size()
-                      << std::endl;
+            // Get triangles.
             int indexOffset = 0;
             for (int vertCount : faceVertexCounts)
             {
@@ -902,28 +899,24 @@ void usd_window::draw()
             std::string pipeline = "dummy";
             std::string pipelineLayout = "dummy";
             std::string shader = "dummy";
-            // primName = "3DMesh";
+            primName = "3DMesh";
             p.render->draw3DMesh(pipeline, pipelineLayout, shader, primName,
                                  geom, modelMatrix, color);
         }
         else if (prim.IsA<UsdGeomNurbsPatch>())
         {
-            std::cerr << "got nurbs patch " << primName << std::endl;
             UsdGeomNurbsPatch out = UsdGeomNurbsPatch(prim);
         }
         else if (prim.IsA<UsdGeomNurbsCurves>())
         {
-            std::cerr << "got nurbs curve " << primName << std::endl;
             UsdGeomNurbsCurves out = UsdGeomNurbsCurves(prim);
         }
         else if (prim.IsA<UsdGeomBasisCurves>())
         {
-            std::cerr << "got basis curve " << primName << std::endl;
             UsdGeomBasisCurves out = UsdGeomBasisCurves(prim);
         }
         else if (prim.IsA<UsdGeomSphere>())
         {
-            std::cerr << "got sphere " << primName << std::endl;
             UsdGeomSphere out = UsdGeomSphere(prim);
             float radius = 1;
             out.GetRadiusAttr().Get(&radius, time);
@@ -1041,7 +1034,7 @@ void usd_window::nextTimeCode()
 {
     TLRENDER_P();
 
-    p.time += p.timeCodesPerSecond;
+    p.time += 1.0;
 
     if (p.time > p.endTimeCode)
         p.time = p.startTimeCode;
@@ -1056,8 +1049,10 @@ void usd_window::nextTimeCode()
 void usd_window::setUSDFile(const std::string& fileName)
 {
     TLRENDER_P();
-
-    TfDiagnosticMgr::GetInstance().SetQuiet(false);
+    
+    p.path = file::Path(fileName);
+    
+    //TfDiagnosticMgr::GetInstance().SetQuiet(false);
 
     
     p.stage = UsdStage::Open(fileName);
@@ -1068,11 +1063,8 @@ void usd_window::setUSDFile(const std::string& fileName)
     p.time = p.startTimeCode;
 
     double timeout = 1.0 / p.timeCodesPerSecond;
-    if (p.startTimeCode != p.endTimeCode)
-    {
-        Fl::add_timeout(timeout, (Fl_Timeout_Handler) increment_timecode_cb,
-                        this);
-    }
+
+    Fl::add_timeout(timeout, (Fl_Timeout_Handler) increment_timecode_cb, this);
 }
 
 int main(int argc, char **argv) {

@@ -15,12 +15,15 @@ namespace tl
         {
             return R"(#version 450
 layout(location = 0) in vec3 vPos;
+layout(location = 0) out vec3 fragPosition;
+
 layout(set = 0, binding = 0, std140) uniform Transform {
      mat4 mvp;
 } transform;
 
 void main()
 {
+    fragPosition = vPos;
     gl_Position = transform.mvp * vec4(vPos, 1.0);
 })";
         }
@@ -28,7 +31,8 @@ void main()
         std::string fragmentDummy()
         {
             return R"(#version 450
- layout(location = 0) out vec4 outColor;
+layout(location = 0) in vec3 inPosition;
+layout(location = 0) out vec4 outColor;
                   
 layout(push_constant) uniform PushConstants {
     vec4 color;
@@ -36,7 +40,22 @@ layout(push_constant) uniform PushConstants {
                  
 void main()
 {
-     outColor = pc.color;
+    // Fake a normal from position (assumes object roughly centered at origin)
+    vec3 normal = normalize(inPosition);
+
+    // Simple light direction
+    vec3 lightDir = normalize(vec3(0.5, 0.5, 1.0));
+
+    // Diffuse (Lambert)
+    float diff = max(dot(normal, lightDir), 0.0);
+
+    // Add a bit of ambient so it's not fully black
+    float ambient = 0.2;
+
+    vec3 finalColor = pc.color.rgb * (ambient + diff);
+
+    outColor = vec4(finalColor, pc.color.a);
+    outColor = pc.color;
 })";
         }
         
