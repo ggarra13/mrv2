@@ -302,7 +302,7 @@ usd_window::usd_window(int X, int Y, int W, int H) :
 {
     TLRENDER_P();
     
-    mode(FL_RGB | FL_ALPHA | FL_DEPTH | FL_STENCIL );
+    mode(FL_RGB | FL_ALPHA);
 
     
     p.context = system::Context::create();
