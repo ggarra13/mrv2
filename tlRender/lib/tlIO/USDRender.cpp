@@ -14,6 +14,7 @@
 #include <pxr/pxr.h>
 #include <pxr/base/tf/diagnostic.h>
 #include <pxr/base/tf/token.h>
+#include <pxr/base/tf/debug.h>
 #include <pxr/usd/usd/timeCode.h>
 #include <pxr/usd/usd/primRange.h>
 #include <pxr/usd/usdGeom/camera.h>
@@ -399,6 +400,14 @@ namespace tl
                 HdDriver(), TfToken(), gpuEnabled);
             if (stage && engine)
             {
+                const std::string msg = "HDST_DUMP_SHADER_SOURCEFILE";
+                const char* envvar = getenv(msg.c_str());
+                if (envvar)
+                {
+                    if (!TfDebug::IsDebugSymbolNameEnabled(msg)) {
+                        TfDebug::SetDebugSymbolsByName(msg, true);
+                    }
+                }
                 if (auto logSystem = p.logSystem.lock())
                 {
                     const std::string renderer =

@@ -1,6 +1,7 @@
 
-#include "USDProcessSkeletonRoot.h"
-
+// #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
+#include "USDGetTextures.h"
+#include "USDResolveTexture.h"
 
 #include <pxr/pxr.h>
 
@@ -31,6 +32,7 @@
 #include <pxr/usd/usdGeom/basisCurves.h>
 #include <pxr/usd/usdGeom/bboxCache.h>
 #include <pxr/usd/usdGeom/camera.h>
+#include <pxr/usd/usdGeom/imageable.h>
 #include <pxr/usd/usdGeom/mesh.h>
 #include <pxr/usd/usdGeom/metrics.h>
 #include <pxr/usd/usdGeom/nurbsCurves.h>
@@ -93,7 +95,30 @@
 using namespace PXR_NS;
 
 namespace
-{   
+{
+    void TraverseVisiblePrims(const UsdPrim& rootPrim,
+                              const UsdTimeCode& time = UsdTimeCode::Default()) 
+    {
+        UsdPrimRange range(rootPrim);
+    
+        for (auto it = range.begin(); it != range.end(); ++it) {
+            if (it->IsA<UsdGeomImageable>()) {
+                UsdGeomImageable imageable(*it);
+            
+                if (imageable.ComputeVisibility(time) ==
+                    UsdGeomTokens->invisible) {
+                    // If this prim is invisible, its entire subtree is invisible.
+                    // Prune the traversal to skip all children.
+                    it.PruneChildren();
+                    continue;
+                }
+            }
+            
+            // Process your visible prim here
+            std::cout << "Visible: " << it->GetPath().GetString() << std::endl;
+        }
+    }
+    
     UsdGeomCamera getCamera(
         const UsdStageRefPtr& stage,
         const std::string& name = std::string())
@@ -783,28 +808,48 @@ void usd_window::draw()
     std::size_t numPoints = 0;
     std::size_t numSpheres = 0;
     
-    for (const auto& prim : range)
-    {
-        primPath = prim.GetPath().GetString();
+    for (auto it = range.begin(); it != range.end(); ++it) {
+        primPath = it->GetPath().GetString();
+        
+        if (it->IsA<UsdGeomImageable>()) {
+            UsdGeomImageable imageable(*it);
+            
+            if (imageable.ComputeVisibility(time) ==
+                UsdGeomTokens->invisible) {
+                // If this prim is invisible, its entire subtree is invisible.
+                // Prune the traversal to skip all children.
+                it.PruneChildren();
+                continue;
+            }
+
+            // If purpose is not default or not render, don't use this
+            // geometry.
+            TfToken purpose = imageable.ComputePurpose();
+            if (purpose != UsdGeomTokens->default_ &&
+                purpose != UsdGeomTokens->render)
+                continue;
+        }
+        
         //std::cout << prim.GetTypeName() << " " << primPath << std::endl;
-        matrix = xformCache.GetLocalToWorldTransform(prim);
-        const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1], matrix[0][2],
-                                           matrix[0][3],
-                                           matrix[1][0], matrix[1][1], matrix[1][2],
-                                           matrix[1][3],
-                                           matrix[2][0], matrix[2][1], matrix[2][2],
-                                           matrix[2][3],
-                                           matrix[3][0], matrix[3][1], matrix[3][2],
-                                           matrix[3][3]);
+        matrix = xformCache.GetLocalToWorldTransform(*it);
+        const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
+                                           matrix[0][2], matrix[0][3],
+                                           matrix[1][0], matrix[1][1],
+                                           matrix[1][2], matrix[1][3],
+                                           matrix[2][0], matrix[2][1],
+                                           matrix[2][2], matrix[2][3],
+                                           matrix[3][0], matrix[3][1],
+                                           matrix[3][2], matrix[3][3]);
         
         VtArray<GfVec3f> colors;
-        UsdGeomGprim gprim(prim);
-        gprim.GetDisplayColorAttr().Get(&colors);
+        UsdGeomGprim gprim(*it);
+        if (gprim)
+            gprim.GetDisplayColorAttr().Get(&colors);
 
         image::Color4f color(0.5F, 0.5F, 0.5F);
         if (colors.size() == 0)
         {
-            UsdShadeMaterial material = UsdShadeMaterialBindingAPI(prim).
+            UsdShadeMaterial material = UsdShadeMaterialBindingAPI(*it).
                                         ComputeBoundMaterial();
             if (material)
             {
@@ -826,17 +871,20 @@ void usd_window::draw()
             color.b = colors[0][2];
         }
         
-        if (prim.IsA<UsdSkelRoot>())
+        if (it->IsA<UsdSkelRoot>())
         {
             ++numSkeletons;
 
-            //UsdSkelRoot skelRoot(prim);
+            //UsdSkelRoot skelRoot(*it);
             //usd::ProcessSkeletonRoot(skelRoot, skelCache, time);
         }
-        else if (prim.IsA<UsdGeomMesh>())
+        else if (it->IsA<UsdGeomMesh>())
         {
             ++numMeshes;
-            UsdGeomMesh usdMesh = UsdGeomMesh(prim);
+            UsdGeomMesh usdMesh = UsdGeomMesh(*it);
+
+            //bool doubleSided = usdMesh.GetDoubleSidedAttr().Get();
+            //std::cerr << primPath << " not double sided" << std::endl;
 
             // -------------------------
             // 1. VERTICES (Points)
@@ -872,8 +920,8 @@ void usd_window::draw()
                 normalsPrimvar.ComputeFlattened(&normals, time);
                 
                 TfToken interp = normalsPrimvar.GetInterpolation();
-                std::cout << "Normals count: " << normals.size()
-                          << "  interpolation: " << interp << "\n";
+                // std::cout << "Normals count: " << normals.size()
+                //           << "  interpolation: " << interp << "\n";
 
                 // walks faceVertexIndices for faceVarying
                 int faceCornerIdx = 0; 
@@ -881,7 +929,6 @@ void usd_window::draw()
                 for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
                      ++faceIdx) {
                     int vertCount = faceVertexCounts[faceIdx];
-                    std::cout << "face[" << faceIdx << "]:\n";
 
                     for (int i = 0; i < vertCount; ++i) {
                         int pointIdx = faceVertexIndices[faceCornerIdx + i];
@@ -907,8 +954,97 @@ void usd_window::draw()
                 }
             }
 
+            UsdGeomPrimvar st = primvarsAPI.GetPrimvar(TfToken("st"));
+            if (st.IsDefined()) {
+                
+                VtArray<GfVec2f> values;
+                if (st.Get(&values))
+                {
+                    TfToken interp = st.GetInterpolation();
+                    // std::cerr << "STs found=" << values.size()
+                    //           << " interpolation=" << interp << std::endl;
+
+                    if (st.IsIndexed())
+                    {
+                        VtArray<int> indices;
+                        st.GetIndices(&indices);
+
+                        std::vector<GfVec2f> expanded(indices.size());
+                        for (size_t i = 0; i < indices.size(); ++i)
+                            expanded[i] = values[indices[i]];
+
+                        // walks faceVertexIndices for faceVarying
+                        int faceCornerIdx = 0; 
+
+                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                             ++faceIdx) {
+                            int vertCount = faceVertexCounts[faceIdx];
+                                
+                            for (int i = 0; i < vertCount; ++i) {
+                                int pointIdx = faceVertexIndices[faceCornerIdx + i];
+                                GfVec2f uv;
+
+                                if (interp == UsdGeomTokens->faceVarying) {
+                                    // One uv per face-corner, in face-winding order
+                                    uv = expanded[faceCornerIdx + i];
+                                } else if (interp == UsdGeomTokens->vertex) {
+                                    // UV indexed the same way as points
+                                    uv = expanded[pointIdx];
+                                } else if (interp == UsdGeomTokens->uniform) {
+                                    // One UV for the entire face
+                                    uv = expanded[faceIdx];
+                                } else {
+                                    // constant — one UV for the whole mesh
+                                    uv = expanded[0];
+                                }
+
+                                geom.t.push_back(math::Vector2f(uv[0], uv[1]));
+                            }
+                            faceCornerIdx += vertCount;
+                        }
+                    }
+                    else
+                    {
+                        // walks faceVertexIndices for faceVarying
+                        int faceCornerIdx = 0; 
+
+                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                             ++faceIdx) {
+                            int vertCount = faceVertexCounts[faceIdx];
+                                
+                            for (int i = 0; i < vertCount; ++i) {
+                                int pointIdx = faceVertexIndices[faceCornerIdx + i];
+                                GfVec2f uv;
+
+                                if (interp == UsdGeomTokens->faceVarying) {
+                                    // One uv per face-corner, in face-winding order
+                                    uv = values[faceCornerIdx + i];
+                                } else if (interp == UsdGeomTokens->vertex) {
+                                    // UV indexed the same way as points
+                                    uv = values[pointIdx];
+                                } else if (interp == UsdGeomTokens->uniform) {
+                                    // One UV for the entire face
+                                    uv = values[faceIdx];
+                                } else {
+                                    // constant — one UV for the whole mesh
+                                    uv = values[0];
+                                }
+
+                                geom.t.push_back(math::Vector2f(uv[0], uv[1]));
+                            }
+                            faceCornerIdx += vertCount;
+                        }
+                    }
+                }
+            }
+
             // Get triangles.
             int indexOffset = 0;
+            bool hasNormals = !geom.n.empty();
+            bool hasUVs = !geom.t.empty();
+            // std::cout << "geom.v=" << geom.v.size() << std::endl;
+            // std::cout << "geom.n=" << geom.n.size() << std::endl;
+            // std::cout << "geom.t=" << geom.t.size() << std::endl;
             for (int vertCount : faceVertexCounts)
             {
                 // Fan triangulation: anchor at faceVertexIndices[indexOffset]
@@ -916,39 +1052,63 @@ void usd_window::draw()
                 for (int i = 1; i < vertCount - 1; ++i)
                 {
                     geom::Triangle3 triangle;
-                    triangle.v[0] = faceVertexIndices[indexOffset] + 1;
-                    triangle.v[1] = faceVertexIndices[indexOffset + i] + 1;
-                    triangle.v[2] = faceVertexIndices[indexOffset + i + 1] + 1;
+                    triangle.v[0].v = faceVertexIndices[indexOffset] + 1;
+                    triangle.v[1].v = faceVertexIndices[indexOffset + i] + 1;
+                    triangle.v[2].v = faceVertexIndices[indexOffset + i + 1] + 1;
+
+                    if (hasNormals)
+                    {
+                        triangle.v[0].n = indexOffset + 1;
+                        triangle.v[1].n = indexOffset + i + 1;
+                        triangle.v[2].n = indexOffset + i + 2;
+                    }
+                    
+                    if (hasUVs)
+                    {
+                        triangle.v[0].t = indexOffset + 1;
+                        triangle.v[1].t = indexOffset + i + 1;
+                        triangle.v[2].t = indexOffset + i + 2;
+                    }
+                    
                     geom.triangles.push_back(triangle);
                 }
                 indexOffset += vertCount;
             }
+            if (!geom.t.empty())
+            {
+                std::string diffuseTexture = usd::GetDiffuseTexturePath(*it);
+                std::cerr << primPath << " texture="
+                          << diffuseTexture << std::endl;
+                
+                auto texture = vlk::ResolveTexture(ctx, diffuseTexture);
+            }
             std::string pipeline = "dummy";
             std::string pipelineLayout = "dummy";
-            std::string shader = "dummy";
+            //std::string shader = "dummy";
+            std::string shader = "st";
             primPath = "3DMesh";
             p.render->draw3DMesh(pipeline, pipelineLayout, shader, primPath,
                                  geom, modelMatrix, color);
         }
-        else if (prim.IsA<UsdGeomNurbsPatch>())
+        else if (it->IsA<UsdGeomNurbsPatch>())
         {
             ++numNurbsPatches; 
-            UsdGeomNurbsPatch out = UsdGeomNurbsPatch(prim);
+            UsdGeomNurbsPatch out = UsdGeomNurbsPatch(*it);
         }
-        else if (prim.IsA<UsdGeomNurbsCurves>())
+        else if (it->IsA<UsdGeomNurbsCurves>())
         {
             ++numNurbsCurves; 
-            UsdGeomNurbsCurves out = UsdGeomNurbsCurves(prim);
+            UsdGeomNurbsCurves out = UsdGeomNurbsCurves(*it);
         }
-        else if (prim.IsA<UsdGeomBasisCurves>())
+        else if (it->IsA<UsdGeomBasisCurves>())
         {
             ++numBasisCurves; 
-            UsdGeomBasisCurves out = UsdGeomBasisCurves(prim);
+            UsdGeomBasisCurves out = UsdGeomBasisCurves(*it);
         }
-        else if (prim.IsA<UsdGeomSphere>())
+        else if (it->IsA<UsdGeomSphere>())
         {
             ++numSpheres; 
-            UsdGeomSphere out = UsdGeomSphere(prim);
+            UsdGeomSphere out = UsdGeomSphere(*it);
             float radius = 1;
             out.GetRadiusAttr().Get(&radius, time);
             auto geom = geom::sphere(radius, 16, 16); 
@@ -1091,8 +1251,9 @@ void usd_window::setUSDFile(const std::string& fileName)
     TLRENDER_P();
     
     p.path = file::Path(fileName);
+
     
-    //TfDiagnosticMgr::GetInstance().SetQuiet(false);
+    TfDiagnosticMgr::GetInstance().SetQuiet(true);
 
     
     p.stage = UsdStage::Open(fileName);
@@ -1125,7 +1286,7 @@ int main(int argc, char **argv) {
         exit(1);
     }
     
-    Fl::use_high_res_GL(1);
+    Fl::use_high_res_VK(1);
 
     Fl_Window window(300, 330);
   

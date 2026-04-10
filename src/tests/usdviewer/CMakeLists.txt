@@ -7,12 +7,14 @@ set(HEADERS
     #USD.h
     #USDPrivate.h
     USDProcessSkeletonRoot.h
+    USDResolveTexture.h
 )
 set(SOURCES
     #USD.cpp
     #USDRead.cpp
     #USDRender.cpp
     USDProcessSkeletonRoot.cpp
+    USDResolveTexture.cpp
     main.cpp)
 
 find_package(Vulkan REQUIRED)

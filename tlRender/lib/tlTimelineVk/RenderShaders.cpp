@@ -58,6 +58,43 @@ void main()
 })";
         }
         
+        std::string vertexSTs()
+        {
+            return R"(#version 450
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec2 vTexture;
+layout(location = 0) out vec2 fTexture;
+layout(location = 1) out vec3 fragPosition;
+
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+} transform;
+
+void main()
+{
+    fragPosition = vPos;
+    fTexture = vTexture;
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+})";
+        }
+
+        std::string fragmentSTs()
+        {
+            return R"(#version 450
+layout(location = 0) in vec2 fTexture;
+layout(location = 1) in vec3 inPosition;
+layout(location = 0) out vec4 outColor;
+                  
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;       
+                 
+void main()
+{
+      outColor = vec4(fTexture.r, fTexture.g, 0, 1);
+})";
+        }
+        
         std::string vertexSource()
         {
             return R"(#version 450

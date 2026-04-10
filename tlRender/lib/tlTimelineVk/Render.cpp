@@ -1276,6 +1276,15 @@ namespace tl
                 p.shaders["dummy"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["dummy"]);
             }
+            if (!p.shaders["st"])
+            {
+                p.shaders["st"] = vlk::Shader::create(
+                    ctx, vertexSTs(), fragmentSTs(), "st");
+                p.shaders["st"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["st"]->addPush("color", color, vlk::kShaderFragment);
+                _createBindingSet(p.shaders["st"]);
+            }
 #endif
             if (!p.compute["rgbf16_to_rgbaf16"])
             {
