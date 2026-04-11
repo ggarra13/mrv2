@@ -59,6 +59,8 @@ Change Log
 - Improved performance of playback when Waveform or Vectorscope were open and no selection was made.
 - Fixed Vulkan validation errors on Environment Maps switching.
 - Switched to Environment Map creation function to use tlRender's Matrix library instead of depending on Imath.
+- Added toggling USD's enableSceneLights in OpenGL backend.
+- Added toggling USD's enableSceneMaterials in OpenGL backend.
 
 
 v1.6.1

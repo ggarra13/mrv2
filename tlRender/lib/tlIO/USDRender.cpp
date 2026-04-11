@@ -704,12 +704,14 @@ namespace tl
                             {
                                 renderWidth = std::atoi(i->second.c_str());
                             }
+                            
                             float complexity = 1.F;
                             i = ioOptions.find("USD/complexity");
                             if (i != ioOptions.end())
                             {
                                 complexity = std::atof(i->second.c_str());
                             }
+                            
                             DrawMode drawMode = DrawMode::ShadedSmooth;
                             i = ioOptions.find("USD/drawMode");
                             if (i != ioOptions.end())
@@ -717,12 +719,28 @@ namespace tl
                                 std::stringstream ss(i->second);
                                 ss >> drawMode;
                             }
+                            
                             bool enableLighting = true;
                             i = ioOptions.find("USD/enableLighting");
                             if (i != ioOptions.end())
                             {
                                 enableLighting = std::atoi(i->second.c_str());
                             }
+                            
+                            bool enableSceneLights = true;
+                            i = ioOptions.find("USD/enableSceneLights");
+                            if (i != ioOptions.end())
+                            {
+                                enableSceneLights = std::atoi(i->second.c_str());
+                            }
+                            
+                            bool enableSceneMaterials = true;
+                            i = ioOptions.find("USD/enableSceneMaterials");
+                            if (i != ioOptions.end())
+                            {
+                                enableSceneMaterials = std::atoi(i->second.c_str());
+                            }
+                                
                             bool sRGB = true;
                             i = ioOptions.find("USD/sRGB");
                             if (i != ioOptions.end())
@@ -737,6 +755,7 @@ namespace tl
                             {
                                 cameraName = i->second;
                             }
+                            
                             GfCamera gfCamera;
                             auto camera =
                                 getCamera(stageCacheItem.stage, cameraName);
@@ -796,6 +815,9 @@ namespace tl
                             renderParams.complexity = complexity;
                             renderParams.drawMode = toUSD(drawMode);
                             renderParams.enableLighting = enableLighting;
+                            renderParams.enableSceneLights = enableSceneLights;
+                            renderParams.enableSceneMaterials = enableSceneMaterials;
+                            
                             renderParams.clearColor =
                                 GfVec4f(0.F, 0.F, 0.F, 0.F);
                             renderParams.colorCorrectionMode =

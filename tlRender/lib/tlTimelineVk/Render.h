@@ -26,6 +26,8 @@ namespace OCIO = OCIO_NAMESPACE;
 
 #include <FL/Fl_Vk_Window.H>
 
+#include <unordered_map>
+
 struct pl_shader_res;
 
 namespace tl
@@ -169,13 +171,10 @@ namespace tl
                           const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                           const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
                           const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
-            void draw3DMesh(const std::string& pipelineName,
-                            const std::string& pipelineLayoutName,
-                            const std::string& shaderName,
-                            const std::string& meshName,
-                            const geom::TriangleMesh3&,
+            void draw3DMesh(const geom::TriangleMesh3&,
                             const math::Matrix4x4f&,
                             const image::Color4f&,
+                            const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
                             const bool enableBlending = false,
                             const VkBlendFactor srcColorBlendFactor =
                             VK_BLEND_FACTOR_SRC_ALPHA,

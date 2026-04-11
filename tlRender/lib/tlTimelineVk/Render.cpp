@@ -1286,6 +1286,18 @@ namespace tl
                 _createBindingSet(p.shaders["st"]);
             }
 #endif
+            if (!p.shaders["usd"])
+            {
+                p.shaders["usd"] = vlk::Shader::create(
+                    ctx, vertexUSD(), fragmentUSD(), "usd");
+                p.shaders["usd"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["usd"]->addTexture("diffuseTexture");
+                p.shaders["usd"]->addTexture("specularTexture");
+                p.shaders["usd"]->addTexture("roughnessTexture");
+                p.shaders["usd"]->addPush("color", color, vlk::kShaderFragment);
+                _createBindingSet(p.shaders["usd"]);
+            }
             if (!p.compute["rgbf16_to_rgbaf16"])
             {
 #if USE_PRECOMPILED_SHADERS

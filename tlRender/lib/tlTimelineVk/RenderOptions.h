@@ -20,7 +20,7 @@
 //
 // Use 1 for faster startups.
 //
-#define USE_PRECOMPILED_SHADERS 1
+#define USE_PRECOMPILED_SHADERS 0
 
 //
 // Use 1 for using dynamic stencils.

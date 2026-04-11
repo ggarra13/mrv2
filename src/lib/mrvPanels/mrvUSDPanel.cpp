@@ -66,6 +66,7 @@ namespace mrv
 
             Fl_Group* bg;
             Fl_Spinner* sp;
+            Fl_Choice* m;
             std_any value;
             int open;
 
@@ -102,55 +103,13 @@ namespace mrv
             bg->box(FL_NO_BOX);
             bg->begin();
 
-            auto mW = new Widget< Fl_Choice >(
-                g->x() + 130, Y, g->w() - 130, 20, _("Renderer"));
-            Fl_Choice* m = mW;
-            m->labelsize(12);
-            m->align(FL_ALIGN_LEFT);
-
-            auto player = p.ui->uiView->getTimelinePlayer();
-            if (player)
-            {
-                const auto& inPlayer = player->player();
-                const auto& info = inPlayer->getIOInfo();
-                bool hasRenderer = false;
-                for (const auto& tag : info.tags)
-                {
-                    const std::string& key = tag.first;
-                    const std::string rendererKey = "Renderer ";
-                    if (key.compare(0, rendererKey.size(), rendererKey) == 0)
-                    {
-                        hasRenderer = true;
-                        m->add(tag.second.c_str());
-                    }
-                }
-                if (!hasRenderer)
-                    m->add("None");
-            }
-            std::string rendererName =
-                settings->getValue<std::string>("USD/rendererName");
-            int index = m->find_index(rendererName.c_str());
-            if (index < 0)
-                index = 0;
-            m->value(index);
-            mW->callback(
-                [=](auto o)
-                {
-                    const Fl_Menu_Item* item = o->mvalue();
-                    const std::string& renderName = item->label();
-                    settings->setValue("USD/rendererName", renderName);
-                    _update();
-                });
-
-            Y += 22;
-
             auto spW = new Widget< Fl_Spinner >(
                 g->x() + 160, Y, g->w() - 160, 20, _("Render Width"));
             sp = spW;
-            sp->format("%4.4g");
+            sp->format("%4d");
             sp->labelsize(12);
             sp->textcolor(FL_BLACK);
-            sp->step(1);
+            sp->step(32);
             sp->range(32, 4096);
             sp->align(FL_ALIGN_LEFT);
             int v = settings->getValue<int>("USD/renderWidth");
@@ -189,7 +148,7 @@ namespace mrv
 
             Y += 22;
 
-            mW = new Widget< Fl_Choice >(
+            auto mW = new Widget< Fl_Choice >(
                 g->x() + 130, Y, g->w() - 130, 20, _("Draw Mode"));
             m = mW;
             m->labelsize(12);
@@ -271,6 +230,28 @@ namespace mrv
                 });
 
             Y += 22;
+
+            spW = new Widget< Fl_Spinner >(
+                g->x() + 160, Y, g->w() - 160, 20, _("Mesh Cache"));
+            sp = spW;
+            sp->format("%4d");
+            sp->labelsize(12);
+            sp->textcolor(FL_BLACK);
+            sp->step(1);
+            sp->range(1, 10);
+            sp->align(FL_ALIGN_LEFT);
+            v = settings->getValue<int>("USD/meshCache");
+            sp->value(v);
+            spW->callback(
+                [=](auto o)
+                {
+                    int v = static_cast<int>(o->value());
+                    settings->setValue("USD/meshCache", v);
+                    _update();
+                });
+            
+            Y += 22;
+            
             spW = new Widget< Fl_Spinner >(
                 g->x() + 160, Y, g->w() - 160, 20, _("Stage Cache"));
             sp = spW;

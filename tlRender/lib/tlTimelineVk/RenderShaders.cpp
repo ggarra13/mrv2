@@ -58,6 +58,76 @@ void main()
 })";
         }
         
+        std::string vertexUSD()
+        {
+            return R"(#version 450
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec2 vTexture;
+layout(location = 0) out vec2 fTexture;
+layout(location = 1) out vec3 fPos;
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    fTexture = vTexture;
+    fPos = vPos;
+})";
+        }
+        
+        std::string fragmentUSD()
+        {
+            return R"(#version 450
+layout(location = 0) in vec2 fTexture;
+layout(location = 1) in vec3 inPosition;
+layout(location = 0) out vec4 outColor;
+
+layout(binding = 1) uniform sampler2D diffuseTexture;
+layout(binding = 2) uniform sampler2D specularTexture;
+layout(binding = 3) uniform sampler2D roughnessTexture;
+
+                  
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;       
+                 
+void main()
+{
+    // Fake a normal from position (assumes object roughly centered at origin)
+    vec3 normal = normalize(inPosition);
+
+    // Simple light direction
+    vec3 lightDir = normalize(vec3(0.0, 0.0, 1.0));
+
+    // View direction (assuming camera at origin)
+    vec3 viewDir = normalize(vec3(0.0, 0.0, 1.0));
+
+    // Diffuse (Lambert)
+    float diff = max(dot(normal, lightDir), 0.0);
+
+    // Reflection vector
+    vec3 reflectDir = reflect(-lightDir, normal);
+
+    // Phong specular
+    float shininess = texture(roughnessTexture, fTexture).r;
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+
+    // Specular strength
+    vec3 specStrength = texture(specularTexture, fTexture).rgb + vec3(0.5);
+
+    // Add a bit of ambient so it's not fully black
+    float ambient = 0.2;
+
+    vec3 txt = texture(diffuseTexture, fTexture).rgb + pc.color.rgb;
+
+    vec3 finalColor = txt * (ambient + diff) + vec3(specStrength * spec);
+
+    outColor = vec4(finalColor, pc.color.a);
+})";
+        }
+        
         std::string vertexSTs()
         {
             return R"(#version 450
@@ -101,6 +171,7 @@ void main()
 layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec2 vTexture;
 layout(location = 0) out vec2 fTexture;
+layout(location = 1) out vec3 fPos;
 layout(set = 0, binding = 0, std140) uniform Transform {
      mat4 mvp;
 } transform;
@@ -109,6 +180,7 @@ void main()
 {
     gl_Position = transform.mvp * vec4(vPos, 1.0);
     fTexture = vTexture;
+    fPos = vPos;
 })";
         }
 
@@ -234,7 +306,7 @@ layout(push_constant) uniform PushConstants {
                  
 void main()
 {
-     outColor = texture(textureSampler, fTexture) * pc.color;
+     outColor = texture(textureSampler, fTexture); // * pc.color;
 })";
         }
 

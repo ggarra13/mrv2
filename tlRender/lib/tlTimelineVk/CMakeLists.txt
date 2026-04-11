@@ -1,6 +1,7 @@
 set(HEADERS
     Render.h
-    RenderShadersBinary.h)
+    RenderShadersBinary.h
+    USDTextureSlots.h)
 set(PRIVATE_HEADERS
     HDRPeakDetection.h
     RenderPrivate.h

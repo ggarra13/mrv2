@@ -259,14 +259,10 @@ namespace tl
                         "Texture binding not found: " + name);
                 if (!texture)
                     throw std::runtime_error("Null texture for: " + name);
-
-                // std::cerr << "\tupdateTexture " << name
-                //           << " at " << it->second.binding
-                //           << std::endl;
                 
                 VkDescriptorImageInfo imageInfo{};
-                imageInfo.imageView = texture->getImageView();
                 imageInfo.sampler = texture->getSampler();
+                imageInfo.imageView = texture->getImageView();
                 imageInfo.imageLayout = texture->getImageLayout();
 
                 VkWriteDescriptorSet write{};
@@ -278,7 +274,7 @@ namespace tl
                     VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
                 write.descriptorCount = 1;
                 write.pImageInfo = &imageInfo;
-
+                
                 vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
             }
 

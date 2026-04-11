@@ -1,6 +1,9 @@
 
+#define PRINT_STATS 0
+#define BAKE_JOINTS 1
+
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
-#include "USDGetTextures.h"
+#include "USDGetTexturePath.h"
 #include "USDResolveTexture.h"
 
 #include <pxr/pxr.h>
@@ -59,23 +62,21 @@
 #include <pxr/imaging/hdx/tokens.h>
 #include <pxr/imaging/hdx/types.h>
 
-
-#include <OpenEXR/ImfRgbaFile.h>
-#include <OpenEXR/ImfArray.h>
-#include <OpenEXR/ImfHeader.h>
-
-#include <tlCore/Image.h>
-#include <tlCore/Path.h>
-
 #include <tlTimelineVk/Render.h>
 #include <tlTimelineVk/RenderShadersBinary.h>
+#include <tlTimelineVk/USDTextureSlots.h>
 
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Shader.h>
 
+#include <tlCore/Image.h>
 #include <tlCore/Mesh.h>
+#include <tlCore/Path.h>
 
+#include <OpenEXR/ImfRgbaFile.h>
+#include <OpenEXR/ImfArray.h>
+#include <OpenEXR/ImfHeader.h>
 
 #include <FL/platform.H>
 #include <FL/Fl.H>
@@ -85,40 +86,15 @@
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
 
-
-#include <tlCore/Image.h>
-#include <tlCore/Path.h>
-
+#include <memory>
 #include <iostream>
 #include <string>
+#include <unordered_map>
 
 using namespace PXR_NS;
 
 namespace
 {
-    void TraverseVisiblePrims(const UsdPrim& rootPrim,
-                              const UsdTimeCode& time = UsdTimeCode::Default()) 
-    {
-        UsdPrimRange range(rootPrim);
-    
-        for (auto it = range.begin(); it != range.end(); ++it) {
-            if (it->IsA<UsdGeomImageable>()) {
-                UsdGeomImageable imageable(*it);
-            
-                if (imageable.ComputeVisibility(time) ==
-                    UsdGeomTokens->invisible) {
-                    // If this prim is invisible, its entire subtree is invisible.
-                    // Prune the traversal to skip all children.
-                    it.PruneChildren();
-                    continue;
-                }
-            }
-            
-            // Process your visible prim here
-            std::cout << "Visible: " << it->GetPath().GetString() << std::endl;
-        }
-    }
-    
     UsdGeomCamera getCamera(
         const UsdStageRefPtr& stage,
         const std::string& name = std::string())
@@ -302,7 +278,9 @@ struct usd_window::Private
     double time = 0;
 
     // Vulkan information.
+    bool collectTextures = true;
     VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
+    std::unordered_map<std::string, std::unordered_map<int, std::shared_ptr<vlk::Texture> > > textures;
 
     //! tlRender context
     std::shared_ptr<system::Context> context;
@@ -704,8 +682,104 @@ void usd_window::draw()
 
     VkCommandBuffer cmd = getCurrentCommandBuffer();
 
-    // const double timeCode = 
-    //     request->time.rescaled_to(stage->GetTimeCodesPerSecond()).value();
+    if (p.collectTextures)
+    {
+        p.collectTextures = false;
+
+        // Create an empty 1 byte texture
+        image::Info info(1, 1, image::PixelType::L_U8);
+        auto emptyTexture = vlk::Texture::create(ctx, info);
+        const uint8_t data = 0;
+        emptyTexture->copy(&data, 1);
+        
+        // Collect textures.
+        UsdPrimRange range(p.stage->GetPseudoRoot(),
+                           UsdTraverseInstanceProxies());
+
+        for (auto it = range.begin(); it != range.end(); ++it) {
+
+            //
+            // Ignore hidden geometry
+            //
+            if (it->IsA<UsdGeomImageable>()) {
+                UsdGeomImageable imageable(*it);
+            
+                if (imageable.ComputeVisibility(p.time) ==
+                    UsdGeomTokens->invisible) {
+                    // If this prim is invisible, its entire subtree is invisible.
+                    // Prune the traversal to skip all children.
+                    it.PruneChildren();
+                    continue;
+                }
+
+                // If purpose is not default or not render, don't use this
+                // geometry.
+                TfToken purpose = imageable.ComputePurpose();
+                if (purpose != UsdGeomTokens->default_ &&
+                    purpose != UsdGeomTokens->render)
+                    continue;
+
+                std::shared_ptr<vlk::Texture> texture;
+                std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
+                
+                const std::string& diffuseTexture = usd::GetTexturePath(*it, TfToken("diffuseColor"));
+                if (!diffuseTexture.empty())
+                {
+                    texture = vlk::ResolveTexture(ctx, diffuseTexture);
+                    texture->transitionToShaderRead(cmd);
+                    textures[USD_Diffuse] = texture;
+                }
+                else
+                {
+                    textures[USD_Diffuse] = emptyTexture;
+                }
+                const std::string& specularTexture = usd::GetTexturePath(*it, TfToken("specularColor"));
+                if (!specularTexture.empty())
+                {
+                    texture = vlk::ResolveTexture(ctx, specularTexture);
+                    texture->transitionToShaderRead(cmd);
+                    textures[USD_Specular] = texture;
+                }
+                else
+                {
+                    textures[USD_Specular] = emptyTexture;
+                }
+                const std::string& roughnessTexture = usd::GetTexturePath(*it, TfToken("roughness"));
+                if (!roughnessTexture.empty())
+                {
+                    texture = vlk::ResolveTexture(ctx, roughnessTexture);
+                    texture->transitionToShaderRead(cmd);
+                    textures[USD_Roughness] = texture;
+                }
+                else
+                {
+                    textures[USD_Roughness] = emptyTexture;
+                }
+                // std::string displacementTexture = usd::GetTexturePath(*it, TfToken("displacement"));
+                // if (!displacementTexture.empty())
+                // {
+                //     texture = vlk::ResolveTexture(ctx, displacementTexture);
+                //     texture->transitionToShaderRead(cmd);
+                //     const std::string& primPath = it->GetPath().GetString();
+                //     p.textures[primPath] = texture;
+                // }
+
+                if (!textures.empty())
+                {
+                    if (!diffuseTexture.empty())
+                        std::cout << " diffuse=" << diffuseTexture << std::endl;
+                    if (!specularTexture.empty())
+                        std::cout << "specular=" << specularTexture << std::endl;
+                    if (!roughnessTexture.empty())
+                        std::cout << "roughness=" << roughnessTexture << std::endl;
+                
+                    const std::string& primPath = it->GetPath().GetString();
+                    p.textures[primPath] = textures;
+                }
+            }
+        }
+    }
+    
 
     const double time = p.time;
 
@@ -763,13 +837,11 @@ void usd_window::draw()
         p.vbo.reset();
     }
 
-    
-
     // locale::SetAndRestore saved;
     timeline::RenderOptions renderOptions;
     renderOptions.colorBuffer = image::PixelType::RGBA_F16;
     renderOptions.clear = true;
-    renderOptions.clearColor = image::Color4f(0, 1, 0, 1);
+    renderOptions.clearColor = image::Color4f(0.2F, 0.2F, 0.2F, 0.F);
     
     p.render->begin(
         cmd, p.buffer, m_currentFrameIndex, renderSize,
@@ -785,12 +857,6 @@ void usd_window::draw()
     
     UsdPrimRange range(p.stage->GetPseudoRoot(),
                        UsdTraverseInstanceProxies());
-    
-    // // Bake the all skeletons and bound geometry over the time range.
-    // // \@todo: this is done on the CPU (slow) and it uses a lot of memory.
-    // GfInterval interval(p.time, p.time + 1.0);
-    // UsdSkelBakeSkinning(range, interval);
-    
     GfMatrix4d matrix;
     UsdSkelCache skelCache;
     UsdGeomXformCache xformCache(time);
@@ -808,8 +874,8 @@ void usd_window::draw()
     std::size_t numPoints = 0;
     std::size_t numSpheres = 0;
     
+    std::shared_ptr<vlk::Texture> texture;    
     for (auto it = range.begin(); it != range.end(); ++it) {
-        primPath = it->GetPath().GetString();
         
         if (it->IsA<UsdGeomImageable>()) {
             UsdGeomImageable imageable(*it);
@@ -830,7 +896,7 @@ void usd_window::draw()
                 continue;
         }
         
-        //std::cout << prim.GetTypeName() << " " << primPath << std::endl;
+        primPath = it->GetPath().GetString();
         matrix = xformCache.GetLocalToWorldTransform(*it);
         const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
                                            matrix[0][2], matrix[0][3],
@@ -998,7 +1064,7 @@ void usd_window::draw()
                                     uv = expanded[0];
                                 }
 
-                                geom.t.push_back(math::Vector2f(uv[0], uv[1]));
+                                geom.t.push_back(math::Vector2f(uv[0], 1.0F - uv[1]));
                             }
                             faceCornerIdx += vertCount;
                         }
@@ -1040,11 +1106,8 @@ void usd_window::draw()
 
             // Get triangles.
             int indexOffset = 0;
-            bool hasNormals = !geom.n.empty();
-            bool hasUVs = !geom.t.empty();
-            // std::cout << "geom.v=" << geom.v.size() << std::endl;
-            // std::cout << "geom.n=" << geom.n.size() << std::endl;
-            // std::cout << "geom.t=" << geom.t.size() << std::endl;
+            const bool hasNormals = !geom.n.empty();
+            const bool hasUVs = !geom.t.empty();
             for (int vertCount : faceVertexCounts)
             {
                 // Fan triangulation: anchor at faceVertexIndices[indexOffset]
@@ -1074,21 +1137,20 @@ void usd_window::draw()
                 }
                 indexOffset += vertCount;
             }
-            if (!geom.t.empty())
+
+            //
+            // Find the textures if the mesh has UVs 
+            //
+            std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
+            if (hasUVs)
             {
-                std::string diffuseTexture = usd::GetDiffuseTexturePath(*it);
-                std::cerr << primPath << " texture="
-                          << diffuseTexture << std::endl;
-                
-                auto texture = vlk::ResolveTexture(ctx, diffuseTexture);
+                auto i = p.textures.find(primPath);
+                if (i != p.textures.end())
+                {
+                    textures = i->second;
+                }
             }
-            std::string pipeline = "dummy";
-            std::string pipelineLayout = "dummy";
-            //std::string shader = "dummy";
-            std::string shader = "st";
-            primPath = "3DMesh";
-            p.render->draw3DMesh(pipeline, pipelineLayout, shader, primPath,
-                                 geom, modelMatrix, color);
+            p.render->draw3DMesh(geom, modelMatrix, color, textures);
         }
         else if (it->IsA<UsdGeomNurbsPatch>())
         {
@@ -1111,19 +1173,28 @@ void usd_window::draw()
             UsdGeomSphere out = UsdGeomSphere(*it);
             float radius = 1;
             out.GetRadiusAttr().Get(&radius, time);
-            auto geom = geom::sphere(radius, 16, 16); 
-            std::string pipeline = "dummy";
-            std::string pipelineLayout = "dummy";
-            std::string shader = "dummy";
-            p.render->draw3DMesh(pipeline, pipelineLayout, shader, primPath,
-                                 geom, modelMatrix, color);
+            auto geom = geom::sphere(radius, 16, 16);
+            const bool hasUVs = !geom.t.empty();
+
+            std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
+            if (hasUVs)
+            {
+                auto i = p.textures.find(primPath);
+                if (i != p.textures.end())
+                {
+                    textures = i->second;
+                }
+            }
+            
+            p.render->draw3DMesh(geom, modelMatrix, color, textures);
         }
         // \@todo: cylinder
     }
 
     p.render->endRenderPass();
     p.render->end();
-    
+
+#if PRINT_STATS
     std::cout << "       Meshes = " << numMeshes << std::endl
               << "      Subdivs = " << numSubdivs << std::endl
               << "Nurbs Patches = " << numNurbsPatches << std::endl
@@ -1132,6 +1203,7 @@ void usd_window::draw()
               << "       Points = " << numPoints << std::endl
               << "    Skeletons = " << numSkeletons << std::endl
               << "      Spheres = " << numSpheres << std::endl;
+#endif
     
     p.render->setTransform(oldTransform);
 
@@ -1263,7 +1335,7 @@ void usd_window::setUSDFile(const std::string& fileName)
     p.timeCodesPerSecond = p.stage->GetTimeCodesPerSecond();
     p.time = p.startTimeCode;
 
-#if 1
+#if BAKE_JOINTS
 
     // Bake the all skeletons and bound geometry over the time range.
     // \@todo: this is done on the CPU (slow) and it uses a lot of memory.
@@ -1288,9 +1360,9 @@ int main(int argc, char **argv) {
     
     Fl::use_high_res_VK(1);
 
-    Fl_Window window(300, 330);
+    Fl_Window window(1024, 960);
   
-    usd_window sw(10, 10, 280, 280);
+    usd_window sw(10, 10, 1004, 940);
     sw.setUSDFile(argv[1]);
 
     window.resizable(&sw);

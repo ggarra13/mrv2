@@ -5,6 +5,7 @@
 
 #include <tlTimelineVk/RenderPrivate.h>
 #include <tlTimelineVk/RenderStructs.h>
+#include <tlTimelineVk/USDTextureSlots.h>
 
 #include <tlVk/Vk.h>
 
@@ -140,8 +141,9 @@ namespace tl
             {
                 p.vaos[meshName] = vlk::VAO::create(ctx);
                 
-                // Use a 5 Gb cache \@todo: make it optional
-                size_t size = 5 * memory::gigabyte;
+                // Use a 3 Gb cache \@todo: make it optional
+                // value must be less than (4292870144 on RTX 3080)
+                size_t size = 3 * memory::gigabyte;
                 p.vaos[meshName]->setMemorySize(size);
                 
                 p.vaos[meshName]->bind(p.frameIndex);
@@ -258,13 +260,10 @@ namespace tl
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, transform, color);
         }
 
-        void Render::draw3DMesh(const std::string& pipelineName,
-                                const std::string& pipelineLayoutName,
-                                const std::string& shaderName,
-                                const std::string& meshName,
-                                const geom::TriangleMesh3& mesh,
+        void Render::draw3DMesh(const geom::TriangleMesh3& mesh,
                                 const math::Matrix4x4f& matrix,
                                 const image::Color4f& color,
+                                const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
                                 const bool enableBlending,
                                 const VkBlendFactor srcColorBlendFactor,
                                 const VkBlendFactor dstColorBlendFactor,
@@ -275,9 +274,48 @@ namespace tl
         {
             TLRENDER_P();
 
+            const std::string meshName = "3DMeshes";
+            
             _create3DMesh(meshName, mesh);
-            _createBindingSet(p.shaders[shaderName]);
 
+            std::string pipelineName;
+            std::string pipelineLayoutName;
+            std::string shaderName;
+
+            if (!mesh.t.empty() && textures.size() != 0)
+            {
+                shaderName = "usd";
+                pipelineName = pipelineLayoutName = shaderName;
+
+                _createBindingSet(p.shaders[shaderName]);
+                
+                p.shaders[shaderName]->bind(p.frameIndex);
+                auto i = textures.find(USD_Diffuse);
+                if (i != textures.end())
+                {
+                    p.shaders[shaderName]->setTexture("diffuseTexture", i->second);
+                }
+                i = textures.find(USD_Specular);
+                if (i != textures.end())
+                {
+                    p.shaders[shaderName]->setTexture("specularTexture", i->second);
+                }
+                i = textures.find(USD_Roughness);
+                if (i != textures.end())
+                {
+                    p.shaders[shaderName]->setTexture("roughnessTexture", i->second);
+                }
+            }
+            else
+            {
+                shaderName = "dummy";
+                pipelineName = pipelineLayoutName = shaderName;
+
+                _createBindingSet(p.shaders[shaderName]);
+                
+                p.shaders[shaderName]->bind(p.frameIndex);
+            }
+            
             createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                            shaderName, meshName, enableBlending,
                            srcColorBlendFactor, dstColorBlendFactor,
@@ -587,7 +625,7 @@ namespace tl
 
             auto shader = p.shaders[shaderName];
             shader->bind(p.frameIndex);
-            shader->setUniform("textureSampler", texture);
+            shader->setTexture("textureSampler", texture);
             _bindDescriptorSets(pipelineLayoutName, shaderName);
 
             if (p.vbos["texture"])
