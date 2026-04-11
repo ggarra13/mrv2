@@ -1,6 +1,7 @@
 
 #define PRINT_STATS 0
 #define BAKE_JOINTS 1
+#define DEBUG_TEXTURES 0
 
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
 #include "USDGetTexturePath.h"
@@ -273,8 +274,6 @@ struct usd_window::Private
     double startTimeCode = 0.F;
     double endTimeCode = 100.F;
     double timeCodesPerSecond = 24.0F;
-
-    // Current time
     double time = 0;
 
     // Vulkan information.
@@ -689,8 +688,13 @@ void usd_window::draw()
         // Create an empty 1 byte texture
         image::Info info(1, 1, image::PixelType::L_U8);
         auto emptyTexture = vlk::Texture::create(ctx, info);
-        const uint8_t data = 0;
+        uint8_t data = 0;
         emptyTexture->copy(&data, 1);
+        
+        // Create a filled 1 byte texture
+        auto filledTexture = vlk::Texture::create(ctx, info);
+        data = 255;
+        filledTexture->copy(&data, 1);
         
         // Collect textures.
         UsdPrimRange range(p.stage->GetPseudoRoot(),
@@ -721,58 +725,128 @@ void usd_window::draw()
 
                 std::shared_ptr<vlk::Texture> texture;
                 std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
+
+                //
+                // Correct
+                //
+                const char* diffuseTokens[] = {"diffuse", "diffuseColor", "DiffuseColor"};
+                for (const auto& diffuse : diffuseTokens)
+                {
+                    const std::string& diffuseTexture = usd::GetTexturePath(*it, TfToken(diffuse));
+                    if (!diffuseTexture.empty())
+                    {
+                        texture = vlk::ResolveTexture(ctx, diffuseTexture);
+                        texture->transitionToShaderRead(cmd);
+                        textures[USD_DiffuseMap] = texture;
+                        break;
+                    }
+                    else
+                    {
+                        textures[USD_DiffuseMap] = filledTexture;
+                    }
+                }
                 
-                const std::string& diffuseTexture = usd::GetTexturePath(*it, TfToken("diffuseColor"));
-                if (!diffuseTexture.empty())
+                //
+                // Correct
+                //
+                const char* metallicTokens[] = {"metallic", "specularColor", "SpecularColor"};
+                for (const auto& metallic : metallicTokens)
                 {
-                    texture = vlk::ResolveTexture(ctx, diffuseTexture);
+                    const std::string& metallicTexture = usd::GetTexturePath(*it, TfToken(metallic));
+                    if (!metallicTexture.empty())
+                    {
+                        texture = vlk::ResolveTexture(ctx, metallicTexture);
+                        texture->transitionToShaderRead(cmd);
+                        textures[USD_MetallicMap] = texture;
+                        break;
+                    }
+                    else
+                    {
+                        textures[USD_MetallicMap] = emptyTexture;
+                    }
+                }
+                
+                //
+                // Correct
+                //
+                const char* roughnessTokens[] = {"roughness", "roughnessColor", "RoughnessColor"};
+                for (const auto& roughness : roughnessTokens)
+                {
+                    const std::string& roughnessTexture = usd::GetTexturePath(*it, TfToken(roughness));
+                    if (!roughnessTexture.empty())
+                    {
+                        texture = vlk::ResolveTexture(ctx, roughnessTexture);
+                        texture->transitionToShaderRead(cmd);
+                        textures[USD_RoughnessMap] = texture;
+                        break;
+                    }
+                    else
+                    {
+                        textures[USD_RoughnessMap] = emptyTexture;
+                    }
+                }
+                
+                //
+                // Correct
+                //
+                const char* occlusionTokens[] = {"occlusion", "occlusionColor", "OcclusionColor"};
+                for (const auto& occlusion : occlusionTokens)
+                {
+                    const std::string& occlusionTexture = usd::GetTexturePath(*it, TfToken(occlusion));
+                    if (!occlusionTexture.empty())
+                    {
+                        texture = vlk::ResolveTexture(ctx, occlusionTexture);
+                        texture->transitionToShaderRead(cmd);
+                        textures[USD_AOMap] = texture;
+                        break;
+                    }
+                    else
+                    {
+                        textures[USD_AOMap] = emptyTexture;
+                    }
+                }
+                
+                const std::string& normalsTexture = usd::GetTexturePath(*it, TfToken("normal"));
+                if (!normalsTexture.empty())
+                {
+                    texture = vlk::ResolveTexture(ctx, normalsTexture);
                     texture->transitionToShaderRead(cmd);
-                    textures[USD_Diffuse] = texture;
+                    textures[USD_NormalMap] = texture;
                 }
                 else
                 {
-                    textures[USD_Diffuse] = emptyTexture;
+                    textures[USD_NormalMap] = emptyTexture;
                 }
-                const std::string& specularTexture = usd::GetTexturePath(*it, TfToken("specularColor"));
-                if (!specularTexture.empty())
+                
+                std::string displacementTexture = usd::GetTexturePath(*it, TfToken("displacement"));
+                if (!displacementTexture.empty())
                 {
-                    texture = vlk::ResolveTexture(ctx, specularTexture);
+                    texture = vlk::ResolveTexture(ctx, displacementTexture);
                     texture->transitionToShaderRead(cmd);
-                    textures[USD_Specular] = texture;
+                    textures[USD_DisplacementMap] = texture;
                 }
                 else
                 {
-                    textures[USD_Specular] = emptyTexture;
+                    textures[USD_DisplacementMap] = emptyTexture;
                 }
-                const std::string& roughnessTexture = usd::GetTexturePath(*it, TfToken("roughness"));
-                if (!roughnessTexture.empty())
-                {
-                    texture = vlk::ResolveTexture(ctx, roughnessTexture);
-                    texture->transitionToShaderRead(cmd);
-                    textures[USD_Roughness] = texture;
-                }
-                else
-                {
-                    textures[USD_Roughness] = emptyTexture;
-                }
-                // std::string displacementTexture = usd::GetTexturePath(*it, TfToken("displacement"));
-                // if (!displacementTexture.empty())
-                // {
-                //     texture = vlk::ResolveTexture(ctx, displacementTexture);
-                //     texture->transitionToShaderRead(cmd);
-                //     const std::string& primPath = it->GetPath().GetString();
-                //     p.textures[primPath] = texture;
-                // }
 
                 if (!textures.empty())
                 {
+#if DEBUG_TEXTURES
                     if (!diffuseTexture.empty())
                         std::cout << " diffuse=" << diffuseTexture << std::endl;
-                    if (!specularTexture.empty())
-                        std::cout << "specular=" << specularTexture << std::endl;
+                    if (!metallicTexture.empty())
+                        std::cout << "metallic=" << metallicTexture << std::endl;
                     if (!roughnessTexture.empty())
                         std::cout << "roughness=" << roughnessTexture << std::endl;
-                
+                    if (!normalsTexture.empty())
+                        std::cout << "normals=" << normalsTexture << std::endl;
+                    if (!occlusionTexture.empty())
+                        std::cout << "occlusion=" << occlusionTexture << std::endl;
+                    if (!displacementTexture.empty())
+                        std::cout << "displacement=" << displacementTexture << std::endl;
+#endif
+                    
                     const std::string& primPath = it->GetPath().GetString();
                     p.textures[primPath] = textures;
                 }
@@ -810,14 +884,14 @@ void usd_window::draw()
     const GfMatrix4d& projectionMatrix = frustum.ComputeProjectionMatrix();
 
     const GfMatrix4d& Gfmvp = viewMatrix * projectionMatrix;
-    const math::Matrix4x4f mvp(
+    const auto& mvp = math::Matrix4x4f(
         Gfmvp[0][0], Gfmvp[0][1], Gfmvp[0][2], Gfmvp[0][3],
         Gfmvp[1][0], Gfmvp[1][1], Gfmvp[1][2], Gfmvp[1][3],
         Gfmvp[2][0], Gfmvp[2][1], Gfmvp[2][2], Gfmvp[2][3],
         Gfmvp[3][0], Gfmvp[3][1], Gfmvp[3][2], Gfmvp[3][3]);
     
     const size_t renderWidth = pixel_w();
-    const size_t renderHeight = pixel_h();
+    const size_t renderHeight = pixel_w() / aspectRatio;
 
     vlk::OffscreenBufferOptions offscreenBufferOptions;
     offscreenBufferOptions.colorType = image::PixelType::RGBA_F16;
@@ -912,7 +986,7 @@ void usd_window::draw()
         if (gprim)
             gprim.GetDisplayColorAttr().Get(&colors);
 
-        image::Color4f color(0.5F, 0.5F, 0.5F);
+        image::Color4f color(1.F, 1.F, 1.F);
         if (colors.size() == 0)
         {
             UsdShadeMaterial material = UsdShadeMaterialBindingAPI(*it).
@@ -979,15 +1053,15 @@ void usd_window::draw()
 
             // Get Normals.
             UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
-            UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
+             UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
             if (normalsPrimvar.IsDefined()) {
                 
                 VtArray<GfVec3f> normals;
                 normalsPrimvar.ComputeFlattened(&normals, time);
                 
                 TfToken interp = normalsPrimvar.GetInterpolation();
-                // std::cout << "Normals count: " << normals.size()
-                //           << "  interpolation: " << interp << "\n";
+                std::cout << "Normals count: " << normals.size()
+                          << "  interpolation: " << interp << "\n";
 
                 // walks faceVertexIndices for faceVarying
                 int faceCornerIdx = 0; 
@@ -1017,6 +1091,49 @@ void usd_window::draw()
                         geom.n.push_back(math::Vector3f(n[0], n[1], n[2]));
                     }
                     faceCornerIdx += vertCount;
+                }
+            }
+            else
+            {
+                // 1. Initialize an array of zero-vectors, sized identically to the points array
+                VtVec3fArray normals(points.size(), GfVec3f(0.0f));
+
+                size_t indexOffset = 0;
+
+                // 2. Iterate through each polygon
+                for (size_t i = 0; i < faceVertexCounts.size(); ++i) {
+                    int numVerts = faceVertexCounts[i];
+    
+                    // We need at least a triangle to compute a face normal
+                    if (numVerts >= 3) {
+                        // Grab the first three points of the face
+                        int v0_idx = faceVertexIndices[indexOffset];
+                        int v1_idx = faceVertexIndices[indexOffset + 1];
+                        int v2_idx = faceVertexIndices[indexOffset + 2];
+
+                        GfVec3f p0 = points[v0_idx];
+                        GfVec3f p1 = points[v1_idx];
+                        GfVec3f p2 = points[v2_idx];
+
+                        // Calculate the cross product of the two edges.
+                        // Note: We intentionally DO NOT normalize this face normal yet. 
+                        // This naturally creates an "area-weighted" average, meaning 
+                        // larger faces will have a stronger influence on the vertex's final normal.
+                        GfVec3f faceNormal = GfCross(p1 - p0, p2 - p0);
+
+                        // Accumulate this face normal into the slot for EVERY vertex sharing this face
+                        for (int j = 0; j < numVerts; ++j) {
+                            int vertexIndex = faceVertexIndices[indexOffset + j];
+                            normals[vertexIndex] += faceNormal;
+                        }
+                    }
+                    indexOffset += numVerts;
+                }
+
+                // 3. Normalize the final accumulated vectors
+                for (size_t i = 0; i < normals.size(); ++i) {
+                    normals[i].Normalize();
+                    geom.n.push_back(math::Vector3f(normals[i][0], normals[i][1], normals[i][2]));
                 }
             }
 
@@ -1188,7 +1305,7 @@ void usd_window::draw()
             
             p.render->draw3DMesh(geom, modelMatrix, color, textures);
         }
-        // \@todo: cylinder
+        // \@todo: cylinder, capsule, cone, volumetrics, etc.
     }
 
     p.render->endRenderPass();
@@ -1360,9 +1477,9 @@ int main(int argc, char **argv) {
     
     Fl::use_high_res_VK(1);
 
-    Fl_Window window(1024, 960);
+    Fl_Window window(960, 960);
   
-    usd_window sw(10, 10, 1004, 940);
+    usd_window sw(10, 10, window.w() - 20, window.h() - 20);
     sw.setUSDFile(argv[1]);
 
     window.resizable(&sw);

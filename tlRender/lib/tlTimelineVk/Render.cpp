@@ -1285,18 +1285,45 @@ namespace tl
                 p.shaders["st"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["st"]);
             }
-#endif
             if (!p.shaders["usd"])
             {
                 p.shaders["usd"] = vlk::Shader::create(
                     ctx, vertexUSD(), fragmentUSD(), "usd");
                 p.shaders["usd"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["usd"]->addTexture("diffuseTexture");
-                p.shaders["usd"]->addTexture("specularTexture");
-                p.shaders["usd"]->addTexture("roughnessTexture");
                 p.shaders["usd"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["usd"]->addTexture("u_DiffuseMap");
+                p.shaders["usd"]->addTexture("u_MetallicMap");
+                p.shaders["usd"]->addTexture("u_RoughnessMap");
+                p.shaders["usd"]->addTexture("u_NormalMap");
+                p.shaders["usd"]->addTexture("u_AOMap");
                 _createBindingSet(p.shaders["usd"]);
+            }
+#endif
+            if (!p.shaders["pbr"])
+            {
+                p.shaders["pbr"] = vlk::Shader::create(
+                    ctx, vertexUSD(), fragmentUSD(), "pbr");
+                
+                PBRTransform transform;
+                p.shaders["pbr"]->createUniform("u_Transform", transform,
+                                                vlk::kShaderVertex);
+
+                p.shaders["pbr"]->addTexture("u_DiffuseMap");
+                p.shaders["pbr"]->addTexture("u_MetallicMap");
+                p.shaders["pbr"]->addTexture("u_RoughnessMap");
+                p.shaders["pbr"]->addTexture("u_NormalMap");
+                p.shaders["pbr"]->addTexture("u_AOMap");
+                
+                PBRMaterial material;
+                
+                p.shaders["pbr"]->createUniform("u_Material", material);
+                
+                PBRScene scene;
+                scene.lightColor = math::Vector3f(1, 1, 1);
+                p.shaders["pbr"]->createUniform("u_Scene", scene);
+                
+                _createBindingSet(p.shaders["pbr"]);
             }
             if (!p.compute["rgbf16_to_rgbaf16"])
             {
@@ -1686,6 +1713,8 @@ namespace tl
                 if (i.second)
                 {
                     i.second->bind(p.frameIndex);
+                    if (i.second->getName() == "pbr")
+                        continue;
                     i.second->setUniform("transform.mvp", p.transform,
                                          vlk::kShaderVertex);
                 }

@@ -15,7 +15,9 @@ namespace tl
         {
             return R"(#version 450
 layout(location = 0) in vec3 vPos;
-layout(location = 0) out vec3 fragPosition;
+layout(location = 1) in vec3 vNormal;
+layout(location = 0) out vec3 fPosition;
+layout(location = 1) out vec3 fNormal;
 
 layout(set = 0, binding = 0, std140) uniform Transform {
      mat4 mvp;
@@ -23,8 +25,9 @@ layout(set = 0, binding = 0, std140) uniform Transform {
 
 void main()
 {
-    fragPosition = vPos;
-    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    fNormal = vNormal;
+    fPosition = vPos;
+    gl_Position = transform.mvp * vec4(vPos, 1.0);   
 })";
         }
 
@@ -32,6 +35,7 @@ void main()
         {
             return R"(#version 450
 layout(location = 0) in vec3 inPosition;
+layout(location = 1) in vec3 inNormal;
 layout(location = 0) out vec4 outColor;
                   
 layout(push_constant) uniform PushConstants {
@@ -40,8 +44,7 @@ layout(push_constant) uniform PushConstants {
                  
 void main()
 {
-    // Fake a normal from position (assumes object roughly centered at origin)
-    vec3 normal = normalize(inPosition);
+    vec3 normal = inNormal;
 
     // Simple light direction
     vec3 lightDir = normalize(vec3(0.5, 0.5, 1.0));
@@ -61,10 +64,13 @@ void main()
         std::string vertexUSD()
         {
             return R"(#version 450
+
 layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec2 vTexture;
+
 layout(location = 0) out vec2 fTexture;
 layout(location = 1) out vec3 fPos;
+
 layout(set = 0, binding = 0, std140) uniform Transform {
      mat4 mvp;
 } transform;
@@ -84,9 +90,11 @@ layout(location = 0) in vec2 fTexture;
 layout(location = 1) in vec3 inPosition;
 layout(location = 0) out vec4 outColor;
 
-layout(binding = 1) uniform sampler2D diffuseTexture;
-layout(binding = 2) uniform sampler2D specularTexture;
-layout(binding = 3) uniform sampler2D roughnessTexture;
+layout(binding = 1) uniform sampler2D u_DiffuseMap;
+layout(binding = 2) uniform sampler2D u_MetallicMap;
+layout(binding = 3) uniform sampler2D u_RoughnessMap;
+layout(binding = 4) uniform sampler2D u_NormalMap;
+layout(binding = 5) uniform sampler2D u_AOMap;
 
                   
 layout(push_constant) uniform PushConstants {
@@ -111,16 +119,16 @@ void main()
     vec3 reflectDir = reflect(-lightDir, normal);
 
     // Phong specular
-    float shininess = texture(roughnessTexture, fTexture).r;
+    float shininess = texture(u_RoughnessMap, fTexture).r;
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
 
     // Specular strength
-    vec3 specStrength = texture(specularTexture, fTexture).rgb + vec3(0.5);
+    vec3 specStrength = texture(u_MetallicMap, fTexture).rgb + vec3(0.5);
 
     // Add a bit of ambient so it's not fully black
     float ambient = 0.2;
 
-    vec3 txt = texture(diffuseTexture, fTexture).rgb + pc.color.rgb;
+    vec3 txt = texture(u_DiffuseMap, fTexture).rgb + pc.color.rgb;
 
     vec3 finalColor = txt * (ambient + diff) + vec3(specStrength * spec);
 

@@ -50,6 +50,10 @@ namespace tl
 
         std::string vertexUSD();
         std::string fragmentUSD();
+
+        std::string vertexPBR();
+        std::string fragmentPBR();
+
         
         std::string vertexSource();
         std::string vertex2Source();

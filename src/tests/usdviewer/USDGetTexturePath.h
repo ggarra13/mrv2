@@ -14,6 +14,6 @@ namespace tl
 {
     namespace usd
     {
-        std::string GetTexturePath(const pxr::UsdPrim& prim, const pxr::TfToken& inputName, const bool debug = true);
+        std::string GetTexturePath(const pxr::UsdPrim& prim, const pxr::TfToken& inputName, const bool debug = false);
     }
 }

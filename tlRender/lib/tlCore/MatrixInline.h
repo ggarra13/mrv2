@@ -267,5 +267,21 @@ namespace tl
                 v[0] * a.e[3] + v[1] * a.e[7] + v[2] * a.e[11] + v[3] * a.e[15];
             return out;
         }
+        
+        template<typename T>
+        Matrix3x3<T> transpose(const Matrix4x4<T>& m)
+        {
+            math::Matrix3x3f out(m.e[0],  // 0,0
+                                 m.e[4],  // 1,0
+                                 m.e[8],  // 2,0 
+                                 m.e[1],  // 0,1
+                                 m.e[5],  // 1,1
+                                 m.e[9],  // 2,1
+                                 m.e[2],  // 0,2
+                                 m.e[6],  // 1,2
+                                 m.e[10]); // 2,2
+            return out;
+        }
+        
     }; // namespace math
 } // namespace tl

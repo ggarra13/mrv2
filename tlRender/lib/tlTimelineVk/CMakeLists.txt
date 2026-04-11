@@ -15,6 +15,7 @@ set(SOURCE
     RenderVideo.cpp
     RenderVulkan.cpp
     RenderShaders.cpp
+    RenderPBRShader.cpp
     RenderStereo.cpp)
 
 set(LIBRARIES_PRIVATE )

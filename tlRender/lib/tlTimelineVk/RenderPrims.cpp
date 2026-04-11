@@ -159,11 +159,14 @@ namespace tl
             TLRENDER_P();
             auto shader = p.shaders[shaderName];
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-            vkCmdPushConstants(p.cmd, pipelineLayout,
-                               shader->getPushStageFlags(), 0,
-                               sizeof(color), &color);
             shader->bind(p.frameIndex);
-            shader->setUniform("transform.mvp", transform);
+            if (shaderName != "pbr")
+            {
+                vkCmdPushConstants(p.cmd, pipelineLayout,
+                                   shader->getPushStageFlags(), 0,
+                                   sizeof(color), &color);
+                shader->setUniform("transform.mvp", transform);
+            }
             _bindDescriptorSets(pipelineLayoutName, shaderName);
             _vkDraw(meshName);
         }
@@ -282,29 +285,23 @@ namespace tl
             std::string pipelineLayoutName;
             std::string shaderName;
 
-            if (!mesh.t.empty() && textures.size() != 0)
+            const auto transform = p.transform * matrix;
+            
+            if (0) //!mesh.t.empty() && textures.size() != 0)
             {
-                shaderName = "usd";
+                shaderName = "pbr";
                 pipelineName = pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);
                 
                 p.shaders[shaderName]->bind(p.frameIndex);
-                auto i = textures.find(USD_Diffuse);
-                if (i != textures.end())
-                {
-                    p.shaders[shaderName]->setTexture("diffuseTexture", i->second);
-                }
-                i = textures.find(USD_Specular);
-                if (i != textures.end())
-                {
-                    p.shaders[shaderName]->setTexture("specularTexture", i->second);
-                }
-                i = textures.find(USD_Roughness);
-                if (i != textures.end())
-                {
-                    p.shaders[shaderName]->setTexture("roughnessTexture", i->second);
-                }
+
+                PBRTransform u_Transform;
+                u_Transform.model = matrix;
+                u_Transform.mvp = p.transform;
+                u_Transform.normalMatrix = math::transpose(matrix);
+                p.shaders[shaderName]->setUniform("u_Transform", u_Transform);
+                
             }
             else
             {
@@ -316,13 +313,23 @@ namespace tl
                 p.shaders[shaderName]->bind(p.frameIndex);
             }
             
+            // auto i = textures.find(USD_DiffuseMap);
+            // p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
+            // i = textures.find(USD_MetallicMap);
+            // p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
+            // i = textures.find(USD_RoughnessMap);
+            // p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
+            // i = textures.find(USD_NormalMap);
+            // p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
+            // i = textures.find(USD_AOMap);
+            // p.shaders[shaderName]->setTexture("u_AOMap", i->second);
+                
             createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                            shaderName, meshName, enableBlending,
                            srcColorBlendFactor, dstColorBlendFactor,
                            srcAlphaBlendFactor, dstAlphaBlendFactor,
                            colorBlendOp, alphaBlendOp);
 
-            const auto transform = p.transform * matrix;
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, transform, color);
         }
 

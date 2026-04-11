@@ -99,6 +99,9 @@ namespace tl
         template <typename T>
         Vector<4, T> operator*(const Matrix4x4<T>&, const Vector<4,T>&);
 
+        template<typename T>
+        Matrix3x3<T> transpose(const Matrix4x4<T>&);
+        
         ///@}
 
         //! \name Serialize
