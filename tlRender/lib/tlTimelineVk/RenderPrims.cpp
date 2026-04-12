@@ -141,9 +141,9 @@ namespace tl
             {
                 p.vaos[meshName] = vlk::VAO::create(ctx);
                 
-                // Use a 3 Gb cache \@todo: make it optional
+                // Use a 4 Gb cache \@todo: make it optional
                 // value must be less than (4292870144 on RTX 3080)
-                size_t size = 3 * memory::gigabyte;
+                size_t size = 3.5 * memory::gigabyte;
                 p.vaos[meshName]->setMemorySize(size);
                 
                 p.vaos[meshName]->bind(p.frameIndex);
@@ -295,13 +295,22 @@ namespace tl
                 _createBindingSet(p.shaders[shaderName]);
                 
                 p.shaders[shaderName]->bind(p.frameIndex);
-
-                PBRTransform u_Transform;
-                u_Transform.model = matrix;
-                u_Transform.mvp = p.transform;
-                u_Transform.normalMatrix = math::transpose(matrix);
-                p.shaders[shaderName]->setUniform("u_Transform", u_Transform);
                 
+                auto i = textures.find(USD_DiffuseMap);
+                if (i != textures.end())
+                    p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
+                i = textures.find(USD_MetallicMap);
+                if (i != textures.end())
+                    p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
+                i = textures.find(USD_RoughnessMap);
+                if (i != textures.end())
+                    p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
+                i = textures.find(USD_NormalMap);
+                if (i != textures.end())
+                    p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
+                i = textures.find(USD_AOMap);
+                if (i != textures.end())
+                    p.shaders[shaderName]->setTexture("u_AOMap", i->second);
             }
             else
             {

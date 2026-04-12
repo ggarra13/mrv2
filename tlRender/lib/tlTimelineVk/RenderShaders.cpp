@@ -61,6 +61,83 @@ void main()
 })";
         }
         
+        std::string vertexPBR()
+        {
+            return R"(#version 450
+// ─────────────────────────────────────────────
+//  Per-vertex attributes
+// ─────────────────────────────────────────────
+// layout(location = 0) in vec3 a_Position;
+// layout(location = 1) in vec3 a_Normal;
+// layout(location = 2) in vec2 a_TexCoord;
+// layout(location = 3) in vec4 a_Tangent;   // xyz = tangent, w = bitangent sign
+
+layout(location = 0) in vec3  a_Position;       // GL_HALF_FLOAT  → 6 bytes
+layout(location = 1) in int   a_NormalPacked;   // GL_INT_2_10_10_10_REV → 4 bytes
+layout(location = 2) in vec2  a_TexCoord;       // GL_HALF_FLOAT  → 4 bytes
+layout(location = 3) in int   a_TangentPacked;  // GL_INT_2_10_10_10_REV → 4 bytes
+
+// ─────────────────────────────────────────────
+//  Uniforms
+// ─────────────────────────────────────────────
+layout(std140, binding = 2) uniform Transform {
+    mat4 model;         // object → world
+    mat4 view;          // world  → camera
+    mat4 projection;    // camera → clip
+    mat3 normalMatrix;  // transpose(inverse(model)), for correct normal transform
+} u_Transform;
+
+// ─────────────────────────────────────────────
+//  Outputs to the fragment shader
+// ─────────────────────────────────────────────
+out VertexData {
+    vec3 FragPos;   // world-space position
+    vec3 Normal;    // world-space normal
+    vec2 TexCoord;  // UV (passed through unchanged)
+    mat3 TBN;       // tangent-space → world-space rotation matrix
+} vs_out;
+
+// ─────────────────────────────────────────────
+//  Main
+// ─────────────────────────────────────────────
+void main() {
+
+    // ── World-space position ──────────────────
+    vec4 worldPos   = u_Transform.model * vec4(a_Position, 1.0);
+    vs_out.FragPos  = worldPos.xyz;
+
+    // ── World-space normal ────────────────────
+    // Use the normal matrix to handle non-uniform scaling correctly.
+    vs_out.Normal   = normalize(u_Transform.normalMatrix * a_Normal);
+
+    // ── UV passthrough ────────────────────────
+    vs_out.TexCoord = a_TexCoord;
+
+    // ── TBN matrix ───────────────────────────
+    // Re-orthogonalise T against N (Gram-Schmidt) so that any slight
+    // imprecision in the mesh data or normal-matrix transform doesn't
+    // cause the basis to become non-orthogonal.
+    vec3 N = vs_out.Normal;
+    vec3 T = normalize(u_Transform.normalMatrix * a_Tangent.xyz);
+    T = normalize(T - dot(T, N) * N);       // make T perpendicular to N
+
+    // a_Tangent.w encodes the handedness of the bitangent (±1).
+    // Using cross(N, T) instead of cross(T, N) keeps a right-handed basis.
+    vec3 B = cross(N, T) * a_Tangent.w;
+
+    // Columns of TBN transform a vector from tangent space to world space,
+    // which is exactly what the fragment shader needs to unpack the normal map.
+    vs_out.TBN = mat3(T, B, N);
+
+    // ── Clip-space position ───────────────────
+    gl_Position = u_Transform.projection
+                * u_Transform.view
+                * worldPos;
+}
+
+)";
+        }
+        
         std::string vertexUSD()
         {
             return R"(#version 450
@@ -68,8 +145,8 @@ void main()
 layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec2 vTexture;
 
-layout(location = 0) out vec2 fTexture;
-layout(location = 1) out vec3 fPos;
+layout(location = 0) out vec3 fPos;
+layout(location = 1) out vec2 fTexture;
 
 layout(set = 0, binding = 0, std140) uniform Transform {
      mat4 mvp;
@@ -86,9 +163,8 @@ void main()
         std::string fragmentUSD()
         {
             return R"(#version 450
-layout(location = 0) in vec2 fTexture;
-layout(location = 1) in vec3 inPosition;
-layout(location = 0) out vec4 outColor;
+layout(location = 0) in vec3 fPos;
+layout(location = 1) in vec2 fTexture;
 
 layout(binding = 1) uniform sampler2D u_DiffuseMap;
 layout(binding = 2) uniform sampler2D u_MetallicMap;
@@ -96,43 +172,147 @@ layout(binding = 3) uniform sampler2D u_RoughnessMap;
 layout(binding = 4) uniform sampler2D u_NormalMap;
 layout(binding = 5) uniform sampler2D u_AOMap;
 
+layout(location = 0) out vec4 outColor;
                   
 layout(push_constant) uniform PushConstants {
     vec4 color;
 } pc;       
                  
+// ─────────────────────────────────────────────
+//  Constants
+// ─────────────────────────────────────────────
+const float PI      = 3.14159265359;
+const float EPSILON = 0.0001;
+
+// ═════════════════════════════════════════════
+//  PBR helper functions
+// ═════════════════════════════════════════════
+
+// Normal Distribution Function – GGX / Trowbridge-Reitz
+float NDF_GGX(float NdotH, float roughness) {
+    float a  = roughness * roughness;
+    float a2 = a * a;
+    float d  = (NdotH * NdotH) * (a2 - 1.0) + 1.0;
+    return a2 / (PI * d * d + EPSILON);
+}
+
+// Geometry function – Smith's method with Schlick-GGX
+float G_SchlickGGX(float NdotV, float roughness) {
+    float r = roughness + 1.0;
+    float k = (r * r) / 8.0;
+    return NdotV / (NdotV * (1.0 - k) + k);
+}
+
+float G_Smith(float NdotV, float NdotL, float roughness) {
+    return G_SchlickGGX(NdotV, roughness)
+         * G_SchlickGGX(NdotL, roughness);
+}
+
+// Fresnel – Schlick approximation
+vec3 Fresnel_Schlick(float cosTheta, vec3 F0) {
+    return F0 + (1.0 - F0) * pow(max(1.0 - cosTheta, 0.0), 5.0);
+}
+
 void main()
 {
-    // Fake a normal from position (assumes object roughly centered at origin)
-    vec3 normal = normalize(inPosition);
+    vec2 uv = fTexture;
 
-    // Simple light direction
-    vec3 lightDir = normalize(vec3(0.0, 0.0, 1.0));
+    // User's material parameters (\todo: pass as UBO)
+    vec4  u_Material_diffuseColor = pc.color;
+    float u_Material_metallic = 1;
+    float u_Material_roughness = 1;
+    float u_Material_aoStrength = 1.0;
 
-    // View direction (assuming camera at origin)
-    vec3 viewDir = normalize(vec3(0.0, 0.0, 1.0));
+    // Scene parameters (\todo: pass as UBO)
+    vec3 u_Scene_camPos    = vec3(0, 0, 0);
+    vec3 u_Scene_lightPos  = vec3(0, 0, 0);
+    vec3 u_Scene_lightColor = vec3(1, 1, 1);
 
-    // Diffuse (Lambert)
-    float diff = max(dot(normal, lightDir), 0.0);
 
-    // Reflection vector
-    vec3 reflectDir = reflect(-lightDir, normal);
+    // ── Sample textures ───────────────────────
+    vec3  albedo    = texture(u_DiffuseMap,   uv).rgb * u_Material_diffuseColor.rgb;
+    float metallic  = texture(u_MetallicMap,  uv).r * u_Material_metallic;
+    float roughness = texture(u_RoughnessMap, uv).r * u_Material_roughness;
+    float ao        = mix(1.0, texture(u_AOMap, uv).r, u_Material_aoStrength);
 
-    // Phong specular
-    float shininess = texture(u_RoughnessMap, fTexture).r;
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+    // Clamp to physically plausible range
+    roughness = clamp(roughness, 0.05, 1.0);
+    metallic  = clamp(metallic,  0.0,  1.0);
 
-    // Specular strength
-    vec3 specStrength = texture(u_MetallicMap, fTexture).rgb + vec3(0.5);
+    // ── Normal from normal map ────────────────
+    vec3 Nt  = texture(u_NormalMap, uv).rgb * 2.0 - 1.0; // [0,1] → [-1,1]
+    // vec3 N   = normalize(fs_in.TBN * Nt);                 // tangent → world space
 
-    // Add a bit of ambient so it's not fully black
-    float ambient = 0.2;
+    // \@todo: -faceted- normal (see above for correct calculation)
+    vec3 dx = dFdx(fPos);
+    vec3 dy = dFdy(fPos);
+    // vec3 N = normalize(cross(dx, dy) + Nt);
+    vec3 N = normalize(cross(dx, dy));
 
-    vec3 txt = texture(u_DiffuseMap, fTexture).rgb + pc.color.rgb;
+    // ── Lighting vectors ──────────────────────
+    vec3 V = normalize(fPos - u_Scene_camPos);
 
-    vec3 finalColor = txt * (ambient + diff) + vec3(specStrength * spec);
+    //vec3 V = vec3(0, 0, 1);  // correct
+    vec3 L = normalize(u_Scene_lightPos - fPos); // correct
+    vec3 H = normalize(V + L);
 
-    outColor = vec4(finalColor, pc.color.a);
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float NdotH = max(dot(N, H), 0.0);
+    float HdotV = max(dot(H, V), 0.0);
+
+    // ── Base reflectance (F0) ─────────────────
+    // Dialectrics use 0.04; metals use their albedo colour.
+    vec3 F0 = mix(vec3(0.04), albedo, metallic);
+
+    // ── Cook-Torrance specular BRDF ───────────
+    float NDF = NDF_GGX(NdotH, roughness);
+    float G   = G_Smith(NdotV, NdotL, roughness);
+    vec3  F   = Fresnel_Schlick(HdotV, F0);
+
+    vec3 numerator   = NDF * G * F;
+    float denominator = 4.0 * NdotV * NdotL + EPSILON;
+    vec3 specular     = numerator / denominator;
+
+    // ── Diffuse (Lambertian) ──────────────────
+    // Energy conservation: metals have no diffuse.
+    vec3 kD = (vec3(1.0) - F) * (1.0 - metallic);
+    vec3 diffuse = kD * albedo / PI;
+
+    // // // Diffuse (Lambert)
+    // float diff = max(dot(N, L), 0.0);
+    // diffuse = vec3(diff) * albedo;
+
+    // ── Radiance & final colour ───────────────
+    float dist     = length(u_Scene_lightPos - fPos);
+    float atten    = 1.0 / (dist * dist);          // inverse-square falloff
+    vec3  radiance = u_Scene_lightColor; // * atten;
+ 
+    vec3 Lo = (diffuse + specular) * radiance * NdotL;
+
+    // Simple ambient term, attenuated by AO ( was 0.03)
+    vec3 ambient = vec3(0.03) * albedo * ao;
+
+    vec3 color = ambient + diffuse + specular;
+
+    // ── Tone mapping (Reinhard) + gamma  ───────  WRONG
+    // color = color / (color + vec3(1.0));            // HDR → LDR
+    // color = pow(color, vec3(1.0 / 2.2));            // linear → sRGB
+
+    outColor = vec4(color, pc.color.a);
+
+      // VERIFIED: albedo and ao are okay.
+
+     // VERIFIED: Ambient occlusion looks really nice at 1
+     // outColor = vec4(ambient, pc.color.a);
+
+    // VERIFIED: normal (N) is faceted but correct!
+    // outColor = vec4((N + 1) / 2, pc.color.a);
+
+    // VERIFIED: specular is correct
+    // outColor = vec4(specular, pc.color.a);
+
+    // VERIFIED: normal mapping does not work correctly?
 })";
         }
         
