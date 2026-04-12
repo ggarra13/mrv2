@@ -266,6 +266,7 @@ namespace tl
         void Render::draw3DMesh(const geom::TriangleMesh3& mesh,
                                 const math::Matrix4x4f& matrix,
                                 const image::Color4f& color,
+                                const std::string& shaderId,
                                 const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
                                 const bool enableBlending,
                                 const VkBlendFactor srcColorBlendFactor,
@@ -287,16 +288,16 @@ namespace tl
 
             const auto transform = p.transform * matrix;
             
-            if (0) //!mesh.t.empty() && textures.size() != 0)
+            if (shaderId.empty() || shaderId == "dummy" || textures.empty())
             {
-                shaderName = "pbr";
+                shaderName = "dummy";
                 pipelineName = pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);
                 
-                p.shaders[shaderName]->bind(p.frameIndex);                
+                p.shaders[shaderName]->bind(p.frameIndex);        
             }
-            else
+            else if (shaderId == "UsdPreviewSurface")
             {
                 shaderName = "usd";
                 pipelineName = pipelineLayoutName = shaderName;
@@ -304,20 +305,24 @@ namespace tl
                 _createBindingSet(p.shaders[shaderName]);
                 
                 p.shaders[shaderName]->bind(p.frameIndex);
+                
+                auto i = textures.find(USD_DiffuseMap);
+                p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
+                i = textures.find(USD_MetallicMap);
+                p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
+                i = textures.find(USD_RoughnessMap);
+                p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
+                i = textures.find(USD_NormalMap);
+                p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
+                i = textures.find(USD_AOMap);
+                p.shaders[shaderName]->setTexture("u_AOMap", i->second);
+                i = textures.find(USD_OpacityMap);
+                p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
             }
-            
-            auto i = textures.find(USD_DiffuseMap);
-            p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
-            i = textures.find(USD_MetallicMap);
-            p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
-            i = textures.find(USD_RoughnessMap);
-            p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
-            i = textures.find(USD_NormalMap);
-            p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
-            i = textures.find(USD_AOMap);
-            p.shaders[shaderName]->setTexture("u_AOMap", i->second);
-            i = textures.find(USD_OpacityMap);
-            p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
+            else
+            {
+                throw std::runtime_error("Unknown shader type " + shaderId);
+            }
                 
             createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                            shaderName, meshName, enableBlending,

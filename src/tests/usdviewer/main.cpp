@@ -1,11 +1,9 @@
 
 #define PRINT_STATS 0
-#define PRINT_TEXTURES 1
 #define BAKE_JOINTS 1
 
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
-#include "USDGetTexturePath.h"
-#include "USDResolveTexture.h"
+#include "USDCollectTextures.h"
 
 #include <pxr/pxr.h>
 
@@ -36,7 +34,6 @@
 #include <pxr/usd/usdGeom/basisCurves.h>
 #include <pxr/usd/usdGeom/bboxCache.h>
 #include <pxr/usd/usdGeom/camera.h>
-#include <pxr/usd/usdGeom/imageable.h>
 #include <pxr/usd/usdGeom/mesh.h>
 #include <pxr/usd/usdGeom/metrics.h>
 #include <pxr/usd/usdGeom/nurbsCurves.h>
@@ -281,7 +278,7 @@ struct usd_window::Private
     // Vulkan information.
     bool collectTextures = true;
     VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
-    std::unordered_map<std::string, std::unordered_map<int, std::shared_ptr<vlk::Texture> > > textures;
+    std::unordered_map<std::string, tl::usd::ShaderTextures > textures;
 
     //! tlRender context
     std::shared_ptr<system::Context> context;
@@ -686,239 +683,7 @@ void usd_window::draw()
     if (p.collectTextures)
     {
         p.collectTextures = false;
-
-        // Create an empty texture
-        image::Info info(1, 1, image::PixelType::L_U8);
-        std::shared_ptr<image::Image> img = image::Image::create(info);
-        memset(img->getData(), 0, img->getDataByteCount());
-        
-        auto emptyTexture = vlk::Texture::create(ctx, info);
-        emptyTexture->copy(img);
-        emptyTexture->transitionToShaderRead(cmd);
-
-        // Create a gray texture
-        memset(img->getData(), 128, img->getDataByteCount());
-        
-        auto middleTexture = vlk::Texture::create(ctx, info);
-        middleTexture->copy(img);
-        middleTexture->transitionToShaderRead(cmd);
-        
-        // Create a filled texture
-        memset(img->getData(), 255, img->getDataByteCount());
-        
-        auto filledTexture = vlk::Texture::create(ctx, info);
-        filledTexture->copy(img);
-        filledTexture->transitionToShaderRead(cmd);
-        
-        // Collect textures.
-        UsdPrimRange range(p.stage->GetPseudoRoot(),
-                           UsdTraverseInstanceProxies());
-
-        std::cout << "Started Reading textures..." << std::endl;
-        std::unordered_map<std::string, std::shared_ptr<vlk::Texture > >
-            textureCache;
-        
-        for (auto it = range.begin(); it != range.end(); ++it) {
-
-            //
-            // Ignore hidden geometry
-            //
-            if (it->IsA<UsdGeomImageable>()) {
-                UsdGeomImageable imageable(*it);
-            
-                if (imageable.ComputeVisibility(p.time) ==
-                    UsdGeomTokens->invisible) {
-                    // If this prim is invisible, its entire subtree is invisible.
-                    // Prune the traversal to skip all children.
-                    it.PruneChildren();
-                    continue;
-                }
-
-                // If purpose is not default or not render, don't use this
-                // geometry.
-                TfToken purpose = imageable.ComputePurpose();
-                if (purpose != UsdGeomTokens->default_ &&
-                    purpose != UsdGeomTokens->render)
-                    continue;
-
-                std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-                std::shared_ptr<vlk::Texture > texture;
-                std::string file;
-
-                file = usd::GetTexturePath(*it, TfToken("diffuseColor"));
-                if (!file.empty())
-                {
-#if PRINT_TEXTURES
-                    std::cout << "Found diffuseColor texture " << file << std::endl;
-#endif
-                    auto i = textureCache.find(file);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, file);
-                        texture->transitionToShaderRead(cmd);
-                        textureCache[file] = texture;
-                    }
-                    else
-                    {
-                        texture = i->second;
-                    }
-                    textures[USD_DiffuseMap] = texture;
-                }
-                else
-                {
-                    textures[USD_DiffuseMap] = filledTexture;
-                }
-                
-                file = usd::GetTexturePath(*it, TfToken("opacity"));
-                if (!file.empty())
-                {
-#if PRINT_TEXTURES
-                    std::cout << "Found opacity texture " << file << std::endl;
-#endif
-                    auto i = textureCache.find(file);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, file);
-                        texture->transitionToShaderRead(cmd);
-                        textureCache[file] = texture;
-                    }
-                    else
-                    {
-                        texture = i->second;
-                    }
-                    textures[USD_OpacityMap] = texture;
-                }
-                else
-                {
-                    textures[USD_OpacityMap] = filledTexture;
-                }
-                
-                //
-                // Correct
-                //
-                file = usd::GetTexturePath(*it, TfToken("metallic"));
-                if (!file.empty())
-                {
-#if PRINT_TEXTURES
-                    std::cout << "Found metallic texture " << file << std::endl;
-#endif
-                    auto i = textureCache.find(file);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, file);
-                        texture->transitionToShaderRead(cmd);
-                        textureCache[file] = texture;
-                    }
-                    else
-                    {
-                        texture = i->second;
-                    }
-                    textures[USD_MetallicMap] = texture;
-                }
-                else
-                {
-                    textures[USD_MetallicMap] = emptyTexture;
-                }
-
-
-                //
-                // Correct
-                //
-                file = usd::GetTexturePath(*it, TfToken("roughness"));
-                if (!file.empty())
-                {
-#if PRINT_TEXTURES
-                    std::cout << "Found roughness texture " << file << std::endl;
-#endif
-                    auto i = textureCache.find(file);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, file);
-                        texture->transitionToShaderRead(cmd);
-                        textureCache[file] = texture;
-                    }
-                    else
-                    {
-                        texture = i->second;
-                    }
-                    textures[USD_RoughnessMap] = texture;
-                }
-                else
-                {
-                    textures[USD_RoughnessMap] = emptyTexture;
-                }
-                
-                //
-                // Correct
-                //
-                file = usd::GetTexturePath(*it, TfToken("normal"));
-                if (!file.empty())
-                {
-#if PRINT_TEXTURES
-                    std::cout << "Found normal texture " << file << std::endl;
-#endif
-                    auto i = textureCache.find(file);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, file);
-                        texture->transitionToShaderRead(cmd);
-                        textureCache[file] = texture;
-                    }
-                    else
-                    {
-                        texture = i->second;
-                    }
-                    textures[USD_NormalMap] = texture;
-                }
-                else
-                {
-                    textures[USD_NormalMap] = middleTexture;
-                }
-                
-                file = usd::GetTexturePath(*it, TfToken("occlusion"));
-                if (!file.empty())
-                {
-#if PRINT_TEXTURES
-                    std::cout << "Found occlusion texture " << file << std::endl;
-#endif
-                    auto i = textureCache.find(file);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, file);
-                        texture->transitionToShaderRead(cmd);
-                        textureCache[file] = texture;
-                    }
-                    else
-                    {
-                        texture = i->second;
-                    }
-                    textures[USD_AOMap] = texture;
-                }
-                else
-                {
-                    textures[USD_AOMap] = filledTexture;
-                }
-                
-                // file = usd::GetTexturePath(*it, TfToken("displacement"));
-                // if (!file.empty())
-                // {
-#if PRINT_TEXTURES
-               // std::cout << "Found displacement texture " << file << std::endl;
-#endif
-                //     texture = vlk::ResolveTexture(ctx, file);
-                //     texture->transitionToShaderRead(cmd);
-                //     textures[USD_DisplacementMap] = texture;
-                // }
-                // else
-                // {
-                //     textures[USD_DisplacementMap] = emptyTexture;
-                // }
-
-                const std::string primPath = it->GetPath().GetString();
-                p.textures[primPath] = textures;
-            }
-        }
-        std::cout << "Finished Reading Textures..." << std::endl;
+        usd::CollectTextures(ctx, cmd, p.stage, p.time, p.textures);
     }
 
     const double time = p.time;
@@ -1053,6 +818,7 @@ void usd_window::draw()
             gprim.GetDisplayColorAttr().Get(&colors);
 
         image::Color4f color(0.5F, 0.5F, 0.5F);
+        std::string shaderName;
         if (colors.size() == 0)
         {
             UsdShadeMaterial material = UsdShadeMaterialBindingAPI(*it).
@@ -1060,6 +826,9 @@ void usd_window::draw()
             if (material)
             {
                 UsdShadeShader shader = material.ComputeSurfaceSource();
+                TfToken shaderId;
+                shader.GetIdAttr().Get(&shaderId);
+                shaderName = shaderId.GetString();
                 if (shader)
                 {
                     GfVec3f diffuse;
@@ -1094,7 +863,7 @@ void usd_window::draw()
             UsdGeomMesh usdMesh = UsdGeomMesh(*it);
 
             //bool doubleSided = usdMesh.GetDoubleSidedAttr().Get();
-            //std::cerr << primPath << " not double sided" << std::endl;
+            //std::cerr << primPath << " double sided=" << doubleSided << std::endl;
 
             // -------------------------
             // 1. VERTICES (Points)
@@ -1121,7 +890,7 @@ void usd_window::draw()
                 geom.v.push_back(math::Vector3f(p[0], p[1], p[2]));
             }
 
-            // Get Normals.
+            // Get Normals if any.
             UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
             UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
             if (normalsPrimvar.IsDefined()) {
@@ -1164,6 +933,9 @@ void usd_window::draw()
                 }
             }
 
+            //
+            // Get UVs (st)
+            //
             UsdGeomPrimvar st = primvarsAPI.GetPrimvar(TfToken("st"));
             if (st.IsDefined()) {
                 
@@ -1298,9 +1070,16 @@ void usd_window::draw()
                 if (i != p.textures.end())
                 {
                     textures = i->second;
+                    shaderName = "UsdPreviewSurface";
                 }
             }
-            p.render->draw3DMesh(geom, modelMatrix, color, textures);
+            else
+            {
+                shaderName = "dummy";
+            }
+            
+            p.render->draw3DMesh(geom, modelMatrix, color, shaderName,
+                                 textures);
         }
         else if (it->IsA<UsdGeomNurbsPatch>())
         {
@@ -1336,7 +1115,8 @@ void usd_window::draw()
                 }
             }
             
-            p.render->draw3DMesh(geom, modelMatrix, color, textures);
+            p.render->draw3DMesh(geom, modelMatrix, color,
+                                 shaderName, textures);
         }
         // \@todo: cylinder
     }
@@ -1479,6 +1259,11 @@ void usd_window::setUSDFile(const std::string& fileName)
 
     
     p.stage = UsdStage::Open(fileName);
+    if (!p.stage)
+    {
+        std::cerr << "Could not read stage.  Aborting..." << std::endl;
+        exit(1);
+    }
 
     p.startTimeCode = p.stage->GetStartTimeCode();
     p.endTimeCode   = p.stage->GetEndTimeCode();
@@ -1486,14 +1271,14 @@ void usd_window::setUSDFile(const std::string& fileName)
     p.time = p.startTimeCode;
 
 #if BAKE_JOINTS
-
+    std::cout << "Baking joints..." << std::endl;
     // Bake the all skeletons and bound geometry over the time range.
     // \@todo: this is done on the CPU (slow) and it uses a lot of memory.
     UsdPrimRange range(p.stage->GetPseudoRoot(),
                        UsdTraverseInstanceProxies());
     GfInterval interval(p.startTimeCode, p.endTimeCode);
     UsdSkelBakeSkinning(range, interval);
-
+    std::cout << "Baked joints..." << std::endl;
 #endif
     
     double timeout = 1.0 / p.timeCodesPerSecond;

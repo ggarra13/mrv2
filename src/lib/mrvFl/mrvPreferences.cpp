@@ -378,10 +378,14 @@ namespace mrv
         uiPrefs->uiPrefsOCIOInTopBar->value((bool)tmp);
 
         view.get("debanding", tmp, 0);
+
+#ifdef VULKAN_BACKEND
         if (tmp != 0)
         {
             LOG_WARNING(_("Debanding is not set to None.  This can make images show blurred"));
         }
+#endif
+        
         uiPrefs->uiPrefsDebanding->value(tmp);
         
         view.get("video_levels", tmp, 0);

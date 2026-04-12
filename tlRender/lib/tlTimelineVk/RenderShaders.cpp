@@ -34,8 +34,7 @@ void main()
         std::string fragmentDummy()
         {
             return R"(#version 450
-layout(location = 0) in vec3 inPosition;
-layout(location = 1) in vec3 inNormal;
+layout(location = 0) in vec3 fPos;
 layout(location = 0) out vec4 outColor;
                   
 layout(push_constant) uniform PushConstants {
@@ -44,13 +43,15 @@ layout(push_constant) uniform PushConstants {
                  
 void main()
 {
-    vec3 normal = inNormal;
+    vec3 dx = dFdx(fPos);
+    vec3 dy = dFdy(fPos);
+    vec3 N = normalize(cross(dx, dy));
 
     // Simple light direction
-    vec3 lightDir = normalize(vec3(0.5, 0.5, 1.0));
+    vec3 L = normalize(vec3(0.0, 0.0, -1.0));
 
     // Diffuse (Lambert)
-    float diff = max(dot(normal, lightDir), 0.0);
+    float diff = max(dot(N, L), 0.0);
 
     // Add a bit of ambient so it's not fully black
     float ambient = 0.2;
@@ -224,7 +225,8 @@ void main()
     float u_Material_roughness = 1;
     float u_Material_aoStrength = 1.0;
 
-    // Scene parameters (\todo: pass as UBO)
+    // Scene parameters (\todo: pass as UBO? Not needed for a single light from
+    //                          camera)
     vec3 u_Scene_camPos    = vec3(0, 0, 0);
     vec3 u_Scene_lightPos  = vec3(0, 0, 0);
     vec3 u_Scene_lightColor = vec3(1, 1, 1);
@@ -296,11 +298,12 @@ void main()
 
     vec3 color = ambient + diffuse + specular;
 
-    // ── Tone mapping (Reinhard) + gamma  ───────  WRONG
+    // ── Tone mapping (Reinhard) + gamma  ───────  WRONG AND UNNEEDED
+    //    If we merge it into vmrv2, we can use libplacebo directly.
     // color = color / (color + vec3(1.0));            // HDR → LDR
     // color = pow(color, vec3(1.0 / 2.2));            // linear → sRGB
 
-    outColor = vec4(color, opacity);
+    outColor = vec4(color * opacity, opacity);
 
     // VERIFIED: albedo and ao are okay.
 
@@ -316,9 +319,11 @@ void main()
     // VERIFIED: specular is correct 
     // outColor = vec4(specular, opacity);
 
+    // VERIFIED: opacity works correctly.
+    // outColor = vec4(vec3(opacity), opacity);
+
     // INCORRECT: normal mapping does not work correctly.
 
-    // INCORRECT: opacity does not work correctly.
 })";
         }
         

@@ -174,6 +174,7 @@ namespace tl
             void draw3DMesh(const geom::TriangleMesh3&,
                             const math::Matrix4x4f&,
                             const image::Color4f&,
+                            const std::string& shaderName,
                             const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
                             const bool enableBlending = false,
                             const VkBlendFactor srcColorBlendFactor =

@@ -1,4 +1,5 @@
 
+#include "USDGetTextureOrValue.h"
 
 #include <memory>
 #include <string>
@@ -11,7 +12,8 @@ namespace tl
     {
         class Texture;
         
-        std::shared_ptr<Texture> ResolveTexture(Fl_Vk_Context& ctx,
-                                                const std::string& resolvedPath);
+        std::shared_ptr<Texture> ResolveTexture(
+            Fl_Vk_Context& ctx,
+            const usd::ShaderInputResult& result);
     }
 }
