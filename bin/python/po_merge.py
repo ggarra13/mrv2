@@ -86,6 +86,7 @@ class POMergeMissing:
         print('Creating merged',merged_file)
         target_po.save(merged_file)
 
+        os.remove(missing_po)
 
 def merge_missing(lang):
 

@@ -212,7 +212,11 @@ El menú de Render provee controles para modificar la representación de la imag
 .. topic:: Mezcla Alfa
 
    Puede seleccionar como se maneja el canal alfa cuando la imagen o vídeo tiene uno.  Puede elegir entre Ninguna, Derecha o Premultiplicada.  Las imágenes de OpenEXR deben ser, normalmente, compuestas con alfa Premultiplicada.
-      
+   
+.. topic:: Debanding (Vulkan only)
+
+   Con esta opcion puede suavizar áreas de la imagen que tienen  dients by running a localized blur filter.  It is useful mainly for video files which are susceptible to banding.  However, for professional video work when seeing images, it should probably be turned off.
+
 .. topic:: Filtros de Minificación y Magnificación
 
    Con estos dos controles, puede seleccionar cómo mrv2 muestra las imágenes cuando está de cerca o de lejos.  Puede elegir en usar un Filtro de Cercanía (Pixelado) o uno Lineal.  El Filtro de Magnificación puede ser alternado con Shift + F.
@@ -264,7 +268,7 @@ El menú de línea de tiempo provee controles para modificar la ventana gráfica
 
    Con esto prendido, podés mostrar las transiciones de audio y vídeo en
    archivos .otio.
-   (Actualmente no implementado en v1.5.3).
+   (Actualmente no implementado en v1.5.4).
 
 .. topic:: Marcadores
 

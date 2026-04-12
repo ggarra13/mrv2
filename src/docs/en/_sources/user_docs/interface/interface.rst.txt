@@ -212,6 +212,10 @@ The Render menu provides controls for modifying the rendering of the image on th
 
    You can select how the alpha channel is handled when the image or video has one.  You can choose between None, Straight or Premultiplied.  OpenEXR images should, normally, be comped Premultiplied.
       
+.. topic:: Eliminación de bandas (solo Vulkan)
+
+Con esta opción, se pueden suavizar áreas de la imagen donde hay gradientes mediante la aplicación de un filtro de desenfoque localizado. Es útil principalmente para archivos de video que son propensos al efecto de bandas. Sin embargo, para trabajos profesionales de video al revisar imágenes, probablemente debería desactivarse.
+
 .. topic:: Minify and Magnify Filters
 
    With these two controls, you can select how mrv2 displays the images when zoomed in or zoomed out.  You can choose whether to use a Nearest (Pixelated) Filter or a Linear one.  The Magnify Filter can be toggled with Shift + F.
@@ -261,7 +265,7 @@ The Timeline menu provides controls for modifying the timeline viewport at the b
 .. topic:: Transitions
 
    With this on, you can show audio and video transitions in .otio files.
-   (Currently not implemented in v1.5.3).
+   (Currently not implemented in v1.5.4).
 
 .. topic:: Markers
 

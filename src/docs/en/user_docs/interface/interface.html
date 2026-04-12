@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The mrv2 Interface &mdash; mrv2 v1.5.4 documentation</title>
+  <title>The mrv2 Interface &mdash; mrv2 v1.6.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=e762a7cc"></script>
+      <script src="../../_static/documentation_options.js?v=1aec6df3"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -324,6 +324,7 @@ images (.hdr or OpenEXR) will get shown in red.</p>
 <p class="topic-title">Alpha Blend</p>
 <p>You can select how the alpha channel is handled when the image or video has one.  You can choose between None, Straight or Premultiplied.  OpenEXR images should, normally, be comped Premultiplied.</p>
 </aside>
+<p>Con esta opción, se pueden suavizar áreas de la imagen donde hay gradientes mediante la aplicación de un filtro de desenfoque localizado. Es útil principalmente para archivos de video que son propensos al efecto de bandas. Sin embargo, para trabajos profesionales de video al revisar imágenes, probablemente debería desactivarse.</p>
 <aside class="topic">
 <p class="topic-title">Minify and Magnify Filters</p>
 <p>With these two controls, you can select how mrv2 displays the images when zoomed in or zoomed out.  You can choose whether to use a Nearest (Pixelated) Filter or a Linear one.  The Magnify Filter can be toggled with Shift + F.</p>
@@ -371,7 +372,7 @@ resolutions.</p>
 <aside class="topic">
 <p class="topic-title">Transitions</p>
 <p>With this on, you can show audio and video transitions in .otio files.
-(Currently not implemented in v1.5.3).</p>
+(Currently not implemented in v1.5.4).</p>
 </aside>
 <aside class="topic">
 <p class="topic-title">Markers</p>

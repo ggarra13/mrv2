@@ -454,7 +454,6 @@ if (APPLE)
     add_subdirectory(launcher)
 endif()
 
-
 if (MRV2_BACKEND STREQUAL "VK")
     add_subdirectory(tests)
 else()

@@ -61,6 +61,7 @@ Change Log
 - Switched to Environment Map creation function to use tlRender's Matrix library instead of depending on Imath.
 - Added toggling USD's enableSceneLights in OpenGL backend.
 - Added toggling USD's enableSceneMaterials in OpenGL backend.
+- On vmrv2, made Debanding default to None as it was messing artists' viewing of images. If you already started vmrv2, you should change Window->Preferences->User Interface->Render->Debanding.
 
 
 v1.6.1
