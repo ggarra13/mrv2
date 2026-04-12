@@ -218,7 +218,7 @@ void main()
     vec2 uv = fTexture;
 
     // User's material parameters (\todo: pass as UBO)
-    vec4  u_Material_diffuseColor = pc.color;
+    vec4  u_Material_diffuseColor = vec4(1,1,1,1); //pc.color;
     float u_Material_metallic = 1;
     float u_Material_roughness = 1;
     float u_Material_aoStrength = 1.0;
@@ -233,7 +233,8 @@ void main()
     vec3  albedo    = texture(u_DiffuseMap,   uv).rgb * u_Material_diffuseColor.rgb;
     float metallic  = texture(u_MetallicMap,  uv).r * u_Material_metallic;
     float roughness = texture(u_RoughnessMap, uv).r * u_Material_roughness;
-    float ao        = mix(1.0, texture(u_AOMap, uv).r, u_Material_aoStrength);
+    float aoMap     = texture(u_AOMap, uv).r;
+    float ao        = mix(1.0, aoMap, u_Material_aoStrength);
 
     // Clamp to physically plausible range
     roughness = clamp(roughness, 0.05, 1.0);
@@ -246,14 +247,17 @@ void main()
     // \@todo: -faceted- normal (see above for correct calculation)
     vec3 dx = dFdx(fPos);
     vec3 dy = dFdy(fPos);
-    // vec3 N = normalize(cross(dx, dy) + Nt);
     vec3 N = normalize(cross(dx, dy));
 
-    // ── Lighting vectors ──────────────────────
-    vec3 V = normalize(fPos - u_Scene_camPos);
+    // Normal mapping cannot be done in local space.
+    // vec3 N = normalize(cross(dx, dy) + Nt);
 
-    //vec3 V = vec3(0, 0, 1);  // correct
-    vec3 L = normalize(u_Scene_lightPos - fPos); // correct
+    // ── Lighting vectors ──────────────────────
+    //vec3 V = normalize(fPos - u_Scene_camPos);  // correct
+
+    vec3 V = vec3(0, 0, -1);  // correct
+    // vec3 L = normalize(u_Scene_lightPos - fPos); // incorrect
+    vec3 L = normalize(vec3(0, 0, -1)); // correct
     vec3 H = normalize(V + L);
 
     float NdotV = max(dot(N, V), 0.0);
@@ -279,10 +283,6 @@ void main()
     vec3 kD = (vec3(1.0) - F) * (1.0 - metallic);
     vec3 diffuse = kD * albedo / PI;
 
-    // // // Diffuse (Lambert)
-    // float diff = max(dot(N, L), 0.0);
-    // diffuse = vec3(diff) * albedo;
-
     // ── Radiance & final colour ───────────────
     float dist     = length(u_Scene_lightPos - fPos);
     float atten    = 1.0 / (dist * dist);          // inverse-square falloff
@@ -291,7 +291,7 @@ void main()
     vec3 Lo = (diffuse + specular) * radiance * NdotL;
 
     // Simple ambient term, attenuated by AO ( was 0.03)
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 ambient = vec3(0.1) * albedo * ao;
 
     vec3 color = ambient + diffuse + specular;
 
@@ -301,15 +301,18 @@ void main()
 
     outColor = vec4(color, pc.color.a);
 
-      // VERIFIED: albedo and ao are okay.
+    // VERIFIED: albedo and ao are okay.
 
-     // VERIFIED: Ambient occlusion looks really nice at 1
-     // outColor = vec4(ambient, pc.color.a);
+    // VERIFIED: Ambient occlusion works correctly
+    // outColor = vec4(ambient, pc.color.a);
 
     // VERIFIED: normal (N) is faceted but correct!
     // outColor = vec4((N + 1) / 2, pc.color.a);
 
-    // VERIFIED: specular is correct
+    // VERIFIED: diffuse is correct for metallic
+    //outColor = vec4(diffuse, pc.color.a);
+
+    // VERIFIED: specular is correct 
     // outColor = vec4(specular, pc.color.a);
 
     // VERIFIED: normal mapping does not work correctly?

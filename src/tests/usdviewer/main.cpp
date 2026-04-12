@@ -687,11 +687,28 @@ void usd_window::draw()
     {
         p.collectTextures = false;
 
-        // Create an empty 1 byte texture
+        // Create an empty texture
         image::Info info(1, 1, image::PixelType::L_U8);
+        std::shared_ptr<image::Image> img = image::Image::create(info);
+        memset(img->getData(), 0, img->getDataByteCount());
+        
         auto emptyTexture = vlk::Texture::create(ctx, info);
-        const uint8_t data = 0;
-        emptyTexture->copy(&data, 1);
+        emptyTexture->copy(img);
+        emptyTexture->transitionToShaderRead(cmd);
+
+        // Create a gray texture
+        memset(img->getData(), 128, img->getDataByteCount());
+        
+        auto middleTexture = vlk::Texture::create(ctx, info);
+        middleTexture->copy(img);
+        middleTexture->transitionToShaderRead(cmd);
+        
+        // Create a filled texture
+        memset(img->getData(), 255, img->getDataByteCount());
+        
+        auto filledTexture = vlk::Texture::create(ctx, info);
+        filledTexture->copy(img);
+        filledTexture->transitionToShaderRead(cmd);
         
         // Collect textures.
         UsdPrimRange range(p.stage->GetPseudoRoot(),
@@ -736,7 +753,7 @@ void usd_window::draw()
                 }
                 else
                 {
-                    textures[USD_DiffuseMap] = emptyTexture;
+                    textures[USD_DiffuseMap] = filledTexture;
                 }
                 
                 //
@@ -791,7 +808,7 @@ void usd_window::draw()
                 }
                 else
                 {
-                    textures[USD_NormalMap] = emptyTexture;
+                    textures[USD_NormalMap] = middleTexture;
                 }
                 
                 file = usd::GetTexturePath(*it, TfToken("occlusion"));
@@ -806,7 +823,7 @@ void usd_window::draw()
                 }
                 else
                 {
-                    textures[USD_AOMap] = emptyTexture;
+                    textures[USD_AOMap] = filledTexture;
                 }
                 
                 // file = usd::GetTexturePath(*it, TfToken("displacement"));

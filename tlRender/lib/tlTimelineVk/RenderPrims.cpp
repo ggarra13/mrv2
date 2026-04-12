@@ -294,27 +294,11 @@ namespace tl
 
                 _createBindingSet(p.shaders[shaderName]);
                 
-                p.shaders[shaderName]->bind(p.frameIndex);
-                
-                auto i = textures.find(USD_DiffuseMap);
-                if (i != textures.end())
-                    p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
-                i = textures.find(USD_MetallicMap);
-                if (i != textures.end())
-                    p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
-                i = textures.find(USD_RoughnessMap);
-                if (i != textures.end())
-                    p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
-                i = textures.find(USD_NormalMap);
-                if (i != textures.end())
-                    p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
-                i = textures.find(USD_AOMap);
-                if (i != textures.end())
-                    p.shaders[shaderName]->setTexture("u_AOMap", i->second);
+                p.shaders[shaderName]->bind(p.frameIndex);                
             }
             else
             {
-                shaderName = "dummy";
+                shaderName = "usd";
                 pipelineName = pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);
@@ -322,16 +306,16 @@ namespace tl
                 p.shaders[shaderName]->bind(p.frameIndex);
             }
             
-            // auto i = textures.find(USD_DiffuseMap);
-            // p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
-            // i = textures.find(USD_MetallicMap);
-            // p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
-            // i = textures.find(USD_RoughnessMap);
-            // p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
-            // i = textures.find(USD_NormalMap);
-            // p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
-            // i = textures.find(USD_AOMap);
-            // p.shaders[shaderName]->setTexture("u_AOMap", i->second);
+            auto i = textures.find(USD_DiffuseMap);
+            p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
+            i = textures.find(USD_MetallicMap);
+            p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
+            i = textures.find(USD_RoughnessMap);
+            p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
+            i = textures.find(USD_NormalMap);
+            p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
+            i = textures.find(USD_AOMap);
+            p.shaders[shaderName]->setTexture("u_AOMap", i->second);
                 
             createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                            shaderName, meshName, enableBlending,

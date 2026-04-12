@@ -456,8 +456,9 @@ endif()
 
 if (MRV2_BACKEND STREQUAL "VK")
     add_subdirectory(tests)
-else()
-    # Since on GL backend we have OpenUSD *and* Vulkan, compile usdviewer
+endif()
+
+if (TLRENDER_VK AND TLRENDER_USD)
     add_subdirectory(tests/usdviewer)
 endif()
 
