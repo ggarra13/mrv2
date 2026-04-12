@@ -17,9 +17,23 @@ namespace tl
         namespace
         {
             void FillEmptyShaderInputResult(ShaderInputResult& result,
+                                            const UsdPrim&   prim,
                                             const TfToken& inputName)
             {
                 result.hasValue = true;
+                
+                VtArray<GfVec3f> colors;
+                UsdGeomGprim gprim(prim);
+                if (gprim)
+                    gprim.GetDisplayColorAttr().Get(&colors);
+                if (inputName == TfToken("diffuseColor") && colors.size() == 1)
+                {
+                    result.value[0] = colors[0][0];
+                    result.value[1] = colors[0][1];
+                    result.value[2] = colors[0][2];
+                    result.value[3] = colors[0][3];
+                    return;
+                }
                 
                 if (inputName == TfToken("diffuseColor") ||
                     inputName == TfToken("opacity") ||
@@ -125,7 +139,7 @@ namespace tl
             {
                 if (debug) std::cerr << "Did not find material for "
                                      << prim.GetPath().GetString() << std::endl;
-                FillEmptyShaderInputResult(result, inputName);
+                FillEmptyShaderInputResult(result, prim, inputName);
                 return result;
             }
 
@@ -150,12 +164,12 @@ namespace tl
                         if (fileInput.Get(&assetPath))
                             result.texturePath = assetPath.GetResolvedPath();
                         else
-                            FillEmptyShaderInputResult(result, inputName);
+                            FillEmptyShaderInputResult(result, prim, inputName);
                     }
                 }
                 else
                 {
-                    FillEmptyShaderInputResult(result, inputName);
+                    FillEmptyShaderInputResult(result, prim, inputName);
                 }
                 return result;
             }
@@ -170,7 +184,7 @@ namespace tl
             {
                 if (debug) std::cerr << "Did not find "
                                      << inputName.GetString() << " input." << std::endl;
-                FillEmptyShaderInputResult(result, inputName);
+                FillEmptyShaderInputResult(result, prim, inputName);
                 return result;
             }
 
