@@ -438,6 +438,7 @@ namespace tl
                 }
                 break;
             default:
+                throw std::runtime_error("Could not convert mesh");
                 break;
             }
             return out;
@@ -460,7 +461,7 @@ namespace tl
 
             p.size = size;
             p.type = type;
-
+            
             p.bindingDesc.resize(1);
             p.bindingDesc[0].binding = 0;
             p.bindingDesc[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
@@ -531,6 +532,46 @@ namespace tl
                     {1, 0, VK_FORMAT_R16G16_UNORM,
                      static_cast<uint32_t>(3 * sizeof(float))});
                 break;
+            case VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8:
+                // Stride: 12 (Pos) + 4 (UV) + 4 (Normal) + 4 (Color) = 24 bytes
+                p.bindingDesc[0].stride = 24;
+
+                // Location 0: Position (Offset 0)
+                p.attributes.push_back({0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0});
+
+                // Location 1: UV (Offset 12)
+                p.attributes.push_back({1, 0, VK_FORMAT_R16G16_UNORM, 12});
+
+                // Location 2: Normal (Offset 16)
+                p.attributes.push_back({2, 0, VK_FORMAT_A2B10G10R10_SNORM_PACK32, 16});
+
+                // Location 3: Color (Offset 20)
+                // Using UNORM means the 0-255 byte is mapped to 0.0-1.0 in the shader
+                p.attributes.push_back({3, 0, VK_FORMAT_R8G8B8A8_UNORM, 20});
+                break;
+                
+            case VBOType::Pos3_F32_UV_U16_Normal_U10:
+                // Stride: 12 (Pos) + 4 (UV) + 4 (Normal) = 20 bytes
+                // Using uint32_t for the packed normal ensures 4-byte alignment
+                p.bindingDesc[0].stride =
+                    3 * sizeof(float) + 2 * sizeof(uint16_t) + sizeof(PackedNormal);
+
+                p.attributes.push_back({
+                    0, // location
+                    0, // binding
+                    VK_FORMAT_R32G32B32_SFLOAT,
+                    0 // offset
+                });
+
+                p.attributes.push_back(
+                    {1, 0, VK_FORMAT_R16G16_UNORM,
+                     static_cast<uint32_t>(3 * sizeof(float))});
+
+                p.attributes.push_back(
+                    {2, // location
+                     0, // binding
+                     VK_FORMAT_A2B10G10R10_SNORM_PACK32, 16});
+                break;
             case VBOType::Pos3_F32_UV_F32_Normal_F32:
                 p.bindingDesc[0].stride =
                     3 * sizeof(float) + 2 * sizeof(float) + 3 * sizeof(float);
@@ -596,6 +637,7 @@ namespace tl
                      static_cast<uint32_t>(3 * sizeof(float))});
                 break;
             default:
+                throw std::runtime_error("Unknown VBOType for stride!");
                 break;
             }
         }

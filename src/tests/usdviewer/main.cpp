@@ -1,5 +1,6 @@
 
 #define PRINT_STATS 0
+#define PRINT_TEXTURES 0
 #define BAKE_JOINTS 1
 
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
@@ -719,13 +720,17 @@ void usd_window::draw()
                     purpose != UsdGeomTokens->render)
                     continue;
 
-                std::shared_ptr<vlk::Texture> texture;
                 std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-                
-                const std::string& diffuseTexture = usd::GetTexturePath(*it, TfToken("diffuseColor"));
-                if (!diffuseTexture.empty())
+                std::shared_ptr<vlk::Texture > texture;
+                std::string file;
+
+                file = usd::GetTexturePath(*it, TfToken("diffuseColor"));
+                if (!file.empty())
                 {
-                    texture = vlk::ResolveTexture(ctx, diffuseTexture);
+#if PRINT_TEXTURES
+                    std::cout << "Found diffuseColor texture " << file << std::endl;
+#endif
+                    texture = vlk::ResolveTexture(ctx, file);
                     texture->transitionToShaderRead(cmd);
                     textures[USD_Diffuse] = texture;
                 }
@@ -733,21 +738,36 @@ void usd_window::draw()
                 {
                     textures[USD_Diffuse] = emptyTexture;
                 }
-                const std::string& specularTexture = usd::GetTexturePath(*it, TfToken("specularColor"));
-                if (!specularTexture.empty())
+                
+                //
+                // Correct
+                //
+                file = usd::GetTexturePath(*it, TfToken("metallic"));
+                if (!file.empty())
                 {
-                    texture = vlk::ResolveTexture(ctx, specularTexture);
+#if PRINT_TEXTURES
+                    std::cout << "Found metallic texture " << file << std::endl;
+#endif
+                    texture = vlk::ResolveTexture(ctx, file);
                     texture->transitionToShaderRead(cmd);
-                    textures[USD_Specular] = texture;
+                    textures[USD_Metallic] = texture;
                 }
                 else
                 {
-                    textures[USD_Specular] = emptyTexture;
+                    textures[USD_Metallic] = emptyTexture;
                 }
-                const std::string& roughnessTexture = usd::GetTexturePath(*it, TfToken("roughness"));
-                if (!roughnessTexture.empty())
+
+
+                //
+                // Correct
+                //
+                file = usd::GetTexturePath(*it, TfToken("roughness"));
+                if (!file.empty())
                 {
-                    texture = vlk::ResolveTexture(ctx, roughnessTexture);
+#if PRINT_TEXTURES
+                    std::cout << "Found roughness texture " << file << std::endl;
+#endif
+                    texture = vlk::ResolveTexture(ctx, file);
                     texture->transitionToShaderRead(cmd);
                     textures[USD_Roughness] = texture;
                 }
@@ -755,31 +775,60 @@ void usd_window::draw()
                 {
                     textures[USD_Roughness] = emptyTexture;
                 }
-                // std::string displacementTexture = usd::GetTexturePath(*it, TfToken("displacement"));
-                // if (!displacementTexture.empty())
+                
+                //
+                // Correct
+                //
+                file = usd::GetTexturePath(*it, TfToken("normal"));
+                if (!file.empty())
+                {
+#if PRINT_TEXTURES
+                    std::cout << "Found normal texture " << file << std::endl;
+#endif
+                    texture = vlk::ResolveTexture(ctx, file);
+                    texture->transitionToShaderRead(cmd);
+                    textures[USD_Normal] = texture;
+                }
+                else
+                {
+                    textures[USD_Normal] = emptyTexture;
+                }
+                
+                file = usd::GetTexturePath(*it, TfToken("occlusion"));
+                if (!file.empty())
+                {
+#if PRINT_TEXTURES
+                    std::cout << "Found occlusion texture " << file << std::endl;
+#endif
+                    texture = vlk::ResolveTexture(ctx, file);
+                    texture->transitionToShaderRead(cmd);
+                    textures[USD_AO] = texture;
+                }
+                else
+                {
+                    textures[USD_AO] = emptyTexture;
+                }
+                
+                // file = usd::GetTexturePath(*it, TfToken("displacement"));
+                // if (!file.empty())
                 // {
-                //     texture = vlk::ResolveTexture(ctx, displacementTexture);
+#if PRINT_TEXTURES
+               // std::cout << "Found displacement texture " << file << std::endl;
+#endif
+                //     texture = vlk::ResolveTexture(ctx, file);
                 //     texture->transitionToShaderRead(cmd);
-                //     const std::string& primPath = it->GetPath().GetString();
-                //     p.textures[primPath] = texture;
+                //     textures[USD_Displacement] = texture;
+                // }
+                // else
+                // {
+                //     textures[USD_Displacement] = emptyTexture;
                 // }
 
-                if (!textures.empty())
-                {
-                    if (!diffuseTexture.empty())
-                        std::cout << " diffuse=" << diffuseTexture << std::endl;
-                    if (!specularTexture.empty())
-                        std::cout << "specular=" << specularTexture << std::endl;
-                    if (!roughnessTexture.empty())
-                        std::cout << "roughness=" << roughnessTexture << std::endl;
-                
-                    const std::string& primPath = it->GetPath().GetString();
-                    p.textures[primPath] = textures;
-                }
+                const std::string primPath = it->GetPath().GetString();
+                p.textures[primPath] = textures;
             }
         }
     }
-    
 
     const double time = p.time;
 
@@ -841,7 +890,7 @@ void usd_window::draw()
     timeline::RenderOptions renderOptions;
     renderOptions.colorBuffer = image::PixelType::RGBA_F16;
     renderOptions.clear = true;
-    renderOptions.clearColor = image::Color4f(0.2F, 0.2F, 0.2F, 0.F);
+    renderOptions.clearColor = image::Color4f(0.0F, 0.0F, 0.0F, 0.F);
     
     p.render->begin(
         cmd, p.buffer, m_currentFrameIndex, renderSize,
@@ -923,10 +972,14 @@ void usd_window::draw()
                 if (shader)
                 {
                     GfVec3f diffuse;
-                    shader.GetInput(TfToken("diffuseColor")).Get(&diffuse);
-                    color.r = diffuse[0];
-                    color.g = diffuse[1];
-                    color.b = diffuse[2];
+                    UsdShadeInput diffuseColorInput = shader.GetInput(TfToken("diffuseColor"));
+                    if (diffuseColorInput)
+                    {
+                        diffuseColorInput.Get(&diffuse);
+                        color.r = diffuse[0];
+                        color.g = diffuse[1];
+                        color.b = diffuse[2];
+                    }
                 }
             }
         }
@@ -1108,6 +1161,8 @@ void usd_window::draw()
             int indexOffset = 0;
             const bool hasNormals = !geom.n.empty();
             const bool hasUVs = !geom.t.empty();
+            
+            std::vector<math::Vector3f> normals(points.size());
             for (int vertCount : faceVertexCounts)
             {
                 // Fan triangulation: anchor at faceVertexIndices[indexOffset]
@@ -1115,9 +1170,13 @@ void usd_window::draw()
                 for (int i = 1; i < vertCount - 1; ++i)
                 {
                     geom::Triangle3 triangle;
-                    triangle.v[0].v = faceVertexIndices[indexOffset] + 1;
-                    triangle.v[1].v = faceVertexIndices[indexOffset + i] + 1;
-                    triangle.v[2].v = faceVertexIndices[indexOffset + i + 1] + 1;
+                    const int i0 = faceVertexIndices[indexOffset];
+                    const int i1 = faceVertexIndices[indexOffset + i];
+                    const int i2 = faceVertexIndices[indexOffset + i + 1];
+                    
+                    triangle.v[0].v = i0 + 1;
+                    triangle.v[1].v = i1 + 1;
+                    triangle.v[2].v = i2 + 1;
 
                     if (hasNormals)
                     {
@@ -1354,15 +1413,15 @@ void usd_window::setUSDFile(const std::string& fileName)
 int main(int argc, char **argv) {
     if (argc != 2)
     {
-        std::cerr << argv[0] << " <file.usd>" << std::endl;
+        std::cout << argv[0] << " <file.usd>" << std::endl;
         exit(1);
     }
     
     Fl::use_high_res_VK(1);
 
-    Fl_Window window(1024, 960);
+    Fl_Window window(640, 640);
   
-    usd_window sw(10, 10, 1004, 940);
+    usd_window sw(10, 10, window.w() - 20, window.h() - 20);
     sw.setUSDFile(argv[1]);
 
     window.resizable(&sw);

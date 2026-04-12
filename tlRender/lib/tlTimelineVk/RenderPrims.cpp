@@ -141,9 +141,9 @@ namespace tl
             {
                 p.vaos[meshName] = vlk::VAO::create(ctx);
                 
-                // Use a 3 Gb cache \@todo: make it optional
+                // Use a 4 Gb cache \@todo: make it optional
                 // value must be less than (4292870144 on RTX 3080)
-                size_t size = 3 * memory::gigabyte;
+                size_t size = 3.5 * memory::gigabyte;
                 p.vaos[meshName]->setMemorySize(size);
                 
                 p.vaos[meshName]->bind(p.frameIndex);
@@ -292,19 +292,19 @@ namespace tl
                 p.shaders[shaderName]->bind(p.frameIndex);
                 auto i = textures.find(USD_Diffuse);
                 if (i != textures.end())
-                {
-                    p.shaders[shaderName]->setTexture("diffuseTexture", i->second);
-                }
-                i = textures.find(USD_Specular);
+                    p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
+                i = textures.find(USD_Metallic);
                 if (i != textures.end())
-                {
-                    p.shaders[shaderName]->setTexture("specularTexture", i->second);
-                }
+                    p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
                 i = textures.find(USD_Roughness);
                 if (i != textures.end())
-                {
-                    p.shaders[shaderName]->setTexture("roughnessTexture", i->second);
-                }
+                    p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
+                i = textures.find(USD_Normal);
+                if (i != textures.end())
+                    p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
+                i = textures.find(USD_AO);
+                if (i != textures.end())
+                    p.shaders[shaderName]->setTexture("u_AOMap", i->second);
             }
             else
             {

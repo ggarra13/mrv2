@@ -1292,9 +1292,11 @@ namespace tl
                     ctx, vertexUSD(), fragmentUSD(), "usd");
                 p.shaders["usd"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["usd"]->addTexture("diffuseTexture");
-                p.shaders["usd"]->addTexture("specularTexture");
-                p.shaders["usd"]->addTexture("roughnessTexture");
+                p.shaders["usd"]->addTexture("u_DiffuseMap");
+                p.shaders["usd"]->addTexture("u_MetallicMap");
+                p.shaders["usd"]->addTexture("u_RoughnessMap");
+                p.shaders["usd"]->addTexture("u_NormalMap");
+                p.shaders["usd"]->addTexture("u_AOMap");
                 p.shaders["usd"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["usd"]);
             }

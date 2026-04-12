@@ -17,7 +17,7 @@ namespace tl
 
         std::string GetTexturePath(const pxr::UsdPrim& prim, const pxr::TfToken& inputName, const bool debug) {
             using namespace PXR_NS;
-
+            
             // 1. Try to get the Material bound directly to the Prim
             UsdShadeMaterialBindingAPI bindingApi(prim);
             UsdShadeMaterial material = bindingApi.ComputeBoundMaterial();

@@ -6,10 +6,34 @@
 #include <tlVk/Texture.h>
 #include <tlCore/Image.h>
 
+#include <cmath>
+#include <vector>
+
 namespace tl
 {
     namespace vlk
     {
+
+        void ProcessSRGBToLinear(unsigned char* data, int width, int height, int numChannels) {
+            int totalPixels = width * height * numChannels;
+            int numChannelsNoAlpha = (numChannels == 4 ? 3 : numChannels == 2 ? 1 : numChannels);
+    
+            for (int i = 0; i < totalPixels; i += numChannels) {
+                // We only process RGB; Alpha is usually already linear
+                for (int j = 0; j < numChannelsNoAlpha; ++j) {
+                    // 1. Normalize to 0.0 - 1.0
+                    float normalized = data[i + j] / 255.0f;
+            
+                    // 2. Apply Gamma (Approximation of 2.2)
+                    float linearized = std::pow(normalized, 2.2f);
+            
+                    // 3. Scale back to 0-255 (if staying in 8-bit) 
+                    // Note: Doing math in 8-bit causes heavy precision loss.
+                    data[i + j] = static_cast<unsigned char>(std::round(linearized * 255.0f));
+                }
+            }
+        }
+        
         std::shared_ptr<vlk::Texture> ResolveTexture(Fl_Vk_Context& ctx,
                                                      const std::string& resolvedPath)
         {
@@ -29,20 +53,28 @@ namespace tl
                 
                 // Map HioFormat to bit depth
                 switch (hioFormat) {
-                case HioFormatUNorm8:
                 case HioFormatUNorm8srgb:
                     pixelType = image::PixelType::L_U8;
                     break;
-                case HioFormatUNorm8Vec2:
                 case HioFormatUNorm8Vec2srgb:
                     pixelType = image::PixelType::LA_U8;
                     break;
-                case HioFormatUNorm8Vec3:
                 case HioFormatUNorm8Vec3srgb:
                     pixelType = image::PixelType::RGB_U8;
                     break;
-                case HioFormatUNorm8Vec4:
                 case HioFormatUNorm8Vec4srgb:
+                    pixelType = image::PixelType::RGBA_U8;
+                    break;
+                case HioFormatUNorm8:
+                    pixelType = image::PixelType::L_U8;
+                    break;
+                case HioFormatUNorm8Vec2:
+                    pixelType = image::PixelType::LA_U8;
+                    break;
+                case HioFormatUNorm8Vec3:
+                    pixelType = image::PixelType::RGB_U8;
+                    break;
+                case HioFormatUNorm8Vec4:
                     pixelType = image::PixelType::RGBA_U8;
                     break;
                 case HioFormatSNorm8:
@@ -152,6 +184,14 @@ namespace tl
 
                 if (image->Read(spec))
                 {
+                    if (image->IsColorSpaceSRGB())
+                    {
+                        uint8_t* data = img->getData();
+                        int numChannels = image::getChannelCount(img->getPixelType());
+                        
+                        // ProcessSRGBToLinear(data, width, height, numChannels);
+                    }
+                    
                     out = vlk::Texture::create(ctx, info);
                     out->copy(img);
                 }
