@@ -59,6 +59,7 @@ Change Log
 - Improved performance of playback when Waveform or Vectorscope were open and no selection was made.
 - Fixed Vulkan validation errors on Environment Maps switching.
 - Switched to Environment Map creation function to use tlRender's Matrix library instead of depending on Imath.
+- On vmrv2, made Debanding default to None as it was messing artists' viewing of images. If you already started vmrv2, you should change Window->Preferences->User Interface->Render->Debanding.
 
 
 v1.6.1
