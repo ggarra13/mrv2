@@ -1,6 +1,6 @@
 
 #define PRINT_STATS 0
-#define PRINT_TEXTURES 0
+#define PRINT_TEXTURES 1
 #define BAKE_JOINTS 1
 
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
@@ -714,6 +714,10 @@ void usd_window::draw()
         UsdPrimRange range(p.stage->GetPseudoRoot(),
                            UsdTraverseInstanceProxies());
 
+        std::cout << "Started Reading textures..." << std::endl;
+        std::unordered_map<std::string, std::shared_ptr<vlk::Texture > >
+            textureCache;
+        
         for (auto it = range.begin(); it != range.end(); ++it) {
 
             //
@@ -747,13 +751,46 @@ void usd_window::draw()
 #if PRINT_TEXTURES
                     std::cout << "Found diffuseColor texture " << file << std::endl;
 #endif
-                    texture = vlk::ResolveTexture(ctx, file);
-                    texture->transitionToShaderRead(cmd);
+                    auto i = textureCache.find(file);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, file);
+                        texture->transitionToShaderRead(cmd);
+                        textureCache[file] = texture;
+                    }
+                    else
+                    {
+                        texture = i->second;
+                    }
                     textures[USD_DiffuseMap] = texture;
                 }
                 else
                 {
                     textures[USD_DiffuseMap] = filledTexture;
+                }
+                
+                file = usd::GetTexturePath(*it, TfToken("opacity"));
+                if (!file.empty())
+                {
+#if PRINT_TEXTURES
+                    std::cout << "Found opacity texture " << file << std::endl;
+#endif
+                    auto i = textureCache.find(file);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, file);
+                        texture->transitionToShaderRead(cmd);
+                        textureCache[file] = texture;
+                    }
+                    else
+                    {
+                        texture = i->second;
+                    }
+                    textures[USD_OpacityMap] = texture;
+                }
+                else
+                {
+                    textures[USD_OpacityMap] = filledTexture;
                 }
                 
                 //
@@ -765,8 +802,17 @@ void usd_window::draw()
 #if PRINT_TEXTURES
                     std::cout << "Found metallic texture " << file << std::endl;
 #endif
-                    texture = vlk::ResolveTexture(ctx, file);
-                    texture->transitionToShaderRead(cmd);
+                    auto i = textureCache.find(file);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, file);
+                        texture->transitionToShaderRead(cmd);
+                        textureCache[file] = texture;
+                    }
+                    else
+                    {
+                        texture = i->second;
+                    }
                     textures[USD_MetallicMap] = texture;
                 }
                 else
@@ -784,8 +830,17 @@ void usd_window::draw()
 #if PRINT_TEXTURES
                     std::cout << "Found roughness texture " << file << std::endl;
 #endif
-                    texture = vlk::ResolveTexture(ctx, file);
-                    texture->transitionToShaderRead(cmd);
+                    auto i = textureCache.find(file);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, file);
+                        texture->transitionToShaderRead(cmd);
+                        textureCache[file] = texture;
+                    }
+                    else
+                    {
+                        texture = i->second;
+                    }
                     textures[USD_RoughnessMap] = texture;
                 }
                 else
@@ -802,8 +857,17 @@ void usd_window::draw()
 #if PRINT_TEXTURES
                     std::cout << "Found normal texture " << file << std::endl;
 #endif
-                    texture = vlk::ResolveTexture(ctx, file);
-                    texture->transitionToShaderRead(cmd);
+                    auto i = textureCache.find(file);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, file);
+                        texture->transitionToShaderRead(cmd);
+                        textureCache[file] = texture;
+                    }
+                    else
+                    {
+                        texture = i->second;
+                    }
                     textures[USD_NormalMap] = texture;
                 }
                 else
@@ -817,8 +881,17 @@ void usd_window::draw()
 #if PRINT_TEXTURES
                     std::cout << "Found occlusion texture " << file << std::endl;
 #endif
-                    texture = vlk::ResolveTexture(ctx, file);
-                    texture->transitionToShaderRead(cmd);
+                    auto i = textureCache.find(file);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, file);
+                        texture->transitionToShaderRead(cmd);
+                        textureCache[file] = texture;
+                    }
+                    else
+                    {
+                        texture = i->second;
+                    }
                     textures[USD_AOMap] = texture;
                 }
                 else
@@ -845,6 +918,7 @@ void usd_window::draw()
                 p.textures[primPath] = textures;
             }
         }
+        std::cout << "Finished Reading Textures..." << std::endl;
     }
 
     const double time = p.time;

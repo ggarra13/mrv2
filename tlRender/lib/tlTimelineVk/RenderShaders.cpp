@@ -171,6 +171,7 @@ layout(binding = 2) uniform sampler2D u_MetallicMap;
 layout(binding = 3) uniform sampler2D u_RoughnessMap;
 layout(binding = 4) uniform sampler2D u_NormalMap;
 layout(binding = 5) uniform sampler2D u_AOMap;
+layout(binding = 6) uniform sampler2D u_OpacityMap;
 
 layout(location = 0) out vec4 outColor;
                   
@@ -233,8 +234,8 @@ void main()
     vec3  albedo    = texture(u_DiffuseMap,   uv).rgb * u_Material_diffuseColor.rgb;
     float metallic  = texture(u_MetallicMap,  uv).r * u_Material_metallic;
     float roughness = texture(u_RoughnessMap, uv).r * u_Material_roughness;
-    float aoMap     = texture(u_AOMap, uv).r;
-    float ao        = mix(1.0, aoMap, u_Material_aoStrength);
+    float opacity   = texture(u_OpacityMap, uv).a;
+    float ao        = mix(1.0, texture(u_AOMap, uv).r, u_Material_aoStrength);
 
     // Clamp to physically plausible range
     roughness = clamp(roughness, 0.05, 1.0);
@@ -299,23 +300,25 @@ void main()
     // color = color / (color + vec3(1.0));            // HDR → LDR
     // color = pow(color, vec3(1.0 / 2.2));            // linear → sRGB
 
-    outColor = vec4(color, pc.color.a);
+    outColor = vec4(color, opacity);
 
     // VERIFIED: albedo and ao are okay.
 
     // VERIFIED: Ambient occlusion works correctly
-    // outColor = vec4(ambient, pc.color.a);
+    // outColor = vec4(ambient, 1.0 opacity);
 
     // VERIFIED: normal (N) is faceted but correct!
-    // outColor = vec4((N + 1) / 2, pc.color.a);
+    // outColor = vec4((N + 1) / 2, opacity);
 
     // VERIFIED: diffuse is correct for metallic
-    //outColor = vec4(diffuse, pc.color.a);
+    //outColor = vec4(diffuse, opacity);
 
     // VERIFIED: specular is correct 
-    // outColor = vec4(specular, pc.color.a);
+    // outColor = vec4(specular, opacity);
 
-    // VERIFIED: normal mapping does not work correctly?
+    // INCORRECT: normal mapping does not work correctly.
+
+    // INCORRECT: opacity does not work correctly.
 })";
         }
         

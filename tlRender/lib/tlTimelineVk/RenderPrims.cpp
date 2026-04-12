@@ -316,6 +316,8 @@ namespace tl
             p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
             i = textures.find(USD_AOMap);
             p.shaders[shaderName]->setTexture("u_AOMap", i->second);
+            i = textures.find(USD_OpacityMap);
+            p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
                 
             createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                            shaderName, meshName, enableBlending,

@@ -1297,6 +1297,7 @@ namespace tl
                 p.shaders["usd"]->addTexture("u_RoughnessMap");
                 p.shaders["usd"]->addTexture("u_NormalMap");
                 p.shaders["usd"]->addTexture("u_AOMap");
+                p.shaders["usd"]->addTexture("u_OpacityMap");
                 _createBindingSet(p.shaders["usd"]);
             }
 #endif
