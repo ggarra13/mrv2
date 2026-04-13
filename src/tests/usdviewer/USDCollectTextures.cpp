@@ -1,8 +1,7 @@
 
 #include "USDGetMaterials.h"
 #include "USDResolveTexture.h"
-
-#include <tlTimelineVk/USDTextureSlots.h>
+#include "USDTextureSlots.h"
 
 #include <tlVk/Texture.h>
 

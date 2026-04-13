@@ -5,6 +5,8 @@
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
 #include "USDCollectTextures.h"
 
+#include <tlCore/Context.h>
+
 #include <pxr/pxr.h>
 
 // math primitives
@@ -64,9 +66,11 @@
 #include <pxr/imaging/hdx/tokens.h>
 #include <pxr/imaging/hdx/types.h>
 
-#include <tlTimelineVk/Render.h>
+#include "USDRender.h"
+#include "USDRenderShadersBinary.h"
+#include "USDTextureSlots.h"
+
 #include <tlTimelineVk/RenderShadersBinary.h>
-#include <tlTimelineVk/USDTextureSlots.h>
 
 #include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
@@ -303,7 +307,7 @@ struct usd_window::Private
     std::shared_ptr<system::Context> context;
     
     //! Offscreen renderer.
-    std::shared_ptr<timeline_vlk::Render> render;
+    std::shared_ptr<usd::Render> render;
     
     //! Offscreen buffer.
     std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
@@ -324,7 +328,6 @@ usd_window::usd_window(int X, int Y, int W, int H) :
     
     mode(FL_RGB | FL_ALPHA);
 
-    
     p.context = system::Context::create();
 }
 
@@ -431,17 +434,17 @@ void usd_window::prepare_shaders()
     TLRENDER_P();
     
     if (!p.render) {
-        p.render = timeline_vlk::Render::create(ctx, p.context);
+        p.render = usd::Render::create(ctx, p.context);
     }
     
     if (!p.shader)
     {
         p.shader = vlk::Shader::create(
             ctx,
-            timeline_vlk::Vertex3_spv,
-            timeline_vlk::Vertex3_spv_len,
-            timeline_vlk::textureFragment_spv,
-            timeline_vlk::textureFragment_spv_len,
+            usd::Vertex3_spv,
+            usd::Vertex3_spv_len,
+            usd::textureFragment_spv,
+            usd::textureFragment_spv_len,
             "p.shader");
 
         // Create parameters for shader.

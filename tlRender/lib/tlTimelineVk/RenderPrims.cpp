@@ -5,7 +5,6 @@
 
 #include <tlTimelineVk/RenderPrivate.h>
 #include <tlTimelineVk/RenderStructs.h>
-#include <tlTimelineVk/USDTextureSlots.h>
 
 #include <tlVk/Vk.h>
 
@@ -260,76 +259,6 @@ namespace tl
 
             const auto transform = p.transform *
                                    math::translate(math::Vector3f(position.x, position.y, 0.F));
-            _emitMeshDraw(pipelineLayoutName, shaderName, meshName, transform, color);
-        }
-
-        void Render::draw3DMesh(const geom::TriangleMesh3& mesh,
-                                const math::Matrix4x4f& matrix,
-                                const image::Color4f& color,
-                                const std::string& shaderId,
-                                const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
-                                const bool enableBlending,
-                                const VkBlendFactor srcColorBlendFactor,
-                                const VkBlendFactor dstColorBlendFactor,
-                                const VkBlendFactor srcAlphaBlendFactor,
-                                const VkBlendFactor dstAlphaBlendFactor,
-                                const VkBlendOp colorBlendOp,
-                                const VkBlendOp alphaBlendOp)
-        {
-            TLRENDER_P();
-
-            const std::string meshName = "3DMeshes";
-            
-            _create3DMesh(meshName, mesh);
-
-            std::string pipelineName;
-            std::string pipelineLayoutName;
-            std::string shaderName;
-
-            const auto transform = p.transform * matrix;
-            
-            if (shaderId.empty() || shaderId == "dummy" || textures.empty())
-            {
-                shaderName = "dummy";
-                pipelineName = pipelineLayoutName = shaderName;
-
-                _createBindingSet(p.shaders[shaderName]);
-                
-                p.shaders[shaderName]->bind(p.frameIndex);        
-            }
-            else if (shaderId == "UsdPreviewSurface")
-            {
-                shaderName = "usd";
-                pipelineName = pipelineLayoutName = shaderName;
-
-                _createBindingSet(p.shaders[shaderName]);
-                
-                p.shaders[shaderName]->bind(p.frameIndex);
-                
-                auto i = textures.find(USD_DiffuseMap);
-                p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
-                i = textures.find(USD_MetallicMap);
-                p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
-                i = textures.find(USD_RoughnessMap);
-                p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
-                i = textures.find(USD_NormalMap);
-                p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
-                i = textures.find(USD_OcclusionMap);
-                p.shaders[shaderName]->setTexture("u_AOMap", i->second);
-                i = textures.find(USD_OpacityMap);
-                p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
-            }
-            else
-            {
-                throw std::runtime_error("Unknown shader type " + shaderId);
-            }
-                
-            createPipeline(p.fbo, pipelineName, pipelineLayoutName,
-                           shaderName, meshName, enableBlending,
-                           srcColorBlendFactor, dstColorBlendFactor,
-                           srcAlphaBlendFactor, dstAlphaBlendFactor,
-                           colorBlendOp, alphaBlendOp);
-
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, transform, color);
         }
 
