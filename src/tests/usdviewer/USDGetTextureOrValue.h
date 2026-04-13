@@ -16,8 +16,8 @@ namespace tl
             bool                  hasValue = false;     // true when value is populated
         };
 
-        ShaderInputResult GetTextureOrValue(const pxr::UsdPrim&   prim,
-                                            const pxr::TfToken&   inputName,
-                                            const bool            debug = true);
+        ShaderInputResult GetTextureOrValue(const pxr::UsdPrim& prim,
+                                            const pxr::TfToken& inputName,
+                                            const bool          debug = false);
     }
 }

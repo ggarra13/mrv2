@@ -1,5 +1,5 @@
 
-#define PRINT_TEXTURES 1
+#define PRINT_TEXTURES 0
 
 #include "USDGetTextureOrValue.h"
 #include "USDResolveTexture.h"
@@ -104,7 +104,6 @@ namespace tl
                 auto i = textureCache.find(result.texturePath);
                 if (i == textureCache.end())
                 {
-                    std::cerr << "\tdiffuse=" << result.texturePath << std::endl;
                     texture = vlk::ResolveTexture(ctx, result);
                     texture->transitionToShaderRead(cmd);
                     if (!result.texturePath.empty())
@@ -113,7 +112,6 @@ namespace tl
                 }
                 else
                 {
-                    std::cerr << "\tREUSING diffuse=" << result.texturePath << std::endl;
                     textures[USD_DiffuseMap] = i->second;
                 }
                 
@@ -121,7 +119,6 @@ namespace tl
                 i = textureCache.find(result.texturePath);
                 if (i == textureCache.end())
                 {
-                    std::cerr << "\topacity=" << result.texturePath << std::endl;
                     texture = vlk::ResolveTexture(ctx, result);
                     texture->transitionToShaderRead(cmd);
                     if (!result.texturePath.empty())
@@ -130,7 +127,6 @@ namespace tl
                 }
                 else
                 {
-                    std::cerr << "\tREUSING opacity=" << result.texturePath << std::endl;
                     textures[USD_OpacityMap] = i->second;
                 }
                 
@@ -138,7 +134,6 @@ namespace tl
                 i = textureCache.find(result.texturePath);
                 if (i == textureCache.end())
                 {
-                    std::cerr << "\tmetallic=" << result.texturePath << std::endl;
                     texture = vlk::ResolveTexture(ctx, result);
                     texture->transitionToShaderRead(cmd);
                     if (!result.texturePath.empty())
@@ -147,7 +142,6 @@ namespace tl
                 }
                 else
                 {
-                    std::cerr << "\tREUSING metallic=" << result.texturePath << std::endl;
                     textures[USD_MetallicMap] = i->second;
                 }
 
@@ -155,7 +149,6 @@ namespace tl
                 i = textureCache.find(result.texturePath);
                 if (i == textureCache.end())
                 {
-                    std::cerr << "\troughness=" << result.texturePath << std::endl;
                     texture = vlk::ResolveTexture(ctx, result);
                     texture->transitionToShaderRead(cmd);
                     if (!result.texturePath.empty())
@@ -164,7 +157,6 @@ namespace tl
                 }
                 else
                 {
-                    std::cerr << "\tREUSING roughness=" << result.texturePath << std::endl;
                     textures[USD_RoughnessMap] = i->second;
                 }
 
@@ -172,7 +164,6 @@ namespace tl
                 i = textureCache.find(result.texturePath);
                 if (i == textureCache.end())
                 {
-                    std::cerr << "\tnormal=" << result.texturePath << std::endl;
                     texture = vlk::ResolveTexture(ctx, result);
                     texture->transitionToShaderRead(cmd);
                     if (!result.texturePath.empty())
@@ -181,7 +172,6 @@ namespace tl
                 }
                 else
                 {
-                    std::cerr << "\tREUSING normal=" << result.texturePath << std::endl;
                     textures[USD_NormalMap] = i->second;
                 }
                 
@@ -189,7 +179,6 @@ namespace tl
                 i = textureCache.find(result.texturePath);
                 if (i == textureCache.end())
                 {
-                    std::cerr << "\tocclusion=" << result.texturePath << std::endl;
                     texture = vlk::ResolveTexture(ctx, result);
                     texture->transitionToShaderRead(cmd);
                     if (!result.texturePath.empty())
@@ -198,7 +187,6 @@ namespace tl
                 }
                 else
                 {
-                    std::cerr << "\tREUSING occlusion=" << result.texturePath << std::endl;
                     textures[USD_AOMap] = i->second;
                 }
                 
@@ -206,7 +194,6 @@ namespace tl
                 i = textureCache.find(result.texturePath);
                 if (i == textureCache.end())
                 {
-                    std::cerr << "\tdisplacement=" << result.texturePath << std::endl;
                     texture = vlk::ResolveTexture(ctx, result);
                     texture->transitionToShaderRead(cmd);
                     if (!result.texturePath.empty())
@@ -215,16 +202,13 @@ namespace tl
                 }
                 else
                 {
-                    std::cerr << "\tREUSING displacement=" << result.texturePath << std::endl;
                     textures[USD_DisplacementMap] = i->second;
                 }
 
                 collectedTextures[primPath] = textures;
             }
         
-#if PRINT_TEXTURES
             std::cout << "Finished Reading Textures..." << std::endl;
-#endif
         }
         
     }
