@@ -37,6 +37,7 @@ if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
 elseif(UNIX AND NOT APPLE)
     list(APPEND USD_ARGS --build-args)
     set(_include_bandaid "-include cstdint")
+    list(APPEND USD_ARGS USD,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
     list(APPEND USD_ARGS MaterialX,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
 endif()
 

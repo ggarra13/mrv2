@@ -62,6 +62,27 @@ Change Log
 - Added toggling USD's enableSceneLights in OpenGL backend.
 - Added toggling USD's enableSceneMaterials in OpenGL backend.
 - On vmrv2, made Debanding default to None as it was messing artists' viewing of images. If you already started vmrv2, you should change Window->Preferences->User Interface->Render->Debanding.
+- There's now an additional utility called usdviewer that uses Vulkan to parse and preview OpenUSD assets.  It is still very much a work in progress.
+
+  + It currently has:
+  	  * Meshes only (with an approx. 4GB memory limit)
+	  * Subsets
+	  * UsdPreviewShader only
+	  * Bone Animation (memory hungry)
+	  * Shape Animation
+	  * Textures
+	  * One Single Light is used from the POV of the camera.
+	  
+  + It is missing:
+          * Subdivision surfaces (only the unsubdived mesh is shown)
+	  * NURBs Patches (with or without weights)
+	  * NURBs Splines
+	  * Basis Splines
+	  * Normal mapping
+	  * Displacement mapping
+	  * Actual scene lighting
+	  * Dome lights
+	  
 
 
 v1.6.1

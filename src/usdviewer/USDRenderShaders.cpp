@@ -239,9 +239,9 @@ void main()
     float opacity   = texture(u_OpacityMap, uv).a;
     float ao        = mix(1.0, texture(u_AOMap, uv).r, u_Material_aoStrength);
 
-    // Clamp to physically plausible range
-    roughness = clamp(roughness, 0.05, 1.0);
-    metallic  = clamp(metallic,  0.0,  1.0);
+    // \@todo: re-add Clamp to physically plausible range
+    // roughness = clamp(roughness, 0.05, 1.0);
+    // metallic  = clamp(metallic,  0.0,  1.0);
 
     // ── Normal from normal map ────────────────
     vec3 Nt  = texture(u_NormalMap, uv).rgb * 2.0 - 1.0; // [0,1] → [-1,1]
