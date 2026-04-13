@@ -1,5 +1,5 @@
 
-#include "USDGetTextureOrValue.h"
+#include "USDGetMaterials.h"
 
 #include <memory>
 #include <string>

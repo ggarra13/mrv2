@@ -306,9 +306,10 @@ void main()
     outColor = vec4(color * opacity, opacity);
 
     // VERIFIED: albedo and ao are okay.
+    // outColor = vec4(albedo, 1.0);
 
     // VERIFIED: Ambient occlusion works correctly
-    // outColor = vec4(ambient, 1.0 opacity);
+    // outColor = vec4(ambient, opacity);
 
     // VERIFIED: normal (N) is faceted but correct!
     // outColor = vec4((N + 1) / 2, opacity);

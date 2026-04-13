@@ -314,7 +314,7 @@ namespace tl
                 p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
                 i = textures.find(USD_NormalMap);
                 p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
-                i = textures.find(USD_AOMap);
+                i = textures.find(USD_OcclusionMap);
                 p.shaders[shaderName]->setTexture("u_AOMap", i->second);
                 i = textures.find(USD_OpacityMap);
                 p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);

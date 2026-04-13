@@ -1,8 +1,7 @@
-#include "USDGetTextureOrValue.h"
+#include "USDGetMaterials.h"
 
 #include <pxr/usd/usdGeom/imageable.h>
 #include <pxr/usd/usdGeom/subset.h>
-#include <pxr/usd/usdShade/material.h>
 #include <pxr/usd/usdShade/materialBindingAPI.h>
 #include <pxr/usd/usdShade/shader.h>
 
@@ -16,6 +15,7 @@ namespace tl
         
         namespace
         {
+            
             void FillEmptyShaderInputResult(ShaderInputResult& result,
                                             const UsdPrim&   prim,
                                             const TfToken& inputName)
@@ -58,87 +58,13 @@ namespace tl
         }
 
         ShaderInputResult GetTextureOrValue(const UsdPrim&   prim,
+                                            const UsdShadeMaterial& material,
                                             const TfToken&   inputName,
-                                            const bool            debug)
+                                            const bool       debug)
         {
             ShaderInputResult result;
-
-            // ------------------------------------------------------------------
-            // Helper: read a constant scalar or vector input into result.value.
-            // Handles color3f/float3/normal3f → [r,g,b,1], color4f/float4 → [r,g,b,a],
-            // and float → [v,v,v,v].
-            // ------------------------------------------------------------------
-            auto readConstantValue = [&](const UsdShadeInput& input)
-            {
-                if (!input) return;
-
-                const SdfValueTypeName typeName = input.GetAttr().GetTypeName();
-
-                if (typeName == SdfValueTypeNames->Color3f  ||
-                    typeName == SdfValueTypeNames->Float3   ||
-                    typeName == SdfValueTypeNames->Normal3f)
-                {
-                    GfVec3f v;
-                    if (input.Get(&v))
-                    {
-                        if (debug) std::cerr << "got 3 values " << v[0] << " " << v[1] << " " << v[2] 
-                                             << std::endl;
-                        result.value    = { v[0], v[1], v[2], 1.0f };
-                        result.hasValue = true;
-                    }
-                }
-                else if (typeName == SdfValueTypeNames->Color4f ||
-                         typeName == SdfValueTypeNames->Float4)
-                {
-                    GfVec4f v;
-                    if (input.Get(&v))
-                    {
-                        if (debug) std::cerr << "got 4 values " << v[0] << " " << v[1] << " " << v[2] << " " << v[3]
-                                             << std::endl;
-                        result.value    = { v[0], v[1], v[2], v[3] };
-                        result.hasValue = true;
-                    }
-                }
-                else if (typeName == SdfValueTypeNames->Float)
-                {
-                    float v = 0.f;
-                    if (input.Get(&v))
-                    {
-                        if (debug) std::cerr << "got 1 value " << v 
-                                             << std::endl;
-                        result.value    = { v, v, v, v };
-                        result.hasValue = true;
-                    }
-                }
-                else if (debug)
-                {
-                    std::cerr << "Unhandled input type for fallback value: "
-                              << typeName.GetAsToken().GetString() << std::endl;
-                }
-            };
-
-            // 1. Try to get the Material bound directly to the Prim
-            UsdShadeMaterialBindingAPI bindingApi(prim);
-            UsdShadeMaterial material = bindingApi.ComputeBoundMaterial();
-
-            // 1b. If no direct material is found, check for GeomSubsets (per-face bindings)
             if (!material)
             {
-                UsdGeomImageable imageable(prim);
-                if (imageable)
-                {
-                    for (const UsdGeomSubset& subset : UsdGeomSubset::GetAllGeomSubsets(imageable))
-                    {
-                        UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
-                        material = subsetBinding.ComputeBoundMaterial();
-                        if (material) break;
-                    }
-                }
-            }
-            if (!material)
-            {
-                if (debug) std::cerr << "Did not find material for "
-                                     << prim.GetPath().GetString() << std::endl;
                 FillEmptyShaderInputResult(result, prim, inputName);
                 return result;
             }
@@ -173,17 +99,62 @@ namespace tl
                 }
                 return result;
             }
+            
+            // ------------------------------------------------------------------
+            // Helper: read a constant scalar or vector input into result.value.
+            // Handles color3f/float3/normal3f → [r,g,b,1], color4f/float4 → [r,g,b,a],
+            // and float → [v,v,v,v].
+            // ------------------------------------------------------------------
+            auto readConstantValue = [&](const UsdShadeInput& input)
+            {
+                if (!input) return;
 
+                const SdfValueTypeName typeName = input.GetAttr().GetTypeName();
+
+                if (typeName == SdfValueTypeNames->Color3f  ||
+                    typeName == SdfValueTypeNames->Float3   ||
+                    typeName == SdfValueTypeNames->Normal3f)
+                {
+                    GfVec3f v;
+                    if (input.Get(&v))
+                    {
+                        result.value    = { v[0], v[1], v[2], 1.0f };
+                        result.hasValue = true;
+                    }
+                }
+                else if (typeName == SdfValueTypeNames->Color4f ||
+                         typeName == SdfValueTypeNames->Float4)
+                {
+                    GfVec4f v;
+                    if (input.Get(&v))
+                    {
+                        result.value    = { v[0], v[1], v[2], v[3] };
+                        result.hasValue = true;
+                    }
+                }
+                else if (typeName == SdfValueTypeNames->Float)
+                {
+                    float v = 0.f;
+                    if (input.Get(&v))
+                    {
+                        result.value    = { v, v, v, v };
+                        result.hasValue = true;
+                    }
+                }
+            };
+                        
             // 2. For all other inputs, get the Surface Shader
             UsdShadeShader surfaceShader = material.ComputeSurfaceSource(TfToken("universal"));
-            if (!surfaceShader) return result;
+            if (!surfaceShader)
+            {
+                FillEmptyShaderInputResult(result, prim, inputName);
+                return result;
+            }
 
             // 3. Look for the requested input on the shader
             UsdShadeInput shaderInput = surfaceShader.GetInput(inputName);
             if (!shaderInput)
             {
-                if (debug) std::cerr << "Did not find "
-                                     << inputName.GetString() << " input." << std::endl;
                 FillEmptyShaderInputResult(result, prim, inputName);
                 return result;
             }
@@ -204,6 +175,10 @@ namespace tl
                     if (fileInput.Get(&assetPath))
                     {
                         result.texturePath = assetPath.GetResolvedPath();
+                        if (debug)
+                        {
+                            std::cout << "\t" << inputName << " has " << result.texturePath << std::endl;
+                        }
                         return result;                      // texture found — done
                     }
                 }
@@ -211,7 +186,63 @@ namespace tl
 
             // 5. No texture connection — read the constant value off the input directly
             readConstantValue(shaderInput);
+
             return result;
+        }
+
+        
+        Material ParseMaterial(const UsdPrim& prim,
+                               const UsdShadeMaterial& material,
+                               const bool debug)
+        {
+            Material out;
+            
+            out.diffuseColor = GetTextureOrValue(prim, material, TfToken("diffuseColor"), debug);
+            out.opacity = GetTextureOrValue(prim, material, TfToken("opacity"), debug);
+            out.metallic = GetTextureOrValue(prim, material, TfToken("metallic"), debug);
+            out.roughness = GetTextureOrValue(prim, material, TfToken("roughness"), debug);
+            out.normal = GetTextureOrValue(prim, material, TfToken("normal"), debug);
+            out.occlusion = GetTextureOrValue(prim, material, TfToken("occlusion"), debug);
+            out.displacement = GetTextureOrValue(prim, material, TfToken("displacement"), debug);
+
+            return out;
+        }
+        
+        std::unordered_map<std::string, Material >
+        GetMaterials(const pxr::UsdPrim& prim,
+                     const bool          debug)
+        {
+            std::unordered_map<std::string, Material > out;
+            
+            // 1. Try to get the Material bound directly to the Prim
+            UsdShadeMaterialBindingAPI bindingApi(prim);
+            UsdShadeMaterial material = bindingApi.ComputeBoundMaterial();
+
+            // 1b. If no direct material is found, check for GeomSubsets (per-face bindings)
+            if (!material)
+            {
+                UsdGeomImageable imageable(prim);
+                if (imageable)
+                {
+                    for (const UsdGeomSubset& subset : UsdGeomSubset::GetAllGeomSubsets(imageable))
+                    {
+                        UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
+                        material = subsetBinding.ComputeBoundMaterial();
+                        if (material)
+                        {
+                            Material result = ParseMaterial(prim, material, debug);
+                            out[material.GetPath().GetString()] = result;
+                        }
+                    }
+                }
+            }
+            if (material)
+            {
+                Material result = ParseMaterial(prim, material, debug);
+                out[material.GetPath().GetString()] = result;
+            }
+
+            return out;
         }
     }
 }

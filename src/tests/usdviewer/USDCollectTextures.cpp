@@ -1,7 +1,5 @@
 
-#define PRINT_TEXTURES 0
-
-#include "USDGetTextureOrValue.h"
+#include "USDGetMaterials.h"
 #include "USDResolveTexture.h"
 
 #include <tlTimelineVk/USDTextureSlots.h>
@@ -90,122 +88,130 @@ namespace tl
                     purpose != UsdGeomTokens->render)
                     continue;
                 
-                
-                const std::string primPath = it->GetPath().GetString();
-#if PRINT_TEXTURES
-                std::cout << primPath << std::endl;
-#endif             
+                 std::unordered_map<std::string, usd::Material> materials;               
                 std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
                 std::shared_ptr<vlk::Texture > texture;
-                usd::ShaderInputResult result;
+                
+                materials = usd::GetMaterials(*it);
+                for (auto& [name, material] : materials)
+                {
+                    usd::ShaderInputResult& slot = material.diffuseColor;
+                    std::string texturePath = slot.texturePath;
+                    auto i = textureCache.find(texturePath);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, slot);
+                        texture->transitionToShaderRead(cmd);
+                        if (!slot.texturePath.empty())
+                            textureCache[texturePath] = texture;
+                        textures[USD_DiffuseMap] = texture;
+                    }
+                    else
+                    {
+                        textures[USD_DiffuseMap] = i->second;
+                    }
+                    
+                    slot = material.opacity;
+                    texturePath = slot.texturePath;
+                    i = textureCache.find(texturePath);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, slot);
+                        texture->transitionToShaderRead(cmd);
+                        if (!texturePath.empty())
+                            textureCache[texturePath] = texture;
+                        textures[USD_OpacityMap] = texture;
+                    }
+                    else
+                    {
+                        textures[USD_OpacityMap] = i->second;
+                    }
+                    
+                    
+                    slot = material.metallic;
+                    texturePath = slot.texturePath;
+                    i = textureCache.find(texturePath);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, slot);
+                        texture->transitionToShaderRead(cmd);
+                        if (!texturePath.empty())
+                            textureCache[texturePath] = texture;
+                        textures[USD_MetallicMap] = texture;
+                    }
+                    else
+                    {
+                        textures[USD_MetallicMap] = i->second;
+                    }
+                    
+                    slot = material.roughness;
+                    texturePath = slot.texturePath;
+                    i = textureCache.find(texturePath);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, slot);
+                        texture->transitionToShaderRead(cmd);
+                        if (!texturePath.empty())
+                            textureCache[texturePath] = texture;
+                        textures[USD_RoughnessMap] = texture;
+                    }
+                    else
+                    {
+                        textures[USD_RoughnessMap] = i->second;
+                    }
+                    
+                    slot = material.normal;
+                    texturePath = slot.texturePath;
+                    i = textureCache.find(texturePath);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, slot);
+                        texture->transitionToShaderRead(cmd);
+                        if (!texturePath.empty())
+                            textureCache[texturePath] = texture;
+                        textures[USD_NormalMap] = texture;
+                    }
+                    else
+                    {
+                        textures[USD_NormalMap] = i->second;
+                    }
+                    
+                    slot = material.occlusion;
+                    texturePath = slot.texturePath;
+                    i = textureCache.find(texturePath);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, slot);
+                        texture->transitionToShaderRead(cmd);
+                        if (!texturePath.empty())
+                            textureCache[texturePath] = texture;
+                        textures[USD_OcclusionMap] = texture;
+                    }
+                    else
+                    {
+                        textures[USD_OcclusionMap] = i->second;
+                    }
+                    
+                    slot = material.displacement;
+                    texturePath = slot.texturePath;
+                    i = textureCache.find(texturePath);
+                    if (i == textureCache.end())
+                    {
+                        texture = vlk::ResolveTexture(ctx, slot);
+                        texture->transitionToShaderRead(cmd);
+                        if (!texturePath.empty())
+                            textureCache[texturePath] = texture;
+                        textures[USD_DisplacementMap] = texture;
+                    }
+                    else
+                    {
+                        textures[USD_DisplacementMap] = i->second;
+                    }
+                    
+                    collectedTextures[name] = textures;
+                }
+                
 
-                result = usd::GetTextureOrValue(*it, TfToken("diffuseColor"));
-                
-                auto i = textureCache.find(result.texturePath);
-                if (i == textureCache.end())
-                {
-                    texture = vlk::ResolveTexture(ctx, result);
-                    texture->transitionToShaderRead(cmd);
-                    if (!result.texturePath.empty())
-                        textureCache[result.texturePath] = texture;
-                    textures[USD_DiffuseMap] = texture;
-                }
-                else
-                {
-                    textures[USD_DiffuseMap] = i->second;
-                }
-                
-                result = usd::GetTextureOrValue(*it, TfToken("opacity"));
-                i = textureCache.find(result.texturePath);
-                if (i == textureCache.end())
-                {
-                    texture = vlk::ResolveTexture(ctx, result);
-                    texture->transitionToShaderRead(cmd);
-                    if (!result.texturePath.empty())
-                        textureCache[result.texturePath] = texture;
-                    textures[USD_OpacityMap] = texture;
-                }
-                else
-                {
-                    textures[USD_OpacityMap] = i->second;
-                }
-                
-                result = usd::GetTextureOrValue(*it, TfToken("metallic"));
-                i = textureCache.find(result.texturePath);
-                if (i == textureCache.end())
-                {
-                    texture = vlk::ResolveTexture(ctx, result);
-                    texture->transitionToShaderRead(cmd);
-                    if (!result.texturePath.empty())
-                        textureCache[result.texturePath] = texture;
-                    textures[USD_MetallicMap] = texture;
-                }
-                else
-                {
-                    textures[USD_MetallicMap] = i->second;
-                }
-
-                result = usd::GetTextureOrValue(*it, TfToken("roughness"));
-                i = textureCache.find(result.texturePath);
-                if (i == textureCache.end())
-                {
-                    texture = vlk::ResolveTexture(ctx, result);
-                    texture->transitionToShaderRead(cmd);
-                    if (!result.texturePath.empty())
-                        textureCache[result.texturePath] = texture;
-                    textures[USD_RoughnessMap] = texture;
-                }
-                else
-                {
-                    textures[USD_RoughnessMap] = i->second;
-                }
-
-                result = usd::GetTextureOrValue(*it, TfToken("normal"));
-                i = textureCache.find(result.texturePath);
-                if (i == textureCache.end())
-                {
-                    texture = vlk::ResolveTexture(ctx, result);
-                    texture->transitionToShaderRead(cmd);
-                    if (!result.texturePath.empty())
-                        textureCache[result.texturePath] = texture;
-                    textures[USD_NormalMap] = texture;
-                }
-                else
-                {
-                    textures[USD_NormalMap] = i->second;
-                }
-                
-                result = usd::GetTextureOrValue(*it, TfToken("occlusion"));
-                i = textureCache.find(result.texturePath);
-                if (i == textureCache.end())
-                {
-                    texture = vlk::ResolveTexture(ctx, result);
-                    texture->transitionToShaderRead(cmd);
-                    if (!result.texturePath.empty())
-                        textureCache[result.texturePath] = texture;
-                    textures[USD_AOMap] = texture;
-                }
-                else
-                {
-                    textures[USD_AOMap] = i->second;
-                }
-                
-                result = usd::GetTextureOrValue(*it, TfToken("displacement"));
-                i = textureCache.find(result.texturePath);
-                if (i == textureCache.end())
-                {
-                    texture = vlk::ResolveTexture(ctx, result);
-                    texture->transitionToShaderRead(cmd);
-                    if (!result.texturePath.empty())
-                        textureCache[result.texturePath] = texture;
-                    textures[USD_DisplacementMap] = texture;
-                }
-                else
-                {
-                    textures[USD_DisplacementMap] = i->second;
-                }
-
-                collectedTextures[primPath] = textures;
             }
         
             std::cout << "Finished Reading Textures..." << std::endl;

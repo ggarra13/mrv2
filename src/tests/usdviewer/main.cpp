@@ -14,7 +14,9 @@
 // diagnostics
 #include <pxr/base/tf/diagnostic.h>
 #include <pxr/base/tf/token.h>
+#include <pxr/base/tf/stringUtils.h>
 
+#include <pxr/usd/usd/stage.h>
 #include <pxr/usd/usd/timeCode.h>
 #include <pxr/usd/usd/primRange.h>
 
@@ -39,6 +41,8 @@
 #include <pxr/usd/usdGeom/nurbsCurves.h>
 #include <pxr/usd/usdGeom/nurbsPatch.h>
 #include <pxr/usd/usdGeom/sphere.h>
+#include <pxr/usd/usdGeom/subset.h>
+#include <pxr/usd/usdGeom/xform.h>
 #include <pxr/usd/usdGeom/xformCache.h>
 #include <pxr/usd/usdGeom/primvarsAPI.h>
 
@@ -93,6 +97,8 @@ using namespace PXR_NS;
 
 namespace
 {
+    
+
     UsdGeomCamera getCamera(
         const UsdStageRefPtr& stage,
         const std::string& name = std::string())
@@ -248,7 +254,20 @@ protected:
     void prepare_shaders();
     void prepare_pipeline_layout();
     void prepare_pipeline();
-
+    
+    std::vector<UsdGeomMesh> _SplitMeshBySubsets(
+        const std::string& primPath,
+        const UsdGeomMesh& mesh,
+        const VtArray<GfVec3f>& points,
+        const VtArray<int>& faceCounts,
+        const VtArray<int> faceIndices,
+        const std::vector<UsdGeomSubset>& subsets);
+    void _drawMesh(const std::string& primPath,
+                   const UsdGeomMesh& usdMesh,
+                   const math::Matrix4x4f& modelMatrix,
+                   std::string shaderName,
+                   const image::Color4f& color,
+                   const UsdTimeCode time);
     math::Matrix4x4f _createTexturedRectangle();
     
     TLRENDER_PRIVATE();
@@ -674,6 +693,509 @@ void usd_window::flush()
     }
 }
 
+struct UVData
+{
+    VtArray<GfVec2f> values;
+    VtArray<int> indices;   // optional
+    TfToken interpolation;
+    bool indexed = false;
+};
+
+UVData GetMeshUVs(const UsdGeomMesh& mesh)
+{
+    UVData uv;
+
+    UsdGeomPrimvarsAPI primvars(mesh);
+    UsdGeomPrimvar st = primvars.GetPrimvar(TfToken("st"));
+
+    if (!st)
+        return uv;
+
+    st.Get(&uv.values);
+    uv.interpolation = st.GetInterpolation();
+
+    if (st.IsIndexed())
+    {
+        st.GetIndices(&uv.indices);
+        uv.indexed = true;
+    }
+
+    return uv;
+}
+
+std::vector<UsdGeomMesh> usd_window::_SplitMeshBySubsets(
+    const std::string& primPath,
+    const UsdGeomMesh& mesh,
+    const VtArray<GfVec3f>& points,
+    const VtArray<int>& faceCounts,
+    const VtArray<int> faceIndices,
+    const std::vector<UsdGeomSubset>& subsets)
+{
+    TLRENDER_P();
+
+    std::vector<UsdGeomMesh> out;
+    out.reserve(subsets.size());
+    
+    UVData srcUV = GetMeshUVs(mesh);
+    for (const UsdGeomSubset& subset : subsets)
+    {
+        TfToken elementType;
+        subset.GetElementTypeAttr().Get(&elementType);
+
+        if (elementType != UsdGeomTokens->face)
+            continue; // only handling face subsets
+
+        VtArray<GfVec2f> newUVs;
+
+        int faceVertexCursor = 0;
+
+        VtArray<int> subsetFaces;
+        subset.GetIndicesAttr().Get(&subsetFaces);
+        
+        std::unordered_set<int> subsetSet(subsetFaces.begin(), subsetFaces.end());
+        
+        struct SubsetMeshData
+        {
+            VtArray<GfVec3f> points;
+            VtArray<int> faceVertexCounts;
+            VtArray<int> faceVertexIndices;
+        };
+
+        SubsetMeshData data;
+
+        std::unordered_map<int, int> oldToNewIndex;
+
+        // --- Iterate faces ---
+        int faceStart = 0;
+        for (size_t faceId = 0; faceId < faceCounts.size(); ++faceId)
+        {
+            int count = faceCounts[faceId];
+
+            // Check if this face is in the subset
+            if (subsetSet.find(faceId) == subsetSet.end())
+            {
+                faceStart += count;
+                faceVertexCursor += count;
+                continue;
+            }
+
+            data.faceVertexCounts.push_back(count);
+
+            for (int i = 0; i < count; ++i)
+            {
+                int oldIndex = faceIndices[faceStart + i];
+
+                auto it = oldToNewIndex.find(oldIndex);
+                int newIndex;
+
+                if (it == oldToNewIndex.end())
+                {
+                    newIndex = static_cast<int>(data.points.size());
+                    oldToNewIndex[oldIndex] = newIndex;
+                    data.points.push_back(points[oldIndex]);
+                }
+                else
+                {
+                    newIndex = it->second;
+                }
+
+                data.faceVertexIndices.push_back(newIndex);
+
+                if (srcUV.values.size() > 0)
+                {
+                    if (srcUV.interpolation == UsdGeomTokens->faceVarying)
+                    {
+                        int uvIdx = faceVertexCursor + i;
+
+                        if (srcUV.indexed)
+                            uvIdx = srcUV.indices[uvIdx];
+
+                        newUVs.push_back(srcUV.values[uvIdx]);
+                    }
+                    else if (srcUV.interpolation == UsdGeomTokens->vertex)
+                    {
+                        if (it == oldToNewIndex.end()) 
+                        {
+                            int uvIdx = oldIndex;
+                        
+                            if (srcUV.indexed)
+                                uvIdx = srcUV.indices[uvIdx];
+
+                            // remap like points
+                            newUVs.push_back(srcUV.values[uvIdx]);
+                        }
+                    }
+                    else if (srcUV.interpolation == UsdGeomTokens->uniform)
+                    {
+                    }
+                    else if (srcUV.interpolation == UsdGeomTokens->face)
+                    {
+                    }
+                    else if (srcUV.interpolation == UsdGeomTokens->constant)
+                    {
+                    }
+                }
+
+            }
+
+            faceStart += count;
+            faceVertexCursor += count;
+        }
+
+        // --- Create new mesh prim ---
+        std::string subsetBase = subset.GetPrim().GetName().GetString();
+        std::string safeName = TfMakeValidIdentifier(subsetBase);
+
+        if (safeName.empty())
+            safeName = "subset";
+
+        // Add suffix to avoid collisions
+        safeName += "_geom";
+        UsdPrim parentPrim = mesh.GetPrim().GetParent();
+        SdfPath newPath = parentPrim.GetPath().AppendChild(TfToken(safeName));
+
+        if (newPath.IsEmpty()) {
+            std::cerr << "Still failed to create path: " << safeName << std::endl;
+            continue;
+        }
+        
+        UsdGeomMesh newMesh = UsdGeomMesh::Define(p.stage, newPath);
+        if (!newMesh)
+        {
+            std::cerr << "Could not create new mesh at "
+                      << newPath.GetString() << std::endl;
+            continue;
+        }
+
+        newMesh.CreatePointsAttr().Set(data.points);
+        newMesh.CreateFaceVertexCountsAttr().Set(data.faceVertexCounts);
+        newMesh.CreateFaceVertexIndicesAttr().Set(data.faceVertexIndices);
+        
+        if (!newUVs.empty())
+        {
+            UsdGeomPrimvarsAPI pv(newMesh);
+            
+            UsdGeomPrimvar newSt =
+                pv.CreatePrimvar(
+                    TfToken("st"),
+                    SdfValueTypeNames->TexCoord2fArray,
+                    srcUV.interpolation
+                    );
+
+            newSt.Set(newUVs);
+        }
+        
+        UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
+
+        UsdShadeMaterial material =
+            subsetBinding.ComputeBoundMaterial();
+
+        if (material)
+        {
+            // Bind material to the new mesh
+            UsdShadeMaterialBindingAPI newBinding =
+                UsdShadeMaterialBindingAPI::Apply(newMesh.GetPrim());
+            newBinding.Bind(material);
+        }
+        else
+        {
+            // Fallback: try mesh-level material
+            UsdShadeMaterialBindingAPI meshBinding(mesh.GetPrim());
+
+            UsdShadeMaterial meshMaterial =
+                meshBinding.ComputeBoundMaterial();
+
+            if (meshMaterial)
+            {
+                UsdShadeMaterialBindingAPI newBinding =
+                    UsdShadeMaterialBindingAPI::Apply(newMesh.GetPrim());
+                newBinding.Bind(meshMaterial);
+            }
+            else
+            {
+                // \@note: Attaching no material works fine (renders lambert)
+            }
+        }
+
+        out.push_back(newMesh);
+    }
+
+    return out;
+}
+
+void usd_window::_drawMesh(const std::string& primPath,
+                           const UsdGeomMesh& usdMesh,
+                           const math::Matrix4x4f& modelMatrix,
+                           std::string shaderName,
+                           const image::Color4f& color,
+                           const UsdTimeCode time)
+{
+    TLRENDER_P();
+
+    // -------------------------
+    // 1. VERTICES (Points)
+    // -------------------------
+    VtArray<GfVec3f> points;
+    usdMesh.GetPointsAttr().Get(&points, time);
+
+    // Faces vertex counts: number vertices per face.
+    VtArray<int> faceVertexCounts;
+    usdMesh.GetFaceVertexCountsAttr().Get(&faceVertexCounts, time);
+            
+    // faceVertexIndices: flat list of vertex indices for all faces
+    VtArray<int> faceVertexIndices;
+    usdMesh.GetFaceVertexIndicesAttr().Get(&faceVertexIndices, time);
+    
+    const TfToken materialBindFamily("materialBind");
+    std::vector<UsdGeomSubset> subsets =
+        UsdGeomSubset::GetGeomSubsets(usdMesh,
+                                      UsdGeomTokens->face,
+                                      materialBindFamily);
+    if (subsets.size() > 1)
+    {
+        const std::vector<UsdGeomMesh>& meshes = _SplitMeshBySubsets(
+            primPath,
+            usdMesh,
+            points,
+            faceVertexCounts,
+            faceVertexIndices,
+            subsets);
+
+        for (const auto& mesh : meshes)
+        {
+            std::string primPath = mesh.GetPath().GetString();
+            _drawMesh(primPath, mesh, modelMatrix, shaderName, color, time);
+        }
+
+        return;
+    }
+
+            
+    geom::TriangleMesh3 geom;
+
+    // Get points.
+    geom.v.reserve(points.size());
+    for (int i = 0; i < points.size(); ++i)
+    {
+        const auto& p = points[i];
+        geom.v.push_back(math::Vector3f(p[0], p[1], p[2]));
+    }
+
+    // Get Normals if any.
+    UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
+    UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
+    if (normalsPrimvar.IsDefined()) {
+                
+        VtArray<GfVec3f> normals;
+        normalsPrimvar.ComputeFlattened(&normals, time);
+                
+        TfToken interp = normalsPrimvar.GetInterpolation();
+        // std::cout << "Normals count: " << normals.size()
+        //           << "  interpolation: " << interp << "\n";
+
+        // walks faceVertexIndices for faceVarying
+        int faceCornerIdx = 0; 
+
+        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+             ++faceIdx) {
+            int vertCount = faceVertexCounts[faceIdx];
+
+            for (int i = 0; i < vertCount; ++i) {
+                int pointIdx = faceVertexIndices[faceCornerIdx + i];
+                GfVec3f n;
+
+                if (interp == UsdGeomTokens->faceVarying) {
+                    // One normal per face-corner, in face-winding order
+                    n = normals[faceCornerIdx + i];
+                } else if (interp == UsdGeomTokens->vertex) {
+                    // Normal indexed the same way as points
+                    n = normals[pointIdx];
+                } else if (interp == UsdGeomTokens->uniform) {
+                    // One normal for the entire face
+                    n = normals[faceIdx];
+                } else {
+                    // constant — one normal for the whole mesh
+                    n = normals[0];
+                }
+
+                geom.n.push_back(math::Vector3f(n[0], n[1], n[2]));
+            }
+            faceCornerIdx += vertCount;
+        }
+    }
+
+    //
+    // Get UVs (st)
+    //
+    UsdGeomPrimvar st = primvarsAPI.GetPrimvar(TfToken("st"));
+    if (st.IsDefined()) {
+                
+        VtArray<GfVec2f> values;
+        if (st.Get(&values))
+        {
+            TfToken interp = st.GetInterpolation();
+            // std::cerr << "STs found=" << values.size()
+            //           << " interpolation=" << interp << std::endl;
+
+            if (st.IsIndexed())
+            {
+                VtArray<int> indices;
+                st.GetIndices(&indices);
+
+                std::vector<GfVec2f> expanded(indices.size());
+                for (size_t i = 0; i < indices.size(); ++i)
+                    expanded[i] = values[indices[i]];
+
+                // walks faceVertexIndices for faceVarying
+                int faceCornerIdx = 0; 
+
+                for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                     ++faceIdx) {
+                    int vertCount = faceVertexCounts[faceIdx];
+                                
+                    for (int i = 0; i < vertCount; ++i) {
+                        int pointIdx = faceVertexIndices[faceCornerIdx + i];
+                        GfVec2f uv;
+
+                        if (interp == UsdGeomTokens->faceVarying) {
+                            // One uv per face-corner, in face-winding order
+                            uv = expanded[faceCornerIdx + i];
+                        } else if (interp == UsdGeomTokens->vertex) {
+                            // UV indexed the same way as points
+                            uv = expanded[pointIdx];
+                        } else if (interp == UsdGeomTokens->uniform) {
+                            // One UV for the entire face
+                            uv = expanded[faceIdx];
+                        } else {
+                            // constant — one UV for the whole mesh
+                            uv = expanded[0];
+                        }
+
+                        geom.t.push_back(math::Vector2f(uv[0], 1.0F - uv[1]));
+                    }
+                    faceCornerIdx += vertCount;
+                }
+            }
+            else
+            {
+                // walks faceVertexIndices for faceVarying
+                int faceCornerIdx = 0; 
+
+                for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                     ++faceIdx) {
+                    int vertCount = faceVertexCounts[faceIdx];
+                                
+                    for (int i = 0; i < vertCount; ++i) {
+                        int pointIdx = faceVertexIndices[faceCornerIdx + i];
+                        GfVec2f uv;
+
+                        if (interp == UsdGeomTokens->faceVarying) {
+                            // One uv per face-corner, in face-winding order
+                            uv = values[faceCornerIdx + i];
+                        } else if (interp == UsdGeomTokens->vertex) {
+                            // UV indexed the same way as points
+                            uv = values[pointIdx];
+                        } else if (interp == UsdGeomTokens->uniform) {
+                            // One UV for the entire face
+                            uv = values[faceIdx];
+                        } else {
+                            // constant — one UV for the whole mesh
+                            uv = values[0];
+                        }
+
+                        geom.t.push_back(math::Vector2f(uv[0], uv[1]));
+                    }
+                    faceCornerIdx += vertCount;
+                }
+            }
+        }
+    }
+
+    // Get triangles.
+    int indexOffset = 0;
+    const bool hasNormals = !geom.n.empty();
+    const bool hasUVs = !geom.t.empty();
+            
+    std::vector<math::Vector3f> normals(points.size());
+    for (int vertCount : faceVertexCounts)
+    {
+        // Fan triangulation: anchor at faceVertexIndices[indexOffset]
+        // e.g. a quad [A, B, C, D] → (A,B,C), (A,C,D)
+        for (int i = 1; i < vertCount - 1; ++i)
+        {
+            geom::Triangle3 triangle;
+            const int i0 = faceVertexIndices[indexOffset];
+            const int i1 = faceVertexIndices[indexOffset + i];
+            const int i2 = faceVertexIndices[indexOffset + i + 1];
+                    
+            triangle.v[0].v = i0 + 1;
+            triangle.v[1].v = i1 + 1;
+            triangle.v[2].v = i2 + 1;
+
+            if (hasNormals)
+            {
+                triangle.v[0].n = indexOffset + 1;
+                triangle.v[1].n = indexOffset + i + 1;
+                triangle.v[2].n = indexOffset + i + 2;
+            }
+                    
+            if (hasUVs)
+            {
+                triangle.v[0].t = indexOffset + 1;
+                triangle.v[1].t = indexOffset + i + 1;
+                triangle.v[2].t = indexOffset + i + 2;
+            }
+                    
+            geom.triangles.push_back(triangle);
+        }
+        indexOffset += vertCount;
+    }
+
+    //
+    // Find the textures if the mesh has UVs 
+    //
+    std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
+    if (hasUVs)
+    {
+        // 1. Try to get the Material bound directly to the Prim
+        UsdPrim prim = usdMesh.GetPrim();
+        UsdShadeMaterialBindingAPI bindingApi(prim);
+        UsdShadeMaterial material = bindingApi.ComputeBoundMaterial();
+
+        if (!material)
+        {
+            UsdGeomImageable imageable(prim);
+            if (imageable)
+            {
+                for (const UsdGeomSubset& subset : UsdGeomSubset::GetAllGeomSubsets(imageable))
+                {
+                    UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
+                    material = subsetBinding.ComputeBoundMaterial();
+                    if (material)
+                        break;
+                }
+            }
+        }
+        
+        std::string materialPath = material.GetPath().GetString();
+        
+        auto i = p.textures.find(materialPath);
+        if (i != p.textures.end())
+        {
+            textures = i->second;
+            shaderName = "UsdPreviewSurface";
+        }
+    }
+    else
+    {
+        shaderName = "dummy";
+    }
+
+            
+    p.render->draw3DMesh(geom, modelMatrix, color, shaderName,
+                         textures);
+}
+
 void usd_window::draw()
 {
     TLRENDER_P();
@@ -860,229 +1382,9 @@ void usd_window::draw()
         else if (it->IsA<UsdGeomMesh>())
         {
             ++numMeshes;
+
             UsdGeomMesh usdMesh = UsdGeomMesh(*it);
-
-            //bool doubleSided = usdMesh.GetDoubleSidedAttr().Get();
-            //std::cerr << primPath << " double sided=" << doubleSided << std::endl;
-
-            // -------------------------
-            // 1. VERTICES (Points)
-            // -------------------------
-            VtArray<GfVec3f> points;
-            usdMesh.GetPointsAttr().Get(&points, time);
-
-            // Faces vertex counts: number vertices per face.
-            VtArray<int> faceVertexCounts;
-            usdMesh.GetFaceVertexCountsAttr().Get(&faceVertexCounts, time);
-            
-            // faceVertexIndices: flat list of vertex indices for all faces
-            VtArray<int> faceVertexIndices;
-            usdMesh.GetFaceVertexIndicesAttr().Get(&faceVertexIndices, time);
-
-            
-            geom::TriangleMesh3 geom;
-
-            // Get points.
-            geom.v.reserve(points.size());
-            for (int i = 0; i < points.size(); ++i)
-            {
-                const auto& p = points[i];
-                geom.v.push_back(math::Vector3f(p[0], p[1], p[2]));
-            }
-
-            // Get Normals if any.
-            UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
-            UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
-            if (normalsPrimvar.IsDefined()) {
-                
-                VtArray<GfVec3f> normals;
-                normalsPrimvar.ComputeFlattened(&normals, time);
-                
-                TfToken interp = normalsPrimvar.GetInterpolation();
-                // std::cout << "Normals count: " << normals.size()
-                //           << "  interpolation: " << interp << "\n";
-
-                // walks faceVertexIndices for faceVarying
-                int faceCornerIdx = 0; 
-
-                for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
-                     ++faceIdx) {
-                    int vertCount = faceVertexCounts[faceIdx];
-
-                    for (int i = 0; i < vertCount; ++i) {
-                        int pointIdx = faceVertexIndices[faceCornerIdx + i];
-                        GfVec3f n;
-
-                        if (interp == UsdGeomTokens->faceVarying) {
-                            // One normal per face-corner, in face-winding order
-                            n = normals[faceCornerIdx + i];
-                        } else if (interp == UsdGeomTokens->vertex) {
-                            // Normal indexed the same way as points
-                            n = normals[pointIdx];
-                        } else if (interp == UsdGeomTokens->uniform) {
-                            // One normal for the entire face
-                            n = normals[faceIdx];
-                        } else {
-                            // constant — one normal for the whole mesh
-                            n = normals[0];
-                        }
-
-                        geom.n.push_back(math::Vector3f(n[0], n[1], n[2]));
-                    }
-                    faceCornerIdx += vertCount;
-                }
-            }
-
-            //
-            // Get UVs (st)
-            //
-            UsdGeomPrimvar st = primvarsAPI.GetPrimvar(TfToken("st"));
-            if (st.IsDefined()) {
-                
-                VtArray<GfVec2f> values;
-                if (st.Get(&values))
-                {
-                    TfToken interp = st.GetInterpolation();
-                    // std::cerr << "STs found=" << values.size()
-                    //           << " interpolation=" << interp << std::endl;
-
-                    if (st.IsIndexed())
-                    {
-                        VtArray<int> indices;
-                        st.GetIndices(&indices);
-
-                        std::vector<GfVec2f> expanded(indices.size());
-                        for (size_t i = 0; i < indices.size(); ++i)
-                            expanded[i] = values[indices[i]];
-
-                        // walks faceVertexIndices for faceVarying
-                        int faceCornerIdx = 0; 
-
-                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
-                             ++faceIdx) {
-                            int vertCount = faceVertexCounts[faceIdx];
-                                
-                            for (int i = 0; i < vertCount; ++i) {
-                                int pointIdx = faceVertexIndices[faceCornerIdx + i];
-                                GfVec2f uv;
-
-                                if (interp == UsdGeomTokens->faceVarying) {
-                                    // One uv per face-corner, in face-winding order
-                                    uv = expanded[faceCornerIdx + i];
-                                } else if (interp == UsdGeomTokens->vertex) {
-                                    // UV indexed the same way as points
-                                    uv = expanded[pointIdx];
-                                } else if (interp == UsdGeomTokens->uniform) {
-                                    // One UV for the entire face
-                                    uv = expanded[faceIdx];
-                                } else {
-                                    // constant — one UV for the whole mesh
-                                    uv = expanded[0];
-                                }
-
-                                geom.t.push_back(math::Vector2f(uv[0], 1.0F - uv[1]));
-                            }
-                            faceCornerIdx += vertCount;
-                        }
-                    }
-                    else
-                    {
-                        // walks faceVertexIndices for faceVarying
-                        int faceCornerIdx = 0; 
-
-                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
-                             ++faceIdx) {
-                            int vertCount = faceVertexCounts[faceIdx];
-                                
-                            for (int i = 0; i < vertCount; ++i) {
-                                int pointIdx = faceVertexIndices[faceCornerIdx + i];
-                                GfVec2f uv;
-
-                                if (interp == UsdGeomTokens->faceVarying) {
-                                    // One uv per face-corner, in face-winding order
-                                    uv = values[faceCornerIdx + i];
-                                } else if (interp == UsdGeomTokens->vertex) {
-                                    // UV indexed the same way as points
-                                    uv = values[pointIdx];
-                                } else if (interp == UsdGeomTokens->uniform) {
-                                    // One UV for the entire face
-                                    uv = values[faceIdx];
-                                } else {
-                                    // constant — one UV for the whole mesh
-                                    uv = values[0];
-                                }
-
-                                geom.t.push_back(math::Vector2f(uv[0], uv[1]));
-                            }
-                            faceCornerIdx += vertCount;
-                        }
-                    }
-                }
-            }
-
-            // Get triangles.
-            int indexOffset = 0;
-            const bool hasNormals = !geom.n.empty();
-            const bool hasUVs = !geom.t.empty();
-            
-            std::vector<math::Vector3f> normals(points.size());
-            for (int vertCount : faceVertexCounts)
-            {
-                // Fan triangulation: anchor at faceVertexIndices[indexOffset]
-                // e.g. a quad [A, B, C, D] → (A,B,C), (A,C,D)
-                for (int i = 1; i < vertCount - 1; ++i)
-                {
-                    geom::Triangle3 triangle;
-                    const int i0 = faceVertexIndices[indexOffset];
-                    const int i1 = faceVertexIndices[indexOffset + i];
-                    const int i2 = faceVertexIndices[indexOffset + i + 1];
-                    
-                    triangle.v[0].v = i0 + 1;
-                    triangle.v[1].v = i1 + 1;
-                    triangle.v[2].v = i2 + 1;
-
-                    if (hasNormals)
-                    {
-                        triangle.v[0].n = indexOffset + 1;
-                        triangle.v[1].n = indexOffset + i + 1;
-                        triangle.v[2].n = indexOffset + i + 2;
-                    }
-                    
-                    if (hasUVs)
-                    {
-                        triangle.v[0].t = indexOffset + 1;
-                        triangle.v[1].t = indexOffset + i + 1;
-                        triangle.v[2].t = indexOffset + i + 2;
-                    }
-                    
-                    geom.triangles.push_back(triangle);
-                }
-                indexOffset += vertCount;
-            }
-
-            //
-            // Find the textures if the mesh has UVs 
-            //
-            std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-            if (hasUVs)
-            {
-                auto i = p.textures.find(primPath);
-                if (i != p.textures.end())
-                {
-                    textures = i->second;
-                    shaderName = "UsdPreviewSurface";
-                }
-            }
-            else
-            {
-                shaderName = "dummy";
-                std::cerr << primPath << " using shader " << shaderName
-                          << std::endl;
-            }
-
-            
-            p.render->draw3DMesh(geom, modelMatrix, color, shaderName,
-                                 textures);
+            _drawMesh(primPath, usdMesh, modelMatrix, shaderName, color, time);
         }
         else if (it->IsA<UsdGeomNurbsPatch>())
         {
@@ -1111,7 +1413,12 @@ void usd_window::draw()
             std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
             if (hasUVs)
             {
-                auto i = p.textures.find(primPath);
+                UsdShadeMaterialBindingAPI bindingApi(*it);
+                UsdShadeMaterial material = bindingApi.ComputeBoundMaterial();
+
+                const std::string materialPath = material.GetPath().GetString();
+        
+                auto i = p.textures.find(materialPath);
                 if (i != p.textures.end())
                 {
                     textures = i->second;
@@ -1272,36 +1579,6 @@ void usd_window::setUSDFile(const std::string& fileName)
     p.endTimeCode   = p.stage->GetEndTimeCode();
     p.timeCodesPerSecond = p.stage->GetTimeCodesPerSecond();
     p.time = p.startTimeCode;
-
-    std::string wantedMtl = "Coral";
-    UsdPrim rootPrim = p.stage->GetDefaultPrim();
-    if (!rootPrim)
-        return;
-    
-    UsdVariantSet matVS = rootPrim.GetVariantSets()
-                          .GetVariantSet("Material");
-    std::string current = matVS.GetVariantSelection();
-    std::cerr << "Got variant selection=" << current << std::endl;
-    if (current != wantedMtl)
-    {
-        std::cout << "\nSwitching Material variant: \""
-                  << current << "\" -> \"" << wantedMtl << "\"\n";
-        if (!matVS.SetVariantSelection(wantedMtl))
-        {
-            std::cerr << "ERROR: variant \"" << wantedMtl
-                      << "\" does not exist in variantSet \"Material\".\n";
-            return;
-        }
-    }
-    else
-    {
-        if (!matVS.SetVariantSelection(wantedMtl))
-        {
-            std::cerr << "ERROR: variant \"" << wantedMtl
-                      << "\" does not exist in variantSet \"Material\".\n";
-            return;
-        }
-    }
     
 #if BAKE_JOINTS
     std::cout << "Baking joints..." << std::endl;

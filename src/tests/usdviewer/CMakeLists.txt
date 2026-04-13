@@ -6,8 +6,8 @@
 set(HEADERS
     #USD.h
     #USDPrivate.h
-    #USDCollectTextures.h
-    USDGetTextureOrValue.h
+    USDCollectTextures.h
+    USDGetMaterials.h
 #    USDProcessSkeletonRoot.h
     USDResolveTexture.h
 )
@@ -16,7 +16,7 @@ set(SOURCES
     #USDRead.cpp
     #USDRender.cpp
     USDCollectTextures.cpp
-    USDGetTextureOrValue.cpp
+    USDGetMaterials.cpp
 #    USDProcessSkeletonRoot.cpp
     USDResolveTexture.cpp
     main.cpp)

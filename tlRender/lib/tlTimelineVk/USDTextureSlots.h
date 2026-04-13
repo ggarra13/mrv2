@@ -3,10 +3,10 @@
 enum USDTextureSlots
 {
     USD_DiffuseMap = 0,
+    USD_OpacityMap,
     USD_MetallicMap,
     USD_RoughnessMap,
     USD_NormalMap,
-    USD_AOMap,
-    USD_OpacityMap,
+    USD_OcclusionMap,
     USD_DisplacementMap,
 };
