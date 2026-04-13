@@ -1076,7 +1076,10 @@ void usd_window::draw()
             else
             {
                 shaderName = "dummy";
+                std::cerr << primPath << " using shader " << shaderName
+                          << std::endl;
             }
+
             
             p.render->draw3DMesh(geom, modelMatrix, color, shaderName,
                                  textures);
@@ -1270,6 +1273,36 @@ void usd_window::setUSDFile(const std::string& fileName)
     p.timeCodesPerSecond = p.stage->GetTimeCodesPerSecond();
     p.time = p.startTimeCode;
 
+    std::string wantedMtl = "Coral";
+    UsdPrim rootPrim = p.stage->GetDefaultPrim();
+    if (!rootPrim)
+        return;
+    
+    UsdVariantSet matVS = rootPrim.GetVariantSets()
+                          .GetVariantSet("Material");
+    std::string current = matVS.GetVariantSelection();
+    std::cerr << "Got variant selection=" << current << std::endl;
+    if (current != wantedMtl)
+    {
+        std::cout << "\nSwitching Material variant: \""
+                  << current << "\" -> \"" << wantedMtl << "\"\n";
+        if (!matVS.SetVariantSelection(wantedMtl))
+        {
+            std::cerr << "ERROR: variant \"" << wantedMtl
+                      << "\" does not exist in variantSet \"Material\".\n";
+            return;
+        }
+    }
+    else
+    {
+        if (!matVS.SetVariantSelection(wantedMtl))
+        {
+            std::cerr << "ERROR: variant \"" << wantedMtl
+                      << "\" does not exist in variantSet \"Material\".\n";
+            return;
+        }
+    }
+    
 #if BAKE_JOINTS
     std::cout << "Baking joints..." << std::endl;
     // Bake the all skeletons and bound geometry over the time range.

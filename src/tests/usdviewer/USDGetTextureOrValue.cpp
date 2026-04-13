@@ -42,14 +42,14 @@ namespace tl
                     result.texturePath = "*solid";
                     result.value    = { 1.F, 1.F, 1.F, 1.F };
                 }
-                else if (inputName == TfToken("displacement") ||
-                         inputName == TfToken("roughness") ||
-                         inputName == TfToken("metallic"))
+                else if (inputName == TfToken("displacement") )
                 {
                     result.texturePath = "*empty";
                     result.value    = { 0.F, 0.F, 0.F, 0.F };
                 }
-                else if (inputName == TfToken("normal"))
+                else if (inputName == TfToken("normal") ||
+                         inputName == TfToken("metallic") ||
+                         inputName == TfToken("roughness"))
                 {
                     result.texturePath = "*middle";
                     result.value    = { 0.5F, 0.5F, 0.5F, 0.5F };
