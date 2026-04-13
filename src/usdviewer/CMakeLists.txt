@@ -8,8 +8,9 @@ set(HEADERS
     #USDPrivate.h
     USDCollectTextures.h
     USDGetMaterials.h
-#    USDProcessSkeletonRoot.h
+    #    USDProcessSkeletonRoot.h
     USDRender.h
+    USDRenderEngine.h
     USDRenderShadersBinary.h
     USDResolveTexture.h
 )
@@ -20,6 +21,7 @@ set(SOURCES
     USDGetMaterials.cpp
     #    USDProcessSkeletonRoot.cpp
     USDRender.cpp
+    USDRenderEngine.cpp
     USDRenderPrims.cpp
     USDRenderShaders.cpp
     USDRenderVulkan.cpp
@@ -52,7 +54,7 @@ target_link_libraries(usdviewer PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE}
 target_link_directories( usdviewer BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )
 
 install(TARGETS usdviewer
-    RUNTIME DESTINATION bin/tests COMPONENT tests
+    RUNTIME DESTINATION bin COMPONENT applications
     LIBRARY DESTINATION lib COMPONENT libraries
     ARCHIVE DESTINATION lib COMPONENT libraries )
 
