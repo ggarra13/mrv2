@@ -37,8 +37,7 @@ namespace tl
                 
                 if (inputName == TfToken("diffuseColor") || // ok
                     inputName == TfToken("opacity") ||   // ok
-                    inputName == TfToken("occlusion") || // ok
-                    inputName == TfToken("normal"))      // ok
+                    inputName == TfToken("occlusion"))      // ok
                 {
                     result.texturePath = "*solid";
                     result.value    = { 1.F, 1.F, 1.F, 1.F };
@@ -53,6 +52,12 @@ namespace tl
                 {
                     result.texturePath = "*middle";
                     result.value    = { 0.5F, 0.5F, 0.5F, 0.5F };
+                }
+                else if(inputName == TfToken("normal"))  // ok
+                {
+                    // These values make sure the normal is not perturbed.
+                    result.texturePath = "*normal";
+                    result.value    = { 0.5F, 0.5F, 1.0F, 1.0F };
                 }
             }
         }

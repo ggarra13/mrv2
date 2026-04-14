@@ -47,8 +47,7 @@ void main()
     vec3 N = normalize(cross(dx, dy));
 
     // Simple light direction
-    vec3 lightPos = vec3(0.0, 0.0, 0.0);
-    vec3 L = normalize(fPos - lightPos);
+    vec3 L = normalize(vec3(0.0, 0.0, -1.0));
 
     // Diffuse (Lambert)
     float diff = max(dot(N, L), 0.0);
@@ -294,9 +293,6 @@ void main()
 
     mat3 TBN = ComputeTBNMatrix(fPos, N, st);
     N = normalize(TBN * Nt);
-
-    // Normal mapping cannot be done in local space.
-    // vec3 N = normalize(cross(dx, dy) + Nt);
 
     // ── Lighting vectors ──────────────────────
     //vec3 V = normalize(fPos - u_Scene_camPos);  // correct

@@ -10,12 +10,12 @@
 
 // Use 1 for using the dummy shader for debugging.
 #define USE_DUMMY_SHADER 1
-#define USE_ST_SHADER 1
+#define USE_ST_SHADER 0
 
 //
 // Use 1 for faster startups.
 //
-#define USE_PRECOMPILED_SHADERS 0
+#define USE_PRECOMPILED_SHADERS 1
 
 //
 // Use 1 for using dynamic stencils.
@@ -29,8 +29,8 @@
 #define USE_DYNAMIC_RGBA_WRITE_MASKS 0
 
 //
-#define DEBUG_TEXTURES  1
-#define DEBUG_MATERIALS 1
+#define DEBUG_TEXTURES  0
+#define DEBUG_MATERIALS 0
 #define DEBUG_BAKE_JOINTS 0
 
 #include "USDRenderShadersBinary.h"
