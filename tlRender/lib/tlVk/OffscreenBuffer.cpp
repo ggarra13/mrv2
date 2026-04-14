@@ -261,20 +261,30 @@ namespace tl
             if (p.sampler != VK_NULL_HANDLE)
                 vkDestroySampler(device, p.sampler, nullptr);
 
-            if (p.framebuffer != VK_NULL_HANDLE)
+            // Multisampled color
+            if (p.msColorImage != VK_NULL_HANDLE)
+                vkDestroyImage(device, p.msColorImage, nullptr);
+            if (p.msColorMemory != VK_NULL_HANDLE)
+                vkFreeMemory(device, p.msColorMemory, nullptr);
+            if (p.msColorImageView != VK_NULL_HANDLE)
+                vkDestroyImageView(device, p.msColorImageView, nullptr);
+
+             if (p.framebuffer != VK_NULL_HANDLE)
                 vkDestroyFramebuffer(device, p.framebuffer, nullptr);
             if (p.clearRenderPass != VK_NULL_HANDLE)
                 vkDestroyRenderPass(device, p.clearRenderPass, nullptr);
             if (p.loadRenderPass != VK_NULL_HANDLE)
                 vkDestroyRenderPass(device, p.loadRenderPass, nullptr);
 
-            if (p.resolveImageView != VK_NULL_HANDLE)
-                vkDestroyImageView(device, p.resolveImageView, nullptr);            
+           // Resolved color (always present)
             if (p.resolveImage != VK_NULL_HANDLE)
                 vkDestroyImage(device, p.resolveImage, nullptr);
             if (p.resolveMemory != VK_NULL_HANDLE)
                 vkFreeMemory(device, p.resolveMemory, nullptr);
+            if (p.resolveImageView != VK_NULL_HANDLE)
+                vkDestroyImageView(device, p.resolveImageView, nullptr);
             
+            // Depth
             if (p.depthImageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.depthImageView, nullptr);
             if (p.depthImage != VK_NULL_HANDLE)
@@ -282,6 +292,7 @@ namespace tl
             if (p.depthMemory != VK_NULL_HANDLE)
                 vkFreeMemory(device, p.depthMemory, nullptr);
 
+            // PBO ring of buffers
             for (auto& pbo : p.pboRing)
             {
                 if (pbo.buffer != VK_NULL_HANDLE)
@@ -293,16 +304,17 @@ namespace tl
             }
 
             // Reset layouts
+            p.msColorImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             p.resolveImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            p.depthLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            p.depthLayout        = VK_IMAGE_LAYOUT_UNDEFINED;
         }
 
         void OffscreenBuffer::initialize()
         {
             TLRENDER_P();
 
-            createImage();
-            createImageView();
+            createColorImages();
+            createImageViews();
 
             if (hasDepth() || hasStencil())
             {
@@ -418,6 +430,88 @@ namespace tl
                 throw std::runtime_error("Failed to create depth image view");
         }
 
+        void OffscreenBuffer::createColorImages()
+        {
+            TLRENDER_P();
+            VkDevice device = ctx.device;
+
+            VkSampleCountFlagBits samples = getSampleCount();
+            bool multisampled = (samples != VK_SAMPLE_COUNT_1_BIT);
+
+            // --------------------------------------------------
+            // 1. Resolve image (always single-sampled)
+            // --------------------------------------------------
+            {
+                VkImageCreateInfo info{};
+                info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+                info.imageType = VK_IMAGE_TYPE_2D;
+                info.extent = { static_cast<uint32_t>(p.size.w), static_cast<uint32_t>(p.size.h), 1 };
+                info.mipLevels = 1;
+                info.arrayLayers = 1;
+                info.format = p.colorFormat;
+                info.tiling = VK_IMAGE_TILING_OPTIMAL;
+                info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                info.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                             VK_IMAGE_USAGE_SAMPLED_BIT |
+                             VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+                info.samples = VK_SAMPLE_COUNT_1_BIT;
+                info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+                if (vkCreateImage(device, &info, nullptr, &p.resolveImage) != VK_SUCCESS)
+                    throw std::runtime_error("Failed to create resolve image");
+
+                VkMemoryRequirements memReq;
+                vkGetImageMemoryRequirements(device, p.resolveImage, &memReq);
+
+                VkMemoryAllocateInfo allocInfo{};
+                allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+                allocInfo.allocationSize = memReq.size;
+                allocInfo.memoryTypeIndex = findMemoryType(
+                    memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+                if (vkAllocateMemory(device, &allocInfo, nullptr, &p.resolveMemory) != VK_SUCCESS)
+                    throw std::runtime_error("Failed to allocate resolve image memory");
+
+                vkBindImageMemory(device, p.resolveImage, p.resolveMemory, 0);
+            }
+
+            // --------------------------------------------------
+            // 2. Multisampled color image (only when needed)
+            // --------------------------------------------------
+            if (multisampled)
+            {
+                VkImageCreateInfo info{};
+                info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+                info.imageType = VK_IMAGE_TYPE_2D;
+                info.extent = { static_cast<uint32_t>(p.size.w), static_cast<uint32_t>(p.size.h), 1 };
+                info.mipLevels = 1;
+                info.arrayLayers = 1;
+                info.format = p.colorFormat;
+                info.tiling = VK_IMAGE_TILING_OPTIMAL;
+                info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                info.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;   // internal only
+                info.samples = samples;
+                info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+                if (vkCreateImage(device, &info, nullptr, &p.msColorImage) != VK_SUCCESS)
+                    throw std::runtime_error("Failed to create multisampled color image");
+
+                VkMemoryRequirements memReq;
+                vkGetImageMemoryRequirements(device, p.msColorImage, &memReq);
+
+                VkMemoryAllocateInfo allocInfo{};
+                allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+                allocInfo.allocationSize = memReq.size;
+                allocInfo.memoryTypeIndex = findMemoryType(
+                    memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+                if (vkAllocateMemory(device, &allocInfo, nullptr, &p.msColorMemory) != VK_SUCCESS)
+                    throw std::runtime_error("Failed to allocate multisampled color memory");
+
+                vkBindImageMemory(device, p.msColorImage, p.msColorMemory, 0);
+            }
+        }
+        
         std::shared_ptr<OffscreenBuffer> OffscreenBuffer::create(
             Fl_Vk_Context& context, const math::Size2i& size,
             const OffscreenBufferOptions& options)
@@ -555,51 +649,7 @@ namespace tl
             return _p->viewport;
         }
 
-        void OffscreenBuffer::createImage()
-        {
-            TLRENDER_P();
-
-            VkDevice device = ctx.device;
-
-            VkImageCreateInfo info{};
-            info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-            info.imageType = VK_IMAGE_TYPE_2D;
-            info.extent.width = static_cast<uint32_t>(p.size.w);
-            info.extent.height = static_cast<uint32_t>(p.size.h);
-            info.extent.depth = 1;
-            info.mipLevels = 1;
-            info.arrayLayers = 1;
-            info.format = p.colorFormat;
-            info.tiling = VK_IMAGE_TILING_OPTIMAL;
-            info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            info.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
-                         VK_IMAGE_USAGE_SAMPLED_BIT |
-                         VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
-            VkSampleCountFlagBits samples = getVulkanSamples(p.options.sampling);
-            info.samples = samples;
-            info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
-            if (vkCreateImage(device, &info, nullptr, &p.resolveImage) != VK_SUCCESS)
-                throw std::runtime_error("Failed to create offscreen image");
-
-            VkMemoryRequirements memReq;
-            vkGetImageMemoryRequirements(device, p.resolveImage, &memReq);
-
-            VkMemoryAllocateInfo allocInfo{};
-            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-            allocInfo.allocationSize = memReq.size;
-            allocInfo.memoryTypeIndex = findMemoryType(
-                memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-            if (vkAllocateMemory(device, &allocInfo, nullptr, &p.resolveMemory) !=
-                VK_SUCCESS)
-                throw std::runtime_error(
-                    "Failed to allocate offscreen image memory");
-
-            vkBindImageMemory(device, p.resolveImage, p.resolveMemory, 0);
-        }
-
-        void OffscreenBuffer::createImageView()
+        void OffscreenBuffer::createImageViews()
         {
             TLRENDER_P();
 

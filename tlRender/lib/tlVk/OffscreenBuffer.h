@@ -233,8 +233,8 @@ namespace tl
 
             void cleanup();
             void initialize();
-            void createImage();
-            void createImageView();
+            void createColorImages();
+            void createImageViews();
             void createDepthImage();
             void createDepthImageView();
             void createClearRenderPass();
