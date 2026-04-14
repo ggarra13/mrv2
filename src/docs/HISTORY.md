@@ -72,14 +72,14 @@ Change Log
 	  * Bone Animation (memory hungry)
 	  * Shape Animation
 	  * Textures
-	  * One Single Light is used from the POV of the camera.
+	  * One Single Light is used from the POV of the camera and
+	    a pseudo skylight dome light.
 	  
   + It is missing:
           * Subdivision surfaces (only the unsubdived mesh is shown)
 	  * NURBs Patches (with or without weights)
 	  * NURBs Splines
 	  * Basis Splines
-	  * Normal mapping
 	  * Displacement mapping
 	  * Actual scene lighting
 	  * Dome lights
