@@ -707,7 +707,9 @@ namespace tl
             colorAttachment.format = p.colorFormat;
             colorAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
             colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            colorAttachment.storeOp = multisampled ?
+                                      VK_ATTACHMENT_STORE_OP_DONT_CARE :
+                                      VK_ATTACHMENT_STORE_OP_STORE;
             colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             colorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             attachments.push_back(colorAttachment);
@@ -723,6 +725,10 @@ namespace tl
                 resolveAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
                 resolveAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 attachments.push_back(resolveAttachment);
+            }
+            else
+            {
+                colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
             }
 
             // Depth/stencil
@@ -960,60 +966,73 @@ namespace tl
                 };
             }
         }
-
+        
         void OffscreenBuffer::beginLoadRenderPass(VkCommandBuffer cmd,
                                                   VkSubpassContents contents)
         {
             TLRENDER_P();
-
-            // Note: even this is a load render pass, the clear values are
-            //       needed by the Vulkan spec (they are just ignored).
-            std::vector<VkClearValue> clearValues;
             
-            VkClearValue colorClear = {};
-            const image::Color4f& color = p.options.clearColor;
-            colorClear.color = {{color.r, color.g, color.b, color.a}}; // Black clear
-            clearValues.push_back(colorClear);
+            bool multisampled = (getSampleCount() != VK_SAMPLE_COUNT_1_BIT);
+
+            std::vector<VkClearValue> clearValues;
+
+            // Color attachment (index 0) — never cleared in load pass
+            clearValues.push_back({});   // dummy (ignored)
+
+            if (multisampled)
+            {
+                // Resolve attachment (index 1) — LOAD, so ignored for clear
+                clearValues.push_back({});   // dummy
+            }
 
             if (hasDepth() || hasStencil())
             {
+                // Depth/stencil (index 2 when MS, index 1 when not) — stencil is cleared
                 VkClearValue depthClear = {};
                 depthClear.depthStencil = {1.0f, 0};
                 clearValues.push_back(depthClear);
             }
-            
+
             VkRenderPassBeginInfo beginInfo = {};
             beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
             beginInfo.renderPass = p.loadRenderPass;
             beginInfo.framebuffer = p.framebuffer;
             beginInfo.renderArea.offset = {0, 0};
-            beginInfo.renderArea.extent = {
-                static_cast<uint32_t>(p.size.w),
-                static_cast<uint32_t>(p.size.h)};
-            beginInfo.clearValueCount =
-                static_cast<uint32_t>(clearValues.size());
+            beginInfo.renderArea.extent = getExtent();
+            beginInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
             beginInfo.pClearValues = clearValues.data();
-
+            
             vkCmdBeginRenderPass(cmd, &beginInfo, contents);
             
             setupViewportAndScissor(cmd);
         }
-        
+
         void OffscreenBuffer::beginClearRenderPass(VkCommandBuffer cmd,
                                                    VkSubpassContents contents)
         {
             TLRENDER_P();
             
+            bool multisampled = (getSampleCount() != VK_SAMPLE_COUNT_1_BIT);
+
             std::vector<VkClearValue> clearValues;
+
+            // Color clear (always for attachment 0)
             VkClearValue colorClear = {};
             const image::Color4f& color = p.options.clearColor;
-            colorClear.color = {{color.r, color.g, color.b, color.a}}; // Black clear
+            colorClear.color = {{color.r, color.g, color.b, color.a}};
             clearValues.push_back(colorClear);
+
+            if (multisampled)
+            {
+                // Resolve attachment (index 1) uses DONT_CARE → value ignored, but slot required
+                clearValues.push_back({});  // dummy
+            }
 
             if (hasDepth() || hasStencil())
             {
+                // Depth/stencil clear (attachment index 2 when MS, or 1 when not)
                 VkClearValue depthClear = {};
-                depthClear.depthStencil = {1.0f, 0};
+                depthClear.depthStencil = {1.0f, 0};   // depth=1.0, stencil=0
                 clearValues.push_back(depthClear);
             }
 
@@ -1022,13 +1041,10 @@ namespace tl
             beginInfo.renderPass = p.clearRenderPass;
             beginInfo.framebuffer = p.framebuffer;
             beginInfo.renderArea.offset = {0, 0};
-            beginInfo.renderArea.extent = {
-                static_cast<uint32_t>(p.size.w),
-                static_cast<uint32_t>(p.size.h)};
-            beginInfo.clearValueCount =
-                static_cast<uint32_t>(clearValues.size());
+            beginInfo.renderArea.extent = getExtent();
+            beginInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
             beginInfo.pClearValues = clearValues.data();
-
+            
             vkCmdBeginRenderPass(cmd, &beginInfo, contents);
             
             setupViewportAndScissor(cmd);

@@ -813,6 +813,7 @@ namespace tl
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F16;
             offscreenBufferOptions.depth = vlk::OffscreenDepth::_32;
             offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
+            offscreenBufferOptions.sampling = vlk::OffscreenSampling::_4;
             offscreenBufferOptions.pbo = true;
             offscreenBufferOptions.colorFilters.minify = timeline::ImageFilter::Linear;
             offscreenBufferOptions.colorFilters.magnify = timeline::ImageFilter::Linear;

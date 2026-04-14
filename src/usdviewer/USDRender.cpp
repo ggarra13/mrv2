@@ -368,9 +368,10 @@ namespace tl
         {
             TLRENDER_P();
 
-            VkClearValue clearValues[2];
+            VkClearValue clearValues[3];
             clearValues[0].color = {value.r, value.g, value.b, value.a};
-            clearValues[1].depthStencil = {1.F, 0};
+            clearValues[1].color = {value.r, value.g, value.b, value.a};
+            clearValues[2].depthStencil = {1.F, 0};
 
             VkRenderPassBeginInfo rpBegin{};
             rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -379,7 +380,7 @@ namespace tl
             rpBegin.renderArea.offset = {0, 0};
             rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
             rpBegin.clearValueCount =
-                1 +
+                2 +
                 static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
             rpBegin.pClearValues = clearValues;
 
