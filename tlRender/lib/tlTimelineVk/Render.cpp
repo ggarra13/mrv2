@@ -1276,30 +1276,6 @@ namespace tl
                 p.shaders["dummy"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["dummy"]);
             }
-            if (!p.shaders["st"])
-            {
-                p.shaders["st"] = vlk::Shader::create(
-                    ctx, vertexSTs(), fragmentSTs(), "st");
-                p.shaders["st"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["st"]->addPush("color", color, vlk::kShaderFragment);
-                _createBindingSet(p.shaders["st"]);
-            }
-            if (!p.shaders["usd"])
-            {
-                p.shaders["usd"] = vlk::Shader::create(
-                    ctx, vertexUSD(), fragmentUSD(), "usd");
-                p.shaders["usd"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["usd"]->addPush("color", color, vlk::kShaderFragment);
-                p.shaders["usd"]->addTexture("u_DiffuseMap");
-                p.shaders["usd"]->addTexture("u_MetallicMap");
-                p.shaders["usd"]->addTexture("u_RoughnessMap");
-                p.shaders["usd"]->addTexture("u_NormalMap");
-                p.shaders["usd"]->addTexture("u_AOMap");
-                p.shaders["usd"]->addTexture("u_OpacityMap");
-                _createBindingSet(p.shaders["usd"]);
-            }
 #endif
             if (!p.shaders["pbr"])
             {

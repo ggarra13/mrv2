@@ -15,12 +15,12 @@
 #define DEBUG_PIPELINE_LAYOUT_USE 0
 
 // Use 1 for using the dummy shader for debugging.
-#define USE_DUMMY_SHADER 1
+#define USE_DUMMY_SHADER 0
 
 //
 // Use 1 for faster startups.
 //
-#define USE_PRECOMPILED_SHADERS 0
+#define USE_PRECOMPILED_SHADERS 1
 
 //
 // Use 1 for using dynamic stencils.

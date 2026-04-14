@@ -654,19 +654,38 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
+            bool multisampled = (getSampleCount() != VK_SAMPLE_COUNT_1_BIT);
 
-            VkImageViewCreateInfo viewInfo{};
-            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            viewInfo.image = p.resolveImage;
-            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            viewInfo.format = p.colorFormat;
-            viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            viewInfo.subresourceRange.levelCount = 1;
-            viewInfo.subresourceRange.layerCount = 1;
+            // MS color view (only when multisampled)
+            if (multisampled)
+            {
+                VkImageViewCreateInfo viewInfo{};
+                viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+                viewInfo.image = p.msColorImage;
+                viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                viewInfo.format = p.colorFormat;
+                viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                viewInfo.subresourceRange.levelCount = 1;
+                viewInfo.subresourceRange.layerCount = 1;
 
-            if (vkCreateImageView(device, &viewInfo, nullptr, &p.resolveImageView) !=
-                VK_SUCCESS)
-                throw std::runtime_error("Failed to create image view");
+                if (vkCreateImageView(device, &viewInfo, nullptr, &p.msColorImageView) != VK_SUCCESS)
+                    throw std::runtime_error("Failed to create MS color image view");
+            }
+
+            // Resolve view (always present - this is what the public API returns)
+            {
+                VkImageViewCreateInfo viewInfo{};
+                viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+                viewInfo.image = p.resolveImage;
+                viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                viewInfo.format = p.colorFormat;
+                viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                viewInfo.subresourceRange.levelCount = 1;
+                viewInfo.subresourceRange.layerCount = 1;
+
+                if (vkCreateImageView(device, &viewInfo, nullptr, &p.resolveImageView) != VK_SUCCESS)
+                    throw std::runtime_error("Failed to create resolve image view");
+            }
         }
 
         //
@@ -677,104 +696,85 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
+            
+            VkSampleCountFlagBits samples = getSampleCount();
+            bool multisampled = (samples != VK_SAMPLE_COUNT_1_BIT);
 
+            std::vector<VkAttachmentDescription> attachments;
+
+            // MS color (or single-sample if not MS)
             VkAttachmentDescription colorAttachment{};
             colorAttachment.format = p.colorFormat;
-            colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+            colorAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
             colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            VkImageLayout initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            colorAttachment.initialLayout = initialLayout;
-            colorAttachment.finalLayout =
-                VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            colorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            attachments.push_back(colorAttachment);
+
+            // Resolve attachment
+            VkAttachmentDescription resolveAttachment{};
+            if (multisampled)
+            {
+                resolveAttachment.format = p.colorFormat;
+                resolveAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+                resolveAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                resolveAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                resolveAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                resolveAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                attachments.push_back(resolveAttachment);
+            }
+
+            // Depth/stencil
+            if (hasDepth() || hasStencil())
+            {
+                VkAttachmentDescription depthAttachment{};
+                depthAttachment.format = p.depthFormat;
+                depthAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
+                depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+                depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                attachments.push_back(depthAttachment);
+            }
+
+            // Subpass
+            VkSubpassDescription subpass{};
+            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+            subpass.colorAttachmentCount = 1;
 
             VkAttachmentReference colorRef{};
             colorRef.attachment = 0;
             colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-            VkSubpassDescription subpass{};
-            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-            subpass.colorAttachmentCount = 1;
             subpass.pColorAttachments = &colorRef;
 
-            std::vector<VkAttachmentDescription> attachments;
-            attachments.push_back(colorAttachment);
+            VkAttachmentReference resolveRef{};
+            if (multisampled)
+            {
+                resolveRef.attachment = 1;
+                resolveRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                subpass.pResolveAttachments = &resolveRef;
+            }
 
             VkAttachmentReference depthRef{};
-
             if (hasDepth() || hasStencil())
             {
-                depthRef.attachment = 1;
-                depthRef.layout =
-                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
+                depthRef.attachment = multisampled ? 2 : 1;
+                depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 subpass.pDepthStencilAttachment = &depthRef;
-
-                VkAttachmentDescription depthAttachment{};
-                depthAttachment.format = p.depthFormat;
-                depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-                depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-                depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-                depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-                depthAttachment.stencilStoreOp =
-                    VK_ATTACHMENT_STORE_OP_STORE;
-                depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-                depthAttachment.finalLayout =
-                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-                attachments.push_back(depthAttachment);
             }
-
-            VkSubpassDependency dependency{};
-            dependency.srcSubpass = 0;
-            dependency.dstSubpass = 0;
-
-            // Stages involved:
-            // - Color output
-            // - Depth/stencil tests
-            // - Fragment shader sampling (e.g., input attachments or sampled images)
-            dependency.srcStageMask =
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
-                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT |
-                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-
-            dependency.dstStageMask = dependency.srcStageMask;
-
-            // Access types involved:
-            dependency.srcAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-                VK_ACCESS_SHADER_READ_BIT;
-
-            dependency.dstAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-                VK_ACCESS_SHADER_READ_BIT;
-
-            if (hasDepth() || hasStencil())
-            {
-                dependency.srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-                dependency.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-            }
-
-            // Optional: this can improve performance on tiled GPUs
-            dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
-
 
             VkRenderPassCreateInfo rpInfo{};
             rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             rpInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
             rpInfo.pAttachments = attachments.data();
-            // rpInfo.dependencyCount = 1;
-            // rpInfo.pDependencies = &dependency;
             rpInfo.subpassCount = 1;
             rpInfo.pSubpasses = &subpass;
 
-            if (vkCreateRenderPass(
-                    device, &rpInfo, nullptr, &p.clearRenderPass) !=
-                VK_SUCCESS)
-                throw std::runtime_error(
-                    "Failed to create compositing render pass");
+            if (vkCreateRenderPass(device, &rpInfo, nullptr, &p.clearRenderPass) != VK_SUCCESS)
+                throw std::runtime_error("Failed to create clear render pass");
         }
 
 
@@ -788,114 +788,110 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-            VkAttachmentDescription colorAttachment{};
-            colorAttachment.format = p.colorFormat;
-            colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            VkImageLayout initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            colorAttachment.initialLayout = initialLayout;
-            colorAttachment.finalLayout =
-                VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-            VkAttachmentReference colorRef{};
-            colorRef.attachment = 0;
-            colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-            VkSubpassDescription subpass{};
-            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-            subpass.colorAttachmentCount = 1;
-            subpass.pColorAttachments = &colorRef;
+            VkSampleCountFlagBits samples = getSampleCount();
+            bool multisampled = (samples != VK_SAMPLE_COUNT_1_BIT);
 
             std::vector<VkAttachmentDescription> attachments;
+
+            // MS color
+            VkAttachmentDescription colorAttachment{};
+            colorAttachment.format = p.colorFormat;
+            colorAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
+            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;   // previous MS data is not preserved
+            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            colorAttachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            colorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             attachments.push_back(colorAttachment);
 
-            VkAttachmentReference depthRef{};
+            // Resolve
+            VkAttachmentDescription resolveAttachment{};
+            if (multisampled)
+            {
+                resolveAttachment.format = p.colorFormat;
+                resolveAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+                resolveAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;   // try to keep previous resolved pixels
+                resolveAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                resolveAttachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                resolveAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                attachments.push_back(resolveAttachment);
+            }
+            else
+            {
+                // Non-MS case – load previous color
+                colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+                colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                attachments[0] = colorAttachment; // update the one we just pushed
+            }
 
+            // Depth/stencil (same as original intent)
             if (hasDepth() || hasStencil())
             {
-                depthRef.attachment = 1;
-                depthRef.layout =
-                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-                subpass.pDepthStencilAttachment = &depthRef;
-
                 VkAttachmentDescription depthAttachment{};
                 depthAttachment.format = p.depthFormat;
-                depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+                depthAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
                 depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
                 depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
                 depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
-                
                 depthAttachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-                depthAttachment.finalLayout =
-                    VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 attachments.push_back(depthAttachment);
             }
 
-            VkSubpassDependency dependency{};
-            dependency.srcSubpass = 0;
-            dependency.dstSubpass = 0;
+            VkSubpassDescription subpass{};
+            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+            subpass.colorAttachmentCount = 1;
 
-            // Stages involved:
-            // - Color output
-            // - Depth/stencil tests
-            // - Fragment shader sampling (e.g., input attachments or sampled images)
-            dependency.srcStageMask =
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
-                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT |
-                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+            VkAttachmentReference colorRef{};
+            colorRef.attachment = 0;
+            colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            subpass.pColorAttachments = &colorRef;
 
-            dependency.dstStageMask = dependency.srcStageMask;
-
-            // Access types involved:
-            dependency.srcAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-                VK_ACCESS_SHADER_READ_BIT;
-
-            dependency.dstAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-                VK_ACCESS_SHADER_READ_BIT;
-
-            if (hasDepth() || hasStencil())
+            VkAttachmentReference resolveRef{};
+            if (multisampled)
             {
-                dependency.srcAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-                dependency.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-                                            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+                resolveRef.attachment = 1;
+                resolveRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                subpass.pResolveAttachments = &resolveRef;
             }
 
-            // Optional: this can improve performance on tiled GPUs
-            dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
-
+            VkAttachmentReference depthRef{};
+            if (hasDepth() || hasStencil())
+            {
+                depthRef.attachment = multisampled ? 2 : (multisampled ? 2 : 1);
+                depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                subpass.pDepthStencilAttachment = &depthRef;
+            }
 
             VkRenderPassCreateInfo rpInfo{};
             rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
             rpInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
             rpInfo.pAttachments = attachments.data();
-            // rpInfo.dependencyCount = 1;
-            // rpInfo.pDependencies = &dependency;
             rpInfo.subpassCount = 1;
             rpInfo.pSubpasses = &subpass;
 
-            if (vkCreateRenderPass(
-                    device, &rpInfo, nullptr, &p.loadRenderPass) !=
-                VK_SUCCESS)
-                throw std::runtime_error(
-                    "Failed to create compositing render pass");
+            if (vkCreateRenderPass(device, &rpInfo, nullptr, &p.loadRenderPass) != VK_SUCCESS)
+                throw std::runtime_error("Failed to create load render pass");
         }
-
 
         void OffscreenBuffer::createFramebuffer()
         {
             TLRENDER_P();
-
             VkDevice device = ctx.device;
 
             std::vector<VkImageView> attachments;
-            attachments.push_back(p.resolveImageView);
+            bool multisampled = (getSampleCount() != VK_SAMPLE_COUNT_1_BIT);
+
+            if (multisampled)
+            {
+                attachments.push_back(p.msColorImageView);
+                attachments.push_back(p.resolveImageView);
+            }
+            else
+            {
+                attachments.push_back(p.resolveImageView);
+            }
+
             if (hasDepth() || hasStencil())
                 attachments.push_back(p.depthImageView);
 
@@ -908,8 +904,7 @@ namespace tl
             fbInfo.height = p.size.h;
             fbInfo.layers = 1;
 
-            if (vkCreateFramebuffer(device, &fbInfo, nullptr, &p.framebuffer) !=
-                VK_SUCCESS)
+            if (vkCreateFramebuffer(device, &fbInfo, nullptr, &p.framebuffer) != VK_SUCCESS)
                 throw std::runtime_error("Failed to create framebuffer");
         }
 
@@ -929,23 +924,6 @@ namespace tl
                 }
             }
             throw std::runtime_error("Failed to find suitable memory type");
-        }
-
-        void OffscreenBuffer::transitionToShaderRead(VkCommandBuffer cmd)
-        {
-            TLRENDER_P();
-            
-            if (p.resolveImageLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
-            {
-                return;
-            }
-
-            transitionImageLayout(cmd, p.resolveImage,
-                                  p.resolveImageLayout,
-                                  VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-            // Track layout
-            p.resolveImageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
 
         void OffscreenBuffer::setupViewportAndScissor()
@@ -1056,22 +1034,6 @@ namespace tl
             setupViewportAndScissor(cmd);
         }
 
-        void OffscreenBuffer::endRenderPass(VkCommandBuffer cmd)
-        {
-            TLRENDER_P();
-            
-            vkCmdEndRenderPass(cmd);
-            
-            // Update tracked layouts to reflect the finalLayouts of the render pass
-            // These are the final layouts specified in both clearRenderPass and
-            // loadRenderPass
-            p.resolveImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            if (hasDepth() || hasStencil())
-            {
-                p.depthLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            }
-        }
-
         void OffscreenBuffer::setupViewportAndScissor(VkCommandBuffer cmd)
         {
             TLRENDER_P();
@@ -1085,19 +1047,51 @@ namespace tl
         void OffscreenBuffer::transitionToColorAttachment(VkCommandBuffer cmd)
         {
             TLRENDER_P();
+            bool multisampled = (getSampleCount() != VK_SAMPLE_COUNT_1_BIT);
 
-            if (p.resolveImageLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
+            // MS color (if present)
+            if (multisampled && p.msColorImageLayout != VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
             {
-                return;
+                transitionImageLayout(cmd, p.msColorImage, p.msColorImageLayout,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                p.msColorImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             }
 
-            transitionImageLayout(cmd, p.resolveImage, p.resolveImageLayout,
-                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-
-            // Track layout
-            p.resolveImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            // Resolve color (always)
+            if (p.resolveImageLayout != VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
+            {
+                transitionImageLayout(cmd, p.resolveImage, p.resolveImageLayout,
+                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+                p.resolveImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            }
         }
         
+        void OffscreenBuffer::transitionToShaderRead(VkCommandBuffer cmd)
+        {
+            TLRENDER_P();
+
+            if (p.resolveImageLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+                return;
+
+            transitionImageLayout(cmd, p.resolveImage, p.resolveImageLayout,
+                                  VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            p.resolveImageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        }
+
+        void OffscreenBuffer::endRenderPass(VkCommandBuffer cmd)
+        {
+            TLRENDER_P();
+            vkCmdEndRenderPass(cmd);
+
+            bool multisampled = (getSampleCount() != VK_SAMPLE_COUNT_1_BIT);
+            if (multisampled)
+                p.msColorImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            p.resolveImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            if (hasDepth() || hasStencil())
+                p.depthLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        }
+
         void OffscreenBuffer::transitionDepthToStencilAttachment(VkCommandBuffer cmd)
         {
             TLRENDER_P();
@@ -1327,11 +1321,6 @@ namespace tl
             // because flush() waits synchronously each frame.
             auto& pbo = p.pboRing[p.writeIndex];
 
-            // Transition to TRANSFER_SRC
-            transitionImageLayout(cmd, p.resolveImage,
-                                  p.resolveImageLayout,
-                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-
             VkBufferImageCopy region{};
             region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             region.imageSubresource.mipLevel = 0;
@@ -1341,6 +1330,10 @@ namespace tl
             if (w == 0) w = p.size.w;
             if (h == 0) h = p.size.h;
             region.imageExtent = {w, h, 1};
+
+            transitionImageLayout(cmd, p.resolveImage,
+                                  p.resolveImageLayout,
+                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
 
             vkCmdCopyImageToBuffer(cmd, p.resolveImage,
                                    VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
