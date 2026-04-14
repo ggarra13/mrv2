@@ -15,19 +15,18 @@ namespace tl
         {
             return R"(#version 450
 layout(location = 0) in vec3 vPos;
-layout(location = 1) in vec3 vNormal;
-layout(location = 0) out vec3 fPosition;
-layout(location = 1) out vec3 fNormal;
+
+layout(location = 0) out vec3 fPos;
 
 layout(set = 0, binding = 0, std140) uniform Transform {
      mat4 mvp;
+     mat4 model;
 } transform;
 
 void main()
 {
-    fNormal = vNormal;
-    fPosition = vPos;
     gl_Position = transform.mvp * vec4(vPos, 1.0);   
+    fPos = (transform.model * vec4(vPos, 1.0)).xyz;
 })";
         }
 
@@ -48,7 +47,8 @@ void main()
     vec3 N = normalize(cross(dx, dy));
 
     // Simple light direction
-    vec3 L = normalize(vec3(0.0, 0.0, -1.0));
+    vec3 lightPos = vec3(0.0, 0.0, 0.0);
+    vec3 L = normalize(fPos - lightPos);
 
     // Diffuse (Lambert)
     float diff = max(dot(N, L), 0.0);
@@ -151,13 +151,15 @@ layout(location = 1) out vec2 fTexture;
 
 layout(set = 0, binding = 0, std140) uniform Transform {
      mat4 mvp;
+     mat4 model;
 } transform;
 
 void main()
 {
     gl_Position = transform.mvp * vec4(vPos, 1.0);
     fTexture = vTexture;
-    fPos = vPos;
+    // fPos = vPos;
+    fPos = (transform.model * vec4(vPos, 1.0)).xyz;
 })";
         }
         
@@ -190,6 +192,44 @@ const float EPSILON = 0.0001;
 //  PBR helper functions
 // ═════════════════════════════════════════════
 
+// Calculation of TBN matrix and terminology based on "Surface
+// Gradient-Based Bump Mapping Framework" (2020)
+mat3
+ComputeTBNMatrix(vec3 P, vec3 N, vec2 st)
+{
+    // Get screen space derivatives of position
+    vec3 dPdx = dFdx(P);
+    vec3 dPdy = dFdy(P);
+
+    // Ensure position derivatives are perpendicular to N
+    vec3 sigmaX = dPdx - dot(dPdx, N) * N;
+    vec3 sigmaY = dPdy - dot(dPdy, N) * N;
+
+    float flipSign = dot(dPdy, cross(N, dPdx)) < 0 ? -1 : 1;
+
+    // Get screen space derivatives of st
+    vec2 dSTdx = dFdx(st);
+    vec2 dSTdy = dFdy(st);
+
+    // Get determinant and determinant sign of st matrix
+    float det = dot(dSTdx, vec2(dSTdy.y, -dSTdy.x));
+    float signDet = det < 0 ? -1 : 1;
+
+    // Get first column of inv st matrix
+    // Don't divide by det, but scale by its sign
+    vec2 invC0 = signDet * vec2(dSTdy.y, -dSTdx.y);
+
+    vec3 T = sigmaX * invC0.x + sigmaY * invC0.y;
+
+    if (abs(det) > 0) {
+        T = normalize(T);
+    }
+
+    vec3 B = (signDet * flipSign) * cross(N, T);
+
+    return mat3(T, B, N);
+}
+
 // Normal Distribution Function – GGX / Trowbridge-Reitz
 float NDF_GGX(float NdotH, float roughness) {
     float a  = roughness * roughness;
@@ -217,34 +257,34 @@ vec3 Fresnel_Schlick(float cosTheta, vec3 F0) {
 
 void main()
 {
-    vec2 uv = fTexture;
+    vec2 st = fTexture;
 
     // User's material parameters (\todo: pass as UBO)
     vec4  u_Material_diffuseColor = vec4(1,1,1,1); //pc.color;
-    float u_Material_metallic = 1;
-    float u_Material_roughness = 1;
+    float u_Material_metallic = 1.0;
+    float u_Material_roughness = 1.0;
     float u_Material_aoStrength = 1.0;
 
     // Scene parameters (\todo: pass as UBO? Not needed for a single light from
     //                          camera)
     vec3 u_Scene_camPos    = vec3(0, 0, 0);
     vec3 u_Scene_lightPos  = vec3(0, 0, 0);
-    vec3 u_Scene_lightColor = vec3(1, 1, 1);
+    vec3 u_Scene_lightColor = vec3(2, 2, 2);
 
 
     // ── Sample textures ───────────────────────
-    vec3  albedo    = texture(u_DiffuseMap,   uv).rgb * u_Material_diffuseColor.rgb;
-    float metallic  = texture(u_MetallicMap,  uv).r * u_Material_metallic;
-    float roughness = texture(u_RoughnessMap, uv).r * u_Material_roughness;
-    float opacity   = texture(u_OpacityMap, uv).a;
-    float ao        = mix(1.0, texture(u_AOMap, uv).r, u_Material_aoStrength);
+    vec3  albedo    = texture(u_DiffuseMap,   st).rgb * u_Material_diffuseColor.rgb;
+    float metallic  = texture(u_MetallicMap,  st).r * u_Material_metallic;
+    float roughness = texture(u_RoughnessMap, st).r * u_Material_roughness;
+    float opacity   = texture(u_OpacityMap, st).a;
+    float ao        = mix(1.0, texture(u_AOMap, st).r, u_Material_aoStrength);
 
-    // \@todo: re-add Clamp to physically plausible range
-    // roughness = clamp(roughness, 0.05, 1.0);
-    // metallic  = clamp(metallic,  0.0,  1.0);
+    // Clamp to physically plausible range
+    roughness = clamp(roughness, 0.05, 1.0);
+    metallic  = clamp(metallic,  0.0,  1.0);
 
     // ── Normal from normal map ────────────────
-    vec3 Nt  = texture(u_NormalMap, uv).rgb * 2.0 - 1.0; // [0,1] → [-1,1]
+    vec3 Nt  = texture(u_NormalMap, st).rgb * 2.0 - 1.0; // [0,1] → [-1,1]
     // vec3 N   = normalize(fs_in.TBN * Nt);                 // tangent → world space
 
     // \@todo: -faceted- normal (see above for correct calculation)
@@ -252,15 +292,24 @@ void main()
     vec3 dy = dFdy(fPos);
     vec3 N = normalize(cross(dx, dy));
 
+    mat3 TBN = ComputeTBNMatrix(fPos, N, st);
+    N = normalize(TBN * Nt);
+
     // Normal mapping cannot be done in local space.
     // vec3 N = normalize(cross(dx, dy) + Nt);
 
     // ── Lighting vectors ──────────────────────
     //vec3 V = normalize(fPos - u_Scene_camPos);  // correct
 
-    vec3 V = vec3(0, 0, -1);  // correct
-    // vec3 L = normalize(u_Scene_lightPos - fPos); // incorrect
+    // vec3 V = normalize(-fPos);  // correct
+    vec3 V = normalize(vec3(0, 0, -1)); // correct
+
+    // Simple light direction (incorrect)
+    //vec3 lightPos = vec3(0.0, 0.0, 0.0);
+    //vec3 L = normalize(lightPos - fPos);
+
     vec3 L = normalize(vec3(0, 0, -1)); // correct
+
     vec3 H = normalize(V + L);
 
     float NdotV = max(dot(N, V), 0.0);
@@ -293,10 +342,21 @@ void main()
  
     vec3 Lo = (diffuse + specular) * radiance * NdotL;
 
-    // Simple ambient term, attenuated by AO ( was 0.03)
-    vec3 ambient = vec3(0.1) * albedo * ao;
+    // Simulate environment reflection
+    vec3 reflectionVector = reflect(-V, N);
 
-    vec3 color = ambient + diffuse + specular;
+    // Fake environment light (a gradient from sky to ground)
+    vec3 envColor = mix(vec3(0.2, 0.2, 0.2), vec3(0.8, 0.9, 1.0),
+                        reflectionVector.y * 0.5 + 0.5);
+
+   // Dielectrics get flat ambient, Metals get the environment reflection
+   vec3 ambientDiffuse = vec3(0.03) * albedo;
+   vec3 ambientSpecular = envColor * F0 * (1.0 - roughness); 
+
+    vec3 ambient = (ambientDiffuse + ambientSpecular) * ao;
+
+    // Combine ambient + diffuse + specular
+    vec3 color = ambient + Lo;
 
     // ── Tone mapping (Reinhard) + gamma  ───────  WRONG AND UNNEEDED
     //    If we merge it into vmrv2, we can use libplacebo directly.
@@ -342,7 +402,7 @@ layout(set = 0, binding = 0, std140) uniform Transform {
 
 void main()
 {
-    fragPosition = vPos;
+    fragPosition = vPos;  // no need to transform this one for STs
     fTexture = vTexture;
     gl_Position = transform.mvp * vec4(vPos, 1.0);
 })";
@@ -353,6 +413,7 @@ void main()
             return R"(#version 450
 layout(location = 0) in vec2 fTexture;
 layout(location = 1) in vec3 inPosition;
+
 layout(location = 0) out vec4 outColor;
                   
 layout(push_constant) uniform PushConstants {
@@ -365,150 +426,6 @@ void main()
 })";
         }
         
-        std::string vertexSource()
-        {
-            return R"(#version 450
-layout(location = 0) in vec3 vPos;
-layout(location = 1) in vec2 vTexture;
-layout(location = 0) out vec2 fTexture;
-layout(location = 1) out vec3 fPos;
-layout(set = 0, binding = 0, std140) uniform Transform {
-     mat4 mvp;
-} transform;
-
-void main()
-{
-    gl_Position = transform.mvp * vec4(vPos, 1.0);
-    fTexture = vTexture;
-    fPos = vPos;
-})";
-        }
-
-        std::string vertex2Source()
-        {
-            return R"(#version 450
-layout(location = 0) in vec2 vPos;
-layout(location = 1) in vec2 vTexture;
-layout(location = 0) out vec2 fTexture;
-layout(set = 0, binding = 0, std140) uniform Transform {
-    mat4 mvp;
-} transform;
-
-void main()
-{
-    gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
-    fTexture = vTexture;
-})";
-        }
-
-
-        std::string vertex2NoUVsSource()
-        {
-            return R"(#version 450
-layout(location = 0) in vec2 vPos;
-layout(set = 0, binding = 0, std140) uniform Transform {
-    mat4 mvp;
-} transform;
-
-void main()
-{
-    gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
-})";
-        }
         
-        std::string meshFragmentSource()
-        {
-            return R"(#version 450
-                   
-layout(location = 0) in  vec2 fTexture;
-layout(location = 0) out vec4 outColor;
-                  
-layout(push_constant) uniform PushConstants {
-    vec4 color;
-} pc;       
-                 
-void main()
-{
-     outColor = pc.color;
-})";
-        }
-
-        std::string colorMeshVertexSource()
-        {
-            return R"(#version 450
-                 
-layout(location = 0) in vec2 vPos;
-layout(location = 1) in vec4 vColor;
-layout(location = 0) out vec4 fColor;
-
-layout(set = 0, binding = 0, std140) uniform TransformUBO {
-    mat4 mvp;
-} transform;
-                 
-void main()
-{
-    gl_Position = transform.mvp * vec4(vPos, 0.0, 1.0);
-    fColor = vColor;
-})";
-        }
-
-        std::string colorMeshFragmentSource()
-        {
-            return R"(#version 450
-                 
-layout(location = 0) in vec4 fColor;
-layout(location = 0) out vec4 outColor;
-                 
-layout(push_constant) uniform PushConstants {
-    vec4 color;
-} pc; 
-
-void main()
-{
-    outColor = fColor * pc.color;
-})";
-        }
-
-        std::string textFragmentSource()
-        {
-            return R"(#version 450
-                 
-layout(location = 0) in vec2 fTexture;
-layout(location = 0) out vec4 outColor;
-
-layout(binding = 1) uniform sampler2D textureSampler;
-                 
-layout(push_constant) uniform PushConstants {
-    vec4 color;
-} pc;
-                 
-void main()
-{
-     outColor.r = pc.color.r;
-     outColor.g = pc.color.g;
-     outColor.b = pc.color.b;
-     outColor.a = pc.color.a * texture(textureSampler, fTexture).r;
-})";
-        }
-
-        std::string textureFragmentSource()
-        {
-            return R"(#version 450
-                 
-layout(location = 0) in vec2 fTexture;
-layout(location = 0) out vec4 outColor;
-
-layout(binding = 1) uniform sampler2D textureSampler;
-
-layout(push_constant) uniform PushConstants {
-    vec4 color;
-} pc;
-                 
-void main()
-{
-     outColor = texture(textureSampler, fTexture); // * pc.color;
-})";
-        }
-        
-    } // namespace timeline_vlk
+    } // namespace usd
 } // namespace tl

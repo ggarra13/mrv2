@@ -80,7 +80,8 @@ namespace tl
         void Render::_emitMeshDraw(const std::string& pipelineLayoutName,
                                    const std::string& shaderName,
                                    const std::string& meshName,
-                                   const math::Matrix4x4f& transform,
+                                   const math::Matrix4x4f& mvp,
+                                   const math::Matrix4x4f& model,
                                    const image::Color4f& color)
         {
             TLRENDER_P();
@@ -90,14 +91,17 @@ namespace tl
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                shader->getPushStageFlags(), 0,
                                sizeof(color), &color);
-            shader->setUniform("transform.mvp", transform);
+            USDTransforms transforms;
+            transforms.mvp = mvp;
+            transforms.model = model;
+            shader->setUniform("transforms", transforms);
             _bindDescriptorSets(pipelineLayoutName, shaderName);
             _vkDraw(meshName);
         }
 
 
         void Render::draw3DMesh(const geom::TriangleMesh3& mesh,
-                                const math::Matrix4x4f& matrix,
+                                const math::Matrix4x4f& model,
                                 const image::Color4f& color,
                                 const std::string& shaderId,
                                 const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
@@ -119,7 +123,7 @@ namespace tl
             std::string pipelineLayoutName;
             std::string shaderName;
 
-            const auto transform = p.transform * matrix;
+            const auto mvp = p.transform * model;
             
             if (shaderId.empty() || shaderId == "dummy" || textures.empty())
             {
@@ -177,7 +181,8 @@ namespace tl
                            srcAlphaBlendFactor, dstAlphaBlendFactor,
                            colorBlendOp, alphaBlendOp);
 
-            _emitMeshDraw(pipelineLayoutName, shaderName, meshName, transform, color);
+            _emitMeshDraw(pipelineLayoutName, shaderName, meshName, mvp,
+                          model, color);
         }
 
         

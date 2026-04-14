@@ -589,7 +589,8 @@ namespace tl
                 if (st.Get(&values))
                 {
                     TfToken interp = st.GetInterpolation();
-                    // std::cerr << "STs found=" << values.size()
+                    // std::cerr << primPath << std::endl;
+                    // std::cerr << "\tSTs found=" << values.size()
                     //           << " interpolation=" << interp << std::endl;
 
                     if (st.IsIndexed())

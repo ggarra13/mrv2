@@ -166,15 +166,15 @@ namespace tl
             g.bindingSets.clear();
             g.buffers.clear();
             
-            const math::Matrix4x4f transform;
             const image::Color4f color(1.F, 1.F, 1.F);
+            USDTransforms transforms;
 
             if (!p.shaders["dummy"])
             {
                 p.shaders["dummy"] = vlk::Shader::create(
                     ctx, vertexDummy(), fragmentDummy(), "dummy");
                 p.shaders["dummy"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
+                    "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["dummy"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["dummy"]);
             }
@@ -184,7 +184,7 @@ namespace tl
                 p.shaders["st"] = vlk::Shader::create(
                     ctx, vertexSTs(), fragmentSTs(), "st");
                 p.shaders["st"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
+                    "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["st"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["st"]);
             }
@@ -194,7 +194,7 @@ namespace tl
                 p.shaders["usd"] = vlk::Shader::create(
                     ctx, vertexUSD(), fragmentUSD(), "usd");
                 p.shaders["usd"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
+                    "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["usd"]->addPush("color", color, vlk::kShaderFragment);
                 p.shaders["usd"]->addTexture("u_DiffuseMap");
                 p.shaders["usd"]->addTexture("u_MetallicMap");
@@ -217,7 +217,6 @@ namespace tl
                 math::ortho(
                     0.F, static_cast<float>(renderSize.w), 0.F,
                     static_cast<float>(renderSize.h), -1.F, 1.F));
-            // applyTransforms();
         }
 
         void Render::end()
@@ -465,7 +464,9 @@ namespace tl
                 if (i.second)
                 {
                     i.second->bind(p.frameIndex);
-                    i.second->setUniform("transform.mvp", p.transform,
+                    USDTransforms transforms;
+                    transforms.mvp = transforms.model = p.transform;
+                    i.second->setUniform("transforms", transforms,
                                          vlk::kShaderVertex);
                 }
             }

@@ -4,13 +4,18 @@
 
 namespace tl
 {
-    namespace timeline_vlk
+    namespace usd
     {
+        struct USDTransforms
+        {
+            alignas(16) math::Matrix4x4f mvp;
+            alignas(16) math::Matrix4x4f model;
+        };
         
         struct PBRTransform
         {
-            alignas(16) math::Matrix4x4f model;
             alignas(16) math::Matrix4x4f mvp;
+            alignas(16) math::Matrix4x4f model;
             alignas(16) math::Matrix3x3f normalMatrix;
         };
                 

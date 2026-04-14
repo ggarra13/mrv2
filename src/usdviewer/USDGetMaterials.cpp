@@ -35,21 +35,21 @@ namespace tl
                     return;
                 }
                 
-                if (inputName == TfToken("diffuseColor") ||
-                    inputName == TfToken("opacity") ||
-                    inputName == TfToken("occlusion"))
+                if (inputName == TfToken("diffuseColor") || // ok
+                    inputName == TfToken("opacity") ||   // ok
+                    inputName == TfToken("occlusion") || // ok
+                    inputName == TfToken("normal"))      // ok
                 {
                     result.texturePath = "*solid";
                     result.value    = { 1.F, 1.F, 1.F, 1.F };
                 }
-                else if (inputName == TfToken("displacement") ||
-                         inputName == TfToken("metallic") ||
-                         inputName == TfToken("roughness"))
+                else if (inputName == TfToken("metallic") ||  // ok 
+                         inputName == TfToken("displacement"))     // ok
                 {
                     result.texturePath = "*empty";
                     result.value    = { 0.F, 0.F, 0.F, 0.F };
                 }
-                else if (inputName == TfToken("normal"))
+                else if (inputName == TfToken("roughness"))
                 {
                     result.texturePath = "*middle";
                     result.value    = { 0.5F, 0.5F, 0.5F, 0.5F };

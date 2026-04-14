@@ -138,7 +138,8 @@ namespace tl
             void _emitMeshDraw(const std::string& pipelineLayoutName,
                                const std::string& shaderName,
                                const std::string& meshName,
-                               const math::Matrix4x4f& transform,
+                               const math::Matrix4x4f& mvp,
+                               const math::Matrix4x4f& model,
                                const image::Color4f& color);
 
             void _setupRectCommon(const math::Box2i& box);

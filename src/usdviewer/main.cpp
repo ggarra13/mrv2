@@ -542,9 +542,9 @@ void usd_window::flush()
         void* data = p.buffer->getInlineReadbackPtr();
         if (data)
         {
-            memcpy(p.captureImage->getData(), data,
-                   p.captureImage->getDataByteCount());
-            saveHalfRGB("/home/gga/test.exr", p.captureImage);
+            // memcpy(p.captureImage->getData(), data,
+            //        p.captureImage->getDataByteCount());
+            // saveHalfRGB("/home/gga/test.exr", p.captureImage);
         }
     }
 }
@@ -593,29 +593,43 @@ void usd_window::draw()
     p.buffer->transitionToShaderRead(cmd);
 
     math::Size2i renderSize(p.buffer->getWidth(), p.buffer->getHeight());
-    float aspectRatio = math::aspectRatio(renderSize);
     
-    float windowW = pixel_w();
-    float windowH = pixel_h();
+    float windowW = (float)pixel_w();
+    float windowH = (float)pixel_h();
 
-    float renderW = renderSize.w;
-    float renderH = renderSize.h;
+    float renderW = (float)renderSize.w;
+    float renderH = (float)renderSize.h;
 
-    float offsetX = (windowW - renderW) * 0.5f;
-    float offsetY = (windowH - renderH) * 0.5f;
-            
+    // 1. Calculate scaling factors for both axes
+    float scaleX = windowW / renderW;
+    float scaleY = windowH / renderH;
+
+    // 2. Use the smaller scale to "fit" the render inside the window
+    // This prevents the render from being larger than the window
+    float scale = (scaleX < scaleY) ? scaleX : scaleY;
+
+    // 3. Calculate the final scaled dimensions
+    float finalW = renderW * scale;
+    float finalH = renderH * scale;
+
+    // 4. Calculate offsets to center the scaled render
+    float offsetX = (windowW - finalW) * 0.5f;
+    float offsetY = (windowH - finalH) * 0.5f;
+
     VkViewport viewport = {};
-    viewport.x     = offsetX;
-    viewport.y     = offsetY;
-    viewport.width = renderW;
-    viewport.height = renderH;
+    viewport.x        = offsetX;
+    viewport.y        = offsetY;
+    viewport.width    = finalW;
+    viewport.height   = finalH;
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
     vkCmdSetViewport(cmd, 0, 1, &viewport);
-    
+
     VkRect2D scissor = {};
-    scissor.extent.width = windowW;
-    scissor.extent.height = windowH;
+    scissor.offset.x      = (int32_t)std::max(0.0f, offsetX);
+    scissor.offset.y      = (int32_t)std::max(0.0f, offsetY);
+    scissor.extent.width  = (uint32_t)finalW;
+    scissor.extent.height = (uint32_t)finalH;
     vkCmdSetScissor(cmd, 0, 1, &scissor);
             
     // Bind the shaders to the current frame index.
