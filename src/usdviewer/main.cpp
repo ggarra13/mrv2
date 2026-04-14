@@ -102,7 +102,7 @@ void saveHalfRGB(const char* filename,
         file.setFrameBuffer(&pixels[0][0], 1, width);
         file.writePixels(height);
         
-        std::cout << "Image saved successfully to " << filename << std::endl;
+        //std::cout << "Image saved successfully to " << filename << std::endl;
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }

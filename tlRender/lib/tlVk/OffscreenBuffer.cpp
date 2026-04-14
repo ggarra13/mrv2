@@ -162,16 +162,23 @@ namespace tl
             VkFormat colorFormat = VK_FORMAT_R8G8B8A8_UNORM;
             VkFormat depthFormat = VK_FORMAT_UNDEFINED;
 
-            VkImageLayout imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            VkImage image = VK_NULL_HANDLE;
-            VkDeviceMemory imageMemory = VK_NULL_HANDLE;
-            VkImageView imageView = VK_NULL_HANDLE;
+            // Multisampled color render target (only created when sampling > 1)
+            VkImage         msColorImage       = VK_NULL_HANDLE;
+            VkDeviceMemory  msColorMemory      = VK_NULL_HANDLE;
+            VkImageView     msColorImageView   = VK_NULL_HANDLE;
+            VkImageLayout   msColorImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
-            VkImageLayout depthLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            VkImage depthImage = VK_NULL_HANDLE;
-            VkDeviceMemory depthMemory = VK_NULL_HANDLE;
-            VkImageView depthImageView = VK_NULL_HANDLE;
+            // Resolved single-sample color image (public API image/view/layout)
+            VkImage         resolveImage       = VK_NULL_HANDLE;
+            VkDeviceMemory  resolveMemory      = VK_NULL_HANDLE;
+            VkImageView     resolveImageView   = VK_NULL_HANDLE;
+            VkImageLayout   resolveImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
+            VkImageLayout   depthLayout        = VK_IMAGE_LAYOUT_UNDEFINED;
+            VkImage         depthImage         = VK_NULL_HANDLE;
+            VkDeviceMemory  depthMemory        = VK_NULL_HANDLE;
+            VkImageView     depthImageView     = VK_NULL_HANDLE;
+            
             VkRenderPass clearRenderPass = VK_NULL_HANDLE;
             VkRenderPass loadRenderPass = VK_NULL_HANDLE;
             VkFramebuffer framebuffer = VK_NULL_HANDLE;
@@ -261,12 +268,13 @@ namespace tl
             if (p.loadRenderPass != VK_NULL_HANDLE)
                 vkDestroyRenderPass(device, p.loadRenderPass, nullptr);
 
-            if (p.imageView != VK_NULL_HANDLE)
-                vkDestroyImageView(device, p.imageView, nullptr);            
-            if (p.image != VK_NULL_HANDLE)
-                vkDestroyImage(device, p.image, nullptr);
-            if (p.imageMemory != VK_NULL_HANDLE)
-                vkFreeMemory(device, p.imageMemory, nullptr);
+            if (p.resolveImageView != VK_NULL_HANDLE)
+                vkDestroyImageView(device, p.resolveImageView, nullptr);            
+            if (p.resolveImage != VK_NULL_HANDLE)
+                vkDestroyImage(device, p.resolveImage, nullptr);
+            if (p.resolveMemory != VK_NULL_HANDLE)
+                vkFreeMemory(device, p.resolveMemory, nullptr);
+            
             if (p.depthImageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.depthImageView, nullptr);
             if (p.depthImage != VK_NULL_HANDLE)
@@ -285,7 +293,7 @@ namespace tl
             }
 
             // Reset layouts
-            p.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            p.resolveImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             p.depthLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         }
 
@@ -472,12 +480,12 @@ namespace tl
         
         VkImageLayout OffscreenBuffer::getImageLayout() const
         {
-            return _p->imageLayout;
+            return _p->resolveImageLayout;
         }
         
         void OffscreenBuffer::setImageLayout(VkImageLayout value)
         {
-            _p->imageLayout = value;
+            _p->resolveImageLayout = value;
         }
 
         VkImageLayout OffscreenBuffer::getDepthLayout() const
@@ -492,7 +500,7 @@ namespace tl
         
         const std::string OffscreenBuffer::getImageLayoutName() const
         {
-            return getLayoutName(_p->imageLayout);
+            return getLayoutName(_p->resolveImageLayout);
         }
 
         const std::string OffscreenBuffer::getDepthLayoutName() const
@@ -502,12 +510,12 @@ namespace tl
 
         VkImageView OffscreenBuffer::getImageView() const
         {
-            return _p->imageView;
+            return _p->resolveImageView;
         }
 
         VkImage OffscreenBuffer::getImage() const
         {
-            return _p->image;
+            return _p->resolveImage;
         }
 
         VkFramebuffer OffscreenBuffer::getFramebuffer() const
@@ -571,11 +579,11 @@ namespace tl
             info.samples = samples;
             info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-            if (vkCreateImage(device, &info, nullptr, &p.image) != VK_SUCCESS)
+            if (vkCreateImage(device, &info, nullptr, &p.resolveImage) != VK_SUCCESS)
                 throw std::runtime_error("Failed to create offscreen image");
 
             VkMemoryRequirements memReq;
-            vkGetImageMemoryRequirements(device, p.image, &memReq);
+            vkGetImageMemoryRequirements(device, p.resolveImage, &memReq);
 
             VkMemoryAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -583,12 +591,12 @@ namespace tl
             allocInfo.memoryTypeIndex = findMemoryType(
                 memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-            if (vkAllocateMemory(device, &allocInfo, nullptr, &p.imageMemory) !=
+            if (vkAllocateMemory(device, &allocInfo, nullptr, &p.resolveMemory) !=
                 VK_SUCCESS)
                 throw std::runtime_error(
                     "Failed to allocate offscreen image memory");
 
-            vkBindImageMemory(device, p.image, p.imageMemory, 0);
+            vkBindImageMemory(device, p.resolveImage, p.resolveMemory, 0);
         }
 
         void OffscreenBuffer::createImageView()
@@ -599,14 +607,14 @@ namespace tl
 
             VkImageViewCreateInfo viewInfo{};
             viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            viewInfo.image = p.image;
+            viewInfo.image = p.resolveImage;
             viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
             viewInfo.format = p.colorFormat;
             viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             viewInfo.subresourceRange.levelCount = 1;
             viewInfo.subresourceRange.layerCount = 1;
 
-            if (vkCreateImageView(device, &viewInfo, nullptr, &p.imageView) !=
+            if (vkCreateImageView(device, &viewInfo, nullptr, &p.resolveImageView) !=
                 VK_SUCCESS)
                 throw std::runtime_error("Failed to create image view");
         }
@@ -837,7 +845,7 @@ namespace tl
             VkDevice device = ctx.device;
 
             std::vector<VkImageView> attachments;
-            attachments.push_back(p.imageView);
+            attachments.push_back(p.resolveImageView);
             if (hasDepth() || hasStencil())
                 attachments.push_back(p.depthImageView);
 
@@ -877,17 +885,17 @@ namespace tl
         {
             TLRENDER_P();
             
-            if (p.imageLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+            if (p.resolveImageLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
             {
                 return;
             }
 
-            transitionImageLayout(cmd, p.image,
-                                  p.imageLayout,
+            transitionImageLayout(cmd, p.resolveImage,
+                                  p.resolveImageLayout,
                                   VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
             // Track layout
-            p.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            p.resolveImageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
 
         void OffscreenBuffer::setupViewportAndScissor()
@@ -1007,7 +1015,7 @@ namespace tl
             // Update tracked layouts to reflect the finalLayouts of the render pass
             // These are the final layouts specified in both clearRenderPass and
             // loadRenderPass
-            p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            p.resolveImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             if (hasDepth() || hasStencil())
             {
                 p.depthLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -1028,16 +1036,16 @@ namespace tl
         {
             TLRENDER_P();
 
-            if (p.imageLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
+            if (p.resolveImageLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
             {
                 return;
             }
 
-            transitionImageLayout(cmd, p.image, p.imageLayout,
+            transitionImageLayout(cmd, p.resolveImage, p.resolveImageLayout,
                                   VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 
             // Track layout
-            p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            p.resolveImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
         
         void OffscreenBuffer::transitionDepthToStencilAttachment(VkCommandBuffer cmd)
@@ -1197,8 +1205,8 @@ namespace tl
             vkResetFences(device, 1, &pbo.fence);
 
             // Transition image to TRANSFER_SRC
-            transitionImageLayout(cmd, p.image,
-                                  p.imageLayout,
+            transitionImageLayout(cmd, p.resolveImage,
+                                  p.resolveImageLayout,
                                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
             
             // Setup copy region
@@ -1214,16 +1222,16 @@ namespace tl
             
             region.imageExtent = {w, h, 1};
 
-            vkCmdCopyImageToBuffer(cmd, p.image,
+            vkCmdCopyImageToBuffer(cmd, p.resolveImage,
                                    VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                    pbo.buffer, 1, &region);
 
             // Transition back if needed
-            transitionImageLayout(cmd, p.image,
+            transitionImageLayout(cmd, p.resolveImage,
                                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                   VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 
-            p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            p.resolveImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         }
 
         void OffscreenBuffer::submitReadback(VkCommandBuffer cmd)
@@ -1270,8 +1278,8 @@ namespace tl
             auto& pbo = p.pboRing[p.writeIndex];
 
             // Transition to TRANSFER_SRC
-            transitionImageLayout(cmd, p.image,
-                                  p.imageLayout,
+            transitionImageLayout(cmd, p.resolveImage,
+                                  p.resolveImageLayout,
                                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
 
             VkBufferImageCopy region{};
@@ -1284,15 +1292,15 @@ namespace tl
             if (h == 0) h = p.size.h;
             region.imageExtent = {w, h, 1};
 
-            vkCmdCopyImageToBuffer(cmd, p.image,
+            vkCmdCopyImageToBuffer(cmd, p.resolveImage,
                                    VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                    pbo.buffer, 1, &region);
 
             // Transition back so the image is ready as a shader source next
-            transitionImageLayout(cmd, p.image,
+            transitionImageLayout(cmd, p.resolveImage,
                                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                   VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-            p.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            p.resolveImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
             // Advance ring — the data will be in the slot we just recorded into
             p.writeIndex = (p.writeIndex + 1) % NUM_PBO_BUFFERS;
