@@ -11,9 +11,9 @@ set(CMAKE_FIND_FRAMEWORK LAST)
 
 # Do not skip RPATH as that can make macOS crash.
 set(CMAKE_SKIP_RPATH FALSE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
 # Avoid warnings of overshadowing system libraries.
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 if(APPLE)
     set(CMAKE_INSTALL_RPATH "@executable_path/../lib")
 elseif(UNIX)

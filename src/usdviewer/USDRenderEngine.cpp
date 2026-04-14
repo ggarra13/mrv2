@@ -659,7 +659,7 @@ namespace tl
                                     uv = values[0];
                                 }
 
-                                geom.t.push_back(math::Vector2f(uv[0], uv[1]));
+                                geom.t.push_back(math::Vector2f(uv[0], 1.0f - uv[1]));
                             }
                             faceCornerIdx += vertCount;
                         }
