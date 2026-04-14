@@ -62,6 +62,7 @@ Change Log
 - Added toggling USD's enableSceneLights in OpenGL backend.
 - Added toggling USD's enableSceneMaterials in OpenGL backend.
 - On vmrv2, made Debanding default to None as it was messing artists' viewing of images. If you already started vmrv2, you should change Window->Preferences->User Interface->Render->Debanding.
+- Fixed USD render options in Python and in the UI.
 - There's now an additional utility called usdviewer that uses Vulkan to parse and preview OpenUSD assets.  It is still very much a work in progress.
 
   + It currently has:

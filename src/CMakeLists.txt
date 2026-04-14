@@ -234,10 +234,7 @@ if(TLRENDER_TIFF)
 endif()
 
 if(TLRENDER_USD)
-    find_package(pxr)
-    if(pxr_FOUND)
-        add_definitions(-DTLRENDER_USD)
-    endif()
+    add_definitions(-DTLRENDER_USD)
 endif()
 
 if(TLRENDER_VK)

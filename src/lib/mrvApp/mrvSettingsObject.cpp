@@ -3,174 +3,164 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-#include "mrvApp/mrvSettingsObject.h"
+ #include "mrvApp/mrvSettingsObject.h"
 
-#include "mrvFl/mrvIO.h"
+ #include "mrvFl/mrvIO.h"
 
-#include "mrvCore/mrvFile.h"
+ #include "mrvCore/mrvFile.h"
 
-#include "mrvOS/mrvMemory.h"
-#include "mrvOS/mrvOS.h"
+ #include "mrvOS/mrvMemory.h"
+ #include "mrvOS/mrvOS.h"
 
 
-#if defined(TLRENDER_USD)
-#    include "mrvOptions/mrvUSD.h"
-#endif // TLRENDER_USD
+ #if defined(TLRENDER_USD)
+ #    include "mrvOptions/mrvUSD.h"
+ #endif // TLRENDER_USD
 
-#include <tlCore/Memory.h>
-#include <tlCore/StringFormat.h>
+ #include <tlCore/Memory.h>
+ #include <tlCore/StringFormat.h>
 
-#include <tlTimeline/Player.h>
-#include <tlTimeline/Timeline.h>
+ #include <tlTimeline/Player.h>
+ #include <tlTimeline/Timeline.h>
 
-#include <tlTimelineUI/IItem.h>
+ #include <tlTimelineUI/IItem.h>
 
-#include <FL/Fl.H>
+ #include <FL/Fl.H>
 
-#include <vector>
-#include <map>
-#include <unordered_set>
-#include <algorithm>
-#include <filesystem>
-namespace fs = std::filesystem;
+ #include <vector>
+ #include <map>
+ #include <unordered_set>
+ #include <algorithm>
+ #include <filesystem>
+ namespace fs = std::filesystem;
 
-namespace mrv
-{
-    namespace
-    {
-        const char* kModule = "settings";
-        const int kRecentFilesMax = 10;
-        const int kRecentHostsMax = 10;
-        const int kRecentPythonScriptsMax = 10;
-    } // namespace
+ namespace mrv
+ {
+     namespace
+     {
+         const char* kModule = "settings";
+         const int kRecentFilesMax = 10;
+         const int kRecentHostsMax = 10;
+         const int kRecentPythonScriptsMax = 10;
+     } // namespace
 
-    namespace
-    {
-    }
+     namespace
+     {
+     }
 
-    struct SettingsObject::Private
-    {
-        std::map<std::string, std_any> defaultValues;
-        std::map<std::string, std_any> settings;
-        std::vector<std::string> recentFiles;
-        std::vector<std::string> recentHosts;
-        std::vector<std::string> pythonScripts;
-    };
+     struct SettingsObject::Private
+     {
+         std::map<std::string, std_any> defaultValues;
+         std::map<std::string, std_any> settings;
+         std::vector<std::string> recentFiles;
+         std::vector<std::string> recentHosts;
+         std::vector<std::string> pythonScripts;
+     };
 
-    SettingsObject::SettingsObject() :
-        _p(new Private)
-    {
-        TLRENDER_P();
+     SettingsObject::SettingsObject() :
+         _p(new Private)
+     {
+         TLRENDER_P();
 
-        // GUI Window defaults (all panels)
-        p.defaultValues["gui/Annotations/Window"] = 0;
-        p.defaultValues["gui/Background/Window"] = 0;
-        p.defaultValues["gui/Color Area/Window"] = 0;
-        p.defaultValues["gui/Color/Window"] = 0;
-        p.defaultValues["gui/Compare/Window"] = 0;
-        p.defaultValues["gui/Devices/Window"] = 0;
-        p.defaultValues["gui/Environment Map/Window"] = 0;
-        p.defaultValues["gui/Files/Window"] = 0;
-        p.defaultValues["gui/Histogram/Window"] = 0;
-        p.defaultValues["gui/Media Info/Window"] = 0;
-        p.defaultValues["gui/NDI/Window"] = 0;
-        p.defaultValues["gui/Network/Window"] = 0;
-        p.defaultValues["gui/Playlist/Window"] = 0;
-        p.defaultValues["gui/Settings/Window"] = 0;
-        p.defaultValues["gui/Stereo 3D/Window"] = 0;
-        p.defaultValues["gui/USD/Window"] = 0;
+         // GUI Window defaults (all panels)
+         p.defaultValues["gui/Annotations/Window"] = 0;
+         p.defaultValues["gui/Background/Window"] = 0;
+         p.defaultValues["gui/Color Area/Window"] = 0;
+         p.defaultValues["gui/Color/Window"] = 0;
+         p.defaultValues["gui/Compare/Window"] = 0;
+         p.defaultValues["gui/Devices/Window"] = 0;
+         p.defaultValues["gui/Environment Map/Window"] = 0;
+         p.defaultValues["gui/Files/Window"] = 0;
+         p.defaultValues["gui/Histogram/Window"] = 0;
+         p.defaultValues["gui/Media Info/Window"] = 0;
+         p.defaultValues["gui/NDI/Window"] = 0;
+         p.defaultValues["gui/Network/Window"] = 0;
+         p.defaultValues["gui/Playlist/Window"] = 0;
+         p.defaultValues["gui/Settings/Window"] = 0;
+         p.defaultValues["gui/Stereo 3D/Window"] = 0;
+         p.defaultValues["gui/USD/Window"] = 0;
 
-        p.defaultValues["gui/Files/WindowW"] = 400;
-        p.defaultValues["gui/Compare/WindowW"] = 400;
-        p.defaultValues["gui/Stereo 3D/WindowW"] = 400;
+         p.defaultValues["gui/Files/WindowW"] = 400;
+         p.defaultValues["gui/Compare/WindowW"] = 400;
+         p.defaultValues["gui/Stereo 3D/WindowW"] = 400;
 
-        p.defaultValues["gui/Logs/Window"] = 1;
-        p.defaultValues["gui/Logs/WindowW"] = 800;
-        p.defaultValues["gui/Logs/WindowH"] = 400;
+         p.defaultValues["gui/Logs/Window"] = 1;
+         p.defaultValues["gui/Logs/WindowW"] = 800;
+         p.defaultValues["gui/Logs/WindowH"] = 400;
 
-        p.defaultValues["gui/Python/Window"] = 1;
-        p.defaultValues["gui/Python/WindowW"] = 640;
-        p.defaultValues["gui/Python/WindowH"] = 400;
+         p.defaultValues["gui/Python/Window"] = 1;
+         p.defaultValues["gui/Python/WindowW"] = 640;
+         p.defaultValues["gui/Python/WindowH"] = 400;
 
-        p.defaultValues["NDI/Output/Stream Name"] = "mrv2";
-        p.defaultValues["NDI/HDRData"] = "";
-        p.defaultValues["BMD/HDRData"] = "";
-        
-        uint64_t totalVirtualMem = 0;
-        uint64_t virtualMemUsed = 0;
-        uint64_t virtualMemUsedByMe = 0;
-        uint64_t totalPhysMem = 0;
-        uint64_t physMemUsed = 0;
-        uint64_t physMemUsedByMe = 0;
-        memory_information(
-            totalVirtualMem, virtualMemUsed, virtualMemUsedByMe, totalPhysMem,
-            physMemUsed, physMemUsedByMe);
-        totalPhysMem /= 1024;
+         p.defaultValues["NDI/Output/Stream Name"] = "mrv2";
+         p.defaultValues["NDI/HDRData"] = "";
+         p.defaultValues["BMD/HDRData"] = "";
 
-        p.defaultValues["Timeline/Editable"] = true;
-        p.defaultValues["Timeline/TrackInfo"] =
-            TIMELINEUI::DisplayOptions().trackInfo;
-        p.defaultValues["Timeline/ClipInfo"] =
-            TIMELINEUI::DisplayOptions().clipInfo;
-        p.defaultValues["Timeline/ScrollToCurrentFrame"] = true;
-        p.defaultValues["Timeline/StopOnScrub"] = true;
-        p.defaultValues["Timeline/FirstTrack"] = false;
-        p.defaultValues["Audio/Volume"] = 1.0F;
-        p.defaultValues["Audio/Mute"] = false;
-        p.defaultValues["Cache/GBytes"] = static_cast<int>(totalPhysMem / 2);
-        p.defaultValues["Cache/ReadAhead"] =
-            timeline::PlayerCacheOptions().readAhead.value();
-        p.defaultValues["Cache/ReadBehind"] =
-            timeline::PlayerCacheOptions().readBehind.value();
-        p.defaultValues["FileSequence/Audio"] =
-            static_cast<int>(timeline::FileSequenceAudio::BaseName);
-        p.defaultValues["FileSequence/AudioFileName"] = std::string();
-        p.defaultValues["FileSequence/AudioDirectory"] = std::string();
-        const timeline::PlayerOptions playerOptions;
-        p.defaultValues["Performance/TimerMode"] =
-            static_cast<int>(playerOptions.timerMode);
-        p.defaultValues["Performance/AudioBufferFrameCount"] =
-            static_cast<int>(playerOptions.audioBufferFrameCount);
-        p.defaultValues["SequenceIO/ThreadCount"] = 16;
-        p.defaultValues["Performance/VideoRequestCount"] = 16;
-        p.defaultValues["Performance/AudioRequestCount"] = 16;
-        p.defaultValues["Performance/FFmpegThreadCount"] = 0;
-        p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
-        p.defaultValues["Performance/FFmpegColorAccuracy"] = 0;
-        p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
-        p.defaultValues["EnvironmentMap/Sphere/SubdivisionX"] = 36;
-        p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
-        p.defaultValues["EnvironmentMap/Spin"] = 1;
-        p.defaultValues["TCP/Control/Port"] = std::string("55150");
+         uint64_t totalVirtualMem = 0;
+         uint64_t virtualMemUsed = 0;
+         uint64_t virtualMemUsedByMe = 0;
+         uint64_t totalPhysMem = 0;
+         uint64_t physMemUsed = 0;
+         uint64_t physMemUsedByMe = 0;
+         memory_information(
+             totalVirtualMem, virtualMemUsed, virtualMemUsedByMe, totalPhysMem,
+             physMemUsed, physMemUsedByMe);
+         totalPhysMem /= 1024;
 
-        Fl_Color c;
-        p.defaultValues["Background/Type"] = 0;
-        c = fl_rgb_color(128, 128, 128);
-        p.defaultValues["Background/color1"] = static_cast<int>(c);
-        c = fl_rgb_color(255, 255, 255);
-        p.defaultValues["Background/color0"] = static_cast<int>(c);
-        p.defaultValues["Background/CheckersSize"] = 100;
+         p.defaultValues["Timeline/Editable"] = true;
+         p.defaultValues["Timeline/TrackInfo"] =
+             TIMELINEUI::DisplayOptions().trackInfo;
+         p.defaultValues["Timeline/ClipInfo"] =
+             TIMELINEUI::DisplayOptions().clipInfo;
+         p.defaultValues["Timeline/ScrollToCurrentFrame"] = true;
+         p.defaultValues["Timeline/StopOnScrub"] = true;
+         p.defaultValues["Timeline/FirstTrack"] = false;
+         p.defaultValues["Audio/Volume"] = 1.0F;
+         p.defaultValues["Audio/Mute"] = false;
+         p.defaultValues["Cache/GBytes"] = static_cast<int>(totalPhysMem / 2);
+         p.defaultValues["Cache/ReadAhead"] =
+             timeline::PlayerCacheOptions().readAhead.value();
+         p.defaultValues["Cache/ReadBehind"] =
+             timeline::PlayerCacheOptions().readBehind.value();
+         p.defaultValues["FileSequence/Audio"] =
+             static_cast<int>(timeline::FileSequenceAudio::BaseName);
+         p.defaultValues["FileSequence/AudioFileName"] = std::string();
+         p.defaultValues["FileSequence/AudioDirectory"] = std::string();
+         const timeline::PlayerOptions playerOptions;
+         p.defaultValues["Performance/TimerMode"] =
+             static_cast<int>(playerOptions.timerMode);
+         p.defaultValues["Performance/AudioBufferFrameCount"] =
+             static_cast<int>(playerOptions.audioBufferFrameCount);
+         p.defaultValues["SequenceIO/ThreadCount"] = 16;
+         p.defaultValues["Performance/VideoRequestCount"] = 16;
+         p.defaultValues["Performance/AudioRequestCount"] = 16;
+         p.defaultValues["Performance/FFmpegThreadCount"] = 0;
+         p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
+         p.defaultValues["Performance/FFmpegColorAccuracy"] = 0;
+         p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
+         p.defaultValues["EnvironmentMap/Sphere/SubdivisionX"] = 36;
+         p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
+         p.defaultValues["EnvironmentMap/Spin"] = 1;
+         p.defaultValues["TCP/Control/Port"] = std::string("55150");
 
-#if defined(TLRENDER_USD)
-        p.defaultValues["USD/rendererName"] = usd::RenderOptions().rendererName;
-        p.defaultValues["USD/renderWidth"] =
-            static_cast<int>(usd::RenderOptions().renderWidth);
-        p.defaultValues["USD/complexity"] =
-            static_cast<float>(usd::RenderOptions().complexity);
-        p.defaultValues["USD/drawMode"] =
-            static_cast<int>(usd::RenderOptions().drawMode);
-        p.defaultValues["USD/enableLighting"] =
-            static_cast<int>(usd::RenderOptions().enableLighting);
-        p.defaultValues["USD/enableSceneLights"] = 
-            static_cast<int>(usd::RenderOptions().enableSceneLights);
-        p.defaultValues["USD/enableSceneMaterials"] = 
-            static_cast<int>(usd::RenderOptions().enableSceneMaterials);
-        p.defaultValues["USD/sRGB"] =
-            static_cast<int>(usd::RenderOptions().sRGB);
-        p.defaultValues["USD/stageCacheByteCount"] =
-            static_cast<int>(usd::RenderOptions().stageCache);
-        p.defaultValues["USD/diskCacheByteCount"] =
-            static_cast<int>(usd::RenderOptions().diskCache / memory::gigabyte);
+         Fl_Color c;
+         p.defaultValues["Background/Type"] = 0;
+         c = fl_rgb_color(128, 128, 128);
+         p.defaultValues["Background/color1"] = static_cast<int>(c);
+         c = fl_rgb_color(255, 255, 255);
+         p.defaultValues["Background/color0"] = static_cast<int>(c);
+         p.defaultValues["Background/CheckersSize"] = 100;
+
+ #if defined(TLRENDER_USD)
+        p.defaultValues["USD/renderWidth"] = 1024;
+        p.defaultValues["USD/complexity"] = 1.f;
+        p.defaultValues["USD/drawMode"] = static_cast<int>(usd::RenderOptions().drawMode);
+        p.defaultValues["USD/enableLighting"] = true;
+        p.defaultValues["USD/enableSceneLights"] = false;
+        p.defaultValues["USD/enableSceneMaterials"] = true;
+        p.defaultValues["USD/sRGB"] = true;
+        p.defaultValues["USD/stageCacheByteCount"] = 32;
+        p.defaultValues["USD/diskCacheByteCount"] = 0;
 #endif
 
 #if defined(TLRENDER_NDI)

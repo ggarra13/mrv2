@@ -30,19 +30,17 @@ Contains all classes and enums related to USD (Universal Scene Description).
     py::class_<usd::RenderOptions>(usd, "RenderOptions")
         .def(py::init<>())
         .def(
-            py::init<
-                std::string, int, float, tl::usd::DrawMode, bool, bool, bool,
+            py::init<int, float, tl::usd::DrawMode, bool, bool, bool,
                 bool, size_t, size_t>(),
-            py::arg("rendererName") = 0, py::arg("renderWidth") = 1920,
+            py::arg("renderWidth") = 1024,
             py::arg("complexity") = 1.F,
             py::arg("drawMode") = tl::usd::DrawMode::ShadedSmooth,
             py::arg("enableLighting") = true,
             py::arg("enableSceneLights") = false,
-            py::arg("enableSceneMaterials") = false, py::arg("sRGB") = true,
-            py::arg("stageCache") = 10, py::arg("diskCache") = 0)
-        .def_readwrite(
-            "rendererName", &usd::RenderOptions::rendererName,
-            _("Renderer Name"))
+            py::arg("enableSceneMaterials") = false,
+            py::arg("sRGB") = true,
+            py::arg("stageCache") = 10,
+            py::arg("diskCache") = 32)
         .def_readwrite(
             "renderWidth", &usd::RenderOptions::renderWidth, _("Render Width"))
         .def_readwrite(
@@ -55,10 +53,10 @@ Contains all classes and enums related to USD (Universal Scene Description).
             "enableLighting", &usd::RenderOptions::enableLighting,
             _("Enable Lighting"))
         .def_readwrite(
-            "enableSceneLights", &usd::RenderOptions::enableLighting,
+            "enableSceneLights", &usd::RenderOptions::enableSceneLights,
             _("Enable Scene Lights"))
         .def_readwrite(
-            "enableSceneMaterials", &usd::RenderOptions::enableLighting,
+            "enableSceneMaterials", &usd::RenderOptions::enableSceneMaterials,
             _("Enable Scene Materials"))
         .def_readwrite("sRGB", &usd::RenderOptions::sRGB, _("Enable sRGB"))
         .def_readwrite(
@@ -76,6 +74,8 @@ Contains all classes and enums related to USD (Universal Scene Description).
                   << " complexity=" << o.complexity
                   << " drawMode=" << o.drawMode
                   << " enableLighting=" << (o.enableLighting ? "True" : "False")
+                  << " enableSceneLights=" << (o.enableSceneLights ? "True" : "False")
+                  << " enableSceneMaterials=" << (o.enableSceneMaterials ? "True" : "False")
                   << " sRGB=" << (o.sRGB ? "True" : "False")
                   << " stageCache=" << o.stageCache
                   << " diskCache=" << o.diskCache << ">";

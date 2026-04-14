@@ -13,7 +13,6 @@ namespace mrv
         bool RenderOptions::operator==(const RenderOptions& b) const
         {
             return (
-                rendererName == b.rendererName &&
                 renderWidth == b.renderWidth && complexity == b.complexity &&
                 drawMode == b.drawMode && enableLighting == b.enableLighting &&
                 sRGB == b.sRGB && stageCache == b.stageCache &&

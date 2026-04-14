@@ -106,7 +106,7 @@ namespace mrv
             auto spW = new Widget< Fl_Spinner >(
                 g->x() + 160, Y, g->w() - 160, 20, _("Render Width"));
             sp = spW;
-            sp->format("%4d");
+            sp->format("%4.4g");
             sp->labelsize(12);
             sp->textcolor(FL_BLACK);
             sp->step(32);
@@ -132,7 +132,7 @@ namespace mrv
             sp->textcolor(FL_BLACK);
             sp->step(0.001);
             // sp->range(1, 12);
-            sp->range(1, 2);
+            sp->range(0.001, 2);
             sp->align(FL_ALIGN_LEFT);
 
             float complexity = settings->getValue<float>("USD/complexity");
@@ -229,27 +229,6 @@ namespace mrv
                     _update();
                 });
 
-            Y += 22;
-
-            spW = new Widget< Fl_Spinner >(
-                g->x() + 160, Y, g->w() - 160, 20, _("Mesh Cache"));
-            sp = spW;
-            sp->format("%4d");
-            sp->labelsize(12);
-            sp->textcolor(FL_BLACK);
-            sp->step(1);
-            sp->range(1, 10);
-            sp->align(FL_ALIGN_LEFT);
-            v = settings->getValue<int>("USD/meshCache");
-            sp->value(v);
-            spW->callback(
-                [=](auto o)
-                {
-                    int v = static_cast<int>(o->value());
-                    settings->setValue("USD/meshCache", v);
-                    _update();
-                });
-            
             Y += 22;
             
             spW = new Widget< Fl_Spinner >(

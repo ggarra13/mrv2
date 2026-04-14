@@ -14,7 +14,6 @@ namespace mrv
     {
         struct RenderOptions
         {
-            std::string rendererName = "GL";
             int renderWidth = 1920;
             float complexity = 1.F;
             tl::usd::DrawMode drawMode = tl::usd::DrawMode::ShadedSmooth;

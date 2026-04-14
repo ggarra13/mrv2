@@ -25,8 +25,6 @@ namespace mrv
             auto o = renderOptions();
 
             io::Options ioOptions;
-            ioOptions["USD/rendererName"] =
-                string::Format("{0}").arg(o.rendererName);
             ioOptions["USD/renderWidth"] =
                 string::Format("{0}").arg(o.renderWidth);
             ioOptions["USD/complexity"] =
