@@ -70,9 +70,18 @@ namespace tl
                 
                 // Use a 4 Gb cache \@todo: make it optional
                 // value must be less than (4292870144 on RTX 3080)
-                size_t size = 3.5 * memory::gigabyte;
-                p.vaos[meshName]->setMemorySize(size);
+                VkPhysicalDeviceVulkan11Properties vulkan11Props = {};
+                vulkan11Props.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES;
                 
+                VkPhysicalDeviceProperties2 props2 = {};
+                props2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+                props2.pNext = &vulkan11Props;
+
+                vkGetPhysicalDeviceProperties2(ctx.gpu, &props2);
+
+                // Now you have the limit:
+                VkDeviceSize size = vulkan11Props.maxMemoryAllocationSize - 1024;
+                p.vaos[meshName]->setMemorySize(size);
                 p.vaos[meshName]->bind(p.frameIndex);
             }
         }
