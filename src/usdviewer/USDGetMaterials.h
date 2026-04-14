@@ -1,5 +1,7 @@
 #pragma once
 
+#include "USDRenderOptions.h"
+
 #include <pxr/usd/usd/prim.h>
 #include <pxr/usd/usdShade/material.h>
 
@@ -31,13 +33,15 @@ namespace tl
             ShaderInputResult     displacement;
         };
 
-        // Get a list of textures and/or values for each material in a primitive.
-        ShaderInputResult GetTextureOrValue(const pxr::UsdPrim& prim,
-                                            const pxr::UsdShadeMaterial& material,
-                                            const pxr::TfToken& inputName,
-                                            const bool          debug = false);
+        // Get a list of textures and/or values for each material in a primitive
+        ShaderInputResult GetTextureOrValue(
+            const pxr::UsdPrim& prim,
+            const pxr::UsdShadeMaterial& material,
+            const pxr::TfToken& inputName,
+            const bool          debug = DEBUG_TEXTURES);
         
-        std::unordered_map<std::string, Material> GetMaterials(const pxr::UsdPrim& prim,
-                                                               const bool          debug = false);
+        std::unordered_map<std::string, Material>
+        GetMaterials(const pxr::UsdPrim& prim,
+                     const bool          debug = DEBUG_MATERIALS);
     }
 }

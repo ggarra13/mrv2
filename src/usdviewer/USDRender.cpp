@@ -178,6 +178,7 @@ namespace tl
                 p.shaders["dummy"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["dummy"]);
             }
+#if USE_ST_SHADER
             if (!p.shaders["st"])
             {
                 p.shaders["st"] = vlk::Shader::create(
@@ -187,6 +188,7 @@ namespace tl
                 p.shaders["st"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["st"]);
             }
+#endif
             if (!p.shaders["usd"])
             {
                 p.shaders["usd"] = vlk::Shader::create(

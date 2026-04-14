@@ -172,12 +172,12 @@ namespace
         GfMatrix4d xf;
         if (upAxis == UsdGeomTokens->y)
         {
-            xf.SetTranslate(center + GfVec3d(0, 0, distance));
+            xf.SetTranslate(center + GfVec3d(0, 0, distance * 1.5));
         }
         else
         {
             xf.SetRotate(GfRotation(GfVec3d(1, 0, 0), 90));
-            xf.SetTranslateOnly(center + GfVec3d(0, -distance, 0));
+            xf.SetTranslateOnly(center + GfVec3d(0, -distance * 1.5, 0));
         }
         gfCamera.SetTransform(xf);
         return gfCamera;
@@ -486,7 +486,7 @@ namespace tl
                                      const image::Color4f& color)
         {
             TLRENDER_P();
-
+            
             // -------------------------
             // 1. VERTICES (Points)
             // -------------------------
@@ -746,7 +746,7 @@ namespace tl
                 shaderName = "dummy";
             }
 
-            
+
             p.render->draw3DMesh(geom, modelMatrix, color, shaderName,
                                  textures);
         }
@@ -814,6 +814,8 @@ namespace tl
             offscreenBufferOptions.depth = vlk::OffscreenDepth::_32;
             offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
             offscreenBufferOptions.pbo = true;
+            offscreenBufferOptions.colorFilters.minify = timeline::ImageFilter::Linear;
+            offscreenBufferOptions.colorFilters.magnify = timeline::ImageFilter::Linear;
 
             const math::Size2i renderSize(renderWidth, renderHeight);
             if (vlk::doCreate(

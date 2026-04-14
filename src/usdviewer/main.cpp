@@ -103,7 +103,6 @@ void saveHalfRGB(const char* filename,
         file.writePixels(height);
         
         std::cout << "Image saved successfully to " << filename << std::endl;
-        exit(0);
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
@@ -543,9 +542,9 @@ void usd_window::flush()
         void* data = p.buffer->getInlineReadbackPtr();
         if (data)
         {
-            //memcpy(p.captureImage->getData(), data,
-            //       p.captureImage->getDataByteCount());
-            //saveHalfRGB("/home/gga/test.exr", p.captureImage);
+            memcpy(p.captureImage->getData(), data,
+                   p.captureImage->getDataByteCount());
+            saveHalfRGB("/home/gga/test.exr", p.captureImage);
         }
     }
 }
@@ -556,7 +555,7 @@ void usd_window::draw()
 
     VkCommandBuffer cmd = getCurrentCommandBuffer();
 
-    p.engine->draw(cmd, m_currentFrameIndex, pixel_w());
+    p.engine->draw(cmd, m_currentFrameIndex, 1024);
 
     p.buffer = p.engine->getFBO();
 
@@ -583,8 +582,8 @@ void usd_window::draw()
         
     p.buffer->readPixelsInline(cmd,
                                0, 0,
-                               p.captureImage->getWidth(),
-                               p.captureImage->getHeight());
+                               renderWidth,
+                               renderHeight);
     p.pendingReadback = true;
     // ─────────────────────────────────────────────────────────────────────
 

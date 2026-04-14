@@ -195,7 +195,11 @@ namespace tl
                             // ProcessSRGBToLinear(data, width, height, numChannels);
                         }
                     
-                        out = vlk::Texture::create(ctx, info);
+                        TextureOptions options;
+                        options.filters.minify = timeline::ImageFilter::Linear;
+                        options.filters.magnify = timeline::ImageFilter::Linear;
+                        
+                        out = vlk::Texture::create(ctx, info, options);
                         out->copy(img);
                     }
                 }
