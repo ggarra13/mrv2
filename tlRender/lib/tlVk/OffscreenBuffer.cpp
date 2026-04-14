@@ -720,7 +720,7 @@ namespace tl
             {
                 resolveAttachment.format = p.colorFormat;
                 resolveAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-                resolveAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                resolveAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 resolveAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
                 resolveAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
                 resolveAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -803,7 +803,7 @@ namespace tl
             VkAttachmentDescription colorAttachment{};
             colorAttachment.format = p.colorFormat;
             colorAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
-            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;   // previous MS data is not preserved
+            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;   // previous MS data is not preserved
             colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
             colorAttachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             colorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;

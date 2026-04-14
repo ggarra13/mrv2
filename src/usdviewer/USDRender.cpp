@@ -368,10 +368,28 @@ namespace tl
         {
             TLRENDER_P();
 
-            VkClearValue clearValues[3];
-            clearValues[0].color = {value.r, value.g, value.b, value.a};
-            clearValues[1].color = {value.r, value.g, value.b, value.a};
-            clearValues[2].depthStencil = {1.F, 0};
+            std::vector<VkClearValue> clearValues;
+            
+            // Color clear (always for attachment 0)
+            VkClearValue colorClear = {};
+            colorClear.color = {{value.r, value.g, value.b, value.a}};
+            clearValues.push_back(colorClear);
+            
+            bool multisampled = (p.fbo->getSampleCount() != VK_SAMPLE_COUNT_1_BIT);
+            
+            if (multisampled)
+            {
+                // Resolve attachment (index 1) uses DONT_CARE → value ignored, but slot required
+                clearValues.push_back({});  // dummy
+            }
+
+            if (p.fbo->hasDepth() || p.fbo->hasStencil())
+            {
+                // Depth/stencil clear (attachment index 2 when MS, or 1 when not)
+                VkClearValue depthClear = {};
+                depthClear.depthStencil = {1.0f, 0};   // depth=1.0, stencil=0
+                clearValues.push_back(depthClear);
+            }
 
             VkRenderPassBeginInfo rpBegin{};
             rpBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -379,10 +397,8 @@ namespace tl
             rpBegin.framebuffer = p.fbo->getFramebuffer();
             rpBegin.renderArea.offset = {0, 0};
             rpBegin.renderArea.extent = p.fbo->getExtent(); // Use FBO extent
-            rpBegin.clearValueCount =
-                2 +
-                static_cast<uint16_t>(p.fbo->hasDepth() || p.fbo->hasStencil());
-            rpBegin.pClearValues = clearValues;
+            rpBegin.clearValueCount = clearValues.size();
+            rpBegin.pClearValues = clearValues.data();
 
             // Begin the first render pass instance within the single command
             // buffer
