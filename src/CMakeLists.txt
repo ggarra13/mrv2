@@ -457,9 +457,6 @@ endif()
 
 if (MRV2_BACKEND STREQUAL "VK")
     add_subdirectory(tests)
-endif()
-
-if (TLRENDER_VK AND TLRENDER_USD)
     add_subdirectory(usdviewer)
 endif()
 

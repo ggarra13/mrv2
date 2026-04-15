@@ -356,8 +356,8 @@ void main()
 
     // ── Tone mapping (Reinhard) + gamma  ───────  WRONG AND UNNEEDED
     //    If we merge it into vmrv2, we can use libplacebo directly.
-    // color = color / (color + vec3(1.0));            // HDR → LDR
-    // color = pow(color, vec3(1.0 / 2.2));            // linear → sRGB
+    color = color / (color + vec3(1.0));            // HDR → LDR
+    color = pow(color, vec3(1.0 / 2.2));            // linear → sRGB
 
     outColor = vec4(color * opacity, opacity);
 
