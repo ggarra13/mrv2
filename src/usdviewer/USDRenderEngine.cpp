@@ -972,26 +972,22 @@ namespace tl
                 }
                 else if (it->IsA<UsdGeomNurbsPatch>())
                 {
-                    std::cerr << "is patch" << std::endl;
                     ++numNurbsPatches; 
                     UsdGeomNurbsPatch out = UsdGeomNurbsPatch(*it);
                 }
                 else if (it->IsA<UsdGeomNurbsCurves>())
                 {
-                    std::cerr << "is nurbs curve" << std::endl;
                     ++numNurbsCurves; 
                     UsdGeomNurbsCurves out = UsdGeomNurbsCurves(*it);
                 }
                 else if (it->IsA<UsdGeomBasisCurves>())
                 {
                     ++numBasisCurves; 
-                    std::cerr << "is basis curve" << std::endl;
                     UsdGeomBasisCurves out = UsdGeomBasisCurves(*it);
                 }
                 else if (it->IsA<UsdGeomSphere>())
                 {
                     ++numSpheres; 
-                    std::cerr << "is sphere" << std::endl;
                     UsdGeomSphere out = UsdGeomSphere(*it);
                     float radius = 1;
                     out.GetRadiusAttr().Get(&radius, p.time);
