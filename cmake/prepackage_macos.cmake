@@ -263,6 +263,8 @@ file(COPY ${CPACK_PREPACKAGE}/bin/mrv2
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
 file(COPY ${CPACK_PREPACKAGE}/bin/license_helper
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
+file(COPY ${CPACK_PREPACKAGE}/bin/usdviewer
+    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
 file(COPY ${CPACK_PREPACKAGE}/bin/environment.sh
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
 file(COPY ${CPACK_PREPACKAGE}/bin/install_dmg.sh
@@ -321,14 +323,12 @@ install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libintl*")
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libomp*")
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libz*" )
-    
-if (MRV2_BACKEND STREQUAL "VK")
-    install_vulkan_lib_glob("libglslang*" vmrv2)
-    install_vulkan_lib_glob("libSPIRV*" vmrv2)
-    install_vulkan_lib_glob("libMoltenVK*" vmrv2)
-    install_vulkan_lib_glob("libvulkan*" vmrv2)
-    install_vulkan_icd_filenames(vmrv2)
-endif()
+
+install_vulkan_lib_glob("libglslang*" ${mrv2_NAME})
+install_vulkan_lib_glob("libSPIRV*" ${mrv2_NAME})
+install_vulkan_lib_glob("libMoltenVK*" ${mrv2_NAME})
+install_vulkan_lib_glob("libvulkan*" ${mrv2_NAME})
+install_vulkan_icd_filenames(${mrv2_NAME})
 
 #
 # Pre-pare hdr.app if present
