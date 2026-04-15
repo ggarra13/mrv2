@@ -15,6 +15,8 @@
 #include <pxr/pxr.h>
 
 // math primitives
+#include <pxr/base/gf/camera.h>
+#include <pxr/base/gf/frustum.h>
 #include <pxr/base/gf/matrix4d.h>
 #include <pxr/base/gf/vec3f.h>
 
@@ -28,10 +30,6 @@
 #include <pxr/usd/usd/primRange.h>
 
 #include <pxr/usd/usdUtils/pipeline.h>
-
-#include <pxr/usdImaging/usdAppUtils/api.h>
-#include <pxr/usdImaging/usdAppUtils/camera.h>
-#include <pxr/usdImaging/usdAppUtils/frameRecorder.h>
 
 #include <pxr/imaging/hd/renderBuffer.h>
 #include <pxr/imaging/hdSt/hioConversions.h>
@@ -100,7 +98,23 @@ using namespace PXR_NS;
 
 namespace
 {
-    
+
+    UsdGeomCamera UsdGetCameraAtPath(
+        const UsdStageRefPtr& stage,
+        const SdfPath path)
+    {
+        UsdGeomCamera out;
+        for (const auto& prim : stage->Traverse())
+        {
+            if (prim.IsA<UsdGeomCamera>())
+            {
+                if (prim.GetPath() == path)
+                    out = UsdGeomCamera(prim);
+                break;
+            }
+        }
+        return out;
+    }
 
     UsdGeomCamera getCamera(
         const UsdStageRefPtr& stage,
@@ -109,13 +123,13 @@ namespace
         UsdGeomCamera out;
         if (!name.empty())
         {
-            out = UsdAppUtilsGetCameraAtPath(stage, SdfPath(name));
+            out = UsdGetCameraAtPath(stage, SdfPath(name));
         }
         if (!out)
         {
             const TfToken primaryCameraName =
                 UsdUtilsGetPrimaryCameraName();
-            out = UsdAppUtilsGetCameraAtPath(
+            out = UsdGetCameraAtPath(
                 stage, SdfPath(primaryCameraName));
         }
         if (!out)
@@ -172,12 +186,12 @@ namespace
         GfMatrix4d xf;
         if (upAxis == UsdGeomTokens->y)
         {
-            xf.SetTranslate(center + GfVec3d(0, 0, distance * 1.5));
+            xf.SetTranslate(center + GfVec3d(0, 0, distance * 1.2));
         }
         else
         {
             xf.SetRotate(GfRotation(GfVec3d(1, 0, 0), 90));
-            xf.SetTranslateOnly(center + GfVec3d(0, -distance * 1.5, 0));
+            xf.SetTranslateOnly(center + GfVec3d(0, -distance * 1.2, 0));
         }
         gfCamera.SetTransform(xf);
         return gfCamera;
@@ -798,7 +812,7 @@ namespace tl
                 aspectRatio = 1.F;
             }
             unsigned renderHeight = renderWidth / aspectRatio;
-            
+
             const GfFrustum frustum = gfCamera.GetFrustum();
             const GfVec3d cameraPos = frustum.GetPosition();
     

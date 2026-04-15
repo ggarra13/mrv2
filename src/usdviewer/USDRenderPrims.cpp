@@ -81,6 +81,9 @@ namespace tl
 
                 // Now you have the limit:
                 VkDeviceSize size = vulkan11Props.maxMemoryAllocationSize - 1024;
+#ifndef APPLE
+                size = 3.5 * memory::gigabyte;
+#endif
                 p.vaos[meshName]->setMemorySize(size);
                 p.vaos[meshName]->bind(p.frameIndex);
             }

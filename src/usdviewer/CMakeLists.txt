@@ -34,8 +34,8 @@ find_package(pxr REQUIRED)
 add_definitions(-DTLRENDER_USD)
 
 set(LIBRARIES )
-list(APPEND LIBRARIES OpenEXR::OpenEXR tlRender::tlVk tlRender::tlCore tf usd usdGeom usdAppUtils hd)
-list(APPEND LIBRARIES ${FLTK_gl_LIBRARY} ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES})
+list(APPEND LIBRARIES OpenEXR::OpenEXR tlRender::tlVk tlRender::tlCore tf usd usdUtils usdGeom usdShade usdSkel hio hd)
+list(APPEND LIBRARIES ${FLTK_vk_LIBRARY} ${FLTK_LIBRARIES})
 list(APPEND LIBRARIES Vulkan::Vulkan)
 
 
@@ -48,7 +48,7 @@ endif()
 
 add_executable(usdviewer WIN32 ${SOURCES} ${HEADERS})
 
-target_include_directories( usdviewer BEFORE PRIVATE . )
+target_include_directories(usdviewer BEFORE PRIVATE .)
 
 target_link_libraries(usdviewer PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( usdviewer BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )

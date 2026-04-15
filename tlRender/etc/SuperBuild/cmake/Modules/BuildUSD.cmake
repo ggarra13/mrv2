@@ -42,7 +42,7 @@ elseif(UNIX AND NOT APPLE)
 endif()
 
 list(APPEND USD_ARGS --no-python --no-examples --no-tutorials --no-tools)
-list(APPEND USD_ARGB --no-docs --no-draco --no-mayapy-tests --no-embree --no-usdview --no-ptex)
+list(APPEND USD_ARGS --no-docs --no-draco --no-mayapy-tests --no-embree --no-usdview --no-ptex)
 list(APPEND USD_ARGS --onetbb)
 list(APPEND USD_ARGS --verbose)
 

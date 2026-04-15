@@ -21,7 +21,6 @@ namespace tl
                 vlk::TextureBorder out = vlk::TextureBorder::ClampToEdge;
                 
                 const std::string border = borderToken.GetText();
-                std::cerr << "border is " << border << std::endl;
                 if (border == "clamp")
                     return out;
                 else if (border == "repeat")
