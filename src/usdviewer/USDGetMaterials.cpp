@@ -5,6 +5,7 @@
 #include <pxr/usd/usdShade/materialBindingAPI.h>
 #include <pxr/usd/usdShade/shader.h>
 
+
 #include <iostream>
 
 namespace tl
@@ -15,7 +16,22 @@ namespace tl
         
         namespace
         {
-            
+            vlk::TextureBorder getBorder(const TfToken& borderToken)
+            {
+                vlk::TextureBorder out = vlk::TextureBorder::ClampToEdge;
+                
+                const std::string border = borderToken.GetText();
+                std::cerr << "border is " << border << std::endl;
+                if (border == "clamp")
+                    return out;
+                else if (border == "repeat")
+                    out = vlk::TextureBorder::Repeat;
+                else if (border == "mirror")
+                    out = vlk::TextureBorder::MirroredRepeat;
+                else if (border == "black")
+                    out = vlk::TextureBorder::ClampToBorder;
+                return out;
+            }
             void FillEmptyShaderInputResult(ShaderInputResult& result,
                                             const UsdPrim&   prim,
                                             const TfToken& inputName)
@@ -179,6 +195,20 @@ namespace tl
                     SdfAssetPath assetPath;
                     if (fileInput.Get(&assetPath))
                     {
+                        // Access the wrapS and wrapT inputs
+                        UsdShadeInput wrapSInput = textureShader.GetInput(TfToken("wrapS"));
+                        UsdShadeInput wrapTInput = textureShader.GetInput(TfToken("wrapT"));
+
+                        TfToken sVal, tVal;
+
+                        // Use a fallback (useMetadata) if the attribute isn't authored
+                        if (wrapSInput && wrapSInput.Get(&sVal)) {
+                            result.borderU = getBorder(sVal);
+                        }
+                        if (wrapTInput && wrapTInput.Get(&tVal)) {
+                            result.borderV = getBorder(sVal);
+                        }
+    
                         result.texturePath = assetPath.GetResolvedPath();
                         if (debug)
                         {

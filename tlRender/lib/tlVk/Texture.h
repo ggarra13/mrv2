@@ -21,12 +21,35 @@ namespace tl
         //! Get the Vulkan's source texture format.
         VkFormat getTextureFormat(image::PixelType);
 
+        enum class TextureBorder
+        {
+            ClampToEdge,
+            Repeat,
+            MirroredRepeat,
+            ClampToBorder,
+            MirrorClampToEdge,
+
+            Count,
+            First = ClampToEdge
+        };
+
+        struct TextureBorders
+        {
+            TextureBorder U = TextureBorder::ClampToEdge;
+            TextureBorder V = TextureBorder::ClampToEdge;
+            TextureBorder W = TextureBorder::ClampToEdge;
+            
+            bool operator==(const TextureBorders&) const;
+            bool operator!=(const TextureBorders&) const;
+        };        
+        
         //! Vulkan texture options.
         struct TextureOptions
         {
             timeline::ImageFilters filters;
             bool pbo = false;
             VkImageTiling tiling = VK_IMAGE_TILING_LINEAR;
+            TextureBorders borders;
 
             bool operator==(const TextureOptions&) const;
             bool operator!=(const TextureOptions&) const;

@@ -5,6 +5,8 @@
 #include <pxr/usd/usd/prim.h>
 #include <pxr/usd/usdShade/material.h>
 
+#include <tlVk/Texture.h>
+
 #include <array>
 #include <string>
 #include <unordered_map>
@@ -19,6 +21,8 @@ namespace tl
             std::string           texturePath;          // non-empty when a texture is found
             std::array<float, 4>  value  = {};          // constant value when no texture
             bool                  hasValue = false;     // true when value is populated
+            vlk::TextureBorder    borderU = vlk::TextureBorder::ClampToEdge;
+            vlk::TextureBorder    borderV = vlk::TextureBorder::ClampToEdge;
         };
 
         //! Material.

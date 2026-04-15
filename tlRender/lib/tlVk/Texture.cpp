@@ -21,6 +21,32 @@ namespace tl
 {
     namespace vlk
     {
+        VkSamplerAddressMode getTextureBorder(TextureBorder value)
+        {            
+            VkSamplerAddressMode out = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+            switch (value)
+            {
+            case TextureBorder::ClampToEdge:
+                out = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+                break;
+            case TextureBorder::Repeat:
+                out = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+                break;
+            case TextureBorder::MirroredRepeat:
+                out = VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+                break;
+            case TextureBorder::ClampToBorder:
+                out = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+                break;
+            case TextureBorder::MirrorClampToEdge:
+                out = VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE;
+                break;
+            default:
+                std::cerr << "Unhandled texture sampler border " << (int) value << std::endl;
+                break;
+            };
+            return out;
+        }
         
         std::size_t getDataByteCount(
             const VkImageType type, uint32_t w, uint32_t h, uint32_t d,
@@ -173,9 +199,20 @@ namespace tl
             return data[static_cast<std::size_t>(type)];
         }
 
+        bool TextureBorders::operator==(const TextureBorders& other) const
+        {
+            return U == other.U && V == other.V && W == other.W;
+        }
+
+        bool TextureBorders::operator!=(const TextureBorders& other) const
+        {
+            return !(*this == other);
+        }
+        
         bool TextureOptions::operator==(const TextureOptions& other) const
         {
-            return filters == other.filters && pbo == other.pbo;
+            return filters == other.filters && tiling == other.tiling &&
+                pbo == other.pbo && borders == other.borders;
         }
 
         bool TextureOptions::operator!=(const TextureOptions& other) const
@@ -1183,9 +1220,9 @@ namespace tl
             samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
             samplerInfo.magFilter = getTextureFilter(p.options.filters.magnify);
             samplerInfo.minFilter = getTextureFilter(p.options.filters.minify);
-            samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-            samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-            samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+            samplerInfo.addressModeU = getTextureBorder(p.options.borders.U);
+            samplerInfo.addressModeV = getTextureBorder(p.options.borders.V);
+            samplerInfo.addressModeW = getTextureBorder(p.options.borders.W);
 
             p.sampler = samplersCache->getOrCreateSampler(samplerInfo);
         }

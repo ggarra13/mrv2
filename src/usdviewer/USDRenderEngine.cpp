@@ -588,7 +588,7 @@ namespace tl
                 VtArray<GfVec2f> values;
                 if (st.Get(&values))
                 {
-                    TfToken interp = st.GetInterpolation();
+                    const TfToken interp = st.GetInterpolation();
                     // std::cerr << primPath << std::endl;
                     // std::cerr << "\tSTs found=" << values.size()
                     //           << " interpolation=" << interp << std::endl;
@@ -602,7 +602,6 @@ namespace tl
                         for (size_t i = 0; i < indices.size(); ++i)
                             expanded[i] = values[indices[i]];
 
-                        // walks faceVertexIndices for faceVarying
                         int faceCornerIdx = 0; 
 
                         for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
@@ -616,7 +615,8 @@ namespace tl
                                 if (interp == UsdGeomTokens->faceVarying) {
                                     // One uv per face-corner, in face-winding order
                                     uv = expanded[faceCornerIdx + i];
-                                } else if (interp == UsdGeomTokens->vertex) {
+                                } else if (interp == UsdGeomTokens->vertex ||
+                                           interp == UsdGeomTokens->varying) {
                                     // UV indexed the same way as points
                                     uv = expanded[pointIdx];
                                 } else if (interp == UsdGeomTokens->uniform) {
@@ -634,21 +634,23 @@ namespace tl
                     }
                     else
                     {
-                        // walks faceVertexIndices for faceVarying
-                        int faceCornerIdx = 0; 
+                        int faceCornerIdx = 0;
 
                         for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
                              ++faceIdx) {
                             int vertCount = faceVertexCounts[faceIdx];
                                 
                             for (int i = 0; i < vertCount; ++i) {
-                                int pointIdx = faceVertexIndices[faceCornerIdx + i];
+                                // Linear index of the current corner
+                                int currentCorner = faceCornerIdx + i;
+                                int pointIdx = faceVertexIndices[currentCorner];
                                 GfVec2f uv;
 
                                 if (interp == UsdGeomTokens->faceVarying) {
                                     // One uv per face-corner, in face-winding order
-                                    uv = values[faceCornerIdx + i];
-                                } else if (interp == UsdGeomTokens->vertex) {
+                                    uv = values[currentCorner];
+                                } else if (interp == UsdGeomTokens->vertex ||
+                                           interp == UsdGeomTokens->varying) {
                                     // UV indexed the same way as points
                                     uv = values[pointIdx];
                                 } else if (interp == UsdGeomTokens->uniform) {
@@ -666,7 +668,7 @@ namespace tl
                     }
                 }
             }
-
+            
             // Get triangles.
             int indexOffset = 0;
             const bool hasNormals = !geom.n.empty();
@@ -865,7 +867,6 @@ namespace tl
     
             std::shared_ptr<vlk::Texture> texture;    
             for (auto it = range.begin(); it != range.end(); ++it) {
-        
                 if (it->IsA<UsdGeomImageable>()) {
                     UsdGeomImageable imageable(*it);
             
@@ -902,19 +903,28 @@ namespace tl
                     gprim.GetDisplayColorAttr().Get(&colors);
 
                 image::Color4f color(0.5F, 0.5F, 0.5F);
+
+                if (colors.size() == 1)
+                {
+                    color.r = colors[0][0];
+                    color.g = colors[0][1];
+                    color.b = colors[0][2];
+                }
                 std::string shaderName;
                 if (colors.size() == 0)
                 {
-                    UsdShadeMaterial material = UsdShadeMaterialBindingAPI(*it).
-                                                ComputeBoundMaterial();
+                    UsdShadeMaterialBindingAPI bindingApi(*it);
+                    UsdShadeMaterial material = bindingApi.ComputeBoundMaterial();
+                    
                     if (material)
                     {
                         UsdShadeShader shader = material.ComputeSurfaceSource();
                         TfToken shaderId;
-                        shader.GetIdAttr().Get(&shaderId);
-                        shaderName = shaderId.GetString();
                         if (shader)
                         {
+                            shader.GetIdAttr().Get(&shaderId);
+                            shaderName = shaderId.GetString();
+                        
                             GfVec3f diffuse;
                             UsdShadeInput diffuseColorInput = shader.GetInput(TfToken("diffuseColor"));
                             if (diffuseColorInput)
@@ -925,13 +935,11 @@ namespace tl
                                 color.b = diffuse[2];
                             }
                         }
+                        else
+                        {
+                            std::cerr << "no shader for material " << std::endl;
+                        }
                     }
-                }
-                else if (colors.size() == 1)
-                {
-                    color.r = colors[0][0];
-                    color.g = colors[0][1];
-                    color.b = colors[0][2];
                 }
         
                 if (it->IsA<UsdSkelRoot>())
@@ -950,22 +958,26 @@ namespace tl
                 }
                 else if (it->IsA<UsdGeomNurbsPatch>())
                 {
+                    std::cerr << "is patch" << std::endl;
                     ++numNurbsPatches; 
                     UsdGeomNurbsPatch out = UsdGeomNurbsPatch(*it);
                 }
                 else if (it->IsA<UsdGeomNurbsCurves>())
                 {
+                    std::cerr << "is nurbs curve" << std::endl;
                     ++numNurbsCurves; 
                     UsdGeomNurbsCurves out = UsdGeomNurbsCurves(*it);
                 }
                 else if (it->IsA<UsdGeomBasisCurves>())
                 {
                     ++numBasisCurves; 
+                    std::cerr << "is basis curve" << std::endl;
                     UsdGeomBasisCurves out = UsdGeomBasisCurves(*it);
                 }
                 else if (it->IsA<UsdGeomSphere>())
                 {
                     ++numSpheres; 
+                    std::cerr << "is sphere" << std::endl;
                     UsdGeomSphere out = UsdGeomSphere(*it);
                     float radius = 1;
                     out.GetRadiusAttr().Get(&radius, p.time);

@@ -28,32 +28,7 @@ namespace tl
                              const UsdTimeCode time,
                              std::unordered_map<std::string,
                              ShaderTextures >& collectedTextures)
-        {
-            // Create an empty texture (L_U8 is okay)
-            image::Info info(1, 1, image::PixelType::L_U8);
-            std::shared_ptr<image::Image> img = image::Image::create(info);
-            memset(img->getData(), 0, img->getDataByteCount());
-        
-            auto emptyTexture = vlk::Texture::create(ctx, info);
-            emptyTexture->copy(img);
-            emptyTexture->transitionToShaderRead(cmd);
-
-            // Create a gray texture
-            info = image::Info(1, 1, image::PixelType::RGBA_U8);
-            memset(img->getData(), 128, img->getDataByteCount());
-        
-            auto middleTexture = vlk::Texture::create(ctx, info);
-            middleTexture->copy(img);
-            middleTexture->transitionToShaderRead(cmd);
-        
-            // Create a filled (RGBA) texture
-            img = image::Image::create(info);
-            memset(img->getData(), 255, img->getDataByteCount());
-        
-            auto filledTexture = vlk::Texture::create(ctx, info);
-            filledTexture->copy(img);
-            filledTexture->transitionToShaderRead(cmd);
-        
+        {        
             // Collect textures.
             UsdPrimRange range(stage->GetPseudoRoot(),
                                UsdTraverseInstanceProxies());

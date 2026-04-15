@@ -198,6 +198,8 @@ namespace tl
                         TextureOptions options;
                         options.filters.minify = timeline::ImageFilter::Linear;
                         options.filters.magnify = timeline::ImageFilter::Linear;
+                        options.borders.U = result.borderU;
+                        options.borders.V = result.borderV;
                         
                         out = vlk::Texture::create(ctx, info, options);
                         out->copy(img);
@@ -206,18 +208,16 @@ namespace tl
             }
             else
             {
+                // Create a 1x1 RGBA texture with the values of result.
                 const image::Info info(1, 1, image::PixelType::RGBA_F32);
                 std::shared_ptr<image::Image> img = image::Image::create(info); 
-
-                // uint8_t values[4];
-                // values[0] = std::clamp(result.value[0], 0.F, 1.F) * 255;
-                // values[1] = std::clamp(result.value[1], 0.F, 1.F) * 255;
-                // values[2] = std::clamp(result.value[2], 0.F, 1.F) * 255;
-                // values[3] = std::clamp(result.value[3], 0.F, 1.F) * 255;
-                
                 std::memcpy(img->getData(), &result.value[0], sizeof(float)*4);
                 
-                out = vlk::Texture::create(ctx, info);
+                TextureOptions options;
+                options.filters.minify = timeline::ImageFilter::Nearest;
+                options.filters.magnify = timeline::ImageFilter::Nearest;
+                        
+                out = vlk::Texture::create(ctx, info, options);
                 out->copy(img);
             }
 
