@@ -27,6 +27,7 @@ set(libdisplay_info_CONFIGURE
     ${libdisplay_info_PYTHONPATH} 
     -- ${MESON_EXECUTABLE} setup
     --prefix=${CMAKE_INSTALL_PREFIX}
+    --libdir=lib
     build)
 
 set(libdisplay_info_BUILD 

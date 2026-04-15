@@ -20,7 +20,7 @@ if (WIN32)
     set(libdovi_move_lib mv ${INSTALL_PREFIX}/lib/dovi.dll.lib ${INSTALL_PREFIX}/lib/dovi.lib) 
     set(libdovi_INSTALL ${MRV2_MSYS_CMD} -c "([ -f /usr/bin/link.exe ] && mv -f /usr/bin/link /usr/bin/link_msys.exe) || true && cd dolby_vision && cargo cinstall --release --prefix ${INSTALL_PREFIX}" && ${libdovi_move_lib})
 else()
-    set(libdovi_INSTALL cd dolby_vision && cargo cinstall --release --prefix "${INSTALL_PREFIX}")
+    set(libdovi_INSTALL cd dolby_vision && cargo cinstall --release --prefix "${INSTALL_PREFIX}" --libdir=lib)
 endif()
 
 

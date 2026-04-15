@@ -209,7 +209,7 @@ elseif(UNIX)
     #
     set(CPACK_GENERATOR $ENV{CPACK_GENERATOR})
     if (NOT CPACK_GENERATOR)
-	set(CPACK_GENERATOR DEB RPM TGZ)
+	set(CPACK_GENERATOR TGZ)
     endif()
     
     #
