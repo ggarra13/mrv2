@@ -263,8 +263,6 @@ file(COPY ${CPACK_PREPACKAGE}/bin/mrv2
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
 file(COPY ${CPACK_PREPACKAGE}/bin/license_helper
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
-file(COPY ${CPACK_PREPACKAGE}/bin/usdviewer
-    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
 file(COPY ${CPACK_PREPACKAGE}/bin/environment.sh
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
 file(COPY ${CPACK_PREPACKAGE}/bin/install_dmg.sh
