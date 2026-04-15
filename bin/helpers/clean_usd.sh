@@ -17,6 +17,8 @@
 echo "This script will clear OpenUSD at $BUILD_DIR"
 ask_to_continue
 
+echo "Removing..."
+
 export INSTALL=$BUILD_DIR/install
 
 rm -rf $INSTALL/build
