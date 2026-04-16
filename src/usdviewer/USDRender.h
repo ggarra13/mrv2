@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "USDMaterial.h"
+
 #include <tlTimeline/RenderOptions.h>
 
 #include <tlVk/Mesh.h>
@@ -103,6 +105,10 @@ namespace tl
             void setClipRectEnabled(bool);
             math::Box2i getClipRect() const;
             void setClipRect(const math::Box2i&);
+
+
+            void setCameraWorldPosition(const math::Vector3f&);
+            
             math::Matrix4x4f getTransform() const;
             void setTransform(const math::Matrix4x4f&);
             void applyTransforms();
@@ -114,6 +120,7 @@ namespace tl
                             const image::Color4f&,
                             const std::string& shaderName,
                             const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
+                            const Material& material = Material(), 
                             const bool enableBlending = false,
                             const VkBlendFactor srcColorBlendFactor =
                             VK_BLEND_FACTOR_SRC_ALPHA,

@@ -4,6 +4,8 @@
 
 #include <pxr/usd/usd/prim.h>
 #include <pxr/usd/usdShade/material.h>
+#include <pxr/usd/usd/stage.h>
+#include <pxr/usd/usd/timeCode.h>
 
 #include <tlVk/Texture.h>
 
@@ -11,31 +13,12 @@
 #include <string>
 #include <unordered_map>
 
+#include "USDMaterial.h"
+
 namespace tl
 {
     namespace usd
     {
-        //! Inputs to a material (hold a texture or a value).
-        struct ShaderInputResult
-        {
-            std::string           texturePath;          // non-empty when a texture is found
-            std::array<float, 4>  value  = {};          // constant value when no texture
-            bool                  hasValue = false;     // true when value is populated
-            vlk::TextureBorder    borderU = vlk::TextureBorder::ClampToEdge;
-            vlk::TextureBorder    borderV = vlk::TextureBorder::ClampToEdge;
-        };
-
-        //! Material.
-        struct Material
-        {
-            ShaderInputResult     diffuseColor;
-            ShaderInputResult     opacity;
-            ShaderInputResult     metallic;
-            ShaderInputResult     roughness;
-            ShaderInputResult     normal;
-            ShaderInputResult     occlusion;
-            ShaderInputResult     displacement;
-        };
 
         // Get a list of textures and/or values for each material in a primitive
         ShaderInputResult GetTextureOrValue(
@@ -44,8 +27,14 @@ namespace tl
             const pxr::TfToken& inputName,
             const bool          debug = DEBUG_TEXTURES);
         
-        std::unordered_map<std::string, Material>
+        void
         GetMaterials(const pxr::UsdPrim& prim,
+                     std::unordered_map<std::string, Material >& out,
                      const bool          debug = DEBUG_MATERIALS);
+
+        void CollectMaterials(Fl_Vk_Context& ctx,
+                              const pxr::UsdStageRefPtr stage,
+                              std::unordered_map<std::string,
+                              usd::Material >& materials);
     }
 }

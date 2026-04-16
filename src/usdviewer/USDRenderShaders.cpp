@@ -169,11 +169,20 @@ layout(location = 0) in vec3 fPos;
 layout(location = 1) in vec2 fTexture;
 
 layout(binding = 1) uniform sampler2D u_DiffuseMap;
-layout(binding = 2) uniform sampler2D u_MetallicMap;
-layout(binding = 3) uniform sampler2D u_RoughnessMap;
-layout(binding = 4) uniform sampler2D u_NormalMap;
-layout(binding = 5) uniform sampler2D u_AOMap;
-layout(binding = 6) uniform sampler2D u_OpacityMap;
+layout(binding = 2) uniform sampler2D u_EmissiveMap;
+layout(binding = 3) uniform sampler2D u_MetallicMap;
+layout(binding = 4) uniform sampler2D u_RoughnessMap;
+layout(binding = 5) uniform sampler2D u_NormalMap;
+layout(binding = 6) uniform sampler2D u_AOMap;
+layout(binding = 7) uniform sampler2D u_OpacityMap;
+
+layout(set = 0, binding = 8, std140) uniform Parameters {
+     float opacityThreshold;
+} param;
+
+layout(set = 0, binding = 9, std140) uniform Scene {
+     vec3 camPos;
+} scene;
 
 layout(location = 0) out vec4 outColor;
                   
@@ -264,19 +273,18 @@ void main()
     float u_Material_roughness = 1.0;
     float u_Material_aoStrength = 1.0;
 
-    // Scene parameters (\todo: pass as UBO? Not needed for a single light from
-    //                          camera)
-    vec3 u_Scene_camPos    = vec3(0, 0, 0);
-    vec3 u_Scene_lightPos  = vec3(0, 0, 0);
-    vec3 u_Scene_lightColor = vec3(2, 2, 2);
-
-
     // ── Sample textures ───────────────────────
-    vec3  albedo    = texture(u_DiffuseMap,   st).rgb * u_Material_diffuseColor.rgb;
+    vec3 albedo = texture(u_DiffuseMap,   st).rgb * u_Material_diffuseColor.rgb;
     float metallic  = texture(u_MetallicMap,  st).r * u_Material_metallic;
     float roughness = texture(u_RoughnessMap, st).r * u_Material_roughness;
     float opacity   = texture(u_OpacityMap, st).a;
     float ao        = mix(1.0, texture(u_AOMap, st).r, u_Material_aoStrength);
+    vec3 emissive   = texture(u_EmissiveMap, st).rgb;
+
+    if (opacity < param.opacityThreshold)
+    {
+       discard;
+    }
 
     // Clamp to physically plausible range
     roughness = clamp(roughness, 0.05, 1.0);
@@ -294,18 +302,10 @@ void main()
     mat3 TBN = ComputeTBNMatrix(fPos, N, st);
     N = normalize(TBN * Nt);
 
-    // ── Lighting vectors ──────────────────────
-    //vec3 V = normalize(fPos - u_Scene_camPos);  // correct
-
-    // vec3 V = normalize(-fPos);  // correct
-    vec3 V = normalize(vec3(0, 0, -1)); // correct
-
-    // Simple light direction (incorrect)
-    //vec3 lightPos = vec3(0.0, 0.0, 0.0);
-    //vec3 L = normalize(lightPos - fPos);
-
-    vec3 L = normalize(vec3(0, 0, -1)); // correct
-
+    // Scene parameters
+    vec3 u_Scene_lightColor = vec3(1,1,1);
+    vec3 V = normalize(fPos - scene.camPos);
+    vec3 L = V;
     vec3 H = normalize(V + L);
 
     float NdotV = max(dot(N, V), 0.0);
@@ -332,7 +332,7 @@ void main()
     vec3 diffuse = kD * albedo / PI;
 
     // ── Radiance & final colour ───────────────
-    float dist     = length(u_Scene_lightPos - fPos);
+    float dist     = length(L);
     float atten    = 1.0 / (dist * dist);          // inverse-square falloff
     vec3  radiance = u_Scene_lightColor; // * atten;
  
@@ -352,7 +352,7 @@ void main()
     vec3 ambient = (ambientDiffuse + ambientSpecular) * ao;
 
     // Combine ambient + diffuse + specular
-    vec3 color = ambient + Lo;
+    vec3 color = ambient + Lo + emissive;
 
     // ── Tone mapping (Reinhard) + gamma  ───────  WRONG AND UNNEEDED
     //    If we merge it into vmrv2, we can use libplacebo directly.

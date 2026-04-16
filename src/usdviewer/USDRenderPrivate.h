@@ -55,6 +55,7 @@ namespace tl
 
             std::weak_ptr<system::Context> context;
             math::Box2i viewport;
+            math::Vector3f    cameraPosition;
             math::Matrix4x4f transform;
             bool clipRectEnabled = false;
             math::Box2i clipRect;

@@ -4,8 +4,8 @@
 // All rights reserved.
 
 #include "USDRenderPrivate.h"
-#include "USDRenderStructs.h"
 #include "USDTextureSlots.h"
+#include "USDRenderStructs.h"
 
 #include <tlVk/Vk.h>
 
@@ -117,6 +117,7 @@ namespace tl
                                 const image::Color4f& color,
                                 const std::string& shaderId,
                                 const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
+                                const usd::Material& material,
                                 const bool enableBlending,
                                 const VkBlendFactor srcColorBlendFactor,
                                 const VkBlendFactor dstColorBlendFactor,
@@ -158,6 +159,9 @@ namespace tl
                 auto i = textures.find(USD_DiffuseMap);
                 p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
                 
+                i = textures.find(USD_EmissiveMap);
+                p.shaders[shaderName]->setTexture("u_EmissiveMap", i->second);
+                
                 i = textures.find(USD_MetallicMap);
                 p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
                 
@@ -172,12 +176,20 @@ namespace tl
                 
                 i = textures.find(USD_OpacityMap);
                 p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
+
+                USDShaderParameters params;
+                params.opacityThreshold = material.opacityThreshold;
+                p.shaders[shaderName]->setUniform("params", params);
+
+                USDSceneParameters scene;
+                scene.camPos = p.cameraPosition;
+                p.shaders[shaderName]->setUniform("scene", scene);
             }
             else if (shaderId == "st")
             {
                 shaderName = "st";
                 pipelineName = pipelineLayoutName = shaderName;
-
+                
                 _createBindingSet(p.shaders[shaderName]);
                 
                 p.shaders[shaderName]->bind(p.frameIndex);  

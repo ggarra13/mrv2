@@ -4,6 +4,7 @@
 
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
 #include "USDCollectTextures.h"
+#include "USDGetMaterials.h"
 #include "USDRender.h"
 #include "USDRenderShadersBinary.h"
 #include "USDTextureSlots.h"
@@ -221,8 +222,10 @@ namespace tl
             UsdTimeCode time = 0;
 
             // Vulkan information.
+            bool collectMaterials = true;
             bool collectTextures = true;
-            std::unordered_map<std::string, tl::usd::ShaderTextures > textures;
+            std::unordered_map<std::string, usd::Material > materials;
+            std::unordered_map<std::string, usd::ShaderTextures > textures;
 
             //! tlRender context
             std::shared_ptr<system::Context> context;
@@ -726,15 +729,16 @@ namespace tl
             //
             // Find the textures if the mesh has UVs 
             //
+            usd::Material material;
             std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
             if (hasUVs)
             {
                 // 1. Try to get the Material bound directly to the Prim
                 UsdPrim prim = usdMesh.GetPrim();
                 UsdShadeMaterialBindingAPI bindingApi(prim);
-                UsdShadeMaterial material = bindingApi.ComputeBoundMaterial();
+                UsdShadeMaterial usdMaterial = bindingApi.ComputeBoundMaterial();
 
-                if (!material)
+                if (!usdMaterial)
                 {
                     UsdGeomImageable imageable(prim);
                     if (imageable)
@@ -742,19 +746,24 @@ namespace tl
                         for (const UsdGeomSubset& subset : UsdGeomSubset::GetAllGeomSubsets(imageable))
                         {
                             UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
-                            material = subsetBinding.ComputeBoundMaterial();
-                            if (material)
+                            usdMaterial = subsetBinding.ComputeBoundMaterial();
+                            if (usdMaterial)
                                 break;
                         }
                     }
                 }
         
-                std::string materialPath = material.GetPath().GetString();
+                std::string materialPath = usdMaterial.GetPath().GetString();
         
                 auto i = p.textures.find(materialPath);
                 if (i != p.textures.end())
                 {
                     textures = i->second;
+                    auto j = p.materials.find(materialPath);
+                    if (j != p.materials.end())
+                    {
+                        material = j->second;
+                    }
                     shaderName = "UsdPreviewSurface";
                 }
             }
@@ -764,8 +773,10 @@ namespace tl
             }
 
 
+            
+            
             p.render->draw3DMesh(geom, modelMatrix, color, shaderName,
-                                 textures);
+                                 textures, material);
         }
 
         void RenderEngine::draw(VkCommandBuffer cmd,
@@ -785,10 +796,19 @@ namespace tl
                 }
             }
 
+            if (p.collectMaterials)
+            {
+                p.collectMaterials = false;
+                usd::CollectMaterials(ctx, p.stage, p.materials);
+            }
             if (p.collectTextures)
             {
                 p.collectTextures = false;
-                usd::CollectTextures(ctx, cmd, p.stage, p.time, p.textures);
+                std::unordered_map<std::string, std::shared_ptr<vlk::Texture > > textureCache;
+                for (auto& [materialName, material] : p.materials)
+                {
+                    usd::CollectTextures(ctx, materialName, material, textureCache, p.textures);
+                }
             }
 
             std::string cameraName;
@@ -851,10 +871,14 @@ namespace tl
     
             p.render->begin(cmd, p.buffer, frameIndex, renderSize,
                             renderOptions);
+            const math::Vector3f camPos = math::Vector3f(cameraPos[0],
+                                                         cameraPos[1],
+                                                         cameraPos[2]);
+            p.render->setCameraWorldPosition(camPos);
             p.render->applyTransforms();
             p.render->beginLoadRenderPass();
             p.render->setupViewportAndScissor();
-    
+            
             auto oldTransform = p.render->getTransform();
             p.render->setTransform(mvp);
 

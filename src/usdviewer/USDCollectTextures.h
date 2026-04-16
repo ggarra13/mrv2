@@ -5,6 +5,8 @@
 
 #include <vulkan/vulkan.h>
 
+#include "USDMaterial.h"
+
 #include <unordered_map>
 #include <string>
 
@@ -25,12 +27,11 @@ namespace tl
         typedef std::unordered_map<int,
                                    std::shared_ptr<vlk::Texture> > ShaderTextures;
 
-        // Collect all textures for a primitive.
         void CollectTextures(Fl_Vk_Context& ctx,
-                             const VkCommandBuffer cmd,
-                             const UsdStageRefPtr stage,
-                             const UsdTimeCode time,
-                             std::unordered_map<std::string, ShaderTextures >&
-                             collectedTextures);
+                             const std::string& materialName,
+                             const usd::Material& material,
+                             std::unordered_map<std::string, std::shared_ptr<vlk::Texture > >&
+                             textureCache,
+                             std::unordered_map<std::string, ShaderTextures >& collectedTextures);
     }
 }

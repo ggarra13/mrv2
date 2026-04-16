@@ -1,8 +1,11 @@
 #include "USDGetMaterials.h"
 
+#include <pxr/usd/usd/primRange.h>
+
 #include <pxr/usd/usdGeom/imageable.h>
 #include <pxr/usd/usdGeom/subset.h>
 #include <pxr/usd/usdShade/materialBindingAPI.h>
+#include <pxr/usd/usdShade/material.h>
 #include <pxr/usd/usdShade/shader.h>
 
 
@@ -31,24 +34,11 @@ namespace tl
                     out = vlk::TextureBorder::ClampToBorder;
                 return out;
             }
+            
             void FillEmptyShaderInputResult(ShaderInputResult& result,
-                                            const UsdPrim&   prim,
                                             const TfToken& inputName)
             {
                 result.hasValue = true;
-                
-                VtArray<GfVec3f> colors;
-                UsdGeomGprim gprim(prim);
-                if (gprim)
-                    gprim.GetDisplayColorAttr().Get(&colors);
-                if (inputName == TfToken("diffuseColor") && colors.size() == 1)
-                {
-                    result.value[0] = colors[0][0];
-                    result.value[1] = colors[0][1];
-                    result.value[2] = colors[0][2];
-                    result.value[3] = colors[0][3];
-                    return;
-                }
                 
                 if (inputName == TfToken("diffuseColor") || // ok
                     inputName == TfToken("opacity") ||   // ok
@@ -58,7 +48,8 @@ namespace tl
                     result.value    = { 1.F, 1.F, 1.F, 1.F };
                 }
                 else if (inputName == TfToken("metallic") ||  // ok 
-                         inputName == TfToken("displacement"))     // ok
+                         inputName == TfToken("displacement") ||
+                         inputName == TfToken("emissiveColor"))     // ok
                 {
                     result.texturePath = "*empty";
                     result.value    = { 0.F, 0.F, 0.F, 0.F };
@@ -77,15 +68,14 @@ namespace tl
             }
         }
 
-        ShaderInputResult GetTextureOrValue(const UsdPrim&   prim,
-                                            const UsdShadeMaterial& material,
+        ShaderInputResult GetTextureOrValue(const UsdShadeMaterial& material,
                                             const TfToken&   inputName,
                                             const bool       debug)
         {
             ShaderInputResult result;
             if (!material)
             {
-                FillEmptyShaderInputResult(result, prim, inputName);
+                FillEmptyShaderInputResult(result, inputName);
                 return result;
             }
 
@@ -110,12 +100,12 @@ namespace tl
                         if (fileInput.Get(&assetPath))
                             result.texturePath = assetPath.GetResolvedPath();
                         else
-                            FillEmptyShaderInputResult(result, prim, inputName);
+                            FillEmptyShaderInputResult(result, inputName);
                     }
                 }
                 else
                 {
-                    FillEmptyShaderInputResult(result, prim, inputName);
+                    FillEmptyShaderInputResult(result, inputName);
                 }
                 return result;
             }
@@ -167,7 +157,7 @@ namespace tl
             UsdShadeShader surfaceShader = material.ComputeSurfaceSource(TfToken("universal"));
             if (!surfaceShader)
             {
-                FillEmptyShaderInputResult(result, prim, inputName);
+                FillEmptyShaderInputResult(result, inputName);
                 return result;
             }
 
@@ -175,7 +165,7 @@ namespace tl
             UsdShadeInput shaderInput = surfaceShader.GetInput(inputName);
             if (!shaderInput)
             {
-                FillEmptyShaderInputResult(result, prim, inputName);
+                FillEmptyShaderInputResult(result, inputName);
                 return result;
             }
 
@@ -224,59 +214,77 @@ namespace tl
             return result;
         }
 
+        float GetShaderFloatValue(const UsdShadeMaterial& material,
+                                  const TfToken&   inputName,
+                                  const bool       debug)
+        {
+            float out = 0.F;
+            UsdShadeShader surfaceShader = material.ComputeSurfaceSource(TfToken("universal"));
+            if (!surfaceShader)
+            {
+                return out;
+            }
+
+            UsdShadeInput shaderInput = surfaceShader.GetInput(inputName);
+            if (!shaderInput)
+            {
+                return out;
+            }
+            
+            shaderInput.Get(&out);
+            return out;
+        }
+
         
-        Material ParseMaterial(const UsdPrim& prim,
-                               const UsdShadeMaterial& material,
+        Material ParseMaterial(const UsdShadeMaterial& material,
                                const bool debug)
         {
             Material out;
             
-            out.diffuseColor = GetTextureOrValue(prim, material, TfToken("diffuseColor"), debug);
-            out.opacity = GetTextureOrValue(prim, material, TfToken("opacity"), debug);
-            out.metallic = GetTextureOrValue(prim, material, TfToken("metallic"), debug);
-            out.roughness = GetTextureOrValue(prim, material, TfToken("roughness"), debug);
-            out.normal = GetTextureOrValue(prim, material, TfToken("normal"), debug);
-            out.occlusion = GetTextureOrValue(prim, material, TfToken("occlusion"), debug);
-            out.displacement = GetTextureOrValue(prim, material, TfToken("displacement"), debug);
+            out.diffuseColor = GetTextureOrValue(material, TfToken("diffuseColor"), debug);
+            out.emissiveColor = GetTextureOrValue(material, TfToken("emissiveColor"), debug);
+            out.opacity = GetTextureOrValue(material, TfToken("opacity"), debug);
+            out.metallic = GetTextureOrValue(material, TfToken("metallic"), debug);
+            out.roughness = GetTextureOrValue(material, TfToken("roughness"), debug);
+            out.normal = GetTextureOrValue(material, TfToken("normal"), debug);
+            out.occlusion = GetTextureOrValue(material, TfToken("occlusion"), debug);
+            out.displacement = GetTextureOrValue(material, TfToken("displacement"), debug);
 
+            out.opacityThreshold = GetShaderFloatValue(material,
+                                                       TfToken("opacityThreshold"),
+                                                       debug);
+
+            
             return out;
         }
-        
-        std::unordered_map<std::string, Material >
-        GetMaterials(const pxr::UsdPrim& prim,
-                     const bool          debug)
-        {
-            std::unordered_map<std::string, Material > out;
-            
-            // 1. Try to get the Material bound directly to the Prim
-            UsdShadeMaterialBindingAPI bindingApi(prim);
-            UsdShadeMaterial material = bindingApi.ComputeBoundMaterial();
 
-            // 1b. If no direct material is found, check for GeomSubsets (per-face bindings)
-            if (!material)
-            {
-                UsdGeomImageable imageable(prim);
-                if (imageable)
-                {
-                    for (const UsdGeomSubset& subset : UsdGeomSubset::GetAllGeomSubsets(imageable))
-                    {
-                        UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
-                        material = subsetBinding.ComputeBoundMaterial();
-                        if (material)
-                        {
-                            Material result = ParseMaterial(prim, material, debug);
-                            out[material.GetPath().GetString()] = result;
-                        }
-                    }
-                }
-            }
-            if (material)
-            {
-                Material result = ParseMaterial(prim, material, debug);
+        
+        void CollectMaterials(Fl_Vk_Context& ctx,
+                              const pxr::UsdStageRefPtr stage,
+                              std::unordered_map<std::string, usd::Material >& out)
+        {
+            UsdPrimRange range(stage->GetPseudoRoot(),
+                               UsdTraverseInstanceProxies());
+            std::cout << "Started Reading materials..." << std::endl;
+
+            bool debug = true;
+            for (auto it = range.begin(); it != range.end(); ++it) {
+
+                //
+                // Ignore hidden geometry
+                //
+                if (!it->IsA<UsdShadeMaterial>())
+                    continue;
+
+                UsdShadeMaterial material(*it);
+                
+                Material result = ParseMaterial(material, debug);
                 out[material.GetPath().GetString()] = result;
             }
-
-            return out;
+            
+            std::cout << "Finished Reading " << out.size()
+                      << " materials..." << std::endl;
         }
+        
     }
 }

@@ -6,8 +6,8 @@
 #include "FL/Fl_Vk_Utils.H"
 #include "FL/vk_enum_string_helper.h"
 
-#include <USDRenderPrivate.h>
-#include <USDRenderStructs.h>
+#include "USDRenderStructs.h"
+#include "USDRenderPrivate.h"
 
 #include <tlVk/Buffer.h>
 #include <tlVk/Vk.h>
@@ -197,11 +197,16 @@ namespace tl
                     "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["usd"]->addPush("color", color, vlk::kShaderFragment);
                 p.shaders["usd"]->addTexture("u_DiffuseMap");
+                p.shaders["usd"]->addTexture("u_EmissiveMap");
                 p.shaders["usd"]->addTexture("u_MetallicMap");
                 p.shaders["usd"]->addTexture("u_RoughnessMap");
                 p.shaders["usd"]->addTexture("u_NormalMap");
                 p.shaders["usd"]->addTexture("u_AOMap");
                 p.shaders["usd"]->addTexture("u_OpacityMap");
+                USDShaderParameters params;
+                p.shaders["usd"]->createUniform("params", params);
+                USDSceneParameters scene;
+                p.shaders["usd"]->createUniform("scene", scene);
                 _createBindingSet(p.shaders["usd"]);
             }
             
@@ -450,6 +455,11 @@ namespace tl
             return _p->transform;
         }
 
+        void Render::setCameraWorldPosition(const math::Vector3f& value)
+        {
+            _p->cameraPosition = value;
+        }
+        
         void Render::setTransform(const math::Matrix4x4f& value)
         {
             _p->transform = value;
