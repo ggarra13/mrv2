@@ -133,6 +133,9 @@ namespace tl
             //! Get device memory.
             VkDeviceMemory getDeviceMemory() const;
 
+            //! Return true if @p dataSize bytes fit in the current frame region.
+            bool canFit(std::size_t dataSize) const;
+            
             //! Upload mesh data and return offset.
             std::size_t upload(const std::vector<uint8_t>& data);
 

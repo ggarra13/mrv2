@@ -9,6 +9,8 @@
 #include "USDRenderShadersBinary.h"
 #include "USDTextureSlots.h"
 
+#include "Mesh.h"
+
 #include <tlCore/Context.h>
 
 #include <pxr/pxr.h>
@@ -39,7 +41,6 @@
 #include <pxr/imaging/hdx/types.h>
 
 
-#include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Shader.h>
 

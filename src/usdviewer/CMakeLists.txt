@@ -6,6 +6,7 @@
 set(HEADERS
     #USD.h
     #USDPrivate.h
+    VAOPool.h
     USDCollectTextures.h
     USDGetMaterials.h
     #    USDProcessSkeletonRoot.h
@@ -17,6 +18,7 @@ set(HEADERS
 set(SOURCES
     #USD.cpp
     #USDRead.cpp
+    VAOPool.cpp
     USDCollectTextures.cpp
     USDGetMaterials.cpp
     #    USDProcessSkeletonRoot.cpp

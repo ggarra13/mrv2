@@ -27,11 +27,10 @@ namespace tl
         typedef std::unordered_map<int,
                                    std::shared_ptr<vlk::Texture> > ShaderTextures;
 
-        void CollectTextures(Fl_Vk_Context& ctx,
-                             const std::string& materialName,
-                             const usd::Material& material,
-                             std::unordered_map<std::string, std::shared_ptr<vlk::Texture > >&
-                             textureCache,
-                             std::unordered_map<std::string, ShaderTextures >& collectedTextures);
+        void
+        CollectTextures(Fl_Vk_Context& ctx,
+                        const std::unordered_map<std::string, Material >& materials,
+                        std::unordered_map<std::string, std::shared_ptr<vlk::Texture > >& textureCache,
+                        std::unordered_map<std::string, ShaderTextures >& collectedTextures);
     }
 }

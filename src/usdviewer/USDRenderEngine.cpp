@@ -70,7 +70,6 @@
 
 #include <tlTimelineVk/RenderShadersBinary.h>
 
-#include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Shader.h>
 
@@ -805,10 +804,8 @@ namespace tl
             {
                 p.collectTextures = false;
                 std::unordered_map<std::string, std::shared_ptr<vlk::Texture > > textureCache;
-                for (auto& [materialName, material] : p.materials)
-                {
-                    usd::CollectTextures(ctx, materialName, material, textureCache, p.textures);
-                }
+                usd::CollectTextures(ctx, p.materials, textureCache, p.textures);
+                
             }
 
             std::string cameraName;

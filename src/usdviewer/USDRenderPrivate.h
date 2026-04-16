@@ -6,10 +6,10 @@
 #pragma once
 
 
-#include <USDRenderOptions.h>
-#include <USDRender.h>
+#include "USDRenderOptions.h"
+#include "USDRender.h"
+#include "VAOPool.h"
 
-#include <tlVk/Mesh.h>
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/PipelineCreationState.h>
 #include <tlVk/Shader.h>
@@ -49,7 +49,8 @@ namespace tl
 
             // Current frame in the swapchain
             int32_t frameIndex; // must be an int32_t not an uint32_t.
-
+            std::shared_ptr<vlk::VAOPool> vaoPool;
+            
             math::Size2i renderSize;
             timeline::RenderOptions renderOptions;
 

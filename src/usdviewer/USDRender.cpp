@@ -11,7 +11,6 @@
 
 #include <tlVk/Buffer.h>
 #include <tlVk/Vk.h>
-#include <tlVk/Mesh.h>
 #include <tlVk/Util.h>
 
 #include <tlCore/Assert.h>
@@ -113,6 +112,11 @@ namespace tl
             p.renderPass = fbo->getClearRenderPass();
             p.frameIndex = frameIndex;
 
+            if (p.vaoPool)
+            {
+                p.vaoPool->bind(frameIndex);
+            }
+
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
             const VkColorComponentFlags allMask[] =
                 { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
@@ -210,9 +214,6 @@ namespace tl
                 _createBindingSet(p.shaders["usd"]);
             }
             
-            //
-            // Meshes
-            //
             if (renderOptions.clear)
             {
                 clearViewport(renderOptions.clearColor);

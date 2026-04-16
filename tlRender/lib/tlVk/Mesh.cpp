@@ -824,13 +824,9 @@ namespace tl
         {
             TLRENDER_P();
             const size_t dataSize = vertexData.size();
-            const std::size_t absOffset = (p.frameIndex * p.regionSize) + p.relativeOffset;
 
             // Check for overflow within the frame region
             if (p.relativeOffset + dataSize > p.regionSize) {
-                std::cerr << "VAO: Frame region overflow "
-                          << (p.relativeOffset + dataSize) << " > " << p.regionSize
-                          << std::endl;
                 std::cerr << "VAO: call setMemorySize with more than "
                           << p.totalSize
                           << " region="
@@ -838,8 +834,10 @@ namespace tl
                           << std::endl;
                 throw std::runtime_error("VAO: Frame region overflow!");
             }
+            
             // Compute absolute offset in the big buffer:
             // per-frame region + relative
+            const std::size_t absOffset = (p.frameIndex * p.regionSize) + p.relativeOffset;
             void* dst = reinterpret_cast<uint8_t*>(p.mappedPtr) + absOffset;
             memcpy(dst, vertexData.data(), dataSize);
 
@@ -857,7 +855,9 @@ namespace tl
                 throw std::runtime_error("vmaFlushAllocation failed");
             }
 
-            size_t currentUploadOffset = absOffset;
+            // Store the current upload offset to return it for immediat
+            // drawing if needed.
+            const size_t currentUploadOffset = absOffset;
 
             // Advance and align the relative offset for the NEXT upload
             p.relativeOffset += dataSize;
@@ -888,6 +888,11 @@ namespace tl
             VmaAllocationInfo allocInfo;
             vmaGetAllocationInfo(ctx.allocator, _p->allocation, &allocInfo);
             return allocInfo.deviceMemory;
+        }
+        
+        bool VAO::canFit(std::size_t dataSize) const
+        {
+            return (_p->relativeOffset + dataSize) <= _p->regionSize;
         }
         
     } // namespace vlk

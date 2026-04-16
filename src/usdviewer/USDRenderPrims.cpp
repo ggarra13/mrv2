@@ -16,6 +16,13 @@ namespace tl
     namespace usd
     {
 
+        // ------------------------------------------------------------------
+        //  _create3DMesh
+        //
+        //  Responsible only for the VBO (CPU-side vertex data).  The VAO
+        //  pool lives in Private and is managed by the pool itself; we no
+        //  longer create or cache per-mesh VAOs here.
+        // ------------------------------------------------------------------
         void Render::_create3DMesh(const std::string& meshName,
                                    const geom::TriangleMesh3& mesh)
         {
@@ -27,24 +34,24 @@ namespace tl
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += triangleCount;
 
+            // -----------------------------------------------------------------
+            //  Choose the richest VBOType that this mesh's data supports.
+            //
+            //  NOTE: the two duplicate conditions in the original code
+            //  (t+n+c checked twice, t+n checked twice) mean the second branch
+            //  of each pair was dead code.  The types that require float UVs /
+            //  float normals are left as TODOs for a future VBOType selector.
+            // -----------------------------------------------------------------
             vlk::VBOType type = vlk::VBOType::Pos3_F32;
             if (!mesh.t.empty() && !mesh.n.empty() && !mesh.c.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8;
-            }
-            else if (!mesh.t.empty() && !mesh.n.empty() && !mesh.c.empty())
-            {
-                // \todo: How do we this distinguish this type?
-                type = vlk::VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32;
+                // \todo distinguish Pos3_F32_UV_F32_Normal_F32_Color_F32
             }
             else if (!mesh.t.empty() && !mesh.n.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16_Normal_U10;
-            }
-            else if (!mesh.t.empty() && !mesh.n.empty())
-            {
-                // \todo: How do we this distinguish this type?
-                type = vlk::VBOType::Pos3_F32_UV_F32_Normal_F32;
+                // \todo distinguish Pos3_F32_UV_F32_Normal_F32
             }
             else if (!mesh.t.empty())
             {
@@ -54,41 +61,41 @@ namespace tl
             {
                 type = vlk::VBOType::Pos3_F32_Color_U8;
             }
-            
+
+            // Rebuild the VBO whenever the triangle count or type changes.
             if (!p.vbos[meshName] ||
-                (p.vbos[meshName] &&
-                 p.vbos[meshName]->getSize() != triangleCount * 3))
+                p.vbos[meshName]->getSize() != triangleCount * 3 ||
+                p.vbos[meshName]->getType() != type)
             {
                 p.vbos[meshName] = vlk::VBO::create(triangleCount * 3, type);
             }
             if (p.vbos[meshName])
                 p.vbos[meshName]->copy(convert(mesh, type));
 
-            if (!p.vaos[meshName] && p.vbos[meshName])
+            // ------------------------------------------------------------------
+            //  Pool initialisation – create the pool on first use.
+            //
+            //  The pool is a member of Private:
+            //    std::shared_ptr<vlk::VAOPool> vaoPool;
+            //
+            //  Call  p.vaoPool->bind(p.frameIndex)  once per frame, e.g. in
+            //  Render::begin() - NOT here
+            // ------------------------------------------------------------------
+            if (!p.vaoPool)
             {
-                p.vaos[meshName] = vlk::VAO::create(ctx);
-                
-                // Use a 4 Gb cache \@todo: make it optional
-                // value must be less than (4292870144 on RTX 3080)
-                VkPhysicalDeviceVulkan11Properties vulkan11Props = {};
-                vulkan11Props.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES;
-                
-                VkPhysicalDeviceProperties2 props2 = {};
-                props2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
-                props2.pNext = &vulkan11Props;
-
-                vkGetPhysicalDeviceProperties2(ctx.gpu, &props2);
-
-                // Now you have the limit:
-                VkDeviceSize size = vulkan11Props.maxMemoryAllocationSize - 1024;
-#ifndef __APPLE__
-                size = 3.5 * memory::gigabyte;
-#endif
-                p.vaos[meshName]->setMemorySize(size);
-                p.vaos[meshName]->bind(p.frameIndex);
+                VkDeviceSize slotSize =
+                    static_cast<VkDeviceSize>(memory::gigabyte);
+                p.vaoPool = vlk::VAOPool::create(ctx, slotSize);
             }
         }
-        
+
+        // ------------------------------------------------------------------
+        //  _emitMeshDraw
+        //
+        //  Uploads the VBO into whichever pool slot has room and issues the
+        //  draw command.  The VAOAllocation token is transient – it is only
+        //  valid for the current command buffer recording.
+        // ------------------------------------------------------------------
         void Render::_emitMeshDraw(const std::string& pipelineLayoutName,
                                    const std::string& shaderName,
                                    const std::string& meshName,
@@ -104,11 +111,17 @@ namespace tl
                                shader->getPushStageFlags(), 0,
                                sizeof(color), &color);
             USDTransforms transforms;
-            transforms.mvp = mvp;
+            transforms.mvp   = mvp;
             transforms.model = model;
             shader->setUniform("transforms", transforms);
             _bindDescriptorSets(pipelineLayoutName, shaderName);
-            _vkDraw(meshName);
+
+            // Upload the vertex data into the pool and draw immediately.
+            // The pool selects a slot with enough room, overflowing to a new
+            // 1 GB buffer when the current one is full.
+            const vlk::VAOAllocation alloc =
+                p.vaoPool->upload(p.vbos[meshName]);
+            p.vaoPool->draw(p.cmd, alloc);
         }
 
 
