@@ -9,8 +9,6 @@
 #include "USDRenderShadersBinary.h"
 #include "USDTextureSlots.h"
 
-#include "Mesh.h"
-
 #include <tlCore/Context.h>
 
 #include <pxr/pxr.h>
