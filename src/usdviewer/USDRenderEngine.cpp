@@ -186,12 +186,12 @@ namespace
         GfMatrix4d xf;
         if (upAxis == UsdGeomTokens->y)
         {
-            xf.SetTranslate(center + GfVec3d(0, 0, distance * 1.2));
+            xf.SetTranslate(center + GfVec3d(0, 0, distance));
         }
         else
         {
             xf.SetRotate(GfRotation(GfVec3d(1, 0, 0), 90));
-            xf.SetTranslateOnly(center + GfVec3d(0, -distance * 1.2, 0));
+            xf.SetTranslateOnly(center + GfVec3d(0, -distance, 0));
         }
         gfCamera.SetTransform(xf);
         return gfCamera;
@@ -805,6 +805,10 @@ namespace tl
                 p.collectTextures = false;
                 std::unordered_map<std::string, std::shared_ptr<vlk::Texture > > textureCache;
                 usd::CollectTextures(ctx, p.materials, textureCache, p.textures);
+                for (auto& [_, texture] : textureCache)
+                {
+                    texture->transitionToShaderRead(cmd);
+                }
                 
             }
 
