@@ -543,6 +543,7 @@ namespace tl
 
             
             geom::TriangleMesh3 geom;
+            MeshOptimization meshOptimization;
 
             // Get points.
             geom.v.reserve(points.size());
@@ -589,6 +590,11 @@ namespace tl
                             n = normals[0];
                         }
 
+                        if (n[0] < -1.F || n[0] > 1.F ||
+                            n[1] < -1.F || n[1] > 1.F ||
+                            n[2] < -1.F || n[2] > 1.F)
+                            meshOptimization.floatNormals = true;
+                            
                         geom.n.push_back(math::Vector3f(n[0], n[1], n[2]));
                     }
                     faceCornerIdx += vertCount;
@@ -618,6 +624,10 @@ namespace tl
                         for (size_t i = 0; i < indices.size(); ++i)
                             expanded[i] = values[indices[i]];
 
+                        const bool isFaceVarying =
+                            interp == UsdGeomTokens->faceVarying ||
+                            expanded.size() == faceVertexIndices.size();
+                        
                         int faceCornerIdx = 0; 
 
                         for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
@@ -628,7 +638,7 @@ namespace tl
                                 int pointIdx = faceVertexIndices[faceCornerIdx + i];
                                 GfVec2f uv;
 
-                                if (interp == UsdGeomTokens->faceVarying) {
+                                if (isFaceVarying) {
                                     // One uv per face-corner, in face-winding order
                                     uv = expanded[faceCornerIdx + i];
                                 } else if (interp == UsdGeomTokens->vertex ||
@@ -651,6 +661,9 @@ namespace tl
                     else
                     {
                         int faceCornerIdx = 0;
+                        const bool isFaceVarying =
+                            interp == UsdGeomTokens->faceVarying ||
+                            values.size() == faceVertexIndices.size();
 
                         for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
                              ++faceIdx) {
@@ -661,9 +674,7 @@ namespace tl
                                 int currentCorner = faceCornerIdx + i;
                                 int pointIdx = faceVertexIndices[currentCorner];
                                 GfVec2f uv;
-
-                                if (interp == UsdGeomTokens->faceVarying) {
-                                    // One uv per face-corner, in face-winding order
+                                if (isFaceVarying) {
                                     uv = values[currentCorner];
                                 } else if (interp == UsdGeomTokens->vertex ||
                                            interp == UsdGeomTokens->varying) {
@@ -677,7 +688,11 @@ namespace tl
                                     uv = values[0];
                                 }
 
-                                geom.t.push_back(math::Vector2f(uv[0], 1.0f - uv[1]));
+                                if (uv[0] < 0.F || uv[0] > 1.F ||
+                                    uv[1] < 0.F || uv[1] > 1.F)
+                                    meshOptimization.floatUVs = true;
+                            
+                            geom.t.emplace_back(math::Vector2f(uv[0], 1.0f - uv[1]));
                             }
                             faceCornerIdx += vertCount;
                         }
@@ -690,14 +705,13 @@ namespace tl
             const bool hasNormals = !geom.n.empty();
             const bool hasUVs = !geom.t.empty();
             
-            std::vector<math::Vector3f> normals(points.size());
+            geom::Triangle3 triangle;
             for (int vertCount : faceVertexCounts)
             {
                 // Fan triangulation: anchor at faceVertexIndices[indexOffset]
                 // e.g. a quad [A, B, C, D] → (A,B,C), (A,C,D)
                 for (int i = 1; i < vertCount - 1; ++i)
                 {
-                    geom::Triangle3 triangle;
                     const int i0 = faceVertexIndices[indexOffset];
                     const int i1 = faceVertexIndices[indexOffset + i];
                     const int i2 = faceVertexIndices[indexOffset + i + 1];
@@ -720,7 +734,7 @@ namespace tl
                         triangle.v[2].t = indexOffset + i + 2;
                     }
                     
-                    geom.triangles.push_back(triangle);
+                    geom.triangles.emplace_back(triangle);
                 }
                 indexOffset += vertCount;
             }
@@ -773,8 +787,8 @@ namespace tl
 
 
             
-            MeshOptimization opt;
-            p.render->draw3DMesh(geom, opt, modelMatrix, color, shaderName,
+            
+            p.render->draw3DMesh(geom, meshOptimization, modelMatrix, color, shaderName,
                                  textures, material);
         }
 
@@ -837,15 +851,24 @@ namespace tl
             const GfFrustum frustum = gfCamera.GetFrustum();
             const GfVec3d cameraPos = frustum.GetPosition();
     
-            const GfMatrix4d& viewMatrix = frustum.ComputeViewMatrix();
-            const GfMatrix4d& projectionMatrix = frustum.ComputeProjectionMatrix();
+            const GfMatrix4d& gfViewMatrix = frustum.ComputeViewMatrix();
+            const GfMatrix4d& gfProjectionMatrix = frustum.ComputeProjectionMatrix();
 
-            const GfMatrix4d& Gfmvp = viewMatrix * projectionMatrix;
+            const GfMatrix4d& Gfmvp = gfViewMatrix * gfProjectionMatrix;
             const math::Matrix4x4f mvp(
                 Gfmvp[0][0], Gfmvp[0][1], Gfmvp[0][2], Gfmvp[0][3],
                 Gfmvp[1][0], Gfmvp[1][1], Gfmvp[1][2], Gfmvp[1][3],
                 Gfmvp[2][0], Gfmvp[2][1], Gfmvp[2][2], Gfmvp[2][3],
                 Gfmvp[3][0], Gfmvp[3][1], Gfmvp[3][2], Gfmvp[3][3]);
+            const math::Matrix4x4f viewMatrix(
+                gfViewMatrix[0][0], gfViewMatrix[0][1],
+                gfViewMatrix[0][2], gfViewMatrix[0][3],
+                gfViewMatrix[1][0], gfViewMatrix[1][1],
+                gfViewMatrix[1][2], gfViewMatrix[1][3],
+                gfViewMatrix[2][0], gfViewMatrix[2][1],
+                gfViewMatrix[2][2], gfViewMatrix[2][3],
+                gfViewMatrix[3][0], gfViewMatrix[3][1],
+                gfViewMatrix[3][2], gfViewMatrix[3][3]);
     
             vlk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F16;
@@ -876,6 +899,7 @@ namespace tl
                                                          cameraPos[1],
                                                          cameraPos[2]);
             p.render->setCameraWorldPosition(camPos);
+            p.render->setViewMatrix(viewMatrix);
             p.render->applyTransforms();
             p.render->beginLoadRenderPass();
             p.render->setupViewportAndScissor();
