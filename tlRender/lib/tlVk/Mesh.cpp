@@ -38,6 +38,7 @@ namespace tl
             "Pos3_F32_UV_U16",
             "Pos3_F32_UV_U16_Normal_U10",
             "Pos3_F32_UV_U16_Normal_U10_Color_U8",
+            "Pos3_F32_UV_F32",
             "Pos3_F32_UV_F32_Normal_F32",
             "Pos3_F32_UV_F32_Normal_F32_Color_F32",
             "Pos3_F32_Color_U8");
@@ -369,6 +370,29 @@ namespace tl
                     }
                 }
                 break;
+            case vlk::VBOType::Pos3_F32_UV_F32:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex3* vertices[] = {
+                        &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]};
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        pf[2] = v ? mesh.v[v - 1].z : 0.F;
+                        p += 3 * sizeof(float);
+
+                        const size_t t = vertices[k]->t;
+                        pf = reinterpret_cast<float*>(p);
+                        pf[0] = t ? mesh.t[t - 1].x : 0.F;
+                        pf[1] = t ? mesh.t[t - 1].y : 0.F;
+                        p += 2 * sizeof(float);
+                    }
+                }
+                break;
             case vlk::VBOType::Pos3_F32_UV_F32_Normal_F32:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
@@ -571,6 +595,21 @@ namespace tl
                     {2, // location
                      0, // binding
                      VK_FORMAT_A2B10G10R10_SNORM_PACK32, 16});
+                break;
+            case VBOType::Pos3_F32_UV_F32:
+                p.bindingDesc[0].stride =
+                    3 * sizeof(float) + 2 * sizeof(float);
+
+                p.attributes.push_back({
+                    0, // location
+                    0, // binding
+                    VK_FORMAT_R32G32B32_SFLOAT,
+                    0 // offset
+                });
+
+                p.attributes.push_back(
+                    {1, 0, VK_FORMAT_R32G32_SFLOAT,
+                     static_cast<uint32_t>(3 * sizeof(float))});
                 break;
             case VBOType::Pos3_F32_UV_F32_Normal_F32:
                 p.bindingDesc[0].stride =

@@ -3,8 +3,8 @@
 // Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
-#include "USDRenderPrivate.h"
 #include "USDTextureSlots.h"
+#include "USDRenderPrivate.h"
 #include "USDRenderStructs.h"
 
 #include <tlVk/Vk.h>
@@ -24,7 +24,8 @@ namespace tl
         //  longer create or cache per-mesh VAOs here.
         // ------------------------------------------------------------------
         void Render::_create3DMesh(const std::string& meshName,
-                                   const geom::TriangleMesh3& mesh)
+                                   const geom::TriangleMesh3& mesh,
+                                   const usd::MeshOptimization& opt)
         {
             TLRENDER_P();
 
@@ -34,28 +35,24 @@ namespace tl
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += triangleCount;
 
-            // -----------------------------------------------------------------
-            //  Choose the richest VBOType that this mesh's data supports.
-            //
-            //  NOTE: the two duplicate conditions in the original code
-            //  (t+n+c checked twice, t+n checked twice) mean the second branch
-            //  of each pair was dead code.  The types that require float UVs /
-            //  float normals are left as TODOs for a future VBOType selector.
-            // -----------------------------------------------------------------
             vlk::VBOType type = vlk::VBOType::Pos3_F32;
             if (!mesh.t.empty() && !mesh.n.empty() && !mesh.c.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8;
-                // \todo distinguish Pos3_F32_UV_F32_Normal_F32_Color_F32
+                if (opt.floatUVs || opt.floatColors || opt.floatNormals)
+                    type = vlk::VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32;
             }
             else if (!mesh.t.empty() && !mesh.n.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16_Normal_U10;
-                // \todo distinguish Pos3_F32_UV_F32_Normal_F32
+                if (opt.floatUVs || opt.floatNormals)
+                    type = vlk::VBOType::Pos3_F32_UV_F32_Normal_F32;
             }
             else if (!mesh.t.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16;
+                if (opt.floatUVs)
+                    type = vlk::VBOType::Pos3_F32_UV_F32;
             }
             else if (!mesh.c.empty())
             {
@@ -113,6 +110,7 @@ namespace tl
             USDTransforms transforms;
             transforms.mvp   = mvp;
             transforms.model = model;
+            transforms.view  = p.viewMatrix;
             shader->setUniform("transforms", transforms);
             _bindDescriptorSets(pipelineLayoutName, shaderName);
 
@@ -126,6 +124,7 @@ namespace tl
 
 
         void Render::draw3DMesh(const geom::TriangleMesh3& mesh,
+                                const usd::MeshOptimization& meshOptimization,
                                 const math::Matrix4x4f& model,
                                 const image::Color4f& color,
                                 const std::string& shaderId,
@@ -143,7 +142,7 @@ namespace tl
 
             const std::string meshName = "3DMeshes";
             
-            _create3DMesh(meshName, mesh);
+            _create3DMesh(meshName, mesh, meshOptimization);
 
             std::string pipelineName;
             std::string pipelineLayoutName;
@@ -158,7 +157,7 @@ namespace tl
 
                 _createBindingSet(p.shaders[shaderName]);
                 
-                p.shaders[shaderName]->bind(p.frameIndex);        
+                p.shaders[shaderName]->bind(p.frameIndex);
             }
             else if (shaderId == "UsdPreviewSurface")
             {

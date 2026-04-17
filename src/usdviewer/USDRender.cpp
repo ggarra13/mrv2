@@ -466,6 +466,11 @@ namespace tl
             _p->transform = value;
         }
         
+        void Render::setViewMatrix(const math::Matrix4x4f& value)
+        {
+            _p->viewMatrix = value;
+        }
+        
         void Render::applyTransforms()
         {
             TLRENDER_P();
@@ -477,6 +482,7 @@ namespace tl
                     i.second->bind(p.frameIndex);
                     USDTransforms transforms;
                     transforms.mvp = transforms.model = p.transform;
+                    transforms.view = p.viewMatrix;
                     i.second->setUniform("transforms", transforms,
                                          vlk::kShaderVertex);
                 }

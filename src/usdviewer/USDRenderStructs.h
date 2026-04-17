@@ -13,6 +13,7 @@ namespace tl
         {
             alignas(16) math::Matrix4x4f mvp;
             alignas(16) math::Matrix4x4f model;
+            alignas(16) math::Matrix4x4f view;
         };
 
         struct USDShaderParameters

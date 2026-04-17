@@ -6,6 +6,7 @@
 #pragma once
 
 #include "USDMaterial.h"
+#include "USDMeshOptimization.h"
 
 #include <tlTimeline/RenderOptions.h>
 
@@ -111,11 +112,14 @@ namespace tl
             
             math::Matrix4x4f getTransform() const;
             void setTransform(const math::Matrix4x4f&);
+            void setViewMatrix(const math::Matrix4x4f&);
+            
             void applyTransforms();
             
             //! @{
             //!     These functions draw to the internal FBO.
             void draw3DMesh(const geom::TriangleMesh3&,
+                            const usd::MeshOptimization&,
                             const math::Matrix4x4f&,
                             const image::Color4f&,
                             const std::string& shaderName,
@@ -152,7 +156,8 @@ namespace tl
             void _setupRectCommon(const math::Box2i& box);
             
             void _create3DMesh(
-                const std::string& meshName, const geom::TriangleMesh3& mesh);
+                const std::string& meshName, const geom::TriangleMesh3& mesh,
+                const usd::MeshOptimization&);
             void _createBindingSet(const std::shared_ptr<vlk::Shader>& shaderName);
             VkPipelineLayout _createPipelineLayout(
                 const std::string& pipelineLayoutName,

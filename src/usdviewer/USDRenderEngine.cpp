@@ -773,8 +773,8 @@ namespace tl
 
 
             
-            
-            p.render->draw3DMesh(geom, modelMatrix, color, shaderName,
+            MeshOptimization opt;
+            p.render->draw3DMesh(geom, opt, modelMatrix, color, shaderName,
                                  textures, material);
         }
 
@@ -1033,8 +1033,9 @@ namespace tl
                             textures = i->second;
                         }
                     }
-            
-                    p.render->draw3DMesh(geom, modelMatrix, color,
+
+                    MeshOptimization opt;
+                    p.render->draw3DMesh(geom, opt, modelMatrix, color,
                                          shaderName, textures);
                 }
                 // \@todo: cylinder
