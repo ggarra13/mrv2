@@ -5,6 +5,7 @@
 #pragma once
 // Fragmant shaders
 #include "shaders/textureFragment.spv.h"
+#include "shaders/tonemappingFragment.spv.h"
 
 // Vertex shaders
 #include "shaders/Vertex3.spv.h"

@@ -79,7 +79,9 @@ namespace tl
                 const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
                 const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                 const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
-                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD,
+                const VkBool32 depthTest = VK_TRUE,
+                const VkBool32 depthWrite = VK_TRUE);
             void usePipeline(const std::string& pipelineName);
 
             //! Overriden begin function
@@ -126,6 +128,8 @@ namespace tl
                             const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
                             const Material& material = Material(), 
                             const bool enableBlending = false,
+                            const VkBool32 depthTest = VK_TRUE,
+                            const VkBool32 depthWrite = VK_TRUE,
                             const VkBlendFactor srcColorBlendFactor =
                             VK_BLEND_FACTOR_SRC_ALPHA,
                             const VkBlendFactor dstColorBlendFactor =
@@ -135,6 +139,23 @@ namespace tl
                             const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
                             const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
 
+            void draw3DTransparentMesh(const geom::TriangleMesh3&,
+                                       const usd::MeshOptimization&,
+                                       const math::Matrix4x4f&,
+                                       const image::Color4f&,
+                                       const std::string& shaderName,
+                                       const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
+                                       const Material& material = Material(), 
+                                       const bool enableBlending = true,
+                                       const VkBlendFactor srcColorBlendFactor =
+                                       VK_BLEND_FACTOR_SRC_ALPHA,
+                                       const VkBlendFactor dstColorBlendFactor =
+                                       VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                       const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                                       const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                       const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
+                                       const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+            
             //! Vulkan render pass functions
             void beginLoadRenderPass();
             void beginRenderPass();

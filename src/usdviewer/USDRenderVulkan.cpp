@@ -201,7 +201,9 @@ namespace tl
             const VkBlendFactor srcAlphaBlendFactor,
             const VkBlendFactor dstAlphaBlendFactor,
             const VkBlendOp colorBlendOp,
-            const VkBlendOp alphaBlendOp)
+            const VkBlendOp alphaBlendOp,
+            const VkBool32 depthTest,
+            const VkBool32 depthWrite)
         {
             TLRENDER_P();
 
@@ -227,8 +229,8 @@ namespace tl
             cb.attachments.push_back(colorBlendAttachment);
             
             vlk::DepthStencilStateInfo ds;
-            ds.depthTestEnable = fbo->hasDepth() ? VK_TRUE : VK_FALSE;
-            ds.depthWriteEnable = fbo->hasDepth() ? VK_TRUE : VK_FALSE;
+            ds.depthTestEnable = fbo->hasDepth() ? depthTest : VK_FALSE;
+            ds.depthWriteEnable = fbo->hasDepth() ? depthWrite : VK_FALSE;
             ds.stencilTestEnable = fbo->hasStencil() ? VK_TRUE : VK_FALSE;
             
             vlk::MultisampleStateInfo ms;

@@ -173,18 +173,18 @@ void main()
     float u_Material_roughness = 1.0;
     float u_Material_aoStrength = 1.0;
 
-    // ── Sample textures ───────────────────────
-    vec3 albedo = texture(u_DiffuseMap,   st).rgb * u_Material_diffuseColor.rgb;
-    float metallic  = texture(u_MetallicMap,  st).r * u_Material_metallic;
-    float roughness = texture(u_RoughnessMap, st).r * u_Material_roughness;
     float opacity   = texture(u_OpacityMap, st).a;
-    float ao        = mix(1.0, texture(u_AOMap, st).r, u_Material_aoStrength);
-    vec3 emissive   = texture(u_EmissiveMap, st).rgb;
-
     if (opacity < param.opacityThreshold)
     {
        discard;
     }
+
+    // ── Sample textures ───────────────────────
+    vec3 albedo = texture(u_DiffuseMap,   st).rgb * pc.color.rgb;
+    float metallic  = texture(u_MetallicMap,  st).r * u_Material_metallic;
+    float roughness = texture(u_RoughnessMap, st).r * u_Material_roughness;
+    float ao        = mix(1.0, texture(u_AOMap, st).r, u_Material_aoStrength);
+    vec3 emissive   = texture(u_EmissiveMap, st).rgb;
 
     // Clamp to physically plausible range
     roughness = clamp(roughness, 0.05, 1.0);
@@ -247,12 +247,11 @@ void main()
     // Combine ambient + diffuse + specular
     vec3 color = ambient + Lo + emissive;
 
-    // ── Tone mapping (Reinhard) + gamma  ───────  WRONG AND UNNEEDED
-    //    If we merge it into vmrv2, we can use libplacebo directly.
-    color = color / (color + vec3(1.0));            // HDR → LDR
-    color = pow(color, vec3(1.0 / 2.2));            // linear → sRGB
+    // ── Tone mapping (Reinhard) + gamma  ─────── 
+    // color = color / (color + vec3(1.0));            // HDR → LDR
+    // color = pow(color, vec3(1.0 / 2.2));            // linear → sRGB
 
-    outColor = vec4(color * opacity, opacity);
+    outColor = vec4(color, opacity);
 
     // VERIFIED: albedo and ao are okay.
     // outColor = vec4(albedo, 1.0);

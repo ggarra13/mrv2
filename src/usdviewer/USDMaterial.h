@@ -15,6 +15,30 @@ namespace tl
             bool                  hasValue = false;     // true when value is populated
             vlk::TextureBorder    borderU = vlk::TextureBorder::ClampToEdge;
             vlk::TextureBorder    borderV = vlk::TextureBorder::ClampToEdge;
+            std::string           channel = "rgba";
+            
+            std::string getConnection() const
+                {
+                    if (texturePath.empty())
+                        return texturePath;
+                    else
+                        return texturePath + ":" + channel;
+                }
+            
+            bool operator==(const ShaderInputResult& b) const
+                {
+                    return (texturePath == b.texturePath &&
+                            hasValue == b.hasValue &&
+                            channel == b.channel &&
+                            borderU == b.borderU &&
+                            borderV == b.borderV &&
+                            value == b.value );
+                }
+            
+            bool operator!=(const ShaderInputResult& b) const
+                {
+                    return !(*this == b);
+                }
         };
 
         //! Material.
@@ -29,7 +53,27 @@ namespace tl
             ShaderInputResult     occlusion;
             ShaderInputResult     displacement;
 
+            bool                  transparent = false;
             float                 opacityThreshold = 0.F;
+            
+            bool operator==(const Material& b) const
+                {
+                    return (
+                        diffuseColor == b.diffuseColor &&
+                        metallic == b.metallic &&
+                        roughness == b.roughness &&
+                        occlusion == b.occlusion &&
+                        opacity == b.opacity &&
+                        normal == b.normal &&
+                        transparent == b.transparent &&
+                        emissiveColor == b.emissiveColor &&
+                        opacityThreshold == b.opacityThreshold);
+                }
+            
+            bool operator!=(const Material& b) const
+                {
+                    return !(*this == b);
+                }
         };
     }
 }

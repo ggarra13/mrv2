@@ -8,6 +8,7 @@
 #include "USDRender.h"
 #include "USDRenderShadersBinary.h"
 #include "USDTextureSlots.h"
+#include "USDTransparentPrimitive.h"
 
 #include "USDRenderEngine.h"
 
@@ -91,6 +92,7 @@
 
 #include <memory>
 #include <iostream>
+#include <set>
 #include <string>
 #include <unordered_map>
 
@@ -99,6 +101,26 @@ using namespace PXR_NS;
 namespace
 {
 
+    tl::math::Vector3f GetWorldCenter(const UsdPrim& prim)
+    {
+        UsdGeomImageable imageable(prim);
+        if (!imageable)
+            return tl::math::Vector3f(0.F, 0.F, 0.F);
+
+        // TimeCode::Default() or a specific time if animated
+        UsdGeomBBoxCache bboxCache(
+            UsdTimeCode::Default(),
+            UsdGeomImageable::GetOrderedPurposeTokens()
+            );
+
+        GfBBox3d bbox = bboxCache.ComputeWorldBound(prim);
+
+        GfRange3d range = bbox.ComputeAlignedBox();
+
+        GfVec3d center = range.GetMidpoint();
+        return tl::math::Vector3f(center[0], center[1], center[2]);
+    }
+    
     UsdGeomCamera UsdGetCameraAtPath(
         const UsdStageRefPtr& stage,
         const SdfPath path)
@@ -225,6 +247,10 @@ namespace tl
             bool collectTextures = true;
             std::unordered_map<std::string, usd::Material > materials;
             std::unordered_map<std::string, usd::ShaderTextures > textures;
+
+            // Renderer information
+            std::vector<TransparentPrimitive> transparentPrims;
+            
 
             //! tlRender context
             std::shared_ptr<system::Context> context;
@@ -692,7 +718,7 @@ namespace tl
                                     uv[1] < 0.F || uv[1] > 1.F)
                                     meshOptimization.floatUVs = true;
                             
-                            geom.t.emplace_back(math::Vector2f(uv[0], 1.0f - uv[1]));
+                                geom.t.emplace_back(math::Vector2f(uv[0], 1.0f - uv[1]));
                             }
                             faceCornerIdx += vertCount;
                         }
@@ -786,10 +812,26 @@ namespace tl
             }
 
 
-            
-            
-            p.render->draw3DMesh(geom, meshOptimization, modelMatrix, color, shaderName,
-                                 textures, material);
+            if (!material.transparent)
+            {
+                // Object is opaque.  Render it.
+                p.render->draw3DMesh(geom, meshOptimization, modelMatrix, color,
+                                     shaderName, textures, material);
+            }
+            else
+            {
+                TransparentPrimitive object;
+                object.geom = geom;
+                object.optimization = meshOptimization;
+                object.modelMatrix = modelMatrix;
+                object.color = color;
+                object.shaderName = shaderName;
+                object.material = material;
+                object.textures = textures;
+                object.center = GetWorldCenter(usdMesh.GetPrim());
+                p.transparentPrims.emplace_back(object);
+                
+            }
         }
 
         void RenderEngine::draw(VkCommandBuffer cmd,
@@ -797,7 +839,6 @@ namespace tl
                                 unsigned renderWidth)
         {
             TLRENDER_P();
-            
             if (!p.render)
             {
                 p.render = usd::Render::create(ctx, p.context);
@@ -891,7 +932,7 @@ namespace tl
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_F16;
             renderOptions.clear = true;
-            renderOptions.clearColor = image::Color4f(0.0F, 0.0F, 0.0F, 0.F);
+            renderOptions.clearColor = image::Color4f(0.F, 0.F, 0.F, 0.F);
     
             p.render->begin(cmd, p.buffer, frameIndex, renderSize,
                             renderOptions);
@@ -927,7 +968,8 @@ namespace tl
             std::size_t numSkeletons = 0;
             std::size_t numPoints = 0;
             std::size_t numSpheres = 0;
-    
+
+            p.transparentPrims.clear();
             std::shared_ptr<vlk::Texture> texture;    
             for (auto it = range.begin(); it != range.end(); ++it) {
                 if (it->IsA<UsdGeomImageable>()) {
@@ -972,6 +1014,7 @@ namespace tl
                     color.r = colors[0][0];
                     color.g = colors[0][1];
                     color.b = colors[0][2];
+                    color.a = colors[0][3];
                 }
                 std::string shaderName;
                 if (colors.size() == 0)
@@ -987,23 +1030,10 @@ namespace tl
                         {
                             shader.GetIdAttr().Get(&shaderId);
                             shaderName = shaderId.GetString();
-                        
-                            GfVec3f diffuse;
-                            UsdShadeInput diffuseColorInput = shader.GetInput(TfToken("diffuseColor"));
-                            if (diffuseColorInput)
-                            {
-                                diffuseColorInput.Get(&diffuse);
-                                color.r = diffuse[0];
-                                color.g = diffuse[1];
-                                color.b = diffuse[2];
-                            }
-                        }
-                        else
-                        {
-                            std::cerr << "no shader for material " << std::endl;
                         }
                     }
                 }
+
         
                 if (it->IsA<UsdSkelRoot>())
                 {
@@ -1065,6 +1095,22 @@ namespace tl
                 // \@todo: cylinder
             }
 
+            //
+            // Draw transparent primitives.
+            //
+            
+            for (auto& object : p.transparentPrims)
+            {                
+                VkBool32 depthTest = VK_TRUE;
+                VkBool32 depthWrite = VK_TRUE;  // this should be false, but
+                p.render->draw3DMesh(object.geom, object.optimization,
+                                     object.modelMatrix, object.color,
+                                     object.shaderName, object.textures,
+                                     object.material, true, depthTest,
+                                     depthWrite);
+            }
+            
+            
             p.render->endRenderPass();
             p.render->end();
 

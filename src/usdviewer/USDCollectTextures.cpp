@@ -33,19 +33,25 @@ namespace tl
             
             std::cout << "Started Reading textures..." << std::endl;
             std::shared_ptr<vlk::Texture > texture;
+            std::string connection;
+            std::size_t numTextures = 0;
             for (const auto& [materialName, material] : materials)
             {
                    
                 std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
                 {
                     const usd::ShaderInputResult& slot = material.diffuseColor;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
+                    connection = slot.getConnection();
+                    auto i = textureCache.find(connection);
                     if (i == textureCache.end())
                     {
                         texture = vlk::ResolveTexture(ctx, slot);
-                        if (!slot.texturePath.empty())
-                            textureCache[texturePath] = texture;
+                        if (!connection.empty())
+                        {
+                            textureCache[connection] = texture;
+                            if (!slot.hasValue)
+                                ++numTextures;
+                        }
                         textures[USD_DiffuseMap] = texture;
                     }
                     else
@@ -56,14 +62,18 @@ namespace tl
 
                 {
                     const usd::ShaderInputResult& slot = material.opacity;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
-                    i = textureCache.find(texturePath);
+                    connection = slot.getConnection();
+                    auto i = textureCache.find(connection);
+                    i = textureCache.find(connection);
                     if (i == textureCache.end())
                     {
                         texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
+                        if (!connection.empty())
+                        {
+                            textureCache[connection] = texture;
+                            if (!slot.hasValue)
+                                ++numTextures;
+                        }
                         textures[USD_OpacityMap] = texture;
                     }
                     else
@@ -74,13 +84,17 @@ namespace tl
                     
                 {       
                     const usd::ShaderInputResult& slot = material.metallic;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
+                    connection = slot.getConnection();
+                    auto i = textureCache.find(connection);
                     if (i == textureCache.end())
                     {
                         texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
+                        if (!connection.empty())
+                        {
+                            textureCache[connection] = texture;
+                            if (!slot.hasValue)
+                                ++numTextures;
+                        }
                         textures[USD_MetallicMap] = texture;
                     }
                     else
@@ -91,13 +105,17 @@ namespace tl
 
                 {
                     const usd::ShaderInputResult& slot = material.roughness;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
+                    connection = slot.getConnection();
+                    auto i = textureCache.find(connection);
                     if (i == textureCache.end())
                     {
                         texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
+                        if (!connection.empty())
+                        {
+                            textureCache[connection] = texture;
+                            if (!slot.hasValue)
+                                ++numTextures;
+                        }
                         textures[USD_RoughnessMap] = texture;
                     }
                     else
@@ -108,13 +126,17 @@ namespace tl
 
                 {
                     const usd::ShaderInputResult& slot = material.normal;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
+                    connection = slot.getConnection();
+                    auto i = textureCache.find(connection);
                     if (i == textureCache.end())
                     {
                         texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
+                        if (!connection.empty())
+                        {
+                            textureCache[connection] = texture;
+                            if (!slot.hasValue)
+                                ++numTextures;
+                        }
                         textures[USD_NormalMap] = texture;
                     }
                     else
@@ -125,13 +147,17 @@ namespace tl
 
                 {
                     const usd::ShaderInputResult& slot = material.occlusion;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
+                    connection = slot.getConnection();
+                    auto i = textureCache.find(connection);
                     if (i == textureCache.end())
                     {
                         texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
+                        if (!connection.empty())
+                        {
+                            textureCache[connection] = texture;
+                            if (!slot.hasValue)
+                                ++numTextures;
+                        }
                         textures[USD_OcclusionMap] = texture;
                     }
                     else
@@ -142,13 +168,17 @@ namespace tl
 
                 {
                     const usd::ShaderInputResult& slot = material.emissiveColor;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
+                    connection = slot.getConnection();
+                    auto i = textureCache.find(connection);
                     if (i == textureCache.end())
                     {
                         texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
+                        if (!connection.empty())
+                        {
+                            textureCache[connection] = texture;
+                            if (!slot.hasValue)
+                                ++numTextures;
+                        }
                         textures[USD_EmissiveMap] = texture;
                     }
                     else
@@ -159,13 +189,17 @@ namespace tl
             
                 {
                     const usd::ShaderInputResult& slot = material.displacement;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
+                    connection = slot.getConnection();
+                    auto i = textureCache.find(connection);
                     if (i == textureCache.end())
                     {
                         texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
+                        if (!connection.empty())
+                        {
+                            textureCache[connection] = texture;
+                            if (!slot.hasValue)
+                                ++numTextures;
+                        }
                         textures[USD_DisplacementMap] = texture;
                     }
                     else
@@ -177,7 +211,7 @@ namespace tl
                 collectedTextures[materialName] = textures;
             }
             
-            std::cout << "Finished Reading Textures." << std::endl;
+            std::cout << "Finished Reading " << numTextures << " Textures." << std::endl;
 
             
         }

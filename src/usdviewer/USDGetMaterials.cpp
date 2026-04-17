@@ -188,15 +188,17 @@ namespace tl
                         UsdShadeInput wrapSInput = textureShader.GetInput(TfToken("wrapS"));
                         UsdShadeInput wrapTInput = textureShader.GetInput(TfToken("wrapT"));
 
+                        // Get S and T border wrapping (clamp, repeat, black, mirror, etc)
                         TfToken sVal, tVal;
-
-                        // Use a fallback (useMetadata) if the attribute isn't authored
                         if (wrapSInput && wrapSInput.Get(&sVal)) {
                             result.borderU = getBorder(sVal);
                         }
                         if (wrapTInput && wrapTInput.Get(&tVal)) {
                             result.borderV = getBorder(sVal);
                         }
+
+                        // Get the channel of the connection
+                        result.channel = sourceName.GetString();
     
                         result.texturePath = assetPath.GetResolvedPath();
                         if (debug)
@@ -253,7 +255,14 @@ namespace tl
             out.opacityThreshold = GetShaderFloatValue(material,
                                                        TfToken("opacityThreshold"),
                                                        debug);
-
+            if (out.opacityThreshold > 0.F)
+                out.transparent = true;
+            if (!out.opacity.texturePath.empty() ||
+                (out.opacity.hasValue &&
+                 (out.opacity.value[0] < 0.95F ||
+                  out.opacity.value[1] < 0.95F ||
+                  out.opacity.value[2] < 0.95F)))
+                out.transparent = true;
             
             return out;
         }

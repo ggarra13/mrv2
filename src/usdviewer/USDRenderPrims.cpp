@@ -131,6 +131,8 @@ namespace tl
                                 const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
                                 const usd::Material& material,
                                 const bool enableBlending,
+                                const VkBool32 depthTest,
+                                const VkBool32 depthWrite,
                                 const VkBlendFactor srcColorBlendFactor,
                                 const VkBlendFactor dstColorBlendFactor,
                                 const VkBlendFactor srcAlphaBlendFactor,
@@ -140,20 +142,44 @@ namespace tl
         {
             TLRENDER_P();
 
-            const std::string meshName = "3DMeshes";
-            
-            _create3DMesh(meshName, mesh, meshOptimization);
-
             std::string pipelineName;
             std::string pipelineLayoutName;
             std::string shaderName;
+            const std::string meshName = "3DMeshes";
+            if (enableBlending)
+            {
+                pipelineName = "blending";
+            }
+            else
+            {
+                pipelineName = "no_blending";
+            }
+            if (depthTest)
+            {
+                pipelineName += "_depth_test";
+            }
+            else
+            {
+                pipelineName += "_no_depth_test";
+            }
+            if (depthWrite)
+            {
+                pipelineName += "_depth_write";
+            }
+            else
+            {
+                pipelineName += "_no_depth_write";
+            }
+            
+            _create3DMesh(meshName, mesh, meshOptimization);
+
 
             const auto mvp = p.transform * model;
             
             if (shaderId.empty() || shaderId == "dummy" || textures.empty())
             {
                 shaderName = "dummy";
-                pipelineName = pipelineLayoutName = shaderName;
+                pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);
                 
@@ -162,7 +188,7 @@ namespace tl
             else if (shaderId == "UsdPreviewSurface")
             {
                 shaderName = "usd";
-                pipelineName = pipelineLayoutName = shaderName;
+                pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);
                 
@@ -200,7 +226,7 @@ namespace tl
             else if (shaderId == "st")
             {
                 shaderName = "st";
-                pipelineName = pipelineLayoutName = shaderName;
+                pipelineLayoutName = shaderName;
                 
                 _createBindingSet(p.shaders[shaderName]);
                 
@@ -215,7 +241,8 @@ namespace tl
                            shaderName, meshName, enableBlending,
                            srcColorBlendFactor, dstColorBlendFactor,
                            srcAlphaBlendFactor, dstAlphaBlendFactor,
-                           colorBlendOp, alphaBlendOp);
+                           colorBlendOp, alphaBlendOp, depthTest,
+                           depthWrite);
 
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, mvp,
                           model, color);
