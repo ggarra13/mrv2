@@ -259,30 +259,22 @@ namespace tl
                                                        TfToken("opacityThreshold"),
                                                        0.F,
                                                        debug);
-            // if (out.opacityThreshold > 0.F)
-            // {
-            //     out.transparent = true;
-            // }
+            if (out.opacityThreshold > 0.F)
+            {
+                out.transparent = true;
+            }
             if (!out.opacity.texturePath.empty() &&
                 out.opacity.texturePath != "*solid")
             {
-                std::cerr << "opacity texture " << out.opacity.texturePath
-                          << std::endl;
                 out.transparent = true;
-                // abort();
             }
-            // if ((out.opacity.hasValue &&
-            //      (out.opacity.value[0] < 0.95F ||
-            //       out.opacity.value[1] < 0.95F ||
-            //       out.opacity.value[2] < 0.95F)))
-            // {
-            //     std::cerr << "opacity value" << std::endl;
-            //     out.transparent = true;
-            //     // abort();
-            // }
-
-            std::cerr << "out.transparent=" << out.transparent << std::endl;
-            
+            if ((out.opacity.hasValue &&
+                 (out.opacity.value[0] < 0.95F ||
+                  out.opacity.value[1] < 0.95F ||
+                  out.opacity.value[2] < 0.95F)))
+            {
+                out.transparent = true;
+            }
             return out;
         }
 
@@ -334,8 +326,6 @@ namespace tl
             for (auto& [path, material] : usedMaterials)
             {
                 Material result = ParseMaterial(material, false);
-                std::cerr << "PARSED " << path << " transparent="
-                          << result.transparent << std::endl;
                 out[path] = result;
             }
             std::cout << "Finished Reading " << out.size()
