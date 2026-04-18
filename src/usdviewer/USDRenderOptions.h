@@ -10,7 +10,7 @@
 
 // Use 1 for using the dummy shader for debugging.
 #define USE_DUMMY_SHADER 1
-#define USE_ST_SHADER 0
+#define USE_ST_SHADER 1
 
 //
 // Use 1 for faster startups.

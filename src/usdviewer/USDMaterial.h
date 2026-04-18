@@ -11,7 +11,7 @@ namespace tl
         struct ShaderInputResult
         {
             std::string           texturePath;          // non-empty when a texture is found
-            std::array<float, 4>  value  = {};          // constant value when no texture
+            std::array<float, 4>  value  = {1.F, 1.F, 1.F, 1.F};          // constant value when no texture
             bool                  hasValue = false;     // true when value is populated
             vlk::TextureBorder    borderU = vlk::TextureBorder::ClampToEdge;
             vlk::TextureBorder    borderV = vlk::TextureBorder::ClampToEdge;

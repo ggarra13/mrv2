@@ -104,6 +104,7 @@ namespace tl
             auto shader = p.shaders[shaderName];
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             shader->bind(p.frameIndex);
+            
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                shader->getPushStageFlags(), 0,
                                sizeof(color), &color);
@@ -112,6 +113,7 @@ namespace tl
             transforms.model = model;
             transforms.view  = p.viewMatrix;
             shader->setUniform("transforms", transforms);
+            
             _bindDescriptorSets(pipelineLayoutName, shaderName);
 
             // Upload the vertex data into the pool and draw immediately.
@@ -234,7 +236,7 @@ namespace tl
                 
                 _createBindingSet(p.shaders[shaderName]);
                 
-                p.shaders[shaderName]->bind(p.frameIndex);  
+                p.shaders[shaderName]->bind(p.frameIndex);
             }
             else
             {

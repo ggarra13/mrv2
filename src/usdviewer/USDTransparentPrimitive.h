@@ -18,13 +18,11 @@ namespace tl
             math::Matrix4x4f modelMatrix;
             
             // Material information.
-            std::string shaderName;
+            std::string shaderId;
             image::Color4f color;
             Material material;
             std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
             
-            math::Vector3f center;
-
             bool operator==(const TransparentPrimitive& b) const
                 {
                     return (geom.v.size() == b.geom.v.size() &&
@@ -32,11 +30,10 @@ namespace tl
                             geom.n.size() == b.geom.n.size() &&
                             geom.triangles.size() == b.geom.triangles.size() &&
                             modelMatrix == b.modelMatrix &&
-                            shaderName == b.shaderName &&
+                            shaderId == b.shaderId &&
                             color == b.color &&
                             material == b.material &&
-                            textures == b.textures &&
-                            center == b.center);
+                            textures == b.textures);
                 }
             
             bool operator!=(const TransparentPrimitive& b) const

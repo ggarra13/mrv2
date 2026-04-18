@@ -110,9 +110,8 @@ namespace tl
                 // Hio::Image opens the file (or the file inside the .usdz) and reads the header
                 HioImageSharedPtr image = HioImage::OpenForReading(result.texturePath);
                 
-                if (image) {
-                    std::cout << "\tRead texture \"" << result.texturePath << "\"" << std::endl;
-                
+                if (image)
+                {
                     int width  = image->GetWidth();
                     int height = image->GetHeight();
                     HioFormat hioFormat = image->GetFormat();

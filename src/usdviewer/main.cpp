@@ -759,12 +759,12 @@ void usd_window::nextTimeCode()
 
     if (p.engine)
     {
-        // p.time += 1.0;
+        p.time += 1.0;
         
-        // if (p.time > p.endTimeCode)
-        //     p.time = p.startTimeCode;
+        if (p.time > p.endTimeCode)
+            p.time = p.startTimeCode;
 
-        // p.engine->setTimeCode(p.stage, p.time);
+        p.engine->setTimeCode(p.stage, p.time);
     
         redraw();
     }
@@ -795,7 +795,7 @@ void usd_window::setUSDFile(const std::string& fileName)
     p.endTimeCode   = p.stage->GetEndTimeCode();
     p.timeCodesPerSecond = p.stage->GetTimeCodesPerSecond();
     p.time = p.startTimeCode;
-    p.lastTime = p.startTimeCode - 1;
+    p.lastTime = p.startTimeCode - 1000000;
     
     double timeout = 1.0 / p.timeCodesPerSecond;
 

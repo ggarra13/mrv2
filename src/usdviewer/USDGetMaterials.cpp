@@ -1,5 +1,7 @@
 #include "USDGetMaterials.h"
 
+#include "usd/material.h"
+
 #include <pxr/usd/usd/primRange.h>
 
 #include <pxr/usd/usdGeom/imageable.h>
@@ -218,9 +220,10 @@ namespace tl
 
         float GetShaderFloatValue(const UsdShadeMaterial& material,
                                   const TfToken&   inputName,
-                                  const bool       debug)
+                                  const float      defaultValue = 0.F,
+                                  const bool       debug = false)
         {
-            float out = 0.F;
+            float out = defaultValue;
             UsdShadeShader surfaceShader = material.ComputeSurfaceSource(TfToken("glslfx"));
             if (!surfaceShader)
             {
@@ -254,15 +257,31 @@ namespace tl
 
             out.opacityThreshold = GetShaderFloatValue(material,
                                                        TfToken("opacityThreshold"),
+                                                       0.F,
                                                        debug);
-            if (out.opacityThreshold > 0.F)
+            // if (out.opacityThreshold > 0.F)
+            // {
+            //     out.transparent = true;
+            // }
+            if (!out.opacity.texturePath.empty() &&
+                out.opacity.texturePath != "*solid")
+            {
+                std::cerr << "opacity texture " << out.opacity.texturePath
+                          << std::endl;
                 out.transparent = true;
-            if (!out.opacity.texturePath.empty() ||
-                (out.opacity.hasValue &&
-                 (out.opacity.value[0] < 0.95F ||
-                  out.opacity.value[1] < 0.95F ||
-                  out.opacity.value[2] < 0.95F)))
-                out.transparent = true;
+                // abort();
+            }
+            // if ((out.opacity.hasValue &&
+            //      (out.opacity.value[0] < 0.95F ||
+            //       out.opacity.value[1] < 0.95F ||
+            //       out.opacity.value[2] < 0.95F)))
+            // {
+            //     std::cerr << "opacity value" << std::endl;
+            //     out.transparent = true;
+            //     // abort();
+            // }
+
+            std::cerr << "out.transparent=" << out.transparent << std::endl;
             
             return out;
         }
@@ -276,57 +295,23 @@ namespace tl
                                UsdTraverseInstanceProxies());
             std::cout << "Started Reading materials..." << std::endl;
 
-            bool debug = true;
-#if 1
-            for (auto it = range.begin(); it != range.end(); ++it) {
-
-                if (!UsdShadeMaterialBindingAPI::CanApply(*it))
-                    continue;
-
-                UsdShadeMaterialBindingAPI bindingApi(*it);
-                // UsdShadeMaterial material =
-                //     bindingApi.ComputeBoundMaterial(UsdShadeTokens->preview);  
-                UsdShadeMaterial material =
-                    bindingApi.ComputeBoundMaterial(UsdShadeTokens->full);  
-                Material result = ParseMaterial(material, debug);
-                out[material.GetPath().GetString()] = result;
-            }
-
-#elif 0
-            
-            for (auto it = range.begin(); it != range.end(); ++it) {
-
-                //
-                // Ignore hidden geometry
-                //
-                if (!it->IsA<UsdShadeMaterial>())
-                    continue;
-
-                UsdShadeMaterial material(*it);
-                
-                Material result = ParseMaterial(material, debug);
-                out[material.GetPath().GetString()] = result;
-            }
-#else
+            bool debug = false;
             std::unordered_map<std::string, UsdShadeMaterial> usedMaterials;
 
             for (const UsdPrim& prim : range)
             {
                 if (!UsdShadeMaterialBindingAPI::CanApply(prim))
                     continue;
-
+                        
                 UsdShadeMaterialBindingAPI api(prim);
-
-                for (auto purpose : {
-                        UsdShadeTokens->full,
-                        UsdShadeTokens->preview })
+                UsdShadeMaterial mat = usd::GetMaterial(api);
+                if (mat)
                 {
-                    UsdShadeMaterial mat = api.ComputeBoundMaterial(purpose);
-                    if (mat)
-                        usedMaterials[mat.GetPath().GetString()] = mat;
+                    std::string key = mat.GetPrim().GetPath().GetString();
+                    usedMaterials[key] = mat;
                 }
 
-                // 🔥 IMPORTANT: subsets
+                // subsets
                 if (prim.IsA<UsdGeomImageable>())
                 {
                     auto subsets =
@@ -336,20 +321,23 @@ namespace tl
                     for (const auto& subset : subsets)
                     {
                         UsdShadeMaterialBindingAPI subApi(subset.GetPrim());
-                        UsdShadeMaterial mat = subApi.ComputeBoundMaterial();
-
+                        UsdShadeMaterial mat = usd::GetMaterial(subApi);
                         if (mat)
-                            usedMaterials[mat.GetPath().GetString()] = mat;
+                        {
+                            std::string key = mat.GetPrim().GetPath().GetString();
+                            usedMaterials[key] = mat;
+                        }
                     }
                 }
             }
 
             for (auto& [path, material] : usedMaterials)
             {
-                Material result = ParseMaterial(material, debug);
+                Material result = ParseMaterial(material, false);
+                std::cerr << "PARSED " << path << " transparent="
+                          << result.transparent << std::endl;
                 out[path] = result;
             }
-#endif
             std::cout << "Finished Reading " << out.size()
                       << " materials..." << std::endl;
         }

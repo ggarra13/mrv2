@@ -1,14 +1,17 @@
 
-#define PRINT_STATS 0
+#define PRINT_STATS 1
 #define BAKE_JOINTS 1
 
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
+
 #include "USDCollectTextures.h"
 #include "USDGetMaterials.h"
 #include "USDRender.h"
 #include "USDRenderShadersBinary.h"
 #include "USDTextureSlots.h"
 #include "USDTransparentPrimitive.h"
+
+#include "usd/material.h"
 
 #include "USDRenderEngine.h"
 
@@ -100,26 +103,6 @@ using namespace PXR_NS;
 
 namespace
 {
-
-    tl::math::Vector3f GetWorldCenter(const UsdPrim& prim)
-    {
-        UsdGeomImageable imageable(prim);
-        if (!imageable)
-            return tl::math::Vector3f(0.F, 0.F, 0.F);
-
-        // TimeCode::Default() or a specific time if animated
-        UsdGeomBBoxCache bboxCache(
-            UsdTimeCode::Default(),
-            UsdGeomImageable::GetOrderedPurposeTokens()
-            );
-
-        GfBBox3d bbox = bboxCache.ComputeWorldBound(prim);
-
-        GfRange3d range = bbox.ComputeAlignedBox();
-
-        GfVec3d center = range.GetMidpoint();
-        return tl::math::Vector3f(center[0], center[1], center[2]);
-    }
     
     UsdGeomCamera UsdGetCameraAtPath(
         const UsdStageRefPtr& stage,
@@ -251,7 +234,8 @@ namespace tl
 
             // Renderer information
             std::vector<TransparentPrimitive> transparentPrims;
-            
+            std::size_t opaqueObjs = 0;
+            std::size_t transparentObjs = 0;
 
             //! tlRender context
             std::shared_ptr<system::Context> context;
@@ -485,10 +469,7 @@ namespace tl
                 }
         
                 UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
-
-                UsdShadeMaterial material =
-                    subsetBinding.ComputeBoundMaterial();
-
+                UsdShadeMaterial material = GetMaterial(subsetBinding);
                 if (material)
                 {
                     // Bind material to the new mesh
@@ -500,15 +481,12 @@ namespace tl
                 {
                     // Fallback: try mesh-level material
                     UsdShadeMaterialBindingAPI meshBinding(mesh.GetPrim());
-
-                    UsdShadeMaterial meshMaterial =
-                        meshBinding.ComputeBoundMaterial();
-
-                    if (meshMaterial)
+                    material = usd::GetMaterial(meshBinding);
+                    if (material)
                     {
                         UsdShadeMaterialBindingAPI newBinding =
                             UsdShadeMaterialBindingAPI::Apply(newMesh.GetPrim());
-                        newBinding.Bind(meshMaterial);
+                        newBinding.Bind(material);
                     }
                     else
                     {
@@ -525,7 +503,7 @@ namespace tl
         void RenderEngine::_drawMesh(const std::string& primPath,
                                      const UsdGeomMesh& usdMesh,
                                      const math::Matrix4x4f& modelMatrix,
-                                     std::string shaderName,
+                                     std::string shaderId,
                                      const image::Color4f& color)
         {
             TLRENDER_P();
@@ -543,15 +521,16 @@ namespace tl
             // faceVertexIndices: flat list of vertex indices for all faces
             VtArray<int> faceVertexIndices;
             usdMesh.GetFaceVertexIndicesAttr().Get(&faceVertexIndices, p.time);
-    
+
             const TfToken materialBindFamily("materialBind");
             std::vector<UsdGeomSubset> subsets =
                 UsdGeomSubset::GetGeomSubsets(usdMesh,
                                               UsdGeomTokens->face,
                                               materialBindFamily);
+            // If only one subset, no need to split the mesh
             if (subsets.size() > 1)
             {
-                const std::vector<UsdGeomMesh>& meshes = _SplitMeshBySubsets(
+                const std::vector<UsdGeomMesh>& usdMeshes = _SplitMeshBySubsets(
                     primPath,
                     usdMesh,
                     points,
@@ -559,15 +538,14 @@ namespace tl
                     faceVertexIndices,
                     subsets);
 
-                for (const auto& mesh : meshes)
+                for (const auto& usdMesh : usdMeshes)
                 {
-                    std::string primPath = mesh.GetPath().GetString();
-                    _drawMesh(primPath, mesh, modelMatrix, shaderName, color);
+                    const std::string primPath = usdMesh.GetPath().GetString();
+                    _drawMesh(primPath, usdMesh, modelMatrix, shaderId, color);
                 }
 
                 return;
             }
-
             
             geom::TriangleMesh3 geom;
             MeshOptimization meshOptimization;
@@ -580,8 +558,9 @@ namespace tl
                 geom.v.push_back(math::Vector3f(p[0], p[1], p[2]));
             }
 
-            // Get Normals if any.
             UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
+
+            // Get Normals if any.
             UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
             if (normalsPrimvar.IsDefined()) {
                 
@@ -627,7 +606,7 @@ namespace tl
                     faceCornerIdx += vertCount;
                 }
             }
-
+            
             //
             // Get UVs (st)
             //
@@ -638,12 +617,14 @@ namespace tl
                 if (st.Get(&values))
                 {
                     const TfToken interp = st.GetInterpolation();
-                    // std::cerr << primPath << std::endl;
-                    // std::cerr << "\tSTs found=" << values.size()
-                    //           << " interpolation=" << interp << std::endl;
-
+                    
+                    // std::cout << primPath << std::endl;
+                    // std::cout << "\tSTs found=" << values.size()
+                    //           << " interpolation=" << interp
+                    //           << " indexed=" << st.IsIndexed() << std::endl;
                     if (st.IsIndexed())
                     {
+                        
                         VtArray<int> indices;
                         st.GetIndices(&indices);
 
@@ -771,29 +752,29 @@ namespace tl
             //
             usd::Material material;
             std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-            if (hasUVs)
-            {
-                // 1. Try to get the Material bound directly to the Prim
-                UsdPrim prim = usdMesh.GetPrim();
-                UsdShadeMaterialBindingAPI bindingApi(prim);
-                UsdShadeMaterial usdMaterial = bindingApi.ComputeBoundMaterial();
 
-                if (!usdMaterial)
+            // 1. Try to get the Material bound directly to the Prim
+            UsdPrim prim = usdMesh.GetPrim();
+            
+            UsdShadeMaterialBindingAPI api(prim);
+            UsdShadeMaterial mat = usd::GetMaterial(api);
+            if (!mat)
+            {
+                UsdGeomImageable imageable(prim);
+                if (imageable)
                 {
-                    UsdGeomImageable imageable(prim);
-                    if (imageable)
+                    for (const UsdGeomSubset& subset : UsdGeomSubset::GetAllGeomSubsets(imageable))
                     {
-                        for (const UsdGeomSubset& subset : UsdGeomSubset::GetAllGeomSubsets(imageable))
-                        {
-                            UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
-                            usdMaterial = subsetBinding.ComputeBoundMaterial();
-                            if (usdMaterial)
-                                break;
-                        }
+                        UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
+                        mat = usd::GetMaterial(subsetBinding);
                     }
                 }
-        
-                std::string materialPath = usdMaterial.GetPath().GetString();
+            }
+
+            shaderId = "dummy";
+            if (mat)
+            {
+                std::string materialPath = mat.GetPrim().GetPath().GetString();
         
                 auto i = p.textures.find(materialPath);
                 if (i != p.textures.end())
@@ -803,36 +784,34 @@ namespace tl
                     if (j != p.materials.end())
                     {
                         material = j->second;
+                        std::cerr << "got material " << j->first
+                                  << " transparent=" << material.transparent
+                                  << std::endl;
                     }
-                    shaderName = "UsdPreviewSurface";
+                    shaderId = "UsdPreviewSurface";
                 }
             }
-            else
-            {
-                shaderName = "dummy";
-                std::cerr << "NO UVs for " << primPath << std::endl;
-            }
-
 
             if (!material.transparent)
             {
+                p.opaqueObjs++;
                 // Object is opaque.  Render it.
                 p.render->drawMesh(geom, meshOptimization, modelMatrix, color,
-                                     shaderName, textures, material);
+                                   "st", textures, material);
             }
             else
             {
+                p.transparentObjs++;
+                
                 TransparentPrimitive object;
                 object.geom = geom;
                 object.optimization = meshOptimization;
                 object.modelMatrix = modelMatrix;
                 object.color = color;
-                object.shaderName = shaderName;
+                object.shaderId = shaderId;
                 object.material = material;
                 object.textures = textures;
-                object.center = GetWorldCenter(usdMesh.GetPrim());
                 p.transparentPrims.emplace_back(object);
-                
             }
         }
 
@@ -935,7 +914,8 @@ namespace tl
             renderOptions.colorBuffer = image::PixelType::RGBA_F16;
             renderOptions.clear = true;
             renderOptions.clearColor = image::Color4f(0.F, 0.F, 0.F, 0.F);
-    
+
+            
             p.render->begin(cmd, p.buffer, frameIndex, renderSize,
                             renderOptions);
             const math::Vector3f camPos = math::Vector3f(cameraPos[0],
@@ -962,6 +942,10 @@ namespace tl
             //
             // Stats
             //
+            p.opaqueObjs = 0;
+            p.transparentObjs = 0;
+            p.transparentPrims.clear();
+            
             std::size_t numMeshes = 0;
             std::size_t numSubdivs = 0;
             std::size_t numNurbsPatches = 0;
@@ -971,7 +955,6 @@ namespace tl
             std::size_t numPoints = 0;
             std::size_t numSpheres = 0;
 
-            p.transparentPrims.clear();
             std::shared_ptr<vlk::Texture> texture;    
             for (auto it = range.begin(); it != range.end(); ++it) {
 
@@ -990,11 +973,14 @@ namespace tl
                     // If purpose is not default or not render, don't use this
                     // geometry.
                     TfToken purpose = imageable.ComputePurpose();
-                    if (purpose != UsdGeomTokens->default_ &&
-                        purpose != UsdGeomTokens->render)
+                    // if (purpose != UsdGeomTokens->default_ &&
+                    //     purpose != UsdGeomTokens->render)
+                    if (purpose != UsdGeomTokens->render)
                         continue;
                 }
 
+                if (!UsdShadeMaterialBindingAPI::CanApply(*it))
+                    continue;
 
                 primPath = it->GetPath().GetString();
                 matrix = xformCache.GetLocalToWorldTransform(*it);
@@ -1021,38 +1007,14 @@ namespace tl
                     color.b = colors[0][2];
                     color.a = colors[0][3];
                 }
-                std::string shaderName;
-                if (colors.size() == 0)
-                {
-                    UsdShadeMaterialBindingAPI bindingApi(*it);
-                    UsdShadeMaterial material = bindingApi.ComputeBoundMaterial();
-                    
-                    if (material)
-                    {
-                        UsdShadeShader shader = material.ComputeSurfaceSource();
-                        TfToken shaderId;
-                        if (shader)
-                        {
-                            shader.GetIdAttr().Get(&shaderId);
-                            shaderName = shaderId.GetString();
-                        }
-                    }
-                }
 
-        
-                if (it->IsA<UsdSkelRoot>())
-                {
-                    ++numSkeletons;
-
-                    //UsdSkelRoot skelRoot(*it);
-                    //usd::ProcessSkeletonRoot(skelRoot, skelCache, p.time);
-                }
-                else if (it->IsA<UsdGeomMesh>())
+                std::string shaderId;
+                if (it->IsA<UsdGeomMesh>())
                 {
                     ++numMeshes;
 
                     UsdGeomMesh usdMesh = UsdGeomMesh(*it);
-                    _drawMesh(primPath, usdMesh, modelMatrix, shaderName, color);
+                    _drawMesh(primPath, usdMesh, modelMatrix, shaderId, color);
                 }
                 else if (it->IsA<UsdGeomNurbsPatch>())
                 {
@@ -1079,10 +1041,11 @@ namespace tl
                     const bool hasUVs = !geom.t.empty();
                     
                     std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
+                    std::string shaderId = "dummy";
                     if (hasUVs)
                     {
-                        UsdShadeMaterialBindingAPI bindingApi(*it);
-                        UsdShadeMaterial material = bindingApi.ComputeBoundMaterial();
+                        UsdShadeMaterialBindingAPI api(*it);
+                        UsdShadeMaterial material = usd::GetMaterial(api);
 
                         const std::string materialPath = material.GetPath().GetString();
         
@@ -1090,12 +1053,13 @@ namespace tl
                         if (i != p.textures.end())
                         {
                             textures = i->second;
+                            shaderId = "UsdShaderPreview";
                         }
                     }
 
                     MeshOptimization opt;
                     p.render->drawMesh(geom, opt, modelMatrix, color,
-                                         shaderName, textures);
+                                       shaderId, textures);
                 }
                 // \@todo: cylinder
             }
@@ -1110,7 +1074,7 @@ namespace tl
                 VkBool32 depthWrite = VK_TRUE;  // \@bug: this should be false, but sorting is an issue
                 p.render->drawMesh(object.geom, object.optimization,
                                    object.modelMatrix, object.color,
-                                   object.shaderName, object.textures,
+                                   object.shaderId, object.textures,
                                    object.material, true, depthTest,
                                    depthWrite);
             }
@@ -1120,7 +1084,9 @@ namespace tl
             p.render->end();
 
 #if PRINT_STATS
-            std::cout << "       Meshes = " << numMeshes << std::endl
+            std::cout << "       Opaque = " << p.opaqueObjs << std::endl
+                      << "  Transparent = " << p.transparentObjs << std::endl
+                      << "       Meshes = " << numMeshes << std::endl
                       << "      Subdivs = " << numSubdivs << std::endl
                       << "Nurbs Patches = " << numNurbsPatches << std::endl
                       << " Nurbs Curves = " << numNurbsCurves << std::endl
@@ -1135,7 +1101,8 @@ namespace tl
             if (p.buffer)
             {
                 p.buffer->transitionToShaderRead(cmd);
-            }        
+            }
+
         }
 
         std::shared_ptr<vlk::OffscreenBuffer> RenderEngine::getFBO()
