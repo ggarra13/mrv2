@@ -204,6 +204,7 @@ namespace
         {
             distance += dim[1] / 2;
         }
+        distance *= 1.15;  // <--- fudge factor
 
         GfMatrix4d xf;
         if (upAxis == UsdGeomTokens->y)
@@ -809,13 +810,14 @@ namespace tl
             else
             {
                 shaderName = "dummy";
+                std::cerr << "NO UVs for " << primPath << std::endl;
             }
 
 
             if (!material.transparent)
             {
                 // Object is opaque.  Render it.
-                p.render->draw3DMesh(geom, meshOptimization, modelMatrix, color,
+                p.render->drawMesh(geom, meshOptimization, modelMatrix, color,
                                      shaderName, textures, material);
             }
             else
@@ -972,6 +974,8 @@ namespace tl
             p.transparentPrims.clear();
             std::shared_ptr<vlk::Texture> texture;    
             for (auto it = range.begin(); it != range.end(); ++it) {
+
+                // Check if a primitive is visible and its purpose is "render" or "default".
                 if (it->IsA<UsdGeomImageable>()) {
                     UsdGeomImageable imageable(*it);
             
@@ -990,7 +994,8 @@ namespace tl
                         purpose != UsdGeomTokens->render)
                         continue;
                 }
-        
+
+
                 primPath = it->GetPath().GetString();
                 matrix = xformCache.GetLocalToWorldTransform(*it);
                 const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
@@ -1089,7 +1094,7 @@ namespace tl
                     }
 
                     MeshOptimization opt;
-                    p.render->draw3DMesh(geom, opt, modelMatrix, color,
+                    p.render->drawMesh(geom, opt, modelMatrix, color,
                                          shaderName, textures);
                 }
                 // \@todo: cylinder
@@ -1102,12 +1107,12 @@ namespace tl
             for (auto& object : p.transparentPrims)
             {                
                 VkBool32 depthTest = VK_TRUE;
-                VkBool32 depthWrite = VK_TRUE;  // this should be false, but
-                p.render->draw3DMesh(object.geom, object.optimization,
-                                     object.modelMatrix, object.color,
-                                     object.shaderName, object.textures,
-                                     object.material, true, depthTest,
-                                     depthWrite);
+                VkBool32 depthWrite = VK_TRUE;  // \@bug: this should be false, but sorting is an issue
+                p.render->drawMesh(object.geom, object.optimization,
+                                   object.modelMatrix, object.color,
+                                   object.shaderName, object.textures,
+                                   object.material, true, depthTest,
+                                   depthWrite);
             }
             
             

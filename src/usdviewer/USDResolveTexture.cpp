@@ -111,6 +111,7 @@ namespace tl
                 HioImageSharedPtr image = HioImage::OpenForReading(result.texturePath);
                 
                 if (image) {
+                    std::cout << "\tRead texture \"" << result.texturePath << "\"" << std::endl;
                 
                     int width  = image->GetWidth();
                     int height = image->GetHeight();

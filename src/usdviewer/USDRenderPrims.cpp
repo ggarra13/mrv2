@@ -123,22 +123,22 @@ namespace tl
         }
 
 
-        void Render::draw3DMesh(const geom::TriangleMesh3& mesh,
-                                const usd::MeshOptimization& meshOptimization,
-                                const math::Matrix4x4f& model,
-                                const image::Color4f& color,
-                                const std::string& shaderId,
-                                const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
-                                const usd::Material& material,
-                                const bool enableBlending,
-                                const VkBool32 depthTest,
-                                const VkBool32 depthWrite,
-                                const VkBlendFactor srcColorBlendFactor,
-                                const VkBlendFactor dstColorBlendFactor,
-                                const VkBlendFactor srcAlphaBlendFactor,
-                                const VkBlendFactor dstAlphaBlendFactor,
-                                const VkBlendOp colorBlendOp,
-                                const VkBlendOp alphaBlendOp)
+        void Render::drawMesh(const geom::TriangleMesh3& mesh,
+                              const usd::MeshOptimization& meshOptimization,
+                              const math::Matrix4x4f& model,
+                              const image::Color4f& color,
+                              const std::string& shaderId,
+                              const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
+                              const usd::Material& material,
+                              const bool enableBlending,
+                              const VkBool32 depthTest,
+                              const VkBool32 depthWrite,
+                              const VkBlendFactor srcColorBlendFactor,
+                              const VkBlendFactor dstColorBlendFactor,
+                              const VkBlendFactor srcAlphaBlendFactor,
+                              const VkBlendFactor dstAlphaBlendFactor,
+                              const VkBlendOp colorBlendOp,
+                              const VkBlendOp alphaBlendOp)
         {
             TLRENDER_P();
 
@@ -176,7 +176,7 @@ namespace tl
 
             const auto mvp = p.transform * model;
             
-            if (shaderId.empty() || shaderId == "dummy" || textures.empty())
+            if (textures.empty())
             {
                 shaderName = "dummy";
                 pipelineLayoutName = shaderName;
@@ -184,6 +184,10 @@ namespace tl
                 _createBindingSet(p.shaders[shaderName]);
                 
                 p.shaders[shaderName]->bind(p.frameIndex);
+                
+                USDSceneParameters scene;
+                scene.camPos = p.cameraPosition;
+                p.shaders[shaderName]->setUniform("scene", scene);
             }
             else if (shaderId == "UsdPreviewSurface")
             {

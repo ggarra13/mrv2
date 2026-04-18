@@ -617,6 +617,11 @@ void usd_window::draw()
 
     VkCommandBuffer cmd = getCurrentCommandBuffer();
 
+    // Clear the viewport
+    m_clearColor = { 0.2, 0.2, 0.2, 0.0 };
+    begin_render_pass();
+    end_render_pass();
+            
     p.engine->draw(cmd, m_currentFrameIndex, 1024);
 
     p.buffer = p.engine->getFBO();

@@ -7,7 +7,7 @@
 #include <pxr/usd/usdShade/materialBindingAPI.h>
 #include <pxr/usd/usdShade/material.h>
 #include <pxr/usd/usdShade/shader.h>
-
+#include <pxr/usd/usdShade/tokens.h>
 
 #include <iostream>
 
@@ -154,7 +154,7 @@ namespace tl
             };
                         
             // 2. For all other inputs, get the Surface Shader
-            UsdShadeShader surfaceShader = material.ComputeSurfaceSource(TfToken("universal"));
+            UsdShadeShader surfaceShader = material.ComputeSurfaceSource(TfToken("glslfx"));
             if (!surfaceShader)
             {
                 FillEmptyShaderInputResult(result, inputName);
@@ -201,7 +201,7 @@ namespace tl
                         result.channel = sourceName.GetString();
     
                         result.texturePath = assetPath.GetResolvedPath();
-                        if (debug)
+                        if (debug && !result.texturePath.empty())
                         {
                             std::cout << "\t" << inputName << " has " << result.texturePath << std::endl;
                         }
@@ -221,7 +221,7 @@ namespace tl
                                   const bool       debug)
         {
             float out = 0.F;
-            UsdShadeShader surfaceShader = material.ComputeSurfaceSource(TfToken("universal"));
+            UsdShadeShader surfaceShader = material.ComputeSurfaceSource(TfToken("glslfx"));
             if (!surfaceShader)
             {
                 return out;
@@ -277,6 +277,23 @@ namespace tl
             std::cout << "Started Reading materials..." << std::endl;
 
             bool debug = true;
+#if 1
+            for (auto it = range.begin(); it != range.end(); ++it) {
+
+                if (!UsdShadeMaterialBindingAPI::CanApply(*it))
+                    continue;
+
+                UsdShadeMaterialBindingAPI bindingApi(*it);
+                // UsdShadeMaterial material =
+                //     bindingApi.ComputeBoundMaterial(UsdShadeTokens->preview);  
+                UsdShadeMaterial material =
+                    bindingApi.ComputeBoundMaterial(UsdShadeTokens->full);  
+                Material result = ParseMaterial(material, debug);
+                out[material.GetPath().GetString()] = result;
+            }
+
+#elif 0
+            
             for (auto it = range.begin(); it != range.end(); ++it) {
 
                 //
@@ -290,10 +307,51 @@ namespace tl
                 Material result = ParseMaterial(material, debug);
                 out[material.GetPath().GetString()] = result;
             }
-            
+#else
+            std::unordered_map<std::string, UsdShadeMaterial> usedMaterials;
+
+            for (const UsdPrim& prim : range)
+            {
+                if (!UsdShadeMaterialBindingAPI::CanApply(prim))
+                    continue;
+
+                UsdShadeMaterialBindingAPI api(prim);
+
+                for (auto purpose : {
+                        UsdShadeTokens->full,
+                        UsdShadeTokens->preview })
+                {
+                    UsdShadeMaterial mat = api.ComputeBoundMaterial(purpose);
+                    if (mat)
+                        usedMaterials[mat.GetPath().GetString()] = mat;
+                }
+
+                // 🔥 IMPORTANT: subsets
+                if (prim.IsA<UsdGeomImageable>())
+                {
+                    auto subsets =
+                        UsdGeomSubset::GetAllGeomSubsets(
+                            UsdGeomImageable(prim));
+
+                    for (const auto& subset : subsets)
+                    {
+                        UsdShadeMaterialBindingAPI subApi(subset.GetPrim());
+                        UsdShadeMaterial mat = subApi.ComputeBoundMaterial();
+
+                        if (mat)
+                            usedMaterials[mat.GetPath().GetString()] = mat;
+                    }
+                }
+            }
+
+            for (auto& [path, material] : usedMaterials)
+            {
+                Material result = ParseMaterial(material, debug);
+                out[path] = result;
+            }
+#endif
             std::cout << "Finished Reading " << out.size()
                       << " materials..." << std::endl;
         }
-        
     }
 }

@@ -179,6 +179,8 @@ namespace tl
                     ctx, vertexDummy(), fragmentDummy(), "dummy");
                 p.shaders["dummy"]->createUniform(
                     "transforms", transforms, vlk::kShaderVertex);
+                USDSceneParameters scene;
+                p.shaders["dummy"]->createUniform("scene", scene);
                 p.shaders["dummy"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["dummy"]);
             }

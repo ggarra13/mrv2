@@ -41,6 +41,10 @@ layout(push_constant) uniform PushConstants {
     vec4 color;
 } pc;       
                  
+layout(set = 0, binding = 1, std140) uniform Scene {
+     vec3 camPos;
+} scene;
+
 void main()
 {
     vec3 dx = dFdx(Peye);
@@ -48,10 +52,11 @@ void main()
     vec3 N = normalize(cross(dx, dy));
 
     // Simple light direction
-    vec3 L = normalize(Peye);
+    vec3 V = normalize(Peye - scene.camPos);
+    vec3 L = V;
 
     // Diffuse (Lambert)
-    float diff = max(dot(N, L), 0.0);
+    float diff = min(max(dot(N, L), 0.0), 0.75);
 
     // Add a bit of ambient so it's not fully black
     float ambient = 0.2;
@@ -247,10 +252,7 @@ void main()
     // Combine ambient + diffuse + specular
     vec3 color = ambient + Lo + emissive;
 
-    // ── Tone mapping (Reinhard) + gamma  ─────── 
-    // color = color / (color + vec3(1.0));            // HDR → LDR
-    // color = pow(color, vec3(1.0 / 2.2));            // linear → sRGB
-
+    // Combine color and opacity.  Do NOT premult.
     outColor = vec4(color, opacity);
 
     // VERIFIED: albedo and ao are okay.
