@@ -253,6 +253,7 @@ namespace tl
                 std::size_t basisCurves = 0;
                 std::size_t points = 0;
                 std::size_t spheres = 0;
+                std::size_t textures = 0;
                 
                 std::size_t skeletons = 0;
 
@@ -264,6 +265,7 @@ namespace tl
                         points = 0;
                         spheres = 0;
                         skeletons = 0;
+                        textures = 0;
                     }
 
                 void print(std::ostream& o)
@@ -274,6 +276,8 @@ namespace tl
                           << std::endl
                           << std::endl
                           << "    Triangles = " << triangles
+                          << std::endl
+                          << "    Textures  = " << textures
                           << std::endl
                           << std::endl
                           << "       Meshes = " << meshes << std::endl
@@ -611,7 +615,7 @@ namespace tl
             for (int i = 0; i < points.size(); ++i)
             {
                 const auto& p = points[i];
-                geom.v.push_back(math::Vector3f(p[0], p[1], p[2]));
+                geom.v.emplace_back(math::Vector3f(p[0], p[1], p[2]));
             }
 
             UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
@@ -658,7 +662,7 @@ namespace tl
                             n[2] < -1.F || n[2] > 1.F)
                             meshOptimization.floatNormals = true;
                             
-                        geom.n.push_back(math::Vector3f(n[0], n[1], n[2]));
+                        geom.n.emplace_back(math::Vector3f(n[0], n[1], n[2]));
                     }
                     faceCornerIdx += vertCount;
                 }
@@ -719,7 +723,7 @@ namespace tl
                                     uv[1] < 0.F || uv[1] > 1.F)
                                     meshOptimization.floatUVs = true;
                                 
-                                geom.t.push_back(math::Vector2f(uv[0], 1.0F - uv[1]));
+                                geom.t.emplace_back(math::Vector2f(uv[0], 1.0F - uv[1]));
                             }
                             faceCornerIdx += vertCount;
                         }
@@ -800,7 +804,7 @@ namespace tl
                         triangle.v[2].t = indexOffset + i + 2;
                     }
                     
-                    geom.triangles.push_back(triangle);
+                    geom.triangles.emplace_back(triangle);
                 }
                 indexOffset += vertCount;
             }
@@ -833,6 +837,10 @@ namespace tl
                     }
                 }
             }
+            else
+            {
+                std::cerr << "no UVs" << std::endl;
+            }
 
             shaderId = "dummy";
             if (usdMaterial)
@@ -853,6 +861,7 @@ namespace tl
             }
 
             shaderId = "st";
+            p.stats.textures += textures.size();
 
             if (!material.transparent)
             {
