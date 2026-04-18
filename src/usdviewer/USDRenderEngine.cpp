@@ -95,11 +95,13 @@
 
 #include <memory>
 #include <iostream>
-#include <set>
+#include <regex>
 #include <string>
 #include <unordered_map>
 
 using namespace PXR_NS;
+
+std::regex re("blackboard01");
 
 namespace
 {
@@ -832,13 +834,12 @@ namespace tl
                     if (j != p.materials.end())
                     {
                         material = j->second;
-                        std::cerr << "got material " << j->first
-                                  << " transparent=" << material.transparent
-                                  << std::endl;
                     }
                     shaderId = "UsdPreviewSurface";
                 }
             }
+
+            shaderId = "st";
 
             if (!material.transparent)
             {
@@ -1015,14 +1016,16 @@ namespace tl
                         purpose != UsdGeomTokens->render)
                         continue;
 
-                    // if (purpose != UsdGeomTokens->render)
-                    //     continue;
                 }
 
                 if (!UsdShadeMaterialBindingAPI::CanApply(*it))
                     continue;
 
                 primPath = it->GetPath().GetString();
+
+                if (!std::regex_search(primPath, re))
+                    continue;
+                
                 matrix = xformCache.GetLocalToWorldTransform(*it);
                 const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
                                                    matrix[0][2], matrix[0][3],
@@ -1101,11 +1104,11 @@ namespace tl
                     p.render->drawMesh(geom, opt, modelMatrix, color,
                                        shaderId, textures);
                 }
-                // \@todo: cylinder, etc...
+                // \@todo: handle cylinder, etc...
             }
 
             //
-            // Sort primitives by center.
+            // \@todo: Sort primitives by center.
             // 
 
             //
