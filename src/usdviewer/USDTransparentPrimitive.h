@@ -22,10 +22,13 @@ namespace tl
             image::Color4f color;
             Material material;
             std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
+
+            math::Vector3f center;
             
             bool operator==(const TransparentPrimitive& b) const
                 {
-                    return (geom.v.size() == b.geom.v.size() &&
+                    return (center == b.center &&
+                            geom.v.size() == b.geom.v.size() &&
                             geom.t.size() == b.geom.t.size() &&
                             geom.n.size() == b.geom.n.size() &&
                             geom.triangles.size() == b.geom.triangles.size() &&

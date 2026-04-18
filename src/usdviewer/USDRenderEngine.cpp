@@ -234,9 +234,57 @@ namespace tl
 
             // Renderer information
             std::vector<TransparentPrimitive> transparentPrims;
-            std::size_t opaqueObjs = 0;
-            std::size_t transparentObjs = 0;
 
+            struct Stats
+            {
+                // Primitive counts
+                std::size_t total  = 0;
+                std::size_t opaque = 0;
+                std::size_t transparent = 0;
+
+                // Primitive types
+                std::size_t meshes = 0;
+                std::size_t subdivs = 0;
+                std::size_t nurbs = 0;
+                std::size_t nurbsCurves = 0;
+                std::size_t basisCurves = 0;
+                std::size_t points = 0;
+                std::size_t spheres = 0;
+                
+                std::size_t skeletons = 0;
+
+                void reset()
+                    {
+                        opaque = transparent = total = 0;
+                        meshes = subdivs = nurbs = 0;
+                        nurbsCurves = basisCurves = 0;
+                        points = 0;
+                        spheres = 0;
+                        skeletons = 0;
+                    }
+
+                void print(std::ostream& o)
+                    {
+                        o << "        Total = " << total << std::endl
+                          << "       Opaque = " << opaque << std::endl
+                          << "  Transparent = " << transparent
+                          << std::endl
+                          << "       Meshes = " << meshes << std::endl
+                          << "      Subdivs = " << subdivs << std::endl
+                          << "Nurbs Patches = " << nurbs << std::endl
+                          << " Nurbs Curves = " << nurbsCurves
+                          << std::endl
+                          << " Basis Curves = " << basisCurves
+                          << std::endl
+                          << "       Points = " << points << std::endl
+                          << "    Skeletons = " << skeletons
+                          << std::endl
+                          << "      spheres = " << spheres
+                          << std::endl;
+                    }
+            };
+            Stats stats;
+            
             //! tlRender context
             std::shared_ptr<system::Context> context;
 
@@ -794,14 +842,14 @@ namespace tl
 
             if (!material.transparent)
             {
-                p.opaqueObjs++;
+                p.stats.opaque++;
                 // Object is opaque.  Render it.
                 p.render->drawMesh(geom, meshOptimization, modelMatrix, color,
-                                   "st", textures, material);
+                                   shaderId, textures, material);
             }
             else
             {
-                p.transparentObjs++;
+                p.stats.transparent++;
                 
                 TransparentPrimitive object;
                 object.geom = geom;
@@ -942,19 +990,9 @@ namespace tl
             //
             // Stats
             //
-            p.opaqueObjs = 0;
-            p.transparentObjs = 0;
+            p.stats.reset();
             p.transparentPrims.clear();
             
-            std::size_t numMeshes = 0;
-            std::size_t numSubdivs = 0;
-            std::size_t numNurbsPatches = 0;
-            std::size_t numNurbsCurves = 0;
-            std::size_t numBasisCurves = 0;
-            std::size_t numSkeletons = 0;
-            std::size_t numPoints = 0;
-            std::size_t numSpheres = 0;
-
             std::shared_ptr<vlk::Texture> texture;    
             for (auto it = range.begin(); it != range.end(); ++it) {
 
@@ -973,10 +1011,12 @@ namespace tl
                     // If purpose is not default or not render, don't use this
                     // geometry.
                     TfToken purpose = imageable.ComputePurpose();
-                    // if (purpose != UsdGeomTokens->default_ &&
-                    //     purpose != UsdGeomTokens->render)
-                    if (purpose != UsdGeomTokens->render)
+                    if (purpose != UsdGeomTokens->default_ &&
+                        purpose != UsdGeomTokens->render)
                         continue;
+
+                    // if (purpose != UsdGeomTokens->render)
+                    //     continue;
                 }
 
                 if (!UsdShadeMaterialBindingAPI::CanApply(*it))
@@ -1011,29 +1051,29 @@ namespace tl
                 std::string shaderId;
                 if (it->IsA<UsdGeomMesh>())
                 {
-                    ++numMeshes;
+                    p.stats.meshes++;
 
                     UsdGeomMesh usdMesh = UsdGeomMesh(*it);
                     _drawMesh(primPath, usdMesh, modelMatrix, shaderId, color);
                 }
                 else if (it->IsA<UsdGeomNurbsPatch>())
                 {
-                    ++numNurbsPatches; 
+                    p.stats.nurbs++; 
                     UsdGeomNurbsPatch out = UsdGeomNurbsPatch(*it);
                 }
                 else if (it->IsA<UsdGeomNurbsCurves>())
                 {
-                    ++numNurbsCurves; 
+                    p.stats.nurbsCurves++; 
                     UsdGeomNurbsCurves out = UsdGeomNurbsCurves(*it);
                 }
                 else if (it->IsA<UsdGeomBasisCurves>())
                 {
-                    ++numBasisCurves; 
+                    p.stats.basisCurves++; 
                     UsdGeomBasisCurves out = UsdGeomBasisCurves(*it);
                 }
                 else if (it->IsA<UsdGeomSphere>())
                 {
-                    ++numSpheres; 
+                    p.stats.spheres++;
                     UsdGeomSphere out = UsdGeomSphere(*it);
                     float radius = 1;
                     out.GetRadiusAttr().Get(&radius, p.time);
@@ -1061,17 +1101,20 @@ namespace tl
                     p.render->drawMesh(geom, opt, modelMatrix, color,
                                        shaderId, textures);
                 }
-                // \@todo: cylinder
+                // \@todo: cylinder, etc...
             }
+
+            //
+            // Sort primitives by center.
+            // 
 
             //
             // Draw transparent primitives.
             //
-            
             for (auto& object : p.transparentPrims)
             {                
                 VkBool32 depthTest = VK_TRUE;
-                VkBool32 depthWrite = VK_TRUE;  // \@bug: this should be false, but sorting is an issue
+                VkBool32 depthWrite = VK_FALSE;
                 p.render->drawMesh(object.geom, object.optimization,
                                    object.modelMatrix, object.color,
                                    object.shaderId, object.textures,
@@ -1083,21 +1126,13 @@ namespace tl
             p.render->endRenderPass();
             p.render->end();
 
-#if PRINT_STATS
-            std::cout << "       Opaque = " << p.opaqueObjs << std::endl
-                      << "  Transparent = " << p.transparentObjs << std::endl
-                      << "       Meshes = " << numMeshes << std::endl
-                      << "      Subdivs = " << numSubdivs << std::endl
-                      << "Nurbs Patches = " << numNurbsPatches << std::endl
-                      << " Nurbs Curves = " << numNurbsCurves << std::endl
-                      << " Basis Curves = " << numBasisCurves << std::endl
-                      << "       Points = " << numPoints << std::endl
-                      << "    Skeletons = " << numSkeletons << std::endl
-                      << "      Spheres = " << numSpheres << std::endl;
-#endif
     
             p.render->setTransform(oldTransform);
-    
+
+#ifdef PRINT_STATS
+            p.stats.print(std::cout);
+#endif
+            
             if (p.buffer)
             {
                 p.buffer->transitionToShaderRead(cmd);
