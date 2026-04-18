@@ -245,6 +245,7 @@ namespace tl
                 std::size_t transparent = 0;
 
                 // Primitive types
+                std::size_t triangles = 0;
                 std::size_t meshes = 0;
                 std::size_t subdivs = 0;
                 std::size_t nurbs = 0;
@@ -258,7 +259,7 @@ namespace tl
                 void reset()
                     {
                         opaque = transparent = total = 0;
-                        meshes = subdivs = nurbs = 0;
+                        triangles = meshes = subdivs = nurbs = 0;
                         nurbsCurves = basisCurves = 0;
                         points = 0;
                         spheres = 0;
@@ -270,6 +271,10 @@ namespace tl
                         o << "        Total = " << total << std::endl
                           << "       Opaque = " << opaque << std::endl
                           << "  Transparent = " << transparent
+                          << std::endl
+                          << std::endl
+                          << "    Triangles = " << triangles
+                          << std::endl
                           << std::endl
                           << "       Meshes = " << meshes << std::endl
                           << "      Subdivs = " << subdivs << std::endl
@@ -597,6 +602,7 @@ namespace tl
                 return;
             }
             
+            
             geom::TriangleMesh3 geom;
             MeshOptimization meshOptimization;
 
@@ -610,6 +616,7 @@ namespace tl
 
             UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
 
+#if 0
             // Get Normals if any.
             UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
             if (normalsPrimvar.IsDefined()) {
@@ -618,8 +625,8 @@ namespace tl
                 normalsPrimvar.ComputeFlattened(&normals, p.time);
                 
                 TfToken interp = normalsPrimvar.GetInterpolation();
-                // std::cout << "Normals count: " << normals.size()
-                //           << "  interpolation: " << interp << "\n";
+                std::cout << "Normals count: " << normals.size()
+                          << "  interpolation: " << interp << "\n";
 
                 // walks faceVertexIndices for faceVarying
                 int faceCornerIdx = 0; 
@@ -656,6 +663,7 @@ namespace tl
                     faceCornerIdx += vertCount;
                 }
             }
+#endif
             
             //
             // Get UVs (st)
@@ -681,10 +689,6 @@ namespace tl
                         std::vector<GfVec2f> expanded(indices.size());
                         for (size_t i = 0; i < indices.size(); ++i)
                             expanded[i] = values[indices[i]];
-
-                        const bool isFaceVarying =
-                            interp == UsdGeomTokens->faceVarying ||
-                            expanded.size() == faceVertexIndices.size();
                         
                         int faceCornerIdx = 0; 
 
@@ -696,7 +700,7 @@ namespace tl
                                 int pointIdx = faceVertexIndices[faceCornerIdx + i];
                                 GfVec2f uv;
 
-                                if (isFaceVarying) {
+                                if (interp == UsdGeomTokens->faceVarying) {
                                     // One uv per face-corner, in face-winding order
                                     uv = expanded[faceCornerIdx + i];
                                 } else if (interp == UsdGeomTokens->vertex ||
@@ -711,6 +715,10 @@ namespace tl
                                     uv = expanded[0];
                                 }
 
+                                if (uv[0] < 0.F || uv[0] > 1.F ||
+                                    uv[1] < 0.F || uv[1] > 1.F)
+                                    meshOptimization.floatUVs = true;
+                                
                                 geom.t.push_back(math::Vector2f(uv[0], 1.0F - uv[1]));
                             }
                             faceCornerIdx += vertCount;
@@ -792,7 +800,7 @@ namespace tl
                         triangle.v[2].t = indexOffset + i + 2;
                     }
                     
-                    geom.triangles.emplace_back(triangle);
+                    geom.triangles.push_back(triangle);
                 }
                 indexOffset += vertCount;
             }
@@ -801,30 +809,35 @@ namespace tl
             // Find the textures if the mesh has UVs 
             //
             usd::Material material;
+            UsdShadeMaterial usdMaterial;
             std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-
-            // 1. Try to get the Material bound directly to the Prim
-            UsdPrim prim = usdMesh.GetPrim();
-            
-            UsdShadeMaterialBindingAPI api(prim);
-            UsdShadeMaterial mat = usd::GetMaterial(api);
-            if (!mat)
+            if (hasUVs)
             {
-                UsdGeomImageable imageable(prim);
-                if (imageable)
+                // 1. Try to get the Material bound directly to the Prim
+                UsdPrim prim = usdMesh.GetPrim();
+                UsdShadeMaterialBindingAPI bindingApi(prim);
+                usdMaterial = bindingApi.ComputeBoundMaterial();
+
+                if (!usdMaterial)
                 {
-                    for (const UsdGeomSubset& subset : UsdGeomSubset::GetAllGeomSubsets(imageable))
+                    UsdGeomImageable imageable(prim);
+                    if (imageable)
                     {
-                        UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
-                        mat = usd::GetMaterial(subsetBinding);
+                        for (const UsdGeomSubset& subset : UsdGeomSubset::GetAllGeomSubsets(imageable))
+                        {
+                            UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
+                            usdMaterial = subsetBinding.ComputeBoundMaterial();
+                            if (usdMaterial)
+                                break;
+                        }
                     }
                 }
             }
 
             shaderId = "dummy";
-            if (mat)
+            if (usdMaterial)
             {
-                std::string materialPath = mat.GetPrim().GetPath().GetString();
+                std::string materialPath = usdMaterial.GetPrim().GetPath().GetString();
         
                 auto i = p.textures.find(materialPath);
                 if (i != p.textures.end())
@@ -843,14 +856,18 @@ namespace tl
 
             if (!material.transparent)
             {
-                p.stats.opaque++;
                 // Object is opaque.  Render it.
+                p.stats.opaque++;
+
+                p.stats.triangles += geom.triangles.size();
+                
                 p.render->drawMesh(geom, meshOptimization, modelMatrix, color,
                                    shaderId, textures, material);
             }
             else
             {
                 p.stats.transparent++;
+                p.stats.triangles += geom.triangles.size();
                 
                 TransparentPrimitive object;
                 object.geom = geom;
@@ -869,6 +886,7 @@ namespace tl
                                 unsigned renderWidth)
         {
             TLRENDER_P();
+            
             if (!p.render)
             {
                 p.render = usd::Render::create(ctx, p.context);
@@ -1023,8 +1041,8 @@ namespace tl
 
                 primPath = it->GetPath().GetString();
 
-                if (!std::regex_search(primPath, re))
-                    continue;
+                // if (!std::regex_search(primPath, re))
+                //     continue;
                 
                 matrix = xformCache.GetLocalToWorldTransform(*it);
                 const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
