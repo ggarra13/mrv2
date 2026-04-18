@@ -772,7 +772,7 @@ namespace tl
             }
 
 
-            
+            shaderName = "st";
             
             p.render->draw3DMesh(geom, modelMatrix, color, shaderName,
                                  textures, material);

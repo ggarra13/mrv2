@@ -151,7 +151,17 @@ namespace tl
 
             const auto mvp = p.transform * model;
             
-            if (shaderId.empty() || shaderId == "dummy" || textures.empty())
+            if (shaderId == "st")
+            {
+                shaderName = "st";
+                pipelineName = pipelineLayoutName = shaderName;
+                
+                _createBindingSet(p.shaders[shaderName]);
+                
+                p.shaders[shaderName]->bind(p.frameIndex);  
+            }
+            else if (shaderId.empty() || shaderId == "dummy" ||
+                     textures.empty())
             {
                 shaderName = "dummy";
                 pipelineName = pipelineLayoutName = shaderName;
@@ -197,15 +207,6 @@ namespace tl
                 USDSceneParameters scene;
                 scene.camPos = p.cameraPosition;
                 p.shaders[shaderName]->setUniform("scene", scene);
-            }
-            else if (shaderId == "st")
-            {
-                shaderName = "st";
-                pipelineName = pipelineLayoutName = shaderName;
-                
-                _createBindingSet(p.shaders[shaderName]);
-                
-                p.shaders[shaderName]->bind(p.frameIndex);  
             }
             else
             {

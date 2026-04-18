@@ -267,7 +267,7 @@ namespace tl
                                UsdTraverseInstanceProxies());
             std::cout << "Started Reading materials..." << std::endl;
 
-            bool debug = true;
+            bool debug = DEBUG_MATERIALS;
             for (auto it = range.begin(); it != range.end(); ++it) {
 
                 //
