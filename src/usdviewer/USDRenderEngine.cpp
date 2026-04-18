@@ -101,8 +101,6 @@
 
 using namespace PXR_NS;
 
-std::regex re("blackboard01");
-
 namespace
 {
     
@@ -265,7 +263,6 @@ namespace tl
                         points = 0;
                         spheres = 0;
                         skeletons = 0;
-                        textures = 0;
                     }
 
                 void print(std::ostream& o)
@@ -819,9 +816,9 @@ namespace tl
             {
                 // 1. Try to get the Material bound directly to the Prim
                 UsdPrim prim = usdMesh.GetPrim();
-                UsdShadeMaterialBindingAPI bindingApi(prim);
-                usdMaterial = bindingApi.ComputeBoundMaterial();
 
+                UsdShadeMaterialBindingAPI api(prim);
+                usdMaterial = usd::GetMaterial(api);
                 if (!usdMaterial)
                 {
                     UsdGeomImageable imageable(prim);
@@ -830,18 +827,14 @@ namespace tl
                         for (const UsdGeomSubset& subset : UsdGeomSubset::GetAllGeomSubsets(imageable))
                         {
                             UsdShadeMaterialBindingAPI subsetBinding(subset.GetPrim());
-                            usdMaterial = subsetBinding.ComputeBoundMaterial();
+                            usdMaterial = usd::GetMaterial(subsetBinding);
                             if (usdMaterial)
                                 break;
                         }
                     }
                 }
             }
-            else
-            {
-                std::cerr << "no UVs" << std::endl;
-            }
-
+            
             shaderId = "dummy";
             if (usdMaterial)
             {
@@ -860,23 +853,20 @@ namespace tl
                 }
             }
 
-            shaderId = "st";
-            p.stats.textures += textures.size();
+            p.stats.textures = p.textures.size();
+            p.stats.triangles += geom.triangles.size();
 
             if (!material.transparent)
             {
                 // Object is opaque.  Render it.
                 p.stats.opaque++;
 
-                p.stats.triangles += geom.triangles.size();
-                
                 p.render->drawMesh(geom, meshOptimization, modelMatrix, color,
                                    shaderId, textures, material);
             }
             else
             {
                 p.stats.transparent++;
-                p.stats.triangles += geom.triangles.size();
                 
                 TransparentPrimitive object;
                 object.geom = geom;
@@ -1050,9 +1040,6 @@ namespace tl
 
                 primPath = it->GetPath().GetString();
 
-                // if (!std::regex_search(primPath, re))
-                //     continue;
-                
                 matrix = xformCache.GetLocalToWorldTransform(*it);
                 const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
                                                    matrix[0][2], matrix[0][3],
