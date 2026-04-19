@@ -24,6 +24,7 @@
 #include <pxr/base/gf/camera.h>
 #include <pxr/base/gf/frustum.h>
 #include <pxr/base/gf/matrix4d.h>
+#include <pxr/base/gf/range3d.h>
 #include <pxr/base/gf/vec3f.h>
 
 // diagnostics
@@ -108,6 +109,29 @@ using namespace PXR_NS;
 
 namespace
 {
+
+    tl::math::Vector3f GetObjectWorldCenter(const UsdPrim& prim,
+                                            UsdTimeCode time = UsdTimeCode::Default()) {
+        // 1. Define which purposes to include (usually 'default')
+        TfTokenVector purposes = {UsdGeomTokens->default_};
+
+        // 2. Initialize the BBoxCache for the given time
+        UsdGeomBBoxCache bboxCache(time, purposes);
+
+        // 3. Compute the world-space bounding box
+        // This handles the hierarchy transformation internally
+        GfBBox3d worldBbox = bboxCache.ComputeWorldBound(prim);
+        GfRange3d range = worldBbox.GetRange();
+
+        // 4. Return the midpoint of the range
+        if (!range.IsEmpty()) {
+            const GfVec3d c(range.GetMidpoint());
+            return tl::math::Vector3f(c[0], c[1], c[2]);
+        }
+
+        // Return zero vector if prim has no bounds
+        return tl::math::Vector3f(0.F, 0.F, 0.F);
+    }
     
     UsdGeomCamera UsdGetCameraAtPath(
         const UsdStageRefPtr& stage,
@@ -803,6 +827,8 @@ namespace tl
                 object.shaderId = shaderId;
                 object.material = material;
                 object.textures = textures;
+                object.center   = GetObjectWorldCenter(usdMesh.GetPrim(),
+                                                       p.time);
                 p.transparentPrims.emplace_back(object);
             }
         }
@@ -1068,8 +1094,16 @@ namespace tl
             }
 
             //
-            // \@todo: Sort primitives by center.
-            // 
+            // Sort primitives by center from back to front.
+            //
+            std::sort(p.transparentPrims.begin(),
+                      p.transparentPrims.end(),
+                      [&camPos] (const auto& a, const auto& b)
+                          {
+                              double aLength = math::length2(a.center - camPos);
+                              double bLength = math::length2(b.center - camPos);
+                              return aLength > bLength;
+                          });
 
             //
             // Draw transparent primitives.

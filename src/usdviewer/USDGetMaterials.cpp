@@ -24,18 +24,12 @@ namespace tl
             UsdShadeShader findSurfaceShader(const UsdShadeMaterial& material)
             {
                 UsdShadeShader out;
-                out = material.ComputeSurfaceSource(TfToken("universal"));
-                if (!out)
-                {
-                    if (!out)
-                    {
-                        out = material.ComputeSurfaceSource();
-                    }
-                    if (!out)
-                    {
-                        out = material.ComputeSurfaceSource(TfToken("preview"));
-                    }
-                }
+                TfTokenVector contexts = {
+                    TfToken("glslfx"),
+                    TfToken("mtlx"),
+                    TfToken("preview"),
+                };
+                out = material.ComputeSurfaceSource(contexts);
                 return out;
             }
 
