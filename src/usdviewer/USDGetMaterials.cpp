@@ -18,9 +18,28 @@ namespace tl
     namespace usd
     {
         using namespace PXR_NS;
-        
+
         namespace
         {
+            UsdShadeShader findSurfaceShader(const UsdShadeMaterial& material)
+            {
+                UsdShadeShader out;
+                out = material.ComputeSurfaceSource(TfToken("universal"));
+                if (!out)
+                {
+                    if (!out)
+                    {
+                        out = material.ComputeSurfaceSource();
+                    }
+                    if (!out)
+                    {
+                        out = material.ComputeSurfaceSource(TfToken("preview"));
+                    }
+                }
+                return out;
+            }
+
+            
             vlk::TextureBorder getBorder(const TfToken& borderToken)
             {
                 vlk::TextureBorder out = vlk::TextureBorder::ClampToEdge;
@@ -71,8 +90,8 @@ namespace tl
         }
 
         ShaderInputResult GetTextureOrValue(const UsdShadeMaterial& material,
-                                            const TfToken&   inputName,
-                                            const bool       debug)
+                                            const TfToken& inputName,
+                                            const bool debug)
         {
             ShaderInputResult result;
             if (!material)
@@ -81,82 +100,122 @@ namespace tl
                 return result;
             }
 
-            // DISPLACEMENT EXCEPTION:
-            // Look at the Material's displacement output, not the surface shader.
-            // No constant-value fallback is meaningful for displacement, so return as-is.
-            if (inputName == TfToken("displacement"))
-            {
-                UsdShadeOutput       dispOutput = material.GetDisplacementOutput();
-                UsdShadeConnectableAPI source;
-                TfToken              sourceName;
-                UsdShadeAttributeType sourceType;
-
-                if (UsdShadeConnectableAPI::GetConnectedSource(
-                        dispOutput, &source, &sourceName, &sourceType))
-                {
-                    UsdShadeShader textureShader(source.GetPrim());
-                    UsdShadeInput  fileInput = textureShader.GetInput(TfToken("file"));
-                    if (fileInput)
-                    {
-                        SdfAssetPath assetPath;
-                        if (fileInput.Get(&assetPath))
-                            result.texturePath = assetPath.GetResolvedPath();
-                        else
-                            FillEmptyShaderInputResult(result, inputName);
-                    }
-                }
-                else
-                {
-                    FillEmptyShaderInputResult(result, inputName);
-                }
-                return result;
-            }
-            
             // ------------------------------------------------------------------
             // Helper: read a constant scalar or vector input into result.value.
-            // Handles color3f/float3/normal3f → [r,g,b,1], color4f/float4 → [r,g,b,a],
-            // and float → [v,v,v,v].
             // ------------------------------------------------------------------
             auto readConstantValue = [&](const UsdShadeInput& input)
+                {
+                    if (!input) return;
+
+                    const SdfValueTypeName typeName = input.GetAttr().GetTypeName();
+
+                    if (typeName == SdfValueTypeNames->Color3f  ||
+                        typeName == SdfValueTypeNames->Float3   ||
+                        typeName == SdfValueTypeNames->Normal3f)
+                    {
+                        GfVec3f v;
+                        if (input.Get(&v))
+                        {
+                            result.value    = { v[0], v[1], v[2], 1.0f };
+                            result.hasValue = true;
+                        }
+                    }
+                    else if (typeName == SdfValueTypeNames->Color4f ||
+                             typeName == SdfValueTypeNames->Float4)
+                    {
+                        GfVec4f v;
+                        if (input.Get(&v))
+                        {
+                            result.value    = { v[0], v[1], v[2], v[3] };
+                            result.hasValue = true;
+                        }
+                    }
+                    else if (typeName == SdfValueTypeNames->Float)
+                    {
+                        float v = 0.f;
+                        if (input.Get(&v))
+                        {
+                            result.value    = { v, v, v, v };
+                            result.hasValue = true;
+                        }
+                    }
+                };
+
+            // ------------------------------------------------------------------
+            // Helper: Extract texture parameters from a producing attribute
+            // ------------------------------------------------------------------
+            auto extractTextureParams = [&](const UsdAttribute& upstreamAttr) -> bool
+                {
+                    UsdShadeShader textureShader(upstreamAttr.GetPrim());
+                    if (!textureShader) return false;
+
+                    UsdShadeInput fileInput = textureShader.GetInput(TfToken("file"));
+                    if (!fileInput)
+                    {
+                        fileInput = textureShader.GetInput(TfToken("filename"));
+                        if (!fileInput)
+                        {
+                            fileInput = textureShader.GetInput(TfToken("inputs:file"));
+                        }
+                        if (!fileInput)
+                            return false;
+                    }
+                    SdfAssetPath assetPath;
+                    if (fileInput.Get(&assetPath))
+                    {
+                        // Access the wrapS and wrapT inputs
+                        UsdShadeInput wrapSInput = textureShader.GetInput(TfToken("wrapS"));
+                        UsdShadeInput wrapTInput = textureShader.GetInput(TfToken("wrapT"));
+
+                        // Get S and T border wrapping (clamp, repeat, black, mirror, etc)
+                        TfToken sVal, tVal;
+                        if (wrapSInput && wrapSInput.Get(&sVal)) {
+                            result.borderU = getBorder(sVal);
+                        }
+                        if (wrapTInput && wrapTInput.Get(&tVal)) {
+                            result.borderV = getBorder(tVal); // Fixed: was previously using sVal
+                        }
+
+                        // Get the channel of the connection (e.g. "outputs:rgb" -> "rgb")
+                        std::string attrStr = upstreamAttr.GetName().GetString();
+                        const std::string prefix = "outputs:";
+                        if (attrStr.find(prefix) == 0) {
+                            result.channel = attrStr.substr(prefix.length());
+                        } else {
+                            result.channel = attrStr;
+                        }
+
+                        result.texturePath = assetPath.GetResolvedPath();
+                        if (debug && !result.texturePath.empty())
+                        {
+                            std::cout << "\t" << inputName << " has " << result.texturePath << std::endl;
+                        }
+                        return true; // Texture successfully found and parsed
+                    }
+                    return false;
+                };
+
+
+            // 1. DISPLACEMENT EXCEPTION
+            if (inputName == TfToken("displacement"))
             {
-                if (!input) return;
+                UsdShadeOutput dispOutput = material.GetDisplacementOutput();
+                if (dispOutput)
+                {
+                    // GetValueProducingAttributes handles deep graph traversal
+                    for (const UsdAttribute& attr : dispOutput.GetValueProducingAttributes()) {
+                        if (extractTextureParams(attr)) {
+                            return result;
+                        }
+                    }
+                }
+        
+                FillEmptyShaderInputResult(result, inputName);
+                return result;
+            }
 
-                const SdfValueTypeName typeName = input.GetAttr().GetTypeName();
-
-                if (typeName == SdfValueTypeNames->Color3f  ||
-                    typeName == SdfValueTypeNames->Float3   ||
-                    typeName == SdfValueTypeNames->Normal3f)
-                {
-                    GfVec3f v;
-                    if (input.Get(&v))
-                    {
-                        result.value    = { v[0], v[1], v[2], 1.0f };
-                        result.hasValue = true;
-                    }
-                }
-                else if (typeName == SdfValueTypeNames->Color4f ||
-                         typeName == SdfValueTypeNames->Float4)
-                {
-                    GfVec4f v;
-                    if (input.Get(&v))
-                    {
-                        result.value    = { v[0], v[1], v[2], v[3] };
-                        result.hasValue = true;
-                    }
-                }
-                else if (typeName == SdfValueTypeNames->Float)
-                {
-                    float v = 0.f;
-                    if (input.Get(&v))
-                    {
-                        result.value    = { v, v, v, v };
-                        result.hasValue = true;
-                    }
-                }
-            };
-                        
             // 2. For all other inputs, get the Surface Shader
-            UsdShadeShader surfaceShader = material.ComputeSurfaceSource(TfToken("glslfx"));
+            UsdShadeShader surfaceShader = findSurfaceShader(material);
             if (!surfaceShader)
             {
                 FillEmptyShaderInputResult(result, inputName);
@@ -171,44 +230,19 @@ namespace tl
                 return result;
             }
 
-            // 4. Trace the connection to a texture node
-            UsdShadeConnectableAPI source;
-            TfToken                sourceName;
-            UsdShadeAttributeType  sourceType;
-
-            if (UsdShadeConnectableAPI::GetConnectedSource(
-                    shaderInput.GetAttr(), &source, &sourceName, &sourceType))
+            // 4. Trace the connection to a texture node traversing through NodeGraphs
+            auto prodAttrs = shaderInput.GetValueProducingAttributes();
+            for (const UsdAttribute& attr : prodAttrs) 
             {
-                UsdShadeShader textureShader(source.GetPrim());
-                UsdShadeInput  fileInput = textureShader.GetInput(TfToken("file"));
-                if (fileInput)
-                {
-                    SdfAssetPath assetPath;
-                    if (fileInput.Get(&assetPath))
-                    {
-                        // Access the wrapS and wrapT inputs
-                        UsdShadeInput wrapSInput = textureShader.GetInput(TfToken("wrapS"));
-                        UsdShadeInput wrapTInput = textureShader.GetInput(TfToken("wrapT"));
-
-                        // Get S and T border wrapping (clamp, repeat, black, mirror, etc)
-                        TfToken sVal, tVal;
-                        if (wrapSInput && wrapSInput.Get(&sVal)) {
-                            result.borderU = getBorder(sVal);
-                        }
-                        if (wrapTInput && wrapTInput.Get(&tVal)) {
-                            result.borderV = getBorder(sVal);
-                        }
-
-                        // Get the channel of the connection
-                        result.channel = sourceName.GetString();
-    
-                        result.texturePath = assetPath.GetResolvedPath();
-                        if (debug && !result.texturePath.empty())
-                        {
-                            std::cout << "\t" << inputName << " has " << result.texturePath << std::endl;
-                        }
-                        return result;                      // texture found — done
+                if (debug) {
+                    std::cout << "Inspecting Prim: " << attr.GetPrim().GetPath() << " | Attr: " << attr.GetName() << std::endl;
+                    for (auto& input : UsdShadeShader(attr.GetPrim()).GetInputs()) {
+                        std::cout << "  - Found Input: " << input.GetFullName() << std::endl;
                     }
+                }
+                
+                if (extractTextureParams(attr)) {
+                    return result; // Texture found and extracted
                 }
             }
 
@@ -217,6 +251,7 @@ namespace tl
 
             return result;
         }
+        
 
         float GetShaderFloatValue(const UsdShadeMaterial& material,
                                   const TfToken&   inputName,
@@ -224,7 +259,7 @@ namespace tl
                                   const bool       debug = false)
         {
             float out = defaultValue;
-            UsdShadeShader surfaceShader = material.ComputeSurfaceSource(TfToken("glslfx"));
+            UsdShadeShader surfaceShader = findSurfaceShader(material);
             if (!surfaceShader)
             {
                 return out;
@@ -287,7 +322,7 @@ namespace tl
                                UsdTraverseInstanceProxies());
             std::cout << "Started Reading materials..." << std::endl;
 
-            bool debug = false;
+            bool debug = DEBUG_MATERIALS;
             std::unordered_map<std::string, UsdShadeMaterial> usedMaterials;
 
             for (const UsdPrim& prim : range)
@@ -299,7 +334,7 @@ namespace tl
                 UsdShadeMaterial mat = usd::GetMaterial(api);
                 if (mat)
                 {
-                    std::string key = mat.GetPrim().GetPath().GetString();
+                    std::string key = mat.GetPath().GetString();
                     usedMaterials[key] = mat;
                 }
 
@@ -316,7 +351,7 @@ namespace tl
                         UsdShadeMaterial mat = usd::GetMaterial(subApi);
                         if (mat)
                         {
-                            std::string key = mat.GetPrim().GetPath().GetString();
+                            std::string key = mat.GetPath().GetString();
                             usedMaterials[key] = mat;
                         }
                     }

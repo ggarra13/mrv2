@@ -10,7 +10,10 @@ namespace tl
         inline pxr::UsdShadeMaterial GetMaterial(pxr::UsdShadeMaterialBindingAPI& api)
         {
             pxr::UsdShadeMaterial out;
-#if 1
+
+            // If we don't specify a purpose, we cam get a barebone scenes with almost no textures (ALab scene for example)
+            // In preview mode, the ALab scene has all sort of UV texturing
+            // issues.
             for (auto purpose : {
                     pxr::UsdShadeTokens->full,
                     pxr::UsdShadeTokens->preview })
@@ -19,10 +22,6 @@ namespace tl
                 if (out)
                     break;
             }
-#else
-            /// If we don't specify a purpose, we get a barebone scenes with almost no textures
-            out = api.ComputeBoundMaterial();
-#endif
             return out;
         }
     }

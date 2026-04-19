@@ -42,10 +42,14 @@
 #include <pxr/imaging/hdx/tokens.h>
 #include <pxr/imaging/hdx/types.h>
 
-// Primitive types
+// Primitive types (refactor all this to scene traversal)
 #include <pxr/usd/usdGeom/basisCurves.h>
 #include <pxr/usd/usdGeom/bboxCache.h>
 #include <pxr/usd/usdGeom/camera.h>
+#include <pxr/usd/usdGeom/capsule.h>
+#include <pxr/usd/usdGeom/cone.h>
+#include <pxr/usd/usdGeom/cube.h>
+#include <pxr/usd/usdGeom/cylinder.h>
 #include <pxr/usd/usdGeom/metrics.h>
 #include <pxr/usd/usdGeom/nurbsCurves.h>
 #include <pxr/usd/usdGeom/nurbsPatch.h>
@@ -242,15 +246,24 @@ namespace tl
                 std::size_t opaque = 0;
                 std::size_t transparent = 0;
 
-                // Primitive types
+                // Total scene triangles
                 std::size_t triangles = 0;
+                
+                // Main Primitive types
                 std::size_t meshes = 0;
                 std::size_t subdivs = 0;
                 std::size_t nurbs = 0;
                 std::size_t nurbsCurves = 0;
                 std::size_t basisCurves = 0;
                 std::size_t points = 0;
+
+                // Not common primitives
+                std::size_t capsules = 0;
+                std::size_t cones = 0;
+                std::size_t cubes = 0;
+                std::size_t cylinders = 0;
                 std::size_t spheres = 0;
+                
                 std::size_t textures = 0;
                 
                 std::size_t skeletons = 0;
@@ -261,20 +274,22 @@ namespace tl
                         triangles = meshes = subdivs = nurbs = 0;
                         nurbsCurves = basisCurves = 0;
                         points = 0;
-                        spheres = 0;
+                        capsules = cones = cubes = cylinders = spheres = 0;
                         skeletons = 0;
                     }
 
                 void print(std::ostream& o)
                     {
-                        o << "        Total = " << total << std::endl
-                          << "       Opaque = " << opaque << std::endl
-                          << "  Transparent = " << transparent
-                          << std::endl
+                        o << "---------------------------------------------------"
                           << std::endl
                           << "    Triangles = " << triangles
                           << std::endl
                           << "    Textures  = " << textures
+                          << std::endl
+                          << std::endl
+                          << "        Total = " << total << std::endl
+                          << "       Opaque = " << opaque << std::endl
+                          << "  Transparent = " << transparent
                           << std::endl
                           << std::endl
                           << "       Meshes = " << meshes << std::endl
@@ -287,7 +302,11 @@ namespace tl
                           << "       Points = " << points << std::endl
                           << "    Skeletons = " << skeletons
                           << std::endl
-                          << "      spheres = " << spheres
+                          << "     Capsules = " << capsules << std::endl
+                          << "        Cones = " << cones << std::endl
+                          << "        Cubes = " << cubes << std::endl
+                          << "    Cylinders = " << cylinders << std::endl
+                          << "      Spheres = " << spheres << std::endl
                           << std::endl;
                     }
             };
@@ -835,10 +854,10 @@ namespace tl
                 }
             }
             
-            shaderId = "dummy";
+            shaderId = "st";
             if (usdMaterial)
             {
-                std::string materialPath = usdMaterial.GetPrim().GetPath().GetString();
+                std::string materialPath = usdMaterial.GetPath().GetString();
         
                 auto i = p.textures.find(materialPath);
                 if (i != p.textures.end())
@@ -1065,9 +1084,11 @@ namespace tl
                     color.a = colors[0][3];
                 }
 
+                
                 std::string shaderId;
                 if (it->IsA<UsdGeomMesh>())
                 {
+                    p.stats.total++;
                     p.stats.meshes++;
 
                     UsdGeomMesh usdMesh = UsdGeomMesh(*it);
@@ -1075,48 +1096,69 @@ namespace tl
                 }
                 else if (it->IsA<UsdGeomNurbsPatch>())
                 {
+                    p.stats.total++;
                     p.stats.nurbs++; 
                     UsdGeomNurbsPatch out = UsdGeomNurbsPatch(*it);
                 }
                 else if (it->IsA<UsdGeomNurbsCurves>())
                 {
+                    p.stats.total++;
                     p.stats.nurbsCurves++; 
                     UsdGeomNurbsCurves out = UsdGeomNurbsCurves(*it);
                 }
                 else if (it->IsA<UsdGeomBasisCurves>())
                 {
+                    p.stats.total++;
                     p.stats.basisCurves++; 
                     UsdGeomBasisCurves out = UsdGeomBasisCurves(*it);
                 }
                 else if (it->IsA<UsdGeomSphere>())
                 {
+                    p.stats.total++;
                     p.stats.spheres++;
                     UsdGeomSphere out = UsdGeomSphere(*it);
                     float radius = 1;
                     out.GetRadiusAttr().Get(&radius, p.time);
                     auto geom = geom::sphere(radius, 16, 16);
-                    const bool hasUVs = !geom.t.empty();
                     
                     std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
                     std::string shaderId = "dummy";
-                    if (hasUVs)
-                    {
-                        UsdShadeMaterialBindingAPI api(*it);
-                        UsdShadeMaterial material = usd::GetMaterial(api);
+                    UsdShadeMaterialBindingAPI api(*it);
+                    UsdShadeMaterial material = usd::GetMaterial(api);
 
-                        const std::string materialPath = material.GetPath().GetString();
+                    const std::string materialPath =
+                        material.GetPrim().GetPath().GetString();
         
-                        auto i = p.textures.find(materialPath);
-                        if (i != p.textures.end())
-                        {
-                            textures = i->second;
-                            shaderId = "UsdShaderPreview";
-                        }
+                    auto i = p.textures.find(materialPath);
+                    if (i != p.textures.end())
+                    {
+                        textures = i->second;
+                        shaderId = "UsdShaderPreview";
                     }
 
                     MeshOptimization opt;
                     p.render->drawMesh(geom, opt, modelMatrix, color,
                                        shaderId, textures);
+                }
+                else if (it->IsA<UsdGeomCube>())
+                {
+                    p.stats.total++;
+                    p.stats.cubes++;
+                }
+                else if (it->IsA<UsdGeomCylinder>())
+                {
+                    p.stats.total++;
+                    p.stats.cylinders++;
+                }
+                else if (it->IsA<UsdGeomCapsule>())
+                {
+                    p.stats.total++;
+                    p.stats.capsules++;
+                }
+                else if (it->IsA<UsdGeomCone>())
+                {
+                    p.stats.total++;
+                    p.stats.cones++;
                 }
                 // \@todo: handle cylinder, etc...
             }
