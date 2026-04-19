@@ -11,12 +11,14 @@ namespace tl
         {
             pxr::UsdShadeMaterial out;
 
-            // If we don't specify a purpose, we cam get a barebone scenes with almost no textures (ALab scene for example)
+            // If we don't specify a purpose, we get a barebone scenes with almost no textures (ALab scene for example)
             // In preview mode, the ALab scene has all sort of UV texturing
             // issues.
             for (auto purpose : {
-                    pxr::UsdShadeTokens->full,
-                    pxr::UsdShadeTokens->preview })
+                    pxr::UsdShadeTokens->preview,  // preview returns all preview textures for Storm (ALab has 974 textures)
+                    pxr::UsdShadeTokens->full,  // (ALab 29 textures on my small scene as I have not downloaded the high-res texture pack)
+                }
+                )
             {
                 out = api.ComputeBoundMaterial(purpose);
                 if (out)

@@ -4,30 +4,29 @@
 
 
 set(HEADERS
-    #USD.h
-    #USDPrivate.h
     VAOPool.h
     USDCollectTextures.h
     USDGetMaterials.h
-    #    USDProcessSkeletonRoot.h
     USDRender.h
     USDRenderEngine.h
     USDRenderShadersBinary.h
     USDResolveTexture.h
+
+    usd/material.h
+    usd/primvars.h
 )
 set(SOURCES
-    #USD.cpp
-    #USDRead.cpp
     VAOPool.cpp
     USDCollectTextures.cpp
     USDGetMaterials.cpp
-    #    USDProcessSkeletonRoot.cpp
     USDRender.cpp
     USDRenderEngine.cpp
     USDRenderPrims.cpp
     USDRenderShaders.cpp
     USDRenderVulkan.cpp
     USDResolveTexture.cpp
+
+    usd/primvars.cpp
     main.cpp)
 
 find_package(Vulkan REQUIRED)

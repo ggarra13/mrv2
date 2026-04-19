@@ -57,9 +57,8 @@ namespace tl
             std::weak_ptr<system::Context> context;
             math::Box2i viewport;
 
-            math::Vector3f   cameraPosition;
-            math::Matrix4x4f transform;
-            math::Matrix4x4f viewMatrix;
+            math::Matrix4x4f transform;    // vp
+            math::Matrix4x4f viewMatrix;   // view
             
             bool clipRectEnabled = false;
             math::Box2i clipRect;
@@ -84,23 +83,6 @@ namespace tl
                 pipelines;
             std::unordered_map<std::string, std::shared_ptr<vlk::VBO> > vbos;
             std::unordered_map<std::string, std::shared_ptr<vlk::VAO> > vaos;
-
-            std::chrono::steady_clock::time_point timer;
-            struct Stats
-            {
-                int time = 0;
-                size_t rects = 0;
-                size_t meshes = 0;
-                size_t meshTriangles = 0;
-                size_t text = 0;
-                size_t textTriangles = 0;
-                size_t textures = 0;
-                size_t images = 0;
-                size_t pipelineChanges = 0;
-            };
-            Stats currentStats;
-            std::list<Stats> stats;
-            std::chrono::steady_clock::time_point logTimer;
         };
         
     } // namespace usd

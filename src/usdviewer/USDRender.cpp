@@ -44,7 +44,6 @@ namespace tl
             TLRENDER_P();
 
             p.context = context;
-            p.logTimer = std::chrono::steady_clock::now();
         }
 
         Render::Render(Fl_Vk_Context& context) :
@@ -147,8 +146,6 @@ namespace tl
         {
             TLRENDER_P();
 
-            p.timer = std::chrono::steady_clock::now();
-
             p.renderSize = renderSize;
             p.renderOptions = renderOptions;
 
@@ -179,8 +176,6 @@ namespace tl
                     ctx, vertexDummy(), fragmentDummy(), "dummy");
                 p.shaders["dummy"]->createUniform(
                     "transforms", transforms, vlk::kShaderVertex);
-                USDSceneParameters scene;
-                p.shaders["dummy"]->createUniform("scene", scene);
                 p.shaders["dummy"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["dummy"]);
             }
@@ -211,8 +206,6 @@ namespace tl
                 p.shaders["usd"]->addTexture("u_OpacityMap");
                 p.shaders["usd"]->addTexture("u_OpacityThresholdMap");
                 p.shaders["usd"]->addTexture("u_IorMap");
-                USDSceneParameters scene;
-                p.shaders["usd"]->createUniform("scene", scene);
                 _createBindingSet(p.shaders["usd"]);
             }
             
@@ -386,11 +379,6 @@ namespace tl
             return _p->transform;
         }
 
-        void Render::setCameraWorldPosition(const math::Vector3f& value)
-        {
-            _p->cameraPosition = value;
-        }
-        
         void Render::setTransform(const math::Matrix4x4f& value)
         {
             _p->transform = value;

@@ -32,9 +32,6 @@ namespace tl
             size_t triangleCount = mesh.triangles.size();
             if (triangleCount == 0) return;
 
-            ++(p.currentStats.meshes);
-            p.currentStats.meshTriangles += triangleCount;
-
             vlk::VBOType type = vlk::VBOType::Pos3_F32;
             if (!mesh.t.empty() && !mesh.n.empty() && !mesh.c.empty())
             {
@@ -188,18 +185,14 @@ namespace tl
                 
                 p.shaders[shaderName]->bind(p.frameIndex);
             }
-            else if (textures.empty())
+            else if (textures.empty() || shaderId == "dummy")
             {
                 shaderName = "dummy";
                 pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);
                 
-                p.shaders[shaderName]->bind(p.frameIndex);
-                
-                USDSceneParameters scene;
-                scene.camPos = p.cameraPosition;
-                p.shaders[shaderName]->setUniform("scene", scene);
+                p.shaders[shaderName]->bind(p.frameIndex);                
             }
             else if (shaderId == "UsdPreviewSurface")
             {
@@ -236,10 +229,6 @@ namespace tl
                 
                 i = textures.find(USD_IorMap);
                 p.shaders[shaderName]->setTexture("u_IorMap", i->second);
-
-                USDSceneParameters scene;
-                scene.camPos = p.cameraPosition;
-                p.shaders[shaderName]->setUniform("scene", scene);
             }
             else
             {

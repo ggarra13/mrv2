@@ -12,6 +12,7 @@
 #include "USDTransparentPrimitive.h"
 
 #include "usd/material.h"
+#include "usd/primvars.h"
 #include "usd/primvarSampler.h"
 
 #include "USDRenderEngine.h"
@@ -44,7 +45,7 @@
 #include <pxr/imaging/hdx/tokens.h>
 #include <pxr/imaging/hdx/types.h>
 
-// Primitive types (refactor all this to scene traversal)
+// Primitive types (refactor all this for scene traversal)
 #include <pxr/usd/usdGeom/basisCurves.h>
 #include <pxr/usd/usdGeom/bboxCache.h>
 #include <pxr/usd/usdGeom/camera.h>
@@ -649,25 +650,48 @@ namespace tl
             geom::TriangleMesh3 geom;
             MeshOptimization meshOptimization;
 
-            // Get points.
-            geom.v.reserve(points.size());
-            for (int i = 0; i < points.size(); ++i)
+            std::vector<usd::PrimvarAndType> primvarsAndType = usd::GetPrimvars(usdMesh.GetPrim());
+
+            for (const auto& pvt : primvarsAndType)
             {
-                const auto& p = points[i];
-                geom.v.emplace_back(math::Vector3f(p[0], p[1], p[2]));
-            }
+                const UsdGeomPrimvar& pv = pvt.pv;
+                const TfToken& type = pvt.type;
 
-            UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
-
-            // Get Normals if any.
-            UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
-            if (normalsPrimvar.IsDefined()) {
-                
-                usd::PrimvarSampler<GfVec3f> sampler(normalsPrimvar);
-                if (sampler.IsValid()) {
-                    int faceCornerIdx = 0; 
-                    for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
-                         ++faceIdx) {
+                if (type == TfToken("st"))
+                {
+                    // Get STs if any.
+                    usd::PrimvarSampler<GfVec2f> sampler(pv);
+                    if (sampler.IsValid())
+                    {
+                        int faceCornerIdx = 0; 
+                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                             ++faceIdx) {
+                            int vertCount = faceVertexCounts[faceIdx];
+                            
+                            for (int i = 0; i < vertCount; ++i) {
+                                int cornerIdx = faceCornerIdx + i;
+                                int pointIdx = faceVertexIndices[cornerIdx];
+                            
+                                GfVec2f uv = sampler.Sample(faceIdx, cornerIdx, pointIdx);
+                                
+                                if (uv[0] < 0.F || uv[0] > 1.F ||
+                                    uv[1] < 0.F || uv[1] > 1.F)
+                                    meshOptimization.floatUVs = true;
+                                
+                                geom.t.emplace_back(math::Vector2f(uv[0], 1.0F - uv[1]));
+                            }
+                            faceCornerIdx += vertCount;
+                        }
+                    }
+                }
+                else if (type == TfToken("normal"))
+                {
+                    // Get Normals if any.
+                    usd::PrimvarSampler<GfVec3f> sampler(pv);
+                    if (sampler.IsValid()) {
+                        int faceCornerIdx = 0; 
+                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                             ++faceIdx) {
                         int vertCount = faceVertexCounts[faceIdx];
                         
                         for (int i = 0; i < vertCount; ++i) {
@@ -684,42 +708,56 @@ namespace tl
                             geom.n.emplace_back(math::Vector3f(n[0], n[1], n[2]));
                         }
                         faceCornerIdx += vertCount;
+                        }
                     }
                 }
-            }
-            
-            //
-            // Get UVs (st)
-            //
-            UsdGeomPrimvar st = primvarsAPI.GetPrimvar(TfToken("st"));
-            if (st.IsDefined()) {
-                usd::PrimvarSampler<GfVec2f> sampler(st);
-                if (sampler.IsValid())
+                else if (type == TfToken("color"))
                 {
-                    int faceCornerIdx = 0; 
-                    for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
-                         ++faceIdx) {
+                    usd::PrimvarSampler<GfVec3f> sampler(pv);
+                    if (sampler.IsValid()) {
+                        int faceCornerIdx = 0; 
+                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                             ++faceIdx) {
                         int vertCount = faceVertexCounts[faceIdx];
                         
                         for (int i = 0; i < vertCount; ++i) {
                             int cornerIdx = faceCornerIdx + i;
                             int pointIdx = faceVertexIndices[cornerIdx];
 
-                            GfVec2f uv = sampler.Sample(faceIdx, cornerIdx, pointIdx);
+                            GfVec3f c = sampler.Sample(faceIdx, cornerIdx, pointIdx);
                             
-                            if (uv[0] < 0.F || uv[0] > 1.F ||
-                                uv[1] < 0.F || uv[1] > 1.F)
-                                meshOptimization.floatUVs = true;
-                                
-                            geom.t.emplace_back(math::Vector2f(uv[0], 1.0F - uv[1]));
+                            if (c[0] < 0.F || c[0] > 1.F ||
+                                c[1] < 0.F || c[1] > 1.F ||
+                                c[2] < 0.F || c[2] > 1.F ||
+                                c[3] < 0.F || c[3] > 1.F)
+                                meshOptimization.floatColors = true;
+                            
+                            geom.c.emplace_back(
+                                math::Vector4f(c[0], c[1], c[2], c[3]));
                         }
                         faceCornerIdx += vertCount;
+                        }
                     }
+                }
+                else
+                {
+                    std::cerr << "Unknown type for primvar type="
+                              << type.GetString()
+                              << std::endl;
                 }
             }
             
             // Get triangles.
             int indexOffset = 0;
+
+            // Get points.
+            geom.v.reserve(points.size());
+            for (int i = 0; i < points.size(); ++i)
+            {
+                const auto& p = points[i];
+                geom.v.emplace_back(math::Vector3f(p[0], p[1], p[2]));
+            }
+            
             const bool hasNormals = !geom.n.empty();
             const bool hasUVs = !geom.t.empty();
             
@@ -789,17 +827,17 @@ namespace tl
             shaderId = "st";
             if (usdMaterial)
             {
-                std::string materialPath = usdMaterial.GetPath().GetString();
+                std::string materialPath = usdMaterial.GetPrim().GetPath().GetString();
         
                 auto i = p.textures.find(materialPath);
                 if (i != p.textures.end())
                 {
                     textures = i->second;
-                    auto j = p.materials.find(materialPath);
-                    if (j != p.materials.end())
-                    {
-                        material = j->second;
-                    }
+                }
+                auto j = p.materials.find(materialPath);
+                if (j != p.materials.end())
+                {
+                    material = j->second;
                     shaderId = "UsdPreviewSurface";
                 }
             }
@@ -891,6 +929,8 @@ namespace tl
 
             const GfFrustum frustum = gfCamera.GetFrustum();
             const GfVec3d cameraPos = frustum.GetPosition();
+            const math::Vector3f camPos(cameraPos[0], cameraPos[1],
+                                        cameraPos[2]);
     
             const GfMatrix4d& gfViewMatrix = frustum.ComputeViewMatrix();
             const GfMatrix4d& gfProjectionMatrix = frustum.ComputeProjectionMatrix();
@@ -937,10 +977,6 @@ namespace tl
             
             p.render->begin(cmd, p.buffer, frameIndex, renderSize,
                             renderOptions);
-            const math::Vector3f camPos = math::Vector3f(cameraPos[0],
-                                                         cameraPos[1],
-                                                         cameraPos[2]);
-            p.render->setCameraWorldPosition(camPos);
             p.render->setViewMatrix(viewMatrix);
             p.render->applyTransforms();
             p.render->beginLoadRenderPass();
@@ -1003,12 +1039,13 @@ namespace tl
                                                    matrix[3][0], matrix[3][1],
                                                    matrix[3][2], matrix[3][3]);
         
+
+                image::Color4f color(1, 1, 1);
+                
                 VtArray<GfVec3f> colors;
                 UsdGeomGprim gprim(*it);
                 if (gprim)
                     gprim.GetDisplayColorAttr().Get(&colors);
-
-                image::Color4f color(0.5F, 0.5F, 0.5F);
 
                 if (colors.size() == 1)
                 {
@@ -1017,7 +1054,7 @@ namespace tl
                     color.b = colors[0][2];
                     color.a = colors[0][3];
                 }
-
+                
                 
                 std::string shaderId;
                 if (it->IsA<UsdGeomMesh>())

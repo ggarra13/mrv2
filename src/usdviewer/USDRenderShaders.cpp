@@ -39,11 +39,7 @@ layout(location = 0) out vec4 outColor;
                   
 layout(push_constant) uniform PushConstants {
     vec4 color;
-} pc;       
-                 
-layout(set = 0, binding = 1, std140) uniform Scene {
-     vec3 camPos;
-} scene;
+} pc;
 
 void main()
 {
@@ -52,7 +48,7 @@ void main()
     vec3 N = normalize(cross(dx, dy));
 
     // Simple light direction
-    vec3 V = normalize(Peye - scene.camPos);
+    vec3 V = normalize(Peye);
     vec3 L = V;
 
     // Diffuse (Lambert)
@@ -109,10 +105,6 @@ layout(binding = 6) uniform sampler2D u_AOMap;
 layout(binding = 7) uniform sampler2D u_OpacityMap;
 layout(binding = 8) uniform sampler2D u_OpacityThresholdMap;
 layout(binding = 9) uniform sampler2D u_IorMap;
-
-layout(set = 0, binding = 10, std140) uniform Scene {
-     vec3 camPos;
-} scene;
 
 layout(location = 0) out vec4 outColor;
                   
@@ -177,7 +169,7 @@ void main()
 
     float opacity   = texture(u_OpacityMap, st).a;
     float opacityThreshold = texture(u_OpacityThresholdMap, st).r;
-    if (opacity < opacityThreshold)
+    if (opacity < opacityThreshold || opacity < 0.05)
     {
        discard;
     }
@@ -200,7 +192,7 @@ void main()
     vec3 N = normalize(TBN * Nt);
 
     // ── View / Light / Half vectors (Hydra eye-space style) ──
-    vec3 V = normalize(Peye - scene.camPos);
+    vec3 V = normalize(Peye);
     vec3 L = V;
     vec3 H = normalize(L + V);
 
@@ -254,16 +246,13 @@ void main()
     outColor = vec4(color, opacity);
 
     // VERIFIED: albedo and ao are okay.
-    // outColor = vec4(albedo, 1.0);
+    //outColor = vec4(albedo, 1.0);
 
     // VERIFIED: Ambient occlusion works correctly
-    // outColor = vec4(ambient, opacity);
-
-    // VERIFIED: normal (N) is faceted but correct!
-    // outColor = vec4((N + 1) / 2, opacity);
+    //outColor = vec4(ambient, opacity);
 
     // VERIFIED: diffuse is correct for metallic
-    //outColor = vec4(diffuse, opacity);
+    // outColor = vec4(diffuse, opacity);
 
     // VERIFIED: specular is correct 
     // outColor = vec4(specular, opacity);
@@ -271,7 +260,7 @@ void main()
     // VERIFIED: opacity works correctly.
     // outColor = vec4(vec3(opacity), opacity);
 
-    // INCORRECT: normal mapping does not work correctly.
+    // VERIFIED: normal mapping works correctly.
 
 })";
         }
@@ -281,6 +270,7 @@ void main()
             return R"(#version 450
 layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec2 vTexture;
+
 layout(location = 0) out vec2 fTexture;
 layout(location = 1) out vec3 fragPosition;
 

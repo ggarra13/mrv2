@@ -259,8 +259,6 @@ namespace tl
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
             p.currentPipeline = pipelineName;
-            
-            ++(p.currentStats.pipelineChanges);
         }
         
         void Render::_bindDescriptorSets(

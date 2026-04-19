@@ -110,8 +110,6 @@ namespace tl
             void setClipRect(const math::Box2i&);
 
 
-            void setCameraWorldPosition(const math::Vector3f&);
-            
             math::Matrix4x4f getTransform() const;
             void setTransform(const math::Matrix4x4f&);
             void setViewMatrix(const math::Matrix4x4f&);

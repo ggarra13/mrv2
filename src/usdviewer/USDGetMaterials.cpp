@@ -25,7 +25,7 @@ namespace tl
             UsdShadeShader findSurfaceShader(const UsdShadeMaterial& material)
             {
                 UsdShadeShader out;
-                TfTokenVector contexts = {
+                static TfTokenVector contexts = {
                     TfToken("glslfx"),
                     TfToken("mtlx"),
                     TfToken("preview"),
@@ -56,42 +56,55 @@ namespace tl
                                             const TfToken& inputName)
             {
                 result.hasValue = true;
-                
-                if (inputName == TfToken("diffuseColor") || // ok
-                    inputName == TfToken("opacity") ||   // ok
-                    inputName == TfToken("occlusion") ||
-                    inputName == TfToken("ior"))      // ok
+    
+                // 1.0 Defaults (Full Intensity / No Occlusion)
+                if (inputName == TfToken("diffuseColor") || 
+                    inputName == TfToken("opacity") ||   
+                    inputName == TfToken("occlusion"))      
                 {
                     result.texturePath = "*white";
-                    result.value    = { 1.F, 1.F, 1.F, 1.F };
+                    result.value = { 1.F, 1.F, 1.F, 1.F };
                 }
-                else if (inputName == TfToken("metallic") ||  // ok 
+                // 0.0 Defaults (Off / Flat)
+                else if (inputName == TfToken("metallic") ||  
                          inputName == TfToken("displacement") ||
                          inputName == TfToken("emissiveColor") ||
-                         inputName == TfToken("opacityThreshold"))     // ok
+                         inputName == TfToken("opacityThreshold") ||
+                         inputName == TfToken("clearcoat")) 
                 {
                     result.texturePath = "*black";
-                    result.value    = { 0.F, 0.F, 0.F, 0.F };
+                    result.value = { 0.F, 0.F, 0.F, 0.F };
                 }
-                else if (inputName == TfToken("roughness"))
+                // Specular/Roughness Defaults (Middle-ground)
+                else if (inputName == TfToken("roughness") || 
+                         inputName == TfToken("clearcoatRoughness"))
                 {
                     result.texturePath = "*middle";
-                    result.value    = { 0.5F, 0.5F, 0.5F, 0.5F };
+                    result.value = { 0.5F, 0.5F, 0.5F, 0.5F };
                 }
-                else if(inputName == TfToken("normal"))  // ok
+                // Normal Map Default (Identity Vector)
+                else if (inputName == TfToken("normal")) 
                 {
-                    // These values make sure the normal is not perturbed.
                     result.texturePath = "*normal";
-                    result.value    = { 0.5F, 0.5F, 1.0F, 1.0F };
+                    result.value = { 0.5F, 0.5F, 1.0F, 1.0F }; // Vector {0, 0, 1} in 0-1 range
+                }
+                // IOR Exception (Standard is 1.5)
+                else if (inputName == TfToken("ior"))
+                {
+                    result.texturePath = "*ior1.5";
+                    result.value = { 1.5F, 1.5F, 1.5F, 1.0F };
                 }
                 else
                 {
-                    std::string err = "Unknown input " + inputName.GetString();
-                    throw std::runtime_error(err);
+                    // Use a warning instead of a throw if you want the renderer to keep running
+                    std::cerr << "Warning: Unknown input "
+                              << inputName.GetString() << std::endl;
+                    result.texturePath = "*black";
+                    result.value = { 0.F, 0.F, 0.F, 1.F };
                 }
             }
         }
-
+            
         ShaderInputResult GetTextureOrValue(const UsdShadeMaterial& material,
                                             const TfToken& inputName,
                                             const UsdTimeCode& time,
@@ -168,14 +181,6 @@ namespace tl
 
                     // 1. Check if this specific node has the file input
                     UsdShadeInput fileInput = nodeShader.GetInput(TfToken("file"));
-                    // if (!fileInput)
-                    // {
-                    //     fileInput = nodeShader.GetInput(TfToken("filename"));
-                    //     if (!fileInput)
-                    //     {
-                    //         fileInput = nodeShader.GetInput(TfToken("inputs:file"));
-                    //     }
-                    // }
 
                     // 2. Base Case: We found the image node!
                     if (fileInput)
@@ -273,13 +278,6 @@ namespace tl
             auto prodAttrs = shaderInput.GetValueProducingAttributes();
             for (const UsdAttribute& attr : prodAttrs) 
             {
-                // if (debug) {
-                //     std::cout << "Inspecting Prim: " << attr.GetPrim().GetPath() << " | Attr: " << attr.GetName() << std::endl;
-                //     for (auto& input : UsdShadeShader(attr.GetPrim()).GetInputs()) {
-                //         std::cout << "  - Found Input: " << input.GetFullName() << std::endl;
-                //     }
-                // }
-                
                 if (extractTextureParamsRec(attr)) {
                     return result; // Texture found and extracted
                 }
@@ -321,7 +319,6 @@ namespace tl
                                const bool debug)
         {
             Material out;
-            
             out.diffuseColor = GetTextureOrValue(material, TfToken("diffuseColor"), time, debug);
             out.emissiveColor = GetTextureOrValue(material, TfToken("emissiveColor"), time, debug);
             out.opacity = GetTextureOrValue(material, TfToken("opacity"), time, debug);
@@ -337,40 +334,31 @@ namespace tl
             if ((!out.opacity.texturePath.empty() &&
                  out.opacity.texturePath != "*white"))
             {
-                std::cerr << "transparent due to opacity texture"
-                          << std::endl;
                 out.transparent = true;
             }
-            
-            if (out.opacity.hasValue &&
+            else if (out.opacity.hasValue &&
                  (out.opacity.value[0] < 0.95F ||
                   out.opacity.value[1] < 0.95F ||
                   out.opacity.value[2] < 0.95F ||
                   out.opacity.value[3] < 0.95F))
             {
-                std::cerr << "transparent due to opacity value"
-                          << std::endl;
                 out.transparent = true;
             }
-                
-            if (!out.opacityThreshold.texturePath.empty() &&
-                out.opacityThreshold.texturePath != "*black")
+            else if (!out.opacityThreshold.texturePath.empty() &&
+                     out.opacityThreshold.texturePath != "*black")
             {
-                std::cerr << "transparent due to opacity threshold texture"
-                          << std::endl;
                 out.transparent = true;
             }
-            
-            if (out.opacityThreshold.hasValue &&
-                (out.opacityThreshold.value[0] > 0.1F ||
-                 out.opacityThreshold.value[1] > 0.1F ||
-                 out.opacityThreshold.value[2] > 0.1F ||
-                 out.opacityThreshold.value[3] > 0.1F))
+            else if (out.opacityThreshold.hasValue &&
+                     (out.opacityThreshold.value[0] > 0.F ||
+                      out.opacityThreshold.value[1] > 0.F ||
+                      out.opacityThreshold.value[2] > 0.F ||
+                      out.opacityThreshold.value[3] > 0.F))
             {
-                std::cerr << "transparent due to opacity threshold value"
-                          << std::endl;
                 out.transparent = true;
             }
+            if (debug && out.transparent)
+                std:: cout << "\t\tMATERIAL IS TRANSPARENT" << std::endl;
             return out;
         }
 
@@ -385,7 +373,6 @@ namespace tl
             std::cout << "Started Reading materials..." << std::endl;
 
             bool debug = DEBUG_MATERIALS;
-            std::unordered_map<std::string, UsdShadeMaterial> usedMaterials;
 
             for (const UsdPrim& prim : range)
             {
@@ -396,8 +383,9 @@ namespace tl
                 UsdShadeMaterial mat = usd::GetMaterial(api);
                 if (mat)
                 {
-                    std::string key = mat.GetPath().GetString();
-                    usedMaterials[key] = mat;
+                    const std::string key = mat.GetPrim().GetPath().GetString();
+                    const Material& result = ParseMaterial(mat, time, debug);
+                    out[key] = result;
                 }
 
                 // subsets
@@ -413,17 +401,28 @@ namespace tl
                         UsdShadeMaterial mat = usd::GetMaterial(subApi);
                         if (mat)
                         {
-                            std::string key = mat.GetPath().GetString();
-                            usedMaterials[key] = mat;
+                            const std::string key = mat.GetPrim().GetPath().GetString();
+                            const Material& result = ParseMaterial(mat, time, debug);
+                            out[key] = result;
                         }
                     }
                 }
             }
 
-            for (auto& [path, material] : usedMaterials)
+            if (debug)
             {
-                Material result = ParseMaterial(material, time, debug);
-                out[path] = result;
+                std::size_t opaque = 0;
+                std::size_t transparent = 0;
+                for (auto& [path, material] : out)
+                {
+                    std::cerr << path << std::endl;
+                    if (material.transparent)
+                        ++transparent;
+                    else
+                        ++opaque;
+                }
+                std::cout << "Opaque materials: " << opaque << std::endl
+                          << "Transparent materials: " << transparent << std::endl;
             }
             std::cout << "Finished Reading " << out.size()
                       << " materials..." << std::endl;

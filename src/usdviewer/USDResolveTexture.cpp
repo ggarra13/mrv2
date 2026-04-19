@@ -102,7 +102,7 @@ namespace tl
             const usd::ShaderInputResult& result)
         {
             using namespace PXR_NS;
-
+            
             std::shared_ptr<vlk::Texture> out;
             const std::string& path = result.texturePath;
 

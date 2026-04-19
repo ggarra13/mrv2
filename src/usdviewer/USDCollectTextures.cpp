@@ -21,31 +21,36 @@ namespace tl
     namespace usd
     {
         using namespace PXR_NS;
+        
+#define GET_SLOT_TEXTURE(INPUT, MAPNAME)                        \
+        {                                                       \
+        const usd::ShaderInputResult  slot = material.INPUT;    \
+        connection = slot.getConnection();                      \
+        if (connection.empty())                                 \
+        {                                                       \
+            texture = vlk::ResolveTexture(ctx, slot);           \
+            textures[MAPNAME] = texture;                        \
+        }                                                       \
+        else                                                    \
+        {                                                       \
+            auto i = textureCache.find(connection);             \
+            if (i == textureCache.end())                        \
+            {                                                   \
+                texture = vlk::ResolveTexture(ctx, slot);       \
+                textureCache[connection] = texture;             \
+                if (!slot.hasValue)                             \
+                    ++numTextures;                              \
+                textures[MAPNAME] = texture;                    \
+            }                                                   \
+            else                                                \
+            {                                                   \
+                textures[MAPNAME] = i->second;                  \
+            }                                                   \
+        }                                                       \
+    }                                                           \
+    
 
-#define GET_SLOT_TEXTURE(input, Map)                                    \
-        {                                                               \
-            const usd::ShaderInputResult& slot = material.input;        \
-            connection = slot.getConnection();                          \
-            auto i = textureCache.find(connection);                     \
-            if (i == textureCache.end())                                \
-            {                                                           \
-                texture = vlk::ResolveTexture(ctx, slot);               \
-                if (!connection.empty())                                \
-                {                                                       \
-                    textureCache[connection] = texture;                 \
-                    if (!slot.hasValue)                                 \
-                        ++numTextures;                                  \
-                }                                                       \
-                textures[Map] = texture;                                \
-            }                                                           \
-            else                                                        \
-            {                                                           \
-                textures[Map] = i->second;                              \
-            }                                                           \
-        }
-
-
-void CollectTextures(Fl_Vk_Context& ctx,
+        void CollectTextures(Fl_Vk_Context& ctx,
                              const std::unordered_map<std::string, Material >& materials,
                              std::unordered_map<std::string, std::shared_ptr<vlk::Texture > >&
                              textureCache,
@@ -59,9 +64,8 @@ void CollectTextures(Fl_Vk_Context& ctx,
             std::size_t numTextures = 0;
             for (const auto& [materialName, material] : materials)
             {
-                   
                 std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-
+                
                 GET_SLOT_TEXTURE(diffuseColor, USD_DiffuseMap);
                 GET_SLOT_TEXTURE(opacity, USD_OpacityMap);
                 GET_SLOT_TEXTURE(metallic, USD_MetallicMap);
