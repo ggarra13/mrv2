@@ -12,6 +12,7 @@
 #include "USDTransparentPrimitive.h"
 
 #include "usd/material.h"
+#include "usd/primvarSampler.h"
 
 #include "USDRenderEngine.h"
 
@@ -226,8 +227,6 @@ namespace tl
             double startTimeCode = 0.F;
             double endTimeCode = 100.F;
             double timeCodesPerSecond = 24.0F;
-
-            // Current time
             UsdTimeCode time = 0;
 
             // Vulkan information.
@@ -636,152 +635,61 @@ namespace tl
 
             UsdGeomPrimvarsAPI primvarsAPI(usdMesh);
 
-#if 0
             // Get Normals if any.
             UsdGeomPrimvar normalsPrimvar = primvarsAPI.GetPrimvar(UsdGeomTokens->normals);
             if (normalsPrimvar.IsDefined()) {
                 
-                VtArray<GfVec3f> normals;
-                normalsPrimvar.ComputeFlattened(&normals, p.time);
-                
-                TfToken interp = normalsPrimvar.GetInterpolation();
-                std::cout << "Normals count: " << normals.size()
-                          << "  interpolation: " << interp << "\n";
+                usd::PrimvarSampler<GfVec3f> sampler(normalsPrimvar);
+                if (sampler.IsValid()) {
+                    int faceCornerIdx = 0; 
+                    for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                         ++faceIdx) {
+                        int vertCount = faceVertexCounts[faceIdx];
+                        
+                        for (int i = 0; i < vertCount; ++i) {
+                            int cornerIdx = faceCornerIdx + i;
+                            int pointIdx = faceVertexIndices[cornerIdx];
 
-                // walks faceVertexIndices for faceVarying
-                int faceCornerIdx = 0; 
-
-                for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
-                     ++faceIdx) {
-                    int vertCount = faceVertexCounts[faceIdx];
-
-                    for (int i = 0; i < vertCount; ++i) {
-                        int pointIdx = faceVertexIndices[faceCornerIdx + i];
-                        GfVec3f n;
-
-                        if (interp == UsdGeomTokens->faceVarying) {
-                            // One normal per face-corner, in face-winding order
-                            n = normals[faceCornerIdx + i];
-                        } else if (interp == UsdGeomTokens->vertex) {
-                            // Normal indexed the same way as points
-                            n = normals[pointIdx];
-                        } else if (interp == UsdGeomTokens->uniform) {
-                            // One normal for the entire face
-                            n = normals[faceIdx];
-                        } else {
-                            // constant — one normal for the whole mesh
-                            n = normals[0];
-                        }
-
-                        if (n[0] < -1.F || n[0] > 1.F ||
-                            n[1] < -1.F || n[1] > 1.F ||
-                            n[2] < -1.F || n[2] > 1.F)
-                            meshOptimization.floatNormals = true;
+                            GfVec3f n = sampler.Sample(faceIdx, cornerIdx, pointIdx);
                             
-                        geom.n.emplace_back(math::Vector3f(n[0], n[1], n[2]));
+                            if (n[0] < -1.F || n[0] > 1.F ||
+                                n[1] < -1.F || n[1] > 1.F ||
+                                n[2] < -1.F || n[2] > 1.F)
+                                meshOptimization.floatNormals = true;
+                            
+                            geom.n.emplace_back(math::Vector3f(n[0], n[1], n[2]));
+                        }
+                        faceCornerIdx += vertCount;
                     }
-                    faceCornerIdx += vertCount;
                 }
             }
-#endif
             
             //
             // Get UVs (st)
             //
             UsdGeomPrimvar st = primvarsAPI.GetPrimvar(TfToken("st"));
             if (st.IsDefined()) {
-                
-                VtArray<GfVec2f> values;
-                if (st.Get(&values))
+                usd::PrimvarSampler<GfVec2f> sampler(st);
+                if (sampler.IsValid())
                 {
-                    const TfToken interp = st.GetInterpolation();
-                    
-                    // std::cout << primPath << std::endl;
-                    // std::cout << "\tSTs found=" << values.size()
-                    //           << " interpolation=" << interp
-                    //           << " indexed=" << st.IsIndexed() << std::endl;
-                    if (st.IsIndexed())
-                    {
+                    int faceCornerIdx = 0; 
+                    for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                         ++faceIdx) {
+                        int vertCount = faceVertexCounts[faceIdx];
                         
-                        VtArray<int> indices;
-                        st.GetIndices(&indices);
+                        for (int i = 0; i < vertCount; ++i) {
+                            int cornerIdx = faceCornerIdx + i;
+                            int pointIdx = faceVertexIndices[cornerIdx];
 
-                        std::vector<GfVec2f> expanded(indices.size());
-                        for (size_t i = 0; i < indices.size(); ++i)
-                            expanded[i] = values[indices[i]];
-                        
-                        int faceCornerIdx = 0; 
-
-                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
-                             ++faceIdx) {
-                            int vertCount = faceVertexCounts[faceIdx];
-                                
-                            for (int i = 0; i < vertCount; ++i) {
-                                int pointIdx = faceVertexIndices[faceCornerIdx + i];
-                                GfVec2f uv;
-
-                                if (interp == UsdGeomTokens->faceVarying) {
-                                    // One uv per face-corner, in face-winding order
-                                    uv = expanded[faceCornerIdx + i];
-                                } else if (interp == UsdGeomTokens->vertex ||
-                                           interp == UsdGeomTokens->varying) {
-                                    // UV indexed the same way as points
-                                    uv = expanded[pointIdx];
-                                } else if (interp == UsdGeomTokens->uniform) {
-                                    // One UV for the entire face
-                                    uv = expanded[faceIdx];
-                                } else {
-                                    // constant — one UV for the whole mesh
-                                    uv = expanded[0];
-                                }
-
-                                if (uv[0] < 0.F || uv[0] > 1.F ||
-                                    uv[1] < 0.F || uv[1] > 1.F)
-                                    meshOptimization.floatUVs = true;
-                                
-                                geom.t.emplace_back(math::Vector2f(uv[0], 1.0F - uv[1]));
-                            }
-                            faceCornerIdx += vertCount;
-                        }
-                    }
-                    else
-                    {
-                        int faceCornerIdx = 0;
-                        const bool isFaceVarying =
-                            interp == UsdGeomTokens->faceVarying ||
-                            values.size() == faceVertexIndices.size();
-
-                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
-                             ++faceIdx) {
-                            int vertCount = faceVertexCounts[faceIdx];
-                                
-                            for (int i = 0; i < vertCount; ++i) {
-                                // Linear index of the current corner
-                                int currentCorner = faceCornerIdx + i;
-                                int pointIdx = faceVertexIndices[currentCorner];
-                                GfVec2f uv;
-                                if (isFaceVarying) {
-                                    uv = values[currentCorner];
-                                } else if (interp == UsdGeomTokens->vertex ||
-                                           interp == UsdGeomTokens->varying) {
-                                    // UV indexed the same way as points
-                                    uv = values[pointIdx];
-                                } else if (interp == UsdGeomTokens->uniform) {
-                                    // One UV for the entire face
-                                    uv = values[faceIdx];
-                                } else {
-                                    // constant — one UV for the whole mesh
-                                    uv = values[0];
-                                }
-
-                                if (uv[0] < 0.F || uv[0] > 1.F ||
-                                    uv[1] < 0.F || uv[1] > 1.F)
-                                    meshOptimization.floatUVs = true;
+                            GfVec2f uv = sampler.Sample(faceIdx, cornerIdx, pointIdx);
                             
-                                geom.t.emplace_back(math::Vector2f(uv[0], 1.0f - uv[1]));
-                            }
-                            faceCornerIdx += vertCount;
+                            if (uv[0] < 0.F || uv[0] > 1.F ||
+                                uv[1] < 0.F || uv[1] > 1.F)
+                                meshOptimization.floatUVs = true;
+                                
+                            geom.t.emplace_back(math::Vector2f(uv[0], 1.0F - uv[1]));
                         }
+                        faceCornerIdx += vertCount;
                     }
                 }
             }
@@ -1122,13 +1030,10 @@ namespace tl
                     auto geom = geom::sphere(radius, 16, 16);
                     
                     std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-                    std::string shaderId = "dummy";
                     UsdShadeMaterialBindingAPI api(*it);
                     UsdShadeMaterial material = usd::GetMaterial(api);
 
-                    const std::string materialPath =
-                        material.GetPrim().GetPath().GetString();
-        
+                    const std::string materialPath = material.GetPath().GetString();
                     auto i = p.textures.find(materialPath);
                     if (i != p.textures.end())
                     {
@@ -1160,7 +1065,6 @@ namespace tl
                     p.stats.total++;
                     p.stats.cones++;
                 }
-                // \@todo: handle cylinder, etc...
             }
 
             //
