@@ -107,13 +107,10 @@ layout(binding = 4) uniform sampler2D u_RoughnessMap;
 layout(binding = 5) uniform sampler2D u_NormalMap;
 layout(binding = 6) uniform sampler2D u_AOMap;
 layout(binding = 7) uniform sampler2D u_OpacityMap;
+layout(binding = 8) uniform sampler2D u_OpacityThresholdMap;
+layout(binding = 9) uniform sampler2D u_IorMap;
 
-layout(set = 0, binding = 8, std140) uniform Parameters {
-     float opacityThreshold;
-} param;
-
-
-layout(set = 0, binding = 9, std140) uniform Scene {
+layout(set = 0, binding = 10, std140) uniform Scene {
      vec3 camPos;
 } scene;
 
@@ -179,7 +176,8 @@ void main()
     float u_Material_aoStrength = 1.0;
 
     float opacity   = texture(u_OpacityMap, st).a;
-    if (opacity < param.opacityThreshold)
+    float opacityThreshold = texture(u_OpacityThresholdMap, st).r;
+    if (opacity < opacityThreshold)
     {
        discard;
     }

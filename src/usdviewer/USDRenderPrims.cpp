@@ -230,10 +230,12 @@ namespace tl
                 
                 i = textures.find(USD_OpacityMap);
                 p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
-
-                USDShaderParameters params;
-                params.opacityThreshold = material.opacityThreshold;
-                p.shaders[shaderName]->setUniform("params", params);
+                
+                i = textures.find(USD_OpacityThresholdMap);
+                p.shaders[shaderName]->setTexture("u_OpacityThresholdMap", i->second);
+                
+                i = textures.find(USD_IorMap);
+                p.shaders[shaderName]->setTexture("u_IorMap", i->second);
 
                 USDSceneParameters scene;
                 scene.camPos = p.cameraPosition;

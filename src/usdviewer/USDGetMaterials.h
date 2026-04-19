@@ -34,6 +34,7 @@ namespace tl
 
         void CollectMaterials(Fl_Vk_Context& ctx,
                               const pxr::UsdStageRefPtr stage,
+                              const pxr::UsdTimeCode time,
                               std::unordered_map<std::string,
                               usd::Material >& materials);
     }

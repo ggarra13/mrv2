@@ -16,6 +16,7 @@ namespace tl
             vlk::TextureBorder    borderU = vlk::TextureBorder::ClampToEdge;
             vlk::TextureBorder    borderV = vlk::TextureBorder::ClampToEdge;
             std::string           channel = "rgba";
+            std::string        colorSpace = "srgb";
             
             std::string getConnection() const
                 {
@@ -32,6 +33,7 @@ namespace tl
                             channel == b.channel &&
                             borderU == b.borderU &&
                             borderV == b.borderV &&
+                            colorSpace == b.colorSpace &&
                             value == b.value );
                 }
             
@@ -52,9 +54,10 @@ namespace tl
             ShaderInputResult     normal;
             ShaderInputResult     occlusion;
             ShaderInputResult     displacement;
+            ShaderInputResult     ior;
+            ShaderInputResult     opacityThreshold;
 
             bool                  transparent = false;
-            float                 opacityThreshold = 0.F;
             
             bool operator==(const Material& b) const
                 {
@@ -67,7 +70,8 @@ namespace tl
                         normal == b.normal &&
                         transparent == b.transparent &&
                         emissiveColor == b.emissiveColor &&
-                        opacityThreshold == b.opacityThreshold);
+                        opacityThreshold == b.opacityThreshold &&
+                        ior == b.ior);
                 }
             
             bool operator!=(const Material& b) const

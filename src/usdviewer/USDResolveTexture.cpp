@@ -104,11 +104,16 @@ namespace tl
             using namespace PXR_NS;
 
             std::shared_ptr<vlk::Texture> out;
+            const std::string& path = result.texturePath;
 
-            if (!result.texturePath.empty() && result.texturePath[0] != '*')
+            if (!path.empty() && path[0] != '*')
             {
+                // Detect UDIM
+                bool isUDIM = path.find("<UDIM>") != std::string::npos ||
+                              path.find("%04d") != std::string::npos;
+                
                 // Hio::Image opens the file (or the file inside the .usdz) and reads the header
-                HioImageSharedPtr image = HioImage::OpenForReading(result.texturePath);
+                HioImageSharedPtr image = HioImage::OpenForReading(path);
                 
                 if (image)
                 {

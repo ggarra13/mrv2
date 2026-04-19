@@ -65,14 +65,15 @@ namespace tl
                     inputName == TfToken("opacity") ||   // ok
                     inputName == TfToken("occlusion"))      // ok
                 {
-                    result.texturePath = "*solid";
+                    result.texturePath = "*white";
                     result.value    = { 1.F, 1.F, 1.F, 1.F };
                 }
                 else if (inputName == TfToken("metallic") ||  // ok 
                          inputName == TfToken("displacement") ||
-                         inputName == TfToken("emissiveColor"))     // ok
+                         inputName == TfToken("emissiveColor") ||
+                         inputName == TfToken("opacityThreshold"))     // ok
                 {
-                    result.texturePath = "*empty";
+                    result.texturePath = "*black";
                     result.value    = { 0.F, 0.F, 0.F, 0.F };
                 }
                 else if (inputName == TfToken("roughness"))
@@ -91,6 +92,7 @@ namespace tl
 
         ShaderInputResult GetTextureOrValue(const UsdShadeMaterial& material,
                                             const TfToken& inputName,
+                                            const UsdTimeCode& time,
                                             const bool debug)
         {
             ShaderInputResult result;
@@ -114,7 +116,7 @@ namespace tl
                         typeName == SdfValueTypeNames->Normal3f)
                     {
                         GfVec3f v;
-                        if (input.Get(&v))
+                        if (input.Get(&v, time))
                         {
                             result.value    = { v[0], v[1], v[2], 1.0f };
                             result.hasValue = true;
@@ -124,7 +126,7 @@ namespace tl
                              typeName == SdfValueTypeNames->Float4)
                     {
                         GfVec4f v;
-                        if (input.Get(&v))
+                        if (input.Get(&v, time))
                         {
                             result.value    = { v[0], v[1], v[2], v[3] };
                             result.hasValue = true;
@@ -133,7 +135,7 @@ namespace tl
                     else if (typeName == SdfValueTypeNames->Float)
                     {
                         float v = 0.f;
-                        if (input.Get(&v))
+                        if (input.Get(&v, time))
                         {
                             result.value    = { v, v, v, v };
                             result.hasValue = true;
@@ -161,7 +163,7 @@ namespace tl
                             return false;
                     }
                     SdfAssetPath assetPath;
-                    if (fileInput.Get(&assetPath))
+                    if (fileInput.Get(&assetPath, time))
                     {
                         // Access the wrapS and wrapT inputs
                         UsdShadeInput wrapSInput = textureShader.GetInput(TfToken("wrapS"));
@@ -174,6 +176,12 @@ namespace tl
                         }
                         if (wrapTInput && wrapTInput.Get(&tVal)) {
                             result.borderV = getBorder(tVal); // Fixed: was previously using sVal
+                        }
+
+                        UsdShadeInput colorSpaceInput = textureShader.GetInput(TfToken("sourceColorSpaec"));
+                        if (colorSpaceInput && colorSpaceInput.Get(&sVal))
+                        {
+                            result.colorSpace = sVal.GetString();
                         }
 
                         // Get the channel of the connection (e.g. "outputs:rgb" -> "rgb")
@@ -255,6 +263,7 @@ namespace tl
 
         float GetShaderFloatValue(const UsdShadeMaterial& material,
                                   const TfToken&   inputName,
+                                  const UsdTimeCode& time,
                                   const float      defaultValue = 0.F,
                                   const bool       debug = false)
         {
@@ -271,42 +280,43 @@ namespace tl
                 return out;
             }
             
-            shaderInput.Get(&out);
+            shaderInput.Get(&out, time);
             return out;
         }
 
         
         Material ParseMaterial(const UsdShadeMaterial& material,
+                               const UsdTimeCode& time,
                                const bool debug)
         {
             Material out;
             
-            out.diffuseColor = GetTextureOrValue(material, TfToken("diffuseColor"), debug);
-            out.emissiveColor = GetTextureOrValue(material, TfToken("emissiveColor"), debug);
-            out.opacity = GetTextureOrValue(material, TfToken("opacity"), debug);
-            out.metallic = GetTextureOrValue(material, TfToken("metallic"), debug);
-            out.roughness = GetTextureOrValue(material, TfToken("roughness"), debug);
-            out.normal = GetTextureOrValue(material, TfToken("normal"), debug);
-            out.occlusion = GetTextureOrValue(material, TfToken("occlusion"), debug);
-            out.displacement = GetTextureOrValue(material, TfToken("displacement"), debug);
-
-            out.opacityThreshold = GetShaderFloatValue(material,
-                                                       TfToken("opacityThreshold"),
-                                                       0.F,
-                                                       debug);
-            if (out.opacityThreshold > 0.F)
-            {
-                out.transparent = true;
-            }
-            if (!out.opacity.texturePath.empty() &&
-                out.opacity.texturePath != "*solid")
-            {
-                out.transparent = true;
-            }
-            if ((out.opacity.hasValue &&
+            out.diffuseColor = GetTextureOrValue(material, TfToken("diffuseColor"), time, debug);
+            out.emissiveColor = GetTextureOrValue(material, TfToken("emissiveColor"), time, debug);
+            out.opacity = GetTextureOrValue(material, TfToken("opacity"), time, debug);
+            out.metallic = GetTextureOrValue(material, TfToken("metallic"), time, debug);
+            out.roughness = GetTextureOrValue(material, TfToken("roughness"), time, debug);
+            out.normal = GetTextureOrValue(material, TfToken("normal"), time, debug);
+            out.occlusion = GetTextureOrValue(material, TfToken("occlusion"), time, debug);
+            out.displacement = GetTextureOrValue(material, TfToken("displacement"), time, debug);
+            out.ior = GetTextureOrValue(material, TfToken("ior"), time, debug);
+            out.opacityThreshold = GetTextureOrValue(material,
+                                                     TfToken("opacityThreshold"),
+                                                     time, debug);
+            if ((!out.opacity.texturePath.empty() &&
+                 out.opacity.texturePath != "*white") ||
+                (out.opacity.hasValue &&
                  (out.opacity.value[0] < 0.95F ||
                   out.opacity.value[1] < 0.95F ||
-                  out.opacity.value[2] < 0.95F)))
+                  out.opacity.value[2] < 0.95F ||
+                  out.opacity.value[3] < 0.95F))     ||
+                (!out.opacityThreshold.texturePath.empty() &&
+                 out.opacityThreshold.texturePath != "*black") ||
+                (out.opacityThreshold.hasValue &&
+                 (out.opacityThreshold.value[0] > 0.1F ||
+                  out.opacityThreshold.value[1] > 0.1F ||
+                  out.opacityThreshold.value[2] > 0.1F ||
+                  out.opacityThreshold.value[3] > 0.1F)))
             {
                 out.transparent = true;
             }
@@ -316,6 +326,7 @@ namespace tl
         
         void CollectMaterials(Fl_Vk_Context& ctx,
                               const pxr::UsdStageRefPtr stage,
+                              const pxr::UsdTimeCode time,
                               std::unordered_map<std::string, usd::Material >& out)
         {
             UsdPrimRange range(stage->GetPseudoRoot(),
@@ -360,7 +371,7 @@ namespace tl
 
             for (auto& [path, material] : usedMaterials)
             {
-                Material result = ParseMaterial(material, false);
+                Material result = ParseMaterial(material, time, debug);
                 out[path] = result;
             }
             std::cout << "Finished Reading " << out.size()

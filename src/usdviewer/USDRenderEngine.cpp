@@ -827,7 +827,7 @@ namespace tl
             if (p.collectMaterials)
             {
                 p.collectMaterials = false;
-                usd::CollectMaterials(ctx, p.stage, p.materials);
+                usd::CollectMaterials(ctx, p.stage, p.time, p.materials);
             }
             if (p.collectTextures)
             {
@@ -1120,6 +1120,7 @@ namespace tl
             }
             
             p.time = time;
+            p.collectTextures = true;
         }
 
         void RenderEngine::_bakeJoints()

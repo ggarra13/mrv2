@@ -22,8 +22,30 @@ namespace tl
     {
         using namespace PXR_NS;
 
-        
-        void CollectTextures(Fl_Vk_Context& ctx,
+#define GET_SLOT_TEXTURE(input, Map)                                    \
+        {                                                               \
+            const usd::ShaderInputResult& slot = material.input;        \
+            connection = slot.getConnection();                          \
+            auto i = textureCache.find(connection);                     \
+            if (i == textureCache.end())                                \
+            {                                                           \
+                texture = vlk::ResolveTexture(ctx, slot);               \
+                if (!connection.empty())                                \
+                {                                                       \
+                    textureCache[connection] = texture;                 \
+                    if (!slot.hasValue)                                 \
+                        ++numTextures;                                  \
+                }                                                       \
+                textures[Map] = texture;                                \
+            }                                                           \
+            else                                                        \
+            {                                                           \
+                textures[Map] = i->second;                              \
+            }                                                           \
+        }
+
+
+void CollectTextures(Fl_Vk_Context& ctx,
                              const std::unordered_map<std::string, Material >& materials,
                              std::unordered_map<std::string, std::shared_ptr<vlk::Texture > >&
                              textureCache,
@@ -39,175 +61,18 @@ namespace tl
             {
                    
                 std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-                {
-                    const usd::ShaderInputResult& slot = material.diffuseColor;
-                    connection = slot.getConnection();
-                    auto i = textureCache.find(connection);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!connection.empty())
-                        {
-                            textureCache[connection] = texture;
-                            if (!slot.hasValue)
-                                ++numTextures;
-                        }
-                        textures[USD_DiffuseMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_DiffuseMap] = i->second;
-                    }
-                }
 
-                {
-                    const usd::ShaderInputResult& slot = material.opacity;
-                    connection = slot.getConnection();
-                    auto i = textureCache.find(connection);
-                    i = textureCache.find(connection);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!connection.empty())
-                        {
-                            textureCache[connection] = texture;
-                            if (!slot.hasValue)
-                                ++numTextures;
-                        }
-                        textures[USD_OpacityMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_OpacityMap] = i->second;
-                    }
-                }
-                    
-                {       
-                    const usd::ShaderInputResult& slot = material.metallic;
-                    connection = slot.getConnection();
-                    auto i = textureCache.find(connection);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!connection.empty())
-                        {
-                            textureCache[connection] = texture;
-                            if (!slot.hasValue)
-                                ++numTextures;
-                        }
-                        textures[USD_MetallicMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_MetallicMap] = i->second;
-                    }
-                }
+                GET_SLOT_TEXTURE(diffuseColor, USD_DiffuseMap);
+                GET_SLOT_TEXTURE(opacity, USD_OpacityMap);
+                GET_SLOT_TEXTURE(metallic, USD_MetallicMap);
+                GET_SLOT_TEXTURE(roughness, USD_RoughnessMap);
+                GET_SLOT_TEXTURE(normal, USD_NormalMap);
+                GET_SLOT_TEXTURE(occlusion, USD_OcclusionMap);
+                GET_SLOT_TEXTURE(emissiveColor, USD_EmissiveMap)
+                GET_SLOT_TEXTURE(displacement, USD_DisplacementMap);
+                GET_SLOT_TEXTURE(opacityThreshold, USD_OpacityThresholdMap);
+                GET_SLOT_TEXTURE(ior, USD_IorMap);
 
-                {
-                    const usd::ShaderInputResult& slot = material.roughness;
-                    connection = slot.getConnection();
-                    auto i = textureCache.find(connection);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!connection.empty())
-                        {
-                            textureCache[connection] = texture;
-                            if (!slot.hasValue)
-                                ++numTextures;
-                        }
-                        textures[USD_RoughnessMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_RoughnessMap] = i->second;
-                    }
-                }
-
-                {
-                    const usd::ShaderInputResult& slot = material.normal;
-                    connection = slot.getConnection();
-                    auto i = textureCache.find(connection);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!connection.empty())
-                        {
-                            textureCache[connection] = texture;
-                            if (!slot.hasValue)
-                                ++numTextures;
-                        }
-                        textures[USD_NormalMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_NormalMap] = i->second;
-                    }
-                }
-
-                {
-                    const usd::ShaderInputResult& slot = material.occlusion;
-                    connection = slot.getConnection();
-                    auto i = textureCache.find(connection);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!connection.empty())
-                        {
-                            textureCache[connection] = texture;
-                            if (!slot.hasValue)
-                                ++numTextures;
-                        }
-                        textures[USD_OcclusionMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_OcclusionMap] = i->second;
-                    }
-                }
-
-                {
-                    const usd::ShaderInputResult& slot = material.emissiveColor;
-                    connection = slot.getConnection();
-                    auto i = textureCache.find(connection);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!connection.empty())
-                        {
-                            textureCache[connection] = texture;
-                            if (!slot.hasValue)
-                                ++numTextures;
-                        }
-                        textures[USD_EmissiveMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_EmissiveMap] = i->second;
-                    }
-                }
-            
-                {
-                    const usd::ShaderInputResult& slot = material.displacement;
-                    connection = slot.getConnection();
-                    auto i = textureCache.find(connection);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!connection.empty())
-                        {
-                            textureCache[connection] = texture;
-                            if (!slot.hasValue)
-                                ++numTextures;
-                        }
-                        textures[USD_DisplacementMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_DisplacementMap] = i->second;
-                    }
-                }
-                    
                 collectedTextures[materialName] = textures;
             }
             
