@@ -138,15 +138,24 @@ namespace tl
                     }
                 };
 
-            // ------------------------------------------------------------------
+            // -----------------------------------------------------------------
             // Helper: Extract texture parameters from a producing attribute
-            // ------------------------------------------------------------------
-            // ------------------------------------------------------------------
-            // Helper: Extract texture params by recursively walking upstream
-            // ------------------------------------------------------------------
+            // -----------------------------------------------------------------
+            std::unordered_set<std::string> visitedPrims;
+            
             std::function<bool(const UsdAttribute&)> extractTextureParamsRec;
             extractTextureParamsRec = [&](const UsdAttribute& upstreamAttr) -> bool
                 {
+                    UsdPrim prim = upstreamAttr.GetPrim();
+                    if (!prim) return false;
+
+                    // 1. Cycle Detection: Check if we've already visited this prim
+                    std::string primPath = prim.GetPath().GetString();
+                    if (visitedPrims.find(primPath) != visitedPrims.end()) {
+                        return false; // Back out, we've already evaluated this node
+                    }
+                    visitedPrims.insert(primPath); // Mark as visited
+                    
                     UsdShadeShader nodeShader(upstreamAttr.GetPrim());
                     if (!nodeShader) return false;
 
@@ -257,12 +266,12 @@ namespace tl
             auto prodAttrs = shaderInput.GetValueProducingAttributes();
             for (const UsdAttribute& attr : prodAttrs) 
             {
-                if (debug) {
-                    std::cout << "Inspecting Prim: " << attr.GetPrim().GetPath() << " | Attr: " << attr.GetName() << std::endl;
-                    for (auto& input : UsdShadeShader(attr.GetPrim()).GetInputs()) {
-                        std::cout << "  - Found Input: " << input.GetFullName() << std::endl;
-                    }
-                }
+                // if (debug) {
+                //     std::cout << "Inspecting Prim: " << attr.GetPrim().GetPath() << " | Attr: " << attr.GetName() << std::endl;
+                //     for (auto& input : UsdShadeShader(attr.GetPrim()).GetInputs()) {
+                //         std::cout << "  - Found Input: " << input.GetFullName() << std::endl;
+                //     }
+                // }
                 
                 if (extractTextureParamsRec(attr)) {
                     return result; // Texture found and extracted
