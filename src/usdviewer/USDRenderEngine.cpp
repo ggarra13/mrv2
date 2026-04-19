@@ -1111,7 +1111,7 @@ namespace tl
             for (auto& object : p.transparentPrims)
             {                
                 VkBool32 depthTest = VK_TRUE;
-                VkBool32 depthWrite = VK_FALSE;
+                VkBool32 depthWrite = VK_TRUE;  // \@bug: should be VK_FALSE
                 p.render->drawMesh(object.geom, object.optimization,
                                    object.modelMatrix, object.color,
                                    object.shaderId, object.textures,

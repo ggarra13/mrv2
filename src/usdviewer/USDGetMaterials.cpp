@@ -29,6 +29,7 @@ namespace tl
                     TfToken("glslfx"),
                     TfToken("mtlx"),
                     TfToken("preview"),
+                    TfToken("universal"),
                 };
                 out = material.ComputeSurfaceSource(contexts);
                 return out;
@@ -58,7 +59,8 @@ namespace tl
                 
                 if (inputName == TfToken("diffuseColor") || // ok
                     inputName == TfToken("opacity") ||   // ok
-                    inputName == TfToken("occlusion"))      // ok
+                    inputName == TfToken("occlusion") ||
+                    inputName == TfToken("ior"))      // ok
                 {
                     result.texturePath = "*white";
                     result.value    = { 1.F, 1.F, 1.F, 1.F };
@@ -81,6 +83,11 @@ namespace tl
                     // These values make sure the normal is not perturbed.
                     result.texturePath = "*normal";
                     result.value    = { 0.5F, 0.5F, 1.0F, 1.0F };
+                }
+                else
+                {
+                    std::string err = "Unknown input " + inputName.GetString();
+                    throw std::runtime_error(err);
                 }
             }
         }
@@ -161,14 +168,14 @@ namespace tl
 
                     // 1. Check if this specific node has the file input
                     UsdShadeInput fileInput = nodeShader.GetInput(TfToken("file"));
-                    if (!fileInput)
-                    {
-                        fileInput = nodeShader.GetInput(TfToken("filename"));
-                        if (!fileInput)
-                        {
-                            fileInput = nodeShader.GetInput(TfToken("inputs:file"));
-                        }
-                    }
+                    // if (!fileInput)
+                    // {
+                    //     fileInput = nodeShader.GetInput(TfToken("filename"));
+                    //     if (!fileInput)
+                    //     {
+                    //         fileInput = nodeShader.GetInput(TfToken("inputs:file"));
+                    //     }
+                    // }
 
                     // 2. Base Case: We found the image node!
                     if (fileInput)
@@ -328,20 +335,40 @@ namespace tl
                                                      TfToken("opacityThreshold"),
                                                      time, debug);
             if ((!out.opacity.texturePath.empty() &&
-                 out.opacity.texturePath != "*white") ||
-                (out.opacity.hasValue &&
+                 out.opacity.texturePath != "*white"))
+            {
+                std::cerr << "transparent due to opacity texture"
+                          << std::endl;
+                out.transparent = true;
+            }
+            
+            if (out.opacity.hasValue &&
                  (out.opacity.value[0] < 0.95F ||
                   out.opacity.value[1] < 0.95F ||
                   out.opacity.value[2] < 0.95F ||
-                  out.opacity.value[3] < 0.95F))     ||
-                (!out.opacityThreshold.texturePath.empty() &&
-                 out.opacityThreshold.texturePath != "*black") ||
-                (out.opacityThreshold.hasValue &&
-                 (out.opacityThreshold.value[0] > 0.1F ||
-                  out.opacityThreshold.value[1] > 0.1F ||
-                  out.opacityThreshold.value[2] > 0.1F ||
-                  out.opacityThreshold.value[3] > 0.1F)))
+                  out.opacity.value[3] < 0.95F))
             {
+                std::cerr << "transparent due to opacity value"
+                          << std::endl;
+                out.transparent = true;
+            }
+                
+            if (!out.opacityThreshold.texturePath.empty() &&
+                out.opacityThreshold.texturePath != "*black")
+            {
+                std::cerr << "transparent due to opacity threshold texture"
+                          << std::endl;
+                out.transparent = true;
+            }
+            
+            if (out.opacityThreshold.hasValue &&
+                (out.opacityThreshold.value[0] > 0.1F ||
+                 out.opacityThreshold.value[1] > 0.1F ||
+                 out.opacityThreshold.value[2] > 0.1F ||
+                 out.opacityThreshold.value[3] > 0.1F))
+            {
+                std::cerr << "transparent due to opacity threshold value"
+                          << std::endl;
                 out.transparent = true;
             }
             return out;
