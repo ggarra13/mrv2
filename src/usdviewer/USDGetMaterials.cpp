@@ -11,6 +11,7 @@
 #include <pxr/usd/usdShade/shader.h>
 #include <pxr/usd/usdShade/tokens.h>
 
+#include <functional>
 #include <iostream>
 
 namespace tl
@@ -140,60 +141,80 @@ namespace tl
             // ------------------------------------------------------------------
             // Helper: Extract texture parameters from a producing attribute
             // ------------------------------------------------------------------
-            auto extractTextureParams = [&](const UsdAttribute& upstreamAttr) -> bool
+            // ------------------------------------------------------------------
+            // Helper: Extract texture params by recursively walking upstream
+            // ------------------------------------------------------------------
+            std::function<bool(const UsdAttribute&)> extractTextureParamsRec;
+            extractTextureParamsRec = [&](const UsdAttribute& upstreamAttr) -> bool
                 {
-                    UsdShadeShader textureShader(upstreamAttr.GetPrim());
-                    if (!textureShader) return false;
+                    UsdShadeShader nodeShader(upstreamAttr.GetPrim());
+                    if (!nodeShader) return false;
 
-                    UsdShadeInput fileInput = textureShader.GetInput(TfToken("file"));
+                    // 1. Check if this specific node has the file input
+                    UsdShadeInput fileInput = nodeShader.GetInput(TfToken("file"));
                     if (!fileInput)
                     {
-                        fileInput = textureShader.GetInput(TfToken("filename"));
+                        fileInput = nodeShader.GetInput(TfToken("filename"));
                         if (!fileInput)
                         {
-                            fileInput = textureShader.GetInput(TfToken("inputs:file"));
+                            fileInput = nodeShader.GetInput(TfToken("inputs:file"));
                         }
-                        if (!fileInput)
-                            return false;
                     }
-                    SdfAssetPath assetPath;
-                    if (fileInput.Get(&assetPath, time))
+
+                    // 2. Base Case: We found the image node!
+                    if (fileInput)
                     {
-                        // Access the wrapS and wrapT inputs
-                        UsdShadeInput wrapSInput = textureShader.GetInput(TfToken("wrapS"));
-                        UsdShadeInput wrapTInput = textureShader.GetInput(TfToken("wrapT"));
-
-                        // Get S and T border wrapping (clamp, repeat, black, mirror, etc)
-                        TfToken sVal, tVal;
-                        if (wrapSInput && wrapSInput.Get(&sVal)) {
-                            result.borderU = getBorder(sVal);
-                        }
-                        if (wrapTInput && wrapTInput.Get(&tVal)) {
-                            result.borderV = getBorder(tVal); // Fixed: was previously using sVal
-                        }
-
-                        UsdShadeInput colorSpaceInput = textureShader.GetInput(TfToken("sourceColorSpaec"));
-                        if (colorSpaceInput && colorSpaceInput.Get(&sVal))
+                        SdfAssetPath assetPath;
+                        if (fileInput.Get(&assetPath, time))
                         {
-                            result.colorSpace = sVal.GetString();
-                        }
+                            // Access the wrapS and wrapT inputs
+                            UsdShadeInput wrapSInput = nodeShader.GetInput(TfToken("wrapS"));
+                            UsdShadeInput wrapTInput = nodeShader.GetInput(TfToken("wrapT"));
 
-                        // Get the channel of the connection (e.g. "outputs:rgb" -> "rgb")
-                        std::string attrStr = upstreamAttr.GetName().GetString();
-                        const std::string prefix = "outputs:";
-                        if (attrStr.find(prefix) == 0) {
-                            result.channel = attrStr.substr(prefix.length());
-                        } else {
-                            result.channel = attrStr;
-                        }
+                            // Get S and T border wrapping (clamp, repeat, black, mirror, etc)
+                            TfToken sVal, tVal;
+                            if (wrapSInput && wrapSInput.Get(&sVal)) {
+                                result.borderU = getBorder(sVal);
+                            }
+                            if (wrapTInput && wrapTInput.Get(&tVal)) {
+                                result.borderV = getBorder(tVal); 
+                            }
 
-                        result.texturePath = assetPath.GetResolvedPath();
-                        if (debug && !result.texturePath.empty())
-                        {
-                            std::cout << "\t" << inputName << " has " << result.texturePath << std::endl;
+                            // Note: I corrected a typo in your original code here ("sourceColorSpaec" -> "sourceColorSpace")
+                            UsdShadeInput colorSpaceInput = nodeShader.GetInput(TfToken("sourceColorSpace"));
+                            if (colorSpaceInput && colorSpaceInput.Get(&sVal))
+                            {
+                                result.colorSpace = sVal.GetString();
+                            }
+
+                            // Get the channel of the connection (e.g. "outputs:rgb" -> "rgb")
+                            std::string attrStr = upstreamAttr.GetName().GetString();
+                            const std::string prefix = "outputs:";
+                            if (attrStr.find(prefix) == 0) {
+                                result.channel = attrStr.substr(prefix.length());
+                            } else {
+                                result.channel = attrStr;
+                            }
+
+                            result.texturePath = assetPath.GetResolvedPath();
+                            if (debug && !result.texturePath.empty())
+                            {
+                                std::cout << "\t" << inputName << " has " << result.texturePath << std::endl;
+                            }
+                            return true; // Texture successfully found and parsed
                         }
-                        return true; // Texture successfully found and parsed
                     }
+
+                    // 3. Recursive Step: If no 'file' input, this is an intermediate node (like a Normal Map).
+                    // We must iterate through ITS inputs and keep walking upstream.
+                    for (const UsdShadeInput& innerInput : nodeShader.GetInputs()) {
+                        for (const UsdAttribute& prodAttr : innerInput.GetValueProducingAttributes()) {
+                            if (extractTextureParamsRec(prodAttr)) {
+                                return true;
+                            }
+                        }
+                    }
+
                     return false;
                 };
 
@@ -206,7 +227,7 @@ namespace tl
                 {
                     // GetValueProducingAttributes handles deep graph traversal
                     for (const UsdAttribute& attr : dispOutput.GetValueProducingAttributes()) {
-                        if (extractTextureParams(attr)) {
+                        if (extractTextureParamsRec(attr)) {
                             return result;
                         }
                     }
@@ -243,7 +264,7 @@ namespace tl
                     }
                 }
                 
-                if (extractTextureParams(attr)) {
+                if (extractTextureParamsRec(attr)) {
                     return result; // Texture found and extracted
                 }
             }
