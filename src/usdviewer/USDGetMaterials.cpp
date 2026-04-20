@@ -384,6 +384,8 @@ namespace tl
                 if (mat)
                 {
                     const std::string key = mat.GetPrim().GetPath().GetString();
+                    if (out.find(key) != out.end())
+                        continue;
                     const Material& result = ParseMaterial(mat, time, debug);
                     out[key] = result;
                 }
@@ -402,6 +404,9 @@ namespace tl
                         if (mat)
                         {
                             const std::string key = mat.GetPrim().GetPath().GetString();
+                            if (out.find(key) != out.end())
+                                continue;
+                            
                             const Material& result = ParseMaterial(mat, time, debug);
                             out[key] = result;
                         }

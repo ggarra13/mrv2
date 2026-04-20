@@ -759,12 +759,12 @@ void usd_window::nextTimeCode()
 
     if (p.engine)
     {
-        // p.time += 1.0;
+        p.time += 1.0;
         
-        // if (p.time > p.endTimeCode)
-        //     p.time = p.startTimeCode;
+        if (p.time > p.endTimeCode)
+            p.time = p.startTimeCode;
 
-        // p.engine->setTimeCode(p.stage, p.time);
+        p.engine->setTimeCode(p.stage, p.time);
     
         redraw();
     }

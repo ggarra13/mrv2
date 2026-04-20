@@ -904,6 +904,7 @@ namespace tl
             {
                 p.collectTextures = false;
                 std::unordered_map<std::string, std::shared_ptr<vlk::Texture > > textureCache;
+                p.textures.clear();
                 usd::CollectTextures(ctx, p.materials, textureCache, p.textures);
                 for (auto& [_, texture] : textureCache)
                 {
