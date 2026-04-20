@@ -75,17 +75,6 @@ namespace tl
                     std::vector<PrimvarRequest> requests;
                     CollectPrimvarReadersRecursive(surface, requests);
 
-                    std::sort(requests.begin(), requests.end(),
-                              [](const PrimvarRequest& a, const PrimvarRequest& b){
-                                  return a.varname > b.varname;
-                              });
-                    requests.erase(
-                        std::unique(requests.begin(), requests.end(),
-                                    [](const PrimvarRequest& a, const PrimvarRequest& b){
-                                        return a.varname == b.varname;
-                                    }),
-                        requests.end());
-
                     // 4. Look up only what the material needs
                     UsdGeomPrimvarsAPI primvarsAPI(prim);
                     for (const auto& request : requests)
@@ -121,6 +110,17 @@ namespace tl
                     out.emplace_back(pvt);
                 }
             }
+
+            std::sort(out.begin(), out.end(),
+                      [](const PrimvarAndType& a, const PrimvarAndType& b){
+                          return a.name > b.name;
+                      });
+            out.erase(
+                std::unique(out.begin(), out.end(),
+                            [](const PrimvarAndType& a, const PrimvarAndType& b){
+                                return a.name == b.name;
+                            }),
+                out.end());
             return out;
         }
         

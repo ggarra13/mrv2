@@ -669,6 +669,10 @@ namespace tl
                 std::cerr << primPath << std::endl
                           << "\tHas more than one set of uv coordinates. " 
                           << "This is currently not supported." << std::endl;
+                for (const auto& pvt : primvarsAndType)
+                {
+                    std::cerr << "\t\t" << pvt.name << std::endl;
+                }
             }
             
             for (const auto& pvt : primvarsAndType)
