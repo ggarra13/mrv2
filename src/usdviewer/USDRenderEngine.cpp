@@ -652,13 +652,37 @@ namespace tl
 
             std::vector<usd::PrimvarAndType> primvarsAndType = usd::GetPrimvars(usdMesh.GetPrim());
 
+            // \@bug: OpenUSD supports multiple uv sets per geometry (actually,
+            //        per texture).
+            //        If we find that, then we will prefer to use the
+            //        "primvars:st" one.
+            int numUVSets = 0;
+            for (const auto& pvt : primvarsAndType)
+            {
+                if (pvt.type == TfToken("st"))
+                {
+                    ++numUVSets;
+                }
+            }
+            if (numUVSets > 1)
+            {
+                std::cerr << primPath << std::endl
+                          << "\tHas more than one set of uv coordinates. " 
+                          << "This is currently not supported." << std::endl;
+            }
+            
             for (const auto& pvt : primvarsAndType)
             {
                 const UsdGeomPrimvar& pv = pvt.pv;
-                const TfToken& type = pvt.type;
+                const TfToken type = pvt.type;
 
                 if (type == TfToken("st"))
                 {
+                    bool ok = (numUVSets == 1 ||
+                               (numUVSets != 1 &&
+                                pvt.name == TfToken("primvars:st")));
+                    if (!ok) continue;
+                        
                     // Get STs if any.
                     usd::PrimvarSampler<GfVec2f> sampler(pv);
                     if (sampler.IsValid())
@@ -739,12 +763,12 @@ namespace tl
                         }
                     }
                 }
-                else
-                {
-                    // std::cerr << "Unknown type for primvar type="
-                    //           << type.GetString()
-                    //           << std::endl;
-                }
+                // else
+                // {
+                //     std::cerr << "Unknown type for primvar type="
+                //               << type.GetString()
+                //               << std::endl;
+                // }
             }
 
             // Get points.
@@ -1037,6 +1061,13 @@ namespace tl
 
                 primPath = it->GetPath().GetString();
 
+                // std::regex re("Sweater");
+                // std::regex re("stoat");
+                // if (!std::regex_search(primPath, re))
+                //     continue;
+
+                // std::cout << primPath << std::endl;
+
                 matrix = xformCache.GetLocalToWorldTransform(*it);
                 const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
                                                    matrix[0][2], matrix[0][3],
@@ -1048,7 +1079,7 @@ namespace tl
                                                    matrix[3][2], matrix[3][3]);
         
 
-                image::Color4f color(1, 1, 1);
+                image::Color4f color(0.5, 0.5, 0.5);
                 
                 VtArray<GfVec3f> colors;
                 UsdGeomGprim gprim(*it);

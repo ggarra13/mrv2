@@ -89,24 +89,20 @@ namespace tl
                     // 4. Look up only what the material needs
                     UsdGeomPrimvarsAPI primvarsAPI(prim);
                     for (const auto& request : requests)
-                    {                
+                    {
                         UsdGeomPrimvar pv = primvarsAPI.FindPrimvarWithInheritance(request.varname);
                         if (pv && pv.IsDefined())
                         {
-                            TfToken type = ClassifyPrimvar(pv, request.readerType);
                             PrimvarAndType pvt;
                             pvt.pv = pv;
-                            pvt.type = type;
+                            pvt.name = pv.GetName();
+                            pvt.type = ClassifyPrimvar(pv, request.readerType);
                             out.emplace_back(pvt);
                         }
                     }
-
-                    if (!out.empty())
-                        return out;
                 }
             }
 
-            // Fallback: scan primvars directly by authored type role
             UsdGeomPrimvarsAPI primvarsAPI(prim);
             for (const UsdGeomPrimvar& pv : primvarsAPI.FindPrimvarsWithInheritance())
             {
@@ -116,10 +112,13 @@ namespace tl
 
                 if (role == SdfValueRoleNames->TextureCoordinate ||
                     role == SdfValueRoleNames->Normal            ||
-                    role == SdfValueRoleNames->Color             ||
-                    role == SdfValueRoleNames->Point)
+                    role == SdfValueRoleNames->Color)
                 {
-                    out.push_back({pv, ClassifyPrimvar(pv, TfToken())});
+                    PrimvarAndType pvt;
+                    pvt.pv = pv;
+                    pvt.name = pv.GetName();
+                    pvt.type = ClassifyPrimvar(pv, TfToken());
+                    out.emplace_back(pvt);
                 }
             }
             return out;

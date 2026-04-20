@@ -44,6 +44,7 @@ namespace tl
         //! Helper struct to hold the primvar and its type.
         struct PrimvarAndType
         {
+            pxr::TfToken name;
             pxr::UsdGeomPrimvar pv;
             pxr::TfToken type;
         };
