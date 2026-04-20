@@ -66,18 +66,30 @@ namespace tl
         std::size_t getByteCount(VBOType value)
         {
             const std::array<size_t, static_cast<size_t>(VBOType::Count)> data =
+                 // Pos2_F32
                 {2 * sizeof(float),
+                 // Pos2_F32_UV_U16
                  2 * sizeof(float) + 2 * sizeof(uint16_t),
-                 2 * sizeof(float) + 4 * sizeof(float),
+                 // Pos2_F32_Color_F32
+                 2 * sizeof(float) + 4 * sizeof(float),    
+                 // Pos3_F32                  
                  3 * sizeof(float),
+                 // Pos3_F32_UV_U16
                  3 * sizeof(float) + 2 * sizeof(uint16_t),
-                 3 * sizeof(float) + 2 * sizeof(uint16_t) +
+                 // Pos3_F32_UV_U16_Normal_U10
+                 3 * sizeof(float) + 2 * sizeof(uint16_t) + 
                      sizeof(PackedNormal),
-                 3 * sizeof(float) + 2 * sizeof(uint16_t) +
+                 // Pos3_F32_UV_U16_Normal_U10_Color_U8
+                 3 * sizeof(float) + 2 * sizeof(uint16_t) + 
                      sizeof(PackedNormal) + sizeof(PackedColor),
+                 // Pos3_F32_UV_F32
+                 3 * sizeof(float) + 2 * sizeof(float),
+                 // Pos3_F32_UV_F32_Normal_F32
                  3 * sizeof(float) + 2 * sizeof(float) + 3 * sizeof(float),
+                 // Pos3_F32_UV_F32_Normal_F32_Color_F32
                  3 * sizeof(float) + 2 * sizeof(float) + 3 * sizeof(float) +
                      4 * sizeof(float),
+                 // Pos3_F32_Color_U8
                  3 * sizeof(float) + sizeof(PackedColor)};
             return data[static_cast<size_t>(value)];
         }
@@ -296,6 +308,47 @@ namespace tl
                     }
                 }
                 break;
+            case vlk::VBOType::Pos3_F32_Color_U8:
+                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    const geom::Vertex3* vertices[] = {
+                        &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
+                        &mesh.triangles[i].v[2]};
+                    for (size_t k = 0; k < 3; ++k)
+                    {
+                        const size_t v = vertices[k]->v;
+                        float* pf = reinterpret_cast<float*>(p);
+                        pf[0] = v ? mesh.v[v - 1].x : 0.F;
+                        pf[1] = v ? mesh.v[v - 1].y : 0.F;
+                        pf[2] = v ? mesh.v[v - 1].z : 0.F;
+                        p += 3 * sizeof(float);
+                        
+                        const size_t c = vertices[k]->c;
+                        auto packedColor = reinterpret_cast<PackedColor*>(p);
+                        packedColor->r =
+                            c ? math::clamp(
+                                    static_cast<int>(mesh.c[c - 1].x * 255.F),
+                                    0, 255)
+                              : 255;
+                        packedColor->g =
+                            c ? math::clamp(
+                                    static_cast<int>(mesh.c[c - 1].y * 255.F),
+                                    0, 255)
+                              : 255;
+                        packedColor->b =
+                            c ? math::clamp(
+                                    static_cast<int>(mesh.c[c - 1].z * 255.F),
+                                    0, 255)
+                              : 255;
+                        packedColor->a =
+                            c ? math::clamp(
+                                    static_cast<int>(mesh.c[c - 1].w * 255.F),
+                                    0, 255)
+                              : 255;
+                        p += sizeof(PackedColor);
+                    }
+                }
+                break;
             case vlk::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8:
                 for (size_t i = range.getMin(); i <= range.getMax(); ++i)
                 {
@@ -462,6 +515,7 @@ namespace tl
                 }
                 break;
             default:
+                std::cerr << "Mesh type is " << type << std::endl;
                 throw std::runtime_error("Could not convert mesh");
                 break;
             }

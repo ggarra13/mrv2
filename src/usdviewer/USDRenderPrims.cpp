@@ -37,7 +37,9 @@ namespace tl
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8;
                 if (opt.floatUVs || opt.floatColors || opt.floatNormals)
+                {
                     type = vlk::VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32;
+                }
             }
             else if (!mesh.t.empty() && !mesh.n.empty())
             {
@@ -64,8 +66,10 @@ namespace tl
                 p.vbos[meshName] = vlk::VBO::create(triangleCount * 3, type);
             }
             if (p.vbos[meshName])
+            {
                 p.vbos[meshName]->copy(convert(mesh, type));
-
+            }
+            
             // ------------------------------------------------------------------
             //  Pool initialisation – create the pool on first use.
             //
@@ -197,6 +201,10 @@ namespace tl
             else if (shaderId == "UsdPreviewSurface")
             {
                 shaderName = "usd";
+                if (!mesh.n.empty() && !mesh.c.empty())
+                    shaderName = "usd_n_c";
+                if (!mesh.n.empty())
+                    shaderName = "usd_n";
                 pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);
@@ -235,12 +243,12 @@ namespace tl
                 throw std::runtime_error("Unknown shader type " + shaderId);
             }
                 
-            createPipeline(p.fbo, pipelineName, pipelineLayoutName,
-                           shaderName, meshName, enableBlending,
-                           srcColorBlendFactor, dstColorBlendFactor,
-                           srcAlphaBlendFactor, dstAlphaBlendFactor,
-                           colorBlendOp, alphaBlendOp, depthTest,
-                           depthWrite);
+            _createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                            shaderName, meshName, enableBlending,
+                            srcColorBlendFactor, dstColorBlendFactor,
+                            srcAlphaBlendFactor, dstAlphaBlendFactor,
+                            colorBlendOp, alphaBlendOp, depthTest,
+                            depthWrite);
 
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, mvp,
                           model, color);

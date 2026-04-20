@@ -746,9 +746,6 @@ namespace tl
                               << std::endl;
                 }
             }
-            
-            // Get triangles.
-            int indexOffset = 0;
 
             // Get points.
             geom.v.reserve(points.size());
@@ -758,9 +755,12 @@ namespace tl
                 geom.v.emplace_back(math::Vector3f(p[0], p[1], p[2]));
             }
             
-            const bool hasNormals = !geom.n.empty();
             const bool hasUVs = !geom.t.empty();
-            
+            const bool hasNormals = !geom.n.empty();
+            const bool hasColors = !geom.c.empty();
+
+            // Create triangles.
+            int indexOffset = 0;
             geom::Triangle3 triangle;
             for (int vertCount : faceVertexCounts)
             {
@@ -788,6 +788,13 @@ namespace tl
                         triangle.v[0].t = indexOffset + 1;
                         triangle.v[1].t = indexOffset + i + 1;
                         triangle.v[2].t = indexOffset + i + 2;
+                    }
+
+                    if (hasColors)
+                    {
+                        triangle.v[0].c = indexOffset + 1;
+                        triangle.v[1].c = indexOffset + i + 1;
+                        triangle.v[2].c = indexOffset + i + 2;
                     }
                     
                     geom.triangles.emplace_back(triangle);
@@ -824,7 +831,7 @@ namespace tl
                 }
             }
             
-            shaderId = "st";
+            shaderId = "dummy";
             if (usdMaterial)
             {
                 std::string materialPath = usdMaterial.GetPrim().GetPath().GetString();
@@ -838,8 +845,8 @@ namespace tl
                 if (j != p.materials.end())
                 {
                     material = j->second;
-                    shaderId = "UsdPreviewSurface";
                 }
+                shaderId = "UsdPreviewSurface";
             }
 
             p.stats.textures = p.textures.size();

@@ -88,7 +88,90 @@ void main()
     Peye = (transform.view * transform.model * vec4(vPos, 1.0)).xyz;
 })";
         }
+
+        std::string vertexUSD_UV_Normal_Color()
+        {
+            return R"(#version 450
+
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec2 vTexture;
+layout(location = 2) in vec3 vNormal;
+layout(location = 3) in vec3 vColor;
+
+layout(location = 0) out vec3 Peye;  // ← view-space position (Peye)
+layout(location = 1) out vec2 fTexture;
+
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+     mat4 model;
+     mat4 view;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    fTexture = vTexture;
+    Peye = (transform.view * transform.model * vec4(vPos, 1.0)).xyz;
+})";
+        }
         
+        std::string vertexUSD_Normal()
+        {
+            return R"(#version 450
+
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec2 vTexture;
+layout(location = 2) in vec3 vNormal;
+
+layout(location = 0) out vec3 Peye;  // ← view-space position (Peye)
+layout(location = 1) out vec2 fTexture;
+layout(location = 2) out vec3 fNormal;
+
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+     mat4 model;
+     mat4 view;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    fTexture = vTexture;
+    fNormal = vNormal;
+    Peye = (transform.view * transform.model * vec4(vPos, 1.0)).xyz;
+})";
+        }
+        
+        std::string vertexUSD_Normal_Color()
+        {
+            return R"(#version 450
+
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec2 vTexture;
+layout(location = 2) in vec3 vNormal;
+layout(location = 3) in vec3 vColor;
+
+layout(location = 0) out vec3 Peye;  // ← view-space position (Peye)
+layout(location = 1) out vec2 fTexture;
+layout(location = 2) out vec3 fNormal;
+layout(location = 3) out vec3 fColor;
+
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+     mat4 model;
+     mat4 view;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    fTexture = vTexture;
+    fColor = vColor;
+    fNormal = vNormal;
+    Peye = (transform.view * transform.model * vec4(vPos, 1.0)).xyz;
+})";
+        }
+
         std::string fragmentUSD()
         {
             return R"(#version 450

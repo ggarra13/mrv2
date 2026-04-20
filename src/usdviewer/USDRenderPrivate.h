@@ -33,11 +33,9 @@ namespace tl
 
         std::string vertexUSD();
         std::string fragmentUSD();
-
-        std::string vertexPBR();
-        std::string fragmentPBR();
         
-
+        std::string vertexUSD_Normal();
+        std::string vertexUSD_Normal_Color();
 
 
         struct Render::Private

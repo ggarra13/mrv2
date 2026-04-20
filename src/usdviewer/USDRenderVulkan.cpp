@@ -70,14 +70,14 @@ namespace tl
             return pipelineLayout;
         }
         
-        void Render::createPipeline(const std::string& pipelineName,
-                                    const std::string& pipelineLayoutName,
-                                    const VkRenderPass renderPass,
-                                    const std::shared_ptr<vlk::Shader>& shader,
-                                    const std::shared_ptr<vlk::VBO>& mesh,
-                                    const vlk::ColorBlendStateInfo& cb,
-                                    const vlk::DepthStencilStateInfo& ds,
-                                    const vlk::MultisampleStateInfo& ms)
+        void Render::_createPipeline(const std::string& pipelineName,
+                                     const std::string& pipelineLayoutName,
+                                     const VkRenderPass renderPass,
+                                     const std::shared_ptr<vlk::Shader>& shader,
+                                     const std::shared_ptr<vlk::VBO>& mesh,
+                                     const vlk::ColorBlendStateInfo& cb,
+                                     const vlk::DepthStencilStateInfo& ds,
+                                     const vlk::MultisampleStateInfo& ms)
         {
             TLRENDER_P();
             
@@ -189,7 +189,7 @@ namespace tl
             p.currentPipeline = pipelineName;
         }
         
-        void Render::createPipeline(
+        void Render::_createPipeline(
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::string& pipelineName,
             const std::string& pipelineLayoutName,
@@ -236,8 +236,8 @@ namespace tl
             vlk::MultisampleStateInfo ms;
             ms.rasterizationSamples = fbo->getSampleCount();
 
-            createPipeline(pipelineName, pipelineLayoutName,
-                           fbo->getLoadRenderPass(), shader, mesh, cb, ds, ms);
+            _createPipeline(pipelineName, pipelineLayoutName,
+                            fbo->getLoadRenderPass(), shader, mesh, cb, ds, ms);
             
             fbo->setupViewportAndScissor(p.cmd);
             if (p.clipRectEnabled)
@@ -246,7 +246,7 @@ namespace tl
             }
         }
 
-        void Render::usePipeline(const std::string& pipelineName)
+        void Render::_usePipeline(const std::string& pipelineName)
         {
             TLRENDER_P();
 

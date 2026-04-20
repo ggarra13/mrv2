@@ -58,53 +58,53 @@ namespace tl
         {
             std::vector<PrimvarAndType> out;
             
-            // 1. Resolve the bound material for the purpose
-            UsdShadeMaterialBindingAPI bindingAPI(prim);
-            UsdShadeMaterial material = usd::GetMaterial(bindingAPI);
+            // // 1. Resolve the bound material for the purpose
+            // UsdShadeMaterialBindingAPI bindingAPI(prim);
+            // UsdShadeMaterial material = usd::GetMaterial(bindingAPI);
 
-            if (material)
-            {
-                // 2. Get the surface terminal output
-                UsdShadeShader surface = material.ComputeSurfaceSource(
-                    {UsdShadeTokens->preview}
-                    );
+            // if (material)
+            // {
+            //     // 2. Get the surface terminal output
+            //     UsdShadeShader surface = material.ComputeSurfaceSource(
+            //         {UsdShadeTokens->preview}
+            //         );
 
-                if (surface)
-                {
-                    // 3. Walk the network collecting PrimvarReader varnames
-                    std::vector<PrimvarRequest> requests;
-                    CollectPrimvarReadersRecursive(surface, requests);
+            //     if (surface)
+            //     {
+            //         // 3. Walk the network collecting PrimvarReader varnames
+            //         std::vector<PrimvarRequest> requests;
+            //         CollectPrimvarReadersRecursive(surface, requests);
 
-                    std::sort(requests.begin(), requests.end(),
-                              [](const PrimvarRequest& a, const PrimvarRequest& b){
-                                  return a.varname > b.varname;
-                              });
-                    requests.erase(
-                        std::unique(requests.begin(), requests.end(),
-                                    [](const PrimvarRequest& a, const PrimvarRequest& b){
-                                        return a.varname == b.varname;
-                                    }),
-                        requests.end());
+            //         std::sort(requests.begin(), requests.end(),
+            //                   [](const PrimvarRequest& a, const PrimvarRequest& b){
+            //                       return a.varname > b.varname;
+            //                   });
+            //         requests.erase(
+            //             std::unique(requests.begin(), requests.end(),
+            //                         [](const PrimvarRequest& a, const PrimvarRequest& b){
+            //                             return a.varname == b.varname;
+            //                         }),
+            //             requests.end());
 
-                    // 4. Look up only what the material needs
-                    UsdGeomPrimvarsAPI primvarsAPI(prim);
-                    for (const auto& request : requests)
-                    {                
-                        UsdGeomPrimvar pv = primvarsAPI.FindPrimvarWithInheritance(request.varname);
-                        if (pv && pv.IsDefined())
-                        {
-                            TfToken type = ClassifyPrimvar(pv, request.readerType);
-                            PrimvarAndType pvt;
-                            pvt.pv = pv;
-                            pvt.type = type;
-                            out.emplace_back(pvt);
-                        }
-                    }
+            //         // 4. Look up only what the material needs
+            //         UsdGeomPrimvarsAPI primvarsAPI(prim);
+            //         for (const auto& request : requests)
+            //         {                
+            //             UsdGeomPrimvar pv = primvarsAPI.FindPrimvarWithInheritance(request.varname);
+            //             if (pv && pv.IsDefined())
+            //             {
+            //                 TfToken type = ClassifyPrimvar(pv, request.readerType);
+            //                 PrimvarAndType pvt;
+            //                 pvt.pv = pv;
+            //                 pvt.type = type;
+            //                 out.emplace_back(pvt);
+            //             }
+            //         }
 
-                    if (!out.empty())
-                        return out;
-                }
-            }
+            //         if (!out.empty())
+            //             return out;
+            //     }
+            // }
 
             // Fallback: scan primvars directly by authored type role
             UsdGeomPrimvarsAPI primvarsAPI(prim);

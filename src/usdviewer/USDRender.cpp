@@ -209,6 +209,44 @@ namespace tl
                 _createBindingSet(p.shaders["usd"]);
             }
             
+            if (!p.shaders["usd_n"])
+            {
+                p.shaders["usd_n"] = vlk::Shader::create(
+                    ctx, vertexUSD_Normal(), fragmentUSD(), "usd");
+                p.shaders["usd_n"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["usd_n"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["usd_n"]->addTexture("u_DiffuseMap");
+                p.shaders["usd_n"]->addTexture("u_EmissiveMap");
+                p.shaders["usd_n"]->addTexture("u_MetallicMap");
+                p.shaders["usd_n"]->addTexture("u_RoughnessMap");
+                p.shaders["usd_n"]->addTexture("u_NormalMap");
+                p.shaders["usd_n"]->addTexture("u_AOMap");
+                p.shaders["usd_n"]->addTexture("u_OpacityMap");
+                p.shaders["usd_n"]->addTexture("u_OpacityThresholdMap");
+                p.shaders["usd_n"]->addTexture("u_IorMap");
+                _createBindingSet(p.shaders["usd_n"]);
+            }
+            
+            if (!p.shaders["usd_n_c"])
+            {
+                p.shaders["usd_n_c"] = vlk::Shader::create(
+                    ctx, vertexUSD_Normal_Color(), fragmentUSD(), "usd");
+                p.shaders["usd_n_c"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["usd_n_c"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["usd_n_c"]->addTexture("u_DiffuseMap");
+                p.shaders["usd_n_c"]->addTexture("u_EmissiveMap");
+                p.shaders["usd_n_c"]->addTexture("u_MetallicMap");
+                p.shaders["usd_n_c"]->addTexture("u_RoughnessMap");
+                p.shaders["usd_n_c"]->addTexture("u_NormalMap");
+                p.shaders["usd_n_c"]->addTexture("u_AOMap");
+                p.shaders["usd_n_c"]->addTexture("u_OpacityMap");
+                p.shaders["usd_n_c"]->addTexture("u_OpacityThresholdMap");
+                p.shaders["usd_n_c"]->addTexture("u_IorMap");
+                _createBindingSet(p.shaders["usd_n_c"]);
+            }
+            
             if (renderOptions.clear)
             {
                 clearViewport(renderOptions.clearColor);

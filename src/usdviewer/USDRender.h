@@ -56,33 +56,6 @@ namespace tl
             VkCommandBuffer getCommandBuffer() const;
             uint32_t getFrameIndex() const;
 
-            // Main entry pipeline creation function
-            void createPipeline(const std::string& pipelineName,
-                                const std::string& pipelineLayoutName,
-                                const VkRenderPass renderPass,
-                                const std::shared_ptr<vlk::Shader>& shader,
-                                const std::shared_ptr<vlk::VBO>& mesh,
-                                const vlk::ColorBlendStateInfo& cb = vlk::ColorBlendStateInfo(),
-                                const vlk::DepthStencilStateInfo& ds = vlk::DepthStencilStateInfo(),
-                                const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());         
-            void createPipeline(
-                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
-                const std::string& pipelineName,
-                const std::string& pipelineLayoutName,
-                const std::string& shaderName,
-                const std::string& meshName,
-                const bool enableBlending = false,
-                const VkBlendFactor srcColorBlendFactor =
-                    VK_BLEND_FACTOR_SRC_ALPHA,
-                const VkBlendFactor dstColorBlendFactor =
-                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
-                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD,
-                const VkBool32 depthTest = VK_TRUE,
-                const VkBool32 depthWrite = VK_TRUE);
-            void usePipeline(const std::string& pipelineName);
 
             //! Overriden begin function
             void begin(
@@ -144,6 +117,35 @@ namespace tl
             void setupViewportAndScissor();
             
         private:
+            // Main entry pipeline creation function
+            void _createPipeline(const std::string& pipelineName,
+                                const std::string& pipelineLayoutName,
+                                const VkRenderPass renderPass,
+                                const std::shared_ptr<vlk::Shader>& shader,
+                                const std::shared_ptr<vlk::VBO>& mesh,
+                                const vlk::ColorBlendStateInfo& cb = vlk::ColorBlendStateInfo(),
+                                const vlk::DepthStencilStateInfo& ds = vlk::DepthStencilStateInfo(),
+                                const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());         
+            void _createPipeline(
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const std::string& pipelineName,
+                const std::string& pipelineLayoutName,
+                const std::string& shaderName,
+                const std::string& meshName,
+                const bool enableBlending = false,
+                const VkBlendFactor srcColorBlendFactor =
+                    VK_BLEND_FACTOR_SRC_ALPHA,
+                const VkBlendFactor dstColorBlendFactor =
+                    VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
+                const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD,
+                const VkBool32 depthTest = VK_TRUE,
+                const VkBool32 depthWrite = VK_TRUE);
+
+            void _usePipeline(const std::string& pipelineName);
+
             void _uploadMesh(const std::string& meshName,
                              const geom::TriangleMesh2& mesh,
                              size_t triangleCount);
