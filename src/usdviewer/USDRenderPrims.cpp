@@ -179,7 +179,6 @@ namespace tl
 
             const auto mvp = p.transform * model;
             
-            
             if (shaderId == "st")
             {
                 shaderName = "st";
@@ -205,6 +204,7 @@ namespace tl
                     shaderName = "usd_n_c";
                 if (!mesh.n.empty())
                     shaderName = "usd_n";
+
                 pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);

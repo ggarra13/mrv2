@@ -386,6 +386,10 @@ namespace tl
                     const std::string key = mat.GetPrim().GetPath().GetString();
                     if (out.find(key) != out.end())
                         continue;
+                    if (debug)
+                    {
+                        std::cout << "MATERIAL " << key << std::endl;
+                    }
                     const Material& result = ParseMaterial(mat, time, debug);
                     out[key] = result;
                 }
@@ -407,6 +411,10 @@ namespace tl
                             if (out.find(key) != out.end())
                                 continue;
                             
+                            if (debug)
+                            {
+                                std::cout << "MATERIAL " << key << std::endl;
+                            }
                             const Material& result = ParseMaterial(mat, time, debug);
                             out[key] = result;
                         }
@@ -420,7 +428,6 @@ namespace tl
                 std::size_t transparent = 0;
                 for (auto& [path, material] : out)
                 {
-                    std::cerr << path << std::endl;
                     if (material.transparent)
                         ++transparent;
                     else
