@@ -741,9 +741,9 @@ namespace tl
                 }
                 else
                 {
-                    std::cerr << "Unknown type for primvar type="
-                              << type.GetString()
-                              << std::endl;
+                    // std::cerr << "Unknown type for primvar type="
+                    //           << type.GetString()
+                    //           << std::endl;
                 }
             }
 
@@ -834,7 +834,7 @@ namespace tl
             shaderId = "dummy";
             if (usdMaterial)
             {
-                std::string materialPath = usdMaterial.GetPrim().GetPath().GetString();
+                std::string materialPath = usdMaterial.GetPath().GetString();
         
                 auto i = p.textures.find(materialPath);
                 if (i != p.textures.end())
