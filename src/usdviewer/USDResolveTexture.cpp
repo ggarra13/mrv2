@@ -2,7 +2,6 @@
 #include <pxr/imaging/hio/image.h>
 
 #include "USDResolveTexture.h"
-#include "USDRenderOptions.h"
 
 #include <tlVk/Texture.h>
 #include <tlCore/Image.h>
@@ -114,9 +113,6 @@ namespace tl
                               path.find("%04d") != std::string::npos;
                 
                 // Hio::Image opens the file (or the file inside the .usdz) and reads the header
-#if DEBUG_TEXTURES
-                std::cerr << "\tOpening " << path << std::endl;
-#endif
                 HioImageSharedPtr image = HioImage::OpenForReading(path);
                 
                 if (image)

@@ -261,7 +261,6 @@ namespace tl
             std::unordered_map<std::string, usd::ShaderTextures > textures;
 
             // Renderer information
-            std::vector<TransparentPrimitive> OpaquePrims;
             std::vector<TransparentPrimitive> transparentPrims;
 
             struct Stats
@@ -665,20 +664,17 @@ namespace tl
                     ++numUVSets;
                 }
             }
-            TfToken preferredUVName = TfToken("st");
             if (numUVSets > 1)
             {
-                preferredUVName = primvarsAndType[0].name;
                 std::cerr << primPath << std::endl
                           << "\tHas more than one set of uv coordinates. " 
-                          << "This is currently not supported." << std::endl
-                          << "\t\tWill use: " << preferredUVName.GetString() << std::endl;
+                          << "This is currently not supported." << std::endl;
+                for (const auto& pvt : primvarsAndType)
+                {
+                    std::cerr << "\t\t" << pvt.name << std::endl;
+                }
             }
-
-
-            //
-            // First, add the primvars: sts, normals and colors if present
-            //
+            
             for (const auto& pvt : primvarsAndType)
             {
                 const UsdGeomPrimvar& pv = pvt.pv;
@@ -688,7 +684,7 @@ namespace tl
                 {
                     bool ok = (numUVSets == 1 ||
                                (numUVSets != 1 &&
-                                pvt.name == preferredUVName));
+                                pvt.name == TfToken("primvars:st")));
                     if (!ok) continue;
                         
                     // Get STs if any.
@@ -880,10 +876,7 @@ namespace tl
                 }
                 shaderId = "UsdPreviewSurface";
             }
-            // For testing... uncomment these
-            // shaderId = "dummy";
-            // shaderId = "st";
-            
+
             p.stats.textures = p.textures.size();
             p.stats.triangles += geom.triangles.size();
 
@@ -1015,7 +1008,7 @@ namespace tl
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_F16;
             renderOptions.clear = true;
-            renderOptions.clearColor = image::Color4f(1.F, 1.F, 1.F, 1.F);
+            renderOptions.clearColor = image::Color4f(0.F, 0.F, 0.F, 0.F);
 
             
             p.render->begin(cmd, p.buffer, frameIndex, renderSize,
@@ -1071,11 +1064,9 @@ namespace tl
                     continue;
 
                 primPath = it->GetPath().GetString();
-                
-                std::regex re("Leg");
+
                 // std::regex re("Sweater");
                 // std::regex re("stoat");
-                
                 // if (!std::regex_search(primPath, re))
                 //     continue;
 
@@ -1148,13 +1139,12 @@ namespace tl
                     UsdShadeMaterialBindingAPI api(*it);
                     UsdShadeMaterial material = usd::GetMaterial(api);
 
-                    shaderId = "dummy";
                     const std::string materialPath = material.GetPath().GetString();
                     auto i = p.textures.find(materialPath);
                     if (i != p.textures.end())
                     {
                         textures = i->second;
-                        shaderId = "UsdPreviewSurface";
+                        shaderId = "UsdShaderPreview";
                     }
 
                     MeshOptimization opt;

@@ -11,48 +11,6 @@ namespace tl
 {
     namespace usd
     {
-
-        std::string vertexSTs()
-        {
-            return R"(#version 450
-layout(location = 0) in vec3 vPos;
-layout(location = 1) in vec2 vTexture;
-
-layout(location = 0) out vec2 fTexture;
-layout(location = 1) out vec3 fragPosition;
-
-layout(set = 0, binding = 0, std140) uniform Transform {
-     mat4 mvp;
-     mat4 model;
-     mat4 view;
-} transform;
-
-void main()
-{
-    fragPosition = vPos;  // no need to transform this one for STs
-    fTexture = vTexture;
-    gl_Position = transform.mvp * vec4(vPos, 1.0);
-})";
-        }
-
-        std::string fragmentSTs()
-        {
-            return R"(#version 450
-layout(location = 0) in vec2 fTexture;
-layout(location = 1) in vec3 inPosition;
-
-layout(location = 0) out vec4 outColor;
-                  
-layout(push_constant) uniform PushConstants {
-    vec4 color;
-} pc;       
-                 
-void main()
-{
-      outColor = vec4(fTexture.r, fTexture.g, 0, 1);
-})";
-        }
-        
         std::string vertexDummy()
         {
             return R"(#version 450
@@ -113,6 +71,32 @@ void main()
 
 layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec2 vTexture;
+
+layout(location = 0) out vec3 Peye;  // ← view-space position (Peye)
+layout(location = 1) out vec2 fTexture;
+
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+     mat4 model;
+     mat4 view;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    fTexture = vTexture;
+    Peye = (transform.view * transform.model * vec4(vPos, 1.0)).xyz;
+})";
+        }
+
+        std::string vertexUSD_UV_Normal_Color()
+        {
+            return R"(#version 450
+
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec2 vTexture;
+layout(location = 2) in vec3 vNormal;
+layout(location = 3) in vec3 vColor;
 
 layout(location = 0) out vec3 Peye;  // ← view-space position (Peye)
 layout(location = 1) out vec2 fTexture;
@@ -336,31 +320,72 @@ void main()
    vec3 ambientDiffuse = vec3(0.03) * albedo;
    vec3 ambientSpecular = envColor * F0 * (1.0 - roughness); 
 
-   vec3 ambient = (ambientDiffuse + ambientSpecular) * ao;
+    vec3 ambient = (ambientDiffuse + ambientSpecular) * ao;
 
-   // Combine ambient + diffuse + specular
-   vec3 color = ambient + Lo + emissive;
+    // Combine ambient + diffuse + specular
+    vec3 color = ambient + Lo + emissive;
 
-   // Combine color and opacity.  Do NOT premult.
-   outColor = vec4(color, opacity);
+    // Combine color and opacity.  Do NOT premult.
+    outColor = vec4(color, opacity);
 
-   // VERIFIED: albedo and ao are okay.
-   outColor = vec4(albedo, 1.0);
+    // VERIFIED: albedo and ao are okay.
+    //outColor = vec4(albedo, 1.0);
 
-   // VERIFIED: Ambient occlusion works correctly
-   // outColor = vec4(ambient, opacity);
+    // VERIFIED: Ambient occlusion works correctly
+    //outColor = vec4(ambient, opacity);
 
-   // VERIFIED: diffuse is correct for metallic
-   // outColor = vec4(diffuse, opacity);
+    // VERIFIED: diffuse is correct for metallic
+    // outColor = vec4(diffuse, opacity);
 
-   // VERIFIED: specular is correct 
-   // outColor = vec4(specular, opacity);
+    // VERIFIED: specular is correct 
+    // outColor = vec4(specular, opacity);
 
-   // VERIFIED: opacity works correctly.
-   // outColor = vec4(vec3(opacity), opacity);
+    // VERIFIED: opacity works correctly.
+    // outColor = vec4(vec3(opacity), opacity);
 
-   // VERIFIED: normal mapping works correctly (chess_set).
+    // VERIFIED: normal mapping works correctly.
 
+})";
+        }
+        
+        std::string vertexSTs()
+        {
+            return R"(#version 450
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec2 vTexture;
+
+layout(location = 0) out vec2 fTexture;
+layout(location = 1) out vec3 fragPosition;
+
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+     mat4 model;
+     mat4 view;
+} transform;
+
+void main()
+{
+    fragPosition = vPos;  // no need to transform this one for STs
+    fTexture = vTexture;
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+})";
+        }
+
+        std::string fragmentSTs()
+        {
+            return R"(#version 450
+layout(location = 0) in vec2 fTexture;
+layout(location = 1) in vec3 inPosition;
+
+layout(location = 0) out vec4 outColor;
+                  
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;       
+                 
+void main()
+{
+      outColor = vec4(fTexture.r, fTexture.g, 0, 1);
 })";
         }
         

@@ -13,7 +13,6 @@ namespace tl
             std::string           texturePath;          // non-empty when a texture is found
             std::array<float, 4>  value  = {1.F, 1.F, 1.F, 1.F};          // constant value when no texture
             bool                  hasValue = false;     // true when value is populated
-            bool                  animated = false;
             vlk::TextureBorder    borderU = vlk::TextureBorder::ClampToEdge;
             vlk::TextureBorder    borderV = vlk::TextureBorder::ClampToEdge;
             std::string           channel = "rgba";
@@ -30,7 +29,6 @@ namespace tl
             bool operator==(const ShaderInputResult& b) const
                 {
                     return (texturePath == b.texturePath &&
-                            animated == b.animated &&
                             hasValue == b.hasValue &&
                             channel == b.channel &&
                             borderU == b.borderU &&
@@ -51,15 +49,13 @@ namespace tl
             ShaderInputResult     diffuseColor;
             ShaderInputResult     emissiveColor;
             ShaderInputResult     opacity;
-            ShaderInputResult     opacityThreshold;
             ShaderInputResult     metallic;
             ShaderInputResult     roughness;
             ShaderInputResult     normal;
             ShaderInputResult     occlusion;
-
-            // These two are for future use
             ShaderInputResult     displacement;
             ShaderInputResult     ior;
+            ShaderInputResult     opacityThreshold;
 
             bool                  transparent = false;
             
