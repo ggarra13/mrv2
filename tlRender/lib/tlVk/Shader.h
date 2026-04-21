@@ -30,6 +30,7 @@ namespace tl
             kShaderVertex = 1,
             kShaderFragment = 2,
             kShaderCompute = 4,
+            kShaderGeometry = 8,
         };
 
         inline VkShaderStageFlags getVulkanShaderFlags(ShaderFlags stageFlags)

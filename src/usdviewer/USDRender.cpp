@@ -179,6 +179,15 @@ namespace tl
                 p.shaders["dummy"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["dummy"]);
             }
+            if (!p.shaders["dummy_c"])
+            {
+                p.shaders["dummy_c"] = vlk::Shader::create(
+                    ctx, vertexDummy_Color(), fragmentDummy_Color(), "dummy");
+                p.shaders["dummy_c"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["dummy_c"]->addPush("color", color, vlk::kShaderFragment);
+                _createBindingSet(p.shaders["dummy_c"]);
+            }
 #if USE_ST_SHADER
             if (!p.shaders["st"])
             {
@@ -193,7 +202,7 @@ namespace tl
             if (!p.shaders["usd"])
             {
                 p.shaders["usd"] = vlk::Shader::create(
-                    ctx, vertexUSD(), fragmentUSD(), "usd");
+                    ctx, vertexUSD_UV(), fragmentUSD(), "usd");
                 p.shaders["usd"]->createUniform(
                     "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["usd"]->addPush("color", color, vlk::kShaderFragment);
@@ -209,42 +218,70 @@ namespace tl
                 _createBindingSet(p.shaders["usd"]);
             }
             
-            if (!p.shaders["usd_n"])
+            if (!p.shaders["usd_uv_n"])
             {
-                p.shaders["usd_n"] = vlk::Shader::create(
-                    ctx, vertexUSD_Normal(), fragmentUSD(), "usd");
-                p.shaders["usd_n"]->createUniform(
+                bool hasNormal = true;
+                bool hasColor = false;
+                p.shaders["usd_uv_n"] = vlk::Shader::create(
+                    ctx, vertexUSD_UV_Normal(), fragmentUSD(hasNormal,
+                                                            hasColor), "usd");
+                p.shaders["usd_uv_n"]->createUniform(
                     "transforms", transforms, vlk::kShaderVertex);
-                p.shaders["usd_n"]->addPush("color", color, vlk::kShaderFragment);
-                p.shaders["usd_n"]->addTexture("u_DiffuseMap");
-                p.shaders["usd_n"]->addTexture("u_EmissiveMap");
-                p.shaders["usd_n"]->addTexture("u_MetallicMap");
-                p.shaders["usd_n"]->addTexture("u_RoughnessMap");
-                p.shaders["usd_n"]->addTexture("u_NormalMap");
-                p.shaders["usd_n"]->addTexture("u_AOMap");
-                p.shaders["usd_n"]->addTexture("u_OpacityMap");
-                p.shaders["usd_n"]->addTexture("u_OpacityThresholdMap");
-                p.shaders["usd_n"]->addTexture("u_IorMap");
-                _createBindingSet(p.shaders["usd_n"]);
+                p.shaders["usd_uv_n"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["usd_uv_n"]->addTexture("u_DiffuseMap");
+                p.shaders["usd_uv_n"]->addTexture("u_EmissiveMap");
+                p.shaders["usd_uv_n"]->addTexture("u_MetallicMap");
+                p.shaders["usd_uv_n"]->addTexture("u_RoughnessMap");
+                p.shaders["usd_uv_n"]->addTexture("u_NormalMap");
+                p.shaders["usd_uv_n"]->addTexture("u_AOMap");
+                p.shaders["usd_uv_n"]->addTexture("u_OpacityMap");
+                p.shaders["usd_uv_n"]->addTexture("u_OpacityThresholdMap");
+                p.shaders["usd_uv_n"]->addTexture("u_IorMap");
+                _createBindingSet(p.shaders["usd_uv_n"]);
             }
             
-            if (!p.shaders["usd_n_c"])
+            if (!p.shaders["usd_uv_n_c"])
             {
-                p.shaders["usd_n_c"] = vlk::Shader::create(
-                    ctx, vertexUSD_Normal_Color(), fragmentUSD(), "usd");
-                p.shaders["usd_n_c"]->createUniform(
+                bool hasNormal = true;
+                bool hasColor = true;
+                p.shaders["usd_uv_n_c"] = vlk::Shader::create(
+                    ctx, vertexUSD_UV_Normal_Color(), fragmentUSD(hasNormal,
+                                                                  hasColor), "usd");
+                p.shaders["usd_uv_n_c"]->createUniform(
                     "transforms", transforms, vlk::kShaderVertex);
-                p.shaders["usd_n_c"]->addPush("color", color, vlk::kShaderFragment);
-                p.shaders["usd_n_c"]->addTexture("u_DiffuseMap");
-                p.shaders["usd_n_c"]->addTexture("u_EmissiveMap");
-                p.shaders["usd_n_c"]->addTexture("u_MetallicMap");
-                p.shaders["usd_n_c"]->addTexture("u_RoughnessMap");
-                p.shaders["usd_n_c"]->addTexture("u_NormalMap");
-                p.shaders["usd_n_c"]->addTexture("u_AOMap");
-                p.shaders["usd_n_c"]->addTexture("u_OpacityMap");
-                p.shaders["usd_n_c"]->addTexture("u_OpacityThresholdMap");
-                p.shaders["usd_n_c"]->addTexture("u_IorMap");
-                _createBindingSet(p.shaders["usd_n_c"]);
+                p.shaders["usd_uv_n_c"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["usd_uv_n_c"]->addTexture("u_DiffuseMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_EmissiveMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_MetallicMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_RoughnessMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_NormalMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_AOMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_OpacityMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_OpacityThresholdMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_IorMap");
+                _createBindingSet(p.shaders["usd_uv_n_c"]);
+            }
+            
+            
+            if (!p.shaders["usd_uv_c"])
+            {
+                bool hasNormal = false;
+                bool hasColor = true;
+                p.shaders["usd_uv_c"] = vlk::Shader::create(
+                    ctx, vertexUSD_UV_Color(), fragmentUSD(hasNormal, hasColor), "usd");
+                p.shaders["usd_uv_c"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["usd_uv_c"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["usd_uv_c"]->addTexture("u_DiffuseMap");
+                p.shaders["usd_uv_c"]->addTexture("u_EmissiveMap");
+                p.shaders["usd_uv_c"]->addTexture("u_MetallicMap");
+                p.shaders["usd_uv_c"]->addTexture("u_RoughnessMap");
+                p.shaders["usd_uv_c"]->addTexture("u_NormalMap");
+                p.shaders["usd_uv_c"]->addTexture("u_AOMap");
+                p.shaders["usd_uv_c"]->addTexture("u_OpacityMap");
+                p.shaders["usd_uv_c"]->addTexture("u_OpacityThresholdMap");
+                p.shaders["usd_uv_c"]->addTexture("u_IorMap");
+                _createBindingSet(p.shaders["usd_uv_c"]);
             }
             
             if (renderOptions.clear)

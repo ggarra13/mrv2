@@ -47,15 +47,25 @@ namespace tl
                 if (opt.floatUVs || opt.floatNormals)
                     type = vlk::VBOType::Pos3_F32_UV_F32_Normal_F32;
             }
-            else if (!mesh.t.empty())
+            else if (!mesh.t.empty() && !mesh.c.empty())
+            {
+                type = vlk::VBOType::Pos3_F32_UV_U16_Color_U8;
+            }
+            else if (!mesh.t.empty() && mesh.c.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16;
                 if (opt.floatUVs)
                     type = vlk::VBOType::Pos3_F32_UV_F32;
             }
-            else if (!mesh.c.empty())
+            else if (mesh.t.empty() && !mesh.c.empty())
             {
                 type = vlk::VBOType::Pos3_F32_Color_U8;
+            }
+            else
+            {
+                type = vlk::VBOType::Pos3_F32_UV_U16;
+                if (opt.floatUVs)
+                    type = vlk::VBOType::Pos3_F32_UV_F32;
             }
 
             // Rebuild the VBO whenever the triangle count or type changes.
@@ -67,6 +77,7 @@ namespace tl
             }
             if (p.vbos[meshName])
             {
+                std::cout << "\t\tconvert mesh type = " << type << std::endl;
                 p.vbos[meshName]->copy(convert(mesh, type));
             }
             
@@ -192,6 +203,9 @@ namespace tl
             else if (textures.empty() || shaderId == "dummy")
             {
                 shaderName = "dummy";
+                if (!mesh.c.empty())
+                    shaderName = "dummy_c";
+                
                 pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);
@@ -201,10 +215,17 @@ namespace tl
             else if (shaderId == "UsdPreviewSurface")
             {
                 shaderName = "usd";
-                if (!mesh.n.empty() && !mesh.c.empty())
-                    shaderName = "usd_n_c";
-                if (!mesh.n.empty())
-                    shaderName = "usd_n";
+                if (!mesh.t.empty() && !mesh.n.empty() && !mesh.c.empty())
+                    shaderName = "usd_uv_n_c";
+                else if (!mesh.t.empty() && !mesh.n.empty())
+                    shaderName = "usd_uv_n";
+                else if (!mesh.t.empty() && !mesh.c.empty())
+                    shaderName ="usd_uv_c";
+                else if (mesh.t.empty() && !mesh.c.empty())
+                    shaderName = "usd_c";
+
+                std::cout << "\t\tshaderName = " << shaderName << std::endl;
+                
                 pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);

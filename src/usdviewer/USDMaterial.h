@@ -3,6 +3,8 @@
 
 #include <tlVk/Texture.h>
 
+#include <ostream>
+
 namespace tl
 {
     namespace usd
@@ -42,6 +44,18 @@ namespace tl
                     return !(*this == b);
                 }
         };
+        
+
+        inline
+        std::ostream& operator<<(std::ostream& o, const ShaderInputResult& b)
+        {
+            if (!b.texturePath.empty())
+                return o << b.texturePath << " channel=" << b.channel
+                         << " borderU=" << b.borderU << " borderV=" << b.borderV;
+            else
+                return o << " hasValue=" << b.hasValue << " " << b.value[0] << ", "
+                         << b.value[1] << ", " << b.value[2] << " " << b.value[3];
+        }
 
         //! Material.
         struct Material

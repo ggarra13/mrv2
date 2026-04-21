@@ -64,15 +64,72 @@ void main()
 })";
         }
         
+        std::string vertexDummy_Color()
+        {
+            return R"(#version 450
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec4 vColor;
+
+layout(location = 0) out vec3 Peye;
+layout(location = 1) out vec4 fColor;
+
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+     mat4 model;
+     mat4 view;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);   
+    Peye = (transform.view * transform.model * vec4(vPos, 1.0)).xyz;
+    fColor = vColor;
+})";
+        }
+
+        std::string fragmentDummy_Color()
+        {
+            return R"(#version 450
+layout(location = 0) in vec3 Peye;
+layout(location = 1) in vec4 fColor;
+
+layout(location = 0) out vec4 outColor;
+                  
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;
+
+void main()
+{
+    vec3 dx = dFdx(Peye);
+    vec3 dy = dFdy(Peye);
+    vec3 N = normalize(cross(dx, dy));
+
+    // Simple light direction
+    vec3 V = normalize(Peye);
+    vec3 L = V;
+
+    // Diffuse (Lambert)
+    float diff = min(max(dot(N, L), 0.0), 0.75);
+
+    // Add a bit of ambient so it's not fully black
+    float ambient = 0.2;
+
+    vec3 finalColor = fColor.rgb * (ambient + diff);
+
+    outColor = vec4(finalColor, fColor.a);
+    
+})";
+        }
         
-        std::string vertexUSD()
+        std::string vertexUSD_UV()
         {
             return R"(#version 450
 
 layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec2 vTexture;
 
-layout(location = 0) out vec3 Peye;  // ← view-space position (Peye)
+layout(location = 0) out vec3 Peye;
 layout(location = 1) out vec2 fTexture;
 
 layout(set = 0, binding = 0, std140) uniform Transform {
@@ -88,34 +145,8 @@ void main()
     Peye = (transform.view * transform.model * vec4(vPos, 1.0)).xyz;
 })";
         }
-
-        std::string vertexUSD_UV_Normal_Color()
-        {
-            return R"(#version 450
-
-layout(location = 0) in vec3 vPos;
-layout(location = 1) in vec2 vTexture;
-layout(location = 2) in vec3 vNormal;
-layout(location = 3) in vec3 vColor;
-
-layout(location = 0) out vec3 Peye;  // ← view-space position (Peye)
-layout(location = 1) out vec2 fTexture;
-
-layout(set = 0, binding = 0, std140) uniform Transform {
-     mat4 mvp;
-     mat4 model;
-     mat4 view;
-} transform;
-
-void main()
-{
-    gl_Position = transform.mvp * vec4(vPos, 1.0);
-    fTexture = vTexture;
-    Peye = (transform.view * transform.model * vec4(vPos, 1.0)).xyz;
-})";
-        }
         
-        std::string vertexUSD_Normal()
+        std::string vertexUSD_UV_Normal()
         {
             return R"(#version 450
 
@@ -142,19 +173,19 @@ void main()
 })";
         }
         
-        std::string vertexUSD_Normal_Color()
+        std::string vertexUSD_UV_Normal_Color()
         {
             return R"(#version 450
 
 layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec2 vTexture;
 layout(location = 2) in vec3 vNormal;
-layout(location = 3) in vec3 vColor;
+layout(location = 3) in vec4 vColor;
 
-layout(location = 0) out vec3 Peye;  // ← view-space position (Peye)
+layout(location = 0) out vec3 Peye;  // view-space position (Peye)
 layout(location = 1) out vec2 fTexture;
 layout(location = 2) out vec3 fNormal;
-layout(location = 3) out vec3 fColor;
+layout(location = 3) out vec4 fColor;
 
 layout(set = 0, binding = 0, std140) uniform Transform {
      mat4 mvp;
@@ -172,12 +203,64 @@ void main()
 })";
         }
 
-        std::string fragmentUSD()
+        
+        std::string vertexUSD_UV_Color()
         {
             return R"(#version 450
 
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec2 vTexture;
+layout(location = 2) in vec4 vColor;
+
+layout(location = 0) out vec3 Peye;  // ← view-space position (Peye)
+layout(location = 1) out vec2 fTexture;
+layout(location = 2) out vec4 fColor;
+
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+     mat4 model;
+     mat4 view;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    fTexture = vTexture;
+    fColor = vColor;
+    Peye = (transform.view * transform.model * vec4(vPos, 1.0)).xyz;
+})";
+        }
+        
+        std::string fragmentUSD(bool hasNormal, bool hasColor)
+        {
+            int idx = 2;
+            std::string normalInput = "";
+            std::string normalCode =
+                "vec3 N_base = normalize(cross(dFdx(Peye), dFdy(Peye)));\n";
+            if (hasNormal) {
+                normalInput = "layout(location=" + std::to_string(idx) +
+                              ") in vec3 fNormal;\n";
+                //normalCode  = "vec3 N_base = fNormal;\n";  // normal is not in eye space yet
+                ++idx;
+            }
+            
+            std::string colorInput = "";
+            std::string colorCode = "vec3 albedo = texture(u_DiffuseMap, st).rgb;\n";
+            if (hasColor) {
+                colorInput = "layout(location=" + std::to_string(idx) +
+                              ") in vec4 fColor;\n";
+                // colorCode  = "vec3 albedo = fColor.rgb;\n";  // pink based colors everywhere
+                // colorCode  = "vec3 albedo = pc.color.rgb;\n";  // white colors with pink paws
+                // colorCode  = "vec3 albedo = texture(u_DiffuseMap, st).rgb * pc.color.rgb;\n";
+                // colorCode  = "vec3 albedo = texture(u_DiffuseMap, st).rgb * pc.color.rgb;\n";  // white colors
+                ++idx;
+            }
+            return string::Format(R"(#version 450
+
 layout(location = 0) in vec3 Peye;
 layout(location = 1) in vec2 fTexture;
+{0}  // normal
+{1}  // color
 
 layout(binding = 1) uniform sampler2D u_DiffuseMap;
 layout(binding = 2) uniform sampler2D u_EmissiveMap;
@@ -245,7 +328,6 @@ void main()
     vec2 st = fTexture;
 
     // Material (move to UBO later if you want)
-    vec4  u_Material_diffuseColor = vec4(1.0);
     float u_Material_metallic = 1.0;
     float u_Material_roughness = 1.0;
     float u_Material_aoStrength = 1.0;
@@ -258,7 +340,8 @@ void main()
     }
 
     // ── Sample textures ───────────────────────
-    vec3 albedo = texture(u_DiffuseMap,   st).rgb * pc.color.rgb;
+    // vec3 albedo = texture(u_DiffuseMap,   st).rgb * pc.color.rgb;
+    {2} // colorCode
     float metallic  = texture(u_MetallicMap,  st).r * u_Material_metallic;
     float roughness = texture(u_RoughnessMap, st).r * u_Material_roughness;
     float ao        = mix(1.0, texture(u_AOMap, st).r, u_Material_aoStrength);
@@ -270,7 +353,8 @@ void main()
 
     // ── Normal from normal map ────────────────
     vec3 Nt  = texture(u_NormalMap, st).rgb * 2.0 - 1.0; // [0,1] → [-1,1]
-    vec3 N_base = normalize(cross(dFdx(Peye), dFdy(Peye)));
+    {3}  // normalCode
+    //vec3 N_base = normalize(cross(dFdx(Peye), dFdy(Peye)));
     mat3 TBN = ComputeTBNMatrix(Peye, N_base, st);
     vec3 N = normalize(TBN * Nt);
 
@@ -345,7 +429,10 @@ void main()
 
     // VERIFIED: normal mapping works correctly.
 
-})";
+})").arg(normalInput).
+                arg(colorInput).
+                arg(colorCode).
+                arg(normalCode);
         }
         
         std::string vertexSTs()

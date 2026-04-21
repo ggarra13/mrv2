@@ -1,5 +1,5 @@
 
-#define PRINT_STATS 0
+//#define ANIMATE 1
 #define BAKE_JOINTS 1
 
 #define LOG_STATUS(x) std::cerr << x << std::endl;
@@ -759,14 +759,16 @@ void usd_window::nextTimeCode()
 
     if (p.engine)
     {
-        // p.time += 1.0;
+#if ANIMATE
+        p.time += 1.0;
         
-        // if (p.time > p.endTimeCode)
-        //     p.time = p.startTimeCode;
+        if (p.time > p.endTimeCode)
+            p.time = p.startTimeCode;
 
-        // p.engine->setTimeCode(p.stage, p.time);
+        p.engine->setTimeCode(p.stage, p.time);
     
-        // redraw();
+        redraw();
+#endif
     }
 
     double timeout = 1.0 / p.timeCodesPerSecond;

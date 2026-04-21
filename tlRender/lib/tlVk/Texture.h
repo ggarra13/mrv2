@@ -32,6 +32,8 @@ namespace tl
             Count,
             First = ClampToEdge
         };
+        TLRENDER_ENUM(TextureBorder);
+        TLRENDER_ENUM_SERIALIZE(TextureBorder);
 
         struct TextureBorders
         {

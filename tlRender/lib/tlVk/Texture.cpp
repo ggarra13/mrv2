@@ -7,20 +7,36 @@
 #include <tlVk/Vk.h>
 
 #include <tlCore/Assert.h>
+#include <tlCore/Error.h>
+#include <tlCore/String.h>
+#include <tlCore/Util.h>
 
 #include <FL/Fl_Vk_Utils.H>
 #include <FL/vk_enum_string_helper.h>
 
 #include <array>
 #include <iostream>
+#include <string>
+#include <vector>
+
 #include <cstdint>
-#include <stddef.h>
+#include <cstddef>
 
 
 namespace tl
 {
     namespace vlk
     {
+        TLRENDER_ENUM_IMPL(
+            TextureBorder,
+            "ClampToEdge",
+            "Repeat",
+            "MirroredRepeat",
+            "ClampToBorder",
+            "MirrorClampToEdge",
+            );
+        TLRENDER_ENUM_SERIALIZE_IMPL(TextureBorder);
+        
         VkSamplerAddressMode getTextureBorder(TextureBorder value)
         {            
             VkSamplerAddressMode out = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;

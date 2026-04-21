@@ -45,7 +45,7 @@
 #include <pxr/imaging/hdx/tokens.h>
 #include <pxr/imaging/hdx/types.h>
 
-// Primitive types (refactor all this for scene traversal)
+// Primitive types (refactor all these for scene traversal)
 #include <pxr/usd/usdGeom/basisCurves.h>
 #include <pxr/usd/usdGeom/bboxCache.h>
 #include <pxr/usd/usdGeom/camera.h>
@@ -607,6 +607,9 @@ namespace tl
         {
             TLRENDER_P();
             
+            // 1. Try to get the Material bound directly to the Prim
+            UsdPrim prim = usdMesh.GetPrim();  // \@todo: remove to use just prim not usdMesh
+            
             // -------------------------
             // 1. VERTICES (Points)
             // -------------------------
@@ -647,7 +650,7 @@ namespace tl
             }
             
             
-            geom::TriangleMesh3 geom;
+            std::shared_ptr<geom::TriangleMesh3> geom(new geom::TriangleMesh3);
             MeshOptimization meshOptimization;
 
             std::vector<usd::PrimvarAndType> primvarsAndType = usd::GetPrimvars(usdMesh.GetPrim());
@@ -657,6 +660,7 @@ namespace tl
             //        If we find that, then we will prefer to use the
             //        "primvars:st" one.
             int numUVSets = 0;
+            TfToken preferredUV = TfToken("primvars:st");
             for (const auto& pvt : primvarsAndType)
             {
                 if (pvt.type == TfToken("st"))
@@ -668,10 +672,14 @@ namespace tl
             {
                 std::cerr << primPath << std::endl
                           << "\tHas more than one set of uv coordinates. " 
-                          << "This is currently not supported." << std::endl;
+                          << "Not yet supported. Picking \""
+                          << preferredUV.GetString() << "\"." << std::endl;
                 for (const auto& pvt : primvarsAndType)
                 {
-                    std::cerr << "\t\t" << pvt.name << std::endl;
+                    if (pvt.type == TfToken("st"))
+                    {
+                        std::cerr << "\t\t" << pvt.name << std::endl;
+                    }
                 }
             }
             
@@ -684,9 +692,11 @@ namespace tl
                 {
                     bool ok = (numUVSets == 1 ||
                                (numUVSets != 1 &&
-                                pvt.name == TfToken("primvars:st")));
+                                pvt.name == preferredUV));
                     if (!ok) continue;
-                        
+
+                    std::cout << "\t\tadding STs " << pvt.name << std::endl;
+                    
                     // Get STs if any.
                     usd::PrimvarSampler<GfVec2f> sampler(pv);
                     if (sampler.IsValid())
@@ -706,7 +716,7 @@ namespace tl
                                     uv[1] < 0.F || uv[1] > 1.F)
                                     meshOptimization.floatUVs = true;
                                 
-                                geom.t.emplace_back(math::Vector2f(uv[0], 1.0F - uv[1]));
+                                geom->t.emplace_back(math::Vector2f(uv[0], 1.0F - uv[1]));
                             }
                             faceCornerIdx += vertCount;
                         }
@@ -733,7 +743,7 @@ namespace tl
                                 n[2] < -1.F || n[2] > 1.F)
                                 meshOptimization.floatNormals = true;
                             
-                            geom.n.emplace_back(math::Vector3f(n[0], n[1], n[2]));
+                            geom->n.emplace_back(math::Vector3f(n[0], n[1], n[2]));
                         }
                         faceCornerIdx += vertCount;
                         }
@@ -760,7 +770,7 @@ namespace tl
                                 c[3] < 0.F || c[3] > 1.F)
                                 meshOptimization.floatColors = true;
                             
-                            geom.c.emplace_back(
+                            geom->c.emplace_back(
                                 math::Vector4f(c[0], c[1], c[2], c[3]));
                         }
                         faceCornerIdx += vertCount;
@@ -776,16 +786,16 @@ namespace tl
             }
 
             // Get points.
-            geom.v.reserve(points.size());
+            geom->v.reserve(points.size());
             for (int i = 0; i < points.size(); ++i)
             {
                 const auto& p = points[i];
-                geom.v.emplace_back(math::Vector3f(p[0], p[1], p[2]));
+                geom->v.emplace_back(math::Vector3f(p[0], p[1], p[2]));
             }
             
-            const bool hasUVs = !geom.t.empty();
-            const bool hasNormals = !geom.n.empty();
-            const bool hasColors = !geom.c.empty();
+            const bool hasUVs = !geom->t.empty();
+            const bool hasNormals = !geom->n.empty();
+            const bool hasColors = !geom->c.empty();
 
             // Create triangles.
             int indexOffset = 0;
@@ -803,19 +813,19 @@ namespace tl
                     triangle.v[0].v = i0 + 1;
                     triangle.v[1].v = i1 + 1;
                     triangle.v[2].v = i2 + 1;
-
-                    if (hasNormals)
-                    {
-                        triangle.v[0].n = indexOffset + 1;
-                        triangle.v[1].n = indexOffset + i + 1;
-                        triangle.v[2].n = indexOffset + i + 2;
-                    }
                     
                     if (hasUVs)
                     {
                         triangle.v[0].t = indexOffset + 1;
                         triangle.v[1].t = indexOffset + i + 1;
                         triangle.v[2].t = indexOffset + i + 2;
+                    }
+                    
+                    if (hasNormals)
+                    {
+                        triangle.v[0].n = indexOffset + 1;
+                        triangle.v[1].n = indexOffset + i + 1;
+                        triangle.v[2].n = indexOffset + i + 2;
                     }
 
                     if (hasColors)
@@ -825,11 +835,12 @@ namespace tl
                         triangle.v[2].c = indexOffset + i + 2;
                     }
                     
-                    geom.triangles.emplace_back(triangle);
+                    geom->triangles.emplace_back(triangle);
                 }
                 indexOffset += vertCount;
             }
 
+                
             //
             // Find the textures if the mesh has UVs 
             //
@@ -838,8 +849,6 @@ namespace tl
             std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
             if (hasUVs)
             {
-                // 1. Try to get the Material bound directly to the Prim
-                UsdPrim prim = usdMesh.GetPrim();
 
                 UsdShadeMaterialBindingAPI api(prim);
                 usdMaterial = usd::GetMaterial(api);
@@ -860,9 +869,10 @@ namespace tl
             }
             
             shaderId = "dummy";
+            std::string materialPath = "unassigned";
             if (usdMaterial)
             {
-                std::string materialPath = usdMaterial.GetPath().GetString();
+                materialPath = usdMaterial.GetPath().GetString();
         
                 auto i = p.textures.find(materialPath);
                 if (i != p.textures.end())
@@ -878,28 +888,28 @@ namespace tl
             }
 
             p.stats.textures = p.textures.size();
-            p.stats.triangles += geom.triangles.size();
+            p.stats.triangles += geom->triangles.size();
 
             if (!material.transparent)
             {
                 // Object is opaque.  Render it.
                 p.stats.opaque++;
 
-                p.render->drawMesh(geom, meshOptimization, modelMatrix, color,
+                std::cout << "\thas material=" << materialPath << std::endl
+                          << "\tshader=" << shaderId << " textures.size()="
+                          << textures.size()
+                          << " hasUVs=" << hasUVs << " hasColors=" << hasColors << std::endl;
+                
+                p.render->drawMesh(*geom, meshOptimization, modelMatrix, color,
                                    shaderId, textures, material);
             }
             else
             {
                 p.stats.transparent++;
                 
-                TransparentPrimitive object;
-                object.geom = geom;
-                object.optimization = meshOptimization;
-                object.modelMatrix = modelMatrix;
-                object.color = color;
-                object.shaderId = shaderId;
-                object.material = material;
-                object.textures = textures;
+                TransparentPrimitive object(geom, meshOptimization,
+                                            modelMatrix, shaderId, color,
+                                            material, textures);
                 object.center   = GetObjectWorldCenter(usdMesh.GetPrim(),
                                                        p.time);
                 p.transparentPrims.emplace_back(object);
@@ -1066,21 +1076,24 @@ namespace tl
                 primPath = it->GetPath().GetString();
 
                 // std::regex re("Sweater");
-                // std::regex re("stoat");
+                std::regex re("(?:stoat|remi)");
+                // std::regex re("Paw");  // legs and arms ends
+                // std::regex re("legsPaw");     // legs only
+                
                 // if (!std::regex_search(primPath, re))
                 //     continue;
 
                 // std::cout << primPath << std::endl;
 
                 matrix = xformCache.GetLocalToWorldTransform(*it);
-                const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
-                                                   matrix[0][2], matrix[0][3],
-                                                   matrix[1][0], matrix[1][1],
-                                                   matrix[1][2], matrix[1][3],
-                                                   matrix[2][0], matrix[2][1],
-                                                   matrix[2][2], matrix[2][3],
-                                                   matrix[3][0], matrix[3][1],
-                                                   matrix[3][2], matrix[3][3]);
+                math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
+                                             matrix[0][2], matrix[0][3],
+                                             matrix[1][0], matrix[1][1],
+                                             matrix[1][2], matrix[1][3],
+                                             matrix[2][0], matrix[2][1],
+                                             matrix[2][2], matrix[2][3],
+                                             matrix[3][0], matrix[3][1],
+                                             matrix[3][2], matrix[3][3]);
         
 
                 image::Color4f color(0.5, 0.5, 0.5);
@@ -1192,7 +1205,7 @@ namespace tl
             {                
                 VkBool32 depthTest = VK_TRUE;
                 VkBool32 depthWrite = VK_TRUE;  // \@bug: should be VK_FALSE
-                p.render->drawMesh(object.geom, object.optimization,
+                p.render->drawMesh(*object.geom, object.optimization,
                                    object.modelMatrix, object.color,
                                    object.shaderId, object.textures,
                                    object.material, true, depthTest,

@@ -24,19 +24,23 @@ namespace tl
 {
     namespace usd
     {
-        // For drawing
+        // Shaders as text
         std::string vertexDummy();
         std::string fragmentDummy();
+        std::string vertexDummy_Color();
+        std::string fragmentDummy_Color();
 
         std::string vertexSTs();
         std::string fragmentSTs();
 
-        std::string vertexUSD();
-        std::string fragmentUSD();
-        
-        std::string vertexUSD_Normal();
-        std::string vertexUSD_Normal_Color();
+        std::string vertexUSD_UV();
+        std::string vertexUSD_UV_Color();
+        std::string vertexUSD_UV_Normal();
+        std::string vertexUSD_UV_Normal_Color();
 
+        std::string fragmentUSD(bool hasNormal = false,
+                                bool hasColor = false);
+        
 
         struct Render::Private
         {

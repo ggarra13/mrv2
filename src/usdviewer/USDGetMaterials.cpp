@@ -162,7 +162,7 @@ namespace tl
             // Helper: Extract texture parameters from a producing attribute
             // -----------------------------------------------------------------
             std::unordered_set<std::string> visitedPrims;
-            
+            int tabs = 0;
             std::function<bool(const UsdAttribute&)> extractTextureParamsRec;
             extractTextureParamsRec = [&](const UsdAttribute& upstreamAttr) -> bool
                 {
@@ -176,9 +176,9 @@ namespace tl
                     }
                     visitedPrims.insert(primPath); // Mark as visited
                     
-                    UsdShadeShader nodeShader(upstreamAttr.GetPrim());
+                    UsdShadeShader nodeShader(prim);
                     if (!nodeShader) return false;
-
+                    
                     // 1. Check if this specific node has the file input
                     UsdShadeInput fileInput = nodeShader.GetInput(TfToken("file"));
 
@@ -201,7 +201,6 @@ namespace tl
                                 result.borderV = getBorder(tVal); 
                             }
 
-                            // Note: I corrected a typo in your original code here ("sourceColorSpaec" -> "sourceColorSpace")
                             UsdShadeInput colorSpaceInput = nodeShader.GetInput(TfToken("sourceColorSpace"));
                             if (colorSpaceInput && colorSpaceInput.Get(&sVal))
                             {
@@ -218,28 +217,13 @@ namespace tl
                             }
 
                             result.texturePath = assetPath.GetResolvedPath();
-                            if (debug && !result.texturePath.empty())
-                            {
-                                std::cout << "\t" << inputName << " has " << result.texturePath << std::endl;
-                            }
                             return true; // Texture successfully found and parsed
                         }
                     }
-
-                    // 3. Recursive Step: If no 'file' input, this is an intermediate node (like a Normal Map).
-                    // We must iterate through ITS inputs and keep walking upstream.
-                    for (const UsdShadeInput& innerInput : nodeShader.GetInputs()) {
-                        for (const UsdAttribute& prodAttr : innerInput.GetValueProducingAttributes()) {
-                            if (extractTextureParamsRec(prodAttr)) {
-                                return true;
-                            }
-                        }
-                    }
-
                     return false;
                 };
-
-
+            
+            
             // 1. DISPLACEMENT EXCEPTION
             if (inputName == TfToken("displacement"))
             {
@@ -247,6 +231,7 @@ namespace tl
                 if (dispOutput)
                 {
                     // GetValueProducingAttributes handles deep graph traversal
+                    tabs = 0;
                     for (const UsdAttribute& attr : dispOutput.GetValueProducingAttributes()) {
                         if (extractTextureParamsRec(attr)) {
                             return result;
@@ -357,7 +342,22 @@ namespace tl
             {
                 out.transparent = true;
             }
-            if (debug && out.transparent)
+            
+            if (debug)
+            {
+                std::cout << "\tdiffuseColor " << out.diffuseColor << std::endl
+                          << "\topacity " << out.opacity << std::endl
+                          << "\tmetallic " << out.metallic << std::endl
+                          << "\troughness " << out.roughness << std::endl
+                          << "\tnormal " << out.normal << std::endl
+                          << "\tocclusion " << out.occlusion << std::endl
+                          << "\temissiveColor " << out.emissiveColor << std::endl
+                          << "\topacityTheshold " << out.opacityThreshold << std::endl
+                          << "\tdisplacement " << out.displacement << std::endl
+                          << "\tior" << out.ior << std::endl;
+            }
+            
+            if (out.transparent)
                 std:: cout << "\t\tMATERIAL IS TRANSPARENT" << std::endl;
             return out;
         }
@@ -386,6 +386,10 @@ namespace tl
                     const std::string key = mat.GetPrim().GetPath().GetString();
                     if (out.find(key) != out.end())
                         continue;
+                    if (debug)
+                    {
+                        std::cout << "MATERIAL " << key << std::endl;
+                    }
                     const Material& result = ParseMaterial(mat, time, debug);
                     out[key] = result;
                 }
@@ -407,6 +411,10 @@ namespace tl
                             if (out.find(key) != out.end())
                                 continue;
                             
+                            if (debug)
+                            {
+                                std::cout << "MATERIAL " << key << std::endl;
+                            }
                             const Material& result = ParseMaterial(mat, time, debug);
                             out[key] = result;
                         }
@@ -420,7 +428,6 @@ namespace tl
                 std::size_t transparent = 0;
                 for (auto& [path, material] : out)
                 {
-                    std::cerr << path << std::endl;
                     if (material.transparent)
                         ++transparent;
                     else
