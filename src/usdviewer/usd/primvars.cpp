@@ -101,7 +101,8 @@ namespace tl
 
                 if (role == SdfValueRoleNames->TextureCoordinate ||
                     role == SdfValueRoleNames->Normal            ||
-                    role == SdfValueRoleNames->Color)
+                    role == SdfValueRoleNames->Color             ||
+                    role == SdfValueRoleNames->Point)
                 {
                     PrimvarAndType pvt;
                     pvt.pv = pv;
