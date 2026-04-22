@@ -4,7 +4,6 @@
 
 
 set(HEADERS
-    VAOPool.h
     USDCollectTextures.h
     USDGetMaterials.h
     USDRender.h
@@ -14,9 +13,10 @@ set(HEADERS
 
     usd/material.h
     usd/primvars.h
+
+    Vk/VAOPool.h
 )
 set(SOURCES
-    VAOPool.cpp
     USDCollectTextures.cpp
     USDGetMaterials.cpp
     USDRender.cpp
@@ -27,6 +27,9 @@ set(SOURCES
     USDResolveTexture.cpp
 
     usd/primvars.cpp
+    
+    Vk/VAOPool.cpp
+    
     main.cpp)
 
 find_package(Vulkan REQUIRED)

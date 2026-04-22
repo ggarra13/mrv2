@@ -639,8 +639,8 @@ namespace tl
 
             // \@bug: OpenUSD supports multiple uv sets per geometry (actually,
             //        per texture).
-            //        If we find that, then we will prefer to use the
-            //        "primvars:st" one.
+            //        If we find that, then we will use the last one and
+            //        spit out a warning.
             int numUVSets = 0;
             int uvCount = 0;
             for (const auto& pvt : primvarsAndType)
@@ -677,6 +677,7 @@ namespace tl
 
                 if (type == TfToken("st"))
                 {
+                    // We'll use whatever UV comes last
                     ++uvCount;
                     if (uvCount < numUVSets)
                         continue;
@@ -685,18 +686,18 @@ namespace tl
                     usd::PrimvarSampler<GfVec2f> sampler(pv, time);
                     if (sampler.IsValid())
                     {
-                        geom->t.clear();
-                        
                         int faceCornerIdx = 0; 
                         for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
                              ++faceIdx) {
                             int vertCount = faceVertexCounts[faceIdx];
                             
                             for (int i = 0; i < vertCount; ++i) {
-                                int cornerIdx = faceCornerIdx + i;
-                                int pointIdx = faceVertexIndices[cornerIdx];
+                                int faceVertexIdx = faceCornerIdx + i;
+                                int pointIdx = faceVertexIndices[faceVertexIdx];
                             
-                                GfVec2f uv = sampler.Sample(faceIdx, cornerIdx, pointIdx);
+                                GfVec2f uv = sampler.Sample(faceIdx,
+                                                            faceVertexIdx,
+                                                            pointIdx);
                                 
                                 if (uv[0] < 0.F || uv[0] > 1.F ||
                                     uv[1] < 0.F || uv[1] > 1.F)
@@ -714,24 +715,27 @@ namespace tl
                     usd::PrimvarSampler<GfVec3f> sampler(pv, time);
                     if (sampler.IsValid()) {
                         int faceCornerIdx = 0; 
-                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
+                        for (size_t faceIdx = 0;
+                             faceIdx < faceVertexCounts.size();
                              ++faceIdx) {
-                        int vertCount = faceVertexCounts[faceIdx];
+                            int vertCount = faceVertexCounts[faceIdx];
                         
-                        for (int i = 0; i < vertCount; ++i) {
-                            int cornerIdx = faceCornerIdx + i;
-                            int pointIdx = faceVertexIndices[cornerIdx];
-
-                            GfVec3f n = sampler.Sample(faceIdx, cornerIdx, pointIdx);
+                            for (int i = 0; i < vertCount; ++i) {
+                                int faceVertexIdx = faceCornerIdx + i;
+                                int pointIdx = faceVertexIndices[faceVertexIdx];
+                                
+                                GfVec3f n = sampler.Sample(faceIdx,
+                                                           faceVertexIdx,
+                                                           pointIdx);
                             
-                            if (n[0] < -1.F || n[0] > 1.F ||
-                                n[1] < -1.F || n[1] > 1.F ||
-                                n[2] < -1.F || n[2] > 1.F)
-                                meshOptimization.floatNormals = true;
+                                if (n[0] < -1.F || n[0] > 1.F ||
+                                    n[1] < -1.F || n[1] > 1.F ||
+                                    n[2] < -1.F || n[2] > 1.F)
+                                    meshOptimization.floatNormals = true;
                             
-                            geom->n.emplace_back(math::Vector3f(n[0], n[1], n[2]));
-                        }
-                        faceCornerIdx += vertCount;
+                                geom->n.emplace_back(math::Vector3f(n[0], n[1], n[2]));
+                            }
+                            faceCornerIdx += vertCount;
                         }
                     }
                 }
@@ -739,27 +743,30 @@ namespace tl
                 {
                     usd::PrimvarSampler<GfVec4f> sampler(pv, time);
                     if (sampler.IsValid()) {
+                        std::cout << "got color per vertex" << std::endl;
                         int faceCornerIdx = 0; 
                         for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
                              ++faceIdx) {
-                        int vertCount = faceVertexCounts[faceIdx];
+                            int vertCount = faceVertexCounts[faceIdx];
                         
-                        for (int i = 0; i < vertCount; ++i) {
-                            int cornerIdx = faceCornerIdx + i;
-                            int pointIdx = faceVertexIndices[cornerIdx];
+                            for (int i = 0; i < vertCount; ++i) {
+                                int faceVertexIdx = faceCornerIdx + i;
+                                int pointIdx = faceVertexIndices[faceVertexIdx];
 
-                            GfVec4f c = sampler.Sample(faceIdx, cornerIdx, pointIdx);
+                                GfVec4f c = sampler.Sample(faceIdx,
+                                                           faceVertexIdx,
+                                                           pointIdx);
                             
-                            if (c[0] < 0.F || c[0] > 1.F ||
-                                c[1] < 0.F || c[1] > 1.F ||
-                                c[2] < 0.F || c[2] > 1.F ||
-                                c[3] < 0.F || c[3] > 1.F)
-                                meshOptimization.floatColors = true;
+                                if (c[0] < 0.F || c[0] > 1.F ||
+                                    c[1] < 0.F || c[1] > 1.F ||
+                                    c[2] < 0.F || c[2] > 1.F ||
+                                    c[3] < 0.F || c[3] > 1.F)
+                                    meshOptimization.floatColors = true;
                             
-                            geom->c.emplace_back(
-                                math::Vector4f(c[0], c[1], c[2], c[3]));
-                        }
-                        faceCornerIdx += vertCount;
+                                geom->c.emplace_back(
+                                    math::Vector4f(c[0], c[1], c[2], c[3]));
+                            }
+                            faceCornerIdx += vertCount;
                         }
                     }
                 }
@@ -835,7 +842,6 @@ namespace tl
             std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
             if (hasUVs)
             {
-
                 UsdShadeMaterialBindingAPI api(prim);
                 usdMaterial = usd::GetMaterial(api);
                 if (!usdMaterial)
@@ -860,37 +866,25 @@ namespace tl
             {
                 shaderId = "UsdPreviewSurface";
                 materialKey = usdMaterial.GetPrim().GetPath().GetString();
-                // materialKey += "#" + primPath;
-        
+                
                 auto i = p.textures.find(materialKey);
                 if (i != p.textures.end())
                 {
                     textures = i->second;
-                }
-                else
-                {
-                    std::cerr << "Did not find textures " << materialKey << std::endl;
                 }
                 auto j = p.materials.find(materialKey);
                 if (j != p.materials.end())
                 {
                     material = j->second;
                 }
-                else
-                {
-                    std::cerr << "Did not find material " << materialKey << std::endl;
-                }
-            }
-            else
-            {
-                shaderId = "st";
             }
 
 
+            shaderId = "dummy";
             p.stats.textures = p.textures.size();
             p.stats.triangles += geom->triangles.size();
 
-            if (!material.transparent)
+            if (1) //!material.transparent)
             {
                 // Object is opaque.  Render it without blending.
                 p.stats.opaque++;
@@ -1074,15 +1068,21 @@ namespace tl
 
                 primPath = it->GetPath().GetString();
 
-                std::regex re("Sweater");
+                //std::regex re("Sweater");
                 // std::regex re("(?:stoat|remi)");
                 // std::regex re("Paw");  // legs and arms ends
                 // std::regex re("legsPaw");     // legs only
+
+                std::regex re("REye");
+                //std::regex re("(?:Iris|Pupil|Sclera)");  // renders brown as it should
+                // std::regex re("Sclera");
+                // std::regex re("Cornea");
+                // std::regex re("Pupil");  // renders black as it should
                 
-                // if (!std::regex_search(primPath, re))
-                //     continue;
+                if (!std::regex_search(primPath, re))
+                    continue;
                 
-                // std::cout << primPath << std::endl;
+                std::cout << primPath << std::endl;
 
                 matrix = xformCache.GetLocalToWorldTransform(*it);
                 math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
@@ -1100,16 +1100,17 @@ namespace tl
                 VtArray<GfVec3f> colors;
                 UsdGeomGprim gprim(*it);
                 if (gprim)
-                    gprim.GetDisplayColorAttr().Get(&colors);
+                    gprim.GetDisplayColorAttr().Get(&colors, p.time);
 
                 if (colors.size() == 1)
                 {
                     color.r = colors[0][0];
                     color.g = colors[0][1];
                     color.b = colors[0][2];
-                    color.a = colors[0][3];
+
+                    // The displayColor attribute does not use alpha.
+                    // color.a = colors[0][3];
                 }
-                
                 
                 std::string shaderId;
                 if (it->IsA<UsdGeomMesh>())
@@ -1197,7 +1198,7 @@ namespace tl
             for (auto& object : p.transparentPrims)
             {                
                 VkBool32 depthTest = VK_TRUE;
-                VkBool32 depthWrite = VK_TRUE;
+                VkBool32 depthWrite = VK_FALSE;
                 p.render->drawMesh(*object.geom, object.optimization,
                                    object.modelMatrix, object.color,
                                    object.shaderId, object.textures,

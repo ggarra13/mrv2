@@ -8,7 +8,7 @@
 
 #include "USDRenderOptions.h"
 #include "USDRender.h"
-#include "VAOPool.h"
+#include "Vk/VAOPool.h"
 
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/PipelineCreationState.h>
