@@ -1107,9 +1107,7 @@ namespace tl
                     color.r = colors[0][0];
                     color.g = colors[0][1];
                     color.b = colors[0][2];
-
-                    // The displayColor attribute does not use alpha.
-                    // color.a = colors[0][3];
+                    color.a = colors[0][3];
                 }
                 
                 std::string shaderId;
@@ -1198,7 +1196,7 @@ namespace tl
             for (auto& object : p.transparentPrims)
             {                
                 VkBool32 depthTest = VK_TRUE;
-                VkBool32 depthWrite = VK_FALSE;
+                VkBool32 depthWrite = VK_TRUE;  // \@bug: should be VK_FALSE
                 p.render->drawMesh(*object.geom, object.optimization,
                                    object.modelMatrix, object.color,
                                    object.shaderId, object.textures,
