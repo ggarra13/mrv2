@@ -49,7 +49,6 @@ namespace tl
         struct TextureOptions
         {
             timeline::ImageFilters filters;
-            bool pbo = false;
             VkImageTiling tiling = VK_IMAGE_TILING_LINEAR;
             TextureBorders borders;
 

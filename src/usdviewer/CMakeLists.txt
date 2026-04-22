@@ -11,6 +11,8 @@ set(HEADERS
     USDRenderShadersBinary.h
     USDResolveTexture.h
 
+    engine/options.h
+    
     usd/material.h
     usd/primvars.h
 

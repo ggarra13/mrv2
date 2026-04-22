@@ -228,7 +228,7 @@ namespace tl
         bool TextureOptions::operator==(const TextureOptions& other) const
         {
             return filters == other.filters && tiling == other.tiling &&
-                pbo == other.pbo && borders == other.borders;
+                borders == other.borders;
         }
 
         bool TextureOptions::operator!=(const TextureOptions& other) const

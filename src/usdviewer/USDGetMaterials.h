@@ -1,6 +1,6 @@
 #pragma once
 
-#include "USDRenderOptions.h"
+#include "engine/options.h"
 
 #include <pxr/usd/usd/prim.h>
 #include <pxr/usd/usdShade/material.h>

@@ -183,8 +183,6 @@ namespace tl
             VkRenderPass loadRenderPass = VK_NULL_HANDLE;
             VkFramebuffer framebuffer = VK_NULL_HANDLE;
 
-            VkFramebuffer framebufferCompositing = VK_NULL_HANDLE;
-
             VkSampler sampler = VK_NULL_HANDLE;
 
             VkViewport viewport = {};

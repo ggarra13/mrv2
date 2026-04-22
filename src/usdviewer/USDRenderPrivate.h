@@ -6,7 +6,7 @@
 #pragma once
 
 
-#include "USDRenderOptions.h"
+#include "engine/options.h"
 #include "USDRender.h"
 #include "Vk/VAOPool.h"
 
