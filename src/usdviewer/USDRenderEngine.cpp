@@ -884,7 +884,7 @@ namespace tl
             p.stats.textures = p.textures.size();
             p.stats.triangles += geom->triangles.size();
 
-            if (1) //!material.transparent)
+            if (!material.transparent)
             {
                 // Object is opaque.  Render it without blending.
                 p.stats.opaque++;
