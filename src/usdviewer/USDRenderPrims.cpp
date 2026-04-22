@@ -32,10 +32,6 @@ namespace tl
             size_t triangleCount = mesh.triangles.size();
             if (triangleCount == 0) return;
 
-            std::cout << "uvs=" << mesh.t.size() << "\n";
-            std::cout << "  n=" << mesh.n.size() << "\n";
-            std::cout << "  c=" << mesh.c.size() << "\n";
-            
             vlk::VBOType type = vlk::VBOType::Pos3_F32;
             if (!mesh.t.empty() && !mesh.n.empty() && !mesh.c.empty())
             {
@@ -57,14 +53,12 @@ namespace tl
             }
             else if (!mesh.t.empty() && mesh.c.empty())
             {
-                std::cout << "uv but color empty" << std::endl;
                 type = vlk::VBOType::Pos3_F32_UV_U16;
                 if (opt.floatUVs)
                     type = vlk::VBOType::Pos3_F32_UV_F32;
             }
             else if (mesh.t.empty() && !mesh.c.empty())
             {
-                std::cout << "color_u8" << std::endl;
                 type = vlk::VBOType::Pos3_F32_Color_U8;
             }
 
@@ -73,7 +67,6 @@ namespace tl
                 p.vbos[meshName]->getSize() != triangleCount * 3 ||
                 p.vbos[meshName]->getType() != type)
             {
-                std::cout << "\t" << type << std::endl;
                 p.vbos[meshName] = vlk::VBO::create(triangleCount * 3, type);
             }
             if (p.vbos[meshName])
@@ -201,7 +194,7 @@ namespace tl
                 
                 p.shaders[shaderName]->bind(p.frameIndex);
             }
-            else if (textures.empty() || shaderId == "dummy" || !mesh.c.empty())
+            else if (textures.empty() || shaderId == "dummy")
             {
                 shaderName = "dummy";
                 if (!mesh.c.empty())
@@ -262,9 +255,6 @@ namespace tl
             {
                 throw std::runtime_error("Unknown shader type " + shaderId);
             }
-                
-            std::cerr << "\tshaderName=" << shaderName << " color="
-                      << color << std::endl;
                 
             _createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                             shaderName, meshName, enableBlending,

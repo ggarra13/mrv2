@@ -743,7 +743,6 @@ namespace tl
                 {
                     usd::PrimvarSampler<GfVec4f> sampler(pv, time);
                     if (sampler.IsValid()) {
-                        std::cout << "got color per vertex" << std::endl;
                         int faceCornerIdx = 0; 
                         for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
                              ++faceIdx) {
@@ -864,23 +863,21 @@ namespace tl
             std::string materialKey = "unassigned";
             if (usdMaterial)
             {
-                shaderId = "UsdPreviewSurface";
-                materialKey = usdMaterial.GetPrim().GetPath().GetString();
+                std::string materialKey = usdMaterial.GetPrim().GetPath().GetString();
                 
                 auto i = p.textures.find(materialKey);
                 if (i != p.textures.end())
                 {
                     textures = i->second;
-                }
-                auto j = p.materials.find(materialKey);
-                if (j != p.materials.end())
-                {
-                    material = j->second;
+                    auto j = p.materials.find(materialKey);
+                    if (j != p.materials.end())
+                    {
+                        material = j->second;
+                        shaderId = "UsdPreviewSurface";
+                    }
                 }
             }
 
-
-            shaderId = "dummy";
             p.stats.textures = p.textures.size();
             p.stats.triangles += geom->triangles.size();
 
@@ -900,8 +897,8 @@ namespace tl
                 object.geom = geom;
                 object.optimization = meshOptimization;
                 object.modelMatrix = modelMatrix;
-                object.shaderId = shaderId;
                 object.color = color;
+                object.shaderId = shaderId;
                 object.material = material;
                 object.textures = textures;
 
@@ -970,8 +967,6 @@ namespace tl
 
             const GfFrustum frustum = gfCamera.GetFrustum();
             const GfVec3d cameraPos = frustum.GetPosition();
-            const GfVec3d viewDir = frustum.ComputeViewDirection();
-
             const math::Vector3f camPos(cameraPos[0], cameraPos[1],
                                         cameraPos[2]);
     
@@ -1073,34 +1068,30 @@ namespace tl
 
                 primPath = it->GetPath().GetString();
 
-                //std::regex re("Sweater");
-                // std::regex re("(?:stoat|remi)");
-                // std::regex re("Paw");  // legs and arms ends
-                // std::regex re("legsPaw");     // legs only
 
-                std::regex re("REye");
+                matrix = xformCache.GetLocalToWorldTransform(*it);
+                const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
+                                                   matrix[0][2], matrix[0][3],
+                                                   matrix[1][0], matrix[1][1],
+                                                   matrix[1][2], matrix[1][3],
+                                                   matrix[2][0], matrix[2][1],
+                                                   matrix[2][2], matrix[2][3],
+                                                   matrix[3][0], matrix[3][1],
+                                                   matrix[3][2], matrix[3][3]);
+
+                // std::regex re("Leg");
+                //std::regex re("REye");
                 //std::regex re("(?:Iris|Pupil|Sclera)");  // renders brown as it should
                 // std::regex re("Sclera");
                 // std::regex re("Cornea");
                 // std::regex re("Pupil");  // renders black as it should
                 
-                if (!std::regex_search(primPath, re))
-                    continue;
+                // if (!std::regex_search(primPath, re))
+                //     continue;
                 
-                std::cout << primPath << std::endl;
+                // std::cout << primPath << std::endl;
 
-                matrix = xformCache.GetLocalToWorldTransform(*it);
-                math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
-                                             matrix[0][2], matrix[0][3],
-                                             matrix[1][0], matrix[1][1],
-                                             matrix[1][2], matrix[1][3],
-                                             matrix[2][0], matrix[2][1],
-                                             matrix[2][2], matrix[2][3],
-                                             matrix[3][0], matrix[3][1],
-                                             matrix[3][2], matrix[3][3]);
-        
-
-                image::Color4f color(0.5, 0.5, 0.5);
+                image::Color4f color(1, 1, 1);
                 
                 VtArray<GfVec3f> colors;
                 UsdGeomGprim gprim(*it);
@@ -1112,8 +1103,9 @@ namespace tl
                     color.r = colors[0][0];
                     color.g = colors[0][1];
                     color.b = colors[0][2];
-                    //color.a = colors[0][3];
+                    //color.a = colors[0][3];  // alpha is not used.
                 }
+                
                 
                 std::string shaderId;
                 if (it->IsA<UsdGeomMesh>())
@@ -1159,9 +1151,7 @@ namespace tl
                     UsdShadeMaterialBindingAPI api(*it);
                     UsdShadeMaterial material = usd::GetMaterial(api);
 
-                    std::string materialKey = material.GetPath().GetString();
-                    materialKey += "#" + primPath;
-                    
+                    const std::string materialKey = material.GetPath().GetString();
                     auto i = p.textures.find(materialKey);
                     if (i != p.textures.end())
                     {
