@@ -64,6 +64,9 @@ namespace tl
             std::size_t numTextures = 0;
             for (const auto& [materialName, material] : materials)
             {
+#if DEBUG_TEXTURES
+                std::cout << "\tReading textures for " << materialName << std::endl;
+#endif
                 std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
                 
                 GET_SLOT_TEXTURE(diffuseColor, USD_DiffuseMap);

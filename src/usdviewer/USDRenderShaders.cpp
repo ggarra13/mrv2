@@ -91,7 +91,8 @@ void main()
         {
             return R"(#version 450
 layout(location = 0) in vec3 Peye;
-layout(location = 1) in vec4 fColor;
+layout(location = 1) in vec2 fTexture;
+layout(location = 2) in vec4 fColor;
 
 layout(location = 0) out vec4 outColor;
                   
@@ -245,7 +246,7 @@ void main()
             }
             
             std::string colorInput = "";
-            std::string colorCode = "vec3 albedo = texture(u_DiffuseMap, st).rgb;\n";
+            std::string colorCode = "vec3 albedo = texture(u_DiffuseMap, st).rgb * pc.color.rgb;\n";
             if (hasColor) {
                 colorInput = "layout(location=" + std::to_string(idx) +
                               ") in vec4 fColor;\n";
@@ -441,8 +442,8 @@ void main()
 layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec2 vTexture;
 
-layout(location = 0) out vec2 fTexture;
-layout(location = 1) out vec3 fragPosition;
+layout(location = 0) out vec3 fPosition;
+layout(location = 1) out vec2 fTexture;
 
 layout(set = 0, binding = 0, std140) uniform Transform {
      mat4 mvp;
@@ -452,7 +453,7 @@ layout(set = 0, binding = 0, std140) uniform Transform {
 
 void main()
 {
-    fragPosition = vPos;  // no need to transform this one for STs
+    fPosition = vPos;  // no need to transform this one for STs
     fTexture = vTexture;
     gl_Position = transform.mvp * vec4(vPos, 1.0);
 })";
@@ -461,8 +462,8 @@ void main()
         std::string fragmentSTs()
         {
             return R"(#version 450
-layout(location = 0) in vec2 fTexture;
-layout(location = 1) in vec3 inPosition;
+layout(location = 0) in vec3 fPosition;
+layout(location = 1) in vec2 fTexture;
 
 layout(location = 0) out vec4 outColor;
                   
@@ -472,7 +473,8 @@ layout(push_constant) uniform PushConstants {
                  
 void main()
 {
-      outColor = vec4(fTexture.r, fTexture.g, 0, 1);
+      vec2 uv = fract(fTexture);
+      outColor = vec4(uv, 0, 1);
 })";
         }
         

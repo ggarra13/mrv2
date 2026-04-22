@@ -99,8 +99,9 @@
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
 
-#include <memory>
+#include <chrono>
 #include <iostream>
+#include <memory>
 #include <regex>
 #include <string>
 #include <unordered_map>
@@ -241,6 +242,8 @@ namespace tl
 
             struct Stats
             {
+                std::chrono::steady_clock::time_point timer;
+                
                 // Primitive counts
                 std::size_t total  = 0;
                 std::size_t opaque = 0;
@@ -586,20 +589,21 @@ namespace tl
             
             // 1. Try to get the Material bound directly to the Prim
             UsdPrim prim = usdMesh.GetPrim();  // \@todo: remove to use just prim not usdMesh
+            UsdTimeCode time = p.time;
             
             // -------------------------
             // 1. VERTICES (Points)
             // -------------------------
             VtArray<GfVec3f> points;
-            usdMesh.GetPointsAttr().Get(&points, p.time);
+            usdMesh.GetPointsAttr().Get(&points, time);
 
             // Faces vertex counts: number vertices per face.
             VtArray<int> faceVertexCounts;
-            usdMesh.GetFaceVertexCountsAttr().Get(&faceVertexCounts, p.time);
+            usdMesh.GetFaceVertexCountsAttr().Get(&faceVertexCounts, time);
             
             // faceVertexIndices: flat list of vertex indices for all faces
             VtArray<int> faceVertexIndices;
-            usdMesh.GetFaceVertexIndicesAttr().Get(&faceVertexIndices, p.time);
+            usdMesh.GetFaceVertexIndicesAttr().Get(&faceVertexIndices, time);
 
             const TfToken materialBindFamily("materialBind");
             std::vector<UsdGeomSubset> subsets =
@@ -638,7 +642,7 @@ namespace tl
             //        If we find that, then we will prefer to use the
             //        "primvars:st" one.
             int numUVSets = 0;
-            TfToken preferredUV = TfToken("primvars:st");
+            int uvCount = 0;
             for (const auto& pvt : primvarsAndType)
             {
                 if (pvt.type == TfToken("st"))
@@ -648,18 +652,23 @@ namespace tl
             }
             if (numUVSets > 1)
             {
-                std::cerr << primPath << std::endl
-                          << "\tHas more than one set of uv coordinates. " 
-                          << "Not yet supported. Picking \""
-                          << preferredUV.GetString() << "\"." << std::endl;
-                for (const auto& pvt : primvarsAndType)
+                static bool warned = false;
+                if (!warned)
                 {
-                    if (pvt.type == TfToken("st"))
+                    std::cerr << primPath << " (among others?) " << std::endl
+                              << "has more than one set of uv coordinates. " 
+                              << "Not yet supported. Picking last one." << std::endl;
+                    warned = true;
+                    for (const auto& pvt : primvarsAndType)
                     {
-                        std::cerr << "\t\t" << pvt.name << std::endl;
+                        if (pvt.type == TfToken("st"))
+                        {
+                            std::cout << "\t\t" << pvt.name << std::endl;
+                        }
                     }
                 }
             }
+            
             
             for (const auto& pvt : primvarsAndType)
             {
@@ -668,17 +677,16 @@ namespace tl
 
                 if (type == TfToken("st"))
                 {
-                    bool ok = (numUVSets == 1 ||
-                               (numUVSets != 1 &&
-                                pvt.name == preferredUV));
-                    if (!ok) continue;
-
-                    std::cout << "\t\tadding STs " << pvt.name << std::endl;
+                    ++uvCount;
+                    if (uvCount < numUVSets)
+                        continue;
                     
                     // Get STs if any.
-                    usd::PrimvarSampler<GfVec2f> sampler(pv);
+                    usd::PrimvarSampler<GfVec2f> sampler(pv, time);
                     if (sampler.IsValid())
                     {
+                        geom->t.clear();
+                        
                         int faceCornerIdx = 0; 
                         for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
                              ++faceIdx) {
@@ -703,7 +711,7 @@ namespace tl
                 else if (type == TfToken("normal"))
                 {
                     // Get Normals if any.
-                    usd::PrimvarSampler<GfVec3f> sampler(pv);
+                    usd::PrimvarSampler<GfVec3f> sampler(pv, time);
                     if (sampler.IsValid()) {
                         int faceCornerIdx = 0; 
                         for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
@@ -729,7 +737,7 @@ namespace tl
                 }
                 else if (type == TfToken("color"))
                 {
-                    usd::PrimvarSampler<GfVec3f> sampler(pv);
+                    usd::PrimvarSampler<GfVec4f> sampler(pv, time);
                     if (sampler.IsValid()) {
                         int faceCornerIdx = 0; 
                         for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
@@ -740,7 +748,7 @@ namespace tl
                             int cornerIdx = faceCornerIdx + i;
                             int pointIdx = faceVertexIndices[cornerIdx];
 
-                            GfVec3f c = sampler.Sample(faceIdx, cornerIdx, pointIdx);
+                            GfVec4f c = sampler.Sample(faceIdx, cornerIdx, pointIdx);
                             
                             if (c[0] < 0.F || c[0] > 1.F ||
                                 c[1] < 0.F || c[1] > 1.F ||
@@ -847,37 +855,46 @@ namespace tl
             }
             
             shaderId = "dummy";
-            std::string materialPath = "unassigned";
+            std::string materialKey = "unassigned";
             if (usdMaterial)
             {
-                materialPath = usdMaterial.GetPath().GetString();
+                shaderId = "UsdPreviewSurface";
+                materialKey = usdMaterial.GetPrim().GetPath().GetString();
+                // materialKey += "#" + primPath;
         
-                auto i = p.textures.find(materialPath);
+                auto i = p.textures.find(materialKey);
                 if (i != p.textures.end())
                 {
                     textures = i->second;
                 }
-                auto j = p.materials.find(materialPath);
+                else
+                {
+                    std::cerr << "Did not find textures " << materialKey << std::endl;
+                }
+                auto j = p.materials.find(materialKey);
                 if (j != p.materials.end())
                 {
                     material = j->second;
                 }
-                shaderId = "UsdPreviewSurface";
+                else
+                {
+                    std::cerr << "Did not find material " << materialKey << std::endl;
+                }
             }
+            else
+            {
+                shaderId = "st";
+            }
+
 
             p.stats.textures = p.textures.size();
             p.stats.triangles += geom->triangles.size();
 
-            if (1) //!material.transparent)
+            if (!material.transparent)
             {
-                // Object is opaque.  Render it.
+                // Object is opaque.  Render it without blending.
                 p.stats.opaque++;
 
-                std::cout << "\thas material=" << materialPath << std::endl
-                          << "\tshader=" << shaderId << " textures.size()="
-                          << textures.size()
-                          << " hasUVs=" << hasUVs << " hasColors=" << hasColors << std::endl;
-                
                 p.render->drawMesh(*geom, meshOptimization, modelMatrix, color,
                                    shaderId, textures, material);
             }
@@ -898,6 +915,8 @@ namespace tl
                                 unsigned renderWidth)
         {
             TLRENDER_P();
+            
+            p.stats.timer = std::chrono::steady_clock::now();
             
             if (!p.render)
             {
@@ -980,7 +999,7 @@ namespace tl
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F16;
             offscreenBufferOptions.depth = vlk::OffscreenDepth::_32;
             offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
-            offscreenBufferOptions.sampling = vlk::OffscreenSampling::_4;
+            offscreenBufferOptions.sampling = vlk::OffscreenSampling::kNone;
             offscreenBufferOptions.pbo = true;
             offscreenBufferOptions.colorFilters.minify = timeline::ImageFilter::Linear;
             offscreenBufferOptions.colorFilters.magnify = timeline::ImageFilter::Linear;
@@ -1055,14 +1074,14 @@ namespace tl
 
                 primPath = it->GetPath().GetString();
 
-                // std::regex re("Sweater");
-                std::regex re("(?:stoat|remi)");
+                std::regex re("Sweater");
+                // std::regex re("(?:stoat|remi)");
                 // std::regex re("Paw");  // legs and arms ends
                 // std::regex re("legsPaw");     // legs only
                 
-                if (!std::regex_search(primPath, re))
-                    continue;
-
+                // if (!std::regex_search(primPath, re))
+                //     continue;
+                
                 // std::cout << primPath << std::endl;
 
                 matrix = xformCache.GetLocalToWorldTransform(*it);
@@ -1124,17 +1143,22 @@ namespace tl
                 {
                     p.stats.total++;
                     p.stats.spheres++;
+
+                    UsdTimeCode time = p.time;
+                    
                     UsdGeomSphere out = UsdGeomSphere(*it);
                     float radius = 1;
-                    out.GetRadiusAttr().Get(&radius, p.time);
+                    out.GetRadiusAttr().Get(&radius, time);
                     auto geom = geom::sphere(radius, 16, 16);
                     
                     std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
                     UsdShadeMaterialBindingAPI api(*it);
                     UsdShadeMaterial material = usd::GetMaterial(api);
 
-                    const std::string materialPath = material.GetPath().GetString();
-                    auto i = p.textures.find(materialPath);
+                    std::string materialKey = material.GetPath().GetString();
+                    materialKey += "#" + primPath;
+                    
+                    auto i = p.textures.find(materialKey);
                     if (i != p.textures.end())
                     {
                         textures = i->second;
@@ -1166,49 +1190,19 @@ namespace tl
                     p.stats.cones++;
                 }
             }
-
-            for (auto& object : p.transparentPrims)
-            {
-                object.sortKey = usd::makeSortKey(object.bbox,
-                                                  cameraPos,
-                                                  viewDir,
-                                                  p.stats.total);
-            }
             
-            //
-            // Sort primitives by center from back to front.
-            //
-            std::sort(p.transparentPrims.begin(),
-                      p.transparentPrims.end(),
-                      [](const auto& a, const auto& b)
-                      {
-                          if (a.sortKey.depth != b.sortKey.depth)
-                              return a.sortKey.depth > b.sortKey.depth;
-
-                          return a.sortKey.tieBreaker > b.sortKey.tieBreaker;
-                      });
-
             //
             // Draw transparent primitives.
             //
             for (auto& object : p.transparentPrims)
             {                
                 VkBool32 depthTest = VK_TRUE;
-                VkBool32 depthWrite = VK_FALSE;
+                VkBool32 depthWrite = VK_TRUE;
                 p.render->drawMesh(*object.geom, object.optimization,
                                    object.modelMatrix, object.color,
                                    object.shaderId, object.textures,
                                    object.material, true, depthTest,
                                    depthWrite);
-                // p.render->drawMesh(*object.geom, object.optimization,
-                //                    object.modelMatrix, object.color,
-                //                    object.shaderId, object.textures,
-                //                    object.material, true, depthTest,
-                //                    depthWrite,
-                //                    VK_BLEND_FACTOR_ONE,
-                //                    VK_BLEND_FACTOR_ONE,
-                //                    VK_BLEND_FACTOR_ONE,
-                //                    VK_BLEND_FACTOR_ONE);
             }
             
             
@@ -1218,15 +1212,23 @@ namespace tl
     
             p.render->setTransform(oldTransform);
 
-#ifdef PRINT_STATS
-            p.stats.print(std::cout);
+#if PRINT_STATS
+            std::ostream& out = std::cout;
+            p.stats.print(out);
 #endif
             
             if (p.buffer)
             {
                 p.buffer->transitionToShaderRead(cmd);
             }
+            
+            const auto now = std::chrono::steady_clock::now();
+            const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(
+                now - p.stats.timer);
 
+#if PRINT_STATS
+            out << "Render time: " << ( diff.count() / 1000.F) << " seconds" << std::endl;
+#endif
         }
 
         std::shared_ptr<vlk::OffscreenBuffer> RenderEngine::getFBO()
@@ -1246,7 +1248,6 @@ namespace tl
             }
             
             p.time = time;
-            p.collectTextures = true;
         }
 
         void RenderEngine::_bakeJoints()

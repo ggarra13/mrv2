@@ -96,7 +96,6 @@ namespace tl
                 }
                 else
                 {
-                    // Use a warning instead of a throw if you want the renderer to keep running
                     std::cerr << "Warning: Unknown input "
                               << inputName.GetString() << std::endl;
                     result.texturePath = "*black";
@@ -162,7 +161,6 @@ namespace tl
             // Helper: Extract texture parameters from a producing attribute
             // -----------------------------------------------------------------
             std::unordered_set<std::string> visitedPrims;
-            int tabs = 0;
             std::function<bool(const UsdAttribute&)> extractTextureParamsRec;
             extractTextureParamsRec = [&](const UsdAttribute& upstreamAttr) -> bool
                 {
@@ -231,7 +229,6 @@ namespace tl
                 if (dispOutput)
                 {
                     // GetValueProducingAttributes handles deep graph traversal
-                    tabs = 0;
                     for (const UsdAttribute& attr : dispOutput.GetValueProducingAttributes()) {
                         if (extractTextureParamsRec(attr)) {
                             return result;
@@ -355,10 +352,10 @@ namespace tl
                           << "\topacityTheshold " << out.opacityThreshold << std::endl
                           << "\tdisplacement " << out.displacement << std::endl
                           << "\tior" << out.ior << std::endl;
+                if (out.transparent)
+                    std:: cout << "\t\tMATERIAL IS TRANSPARENT" << std::endl;
             }
             
-            if (out.transparent)
-                std:: cout << "\t\tMATERIAL IS TRANSPARENT" << std::endl;
             return out;
         }
 
@@ -383,7 +380,9 @@ namespace tl
                 UsdShadeMaterial mat = usd::GetMaterial(api);
                 if (mat)
                 {
-                    const std::string key = mat.GetPrim().GetPath().GetString();
+                    std::string key = mat.GetPrim().GetPath().GetString();
+                    std::string primPath = prim.GetPath().GetString();
+                    // key += "#" + primPath;
                     if (out.find(key) != out.end())
                         continue;
                     if (debug)
@@ -403,13 +402,15 @@ namespace tl
 
                     for (const auto& subset : subsets)
                     {
-                        UsdShadeMaterialBindingAPI subApi(subset.GetPrim());
+                        UsdPrim prim = subset.GetPrim();
+                        std::string primPath = prim.GetPath().GetString();
+                        
+                        UsdShadeMaterialBindingAPI subApi(prim);
                         UsdShadeMaterial mat = usd::GetMaterial(subApi);
                         if (mat)
                         {
-                            const std::string key = mat.GetPrim().GetPath().GetString();
-                            if (out.find(key) != out.end())
-                                continue;
+                            std::string key = mat.GetPrim().GetPath().GetString();
+                            key += "#" + primPath;
                             
                             if (debug)
                             {

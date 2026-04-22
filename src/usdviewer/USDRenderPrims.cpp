@@ -77,7 +77,6 @@ namespace tl
             }
             if (p.vbos[meshName])
             {
-                std::cout << "\t\tconvert mesh type = " << type << std::endl;
                 p.vbos[meshName]->copy(convert(mesh, type));
             }
             
@@ -200,11 +199,9 @@ namespace tl
                 
                 p.shaders[shaderName]->bind(p.frameIndex);
             }
-            else if (textures.empty() || shaderId == "dummy")
+            else if (textures.empty() || shaderId == "dummy" || !mesh.c.empty())
             {
                 shaderName = "dummy";
-                if (!mesh.c.empty())
-                    shaderName = "dummy_c";
                 
                 pipelineLayoutName = shaderName;
 
@@ -223,8 +220,6 @@ namespace tl
                     shaderName ="usd_uv_c";
                 else if (mesh.t.empty() && !mesh.c.empty())
                     shaderName = "usd_c";
-
-                std::cout << "\t\tshaderName = " << shaderName << std::endl;
                 
                 pipelineLayoutName = shaderName;
 

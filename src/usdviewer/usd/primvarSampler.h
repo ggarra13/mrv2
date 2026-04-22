@@ -8,40 +8,41 @@ namespace tl
         class PrimvarSampler
         {
         public:
-            PrimvarSampler(const UsdGeomPrimvar& primvar)
+            PrimvarSampler(const UsdGeomPrimvar& primvar,
+                           const UsdTimeCode& time)
                 {
                     valid = primvar.IsDefined();
                     if (!valid)
                         return;
 
-                    primvar.Get(&values);
+                    primvar.Get(&values, time);
                     interpolation = primvar.GetInterpolation();
-
+                    
                     indexed = primvar.IsIndexed();
                     if (indexed)
-                        primvar.GetIndices(&indices);
+                        primvar.GetIndices(&indices, time);
                 }
 
             bool IsValid() const { return valid && !values.empty(); }
 
             T Sample(int faceIdx,
-                     int faceCornerIdx,
+                     int faceVertexIdx,
                      int pointIdx) const
                 {
-                    int idx = ResolveIndex(faceIdx, faceCornerIdx, pointIdx);
+                    int idx = ResolveIndex(faceIdx, faceVertexIdx, pointIdx);
                     return values[idx];
                 }
 
         private:
             int ResolveIndex(int faceIdx,
-                             int faceCornerIdx,
+                             int faceVertexIdx,
                              int pointIdx) const
                 {
                     int domainIdx = 0;
 
                     if (interpolation == UsdGeomTokens->faceVarying)
                     {
-                        domainIdx = faceCornerIdx;
+                        domainIdx = faceVertexIdx;
                     }
                     else if (interpolation == UsdGeomTokens->vertex ||
                              interpolation == UsdGeomTokens->varying)
@@ -58,8 +59,10 @@ namespace tl
                     }
 
                     if (indexed)
+                    {
                         return indices[domainIdx];
-
+                    }
+                    
                     return domainIdx;
                 }
 
