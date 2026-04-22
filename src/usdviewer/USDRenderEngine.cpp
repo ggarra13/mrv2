@@ -1107,7 +1107,7 @@ namespace tl
                     color.r = colors[0][0];
                     color.g = colors[0][1];
                     color.b = colors[0][2];
-                    color.a = colors[0][3];
+                    //color.a = colors[0][3];
                 }
                 
                 std::string shaderId;
