@@ -67,13 +67,6 @@ namespace tl
                 std::cout << "color_u8" << std::endl;
                 type = vlk::VBOType::Pos3_F32_Color_U8;
             }
-            else
-            {
-                std::cout << "default fallback" << std::endl;
-                type = vlk::VBOType::Pos3_F32_UV_U16;
-                if (opt.floatUVs)
-                    type = vlk::VBOType::Pos3_F32_UV_F32;
-            }
 
             // Rebuild the VBO whenever the triangle count or type changes.
             if (!p.vbos[meshName] ||
