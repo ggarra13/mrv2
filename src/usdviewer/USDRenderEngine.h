@@ -4,6 +4,7 @@
 #include <tlCore/Matrix.h>
 #include <tlCore/Util.h>
 
+#include <pxr/usd/usdGeom/bboxCache.h>
 #include <pxr/usd/usdGeom/mesh.h>
 #include <pxr/usd/usdGeom/subset.h>
 
@@ -48,7 +49,8 @@ namespace tl
                            const UsdGeomMesh& usdMesh,
                            const math::Matrix4x4f& modelMatrix,
                            std::string shaderName,
-                           const image::Color4f& color);
+                           const image::Color4f& color,
+                           pxr::UsdGeomBBoxCache& );
 
             Fl_Vk_Context& ctx;
             

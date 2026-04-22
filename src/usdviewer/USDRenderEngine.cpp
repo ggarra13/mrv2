@@ -47,7 +47,6 @@
 
 // Primitive types (refactor all these for scene traversal)
 #include <pxr/usd/usdGeom/basisCurves.h>
-#include <pxr/usd/usdGeom/bboxCache.h>
 #include <pxr/usd/usdGeom/camera.h>
 #include <pxr/usd/usdGeom/capsule.h>
 #include <pxr/usd/usdGeom/cone.h>
@@ -110,29 +109,6 @@ using namespace PXR_NS;
 
 namespace
 {
-
-    tl::math::Vector3f GetObjectWorldCenter(const UsdPrim& prim,
-                                            UsdTimeCode time = UsdTimeCode::Default()) {
-        // 1. Define which purposes to include (usually 'default')
-        TfTokenVector purposes = {UsdGeomTokens->default_};
-
-        // 2. Initialize the BBoxCache for the given time
-        UsdGeomBBoxCache bboxCache(time, purposes);
-
-        // 3. Compute the world-space bounding box
-        // This handles the hierarchy transformation internally
-        GfBBox3d worldBbox = bboxCache.ComputeWorldBound(prim);
-        GfRange3d range = worldBbox.GetRange();
-
-        // 4. Return the midpoint of the range
-        if (!range.IsEmpty()) {
-            const GfVec3d c(range.GetMidpoint());
-            return tl::math::Vector3f(c[0], c[1], c[2]);
-        }
-
-        // Return zero vector if prim has no bounds
-        return tl::math::Vector3f(0.F, 0.F, 0.F);
-    }
     
     UsdGeomCamera UsdGetCameraAtPath(
         const UsdStageRefPtr& stage,
@@ -603,7 +579,8 @@ namespace tl
                                      const UsdGeomMesh& usdMesh,
                                      const math::Matrix4x4f& modelMatrix,
                                      std::string shaderId,
-                                     const image::Color4f& color)
+                                     const image::Color4f& color,
+                                     UsdGeomBBoxCache& bboxCache)
         {
             TLRENDER_P();
             
@@ -643,7 +620,8 @@ namespace tl
                 for (const auto& usdMesh : usdMeshes)
                 {
                     const std::string primPath = usdMesh.GetPath().GetString();
-                    _drawMesh(primPath, usdMesh, modelMatrix, shaderId, color);
+                    _drawMesh(primPath, usdMesh, modelMatrix, shaderId, color,
+                              bboxCache);
                 }
 
                 return;
@@ -890,7 +868,7 @@ namespace tl
             p.stats.textures = p.textures.size();
             p.stats.triangles += geom->triangles.size();
 
-            if (!material.transparent)
+            if (1) //!material.transparent)
             {
                 // Object is opaque.  Render it.
                 p.stats.opaque++;
@@ -910,8 +888,7 @@ namespace tl
                 TransparentPrimitive object(geom, meshOptimization,
                                             modelMatrix, shaderId, color,
                                             material, textures);
-                object.center   = GetObjectWorldCenter(usdMesh.GetPrim(),
-                                                       p.time);
+                object.bbox = bboxCache.ComputeWorldBound(prim);
                 p.transparentPrims.emplace_back(object);
             }
         }
@@ -975,6 +952,8 @@ namespace tl
 
             const GfFrustum frustum = gfCamera.GetFrustum();
             const GfVec3d cameraPos = frustum.GetPosition();
+            const GfVec3d viewDir = frustum.ComputeViewDirection();
+
             const math::Vector3f camPos(cameraPos[0], cameraPos[1],
                                         cameraPos[2]);
     
@@ -1030,8 +1009,9 @@ namespace tl
             
             auto oldTransform = p.render->getTransform();
             p.render->setTransform(mvp);
-
-
+            
+            TfTokenVector purposes = {UsdGeomTokens->default_};
+            UsdGeomBBoxCache bboxCache(p.time, purposes);
     
             UsdPrimRange range(p.stage->GetPseudoRoot(),
                                UsdTraverseInstanceProxies());
@@ -1080,8 +1060,8 @@ namespace tl
                 // std::regex re("Paw");  // legs and arms ends
                 // std::regex re("legsPaw");     // legs only
                 
-                // if (!std::regex_search(primPath, re))
-                //     continue;
+                if (!std::regex_search(primPath, re))
+                    continue;
 
                 // std::cout << primPath << std::endl;
 
@@ -1119,7 +1099,8 @@ namespace tl
                     p.stats.meshes++;
 
                     UsdGeomMesh usdMesh = UsdGeomMesh(*it);
-                    _drawMesh(primPath, usdMesh, modelMatrix, shaderId, color);
+                    _drawMesh(primPath, usdMesh, modelMatrix, shaderId, color,
+                              bboxCache);
                 }
                 else if (it->IsA<UsdGeomNurbsPatch>())
                 {
@@ -1186,17 +1167,26 @@ namespace tl
                 }
             }
 
+            for (auto& object : p.transparentPrims)
+            {
+                object.sortKey = usd::makeSortKey(object.bbox,
+                                                  cameraPos,
+                                                  viewDir,
+                                                  p.stats.total);
+            }
+            
             //
             // Sort primitives by center from back to front.
             //
             std::sort(p.transparentPrims.begin(),
                       p.transparentPrims.end(),
-                      [&camPos] (const auto& a, const auto& b)
-                          {
-                              double aLength = math::length2(a.center - camPos);
-                              double bLength = math::length2(b.center - camPos);
-                              return aLength > bLength;
-                          });
+                      [](const auto& a, const auto& b)
+                      {
+                          if (a.sortKey.depth != b.sortKey.depth)
+                              return a.sortKey.depth > b.sortKey.depth;
+
+                          return a.sortKey.tieBreaker > b.sortKey.tieBreaker;
+                      });
 
             //
             // Draw transparent primitives.
@@ -1204,12 +1194,21 @@ namespace tl
             for (auto& object : p.transparentPrims)
             {                
                 VkBool32 depthTest = VK_TRUE;
-                VkBool32 depthWrite = VK_TRUE;  // \@bug: should be VK_FALSE
+                VkBool32 depthWrite = VK_FALSE;
                 p.render->drawMesh(*object.geom, object.optimization,
                                    object.modelMatrix, object.color,
                                    object.shaderId, object.textures,
                                    object.material, true, depthTest,
                                    depthWrite);
+                // p.render->drawMesh(*object.geom, object.optimization,
+                //                    object.modelMatrix, object.color,
+                //                    object.shaderId, object.textures,
+                //                    object.material, true, depthTest,
+                //                    depthWrite,
+                //                    VK_BLEND_FACTOR_ONE,
+                //                    VK_BLEND_FACTOR_ONE,
+                //                    VK_BLEND_FACTOR_ONE,
+                //                    VK_BLEND_FACTOR_ONE);
             }
             
             

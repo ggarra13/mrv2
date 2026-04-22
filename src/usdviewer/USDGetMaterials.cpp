@@ -321,7 +321,7 @@ namespace tl
             {
                 out.transparent = true;
             }
-            else if (out.opacity.hasValue &&
+            if (out.opacity.hasValue &&
                  (out.opacity.value[0] < 0.95F ||
                   out.opacity.value[1] < 0.95F ||
                   out.opacity.value[2] < 0.95F ||
