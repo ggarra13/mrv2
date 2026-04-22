@@ -896,10 +896,15 @@ namespace tl
             {
                 p.stats.transparent++;
                 
-                TransparentPrimitive object(geom, meshOptimization,
-                                            modelMatrix, shaderId, color,
-                                            material, textures);
-                object.bbox = bboxCache.ComputeWorldBound(prim);
+                TransparentPrimitive object;
+                object.geom = geom;
+                object.optimization = meshOptimization;
+                object.modelMatrix = modelMatrix;
+                object.shaderId = shaderId;
+                object.color = color;
+                object.material = material;
+                object.textures = textures;
+
                 p.transparentPrims.emplace_back(object);
             }
         }
