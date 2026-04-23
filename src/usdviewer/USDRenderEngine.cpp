@@ -912,7 +912,8 @@ namespace tl
                                 unsigned renderWidth)
         {
             TLRENDER_P();
-            
+
+            std::cerr << "draw loop begin" << std::endl;
             p.stats.timer = std::chrono::steady_clock::now();
             
             if (!p.render)
@@ -996,6 +997,7 @@ namespace tl
             offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
             offscreenBufferOptions.sampling = vlk::OffscreenSampling::kNone;
             offscreenBufferOptions.pbo = true;
+            offscreenBufferOptions.storeDepth = true;
             offscreenBufferOptions.colorFilters.minify = timeline::ImageFilter::Linear;
             offscreenBufferOptions.colorFilters.magnify = timeline::ImageFilter::Linear;
 
@@ -1193,19 +1195,21 @@ namespace tl
             p.render->createOIT();
             p.render->beginOITRenderPass();
             
-            // //
-            // // Draw transparent primitives.
-            // //
+            //
+            // Draw transparent primitives.
+            //
             for (auto& object : p.transparentPrims)
-            {                
+            {
+                std::cerr << "one oit mesh draw" << std::endl;
                 p.render->drawMeshOIT(*object.geom, object.optimization,
                                       object.modelMatrix, object.color,
                                       "usd_oit", object.textures,
                                       object.material);
+                std::cerr << "one oit mesh drawn" << std::endl;
             }
             
             
-            p.render->endRenderPass();
+            p.render->endOITRenderPass();
             p.render->end();
 
             p.render->setRenderPass(oldRenderPass);

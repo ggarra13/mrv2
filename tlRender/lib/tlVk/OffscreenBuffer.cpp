@@ -127,6 +127,7 @@ namespace tl
                     stencil == other.stencil && sampling == other.sampling &&
                     clearColor == other.clearColor &&
                     clearDepth == other.clearDepth &&
+                    storeDepth == other.storeDepth &&
                     pbo == other.pbo);
         }
 
@@ -316,6 +317,7 @@ namespace tl
 
             if (hasDepth() || hasStencil())
             {
+                std::cerr << "create depth/stencil image/view" << std::endl;
                 createDepthImage();
                 createDepthImageView();
             }
@@ -741,7 +743,8 @@ namespace tl
                 depthAttachment.format = p.depthFormat;
                 depthAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
                 depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-                depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                depthAttachment.storeOp = p.options.storeDepth ?  VK_ATTACHMENT_STORE_OP_STORE :
+                                          VK_ATTACHMENT_STORE_OP_DONT_CARE;
                 depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
                 depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -839,7 +842,8 @@ namespace tl
                 depthAttachment.format = p.depthFormat;
                 depthAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
                 depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-                depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                depthAttachment.storeOp = p.options.storeDepth ?  VK_ATTACHMENT_STORE_OP_STORE :
+                                          VK_ATTACHMENT_STORE_OP_DONT_CARE;
                 depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
                 depthAttachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;

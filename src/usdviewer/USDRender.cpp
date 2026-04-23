@@ -432,20 +432,7 @@ namespace tl
             
             p.fbo->endRenderPass(p.cmd);
         }
-        
-        void Render::endOITRenderPass()
-        {
-            TLRENDER_P();
-            vkCmdEndRenderPass(p.cmd);
-    
-            // Tell the C++ tracking what the render pass did for us automatically.
-            // This prevents transition() from inserting a wrong barrier next frame.
-            p.accum[p.frameIndex]->setCurrentLayout(
-                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-            p.reveal[p.frameIndex]->setCurrentLayout(
-                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        }
-        
+                
         void Render::setupViewportAndScissor()
         {
             TLRENDER_P();

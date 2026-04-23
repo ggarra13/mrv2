@@ -9,6 +9,7 @@
 #include <string>
 
 #define USE_REVEAL 1
+#define USE_DEPTH 1   // turning this to one results VK_ERROR_DEVICE_LOST
 
 #if DEBUG_PIPELINE_USE
 #define DEBUG_PIPELINE(x) std::cerr << x << std::endl;
@@ -321,6 +322,8 @@ namespace tl
                 attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
                 attachments.push_back(attachment);
 #endif
+
+#if USE_DEPTH
                 
                 // We reuse depth from opaque pass (in p.fbo).
                 attachment.format = p.fbo->getDepthFormat();
@@ -332,7 +335,8 @@ namespace tl
                 attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 attachments.push_back(attachment);
-
+#endif
+                
                 std::vector<VkAttachmentReference> colorRefs;
 
                 VkAttachmentReference colorRef = {};
@@ -346,16 +350,19 @@ namespace tl
                 colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 colorRefs.push_back(colorRef);
 #endif
-                
+
+#if USE_DEPTH
                 VkAttachmentReference depthRef = {};
                 depthRef.attachment = colorRefs.size();
                 depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-   
+#endif
                 VkSubpassDescription subpass = {};
                 subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
                 subpass.colorAttachmentCount = colorRefs.size();
                 subpass.pColorAttachments = colorRefs.data();
+#if USE_DEPTH
                 subpass.pDepthStencilAttachment = &depthRef;
+#endif
 
                 VkSubpassDependency dependency = {};
 
@@ -406,7 +413,9 @@ namespace tl
 
 
             std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+#if USE_DEPTH
             p.fbo->transitionDepthToStencilAttachment(p.cmd);
+#endif
             
             p.accum[p.frameIndex]->transitionToColorAttachment(p.cmd);
 #if USE_REVEAL
@@ -420,8 +429,9 @@ namespace tl
             views.push_back(p.reveal[p.frameIndex]->getImageView());
 #endif
 
+#if USE_DEPTH
             views.push_back(p.fbo->getDepthImageView());
-            
+#endif
 
             VkFramebufferCreateInfo fbInfo = {};
             fbInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -455,11 +465,13 @@ namespace tl
             clears.push_back(clear);
 #endif
 
+#if USE_DEPTH
             // Depth = don't care (we LOAD it)
             clear.color = {1.f, 0.f, 0.f, 0.f};
             clear.depthStencil = {1.0f, 0};
             clears.push_back(clear);
-
+#endif
+            
             VkRenderPassBeginInfo beginInfo = {};
             beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
             beginInfo.renderPass = p.oitRenderPass;
@@ -473,6 +485,24 @@ namespace tl
 
             vkCmdBeginRenderPass(p.cmd, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
+            VkViewport viewport = {};
+            viewport.x = 0.0f;
+            // Set the y origin to the bottom of the framebuffer
+            viewport.y = static_cast<float>(p.fbo->getHeight());
+            viewport.width = static_cast<float>(p.fbo->getWidth());
+            // Use a negative height to flip the y-axis
+            viewport.height = -static_cast<float>(p.fbo->getHeight());
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+
+            VkRect2D scissor = {};
+            scissor = {};
+            scissor.offset = {0, 0};
+            scissor.extent = {
+                static_cast<uint32_t>(p.fbo->getWidth()),
+                static_cast<uint32_t>(p.fbo->getHeight())};
+            vkCmdSetViewport(p.cmd, 0, 1, &viewport);
+            vkCmdSetScissor(p.cmd, 0, 1, &scissor);
         }
         
         VkRenderPass Render::getRenderPass() const
@@ -597,10 +627,27 @@ namespace tl
             _createPipeline(pipelineName, pipelineLayoutName,
                             p.oitRenderPass, shader, mesh, cb, ds, ms);
             
+            
             const auto mvp = p.transform * model;
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, mvp,
                           model, color);
         }
+
+        void Render::endOITRenderPass()
+        {
+            TLRENDER_P();
+            vkCmdEndRenderPass(p.cmd);
+    
+            // Tell the C++ tracking what the render pass did for us automatically.
+            // This prevents transition() from inserting a wrong barrier next frame.
+            p.accum[p.frameIndex]->setCurrentLayout(
+                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            p.reveal[p.frameIndex]->setCurrentLayout(
+                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+            p.fbo->transitionToShaderRead(p.cmd);
+        }
+
         
     }
 }
