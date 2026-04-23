@@ -111,10 +111,17 @@ namespace tl
                           const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
             
             //! Vulkan render pass functions
+            void beginOITRenderPass();
             void beginLoadRenderPass();
             void beginRenderPass();
             void endRenderPass();
+            
             void setupViewportAndScissor();
+
+            //! Create OIT renderpass and framebuffer for current frameIndex.
+            void createOIT();
+            void colorBlendOIT();
+            
             
         private:
             // Main entry pipeline creation function

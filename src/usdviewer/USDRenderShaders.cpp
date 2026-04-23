@@ -232,7 +232,8 @@ void main()
 })";
         }
         
-        std::string fragmentUSD(bool hasNormal, bool hasColor)
+        std::string fragmentUSD(bool hasNormal, bool hasColor,
+                                bool hasOIT)
         {
             int idx = 2;
             std::string normalInput = "";
@@ -256,6 +257,22 @@ void main()
                 // colorCode  = "vec3 albedo = texture(u_DiffuseMap, st).rgb * pc.color.rgb;\n";  // white colors
                 ++idx;
             }
+
+            std::string output = "layout(location = 0) out vec4 outColor;\n";
+            std::string outputCode = "outColor = vec4(color, opacity);\n";
+            if (hasOIT)
+            {
+                output = R"(layout(location = 0) out vec4 outAccum;\n
+                           layout(location = 1) out float outReveal;)";
+                outputCode = R"(
+// Weight (can be simple or fancy)
+float weight = max(0.01, pow(opacity, 4.0));
+
+outAccum  = vec4(color.rgb * opacity * weight, opacity * weight);
+outReveal = opacity;
+)";
+            }
+            
             return string::Format(R"(#version 450
 
 layout(location = 0) in vec3 Peye;
@@ -273,7 +290,7 @@ layout(binding = 7) uniform sampler2D u_OpacityMap;
 layout(binding = 8) uniform sampler2D u_OpacityThresholdMap;
 layout(binding = 9) uniform sampler2D u_IorMap;
 
-layout(location = 0) out vec4 outColor;
+{2}
                   
 layout(push_constant) uniform PushConstants {
     vec4 color;
@@ -342,7 +359,7 @@ void main()
 
     // ── Sample textures ───────────────────────
     // vec3 albedo = texture(u_DiffuseMap,   st).rgb * pc.color.rgb;
-    {2} // colorCode
+    {3} // colorCode
     float metallic  = texture(u_MetallicMap,  st).r * u_Material_metallic;
     float roughness = texture(u_RoughnessMap, st).r * u_Material_roughness;
     float ao        = mix(1.0, texture(u_AOMap, st).r, u_Material_aoStrength);
@@ -354,7 +371,7 @@ void main()
 
     // ── Normal from normal map ────────────────
     vec3 Nt  = texture(u_NormalMap, st).rgb * 2.0 - 1.0; // [0,1] → [-1,1]
-    {3}  // normalCode
+    {4}  // normalCode
     //vec3 N_base = normalize(cross(dFdx(Peye), dFdy(Peye)));
     mat3 TBN = ComputeTBNMatrix(Peye, N_base, st);
     vec3 N = normalize(TBN * Nt);
@@ -411,7 +428,8 @@ void main()
     vec3 color = ambient + Lo + emissive;
 
     // Combine color and opacity.  Do NOT premult.
-    outColor = vec4(color, opacity);
+    //outColor = vec4(color, opacity);
+    {5}
 
     // VERIFIED: albedo and ao are okay.
     //outColor = vec4(albedo, 1.0);
@@ -430,10 +448,13 @@ void main()
 
     // VERIFIED: normal mapping works correctly.
 
-})").arg(normalInput).
+})").
+                arg(normalInput).
                 arg(colorInput).
+                arg(output).
                 arg(colorCode).
-                arg(normalCode);
+                arg(normalCode).
+                arg(outputCode);
         }
         
         std::string vertexSTs()

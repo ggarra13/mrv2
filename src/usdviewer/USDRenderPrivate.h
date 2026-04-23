@@ -39,7 +39,8 @@ namespace tl
         std::string vertexUSD_UV_Normal_Color();
 
         std::string fragmentUSD(bool hasNormal = false,
-                                bool hasColor = false);
+                                bool hasColor = false,
+                                bool hasOIT = false);
         
 
         struct Render::Private
@@ -78,6 +79,8 @@ namespace tl
             // Active resources
             std::shared_ptr<vlk::Texture> accum[vlk::MAX_FRAMES_IN_FLIGHT];
             std::shared_ptr<vlk::Texture> reveal[vlk::MAX_FRAMES_IN_FLIGHT];
+            VkFramebuffer oitFramebuffer[vlk::MAX_FRAMES_IN_FLIGHT];
+            VkRenderPass  oitRenderPass;
             
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex / Fragment
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute

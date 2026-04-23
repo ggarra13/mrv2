@@ -605,6 +605,11 @@ namespace tl
             return _p->resolveImageView;
         }
 
+        VkImageView OffscreenBuffer::getDepthImageView() const
+        {
+            return _p->depthImageView;
+        }
+
         VkImage OffscreenBuffer::getImage() const
         {
             return _p->resolveImage;

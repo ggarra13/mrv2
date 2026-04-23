@@ -190,6 +190,7 @@ namespace tl
             const image::Color4f color(1.F, 1.F, 1.F);
             USDTransforms transforms;
 
+            // Dummy shaders
             if (!p.shaders["dummy"])
             {
                 p.shaders["dummy"] = vlk::Shader::create(
@@ -236,6 +237,28 @@ namespace tl
                 p.shaders["usd"]->addTexture("u_OpacityThresholdMap");
                 p.shaders["usd"]->addTexture("u_IorMap");
                 _createBindingSet(p.shaders["usd"]);
+            }
+            
+            if (!p.shaders["usd_oit"])
+            {
+                bool hasNormal = false;
+                bool hasColor = false;
+                bool hasOIT = true;
+                p.shaders["usd_oit"] = vlk::Shader::create(
+                    ctx, vertexUSD_UV(), fragmentUSD(), "usd_oit");
+                p.shaders["usd_oit"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["usd_oit"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["usd_oit"]->addTexture("u_DiffuseMap");
+                p.shaders["usd_oit"]->addTexture("u_EmissiveMap");
+                p.shaders["usd_oit"]->addTexture("u_MetallicMap");
+                p.shaders["usd_oit"]->addTexture("u_RoughnessMap");
+                p.shaders["usd_oit"]->addTexture("u_NormalMap");
+                p.shaders["usd_oit"]->addTexture("u_AOMap");
+                p.shaders["usd_oit"]->addTexture("u_OpacityMap");
+                p.shaders["usd_oit"]->addTexture("u_OpacityThresholdMap");
+                p.shaders["usd_oit"]->addTexture("u_IorMap");
+                _createBindingSet(p.shaders["usd_oit"]);
             }
             
             if (!p.shaders["usd_uv_n"])

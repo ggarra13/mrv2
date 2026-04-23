@@ -151,6 +151,9 @@ namespace tl
 
             //! Get image view.
             VkImageView getImageView() const;
+            
+            //! Get image view.
+            VkImageView getDepthImageView() const;
 
             //! Get image.
             VkImage getImage() const;
