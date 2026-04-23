@@ -3,10 +3,12 @@
 // All rights reserved.
 
 #include "USDRenderPrivate.h"
+#include "USDTextureSlots.h"
 
 #include <iostream>
 #include <string>
 
+#define USE_REVEAL 1
 
 #if DEBUG_PIPELINE_USE
 #define DEBUG_PIPELINE(x) std::cerr << x << std::endl;
@@ -281,12 +283,6 @@ namespace tl
             p.vaos[meshName]->bind(p.frameIndex);
             p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
         }
-
-        void Render::colorBlendOIT(vlk::ColorBlendStateInfo& cb)
-        {
-                
-        }
-
         
         void Render::createOIT()
         {
@@ -299,54 +295,66 @@ namespace tl
             if (p.oitRenderPass == VK_NULL_HANDLE)
             {
 
-                VkAttachmentDescription attachments[3] = {};
+                std::vector<VkAttachmentDescription> attachments;
 
                 // Accum attachment
-                attachments[0].format = VK_FORMAT_R16G16B16A16_SFLOAT;
-                attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
-                attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-                attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-                attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-                attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-                attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-                attachments[0].finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                VkAttachmentDescription attachment = {};
+                attachment.format = VK_FORMAT_R16G16B16A16_SFLOAT;
+                attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+                attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                attachments.push_back(attachment);
 
+#if USE_REVEAL
                 // Reveal attachment
-                attachments[1].format = VK_FORMAT_R16_SFLOAT;
-                attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
-                attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-                attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-                attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-                attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-                attachments[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-                attachments[1].finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-
+                attachment.format = VK_FORMAT_R16_SFLOAT;
+                attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+                attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                attachments.push_back(attachment);
+#endif
+                
                 // We reuse depth from opaque pass (in p.fbo).
-                attachments[2].format = p.fbo->getDepthFormat();
-                attachments[2].samples = VK_SAMPLE_COUNT_1_BIT;
-                attachments[2].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;   // keep depth!
-                attachments[2].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-                attachments[2].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-                attachments[2].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-                attachments[2].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-                attachments[2].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                attachment.format = p.fbo->getDepthFormat();
+                attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+                attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;   // keep depth!
+                attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                attachments.push_back(attachment);
 
-                VkAttachmentReference colorRefs[2] = {};
+                std::vector<VkAttachmentReference> colorRefs;
+
+                VkAttachmentReference colorRef = {};
          
-                colorRefs[0].attachment = 0;
-                colorRefs[0].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                colorRef.attachment = colorRefs.size();
+                colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                colorRefs.push_back(colorRef);
 
-                colorRefs[1].attachment = 1;
-                colorRefs[1].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
+#if USE_REVEAL
+                colorRef.attachment = colorRefs.size();
+                colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                colorRefs.push_back(colorRef);
+#endif
+                
                 VkAttachmentReference depthRef = {};
-                depthRef.attachment = 2;
+                depthRef.attachment = colorRefs.size();
                 depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
    
                 VkSubpassDescription subpass = {};
                 subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-                subpass.colorAttachmentCount = 2;
-                subpass.pColorAttachments = colorRefs;
+                subpass.colorAttachmentCount = colorRefs.size();
+                subpass.pColorAttachments = colorRefs.data();
                 subpass.pDepthStencilAttachment = &depthRef;
 
                 VkSubpassDependency dependency = {};
@@ -361,7 +369,8 @@ namespace tl
 
                 dependency.dstStageMask =
                     VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
-                    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+                    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                    VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
 
                 dependency.srcAccessMask =
                     VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
@@ -373,8 +382,8 @@ namespace tl
 
                 VkRenderPassCreateInfo rpInfo = {};
                 rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-                rpInfo.attachmentCount = 3;
-                rpInfo.pAttachments = attachments;
+                rpInfo.attachmentCount = attachments.size();
+                rpInfo.pAttachments = attachments.data();
                 rpInfo.subpassCount = 1;
                 rpInfo.pSubpasses = &subpass;
                 rpInfo.dependencyCount = 1;
@@ -382,6 +391,8 @@ namespace tl
 
                 VK_CHECK(vkCreateRenderPass(device, &rpInfo, nullptr,
                                             &p.oitRenderPass));
+
+                p.renderPass = p.oitRenderPass;
             }
 
             // Recreate the framebuffer only when the size or attachments change.
@@ -392,40 +403,62 @@ namespace tl
                 vkDestroyFramebuffer(device, p.oitFramebuffer[p.frameIndex], nullptr);
                 p.oitFramebuffer[p.frameIndex] = VK_NULL_HANDLE;
             }
+
+
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+            p.fbo->transitionDepthToStencilAttachment(p.cmd);
             
-            VkImageView views[3] = {
-                p.accum[p.frameIndex]->getImageView(),
-                p.reveal[p.frameIndex]->getImageView(),
-                p.fbo->getDepthImageView()
-            };
+            p.accum[p.frameIndex]->transitionToColorAttachment(p.cmd);
+#if USE_REVEAL
+            p.reveal[p.frameIndex]->transitionToColorAttachment(p.cmd);
+#endif
+            std::vector<VkImageView> views;
+            views.push_back(p.accum[p.frameIndex]->getImageView());
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+
+#if USE_REVEAL
+            views.push_back(p.reveal[p.frameIndex]->getImageView());
+#endif
+
+            views.push_back(p.fbo->getDepthImageView());
+            
 
             VkFramebufferCreateInfo fbInfo = {};
             fbInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
             fbInfo.renderPass = p.oitRenderPass;
-            fbInfo.attachmentCount = 3;
-            fbInfo.pAttachments = views;
+            fbInfo.attachmentCount = views.size();
+            fbInfo.pAttachments = views.data();
             fbInfo.width = p.fbo->getWidth();
             fbInfo.height = p.fbo->getHeight();
             fbInfo.layers = 1;
 
             VK_CHECK(vkCreateFramebuffer(device, &fbInfo, nullptr,
                                          &p.oitFramebuffer[p.frameIndex]));
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         }
 
         void Render::beginOITRenderPass()
         {
             TLRENDER_P();
             
-            VkClearValue clears[3];
+            std::vector<VkClearValue> clears;
 
+            VkClearValue clear = {};
+            
             // Accum = 0
-            clears[0].color = {0.f, 0.f, 0.f, 0.f};
+            clear.color = {0.f, 0.f, 0.f, 0.f};
+            clears.push_back(clear);
 
+#if USE_REVEAL            
             // Reveal = 1
-            clears[1].color = {1.f, 0.f, 0.f, 0.f};
+            clear.color = {1.f, 0.f, 0.f, 0.f};
+            clears.push_back(clear);
+#endif
 
             // Depth = don't care (we LOAD it)
-            clears[2].depthStencil = {1.0f, 0};
+            clear.color = {1.f, 0.f, 0.f, 0.f};
+            clear.depthStencil = {1.0f, 0};
+            clears.push_back(clear);
 
             VkRenderPassBeginInfo beginInfo = {};
             beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -435,12 +468,11 @@ namespace tl
                 static_cast<uint32_t>(p.fbo->getWidth()),
                 static_cast<uint32_t>(p.fbo->getHeight())
             };
-            beginInfo.clearValueCount = 3;
-            beginInfo.pClearValues = clears;
+            beginInfo.clearValueCount = clears.size();
+            beginInfo.pClearValues = clears.data();
 
             vkCmdBeginRenderPass(p.cmd, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-            p.renderPass = p.oitRenderPass;
         }
         
         VkRenderPass Render::getRenderPass() const
@@ -452,5 +484,123 @@ namespace tl
         {
             _p->renderPass = value;
         }
+        
+        void Render::drawMeshOIT(const geom::TriangleMesh3& geom,
+                                 const usd::MeshOptimization& meshOptimization,
+                                 const math::Matrix4x4f& model,
+                                 const image::Color4f& color,
+                                 const std::string& shaderId,
+                                 const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
+                                 const Material& material)
+        {
+            TLRENDER_P();
+
+            std::string pipelineName;
+            std::string pipelineLayoutName;
+            std::string shaderName = "usd_oit";
+            const std::string meshName = "3DMeshes";
+                
+            pipelineName = "oit_blending";
+            pipelineName += "_depth_test";
+            pipelineName += "_no_depth_write";
+            
+            _create3DMesh(meshName, geom, meshOptimization);
+            
+            pipelineLayoutName = shaderName;
+            
+            _createBindingSet(p.shaders[shaderName]);
+            
+            p.shaders[shaderName]->bind(p.frameIndex);
+                
+            auto i = textures.find(USD_DiffuseMap);
+            p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
+                
+            i = textures.find(USD_EmissiveMap);
+            p.shaders[shaderName]->setTexture("u_EmissiveMap", i->second);
+                
+            i = textures.find(USD_MetallicMap);
+            p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
+                
+            i = textures.find(USD_RoughnessMap);
+            p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
+                
+            i = textures.find(USD_NormalMap);
+            p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
+                
+            i = textures.find(USD_OcclusionMap);
+            p.shaders[shaderName]->setTexture("u_AOMap", i->second);
+                
+            i = textures.find(USD_OpacityMap) ;
+            p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
+                
+            i = textures.find(USD_OpacityThresholdMap);
+            p.shaders[shaderName]->setTexture("u_OpacityThresholdMap", i->second);
+                
+            i = textures.find(USD_IorMap);
+            p.shaders[shaderName]->setTexture("u_IorMap", i->second);
+                
+            vlk::ColorBlendStateInfo cb;
+            
+            vlk::ColorBlendAttachmentStateInfo accumBlend;
+            accumBlend.blendEnable = VK_TRUE;
+            accumBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+            accumBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
+            accumBlend.colorBlendOp = VK_BLEND_OP_ADD;
+
+            accumBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            accumBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            accumBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+
+            accumBlend.colorWriteMask =
+                VK_COLOR_COMPONENT_R_BIT |
+                VK_COLOR_COMPONENT_G_BIT |
+                VK_COLOR_COMPONENT_B_BIT |
+                VK_COLOR_COMPONENT_A_BIT;
+            cb.attachments.push_back(accumBlend);
+
+#if USE_REVEAL
+            vlk::ColorBlendAttachmentStateInfo revealBlend;
+            revealBlend.blendEnable = VK_TRUE;
+            revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+            revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;  // safer according to ChatGPT
+            // revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+            revealBlend.colorBlendOp = VK_BLEND_OP_ADD;
+
+            revealBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+            revealBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            revealBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+            
+            revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
+
+            cb.attachments.push_back(revealBlend);
+#endif
+            
+            cb.logicOpEnable = VK_FALSE;
+            cb.logicOp = VK_LOGIC_OP_COPY;
+            
+            cb.blendConstants[0] = 0.0f;
+            cb.blendConstants[1] = 0.0f;
+            cb.blendConstants[2] = 0.0f;
+            cb.blendConstants[3] = 0.0f;
+                
+            vlk::DepthStencilStateInfo ds;
+            ds.depthTestEnable = VK_TRUE;
+            ds.depthWriteEnable = VK_FALSE;
+            ds.stencilTestEnable = VK_FALSE;
+            
+            vlk::MultisampleStateInfo ms;
+            //ms.rasterizationSamples = p.fbo->getSampleCount();
+
+            auto shader = p.shaders["usd_oit"];
+            auto mesh = p.vbos[meshName];
+
+            _createPipeline(pipelineName, pipelineLayoutName,
+                            p.oitRenderPass, shader, mesh, cb, ds, ms);
+            
+            const auto mvp = p.transform * model;
+            _emitMeshDraw(pipelineLayoutName, shaderName, meshName, mvp,
+                          model, color);
+        }
+        
     }
 }

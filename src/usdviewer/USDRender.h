@@ -130,7 +130,6 @@ namespace tl
 
             //! Create OIT renderpass and framebuffer for current frameIndex.
             void createOIT();
-            void colorBlendOIT(vlk::ColorBlendStateInfo& cb);
             
             
         private:

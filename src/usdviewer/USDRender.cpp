@@ -133,7 +133,7 @@ namespace tl
             options.filters.magnify = timeline::ImageFilter::Nearest;
             options.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
                             VK_IMAGE_USAGE_SAMPLED_BIT;
-            options.samples = p.fbo->getSampleCount();
+            // options.samples = p.fbo->getSampleCount();
             
             if (doCreate(p.accum[frameIndex], renderSize, options))
             {
@@ -141,11 +141,28 @@ namespace tl
                                  image::PixelType::RGBA_F16);
                 p.accum[frameIndex] = vlk::Texture::create(ctx, info, options);
             }
-            
+
             if (doCreate(p.reveal[frameIndex], renderSize, options))
             {
                 image::Info info(renderSize.w, renderSize.h,
                                  image::PixelType::L_F16);
+
+                //
+                // Some GPUs do not support blending on R16_FLOAT.
+                // Downgrade to R16_UNORM if that's the case.
+                // 
+                VkFormatProperties props;
+                vkGetPhysicalDeviceFormatProperties(ctx.gpu,
+                                                    VK_FORMAT_R16_SFLOAT,
+                                                    &props);
+
+                if (!(props.optimalTilingFeatures &
+                      VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT))
+                {
+                    info = image::Info(renderSize.w, renderSize.h,
+                                       image::PixelType::L_U8);
+                }
+                
                 p.reveal[frameIndex] = vlk::Texture::create(ctx, info, options);
             }
             
