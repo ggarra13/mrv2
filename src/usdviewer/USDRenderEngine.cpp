@@ -873,7 +873,7 @@ namespace tl
                     if (j != p.materials.end())
                     {
                         material = j->second;
-                        shaderId = "UsdPreviewSurface";
+                        shaderId = "usd";
                     }
                 }
             }
@@ -891,6 +891,7 @@ namespace tl
             }
             else
             {
+                // Object is transparent.  Store it for later drawing.
                 p.stats.transparent++;
                 
                 TransparentPrimitive object;
@@ -1185,25 +1186,29 @@ namespace tl
                 }
             }
             
-            //
-            // Draw transparent primitives.
-            //
+            p.render->endRenderPass();
+
+            auto oldRenderPass = p.render->getRenderPass();
+            
+            p.render->createOIT();
+            p.render->beginOITRenderPass();
+            
+            // //
+            // // Draw transparent primitives.
+            // //
             for (auto& object : p.transparentPrims)
             {                
-                VkBool32 depthTest = VK_TRUE;
-                VkBool32 depthWrite = VK_TRUE;  // \@bug: should be VK_FALSE
-                p.render->drawMesh(*object.geom, object.optimization,
-                                   object.modelMatrix, object.color,
-                                   object.shaderId, object.textures,
-                                   object.material, true, depthTest,
-                                   depthWrite);
+                // p.render->drawMeshOIT(*object.geom, object.optimization,
+                //                       object.modelMatrix, object.color,
+                //                       "usd_oit", object.textures,
+                //                       object.material);
             }
             
             
             p.render->endRenderPass();
             p.render->end();
 
-    
+            p.render->setRenderPass(oldRenderPass);
             p.render->setTransform(oldTransform);
 
 #if PRINT_STATS

@@ -130,7 +130,7 @@ namespace tl
         }
 
 
-        void Render::drawMesh(const geom::TriangleMesh3& mesh,
+        void Render::drawMesh(const geom::TriangleMesh3& geom,
                               const usd::MeshOptimization& meshOptimization,
                               const math::Matrix4x4f& model,
                               const image::Color4f& color,
@@ -178,7 +178,7 @@ namespace tl
                 pipelineName += "_no_depth_write";
             }
             
-            _create3DMesh(meshName, mesh, meshOptimization);
+            _create3DMesh(meshName, geom, meshOptimization);
 
 
             const auto mvp = p.transform * model;
@@ -197,7 +197,7 @@ namespace tl
             else if (textures.empty() || shaderId == "dummy")
             {
                 shaderName = "dummy";
-                if (!mesh.c.empty())
+                if (!geom.c.empty())
                     shaderName = "dummy_c";
                 
                 pipelineLayoutName = shaderName;
@@ -206,17 +206,54 @@ namespace tl
                 
                 p.shaders[shaderName]->bind(p.frameIndex);                
             }
-            else if (shaderId == "UsdPreviewSurface")
+            else if (shaderId == "usd")
             {
                 shaderName = "usd";
-                if (!mesh.t.empty() && !mesh.n.empty() && !mesh.c.empty())
+                if (!geom.t.empty() && !geom.n.empty() && !geom.c.empty())
                     shaderName = "usd_uv_n_c";
-                else if (!mesh.t.empty() && !mesh.n.empty())
+                else if (!geom.t.empty() && !geom.n.empty())
                     shaderName = "usd_uv_n";
-                else if (!mesh.t.empty() && !mesh.c.empty())
+                else if (!geom.t.empty() && !geom.c.empty())
                     shaderName ="usd_uv_c";
-                else if (mesh.t.empty() && !mesh.c.empty())
+                else if (geom.t.empty() && !geom.c.empty())
                     shaderName = "usd_c";
+                
+                pipelineLayoutName = shaderName;
+
+                _createBindingSet(p.shaders[shaderName]);
+                
+                p.shaders[shaderName]->bind(p.frameIndex);
+                
+                auto i = textures.find(USD_DiffuseMap);
+                p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
+                
+                i = textures.find(USD_EmissiveMap);
+                p.shaders[shaderName]->setTexture("u_EmissiveMap", i->second);
+                
+                i = textures.find(USD_MetallicMap);
+                p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
+                
+                i = textures.find(USD_RoughnessMap);
+                p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
+                
+                i = textures.find(USD_NormalMap);
+                p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
+                
+                i = textures.find(USD_OcclusionMap);
+                p.shaders[shaderName]->setTexture("u_AOMap", i->second);
+                
+                i = textures.find(USD_OpacityMap);
+                p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
+                
+                i = textures.find(USD_OpacityThresholdMap);
+                p.shaders[shaderName]->setTexture("u_OpacityThresholdMap", i->second);
+                
+                i = textures.find(USD_IorMap);
+                p.shaders[shaderName]->setTexture("u_IorMap", i->second);
+            }
+            else if (shaderId == "usd_oit")
+            {
+                shaderName = "usd_oit";
                 
                 pipelineLayoutName = shaderName;
 
@@ -267,6 +304,82 @@ namespace tl
                           model, color);
         }
 
+        void Render::drawMeshOIT(const geom::TriangleMesh3& geom,
+                                 const usd::MeshOptimization& meshOptimization,
+                                 const math::Matrix4x4f& model,
+                                 const image::Color4f& color,
+                                 const std::string& shaderId,
+                                 const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
+                                 const Material& material)
+        {
+            TLRENDER_P();
+
+            std::string pipelineName;
+            std::string pipelineLayoutName;
+            std::string shaderName = "usd_oit";
+            const std::string meshName = "3DMeshes";
+                
+            pipelineName = "blending";
+            pipelineName += "_depth_test";
+            pipelineName += "_no_depth_write";
+            
+            _create3DMesh(meshName, geom, meshOptimization);
+            
+            pipelineLayoutName = shaderName;
+            
+            _createBindingSet(p.shaders[shaderName]);
+            
+            p.shaders[shaderName]->bind(p.frameIndex);
+                
+            auto i = textures.find(USD_DiffuseMap);
+            p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
+                
+            i = textures.find(USD_EmissiveMap);
+            p.shaders[shaderName]->setTexture("u_EmissiveMap", i->second);
+                
+            i = textures.find(USD_MetallicMap);
+            p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
+                
+            i = textures.find(USD_RoughnessMap);
+            p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
+                
+            i = textures.find(USD_NormalMap);
+            p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
+                
+            i = textures.find(USD_OcclusionMap);
+            p.shaders[shaderName]->setTexture("u_AOMap", i->second);
+                
+            i = textures.find(USD_OpacityMap) ;
+            p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
+                
+            i = textures.find(USD_OpacityThresholdMap);
+            p.shaders[shaderName]->setTexture("u_OpacityThresholdMap", i->second);
+                
+            i = textures.find(USD_IorMap);
+            p.shaders[shaderName]->setTexture("u_IorMap", i->second);
+                
+            vlk::ColorBlendStateInfo cb;
+            colorBlendOIT(cb); 
+                
+            vlk::DepthStencilStateInfo ds;
+            ds.depthTestEnable = VK_TRUE;
+            ds.depthWriteEnable = VK_FALSE;
+            ds.stencilTestEnable = VK_FALSE;
+            
+            vlk::MultisampleStateInfo ms;
+            ms.rasterizationSamples = p.fbo->getSampleCount();
+
+            auto shader = p.shaders["usd_oit"];
+            auto mesh = p.vbos[meshName];
+            
+            _createPipeline(pipelineName, pipelineLayoutName,
+                            getRenderPass(), shader, mesh, cb, ds, ms);
+
+
+            const auto mvp = p.transform * model;
+            _emitMeshDraw(pipelineLayoutName, shaderName, meshName, mvp,
+                          model, color);
+        }
         
     } // namespace usd
 } // namespace tl

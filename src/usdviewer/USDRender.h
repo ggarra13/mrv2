@@ -109,6 +109,14 @@ namespace tl
                           const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
                           const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
                           const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
+
+            void drawMeshOIT(const geom::TriangleMesh3&,
+                             const usd::MeshOptimization&,
+                             const math::Matrix4x4f&,
+                             const image::Color4f&,
+                             const std::string& shaderName,
+                             const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
+                             const Material& material = Material());
             
             //! Vulkan render pass functions
             void beginOITRenderPass();
@@ -120,19 +128,19 @@ namespace tl
 
             //! Create OIT renderpass and framebuffer for current frameIndex.
             void createOIT();
-            void colorBlendOIT();
+            void colorBlendOIT(vlk::ColorBlendStateInfo& cb);
             
             
         private:
             // Main entry pipeline creation function
             void _createPipeline(const std::string& pipelineName,
-                                const std::string& pipelineLayoutName,
-                                const VkRenderPass renderPass,
-                                const std::shared_ptr<vlk::Shader>& shader,
-                                const std::shared_ptr<vlk::VBO>& mesh,
-                                const vlk::ColorBlendStateInfo& cb = vlk::ColorBlendStateInfo(),
-                                const vlk::DepthStencilStateInfo& ds = vlk::DepthStencilStateInfo(),
-                                const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());         
+                                 const std::string& pipelineLayoutName,
+                                 const VkRenderPass renderPass,
+                                 const std::shared_ptr<vlk::Shader>& shader,
+                                 const std::shared_ptr<vlk::VBO>& mesh,
+                                 const vlk::ColorBlendStateInfo& cb = vlk::ColorBlendStateInfo(),
+                                 const vlk::DepthStencilStateInfo& ds = vlk::DepthStencilStateInfo(),
+                                 const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());         
             void _createPipeline(
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::string& pipelineName,

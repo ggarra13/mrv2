@@ -282,9 +282,10 @@ namespace tl
             p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
         }
 
-        void Render::colorBlendOIT()
+        void Render::colorBlendOIT(vlk::ColorBlendStateInfo& cb)
         {
-            VkPipelineColorBlendAttachmentState accumBlend = {};
+                
+            vlk::ColorBlendAttachmentStateInfo accumBlend;
             accumBlend.blendEnable = VK_TRUE;
             accumBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
             accumBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
@@ -300,8 +301,9 @@ namespace tl
                 VK_COLOR_COMPONENT_B_BIT |
                 VK_COLOR_COMPONENT_A_BIT;
 
+            cb.attachments.push_back(accumBlend);
 
-            VkPipelineColorBlendAttachmentState revealBlend = {};
+            vlk::ColorBlendAttachmentStateInfo revealBlend;
             revealBlend.blendEnable = VK_TRUE;
             revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
             revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
@@ -313,22 +315,15 @@ namespace tl
             
             revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
 
-            VkPipelineColorBlendAttachmentState attachments[2] = {
-                accumBlend,
-                revealBlend
-            };
+            cb.attachments.push_back(revealBlend);
 
-            VkPipelineColorBlendStateCreateInfo blendState = {};
-            blendState.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-            blendState.logicOpEnable = VK_FALSE;
-            blendState.logicOp = VK_LOGIC_OP_COPY;
-            blendState.attachmentCount = 2;
-            blendState.pAttachments = attachments;
-
-            blendState.blendConstants[0] = 0.0f;
-            blendState.blendConstants[1] = 0.0f;
-            blendState.blendConstants[2] = 0.0f;
-            blendState.blendConstants[3] = 0.0f;
+            cb.logicOpEnable = VK_FALSE;
+            cb.logicOp = VK_LOGIC_OP_COPY;
+            
+            cb.blendConstants[0] = 0.0f;
+            cb.blendConstants[1] = 0.0f;
+            cb.blendConstants[2] = 0.0f;
+            cb.blendConstants[3] = 0.0f;
 
         }
 
@@ -419,12 +414,8 @@ namespace tl
             rpInfo.dependencyCount = 1;
             rpInfo.pDependencies = &dependency;
 
-            if (vkCreateRenderPass(device, &rpInfo, nullptr,
-                                   &p.oitRenderPass) !=
-                VK_TRUE)
-            {
-                std::cerr << "Error creating oitRenderPass" << std::endl;
-            }
+            VK_CHECK(vkCreateRenderPass(device, &rpInfo, nullptr,
+                                        &p.oitRenderPass));
 
             VkImageView views[3] = {
                 p.accum[p.frameIndex]->getImageView(),
@@ -441,12 +432,8 @@ namespace tl
             fbInfo.height = p.fbo->getHeight();
             fbInfo.layers = 1;
 
-            if (vkCreateFramebuffer(device, &fbInfo, nullptr,
-                                    &p.oitFramebuffer[p.frameIndex]) != VK_TRUE)
-            {
-                std::cerr << "Error creating oitFramebuffer for "
-                          << p.frameIndex << std::endl;
-            }
+            VK_CHECK(vkCreateFramebuffer(device, &fbInfo, nullptr,
+                                         &p.oitFramebuffer[p.frameIndex]));
         }
 
         void Render::beginOITRenderPass()
@@ -476,6 +463,8 @@ namespace tl
             beginInfo.pClearValues = clears;
 
             vkCmdBeginRenderPass(p.cmd, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+            p.renderPass = p.oitRenderPass;
         }
         
         VkRenderPass Render::getRenderPass() const

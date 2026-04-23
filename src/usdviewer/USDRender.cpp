@@ -57,6 +57,7 @@ namespace tl
                 p.garbage[i].pipelines.reserve(20);
                 p.garbage[i].pipelineLayouts.reserve(20);
                 p.garbage[i].bindingSets.reserve(20);
+                p.oitFramebuffer[i] = VK_NULL_HANDLE;
             }
         }
 
@@ -65,6 +66,16 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
+
+            for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
+            {
+                if (p.oitFramebuffer[i] != VK_NULL_HANDLE)
+                    vkDestroyFramebuffer(device, p.oitFramebuffer[i], nullptr);
+            }
+
+            if (p.oitRenderPass != VK_NULL_HANDLE)
+                vkDestroyRenderPass(device, p.oitRenderPass, nullptr);
+        
             
             for (auto& [_, pipeline] : p.pipelines)
             {
