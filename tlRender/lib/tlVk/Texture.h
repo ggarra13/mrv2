@@ -53,6 +53,7 @@ namespace tl
             TextureBorders borders;
             int usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
                         VK_IMAGE_USAGE_SAMPLED_BIT;
+            VkSampleCountFlagBits samples = VK_SAMPLE_COUNT_1_BIT;
             bool operator==(const TextureOptions&) const;
             bool operator!=(const TextureOptions&) const;
         };

@@ -374,7 +374,6 @@ namespace tl
                 VK_COLOR_COMPONENT_B_BIT |
                 VK_COLOR_COMPONENT_A_BIT;
 
-            cb.attachments.push_back(accumBlend);
 
             vlk::ColorBlendAttachmentStateInfo revealBlend;
             revealBlend.blendEnable = VK_TRUE;
@@ -388,6 +387,7 @@ namespace tl
             
             revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
 
+            cb.attachments.push_back(accumBlend);
             cb.attachments.push_back(revealBlend);
 
             cb.logicOpEnable = VK_FALSE;
@@ -404,7 +404,7 @@ namespace tl
             ds.stencilTestEnable = VK_FALSE;
             
             vlk::MultisampleStateInfo ms;
-            ms.rasterizationSamples = p.fbo->getSampleCount();
+            //ms.rasterizationSamples = p.fbo->getSampleCount();
 
             auto shader = p.shaders["usd_oit"];
             auto mesh = p.vbos[meshName];

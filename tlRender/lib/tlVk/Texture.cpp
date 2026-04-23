@@ -228,7 +228,8 @@ namespace tl
         bool TextureOptions::operator==(const TextureOptions& other) const
         {
             return filters == other.filters && tiling == other.tiling &&
-                borders == other.borders && usage == other.usage;
+                borders == other.borders && usage == other.usage &&
+                samples == other.samples;
         }
 
         bool TextureOptions::operator!=(const TextureOptions& other) const
@@ -1145,7 +1146,7 @@ namespace tl
             imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             imageInfo.usage = p.options.usage;
             imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+            imageInfo.samples = p.options.samples;
 
             VmaAllocationCreateInfo allocInfo = {};
             allocInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;

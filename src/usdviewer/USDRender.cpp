@@ -133,6 +133,7 @@ namespace tl
             options.filters.magnify = timeline::ImageFilter::Nearest;
             options.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
                             VK_IMAGE_USAGE_SAMPLED_BIT;
+            options.samples = p.fbo->getSampleCount();
             
             if (doCreate(p.accum[frameIndex], renderSize, options))
             {
