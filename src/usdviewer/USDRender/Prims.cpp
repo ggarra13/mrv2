@@ -4,8 +4,9 @@
 // All rights reserved.
 
 #include "USDTextureSlots.h"
-#include "USDRenderPrivate.h"
-#include "USDRenderStructs.h"
+
+#include "USDRender/Private.h"
+#include "USDRender/Structs.h"
 
 #include <tlVk/Vk.h>
 

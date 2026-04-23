@@ -7,7 +7,9 @@
 
 
 #include "engine/options.h"
-#include "USDRender.h"
+
+#include "USDRender/Render.h"
+
 #include "Vk/VAOPool.h"
 
 #include <tlVk/OffscreenBuffer.h>

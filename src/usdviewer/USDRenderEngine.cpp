@@ -6,16 +6,17 @@
 
 #include "USDCollectTextures.h"
 #include "USDGetMaterials.h"
-#include "USDRender.h"
-#include "USDRenderShadersBinary.h"
 #include "USDTextureSlots.h"
 #include "USDTransparentPrimitive.h"
+
+#include "USDRender/Render.h"
+#include "USDRender/ShadersBinary.h"
 
 #include "usd/material.h"
 #include "usd/primvars.h"
 #include "usd/primvarSampler.h"
 
-#include "USDRenderEngine.h"
+#include "USDRenderEngine.h"  // must come here.
 
 #include <tlCore/Context.h>
 
@@ -913,7 +914,6 @@ namespace tl
         {
             TLRENDER_P();
 
-            std::cerr << "draw loop begin" << std::endl;
             p.stats.timer = std::chrono::steady_clock::now();
             
             if (!p.render)
@@ -1188,10 +1188,11 @@ namespace tl
                 }
             }
             
+#if 0
             p.render->endRenderPass();
 
             auto oldRenderPass = p.render->getRenderPass();
-            
+
             p.render->createOIT();
             p.render->beginOITRenderPass();
             
@@ -1200,19 +1201,33 @@ namespace tl
             //
             for (auto& object : p.transparentPrims)
             {
-                std::cerr << "one oit mesh draw" << std::endl;
                 p.render->drawMeshOIT(*object.geom, object.optimization,
                                       object.modelMatrix, object.color,
                                       "usd_oit", object.textures,
                                       object.material);
-                std::cerr << "one oit mesh drawn" << std::endl;
             }
             
             
             p.render->endOITRenderPass();
-            p.render->end();
 
             p.render->setRenderPass(oldRenderPass);
+#else
+            //
+            // Draw transparent primitives.
+            //
+            for (auto& object : p.transparentPrims)
+            {
+                p.render->drawMesh(*object.geom, object.optimization,
+                                   object.modelMatrix, object.color,
+                                   object.shaderId, object.textures,
+                                   object.material);
+            }
+            
+            p.render->endRenderPass();
+#endif
+            
+            p.render->end();
+
             p.render->setTransform(oldTransform);
 
 #if PRINT_STATS

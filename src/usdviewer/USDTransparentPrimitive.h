@@ -1,5 +1,6 @@
 
 #include "USDMaterial.h"
+#include "USDMeshOptimization.h"
 
 #include <tlCore/Color.h>
 #include <tlCore/Matrix.h>
@@ -12,9 +13,7 @@ namespace tl
         
         struct TransparentPrimitive
         {
-                               
-                               
-            
+                                                  
             // Geometry information.
             std::shared_ptr<geom::TriangleMesh3> geom;
             MeshOptimization optimization;

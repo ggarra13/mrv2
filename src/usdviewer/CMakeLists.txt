@@ -6,9 +6,12 @@
 set(HEADERS
     USDCollectTextures.h
     USDGetMaterials.h
-    USDRender.h
     USDRenderEngine.h
-    USDRenderShadersBinary.h
+
+    USDRender/ShadersBinary.h
+    USDRender/Private.h
+    USDRender/Render.h
+    
     USDResolveTexture.h
 
     engine/options.h
@@ -19,13 +22,15 @@ set(HEADERS
     Vk/VAOPool.h
 )
 set(SOURCES
+    
+    USDRender/Render.cpp
+    USDRender/Prims.cpp
+    USDRender/Shaders.cpp
+    USDRender/Vulkan.cpp
+    
     USDCollectTextures.cpp
     USDGetMaterials.cpp
-    USDRender.cpp
     USDRenderEngine.cpp
-    USDRenderPrims.cpp
-    USDRenderShaders.cpp
-    USDRenderVulkan.cpp
     USDResolveTexture.cpp
 
     usd/primvars.cpp

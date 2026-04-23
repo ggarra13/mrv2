@@ -1,5 +1,5 @@
 
-#define ANIMATE 1
+#define ANIMATE 0
 #define BAKE_JOINTS 1
 
 #define LOG_STATUS(x) std::cerr << x << std::endl;
@@ -8,9 +8,10 @@
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
 #include "USDCollectTextures.h"
 #include "USDRenderEngine.h"
-#include "USDRender.h"
-#include "USDRenderShadersBinary.h"
 #include "USDTextureSlots.h"
+
+#include "USDRender/Render.h"
+#include "USDRender/ShadersBinary.h"
 
 #include <tlCore/Context.h>
 

@@ -6,8 +6,8 @@
 #include "FL/Fl_Vk_Utils.H"
 #include "FL/vk_enum_string_helper.h"
 
-#include "USDRenderStructs.h"
-#include "USDRenderPrivate.h"
+#include "USDRender/Structs.h"
+#include "USDRender/Private.h"
 
 #include <tlVk/Buffer.h>
 #include <tlVk/Vk.h>

@@ -2,8 +2,9 @@
 // Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
-#include "USDRenderPrivate.h"
 #include "USDTextureSlots.h"
+
+#include "USDRender/Private.h"
 
 #include <iostream>
 #include <string>
