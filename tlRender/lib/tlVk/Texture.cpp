@@ -228,7 +228,7 @@ namespace tl
         bool TextureOptions::operator==(const TextureOptions& other) const
         {
             return filters == other.filters && tiling == other.tiling &&
-                borders == other.borders;
+                borders == other.borders && usage == other.usage;
         }
 
         bool TextureOptions::operator!=(const TextureOptions& other) const
@@ -253,7 +253,7 @@ namespace tl
             image::Info info;
 
             TextureOptions options;
-
+            
             std::string name;
             uint32_t arrayLayers = 1; // unused.
 
@@ -1069,9 +1069,6 @@ namespace tl
         void Texture::createImage()
         {
             TLRENDER_P();
-
-            int usage = 
-                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
     
             VkPhysicalDeviceImageFormatInfo2 formatInfo = {};
             formatInfo.sType =
@@ -1079,7 +1076,7 @@ namespace tl
             formatInfo.format = p.format;
             formatInfo.type = p.imageType;
             formatInfo.tiling = p.options.tiling;
-            formatInfo.usage = usage;
+            formatInfo.usage = p.options.usage;
             formatInfo.flags = 0;
 
             VkImageFormatProperties2 imageProperties = {};
@@ -1107,13 +1104,13 @@ namespace tl
                 case VK_FORMAT_R16G16B16_SFLOAT:
                     p.internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
                     p.info.pixelType = image::PixelType::RGBA_F16;
-                    usage |= VK_IMAGE_USAGE_STORAGE_BIT;
+                    p.options.usage |= VK_IMAGE_USAGE_STORAGE_BIT;
                     p.needPadRgbToRgba = true;
                     break;
                 case VK_FORMAT_R32G32B32_SFLOAT:
                     p.internalFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
                     p.info.pixelType = image::PixelType::RGBA_F32;
-                    usage |= VK_IMAGE_USAGE_STORAGE_BIT;
+                    p.options.usage |= VK_IMAGE_USAGE_STORAGE_BIT;
                     p.needPadRgbToRgba = true;
                     break;
                 default:
@@ -1146,7 +1143,7 @@ namespace tl
             imageInfo.format = p.internalFormat;
             imageInfo.tiling = p.options.tiling;
             imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            imageInfo.usage = usage;
+            imageInfo.usage = p.options.usage;
             imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 
@@ -1243,5 +1240,23 @@ namespace tl
             p.sampler = samplersCache->getOrCreateSampler(samplerInfo);
         }
 
+        const TextureOptions& Texture::getOptions() const
+        {
+            return _p->options;
+        }
+
+        
+        bool doCreate(
+            const std::shared_ptr<Texture>& texture,
+            const math::Size2i& size, const TextureOptions& options)
+        {
+            bool out = false;
+            out |= size.isValid() && !texture;
+            out |= size.isValid() && texture &&
+                   (texture->getWidth() != size.w ||
+                    texture->getHeight() != size.h);
+            out |= texture && texture->getOptions() != options;
+            return out;
+        }
     } // namespace vlk
 } // namespace tl

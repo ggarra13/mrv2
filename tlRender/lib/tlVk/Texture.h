@@ -51,7 +51,8 @@ namespace tl
             timeline::ImageFilters filters;
             VkImageTiling tiling = VK_IMAGE_TILING_LINEAR;
             TextureBorders borders;
-
+            int usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+                        VK_IMAGE_USAGE_SAMPLED_BIT;
             bool operator==(const TextureOptions&) const;
             bool operator!=(const TextureOptions&) const;
         };
@@ -92,13 +93,16 @@ namespace tl
                 const uint32_t depth, const VkFormat format,
                 const std::string& name = "sampler1",
                 const TextureOptions& = TextureOptions());
-
+            
              //! Get the image information.
             const image::Info& getInfo() const;
 
             //! Get the size.
             const image::Size& getSize() const;
 
+            //! Get the options.
+            const TextureOptions& getOptions() const;
+            
             //! Get the width.
             int getWidth() const;
 
@@ -158,7 +162,7 @@ namespace tl
             VkImage getImage() const;
 
             VkImageLayout getImageLayout() const;
-
+            
         private:
             Fl_Vk_Context& ctx;
 
@@ -173,5 +177,10 @@ namespace tl
             
             TLRENDER_PRIVATE();
         };
+        
+        //! Check whether the offscreen buffer should be created or re-created.
+        bool doCreate(
+            const std::shared_ptr<Texture>&, const math::Size2i&,
+            const TextureOptions&);
     } // namespace vlk
 } // namespace tl

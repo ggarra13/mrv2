@@ -57,7 +57,6 @@ namespace tl
                 p.garbage[i].pipelines.reserve(20);
                 p.garbage[i].pipelineLayouts.reserve(20);
                 p.garbage[i].bindingSets.reserve(20);
-                p.garbage[i].buffers.reserve(20);
             }
         }
 
@@ -115,7 +114,29 @@ namespace tl
             {
                 p.vaoPool->bind(frameIndex);
             }
-
+            
+            image::Info info;
+                
+            vlk::TextureOptions options;
+            options.filters.minify = timeline::ImageFilter::Nearest;
+            options.filters.magnify = timeline::ImageFilter::Nearest;
+            options.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                            VK_IMAGE_USAGE_SAMPLED_BIT;
+            
+            if (doCreate(p.accum[frameIndex], renderSize, options))
+            {
+                image::Info info(renderSize.w, renderSize.h,
+                                 image::PixelType::RGBA_F16);
+                p.accum[frameIndex] = vlk::Texture::create(ctx, info, options);
+            }
+            
+            if (doCreate(p.reveal[frameIndex], renderSize, options))
+            {
+                image::Info info(renderSize.w, renderSize.h,
+                                 image::PixelType::L_F16);
+                p.reveal[frameIndex] = vlk::Texture::create(ctx, info, options);
+            }
+            
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
             const VkColorComponentFlags allMask[] =
                 { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
@@ -165,7 +186,6 @@ namespace tl
             g.pipelines.clear();
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
-            g.buffers.clear();
             
             const image::Color4f color(1.F, 1.F, 1.F);
             USDTransforms transforms;

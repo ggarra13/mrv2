@@ -53,6 +53,7 @@ namespace tl
             int32_t frameIndex; // must be an int32_t not an uint32_t.
             std::shared_ptr<vlk::VAOPool> vaoPool;
             
+            
             math::Size2i renderSize;
             timeline::RenderOptions renderOptions;
 
@@ -71,14 +72,15 @@ namespace tl
                 std::vector<VkPipeline> pipelines;
                 std::vector<VkPipelineLayout> pipelineLayouts;
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
-                std::vector<std::shared_ptr<vlk::OffscreenBuffer> > buffers;
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
 
+            // Active resources
+            std::shared_ptr<vlk::Texture> accum[vlk::MAX_FRAMES_IN_FLIGHT];
+            std::shared_ptr<vlk::Texture> reveal[vlk::MAX_FRAMES_IN_FLIGHT];
+            
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex / Fragment
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute
-            std::unordered_map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
-                buffers;
             std::unordered_map<std::string, VkPipelineLayout> pipelineLayouts;
             std::unordered_map<
                 std::string, std::pair<vlk::PipelineCreationState, VkPipeline>>
