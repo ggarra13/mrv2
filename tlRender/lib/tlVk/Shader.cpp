@@ -22,11 +22,15 @@ namespace tl
         struct Shader::Private
         {
             VkShaderModule vertex = VK_NULL_HANDLE;
+            std::string vertexSource = "unavailable - binary shader";
+            
             VkShaderModule fragment = VK_NULL_HANDLE;
+            std::string fragmentSource = "unavailable - binary shader";
             
             VkPipeline computePipeline = VK_NULL_HANDLE;
             VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
             VkShaderModule compute = VK_NULL_HANDLE;
+            std::string computeSource = "unavailable - binary shader";
         };
 
         void Shader::_createVertexShader(const std::string& source)
@@ -43,6 +47,7 @@ namespace tl
 
                 // Assuming you have a VkDevice 'device' already created
                 p.vertex = create_shader_module(ctx.device, spirv);
+                p.vertexSource = source;
             }
             catch (const std::exception& e)
             {
@@ -74,6 +79,7 @@ namespace tl
 
                 // Assuming you have a VkDevice 'device' already created
                 p.fragment = create_shader_module(ctx.device, spirv);
+                p.fragmentSource = source;
             }
             catch (const std::exception& e)
             {
@@ -105,6 +111,7 @@ namespace tl
 
                 // Assuming you have a VkDevice 'device' already created
                 p.compute = create_shader_module(ctx.device, spirv);
+                p.computeSource = source;
             }
             catch (const std::exception& e)
             {
@@ -281,6 +288,21 @@ namespace tl
         const VkShaderModule& Shader::getFragment() const
         {
             return _p->fragment;
+        }
+        
+        const std::string& Shader::getVertexSource() const
+        {
+            return _p->vertexSource;
+        }
+
+        const std::string& Shader::getFragmentSource() const
+        {
+            return _p->fragmentSource;
+        }
+        
+        const std::string& Shader::getComputeSource() const
+        {
+            return _p->computeSource;
         }
 
         void Shader::useBindingSet(const std::shared_ptr<ShaderBindingSet> value)

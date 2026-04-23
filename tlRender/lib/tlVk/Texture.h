@@ -130,10 +130,11 @@ namespace tl
             void copy(const uint8_t*, const std::size_t,
                       const int rowPitch = 0);
 
-            //! \@todo:
             void copy(const std::shared_ptr<image::Image>&, int x, int y);
 
             ///@}
+
+            void setCurrentLayout(VkImageLayout);
             
             void transition(
                 VkCommandBuffer cmd,

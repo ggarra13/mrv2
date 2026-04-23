@@ -1245,6 +1245,10 @@ namespace tl
             return _p->options;
         }
 
+        void Texture::setCurrentLayout(VkImageLayout value)
+        {
+            _p->currentLayout = value;
+        }
         
         bool doCreate(
             const std::shared_ptr<Texture>& texture,

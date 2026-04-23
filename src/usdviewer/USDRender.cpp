@@ -256,7 +256,8 @@ namespace tl
                 bool hasColor = false;
                 bool hasOIT = true;
                 p.shaders["usd_oit"] = vlk::Shader::create(
-                    ctx, vertexUSD_UV(), fragmentUSD(), "usd_oit");
+                    ctx, vertexUSD_UV(), fragmentUSD(hasNormal, hasColor,
+                                                     hasOIT), "usd_oit");
                 p.shaders["usd_oit"]->createUniform(
                     "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["usd_oit"]->addPush("color", color, vlk::kShaderFragment);
@@ -412,6 +413,19 @@ namespace tl
             TLRENDER_P();
             
             p.fbo->endRenderPass(p.cmd);
+        }
+        
+        void Render::endOITRenderPass()
+        {
+            TLRENDER_P();
+            vkCmdEndRenderPass(p.cmd);
+    
+            // Tell the C++ tracking what the render pass did for us automatically.
+            // This prevents transition() from inserting a wrong barrier next frame.
+            p.accum[p.frameIndex]->setCurrentLayout(
+                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            p.reveal[p.frameIndex]->setCurrentLayout(
+                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
         
         void Render::setupViewportAndScissor()

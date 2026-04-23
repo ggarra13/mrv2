@@ -262,14 +262,16 @@ void main()
             std::string outputCode = "outColor = vec4(color, opacity);\n";
             if (hasOIT)
             {
-                output = R"(layout(location = 0) out vec4 outAccum;\n
-                           layout(location = 1) out float outReveal;)";
+                output = R"(
+layout(location = 0) out vec4 outAccum;
+layout(location = 1) out vec4 outReveal;
+)";
                 outputCode = R"(
-// Weight (can be simple or fancy)
-float weight = max(0.01, pow(opacity, 4.0));
+    // Weight (can be simple or fancy)
+    float weight = max(0.01, pow(opacity, 4.0));
 
-outAccum  = vec4(color.rgb * opacity * weight, opacity * weight);
-outReveal = opacity;
+    outAccum  = vec4(color.rgb * opacity * weight, opacity * weight);
+    outReveal = vec4(opacity, 0.0, 0.0, 1.0);
 )";
             }
             

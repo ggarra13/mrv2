@@ -120,6 +120,8 @@ namespace tl
             
             //! Vulkan render pass functions
             void beginOITRenderPass();
+            void endOITRenderPass();
+            
             void beginLoadRenderPass();
             void beginRenderPass();
             void endRenderPass();

@@ -285,46 +285,6 @@ namespace tl
         void Render::colorBlendOIT(vlk::ColorBlendStateInfo& cb)
         {
                 
-            vlk::ColorBlendAttachmentStateInfo accumBlend;
-            accumBlend.blendEnable = VK_TRUE;
-            accumBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
-            accumBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
-            accumBlend.colorBlendOp = VK_BLEND_OP_ADD;
-
-            accumBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-            accumBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-            accumBlend.alphaBlendOp = VK_BLEND_OP_ADD;
-
-            accumBlend.colorWriteMask =
-                VK_COLOR_COMPONENT_R_BIT |
-                VK_COLOR_COMPONENT_G_BIT |
-                VK_COLOR_COMPONENT_B_BIT |
-                VK_COLOR_COMPONENT_A_BIT;
-
-            cb.attachments.push_back(accumBlend);
-
-            vlk::ColorBlendAttachmentStateInfo revealBlend;
-            revealBlend.blendEnable = VK_TRUE;
-            revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
-            revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
-            revealBlend.colorBlendOp = VK_BLEND_OP_ADD;
-
-            revealBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-            revealBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-            revealBlend.alphaBlendOp = VK_BLEND_OP_ADD;
-            
-            revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
-
-            cb.attachments.push_back(revealBlend);
-
-            cb.logicOpEnable = VK_FALSE;
-            cb.logicOp = VK_LOGIC_OP_COPY;
-            
-            cb.blendConstants[0] = 0.0f;
-            cb.blendConstants[1] = 0.0f;
-            cb.blendConstants[2] = 0.0f;
-            cb.blendConstants[3] = 0.0f;
-
         }
 
         
@@ -334,89 +294,105 @@ namespace tl
 
             VkDevice device = ctx.device;
             
-            VkAttachmentDescription attachments[3] = {};
+            // Only create the render pass once (it doesn't depend on frame size, 
+            // only on formats which don't change).
+            if (p.oitRenderPass == VK_NULL_HANDLE)
+            {
 
-            // Accum attachment
-            attachments[0].format = VK_FORMAT_R16G16B16A16_SFLOAT;
-            attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
-            attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            attachments[0].finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                VkAttachmentDescription attachments[3] = {};
 
-            // Reveal attachment
-            attachments[1].format = VK_FORMAT_R16_SFLOAT;
-            attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
-            attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachments[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            attachments[1].finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                // Accum attachment
+                attachments[0].format = VK_FORMAT_R16G16B16A16_SFLOAT;
+                attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
+                attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                attachments[0].finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-            // We reuse depth from opaque pass (in p.fbo).
-            attachments[2].format = p.fbo->getDepthFormat();
-            attachments[2].samples = VK_SAMPLE_COUNT_1_BIT;
-            attachments[2].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;   // keep depth!
-            attachments[2].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            attachments[2].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            attachments[2].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachments[2].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            attachments[2].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                // Reveal attachment
+                attachments[1].format = VK_FORMAT_R16_SFLOAT;
+                attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
+                attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                attachments[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                attachments[1].finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-            VkAttachmentReference colorRefs[2] = {};
+                // We reuse depth from opaque pass (in p.fbo).
+                attachments[2].format = p.fbo->getDepthFormat();
+                attachments[2].samples = VK_SAMPLE_COUNT_1_BIT;
+                attachments[2].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;   // keep depth!
+                attachments[2].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                attachments[2].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                attachments[2].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                attachments[2].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                attachments[2].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+                VkAttachmentReference colorRefs[2] = {};
          
-            colorRefs[0].attachment = 0;
-            colorRefs[0].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                colorRefs[0].attachment = 0;
+                colorRefs[0].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-            colorRefs[1].attachment = 1;
-            colorRefs[1].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                colorRefs[1].attachment = 1;
+                colorRefs[1].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-            VkAttachmentReference depthRef = {};
-            depthRef.attachment = 2;
-            depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                VkAttachmentReference depthRef = {};
+                depthRef.attachment = 2;
+                depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
    
-            VkSubpassDescription subpass = {};
-            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-            subpass.colorAttachmentCount = 2;
-            subpass.pColorAttachments = colorRefs;
-            subpass.pDepthStencilAttachment = &depthRef;
+                VkSubpassDescription subpass = {};
+                subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+                subpass.colorAttachmentCount = 2;
+                subpass.pColorAttachments = colorRefs;
+                subpass.pDepthStencilAttachment = &depthRef;
 
-            VkSubpassDependency dependency = {};
+                VkSubpassDependency dependency = {};
 
-            dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-            dependency.dstSubpass = 0;
+                dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+                dependency.dstSubpass = 0;
 
-            dependency.srcStageMask =
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+                dependency.srcStageMask =
+                    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
+                    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                    VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
 
-            dependency.dstStageMask =
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+                dependency.dstStageMask =
+                    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
+                    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 
-            dependency.srcAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-                VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+                dependency.srcAccessMask =
+                    VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                    VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
-            dependency.dstAccessMask =
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-                VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+                dependency.dstAccessMask =
+                    VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+                    VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
 
-            VkRenderPassCreateInfo rpInfo = {};
-            rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-            rpInfo.attachmentCount = 3;
-            rpInfo.pAttachments = attachments;
-            rpInfo.subpassCount = 1;
-            rpInfo.pSubpasses = &subpass;
-            rpInfo.dependencyCount = 1;
-            rpInfo.pDependencies = &dependency;
+                VkRenderPassCreateInfo rpInfo = {};
+                rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+                rpInfo.attachmentCount = 3;
+                rpInfo.pAttachments = attachments;
+                rpInfo.subpassCount = 1;
+                rpInfo.pSubpasses = &subpass;
+                rpInfo.dependencyCount = 1;
+                rpInfo.pDependencies = &dependency;
 
-            VK_CHECK(vkCreateRenderPass(device, &rpInfo, nullptr,
-                                        &p.oitRenderPass));
+                VK_CHECK(vkCreateRenderPass(device, &rpInfo, nullptr,
+                                            &p.oitRenderPass));
+            }
 
+            // Recreate the framebuffer only when the size or attachments change.
+            // Wait for the slot to be free (your existing fence/semaphore scheme 
+            // guarantees this at frame-begin, so it is safe to destroy here).
+            if (p.oitFramebuffer[p.frameIndex] != VK_NULL_HANDLE)
+            {
+                vkDestroyFramebuffer(device, p.oitFramebuffer[p.frameIndex], nullptr);
+                p.oitFramebuffer[p.frameIndex] = VK_NULL_HANDLE;
+            }
+            
             VkImageView views[3] = {
                 p.accum[p.frameIndex]->getImageView(),
                 p.reveal[p.frameIndex]->getImageView(),

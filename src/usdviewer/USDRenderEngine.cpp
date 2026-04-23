@@ -1198,10 +1198,10 @@ namespace tl
             // //
             for (auto& object : p.transparentPrims)
             {                
-                // p.render->drawMeshOIT(*object.geom, object.optimization,
-                //                       object.modelMatrix, object.color,
-                //                       "usd_oit", object.textures,
-                //                       object.material);
+                p.render->drawMeshOIT(*object.geom, object.optimization,
+                                      object.modelMatrix, object.color,
+                                      "usd_oit", object.textures,
+                                      object.material);
             }
             
             

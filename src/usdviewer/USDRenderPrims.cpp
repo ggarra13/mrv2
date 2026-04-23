@@ -180,9 +180,6 @@ namespace tl
             
             _create3DMesh(meshName, geom, meshOptimization);
 
-
-            const auto mvp = p.transform * model;
-
             
             
             if (shaderId == "st")
@@ -300,6 +297,7 @@ namespace tl
                             colorBlendOp, alphaBlendOp, depthTest,
                             depthWrite);
 
+            const auto mvp = p.transform * model;
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, mvp,
                           model, color);
         }
@@ -319,7 +317,7 @@ namespace tl
             std::string shaderName = "usd_oit";
             const std::string meshName = "3DMeshes";
                 
-            pipelineName = "blending";
+            pipelineName = "oit_blending";
             pipelineName += "_depth_test";
             pipelineName += "_no_depth_write";
             
@@ -359,7 +357,46 @@ namespace tl
             p.shaders[shaderName]->setTexture("u_IorMap", i->second);
                 
             vlk::ColorBlendStateInfo cb;
-            colorBlendOIT(cb); 
+            
+            vlk::ColorBlendAttachmentStateInfo accumBlend;
+            accumBlend.blendEnable = VK_TRUE;
+            accumBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+            accumBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
+            accumBlend.colorBlendOp = VK_BLEND_OP_ADD;
+
+            accumBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            accumBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+            accumBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+
+            accumBlend.colorWriteMask =
+                VK_COLOR_COMPONENT_R_BIT |
+                VK_COLOR_COMPONENT_G_BIT |
+                VK_COLOR_COMPONENT_B_BIT |
+                VK_COLOR_COMPONENT_A_BIT;
+
+            cb.attachments.push_back(accumBlend);
+
+            vlk::ColorBlendAttachmentStateInfo revealBlend;
+            revealBlend.blendEnable = VK_TRUE;
+            revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+            revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+            revealBlend.colorBlendOp = VK_BLEND_OP_ADD;
+
+            revealBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+            revealBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            revealBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+            
+            revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
+
+            cb.attachments.push_back(revealBlend);
+
+            cb.logicOpEnable = VK_FALSE;
+            cb.logicOp = VK_LOGIC_OP_COPY;
+            
+            cb.blendConstants[0] = 0.0f;
+            cb.blendConstants[1] = 0.0f;
+            cb.blendConstants[2] = 0.0f;
+            cb.blendConstants[3] = 0.0f;
                 
             vlk::DepthStencilStateInfo ds;
             ds.depthTestEnable = VK_TRUE;
@@ -371,11 +408,10 @@ namespace tl
 
             auto shader = p.shaders["usd_oit"];
             auto mesh = p.vbos[meshName];
-            
+
             _createPipeline(pipelineName, pipelineLayoutName,
-                            getRenderPass(), shader, mesh, cb, ds, ms);
-
-
+                            p.oitRenderPass, shader, mesh, cb, ds, ms);
+            
             const auto mvp = p.transform * model;
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, mvp,
                           model, color);
