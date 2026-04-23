@@ -7,20 +7,36 @@
 #include <tlVk/Vk.h>
 
 #include <tlCore/Assert.h>
+#include <tlCore/Error.h>
+#include <tlCore/String.h>
+#include <tlCore/Util.h>
 
 #include <FL/Fl_Vk_Utils.H>
 #include <FL/vk_enum_string_helper.h>
 
 #include <array>
 #include <iostream>
+#include <string>
+#include <vector>
+
 #include <cstdint>
-#include <stddef.h>
+#include <cstddef>
 
 
 namespace tl
 {
     namespace vlk
     {
+        TLRENDER_ENUM_IMPL(
+            TextureBorder,
+            "ClampToEdge",
+            "Repeat",
+            "MirroredRepeat",
+            "ClampToBorder",
+            "MirrorClampToEdge",
+            );
+        TLRENDER_ENUM_SERIALIZE_IMPL(TextureBorder);
+        
         VkSamplerAddressMode getTextureBorder(TextureBorder value)
         {            
             VkSamplerAddressMode out = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
@@ -212,7 +228,8 @@ namespace tl
         bool TextureOptions::operator==(const TextureOptions& other) const
         {
             return filters == other.filters && tiling == other.tiling &&
-                pbo == other.pbo && borders == other.borders;
+                borders == other.borders && usage == other.usage &&
+                samples == other.samples;
         }
 
         bool TextureOptions::operator!=(const TextureOptions& other) const
@@ -237,7 +254,7 @@ namespace tl
             image::Info info;
 
             TextureOptions options;
-
+            
             std::string name;
             uint32_t arrayLayers = 1; // unused.
 
@@ -498,6 +515,14 @@ namespace tl
                 dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
             }
             else if (p.currentLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
+                     newLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
+            {
+                srcAccessMask = 0;
+                dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                srcStageMask  = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+                dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            }
+            else if (p.currentLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
                      newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
             {
                 srcAccessMask = 0;
@@ -559,8 +584,10 @@ namespace tl
         void Texture::transitionToColorAttachment(VkCommandBuffer cmd)
         {
             transition(cmd, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                       VK_ACCESS_SHADER_READ_BIT, 0,
-                       VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0);
+                       VK_ACCESS_SHADER_READ_BIT,
+                       VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                       VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                       VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
         }
 
         void Texture::setRGBToRGBA(bool value)
@@ -1053,9 +1080,6 @@ namespace tl
         void Texture::createImage()
         {
             TLRENDER_P();
-
-            int usage = 
-                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
     
             VkPhysicalDeviceImageFormatInfo2 formatInfo = {};
             formatInfo.sType =
@@ -1063,7 +1087,7 @@ namespace tl
             formatInfo.format = p.format;
             formatInfo.type = p.imageType;
             formatInfo.tiling = p.options.tiling;
-            formatInfo.usage = usage;
+            formatInfo.usage = p.options.usage;
             formatInfo.flags = 0;
 
             VkImageFormatProperties2 imageProperties = {};
@@ -1091,13 +1115,13 @@ namespace tl
                 case VK_FORMAT_R16G16B16_SFLOAT:
                     p.internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
                     p.info.pixelType = image::PixelType::RGBA_F16;
-                    usage |= VK_IMAGE_USAGE_STORAGE_BIT;
+                    p.options.usage |= VK_IMAGE_USAGE_STORAGE_BIT;
                     p.needPadRgbToRgba = true;
                     break;
                 case VK_FORMAT_R32G32B32_SFLOAT:
                     p.internalFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
                     p.info.pixelType = image::PixelType::RGBA_F32;
-                    usage |= VK_IMAGE_USAGE_STORAGE_BIT;
+                    p.options.usage |= VK_IMAGE_USAGE_STORAGE_BIT;
                     p.needPadRgbToRgba = true;
                     break;
                 default:
@@ -1130,9 +1154,9 @@ namespace tl
             imageInfo.format = p.internalFormat;
             imageInfo.tiling = p.options.tiling;
             imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            imageInfo.usage = usage;
+            imageInfo.usage = p.options.usage;
             imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+            imageInfo.samples = p.options.samples;
 
             VmaAllocationCreateInfo allocInfo = {};
             allocInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
@@ -1227,5 +1251,27 @@ namespace tl
             p.sampler = samplersCache->getOrCreateSampler(samplerInfo);
         }
 
+        const TextureOptions& Texture::getOptions() const
+        {
+            return _p->options;
+        }
+
+        void Texture::setCurrentLayout(VkImageLayout value)
+        {
+            _p->currentLayout = value;
+        }
+        
+        bool doCreate(
+            const std::shared_ptr<Texture>& texture,
+            const math::Size2i& size, const TextureOptions& options)
+        {
+            bool out = false;
+            out |= size.isValid() && !texture;
+            out |= size.isValid() && texture &&
+                   (texture->getWidth() != size.w ||
+                    texture->getHeight() != size.h);
+            out |= texture && texture->getOptions() != options;
+            return out;
+        }
     } // namespace vlk
 } // namespace tl
