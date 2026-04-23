@@ -1,4 +1,4 @@
-DEBUG_CLOUDFLARE=0
+DEBUG_CLOUDFLARE=1
 
 
 import os
@@ -312,6 +312,20 @@ if __name__ == "__main__":
      mrv2_lin_g, vmrv2_lin_g,
      mrv2_mac_g, vmrv2_mac_g) = get_github_downloads(user, repo, tag)
 
+    print(f'{format_number(mrv2_win_g, 5)} mrv2 Windows Downloads (All Archs)')
+    print(f'{format_number(mrv2_lin_g, 5)} mrv2 Linux Downloads (All Archs)')
+    print(f'{format_number(mrv2_mac_g, 5)} mrv2 macOS Downloads (All Archs)')
+    print()
+    print(f'{format_number(vmrv2_win_g, 5)} vmrv2 Windows Downloads (All Archs)')
+    print(f'{format_number(vmrv2_lin_g, 5)} vmrv2 Linux Downloads (All Archs)')
+    print(f'{format_number(vmrv2_mac_g, 5)} vmrv2 macOS Downloads (All Archs)')
+    print()
+    print(f'{format_number(mrv2_github, 5)} Total mrv2 Total Downloads')
+    print(f'{format_number(vmrv2_github, 5)} Total vmrv2 Total Downloads')
+    print('===================================================================')
+    github_total = mrv2_github + mrv2_github
+    print(f'{format_number(github_total, 5)} Total Downloads for GitHub')
+    
     mrv2_grand_total += mrv2_github
     vmrv2_grand_total += vmrv2_github
     mrv2_windows_grand_total += mrv2_win_g
