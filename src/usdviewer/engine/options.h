@@ -30,6 +30,6 @@
 
 //
 #define DEBUG_TEXTURES  0
-#define DEBUG_MATERIALS 0
+#define DEBUG_MATERIALS 1
 #define DEBUG_BAKE_JOINTS 0
 
