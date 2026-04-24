@@ -160,7 +160,7 @@ namespace tl
                     if (i != p.textures.end())
                     {
                         textures = i->second;
-                        shaderId = "UsdShaderPreview";
+                        shaderId = "usd";
                     }
 
                     MeshOptimization opt;
