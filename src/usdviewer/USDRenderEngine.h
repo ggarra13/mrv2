@@ -58,3 +58,5 @@ namespace tl
         };
     }
 }
+
+#include "USDRenderEnginePrivate.h"
