@@ -14,14 +14,19 @@ namespace tl
             Mesh(const pxr::UsdGeomMesh& usdPrim, const pxr::UsdTimeCode time) :
                 PointBased(usdPrim, time)
                 {    
+                    usdPrim.GetFaceVertexCountsAttr().Get(&faceVertexCounts,
+                                                          time);
+            
+                    usdPrim.GetFaceVertexIndicesAttr().Get(&faceVertexIndices,
+                                                           time);
                 }
 
-            pxr::VtArray<int> getFaceVertexCounts()
+            pxr::VtArray<int> GetFaceVertexCounts()
                 {
                     return faceVertexCounts;
                 }
             
-            pxr::VtArray<int> getFaceVertexIndices()
+            pxr::VtArray<int> GetFaceVertexIndices()
                 {
                     return faceVertexIndices;
                 }

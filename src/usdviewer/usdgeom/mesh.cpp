@@ -24,12 +24,6 @@ namespace tl
             std::shared_ptr<geom::TriangleMesh3> out(new geom::TriangleMesh3);
 
             UsdGeomMesh usdMesh(prim);
-                    
-            // Faces vertex counts: number vertices per face.
-            usdMesh.GetFaceVertexCountsAttr().Get(&faceVertexCounts, time);
-            
-            // faceVertexIndices: flat list of vertex indices for all faces
-            usdMesh.GetFaceVertexIndicesAttr().Get(&faceVertexIndices, time);
             
             std::vector<usd::PrimvarAndType> primvarsAndType = usd::GetPrimvars(prim);
 

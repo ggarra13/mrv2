@@ -1120,8 +1120,6 @@ namespace tl
 
             if (hasDepth() || hasStencil())
                 p.depthLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-            std::cerr << __FUNCTION__ << " now in VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL" << std::endl;
         }
 
         void OffscreenBuffer::transitionDepthToStencilAttachment(VkCommandBuffer cmd)
@@ -1130,7 +1128,6 @@ namespace tl
 
             if (p.depthLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
             {
-                std::cerr << __FUNCTION__ << " already in VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL" << std::endl;
                 return;
             }
             
@@ -1173,7 +1170,6 @@ namespace tl
             // Track layout
             p.depthLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
             
-            std::cerr << __FUNCTION__ << " now in VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL" << std::endl;
         }
 
         void OffscreenBuffer::transitionDepthToShaderRead(VkCommandBuffer cmd)
@@ -1182,7 +1178,6 @@ namespace tl
 
             if (p.depthLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL)
             {
-                std::cerr << __FUNCTION__ << " already in VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL" << std::endl;
                 return;
             }
 
@@ -1215,7 +1210,6 @@ namespace tl
             // Track layout
             p.depthLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
             
-            std::cerr << __FUNCTION__ << " now in VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL" << std::endl;
         }
         
         void OffscreenBuffer::createStagingBuffers()

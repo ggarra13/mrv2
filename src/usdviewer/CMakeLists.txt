@@ -23,6 +23,7 @@ set(HEADERS
     
     usd/material.h
     usd/primvars.h
+    usd/subsetsSplit.h
 
     Vk/VAOPool.h
 )
@@ -44,6 +45,7 @@ set(SOURCES
     usdgeom/mesh.cpp
     
     usd/primvars.cpp
+    usd/subsetsSplit.cpp
     
     Vk/VAOPool.cpp
     

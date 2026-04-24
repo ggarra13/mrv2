@@ -20,7 +20,7 @@ namespace tl
                 }
 
             
-            pxr::VtArray<pxr::GfVec3f> getPoints()
+            pxr::VtArray<pxr::GfVec3f> GetPoints()
                 {
                     return points;
                 }
