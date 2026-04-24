@@ -63,6 +63,8 @@ namespace tl
                 type = vlk::VBOType::Pos3_F32_Color_U8;
             }
 
+            std::cout << "mesh type=" << type << std::endl;
+
             // Rebuild the VBO whenever the triangle count or type changes.
             if (!p.vbos[meshName] ||
                 p.vbos[meshName]->getSize() != triangleCount * 3 ||
@@ -291,6 +293,8 @@ namespace tl
                 throw std::runtime_error("Unknown shader type " + shaderId);
             }
                 
+            std::cerr << "\t" << shaderName << std::endl;
+            
             _createPipeline(p.fbo, pipelineName, pipelineLayoutName,
                             shaderName, meshName, enableBlending,
                             srcColorBlendFactor, dstColorBlendFactor,

@@ -539,7 +539,7 @@ namespace tl
                 p.render->drawMesh(*object.geom, object.optimization,
                                    object.modelMatrix, object.color,
                                    object.shaderId, object.textures,
-                                   object.material);
+                                   object.material, true);
             }
 #endif
             
