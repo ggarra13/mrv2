@@ -8,8 +8,8 @@ namespace tl
         class PrimvarSampler
         {
         public:
-            PrimvarSampler(const UsdGeomPrimvar& primvar,
-                           const UsdTimeCode& time)
+            PrimvarSampler(const pxr::UsdGeomPrimvar& primvar,
+                           const pxr::UsdTimeCode& time)
                 {
                     valid = primvar.IsDefined();
                     if (!valid)
@@ -40,16 +40,16 @@ namespace tl
                 {
                     int domainIdx = 0;
 
-                    if (interpolation == UsdGeomTokens->faceVarying)
+                    if (interpolation == pxr::UsdGeomTokens->faceVarying)
                     {
                         domainIdx = faceVertexIdx;
                     }
-                    else if (interpolation == UsdGeomTokens->vertex ||
-                             interpolation == UsdGeomTokens->varying)
+                    else if (interpolation == pxr::UsdGeomTokens->vertex ||
+                             interpolation == pxr::UsdGeomTokens->varying)
                     {
                         domainIdx = pointIdx;
                     }
-                    else if (interpolation == UsdGeomTokens->uniform)
+                    else if (interpolation == pxr::UsdGeomTokens->uniform)
                     {
                         domainIdx = faceIdx;
                     }
@@ -69,10 +69,10 @@ namespace tl
         private:
             bool valid = false;
             bool indexed = false;
-            TfToken interpolation;
+            pxr::TfToken interpolation;
 
-            VtArray<T> values;
-            VtArray<int> indices;
+            pxr::VtArray<T> values;
+            pxr::VtArray<int> indices;
         };
 
     }

@@ -81,6 +81,7 @@ namespace tl
             image::Color4f clearColor = image::Color4f(0.F, 0.F, 0.F, 0.F);
             bool      clearDepth = true;
             bool      pbo = false;
+            bool      storeDepth = false;
 
             bool operator==(const OffscreenBufferOptions&) const;
             bool operator!=(const OffscreenBufferOptions&) const;
@@ -158,6 +159,9 @@ namespace tl
             //! Get image.
             VkImage getImage() const;
 
+            //! Get the depth/stencil image.
+            VkImage getDepthImage() const;
+            
             //! Get normal handles.
             VkFramebuffer getFramebuffer() const;
             VkRenderPass getClearRenderPass() const;

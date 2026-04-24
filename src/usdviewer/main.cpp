@@ -8,9 +8,10 @@
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
 #include "USDCollectTextures.h"
 #include "USDRenderEngine.h"
-#include "USDRender.h"
-#include "USDRenderShadersBinary.h"
 #include "USDTextureSlots.h"
+
+#include "USDRender/Render.h"
+#include "USDRender/ShadersBinary.h"
 
 #include <tlCore/Context.h>
 

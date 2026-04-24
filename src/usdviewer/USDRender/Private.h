@@ -7,7 +7,9 @@
 
 
 #include "engine/options.h"
-#include "USDRender.h"
+
+#include "USDRender/Render.h"
+
 #include "Vk/VAOPool.h"
 
 #include <tlVk/OffscreenBuffer.h>
@@ -80,7 +82,7 @@ namespace tl
             std::shared_ptr<vlk::Texture> accum[vlk::MAX_FRAMES_IN_FLIGHT];
             std::shared_ptr<vlk::Texture> reveal[vlk::MAX_FRAMES_IN_FLIGHT];
             VkFramebuffer oitFramebuffer[vlk::MAX_FRAMES_IN_FLIGHT];
-            VkRenderPass  oitRenderPass;
+            VkRenderPass  oitRenderPass = VK_NULL_HANDLE;
             
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex / Fragment
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute

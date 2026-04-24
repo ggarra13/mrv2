@@ -1,5 +1,8 @@
 
 #include "USDMaterial.h"
+#include "USDMeshOptimization.h"
+#include "USDCollectTextures.h"
+#include "USDGetMaterials.h"
 
 #include <tlCore/Color.h>
 #include <tlCore/Matrix.h>
@@ -10,11 +13,9 @@ namespace tl
     namespace usd
     {
         
-        struct TransparentPrimitive
+        struct EnginePrimitive
         {
-                               
-                               
-            
+                                                  
             // Geometry information.
             std::shared_ptr<geom::TriangleMesh3> geom;
             MeshOptimization optimization;
@@ -27,7 +28,7 @@ namespace tl
             Material material;
             std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
 
-            bool operator==(const TransparentPrimitive& b) const
+            bool operator==(const EnginePrimitive& b) const
                 {
                     return (geom->v.size() == b.geom->v.size() &&
                             geom->t.size() == b.geom->t.size() &&
@@ -41,7 +42,7 @@ namespace tl
                             textures == b.textures);
                 }
             
-            bool operator!=(const TransparentPrimitive& b) const
+            bool operator!=(const EnginePrimitive& b) const
                 {
                     return !(*this == b);
                 }

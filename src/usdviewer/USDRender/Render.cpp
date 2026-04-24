@@ -6,8 +6,8 @@
 #include "FL/Fl_Vk_Utils.H"
 #include "FL/vk_enum_string_helper.h"
 
-#include "USDRenderStructs.h"
-#include "USDRenderPrivate.h"
+#include "USDRender/Structs.h"
+#include "USDRender/Private.h"
 
 #include <tlVk/Buffer.h>
 #include <tlVk/Vk.h>
@@ -57,6 +57,7 @@ namespace tl
                 p.garbage[i].pipelines.reserve(20);
                 p.garbage[i].pipelineLayouts.reserve(20);
                 p.garbage[i].bindingSets.reserve(20);
+                p.oitFramebuffer[i] = VK_NULL_HANDLE;
             }
         }
 
@@ -65,6 +66,16 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
+
+            for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
+            {
+                if (p.oitFramebuffer[i] != VK_NULL_HANDLE)
+                    vkDestroyFramebuffer(device, p.oitFramebuffer[i], nullptr);
+            }
+
+            if (p.oitRenderPass != VK_NULL_HANDLE)
+                vkDestroyRenderPass(device, p.oitRenderPass, nullptr);
+        
             
             for (auto& [_, pipeline] : p.pipelines)
             {
@@ -122,6 +133,7 @@ namespace tl
             options.filters.magnify = timeline::ImageFilter::Nearest;
             options.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
                             VK_IMAGE_USAGE_SAMPLED_BIT;
+            // options.samples = p.fbo->getSampleCount();
             
             if (doCreate(p.accum[frameIndex], renderSize, options))
             {
@@ -129,11 +141,28 @@ namespace tl
                                  image::PixelType::RGBA_F16);
                 p.accum[frameIndex] = vlk::Texture::create(ctx, info, options);
             }
-            
+
             if (doCreate(p.reveal[frameIndex], renderSize, options))
             {
                 image::Info info(renderSize.w, renderSize.h,
                                  image::PixelType::L_F16);
+
+                //
+                // Some GPUs do not support blending on R16_FLOAT.
+                // Downgrade to R16_UNORM if that's the case.
+                // 
+                VkFormatProperties props;
+                vkGetPhysicalDeviceFormatProperties(ctx.gpu,
+                                                    VK_FORMAT_R16_SFLOAT,
+                                                    &props);
+
+                if (!(props.optimalTilingFeatures &
+                      VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT))
+                {
+                    info = image::Info(renderSize.w, renderSize.h,
+                                       image::PixelType::L_U8);
+                }
+                
                 p.reveal[frameIndex] = vlk::Texture::create(ctx, info, options);
             }
             
@@ -245,7 +274,8 @@ namespace tl
                 bool hasColor = false;
                 bool hasOIT = true;
                 p.shaders["usd_oit"] = vlk::Shader::create(
-                    ctx, vertexUSD_UV(), fragmentUSD(), "usd_oit");
+                    ctx, vertexUSD_UV(), fragmentUSD(hasNormal, hasColor,
+                                                     hasOIT), "usd_oit");
                 p.shaders["usd_oit"]->createUniform(
                     "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["usd_oit"]->addPush("color", color, vlk::kShaderFragment);
@@ -402,7 +432,7 @@ namespace tl
             
             p.fbo->endRenderPass(p.cmd);
         }
-        
+                
         void Render::setupViewportAndScissor()
         {
             TLRENDER_P();

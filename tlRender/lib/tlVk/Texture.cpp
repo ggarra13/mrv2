@@ -228,7 +228,8 @@ namespace tl
         bool TextureOptions::operator==(const TextureOptions& other) const
         {
             return filters == other.filters && tiling == other.tiling &&
-                borders == other.borders && usage == other.usage;
+                borders == other.borders && usage == other.usage &&
+                samples == other.samples;
         }
 
         bool TextureOptions::operator!=(const TextureOptions& other) const
@@ -514,6 +515,14 @@ namespace tl
                 dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
             }
             else if (p.currentLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
+                     newLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
+            {
+                srcAccessMask = 0;
+                dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                srcStageMask  = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+                dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            }
+            else if (p.currentLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
                      newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
             {
                 srcAccessMask = 0;
@@ -575,8 +584,10 @@ namespace tl
         void Texture::transitionToColorAttachment(VkCommandBuffer cmd)
         {
             transition(cmd, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                       VK_ACCESS_SHADER_READ_BIT, 0,
-                       VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0);
+                       VK_ACCESS_SHADER_READ_BIT,
+                       VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                       VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                       VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
         }
 
         void Texture::setRGBToRGBA(bool value)
@@ -1145,7 +1156,7 @@ namespace tl
             imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             imageInfo.usage = p.options.usage;
             imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+            imageInfo.samples = p.options.samples;
 
             VmaAllocationCreateInfo allocInfo = {};
             allocInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
@@ -1245,6 +1256,10 @@ namespace tl
             return _p->options;
         }
 
+        void Texture::setCurrentLayout(VkImageLayout value)
+        {
+            _p->currentLayout = value;
+        }
         
         bool doCreate(
             const std::shared_ptr<Texture>& texture,

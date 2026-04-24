@@ -1,4 +1,6 @@
 
+#pragma once
+
 namespace tl
 {
     namespace usd

@@ -123,10 +123,12 @@ namespace tl
             const OffscreenBufferOptions& other) const
         {
             return (colorType == other.colorType &&
-                    colorFilters == other.colorFilters && depth == other.depth &&
+                    colorFilters == other.colorFilters &&
+                    depth == other.depth &&
                     stencil == other.stencil && sampling == other.sampling &&
                     clearColor == other.clearColor &&
                     clearDepth == other.clearDepth &&
+                    storeDepth == other.storeDepth &&
                     pbo == other.pbo);
         }
 
@@ -615,6 +617,11 @@ namespace tl
             return _p->resolveImage;
         }
 
+        VkImage OffscreenBuffer::getDepthImage() const
+        {
+            return _p->depthImage;
+        }
+
         VkFramebuffer OffscreenBuffer::getFramebuffer() const
         {
             return _p->framebuffer;
@@ -741,7 +748,9 @@ namespace tl
                 depthAttachment.format = p.depthFormat;
                 depthAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
                 depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-                depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                depthAttachment.storeOp = p.options.storeDepth ?
+                                          VK_ATTACHMENT_STORE_OP_STORE :
+                                          VK_ATTACHMENT_STORE_OP_DONT_CARE;
                 depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
                 depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -839,7 +848,9 @@ namespace tl
                 depthAttachment.format = p.depthFormat;
                 depthAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
                 depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-                depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                depthAttachment.storeOp = p.options.storeDepth ?
+                                          VK_ATTACHMENT_STORE_OP_STORE :
+                                          VK_ATTACHMENT_STORE_OP_DONT_CARE;
                 depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
                 depthAttachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -1158,17 +1169,23 @@ namespace tl
 
             // Track layout
             p.depthLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            
         }
 
         void OffscreenBuffer::transitionDepthToShaderRead(VkCommandBuffer cmd)
         {
             TLRENDER_P();
 
+            if (p.depthLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL)
+            {
+                return;
+            }
+
             VkImageMemoryBarrier barrier{};
             barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
             barrier.oldLayout =
                 VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            barrier.newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
             barrier.srcAccessMask =
                 VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
             barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
@@ -1191,7 +1208,8 @@ namespace tl
                 nullptr, 1, &barrier);
 
             // Track layout
-            p.depthLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            p.depthLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+            
         }
         
         void OffscreenBuffer::createStagingBuffers()

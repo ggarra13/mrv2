@@ -53,6 +53,7 @@ namespace tl
             TextureBorders borders;
             int usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
                         VK_IMAGE_USAGE_SAMPLED_BIT;
+            VkSampleCountFlagBits samples = VK_SAMPLE_COUNT_1_BIT;
             bool operator==(const TextureOptions&) const;
             bool operator!=(const TextureOptions&) const;
         };
@@ -130,10 +131,11 @@ namespace tl
             void copy(const uint8_t*, const std::size_t,
                       const int rowPitch = 0);
 
-            //! \@todo:
             void copy(const std::shared_ptr<image::Image>&, int x, int y);
 
             ///@}
+
+            void setCurrentLayout(VkImageLayout);
             
             void transition(
                 VkCommandBuffer cmd,

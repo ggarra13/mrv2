@@ -6,29 +6,46 @@
 set(HEADERS
     USDCollectTextures.h
     USDGetMaterials.h
-    USDRender.h
     USDRenderEngine.h
-    USDRenderShadersBinary.h
+
+    USDRender/ShadersBinary.h
+    USDRender/Private.h
+    USDRender/Render.h
+
+    USDEnginePrimitive.h
     USDResolveTexture.h
 
     engine/options.h
+
+    usdgeom/pointBased.h
+    usdgeom/prim.h
+    usdgeom/mesh.h
     
     usd/material.h
     usd/primvars.h
+    usd/subsetsSplit.h
 
     Vk/VAOPool.h
 )
 set(SOURCES
+    
+    USDRender/Render.cpp
+    USDRender/Prims.cpp
+    USDRender/Shaders.cpp
+    USDRender/Vulkan.cpp
+    
     USDCollectTextures.cpp
     USDGetMaterials.cpp
-    USDRender.cpp
     USDRenderEngine.cpp
-    USDRenderPrims.cpp
-    USDRenderShaders.cpp
-    USDRenderVulkan.cpp
     USDResolveTexture.cpp
+    USDSceneTraversal.cpp
 
+    usdgeom/pointBased.cpp
+    usdgeom/prim.cpp
+    usdgeom/mesh.cpp
+    
     usd/primvars.cpp
+    usd/subsetsSplit.cpp
     
     Vk/VAOPool.cpp
     
@@ -38,6 +55,7 @@ find_package(Vulkan REQUIRED)
 
 find_package(pxr REQUIRED)
 add_definitions(-DTLRENDER_USD)
+
 
 set(LIBRARIES )
 list(APPEND LIBRARIES OpenEXR::OpenEXR tlRender::tlVk tlRender::tlCore tf usd usdUtils usdGeom usdShade usdSkel hio hd)
@@ -55,6 +73,9 @@ endif()
 add_executable(usdviewer WIN32 ${SOURCES} ${HEADERS})
 
 target_include_directories(usdviewer BEFORE PRIVATE .)
+if(UNIX AND NOT APPLE)
+    target_compile_options(usdviewer PUBLIC -Wno-deprecated)
+endif()
 
 target_link_libraries(usdviewer PUBLIC ${LIBRARIES} PRIVATE ${LIBRARIES_PRIVATE})
 target_link_directories( usdviewer BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib /usr/local/lib )

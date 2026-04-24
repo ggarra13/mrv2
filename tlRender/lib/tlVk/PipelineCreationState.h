@@ -367,10 +367,6 @@ namespace tl
             VkRenderPass renderPass = VK_NULL_HANDLE; // Store the handle
             uint32_t subpass = 0;
 
-            // Base pipeline (if using derivation)
-            // VkPipeline                     basePipelineHandle; // Store the
-            // handle int32_t                        basePipelineIndex;
-
             // Flags
             VkPipelineCreateFlags flags = 0;
 
