@@ -6,10 +6,11 @@
 
 #include "USDRender/Private.h"
 
+#include <FL/vk_enum_string_helper.h>
+
 #include <iostream>
 #include <string>
 
-#define USE_REVEAL 1
 #define USE_DEPTH 1   // turning this to one results VK_ERROR_DEVICE_LOST
 
 #if DEBUG_PIPELINE_USE
@@ -291,7 +292,7 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
-            
+
             // Only create the render pass once (it doesn't depend on frame size, 
             // only on formats which don't change).
             if (p.oitRenderPass == VK_NULL_HANDLE)
@@ -311,7 +312,6 @@ namespace tl
                 attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
                 attachments.push_back(attachment);
 
-#if USE_REVEAL
                 // Reveal attachment
                 attachment.format = VK_FORMAT_R16_SFLOAT;
                 attachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -322,13 +322,12 @@ namespace tl
                 attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
                 attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
                 attachments.push_back(attachment);
-#endif
 
 #if USE_DEPTH
                 
                 // We reuse depth from opaque pass (in p.fbo).
                 attachment.format = p.fbo->getDepthFormat();
-                attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+                attachment.samples = p.fbo->getSampleCount();
                 attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;   // keep depth!
                 attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
                 attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -346,11 +345,9 @@ namespace tl
                 colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 colorRefs.push_back(colorRef);
 
-#if USE_REVEAL
                 colorRef.attachment = colorRefs.size();
                 colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 colorRefs.push_back(colorRef);
-#endif
 
 #if USE_DEPTH
                 VkAttachmentReference depthRef = {};
@@ -371,21 +368,14 @@ namespace tl
                 dependency.dstSubpass = 0;
 
                 dependency.srcStageMask =
-                    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
-                    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
                     VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-
-                dependency.dstStageMask =
-                    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
-                    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
-                    VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-
                 dependency.srcAccessMask =
-                    VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
                     VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
+                dependency.dstStageMask =
+                    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+
                 dependency.dstAccessMask =
-                    VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
                     VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
 
                 VkRenderPassCreateInfo rpInfo = {};
@@ -413,22 +403,16 @@ namespace tl
             }
 
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
 #if USE_DEPTH
             p.fbo->transitionDepthToStencilAttachment(p.cmd);
 #endif
             
             p.accum[p.frameIndex]->transitionToColorAttachment(p.cmd);
-#if USE_REVEAL
             p.reveal[p.frameIndex]->transitionToColorAttachment(p.cmd);
-#endif
+
             std::vector<VkImageView> views;
             views.push_back(p.accum[p.frameIndex]->getImageView());
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
-#if USE_REVEAL
             views.push_back(p.reveal[p.frameIndex]->getImageView());
-#endif
 
 #if USE_DEPTH
             views.push_back(p.fbo->getDepthImageView());
@@ -445,7 +429,6 @@ namespace tl
 
             VK_CHECK(vkCreateFramebuffer(device, &fbInfo, nullptr,
                                          &p.oitFramebuffer[p.frameIndex]));
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         }
 
         void Render::beginOITRenderPass()
@@ -460,11 +443,9 @@ namespace tl
             clear.color = {0.f, 0.f, 0.f, 0.f};
             clears.push_back(clear);
 
-#if USE_REVEAL            
             // Reveal = 1
             clear.color = {1.f, 0.f, 0.f, 0.f};
             clears.push_back(clear);
-#endif
 
 #if USE_DEPTH
             // Depth = don't care (we LOAD it)
@@ -589,7 +570,6 @@ namespace tl
                 VK_COLOR_COMPONENT_A_BIT;
             cb.attachments.push_back(accumBlend);
 
-#if USE_REVEAL
             vlk::ColorBlendAttachmentStateInfo revealBlend;
             revealBlend.blendEnable = VK_TRUE;
             revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
@@ -604,7 +584,6 @@ namespace tl
             revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
 
             cb.attachments.push_back(revealBlend);
-#endif
             
             cb.logicOpEnable = VK_FALSE;
             cb.logicOp = VK_LOGIC_OP_COPY;

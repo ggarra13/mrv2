@@ -1188,7 +1188,7 @@ namespace tl
                 }
             }
             
-#if 0
+#if 1
             p.render->endRenderPass();
 
             auto oldRenderPass = p.render->getRenderPass();

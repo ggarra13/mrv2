@@ -159,6 +159,9 @@ namespace tl
             //! Get image.
             VkImage getImage() const;
 
+            //! Get the depth/stencil image.
+            VkImage getDepthImage() const;
+            
             //! Get normal handles.
             VkFramebuffer getFramebuffer() const;
             VkRenderPass getClearRenderPass() const;
