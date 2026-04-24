@@ -8,8 +8,6 @@
 
 #include "usdgeom/mesh.h"
 
-#include "usd/primvars.h"
-#include "usd/primvarSampler.h"
 #include "usd/subsetsSplit.h"
 
 #include <tlCore/Context.h>
@@ -43,16 +41,9 @@
 #include <pxr/usd/usdGeom/metrics.h>
 #include <pxr/usd/usdGeom/xform.h>
 #include <pxr/usd/usdGeom/xformCache.h>
-#include <pxr/usd/usdGeom/primvarsAPI.h>
 
 // Skeleton types
-#include <pxr/usd/usdSkel/animQuery.h>
 #include <pxr/usd/usdSkel/bakeSkinning.h>
-#include <pxr/usd/usdSkel/bindingAPI.h>
-#include <pxr/usd/usdSkel/cache.h>
-#include <pxr/usd/usdSkel/root.h>
-#include <pxr/usd/usdSkel/skeletonQuery.h>
-#include <pxr/usd/usdSkel/utils.h>
 
 // Material and Shaders
 #include <pxr/usd/usdShade/material.h>
@@ -442,6 +433,7 @@ namespace tl
             offscreenBufferOptions.sampling = vlk::OffscreenSampling::kNone;
             offscreenBufferOptions.pbo = true;
             offscreenBufferOptions.storeDepth = true;
+            offscreenBufferOptions.multiFrameDepth = true;
             offscreenBufferOptions.colorFilters.minify = timeline::ImageFilter::Linear;
             offscreenBufferOptions.colorFilters.magnify = timeline::ImageFilter::Linear;
 
@@ -452,6 +444,8 @@ namespace tl
                 p.buffer = vlk::OffscreenBuffer::create(
                     ctx, renderSize, offscreenBufferOptions);
             }
+
+            p.buffer->setFrameIndex(frameIndex);
 
             // locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
@@ -470,6 +464,8 @@ namespace tl
             auto oldTransform = p.render->getTransform();
             p.render->setTransform(mvp);
 
+            // Traverse scene converting to triangles and classfying primitives
+            // in opaque and transparent.
             _sceneTraversal();
 
             for (auto& object : p.opaquePrims)
@@ -480,37 +476,38 @@ namespace tl
                                    object.material);
             }
             
+#if 0
             p.render->endRenderPass();
 
-#if 0
-
-            //
-            // We must use a barrier to make sure the previous (opaque)
-            // render pass finishes.
-            //
-            VkImageMemoryBarrier barrier = {};
-            barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-            barrier.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-            barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-
-            barrier.oldLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            barrier.newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-            barrier.image = p.buffer->getDepthImage();
-            barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-            barrier.subresourceRange.baseMipLevel = 0;
-            barrier.subresourceRange.levelCount = 1;
-            barrier.subresourceRange.baseArrayLayer = 0;
-            barrier.subresourceRange.layerCount = 1;
+            p.buffer->transitionDepthForAttachment(cmd);
             
-            vkCmdPipelineBarrier(
-                cmd,
-                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
-                0,
-                0, nullptr,
-                0, nullptr,
-                1, &barrier);
+    //         //
+    //         // Do we must use a barrier to make sure the previous (opaque)
+    //         // render pass finishes?
+    //         //
+    //         VkImageMemoryBarrier depthBarrier{
+    //             .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+    //             .srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+    //             .dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
+    //             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+    //             .oldLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,   // must match finalLayout of opaque RP
+    //             .newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,   // must match initialLayout of transparent RP
+    //             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+    //             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+    //             .image = p.buffer->getDepthImage(),
+    //             .subresourceRange = { VK_IMAGE_ASPECT_DEPTH_BIT, 0, 1, 0, 1 }
+    //         };
+
+    //         vkCmdPipelineBarrier(cmd,
+    //                              VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,                                 // opaque wrote depth
+    //                              VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+    //                              VK_DEPENDENCY_BY_REGION_BIT,
+    // 0, nullptr, 0, nullptr,
+    //                              1, &depthBarrier);
+#endif
+
+#if 0       // \@bug: Making this 1 and calling drawMeshOIT we'll get
+//             //        VK_ERROR_DEVICE_LOST 
             
             auto oldRenderPass = p.render->getRenderPass();
 
@@ -541,6 +538,8 @@ namespace tl
                                    object.shaderId, object.textures,
                                    object.material, true);
             }
+
+            p.render->endRenderPass();
 #endif
             
             p.render->end();

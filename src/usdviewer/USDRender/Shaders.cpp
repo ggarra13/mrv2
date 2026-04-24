@@ -264,11 +264,16 @@ layout(location = 0) out vec4 outAccum;
 layout(location = 1) out vec4 outReveal;
 )";
                 outputCode = R"(
-    // Weight (can be simple or fancy)
-    float weight = max(0.01, pow(opacity, 4.0));
+// Correct WBOIT output:
+float weight    = clamp(pow(opacity, 4.0) + 0.01, 0.001, 300.0);
 
-    outAccum  = vec4(color.rgb * opacity * weight, opacity * weight);
-    outReveal = vec4(opacity, 0.0, 0.0, 1.0);
+// Accum: additive blend (ONE, ONE)
+outAccum  = vec4(color * opacity * weight, opacity * weight);
+
+// Reveal: the blend state is (ZERO, ONE_MINUS_SRC_ALPHA)
+// so src_alpha is what drives the multiplicative accumulation
+// Write opacity into ALL channels so any component read works
+outReveal = vec4(opacity);  
 )";
             }
             

@@ -92,23 +92,26 @@ namespace tl
                 }
             }
 
-            UsdGeomPrimvarsAPI primvarsAPI(prim);
-            for (const UsdGeomPrimvar& pv : primvarsAPI.FindPrimvarsWithInheritance())
+            if (out.empty())
             {
-                if (!pv.IsDefined()) continue;
-
-                TfToken role = pv.GetTypeName().GetRole();
-
-                if (role == SdfValueRoleNames->TextureCoordinate ||
-                    role == SdfValueRoleNames->Normal            ||
-                    role == SdfValueRoleNames->Color             ||
-                    role == SdfValueRoleNames->Point)
+                UsdGeomPrimvarsAPI primvarsAPI(prim);
+                for (const UsdGeomPrimvar& pv : primvarsAPI.FindPrimvarsWithInheritance())
                 {
-                    PrimvarAndType pvt;
-                    pvt.pv = pv;
-                    pvt.name = pv.GetName();
-                    pvt.type = ClassifyPrimvar(pv, TfToken());
-                    out.emplace_back(pvt);
+                    if (!pv.IsDefined()) continue;
+
+                    TfToken role = pv.GetTypeName().GetRole();
+
+                    if (role == SdfValueRoleNames->TextureCoordinate ||
+                        role == SdfValueRoleNames->Normal            ||
+                        role == SdfValueRoleNames->Color             ||
+                        role == SdfValueRoleNames->Point)
+                    {
+                        PrimvarAndType pvt;
+                        pvt.pv = pv;
+                        pvt.name = pv.GetName();
+                        pvt.type = ClassifyPrimvar(pv, TfToken());
+                        out.emplace_back(pvt);
+                    }
                 }
             }
 

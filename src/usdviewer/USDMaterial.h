@@ -3,6 +3,8 @@
 
 #include <tlVk/Texture.h>
 
+#include <pxr/base/tf/token.h>
+
 #include <ostream>
 
 namespace tl
@@ -19,6 +21,8 @@ namespace tl
             vlk::TextureBorder    borderV = vlk::TextureBorder::ClampToEdge;
             std::string           channel = "rgba";
             std::string        colorSpace = "srgb";
+            pxr::TfToken          primvar = pxr::TfToken("st");
+            bool                 animated = false;
             
             std::string getConnection() const
                 {
@@ -30,13 +34,14 @@ namespace tl
             
             bool operator==(const ShaderInputResult& b) const
                 {
-                    return (texturePath == b.texturePath &&
+                    return (animated == b.animated &&
                             hasValue == b.hasValue &&
+                            value == b.value &&
+                            texturePath == b.texturePath &&
                             channel == b.channel &&
                             borderU == b.borderU &&
                             borderV == b.borderV &&
-                            colorSpace == b.colorSpace &&
-                            value == b.value );
+                            colorSpace == b.colorSpace);
                 }
             
             bool operator!=(const ShaderInputResult& b) const
@@ -49,8 +54,8 @@ namespace tl
         inline
         std::ostream& operator<<(std::ostream& o, const ShaderInputResult& b)
         {
-            if (!b.texturePath.empty())
-                return o << b.texturePath << " channel=" << b.channel
+            if (!b.texturePath.empty() && b.texturePath[0] != '*')
+                return o << b.texturePath << " primvar=" << b.primvar.GetString() << " channel=" << b.channel
                          << " borderU=" << b.borderU << " borderV=" << b.borderV;
             else
                 return o << " hasValue=" << b.hasValue << " " << b.value[0] << ", "

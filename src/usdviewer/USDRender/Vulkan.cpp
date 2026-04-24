@@ -11,7 +11,8 @@
 #include <iostream>
 #include <string>
 
-#define USE_DEPTH 1   // turning this to one results VK_ERROR_DEVICE_LOST
+#define USE_DEPTH 1   // \@bug: turning this to one AND drawing to accum/reveal
+                      // results in VK_ERROR_DEVICE_LOST
 
 #if DEBUG_PIPELINE_USE
 #define DEBUG_PIPELINE(x) std::cerr << x << std::endl;
@@ -278,14 +279,6 @@ namespace tl
                 p.pipelineLayouts[pipelineLayoutName], 0, 1,
                 &descriptorSet, 0, nullptr);
         }        
-
-        void Render::_vkDraw(const std::string& meshName)
-        {
-            TLRENDER_P();
-            
-            p.vaos[meshName]->bind(p.frameIndex);
-            p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
-        }
         
         void Render::createOIT()
         {
@@ -302,24 +295,24 @@ namespace tl
 
                 // Accum attachment
                 VkAttachmentDescription attachment = {};
-                attachment.format = VK_FORMAT_R16G16B16A16_SFLOAT;
+                attachment.format = p.accum[p.frameIndex]->getInternalFormat();
                 attachment.samples = VK_SAMPLE_COUNT_1_BIT;
                 attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
                 attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
                 attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-                attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
                 attachments.push_back(attachment);
 
                 // Reveal attachment
-                attachment.format = VK_FORMAT_R16_SFLOAT;
+                attachment.format = p.reveal[p.frameIndex]->getInternalFormat();
                 attachment.samples = VK_SAMPLE_COUNT_1_BIT;
                 attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
                 attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
                 attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-                attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
                 attachments.push_back(attachment);
 
@@ -362,21 +355,24 @@ namespace tl
                 subpass.pDepthStencilAttachment = &depthRef;
 #endif
 
-                VkSubpassDependency dependency = {};
+                // Comprehensive dual dependencies to prevent layout transition races
+                std::vector<VkSubpassDependency> dependencies(2);
 
-                dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-                dependency.dstSubpass = 0;
+                // 1. External to Subpass 0 (Synchronize previous passes/barriers)
+                dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;
+                dependencies[0].dstSubpass = 0;
+                dependencies[0].srcStageMask = VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dependencies[0].srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                dependencies[0].dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dependencies[0].dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
 
-                dependency.srcStageMask =
-                    VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-                dependency.srcAccessMask =
-                    VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-
-                dependency.dstStageMask =
-                    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-
-                dependency.dstAccessMask =
-                    VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+                // 2. Subpass 0 to External (Synchronize transition to SHADER_READ_ONLY)
+                dependencies[1].srcSubpass = 0;
+                dependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
+                dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                dependencies[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+                dependencies[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 
                 VkRenderPassCreateInfo rpInfo = {};
                 rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -384,8 +380,8 @@ namespace tl
                 rpInfo.pAttachments = attachments.data();
                 rpInfo.subpassCount = 1;
                 rpInfo.pSubpasses = &subpass;
-                rpInfo.dependencyCount = 1;
-                rpInfo.pDependencies = &dependency;
+                rpInfo.dependencyCount = dependencies.size();
+                rpInfo.pDependencies = dependencies.data();
 
                 VK_CHECK(vkCreateRenderPass(device, &rpInfo, nullptr,
                                             &p.oitRenderPass));
@@ -624,8 +620,6 @@ namespace tl
                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             p.reveal[p.frameIndex]->setCurrentLayout(
                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-            p.fbo->transitionToShaderRead(p.cmd);
         }
 
         

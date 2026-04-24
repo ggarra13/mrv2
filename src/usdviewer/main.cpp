@@ -1,5 +1,5 @@
 
-#define ANIMATE 1
+#define ANIMATE 0
 #define BAKE_JOINTS 1
 
 #define LOG_STATUS(x) std::cerr << x << std::endl;

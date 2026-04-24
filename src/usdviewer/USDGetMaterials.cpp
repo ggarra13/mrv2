@@ -28,8 +28,6 @@ namespace tl
                 static TfTokenVector contexts = {
                     TfToken("glslfx"),
                     TfToken("mtlx"),
-                    TfToken("preview"),
-                    TfToken("universal"),
                 };
                 out = material.ComputeSurfaceSource(contexts);
                 return out;
@@ -98,12 +96,32 @@ namespace tl
                 {
                     std::cerr << "Warning: Unknown input "
                               << inputName.GetString() << std::endl;
-                    result.texturePath = "*black";
-                    result.value = { 0.F, 0.F, 0.F, 1.F };
+                    result.texturePath = "*white";
+                    result.value = { 1.F, 1.F, 1.F, 1.F };
                 }
             }
         }
-            
+
+        // Helper to resolve a token/string input that might be connected
+        TfToken ResolveTokenInput(const UsdShadeInput& input) {
+            TfToken tok;
+            if (input.Get(&tok)) return tok;
+
+            // Fall back to string (MaterialX style)
+            std::string str;
+            if (input.Get(&str) && !str.empty()) return TfToken(str);
+
+            // If still nothing, try following a connection (e.g. material-level override)
+            UsdShadeConnectableAPI source;
+            TfToken sourceName;
+            UsdShadeAttributeType sourceType;
+            if (input.GetConnectedSource(&source, &sourceName, &sourceType)) {
+                UsdShadeInput upstream = UsdShadeShader(source.GetPrim()).GetInput(sourceName);
+                if (upstream) return ResolveTokenInput(upstream);  // recurse once
+            }
+            return TfToken();
+        }
+        
         ShaderInputResult GetTextureOrValue(const UsdShadeMaterial& material,
                                             const TfToken& inputName,
                                             const UsdTimeCode& time,
@@ -213,7 +231,33 @@ namespace tl
                             } else {
                                 result.channel = attrStr;
                             }
+                            
+                            // 1. Get the 'st' input from the texture shader
+                            UsdShadeInput stInput = nodeShader.GetInput(TfToken("st"));
 
+                            if (stInput.HasConnectedSource()) {
+                                UsdShadeConnectableAPI source;
+                                TfToken sourceName;
+                                UsdShadeAttributeType sourceType;
+                                
+                                // 2. Follow the connection to the source node (usually a PrimvarReader)
+                                if (stInput.GetConnectedSource(&source, &sourceName, &sourceType)) {
+                                    UsdShadeShader primvarReaderShader(source.GetPrim());
+
+                                    // Get the primvar name — works for BOTH UsdPrimvarReader AND MaterialX (ALab scene)
+                                    UsdShadeInput varnameInput   = primvarReaderShader.GetInput(TfToken("varname"));
+                                    UsdShadeInput geompropInput  = primvarReaderShader.GetInput(TfToken("geomprop"));
+
+                                    TfToken primvarName;
+                                    primvarName = ResolveTokenInput(varnameInput);
+                                    if (primvarName.IsEmpty())
+                                        primvarName = ResolveTokenInput(geompropInput);
+
+                                    result.primvar = primvarName;
+                                    
+                                }
+                            }
+                            
                             result.texturePath = assetPath.GetResolvedPath();
                             return true; // Texture successfully found and parsed
                         }
@@ -313,6 +357,8 @@ namespace tl
             out.opacityThreshold = GetTextureOrValue(material,
                                                      TfToken("opacityThreshold"),
                                                      time, debug);
+
+            
             if ((!out.opacity.texturePath.empty() &&
                  out.opacity.texturePath != "*white"))
             {

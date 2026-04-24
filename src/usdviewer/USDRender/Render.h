@@ -185,7 +185,6 @@ namespace tl
             void _bindDescriptorSets(
                 const std::string& pipelineLayoutName,
                 const std::string& shaderName);
-            void _vkDraw(const std::string& meshName);
 
             Fl_Vk_Context& ctx;
 
