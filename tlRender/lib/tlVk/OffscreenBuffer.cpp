@@ -848,7 +848,8 @@ namespace tl
                 depthAttachment.format = p.depthFormat;
                 depthAttachment.samples = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
                 depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-                depthAttachment.storeOp = p.options.storeDepth ?  VK_ATTACHMENT_STORE_OP_STORE :
+                depthAttachment.storeOp = p.options.storeDepth ?
+                                          VK_ATTACHMENT_STORE_OP_STORE :
                                           VK_ATTACHMENT_STORE_OP_DONT_CARE;
                 depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;

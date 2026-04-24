@@ -4,15 +4,12 @@
 
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
 
-#include "USDCollectTextures.h"
-#include "USDGetMaterials.h"
 #include "USDTextureSlots.h"
 
+#include "usdgeom/mesh.h"
 
 #include "usd/primvars.h"
 #include "usd/primvarSampler.h"
-
-#include "USDRenderEngine.h"  // must come here.
 
 #include <tlCore/Context.h>
 
@@ -41,16 +38,8 @@
 #include <pxr/imaging/hdx/types.h>
 
 // Primitive types (refactor all these for scene traversal)
-#include <pxr/usd/usdGeom/basisCurves.h>
 #include <pxr/usd/usdGeom/camera.h>
-#include <pxr/usd/usdGeom/capsule.h>
-#include <pxr/usd/usdGeom/cone.h>
-#include <pxr/usd/usdGeom/cube.h>
-#include <pxr/usd/usdGeom/cylinder.h>
 #include <pxr/usd/usdGeom/metrics.h>
-#include <pxr/usd/usdGeom/nurbsCurves.h>
-#include <pxr/usd/usdGeom/nurbsPatch.h>
-#include <pxr/usd/usdGeom/sphere.h>
 #include <pxr/usd/usdGeom/xform.h>
 #include <pxr/usd/usdGeom/xformCache.h>
 #include <pxr/usd/usdGeom/primvarsAPI.h>
@@ -73,7 +62,7 @@
 #include <pxr/imaging/hdx/tokens.h>
 #include <pxr/imaging/hdx/types.h>
 
-#include <tlTimelineVk/RenderShadersBinary.h>
+#include "USDRenderEngine.h"  // must come after Pixar includes
 
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/Shader.h>
@@ -94,12 +83,14 @@
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
 
+
 #include <chrono>
 #include <iostream>
 #include <memory>
 #include <regex>
 #include <string>
 #include <unordered_map>
+
 
 using namespace PXR_NS;
 
@@ -478,21 +469,11 @@ namespace tl
             // 1. Try to get the Material bound directly to the Prim
             UsdPrim prim = usdMesh.GetPrim();  // \@todo: remove to use just prim not usdMesh
             UsdTimeCode time = p.time;
-            
-            // -------------------------
-            // 1. VERTICES (Points)
-            // -------------------------
-            VtArray<GfVec3f> points;
-            usdMesh.GetPointsAttr().Get(&points, time);
 
-            // Faces vertex counts: number vertices per face.
-            VtArray<int> faceVertexCounts;
-            usdMesh.GetFaceVertexCountsAttr().Get(&faceVertexCounts, time);
-            
-            // faceVertexIndices: flat list of vertex indices for all faces
-            VtArray<int> faceVertexIndices;
-            usdMesh.GetFaceVertexIndicesAttr().Get(&faceVertexIndices, time);
+            usdgeom::Mesh mesh(usdMesh, time);
 
+            
+            
             const TfToken materialBindFamily("materialBind");
             std::vector<UsdGeomSubset> subsets =
                 UsdGeomSubset::GetGeomSubsets(usdMesh,
@@ -504,9 +485,9 @@ namespace tl
                 const std::vector<UsdGeomMesh>& usdMeshes = _SplitMeshBySubsets(
                     primPath,
                     usdMesh,
-                    points,
-                    faceVertexCounts,
-                    faceVertexIndices,
+                    mesh.getPoints(),
+                    mesh.getFaceVertexCounts(),
+                    mesh.getFaceVertexIndices(),
                     subsets);
 
                 for (const auto& usdMesh : usdMeshes)
@@ -518,208 +499,9 @@ namespace tl
 
                 return;
             }
-            
-            
-            std::shared_ptr<geom::TriangleMesh3> geom(new geom::TriangleMesh3);
+
             MeshOptimization meshOptimization;
-
-            std::vector<usd::PrimvarAndType> primvarsAndType = usd::GetPrimvars(usdMesh.GetPrim());
-
-            // \@bug: OpenUSD supports multiple uv sets per geometry (actually,
-            //        per texture).
-            //        If we find that, then we will use the last one and
-            //        spit out a warning.
-            int numUVSets = 0;
-            int uvCount = 0;
-            for (const auto& pvt : primvarsAndType)
-            {
-                if (pvt.type == TfToken("st"))
-                {
-                    ++numUVSets;
-                }
-            }
-            if (numUVSets > 1)
-            {
-                static bool warned = false;
-                if (!warned)
-                {
-                    std::cerr << primPath << " (among others?) " << std::endl
-                              << "has more than one set of uv coordinates. " 
-                              << "Not yet supported. Picking last one." << std::endl;
-                    warned = true;
-                    for (const auto& pvt : primvarsAndType)
-                    {
-                        if (pvt.type == TfToken("st"))
-                        {
-                            std::cout << "\t\t" << pvt.name << std::endl;
-                        }
-                    }
-                }
-            }
-            
-            
-            for (const auto& pvt : primvarsAndType)
-            {
-                const UsdGeomPrimvar& pv = pvt.pv;
-                const TfToken type = pvt.type;
-
-                if (type == TfToken("st"))
-                {
-                    // We'll use whatever UV comes last
-                    ++uvCount;
-                    if (uvCount < numUVSets)
-                        continue;
-                    
-                    // Get STs if any.
-                    usd::PrimvarSampler<GfVec2f> sampler(pv, time);
-                    if (sampler.IsValid())
-                    {
-                        int faceCornerIdx = 0; 
-                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
-                             ++faceIdx) {
-                            int vertCount = faceVertexCounts[faceIdx];
-                            
-                            for (int i = 0; i < vertCount; ++i) {
-                                int faceVertexIdx = faceCornerIdx + i;
-                                int pointIdx = faceVertexIndices[faceVertexIdx];
-                            
-                                GfVec2f uv = sampler.Sample(faceIdx,
-                                                            faceVertexIdx,
-                                                            pointIdx);
-                                
-                                if (uv[0] < 0.F || uv[0] > 1.F ||
-                                    uv[1] < 0.F || uv[1] > 1.F)
-                                    meshOptimization.floatUVs = true;
-                                
-                                geom->t.emplace_back(math::Vector2f(uv[0], 1.0F - uv[1]));
-                            }
-                            faceCornerIdx += vertCount;
-                        }
-                    }
-                }
-                else if (type == TfToken("normal"))
-                {
-                    // Get Normals if any.
-                    usd::PrimvarSampler<GfVec3f> sampler(pv, time);
-                    if (sampler.IsValid()) {
-                        int faceCornerIdx = 0; 
-                        for (size_t faceIdx = 0;
-                             faceIdx < faceVertexCounts.size();
-                             ++faceIdx) {
-                            int vertCount = faceVertexCounts[faceIdx];
-                        
-                            for (int i = 0; i < vertCount; ++i) {
-                                int faceVertexIdx = faceCornerIdx + i;
-                                int pointIdx = faceVertexIndices[faceVertexIdx];
-                                
-                                GfVec3f n = sampler.Sample(faceIdx,
-                                                           faceVertexIdx,
-                                                           pointIdx);
-                            
-                                if (n[0] < -1.F || n[0] > 1.F ||
-                                    n[1] < -1.F || n[1] > 1.F ||
-                                    n[2] < -1.F || n[2] > 1.F)
-                                    meshOptimization.floatNormals = true;
-                            
-                                geom->n.emplace_back(math::Vector3f(n[0], n[1], n[2]));
-                            }
-                            faceCornerIdx += vertCount;
-                        }
-                    }
-                }
-                else if (type == TfToken("color"))
-                {
-                    usd::PrimvarSampler<GfVec4f> sampler(pv, time);
-                    if (sampler.IsValid()) {
-                        int faceCornerIdx = 0; 
-                        for (size_t faceIdx = 0; faceIdx < faceVertexCounts.size();
-                             ++faceIdx) {
-                            int vertCount = faceVertexCounts[faceIdx];
-                        
-                            for (int i = 0; i < vertCount; ++i) {
-                                int faceVertexIdx = faceCornerIdx + i;
-                                int pointIdx = faceVertexIndices[faceVertexIdx];
-
-                                GfVec4f c = sampler.Sample(faceIdx,
-                                                           faceVertexIdx,
-                                                           pointIdx);
-                            
-                                if (c[0] < 0.F || c[0] > 1.F ||
-                                    c[1] < 0.F || c[1] > 1.F ||
-                                    c[2] < 0.F || c[2] > 1.F ||
-                                    c[3] < 0.F || c[3] > 1.F)
-                                    meshOptimization.floatColors = true;
-                            
-                                geom->c.emplace_back(
-                                    math::Vector4f(c[0], c[1], c[2], c[3]));
-                            }
-                            faceCornerIdx += vertCount;
-                        }
-                    }
-                }
-                // else
-                // {
-                //     std::cerr << "Unknown type for primvar type="
-                //               << type.GetString()
-                //               << std::endl;
-                // }
-            }
-
-            // Get points.
-            geom->v.reserve(points.size());
-            for (int i = 0; i < points.size(); ++i)
-            {
-                const auto& p = points[i];
-                geom->v.emplace_back(math::Vector3f(p[0], p[1], p[2]));
-            }
-            
-            const bool hasUVs = !geom->t.empty();
-            const bool hasNormals = !geom->n.empty();
-            const bool hasColors = !geom->c.empty();
-
-            // Create triangles.
-            int indexOffset = 0;
-            geom::Triangle3 triangle;
-            for (int vertCount : faceVertexCounts)
-            {
-                // Fan triangulation: anchor at faceVertexIndices[indexOffset]
-                // e.g. a quad [A, B, C, D] → (A,B,C), (A,C,D)
-                for (int i = 1; i < vertCount - 1; ++i)
-                {
-                    const int i0 = faceVertexIndices[indexOffset];
-                    const int i1 = faceVertexIndices[indexOffset + i];
-                    const int i2 = faceVertexIndices[indexOffset + i + 1];
-                    
-                    triangle.v[0].v = i0 + 1;
-                    triangle.v[1].v = i1 + 1;
-                    triangle.v[2].v = i2 + 1;
-                    
-                    if (hasUVs)
-                    {
-                        triangle.v[0].t = indexOffset + 1;
-                        triangle.v[1].t = indexOffset + i + 1;
-                        triangle.v[2].t = indexOffset + i + 2;
-                    }
-                    
-                    if (hasNormals)
-                    {
-                        triangle.v[0].n = indexOffset + 1;
-                        triangle.v[1].n = indexOffset + i + 1;
-                        triangle.v[2].n = indexOffset + i + 2;
-                    }
-
-                    if (hasColors)
-                    {
-                        triangle.v[0].c = indexOffset + 1;
-                        triangle.v[1].c = indexOffset + i + 1;
-                        triangle.v[2].c = indexOffset + i + 2;
-                    }
-                    
-                    geom->triangles.emplace_back(triangle);
-                }
-                indexOffset += vertCount;
-            }
-
+            std::shared_ptr<geom::TriangleMesh3> geom = mesh.convert(meshOptimization);
                 
             //
             // Find the textures if the mesh has UVs 
@@ -727,7 +509,7 @@ namespace tl
             usd::Material material;
             UsdShadeMaterial usdMaterial;
             std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-            if (hasUVs)
+            if (!geom->t.empty())
             {
                 UsdShadeMaterialBindingAPI api(prim);
                 usdMaterial = usd::GetMaterial(api);
@@ -769,27 +551,27 @@ namespace tl
             p.stats.textures = p.textures.size();
             p.stats.triangles += geom->triangles.size();
 
+            EnginePrimitive object;
+            object.geom = geom;
+            object.optimization = meshOptimization;
+            object.modelMatrix = modelMatrix;
+            object.color = color;
+            object.shaderId = shaderId;
+            object.material = material;
+            object.textures = textures;
+                
             if (!material.transparent)
             {
                 // Object is opaque.  Render it without blending.
                 p.stats.opaque++;
 
-                p.render->drawMesh(*geom, meshOptimization, modelMatrix, color,
-                                   shaderId, textures, material);
+                p.opaquePrims.emplace_back(object);
             }
             else
             {
                 // Object is transparent.  Store it for later drawing.
                 p.stats.transparent++;
                 
-                TransparentPrimitive object;
-                object.geom = geom;
-                object.optimization = meshOptimization;
-                object.modelMatrix = modelMatrix;
-                object.color = color;
-                object.shaderId = shaderId;
-                object.material = material;
-                object.textures = textures;
 
                 p.transparentPrims.emplace_back(object);
             }
@@ -912,172 +694,49 @@ namespace tl
             
             auto oldTransform = p.render->getTransform();
             p.render->setTransform(mvp);
-            
-            TfTokenVector purposes = {UsdGeomTokens->default_};
-            UsdGeomBBoxCache bboxCache(p.time, purposes);
-    
-            UsdPrimRange range(p.stage->GetPseudoRoot(),
-                               UsdTraverseInstanceProxies());
-            GfMatrix4d matrix;
-            UsdSkelCache skelCache;
-            UsdGeomXformCache xformCache(p.time);
-            std::string primPath;
 
-            //
-            // Stats
-            //
-            p.stats.reset();
-            p.transparentPrims.clear();
-            
-            std::shared_ptr<vlk::Texture> texture;    
-            for (auto it = range.begin(); it != range.end(); ++it) {
+            _sceneTraversal();
 
-                // Check if a primitive is visible and its purpose is "render" or "default".
-                if (it->IsA<UsdGeomImageable>()) {
-                    UsdGeomImageable imageable(*it);
-            
-                    if (imageable.ComputeVisibility(p.time) ==
-                        UsdGeomTokens->invisible) {
-                        // If this prim is invisible, its entire subtree is invisible.
-                        // Prune the traversal to skip all children.
-                        it.PruneChildren();
-                        continue;
-                    }
-
-                    // If purpose is not default or not render, don't use this
-                    // geometry.
-                    TfToken purpose = imageable.ComputePurpose();
-                    if (purpose != UsdGeomTokens->default_ &&
-                        purpose != UsdGeomTokens->render)
-                        continue;
-
-                }
-
-                if (!UsdShadeMaterialBindingAPI::CanApply(*it))
-                    continue;
-
-                primPath = it->GetPath().GetString();
-
-
-                matrix = xformCache.GetLocalToWorldTransform(*it);
-                const math::Matrix4x4f modelMatrix(matrix[0][0], matrix[0][1],
-                                                   matrix[0][2], matrix[0][3],
-                                                   matrix[1][0], matrix[1][1],
-                                                   matrix[1][2], matrix[1][3],
-                                                   matrix[2][0], matrix[2][1],
-                                                   matrix[2][2], matrix[2][3],
-                                                   matrix[3][0], matrix[3][1],
-                                                   matrix[3][2], matrix[3][3]);
-
-                // std::regex re("Leg");
-                //std::regex re("REye");
-                //std::regex re("(?:Iris|Pupil|Sclera)");  // renders brown as it should
-                // std::regex re("Sclera");
-                // std::regex re("Cornea");
-                // std::regex re("Pupil");  // renders black as it should
-                
-                // if (!std::regex_search(primPath, re))
-                //     continue;
-                
-                // std::cout << primPath << std::endl;
-
-                image::Color4f color(1, 1, 1);
-                
-                VtArray<GfVec3f> colors;
-                UsdGeomGprim gprim(*it);
-                if (gprim)
-                    gprim.GetDisplayColorAttr().Get(&colors, p.time);
-
-                if (colors.size() == 1)
-                {
-                    color.r = colors[0][0];
-                    color.g = colors[0][1];
-                    color.b = colors[0][2];
-                    //color.a = colors[0][3];  // alpha is not used.
-                }
-                
-                
-                std::string shaderId;
-                if (it->IsA<UsdGeomMesh>())
-                {
-                    p.stats.total++;
-                    p.stats.meshes++;
-
-                    UsdGeomMesh usdMesh = UsdGeomMesh(*it);
-                    _drawMesh(primPath, usdMesh, modelMatrix, shaderId, color,
-                              bboxCache);
-                }
-                else if (it->IsA<UsdGeomNurbsPatch>())
-                {
-                    p.stats.total++;
-                    p.stats.nurbs++; 
-                    UsdGeomNurbsPatch out = UsdGeomNurbsPatch(*it);
-                }
-                else if (it->IsA<UsdGeomNurbsCurves>())
-                {
-                    p.stats.total++;
-                    p.stats.nurbsCurves++; 
-                    UsdGeomNurbsCurves out = UsdGeomNurbsCurves(*it);
-                }
-                else if (it->IsA<UsdGeomBasisCurves>())
-                {
-                    p.stats.total++;
-                    p.stats.basisCurves++; 
-                    UsdGeomBasisCurves out = UsdGeomBasisCurves(*it);
-                }
-                else if (it->IsA<UsdGeomSphere>())
-                {
-                    p.stats.total++;
-                    p.stats.spheres++;
-
-                    UsdTimeCode time = p.time;
-                    
-                    UsdGeomSphere out = UsdGeomSphere(*it);
-                    float radius = 1;
-                    out.GetRadiusAttr().Get(&radius, time);
-                    auto geom = geom::sphere(radius, 16, 16);
-                    
-                    std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-                    UsdShadeMaterialBindingAPI api(*it);
-                    UsdShadeMaterial material = usd::GetMaterial(api);
-
-                    const std::string materialKey = material.GetPath().GetString();
-                    auto i = p.textures.find(materialKey);
-                    if (i != p.textures.end())
-                    {
-                        textures = i->second;
-                        shaderId = "UsdShaderPreview";
-                    }
-
-                    MeshOptimization opt;
-                    p.render->drawMesh(geom, opt, modelMatrix, color,
-                                       shaderId, textures);
-                }
-                else if (it->IsA<UsdGeomCube>())
-                {
-                    p.stats.total++;
-                    p.stats.cubes++;
-                }
-                else if (it->IsA<UsdGeomCylinder>())
-                {
-                    p.stats.total++;
-                    p.stats.cylinders++;
-                }
-                else if (it->IsA<UsdGeomCapsule>())
-                {
-                    p.stats.total++;
-                    p.stats.capsules++;
-                }
-                else if (it->IsA<UsdGeomCone>())
-                {
-                    p.stats.total++;
-                    p.stats.cones++;
-                }
+            for (auto& object : p.opaquePrims)
+            {
+                p.render->drawMesh(*object.geom, object.optimization,
+                                   object.modelMatrix, object.color,
+                                   object.shaderId, object.textures,
+                                   object.material);
             }
             
-#if 1
             p.render->endRenderPass();
 
+
+            //
+            // We must use a barrier to make sure the previous (opaque)
+            // render pass finishes.
+            //
+            VkImageMemoryBarrier barrier = {};
+            barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+            barrier.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+            barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+
+            barrier.oldLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            barrier.newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+            barrier.image = p.buffer->getDepthImage();
+            barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+            barrier.subresourceRange.baseMipLevel = 0;
+            barrier.subresourceRange.levelCount = 1;
+            barrier.subresourceRange.baseArrayLayer = 0;
+            barrier.subresourceRange.layerCount = 1;
+            
+            vkCmdPipelineBarrier(
+                cmd,
+                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+                0,
+                0, nullptr,
+                0, nullptr,
+                1, &barrier);
+            
+#if 0
             auto oldRenderPass = p.render->getRenderPass();
 
             p.render->createOIT();
@@ -1099,9 +758,7 @@ namespace tl
 
             p.render->setRenderPass(oldRenderPass);
 #else
-            //
-            // Draw transparent primitives.
-            //
+            
             for (auto& object : p.transparentPrims)
             {
                 p.render->drawMesh(*object.geom, object.optimization,
@@ -1109,8 +766,6 @@ namespace tl
                                    object.shaderId, object.textures,
                                    object.material);
             }
-            
-            p.render->endRenderPass();
 #endif
             
             p.render->end();

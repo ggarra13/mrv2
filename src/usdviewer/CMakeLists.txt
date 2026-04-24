@@ -11,10 +11,15 @@ set(HEADERS
     USDRender/ShadersBinary.h
     USDRender/Private.h
     USDRender/Render.h
-    
+
+    USDEnginePrimitive.h
     USDResolveTexture.h
 
     engine/options.h
+
+    usdgeom/pointBased.h
+    usdgeom/prim.h
+    usdgeom/mesh.h
     
     usd/material.h
     usd/primvars.h
@@ -32,7 +37,12 @@ set(SOURCES
     USDGetMaterials.cpp
     USDRenderEngine.cpp
     USDResolveTexture.cpp
+    USDSceneTraversal.cpp
 
+    usdgeom/pointBased.cpp
+    usdgeom/prim.cpp
+    usdgeom/mesh.cpp
+    
     usd/primvars.cpp
     
     Vk/VAOPool.cpp

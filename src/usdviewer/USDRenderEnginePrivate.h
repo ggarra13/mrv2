@@ -1,7 +1,8 @@
+#include "USDEnginePrimitive.h"
 
 #include "USDRender/Render.h"
 #include "USDRender/ShadersBinary.h"
-#include "USDTransparentPrimitive.h"
+
 
 #include "usd/material.h"
 
@@ -30,7 +31,8 @@ namespace tl
             std::unordered_map<std::string, usd::ShaderTextures > textures;
 
             // Renderer information
-            std::vector<TransparentPrimitive> transparentPrims;
+            std::vector<EnginePrimitive> opaquePrims;
+            std::vector<EnginePrimitive> transparentPrims;
 
             struct Stats
             {

@@ -14,6 +14,8 @@ namespace tl
 {
     namespace usd
     {
+        using namespace pxr;
+        
         class RenderEngine : public std::enable_shared_from_this<RenderEngine>
         {
             TLRENDER_NON_COPYABLE(RenderEngine);
@@ -35,7 +37,7 @@ namespace tl
                       unsigned renderWidth);
             
         protected:
-    
+            void _sceneTraversal();
             void _bakeJoints();
             
             std::vector<UsdGeomMesh> _SplitMeshBySubsets(
