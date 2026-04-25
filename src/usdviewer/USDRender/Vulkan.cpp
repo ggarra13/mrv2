@@ -395,13 +395,13 @@ namespace tl
             // guarantees this at frame-begin, so it is safe to destroy here).
             if (p.oitFramebuffer[p.frameIndex] != VK_NULL_HANDLE)
             {
-                vkDestroyFramebuffer(device, p.oitFramebuffer[p.frameIndex], nullptr);
+                p.garbage[p.frameIndex].framebuffers.push_back(p.oitFramebuffer[p.frameIndex]);
                 p.oitFramebuffer[p.frameIndex] = VK_NULL_HANDLE;
             }
 
 
 #if USE_DEPTH
-            p.fbo->transitionDepthToStencilAttachment(p.cmd);
+            p.fbo->transitionDepthForAttachment(p.cmd);
 #endif
             
             p.accum[p.frameIndex]->transitionToColorAttachment(p.cmd);

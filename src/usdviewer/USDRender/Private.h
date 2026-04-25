@@ -74,6 +74,7 @@ namespace tl
             {
                 std::vector<VkPipeline> pipelines;
                 std::vector<VkPipelineLayout> pipelineLayouts;
+                std::vector<VkFramebuffer>    framebuffers;
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;

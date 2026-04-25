@@ -486,17 +486,6 @@ namespace tl
             
             auto oldRenderPass = p.render->getRenderPass();
 
-            // Debug-only extra barrier
-            // VkImageMemoryBarrier db = { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
-            // db.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-            // db.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-            // db.oldLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            // db.newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            // db.image = p.buffer->getDepthImage();           // or however you expose the active depth image
-            // db.subresourceRange = { p.buffer->hasDepth() ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) | p.buffer->hasStencil() ? VK_IMAGE_ASPECT_STENCIL_BIT : 0), 0, 1, 0, 1 };
-            // vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, 0, 0, nullptr, 0, nullptr, 1, &db);
-
-
             p.render->createOIT();
             p.render->beginOITRenderPass();
             

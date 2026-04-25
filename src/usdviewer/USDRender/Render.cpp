@@ -57,6 +57,7 @@ namespace tl
                 p.garbage[i].pipelines.reserve(20);
                 p.garbage[i].pipelineLayouts.reserve(20);
                 p.garbage[i].bindingSets.reserve(20);
+                p.garbage[i].framebuffers.reserve(20);
                 p.oitFramebuffer[i] = VK_NULL_HANDLE;
             }
         }
@@ -96,6 +97,11 @@ namespace tl
                 for (auto& pipelineLayout : g.pipelineLayouts)
                 {
                     vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+                }
+                // Destroy old pipelineLayouts that are no longer used.
+                for (auto& framebuffer : g.framebuffers)
+                {
+                    vkDestroyFramebuffer(device, framebuffer, nullptr);
                 }
             }
         }
@@ -212,8 +218,14 @@ namespace tl
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
             }
+            // Destroy old framebuffers that are no longer used.
+            for (auto& fb : g.framebuffers)
+            {
+                vkDestroyFramebuffer(device, fb, nullptr);
+            }
             g.pipelines.clear();
             g.pipelineLayouts.clear();
+            g.framebuffers.clear();
             g.bindingSets.clear();
             
             const image::Color4f color(1.F, 1.F, 1.F);
