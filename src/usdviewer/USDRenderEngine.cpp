@@ -476,40 +476,26 @@ namespace tl
                                    object.material);
             }
             
-#if 0
             p.render->endRenderPass();
-
-            p.buffer->transitionDepthForAttachment(cmd);
             
-    //         //
-    //         // Do we must use a barrier to make sure the previous (opaque)
-    //         // render pass finishes?
-    //         //
-    //         VkImageMemoryBarrier depthBarrier{
-    //             .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-    //             .srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-    //             .dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
-    //             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-    //             .oldLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,   // must match finalLayout of opaque RP
-    //             .newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,   // must match initialLayout of transparent RP
-    //             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-    //             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-    //             .image = p.buffer->getDepthImage(),
-    //             .subresourceRange = { VK_IMAGE_ASPECT_DEPTH_BIT, 0, 1, 0, 1 }
-    //         };
+//            p.buffer->transitionDepthForAttachment(cmd);
 
-    //         vkCmdPipelineBarrier(cmd,
-    //                              VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,                                 // opaque wrote depth
-    //                              VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-    //                              VK_DEPENDENCY_BY_REGION_BIT,
-    // 0, nullptr, 0, nullptr,
-    //                              1, &depthBarrier);
-#endif
 
-#if 0       // \@bug: Making this 1 and calling drawMeshOIT we'll get
+#if 1       // \@bug: Making this 1 and calling drawMeshOIT we'll get
 //             //        VK_ERROR_DEVICE_LOST 
             
             auto oldRenderPass = p.render->getRenderPass();
+
+            // Debug-only extra barrier
+            // VkImageMemoryBarrier db = { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+            // db.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+            // db.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+            // db.oldLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            // db.newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            // db.image = p.buffer->getDepthImage();           // or however you expose the active depth image
+            // db.subresourceRange = { p.buffer->hasDepth() ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) | p.buffer->hasStencil() ? VK_IMAGE_ASPECT_STENCIL_BIT : 0), 0, 1, 0, 1 };
+            // vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, 0, 0, nullptr, 0, nullptr, 1, &db);
+
 
             p.render->createOIT();
             p.render->beginOITRenderPass();

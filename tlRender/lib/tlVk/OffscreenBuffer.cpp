@@ -1291,53 +1291,94 @@ namespace tl
         // ====================================================================
         //  Depth transitions – always operate on the active frame's depth image
         // ====================================================================
-
         void OffscreenBuffer::transitionDepthToStencilAttachment(VkCommandBuffer cmd)
         {
             TLRENDER_P();
 
-            VkImageLayout& currentLayout = p.activeDepthLayout();
             VkImage        depthImage    = p.activeDepthImage();
+            VkImageLayout& currentLayout = p.activeDepthLayout();
 
-            if (currentLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
-                return;
-            
+            VkImageLayout oldLayout = currentLayout;
+            VkImageLayout newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+            // Always issue a barrier (even if layout is already correct).
+            // This is the critical synchronization point between the opaque render pass
+            // and the OIT render pass.
             VkImageMemoryBarrier barrier{};
             barrier.sType         = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-            barrier.oldLayout     = currentLayout;
-            barrier.newLayout     = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            barrier.srcAccessMask = (currentLayout == VK_IMAGE_LAYOUT_UNDEFINED)
-                                    ? 0
-                                    : VK_ACCESS_SHADER_READ_BIT;
-            barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-                                    VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+            barrier.oldLayout     = oldLayout;
+            barrier.newLayout     = newLayout;
+            barrier.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+            barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
+                                    VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
             barrier.image         = depthImage;
 
             barrier.subresourceRange.aspectMask = 0;
-            if (hasDepth())
-                barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_DEPTH_BIT;
-            if (hasStencil())
-                barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+            if (hasDepth())  barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_DEPTH_BIT;
+            if (hasStencil()) barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
             barrier.subresourceRange.baseMipLevel   = 0;
             barrier.subresourceRange.levelCount     = 1;
             barrier.subresourceRange.baseArrayLayer = 0;
             barrier.subresourceRange.layerCount     = 1;
 
-            VkPipelineStageFlags srcStage = (currentLayout == VK_IMAGE_LAYOUT_UNDEFINED)
-                                            ? VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-                                            : VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-
             vkCmdPipelineBarrier(
                 cmd,
-                srcStage,
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,  // previous pass
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, // OIT
                 0,
                 0, nullptr,
                 0, nullptr,
                 1, &barrier);
 
-            currentLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            currentLayout = newLayout;  // keep tracking happy
         }
+        
+        // void OffscreenBuffer::transitionDepthToStencilAttachment(VkCommandBuffer cmd)
+        // {
+        //     TLRENDER_P();
+
+        //     VkImageLayout& currentLayout = p.activeDepthLayout();
+        //     VkImage        depthImage    = p.activeDepthImage();
+
+        //     if (currentLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
+        //         return;
+            
+        //     VkImageMemoryBarrier barrier{};
+        //     barrier.sType         = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        //     barrier.oldLayout     = currentLayout;
+        //     barrier.newLayout     = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        //     barrier.srcAccessMask = (currentLayout == VK_IMAGE_LAYOUT_UNDEFINED)
+        //                             ? 0
+        //                             : VK_ACCESS_SHADER_READ_BIT;
+        //     barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+        //                             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+        //     barrier.image         = depthImage;
+
+        //     barrier.subresourceRange.aspectMask = 0;
+        //     if (hasDepth())
+        //         barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_DEPTH_BIT;
+        //     if (hasStencil())
+        //         barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+        //     barrier.subresourceRange.baseMipLevel   = 0;
+        //     barrier.subresourceRange.levelCount     = 1;
+        //     barrier.subresourceRange.baseArrayLayer = 0;
+        //     barrier.subresourceRange.layerCount     = 1;
+
+        //     VkPipelineStageFlags srcStage = (currentLayout == VK_IMAGE_LAYOUT_UNDEFINED)
+        //                                     ? VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+        //                                     : VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+
+        //     vkCmdPipelineBarrier(
+        //         cmd,
+        //         srcStage,
+        //         VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+        //         0,
+        //         0, nullptr,
+        //         0, nullptr,
+        //         1, &barrier);
+
+        //     currentLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        // }
 
         void OffscreenBuffer::transitionDepthToShaderRead(VkCommandBuffer cmd)
         {

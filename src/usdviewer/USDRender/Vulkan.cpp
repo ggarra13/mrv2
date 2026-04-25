@@ -358,21 +358,22 @@ namespace tl
                 // Comprehensive dual dependencies to prevent layout transition races
                 std::vector<VkSubpassDependency> dependencies(2);
 
-                // 1. External to Subpass 0 (Synchronize previous passes/barriers)
-                dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;
-                dependencies[0].dstSubpass = 0;
-                dependencies[0].srcStageMask = VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-                dependencies[0].srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-                dependencies[0].dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-                dependencies[0].dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+                // External → Subpass 0 (opaque → OIT)
+                dependencies[0].srcSubpass      = VK_SUBPASS_EXTERNAL;
+                dependencies[0].dstSubpass      = 0;
+                dependencies[0].srcStageMask    = VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dependencies[0].srcAccessMask   = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                dependencies[0].dstStageMask    = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dependencies[0].dstAccessMask   = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                                                  VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
-                // 2. Subpass 0 to External (Synchronize transition to SHADER_READ_ONLY)
-                dependencies[1].srcSubpass = 0;
-                dependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
-                dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-                dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-                dependencies[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-                dependencies[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+               // Subpass 0 → External (for later shader read of accum/reveal)
+                dependencies[1].srcSubpass      = 0;
+                dependencies[1].dstSubpass      = VK_SUBPASS_EXTERNAL;
+                dependencies[1].srcStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dependencies[1].srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                dependencies[1].dstStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+                dependencies[1].dstAccessMask   = VK_ACCESS_SHADER_READ_BIT;
 
                 VkRenderPassCreateInfo rpInfo = {};
                 rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -506,7 +507,7 @@ namespace tl
             std::string pipelineName;
             std::string pipelineLayoutName;
             std::string shaderName = "usd_oit";
-            const std::string meshName = "3DMeshes";
+            const std::string meshName = "TransparentMeshes";
                 
             pipelineName = "oit_blending";
             pipelineName += "_depth_test";
@@ -595,7 +596,7 @@ namespace tl
             ds.stencilTestEnable = VK_FALSE;
             
             vlk::MultisampleStateInfo ms;
-            //ms.rasterizationSamples = p.fbo->getSampleCount();
+            ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
             auto shader = p.shaders["usd_oit"];
             auto mesh = p.vbos[meshName];
@@ -620,6 +621,7 @@ namespace tl
                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             p.reveal[p.frameIndex]->setCurrentLayout(
                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            p.fbo->setDepthLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         }
 
         

@@ -484,6 +484,7 @@ namespace tl
             // Update C++ layout tracking to match render pass
             //finalLayout
             p.fbo->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+            p.fbo->setDepthLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         }
 
         bool Render::getClipRectEnabled() const
