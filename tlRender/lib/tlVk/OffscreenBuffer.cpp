@@ -838,9 +838,7 @@ namespace tl
                 depthAttachment.format          = p.depthFormat;
                 depthAttachment.samples         = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
                 depthAttachment.loadOp          = VK_ATTACHMENT_LOAD_OP_CLEAR;
-                depthAttachment.storeOp         = p.options.storeDepth ?
-                                                  VK_ATTACHMENT_STORE_OP_STORE :
-                                                  VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                depthAttachment.storeOp         = VK_ATTACHMENT_STORE_OP_STORE;
                 depthAttachment.stencilLoadOp   = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.stencilStoreOp  = VK_ATTACHMENT_STORE_OP_STORE;
                 depthAttachment.initialLayout   = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -938,9 +936,7 @@ namespace tl
                 depthAttachment.format         = p.depthFormat;
                 depthAttachment.samples        = multisampled ? samples : VK_SAMPLE_COUNT_1_BIT;
                 depthAttachment.loadOp         = VK_ATTACHMENT_LOAD_OP_LOAD;
-                depthAttachment.storeOp        = p.options.storeDepth ?
-                                                 VK_ATTACHMENT_STORE_OP_STORE :
-                                                 VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                depthAttachment.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
                 depthAttachment.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_CLEAR;
                 depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
                 depthAttachment.initialLayout  = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -1212,8 +1208,9 @@ namespace tl
                 p.resolveImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             }
         }
-        
-        void OffscreenBuffer::transitionDepthForAttachment(VkCommandBuffer cmd)
+
+        // Now correct.
+        void OffscreenBuffer::barrierDepthForAttachment(VkCommandBuffer cmd)
         {
             TLRENDER_P();
 
@@ -1223,17 +1220,17 @@ namespace tl
             // Ensure we are in the correct layout for an attachment
             // If it's already READ_ONLY from a previous transition, we MUST move it back.
             VkImageLayout oldLayout = currentLayout;
-            VkImageLayout newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            VkImageLayout newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
 
             VkImageMemoryBarrier barrier{};
             barrier.sType         = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
             barrier.oldLayout     = oldLayout;
             barrier.newLayout     = newLayout;
     
-            // SOURCE: Wait for the previous pass to finish writing depth
+            // SOURCE: Wait for the previous pass to finish writing depth.
             barrier.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
     
-            // DESTINATION: Allow the next pass to read/write the depth attachment
+            // DESTINATION: Allow the next pass to read the depth attachment.
             barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
     
             barrier.image         = depthImage;
@@ -1243,20 +1240,20 @@ namespace tl
             if (hasStencil())
                 barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
         
-            barrier.subresourceRange.baseMipLevel   = 0;
-            barrier.subresourceRange.levelCount     = 1;
-            barrier.subresourceRange.baseArrayLayer = 0;
-            barrier.subresourceRange.layerCount     = 1;
+            barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.subresourceRange = { VK_IMAGE_ASPECT_DEPTH_BIT, 0, 1, 0, 1 };
 
             // We synchronize between the end of the previous depth tests and the start of the next ones.
+            
             vkCmdPipelineBarrier(
                 cmd,
-                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT, // Previous pass "Store"
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT, // Next pass "Load/Test"
-                0,
-                0, nullptr,
-                0, nullptr,
-                1, &barrier);
+                VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, // src stages
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,                                            // dst stage (depth test)
+                0,                                                                                     // dependency flags
+                0, nullptr, 0, nullptr,
+                1, &barrier
+                );
 
             currentLayout = newLayout;
         }

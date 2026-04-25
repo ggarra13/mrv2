@@ -224,10 +224,12 @@ namespace tl
             void transitionToColorAttachment(VkCommandBuffer cmd);
             
             //! Depth transitions – always operate on the active frame's depth image.
-            void transitionDepthForAttachment(VkCommandBuffer cmd);
             void transitionDepthToStencilAttachment(VkCommandBuffer cmd);
             void transitionDepthToShaderRead(VkCommandBuffer cmd);
 
+            //! Barriers to force depth to an attachment.
+            void barrierDepthForAttachment(VkCommandBuffer cmd);
+            
             //! Set up the internal scissor.
             void setupScissor(const math::Box2i&); 
             

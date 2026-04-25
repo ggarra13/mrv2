@@ -11,7 +11,7 @@
 #include <iostream>
 #include <string>
 
-#define USE_DEPTH 1   // \@bug: turning this to one AND drawing to accum/reveal
+#define USE_DEPTH 0   // \@bug: turning this to one AND drawing to accum/reveal
                       // results in VK_ERROR_DEVICE_LOST
 
 #if DEBUG_PIPELINE_USE
@@ -322,7 +322,7 @@ namespace tl
                 attachment.format = p.fbo->getDepthFormat();
                 attachment.samples = p.fbo->getSampleCount();
                 attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;   // keep depth!
-                attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                attachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;  // we don't write to it
                 attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
                 attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
                 attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -356,9 +356,12 @@ namespace tl
 #endif
 
                 // Comprehensive dual dependencies to prevent layout transition races
-                std::vector<VkSubpassDependency> dependencies(2);
+                std::vector<VkSubpassDependency> dependencies;
+
+#if SUBPASS_DEPENDENCIES
 
                 // External → Subpass 0 (opaque → OIT)
+                dependencies.push_back(VkSubpassDependency());
                 dependencies[0].srcSubpass      = VK_SUBPASS_EXTERNAL;
                 dependencies[0].dstSubpass      = 0;
                 dependencies[0].srcStageMask    = VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
@@ -367,13 +370,15 @@ namespace tl
                 dependencies[0].dstAccessMask   = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
                                                   VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
-               // Subpass 0 → External (for later shader read of accum/reveal)
+               // Subpass 0 → External (for later shader read of accum/reveal) -- NOT USED YET
+                dependencies.push_back(VkSubpassDependency());
                 dependencies[1].srcSubpass      = 0;
                 dependencies[1].dstSubpass      = VK_SUBPASS_EXTERNAL;
                 dependencies[1].srcStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
                 dependencies[1].srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
                 dependencies[1].dstStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
                 dependencies[1].dstAccessMask   = VK_ACCESS_SHADER_READ_BIT;
+#endif
 
                 VkRenderPassCreateInfo rpInfo = {};
                 rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -399,10 +404,7 @@ namespace tl
                 p.oitFramebuffer[p.frameIndex] = VK_NULL_HANDLE;
             }
 
-
-#if USE_DEPTH
-            p.fbo->transitionDepthForAttachment(p.cmd);
-#endif
+            p.fbo->barrierDepthForAttachment(p.cmd);
             
             p.accum[p.frameIndex]->transitionToColorAttachment(p.cmd);
             p.reveal[p.frameIndex]->transitionToColorAttachment(p.cmd);
@@ -570,7 +572,7 @@ namespace tl
             vlk::ColorBlendAttachmentStateInfo revealBlend;
             revealBlend.blendEnable = VK_TRUE;
             revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
-            revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;  // safer according to ChatGPT
+            revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;  // safer ?
             // revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
             revealBlend.colorBlendOp = VK_BLEND_OP_ADD;
 
