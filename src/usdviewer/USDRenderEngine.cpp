@@ -486,7 +486,6 @@ namespace tl
             p.buffer->transitionToColorAttachment(cmd);
             p.buffer->transitionDepthToStencilAttachment(cmd);
 
-#if 1
             auto oldRenderPass = p.render->getRenderPass();
 
             p.render->createOIT();
@@ -497,44 +496,15 @@ namespace tl
             //
             for (auto& object : p.transparentPrims)
             {
-                p.render->drawMesh(*object.geom, object.optimization,
-                                   object.modelMatrix, object.color,
-                                   object.shaderId, object.textures,
-                                   object.material);
-                // p.render->drawMeshOIT(*object.geom, object.optimization,
-                //                       object.modelMatrix, object.color,
-                //                       "usd_oit", object.textures,
-                //                       object.material);
+                p.render->drawMeshOIT(*object.geom, object.optimization,
+                                      object.modelMatrix, object.color,
+                                      "usd_oit", object.textures,
+                                      object.material);
             }
             
             
             p.render->endOITRenderPass();
 
-            p.render->setRenderPass(oldRenderPass);
-
-#else
-            
-            p.render->beginLoadRenderPass();
-            
-            //
-            // Draw transparent primitives.
-            //
-            for (auto& object : p.transparentPrims)
-            {
-                p.render->drawMesh(*object.geom, object.optimization,
-                                   object.modelMatrix, object.color,
-                                   object.shaderId, object.textures,
-                                   object.material);
-                // p.render->drawMeshOIT(*object.geom, object.optimization,
-                //                       object.modelMatrix, object.color,
-                //                       "usd_oit", object.textures,
-                //                       object.material);
-            }
-            
-            
-            p.render->endRenderPass();
-#endif
-            
             p.render->end();
 
             p.render->setTransform(oldTransform);
