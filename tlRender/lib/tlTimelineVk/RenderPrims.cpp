@@ -139,12 +139,6 @@ namespace tl
             if (!p.vaos[meshName] && p.vbos[meshName])
             {
                 p.vaos[meshName] = vlk::VAO::create(ctx);
-                
-                // Use a 4 Gb cache \@todo: make it optional
-                // value must be less than (4292870144 on RTX 3080)
-                size_t size = 3.5 * memory::gigabyte;
-                p.vaos[meshName]->setMemorySize(size);
-                
                 p.vaos[meshName]->bind(p.frameIndex);
             }
         }
@@ -159,13 +153,10 @@ namespace tl
             auto shader = p.shaders[shaderName];
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             shader->bind(p.frameIndex);
-            if (shaderName != "pbr")
-            {
-                vkCmdPushConstants(p.cmd, pipelineLayout,
-                                   shader->getPushStageFlags(), 0,
-                                   sizeof(color), &color);
-                shader->setUniform("transform.mvp", transform);
-            }
+            vkCmdPushConstants(p.cmd, pipelineLayout,
+                               shader->getPushStageFlags(), 0,
+                               sizeof(color), &color);
+            shader->setUniform("transform.mvp", transform);
             _bindDescriptorSets(pipelineLayoutName, shaderName);
             _vkDraw(meshName);
         }
