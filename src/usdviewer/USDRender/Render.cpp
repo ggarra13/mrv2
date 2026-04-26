@@ -370,6 +370,25 @@ namespace tl
                 _createBindingSet(p.shaders["usd_uv_c"]);
             }
             
+            if (!p.shaders["resolve"])
+            {
+                p.shaders["resolve"] = vlk::Shader::create(
+                    ctx, vertexUSD_UV(), fragment_Resolve(), "resolve");
+                p.shaders["resolve"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["resolve"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["resolve"]->addTexture("accum");
+                p.shaders["resolve"]->addTexture("reveal");
+                _createBindingSet(p.shaders["resolve"]);
+            }
+            
+            if (!p.vbos["resolve"] || p.vbos["resolve"]->getSize() != 6)
+            {
+                p.vbos["resolve"] =
+                    vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                p.vaos["resolve"] = vlk::VAO::create(ctx);
+            }
+            
             if (renderOptions.clear)
             {
                 clearViewport(renderOptions.clearColor);

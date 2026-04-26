@@ -91,7 +91,7 @@ namespace tl
                 p.vaoPool = vlk::VAOPool::create(ctx, slotSize);
             }
         }
-
+        
         // ------------------------------------------------------------------
         //  _emitMeshDraw
         //

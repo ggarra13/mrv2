@@ -117,7 +117,7 @@ namespace tl
             std::shared_ptr<usd::Render> render;
     
             //! Offscreen buffer.
-            std::shared_ptr<tl::vlk::OffscreenBuffer> buffer;
+            std::shared_ptr<tl::vlk::OffscreenBuffer> fbo;
         };
 
     }

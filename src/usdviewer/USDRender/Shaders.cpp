@@ -248,10 +248,7 @@ void main()
             if (hasColor) {
                 colorInput = "layout(location=" + std::to_string(idx) +
                               ") in vec4 fColor;\n";
-                // colorCode  = "vec3 albedo = fColor.rgb;\n";  // pink based colors everywhere
-                // colorCode  = "vec3 albedo = pc.color.rgb;\n";  // white colors with pink paws
-                // colorCode  = "vec3 albedo = texture(u_DiffuseMap, st).rgb * pc.color.rgb;\n";
-                // colorCode  = "vec3 albedo = texture(u_DiffuseMap, st).rgb * pc.color.rgb;\n";  // white colors
+                colorCode  = "vec3 albedo = texture(u_DiffuseMap, st).rgb * fColor.rgb;\n";
                 ++idx;
             }
 
@@ -294,7 +291,7 @@ layout(binding = 7) uniform sampler2D u_OpacityMap;
 layout(binding = 8) uniform sampler2D u_OpacityThresholdMap;
 layout(binding = 9) uniform sampler2D u_IorMap;
 
-{2}
+{2}  // shader output(s)
                   
 layout(push_constant) uniform PushConstants {
     vec4 color;
@@ -431,9 +428,7 @@ void main()
     // Combine ambient + diffuse + specular
     vec3 color = ambient + Lo + emissive;
 
-    // Combine color and opacity.  Do NOT premult.
-    //outColor = vec4(color, opacity);
-    {5}
+    {5}  // outputCode
 
     // VERIFIED: albedo and ao are okay.
     //outColor = vec4(albedo, 1.0);
@@ -502,7 +497,39 @@ void main()
       outColor = vec4(uv, 0, 1);
 })";
         }
-        
+
+        /** 
+         * Shader used to resolve OIT transparency from
+         * an accumTex and revealTex, using BWOIT algorithm.
+         * 
+         * @return outColor
+         */
+        std::string fragment_Resolve()
+        {
+            return R"(#version 450
+layout(location = 0) in vec3 fPosition;
+layout(location = 1) in vec2 uv;
+
+layout(binding = 1) uniform sampler2D accumTex;
+layout(binding = 2) uniform sampler2D revealTex;
+
+layout(location = 0) out vec4 outColor;
+                  
+layout(push_constant) uniform PushConstants {
+    vec4 color;
+} pc;       
+                 
+void main()
+{
+    vec4 accum = texture(accumTex, uv);
+    float reveal = texture(revealTex, uv).r;
+
+    vec3 color = accum.rgb / max(accum.a, 1e-5);
+    float alpha = 1.0 - reveal;
+
+    outColor = vec4(color, alpha);
+})";
+        }
         
     } // namespace usd
 } // namespace tl

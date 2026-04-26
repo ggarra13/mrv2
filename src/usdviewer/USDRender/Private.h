@@ -44,7 +44,8 @@ namespace tl
                                 bool hasColor = false,
                                 bool hasOIT = false);
         
-
+        std::string fragment_Resolve();
+        
         struct Render::Private
         {
             // Vulkan variables

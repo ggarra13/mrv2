@@ -439,17 +439,17 @@ namespace tl
 
             const math::Size2i renderSize(renderWidth, renderHeight);
             if (vlk::doCreate(
-                    p.buffer, renderSize, offscreenBufferOptions))
+                    p.fbo, renderSize, offscreenBufferOptions))
             {
-                p.buffer = vlk::OffscreenBuffer::create(
+                p.fbo = vlk::OffscreenBuffer::create(
                     ctx, renderSize, offscreenBufferOptions);
             }
 
-            p.buffer->setFrameIndex(frameIndex);
+            p.fbo->setFrameIndex(frameIndex);
 
             // Make sure we can write to the buffer
-            p.buffer->transitionToColorAttachment(cmd);
-            p.buffer->transitionDepthToStencilAttachment(cmd);
+            p.fbo->transitionToColorAttachment(cmd);
+            p.fbo->transitionDepthToStencilAttachment(cmd);
 
             // locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
@@ -458,7 +458,7 @@ namespace tl
             renderOptions.clearColor = image::Color4f(0.F, 0.F, 0.F, 0.F);
 
             
-            p.render->begin(cmd, p.buffer, frameIndex, renderSize,
+            p.render->begin(cmd, p.fbo, frameIndex, renderSize,
                             renderOptions);
             p.render->setViewMatrix(viewMatrix);
             p.render->applyTransforms();
@@ -483,8 +483,8 @@ namespace tl
             p.render->endRenderPass();
 
             // Make sure we can write to the depth buffer.
-            p.buffer->transitionToColorAttachment(cmd);
-            p.buffer->transitionDepthToStencilAttachment(cmd);
+            p.fbo->transitionToColorAttachment(cmd);
+            p.fbo->transitionDepthToStencilAttachment(cmd);
 
             auto oldRenderPass = p.render->getRenderPass();
 
@@ -505,16 +505,27 @@ namespace tl
             
             p.render->endOITRenderPass();
 
+            p.render->setTransform(oldTransform);
+            
+            p.render->beginResolveRenderPass();
+
+            p.render->drawRect(math::Box2i(0, 0, renderSize.w, renderSize.h),
+                               image::Color4f(1.F, 1.F, 1.F, 1.F));
+            
+            p.render->endRenderPass();
+
+            
             p.render->end();
 
-            p.render->setTransform(oldTransform);
+            
+            
 
 #if PRINT_STATS
             std::ostream& out = std::cout;
             p.stats.print(out);
 #endif
             
-            p.buffer->transitionToShaderRead(cmd);
+            p.fbo->transitionToShaderRead(cmd);
             
             const auto now = std::chrono::steady_clock::now();
             const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -527,7 +538,7 @@ namespace tl
 
         std::shared_ptr<vlk::OffscreenBuffer> RenderEngine::getFBO()
         {
-            return _p->buffer;
+            return _p->fbo;
         }
 
         void RenderEngine::setTimeCode(UsdStageRefPtr stage,

@@ -91,6 +91,9 @@ namespace tl
             
             //! @{
             //!     These functions draw to the internal FBO.
+            void drawRect(const math::Box2i& box,
+                          const image::Color4f& color);
+            
             void drawMesh(const geom::TriangleMesh3&,
                           const usd::MeshOptimization&,
                           const math::Matrix4x4f&,
@@ -110,6 +113,8 @@ namespace tl
                           const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD,
                           const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD);
 
+            // Draw mesh in OIT pass with two attachments and proper
+            // blending for them (accum and reveal).
             void drawMeshOIT(const geom::TriangleMesh3&,
                              const usd::MeshOptimization&,
                              const math::Matrix4x4f&,
@@ -117,13 +122,13 @@ namespace tl
                              const std::string& shaderName,
                              const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
                              const Material& material = Material());
-            
-            //! Vulkan render pass functions
-            void beginOITRenderPass();
-            void endOITRenderPass();
-            
+
+            // !@{ Render Passes
             void beginLoadRenderPass();
             void beginRenderPass();
+            void beginOITRenderPass();
+            void beginResolveRenderPass();
+            void endOITRenderPass();
             void endRenderPass();
             
             void setupViewportAndScissor();

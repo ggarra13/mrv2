@@ -13,7 +13,6 @@
 
 #define USE_FBO 0
 #define USE_DEPENDENCIES 0
-#define USE_REVEAL 1
 #define USE_DEPTH 1   // \@bug: turning this to one AND drawing to accum/reveal
                       // results in VK_ERROR_DEVICE_LOST
 
@@ -294,7 +293,6 @@ namespace tl
                 attachment.finalLayout   = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 attachments.push_back(attachment);
 
-#if USE_REVEAL
                 // Reveal attachment
                 attachment.format = p.reveal[p.frameIndex]->getInternalFormat();
                 attachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -305,10 +303,7 @@ namespace tl
                 attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 attachment.finalLayout   = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 attachments.push_back(attachment);
-#endif
 
-#if USE_DEPTH
-                
                 // We reuse depth from opaque pass (in p.fbo).
                 attachment.format = p.fbo->getDepthFormat();
                 attachment.samples = VK_SAMPLE_COUNT_1_BIT; //p.fbo->getSampleCount();
@@ -319,7 +314,6 @@ namespace tl
                 attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 attachments.push_back(attachment);
-#endif
                 
                 std::vector<VkAttachmentReference> colorRefs;
 
@@ -329,24 +323,19 @@ namespace tl
                 colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 colorRefs.push_back(colorRef);
 
-#if USE_REVEAL
                 colorRef.attachment = colorRefs.size();
                 colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 colorRefs.push_back(colorRef);
-#endif
 
-#if USE_DEPTH
                 VkAttachmentReference depthRef = {};
                 depthRef.attachment = colorRefs.size();
                 depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-#endif
+                
                 VkSubpassDescription subpass = {};
                 subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
                 subpass.colorAttachmentCount = colorRefs.size();
                 subpass.pColorAttachments = colorRefs.data();
-#if USE_DEPTH
                 subpass.pDepthStencilAttachment = &depthRef;
-#endif
 
 #if USE_DEPENDENCIES
                 // Comprehensive dual dependencies to prevent layout transition races
@@ -403,28 +392,14 @@ namespace tl
                 p.oitFramebuffer[p.frameIndex] = VK_NULL_HANDLE;
             }
 
-            // We already issued this in USDRenderEngine.cpp
-            // p.fbo->transitionDepthToStencilAttachment(p.cmd);
-            
+            p.fbo->transitionDepthToStencilAttachment(p.cmd);            
             p.accum[p.frameIndex]->transitionToColorAttachment(p.cmd);
-
-#if USE_REVEAL
             p.reveal[p.frameIndex]->transitionToColorAttachment(p.cmd);
-#endif
             
             std::vector<VkImageView> views;
-#if USE_FBO
-            views.push_back(p.fbo->getImageView());
-#else
             views.push_back(p.accum[p.frameIndex]->getImageView());
-#endif
-#if USE_REVEAL
             views.push_back(p.reveal[p.frameIndex]->getImageView());
-#endif
-
-#if USE_DEPTH
             views.push_back(p.fbo->getDepthImageView());
-#endif
 
             VkFramebufferCreateInfo fbInfo = {};
             fbInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -439,6 +414,16 @@ namespace tl
                                          &p.oitFramebuffer[p.frameIndex]));
         }
 
+        void Render::beginResolveRenderPass()
+        {
+            TLRENDER_P();
+
+            p.accum[p.frameIndex]->transitionToShaderRead(p.cmd);
+            p.reveal[p.frameIndex]->transitionToShaderRead(p.cmd);
+            
+            beginLoadRenderPass();
+        }
+        
         void Render::beginOITRenderPass()
         {
             TLRENDER_P();
@@ -451,18 +436,14 @@ namespace tl
             clear.color = {0.f, 0.f, 0.f, 0.f};
             clears.push_back(clear);
 
-#if USE_REVEAL
             // Reveal = 1
             clear.color = {1.f, 0.f, 0.f, 0.f};
             clears.push_back(clear);
-#endif
 
-#if USE_DEPTH
             // Depth = don't care (we LOAD it)
             clear.color = {1.f, 0.f, 0.f, 0.f};
             clear.depthStencil = {1.0f, 0};
             clears.push_back(clear);
-#endif
             
             VkRenderPassBeginInfo beginInfo = {};
             beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -485,6 +466,29 @@ namespace tl
         void Render::setRenderPass(VkRenderPass value)
         {
             _p->renderPass = value;
+        }
+        
+        void Render::drawRect(const math::Box2i& box,
+                              const image::Color4f& color)
+        {
+            TLRENDER_P();
+            
+            _createBindingSet(p.shaders["resolve"]);
+            p.shaders["resolve"]->bind(p.frameIndex);
+            p.shaders["resolve"]->setTexture("accum", p.accum[p.frameIndex]);
+            p.shaders["resolve"]->setTexture("reveal", p.reveal[p.frameIndex]);
+            if (p.vbos["resolve"])
+                p.vbos["resolve"]->copy(convert(geom::box(box),
+                                                p.vbos["resolve"]->getType()));
+            
+            const bool enableBlending = true;
+            const std::string pipelineName = enableBlending ?
+                                             "resolve_blending" : "resolve";
+            _createPipeline(p.fbo, pipelineName,
+                            "resolve", "resolve", "resolve",
+                            enableBlending);
+            _emitMeshDraw("resolve", "resolve", "resolve",
+                          p.transform, p.transform, color);
         }
         
         void Render::drawMeshOIT(const geom::TriangleMesh3& geom,
@@ -560,7 +564,6 @@ namespace tl
                 VK_COLOR_COMPONENT_A_BIT;
             cb.attachments.push_back(accumBlend);
 
-#if USE_REVEAL
             vlk::ColorBlendAttachmentStateInfo revealBlend;
             revealBlend.blendEnable = VK_TRUE;
             revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
@@ -575,7 +578,6 @@ namespace tl
             revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
 
             cb.attachments.push_back(revealBlend);
-#endif
             
             cb.logicOpEnable = VK_FALSE;
             cb.logicOp = VK_LOGIC_OP_COPY;
