@@ -11,9 +11,9 @@
 #include <iostream>
 #include <string>
 
-#define USE_FBO 1
+#define USE_FBO 0
 #define USE_DEPENDENCIES 0
-#define USE_REVEAL 0
+#define USE_REVEAL 1
 #define USE_DEPTH 1   // \@bug: turning this to one AND drawing to accum/reveal
                       // results in VK_ERROR_DEVICE_LOST
 
