@@ -465,13 +465,12 @@ namespace tl
             p.render->beginLoadRenderPass();
             p.render->setupViewportAndScissor();
             
-            auto oldTransform = p.render->getTransform();
-            p.render->setTransform(mvp);
 
             // Traverse scene converting to triangles and classfying primitives
             // in opaque and transparent.
             _sceneTraversal();
 
+            p.render->setTransform(mvp);
             for (auto& object : p.opaquePrims)
             {
                 p.render->drawMesh(*object.geom, object.optimization,
@@ -505,7 +504,10 @@ namespace tl
             
             p.render->endOITRenderPass();
 
-            p.render->setTransform(oldTransform);
+            auto ortho = math::ortho(
+                0.F, static_cast<float>(renderSize.w), 
+                static_cast<float>(renderSize.h), 0.F, -1.F, 1.F);
+            p.render->setTransform(ortho);
             
             p.render->beginResolveRenderPass();
 
