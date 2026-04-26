@@ -447,6 +447,10 @@ namespace tl
 
             p.buffer->setFrameIndex(frameIndex);
 
+            // Make sure we can write to the buffer
+            p.buffer->transitionToColorAttachment(cmd);
+            p.buffer->transitionDepthToStencilAttachment(cmd);
+
             // locale::SetAndRestore saved;
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_F16;
@@ -477,13 +481,12 @@ namespace tl
             }
             
             p.render->endRenderPass();
-            
-//            p.buffer->transitionDepthForAttachment(cmd);
 
+            // Make sure we can write to the depth buffer.
+            p.buffer->transitionToColorAttachment(cmd);
+            p.buffer->transitionDepthToStencilAttachment(cmd);
 
-#if 1       // \@bug: Making this 1 and calling drawMeshOIT we'll get
-//             //        VK_ERROR_DEVICE_LOST 
-            
+#if 1
             auto oldRenderPass = p.render->getRenderPass();
 
             p.render->createOIT();
@@ -494,26 +497,41 @@ namespace tl
             //
             for (auto& object : p.transparentPrims)
             {
-                p.render->drawMeshOIT(*object.geom, object.optimization,
-                                      object.modelMatrix, object.color,
-                                      "usd_oit", object.textures,
-                                      object.material);
+                p.render->drawMesh(*object.geom, object.optimization,
+                                   object.modelMatrix, object.color,
+                                   object.shaderId, object.textures,
+                                   object.material);
+                // p.render->drawMeshOIT(*object.geom, object.optimization,
+                //                       object.modelMatrix, object.color,
+                //                       "usd_oit", object.textures,
+                //                       object.material);
             }
             
             
             p.render->endOITRenderPass();
 
             p.render->setRenderPass(oldRenderPass);
+
 #else
             
+            p.render->beginLoadRenderPass();
+            
+            //
+            // Draw transparent primitives.
+            //
             for (auto& object : p.transparentPrims)
             {
                 p.render->drawMesh(*object.geom, object.optimization,
                                    object.modelMatrix, object.color,
                                    object.shaderId, object.textures,
-                                   object.material, true);
+                                   object.material);
+                // p.render->drawMeshOIT(*object.geom, object.optimization,
+                //                       object.modelMatrix, object.color,
+                //                       "usd_oit", object.textures,
+                //                       object.material);
             }
-
+            
+            
             p.render->endRenderPass();
 #endif
             
@@ -526,10 +544,7 @@ namespace tl
             p.stats.print(out);
 #endif
             
-            if (p.buffer)
-            {
-                p.buffer->transitionToShaderRead(cmd);
-            }
+            p.buffer->transitionToShaderRead(cmd);
             
             const auto now = std::chrono::steady_clock::now();
             const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(

@@ -294,6 +294,9 @@ namespace tl
             p.format = p.internalFormat = getTextureFormat(info.pixelType);
             p.options = options;
 
+            if (p.options.tiling == VK_IMAGE_TILING_OPTIMAL)
+                p.memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    
             createCommandPool();
             createImage();
             allocateMemory();
@@ -1155,8 +1158,8 @@ namespace tl
             imageInfo.tiling = p.options.tiling;
             imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             imageInfo.usage = p.options.usage;
-            imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             imageInfo.samples = p.options.samples;
+            imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
             VmaAllocationCreateInfo allocInfo = {};
             allocInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
@@ -1164,6 +1167,7 @@ namespace tl
             if (p.memoryFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) {
                 // Usually for textures that stay on GPU. 
                 // VMA will prefer DEVICE_LOCAL memory.
+                allocInfo.usage    = VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE;
                 allocInfo.priority = 1.0f; 
             } else {
                 // For staging buffers or dynamic textures.

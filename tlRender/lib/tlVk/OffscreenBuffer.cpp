@@ -1335,8 +1335,10 @@ namespace tl
 
             VkImageLayout& currentLayout = p.activeDepthLayout();
             VkImage        depthImage    = p.activeDepthImage();
+            
+            VkImageLayout newLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
 
-            if (currentLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL)
+            if (currentLayout == newLayout)
                 return;
 
             VkImageMemoryBarrier barrier{};
@@ -1362,7 +1364,7 @@ namespace tl
                 VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0,
                 nullptr, 1, &barrier);
 
-            currentLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+            currentLayout = newLayout;
         }
 
         // ====================================================================

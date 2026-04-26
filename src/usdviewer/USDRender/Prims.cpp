@@ -249,43 +249,6 @@ namespace tl
                 i = textures.find(USD_IorMap);
                 p.shaders[shaderName]->setTexture("u_IorMap", i->second);
             }
-            else if (shaderId == "usd_oit")
-            {
-                shaderName = "usd_oit";
-                
-                pipelineLayoutName = shaderName;
-
-                _createBindingSet(p.shaders[shaderName]);
-                
-                p.shaders[shaderName]->bind(p.frameIndex);
-                
-                auto i = textures.find(USD_DiffuseMap);
-                p.shaders[shaderName]->setTexture("u_DiffuseMap", i->second);
-                
-                i = textures.find(USD_EmissiveMap);
-                p.shaders[shaderName]->setTexture("u_EmissiveMap", i->second);
-                
-                i = textures.find(USD_MetallicMap);
-                p.shaders[shaderName]->setTexture("u_MetallicMap", i->second);
-                
-                i = textures.find(USD_RoughnessMap);
-                p.shaders[shaderName]->setTexture("u_RoughnessMap", i->second);
-                
-                i = textures.find(USD_NormalMap);
-                p.shaders[shaderName]->setTexture("u_NormalMap", i->second);
-                
-                i = textures.find(USD_OcclusionMap);
-                p.shaders[shaderName]->setTexture("u_AOMap", i->second);
-                
-                i = textures.find(USD_OpacityMap);
-                p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
-                
-                i = textures.find(USD_OpacityThresholdMap);
-                p.shaders[shaderName]->setTexture("u_OpacityThresholdMap", i->second);
-                
-                i = textures.find(USD_IorMap);
-                p.shaders[shaderName]->setTexture("u_IorMap", i->second);
-            }
             else
             {
                 throw std::runtime_error("Unknown shader type " + shaderId);

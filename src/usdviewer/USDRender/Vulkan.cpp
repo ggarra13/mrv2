@@ -11,20 +11,12 @@
 #include <iostream>
 #include <string>
 
-#define USE_DEPTH 0   // \@bug: turning this to one AND drawing to accum/reveal
+#define USE_FBO 1
+#define USE_DEPENDENCIES 0
+#define USE_REVEAL 0
+#define USE_DEPTH 1   // \@bug: turning this to one AND drawing to accum/reveal
                       // results in VK_ERROR_DEVICE_LOST
 
-#if DEBUG_PIPELINE_USE
-#define DEBUG_PIPELINE(x) std::cerr << x << std::endl;
-#else
-#define DEBUG_PIPELINE(x)
-#endif
-
-#if DEBUG_PIPELINE_LAYOUT_USE
-#define DEBUG_PIPELINE_LAYOUT(x) std::cerr << x << std::endl;
-#else
-#define DEBUG_PIPELINE_LAYOUT(x)
-#endif
 
 namespace tl
 {
@@ -90,7 +82,6 @@ namespace tl
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
             {
-                DEBUG_PIPELINE_LAYOUT("CREATING   pipelineLayout " << pipelineLayoutName);
                 pipelineLayout = _createPipelineLayout(pipelineLayoutName,
                                                        shader);
             }
@@ -165,7 +156,6 @@ namespace tl
             VkPipeline pipeline;
             if (p.pipelines.count(pipelineName) == 0)
             {
-                DEBUG_PIPELINE("CREATING   pipeline " << pipelineName);
                 pipeline = pipelineState.create(device);
                 p.pipelines[pipelineName] = std::make_pair(pipelineState,
                                                            pipeline);
@@ -177,7 +167,6 @@ namespace tl
                 VkPipeline oldPipeline = pair.second;
                 if (pipelineState != oldPipelineState)
                 {
-                    DEBUG_PIPELINE("RECREATING pipeline " << pipelineName);
                     p.garbage[p.frameIndex].pipelines.push_back(
                         oldPipeline);
                     pipeline = pipelineState.create(device);
@@ -302,9 +291,10 @@ namespace tl
                 attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
                 attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
                 attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                attachment.finalLayout   = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 attachments.push_back(attachment);
 
+#if USE_REVEAL
                 // Reveal attachment
                 attachment.format = p.reveal[p.frameIndex]->getInternalFormat();
                 attachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -313,18 +303,19 @@ namespace tl
                 attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
                 attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
                 attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                attachment.finalLayout   = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 attachments.push_back(attachment);
+#endif
 
 #if USE_DEPTH
                 
                 // We reuse depth from opaque pass (in p.fbo).
                 attachment.format = p.fbo->getDepthFormat();
-                attachment.samples = p.fbo->getSampleCount();
+                attachment.samples = VK_SAMPLE_COUNT_1_BIT; //p.fbo->getSampleCount();
                 attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;   // keep depth!
-                attachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;  // we don't write to it
-                attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-                attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;  // we don't write to it
+                attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
                 attachment.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 attachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
                 attachments.push_back(attachment);
@@ -338,9 +329,11 @@ namespace tl
                 colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 colorRefs.push_back(colorRef);
 
+#if USE_REVEAL
                 colorRef.attachment = colorRefs.size();
                 colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 colorRefs.push_back(colorRef);
+#endif
 
 #if USE_DEPTH
                 VkAttachmentReference depthRef = {};
@@ -355,29 +348,34 @@ namespace tl
                 subpass.pDepthStencilAttachment = &depthRef;
 #endif
 
+#if USE_DEPENDENCIES
                 // Comprehensive dual dependencies to prevent layout transition races
                 std::vector<VkSubpassDependency> dependencies;
 
-#if SUBPASS_DEPENDENCIES
 
                 // External → Subpass 0 (opaque → OIT)
-                dependencies.push_back(VkSubpassDependency());
+                VkSubpassDependency opaqueOIT = {}
+                dependencies.push_back(opaqueOIT);
                 dependencies[0].srcSubpass      = VK_SUBPASS_EXTERNAL;
                 dependencies[0].dstSubpass      = 0;
-                dependencies[0].srcStageMask    = VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-                dependencies[0].srcAccessMask   = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-                dependencies[0].dstStageMask    = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-                dependencies[0].dstAccessMask   = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                dependencies[0].srcStageMask    = VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT |
+                                                  VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dependencies[0].srcAccessMask   = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
+                                                  VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+                dependencies[0].dstStageMask    = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
+                                                  VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                dependencies[0].dstAccessMask   = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
+                                                  VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
                                                   VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
-               // Subpass 0 → External (for later shader read of accum/reveal) -- NOT USED YET
-                dependencies.push_back(VkSubpassDependency());
-                dependencies[1].srcSubpass      = 0;
-                dependencies[1].dstSubpass      = VK_SUBPASS_EXTERNAL;
-                dependencies[1].srcStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-                dependencies[1].srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-                dependencies[1].dstStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-                dependencies[1].dstAccessMask   = VK_ACCESS_SHADER_READ_BIT;
+               // // Subpass 0 → External (for later shader read of accum/reveal) -- NOT USED YET
+               //  dependencies.push_back(VkSubpassDependency());
+               //  dependencies[1].srcSubpass      = 0;
+               //  dependencies[1].dstSubpass      = VK_SUBPASS_EXTERNAL;
+               //  dependencies[1].srcStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+               //  dependencies[1].srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+               //  dependencies[1].dstStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+               //  dependencies[1].dstAccessMask   = VK_ACCESS_SHADER_READ_BIT;
 #endif
 
                 VkRenderPassCreateInfo rpInfo = {};
@@ -386,13 +384,14 @@ namespace tl
                 rpInfo.pAttachments = attachments.data();
                 rpInfo.subpassCount = 1;
                 rpInfo.pSubpasses = &subpass;
+
+#if USE_DEPENDENCIES
                 rpInfo.dependencyCount = dependencies.size();
                 rpInfo.pDependencies = dependencies.data();
+#endif
 
                 VK_CHECK(vkCreateRenderPass(device, &rpInfo, nullptr,
                                             &p.oitRenderPass));
-
-                p.renderPass = p.oitRenderPass;
             }
 
             // Recreate the framebuffer only when the size or attachments change.
@@ -404,14 +403,24 @@ namespace tl
                 p.oitFramebuffer[p.frameIndex] = VK_NULL_HANDLE;
             }
 
-            p.fbo->barrierDepthForAttachment(p.cmd);
+            // We already issued this in USDRenderEngine.cpp
+            // p.fbo->transitionDepthToStencilAttachment(p.cmd);
             
             p.accum[p.frameIndex]->transitionToColorAttachment(p.cmd);
-            p.reveal[p.frameIndex]->transitionToColorAttachment(p.cmd);
 
+#if USE_REVEAL
+            p.reveal[p.frameIndex]->transitionToColorAttachment(p.cmd);
+#endif
+            
             std::vector<VkImageView> views;
+#if USE_FBO
+            views.push_back(p.fbo->getImageView());
+#else
             views.push_back(p.accum[p.frameIndex]->getImageView());
+#endif
+#if USE_REVEAL
             views.push_back(p.reveal[p.frameIndex]->getImageView());
+#endif
 
 #if USE_DEPTH
             views.push_back(p.fbo->getDepthImageView());
@@ -442,9 +451,11 @@ namespace tl
             clear.color = {0.f, 0.f, 0.f, 0.f};
             clears.push_back(clear);
 
+#if USE_REVEAL
             // Reveal = 1
             clear.color = {1.f, 0.f, 0.f, 0.f};
             clears.push_back(clear);
+#endif
 
 #if USE_DEPTH
             // Depth = don't care (we LOAD it)
@@ -457,33 +468,13 @@ namespace tl
             beginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
             beginInfo.renderPass = p.oitRenderPass;
             beginInfo.framebuffer = p.oitFramebuffer[p.frameIndex];
-            beginInfo.renderArea.extent = {
-                static_cast<uint32_t>(p.fbo->getWidth()),
-                static_cast<uint32_t>(p.fbo->getHeight())
-            };
+            beginInfo.renderArea.extent = p.fbo->getExtent();
             beginInfo.clearValueCount = clears.size();
             beginInfo.pClearValues = clears.data();
 
             vkCmdBeginRenderPass(p.cmd, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-            VkViewport viewport = {};
-            viewport.x = 0.0f;
-            // Set the y origin to the bottom of the framebuffer
-            viewport.y = static_cast<float>(p.fbo->getHeight());
-            viewport.width = static_cast<float>(p.fbo->getWidth());
-            // Use a negative height to flip the y-axis
-            viewport.height = -static_cast<float>(p.fbo->getHeight());
-            viewport.minDepth = 0.0f;
-            viewport.maxDepth = 1.0f;
-
-            VkRect2D scissor = {};
-            scissor = {};
-            scissor.offset = {0, 0};
-            scissor.extent = {
-                static_cast<uint32_t>(p.fbo->getWidth()),
-                static_cast<uint32_t>(p.fbo->getHeight())};
-            vkCmdSetViewport(p.cmd, 0, 1, &viewport);
-            vkCmdSetScissor(p.cmd, 0, 1, &scissor);
+            p.fbo->setupViewportAndScissor(p.cmd);
         }
         
         VkRenderPass Render::getRenderPass() const
@@ -569,6 +560,7 @@ namespace tl
                 VK_COLOR_COMPONENT_A_BIT;
             cb.attachments.push_back(accumBlend);
 
+#if USE_REVEAL
             vlk::ColorBlendAttachmentStateInfo revealBlend;
             revealBlend.blendEnable = VK_TRUE;
             revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
@@ -583,6 +575,7 @@ namespace tl
             revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
 
             cb.attachments.push_back(revealBlend);
+#endif
             
             cb.logicOpEnable = VK_FALSE;
             cb.logicOp = VK_LOGIC_OP_COPY;
@@ -616,14 +609,6 @@ namespace tl
         {
             TLRENDER_P();
             vkCmdEndRenderPass(p.cmd);
-    
-            // Tell the C++ tracking what the render pass did for us automatically.
-            // This prevents transition() from inserting a wrong barrier next frame.
-            p.accum[p.frameIndex]->setCurrentLayout(
-                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-            p.reveal[p.frameIndex]->setCurrentLayout(
-                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-            p.fbo->setDepthLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         }
 
         
