@@ -24,8 +24,6 @@ set(HEADERS
     usd/material.h
     usd/primvars.h
     usd/subsetsSplit.h
-
-    Vk/VAOPool.h
 )
 set(SOURCES
     
@@ -46,8 +44,6 @@ set(SOURCES
     
     usd/primvars.cpp
     usd/subsetsSplit.cpp
-    
-    Vk/VAOPool.cpp
     
     main.cpp)
 

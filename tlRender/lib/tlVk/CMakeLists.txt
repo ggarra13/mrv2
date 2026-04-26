@@ -7,6 +7,7 @@ set(HEADERS
     Texture.h
     TextureAtlas.h
     Util.h
+    VAOPool.h
     Vk.h)
 set(PRIVATE_HEADERS)
 
@@ -18,7 +19,8 @@ set(SOURCE
     Shader.cpp
     Texture.cpp
     TextureAtlas.cpp
-    Util.cpp)
+    Util.cpp
+    VAOPool.cpp)
 
 find_package(Vulkan REQUIRED)  
 find_package(FLTK CONFIG REQUIRED)

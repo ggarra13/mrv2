@@ -10,12 +10,12 @@
 
 #include "USDRender/Render.h"
 
-#include "Vk/VAOPool.h"
 
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/PipelineCreationState.h>
 #include <tlVk/Shader.h>
 #include <tlVk/Texture.h>
+#include <tlVk/VAOPool.h>
 
 #include <array>
 #include <list>
