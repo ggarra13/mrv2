@@ -62,6 +62,8 @@ namespace tl
             UsdShadeMaterialBindingAPI bindingAPI(prim);
             UsdShadeMaterial material = usd::GetMaterial(bindingAPI);
 
+            bool hasSTs = false;
+            
             if (material)
             {
                 // 2. Get the surface terminal output
@@ -86,13 +88,15 @@ namespace tl
                             pvt.pv = pv;
                             pvt.name = pv.GetName();
                             pvt.type = ClassifyPrimvar(pv, request.readerType);
+                            if (pvt.type == TfToken("st"))
+                                hasSTs = true;
                             out.emplace_back(pvt);
                         }
                     }
                 }
             }
 
-            if (out.empty())
+            if (!hasSTs)
             {
                 UsdGeomPrimvarsAPI primvarsAPI(prim);
                 for (const UsdGeomPrimvar& pv : primvarsAPI.FindPrimvarsWithInheritance())
@@ -101,7 +105,8 @@ namespace tl
 
                     TfToken role = pv.GetTypeName().GetRole();
 
-                    if (role == SdfValueRoleNames->TextureCoordinate ||
+                    if (role.IsEmpty() ||
+                        role == SdfValueRoleNames->TextureCoordinate ||
                         role == SdfValueRoleNames->Normal            ||
                         role == SdfValueRoleNames->Color             ||
                         role == SdfValueRoleNames->Point)

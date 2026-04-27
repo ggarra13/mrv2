@@ -1,6 +1,6 @@
 
 #define PRINT_TIME 1
-#define PRINT_STATS 0
+#define PRINT_STATS 1
 #define BAKE_JOINTS 1
 
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
@@ -317,7 +317,7 @@ namespace tl
             std::string materialKey = "unassigned";
             if (usdMaterial)
             {
-                std::string materialKey = usdMaterial.GetPrim().GetPath().GetString();
+                materialKey = usdMaterial.GetPrim().GetPath().GetString();
                 
                 auto i = p.textures.find(materialKey);
                 if (i != p.textures.end())
