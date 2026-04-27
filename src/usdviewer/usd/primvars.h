@@ -38,7 +38,7 @@ namespace tl
                     return TfToken("color");      // or "vector" — ambiguous
             }
 
-            return TfToken("st");  // "st" is default
+            return TfToken("generic");  // "st" is default
         }
 
         //! Helper struct to hold the primvar and its type.
