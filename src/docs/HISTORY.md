@@ -44,8 +44,8 @@ They do have, however:
 
 Prices might change (go up or down) depending on competition and new features.
 
-Change Log
-----------
+ChangeLog
+---------
 
 - Fixed a bug with file requester not supporting the file suffix for single files (not sequences).
 - Fixed a bug with Link Annotations exiting as soon as an image was selected.
@@ -134,7 +134,7 @@ They do have, however:
 
 Prices might change (go up or down) depending on competition and new features.
 
-Change Log
+ChangeLog
 ----------
 
 - Added Rec2020 support for the Vectorscope.
@@ -151,7 +151,7 @@ Change Log
 v1.6.0
 ======
 
-Change Log
+ChangeLog
 ----------
 
 - UI improvement: Improved readability of the Media Information Panel.
@@ -178,8 +178,8 @@ Change Log
 v1.5.9
 ======
 
-Change Log
-----------
+ChangeLog
+---------
 
 - This update concentrates on UI improvements and user friendliness.
 - Improved Timecode input widget skipping over : and ; and prevent an invalid time (ie. --:--:--:--).
