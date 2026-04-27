@@ -39,12 +39,10 @@ namespace tl
             }
             
             TfToken name = pv.GetName();
-            if (name == TfToken("primvars:skel:jointWeights") ||
-                name == TfToken("primvars:skel:jointIndices") ||
-                name == TfToken("primvars:skel:geomBindTransform"))
-                return TfToken("generic");
+            if (name == TfToken("primvars:st"))
+                return TfToken("st");
 
-            return TfToken("st");  // "st" is default
+            return TfToken("generic");
         }
 
         //! Helper struct to hold the primvar and its type.
