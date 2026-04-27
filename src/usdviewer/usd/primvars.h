@@ -37,8 +37,14 @@ namespace tl
                 if (readerType == TfToken("UsdPrimvarReader_float3"))
                     return TfToken("color");      // or "vector" — ambiguous
             }
+            
+            TfToken name = pv.GetName();
+            if (name == TfToken("primvars:skel:jointWeights") ||
+                name == TfToken("primvars:skel:jointIndices") ||
+                name == TfToken("primvars:skel:geomBindTransform"))
+                return TfToken("generic");
 
-            return TfToken("generic");  // "st" is default
+            return TfToken("st");  // "st" is default
         }
 
         //! Helper struct to hold the primvar and its type.
