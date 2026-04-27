@@ -250,8 +250,7 @@ void main()
 })";
         }
         
-        std::string fragmentUSD(bool hasNormal, bool hasColor,
-                                bool hasOIT)
+        std::string fragmentUSD(bool hasNormal, bool hasColor)
         {
             int idx = 2;
             std::string normalInput = "";
@@ -273,31 +272,6 @@ void main()
                 ++idx;
             }
 
-            std::string output = "layout(location = 0) out vec4 outColor;\n";
-            std::string outputCode = "outColor = vec4(color, opacity);\n";
-            if (hasOIT)
-            {
-                output = R"(
-layout(location = 0) out vec4 outAccum;
-layout(location = 1) out vec4 outReveal;
-)";
-                outputCode = R"(
-// Correct WBOIT output:
-// A standard McGuire WBOIT depth weight formulation
-float linearDepth = gl_FragCoord.z; // If you need linear depth, calculate it based on your projection
-float depthWeight = clamp(0.3 / (1e-5 + pow(linearDepth, 4.0)), 1e-2, 3e3);
-float weight = clamp(pow(opacity, 4.0) + 0.01, 0.01, 3000.0) * depthWeight;
-
-// Accum: additive blend (ONE, ONE)
-outAccum  = vec4(color * opacity * weight, opacity * weight);
-
-// Reveal: the blend state is (ZERO, ONE_MINUS_SRC_ALPHA)
-// so src_alpha is what drives the multiplicative accumulation
-// Write opacity into ALL channels so any component read works
-outReveal = vec4(opacity);  
-)";
-            }
-            
             return string::Format(R"(#version 450
 
 layout(location = 0) in vec3 Peye;
@@ -315,7 +289,7 @@ layout(binding = 7) uniform sampler2D u_OpacityMap;
 layout(binding = 8) uniform sampler2D u_OpacityThresholdMap;
 layout(binding = 9) uniform sampler2D u_IorMap;
 
-{2}  // shader output(s)
+layout(location = 0) out vec4 outColor;
                   
 layout(push_constant) uniform PushConstants {
     vec4 color;
@@ -384,7 +358,7 @@ void main()
 
     // ── Sample textures ───────────────────────
     // vec3 albedo = texture(u_DiffuseMap,   st).rgb * pc.color.rgb;
-    {3} // colorCode
+    {2} // colorCode
     float metallic  = texture(u_MetallicMap,  st).r * u_Material_metallic;
     float roughness = texture(u_RoughnessMap, st).r * u_Material_roughness;
     float ao        = mix(1.0, texture(u_AOMap, st).r, u_Material_aoStrength);
@@ -396,7 +370,7 @@ void main()
 
     // ── Normal from normal map ────────────────
     vec3 Nt  = texture(u_NormalMap, st).rgb * 2.0 - 1.0; // [0,1] → [-1,1]
-    {4}  // normalCode
+    {3}  // normalCode
     //vec3 N_base = normalize(cross(dFdx(Peye), dFdy(Peye)));
     mat3 TBN = ComputeTBNMatrix(Peye, N_base, st);
     vec3 N = normalize(TBN * Nt);
@@ -452,7 +426,7 @@ void main()
     // Combine ambient + diffuse + specular
     vec3 color = ambient + Lo + emissive;
 
-    {5}  // outputCode
+    outColor = vec4(color, opacity);
 
     // VERIFIED: albedo and ao are okay.
     //outColor = vec4(albedo, 1.0);
@@ -474,10 +448,8 @@ void main()
 })").
                 arg(normalInput).
                 arg(colorInput).
-                arg(output).
                 arg(colorCode).
-                arg(normalCode).
-                arg(outputCode);
+                arg(normalCode);
         }
         
         std::string vertexSTs()

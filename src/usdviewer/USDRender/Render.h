@@ -120,16 +120,11 @@ namespace tl
             // !@{ Render Passes
             void beginLoadRenderPass();
             void beginRenderPass();
-            void beginOITRenderPass();
             void beginResolveRenderPass();
-            void endOITRenderPass();
             void endRenderPass();
             
             void setupViewportAndScissor();
 
-            //! Create OIT renderpass and framebuffer for current frameIndex.
-            void createOIT();
-            
             
         private:
             // Main entry pipeline creation function

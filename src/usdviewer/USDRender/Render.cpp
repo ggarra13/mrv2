@@ -57,8 +57,6 @@ namespace tl
                 p.garbage[i].pipelines.reserve(20);
                 p.garbage[i].pipelineLayouts.reserve(20);
                 p.garbage[i].bindingSets.reserve(20);
-                p.garbage[i].framebuffers.reserve(20);
-                p.oitFramebuffer[i] = VK_NULL_HANDLE;
             }
         }
 
@@ -67,16 +65,6 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
-
-            for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
-            {
-                if (p.oitFramebuffer[i] != VK_NULL_HANDLE)
-                    vkDestroyFramebuffer(device, p.oitFramebuffer[i], nullptr);
-            }
-
-            if (p.oitRenderPass != VK_NULL_HANDLE)
-                vkDestroyRenderPass(device, p.oitRenderPass, nullptr);
-        
             
             for (auto& [_, pipeline] : p.pipelines)
             {
@@ -97,11 +85,6 @@ namespace tl
                 for (auto& pipelineLayout : g.pipelineLayouts)
                 {
                     vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-                }
-                // Destroy old pipelineLayouts that are no longer used.
-                for (auto& framebuffer : g.framebuffers)
-                {
-                    vkDestroyFramebuffer(device, framebuffer, nullptr);
                 }
             }
         }
@@ -132,47 +115,6 @@ namespace tl
                 p.vaoPool->bind(frameIndex);
             }
             
-            image::Info info;
-                
-            vlk::TextureOptions options;
-            options.filters.minify = timeline::ImageFilter::Nearest;
-            options.filters.magnify = timeline::ImageFilter::Nearest;
-            options.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
-                            VK_IMAGE_USAGE_SAMPLED_BIT;
-            options.tiling = VK_IMAGE_TILING_OPTIMAL;
-            options.samples = p.fbo->getSampleCount();
-            
-            if (doCreate(p.accum[frameIndex], renderSize, options))
-            {
-                image::Info info(renderSize.w, renderSize.h,
-                                 image::PixelType::RGBA_F16);
-                p.accum[frameIndex] = vlk::Texture::create(ctx, info, options);
-            }
-
-            if (doCreate(p.reveal[frameIndex], renderSize, options))
-            {
-                image::Info info(renderSize.w, renderSize.h,
-                                 image::PixelType::L_F16);
-
-                //
-                // Some GPUs do not support blending on R16_FLOAT.
-                // Downgrade to R16_UNORM if that's the case.
-                // 
-                VkFormatProperties props;
-                vkGetPhysicalDeviceFormatProperties(ctx.gpu,
-                                                    VK_FORMAT_R16_SFLOAT,
-                                                    &props);
-
-                if (!(props.optimalTilingFeatures &
-                      VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT))
-                {
-                    info = image::Info(renderSize.w, renderSize.h,
-                                       image::PixelType::L_U8);
-                }
-                
-                p.reveal[frameIndex] = vlk::Texture::create(ctx, info, options);
-                p.oitRecreate = true;
-            }
             
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
             const VkColorComponentFlags allMask[] =
@@ -220,14 +162,9 @@ namespace tl
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
             }
-            // Destroy old framebuffers that are no longer used.
-            for (auto& fb : g.framebuffers)
-            {
-                vkDestroyFramebuffer(device, fb, nullptr);
-            }
+
             g.pipelines.clear();
             g.pipelineLayouts.clear();
-            g.framebuffers.clear();
             g.bindingSets.clear();
             
             const image::Color4f color(1.F, 1.F, 1.F);
@@ -280,29 +217,6 @@ namespace tl
                 p.shaders["usd"]->addTexture("u_OpacityThresholdMap");
                 p.shaders["usd"]->addTexture("u_IorMap");
                 _createBindingSet(p.shaders["usd"]);
-            }
-            
-            if (!p.shaders["usd_oit"])
-            {
-                bool hasNormal = false;
-                bool hasColor = false;
-                bool hasOIT = true;
-                p.shaders["usd_oit"] = vlk::Shader::create(
-                    ctx, vertexUSD_UV(), fragmentUSD(hasNormal, hasColor,
-                                                     hasOIT), "usd_oit");
-                p.shaders["usd_oit"]->createUniform(
-                    "transforms", transforms, vlk::kShaderVertex);
-                p.shaders["usd_oit"]->addPush("color", color, vlk::kShaderFragment);
-                p.shaders["usd_oit"]->addTexture("u_DiffuseMap");
-                p.shaders["usd_oit"]->addTexture("u_EmissiveMap");
-                p.shaders["usd_oit"]->addTexture("u_MetallicMap");
-                p.shaders["usd_oit"]->addTexture("u_RoughnessMap");
-                p.shaders["usd_oit"]->addTexture("u_NormalMap");
-                p.shaders["usd_oit"]->addTexture("u_AOMap");
-                p.shaders["usd_oit"]->addTexture("u_OpacityMap");
-                p.shaders["usd_oit"]->addTexture("u_OpacityThresholdMap");
-                p.shaders["usd_oit"]->addTexture("u_IorMap");
-                _createBindingSet(p.shaders["usd_oit"]);
             }
             
             if (!p.shaders["usd_uv_n"])
@@ -378,8 +292,7 @@ namespace tl
                 p.shaders["resolve"]->createUniform(
                     "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["resolve"]->addPush("color", color, vlk::kShaderFragment);
-                p.shaders["resolve"]->addTexture("accum");
-                p.shaders["resolve"]->addTexture("reveal");
+                p.shaders["resolve"]->addTexture("textureSampler");
                 _createBindingSet(p.shaders["resolve"]);
             }
             

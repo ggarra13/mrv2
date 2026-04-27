@@ -5,6 +5,9 @@
 #define LOG_STATUS(x) std::cerr << x << std::endl;
 #define _(x) x
 
+
+#include <FL/vk_enum_string_helper.h>   // must come first.
+
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
 #include "USDCollectTextures.h"
 #include "USDRenderEngine.h"
@@ -62,8 +65,6 @@
 
 #include <FL/Fl_Vk_Window.H>
 #include <FL/Fl_Vk_Utils.H>
-
-#include <FL/vk_enum_string_helper.h>
 
 #include <memory>
 #include <iostream>

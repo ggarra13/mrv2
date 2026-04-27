@@ -496,8 +496,6 @@ namespace tl
                                    object.shaderId, object.textures,
                                    object.material);
             }
-            
-            p.render->endRenderPass();
 
             if (!p.transparentPrims.empty())
             {
@@ -512,40 +510,33 @@ namespace tl
                               return distSqA > distSqB;
                           });
 
-                p.render->createOIT();
-                p.render->beginOITRenderPass();
-            
-                //
-                // Draw transparent primitives.
-                //
+                const bool enableBlending = true;
                 for (auto& object : p.transparentPrims)
                 {
-                    p.render->drawMeshOIT(*object.geom, object.optimization,
-                                          object.modelMatrix, object.color,
-                                          "usd_oit", object.textures,
-                                          object.material);
+                    p.render->drawMesh(*object.geom, object.optimization,
+                                       object.modelMatrix, object.color,
+                                       object.shaderId, object.textures,
+                                       object.material, enableBlending);
                 }
+                
+                // // Composite a quad with the result of accum / reveal.
+                // //
+                // // We purposedly flip the projection to account for
+                // // Vulkan's inverted Y.
+                // auto ortho = math::ortho(
+                //     0.F, static_cast<float>(renderSize.w), 
+                //     static_cast<float>(renderSize.h), 0.F, -1.F, 1.F);
+                // p.render->setTransform(ortho);
             
-            
-                p.render->endOITRenderPass();
+                // p.render->beginResolveRenderPass();
 
-                //
-                // Composite a quad with the result of accum / reveal.
-                //
-                // We purposedly flip the projection to account for
-                // Vulkan's inverted Y.
-                auto ortho = math::ortho(
-                    0.F, static_cast<float>(renderSize.w), 
-                    static_cast<float>(renderSize.h), 0.F, -1.F, 1.F);
-                p.render->setTransform(ortho);
+                // p.render->drawRect(math::Box2i(0, 0, renderSize.w, renderSize.h),
+                //                    image::Color4f(1.F, 1.F, 1.F, 1.F));
             
-                p.render->beginResolveRenderPass();
 
-                p.render->drawRect(math::Box2i(0, 0, renderSize.w, renderSize.h),
-                                   image::Color4f(1.F, 1.F, 1.F, 1.F));
-            
-                p.render->endRenderPass();
             }
+            
+            p.render->endRenderPass();
 
             
             p.render->end();

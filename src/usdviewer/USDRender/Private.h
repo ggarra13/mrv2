@@ -42,8 +42,7 @@ namespace tl
         std::string vertexUSD_UV_Normal_Color();
 
         std::string fragmentUSD(bool hasNormal = false,
-                                bool hasColor = false,
-                                bool hasOIT = false);
+                                bool hasColor = false);
         
         std::string fragment_Resolve();
         
@@ -77,17 +76,9 @@ namespace tl
             {
                 std::vector<VkPipeline> pipelines;
                 std::vector<VkPipelineLayout> pipelineLayouts;
-                std::vector<VkFramebuffer>    framebuffers;
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
-
-            // OIT resources
-            std::shared_ptr<vlk::Texture> accum[vlk::MAX_FRAMES_IN_FLIGHT];
-            std::shared_ptr<vlk::Texture> reveal[vlk::MAX_FRAMES_IN_FLIGHT];
-            VkFramebuffer oitFramebuffer[vlk::MAX_FRAMES_IN_FLIGHT];
-            VkRenderPass  oitRenderPass = VK_NULL_HANDLE;
-            bool oitRecreate = true;
             
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex / Fragment
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute
