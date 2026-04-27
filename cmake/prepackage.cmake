@@ -108,6 +108,7 @@ set( _pythonSiteModules
     fltk14/*.cpp
     fltk14/*.h
     fsspec*
+    greenlet*
     huggingface-hub*
     imagesize*
     Jinja*
@@ -122,7 +123,9 @@ set( _pythonSiteModules
     pkg_resources*
     pillow*
     PIL*
+    playwright*
     polib*
+    pyee*
     pyyaml*
     pyYAML*
     pygments*
