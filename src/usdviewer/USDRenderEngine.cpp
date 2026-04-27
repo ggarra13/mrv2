@@ -1,5 +1,6 @@
 
-#define PRINT_STATS 1
+#define PRINT_TIME 1
+#define PRINT_STATS 0
 #define BAKE_JOINTS 1
 
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
@@ -88,7 +89,24 @@ using namespace PXR_NS;
 
 namespace
 {
+    GfVec3d GetWorldCenter(const UsdPrim& prim,
+                           UsdTimeCode time,
+                           UsdGeomBBoxCache& bbox) {
     
+        // 3. Compute the world-space bounding box
+        // This handles the hierarchy transformation internally
+        GfBBox3d worldBbox = bbox.ComputeWorldBound(prim);
+        GfRange3d range = worldBbox.GetRange();
+
+        // 4. Return the midpoint of the range
+        if (!range.IsEmpty()) {
+            return range.GetMidpoint();
+        }
+
+        // Return zero vector if prim has no bounds
+        return GfVec3d(0.0);
+    }   
+   
     UsdGeomCamera UsdGetCameraAtPath(
         const UsdStageRefPtr& stage,
         const SdfPath path)
@@ -338,7 +356,7 @@ namespace tl
                 // Object is transparent.  Store it for later drawing.
                 p.stats.transparent++;
                 
-
+                object.worldCenter = GetWorldCenter(prim, time, bboxCache);
                 p.transparentPrims.emplace_back(object);
             }
         }
@@ -481,40 +499,53 @@ namespace tl
             
             p.render->endRenderPass();
 
-            // Make sure we can write to the depth buffer.
-            p.fbo->transitionToColorAttachment(cmd);
-            p.fbo->transitionDepthToStencilAttachment(cmd);
-
-            auto oldRenderPass = p.render->getRenderPass();
-
-            p.render->createOIT();
-            p.render->beginOITRenderPass();
-            
-            //
-            // Draw transparent primitives.
-            //
-            for (auto& object : p.transparentPrims)
+            if (!p.transparentPrims.empty())
             {
-                p.render->drawMeshOIT(*object.geom, object.optimization,
-                                      object.modelMatrix, object.color,
-                                      "usd_oit", object.textures,
-                                      object.material);
-            }
-            
-            
-            p.render->endOITRenderPass();
+                // std::sort(p.transparentPrims.begin(),
+                //           p.transparentPrims.end(),
+                //           [&cameraPos](const auto& a, const auto& b) {
+                //               // Calculate squared distances to avoid expensive square root operations
+                //               double distSqA = (a.worldCenter - cameraPos).GetLengthSq();
+                //               double distSqB = (b.worldCenter - cameraPos).GetLengthSq();
 
-            auto ortho = math::ortho(
-                0.F, static_cast<float>(renderSize.w), 
-                static_cast<float>(renderSize.h), 0.F, -1.F, 1.F);
-            p.render->setTransform(ortho);
-            
-            p.render->beginResolveRenderPass();
+                //               // Back-to-front sorting (Farther objects come first)
+                //               return distSqA > distSqB;
+                //           });
 
-            p.render->drawRect(math::Box2i(0, 0, renderSize.w, renderSize.h),
-                               image::Color4f(1.F, 1.F, 1.F, 1.F));
+                    p.render->createOIT();
+                    p.render->beginOITRenderPass();
             
-            p.render->endRenderPass();
+                    //
+                    // Draw transparent primitives.
+                    //
+                    for (auto& object : p.transparentPrims)
+                    {
+                        p.render->drawMeshOIT(*object.geom, object.optimization,
+                                              object.modelMatrix, object.color,
+                                              "usd_oit", object.textures,
+                                              object.material);
+                    }
+            
+            
+                    p.render->endOITRenderPass();
+
+                    //
+                    // Composite a quad with the result of accum / reveal.
+                    //
+                    // We purposedly flip the projection to account for
+                    // Vulkan's inverted Y.
+                    auto ortho = math::ortho(
+                        0.F, static_cast<float>(renderSize.w), 
+                        static_cast<float>(renderSize.h), 0.F, -1.F, 1.F);
+                    p.render->setTransform(ortho);
+            
+                    p.render->beginResolveRenderPass();
+
+                    p.render->drawRect(math::Box2i(0, 0, renderSize.w, renderSize.h),
+                                       image::Color4f(1.F, 1.F, 1.F, 1.F));
+            
+                    p.render->endRenderPass();
+                }
 
             
             p.render->end();
@@ -522,8 +553,9 @@ namespace tl
             
             
 
-#if PRINT_STATS
+
             std::ostream& out = std::cout;
+#if PRINT_STATS
             p.stats.print(out);
 #endif
             

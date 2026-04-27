@@ -21,6 +21,7 @@ namespace tl
             MeshOptimization optimization;
 
             math::Matrix4x4f modelMatrix;
+            pxr::GfVec3d worldCenter; 
             
             // Material information.
             std::string shaderId;

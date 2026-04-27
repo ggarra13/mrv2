@@ -8,6 +8,27 @@ namespace tl
 {
     namespace usd
     {
+        std::string vertex2_UV()
+        {
+            return R"(#version 450
+layout(location = 0) in vec3 vPos;
+layout(location = 1) in vec2 vTexture;
+
+layout(location = 1) out vec2 fTexture;
+
+layout(set = 0, binding = 0, std140) uniform Transform {
+     mat4 mvp;
+     mat4 model;
+     mat4 view;
+} transform;
+
+void main()
+{
+    gl_Position = transform.mvp * vec4(vPos, 1.0);
+    fTexture = vTexture;
+})";
+        }
+        
         std::string vertexDummy()
         {
             return R"(#version 450

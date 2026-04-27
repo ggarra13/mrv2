@@ -171,6 +171,7 @@ namespace tl
                 }
                 
                 p.reveal[frameIndex] = vlk::Texture::create(ctx, info, options);
+                p.oitRecreate = true;
             }
             
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
@@ -373,7 +374,7 @@ namespace tl
             if (!p.shaders["resolve"])
             {
                 p.shaders["resolve"] = vlk::Shader::create(
-                    ctx, vertexUSD_UV(), fragment_Resolve(), "resolve");
+                    ctx, vertex2_UV(), fragment_Resolve(), "resolve");
                 p.shaders["resolve"]->createUniform(
                     "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["resolve"]->addPush("color", color, vlk::kShaderFragment);

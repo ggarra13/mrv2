@@ -27,6 +27,7 @@ namespace tl
     namespace usd
     {
         // Shaders as text
+        std::string vertex2_UV();
         std::string vertexDummy();
         std::string fragmentDummy();
         std::string vertexDummy_Color();
@@ -69,6 +70,7 @@ namespace tl
             
             bool clipRectEnabled = false;
             math::Box2i clipRect;
+
             std::string currentPipeline;
 
             struct FrameGarbage
@@ -80,11 +82,12 @@ namespace tl
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
 
-            // Active resources
+            // OIT resources
             std::shared_ptr<vlk::Texture> accum[vlk::MAX_FRAMES_IN_FLIGHT];
             std::shared_ptr<vlk::Texture> reveal[vlk::MAX_FRAMES_IN_FLIGHT];
             VkFramebuffer oitFramebuffer[vlk::MAX_FRAMES_IN_FLIGHT];
             VkRenderPass  oitRenderPass = VK_NULL_HANDLE;
+            bool oitRecreate = true;
             
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex / Fragment
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute

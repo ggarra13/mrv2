@@ -68,12 +68,6 @@ namespace tl
             //! Gets the internal FBO
             std::shared_ptr<vlk::OffscreenBuffer> getFBO() const;
 
-            //! Gets the current Vulkan render pass.
-            VkRenderPass getRenderPass() const;
-
-            //! Changes the current Vulkan render pass.
-            void setRenderPass(VkRenderPass);
-            
             math::Box2i getViewport() const;
             void setViewport(const math::Box2i&);
             void clearViewport(const image::Color4f&);

@@ -383,18 +383,16 @@ namespace tl
                                             &p.oitRenderPass));
             }
 
-            // Recreate the framebuffer only when the size or attachments change.
-            // Wait for the slot to be free (your existing fence/semaphore scheme 
-            // guarantees this at frame-begin, so it is safe to destroy here).
-            if (p.oitFramebuffer[p.frameIndex] != VK_NULL_HANDLE)
-            {
-                p.garbage[p.frameIndex].framebuffers.push_back(p.oitFramebuffer[p.frameIndex]);
-                p.oitFramebuffer[p.frameIndex] = VK_NULL_HANDLE;
-            }
 
             p.fbo->transitionDepthToStencilAttachment(p.cmd);            
             p.accum[p.frameIndex]->transitionToColorAttachment(p.cmd);
             p.reveal[p.frameIndex]->transitionToColorAttachment(p.cmd);
+            
+            if (p.oitFramebuffer[p.frameIndex] != VK_NULL_HANDLE &&
+                p.oitRecreate == false)
+            {
+                return;
+            }
             
             std::vector<VkImageView> views;
             views.push_back(p.accum[p.frameIndex]->getImageView());
@@ -412,6 +410,7 @@ namespace tl
 
             VK_CHECK(vkCreateFramebuffer(device, &fbInfo, nullptr,
                                          &p.oitFramebuffer[p.frameIndex]));
+            p.oitRecreate = false;
         }
 
         void Render::beginResolveRenderPass()
@@ -456,16 +455,6 @@ namespace tl
             vkCmdBeginRenderPass(p.cmd, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
             p.fbo->setupViewportAndScissor(p.cmd);
-        }
-        
-        VkRenderPass Render::getRenderPass() const
-        {
-            return _p->renderPass;
-        }
-
-        void Render::setRenderPass(VkRenderPass value)
-        {
-            _p->renderPass = value;
         }
         
         void Render::drawRect(const math::Box2i& box,
