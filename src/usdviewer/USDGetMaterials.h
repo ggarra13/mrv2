@@ -1,6 +1,6 @@
 #pragma once
 
-#include "USDRenderOptions.h"
+#include "engine/options.h"
 
 #include <pxr/usd/usd/prim.h>
 #include <pxr/usd/usdShade/material.h>
@@ -34,6 +34,7 @@ namespace tl
 
         void CollectMaterials(Fl_Vk_Context& ctx,
                               const pxr::UsdStageRefPtr stage,
+                              const pxr::UsdTimeCode time,
                               std::unordered_map<std::string,
                               usd::Material >& materials);
     }

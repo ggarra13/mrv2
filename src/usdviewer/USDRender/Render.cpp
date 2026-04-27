@@ -6,8 +6,8 @@
 #include "FL/Fl_Vk_Utils.H"
 #include "FL/vk_enum_string_helper.h"
 
-#include "USDRenderStructs.h"
-#include "USDRenderPrivate.h"
+#include "USDRender/Structs.h"
+#include "USDRender/Private.h"
 
 #include <tlVk/Buffer.h>
 #include <tlVk/Vk.h>
@@ -44,7 +44,6 @@ namespace tl
             TLRENDER_P();
 
             p.context = context;
-            p.logTimer = std::chrono::steady_clock::now();
         }
 
         Render::Render(Fl_Vk_Context& context) :
@@ -58,7 +57,6 @@ namespace tl
                 p.garbage[i].pipelines.reserve(20);
                 p.garbage[i].pipelineLayouts.reserve(20);
                 p.garbage[i].bindingSets.reserve(20);
-                p.garbage[i].buffers.reserve(20);
             }
         }
 
@@ -116,7 +114,8 @@ namespace tl
             {
                 p.vaoPool->bind(frameIndex);
             }
-
+            
+            
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
             const VkColorComponentFlags allMask[] =
                 { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
@@ -147,8 +146,6 @@ namespace tl
         {
             TLRENDER_P();
 
-            p.timer = std::chrono::steady_clock::now();
-
             p.renderSize = renderSize;
             p.renderOptions = renderOptions;
 
@@ -165,14 +162,15 @@ namespace tl
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
             }
+
             g.pipelines.clear();
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
-            g.buffers.clear();
             
             const image::Color4f color(1.F, 1.F, 1.F);
             USDTransforms transforms;
 
+            // Dummy shaders
             if (!p.shaders["dummy"])
             {
                 p.shaders["dummy"] = vlk::Shader::create(
@@ -181,6 +179,15 @@ namespace tl
                     "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["dummy"]->addPush("color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["dummy"]);
+            }
+            if (!p.shaders["dummy_c"])
+            {
+                p.shaders["dummy_c"] = vlk::Shader::create(
+                    ctx, vertexDummy_Color(), fragmentDummy_Color(), "dummy");
+                p.shaders["dummy_c"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["dummy_c"]->addPush("color", color, vlk::kShaderFragment);
+                _createBindingSet(p.shaders["dummy_c"]);
             }
 #if USE_ST_SHADER
             if (!p.shaders["st"])
@@ -196,7 +203,7 @@ namespace tl
             if (!p.shaders["usd"])
             {
                 p.shaders["usd"] = vlk::Shader::create(
-                    ctx, vertexUSD(), fragmentUSD(), "usd");
+                    ctx, vertexUSD_UV(), fragmentUSD(), "usd");
                 p.shaders["usd"]->createUniform(
                     "transforms", transforms, vlk::kShaderVertex);
                 p.shaders["usd"]->addPush("color", color, vlk::kShaderFragment);
@@ -207,11 +214,93 @@ namespace tl
                 p.shaders["usd"]->addTexture("u_NormalMap");
                 p.shaders["usd"]->addTexture("u_AOMap");
                 p.shaders["usd"]->addTexture("u_OpacityMap");
-                USDShaderParameters params;
-                p.shaders["usd"]->createUniform("params", params);
-                USDSceneParameters scene;
-                p.shaders["usd"]->createUniform("scene", scene);
+                p.shaders["usd"]->addTexture("u_OpacityThresholdMap");
+                p.shaders["usd"]->addTexture("u_IorMap");
                 _createBindingSet(p.shaders["usd"]);
+            }
+            
+            if (!p.shaders["usd_uv_n"])
+            {
+                bool hasNormal = true;
+                bool hasColor = false;
+                p.shaders["usd_uv_n"] = vlk::Shader::create(
+                    ctx, vertexUSD_UV_Normal(), fragmentUSD(hasNormal,
+                                                            hasColor), "usd");
+                p.shaders["usd_uv_n"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["usd_uv_n"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["usd_uv_n"]->addTexture("u_DiffuseMap");
+                p.shaders["usd_uv_n"]->addTexture("u_EmissiveMap");
+                p.shaders["usd_uv_n"]->addTexture("u_MetallicMap");
+                p.shaders["usd_uv_n"]->addTexture("u_RoughnessMap");
+                p.shaders["usd_uv_n"]->addTexture("u_NormalMap");
+                p.shaders["usd_uv_n"]->addTexture("u_AOMap");
+                p.shaders["usd_uv_n"]->addTexture("u_OpacityMap");
+                p.shaders["usd_uv_n"]->addTexture("u_OpacityThresholdMap");
+                p.shaders["usd_uv_n"]->addTexture("u_IorMap");
+                _createBindingSet(p.shaders["usd_uv_n"]);
+            }
+            
+            if (!p.shaders["usd_uv_n_c"])
+            {
+                bool hasNormal = true;
+                bool hasColor = true;
+                p.shaders["usd_uv_n_c"] = vlk::Shader::create(
+                    ctx, vertexUSD_UV_Normal_Color(), fragmentUSD(hasNormal,
+                                                                  hasColor), "usd");
+                p.shaders["usd_uv_n_c"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["usd_uv_n_c"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["usd_uv_n_c"]->addTexture("u_DiffuseMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_EmissiveMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_MetallicMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_RoughnessMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_NormalMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_AOMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_OpacityMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_OpacityThresholdMap");
+                p.shaders["usd_uv_n_c"]->addTexture("u_IorMap");
+                _createBindingSet(p.shaders["usd_uv_n_c"]);
+            }
+            
+            
+            if (!p.shaders["usd_uv_c"])
+            {
+                bool hasNormal = false;
+                bool hasColor = true;
+                p.shaders["usd_uv_c"] = vlk::Shader::create(
+                    ctx, vertexUSD_UV_Color(), fragmentUSD(hasNormal, hasColor), "usd");
+                p.shaders["usd_uv_c"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["usd_uv_c"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["usd_uv_c"]->addTexture("u_DiffuseMap");
+                p.shaders["usd_uv_c"]->addTexture("u_EmissiveMap");
+                p.shaders["usd_uv_c"]->addTexture("u_MetallicMap");
+                p.shaders["usd_uv_c"]->addTexture("u_RoughnessMap");
+                p.shaders["usd_uv_c"]->addTexture("u_NormalMap");
+                p.shaders["usd_uv_c"]->addTexture("u_AOMap");
+                p.shaders["usd_uv_c"]->addTexture("u_OpacityMap");
+                p.shaders["usd_uv_c"]->addTexture("u_OpacityThresholdMap");
+                p.shaders["usd_uv_c"]->addTexture("u_IorMap");
+                _createBindingSet(p.shaders["usd_uv_c"]);
+            }
+            
+            if (!p.shaders["resolve"])
+            {
+                p.shaders["resolve"] = vlk::Shader::create(
+                    ctx, vertex2_UV(), fragment_Resolve(), "resolve");
+                p.shaders["resolve"]->createUniform(
+                    "transforms", transforms, vlk::kShaderVertex);
+                p.shaders["resolve"]->addPush("color", color, vlk::kShaderFragment);
+                p.shaders["resolve"]->addTexture("textureSampler");
+                _createBindingSet(p.shaders["resolve"]);
+            }
+            
+            if (!p.vbos["resolve"] || p.vbos["resolve"]->getSize() != 6)
+            {
+                p.vbos["resolve"] =
+                    vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
+                p.vaos["resolve"] = vlk::VAO::create(ctx);
             }
             
             if (renderOptions.clear)
@@ -230,78 +319,6 @@ namespace tl
             TLRENDER_P();
 
             p.fbo->transitionToShaderRead(p.cmd);
-
-            const auto now = std::chrono::steady_clock::now();
-            const auto diff =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    now - p.timer);
-            p.currentStats.time = diff.count();
-            p.stats.push_back(p.currentStats);
-            p.currentStats = Private::Stats();
-            while (p.stats.size() > 60)
-            {
-                p.stats.pop_front();
-            }
-            
-            const std::chrono::duration<float> logDiff = now - p.logTimer;
-            if (logDiff.count() > 10.F)
-            {
-                p.logTimer = now;
-                if (auto context = p.context.lock())
-                {
-                    Private::Stats average;
-                    const size_t size = p.stats.size();
-                    if (size > 0)
-                    {
-                        for (const auto& i : p.stats)
-                        {
-                            average.time += i.time;
-                            average.rects += i.rects;
-                            average.meshes += i.meshes;
-                            average.meshTriangles += i.meshTriangles;
-                            average.text += i.text;
-                            average.textTriangles += i.textTriangles;
-                            average.textures += i.textures;
-                            average.images += i.images;
-                            average.pipelineChanges += i.pipelineChanges;
-                        }
-                        average.time /= p.stats.size();
-                        average.rects /= p.stats.size();
-                        average.meshes /= p.stats.size();
-                        average.meshTriangles /= p.stats.size();
-                        average.text /= p.stats.size();
-                        average.textTriangles /= p.stats.size();
-                        average.textures /= p.stats.size();
-                        average.images /= p.stats.size();
-                        average.pipelineChanges /= p.stats.size();
-                    }
-
-                    context->log(
-                        string::Format("tl::usd::Render {0}").arg(this),
-                        string::Format(
-                            "\n"
-                            "    Average render time: {0}ms\n"
-                            "    Average rectangle count: {1}\n"
-                            "    Average mesh count: {2}\n"
-                            "    Average mesh triangles: {3}\n"
-                            "    Average text count: {4}\n"
-                            "    Average text triangles: {5}\n"
-                            "    Average texture count: {6}\n"
-                            "    Average image count: {7}\n"
-                            "    Average pipeline changes: {8}\n"
-                            "    Glyph texture atlas: {9}%\n"
-                            "    Glyph IDs: {10}")
-                            .arg(average.time)
-                            .arg(average.rects)
-                            .arg(average.meshes)
-                            .arg(average.meshTriangles)
-                            .arg(average.text)
-                            .arg(average.textTriangles)
-                            .arg(average.textures)
-                            .arg(average.images)
-                            .arg(average.pipelineChanges));
-                }
-            }
         }
 
         VkCommandBuffer Render::getCommandBuffer() const
@@ -361,7 +378,7 @@ namespace tl
             
             p.fbo->endRenderPass(p.cmd);
         }
-        
+                
         void Render::setupViewportAndScissor()
         {
             TLRENDER_P();
@@ -413,6 +430,7 @@ namespace tl
             // Update C++ layout tracking to match render pass
             //finalLayout
             p.fbo->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+            p.fbo->setDepthLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         }
 
         bool Render::getClipRectEnabled() const
@@ -456,14 +474,14 @@ namespace tl
             return _p->transform;
         }
 
-        void Render::setCameraWorldPosition(const math::Vector3f& value)
-        {
-            _p->cameraPosition = value;
-        }
-        
         void Render::setTransform(const math::Matrix4x4f& value)
         {
             _p->transform = value;
+        }
+        
+        void Render::setViewMatrix(const math::Matrix4x4f& value)
+        {
+            _p->viewMatrix = value;
         }
         
         void Render::applyTransforms()
@@ -477,6 +495,7 @@ namespace tl
                     i.second->bind(p.frameIndex);
                     USDTransforms transforms;
                     transforms.mvp = transforms.model = p.transform;
+                    transforms.view = p.viewMatrix;
                     i.second->setUniform("transforms", transforms,
                                          vlk::kShaderVertex);
                 }

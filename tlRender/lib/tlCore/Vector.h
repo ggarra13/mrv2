@@ -133,6 +133,9 @@ namespace tl
         template<int C, typename T>
         T length(const Vector<C, T>&);
         
+        template<int C, typename T>
+        T length2(const Vector<C, T>&);
+        
         //! Normalize the given vector.
         template<int C, typename T>
         Vector<C, T> normalize(const Vector<C, T>&);        

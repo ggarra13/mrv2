@@ -6,14 +6,16 @@
 #pragma once
 
 
-#include "USDRenderOptions.h"
-#include "USDRender.h"
-#include "VAOPool.h"
+#include "engine/options.h"
+
+#include "USDRender/Render.h"
+
 
 #include <tlVk/OffscreenBuffer.h>
 #include <tlVk/PipelineCreationState.h>
 #include <tlVk/Shader.h>
 #include <tlVk/Texture.h>
+#include <tlVk/VAOPool.h>
 
 #include <array>
 #include <list>
@@ -24,22 +26,26 @@ namespace tl
 {
     namespace usd
     {
-        // For drawing
+        // Shaders as text
+        std::string vertex2_UV();
         std::string vertexDummy();
         std::string fragmentDummy();
+        std::string vertexDummy_Color();
+        std::string fragmentDummy_Color();
 
         std::string vertexSTs();
         std::string fragmentSTs();
 
-        std::string vertexUSD();
-        std::string fragmentUSD();
+        std::string vertexUSD_UV();
+        std::string vertexUSD_UV_Color();
+        std::string vertexUSD_UV_Normal();
+        std::string vertexUSD_UV_Normal_Color();
 
-        std::string vertexPBR();
-        std::string fragmentPBR();
+        std::string fragmentUSD(bool hasNormal = false,
+                                bool hasColor = false);
         
-
-
-
+        std::string fragment_Resolve();
+        
         struct Render::Private
         {
             // Vulkan variables
@@ -51,15 +57,19 @@ namespace tl
             int32_t frameIndex; // must be an int32_t not an uint32_t.
             std::shared_ptr<vlk::VAOPool> vaoPool;
             
+            
             math::Size2i renderSize;
             timeline::RenderOptions renderOptions;
 
             std::weak_ptr<system::Context> context;
             math::Box2i viewport;
-            math::Vector3f    cameraPosition;
-            math::Matrix4x4f transform;
+
+            math::Matrix4x4f transform;    // vp
+            math::Matrix4x4f viewMatrix;   // view
+            
             bool clipRectEnabled = false;
             math::Box2i clipRect;
+
             std::string currentPipeline;
 
             struct FrameGarbage
@@ -67,37 +77,17 @@ namespace tl
                 std::vector<VkPipeline> pipelines;
                 std::vector<VkPipelineLayout> pipelineLayouts;
                 std::vector<std::shared_ptr<vlk::ShaderBindingSet> > bindingSets;
-                std::vector<std::shared_ptr<vlk::OffscreenBuffer> > buffers;
             };
             std::array<FrameGarbage, vlk::MAX_FRAMES_IN_FLIGHT> garbage;
-
+            
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > shaders;  // Vertex / Fragment
             std::unordered_map<std::string, std::shared_ptr<vlk::Shader> > compute;  // Compute
-            std::unordered_map<std::string, std::shared_ptr<vlk::OffscreenBuffer> >
-                buffers;
             std::unordered_map<std::string, VkPipelineLayout> pipelineLayouts;
             std::unordered_map<
                 std::string, std::pair<vlk::PipelineCreationState, VkPipeline>>
                 pipelines;
             std::unordered_map<std::string, std::shared_ptr<vlk::VBO> > vbos;
             std::unordered_map<std::string, std::shared_ptr<vlk::VAO> > vaos;
-
-            std::chrono::steady_clock::time_point timer;
-            struct Stats
-            {
-                int time = 0;
-                size_t rects = 0;
-                size_t meshes = 0;
-                size_t meshTriangles = 0;
-                size_t text = 0;
-                size_t textTriangles = 0;
-                size_t textures = 0;
-                size_t images = 0;
-                size_t pipelineChanges = 0;
-            };
-            Stats currentStats;
-            std::list<Stats> stats;
-            std::chrono::steady_clock::time_point logTimer;
         };
         
     } // namespace usd

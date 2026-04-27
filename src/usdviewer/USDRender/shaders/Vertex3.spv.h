@@ -77,7 +77,7 @@ namespace tl {
 
 const size_t Vertex3_spv_len = sizeof(Vertex3_spv);
 
-    } // namespace timeline_vlk
+    } // namespace usd
 
 } // namespace tl
 #endif // VERTEX3_SPV_H

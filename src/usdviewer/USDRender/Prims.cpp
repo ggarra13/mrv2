@@ -3,9 +3,10 @@
 // Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
-#include "USDRenderPrivate.h"
 #include "USDTextureSlots.h"
-#include "USDRenderStructs.h"
+
+#include "USDRender/Private.h"
+#include "USDRender/Structs.h"
 
 #include <tlVk/Vk.h>
 
@@ -24,40 +25,40 @@ namespace tl
         //  longer create or cache per-mesh VAOs here.
         // ------------------------------------------------------------------
         void Render::_create3DMesh(const std::string& meshName,
-                                   const geom::TriangleMesh3& mesh)
+                                   const geom::TriangleMesh3& mesh,
+                                   const usd::MeshOptimization& opt)
         {
             TLRENDER_P();
 
             size_t triangleCount = mesh.triangles.size();
             if (triangleCount == 0) return;
 
-            ++(p.currentStats.meshes);
-            p.currentStats.meshTriangles += triangleCount;
-
-            // -----------------------------------------------------------------
-            //  Choose the richest VBOType that this mesh's data supports.
-            //
-            //  NOTE: the two duplicate conditions in the original code
-            //  (t+n+c checked twice, t+n checked twice) mean the second branch
-            //  of each pair was dead code.  The types that require float UVs /
-            //  float normals are left as TODOs for a future VBOType selector.
-            // -----------------------------------------------------------------
             vlk::VBOType type = vlk::VBOType::Pos3_F32;
             if (!mesh.t.empty() && !mesh.n.empty() && !mesh.c.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8;
-                // \todo distinguish Pos3_F32_UV_F32_Normal_F32_Color_F32
+                if (opt.floatUVs || opt.floatColors || opt.floatNormals)
+                {
+                    type = vlk::VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32;
+                }
             }
             else if (!mesh.t.empty() && !mesh.n.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16_Normal_U10;
-                // \todo distinguish Pos3_F32_UV_F32_Normal_F32
+                if (opt.floatUVs || opt.floatNormals)
+                    type = vlk::VBOType::Pos3_F32_UV_F32_Normal_F32;
             }
-            else if (!mesh.t.empty())
+            else if (!mesh.t.empty() && !mesh.c.empty())
+            {
+                type = vlk::VBOType::Pos3_F32_UV_U16_Color_U8;
+            }
+            else if (!mesh.t.empty() && mesh.c.empty())
             {
                 type = vlk::VBOType::Pos3_F32_UV_U16;
+                if (opt.floatUVs)
+                    type = vlk::VBOType::Pos3_F32_UV_F32;
             }
-            else if (!mesh.c.empty())
+            else if (mesh.t.empty() && !mesh.c.empty())
             {
                 type = vlk::VBOType::Pos3_F32_Color_U8;
             }
@@ -70,8 +71,10 @@ namespace tl
                 p.vbos[meshName] = vlk::VBO::create(triangleCount * 3, type);
             }
             if (p.vbos[meshName])
+            {
                 p.vbos[meshName]->copy(convert(mesh, type));
-
+            }
+            
             // ------------------------------------------------------------------
             //  Pool initialisation – create the pool on first use.
             //
@@ -88,7 +91,7 @@ namespace tl
                 p.vaoPool = vlk::VAOPool::create(ctx, slotSize);
             }
         }
-
+        
         // ------------------------------------------------------------------
         //  _emitMeshDraw
         //
@@ -107,13 +110,16 @@ namespace tl
             auto shader = p.shaders[shaderName];
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             shader->bind(p.frameIndex);
+            
             vkCmdPushConstants(p.cmd, pipelineLayout,
                                shader->getPushStageFlags(), 0,
                                sizeof(color), &color);
             USDTransforms transforms;
             transforms.mvp   = mvp;
             transforms.model = model;
+            transforms.view  = p.viewMatrix;
             shader->setUniform("transforms", transforms);
+            
             _bindDescriptorSets(pipelineLayoutName, shaderName);
 
             // Upload the vertex data into the pool and draw immediately.
@@ -125,55 +131,92 @@ namespace tl
         }
 
 
-        void Render::draw3DMesh(const geom::TriangleMesh3& mesh,
-                                const math::Matrix4x4f& model,
-                                const image::Color4f& color,
-                                const std::string& shaderId,
-                                const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
-                                const usd::Material& material,
-                                const bool enableBlending,
-                                const VkBlendFactor srcColorBlendFactor,
-                                const VkBlendFactor dstColorBlendFactor,
-                                const VkBlendFactor srcAlphaBlendFactor,
-                                const VkBlendFactor dstAlphaBlendFactor,
-                                const VkBlendOp colorBlendOp,
-                                const VkBlendOp alphaBlendOp)
+        void Render::drawMesh(const geom::TriangleMesh3& geom,
+                              const usd::MeshOptimization& meshOptimization,
+                              const math::Matrix4x4f& model,
+                              const image::Color4f& color,
+                              const std::string& shaderId,
+                              const std::unordered_map<int, std::shared_ptr<vlk::Texture> >& textures,
+                              const usd::Material& material,
+                              const bool enableBlending,
+                              const VkBool32 depthTest,
+                              const VkBool32 depthWrite,
+                              const VkBlendFactor srcColorBlendFactor,
+                              const VkBlendFactor dstColorBlendFactor,
+                              const VkBlendFactor srcAlphaBlendFactor,
+                              const VkBlendFactor dstAlphaBlendFactor,
+                              const VkBlendOp colorBlendOp,
+                              const VkBlendOp alphaBlendOp)
         {
             TLRENDER_P();
-
-            const std::string meshName = "3DMeshes";
-            
-            _create3DMesh(meshName, mesh);
 
             std::string pipelineName;
             std::string pipelineLayoutName;
             std::string shaderName;
+            const std::string meshName = "3DMeshes";
+            if (enableBlending)
+            {
+                pipelineName = "blending";
+            }
+            else
+            {
+                pipelineName = "no_blending";
+            }
+            if (depthTest)
+            {
+                pipelineName += "_depth_test";
+            }
+            else
+            {
+                pipelineName += "_no_depth_test";
+            }
+            if (depthWrite)
+            {
+                pipelineName += "_depth_write";
+            }
+            else
+            {
+                pipelineName += "_no_depth_write";
+            }
+            
+            _create3DMesh(meshName, geom, meshOptimization);
 
-            const auto mvp = p.transform * model;
+            
             
             if (shaderId == "st")
             {
                 shaderName = "st";
-                pipelineName = pipelineLayoutName = shaderName;
+                pipelineLayoutName = shaderName;
                 
                 _createBindingSet(p.shaders[shaderName]);
                 
-                p.shaders[shaderName]->bind(p.frameIndex);  
+                p.shaders[shaderName]->bind(p.frameIndex);
             }
-            else if (shaderId.empty() || shaderId == "dummy" ||
-                     textures.empty())
+            else if (textures.empty() || shaderId == "dummy")
             {
                 shaderName = "dummy";
-                pipelineName = pipelineLayoutName = shaderName;
+                if (!geom.c.empty())
+                    shaderName = "dummy_c";
+                
+                pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);
                 
-                p.shaders[shaderName]->bind(p.frameIndex);        
+                p.shaders[shaderName]->bind(p.frameIndex);                
             }
-            else if (shaderId == "UsdPreviewSurface")
+            else if (shaderId == "usd")
             {
                 shaderName = "usd";
-                pipelineName = pipelineLayoutName = shaderName;
+                if (!geom.t.empty() && !geom.n.empty() && !geom.c.empty())
+                    shaderName = "usd_uv_n_c";
+                else if (!geom.t.empty() && !geom.n.empty())
+                    shaderName = "usd_uv_n";
+                else if (!geom.t.empty() && !geom.c.empty())
+                    shaderName ="usd_uv_c";
+                else if (geom.t.empty() && !geom.c.empty())
+                    shaderName = "usd_c";
+                
+                pipelineLayoutName = shaderName;
 
                 _createBindingSet(p.shaders[shaderName]);
                 
@@ -199,30 +242,29 @@ namespace tl
                 
                 i = textures.find(USD_OpacityMap);
                 p.shaders[shaderName]->setTexture("u_OpacityMap", i->second);
-
-                USDShaderParameters params;
-                params.opacityThreshold = material.opacityThreshold;
-                p.shaders[shaderName]->setUniform("params", params);
-
-                USDSceneParameters scene;
-                scene.camPos = p.cameraPosition;
-                p.shaders[shaderName]->setUniform("scene", scene);
+                
+                i = textures.find(USD_OpacityThresholdMap);
+                p.shaders[shaderName]->setTexture("u_OpacityThresholdMap", i->second);
+                
+                i = textures.find(USD_IorMap);
+                p.shaders[shaderName]->setTexture("u_IorMap", i->second);
             }
             else
             {
                 throw std::runtime_error("Unknown shader type " + shaderId);
             }
                 
-            createPipeline(p.fbo, pipelineName, pipelineLayoutName,
-                           shaderName, meshName, enableBlending,
-                           srcColorBlendFactor, dstColorBlendFactor,
-                           srcAlphaBlendFactor, dstAlphaBlendFactor,
-                           colorBlendOp, alphaBlendOp);
+            _createPipeline(p.fbo, pipelineName, pipelineLayoutName,
+                            shaderName, meshName, enableBlending,
+                            srcColorBlendFactor, dstColorBlendFactor,
+                            srcAlphaBlendFactor, dstAlphaBlendFactor,
+                            colorBlendOp, alphaBlendOp, depthTest,
+                            depthWrite);
 
+            const auto mvp = p.transform * model;
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, mvp,
                           model, color);
         }
 
-        
     } // namespace usd
 } // namespace tl

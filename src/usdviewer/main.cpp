@@ -1,13 +1,20 @@
 
-#define PRINT_STATS 0
+#define ANIMATE 1
 #define BAKE_JOINTS 1
+
+#define LOG_STATUS(x) std::cerr << x << std::endl;
+#define _(x) x
+
+
+#include <FL/vk_enum_string_helper.h>   // must come first.
 
 // #include "USDProcessSkeletonRoot.h"  // \@todo: do deformation in compute shader
 #include "USDCollectTextures.h"
 #include "USDRenderEngine.h"
-#include "USDRender.h"
-#include "USDRenderShadersBinary.h"
 #include "USDTextureSlots.h"
+
+#include "USDRender/Render.h"
+#include "USDRender/ShadersBinary.h"
 
 #include <tlCore/Context.h>
 
@@ -45,6 +52,7 @@
 #include <tlCore/Image.h>
 #include <tlCore/Mesh.h>
 #include <tlCore/Path.h>
+#include <tlCore/StringFormat.h>
 
 #include <OpenEXR/ImfRgbaFile.h>
 #include <OpenEXR/ImfArray.h>
@@ -129,6 +137,8 @@ public:
     //! Vulkan destruction function.
     void destroy() FL_OVERRIDE;
 
+    //! Vulkan color space negotiation.
+    void init_colorspace() FL_OVERRIDE;
 
 protected:
     void prepare_render_pass();
@@ -153,6 +163,7 @@ struct usd_window::Private
     // Engine information
     std::shared_ptr<usd::RenderEngine> engine;
     double time;
+    double lastTime;
     double startTimeCode;
     double endTimeCode;
     double timeCodesPerSecond;
@@ -178,6 +189,61 @@ usd_window::usd_window(int X, int Y, int W, int H) :
     mode(FL_RGB | FL_ALPHA);
 }
 
+void usd_window::init_colorspace()
+{
+    TLRENDER_P();
+
+    // This call will try to set colorSpace() to the best color space
+    // possible based on what Vulkan returns.
+    Fl_Vk_Window::init_colorspace();
+            
+    // First check if Wayland returned a valid color space for this
+    // monitor.
+    bool valid_colorspace = false;
+    switch (colorSpace())
+    {
+    case VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT:
+    case VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT:
+    case VK_COLOR_SPACE_HDR10_ST2084_EXT:
+    case VK_COLOR_SPACE_HDR10_HLG_EXT:
+    case VK_COLOR_SPACE_DOLBYVISION_EXT:
+        valid_colorspace = true;
+        break;
+    default:
+        break;
+    }
+            
+    // if (valid_colorspace)
+    // {
+    //     if (p.monitor_first_run)
+    //     {
+    //         p.screen_index = this->screen_num();
+    //         p.monitor = getHDRCapabilities(p.screen_index);
+    //         p.monitor_first_run = false; 
+    //     }
+    //     _getMonitorNits();
+    // }
+    // else
+    {
+        // colorSpace() = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+        // format() = VK_FORMAT_B8G8R8A8_SRGB;
+        // format() = VK_FORMAT_B8G8R8A8_UNORM;
+            
+        // if (p.monitor.hdr_enabled)
+        //     LOG_STATUS(_("HDR monitor not detected by Vulkan or Window Manager."));
+                
+        // p.monitor.hdr_enabled = p.monitor.hdr_supported = false;
+        // p.monitor.min_nits = 0.001F;
+        // p.monitor.max_nits = 100.F;
+    }
+
+    std::string msg;            
+    msg = string::Format(_("Vulkan color space is {0}")).arg(string_VkColorSpaceKHR(colorSpace()));
+    LOG_STATUS(msg);
+                    
+    msg = string::Format(_("Vulkan format is {0}")).arg(string_VkFormat(format()));
+    LOG_STATUS(msg);
+}
 void usd_window::prepare_render_pass()
 {            
     bool has_depth = mode() & FL_DEPTH;
@@ -286,8 +352,8 @@ void usd_window::prepare_shaders()
             ctx,
             usd::Vertex3_spv,
             usd::Vertex3_spv_len,
-            usd::textureFragment_spv,
-            usd::textureFragment_spv_len,
+            usd::tonemappingFragment_spv,
+            usd::tonemappingFragment_spv_len,
             "p.shader");
 
         // Create parameters for shader.
@@ -554,10 +620,18 @@ void usd_window::draw()
 
     VkCommandBuffer cmd = getCurrentCommandBuffer();
 
-    p.engine->draw(cmd, m_currentFrameIndex, 1024);
+    // Clear the viewport
+    m_clearColor = { 0.2, 0.2, 0.2, 0.0 };
+    begin_render_pass();
+    end_render_pass();
 
-    p.buffer = p.engine->getFBO();
-
+    if (p.time != p.lastTime)
+    {
+        p.engine->draw(cmd, m_currentFrameIndex, 1024);
+        
+        p.buffer = p.engine->getFBO();
+    }
+    
     // ── Inline readback ──────────────────────────────────────────────────
     // Record the image→buffer copy into the MAIN command buffer right here,
     // while the offscreen image is still in COLOR_ATTACHMENT_OPTIMAL.
@@ -672,6 +746,8 @@ void usd_window::draw()
     }
 
     end_render_pass(cmd);
+
+    p.lastTime = p.time;
 }
 
 static void increment_timecode_cb(usd_window* w)
@@ -685,6 +761,7 @@ void usd_window::nextTimeCode()
 
     if (p.engine)
     {
+#if ANIMATE
         p.time += 1.0;
         
         if (p.time > p.endTimeCode)
@@ -693,6 +770,7 @@ void usd_window::nextTimeCode()
         p.engine->setTimeCode(p.stage, p.time);
     
         redraw();
+#endif
     }
 
     double timeout = 1.0 / p.timeCodesPerSecond;
@@ -721,7 +799,8 @@ void usd_window::setUSDFile(const std::string& fileName)
     p.endTimeCode   = p.stage->GetEndTimeCode();
     p.timeCodesPerSecond = p.stage->GetTimeCodesPerSecond();
     p.time = p.startTimeCode;
-        
+    p.lastTime = p.startTimeCode - 1000000;
+    
     double timeout = 1.0 / p.timeCodesPerSecond;
 
     Fl::add_timeout(timeout, (Fl_Timeout_Handler) increment_timecode_cb, this);

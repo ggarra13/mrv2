@@ -9,5 +9,7 @@ enum USDTextureSlots
     USD_RoughnessMap,
     USD_NormalMap,
     USD_OcclusionMap,
+    USD_OpacityThresholdMap,
+    USD_IorMap,
     USD_DisplacementMap,
 };

@@ -214,6 +214,17 @@ namespace tl
         }
         
         template<int C, typename T>
+        inline T length2(const Vector<C, T>& v)
+        {
+            T s = T(0);
+            for (int c = 0; c < C; ++c)
+            {
+                s += v[c] * v[c];
+            }
+            return s;
+        }
+        
+        template<int C, typename T>
         inline Vector<C, T> normalize(const Vector<C, T>& v)
         {
             Vector<C, T> out = v;

@@ -21,8 +21,35 @@ namespace tl
     namespace usd
     {
         using namespace PXR_NS;
-
         
+#define GET_SLOT_TEXTURE(INPUT, MAPNAME)                        \
+        {                                                       \
+        const usd::ShaderInputResult  slot = material.INPUT;    \
+        connection = slot.getConnection();                      \
+        if (connection.empty())                                 \
+        {                                                       \
+            texture = vlk::ResolveTexture(ctx, slot);           \
+            textures[MAPNAME] = texture;                        \
+        }                                                       \
+        else                                                    \
+        {                                                       \
+            auto i = textureCache.find(connection);             \
+            if (i == textureCache.end())                        \
+            {                                                   \
+                texture = vlk::ResolveTexture(ctx, slot);       \
+                textureCache[connection] = texture;             \
+                if (!slot.hasValue)                             \
+                    ++numTextures;                              \
+                textures[MAPNAME] = texture;                    \
+            }                                                   \
+            else                                                \
+            {                                                   \
+                textures[MAPNAME] = i->second;                  \
+            }                                                   \
+        }                                                       \
+    }                                                           \
+    
+
         void CollectTextures(Fl_Vk_Context& ctx,
                              const std::unordered_map<std::string, Material >& materials,
                              std::unordered_map<std::string, std::shared_ptr<vlk::Texture > >&
@@ -33,151 +60,30 @@ namespace tl
             
             std::cout << "Started Reading textures..." << std::endl;
             std::shared_ptr<vlk::Texture > texture;
+            std::string connection;
+            std::size_t numTextures = 0;
             for (const auto& [materialName, material] : materials)
             {
-                   
+#if DEBUG_TEXTURES
+                std::cout << "\tReading textures for " << materialName << std::endl;
+#endif
                 std::unordered_map<int, std::shared_ptr<vlk::Texture > > textures;
-                {
-                    const usd::ShaderInputResult& slot = material.diffuseColor;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!slot.texturePath.empty())
-                            textureCache[texturePath] = texture;
-                        textures[USD_DiffuseMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_DiffuseMap] = i->second;
-                    }
-                }
+                
+                GET_SLOT_TEXTURE(diffuseColor, USD_DiffuseMap);
+                GET_SLOT_TEXTURE(opacity, USD_OpacityMap);
+                GET_SLOT_TEXTURE(metallic, USD_MetallicMap);
+                GET_SLOT_TEXTURE(roughness, USD_RoughnessMap);
+                GET_SLOT_TEXTURE(normal, USD_NormalMap);
+                GET_SLOT_TEXTURE(occlusion, USD_OcclusionMap);
+                GET_SLOT_TEXTURE(emissiveColor, USD_EmissiveMap)
+                GET_SLOT_TEXTURE(displacement, USD_DisplacementMap);
+                GET_SLOT_TEXTURE(opacityThreshold, USD_OpacityThresholdMap);
+                GET_SLOT_TEXTURE(ior, USD_IorMap);
 
-                {
-                    const usd::ShaderInputResult& slot = material.opacity;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
-                    i = textureCache.find(texturePath);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
-                        textures[USD_OpacityMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_OpacityMap] = i->second;
-                    }
-                }
-                    
-                {       
-                    const usd::ShaderInputResult& slot = material.metallic;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
-                        textures[USD_MetallicMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_MetallicMap] = i->second;
-                    }
-                }
-
-                {
-                    const usd::ShaderInputResult& slot = material.roughness;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
-                        textures[USD_RoughnessMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_RoughnessMap] = i->second;
-                    }
-                }
-
-                {
-                    const usd::ShaderInputResult& slot = material.normal;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
-                        textures[USD_NormalMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_NormalMap] = i->second;
-                    }
-                }
-
-                {
-                    const usd::ShaderInputResult& slot = material.occlusion;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
-                        textures[USD_OcclusionMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_OcclusionMap] = i->second;
-                    }
-                }
-
-                {
-                    const usd::ShaderInputResult& slot = material.emissiveColor;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
-                        textures[USD_EmissiveMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_EmissiveMap] = i->second;
-                    }
-                }
-            
-                {
-                    const usd::ShaderInputResult& slot = material.displacement;
-                    std::string texturePath = slot.texturePath;
-                    auto i = textureCache.find(texturePath);
-                    if (i == textureCache.end())
-                    {
-                        texture = vlk::ResolveTexture(ctx, slot);
-                        if (!texturePath.empty())
-                            textureCache[texturePath] = texture;
-                        textures[USD_DisplacementMap] = texture;
-                    }
-                    else
-                    {
-                        textures[USD_DisplacementMap] = i->second;
-                    }
-                }
-                    
                 collectedTextures[materialName] = textures;
             }
             
-            std::cout << "Finished Reading Textures." << std::endl;
+            std::cout << "Finished Reading " << numTextures << " Textures." << std::endl;
 
             
         }

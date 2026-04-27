@@ -295,8 +295,6 @@ namespace tl
             std::vector<std::shared_ptr<vlk::Texture> > out;
             vlk::TextureOptions options;
             options.filters = imageFilters;
-            options.pbo =
-                info.size.w >= pboSizeMin || info.size.h >= pboSizeMin;
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:

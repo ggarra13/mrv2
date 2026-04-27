@@ -55,7 +55,7 @@ namespace tl {
 
 const size_t textureFragment_spv_len = sizeof(textureFragment_spv);
 
-    } // namespace timeline_vlk
+    } // namespace usd
 
 } // namespace tl
 #endif // TEXTUREFRAGMENT_SPV_H

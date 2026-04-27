@@ -2,23 +2,20 @@
 // Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
-#include "USDRenderPrivate.h"
+#include "USDTextureSlots.h"
+
+#include "USDRender/Private.h"
+
+#include <FL/vk_enum_string_helper.h>
 
 #include <iostream>
 #include <string>
 
+#define USE_FBO 0
+#define USE_DEPENDENCIES 0
+#define USE_DEPTH 1   // \@bug: turning this to one AND drawing to accum/reveal
+                      // results in VK_ERROR_DEVICE_LOST
 
-#if DEBUG_PIPELINE_USE
-#define DEBUG_PIPELINE(x) std::cerr << x << std::endl;
-#else
-#define DEBUG_PIPELINE(x)
-#endif
-
-#if DEBUG_PIPELINE_LAYOUT_USE
-#define DEBUG_PIPELINE_LAYOUT(x) std::cerr << x << std::endl;
-#else
-#define DEBUG_PIPELINE_LAYOUT(x)
-#endif
 
 namespace tl
 {
@@ -70,21 +67,20 @@ namespace tl
             return pipelineLayout;
         }
         
-        void Render::createPipeline(const std::string& pipelineName,
-                                    const std::string& pipelineLayoutName,
-                                    const VkRenderPass renderPass,
-                                    const std::shared_ptr<vlk::Shader>& shader,
-                                    const std::shared_ptr<vlk::VBO>& mesh,
-                                    const vlk::ColorBlendStateInfo& cb,
-                                    const vlk::DepthStencilStateInfo& ds,
-                                    const vlk::MultisampleStateInfo& ms)
+        void Render::_createPipeline(const std::string& pipelineName,
+                                     const std::string& pipelineLayoutName,
+                                     const VkRenderPass renderPass,
+                                     const std::shared_ptr<vlk::Shader>& shader,
+                                     const std::shared_ptr<vlk::VBO>& mesh,
+                                     const vlk::ColorBlendStateInfo& cb,
+                                     const vlk::DepthStencilStateInfo& ds,
+                                     const vlk::MultisampleStateInfo& ms)
         {
             TLRENDER_P();
             
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
             {
-                DEBUG_PIPELINE_LAYOUT("CREATING   pipelineLayout " << pipelineLayoutName);
                 pipelineLayout = _createPipelineLayout(pipelineLayoutName,
                                                        shader);
             }
@@ -159,7 +155,6 @@ namespace tl
             VkPipeline pipeline;
             if (p.pipelines.count(pipelineName) == 0)
             {
-                DEBUG_PIPELINE("CREATING   pipeline " << pipelineName);
                 pipeline = pipelineState.create(device);
                 p.pipelines[pipelineName] = std::make_pair(pipelineState,
                                                            pipeline);
@@ -171,7 +166,6 @@ namespace tl
                 VkPipeline oldPipeline = pair.second;
                 if (pipelineState != oldPipelineState)
                 {
-                    DEBUG_PIPELINE("RECREATING pipeline " << pipelineName);
                     p.garbage[p.frameIndex].pipelines.push_back(
                         oldPipeline);
                     pipeline = pipelineState.create(device);
@@ -189,7 +183,7 @@ namespace tl
             p.currentPipeline = pipelineName;
         }
         
-        void Render::createPipeline(
+        void Render::_createPipeline(
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::string& pipelineName,
             const std::string& pipelineLayoutName,
@@ -201,7 +195,9 @@ namespace tl
             const VkBlendFactor srcAlphaBlendFactor,
             const VkBlendFactor dstAlphaBlendFactor,
             const VkBlendOp colorBlendOp,
-            const VkBlendOp alphaBlendOp)
+            const VkBlendOp alphaBlendOp,
+            const VkBool32 depthTest,
+            const VkBool32 depthWrite)
         {
             TLRENDER_P();
 
@@ -227,15 +223,15 @@ namespace tl
             cb.attachments.push_back(colorBlendAttachment);
             
             vlk::DepthStencilStateInfo ds;
-            ds.depthTestEnable = fbo->hasDepth() ? VK_TRUE : VK_FALSE;
-            ds.depthWriteEnable = fbo->hasDepth() ? VK_TRUE : VK_FALSE;
+            ds.depthTestEnable = fbo->hasDepth() ? depthTest : VK_FALSE;
+            ds.depthWriteEnable = fbo->hasDepth() ? depthWrite : VK_FALSE;
             ds.stencilTestEnable = fbo->hasStencil() ? VK_TRUE : VK_FALSE;
             
             vlk::MultisampleStateInfo ms;
             ms.rasterizationSamples = fbo->getSampleCount();
 
-            createPipeline(pipelineName, pipelineLayoutName,
-                           fbo->getLoadRenderPass(), shader, mesh, cb, ds, ms);
+            _createPipeline(pipelineName, pipelineLayoutName,
+                            fbo->getLoadRenderPass(), shader, mesh, cb, ds, ms);
             
             fbo->setupViewportAndScissor(p.cmd);
             if (p.clipRectEnabled)
@@ -244,7 +240,7 @@ namespace tl
             }
         }
 
-        void Render::usePipeline(const std::string& pipelineName)
+        void Render::_usePipeline(const std::string& pipelineName)
         {
             TLRENDER_P();
 
@@ -257,8 +253,6 @@ namespace tl
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
             p.currentPipeline = pipelineName;
-            
-            ++(p.currentStats.pipelineChanges);
         }
         
         void Render::_bindDescriptorSets(
@@ -273,23 +267,43 @@ namespace tl
                 p.pipelineLayouts[pipelineLayoutName], 0, 1,
                 &descriptorSet, 0, nullptr);
         }        
+        
 
-        void Render::_vkDraw(const std::string& meshName)
+        
+        void Render::drawRect(const math::Box2i& box,
+                              const image::Color4f& color)
         {
             TLRENDER_P();
             
-            p.vaos[meshName]->bind(p.frameIndex);
-            p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
+            _createBindingSet(p.shaders["resolve"]);
+            p.shaders["resolve"]->bind(p.frameIndex);
+            // p.shaders["resolve"]->setTexture("textureSampler", p.accum[p.frameIndex]);
+            if (p.vbos["resolve"])
+                p.vbos["resolve"]->copy(convert(geom::box(box),
+                                                p.vbos["resolve"]->getType()));
+            
+            const bool enableBlending = true;
+            const VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            const VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD;
+            const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD;
+            const VkBool32 depthTest = VK_FALSE;
+            const VkBool32 depthWrite = VK_FALSE;
+            
+            const std::string pipelineName = enableBlending ?
+                                             "resolve_blending" : "resolve";
+            _createPipeline(p.fbo, pipelineName,
+                            "resolve", "resolve", "resolve",
+                            enableBlending, srcColorBlendFactor, dstColorBlendFactor,
+                            srcAlphaBlendFactor, dstAlphaBlendFactor,
+                            colorBlendOp, alphaBlendOp, depthTest, depthWrite);
+            _emitMeshDraw("resolve", "resolve", "resolve",
+                          p.transform, p.transform, color);
         }
+        
 
-        VkRenderPass Render::getRenderPass() const
-        {
-            return _p->renderPass;
-        }
-
-        void Render::setRenderPass(VkRenderPass value)
-        {
-            _p->renderPass = value;
-        }
+        
     }
 }

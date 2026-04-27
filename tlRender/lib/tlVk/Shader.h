@@ -30,6 +30,7 @@ namespace tl
             kShaderVertex = 1,
             kShaderFragment = 2,
             kShaderCompute = 4,
+            kShaderGeometry = 8,
         };
 
         inline VkShaderStageFlags getVulkanShaderFlags(ShaderFlags stageFlags)
@@ -117,6 +118,15 @@ namespace tl
             //! Get the Vulkan fragment module.
             const VkShaderModule& getFragment() const;
 
+            //! Get the vertex source if available.
+            const std::string& getVertexSource() const;
+            
+            //! Get the fragment source if available.
+            const std::string& getFragmentSource() const;
+            
+            //! Get the compute source if available.
+            const std::string& getComputeSource() const;
+            
             //! Get the Vulkan description set for current frame.
             const VkDescriptorSet getDescriptorSet() const;
 

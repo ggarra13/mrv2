@@ -4,6 +4,7 @@
 #include <tlCore/Matrix.h>
 #include <tlCore/Util.h>
 
+#include <pxr/usd/usdGeom/bboxCache.h>
 #include <pxr/usd/usdGeom/mesh.h>
 #include <pxr/usd/usdGeom/subset.h>
 
@@ -13,6 +14,8 @@ namespace tl
 {
     namespace usd
     {
+        using namespace pxr;
+        
         class RenderEngine : public std::enable_shared_from_this<RenderEngine>
         {
             TLRENDER_NON_COPYABLE(RenderEngine);
@@ -34,7 +37,7 @@ namespace tl
                       unsigned renderWidth);
             
         protected:
-    
+            void _sceneTraversal();
             void _bakeJoints();
             
             std::vector<UsdGeomMesh> _SplitMeshBySubsets(
@@ -48,7 +51,8 @@ namespace tl
                            const UsdGeomMesh& usdMesh,
                            const math::Matrix4x4f& modelMatrix,
                            std::string shaderName,
-                           const image::Color4f& color);
+                           const image::Color4f& color,
+                           pxr::UsdGeomBBoxCache& );
 
             Fl_Vk_Context& ctx;
             
@@ -56,3 +60,5 @@ namespace tl
         };
     }
 }
+
+#include "USDRenderEnginePrivate.h"
