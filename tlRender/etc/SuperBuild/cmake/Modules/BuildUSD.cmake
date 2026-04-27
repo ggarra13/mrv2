@@ -1,6 +1,14 @@
 
 include(ExternalProject)
 
+include(ProcessorCount)
+ProcessorCount(NPROCS)
+
+if(NPROCS GREATER 1)
+    math(EXPR NPROCS "${NPROCS} / 2")
+endif()
+
+
 set(USD_DEPENDENCIES ${PYTHON_DEP})
 message(STATUS "USD DEPENDENCIES=${USD_DEPENDENCIES}")
 
@@ -24,7 +32,7 @@ if( "${CMAKE_BUILD_TYPE_LC}" STREQUAL "relwithdebinfo" )
     set(CMAKE_BUILD_TYPE_LC relwithdebuginfo)
 endif()
 
-set(USD_ARGS -v --build-variant ${CMAKE_BUILD_TYPE_LC} --generator Ninja -j 8)
+set(USD_ARGS -v --build-variant ${CMAKE_BUILD_TYPE_LC} --generator Ninja -j ${NPROCS})
 if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
     list(APPEND USD_ARGS --build-args)
     list(APPEND USD_ARGS USD,"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
