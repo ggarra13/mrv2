@@ -14,7 +14,7 @@ namespace tl
 layout(location = 0) in vec3 vPos;
 layout(location = 1) in vec2 vTexture;
 
-layout(location = 1) out vec2 fTexture;
+layout(location = 0) out vec2 fTexture;
 
 layout(set = 0, binding = 0, std140) uniform Transform {
      mat4 mvp;
@@ -283,7 +283,10 @@ layout(location = 1) out vec4 outReveal;
 )";
                 outputCode = R"(
 // Correct WBOIT output:
-float weight    = clamp(pow(opacity, 4.0) + 0.01, 0.001, 300.0);
+// A standard McGuire WBOIT depth weight formulation
+float linearDepth = gl_FragCoord.z; // If you need linear depth, calculate it based on your projection
+float depthWeight = clamp(0.3 / (1e-5 + pow(linearDepth, 4.0)), 1e-2, 3e3);
+float weight = clamp(pow(opacity, 4.0) + 0.01, 0.01, 3000.0) * depthWeight;
 
 // Accum: additive blend (ONE, ONE)
 outAccum  = vec4(color * opacity * weight, opacity * weight);
@@ -528,8 +531,7 @@ void main()
         std::string fragment_Resolve()
         {
             return R"(#version 450
-layout(location = 0) in vec3 fPosition;
-layout(location = 1) in vec2 uv;
+layout(location = 0) in vec2 uv;
 
 layout(binding = 1) uniform sampler2D accumTex;
 layout(binding = 2) uniform sampler2D revealTex;

@@ -471,11 +471,22 @@ namespace tl
                                                 p.vbos["resolve"]->getType()));
             
             const bool enableBlending = true;
+            const VkBlendFactor srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            const VkBlendFactor dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            const VkBlendFactor srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+            const VkBlendFactor dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            const VkBlendOp colorBlendOp = VK_BLEND_OP_ADD;
+            const VkBlendOp alphaBlendOp = VK_BLEND_OP_ADD;
+            const VkBool32 depthTest = VK_FALSE;
+            const VkBool32 depthWrite = VK_FALSE;
+            
             const std::string pipelineName = enableBlending ?
                                              "resolve_blending" : "resolve";
             _createPipeline(p.fbo, pipelineName,
                             "resolve", "resolve", "resolve",
-                            enableBlending);
+                            enableBlending, srcColorBlendFactor, dstColorBlendFactor,
+                            srcAlphaBlendFactor, dstAlphaBlendFactor,
+                            colorBlendOp, alphaBlendOp, depthTest, depthWrite);
             _emitMeshDraw("resolve", "resolve", "resolve",
                           p.transform, p.transform, color);
         }
@@ -556,8 +567,7 @@ namespace tl
             vlk::ColorBlendAttachmentStateInfo revealBlend;
             revealBlend.blendEnable = VK_TRUE;
             revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
-            revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;  // safer ?
-            // revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+            revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             revealBlend.colorBlendOp = VK_BLEND_OP_ADD;
 
             revealBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
@@ -580,9 +590,10 @@ namespace tl
             ds.depthTestEnable = VK_TRUE;
             ds.depthWriteEnable = VK_FALSE;
             ds.stencilTestEnable = VK_FALSE;
+            ds.depthCompareOp = VK_COMPARE_OP_LESS;
             
             vlk::MultisampleStateInfo ms;
-            ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+            ms.rasterizationSamples = p.fbo->getSampleCount();
 
             auto shader = p.shaders["usd_oit"];
             auto mesh = p.vbos[meshName];

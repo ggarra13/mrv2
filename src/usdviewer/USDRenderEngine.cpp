@@ -501,51 +501,51 @@ namespace tl
 
             if (!p.transparentPrims.empty())
             {
-                // std::sort(p.transparentPrims.begin(),
-                //           p.transparentPrims.end(),
-                //           [&cameraPos](const auto& a, const auto& b) {
-                //               // Calculate squared distances to avoid expensive square root operations
-                //               double distSqA = (a.worldCenter - cameraPos).GetLengthSq();
-                //               double distSqB = (b.worldCenter - cameraPos).GetLengthSq();
+                std::sort(p.transparentPrims.begin(),
+                          p.transparentPrims.end(),
+                          [&cameraPos](const auto& a, const auto& b) {
+                              // Calculate squared distances to avoid expensive square root operations
+                              double distSqA = (a.worldCenter - cameraPos).GetLengthSq();
+                              double distSqB = (b.worldCenter - cameraPos).GetLengthSq();
 
-                //               // Back-to-front sorting (Farther objects come first)
-                //               return distSqA > distSqB;
-                //           });
+                              // Back-to-front sorting (Farther objects come first)
+                              return distSqA > distSqB;
+                          });
 
-                    p.render->createOIT();
-                    p.render->beginOITRenderPass();
+                p.render->createOIT();
+                p.render->beginOITRenderPass();
             
-                    //
-                    // Draw transparent primitives.
-                    //
-                    for (auto& object : p.transparentPrims)
-                    {
-                        p.render->drawMeshOIT(*object.geom, object.optimization,
-                                              object.modelMatrix, object.color,
-                                              "usd_oit", object.textures,
-                                              object.material);
-                    }
-            
-            
-                    p.render->endOITRenderPass();
-
-                    //
-                    // Composite a quad with the result of accum / reveal.
-                    //
-                    // We purposedly flip the projection to account for
-                    // Vulkan's inverted Y.
-                    auto ortho = math::ortho(
-                        0.F, static_cast<float>(renderSize.w), 
-                        static_cast<float>(renderSize.h), 0.F, -1.F, 1.F);
-                    p.render->setTransform(ortho);
-            
-                    p.render->beginResolveRenderPass();
-
-                    p.render->drawRect(math::Box2i(0, 0, renderSize.w, renderSize.h),
-                                       image::Color4f(1.F, 1.F, 1.F, 1.F));
-            
-                    p.render->endRenderPass();
+                //
+                // Draw transparent primitives.
+                //
+                for (auto& object : p.transparentPrims)
+                {
+                    p.render->drawMeshOIT(*object.geom, object.optimization,
+                                          object.modelMatrix, object.color,
+                                          "usd_oit", object.textures,
+                                          object.material);
                 }
+            
+            
+                p.render->endOITRenderPass();
+
+                //
+                // Composite a quad with the result of accum / reveal.
+                //
+                // We purposedly flip the projection to account for
+                // Vulkan's inverted Y.
+                auto ortho = math::ortho(
+                    0.F, static_cast<float>(renderSize.w), 
+                    static_cast<float>(renderSize.h), 0.F, -1.F, 1.F);
+                p.render->setTransform(ortho);
+            
+                p.render->beginResolveRenderPass();
+
+                p.render->drawRect(math::Box2i(0, 0, renderSize.w, renderSize.h),
+                                   image::Color4f(1.F, 1.F, 1.F, 1.F));
+            
+                p.render->endRenderPass();
+            }
 
             
             p.render->end();
