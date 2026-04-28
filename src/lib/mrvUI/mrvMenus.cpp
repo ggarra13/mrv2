@@ -1491,6 +1491,20 @@ namespace mrv
                     item->set();
 
                 idx = menu->add(
+                    _("Image/Compare Mode/Add"), 0,
+                    (Fl_Callback*)compare_add_cb, ui, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (o.mode == timeline::CompareMode::Add)
+                    item->set();
+                
+                idx = menu->add(
+                    _("Image/Compare Mode/Multiply"), 0,
+                    (Fl_Callback*)compare_multiply_cb, ui, mode);
+                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                if (o.mode == timeline::CompareMode::Multiply)
+                    item->set();
+
+                idx = menu->add(
                     _("Image/Compare Mode/Horizontal"), 0,
                     (Fl_Callback*)compare_horizontal_cb, ui, mode);
                 item = (Fl_Menu_Item*)&(menu->menu()[idx]);

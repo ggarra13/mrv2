@@ -16,8 +16,10 @@ set(SOURCES
     CompareA.cpp
     CompareB.cpp
     Compare.cpp
+    CompareAdd.cpp
     CompareDifference.cpp
     CompareHorizontal.cpp
+    CompareMultiply.cpp
     CompareOverlay.cpp
     CompareTile.cpp
     CompareVertical.cpp

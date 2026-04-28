@@ -270,6 +270,8 @@ namespace mrv
                 case timeline::CompareMode::Wipe:
                 case timeline::CompareMode::Overlay:
                 case timeline::CompareMode::Difference:
+                case timeline::CompareMode::Add:
+                case timeline::CompareMode::Multiply:
                 case timeline::CompareMode::Horizontal:
                 case timeline::CompareMode::Vertical:
                     if (b.size() > 1)
@@ -562,6 +564,8 @@ namespace mrv
             case timeline::CompareMode::Wipe:
             case timeline::CompareMode::Overlay:
             case timeline::CompareMode::Difference:
+            case timeline::CompareMode::Add:
+            case timeline::CompareMode::Multiply:
             case timeline::CompareMode::Horizontal:
             case timeline::CompareMode::Vertical:
             {
@@ -663,6 +667,8 @@ namespace mrv
         case timeline::CompareMode::Wipe:
         case timeline::CompareMode::Overlay:
         case timeline::CompareMode::Difference:
+        case timeline::CompareMode::Add:
+        case timeline::CompareMode::Multiply:
         case timeline::CompareMode::Horizontal:
         case timeline::CompareMode::Vertical:
         case timeline::CompareMode::Tile:

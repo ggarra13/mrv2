@@ -552,9 +552,8 @@ namespace tl
 
                 if (p.buffers["difference0"] && p.buffers["difference1"])
                 {
-                    glBlendFuncSeparate(
-                        GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-
+                    glDisable(GL_BLEND);
+                              
                     glViewport(
                         p.viewport.x(),
                         p.renderSize.h - p.viewport.h() - p.viewport.y(),
@@ -584,6 +583,8 @@ namespace tl
                         p.vaos["video"]->draw(
                             GL_TRIANGLES, 0, p.vbos["video"]->getSize());
                     }
+                    
+                    glEnable(GL_BLEND);
                 }
             }
         }
@@ -710,8 +711,7 @@ namespace tl
 
                 if (p.buffers["multiply0"] && p.buffers["multiply1"])
                 {
-                    glBlendFuncSeparate(
-                        GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+                    glDisable(GL_BLEND);
 
                     glViewport(
                         p.viewport.x(),
@@ -742,6 +742,8 @@ namespace tl
                         p.vaos["video"]->draw(
                             GL_TRIANGLES, 0, p.vbos["video"]->getSize());
                     }
+                    
+                    glEnable(GL_BLEND);
                 }
             }
         }
@@ -868,8 +870,7 @@ namespace tl
 
                 if (p.buffers["add0"] && p.buffers["add1"])
                 {
-                    glBlendFuncSeparate(
-                        GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+                    glDisable(GL_BLEND);
 
                     glViewport(
                         p.viewport.x(),
@@ -900,6 +901,8 @@ namespace tl
                         p.vaos["video"]->draw(
                             GL_TRIANGLES, 0, p.vbos["video"]->getSize());
                     }
+                    
+                    glEnable(GL_BLEND);
                 }
             }
         }

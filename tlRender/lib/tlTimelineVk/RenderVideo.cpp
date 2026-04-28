@@ -846,7 +846,7 @@ namespace tl
                     const std::string pipelineLayoutName = "difference";
                     const std::string shaderName = "difference";
                     const std::string meshName = "video";
-                    const bool enableBlending = true;  
+                    const bool enableBlending = false;  
                     createPipeline(p.fbo, pipelineName,
                                    pipelineLayoutName, shaderName, meshName,
                                    enableBlending,
@@ -968,7 +968,7 @@ namespace tl
                     const std::string pipelineLayoutName = "multiply";
                     const std::string shaderName = "multiply";
                     const std::string meshName = "video";
-                    const bool enableBlending = true;  
+                    const bool enableBlending = false;  
                     createPipeline(p.fbo, pipelineName,
                                    pipelineLayoutName, shaderName, meshName,
                                    enableBlending,
@@ -1074,15 +1074,7 @@ namespace tl
 
                 if (p.buffers["add0"] && p.buffers["add1"])
                 {
-                    // glBlendFuncSeparate(
-                    //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-
-                    // glViewport(
-                    //     p.viewport.x(),
-                    //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
-                    //     p.viewport.w(), p.viewport.h());
-
-                    // Transition buffers to color read
+                    // Transition buffers to shader read
                     p.buffers["add0"]->transitionToShaderRead(p.cmd);
                     p.buffers["add1"]->transitionToShaderRead(p.cmd);
 
@@ -1090,7 +1082,7 @@ namespace tl
                     const std::string pipelineLayoutName = "add";
                     const std::string shaderName = "add";
                     const std::string meshName = "video";
-                    const bool enableBlending = true;  
+                    const bool enableBlending = false;  
                     createPipeline(p.fbo, pipelineName,
                                    pipelineLayoutName, shaderName, meshName,
                                    enableBlending,
