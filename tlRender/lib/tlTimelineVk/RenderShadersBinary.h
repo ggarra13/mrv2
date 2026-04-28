@@ -14,6 +14,8 @@
 #include "shaders/colorMeshVertex.spv.h"
 #include "shaders/colorMeshFragment.spv.h"
 #include "shaders/differenceFragment.spv.h"
+#include "shaders/addFragment.spv.h"
+#include "shaders/multiplyFragment.spv.h"
 #include "shaders/dummyFragment.spv.h"
 #include "shaders/hardFragment.spv.h"
 #include "shaders/imageFragment.spv.h"

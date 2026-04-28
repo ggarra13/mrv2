@@ -417,6 +417,24 @@ namespace mrv
         model->setCompareOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
+    
+    void compare_add_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::Add;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+    
+    void compare_multiply_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::Multiply;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
 
     void compare_horizontal_cb(Fl_Widget* w, ViewerUI* ui)
     {

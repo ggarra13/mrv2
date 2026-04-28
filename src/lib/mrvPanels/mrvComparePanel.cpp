@@ -24,6 +24,8 @@
 #include "mrvIcons/CompareA.h"
 #include "mrvIcons/CompareB.h"
 #include "mrvIcons/CompareDifference.h"
+#include "mrvIcons/CompareAdd.h"
+#include "mrvIcons/CompareMultiply.h"
 #include "mrvIcons/CompareHorizontal.h"
 #include "mrvIcons/CompareTile.h"
 #include "mrvIcons/CompareVertical.h"
@@ -338,6 +340,27 @@ namespace mrv
                     compare_tile_cb(nullptr, p.ui);
                 });
 
+            bW = new Widget< Button >(X + 210, Y, 30, 30);
+            b = bW;
+            b->bind_image(MRV2_LOAD_SVG(CompareAdd));
+            b->tooltip(_("Add the A and B files"));
+
+            bW->callback(
+                [=](auto w)
+                {
+                    compare_add_cb(nullptr, p.ui);
+                });
+            bW = new Widget< Button >(X + 210, Y, 30, 30);
+            b = bW;
+            b->bind_image(MRV2_LOAD_SVG(CompareMultiply));
+            b->tooltip(_("Multiply the A and B files"));
+
+            bW->callback(
+                [=](auto w)
+                {
+                    compare_multiply_cb(nullptr, p.ui);
+                });
+            
             bW = new Widget< Button >(X + 240, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(Prev));

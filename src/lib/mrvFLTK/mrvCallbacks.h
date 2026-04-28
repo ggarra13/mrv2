@@ -78,7 +78,11 @@ namespace mrv
     void compare_b_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_wipe_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_overlay_cb(Fl_Widget* w, ViewerUI* ui);
+
     void compare_difference_cb(Fl_Widget* w, ViewerUI* ui);
+    void compare_add_cb(Fl_Widget* w, ViewerUI* ui);
+    void compare_multiply_cb(Fl_Widget* w, ViewerUI* ui);
+    
     void compare_horizontal_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_vertical_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_tile_cb(Fl_Widget* w, ViewerUI* ui);

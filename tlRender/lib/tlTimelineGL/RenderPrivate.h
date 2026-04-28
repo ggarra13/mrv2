@@ -49,6 +49,8 @@ namespace tl
             const std::string& debandingDef = "",
             const std::string& debanding = "");
         std::string differenceFragmentSource();
+        std::string addFragmentSource();
+        std::string multiplyFragmentSource();
 
         std::vector<std::shared_ptr<gl::Texture> > getTextures(
             const image::Info&, const timeline::ImageFilters&,
