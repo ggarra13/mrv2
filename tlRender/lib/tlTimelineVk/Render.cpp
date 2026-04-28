@@ -1190,6 +1190,50 @@ namespace tl
 
                 _createBindingSet(p.shaders["difference"]);
             }
+            if (!p.shaders["multiply"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["multiply"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    multiplyFragment_spv,
+                    multiplyFragment_spv_len, "multiply");
+#else
+                p.shaders["multiply"] = vlk::Shader::create(
+                    ctx, vertexSource(), multiplyFragmentSource(),
+                    "multiply");
+#endif
+
+                p.shaders["multiply"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["multiply"]->addFBO("textureSampler");
+                p.shaders["multiply"]->addFBO("textureSamplerB");
+
+                _createBindingSet(p.shaders["multiply"]);
+            }
+            if (!p.shaders["add"])
+            {
+#if USE_PRECOMPILED_SHADERS
+                p.shaders["add"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    addFragment_spv,
+                    addFragment_spv_len, "add");
+#else
+                p.shaders["add"] = vlk::Shader::create(
+                    ctx, vertexSource(), addFragmentSource(),
+                    "add");
+#endif
+
+                p.shaders["add"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["add"]->addFBO("textureSampler");
+                p.shaders["add"]->addFBO("textureSamplerB");
+
+                _createBindingSet(p.shaders["add"]);
+            }
             if (!p.shaders["dissolve"])
             {
 #if USE_PRECOMPILED_SHADERS

@@ -65,6 +65,8 @@ namespace tl
         std::string textFragmentSource();
         std::string textureFragmentSource();
         std::string differenceFragmentSource();
+        std::string multiplyFragmentSource();
+        std::string addFragmentSource();
         std::string debandingFragmentSource(const float threshold = 48.F,
                                             const float range = 16.F,
                                             const int iterations = 1,

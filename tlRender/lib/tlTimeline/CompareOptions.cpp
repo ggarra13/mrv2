@@ -18,7 +18,7 @@ namespace tl
     {
         TLRENDER_ENUM_IMPL(
             CompareMode, "A", "B", "Wipe", "Overlay", "Difference",
-            "Horizontal", "Vertical", "Tile");
+            "Multiply", "Add", "Horizontal", "Vertical", "Tile");
         TLRENDER_ENUM_SERIALIZE_IMPL(CompareMode);
 
         TLRENDER_ENUM_IMPL(CompareTimeMode, "Relative", "Absolute");

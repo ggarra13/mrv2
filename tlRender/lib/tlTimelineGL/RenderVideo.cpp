@@ -64,6 +64,34 @@ namespace tl
                         compareOptions);
                 }
                 break;
+            case timeline::CompareMode::Multiply:
+                if (videoData.size() > 1)
+                {
+                    _drawVideoMultiply(
+                        videoData, boxes, imageOptions, displayOptions,
+                        compareOptions);
+                }
+                else
+                {
+                    _drawVideoA(
+                        videoData, boxes, imageOptions, displayOptions,
+                        compareOptions);
+                }
+                break;
+            case timeline::CompareMode::Add:
+                if (videoData.size() > 1)
+                {
+                    _drawVideoAdd(
+                        videoData, boxes, imageOptions, displayOptions,
+                        compareOptions);
+                }
+                else
+                {
+                    _drawVideoA(
+                        videoData, boxes, imageOptions, displayOptions,
+                        compareOptions);
+                }
+                break;
             case timeline::CompareMode::Horizontal:
             case timeline::CompareMode::Vertical:
             case timeline::CompareMode::Tile:
@@ -543,6 +571,322 @@ namespace tl
                     glActiveTexture(static_cast<GLenum>(GL_TEXTURE1));
                     glBindTexture(
                         GL_TEXTURE_2D, p.buffers["difference1"]->getColorID());
+
+                    if (p.vbos["video"])
+                    {
+                        p.vbos["video"]->copy(convert(
+                            geom::box(boxes[0], true),
+                            p.vbos["video"]->getType()));
+                    }
+                    if (p.vaos["video"])
+                    {
+                        p.vaos["video"]->bind();
+                        p.vaos["video"]->draw(
+                            GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                    }
+                }
+            }
+        }
+
+        void Render::_drawVideoMultiply(
+            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions,
+            const timeline::CompareOptions& compareOptions)
+        {
+            TLRENDER_P();
+            if (!videoData.empty() && !boxes.empty())
+            {
+                const math::Size2i offscreenBufferSize(
+                    boxes[0].w(), boxes[0].h());
+                gl::OffscreenBufferOptions offscreenBufferOptions;
+                offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
+                if (!displayOptions.empty())
+                {
+                    offscreenBufferOptions.colorFilters =
+                        displayOptions[0].imageFilters;
+                }
+                if (doCreate(
+                        p.buffers["multiply0"], offscreenBufferSize,
+                        offscreenBufferOptions))
+                {
+                    p.buffers["multiply0"] = gl::OffscreenBuffer::create(
+                        offscreenBufferSize, offscreenBufferOptions);
+                }
+
+                if (p.buffers["multiply0"])
+                {
+                    const gl::SetAndRestore scissorTest(
+                        GL_SCISSOR_TEST, GL_FALSE);
+
+                    gl::OffscreenBufferBinding binding(
+                        p.buffers["multiply0"]);
+                    glViewport(
+                        0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
+                    glClearColor(0.F, 0.F, 0.F, 0.F);
+                    glClear(GL_COLOR_BUFFER_BIT);
+
+                    p.shaders["display"]->bind();
+                    p.shaders["display"]->setUniform(
+                        "transform.mvp",
+                        math::ortho(
+                            0.F, static_cast<float>(offscreenBufferSize.w),
+                            static_cast<float>(offscreenBufferSize.h), 0.F,
+                            -1.F, 1.F));
+
+                    _drawVideo(
+                        videoData[0],
+                        math::Box2i(
+                            0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
+                        !imageOptions.empty()
+                            ? std::make_shared<timeline::ImageOptions>(
+                                  imageOptions[0])
+                            : nullptr,
+                        !displayOptions.empty() ? displayOptions[0]
+                                                : timeline::DisplayOptions());
+
+                    p.shaders["display"]->bind();
+                    p.shaders["display"]->setUniform(
+                        "transform.mvp", p.transform);
+                }
+
+                if (videoData.size() > 1)
+                {
+                    offscreenBufferOptions = gl::OffscreenBufferOptions();
+                    offscreenBufferOptions.colorType =
+                        p.renderOptions.colorBuffer;
+                    if (displayOptions.size() > 1)
+                    {
+                        offscreenBufferOptions.colorFilters =
+                            displayOptions[1].imageFilters;
+                    }
+                    if (doCreate(
+                            p.buffers["multiply1"], offscreenBufferSize,
+                            offscreenBufferOptions))
+                    {
+                        p.buffers["multiply1"] = gl::OffscreenBuffer::create(
+                            offscreenBufferSize, offscreenBufferOptions);
+                    }
+
+                    if (p.buffers["multiply1"])
+                    {
+                        const gl::SetAndRestore scissorTest(
+                            GL_SCISSOR_TEST, GL_FALSE);
+
+                        gl::OffscreenBufferBinding binding(
+                            p.buffers["multiply1"]);
+                        glViewport(
+                            0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
+                        glClearColor(0.F, 0.F, 0.F, 0.F);
+                        glClear(GL_COLOR_BUFFER_BIT);
+
+                        p.shaders["display"]->bind();
+                        p.shaders["display"]->setUniform(
+                            "transform.mvp",
+                            math::ortho(
+                                0.F, static_cast<float>(offscreenBufferSize.w),
+                                static_cast<float>(offscreenBufferSize.h), 0.F,
+                                -1.F, 1.F));
+
+                        _drawVideo(
+                            videoData[1],
+                            math::Box2i(
+                                0, 0, offscreenBufferSize.w,
+                                offscreenBufferSize.h),
+                            imageOptions.size() > 1
+                                ? std::make_shared<timeline::ImageOptions>(
+                                      imageOptions[1])
+                                : nullptr,
+                            displayOptions.size() > 1
+                                ? displayOptions[1]
+                                : timeline::DisplayOptions());
+                    }
+                }
+                else
+                {
+                    p.buffers["multiply1"].reset();
+                }
+
+                if (p.buffers["multiply0"] && p.buffers["multiply1"])
+                {
+                    glBlendFuncSeparate(
+                        GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+
+                    glViewport(
+                        p.viewport.x(),
+                        p.renderSize.h - p.viewport.h() - p.viewport.y(),
+                        p.viewport.w(), p.viewport.h());
+
+                    p.shaders["multiply"]->bind();
+                    p.shaders["multiply"]->setUniform("textureSampler", 0);
+                    p.shaders["multiply"]->setUniform("textureSamplerB", 1);
+
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
+                    glBindTexture(
+                        GL_TEXTURE_2D, p.buffers["multiply0"]->getColorID());
+
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE1));
+                    glBindTexture(
+                        GL_TEXTURE_2D, p.buffers["multiply1"]->getColorID());
+
+                    if (p.vbos["video"])
+                    {
+                        p.vbos["video"]->copy(convert(
+                            geom::box(boxes[0], true),
+                            p.vbos["video"]->getType()));
+                    }
+                    if (p.vaos["video"])
+                    {
+                        p.vaos["video"]->bind();
+                        p.vaos["video"]->draw(
+                            GL_TRIANGLES, 0, p.vbos["video"]->getSize());
+                    }
+                }
+            }
+        }
+        
+        void Render::_drawVideoAdd(
+            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions,
+            const timeline::CompareOptions& compareOptions)
+        {
+            TLRENDER_P();
+            if (!videoData.empty() && !boxes.empty())
+            {
+                const math::Size2i offscreenBufferSize(
+                    boxes[0].w(), boxes[0].h());
+                gl::OffscreenBufferOptions offscreenBufferOptions;
+                offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
+                if (!displayOptions.empty())
+                {
+                    offscreenBufferOptions.colorFilters =
+                        displayOptions[0].imageFilters;
+                }
+                if (doCreate(
+                        p.buffers["add0"], offscreenBufferSize,
+                        offscreenBufferOptions))
+                {
+                    p.buffers["add0"] = gl::OffscreenBuffer::create(
+                        offscreenBufferSize, offscreenBufferOptions);
+                }
+
+                if (p.buffers["add0"])
+                {
+                    const gl::SetAndRestore scissorTest(
+                        GL_SCISSOR_TEST, GL_FALSE);
+
+                    gl::OffscreenBufferBinding binding(
+                        p.buffers["add0"]);
+                    glViewport(
+                        0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
+                    glClearColor(0.F, 0.F, 0.F, 0.F);
+                    glClear(GL_COLOR_BUFFER_BIT);
+
+                    p.shaders["display"]->bind();
+                    p.shaders["display"]->setUniform(
+                        "transform.mvp",
+                        math::ortho(
+                            0.F, static_cast<float>(offscreenBufferSize.w),
+                            static_cast<float>(offscreenBufferSize.h), 0.F,
+                            -1.F, 1.F));
+
+                    _drawVideo(
+                        videoData[0],
+                        math::Box2i(
+                            0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
+                        !imageOptions.empty()
+                            ? std::make_shared<timeline::ImageOptions>(
+                                  imageOptions[0])
+                            : nullptr,
+                        !displayOptions.empty() ? displayOptions[0]
+                                                : timeline::DisplayOptions());
+
+                    p.shaders["display"]->bind();
+                    p.shaders["display"]->setUniform(
+                        "transform.mvp", p.transform);
+                }
+
+                if (videoData.size() > 1)
+                {
+                    offscreenBufferOptions = gl::OffscreenBufferOptions();
+                    offscreenBufferOptions.colorType =
+                        p.renderOptions.colorBuffer;
+                    if (displayOptions.size() > 1)
+                    {
+                        offscreenBufferOptions.colorFilters =
+                            displayOptions[1].imageFilters;
+                    }
+                    if (doCreate(
+                            p.buffers["add1"], offscreenBufferSize,
+                            offscreenBufferOptions))
+                    {
+                        p.buffers["add1"] = gl::OffscreenBuffer::create(
+                            offscreenBufferSize, offscreenBufferOptions);
+                    }
+
+                    if (p.buffers["add1"])
+                    {
+                        const gl::SetAndRestore scissorTest(
+                            GL_SCISSOR_TEST, GL_FALSE);
+
+                        gl::OffscreenBufferBinding binding(
+                            p.buffers["add1"]);
+                        glViewport(
+                            0, 0, offscreenBufferSize.w, offscreenBufferSize.h);
+                        glClearColor(0.F, 0.F, 0.F, 0.F);
+                        glClear(GL_COLOR_BUFFER_BIT);
+
+                        p.shaders["display"]->bind();
+                        p.shaders["display"]->setUniform(
+                            "transform.mvp",
+                            math::ortho(
+                                0.F, static_cast<float>(offscreenBufferSize.w),
+                                static_cast<float>(offscreenBufferSize.h), 0.F,
+                                -1.F, 1.F));
+
+                        _drawVideo(
+                            videoData[1],
+                            math::Box2i(
+                                0, 0, offscreenBufferSize.w,
+                                offscreenBufferSize.h),
+                            imageOptions.size() > 1
+                                ? std::make_shared<timeline::ImageOptions>(
+                                      imageOptions[1])
+                                : nullptr,
+                            displayOptions.size() > 1
+                                ? displayOptions[1]
+                                : timeline::DisplayOptions());
+                    }
+                }
+                else
+                {
+                    p.buffers["add1"].reset();
+                }
+
+                if (p.buffers["add0"] && p.buffers["add1"])
+                {
+                    glBlendFuncSeparate(
+                        GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+
+                    glViewport(
+                        p.viewport.x(),
+                        p.renderSize.h - p.viewport.h() - p.viewport.y(),
+                        p.viewport.w(), p.viewport.h());
+
+                    p.shaders["add"]->bind();
+                    p.shaders["add"]->setUniform("textureSampler", 0);
+                    p.shaders["add"]->setUniform("textureSamplerB", 1);
+
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
+                    glBindTexture(
+                        GL_TEXTURE_2D, p.buffers["add0"]->getColorID());
+
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE1));
+                    glBindTexture(
+                        GL_TEXTURE_2D, p.buffers["add1"]->getColorID());
 
                     if (p.vbos["video"])
                     {

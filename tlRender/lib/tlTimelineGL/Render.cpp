@@ -661,6 +661,16 @@ namespace tl
                 p.shaders["difference"] = gl::Shader::create(
                     vertexSource(), differenceFragmentSource());
             }
+            if (!p.shaders["add"])
+            {
+                p.shaders["add"] = gl::Shader::create(
+                    vertexSource(), addFragmentSource());
+            }
+            if (!p.shaders["multiply"])
+            {
+                p.shaders["multiply"] = gl::Shader::create(
+                    vertexSource(), multiplyFragmentSource());
+            }
             if (!p.shaders["dissolve"])
             {
                 p.shaders["dissolve"] =

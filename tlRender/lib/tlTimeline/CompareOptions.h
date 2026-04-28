@@ -17,6 +17,8 @@ namespace tl
             Wipe,
             Overlay,
             Difference,
+            Multiply,
+            Add,
             Horizontal,
             Vertical,
             Tile,

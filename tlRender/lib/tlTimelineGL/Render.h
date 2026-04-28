@@ -136,6 +136,18 @@ namespace tl
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
+            void _drawVideoAdd(
+                const std::vector<timeline::VideoData>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&,
+                const timeline::CompareOptions&);
+            void _drawVideoMultiply(
+                const std::vector<timeline::VideoData>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&,
+                const timeline::CompareOptions&);
             void _drawVideoTile(
                 const std::vector<timeline::VideoData>&,
                 const std::vector<math::Box2i>&,
