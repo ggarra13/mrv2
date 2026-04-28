@@ -41,6 +41,6 @@ if [[ $KERNEL == *Darwin* ]]; then
 fi
 
 #
-# Start up mrv2
+# Start up hdr
 #
 "${dir}/bin/hdr" "$@"
