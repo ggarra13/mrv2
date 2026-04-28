@@ -234,9 +234,9 @@ if [[ ! -f "$HISTORY" ]]; then
 fi
 
 # Find the line number of "v${mrv2_VERSION}" in the file
-start_lines=$(grep -n "^ChangeLog" "$HISTORY" | cut -d':' -f1)
+start_lines=$(grep -n "^Change Log" "$HISTORY" | cut -d':' -f1)
 if [[ -z "$start_lines" ]]; then
-    echo "Error: Version v${mrv2_VERSION} has no ChangeLog in $HISTORY."
+    echo "Error: Version v${mrv2_VERSION} has no Change Log in $HISTORY."
     exit 1
 fi
 

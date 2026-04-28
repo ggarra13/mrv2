@@ -37,6 +37,10 @@ namespace tl
                 if (readerType == TfToken("UsdPrimvarReader_float3"))
                     return TfToken("color");      // or "vector" — ambiguous
             }
+            
+            TfToken name = pv.GetName();
+            if (name == TfToken("primvars:st"))
+                return TfToken("st");
 
             return TfToken("generic");
         }
