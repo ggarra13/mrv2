@@ -76,6 +76,7 @@ namespace mrv
     //! Compare callbacks
     void compare_a_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_b_cb(Fl_Widget* w, ViewerUI* ui);
+    void toggle_compare_a_and_b_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_wipe_cb(Fl_Widget* w, ViewerUI* ui);
     void compare_overlay_cb(Fl_Widget* w, ViewerUI* ui);
 

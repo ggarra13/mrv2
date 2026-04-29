@@ -1469,6 +1469,7 @@ namespace mrv
                 if (o.mode == timeline::CompareMode::B)
                     item->set();
 
+                mode = FL_MENU_RADIO;
                 idx = menu->add(
                     _("Image/Compare Mode/Wipe"), 0,
                     (Fl_Callback*)compare_wipe_cb, ui, mode);
@@ -1534,7 +1535,8 @@ namespace mrv
 
                     const auto& path = files[i]->path;
                     fileName = path.getBaseName() + path.getNumber() +
-                               path.getExtension();
+                               path.getSuffix() + path.getExtension() +
+                               path.getRequest();
                     snprintf(buf, 256, _("Image/Go to/%s"), fileName.c_str());
                     std::uintptr_t ptr = i;
                     idx = menu->add(
@@ -1544,7 +1546,12 @@ namespace mrv
                         item->set();
                     else
                         item->clear();
-
+                    
+                    idx = menu->add(
+                        _("Image/Compare/Toggle A and B"), 0,
+                        (Fl_Callback*)toggle_compare_a_and_b_cb,
+                        ui, 0);
+                
                     snprintf(buf, 256, _("Image/Compare/%s"), fileName.c_str());
                     idx = menu->add(
                         buf, 0, (Fl_Callback*)select_Bfile_cb, (void*)ptr,

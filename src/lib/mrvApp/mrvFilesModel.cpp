@@ -250,7 +250,9 @@ namespace mrv
             p.layers->setAlways(_getLayers());
         }
     }
-
+    
+    // value == true → “make sure this index is included in B”
+    // value == false → “make sure this index is NOT included in B”
     void FilesModel::setB(int index, bool value)
     {
         TLRENDER_P();

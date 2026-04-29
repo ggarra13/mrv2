@@ -92,7 +92,8 @@ namespace mrv
             auto item = model->observeA()->get();
             auto path = item->path;
             std::string title =
-                path.getBaseName() + path.getNumber() + path.getExtension();
+                path.getBaseName() + path.getNumber() + path.getSuffix() +
+                path.getExtension();
 
             char page_title[256];
             /* xgettext:c-format */

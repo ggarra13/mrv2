@@ -372,6 +372,22 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void toggle_compare_a_and_b_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto aIndex = model->observeAIndex()->get();
+        if (aIndex < 0)
+            return;
+        auto bIndexes = model->observeBIndexes()->get();
+        if (bIndexes.size() != 1)
+            return;
+
+        model->setA(bIndexes[0]);
+        model->setB(aIndex, true);
+        
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void compare_a_cb(Fl_Widget* w, ViewerUI* ui)
     {
         auto model = App::app->filesModel();

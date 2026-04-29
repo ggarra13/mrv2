@@ -47,8 +47,11 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
-- Added two new Compare Modes (Add and Multiply).
+- Added two new Compare Modes (Add and Multiply).  Multiply can be useful to check ambient occlusion passes.
 - Fixed missing src/bin/usdviewer.sh file.
+- Added Image->Compare->Toggle A and B to easily switch the order of comparisons.
+- Fixed missing suffixes in Image->Go To.
+- Fixed missing suffixes in PDF's images creation titles.
 
 
 v1.6.2
