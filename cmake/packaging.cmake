@@ -224,6 +224,8 @@ elseif(UNIX)
 	"${PROJECT_BINARY_DIR}/etc/${mrv2_NAME}-v${mrv2_VERSION}.desktop" )
     configure_file( ${MRV2_DIR}/etc/Linux/hdr.desktop.in
 	"${PROJECT_BINARY_DIR}/etc/hdr-v${mrv2_VERSION}.desktop" )
+    configure_file( ${MRV2_DIR}/etc/Linux/usdviewer.desktop.in
+	"${PROJECT_BINARY_DIR}/etc/usdviewer-v${mrv2_VERSION}.desktop" )
 
     #
     # This desktop file is for Wayland to set its icon correctly.
@@ -251,6 +253,22 @@ elseif(UNIX)
     else()
 	message(STATUS "-----------No hdr utility------------------")
     endif()
+    
+    if (EXISTS "${CMAKE_INSTALL_PREFIX}/bin/usdviewer")
+	message(STATUS "-----------usdviewer utility------------------")
+	configure_file( ${MRV2_DIR}/etc/Linux/usdviewer.main.desktop.in
+	    "${PROJECT_BINARY_DIR}/etc/usdviewer.desktop")
+	configure_file( ${MRV2_DIR}/etc/Linux/usdviewer.desktop.in
+	    "${PROJECT_BINARY_DIR}/etc/usdviewer-v${mrv2_VERSION}.desktop")
+    
+	install(FILES "${PROJECT_BINARY_DIR}/etc/usdviewer.desktop"
+	    DESTINATION share/applications COMPONENT applications)
+	install(FILES "${PROJECT_BINARY_DIR}/etc/usdviewer-v${mrv2_VERSION}.desktop"
+	    DESTINATION share/applications COMPONENT applications)
+    else()
+	message(STATUS "-----------No usdviewer utility------------------")
+    endif()
+
 
 
     set(CPACK_INSTALL_PREFIX /usr/local/${mrv2ShortName})

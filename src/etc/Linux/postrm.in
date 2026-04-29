@@ -8,6 +8,12 @@ if [[ -L /usr/bin/hdr ]]; then
     has_hdr=1
 fi
 
+has_usdviewer=0
+if [[ -L /usr/bin/usdviewer ]]; then
+    has_usdviewer=1
+fi
+
+
 # Remove /usr/bin/mrv2 if it is a symlink to our version
 removed=0
 fullpath=""
@@ -19,6 +25,9 @@ if [[ -L /usr/bin/@mrv2_NAME@ ]]; then
 	rm -f /usr/bin/@mrv2_NAME@
 	if [[ $has_hdr == 1 ]]; then
 	    rm -f /usr/bin/hdr
+	fi
+	if [[ $has_usdviewer == 1 ]]; then
+	    rm -f /usr/bin/usdviewer
 	fi
 	removed=1
     else
@@ -42,6 +51,9 @@ rm -f /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@
 if [[ -e /usr/bin/hdr-v@mrv2_VERSION@ ]]; then
     rm -f /usr/bin/hdr-v@mrv2_VERSION@
 fi
+if [[ -e /usr/bin/usdviewer-v@mrv2_VERSION@ ]]; then
+    rm -f /usr/bin/usdviewer-v@mrv2_VERSION@
+fi
 
 # Find the closest version folder in /usr/bin
 closest_version=$(ls -1 "/usr/local/" | grep "^@mrv2_NAME@-v" | sort -V | tail -n 1)
@@ -55,6 +67,10 @@ if [[ -n "$closest_version" && $removed == 1 ]]; then
 	ln -s "/usr/local/$closest_version/bin/hdr.sh" "/usr/bin/hdr"
 	echo "Created a new symbolic link: $closest_version -> /usr/bin/hdr"
     fi
+    if [[ $has_usdviewer == 1 ]]; then
+	ln -s "/usr/local/$closest_version/bin/usdviewer.sh" "/usr/bin/usdviewer"
+	echo "Created a new symbolic link: $closest_version -> /usr/bin/usdviewer"
+    fi
 else
     if [[ $removed == 1 ]]; then
 	echo "No suitable version found to create a symbolic link."
@@ -62,6 +78,9 @@ else
 	rm -f /usr/share/applications/@mrv2_NAME@.desktop
 	if [[ $has_hdr == 1 ]]; then
 	    rm -f /usr/share/applications/hdr.desktop
+	fi
+	if [[ $has_usdviewer == 1 ]]; then
+	    rm -f /usr/share/applications/usdviewer.desktop
 	fi
 	
 	#
@@ -72,6 +91,9 @@ else
 	    rm -f $icons_dir/@mrv2_NAME@.png
 	    if [[ $has_hdr == 1 ]]; then
 		rm -f $icons_dir/hdr.png
+	    fi
+	    if [[ $has_usdviewer == 1 ]]; then
+		rm -f $icons_dir/usdviewer.png
 	    fi
 	done
     fi
@@ -88,12 +110,16 @@ if [ "$full_dir" != "$desktop_dir" ]; then
 fi
 
 #
-# Remove Desktop shortcut
+# Remove Desktop shortcuts
 #
 rm -f "${desktop_dir}/@mrv2_NAME@-v@mrv2_VERSION@.desktop"
 
 if [ -e "${desktop_dir}/hdr-v@mrv2_VERSION@.desktop" ]; then
     rm -f "${desktop_dir}/hdr-v@mrv2_VERSION@.desktop"
+fi
+
+if [ -e "${desktop_dir}/usdviewer-v@mrv2_VERSION@.desktop" ]; then
+    rm -f "${desktop_dir}/usdviewer-v@mrv2_VERSION@.desktop"
 fi
 
 #
@@ -104,6 +130,9 @@ for i in $ICON_SIZES; do
     rm -f $icons_dir/@mrv2_NAME@-v@mrv2_VERSION@.png
     if [[ $has_hdr == 1 ]]; then
 	rm -f $icons_dir/hdr-v@mrv2_VERSION@.png
+    fi
+    if [[ $has_usdviewer == 1 ]]; then
+	rm -f $icons_dir/usdviewer-v@mrv2_VERSION@.png
     fi
 done
 

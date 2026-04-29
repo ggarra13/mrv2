@@ -1147,10 +1147,6 @@ namespace tl
         {
             TLRENDER_P();
             
-            // \@todo: \@bug?: there's no such call in Vulkan.
-            // GLint viewportPrev[4] = {0, 0, 0, 0};
-            // glGetIntegerv(GL_VIEWPORT, viewportPrev);
-            
             // Saving and restoring the old matrix is needed for tiling.
             math::Matrix4x4 oldTransform = p.transform;
             p.transform = math::ortho(0.F, static_cast<float>(box.w()),
