@@ -77,7 +77,7 @@ if [[ $KERNEL != *Windows* ]]; then
 		run_cmd rm -f ~/bin/vmrv2
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/vmrv2
 		run_cmd rm -f ~/bin/usdviewer
-		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/usdviewer ~/bin/usdviewer
+		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/usdviewer.sh ~/bin/usdviewer
 	    else
 		run_cmd rm -f ~/bin/mrv2
 		run_cmd ln -s $PWD/$BUILD_DIR/install/bin/mrv2.sh ~/bin/mrv2
