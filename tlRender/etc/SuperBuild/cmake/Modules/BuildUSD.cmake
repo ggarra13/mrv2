@@ -14,7 +14,7 @@ message(STATUS "USD DEPENDENCIES=${USD_DEPENDENCIES}")
 
 set(USD_GIT_REPOSITORY https://github.com/PixarAnimationStudios/OpenUSD.git)
 
-set(USD_GIT_TAG v26.03)  # was v25.11
+set(USD_GIT_TAG v26.05)  # was v25.03 (with bandaid)
 
 #
 # If you are building a new USD version, make sure to run:
@@ -42,11 +42,6 @@ if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET)
         oneTBB,-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
         oneTBB,-DCMAKE_CXX_OSX_DEPLOYMENT_TARGET_FLAG:STRING="-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}"
         oneTBB,-DCMAKE_C_OSX_DEPLOYMENT_TARGET_FLAG:STRING="-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-elseif(UNIX AND NOT APPLE)
-    list(APPEND USD_ARGS --build-args)
-    set(_include_bandaid "-include cstdint")
-    list(APPEND USD_ARGS USD,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
-    list(APPEND USD_ARGS MaterialX,"-DCMAKE_CXX_FLAGS='${_include_bandaid}'")
 endif()
 
 list(APPEND USD_ARGS --no-python --no-examples --no-tutorials --no-tools)
