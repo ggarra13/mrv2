@@ -2769,6 +2769,9 @@ std::string Flu_File_Chooser::formatDate(const char* d)
 
 void Flu_File_Chooser::cleanupPath(std::string& s)
 {
+    if (s == "/")
+        return;
+    
     try
     {
         s = fs::canonical(fs::path(s)).u8string();
@@ -2777,7 +2780,8 @@ void Flu_File_Chooser::cleanupPath(std::string& s)
     {
         s = mrv::string::normalizePath(s);
     }
-    if (!s.empty() && s.back() != '/') s += '/';  // Ensure trailing slash
+    if (!s.empty() && s.back() != '/')
+        s += '/';  // Ensure trailing slash
 }
 
 void Flu_File_Chooser::backCB()
@@ -2978,7 +2982,7 @@ void Flu_File_Chooser::buildLocationCombo()
                 }
                 drives[i] =
                     std::string(disk) + " (" + std::string(drive) + ")/";
-                s += mrv::string::commentCharacter(drives[i]);
+                s = mrv::string::commentCharacter(drives[i]);
                 n = location->tree.add(s.c_str());
                 if (n)
                     n->usericon(driveIcons[i]);
