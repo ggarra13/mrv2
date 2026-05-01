@@ -79,8 +79,8 @@ if [[ $KERNEL == *Darwin* ]]; then
     fi
 fi
 
-if [[ $FLAGS == "" ]]; then
-    export FLAGS="-j ${CPU_CORES}"
+if [[ ! " $FLAGS " =~ [[:space:]]-j([0-9]+)?[[:space:]] ]]; then
+    FLAGS="-j ${CPU_CORES} ${FLAGS}"
 fi
 export FLAGS="${FLAGS} $*"
 

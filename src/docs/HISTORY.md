@@ -52,6 +52,8 @@ ChangeLog
 - Added Image->Compare->Toggle A and B to easily switch the order of comparisons.
 - Fixed missing suffixes in Image->Go To.
 - Fixed missing suffixes in PDF's images creation titles.
+- Fixed the Non-Native File Requester on Windows not allowing to show the drives.
+- Fixed building on the cloud with potentiall only 1 CPU.
 
 
 v1.6.2
