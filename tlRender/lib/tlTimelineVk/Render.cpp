@@ -2346,7 +2346,8 @@ namespace tl
                     }
                     p.ocioData->lvp->setDisplayViewTransform(
                         p.ocioData->transform);
-                    p.ocioData->lvp->setLooksOverrideEnabled(true);
+                    const bool hasLooks = !p.ocioOptions.look.empty();
+                    p.ocioData->lvp->setLooksOverrideEnabled(hasLooks);
                     p.ocioData->lvp->setLooksOverride(
                         p.ocioOptions.look.c_str());
 
