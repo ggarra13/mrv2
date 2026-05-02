@@ -54,6 +54,7 @@ ChangeLog
 - Fixed missing suffixes in PDF's images creation titles.
 - Fixed the Non-Native File Requester on Windows not allowing to show the drives.
 - Fixed building on the cloud with potentiall only 1 CPU.
+- Fixed OCIO Looks always overriding potential Looks attached to a custom Display transform.
 
 
 v1.6.2
