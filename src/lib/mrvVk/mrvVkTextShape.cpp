@@ -43,6 +43,12 @@ namespace
                 (cp >= 0x1F3FB && cp <= 0x1F3FF));   // Skin Tone
     }
     
+    std::string _getFontFamily(const tl::file::Path& path)
+    {
+        std::string out;
+        out = path.getBaseName() + path.getNumber() + path.getSuffix();
+        return out;
+    }
 } // namespace
 
 namespace mrv
@@ -441,7 +447,8 @@ namespace mrv
     int VKTextShape::handle_mouse_click(int event, const math::Vector2i& local)
     {
         file::Path path(fontPath);
-        const std::string fontFamily = path.getBaseName();
+        const std::string fontFamily = _getFontFamily(path);
+        
         const image::FontInfo fontInfo(fontFamily, fontSize);
         const image::FontMetrics fontMetrics = fontSystem->getMetrics(fontInfo);
         const int ascender = fontMetrics.ascender;
@@ -495,13 +502,13 @@ namespace mrv
         // Add selected font.
         //
         const file::Path path(fontPath);
-        const std::string fontFamily = path.getBaseName();
+        const std::string fontFamily = _getFontFamily(path);
         
         //
         // Add emoji font.
         //
         const file::Path emojiPath = image::emojiFont();
-        const std::string emojiFamily = emojiPath.getBaseName();
+        const std::string emojiFamily = _getFontFamily(emojiPath);
         
         //
         // Get metrics for selected font.
@@ -603,13 +610,13 @@ namespace mrv
         // Add selected font.
         //
         const file::Path path(fontPath);
-        const std::string fontFamily = path.getBaseName();
+        const std::string fontFamily = _getFontFamily(path);
         
         //
         // Add emoji font.
         //
         const file::Path emojiPath = image::emojiFont();
-        const std::string emojiFamily = emojiPath.getBaseName();
+        const std::string emojiFamily = _getFontFamily(emojiPath);
         
         //
         // Get metrics for selected font.
@@ -703,7 +710,8 @@ namespace mrv
         // Add selected font.
         //
         const file::Path path(fontPath);
-        const std::string fontFamily = path.getBaseName();
+        const std::string fontFamily = _getFontFamily(path);
+        
         if (!fontSystem->hasFont(fontFamily))
         {
             fontSystem->addFont(fontPath);
@@ -713,7 +721,8 @@ namespace mrv
         // Add emoji font.
         //
         const file::Path emojiPath = image::emojiFont();
-        const std::string emojiFamily = emojiPath.getBaseName();
+        const std::string emojiFamily = _getFontFamily(emojiPath);
+        
         if (!fontSystem->hasFont(emojiFamily))
         {
             fontSystem->addFont(emojiPath.get());

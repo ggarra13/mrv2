@@ -178,7 +178,6 @@ namespace
         paths.emplace_back("/usr/share/fonts/");
         paths.emplace_back("/usr/local/share/fonts/");
 #endif
-
         return paths;
     }
 
@@ -377,7 +376,9 @@ namespace tl
             TLRENDER_P();
             
             file::Path fileName(filePath.filename().generic_string());
-            const std::string name = fileName.getBaseName();
+            const std::string name = fileName.getBaseName() +
+                                     fileName.getNumber() +
+                                     fileName.getSuffix();
             if (p.fontData.find(name) != p.fontData.end())
                 return;
             
