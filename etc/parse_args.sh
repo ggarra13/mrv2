@@ -195,7 +195,9 @@ if [[ "$NOARGS" == "" ]]; then
 		export MRV2_VK=ON
 		export MRV2_BACKEND=VK
 		export TLRENDER_VK=ON
-		export TLRENDER_USD=OFF
+		if [ -z $TLRENDER_USD ]; then
+		    export TLRENDER_USD=OFF
+		fi
 		shift
 		continue
 		;;

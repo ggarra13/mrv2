@@ -56,6 +56,9 @@ ChangeLog
 - Fixed building on the cloud with potentiall only 1 CPU.
 - Fixed OCIO Looks always overriding potential Looks attached to a custom Display transform.
 - Fixed Path.cpp and File.cpp code for UTF-8 under C++20 (wrong use of u8strings)
+- Moved usdviewer utility into its own repository at.  It was making the Vulkan vmrv2 slower to load:
+
+  	* www.github.com:ggarra13/usdviewer.git
 
 
 v1.6.2

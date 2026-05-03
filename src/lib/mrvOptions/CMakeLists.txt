@@ -35,7 +35,7 @@ set(LIBRARIES_PRIVATE )
 
 if(TLRENDER_USD)
     list(APPEND LIBRARIES_PRIVATE tf usd usdGeom)
-    if (MRV2_BACKEND STREQUAL "GL")
+    if (TLRENDER_GL)
 	list(APPEND LIBRARIES_PRIVATE usdImagingGL usdAppUtils hd)
     endif()
 endif()

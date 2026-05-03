@@ -11,14 +11,10 @@ set(CMAKE_FIND_FRAMEWORK LAST)
 
 # Do not skip RPATH as that can make macOS crash.
 set(CMAKE_SKIP_RPATH FALSE)
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
 # Avoid warnings of overshadowing system libraries.
-if(APPLE)
-    set(CMAKE_INSTALL_RPATH "@executable_path/../lib")
-elseif(UNIX)
-    set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
-endif()
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_INSTALL_RPATH "@executable_path/../lib;${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
 
 # Build the executable with the final CMAKE_INSTALL_RPATH from the very beginning.
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
@@ -48,9 +44,8 @@ if ( UNIX )
     link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
-if (MRV2_BACKEND STREQUAL "VK")
-    find_package(Vulkan OPTIONAL_COMPONENTS
-	glslang shaderc_combined SPIRV-Tools)
+if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
+    find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
 endif()
 
 find_package(FLTK CONFIG REQUIRED)
@@ -239,7 +234,10 @@ if(TLRENDER_TIFF)
 endif()
 
 if(TLRENDER_USD)
-    add_definitions(-DTLRENDER_USD)
+    find_package(pxr)
+    if(pxr_FOUND)
+        add_definitions(-DTLRENDER_USD)
+    endif()
 endif()
 
 if(TLRENDER_VK)
@@ -456,7 +454,7 @@ if (APPLE)
     add_subdirectory(launcher)
 endif()
 
-if (MRV2_BACKEND STREQUAL "VK")
+if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
     add_subdirectory(tests)
 endif()
 
