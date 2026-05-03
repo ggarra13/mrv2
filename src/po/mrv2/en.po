@@ -26,9 +26,6 @@ msgstr ""
 "\n"
 "Contains all classes and enums related to USD (Universal Scene Description). \n"
 
-msgid "Renderer Name"
-msgstr "Renderer Name"
-
 msgid "Render Width"
 msgstr "Render Width"
 
@@ -2704,6 +2701,12 @@ msgstr "Show the A file above the B file"
 msgid "Tile the A and B files"
 msgstr "Tile the A and B files"
 
+msgid "Add the A and B files"
+msgstr "Tile the A and B files"
+
+msgid "Multiply the A and B files"
+msgstr "Tile the A and B files"
+
 msgid "Wipe"
 msgstr "Wipe"
 
@@ -4457,6 +4460,12 @@ msgstr "Image/Compare Mode/Overlay"
 msgid "Image/Compare Mode/Difference"
 msgstr "Image/Compare Mode/Difference"
 
+msgid "Image/Compare Mode/Add"
+msgstr "Image/Compare Mode/A"
+
+msgid "Image/Compare Mode/Multiply"
+msgstr "Image/Compare Mode/Wipe"
+
 msgid "Image/Compare Mode/Horizontal"
 msgstr "Image/Compare Mode/Horizontal"
 
@@ -4468,6 +4477,9 @@ msgstr "Image/Compare Mode/Tile"
 
 msgid "Image/Go to/%s"
 msgstr "Image/Go to/%s"
+
+msgid "Image/Compare/Toggle A and B"
+msgstr "Image/Compare Mode/A"
 
 msgid "Image/Compare/%s"
 msgstr "Image/Compare/%s"
@@ -8281,6 +8293,9 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "task info failed"
+
+#~ msgid "Renderer Name"
+#~ msgstr "Renderer Name"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"

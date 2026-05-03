@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.2.7\n"
+"Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: 2024-08-30 23:49-0300\n"
 "Last-Translator: Automatically generated\n"
@@ -22,9 +22,6 @@ msgid ""
 msgstr ""
 "\n"
 "यूएसडी मॉड्यूल. अमेरिकाडी से संबंधित सभी वर्ग और ई-मैक्स्स (प्रयोगात्मक दृश्य वर्णन) से संबंधित हैं.\n"
-
-msgid "Renderer Name"
-msgstr "रेंडरर नाम"
 
 msgid "Render Width"
 msgstr "रेंडर चौड़ाई"
@@ -2683,6 +2680,12 @@ msgstr "ब फ़ाइल के ऊपर एक फ़ाइल दिखा
 msgid "Tile the A and B files"
 msgstr "एक तथा बी फ़ाइलें टाइल करें"
 
+msgid "Add the A and B files"
+msgstr "A और B फ़ाइलों को जोड़ें"
+
+msgid "Multiply the A and B files"
+msgstr "A और B फ़ाइलों को गुणा करें"
+
 msgid "Wipe"
 msgstr "पट्टी पोंछना प्रभाव"
 
@@ -4430,31 +4433,40 @@ msgid "Image/Version/Next"
 msgstr "छवि/संस्करण/अगला"
 
 msgid "Image/Compare Mode/A"
-msgstr "छवि/मोड से तुलना करें/A"
+msgstr "छवि/तुलना मोड/A"
 
 msgid "Image/Compare Mode/B"
-msgstr "छवि/मोड से तुलना करें/B"
+msgstr "छवि/तुलना मोड/B"
 
 msgid "Image/Compare Mode/Wipe"
-msgstr "छवि/मोड से तुलना करें/पट्टी पोंछना प्रभाव"
+msgstr "छवि/तुलना मोड/पट्टी पोंछना प्रभाव"
 
 msgid "Image/Compare Mode/Overlay"
-msgstr "छवि/मोड से तुलना करें/सीमा: (S)"
+msgstr "छवि/तुलना मोड/सीमा: (S)"
 
 msgid "Image/Compare Mode/Difference"
-msgstr "छवि/मोड से तुलना करें/भिन्नता"
+msgstr "छवि/तुलना मोड/भिन्नता"
+
+msgid "Image/Compare Mode/Add"
+msgstr "छवि/तुलना मोड/जोड़ें"
+
+msgid "Image/Compare Mode/Multiply"
+msgstr "छवि/तुलना मोड/गुणा करें"
 
 msgid "Image/Compare Mode/Horizontal"
-msgstr "छवि/मोड से तुलना करें/क्षैतिज"
+msgstr "छवि/तुलना मोड/क्षैतिज"
 
 msgid "Image/Compare Mode/Vertical"
-msgstr "छवि/मोड से तुलना करें/लंबवत"
+msgstr "छवि/तुलना मोड/लंबवत"
 
 msgid "Image/Compare Mode/Tile"
-msgstr "छवि/मोड से तुलना करें/टाइल"
+msgstr "छवि/तुलना मोड/टाइल"
 
 msgid "Image/Go to/%s"
 msgstr "छवि/यहाँ जाएँ/%s"
+
+msgid "Image/Compare/Toggle A and B"
+msgstr "छवि/तुलना/A और B टॉगल करें"
 
 msgid "Image/Compare/%s"
 msgstr "छवि/तुलना करें/%s"
@@ -8246,6 +8258,9 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
+
+#~ msgid "Renderer Name"
+#~ msgstr "रेंडरर नाम"
 
 #~ msgid "Renderer"
 #~ msgstr "रेंडरर"

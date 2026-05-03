@@ -22,9 +22,6 @@ msgstr ""
 "\n"
 "USD（Universal Scene Description）に関連するすべてのクラスと列挙型を含みます。\n"
 
-msgid "Renderer Name"
-msgstr "レンダラー"
-
 msgid "Render Width"
 msgstr "レンダリング"
 
@@ -2665,6 +2662,12 @@ msgstr "ナビゲーションバー上のページ読み込みのバーを表示
 msgid "Tile the A and B files"
 msgstr "AとB"
 
+msgid "Add the A and B files"
+msgstr "AとBのファイルを加算"
+
+msgid "Multiply the A and B files"
+msgstr "AとBのファイルを乗算"
+
 msgid "Wipe"
 msgstr "擦除"
 
@@ -4397,6 +4400,12 @@ msgstr "画像/比較モード/オーバーレイ"
 msgid "Image/Compare Mode/Difference"
 msgstr "画像/比較モード/差分"
 
+msgid "Image/Compare Mode/Add"
+msgstr "画像/比較モード/加算"
+
+msgid "Image/Compare Mode/Multiply"
+msgstr "画像/比較モード/乗算"
+
 msgid "Image/Compare Mode/Horizontal"
 msgstr "画像/比較モード/水平"
 
@@ -4408,6 +4417,9 @@ msgstr "画像/比較モード/タイル"
 
 msgid "Image/Go to/%s"
 msgstr "画像/移動/%s"
+
+msgid "Image/Compare/Toggle A and B"
+msgstr "画像/比較/AとBを切り替え"
 
 msgid "Image/Compare/%s"
 msgstr "画像/比較/%s"
@@ -8085,6 +8097,9 @@ msgstr "host_statistics64に失敗しました。"
 
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました。"
+
+#~ msgid "Renderer Name"
+#~ msgstr "レンダラー"
 
 #~ msgid "Renderer"
 #~ msgstr "レンダラー"

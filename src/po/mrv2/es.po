@@ -27,9 +27,6 @@ msgstr ""
 "\n"
 "Contiene todas las classes y enums relativas a USD (Univesal Scene Description). \n"
 
-msgid "Renderer Name"
-msgstr "Nombre de Renderizador"
-
 msgid "Render Width"
 msgstr "Ancho de Render"
 
@@ -2738,6 +2735,12 @@ msgstr "Mueste el archivo A sobre el B"
 msgid "Tile the A and B files"
 msgstr "Ponga en Mosaico los archivos A y B"
 
+msgid "Add the A and B files"
+msgstr "Sumar los clips A y B"
+
+msgid "Multiply the A and B files"
+msgstr "Multiplicar los clips A y B"
+
 msgid "Wipe"
 msgstr "Limpiaparabrisas"
 
@@ -4524,6 +4527,12 @@ msgstr "Imagen/Comparar el modo/Sobreposición"
 msgid "Image/Compare Mode/Difference"
 msgstr "Imagen/Comparar el modo/Diferencia"
 
+msgid "Image/Compare Mode/Add"
+msgstr "Imagen/Modo de comparación/Sumar"
+
+msgid "Image/Compare Mode/Multiply"
+msgstr "Imagen/Modo de comparación/Multiplicar"
+
 msgid "Image/Compare Mode/Horizontal"
 msgstr "Imagen/Comparar el modo/Horizontal"
 
@@ -4535,6 +4544,9 @@ msgstr "Imagen/Comparar el modo/Azulejo"
 
 msgid "Image/Go to/%s"
 msgstr "Imagen/Ve a/%s"
+
+msgid "Image/Compare/Toggle A and B"
+msgstr "Imagen/Comparar/Alternar A y B"
 
 msgid "Image/Compare/%s"
 msgstr "Imagen/Comparar/%s"
@@ -8365,6 +8377,9 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "task info falló"
+
+#~ msgid "Renderer Name"
+#~ msgstr "Nombre de Renderizador"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderizador"

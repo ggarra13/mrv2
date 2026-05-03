@@ -23,9 +23,6 @@ msgstr ""
 "\n"
 "Modulo USD. Contiene tutte le classi e enum relativi al USD (Descrizione della scena universale).\n"
 
-msgid "Renderer Name"
-msgstr "Nome del prestatore"
-
 msgid "Render Width"
 msgstr "Larghezza di resa"
 
@@ -2700,6 +2697,12 @@ msgstr "Mostra il file A sopra il file B"
 msgid "Tile the A and B files"
 msgstr "Piastrelle i file A e B"
 
+msgid "Add the A and B files"
+msgstr "Aggiungi i file A e B"
+
+msgid "Multiply the A and B files"
+msgstr "Moltiplica i file A e B"
+
 msgid "Wipe"
 msgstr "Pulire"
 
@@ -4481,6 +4484,12 @@ msgstr "Immagine/Confronta la modalità/Sovrapposizione"
 msgid "Image/Compare Mode/Difference"
 msgstr "Immagine/Confronta la modalità/Differenza"
 
+msgid "Image/Compare Mode/Add"
+msgstr "Immagine/Modalità confronto/Aggiungi"
+
+msgid "Image/Compare Mode/Multiply"
+msgstr "Immagine/Modalità confronto/Moltiplica"
+
 msgid "Image/Compare Mode/Horizontal"
 msgstr "Immagine/Confronta la modalità/Orizzontale"
 
@@ -4492,6 +4501,9 @@ msgstr "Immagine/Confronta la modalità/Piastrelle"
 
 msgid "Image/Go to/%s"
 msgstr "Immagine/Vai a/%s"
+
+msgid "Image/Compare/Toggle A and B"
+msgstr "Immagine/Confronta/Attiva - disattiva A e B"
 
 msgid "Image/Compare/%s"
 msgstr "Immagine/Confronta/%s"
@@ -8342,6 +8354,9 @@ msgstr "host_statistics64 non riuscito"
 
 msgid "task info failed"
 msgstr "Informazione dell'attività non riuscita"
+
+#~ msgid "Renderer Name"
+#~ msgstr "Nome del prestatore"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"

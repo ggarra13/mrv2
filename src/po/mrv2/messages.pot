@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.6.2\n"
+"Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -21,9 +21,6 @@ msgid ""
 "\n"
 "Contains all classes and enums related to USD (Universal Scene "
 "Description). \n"
-msgstr ""
-
-msgid "Renderer Name"
 msgstr ""
 
 msgid "Render Width"
@@ -2434,6 +2431,12 @@ msgstr ""
 msgid "Tile the A and B files"
 msgstr ""
 
+msgid "Add the A and B files"
+msgstr ""
+
+msgid "Multiply the A and B files"
+msgstr ""
+
 msgid "Wipe"
 msgstr ""
 
@@ -4128,6 +4131,12 @@ msgstr ""
 msgid "Image/Compare Mode/Difference"
 msgstr ""
 
+msgid "Image/Compare Mode/Add"
+msgstr ""
+
+msgid "Image/Compare Mode/Multiply"
+msgstr ""
+
 msgid "Image/Compare Mode/Horizontal"
 msgstr ""
 
@@ -4138,6 +4147,9 @@ msgid "Image/Compare Mode/Tile"
 msgstr ""
 
 msgid "Image/Go to/%s"
+msgstr ""
+
+msgid "Image/Compare/Toggle A and B"
 msgstr ""
 
 msgid "Image/Compare/%s"

@@ -23,9 +23,6 @@ msgstr ""
 "\n"
 "Modulo USD. Contiene todas as classes e enums relacionados ao USD (Descrio Universal da Cena).\n"
 
-msgid "Renderer Name"
-msgstr "Nome do remetente"
-
 msgid "Render Width"
 msgstr "Largura de rendio"
 
@@ -2681,6 +2678,12 @@ msgstr "Mostrar o ficheiro A acima do ficheiro B"
 msgid "Tile the A and B files"
 msgstr "Telha os arquivos A e B"
 
+msgid "Add the A and B files"
+msgstr "Adicionar os arquivos A e B"
+
+msgid "Multiply the A and B files"
+msgstr "Multiplicar os arquivos A e B"
+
 msgid "Wipe"
 msgstr "Limpar"
 
@@ -4446,6 +4449,12 @@ msgstr "Imagem/Comparar o Modo/Sobreposição"
 msgid "Image/Compare Mode/Difference"
 msgstr "Imagem/Comparar o Modo/Diferença"
 
+msgid "Image/Compare Mode/Add"
+msgstr "Imagem/Modo de comparação/Adicionar"
+
+msgid "Image/Compare Mode/Multiply"
+msgstr "Imagem/Modo de comparação/Multiplicar"
+
 msgid "Image/Compare Mode/Horizontal"
 msgstr "Imagem/Comparar o Modo/Horizontal"
 
@@ -4457,6 +4466,9 @@ msgstr "Imagem/Comparar o Modo/Telha"
 
 msgid "Image/Go to/%s"
 msgstr "Imagem/Vá para/%s"
+
+msgid "Image/Compare/Toggle A and B"
+msgstr "Imagem/Comparar/Alternar A e B"
 
 msgid "Image/Compare/%s"
 msgstr "Imagem/Comparar/%s"
@@ -8290,6 +8302,9 @@ msgstr "falhou o host_statistics64"
 
 msgid "task info failed"
 msgstr "Falhou a informao da tarefa"
+
+#~ msgid "Renderer Name"
+#~ msgstr "Nome do remetente"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"

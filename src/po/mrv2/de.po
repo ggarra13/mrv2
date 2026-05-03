@@ -21,9 +21,6 @@ msgstr ""
 "\n"
 "USD-Modul. Enthlt alle Klassen und Enums im Zusammenhang mit USD (Universal Scene Description).\n"
 
-msgid "Renderer Name"
-msgstr "Name des Renderers"
-
 msgid "Render Width"
 msgstr "Breite des Renders"
 
@@ -2670,6 +2667,12 @@ msgstr "Die A-Datei ber der B-Datei anzeigen"
 msgid "Tile the A and B files"
 msgstr "Fliese die A- und B-Dateien"
 
+msgid "Add the A and B files"
+msgstr "Addiere die A- und B-Dateien"
+
+msgid "Multiply the A and B files"
+msgstr "Multipliziere die A- und B-Dateien"
+
 msgid "Wipe"
 msgstr "Wischen"
 
@@ -4435,31 +4438,40 @@ msgid "Image/Version/Next"
 msgstr "Bild/Fassung/Nchster"
 
 msgid "Image/Compare Mode/A"
-msgstr "Bild/Modus vergleichen/A"
+msgstr "Bild/Vergleichsmodus/A"
 
 msgid "Image/Compare Mode/B"
-msgstr "Bild/Modus vergleichen/B"
+msgstr "Bild/Vergleichsmodus/B"
 
 msgid "Image/Compare Mode/Wipe"
-msgstr "Bild/Modus vergleichen/Wischen"
+msgstr "Bild/Vergleichsmodus/Wischen"
 
 msgid "Image/Compare Mode/Overlay"
-msgstr "Bild/Modus vergleichen/Überlagerung"
+msgstr "Bild/Vergleichsmodus/Überlagerung"
 
 msgid "Image/Compare Mode/Difference"
-msgstr "Bild/Modus vergleichen/Veränderung"
+msgstr "Bild/Vergleichsmodus/Veränderung"
+
+msgid "Image/Compare Mode/Add"
+msgstr "Bild/Vergleichsmodus/Addieren"
+
+msgid "Image/Compare Mode/Multiply"
+msgstr "Bild/Vergleichsmodus/Multiplizieren"
 
 msgid "Image/Compare Mode/Horizontal"
-msgstr "Bild/Modus vergleichen/Horizontal"
+msgstr "Bild/Vergleichsmodus/Horizontal"
 
 msgid "Image/Compare Mode/Vertical"
-msgstr "Bild/Modus vergleichen/Vertikal"
+msgstr "Bild/Vergleichsmodus/Vertikal"
 
 msgid "Image/Compare Mode/Tile"
-msgstr "Bild/Modus vergleichen/Fliesen"
+msgstr "Bild/Vergleichsmodus/Fliesen"
 
 msgid "Image/Go to/%s"
 msgstr "Bild/Gehen Sie zu/%s"
+
+msgid "Image/Compare/Toggle A and B"
+msgstr "Bild/Vergleich/A und B umschalten"
 
 msgid "Image/Compare/%s"
 msgstr "Bild/Vergleich/%s"
@@ -8298,6 +8310,9 @@ msgstr "host_statistik64 fehlgeschlagen"
 
 msgid "task info failed"
 msgstr "Task-Info fehlgeschlagen"
+
+#~ msgid "Renderer Name"
+#~ msgstr "Name des Renderers"
 
 #~ msgid "Renderer"
 #~ msgstr "Renderer"

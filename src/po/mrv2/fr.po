@@ -23,9 +23,6 @@ msgstr ""
 "\n"
 "Module USD. Contient toutes les classes et énumérations liées à USD (Universal Scene Description).\n"
 
-msgid "Renderer Name"
-msgstr "Nom du donneur"
-
 msgid "Render Width"
 msgstr "Largeur de rendu"
 
@@ -2674,6 +2671,12 @@ msgstr "Afficher le fichier A au-dessus du fichier B"
 msgid "Tile the A and B files"
 msgstr "Tile les fichiers A et B"
 
+msgid "Add the A and B files"
+msgstr "Additionner les fichiers A et B"
+
+msgid "Multiply the A and B files"
+msgstr "Multiplier les fichiers A et B"
+
 msgid "Wipe"
 msgstr "Nettoyage"
 
@@ -4439,31 +4442,40 @@ msgid "Image/Version/Next"
 msgstr "Image/Version/Suivant"
 
 msgid "Image/Compare Mode/A"
-msgstr "Image/Comparer le mode/A"
+msgstr "Image/Mode de comparaison/A"
 
 msgid "Image/Compare Mode/B"
-msgstr "Image/Comparer le mode/B"
+msgstr "Image/Mode de comparaison/B"
 
 msgid "Image/Compare Mode/Wipe"
-msgstr "Image/Comparer le mode/Nettoyage"
+msgstr "Image/Mode de comparaison/Nettoyage"
 
 msgid "Image/Compare Mode/Overlay"
-msgstr "Image/Comparer le mode/Revêtement"
+msgstr "Image/Mode de comparaison/Revêtement"
 
 msgid "Image/Compare Mode/Difference"
-msgstr "Image/Comparer le mode/Différence"
+msgstr "Image/Mode de comparaison/Différence"
+
+msgid "Image/Compare Mode/Add"
+msgstr "Image/Mode de comparaison/Ajouter"
+
+msgid "Image/Compare Mode/Multiply"
+msgstr "Image/Mode de comparaison/Multiplier"
 
 msgid "Image/Compare Mode/Horizontal"
-msgstr "Image/Comparer le mode/horizontaux"
+msgstr "Image/Mode de comparaison/horizontaux"
 
 msgid "Image/Compare Mode/Vertical"
-msgstr "Image/Comparer le mode/Vertical"
+msgstr "Image/Mode de comparaison/Vertical"
 
 msgid "Image/Compare Mode/Tile"
-msgstr "Image/Comparer le mode/Carrelage"
+msgstr "Image/Mode de comparaison/Carrelage"
 
 msgid "Image/Go to/%s"
 msgstr "Image/Allez-y./%s"
+
+msgid "Image/Compare/Toggle A and B"
+msgstr "Image/Comparer/Basculer A et B"
 
 msgid "Image/Compare/%s"
 msgstr "Image/Comparer/%s"
@@ -8330,6 +8342,9 @@ msgstr "host_statistics64 a échoué"
 
 msgid "task info failed"
 msgstr "l'information de la tâche a échoué"
+
+#~ msgid "Renderer Name"
+#~ msgstr "Nom du donneur"
 
 #~ msgid "Renderer"
 #~ msgstr "Rendeur"

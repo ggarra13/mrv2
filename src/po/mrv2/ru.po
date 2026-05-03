@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.2.8\n"
+"Project-Id-Version: mrv2 v1.6.3\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: 2023-02-11 13:42-0300\n"
 "Last-Translator: Gonzalo Garramuño <ggarra13@gmail.com>\n"
@@ -24,9 +24,6 @@ msgstr ""
 "Модуль долл. США.\n"
 "\n"
 "Содержит все классы и энумы, относящиеся к доллару США (всеобщее описание сцены).\n"
-
-msgid "Renderer Name"
-msgstr "Имя заказчика"
 
 msgid "Render Width"
 msgstr "Рендер-широкоугольник"
@@ -2719,6 +2716,12 @@ msgstr "Показать файл А над файлом B"
 msgid "Tile the A and B files"
 msgstr "Подключить файлы A и B"
 
+msgid "Add the A and B files"
+msgstr "Сложить файлы A и B"
+
+msgid "Multiply the A and B files"
+msgstr "Умножить файлы A и B"
+
 msgid "Wipe"
 msgstr "Промывка"
 
@@ -4470,31 +4473,40 @@ msgid "Image/Version/Next"
 msgstr "Фотография/Версия/Следующий"
 
 msgid "Image/Compare Mode/A"
-msgstr "Фотография/Сравнить режим/A"
+msgstr "Фотография/Режим сравнения/A"
 
 msgid "Image/Compare Mode/B"
-msgstr "Фотография/Сравнить режим/B"
+msgstr "Фотография/Режим сравнения/B"
 
 msgid "Image/Compare Mode/Wipe"
-msgstr "Фотография/Сравнить режим/Промывка"
+msgstr "Фотография/Режим сравнения/Промывка"
 
 msgid "Image/Compare Mode/Overlay"
-msgstr "Фотография/Сравнить режим/Накладные"
+msgstr "Фотография/Режим сравнения/Накладные"
 
 msgid "Image/Compare Mode/Difference"
-msgstr "Фотография/Сравнить режим/Разница"
+msgstr "Фотография/Режим сравнения/Разница"
+
+msgid "Image/Compare Mode/Add"
+msgstr "Изображение/Режим сравнения/Сложение"
+
+msgid "Image/Compare Mode/Multiply"
+msgstr "Изображение/Режим сравнения/Умножение"
 
 msgid "Image/Compare Mode/Horizontal"
-msgstr "Фотография/Сравнить режим/Горизонтальный"
+msgstr "Фотография/Режим сравнения/Горизонтальный"
 
 msgid "Image/Compare Mode/Vertical"
-msgstr "Фотография/Сравнить режим/Вертикальный"
+msgstr "Фотография/Режим сравнения/Вертикальный"
 
 msgid "Image/Compare Mode/Tile"
-msgstr "Фотография/Сравнить режим/Тяжелый"
+msgstr "Фотография/Режим сравнения/Тяжелый"
 
 msgid "Image/Go to/%s"
 msgstr "Фотография/Перейти/%s"
+
+msgid "Image/Compare/Toggle A and B"
+msgstr "Изображение/Сравнение/Переключить A и B"
 
 msgid "Image/Compare/%s"
 msgstr "Фотография/Сравнить/%s"
@@ -8322,6 +8334,9 @@ msgstr "shop_statistics64 не сработал"
 
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
+
+#~ msgid "Renderer Name"
+#~ msgstr "Имя заказчика"
 
 #~ msgid "Renderer"
 #~ msgstr "Редактор"

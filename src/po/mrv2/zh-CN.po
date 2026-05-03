@@ -24,9 +24,6 @@ msgstr ""
 "\n"
 "包含所有与 USD（通用场景描述）相关的类和枚举。\n"
 
-msgid "Renderer Name"
-msgstr "渲染器命名"
-
 msgid "Render Width"
 msgstr "宽度"
 
@@ -2663,6 +2660,12 @@ msgstr "在 B 文件上方显示 A 文件"
 msgid "Tile the A and B files"
 msgstr "将 A 和 B Tile放置"
 
+msgid "Add the A and B files"
+msgstr "将 A 和 B 文件相加"
+
+msgid "Multiply the A and B files"
+msgstr "将 A 和 B 文件相乘"
+
 msgid "Wipe"
 msgstr "擦去"
 
@@ -4387,6 +4390,12 @@ msgstr "图像/比较模式/重叠"
 msgid "Image/Compare Mode/Difference"
 msgstr "图像/比较模式/差异"
 
+msgid "Image/Compare Mode/Add"
+msgstr "图像/比较模式/相加"
+
+msgid "Image/Compare Mode/Multiply"
+msgstr "图像/比较模式/相乘"
+
 msgid "Image/Compare Mode/Horizontal"
 msgstr "图像/比较模式/水平"
 
@@ -4398,6 +4407,9 @@ msgstr "图像/比较模式/平铺"
 
 msgid "Image/Go to/%s"
 msgstr "图像/转到/%s"
+
+msgid "Image/Compare/Toggle A and B"
+msgstr "图像/比较/切换 A 和 B"
 
 msgid "Image/Compare/%s"
 msgstr "图像/比较比/%s"
@@ -8095,6 +8107,9 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "任务信息失败"
+
+#~ msgid "Renderer Name"
+#~ msgstr "渲染器命名"
 
 #~ msgid "Renderer"
 #~ msgstr "渲染器"
