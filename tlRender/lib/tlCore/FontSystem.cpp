@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2021-2024 Darby Johnston
+// Copyright (c) 2025-Present Gonzalo Garramuño
 // All rights reserved.
 
 #include <tlCore/FontSystem.h>
@@ -52,6 +53,12 @@ namespace
     constexpr bool isNewline(tl_char_t c)
     {
         return '\n' == c || '\r' == c;
+    }
+
+    std::string toUtf8(const std::filesystem::path& p)
+    {
+        auto u8 = p.u8string();
+        return std::string(u8.begin(), u8.end());
     }
 
     std::u32string utf8_to_utf32(const std::string& utf8_str)
@@ -898,7 +905,7 @@ namespace tl
                     baseName == "Apple Color Emoji" ||
                     baseName == "seguiemj")
                 {
-                    out = file::Path(font.u8string());
+                    out = file::Path(toUtf8(font));
                     break;
                 }
             }

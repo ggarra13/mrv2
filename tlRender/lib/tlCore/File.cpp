@@ -30,7 +30,7 @@ namespace tl
 
         bool isReadable(const std::string& fileName)
         {
-            fs::path p(fileName);
+            fs::path p = fs::u8path(fileName);
 
             const std::string& filePath = p.generic_string();
             if (filePath.empty())

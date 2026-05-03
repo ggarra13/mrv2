@@ -15,6 +15,16 @@ namespace tl
 {
     namespace file
     {
+
+        namespace
+        {
+            std::string toUtf8(const std::filesystem::path& p)
+            {
+                auto u8 = p.u8string();
+                return std::string(u8.begin(), u8.end());
+            }
+        }
+        
         std::vector<std::string> split(std::filesystem::path path)
         {
             std::list<std::string> out;
@@ -23,13 +33,13 @@ namespace tl
             {
                 if (!path.filename().empty())
                 {
-                    out.push_front(path.filename().u8string());
+                    out.push_front(toUtf8(path.filename()));
                 }
                 path = path.parent_path();
             }
             if (!path.empty())
             {
-                out.push_front(path.u8string());
+                out.push_front(toUtf8(path));
             }
             return std::vector<std::string>(out.begin(), out.end());
         }
@@ -538,8 +548,8 @@ namespace tl
             {
                 for (const auto& i : std::filesystem::directory_iterator(path))
                 {
-                    const Path path(i.path().u8string(), pathOptions);
-                    const std::string fileName = i.path().filename().u8string();
+                    const Path path(toUtf8(i.path()), pathOptions);
+                    const std::string fileName = toUtf8(i.path().filename());
 
                     // Apply filters.
                     bool keep = true;
@@ -669,7 +679,7 @@ namespace tl
                 const std::filesystem::path stdpath = std::filesystem::u8path(out.get());
                 for (const auto& i : std::filesystem::directory_iterator(stdpath.parent_path()))
                 {
-                    const Path entry(i.path().u8string(), pathOptions);
+                    const Path entry(toUtf8(i.path()), pathOptions);
                     const bool isDir = std::filesystem::is_directory(i.path());
                     if (init && !isDir)
                     {
