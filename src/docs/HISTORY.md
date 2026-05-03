@@ -55,6 +55,7 @@ ChangeLog
 - Fixed the Non-Native File Requester on Windows not allowing to show the drives.
 - Fixed building on the cloud with potentiall only 1 CPU.
 - Fixed OCIO Looks always overriding potential Looks attached to a custom Display transform.
+- Fixed Path.cpp and File.cpp code for UTF-8 under C++20 (wrong use of u8strings)
 
 
 v1.6.2

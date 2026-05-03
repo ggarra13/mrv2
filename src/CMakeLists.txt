@@ -48,8 +48,9 @@ if ( UNIX )
     link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
-if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
-    find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
+if (MRV2_BACKEND STREQUAL "VK")
+    find_package(Vulkan OPTIONAL_COMPONENTS
+	glslang shaderc_combined SPIRV-Tools)
 endif()
 
 find_package(FLTK CONFIG REQUIRED)
@@ -457,7 +458,6 @@ endif()
 
 if (MRV2_BACKEND STREQUAL "VK")
     add_subdirectory(tests)
-    add_subdirectory(usdviewer)
 endif()
 
 #
