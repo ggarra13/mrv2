@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <array>
+#include <filesystem>
 #include <list>
 #include <sstream>
 
@@ -676,7 +677,15 @@ namespace tl
             {
                 // Find matching sequence files.
                 bool init = true;
-                const std::filesystem::path stdpath = std::filesystem::u8path(out.get());
+                std::string fileName(out.get());
+                
+#if defined(__cpp_lib_char8_t)
+                // C++20: u8path is deprecated. We cast the string data to char8_t.
+                const std::filesystem::path stdpath{reinterpret_cast<const char8_t*>(fileName.data())};
+#else
+                // C++17: u8path is the standard way to handle UTF-8 strings.
+                const std::filesystem::path stdpath = std::filesystem::u8path(fileName);
+#endif
                 for (const auto& i : std::filesystem::directory_iterator(stdpath.parent_path()))
                 {
                     const Path entry(toUtf8(i.path()), pathOptions);
