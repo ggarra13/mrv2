@@ -7,6 +7,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <string>
 
 namespace fs = std::filesystem;
 
@@ -30,7 +31,7 @@ namespace tl
 
         bool isReadable(const std::string& fileName)
         {
-            fs::path p = fs::u8path(fileName);
+            fs::path p = fs::path(fileName);
 
             const std::string& filePath = p.generic_string();
             if (filePath.empty())
