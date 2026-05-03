@@ -31,23 +31,23 @@ namespace tl
 
         bool isReadable(const std::string& fileName)
         {
-            fs::path p = fs::path(fileName);
-
-            const std::string& filePath = p.generic_string();
-            if (filePath.empty())
+#if defined(__cpp_lib_char8_t)
+            // C++20: u8path is deprecated. We cast the string data to char8_t.
+            fs::path p{reinterpret_cast<const char8_t*>(fileName.data())};
+#else
+            // C++17: u8path is the standard way to handle UTF-8 strings.
+            fs::path p = fs::u8path(fileName);   // same in C++17
+#endif
+            
+            // 2. Logic checks
+            if (p.empty()) 
                 return false;
-
-            if (isNetwork(filePath))
+    
+            if (isNetwork(p.string()))
                 return true;
 
-            std::ifstream f(filePath);
-            if (f.is_open())
-            {
-                f.close();
-                return true;
-            }
-
-            return false;
+            std::ifstream f(p);
+            return f.is_open();
         }
     } // namespace file
 } // namespace tl
