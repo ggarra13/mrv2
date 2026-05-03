@@ -323,8 +323,6 @@ install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libplacebo*")
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libz*" )
 
 if (MRV2_BACKEND STREQUAL "VK")
-    file(COPY ${CPACK_PREPACKAGE}/bin/usdviewer
-	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources/bin)
     install_vulkan_lib_glob("libglslang*" ${mrv2_NAME})
     install_vulkan_lib_glob("libSPIRV*" ${mrv2_NAME})
     install_vulkan_lib_glob("libMoltenVK*" ${mrv2_NAME})
