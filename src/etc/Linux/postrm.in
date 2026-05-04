@@ -1,124 +1,181 @@
 #!/bin/bash
+# Debian package post-removal script for mrv2/vmrv2
+# Handles proper uninstall with symlink fallback to closest version
 
-# Some constants
+set -e
+
+# Constants
 ICON_SIZES='16 32 48 64 128 256'
+BIN_DIR="/usr/bin"
+INSTALL_PREFIX="@CPACK_INSTALL_PREFIX@"
+MRV2_NAME="@mrv2_NAME@"
+MRV2_VERSION="@mrv2_VERSION@"
+SHARE_DIR="/usr/share"
+APP_DIR="${SHARE_DIR}/applications"
 
+# Flags
 has_hdr=0
-if [[ -L /usr/bin/hdr ]]; then
+removed_main_symlink=0
+
+# Check if hdr symlink exists
+if [[ -L "${BIN_DIR}/hdr" ]]; then
     has_hdr=1
 fi
 
+# ============================================================================
+# FUNCTION: Get the actual installation path from a symlink
+# ============================================================================
+get_symlink_target() {
+    local symlink="$1"
+    if [[ -L "$symlink" ]]; then
+        readlink -f "$symlink"
+    fi
+}
 
-# Remove /usr/bin/mrv2 if it is a symlink to our version
-removed=0
-fullpath=""
-if [[ -L /usr/bin/@mrv2_NAME@ ]]; then
-    fullpath=`readlink /usr/bin/@mrv2_NAME@`
-    installpath="@CPACK_INSTALL_PREFIX@/bin/mrv2.sh"
-    if [ "$fullpath" == "$installpath" ]; then
-	echo "Removing symlink from /usr/bin/@mrv2_NAME@"
-	rm -f /usr/bin/@mrv2_NAME@
-	if [[ $has_hdr == 1 ]]; then
-	    rm -f /usr/bin/hdr
-	fi
-	removed=1
+# ============================================================================
+# FUNCTION: Find all installed versions sorted by version number
+# ============================================================================
+find_installed_versions() {
+    # Look for directories matching pattern: @MRV2_NAME@-v*
+    ls -1d "${INSTALL_PREFIX}/${MRV2_NAME}-v"* 2>/dev/null | \
+        xargs -I {} basename {} | \
+        sort -V || true
+}
+
+# ============================================================================
+# STEP 1: Remove the main symlink (@mrv2_NAME@) if it points to our version
+# ============================================================================
+echo "Step 1: Checking main symlink ${BIN_DIR}/${MRV2_NAME}..."
+
+if [[ -L "${BIN_DIR}/${MRV2_NAME}" ]]; then
+    actual_target=$(get_symlink_target "${BIN_DIR}/${MRV2_NAME}")
+    expected_target="${INSTALL_PREFIX}/${MRV2_NAME}-v${MRV2_VERSION}/bin/mrv2.sh"
+    
+    if [[ "$actual_target" == "$expected_target" ]]; then
+        echo "  Removing symlink ${BIN_DIR}/${MRV2_NAME} (pointed to our version)"
+        rm -f "${BIN_DIR}/${MRV2_NAME}"
+        if [[ $has_hdr == 1 ]]; then
+            rm -f "${BIN_DIR}/hdr"
+        fi
+        removed_main_symlink=1
     else
-	echo "/usr/bin/@mrv2_NAME@ does not point to $installpath."
-	echo "Won't remove symlink."
-    fi
-fi
-
-if [[ @mrv2_NAME@ == "vmrv2" ]]; then
-    vmrv2="@CPACK_INSTALL_PREFIX@/bin/@mrv2_NAME@"
-    if [[ -e $vmrv2 ]]; then
-	rm -f $vmrv2
-    fi
-fi
-
-sharedir=/usr/share
-appdir=${sharedir}/applications
-
-echo "Removing symlink from /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@"
-rm -f /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@
-if [[ -e /usr/bin/hdr-v@mrv2_VERSION@ ]]; then
-    rm -f /usr/bin/hdr-v@mrv2_VERSION@
-fi
-
-# Find the closest version folder in /usr/bin
-closest_version=$(ls -1 "/usr/local/" | grep "^@mrv2_NAME@-v" | sort -V | tail -n 1)
-
-# Check if a closest version was found
-if [[ -n "$closest_version" && $removed == 1 ]]; then
-    # Create a new symbolic link pointing to the closest version
-    ln -s "/usr/local/$closest_version/bin/mrv2.sh" "/usr/bin/@mrv2_NAME@"
-    echo "Created a new symbolic link: $closest_version -> /usr/bin/@mrv2_NAME@"
-    if [[ $has_hdr == 1 ]]; then
-	ln -s "/usr/local/$closest_version/bin/hdr.sh" "/usr/bin/hdr"
-	echo "Created a new symbolic link: $closest_version -> /usr/bin/hdr"
+        echo "  Symlink points to different version: $actual_target"
+        echo "  Keeping symlink (points to another installation)"
     fi
 else
-    if [[ $removed == 1 ]]; then
-	echo "No suitable version found to create a symbolic link."
-	echo "Removing /usr/share/applications/@mrv2_NAME@.desktop and @mrv2_NAME@.png"
-	rm -f /usr/share/applications/@mrv2_NAME@.desktop
-	if [[ $has_hdr == 1 ]]; then
-	    rm -f /usr/share/applications/hdr.desktop
-	fi
-	
-	#
-	# Remove all icon sizes
-	#
-	for i in $ICON_SIZES; do
-	    icons_dir=${sharedir}/icons/hicolor/${i}x${i}/apps/
-	    rm -f $icons_dir/@mrv2_NAME@.png
-	    if [[ $has_hdr == 1 ]]; then
-		rm -f $icons_dir/hdr.png
-	    fi
-	done
+    echo "  ${BIN_DIR}/${MRV2_NAME} is not a symlink or doesn't exist"
+fi
+
+# ============================================================================
+# STEP 2: Handle vmrv2 binary (if applicable)
+# ============================================================================
+if [[ "$MRV2_NAME" == "vmrv2" ]]; then
+    vmrv2_binary="${INSTALL_PREFIX}/bin/${MRV2_NAME}"
+    if [[ -f "$vmrv2_binary" ]]; then
+        echo "Step 2: Removing vmrv2 binary from ${INSTALL_PREFIX}/bin/"
+        rm -f "$vmrv2_binary"
     fi
 fi
 
-  
-full_dir=$(xdg-user-dir DESKTOP)
+# ============================================================================
+# STEP 3: Remove versioned symlinks and files
+# ============================================================================
+echo "Step 3: Removing versioned files and symlinks..."
 
-desktop_dir=${full_dir#/root/}
-
-if [ "$full_dir" != "$desktop_dir" ]; then
-    name=`logname`
-    desktop_dir=/home/${name}/${desktop_dir}
+rm -f "${BIN_DIR}/${MRV2_NAME}-v${MRV2_VERSION}"
+if [[ -e "${BIN_DIR}/hdr-v${MRV2_VERSION}" ]]; then
+    rm -f "${BIN_DIR}/hdr-v${MRV2_VERSION}"
 fi
 
-#
-# Remove Desktop shortcuts
-#
-rm -f "${desktop_dir}/@mrv2_NAME@-v@mrv2_VERSION@.desktop"
-
-if [ -e "${desktop_dir}/hdr-v@mrv2_VERSION@.desktop" ]; then
-    rm -f "${desktop_dir}/hdr-v@mrv2_VERSION@.desktop"
-fi
-
-#
-# Remove all icon sizes
-#
-for i in $ICON_SIZES; do
-    icons_dir=${sharedir}/icons/hicolor/${i}x${i}/apps/
-    rm -f $icons_dir/@mrv2_NAME@-v@mrv2_VERSION@.png
+# Remove versioned desktop shortcuts
+desktop_dir=$(xdg-user-dir DESKTOP 2>/dev/null || echo "${HOME}/Desktop")
+if [[ -d "$desktop_dir" ]]; then
+    rm -f "${desktop_dir}/${MRV2_NAME}-v${MRV2_VERSION}.desktop"
     if [[ $has_hdr == 1 ]]; then
-	rm -f $icons_dir/hdr-v@mrv2_VERSION@.png
+        rm -f "${desktop_dir}/hdr-v${MRV2_VERSION}.desktop"
+    fi
+fi
+
+# Remove versioned application shortcuts
+rm -f "${APP_DIR}/${MRV2_NAME}-v${MRV2_VERSION}.desktop"
+if [[ $has_hdr == 1 ]]; then
+    rm -f "${APP_DIR}/hdr-v${MRV2_VERSION}.desktop"
+fi
+
+# Remove versioned icons
+for size in $ICON_SIZES; do
+    icons_dir="${SHARE_DIR}/icons/hicolor/${size}x${size}/apps/"
+    if [[ -d "$icons_dir" ]]; then
+        rm -f "${icons_dir}/${MRV2_NAME}-v${MRV2_VERSION}.png"
+        if [[ $has_hdr == 1 ]]; then
+            rm -f "${icons_dir}/hdr-v${MRV2_VERSION}.png"
+        fi
     fi
 done
 
-#
-# Remove /usr/share/applications/@mrv2_NAME@-v<VERSION>.desktop
-#
-rm -f ${appdir}/@mrv2_NAME@-v@mrv2_VERSION@.desktop
+# ============================================================================
+# STEP 4: Recreate main symlink pointing to closest available version
+# ============================================================================
+echo "Step 4: Looking for other installed versions..."
 
-if [[ $has_hdr == 1 ]]; then
-    rm -f ${appdir}/hdr-v@mrv2_VERSION@.desktop
+if [[ $removed_main_symlink == 1 ]]; then
+    # Find the closest (newest) version still available
+    closest_version=$(find_installed_versions | tail -n 1)
+    
+    if [[ -n "$closest_version" ]]; then
+        closest_path="${INSTALL_PREFIX}/${closest_version}"
+        if [[ -d "$closest_path" && -f "${closest_path}/bin/mrv2.sh" ]]; then
+            echo "  Found closest version: $closest_version"
+            echo "  Creating new symlink ${BIN_DIR}/${MRV2_NAME} -> ${closest_version}"
+            
+            ln -sf "${closest_path}/bin/mrv2.sh" "${BIN_DIR}/${MRV2_NAME}"
+            
+            if [[ $has_hdr == 1 && -f "${closest_path}/bin/hdr.sh" ]]; then
+                ln -sf "${closest_path}/bin/hdr.sh" "${BIN_DIR}/hdr"
+                echo "  Created symlink ${BIN_DIR}/hdr -> ${closest_version}"
+            fi
+        else
+            echo "  ERROR: Found closest version directory but binaries missing: $closest_path"
+            echo "  Skipping symlink creation"
+        fi
+    else
+        echo "  No other versions found."
+        echo "  Removing generic symlinks and application files..."
+        
+        # Only remove if we removed the main symlink
+        rm -f "${APP_DIR}/${MRV2_NAME}.desktop"
+        if [[ $has_hdr == 1 ]]; then
+            rm -f "${APP_DIR}/hdr.desktop"
+        fi
+        
+        # Remove generic icons
+        for size in $ICON_SIZES; do
+            icons_dir="${SHARE_DIR}/icons/hicolor/${size}x${size}/apps/"
+            if [[ -d "$icons_dir" ]]; then
+                rm -f "${icons_dir}/${MRV2_NAME}.png"
+                if [[ $has_hdr == 1 ]]; then
+                    rm -f "${icons_dir}/hdr.png"
+                fi
+            fi
+        done
+    fi
+else
+    echo "  Main symlink was not removed (points to different version), skipping fallback"
 fi
 
-echo "Updating desktop database..."
-update-desktop-database
+# ============================================================================
+# STEP 5: Update system databases
+# ============================================================================
+echo "Step 5: Updating system databases..."
 
-echo "Updating mime database..."
-update-mime-database /usr/share/mime
+if command -v update-desktop-database &> /dev/null; then
+    echo "  Updating desktop database..."
+    update-desktop-database 2>/dev/null || true
+fi
+
+if command -v update-mime-database &> /dev/null; then
+    echo "  Updating MIME database..."
+    update-mime-database /usr/share/mime 2>/dev/null || true
+fi
+
+echo "Uninstall completed successfully."
