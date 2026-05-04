@@ -37,7 +37,7 @@ get_symlink_target() {
 # ============================================================================
 find_installed_versions() {
     # Look for directories matching pattern: @MRV2_NAME@-v*
-    ls -1d "${INSTALL_PREFIX}/${MRV2_NAME}-v"* 2>/dev/null | \
+    ls -1d "/usr/local/${MRV2_NAME}-v"* 2>/dev/null | \
         xargs -I {} basename {} | \
         sort -V || true
 }
@@ -132,7 +132,7 @@ if [[ $removed_main_symlink == 1 ]]; then
     closest_version=$(find_installed_versions | tail -n 1)
     
     if [[ -n "$closest_version" ]]; then
-        closest_path="${INSTALL_PREFIX}/${closest_version}"
+        closest_path="/usr/local/${closest_version}"
         if [[ -d "$closest_path" && -f "${closest_path}/bin/mrv2.sh" ]]; then
             echo "  Found closest version: $closest_version"
             echo "  Creating new symlink ${BIN_DIR}/${MRV2_NAME} -> ${closest_version}"
