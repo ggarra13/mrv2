@@ -9,7 +9,7 @@ https://mrv2.sourceforge.io/downloads/mrv2-download-page.html
 
 mrv2 ships now in two compiled versions:
 
-   - mrv2 with OpenGL backend  (free and donationware)   
+   - mrv2 with OpenGL backend  (free and donationware)
    - vmrv2 with Vulkan backend (free and donationware)
 
 It also ships for many more architectures, so be careful to download the correct one.
@@ -53,17 +53,18 @@ ChangeLog
 - Fixed missing suffixes in Image->Go To.
 - Fixed missing suffixes in PDF's images creation titles.
 - Fixed the Non-Native File Requester on Windows not allowing to show the drives.
-- Fixed building on the cloud with potentiall only 1 CPU.
+- Fixed building on the cloud with potentially only 1 CPU.
 - Fixed OCIO Looks always overriding potential Looks attached to a custom Display transform.
 - Fixed Path.cpp and File.cpp code for UTF-8 under C++20 (wrong use of u8strings)
 - Fixed Vulkan Text Annotations which had gotten broken due to a requested change in path handling.  Now it works correctly, including emojis.
 - Fixed .webp image sequences not working when they had a suffix.
 - Improved and fixed minor bugs in the postinst.in and postrm.in scripts used on Linux's DEB and RPM packages.
 - UI improvement: On Linux Vulkan Wayland builds, fixed the blurriness of the timeline.
-- Fixe
-- Moved usdviewer utility into its own repository at.  It was making the Vulkan vmrv2 slower to load:
+- Moved usdviewer utility into its own repository at:
 
   	* www.github.com:ggarra13/usdviewer.git
+	
+It was making the Vulkan vmrv2 slower to load.
 
 
 v1.6.2
