@@ -240,21 +240,24 @@ namespace tl
                 char buf[4096];
                 const std::string& directory = path.getDirectory();
                 const std::string& baseName  = path.getBaseName();
+                const std::string& suffix    = path.getSuffix();
                 const std::string& extension = path.getExtension();
                 const int padding = path.getPadding();
                 if (padding == 0)
                 {
-                    snprintf(buf, 4096, "%s%s%%d%s",
+                    snprintf(buf, 4096, "%s%s%%d%s%s",
                              directory.c_str(),
                              baseName.c_str(),
+                             suffix.c_str(),
                              extension.c_str());
                 }
                 else
                 {
-                    snprintf(buf, 4096, "%s%s%%0%dd%s",
+                    snprintf(buf, 4096, "%s%s%%0%dd%s%s",
                              directory.c_str(),
                              baseName.c_str(),
                              padding,
+                             suffix.c_str(),
                              extension.c_str());
                 }
                 formatFileName = buf;
