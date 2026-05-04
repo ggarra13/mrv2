@@ -49,8 +49,7 @@ echo "Step 1: Checking main symlink ${BIN_DIR}/${MRV2_NAME}..."
 
 if [[ -L "${BIN_DIR}/${MRV2_NAME}" ]]; then
     actual_target=$(get_symlink_target "${BIN_DIR}/${MRV2_NAME}")
-    expected_target="${INSTALL_PREFIX}/${MRV2_NAME}-v${MRV2_VERSION}/bin/mrv2.sh"
-    
+    expected_target="${INSTALL_PREFIX}/bin/mrv2.sh"
     if [[ "$actual_target" == "$expected_target" ]]; then
         echo "  Removing symlink ${BIN_DIR}/${MRV2_NAME} (pointed to our version)"
         rm -f "${BIN_DIR}/${MRV2_NAME}"
@@ -87,8 +86,18 @@ if [[ -e "${BIN_DIR}/hdr-v${MRV2_VERSION}" ]]; then
     rm -f "${BIN_DIR}/hdr-v${MRV2_VERSION}"
 fi
 
-# Remove versioned desktop shortcuts
-desktop_dir=$(xdg-user-dir DESKTOP 2>/dev/null || echo "${HOME}/Desktop")
+
+# Now, as root, get DESKTOP directory
+full_dir=$(xdg-user-dir DESKTOP 2>/dev/null || echo "${HOME}/Desktop")
+desktop_dir=${fulldir#/root/}
+
+# If fulldir had /root/ in it, then rearrange to copy to /home/user directory
+if [[ $full_dir != $desktop_dir ]]; then
+    # Get name and Desktop directory of actual user.
+    name=`logname`
+    desktop_dir=/home/${name}/${desktop_dir}
+fi
+
 if [[ -d "$desktop_dir" ]]; then
     rm -f "${desktop_dir}/${MRV2_NAME}-v${MRV2_VERSION}.desktop"
     if [[ $has_hdr == 1 ]]; then
