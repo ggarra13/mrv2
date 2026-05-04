@@ -58,7 +58,9 @@ ChangeLog
 - Fixed Path.cpp and File.cpp code for UTF-8 under C++20 (wrong use of u8strings)
 - Fixed Vulkan Text Annotations which had gotten broken due to a requested change in path handling.  Now it works correctly, including emojis.
 - Fixed .webp image sequences not working when they had a suffix.
-- Fixed the postrm.in uninstall script used on Linux's DEB and RPM.
+- Improved and fixed minor bugs in the postinst.in and postrm.in scripts used on Linux's DEB and RPM packages.
+- UI improvement: On Linux Vulkan Wayland builds, fixed the blurriness of the timeline.
+- Fixe
 - Moved usdviewer utility into its own repository at.  It was making the Vulkan vmrv2 slower to load:
 
   	* www.github.com:ggarra13/usdviewer.git

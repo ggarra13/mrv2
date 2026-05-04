@@ -70,9 +70,10 @@ fi
 # ============================================================================
 if [[ "$MRV2_NAME" == "vmrv2" ]]; then
     vmrv2_binary="${INSTALL_PREFIX}/bin/${MRV2_NAME}"
-    if [[ -e "$vmrv2_binary" ]]; then
-        echo "Step 2: Removing vmrv2 binary from ${INSTALL_PREFIX}/bin/"
+    if [[ -L "$vmrv2_binary" ]]; then
+        echo "Step 2: Removing vmrv2 symlink from ${INSTALL_PREFIX}/bin/"
         rm -f "$vmrv2_binary"
+	rm -rf "${INSTALL_PREFIX}"
     fi
 fi
 
