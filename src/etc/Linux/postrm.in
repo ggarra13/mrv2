@@ -70,7 +70,7 @@ fi
 # ============================================================================
 if [[ "$MRV2_NAME" == "vmrv2" ]]; then
     vmrv2_binary="${INSTALL_PREFIX}/bin/${MRV2_NAME}"
-    if [[ -f "$vmrv2_binary" ]]; then
+    if [[ -e "$vmrv2_binary" ]]; then
         echo "Step 2: Removing vmrv2 binary from ${INSTALL_PREFIX}/bin/"
         rm -f "$vmrv2_binary"
     fi
@@ -89,7 +89,7 @@ fi
 
 # Now, as root, get DESKTOP directory
 full_dir=$(xdg-user-dir DESKTOP 2>/dev/null || echo "${HOME}/Desktop")
-desktop_dir=${fulldir#/root/}
+desktop_dir=${full_dir#/root/}
 
 # If fulldir had /root/ in it, then rearrange to copy to /home/user directory
 if [[ $full_dir != $desktop_dir ]]; then

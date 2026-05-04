@@ -180,7 +180,7 @@ xdg-mime default "${shortcut}" image/x-cin image/x-dpx image/jpeg image/png imag
 echo "Updating desktop database..."
 update-desktop-database
 
-echo "Updating mime database..."
+echo "Updating MIME database..."
 update-mime-database /usr/share/mime
 
 #
