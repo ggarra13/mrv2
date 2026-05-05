@@ -1,6 +1,6 @@
 include(ExternalProject)
 
-set(SvtAV1_GIT_REPOSITORY "https://gitlab.com/AOMediaCodec/SVTAV1.git")
+set(SvtAV1_GIT_REPOSITORY "https://gitlab.com/AOMediaCodec/SVT-AV1.git")
 set(SvtAV1_GIT_TAG "v4.0.1")
 
 # This tries to use NASM or GAS for compilation
