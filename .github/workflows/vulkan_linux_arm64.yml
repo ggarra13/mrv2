@@ -42,8 +42,22 @@ jobs:
           rustc -Vv
           cargo -V
 
-      - name: Install cargo-c
-        run: cargo install cargo-c --locked
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install cargo-c if needed
+        run: |
+          if ! command -v cargo-cinstall >/dev/null 2>&1; then
+              cargo install cargo-c --locked
+          fi
 
       - name: Get machine name
         run: |
