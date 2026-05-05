@@ -10,8 +10,7 @@ on:
 
 jobs:
   ###################################
-  #                                 #
-  # FULL BUILDS                     #
+  #                                 #  # FULL BUILDS                     #
   #                                 #
   ###################################
   linux-vulkan-arm64:
@@ -23,19 +22,28 @@ jobs:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Setup ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: ${{ runner.os }}-arm64-Vulkan-ccache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-arm64-Vulkan-ccache-
+      - name: Install ccache
+        run: sudo apt-get update && sudo apt-get install -y ccache
 
-      - name: Install Rust (ARM64)
-        uses: actions-rs/toolchain@v1
+      - uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-v1
+          restore-keys: |
+              ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
+
+      - name: Configure ccache
+        run: |
+          echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
+          echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+          echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
+          ccache --max-size=500M
+        
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-          override: true
-          profile: minimal
+          components: clippy,rustfmt
 
       - name: Verify
         run: |
@@ -48,7 +56,6 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            ~/.cargo/bin
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
@@ -103,7 +110,6 @@ jobs:
         run: sudo apt-get install -y libssl-dev libffi-dev python3
 
       - name: Install Vulkan drivers
-        if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
         run: sudo apt install -y mesa-vulkan-drivers
 
       - name: Cache Vulkan SDK
@@ -111,7 +117,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: VulkanSDK-*
-          key: ${{ runner.os }}-arm64-vulkan-sdk-${{ hashFiles('etc/vulkan_version.sh', 'etc/linux/install_vulkan.sh') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-vulkan-sdk-${{ hashFiles('etc/vulkan_version.sh', 'etc/linux/install_vulkan.sh') }}
 
       # Install Vulkan SDK
       - name: Install/Build Vulkan SDK

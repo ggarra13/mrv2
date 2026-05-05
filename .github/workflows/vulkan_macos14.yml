@@ -23,23 +23,18 @@ jobs:
         submodules: recursive
         fetch-depth: 1
 
-    - name: Setup ccache
-      uses: hendrikmuhs/ccache-action@v1.2
-      with:
-        key: ${{ runner.os }}-arm64-Vulkan-ccache-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-arm64-Vulkan-ccache-
+    - name: Install ccache
+      run: brew install ccache
 
     - name: Get machine name
       run: |
         echo "Machine name: $RUNNER_NAME"
 
-    - name: Install Rust (ARM64)
-      uses: actions-rs/toolchain@v1
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
       with:
         toolchain: stable
-        override: true
-        profile: minimal
+        components: clippy,rustfmt
 
     - name: Verify
       run: rustc -Vv

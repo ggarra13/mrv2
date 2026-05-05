@@ -27,13 +27,6 @@ jobs:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Setup ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: ${{ runner.os }}-amd64-Vulkan-ccache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-amd64-Vulkan-ccache-
-
       - name: Setup environment
         uses: ilammy/msvc-dev-cmd@v1
 
@@ -77,14 +70,13 @@ jobs:
         with:
           update: true
           path-type: inherit
-
+          
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-          override: true
-          profile: minimal
-
+          components: clippy,rustfmt
+        
       - name: Verify
         run: |
           cargo -V
@@ -113,23 +105,14 @@ jobs:
         run: |
           echo "Machine name: $RUNNER_NAME"
 
-      - name: Cache Vulkan SDK
-        id: cache-vulkan-sdk
-        uses: actions/cache@v4
-        with:
-          path: VulkanSDK-*
-          key: ${{ runner.os }}-amd64-vulkan-sdk-${{ hashFiles('etc/vulkan_version.sh', 'etc/windows/install_vulkan.sh') }}
-
-
       # Install Vulkan SDK
       - name: Install Vulkan SDK
-        if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
         env:
           BUILD_VULKAN: OFF  # optional
         run: |
           . ./etc/windows/install_vulkan.sh
 
-      # Set Vulkan environment variables (always, even if cached)
+      # Set Vulkan environment variables
       - name: Set Vulkan environment variables
         run: |
           # Debug: show current directory and contents

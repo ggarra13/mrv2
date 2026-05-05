@@ -21,108 +21,118 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        fetch-depth: 1
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
 
-    - name: Setup ccache
-      uses: hendrikmuhs/ccache-action@v1.2
-      with:
-        key: ${{ runner.os }}-amd64-OpenGL-ccache-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-amd64-OpenGL-ccache-
+      - name: Install ccache
+        run: brew install ccache
 
-    - name: Get machine name
-      run: |
-        echo "Machine name: $RUNNER_NAME"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-v1
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
+
+      - name: Configure ccache
+        run: |
+          echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
+          echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+          echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
+          ccache --max-size=500M
+          
+      - name: Get machine name
+        run: |
+          echo "Machine name: $RUNNER_NAME"
    
-    - name: Install ninja-build
-      run: brew install ninja
+      - name: Install ninja-build
+        run: brew install ninja
 
-    - name: Install gettext
-      run: brew install gettext
+      - name: Install gettext
+        run: brew install gettext
 
-    - name: Install automake and other network utils
-      run: brew install automake autoconf curl rsync wget
+      - name: Install automake and other network utils
+        run: brew install automake autoconf curl rsync wget
 
-    - name: Install GNU sed
-      run: brew install gnu-sed
+      - name: Install GNU sed
+        run: brew install gnu-sed
 
-    - name: Install Python dependencies
-      run: brew install libb2 libffi readline sqlite3 xz zlib
+      - name: Install Python dependencies
+        run: brew install libb2 libffi readline sqlite3 xz zlib
 
-    - name: Install pyFLTK dependencies
-      run: brew install swig
+      - name: Install pyFLTK dependencies
+        run: brew install swig
 
-    - name: Remove system OpenEXR and Imath
-      run: |
-        brew uninstall --ignore-dependencies openexr imath || true
+      - name: Remove system OpenEXR and Imath
+        run: |
+          brew uninstall --ignore-dependencies openexr imath || true
 
-    - name: Checkout git tag type
-      run: git ls-remote --tags https://github.com/ggarra13/fltk.git | grep v1.2.2
+      - name: Checkout git tag type
+        run: git ls-remote --tags https://github.com/ggarra13/fltk.git | grep v1.2.2
 
-    - name: Setup environment
-      run: mkdir -p ssh
+      - name: Setup environment
+        run: mkdir -p ssh
 
-    - name: Decode SSH key
-      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
-      shell: bash
+      - name: Decode SSH key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+        shell: bash
 
-    - name: Set permissions on SSH key
-      run: chmod 600 ssh/id_rsa
+      - name: Set permissions on SSH key
+        run: chmod 600 ssh/id_rsa
 
-    - name: Decode FLTK SSH key
-      run: |
+      - name: Decode FLTK SSH key
+        run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+            chmod 600 ~/.ssh/id_ed25519
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Add SourceForge to known_hosts
+        shell: bash
+        run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
 
-    - name: Add SourceForge to known_hosts
-      shell: bash
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      - name: Set executable permissions
+        run: |
+          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
 
-    - name: Set executable permissions
-      run: |
-        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+      - name: List disk space
+        run: |
+          df -k
 
-    - name: List disk space
-      run: |
-        df -k
+      - name: Build mrv2
+        env:
+          BUILD_PYTHON: ON
+          MRV2_PYFLTK: ON
+          MRV2_PYBIND11: ON
+          MRV2_NETWORK: ON
+          MRV2_PDF: ON
+          MRV2_VK: ON
+          TLRENDER_AV1: ON
+          TLRENDER_EXR: ON
+          TLRENDER_FFMPEG: ON
+          TLRENDER_FFMPEG_MINIMAL: ON
+          TLRENDER_HAP: ON
+          TLRENDER_JPEG: ON
+          TLRENDER_NDI: OFF
+          TLRENDER_NET: ON
+          TLRENDER_OPENJPH: ON
+          TLRENDER_RAW: ON
+          TLRENDER_SGI: ON
+          TLRENDER_STB: ON
+          TLRENDER_SVTAV1: ON
+          TLRENDER_TIFF: ON
+          TLRENDER_USD: ON
+          TLRENDER_VK: OFF
+          TLRENDER_VPX: ON
+          TLRENDER_YASM: ON
 
-    - name: Build mrv2
-      env:
-        BUILD_PYTHON: ON
-        MRV2_PYFLTK: ON
-        MRV2_PYBIND11: ON
-        MRV2_NETWORK: ON
-        MRV2_PDF: ON
-        MRV2_VK: ON
-        TLRENDER_AV1: ON
-        TLRENDER_EXR: ON
-        TLRENDER_FFMPEG: ON
-        TLRENDER_FFMPEG_MINIMAL: ON
-        TLRENDER_HAP: ON
-        TLRENDER_JPEG: ON
-        TLRENDER_NDI: OFF
-        TLRENDER_NET: ON
-        TLRENDER_OPENJPH: ON
-        TLRENDER_RAW: ON
-        TLRENDER_SGI: ON
-        TLRENDER_STB: ON
-        TLRENDER_SVTAV1: ON
-        TLRENDER_TIFF: ON
-        TLRENDER_USD: ON
-        TLRENDER_VK: OFF
-        TLRENDER_VPX: ON
-        TLRENDER_YASM: ON
+        run: |
+          ./etc/runme_nolog.sh -t package clean
 
-      run: |
-        ./etc/runme_nolog.sh -t package clean
-
-    - name: Upload binaries
-      run: |
-        ./bin/release/upload_sourceforge.sh
+      - name: Upload binaries
+        run: |
+          ./bin/release/upload_sourceforge.sh

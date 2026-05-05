@@ -23,19 +23,28 @@ jobs:
         submodules: recursive
         fetch-depth: 1
 
-    - name: Setup ccache
-      uses: hendrikmuhs/ccache-action@v1.2
-      with:
-        key: ${{ runner.os }}-amd64-Vulkan-ccache-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-amd64-Vulkan-ccache-
+    - name: Install ccache
+      run: sudo apt-get update && sudo apt-get install -y ccache
 
+    - uses: actions/cache@v4
+      with:
+        path: ~/.ccache
+        key: ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-v1
+        restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
+
+    - name: Configure ccache
+      run: |
+        echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
+        echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+        echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
+        ccache --max-size=500M
+        
     - name: Install Rust
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@stable
       with:
         toolchain: stable
-        override: true
-        profile: minimal
+        components: clippy,rustfmt
 
     - name: Cache cargo
       uses: actions/cache@v4
@@ -101,7 +110,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: VulkanSDK-*
-        key: ${{ runner.os }}-amd64-vulkan-sdk-${{ hashFiles('etc/vulkan_version.sh', 'etc/linux/install_vulkan.sh') }}
+        key: ${{ runner.os }}-${{ runner.arch }}-vulkan-sdk-${{ hashFiles('etc/vulkan_version.sh', 'etc/linux/install_vulkan.sh') }}
 
     # Install Vulkan SDK
     - name: Install Vulkan

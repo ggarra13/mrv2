@@ -27,13 +27,24 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 1
-      - name: Setup ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: ${{ runner.os }}-arm64-OpenGL-ccache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-arm64-OpenGL-ccache-
 
+      - name: Install ccache
+        run: brew install ccache
+        
+      - uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-v1
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
+
+      - name: Configure ccache
+        run: |
+          echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
+          echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+          echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
+          ccache --max-size=500M
+        
       - name: Get machine name
         run: |
           echo "Machine name: $RUNNER_NAME"
