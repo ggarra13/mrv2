@@ -49,11 +49,12 @@ BROWSER_IMPERSONATE = 'safari15_5'
 mrv2_grand_total = vmrv2_grand_total = 0
 mrv2_windows_grand_total = mrv2_linux_grand_total = mrv2_macos_grand_total = 0
 vmrv2_windows_grand_total = vmrv2_linux_grand_total = vmrv2_macos_grand_total = 0
+mrv2_unknown_grand_total = vmrv2_unknown_grand_total = 0
 
-windows_re = re.compile(R"(?:Windows|Unknown)")
+windows_re = re.compile(R"Windows")
 linux_re = re.compile(R"Linux")
 macos_re = re.compile(R"(?:Darwin|Macintosh)")
-
+unknown_re = re.compile(R"Unknown")
 
 def get_date_arguments():
     parser = argparse.ArgumentParser(description='Process GitHub and SourceForge download counts.')
@@ -173,6 +174,7 @@ def count_sourceforge(repo, folder_name, end_date, start_date, fetch_json):
 
     mrv2_total = vmrv2_total = 0
     mrv2_win = vmrv2_win = mrv2_lin = vmrv2_lin = mrv2_mac = vmrv2_mac = 0
+    mrv2_unk = vmrv2_unk = 0
 
     if is_detailed_stats_folder:
         # === DETAILED FILE-LEVEL STATS ===
@@ -235,6 +237,11 @@ def count_sourceforge(repo, folder_name, end_date, start_date, fetch_json):
                                         mrv2_mac += count
                                     else:
                                         vmrv2_mac += count
+                                elif os_type == 'Unknown':
+                                    if package == 'mrv2':
+                                        mrv2_unk += count
+                                    else:
+                                       vmrv2_unk += count
                         except ValueError:
                             continue
 
@@ -260,7 +267,8 @@ def count_sourceforge(repo, folder_name, end_date, start_date, fetch_json):
         return (mrv2_total, vmrv2_total,
                 mrv2_win, vmrv2_win,
                 mrv2_lin, vmrv2_lin,
-                mrv2_mac, vmrv2_mac)
+                mrv2_mac, vmrv2_mac,
+                mrv2_unk, vmrv2_unk)
 
     # === AGGREGATED FOLDER STATS (beta + older released) ===
     urls = [
@@ -286,11 +294,13 @@ def count_sourceforge(repo, folder_name, end_date, start_date, fetch_json):
                     if windows_re.search(os_name): mrv2_win += num
                     elif linux_re.search(os_name): mrv2_lin += num
                     elif macos_re.search(os_name): mrv2_mac += num
+                    elif unknown_re.search(os_name): mrv2_unk += num
                 elif prefix == 'vmrv2':
                     vmrv2_total += num
                     if windows_re.search(os_name): vmrv2_win += num
                     elif linux_re.search(os_name): vmrv2_lin += num
                     elif macos_re.search(os_name): vmrv2_mac += num
+                    elif unknown_re.search(os_name): vmrv2_unk += num
                 print('{:>5}  {:<5} OS: {:<40}'.format(num, prefix, os_name))
             except Exception:
                 continue
@@ -299,7 +309,7 @@ def count_sourceforge(repo, folder_name, end_date, start_date, fetch_json):
         print('{:>5} Total Downloads for SourceForge {} (Aggregated)'.format(
             format_number(total_downloads, 5), f'{repo}/{folder_name}'))
 
-    return (mrv2_total, vmrv2_total, mrv2_win, vmrv2_win, mrv2_lin, vmrv2_lin, mrv2_mac, vmrv2_mac)
+    return (mrv2_total, vmrv2_total, mrv2_win, vmrv2_win, mrv2_lin, vmrv2_lin, mrv2_mac, vmrv2_mac, mrv2_unk, vmrv2_unk)
 
 # ====================== MAIN ======================
 if __name__ == "__main__":
@@ -420,7 +430,8 @@ if __name__ == "__main__":
             (mrv2_sf, vmrv2_sf,
              mrv2_win_sf, vmrv2_win_sf,
              mrv2_lin_sf, vmrv2_lin_sf,
-             mrv2_mac_sf, vmrv2_mac_sf) = count_sourceforge(
+             mrv2_mac_sf, vmrv2_mac_sf,
+             mrv2_unk_sf, vmrv2_unk_sf) = count_sourceforge(
                 repo, folder, end_date_str, date_start, fetch_sf_json)
 
             mrv2_grand_total += mrv2_sf
@@ -431,6 +442,8 @@ if __name__ == "__main__":
             vmrv2_linux_grand_total += vmrv2_lin_sf
             mrv2_macos_grand_total += mrv2_mac_sf
             vmrv2_macos_grand_total += vmrv2_mac_sf
+            mrv2_unknown_grand_total += mrv2_unk_sf
+            vmrv2_unknown_grand_total += vmrv2_unk_sf
 
         browser.close()
         
@@ -439,10 +452,12 @@ if __name__ == "__main__":
     print(f'{format_number(mrv2_windows_grand_total, 5)} Grand Total mrv2 Windows Downloads (GitHub + SourceForge)')
     print(f'{format_number(mrv2_linux_grand_total, 5)} Grand Total mrv2 Linux Downloads (GitHub + SourceForge)')
     print(f'{format_number(mrv2_macos_grand_total, 5)} Grand Total mrv2 macOS Downloads (GitHub + SourceForge)')
+    print(f'{format_number(mrv2_unknown_grand_total, 5)} Grand Total mrv2 Unknown Downloads - Windows? (GitHub + SourceForge)')
     print()
     print(f'{format_number(vmrv2_windows_grand_total, 5)} Grand Total vmrv2 Windows Downloads (GitHub + SourceForge)')
     print(f'{format_number(vmrv2_linux_grand_total, 5)} Grand Total vmrv2 Linux Downloads (GitHub + SourceForge)')
     print(f'{format_number(vmrv2_macos_grand_total, 5)} Grand Total vmrv2 macOS Downloads (GitHub + SourceForge)')
+    print(f'{format_number(vmrv2_unknown_grand_total, 5)} Grand Total vmrv2 Unknown Downloads - Windows? (GitHub + SourceForge)')
     print()
     print(f'{format_number(mrv2_grand_total, 5)} Grand Total mrv2 Downloads (GitHub + SourceForge)')
     print(f'{format_number(vmrv2_grand_total, 5)} Grand Total vmrv2 Downloads (GitHub + SourceForge)')
