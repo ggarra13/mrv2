@@ -28,9 +28,9 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.ccache
-          key: ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-v1
+          key: ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-v1
           restore-keys: |
-              ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
+              ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-
 
       - name: Configure ccache
         run: |
