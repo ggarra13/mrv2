@@ -18,218 +18,218 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        fetch-depth: 1
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
 
-    - name: Install ccache
-      run: sudo apt-get update && sudo apt-get install -y ccache
+      - name: Install ccache
+        run: sudo apt-get update && sudo apt-get install -y ccache
 
-    - uses: actions/cache@v4
-      with:
-        path: ~/.ccache
-        key: ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-v1
-        restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
+      - uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-v1
+          restore-keys: |
+              ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-
 
-    - name: Configure ccache
-      run: |
-        echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
-        echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-        echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
-        ccache --max-size=500M
-        
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: stable
-        components: clippy,rustfmt
+      - name: Configure ccache
+        run: |
+          echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
+          echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+          echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
+          ccache --max-size=500M
+          
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: clippy,rustfmt
 
-    - name: Cache cargo
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          ~/.cargo/bin
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-        restore-keys: |
-            ${{ runner.os }}-cargo-
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+              ${{ runner.os }}-cargo-
 
-    - name: Install cargo-c if needed
-      run: |
-        if ! command -v cargo-cinstall >/dev/null 2>&1; then
-            cargo install cargo-c --locked
-        fi
+      - name: Install cargo-c if needed
+        run: |
+          if ! command -v cargo-cinstall >/dev/null 2>&1; then
+              cargo install cargo-c --locked
+          fi
 
-    - name: Update repos
-      run: |
-        sudo add-apt-repository universe -y
-        sudo apt-get update || { echo "apt-get update failed"; exit 1; }
+      - name: Update repos
+        run: |
+          sudo add-apt-repository universe -y
+          sudo apt-get update || { echo "apt-get update failed"; exit 1; }
 
-    - name: Install build tools
-      run: |
-        sudo apt-get install autoconf automake
-        
-    - name: Install OpenGL dev
-      run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
+      - name: Install build tools
+        run: |
+          sudo apt-get install autoconf automake
+          
+      - name: Install OpenGL dev
+        run: sudo apt-get install -y xorg-dev libglu1-mesa-dev mesa-common-dev
 
-    - name: Install X11 dev
-      run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
+      - name: Install X11 dev
+        run: sudo apt-get install -y libx11-dev libxcursor-dev libxinerama-dev
 
-    - name: Install ALSA dev
-      run: sudo apt-get install -y libasound2-dev
+      - name: Install ALSA dev
+        run: sudo apt-get install -y libasound2-dev
 
-    - name: Install PulseAudio dev
-      run: sudo apt-get install -y libpulse-dev
+      - name: Install PulseAudio dev
+        run: sudo apt-get install -y libpulse-dev
 
-    - name: Install Pango dev
-      run: sudo apt-get install -y libpango1.0-dev
+      - name: Install Pango dev
+        run: sudo apt-get install -y libpango1.0-dev
 
-    - name: Install Wayland
-      run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev libglu-dev libdrm-dev
+      - name: Install Wayland
+        run: sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev libglu-dev libdrm-dev
 
-    - name: Install curl and openssl
-      run: sudo apt-get install -y curl openssl rsync libunistring-dev
+      - name: Install curl and openssl
+        run: sudo apt-get install -y curl openssl rsync libunistring-dev
 
-    - name: Install ninja-build
-      run: sudo apt-get install -y ninja-build
+      - name: Install ninja-build
+        run: sudo apt-get install -y ninja-build
 
-    - name: Install gettext
-      run: sudo apt-get install -y gettext
+      - name: Install gettext
+        run: sudo apt-get install -y gettext
 
-    - name: Install python dependencies
-      run: sudo apt-get install -y libssl-dev libffi-dev python3
+      - name: Install python dependencies
+        run: sudo apt-get install -y libssl-dev libffi-dev python3
 
-    - name: Install Vulkan drivers
-      run: sudo apt install -y mesa-vulkan-drivers
+      - name: Install Vulkan drivers
+        run: sudo apt install -y mesa-vulkan-drivers
 
-    - name: Cache Vulkan SDK
-      id: cache-vulkan-sdk
-      uses: actions/cache@v4
-      with:
-        path: VulkanSDK-*
-        key: ${{ runner.os }}-${{ runner.arch }}-vulkan-sdk-${{ hashFiles('etc/vulkan_version.sh', 'etc/linux/install_vulkan.sh') }}
+      - name: Cache Vulkan SDK
+        id: cache-vulkan-sdk
+        uses: actions/cache@v4
+        with:
+          path: VulkanSDK-*
+          key: ${{ runner.os }}-${{ runner.arch }}-vulkan-sdk-${{ hashFiles('etc/vulkan_version.sh', 'etc/linux/install_vulkan.sh') }}
 
-    # Install Vulkan SDK
-    - name: Install Vulkan
-      if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
-      env:
-        BUILD_VULKAN: OFF  # optional
-      run: |
-        ./etc/linux/install_vulkan.sh
+      # Install Vulkan SDK
+      - name: Install Vulkan
+        if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
+        env:
+          BUILD_VULKAN: OFF  # optional
+        run: |
+          ./etc/linux/install_vulkan.sh
 
-    # Set Vulkan environment variables (always, even if cached)
-    - name: Set Vulkan environment variables
-      run: |
-        # Debug: show current directory and contents
-        echo "Current directory: $(pwd)"
-        echo "Looking for VulkanSDK-* directories..."
+      # Set Vulkan environment variables (always, even if cached)
+      - name: Set Vulkan environment variables
+        run: |
+          # Debug: show current directory and contents
+          echo "Current directory: $(pwd)"
+          echo "Looking for VulkanSDK-* directories..."
 
-        # Find Vulkan SDK installation in workspace
-        VULKAN_DIR=$(find . -maxdepth 1 -type d -name "VulkanSDK-*" 2>/dev/null | head -1)
+          # Find Vulkan SDK installation in workspace
+          VULKAN_DIR=$(find . -maxdepth 1 -type d -name "VulkanSDK-*" 2>/dev/null | head -1)
 
-        if [ -z "$VULKAN_DIR" ]; then
-          echo "Error: Vulkan SDK directory not found (VulkanSDK-*)"
-          echo "Available directories:"
-          ls -ld */ 2>/dev/null || echo "No directories found"
-          exit 1
-        fi
-
-        if [ -d "$VULKAN_DIR" ]; then
-          echo "Found Vulkan SDK directory: $VULKAN_DIR"
-
-          # Find the version directory inside
-          VULKAN_VERSION=$(ls -1 "$VULKAN_DIR" | head -1)
-          echo "Version directory: $VULKAN_VERSION"
-
-          VULKAN_SDK="$VULKAN_DIR/$VULKAN_VERSION/x86_64"
-
-          if [ -d "$VULKAN_SDK" ]; then
-            # Convert to absolute path
-            VULKAN_SDK=$(cd "$VULKAN_SDK" && pwd)
-
-            echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
-            echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
-            echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
-            echo "Vulkan SDK configured: $VULKAN_SDK"
-          else
-            echo "Error: Vulkan SDK architecture directory not found: $VULKAN_SDK"
-            echo "Contents of $VULKAN_DIR/$VULKAN_VERSION:"
-            ls -la "$VULKAN_DIR/$VULKAN_VERSION" || echo "Directory not accessible"
+          if [ -z "$VULKAN_DIR" ]; then
+            echo "Error: Vulkan SDK directory not found (VulkanSDK-*)"
+            echo "Available directories:"
+            ls -ld */ 2>/dev/null || echo "No directories found"
             exit 1
           fi
-        else
-          echo "Error: Vulkan SDK directory exists but is not accessible: $VULKAN_DIR"
-          exit 1
-        fi
 
-    - name: Synchronize clock
-      run: |
-        sudo apt-get install -y ntp
+          if [ -d "$VULKAN_DIR" ]; then
+            echo "Found Vulkan SDK directory: $VULKAN_DIR"
 
-    - name: Setup environment
-      run: mkdir -p ssh
+            # Find the version directory inside
+            VULKAN_VERSION=$(ls -1 "$VULKAN_DIR" | head -1)
+            echo "Version directory: $VULKAN_VERSION"
 
-    - name: Decode SSH key
-      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
-      shell: bash
+            VULKAN_SDK="$VULKAN_DIR/$VULKAN_VERSION/x86_64"
 
-    - name: Set permissions on SSH key
-      run: chmod 600 ssh/id_rsa
+            if [ -d "$VULKAN_SDK" ]; then
+              # Convert to absolute path
+              VULKAN_SDK=$(cd "$VULKAN_SDK" && pwd)
 
-    - name: Decode FLTK SSH key
-      run: |
+              echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+              echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
+              echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
+              echo "Vulkan SDK configured: $VULKAN_SDK"
+            else
+              echo "Error: Vulkan SDK architecture directory not found: $VULKAN_SDK"
+              echo "Contents of $VULKAN_DIR/$VULKAN_VERSION:"
+              ls -la "$VULKAN_DIR/$VULKAN_VERSION" || echo "Directory not accessible"
+              exit 1
+            fi
+          else
+            echo "Error: Vulkan SDK directory exists but is not accessible: $VULKAN_DIR"
+            exit 1
+          fi
+
+      - name: Synchronize clock
+        run: |
+          sudo apt-get install -y ntp
+
+      - name: Setup environment
+        run: mkdir -p ssh
+
+      - name: Decode SSH key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+        shell: bash
+
+      - name: Set permissions on SSH key
+        run: chmod 600 ssh/id_rsa
+
+      - name: Decode FLTK SSH key
+        run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+            chmod 600 ~/.ssh/id_ed25519
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Add SourceForge to known_hosts
+        shell: bash
+        run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
 
-    - name: Add SourceForge to known_hosts
-      shell: bash
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+      - name: Set executable permissions
+        run: |
+          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
 
-    - name: Set executable permissions
-      run: |
-        chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+      - name: List disk space
+        run: |
+          df -k
 
-    - name: List disk space
-      run: |
-        df -k
+      - name: Build vmrv2
+        env:
+          BUILD_PYTHON: ON
+          MRV2_PYFLTK: ON
+          MRV2_PYBIND11: ON
+          MRV2_NETWORK: ON
+          MRV2_PDF: ON
+          TLRENDER_AV1: ON
+          TLRENDER_EXR: ON
+          TLRENDER_FFMPEG: ON
+          TLRENDER_FFMPEG_MINIMAL: ON
+          TLRENDER_GL: OFF
+          TLRENDER_HAP: ON
+          TLRENDER_JPEG: ON
+          TLRENDER_NDI: OFF
+          TLRENDER_NET: ON
+          TLRENDER_OPENJPH: ON
+          TLRENDER_RAW: ON
+          TLRENDER_SGI: ON
+          TLRENDER_STB: ON
+          TLRENDER_SVTAV1: ON
+          TLRENDER_TIFF: ON
+          TLRENDER_USD: OFF
+          TLRENDER_VPX: ON
+          TLRENDER_YASM: ON
 
-    - name: Build vmrv2
-      env:
-        BUILD_PYTHON: ON
-        MRV2_PYFLTK: ON
-        MRV2_PYBIND11: ON
-        MRV2_NETWORK: ON
-        MRV2_PDF: ON
-        TLRENDER_AV1: ON
-        TLRENDER_EXR: ON
-        TLRENDER_FFMPEG: ON
-        TLRENDER_FFMPEG_MINIMAL: ON
-        TLRENDER_GL: OFF
-        TLRENDER_HAP: ON
-        TLRENDER_JPEG: ON
-        TLRENDER_NDI: OFF
-        TLRENDER_NET: ON
-        TLRENDER_OPENJPH: ON
-        TLRENDER_RAW: ON
-        TLRENDER_SGI: ON
-        TLRENDER_STB: ON
-        TLRENDER_SVTAV1: ON
-        TLRENDER_TIFF: ON
-        TLRENDER_USD: OFF
-        TLRENDER_VPX: ON
-        TLRENDER_YASM: ON
+        run: |
+          ./etc/runme_nolog.sh -t package -vk
 
-      run: |
-        ./etc/runme_nolog.sh -t package -vk
-
-    - name: Upload binaries
-      run: |
-        ./bin/release/upload_sourceforge.sh -vk
+      - name: Upload binaries
+        run: |
+          ./bin/release/upload_sourceforge.sh -vk
 
