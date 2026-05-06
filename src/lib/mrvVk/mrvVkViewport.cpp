@@ -696,13 +696,6 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
             
-            // Get the command buffer started for the current frame.
-            VkCommandBuffer cmd = getCurrentCommandBuffer();
-
-            // Clear the frame
-            begin_render_pass(cmd);
-            end_render_pass(cmd);
-            
             // Check if the window changed screen.
             bool changed_screen = false;
             if (p.screen_index != this->screen_num())
@@ -744,13 +737,24 @@ namespace mrv
                             LOG_STATUS(msg);
                         }
                     }
-                    p.monitor = monitor;
-                    m_swapchain_needs_recreation = true;
-                    init_colorspace();
-                    redraw();
-                    return;
                 }
+                p.monitor = monitor;
+                
+                // If we changed screen we may have gone to a monitor with
+                // different scaling.  Recreate swapchain.
+                m_swapchain_needs_recreation = true;
+                init_colorspace();
+                redraw();
+                return;
             }
+            
+            // Get the command buffer started for the current frame.
+            VkCommandBuffer cmd = getCurrentCommandBuffer();
+
+            // Clear the frame
+            begin_render_pass(cmd);
+            end_render_pass(cmd);
+            
 
             // Store command for easy access.
             vk.cmd = cmd;

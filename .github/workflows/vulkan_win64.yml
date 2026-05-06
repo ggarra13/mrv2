@@ -77,9 +77,19 @@ jobs:
           toolchain: stable
           components: clippy,rustfmt
         
-      - name: Verify
+      - name: Install cargo-c if needed
         run: |
-          cargo -V
+          if ! command -v cargo-cinstall >/dev/null 2>&1; then
+              cargo install cargo-c --locked
+          fi
+          
+      - name: Verify Rust and Cargo
+        run: |
+          rust  -Vv
+          cargo -Vv
+          cargo cinstall --version
+          which rustc
+          which cargo
 
       - name: Fix linker shadowing
         run: mv /usr/bin/link.exe /usr/bin/link_msys.exe
@@ -94,12 +104,6 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
-
-      - name: Install cargo-c if needed
-        run: |
-          if ! command -v cargo-cinstall >/dev/null 2>&1; then
-              cargo install cargo-c --locked
-          fi
     
       - name: Get machine name
         run: |

@@ -149,6 +149,8 @@ namespace mrv
             ViewerUI* ui = nullptr;
             Fl_Window* topWindow = nullptr;
 
+            int screen_index = 0;
+
             
             TimelinePlayer* player = nullptr;
 
@@ -819,6 +821,22 @@ namespace mrv
         void TimelineWidget::draw()
         {
             TLRENDER_P();
+
+            bool changed_screen = false;
+            if (p.screen_index != this->screen_num())
+            {
+                p.screen_index = this->screen_num();
+                changed_screen = true;
+            }
+
+            // If we changed screen we may have gone to a monitor with
+            // different scaling.  Recreate swapchain.
+            if (changed_screen)
+            {
+                m_swapchain_needs_recreation = true;
+                redraw();
+                return;
+            }
             
             const math::Size2i renderSize(pixel_w(), pixel_h());
             

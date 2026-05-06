@@ -63,6 +63,14 @@ jobs:
               cargo install cargo-c --locked
           fi
 
+      - name: Verify Rust and Cargo
+        run: |
+          rustc -Vv
+          cargo -Vv
+          cargo cinstall --version
+          which rustc
+          which cargo
+          
       - name: Update repos
         run: |
           sudo add-apt-repository universe -y

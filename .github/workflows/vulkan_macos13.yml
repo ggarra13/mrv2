@@ -46,8 +46,22 @@ jobs:
           toolchain: stable
           components: clippy,rustfmt
 
-      - name: Verify
-        run: rustc -Vv
+      - name: Ensure cargo is in PATH
+        run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        
+      - name: Install cargo-c if needed
+        run: |
+          if ! command -v cargo-cinstall >/dev/null 2>&1; then
+              cargo install cargo-c --locked
+          fi
+          
+      - name: Verify Rust and Cargo
+        run: |
+          rustc -Vv
+          cargo -Vv
+          cargo cinstall --version
+          which rustc
+          which cargo
 
       - name: Cache cargo
         uses: actions/cache@v4
@@ -89,7 +103,6 @@ jobs:
       - name: Install/Build Vulkan SDK
         env:
           BUILD_VULKAN: OFF
-        shell: bash
         run: |
           if [[ "$BUILD_VULKAN" == "ON" ]]; then
             ./etc/macos/install_vulkan.sh
@@ -125,7 +138,6 @@ jobs:
 
       - name: Decode SSH key
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
-        shell: bash
 
       - name: Set permissions on SSH key
         run: chmod 600 ssh/id_rsa
@@ -138,7 +150,6 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Add SourceForge to known_hosts
-        shell: bash
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
