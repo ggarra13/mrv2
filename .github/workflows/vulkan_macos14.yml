@@ -125,8 +125,12 @@ jobs:
             vulkaninfo --summary || true
           fi
 
-      - name: Setup SSH Directory
-        run: mkdir -p ~/.ssh
+      - name: Remove system OpenEXR and Imath
+        run: |
+          brew uninstall --ignore-dependencies openexr imath || true
+
+      - name: Setup environment
+        run: mkdir -p ssh
 
       - name: Decode SSH key
         run: |
@@ -146,9 +150,6 @@ jobs:
 
       - name: Set executable permissions
         run: chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
-
-      - name: List disk space
-        run: df -k
 
       - name: Build vmrv2
         env:

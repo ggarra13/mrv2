@@ -5,7 +5,7 @@ on:
     branches-ignore:
       - main
     tags-ignore:
-      - "**"
+      - '**'
   workflow_dispatch:
 
 jobs:
@@ -39,15 +39,34 @@ jobs:
           echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
           echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
           ccache --max-size=500M
-          
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          components: clippy,rustfmt
+              
+      - name: Get machine name
+        run: |
+          echo "Machine name: $RUNNER_NAME"
 
-      - name: Verify
-        run: rustc -Vv
+      # - name: Install Rust
+      #   uses: dtolnay/rust-toolchain@stable
+      #   with:
+      #     toolchain: stable
+      #     components: clippy,rustfmt
+
+      - name: Install rust
+        run: brew install rust
+      
+      - name: Install cargo-c
+        run: brew install cargo-c
+          
+      - name: Install cargo-c if needed
+        run: |
+          if ! command -v cargo-cinstall >/dev/null 2>&1; then
+              cargo install cargo-c --locked
+          fi
+          
+      - name: Verify Rust and Cargo
+        run: |
+          rustc -Vv
+          cargo -Vv
+          cargo cinstall --version
 
       - name: Cache cargo
         uses: actions/cache@v4
@@ -59,16 +78,6 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
-
-      - name: Install cargo-c if needed
-        run: |
-          if ! command -v cargo-cinstall >/dev/null 2>&1; then
-              cargo install cargo-c --locked
-          fi
-
-      - name: Get machine name
-        run: |
-          echo "Machine name: $RUNNER_NAME"
           
       - name: Install ninja-build
         run: brew install ninja
@@ -124,32 +133,23 @@ jobs:
         run: mkdir -p ssh
 
       - name: Decode SSH key
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
         shell: bash
-
-      - name: Set permissions on SSH key
-        run: chmod 600 ssh/id_rsa
 
       - name: Decode FLTK SSH key
         run: |
-          mkdir -p ~/.ssh
           echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Add SourceForge to known_hosts
         shell: bash
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+        run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
 
       - name: Set executable permissions
-        run: |
-          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
-
-      - name: List disk space
-        run: |
-          df -k
+        run: chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
 
       - name: Build vmrv2
         env:
@@ -176,11 +176,7 @@ jobs:
           TLRENDER_USD: OFF
           TLRENDER_VPX: ON
           TLRENDER_YASM: ON
+        run: ./etc/runme_nolog.sh -t package -vk clean
 
-        run: |
-          ./etc/runme_nolog.sh -t package -vk clean
-
-      - name: Upload binaries  # Conditional step
-        run: |
-          ./bin/release/upload_sourceforge.sh -vk
-
+      - name: Upload binaries
+        run: ./bin/release/upload_sourceforge.sh -vk
