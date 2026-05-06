@@ -48,6 +48,7 @@ ChangeLog
 ---------
 
 - Updated build to use Svt-AV1 v4.0.1.
+- Fixed Preferences->OCIO Display->Display / View when there was a single Display.
 
 
 v1.6.3
