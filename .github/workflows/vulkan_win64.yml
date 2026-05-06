@@ -70,6 +70,9 @@ jobs:
         with:
           update: true
           path-type: inherit
+
+      - name: Fix linker shadowing
+        run: mv /usr/bin/link.exe /usr/bin/link_msys.exe
           
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -90,9 +93,6 @@ jobs:
           cargo cinstall --version
           which rustc
           which cargo
-
-      - name: Fix linker shadowing
-        run: mv /usr/bin/link.exe /usr/bin/link_msys.exe
 
       - name: Cache cargo
         uses: actions/cache@v4

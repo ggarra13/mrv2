@@ -44,14 +44,17 @@ jobs:
         run: |
           echo "Machine name: $RUNNER_NAME"
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          components: clippy,rustfmt
+      # - name: Install Rust
+      #   uses: dtolnay/rust-toolchain@stable
+      #   with:
+      #     toolchain: stable
+      #     components: clippy,rustfmt
 
-      - name: Install cargo
-        run: brew install cargo
+      - name: Install rust
+        run: brew install rust
+      
+      - name: Install cargo-c
+        run: brew install cargo-c
           
       - name: Install cargo-c if needed
         run: |
