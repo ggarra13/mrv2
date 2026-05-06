@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0400
+version 1.0500
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -7,11 +7,7 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
-snap {
-  ver 1
-  current_suite FLTK
-  current_preset 0
-}
+include_guard {}
 decl {\#include <string>} {public local
 }
 
@@ -36,10 +32,10 @@ Function {make_ocio_chooser(std::string c, mrv::OCIOBrowser::Type type )} {open 
     label {OCIO Browser}
     user_data w user_data_type {Fl_Window*}
     callback {ocio = orig; v->hide();} open
-    xywh {691 331 395 445} type Single resizable hotspot
+    xywh {0 0 395 445} type Single resizable hotspot
     code0 {orig = ocio = c;} modal visible
   } {
-    Fl_Group {} {open selected
+    Fl_Group {} {open
       xywh {0 0 395 445} box PLASTIC_UP_BOX
     } {
       Fl_Browser uiOCIOBrowser {
@@ -70,5 +66,6 @@ if ( elem < 1 || elem > o->size() ) { v->clear(); return; }
   while ( w->visible() )
       Fl::check();
 Fl::delete_widget(w);
-return ocio;} {}
+return ocio;} {selected
+  }
 }

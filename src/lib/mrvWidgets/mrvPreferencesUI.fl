@@ -1050,7 +1050,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
             }
             Fl_Group {} {
               label {HDR Peak Detection}
-              xywh {280 38 565 369} box EMBOSSED_BOX align 5
+              xywh {280 38 565 369} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {HDR Peak Detection}
@@ -1070,7 +1070,7 @@ v->uiWindowYSize->value( v->main->uiMain->h() );}
                   }
                 }
                 Fl_Value_Input uiPrefsHDRPeakPercentile {
-                  label {HDR Percentile} selected
+                  label {HDR Percentile}
                   tooltip {When less than 100, helps find the peak brightness ignoring the top 1 percent outliers.} xywh {629 162 64 28} minimum 0.1 maximum 100 step 0.1 value 100 textcolor 56
                 }
                 Fl_Value_Input uiPrefsHDRPeakSmoothingPeriod {
@@ -1371,11 +1371,11 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
               }
             }
             Fl_Group {} {
-              label {OCIO Defaults}
-              xywh {288 37 555 367} align 5 hide
+              label {OCIO Defaults} open
+              xywh {288 37 555 367} align 5
             } {
               Fl_Group {} {
-                label {OCIO Defaults}
+                label {OCIO Defaults} open
                 xywh {305 54 520 340} box ROUNDED_BOX
               } {
                 Fl_Group uiOCIO_ICS {
@@ -1510,8 +1510,9 @@ v->uiOCIO_Look->do_callback();}
 }
 catch(const std::exception& e)
 {
+  std::cerr << e.what() << std::endl;
   o->value("");
-}}
+}} selected
                     tooltip {Default Display / View} xywh {396 346 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                   }
                   Fl_Button {} {
