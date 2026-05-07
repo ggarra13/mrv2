@@ -133,6 +133,11 @@ extern "C"
 #    include <stb/stb_image.h>
 #endif
 
+#ifdef TLRENDER_SVTAV1
+#undef Bool
+#    include <svt-av1/EbSvtAv1.h>
+#endif
+
 #ifdef TLRENDER_TIFF
 #    include <tiffvers.h>
 #endif
@@ -1059,6 +1064,15 @@ namespace mrv
 #ifdef TLRENDER_STB
         o << "stb v" << STBI_VERSION << endl
           << "Copyright (c) 2017 Sean Barrett" << endl
+          << endl;
+#endif
+#ifdef TLRENDER_SVTAV1
+        o << "svt-av1 v"
+          << SVT_AV1_VERSION_MAJOR << "."
+          << SVT_AV1_VERSION_MINOR << "."
+          << SVT_AV1_VERSION_PATCHLEVEL
+          << endl
+          << "Copyright (c) 2019 Intel Corporation" << endl
           << endl;
 #endif
 #ifdef TLRENDER_USD
