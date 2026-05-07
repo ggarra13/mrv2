@@ -105,12 +105,6 @@ jobs:
           restore-keys: |
               ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
 
-      - name: Configure and Reset ccache
-        run: |
-          ccache --max-size=500M
-          ccache -z # Zero out the stats so you can see the cache hit rate for *this* specific run at the end
-          
-
       - name: Synchronize clock
         shell: cmd
         run: |
@@ -125,6 +119,11 @@ jobs:
           update: true
           path-type: inherit
 
+      - name: Configure and Reset ccache
+        run: |
+          ccache --max-size=500M
+          ccache -z # Zero out the stats so you can see the cache hit rate for *this* specific run at the end
+          
       - name: Get machine name
         run: |
           echo "Machine name: $RUNNER_NAME"
