@@ -49,6 +49,8 @@ ChangeLog
 
 - Updated build to use Svt-AV1 v4.0.1.
 - Fixed Preferences->OCIO Display->Display / View selection when there was a single Display.
+- Fixed a Linux Wayland Cairo race condition in FLTK when playing back heavy videos.
+- Fixed a minor validation error on vmrv2 when switching to Blit the Viewports.
 
 
 v1.6.3
