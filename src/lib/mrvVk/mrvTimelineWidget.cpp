@@ -821,6 +821,10 @@ namespace mrv
         void TimelineWidget::draw()
         {
             TLRENDER_P();
+            
+            const math::Size2i renderSize(pixel_w(), pixel_h());
+            
+            VkCommandBuffer cmd = getCurrentCommandBuffer();
 
             bool changed_screen = false;
             if (p.screen_index != this->screen_num())
@@ -833,14 +837,14 @@ namespace mrv
             // different scaling.  Recreate swapchain.
             if (changed_screen)
             {
+                // If we changed screen, we should still begin/end the clear
+                // render pass.
+                begin_render_pass(cmd);
+                end_render_pass(cmd);
                 m_swapchain_needs_recreation = true;
                 redraw();
                 return;
             }
-            
-            const math::Size2i renderSize(pixel_w(), pixel_h());
-            
-            VkCommandBuffer cmd = getCurrentCommandBuffer();
 
             std::vector<int> markers;
             if (p.player && p.player->hasAnnotations())
