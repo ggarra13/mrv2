@@ -106,8 +106,6 @@ jobs:
               ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
 
       - name: Configure and Reset ccache
-        # We can now safely use the msys2 shell since paths are absolute and environment is set
-        shell: msys2 {0} 
         run: |
           ccache --max-size=500M
           ccache -z # Zero out the stats so you can see the cache hit rate for *this* specific run at the end
