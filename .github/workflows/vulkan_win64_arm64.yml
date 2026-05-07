@@ -66,6 +66,62 @@ jobs:
       # with:
       #   path: 'C:\VS2022Custom'
 
+      - name: Install ccache
+        shell: pwsh
+        run: |
+          # Detect architecture
+          if ("${{ runner.arch }}" -eq "ARM64") {
+            $arch = "aarch64"
+          } else {
+            $arch = "x86_64"
+          }
+
+          $version = "4.13.6"  
+          $url = "https://github.com/ccache/ccache/releases/download/v$version/ccache-$version-windows-$arch.zip"
+
+          Invoke-WebRequest -Uri $url -OutFile ccache.zip
+          Expand-Archive -Path ccache.zip -DestinationPath . -Force
+
+          # Move the binary to a location in PATH
+          $ccache_bin_dir = "$env:USERPROFILE\.local\bin"
+          New-Item -ItemType Directory -Force -Path $ccache_bin_dir | Out-Null
+          Move-Item -Path "ccache-$version-windows-$arch/ccache.exe" -Destination "$ccache_bin_dir\ccache.exe" -Force
+
+          # Add to PATH for subsequent steps
+          echo "$ccache_bin_dir" | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8
+
+          # Verify (using absolute path because PATH isn't updated for current step)
+          & "$ccache_bin_dir\ccache.exe" --version
+
+      - name: Set ccache Environment Variables
+        shell: pwsh
+        run: |
+          # 1. Use runner.temp for a guaranteed, shared absolute path across Windows/Node/MSYS2
+          $ccache_dir = "$env:RUNNER_TEMP\.ccache"
+          echo "CCACHE_DIR=$ccache_dir" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          
+          # 2. Normalize Workspace path for MSYS2 compatibility
+          $workspace = "${{ github.workspace }}".Replace('\', '/')
+          echo "CCACHE_BASEDIR=$workspace" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          
+          echo "CCACHE_COMPILERCHECK=content" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - uses: actions/cache@v4
+        with:
+          # Match the exact absolute path defined in the previous step
+          path: ${{ runner.temp }}/.ccache
+          key: ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-v1
+          restore-keys: |
+              ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-
+
+      - name: Configure and Reset ccache
+        # We can now safely use the msys2 shell since paths are absolute and environment is set
+        shell: msys2 {0} 
+        run: |
+          ccache --max-size=500M
+          ccache -z # Zero out the stats so you can see the cache hit rate for *this* specific run at the end
+          
+          
       - name: Synchronize clock
         shell: cmd
         run: |
