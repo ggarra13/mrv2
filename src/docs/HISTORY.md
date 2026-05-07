@@ -48,6 +48,7 @@ ChangeLog
 ---------
 
 - Updated build to use Svt-AV1 v4.0.1.
+- Added Svt-AV1 version to Help->About Window.
 - Fixed Preferences->OCIO Display->Display / View selection when there was a single Display.
 - Fixed a Linux Wayland Cairo race condition in FLTK when playing back heavy videos.
 - Fixed a random crash on Linux Wayland when moving the vmrv2 or mrv2 window from a monitor with scale of 100% to a monitor with a scale of 200%. 
