@@ -315,6 +315,9 @@ msgstr "Abrir una Sesión"
 msgid "Save a session file."
 msgstr "Guardar Sesión."
 
+msgid "Save and reload session file restarting mrv2."
+msgstr "Guardar y recargard sesión, relanzando mrv2."
+
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Plugin de Python duplicado {0} en {1} y {2}."
 

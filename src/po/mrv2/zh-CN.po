@@ -299,6 +299,9 @@ msgstr "打开会话文件 。"
 msgid "Save a session file."
 msgstr "保存会话文件 。"
 
+msgid "Save and reload session file restarting mrv2."
+msgstr "保存并重新加载会话文件，同时重启 mrv2。"
+
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "复制的Python插件 {0} in {1} {2}"
 

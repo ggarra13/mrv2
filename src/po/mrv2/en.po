@@ -301,6 +301,9 @@ msgstr "Open a session file."
 msgid "Save a session file."
 msgstr "Save a session file."
 
+msgid "Save and reload session file restarting mrv2."
+msgstr "Save and reload session file restarting mrv2."
+
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Duplicated Python plugin {0} in {1} and {2}."
 
@@ -1944,19 +1947,19 @@ msgid "Stop streaming"
 msgstr "Stop streaming"
 
 msgid "Type of Waveform Monitor."
-msgstr ""
+msgstr "Type of Waveform Monitor."
 
 msgid "Max. Value"
 msgstr "Hex Values"
 
 msgid "Maximum Value in F-Stops."
-msgstr ""
+msgstr "Maximum Value in F-Stops."
 
 msgid "Log Scale"
-msgstr ""
+msgstr "Log Scale"
 
 msgid "Use a Log Scale in HDR."
-msgstr ""
+msgstr "Use a Log Scale in HDR."
 
 msgid "Type of Vectorscope."
 msgstr "Vectorscope"
@@ -3018,7 +3021,7 @@ msgstr ""
 "movies slower."
 
 msgid "Debanding is not set to None.  This can make images show blurred"
-msgstr ""
+msgstr "Debanding is not set to None.  This can make images show blurred"
 
 msgid "Could not open color theme from \"{0}\"."
 msgstr "Could not open color theme from \"{0}\"."
@@ -3655,7 +3658,7 @@ msgid "Vectorscope"
 msgstr "Vectorscope"
 
 msgid "Waveform"
-msgstr ""
+msgstr "Waveform"
 
 msgid "Hotkeys"
 msgstr "Hotkeys"
@@ -6083,10 +6086,10 @@ msgid "File / URL"
 msgstr "File / URL"
 
 msgid "AI Prompt"
-msgstr ""
+msgstr "AI Prompt"
 
 msgid "AI prompt to feed the image to AI."
-msgstr ""
+msgstr "AI prompt to feed the image to AI."
 
 msgid "Half"
 msgstr "Half"

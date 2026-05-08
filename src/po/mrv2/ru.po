@@ -300,6 +300,9 @@ msgstr "Откройте сессионный файл."
 msgid "Save a session file."
 msgstr "Сохранить сессионный файл."
 
+msgid "Save and reload session file restarting mrv2."
+msgstr "Сохранить и перезагрузить файл сеанса, перезапустив mrv2."
+
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Дублированный мешок Python {0} в {1} и {2}."
 

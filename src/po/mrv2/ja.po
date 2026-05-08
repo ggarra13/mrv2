@@ -298,6 +298,9 @@ msgstr "ファイルを開きます"
 msgid "Save a session file."
 msgstr "Q&Aセッション"
 
+msgid "Save and reload session file restarting mrv2."
+msgstr "mrv2 を再起動してセッションファイルを保存し、再読み込みします。"
+
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "重複したPythonプラグイン {0} が {1} と {2} にあります。"
 

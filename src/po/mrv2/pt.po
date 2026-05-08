@@ -295,6 +295,9 @@ msgstr "Abra um ficheiro de sesso."
 msgid "Save a session file."
 msgstr "Gravar um ficheiro de sesso."
 
+msgid "Save and reload session file restarting mrv2."
+msgstr "Salvar e recarregar o arquivo de sessão reiniciando o mrv2."
+
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Complemento Python duplicado {0} em {1} e {2}."
 

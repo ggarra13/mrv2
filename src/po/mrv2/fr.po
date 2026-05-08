@@ -292,6 +292,9 @@ msgstr "Ouvrez un fichier de session."
 msgid "Save a session file."
 msgstr "Enregistrer un fichier de session."
 
+msgid "Save and reload session file restarting mrv2."
+msgstr "Enregistrer et recharger le fichier de session en redémarrant mrv2."
+
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Plugin Python en double {0} dans {1} et {2}."
 

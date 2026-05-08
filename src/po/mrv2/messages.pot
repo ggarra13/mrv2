@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.6.3\n"
+"Project-Id-Version: mrv2 v1.6.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -280,6 +280,9 @@ msgid "Open a session file."
 msgstr ""
 
 msgid "Save a session file."
+msgstr ""
+
+msgid "Save and reload session file restarting mrv2."
 msgstr ""
 
 msgid "Duplicated Python plugin {0} in {1} and {2}."

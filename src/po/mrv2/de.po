@@ -294,6 +294,9 @@ msgstr "ffnen Sie eine Sitzungsdatei."
 msgid "Save a session file."
 msgstr "Eine Sitzungsdatei speichern."
 
+msgid "Save and reload session file restarting mrv2."
+msgstr "Sitzungsdatei speichern und neu laden, dabei mrv2 neu starten."
+
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "Dupliziertes Python-Plugin {0} in {1} und {2}."
 

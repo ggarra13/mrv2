@@ -290,6 +290,9 @@ msgstr "सत्र फ़ाइल खोलें."
 msgid "Save a session file."
 msgstr "एक सत्र फ़ाइल सहेजें."
 
+msgid "Save and reload session file restarting mrv2."
+msgstr "mrv2 को पुनः आरंभ करते हुए सत्र फ़ाइल को सहेजें और पुनः लोड करें।"
+
 msgid "Duplicated Python plugin {0} in {1} and {2}."
 msgstr "दोहरी पाइथन प्लगिन {0} को {1} और {2} में."
 
