@@ -53,6 +53,7 @@ ChangeLog
 - Fixed a Linux Wayland Cairo race condition in FLTK when playing back heavy videos.
 - Fixed a random crash on Linux Wayland when moving the vmrv2 or mrv2 window from a monitor with scale of 100% to a monitor with a scale of 200%. 
 - Fixed a minor validation error on vmrv2 when switching to Blit the Viewports.
+- UI Improvement: cleaned up Annotations Panel a bit.
 
 
 v1.6.3

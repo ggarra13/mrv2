@@ -104,7 +104,7 @@ namespace mrv
 
             cg->begin();
 
-            Fl_Group* bg = new Fl_Group(g->x(), Y + 20, g->w(), 40);
+            Fl_Group* bg = new Fl_Group(g->x(), Y + 20, g->w(), 50);
             bg->begin();
 
             bg = new Fl_Group(g->x(), Y + 20, g->w(), 40);
@@ -202,7 +202,7 @@ namespace mrv
                 });
 
             auto sV =
-                new Widget< HorSlider >(X, Y + 40, g->w(), 20, _("Size:"));
+                new Widget< HorSlider >(X, Y + 50, g->w(), 20, _("Size:"));
             s = sV;
             s->range(12, 100);
             s->step(1);
