@@ -7,6 +7,8 @@
 
 #include "mrvFl/mrvSession.h"
 
+#include "mrvFLTK/mrvCallbacks.h"
+
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
 namespace py = pybind11;
@@ -49,6 +51,11 @@ namespace mrv
             return session::save(file);
         }
 
+        void save_and_reload()
+        {
+            reload_session_cb(nullptr, App::ui);
+        }
+        
     } // namespace session
 } // namespace mrv
 
@@ -112,6 +119,10 @@ Used to manage everything related to sessions.
     session.def(
         "save", py::overload_cast<std::string>(&mrv::session::saveAs),
         _("Save a session file."), py::arg("file"));
+    
+    session.def(
+        "save_and_reload", &mrv::session::save_and_reload,
+        _("Save and reload session file restarting mrv2."));
 }
 /**
  * \endcond
