@@ -220,6 +220,9 @@ namespace mrv
         {
             Fl::check();
         }
+        if (urlMovie.cancel)
+            return;
+        
         std::string url = urlMovie.uiURL->value();
         std::string user = urlMovie.uiUser->value();
         std::string password = urlMovie.uiPassword->value();
