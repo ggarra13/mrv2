@@ -8,14 +8,16 @@ i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
 include_guard {}
-class URLMovieUI {open selected
+class URLMovieUI {open
 } {
   decl {bool cancel = false;} {public local
   }
   Function {make_window()} {open
   } {
     Fl_Window uiMain {
-      label {Link Annotation} open
+      label {Link Annotation}
+      callback {cancel = true;
+o->hide();} open selected
       xywh {0 0 799 240} type Double modal visible
     } {
       Fl_Input uiURL {
