@@ -222,8 +222,8 @@ namespace mrv
         }
         std::string url = urlMovie.uiURL->value();
         std::string user = urlMovie.uiUser->value();
-        std::string password = urlMovie.uiUser->value();
-        std::string suffix = urlMovie.uiUser->value();
+        std::string password = urlMovie.uiPassword->value();
+        std::string suffix = urlMovie.uiSuffix->value();
 
         if (url.substr(0, 8) != "https://" &&
             url.substr(0, 7) != "http://")

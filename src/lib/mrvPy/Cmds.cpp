@@ -70,11 +70,37 @@ namespace mrv2
         {
             App* app = App::app;
             std::string filename = file;
-            if (file[0] == '~')
+            if (!file.empty() && file[0] == '~')
             {
                 filename = mrv::homepath() + file.substr(1, file.size());
             }
             app->open(filename, audioFile);
+        }
+        
+        /**
+         *  \brief Open an url movie with optional user, password and suffix.
+         *
+         * @param url         str holding the url.
+         * @param user   optional str holding the path to the audio file.
+         */
+        void open_url_movie(const std::string& url, const std::string& user,
+                            const std::string& password,
+                            const std::string& suffix)
+        {
+            App* app = App::app;
+            
+            std::vector<std::string> files;
+            std::string full_url = url;
+            if (!user.empty())
+                full_url += "?user=" + user;
+            if (!password.empty())
+                full_url += ";password=" + password;
+            if (!suffix.empty())
+                full_url += suffix;
+        
+            files.push_back(full_url);
+
+            open_files_cb(files, App::ui);
         }
 
         /**
@@ -505,6 +531,13 @@ Used to run main commands and get arguments and set the display, image, compare,
     cmds.def(
         "open", &mrv2::cmd::open, _("Open file with optional audio."),
         py::arg("fileName"), py::arg("audioFileName") = std::string());
+    
+    cmds.def(
+        "open_url_movie", &mrv2::cmd::open_url_movie, _("Open url movie with optional user, password and suffix"),
+        py::arg("url"),
+        py::arg("user") = std::string(),
+        py::arg("password") = std::string(),
+        py::arg("suffix") = std::string());
 
     cmds.def(
         "compare", &mrv2::cmd::compare,

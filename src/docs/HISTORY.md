@@ -54,7 +54,9 @@ ChangeLog
 - Fixed a random crash on Linux Wayland when moving the vmrv2 or mrv2 window from a monitor with scale of 100% to a monitor with a scale of 200%. 
 - Fixed a minor validation error on vmrv2 when switching to Blit the Viewports.
 - UI Improvement: cleaned up Annotations Panel a bit.
+- Bug fix: fixed password and suffix entries when opening an URL movie.
 - Python: added session.save_and_reload() to save the session and restart the viewer with the same session.  This is useful to propagate changes to the environment variables on Windows.
+- Python: added cmd.open_url_movie() for opening url movies with optional user name, password and suffix.
 
 
 v1.6.3
