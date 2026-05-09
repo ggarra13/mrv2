@@ -101,7 +101,7 @@ jobs:
         with:
           # Match the exact absolute path defined in the previous step
           path: ${{ runner.temp }}/.ccache
-          key: ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-v1
+          key: ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-${{ github.sha }}
           restore-keys: |
               ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-
           

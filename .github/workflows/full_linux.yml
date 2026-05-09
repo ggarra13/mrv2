@@ -25,21 +25,22 @@ jobs:
           
       - name: Install ccache
         run: sudo apt-get update && sudo apt-get install -y ccache
-        
-      - uses: actions/cache@v4
-        with:
-          path: ~/.ccache
-          key: ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-v1
-          restore-keys: |
-              ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
 
       - name: Configure ccache
         run: |
           echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
           echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
           echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
+          echo "CCACHE_DATE=$(date +'%Y-%m')" >> $GITHUB_ENV
           ccache --max-size=500M
-      
+              
+      - uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-${{ env.CCACHE_DATE }}
+          restore-keys: |
+              ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
+              
       - name: Get machine name
         run: |
           echo "Machine name: $RUNNER_NAME"
