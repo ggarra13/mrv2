@@ -2,21 +2,15 @@
 Licencias
 #########
 
-Si corres la versión de OpenGL (mrv2) o Vulkan (vmrv2) a partir de la versión v1.6.4, como es un producto comercial, debés obtener una licencia para tu computadora.
+Si corre mrv2 o vmrv2, puede licenciarlo para acceder a funciones más avanzadas.
 
-Cuando comenzas mrv2, si no hay una licencia válida, aparecerá el ayudante de
-licencias con la ID de tu máquina.
+Para ello, debe ir a Ayuda->Desbloquear Funciones.
 
-Debés proveer esa ID de tu máquina a ggarra13@gmail.com con tu email propio que
-usaste con Paypal para verificar tu compra.
+Un programa de ayuda de licencias aparecerá con el costo actual de los planes de licencias.
 
-Recibirás luego un email con tu llave de licencia, que se verá similar a:
+Mostrará también un identificador de su máquina y un boton de donar.
 
-e6dc7488c3b4319f51d9bde0408f191d84333fc568de264644cee4787719b4d
+Al cliquear en Donate, aparecerá una página de donaciones de Paypal en su navegador de web.  Entre la donación para el plan que quiera y luego en comentarios, entre su identificador de máquina.
 
-y una fecha de expiration codificada, como:
-
-5e4244070d594a0d4259
-
-Debés entrar ese texto sin cambios en el campo de License y Expiration y luego cliquear en crear.  El archivo mrv2.license.prefs será creado el directorio del usuario actual, dentro de .filmaura.
+Su licencia será eventualmente procesada (puede tardar un par de días) y podrá acceder a las funciones que eligió.
 

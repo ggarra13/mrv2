@@ -2,20 +2,14 @@
 Licensing
 #########
 
-If running the OpenGL (mrv2) or Vulkan version (vmrv2) after v1.6.4, as it is a commercial product, you need to license it for your computer.
+If running the OpenGL (mrv2) or Vulkan version (vmrv2), you can license it to access premium features.
 
-When you start mrv2, if there's no license it will popup a license helper with
-an ID for your machine.
+You should go to Help->Unlock Features.
 
-You need to provide that machine ID to ggarra13@gmail.com with your own email to
-validate the purchase.
+A license helper program will appear with the current pricing of the license plans.
 
-You will then receive an email with your License key, which will look like:
+It will also show a machine id and a button to donate.
 
-e6dc7488c3b4319f51d9bde0408f191d84333fc568de264644cee4787719b4d
+You should click on Donate, which will bring a Paypal Donate page on your browser.  Enter the donation for the license plan you want (or a any donation amount if you don't want to unlock features) and when asked later, enter your machine id.
 
-and an expiration encoded date, like:
-
-5e4244070d594a0d4259
-
-You need to enter that long string into the license field and then click on create.  The mrv2.license.prefs will be created on the current user's directory.
+Your node-license will eventually be processed (can take a couple of days) and you will be able to access the unlocked features.
