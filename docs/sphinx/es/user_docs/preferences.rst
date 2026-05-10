@@ -382,6 +382,8 @@ Línea de Tiempo
 HDR
 ===
 
+.. image:: ./images/preferences/es_hdr.png
+   :align: center
 
 .. topic:: Preferir RGB (Vulkan)
 
@@ -412,6 +414,16 @@ HDR
 
 	   El gamut mapping (mapeo de gamut) es el proceso de convertir colores de un espacio de color a otro cuando el dispositivo de destino no puede representar todos los colores originales.
 
+Detección de Umbral de HDR
+==========================
+
+.. image:: ./images/preferences/es_hdr_peak.png
+   :align: center
+
+La detección de picos HDR (HDR peak detection) es el proceso de analizar contenido de video o imágenes para determinar los niveles de luminancia más brillantes y significativos presentes en la señal. Algunas películas proporcionan datos HDR por secuencia, por lo que en esos casos esto puede no ser necesario.
+
+La detección de picos analiza dinámicamente cada cuadro (frame) para identificar las altas luces (highlights) y ajustar la visualización en cada cuadro.
+	   
 Reproducir
 ==========
 

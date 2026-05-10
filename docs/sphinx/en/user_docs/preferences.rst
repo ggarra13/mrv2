@@ -376,6 +376,9 @@ Timeline
 HDR
 ===
 
+.. image:: ./images/preferences/en_hdr.png
+   :align: center
+	   
 .. topic:: Prefer RGB (Vulkan)
 
 	   Vulkan operates faster on multiples of 4 bytes.  So, by default it
@@ -411,6 +414,9 @@ HDR
 
 HDR Peak Detection
 ==================
+
+.. image:: ./images/preferences/en_hdr_peak.png
+   :align: center
 
 HDR peak detection is the process of analyzing video or image content to determine the brightest meaningful luminance levels present in the signal.  Some movies provide HDR Data on a per sequence basis, so this may not be needed in those cases.
 Peak detection dynamically checks each frame to see the highlights and adjust the display on each frame.

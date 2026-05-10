@@ -70,6 +70,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#render">Render</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#thumbnails">Thumbnails</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#timeline">Timeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hdr">HDR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hdr-peak-detection">HDR Peak Detection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#playback">Playback</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#edit">Edit</a></li>
 </ul>
@@ -402,7 +404,7 @@ dissolves in OTIO.</p>
 </ul>
 </aside>
 <aside class="topic">
-<p class="topic-title">Minify Fukter</p>
+<p class="topic-title">Minify Filter</p>
 <ul>
 <li><p>Linear</p>
 <p>Linear when downsizing.</p>
@@ -413,7 +415,7 @@ dissolves in OTIO.</p>
 </ul>
 </aside>
 <aside class="topic">
-<p class="topic-title">Magnify Fukter</p>
+<p class="topic-title">Magnify Filter</p>
 <ul>
 <li><p>Linear</p>
 <p>Linear when upsizing.</p>
@@ -459,6 +461,48 @@ program exit.</p>
 <p class="topic-title">Start in Edit mode</p>
 <p>When selected, the UI will start in Edit mode by default.</p>
 </aside>
+</section>
+<section id="hdr">
+<h2>HDR<a class="headerlink" href="#hdr" title="Link to this heading"></a></h2>
+<img alt="../_images/en_hdr.png" class="align-center" src="../_images/en_hdr.png" />
+<aside class="topic">
+<p class="topic-title">Prefer RGB (Vulkan)</p>
+<p>Vulkan operates faster on multiples of 4 bytes.  So, by default it
+will decompress images as RGBA.  With this setting you can force it
+to decompress images as RGB when possible to save memory at the
+cost of some speed.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Chromaticities</p>
+<p>OpenEXR images encode chromaticities, albeit they can usually not be
+relied upon for HDR.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">HDR Data</p>
+<p>In HDR movies, HDR Data is encoded in the file.  You can turn it
+off here by default.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Tonemap Algorithm</p>
+<p>Tonemapping in HDR is the process of converting a scene or image
+with a very wide brightness range into a narrower range that a
+display can actually show.
+HDR can use different algorithms for tone mapping.  Here you can
+select the default one.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Gamut Mapping</p>
+<p>Gamut mapping in HDR is the process of converting colors from one
+color gamut into another gamut while preserving appearance as much
+as possible.</p>
+<p>A “gamut” is the range of colors a system can represent.</p>
+</aside>
+</section>
+<section id="hdr-peak-detection">
+<h2>HDR Peak Detection<a class="headerlink" href="#hdr-peak-detection" title="Link to this heading"></a></h2>
+<img alt="../_images/en_hdr_peak.png" class="align-center" src="../_images/en_hdr_peak.png" />
+<p>HDR peak detection is the process of analyzing video or image content to determine the brightest meaningful luminance levels present in the signal.  Some movies provide HDR Data on a per sequence basis, so this may not be needed in those cases.
+Peak detection dynamically checks each frame to see the highlights and adjust the display on each frame.</p>
 </section>
 <section id="playback">
 <h2>Playback<a class="headerlink" href="#playback" title="Link to this heading"></a></h2>
@@ -529,17 +573,38 @@ y ningún archivo config.ocio.</p>
 <p class="admonition-title">Note</p>
 <p>If the environment variable OCIO is set, this setting will be ignored.</p>
 </div>
+<aside class="topic">
+<p class="topic-title">Use Default Display and View</p>
+<p>OCIO config files can store a default display and view.  With this
+setting, you can choose to use them.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Use Active Views and Active Displays</p>
+<p>OCIO config files can make only some views and displays active.
+When this setting is on, the player will pay attention to that
+setting in the .config file.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">No OCIO on Videos or sRGB/BT709 data</p>
+<p>This setting can be a bit controvertial.  It will turn off OCIO
+whenever you play a video or show an sRGB or BT709 data, like 8-bit
+movies or images.</p>
+</aside>
 </section>
 <section id="ocio-defaults">
 <h2>OCIO Defaults<a class="headerlink" href="#ocio-defaults" title="Link to this heading"></a></h2>
 <img alt="../_images/en_ocio_defaults.png" class="align-center" src="../_images/en_ocio_defaults.png" />
 <aside class="topic">
-<p class="topic-title">Use Active Views and Active Displays</p>
-<p>When selected, if the OCIO config.ocio file has active views or active displays, these will be used (filtered).  Otherwise, they will be ignored.</p>
-</aside>
-<aside class="topic">
 <p class="topic-title">Input Color Space</p>
 <p>Establish the Input Color Space preferred for each image bit depth.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Look</p>
+<p>Establish the default look.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Display / View</p>
+<p>Establish the default Display and View.</p>
 </aside>
 </section>
 <section id="loading">

@@ -71,12 +71,14 @@
 <li class="toctree-l3"><a class="reference internal" href="#render">Render</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#miniaturas">Miniaturas</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#linea-de-tiempo">Línea de Tiempo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hdr">HDR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deteccion-de-umbral-de-hdr">Detección de Umbral de HDR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#reproducir">Reproducir</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#edicion">Edición</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#ocio">OCIO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ocio-por-defecto">OCIO por Defecto</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ocio-estandard">OCIO Estandard</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cargando">Cargando</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mapeo-de-carpetas">Mapeo de Carpetas</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#red">Red</a></li>
@@ -465,6 +467,45 @@ programa.</p>
 <p>Al seleccionarlo, el programa comenzará en modo de edición.</p>
 </aside>
 </section>
+<section id="hdr">
+<h2>HDR<a class="headerlink" href="#hdr" title="Link to this heading"></a></h2>
+<img alt="../_images/es_hdr.png" class="align-center" src="../_images/es_hdr.png" />
+<aside class="topic">
+<p class="topic-title">Preferir RGB (Vulkan)</p>
+<p>Vulkan operata más rápido en múltiplos de 4 bits.  Por ello, el
+defecto es descomprimir imáganes como RGBA.
+Con este seteo, lo fuerza a usar RGB para ahorrar memoria al costo
+de velocidad.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Chromaticities</p>
+<p>Las imágenes de OpenEXR pueden encodificar cromaticidades, aunque en
+general no se puede depender de ello.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Datos HDR</p>
+<p>En películas HDR, los datos están encodificados en el archivo.
+Puede apagarlo aquí por defecto.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Mapeo de tonos</p>
+<p>Mapeo de tonos en HDR es el proceso de convertir una escena o imagen
+con un rango muy amplio de brillo a un rango mas estrecho que tu
+display pueda mostrar.
+HDR puede usar diferente algoritmos para ello.  Aquí puede setear el
+de defecto.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Mapeo de Gamut</p>
+<p>El gamut mapping (mapeo de gamut) es el proceso de convertir colores de un espacio de color a otro cuando el dispositivo de destino no puede representar todos los colores originales.</p>
+</aside>
+</section>
+<section id="deteccion-de-umbral-de-hdr">
+<h2>Detección de Umbral de HDR<a class="headerlink" href="#deteccion-de-umbral-de-hdr" title="Link to this heading"></a></h2>
+<img alt="../_images/es_hdr_peak.png" class="align-center" src="../_images/es_hdr_peak.png" />
+<p>La detección de picos HDR (HDR peak detection) es el proceso de analizar contenido de video o imágenes para determinar los niveles de luminancia más brillantes y significativos presentes en la señal. Algunas películas proporcionan datos HDR por secuencia, por lo que en esos casos esto puede no ser necesario.</p>
+<p>La detección de picos analiza dinámicamente cada cuadro (frame) para identificar las altas luces (highlights) y ajustar la visualización en cada cuadro.</p>
+</section>
 <section id="reproducir">
 <h2>Reproducir<a class="headerlink" href="#reproducir" title="Link to this heading"></a></h2>
 <img alt="../_images/es_playback.png" class="align-center" src="../_images/es_playback.png" />
@@ -533,18 +574,32 @@ them.  They are prefixed by ocio:// and have no config.ocio file.</p>
 <p class="admonition-title">Nota</p>
 <p>Si está seteada la variable de entorno OCIO, este seteo será ignorado.</p>
 </div>
-</section>
-<section id="ocio-por-defecto">
-<h2>OCIO por Defecto<a class="headerlink" href="#ocio-por-defecto" title="Link to this heading"></a></h2>
-<img alt="../_images/es_ocio_defaults.png" class="align-center" src="../_images/es_ocio_defaults.png" />
 <aside class="topic">
 <p class="topic-title">Use Vistas Activas y Displays Activos</p>
 <p>Al estar seleccionada, si el archivo de OCIO config.ocio tiene vistas o displays activos, éstos serán usados (filtrados).  De otra forma, serán ignorados.</p>
 </aside>
 <aside class="topic">
+<p class="topic-title">Sin OCIO en Videos o datos sRGB/BT709</p>
+<p>This setting es un poco controversial.  Desactiva OCIO
+cuando vea un video sRGB o BT709, como una película o imagen de
+8-bits.</p>
+</aside>
+</section>
+<section id="ocio-estandard">
+<h2>OCIO Estandard<a class="headerlink" href="#ocio-estandard" title="Link to this heading"></a></h2>
+<img alt="../_images/es_ocio_defaults.png" class="align-center" src="../_images/es_ocio_defaults.png" />
+<aside class="topic">
 <p class="topic-title">Espacio de Entrada de Color</p>
 <p>Establece el Espacio de Entrada de Color para cada imagen basada en
 su profundidad de bits.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Look</p>
+<p>Establece el look por defecto.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Display / View</p>
+<p>Establece la Vista y el Display por defecto.</p>
 </aside>
 </section>
 <section id="cargando">
