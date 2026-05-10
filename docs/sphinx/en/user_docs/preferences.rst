@@ -312,7 +312,7 @@ Render
 
 	     Color and alpha are considered premultiplied.
 	     
-.. topic:: Minify Fukter
+.. topic:: Minify Filter
 
 	   - Linear
 
@@ -322,7 +322,7 @@ Render
 
 	     No filter.
 	     
-.. topic:: Magnify Fukter
+.. topic:: Magnify Filter
 
 	   - Linear
 
@@ -372,6 +372,48 @@ Timeline
 .. topic:: Start in Edit mode
 
 	   When selected, the UI will start in Edit mode by default.
+
+HDR
+===
+
+.. topic:: Prefer RGB (Vulkan)
+
+	   Vulkan operates faster on multiples of 4 bytes.  So, by default it
+	   will decompress images as RGBA.  With this setting you can force it
+	   to decompress images as RGB when possible to save memory at the
+	   cost of some speed.
+
+.. topic:: Chromaticities
+
+	   OpenEXR images encode chromaticities, albeit they can usually not be
+	   relied upon for HDR.
+
+.. topic:: HDR Data
+
+	   In HDR movies, HDR Data is encoded in the file.  You can turn it
+	   off here by default.
+	   
+.. topic:: Tonemap Algorithm
+	   
+	   Tonemapping in HDR is the process of converting a scene or image
+	   with a very wide brightness range into a narrower range that a
+	   display can actually show.
+	   HDR can use different algorithms for tone mapping.  Here you can
+	   select the default one.
+
+.. topic:: Gamut Mapping
+
+	   Gamut mapping in HDR is the process of converting colors from one
+	   color gamut into another gamut while preserving appearance as much
+	   as possible.
+
+	   A “gamut” is the range of colors a system can represent.
+
+HDR Peak Detection
+==================
+
+HDR peak detection is the process of analyzing video or image content to determine the brightest meaningful luminance levels present in the signal.  Some movies provide HDR Data on a per sequence basis, so this may not be needed in those cases.
+Peak detection dynamically checks each frame to see the highlights and adjust the display on each frame.
 	   
 	     
 Playback
@@ -451,6 +493,25 @@ OCIO
 
    If the environment variable OCIO is set, this setting will be ignored.
 
+   
+.. topic:: Use Default Display and View
+
+	   OCIO config files can store a default display and view.  With this
+	   setting, you can choose to use them.
+
+.. topic:: Use Active Views and Active Displays
+
+	   OCIO config files can make only some views and displays active.
+	   When this setting is on, the player will pay attention to that
+	   setting in the .config file.
+
+.. topic:: No OCIO on Videos or sRGB/BT709 data
+
+	   This setting can be a bit controvertial.  It will turn off OCIO
+	   whenever you play a video or show an sRGB or BT709 data, like 8-bit
+	   movies or images.
+
+
 	   
 OCIO Defaults
 =============
@@ -458,14 +519,17 @@ OCIO Defaults
 .. image:: ./images/preferences/en_ocio_defaults.png
    :align: center
 
-
-.. topic:: Use Active Views and Active Displays
-
-	   When selected, if the OCIO config.ocio file has active views or active displays, these will be used (filtered).  Otherwise, they will be ignored.
-
 .. topic:: Input Color Space
 
 	   Establish the Input Color Space preferred for each image bit depth.
+
+.. topic:: Look
+
+	   Establish the default look.
+
+.. topic:: Display / View
+
+	   Establish the default Display and View.
 	   
 Loading
 =======

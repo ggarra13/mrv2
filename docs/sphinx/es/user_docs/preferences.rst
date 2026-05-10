@@ -379,6 +379,39 @@ Línea de Tiempo
 
 	   Al seleccionarlo, el programa comenzará en modo de edición.
 
+HDR
+===
+
+
+.. topic:: Preferir RGB (Vulkan)
+
+	   Vulkan operata más rápido en múltiplos de 4 bits.  Por ello, el
+	   defecto es descomprimir imáganes como RGBA.
+	   Con este seteo, lo fuerza a usar RGB para ahorrar memoria al costo
+	   de velocidad.
+
+.. topic:: Chromaticities
+
+	   Las imágenes de OpenEXR pueden encodificar cromaticidades, aunque en
+	   general no se puede depender de ello.
+
+.. topic:: Datos HDR
+
+	   En películas HDR, los datos están encodificados en el archivo.
+	   Puede apagarlo aquí por defecto.
+	   
+.. topic:: Mapeo de tonos
+	   
+	   Mapeo de tonos en HDR es el proceso de convertir una escena o imagen
+	   con un rango muy amplio de brillo a un rango mas estrecho que tu
+	   display pueda mostrar.
+	   HDR puede usar diferente algoritmos para ello.  Aquí puede setear el
+	   de defecto.
+
+.. topic:: Mapeo de Gamut
+
+	   El gamut mapping (mapeo de gamut) es el proceso de convertir colores de un espacio de color a otro cuando el dispositivo de destino no puede representar todos los colores originales.
+
 Reproducir
 ==========
 
@@ -453,22 +486,36 @@ OCIO
 .. note::
 
    Si está seteada la variable de entorno OCIO, este seteo será ignorado.
+
+.. topic:: Use Vistas Activas y Displays Activos
 	   
-OCIO por Defecto
-================
+	   Al estar seleccionada, si el archivo de OCIO config.ocio tiene vistas o displays activos, éstos serán usados (filtrados).  De otra forma, serán ignorados.
+	   
+.. topic:: Sin OCIO en Videos o datos sRGB/BT709
+
+	   This setting es un poco controversial.  Desactiva OCIO
+	   cuando vea un video sRGB o BT709, como una película o imagen de
+	   8-bits.
+	   
+OCIO Estandard
+==============
 
 .. image:: ./images/preferences/es_ocio_defaults.png
    :align: center
 
 
-.. topic:: Use Vistas Activas y Displays Activos
-	   
-	   Al estar seleccionada, si el archivo de OCIO config.ocio tiene vistas o displays activos, éstos serán usados (filtrados).  De otra forma, serán ignorados.
-
 .. topic:: Espacio de Entrada de Color
 
 	   Establece el Espacio de Entrada de Color para cada imagen basada en
 	   su profundidad de bits.
+	   
+.. topic:: Look
+
+	   Establece el look por defecto.
+
+.. topic:: Display / View
+
+	   Establece la Vista y el Display por defecto.
 	   
 Cargando
 ========
