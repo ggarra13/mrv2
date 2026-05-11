@@ -154,7 +154,21 @@ vec4 sampleTexture(
               c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
               c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
           }
-              
+
+          if (1 == imageChannels)
+          {
+              c.g = c.b = c.r;
+              c.a = 1.0;
+          }
+          else if (2 == imageChannels)
+          {
+              c.a = c.g;
+              c.g = c.b = c.r;
+          }
+          else if (3 == imageChannels)
+          {
+              c.a = 1.0;
+          }              
        }
       return c;
 }

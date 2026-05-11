@@ -59,6 +59,7 @@ ChangeLog
 - Python: added session.save_and_reload() to save the session and restart the viewer with the same session.  This is useful to propagate changes to the environment variables on Windows.
 - Python: added cmd.open_url_movie() for opening url movies with optional user name, password and suffix.
 - Building: improved building performance on the cloud.
+- Vulkan: fixed showing LA_U8 and similar images.
 
 
 v1.6.3
