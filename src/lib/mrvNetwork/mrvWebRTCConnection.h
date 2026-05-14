@@ -17,25 +17,22 @@ namespace mrv
         }
 
         std::shared_ptr<rtc::DataChannel> dataChannel;
+        bool dataChannelOpen = false;
+        bool sentRemote = false;
 
         std::string createOffer()
             {
                 return _peerConnection->createOffer();
             }
-
-        bool sentRemote() const
-            {
-                return _sentRemote;
-            }
-    
+        
         void setRemoteDescription(const rtc::Description& d)
             {
                 _peerConnection->setRemoteDescription(d);
-                _sentRemote = true;
+                sentRemote = true;
             }
     
     private:
-        std::atomic<bool> _sentRemote = false;
+        bool _sentRemote = false;
         std::shared_ptr<rtc::PeerConnection> _peerConnection;
     };
 

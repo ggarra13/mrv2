@@ -22,47 +22,47 @@ set( LIBRARIES mrvFLTK mrvVoice)
 
 if(MRV2_NETWORK)
     list(APPEND SOURCES
-	        # Common
-		mrvSyncClient.cpp
-    		mrvSyncMedia.cpp
-    		mrvSyncUI.cpp
-    		mrvCommandInterpreter.cpp
+	# Common
+	mrvSyncClient.cpp
+    	mrvSyncMedia.cpp
+    	mrvSyncUI.cpp
+    	mrvCommandInterpreter.cpp
 		
-	        # TCP
-    		mrvClient.cpp
-		mrvComfyUIListener.cpp
-		mrvImageListener.cpp
-    		mrvMessagePublisher.cpp
-    		mrvParseHost.cpp
+	# TCP
+    	mrvClient.cpp
+	mrvComfyUIListener.cpp
+	mrvImageListener.cpp
+    	mrvMessagePublisher.cpp
+    	mrvParseHost.cpp
+    	mrvConnectionHandler.cpp
+    	mrvServer.cpp
 
-		
-    		mrvConnectionHandler.cpp
-    		mrvServer.cpp
-
-		# WebRTC
-		mrvSignalingClient.cpp
-		mrvWebRTCClient.cpp
-		mrvWebRTCManager.cpp
-	    )
+	# WebRTC
+	mrvSignalingClient.cpp
+	mrvWebRTCClient.cpp
+	mrvWebRTCManager.cpp)
     list(APPEND HEADERS
-              	mrvComfyUIListener.h 
-		mrvImageListener.h
-    		mrvMessagePublisher.h
-		mrvParseHost.h
-    		mrvProtocolVersion.h
-    		mrvClient.h
-    		mrvCommandInterpreter.h
-		mrvConnectionHandler.h
-    		mrvServer.h
-
-		# WebRTC
-		mrvSignalingClient.h
-		mrvSignalingMessage.h
-		mrvWebRTCClient.h
-		mrvWebRTCManager.h
-	    )
+	# TCP
+        mrvComfyUIListener.h 
+	mrvImageListener.h
+    	mrvMessagePublisher.h
+	mrvParseHost.h
+    	mrvProtocolVersion.h
+    	mrvClient.h
+    	mrvCommandInterpreter.h
+	mrvConnectionHandler.h
+    	mrvServer.h
+	
+	# WebRTC
+	mrvSignalingClient.h
+	mrvSignalingMessage.h
+	mrvWebRTCClient.h
+	mrvWebRTCManager.h
+    )
     list(APPEND LIBRARIES Poco::Net Poco::Foundation)
-    list(APPEND LIBRARIES datachannel)
+
+    find_package(LibDataChannel REQUIRED)
+    list(APPEND LIBRARIES LibDataChannel::LibDataChannel)
 endif()
 
 

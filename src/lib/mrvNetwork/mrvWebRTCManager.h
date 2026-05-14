@@ -1,3 +1,4 @@
+#include "mrvNetwork/mrvMessage.h"
 #include "mrvNetwork/mrvSignalingMessage.h"
 #include "mrvNetwork/mrvWebRTCConnection.h"
 
@@ -23,7 +24,12 @@ namespace mrv
         void handleAnswer(const std::string& peerId, const std::string& sdp);
     
         void addRemoteCandidate(const std::string& peerId, const rtc::Candidate& c);
-    
+
+        void publish(const Message&);
+        
+        std::function<void(const rtc::binary&)>
+        onBinaryMessage;
+        
         std::function<void(const SignalingMessage&)>
         onSignalMessage;
 

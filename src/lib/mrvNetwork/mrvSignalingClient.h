@@ -15,7 +15,7 @@ namespace mrv
     class SignalingClient
     {
     public:
-        void connect(const std::string& room = "",
+        void connect(const std::string& roomId,
                      const std::string& playerId = "");
 
         void send(const SignalingMessage& msg);

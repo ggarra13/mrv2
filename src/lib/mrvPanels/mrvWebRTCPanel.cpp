@@ -2,25 +2,21 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include <thread>
-
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Int_Input.H>
-#include <FL/Fl_Flex.H>
-
-#include "mrvIcons/Network.h"
-
-#include "mrvWidgets/mrvFunctional.h"
-#include "mrvWidgets/mrvInput.h"
-#include "mrvWidgets/mrvIntInput.h"
-#include "mrvWidgets/mrvPack.h"
+#include "mrvApp/mrvSettingsObject.h"
 
 #include "mrvNetwork/mrvDummyClient.h"
 #include "mrvNetwork/mrvWebRTCClient.h"
 
-#include "mrvFl/mrvIO.h"
+#include "mrvWidgets/mrvFunctional.h"
+#include "mrvWidgets/mrvInput.h"
 
-#include "mrvApp/mrvSettingsObject.h"
+#include "mrvIcons/Network.h"
+
+#include "mrvCore/mrvUtil.h"
+
+#include <FL/Fl_Input.H>
+
+#include "mrvFl/mrvIO.h"
 
 #include "mrvPanelsCallbacks.h"
 
@@ -28,7 +24,7 @@
 
 namespace
 {
-    const char* kModule = "w3t";
+    const char* kModule = "w3tc";
 }
 
 namespace mrv
@@ -43,8 +39,6 @@ namespace mrv
             Fl_Button* createButton = nullptr;
             Fl_Group* roomGroup = nullptr;
             Input* room = nullptr;
-            // PopupMenu* hostMenu = nullptr;
-            // PopupMenu* typeMenu = nullptr;
         };
 
         WebRTCPanel::WebRTCPanel(ViewerUI* ui) :
@@ -108,22 +102,15 @@ namespace mrv
                         return;
                     }
 
-                    try
+                    std::string roomId = _r->room->value();
+                    if (roomId.empty())
                     {
-                        std::string roomId = _r->room->value();
-                        if (roomId.empty())
-                        {
-                            roomId = "roomA";
-                        }
-                        _r->room->value(roomId.c_str());
-                        
-                        tcp = new WebRTCClient(roomId);
-                        deactivate();
+                        roomId = generateRandomLetters(6);
                     }
-                    catch (const std::exception& e)
-                    {
-                        LOG_ERROR(e.what());
-                    }
+                    _r->room->value(roomId.c_str());
+                    
+                    tcp = new WebRTCClient(roomId);
+                    deactivate();
                 });
             
             g->end();
@@ -131,8 +118,6 @@ namespace mrv
 
         void WebRTCPanel::deactivate()
         {
-            _r->roomGroup->deactivate();
-
             const char* kButtonLabel = _("Disconnect");
             _r->createButton->copy_label(kButtonLabel);
             

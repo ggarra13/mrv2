@@ -21,6 +21,8 @@ namespace mrv
         void sendMessages() override;
         void receiveMessages() override;
 
+        void handleBinaryMessage(rtc::binary data);
+        
     protected:
         SignalingClient signalingClient;
         WebRTCManager webrtcManager;

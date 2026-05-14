@@ -129,4 +129,22 @@ namespace mrv
         const std::string& directory, std::vector<std::string>& movies,
         std::vector<std::string>& sequences, std::vector<std::string>& audios);
 
+    /** 
+     * Generate random numbers as a string
+     * 
+     * @param length number of digits to generate
+     * 
+     * @return string
+     */
+    std::string generateRandomNumbers(int length = 6);
+    
+    /** 
+     * Generate random letters as a string
+     * 
+     * @param length number of letters to generate
+     * 
+     * @return string
+     */
+    std::string generateRandomLetters(int length = 6);
+
 } // namespace mrv

@@ -1,9 +1,13 @@
 #include "mrvNetwork/mrvWebRTCManager.h"
 
+#include "mrvFl/mrvIO.h"
+
 namespace
 {
     template <class T>
     std::weak_ptr<T> make_weak_ptr(std::shared_ptr<T> ptr) { return ptr; }
+
+    const char* kModule = "w3tc";
 }
 
 namespace mrv
@@ -16,6 +20,24 @@ namespace mrv
     void WebRTCManager::setConfiguration(const rtc::Configuration& value)
     {
         config = value;
+    }
+    
+    void WebRTCManager::publish(const Message& msg)
+    {
+        std::vector< uint8_t > bson = nlohmann::json::to_bson(msg);
+        std::size_t messageLength = bson.size();
+        if (messageLength == 0)
+            return;
+                
+        for (auto& [_, client] : clients)
+        {
+            if (!client->dataChannelOpen)
+                continue;
+            
+            client->dataChannel->send(
+                reinterpret_cast<const std::byte*>(bson.data()),
+                messageLength);
+        }
     }
     
     std::shared_ptr<WebRTCConnection>
@@ -32,7 +54,15 @@ namespace mrv
             clients[id] = client;
         }
         pc->onStateChange([this, id, pc](PeerConnection::State state) {
-            std::cout << id << " State: " << state << std::endl;
+            if (state == PeerConnection::State::Failed)
+            {
+                LOG_ERROR("[" << id << "] State: " << state);
+            }
+            else
+            {
+                LOG_STATUS("[" << id << "] State: " << state);
+            }
+                
             if (state == PeerConnection::State::Disconnected ||
                 state == PeerConnection::State::Failed ||
                 state == PeerConnection::State::Closed) {
@@ -60,7 +90,7 @@ namespace mrv
 
         pc->onGatheringStateChange(
             [this, wpc = make_weak_ptr(pc), id](PeerConnection::GatheringState state) {
-                std::cout << "Gathering State: " << state << std::endl;
+                LOG_STATUS("Gathering State: " << state);
                 if (state == PeerConnection::GatheringState::Complete) {
                     if(auto pc = wpc.lock()) {
                         auto description = pc->localDescription();
@@ -78,50 +108,44 @@ namespace mrv
                 }
             });
 
-        // IMPORTANT: Handle incoming DataChannel (especially on answerer side)
-        pc->onDataChannel([id, client](std::shared_ptr<DataChannel> dc) {
-            std::cout << "[" << id << "] Received remote DataChannel: " 
-                      << dc->label() << std::endl;
+        // Handle incoming DataChannel
+        pc->onDataChannel([this, id, client](std::shared_ptr<DataChannel> dc) {
 
             client->dataChannel = dc;
 
             dc->onOpen([id, client]() {
-                std::cout << "[" << id << "] DataChannel onOpen" << std::endl;
+                client->dataChannelOpen = true;
             });
 
-            // dc->onMessage(nullptr, [id, wdc = make_weak_ptr(dc)](
-            //                   const std::string& msg) {
-            //     std::cout << "Message from " << id << " received 1: " << msg << std::endl;
-            //     // Echo back
-            //     if (auto dc = wdc.lock()) {
-            //         dc->send("Pong");
-            //     }
-            // });
+            dc->onMessage([this, id](const rtc::binary data) {
+                if (onBinaryMessage)
+                {
+                    onBinaryMessage(data);
+                }
+            }, {});
 
-            dc->onClosed([id]() {
-                std::cout << "[" << id << "] DataChannel closed" << std::endl;
+            dc->onClosed([id, client]() {
+                client->dataChannelOpen = false;
             });
         });
     
         if (isOfferer)
         {
             auto dc = pc->createDataChannel("mrv2_sync");
-            dc->onOpen([id, wdc = make_weak_ptr(dc)]() {
-                if (auto dc = wdc.lock()) {
-                    dc->send("Ping");
-                }
-            });
 
-            // dc->onMessage(nullptr, [id, wdc = make_weak_ptr(dc)](string msg) {
-            //     std::cout << "Message from " << id << " received: " << msg
-            //               << std::endl;
-            //     if (auto dc = wdc.lock()) {
-            //         dc->send("Ping");
-            //     }
-            // });
-    
-            dc->onClosed([id, wdc = make_weak_ptr(dc)]() {
-                std::cout << "onClosed" << std::endl;
+            dc->onOpen([id, client]() {
+                client->dataChannelOpen = true;
+            });
+            
+            dc->onMessage([this, id](const rtc::binary data) {
+                if (onBinaryMessage)
+                {
+                    onBinaryMessage(data);
+                }
+            }, {});
+
+            dc->onClosed([id, client]() {
+                client->dataChannelOpen = false;
             });
             client->dataChannel = dc;
         
@@ -162,13 +186,13 @@ namespace mrv
     {
         std::lock_guard<std::mutex> lock(mtx);
         auto jt = clients.find(peerId);
-        if (jt != clients.end() && jt->second->sentRemote())
+        if (jt != clients.end() && jt->second->sentRemote)
         {
             jt->second->peerConnection->addRemoteCandidate(c);
         }
         else
         {
-            // PC not created or sendRemoteDescription sent yet — buffer it
+            // PC not created or sendRemoteDescription not sent yet — buffer it
             pendingCandidates[peerId].push_back(c);
         }
     }
@@ -183,7 +207,7 @@ namespace mrv
     void WebRTCManager::drainPendingCandidates(const std::string& peerId)
     {
         // Drain any candidates that arrived before we were ready.
-        // DO NOT ADD lock(mtx).
+        // DO NOT ADD std::lock_guard lock(mtx).
         auto i = clients.find(peerId);
         if (i == clients.end())
             return;

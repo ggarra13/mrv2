@@ -1222,6 +1222,18 @@ namespace mrv
 
                 set_edit_mode_cb(value, ui);
             }
+            else if (c == "WebRTC Panel")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                bool value = message["value"];
+                if ((!value && webrtcPanel) || (value && !webrtcPanel))
+                    webrtc_panel_cb(nullptr, ui);
+            }
             else if (c == "Network Panel")
             {
                 bool receive = prefs->ReceiveUI->value();

@@ -1,8 +1,13 @@
 
 #include "mrvNetwork/mrvSignalingClient.h"
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvUtil.h"
+
+#include <tlCore/StringFormat.h>
 
 #include <chrono>
 #include <iostream>
@@ -12,41 +17,15 @@
 
 namespace
 {
-
-    std::string generateRandomLetters(int length = 6) {
-        // Define the character set to choose from
-        const std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    
-        // Setup the random number generator
-        std::random_device rd;  // Obtain a random seed from the hardware
-        std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
-    
-        // Define the range (0 to the last index of the alphabet string)
-        std::uniform_int_distribution<size_t> distrib(0, alphabet.size() - 1);
-
-        std::string result = "";
-        
-        // Generate the random letters
-        for (int i = 0; i < length; ++i) {
-            result += alphabet[distrib(gen)];
-        }
-    
-        return result;
-    }
-
+    const char* kModule = "w3tc";
 }
 
 namespace mrv
 {
 
-    void SignalingClient::connect(const std::string& room,
+    void SignalingClient::connect(const std::string& roomId,
                                   const std::string& player)
     {
-        roomId = room;
-    
-        if (roomId.empty())
-            roomId = generateRandomLetters();
-    
         if (player.empty())
             playerId = "player" + generateRandomLetters(4);
         else
@@ -54,9 +33,13 @@ namespace mrv
     
         const std::string url = "wss://srv1037957.hstgr.cloud/sync/" +
                                 roomId + "/" + playerId;
-        std::cout << "The room   ID is: " << roomId << std::endl;
-        std::cout << "The player ID is: " << playerId << std::endl;
-
+        
+        std::string msg = string::Format(_("The room ID is: {0}")).arg(roomId);
+        LOG_STATUS(msg);
+        
+        msg = string::Format(_("The player ID is: {0}")).arg(playerId);
+        LOG_STATUS(msg);
+        
         rtc::WebSocketConfiguration config;
         
         std::string caLocation = mrv::rootpath() + "/certs/cacert.pem";
@@ -77,15 +60,15 @@ namespace mrv
         websocket = std::make_shared<rtc::WebSocket>(config);
     
         websocket->onOpen([]() {
-            std::cout << "WebSocket connected, signaling ready" << std::endl;
+            LOG_STATUS("WebSocket connected, signaling ready");
         });
 
         websocket->onClosed([]() {
-            std::cout << "WebSocket closed" << std::endl;
+            LOG_STATUS("WebSocket closed.");
         });
 
         websocket->onError([](const std::string &error) {
-            std::cout << "WebSocket failed: " << error << std::endl;
+            LOG_ERROR("WebSocket failed: " << error);
         });
     
         websocket->onMessage([&](std::variant<rtc::binary, std::string> data) {
@@ -98,7 +81,6 @@ namespace mrv
     
         websocket->open(url);
 
-        std::cout << "Waiting for signaling to be connected..." << std::endl;
         while (!websocket->isOpen()) {
             if (websocket->isClosed())
                 return;
@@ -140,13 +122,14 @@ namespace mrv
             if (onInitPeer) onInitPeer(sender_id, /*isOfferer=*/false);
         }
         else if (type == "offer") {
-            std::cout << "[" << playerId << "] Received offer from "
-                      << sender_id << ".  Generating ANSWER." << std::endl;
+            LOG_STATUS("[" << playerId << "] Received offer from "
+                       << sender_id << ".  Generating ANSWER.");
             if (onOffer) onOffer(sender_id, message["sdp"].get<std::string>());
         }
         else if (type == "answer") {
-            std::cout << "[" << playerId << "] Received answer from " << sender_id
-                      << ". WebRTC Tunnel OPEN!" << std::endl;
+            LOG_STATUS("[" << playerId << "] Received answer from "
+                       << sender_id
+                       << ". WebRTC Tunnel OPEN!");
             if (onAnswer) onAnswer(sender_id, message["sdp"].get<std::string>());
         }
         else if (type == "candidate") {
