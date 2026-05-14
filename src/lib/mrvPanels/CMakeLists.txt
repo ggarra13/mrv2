@@ -23,6 +23,7 @@ set(HEADERS
     mrvThumbnailPanel.h
     mrvVectorscopePanel.h
     mrvWaveformPanel.h
+    mrvWebRTCPanel.h
 )
 
 set(SOURCES
@@ -46,6 +47,7 @@ set(SOURCES
     mrvThumbnailPanel.cpp
     mrvVectorscopePanel.cpp
     mrvWaveformPanel.cpp
+    mrvWebRTCPanel.cpp
 )
 	
 if(TLRENDER_USD)

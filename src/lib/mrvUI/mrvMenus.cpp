@@ -446,6 +446,8 @@ namespace mrv
                 hotkey = kToggleNDI.hotkey();
             else if (tmp == "Network")
                 hotkey = kToggleNetwork.hotkey();
+            else if (tmp == "WebRTC")
+                hotkey = 0;
             else if (tmp == "USD")
                 hotkey = kToggleUSD.hotkey();
             else if (tmp == "Stereo 3D")
@@ -630,6 +632,15 @@ namespace mrv
                     item->set();
                 else
                     item->clear();
+            }
+            else if (tmp == _("WebRTC"))
+            {
+#ifdef MRV2_NETWORK
+                if (webrtcPanel)
+                    item->set();
+                else
+                    item->clear();
+#endif
             }
             else if (
                 tmp == _("Hotkeys") || tmp == _("Preferences") ||

@@ -22,17 +22,28 @@ set( LIBRARIES mrvFLTK mrvVoice)
 
 if(MRV2_NETWORK)
     list(APPEND SOURCES
+	        # Common
+		mrvSyncClient.cpp
+    		mrvSyncMedia.cpp
+    		mrvSyncUI.cpp
+    		mrvCommandInterpreter.cpp
+		
+	        # TCP
     		mrvClient.cpp
 		mrvComfyUIListener.cpp
 		mrvImageListener.cpp
     		mrvMessagePublisher.cpp
     		mrvParseHost.cpp
-    		mrvSyncClient.cpp
-    		mrvSyncMedia.cpp
-    		mrvSyncUI.cpp
-    		mrvCommandInterpreter.cpp
+
+		
     		mrvConnectionHandler.cpp
-    		mrvServer.cpp )
+    		mrvServer.cpp
+
+		# WebRTC
+		mrvSignalingClient.cpp
+		mrvWebRTCClient.cpp
+		mrvWebRTCManager.cpp
+	    )
     list(APPEND HEADERS
               	mrvComfyUIListener.h 
 		mrvImageListener.h
@@ -42,8 +53,16 @@ if(MRV2_NETWORK)
     		mrvClient.h
     		mrvCommandInterpreter.h
 		mrvConnectionHandler.h
-    		mrvServer.h)
-    list(APPEND LIBRARIES Poco::Net Poco::Foundation )
+    		mrvServer.h
+
+		# WebRTC
+		mrvSignalingClient.h
+		mrvSignalingMessage.h
+		mrvWebRTCClient.h
+		mrvWebRTCManager.h
+	    )
+    list(APPEND LIBRARIES Poco::Net Poco::Foundation)
+    list(APPEND LIBRARIES datachannel)
 endif()
 
 

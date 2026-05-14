@@ -28,6 +28,7 @@
 
 #ifdef MRV2_NETWORK
 #    include "mrvPanels/mrvNetworkPanel.h"
+#    include "mrvPanels/mrvWebRTCPanel.h"
 #endif
 
 #ifdef MRV2_PYBIND11
@@ -71,6 +72,9 @@ namespace mrv
 #endif
 #ifdef MRV2_NETWORK
         extern NetworkPanel* networkPanel;
+#endif
+#ifdef MRV2_NETWORK
+        extern WebRTCPanel* webrtcPanel;
 #endif
 #ifdef TLRENDER_USD
         extern USDPanel* usdPanel;
@@ -122,6 +126,7 @@ namespace mrv
         void usd_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void waveform_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void webrtc_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui);
         ///@}
     } // namespace panel

@@ -147,6 +147,9 @@ namespace mrv
 #endif
         {_("Vectorscope"), (Fl_Callback*)vectorscope_panel_cb},
         {_("Waveform"), (Fl_Callback*)waveform_panel_cb},
+#ifdef MRV2_NETWORK
+        {_("WebRTC"), (Fl_Callback*)webrtc_panel_cb},
+#endif
         {_("Hotkeys"), (Fl_Callback*)nullptr},
         {_("Preferences"), (Fl_Callback*)nullptr},
         {_("About"), (Fl_Callback*)nullptr},

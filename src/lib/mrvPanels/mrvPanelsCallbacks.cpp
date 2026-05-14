@@ -34,6 +34,9 @@ namespace mrv
 #ifdef MRV2_NETWORK
         NetworkPanel* networkPanel = nullptr;
 #endif
+#ifdef MRV2_NETWORK
+        WebRTCPanel* webrtcPanel = nullptr;
+#endif
 #ifdef TLRENDER_USD
         USDPanel* usdPanel = nullptr;
 #endif
@@ -145,6 +148,10 @@ namespace mrv
             if (networkPanel && networkPanel->is_panel())
                 network_panel_cb(nullptr, ui);
 #endif
+#ifdef MRV2_NETWORK
+            if (webrtcPanel && webrtcPanel->is_panel())
+                webrtc_panel_cb(nullptr, ui);
+#endif
 #ifdef TLRENDER_USD
             if (usdPanel && usdPanel->is_panel())
                 usd_panel_cb(nullptr, ui);
@@ -194,6 +201,10 @@ namespace mrv
 #ifdef MRV2_NETWORK
             if (networkPanel && !networkPanel->is_panel())
                 network_panel_cb(nullptr, ui);
+#endif
+#ifdef MRV2_NETWORK
+            if (webrtcPanel && !webrtcPanel->is_panel())
+                webrtc_panel_cb(nullptr, ui);
 #endif
 #ifdef TLRENDER_USD
             if (usdPanel && !usdPanel->is_panel())
@@ -561,6 +572,28 @@ namespace mrv
 #endif
         }
 
+        void webrtc_panel_cb(Fl_Widget* w, ViewerUI* ui)
+        {
+#ifdef MRV2_NETWORK
+            bool send = ui->uiPrefs->SendUI->value();
+            if (send)
+            {
+                tcp->pushMessage(
+                    "Webrtc Panel", static_cast<bool>(!webrtcPanel));
+            }
+            if (webrtcPanel)
+            {
+                delete webrtcPanel;
+                webrtcPanel = nullptr;
+                ui->uiMain->fill_menu(ui->uiMenuBar);
+                return;
+            }
+            webrtcPanel = new WebRTCPanel(ui);
+            ui->uiMain->fill_menu(ui->uiMenuBar);
+#endif
+        }
+
+        
         void usd_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
 #ifdef TLRENDER_USD
@@ -638,6 +671,10 @@ namespace mrv
 #ifdef MRV2_NETWORK
                 tcp->pushMessage(
                     "Network Panel", static_cast<bool>(networkPanel));
+#endif
+#ifdef MRV2_NETWORK
+                tcp->pushMessage(
+                    "WebRTC Panel", static_cast<bool>(webrtcPanel));
 #endif
                 tcp->pushMessage(
                     "Histogram Panel", static_cast<bool>(histogramPanel));
