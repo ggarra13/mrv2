@@ -119,7 +119,12 @@ namespace mrv
 
             tcp->lock();
 
-            if (c == "setPlayback")
+            if (c == "sync")
+            {
+                tcp->unlock();
+                tcp->syncClient();
+            }
+            else if (c == "setPlayback")
             {
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)

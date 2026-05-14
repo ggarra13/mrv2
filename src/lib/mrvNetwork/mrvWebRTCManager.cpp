@@ -46,14 +46,14 @@ namespace mrv
     {
         using namespace rtc;
     
-        std::shared_ptr<WebRTCConnection> client;
         auto pc = std::make_shared<PeerConnection>(config);
-        client = std::make_shared<WebRTCConnection>(pc);
+        auto client = std::make_shared<WebRTCConnection>(pc);
         {
             std::lock_guard<std::mutex> lock(mtx);
             clients[id] = client;
         }
         pc->onStateChange([this, id, pc](PeerConnection::State state) {
+            
             if (state == PeerConnection::State::Failed)
             {
                 LOG_ERROR("[" << id << "] State: " << state);
@@ -71,6 +71,7 @@ namespace mrv
             }
             else
             {
+                std::lock_guard<std::mutex> lock(mtx);
                 drainPendingCandidates(id);
             }
         });
@@ -115,14 +116,28 @@ namespace mrv
 
             dc->onOpen([id, client]() {
                 client->dataChannelOpen = true;
+                
+                nlohmann::json message;
+                message["command"] = "sync";
+
+                std::string s = message.dump();
+                
+                client->dataChannel->send(s);
             });
 
-            dc->onMessage([this, id](const rtc::binary data) {
-                if (onBinaryMessage)
-                {
-                    onBinaryMessage(data);
-                }
-            }, {});
+            dc->onMessage(
+                [this, id](const rtc::binary data) {
+                    if (onBinaryMessage)
+                    {
+                        onBinaryMessage(data);
+                    }
+                },
+                [this, id](const std::string& msg) {
+                    if (onStringMessage)
+                    {
+                        onStringMessage(msg);
+                    }
+                });
 
             dc->onClosed([id, client]() {
                 client->dataChannelOpen = false;
@@ -135,14 +150,28 @@ namespace mrv
 
             dc->onOpen([id, client]() {
                 client->dataChannelOpen = true;
+                
+                nlohmann::json message;
+                message["command"] = "sync";
+
+                std::string s = message.dump();
+                
+                client->dataChannel->send(s);
             });
             
-            dc->onMessage([this, id](const rtc::binary data) {
-                if (onBinaryMessage)
-                {
-                    onBinaryMessage(data);
-                }
-            }, {});
+            dc->onMessage(
+                [this, id](const rtc::binary data) {
+                    if (onBinaryMessage)
+                    {
+                        onBinaryMessage(data);
+                    }
+                },
+                [this, id](const std::string& msg) {
+                    if (onStringMessage)
+                    {
+                        onStringMessage(msg);
+                    }
+                });
 
             dc->onClosed([id, client]() {
                 client->dataChannelOpen = false;

@@ -324,6 +324,7 @@ namespace mrv
     extern Hotkey kToggleNetwork;
     extern Hotkey kToggleStereo3D;
     extern Hotkey kToggleUSD;
+    extern Hotkey kToggleWebRTC;
     
     //! Window behavior
     extern Hotkey kToggleClickThrough;

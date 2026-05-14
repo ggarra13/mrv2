@@ -14,7 +14,7 @@
 
 namespace mrv
 {
-    void ConnectionHandler::syncUI()
+    void TCP::syncUI()
     {
         // Sync UI elements
         ViewerUI* ui = App::ui;

@@ -3,6 +3,8 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include "mrvOS/mrvOS.h"
+
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvUtil.h"
@@ -17,7 +19,7 @@
 
 namespace
 {
-    const char* kModule = "w3tc";
+    const char* kModule = "wss ";
 }
 
 namespace mrv
@@ -26,13 +28,24 @@ namespace mrv
     void SignalingClient::connect(const std::string& roomId,
                                   const std::string& player)
     {
+
+#if 0
+        const std::string activeWebRTC = os::sgetenv("MRV2_WEB_RTC");
+        if (activeWebRTC != "1" && activeWebRTC != "ON")
+            return;
+#endif
+
         if (player.empty())
             playerId = "player" + generateRandomLetters(4);
         else
             playerId = player;
-    
-        const std::string url = "wss://srv1037957.hstgr.cloud/sync/" +
-                                roomId + "/" + playerId;
+
+        std::string server = "wss://srv1037957.hstgr.cloud/sync";
+        std::string webRTCServer = os::sgetenv("MRV2_WEB_RTC_SERVER");
+        if (!webRTCServer.empty())
+            server = webRTCServer;
+        
+        const std::string url = server + "/" + roomId + "/" + playerId;
         
         std::string msg = string::Format(_("The room ID is: {0}")).arg(roomId);
         LOG_STATUS(msg);

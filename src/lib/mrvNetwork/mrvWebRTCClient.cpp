@@ -20,14 +20,13 @@ namespace mrv
     WebRTCClient::WebRTCClient(const std::string& roomId,
                                const std::string& playerId)
     {
-        bool enableDebugLogs = false;
-        if (enableDebugLogs) {
+        std::string debug = os::sgetenv("MRV2_WEBRTC_DEBUG");
+        if (debug == "1" || debug == "ON") {
             rtc::InitLogger(rtc::LogLevel::Debug);
         }
         
 
-        rtc::Configuration config;
-        std::string stunServer = os::sgetenv("MRV2_STUNSERVER");
+        std::string stunServer = os::sgetenv("MRV2_STUN_SERVER");
         if (stunServer.empty())
             stunServer = "stun:stun.l.google.com:19302";
 
@@ -35,6 +34,7 @@ namespace mrv
                           arg(stunServer);
         LOG_STATUS(msg);
         
+        rtc::Configuration config;
         config.iceServers.emplace_back(stunServer);
         config.disableAutoNegotiation = true;
 
@@ -45,6 +45,13 @@ namespace mrv
             {
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::from_bson(data);
+                m_receive.push_back(message);
+            };
+        
+        webrtcManager.onStringMessage = [&](const std::string& msg)
+            {
+                std::lock_guard lk(m_receiveMutex);
+                Message message = nlohmann::json::parse(msg);
                 m_receive.push_back(message);
             };
         
@@ -92,10 +99,12 @@ namespace mrv
 
     void WebRTCClient::sendMessages()
     {
+        // Not used.  We use publish directly.
     }
     
     void WebRTCClient::receiveMessages()
     {
+        // This is handled by a WebRTCConnection dataChannel's callback
     }
 
 } // namespace mrv

@@ -62,10 +62,13 @@ namespace mrv
             const std::string& command, const otime::RationalTime& value);
         void
         pushMessage(const std::string& command, const otime::TimeRange& value);
-
+        
         void lock() { m_lock = true; }
         void unlock() { m_lock = false; }
         bool isLocked() { return m_lock == true; }
+
+        //! Sync client to peer's data.
+        void syncClient();
 
         virtual Message popMessage();
 
@@ -76,6 +79,9 @@ namespace mrv
     protected:
         virtual void sendMessages() = 0;
         virtual void receiveMessages() = 0;
+        
+        //! Sync client to peer's UI.
+        void syncUI();
 
         Message receiveMessage();
 

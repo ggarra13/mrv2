@@ -447,7 +447,7 @@ namespace mrv
             else if (tmp == "Network")
                 hotkey = kToggleNetwork.hotkey();
             else if (tmp == "WebRTC")
-                hotkey = 0;
+                hotkey = kToggleWebRTC.hotkey();
             else if (tmp == "USD")
                 hotkey = kToggleUSD.hotkey();
             else if (tmp == "Stereo 3D")

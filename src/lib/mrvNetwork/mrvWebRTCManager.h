@@ -30,6 +30,9 @@ namespace mrv
         std::function<void(const rtc::binary&)>
         onBinaryMessage;
         
+        std::function<void(const std::string&)>
+        onStringMessage;
+        
         std::function<void(const SignalingMessage&)>
         onSignalMessage;
 

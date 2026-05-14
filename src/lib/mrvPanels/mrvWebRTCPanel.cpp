@@ -4,6 +4,8 @@
 
 #include "mrvApp/mrvSettingsObject.h"
 
+#include "mrvUI/mrvAsk.h"
+
 #include "mrvNetwork/mrvDummyClient.h"
 #include "mrvNetwork/mrvWebRTCClient.h"
 
@@ -54,8 +56,8 @@ namespace mrv
                 [](Fl_Widget* w, void* d)
                 {
                     ViewerUI* ui = static_cast< ViewerUI* >(d);
-                    delete networkPanel;
-                    networkPanel = nullptr;
+                    delete webrtcPanel;
+                    webrtcPanel = nullptr;
                     ui->uiMain->fill_menu(ui->uiMenuBar);
                 },
                 ui);
@@ -101,14 +103,25 @@ namespace mrv
                         shutdown();
                         return;
                     }
-
+                    
+                    bool showMessage = false;
                     std::string roomId = _r->room->value();
-                    if (roomId.empty())
+                    if (roomId.size() < 6)
                     {
-                        roomId = generateRandomLetters(6);
+                        showMessage = true;
+                        roomId += generateRandomLetters(6);
                     }
+                    
                     _r->room->value(roomId.c_str());
                     
+                    if (showMessage)
+                    {
+                        mrv::fl_alert(_("Share the room ID with the persons "
+                                        "that will review the session "
+                                        "with you."),
+                                      nullptr);
+                    }
+            
                     tcp = new WebRTCClient(roomId);
                     deactivate();
                 });
