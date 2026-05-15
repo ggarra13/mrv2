@@ -29,11 +29,9 @@ namespace mrv
                                   const std::string& player)
     {
 
-#if 0
         const std::string activeWebRTC = os::sgetenv("MRV2_WEB_RTC");
         if (activeWebRTC != "1" && activeWebRTC != "ON")
             return;
-#endif
 
         if (player.empty())
             playerId = "player" + generateRandomLetters(4);

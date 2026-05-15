@@ -118,7 +118,8 @@ namespace mrv
                     {
                         mrv::fl_alert(_("Share the room ID with the persons "
                                         "that will review the session "
-                                        "with you."),
+                                        "with you.\n\nNote that this feature "
+                                        "is only available in the Pro tier."),
                                       nullptr);
                     }
             
