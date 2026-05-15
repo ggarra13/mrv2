@@ -156,6 +156,10 @@ extern "C"
 #    include <Poco/Version.h>
 #endif
 
+#ifdef MRV2_NETWORK
+#   include <rtc/version.h>
+#endif
+
 #ifdef MRV2_PYBIND11
 #    include <pybind11/pybind11.h>
 #endif
@@ -877,6 +881,11 @@ namespace mrv
           << "Copyright (c) 2016, Alliance for Open Media. All rights reserved."
           << endl << endl;
 #endif
+#ifdef MRV2_NETWORK
+        o << "libdatachannel v" << RTC_VERSION << endl
+          << "Copyright (c) 2020-2021 Paul-Louis Ageneau. All rights reserved."
+          << endl << endl;
+#endif
 #ifdef TLRENDER_NET
         o << curl_version() << endl
           << "(C) Daniel Stenberg, <daniel@haxx.se>, et al." << endl
@@ -921,11 +930,6 @@ namespace mrv
           << "Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc." << endl
           << endl;
 #endif
-        o << "libsamplerate" << endl
-          << "Copyright (c) 2012-2016, Erik de Castro Lopo "
-             "<erikd@mega-nerd.com>"
-          << endl
-          << endl;
 #ifdef TLRENDER_TIFF
         o << TIFFLIB_VERSION_STR
           << endl
