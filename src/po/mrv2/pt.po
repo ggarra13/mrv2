@@ -1940,6 +1940,21 @@ msgstr "Cache em estgio"
 msgid "Disk Cache in GB"
 msgstr "Cache de disco em GB"
 
+msgid "Room"
+msgstr "Sala"
+
+msgid "Room name to enter."
+msgstr "Nome da sala para entrar."
+
+msgid ""
+"Share the room ID with the persons that will review the session with you.\n"
+"\n"
+"Note that this feature is only available in the Pro+ tier."
+msgstr ""
+"Compartilhe o ID da sala com as pessoas que irão revisar a sessão com você.\n"
+"\n"
+"Observe que este recurso está disponível apenas no plano Pro+."
+
 msgid "Type of Waveform Monitor."
 msgstr "Tipo de monitor de forma de onda."
 
@@ -2884,6 +2899,15 @@ msgstr "Faz a seguinte anotao mostrar em todos os quadros."
 msgid "Notes"
 msgstr "Notas"
 
+msgid "STUN server is {0}"
+msgstr "O servidor STUN é {0}"
+
+msgid "The room ID is: {0}"
+msgstr "O ID da sala é: {0}"
+
+msgid "The player ID is: {0}"
+msgstr "O ID do player é: {0}"
+
 msgid "Server started at port {0}."
 msgstr "O servidor comeou na porta {0}."
 
@@ -2895,22 +2919,6 @@ msgstr "Um cliente conectado a partir de {0}"
 
 msgid "Client at {0} disconnected."
 msgstr "Cliente em {0} desconectado."
-
-msgid "Server protocol version is {0}.  Client protocol version is {1}"
-msgstr "Server protocol version is {0}. Client protocol version is {1}"
-
-msgid "Remote file {0} does not exist on local filesystem."
-msgstr "O arquivo remoto {0} no existe no sistema de arquivos local."
-
-msgid "Remote files are less than local files."
-msgstr "Arquivos remotos so menos que arquivos locais."
-
-msgid "Remote file {0} matches file name {1} but not path."
-msgstr ""
-"O ficheiro remoto {0} corresponde ao nome do ficheiro {1} mas no ao caminho."
-
-msgid "Remote file {0} does not match local filename."
-msgstr "O ficheiro remoto {0} no corresponde ao nome do ficheiro local."
 
 msgid "Removing {0} from message publisher."
 msgstr "Remover {0} do editor de mensagens."
@@ -2929,6 +2937,22 @@ msgstr "Conexo do servidor perdida."
 
 msgid "Exception caught: "
 msgstr "Exceo capturada:"
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr "Server protocol version is {0}. Client protocol version is {1}"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "O arquivo remoto {0} no existe no sistema de arquivos local."
+
+msgid "Remote files are less than local files."
+msgstr "Arquivos remotos so menos que arquivos locais."
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr ""
+"O ficheiro remoto {0} corresponde ao nome do ficheiro {1} mas no ao caminho."
+
+msgid "Remote file {0} does not match local filename."
+msgstr "O ficheiro remoto {0} no corresponde ao nome do ficheiro local."
 
 msgid "ERROR:\t"
 msgstr "ERROR:"
@@ -3660,6 +3684,9 @@ msgstr "Vectorescpio"
 
 msgid "Waveform"
 msgstr "Forma de onda"
+
+msgid "WebRTC"
+msgstr "WebRTC"
 
 msgid "Hotkeys"
 msgstr "Teclas quentes"
@@ -8130,6 +8157,9 @@ msgstr "Comutar o NDI"
 
 msgid "Toggle Network"
 msgstr "Activar a RedeName"
+
+msgid "Toggle WebRTC"
+msgstr "Alternar WebRTC"
 
 msgid "Toggle USD"
 msgstr "Comutar o USD"

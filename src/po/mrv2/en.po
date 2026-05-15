@@ -1531,7 +1531,7 @@ msgid "Get all voice and mouse directions for current frame as a JSON file."
 msgstr "Get all voice and mouse directions for current frame as a JSON file."
 
 msgid "Get all URL/File/AI directions for current frame as a JSON file."
-msgstr "Get all voice and mouse directions for current frame as a JSON file."
+msgstr "Get all URL/File/AI directions for current frame as a JSON file."
 
 msgid "{0} - Channels: {1} {2} {3}"
 msgstr "{0} - Channels: {1} {2} {3}"
@@ -1961,11 +1961,26 @@ msgstr "Stage Cache"
 msgid "Disk Cache in GB"
 msgstr "Disk Cache in GB"
 
+msgid "Room"
+msgstr "Room"
+
+msgid "Room name to enter."
+msgstr "Room name to enter."
+
+msgid ""
+"Share the room ID with the persons that will review the session with you.\n"
+"\n"
+"Note that this feature is only available in the Pro+ tier."
+msgstr ""
+"Share the room ID with the persons that will review the session with you.\n"
+"\n"
+"Note that this feature is only available in the Pro+ tier."
+
 msgid "Type of Waveform Monitor."
 msgstr "Type of Waveform Monitor."
 
 msgid "Max. Value"
-msgstr "Hex Values"
+msgstr "Max. Value"
 
 msgid "Maximum Value in F-Stops."
 msgstr "Maximum Value in F-Stops."
@@ -1977,7 +1992,7 @@ msgid "Use a Log Scale in HDR."
 msgstr "Use a Log Scale in HDR."
 
 msgid "Type of Vectorscope."
-msgstr "Vectorscope"
+msgstr "Type of Vectorscope."
 
 msgid "Toggle other eye stereo image."
 msgstr "Toggle other eye stereo image."
@@ -2720,10 +2735,10 @@ msgid "Tile the A and B files"
 msgstr "Tile the A and B files"
 
 msgid "Add the A and B files"
-msgstr "Tile the A and B files"
+msgstr "Add the A and B files"
 
 msgid "Multiply the A and B files"
-msgstr "Tile the A and B files"
+msgstr "Multiply the A and B files"
 
 msgid "Wipe"
 msgstr "Wipe"
@@ -2903,6 +2918,15 @@ msgstr "Makes the following annotation show on all frames."
 msgid "Notes"
 msgstr "Notes"
 
+msgid "STUN server is {0}"
+msgstr "STUN server is {0}"
+
+msgid "The room ID is: {0}"
+msgstr "The room ID is: {0}"
+
+msgid "The player ID is: {0}"
+msgstr "The player ID is: {0}"
+
 msgid "Server started at port {0}."
 msgstr "Server started at port {0}."
 
@@ -2914,21 +2938,6 @@ msgstr "A client connected from {0}"
 
 msgid "Client at {0} disconnected."
 msgstr "Client at {0} disconnected."
-
-msgid "Server protocol version is {0}.  Client protocol version is {1}"
-msgstr "Server protocol version is {0}.  Client protocol version is {1}"
-
-msgid "Remote file {0} does not exist on local filesystem."
-msgstr "Remote file {0} does not exist on local filesystem."
-
-msgid "Remote files are less than local files."
-msgstr "Remote files are less than local files."
-
-msgid "Remote file {0} matches file name {1} but not path."
-msgstr "Remote file {0} matches file name {1} but not path."
-
-msgid "Remote file {0} does not match local filename."
-msgstr "Remote file {0} does not match local filename."
 
 msgid "Removing {0} from message publisher."
 msgstr "Removing {0} from message publisher."
@@ -2947,6 +2956,21 @@ msgstr "Server connection lost."
 
 msgid "Exception caught: "
 msgstr "Exception caught: "
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr "Server protocol version is {0}.  Client protocol version is {1}"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "Remote file {0} does not exist on local filesystem."
+
+msgid "Remote files are less than local files."
+msgstr "Remote files are less than local files."
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr "Remote file {0} matches file name {1} but not path."
+
+msgid "Remote file {0} does not match local filename."
+msgstr "Remote file {0} does not match local filename."
 
 msgid "ERROR:\t"
 msgstr "ERROR:\t"
@@ -3674,6 +3698,9 @@ msgstr "Vectorscope"
 
 msgid "Waveform"
 msgstr "Waveform"
+
+msgid "WebRTC"
+msgstr "WebRTC"
 
 msgid "Hotkeys"
 msgstr "Hotkeys"
@@ -4479,10 +4506,10 @@ msgid "Image/Compare Mode/Difference"
 msgstr "Image/Compare Mode/Difference"
 
 msgid "Image/Compare Mode/Add"
-msgstr "Image/Compare Mode/A"
+msgstr "Image/Compare Mode/Add"
 
 msgid "Image/Compare Mode/Multiply"
-msgstr "Image/Compare Mode/Wipe"
+msgstr "Image/Compare Mode/Multiply"
 
 msgid "Image/Compare Mode/Horizontal"
 msgstr "Image/Compare Mode/Horizontal"
@@ -4497,7 +4524,7 @@ msgid "Image/Go to/%s"
 msgstr "Image/Go to/%s"
 
 msgid "Image/Compare/Toggle A and B"
-msgstr "Image/Compare Mode/A"
+msgstr "Image/Compare/Toggle A and B"
 
 msgid "Image/Compare/%s"
 msgstr "Image/Compare/%s"
@@ -8120,6 +8147,9 @@ msgstr "Toggle NDI"
 msgid "Toggle Network"
 msgstr "Toggle Network"
 
+msgid "Toggle WebRTC"
+msgstr "Toggle WebRTC"
+
 msgid "Toggle USD"
 msgstr "Toggle USD"
 
@@ -8343,7 +8373,7 @@ msgstr "task info failed"
 #~ msgstr "Renderer"
 
 #~ msgid "Video Levels Legal Range HDR"
-#~ msgstr "Video Levels Legal Range"
+#~ msgstr "Video Levels Legal Range HDR"
 
 #~ msgid "Enter a UR."
 #~ msgstr "Enter a UR."

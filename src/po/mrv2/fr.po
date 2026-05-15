@@ -1930,6 +1930,21 @@ msgstr "Cache d'étape"
 msgid "Disk Cache in GB"
 msgstr "Cache de disque en GB"
 
+msgid "Room"
+msgstr "Salle"
+
+msgid "Room name to enter."
+msgstr "Nom de la salle à rejoindre."
+
+msgid ""
+"Share the room ID with the persons that will review the session with you.\n"
+"\n"
+"Note that this feature is only available in the Pro+ tier."
+msgstr ""
+"Partagez l’identifiant de la salle avec les personnes qui examineront la session avec vous.\n"
+"\n"
+"Veuillez noter que cette fonctionnalité est uniquement disponible dans l’offre Pro+."
+
 msgid "Type of Waveform Monitor."
 msgstr "Type de moniteur de forme d’onde."
 
@@ -2888,6 +2903,15 @@ msgstr "Fait apparaître l'annotation suivante sur tous les cadres."
 msgid "Notes"
 msgstr "Notes"
 
+msgid "STUN server is {0}"
+msgstr "Le serveur STUN est {0}"
+
+msgid "The room ID is: {0}"
+msgstr "L’identifiant de la salle est : {0}"
+
+msgid "The player ID is: {0}"
+msgstr "L’identifiant du lecteur est : {0}"
+
 msgid "Server started at port {0}."
 msgstr "Le serveur a démarré au port {0}."
 
@@ -2899,24 +2923,6 @@ msgstr "Un client connecté depuis {0}"
 
 msgid "Client at {0} disconnected."
 msgstr "Client à {0} déconnecté."
-
-msgid "Server protocol version is {0}.  Client protocol version is {1}"
-msgstr ""
-"La version du protocole du serveur est {0}. La version du protocole client "
-"est {1}"
-
-msgid "Remote file {0} does not exist on local filesystem."
-msgstr "Le fichier distant {0} n'existe pas sur le système de fichiers local."
-
-msgid "Remote files are less than local files."
-msgstr "Les fichiers distants sont moins que les fichiers locaux."
-
-msgid "Remote file {0} matches file name {1} but not path."
-msgstr ""
-"Le fichier distant {0} correspond au nom du fichier {1} mais pas au chemin."
-
-msgid "Remote file {0} does not match local filename."
-msgstr "Le fichier distant {0} ne correspond pas au nom de fichier local."
 
 msgid "Removing {0} from message publisher."
 msgstr "Enlever {0} de l'éditeur de messages."
@@ -2935,6 +2941,24 @@ msgstr "La connexion du serveur a été perdue."
 
 msgid "Exception caught: "
 msgstr "Exception prise:"
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr ""
+"La version du protocole du serveur est {0}. La version du protocole client "
+"est {1}"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "Le fichier distant {0} n'existe pas sur le système de fichiers local."
+
+msgid "Remote files are less than local files."
+msgstr "Les fichiers distants sont moins que les fichiers locaux."
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr ""
+"Le fichier distant {0} correspond au nom du fichier {1} mais pas au chemin."
+
+msgid "Remote file {0} does not match local filename."
+msgstr "Le fichier distant {0} ne correspond pas au nom de fichier local."
 
 msgid "ERROR:\t"
 msgstr "C'est pas vrai."
@@ -3671,6 +3695,9 @@ msgstr "Vectorscope"
 
 msgid "Waveform"
 msgstr "Forme d’onde"
+
+msgid "WebRTC"
+msgstr "WebRTC"
 
 msgid "Hotkeys"
 msgstr "Hot-keys"
@@ -8171,6 +8198,9 @@ msgstr "Commutation NDI"
 
 msgid "Toggle Network"
 msgstr "Commutation du réseau"
+
+msgid "Toggle WebRTC"
+msgstr "Activer/désactiver WebRTC"
 
 msgid "Toggle USD"
 msgstr "Commutation en dollars des États-Unis"

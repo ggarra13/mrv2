@@ -1933,6 +1933,21 @@ msgstr "キャッシュ"
 msgid "Disk Cache in GB"
 msgstr "ディスクキャッシュ"
 
+msgid "Room"
+msgstr "ルーム"
+
+msgid "Room name to enter."
+msgstr "参加するルーム名。"
+
+msgid ""
+"Share the room ID with the persons that will review the session with you.\n"
+"\n"
+"Note that this feature is only available in the Pro+ tier."
+msgstr ""
+"セッションを一緒にレビューする相手とルームIDを共有してください。\n"
+"\n"
+"この機能は Pro+ プランでのみ利用可能です。"
+
 msgid "Type of Waveform Monitor."
 msgstr "ウェーブフォームモニターの種類。"
 
@@ -2862,6 +2877,15 @@ msgstr "次の情報は、すべてのソースドキュメントに示す必要
 msgid "Notes"
 msgstr "注記"
 
+msgid "STUN server is {0}"
+msgstr "STUN サーバーは {0} です"
+
+msgid "The room ID is: {0}"
+msgstr "ルームID: {0}"
+
+msgid "The player ID is: {0}"
+msgstr "プレイヤーID: {0}"
+
 msgid "Server started at port {0}."
 msgstr "サーバーはポート {0} で起動しました。"
 
@@ -2873,21 +2897,6 @@ msgstr "クライアントが {0} から接続しました"
 
 msgid "Client at {0} disconnected."
 msgstr "{0} の接続解除"
-
-msgid "Server protocol version is {0}.  Client protocol version is {1}"
-msgstr "サーバープロトコルのバージョンは {0} です。クライアントプロトコルのバージョンは {1} です"
-
-msgid "Remote file {0} does not exist on local filesystem."
-msgstr "リモートファイル {0} はローカルファイルシステムに存在しません。"
-
-msgid "Remote files are less than local files."
-msgstr "ローカルファイルのみがサポートされています。"
-
-msgid "Remote file {0} matches file name {1} but not path."
-msgstr "リモートファイル {0} はファイル名 {1} と一致しますが、パスは一致しません。"
-
-msgid "Remote file {0} does not match local filename."
-msgstr "リモートファイル {0} はローカルファイル名と一致しません。"
 
 msgid "Removing {0} from message publisher."
 msgstr "メッセージパブリッシャーから {0} を削除しています。"
@@ -2906,6 +2915,21 @@ msgstr "サーバー接続"
 
 msgid "Exception caught: "
 msgstr "未知の例外を検出: "
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr "サーバープロトコルのバージョンは {0} です。クライアントプロトコルのバージョンは {1} です"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "リモートファイル {0} はローカルファイルシステムに存在しません。"
+
+msgid "Remote files are less than local files."
+msgstr "ローカルファイルのみがサポートされています。"
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr "リモートファイル {0} はファイル名 {1} と一致しますが、パスは一致しません。"
+
+msgid "Remote file {0} does not match local filename."
+msgstr "リモートファイル {0} はローカルファイル名と一致しません。"
 
 msgid "ERROR:\t"
 msgstr "ERROR:\t"
@@ -3626,6 +3650,9 @@ msgstr "ベクトルスコープ"
 
 msgid "Waveform"
 msgstr "ウェーブフォーム"
+
+msgid "WebRTC"
+msgstr "WebRTC"
 
 msgid "Hotkeys"
 msgstr "ショートカットキー"
@@ -7923,6 +7950,9 @@ msgstr "NDIの切り替え"
 
 msgid "Toggle Network"
 msgstr "ネットワークの切り替え"
+
+msgid "Toggle WebRTC"
+msgstr "WebRTC を切り替え"
 
 msgid "Toggle USD"
 msgstr "USDの切り替え"

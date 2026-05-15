@@ -420,8 +420,8 @@ msgstr ""
 
 msgid ""
 "\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
+"The RationalTime class represents a measure of time of :math:`rt.value/"
+"rt.rate` seconds.\n"
 "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 msgstr ""
 
@@ -1710,6 +1710,18 @@ msgstr ""
 msgid "Disk Cache in GB"
 msgstr ""
 
+msgid "Room"
+msgstr ""
+
+msgid "Room name to enter."
+msgstr ""
+
+msgid ""
+"Share the room ID with the persons that will review the session with you.\n"
+"\n"
+"Note that this feature is only available in the Pro+ tier."
+msgstr ""
+
 msgid "Type of Waveform Monitor."
 msgstr ""
 
@@ -2631,6 +2643,15 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
+msgid "STUN server is {0}"
+msgstr ""
+
+msgid "The room ID is: {0}"
+msgstr ""
+
+msgid "The player ID is: {0}"
+msgstr ""
+
 msgid "Server started at port {0}."
 msgstr ""
 
@@ -2641,21 +2662,6 @@ msgid "A client connected from {0}"
 msgstr ""
 
 msgid "Client at {0} disconnected."
-msgstr ""
-
-msgid "Server protocol version is {0}.  Client protocol version is {1}"
-msgstr ""
-
-msgid "Remote file {0} does not exist on local filesystem."
-msgstr ""
-
-msgid "Remote files are less than local files."
-msgstr ""
-
-msgid "Remote file {0} matches file name {1} but not path."
-msgstr ""
-
-msgid "Remote file {0} does not match local filename."
 msgstr ""
 
 msgid "Removing {0} from message publisher."
@@ -2674,6 +2680,21 @@ msgid "Server connection lost."
 msgstr ""
 
 msgid "Exception caught: "
+msgstr ""
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr ""
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr ""
+
+msgid "Remote files are less than local files."
+msgstr ""
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr ""
+
+msgid "Remote file {0} does not match local filename."
 msgstr ""
 
 msgid "ERROR:\t"
@@ -3357,6 +3378,9 @@ msgid "Vectorscope"
 msgstr ""
 
 msgid "Waveform"
+msgstr ""
+
+msgid "WebRTC"
 msgstr ""
 
 msgid "Hotkeys"
@@ -6599,8 +6623,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -7531,6 +7555,9 @@ msgid "Toggle NDI"
 msgstr ""
 
 msgid "Toggle Network"
+msgstr ""
+
+msgid "Toggle WebRTC"
 msgstr ""
 
 msgid "Toggle USD"

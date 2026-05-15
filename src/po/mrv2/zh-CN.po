@@ -1938,6 +1938,21 @@ msgstr "缓存"
 msgid "Disk Cache in GB"
 msgstr "磁盘缓存 (GB)"
 
+msgid "Room"
+msgstr "房间"
+
+msgid "Room name to enter."
+msgstr "要进入的房间名称。"
+
+msgid ""
+"Share the room ID with the persons that will review the session with you.\n"
+"\n"
+"Note that this feature is only available in the Pro+ tier."
+msgstr ""
+"与将和您一起审阅会话的人员共享房间 ID。\n"
+"\n"
+"请注意，此功能仅在 Pro+ 版本中可用。"
+
 msgid "Type of Waveform Monitor."
 msgstr "波形监视器类型。"
 
@@ -2860,6 +2875,15 @@ msgstr "在所有帧上显示注解"
 msgid "Notes"
 msgstr "Notes"
 
+msgid "STUN server is {0}"
+msgstr "STUN 服务器是 {0}"
+
+msgid "The room ID is: {0}"
+msgstr "房间 ID 是：{0}"
+
+msgid "The player ID is: {0}"
+msgstr "播放器 ID 是：{0}"
+
 msgid "Server started at port {0}."
 msgstr "服务器启动于端口 {0}"
 
@@ -2871,21 +2895,6 @@ msgstr "从 {0} 连接到客户端"
 
 msgid "Client at {0} disconnected."
 msgstr "断开 {0} 的客户端"
-
-msgid "Server protocol version is {0}.  Client protocol version is {1}"
-msgstr "服务器协议版本为 {0}。 客户端协议版本为 {1}"
-
-msgid "Remote file {0} does not exist on local filesystem."
-msgstr "本地文件系统不存在远程文件 {0} 。"
-
-msgid "Remote files are less than local files."
-msgstr "远程文件少于本地文件 。"
-
-msgid "Remote file {0} matches file name {1} but not path."
-msgstr "远程文件 {0} 匹配文件名 {1}, 但不是路径 。"
-
-msgid "Remote file {0} does not match local filename."
-msgstr "远程文件 {0} 不匹配本地文件名 。"
 
 msgid "Removing {0} from message publisher."
 msgstr "正在从信件发布器中删除 {0} 。"
@@ -2904,6 +2913,21 @@ msgstr "服务器连接丢失 。"
 
 msgid "Exception caught: "
 msgstr "抓获的异常:"
+
+msgid "Server protocol version is {0}.  Client protocol version is {1}"
+msgstr "服务器协议版本为 {0}。 客户端协议版本为 {1}"
+
+msgid "Remote file {0} does not exist on local filesystem."
+msgstr "本地文件系统不存在远程文件 {0} 。"
+
+msgid "Remote files are less than local files."
+msgstr "远程文件少于本地文件 。"
+
+msgid "Remote file {0} matches file name {1} but not path."
+msgstr "远程文件 {0} 匹配文件名 {1}, 但不是路径 。"
+
+msgid "Remote file {0} does not match local filename."
+msgstr "远程文件 {0} 不匹配本地文件名 。"
 
 msgid "ERROR:\t"
 msgstr "错误:"
@@ -3616,6 +3640,9 @@ msgstr "Vectorscope"
 
 msgid "Waveform"
 msgstr "波形"
+
+msgid "WebRTC"
+msgstr "WebRTC"
 
 msgid "Hotkeys"
 msgstr "快捷键"
@@ -7933,6 +7960,9 @@ msgstr "开关 NDI"
 
 msgid "Toggle Network"
 msgstr "开关网络"
+
+msgid "Toggle WebRTC"
+msgstr "切换 WebRTC"
 
 msgid "Toggle USD"
 msgstr "开关USD"
