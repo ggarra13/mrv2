@@ -15,6 +15,10 @@ message(STATUS "libdatachannel DEPENDENCIES=${libdatachannel_DEPENDENCIES}")
 
 set(libdatachannel_UPDATE_CMD
     COMMAND git submodule update --init)
+set(libdatachannel_CXX_FLAGS "")
+if (UNIX AND NOT APPLE)
+    set(libdatachannel_CXX_FLAGS "-l dl")
+endif()
 
 ExternalProject_Add(
     libdatachannel
@@ -36,11 +40,11 @@ ExternalProject_Add(
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH_TMP}
-    -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
-    -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+    -DCMAKE_CXX_FLAGS=${libdatachannel_CXX_FLAGS}
     -DCMAKE_INSTALL_MESSAGE=${CMAKE_INSTALL_MESSAGE}
     -DENABLE_OPENSSL=ON
     -DUSE_SYSTEM_JSON=ON
+    -DLIBSRTP_TEST_APPS=OFF
     -DNO_EXAMPLES=TRUE
 )
 
