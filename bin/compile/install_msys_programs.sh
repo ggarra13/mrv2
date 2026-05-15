@@ -21,14 +21,13 @@ pacman -Syu --noconfirm
 #
 if [[ "$MSYS2_INSTALL" == "ON" ]]; then
     programs="swig diffutils"
-    pacman -Sy swig diffutils --noconfirm
 
     if [[ $ARCH == *amd64* ]]; then
 	echo "Installing nasm and perl thru Msys2 x86_64..."
 	programs="$programs nasm perl"
     fi
 
-    pacman -Sy $programs --noconfirm
+    pacman -S --needed --noconfirm $programs
 fi
 
 mkdir -p $BUILD_DIR/install/bin
