@@ -1453,7 +1453,7 @@ namespace mrv
     {
         TLRENDER_P();
 
-
+        tcp->lock();
         p.player->setPlayback(timeline::Playback::Stop);
 
         //
@@ -1506,6 +1506,7 @@ namespace mrv
         else
         {
             // Start playback right away.
+            tcp->unlock();
             ui->uiView->setPlayback(playback);
         }
 
@@ -1513,6 +1514,8 @@ namespace mrv
             (playback == timeline::Playback::Forward ||
              playback == timeline::Playback::Stop))
         {
+            tcp->lock();
+            
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
@@ -1566,13 +1569,15 @@ namespace mrv
                                 p.progress = nullptr;
                                 ui->uiView->setPlayback(playback);
                                 p.cacheInfoObserver.reset();
+                                tcp->unlock();
                                 return;
                             }
                         });
         }
         else if (use_progress && playback == timeline::Playback::Reverse)
         {
-
+            tcp->lock();
+            
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
@@ -1643,6 +1648,7 @@ namespace mrv
                                 p.progress = nullptr;
                                 ui->uiView->setPlayback(playback);
                                 p.cacheInfoObserver.reset();
+                                tcp->unlock();
                                 return;
                             }
                         });

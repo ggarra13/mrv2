@@ -60,6 +60,7 @@ ChangeLog
 - Python: added cmd.open_url_movie() for opening url movies with optional user name, password and suffix.
 - Building: improved building performance on the cloud.
 - Vulkan: fixed showing LA_U8 and similar images.
+- Network: fixed synchronizing of two viewers showing up in Edit mode by default.
 
 
 v1.6.3

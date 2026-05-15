@@ -1364,12 +1364,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-#ifdef OPENGL_BACKEND
-                timelineui::DisplayOptions value = message["value"];
-#endif
-#ifdef VULKAN_BACKEND
-                timelineui_vk::DisplayOptions value = message["value"];
-#endif
+                TIMELINEUI::DisplayOptions value = message["value"];
                 ui->uiTimeline->setDisplayOptions(value);
             }
             else if (c == "Timeline/FrameView")

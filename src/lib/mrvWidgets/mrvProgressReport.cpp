@@ -3,8 +3,9 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 
-
 #include "mrvWidgets/mrvProgressReport.h"
+
+#include "mrvNetwork/mrvTCP.h"
 
 #include "mrvOS/mrvI8N.h"
 
@@ -62,6 +63,7 @@ namespace mrv
         w->set_modal();
         w->end();
 
+        tcp->lock();
         _startTime = std::chrono::steady_clock::now();
         _frameDuration = 0;
     }
@@ -74,6 +76,7 @@ namespace mrv
         fps = nullptr;
         remain = nullptr;
         elapsed = nullptr;
+        tcp->unlock();
     }
 
     void ProgressReport::set_start(int64_t value)
@@ -178,6 +181,7 @@ namespace mrv
             fps = nullptr;
             remain = nullptr;
             elapsed = nullptr;
+            tcp->unlock();
             return false;
         }
 
