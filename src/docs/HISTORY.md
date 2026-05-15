@@ -35,6 +35,7 @@ The donationware version when running without a donation, does not have:
     - Python (available in Standard and later)
     - Editing (available in Edit and later)
     - Voice and Link Annotations (available in Pro)
+    - Internet remote reviews from anywhere on the world (available in Pro+)
 
 They do have, however:
 
@@ -61,7 +62,7 @@ ChangeLog
 - Building: improved building performance on the cloud.
 - Vulkan: fixed showing LA_U8 and similar images.
 - Network: fixed synchronizing of two viewers showing up in Edit mode by default.
-- Network: Added WebRTC panel to synchronize two mrv2 or vmrv2 viewers anywhere in the world.  Syncing is heavily encrypted and the media does not travel through the web.  This feature is ONLY available in the Pro+ tier. 
+- Network: Added WebRTC Panel to synchronize two mrv2 or vmrv2 viewers anywhere in the world.  Syncing is heavily encrypted and the media does not travel through the web.  This feature is ONLY available in the Pro+ tier and it is not available by default in the GitHub release.  
 
 
 v1.6.3
