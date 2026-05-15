@@ -241,7 +241,7 @@ namespace mrv
     Hotkey kToggleTimelineThumbnails(false, false, false, false, 0);
     Hotkey kToggleTimelineTransitions(false, false, false, false, 0);
     Hotkey kToggleTimelineMarkers(false, false, false, false, 0);
-    Hotkey kToggleWebRTC(true, false, false, false, 'w');
+    Hotkey kToggleWebRTC(false, false, false, true, 'n');
 
     // Hotkey to allow mouse click handling to pass through the FLTK window to
     // the OS windows behind it.
