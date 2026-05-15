@@ -61,7 +61,7 @@ ChangeLog
 - Building: improved building performance on the cloud.
 - Vulkan: fixed showing LA_U8 and similar images.
 - Network: fixed synchronizing of two viewers showing up in Edit mode by default.
-- Network: Added WebRTC panel to synchronize two mrv2 or vmrv2 viewers anywhere in the world.  This feature is ONLY available in the Pro+ tier. 
+- Network: Added WebRTC panel to synchronize two mrv2 or vmrv2 viewers anywhere in the world.  Syncing is heavily encrypted and the media does not travel through the web.  This feature is ONLY available in the Pro+ tier. 
 
 
 v1.6.3
