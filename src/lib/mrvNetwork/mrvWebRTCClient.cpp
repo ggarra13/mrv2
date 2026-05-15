@@ -43,6 +43,8 @@ namespace mrv
         // WebRTC → WebRTCClient (this class)
         webrtcManager.onBinaryMessage = [&](const rtc::binary& data)
             {
+                if (m_lock)
+                    return;
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::from_bson(data);
                 m_receive.push_back(message);
@@ -50,6 +52,8 @@ namespace mrv
         
         webrtcManager.onStringMessage = [&](const std::string& msg)
             {
+                if (m_lock)
+                    return;
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::parse(msg);
                 m_receive.push_back(message);
