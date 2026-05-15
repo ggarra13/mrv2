@@ -127,7 +127,7 @@ endif()
 
 if(MRV2_NETWORK)
     find_package(Poco REQUIRED
-	COMPONENTS Net NetSSL JSON Foundation
+	COMPONENTS Net NetSSL Foundation
 	CONFIG)
     add_definitions( -DMRV2_NETWORK )
 endif()

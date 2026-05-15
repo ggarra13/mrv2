@@ -52,7 +52,6 @@ if (MRV2_NETWORK)
     set(LIBRARIES_PRIVATE
 	Poco::Net
 	Poco::NetSSL
-	Poco::JSON
 	Poco::Foundation
     )
 endif()
