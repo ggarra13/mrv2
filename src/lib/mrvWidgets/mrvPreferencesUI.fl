@@ -92,9 +92,9 @@ class PreferencesUI {open
     Fl_Window uiMain {
       label Preferences
       user_data this user_data_type {PreferencesUI*}
-      callback {o->hide();} open
-      xywh {286 309 847 449} type Double hide resizable
-      code0 {main = m;}
+      callback {o->hide();} open selected
+      xywh {100 100 847 449} type Double resizable
+      code0 {main = m;} size_range {847 449 0 0} visible
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
@@ -656,8 +656,8 @@ o->redraw();}
               }
             }
             Fl_Group {} {
-              label Positioning
-              xywh {288 37 555 360} box EMBOSSED_BOX hide
+              label Positioning open
+              xywh {288 37 555 360} box EMBOSSED_BOX
             } {
               Fl_Group {} {
                 label Positioning open
@@ -686,7 +686,7 @@ o->redraw();}
                       xywh {675 139 60 25} textcolor 56
                     }
                   }
-                  Fl_Group {} {open
+                  Fl_Group {} {
                     xywh {339 226 451 43} box ROUNDED_BOX
                   } {
                     Fl_Check_Button uiWindowFixedSize {
@@ -708,8 +708,13 @@ o->redraw();}
                     callback {v->uiWindowXPosition->value( v->main->uiMain->x() );
 v->uiWindowYPosition->value( v->main->uiMain->y() );
 v->uiWindowXSize->value( v->main->uiMain->w() );
-v->uiWindowYSize->value( v->main->uiMain->h() );}
+v->uiWindowYSize->value( v->main->uiMain->h() );
+v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                     tooltip {Fills the Fixed Position and and Fixed Size values with the current values of the viewer.  Remember to also check the boxes for Fixed Position and/or Fixed Size depending what you want to save.} xywh {345 324 445 40} align 128
+                  }
+                  Fl_Value_Input uiWindowScreen {
+                    label {Screen:}
+                    xywh {544 285 60 25} maximum 10 step 1 textcolor 56
                   }
                 }
               }
@@ -1245,7 +1250,7 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label Edit open
+              label Edit
               xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -1295,7 +1300,7 @@ v->uiPrefsFPS->value( g );}
               }
             }
             Fl_Group {} {
-              label OCIO open
+              label OCIO
               xywh {288 37 555 361} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
@@ -1372,7 +1377,7 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
             }
             Fl_Group {} {
               label {OCIO Defaults} open
-              xywh {288 37 555 367} align 5
+              xywh {288 37 555 367} align 5 hide
             } {
               Fl_Group {} {
                 label {OCIO Defaults} open
@@ -1512,7 +1517,7 @@ catch(const std::exception& e)
 {
   std::cerr << e.what() << std::endl;
   o->value("");
-}} selected
+}}
                     tooltip {Default Display / View} xywh {396 346 283 25} box THIN_DOWN_BOX color 20 labelsize 11 align 132 textcolor 56
                   }
                   Fl_Button {} {
@@ -2105,14 +2110,14 @@ for (Fl_Tree_Item* item = tree->first(); item; item = tree->next(item), ++idx)
       }
     }
   }
-  Function {PreferencesUI(ViewerUI* m)} {} {
+  Function {PreferencesUI(ViewerUI* m)} {open
+  } {
     code {make_window(m);} {}
   }
   Function {~PreferencesUI()} {} {
     code {delete uiMain; uiMain = NULL;} {}
   }
-  Function {fill_tree(mrv::PreferencesTree* o)} {open
-  } {
+  Function {fill_tree(mrv::PreferencesTree* o)} {} {
     code {Fl_Tree_Item* item = o->add( _("User Interface") );
 o->add( _("User Interface/View Window") );
 o->add( _("User Interface/File Requester") );

@@ -15,10 +15,10 @@ class URLMovieUI {open
   Function {make_window()} {open
   } {
     Fl_Window uiMain {
-      label {Link Annotation}
+      label {URL Movie}
       callback {cancel = true;
 o->hide();} open selected
-      xywh {0 0 799 240} type Double modal visible
+      xywh {235 258 799 240} type Double modal visible
     } {
       Fl_Input uiURL {
         label URL

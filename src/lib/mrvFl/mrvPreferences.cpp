@@ -722,14 +722,18 @@ namespace mrv
         }
         win.get("x_position", tmp, 0);
         uiPrefs->uiWindowXPosition->value(tmp);
+
         win.get("y_position", tmp, 0);
         uiPrefs->uiWindowYPosition->value(tmp);
 
         win.get("x_size", tmp, 640);
         uiPrefs->uiWindowXSize->value(tmp);
+        
         win.get("y_size", tmp, 530);
-
         uiPrefs->uiWindowYSize->value(tmp);
+
+        win.get("screen", tmp, 0);
+        uiPrefs->uiWindowScreen->value(tmp);
 
         Fl_Preferences flu(gui, "file_requester");
         //
@@ -1512,6 +1516,7 @@ namespace mrv
                 win.set("y_position", uiPrefs->uiWindowYPosition->value());
                 win.set("x_size", uiPrefs->uiWindowXSize->value());
                 win.set("y_size", uiPrefs->uiWindowYSize->value());
+                win.set("screen", uiPrefs->uiWindowScreen->value());
             }
             else
             {
@@ -1521,6 +1526,7 @@ namespace mrv
                 win.set("y_position", ui->uiMain->y());
                 win.set("x_size", ui->uiMain->w());
                 win.set("y_size", ui->uiMain->h());
+                win.set("screen", ui->uiMain->screen_num());
             }
         }
 

@@ -1,4 +1,4 @@
-v1.6.4
+v1.6.5
 ======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
@@ -44,6 +44,16 @@ They do have, however:
     - Saving Images and Movies with Audio
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+- UI: Fixed Window positioning on Windows, X11 and macOS with multiple screens, by storing the screen number.  Note that positioning on Wayland cannot be controlled.
+- UI: Fixed title of URL Movie window, which was showing as Link Annotations.
+
+
+v1.6.4
+======
 
 ChangeLog
 ---------

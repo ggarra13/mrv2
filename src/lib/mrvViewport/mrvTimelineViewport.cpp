@@ -1736,14 +1736,23 @@ namespace mrv
             {
                 posX = (int)uiPrefs->uiWindowXPosition->value();
                 posY = (int)uiPrefs->uiWindowYPosition->value();
+                screen = (int)uiPrefs->uiWindowScreen->value();
             }
             else
             {
                 posX = mw->x();
                 posY = mw->y();
+                screen = -1;
             }
 
-            Fl::screen_work_area(minX, minY, maxW, maxH, posX, posY); //, screen);
+            if (screen >= 0)
+            {
+                Fl::screen_work_area(minX, minY, maxW, maxH, screen);
+            }
+            else
+            {
+                Fl::screen_work_area(minX, minY, maxW, maxH, posX, posY); //, screen);
+            }
 
             int WBars = 0;
             int HBars = 0;
@@ -1893,6 +1902,10 @@ namespace mrv
             }
             else
             {
+                if (screen >= 0)
+                {
+                    mw->screen_num(screen);
+                }
                 mw->resize(posX, posY, W, H);
             }
             
