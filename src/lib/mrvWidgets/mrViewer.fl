@@ -376,7 +376,7 @@ ui->uiView->redraw();} open
               xywh {15 15 100 20}
             }
             MenuItem {} {
-              label Nits selected
+              label Nits
               xywh {5 5 100 20}
             }
             MenuItem {} {
@@ -452,8 +452,8 @@ decl {class AboutUI;} {public global
 }
 
 widget_class TimelineClass {open
-  xywh {0 0 934 56} box NO_BOX hide resizable
-  class Fl_Double_Window
+  xywh {0 0 934 56} box NO_BOX resizable
+  class Fl_Double_Window visible
 } {
   Fl_Group {} {open
     xywh {0 0 933 29} box FLAT_BOX
@@ -726,7 +726,7 @@ else
 {   
    o->image( MRV2_LOAD_SVG(Audio) );
 }
-o->redraw();}
+o->redraw();} selected
             tooltip {Mute audio or switch audio tracks with the right mouse button.} xywh {576 3 27 24} type Toggle labelsize 10 align 80
             code1 {o->image( MRV2_LOAD_SVG(Audio) );}
             class {mrv::AudioButton}

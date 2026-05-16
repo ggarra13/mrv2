@@ -961,11 +961,14 @@ namespace mrv
         }
         else if (event == FL_HIDE)
         {
-            TimelineClass* t = App::ui->uiTimeWindow;
-            p.hidden = true;
-            p.mute = t->uiAudioTracks->value();
-            t->uiAudioTracks->value(1);
-            t->uiAudioTracks->do_callback();
+            if (this == App::ui->uiMain)
+            {
+                TimelineClass* t = App::ui->uiTimeWindow;
+                p.hidden = true;
+                p.mute = t->uiAudioTracks->value();
+                t->uiAudioTracks->value(1);
+                t->uiAudioTracks->do_callback();
+            }
         }
         else if (event == FL_SHOW)
         {
