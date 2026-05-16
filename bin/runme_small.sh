@@ -30,6 +30,9 @@
 #
 params=$*
 
+export BUILD_ROOT=BUILD-small
+export CMAKE_BUILD_TYPE=Release
+
 #
 # Find out our build dir
 #
@@ -53,9 +56,10 @@ export TLRENDER_AV1=ON
 export TLRENDER_EXR=ON
 export TLRENDER_FFMPEG=ON
 export TLRENDER_FFMPEG_MINIMAL=ON
-export TLRENDER_HAP=ON
+export TLRENDER_HAP=OFF
 export TLRENDER_JPEG=ON
 export TLRENDER_LIBPLACEBO=ON
+export TLRENDER_OPENJPH=ON
 export TLRENDER_RAW=ON
 export TLRENDER_SGI=ON
 export TLRENDER_STB=ON
