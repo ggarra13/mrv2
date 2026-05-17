@@ -7,10 +7,11 @@ i18n_gnu_function gettext
 i18n_gnu_static_function gettext_noop
 header_name {.h}
 code_name {.cxx}
+include_guard {}
 decl {\#include <string>} {public local
 }
 
-decl {\#include "mrViewer.h"} {selected public global
+decl {\#include "mrViewer.h"} {public global
 }
 
 decl {\#include "mrvWidgets/mrvTextBrowser.h"} {public global
@@ -24,7 +25,7 @@ class AboutUI {open
   Function {make_window(ViewerUI* main)} {open private
   } {
     Fl_Window uiMain {
-      label {About mrv2} open
+      label {About mrv2} open selected
       xywh {838 347 696 398} type Double resizable
       code0 {//main->uiMain->add(o);} modal visible
     } {
@@ -44,7 +45,7 @@ for (; i != e; ++i )
         } {
           Fl_Group uiAbout {
             label mrv2 open
-            xywh {0 24 696 374}
+            xywh {0 24 696 374} hide
           } {
             Fl_Browser {} {
               xywh {12 38 672 340} color 49 textcolor 32
@@ -54,7 +55,7 @@ for (; i != e; ++i )
           }
           Fl_Group {} {
             label HW open
-            xywh {0 24 696 374} hide
+            xywh {0 24 696 374}
           } {
             Fl_Browser uiCPUInfo {
               label {CPU Information}

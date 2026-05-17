@@ -1699,7 +1699,7 @@ namespace mrv
             w = ui->uiAbout->uiMain;
         else
         {
-#ifdef VULKAN_BACKEND
+#ifndef TLRENDER_USD
             if (label == "USD")
                 return;
 #endif

@@ -94,7 +94,7 @@ class PreferencesUI {open
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open selected
       xywh {100 100 847 449} type Double resizable
-      code0 {main = m;} size_range {847 449 0 0} visible
+      code0 {main = m;} non_modal size_range {847 449 0 0} visible
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX

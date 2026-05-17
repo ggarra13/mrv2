@@ -50,6 +50,7 @@ ChangeLog
 
 - UI: Fixed Window positioning on Windows, X11 and macOS with multiple screens, by storing the screen number.  Note that positioning on Wayland cannot be controlled.
 - UI: Fixed title of URL Movie window, which was showing as Link Annotations.
+- UI: Preferences and Hotkey windows are now non modal (ie. they remain above the main window).
 
 
 v1.6.4
