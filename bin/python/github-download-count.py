@@ -21,11 +21,8 @@ import requests  # plain requests for SourceForge
 import json
 from io import StringIO
 
-try:
-    from functions import format_number
-except ImportError:
-    def format_number(n, width):
-        return str(n).rjust(width)
+def format_number(n, width):
+    return str(n).rjust(width)
 
 # --- Global Configuration ---
 full_names = []
@@ -341,8 +338,8 @@ if __name__ == "__main__":
     print(f'{format_number(vmrv2_lin_g, 5)} vmrv2 Linux Downloads (All Archs)')
     print(f'{format_number(vmrv2_mac_g, 5)} vmrv2 macOS Downloads (All Archs)')
     print()
-    print(f'{format_number(mrv2_github, 5)} Total mrv2 Total Downloads')
-    print(f'{format_number(vmrv2_github, 5)} Total vmrv2 Total Downloads')
+    print(f'{format_number(mrv2_github, 5)}  mrv2 Total Downloads')
+    print(f'{format_number(vmrv2_github, 5)} vmrv2 Total Downloads')
     print('===================================================================')
     github_total = mrv2_github + vmrv2_github
     print(f'{format_number(github_total, 5)} Total Downloads for GitHub')
@@ -388,17 +385,17 @@ if __name__ == "__main__":
 
     # Final grand totals (your original printing code - unchanged)
     print("\n=======================================================================")
-    print(f'{format_number(mrv2_windows_grand_total, 5)} Grand Total mrv2 Windows Downloads (GitHub + SourceForge)')
-    print(f'{format_number(mrv2_linux_grand_total, 5)} Grand Total mrv2 Linux Downloads (GitHub + SourceForge)')
-    print(f'{format_number(mrv2_macos_grand_total, 5)} Grand Total mrv2 macOS Downloads (GitHub + SourceForge)')
-    print(f'{format_number(mrv2_unknown_grand_total, 5)} Grand Total mrv2 Unknown Downloads - Windows? (SourceForge)')
+    print(f'{format_number(mrv2_windows_grand_total, 5)} Grand Total  mrv2 Windows Downloads (GitHub + SourceForge)')
+    print(f'{format_number(mrv2_linux_grand_total, 5)} Grand Total  mrv2 Linux Downloads (GitHub + SourceForge)')
+    print(f'{format_number(mrv2_macos_grand_total, 5)} Grand Total  mrv2 macOS Downloads (GitHub + SourceForge)')
+    print(f'{format_number(mrv2_unknown_grand_total, 5)} Grand Total  mrv2 Unknown Downloads - Windows? (SourceForge)')
     print()
     print(f'{format_number(vmrv2_windows_grand_total, 5)} Grand Total vmrv2 Windows Downloads (GitHub + SourceForge)')
     print(f'{format_number(vmrv2_linux_grand_total, 5)} Grand Total vmrv2 Linux Downloads (GitHub + SourceForge)')
     print(f'{format_number(vmrv2_macos_grand_total, 5)} Grand Total vmrv2 macOS Downloads (GitHub + SourceForge)')
     print(f'{format_number(vmrv2_unknown_grand_total, 5)} Grand Total vmrv2 Unknown Downloads - Windows? (SourceForge)')
     print()
-    print(f'{format_number(mrv2_grand_total, 5)} Grand Total mrv2 Downloads (GitHub + SourceForge)')
+    print(f'{format_number(mrv2_grand_total, 5)} Grand Total  mrv2 Downloads (GitHub + SourceForge)')
     print(f'{format_number(vmrv2_grand_total, 5)} Grand Total vmrv2 Downloads (GitHub + SourceForge)')
     print("-----------------------------------------------------------------------")
     print(f'{format_number(mrv2_grand_total + vmrv2_grand_total, 5)} Grand Total (GitHub + SourceForge)')
