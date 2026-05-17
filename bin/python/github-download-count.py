@@ -21,11 +21,8 @@ import requests  # plain requests for SourceForge
 import json
 from io import StringIO
 
-try:
-    from functions import format_number
-except ImportError:
-    def format_number(n, width):
-        return str(n).rjust(width)
+def format_number(n, width):
+    return str(n).rjust(width)
 
 # --- Global Configuration ---
 full_names = []
@@ -341,7 +338,7 @@ if __name__ == "__main__":
     print(f'{format_number(vmrv2_lin_g, 5)} vmrv2 Linux Downloads (All Archs)')
     print(f'{format_number(vmrv2_mac_g, 5)} vmrv2 macOS Downloads (All Archs)')
     print()
-    print(f'{format_number(mrv2_github, 5)} mrv2 Total Downloads')
+    print(f'{format_number(mrv2_github, 5)}  mrv2 Total Downloads')
     print(f'{format_number(vmrv2_github, 5)} vmrv2 Total Downloads')
     print('===================================================================')
     github_total = mrv2_github + vmrv2_github
