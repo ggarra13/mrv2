@@ -297,7 +297,7 @@ jobs:
           TLRENDER_RAW: ON
           TLRENDER_SGI: ON
           TLRENDER_STB: ON
-          TLRENDER_SVTAV1: ON 
+          TLRENDER_SVTAV1: OFF  # does not work - tries to compile a NEON file 
           TLRENDER_TIFF: ON
           TLRENDER_USD: OFF
           TLRENDER_VPX: ON
