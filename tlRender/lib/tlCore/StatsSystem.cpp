@@ -188,6 +188,7 @@ namespace tl
         void StatsSystem::_log()
         {
             TLRENDER_P();
+            
             const auto samples = p.samples->get();
             std::vector<std::string> lines;
             lines.push_back(std::string());

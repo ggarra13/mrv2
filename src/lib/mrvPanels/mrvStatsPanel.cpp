@@ -95,7 +95,7 @@ namespace mrv
             cg = new Fl_Flex(X, Y, W, groups.size() * 130);
             cg->type(Fl_Flex::VERTICAL);
             
-            cg->gap(40);
+            cg->gap(35);
             cg->margin(5, 20, 5, 10);
             cg->begin();
 
