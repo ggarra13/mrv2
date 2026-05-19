@@ -270,6 +270,9 @@ namespace tl
             //! types.
             void debugDescriptorSets();
 
+            //! Get object count.
+            static size_t getObjectCount();
+            
         private:
             void _createVertexShader(const std::string&);
             void _createFragmentShader(const std::string&);

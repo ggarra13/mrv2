@@ -35,6 +35,7 @@ set(HEADERS
     mrvDockGroup.h
     mrvDragButton.h
     mrvDropWindow.h
+    mrvEEGGraph.h
     mrvFileButton.h
     mrvFileDragger.h
     mrvFPSInput.h
@@ -91,6 +92,7 @@ set(SOURCES
     mrvDockGroup.cpp
     mrvDragButton.cpp
     mrvDropWindow.cpp
+    mrvEEGGraph.cpp
     mrvFileButton.cpp
     mrvFileDragger.cpp
     mrvFPSInput.cpp

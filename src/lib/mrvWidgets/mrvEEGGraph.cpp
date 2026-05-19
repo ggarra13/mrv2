@@ -1,135 +1,208 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright Contributors to the feather-tk project.
 
 #include "mrvWidgets/mrvEEGGraph.h"
 
+#include <tlCore/StringFormat.h>
+
 #include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
 
-#include <cstdint>
-#include <vector>
 #include <algorithm>
-#include <cmath>
-#include <string>
 #include <limits>
-#include <mutex>
 
 namespace mrv
 {
+    // ── Construction ──────────────────────────────────────────────────────────
 
-    EEGGraph::EEGGraph(int X, int Y, int W, int H, const char *L) :
-        Fl_Widget(X, Y, W, H, L)
+    EEGGraph::EEGGraph(int X, int Y, int W, int H, const char* L) :
+        Fl_Widget(X, Y, W, H, L),
+        bg_(fl_rgb_color(8, 12, 8))
     {
-        bg = fl_rgb_color( 8, 12, 8);
         box(FL_NO_BOX);
 
+        // If the FLTK label was supplied use it as the initial group name so
+        // that callers who do:
+        //   new EEGGraph(x, y, w, h, "Image Memory");
+        // don't also have to call setGroup().
+        if (L)
+            group_ = L;
     }
 
-    void EEGGraph::push_sample(const std::string& name, int64_t v) {
-        std::lock_guard<std::mutex> lk(mtx_);
-        auto i = stats.find(name);
-        if (i == stats.end())
+    // ── Group ─────────────────────────────────────────────────────────────────
+
+    void EEGGraph::setGroup(const std::string& group)
+    {
+        group_ = group;
+        traces_.clear();   // old data belongs to the previous group
+    }
+
+    const std::string& EEGGraph::getGroup() const
+    {
+        return group_;
+    }
+
+    // ── Data input ───────────────────────────────────────────────────────────
+
+    void EEGGraph::setSamples(
+        const std::map<std::string, std::vector<int64_t>>& allSamples)
+    {
+        traces_.clear();
+
+        // StatsSystem keys are "Group/Name".  Extract only entries whose
+        // group prefix matches this widget's group.
+        const std::string prefix = group_ + "/";
+
+        for (const auto& [id, buf] : allSamples)
         {
-            stats[name] = Stats();
-            stats[name].fg = colors[stats.size()-1];
+            if (id.compare(0, prefix.size(), prefix) != 0)
+                continue;
+
+            const std::string name = id.substr(prefix.size());
+            traces_[name] = buf;
+
+            // Assign a palette colour the first time this name is seen.
+            if (styles_.find(name) == styles_.end())
+            {
+                TraceStyle ts;
+                ts.fg = _next_color();
+                styles_[name] = ts;
+            }
         }
-        Stats& s = stats[name];
-        s.buffer[s.write_pos] = v;
-        s.write_pos = (s.write_pos + 1) % s.capacity;
-        if (s.sample_count < s.capacity) ++s.sample_count;
+    }
+
+    // ── Style ─────────────────────────────────────────────────────────────────
+
+    void EEGGraph::setTraceStyle(const std::string& name,
+                                  const TraceStyle& style)
+    {
+        styles_[name] = style;
+    }
+
+    const EEGGraph::TraceStyle& EEGGraph::getTraceStyle(
+        const std::string& name) const
+    {
+        auto it = styles_.find(name);
+        if (it == styles_.end())
+        {
+            TraceStyle ts;
+            ts.fg = _next_color();
+            styles_[name] = ts;
+            return styles_[name];
+        }
+        return it->second;
+    }
+
+    // ── Clear ─────────────────────────────────────────────────────────────────
+
+    void EEGGraph::clear()
+    {
+        traces_.clear();
+        // Styles are intentionally kept so the caller doesn't have to
+        // re-configure them after a data reset.
         redraw();
     }
-    
-    void EEGGraph::clear() {
-        std::lock_guard<std::mutex> lk(mtx_);
-        stats.clear();
-        redraw();
-    }
+
+    // ── Drawing ───────────────────────────────────────────────────────────────
 
     void EEGGraph::draw()
     {
         const int X = x(), Y = y(), W = w(), H = h();
         if (W <= 0 || H <= 0) return;
 
-        // ── background ───────────────────────────────────────────────────
-        fl_color(bg);
+        // Bottom 20 px are reserved for per-trace labels.
+        const int CH = H - 20;
 
-        int CH = H - 20;
+        fl_color(bg_);
         fl_rectf(X, Y, W, CH);
 
-        int CX = X; 
-        for (auto& [name, s] : stats)
-        {
-            // ── snapshot the ring-buffer ─────────────────────────────────────
-            std::vector<int64_t> snap;
-            std::size_t cap, wpos, count;
-            {
-                std::lock_guard<std::mutex> lk(mtx_);
-                snap   = s.buffer;
-                cap    = s.capacity;
-                wpos   = s.write_pos;
-                count  = s.sample_count;
-            }
+        int labelX = X;
 
-            if (count == 0)
+        for (const auto& [name, buf] : traces_)
+        {
+            if (buf.empty())
                 continue;
 
-            // ── visible sample window: one sample per pixel column ───────────
-            const int cols = W;
+            const TraceStyle& ts = getTraceStyle(name);
 
-            // Build a display vector (oldest → newest) mapping to pixel cols
-            // We only need `cols` samples at most.
-            std::size_t use = std::min((std::size_t)cols, count);
+            // ── Visible window ───────────────────────────────────────────────
+            // StatsSystem stores samples oldest-first; just take the tail.
+            const int         cols = W;
+            const std::size_t use  =
+                std::min(static_cast<std::size_t>(cols), buf.size());
+
             std::vector<int64_t> vis(cols, 0);
-            // oldest visible sample index in ring
-            std::size_t start = (wpos + cap - use) % cap;
-            for (std::size_t i = 0; i < use; ++i) {
-                std::size_t ri = (start + i) % cap;
+            const std::size_t src_start = buf.size() - use;
+            for (std::size_t i = 0; i < use; ++i)
+                vis[cols - static_cast<int>(use) + i] = buf[src_start + i];
 
-                // right-align: put newest sample at rightmost pixel
-                vis[cols - (int)use + i] = snap[ri];
-            }
-
-            // ── Y autoscale ──────────────────────────────────────────────────
-            int64_t ylo = s.y_min, yhi = s.y_max;
-            if (s.auto_scale) {
+            // ── Y scale ──────────────────────────────────────────────────────
+            int64_t ylo = ts.y_min, yhi = ts.y_max;
+            if (ts.auto_scale)
+            {
                 ylo = std::numeric_limits<int64_t>::max();
                 yhi = std::numeric_limits<int64_t>::min();
-                for (auto v : vis) { ylo = std::min(ylo, v); yhi = std::max(yhi, v); }
+                for (auto v : vis)
+                {
+                    ylo = std::min(ylo, v);
+                    yhi = std::max(yhi, v);
+                }
                 if (ylo == yhi) { ylo -= 1; yhi += 1; }
-                // 5 % padding
-                int64_t pad = (yhi - ylo) / 20 + 1;
-                ylo -= pad; yhi += pad;
+                const int64_t pad = (yhi - ylo) / 20 + 1;
+                ylo -= pad;
+                yhi += pad;
             }
-    
-            const double yrange = (double)(yhi - ylo);
 
-            // helper: sample value → pixel Y (flipped: large value → top)
-            auto sampleY = [&](int64_t v) -> int {
-                double t = (double)(v - ylo) / yrange;
-                return Y + CH - 1 - (int)(t * (CH - 1));
+            const double yrange = static_cast<double>(yhi - ylo);
+            auto sampleY = [&](int64_t v) -> int
+            {
+                const double t = static_cast<double>(v - ylo) / yrange;
+                return Y + CH - 1 - static_cast<int>(t * (CH - 1));
             };
 
-            // ── write-head pixel column ──────────────────────────────────────
-            // The newest sample sits at pixel col = cols-1.
-            // We model the "write head" as scrolling left; the gap trails it.
-            // Since we right-align, we draw the gap at the right end.
-            const int head_col = cols - 1;
+            // ── Trace ────────────────────────────────────────────────────────
+            fl_color(ts.fg);
+            fl_line_style(FL_SOLID, static_cast<int>(ts.line_width + 0.5f));
+            _draw_trace(vis, cols, X, Y, CH, sampleY);
+            fl_line_style(FL_SOLID, 0);
 
-            // ── main trace ───────────────────────────────────────────────────
-            fl_color(s.fg);
-            fl_line_style(FL_SOLID, (int)(s.line_width + 0.5f));
-            _draw_trace(vis, cols, head_col, X, Y, CH, sampleY);
-
+            // ── Label in the bottom strip ────────────────────────────────────
+            // `name` is the StatsSystem name template, e.g. "Images: {0}MB".
+            // Format in the latest (rightmost) value so the label is live.
+            fl_color(ts.fg);
             fl_font(FL_HELVETICA, 10);
-            int NW, NH;
-            fl_measure(name.c_str(), NW, NH); 
-            fl_draw(name.c_str(), CX, Y + H);
-
-            CX += NW;
+            const std::string label =
+                tl::string::Format(name).arg(buf.back());
+            int lw = 0, lh = 0;
+            fl_measure(label.c_str(), lw, lh);
+            fl_draw(label.c_str(), labelX, Y + CH + 14);
+            labelX += lw + 8;
         }
-
-        fl_line_style(FL_SOLID, 0); // reset
-
     }
 
-}
+    // ── Private ───────────────────────────────────────────────────────────────
+
+    template<typename SampleYFn>
+    void EEGGraph::_draw_trace(
+        const std::vector<int64_t>& vis,
+        int cols, int X, int Y, int /*CH*/,
+        SampleYFn sampleY) const
+    {
+        int prev_px = X, prev_py = sampleY(vis[0]);
+        for (int c = 1; c < cols; ++c)
+        {
+            const int px = X + c;
+            const int py = sampleY(vis[c]);
+            fl_line(prev_px, prev_py, px, py);
+            prev_px = px;
+            prev_py = py;
+        }
+    }
+
+    Fl_Color EEGGraph::_next_color() const
+    {
+        const int idx = static_cast<int>(styles_.size()) % kPaletteSize;
+        return kPalette[idx];
+    }
+
+} // namespace mrv

@@ -19,6 +19,7 @@ set(HEADERS
     mrvPanelWidget.h
     mrvPlaylistPanel.h
     mrvSettingsPanel.h
+    mrvStatsPanel.h
     mrvStereo3DPanel.h
     mrvThumbnailPanel.h
     mrvVectorscopePanel.h
@@ -43,6 +44,7 @@ set(SOURCES
     mrvPanelsCallbacks.cpp
     mrvPlaylistPanel.cpp
     mrvSettingsPanel.cpp
+    mrvStatsPanel.cpp
     mrvStereo3DPanel.cpp
     mrvThumbnailPanel.cpp
     mrvVectorscopePanel.cpp

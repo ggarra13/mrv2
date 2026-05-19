@@ -1356,6 +1356,18 @@ namespace mrv
                 if ((!value && stereo3DPanel) || (value && !stereo3DPanel))
                     stereo3D_panel_cb(nullptr, ui);
             }
+            else if (c == "Stats Panel")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                bool value = message["value"];
+                if ((!value && statsPanel) || (value && !statsPanel))
+                    stats_panel_cb(nullptr, ui);
+            }
             else if (c == "setTimelineDisplayOptions")
             {
                 bool receive = prefs->ReceiveUI->value();

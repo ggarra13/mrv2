@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <cstring>
 #include <iostream>
 
@@ -381,14 +382,34 @@ namespace tl
             return out;
         }
 
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+            std::atomic<size_t> totalByteCount = 0;
+        }
+        
+        size_t Image::getTotalByteCount()
+        {
+            return totalByteCount;
+        }
+        
+        size_t Image::getObjectCount()
+        {
+            return objectCount;
+        }
+        
         void Image::_init(const Info& info, const bool ownsData)
         {
             _info = info;
             _owns = ownsData;
             _dataByteCount = image::getDataByteCount(info);
+
+            totalByteCount += _dataByteCount;
+            ++objectCount;
+            
             if (ownsData)
             {
-                //! \bug Allocate a bit of extra space since FFmpeg sws_scale()
+                //! Allocate a bit of extra space since FFmpeg sws_scale()
                 //! seems to be reading past the end?
                 _data = new uint8_t[_dataByteCount + 16];
             }
@@ -402,6 +423,9 @@ namespace tl
         {
             if (_owns)
                 delete [] _data;
+            
+            totalByteCount -= _dataByteCount;
+            --objectCount;
         }
 
         std::shared_ptr<Image> Image::create(const Info& info)
@@ -511,5 +535,6 @@ namespace tl
             out.h = std::stoi(split[1]);
             return is;
         }
+        
     } // namespace image
 } // namespace tl

@@ -97,6 +97,10 @@ namespace tl
 
             ///@}
 
+            static size_t getObjectCount();
+            
+            static size_t getTotalByteCount();
+            
         private:
             TLRENDER_PRIVATE();
         };

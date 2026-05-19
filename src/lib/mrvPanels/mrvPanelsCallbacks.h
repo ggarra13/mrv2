@@ -22,6 +22,7 @@
 #include "mrvPanels/mrvLogsPanel.h"
 #include "mrvPanels/mrvPlaylistPanel.h"
 #include "mrvPanels/mrvSettingsPanel.h"
+#include "mrvPanels/mrvStatsPanel.h"
 #include "mrvPanels/mrvStereo3DPanel.h"
 #include "mrvPanels/mrvVectorscopePanel.h"
 #include "mrvPanels/mrvWaveformPanel.h"
@@ -67,6 +68,7 @@ namespace mrv
         extern EnvironmentMapPanel* environmentMapPanel;
         extern Stereo3DPanel* stereo3DPanel;
         extern BackgroundPanel* backgroundPanel;
+        extern StatsPanel* statsPanel;
 #ifdef MRV2_PYBIND11
         extern PythonPanel* pythonPanel;
 #endif
@@ -127,6 +129,7 @@ namespace mrv
         void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void waveform_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void webrtc_panel_cb(Fl_Widget* w, ViewerUI* ui);
+        void stats_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui);
         ///@}
     } // namespace panel

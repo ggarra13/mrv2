@@ -150,6 +150,7 @@ namespace mrv
 #ifdef MRV2_NETWORK
         {_("WebRTC"), (Fl_Callback*)webrtc_panel_cb},
 #endif
+        {_("Statistics"), (Fl_Callback*)stats_panel_cb},
         {_("Hotkeys"), (Fl_Callback*)nullptr},
         {_("Preferences"), (Fl_Callback*)nullptr},
         {_("About"), (Fl_Callback*)nullptr},

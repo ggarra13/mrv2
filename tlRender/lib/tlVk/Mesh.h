@@ -103,6 +103,12 @@ namespace tl
 
             ///@}
 
+            //! Get the number of objects currenty instantiated.
+            static size_t getObjectCount();
+
+            //! Get the total number of bytes currently used.
+            static size_t getTotalByteCount();
+            
         private:
             TLRENDER_PRIVATE();
         };

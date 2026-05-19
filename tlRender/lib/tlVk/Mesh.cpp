@@ -14,6 +14,7 @@
 #include <tlCore/String.h>
 
 #include <array>
+#include <atomic>
 #include <set>
 #include <stdexcept>
 #include <vector>
@@ -581,6 +582,22 @@ namespace tl
             return out;
         }
 
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+            std::atomic<size_t> totalByteCount = 0;
+        }
+
+        size_t VBO::getObjectCount()
+        {
+            return objectCount;
+        }
+        
+        size_t VBO::getTotalByteCount()
+        {
+            return totalByteCount;
+        }
+        
         struct VBO::Private
         {
             std::size_t size = 0;
@@ -596,6 +613,9 @@ namespace tl
         {
             TLRENDER_P();
 
+            ++objectCount;
+            totalByteCount += size * getByteCount(type);
+            
             p.size = size;
             p.type = type;
             
@@ -830,7 +850,13 @@ namespace tl
         {
         }
 
-        VBO::~VBO() {}
+        VBO::~VBO()
+        {
+            TLRENDER_P();
+            
+            --objectCount;
+            totalByteCount -= p.size * getByteCount(p.type);
+        }
 
         std::shared_ptr<VBO> VBO::create(std::size_t size, VBOType type)
         {

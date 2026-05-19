@@ -265,6 +265,10 @@ namespace tl
             //! Get pixels from readPixelsInline.
             //! Gets the pixels of the latest readPixelsInline command.
             void* getInlineReadbackPtr();
+
+            static size_t getObjectCount();
+
+            static size_t getTotalByteCount();
             
         private:
             Fl_Vk_Context& ctx;

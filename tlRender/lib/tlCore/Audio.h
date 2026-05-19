@@ -166,6 +166,12 @@ namespace tl
             //! Zero the audio data.
             void zero();
 
+            //! Get total byte count of all audio.
+            static size_t getTotalByteCount();
+
+            //! Get total number of audio chunks.
+            static size_t getObjectCount();
+            
         private:
             Info _info;
             size_t _sampleCount = 0;

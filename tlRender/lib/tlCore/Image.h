@@ -378,6 +378,12 @@ namespace tl
                 {
                     return _planar ? _linesize[index] : (_data ? _info.size.w : 0);
                 }
+
+            //! Get total byte count of all images.
+            static size_t getTotalByteCount();
+
+            //! Get total number of images.
+            static size_t getObjectCount();
             
         private:
             Info _info;

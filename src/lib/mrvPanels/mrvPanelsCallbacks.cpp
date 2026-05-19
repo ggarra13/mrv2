@@ -27,6 +27,7 @@ namespace mrv
         VectorscopePanel* vectorscopePanel = nullptr;
         WaveformPanel* waveformPanel = nullptr;
         Stereo3DPanel* stereo3DPanel = nullptr;
+        StatsPanel* statsPanel = nullptr;
         BackgroundPanel* backgroundPanel = nullptr;
 #ifdef MRV2_PYBIND11
         PythonPanel* pythonPanel = nullptr;
@@ -196,6 +197,8 @@ namespace mrv
                 vectorscope_panel_cb(nullptr, ui);
             if (stereo3DPanel && !stereo3DPanel->is_panel())
                 stereo3D_panel_cb(nullptr, ui);
+            if (statsPanel && !statsPanel->is_panel())
+                stats_panel_cb(nullptr, ui);
             if (backgroundPanel && !backgroundPanel->is_panel())
                 background_panel_cb(nullptr, ui);
 #ifdef MRV2_NETWORK
@@ -614,6 +617,25 @@ namespace mrv
 #endif
         }
 
+        void stats_panel_cb(Fl_Widget* w, ViewerUI* ui)
+        {
+            bool send = ui->uiPrefs->SendUI->value();
+            if (send)
+            {
+                tcp->pushMessage(
+                    "Stereo 3D Panel", static_cast<bool>(!statsPanel));
+            }
+            if (statsPanel)
+            {
+                delete statsPanel;
+                statsPanel = nullptr;
+                ui->uiMain->fill_menu(ui->uiMenuBar);
+                return;
+            }
+            statsPanel = new StatsPanel(ui);
+            ui->uiMain->fill_menu(ui->uiMenuBar);
+        }
+        
         void stereo3D_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
             bool send = ui->uiPrefs->SendUI->value();
@@ -682,6 +704,8 @@ namespace mrv
                     "Vectorscope Panel", static_cast<bool>(vectorscopePanel));
                 tcp->pushMessage(
                     "Waveform Panel", static_cast<bool>(waveformPanel));
+                tcp->pushMessage(
+                    "Stats Panel", static_cast<bool>(statsPanel));
             }
         }
 

@@ -24,6 +24,8 @@ extern "C"
 #include <tlVk/Texture.h>
 #include <tlVk/TextureAtlas.h>
 
+#include <tlCore/StatsSystem.h>
+
 #if defined(TLRENDER_OCIO)
 #    include <OpenColorIO/OpenColorIO.h>
 #endif // TLRENDER_OCIO
@@ -244,8 +246,8 @@ namespace tl
                 size_t pipelineChanges = 0;
             };
             Stats currentStats;
-            std::list<Stats> stats;
             std::chrono::steady_clock::time_point logTimer;
+            std::shared_ptr<system::StatsSystem> statsSystem;
 
             void createTextMesh(Fl_Vk_Context& ctx, const geom::TriangleMesh2&);
         };

@@ -37,7 +37,7 @@ namespace mrv
         {
             std::shared_ptr<system::StatsSystem> stats;
             std::map<std::string, EEGGraph*> widget;
-            std::shared_ptr<observer::MapObserver<std::string, int64_t> > sampleIncObserver;
+            std::shared_ptr<observer::MapObserver<std::string, std::vector<int64_t> > > samplesObserver;
         };
 
         StatsPanel::StatsPanel(ViewerUI* ui) :
@@ -105,13 +105,14 @@ namespace mrv
                 w->align(FL_ALIGN_LEFT | FL_ALIGN_TOP);
                 w->copy_label(group.c_str());
                 _r->widget[group] = w;
+                w->setGroup(group);
             }
 
             
-            _r->sampleIncObserver =
-                observer::MapObserver<std::string, int64_t>::create(
-                    _r->stats->observeSamplesInc(),
-                    [this](const std::map<std::string, int64_t>& value)
+            _r->samplesObserver =
+                observer::MapObserver<std::string, std::vector<int64_t> >::create(
+                    _r->stats->observeSamples(),
+                    [this](const std::map<std::string, std::vector<int64_t> >& value)
                         {
                             MRV2_R();
                             
@@ -121,7 +122,8 @@ namespace mrv
                                 const auto j = r.widget.find(keys[0]);
                                 if (j != r.widget.end())
                                 {
-                                    j->second->push_sample(keys[1], i.second);
+                                    j->second->setSamples(value);
+                                    j->second->redraw();
                                 }
                             }
                         });

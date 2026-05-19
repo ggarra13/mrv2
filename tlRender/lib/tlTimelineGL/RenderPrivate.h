@@ -19,6 +19,8 @@ extern "C"
 #include <tlGL/Shader.h>
 #include <tlGL/TextureAtlas.h>
 
+#include <tlCore/StatsSystem.h>
+
 #if defined(TLRENDER_OCIO)
 #    include <OpenColorIO/OpenColorIO.h>
 #endif // TLRENDER_OCIO
@@ -171,7 +173,8 @@ namespace tl
                 size_t images = 0;
             };
             Stats currentStats;
-            std::list<Stats> stats;
+
+            std::shared_ptr<system::StatsSystem> statsSystem;
             std::chrono::steady_clock::time_point logTimer;
 
             void drawTextMesh(const geom::TriangleMesh2&);

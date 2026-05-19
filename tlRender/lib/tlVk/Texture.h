@@ -20,6 +20,10 @@ namespace tl
     {
         //! Get the Vulkan's source texture format.
         VkFormat getTextureFormat(image::PixelType);
+        
+        std::size_t getDataByteCount(
+            const VkImageType type, uint32_t w, uint32_t h, uint32_t d,
+            VkFormat format);
 
         enum class TextureBorder
         {
@@ -165,6 +169,12 @@ namespace tl
 
             VkImageLayout getImageLayout() const;
             
+            //! Get the number of objects currenty instantiated.
+            static size_t getObjectCount();
+
+            //! Get the total number of bytes currently used.
+            static size_t getTotalByteCount();
+            
         private:
             Fl_Vk_Context& ctx;
 
@@ -174,7 +184,6 @@ namespace tl
             void createImageView();
             void createSampler();
 
-            static uint64_t numTextures;
             static std::unique_ptr<SamplersCache> samplersCache;
             
             TLRENDER_PRIVATE();

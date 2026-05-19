@@ -70,7 +70,7 @@ namespace tl
             OffscreenDepth depth = OffscreenDepth::kNone;
             OffscreenStencil stencil = OffscreenStencil::kNone;
             OffscreenSampling sampling = OffscreenSampling::kNone;
-
+            
             bool operator==(const OffscreenBufferOptions&) const;
             bool operator!=(const OffscreenBufferOptions&) const;
         };
@@ -113,6 +113,10 @@ namespace tl
 
             //! Bind the offscreen buffer.
             void bind();
+
+            static size_t getObjectCount();
+
+            static size_t getTotalByteCount();
 
         private:
             TLRENDER_PRIVATE();

@@ -16,6 +16,7 @@
 #include <FL/Fl_Vk_Utils.H>
 
 #include <array>
+#include <atomic>
 #include <sstream>
 #include <iostream>
 
@@ -139,6 +140,22 @@ namespace tl
             return !(*this == other);
         }
 
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+            std::atomic<size_t> totalByteCount = 0;
+        }
+        
+        size_t OffscreenBuffer::getTotalByteCount()
+        {
+            return totalByteCount;
+        }
+        
+        size_t OffscreenBuffer::getObjectCount()
+        {
+            return objectCount;
+        }
+        
         static constexpr int NUM_PBO_BUFFERS = 3;
 
         struct StagingBuffer {
@@ -285,6 +302,14 @@ namespace tl
             if (p.size.h > maxTextureSize)
                 p.size.h = maxTextureSize;
 
+            totalByteCount += vlk::getDataByteCount(VK_IMAGE_TYPE_2D,
+                                                    p.size.w,
+                                                    p.size.h,
+                                                    1,
+                                                    p.colorFormat);
+            ++objectCount;
+            
+            
             initialize();
         }
 
@@ -296,6 +321,15 @@ namespace tl
 
         OffscreenBuffer::~OffscreenBuffer()
         {
+            TLRENDER_P();
+            
+            --objectCount;
+            totalByteCount -= vlk::getDataByteCount(VK_IMAGE_TYPE_2D,
+                                                    p.size.w,
+                                                    p.size.h,
+                                                    1,
+                                                    p.colorFormat);
+            
             cleanup();
         }
 

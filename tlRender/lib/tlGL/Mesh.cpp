@@ -12,6 +12,7 @@
 #include <tlCore/String.h>
 
 #include <array>
+#include <atomic>
 
 namespace tl
 {
@@ -424,6 +425,22 @@ namespace tl
             return out;
         }
 
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+            std::atomic<size_t> totalByteCount = 0;
+        }
+
+        size_t VBO::getObjectCount()
+        {
+            return objectCount;
+        }
+        
+        size_t VBO::getTotalByteCount()
+        {
+            return totalByteCount;
+        }
+        
         struct VBO::Private
         {
             std::size_t size = 0;
@@ -434,6 +451,10 @@ namespace tl
         void VBO::_init(std::size_t size, VBOType type)
         {
             TLRENDER_P();
+            
+            ++objectCount;
+            totalByteCount += size * getByteCount(type);
+            
             p.size = size;
             p.type = type;
             glGenBuffers(1, &p.vbo);
@@ -457,6 +478,9 @@ namespace tl
                 glDeleteBuffers(1, &p.vbo);
                 p.vbo = 0;
             }
+            
+            --objectCount;
+            totalByteCount -= p.size * getByteCount(p.type);
         }
 
         std::shared_ptr<VBO> VBO::create(std::size_t size, VBOType type)

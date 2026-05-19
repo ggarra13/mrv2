@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 
+#include <atomic>
 #include <cstdint>
 #include <cstddef>
 
@@ -246,7 +247,22 @@ namespace tl
             return data[static_cast<std::size_t>(value)];
         }
 
-        uint64_t                       Texture::numTextures = 0;
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+            std::atomic<size_t> totalByteCount = 0;
+        }
+        
+        size_t Texture::getTotalByteCount()
+        {
+            return totalByteCount;
+        }
+        
+        size_t Texture::getObjectCount()
+        {
+            return objectCount;
+        }
+        
         std::unique_ptr<SamplersCache> Texture::samplersCache;
         
         struct Texture::Private
@@ -302,6 +318,13 @@ namespace tl
             allocateMemory();
             createImageView();
             createSampler();
+
+            totalByteCount += getDataByteCount(p.imageType,
+                                               p.info.size.w,
+                                               p.info.size.h,
+                                               p.depth,
+                                               p.internalFormat);
+            ++objectCount;
         }
 
         void Texture::_init(
@@ -333,7 +356,6 @@ namespace tl
             case VK_FORMAT_R8_UNORM:
                 p.info.pixelType = image::PixelType::L_U8;
                 break;
-                // Add other cases if OCIO uses them, but R32 and RGBA32 are the main ones here.
             default:
                 p.info.pixelType = image::PixelType::RGBA_F32; 
                 break;
@@ -358,6 +380,13 @@ namespace tl
             allocateMemory();
             createImageView();
             createSampler();
+            
+            totalByteCount += getDataByteCount(p.imageType,
+                                               p.info.size.w,
+                                               p.info.size.h,
+                                               p.depth,
+                                               p.internalFormat);
+            ++objectCount;
         }
 
         Texture::Texture(Fl_Vk_Context& context) :
@@ -368,13 +397,12 @@ namespace tl
             {
                 samplersCache = std::make_unique<SamplersCache>(ctx.device);
             }
-            ++numTextures;
         }
 
         Texture::~Texture()
         {
             TLRENDER_P();
-
+            
             VkDevice device = ctx.device;
 
             {
@@ -393,8 +421,14 @@ namespace tl
             if (p.commandPool != VK_NULL_HANDLE)
                 vkDestroyCommandPool(device, p.commandPool, nullptr);
             
-            --numTextures;
-            if (numTextures == 0)
+
+            totalByteCount -= getDataByteCount(p.imageType,
+                                               p.info.size.w,
+                                               p.info.size.h,
+                                               p.depth,
+                                               p.internalFormat);
+            --objectCount;
+            if (objectCount == 0)
             {
                 samplersCache.reset();
             }

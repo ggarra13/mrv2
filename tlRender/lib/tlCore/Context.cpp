@@ -7,6 +7,7 @@
 #include <tlCore/AudioSystem.h>
 #include <tlCore/FontSystem.h>
 #include <tlCore/OS.h>
+#include <tlCore/StatsSystem.h>
 #include <tlCore/StringFormat.h>
 #include <tlCore/Timer.h>
 
@@ -37,6 +38,7 @@ namespace tl
             addSystem(time::TimerSystem::create(shared_from_this()));
             addSystem(image::FontSystem::create(shared_from_this()));
             addSystem(audio::System::create(shared_from_this()));
+            addSystem(system::StatsSystem::create(shared_from_this()));
         }
 
         Context::Context() :

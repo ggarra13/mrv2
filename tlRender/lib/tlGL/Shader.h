@@ -84,7 +84,9 @@ namespace tl
             setUniform(const std::string&, const std::vector<math::Vector4f>&);
 
             ///@}
-
+            
+            static size_t getObjectCount();
+            
         private:
             TLRENDER_PRIVATE();
         };

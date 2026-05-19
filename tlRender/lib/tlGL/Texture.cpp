@@ -9,6 +9,7 @@
 #include <tlCore/Assert.h>
 
 #include <array>
+#include <atomic>
 #include <iostream>
 
 namespace tl
@@ -258,6 +259,22 @@ namespace tl
             return data[static_cast<std::size_t>(value)];
         }
 
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+            std::atomic<size_t> totalByteCount = 0;
+        }
+        
+        size_t Texture::getTotalByteCount()
+        {
+            return totalByteCount;
+        }
+        
+        size_t Texture::getObjectCount()
+        {
+            return objectCount;
+        }
+        
         struct Texture::Private
         {
             image::Info info;
@@ -301,6 +318,9 @@ namespace tl
                 p.info.size.w, p.info.size.h, 0,
                 getTextureFormat(p.info.pixelType),
                 getTextureType(p.info.pixelType), NULL);
+
+            ++objectCount;
+            totalByteCount += image::getDataByteCount(p.info);
         }
 
         Texture::Texture() :
@@ -321,6 +341,9 @@ namespace tl
                 glDeleteTextures(1, &p.id);
                 p.id = 0;
             }
+            
+            --objectCount;
+            totalByteCount -= image::getDataByteCount(p.info);
         }
 
         std::shared_ptr<Texture>
@@ -479,5 +502,6 @@ namespace tl
         {
             glBindTexture(GL_TEXTURE_2D, _p->id);
         }
+
     } // namespace gl
 } // namespace tl

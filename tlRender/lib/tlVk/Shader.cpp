@@ -11,6 +11,7 @@
 
 #include <FL/Fl_Vk_Utils.H>
 
+#include <atomic>
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
@@ -19,6 +20,16 @@ namespace tl
 {
     namespace vlk
     {
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+        }
+        
+        size_t Shader::getObjectCount()
+        {
+            return objectCount;
+        }
+        
         struct Shader::Private
         {
             VkShaderModule vertex = VK_NULL_HANDLE;
@@ -153,6 +164,8 @@ namespace tl
             p.vertex = create_shader_module(ctx.device, vertexBytes, vertexLength);
             p.fragment = create_shader_module(ctx.device, fragmentBytes, fragmentLength);
             shaderName = name;
+
+            ++objectCount;
         }
         
         void Shader::_init(const std::string& vertexSource,
@@ -165,6 +178,8 @@ namespace tl
             
             _createVertexShader(vertexSource);
             _createFragmentShader(fragmentSource);
+            
+            ++objectCount;
         }
         
         void Shader::_init(const std::string& computeSource,
@@ -175,6 +190,8 @@ namespace tl
             shaderName = name;
             
             _createComputeShader(computeSource);
+            
+            ++objectCount;
         }
         
         void Shader::_init(const uint32_t* computeBytes,
@@ -186,6 +203,8 @@ namespace tl
             p.compute = create_shader_module(ctx.device, computeBytes, computeLength);
 
             shaderName = name;
+            
+            ++objectCount;
         }
 
         Shader::Shader(Fl_Vk_Context& context) :
@@ -216,6 +235,8 @@ namespace tl
                 vkDestroyPipelineLayout(device, p.pipelineLayout, nullptr);
             
             activeBindingSet.reset();
+            
+            --objectCount;
         }
 
         std::shared_ptr<Shader> Shader::create(

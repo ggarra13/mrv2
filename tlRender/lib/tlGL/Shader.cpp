@@ -10,12 +10,23 @@
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
 
-#include <iostream>
+#include <atomic>
 
 namespace tl
 {
     namespace gl
     {
+
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+        }
+
+        std::size_t Shader::getObjectCount()
+        {
+            return objectCount;
+        }
+        
         struct Shader::Private
         {
             std::string vertexSource;
@@ -94,6 +105,8 @@ namespace tl
                     p.program, string::cBufferSize, NULL, infoLog);
                 throw std::runtime_error(infoLog);
             }
+
+            ++objectCount;
         }
 
         Shader::Shader() :
@@ -119,6 +132,8 @@ namespace tl
                 glDeleteShader(p.fragment);
                 p.fragment = 0;
             }
+
+            --objectCount;
         }
 
         std::shared_ptr<Shader> Shader::create(

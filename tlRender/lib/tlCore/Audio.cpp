@@ -8,6 +8,7 @@
 #include <tlCore/String.h>
 
 #include <array>
+#include <atomic>
 
 namespace tl
 {
@@ -75,11 +76,31 @@ namespace tl
         {
         }
 
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+            std::atomic<size_t> totalByteCount = 0;
+        }
+        
+        size_t Audio::getTotalByteCount()
+        {
+            return totalByteCount;
+        }
+        
+        size_t Audio::getObjectCount()
+        {
+            return objectCount;
+        }
+        
         void Audio::_init(const Info& info, size_t sampleCount)
         {
             _info = info;
             _sampleCount = sampleCount;
             const size_t byteCount = getByteCount();
+
+            ++objectCount;
+            totalByteCount += byteCount;
+            
             // Use reserve() instead of resize() which can be faster since it
             // does not initialize the data.
             _data.reserve(byteCount);
@@ -87,7 +108,13 @@ namespace tl
 
         Audio::Audio() {}
 
-        Audio::~Audio() {}
+        Audio::~Audio()
+        {
+            const size_t byteCount = getByteCount();
+            totalByteCount -= byteCount;
+            
+            --objectCount;
+        }
 
         std::shared_ptr<Audio>
         Audio::create(const Info& info, size_t sampleCount)

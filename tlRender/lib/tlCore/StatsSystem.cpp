@@ -12,11 +12,6 @@
 
 namespace tl
 {
-    namespace
-    {
-        const float tickTime = 3.F;
-        const float logTickTime = 9.F;
-    }
 
     namespace system
     {
@@ -41,19 +36,18 @@ namespace tl
             p.samplesInc = observer::Map<std::string, int64_t>::create();
 
             addSampler(
-                "gfx Memory/Images: {0}MB",
+                "tlRender Memory/Images: {0}MB",
                 [] { return image::Image::getTotalByteCount() / memory::megabyte; });
-
             addSampler(
-                "gfx Objects/Images: {0}",
-                [] { return image::Image::getObjectCount(); });
-            
-            addSampler(
-                "audio Memory/Audio: {0}MB",
+                "tlRender Memory/Audio: {0}MB",
                 [] { return audio::Audio::getTotalByteCount() / memory::megabyte; });
 
             addSampler(
-                "audio Objects/Audio: {0}",
+                "tlRender Objects/Images: {0}",
+                [] { return image::Image::getObjectCount(); });
+
+            addSampler(
+                "tlRender Objects/Audio: {0}",
                 [] { return audio::Audio::getObjectCount(); });
         }
 

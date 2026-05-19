@@ -876,12 +876,47 @@ namespace tl
             {
                 p.textureCache = std::make_shared<TextureCache>();
             }
+
+            if (!p.statsSystem)
+            {
+                p.statsSystem = context->getSystem<system::StatsSystem>();
+                p.statsSystem->addSampler("Vulkan Memory/Buffers: {0}MB",
+                                          [] {
+                                              return vlk::OffscreenBuffer::getTotalByteCount() /
+                                                  memory::megabyte;
+                                          });
+                p.statsSystem->addSampler("Vulkan Memory/Meshes: {0}B",
+                                          [] {
+                                              return vlk::VBO::getTotalByteCount();
+                                          });
+                p.statsSystem->addSampler("Vulkan Memory/Textures: {0}MB",
+                                          [] {
+                                              return vlk::Texture::getTotalByteCount() /
+                                                  memory::megabyte;
+                                          });
+                
+                p.statsSystem->addSampler("Vulkan Objects/Buffers: {0}",
+                                          [] {
+                                              return vlk::OffscreenBuffer::getObjectCount();
+                                          });
+                p.statsSystem->addSampler("Vulkan Objects/Meshes: {0}",
+                                          [] {
+                                              return vlk::VBO::getObjectCount();
+                                          });
+                p.statsSystem->addSampler("Vulkan Objects/Shaders: {0}",
+                                          [] {
+                                              return vlk::Shader::getObjectCount();
+                                          });
+                p.statsSystem->addSampler("Vulkan Objects/Textures: {0}",
+                                          [] {
+                                              return vlk::Texture::getObjectCount();
+                                          });
+            }
             
             p.glyphTextureAtlas = vlk::TextureAtlas::create(
                 ctx, 1, 4096, image::PixelType::L_U8,
                 timeline::ImageFilter::Linear);
 
-            p.logTimer = std::chrono::steady_clock::now();
         }
 
         Render::Render(Fl_Vk_Context& context) :
@@ -1494,80 +1529,6 @@ namespace tl
             TLRENDER_P();
 
             p.fbo->transitionToShaderRead(p.cmd);
-
-            const auto now = std::chrono::steady_clock::now();
-            const auto diff =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    now - p.timer);
-            p.currentStats.time = diff.count();
-            p.stats.push_back(p.currentStats);
-            p.currentStats = Private::Stats();
-            while (p.stats.size() > 60)
-            {
-                p.stats.pop_front();
-            }
-            
-            const std::chrono::duration<float> logDiff = now - p.logTimer;
-            if (logDiff.count() > 10.F)
-            {
-                p.logTimer = now;
-                if (auto context = _context.lock())
-                {
-                    Private::Stats average;
-                    const size_t size = p.stats.size();
-                    if (size > 0)
-                    {
-                        for (const auto& i : p.stats)
-                        {
-                            average.time += i.time;
-                            average.rects += i.rects;
-                            average.meshes += i.meshes;
-                            average.meshTriangles += i.meshTriangles;
-                            average.text += i.text;
-                            average.textTriangles += i.textTriangles;
-                            average.textures += i.textures;
-                            average.images += i.images;
-                            average.pipelineChanges += i.pipelineChanges;
-                        }
-                        average.time /= p.stats.size();
-                        average.rects /= p.stats.size();
-                        average.meshes /= p.stats.size();
-                        average.meshTriangles /= p.stats.size();
-                        average.text /= p.stats.size();
-                        average.textTriangles /= p.stats.size();
-                        average.textures /= p.stats.size();
-                        average.images /= p.stats.size();
-                        average.pipelineChanges /= p.stats.size();
-                    }
-
-                    context->log(
-                        string::Format("tl::timeline_vlk::Render {0}").arg(this),
-                        string::Format(
-                            "\n"
-                            "    Average render time: {0}ms\n"
-                            "    Average rectangle count: {1}\n"
-                            "    Average mesh count: {2}\n"
-                            "    Average mesh triangles: {3}\n"
-                            "    Average text count: {4}\n"
-                            "    Average text triangles: {5}\n"
-                            "    Average texture count: {6}\n"
-                            "    Average image count: {7}\n"
-                            "    Average pipeline changes: {8}\n"
-                            "    Glyph texture atlas: {9}%\n"
-                            "    Glyph IDs: {10}")
-                            .arg(average.time)
-                            .arg(average.rects)
-                            .arg(average.meshes)
-                            .arg(average.meshTriangles)
-                            .arg(average.text)
-                            .arg(average.textTriangles)
-                            .arg(average.textures)
-                            .arg(average.images)
-                            .arg(average.pipelineChanges)
-                            .arg(p.glyphTextureAtlas->getPercentageUsed())
-                            .arg(p.glyphIDs.size()));
-                }
-            }
         }
 
         VkCommandBuffer Render::getCommandBuffer() const

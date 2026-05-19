@@ -205,9 +205,6 @@ def count_sourceforge(repo, folder_name, end_date, start_date, fetch_json):
                 if package == 'mrv2' and (pattern.endswith('aarch64.exe') or pattern.endswith('aarch64.zip')):
                     continue
 
-                # Small delay between file stats calls
-                time.sleep(0.7)
-
                 # Build FULL URL here (uses the correct start_date for this folder)
                 full_url = (f"https://sourceforge.net/projects/{repo}/files/{file_path}"
                             f"/stats/json?start_date={start_date}&end_date={end_date}")
@@ -330,9 +327,9 @@ if __name__ == "__main__":
      mrv2_lin_g, vmrv2_lin_g,
      mrv2_mac_g, vmrv2_mac_g) = get_github_downloads(user, repo, tag)
 
-    print(f'{format_number(mrv2_win_g, 5)} mrv2 Windows Downloads (All Archs)')
-    print(f'{format_number(mrv2_lin_g, 5)} mrv2 Linux Downloads (All Archs)')
-    print(f'{format_number(mrv2_mac_g, 5)} mrv2 macOS Downloads (All Archs)')
+    print(f'{format_number(mrv2_win_g, 5)}  mrv2 Windows Downloads (All Archs)')
+    print(f'{format_number(mrv2_lin_g, 5)}  mrv2 Linux Downloads (All Archs)')
+    print(f'{format_number(mrv2_mac_g, 5)}  mrv2 macOS Downloads (All Archs)')
     print()
     print(f'{format_number(vmrv2_win_g, 5)} vmrv2 Windows Downloads (All Archs)')
     print(f'{format_number(vmrv2_lin_g, 5)} vmrv2 Linux Downloads (All Archs)')

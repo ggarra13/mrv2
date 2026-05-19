@@ -11,6 +11,7 @@
 #include <tlCore/String.h>
 
 #include <array>
+#include <atomic>
 #include <sstream>
 
 namespace tl
@@ -121,6 +122,23 @@ namespace tl
             return !(*this == other);
         }
 
+
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+            std::atomic<size_t> totalByteCount = 0;
+        }
+        
+        size_t OffscreenBuffer::getTotalByteCount()
+        {
+            return totalByteCount;
+        }
+        
+        size_t OffscreenBuffer::getObjectCount()
+        {
+            return objectCount;
+        }
+        
         struct OffscreenBuffer::Private
         {
             math::Size2i size;
@@ -134,6 +152,8 @@ namespace tl
             const math::Size2i& size, const OffscreenBufferOptions& options)
         {
             TLRENDER_P();
+
+            ++objectCount;
 
             p.size = size;
             p.options = options;
@@ -276,6 +296,11 @@ namespace tl
             {
                 throw std::runtime_error(getErrorLabel(Error::Init));
             }
+
+            ++objectCount;
+
+            image::Info info(p.size.w, p.size.h, p.options.colorType);
+            totalByteCount += getDataByteCount(info);
         }
 
         OffscreenBuffer::OffscreenBuffer() :
@@ -301,6 +326,11 @@ namespace tl
                 glDeleteRenderbuffers(1, &p.depthStencilID);
                 p.depthStencilID = 0;
             }
+            
+            --objectCount;
+            
+            image::Info info(p.size.w, p.size.h, p.options.colorType);
+            totalByteCount -= getDataByteCount(info);
         }
 
         std::shared_ptr<OffscreenBuffer> OffscreenBuffer::create(

@@ -450,6 +450,8 @@ namespace mrv
                 hotkey = kToggleWebRTC.hotkey();
             else if (tmp == "USD")
                 hotkey = kToggleUSD.hotkey();
+            else if (tmp == "Statistics")
+                hotkey = 0; //kToggleStats.hotkey();
             else if (tmp == "Stereo 3D")
                 hotkey = kToggleStereo3D.hotkey();
             else if (tmp == "Background")
@@ -612,6 +614,13 @@ namespace mrv
                 else
                     item->clear();
             }
+            else if (tmp == _("Stats"))
+            {
+                if (statsPanel)
+                    item->set();
+                else
+                    item->clear();
+            }
             else if (tmp == _("Media Information"))
             {
                 if (imageInfoPanel)
@@ -629,6 +638,13 @@ namespace mrv
             else if (tmp == _("Background"))
             {
                 if (backgroundPanel)
+                    item->set();
+                else
+                    item->clear();
+            }
+            else if (tmp == _("Statistics"))
+            {
+                if (statsPanel)
                     item->set();
                 else
                     item->clear();

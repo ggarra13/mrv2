@@ -1,98 +1,110 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright Contributors to the feather-tk project.
+
 #pragma once
-// ============================================================
-//  EcgGraph.h  —  FLTK 1.5 electrocardiogram-style graph widget
-//  Usage:
-//    EcgGraph *g = new EcgGraph(x, y, w, h, "label");
-//    g->push_sample(value);   // call from any thread via Fl::lock()
-//    g->set_capacity(1024);   // ring-buffer size (default 2048)
-//    g->set_grid(10, 5);      // horizontal / vertical grid lines
-// ============================================================
 
 #include <FL/Fl_Widget.H>
-#include <FL/fl_draw.H>
 
 #include <cstdint>
-#include <cmath>
-#include <algorithm>
-#include <array>
 #include <map>
-#include <mutex>
+#include <string>
 #include <vector>
 
 namespace mrv
 {
+    //! Single-group EEG-style graph widget.
+    //!
+    //! Each EEGGraph instance represents one StatsSystem *group*.
+    //! Every StatsSystem *name* within that group is drawn as a separate
+    //! colour-coded trace on the shared canvas.
+    //!
+    //! The full StatsSystem key format is "Group/Name", e.g.
+    //!   "Image Memory/Images: {0}MB"
+    //!    ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+    //!    → group_       → one trace
+    //!
+    //! Typical wiring (one observer per EEGGraph):
+    //! @code
+    //!   auto graph = new mrv::EEGGraph(x, y, w, h, "Image Memory");
+    //!   graph->setGroup("Image Memory");
+    //!
+    //!   _samplesObserver = observer::MapObserver<std::string,
+    //!       std::vector<int64_t>>::create(
+    //!           statsSystem->observeSamples(),
+    //!           [graph](const std::map<std::string,
+    //!                                  std::vector<int64_t>>& v)
+    //!           {
+    //!               graph->setSamples(v);   // filters by group internally
+    //!               graph->redraw();
+    //!           });
+    //! @endcode
     class EEGGraph : public Fl_Widget
     {
     public:
-        constexpr static std::array<Fl_Color, 6> colors =
-            {
-                FL_CYAN,
-                FL_MAGENTA,
-                FL_YELLOW,
-                FL_RED,
-                FL_GREEN,
-                FL_BLUE
-            };
-        
-        EEGGraph(int X, int Y, int W, int H, const char *L = nullptr);
+        //! Per-trace visual configuration.
+        //! Keyed by the *name* part of the StatsSystem id (after the '/').
+        //! Auto-populated with defaults on first appearance.
+        struct TraceStyle
+        {
+            Fl_Color fg         = 0x32FF5000; // green
+            float    line_width = 1.5f;
+            bool     auto_scale = true;
+            int64_t  y_min      = 0;
+            int64_t  y_max      = 100;
+        };
 
-        /** Append one sample.  Safe to call from a worker thread when
-         *  the caller holds Fl::lock(). */
-        void push_sample(const std::string& name, int64_t v);
+        //! @param group  Must match the StatsSystem group name exactly.
+        EEGGraph(int X, int Y, int W, int H, const char* L = nullptr);
 
-        /** Clear all samples. */
+        //! Set or change the StatsSystem group this widget represents.
+        void setGroup(const std::string& group);
+        const std::string& getGroup() const;
+
+        //! Receive the full StatsSystem sample map.
+        //! The widget extracts only the entries belonging to its group.
+        void setSamples(const std::map<std::string,
+                                       std::vector<int64_t>>& allSamples);
+
+        //! Override the visual style for one trace (identified by *name*,
+        //! i.e. the part after the '/' in the StatsSystem id).
+        //! May be called before the trace appears in any sample data.
+        void setTraceStyle(const std::string& name, const TraceStyle& style);
+        const TraceStyle& getTraceStyle(const std::string& name) const;
+
+        //! Clear displayed data (styles are preserved).
         void clear();
-        
+
         void draw() override;
 
     private:
-        
-        struct Stats
-        {
-            std::vector<int64_t>  buffer;
-            std::size_t           capacity;
-            std::size_t           write_pos;
-            std::size_t           sample_count;
-            int64_t               y_min, y_max;
-            bool                  auto_scale;
-            float                 line_width;
-            Fl_Color              fg;
-
-            Stats() :
-                capacity(100),
-                write_pos(0),
-                sample_count(0),
-                y_min(0),
-                y_max(0),
-                auto_scale(true),
-                line_width(1.5f),
-                fg(FL_GREEN)
-                {
-                    buffer.resize(capacity, 0);
-                }
-        };
-        std::map<std::string, Stats> stats;
-        
-        Fl_Color              bg;
-        std::mutex            mtx_;
-
         template<typename SampleYFn>
-        void _draw_trace(const std::vector<int64_t> &vis, int cols,
-                         int /*head_col*/,
-                         int X, int Y, int H,
-                         SampleYFn sampleY) {
-            bool in_gap = false;
-            bool started = false;
-            int prev_px = 0, prev_py = 0;
-            for (int c = 0; c < cols; ++c) {
-                int px = X + c;
-                int py = sampleY(vis[c]);
-                if (!started) { prev_px = px; prev_py = py; started = true; continue; }
-                if (!in_gap)
-                    fl_line(prev_px, prev_py, px, py);
-                prev_px = px; prev_py = py;
-            }
-        }
+        void _draw_trace(
+            const std::vector<int64_t>& vis,
+            int cols, int X, int Y, int CH,
+            SampleYFn sampleY) const;
+
+        Fl_Color _next_color() const;
+
+        //! The StatsSystem group this widget belongs to.
+        std::string group_;
+
+        //! Filtered snapshot: key = *name* (after '/'), value = sample vector.
+        std::map<std::string, std::vector<int64_t>> traces_;
+
+        //! Per-trace styles, keyed by *name*. Persists across setSamples().
+        mutable std::map<std::string, TraceStyle> styles_;
+
+        Fl_Color bg_;
+
+        static constexpr Fl_Color kPalette[] = {
+            0x32FF5000,  // green
+            0x50A0FF00,  // blue
+            0xFFC83200,  // amber
+            0xFF505000,  // red
+            0xC850FF00,  // violet
+            0x00E0E000,  // cyan
+        };
+        static constexpr int kPaletteSize = 6;
     };
-    
-}
+
+} // namespace mrv

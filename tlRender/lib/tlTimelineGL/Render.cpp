@@ -573,6 +573,42 @@ namespace tl
             {
                 p.textureCache = std::make_shared<TextureCache>();
             }
+            if (!p.statsSystem)
+            {
+                p.statsSystem = context->getSystem<system::StatsSystem>();
+                p.statsSystem->addSampler("GL Memory/Buffers: {0}MB",
+                                          [] {
+                                              return gl::OffscreenBuffer::getTotalByteCount() /
+                                                  memory::megabyte;
+                                          });
+                p.statsSystem->addSampler("GL Memory/Meshes: {0}B",
+                                          [] {
+                                              return gl::VBO::getTotalByteCount();
+                                          });
+                p.statsSystem->addSampler("GL Memory/Textures: {0}MB",
+                                          [] {
+                                              return gl::Texture::getTotalByteCount() /
+                                                  memory::megabyte;
+                                          });
+
+                
+                p.statsSystem->addSampler("GL Objects/Buffers: {0}",
+                                          [] {
+                                              return gl::OffscreenBuffer::getObjectCount();
+                                          });
+                p.statsSystem->addSampler("GL Objects/Meshes: {0}",
+                                          [] {
+                                              return gl::VBO::getObjectCount();
+                                          });
+                p.statsSystem->addSampler("GL Objects/Shaders: {0}",
+                                          [] {
+                                              return gl::Shader::getObjectCount();
+                                          });
+                p.statsSystem->addSampler("GL Objects/Textures: {0}",
+                                          [] {
+                                              return gl::Texture::getObjectCount();
+                                          });
+            }
 
             p.glyphTextureAtlas = gl::TextureAtlas::create(
                 1, 4096, image::PixelType::L_U8, timeline::ImageFilter::Linear);
@@ -710,82 +746,6 @@ namespace tl
         void Render::end()
         {
             TLRENDER_P();
-
-            //! \bug Should these be reset periodically?
-            // p.glyphIDs.clear();
-            // p.vbos["mesh"].reset();
-            // p.vaos["mesh"].reset();
-            // p.vbos["text"].reset();
-            // p.vaos["text"].reset();
-
-            const auto now = std::chrono::steady_clock::now();
-            const auto diff =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    now - p.timer);
-            p.currentStats.time = diff.count();
-            p.stats.push_back(p.currentStats);
-            p.currentStats = Private::Stats();
-            while (p.stats.size() > 60)
-            {
-                p.stats.pop_front();
-            }
-
-            const std::chrono::duration<float> logDiff = now - p.logTimer;
-            if (logDiff.count() > 10.F)
-            {
-                p.logTimer = now;
-                if (auto context = _context.lock())
-                {
-                    Private::Stats average;
-                    const size_t size = p.stats.size();
-                    if (size > 0)
-                    {
-                        for (const auto& i : p.stats)
-                        {
-                            average.time += i.time;
-                            average.rects += i.rects;
-                            average.meshes += i.meshes;
-                            average.meshTriangles += i.meshTriangles;
-                            average.text += i.text;
-                            average.textTriangles += i.textTriangles;
-                            average.textures += i.textures;
-                            average.images += i.images;
-                        }
-                        average.time /= p.stats.size();
-                        average.rects /= p.stats.size();
-                        average.meshes /= p.stats.size();
-                        average.meshTriangles /= p.stats.size();
-                        average.text /= p.stats.size();
-                        average.textTriangles /= p.stats.size();
-                        average.textures /= p.stats.size();
-                        average.images /= p.stats.size();
-                    }
-
-                    context->log(
-                        string::Format("tl::timeline::GLRender {0}").arg(this),
-                        string::Format("\n"
-                                       "    Average render time: {0}ms\n"
-                                       "    Average rectangle count: {1}\n"
-                                       "    Average mesh count: {2}\n"
-                                       "    Average mesh triangles: {3}\n"
-                                       "    Average text count: {4}\n"
-                                       "    Average text triangles: {5}\n"
-                                       "    Average texture count: {6}\n"
-                                       "    Average image count: {7}\n"
-                                       "    Glyph texture atlas: {8}%\n"
-                                       "    Glyph IDs: {9}")
-                            .arg(average.time)
-                            .arg(average.rects)
-                            .arg(average.meshes)
-                            .arg(average.meshTriangles)
-                            .arg(average.text)
-                            .arg(average.textTriangles)
-                            .arg(average.textures)
-                            .arg(average.images)
-                            .arg(p.glyphTextureAtlas->getPercentageUsed())
-                            .arg(p.glyphIDs.size()));
-                }
-            }
         }
 
         math::Size2i Render::getRenderSize() const
