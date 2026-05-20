@@ -51,6 +51,10 @@ ChangeLog
 - UI: Fixed Window positioning on Windows, X11 and macOS with multiple screens, by storing the screen number.  Note that positioning on Wayland cannot be controlled.
 - UI: Fixed title of URL Movie window, which was showing as Link Annotations.
 - UI: Preferences and Hotkey windows are now non modal (ie. they remain above the main window).
+- UI/Network: The Sync menu now shows up whenever you open the Network or WebRTC panels.
+- Building: moved install of NDI to cmake/functions.cmake.
+- Building: change NDI install to be done at install time instead of at configure time, so NDI DSOs can be easily updated.
+- Building: Made NDI on Linux auto detect the platform.
 
 
 v1.6.4

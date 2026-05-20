@@ -150,6 +150,11 @@ The Python panel allows you to run python code and use mrv2's Python API to cont
 
 You can also select a portion of the code in the editor to run just that instead of all the code typed in the editor.
 
+Stats Panel
++++++++++++
+
+The Stats panel collects statistics of mrv2's engine and displays it in a graph fashion.
+
 Settings Panel
 ++++++++++++++
 
@@ -184,3 +189,9 @@ Vectorscope Panel
    :align: center
 
 The Vectorscope Panel allows you to show a vectorscope of the selected area of the image.  You select the area with the select tool in the Tool Dock where the drawing tools are located.
+
+WebRTC Panel
+++++++++++++
+
+The WebRTC Panel allows syncing two or more remote viewers anywhere in the Web in a "Room".  Then anyone in the Room can control the viewers, by going back and forth, using the drawing tools, etc.
+Note that the actual media is not sent through the web, but must be kept locally.  If you are mixing platforms or the media is not on the same location on both remote locations, you should use Preferences->Path Mapping to make sure the media is found.
