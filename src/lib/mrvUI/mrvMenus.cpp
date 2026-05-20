@@ -1996,7 +1996,8 @@ namespace mrv
         }
 #endif
 
-        if (dynamic_cast< DummyClient* >(tcp) == nullptr)
+        if (dynamic_cast< DummyClient* >(tcp) == nullptr ||
+            panel::networkPanel || panel::webrtcPanel)
         {
             mode = FL_MENU_TOGGLE;
 
@@ -2009,8 +2010,6 @@ namespace mrv
             else
                 item->clear();
 
-            if (numFiles == 0)
-                mode |= FL_MENU_INACTIVE;
             idx = menu->add(
                 _("Sync/Send/UI"), 0, (Fl_Callback*)toggle_sync_send_cb, ui,
                 mode);

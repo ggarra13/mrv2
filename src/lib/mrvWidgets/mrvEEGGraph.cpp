@@ -3,12 +3,16 @@
 
 #include "mrvWidgets/mrvEEGGraph.h"
 
+#include "mrvOS/mrvI8N.h"
+
+#include <tlCore/Memory.h>
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 
 namespace mrv
@@ -107,6 +111,8 @@ namespace mrv
 
     void EEGGraph::draw()
     {
+        using namespace tl;
+        
         const int X = x(), Y = y(), W = w(), H = h();
         if (W <= 0 || H <= 0) return;
 
@@ -171,11 +177,34 @@ namespace mrv
             // Format in the latest (rightmost) value so the label is live.
             fl_color(ts.fg);
             fl_font(FL_HELVETICA, 10);
-            const std::string label =
-                tl::string::Format(name).arg(buf.back());
+
+            char label[256];
+            double value = buf.back();
+            auto j = group_.find(_("Memory"));
+            if (j != std::string::npos)
+            {
+                std::string memorySuffix = "B";
+                if (value >= memory::gigabyte)
+                {
+                    memorySuffix = "GB";
+                    value /= memory::gigabyte;
+                }
+                else if (value >= memory::megabyte)
+                {
+                    memorySuffix = "MB";
+                    value /= memory::megabyte;
+                }
+                double rounded = std::round(value * 100.0) / 100.0;
+                snprintf(label, 256, "%s%.0f%s", name.c_str(), value,
+                         memorySuffix.c_str());
+            }
+            else
+            {
+                snprintf(label, 256, "%s%.0f", name.c_str(), value);
+            }
             int lw = 0, lh = 0;
-            fl_measure(label.c_str(), lw, lh);
-            fl_draw(label.c_str(), labelX, Y + CH + 14);
+            fl_measure(label, lw, lh);
+            fl_draw(label, labelX, Y + CH + 14);
             labelX += lw + 8;
         }
     }

@@ -90,12 +90,12 @@ namespace mrv
 
             Fl_Flex* cg;
 
-            auto groups = _r->stats->getGroups();
+            auto groups = r.stats->getGroups();
             
-            cg = new Fl_Flex(X, Y, W, groups.size() * 130);
+            cg = new Fl_Flex(X, Y, W, groups.size() * 120);
             cg->type(Fl_Flex::VERTICAL);
             
-            cg->gap(35);
+            cg->gap(30);
             cg->margin(5, 20, 5, 10);
             cg->begin();
 
@@ -104,14 +104,19 @@ namespace mrv
                 EEGGraph* w = new EEGGraph(0, 0, 30, 30);
                 w->align(FL_ALIGN_LEFT | FL_ALIGN_TOP);
                 w->copy_label(group.c_str());
-                _r->widget[group] = w;
+                r.widget[group] = w;
                 w->setGroup(group);
             }
 
+            cg->end();
+            cg->layout();
+
+            g->resizable(g);
+
             
-            _r->samplesObserver =
+            r.samplesObserver =
                 observer::MapObserver<std::string, std::vector<int64_t> >::create(
-                    _r->stats->observeSamples(),
+                    r.stats->observeSamples(),
                     [this](const std::map<std::string, std::vector<int64_t> >& value)
                         {
                             MRV2_R();
@@ -128,11 +133,7 @@ namespace mrv
                             }
                         });
                 
-            cg->end();
-            cg->layout();
-
             
-            g->resizable(g);
         }
 
         void StatsPanel::tick()
