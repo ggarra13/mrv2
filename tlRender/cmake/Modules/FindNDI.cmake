@@ -29,16 +29,14 @@ find_library(NDI_LIBRARY NAMES
     # If not, use normal SDK libraries.
     ndi
     Processing.NDI.Lib.x64
+    
     PATHS
     ${TLRENDER_NDI_SDK}/lib/macOS
+    ${TLRENDER_NDI_SDK}/lib/${NDI_SDK_ARCH}
     ${TLRENDER_NDI_SDK}/lib/x86_64-linux-gnu
     ${TLRENDER_NDI_SDK}/Lib/x64
 )
-set(NDI_LIBRARIES
-    ${NDI_LIBRARY})
-if(APPLE)
-elseif(${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "arm")
-endif()
+set(NDI_LIBRARIES ${NDI_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
@@ -63,4 +61,6 @@ endif()
 if(NDI_FOUND AND NOT TARGET NDI)
     add_library(NDI INTERFACE)
     target_link_libraries(NDI INTERFACE NDI::ndi)
+    message(STATUS "NDI_INCLUDE_DIR=${NDI_INCLUDE_DIR}")
+    message(STATUS "NDI_LIBRARIES=${NDI_LIBRARIES}")
 endif()
