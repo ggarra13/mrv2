@@ -38,7 +38,7 @@ then
 	fi
 	export PYTHON=python
     fi
-    $PYTHON -m pip install curl_cffi pytz
+    $PYTHON -m pip install curl_cffi pytz requests
 fi
 
 export TAG=$1
