@@ -16,7 +16,6 @@ Contents:
 - [Translating](#translating)
    - [If you compiled mrv2](#if-you-compiled-mrv2)
    - [If you did not compile mrv2](#if-you-did-not-compile-mrv2)
-   - [Translating with AI](#translating-with-ai)
    - [Translating on Windows](#translating-on-windows)
 - [Developing](#developing)
 
@@ -55,13 +54,33 @@ sudo cpan App::cpanminus && cpanm --notest IPC::Cmd
 #
 # Install dependencies
 #
-sudo dnf -y install git wget curl cmake pango-devel gettext ninja-build \
-	       libglvnd-devel alsa-lib-devel pulseaudio-libs-devel \
-	       dpkg automake \
-	       autoconf wayland-devel wayland-protocols-devel cairo-devel \
-	       libxkbcommon-devel dbus-devel mesa-libGLU-devel gtk3-devel \
-	       libffi-devel openssl-devel tk-devel tcl-devel libXt-devel \
-	       swig ccache
+sudo dnf -y install alsa-lib-devel \
+               automake \
+	       autoconf \
+	       cairo-devel \
+               ccache \
+	       cmake \
+	       curl \
+	       dbus-devel \ 
+	       dpkg \ 
+	       git \
+	       gettext \
+	       gtk3-devel \
+	       libffi-devel \
+	       libglvnd-devel \
+	       libxkbcommon-devel \
+	       libXt-devel \
+	       mesa-libGLU-devel \
+	       ninja-build \
+               openssl-devel \
+	       pango-devel \
+	       pulseaudio-libs-devel \
+	       swig \
+	       tk-devel \
+	       tcl-devel \ 
+	       wayland-devel \
+	       wayland-protocols-devel  \
+	       wget
 
 # If you are building the Vulkan version of vmrv2, you need to install
 # The VulkanSDK components
@@ -95,16 +114,40 @@ sudo apt update
 #
 # Install dependencies
 #
-sudo apt -y install curl build-essential perl git cmake ninja-build \
-                    autoconf automake libpango1.0-dev libglu1-mesa-dev \
-		    xorg-dev libx11-dev libxcursor-dev libxinerama-dev \
-		    gettext libasound2-dev \
-		    libpulse-dev libssl-dev libffi-dev \
-		    libwayland-dev wayland-protocols libdbus-1-dev \
-		    libxkbcommon-dev libegl-dev libgtk-3-dev rpm \
-                    doxygen tk-dev libxt-dev swig ccache
+sudo apt -y install autoconf \
+                    automake \
+                    build-essential \
+		    ccache \
+                    cmake \
+		    curl \
+		    gettext \
+		    git \
+                    libpango1.0-dev \
+		    libglu1-mesa-dev \
+		    xorg-dev \
+		    libasound2-dev \
+		    libcairo-dev \
+		    libdbus-1-dev \
+		    libegl-dev \
+		    libgtk-3-dev \
+		    libffi-dev \
+		    libpulse-dev \
+		    libssl-dev \
+		    libx11-dev \
+		    libxcursor-dev \
+		    libxi-dev \
+		    libxkbcommon-dev 
+		    libxinerama-dev \
+		    libxt-dev \
+		    libwayland-dev 
+		    ninja-build \
+		    perl \
+		    rpm \
+		    swig \
+                    tk-dev \
+		    wayland-protocols
 
-# If you are building the Vulkan version of vmrv2, you need to install
+# If you are building the Vulkan version of mrv2, you need to install
 # The VulkanSDK components
 
 # Install cpanminus and IPC::Cmd non-interactively for libcrypto building
@@ -452,18 +495,6 @@ regenerate the .pot files after a while, before calling -t mo.  To do so:
 Note that this change is dramatic as your commits of the code changes will
 get mangled with all the .pot/.po comments, preventing a clean PR
 (Pull Request) on github.com.
-
-## Translating with AI
-
-There's an AI script that uses the transformers python library for AI
-translation in:
-
-	bin/po/po_translate.sh
-	
-It works by sending a language to it, like:
-
-	bin/po/po_translate.sh all     # for all languages supported by the script.
-	bin/po/po_translate.sh zh-CN   # for Chinese Simplified
 
 ## If you did not compile mrv2
 
