@@ -489,7 +489,6 @@ echo "OpenEXR support .................... ${TLRENDER_EXR} 	(TLRENDER_EXR)"
 echo "STB support (TGA, BMP, PSD) ........ ${TLRENDER_STB} 	(TLRENDER_STB)"
 echo "SSL support ........................ ${TLRENDER_SSL} 	(TLRENDER_SSL)"
 echo "TIFF support ....................... ${TLRENDER_TIFF} 	(TLRENDER_TIFF)"
-echo "tlRender API ....................... ${TLRENDER_API} 	(TLRENDER_API)"
 echo "USD support ........................ ${TLRENDER_USD} 	(TLRENDER_USD)"
 echo "ZFile support ...................... ${TLRENDER_ZFILE} 	(TLRENDER_ZFILE)"
 
