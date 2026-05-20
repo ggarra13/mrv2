@@ -68,34 +68,10 @@ install(TARGETS hdr
     ARCHIVE DESTINATION lib COMPONENT libraries )
 
 
-
-if(TLRENDER_NDI)
-    # NDI libraries have two names: Advanced and normal.
-    # We use a glob to simplify and also for potential future development
-    # of NDI's SDK.
-    if (WIN32)
-	if (TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
-	    # Advanced lib is ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll
-	    file( GLOB HDR_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll )
-	else()
-	    # Normal lib is ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll
-	    file( GLOB HDR_LIB_DYLIBS ${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll )
-	endif()
-	install( FILES  ${HDR_LIB_DYLIBS}
-	    DESTINATION bin
-	    COMPONENT applications )
-    elseif (APPLE)
-	file( GLOB HDR_LIB_DYLIBS ${TLRENDER_NDI_SDK}/lib/macOS/*.dylib* )
-	install( FILES ${HDR_LIB_DYLIBS}
-	    DESTINATION lib
-	    COMPONENT applications )
-    elseif(UNIX)
-	file( GLOB HDR_LIB_DSOS ${TLRENDER_NDI_SDK}/lib/x86_64-linux-gnu/*.so* )
-	install( FILES ${HDR_LIB_DSOS}
-	    DESTINATION lib
-	    COMPONENT applications )
-    endif()
-endif()
+#
+# Install NDI for the platform (on Linux tries to detect architecture)
+#
+install_ndi()
 
     
 if ( APPLE )

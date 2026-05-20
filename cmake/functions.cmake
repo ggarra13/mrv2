@@ -526,3 +526,46 @@ function(copy_pdbs DIR INSTALL_DIR)
 	endif()
     endforeach()
 endfunction()
+
+function(install_ndi)
+    # ---------------------------------------------------------------------------
+    # NDI install
+    # ---------------------------------------------------------------------------
+    if(TLRENDER_NDI)
+	if(WIN32)
+            if(TLRENDER_NDI_SDK MATCHES ".*Advanced.*")
+		set(_NDI_DLL
+                    "${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.Advanced.x64.dll")
+            else()
+		set(_NDI_DLL
+                    "${TLRENDER_NDI_SDK}/bin/x64/Processing.NDI.Lib.x64.dll")
+            endif()
+            install(FILES "${_NDI_DLL}"
+		DESTINATION bin
+		COMPONENT applications)
+
+	elseif(APPLE)
+            install(CODE "
+            file(GLOB _NDI_DYLIBS
+                \"${TLRENDER_NDI_SDK}/lib/macOS/*.dylib*\")
+            foreach(_LIB IN LISTS _NDI_DYLIBS)
+                file(INSTALL \"\${_LIB}\"
+                    DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib\"
+                    FOLLOW_SYMLINK_CHAIN)
+            endforeach()
+        " COMPONENT applications)
+
+	elseif(UNIX)
+            install(CODE "
+            file(GLOB _NDI_DSOS
+                \"${TLRENDER_NDI_SDK}/lib/${NDI_SDK_ARCH}/*.so*\")
+            foreach(_DSO IN LISTS _NDI_DSOS)
+                file(INSTALL \"\${_DSO}\"
+                    DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib\"
+                    FOLLOW_SYMLINK_CHAIN)
+            endforeach()
+        " COMPONENT applications)
+
+	endif()
+    endif()
+endfunction()
