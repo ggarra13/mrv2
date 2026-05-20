@@ -300,7 +300,7 @@ namespace tl
             ++objectCount;
 
             image::Info info(p.size.w, p.size.h, p.options.colorType);
-            totalByteCount += getDataByteCount(info);
+            totalByteCount += image::getDataByteCount(info);
         }
 
         OffscreenBuffer::OffscreenBuffer() :
@@ -330,7 +330,7 @@ namespace tl
             --objectCount;
             
             image::Info info(p.size.w, p.size.h, p.options.colorType);
-            totalByteCount -= getDataByteCount(info);
+            totalByteCount -= image::getDataByteCount(info);
         }
 
         std::shared_ptr<OffscreenBuffer> OffscreenBuffer::create(

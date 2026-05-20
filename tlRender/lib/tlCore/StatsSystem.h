@@ -36,9 +36,6 @@ namespace tl
             //! Get the sampler groups.
             const std::vector<std::string>& getGroups() const;
 
-            //! Get the sampler names in a group.
-            std::vector<std::string> getNames(const std::string& group) const;
-
             //! Get whether the sampler exists.
             bool hasSampler(const std::string&) const;
 
@@ -61,9 +58,6 @@ namespace tl
             std::shared_ptr<observer::IMap<std::string, int64_t> > observeSamplesInc() const;
 
             void tick() override;
-
-        private:
-            void _log();
 
             TLRENDER_PRIVATE();
         };

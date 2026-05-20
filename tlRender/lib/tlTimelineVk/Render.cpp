@@ -880,34 +880,32 @@ namespace tl
             if (!p.statsSystem)
             {
                 p.statsSystem = context->getSystem<system::StatsSystem>();
-                p.statsSystem->addSampler("Vulkan Memory/Buffers: {0}MB",
+                p.statsSystem->addSampler("Vulkan Memory/Buffers: ",
                                           [] {
-                                              return vlk::OffscreenBuffer::getTotalByteCount() /
-                                                  memory::megabyte;
+                                              return vlk::OffscreenBuffer::getTotalByteCount();
                                           });
-                p.statsSystem->addSampler("Vulkan Memory/Meshes: {0}B",
+                p.statsSystem->addSampler("Vulkan Memory/Meshes: ",
                                           [] {
                                               return vlk::VBO::getTotalByteCount();
                                           });
-                p.statsSystem->addSampler("Vulkan Memory/Textures: {0}MB",
+                p.statsSystem->addSampler("Vulkan Memory/Textures: ",
                                           [] {
-                                              return vlk::Texture::getTotalByteCount() /
-                                                  memory::megabyte;
+                                              return vlk::Texture::getTotalByteCount();
                                           });
                 
-                p.statsSystem->addSampler("Vulkan Objects/Buffers: {0}",
+                p.statsSystem->addSampler("Vulkan Objects/Buffers: ",
                                           [] {
                                               return vlk::OffscreenBuffer::getObjectCount();
                                           });
-                p.statsSystem->addSampler("Vulkan Objects/Meshes: {0}",
+                p.statsSystem->addSampler("Vulkan Objects/Meshes: ",
                                           [] {
                                               return vlk::VBO::getObjectCount();
                                           });
-                p.statsSystem->addSampler("Vulkan Objects/Shaders: {0}",
+                p.statsSystem->addSampler("Vulkan Objects/Shaders: ",
                                           [] {
                                               return vlk::Shader::getObjectCount();
                                           });
-                p.statsSystem->addSampler("Vulkan Objects/Textures: {0}",
+                p.statsSystem->addSampler("Vulkan Objects/Textures: ",
                                           [] {
                                               return vlk::Texture::getObjectCount();
                                           });

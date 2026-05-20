@@ -20,7 +20,6 @@ namespace tl
         {
             std::vector<std::pair<std::string, std::function<int64_t(void)> > > samplers;
             std::vector<std::string> groups;
-            std::map<std::string, std::vector<std::string> > names;
             std::shared_ptr<observer::Value<size_t> > samplesMax;
             std::shared_ptr<observer::Map<std::string, std::vector<int64_t> > > samples;
             std::shared_ptr<observer::Map<std::string, int64_t> > samplesInc;
@@ -36,18 +35,18 @@ namespace tl
             p.samplesInc = observer::Map<std::string, int64_t>::create();
 
             addSampler(
-                "tlRender Memory/Images: {0}MB",
-                [] { return image::Image::getTotalByteCount() / memory::megabyte; });
+                "tlRender Memory/Images: ",
+                [] { return image::Image::getTotalByteCount(); });
             addSampler(
-                "tlRender Memory/Audio: {0}MB",
-                [] { return audio::Audio::getTotalByteCount() / memory::megabyte; });
+                "tlRender Memory/Audio: ",
+                [] { return audio::Audio::getTotalByteCount(); });
 
             addSampler(
-                "tlRender Objects/Images: {0}",
+                "tlRender Objects/Images: ",
                 [] { return image::Image::getObjectCount(); });
 
             addSampler(
-                "tlRender Objects/Audio: {0}",
+                "tlRender Objects/Audio: ",
                 [] { return audio::Audio::getObjectCount(); });
         }
 
@@ -68,26 +67,17 @@ namespace tl
             {
                 p.samplers.push_back(std::make_pair(id, sampler));
                 const std::string group = id.substr(0, i);
-                const std::string name = id.substr(i + 1);
                 auto i = std::find(p.groups.begin(), p.groups.end(), group);
                 if (i == p.groups.end())
                 {
                     p.groups.push_back(group);
                 }
-                p.names[group].push_back(name);
             }
         }
 
         const std::vector<std::string>& StatsSystem::getGroups() const
         {
             return _p->groups;
-        }
-
-        std::vector<std::string> StatsSystem::getNames(const std::string& group) const
-        {
-            TLRENDER_P();
-            const auto i = p.names.find(group);
-            return i != p.names.end() ? i->second : std::vector<std::string>();
         }
 
         bool StatsSystem::hasSampler(const std::string& id) const
@@ -184,29 +174,6 @@ namespace tl
             }
             p.samples->setAlways(samples);
         }
-
-        void StatsSystem::_log()
-        {
-            TLRENDER_P();
-            
-            const auto samples = p.samples->get();
-            std::vector<std::string> lines;
-            lines.push_back(std::string());
-            for (const auto& group : p.groups)
-            {
-                lines.push_back(string::Format("    {0}:").arg(group));
-                for (const auto& name : p.names[group])
-                {
-                    const auto i = samples.find(group + "/" + name);
-                    if (i != samples.end())
-                    {
-                        std::string v = string::Format(name).arg(!i->second.empty() ?
-                                                                 i->second.back() : 0);
-                        lines.push_back(string::Format("    * {0}").arg(v));
-                    }
-                }
-            }
-            ISystem::_log(string::join(lines, '\n'));
-        }
     }
 }
+    

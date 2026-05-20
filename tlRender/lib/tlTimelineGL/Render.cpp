@@ -576,35 +576,33 @@ namespace tl
             if (!p.statsSystem)
             {
                 p.statsSystem = context->getSystem<system::StatsSystem>();
-                p.statsSystem->addSampler("GL Memory/Buffers: {0}MB",
+                p.statsSystem->addSampler("GL Memory/Buffers: ",
                                           [] {
-                                              return gl::OffscreenBuffer::getTotalByteCount() /
-                                                  memory::megabyte;
+                                              return gl::OffscreenBuffer::getTotalByteCount();
                                           });
-                p.statsSystem->addSampler("GL Memory/Meshes: {0}B",
+                p.statsSystem->addSampler("GL Memory/Meshes: ",
                                           [] {
                                               return gl::VBO::getTotalByteCount();
                                           });
-                p.statsSystem->addSampler("GL Memory/Textures: {0}MB",
+                p.statsSystem->addSampler("GL Memory/Textures: ",
                                           [] {
-                                              return gl::Texture::getTotalByteCount() /
-                                                  memory::megabyte;
+                                              return gl::Texture::getTotalByteCount();
                                           });
 
                 
-                p.statsSystem->addSampler("GL Objects/Buffers: {0}",
+                p.statsSystem->addSampler("GL Objects/Buffers: ",
                                           [] {
                                               return gl::OffscreenBuffer::getObjectCount();
                                           });
-                p.statsSystem->addSampler("GL Objects/Meshes: {0}",
+                p.statsSystem->addSampler("GL Objects/Meshes: ",
                                           [] {
                                               return gl::VBO::getObjectCount();
                                           });
-                p.statsSystem->addSampler("GL Objects/Shaders: {0}",
+                p.statsSystem->addSampler("GL Objects/Shaders: ",
                                           [] {
                                               return gl::Shader::getObjectCount();
                                           });
-                p.statsSystem->addSampler("GL Objects/Textures: {0}",
+                p.statsSystem->addSampler("GL Objects/Textures: ",
                                           [] {
                                               return gl::Texture::getObjectCount();
                                           });
