@@ -61,10 +61,13 @@ namespace mrv
 
             // Store window X and Y values.
             key = prefix + "/WindowX";
-            settings->setValue(key, tw->x_root());
+            settings->setValue(key, tw->x());
 
             key = prefix + "/WindowY";
-            settings->setValue(key, tw->y_root());
+            settings->setValue(key, tw->y());
+
+            key = prefix + "/Screen";
+            settings->setValue(key, tw->screen_num());
 
             Pack* pack = get_pack();
             Scroll* scroll = get_scroll();

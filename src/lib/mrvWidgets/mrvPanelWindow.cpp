@@ -47,9 +47,77 @@ namespace mrv
         resize(newX, newY, newW, newH);
     }
     
+    int PanelWindow::screen_num()
+    {
+        return Fl_Double_Window::screen_num();
+    }
+    
+    void PanelWindow::screen_num(int x)
+    {
+        Fl_Double_Window::screen_num(x);
+        _current_screen = x;
+    }
+    
     // Handle screen changes for DPI scaling
     void PanelWindow::handle_screen_change()
     {
+        if (!refresh_screen)
+            return;
+        
+        int new_screen = screen_num();
+        
+        if (_current_screen == -1)
+        {
+            // First time initialization
+            _current_screen = new_screen;
+            return;
+        }
+        
+        if (new_screen != _current_screen)
+        {
+            // Screen changed - force complete layout recalculation
+            _current_screen = new_screen;
+            
+            // Force redraw of the entire window and all children
+            damage(FL_DAMAGE_ALL);
+            
+            
+            // Force all children to recalculate
+            if (children() > 0)
+            {
+                PanelGroup* gp = static_cast<PanelGroup*>(child(0));
+                if (gp)
+                {
+                    gp->layout();
+                    gp->redraw();
+                }
+            }
+
+            // Trigger resize to force layout recalculation
+            // newX = x();
+            // newY = y();
+            // newW = w();
+            // newH = h();
+            
+            // Invalidate and recalculate sizes
+            init_sizes();
+
+            
+            // Force a complete redraw
+            redraw();
+            
+            // Ensure FLTK processes the changes
+            Fl::check();
+
+            refresh_screen = false;
+            
+            int W = w() - 1;
+            int H = h();
+            size(W, H);
+            size(W+1, H);
+
+            refresh_screen = true;
+        }
     }
     
     // constructors
@@ -59,7 +127,7 @@ namespace mrv
     {
         if (parented_to_main)
             allow_expand_outside_parent();
-
+        
         newX = x;
         newY = y;
         newW = w;
@@ -75,6 +143,8 @@ namespace mrv
     PanelWindow::PanelWindow(int w, int h, const char* l) :
         Fl_Double_Window(w, h, l)
     {
+        std::cerr << "create panel window anywhere " << std::endl;
+        
         allow_expand_outside_parent();
         
         newX = x();
@@ -351,10 +421,10 @@ namespace mrv
             settings->setValue(key, this->screen_num());
 
             key = prefix + "/WindowX";
-            settings->setValue(key, x_root());
+            settings->setValue(key, x());
             
             key = prefix + "/WindowY";
-            settings->setValue(key, y_root());
+            settings->setValue(key, y());
             
             key = prefix + "/WindowW";
             settings->setValue(key, w());

@@ -54,6 +54,9 @@ namespace mrv
                     const bool parented_to_main = true);
 
         void update_resize();
+
+        int screen_num();
+        void screen_num(int x);
         
         int newX, newY, newW, newH;
         
