@@ -143,8 +143,6 @@ namespace mrv
     PanelWindow::PanelWindow(int w, int h, const char* l) :
         Fl_Double_Window(w, h, l)
     {
-        std::cerr << "create panel window anywhere " << std::endl;
-        
         allow_expand_outside_parent();
         
         newX = x();
