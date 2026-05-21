@@ -61,6 +61,11 @@ namespace mrv
     // Handle screen changes for DPI scaling
     void PanelWindow::handle_screen_change()
     {
+#ifdef _WIN32
+
+        // \@bug: FLTK on Windows has a refresh of the panel windows that makes
+        //        their redraw overlap when going to a smaller DPI window.
+        //        Triggering a dummy resize fixes it.
         if (!refresh_screen)
             return;
         
@@ -118,6 +123,8 @@ namespace mrv
 
             refresh_screen = true;
         }
+#endif
+        
     }
     
     // constructors
