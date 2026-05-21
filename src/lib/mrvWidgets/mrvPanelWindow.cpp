@@ -50,63 +50,6 @@ namespace mrv
     // Handle screen changes for DPI scaling
     void PanelWindow::handle_screen_change()
     {
-        if (!refresh_screen)
-            return;
-        
-        int new_screen = screen_num();
-        
-        if (_current_screen == -1)
-        {
-            // First time initialization
-            _current_screen = new_screen;
-            return;
-        }
-        
-        if (new_screen != _current_screen)
-        {
-            // Screen changed - force complete layout recalculation
-            _current_screen = new_screen;
-            
-            // Force redraw of the entire window and all children
-            damage(FL_DAMAGE_ALL);
-            
-            
-            // Force all children to recalculate
-            if (children() > 0)
-            {
-                PanelGroup* gp = static_cast<PanelGroup*>(child(0));
-                if (gp)
-                {
-                    gp->layout();
-                    gp->redraw();
-                }
-            }
-
-            // Trigger resize to force layout recalculation
-            // newX = x();
-            // newY = y();
-            // newW = w();
-            // newH = h();
-            
-            // Invalidate and recalculate sizes
-            init_sizes();
-
-            
-            // Force a complete redraw
-            redraw();
-            
-            // Ensure FLTK processes the changes
-            Fl::check();
-
-            refresh_screen = false;
-            
-            int W = w() - 1;
-            int H = h();
-            size(W, H);
-            size(W+1, H);
-
-            refresh_screen = true;
-        }
     }
     
     // constructors
