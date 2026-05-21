@@ -3683,6 +3683,9 @@ msgstr "वेवफॉर्म"
 msgid "WebRTC"
 msgstr "WebRTC"
 
+msgid "Statistics"
+msgstr "सांख्यिकी"
+
 msgid "Hotkeys"
 msgstr "सार्वत्रिक फटाफट कुंजियां"
 
@@ -4209,6 +4212,9 @@ msgstr "पैनल/"
 
 msgid "Window/"
 msgstr "विंडो/"
+
+msgid "Stats"
+msgstr "आंकड़े"
 
 msgid "Unknown menu entry "
 msgstr "अज्ञात मेन्यू प्रविष्टि"
@@ -5126,6 +5132,9 @@ msgstr "&अद्यतन/&थंबनेल"
 
 msgid "&Show/In &File Manager"
 msgstr "दिखाएँ/फ़ाइल प्रबंधक"
+
+msgid "Memory"
+msgstr "मेमोरी"
 
 msgid "Maximum:"
 msgstr "अधिकतम:"
@@ -6053,8 +6062,8 @@ msgstr "वर्तमान में उपयोग किया जा र�
 msgid "Current tool being used."
 msgstr "मौज़ूदा औज़ार उपयोग में लिया जा रहा है."
 
-msgid "Link Annotation"
-msgstr "लिंक टिप्पणी"
+msgid "URL Movie"
+msgstr "URL फ़िल्म"
 
 msgid "URL"
 msgstr "URL"
@@ -6082,6 +6091,9 @@ msgstr "URL का प्रत्यय दर्ज करें।"
 
 msgid "File"
 msgstr "फ़ाइल"
+
+msgid "Link Annotation"
+msgstr "लिंक टिप्पणी"
 
 msgid "Title"
 msgstr "शीर्षक"
@@ -6629,9 +6641,6 @@ msgstr "फ्रेम सीमा"
 msgid "Frame Count"
 msgstr "फ्रेम गणना"
 
-msgid "Memory"
-msgstr "मेमोरी"
-
 msgid "Attributes"
 msgstr "गुणधर्म"
 
@@ -6791,6 +6800,9 @@ msgstr ""
 "Fills the Fixed Position and Fixed Size values with the current values of "
 "the viewer. Remember to also check the boxes for Fixed Position and/or Fixed"
 " Size depending what you want to save."
+
+msgid "Screen:"
+msgstr "स्क्रीन:"
 
 msgid "Render"
 msgstr "रेंडर"

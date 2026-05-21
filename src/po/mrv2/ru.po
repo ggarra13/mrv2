@@ -3733,6 +3733,9 @@ msgstr "Осциллограмма"
 msgid "WebRTC"
 msgstr "WebRTC"
 
+msgid "Statistics"
+msgstr "Статистика"
+
 msgid "Hotkeys"
 msgstr "Горячие ключи"
 
@@ -4251,6 +4254,9 @@ msgstr "Панель/"
 
 msgid "Window/"
 msgstr "Окно/"
+
+msgid "Stats"
+msgstr "Стат."
 
 msgid "Unknown menu entry "
 msgstr "Неизвестная запись меню"
@@ -5168,6 +5174,9 @@ msgstr "&Обновить/&Миниатюры"
 
 msgid "&Show/In &File Manager"
 msgstr "Показать/В файловом менеджере"
+
+msgid "Memory"
+msgstr "Память"
 
 msgid "Maximum:"
 msgstr "Максимум:"
@@ -6120,8 +6129,8 @@ msgstr "Используется текущий инструмент редак�
 msgid "Current tool being used."
 msgstr "Используется текущий инструмент."
 
-msgid "Link Annotation"
-msgstr "Аннотация ссылки"
+msgid "URL Movie"
+msgstr "URL-фильм"
 
 msgid "URL"
 msgstr "URL"
@@ -6149,6 +6158,9 @@ msgstr "Введите суффикс URL."
 
 msgid "File"
 msgstr "Файл"
+
+msgid "Link Annotation"
+msgstr "Аннотация ссылки"
 
 msgid "Title"
 msgstr "Заголовок"
@@ -6693,9 +6705,6 @@ msgstr "Диапазон"
 msgid "Frame Count"
 msgstr "Графический подсчет"
 
-msgid "Memory"
-msgstr "Память"
-
 msgid "Attributes"
 msgstr "Атрибуты"
 
@@ -6858,6 +6867,9 @@ msgstr ""
 "Fills the Fixed Position and Fixed Size values with the current values of "
 "the viewer. Remember to also check the boxes for Fixed Position and/or Fixed"
 " Size depending what you want to save."
+
+msgid "Screen:"
+msgstr "Экран:"
 
 msgid "Render"
 msgstr "Редакция"
