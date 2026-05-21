@@ -56,6 +56,7 @@ ChangeLog
 - Building: moved install of NDI to cmake/functions.cmake.
 - Building: change NDI install to be done at install time instead of at configure time, so NDI DSOs can be easily updated.
 - Building: Made NDI on Linux auto detect the platform.
+- Core: Fixed multiply and add shaders for macOS using version 450 instead of 410 of OpenGL.  I apologyze to all macOS users for this.
 
 
 v1.6.4

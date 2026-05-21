@@ -121,6 +121,9 @@ namespace mrv
 
         fl_color(bg_);
         fl_rectf(X, Y, W, CH);
+        
+        fl_color(FL_BACKGROUND_COLOR);
+        fl_rectf(X, Y + CH, W, H - CH);
 
         int labelX = X;
 

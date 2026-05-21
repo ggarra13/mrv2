@@ -679,13 +679,13 @@ vec4 sampleTexture(
         
         std::string multiplyFragmentSource()
         {
-            return R"(#version 450
+            return R"(#version 410
                  
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
                  
-layout(binding = 0) uniform sampler2D textureSampler;
-layout(binding = 1) uniform sampler2D textureSamplerB;
+uniform sampler2D textureSampler;
+uniform sampler2D textureSamplerB;
                  
 void main()
 {
@@ -700,13 +700,13 @@ void main()
 
         std::string addFragmentSource()
         {
-            return R"(#version 450
+            return R"(#version 410
                  
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
                  
-layout(binding = 0) uniform sampler2D textureSampler;
-layout(binding = 1) uniform sampler2D textureSamplerB;
+uniform sampler2D textureSampler;
+uniform sampler2D textureSamplerB;
                  
 void main()
 {
