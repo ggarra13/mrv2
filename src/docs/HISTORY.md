@@ -49,7 +49,7 @@ ChangeLog
 ---------
 
 - UI: Fixed Window positioning on Windows, X11 and macOS with multiple screens, by storing the screen number.  Note that positioning on Wayland cannot be controlled.
-- UI: Fixed Panels positioning getting saved properly on Windows, X11, macOS and Wayland.
+- UI: Fixed Panels positioning getting saved improperly on Windows, X11, macOS and Wayland on multiple screens.
 - UI: Fixed title of URL Movie window, which was showing as Link Annotations.
 - UI: Preferences and Hotkey windows are now non modal (ie. they remain above the main window).
 - UI/Network: The Sync menu now shows up whenever you open the Network or WebRTC panels.
