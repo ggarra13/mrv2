@@ -119,6 +119,7 @@ namespace mrv
         // Bottom 20 px are reserved for per-trace labels.
         const int CH = H - 20;
 
+        fl_antialias(0);
         fl_color(bg_);
         fl_rectf(X, Y, W, CH);
         
@@ -210,6 +211,8 @@ namespace mrv
             fl_draw(label, labelX, Y + CH + 14);
             labelX += lw + 8;
         }
+        
+        fl_antialias(1);
     }
 
     // ── Private ───────────────────────────────────────────────────────────────

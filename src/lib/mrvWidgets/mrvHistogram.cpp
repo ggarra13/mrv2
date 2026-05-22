@@ -33,9 +33,11 @@ namespace mrv
 
     void Histogram::draw()
     {
+        fl_antialias(0);
         fl_rectf(x(), y(), w(), h(), 0, 0, 0);
         if (maxLumma > 0)
             draw_pixels();
+        fl_antialias(1);
     }
 
     void Histogram::count_pixel(const uint8_t* rgb) noexcept

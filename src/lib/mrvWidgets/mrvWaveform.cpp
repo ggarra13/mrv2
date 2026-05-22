@@ -205,7 +205,8 @@ namespace mrv
         TLRENDER_P();
         
         fl_rectf(x(), y(), w(), h(), 0, 0, 0);
-        
+
+        fl_antialias(0);
         draw_grid();
         
         if (p.image)
@@ -214,6 +215,7 @@ namespace mrv
             draw_pixels();
             fl_pop_clip();
         }
+        fl_antialias(1);
     }
 
     void Waveform::draw_pixel(int X, const image::Color4f& rgba)
