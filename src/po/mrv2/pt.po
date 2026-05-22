@@ -3688,6 +3688,9 @@ msgstr "Forma de onda"
 msgid "WebRTC"
 msgstr "WebRTC"
 
+msgid "Statistics"
+msgstr "Estatísticas"
+
 msgid "Hotkeys"
 msgstr "Teclas quentes"
 
@@ -4213,6 +4216,9 @@ msgstr "Painel/"
 
 msgid "Window/"
 msgstr "Janela/"
+
+msgid "Stats"
+msgstr "Estat."
 
 msgid "Unknown menu entry "
 msgstr "Incio de menu desconhecido"
@@ -5130,6 +5136,9 @@ msgstr "&Atualizar/&Miniaturas"
 
 msgid "&Show/In &File Manager"
 msgstr "Mostrar/No Gerenciador de Ficheiros"
+
+msgid "Memory"
+msgstr "Memria"
 
 msgid "Maximum:"
 msgstr "Mximo:"
@@ -6079,8 +6088,8 @@ msgstr "Ferramenta de edição atualmente em uso."
 msgid "Current tool being used."
 msgstr "Ferramenta atual a ser usada."
 
-msgid "Link Annotation"
-msgstr "Anotação de link"
+msgid "URL Movie"
+msgstr "Filme URL"
 
 msgid "URL"
 msgstr "URL"
@@ -6108,6 +6117,9 @@ msgstr "Digite um sufixo de URL."
 
 msgid "File"
 msgstr "Arquivo"
+
+msgid "Link Annotation"
+msgstr "Anotação de link"
 
 msgid "Title"
 msgstr "Título"
@@ -6660,9 +6672,6 @@ msgstr "Gama de molduras"
 msgid "Frame Count"
 msgstr "Contagem de Quadros"
 
-msgid "Memory"
-msgstr "Memria"
-
 msgid "Attributes"
 msgstr "Atributos"
 
@@ -6825,6 +6834,9 @@ msgstr ""
 "Preenche os valores de Posio Fixa e Tamanho Fixo com os valores atuais do "
 "visualizador. Lembre- se tambm de assinalar as caixas de Posio Fixa e/ou "
 "Tamanho Fixo dependendo do que deseja salvar."
+
+msgid "Screen:"
+msgstr "Tela:"
 
 msgid "Render"
 msgstr "Renderizar"

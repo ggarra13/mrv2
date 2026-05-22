@@ -3699,6 +3699,9 @@ msgstr "Forme d’onde"
 msgid "WebRTC"
 msgstr "WebRTC"
 
+msgid "Statistics"
+msgstr "Statistiques"
+
 msgid "Hotkeys"
 msgstr "Hot-keys"
 
@@ -4221,6 +4224,9 @@ msgstr "Panneau/"
 
 msgid "Window/"
 msgstr "Fenêtre/"
+
+msgid "Stats"
+msgstr "Stats"
 
 msgid "Unknown menu entry "
 msgstr "Entrée de menu inconnue"
@@ -5139,6 +5145,9 @@ msgstr "&Mettre à jour/&Miniatures"
 
 msgid "&Show/In &File Manager"
 msgstr "Afficher/Dans le gestionnaire de fichiers"
+
+msgid "Memory"
+msgstr "Mémoire"
 
 msgid "Maximum:"
 msgstr "Maximum:"
@@ -6091,8 +6100,8 @@ msgstr "Outil d’édition actuellement utilisé."
 msgid "Current tool being used."
 msgstr "L'outil actuel est utilisé."
 
-msgid "Link Annotation"
-msgstr "Annotation de lien"
+msgid "URL Movie"
+msgstr "Film URL"
 
 msgid "URL"
 msgstr "URL"
@@ -6120,6 +6129,9 @@ msgstr "Entrez un suffixe d’URL."
 
 msgid "File"
 msgstr "Fichier"
+
+msgid "Link Annotation"
+msgstr "Annotation de lien"
 
 msgid "Title"
 msgstr "Titre"
@@ -6677,9 +6689,6 @@ msgstr "Gamme de cadre"
 msgid "Frame Count"
 msgstr "Nombre de cadres"
 
-msgid "Memory"
-msgstr "Mémoire"
-
 msgid "Attributes"
 msgstr "Attributs"
 
@@ -6849,6 +6858,9 @@ msgstr ""
 "Fills the Fixed Position and Fixed Size values with the current values of "
 "the viewer. Remember to also check the boxes for Fixed Position and/or Fixed"
 " Size depending what you want to save."
+
+msgid "Screen:"
+msgstr "Écran :"
 
 msgid "Render"
 msgstr "Rendre"

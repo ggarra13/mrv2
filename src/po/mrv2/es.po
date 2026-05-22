@@ -3764,6 +3764,9 @@ msgstr "Forma de Onda"
 msgid "WebRTC"
 msgstr "WebRTC"
 
+msgid "Statistics"
+msgstr "Estadísticas"
+
 msgid "Hotkeys"
 msgstr "Atajos"
 
@@ -4291,6 +4294,9 @@ msgstr "Panel/"
 
 msgid "Window/"
 msgstr "Ventana/"
+
+msgid "Stats"
+msgstr "Estad."
 
 msgid "Unknown menu entry "
 msgstr "Entrada de menu desconocida "
@@ -5207,6 +5213,9 @@ msgstr "&Actualizar/&Miniaturas"
 
 msgid "&Show/In &File Manager"
 msgstr "&Mostrar/En &Buscador de Archivos"
+
+msgid "Memory"
+msgstr "Memoria"
 
 msgid "Maximum:"
 msgstr "Máximo:"
@@ -6155,8 +6164,8 @@ msgstr "Herramienta de edición actualmente en uso."
 msgid "Current tool being used."
 msgstr "Herramienta siendo usada."
 
-msgid "Link Annotation"
-msgstr "Anotación de enlace"
+msgid "URL Movie"
+msgstr "Película URL"
 
 msgid "URL"
 msgstr "URL"
@@ -6184,6 +6193,9 @@ msgstr "Introduzca un sufijo para la URL."
 
 msgid "File"
 msgstr "Archivo"
+
+msgid "Link Annotation"
+msgstr "Anotación de enlace"
 
 msgid "Title"
 msgstr "Título"
@@ -6736,9 +6748,6 @@ msgstr "Rango de Cuadros"
 msgid "Frame Count"
 msgstr "Conteo de Cuadros"
 
-msgid "Memory"
-msgstr "Memoria"
-
 msgid "Attributes"
 msgstr "Atributos"
 
@@ -6901,6 +6910,9 @@ msgstr ""
 "Rellena los valores de Posición Fija y Tamaño Fijo con los valores actuales "
 "del reproductor.  Recuerde también activar las Casillas para Posición Fija "
 "y/o Tamaño Fijo dependiendo de qué quiera grabar."
+
+msgid "Screen:"
+msgstr "Pantalla:"
 
 msgid "Render"
 msgstr "Render"

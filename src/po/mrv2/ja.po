@@ -3654,6 +3654,9 @@ msgstr "ウェーブフォーム"
 msgid "WebRTC"
 msgstr "WebRTC"
 
+msgid "Statistics"
+msgstr "統計"
+
 msgid "Hotkeys"
 msgstr "ショートカットキー"
 
@@ -4162,6 +4165,9 @@ msgstr "パネル/"
 
 msgid "Window/"
 msgstr "ウィンドウ/"
+
+msgid "Stats"
+msgstr "統計"
 
 msgid "Unknown menu entry "
 msgstr "メニュー項目:"
@@ -5066,6 +5072,9 @@ msgstr "サムネイルを更新(&U)"
 
 msgid "&Show/In &File Manager"
 msgstr "&表示/&ファイルマネージャーで"
+
+msgid "Memory"
+msgstr "メモリ"
 
 msgid "Maximum:"
 msgstr "最大値:"
@@ -5977,8 +5986,8 @@ msgstr "Herramienta siendo usada."
 msgid "Current tool being used."
 msgstr "現在使用中のツール。"
 
-msgid "Link Annotation"
-msgstr "リンク注釈"
+msgid "URL Movie"
+msgstr "URL動画"
 
 msgid "URL"
 msgstr "URL"
@@ -6006,6 +6015,9 @@ msgstr "URLのサフィックスを入力してください。"
 
 msgid "File"
 msgstr "ファイル"
+
+msgid "Link Annotation"
+msgstr "リンク注釈"
 
 msgid "Title"
 msgstr "タイトル"
@@ -6534,9 +6546,6 @@ msgstr "フレーム範囲"
 msgid "Frame Count"
 msgstr "フレーム数"
 
-msgid "Memory"
-msgstr "メモリ"
-
 msgid "Attributes"
 msgstr "属性"
 
@@ -6684,6 +6693,9 @@ msgid ""
 "Fixed Size depending what you want to save."
 msgstr ""
 "ビューアーの現在の値で、固定位置と固定サイズの値を埋めます。保存したいものに応じて、固定位置と/または固定サイズのチェックボックスも確認してください。"
+
+msgid "Screen:"
+msgstr "画面:"
 
 msgid "Render"
 msgstr "レンダリング"

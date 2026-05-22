@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.6.4\n"
+"Project-Id-Version: mrv2 v1.6.5\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -3383,6 +3383,9 @@ msgstr ""
 msgid "WebRTC"
 msgstr ""
 
+msgid "Statistics"
+msgstr ""
+
 msgid "Hotkeys"
 msgstr ""
 
@@ -3889,6 +3892,9 @@ msgid "Panel/"
 msgstr ""
 
 msgid "Window/"
+msgstr ""
+
+msgid "Stats"
 msgstr ""
 
 msgid "Unknown menu entry "
@@ -4791,6 +4797,9 @@ msgstr ""
 msgid "&Show/In &File Manager"
 msgstr ""
 
+msgid "Memory"
+msgstr ""
+
 msgid "Maximum:"
 msgstr ""
 
@@ -5605,7 +5614,7 @@ msgstr ""
 msgid "Current tool being used."
 msgstr ""
 
-msgid "Link Annotation"
+msgid "URL Movie"
 msgstr ""
 
 msgid "URL"
@@ -5633,6 +5642,9 @@ msgid "Enter a URL suffix"
 msgstr ""
 
 msgid "File"
+msgstr ""
+
+msgid "Link Annotation"
 msgstr ""
 
 msgid "Title"
@@ -6158,9 +6170,6 @@ msgstr ""
 msgid "Frame Count"
 msgstr ""
 
-msgid "Memory"
-msgstr ""
-
 msgid "Attributes"
 msgstr ""
 
@@ -6303,6 +6312,9 @@ msgid ""
 "Fills the Fixed Position and and Fixed Size values with the current values "
 "of the viewer.  Remember to also check the boxes for Fixed Position and/or "
 "Fixed Size depending what you want to save."
+msgstr ""
+
+msgid "Screen:"
 msgstr ""
 
 msgid "Render"

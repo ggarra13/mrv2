@@ -3702,6 +3702,9 @@ msgstr "Waveform"
 msgid "WebRTC"
 msgstr "WebRTC"
 
+msgid "Statistics"
+msgstr "Statistics"
+
 msgid "Hotkeys"
 msgstr "Hotkeys"
 
@@ -4222,6 +4225,9 @@ msgstr "Panel/"
 
 msgid "Window/"
 msgstr "Window/"
+
+msgid "Stats"
+msgstr "Stats"
 
 msgid "Unknown menu entry "
 msgstr "Unknown menu entry "
@@ -5136,6 +5142,9 @@ msgstr "&Update/&Thumbnails"
 
 msgid "&Show/In &File Manager"
 msgstr "&Show/In &File Manager"
+
+msgid "Memory"
+msgstr "Memory"
 
 msgid "Maximum:"
 msgstr "Maximum:"
@@ -6088,8 +6097,8 @@ msgstr "Current edit tool being used."
 msgid "Current tool being used."
 msgstr "Current tool being used."
 
-msgid "Link Annotation"
-msgstr "Link Annotation"
+msgid "URL Movie"
+msgstr "URL Movie"
 
 msgid "URL"
 msgstr "URL"
@@ -6117,6 +6126,9 @@ msgstr "Enter a URL suffix"
 
 msgid "File"
 msgstr "File"
+
+msgid "Link Annotation"
+msgstr "Link Annotation"
 
 msgid "Title"
 msgstr "Title"
@@ -6663,9 +6675,6 @@ msgstr "Frame Range"
 msgid "Frame Count"
 msgstr "Frame Count"
 
-msgid "Memory"
-msgstr "Memory"
-
 msgid "Attributes"
 msgstr "Attributes"
 
@@ -6824,6 +6833,9 @@ msgstr ""
 "Fills the Fixed Position and and Fixed Size values with the current values "
 "of the viewer.  Remember to also check the boxes for Fixed Position and/or "
 "Fixed Size depending what you want to save."
+
+msgid "Screen:"
+msgstr "Screen:"
 
 msgid "Render"
 msgstr "Render"

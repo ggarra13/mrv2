@@ -3644,6 +3644,9 @@ msgstr "波形"
 msgid "WebRTC"
 msgstr "WebRTC"
 
+msgid "Statistics"
+msgstr "统计信息"
+
 msgid "Hotkeys"
 msgstr "快捷键"
 
@@ -4152,6 +4155,9 @@ msgstr "控制板/"
 
 msgid "Window/"
 msgstr "窗口/"
+
+msgid "Stats"
+msgstr "统计"
 
 msgid "Unknown menu entry "
 msgstr "未知的菜单项"
@@ -5062,6 +5068,9 @@ msgstr "&更新/&缩略图"
 
 msgid "&Show/In &File Manager"
 msgstr "&Show/In &File Manager"
+
+msgid "Memory"
+msgstr "内存"
 
 msgid "Maximum:"
 msgstr "最大 :"
@@ -6000,8 +6009,8 @@ msgstr "当前正在使用的编辑工具。"
 msgid "Current tool being used."
 msgstr "当前工具正在使用中"
 
-msgid "Link Annotation"
-msgstr "链接注释"
+msgid "URL Movie"
+msgstr "URL视频"
 
 msgid "URL"
 msgstr "URL"
@@ -6029,6 +6038,9 @@ msgstr "请输入 URL 后缀。"
 
 msgid "File"
 msgstr "文件"
+
+msgid "Link Annotation"
+msgstr "链接注释"
 
 msgid "Title"
 msgstr "标题"
@@ -6554,9 +6566,6 @@ msgstr "帧范围"
 msgid "Frame Count"
 msgstr "帧计数"
 
-msgid "Memory"
-msgstr "内存"
-
 msgid "Attributes"
 msgstr "属性"
 
@@ -6700,6 +6709,9 @@ msgid ""
 "of the viewer.  Remember to also check the boxes for Fixed Position and/or "
 "Fixed Size depending what you want to save."
 msgstr "以当前值填充固定位置和固定大小值。 记住要检查固定位置和/ 或固定大小的框, 取决于您要保存的内容 。"
+
+msgid "Screen:"
+msgstr "屏幕:"
 
 msgid "Render"
 msgstr "渲染"
