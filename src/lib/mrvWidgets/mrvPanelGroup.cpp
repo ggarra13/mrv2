@@ -118,14 +118,14 @@ namespace mrv
 
             std_any value;
 
-            key = prefix + "/Screen";
-            value = settings->getValue<std::any>(key);
-            N = std_any_empty(value) ? 0 : std_any_cast<int>(value);
-
             // If user undocked the window with the undock button,
             // check to see if we have window X and Y saved positions.
             if (button)
             {
+                key = prefix + "/Screen";
+                value = settings->getValue<std::any>(key);
+                N = std_any_empty(value) ? 0 : std_any_cast<int>(value);
+            
                 key = prefix + "/WindowX";
                 value = settings->getValue<std::any>(key);
                 X = std_any_empty(value) ? X : std_any_cast<int>(value);
@@ -133,6 +133,10 @@ namespace mrv
                 key = prefix + "/WindowY";
                 value = settings->getValue<std::any>(key);
                 Y = std_any_empty(value) ? Y : std_any_cast<int>(value);
+            }
+            else
+            {
+                N = top_window()->screen_num();
             }
 
             // If we have saved Window W and (optional) H values, use them.

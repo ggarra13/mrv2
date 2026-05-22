@@ -27,21 +27,6 @@ namespace
 
 namespace mrv
 {
-    // \@bug:  FLTK has a bug when dragging recently undocked windows onto
-    //         a monitor with anoter DPI.  This kind of works around it.
-    static bool use_relative = false;
-
-    // Boolean flag indicating we are dragging the window
-    static bool dragging = false;
-
-    static void drag_idle(void* v)
-    {
-        DragButton* self = static_cast<DragButton*>(v);
-        if (!dragging) return;
-        self->update_drag(); // compute new position
-        Fl::repeat_timeout(0.0, drag_idle, v);
-    }
-    
     DragButton::DragButton(int x, int y, int w, int h, const char* l) :
         Fl_Box(x, y, w, h, l)
     {
@@ -58,29 +43,9 @@ namespace mrv
         int current_mouse_x, current_mouse_y;
         get_global_coords(current_mouse_x, current_mouse_y);
         int new_x, new_y;
-            
-        if (!use_relative)
-        {
-            new_x = winx + (current_mouse_x - fromx);
-            new_y = winy + (current_mouse_y - fromy);
-        }
-        else
-        {
-            // 1. Calculate the relative step since the last event
-            int dx = current_mouse_x - fromx;
-            int dy = current_mouse_y - fromy;
-        
-            // 2. Update the reference coordinates for the next drag event
-            fromx = current_mouse_x;
-            fromy = current_mouse_y;
-            
-            // 3. Get the *current* window coordinates (accepting any OS/DPI adjustments)
-            int current_win_x, current_win_y;
-            get_window_coords(current_win_x, current_win_y);
-
-            new_x = current_win_x + dx;
-            new_y = current_win_y + dy;
-        }
+         
+        new_x = winx + (current_mouse_x - fromx);
+        new_y = winy + (current_mouse_y - fromy);
         
         window()->position(new_x, new_y);
         if (window()->parent())
@@ -124,13 +89,8 @@ namespace mrv
             case FL_PUSH: // downclick in button creates cursor offsets
                 get_global_coords(fromx, fromy);
                 get_window_coords(winx, winy);
-                dragging = true;
-#ifdef _WIN32
-                use_relative = false;
-#endif
                 return 1;
             case FL_DRAG:
-                dragging = true;
                 
                 if (was_docked)
                 {
@@ -159,8 +119,6 @@ namespace mrv
                     hide_dock_group();
                 }
                 
-                dragging = false;
-                use_relative = false;
                 return 1;                    
             default:
                 break; // Ignore other events.
@@ -189,9 +147,6 @@ namespace mrv
                 tg->undock_grp(false); // undock the window
                 was_docked = true;     // note that we *just now* undocked
 
-#ifdef _WIN32
-                use_relative = true;
-#endif  
                 int posX, posY;
                 get_global_coords(posX, posY);
                 
