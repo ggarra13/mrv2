@@ -188,13 +188,13 @@ Donationware prices of binary licenses through PayPal:
 
 I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
 
-- u\$  25 for a Solo license for a year.
-- u\$  50 for a Standard license for a year.
-- u\$  75 for an Edit license for a year.
-- u\$ 150 for a Pro license for a year.
-- u\$ 300 for a Pro license to own (also allowing changing machine id -
-      	      	    	       	   useful for trying Linux distros or
-				   upgrading machines) 
+- u\$  25 for a Solo license for a year (Annotations support).
+- u\$  50 for a Standard license for a year (Solo + Python).
+- u\$  75 for an Edit license for a year (Standard + Video Editing).
+- u\$ 150 for a Pro license for a year (Editing + Voice and Link Annotations).
+- u\$ 300 for a Pro+ license to own (also allowing changing machine id -
+      	      	      	       	     useful for trying Linux distros or
+				     upgrading machines) 
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 
