@@ -178,7 +178,7 @@ def count_sourceforge(repo, folder_name, end_date, start_date, fetch_json):
     """Fetches and sums SourceForge download counts for a folder."""
     print(f"\n\tCount {folder_name} from {start_date} to {end_date}")
 
-    is_detailed_stats_folder = not any(key in folder_name.lower() for key in ['beta/', 'archive'])
+    is_detailed_stats_folder = not any(key in folder_name.lower() for key in ['archive'])
 
     mrv2_total = vmrv2_total = 0
     mrv2_win = vmrv2_win = mrv2_lin = vmrv2_lin = mrv2_mac = vmrv2_mac = 0
@@ -359,8 +359,6 @@ if __name__ == "__main__":
     # Run the three queries using plain requests)
     for folder, date_start in [
         (tag, start_date_str),                     # released (detailed)
-        ('beta/opengl', beta_start_date_str),
-        ('beta/vulkan', beta_start_date_str),
     ]:
         (mrv2_sf, vmrv2_sf,
          mrv2_win_sf, vmrv2_win_sf,

@@ -143,8 +143,8 @@ namespace mrv
             if (player)
                 time = player->currentTime();
 
-            const image::Size size(128, 64);
-
+            size = panel::calculateImageSize();
+            
             file::Path lastPath;
             int Y = g->y();
 
@@ -206,10 +206,19 @@ namespace mrv
 
                 _r->map[i] = b;
 
-                const std::string& layer = getLayerName(media, layerId);
-                std::string text = protocol + dir + "\n" + file + layer;
-                b->copy_label(text.c_str());
-
+                std::string label;
+                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
+                    kThumbnailNormal)
+                {
+                    const std::string layer = getLayerName(media, layerId);
+                    label = protocol + dir + "\n" + file + layer;
+                }
+                else
+                {
+                    label = file;
+                }
+                b->copy_label(label.c_str());
+                
                 _createThumbnail(b, path, time, layerId);
 
                 Y += size.h;
@@ -552,8 +561,6 @@ namespace mrv
                 return;
             otio::RationalTime time;
 
-            const image::Size size(128, 64);
-
             const auto& model = p.ui->app->filesModel();
             const auto& files = model->observeFiles();
             size_t numFiles = files->getSize();
@@ -604,9 +611,18 @@ namespace mrv
                 }
                 b->redraw();
 
-                const std::string& layer = getLayerName(media, layerId);
-                std::string text = protocol + dir + "\n" + file + layer;
-                b->copy_label(text.c_str());
+                std::string label;
+                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
+                    kThumbnailNormal)
+                {
+                    const std::string layer = getLayerName(media, layerId);
+                    label = protocol + dir + "\n" + file + layer;
+                }
+                else
+                {
+                    label = file;
+                }
+                b->copy_label(label.c_str());
 
                 _createThumbnail(b, path, time, layerId);
             }

@@ -16,9 +16,7 @@
 
 #include "mrvEdit/mrvEditCallbacks.h"
 
-
 #include "mrvFLTK/mrvCallbacks.h"
-#include "mrvFl/mrvIO.h"
 
 #include "mrvWidgets/mrvFileButton.h"
 #include "mrvWidgets/mrvFileDragger.h"
@@ -177,10 +175,6 @@ namespace mrv
             }
             if (Fl::event_button1())
             {
-                const std::string text = label();
-                auto lines = string::split(text, '\n');
-                std::string filename = lines[0] + lines[1];
-
                 if (!p.drag)
                 {
                     p.drag = FileDragger::create();

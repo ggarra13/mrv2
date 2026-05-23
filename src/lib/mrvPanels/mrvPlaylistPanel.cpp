@@ -123,10 +123,11 @@ namespace mrv
             const auto& files = model->observeFiles().get()->get();
             const auto& aIndex = model->observeAIndex()->get();
             const size_t numFiles = files.size();
-            const std::string tmpdir = tmppath() + '/';
 
             file::Path lastPath;
 
+            size = panel::calculateImageSize();
+            
             size_t numValidFiles = 0;
             for (size_t i = 0; i < numFiles; ++i)
             {
@@ -144,7 +145,7 @@ namespace mrv
                 lastPath = path;
 
                 auto cbW = new Widget<PlaylistButton>(
-                    g->x(), Y + numValidFiles * 68, g->w(), 68);
+                    g->x(), Y + numValidFiles * size.h + 4, g->w(), size.h + 4);
                 PlaylistButton* b = cbW;
                 _r->indices[b] = i;
                 cbW->callback(
@@ -162,12 +163,23 @@ namespace mrv
 
                 _r->map[i] = b;
 
+                const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
                 const std::string file = path.getFileName(listdir);
                 
-                std::string text = dir + "\n" + file + "\nColor";
-                b->copy_label(text.c_str());
+                std::string label;
+                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
+                    kThumbnailNormal)
+                {
+                    label = protocol + dir + "\n" + file + "\n" + _("Color");
+                }
+                else
+                {
+                    label = file;
+                }
+                b->copy_label(label.c_str());
+                
                 if (i == aIndex)
                 {
                     b->value(1);
@@ -182,20 +194,22 @@ namespace mrv
                     time = media->currentTime;
                 }
 
+                b->createTimeline(path, App::app->getContext());
+
                 _createThumbnail(b, path, time);
             }
 
             if (numValidFiles == 0)
             {
-                Fl_Group* bg = new Fl_Group(g->x(), Y, g->w(), 68);
-                Fl_Box* box = new Fl_Box(g->x(), Y, g->w() - 5, 68);
+                Fl_Group* bg = new Fl_Group(g->x(), Y, g->w(), size.h + 14);
+                Fl_Box* box = new Fl_Box(g->x(), Y, g->w() - 5, size.h + 14);
                 box->box(FL_ENGRAVED_BOX);
                 box->copy_label(_("Drop a clip here to create a playlist."));
                 box->labelsize(12);
                 box->align(FL_ALIGN_INSIDE | FL_ALIGN_CENTER | FL_ALIGN_WRAP);
                 bg->end();
 
-                Y += 70;
+                Y += size.h + 16;
             }
 
             Fl_Group* bg = new Fl_Group(g->x(), Y, g->w(), 30);
@@ -291,7 +305,7 @@ namespace mrv
                     }
                 }
 
-                b->createTimeline(App::app->getContext());
+                b->createTimeline(path, App::app->getContext());
 
                 _createThumbnail(b, path, time);
             }

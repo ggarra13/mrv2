@@ -39,11 +39,7 @@ namespace mrv
         else
             playerId = player;
 
-        std::string server = "wss://srv1037957.hstgr.cloud/sync";
-        std::string webRTCServer = os::sgetenv("MRV2_WEB_RTC_SERVER");
-        if (!webRTCServer.empty())
-            server = webRTCServer;
-        
+        std::string server = os::sgetenv("MRV2_WEB_RTC_SERVER");        
         const std::string url = server + "/" + roomId + "/" + playerId;
         
         std::string msg = string::Format(_("The room ID is: {0}")).arg(roomId);

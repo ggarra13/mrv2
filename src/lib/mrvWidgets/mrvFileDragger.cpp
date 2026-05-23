@@ -6,9 +6,13 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Double_Window.H>
 
+#include "mrvPanels/mrvPanelsAux.h"
+
 #include "mrvWidgets/mrvFileDragger.h"
 
 #include "mrvUI/mrvDesktop.h"
+
+#include "mrvOptions/mrvEnums.h"
 
 #include "mrViewer.h"
 
@@ -37,14 +41,13 @@ namespace mrv
             Fl_Group::current(0);
         }
 
-        const int W = 128;
-        const int H = 80;
-
-        p.window = new MainWindow(X, Y, W, H);
+        const image::Size size = panel::calculateImageSize();
+            
+        p.window = new MainWindow(X, Y, size.w, size.h);
         p.window->allow_expand_outside_parent();
         p.window->border(0);
         p.window->begin();
-        p.box = new Fl_Box(0, 0, W, H);
+        p.box = new Fl_Box(0, 0, size.w, size.h);
         p.window->end();
         p.window->show();
         Fl_Group::current(0);

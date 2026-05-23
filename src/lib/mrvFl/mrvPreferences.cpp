@@ -287,7 +287,12 @@ namespace mrv
         gui.get("timeline_thumbnails", tmp, 0);
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
-        gui.get("panel_thumbnails", tmp, 1);
+#ifdef __APPLE__
+        // On macOS, since users usually a laptop, default to Small thumbnail size.
+        gui.get("panel_thumbnails_size", tmp, 1);
+#else
+        gui.get("panel_thumbnails_size", tmp, 2);
+#endif
         uiPrefs->uiPrefsPanelThumbnails->value(tmp);
 
         gui.get("panel_thumbnails_manually", tmp, 0);
@@ -1373,7 +1378,7 @@ namespace mrv
         gui.set("timeline_video_offset", uiPrefs->uiStartTimeOffset->value());
         gui.set(
             "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
-        gui.set("panel_thumbnails", uiPrefs->uiPrefsPanelThumbnails->value());
+        gui.set("panel_thumbnails_size", uiPrefs->uiPrefsPanelThumbnails->value());
         gui.set("panel_thumbnails_manually",
                 uiPrefs->uiPrefsManualPanelThumbnails->value());
         gui.set("remove_edls", uiPrefs->uiPrefsRemoveEDLs->value());
@@ -2237,7 +2242,7 @@ namespace mrv
             "single_instance", (int)uiPrefs->uiPrefsSingleInstance->value());
         base.flush();
 
-        panel::redrawThumbnails();
+        panel::refreshThumbnails();
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }

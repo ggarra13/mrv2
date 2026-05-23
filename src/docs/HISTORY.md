@@ -1,4 +1,4 @@
-v1.6.5
+v1.6.6
 ======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
@@ -44,6 +44,15 @@ They do have, however:
     - Saving Images and Movies with Audio
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+- UI: Made thumbnails size in Panels be selectable with Preferences->Thumbnails->Panels.  macOS now defaults to small panel thumbnails, as most users use it from a laptop.
+
+
+v1.6.5
+======
 
 ChangeLog
 ---------

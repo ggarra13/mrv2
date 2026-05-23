@@ -23,6 +23,8 @@ namespace mrv
             return false;
         }
 
+        image::Size calculateImageSize();
+        
         std::string getLayerName(
             const std::shared_ptr<FilesModelItem>& item,
             const uint16_t layerId);

@@ -26,7 +26,8 @@ namespace mrv
 
         void setIndex(size_t value);
 
-        void createTimeline(const std::shared_ptr<system::Context>&);
+        void createTimeline(const file::Path& path,
+                            const std::shared_ptr<system::Context>&);
 
     protected:
         void _countVideoAndAudioClips();

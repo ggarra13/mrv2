@@ -142,12 +142,12 @@ namespace mrv
 
             file::Path lastPath;
 
-            std::vector<int> orders;
+            std::vector<int> ordered;
             if (r.sort == Sort::Loaded)
             {
                 for (size_t i = 0; i < numFiles; ++i)
                 {
-                    orders.push_back(i);
+                    ordered.push_back(i);
                 } 
             }
             else if (r.sort == Sort::FileName ||
@@ -188,12 +188,14 @@ namespace mrv
 
                 for (auto& [_, i] : fileNames)
                 {
-                    orders.push_back(i);
+                    ordered.push_back(i);
                 }
             }
 
-            
-            for (const auto i : orders)
+            size = panel::calculateImageSize();
+
+                            
+            for (const auto i : ordered)
             {
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
@@ -251,9 +253,18 @@ namespace mrv
                     layerId = media->videoLayer;
                 }
 
-                const std::string layer = getLayerName(media, layerId);
-                std::string text = protocol + dir + "\n" + file + layer;
-                b->copy_label(text.c_str());
+                std::string label;
+                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
+                    kThumbnailNormal)
+                {
+                    const std::string layer = getLayerName(media, layerId);
+                    label = protocol + dir + "\n" + file + layer;
+                }
+                else
+                {
+                    label = file;
+                }
+                b->copy_label(label.c_str());
 
                 _createThumbnail(b, path, time, layerId);
             }
@@ -365,10 +376,19 @@ namespace mrv
                     layerId = p.ui->uiColorChannel->value();
                 }
 
-                const std::string layer = getLayerName(media, layerId);
-                std::string text = protocol + dir + "\n" + file + layer;
-                b->copy_label(text.c_str());
-
+                std::string label;
+                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
+                    kThumbnailNormal)
+                {
+                    const std::string layer = getLayerName(media, layerId);
+                    label = protocol + dir + "\n" + file + layer;
+                }
+                else
+                {
+                    label = file;
+                }
+                b->copy_label(label.c_str());
+                
                 _createThumbnail(b, path, time, layerId);
             }
         }

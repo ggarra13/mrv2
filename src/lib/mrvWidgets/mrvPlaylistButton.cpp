@@ -42,7 +42,9 @@ namespace mrv
     {
     }
 
-    PlaylistButton::~PlaylistButton() {}
+    PlaylistButton::~PlaylistButton()
+    {
+    }
 
     void PlaylistButton::setIndex(size_t value)
     {
@@ -50,13 +52,10 @@ namespace mrv
     }
 
     void PlaylistButton::createTimeline(
+        const file::Path& path,
         const std::shared_ptr<system::Context>& context)
     {
         TLRENDER_P();
-        const std::string text = label();
-        auto lines = string::split(text, '\n');
-        std::string filename = lines[0] + lines[1];
-        file::Path path(filename);
         p.timeline = timeline::create(path, context);
         redraw();
     }
@@ -102,6 +101,7 @@ namespace mrv
             if (stack)
             {
                 auto tracks = stack->children();
+                
                 for (auto child : tracks)
                 {
                     auto track = otio::dynamic_retainer_cast<otio::Track>(child);
@@ -124,9 +124,17 @@ namespace mrv
         const std::string text = label();
         auto lines = string::split(text, '\n');
         char buf[4096];
-        snprintf(
-            buf, 4096, "%s\n%s\nVideo:%u Audio:%u", lines[0].c_str(),
-            lines[1].c_str(), videoClips, audioClips);
+        if (lines.size() > 1)
+        {
+            snprintf(
+                buf, 4096, "%s\n%s\nVideo:%u Audio:%u", lines[0].c_str(),
+                lines[1].c_str(), videoClips, audioClips);
+        }
+        else
+        {
+            snprintf(
+                buf, 4096, "Video:%u Audio:%u", videoClips, audioClips);
+        }
         copy_label(buf);
     }
 

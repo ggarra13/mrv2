@@ -117,7 +117,8 @@ namespace mrv
 
             static Fl_SVG_Image* NDIimage = MRV2_LOAD_SVG(NDI);
 
-            if (!p.ui->uiPrefs->uiPrefsPanelThumbnails->value())
+            if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
+                kThumbnailNone)
             {
                 widget->bind_image(nullptr);
                 return;
