@@ -129,7 +129,7 @@ namespace mrv
         int64_t ylo = std::numeric_limits<int64_t>::max();
         int64_t yhi = std::numeric_limits<int64_t>::min();
             
-        for (const auto& [name, buf] : traces_)
+        for (const auto& [_, buf] : traces_)
         {
             for (auto v : buf)
             {
