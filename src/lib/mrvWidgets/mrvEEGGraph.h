@@ -47,8 +47,7 @@ namespace mrv
         struct TraceStyle
         {
             Fl_Color fg         = 0x32FF5000; // green
-            float    line_width = 1.5f;
-            bool     auto_scale = true;
+            float    line_width = 2.0f;
             int64_t  y_min      = 0;
             int64_t  y_max      = 100;
         };

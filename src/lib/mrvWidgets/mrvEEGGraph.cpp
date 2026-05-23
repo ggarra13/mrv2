@@ -97,8 +97,6 @@ namespace mrv
         return it->second;
     }
 
-    // ── Clear ─────────────────────────────────────────────────────────────────
-
     void EEGGraph::clear()
     {
         traces_.clear();
@@ -107,8 +105,7 @@ namespace mrv
         redraw();
     }
 
-    // ── Drawing ───────────────────────────────────────────────────────────────
-
+ 
     void EEGGraph::draw()
     {
         using namespace tl;
@@ -128,6 +125,24 @@ namespace mrv
 
         int labelX = X;
 
+        // Calculate Y scale lo and hi.
+        int64_t ylo = std::numeric_limits<int64_t>::max();
+        int64_t yhi = std::numeric_limits<int64_t>::min();
+            
+        for (const auto& [name, buf] : traces_)
+        {
+            for (auto v : buf)
+            {
+                ylo = std::min(ylo, v);
+                yhi = std::max(yhi, v);
+            }
+        }
+        
+        if (ylo == yhi) { ylo -= 1; yhi += 1; }
+        const int64_t pad = (yhi - ylo) / 20 + 1;
+        ylo -= pad;
+        yhi += pad;
+            
         for (const auto& [name, buf] : traces_)
         {
             if (buf.empty())
@@ -146,23 +161,6 @@ namespace mrv
             for (std::size_t i = 0; i < use; ++i)
                 vis[cols - static_cast<int>(use) + i] = buf[src_start + i];
 
-            // ── Y scale ──────────────────────────────────────────────────────
-            int64_t ylo = ts.y_min, yhi = ts.y_max;
-            if (ts.auto_scale)
-            {
-                ylo = std::numeric_limits<int64_t>::max();
-                yhi = std::numeric_limits<int64_t>::min();
-                for (auto v : vis)
-                {
-                    ylo = std::min(ylo, v);
-                    yhi = std::max(yhi, v);
-                }
-                if (ylo == yhi) { ylo -= 1; yhi += 1; }
-                const int64_t pad = (yhi - ylo) / 20 + 1;
-                ylo -= pad;
-                yhi += pad;
-            }
-
             const double yrange = static_cast<double>(yhi - ylo);
             auto sampleY = [&](int64_t v) -> int
             {
@@ -172,7 +170,7 @@ namespace mrv
 
             // ── Trace ────────────────────────────────────────────────────────
             fl_color(ts.fg);
-            fl_line_style(FL_SOLID, static_cast<int>(ts.line_width + 0.5f));
+            fl_line_style(FL_SOLID, static_cast<int>(ts.line_width));
             _draw_trace(vis, cols, X, Y, CH, sampleY);
             fl_line_style(FL_SOLID, 0);
 
