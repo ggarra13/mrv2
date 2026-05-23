@@ -293,7 +293,7 @@ function(install_library_with_links LIBRARY)
     endif()
     
     file(INSTALL
-	DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+	DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/"
 	TYPE SHARED_LIBRARY
 	FOLLOW_SYMLINK_CHAIN
 	FILES "${LIBRARY}"
@@ -319,22 +319,24 @@ function( get_runtime_dependencies TARGET )
 	    execute_process(COMMAND ldd ${exe} OUTPUT_VARIABLE ldd_out)
 	    string (REPLACE "\n" ";" ldd_out_lines ${ldd_out})
 	    foreach (line ${ldd_out_lines})
-		string (REGEX REPLACE "^.* => | \(.*\)" "" pruned ${line})
+		# Capture everything after => excluding text starting with '('
+		string(REGEX REPLACE "^.* => ([^(]+) \\(.*$" "\\1" pruned "${line}")
+		# Remove any ending spaces
 		string (STRIP ${pruned} dep_filename)
-		if (IS_ABSOLUTE ${dep_filename})
+		if (IS_ABSOLUTE "${dep_filename}")
 
 		    list(FIND PROCESSED_LIBRARIES "${dep_filename}" already_processed)
                     if (already_processed EQUAL -1)
                         list(APPEND PROCESSED_LIBRARIES "${dep_filename}")
                         set(PROCESSED_LIBRARIES "${PROCESSED_LIBRARIES}" CACHE INTERNAL "List of processed libraries")
 
-			is_system_lib (${dep_filename} sys_lib)
+			is_system_lib ("${dep_filename}" sys_lib)
 			if (sys_lib EQUAL 0 OR INSTALL_SYSLIBS STREQUAL "true")
-			    install_library_with_links( ${dep_filename} )
+			    install_library_with_links( "${dep_filename}" )
 			endif()
                     endif()
 		else()
-		    is_system_lib (${dep_filename} sys_lib)
+		    is_system_lib ("${dep_filename}" sys_lib)
 		    if (sys_lib EQUAL 0)
 			message("${dep_filename} is NOT absolute - ${line}")
 		    endif()
