@@ -49,6 +49,7 @@ ChangeLog
 ---------
 
 - UI: Made thumbnails size in Panels be selectable with Preferences->Thumbnails->Panels.  macOS now defaults to small panel thumbnails, as most users use it from a laptop.
+- Python: Updated pyFTLK.
 
 
 v1.6.5
