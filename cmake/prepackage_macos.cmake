@@ -405,7 +405,6 @@ if( EXISTS "${CPACK_PREPACKAGE}/hdr.app" )
     fixup_macos_rpath(
         "${_hdr_app_base}/Resources/lib"
         EXECUTABLES
-            "${_hdr_app_base}/MacOS/hdr"
             "${_hdr_app_base}/Resources/bin/hdr"
     )
 endif()

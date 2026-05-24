@@ -35,12 +35,6 @@ function( is_macos_system_lib TARGET ISSYSLIB )
 
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
     
-    if ("${TARGET}" MATCHES "/mrv2")
-        # local library
-	set( ${ISSYSLIB} 1 PARENT_SCOPE)
-	return()
-    endif()
-    
     if ("${TARGET}" MATCHES "^/System")
 	set( ${ISSYSLIB} 1 PARENT_SCOPE)
         return()
