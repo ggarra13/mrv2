@@ -55,6 +55,8 @@ information and global methods for the current application.""" ;
 %ignore Fl::gl_visual;
 %ignore Fl::get_awake_handler_;
 %ignore Fl::copy_image;
+%ignore Fl::get_boxtype;
+%ignore Fl::set_boxtype;
 
 //%wrapper %{
 //#ifdef __APPLE__ 

@@ -1,4 +1,6 @@
 import setuptools
+from setuptools import Command, setup
+from setuptools.command.build import build
 import subprocess
 import glob, os, re, sys, string, platform
 
@@ -23,14 +25,17 @@ if fltk_dir=="":
             fltk_dir=subprocess.check_output(['fltk-config','--prefix']).decode()[:-1]
             print(f'fltk dir found at {fltk_dir}')
         except:
-            print('fltk-config not found. Please install FLTK first and add fltk-config directory to your PATH.')
+            print('Error: fltk-config not found. Please install FLTK 1.4.x development files first and make sure fltk-config is in your PATH.')
             sys.exit()
+
+        # ver=subprocess.check_output(['fltk-config','--version']).decode()[:-1]
+        # if ver[:3] != '1.4':
+        #     print(f'Error: FLTK development version {ver} found. Building pyFltk 1.4.x requires FLTK 1.4.x development files to be installed. Please uninstall previous FLTK development versions.')
+        #     sys.exit()
 
 # Use this to pass additional compile flags, like macOS -mmacosx-version-min=OS_VERSION
 cxx_flags = os.environ.get('CXX_FLAGS', '')
 print("pyFLTK CXX_FLAGS=",cxx_flags)
-print("fltk_dir=", fltk_dir)
-print("FLTK_HOME=", os.environ.get('FLTK_HOME'))
 
 # add your .cpp extensions in the plug-in/src directory.
 UserDefinedSources = glob.glob('./plug-in/src/*.cpp') + \
@@ -46,7 +51,7 @@ UserIncludeDirs = ['./plug-in/include', './plug-in/src']
 # --disable-gl
 # --disable-forms
 ##########################################################################
-doCheckForms = True
+doCheckForms = False
 doCheckGl = True
 isVerbose = True
 
@@ -129,17 +134,17 @@ elif sys.platform == 'darwin':
     cpu_type = platform.processor()
     if cpu_type.startswith("i386"):
         print("i386 CPU variant detected")
-        #lib_dir_list.append('/usr/local/lib')
+        lib_dir_list.append('/usr/local/lib')
         osx_arch = "x86_64"
     elif cpu_type.startswith("arm"):
         print("arm CPU variant detected")
-        #lib_dir_list.append('/opt/homebrew/lib')
+        lib_dir_list.append('/opt/homebrew/lib')
         osx_arch = "arm64"
     else:
         print("PowerPC system detected")
         osx_arch = "ppc"
 
-    compile_arg_list=['-arch', osx_arch, '-std=c++17']
+    compile_arg_list=['-arch', osx_arch]
     link_arg_list=['-stdlib=libc++', '-arch', osx_arch, '-framework','ApplicationServices','-framework','Carbon','-framework', 'Cocoa', '-framework','OpenGL','-rpath', fltk_lib_dir]
 
 else:
@@ -230,14 +235,14 @@ def fltk_config(fltk_dir):
     return (needed_libraries, needed_directories, needed_includes)
 
 ###########################################################################
-all_include_dirs = ['./src', './contrib']
+all_include_dirs = ['./src', './contrib','/usr/include']
 if fltk_dir != "":
-    if sys.platform == 'win32':
-       all_include_dirs.insert(0, fltk_dir+"/include")
-       all_include_dirs.insert(0, os.path.join(fltk_dir,'/include'))
-if sys.platform != 'darwin':
-    all_include_dirs.append('/usr/include')
-print("ALL_INCLUDE_DIRS=",all_include_dirs)
+    #if (sys.platform == 'win32'):
+    #    all_include_dirs.insert(0, fltk_dir+"/include")
+    #else:
+    #    all_include_dirs.insert(0, fltk_dir)
+    all_include_dirs.insert(0, os.path.join(fltk_dir,'include'))
+print(all_include_dirs)
 ###########################################################################
 
 if not (sys.platform == 'win32'):
@@ -263,7 +268,7 @@ if not (sys.platform == 'win32'):
         if lowercase_item.find("fltk") >= 0 and lowercase_item.find("gl") >= 0:
             doOpenGL = True
         if lowercase_item.find("fltk") >= 0 and lowercase_item.find("forms") >= 0:
-            doForms = True
+            doForms = False
             
     # simply add all the libraries to the front of the used libraries
     lib_list = additional_libs+lib_list
@@ -282,7 +287,7 @@ if not (sys.platform == 'win32'):
     if not doOpenGL:
         # disable OpenGL support
         print("FLTK was configured without OpenGL support!")
-        #UserDefinedSources.append('./src/Fl_Gl_Stubs.cxx')
+        UserDefinedSources.append('./src/Fl_Gl_Stubs.cxx')
         compile_arg_list.append("-DDO_NOT_USE_OPENGL")
     else:
         print("FLTK was configured with OpenGL support!")
@@ -290,7 +295,7 @@ if not (sys.platform == 'win32'):
     if not doForms:
         # disable Forms support
         print("FLTK was configured without Forms support!")
-        #UserDefinedSources.append('./src/Fl_Forms_Stubs.cxx')
+        UserDefinedSources.append('./src/Fl_Forms_Stubs.cxx')
     else:
         print("FLTK was configured with Forms support!")
 
@@ -336,36 +341,12 @@ class PySwigCommand(setuptools.Command):
                     add_incl.append('-I' + m.group(1))
         else:
             print("FLTK not found!")
-    if sys.platform != 'darwin':
-        add_incl.append('-I/usr/include')
+    add_incl.append('-I/usr/include')
     self.include = add_incl
 
   def run(self):
     """Run command."""
-    command = ['swig', '-D{0}'.format(sys.platform.upper()),
-               # \@bug: Safe C++ casts are broken, so we use C casts 
-               '-DSWIG_NO_CPLUSPLUS_CAST', 
-               '-DFL_INTERNALS',  
-               '-w302',
-               '-w312',
-               '-w325',
-               '-w362',
-               '-w389',
-               '-w401',
-               '-w473',
-               '-w509',
-               '-I./swig',
-               '-DPYTHON',
-               '-DPYTHON3',
-               '-c++',
-               '-python',
-               '-shadow',
-               '-fastdispatch',
-               '-outdir',
-               'fltk',
-               '-o',
-               'fltk/fltk_wrap.cpp',
-               './swig/fltk.i']
+    command = ['swig', '-D{0}'.format(sys.platform.upper()), '-DFL_INTERNALS', '-w302', '-w312', '-w325', '-w362', '-w389', '-w401', '-w473', '-w509', '-I./swig', '-DPYTHON', '-DPYTHON3', '-c++', '-python', '-shadow', '-fastdispatch', '-outdir', 'fltk', '-o', 'fltk/fltk_wrap.cpp', './swig/fltk.i']
     pos = command.index('-I./swig')
     if sys.platform.upper() == 'DARWIN':
         command[pos:pos] = ["-D__APPLE__"]
@@ -381,7 +362,7 @@ class PySwigCommand(setuptools.Command):
     subprocess.check_call(command)
 
 if cxx_flags != '':
-    compile_arg_list.extend(cxx_flags.split())
+    compile_arg_list.append(cxx_flags)
     
 # module declarations
 contrib_sources = []
@@ -390,43 +371,23 @@ module1 = setuptools.Extension(name='fltk._fltk',
 		    include_dirs = all_include_dirs+UserIncludeDirs,
                     sources = ['./fltk/fltk_wrap.cpp',
                                './contrib/ListSelect.cpp']+UserDefinedSources,
-                    extra_compile_args=compile_arg_list,
+		    extra_compile_args=compile_arg_list,
                     extra_link_args=link_arg_list,
 		    library_dirs=lib_dir_list,
           	    libraries=lib_list)
 
-with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
+class CustomBuild(build):
+    sub_commands = [('build_custom', None)] + build.sub_commands
 
-setuptools.setup (cmdclass={
-        'swig': PySwigCommand,
-       },
-       name = 'pyfltk',
-       version = '1.5.0',
-       #setup_requires=['wheel'],
-       ext_modules = [module1],
-       packages = ['fltk','fltk.test'],
-
-       package_data={'fltk': ['fltk']},
-       include_package_data=True,
-
-       # metadata to display on PyPI
-       author = 'Andreas Held',
-       author_email = 'andreasheld@users.sourceforge.net',
-       url = 'http://pyfltk.sourceforge.net',
-       description = 'This is a Python wrapper for the FLTK',
-       long_description=long_description,
-       long_description_content_type="text/markdown",
-       keywords="python fltk",
-       project_urls={
-           "Bug Tracker": "https://sourceforge.net/p/pyfltk/bugs/",
-           "Documentation": "https://fltk.gitlab.io/fltk/",
-           "Source Code": "https://sourceforge.net/p/pyfltk/code/HEAD/tree/branches/fltk1.4/",
-       },
-       classifiers=[
-           "License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)"
-       ]
+# Note: all package metadata (name, version, description, authors, etc.)
+# is now defined in pyproject.toml. Only build logic lives here.
+setuptools.setup(
+    cmdclass={
+        'build': CustomBuild,
+        'build_custom': PySwigCommand,
+    },
+    ext_modules=[module1],
+    packages=['fltk', 'fltk.test'],
+    package_data={'fltk': ['fltk']},
+    include_package_data=True,
 )
-
-
-
