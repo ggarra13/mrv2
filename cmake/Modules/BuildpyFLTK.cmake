@@ -5,7 +5,7 @@
 include(ExternalProject)
 
 set(pyFLTK_GIT_REPOSITORY "git://git.code.sf.net/p/pyfltk/git-code")
-set(pyFLTK_GIT_TAG master)
+set(pyFLTK_GIT_TAG e536e892091941d501d514c649515d144842a91e)
 
 
 
