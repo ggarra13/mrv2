@@ -58,7 +58,7 @@ isVerbose = True
 doMulti = False
 doOpenGL = False
 doForms  = False
-doShared = False
+doShared = True
 
 # debug flag
 doDebug = False

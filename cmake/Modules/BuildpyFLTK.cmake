@@ -78,7 +78,7 @@ set(pyFLTK_PATCH
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/pyFinalize.i"
     "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
 
-    # For avoiding depreacated fl_ask
+    # For avoiding deprecated fl_ask
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/fl_ask.i"
@@ -89,7 +89,7 @@ set(pyFLTK_PATCH
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/swig/Fl_Group.i"
     "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/swig/"
 
-    # For build fixes (like no forms)
+    # For build fixes (like no forms or building always shared)
     COMMAND
     ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
