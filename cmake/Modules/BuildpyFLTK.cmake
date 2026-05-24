@@ -128,9 +128,8 @@ if(NOT FLTK_BUILD_GL)
 endif()
 # Commands for configure, build and install
 set(pyFLTK_CONFIGURE
-    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install setuptools
-    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} setup.py swig --enable-shared --disable-forms ${pyFLTK_ARGS} ${pyFLTK_DEBUG})
-set(pyFLTK_BUILD     ${pyFLTK_ENV} ${Python_EXECUTABLE} setup.py build --enable-shared --disable-forms ${pyFLTK_ARGS} ${pyFLTK_DEBUG})
+    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install setuptools)
+set(pyFLTK_BUILD     ${pyFLTK_ENV} ${Python_EXECUTABLE} -m build --wheel --enable-shared --disable-forms ${pyFLTK_ARGS} ${pyFLTK_DEBUG})
 set(pyFLTK_INSTALL ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install . )
 
 ExternalProject_Add(
