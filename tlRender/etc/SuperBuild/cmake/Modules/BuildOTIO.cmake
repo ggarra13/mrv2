@@ -3,7 +3,7 @@ include(ExternalProject)
 set(OTIO_GIT_REPOSITORY "https://github.com/PixarAnimationStudios/OpenTimelineIO.git")
 set(OTIO_GIT_TAG "v0.18.1")
 
-set(OTIO_DEPENDENCIES ${Python_DEP} Imath)
+set(OTIO_DEPENDENCIES ${PYTHON_DEP} Imath)
 message(STATUS "OTIO DEPENDENCIES=${OTIO_DEPENDENCIES}")
 
 set(OTIO_SHARED_LIBS ON)
