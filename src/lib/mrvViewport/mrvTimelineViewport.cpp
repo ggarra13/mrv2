@@ -77,6 +77,7 @@ namespace
 
 namespace
 {
+    const double kFullScreenTimeout = 0.01;
     
     inline uint32_t byteSwap32(uint32_t x)
     {
@@ -2533,7 +2534,8 @@ namespace mrv
                     _setFullScreen(false);
                 if (p.ui->uiView == reinterpret_cast<MyViewport*>(this))
                     Fl::add_timeout(
-                        0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
+                        kFullScreenTimeout,
+                        (Fl_Timeout_Handler)restore_ui_state, p.ui);
                 p.presentation = false;
                 _updateCursor();
             }
@@ -2593,15 +2595,13 @@ namespace mrv
                 }
                 if (!p.presentation)
                     _setFullScreen(false);
-                if (p.fullScreen || p.presentation)
-                {
 #ifdef __APPLE__
-                    restore_ui_state(p.ui);
+                restore_ui_state(p.ui);
 #else
-                    Fl::add_timeout(
-                        0.01, (Fl_Timeout_Handler)restore_ui_state, p.ui);
+                Fl::add_timeout(
+                    kFullScreenTimeout,
+                    (Fl_Timeout_Handler)restore_ui_state, p.ui);
 #endif
-                }
                 p.presentation = false;
             }
             else

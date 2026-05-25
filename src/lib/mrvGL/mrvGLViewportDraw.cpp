@@ -1152,12 +1152,18 @@ namespace mrv
 
                     double fps = 1.0 / averageFrameTime;
                     if (fps >= player->speed()) fps = player->speed();
-
+                    
                     snprintf(
                         buf, 512, "DF: %" PRIu64 " FPS: %.2f/%.2f", p.droppedFrames,
                         fps, player->speed());
 
                     tmp += buf;
+
+                    if (swap_interval())
+                        tmp += " FIFO";
+                    else
+                        tmp += " MBOX";
+                    
                     p.startTime = std::chrono::high_resolution_clock::now();
                 }
             }

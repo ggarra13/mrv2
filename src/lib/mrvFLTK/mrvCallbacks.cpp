@@ -1995,7 +1995,7 @@ namespace mrv
             ui->uiHotkey->uiMain->show();
         if (has_about_window)
             ui->uiAbout->uiMain->show();
-
+        
         ui->uiView->frameView();
 
         PanelGroup::show_all();

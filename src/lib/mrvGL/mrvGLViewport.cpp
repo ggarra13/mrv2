@@ -192,14 +192,6 @@ namespace mrv
             if (!valid())
             {
                 _initializeGL();
-                
-
-                if (p.ui->uiPrefs->uiPrefsOpenGLVsync->value() ==
-                    MonitorVSync::kVSyncNone)
-                    swap_interval(0);
-                else
-                    swap_interval(1);
-
                 valid(1);
             }
             
