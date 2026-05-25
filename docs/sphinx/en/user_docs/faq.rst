@@ -89,76 +89,18 @@ Wayland
 
 	If it is using Mesa, you may need to configure XWayland/Wayland
 	correctly for your OS and graphics card.
-	Or use mrv2 not on Wayland but on X11/Xorg.
-
-	On Ubuntu 22.04.4 LTS, you should install the proprietary NVidia
-	drivers 535 at least and do::
-
-	  sudo apt install libnvidia-egl-wayland1
-
-	Note that NVidia's EGL under Wayland under Jammy is buggy and may
-	result on random stopping of the playback until you move the mouse.
-	To fix it, install the deb package from Ubuntu Noble::
-
-	  https://www.ubuntuupdates.org/package/core/noble/main/base/libnvidia-egl-wayland1
+	Or use mrv2 not on Wayland but on XWayland.
 	
 	If you run into that, use XWayland or log in onto X11.  To use
 	XWayland, set::
 
 	  export FLTK_BACKEND=x11
 
-- I get flickering positioning of Panels under Wayland.
-
-        This seems to be a bug in GNOME 48 (Mutter) when playing 4K at 60FPS.
-	  
-- I get warnings when I run the pre-compiled mrv2 on the console under Wayland
-  on a modern distro like Ubuntu 22.04.4 LTS, like::
-
-    (mrv2:6869): GdkPixbuf-WARNING **: 09:23:50.243: Cannot open pixbuf loader module file '/usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache': No such file or directory
-
-    This likely means that your installation is broken.
-    Try running the command
-    gdk-pixbuf-query-loaders > /usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache
-    to make things work again for the time being.
-
-    (mrv2:6869): Gtk-WARNING **: 09:23:50.244: Theme parsing error: gtk.css:1422:23: 'font-feature-settings' is not a valid property name
-
-    (mrv2:6869): Gtk-WARNING **: 09:23:50.245: Theme parsing error: gtk.css:3308:25: 'font-feature-settings' is not a valid property name
-
-    (mrv2:6869): Gtk-WARNING **: 09:23:50.246: Theme parsing error: gtk.css:3770:23: 'font-feature-settings' is not a valid property name
-
-
-  Sadly, these cannot be avoided.  You will need to re-compile from source on
-  your target platform or use mrv2 under XWayland or under X11.
-
-- While repositioning or rescaling floating panels under Wayland, I get clipping
-  redraws of the floating panel.
-
-  Unfortunately, this is a current limitation of FLTK 1.4.
-
 - When I have a long floating panel, like the Media Information Panel, I can
   drag them out of the screen, and cannot repositiong them.
 
   You can use ALT + F7 to reposition it.
 
-- Using drag and drop from Chrome or Chromium does not work on Wayland.
-
-  This is because mrv2 runs under Wayland while Chrome runs under XWayland.
-
-  There's a good workaround, though, to work with Wayland: chromium can be made a Wayland client launching it as follows::
-
-    chromium --ozone-platform-hint=wayland &
-
-  With this, DnD from the chromium URL field to an FLTK Wayland client app works both with gnome/Mutter and KDE/Plasma.
-
-  It's possible to configure chromium so it runs as a Wayland client when possible and an X11 client otherwise::
-
-    run chromium
-    type chrome://flags/#ozone-platform-hint in the URL field
-    change Preferred Ozone platform setting to Auto
-    close and re-launch chromium which will run as a Wayland client.
-
-  Note that Chrome's Wayland support is currently very buggy.
   
 Windows
 =======
@@ -167,7 +109,7 @@ Windows
   How can I display the picture thumbnails once again?
 
   * It is a bug in Windows, but it can be worked around.  You manually should
-    select one file extension that you want thumbnails from and select::
+    select one file extension that you want thumbnails for and select::
     
       Open with->Choose another app
 
