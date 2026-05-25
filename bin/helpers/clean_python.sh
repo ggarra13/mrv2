@@ -14,7 +14,7 @@
 #
 . etc/build_dir.sh
 
-echo "This script will clear Python at $BUILD_DIR"
+echo "This script will clear Python, pybind11 and pyFLTK at $BUILD_DIR"
 ask_to_continue
 
 
@@ -37,3 +37,12 @@ if [[ $KERNEL == *Windows* ]]; then
     echo "Cleaning Windows' bin/Scripts directory"
     rm -rf $INSTALL/bin/Scripts
 fi
+
+echo "Cleaning deps/Python"
+rm -rf $BUILD_DIR/deps/Python
+
+echo "Cleaning deps/pyFLTK"
+rm -rf $BUILD_DIR/deps/pyFLTK
+
+echo "Cleaning deps/pybind11"
+rm -rf $BUILD_DIR/deps/pybind11
