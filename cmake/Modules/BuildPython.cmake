@@ -10,8 +10,8 @@ ProcessorCount(NPROCS)
 
 set( Python_REPOSITORY https://github.com/python/cpython)
 
-set( Python_VERSION 3.12 ) 
-set( Python_TINY    12 )
+set( Python_VERSION 3.14 )  # was 3.12.12 
+set( Python_TINY    5 )
 
 set( Python_GIT_TAG v${Python_VERSION}.${Python_TINY})
 

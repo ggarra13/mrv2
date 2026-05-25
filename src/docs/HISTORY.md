@@ -53,8 +53,11 @@ ChangeLog
 - UI: Fixed statistics panel to more correctly reflect the usage.
 - Core: Added MBOX and FIFO swap_interval() indicators to OpenGL build too.
 - Core: Added __GL_SYNC_TO_VBLANK=0 to OpenGL Linux distro for NVidia cards' performance issues under Ubuntu 26.04 LTS/Gnome50.
-- Python: Updated pyFTLK.
+- Python: Updated to v3.14.5.
+- Python: Updated pyFTLK build.
 - NDI: Updated to v6.3.2.
+- OpenEXR: Updated to v3.4.12.
+- OpenJPH: Updated to v0.27.3.
 - BUILD:  Made macOS dylibs automatically use @rpath instead of relying on DYLD_LIBRARY_PATH, for being more compatible and allowing to code sign the installer later on.
 
 
