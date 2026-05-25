@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panels &mdash; mrv2 v1.6.4 documentation</title>
+  <title>Panels &mdash; mrv2 v1.6.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=751d7927"></script>
+      <script src="../../_static/documentation_options.js?v=e69d7754"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -66,10 +66,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#ndi-panel">NDI Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#playlist-panel">Playlist Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#python-panel">Python Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stats-panel">Stats Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#settings-panel">Settings Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#stereo-3d-panel">Stereo 3D Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#usd-panel">USD Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#vectorscope-panel">Vectorscope Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#webrtc-panel">WebRTC Panel</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../notes.html">Notes and Annotations</a></li>
@@ -189,7 +191,7 @@ Horizontal, Vertical and Tile.  The Tile comparison allows multiple images to be
 <p>The NDI Panel allows you to play back an NDI® stream (ie. a video and audio playback stream) from anywhere on your network using the Network Device Interface protocol.</p>
 <p>For the connection to take place, you need to make sure your firewall allows incoming and outgoing connections.  For more information, refer to the NDI® SDK documentation.</p>
 <p>The pulldown allows you to select the source to play.  Note that starting of playback of NDI® in mrv2 is currently a tad slow, as it needs to cache the video thumbnails and audio first.</p>
-<p>In v1.6.4 and later, NDI® Video and Audio output was also added.  This allows you to stream the contents of what’s playing in mrv2 to any NDI® compatible device or software (like NDI® Tools Studio Monitor on Windows or NDI® Tools Video Monitor on macOS or other instance of mrv2 itself).</p>
+<p>In v1.6.6 and later, NDI® Video and Audio output was also added.  This allows you to stream the contents of what’s playing in mrv2 to any NDI® compatible device or software (like NDI® Tools Studio Monitor on Windows or NDI® Tools Video Monitor on macOS or other instance of mrv2 itself).</p>
 <p>NDI® is a registered trademark of Vizrt NDI AB.</p>
 </section>
 <section id="playlist-panel">
@@ -205,6 +207,10 @@ Horizontal, Vertical and Tile.  The Tile comparison allows multiple images to be
 <img alt="../../_images/python-panel-01.png" class="align-center" src="../../_images/python-panel-01.png" />
 <p>The Python panel allows you to run python code and use mrv2’s Python API to control the viewer.  The Panel is divided into two sections.  The section above records the python output, while the section below is where you type your code.  In order to run the code, you can use the Menus or click on the Keypad Enter key.</p>
 <p>You can also select a portion of the code in the editor to run just that instead of all the code typed in the editor.</p>
+</section>
+<section id="stats-panel">
+<h2>Stats Panel<a class="headerlink" href="#stats-panel" title="Link to this heading"></a></h2>
+<p>The Stats panel collects statistics of mrv2’s engine and displays it in a graph fashion.</p>
 </section>
 <section id="settings-panel">
 <h2>Settings Panel<a class="headerlink" href="#settings-panel" title="Link to this heading"></a></h2>
@@ -226,6 +232,11 @@ Horizontal, Vertical and Tile.  The Tile comparison allows multiple images to be
 <h2>Vectorscope Panel<a class="headerlink" href="#vectorscope-panel" title="Link to this heading"></a></h2>
 <img alt="../../_images/vectorscope-panel-01.png" class="align-center" src="../../_images/vectorscope-panel-01.png" />
 <p>The Vectorscope Panel allows you to show a vectorscope of the selected area of the image.  You select the area with the select tool in the Tool Dock where the drawing tools are located.</p>
+</section>
+<section id="webrtc-panel">
+<h2>WebRTC Panel<a class="headerlink" href="#webrtc-panel" title="Link to this heading"></a></h2>
+<p>The WebRTC Panel allows syncing two or more remote viewers anywhere in the Web in a “Room”.  Then anyone in the Room can control the viewers, by going back and forth, using the drawing tools, etc.
+Note that the actual media is not sent through the web, but must be kept locally.  If you are mixing platforms or the media is not on the same location on both remote locations, you should use Preferences-&gt;Path Mapping to make sure the media is found.</p>
 </section>
 </section>
 

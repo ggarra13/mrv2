@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FAQ &mdash; mrv2 v1.6.4 documentation</title>
+  <title>FAQ &mdash; mrv2 v1.6.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=751d7927"></script>
+      <script src="../_static/documentation_options.js?v=e69d7754"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -197,18 +197,7 @@ Version:    4.6.0 NVIDIA 535.171.04</p>
 <p>Max. Texture Size:32768 x 32768</p>
 <p>If it is using Mesa, you may need to configure XWayland/Wayland
 correctly for your OS and graphics card.
-Or use mrv2 not on Wayland but on X11/Xorg.</p>
-<p>On Ubuntu 22.04.4 LTS, you should install the proprietary NVidia
-drivers 535 at least and do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libnvidia</span><span class="o">-</span><span class="n">egl</span><span class="o">-</span><span class="n">wayland1</span>
-</pre></div>
-</div>
-<p>Note that NVidia’s EGL under Wayland under Jammy is buggy and may
-result on random stopping of the playback until you move the mouse.
-To fix it, install the deb package from Ubuntu Noble:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">ubuntuupdates</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">package</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">noble</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">base</span><span class="o">/</span><span class="n">libnvidia</span><span class="o">-</span><span class="n">egl</span><span class="o">-</span><span class="n">wayland1</span>
-</pre></div>
-</div>
+Or use mrv2 not on Wayland but on XWayland.</p>
 <p>If you run into that, use XWayland or log in onto X11.  To use
 XWayland, set:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FLTK_BACKEND</span><span class="o">=</span><span class="n">x11</span>
@@ -220,53 +209,9 @@ XWayland, set:</p>
 </ul>
 </div></blockquote>
 </li>
-<li><p>I get flickering positioning of Panels under Wayland.</p>
-<blockquote>
-<div><p>This seems to be a bug in GNOME 48 (Mutter) when playing 4K at 60FPS.</p>
-</div></blockquote>
-</li>
-<li><p>I get warnings when I run the pre-compiled mrv2 on the console under Wayland
-on a modern distro like Ubuntu 22.04.4 LTS, like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">mrv2</span><span class="p">:</span><span class="mi">6869</span><span class="p">):</span> <span class="n">GdkPixbuf</span><span class="o">-</span><span class="n">WARNING</span> <span class="o">**</span><span class="p">:</span> <span class="mi">09</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mf">50.243</span><span class="p">:</span> <span class="n">Cannot</span> <span class="nb">open</span> <span class="n">pixbuf</span> <span class="n">loader</span> <span class="n">module</span> <span class="n">file</span> <span class="s1">&#39;/usr/lib64/gdk-pixbuf-2.0/2.10.0/loaders.cache&#39;</span><span class="p">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span>
-
-<span class="n">This</span> <span class="n">likely</span> <span class="n">means</span> <span class="n">that</span> <span class="n">your</span> <span class="n">installation</span> <span class="ow">is</span> <span class="n">broken</span><span class="o">.</span>
-<span class="n">Try</span> <span class="n">running</span> <span class="n">the</span> <span class="n">command</span>
-<span class="n">gdk</span><span class="o">-</span><span class="n">pixbuf</span><span class="o">-</span><span class="n">query</span><span class="o">-</span><span class="n">loaders</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">gdk</span><span class="o">-</span><span class="n">pixbuf</span><span class="o">-</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">2.10.0</span><span class="o">/</span><span class="n">loaders</span><span class="o">.</span><span class="n">cache</span>
-<span class="n">to</span> <span class="n">make</span> <span class="n">things</span> <span class="n">work</span> <span class="n">again</span> <span class="k">for</span> <span class="n">the</span> <span class="n">time</span> <span class="n">being</span><span class="o">.</span>
-
-<span class="p">(</span><span class="n">mrv2</span><span class="p">:</span><span class="mi">6869</span><span class="p">):</span> <span class="n">Gtk</span><span class="o">-</span><span class="n">WARNING</span> <span class="o">**</span><span class="p">:</span> <span class="mi">09</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mf">50.244</span><span class="p">:</span> <span class="n">Theme</span> <span class="n">parsing</span> <span class="n">error</span><span class="p">:</span> <span class="n">gtk</span><span class="o">.</span><span class="n">css</span><span class="p">:</span><span class="mi">1422</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span> <span class="s1">&#39;font-feature-settings&#39;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">valid</span> <span class="nb">property</span> <span class="n">name</span>
-
-<span class="p">(</span><span class="n">mrv2</span><span class="p">:</span><span class="mi">6869</span><span class="p">):</span> <span class="n">Gtk</span><span class="o">-</span><span class="n">WARNING</span> <span class="o">**</span><span class="p">:</span> <span class="mi">09</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mf">50.245</span><span class="p">:</span> <span class="n">Theme</span> <span class="n">parsing</span> <span class="n">error</span><span class="p">:</span> <span class="n">gtk</span><span class="o">.</span><span class="n">css</span><span class="p">:</span><span class="mi">3308</span><span class="p">:</span><span class="mi">25</span><span class="p">:</span> <span class="s1">&#39;font-feature-settings&#39;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">valid</span> <span class="nb">property</span> <span class="n">name</span>
-
-<span class="p">(</span><span class="n">mrv2</span><span class="p">:</span><span class="mi">6869</span><span class="p">):</span> <span class="n">Gtk</span><span class="o">-</span><span class="n">WARNING</span> <span class="o">**</span><span class="p">:</span> <span class="mi">09</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mf">50.246</span><span class="p">:</span> <span class="n">Theme</span> <span class="n">parsing</span> <span class="n">error</span><span class="p">:</span> <span class="n">gtk</span><span class="o">.</span><span class="n">css</span><span class="p">:</span><span class="mi">3770</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span> <span class="s1">&#39;font-feature-settings&#39;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">valid</span> <span class="nb">property</span> <span class="n">name</span>
-</pre></div>
-</div>
-<p>Sadly, these cannot be avoided.  You will need to re-compile from source on
-your target platform or use mrv2 under XWayland or under X11.</p>
-</li>
-<li><p>While repositioning or rescaling floating panels under Wayland, I get clipping
-redraws of the floating panel.</p>
-<p>Unfortunately, this is a current limitation of FLTK 1.4.</p>
-</li>
 <li><p>When I have a long floating panel, like the Media Information Panel, I can
 drag them out of the screen, and cannot repositiong them.</p>
 <p>You can use ALT + F7 to reposition it.</p>
-</li>
-<li><p>Using drag and drop from Chrome or Chromium does not work on Wayland.</p>
-<p>This is because mrv2 runs under Wayland while Chrome runs under XWayland.</p>
-<p>There’s a good workaround, though, to work with Wayland: chromium can be made a Wayland client launching it as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chromium</span> <span class="o">--</span><span class="n">ozone</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">hint</span><span class="o">=</span><span class="n">wayland</span> <span class="o">&amp;</span>
-</pre></div>
-</div>
-<p>With this, DnD from the chromium URL field to an FLTK Wayland client app works both with gnome/Mutter and KDE/Plasma.</p>
-<p>It’s possible to configure chromium so it runs as a Wayland client when possible and an X11 client otherwise:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">chromium</span>
-<span class="nb">type</span> <span class="n">chrome</span><span class="p">:</span><span class="o">//</span><span class="n">flags</span><span class="o">/</span><span class="c1">#ozone-platform-hint in the URL field</span>
-<span class="n">change</span> <span class="n">Preferred</span> <span class="n">Ozone</span> <span class="n">platform</span> <span class="n">setting</span> <span class="n">to</span> <span class="n">Auto</span>
-<span class="n">close</span> <span class="ow">and</span> <span class="n">re</span><span class="o">-</span><span class="n">launch</span> <span class="n">chromium</span> <span class="n">which</span> <span class="n">will</span> <span class="n">run</span> <span class="k">as</span> <span class="n">a</span> <span class="n">Wayland</span> <span class="n">client</span><span class="o">.</span>
-</pre></div>
-</div>
-<p>Note that Chrome’s Wayland support is currently very buggy.</p>
 </li>
 </ul>
 </section>
@@ -278,7 +223,7 @@ drag them out of the screen, and cannot repositiong them.</p>
 How can I display the picture thumbnails once again?</p>
 <ul>
 <li><p>It is a bug in Windows, but it can be worked around.  You manually should
-select one file extension that you want thumbnails from and select:</p>
+select one file extension that you want thumbnails for and select:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Open</span> <span class="k">with</span><span class="o">-&gt;</span><span class="n">Choose</span> <span class="n">another</span> <span class="n">app</span>
 </pre></div>
 </div>

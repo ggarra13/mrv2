@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction &mdash; mrv2 v1.6.4 documentation</title>
+  <title>Introduction &mdash; mrv2 v1.6.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=751d7927"></script>
+      <script src="../_static/documentation_options.js?v=e69d7754"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -48,8 +48,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to mrv2’s documentation!</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">mrv2 User Guide</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Introduction</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#what-is-mrv2">What is mrv2 ?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#current-version-v1-6-4-overview">Current Version: v1.6.4 - Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-are-mrv2-and-vmrv2">What are mrv2 and vmrv2 ?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#current-version-v1-6-6-overview">Current Version: v1.6.6 - Overview</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -100,13 +100,22 @@
              
   <section id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h1>
-<section id="what-is-mrv2">
-<h2>What is mrv2 ?<a class="headerlink" href="#what-is-mrv2" title="Link to this heading"></a></h2>
-<p>mrv2 is an open source professional flipbook and review tool for the Visual Effects, Animation and Computer Graphics Industries.  mrv2 is focused on providing an intuitive, easy to use interface with the highest performance playback engine available at its code and a Python API for pipeline integration and customisation for total flexibility.</p>
+<section id="what-are-mrv2-and-vmrv2">
+<h2>What are mrv2 and vmrv2 ?<a class="headerlink" href="#what-are-mrv2-and-vmrv2" title="Link to this heading"></a></h2>
+<p>mrv2 and vmrv2 are two open source professional flipbook and review tools for the Visual Effects, Animation and Computer Graphics Industries.</p>
+<p>The difference between mrv2 and vmrv2 is their graphics engine.</p>
+<p>mrv2 uses OpenGL which is more battle tested but it is being deprecated while vmrv2 uses Vulkan which is the primary engine on Linux and modern Windows.  vmrv2 generally plays images and videos faster on modern GPUs and has support for Dynamic HDR, while mrv2 supports OpenUSD and uses static tone-mapping to simulate HDR, which may lead to somewhat incorrect colors.</p>
+<p>To put it in perspective, Netflix, YouTube and Disney in their premium subscription packages use HDR, so if you are working on a movie for them or one that will be released in Cinemas you will want to watch your dailies with vmrv2.</p>
+<p>From now on, when we refer to mrv2, we mean both mrv2 and vmrv2.</p>
+<p>mrv2 is focused on providing an intuitive, easy to use interface with the highest performance playback engine available at its code and a Python API for pipeline integration and customisation for total flexibility.</p>
 <p>mrv2 can handle collections of media sources quickly, loads specialised image formats and displays images with colour management. Users can quickly import, organise and group media into playlists and ‘subsets’, playing through and looping on media items and adding review notes and sketched annotations, allowing one to view the media in a highly interactive and collaborative way. This enables workflows that are essential for teams in VFX, animation and other post-production activities who need to see, on demand, the artwork that they and their colleagues are creating. For example one can jump between the viewed media source instantaneously, inspect pixels close-up, do frame-by-frame comparisons across multiple media sources, annotate the media with drawings and captions or add feedback notes to share.</p>
+<p>The Pro versions of mrv2 and vmrv2 take dailies to a new level with the use of voice and link annotations for even faster feedback during the review process.</p>
+<p>These features are useful for group reviews now but its access also through its Python API will, if I am right, in a potential future, allow controlling GenAI in the most intuitive way, by “directing” how you want your characters to behave by using your voice and a pointer.  GenAI is currently not allowing that yet, but mrv2 paves the way.</p>
+<p>In addition to that, you can use Link Annotations to have linked images with an AI prompt for image references anywhere on your timeline so your AI engine can blend between them. This is also available from Python to feed it to your favorite AI service, propietary or local open source tool, if they allow it.</p>
+<p>Albeit I use AI for math, coding, learning and general trouble-shooting, it is not for me as an artist.  I had a short stint on an AI project, but decided it was not for me.  Also doing hard-core AI requires thorough math knowledge which is not my strongest point.  I would rather concentrate on building a tool that helps artists get familiar with AI by using the same review concepts that appear in dailies.</p>
 </section>
-<section id="current-version-v1-6-4-overview">
-<h2>Current Version: v1.6.4 - Overview<a class="headerlink" href="#current-version-v1-6-4-overview" title="Link to this heading"></a></h2>
+<section id="current-version-v1-6-6-overview">
+<h2>Current Version: v1.6.6 - Overview<a class="headerlink" href="#current-version-v1-6-6-overview" title="Link to this heading"></a></h2>
 <p>This version of the application is a robust and high performance playback and review solution. mrv2 has been deployed at multiple facilities and is used by multiple individuals daily since August 2022.</p>
 <p>Here are some key features:</p>
 <p><strong>Loading Media</strong></p>
@@ -169,8 +178,10 @@ Tile ‘Compare Modes’.</p></li>
 <p><strong>Sessions</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><p>Session syncing is provided to synchronize one or more viewers in a review session across a LAN.  You can have a server and multiple clients and they can all control all aspects of mrv2 (user selectable).</p></li>
+<li><p>Session syncing is provided to synchronize one or more viewers in a review session across a LAN or the Internet.  You can have a server and multiple clients and they can all control all aspects of mrv2 (user selectable).</p></li>
 <li><p>Session files can be saved to disk to save the state of the UI and loaded media.</p></li>
+<li><p>Currently, for the security conscious media is not streamed through the
+connection.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Hotkeys</strong></p>
@@ -188,6 +199,8 @@ changing the settings of all the menus and some viewer controls.</p></li>
 <li><p>Create and build media playlists through straightforward API methods.</p></li>
 <li><p>Control all the panel settings and the timeline (start, stop, step frame,
 seek, etc).</p></li>
+<li><p>Link your review sessions and takes to your planning and schedualing tool
+or your choice.</p></li>
 </ul>
 </div></blockquote>
 </section>
