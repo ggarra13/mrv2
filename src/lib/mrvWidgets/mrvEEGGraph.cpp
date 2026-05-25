@@ -116,10 +116,12 @@ namespace mrv
         // Bottom 20 px are reserved for per-trace labels.
         const int CH = H - 20;
 
+        // Draw the EEG box
         fl_antialias(0);
         fl_color(bg_);
         fl_rectf(X, Y, W, CH);
-        
+
+        // Draw the text area
         fl_color(FL_BACKGROUND_COLOR);
         fl_rectf(X, Y + CH, W, H - CH);
 
@@ -156,8 +158,9 @@ namespace mrv
             const std::size_t use  =
                 std::min(static_cast<std::size_t>(cols), buf.size());
 
-            std::vector<int64_t> vis(cols, 0);
             const std::size_t src_start = buf.size() - use;
+            const int64_t fill = buf[src_start]; 
+            std::vector<int64_t> vis(cols, fill);
             for (std::size_t i = 0; i < use; ++i)
                 vis[cols - static_cast<int>(use) + i] = buf[src_start + i];
 
