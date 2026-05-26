@@ -258,6 +258,7 @@ endif()
 
 
 if(MRV2_PYBIND11 OR BUILD_PYTHON)
+    message(STATUS "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
     find_package(Python REQUIRED COMPONENTS Interpreter Development)
 endif()
 

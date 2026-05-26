@@ -30,7 +30,6 @@ PYBIND11_EMBEDDED_MODULE(mrv2, m)
 {
     mrv2_enums(m);
     mrv2_vectors(m);
-    mrv2_otio(m);
     mrv2_filepath(m);
     mrv2_fileitem(m);
     mrv2_filesmodel(m);

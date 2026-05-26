@@ -9,7 +9,6 @@ namespace py = pybind11;
 
 extern void mrv2_enums(py::module& m);
 extern void mrv2_vectors(py::module& m);
-extern void mrv2_otio(py::module& m);
 extern void mrv2_filepath(py::module& m);
 extern void mrv2_fileitem(py::module& m);
 extern void mrv2_image(py::module& m);

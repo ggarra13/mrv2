@@ -58,7 +58,10 @@ ChangeLog
 - NDI: Updated to v6.3.2.
 - OpenEXR: Updated to v3.4.12.
 - OpenJPH: Updated to v0.27.3.
-- BUILD:  Made macOS dylibs automatically use @rpath instead of relying on DYLD_LIBRARY_PATH, for being more compatible and allowing to code sign the installer later on.
+- Build:  Made macOS dylibs automatically use @rpath instead of relying on DYLD_LIBRARY_PATH, for being more compatible and allowing to code sign the installer later on.
+- Build: Fixed missing OTIO dependency on Python.
+- Python:  Fixed registering RationalTime and TimeRange under the mrv2 namespace.  Now we just use opentimelineio directly, which would prevent opentimelineio from being imported.
+- Python/UI:  Added imports for opentimelineio in Python Panel.
 
 
 v1.6.5

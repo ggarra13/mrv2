@@ -495,6 +495,9 @@ namespace mrv
             if (textBuffer->length() == 0)
             {
                 std::string imports = R"PYTHON(
+import opentimelineio as otio
+import opentimelineio.opentime as otime
+
 import mrv2
 from mrv2 import annotations, cmd, math, image, io, media
 from mrv2 import playlist, timeline, ui, )PYTHON";

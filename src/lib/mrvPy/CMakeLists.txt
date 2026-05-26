@@ -21,7 +21,6 @@ set(SOURCES
     Image.cpp
     Math.cpp
     Media.cpp
-    OTIO.cpp
     Playlist.cpp
     Plugin.cpp
     Session.cpp
