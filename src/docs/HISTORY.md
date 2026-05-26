@@ -60,8 +60,10 @@ ChangeLog
 - OpenJPH: Updated to v0.27.3.
 - Build:  Made macOS dylibs automatically use @rpath instead of relying on DYLD_LIBRARY_PATH, for being more compatible and allowing to code sign the installer later on.
 - Build: Fixed missing OTIO dependency on Python.
-- Python:  Fixed registering RationalTime and TimeRange under the mrv2 namespace.  Now we just use opentimelineio directly, which would prevent opentimelineio from being imported.
+- Python:  Fixed registering RationalTime and TimeRange under the mrv2 namespace.  Now we just use opentimelineio directly, which would prevent opentimelineio from being imported.  That does mean that if you were using mrv2.RationalTime or mrv2.TimeRange, you will need to update your scripts to use otime.RationalTime and otime.TimeRange.
+- Python: Updated demos to use opentimelineio.
 - Python/UI:  Added imports for opentimelineio in Python Panel.
+- Build: Added and Improved bin/helpers/clean_* scripts to remove only portions of the compilation chain.
 
 
 v1.6.5

@@ -7,6 +7,9 @@
 # This demo loads a movie clip, plays it for a second and then stops it.
 # 
 
+import opentimelineio as otio
+import opentimelineio.opentime as otime
+
 from mrv2 import cmd, media, timeline
 
 if len(media.list()) == 0:
