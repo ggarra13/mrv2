@@ -36,6 +36,9 @@ if [[ $KERNEL == *Windows* ]]; then
     
     echo "Cleaning Windows' bin/Scripts directory"
     rm -rf $INSTALL/bin/Scripts
+
+    echo "Cleaning $INSTALL/python"
+    rm -rf $INSTALL/python
 fi
 
 echo "Cleaning tlRender/etc/SuperBuild/OTIO"
