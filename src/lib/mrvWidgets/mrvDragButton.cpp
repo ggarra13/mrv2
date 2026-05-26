@@ -30,7 +30,7 @@ namespace mrv
     DragButton::DragButton(int x, int y, int w, int h, const char* l) :
         Fl_Box(x, y, w, h, l)
     {
-        was_docked = false; // Assume we have NOT just undocked...
+        was_docked = true; // Assume we have NOT just undocked...
     }
     
     DragButton::~DragButton()
@@ -42,8 +42,8 @@ namespace mrv
         // This is the stable calculation.
         int current_mouse_x, current_mouse_y;
         get_global_coords(current_mouse_x, current_mouse_y);
+
         int new_x, new_y;
-         
         new_x = winx + (current_mouse_x - fromx);
         new_y = winy + (current_mouse_y - fromy);
         
@@ -89,18 +89,30 @@ namespace mrv
             case FL_PUSH: // downclick in button creates cursor offsets
                 get_global_coords(fromx, fromy);
                 get_window_coords(winx, winy);
+                if (window()) _drag_screen = window()->screen_num();
                 return 1;
             case FL_DRAG:
                 
                 if (was_docked)
                 {
-                    // Need to init offsets, we probably got here following
-                    // a drag from the dock, so the PUSH (above) will not
-                    // have happened.
+                    
                     was_docked = false;
                     get_global_coords(fromx, fromy);
                     get_window_coords(winx, winy);
+                    if (window()) _drag_screen = window()->screen_num();
                 }
+
+#ifdef _WIN32
+                if (window() && window()->screen_num() != _drag_screen)
+                {
+                    // The OS/FLTK just snapped the window into a new DPI space. 
+                    // Re-anchor the drag to prevent the infinite scaling loop!
+                    get_global_coords(fromx, fromy);
+                    get_window_coords(winx, winy);
+                    _drag_screen = window()->screen_num();
+                }
+#endif
+                
                 update_drag();
                 return 1;
             case FL_RELEASE:
@@ -154,6 +166,10 @@ namespace mrv
                 tw->position(posX, posY);
                 if (tw->parent())
                     tw->parent()->init_sizes();
+
+                // Save requested position (same coord system as mouse events)
+                undock_x = posX;
+                undock_y = posY;
             }
             ret = 1;
             break;

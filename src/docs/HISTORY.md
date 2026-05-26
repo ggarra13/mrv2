@@ -51,6 +51,7 @@ ChangeLog
 - UI: Made thumbnails size in Panels be selectable with Preferences->Thumbnails->Panels.  macOS now defaults to small panel thumbnails, as most users use it from a laptop.
 - UI: Fixed restoring of image size in viewport when switching from Full Screen.  This would effect mainly Kwin/Plasma on Linux.
 - UI: Fixed statistics panel to more correctly reflect the usage.
+- UI: Windows' flickering panels while dragging between windows of different scale factors has been improves.
 - Core: Added MBOX and FIFO swap_interval() indicators to OpenGL build too.
 - Core: Added __GL_SYNC_TO_VBLANK=0 to OpenGL Linux distro for NVidia cards' performance issues under Ubuntu 26.04 LTS/Gnome50.
 - Core: Fixed OpenGL backend setting VSync always on at start, even when it was set to Never or Presentation Only.
@@ -62,7 +63,7 @@ ChangeLog
 - Build:  Made macOS dylibs automatically use @rpath instead of relying on DYLD_LIBRARY_PATH, for being more compatible and allowing to code sign the installer later on.
 - Build: Fixed missing OTIO dependency on Python.
 - Python:  Fixed registering RationalTime and TimeRange under the mrv2 namespace.  Now we just use opentimelineio directly, which would prevent opentimelineio from being imported.  That does mean that if you were using mrv2.RationalTime or mrv2.TimeRange, you will need to update your scripts to use otime.RationalTime and otime.TimeRange.
-- Python: Updated demos to use opentimelineio.
+- Python: Updated demos to use opentimelineio, instead of mrv2 equivalents.
 - Python/UI:  Added imports for opentimelineio in Python Panel.
 - Build: Added and Improved bin/helpers/clean_* scripts to remove only portions of the compilation chain.
 

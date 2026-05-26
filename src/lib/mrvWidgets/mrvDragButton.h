@@ -19,6 +19,7 @@ namespace mrv
         bool was_docked = false; // used in handle to note that we have just undocked
         int fromx = 0, fromy = 0; // click posn., used for dragging and docking checks
         int winx = 0, winy = 0; // window origin used for dragging calcs
+        int _drag_screen = -1;
     public:
         
         // basic constructor

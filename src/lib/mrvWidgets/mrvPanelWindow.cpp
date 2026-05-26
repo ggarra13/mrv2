@@ -47,85 +47,6 @@ namespace mrv
         resize(newX, newY, newW, newH);
     }
     
-    int PanelWindow::screen_num()
-    {
-        return Fl_Double_Window::screen_num();
-    }
-    
-    void PanelWindow::screen_num(int x)
-    {
-        Fl_Double_Window::screen_num(x);
-        _current_screen = x;
-    }
-    
-    // Handle screen changes for DPI scaling
-    void PanelWindow::handle_screen_change()
-    {
-#ifdef _WIN32
-
-        // \@bug: FLTK on Windows has a refresh of the panel windows that makes
-        //        their redraw overlap when going to a smaller DPI window.
-        //        Triggering a dummy resize fixes it.
-        if (!refresh_screen)
-            return;
-        
-        int new_screen = screen_num();
-        
-        if (_current_screen == -1)
-        {
-            // First time initialization
-            _current_screen = new_screen;
-            return;
-        }
-        
-        if (new_screen != _current_screen)
-        {
-            // Screen changed - force complete layout recalculation
-            _current_screen = new_screen;
-            
-            // Force redraw of the entire window and all children
-            damage(FL_DAMAGE_ALL);
-            
-            
-            // Force all children to recalculate
-            if (children() > 0)
-            {
-                PanelGroup* gp = static_cast<PanelGroup*>(child(0));
-                if (gp)
-                {
-                    gp->layout();
-                    gp->redraw();
-                }
-            }
-
-            // Trigger resize to force layout recalculation
-            // newX = x();
-            // newY = y();
-            // newW = w();
-            // newH = h();
-            
-            // Invalidate and recalculate sizes
-            init_sizes();
-
-            
-            // Force a complete redraw
-            redraw();
-            
-            // Ensure FLTK processes the changes
-            Fl::check();
-
-            refresh_screen = false;
-            
-            int W = w() - 1;
-            int H = h();
-            size(W, H);
-            size(W+1, H);
-
-            refresh_screen = true;
-        }
-#endif
-        
-    }
     
     // constructors
     PanelWindow::PanelWindow(int x, int y, int w, int h, const char* l,
@@ -142,9 +63,6 @@ namespace mrv
         
         create_dockable_window();
         box(FL_FLAT_BOX);
-        
-        // Initialize screen tracking
-        _current_screen = screen_num();
     }
 
     PanelWindow::PanelWindow(int w, int h, const char* l) :
@@ -159,9 +77,6 @@ namespace mrv
                 
         create_dockable_window();
         box(FL_FLAT_BOX);
-        
-        // Initialize screen tracking
-        _current_screen = screen_num();
     }
 
     PanelWindow::~PanelWindow()
@@ -181,8 +96,7 @@ namespace mrv
 
     void PanelWindow::resize(int X, int Y, int W, int H)
     {
-        int minX, minY, maxW, maxH;
-        Fl::screen_work_area(minX, minY, maxW, maxH, _current_screen);
+        int minX, minY, maxW, maxH, screen_num;
             
         if (App::ui->uiMain->is_wayland_resize())
         {
@@ -191,7 +105,7 @@ namespace mrv
 
 
             Fl_Window* top = App::ui->uiMain;
-            int screen_num = top->screen_num();
+            screen_num = top->screen_num();
             Fl::screen_work_area(minX, minY, maxW, maxH, screen_num);
 
             //
@@ -210,6 +124,9 @@ namespace mrv
         }
         else
         {
+            // Initialize from the target screen (where the window is moving to)
+            screen_num = Fl::screen_num(X, Y);
+            Fl::screen_work_area(minX, minY, maxW, maxH, screen_num);
             if (Y + H > minY + maxH)
             {
                 H = h();
@@ -218,9 +135,6 @@ namespace mrv
 
         
         Fl_Double_Window::resize(X, Y, W, H);
-        
-        // Check for screen changes after resize
-        handle_screen_change();
     }
 
     void PanelWindow::show_all(void)
@@ -287,8 +201,6 @@ namespace mrv
         case FL_ENTER:
         {
             set_cursor(ex, ey);
-            // Check for screen change on enter
-            handle_screen_change();
             return 1;
         }
         case FL_LEAVE:
@@ -298,8 +210,6 @@ namespace mrv
         {
             int ret = Fl_Double_Window::handle(event);
             set_cursor(ex, ey);
-            // Check for screen change during movement
-            handle_screen_change();
             return ret;
         }
         case FL_PUSH:
@@ -403,17 +313,11 @@ namespace mrv
             last_x = ex;
             last_y = ey;
             
-            // Check for screen changes during drag
-            handle_screen_change();
-            
             return 1;
         }
         case FL_RELEASE:
         {
             resizing = false;
-            
-            // Final screen change check after release
-            handle_screen_change();
             
             auto settings = App::app->settings();
             PanelGroup* gp = static_cast< PanelGroup* >(child(0));
@@ -451,8 +355,6 @@ namespace mrv
         }
         case FL_SHOW:
         {
-            // Check screen on show
-            handle_screen_change();
             break;
         }
         }

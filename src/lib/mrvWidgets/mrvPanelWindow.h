@@ -39,13 +39,9 @@ namespace mrv
         int valid;
 
         int last_x, last_y;
-        
-        // Track current screen for DPI change detection
-        int _current_screen = -1;
-        bool refresh_screen = true;
+        int newX, newY, newW, newH;
 
         void set_cursor(int ex, int ey);
-        void handle_screen_change();
 
     public:
         // Normal FLTK constructors
@@ -54,11 +50,6 @@ namespace mrv
                     const bool parented_to_main = true);
 
         void update_resize();
-
-        int screen_num();
-        void screen_num(int x);
-        
-        int newX, newY, newW, newH;
         
         virtual ~PanelWindow();
 
