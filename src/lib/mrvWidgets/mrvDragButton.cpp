@@ -166,10 +166,6 @@ namespace mrv
                 tw->position(posX, posY);
                 if (tw->parent())
                     tw->parent()->init_sizes();
-
-                // Save requested position (same coord system as mouse events)
-                undock_x = posX;
-                undock_y = posY;
             }
             ret = 1;
             break;
