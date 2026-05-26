@@ -53,6 +53,7 @@ ChangeLog
 - UI: Fixed statistics panel to more correctly reflect the usage.
 - Core: Added MBOX and FIFO swap_interval() indicators to OpenGL build too.
 - Core: Added __GL_SYNC_TO_VBLANK=0 to OpenGL Linux distro for NVidia cards' performance issues under Ubuntu 26.04 LTS/Gnome50.
+- Core: Fixed OpenGL backend setting VSync always on at start, even when it was set to Never or Presentation Only.
 - Python: Updated to v3.14.5.
 - Python: Updated pyFTLK build.
 - NDI: Updated to v6.3.2.

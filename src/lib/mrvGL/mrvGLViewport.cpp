@@ -132,6 +132,26 @@ namespace mrv
                         gl::Shader::create(vertexSource, textureFragmentSource());
                     gl.annotationShader = gl::Shader::create(
                         vertexSource, annotationFragmentSource());
+
+                    //
+                    // \@bug: FLTK's Wayland does not initialize the vsync
+                    //        properly, so we do it here
+                    //
+                    int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
+                    if (!p.presentation)
+                    {
+                        if (vsync == MonitorVSync::kVSyncPresentationOnly ||
+                            vsync == MonitorVSync::kVSyncNone)
+                        {
+                            swap_interval(0);
+                            p.ui->uiTimeline->swap_interval(0);
+                        }
+                        else if (vsync == MonitorVSync::kVSyncAlways)
+                        {
+                            swap_interval(1);
+                            p.ui->uiTimeline->swap_interval(1);
+                        }
+                    }
                 }
                 catch (const std::exception& e)
                 {

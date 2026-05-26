@@ -2525,7 +2525,7 @@ namespace mrv
                     swap_interval(0);
                     p.ui->uiTimeline->swap_interval(0);
                 }
-                else
+                else if (vsync == MonitorVSync::kVSyncAlways)
                 {
                     swap_interval(1);
                     p.ui->uiTimeline->swap_interval(1);
@@ -2548,7 +2548,7 @@ namespace mrv
                     swap_interval(1);
                     p.ui->uiTimeline->swap_interval(1);
                 }
-                else
+                else if (vsync == MonitorVSync::kVSyncNone)
                 {
                     swap_interval(0);
                     p.ui->uiTimeline->swap_interval(0);
@@ -2588,7 +2588,7 @@ namespace mrv
                     swap_interval(0);
                     p.ui->uiTimeline->swap_interval(0);
                 }
-                else
+                else if (vsync == MonitorVSync::kVSyncAlways)
                 {
                     swap_interval(1);
                     p.ui->uiTimeline->swap_interval(1);
