@@ -9,6 +9,7 @@ update_cacert() {
     local hash_url="https://curl.se/ca/cacert.pem.sha256"
 
     # Local install location
+    mkdir -p src/certs
     local dest="${1:-src/certs/cacert.pem}"
 
     echo "cacert: checking for updates..."
