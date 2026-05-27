@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.6.5\n"
+"Project-Id-Version: mrv2 v1.6.6\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -413,280 +413,6 @@ msgid "Add a clip to currently selected Playlist EDL."
 msgstr ""
 
 msgid "Save current .otio file with relative paths."
-msgstr ""
-
-msgid "unsupported operand type(s) for {0}: RationalTime and {1}"
-msgstr ""
-
-msgid ""
-"\n"
-"The RationalTime class represents a measure of time of :math:`rt.value/rt."
-"rate` seconds.\n"
-"It can be rescaled into another :class:`~RationalTime`'s rate.\n"
-msgstr ""
-
-msgid ""
-"\n"
-"Returns true if the time is invalid. The time is considered invalid if the "
-"value or the rate are a NaN value\n"
-"or if the rate is less than or equal to zero.\n"
-msgstr ""
-
-msgid "Returns the time value for time converted to new_rate."
-msgstr ""
-
-msgid "Returns the time for time converted to new_rate."
-msgstr ""
-
-msgid "Returns the time value for \"self\" converted to new_rate."
-msgstr ""
-
-msgid ""
-"\n"
-"Compute the duration of samples from first to last (excluding last). This is "
-"not the same as distance.\n"
-"\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 5 frames. "
-"Result will be in the rate of start_time.\n"
-msgstr ""
-
-msgid ""
-"\n"
-"Compute the duration of samples from first to last (including last). This is "
-"not the same as distance.\n"
-"\n"
-"For example, the duration of a clip from frame 10 to frame 15 is 6 frames. "
-"Result will be in the rate of start_time.\n"
-msgstr ""
-
-msgid ""
-"Returns the first valid timecode rate that has the least difference from the "
-"given value."
-msgstr ""
-
-msgid "Turn a frame number and rate into a :class:`~RationalTime` object."
-msgstr ""
-
-msgid "Returns the frame number based on the current rate."
-msgstr ""
-
-msgid "Returns the frame number based on the given rate."
-msgstr ""
-
-msgid "Convert to timecode (``HH:MM:SS;FRAME``)"
-msgstr ""
-
-msgid ""
-"Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:`~RationalTime`."
-msgstr ""
-
-msgid ""
-"Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
-"integer or a decimal number) into a :class:`~RationalTime`."
-msgstr ""
-
-msgid ""
-"\n"
-"The TimeRange class represents a range in time. It encodes the start time "
-"and the duration,\n"
-"meaning that :meth:`end_time_inclusive` (last portion of a sample in the "
-"time range) and\n"
-":meth:`end_time_exclusive` can be computed.\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The time of the last sample containing data in the time range.\n"
-"\n"
-"If the time range starts at (0, 24) with duration (10, 24), this will be\n"
-"(9, 24)\n"
-"\n"
-"If the time range starts at (0, 24) with duration (10.5, 24):\n"
-"(10, 24)\n"
-"\n"
-"In other words, the last frame with data, even if the last frame is "
-"fractional.\n"
-msgstr ""
-
-msgid ""
-"\n"
-"Time of the first sample outside the time range.\n"
-"\n"
-"If start frame is 10 and duration is 5, then end_time_exclusive is 15,\n"
-"because the last time with data in this range is 14.\n"
-"\n"
-"If start frame is 10 and duration is 5.5, then end_time_exclusive is\n"
-"15.5, because the last time with data in this range is 15.\n"
-msgstr ""
-
-msgid "Construct a new :class:`~TimeRange` that is this one extended by other."
-msgstr ""
-
-msgid ""
-"\n"
-"Clamp 'other' (:class:`~RationalTime`) according to\n"
-":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-msgstr ""
-
-msgid ""
-"\n"
-"Clamp 'other' (:class:`~TimeRange`) according to\n"
-":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The start of `this` precedes `other`.\n"
-"`other` precedes the end of `this`.\n"
-"::\n"
-"\n"
-"         other\n"
-"           |\n"
-"           *\n"
-"   [      this      ]\n"
-"\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The start of `this` precedes start of `other`.\n"
-"The end of `this` antecedes end of `other`.\n"
-"::\n"
-"\n"
-"        [ other ]\n"
-"   [      this      ]\n"
-"\n"
-"The converse would be ``other.contains(this)``\n"
-msgstr ""
-
-msgid ""
-"\n"
-"`this` contains `other`.\n"
-"::\n"
-"\n"
-"        other\n"
-"         |\n"
-"         *\n"
-"   [    this    ]\n"
-"\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The start of `this` strictly precedes end of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` strictly antecedes start of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [ this ]\n"
-"       [ other ]\n"
-"\n"
-"The converse would be ``other.overlaps(this)``\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The end of `this` strictly precedes `other` by a value >= `epsilon_s`.\n"
-"::\n"
-"\n"
-"             other\n"
-"               |\n"
-"   [ this ]    *\n"
-"\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The end of `this` strictly equals the start of `other` and\n"
-"the start of `this` strictly equals the end of `other`.\n"
-"::\n"
-"\n"
-"   [this][other]\n"
-"\n"
-"The converse would be ``other.meets(this)``\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The start of `this` strictly equals `other`.\n"
-"::\n"
-"\n"
-"   other\n"
-"     |\n"
-"     *\n"
-"     [ this ]\n"
-"\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The start of `this` strictly equals the start of `other`.\n"
-"The end of `this` strictly precedes the end of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [ this ]\n"
-"   [    other    ]\n"
-"\n"
-"The converse would be ``other.begins(this)``\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The end of `this` strictly equals `other`.\n"
-"::\n"
-"\n"
-"        other\n"
-"          |\n"
-"          *\n"
-"   [ this ]\n"
-"\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The start of `this` strictly antecedes the start of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` strictly equals the end of `other`.\n"
-"::\n"
-"\n"
-"           [ this ]\n"
-"   [     other    ]\n"
-"\n"
-"The converse would be ``other.finishes(this)``\n"
-msgstr ""
-
-msgid ""
-"\n"
-"The start of `this` precedes or equals the end of `other` by a value >= "
-"`epsilon_s`.\n"
-"The end of `this` antecedes or equals the start of `other` by a value >= "
-"`epsilon_s`.\n"
-"::\n"
-"\n"
-"   [    this    ]           OR      [    other    ]\n"
-"        [     other    ]                    [     this    ]\n"
-"\n"
-"The converse would be ``other.finishes(this)``\n"
-msgstr ""
-
-msgid ""
-"\n"
-"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
-"(exclusive).\n"
-"\n"
-"For example, if start_time is 1 and end_time is 10, the returned will have a "
-"duration of 9.\n"
-msgstr ""
-
-msgid ""
-"\n"
-"Creates a :class:`~TimeRange` from start and end :class:`~RationalTime`\\s "
-"(inclusive).\n"
-"\n"
-"For example, if start_time is 1 and end_time is 10, the returned will have a "
-"duration of 10.\n"
 msgstr ""
 
 msgid ""
@@ -1698,18 +1424,6 @@ msgstr ""
 msgid "Stop streaming"
 msgstr ""
 
-msgid "Complexity"
-msgstr ""
-
-msgid "Draw Mode"
-msgstr ""
-
-msgid "Stage Cache"
-msgstr ""
-
-msgid "Disk Cache in GB"
-msgstr ""
-
 msgid "Room"
 msgstr ""
 
@@ -1857,6 +1571,9 @@ msgstr ""
 msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
+msgstr ""
+
+msgid "Color"
 msgstr ""
 
 msgid "Drop a clip here to create a playlist."
@@ -2694,6 +2411,7 @@ msgstr ""
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr ""
 
@@ -2784,9 +2502,11 @@ msgstr ""
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr ""
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr ""
 
@@ -2799,6 +2519,7 @@ msgstr ""
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr ""
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr ""
 
@@ -2850,6 +2571,7 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr ""
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr ""
 
@@ -3202,6 +2924,7 @@ msgstr ""
 msgid "Could not save .otio file: {0}"
 msgstr ""
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr ""
 
@@ -3217,6 +2940,7 @@ msgstr ""
 msgid "Unknown media reference"
 msgstr ""
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr ""
 
@@ -3339,9 +3063,6 @@ msgid "Annotations"
 msgstr ""
 
 msgid "Background"
-msgstr ""
-
-msgid "Color"
 msgstr ""
 
 msgid "Color Area"
@@ -3474,6 +3195,7 @@ msgstr ""
 msgid "Image too big.  Will save the viewport size."
 msgstr ""
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr ""
 
@@ -3636,31 +3358,28 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
-msgid "Rotated image info: {0}"
-msgstr ""
-
-msgid "Scaled image info: {0}"
-msgstr ""
-
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
 msgid "Image info: {0} {1}"
 msgstr ""
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgid "Scaled image info: {0}"
 msgstr ""
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
-msgstr ""
-
-msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
 msgid "Using preset {0}."
+msgstr ""
+
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -3678,31 +3397,10 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr ""
-
-msgid "OpenGL info: {0}"
-msgstr ""
-
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Unsupported output format"
-msgstr ""
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr ""
-
 msgid "Render size: {0}"
-msgstr ""
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr ""
-
-msgid "Offscreen Buffer info: {0}"
-msgstr ""
-
-msgid "Unsupported output format: "
 msgstr ""
 
 msgid "2.35"
@@ -3729,13 +3427,37 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
+msgid "HDR monitor min. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor max. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor not found or not configured."
+msgstr ""
+
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr ""
+
+msgid "Vulkan color space is {0}"
+msgstr ""
+
+msgid "Vulkan format is {0}"
+msgstr ""
+
+msgid "Changed to HDR active monitor at index {0}"
+msgstr ""
+
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr ""
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr ""
+
 msgid "Edit Text"
 msgstr ""
 
 msgid "'{0}' is not a file, directory or url."
-msgstr ""
-
-msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -3750,6 +3472,7 @@ msgstr ""
 msgid "Status is not saved"
 msgstr ""
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr ""
 
@@ -4087,6 +3810,12 @@ msgid "View/Compare/Wipe"
 msgstr ""
 
 msgid "View/Compare/Difference"
+msgstr ""
+
+msgid "View/Compare/Add"
+msgstr ""
+
+msgid "View/Compare/Multiply"
 msgstr ""
 
 msgid "View/Compare/Horizontal"
@@ -5833,6 +5562,9 @@ msgstr ""
 msgid "Nearest"
 msgstr ""
 
+msgid "Normal"
+msgstr ""
+
 msgid "Large"
 msgstr ""
 
@@ -5963,9 +5695,6 @@ msgid "Full Float (Accurate)"
 msgstr ""
 
 msgid "GPU 0"
-msgstr ""
-
-msgid "Normal"
 msgstr ""
 
 msgid "X 2"
@@ -6338,6 +6067,9 @@ msgstr ""
 msgid "Thumbnails"
 msgstr ""
 
+msgid "How to display timeline thumbnails in panels."
+msgstr ""
+
 msgid "Edit Viewport"
 msgstr ""
 
@@ -6356,12 +6088,6 @@ msgstr ""
 msgid ""
 "When this option is on, thumbnails in panels won't be refreshed "
 "automatically.  You will have to use RMB->Update Thumbnail on the Thumbnail."
-msgstr ""
-
-msgid "Preview Thumbnails on Panels"
-msgstr ""
-
-msgid "Preview Thumbnails in Panels"
 msgstr ""
 
 msgid "Display"
@@ -7293,6 +7019,12 @@ msgstr ""
 msgid "Compare Difference"
 msgstr ""
 
+msgid "Compare Add"
+msgstr ""
+
+msgid "Compare Multiply"
+msgstr ""
+
 msgid "Compare Horizontal"
 msgstr ""
 
@@ -7648,6 +7380,9 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
+msgstr ""
+
+msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"

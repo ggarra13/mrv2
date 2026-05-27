@@ -136,4 +136,4 @@ msgid "releases found for the specified repository."
 msgstr "निर्दिष्ट रिपॉज़िटरी के लिए कोई रिलीज़ नहीं मिली।"
 
 msgid "Help/Update mrv2"
-msgstr "मदद/mrv2 अद्यतन करें"
+msgstr "सहायता/mrv2 अद्यतन करें"

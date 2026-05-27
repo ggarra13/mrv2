@@ -156,6 +156,8 @@ namespace mrv
     extern Hotkey kCompareWipe;
     extern Hotkey kCompareOverlay;
     extern Hotkey kCompareDifference;
+    extern Hotkey kCompareAdd;
+    extern Hotkey kCompareMultiply;
     extern Hotkey kCompareHorizontal;
     extern Hotkey kCompareVertical;
     extern Hotkey kCompareTile;

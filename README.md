@@ -153,7 +153,6 @@ Currently supported:
 
 # Tutorials
 
-Besides the basic API documentation included, there is a special channel on youtube.com where you can
-find some tutorials on its basic use:
+Besides the basic API documentation included, there is a special channel on youtube.com where you can find some tutorials on its basic use:
 
 [Video Tutorials](https://www.youtube.com/watch?v=8JViz-pPCrg&list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-)

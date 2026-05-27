@@ -1259,6 +1259,16 @@ namespace mrv
         idx = menu->add(
             buf, kCompareDifference.hotkey(),
             (Fl_Callback*)compare_difference_cb, ui, mode);
+        
+        snprintf(buf, 256, "%s", _("View/Compare/Add"));
+        idx = menu->add(
+            buf, kCompareAdd.hotkey(),
+            (Fl_Callback*)compare_add_cb, ui, mode);
+        
+        snprintf(buf, 256, "%s", _("View/Compare/Multiply"));
+        idx = menu->add(
+            buf, kCompareAdd.hotkey(),
+            (Fl_Callback*)compare_multiply_cb, ui, mode);
 
         snprintf(buf, 256, "%s", _("View/Compare/Horizontal"));
         idx = menu->add(

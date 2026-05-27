@@ -48,10 +48,13 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
-- UI: Made thumbnails size in Panels be selectable with Preferences->Thumbnails->Panels.  macOS now defaults to small panel thumbnails, as most users use it from a laptop.
+- UI: Made thumbnails size in Panels be selectable with Preferences->Thumbnails->Panels.  macOS now defaults to small panel thumbnails, as most artists use it from a laptop.
 - UI: Fixed restoring of image size in viewport when switching from Full Screen.  This would effect mainly Kwin/Plasma on Linux.
 - UI: Fixed statistics panel to more correctly reflect the usage.
-- UI: Windows' flickering panels while dragging between windows of different scale factors has been improves.
+- UI: Windows' flickering panels while dragging between windows of different scale factors has been fixed, albeit the mouse may not move exactly with the window.
+- UI: Added Compare/Add and Compare/Multiply modes to the menus as they were missing.
+- UI: Added hotkeys for Compare/Add and Compare/Multiply modes.
+- UI: Fixed menus in all languages as best as I could at least.  Now the UI should look nice in a different language.
 - Core: Added MBOX and FIFO swap_interval() indicators to OpenGL build too.
 - Core: Added __GL_SYNC_TO_VBLANK=0 to OpenGL Linux distro for NVidia cards' performance issues under Ubuntu 26.04 LTS/Gnome50.
 - Core: Fixed OpenGL backend setting VSync always on at start, even when it was set to Never or Presentation Only.
