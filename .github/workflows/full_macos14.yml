@@ -59,8 +59,8 @@ jobs:
       - name: Install automake and other network utils
         run: brew install automake autoconf curl rsync wget
 
-      - name: Install GNU sed
-        run: brew install gnu-sed
+      - name: Install GNU utils
+        run: brew install gnu-sed coreutils
 
       - name: Install Python dependencies
         run: brew install libb2 libffi readline sqlite3 xz zlib

@@ -90,6 +90,8 @@ namespace mrv
     Hotkey kCompareWipe(false, false, true, false, 'w');
     Hotkey kCompareOverlay(false, false, false, false, 0);
     Hotkey kCompareDifference(false, false, false, false, 0);
+    Hotkey kCompareAdd(false, false, false, false, 0);
+    Hotkey kCompareMultiply(false, false, false, false, 0);
     Hotkey kCompareHorizontal(false, false, false, false, 0);
     Hotkey kCompareVertical(false, false, false, false, 0);
     Hotkey kCompareTile(false, false, false, false, 0);
@@ -470,6 +472,8 @@ namespace mrv
         HotkeyEntry(_("Compare Wipe"), &kCompareWipe),
         HotkeyEntry(_("Compare Overlay"), &kCompareOverlay),
         HotkeyEntry(_("Compare Difference"), &kCompareDifference),
+        HotkeyEntry(_("Compare Add"), &kCompareAdd),
+        HotkeyEntry(_("Compare Multiply"), &kCompareMultiply),
         HotkeyEntry(_("Compare Horizontal"), &kCompareHorizontal),
         HotkeyEntry(_("Compare Vertical"), &kCompareVertical),
         HotkeyEntry(_("Compare Tile"), &kCompareTile),
