@@ -16,12 +16,6 @@ set -o pipefail -e
 . etc/functions.sh
 
 #
-# Get and install the latest cacert for licensing
-#
-. etc/update_cacert.sh
-update_cacert
-
-#
 # Extract mrv2 version from cmake/version.cmake
 #
 extract_version

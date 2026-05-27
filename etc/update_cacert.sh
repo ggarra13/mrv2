@@ -7,6 +7,11 @@ update_cacert() {
     # Download cacert from curl's (Mozilla reputable source).
     local cacert_url="https://curl.se/ca/cacert.pem"
     local hash_url="https://curl.se/ca/cacert.pem.sha256"
+    local sha256cmd='sha256sum'
+    if [[ $KERNEL == *Darwin* ]]; then
+	sha256cmd='gsha256sum'
+	# Can also be: shasum -a 256 which is a perl util.
+    fi
 
     # Local install location
     mkdir -p src/certs
@@ -25,7 +30,7 @@ update_cacert() {
     # Compare against the local file (if it exists)
     if [[ -f "$dest" ]]; then
         local actual
-        actual=$(sha256sum "$dest" | awk '{print $1}')
+        actual=$($sha256cmd "$dest" | awk '{print $1}')
         if [[ "$actual" == "$expected" ]]; then
             echo "cacert: already up to date (SHA256=${expected})"
             return 0
@@ -45,7 +50,7 @@ update_cacert() {
 
     # Verify the downloaded file matches the sidecar hash
     local downloaded_hash
-    downloaded_hash=$(sha256sum "$tmp" | awk '{print $1}')
+    downloaded_hash=$($sha256cmd "$tmp" | awk '{print $1}')
     if [[ "$downloaded_hash" != "$expected" ]]; then
         echo "cacert: ERROR — hash mismatch! Expected ${expected}, got ${downloaded_hash}. Aborting." >&2
         return 1

@@ -48,6 +48,13 @@ get_git_version
 get_compilers
 
 #
+# Get and install the latest cacert for licensing
+#
+. etc/update_cacert.sh
+update_cacert
+
+
+#
 # These are some of the expensive mrv2 options
 #
 if [ -z "$MSYS2_INSTALL" ]; then

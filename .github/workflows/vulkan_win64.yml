@@ -263,7 +263,7 @@ jobs:
 
       - name: Install MSYS2 Dependencies
         run: |
-          pacman -S --noconfirm rsync sha256sum
+          pacman -S --noconfirm rsync coreutils
 
       - name: Build vmrv2
         env:

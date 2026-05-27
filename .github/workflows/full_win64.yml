@@ -160,7 +160,7 @@ jobs:
 
       - name: Install MSYS2 Dependencies
         run: |
-          pacman -S --noconfirm rsync sha256sum
+          pacman -S --noconfirm rsync coreutils
 
       - name: Build mrv2
         env:
