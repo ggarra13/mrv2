@@ -13,7 +13,9 @@
 
 set +e
 
-. $PWD/etc/build_dir.sh
+. etc/build_dir.sh
+. etc/update_cacert.sh
+update_cacert
 
 rm -rf $BUILD_DIR/install/include/FL
 
