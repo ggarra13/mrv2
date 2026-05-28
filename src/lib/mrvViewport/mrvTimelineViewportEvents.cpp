@@ -926,6 +926,136 @@ namespace mrv
             }
         }
 
+        int TimelineViewport::_popupRMBMenu() noexcept
+        {
+            TLRENDER_P();
+            
+            Fl_Group::current(0);
+            p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
+
+            p.popupMenu->textsize(14);
+            p.popupMenu->type(Fl_Menu_Button::POPUP3);
+
+            p.mousePos = _getFocus();
+            auto pos = _getRasterf();
+
+            auto renderSize = getRenderSize();
+                        
+            float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
+            mult = std::clamp(mult, 1.F, 10.F);
+
+#ifdef TLRENDER_FFMPEG
+            if (p.player)
+            {
+                auto annotations = p.player->getVoiceAnnotations();
+                if (!annotations.empty())
+                {
+                    for (auto& annotation : annotations)
+                    {
+                        for (auto& voice : annotation->voices)
+                        {
+                            auto center = voice->getCenter();
+                            auto buttonBox = voice->getBBox(mult);
+                            if (math::contains(buttonBox, pos))
+                            {
+                                currentVoiceOver = voice;
+                                p.popupMenu->add(_("Voice Over/Delete"),
+                                                 0,
+                                                 (Fl_Callback*)voice_over_delete_cb,
+                                                 this);
+                                p.popupMenu->add(_("Audio/Clear"), 0,
+                                                 (Fl_Callback*)voice_over_clear_cb,
+                                                 this);
+                                p.popupMenu->add(_("Audio/Append"), 0,
+                                                 (Fl_Callback*)voice_over_append_cb,
+                                                 this);
+                                p.popupMenu->popup();
+
+                                delete p.popupMenu;
+                                p.popupMenu = nullptr;
+                                return 1;
+                            }
+                        }
+                    }
+                }
+            }
+#endif
+                    
+            p.ui->uiMain->fill_menu(p.popupMenu);
+            p.popupMenu->popup();
+            
+            delete p.popupMenu;
+            p.popupMenu = nullptr;
+            return 1;
+        }
+        
+        int TimelineViewport::_handlePopupLinkMenu(int event) noexcept
+        {
+            TLRENDER_P();
+            
+            if (p.player)
+            {
+                p.mousePos = _getFocus();
+                auto pos = _getRasterf();
+                const auto& renderSize = getRenderSize();
+                    
+                float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
+                mult = std::clamp(mult, 1.F, 10.F);
+                    
+                auto annotation = p.player->getAnnotation();
+                if (p.actionMode == ActionMode::kLink && annotation)
+                {
+                    for (auto& shape : annotation->shapes)
+                    {
+#ifdef VULKAN_BACKEND
+                        VKLinkShape* s;
+                        if (!(s = dynamic_cast<VKLinkShape*>(shape.get())))
+                            continue;
+#endif
+#ifdef OPENGL_BACKEND
+                        GLLinkShape* s;
+                        if (!(s = dynamic_cast<GLLinkShape*>(shape.get())))
+                            continue;
+#endif
+                        auto box = s->getBBox(mult);
+                        if (math::contains(box, pos))
+                        {
+                            if (Fl::event_button1())
+                            {
+                                return s->handle(event);
+                            }
+                            else
+                            {
+                                currentLink = shape;
+                                    
+                                Fl_Group::current(0);
+                                p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
+                                p.popupMenu->textsize(14);
+                                p.popupMenu->type(Fl_Menu_Button::POPUP3);
+                                p.popupMenu->add(
+                                    _("Link/Open"),
+                                    0,
+                                    (Fl_Callback*)link_open_cb,
+                                    s);
+                                p.popupMenu->add(
+                                    _("Link/Edit"),
+                                    0,
+                                    (Fl_Callback*)link_edit_cb,
+                                    s);
+                                p.popupMenu->add(
+                                    _("Link/Delete"), 0,
+                                    (Fl_Callback*)link_delete_cb,
+                                    this);
+                                p.popupMenu->popup();
+                                return 1;
+                            }
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+                    
         int TimelineViewport::handle(int event)
         {
             TLRENDER_P();
@@ -1029,6 +1159,26 @@ namespace mrv
             {
             case FL_FOCUS:
                 return 1;
+            case Fl::Pen::ENTER:
+                p.lastEvent = 0;
+                _updateCursor();
+                _updatePixelBar();
+                updateCoords();
+                redraw();
+                return 1;
+            case Fl::Pen::TOUCH:
+                // Pen tip or eraser just touched the surface.
+                if (Fl::event_state(FL_CTRL) ||
+                    Fl::Pen::event_state(Fl::Pen::State::BUTTON0))
+                    return _popupRMBMenu();
+                /* fall through */
+            case Fl::Pen::DRAW:
+            {
+                p.mousePos = _getFocus();
+                _handleDragLeftMouseButton();
+                _updatePixelBar();
+                return 1;
+            }
             case FL_ENTER:
             {
                 p.lastEvent = 0;
@@ -1097,66 +1247,9 @@ namespace mrv
                     }
                 }
 #endif
-                if (p.player)
-                {
-                    p.mousePos = _getFocus();
-                    auto pos = _getRasterf();
-                    const auto& renderSize = getRenderSize();
-                    
-                    float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
-                    mult = std::clamp(mult, 1.F, 10.F);
-                    
-                    auto annotation = p.player->getAnnotation();
-                    if (p.actionMode == ActionMode::kLink && annotation)
-                    {
-                        for (auto& shape : annotation->shapes)
-                        {
-#ifdef VULKAN_BACKEND
-                            VKLinkShape* s;
-                            if (!(s = dynamic_cast<VKLinkShape*>(shape.get())))
-                                continue;
-#endif
-#ifdef OPENGL_BACKEND
-                            GLLinkShape* s;
-                            if (!(s = dynamic_cast<GLLinkShape*>(shape.get())))
-                                continue;
-#endif
-                            auto box = s->getBBox(mult);
-                            if (math::contains(box, pos))
-                            {
-                                if (Fl::event_button1())
-                                {
-                                    return s->handle(event);
-                                }
-                                else
-                                {
-                                    currentLink = shape;
-                                    
-                                    Fl_Group::current(0);
-                                    p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
-                                    p.popupMenu->textsize(14);
-                                    p.popupMenu->type(Fl_Menu_Button::POPUP3);
-                                    p.popupMenu->add(
-                                        _("Link/Open"),
-                                        0,
-                                        (Fl_Callback*)link_open_cb,
-                                        s);
-                                    p.popupMenu->add(
-                                        _("Link/Edit"),
-                                        0,
-                                        (Fl_Callback*)link_edit_cb,
-                                        s);
-                                    p.popupMenu->add(
-                                        _("Link/Delete"), 0,
-                                        (Fl_Callback*)link_delete_cb,
-                                        this);
-                                    p.popupMenu->popup();
-                                    return 1;
-                                }
-                            }
-                        }
-                    }
-                }
+
+                int ret = _handlePopupLinkMenu(event);
+                if (ret) return ret;
                 
                 p.mousePress = _getFocus();
                 if (!children() && Fl::focus() != this && Fl::event_button1())
@@ -1196,64 +1289,13 @@ namespace mrv
 
                     set_cursor(FL_CURSOR_DEFAULT);
 
-                    Fl_Group::current(0);
-                    p.popupMenu = new Fl_Menu_Button(0, 0, 0, 0);
-
-                    p.popupMenu->textsize(14);
-                    p.popupMenu->type(Fl_Menu_Button::POPUP3);
-
-                    p.mousePos = _getFocus();
-                    auto pos = _getRasterf();
-
-                    auto renderSize = getRenderSize();
-                        
-                    float mult = renderSize.w * 6 / 4096.0 / p.viewZoom / 2 * pixels_per_unit();
-                    mult = std::clamp(mult, 1.F, 10.F);
-
-#ifdef TLRENDER_FFMPEG
-                    if (p.player)
-                    {
-                        auto annotations = p.player->getVoiceAnnotations();
-                        if (!annotations.empty())
-                        {
-                            for (auto& annotation : annotations)
-                            {
-                                for (auto& voice : annotation->voices)
-                                {
-                                    auto center = voice->getCenter();
-                                    auto buttonBox = voice->getBBox(mult);
-                                    if (math::contains(buttonBox, pos))
-                                    {
-                                        currentVoiceOver = voice;
-                                        p.popupMenu->add(_("Voice Over/Delete"),
-                                                         0,
-                                                         (Fl_Callback*)voice_over_delete_cb,
-                                                         this);
-                                        p.popupMenu->add(_("Audio/Clear"), 0,
-                                                         (Fl_Callback*)voice_over_clear_cb,
-                                                         this);
-                                        p.popupMenu->add(_("Audio/Append"), 0,
-                                                         (Fl_Callback*)voice_over_append_cb,
-                                                         this);
-                                        p.popupMenu->popup();
-                                        return 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-#endif
+                    _popupRMBMenu();
                     
-                    p.ui->uiMain->fill_menu(p.popupMenu);
-                    p.popupMenu->popup();
-
                     _updateCursor();
-
-                    delete p.popupMenu;
-                    p.popupMenu = nullptr;
                 }
                 return 1;
             }
+            case Fl::Pen::HOVER:
             case FL_MOVE:
             {                
                 updateCoords();

@@ -151,6 +151,8 @@ namespace mrv
         {
             TLRENDER_P();
 
+            Fl::Pen::subscribe(this);
+            
             auto settings = App::app->settings();
 
             timeline::BackgroundOptions backgroundOptions;

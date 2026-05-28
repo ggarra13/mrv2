@@ -522,6 +522,9 @@ namespace mrv
             
             void _handleDragMiddleMouseButton() noexcept;
 
+            int _popupRMBMenu() noexcept;
+            int _handlePopupLinkMenu(int event) noexcept;
+
             void _updateCursor() const noexcept;
 
             void _updateViewRotation(const math::Vector2f& spin) noexcept;
