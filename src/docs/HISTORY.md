@@ -48,7 +48,8 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
-- UI / Linux Wayland: Added tablet support for drawing with it.
+- UI/Linux Wayland: Added tablet support for drawing annotations with it.
+- UI/MacOS: Added tablet support for drawing annotations with it.
 - UI: Made thumbnails size in Panels be selectable with Preferences->Thumbnails->Panels.  macOS now defaults to small panel thumbnails, as most artists use it from a laptop.
 - UI: Fixed restoring of image size in viewport when switching from Full Screen.  This would effect mainly Kwin/Plasma on Linux.
 - UI: Fixed Statistics panel to more correctly reflect the usage.
