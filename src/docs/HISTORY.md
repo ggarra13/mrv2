@@ -55,6 +55,7 @@ ChangeLog
 - UI: Added Compare/Add and Compare/Multiply modes to the menus as they were missing.
 - UI: Added hotkeys for Compare/Add and Compare/Multiply modes.
 - UI: Fixed menus in all natural languages as best as I could at least.  Now the UI should look nice in a different language.
+- UI: Allowed dragging of File clips without an image, coloring them cyan.
 - Core: Added MBOX and FIFO swap_interval() indicators to OpenGL build too.
 - Core: Added __GL_SYNC_TO_VBLANK=0 to OpenGL Linux distro for NVidia cards' performance issues under Ubuntu 26.04 LTS/Gnome50.1.
 - Core: Fixed OpenGL backend setting VSync always on at start, even when it was set to Never or Presentation Only.
