@@ -322,20 +322,7 @@ You need an Internet connection to use.)TEXT");
         Fl_Box*    prices = new Fl_Box(20, 0, 600, 360);
         prices->box(FL_ENGRAVED_BOX);
         prices->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
-        prices->label(_(R"TEXT(
-USD $  5000
-for Remote - Open Source Development without Hardware (I may fail).
-
-USD $ 10000
-for Remote - Open Source Development With Hardware.
-
-USD $ 40000
-for Remote - Closed Source Custom Development.
-
-USD $100000
-for Buying the source as is and stop its Open Source Development.
-
-Contact ggarra13@@gmail.com)TEXT"));
+        prices->label(_(R"TEXT(Contact ggarra13@@gmail.com)TEXT"));
 
 
         custom_msg->gap(20);

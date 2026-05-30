@@ -1173,8 +1173,8 @@ theme "Black"
     cmap 249 110 16  110
     cmap 250 110 31  110
     cmap 251 110 47  110
-    cmap 252 255 255 255        # label color of Panel drag bar
+    cmap 252 220 220 220        # label color of Panel drag bar
     cmap 253 90  90   90        # bg of Panel drag bar
-    cmap 254 240 240 240        # label color of Panel Headers 
+    cmap 254 200 200 200        # label color of Panel Headers 
     cmap 255 50 50 50		# bg color of Panel Headers
 }

@@ -296,7 +296,7 @@ namespace mrv
 
             auto bW = new Widget< Button >(X + 170, Y, 25, 25);
             bt = hardBrush = bW;
-            bt->selection_color(FL_YELLOW);
+            bt->selection_color(FL_CYAN);
             bt->down_box(FL_EMBOSSED_BOX);
             bt->box(FL_FLAT_BOX);
             bt->tooltip(_("Selects a hard brush."));
@@ -316,7 +316,7 @@ namespace mrv
 
             bt = softBrush = bW = new Widget< Button >(X + 200, Y, 25, 25);
             bt->tooltip(_("Selects a soft brush."));
-            bt->selection_color(FL_YELLOW);
+            bt->selection_color(FL_CYAN);
             bt->down_box(FL_EMBOSSED_BOX);
             bt->box(FL_FLAT_BOX);
             svg = MRV2_LOAD_SVG(SoftBrush);
