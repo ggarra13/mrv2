@@ -515,11 +515,12 @@ namespace mrv
             b = cg->button();
             b->labelsize(14);
             b->size(b->w(), 18);
+            cg->begin();
             
-            Fl_Group* ng = new Fl_Group(X, 30, g->w(), 200);
+            Fl_Group* ng = new Fl_Group(X, 25, cg->w(), 200);
             ng->begin();
             
-            auto nV = new Widget<Fl_Multiline_Input>(X, 40, g->w(), 180);
+            auto nV = new Widget<Fl_Multiline_Input>(X, 25, cg->w(), 180);
             notes = nV;
             notes->cursor_color(FL_RED);
             notes->textsize(16);
