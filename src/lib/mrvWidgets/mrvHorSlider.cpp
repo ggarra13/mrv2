@@ -47,6 +47,7 @@ namespace mrv
             new Widget<Fl_Hor_Slider>(X + Xoffset + 50, Y, sliderW, H);
         uiSlider = uiSliderW;
         uiSlider->when(FL_WHEN_CHANGED);
+        uiSlider->selection_color(FL_CYAN);
 
         X = uiSlider->x() + uiSlider->w() + 3;
         auto uiResetW = new Widget<Fl_Button>(X, Y, 10, H, "@-31+");
