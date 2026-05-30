@@ -48,6 +48,9 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
+- UI: Improved the look of Collapsible Groups and general UI.
+- UI: Made sure all color schemes look pleasing.  If you still don't like my
+      color scheme, you can change the /colors/mrv2.colors text file.	   
 - UI: Made thumbnails size in Panels be selectable with Preferences->Thumbnails->Panels.  macOS now defaults to small panel thumbnails, as most artists use it from a laptop.
 - UI: Made collapsible group flat instead of rounded for a more modern appearance.
 - UI: Made Fl_Hor_Slider use a cyan slider button for being consistent with the rest of th UI:
