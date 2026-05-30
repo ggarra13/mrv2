@@ -109,6 +109,10 @@ jobs:
         run: |
           sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libgtk-3-dev libdrm-dev
 
+      - name: Install EGL for pyFLTK's OpenGL
+        run: |
+          sudo apt-get install libegl-dev
+
       - name: Install curl and openssl
         run: |
           sudo apt-get install -y curl openssl rsync libunistring-dev
