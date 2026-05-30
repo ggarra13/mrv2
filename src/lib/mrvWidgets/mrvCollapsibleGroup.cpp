@@ -108,7 +108,8 @@ namespace mrv
         _button->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
         _button->labelsize(16);
         _button->box(FL_FLAT_BOX);
-        _button->color(fl_rgb_color(50, 50, 50));
+        _button->labelcolor(Fl_Color(254));
+        _button->color(Fl_Color(255)); //
         _button->callback((Fl_Callback*)toggle_tab_cb, this);
 
         _contents = new Pack(

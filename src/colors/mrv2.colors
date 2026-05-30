@@ -271,7 +271,7 @@ theme "Default"
     cmap 251 255 109 255
     cmap 252 255 146 255
     cmap 253 255 182 255
-    cmap 254 255 219 255
+    cmap 254 50 50 50
     cmap 255 255 255 255
 }
 
@@ -902,7 +902,7 @@ theme "Shake"
     cmap 94 150 110 20		# report button 'running a command'
     cmap 95 240 240 36		# text selection color (bg)
     cmap 124 107 92 57		# "End" and "Add Nevercpu" button color (orange)
-    cmap 254 60 70 70           # bgcolor of 'current jobid' lines in tty browser
+    cmap 254 40 40 40           # b
     cmap 255 255 255 255        # FL_WHITE
 }
 
@@ -1173,8 +1173,8 @@ theme "Black"
     cmap 249 110 16  110
     cmap 250 110 31  110
     cmap 251 110 47  110
-    cmap 252 110 63  110
-    cmap 253 110 79  110
-    cmap 254 110 94  110
-    cmap 255 110 110 110
+    cmap 252 255 255 255        # label color of Panel drag bar
+    cmap 253 90  90   90        # bg of Panel drag bar
+    cmap 254 240 240 240        # label color of Panel Headers 
+    cmap 255 50 50 50		# bg color of Panel Headers
 }

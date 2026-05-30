@@ -480,7 +480,6 @@ namespace mrv
         std::string colorname = prefspath() + "mrv2.colors";
         if (!(loaded = schemes.read_themes(colorname.c_str())))
         {
-
             colorname = root + "/colors/mrv2.colors";
             if (!(loaded = schemes.read_themes(colorname.c_str())))
             {
