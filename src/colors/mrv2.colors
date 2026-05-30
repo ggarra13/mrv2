@@ -269,8 +269,9 @@ theme "Default"
     cmap 249 255 36  255
     cmap 250 255 73  255
     cmap 251 255 109 255
-    cmap 252 255 146 255
-    cmap 253 255 182 255
+        
+    cmap 252 90  90   90        # bg of Panel drag bar
+    cmap 253 220 220 220        # label color of Panel drag bar
     cmap 254 50 50 50
     cmap 255 255 255 255
 }
@@ -839,7 +840,7 @@ theme "Plain Gray"
     cmap 249 255 36  255
     cmap 250 255 73  255
     cmap 251 255 109 255
-    cmap 252 255 146 255
+    cmap 252 220 220 220
     cmap 253 255 182 255
     cmap 254 255 219 255
     cmap 255 255 255 255
@@ -1173,8 +1174,10 @@ theme "Black"
     cmap 249 110 16  110
     cmap 250 110 31  110
     cmap 251 110 47  110
+    
     cmap 252 220 220 220        # label color of Panel drag bar
     cmap 253 90  90   90        # bg of Panel drag bar
     cmap 254 200 200 200        # label color of Panel Headers 
     cmap 255 50 50 50		# bg color of Panel Headers
+    
 }
