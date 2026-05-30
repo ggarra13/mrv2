@@ -104,6 +104,7 @@ fi
 echo "VULKAN_SDK=$VULKAN_SDK"
 export VK_LAYER_PATH=$VULKAN_SDK/lib
 export PATH=${VULKAN_SDK}/bin:$PATH
+export LD_LIBRARY_PATH=${VULKAN_SDK}/lib/VulkanLoader/lib:${VULKAN_SDK}/lib:${LD_LIBRARY_PATH}
 
 rm -f $TAR_XZ
 
