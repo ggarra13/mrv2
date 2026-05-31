@@ -403,7 +403,8 @@ namespace mrv
         dragger->clear_visible_focus();
         dragger->align(
             FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_IMAGE_NEXT_TO_TEXT);
-        dragger->color(fl_lighter(dragger->color()));
+        dragger->labelcolor(Fl_Color(252));
+        dragger->color(Fl_Color(253));
         dragger->when(FL_WHEN_CHANGED);
 
         // Group is used for non scrolling widgets in the panel, like the

@@ -107,7 +107,7 @@ jobs:
 
       - name: Install Wayland
         run: |
-          sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libegl-dev libgtk-3-dev libglu-dev libdrm-dev
+          sudo apt-get install -y libwayland-dev wayland-protocols libdbus-1-dev libxkbcommon-dev libgtk-3-dev libdrm-dev
 
       - name: Install curl and openssl
         run: |
@@ -124,11 +124,11 @@ jobs:
       - name: Install python dependencies
         run: |
           sudo apt-get install -y libssl-dev libffi-dev python3
-
+          
       - name: Install Vulkan drivers
         run: |
-          sudo apt install -y mesa-vulkan-drivers
-
+          sudo apt install -y mesa-vulkan-drivers libvulkan-dev      
+          
       - name: Cache Vulkan SDK
         id: cache-vulkan-sdk
         uses: actions/cache@v4

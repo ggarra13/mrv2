@@ -50,13 +50,22 @@ ChangeLog
 
 - UI/Linux Wayland: Added tablet support for drawing annotations with it.
 - UI/MacOS: Added tablet support for drawing annotations with it.
+- UI: Improved the look of Collapsible Groups and general UI.
+- UI: Made sure all color schemes look pleasing.  If you still don't like my
+      color scheme, you can change the /colors/mrv2.colors text file.
 - UI: Made thumbnails size in Panels be selectable with Preferences->Thumbnails->Panels.  macOS now defaults to small panel thumbnails, as most artists use it from a laptop.
+- UI: Made collapsible group flat instead of rounded for a more modern appearance.
+- UI: Made Fl_Hor_Slider use a cyan slider button for being consistent with the rest of th UI:
+- UI: Renamed S: and E: buttons on the timebar to I: and O: which is slightly clear for new users.
+- UI Bug: Fixed Text Slider on Annotations Panel sometimes getting "stuck".
+- UI: Made HorSlider's drag button use a cyan color.   
 - UI: Fixed restoring of image size in viewport when switching from Full Screen.  This would effect mainly Kwin/Plasma on Linux.
 - UI: Fixed Statistics panel to more correctly reflect the usage.
 - UI: Windows' flickering panels while dragging between windows of different scale factors has been fixed, albeit the mouse may not move exactly with the window.
 - UI: Added Compare/Add and Compare/Multiply modes to the menus as they were missing.
 - UI: Added hotkeys for Compare/Add and Compare/Multiply modes.
 - UI: Fixed menus in all natural languages as best as I could at least.  Now the UI should look nice in a different language.
+- UI: Allowed dragging of File clips without an image, coloring them cyan.
 - Core: Added MBOX and FIFO swap_interval() indicators to OpenGL build too.
 - Core: Added __GL_SYNC_TO_VBLANK=0 to OpenGL Linux distro for NVidia cards' performance issues under Ubuntu 26.04 LTS/Gnome50.1.
 - Core: Fixed OpenGL backend setting VSync always on at start, even when it was set to Never or Presentation Only.

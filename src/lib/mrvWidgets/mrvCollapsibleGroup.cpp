@@ -63,7 +63,7 @@ namespace mrv
         //
         _contents->resize(
             x() + GROUP_MARGIN,                // x always same as button
-            y() + _button->h() + GROUP_MARGIN, // y always "below button"
+            y() + _button->h() + GROUP_MARGIN * 2, // y always "below button"
             w() - (GROUP_MARGIN * 2),          // width tracks group's w()
             _contents->h()); // leave height of _contents alone
 
@@ -90,10 +90,7 @@ namespace mrv
         const int x, const int y, const int w, const int h, const char* l) :
         Fl_Group(x, y, w, h, l)
     {
-
-        box(FL_ROUNDED_BOX); // get fancy later, after we debug. It's harder to
-                             // see problems with round box. -erco
-
+        
         // Use a border box for now, so we can see our bounds in parent
         // mrv::Pack.
         // box(FL_BORDER_BOX);
@@ -104,19 +101,20 @@ namespace mrv
         // NOTNEEDED Fl_Group::begin();
         //  Button
         _button = new Fl_Button(
-            x + GROUP_MARGIN,       // margin leaves room for FL_ROUND_BOX
+            x,       // margin leaves room for FL_ROUND_BOX
             y + GROUP_MARGIN,       // margin leaves room for FL_ROUND_BOX
-            w - (GROUP_MARGIN * 2), // width same as group within margin
+            w, // width same as group within margin
             BUTTON_H);              // button height fixed size
         _button->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
         _button->labelsize(16);
-        _button->box(FL_FLAT_BOX); // commented out for easier debugging. Revert
-                                   // when needed
+        _button->box(FL_FLAT_BOX);
+        _button->labelcolor(Fl_Color(254));
+        _button->color(Fl_Color(255)); //
         _button->callback((Fl_Callback*)toggle_tab_cb, this);
 
         _contents = new Pack(
             _button->x(),                    // lines up with button on x
-            y + _button->y() + _button->h(), // just below button
+            y + _button->y() + _button->h() + (GROUP_MARGIN * 2), // just below button
             w - (GROUP_MARGIN * 2), // width same as group within margin
             10);                    // changes when child add()ed
 
@@ -148,18 +146,18 @@ namespace mrv
     }
 
     // // DEBUG
-    // // // // We don't really need this other than for debugging..
     // void CollapsibleGroup::draw() {
     //    fl_push_clip(x(), y(), w(), h());  // enforce clipping
-    //    Fl_Group::draw();                  // let group draw itself and
-    //    children fl_pop_clip();                     // enforce clipping
+    //    Fl_Group::draw();                  // let group draw itself and children
+    //    fl_pop_clip();                     // enforce clipping
 
-    //    fl_color(FL_RED);   fl_rect(x(), y(), w(), h());   // red line around
-    //    group's xywh fl_color(FL_GREEN); fl_rect(_contents->x(),        // grn
-    //    line around pack's xywh
-    //                                _contents->y(),
-    //                                _contents->w(),
-    //                                _contents->h());
+    //    fl_color(FL_RED);
+    //    fl_rect(x(), y(), w(), h());   // red line around group's xywh
+    //    fl_color(FL_GREEN);
+    //    fl_rect(_contents->x(),        // grn line around pack's xywh
+    //            _contents->y(),
+    //            _contents->w(),
+    //            _contents->h());
     // }
 
     void CollapsibleGroup::add(Fl_Widget* w)

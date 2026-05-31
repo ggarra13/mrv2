@@ -23,7 +23,8 @@ namespace mrv
     //! the online documentation.
     std::string docspath();
 
-    //! Path to the mrv2 license.  If not set, it will look in studiopath
+    //! Path to the mrv2 floating license.  If not set, it will look in
+    //!  studiopath
     std::string licensepath();
 
     //! Path to a studio defined directory
@@ -35,7 +36,7 @@ namespace mrv
     //! Path to the mrv2's icon directory (with a trailing slash)
     std::string iconpath();
     
-    //! Path to preference's file (with a trailing slash)
+    //! Path to preference's directory (with a trailing slash)
     std::string prefspath();
 
     //! Path to the built-in python script demos

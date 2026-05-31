@@ -211,7 +211,7 @@ namespace mrv
 #endif
         return out;
     }
-
+    
     const char* docs_list[] = {"en", "es", nullptr};
 
     std::string docspath()
