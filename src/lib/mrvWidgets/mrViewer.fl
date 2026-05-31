@@ -131,8 +131,8 @@ decl {class AboutUI;} {public global
 }
 
 widget_class PixelToolBarClass {open
-  xywh {0 0 934 56} resizable
-  class Fl_Double_Window visible
+  xywh {0 0 934 56} hide resizable
+  class Fl_Double_Window
 } {
   Fl_Group {} {open
     xywh {0 0 933 30} box FLAT_BOX color 96
@@ -761,7 +761,7 @@ if (value < 0.01F)
         xywh {677 3 256 26}
       } {
         Fl_Button uiStartButton {
-          label S
+          label I
           user_data this user_data_type {ViewerUI*}
           callback {auto player = ui->uiView->getTimelinePlayer();
 		    if ( !player ) return;
@@ -777,7 +777,7 @@ uiStartFrame->setTime( startTime );
 
 ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();}
-          xywh {682 3 27 24} type Toggle down_box DOWN_BOX selection_color 14 labelcolor 20 align 16
+          tooltip {Start or In Point of the video.} xywh {682 3 27 24} type Toggle down_box DOWN_BOX selection_color 14 labelcolor 20 align 16
         }
         Fl_Input uiStartFrame {
           user_data this user_data_type {ViewerUI*}
@@ -803,7 +803,7 @@ ui->uiView->take_focus();}
           class {mrv::Timecode}
         }
         Fl_Button uiEndButton {
-          label E
+          label O
           user_data this user_data_type {ViewerUI*}
           callback {auto player = ui->uiView->getTimelinePlayer();
 if ( !player ) return;
@@ -820,7 +820,7 @@ uiEndFrame->setTime( endTime );
 
 ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();}
-          xywh {808 3 27 24} type Toggle selection_color 14 labelcolor 20
+          tooltip {End or Output of the video.} xywh {808 3 27 24} type Toggle selection_color 14 labelcolor 20
         }
         Fl_Input uiEndFrame {
           user_data this user_data_type {ViewerUI*}

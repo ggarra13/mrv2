@@ -18,6 +18,9 @@ else
     . etc/functions.sh
 fi
 
+. etc/update_cacert.sh
+update_cacert
+
 echo "BUILD_DIR=${BUILD_DIR}"
 echo 
 

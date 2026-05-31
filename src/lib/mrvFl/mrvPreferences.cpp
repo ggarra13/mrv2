@@ -287,12 +287,18 @@ namespace mrv
         gui.get("timeline_thumbnails", tmp, 0);
         uiPrefs->uiPrefsTimelineThumbnails->value(tmp);
 
+        gui.get("panel_thumbnails", tmp, 1);
+
 #ifdef __APPLE__
-        // On macOS, since users usually a laptop, default to Small thumbnail size.
-        gui.get("panel_thumbnails_size", tmp, 1);
+        int default_panel_thumbnails = 1; // Small as macOS users use laptops
 #else
-        gui.get("panel_thumbnails_size", tmp, 2);
+        int default_panel_thumbnails = 2; // Normal thumbnail size 
 #endif
+        // If old panel thumbnails preferences was off, set size to None
+        if (tmp == 0)
+            default_panel_thumbnails = 0;
+        gui.get("panel_thumbnails_size", tmp, default_panel_thumbnails);
+
         uiPrefs->uiPrefsPanelThumbnails->value(tmp);
 
         gui.get("panel_thumbnails_manually", tmp, 0);
@@ -474,7 +480,6 @@ namespace mrv
         std::string colorname = prefspath() + "mrv2.colors";
         if (!(loaded = schemes.read_themes(colorname.c_str())))
         {
-
             colorname = root + "/colors/mrv2.colors";
             if (!(loaded = schemes.read_themes(colorname.c_str())))
             {

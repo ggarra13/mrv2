@@ -107,8 +107,8 @@ namespace mrv
             Fl_Group* bg = new Fl_Group(g->x(), Y + 20, g->w(), 50);
             bg->begin();
 
-            bg = new Fl_Group(g->x(), Y + 20, g->w(), 40);
-            bg->begin();
+            // bg = new Fl_Group(g->x(), Y + 20, g->w(), 40);
+            // bg->begin();
 
             auto cW = new Widget< Fl_Choice >(
                 g->x() + 100, Y + 20, g->w() - 100, 20, _("Font"));
@@ -294,9 +294,9 @@ namespace mrv
 
             bool soft = settings->getValue<bool>(kSoftBrush);
 
-            auto bW = new Widget< Button >(X + 150, Y, 25, 25);
+            auto bW = new Widget< Button >(X + 170, Y, 25, 25);
             bt = hardBrush = bW;
-            bt->selection_color(FL_YELLOW);
+            bt->selection_color(FL_CYAN);
             bt->down_box(FL_EMBOSSED_BOX);
             bt->box(FL_FLAT_BOX);
             bt->tooltip(_("Selects a hard brush."));
@@ -316,7 +316,7 @@ namespace mrv
 
             bt = softBrush = bW = new Widget< Button >(X + 200, Y, 25, 25);
             bt->tooltip(_("Selects a soft brush."));
-            bt->selection_color(FL_YELLOW);
+            bt->selection_color(FL_CYAN);
             bt->down_box(FL_EMBOSSED_BOX);
             bt->box(FL_FLAT_BOX);
             svg = MRV2_LOAD_SVG(SoftBrush);
@@ -510,11 +510,19 @@ namespace mrv
             if (!open)
                 cg->close();
 
-            auto nV =
-                new Widget<Fl_Multiline_Input>(X, 40, g->w(), 200, _("Notes"));
+
+            cg = new CollapsibleGroup(X, 20, g->w(), 20, _("Notes"));
+            b = cg->button();
+            b->labelsize(14);
+            b->size(b->w(), 18);
+            cg->begin();
+            
+            Fl_Group* ng = new Fl_Group(X, 25, cg->w(), 200);
+            ng->begin();
+            
+            auto nV = new Widget<Fl_Multiline_Input>(X, 25, cg->w(), 180);
             notes = nV;
-            notes->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
-            notes->textfont(FL_HELVETICA);
+            notes->cursor_color(FL_RED);
             notes->textsize(16);
             notes->textcolor(FL_BLACK);
             notes->wrap(true);
@@ -532,6 +540,15 @@ namespace mrv
                         add_note_annotation_cb(p.ui, text);
                     }
                 });
+            ng->end();
+            
+            cg->end();
+
+            key = prefix + "Notes";
+            value = settings->getValue<std::any>(key);
+            open = std_any_empty(value) ? 1 : std_any_cast<int>(value);
+            if (!open)
+                cg->close();
         }
 
         void AnnotationsPanel::redraw()

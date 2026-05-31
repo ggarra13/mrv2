@@ -48,6 +48,8 @@ namespace mrv
         p.window->border(0);
         p.window->begin();
         p.box = new Fl_Box(0, 0, size.w, size.h);
+        p.box->box(FL_FLAT_BOX);
+        p.box->color(FL_CYAN);
         p.window->end();
         p.window->show();
         Fl_Group::current(0);
