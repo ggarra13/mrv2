@@ -485,7 +485,7 @@ namespace mrv
 
         
         void Viewport::prepare()
-        {
+        {            
             prepare_render_pass();       // Main swapchain render pass
             prepare_load_render_pass();  // swapchain render pass that loads contents
             prepare_shaders();
@@ -620,6 +620,9 @@ namespace mrv
                 if (!vk.annotationRender)
                     vk.annotationRender = timeline_vlk::Render::create(ctx, context);
 
+            
+                // Subscribe to pen events
+                Fl::Pen::subscribe(this);
                 
                 p.fontSystem = image::FontSystem::create(context);
 

@@ -4,7 +4,9 @@
 
 include( ExternalProject )
 
-set(pybind11_GIT_TAG v2.12.0)
+set(pybind11_GIT_TAG v2.13.6) # was 2.12.0
+set(pybind11_DEPENDENCIES ${PYTHON_DEP})
+message(STATUS "pybind11_DEPENDENCIES=${pybind11_DEPENDENCIES}")
 
 set(pybind11_ARGS
     -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHIECTURES}
@@ -28,7 +30,7 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/pybind11
     GIT_PROGRESS 1
     GIT_SHALLOW 1
-    DEPENDS ${PYTHON_DEP}
+    DEPENDS ${pybind11_DEPENDENCIES}
 
     LIST_SEPARATOR |
     

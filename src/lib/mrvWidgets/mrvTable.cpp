@@ -52,7 +52,7 @@ namespace mrv
     {
         fl_push_clip(X, Y, W, H);
         fl_draw_box(FL_THIN_UP_BOX, X, Y, W, H, row_header_color());
-        fl_color(FL_WHITE);
+        fl_color(FL_FOREGROUND_COLOR);
         fl_draw(s, X, Y, W, H, FL_ALIGN_INSIDE | FL_ALIGN_CENTER);
         fl_pop_clip();
     }

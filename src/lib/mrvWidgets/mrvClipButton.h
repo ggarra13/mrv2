@@ -28,7 +28,7 @@ namespace mrv
             if (value())
                 labelcolor(FL_BLACK);
             else
-                labelcolor(FL_WHITE);
+                labelcolor(FL_FOREGROUND_COLOR);
             Fl_Color col = value() ? selection_color() : color();
             draw_box(
                 value() ? (down_box() ? down_box() : fl_down(box())) : box(),

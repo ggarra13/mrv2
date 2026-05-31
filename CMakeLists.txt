@@ -212,6 +212,8 @@ else()
     endif()
 endif()
 
+
+# Do not use Windows' registry to find Python
 message(STATUS "Python EXECUTABLE=${Python_EXECUTABLE}")
 set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
@@ -232,6 +234,11 @@ if (NOT BUILD_PYTHON AND (TLRENDER_AV1 OR TLRENDER_LIBPLACEBO))
     endif()
 endif()
 
+#
+# Python Build / Finding
+#
+set(Python_FIND_DEBUG TRUE)
+set(Python3_FIND_DEBUG TRUE)
 if (NOT BUILD_PYTHON)
    if (TLRENDER_LIBPLACEBO OR TLRENDER_AV1)	
        find_program(MESON_EXECUTABLE NAMES meson.exe meson)
@@ -303,24 +310,6 @@ if(BUILD_PYTHON)
 	else()
 	    message(FATAL_ERROR "Unknown architecture for Python and OpenSSL")
 	endif()
-    endif()
-    message(STATUS "Add dependency ${PYTHON_DEP} to OTIO")
-    add_dependencies(OTIO ${PYTHON_DEP})
-    if (TLRENDER_USD)
-	message(STATUS "Add dependency ${PYTHON_DEP} to USD")
-	add_dependencies(USD ${PYTHON_DEP})
-    endif()
-    if (TLRENDER_AV1)
-	message(STATUS "Add dependency ${PYTHON_DEP} to dav1d")
-	add_dependencies(dav1d ${PYTHON_DEP})
-    endif()
-    if (TLRENDER_LIBPLACEBO)
-	message(STATUS "Add dependency ${PYTHON_DEP} to libplacebo")
-	add_dependencies(libplacebo ${PYTHON_DEP})
-    endif()
-    if (UNIX AND NOT APPLE)
-	message(STATUS "Add dependency ${PYTHON_DEP} to libdisplay-info")
-	add_dependencies(libdisplay-info ${PYTHON_DEP})
     endif()
 endif()
 

@@ -150,8 +150,6 @@ namespace mrv
         void TimelineViewport::_init()
         {
             TLRENDER_P();
-
-            Fl::Pen::subscribe(this);
             
             auto settings = App::app->settings();
 

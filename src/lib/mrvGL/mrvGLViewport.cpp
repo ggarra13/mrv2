@@ -185,6 +185,9 @@ namespace mrv
             refresh();
 
             _initializeGLResources();
+            
+            // Subscribe to pen events
+            Fl::Pen::subscribe(this);
         }
 
         int Viewport::handle(int event)

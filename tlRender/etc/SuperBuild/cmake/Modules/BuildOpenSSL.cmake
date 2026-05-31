@@ -46,6 +46,7 @@ if(WIN32)
 	    ${PERL_EXE} Configure VC-WIN64-ARM
 	    --prefix=${CMAKE_INSTALL_PREFIX}
 	    --openssldir=${CMAKE_INSTALL_PREFIX}
+            no-docs
 	    no-external-tests
 	    no-tests
 	    no-unit-test)
@@ -56,6 +57,7 @@ if(WIN32)
 	    ${PERL_EXE} Configure VC-WIN64A
 	    --prefix=${CMAKE_INSTALL_PREFIX}
 	    --openssldir=${CMAKE_INSTALL_PREFIX}
+            no-docs
 	    no-external-tests
 	    no-tests
 	    no-unit-test)
