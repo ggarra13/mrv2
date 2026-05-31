@@ -39,13 +39,15 @@ find_package(nlohmann_json REQUIRED)
 find_package(harfbuzz REQUIRED)
 find_package(OpenTimelineIO REQUIRED CONFIG)
 find_package(PNG REQUIRED)
-find_package(glfw3 REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(RtAudio)
 
 #
 # These may be installed in cmake or not installed if the setting is off
 #
+if(TLRENDER_GLFW)
+    find_package(glfw3 REQUIRED)
+endif()
 if(TLRENDER_OCIO)
     find_package(OpenColorIO REQUIRED CONFIG)
 endif()
