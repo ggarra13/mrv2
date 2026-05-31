@@ -31,16 +31,42 @@ if(WIN32)
 
 endif()
 
+# Derive these from your Python build variables
+if(WIN32)
+    set(_Python_ROOT ${CMAKE_INSTALL_PREFIX})
+    set(_Python_EXE  ${CMAKE_INSTALL_PREFIX}/bin/python.exe)
+endif()
+
 set(OTIO_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DBUILD_TESTING=OFF
     -DOTIO_FIND_IMATH=ON
+    
     -DPYBIND11_FINDPYTHON=ON
     -DPYBIND11_NOPYTHON=OFF
     -DPYBIND11_NUMPY_1_ONLY=OFF
     -DPYBIND11_SIMPLE_GIL_MANAGEMENT=OFF
     -DPYBIND11_USE_CROSSCOMPILING=OFF
     -DPYBIND11_TEST=OFF
+    
+    # --- Pin Python for pybind11 / FindPython ---
+    -DPython_ROOT_DIR=${_Python_ROOT}
+    -DPython_EXECUTABLE=${_Python_EXE}
+    -DPython3_ROOT_DIR=${_Python_ROOT}
+    -DPython3_EXECUTABLE=${_Python_EXE}
+
+    # Tell FindPython to trust ROOT_DIR and not search elsewhere
+    -DPython_FIND_STRATEGY=LOCATION
+    -DPython3_FIND_STRATEGY=LOCATION
+    -DPython_FIND_REGISTRY=NEVER          # <-- stops x64 registry hit
+    -DPython3_FIND_REGISTRY=NEVER
+
+    -DPython_FIND_VIRTUALENV=NEVER
+    -DPython3_FIND_VIRTUALENV=NEVER
+
+    # Explicit architecture guard
+    -DCMAKE_GENERATOR_PLATFORM=ARM64     # if not already set globally
+    
     -DOTIO_INSTALL_COMMANDLINE_TOOLS=OFF
     -DOTIO_SHARED_LIBS=${OTIO_SHARED_LIBS}
     -DOTIO_PYTHON_INSTALL=${OTIO_PYTHON_INSTALL}

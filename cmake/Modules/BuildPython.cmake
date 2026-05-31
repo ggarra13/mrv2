@@ -169,7 +169,7 @@ ExternalProject_Add(
     GIT_TAG ${Python_GIT_TAG}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/Python
 
-    DEPENDS ${Python_DPENDENCIES}
+    DEPENDS ${Python_DEPENDENCIES}
     
     PATCH_COMMAND     "${Python_PATCH}"
     CONFIGURE_COMMAND "${Python_CONFIGURE}"
