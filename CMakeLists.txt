@@ -212,6 +212,8 @@ else()
     endif()
 endif()
 
+
+# Do not use Windows' registry to find Python
 message(STATUS "Python EXECUTABLE=${Python_EXECUTABLE}")
 set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
@@ -232,6 +234,10 @@ if (NOT BUILD_PYTHON AND (TLRENDER_AV1 OR TLRENDER_LIBPLACEBO))
     endif()
 endif()
 
+#
+# Python Build / Finding
+#
+set(Python_FIND_DEBUG TRUE)   # or Python3_FIND_DEBUG
 if (NOT BUILD_PYTHON)
    if (TLRENDER_LIBPLACEBO OR TLRENDER_AV1)	
        find_program(MESON_EXECUTABLE NAMES meson.exe meson)
@@ -317,6 +323,10 @@ if(BUILD_PYTHON)
     if (TLRENDER_LIBPLACEBO)
 	message(STATUS "Add dependency ${PYTHON_DEP} to libplacebo")
 	add_dependencies(libplacebo ${PYTHON_DEP})
+    endif()
+    if (WIN32 OR APPLE)
+	message(STATUS "Add dependency ${PYTHON_DEP} to harfbuzz")
+	add_dependencies(harfbuzz ${PYTHON_DEP})
     endif()
     if (UNIX AND NOT APPLE)
 	message(STATUS "Add dependency ${PYTHON_DEP} to libdisplay-info")

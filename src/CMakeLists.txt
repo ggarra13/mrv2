@@ -259,6 +259,8 @@ endif()
 
 if(MRV2_PYBIND11 OR BUILD_PYTHON)
     message(STATUS "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
+    set(Python3_FIND_REGISTRY "NEVER" CACHE STRING "")
+    set(Python_FIND_STRATEGY "LOCATION")
     find_package(Python REQUIRED COMPONENTS Interpreter Development)
 endif()
 
