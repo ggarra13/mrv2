@@ -63,9 +63,6 @@ set(OTIO_ARGS
 
     -DPython_FIND_VIRTUALENV=NEVER
     -DPython3_FIND_VIRTUALENV=NEVER
-
-    # Explicit architecture guard
-    -DCMAKE_GENERATOR_PLATFORM=ARM64     # if not already set globally
     
     -DOTIO_INSTALL_COMMANDLINE_TOOLS=OFF
     -DOTIO_SHARED_LIBS=${OTIO_SHARED_LIBS}
