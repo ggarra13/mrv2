@@ -361,7 +361,7 @@ namespace mrv
                 FileButton* b = m.second;
                 uint16_t layerId;
 
-                b->labelcolor(FL_WHITE);
+                b->labelcolor(FL_FOREGROUND_COLOR);
                 WidgetIndices::iterator it = r.indices.find(b);
                 time = media->currentTime;
                 if (Aindex != i)

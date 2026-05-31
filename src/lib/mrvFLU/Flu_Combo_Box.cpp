@@ -37,7 +37,7 @@ Flu_Combo_Box ::Flu_Combo_Box(int X, int Y, int W, int H, const char* l) :
     input.box(FL_FLAT_BOX);
     input.callback(input_cb, this);
     input.when(FL_WHEN_ENTER_KEY_ALWAYS);
-    input.color(FL_WHITE, selection_color());
+    input.color(FL_FOREGROUND_COLOR, selection_color());
     input.textfont(FL_HELVETICA);
     input.textsize(FL_NORMAL_SIZE);
     input.textcolor(FL_BLACK);

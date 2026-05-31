@@ -814,7 +814,7 @@ void Flu_Entry::draw()
         if (editMode == 2)
         {
             editMode--;
-            fl_draw_box(FL_FLAT_BOX, x(), y(), w(), h(), FL_WHITE);
+            fl_draw_box(FL_FLAT_BOX, x(), y(), w(), h(), FL_FOREGROUND_COLOR);
             redraw();
         }
         textcolor(fl_rgb_color(0, 0, 0));

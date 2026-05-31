@@ -51,8 +51,7 @@ ChangeLog
 - UI/Linux Wayland: Added tablet support for drawing annotations with it.
 - UI/MacOS: Added tablet support for drawing annotations with it.
 - UI: Improved the look of Collapsible Groups and general UI.
-- UI: Made sure all color schemes look pleasing.  If you still don't like my
-      color scheme, you can change the /colors/mrv2.colors text file.	   
+- UI: Made sure all color schemes look pleasing.  If you still don't like my color scheme, you can change the colors/mrv2.colors text file and place it in $HOME/.filmaura.	   
 - UI: Made thumbnails size in Panels be selectable with Preferences->Thumbnails->Panels.  macOS now defaults to small panel thumbnails, as most artists use it from a laptop.
 - UI: Made collapsible group flat instead of rounded for a more modern appearance.
 - UI: Made Fl_Hor_Slider use a cyan slider button for being consistent with the rest of th UI:
@@ -77,8 +76,8 @@ ChangeLog
 - Build: Improved compilation performance of OpenSSL on Linux and Windows.
 - Build: Improved compilation of Vulkan mrv2 by removing the dependency on glfw3.
 - Build: Added and Improved bin/helpers/clean_* scripts to remove only portions of the compilation chain.
-- Library: Python: Updated to v3.14.5.
-- Library: Updated pyFTLK build.
+- Library: Updated bundled Python to v3.14.5.
+- Library: Updated pyFTLK build to v1.4.5.
 - Library: Updated NDI to v6.3.2.
 - Library: Updated OpenEXR to v3.4.12.
 - Library: Updated OpenJPH to v0.27.3.

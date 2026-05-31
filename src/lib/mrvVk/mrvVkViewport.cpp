@@ -622,7 +622,9 @@ namespace mrv
 
             
                 // Subscribe to pen events
-                Fl::Pen::subscribe(this);
+            // Subscribe to pen events
+                if (desktop::Wayland() || desktop::macOS())
+                    Fl::Pen::subscribe(this);
                 
                 p.fontSystem = image::FontSystem::create(context);
 

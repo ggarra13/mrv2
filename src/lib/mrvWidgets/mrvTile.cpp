@@ -143,7 +143,7 @@ namespace mrv
         }
         else
         {
-            tg->color(FL_WHITE);
+            tg->color(FL_FOREGROUND_COLOR);
         }
         tg->redraw();
     }

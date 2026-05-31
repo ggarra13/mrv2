@@ -376,7 +376,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     Fl_Group* g;
 
-    filename.labelcolor(FL_WHITE);
+    filename.labelcolor(FL_FOREGROUND_COLOR);
     filename.textcolor(FL_BLACK);
     filename.cursor_color(FL_BLACK);
     filename.label(_(filenameTxt.c_str()));
@@ -481,7 +481,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     desktopBtn->callback(_desktopCB, this);
     {
         Flu_Label* l = new Flu_Label(5, 62, 100, 20, _(desktopTxt.c_str()));
-        l->labelcolor(fl_contrast(FL_WHITE, l->color()));
+        l->labelcolor(fl_contrast(FL_FOREGROUND_COLOR, l->color()));
         l->align(FL_ALIGN_CENTER);
     }
 
@@ -498,14 +498,14 @@ Flu_File_Chooser::Flu_File_Chooser(
         Flu_Label* l = new Flu_Label(5, 142, 100, 20, _(myComputerTxt.c_str()));
         homeBtn->image(MRV2_LOAD_SVG(Home));
 #endif
-        l->labelcolor(fl_contrast(FL_WHITE, l->color()));
+        l->labelcolor(fl_contrast(FL_FOREGROUND_COLOR, l->color()));
         l->align(FL_ALIGN_CENTER);
     }
 
     Flu_Button* documentsBtn = new Flu_Button(30, 178, 50, 48);
     documentsBtn->box(FL_FLAT_BOX);
     documentsBtn->enter_box(FL_THIN_UP_BOX);
-    documentsBtn->labelcolor(fl_contrast(FL_WHITE, documentsBtn->color()));
+    documentsBtn->labelcolor(fl_contrast(FL_FOREGROUND_COLOR, documentsBtn->color()));
     documentsBtn->color(FL_DARK3);
     documentsBtn->callback(_documentsCB, this);
     {
@@ -518,7 +518,7 @@ Flu_File_Chooser::Flu_File_Chooser(
             new Flu_Label(5, 222, 100, 20, _(myDocumentsTxt.c_str()));
         documentsBtn->image(MRV2_LOAD_SVG(TemporaryButton));
 #endif
-        l->labelcolor(fl_contrast(FL_WHITE, l->color()));
+        l->labelcolor(fl_contrast(FL_FOREGROUND_COLOR, l->color()));
         l->align(FL_ALIGN_CENTER);
     }
 
@@ -530,7 +530,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     favoritesBtn->callback(_favoritesCB, this);
     {
         Flu_Label* l = new Flu_Label(5, 302, 100, 20, _(favoritesTxt.c_str()));
-        l->labelcolor(fl_contrast(FL_WHITE, l->color()));
+        l->labelcolor(fl_contrast(FL_FOREGROUND_COLOR, l->color()));
         l->align(FL_ALIGN_CENTER);
     }
 
@@ -551,7 +551,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     location =
         new Flu_Combo_Tree(166, 15, w() - 171, 22, _(locationTxt.c_str()));
-    location->labelcolor(FL_WHITE);
+    location->labelcolor(FL_FOREGROUND_COLOR);
     location->pop_height(200);
     // location->tree.all_branches_always_open( true );
     location->tree.showroot(false);
@@ -567,7 +567,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     hiddenFiles =
         new Fl_Check_Button(110, 43, 130, 25, _(showHiddenTxt.c_str()));
-    hiddenFiles->labelcolor(FL_WHITE);
+    hiddenFiles->labelcolor(FL_FOREGROUND_COLOR);
     hiddenFiles->callback(reloadCB, this);
 #ifdef _WIN32
     hiddenFiles->hide();
@@ -606,7 +606,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     {
         Flu_Separator* sep = new Flu_Separator(385, 42, 10, 28);
         sep->type(Flu_Separator::VERTICAL);
-        sep->color(FL_WHITE);
+        sep->color(FL_FOREGROUND_COLOR);
         sep->box(FL_FLAT_BOX);
     }
 
@@ -634,7 +634,7 @@ Flu_File_Chooser::Flu_File_Chooser(
     {
         Flu_Separator* sep = new Flu_Separator(470, 42, 10, 28);
         sep->type(Flu_Separator::VERTICAL);
-        sep->color(FL_WHITE);
+        sep->color(FL_FOREGROUND_COLOR);
         sep->box(FL_FLAT_BOX);
     }
 
@@ -684,7 +684,7 @@ Flu_File_Chooser::Flu_File_Chooser(
         filelist->copy_label("FileList");
         filelist->labeltype(FL_NO_LABEL);
         filelist->box(FL_FLAT_BOX);
-        filelist->color(FL_WHITE);
+        filelist->color(FL_FOREGROUND_COLOR);
         filelist->type(FL_HORIZONTAL);
         filelist->spacing(2, 0);
         filelist->scrollbar.linesize(DEFAULT_ENTRY_WIDTH + 4);
@@ -700,7 +700,7 @@ Flu_File_Chooser::Flu_File_Chooser(
                     fileDetailsGroup->x() + 2, fileDetailsGroup->y() + 22,
                     fileDetailsGroup->w() - 4, fileDetailsGroup->h() - 20 - 4,
                     this);
-                filescroll->color(FL_WHITE);
+                filescroll->color(FL_FOREGROUND_COLOR);
                 filescroll->scrollbar.linesize(20);
                 filescroll->box(FL_FLAT_BOX);
                 filescroll->type(Flu_Scroll::BOTH);
@@ -732,7 +732,7 @@ Flu_File_Chooser::Flu_File_Chooser(
 
     filePattern = new Flu_Combo_List(
         70, h() - 30, w() - 70 - 85 - 10, 25, _(fileTypesTxt.c_str()));
-    filePattern->labelcolor(FL_WHITE);
+    filePattern->labelcolor(FL_FOREGROUND_COLOR);
     filePattern->editable(false);
     filePattern->callback(reloadCB, this);
     filePattern->pop_height(200);

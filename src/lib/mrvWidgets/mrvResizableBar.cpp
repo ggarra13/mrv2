@@ -90,7 +90,7 @@ namespace mrv
             break;
         case FL_ENTER:
             window()->cursor(FL_CURSOR_WE);
-            color(FL_WHITE);
+            color(FL_FOREGROUND_COLOR);
             redraw();
             return 1;
             break;

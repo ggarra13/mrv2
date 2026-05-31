@@ -70,7 +70,7 @@ namespace mrv
             o->box(FL_THIN_UP_BOX);
             o->labelfont(FL_TIMES_BOLD);
             o->labelsize(34);
-            o->color(FL_WHITE);
+            o->color(FL_FOREGROUND_COLOR);
             o->labelcolor(FL_BLUE);
         }
         g->end();

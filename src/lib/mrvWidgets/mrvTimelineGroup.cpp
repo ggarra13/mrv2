@@ -19,7 +19,7 @@ namespace mrv
         Fl_Group::draw();
         int W = w() / 2 - 20;
         int W2 = w() / 2 + 20;
-        fl_color(FL_WHITE);
+        fl_color(FL_FOREGROUND_COLOR);
         const int Y = y() + 1;
         for (int i = W; i <= W2; i += 4)
         {
