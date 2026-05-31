@@ -219,6 +219,7 @@ jobs:
 
       - name: Build vmrv2
         env:
+          INSTALL_CMAKE: ON
           BUILD_PYTHON: ON
           MRV2_PYFLTK: ON
           MRV2_PYBIND11: ON

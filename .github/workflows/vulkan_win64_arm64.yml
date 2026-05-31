@@ -277,6 +277,7 @@ jobs:
 
       - name: Build vmrv2
         env:
+          INSTALL_CMAKE: ON
           BUILD_PYTHON: ON
           BUILD_VULKAN: OFF
           MRV2_PYFLTK: ON
