@@ -162,8 +162,8 @@ namespace tl
             return
                 (hasNumber() || hasSeqWildcard()) &&
                 other.hasNumber() &&
-                _dir == other._dir &&
-                _base == other._base &&
+                getDirectory() == other.getDirectory() &&
+                getBaseName() == other.getBaseName() &&
                 getSuffix() == other.getSuffix() &&
                 getExtension() == other.getExtension();
         }
