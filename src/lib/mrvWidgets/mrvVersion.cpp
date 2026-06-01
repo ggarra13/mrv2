@@ -47,7 +47,6 @@
 
 #if  defined(OPENGL_BACKEND)
 #        include <OpenGL/OpenGL.h>
-#        include <GLFW/glfw3.h>
 #    endif
 #endif
 
@@ -111,6 +110,7 @@
 #if defined(OPENGL_BACKEND)
 #    include <tlGL/Init.h>
 #    include "mrvGL/mrvGLErrors.h" // defines glGetString and GL_VERSION
+#    include <GLFW/glfw3.h>
 #endif
 
 #ifdef TLRENDER_LIBPLACEBO
