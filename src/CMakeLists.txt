@@ -278,23 +278,7 @@ if(MRV2_PYBIND11 OR BUILD_PYTHON)
     set(Python3_FIND_STRATEGY "LOCATION")
 
     message(STATUS "Python_ROOT_DIR=${Python_ROOT_DIR}")
-    message(STATUS "Python_EXECUTABLE=${Python_EXECUTABLE}")
-    if (EXISTS ${Python_EXECUTABLE})
-	message(STATUS "Python EXECUTABLE exists")
-    else()
-	message(STATUS "Python EXECUTABLE DOES NOT exist")
-    endif()
-
-    message(STATUS "Python_ROOT_DIR=${Python_ROOT_DIR}")
-    message(STATUS "Python_EXECUTABLE=${Python_EXECUTABLE}")
-    message(STATUS "Python_FIND_REGISTRY=${Python_FIND_REGISTRY}")
-    message(STATUS "Python_FIND_STRATEGY=${Python_FIND_STRATEGY}")
-    
-    message(STATUS "Python3_ROOT_DIR=${Python3_ROOT_DIR}")
-    message(STATUS "Python3_EXECUTABLE=${Python3_EXECUTABLE}")
-    message(STATUS "Python3_FIND_REGISTRY=${Python3_FIND_REGISTRY}")
-    message(STATUS "Python3_FIND_STRATEGY=${Python3_FIND_STRATEGY}")
-    
+    message(STATUS "Python_EXECUTABLE=${Python_EXECUTABLE}")    
     find_package(Python REQUIRED COMPONENTS Interpreter Development)
 endif()
 
