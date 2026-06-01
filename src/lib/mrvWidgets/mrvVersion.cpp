@@ -47,6 +47,7 @@
 
 #if  defined(OPENGL_BACKEND)
 #        include <OpenGL/OpenGL.h>
+#        include <GLFW/glfw3.h>
 #    endif
 #endif
 
@@ -863,6 +864,12 @@ namespace mrv
 #if defined(OPENGL_BACKEND)
         o << "glad v" << GLAD_GENERATOR_VERSION << endl
           << "Copyright (c) 2013-2020 David Herberth" << endl
+          << endl;
+        o << "glfw v" << GLFW_VERSION_MAJOR << "."
+          << GLFW_VERSION_MINOR << "." << GL_VERSION_REVISION << endl
+          << "Copyright (c) 2002-2006 Marcus Geelnard" << endl
+          << "Copyright (c) 2006-2019 Camilla Löwy <elmindreda@glfw.org>"
+          << endl
           << endl;
 #endif
         o << "Imath v" << IMATH_VERSION_STRING << endl
