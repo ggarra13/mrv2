@@ -50,6 +50,7 @@ def get_date_arguments():
     parser.add_argument('end_date', type=str, nargs='?', default=None)
     return parser.parse_args()
 
+global diff
 
 def parse_and_process_dates(args):
     # (unchanged - your excellent date parser stays exactly the same)
@@ -74,6 +75,7 @@ def parse_and_process_dates(args):
         except ValueError:
             raise ValueError(f"Invalid date format '{date_str}'.")
 
+    global diff
     start_dt = parse_date_string(args.start_date, False)
     end_dt = datetime.now(timezone.utc) if not args.end_date else parse_date_string(args.end_date, True)
 
@@ -391,4 +393,7 @@ if __name__ == "__main__":
     print(f'{format_number(mrv2_grand_total, 5)} Grand Total  mrv2 Downloads (GitHub + SourceForge)')
     print(f'{format_number(vmrv2_grand_total, 5)} Grand Total vmrv2 Downloads (GitHub + SourceForge)')
     print("-----------------------------------------------------------------------")
-    print(f'{format_number(mrv2_grand_total + vmrv2_grand_total, 5)} Grand Total (GitHub + SourceForge)')
+    total = mrv2_grand_total + vmrv2_grand_total
+    print(f'{format_number(total, 5)} Grand Total (GitHub + SourceForge)')
+    per_hour = round(total / (diff.seconds//3600), 2)
+    print(f'{format_number(per_hour,5)} Total Downloads Per Hour')
