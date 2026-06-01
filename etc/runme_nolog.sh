@@ -164,6 +164,9 @@ fi
 
 if [ -z "$TLRENDER_GL" ]; then
     export TLRENDER_GL=ON
+fi
+
+if [ -z "$TLRENDER_GLFW" ]; then
     export TLRENDER_GLFW=ON
 fi
 

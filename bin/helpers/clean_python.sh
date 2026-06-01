@@ -20,21 +20,23 @@ ask_to_continue
 
 export INSTALL=$BUILD_DIR/install
 
-echo "Cleaning bin directory"
+echo "Cleaning $INSTALL/bin/python*"
 rm -rf $INSTALL/bin/python*
+
+echo "Cleaning $INSTALL/bin/tcl*"
 rm -rf $INSTALL/bin/tcl*
 
 echo "Cleaning lib directory"
 rm -rf $INSTALL/lib/python*
 
 if [[ $KERNEL == *Windows* ]]; then
-    echo "Cleaning Windows' bin/DLLs directory"
+    echo "Cleaning Windows' $INSTALL/bin/DLLs directory"
     rm -rf $INSTALL/bin/DLLs
 
-    echo "Cleaning Windows' bin/Libs directory"
+    echo "Cleaning Windows' $INSTALL/bin/Libs directory"
     rm -rf $INSTALL/bin/Lib
     
-    echo "Cleaning Windows' bin/Scripts directory"
+    echo "Cleaning Windows' $INSTALL/bin/Scripts directory"
     rm -rf $INSTALL/bin/Scripts
 
     echo "Cleaning $INSTALL/python"
