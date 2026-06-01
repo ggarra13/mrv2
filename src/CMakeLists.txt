@@ -262,8 +262,6 @@ endif()
 
 
 if(MRV2_PYBIND11 OR BUILD_PYTHON)
-    message(STATUS "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
-
     # Derive these from your Python build variables
     set(_Python_ROOT ${CMAKE_INSTALL_PREFIX})
     set(_Python_EXE ${PYTHON_EXECUTABLE})
@@ -278,6 +276,25 @@ if(MRV2_PYBIND11 OR BUILD_PYTHON)
 
     set(Python_FIND_STRATEGY "LOCATION")
     set(Python3_FIND_STRATEGY "LOCATION")
+
+    message(STATUS "Python_ROOT_DIR=${Python_ROOT_DIR}")
+    message(STATUS "Python_EXECUTABLE=${Python_EXECUTABLE}")
+    if (EXISTS ${Python_EXECUTABLE})
+	message(STATUS "Python EXECUTABLE exists")
+    else()
+	message(STATUS "Python EXECUTABLE DOES NOT exist")
+    endif()
+
+    message(STATUS "Python_ROOT_DIR=${Python_ROOT_DIR}")
+    message(STATUS "Python_EXECUTABLE=${Python_EXECUTABLE}")
+    message(STATUS "Python_FIND_REGISTRY=${Python_FIND_REGISTRY}")
+    message(STATUS "Python_FIND_STRATEGY=${Python_FIND_STRATEGY}")
+    
+    message(STATUS "Python3_ROOT_DIR=${Python3_ROOT_DIR}")
+    message(STATUS "Python3_EXECUTABLE=${Python3_EXECUTABLE}")
+    message(STATUS "Python3_FIND_REGISTRY=${Python3_FIND_REGISTRY}")
+    message(STATUS "Python3_FIND_STRATEGY=${Python3_FIND_STRATEGY}")
+    
     find_package(Python REQUIRED COMPONENTS Interpreter Development)
 endif()
 

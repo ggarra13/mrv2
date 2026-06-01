@@ -4,8 +4,9 @@
 
 include(ExternalProject)
 
-
-set(GITHUB_REPO "$ENV{GITHUB_REPO}")
+# Derive these from your Python build variables
+set(_Python_ROOT ${CMAKE_INSTALL_PREFIX})
+set(_Python_EXE ${Python_EXECUTABLE})
 
 set(mrv2_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
@@ -54,6 +55,28 @@ set(mrv2_ARGS
 
     -DBUILD_PYTHON=${BUILD_PYTHON}
     -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+       
+    -DPYBIND11_FINDPYTHON=ON
+    -DPYBIND11_NOPYTHON=OFF
+    -DPYBIND11_NUMPY_1_ONLY=OFF
+    -DPYBIND11_SIMPLE_GIL_MANAGEMENT=OFF
+    -DPYBIND11_USE_CROSSCOMPILING=OFF
+    -DPYBIND11_TEST=OFF
+    
+    # --- Pin Python for pybind11 / FindPython ---
+    -DPython_ROOT_DIR=${_Python_ROOT}
+    -DPython_EXECUTABLE=${_Python_EXE}
+    -DPython3_ROOT_DIR=${_Python_ROOT}
+    -DPython3_EXECUTABLE=${_Python_EXE}
+
+    # Tell FindPython to trust ROOT_DIR and not search elsewhere
+    -DPython_FIND_STRATEGY=LOCATION
+    -DPython3_FIND_STRATEGY=LOCATION
+    -DPython_FIND_REGISTRY=NEVER          # <-- stops x64 registry hit
+    -DPython3_FIND_REGISTRY=NEVER
+
+    -DPython_FIND_VIRTUALENV=NEVER
+    -DPython3_FIND_VIRTUALENV=NEVER
 
     -DMRV2_BACKEND=${MRV2_BACKEND}
     -DMRV2_CPPTRACE=${MRV2_CPPTRACE}

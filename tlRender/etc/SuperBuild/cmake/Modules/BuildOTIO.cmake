@@ -32,10 +32,8 @@ if(WIN32)
 endif()
 
 # Derive these from your Python build variables
-if(WIN32)
-    set(_Python_ROOT ${CMAKE_INSTALL_PREFIX})
-    set(_Python_EXE  ${CMAKE_INSTALL_PREFIX}/bin/python.exe)
-endif()
+set(_Python_ROOT ${CMAKE_INSTALL_PREFIX})
+set(_Python_EXE ${Python_EXECUTABLE})
 
 set(OTIO_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
