@@ -186,3 +186,24 @@ Panel de Vectorscopio
    :align: center
 
 El Panel de Vectorscopio permite mostrar un vectorscopio del area seleccionada de la imagen. Podés seleccionar el área con la Herramienta de Selección en la Barra de Herramientas donde las herramientas de dibujo están localizadas.
+
+Panel de Forma de Onda
+++++++++++++++++++++++
+
+.. image:: ../images/waveform-panel-01.png
+   :align: center
+
+El Panel de Forma de Onda permite mostrar una forma de onda del área seleccionada en la imagen.
+Un Forma de Onda muesta la luminancia de los píxeles en el axis Y, mientras que el axis X muestra la posición X (horizontal) de la imágen.
+
+Panel de WebRTC
++++++++++++++++
+
+.. image:: ../images/webrtc-panel-01.png
+   :align: center
+
+El Panel de WebRTC permite sincronizar dos o más reproductores en cualquier parte de la Internet en una "Sala".
+Cuando alguien se conecta a la Sala, puede controlar los reproductores, llendo de un lado a otro, usar las herramientas de dibujo, etc.
+Note que los videos o imágenes no sen enviados por la internet, pero se mantienen localmente.
+Si esta mezclando plataformas o clips que no están en la misma ubicación en ambas localidades remotas, debería usar Preferencias->Mapeo de Carpetas para asegurarse que el clip es encontrado.
+Tambien puede evitar el sincronizado de los clips si va al menú Sync->Media y carga los clips manualmente.

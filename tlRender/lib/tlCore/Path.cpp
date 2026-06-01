@@ -441,7 +441,9 @@ namespace tl
                 if (options.seqNegative &&
                     numPos != std::string::npos &&
                     numPos > protocolDirSize &&
-                    '-' == _path[numPos - 1])
+                    '-' == _path[numPos - 1] &&
+                    (numPos < 2 ||
+                     !std::isalnum(static_cast<unsigned char>(_path[numPos - 2]))))
                 {
                     --numPos;
                 }

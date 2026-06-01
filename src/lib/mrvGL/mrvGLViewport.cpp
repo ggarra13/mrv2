@@ -187,7 +187,8 @@ namespace mrv
             _initializeGLResources();
             
             // Subscribe to pen events
-            Fl::Pen::subscribe(this);
+            if (desktop::Wayland() || desktop::macOS())
+                Fl::Pen::subscribe(this);
         }
 
         int Viewport::handle(int event)

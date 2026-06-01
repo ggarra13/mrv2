@@ -92,7 +92,7 @@ else()
     if (WIN32)
 	find_package(Iconv REQUIRED)
 	find_package(Intl REQUIRED)
-	set(Intl_LIBRARIES Iconv::Iconv Intl::Intl)
+	set(Intl_LIBRARIES Iconv::Iconv Intl::Intl) # new method
     else()
 	find_package(Intl REQUIRED)  # old method
     endif()
@@ -102,7 +102,6 @@ endif()
 # path to their version.h file or similar.
 find_package(tlRender REQUIRED)
 find_package(nlohmann_json REQUIRED)
-find_package(glfw3 REQUIRED)
 find_package(minizip REQUIRED)
 find_package(OpenGL REQUIRED)
 
@@ -173,6 +172,11 @@ endif()
 
 if(TLRENDER_GL)
     add_definitions(-DTLRENDER_GL)
+endif()
+
+if(TLRENDER_GLFW)
+    find_package(glfw3 REQUIRED)
+    add_definitions(-DTLRENDER_GLFW)
 endif()
 
 if(TLRENDER_HAP)

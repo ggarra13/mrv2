@@ -48,10 +48,13 @@ Prices might change (go up or down) depending on competition and new features.
 ChangeLog
 ---------
 
+- Docs: updated unlocking and licensing documentation.
+- Docs: updated new panel looks.
+- Docs: added WebRTC documentation.
 - UI/Linux Wayland: Added tablet support for drawing annotations with it.
 - UI/MacOS: Added tablet support for drawing annotations with it.
 - UI: Improved the look of Collapsible Groups and general UI.
-- UI: Made sure all color schemes look pleasing.  If you still don't like my color scheme, you can change the /colors/mrv2.colors text file.
+- UI: Made sure all color schemes look pleasing.  If you still don't like my color scheme, you can change the colors/mrv2.colors text file and place it in $HOME/.filmaura.	   
 - UI: Made thumbnails size in Panels be selectable with Preferences->Thumbnails->Panels.  macOS now defaults to small panel thumbnails, as most artists use it from a laptop.
 - UI: Made collapsible group flat instead of rounded for a more modern appearance.
 - UI: Made Fl_Hor_Slider use a cyan slider button for being consistent with the rest of th UI:
@@ -68,6 +71,8 @@ ChangeLog
 - Python:  Fixed registering RationalTime and TimeRange under the mrv2 namespace.  Now we just use opentimelineio directly, which would prevent opentimelineio from being imported.  That does mean that if you were using mrv2.RationalTime or mrv2.TimeRange, you will need to update your scripts to use otime.RationalTime and otime.TimeRange.
 - Python: Updated demos to use opentimelineio, instead of mrv2 equivalents.
 - Python/UI:  Added imports for opentimelineio in Python Panel.
+- Core: Bug fixed Path parsing looking for negative values when there was a file named like 'image-01.png'.  The minus was interpreted as a negative sign.
+- Core: Bug fixed Path parsing comparing directories and files by length instead of actual strings.
 - Core: Added MBOX and FIFO swap_interval() indicators to OpenGL build too.
 - Core: Added __GL_SYNC_TO_VBLANK=0 to OpenGL Linux distro for NVidia cards' performance issues under Ubuntu 26.04 LTS/Gnome50.1.
 - Core: Fixed OpenGL backend setting VSync always on at start, even when it was set to Never or Presentation Only.
@@ -76,8 +81,8 @@ ChangeLog
 - Build: Improved compilation performance of OpenSSL on Linux and Windows.
 - Build: Improved compilation of Vulkan mrv2 by removing the dependency on glfw3.
 - Build: Added and Improved bin/helpers/clean_* scripts to remove only portions of the compilation chain.
-- Library: Python: Updated to v3.14.5.
-- Library: Updated pyFTLK build.
+- Library: Updated bundled Python to v3.14.5.
+- Library: Updated pyFTLK build to v1.4.5.
 - Library: Updated NDI to v6.3.2.
 - Library: Updated OpenEXR to v3.4.12.
 - Library: Updated OpenJPH to v0.27.3.

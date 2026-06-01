@@ -287,7 +287,7 @@ namespace mrv
 
                 PlaylistButton* b = m.second;
 
-                b->labelcolor(FL_WHITE);
+                b->labelcolor(FL_FOREGROUND_COLOR);
 
                 time = media->currentTime;
                 if (Aindex != i)
