@@ -130,8 +130,8 @@ decl {class HotkeyUI;} {public global
 decl {class AboutUI;} {public global
 }
 
-widget_class PixelToolBarClass {open
-  xywh {0 0 934 56} hide resizable
+widget_class PixelToolBarClass {
+  xywh {200 473 934 56} hide resizable
   class Fl_Double_Window
 } {
   Fl_Group {} {open
@@ -452,7 +452,7 @@ decl {class AboutUI;} {public global
 }
 
 widget_class TimelineClass {open
-  xywh {0 0 934 56} box NO_BOX resizable
+  xywh {572 601 934 56} box NO_BOX resizable
   class Fl_Double_Window visible
 } {
   Fl_Group {} {open
@@ -726,7 +726,7 @@ else
 {   
    o->image( MRV2_LOAD_SVG(Audio) );
 }
-o->redraw();} selected
+o->redraw();}
             tooltip {Mute audio or switch audio tracks with the right mouse button.} xywh {576 3 27 24} type Toggle labelsize 10 align 80
             code1 {o->image( MRV2_LOAD_SVG(Audio) );}
             class {mrv::AudioButton}
@@ -776,8 +776,8 @@ const auto& startTime = range.start_time();
 uiStartFrame->setTime( startTime );
 
 ui->uiTimeline->setTimelinePlayer(player);
-ui->uiTimeline->redraw();}
-          tooltip {Start or In Point of the video.} xywh {682 3 27 24} type Toggle down_box DOWN_BOX selection_color 14 labelcolor 20 align 16
+ui->uiTimeline->redraw();} selected
+          xywh {682 3 27 24} type Toggle down_box DOWN_BOX selection_color 14 labelcolor 20 align 16
         }
         Fl_Input uiStartFrame {
           user_data this user_data_type {ViewerUI*}
@@ -820,7 +820,7 @@ uiEndFrame->setTime( endTime );
 
 ui->uiTimeline->setTimelinePlayer(player);
 ui->uiTimeline->redraw();}
-          tooltip {End or Output of the video.} xywh {808 3 27 24} type Toggle selection_color 14 labelcolor 20
+          xywh {808 3 27 24} type Toggle selection_color 14 labelcolor 20
         }
         Fl_Input uiEndFrame {
           user_data this user_data_type {ViewerUI*}
@@ -879,8 +879,8 @@ uiSecondary = nullptr;} {}
       callback {int reason = Fl::callback_reason();
 if (reason == FL_REASON_CLOSED)
     exit_cb( o, v );} open
-      xywh {0 0 934 674} type Double color 1 align 80 resizable
-      class {mrv::MainWindow} size_range {934 674 0 0} visible
+      xywh {785 255 934 674} type Double color 1 align 80 hide resizable
+      class {mrv::MainWindow} size_range {934 674 0 0}
     } {
       Fl_Flex uiRegion {open
         xywh {0 0 934 674} box FLAT_BOX resizable fixed_size_tuples {5  0 30  1 29  3 29  4 30  5 25 }
