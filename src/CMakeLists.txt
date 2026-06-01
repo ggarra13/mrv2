@@ -263,8 +263,21 @@ endif()
 
 if(MRV2_PYBIND11 OR BUILD_PYTHON)
     message(STATUS "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
+
+    # Derive these from your Python build variables
+    set(_Python_ROOT ${CMAKE_INSTALL_PREFIX})
+    set(_Python_EXE ${PYTHON_EXECUTABLE})
+
+    set(Python_ROOT_DIR ${_Python_ROOT})
+    set(Python_EXECUTABLE ${_Python_EXE})
+    set(Python3_ROOT_DIR ${_Python_ROOT})
+    set(Python3_EXECUTABLE ${_Python_EXE})
+    
     set(Python3_FIND_REGISTRY "NEVER" CACHE STRING "")
+    set(Python_FIND_REGISTRY "NEVER" CACHE STRING "")
+
     set(Python_FIND_STRATEGY "LOCATION")
+    set(Python3_FIND_STRATEGY "LOCATION")
     find_package(Python REQUIRED COMPONENTS Interpreter Development)
 endif()
 
