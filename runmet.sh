@@ -65,6 +65,8 @@ if [[ -d $dir ]]; then
     if [[ $KERNEL == *Windows* ]]; then
 	export FLTK_HOME=$PWD/$BUILD_DIR/install
 	echo "FLTK_HOME is ${FLTK_HOME}"
+    else
+	export PATH=$PWD/$BUILD_DIR/install/bin:$PATH
     fi
 	
     echo $dir
