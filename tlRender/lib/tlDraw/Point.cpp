@@ -13,6 +13,7 @@ namespace tl
             json = nlohmann::json{
                 {"x", value.x},
                 {"y", value.y},
+                {"pressure", value.pressure},
             };
         }
 
@@ -20,6 +21,11 @@ namespace tl
         {
             json.at("x").get_to(value.x);
             json.at("y").get_to(value.y);
+            // Backward-compatible: old files without "pressure" default to 1.0
+            if (json.contains("pressure"))
+                json.at("pressure").get_to(value.pressure);
+            else
+                value.pressure = 1.0f;
         }
     } // namespace draw
 } // namespace tl

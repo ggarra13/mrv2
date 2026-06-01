@@ -139,6 +139,8 @@ namespace mrv
                     return;
                 
                 shape->pts.push_back(pnt);
+                float pressure = static_cast<float>(Fl::Pen::event_pressure());
+                shape->pts.back().pressure = pressure;
                 _addAnnotationShapePoint();
                 redrawWindows();
                 return;

@@ -22,18 +22,20 @@ namespace tl
         class Point : public Imath::V2d
         {
         public:
+            float pressure = 1.F;
+            
             Point() :
-                Imath::V2d()
+                Imath::V2d(), pressure(1.F)
             {
             }
 
-            Point(double xx, double yy) :
-                Imath::V2d(xx, yy)
+            Point(double xx, double yy, float p = 1.F) :
+                Imath::V2d(xx, yy), pressure(p)
             {
             }
 
             Point(const Point& b) :
-                Imath::V2d(b.x, b.y)
+                Imath::V2d(b.x, b.y), pressure(b.pressure)
             {
             }
 

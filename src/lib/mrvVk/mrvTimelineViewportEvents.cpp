@@ -151,6 +151,8 @@ namespace mrv
                     return;
 
                 shape->pts.push_back(pnt);
+                float pressure = static_cast<float>(Fl::Pen::event_pressure());
+                shape->pts.back().pressure = pressure;
                 _addAnnotationShapePoint();
                 redrawWindows();
                 return;
@@ -386,6 +388,8 @@ namespace mrv
                 shape->soft = softBrush;
                 shape->laser = laser;
                 shape->pts.push_back(pnt);
+                float pressure = static_cast<float>(Fl::Pen::event_pressure());
+                shape->pts.back().pressure = pressure;
                 annotation->push_back(shape);
                 _createAnnotationShape(laser);
                 break;
@@ -408,6 +412,8 @@ namespace mrv
                     shape->color = color;
                     shape->soft = softBrush;
                     shape->pts.push_back(pnt);
+                    float pressure = static_cast<float>(Fl::Pen::event_pressure());
+                    shape->pts.back().pressure = pressure;
                 }
                 
                 annotation->push_back(shape);

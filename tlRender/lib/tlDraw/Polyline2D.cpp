@@ -61,9 +61,6 @@ namespace tl
             points = inPoints;
             filterPoints();
 
-            // operate on half the thickness to make our lives easier
-            float thickness = m_width / 2;
-
             // create poly segments from the points
             std::vector<PolySegment<Point>> segments;
             double numPoints = static_cast<double>(points.size() - 1);
@@ -72,9 +69,14 @@ namespace tl
                 auto& point1 = points[i];
                 auto& point2 = points[i + 1];
 
+                // Per-segment half-thickness: base size × average pressure
+                float avgPressure = (point1.pressure + point2.pressure) * 0.5f;
+                float segThickness = std::max(m_width * avgPressure * 0.5f, 0.5f);
+               
+
                 if (point1 != point2)
                     segments.emplace_back(
-                        LineSegment<Point>(point1, point2), thickness);
+                        LineSegment<Point>(point1, point2), segThickness);
             }
 
             if (endCapStyle == EndCapStyle::JOINT)
@@ -84,15 +86,17 @@ namespace tl
 
                 auto& point1 = points[points.size() - 1];
                 auto& point2 = points[0];
+                float avgPressure = (point1.pressure + point2.pressure) * 0.5f;
+                float segThickness = std::max(m_width * avgPressure * 0.5f, 0.5f);
 
                 if (point1 != point2)
                     segments.emplace_back(
-                        LineSegment<Point>(point1, point2), thickness);
+                        LineSegment<Point>(point1, point2), segThickness);
             }
 
             if (segments.empty())
             {
-                const float w = thickness;
+                const float w = std::max(m_width * points[0].pressure * 0.5f, 0.5f);
                 Point center = points[0];
 
                 if (!m_softEdges)
@@ -161,11 +165,11 @@ namespace tl
             {
                 // extend the start/end points by half the thickness
                 pathStart1 =
-                    pathStart1 - firstSegment.edge1.direction() * thickness;
+                    pathStart1 - firstSegment.edge1.direction() * firstSegment.thickness;
                 pathStart2 =
-                    pathStart2 - firstSegment.edge2.direction() * thickness;
-                pathEnd1 = pathEnd1 + lastSegment.edge1.direction() * thickness;
-                pathEnd2 = pathEnd2 + lastSegment.edge2.direction() * thickness;
+                    pathStart2 - firstSegment.edge2.direction() * firstSegment.thickness;
+                pathEnd1 = pathEnd1 + lastSegment.edge1.direction() * lastSegment.thickness;
+                pathEnd2 = pathEnd2 + lastSegment.edge2.direction() * lastSegment.thickness;
             }
             else if (endCapStyle == EndCapStyle::ROUND)
             {
@@ -536,8 +540,8 @@ namespace tl
         void Polyline2D::createRoundSoftCap(
             const PolySegment<Point>& segment, const bool start)
         {
-            auto left = segment.edge1.direction() * m_width * 0.5;
-            auto right = segment.edge2.direction() * m_width * 0.5;
+            auto left = segment.edge1.direction() * segment.thickness;
+            auto right = segment.edge2.direction() * segment.thickness;
 
             Point center, edge1, edge2;
             if (!start)

@@ -144,17 +144,14 @@ namespace tl
             {
                 PolySegment(const LineSegment<Point>& center, float thickness) :
                     center(center),
-                    // calculate the segment's outer edges by offsetting
-                    // the central line by the normal vector
-                    // multiplied with the thickness
-
-                    // center + center.normal() * thickness
+                    thickness(thickness),
                     edge1(center + center.normal() * thickness),
                     edge2(center - center.normal() * thickness)
                 {
                 }
 
                 LineSegment<Point> center, edge1, edge2;
+                float thickness;
             };
 
             void filterPoints();
