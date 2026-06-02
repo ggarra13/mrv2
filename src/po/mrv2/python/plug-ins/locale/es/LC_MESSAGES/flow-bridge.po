@@ -11,35 +11,35 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: pygettext.py 1.5\n"
 
 msgid "Flow Browser – mrv2"
-msgstr ""
+msgstr "Navegador de Flow – mrv2"
 
 msgid "Project:"
-msgstr ""
+msgstr "Proyecto:"
 
 msgid "↻ Refresh"
-msgstr ""
+msgstr "↻ Actualizar"
 
 msgid "Shots"
-msgstr ""
+msgstr "Tomas"
 
 msgid "Versions"
-msgstr ""
+msgstr "Versiones"
 
 msgid "Details"
-msgstr ""
+msgstr "Detalles"
 
 msgid "▶  Open in mrv2"
-msgstr ""
+msgstr "▶  Abrir en mrv2"
 
 msgid "⬆  Submit current clip"
-msgstr ""
+msgstr "⬆  Enviar clip actual"
 
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 msgid "Flow/Browse & Submit"
-msgstr ""
+msgstr "Flow/Explorar y Enviar"

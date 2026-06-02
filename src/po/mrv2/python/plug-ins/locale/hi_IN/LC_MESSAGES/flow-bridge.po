@@ -14,31 +14,31 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 msgid "Flow Browser – mrv2"
-msgstr ""
+msgstr "फ़्लो ब्राउज़र – mrv2"
 
 msgid "Project:"
-msgstr ""
+msgstr "परियोजना:"
 
 msgid "↻ Refresh"
-msgstr ""
+msgstr "↻ ताज़ा करें"
 
 msgid "Shots"
-msgstr ""
+msgstr "शॉट्स"
 
 msgid "Versions"
-msgstr ""
+msgstr "संस्करण"
 
 msgid "Details"
-msgstr ""
+msgstr "विवरण"
 
 msgid "▶  Open in mrv2"
-msgstr ""
+msgstr "▶  mrv2 में खोलें"
 
 msgid "⬆  Submit current clip"
-msgstr ""
+msgstr "⬆  वर्तमान क्लिप सबमिट करें"
 
 msgid "Close"
-msgstr ""
+msgstr "बंद करें"
 
 msgid "Flow/Browse & Submit"
-msgstr ""
+msgstr "फ़्लो/ब्राउज़ और सबमिट करें"

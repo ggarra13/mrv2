@@ -417,6 +417,7 @@ if(BUILD_PYTHON)
     list(APPEND mrv2_COMPONENTS 
 	python_demos
 	python_tk
+	python_plugins
     )
 endif()
 
@@ -425,6 +426,7 @@ set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "${mrv2_NAME} Application")
 set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "${mrv2_NAME} Documentation")
 if(BUILD_PYTHON)
     set(CPACK_COMPONENT_PYTHON_DEMOS_DISPLAY_NAME "${mrv2_NAME} Python Demos")
+    set(CPACK_COMPONENT_PYTHON_PLUGINS_DISPLAY_NAME "${mrv2_NAME} Python FLTK Plugins")
     set(CPACK_COMPONENT_PYTHON_TK_DISPLAY_NAME "Python TK Libraries")
     set(CPACK_COMPONENT_PYTHON_TK_DISABLED TRUE)
 endif()

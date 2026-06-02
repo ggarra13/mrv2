@@ -367,13 +367,17 @@ install( DIRECTORY share/locale
 # Install update-mrv2 plugin
 #
 if (MRV2_PYBIND11)
-    install( FILES python/plug-ins/update-mrv2.py
+    install(FILES python/plug-ins/flow-bridge.py
 	DESTINATION python/plug-ins
-	COMPONENT applications )
+	COMPONENT python_plugins)
     
-    install( DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
+    install(FILES python/plug-ins/update-mrv2.py
+	DESTINATION python/plug-ins
+	COMPONENT python_plugins)
+    
+    install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
 	DESTINATION python/
-	COMPONENT applications )
+	COMPONENT python_plugins)
     
     #
     # Install mrv2's python demos
@@ -390,7 +394,7 @@ endif()
 #
 # Install mrv2's documentation
 #
-install( DIRECTORY docs
+install( DIRECTORY docs/Legal
     DESTINATION .
     COMPONENT documentation )
 
