@@ -42,6 +42,8 @@ docs/Doxygen
 mrv2/bin/environment.sh
 mrv2/share/locale
 mrv2/po/messages.pot
+src/docs/en
+src/docs/es
 docs/sphinx/doctrees
 docs/sphinx/*/_images
 docs/sphinx/*/_sources
