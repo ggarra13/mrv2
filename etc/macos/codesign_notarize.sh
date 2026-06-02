@@ -10,37 +10,9 @@
 
 set -euo pipefail
 
-# Analyzed mrv2's architecture to craft comprehensive signing script.
 
-# Now I have a solid understanding of the mrv2 project — two app bundles (mrv2.app + hdr.app), shell script launchers, Python libraries, OpenGL/networking capabilities, and CPack-generated DMGs. Let me write the complete script.Created a file, ran a command, read a fileCreated a file, ran a command, read a fileHere's a walkthrough of what the script does and how to use it.
-# Drop it at the repo root (alongside CMakeLists.txt) and make it executable:
-# bash
-#
-# chmod +x codesign_notarize.sh
-#
-# First-time machine setup (one-time only)
-#
-# bash
-# # Securely stores your app-specific password in the login keychain
-# ./codesign_notarize.sh store-creds
+. etc/build_dir.sh
 
-# Full release pipeline
-# bashexport DEVELOPER_ID="Developer ID Application: Gonzalo Garramuño (ABCDE12345)"
-# export TEAM_ID="ABCDE12345"
-# export BUILD_DIR="$(pwd)/BUILD/CPackConfig"   # where CPack puts .app / .dmg
-
-# ./codesign_notarize.sh all
-
-# What it does, step by step
-# PhaseDetailsign-bundlesSigns both mrv2.app and hdr.app inside-out — dylibs → .so modules → frameworks → Python interpreter → executables → shell-script launchers → top-level bundlecreate-dmgStages both apps + an /Applications symlink (drag-install UX), then builds a compressed UDZO disk imagesign-dmgSigns the DMG itself with your Developer IDnotarizeSubmits to Apple's Notary Service via xcrun notarytool and waits for the verdict; on failure it auto-fetches the full rejection logstapleEmbeds the notarization ticket into the DMG and runs a final spctl Gatekeeper check
-
-# mrv2-specific decisions
-
-# disable-library-validation — enabled because mrv2 ships OpenColorIO, OpenEXR, FFmpeg, and other third-party dylibs that aren't signed by Apple.
-# allow-unsigned-executable-memory — needed by the embedded Python runtime (pybind11/pyFLTK JIT).
-# network.client — required by MRV2_NETWORK (streaming, RV sync, NDI).
-# Shell-script launchers (mrv2.sh, launcher.sh, hdr.sh) are signed as plain files — the script detects them automatically.
-# If you use CPack's DMG directly (instead of create-dmg), just run sign-dmg → notarize → staple on it.
 
 # ─────────────────────────────────────────────────────────────────────────────
 #  CONFIGURATION
@@ -49,10 +21,10 @@ set -euo pipefail
 
 # Developer ID Application certificate — exactly as it appears in Keychain Access.
 # Example: "Developer ID Application: Gonzalo Garramuño (XXXXXXXXXX)"
-DEVELOPER_ID="${DEVELOPER_ID:-Developer ID Application: YOUR NAME (TEAMID)}"
+DEVELOPER_ID="${DEVELOPER_ID:-Developer ID Application: Gonzalo Garramuño(TEAMID)}"
 
 # Apple ID (email) associated with your developer account.
-APPLE_ID="${APPLE_ID:-you@example.com}"
+APPLE_ID="${APPLE_ID:-ggarra13@gmail.com}"
 
 # Apple Team ID (10-character string, visible at developer.apple.com).
 TEAM_ID="${TEAM_ID:-XXXXXXXXXX}"
@@ -67,10 +39,11 @@ APP_PASSWORD="${APP_PASSWORD:-@keychain:mrv2-notarytool}"
 NOTARYTOOL_PROFILE="${NOTARYTOOL_PROFILE:-mrv2-notarytool}"
 
 # CPack / build output directory that contains the .app bundles and the DMG.
-BUILD_DIR="${BUILD_DIR:-$(pwd)/BUILD/CPackConfig}"
+BUILD_DIR="${BUILD_DIR}/CPackConfig}"
 
 # Names of the two app bundles produced by CPack.
 MRV2_APP="${MRV2_APP:-mrv2.app}"
+VMRV2_APP="${VMRV2_APP:-vmrv2.app}"
 HDR_APP="${HDR_APP:-hdr.app}"         # Set HDR_APP="" to skip the hdr bundle.
 
 # Name of the DMG produced by CPack (or the one this script creates).
@@ -319,7 +292,12 @@ sign_bundle() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 sign_all_bundles() {
-    sign_bundle "${BUILD_DIR}/${MRV2_APP}"
+    if [[ -n "${MRV2_APP:-}" ]]; then
+	sign_bundle "${BUILD_DIR}/${MRV2_APP}"
+    fi
+    if [[ -n "${VMRV2_APP:-}" ]]; then
+	sign_bundle "${BUILD_DIR}/${VMRV2_APP}"
+    fi
     if [[ -n "${HDR_APP:-}" ]]; then
         sign_bundle "${BUILD_DIR}/${HDR_APP}"
     fi
@@ -330,7 +308,46 @@ sign_all_bundles() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 create_dmg() {
+    step "Creating DMG: ${DMG_NAME}"
+
     runmeq.sh -t package
+    
+    # local src_apps=()
+    # [[ -d "${BUILD_DIR}/${MRV2_APP}" ]] && src_apps+=("${BUILD_DIR}/${MRV2_APP}")
+    # [[ -n "${HDR_APP:-}" && -d "${BUILD_DIR}/${HDR_APP}" ]] \
+    #     && src_apps+=("${BUILD_DIR}/${HDR_APP}")
+    # [[ ${#src_apps[@]} -gt 0 ]] || die "No app bundles found in ${BUILD_DIR}."
+
+    # local staging_dir
+    # staging_dir="$(mktemp -d)"
+    # trap 'rm -rf "${staging_dir}"' RETURN
+
+    # # Copy apps into a staging folder.
+    # for app in "${src_apps[@]}"; do
+    #     ditto "${app}" "${staging_dir}/$(basename "${app}")"
+    # done
+
+    # # Create a symlink to /Applications for drag-install UX.
+    # ln -s /Applications "${staging_dir}/Applications"
+
+    # local tmp_dmg="${BUILD_DIR}/tmp_$$.dmg"
+    # local final_dmg="${BUILD_DIR}/${DMG_NAME}"
+
+    # rm -f "${tmp_dmg}" "${final_dmg}"
+
+    # hdiutil create \
+    #     -volname "mrv2 Installer" \
+    #     -srcfolder "${staging_dir}" \
+    #     -ov -format UDRW \
+    #     "${tmp_dmg}"
+
+    # hdiutil convert "${tmp_dmg}" \
+    #     -format UDZO \
+    #     -imagekey zlib-level=9 \
+    #     -o "${final_dmg}"
+
+    # rm -f "${tmp_dmg}"
+    # ok "DMG created: ${final_dmg}"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -547,11 +564,6 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 #  DISPATCH
 # ─────────────────────────────────────────────────────────────────────────────
-
-#
-# Go back to the root of the project
-#
-cd ../..
 
 case "${COMMAND}" in
 
