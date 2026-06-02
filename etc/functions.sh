@@ -227,10 +227,8 @@ get_kernel()
 	get_linux_id
     fi
 
-    if [[ $ARCH == "" ]]; then
-	export ARCH=`uname -m` # was uname -a
-	export UNAME_ARCH=$ARCH # Store uname architecture to compile properly
-    fi
+    export ARCH=`uname -m` # was uname -a
+    export UNAME_ARCH=$ARCH # Store uname architecture to compile properly
     
     if [[ $KERNEL == *Darwin* ]]; then
 	if [[ $ARCH == aarch64 || $ARCH == arm64 ]]; then

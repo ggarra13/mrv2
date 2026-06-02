@@ -8,10 +8,12 @@
 # Place this script at the root of the mrv2 repository (alongside CMakeLists.txt).
 # Run `./codesign_notarize.sh --help` for full documentation.
 
-set -euo pipefail
+set -eo pipefail
 
+. etc/functions.sh
 
-. etc/build_dir.sh
+get_kernel
+extract_version
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -39,15 +41,15 @@ APP_PASSWORD="${APP_PASSWORD:-@keychain:mrv2-notarytool}"
 NOTARYTOOL_PROFILE="${NOTARYTOOL_PROFILE:-mrv2-notarytool}"
 
 # CPack / build output directory that contains the .app bundles and the DMG.
-BUILD_DIR="${BUILD_DIR}/CPackConfig}"
+
+ROOT_DIR=BUILD-${KERNEL}-${ARCH}
+mrv2_NAME="mrv2"
 
 # Names of the two app bundles produced by CPack.
 MRV2_APP="${MRV2_APP:-mrv2.app}"
 VMRV2_APP="${VMRV2_APP:-vmrv2.app}"
 HDR_APP="${HDR_APP:-hdr.app}"         # Set HDR_APP="" to skip the hdr bundle.
 
-# Name of the DMG produced by CPack (or the one this script creates).
-DMG_NAME="${DMG_NAME:-mrv2-installer.dmg}"
 
 # Entitlements file for the main executables.
 # A default file is generated automatically if this path does not exist.
@@ -293,13 +295,13 @@ sign_bundle() {
 
 sign_all_bundles() {
     if [[ -n "${MRV2_APP:-}" ]]; then
-	sign_bundle "${BUILD_DIR}/${MRV2_APP}"
+	sign_bundle "packages/${BUILD_DIR}/${MRV2_APP}"
     fi
     if [[ -n "${VMRV2_APP:-}" ]]; then
-	sign_bundle "${BUILD_DIR}/${VMRV2_APP}"
+	sign_bundle "packages/${BUILD_DIR}/${VMRV2_APP}"
     fi
     if [[ -n "${HDR_APP:-}" ]]; then
-        sign_bundle "${BUILD_DIR}/${HDR_APP}"
+        sign_bundle "packages/${BUILD_DIR}/${HDR_APP}"
     fi
 }
 
@@ -310,13 +312,13 @@ sign_all_bundles() {
 create_dmg() {
     step "Creating DMG: ${DMG_NAME}"
 
-    runmeq.sh -t package
+    runmeq.sh -t package ${VK_ARG}
     
     # local src_apps=()
-    # [[ -d "${BUILD_DIR}/${MRV2_APP}" ]] && src_apps+=("${BUILD_DIR}/${MRV2_APP}")
-    # [[ -n "${HDR_APP:-}" && -d "${BUILD_DIR}/${HDR_APP}" ]] \
-    #     && src_apps+=("${BUILD_DIR}/${HDR_APP}")
-    # [[ ${#src_apps[@]} -gt 0 ]] || die "No app bundles found in ${BUILD_DIR}."
+    # [[ -d "${PACK_DIR}/${MRV2_APP}" ]] && src_apps+=("${PACK_DIR}/${MRV2_APP}")
+    # [[ -n "${HDR_APP:-}" && -d "${PACK_DIR}/${HDR_APP}" ]] \
+    #     && src_apps+=("${PACK_DIR}/${HDR_APP}")
+    # [[ ${#src_apps[@]} -gt 0 ]] || die "No app bundles found in ${PACK_DIR}."
 
     # local staging_dir
     # staging_dir="$(mktemp -d)"
@@ -330,8 +332,8 @@ create_dmg() {
     # # Create a symlink to /Applications for drag-install UX.
     # ln -s /Applications "${staging_dir}/Applications"
 
-    # local tmp_dmg="${BUILD_DIR}/tmp_$$.dmg"
-    # local final_dmg="${BUILD_DIR}/${DMG_NAME}"
+    # local tmp_dmg="${PACK_DIR}/tmp_$$.dmg"
+    # local final_dmg="${PACK_DIR}/${DMG_NAME}"
 
     # rm -f "${tmp_dmg}" "${final_dmg}"
 
@@ -355,7 +357,7 @@ create_dmg() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 sign_dmg() {
-    local dmg="${BUILD_DIR}/${DMG_NAME}"
+    local dmg="${DIST_DIR}/${DMG_NAME}"
     step "Signing DMG: ${dmg}"
     [[ -f "${dmg}" ]] || die "DMG not found: ${dmg}\nRun 'create-dmg' or point BUILD_DIR at the CPack output directory."
 
@@ -374,7 +376,7 @@ sign_dmg() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 notarize() {
-    local target="${1:-${BUILD_DIR}/${DMG_NAME}}"
+    local target="${1:-${DIST_DIR}/${DMG_NAME}}"
     step "Notarizing: $(basename "${target}")"
     [[ -f "${target}" ]] || die "File not found for notarization: ${target}"
 
@@ -407,7 +409,7 @@ notarize() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 staple_target() {
-    local target="${1:-${BUILD_DIR}/${DMG_NAME}}"
+    local target="${1:-${PACK_DIR}/${DMG_NAME}}"
     step "Stapling notarization ticket: $(basename "${target}")"
 
     xcrun stapler staple "${target}" \
@@ -456,7 +458,7 @@ verify() {
             || warn "  Gatekeeper check failed"
     done
 
-    local dmg="${BUILD_DIR}/${DMG_NAME}"
+    local dmg="${PACK_DIR}/${DMG_NAME}"
     if [[ -f "${dmg}" ]]; then
         info "Checking DMG: $(basename "${dmg}")"
         codesign --verify --verbose=2 "${dmg}" \
@@ -491,7 +493,7 @@ COMMANDS
   entitlements  Generate a default entitlements.plist and exit
 
 OPTIONS
-  -b, --build-dir DIR     Build output dir containing .app bundles and DMG
+  -d, --dir DIR           Root Build output dir containing .app bundles and DMG
                           [default: \$BUILD_DIR or ./BUILD/CPackConfig]
   -i, --identity NAME     Developer ID Application certificate name
   -e, --entitlements PATH Path to entitlements.plist
@@ -517,7 +519,6 @@ TYPICAL CI USAGE
   export DEVELOPER_ID="Developer ID Application: Gonzalo Garramuño (ABCDE12345)"
   export TEAM_ID="ABCDE12345"
   export NOTARYTOOL_PROFILE="mrv2-notarytool"
-  export BUILD_DIR="\$(pwd)/BUILD/CPackConfig"
   $(basename "$0") all
 
 NOTES
@@ -544,7 +545,12 @@ COMMAND=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -b|--build-dir)     BUILD_DIR="$2";           shift 2 ;;
+        -d|--root-dir)      ROOT_DIR="$2";           shift 2 ;;
+        -vk)
+	    ROOT_DIR="Darwin-vulkan-${ARCH}";
+	    mrv2_NAME="vmrv2"
+	    VK_ARG="-vk"
+	    shift 1 ;;
         -i|--identity)      DEVELOPER_ID="$2";        shift 2 ;;
         -e|--entitlements)  ENTITLEMENTS="$2";        shift 2 ;;
         -p|--profile)       NOTARYTOOL_PROFILE="$2";  shift 2 ;;
@@ -560,6 +566,13 @@ if [[ -z "${COMMAND}" ]]; then
     usage
     exit 1
 fi
+
+export BUILD_DIR="${ROOT_DIR}/Release/"
+export PACK_DIR="${BUILD_DIR}/mrv2/src/mrv2-build/_CPack_Packages/Darwin/DragNDrop/${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}"
+export DIST_DIR="packages/${BUILD_DIR}"
+
+# Name of the DMG produced by CPack (or the one this script creates).
+DMG_NAME="${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}.dmg"
 
 # ─────────────────────────────────────────────────────────────────────────────
 #  DISPATCH
