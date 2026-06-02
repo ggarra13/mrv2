@@ -53,6 +53,7 @@ ChangeLog
 - UI/Pen and Tablet: Added tablet support for all platforms.
 - UI/Annotations: Made annotations increase the brush size based on pen pressure.
 
+
 v1.6.6
 ======
 
