@@ -1,0 +1,36 @@
+#
+msgid ""
+msgstr ""
+"Language: it\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Flow Browser – mrv2"
+msgstr "Browser di Flow – mrv2"
+
+msgid "Project:"
+msgstr "Progetto:"
+
+msgid "↻ Refresh"
+msgstr "↻ Aggiorna"
+
+msgid "Shots"
+msgstr "Inquadrature"
+
+msgid "Versions"
+msgstr "Versioni"
+
+msgid "Details"
+msgstr "Dettagli"
+
+msgid "▶  Open in mrv2"
+msgstr "▶  Apri in mrv2"
+
+msgid "⬆  Submit current clip"
+msgstr "⬆  Invia clip corrente"
+
+msgid "Close"
+msgstr "Chiudi"
+
+msgid "Flow/Browse & Submit"
+msgstr "Flow/Sfoglia e invia"

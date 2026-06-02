@@ -1,0 +1,36 @@
+#
+msgid ""
+msgstr ""
+"Language: zh\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Flow Browser – mrv2"
+msgstr "Flow 浏览器 – mrv2"
+
+msgid "Project:"
+msgstr "项目："
+
+msgid "↻ Refresh"
+msgstr "↻ 刷新"
+
+msgid "Shots"
+msgstr "镜头"
+
+msgid "Versions"
+msgstr "版本"
+
+msgid "Details"
+msgstr "详细信息"
+
+msgid "▶  Open in mrv2"
+msgstr "▶  在 mrv2 中打开"
+
+msgid "⬆  Submit current clip"
+msgstr "⬆  提交当前剪辑"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Flow/Browse & Submit"
+msgstr "Flow/浏览与提交"

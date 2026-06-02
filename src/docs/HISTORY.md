@@ -1,4 +1,4 @@
-v1.6.6
+v1.6.7
 ======
 
 mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
@@ -44,6 +44,17 @@ They do have, however:
     - Saving Images and Movies with Audio
 
 Prices might change (go up or down) depending on competition and new features.
+
+ChangeLog
+---------
+
+- Docs: Documentation is no longer kept locally and it is instead read from the internet.
+- Python/UI: Added support for connecting with Autodesk Flow.  The script is barebones.  It is up to your studio to improve it.
+- UI/Pen and Tablet: Added tablet support for all platforms.
+- UI/Annotations: Made annotations increase the brush size based on pen pressure.
+
+v1.6.6
+======
 
 ChangeLog
 ---------

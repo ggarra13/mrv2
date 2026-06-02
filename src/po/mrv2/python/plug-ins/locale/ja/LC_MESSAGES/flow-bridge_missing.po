@@ -1,0 +1,36 @@
+#
+msgid ""
+msgstr ""
+"Language: ja\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Flow Browser – mrv2"
+msgstr "Flowブラウザー – mrv2"
+
+msgid "Project:"
+msgstr "プロジェクト:"
+
+msgid "↻ Refresh"
+msgstr "↻ 更新"
+
+msgid "Shots"
+msgstr "ショット"
+
+msgid "Versions"
+msgstr "バージョン"
+
+msgid "Details"
+msgstr "詳細"
+
+msgid "▶  Open in mrv2"
+msgstr "▶  mrv2で開く"
+
+msgid "⬆  Submit current clip"
+msgstr "⬆  現在のクリップを送信"
+
+msgid "Close"
+msgstr "閉じる"
+
+msgid "Flow/Browse & Submit"
+msgstr "Flow/参照と送信"

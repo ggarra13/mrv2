@@ -1,0 +1,46 @@
+# Russian translations for mrv package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mrv 2-build\n"
+"PO-Revision-Date: 2026-06-02 18:09-0300\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Flow Browser – mrv2"
+msgstr ""
+
+msgid "Project:"
+msgstr ""
+
+msgid "↻ Refresh"
+msgstr ""
+
+msgid "Shots"
+msgstr ""
+
+msgid "Versions"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "▶  Open in mrv2"
+msgstr ""
+
+msgid "⬆  Submit current clip"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Flow/Browse & Submit"
+msgstr ""
