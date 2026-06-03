@@ -10,10 +10,21 @@ import time
 # ══════════════════════════════════════════════════════════════════════════════
 # CONFIGURATION
 # ══════════════════════════════════════════════════════════════════════════════
-FLOW_URL         = os.environ.get("FLOW_URL",    "https://your-studio.shotgrid.autodesk.com")
-FLOW_SCRIPT_NAME = os.environ.get("FLOW_SCRIPT", "mrv2_integration")
-FLOW_API_KEY     = os.environ.get("FLOW_KEY",    "YOUR_SCRIPT_KEY_HERE")
 
+# For more info, refer to this youtube video.
+#
+# https://www.youtube.com/watch?v=RYEBQDJiXAs&t=75s
+
+FLOW_URL = "https://your_site.shotgrid.autodesk.com"
+FLOW_SCRIPT_NAME = 'your_script name as created in Web/Script'
+FLOW_API_KEY = 'Your API Key as created in Web/Scripts'
+
+#
+# The URL and API KEY below will work for 20 days.
+#
+#FLOW_URL = "https://filmaura.shotgrid.autodesk.com"
+#FLOW_SCRIPT_NAME = 'my_script'
+#FLOW_API_KEY = 'lxhaemtakPachryqheaqxlx4&'
 
 # ── mrv2 imports ──────────────────────────────────────────────────────────────
 import mrv2
@@ -72,11 +83,11 @@ class _FlowConn:
     @classmethod
     def get(cls):
         if cls._sg is None:
-            cls._sg = shotgun_api3.Shotgun(
-                FLOW_URL,
-                script_name=FLOW_SCRIPT_NAME,
-                api_key=FLOW_API_KEY,
-            )
+             cls._sg = shotgun_api3.Shotgun(
+                 FLOW_URL,
+                 script_name=FLOW_SCRIPT_NAME,
+                 api_key=FLOW_API_KEY,
+             )
         return cls._sg
 
     @classmethod
@@ -156,6 +167,8 @@ def submit_version(
         sg().update("Shot", shot_id, {"sg_status_list": update_shot_status})
         print(f"[flow_bridge] Shot status → {update_shot_status}")
 
+    Fl.check()
+
     return version
 
 
@@ -223,14 +236,18 @@ class FlowBrowserPanel:
         # Shots
         self._shot_frame = Fl_Group(10, y, 240, h, _("Shots"))
         self._shot_frame.box(FL_ENGRAVED_FRAME)
-        self._shot_list = Fl_Select_Browser(15, y + 25, 230, h - 35)
+        self._shot_list = Fl_Hold_Browser(15, y + 25, 230, h - 35)
+        self._shot_list.textcolor(FL_BLACK)
+        self._shot_list.selection_color(FL_CYAN)
         self._shot_list.callback(self._on_shot_select)
         self._shot_frame.end()
 
         # Versions
         self._ver_frame = Fl_Group(260, y, 240, h, _("Versions"))
         self._ver_frame.box(FL_ENGRAVED_FRAME)
-        self._version_list = Fl_Select_Browser(265, y + 25, 230, h - 35)
+        self._version_list = Fl_Hold_Browser(265, y + 25, 230, h - 35)
+        self._version_list.textcolor(FL_BLACK)
+        self._version_list.selection_color(FL_CYAN)
         self._version_list.callback(self._on_version_select)
         self._ver_frame.end()
 
@@ -238,6 +255,8 @@ class FlowBrowserPanel:
         self._det_frame = Fl_Group(510, y, 300, h, _("Details"))
         self._det_frame.box(FL_ENGRAVED_FRAME)
         self._detail = Fl_Text_Display(520, y + 25, 280, h - 35)
+        self._detail.textcolor(FL_BLACK)
+        self._detail.selection_color(FL_CYAN)
         self._detail.buffer(Fl_Text_Buffer())
         self._det_frame.end()
 
@@ -370,9 +389,8 @@ class FlowBrowserPanel:
                 project_id, shot_id, movie_path,
                 version_name, description, shot_status or ""
             )
-            Fl.fl_alert(f"Submitted successfully!\n\nVersion: {v['code']}")
         except Exception as e:
-            Fl.fl_alert(f"Submit failed:\n{str(e)}")
+            print(f"Submit failed:\n{str(e)}", None)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -386,6 +404,7 @@ class SubmitDialog:
         self._projects = projects
         self._shots = shots
 
+        Fl_Group.current(None)
         self.win = Fl_Double_Window(520, 420, _("Submit to Flow"))
         self.win.begin()
 
@@ -437,9 +456,9 @@ class SubmitDialog:
         # Status
         Fl_Box(20, y, 120, 25, _("Shot status:"))
         self._status_choice = Fl_Choice(150, y, 120, 25)
-        for s in ["", "wtg", "rdy", "ip", "rev", "cmpt"]:
+        for s in ["", "wtg", "ip", "fin"]:
             self._status_choice.add(s)
-        self._status_choice.value(4)  # rev
+        self._status_choice.value(0)  # ""
         y += 40
 
         # Buttons
@@ -450,7 +469,7 @@ class SubmitDialog:
         cancel_btn.callback(lambda w: self.win.hide())
 
         self.win.end()
-        self.win.set_modal()
+        self.win.set_non_modal()
         self.win.show()
 
         while self.win.visible():
@@ -476,6 +495,8 @@ class SubmitDialog:
         return None
 
     def _submit(self, widget):
+        self.win.hide()
+        
         path = self._path_input.value().strip()
         if not path or not os.path.isfile(path):
             Fl.fl_alert(_("Valid movie path required."))
@@ -497,7 +518,6 @@ class SubmitDialog:
         description = self._desc_input.value()
         status = self._status_choice.text(self._status_choice.value())
 
-        self.win.hide()
         self._on_submit(proj_id, shot_id, path, version_name, description, status)
 
 
@@ -519,14 +539,11 @@ class FlowBridgePlugin(mrv2.plugin.Plugin):
                 FlowBrowserPanel()
             except Exception as e:
                 print(f"[flow_bridge] Error: {e}")
-
-        # t = threading.Thread(target=run_panel, daemon=True)
-        # t.start()
         run_panel()
 
     def menus(self):
         menus = {
-            _("Autodesk's Flow/Browse & Submit"): self.launch_browser,
+            _("Flow/Browse and Submit"): self.launch_browser,
         }
         return menus
 
