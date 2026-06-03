@@ -41,5 +41,41 @@ msgstr "⬆  Enviar clipe atual"
 msgid "Close"
 msgstr "Fechar"
 
-msgid "Flow/Browse & Submit"
+msgid "Submit to Flow"
+msgstr ""
+
+msgid "Movie path:"
+msgstr ""
+
+#, fuzzy
+msgid "Shot:"
+msgstr "Tomadas"
+
+#, fuzzy
+msgid "Version name:"
+msgstr "Versões"
+
+msgid "Notes:"
+msgstr ""
+
+msgid "Shot status:"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Valid movie path required."
+msgstr ""
+
+msgid "Select a shot."
+msgstr ""
+
+msgid "Invalid project/shot selection."
+msgstr ""
+
+#, fuzzy
+msgid "Autodesk's Flow/Browse & Submit"
 msgstr "Flow/Navegar e Enviar"

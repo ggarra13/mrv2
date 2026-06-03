@@ -307,15 +307,6 @@ set(VULKAN_SDK $ENV{VULKAN_SDK})
 message(STATUS "VULKAN_SDK set to ${VULKAN_SDK}")
 
 #
-# Copy vmrv2/mrv2 launcher with the name of the directory.
-#
-file(COPY ${CPACK_PREPACKAGE}/bin/launcher
-    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/)
-file(RENAME ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/launcher
-    ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/${mrv2_NAME})
-
-    
-#
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libfltk*")
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libintl*")
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libomp*")

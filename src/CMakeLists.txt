@@ -367,8 +367,8 @@ install( DIRECTORY share/locale
 # Install update-mrv2 plugin
 #
 if (MRV2_PYBIND11)
-    install(FILES python/plug-ins/flow-bridge.py
-	DESTINATION python/plug-ins
+    install(FILES python/plug-ins/demos/flow-bridge.py
+	DESTINATION python/plug-ins/demos
 	COMPONENT python_plugins)
     
     install(FILES python/plug-ins/update-mrv2.py
@@ -473,10 +473,6 @@ endif()
 # Add main source
 #
 add_subdirectory(main)
-
-if (APPLE)
-    add_subdirectory(launcher)
-endif()
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
     add_subdirectory(tests)

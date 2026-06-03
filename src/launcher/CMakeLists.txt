@@ -6,7 +6,6 @@
 set(HEADERS )
 set(SOURCES main.cpp )
 
-
 list(APPEND LIBRARIES fltk::fltk)
 
 add_executable(launcher WIN32  ${SOURCES} ${HEADERS})

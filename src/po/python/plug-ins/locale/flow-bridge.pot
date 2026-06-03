@@ -40,6 +40,39 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-msgid "Flow/Browse & Submit"
+msgid "Submit to Flow"
+msgstr ""
+
+msgid "Movie path:"
+msgstr ""
+
+msgid "Shot:"
+msgstr ""
+
+msgid "Version name:"
+msgstr ""
+
+msgid "Notes:"
+msgstr ""
+
+msgid "Shot status:"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Valid movie path required."
+msgstr ""
+
+msgid "Select a shot."
+msgstr ""
+
+msgid "Invalid project/shot selection."
+msgstr ""
+
+msgid "Autodesk's Flow/Browse & Submit"
 msgstr ""
 

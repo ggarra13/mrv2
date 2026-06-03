@@ -16,6 +16,8 @@ namespace fs = std::filesystem;
 
 #ifdef __APPLE__ /* assume this is OSX */
 #    include <sys/param.h>
+#    include <sys/wait.h>
+#    include <spawn.h>
 
 /* _NSGetExecutablePath : must add -framework CoreFoundation to link line */
 #    include <mach-o/dyld.h>
@@ -109,19 +111,28 @@ int main(int argc, char* argv[])
 {
     // Path to the actual binary (relative to Contents/MacOS/)
     set_root_path(argc, argv);
+
+    std::string cmd = std::string(argv[0]) + ".sh";
+    fs::path f(cmd);
+
+    std::string script = f.filename();
+    if (script == "vmrv2.sh")
+        script = "mrv2.sh";
     
-    std::string script = "launcher.sh";
-    std::string full_path = g_bin_path + "/" + script;
+    std::string resource_path = g_bin_path + "/../Resources/bin";
+    std::string full_path = resource_path + "/" + script;
 
 
     if (!fs::exists(full_path))
     {
         std::cerr << "Could not locate " << full_path
                   << std::endl;
+        std::cerr << "g_bin_path=" << g_bin_path << std::endl;
+        std::cerr << "resource_path=" << resource_path << std::endl;
+        std::cerr << "full_path=" << full_path << std::endl;
         return 1;
     }
 
-    
     // 3. Set the callback.
     // This MUST be done before initializing the display.
     fl_open_callback(open_file_callback);
@@ -153,12 +164,38 @@ int main(int argc, char* argv[])
 
     // The argv array for execv MUST be terminated with a NULL pointer
     new_argv.push_back(NULL);
+#ifdef __APPLE__
+    pid_t pid;
+    posix_spawnattr_t attr;
+    posix_spawnattr_init(&attr);
 
-    // 7. Call execv to replace this launcher with the real program
-    // We use .data() to get the underlying C-style array from the vector.
+    // 1. Declare the external environment pointer used by posix_spawn
+    extern char **environ;
+
+    // Set flags instructing macOS to handle this as a seamless application handover
+    short flags = POSIX_SPAWN_SETEXEC | POSIX_SPAWN_CLOEXEC_DEFAULT;
+    posix_spawnattr_setflags(&attr, flags);
+
+    // Spawn the child binary inheriting the bundle's GUI presence
+    int status = posix_spawn(&pid, full_path.c_str(), NULL, &attr, (char* const*)new_argv.data(), environ);
+    
+    posix_spawnattr_destroy(&attr);
+
+    if (status != 0) {
+        // If posix_spawn fails, handle the error
+        char error_msg[1024];
+        snprintf(error_msg, sizeof(error_msg), "Failed to spawn core binary: %s", strerror(status));
+        fl_alert("%s", error_msg);
+        return 1;
+    }
+    
+    // Exit the launcher cleanly; the spawned process has taken over the GUI context
+    return 0;
+#else
+    // Fallback for non-macOS platforms if compiling cross-platform
     execv(full_path.c_str(), (char* const*)new_argv.data());
-
-    // 8. Error handling
+    
+    // Error handling
     // If execv returns, it means it failed.
     char error_msg[1024];
     snprintf(error_msg, sizeof(error_msg), 
@@ -166,6 +203,8 @@ int main(int argc, char* argv[])
     
     // Use fl_alert to show a graphical error if the execv fails
     fl_alert("%s\n\nError: %s", error_msg, strerror(errno));
+#endif
+
     
-    return 1;
+    return 0;
 }

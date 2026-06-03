@@ -40,5 +40,41 @@ msgstr "⬆  提交当前剪辑"
 msgid "Close"
 msgstr "关闭"
 
-msgid "Flow/Browse & Submit"
+msgid "Submit to Flow"
+msgstr ""
+
+msgid "Movie path:"
+msgstr ""
+
+#, fuzzy
+msgid "Shot:"
+msgstr "镜头"
+
+#, fuzzy
+msgid "Version name:"
+msgstr "版本"
+
+msgid "Notes:"
+msgstr ""
+
+msgid "Shot status:"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Valid movie path required."
+msgstr ""
+
+msgid "Select a shot."
+msgstr ""
+
+msgid "Invalid project/shot selection."
+msgstr ""
+
+#, fuzzy
+msgid "Autodesk's Flow/Browse & Submit"
 msgstr "Flow/浏览与提交"
