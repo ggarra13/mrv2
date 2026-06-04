@@ -10,8 +10,6 @@
 . etc/build_dir.sh
 . etc/vulkan_version.sh
 
-set +e
-
 EXE=/tmp/vulkan-sdk.exe
 rm -rf $EXE
 
@@ -38,6 +36,7 @@ if needs_download && [[ -n "$VK_STRIPPED" ]]; then
     fi
 fi
 
+
 # 3) Fallback to latest
 if needs_download; then
     echo "VK_DOWNLOAD ${VK_DOWNLOAD} version not found.  Downloading latest."
@@ -48,7 +47,7 @@ if needs_download; then
     fi
 fi
 
-ls /tmp
+ls -l $EXE
 
 #
 # Do not use the system VULKAN_SDK, which may be old.
@@ -62,7 +61,6 @@ $EXE \
     --root "$VULKAN_ROOT" \
     --accept-messages \
     --accept-licenses \
-    -da \
     --confirm-command install
 
 rm -f $EXE
@@ -75,9 +73,9 @@ export WINDOWS_VULKAN_SDK=$WINDOWS_VULKAN_ROOT
 if [[ "$BUILD_VULKAN" == "ON" ]]; then
     . etc/common/build_vulkan.sh
 else
-    echo "---------------------------------------------"
-    echo "   Using pre-compiled Vulkan for ${KERNEL}   "
-    echo "---------------------------------------------"
+    echo "------------------------------------------------------------"
+    echo "   Using pre-compiled Vulkan for ${KERNEL}-${ARCH} ($UARCH) "
+    echo "------------------------------------------------------------"
 fi
 
 
