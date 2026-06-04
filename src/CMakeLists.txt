@@ -367,7 +367,9 @@ install( DIRECTORY share/locale
 # Install update-mrv2 plugin
 #
 if (MRV2_PYBIND11)
-    install(FILES python/plug-ins/demos/flow-bridge.py
+    install(FILES
+	python/plug-ins/demos/flow-bridge.py
+	python/plug-ins/AUTODESK_FLOW.md
 	DESTINATION python/plug-ins/demos
 	COMPONENT python_plugins)
     
