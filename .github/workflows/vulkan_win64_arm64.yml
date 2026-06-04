@@ -29,10 +29,56 @@ jobs:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Setup environment (ARM64 native)
-        uses: TheMrMilchmann/msvc-dev-cmd@v1
+      # \@note: No longer maintained
+      # - name: Setup environment (ARM64 native)
+      #   uses: ilammy/msvc-dev-cmd@v1
+      #   with:
+      #     arch: arm64
+
+      - name: Setup Native MSVC ARM64 Environment
+        shell: powershell
+        run: |
+          # Locate vcvarsall.bat dynamically using vswhere
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          $vcvarsPath = Join-Path $vsPath "VC\Auxiliary\Build\vcvarsall.bat"
+    
+          # Run vcvarsall natively for arm64 and export variables to the GitHub environment
+          cmd.exe /c " `"$vcvarsPath`" arm64 && set " | Foreach-Object {
+          if ($_ -match '^([^=]+)=(.*)$') {
+            $name = $Matches[1]
+            $value = $Matches[2]
+            # Only import paths and compiler-critical flags to avoid polluting the env
+            if ($name -match '^(PATH|INCLUDE|LIB|LIBPATH|VCTools.*)$' -and $value) {
+                if ($name -eq 'PATH') {
+                    # Append paths safely to GITHUB_PATH
+                    $value -split ';' | ForEach-Object { 
+                        if ($_) { $_ | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append }
+                    }
+                } else {
+                    # Export variables safely to GITHUB_ENV
+                    "$name=$value" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+                    }
+                }
+            }
+          }
+
+      - name: Setup MSYS
+        uses: msys2/setup-msys2@v2
         with:
-          arch: arm64
+          update: true
+          path-type: inherit
+          msystem: CLANGARM64
+          install: >-
+            base-devel
+            
+      - name: Fix linker shadowing
+        run: mv /usr/bin/link.exe /usr/bin/link_msys.exe
+        
+      - name: Verify compilers
+        run: |
+          which cl
+          which clang-cl
+          clang-cl --version
           
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -121,23 +167,17 @@ jobs:
           net stop w32time
           net start w32time
           w32tm /resync /rediscover
-
-      - name: Setup MSYS
-        uses: msys2/setup-msys2@v2
-        with:
-          update: true
-          path-type: inherit
-          msystem: CLANGARM64
-          install: >-
-            base-devel
+            
+      - name: Verify compilers
+        run: |
+          which cl
+          which clang-cl
+          clang-cl --version
             
       - name: Configure and Reset ccache
         run: |
           ccache --max-size=500M
           ccache -z
-
-      - name: Fix linker shadowing
-        run: mv /usr/bin/link.exe /usr/bin/link_msys.exe
         
       - name: Verify
         run: |
