@@ -22,13 +22,16 @@ jobs:
         shell: msys2 {0}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Setup environment
-        uses: ilammy/msvc-dev-cmd@v1
+      - name: Setup environment (ARM64 native)
+        uses: TheMrMilchmann/msvc-dev-cmd@v1
+        #uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: arm64
 
       - name: Install Visual C++ Redistributable 2022
         run: |
@@ -97,7 +100,7 @@ jobs:
           
           echo "CCACHE_COMPILERCHECK=content" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           # Match the exact absolute path defined in the previous step
           path: ${{ runner.temp }}/.ccache

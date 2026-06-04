@@ -24,13 +24,13 @@ jobs:
         shell: msys2 {0}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
           fetch-depth: 1
 
       - name: Setup environment (ARM64 native)
-        uses: ilammy/msvc-dev-cmd@v1
+        uses: TheMrMilchmann/msvc-dev-cmd@v1
         with:
           arch: arm64
           
@@ -106,7 +106,7 @@ jobs:
           
           echo "CCACHE_COMPILERCHECK=content" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           # Match the exact absolute path defined in the previous step
           path: ${{ runner.temp }}/.ccache
@@ -145,7 +145,7 @@ jobs:
           cargo -V
         
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/registry

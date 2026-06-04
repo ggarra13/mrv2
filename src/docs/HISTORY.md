@@ -49,8 +49,8 @@ ChangeLog
 ---------
 
 - Docs: Documentation is no longer kept locally and it is instead read from the internet.
-- Python/UI: Added support for connecting with Autodesk Flow.  The script is barebones.  It is up to your studio to improve it.
-- UI/Pen and Tablet: Added tablet support for all platforms.
+- UI/Python: Added support for connecting with Autodesk Flow.  The script is barebones.  It is up to your studio to improve it.
+- UI/Pen and Tablet: Added tablet support for all platforms. (WIP)
 - UI/Annotations: Made annotations increase the brush size based on pen pressure.
 - UI/MacOS: Made the "exec" icon disappear when launching the application.
 
