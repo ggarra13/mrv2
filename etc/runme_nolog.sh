@@ -533,6 +533,15 @@ else
     exit 1
 fi
 
+if command -v perl > /dev/null 2>&1; then
+    perl -version
+else
+    echo
+    echo "Perl NOT found!!! Cannot compile OpenSSL."
+    echo
+    exit 1
+fi
+
 #
 # Work-around FLTK's CMakeLists.txt bug
 #
