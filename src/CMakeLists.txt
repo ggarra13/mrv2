@@ -21,7 +21,7 @@ if(APPLE)
         set(_HOMEBREW_LIB "/usr/local/lib")
     endif()
     set(CMAKE_INSTALL_RPATH
-        "@executable_path/../lib;${CMAKE_INSTALL_PREFIX}/lib;${_HOMEBREW_LIB}")
+        "@executable_path/../lib;${_HOMEBREW_LIB}")
 endif()
 
 # Build the executable with the final CMAKE_INSTALL_RPATH from the very beginning.
