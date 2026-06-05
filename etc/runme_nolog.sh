@@ -434,6 +434,16 @@ if [[ $KERNEL == *Windows* ]]; then
     fi
 fi
 
+if command -v ninja > /dev/null 2>&1; then
+    which ninja
+    ninja --version
+else
+    echo
+    echo "ninja NOT found!!! Cannot compile mrv2/vmrv2."
+    echo
+    exit 1
+fi
+
 
 if [[ $KERNEL == *Linux* ]]; then
     echo "Common options"
