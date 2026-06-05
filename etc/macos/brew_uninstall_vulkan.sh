@@ -2,8 +2,8 @@
 
 brew uninstall vulkan-tools
 brew uninstall molten-vk
-brew uninstall spirv-tools
 brew uninstall glslang
+brew uninstall spirv-tools
 brew uninstall shaderc
 brew uninstall vulkan-profiles
 brew uninstall vulkan-loader
