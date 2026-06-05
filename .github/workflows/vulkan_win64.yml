@@ -33,6 +33,8 @@ jobs:
 
       - name: Setup environment
         uses: TheMrMilchmann/setup-msvc-dev@v4
+        with:
+          arch: amd64
       
       # - name: Setup Native MSVC AMD64 Environment
       #   shell: powershell
