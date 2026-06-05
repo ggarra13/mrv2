@@ -146,8 +146,12 @@ if(APPLE)
 	USE_SOURCE_PERMISSIONS
 	COMPONENT applications
     )
-    
 
+    # Install README.txtx
+    install(FILES "${MRV2_DIR}/etc/macOS/README.txt"
+        DESTINATION .
+        COMPONENT applications
+    )
     
     if (EXISTS ${CMAKE_INSTALL_PREFIX}/bin/hdr)
 	
@@ -196,7 +200,6 @@ if(APPLE)
     
     
     
-    set(CPACK_COMPONENTS_ALL "macos_bundles")
     set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${mrv2_NAME};applications;/")
     set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/install;.")
 
