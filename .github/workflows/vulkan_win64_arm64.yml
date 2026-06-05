@@ -164,12 +164,6 @@ jobs:
           net start w32time
           w32tm /resync /rediscover
             
-      - name: Verify compilers
-        run: |
-          which cl
-          which clang-cl
-          clang-cl --version
-            
       - name: Configure and Reset ccache
         run: |
           ccache --max-size=500M
