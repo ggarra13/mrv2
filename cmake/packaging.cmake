@@ -147,8 +147,8 @@ if(APPLE)
 	COMPONENT applications
     )
 
-    # Install README.txtx
-    install(FILES "${MRV2_DIR}/etc/macOS/README.txt"
+    # Install README.md
+    install(FILES "${MRV2_DIR}/etc/macOS/README.md"
         DESTINATION .
         COMPONENT applications
     )

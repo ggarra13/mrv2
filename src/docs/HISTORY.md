@@ -53,6 +53,7 @@ ChangeLog
 - UI/Pen and Tablet: Added tablet support for all platforms. (WIP)
 - UI/Annotations: Made annotations increase the brush size based on pen pressure.
 - UI/MacOS: Made the "exec" icon disappear when launching the application.
+- Install/MacOS: Added a README.txt file with installation instructions in all languages.
 
 
 v1.6.6
