@@ -26,9 +26,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 1    
-          
+
+      # Deprecated:
+      # - name: Setup environment
+      #   uses: ilammy/msvc-dev-cmd@v1
+
       - name: Setup environment
-        uses: ilammy/msvc-dev-cmd@v1
+        uses: TheMrMilchmann/setup-msvc-dev@v4
       
       # - name: Setup Native MSVC AMD64 Environment
       #   shell: powershell
