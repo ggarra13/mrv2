@@ -14,7 +14,15 @@ set(CMAKE_SKIP_RPATH FALSE)
 
 # Avoid warnings of overshadowing system libraries.
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-set(CMAKE_INSTALL_RPATH "@executable_path/../lib;${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
+if(APPLE)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+        set(_HOMEBREW_LIB "/opt/homebrew/lib")
+    else()
+        set(_HOMEBREW_LIB "/usr/local/lib")
+    endif()
+    set(CMAKE_INSTALL_RPATH
+        "@executable_path/../lib;${CMAKE_INSTALL_PREFIX}/lib;${_HOMEBREW_LIB}")
+endif()
 
 # Build the executable with the final CMAKE_INSTALL_RPATH from the very beginning.
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
