@@ -492,6 +492,16 @@ function( fixup_macos_rpath APP_LIB_DIR )
 
         # Rewrite absolute dependency references
         _fixup_macos_dep_refs( "${_lib}" )
+	
+	# After _fixup_macos_dep_refs, for each executable:
+	execute_process(
+	    COMMAND install_name_tool -add_rpath "@loader_path" "${_lib}"
+	    RESULT_VARIABLE _rc
+	    ERROR_VARIABLE _err
+	)	
+	if(_rc AND NOT _err MATCHES "already")
+	    message(WARNING "add_rpath failed for ${_exe_name}: ${_err}")
+	endif()
     endforeach()
 
     # ------------------------------------------------------------------
@@ -505,6 +515,14 @@ function( fixup_macos_rpath APP_LIB_DIR )
         get_filename_component( _exe_name "${_exe}" NAME )
         message( STATUS "  exe ${_exe_name}: rewriting load cmds" )
         _fixup_macos_dep_refs( "${_exe}" )
+
+	# After _fixup_macos_dep_refs, for each executable:
+	execute_process(
+	    COMMAND install_name_tool -add_rpath "@executable_path/../lib" "${_exe}"
+	)
+	execute_process(
+	    COMMAND install_name_tool -add_rpath "@loader_path/../lib" "${_exe}"
+	)
     endforeach()
 endfunction()
 
