@@ -86,8 +86,8 @@ jobs:
       - name: Install automake
         run: brew install automake autoconf curl rsync
 
-      - name: Install GNU utils
-        run: brew install gnu-sed coreutils
+      - name: Install GNU sed
+        run: brew install gnu-sed
 
       - name: Install Python dependencies
         run: brew install libb2 libffi readline sqlite3 xz zlib
