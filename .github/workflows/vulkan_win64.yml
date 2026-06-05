@@ -79,11 +79,6 @@ jobs:
           Start-Process vc_redist_2022.x64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
         shell: powershell
 
-      # - name: Activate MSVC
-      #   uses: ilammy/msvc-dev-cmd@v1
-      #   with:
-      #     path: 'C:\VS2022Custom'
-
       - name: Install ccache
         shell: pwsh
         run: |
