@@ -13,7 +13,7 @@ mrv2 ships now in two compiled versions:
    - vmrv2 with Vulkan backend (free and donationware)
 
 It also ships for many more architectures, so be careful to download the correct one.
-It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).
+	It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).
 
 Unlocking Features
 ------------------
@@ -54,6 +54,7 @@ ChangeLog
 - UI/Annotations: Made annotations increase the brush size based on pen pressure.
 - UI/MacOS: Made the "exec" icon disappear when launching the application.
 - Install/MacOS: Added a README.txt file with installation instructions in all languages.
+- Install/MacOS: Fixed OpenGL and Vulkan installers which got broken in v1.6.6.
 
 
 v1.6.6

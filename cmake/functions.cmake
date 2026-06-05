@@ -514,6 +514,27 @@ function( fixup_macos_rpath APP_LIB_DIR )
         endif()
         get_filename_component( _exe_name "${_exe}" NAME )
         message( STATUS "  exe ${_exe_name}: rewriting load cmds" )
+	
+	# Path to your launcher script
+	set(LAUNCHER_SCRIPT "${_exe}")
+
+	# Read the first few lines of the file
+	file(READ "${LAUNCHER_SCRIPT}" LAUNCHER_CONTENT LIMIT 256)
+
+	# Check if it starts with #!/bin/bash
+	string(FIND "${LAUNCHER_CONTENT}" "#!/bin/bash" POS)
+	if (POS EQUAL 0)
+	    message(STATUS "Launcher uses bash shebang")
+	    continue()
+	endif()
+	
+	# Check if it starts with #!/bin/bash
+	string(FIND "${LAUNCHER_CONTENT}" "#!/bin/sh" POS)
+	if (POS EQUAL 0)
+	    message(STATUS "Launcher uses sh shebang")
+	    continue()
+	endif()
+
         _fixup_macos_dep_refs( "${_exe}" )
 
 	# After _fixup_macos_dep_refs, for each executable:
@@ -533,7 +554,7 @@ endfunction()
 # Macro used to turn a list of .cpp/.h files into an absolute path for
 # fluid files, and shortened relative paths for others.
 #
-# @bug: We need to do this on Windows, as xgettext chokes on too many
+# @bug: We need to do on this Windows, as xgettext chokes on too many
 #       long paths.
 #
 macro( files_to_absolute_paths )
