@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: BSD-3-Clause
+# SPDX-Lsicense-Identifier: BSD-3-Clause
 # flow_bridge.py – mrv2 ↔ Autodesk Flow (ShotGrid) two-way plugin
 # Uses PyFLTK + correct mrv2.plugin.Plugin API
 
@@ -22,9 +22,9 @@ FLOW_API_KEY = 'Your API Key as created in Web/Scripts'
 #
 # The URL and API KEY below will work for 20 days.
 #
-#FLOW_URL = "https://filmaura.shotgrid.autodesk.com"
-#FLOW_SCRIPT_NAME = 'my_script'
-#FLOW_API_KEY = 'lxhaemtakPachryqheaqxlx4&'
+FLOW_URL = "https://filmaura.shotgrid.autodesk.com"
+FLOW_SCRIPT_NAME = 'my_script'
+FLOW_API_KEY = 'lxhaemtakPachryqheaqxlx4&'
 
 # ── mrv2 imports ──────────────────────────────────────────────────────────────
 import mrv2
@@ -73,6 +73,8 @@ except Exception as e:
         return text
     _ = _gettext
     
+def sg_log(x):
+    print(f'        [flow] {x}')
 
 # ══════════════════════════════════════════════════════════════════════════════
 # CONNECTION MANAGER
@@ -83,17 +85,22 @@ class _FlowConn:
     @classmethod
     def get(cls):
         if cls._sg is None:
-             cls._sg = shotgun_api3.Shotgun(
-                 FLOW_URL,
-                 script_name=FLOW_SCRIPT_NAME,
-                 api_key=FLOW_API_KEY,
-             )
+            sg_log(_(f'Connecting to server {FLOW_URL}'))
+            sg_log(_(f'With script "{FLOW_SCRIPT_NAME}"...'))
+            cls._sg = shotgun_api3.Shotgun(
+                FLOW_URL,
+                script_name=FLOW_SCRIPT_NAME,
+                api_key=FLOW_API_KEY,
+            )
+            if cls._sg:
+                sg_log(_(f'Connected.'))
+            else:
+                sg_log(_(f'Could not connect...'))
         return cls._sg
 
     @classmethod
     def reset(cls):
         cls._sg = None
-
 
 def sg():
     return _FlowConn.get()
@@ -141,6 +148,7 @@ def submit_version(
     version_name: str = "",
     description: str = "",
     update_shot_status: str = "",
+    upload_media = False
 ) -> dict:
     if not os.path.isfile(movie_path):
         raise FileNotFoundError(f"Movie file not found: {movie_path}")
@@ -158,14 +166,15 @@ def submit_version(
     }
 
     version = sg().create("Version", version_data)
-    print(f"[flow_bridge] Created Version '{version['code']}' (id={version['id']})")
+    sg_log(_(f"Created Version '{version['code']}' (id={version['id']})"))
 
-    sg().upload("Version", version["id"], movie_path, field_name="sg_uploaded_movie")
-    print(f"[flow_bridge] Media uploaded.")
+    if upload_media:
+        sg().upload("Version", version["id"], movie_path, field_name="sg_uploaded_movie")
+        sg_log(_(f"Media uploaded."))
 
     if update_shot_status:
         sg().update("Shot", shot_id, {"sg_status_list": update_shot_status})
-        print(f"[flow_bridge] Shot status → {update_shot_status}")
+        sg_log(_(f"Shot status → {update_shot_status}"))
 
     Fl.check()
 
@@ -181,7 +190,7 @@ def _open_in_mrv2(path: str):
     try:
         cmd.open(path)
     except Exception as e:
-        print(f"[flow_bridge] Could not open {path}: {e}")
+        print(_(f"Could not open {path}: {e}"))
 
 
 def _current_media_path() -> str:
@@ -209,12 +218,29 @@ class FlowBrowserPanel:
         self._projects = []
         self._shots = {}
         self._versions = {}
+
         self._active_project = None
         self._active_shot = None
+        
+        self._active_project_idx = 0
+        self._active_shot_idx = 0
+        self._active_version_idx = 0
 
         self._build_ui()
         self._load_projects()
 
+    def _refresh_cb(self, widget):
+        # First refresh projects
+        self._load_projects()
+
+        # Now refresh shot list
+        self._shot_list.value(self._active_shot_idx)
+        self._on_shot_change(widget)
+
+        # Finally refresh version list
+        self._version_list.value(self._active_version_idx)
+        self._on_version_change(widget)
+        
     def _build_ui(self):
         self.win = Fl_Double_Window(820, 620, _("Flow Browser – mrv2"))
         self.win.begin()
@@ -222,11 +248,14 @@ class FlowBrowserPanel:
         # Top bar
         bar = Fl_Group(10, 10, self.win.w() - 20, 40)
         bar.begin()
+
         Fl_Box(10, 15, 60, 25, _("Project:"))
         self._project_cb = Fl_Choice(75, 15, 280, 25)
         self._project_cb.callback(self._on_project_change)
+
+        
         refresh_btn = Fl_Button(self.win.w() - 140, 15, 120, 25, _("↻ Refresh"))
-        refresh_btn.callback(self._load_projects_cb)
+        refresh_btn.callback(self._refresh_cb)
         bar.end()
 
         # Main panes
@@ -239,7 +268,7 @@ class FlowBrowserPanel:
         self._shot_list = Fl_Hold_Browser(15, y + 25, 230, h - 35)
         self._shot_list.textcolor(FL_BLACK)
         self._shot_list.selection_color(FL_CYAN)
-        self._shot_list.callback(self._on_shot_select)
+        self._shot_list.callback(self._on_shot_change)
         self._shot_frame.end()
 
         # Versions
@@ -248,7 +277,7 @@ class FlowBrowserPanel:
         self._version_list = Fl_Hold_Browser(265, y + 25, 230, h - 35)
         self._version_list.textcolor(FL_BLACK)
         self._version_list.selection_color(FL_CYAN)
-        self._version_list.callback(self._on_version_select)
+        self._version_list.callback(self._on_version_change)
         self._ver_frame.end()
 
         # Details
@@ -258,6 +287,7 @@ class FlowBrowserPanel:
         self._detail.textcolor(FL_BLACK)
         self._detail.selection_color(FL_CYAN)
         self._detail.buffer(Fl_Text_Buffer())
+        self._detail.wrap_mode(Fl_Text_Display.WRAP_AT_BOUNDS, 300)
         self._det_frame.end()
 
         # Bottom bar
@@ -286,17 +316,20 @@ class FlowBrowserPanel:
             for p in self._projects:
                 self._project_cb.add(p["name"])
             if self._projects:
-                self._project_cb.value(0)
+                self._project_cb.value(self._active_project_idx)
                 self._on_project_change(None)
         except Exception as e:
             Fl.fl_alert(_(f"Connection error:\n{str(e)}"))
 
     def _on_project_change(self, widget):
         idx = self._project_cb.value()
+
         if idx < 0 or idx >= len(self._projects):
             return
+        
         proj = self._projects[idx]
         self._active_project = proj
+        self._active_project_idx = idx
 
         self._shot_list.clear()
         self._version_list.clear()
@@ -308,19 +341,22 @@ class FlowBrowserPanel:
             for s in shots:
                 status = s.get("sg_status_list", "—")
                 self._shot_list.add(f"{s['code']}  [{status}]")
+                description = s.get("description", "")
+                self._detail.buffer().text(description)
         except Exception as e:
             Fl.fl_alert(str(e))
 
-    def _on_shot_select(self, widget):
-        sel = self._shot_list.value()
-        if sel <= 0:
+    def _on_shot_change(self, widget):
+        idx = self._shot_list.value()
+        if idx <= 0:
             return
-        line = self._shot_list.text(sel)
+        line = self._shot_list.text(idx)
         code = line.split("  ")[0].strip()
         shot = self._shots.get(code)
         if not shot:
             return
         self._active_shot = shot
+        self._active_shot_idx = idx
 
         self._version_list.clear()
         self._clear_details()
@@ -333,14 +369,16 @@ class FlowBrowserPanel:
         except Exception as e:
             Fl.fl_alert(str(e))
 
-    def _on_version_select(self, widget):
-        sel = self._version_list.value()
-        if sel <= 0:
+    def _on_version_change(self, widget):
+        idx = self._version_list.value()
+        if idx <= 0:
             return
-        code = self._version_list.text(sel)
+        code = self._version_list.text(idx)
         v = self._versions.get(code)
         if not v:
             return
+
+        self._active_version_idx = idx
 
         artist = (v.get("user") or {}).get("name", "—")
         info = (
@@ -383,12 +421,14 @@ class FlowBrowserPanel:
             on_submit=self._do_submit,
         )
 
-    def _do_submit(self, project_id, shot_id, movie_path, version_name, description, shot_status):
+    def _do_submit(self, project_id, shot_id, movie_path, version_name, description, shot_status, upload_media):
         try:
             v = submit_version(
                 project_id, shot_id, movie_path,
-                version_name, description, shot_status or ""
+                version_name, description, shot_status or "",
+                upload_media
             )
+            self._refresh_cb(None)
         except Exception as e:
             print(f"Submit failed:\n{str(e)}", None)
 
@@ -398,17 +438,21 @@ class FlowBrowserPanel:
 # ══════════════════════════════════════════════════════════════════════════════
 
 class SubmitDialog:
+    
     def __init__(self, parent, default_path, projects, shots,
                  active_project, active_shot, on_submit):
         self._on_submit = on_submit
         self._projects = projects
         self._shots = shots
 
+        self._read_prefs()
+        
         Fl_Group.current(None)
         self.win = Fl_Double_Window(520, 420, _("Submit to Flow"))
         self.win.begin()
 
         y = 20
+        
         # Path
         Fl_Box(20, y, 120, 25, _("Movie path:"))
         self._path_input = Fl_Input(150, y, 340, 25)
@@ -460,6 +504,17 @@ class SubmitDialog:
             self._status_choice.add(s)
         self._status_choice.value(0)  # ""
         y += 40
+        
+        # Upload Media
+        Fl_Box(20, y, 120, 25, _("Upload Media:"))
+        self._upload_choice = Fl_Choice(150, y, 120, 25)
+        for s in [_("No"), _("Yes")]:
+            self._upload_choice.add(s)
+            
+        (status, idx) = self._prefs.get('upload_choice', 0)
+        self._upload_choice.value(idx)
+        self._upload_choice.callback(self._on_upload_change)
+        y += 40
 
         # Buttons
         submit_btn = Fl_Return_Button(150, y, 140, 35, _("Submit"))
@@ -469,13 +524,33 @@ class SubmitDialog:
         cancel_btn.callback(lambda w: self.win.hide())
 
         self.win.end()
-        self.win.set_non_modal()
+        self.win.set_modal()
         self.win.show()
 
         while self.win.visible():
             Fl.check()
             time.sleep(0.01)
 
+        self._write_prefs()
+        
+        self._prefs = None
+        self._app_prefs = None
+
+
+    def _read_prefs(self):
+        self._app_prefs = Fl_Preferences(Fl_Preferences.USER, 'filmaura', 'flow')
+        
+        self._prefs = Fl_Preferences(self._app_prefs, 'Flow')
+        (status, self._prefs_version) = self._prefs.get('version', 0)
+
+    def _write_prefs(self):
+        self._app_prefs.flush()
+        
+    def _on_upload_change(self, widget):
+        idx = widget.value()
+        self._prefs.set('upload_choice', idx)
+        self._write_prefs()
+            
     def _populate_shots(self):
         self._shot_choice.clear()
         pid = self._get_selected_project_id()
@@ -517,8 +592,10 @@ class SubmitDialog:
         version_name = self._name_input.value().strip()
         description = self._desc_input.value()
         status = self._status_choice.text(self._status_choice.value())
+        upload_media = bool(self._upload_choice.value())
 
-        self._on_submit(proj_id, shot_id, path, version_name, description, status)
+        self._on_submit(proj_id, shot_id, path, version_name, description,
+                        status, upload_media)
 
 
 # ══════════════════════════════════════════════════════════════════════════════

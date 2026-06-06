@@ -55,6 +55,7 @@ ChangeLog
 - UI/MacOS: Made the "exec" icon disappear when launching the application.
 - Install/MacOS: Added a README.txt file with installation instructions in all languages.
 - Install/MacOS: Fixed OpenGL and Vulkan installers which got broken in v1.6.6.
+- Python: Made python print() not open the Python Panel.  Only errors will open it.
 
 
 v1.6.6

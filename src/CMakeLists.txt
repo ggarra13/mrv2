@@ -377,8 +377,11 @@ install( DIRECTORY share/locale
 if (MRV2_PYBIND11)
     install(FILES
 	python/plug-ins/demos/flow-bridge.py
-	python/plug-ins/AUTODESK_FLOW.md
 	DESTINATION python/plug-ins/demos
+	COMPONENT python_plugins)
+    install(FILES
+	python/plug-ins/AUTODESK_FLOW.md
+	DESTINATION python/plug-ins
 	COMPONENT python_plugins)
     
     install(FILES python/plug-ins/update-mrv2.py
