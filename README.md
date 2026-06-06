@@ -11,7 +11,6 @@
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_macos14.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_macos14.yml)
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
-[![Sponsor](https://img.shields.io/badge/Sponsor-ggarra13-blue.svg)](https://github.com/sponsors/ggarra13)
 
 ![banner](https://github.com/ggarra13/mrv2/blob/main/assets/images/banner.png)
 
