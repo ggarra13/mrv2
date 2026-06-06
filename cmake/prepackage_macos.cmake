@@ -397,29 +397,6 @@ endif()
 
 
 #
-# Fix up install names in all packaged .dylib files and executables so that
-# every library's own id, all library-to-library references, and all
-# executable-to-library references use @rpath instead of absolute paths.
-# This must run after all libraries have been copied into the bundles.
-#
-set( _mrv2_app_base "${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents" )
-fixup_macos_rpath(
-    "${_mrv2_app_base}/Resources/lib"
-    EXECUTABLES
-        "${_mrv2_app_base}/MacOS/${mrv2_NAME}"
-        "${_mrv2_app_base}/Resources/bin/mrv2"
-)
-
-if( EXISTS "${CPACK_PREPACKAGE}/hdr.app" )
-    set( _hdr_app_base "${CPACK_PREPACKAGE}/hdr.app/Contents" )
-    fixup_macos_rpath(
-        "${_hdr_app_base}/Resources/lib"
-        EXECUTABLES
-            "${_hdr_app_base}/Resources/bin/hdr"
-    )
-endif()
-
-#
 # Clean up main staging area
 #
 file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/bin)
