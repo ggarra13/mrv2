@@ -49,6 +49,8 @@ ChangeLog
 ---------
 
 - Docs: Documentation is no longer kept locally and it is instead read from the internet.
+- Core: Removed an error when saving a single file without a frame number.
+- Core: Fixed a weird but serious bug when saving of OpenEXR images when they had a Data or Display Window set and the format was half float.
 - UI/Python: Added support for connecting with Autodesk Flow.  The script is barebones.  It is up to your studio to improve it.
 - UI/Pen and Tablet: Added tablet support for all platforms. (WIP)
 - UI/Annotations: Made annotations increase the brush size based on pen pressure.

@@ -684,13 +684,17 @@ namespace mrv
             path.getDirectory().c_str(),
             path.getBaseName().c_str(),
             static_cast<int>(path.getPadding()),
-            currentFrame, path.getSuffix().c_str(), path.getExtension().c_str());
+            currentFrame, path.getSuffix().c_str(),
+            path.getExtension().c_str());
 
         if (filename != file && !options.noRename)
         {
             try
             {
-                fs::rename(fs::path(filename), fs::path(file));
+                if (fs::exists(filename))
+                {
+                    fs::rename(fs::path(filename), fs::path(file));
+                }
             }
             catch(const std::exception& e)
             {
