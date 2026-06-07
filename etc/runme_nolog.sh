@@ -350,6 +350,18 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
 	export FLTK_BUILD_SHARED=OFF
     fi
 fi
+
+#
+# Do not remove.  Important for code signing on Windows and Github Action runs.
+#
+export GITHUB_OWNER="${GITHUB_REPOSITORY%%/*}"
+if [ -n "$GITHUB_REPOSITORY" ]; then
+    export GITHUB_REPO="${GITHUB_REPOSITORY##*/}"
+else
+    export GITHUB_REPO=$(basename -s .git "$(git config --get remote.origin.url)")
+fi
+
+
     
 #
 # Clean python path to avoid clashes, mainly, with macOS meson
