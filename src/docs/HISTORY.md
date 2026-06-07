@@ -22,11 +22,7 @@ For unlocking features, once mrv2 loads, you should go to:
   
        Help->Unlock Features.
        
-Donationware prices of binary licenses through PayPal:
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
-
-License works for both mrv2 and vmrv2 (you can have both installed).
+Licensing works for both mrv2 and vmrv2 (you can have both installed).
 You need to have an internet connection for the license system.
 
 The donationware version when running without a donation, does not have:
@@ -55,8 +51,7 @@ ChangeLog
 - UI/Pen and Tablet: Added tablet support for all platforms. (WIP)
 - UI/Annotations: Made annotations increase the brush size based on pen pressure.
 - UI/MacOS: Made the "exec" icon disappear when launching the application.
-- Install/MacOS: Added a README.txt file with installation instructions in all languages.
-- Install/MacOS: Fixed OpenGL and Vulkan installers which got broken in v1.6.6.
+- Install/MacOS: Added a README.md file with installation instructions in all languages.
 - Python: Made python print() not open the Python Panel.  Only errors will open it.
 
 

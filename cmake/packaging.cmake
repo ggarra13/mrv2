@@ -148,7 +148,7 @@ if(APPLE)
     )
 
     # Install README.md
-    install(FILES "${MRV2_DIR}/etc/macOS/README.md"
+    install(FILES "${MRV2_DIR}/etc/macOS/README_${mrv2_NAME}.md"
         DESTINATION .
         COMPONENT applications
     )

@@ -182,19 +182,9 @@ Enjoy!
 Donation Prices
 ---------------
 
-Donationware prices of binary licenses through PayPal:
+Donationware prices for unlocking licenses through PayPal:
 
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PSYEULZG24QHY)
-
-I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
-
-- u\$  25 for a Solo license for a year.
-- u\$  50 for a Standard license for a year.
-- u\$  75 for an Edit license for a year.
-- u\$ 150 for a Pro license for a year.
-- u\$ 300 for a Pro license to own (also allowing changing machine id -
-      	      	    	       	   useful for trying Linux distros or
-				   upgrading machines) 
+Go to Help->Unlock Features to see the latest prices and features.
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 
@@ -282,11 +272,11 @@ an HDR monitor.
 Notes about Vulkan on NVidia Linux
 ----------------------------------
 
-In order to get HDR, you currently need to have the KWin6 or GNOME48 compositors and an HDR monitor.
+In order to get HDR, you currently need to have the KWin6.5+ or GNOME49+ compositors and an HDR monitor.
 
 It will likely work with any NVidia RTX 3080+, but it will require you to choose and test your hardware carefully.
 
-The preferred NVidia driver tested for best performance is nvidia-driver-580+ (default on Ubuntu 25.04 with GNOME48+).
+The preferred NVidia driver tested for best performance is nvidia-driver-595+ (default on Ubuntu 26.04 with GNOME50+).
 
 Notes about Vulkan on macOS Intel
 ---------------------------------
