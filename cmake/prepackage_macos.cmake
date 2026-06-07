@@ -437,3 +437,28 @@ endif()
 file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/presets)
 file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/python)
 file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/share)
+
+#
+# Code-sign the assembled .app bundles before CPack creates the DMG.
+# Skipped silently if DEVELOPER_ID is not set (dev/CI builds without notarization).
+#
+if(DEFINED ENV{DEVELOPER_ID} AND NOT "$ENV{DEVELOPER_ID}" STREQUAL "")
+    message(STATUS "Signing app bundles before DMG creation...")
+
+    set(_sign_script "${ROOT_DIR}/etc/macos/codesign_notarize.sh")
+    set(_vk_arg "")
+    if(MRV2_BACKEND STREQUAL "VK")
+        set(_vk_arg "-vk")
+    endif()
+
+    execute_process(
+        COMMAND "${_sign_script}" ${_vk_arg} sign-bundles
+        WORKING_DIRECTORY "${ROOT_DIR}"
+        RESULT_VARIABLE _sign_result
+    )
+    if(NOT _sign_result EQUAL 0)
+        message(FATAL_ERROR "codesign_notarize.sh sign-bundles failed (exit ${_sign_result}).")
+    endif()
+else()
+    message(STATUS "DEVELOPER_ID not set — skipping bundle signing (self-signed / dev build).")
+endif()

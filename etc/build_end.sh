@@ -27,8 +27,10 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
     # Here we move the installers to the packages location.
     #
     mrv2_NAME=mrv2
+    mrv2_ARG=""
     if [[ $MRV2_BACKEND == "VK" ]]; then
 	mrv2_NAME=vmrv2
+	mrv2_ARG='-vk'
     fi
     
     if [[ $KERNEL == *Windows* ]]; then
@@ -37,7 +39,13 @@ if [[ "$CMAKE_TARGET" == "package" ]]; then
 	. etc/windows/signing_installer.sh
     elif [[ $KERNEL == *Darwin* ]]; then
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Darwin-${ARCH}.dmg"
-	# . etc/macos_signing_installer.sh
+	VK_ARG=""
+	if [[ "$MRV2_VK" == "ON" || "$MRV2_VK" == "1" ]]; then
+	    VK_ARG='-vk'
+	fi
+	etc/macos/codesign_notarize.sh sign-dmg ${VK_ARG}
+	etc/macos/codesign_notarize.sh notarize ${VK_ARG}
+	etc/macos/codesign_notarize.sh staple ${VK_ARG}
     elif [[ $KERNEL == *Linux* ]]; then
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Linux-${ARCH}.deb"
 	send_to_packages "${mrv2_NAME}-v${mrv2_VERSION}-Linux-${ARCH}.rpm"
