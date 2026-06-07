@@ -57,19 +57,7 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
 
 ## Notes on installation
 
-- On macOS you install it by opening the .dmg file, and dragging the mrv2
-  icon to the Applications directory.  If there's already an mrv2 version,
-  we recommend you overwrite it.
-  The macOS application is currently not notarized, so when you launch it you
-  will not be able to run it as macOS will warn you that the file is not secure
-  as it was downloaded from internet.
-  To avoid that, you need to open the Apple Logo->Settings->Privacy and Security
-  and go to Security and allow "Opening Anyway".
-  Alternatively, you can do it from the Terminal, by:
-  
-```
-  sudo xattr -rd com.apple.quarantine /Applications/mrv2.app/
-```
+- On macOS you install it by following the README.md instructions embedded in the .dmg file.
 
 - Windows and Chrome, like macOS, also protect you from installing files
   from the Internet.  When you first download it with Chrome it may warn
@@ -95,13 +83,13 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
   On Debian (Ubuntu, etc) systems, you would install with:
 
 ```
-  sudo dpkg -i mrv2-v1.0.0-Linux-amd64.deb
+  sudo dpkg -i vmrv2-v1.0.0-Linux-amd64.deb
 ```
 
   On Red Hat (Rocky Linux, etc), you would install it with:
   
 ```
-  sudo rpm -i mrv2-v1.0.0-Linux-amd64.rpm
+  sudo rpm -i vmrv2-v1.0.0-Linux-amd64.rpm
 ```
 
   Once you install it, you can run mrv2 by just typing mrv2 or vmrv2 in the 
@@ -115,7 +103,7 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
   .tar.gz file and you can uncompress it with:
   
 ```
-  tar -xf mrv2-v1.0.0-Linux-amd64.tar.gz
+  tar -xf vmrv2-v1.0.0-Linux-amd64.tar.gz
 ```
 
   That will create a folder in the directory you uncompress it from.  You can
