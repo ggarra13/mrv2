@@ -889,6 +889,9 @@ msgstr ""
 msgid "Return the path to preferences of mrv2."
 msgstr ""
 
+msgid "Return the path to studio preferences of mrv2."
+msgstr ""
+
 msgid "Return the display options."
 msgstr ""
 
