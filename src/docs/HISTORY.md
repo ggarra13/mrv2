@@ -51,7 +51,7 @@ ChangeLog
 - UI/Pen and Tablet: Added tablet support for all platforms. (WIP)
 - UI/Annotations: Made annotations increase the brush size based on pen pressure.
 - UI/MacOS: Made the "exec" icon disappear when launching the application.
-- Install/MacOS: Added a README.md file with installation instructions in all languages.
+- Install/MacOS: Added a README.md file with installation instructions for Apple Silicon.
 - Python: Made python print() not open the Python Panel.  Only errors will open it.
 
 
