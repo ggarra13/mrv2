@@ -22,11 +22,7 @@ if [[ $MRV2_BACKEND == "VK" ]]; then
     mrv2_NAME=vmrv2
 fi
 
-if [[ "$GITHUB_REPOSITORY" != "" ]]; then
-    NSIS_INSTALLER="${PWD}/paquetes/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
-else
-    NSIS_INSTALLER="${PWD}/packages/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
-fi
+NSIS_INSTALLER="${PWD}/packages/${BUILD_DIR}/${mrv2_NAME}-v${mrv2_VERSION}-Windows-${ARCH}.exe"
 
 AZURE_HTTP="http://timestamp.sectigo.com/"
 
