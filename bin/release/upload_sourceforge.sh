@@ -27,7 +27,7 @@ upload_file()
         rsync -avz --partial --timeout=60 \
               -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=3" \
               "$src" "ggarra13@frs.sourceforge.net:/home/frs/project/mrv2/beta/$branch/$dest" 2> rsync_error.log
-
+	
         if [[ $? -eq 0 ]]; then
             success=1
             break

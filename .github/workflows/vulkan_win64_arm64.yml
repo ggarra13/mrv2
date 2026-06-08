@@ -39,7 +39,12 @@ jobs:
         uses: TheMrMilchmann/setup-msvc-dev@v4
         with:
           arch: arm64
-
+          
+      - name: CPU info (Windows)
+        shell: pwsh
+        run: |
+          Get-CimInstance Win32_Processor | Format-List *
+          
       # - name: Setup Native MSVC ARM64 Environment
       #   shell: powershell
       #   run: |
