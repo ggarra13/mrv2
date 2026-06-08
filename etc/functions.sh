@@ -435,10 +435,9 @@ send_to_packages()
     local stage=$PWD/$BUILD_DIR/mrv2/src/mrv2-build
     local package=$stage/$1
     if [[ "$CMAKE_TARGET" != "" ]]; then
-	package_dir=$PWD/packages/$BUILD_DIR
-	mkdir -p $package_dir
+	mkdir -p $PACKAGE_DIRECTORY
 	if [[ -e $package ]]; then
-	    mv $package $package_dir
+	    mv $package $PACKAGE_DIRECTORY/
 	else
 	    echo "ERROR package $1 was not created in $stage."
 	fi

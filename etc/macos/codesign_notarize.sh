@@ -361,7 +361,7 @@ create_dmg() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 sign_dmg() {
-    local dmg="${DIST_DIR}/${DMG_NAME}"
+    local dmg="${PACKAGE_DIRECTORY}/${DMG_NAME}"
     step "Signing DMG: ${dmg}"
     [[ -f "${dmg}" ]] || die "DMG not found: ${dmg}\nRun 'create-dmg' or point BUILD_DIR at the CPack output directory."
 
@@ -380,7 +380,7 @@ sign_dmg() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 notarize() {
-    local target="${1:-${DIST_DIR}/${DMG_NAME}}"
+    local target="${1:-${PACKAGE_DIRECTORY}/${DMG_NAME}}"
     step "Notarizing: $(basename "${target}")"
     [[ -f "${target}" ]] || die "File not found for notarization: ${target}"
 
@@ -573,7 +573,6 @@ fi
 
 export BUILD_DIR="${ROOT_DIR}/Release/"
 export PACK_DIR="${BUILD_DIR}/mrv2/src/mrv2-build/_CPack_Packages/Darwin/DragNDrop/${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}"
-export DIST_DIR="packages/${BUILD_DIR}"
 
 # Name of the DMG produced by CPack (or the one this script creates).
 DMG_NAME="${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}.dmg"
