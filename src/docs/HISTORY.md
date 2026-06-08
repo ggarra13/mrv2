@@ -10,6 +10,7 @@ ChangeLog
 - Build/MacOS: Removed Gatekeeper warning when opening the .dmg on Apple Silicon.
 - Install: Added web page warning and link to Installation instructions when downloading files.
 - Install: Verified vmrv2 and mrv2 work under latest macOS Silicon.
+- Linux/Uninstall:  Removed set +e from .rpm and .deb uninstallers as they could leave the uninstallation in an incorrect state if removal was stopped.
 
 
 v1.6.7
