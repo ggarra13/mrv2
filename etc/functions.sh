@@ -438,7 +438,6 @@ send_to_packages()
 	package_dir=$PWD/packages/$BUILD_DIR
 	mkdir -p $package_dir
 	if [[ -e $package ]]; then
-	    echo "mv $package $PWD/packages/$BUILD_DIR"
 	    mv $package $package_dir
 	else
 	    echo "ERROR package $1 was not created in $stage."
