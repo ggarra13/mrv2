@@ -1,45 +1,19 @@
-v1.6.7
+v1.6.8
 ======
 
-mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
+ChangeLog
+---------
 
-If you are unsure what binary to choose, go to:
+- Build: Consolidated package directory.
+- Build/MacOS: Consolidated README_mrv2.md and README_vmrv2.md under a single README.md.in name with a CMake configure_file() call.
+- Build/MacOS: Added notarization code which won't run for now until I request a developer license with Apple (u$99) when I get a new Apple box, some time from now.
+- Build/MacOS: Removed Gatekeeper warning when opening the .dmg on Apple Silicon.
+- Install: Added web page warning and link to Installation instructions when downloading files.
+- Install: Verified vmrv2 and mrv2 work under latest macOS Silicon.
 
-https://mrv2.sourceforge.io/downloads/mrv2-download-page.html
 
-mrv2 ships now in two compiled versions:
-
-   - mrv2 with OpenGL backend  (free and donationware)
-   - vmrv2 with Vulkan backend (free and donationware)
-
-It also ships for many more architectures, so be careful to download the correct one.
-	It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).
-
-Unlocking Features
-------------------
-
-For unlocking features, once mrv2 loads, you should go to:
-  
-       Help->Unlock Features.
-       
-Licensing works for both mrv2 and vmrv2 (you can have both installed).
-You need to have an internet connection for the license system.
-
-The donationware version when running without a donation, does not have:
-
-    - Annotations (available from Solo and later)
-    - Python (available in Standard and later)
-    - Editing (available in Edit and later)
-    - Voice and Link Annotations (available in Pro)
-    - Internet remote reviews from anywhere on the world (available in Pro+)
-
-They do have, however:
-
-    - Tone-mapping (OpenGL) and HDR (Vulkan)
-    - OpenEXR layer switching
-    - Saving Images and Movies with Audio
-
-Prices might change (go up or down) depending on competition and new features.
+v1.6.7
+======
 
 ChangeLog
 ---------
