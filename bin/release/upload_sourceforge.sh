@@ -60,7 +60,7 @@ unset DYLD_LIBRARY_PATH
 export branch=$(git rev-parse --abbrev-ref HEAD)
 if [[ "$branch" != "beta" && \
           "$branch" != "peace" ]]; then
-    echo "You are not on the beta, vulkan, peace or arm64 branch.  Will not make a release."
+    echo "You are not on the beta or peace branch.  Will not make a release."
     exit 0
 fi
 
@@ -135,8 +135,6 @@ cd $package_dir
 # Remove all files if present
 #
 rm -f README.md
-rm -f INSTALLATION_NOTES.md
-rm -f VULKAN_NOTES.md
 
 # Read all the files of this version
 shopt -s nullglob
@@ -182,19 +180,11 @@ Enjoy!
 Donation Prices
 ---------------
 
-Donationware prices of binary licenses through PayPal:
+Donationware prices to unlock features with a Paypal donation:
+
+Help->Unlock Features
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PSYEULZG24QHY)
-
-I use the email information to contact you privately.  I don't sell your information, as I don't have access to it, except for your email, which I use to contact you.
-
-- u\$  25 for a Solo license for a year.
-- u\$  50 for a Standard license for a year.
-- u\$  75 for an Edit license for a year.
-- u\$ 150 for a Pro license for a year.
-- u\$ 300 for a Pro license to own (also allowing changing machine id -
-      	      	    	       	   useful for trying Linux distros or
-				   upgrading machines) 
 
 License works for both mrv2 and vmrv2 (you can have both installed).
 
@@ -221,7 +211,7 @@ They do have, however:
 
 	   - Tone-mapping (OpenGL) and HDR (Vulkan)
 	   - OpenEXR layer switching
-	   - Saving
+	   - Saving OpenEXRs and Movies with Audio
 	   - A Menu Option (Help->Unlock Features) to unlock features
 	     based on donations.
 
@@ -282,11 +272,11 @@ an HDR monitor.
 Notes about Vulkan on NVidia Linux
 ----------------------------------
 
-In order to get HDR, you currently need to have the KWin6 or GNOME48 compositors and an HDR monitor.
+In order to get HDR, you currently need to have the KWin6 or GNOME49+ (Ubuntu 26.04 LTS) compositors and an HDR monitor.  The recommended compo.
 
 It will likely work with any NVidia RTX 3080+, but it will require you to choose and test your hardware carefully.
 
-The preferred NVidia driver tested for best performance is nvidia-driver-580+ (default on Ubuntu 25.04 with GNOME48+).
+The preferred NVidia driver tested for best performance is nvidia-driver-595+.
 
 Notes about Vulkan on macOS Intel
 ---------------------------------
@@ -294,7 +284,13 @@ Notes about Vulkan on macOS Intel
 - Only up to Vulkan 1.3 is currently supported.
 - HDR on macOS needs a MacBook Pro.
   MacBook Pro Intel will give you up to 200 Nits of HDR.
-- MacBook Pro Silicon should work with any M1 device up to HDR+.
+
+Notes about vmrv2/mrv2 on macOS Silicon
+---------------------------------------
+
+- MacBook Pro Silicon should work with any M1+.
+- Note that Apple has hardened the security on non-nontarized applications, so you will need to follow the bundled instructions in the .dmg package after dragging the vmrv2 icon.  That means, type four sudo commands.
+
 
 EOF
 

@@ -4,9 +4,6 @@
 
 include(ExternalProject)
 
-
-set(GITHUB_REPO "$ENV{GITHUB_REPO}")
-
 set(mrv2_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
 

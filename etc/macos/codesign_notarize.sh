@@ -23,7 +23,7 @@ extract_version
 
 # Developer ID Application certificate — exactly as it appears in Keychain Access.
 # Example: "Developer ID Application: Gonzalo Garramuño (XXXXXXXXXX)"
-DEVELOPER_ID="${DEVELOPER_ID:-Developer ID Application: Gonzalo Garramuño(TEAMID)}"
+DEVELOPER_ID="${DEVELOPER_ID:-}"
 
 # Apple ID (email) associated with your developer account.
 APPLE_ID="${APPLE_ID:-ggarra13@gmail.com}"
@@ -85,6 +85,10 @@ check_dependencies() {
 }
 
 check_certificate() {
+    if [[ "${DEVELOPER_ID}" == "" ]]; then
+	echo "DEVELOPER_ID not set. Cannot verify signing certificate"
+	exit 0
+    fi
     step "Verifying signing certificate"
     security find-identity -v -p codesigning \
         | grep -F "${DEVELOPER_ID}" &>/dev/null \
@@ -295,13 +299,13 @@ sign_bundle() {
 
 sign_all_bundles() {
     if [[ -n "${MRV2_APP:-}" ]]; then
-	sign_bundle "packages/${BUILD_DIR}/${MRV2_APP}"
+	sign_bundle "${PACK_DIR}/${MRV2_APP}"
     fi
     if [[ -n "${VMRV2_APP:-}" ]]; then
-	sign_bundle "packages/${BUILD_DIR}/${VMRV2_APP}"
+	sign_bundle "${PACK_DIR}/${VMRV2_APP}"
     fi
     if [[ -n "${HDR_APP:-}" ]]; then
-        sign_bundle "packages/${BUILD_DIR}/${HDR_APP}"
+        sign_bundle "${PACK_DIR}/${HDR_APP}"
     fi
 }
 
@@ -571,6 +575,10 @@ export BUILD_DIR="${ROOT_DIR}/Release/"
 export PACK_DIR="${BUILD_DIR}/mrv2/src/mrv2-build/_CPack_Packages/Darwin/DragNDrop/${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}"
 export DIST_DIR="packages/${BUILD_DIR}"
 
+if [[ ! -d $DIST_DIR ]]; then
+    export DIST_DIR="paquetes/${BUILD_DIR}"
+fi
+
 # Name of the DMG produced by CPack (or the one this script creates).
 DMG_NAME="${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}.dmg"
 
@@ -597,7 +605,7 @@ case "${COMMAND}" in
 
     create-dmg)
         check_dependencies
-        create_dmg
+        #create_dmg
         ;;
 
     sign-dmg)
@@ -626,7 +634,7 @@ case "${COMMAND}" in
         check_certificate
         generate_entitlements
         sign_all_bundles
-        create_dmg
+        #create_dmg
         sign_dmg
         notarize
         staple_target

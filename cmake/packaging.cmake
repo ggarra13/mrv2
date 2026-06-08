@@ -141,14 +141,15 @@ if(APPLE)
 	WORLD_READ WORLD_EXECUTE
 	COPYONLY)
     
+    # Install mrv2.app / vmrv2.app bundle dir
     install(DIRECTORY ${MRV2_BUNDLE_DIR}
 	DESTINATION .
 	USE_SOURCE_PERMISSIONS
 	COMPONENT applications
     )
 
-    # Install README.md
-    install(FILES "${MRV2_DIR}/etc/macOS/README.md"
+    # Install README.md file at root of .dmg
+    install(FILES "/tmp/macOS/README.md"
         DESTINATION .
         COMPONENT applications
     )

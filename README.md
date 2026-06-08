@@ -11,6 +11,7 @@
 [![Build Status](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_macos14.yml/badge.svg)](https://github.com/ggarra13/mrv2/actions/workflows/vulkan_macos14.yml)
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
+[![Sponsor](https://img.shields.io/badge/Sponsor-ggarra13-blue.svg)](https://github.com/sponsors/ggarra13)
 
 ![banner](https://github.com/ggarra13/mrv2/blob/main/assets/images/banner.png)
 
@@ -57,19 +58,15 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
 
 ## Notes on installation
 
-- On macOS you install it by opening the .dmg file, and dragging the mrv2
-  icon to the Applications directory.  If there's already an mrv2 version,
-  we recommend you overwrite it.
+- On macOS you install it by opening the .dmg file.  When you do so, Apple's
+  Gatekeeper will not allow it.
   The macOS application is currently not notarized, so when you launch it you
   will not be able to run it as macOS will warn you that the file is not secure
   as it was downloaded from internet.
   To avoid that, you need to open the Apple Logo->Settings->Privacy and Security
   and go to Security and allow "Opening Anyway".
-  Alternatively, you can do it from the Terminal, by:
-  
-```
-  sudo xattr -rd com.apple.quarantine /Applications/mrv2.app/
-```
+  Then, you need to further follow some steps as in the README file provided
+  in the installer.
 
 - Windows and Chrome, like macOS, also protect you from installing files
   from the Internet.  When you first download it with Chrome it may warn
@@ -152,6 +149,7 @@ Currently supported:
 
 # Tutorials
 
-Besides the basic API documentation included, there is a special channel on youtube.com where you can find some tutorials on its basic use:
+Besides the basic API documentation included, there is a special channel on youtube.com where you can
+find some tutorials on its basic use:
 
 [Video Tutorials](https://www.youtube.com/watch?v=8JViz-pPCrg&list=PLxJ9NNBdNfRmd8AQ41AJYmb7WhN99G5C-)
