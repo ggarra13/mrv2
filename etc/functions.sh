@@ -48,21 +48,21 @@ get_compilers()
 {
     if [[ $KERNEL == *Windows* ]]; then
 	# Native compiler (MSVC)
-	export NATIVE_C_COMPILER=`which cl.exe`
+	export NATIVE_C_COMPILER=`which cl.exe 2> /tmp/error.txt`
 	export NATIVE_C_COMPILER_NAME="cl.exe"
-	export NATIVE_CXX_COMPILER=`which cl.exe`
+	export NATIVE_CXX_COMPILER=`which cl.exe 2> /tmp/error.txt`
 	export NATIVE_CXX_COMPILER_NAME="cl.exe"
 
 	# Generic compiler (Clang with MSVC compatibility)
-	export GENERIC_C_COMPILER=`which clang-cl`
+	export GENERIC_C_COMPILER=`which clang-cl 2> /tmp/error.txt`
 	export GENERIC_C_COMPILER_NAME="clang-cl"
-	export GENERIC_CXX_COMPILER=`which clang-cl`
+	export GENERIC_CXX_COMPILER=`which clang-cl 2> /tmp/error.txt`
 	export GENERIC_CXX_COMPILER_NAME="clang-cl"
 
 	# GNU compatible compilers (MinGW/MSys2 style)
-	export GNU_C_COMPILER=`which clang`
+	export GNU_C_COMPILER=`which clang 2> /tmp/error.txt`
 	export GNU_C_COMPILER_NAME="clang"
-	export GNU_CXX_COMPILER=`which clang++`
+	export GNU_CXX_COMPILER=`which clang++ 2> /tmp/error.txt`
 	export GNU_CXX_COMPILER_NAME="clang++"
 
 	# Linkers & Archivers

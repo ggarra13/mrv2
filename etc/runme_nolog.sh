@@ -362,6 +362,18 @@ unset PYTHONPATH
 #
 #  export PYTHONUTF8=1  USD needs it, meson fails.
 
+#
+# Verification checks...
+#
+if [[ $KERNEL == *Windows* ]]; then
+    if [[ "$ARCH" == "aarch64" ]]; then
+	if [[ "${GNU_C_COMPILER_NAME}" == "" ]]; then
+	    echo "No clang found.  Cannot compile litbplacebo on $ARCH"
+	    exit 1
+	fi
+    fi
+fi
+
 echo
 echo
 echo "Building summary"
