@@ -13,12 +13,18 @@ OUTPUT_FILE=SHA256SUMS
 cd releases/beta
 rm -rf $OUTPUT_FILE
 
+#
+# Add opengl last
+#
 files=""
-for i in vulkan/*$1*; do
+for i in opengl/*$1*; do
     files="$i $files"
 done
 
-for i in opengl/*$1*; do
+#
+# Add Vulkan first
+#
+for i in vulkan/*$1*; do
     files="$i $files"
 done
 
