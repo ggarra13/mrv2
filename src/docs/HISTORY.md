@@ -8,9 +8,10 @@ ChangeLog
 - Build/MacOS: Consolidated README_mrv2.md and README_vmrv2.md under a single README.md.in name with a CMake configure_file() call.
 - Build/MacOS: Added notarization code which won't run for now until I request a developer license with Apple (u$99) when I get a new Apple box, some time from now.
 - Build/MacOS: Removed Gatekeeper warning when opening the .dmg on Apple Silicon.
-- Install: Added web page warning and link to Installation instructions when downloading files.
+- Web page: Added web page warning and link to Installation instructions when downloading files.  This is mainly for macOS users which must work around Apple's horrible GateKeeper security approach.
 - Install: Verified vmrv2 and mrv2 work under latest macOS Silicon.
 - Linux/Uninstall:  Removed set +e from .rpm and .deb uninstallers as they could leave the uninstallation in an incorrect state if removal was stopped.
+- Core: Added Fl::check to getVideoInfo and getAudioInfo, mainly to keep GNOME's responsive on Linux when 4K OpenEXRs are read (but may help other platforms too).
 
 
 v1.6.7
