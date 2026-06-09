@@ -366,11 +366,9 @@ unset PYTHONPATH
 # Verification checks...
 #
 if [[ $KERNEL == *Windows* ]]; then
-    if [[ "$ARCH" == "aarch64" ]]; then
-	if [[ "${GNU_C_COMPILER_NAME}" == "" ]]; then
-	    echo "No clang found.  Cannot compile litbplacebo on $ARCH"
-	    exit 1
-	fi
+    if [[ "${GNU_C_COMPILER_NAME}" == "" ]]; then
+	echo "Cannot compile litbplacebo on $ARCH"
+	exit 1
     fi
 fi
 

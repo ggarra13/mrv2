@@ -27,4 +27,9 @@ function(find_meson_executable TARGET)
     set(${TARGET}_PYTHONPATH "${_LOCAL_PYTHONPATH}" PARENT_SCOPE)
     
     message(STATUS "Found Meson: ${_LOCAL_MESON}")
+    execute_process( COMMAND "${_LOCAL_MESON}" --version
+	OUTPUT_VARIABLE MESON_VERSION
+	OUTPUT_STRIP_TRAILING_WHITESPACE)
+    message(STATUS "Meson version: ${MESON_VERSION}")
+    
 endfunction()
