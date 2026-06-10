@@ -18,11 +18,16 @@ jobs:
     runs-on: ubuntu-24.04-arm
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
           fetch-depth: 1
 
+      - name: CPU info (Linux)
+        run: |
+          lscpu
+          cat /proc/cpuinfo
+          
       - name: Install ccache
         run: sudo apt-get update && sudo apt-get install -y ccache
 
@@ -34,7 +39,7 @@ jobs:
           echo "CCACHE_DATE=$(date +'%Y-%m')" >> $GITHUB_ENV
           ccache --max-size=500M
           
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ~/.ccache
           key: ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-${{ env.CCACHE_DATE }}
@@ -62,7 +67,7 @@ jobs:
           which cargo
 
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/registry
@@ -123,7 +128,7 @@ jobs:
 
       - name: Cache Vulkan SDK
         id: cache-vulkan-sdk
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: VulkanSDK-*
           key: ${{ runner.os }}-${{ runner.arch }}-vulkan-sdk-${{ hashFiles('etc/vulkan_version.sh', 'etc/linux/install_vulkan.sh') }}

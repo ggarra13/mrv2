@@ -39,6 +39,8 @@ endfunction()
 
 
 function(install_vulkan_lib_glob _libglob APPNAME)
+
+    # If we have VULKAN_SDK defined, look there first.
     if (DEFINED VULKAN_SDK AND EXISTS ${VULKAN_SDK})
 	set(_vulkan_found FALSE)
 	file(GLOB _libs "${VULKAN_SDK}/lib/${_libglob}.dylib")
@@ -55,6 +57,8 @@ function(install_vulkan_lib_glob _libglob APPNAME)
 	endif()
 	return()
     endif()
+
+    # If not there, look in /opt/homebrew/lib first.
     set(_vulkan_found FALSE)
     file(GLOB _libs "/opt/homebrew/lib/${_libglob}.dylib")
     foreach( _lib ${_libs} )
@@ -65,15 +69,22 @@ function(install_vulkan_lib_glob _libglob APPNAME)
 	    set(_vulkan_found TRUE)
 	endif()
     endforeach()
+    if (_vulkan_found)
+	return()
+    endif()
+    
+    # If still not there, look in /usr/local/lib/ first.
     if (NOT _vulkan_found)
 	file(GLOB _libs "/usr/local/lib/${_libglob}.dylib")
-	if (EXISTS ${_lib})
-	    foreach( _lib ${_libs} )
-		file(COPY ${_lib}
-		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
-		    FOLLOW_SYMLINK_CHAIN)
-	    endforeach()
-	endif()
+	foreach( _lib ${_libs} )
+	    file(COPY ${_lib}
+		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/lib
+		FOLLOW_SYMLINK_CHAIN)
+	    set(_vulkan_found TRUE)
+	endforeach()
+    endif()
+    if (NOT _vulkan_found)
+	message(FATAL_ERROR "Vulkan libs not found!")
     endif()
 endfunction()
 
@@ -87,40 +98,42 @@ function(install_vulkan_icd_filenames APPNAME)
 	    "${VULKAN_SDK}/etc/vulkan*"
 	    "${VULKAN_SDK}/../etc/vulkan*")
 	foreach( _lib ${_libs} )
-	    if (EXISTS ${_lib})
-		message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc")
-		file(COPY ${_lib}
-		    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc
-		    FOLLOW_SYMLINK_CHAIN)
+	    message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc")
+	    file(COPY ${_lib}
+		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc
+		FOLLOW_SYMLINK_CHAIN)
 		
-		set(_vulkan_found TRUE)
-	    endif()
+	    set(_vulkan_found TRUE)
 	endforeach()
 	if(NOT _vulkan_found)
 	    message(FATAL_ERROR "FAILED: VULKAN_SDK set to ${VULKAN_SDK} but ${VULKAN_SDK}/etc/vulkan/icd.d/*.json not found")
 	endif()
+    endif()
+    
+    if(_vulkan_found)
 	return()
     endif()
 
     #
-    # Try /usr/local next
+    # Try /opt/homebrew/etc/vulkan next
     #
     
     file(GLOB _libs
 	"/opt/homebrew/etc/vulkan*")
     foreach( _lib ${_libs} )
-	if (EXISTS ${_lib})
-	    message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/")
-	    file(COPY ${_lib}
-		DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/
-		FOLLOW_SYMLINK_CHAIN)
-	    set(_vulkan_found TRUE)
-	endif()
+	message(STATUS "Copying ${_lib} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/")
+	file(COPY ${_lib}
+	    DESTINATION ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/etc/
+	    FOLLOW_SYMLINK_CHAIN)
+	set(_vulkan_found TRUE)
     endforeach()
     if(_vulkan_found)
 	return()
     endif()
-    
+
+    #
+    # If still not found, try /usr/local/etc
+    #
     file(GLOB _libs
 	"/usr/local/etc/vulkan*")
     foreach( _lib ${_libs} )
@@ -197,7 +210,7 @@ function(install_vulkan_layers APPNAME)
     endif()
 
     #
-    # Try /usr/local next
+    # Try /opt/homebrew next
     #
     
     file(GLOB _dirs "/opt/homebrew/vulkan-validationlayers/share/vulkan*")
@@ -212,6 +225,10 @@ function(install_vulkan_layers APPNAME)
 	message(STATUS "VULKAN_SDK set to ${VULKAN_SDK} but ${VULKAN_SDKw}/share/vulkan* not found")
     endif()
 
+    if(_vulkan_found)
+	return()
+    endif()
+	
     file(GLOB _dirs "/usr/local/opt/vulkan-validationlayers/share/vulkan*")
     foreach( _dir ${_dirs} )
 	message(STATUS "Copying ${_dir} to ${CPACK_PREPACKAGE}/${APPNAME}.app/Contents/Resources/share/")
@@ -281,8 +298,6 @@ if (EXISTS ${CPACK_PREPACKAGE}/docs)
     file(COPY ${CPACK_PREPACKAGE}/docs
 	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
 endif()
-file(COPY ${CPACK_PREPACKAGE}/lib
-    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
 if (EXISTS ${CPACK_PREPACKAGE}/libraries)
     file(COPY ${CPACK_PREPACKAGE}/libraries
 	DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
@@ -307,15 +322,6 @@ set(VULKAN_SDK $ENV{VULKAN_SDK})
 message(STATUS "VULKAN_SDK set to ${VULKAN_SDK}")
 
 #
-# Copy vmrv2/mrv2 launcher with the name of the directory.
-#
-file(COPY ${CPACK_PREPACKAGE}/bin/launcher
-    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/)
-file(RENAME ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/launcher
-    ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/MacOS/${mrv2_NAME})
-
-    
-#
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libfltk*")
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libintl*")
 install_mrv2_lib_glob("${CPACK_PREPACKAGE}/lib/libomp*")
@@ -329,6 +335,9 @@ if (MRV2_BACKEND STREQUAL "VK")
     install_vulkan_lib_glob("libvulkan*" ${mrv2_NAME})
     install_vulkan_icd_filenames(${mrv2_NAME})
 endif()
+
+file(COPY ${CPACK_PREPACKAGE}/lib
+    DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
 
 #
 # Pre-pare hdr.app if present
@@ -386,28 +395,6 @@ if ("${mrv2_NAME}" STREQUAL "mrv2")
     file(REMOVE ${_files})
 endif()
 
-#
-# Fix up install names in all packaged .dylib files and executables so that
-# every library's own id, all library-to-library references, and all
-# executable-to-library references use @rpath instead of absolute paths.
-# This must run after all libraries have been copied into the bundles.
-#
-set( _mrv2_app_base "${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents" )
-fixup_macos_rpath(
-    "${_mrv2_app_base}/Resources/lib"
-    EXECUTABLES
-        "${_mrv2_app_base}/MacOS/${mrv2_NAME}"
-        "${_mrv2_app_base}/Resources/bin/mrv2"
-)
-
-if( EXISTS "${CPACK_PREPACKAGE}/hdr.app" )
-    set( _hdr_app_base "${CPACK_PREPACKAGE}/hdr.app/Contents" )
-    fixup_macos_rpath(
-        "${_hdr_app_base}/Resources/lib"
-        EXECUTABLES
-            "${_hdr_app_base}/Resources/bin/hdr"
-    )
-endif()
 
 #
 # Clean up main staging area
@@ -427,3 +414,28 @@ endif()
 file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/presets)
 file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/python)
 file(REMOVE_RECURSE ${CPACK_PREPACKAGE}/share)
+
+#
+# Code-sign the assembled .app bundles before CPack creates the DMG.
+# Skipped silently if DEVELOPER_ID is not set (dev/CI builds without notarization).
+#
+if(DEFINED ENV{DEVELOPER_ID} AND NOT "$ENV{DEVELOPER_ID}" STREQUAL "")
+    message(STATUS "Signing app bundles before DMG creation...")
+
+    set(_sign_script "${ROOT_DIR}/etc/macos/codesign_notarize.sh")
+    set(_vk_arg "")
+    if(MRV2_BACKEND STREQUAL "VK")
+        set(_vk_arg "-vk")
+    endif()
+
+    execute_process(
+        COMMAND "${_sign_script}" ${_vk_arg} sign-bundles
+        WORKING_DIRECTORY "${ROOT_DIR}"
+        RESULT_VARIABLE _sign_result
+    )
+    if(NOT _sign_result EQUAL 0)
+        message(FATAL_ERROR "codesign_notarize.sh sign-bundles failed (exit ${_sign_result}).")
+    endif()
+else()
+    message(STATUS "DEVELOPER_ID not set — skipping bundle signing (self-signed / dev build).")
+endif()

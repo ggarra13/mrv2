@@ -36,8 +36,8 @@ namespace tl
             std::string serialize(const Imath::Box<Imath::Vec2<T> >& value)
             {
                 std::stringstream ss;
-                ss << value.min.x << "," << value.min.y << "*" << value.max.x
-                   << "," << value.max.y;
+                ss << value.min.x << " " << value.min.y << " " << value.max.x
+                   << " " << value.max.y;
                 return ss.str();
             }
         } // namespace

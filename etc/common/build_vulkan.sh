@@ -45,7 +45,7 @@ if [[ -z "$BUILD_VULKAN_PROFILES" ]]; then
 fi
 
 if [[ -z "$BUILD_VULKAN_VALIDATIONLAYERS" ]]; then
-    BUILD_VULKAN_PROFILES=ON
+    BUILD_VULKAN_VALIDATIONLAYERS=ON
 fi
 
 if [[ -z "$BUILD_SHADERC" ]]; then
@@ -61,7 +61,7 @@ try_checkout()
 {
     checkouts="v$SDK_VERSION vulkan-sdk-v$SDK_VERSION sdk-$SDK_VERSION v$COMPILE_VERSION vulkan-sdk-v$COMPILE_VERSION sdk-$COMPILE_VERSION main master"
     for checkout in $checkouts; do
-	cmd=`git checkout $checkout &> /dev/null`
+	git checkout "$checkout" &> /dev/null
 	if [[ $? == 0 ]]; then
 	    return
 	fi
@@ -87,6 +87,7 @@ fi
 
 if [[ -z $VULKAN_SDK ]]; then
     echo "No VULKAN_SDK set cannot compile it."
+    exit 1
 fi
 
 export COMPILE_VERSION=$(echo "$SDK_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*$/\1/')
@@ -118,7 +119,7 @@ if [[ "$BUILD_VULKAN_HEADERS" == "ON" || "$BUILD_VULKAN_HEADERS" == "1" ]]; then
 
     cd Vulkan-Headers
     try_checkout
-    cmake -S . -B build -D CMAKE_INSTALL_PREFIX=$CMAKE_INSTALL_PREFIX}
+    cmake -S . -B build -D CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
     cmake --install build --prefix ${CMAKE_INSTALL_PREFIX}
     cd .. 
 fi
@@ -227,14 +228,14 @@ fi
 ###########################
 # SPIRV-Headers (needed?) #
 ###########################
-# if [[ "$BUILD_SPIRV_HEADERS" == "ON" || "$BUILD_SPIRV_HEADERS" == "1" ]]; then
-# if [[ ! -d SPIRV-Headers ]]; then
-#     git clone https://github.com/KhronosGroup/SPIRV-Headers
-# fi
+if [[ "$BUILD_SPIRV_HEADERS" == "ON" || "$BUILD_SPIRV_HEADERS" == "1" ]]; then
+if [[ ! -d SPIRV-Headers ]]; then
+    git clone https://github.com/KhronosGroup/SPIRV-Headers
+fi
 
-# cd SPIRV-Headers
-# try_checkout
-# cd ..
+cd SPIRV-Headers
+try_checkout
+cd ..
 
 
 
@@ -356,6 +357,12 @@ if [[ "$BUILD_SHADERC" == "ON" || "$BUILD_SHADERC" == "1" ]]; then
 
     cd ..
 fi
+
+#
+# Build KosmicKrisp for raytracing support
+#
+git clone https://gitlab.freedesktop.org/mesa/mesa.git
+cd mesa
 
 cd ..
 

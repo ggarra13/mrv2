@@ -14,7 +14,15 @@ set(CMAKE_SKIP_RPATH FALSE)
 
 # Avoid warnings of overshadowing system libraries.
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-set(CMAKE_INSTALL_RPATH "@executable_path/../lib;${CMAKE_INSTALL_PREFIX}/lib;/usr/local/lib")
+if(APPLE)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+        set(_HOMEBREW_LIB "/opt/homebrew/lib")
+    else()
+        set(_HOMEBREW_LIB "/usr/local/lib")
+    endif()
+    set(CMAKE_INSTALL_RPATH
+        "@executable_path/../lib;${_HOMEBREW_LIB}")
+endif()
 
 # Build the executable with the final CMAKE_INSTALL_RPATH from the very beginning.
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
@@ -368,13 +376,22 @@ install( DIRECTORY share/locale
 # Install update-mrv2 plugin
 #
 if (MRV2_PYBIND11)
-    install( FILES python/plug-ins/update-mrv2.py
+    install(FILES
+	python/plug-ins/demos/flow-bridge.py
+	DESTINATION python/plug-ins/demos
+	COMPONENT python_plugins)
+    install(FILES
+	python/plug-ins/AUTODESK_FLOW.md
 	DESTINATION python/plug-ins
-	COMPONENT applications )
+	COMPONENT python_plugins)
     
-    install( DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
+    install(FILES python/plug-ins/update-mrv2.py
+	DESTINATION python/plug-ins
+	COMPONENT python_plugins)
+    
+    install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
 	DESTINATION python/
-	COMPONENT applications )
+	COMPONENT python_plugins)
     
     #
     # Install mrv2's python demos
@@ -391,7 +408,7 @@ endif()
 #
 # Install mrv2's documentation
 #
-install( DIRECTORY docs
+install( DIRECTORY docs/Legal
     DESTINATION .
     COMPONENT documentation )
 
@@ -461,19 +478,10 @@ if (TLRENDER_NDI AND TLRENDER_VK AND MRV2_HDR)
     add_subdirectory(hdr)
 endif()
 
-if ( NOT "$ENV{GITHUB_OWNER}" STREQUAL "" AND
-	NOT "$ENV{GITHUB_OWNER}" STREQUAL "ggarra13")
-    message(FATAL_ERROR "Build configuration rejected by policy checks.")
-endif()
-
 #
 # Add main source
 #
 add_subdirectory(main)
-
-if (APPLE)
-    add_subdirectory(launcher)
-endif()
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
     add_subdirectory(tests)

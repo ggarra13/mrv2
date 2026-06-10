@@ -492,6 +492,16 @@ function( fixup_macos_rpath APP_LIB_DIR )
 
         # Rewrite absolute dependency references
         _fixup_macos_dep_refs( "${_lib}" )
+	
+	# After _fixup_macos_dep_refs, for each executable:
+	execute_process(
+	    COMMAND install_name_tool -add_rpath "@loader_path" "${_lib}"
+	    RESULT_VARIABLE _rc
+	    ERROR_VARIABLE _err
+	)	
+	if(_rc AND NOT _err MATCHES "already")
+	    message(WARNING "add_rpath failed for ${_exe_name}: ${_err}")
+	endif()
     endforeach()
 
     # ------------------------------------------------------------------
@@ -504,7 +514,36 @@ function( fixup_macos_rpath APP_LIB_DIR )
         endif()
         get_filename_component( _exe_name "${_exe}" NAME )
         message( STATUS "  exe ${_exe_name}: rewriting load cmds" )
+	
+	# Path to your launcher script
+	set(LAUNCHER_SCRIPT "${_exe}")
+
+	# Read the first few lines of the file
+	file(READ "${LAUNCHER_SCRIPT}" LAUNCHER_CONTENT LIMIT 256)
+
+	# Check if it starts with #!/bin/bash
+	string(FIND "${LAUNCHER_CONTENT}" "#!/bin/bash" POS)
+	if (POS EQUAL 0)
+	    message(STATUS "Launcher uses bash shebang")
+	    continue()
+	endif()
+	
+	# Check if it starts with #!/bin/bash
+	string(FIND "${LAUNCHER_CONTENT}" "#!/bin/sh" POS)
+	if (POS EQUAL 0)
+	    message(STATUS "Launcher uses sh shebang")
+	    continue()
+	endif()
+
         _fixup_macos_dep_refs( "${_exe}" )
+
+	# After _fixup_macos_dep_refs, for each executable:
+	execute_process(
+	    COMMAND install_name_tool -add_rpath "@executable_path/../lib" "${_exe}"
+	)
+	execute_process(
+	    COMMAND install_name_tool -add_rpath "@loader_path/../lib" "${_exe}"
+	)
     endforeach()
 endfunction()
 
@@ -515,7 +554,7 @@ endfunction()
 # Macro used to turn a list of .cpp/.h files into an absolute path for
 # fluid files, and shortened relative paths for others.
 #
-# @bug: We need to do this on Windows, as xgettext chokes on too many
+# @bug: We need to do on this Windows, as xgettext chokes on too many
 #       long paths.
 #
 macro( files_to_absolute_paths )

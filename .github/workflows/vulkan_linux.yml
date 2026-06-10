@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
           fetch-depth: 1
@@ -34,7 +34,7 @@ jobs:
           echo "CCACHE_DATE=$(date +'%Y-%m')" >> $GITHUB_ENV
           ccache --max-size=500M
           
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ~/.ccache
           key: ${{ runner.os }}-${{ runner.arch }}-Vulkan-ccache-${{ env.CCACHE_DATE }}
@@ -48,7 +48,7 @@ jobs:
           components: clippy,rustfmt
 
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/registry
@@ -135,7 +135,7 @@ jobs:
           
       - name: Cache Vulkan SDK
         id: cache-vulkan-sdk
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: VulkanSDK-*
           key: ${{ runner.os }}-${{ runner.arch }}-vulkan-sdk-${{ hashFiles('etc/vulkan_version.sh', 'etc/linux/install_vulkan.sh') }}

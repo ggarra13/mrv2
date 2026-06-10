@@ -4,10 +4,6 @@
 
 include(ExternalProject)
 
-# Derive these from your Python build variables
-set(_Python_ROOT ${CMAKE_INSTALL_PREFIX})
-set(_Python_EXE ${Python_EXECUTABLE})
-
 set(mrv2_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
 

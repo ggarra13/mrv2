@@ -21,8 +21,6 @@ namespace mrv
     public:
         void write(const std::string& message)
         {
-            if (!panel::pythonPanel)
-                panel::python_panel_cb(nullptr, App::ui);
             PythonOutput* output = panel::PythonPanel::output();
             output->info(message.c_str());
             std::cout << message;

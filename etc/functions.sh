@@ -48,30 +48,30 @@ get_compilers()
 {
     if [[ $KERNEL == *Windows* ]]; then
 	# Native compiler (MSVC)
-	export NATIVE_C_COMPILER=`which cl.exe`
+	export NATIVE_C_COMPILER=`which cl.exe 2> /tmp/error.txt`
 	export NATIVE_C_COMPILER_NAME="cl.exe"
-	export NATIVE_CXX_COMPILER=`which cl.exe`
+	export NATIVE_CXX_COMPILER=`which cl.exe 2> /tmp/error.txt`
 	export NATIVE_CXX_COMPILER_NAME="cl.exe"
 
 	# Generic compiler (Clang with MSVC compatibility)
-	export GENERIC_C_COMPILER=`which clang-cl`
+	export GENERIC_C_COMPILER=`which clang-cl 2> /tmp/error.txt`
 	export GENERIC_C_COMPILER_NAME="clang-cl"
-	export GENERIC_CXX_COMPILER=`which clang-cl`
+	export GENERIC_CXX_COMPILER=`which clang-cl 2> /tmp/error.txt`
 	export GENERIC_CXX_COMPILER_NAME="clang-cl"
 
 	# GNU compatible compilers (MinGW/MSys2 style)
-	export GNU_C_COMPILER=`which clang`
+	export GNU_C_COMPILER=`which clang 2> /tmp/error.txt`
 	export GNU_C_COMPILER_NAME="clang"
-	export GNU_CXX_COMPILER=`which clang++`
+	export GNU_CXX_COMPILER=`which clang++ 2> /tmp/error.txt`
 	export GNU_CXX_COMPILER_NAME="clang++"
 
 	# Linkers & Archivers
-	export NATIVE_LINKER=`which link.exe`
+	export NATIVE_LINKER=`which link.exe 2> /tmp/error.txt`
 	export NATIVE_LINKER_NAME="link.exe"
-	export NATIVE_ARCHIVER=`which lib.exe`
+	export NATIVE_ARCHIVER=`which lib.exe 2> /tmp/error.txt`
 	export NATIVE_ARCHIVER_NAME="lib.exe"
 
-	export GENERIC_LINKER=`which link.exe`
+	export GENERIC_LINKER=`which link.exe 2> /tmp/error.txt`
 	export GENERIC_LINKER_NAME="link.exe"
 
 	export GNU_LINKER=""
@@ -83,58 +83,58 @@ get_compilers()
 	export MACOS_BRAND=$(sysctl -n machdep.cpu.brand_string)
 
 	# C/C++ Compiler (Xcode Clang)
-	export NATIVE_C_COMPILER=`which clang`
+	export NATIVE_C_COMPILER=`which clang 2> /tmp/error.txt`
 	export NATIVE_C_COMPILER_NAME="clang"
-	export GENERIC_C_COMPILER=`which cc`
+	export GENERIC_C_COMPILER=`which cc 2> /tmp/error.txt`
 	export GENERIC_C_COMPILER_NAME="cc"
 
-	export NATIVE_CXX_COMPILER=`which clang++`
+	export NATIVE_CXX_COMPILER=`which clang++ 2> /tmp/error.txt`
 	export NATIVE_CXX_COMPILER_NAME="clang++"
-	export GENERIC_CXX_COMPILER=`which c++`
+	export GENERIC_CXX_COMPILER=`which c++ 2> /tmp/error.txt`
 	export GENERIC_CXX_COMPILER_NAME="c++"
 
 	# Linker & Archiver
-	export NATIVE_LINKER=`which ld`
+	export NATIVE_LINKER=`which ld 2> /tmp/error.txt`
 	export NATIVE_LINKER_NAME="ld"
-	export GENERIC_LINKER=`which ld`
+	export GENERIC_LINKER=`which ld 2> /tmp/error.txt`
 	export GENERIC_LINKER_NAME="ld"
 
-	export NATIVE_ARCHIVER=`which ar`
+	export NATIVE_ARCHIVER=`which ar 2> /tmp/error.txt`
 	export NATIVE_ARCHIVER_NAME="ar"
 
     else
 	# Linux logic
 	# get_linux_id() # Leave just in case
 	
-	export NATIVE_C_COMPILER=`which gcc`
+	export NATIVE_C_COMPILER=`which gcc 2> /tmp/error.txt`
 	export NATIVE_C_COMPILER_NAME="gcc"
-	export NATIVE_CXX_COMPILER=`which g++`
+	export NATIVE_CXX_COMPILER=`which g++ 2> /tmp/error.txt`
 	export NATIVE_CXX_COMPILER_NAME="g++"
 
-	export GENERIC_C_COMPILER=`which gcc`
+	export GENERIC_C_COMPILER=`which gcc 2> /tmp/error.txt`
 	export GENERIC_C_COMPILER_NAME="gcc"
-	export GENERIC_CXX_COMPILER=`which g++`
+	export GENERIC_CXX_COMPILER=`which g++ 2> /tmp/error.txt`
 	export GENERIC_CXX_COMPILER_NAME="g++"
 
-	export GNU_C_COMPILER=`which gcc`
+	export GNU_C_COMPILER=`which gcc 2> /tmp/error.txt`
 	export GNU_C_COMPILER_NAME="gcc"
-	export GNU_CXX_COMPILER=`which g++`
+	export GNU_CXX_COMPILER=`which g++ 2> /tmp/error.txt`
 	export GNU_CXX_COMPILER_NAME="g++"
 
 	# Linker & Archiver
-	export NATIVE_LINKER=`which ld`
+	export NATIVE_LINKER=`which ld 2> /tmp/error.txt`
 	export NATIVE_LINKER_NAME="ld"
-	export NATIVE_ARCHIVER=`which ar`
+	export NATIVE_ARCHIVER=`which ar 2> /tmp/error.txt`
 	export NATIVE_ARCHIVER_NAME="ar"
 	
-	export GENERIC_LINKER=`which ld`
+	export GENERIC_LINKER=`which ld 2> /tmp/error.txt`
 	export GENERIC_LINKER_NAME="ld"
-	export GENERIC_ARCHIVER=`which ar`
+	export GENERIC_ARCHIVER=`which ar 2> /tmp/error.txt`
 	export GENERIC_ARCHIVER_NAME="ar"
 	
-	export GNU_LINKER=`which ld`
+	export GNU_LINKER=`which ld 2> /tmp/error.txt`
 	export GNU_LINKER_NAME="ld"
-	export GNU_ARCHIVER=`which ar`
+	export GNU_ARCHIVER=`which ar 2> /tmp/error.txt`
 	export GNU_ARCHIVER_NAME="ar"
     fi
 
@@ -227,10 +227,8 @@ get_kernel()
 	get_linux_id
     fi
 
-    if [[ $ARCH == "" ]]; then
-	export ARCH=`uname -m` # was uname -a
-	export UNAME_ARCH=$ARCH # Store uname architecture to compile properly
-    fi
+    export ARCH=`uname -m` # was uname -a
+    export UNAME_ARCH=$ARCH # Store uname architecture to compile properly
     
     if [[ $KERNEL == *Darwin* ]]; then
 	if [[ $ARCH == aarch64 || $ARCH == arm64 ]]; then
@@ -437,15 +435,9 @@ send_to_packages()
     local stage=$PWD/$BUILD_DIR/mrv2/src/mrv2-build
     local package=$stage/$1
     if [[ "$CMAKE_TARGET" != "" ]]; then
-	if [[ "$GITHUB_REPOSITORY" != "" ]]; then
-	    package_dir=$PWD/paquetes/$BUILD_DIR
-	else
-	    package_dir=$PWD/packages/$BUILD_DIR
-	fi
-	mkdir -p $package_dir
+	mkdir -p $PACKAGE_DIRECTORY
 	if [[ -e $package ]]; then
-	    echo "mv $package $PWD/packages/$BUILD_DIR"
-	    mv $package $package_dir
+	    mv $package $PACKAGE_DIRECTORY/
 	else
 	    echo "ERROR package $1 was not created in $stage."
 	fi

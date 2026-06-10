@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG tablet)  # was v1.9.6
+set(FLTK_GIT_TAG v1.9.8)  # v1.9.8 has no tablet support
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_merge) # Testing branch

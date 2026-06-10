@@ -48,11 +48,10 @@ get_git_version
 get_compilers
 
 #
-# Get and install the latest cacert for licensing
+# Create the certs certificate
 #
 . etc/update_cacert.sh
 update_cacert
-
 
 #
 # These are some of the expensive mrv2 options
@@ -352,14 +351,6 @@ if [ -z "$FLTK_BUILD_SHARED" ]; then
     fi
 fi
 
-export GITHUB_OWNER="${GITHUB_REPOSITORY%%/*}"
-if [ -n "$GITHUB_REPOSITORY" ]; then
-    export GITHUB_REPO="${GITHUB_REPOSITORY##*/}"
-else
-    export GITHUB_REPO=$(basename -s .git "$(git config --get remote.origin.url)")
-fi
-
-
     
 #
 # Clean python path to avoid clashes, mainly, with macOS meson
@@ -370,6 +361,16 @@ unset PYTHONPATH
 # For Windows mainly, make sure we use UTF8 encoding.
 #
 #  export PYTHONUTF8=1  USD needs it, meson fails.
+
+#
+# Verification checks...
+#
+if [[ $KERNEL == *Windows* ]]; then
+    if [[ "${GNU_C_COMPILER_NAME}" == "" ]]; then
+	echo "Cannot compile litbplacebo on $ARCH"
+	exit 1
+    fi
+fi
 
 echo
 echo
@@ -432,6 +433,16 @@ if [[ $KERNEL == *Windows* ]]; then
     else
 	echo "NSIS not found"
     fi
+fi
+
+if command -v ninja > /dev/null 2>&1; then
+    which ninja
+    ninja --version
+else
+    echo
+    echo "ninja NOT found!!! Cannot compile mrv2/vmrv2."
+    echo
+    exit 1
 fi
 
 
@@ -519,6 +530,15 @@ if command -v swig > /dev/null 2>&1; then
 else
     echo
     echo "swig NOT found!!! Cannot compile pyFLTK."
+    echo
+    exit 1
+fi
+
+if command -v perl > /dev/null 2>&1; then
+    perl -version
+else
+    echo
+    echo "Perl NOT found!!! Cannot compile OpenSSL."
     echo
     exit 1
 fi

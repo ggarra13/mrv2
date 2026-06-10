@@ -1,49 +1,39 @@
-v1.6.6
+v1.6.8
 ======
 
-mrv2 and vmrv2 are open source professional players and review tools for VFX, animation and computer graphics for Windows, Linux and macOS.  You can choose to compile from source or get binaries.
+ChangeLog
+---------
 
-If you are unsure what binary to choose, go to:
+- Build: Consolidated package directory.
+- Build/MacOS: Consolidated README_mrv2.md and README_vmrv2.md under a single README.md.in name with a CMake configure_file() call.
+- Build/MacOS: Added notarization code which won't run for now until I request a developer license with Apple (u$99) when I get a new Apple box, some time from now.
+- Build/MacOS: Removed Gatekeeper warning when opening the .dmg on Apple Silicon.
+- Web page: Added web page warning and link to Installation instructions when downloading files.  This is mainly for macOS users which must work around Apple's horrible GateKeeper security approach.
+- Install: Verified vmrv2 and mrv2 work under latest macOS Silicon.
+- Linux/Uninstall:  Removed set +e from .rpm and .deb uninstallers as they could leave the uninstallation in an incorrect state if removal was stopped.
+- Core: Added Fl::check to getVideoInfo and getAudioInfo, mainly to keep GNOME's responsive on Linux when 4K OpenEXRs are read (but may help other platforms too).
+- Python/Linux: v1.6.7 incorrectly shipped with broken FLTK Python bindings. 
 
-https://mrv2.sourceforge.io/downloads/mrv2-download-page.html
 
-mrv2 ships now in two compiled versions:
+v1.6.7
+======
 
-   - mrv2 with OpenGL backend  (free and donationware)
-   - vmrv2 with Vulkan backend (free and donationware)
+ChangeLog
+---------
 
-It also ships for many more architectures, so be careful to download the correct one.
-It has NOT been tested on Windows aarch64 nor Linux aarch64 (beta testers wanted).
+- Docs: Documentation is no longer kept locally and it is instead read from the internet.
+- Core: Removed an error when saving a single file without a frame number.
+- Core: Fixed a weird but serious bug when saving of OpenEXR images when they had a Data or Display Window set and the format was half float.
+- UI/Python: Added support for connecting with Autodesk Flow.  The script is barebones.  It is up to your studio to improve it.
+- UI/Pen and Tablet: Added tablet support for all platforms. (WIP)
+- UI/Annotations: Made annotations increase the brush size based on pen pressure.
+- UI/MacOS: Made the "exec" icon disappear when launching the application.
+- Install/MacOS: Added a README.md file with installation instructions for Apple Silicon.
+- Python: Made python print() not open the Python Panel.  Only errors will open it.
 
-Unlocking Features
-------------------
 
-For unlocking features, once mrv2 loads, you should go to:
-  
-       Help->Unlock Features.
-       
-Donationware prices of binary licenses through PayPal:
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJMHRRKYCPXYW)
-
-License works for both mrv2 and vmrv2 (you can have both installed).
-You need to have an internet connection for the license system.
-
-The donationware version when running without a donation, does not have:
-
-    - Annotations (available from Solo and later)
-    - Python (available in Standard and later)
-    - Editing (available in Edit and later)
-    - Voice and Link Annotations (available in Pro)
-    - Internet remote reviews from anywhere on the world (available in Pro+)
-
-They do have, however:
-
-    - Tone-mapping (OpenGL) and HDR (Vulkan)
-    - OpenEXR layer switching
-    - Saving Images and Movies with Audio
-
-Prices might change (go up or down) depending on competition and new features.
+v1.6.6
+======
 
 ChangeLog
 ---------

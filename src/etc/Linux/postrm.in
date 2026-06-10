@@ -2,7 +2,10 @@
 # Debian package post-removal script for mrv2/vmrv2
 # Handles proper uninstall with symlink fallback to closest version
 
-set -e
+#
+# We set +e to avoid exiting in case of errors.
+# 
+set +e
 
 # Constants
 ICON_SIZES='16 32 48 64 128 256'

@@ -395,5 +395,5 @@ if __name__ == "__main__":
     print("-----------------------------------------------------------------------")
     total = mrv2_grand_total + vmrv2_grand_total
     print(f'{format_number(total, 5)} Grand Total (GitHub + SourceForge)')
-    per_hour = round(total / (diff.seconds//3600), 2)
+    per_hour = round(total / (diff.days * 24 + diff.seconds//3600), 2)
     print(f'{format_number(per_hour,5)} Total Downloads Per Hour')

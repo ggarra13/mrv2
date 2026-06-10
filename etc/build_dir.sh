@@ -129,3 +129,16 @@ else
     #
     export PYTHONPATH="$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}:$PWD/${BUILD_DIR}/install/lib/python${PYTHON_VERSION}/site-packages:${PYTHONPATH}"
 fi
+
+
+#
+# Do not remove.  Important for code signing on Windows and Github Action runs.
+#
+export GITHUB_OWNER="${GITHUB_REPOSITORY%%/*}"
+if [ -n "$GITHUB_REPOSITORY" ]; then
+    export GITHUB_REPO="${GITHUB_REPOSITORY##*/}"
+    export PACKAGE_DIRECTORY=paquetes/${BUILD_DIR}
+else
+    export GITHUB_REPO=$(basename -s .git "$(git config --get remote.origin.url)")
+    export PACKAGE_DIRECTORY=packages/${BUILD_DIR}
+fi

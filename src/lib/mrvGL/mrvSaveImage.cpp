@@ -684,7 +684,10 @@ namespace mrv
         {
             try
             {
-                fs::rename(fs::path(filename), fs::path(file));
+                if (fs::exists(filename))
+                {
+                    fs::rename(fs::path(filename), fs::path(file));
+                }
             }
             catch(const std::exception& e)
             {

@@ -11,6 +11,8 @@
 #include <tlCore/Assert.h>
 #include <tlCore/StringFormat.h>
 
+#include <FL/Fl.H>
+
 #include <opentimelineio/transition.h>
 
 namespace tl
@@ -22,6 +24,23 @@ namespace tl
             const std::chrono::milliseconds timeout(5);
         }
 
+        // Wait on any future while keeping the UI event loop responsive.
+        // Drop this in the anonymous namespace of TimelinePrivate.cpp.
+        namespace
+        {
+            template <typename T>
+            T waitResponsive(std::future<T>& fut,
+                             std::chrono::milliseconds pollInterval =
+                             std::chrono::milliseconds(8))
+            {
+                while (fut.wait_for(pollInterval) != std::future_status::ready)
+                {
+                    Fl::check();   // process pending FLTK / OS events
+                }
+                return fut.get();
+            }
+        } // namespace
+
         bool Timeline::Private::getVideoInfo(const otio::Composable* composable)
         {
             if (auto clip = dynamic_cast<const otio::Clip*>(composable))
@@ -32,7 +51,9 @@ namespace tl
                     // the timeline.
                     if (auto read = getRead(clip, options.ioOptions))
                     {
-                        const io::Info& ioInfo = read->getInfo().get();
+                        // Use waitResponsive here to keep GNOME happy.
+                        auto infoFuture = read->getInfo();
+                        const io::Info& ioInfo = waitResponsive(infoFuture);
                         this->ioInfo.video = ioInfo.video;
                         this->ioInfo.videoTime = ioInfo.videoTime;
                         this->ioInfo.tags.insert(
@@ -68,7 +89,9 @@ namespace tl
                     // the timeline.
                     if (auto read = getRead(clip, options.ioOptions))
                     {
-                        const io::Info& ioInfo = read->getInfo().get();
+                        // Use waitResponsive here to keep GNOME happy.
+                        auto infoFuture = read->getInfo();
+                        const io::Info& ioInfo = waitResponsive(infoFuture);
                         this->ioInfo.audio = ioInfo.audio;
                         this->ioInfo.audioTime = ioInfo.audioTime;
                         this->ioInfo.tags.insert(

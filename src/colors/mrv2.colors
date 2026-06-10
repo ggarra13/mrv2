@@ -911,11 +911,7 @@ theme "Shake"
 #
 theme "Black"
 {
-    # FLTK standard colors.
-    #     These have all been muted for the Black color theme,
-    #     and black/white brightnesses are inverted.
-    #
-    cmap 0 140 140 140		# black: color of most label text
+    cmap 0 140 140 140		# black: color of menus
     cmap 1 180 0   0            # red: pixel bar color
     cmap 2 0  180  0            # grn: pixel bar color
     cmap 3 120 120 0		# yel

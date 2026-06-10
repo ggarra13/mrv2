@@ -23,6 +23,9 @@ from mrv2 import cmd, plugin, session, settings
 import platform
 import sys
 
+#
+# We use FLTK API
+#
 try:
     from fltk import *
     import fltk as Fl
@@ -31,6 +34,9 @@ except Exception as e:
     print(e)
     pass
 
+#
+# Translation engine if available
+#
 try:
     import gettext
 

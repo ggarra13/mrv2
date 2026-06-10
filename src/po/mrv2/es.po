@@ -1005,6 +1005,9 @@ msgstr "Retorna la carpeta raíz de la instalación de mrv2."
 msgid "Return the path to preferences of mrv2."
 msgstr "Retorna la carpeta de las preferencias de mrv2."
 
+msgid "Return the path to studio preferences of mrv2."
+msgstr "Devuelve la ruta a las preferencias de estudio de mrv2."
+
 msgid "Return the display options."
 msgstr "Retorna las opciones de display."
 
@@ -1562,18 +1565,6 @@ msgstr "Flujo {0} {1}..."
 
 msgid "Stop streaming"
 msgstr "Deja de transmitir"
-
-msgid "Complexity"
-msgstr "Complejidad"
-
-msgid "Draw Mode"
-msgstr "Modo de Dibujar"
-
-msgid "Stage Cache"
-msgstr "Cache del Escenario"
-
-msgid "Disk Cache in GB"
-msgstr "Cache en Disco en GB"
 
 msgid "Room"
 msgstr "Sala"
@@ -3619,34 +3610,29 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "El archivo {0} ya existe.  Por seguridad, no lo sobreescribiré."
 
-msgid "Rotated image info: {0}"
-msgstr "Información de Imagen Rotada: {0}"
-
-msgid "Scaled image info: {0}"
-msgstr "Información de Imagen Escalada: {0}"
-
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: No puedo abrir plugin de escritura."
 
 msgid "Image info: {0} {1}"
 msgstr "Información de Imagen: {0} {1}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-"Imagen demasiado grande para guardar anotaciones. Se escalará al tamaño de "
-"la vista."
+msgid "Scaled image info: {0}"
+msgstr "Información de Imagen Escalada: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "El plugin de Escritura no obtuvo información de salida.  Usando {0}."
-
-msgid "Output info: {0} {1}"
-msgstr "Información de Salida: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Usando perfil {0}, formato de pixel {1}."
 
 msgid "Using preset {0}."
 msgstr "Usando preseteo {0}."
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Información del Buffer: {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Información de Salida: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
@@ -3663,32 +3649,11 @@ msgstr "Grabando Película sin Audio %<PRId64> - %<PRId64>"
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "Solo audio en la línea de tiempo, pero no intenta grabar audio."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Formato y tipo de OpenGL inválidos"
-
-msgid "OpenGL info: {0}"
-msgstr "Información de OpenGL: {0}"
-
 msgid "Saving... {0}"
 msgstr "Grabando... {0}."
 
-msgid "Unsupported output format"
-msgstr "Formato de salida no soportado"
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
-
 msgid "Render size: {0}"
 msgstr "Tamaño de renderizado: {0}"
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "Información de la capa de imagen '{0}': {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Información del Buffer: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Formato de salida no soportado: "
 
 msgid "2.35"
 msgstr "2,35"
@@ -3714,14 +3679,38 @@ msgstr "   Adelante V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "   Atrás       V: % 4<PRIu64>    A: % 4<PRIu64> "
 
+msgid "HDR monitor min. nits = {0}"
+msgstr "Brillo mínimo del monitor HDR (nits) = {0}"
+
+msgid "HDR monitor max. nits = {0}"
+msgstr "Brillo máximo del monitor HDR (nits) = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "Monitor HDR no encontrado o no configurado."
+
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "Monitor HDR no detectado por Vulkan o el Manejador de Ventanas."
+
+msgid "Vulkan color space is {0}"
+msgstr "Espacio de color de Vulkan es {0}"
+
+msgid "Vulkan format is {0}"
+msgstr "Formato de Vulkan es {0}"
+
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Cambiado al monitor HDR activo en el índice {0}"
+
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr "Cambiado al monitor con HDR compatible pero inactivo en el índice {0}"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Cambié a monitor SDR en índice {0}"
+
 msgid "Edit Text"
 msgstr "Editar Texto"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' no es un archivo, directorio ni URL."
-
-msgid "Invalid font for text drawing"
-msgstr "Fuente inválida para dibujar texto"
 
 msgid "Could not convert message to shape: "
 msgstr "No pude convertir el mensaje a figura: "
@@ -5598,17 +5587,11 @@ msgstr "Volúmen del Audio"
 msgid "I"
 msgstr "I"
 
-msgid "Start or In Point of the video."
-msgstr "Comienzo o Punto de Entrada (In) del Video."
-
 msgid "Allows you to set starting frame for timeline."
 msgstr "Permite setear el cuadro de comienzo para la barra de tiempo."
 
 msgid "O"
 msgstr "O"
-
-msgid "End or Output of the video."
-msgstr "Final o Punto de Salida (Out) del Video."
 
 msgid "Allows you to set the ending frame for timeline."
 msgstr "Permite setear el cuadro de finalización para la barra de tiempo."
@@ -7928,6 +7911,9 @@ msgstr "Modo de Fregado"
 msgid "Area Selection Mode"
 msgstr "Modo de Selección de Área"
 
+msgid "Draw Mode"
+msgstr "Modo de Dibujar"
+
 msgid "Erase Mode"
 msgstr "Modo de Borrar"
 
@@ -8039,32 +8025,49 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "task info falló"
 
-#~ msgid "HDR monitor min. nits = {0}"
-#~ msgstr "Brillo mínimo del monitor HDR (nits) = {0}"
+#~ msgid "Complexity"
+#~ msgstr "Complejidad"
 
-#~ msgid "HDR monitor max. nits = {0}"
-#~ msgstr "Brillo máximo del monitor HDR (nits) = {0}"
+#~ msgid "Stage Cache"
+#~ msgstr "Cache del Escenario"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "Monitor HDR no encontrado o no configurado."
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Cache en Disco en GB"
 
-#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
-#~ msgstr "Monitor HDR no detectado por Vulkan o el Manejador de Ventanas."
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "Información de Imagen Rotada: {0}"
 
-#~ msgid "Vulkan color space is {0}"
-#~ msgstr "Espacio de color de Vulkan es {0}"
+#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgstr ""
+#~ "Imagen demasiado grande para guardar anotaciones. Se escalará al tamaño de "
+#~ "la vista."
 
-#~ msgid "Vulkan format is {0}"
-#~ msgstr "Formato de Vulkan es {0}"
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Formato y tipo de OpenGL inválidos"
 
-#~ msgid "Changed to HDR active monitor at index {0}"
-#~ msgstr "Cambiado al monitor HDR activo en el índice {0}"
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "Información de OpenGL: {0}"
 
-#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
-#~ msgstr "Cambiado al monitor con HDR compatible pero inactivo en el índice {0}"
+#~ msgid "Unsupported output format"
+#~ msgstr "Formato de salida no soportado"
 
-#~ msgid "Changed to SDR monitor at index {0}"
-#~ msgstr "Cambié a monitor SDR en índice {0}"
+#~ msgid "Empty video data at time {0}.  Repeating frame."
+#~ msgstr "Datos de vídeo vacíos en el momento {0}. Repetición del cuadro."
+
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "Información de la capa de imagen '{0}': {1} {2}"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Formato de salida no soportado: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Fuente inválida para dibujar texto"
+
+#~ msgid "Start or In Point of the video."
+#~ msgstr "Comienzo o Punto de Entrada (In) del Video."
+
+#~ msgid "End or Output of the video."
+#~ msgstr "Final o Punto de Salida (Out) del Video."
 
 #~ msgid "E"
 #~ msgstr "E"

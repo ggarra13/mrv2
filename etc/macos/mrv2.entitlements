@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+    <!--
+        Hardened Runtime — required for notarization.
+        https://developer.apple.com/documentation/security/hardened_runtime
+    -->
+
+    <!--
+        mrv2 ships its own dylibs (OpenColorIO, OpenEXR, FFmpeg, etc.)
+        that are NOT signed by Apple. Disable library validation so
+        codesign/Gatekeeper does not reject them at launch.
+    -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+
+    <!--
+        Python embeds a JIT and loads .pyc byte-code into executable pages.
+        Required when BUILD_PYTHON=ON / MRV2_PYBIND11=ON.
+    -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+
+    <!--
+        MRV2_NETWORK=ON: allow outbound connections (media streaming,
+        RV sync protocol, NDI discovery, etc.).
+    -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+
+    <!--
+        Media viewer: read/write user-selected files (open, save, export).
+    -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+
+    <!--
+        Allow reading from the user's Movies, Music, and Pictures folders
+        when the user opens a file from those locations.
+    -->
+    <key>com.apple.security.assets.movies.read-only</key>
+    <true/>
+    <key>com.apple.security.assets.music.read-only</key>
+    <true/>
+    <key>com.apple.security.assets.pictures.read-only</key>
+    <true/>
+
+    <!--
+        Uncomment if mrv2 captures audio (e.g. live-input monitoring).
+    -->
+    <!-- <key>com.apple.security.device.audio-input</key><true/> -->
+
+    <!--
+        Uncomment if mrv2 accesses a camera feed.
+    -->
+    <!-- <key>com.apple.security.device.camera</key><true/> -->
+
+</dict>
+</plist>

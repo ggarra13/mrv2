@@ -11,7 +11,7 @@ if [[ !$RUNME ]]; then
     . ./etc/build_dir.sh
 fi
 
-echo "INSTALL Lcoal Cmake AT $PWD/$BUILD_DIR/install"
+echo "INSTALL local Cmake AT $PWD/$BUILD_DIR/install"
 
 mkdir -p $PWD/$BUILD_DIR/install
 

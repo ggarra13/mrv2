@@ -137,6 +137,11 @@ namespace mrv2
             return mrv::prefspath();
         }
 
+        std::string studioPath()
+        {
+            return mrv::studiopath();
+        }
+
         /**
          * \brief Compare two clips with a comparison mode.
          *
@@ -557,6 +562,10 @@ Used to run main commands and get arguments and set the display, image, compare,
     cmds.def(
         "prefsPath", &mrv2::cmd::prefsPath,
         _("Return the path to preferences of mrv2."));
+    
+    cmds.def(
+        "studioPath", &mrv2::cmd::studioPath,
+        _("Return the path to studio preferences of mrv2."));
 
     cmds.def(
         "displayOptions", &mrv2::cmd::displayOptions,
