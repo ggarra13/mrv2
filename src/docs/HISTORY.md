@@ -12,6 +12,7 @@ ChangeLog
 - Install: Verified vmrv2 and mrv2 work under latest macOS Silicon.
 - Linux/Uninstall:  Removed set +e from .rpm and .deb uninstallers as they could leave the uninstallation in an incorrect state if removal was stopped.
 - Core: Added Fl::check to getVideoInfo and getAudioInfo, mainly to keep GNOME's responsive on Linux when 4K OpenEXRs are read (but may help other platforms too).
+- Python/Linux: v1.6.7 incorrectly shipped with broken FLTK Python bindings. 
 
 
 v1.6.7
