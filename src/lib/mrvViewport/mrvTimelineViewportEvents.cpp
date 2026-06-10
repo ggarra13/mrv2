@@ -596,6 +596,8 @@ namespace mrv
                     math::Vector2i pos = _getRaster();
 
                     _clampSelectionArea(pos);
+                    p.selectionAnchor = pos;
+                    
                     math::Box2i area;
                     area.min = pos;
                     area.max = pos;
@@ -740,7 +742,9 @@ namespace mrv
             _clampSelectionArea(pos);
 
             math::Box2i area = p.selection;
+            area.min = p.selectionAnchor;
             area.max = pos;
+            
             setSelectionArea(area);
 
             redrawWindows();
@@ -1171,9 +1175,15 @@ namespace mrv
                 if (Fl::event_state(FL_CTRL) ||
                     Fl::Pen::event_state(Fl::Pen::State::BUTTON0))
                     return _popupRMBMenu();
+                p.pressure = Fl::Pen::event_pressure();
+                p.mousePos = _getFocus();
+                _handlePushLeftMouseButton();
+                _updatePixelBar();
+                return 1;
                 /* fall through */
             case Fl::Pen::DRAW:
             {
+                p.pressure = Fl::Pen::event_pressure();
                 p.mousePos = _getFocus();
                 _handleDragLeftMouseButton();
                 _updatePixelBar();
@@ -1395,6 +1405,9 @@ namespace mrv
                 _updatePixelBar();
                 return 1;
             }
+            case Fl::Pen::LIFT:
+                p.pressure = 0.F;
+                /* fall-thru */
             case FL_RELEASE:
             {
                 if (p.actionMode == ActionMode::kPolygon ||

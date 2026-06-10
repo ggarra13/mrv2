@@ -129,6 +129,7 @@ namespace mrv
             
             //! Rectangle selection ( Color area )
             static math::Box2i selection;
+            math::Vector2i selectionAnchor;
 
             //! Last video size (if changed, clear selection)
             static image::Size videoSize;
@@ -205,10 +206,13 @@ namespace mrv
             //! Tooltip.
             Tooltip* tooltip = nullptr;
 
-            // HDR monitor tracking.
+            //! HDR monitor tracking.
             bool monitor_first_run = true;
             int screen_index = 0;
             monitor::Capabilities monitor;
+
+            //! Tablet information.
+            float pressure = 0.F;
         };
 
     }  // namespace vlk

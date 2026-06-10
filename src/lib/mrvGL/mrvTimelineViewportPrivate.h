@@ -128,6 +128,7 @@ namespace mrv
             
             //! Rectangle selection ( Color area )
             static math::Box2i selection;
+            math::Vector2i selectionAnchor;
 
             //! Last video size (if changed, clear selection)
             static image::Size videoSize;
@@ -202,6 +203,9 @@ namespace mrv
 
             //! Tooltip.
             Tooltip* tooltip = nullptr;
+            
+            //! Tablet information.
+            float pressure = 0.F;
         };
     }  // namespace opengl
 } // namespace mrv

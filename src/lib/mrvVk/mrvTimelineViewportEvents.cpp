@@ -51,6 +51,8 @@ namespace
     const float kLaserFadeTimeout = 0.01;
     const float kLaserFade = 0.025;
 
+    const float kPressure = 32.F;
+    
 } // namespace
 
 namespace mrv
@@ -105,15 +107,20 @@ namespace mrv
             if (p.actionMode != ActionMode::kScrub && !annotation)
                 return;
 
-            if (isDrawAction(p.actionMode) &&
-                !p.showAnnotations)
+            if (isDrawAction(p.actionMode) && !p.showAnnotations)
+            {
                 p.showAnnotations = true;
+            }
                     
             std::shared_ptr< draw::Shape > s;
-            if (annotation)
-                s = annotation->lastShape();
+            if (annotation) s = annotation->lastShape();
 
-            switch (p.actionMode)
+            ActionMode actionMode = p.actionMode;
+            if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
+                actionMode = ActionMode::kErase;
+            const float pen_size = _getPenSize();
+
+            switch (actionMode)
             {
             case ActionMode::kRectangle:
             case ActionMode::kFilledRectangle:
@@ -149,10 +156,14 @@ namespace mrv
                 auto shape = dynamic_cast< VKPathShape* >(s.get());
                 if (!shape)
                     return;
-
+                
                 shape->pts.push_back(pnt);
-                float pressure = static_cast<float>(Fl::Pen::event_pressure());
+                
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
                 shape->pts.back().pressure = pressure;
+                
                 _addAnnotationShapePoint();
                 redrawWindows();
                 return;
@@ -323,10 +334,10 @@ namespace mrv
         {
             TLRENDER_P();
 
-            if (!p.player)
+            auto player = getTimelinePlayer();
+            if (!player)
                 return;
-
-
+            
             uint8_t r, g, b;
             SettingsObject* settings = p.ui->app->settings();
             int fltk_color = p.ui->uiPenColor->color();
@@ -334,19 +345,17 @@ namespace mrv
             float alpha = p.ui->uiPenOpacity->value();
             const image::Color4f color(
                 r / 255.F, g / 255.F, b / 255.F, alpha);
-            const float pen_size = _getPenSize();
 
             bool laser = settings->getValue<bool>(kLaser);
             bool softBrush = settings->getValue<bool>(kSoftBrush);
             int font = settings->getValue<int>(kTextFont);
 
-
-            auto annotation = p.player->getAnnotation();
+            auto annotation = player->getAnnotation();
             bool all_frames =
                 p.ui->app->settings()->getValue<bool>(kAllFrames);
             if (!annotation)
             {
-                annotation = p.player->createAnnotation(all_frames);
+                annotation = player->createAnnotation(all_frames);
                 if (!annotation)
                     return;
             }
@@ -378,7 +387,12 @@ namespace mrv
             p.mousePos = _getFocus();
             draw::Point pnt(_getRasterf());
                         
-            switch (p.actionMode)
+            ActionMode actionMode = p.actionMode;
+            if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
+                actionMode = ActionMode::kErase;
+            const float pen_size = _getPenSize();
+            
+            switch (actionMode)
             {
             case ActionMode::kDraw:
             {
@@ -388,8 +402,12 @@ namespace mrv
                 shape->soft = softBrush;
                 shape->laser = laser;
                 shape->pts.push_back(pnt);
-                float pressure = static_cast<float>(Fl::Pen::event_pressure());
+                
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
                 shape->pts.back().pressure = pressure;
+
                 annotation->push_back(shape);
                 _createAnnotationShape(laser);
                 break;
@@ -408,11 +426,16 @@ namespace mrv
                 }
                 else
                 {
+                    shape->drawing = false;
+                    shape->rectangle = false;
                     shape->pen_size = pen_size * 3.5F;
                     shape->color = color;
                     shape->soft = softBrush;
                     shape->pts.push_back(pnt);
-                    float pressure = static_cast<float>(Fl::Pen::event_pressure());
+                    
+                    float pressure = kPressure * p.pressure;
+                    if (pressure <= 0.F)
+                        pressure = 1.F;
                     shape->pts.back().pressure = pressure;
                 }
                 

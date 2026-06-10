@@ -41,6 +41,9 @@ namespace
 {
     const char* kModule = "view";
     const int kCrossSize = 10;
+
+
+    const float kPressure = 32.F;
 } // namespace
 
 namespace mrv
@@ -89,7 +92,11 @@ namespace mrv
 
             draw::Point pnt(_getRasterf());
 
-            auto annotation = p.player->getAnnotation();
+            auto player = getTimelinePlayer();
+            if (!player)
+                return;
+
+            auto annotation = player->getAnnotation();
             if (p.actionMode != ActionMode::kScrub && !annotation)
                 return;
 
@@ -101,7 +108,12 @@ namespace mrv
             std::shared_ptr< draw::Shape > s;
             if (annotation) s = annotation->lastShape();
 
-            switch (p.actionMode)
+            ActionMode actionMode = p.actionMode;
+            if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
+                actionMode = ActionMode::kErase;
+            const float pen_size = _getPenSize();
+
+            switch (actionMode)
             {
             case ActionMode::kRectangle:
             case ActionMode::kFilledRectangle:
@@ -114,6 +126,7 @@ namespace mrv
                 shape->pts[2].x = pnt.x;
                 shape->pts[2].y = pnt.y;
                 shape->pts[3].y = pnt.y;
+
                 _updateAnnotationShape();
                 redrawWindows();
                 return;
@@ -139,8 +152,12 @@ namespace mrv
                     return;
                 
                 shape->pts.push_back(pnt);
-                float pressure = static_cast<float>(Fl::Pen::event_pressure());
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
                 shape->pts.back().pressure = pressure;
+                
                 _addAnnotationShapePoint();
                 redrawWindows();
                 return;
@@ -365,9 +382,6 @@ namespace mrv
             Fl_Font font =
                 static_cast<Fl_Font>(settings->getValue<int>(kTextFont));
 
-            p.mousePos = _getFocus();
-            draw::Point pnt(_getRasterf());
-
             auto player = getTimelinePlayer();
             if (!player)
                 return;
@@ -406,7 +420,14 @@ namespace mrv
                 }
             }
 
-            switch (p.actionMode)
+            p.mousePos = _getFocus();
+            draw::Point pnt(_getRasterf());
+                        
+            ActionMode actionMode = p.actionMode;
+            if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
+                actionMode = ActionMode::kErase;
+            
+            switch (actionMode)
             {
             case ActionMode::kDraw:
             {
@@ -416,6 +437,12 @@ namespace mrv
                 shape->soft = softBrush;
                 shape->laser = laser;
                 shape->pts.push_back(pnt);
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+                shape->pts.back().pressure = pressure;
+                
                 annotation->push_back(shape);
                 _createAnnotationShape(laser);
                 break;
@@ -438,9 +465,14 @@ namespace mrv
                     shape->drawing = false;
                     shape->rectangle = false;
                     shape->pen_size = pen_size * 3.5F;
-                    shape->soft = softBrush;
                     shape->color = color;
+                    shape->soft = softBrush;
                     shape->pts.push_back(pnt);
+                    
+                    float pressure = kPressure * p.pressure;
+                    if (pressure <= 0.F)
+                        pressure = 1.F;
+                    shape->pts.back().pressure = pressure;
                 }
                 
                 annotation->push_back(shape);

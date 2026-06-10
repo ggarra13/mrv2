@@ -52,6 +52,8 @@
 
 #include "mrvApp/mrvSettingsObject.h"
 
+#include <FL/fl_config.h>
+
 namespace
 {
     const char* kModule = "view";
@@ -187,8 +189,10 @@ namespace mrv
             _initializeGLResources();
             
             // Subscribe to pen events
+#if FLTK_HAVE_PEN_SUPPORT
             if (desktop::Wayland() || desktop::macOS())
                 Fl::Pen::subscribe(this);
+#endif
         }
 
         int Viewport::handle(int event)

@@ -71,7 +71,7 @@ namespace tl
 
                 // Per-segment half-thickness: base size × average pressure
                 float avgPressure = (point1.pressure + point2.pressure) * 0.5f;
-                float segThickness = std::max(m_width * avgPressure * 0.5f, 0.5f);
+                float segThickness = std::max(m_width * avgPressure * 0.5f, 1.F);
                
 
                 if (point1 != point2)
@@ -87,7 +87,7 @@ namespace tl
                 auto& point1 = points[points.size() - 1];
                 auto& point2 = points[0];
                 float avgPressure = (point1.pressure + point2.pressure) * 0.5f;
-                float segThickness = std::max(m_width * avgPressure * 0.5f, 0.5f);
+                float segThickness = std::max(m_width * avgPressure * 0.5f, 1.F);
 
                 if (point1 != point2)
                     segments.emplace_back(
@@ -96,7 +96,7 @@ namespace tl
 
             if (segments.empty())
             {
-                const float w = std::max(m_width * points[0].pressure * 0.5f, 0.5f);
+                const float w = std::max(m_width * points[0].pressure * 0.5f, 1.F);
                 Point center = points[0];
 
                 if (!m_softEdges)

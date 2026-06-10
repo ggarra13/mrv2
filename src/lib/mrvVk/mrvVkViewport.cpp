@@ -49,7 +49,7 @@
 #include <tlVk/Util.h>
 
 #include <FL/vk_enum_string_helper.h>
-
+#include <FL/fl_config.h>
 
 namespace
 {
@@ -620,11 +620,11 @@ namespace mrv
                 if (!vk.annotationRender)
                     vk.annotationRender = timeline_vlk::Render::create(ctx, context);
 
-            
                 // Subscribe to pen events
-            // Subscribe to pen events
+#if FLTK_HAVE_PEN_SUPPORT
                 if (desktop::Wayland() || desktop::macOS())
                     Fl::Pen::subscribe(this);
+#endif
                 
                 p.fontSystem = image::FontSystem::create(context);
 
