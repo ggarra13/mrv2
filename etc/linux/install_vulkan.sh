@@ -90,6 +90,7 @@ if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
     if [[ -d $VULKAN_ROOT/$SDK_VERSION/x86_64 ]]; then
 	cd $VULKAN_ROOT/$SDK_VERSION
 	mv -f x86_64 $UNAME_ARCH
+	rm -rf ${UNAME_ARCH}/lib/*
 	cd -
     fi
 fi

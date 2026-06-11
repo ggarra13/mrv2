@@ -13,7 +13,8 @@ ChangeLog
 - Linux/Uninstall:  Removed set +e from .rpm and .deb uninstallers as they could leave the uninstallation in an incorrect state if removal was stopped.
 - Core: Added Fl::check to getVideoInfo and getAudioInfo, mainly to keep GNOME's responsive on Linux when 4K OpenEXRs are read (but may help other platforms too).
 - UI: Vulkan would draw the selection rectangle incorrectly when selecting bottom-right to top-left, while OpenGL backend would do the same in the opposite direction.
-- Python/Linux: v1.6.7 incorrectly shipped with broken FLTK Python bindings. 
+- Python/Linux: v1.6.7 incorrectly shipped with broken FLTK Python bindings.
+- UI: Added tablet support on all platforms.
 
 
 v1.6.7
