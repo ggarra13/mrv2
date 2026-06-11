@@ -52,46 +52,57 @@ needs_download() {
     [[ ! -e "$TAR_XZ" ]] || (( $(wc -c <"$TAR_XZ") < 8192 ))
 }
 
-# 1) Try full version (unless "latest")
-if [[ "$VK_DOWNLOAD" != "latest" ]] && needs_download; then
-    curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkan-sdk-linux-x86_64-${VK_DOWNLOAD}.tar.xz"   
-fi
+if [[ $ARCH == *amd64* || $ARCH == *x86_64* ]]; then
 
-# 2) Try stripped version if still too small
-if needs_download && [[ -n "$VK_STRIPPED" ]]; then
-    curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkan-sdk-linux-x86_64-${VK_STRIPPED}.tar.xz"  
-fi
+    # 1) Try full version (unless "latest")
+    if [[ "$VK_DOWNLOAD" != "latest" ]] && needs_download; then
+	curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkan-sdk-linux-x86_64-${VK_DOWNLOAD}.tar.xz"   
+    fi
 
-# 3) Fallback to latest
-if needs_download; then
-    echo "Vulkan version ${VK_DOWNLOAD} not found! Downloading latest"
-    curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"
-fi
+    # 2) Try stripped version if still too small
+    if needs_download && [[ -n "$VK_STRIPPED" ]]; then
+	curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/${VK_DOWNLOAD}/linux/vulkan-sdk-linux-x86_64-${VK_STRIPPED}.tar.xz"  
+    fi
 
+    # 3) Fallback to latest
+    if needs_download; then
+	echo "Vulkan version ${VK_DOWNLOAD} not found! Downloading latest"
+	curl -L -o "$TAR_XZ" "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.xz"
+    fi
+    
 
-echo "After downloading it..."
-ls /tmp
+    echo "After downloading it..."
+    ls /tmp
 
-mkdir -p VulkanSDK-${KERNEL}
-cd VulkanSDK-${KERNEL}
-tar -xvf $TAR_XZ
+    mkdir -p VulkanSDK-${KERNEL}
+    cd VulkanSDK-${KERNEL}
+    tar -xvf $TAR_XZ
 
-cd ..
+    cd ..
 
-export VULKAN_ROOT=$PWD/VulkanSDK-${KERNEL}
-echo "VULKAN_ROOT=$VULKAN_ROOT"
+    export VULKAN_ROOT=$PWD/VulkanSDK-${KERNEL}
+    echo "VULKAN_ROOT=$VULKAN_ROOT"
 
-export SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sed -e "s#$VULKAN_ROOT/##" | sed -e "s#/##")
-echo "SDK_VERSION=$SDK_VERSION"
+    export SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sed -e "s#$VULKAN_ROOT/##" | sed -e "s#/##")
+    echo "SDK_VERSION=$SDK_VERSION"
 
-if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
-    # There's no aarch SDK yet, so we just move the x86_64 to aarch64
-    export BUILD_VULKAN=ON  # and we re-build on top (\@todo: ugly)
-    if [[ -d $VULKAN_ROOT/$SDK_VERSION/x86_64 ]]; then
-	cd $VULKAN_ROOT/$SDK_VERSION
-	mv -f x86_64 $UNAME_ARCH
-	rm -rf ${UNAME_ARCH}/lib/*
-	cd -
+else
+
+    export VULKAN_ROOT=$PWD/VulkanSDK-${KERNEL}
+    echo "VULKAN_ROOT=$VULKAN_ROOT"
+
+    export SDK_VERSION=$(ls -d ${VULKAN_ROOT}/* | sed -e "s#$VULKAN_ROOT/##" | sed -e "s#/##")
+    echo "SDK_VERSION=$SDK_VERSION"
+
+    if [[ $ARCH == *arm64* || $ARCH == *aarch64* ]]; then
+	# There's no aarch SDK yet, so we compile from source
+	export BUILD_VULKAN=ON  # and we re-build on top
+
+	# Establish a clean directory structure
+	export SDK_VERSION=$VK_DOWNLOAD
+	mkdir -p "$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH/lib"
+	mkdir -p "$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH/bin"
+	mkdir -p "$VULKAN_ROOT/$SDK_VERSION/$UNAME_ARCH/include"
     fi
 fi
 

@@ -59,7 +59,7 @@ fi
 #
 try_checkout()
 {
-    checkouts="v$SDK_VERSION vulkan-sdk-v$SDK_VERSION sdk-$SDK_VERSION v$COMPILE_VERSION vulkan-sdk-v$COMPILE_VERSION sdk-$COMPILE_VERSION main master"
+    checkouts="v${COMPILE_VERSION} v${SDK_VERSION} vulkan-sdk-v${SDK_VERSION} sdk-$SDK_VERSION vulkan-sdk-v$COMPILE_VERSION sdk-$COMPILE_VERSION main master"
     for checkout in $checkouts; do
 	git checkout "$checkout" &> /dev/null
 	if [[ $? == 0 ]]; then
@@ -365,6 +365,17 @@ fi
 #cd mesa
 
 #cd ..
+
+echo "Compilation finished!"
+echo "ls ${CMAKE_INSTALL_PREFIX}/lib"
+ls ${CMAKE_INSTALL_PREFIX}/lib
+
+echo "ls ${CMAKE_INSTALL_PREFIX}/bin"
+ls ${CMAKE_INSTALL_PREFIX}/bin
+
+echo "ls ${CMAKE_INSTALL_PREFIX}/include"
+ls ${CMAKE_INSTALL_PREFIX}/include
+
 
 #
 # Clean up disk space
