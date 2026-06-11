@@ -190,8 +190,7 @@ namespace mrv
             
             // Subscribe to pen events
 #if FLTK_HAVE_PEN_SUPPORT
-            if (desktop::Wayland() || desktop::macOS())
-                Fl::Pen::subscribe(this);
+            Fl::Pen::subscribe(this);
 #endif
         }
 
