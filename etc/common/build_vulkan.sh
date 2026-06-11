@@ -361,10 +361,10 @@ fi
 #
 # Build KosmicKrisp for raytracing support
 #
-git clone https://gitlab.freedesktop.org/mesa/mesa.git
-cd mesa
+#git clone https://gitlab.freedesktop.org/mesa/mesa.git
+#cd mesa
 
-cd ..
+#cd ..
 
 #
 # Clean up disk space

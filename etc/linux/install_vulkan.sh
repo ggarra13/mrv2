@@ -111,6 +111,7 @@ rm -f $TAR_XZ
 
 if [[ "$BUILD_VULKAN" == "ON" || "$BUILD_VULKAN" == "1" ]]; then
     . etc/common/build_vulkan.sh
+    ls -l "${VULKAN_SDK}/lib/"
 else
     echo "-------------------------------"
     echo "   Using pre-compiled Vulkan   "
