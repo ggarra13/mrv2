@@ -1176,6 +1176,7 @@ namespace mrv
                     Fl::Pen::event_state(Fl::Pen::State::BUTTON0))
                     return _popupRMBMenu();
                 p.pressure = Fl::Pen::event_pressure();
+                std::cerr << "p.pressure=" << p.pressure << std::endl;
                 p.mousePos = _getFocus();
                 _handlePushLeftMouseButton();
                 _updatePixelBar();
@@ -1184,6 +1185,7 @@ namespace mrv
             case Fl::Pen::DRAW:
             {
                 p.pressure = Fl::Pen::event_pressure();
+                std::cerr << "p.pressure=" << p.pressure << std::endl;
                 p.mousePos = _getFocus();
                 _handleDragLeftMouseButton();
                 _updatePixelBar();
@@ -1235,7 +1237,6 @@ namespace mrv
                 break;
             case FL_PUSH:
             {
-
 #ifdef VULKAN_BACKEND
                 if (p.multilineText)
                 {

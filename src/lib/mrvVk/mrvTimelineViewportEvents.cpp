@@ -51,7 +51,11 @@ namespace
     const float kLaserFadeTimeout = 0.01;
     const float kLaserFade = 0.025;
 
+#ifdef _WIN32
+    const float kPressure = 4.F;
+#else
     const float kPressure = 32.F;
+#endif
     
 } // namespace
 
