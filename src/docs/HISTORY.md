@@ -5,6 +5,7 @@ ChangeLog
 ---------
 
 - Build: Consolidated package directory.
+- Build/Linux-aarch: Fixed Vulkan compilation linking an amd64 shaderc library.
 - Build/MacOS: Consolidated README_mrv2.md and README_vmrv2.md under a single README.md.in name with a CMake configure_file() call.
 - Build/MacOS: Added notarization code which won't run for now until I request a developer license with Apple (u$99) when I get a new Apple box, some time from now.
 - Build/MacOS: Removed Gatekeeper warning when opening the .dmg on Apple Silicon.

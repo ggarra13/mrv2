@@ -45,7 +45,8 @@ if [[ -z "$BUILD_VULKAN_PROFILES" ]]; then
 fi
 
 if [[ -z "$BUILD_VULKAN_VALIDATIONLAYERS" ]]; then
-    BUILD_VULKAN_VALIDATIONLAYERS=ON
+    # Only used for development and takes long to compile.
+    BUILD_VULKAN_VALIDATIONLAYERS=OFF
 fi
 
 if [[ -z "$BUILD_SHADERC" ]]; then
