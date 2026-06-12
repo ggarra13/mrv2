@@ -750,7 +750,8 @@ namespace mrv
         // Don't allow creating annotations while playing.  Stop playback first.
         if (playback() != timeline::Playback::Stop)
         {
-            stop();
+            // Stop playback without updating thumbnails.
+            setPlayback(timeline::Playback::Stop, true);
         }
 
         auto time = currentTime();
@@ -771,7 +772,13 @@ namespace mrv
         }
         else
         {
-            return *found;
+            auto annotation = *found;
+            if (!annotation->allFrames && !all_frames)
+            {
+                throw std::runtime_error(
+                    _("Annotation already existed at this time"));
+            }
+            return annotation;
         }
     }
 
@@ -967,7 +974,8 @@ namespace mrv
         // Don't allow creating annotations while playing.  Stop playback first.
         if (playback() != timeline::Playback::Stop)
         {
-            stop();
+            // Stop playback without updating thumbnails.
+            setPlayback(timeline::Playback::Stop, true);
         }
 
         auto time = currentTime();

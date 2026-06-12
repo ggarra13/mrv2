@@ -2172,8 +2172,12 @@ namespace mrv
         if (file::isUSD(item->path))
         {
 #ifdef MRV2_PYBIND11
-            if (!p.options.noPython)
-                py::gil_scoped_release release;
+            // Only release the GIL if this thread currently holds it
+            std::unique_ptr<py::gil_scoped_release> release;
+            if (PyGILState_Check() && !p.options.noPython) 
+            {
+                release = std::make_unique<py::gil_scoped_release>();
+            }
 #endif
             otioTimeline = item->audioPath.isEmpty()
                                ? timeline::create(

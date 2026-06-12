@@ -31,6 +31,10 @@ namespace mrv
         Fl_Box(x, y, w, h, l)
     {
         was_docked = true; // Assume we have NOT just undocked...
+
+#if FLTK_HAVE_PEN_SUPPORT
+        Fl::Pen::subscribe(this);
+#endif
     }
     
     DragButton::~DragButton()
@@ -68,13 +72,14 @@ namespace mrv
         int docked = tg->docked();
         int x2 = 0, y2 = 0;
         int cx, cy;
-        if (event == FL_ENTER || event == FL_MOVE)
+        if (event == FL_ENTER || event == FL_MOVE ||
+            event == Fl::Pen::ENTER || event == Fl::Pen::HOVER)
         {
             if (window())
                 window()->cursor(FL_CURSOR_MOVE);
             ret = 1;
         }
-        else if (event == FL_LEAVE)
+        else if (event == FL_LEAVE || event == Fl::Pen::LIFT)
         {
             if (window())
                 window()->cursor(FL_CURSOR_DEFAULT);
@@ -86,11 +91,13 @@ namespace mrv
         {
             switch (event)
             {
+            case Fl::Pen::TOUCH:
             case FL_PUSH: // downclick in button creates cursor offsets
                 get_global_coords(fromx, fromy);
                 get_window_coords(winx, winy);
                 if (window()) _drag_screen = window()->screen_num();
                 return 1;
+            case Fl::Pen::DRAW:
             case FL_DRAG:
                 
                 if (was_docked)
@@ -115,6 +122,7 @@ namespace mrv
                 
                 update_drag();
                 return 1;
+            case Fl::Pen::LIFT:
             case FL_RELEASE:
                 
                 update_drag();
@@ -141,11 +149,13 @@ namespace mrv
         // OK, so we must be docked - are we being dragged out of the dock?
         switch (event)
         {
+        case Fl::Pen::TOUCH:
         case FL_PUSH: // downclick in button creates cursor offsets
             get_global_coords(fromx, fromy);
             ret = 1;
             break;
 
+        case Fl::Pen::DRAW:
         case FL_DRAG:
             // If the drag has moved further than the drag_min distance
             // then invoke an un-docking
@@ -170,6 +180,9 @@ namespace mrv
             ret = 1;
             break;
 
+        case Fl::Pen::LIFT:
+            ret = 1;
+            break;
         default:
             break;
         }

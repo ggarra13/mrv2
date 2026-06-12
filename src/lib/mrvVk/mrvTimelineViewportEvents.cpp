@@ -353,7 +353,7 @@ namespace mrv
             bool laser = settings->getValue<bool>(kLaser);
             bool softBrush = settings->getValue<bool>(kSoftBrush);
             int font = settings->getValue<int>(kTextFont);
-
+            
             auto annotation = player->getAnnotation();
             bool all_frames =
                 p.ui->app->settings()->getValue<bool>(kAllFrames);

@@ -143,7 +143,12 @@ namespace mrv
 #endif
 
 #ifdef MRV2_PYBIND11
-                py::gil_scoped_release release;
+                // Only release the GIL if this thread currently holds it
+                std::unique_ptr<py::gil_scoped_release> release;
+                if (PyGILState_Check()) 
+                {
+                    release = std::make_unique<py::gil_scoped_release>();
+                }
 #endif
                 const auto& timeline =
                     timeline::Timeline::create(path, context);
