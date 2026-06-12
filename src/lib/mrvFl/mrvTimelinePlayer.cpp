@@ -771,13 +771,7 @@ namespace mrv
         }
         else
         {
-            auto annotation = *found;
-            if (!annotation->allFrames && !all_frames)
-            {
-                throw std::runtime_error(
-                    _("Annotation already existed at this time"));
-            }
-            return annotation;
+            return *found;
         }
     }
 
