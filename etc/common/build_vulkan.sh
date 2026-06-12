@@ -113,6 +113,8 @@ export CMAKE_PREFIX_PATH=${VULKAN_SDK}
 # Vulkan Headers         #
 ##########################
 if [[ "$BUILD_VULKAN_HEADERS" == "ON" || "$BUILD_VULKAN_HEADERS" == "1" ]]; then
+
+    echo "BUILDING Vulkan-Headers..."
     if [ ! -d Vulkan-Headers ]; then
 	git clone https://github.com/KhronosGroup/Vulkan-Headers
     fi
@@ -128,6 +130,8 @@ fi
 # Vulkan Loader          #
 ##########################
 if [[ "$BUILD_VULKAN_LOADER" == "ON" || "$BUILD_VULKAN_LOADER" == "1" ]]; then
+
+    echo "BUILDING Vulkan-Loader..."
     if [ ! -d Vulkan-Loader ]; then
 	git clone https://github.com/KhronosGroup/Vulkan-Loader
     fi
@@ -160,6 +164,8 @@ fi
 # SPIRV-Tools and SPIRV-Tools-opt #
 ###################################
 if [[ "$BUILD_SPIRV_TOOLS" == "ON" || "$BUILD_SPIRV_TOOLS" == "1" ]]; then
+
+    echo "BUILDING SPIRV-Tools..."
     if [[ ! -d SPIRV-Tools ]]; then
 	git clone https://github.com/KhronosGroup/SPIRV-Tools
     fi
@@ -185,6 +191,8 @@ fi
 # SPIRV-Cross #
 ###############
 if [[ "$BUILD_SPIRV_CROSS" == "ON" || "$BUILD_SPIRV_CROSS" == "1" ]]; then
+
+    echo "BUILDING SPIRV-Cross..."
     if [[ ! -d SPIRV-Cross ]]; then
 	git clone https://github.com/KhronosGroup/SPIRV-Cross
     fi
@@ -207,6 +215,8 @@ fi
 # glslang                #
 ##########################
 if [[ "$BUILD_GLSLANG" == "ON" || "$BUILD_GLSLANG" == "1" ]]; then
+
+    echo "BUILDING glslang..."
     if [[ ! -d glslang ]]; then
 	git clone https://github.com/KhronosGroup/glslang
     fi
@@ -229,13 +239,24 @@ fi
 # SPIRV-Headers (needed?) #
 ###########################
 if [[ "$BUILD_SPIRV_HEADERS" == "ON" || "$BUILD_SPIRV_HEADERS" == "1" ]]; then
-if [[ ! -d SPIRV-Headers ]]; then
-    git clone https://github.com/KhronosGroup/SPIRV-Headers
-fi
 
-cd SPIRV-Headers
-try_checkout
-cd ..
+    echo "BUILDING SPIRV-Headers..."
+    if [[ ! -d SPIRV-Headers ]]; then
+	git clone https://github.com/KhronosGroup/SPIRV-Headers
+    fi
+
+    cd SPIRV-Headers
+    try_checkout
+    cmake -S . -B build \
+	  -D UPDATE_DEPS=ON \
+	  -D BUILD_WERROR=${BUILD_WERROR} \
+	  -D BUILD_TESTS=OFF \
+	  -D CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} \
+	  -D CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
+	  -D CMAKE_BUILD_TYPE=Release
+    try_build
+    cd ..
+fi
 
 
 
@@ -244,6 +265,8 @@ cd ..
 
 if [[ "$BUILD_VULKAN_UTILITY_LIBRARIES" == "ON" || \
 	  "$BUILD_VULKAN_UTILITY_LIBRARIES" == "1" ]]; then
+
+    echo "BUILDING Vulkan-Utility-Libraries..."
     if [[ ! -d Vulkan-Utility-Libraries ]]; then
 	git clone https://github.com/KhronosGroup/Vulkan-Utility-Libraries
     fi
@@ -266,6 +289,8 @@ fi
 #####################################
 if [[ "$BUILD_VULKAN_EXTENSIONLAYER" == "ON" || \
 	  "$BUILD_VULKAN_EXTENSIONLAYER" == "1" ]]; then
+
+    echo "BUILDING Vulkan-ExtensionLayer..."
     if [[ ! -d Vulkan-ExtensionLayer ]]; then
 	git clone https://github.com/KhronosGroup/Vulkan-ExtensionLayer
     fi
@@ -288,6 +313,8 @@ fi
 ##############################
 if [[ "$BUILD_VULKAN_PROFILES" == "ON" || \
 	  "$BUILD_VULKAN_PROFILES" == "1" ]]; then
+
+    echo "BUILDING Vulkan-Profiles..."    
     if [[ ! -d Vulkan-Profiles ]]; then
 	git clone https://github.com/KhronosGroup/Vulkan-Profiles
     fi
@@ -310,6 +337,8 @@ fi
 ######################################################
 if [[ "$BUILD_VULKAN_VALIDATIONLAYERS" == "ON" || \
 	  "$BUILD_VULKAN_VALIDATIONLAYERS" == "1" ]]; then
+    
+    echo "BUILDING Vulkan-ValidationLayers..."
     if [[ ! -d Vulkan-ValidationLayers ]]; then
 	git clone https://github.com/KhronosGroup/Vulkan-ValidationLayers
     fi
@@ -335,9 +364,12 @@ fi
 # shaderc                    #
 ##############################
 if [[ "$BUILD_SHADERC" == "ON" || "$BUILD_SHADERC" == "1" ]]; then
+
+    echo "BUILDING shaderc..."
     if [[ ! -d shaderc ]]; then
 	git clone "https://github.com/google/shaderc.git"
     fi
+
     cd shaderc
     try_checkout
     ./utils/git-sync-deps
@@ -366,15 +398,17 @@ fi
 
 #cd ..
 
+echo "---------------------"
 echo "Compilation finished!"
+echo "---------------------"
 echo "ls ${CMAKE_INSTALL_PREFIX}/lib"
-ls ${CMAKE_INSTALL_PREFIX}/lib
+ls ${CMAKE_INSTALL_PREFIX}/lib/*
 
 echo "ls ${CMAKE_INSTALL_PREFIX}/bin"
-ls ${CMAKE_INSTALL_PREFIX}/bin
+ls ${CMAKE_INSTALL_PREFIX}/bin/*
 
-echo "ls ${CMAKE_INSTALL_PREFIX}/include"
-ls ${CMAKE_INSTALL_PREFIX}/include
+echo "ls ${CMAKE_INSTALL_PREFIX}/include/*"
+ls ${CMAKE_INSTALL_PREFIX}/include/*
 
 
 #
