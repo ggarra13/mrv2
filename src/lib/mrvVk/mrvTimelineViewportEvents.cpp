@@ -120,8 +120,10 @@ namespace mrv
             if (annotation) s = annotation->lastShape();
 
             ActionMode actionMode = p.actionMode;
+#ifdef FLTK_HAVE_PEN_SUPPORT
             if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
                 actionMode = ActionMode::kErase;
+#endif
             const float pen_size = _getPenSize();
 
             switch (actionMode)
@@ -392,8 +394,11 @@ namespace mrv
             draw::Point pnt(_getRasterf());
                         
             ActionMode actionMode = p.actionMode;
+#ifdef FLTK_HAVE_PEN_SUPPORT
             if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
                 actionMode = ActionMode::kErase;
+#endif
+            
             const float pen_size = _getPenSize();
             
             switch (actionMode)
