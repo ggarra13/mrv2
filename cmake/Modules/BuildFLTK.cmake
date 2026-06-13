@@ -28,7 +28,7 @@ endif()
 
 # If we are building pyFLTK compile shared too.  FLTK compiles statically for fluid.
 set(FLTK_BUILD_SHARED_LIBS ON )
-set(FLTK_OPTION_PEN_SUPPORT ON) 
+set(FLTK_OPTION_PEN_SUPPORT ON)
 
 set(FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
 
@@ -43,6 +43,9 @@ if(APPLE)
 elseif(WIN32)
     set(FLTK_C_COMPILER ${NATIVE_C_COMPILER})
     set(FLTK_CXX_COMPILER ${NATIVE_CXX_COMPILER})
+    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
+	set(FLTK_OPTION_PEN_SUPPORT OFF)
+    endif()
 elseif(UNIX)
     set(FLTK_C_COMPILER ${NATIVE_C_COMPILER})
     set(FLTK_CXX_COMPILER ${NATIVE_CXX_COMPILER})
