@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.0.0)  # v1.9.8 is good but has no tablet support
+set(FLTK_GIT_TAG v2.0.1)  # v1.9.8 is good but has no tablet support
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_merge) # Testing branch
@@ -27,13 +27,14 @@ else()
 endif()
 
 # If we are building pyFLTK compile shared too.  FLTK compiles statically for fluid.
-set( FLTK_BUILD_SHARED_LIBS ON )  
+set(FLTK_BUILD_SHARED_LIBS ON )
+set(FLTK_OPTION_PEN_SUPPORT ON) 
 
-set( FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
+set(FLTK_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
 
-set( FLTK_C_COMPILER ${NATIVE_COMPILER})
-set( FLTK_C_FLAGS ${CMAKE_C_FLAGS})
-set( FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+set(FLTK_C_COMPILER ${NATIVE_COMPILER})
+set(FLTK_C_FLAGS ${CMAKE_C_FLAGS})
+set(FLTK_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
 if(APPLE)
     # FLTK on macOS chokes with clang on Github.  Still not sure why.
@@ -42,6 +43,12 @@ if(APPLE)
 elseif(WIN32)
     set(FLTK_C_COMPILER ${NATIVE_C_COMPILER})
     set(FLTK_CXX_COMPILER ${NATIVE_CXX_COMPILER})
+
+    # \bug: Win64 aarch does not have pen support.  If compiled with it
+    #       build crashes on fluid.
+    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
+	set(FLTK_OPTION_PEN_SUPPORT OFF) 
+    endif()
 elseif(UNIX)
     set(FLTK_C_COMPILER ${NATIVE_C_COMPILER})
     set(FLTK_CXX_COMPILER ${NATIVE_CXX_COMPILER})
@@ -156,7 +163,7 @@ ExternalProject_Add(
 
     -DFLTK_OPTION_PRINT_SUPPORT=ON
     -DFLTK_OPTION_FILESYSTEM_SUPPORT=ON
-    -DFLTK_OPTION_PEN_SUPPORT=ON
+    -DFLTK_OPTION_PEN_SUPPORT=${FLTK_OPTION_PEN_SUPPORT}
     
     -DFLTK_USE_SYSTEM_LIBDECOR=${FLTK_USE_SYSTEM_LIBDECOR}
     -DFLTK_USE_LIBDECOR_GTK=${FLTK_USE_LIBDECOR_GTK}

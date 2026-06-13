@@ -1165,6 +1165,7 @@ namespace mrv
                 return 1;
             case Fl::Pen::ENTER:
                 p.lastEvent = 0;
+                p.pen_handled = false;
                 _updateCursor();
                 _updatePixelBar();
                 updateCoords();
@@ -1176,7 +1177,7 @@ namespace mrv
                     Fl::Pen::event_state(Fl::Pen::State::BUTTON0))
                     return _popupRMBMenu();
                 p.pressure = Fl::Pen::event_pressure();
-                // std::cerr << "TOUCH p.pressure=" << p.pressure << std::endl;
+                p.pen_handled = true;
                 p.mousePos = _getFocus();
                 _handlePushLeftMouseButton();
                 _updatePixelBar();
@@ -1184,6 +1185,7 @@ namespace mrv
                 /* fall through */
             case Fl::Pen::DRAW:
             {
+                p.pen_handled = true;
                 p.pressure = Fl::Pen::event_pressure();
                 // std::cerr << "DRAW p.pressure=" << p.pressure << std::endl;
                 p.mousePos = _getFocus();
@@ -1267,6 +1269,9 @@ namespace mrv
                 {
                     take_focus();
                 }
+
+                if (p.pen_handled)
+                    return 1;
                 
                 if (Fl::event_button1())
                 {
@@ -1411,6 +1416,7 @@ namespace mrv
                 /* fall-thru */
             case FL_RELEASE:
             {
+                p.pen_handled = false;
                 if (p.actionMode == ActionMode::kPolygon ||
                     p.actionMode == ActionMode::kFilledPolygon)
                     return 1;
@@ -1515,6 +1521,8 @@ namespace mrv
             }
             case FL_DRAG:
             {
+                if (p.pen_handled) return 1;
+                
                 p.mousePos = _getFocus();
                 if (Fl::event_button1())
                 {
