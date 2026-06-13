@@ -518,6 +518,9 @@ if [[ $ASK_TO_CONTINUE == 1 ]]; then
     ask_to_continue
 fi
 
+export CMAKE_INSTALL_PREFIX=$PWD/$BUILD_DIR/install
+export CMAKE_PREFIX_PATH=$PWD/$BUILD_DIR/install
+
 #
 # Handle Windows pre-flight compiles
 #
@@ -529,9 +532,17 @@ if command -v swig > /dev/null 2>&1; then
     swig -version
 else
     echo
-    echo "swig NOT found!!! Cannot compile pyFLTK."
+    echo "swig NOT found!!! Trying to compile from source."
     echo
-    exit 1
+    . etc/common/build_swig.sh
+    if command -v swig > /dev/null 2>&1; then
+	swig -version
+    else
+	echo
+	echo "swig NOT found!!! Cannot compile pyFLTK."
+	echo
+	exit 1
+    fi
 fi
 
 if command -v perl > /dev/null 2>&1; then
@@ -559,8 +570,8 @@ export VCPKG_INSTALL_PREFIX=$PWD/install
 cmd="cmake -G 'Ninja'
 	   -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
            -D CMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
-	   -D CMAKE_INSTALL_PREFIX=$PWD/install
-	   -D CMAKE_PREFIX_PATH=$PWD/install
+	   -D CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+	   -D CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
            -D CMAKE_OSX_ARCHITECTURES=\"${CMAKE_OSX_ARCHITECTURES}\"
            -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
 
