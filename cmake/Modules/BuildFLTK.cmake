@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.0.2)  # v1.9.8 is good but has no tablet support
+set(FLTK_GIT_TAG v2.0.3)  # v1.9.8 is good but has no tablet support
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_merge) # Testing branch
@@ -43,12 +43,6 @@ if(APPLE)
 elseif(WIN32)
     set(FLTK_C_COMPILER ${NATIVE_C_COMPILER})
     set(FLTK_CXX_COMPILER ${NATIVE_CXX_COMPILER})
-
-    # \bug: Win64 aarch does not have pen support.  If compiled with it
-    #       build crashes on fluid.
-    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
-	set(FLTK_OPTION_PEN_SUPPORT OFF) 
-    endif()
 elseif(UNIX)
     set(FLTK_C_COMPILER ${NATIVE_C_COMPILER})
     set(FLTK_CXX_COMPILER ${NATIVE_CXX_COMPILER})
