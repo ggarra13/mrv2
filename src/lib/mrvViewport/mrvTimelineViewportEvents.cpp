@@ -1172,11 +1172,15 @@ namespace mrv
                 redraw();
                 return 1;
             case Fl::Pen::TOUCH:
+#ifdef FLTK_HAVE_PEN_SUPPORT
                 // Pen tip or eraser just touched the surface.
                 if (Fl::event_state(FL_CTRL) ||
                     Fl::Pen::event_state(Fl::Pen::State::BUTTON0))
                     return _popupRMBMenu();
                 p.pressure = Fl::Pen::event_pressure();
+#else
+                p.pressure = 1.F;
+#endif
                 p.pen_handled = true;
                 p.mousePos = _getFocus();
                 _handlePushLeftMouseButton();
@@ -1186,7 +1190,11 @@ namespace mrv
             case Fl::Pen::DRAW:
             {
                 p.pen_handled = true;
+#ifdef FLTK_HAVE_PEN_SUPPORT
                 p.pressure = Fl::Pen::event_pressure();
+#else
+                p.pressure = 1.F;
+#endif
                 // std::cerr << "DRAW p.pressure=" << p.pressure << std::endl;
                 p.mousePos = _getFocus();
                 _handleDragLeftMouseButton();
