@@ -315,7 +315,7 @@ if ( NOT WIN32 )
 
        # Configure  
        configure_file(${CMAKE_SOURCE_DIR}/etc/macOS/README.md.in
-	   /tmp/MacOS/README.md @ONLY
+	   ${CMAKE_SOURCE_DIR}/etc/macOS/README.md @ONLY
 	   FILE_PERMISSIONS
 	   OWNER_READ
 	   GROUP_READ
