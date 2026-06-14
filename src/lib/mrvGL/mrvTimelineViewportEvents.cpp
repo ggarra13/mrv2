@@ -110,7 +110,7 @@ namespace mrv
 
             ActionMode actionMode = p.actionMode;
             
-#ifdef FLTK_HAVE_PEN_SUPPORT
+#if FLTK_HAVE_PEN_SUPPORT
             if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
                 actionMode = ActionMode::kErase;
 #endif
@@ -429,7 +429,7 @@ namespace mrv
                         
             ActionMode actionMode = p.actionMode;
             
-#ifdef FLTK_HAVE_PEN_SUPPORT
+#if FLTK_HAVE_PEN_SUPPORT
             if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
                 actionMode = ActionMode::kErase;
 #endif

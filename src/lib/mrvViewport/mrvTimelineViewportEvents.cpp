@@ -1172,7 +1172,7 @@ namespace mrv
                 redraw();
                 return 1;
             case Fl::Pen::TOUCH:
-#ifdef FLTK_HAVE_PEN_SUPPORT
+#if FLTK_HAVE_PEN_SUPPORT
                 // Pen tip or eraser just touched the surface.
                 if (Fl::event_state(FL_CTRL) ||
                     Fl::Pen::event_state(Fl::Pen::State::BUTTON0))
@@ -1190,7 +1190,7 @@ namespace mrv
             case Fl::Pen::DRAW:
             {
                 p.pen_handled = true;
-#ifdef FLTK_HAVE_PEN_SUPPORT
+#if FLTK_HAVE_PEN_SUPPORT
                 p.pressure = Fl::Pen::event_pressure();
 #else
                 p.pressure = 1.F;
