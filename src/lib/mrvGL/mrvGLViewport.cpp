@@ -189,7 +189,7 @@ namespace mrv
             _initializeGLResources();
             
 #if FLTK_HAVE_PEN_SUPPORT
-            if (!desktop::X11())
+            if (!desktop::X11() && !desktop::XWayland())
             {
                 // Subscribe to pen events
                 Fl::Pen::subscribe(this);
