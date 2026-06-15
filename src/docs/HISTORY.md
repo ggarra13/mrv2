@@ -6,6 +6,7 @@ ChangeLog
 
 - UI: Added tablet support on all platforms.
 - UI: Vulkan would draw the selection rectangle incorrectly when selecting bottom-right to top-left, while OpenGL backend would do the same in the opposite direction.
+- UI: Fixed laser Annotations which were broken.
 
 - Web page: Added web page warning and link to Installation instructions when downloading files.  This is mainly for macOS users which must work around Apple's horrible GateKeeper security approach.
 

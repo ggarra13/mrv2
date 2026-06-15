@@ -40,23 +40,7 @@
 namespace
 {
     const char* kModule = "view";
-    const int kCrossSize = 10;
-
-    const float kSpinTimeout = 0.025;
-    const float kSpinSumX = 0.05;
-    const float kSpinSumY = 0.05;
-    const float kSpinMaxY = 2.0;
-    const float kSpinMaxX = 1.0;
-
-    const float kLaserFadeTimeout = 0.01;
-    const float kLaserFade = 0.025;
-
-#ifdef _WIN32
-    const float kPressure = 4.F;
-#else
-    const float kPressure = 32.F;
-#endif
-    
+    const float kPressure = 2.0F;
 } // namespace
 
 namespace mrv
@@ -326,7 +310,7 @@ namespace mrv
             
             auto shape = dynamic_cast< VKErasePathShape* >(s.get());
             if (!shape)
-                return 1;
+                return 0;
 
             if (shape->rectangle)
                 shape->drawing = false;

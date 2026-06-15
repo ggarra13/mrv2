@@ -40,10 +40,8 @@
 namespace
 {
     const char* kModule = "view";
-    const int kCrossSize = 10;
-
-
-    const float kPressure = 32.F;
+    const int   kCrossSize = 10;    
+    const float kPressure = 2.F;
 } // namespace
 
 namespace mrv
@@ -713,7 +711,7 @@ namespace mrv
             auto shape = dynamic_cast< GLErasePathShape* >(s.get());
             if (!shape)
             {
-                return 1;
+                return 0;
             }
             
             if (shape->rectangle)

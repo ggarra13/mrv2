@@ -207,6 +207,7 @@ namespace mrv
             //! Tablet information.
             float pressure = 0.F;
             bool pen_handled = false;
+            math::Vector2f lastPenPosition;
         };
     }  // namespace opengl
 } // namespace mrv

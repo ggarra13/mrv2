@@ -106,7 +106,7 @@ int WINAPI WinMain(
 
     /* Allocate an array of 'argc + 1' string pointers */
     argv = (char **)malloc((argc + 1) * sizeof(char *));
-  
+
     /* Convert the command line arguments to UTF-8 */
     for (i = 0; i < argc; i++) {
         /* find the required size of the buffer */
