@@ -620,9 +620,12 @@ namespace mrv
                 if (!vk.annotationRender)
                     vk.annotationRender = timeline_vlk::Render::create(ctx, context);
 
-                // Subscribe to pen events
 #if FLTK_HAVE_PEN_SUPPORT
-                Fl::Pen::subscribe(this);
+                if (!desktop::X11() && !desktop::XWayland())
+                {
+                    // Subscribe to pen events
+                    Fl::Pen::subscribe(this);
+                }
 #endif
                 
                 p.fontSystem = image::FontSystem::create(context);
