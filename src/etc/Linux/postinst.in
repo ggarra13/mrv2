@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#
+# We set +e to avoid exiting in case of errors.
+# 
+set +e
+
 # Remove old symlinks just in case
 rm -f /usr/bin/@mrv2_NAME@
 rm -f /usr/bin/hdr
@@ -63,6 +68,9 @@ name=`logname`
 if [[ -z "$name" ]]; then
     name=$LOGNAME
 fi
+if [[ -z "$name" ]]; then
+    name=$(id -un)
+fi
 
 # First, check if user-dirs.dirs exists in user's config directory
 config=.config
@@ -83,11 +91,11 @@ desktop_dir=${fulldir#/root/}
 
 # If fulldir had /root/ in it, then rearrange to copy to /home/user directory
 if [[ $fulldir != $desktop_dir ]]; then
-    desktop_dir=/home/${name}/${desktop_dir}
+    desktop_dir="/home/${name}/${desktop_dir}"
 fi
 
 # Just in case.  If /home/user/DESKTOP directory is missing, create it.
-mkdir -p $desktop_dir
+mkdir -p "$desktop_dir"
 
 #
 # Copy icon to applications directory
@@ -98,9 +106,9 @@ sharedir=$INSTALL_DIR/share
 #
 # Copy desktop, icon and locale translations
 #
-appdir=${sharedir}/applications
+appdir="${sharedir}/applications"
 
-cp -rf ${sharedir}/* /usr/share/
+cp -rf "${sharedir}/*" "/usr/share/."
 
 #
 # Copy the .png icons following Freedesktop.org
@@ -240,12 +248,12 @@ fi
 # Verify the copy
 if [ -f "$LIB_TARGET_DIR/libselinux.so.1" ]; then
     echo "Successfully installed libselinux.so.1 to $LIB_TARGET_DIR/libselinux.so.1"
+    #
+    # Optional: Set permissions (ensure it's readable/executable)
+    #
+    chmod 755 "$LIB_TARGET_DIR/libselinux.so.1"
 else
     echo "Error: Copy appears to have failed. File not found at $LIB_TARGET_DIR/libselinux.so.1"
-    exit 1
+    echo "       Will use default libselinux.so.1 - Remove it if it creates issues."
 fi
 
-#
-# Optional: Set permissions (ensure it's readable/executable)
-#
-chmod 755 "$LIB_TARGET_DIR/libselinux.so.1"

@@ -96,10 +96,16 @@ full_dir=$(xdg-user-dir DESKTOP 2>/dev/null || echo "${HOME}/Desktop")
 desktop_dir=${full_dir#/root/}
 
 # If fulldir had /root/ in it, then rearrange to copy to /home/user directory
-if [[ $full_dir != $desktop_dir ]]; then
+if [[ $full_dir != "$desktop_dir" ]]; then
     # Get name and Desktop directory of actual user.
     name=`logname`
-    desktop_dir=/home/${name}/${desktop_dir}
+    if [[ -z "$name" ]]; then
+	name=$LOGNAME
+    fi
+    if [[ -z "$name" ]]; then
+	name=$(id -un)
+    fi
+    desktop_dir="/home/${name}/${desktop_dir}"
 fi
 
 if [[ -d "$desktop_dir" ]]; then
