@@ -78,7 +78,7 @@ namespace
 namespace
 {
     const double kFullScreenTimeout = 0.01;
-    
+
     inline uint32_t byteSwap32(uint32_t x)
     {
         return ((x >> 24) & 0x000000FF) |
@@ -86,7 +86,7 @@ namespace
             ((x << 8)  & 0x00FF0000) |
             ((x << 24) & 0xFF000000);
     }
-    
+
     inline int normalizeAngle0to360(float angle)
     {
         int out = static_cast<int>(std::fmod(angle, 360.0f));
@@ -108,11 +108,11 @@ namespace mrv
 {
     namespace BACKEND_NAMESPACE
     {
-        
+
         using namespace tl;
 
         timeline::HDROptions TimelineViewport::Private::hdrOptions;
-        timeline::ShaderOptions TimelineViewport::Private::shaderOptions;        
+        timeline::ShaderOptions TimelineViewport::Private::shaderOptions;
         EnvironmentMapOptions TimelineViewport::Private::environmentMapOptions;
         math::Box2i TimelineViewport::Private::selection =
             math::Box2i(0, 0, -1, -1);
@@ -150,7 +150,7 @@ namespace mrv
         void TimelineViewport::_init()
         {
             TLRENDER_P();
-            
+
             auto settings = App::app->settings();
 
             timeline::BackgroundOptions backgroundOptions;
@@ -260,14 +260,14 @@ namespace mrv
         {
             return _p->editMode;
         }
-        
+
         void TimelineViewport::setEditMode(const timeline::EditMode& mode) noexcept
         {
             TLRENDER_P();
-            
+
             if (mode == p.editMode)
                 return;
-            
+
             p.editMode = mode;
 
             p.ui->uiSelect->value(0);
@@ -279,7 +279,7 @@ namespace mrv
             p.ui->uiSlide->value(0);
             p.ui->uiSlip->value(0);
             p.ui->uiTrim->value(0);
-            
+
             if (!app::soporta_editing)
             {
                 p.ui->uiMove->value(1);
@@ -338,7 +338,7 @@ namespace mrv
                 p.ui->uiEditStatus->copy_label(_("Roll"));
                 break;
             }
-            
+
             p.ui->uiTimeline->setEditMode(mode);
         }
 
@@ -346,7 +346,7 @@ namespace mrv
         {
             return _p->actionMode;
         }
-        
+
         void TimelineViewport::setActionMode(const ActionMode& mode) noexcept
         {
             TLRENDER_P();
@@ -369,7 +369,7 @@ namespace mrv
                 }
             }
 #endif
-            
+
             if (mode == p.actionMode)
                 return;
 
@@ -388,7 +388,7 @@ namespace mrv
             p.ui->uiText->value(0);
             p.ui->uiVoice->value(0);
             p.ui->uiLink->value(0);
-            
+
             if (mode != ActionMode::kSelection)
             {
                 math::Box2i area;
@@ -401,14 +401,14 @@ namespace mrv
                 p.ui->uiScrub->value(1);
                 return;
             }
-            
+
             if (p.actionMode == ActionMode::kText && mode != ActionMode::kText)
             {
                 acceptMultilineInput();
             }
 
             p.actionMode = mode;
-            
+
 
             switch (mode)
             {
@@ -492,7 +492,7 @@ namespace mrv
 
             if (n == p.lastCursor)
                 return;
-            
+
             if (window())
                 window()->cursor(n);
 
@@ -512,7 +512,7 @@ namespace mrv
             const auto player = p.player;
             if (!player)
                 return;
-            
+
             const auto& t = player->currentTime();
 
             if (player->playback() == timeline::Playback::Stop)
@@ -624,7 +624,7 @@ namespace mrv
             // stop recording or playing of any voice over.
             _stopVoiceRecording();
             _stopVoicePlaying();
-            
+
             // Clear frame times for drop frame stats.
             p.frameTimes.clear();
 
@@ -802,7 +802,7 @@ namespace mrv
                 _showPixelBar();
             else
                 _hidePixelBar();
-            
+
             if (value != timeline::Playback::Stop)
                 p.droppedFrames = 0;
 
@@ -840,7 +840,7 @@ namespace mrv
 
             if (p.player->playback() != timeline::Playback::Stop)
                 p.droppedFrames = 0;
-            
+
             updatePlaybackButtons();
             p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
         }
@@ -919,7 +919,7 @@ namespace mrv
 
             if (value == p.ocioOptions)
                 return;
-            
+
             p.ocioOptions = value;
             p.previous_screen = -1;
 
@@ -993,10 +993,10 @@ namespace mrv
             p.displayOptions = value;
 
             updateDisplayOptions();
-            
+
             if (p.displayOptions.empty())
                 return;
-            
+
             const auto& d = p.displayOptions[0];
 
             if (d.hdrInfo == timeline::HDRInformation::Inactive)
@@ -1008,7 +1008,7 @@ namespace mrv
             {
                 _getHDR();
             }
-            
+
             redraw();
         }
 
@@ -1043,7 +1043,7 @@ namespace mrv
             //          eliminate p.hdrOptions.hdrData.
             //          Also, the comparison below does not compare hdrData for changes
             //          either.
-            
+
             if (value == p.hdrOptions)
                 return;
 
@@ -1052,7 +1052,7 @@ namespace mrv
             p.hdrOptions.peak_smoothing_period = value.peak_smoothing_period;
             p.hdrOptions.peak_scene_low_limit = value.peak_scene_low_limit;
             p.hdrOptions.peak_scene_high_limit = value.peak_scene_high_limit;
-            
+
             p.hdrOptions.algorithm = value.algorithm;
             p.hdrOptions.gamutMapping = value.gamutMapping;
             redrawWindows();
@@ -1117,10 +1117,10 @@ namespace mrv
         void TimelineViewport::setFrameView(bool value) noexcept
         {
             TLRENDER_P();
-            
+
             if (p.frameView == value)
                 return;
-            
+
             p.frameView = value;
             _updateDevices();
         }
@@ -1397,7 +1397,7 @@ namespace mrv
                 p.videoData[0].size.pixelAspectRatio = p.pixelAspectRatio;
                 image->setPixelAspectRatio(p.pixelAspectRatio);
             }
-                    
+
             if (p.resizeWindow)
             {
                 if (!p.presentation && !p.fullScreen)
@@ -1519,7 +1519,7 @@ namespace mrv
 
                 const auto& hdr = p.hdrOptions.hdrData;
                 bool hasHDR = image::isHDR(hdr);
-                    
+
                 if (hasHDR)
                 {
                     videoRefresh = true;
@@ -1909,7 +1909,7 @@ namespace mrv
                 }
                 mw->resize(posX, posY, W, H);
             }
-            
+
 
             if (desktop::Wayland())
             {
@@ -1924,7 +1924,7 @@ namespace mrv
                     wait::milliseconds(500);
                 }
             }
-            
+
             if (frameView)
             {
                 mw->wait_for_expose();
@@ -1945,7 +1945,7 @@ namespace mrv
         {
             return _getFocus(_p->event_x, _p->event_y);
         }
-        
+
         math::Vector2f TimelineViewport::_getFocusf() const noexcept
         {
             return _getFocusf(_p->event_x, _p->event_y);
@@ -2061,7 +2061,7 @@ namespace mrv
             default:
                 break;
             }
-            
+
             PixelToolBarClass* c = p.ui->uiPixelWindow;
             char buf[24];
             switch (c->uiAColorType->value())
@@ -2284,7 +2284,7 @@ namespace mrv
             {
                 setOCIOOptions(screen, o);
             }
-            
+
             redrawWindows();
         }
 
@@ -2576,9 +2576,9 @@ namespace mrv
 
             if (p.fullScreen == active)
                 return;
-            
+
             p.fullScreen = active;
-     
+
             if (!active)
             {
                 int vsync = p.ui->uiPrefs->uiPrefsOpenGLVsync->value();
@@ -2833,8 +2833,8 @@ namespace mrv
                 offset *= channels * depth;
                 break;
             }
-            
-            
+
+
             rgba.a = 1.0f;
             switch (type)
             {
@@ -3026,7 +3026,7 @@ namespace mrv
                 stride = image->getLineSize(0);
                 offset = Y * stride + X;
                 rgba.r = data[offset] / 255.0f;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1);
                 offset = (Y / 2) * stride + X / 2;
@@ -3037,9 +3037,9 @@ namespace mrv
                 offset = (Y / 2) * stride + X / 2;
                 rgba.b = data[offset] / 255.0f;
 
-                
+
                 color::checkLevels(rgba, videoLevels);
-                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);                
+                rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
             }
             case image::PixelType::YUV_422P_U8:
@@ -3049,17 +3049,17 @@ namespace mrv
                 stride = image->getLineSize(0);
                 offset = Y * stride + X;
                 rgba.r = data[offset] / 255.0f;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1);
                 offset = Y * stride + X / 2;
                 rgba.g = data[offset] / 255.0f;
-                
+
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2);
                 offset = Y * stride + X / 2;
                 rgba.b = data[offset] / 255.0f;
-                
+
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -3071,7 +3071,7 @@ namespace mrv
                 stride = image->getLineSize(0);
                 offset = Y * stride + X;
                 rgba.r = data[offset] / 255.0f;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1);
                 offset = Y * stride + X;
@@ -3095,19 +3095,19 @@ namespace mrv
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 1023.0f;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1) / sizeof(uint16_t);
                 offset = (Y / 2) * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.g = f[offset] / 1023.0f;
-                
+
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2) / sizeof(uint16_t);
                 offset = (Y / 2) * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.b = f[offset] / 1023.0f;
-                
+
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -3121,19 +3121,19 @@ namespace mrv
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 4095.0f;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1) / sizeof(uint16_t);
                 offset = (Y / 2) * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.g = f[offset] / 4095.0f;
-                
+
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2) / sizeof(uint16_t);
                 offset = (Y / 2) * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.b = f[offset] / 4095.0f;
-                
+
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -3147,19 +3147,19 @@ namespace mrv
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 65535.0f;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1) / sizeof(uint16_t);
                 offset = (Y / 2) * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.g = f[offset] / 65535.0f;
-                
+
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2) / sizeof(uint16_t);
                 offset = (Y / 2) * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.b = f[offset] / 65535.0f;
-                
+
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -3173,19 +3173,19 @@ namespace mrv
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 1023.F;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1) / sizeof(uint16_t);
                 offset = Y * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.g = f[offset] / 1023.F;
-                
+
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2) / sizeof(uint16_t);
                 offset = Y * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.b = f[offset] / 1023.F;
-                
+
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -3199,19 +3199,19 @@ namespace mrv
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 4095.F;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1) / sizeof(uint16_t);
                 offset = Y * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.g = f[offset] / 4095.F;
-                
+
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2) / sizeof(uint16_t);
                 offset = Y * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.b = f[offset] / 4095.F;
-                
+
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -3225,19 +3225,19 @@ namespace mrv
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 65535.0f;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1) / sizeof(uint16_t);
                 offset = Y * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.g = f[offset] / 65535.0f;
-                
+
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2) / sizeof(uint16_t);
                 offset = Y * stride + X / 2;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.b = f[offset] / 65535.0f;
-                
+
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -3251,19 +3251,19 @@ namespace mrv
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 1023.0f;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1) / sizeof(uint16_t);
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.g = f[offset] / 1023.0f;
-                
+
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2) / sizeof(uint16_t);
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.b = f[offset] / 1023.0f;
-                
+
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -3277,19 +3277,19 @@ namespace mrv
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 4095.0f;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1) / sizeof(uint16_t);
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.g = f[offset] / 4095.0f;
-                
+
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2) / sizeof(uint16_t);
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.b = f[offset] / 4095.0f;
-                
+
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -3303,19 +3303,19 @@ namespace mrv
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.r = f[offset] / 65535.0f;
-                
+
                 data = image->getPlaneData(1);
                 stride = image->getLineSize(1) / sizeof(uint16_t);
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.g = f[offset] / 65535.0f;
-                
+
                 data = image->getPlaneData(2);
                 stride = image->getLineSize(2) / sizeof(uint16_t);
                 offset = Y * stride + X;
                 f = reinterpret_cast<const uint16_t*>(data);
                 rgba.b = f[offset] / 65535.0f;
-                
+
                 color::checkLevels(rgba, videoLevels);
                 rgba = color::YPbPr::to_rgb(rgba, yuvCoefficients);
                 break;
@@ -3438,7 +3438,7 @@ namespace mrv
 
             const uint32_t W = box.w();
             const uint32_t H = box.h();
-                
+
             unsigned dataSize = W * H * 4 * sizeof(float);
 
             if (dataSize != p.rawImageSize || !p.image)
@@ -3465,7 +3465,7 @@ namespace mrv
             const uint32_t y = box.y();
             const uint32_t w = box.w();
             const uint32_t h = box.h();
-            
+
             for (int Y = 0; Y < h; ++Y)
             {
                 for (int X = 0; X < w; ++X)
@@ -3589,7 +3589,7 @@ namespace mrv
             TLRENDER_P();
             if (p.selection == area)
                 return;
-                
+
             p.selection = area;
 
             // Check min < max
@@ -3601,7 +3601,7 @@ namespace mrv
             {
                 std::swap(p.selection.min.y, p.selection.max.y);
             }
-            
+
             redrawWindows();
 
             bool send = p.ui->uiPrefs->SendColor->value();
@@ -3742,21 +3742,21 @@ namespace mrv
         void TimelineViewport::_getHDR() noexcept
         {
             TLRENDER_P();
-            
+
             if (p.videoData.empty() || p.videoData[0].layers.empty() ||
                 !p.videoData[0].layers[0].image)
             {
                 p.ocio_disabled = false;
                 return;
             }
-                    
+
             auto hdrData = p.videoData[0].layers[0].image->getHDR();
             if (hdrData)
             {
                 // When we have video data, we must tonemap it with libplacebo.
                 p.hdrOptions.hdrData = *hdrData;
                 p.hdrOptions.tonemap = true;
-                
+
                 if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
                     p.ocio_disabled = true;
                 else
@@ -3786,7 +3786,7 @@ namespace mrv
                 {
                     p.hdrOptions.tonemap = true;
                     p.hdrOptions.hdrData = image::nameToPrimaries("SRGB");
-                    
+
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
                         p.ocio_disabled = true;
                     else
@@ -3799,18 +3799,18 @@ namespace mrv
 
                     // Make sure ocio is enabled.
                     p.ocio_disabled = false;
-                        
+
                     // We pass BT709 metadata unless OCIO changes it in
                     // Viewport::_updateHDRMetadata().
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
                 }
             }
         }
-        
+
         void TimelineViewport::_getTags() noexcept
         {
             TLRENDER_P();
-            
+
             p.tagData.clear();
 
             if (!p.player)
@@ -3842,7 +3842,7 @@ namespace mrv
                 {
                     _getHDR();
                 }
-                
+
                 const auto& tags = p.videoData[0].layers[0].image->getTags();
                 for (const auto& tag : tags)
                 {
@@ -3902,7 +3902,7 @@ namespace mrv
             if (hasFrameView())
                 _frameView();
         }
-        
+
         math::Matrix4x4f TimelineViewport::_renderProjectionMatrix() const noexcept
         {
             TLRENDER_P();
@@ -3931,7 +3931,7 @@ namespace mrv
                 transformOffset.x = renderSize.h * renderAspect / 2.F;
                 transformOffset.y = renderSize.h / 2.F;
             }
-            
+
             const auto outputDevice = App::app->outputDevice();
             if (!outputDevice)
                 return math::ortho(
@@ -4015,7 +4015,7 @@ namespace mrv
                 0.F, static_cast<float>(viewportSize.h), -1.F, 1.F);
             return pm * vm * transformOffsetMatrix * rotateMatrix * centerMatrix;
         }
-        
+
         math::Matrix4x4f TimelineViewport::_pixelMatrix() const noexcept
         {
             TLRENDER_P();
@@ -4052,7 +4052,7 @@ namespace mrv
             const math::Matrix4x4f& vm = tm * rotation * to * zoom * translation;
             return vm;
         }
-        
+
     } // namespace BACKEND_NAMESPACE
-    
+
 } // namespace mrv
