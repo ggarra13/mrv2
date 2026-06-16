@@ -3772,9 +3772,15 @@ namespace mrv
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
 
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
+                    {
                         p.ocio_disabled = true;
+                    }
                     else
+                    {
+                        if (file::isOTIO(path))
+                            p.hdrOptions.tonemap = false;
                         p.ocio_disabled = false;
+                    }
                 }
                 else if (file::isSRGB(extension))
                 {

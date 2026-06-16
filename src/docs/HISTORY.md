@@ -18,6 +18,9 @@ ChangeLog
 - Core: Added Fl::check to getVideoInfo and getAudioInfo, mainly to keep GNOME's responsive on Linux when 4K OpenEXRs are read (but may help other platforms too).
 - Core: Fixed random crashes when drawing a shape while playback was running.
 - Core: Fixed potential crashes due to Python's GIL.
+- Core: Made 
+  	     Preferences->OCIO->No OCIO on Videos or SDR/RGB data
+	with .otio files not tonemap the videos by default as it was before and allow OCIO transforms without tonemap.
 
 - Build: Consolidated package directory.
 - Build/Linux-aarch: Fixed Vulkan compilation linking an amd64 shaderc library.
