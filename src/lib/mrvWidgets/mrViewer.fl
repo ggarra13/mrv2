@@ -58,7 +58,7 @@ decl {\#include "mrvWidgets/mrvMainWindow.h"} {public global
 decl {\#include "mrvWidgets/mrvMenuBar.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvPopupMenu.h"} {public global
+decl {\#include "mrvWidgets/mrvPopupMenu.h"} {selected public global
 }
 
 decl {\#include "mrvWidgets/mrvVolumeSlider.h"} {public global
@@ -452,8 +452,8 @@ decl {class AboutUI;} {public global
 }
 
 widget_class TimelineClass {open
-  xywh {572 601 934 56} box NO_BOX resizable
-  class Fl_Double_Window visible
+  xywh {0 0 934 56} box NO_BOX hide resizable
+  class Fl_Double_Window
 } {
   Fl_Group {} {open
     xywh {0 0 933 29} box FLAT_BOX
@@ -776,7 +776,7 @@ const auto& startTime = range.start_time();
 uiStartFrame->setTime( startTime );
 
 ui->uiTimeline->setTimelinePlayer(player);
-ui->uiTimeline->redraw();} selected
+ui->uiTimeline->redraw();}
           xywh {682 3 27 24} type Toggle down_box DOWN_BOX selection_color 14 labelcolor 20 align 16
         }
         Fl_Input uiStartFrame {
@@ -1161,10 +1161,10 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
             code1 {uiMain->workspace = uiViewGroup;}
             class Fl_Flex
           } {
-            Fl_Group uiToolsGroup {
+            Fl_Group uiToolsGroup {open
               xywh {0 59 42 501}
             } {
-              Fl_Group uiEditGroup {open
+              Fl_Group uiEditGroup {
                 xywh {0 59 42 501} box FLAT_BOX hide
               } {
                 Fl_Button uiSelect {
@@ -1232,7 +1232,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                   }
                 }
               }
-              Fl_Group uiActionGroup {
+              Fl_Group uiActionGroup {open
                 xywh {0 59 42 501} box FLAT_BOX
               } {
                 Fl_Button uiScrub {
@@ -1245,7 +1245,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
                   user_data this user_data_type {ViewerUI*}
                   callback {uiView->setActionMode( mrv::ActionMode::kSelection );
 
-if (!mrv::app::soporta_annotations && Fl::event_clicks() >= 1)
+if (mrv::feature_needs_solo_or_later() && Fl::event_clicks() >= 1)
 {
    mrv::panel::color_area_panel_cb( nullptr, v);
    Fl::event_clicks(0);
@@ -1255,7 +1255,7 @@ if (!mrv::app::soporta_annotations && Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiDraw {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::app::soporta_annotations)
+                  callback {if (!mrv::feature_needs_solo_or_later())
    return;
 
 uiView->setActionMode( mrv::ActionMode::kDraw );
@@ -1270,8 +1270,8 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiErase {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::app::soporta_annotations)
-    return;
+                  callback {if (!mrv::feature_needs_solo_or_later())
+   return;
     
     
 uiView->setActionMode( mrv::ActionMode::kErase );
@@ -1286,8 +1286,8 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiPolygon {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::app::soporta_annotations)
-    return;
+                  callback {if (!mrv::feature_needs_solo_or_later())
+   return;
     
 auto mode = mrv::ActionMode::kPolygon;
 
@@ -1317,8 +1317,8 @@ uiView->setActionMode( mode );}
                 }
                 Fl_Button uiCircle {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::app::soporta_annotations)
-    return;  
+                  callback {if (!mrv::feature_needs_solo_or_later())
+   return;
    
 auto mode = mrv::ActionMode::kCircle;
 if (Fl::event_clicks() >= 1)
@@ -1347,8 +1347,8 @@ uiView->setActionMode( mode );}
                 }
                 Fl_Button uiRectangle {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::app::soporta_annotations)
-    return;  
+                  callback {if (!mrv::feature_needs_solo_or_later())
+   return;
    
 auto mode = mrv::ActionMode::kRectangle;
 if (Fl::event_clicks() >= 1)
@@ -1377,8 +1377,8 @@ uiView->setActionMode( mode );}
                 }
                 Fl_Button uiArrow {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::app::soporta_annotations)
-    return;  
+                  callback {if (!mrv::feature_needs_solo_or_later())
+   return;
    
 uiView->setActionMode( mrv::ActionMode::kArrow );
 
@@ -1392,8 +1392,8 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiText {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::app::soporta_annotations)
-    return;  
+                  callback {if (!mrv::feature_needs_solo_or_later())
+   return;
    
 
 uiView->setActionMode( mrv::ActionMode::kText );
@@ -1415,8 +1415,8 @@ if (Fl::event_clicks() >= 1)
                 }
                 Fl_Button uiVoice {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::app::soporta_voice)
-    return;  
+                  callback {if (!mrv::feature_needs_pro_or_later())
+   return;
     
 uiView->setActionMode( mrv::ActionMode::kVoice );}
                   tooltip {Voice Annotation Tool} image {../../icons/Microphone.svg} compress_image 1 xywh {2 363 40 33} down_box DOWN_BOX selection_color 14
@@ -1424,8 +1424,8 @@ uiView->setActionMode( mrv::ActionMode::kVoice );}
                 }
                 Fl_Button uiLink {
                   user_data this user_data_type {ViewerUI*}
-                  callback {if (!mrv::app::soporta_voice)
-    return;  
+                  callback {if (!mrv::feature_needs_pro_or_later())
+   return;
     
 uiView->setActionMode( mrv::ActionMode::kLink );}
                   tooltip {Link Annotation Tool} image {../../icons/Link.svg} compress_image 1 xywh {2 397 40 33} down_box DOWN_BOX selection_color 14
@@ -1480,7 +1480,7 @@ settings->setValue( mrv::kPenColorA, a);}
               code0 {o->main( this );}
               class MyViewport
             } {}
-            Fl_Group uiDockGroup {open
+            Fl_Group uiDockGroup {
               xywh {664 59 270 501} box FLAT_BOX hide
               code0 {uiViewGroup->fixed( o, 270 );}
             } {

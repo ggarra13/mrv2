@@ -8,6 +8,7 @@
 #include "mrvEdit/mrvEditUtil.h"
 
 #include "mrvUI/mrvDesktop.h"
+#include "mrvUI/mrvUtil.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -821,7 +822,7 @@ namespace mrv
     }
 
     void edit_store_redo(TimelinePlayer* player, ViewerUI* ui)
-    {   
+    {
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
@@ -953,7 +954,7 @@ namespace mrv
 
         App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
-        
+
         tcp->pushMessage("Edit/Frame/Cut", time);
     }
 
@@ -1049,7 +1050,7 @@ namespace mrv
         toOtioFile(timeline, ui);
 
         panel::redrawThumbnails();
-        
+
         App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
@@ -1121,14 +1122,14 @@ namespace mrv
         toOtioFile(timeline, ui);
 
         panel::redrawThumbnails();
-        
+
         App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
         tcp->pushMessage("Edit/Frame/Insert", time);
     }
 
-    
+
     void edit_slice_clip_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1175,7 +1176,7 @@ namespace mrv
 
         player->setTimeline(timeline);
         toOtioFile(timeline, ui);
-        
+
         App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
@@ -1199,7 +1200,7 @@ namespace mrv
         edit_store_undo(player, ui);
 
         const auto half_frame = RationalTime(0.4, time.rate());
-        
+
         for (auto track : tracks)
         {
             // Adjust time by almost half a frame to avoid rounding issues
@@ -1225,7 +1226,7 @@ namespace mrv
         edit_clear_redo(ui);
 
         panel::redrawThumbnails();
-        
+
         App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
@@ -1401,7 +1402,7 @@ namespace mrv
             if (refreshMedia)
                 refresh_media_cb(nullptr, ui);
         }
-        
+
         App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
 
@@ -1515,7 +1516,7 @@ namespace mrv
                 track->child_at_time(time, &errorStatus));
 
             if (audioItem)
-            {            
+            {
                 auto audioRange = audioItem->trimmed_range_in_parent().value();
                 if (audioRange == rangeInTrack &&
                     otio::dynamic_retainer_cast<otio::Gap>(audioItem))
@@ -1523,7 +1524,7 @@ namespace mrv
             }
 
             modified = true;
-            
+
             int audioIndex = track->index_of_child(audioItem);
             auto audioClipRange = otime::TimeRange(
                 itemRange.start_time().rescaled_to(sampleRate),
@@ -1562,7 +1563,7 @@ namespace mrv
 
         App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
-        
+
         tcp->pushMessage("Edit/Audio Gap/Insert", time);
     }
 
@@ -1583,7 +1584,7 @@ namespace mrv
 
         auto selected = ui->uiTimeline->getSelectedItems();
 
-        
+
         bool modified = false;
         otio::ErrorStatus errorStatus;
         for (auto composition : compositions)
@@ -1620,7 +1621,7 @@ namespace mrv
             int clipIndex = track->index_of_child(clip);
             if (clipIndex < 0 || clipIndex >= track->children().size())
                 continue;
-            
+
             modified = true;
             track->remove_child(clipIndex);
         }
@@ -1657,7 +1658,7 @@ namespace mrv
         edit_store_undo(player, ui);
 
         bool modified = false;
-        
+
         otio::ErrorStatus errorStatus;
         auto selectedItems = ui->uiTimeline->getSelectedItems();
 
@@ -1692,7 +1693,7 @@ namespace mrv
         }
 
         auto selectedTransitions = ui->uiTimeline->getSelectedTransitions();
-        
+
         for (auto& item : selectedTransitions)
         {
             for (auto composition : compositions)
@@ -1723,7 +1724,7 @@ namespace mrv
                 }
             }
         }
-        
+
         if (!modified)
             return;
 
@@ -1791,7 +1792,7 @@ namespace mrv
 
                 if (!found) continue;
             }
-            
+
             int gapIndex = track->index_of_child(gap);
             if (gapIndex < 0 || gapIndex >= track->children().size())
                 continue;
@@ -1814,7 +1815,7 @@ namespace mrv
 
         tcp->pushMessage("Edit/Audio Gap/Remove", time);
     }
-    
+
     void edit_insert_video_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1860,7 +1861,7 @@ namespace mrv
         auto range = clip->trimmed_range_in_parent().value();
 
         bool modified = false;
-        
+
         for (auto composition : compositions)
         {
             auto track = dynamic_cast<otio::Track*>(composition);
@@ -1928,11 +1929,11 @@ namespace mrv
 
         App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
-        
+
         tcp->pushMessage("Edit/Video Gap/Insert", time);
     }
 
-    
+
     void edit_remove_video_gap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -1949,7 +1950,7 @@ namespace mrv
         edit_store_undo(player, ui);
 
         auto selected = ui->uiTimeline->getSelectedItems();
-        
+
         bool modified = false;
         otio::ErrorStatus errorStatus;
         for (auto composition : compositions)
@@ -1986,7 +1987,7 @@ namespace mrv
 
                 if (!found) continue;
             }
-            
+
             modified = true;
             track->remove_child(gapIndex);
         }
@@ -2028,7 +2029,7 @@ namespace mrv
             left_range = right_range;
             right_range = tmp_range;
         }
-        
+
         if (left_range.end_time_exclusive() != right_range.start_time())
         {
             std::string err = string::Format(
@@ -2039,13 +2040,13 @@ namespace mrv
             LOG_ERROR(err);
             return;
         }
-        
+
         int left_index = track->index_of_child(left);
         if (left_index < 0 || left_index >= track->children().size())
         {
             throw std::runtime_error("Internal error: left item not in track!");
         }
-        
+
         int right_index = track->index_of_child(right);
         if (right_index < 0 || right_index >= track->children().size())
         {
@@ -2054,7 +2055,7 @@ namespace mrv
 
         double left_rate = left_range.duration().rate();
         double right_rate = right_range.duration().rate();
-        
+
         auto in_offset = RationalTime(std::min(
                                           std::max(1.0, left_range.duration().value() /
                                                    2.0), left_rate / 2.0), left_rate);
@@ -2067,10 +2068,10 @@ namespace mrv
         track->insert_child(left_index + 1, transition);
     }
 
-    
+
     void edit_add_transition_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        
+
         auto player = ui->uiView->getTimelinePlayer();
         if (!player)
             return;
@@ -2081,7 +2082,7 @@ namespace mrv
 
         makePathsAbsolute(timeline, ui);
 
-        
+
         auto selection = ui->uiTimeline->getSelectedItems();
         if (selection.size() != 2 && selection.size() != 4)
         {
@@ -2140,12 +2141,12 @@ namespace mrv
             _addTransition(left_video, right_video);
             _addTransition(left_audio, right_audio);
         }
-        
+
         const auto& time = getTime(player);
         updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
     }
-    
+
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -2321,7 +2322,7 @@ namespace mrv
 
         App::unsaved_edits = true;
         ui->uiMain->update_title_bar();
-        
+
         view->redraw();
     }
 
@@ -2987,7 +2988,7 @@ namespace mrv
         auto timeline = player->getTimeline();
         if (!timeline)
             return;
-        
+
         edit_store_undo(player, ui);
 
         // If an undo only operation, return immediately.
@@ -3006,7 +3007,7 @@ namespace mrv
         const auto& stack = timeline->tracks();
         const auto& tracks = stack->children();
 
-        
+
         for (const auto& move : moves)
         {
             if (move.type == tl::timeline::MoveType::Transition)
@@ -3039,7 +3040,7 @@ namespace mrv
                 }
                 continue;
             }
-            
+
             if (move.toIndex < 0 || move.toTrack < 0 ||
                 move.toTrack >= tracks.size())
             {
@@ -3617,7 +3618,7 @@ namespace mrv
     void set_edit_button(EditMode mode, ViewerUI* ui)
     {
         const int kDragBarHeight = 8;
-        
+
         Fl_Button* b = ui->uiEdit;
 
         bool active = (mode == EditMode::kFull || mode == EditMode::kSaved);
@@ -3640,11 +3641,22 @@ namespace mrv
             b->labelcolor(FL_FOREGROUND_COLOR);
         }
         b->redraw();
-        
-        if (active && ui->uiTimeline->isEditable())
+
+        if (active)
         {
-            ui->uiEditGroup->show();
-            ui->uiActionGroup->hide();
+            if (ui->uiTimeline->isEditable())
+            {
+                ui->uiEditGroup->show();
+                ui->uiActionGroup->hide();
+            }
+            else
+            {
+                if (!feature_needs_edit_or_later())
+                {
+                    ui->uiEditGroup->hide();
+                    ui->uiActionGroup->show();
+                }
+            }
         }
         else
         {
@@ -3672,11 +3684,11 @@ namespace mrv
 
         // This is the main viewport with the action items.
         Fl_Flex* viewGroup = ui->uiViewGroup;
-        
+
         // Set some defaults
         int H = kMinEditModeH;            // min. timeline height
         int viewGroupH = tileGroupH - H;  // max. viewport with timeline
-        
+
         auto player = ui->uiView->getTimelinePlayer();
         if (mode == EditMode::kFull && player)
         {
@@ -3769,7 +3781,7 @@ namespace mrv
             }
         }
 #endif
-        
+
         // \@note: We do a resize instead of a move_intersection as:
         //         it is faster and we must avoid collapsing the timeline group
         //         to 0 when going into presentation mode (we internally keep
@@ -3790,7 +3802,7 @@ namespace mrv
         std::cerr << "3 TimelineGroup->h()="
                   << TimelineGroup->h() << std::endl;
 #endif
-        
+
         viewGroup->layout();
 
         tileGroup->init_sizes();

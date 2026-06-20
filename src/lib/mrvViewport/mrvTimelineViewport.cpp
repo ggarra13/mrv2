@@ -23,6 +23,7 @@
 #include "mrvPanels/mrvPanelsCallbacks.h"
 
 #include "mrvUI/mrvDesktop.h"
+#include "mrvUI/mrvUtil.h"
 
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvMultilineInput.h"
@@ -280,7 +281,7 @@ namespace mrv
             p.ui->uiSlip->value(0);
             p.ui->uiTrim->value(0);
 
-            if (!app::soporta_editing)
+            if (!feature_needs_edit_or_later())
             {
                 p.ui->uiMove->value(1);
                 return;

@@ -21,7 +21,7 @@ namespace tl
             {
                 return;
             }
-            
+
             PointList filteredPoints;
             filteredPoints.push_back(points.front());
 
@@ -36,7 +36,7 @@ namespace tl
                 filteredPoints.push_back(p1);
             }
 
-            
+
             // Always add the very last point to ensure the line draws to the
             // cursor.
             // We check against the last added point to avoid duplicates if
@@ -44,11 +44,11 @@ namespace tl
             const Point& lastPoint = points.back();
 
             // Use a small epsilon
-            if ((filteredPoints.back() - lastPoint).length() > 1e-6) 
+            if ((filteredPoints.back() - lastPoint).length() > 1e-6)
             {
                 filteredPoints.push_back(lastPoint);
             }
-    
+
             points = filteredPoints;
         }
 
@@ -57,7 +57,7 @@ namespace tl
             EndCapStyle endCapStyle, bool catmullRomSpline, bool allowOverlap)
         {
 
-            // Filter the points
+            // Filter the nearby points
             points = inPoints;
             filterPoints();
 
@@ -72,7 +72,7 @@ namespace tl
                 // Per-segment half-thickness: base size × average pressure
                 float avgPressure = (point1.pressure + point2.pressure) * 0.5f;
                 float segThickness = std::max(m_width * avgPressure, 1.F);
-               
+
 
                 if (point1 != point2)
                     segments.emplace_back(

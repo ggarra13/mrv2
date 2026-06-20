@@ -1,3 +1,9 @@
+v1.6.9
+======
+
+- UI: Added tablet eraser support when drawing free-hand, allowing you to toggle
+      between drawing and erasing mid point.
+
 v1.6.8
 ======
 

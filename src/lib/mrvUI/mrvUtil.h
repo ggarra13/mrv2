@@ -20,4 +20,11 @@ namespace mrv
                            const char* file = nullptr);
     Fl_PNG_Image* load_png(const std::string& file);
     Fl_XPM_Image* load_xpm(const std::string& file);
+
+    //! @{ Returns true if the license matches
+    bool feature_needs_solo_or_later();
+    bool feature_needs_standard_or_later();
+    bool feature_needs_edit_or_later();
+    bool feature_needs_pro_or_later();
+    // @}
 } // namespace mrv

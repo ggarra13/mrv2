@@ -1,4 +1,4 @@
-mrv2 v1.6.6: Professional VFX Review for Everyone
+mrv2 v1.6.8: Professional VFX Review for Everyone
 ================================
 
 I'm excited to announce the latest update to mrv2 and vmrv2 -- the open-source, high-performance professional players and review tools for the VFX, Animation and CG communities.
@@ -18,16 +18,6 @@ Choose your Tier
 
 While mrv2 remains open-source, we offer Donationware Licenses to unlock	professional grade features and support further development.
 
-Pricing & Licenses
-------------------
-
-Solo ($25/yr): Essential review tools (Annotations).
-Standard ($50/yr): Adds Python power for pipeline integration.
-Edit ($75/yr): Adds an editing suite.
-Pro ($150/yr): Advanced voice tools.
-Pro+ ($300 once): Perpetual to "own" license with machine flexibility.
-     	   	  Link two viewers anywhere in the world to synchronize reviews.
-
 Get Started
 ------------
 
@@ -46,11 +36,14 @@ Support the project via PayPal to receive your license key.
 
 -------------------------------------------------------------------------------
 
-(v)mrv2 v1.6.6
+(v)mrv2 v1.6.8	
 
 Open source professional players and review tools for VFX, animation and CGI for Windows, Linux and macOS has a new version.
 
 Main web page:
 https://mrv2.sourceforge.io
+
+Main download:
+https://mrv2.sourceforge.io/downloads/mrv2-download-page.html
 
 Free and donationware with Paypal for more features.
