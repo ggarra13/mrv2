@@ -120,7 +120,7 @@ namespace mrv
                     // _handlePushLeftMouseButtonShapes().)
                     uint8_t r, g, b;
                     SettingsObject* settings = p.ui->app->settings();
-                    int fltk_color = p.ui->uiPenColor->color();
+                    uint32_t fltk_color = p.ui->uiPenColor->color();
                     Fl::get_color((Fl_Color)fltk_color, r, g, b);
                     float alpha = p.ui->uiPenOpacity->value();
                     const image::Color4f color(
@@ -131,7 +131,7 @@ namespace mrv
                         std::make_shared< VKErasePathShape >();
                     eraseShape->drawing = false;
                     eraseShape->rectangle = false;
-                    eraseShape->pen_size = pen_size * 3.5F;
+                    eraseShape->pen_size = pen_size;
                     eraseShape->color = color;
                     eraseShape->soft = softBrush;
                     eraseShape->pts.push_back(pnt);
@@ -315,7 +315,7 @@ namespace mrv
                 return 0;
 
             uint8_t r, g, b;
-            int fltk_color = p.ui->uiPenColor->color();
+            uint32_t fltk_color = p.ui->uiPenColor->color();
             float alpha = p.ui->uiPenOpacity->value();
             Fl::get_color((Fl_Color)fltk_color, r, g, b);
             const image::Color4f color(r / 255.F, g / 255.F, b / 255.F, alpha);
@@ -375,7 +375,8 @@ namespace mrv
 
             uint8_t r, g, b;
             SettingsObject* settings = p.ui->app->settings();
-            int fltk_color = p.ui->uiPenColor->color();
+            uint32_t fltk_color = p.ui->uiPenColor->color();
+
             Fl::get_color((Fl_Color)fltk_color, r, g, b);
             float alpha = p.ui->uiPenOpacity->value();
             const image::Color4f color(

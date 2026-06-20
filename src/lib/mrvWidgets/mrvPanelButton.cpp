@@ -28,25 +28,24 @@ namespace mrv
         {
         case Fl::Pen::ENTER:
             pen_handled = false;
+            return 1;
         case Fl::Pen::TOUCH:
             do_callback();
             pen_handled = true;
-            ret = 1;
+            return 1;
         case Fl::Pen::DRAW:
-            ret = 1;
+            return 1;
         case Fl::Pen::LIFT:
             pen_handled = false;
-            ret = 1;
+            return 1;
         case FL_ENTER:
-        {
             win->cursor(FL_CURSOR_ARROW);
-            ret = 1;
-        }
+            return 1;
         case FL_LEAVE:
-        {
             win->cursor(FL_CURSOR_DEFAULT);
-            ret = 1;
-        }
+            return 1;
+        default:
+            break;
         }
         return ret;
     } // handle

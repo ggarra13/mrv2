@@ -40,7 +40,7 @@
 namespace
 {
     const char* kModule = "view";
-    const int   kCrossSize = 10;    
+    const int   kCrossSize = 10;
     const float kPressure = 2.F;
 } // namespace
 
@@ -77,7 +77,7 @@ namespace mrv
                 return false;
             }
         }
-        
+
     } // namespace
 
 
@@ -102,18 +102,61 @@ namespace mrv
             {
                 p.showAnnotations = true;
             }
-                    
+
             std::shared_ptr< draw::Shape > s;
             if (annotation) s = annotation->lastShape();
 
             ActionMode actionMode = p.actionMode;
-            
-#if FLTK_HAVE_PEN_SUPPORT
-            if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
-                actionMode = ActionMode::kErase;
-#endif
-            
             const float pen_size = _getPenSize();
+
+#if FLTK_HAVE_PEN_SUPPORT
+            if (actionMode == ActionMode::kDraw &&
+                Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
+            {
+                auto pathShape = dynamic_cast< GLPathShape* >(s.get());
+                if (pathShape)
+                {
+                    // The eraser tip just touched down mid-stroke: stop
+                    // extending the draw path here and start a brand new
+                    // freehand erase path from this same point onward.
+                    // (Mirrors the freehand-erase branch of
+                    // _handlePushLeftMouseButtonShapes().)
+                    uint8_t r, g, b;
+                    SettingsObject* settings = p.ui->app->settings();
+                    int fltk_color = p.ui->uiPenColor->color();
+                    Fl::get_color((Fl_Color)fltk_color, r, g, b);
+                    float alpha = p.ui->uiPenOpacity->value();
+                    const image::Color4f color(
+                        r / 255.F, g / 255.F, b / 255.F, alpha);
+                    bool softBrush = settings->getValue<bool>(kSoftBrush);
+
+                    auto eraseShape =
+                        std::make_shared< GLErasePathShape >();
+                    eraseShape->drawing = false;
+                    eraseShape->rectangle = false;
+                    eraseShape->pen_size = pen_size * 3.5F;
+                    eraseShape->color = color;
+                    eraseShape->soft = softBrush;
+                    eraseShape->pts.push_back(pnt);
+
+                    float pressure = kPressure * p.pressure;
+                    if (pressure <= 0.F)
+                        pressure = 1.F;
+                    eraseShape->pts.back().pressure = pressure;
+
+                    annotation->push_back(eraseShape);
+                    _createAnnotationShape(false); // erasing is never a laser
+
+                    redrawWindows();
+                    return;
+                }
+
+                // We already switched earlier in this same stroke (the
+                // last shape is already a VKErasePathShape) -- just keep
+                // extending it via the kErase case below.
+                actionMode = ActionMode::kErase;
+            }
+#endif
 
             switch (actionMode)
             {
@@ -139,10 +182,10 @@ namespace mrv
                 auto shape = dynamic_cast< GLPathShape* >(s.get());
                 if (!shape)
                     return;
-                
+
                 auto& lastPoint = shape->pts.back();
                 lastPoint = pnt;
-                
+
                 _updateAnnotationShape();
                 redrawWindows();
                 return;
@@ -152,14 +195,14 @@ namespace mrv
                 auto shape = dynamic_cast< GLPathShape* >(s.get());
                 if (!shape)
                     return;
-                
+
                 shape->pts.push_back(pnt);
 
                 float pressure = kPressure * p.pressure;
                 if (pressure <= 0.F)
                     pressure = 1.F;
                 shape->pts.back().pressure = pressure;
-                
+
                 _addAnnotationShapePoint();
                 redrawWindows();
                 return;
@@ -184,7 +227,7 @@ namespace mrv
                     shape->pts.push_back(pnt);
                     _addAnnotationShapePoint();
                 }
-                
+
                 redrawWindows();
                 return;
             }
@@ -260,7 +303,7 @@ namespace mrv
                 return;
             }
         }
-        
+
         MultilineInput* TimelineViewport::getMultilineInput() const noexcept
         {
             MultilineInput* w;
@@ -424,14 +467,14 @@ namespace mrv
 
             p.mousePos = _getFocus();
             draw::Point pnt(_getRasterf());
-                        
+
             ActionMode actionMode = p.actionMode;
-            
+
 #if FLTK_HAVE_PEN_SUPPORT
             if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
                 actionMode = ActionMode::kErase;
 #endif
-            
+
             switch (actionMode)
             {
             case ActionMode::kDraw:
@@ -447,7 +490,7 @@ namespace mrv
                 if (pressure <= 0.F)
                     pressure = 1.F;
                 shape->pts.back().pressure = pressure;
-                
+
                 annotation->push_back(shape);
                 _createAnnotationShape(laser);
                 break;
@@ -473,13 +516,13 @@ namespace mrv
                     shape->color = color;
                     shape->soft = softBrush;
                     shape->pts.push_back(pnt);
-                    
+
                     float pressure = kPressure * p.pressure;
                     if (pressure <= 0.F)
                         pressure = 1.F;
                     shape->pts.back().pressure = pressure;
                 }
-                
+
                 annotation->push_back(shape);
                 _createAnnotationShape(false); // not laser
                 break;
@@ -522,7 +565,7 @@ namespace mrv
                         return;
                     shape->pts.push_back(pnt);
                 }
-                    
+
                 if (p.lastEvent == FL_PUSH)
                 {
                     annotation->push_back(shape);
@@ -550,9 +593,9 @@ namespace mrv
                     if (!shape)
                         return;
                 }
-                    
+
                 shape->pts.push_back(pnt);
-                        
+
                 if (p.lastEvent == FL_PUSH)
                 {
                     annotation->push_back(shape);
@@ -634,11 +677,11 @@ namespace mrv
                 // The L will be 5 pixels high and 3.5 pixels wide on screen.
                 const float L_height_px = 5.0F;
                 const float L_width_px = 3.5F;
-                
+
                 // Store PIXEL OFFSETS in pts[1]
                 // We only need one extra point for this.
                 shape->pts.push_back(draw::Point(L_width_px, L_height_px));
-                
+
                 if (shape->edit())
                 {
                     annotation->push_back(shape);
@@ -696,7 +739,7 @@ namespace mrv
             p.ui->uiMain->fill_menu(p.ui->uiMenuBar);
             p.ui->uiUndoDraw->activate();
         }
-        
+
         int TimelineViewport::_handleReleaseLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
@@ -704,16 +747,16 @@ namespace mrv
             auto annotation = p.player->getAnnotation();
             if (p.actionMode != ActionMode::kScrub && !annotation)
                 return 0;
-            
+
             std::shared_ptr< draw::Shape > s;
             if (annotation) s = annotation->lastShape();
-            
+
             auto shape = dynamic_cast< GLErasePathShape* >(s.get());
             if (!shape)
             {
                 return 0;
             }
-            
+
             if (shape->rectangle)
                 shape->drawing = false;
 
@@ -721,7 +764,7 @@ namespace mrv
 
             return 1;
         }
-        
+
         void TimelineViewport::editText(
             const std::shared_ptr< draw::Shape >& s, const int index) noexcept
         {
