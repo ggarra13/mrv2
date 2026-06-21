@@ -3,6 +3,8 @@ v1.6.9
 
 - UI: Added tablet eraser support when drawing free-hand, allowing you to toggle
       between drawing and erasing mid point.
+- UI: Fixed one really nasty crash in the color picker due to some variables being derived from the wrong class.
+
 
 v1.6.8
 ======
