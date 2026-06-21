@@ -28,7 +28,7 @@
  *
  * The ColorA Button is derived form Fl_Button and shows a color chip
  * and an additional transparent overlay representing an alpha value.
- * This button is useful to give the user the choice of a 
+ * This button is useful to give the user the choice of a
  * color/transparency combination by opening the fl_color_a_chooser.
  */
 
@@ -45,7 +45,7 @@
  * \param x, y, w, h position and size of the widget
  * \param t optional label text
  */
-Flmm_ColorA_Button::Flmm_ColorA_Button(int x, int y, int w, int h, char const *t) 
+Flmm_ColorA_Button::Flmm_ColorA_Button(int x, int y, int w, int h, char const *t)
 : Fl_Button(x, y, w, h, t) {
 }
 
@@ -58,7 +58,7 @@ Flmm_ColorA_Button::Flmm_ColorA_Button(int x, int y, int w, int h, char const *t
  */
 void Flmm_ColorA_Button::chip_color(uchar R, uchar G, uchar B, uchar A) {
   r_ = R; g_ = G; b_ = B; a_ = A;
-  r = R/255.0f; g = G/255.0f; b = B/255.0f; a = A/255.0f; 
+  r = R/255.0f; g = G/255.0f; b = B/255.0f; a = A/255.0f;
   redraw();
 }
 
@@ -70,6 +70,12 @@ void Flmm_ColorA_Button::chip_color(uchar R, uchar G, uchar B, uchar A) {
  * \param A alpha component; 0.0 is fully transparent, 1.0 is opaque
  */
 void Flmm_ColorA_Button::chip_color(float R, float G, float B, float A) {
+
+  if (R < 0.0) R = 0.0; else if (R > 1.0) R = 1.0;
+  if (G < 0.0) G = 0.0; else if (G > 1.0) G = 1.0;
+  if (B < 0.0) B = 0.0; else if (B > 1.0) B = 1.0;
+  if (A < 0.0) A = 0.0; else if (A > 1.0) A = 1.0;
+
   r = R; g = G; b = B; a = A;
   r_ = (uchar)(R*255.0f);
   g_ = (uchar)(G*255.0f);
@@ -93,7 +99,7 @@ void Flmm_ColorA_Button::chip_color(Fl_Color col) {
   chip_color(R, G, B);
 }
 
-void Flmm_ColorA_Button::draw() {  
+void Flmm_ColorA_Button::draw() {
   if (type() == FL_HIDDEN_BUTTON) return;
   Fl_Color col = value() ? selection_color() : color();
   draw_box(value() ? (down_box()?down_box():fl_down(box())) : box(), col);
@@ -104,7 +110,7 @@ void Flmm_ColorA_Button::draw() {
              h()-Fl::box_dh(box()), r_, g_, b_);
   } else {
     th = h()-Fl::box_dh(box());
-    fl_draw_image(generate_achip, this, 
+    fl_draw_image(generate_achip, this,
 	   x()+Fl::box_dx(box()),
 	   y()+Fl::box_dy(box()),
 	   w()-Fl::box_dw(box()), th);
@@ -151,4 +157,3 @@ void Flmm_ColorA_Button::rgba(double& ro, double& go, double& bo, double& ao)
 {
     ro = r; go = g; bo = b; ao = a;
 }
-
