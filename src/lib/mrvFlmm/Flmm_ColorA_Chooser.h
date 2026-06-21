@@ -97,10 +97,10 @@ class Flmm_ColorA_Chooser : public Fl_Group
     Flmm_ValueBox valuebox;
     Flmm_AlphaBox alphabox;
     Fl_Choice choice;
-    Flcc_Value_Input rvalue;
-    Flcc_Value_Input gvalue;
-    Flcc_Value_Input bvalue;
-    Flcc_Value_Input avalue;
+    Flmm_Value_Input rvalue;
+    Flmm_Value_Input gvalue;
+    Flmm_Value_Input bvalue;
+    Flmm_Value_Input avalue;
 
     Fl_Box resize_box;
     double hue_, saturation_, value_;
