@@ -21,7 +21,10 @@ fi
 . etc/update_cacert.sh
 update_cacert
 
+echo
 echo "BUILD_DIR=${BUILD_DIR}"
+echo "PYTHONPATH=${PYTHONPATH}"
+echo "PYTHONHOME=${PYTHONHOME}"
 echo 
 
 dir=$BUILD_DIR/mrv2/src/mrv2-build
@@ -76,9 +79,11 @@ fi
 
 
 if [[ "$CMAKE_TARGET" == "package" ]]; then
-    
+
     cd $dir
-	
+
+    unset PYTHONPATH
+
     run_cmd cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install
 
     cd -
@@ -88,7 +93,7 @@ fi
 cd $dir
 
 cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t "${CMAKE_TARGET}"
-    
+
 STATUS=$?
 
 cd -
