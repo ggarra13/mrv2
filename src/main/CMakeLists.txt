@@ -317,8 +317,8 @@ if ( NOT WIN32 )
        configure_file(${CMAKE_SOURCE_DIR}/etc/macOS/README.md.in
 	   ${CMAKE_SOURCE_DIR}/etc/macOS/README.md @ONLY
 	   FILE_PERMISSIONS
-	   OWNER_READ
-	   GROUP_READ
+	   OWNER_READ OWNER_WRITE 
+	   GROUP_READ OWNER_WRITE 
 	   WORLD_READ)
     endif()
     

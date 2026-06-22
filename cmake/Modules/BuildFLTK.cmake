@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# mrv2 
+# mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.0.8)  # v1.9.8 is good but has no tablet support
+set(FLTK_GIT_TAG v2.0.9)  # v1.9.8 is good but has no tablet support
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_merge) # Testing branch
@@ -111,7 +111,7 @@ else()
     set(FLTK_USE_PANGO   ON)
 endif()
 
-    
+
 ExternalProject_Add(
     FLTK
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/deps/FLTK
@@ -122,9 +122,9 @@ ExternalProject_Add(
 
     GIT_SHALLOW       OFF  # for ExternalProject_Add.
                            # For FetchContent_Declere it is GIT_SHALLOW FALSE
-    
+
     DEPENDS ${FLTK_DEPENDENCIES}
-    
+
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
     -DCMAKE_CXX_COMPILER=${FLTK_CXX_COMPILER}
@@ -158,7 +158,7 @@ ExternalProject_Add(
     -DFLTK_OPTION_PRINT_SUPPORT=ON
     -DFLTK_OPTION_FILESYSTEM_SUPPORT=ON
     -DFLTK_OPTION_PEN_SUPPORT=${FLTK_OPTION_PEN_SUPPORT}
-    
+
     -DFLTK_USE_SYSTEM_LIBDECOR=${FLTK_USE_SYSTEM_LIBDECOR}
     -DFLTK_USE_LIBDECOR_GTK=${FLTK_USE_LIBDECOR_GTK}
     -DFLTK_USE_SYSTEM_ZLIB=${FLTK_USE_SYSTEM_ZLIB}

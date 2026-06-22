@@ -12,6 +12,9 @@ namespace mrv
     PanelButton::PanelButton(int x, int y, int w, int h, const char* l) :
         Fl_Button(x, y, w, h, l)
     {
+#if FLTK_HAVE_PEN_SUPPORT
+        Fl::Pen::subscribe(this);
+#endif
     }
 
     int PanelButton::handle(int event)
@@ -23,16 +26,26 @@ namespace mrv
 
         switch (event)
         {
+        case Fl::Pen::ENTER:
+            pen_handled = false;
+            return 1;
+        case Fl::Pen::TOUCH:
+            do_callback();
+            pen_handled = true;
+            return 1;
+        case Fl::Pen::DRAW:
+            return 1;
+        case Fl::Pen::LIFT:
+            pen_handled = false;
+            return 1;
         case FL_ENTER:
-        {
             win->cursor(FL_CURSOR_ARROW);
-            ret = 1;
-        }
+            return 1;
         case FL_LEAVE:
-        {
             win->cursor(FL_CURSOR_DEFAULT);
-            ret = 1;
-        }
+            return 1;
+        default:
+            break;
         }
         return ret;
     } // handle

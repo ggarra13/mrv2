@@ -57,7 +57,7 @@ namespace mrv
                 sign = -1;
             return sign;
         }
-        
+
         bool isDrawAction(ActionMode mode)
         {
             switch(mode)
@@ -80,7 +80,7 @@ namespace mrv
 
     namespace vulkan
     {
-        
+
         void TimelineViewport::_handleDragLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
@@ -99,16 +99,61 @@ namespace mrv
             {
                 p.showAnnotations = true;
             }
-                    
+
             std::shared_ptr< draw::Shape > s;
             if (annotation) s = annotation->lastShape();
 
             ActionMode actionMode = p.actionMode;
-#if FLTK_HAVE_PEN_SUPPORT
-            if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
-                actionMode = ActionMode::kErase;
-#endif
             const float pen_size = _getPenSize();
+
+#if FLTK_HAVE_PEN_SUPPORT
+            if (actionMode == ActionMode::kDraw &&
+                Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
+            {
+                auto pathShape = dynamic_cast< VKPathShape* >(s.get());
+                if (pathShape)
+                {
+                    // The eraser tip just touched down mid-stroke: stop
+                    // extending the draw path here and start a brand new
+                    // freehand erase path from this same point onward.
+                    // (Mirrors the freehand-erase branch of
+                    // _handlePushLeftMouseButtonShapes().)
+                    uint8_t r, g, b;
+                    SettingsObject* settings = p.ui->app->settings();
+                    uint32_t fltk_color = p.ui->uiPenColor->color();
+                    Fl::get_color((Fl_Color)fltk_color, r, g, b);
+                    float alpha = p.ui->uiPenOpacity->value();
+                    const image::Color4f color(
+                        r / 255.F, g / 255.F, b / 255.F, alpha);
+                    bool softBrush = settings->getValue<bool>(kSoftBrush);
+
+                    auto eraseShape =
+                        std::make_shared< VKErasePathShape >();
+                    eraseShape->drawing = false;
+                    eraseShape->rectangle = false;
+                    eraseShape->pen_size = pen_size;
+                    eraseShape->color = color;
+                    eraseShape->soft = softBrush;
+                    eraseShape->pts.push_back(pnt);
+
+                    float pressure = kPressure * p.pressure;
+                    if (pressure <= 0.F)
+                        pressure = 1.F;
+                    eraseShape->pts.back().pressure = pressure;
+
+                    annotation->push_back(eraseShape);
+                    _createAnnotationShape(false); // erasing is never a laser
+
+                    redrawWindows();
+                    return;
+                }
+
+                // We already switched earlier in this same stroke (the
+                // last shape is already a VKErasePathShape) -- just keep
+                // extending it via the kErase case below.
+                actionMode = ActionMode::kErase;
+            }
+#endif
 
             switch (actionMode)
             {
@@ -146,14 +191,14 @@ namespace mrv
                 auto shape = dynamic_cast< VKPathShape* >(s.get());
                 if (!shape)
                     return;
-                
+
                 shape->pts.push_back(pnt);
-                
+
                 float pressure = kPressure * p.pressure;
                 if (pressure <= 0.F)
                     pressure = 1.F;
                 shape->pts.back().pressure = pressure;
-                
+
                 _addAnnotationShapePoint();
                 redrawWindows();
                 return;
@@ -177,7 +222,7 @@ namespace mrv
                     shape->pts.push_back(pnt);
                     _addAnnotationShapePoint();
                 }
-                
+
                 redrawWindows();
                 return;
             }
@@ -210,7 +255,7 @@ namespace mrv
                 tmp = pointOnLine + -tNormal * normalVector;
                 shape->pts[4] = tmp;
                 _updateAnnotationShape();
-                
+
                 redrawWindows();
                 return;
             }
@@ -260,7 +305,7 @@ namespace mrv
             TLRENDER_P();
 
             Fl::event_dispatch(nullptr);
-                        
+
             auto player = getTimelinePlayer();
             if (!player)
                 return 0;
@@ -270,7 +315,7 @@ namespace mrv
                 return 0;
 
             uint8_t r, g, b;
-            int fltk_color = p.ui->uiPenColor->color();
+            uint32_t fltk_color = p.ui->uiPenColor->color();
             float alpha = p.ui->uiPenOpacity->value();
             Fl::get_color((Fl_Color)fltk_color, r, g, b);
             const image::Color4f color(r / 255.F, g / 255.F, b / 255.F, alpha);
@@ -282,8 +327,8 @@ namespace mrv
             shape->editing = false;
 
             p.multilineText.reset();
-            
-            const float pixels_unit = pixels_per_unit();            
+
+            const float pixels_unit = pixels_per_unit();
             _endAnnotationShape();
             p.ui->uiUndoDraw->activate();
 
@@ -291,23 +336,23 @@ namespace mrv
             redrawWindows();
             Fl::flush();
             redrawWindows();
-            
+
             take_focus();
             return 1;
         }
 
-        
+
         int TimelineViewport::_handleReleaseLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
-            
+
             auto annotation = p.player->getAnnotation();
             if (p.actionMode != ActionMode::kScrub && !annotation)
                 return 0;
-            
+
             std::shared_ptr< draw::Shape > s;
             if (annotation) s = annotation->lastShape();
-            
+
             auto shape = dynamic_cast< VKErasePathShape* >(s.get());
             if (!shape)
                 return 0;
@@ -319,7 +364,7 @@ namespace mrv
 
             return 1;
         }
-        
+
         void TimelineViewport::_handlePushLeftMouseButtonShapes() noexcept
         {
             TLRENDER_P();
@@ -327,10 +372,11 @@ namespace mrv
             auto player = getTimelinePlayer();
             if (!player)
                 return;
-            
+
             uint8_t r, g, b;
             SettingsObject* settings = p.ui->app->settings();
-            int fltk_color = p.ui->uiPenColor->color();
+            uint32_t fltk_color = p.ui->uiPenColor->color();
+
             Fl::get_color((Fl_Color)fltk_color, r, g, b);
             float alpha = p.ui->uiPenOpacity->value();
             const image::Color4f color(
@@ -339,7 +385,7 @@ namespace mrv
             bool laser = settings->getValue<bool>(kLaser);
             bool softBrush = settings->getValue<bool>(kSoftBrush);
             int font = settings->getValue<int>(kTextFont);
-            
+
             auto annotation = player->getAnnotation();
             bool all_frames =
                 p.ui->app->settings()->getValue<bool>(kAllFrames);
@@ -376,15 +422,22 @@ namespace mrv
 
             p.mousePos = _getFocus();
             draw::Point pnt(_getRasterf());
-                        
+
             ActionMode actionMode = p.actionMode;
 #if FLTK_HAVE_PEN_SUPPORT
-            if (Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
+            if (actionMode == ActionMode::kDraw &&
+                Fl::Pen::event_state(Fl::Pen::State::ERASER_DOWN))
+            {
+                // The stylus touched down with its eraser tip while the
+                // Draw tool was active -- start erasing right away
+                // instead of drawing. Reuses the freehand-erase branch
+                // of the kErase case below.
                 actionMode = ActionMode::kErase;
+            }
 #endif
-            
+
             const float pen_size = _getPenSize();
-            
+
             switch (actionMode)
             {
             case ActionMode::kDraw:
@@ -395,7 +448,7 @@ namespace mrv
                 shape->soft = softBrush;
                 shape->laser = laser;
                 shape->pts.push_back(pnt);
-                
+
                 float pressure = kPressure * p.pressure;
                 if (pressure <= 0.F)
                     pressure = 1.F;
@@ -425,13 +478,13 @@ namespace mrv
                     shape->color = color;
                     shape->soft = softBrush;
                     shape->pts.push_back(pnt);
-                    
+
                     float pressure = kPressure * p.pressure;
                     if (pressure <= 0.F)
                         pressure = 1.F;
                     shape->pts.back().pressure = pressure;
                 }
-                
+
                 annotation->push_back(shape);
                 _createAnnotationShape(false); // not laser
                 break;
@@ -474,7 +527,7 @@ namespace mrv
                         return;
                     shape->pts.push_back(pnt);
                 }
-                    
+
                 if (p.lastEvent == FL_PUSH)
                 {
                     annotation->push_back(shape);
@@ -502,9 +555,9 @@ namespace mrv
                     if (!shape)
                         return;
                 }
-                    
+
                 shape->pts.push_back(pnt);
-                        
+
                 if (p.lastEvent == FL_PUSH)
                 {
                     annotation->push_back(shape);
@@ -587,11 +640,11 @@ namespace mrv
                 // The L will be 5 pixels high and 3.5 pixels wide on screen.
                 const float L_height_px = 5.0F;
                 const float L_width_px = 3.5F;
-                
+
                 // Store PIXEL OFFSETS in pts[1]
                 // We only need one extra point for this.
                 shape->pts.push_back(draw::Point(L_width_px, L_height_px));
-                
+
                 if (shape->edit())
                 {
                     annotation->push_back(shape);
@@ -603,7 +656,7 @@ namespace mrv
             {
                 const auto& renderSize = getRenderSize();
                 auto shape = getMultilineInput();
-                        
+
                 double pixels_unit = pixels_per_unit();
                 double pct = renderSize.h / 1024.F;
                 if (pct < 1.0) pct = 1.0;
@@ -622,11 +675,11 @@ namespace mrv
                     image::discoverSystemFonts();
                 p.multilineText = std::make_shared<VKTextShape>();
                 shape = p.multilineText;
-  
+
                 shape->fontSystem = p.fontSystem;
                 shape->fontPath = fontList[(unsigned)font].u8string();
                 shape->fontSize = fontSize;
-                        
+
                 shape->pts.push_back(pos);
                 shape->editing = true;
                 shape->color = color;
@@ -634,7 +687,7 @@ namespace mrv
                 annotation->push_back(shape);
                 take_focus();
 
-            
+
                 redrawWindows();
                 return;
             }
@@ -680,5 +733,5 @@ namespace mrv
 
 
     } // namespace vulkan
-    
+
 } // namespace mrv

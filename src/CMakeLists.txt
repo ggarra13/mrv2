@@ -53,7 +53,10 @@ if ( UNIX )
 endif()
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
+    set(mrv2_NAME vmrv2)
     find_package(Vulkan OPTIONAL_COMPONENTS glslang shaderc_combined SPIRV-Tools)
+else()
+    set(mrv2_NAME mrv2)
 endif()
 
 find_package(FLTK CONFIG REQUIRED)

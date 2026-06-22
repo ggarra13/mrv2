@@ -29,8 +29,8 @@
  *
  * The colorA chooser widget displays a color wheel and sliders
  * for intensity and transparency (alpha). If built into a larger
- * dialog box, the size of this widget should be 245x145. 
- * 
+ * dialog box, the size of this widget should be 245x145.
+ *
  * The recommended way to access a the alpha colo chooser is via
  * a call to flmm_color_a_chooser.
  */
@@ -92,7 +92,7 @@ Flmm_ColorA_Window* colorChooser = nullptr;
 /**
  * Convert hsv color components to rgb.
  *
- * This function converts the hue, saturation and intensity values 
+ * This function converts the hue, saturation and intensity values
  * into red, green and blue components.
  */
 void Flmm_ColorA_Chooser::hsv2rgb(
@@ -103,7 +103,7 @@ void Flmm_ColorA_Chooser::hsv2rgb(
 /**
  * Convert rgb color components to hsv.
  *
- * This function converts the red, green and blue values 
+ * This function converts the red, green and blue values
  * into hue, saturation and intensity components.
  */
 void Flmm_ColorA_Chooser::rgb2hsv(
@@ -153,6 +153,10 @@ void Flmm_ColorA_Chooser::set_valuators() {
  * \return 0, if no values changed over the previous settings, else 1
  */
 int Flmm_ColorA_Chooser::rgb(double R, double G, double B, double A) {
+  if (R < 0.0) R = 0.0; else if (R > 1.0) R = 1.0;
+  if (G < 0.0) G = 0.0; else if (G > 1.0) G = 1.0;
+  if (B < 0.0) B = 0.0; else if (B > 1.0) B = 1.0;
+  if (A < 0.0) A = 0.0; else if (A > 1.0) A = 1.0;
   if (R == r_ && G == g_ && B == b_ && A == a_) return 0;
   double pa = a_;
   r_ = R; g_ = G; b_ = B; a_ = A;
@@ -169,7 +173,7 @@ int Flmm_ColorA_Chooser::rgb(double R, double G, double B, double A) {
     valuebox.damage(FL_DAMAGE_EXPOSE);
   }
   if (hue_ != ph || saturation_ != ps) {
-    huebox.damage(FL_DAMAGE_EXPOSE); 
+    huebox.damage(FL_DAMAGE_EXPOSE);
     valuebox.damage(FL_DAMAGE_SCROLL);
   }
   if (hue_ != ph || saturation_ != ps || a_ != pa) {
@@ -203,7 +207,7 @@ int Flmm_ColorA_Chooser::hsv(double H, double S, double V, double A) {
 #endif
     valuebox.damage(FL_DAMAGE_EXPOSE);}
   if (hue_ != ph || saturation_ != ps) {
-    huebox.damage(FL_DAMAGE_EXPOSE); 
+    huebox.damage(FL_DAMAGE_EXPOSE);
     valuebox.damage(FL_DAMAGE_SCROLL);
   }
   if (hue_ != ph || saturation_ != ps || a_ != pa) {
@@ -249,7 +253,7 @@ int Flmm_HueBox::handle(int e) {
     if (fabs(H-ih) < 3*6.0/w()) H = ih;
     if (fabs(S-is) < 3*1.0/h()) S = is;
     if (Fl::event_state(FL_CTRL)) H = ih;
-    if (c->hsv(H, S, c->value(),c->a())) c->do_callback();
+    if (c->hsv(H, S, c->value(),c->a())) c->do_callback(FL_REASON_DRAGGED);
     redraw();
     } return 1;
   case FL_FOCUS :
@@ -320,7 +324,7 @@ int Flmm_HueBox::handle_key(int key) {
   Xf = (double)X/(double)w1;
   Yf = (double)Y/(double)h1;
   tohs(Xf, Yf, H, S);
-  if (c->hsv(H, S, c->value(),c->a())) c->do_callback();
+  if (c->hsv(H, S, c->value(),c->a())) c->do_callback(FL_REASON_CHANGED);
 
   return 1;
 }
@@ -331,9 +335,9 @@ void Flmm_HueBox::draw() {
   int yy1 = y()+Fl::box_dy(box());
   int w1 = w()-Fl::box_dw(box());
   int h1 = h()-Fl::box_dh(box());
-  if (damage() == FL_DAMAGE_EXPOSE) fl_clip_box(x1,yy1, 6, 6, x1, yy1, w1, h1);
+  fl_push_clip(x1, yy1, w1, h1);
   fl_draw_image(generate_image, this, x1, yy1, w1, h1);
-  if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
+  fl_pop_clip();
   Flmm_ColorA_Chooser* c = (Flmm_ColorA_Chooser*)parent();
 #ifdef CIRCLE
   int X = int(.5*(cos(c->hue()*(M_PI/3.0))*c->saturation()+1) * (w1-6));
@@ -365,7 +369,7 @@ int Flmm_ValueBox::handle(int e) {
       double Yf;
       Yf = 1-(Fl::event_y()-y()-Fl::box_dy(box()))/double(h()-Fl::box_dh(box()));
       if (fabs(Yf-iv)<(3*1.0/h())) Yf = iv;
-      if (c->hsv(c->hue(),c->saturation(),Yf,c->a())) c->do_callback();
+      if (c->hsv(c->hue(),c->saturation(),Yf,c->a())) c->do_callback(FL_REASON_DRAGGED);
     } return 1;
     case FL_FOCUS :
     case FL_UNFOCUS :
@@ -401,9 +405,9 @@ void Flmm_ValueBox::draw() {
   int yy1 = y()+Fl::box_dy(box());
   int w1 = w()-Fl::box_dw(box());
   int h1 = h()-Fl::box_dh(box());
-  if (damage() == FL_DAMAGE_EXPOSE) fl_clip_box(x1,yy1,6,6, x1, yy1, w1, h1);
+  fl_push_clip(x1, yy1, w1, h1);
   fl_draw_image(generate_vimage, this, x1, yy1, w1, h1);
-  if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
+  fl_pop_clip();
   int Y = int((1-c->value()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   draw_box(FL_UP_BOX,x1,yy1+Y,w1,6,Fl::focus() == this ? FL_FOREGROUND_COLOR : FL_GRAY);
@@ -413,10 +417,10 @@ void Flmm_ValueBox::draw() {
 int Flmm_ValueBox::handle_key(int key) {
   int h1 = h()-Fl::box_dh(box())-6;
   Flmm_ColorA_Chooser* c = (Flmm_ColorA_Chooser*)parent();
-  
+
   int Y = int((1-c->value()) * h1);
   if (Y < 0) Y = 0; else if (Y > h1) Y = h1;
-  
+
   switch (key) {
     case FL_Up :
       Y -= 3;
@@ -427,11 +431,12 @@ int Flmm_ValueBox::handle_key(int key) {
     default :
       return 0;
   }
-  
+
   double Yf;
   Yf = 1-((double)Y/(double)h1);
-  if (c->hsv(c->hue(),c->saturation(),Yf,c->a())) c->do_callback();
-  
+  if (c->hsv(c->hue(),c->saturation(),Yf,c->a()))
+      c->do_callback(FL_REASON_CHANGED);
+
   return 1;
 }
 
@@ -450,8 +455,8 @@ int Flmm_AlphaBox::handle(int e) {
     case FL_DRAG: {
       double a;
       a = 1-(Fl::event_y()-y()-Fl::box_dy(box()))/double(h()-Fl::box_dh(box()));
-      if (a<0.0) a = 0.0; if (a>1.0) a = 1.0; 
-      if (c->rgb(c->r(),c->g(),c->b(),a)) c->do_callback();
+      if (a<0.0) a = 0.0; if (a>1.0) a = 1.0;
+      if (c->rgb(c->r(),c->g(),c->b(),a)) c->do_callback(FL_REASON_DRAGGED);
     } return 1;
     case FL_FOCUS :
     case FL_UNFOCUS :
@@ -499,9 +504,9 @@ void Flmm_AlphaBox::draw() {
   int yy1 = y()+Fl::box_dy(box());
   int w1 = w()-Fl::box_dw(box());
   int h1 = h()-Fl::box_dh(box());
-  if (damage() == FL_DAMAGE_EXPOSE) fl_clip_box(x1,yy1,6,6, x1, yy1, w1, h1);
+  fl_push_clip(x1, yy1, w1, h1);
   fl_draw_image(generate_aimage, this, x1, yy1, w1, h1);
-  if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
+  fl_pop_clip();
   int Y = int((1-c->a()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   draw_box(FL_UP_BOX,x1,yy1+Y,w1,6,Fl::focus() == this ? FL_FOREGROUND_COLOR : FL_GRAY);
@@ -511,10 +516,9 @@ void Flmm_AlphaBox::draw() {
 int Flmm_AlphaBox::handle_key(int key) {
   int h1 = h()-Fl::box_dh(box())-6;
   Flmm_ColorA_Chooser* c = (Flmm_ColorA_Chooser*)parent();
-  
+
   int Y = int((1-c->a()) * h1);
-  if (Y < 0) Y = 0; else if (Y > h1) Y = h1;
-  
+
   switch (key) {
     case FL_Up :
       Y -= 3;
@@ -525,10 +529,12 @@ int Flmm_AlphaBox::handle_key(int key) {
     default :
       return 0;
   }
-  
+
+  if (Y < 0) Y = 0;
+  else if (Y > h1) Y = h1;
   double a;
   a = 1-((double)Y/(double)h1);
-  if (c->rgb(c->r(),c->g(),c->b(),a)) c->do_callback();
+  if (c->rgb(c->r(),c->g(),c->b(),a)) c->do_callback(FL_REASON_CHANGED);
   return 1;
 }
 
@@ -536,12 +542,18 @@ int Flmm_AlphaBox::handle_key(int key) {
 
 void Flmm_ColorA_Chooser::rgba_cb(Fl_Widget* o, void*) {
   Flmm_ColorA_Chooser* c = (Flmm_ColorA_Chooser*)(o->parent());
-  double R = c->rvalue.value();
-  double G = c->gvalue.value();
-  double B = c->bvalue.value();
-  double A = c->avalue.value();
+  // clamp input values to valid ranges (issue #749, part 1)
+  double R = c->rvalue.clamp(c->rvalue.value());
+  double G = c->gvalue.clamp(c->gvalue.value());
+  double B = c->bvalue.clamp(c->bvalue.value());
+  double A = c->avalue.clamp(c->avalue.value());
+  // update input values if they were clamped (#749, part 2)
+  c->rvalue.value(R);
+  c->gvalue.value(G);
+  c->bvalue.value(B);
+  c->avalue.value(A);
   if (c->mode() == M_HSV) {
-    if (c->hsv(R,G,B,A)) c->do_callback();
+    if (c->hsv(R,G,B,A)) c->do_callback(FL_REASON_CHANGED);
     return;
   }
   if (c->mode() != M_RGB) {
@@ -550,7 +562,7 @@ void Flmm_ColorA_Chooser::rgba_cb(Fl_Widget* o, void*) {
     B = B/255;
     A = A/255;
   }
-  if (c->rgb(R,G,B,A)) c->do_callback();
+  if (c->rgb(R,G,B,A)) c->do_callback(FL_REASON_CHANGED);
 }
 
 void Flmm_ColorA_Chooser::mode_cb(Fl_Widget* o, void*) {
@@ -565,15 +577,15 @@ void Flmm_ColorA_Chooser::mode_cb(Fl_Widget* o, void*) {
 
 ////////////////////////////////////////////////////////////////
 
-/** 
+/**
  * Create a new color chooser widget with alpha setting.
  *
- * The colorA chooser widget displays a color wheel and sliders for intensity 
- * and transparency (alpha). If built into a larger dialog box, the size of 
+ * The colorA chooser widget displays a color wheel and sliders for intensity
+ * and transparency (alpha). If built into a larger dialog box, the size of
  * this widget should be 245x145.
- * 
- * The recommended way to access a the alpha colo chooser is via a call to 
- * flmm_color_a_chooser. 
+ *
+ * The recommended way to access a the alpha colo chooser is via a call to
+ * flmm_color_a_chooser.
  *
  * \param X, Y, W, H position and size of new widget
  * \param L optional label text
@@ -724,7 +736,7 @@ int Flmm_ColorA_Window::run(double& r, double& g, double& b, double& a)
  *
  * This dialog box is based on FLTK's native fl_color_chooser, adding
  * the ability to display and choose an alpha value (transparency).
- * All components are in double format. An alpha value of 0.0 means full 
+ * All components are in double format. An alpha value of 0.0 means full
  * transparency, 1.0 is opaque.
  *
  * \param name title of color chooser
@@ -748,7 +760,7 @@ int flmm_color_a_chooser(
  *
  * This dialog box is based on FLTK's native fl_color_chooser, adding
  * the ability to display and choose an alpha value (transparency).
- * All components are in float format. An alpha value of 0.0 means full 
+ * All components are in float format. An alpha value of 0.0 means full
  * transparency, 1.0 is opaque.
  *
  * \param name title of color chooser
@@ -769,7 +781,7 @@ int flmm_color_a_chooser(const char* name, float& r, float& g, float& b, float &
  *
  * This dialog box is based on FLTK's native fl_color_chooser, adding
  * the ability to display and choose an alpha value (transparency).
- * All components are in unsigned char format. An alpha value of 0 means full 
+ * All components are in unsigned char format. An alpha value of 0 means full
  * transparency, 255 is opaque.
  *
  * \param name title of color chooser
