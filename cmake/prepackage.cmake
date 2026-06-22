@@ -162,12 +162,12 @@ if(UNIX)
 	# For pyFLTK we need to install all libfltk DSOs including those we
 	# do not use, like forms.
 	message( NOTICE "${linux_lib64_dir} exists...")
-	file(GLOB fltk_dsos "${linux_lib64_dir}/libfltk*.so")
+	file(GLOB _dsos "${linux_lib64_dir}/*.so")
 	file(INSTALL
 	    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
 	    TYPE SHARED_LIBRARY
 	    FOLLOW_SYMLINK_CHAIN
-	    FILES ${fltk_dsos}
+	    FILES ${_dsos}
 	)
 	file(REMOVE_RECURSE ${linux_lib64_dir})
     else()
