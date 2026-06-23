@@ -5,6 +5,11 @@ v1.6.9
       between drawing and erasing mid point.
 - UI: Fixed one really nasty crash in the color picker due to some variables being derived from the wrong class.
 - UI: Fixed HEX pulldown of color picker which was using decimals instead.
+- UI: Fixed Kwin/Plasma's windows decorations.
+- UI: Added Tablet support to libdecor's cairo and GTK3 plugins, without modifying its sources.
+- UI: Added Tablet support for the panels to allow them to be moved and docked with the pen.  Note that if the panel window is above the viewing area, the tablet cannot interact with it.
+- UI: Fixed crashes when using FLTK_BACKEND=x11 on Linux.
+- UI: Allowed resizable bar to the right of viewport to be resized with the tablet.
 
 
 v1.6.8

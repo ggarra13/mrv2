@@ -17,6 +17,8 @@
 #include <FL/fl_draw.H>
 #include <FL/math.h>
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvWidgets/mrvPack.h"
 #include "mrvWidgets/mrvResizableBar.h"
 #include "mrvWidgets/mrvDockGroup.h"
@@ -62,6 +64,11 @@ namespace mrv
         align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
         visible_focus(0);
         box(FL_DOWN_BOX);
+
+#if FLTK_HAVE_PEN_SUPPORT
+        if (!desktop::X11() && !desktop::XWayland())
+            Fl::Pen::subscribe(this);
+#endif
     }
 
     void ResizableBar::draw()
@@ -88,6 +95,7 @@ namespace mrv
         case FL_FOCUS:
             ret = 1;
             break;
+        case Fl::Pen::ENTER:
         case FL_ENTER:
             window()->cursor(FL_CURSOR_WE);
             color(FL_FOREGROUND_COLOR);
@@ -100,10 +108,12 @@ namespace mrv
             redraw();
             return 1;
             break;
+        case Fl::Pen::TOUCH:
         case FL_PUSH:
             ret = 1;
             last_x = this_x;
             break;
+        case Fl::Pen::DRAW:
         case FL_DRAG:
             window()->cursor(FL_CURSOR_WE);
             HandleDrag(this_x - last_x);
