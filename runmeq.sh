@@ -60,7 +60,8 @@ if [[ "$CMAKE_TARGET" == doc* ]]; then
     cd -
 fi
 
-if [[ "$CMAKE_TARGET" == "package" ]]; then
+if [[ "$CMAKE_TARGET" == "package" || "$CMAKE_TARGET" == "pot" ||
+	  "$CMAKE_TARGET" == "mo" ]]; then
     
     clean_mo_files
     

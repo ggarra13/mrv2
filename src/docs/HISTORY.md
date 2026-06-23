@@ -10,6 +10,7 @@ v1.6.9
 - UI: Added Tablet support for the panels to allow them to be moved and docked with the pen.  Note that if the panel window is above the viewing area, the tablet cannot interact with it.
 - UI: Fixed crashes when using FLTK_BACKEND=x11 on Linux.
 - UI: Allowed resizable bar to the right of viewport to be resized with the tablet.
+- UI: Made showing of tooltips optional in Window->Preferences.
 
 
 v1.6.8

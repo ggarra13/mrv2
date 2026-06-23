@@ -93,26 +93,26 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double hide resizable
-      code0 {main = m;} non_modal size_range {847 449 0 0}
+      xywh {0 0 847 449} type Double resizable
+      code0 {main = m;} non_modal size_range {847 449 0 0} visible
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
       } {
         Fl_Group {} {open
-          xywh {280 28 566 420}
+          xywh {280 28 567 420}
         } {
           Fl_Wizard uiWizard {
             label Settings open
-            xywh {280 28 565 380} box PLASTIC_UP_BOX labelcolor 32
+            xywh {280 28 567 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
               label {User Interface}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
-                label {Window Behavior} open
-                xywh {293 61 545 164} box ROUNDED_BOX
+                label {Window Behavior}
+                xywh {293 61 545 323} box ROUNDED_BOX
               } {
                 Fl_Check_Button uiPrefsAlwaysOnTop {
                   label {Always on Top}
@@ -129,68 +129,78 @@ If you try to open several mrv2s with different images, all these images will be
                 }
                 Fl_Check_Button uiPrefsAutoFitImage {
                   label {Auto Refit Image}
-                  tooltip {When selected, mrv2 will apply a fit image operation on each video played.  This effectively means the video will be resized automatically based on the size of the window.} xywh {317 161 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will apply a fit image operation on each video played.  This effectively means the video will be resized automatically based on the size of the window.} xywh {559 71 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button uiPrefsRaiseOnEnter {
                   label {Raise on Enter}
-                  tooltip {When selected, mrv2 will raise the window to the front once you enter the view window.} xywh {317 190 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will raise the window to the front once you enter the view window.} xywh {559 100 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
-                Fl_Group uiPrefsOpenMode {open
-                  xywh {632 73 196 142} box UP_BOX
+                Fl_Group uiPrefsOpenMode {
+                  label {Window at Start}
+                  xywh {449 199 254 140} box UP_BOX
                 } {
                   Fl_Round_Button {} {
                     label Normal
-                    tooltip {When selected, mrv2 will resize its window to the first image.} xywh {644 86 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 align 8
+                    tooltip {When selected, mrv2 will resize its window to the first image.} xywh {461 212 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 align 8
                   }
                   Fl_Round_Button {} {
                     label Fullscreen
-                    tooltip {When selected, mrv2 will start in full screen mode.} xywh {644 116 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                    tooltip {When selected, mrv2 will start in full screen mode.} xywh {461 242 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
                   }
                   Fl_Round_Button {} {
                     label Presentation
-                    tooltip {When selected, mrv2 will start in presentation mode.} xywh {644 146 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                    tooltip {When selected, mrv2 will start in presentation mode.} xywh {461 272 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
                   }
                   Fl_Round_Button {} {
                     label Maximized
-                    tooltip {When selected, mrv2 will start in a maximized window.} xywh {644 176 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
+                    tooltip {When selected, mrv2 will start in a maximized window.} xywh {461 302 25 26} type Radio box ROUND_UP_BOX down_box ROUND_DOWN_BOX align 8
                   }
                 }
               }
+            }
+            Fl_Group {} {
+              label {User Interface Elements}
+              xywh {286 44 555 360} box EMBOSSED_BOX align 5 hide
+            } {
               Fl_Group {} {
                 label {UI Elements}
-                xywh {293 247 545 140} box ROUNDED_BOX
+                xywh {299 88 530 276} box ROUNDED_BOX
               } {
+                Fl_Check_Button uiPrefsTooltips {
+                  label Tooltips
+                  tooltip {Choose whether to show tooltips or not.} xywh {325 138 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                }
                 Fl_Check_Button uiPrefsMenuBar {
                   label {Menu Bar}
-                  tooltip {When selected, mrv2 will start with the menu bar already shown.} xywh {423 261 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will start with the menu bar already shown.} xywh {324 190 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button uiPrefsTopbar {
                   label Topbar
-                  tooltip {When selected, mrv2 will start with its channel, gain, gamma toolbar visible.} xywh {424 289 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will start with its channel, gain, gamma toolbar visible.} xywh {325 218 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button uiPrefsPixelToolbar {
                   label {Pixel Toolbar}
-                  tooltip {When selected, mrv2 will start with the pixel toolbar shown.} xywh {424 319 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
+                  tooltip {When selected, mrv2 will start with the pixel toolbar shown.} xywh {325 248 25 25} box UP_BOX down_box DOWN_BOX value 1 align 8
                 }
                 Fl_Check_Button uiPrefsTimeline {
                   label Timeline
-                  tooltip {When selected, mrv2 will start with the timeline shown.} xywh {424 347 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
-                }
-                Fl_Check_Button uiPrefsStatusBar {
-                  label {Status Bar}
-                  tooltip {When selected, mrv2 will start with the status bar visible.} xywh {599 319 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
+                  tooltip {When selected, mrv2 will start with the timeline shown.} xywh {325 276 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
                 }
                 Fl_Check_Button uiPrefsMacOSMenus {
                   label {macOS Menus}
-                  tooltip {This is a macOS setting only.  When selected the menus will appear on the system toolbar instead of the mrv2 toolbar.} xywh {598 260 25 25} box UP_BOX down_box DOWN_BOX align 8
+                  tooltip {This is a macOS setting only.  When selected the menus will appear on the system toolbar instead of the mrv2 toolbar.} xywh {582 190 25 25} box UP_BOX down_box DOWN_BOX align 8
                 }
                 Fl_Check_Button uiPrefsToolBar {
                   label {Tool Dock}
-                  tooltip {When selected, mrv2 will start with the action tool dock already open.} xywh {598 291 25 25} box UP_BOX down_box DOWN_BOX align 136
+                  tooltip {When selected, mrv2 will start with the action tool dock already open.} xywh {582 221 25 25} box UP_BOX down_box DOWN_BOX align 136
+                }
+                Fl_Check_Button uiPrefsStatusBar {
+                  label {Status Bar}
+                  tooltip {When selected, mrv2 will start with the status bar visible.} xywh {583 249 25 25} box UP_BOX down_box DOWN_BOX value 1 align 136
                 }
                 Fl_Check_Button uiPrefsOnePanelOnly {
                   label {Only One Panel}
-                  tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {599 347 25 25} box UP_BOX down_box DOWN_BOX align 136
+                  tooltip {When selected, mrv2 will start with the only one panel option selected.} xywh {583 277 25 25} box UP_BOX down_box DOWN_BOX align 136
                 }
               }
             }
@@ -811,15 +821,15 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
               }
             }
             Fl_Group {} {
-              label Thumbnails open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label Thumbnails
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
-                label Thumbnails open
+                label Thumbnails
                 xywh {325 63 480 316} box ROUNDED_BOX
               } {
                 Fl_Choice uiPrefsPanelThumbnails {
-                  label Panels open selected
+                  label Panels open
                   tooltip {How to display timeline thumbnails in panels.} xywh {398 97 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code0 {o->value(2);}
                 } {
@@ -1390,7 +1400,7 @@ uiPrefs->uiPrefsOCIOConfig->value( r.c_str() );}
               }
             }
             Fl_Group {} {
-              label {OCIO Defaults} open
+              label {OCIO Defaults}
               xywh {288 37 555 367} align 5 hide
             } {
               Fl_Group {} {
@@ -2093,7 +2103,7 @@ mrv::Preferences::run();}
             }
           }
         }
-        Fl_Group {} {open
+        Fl_Group {} {
           xywh {9 0 270 447} box PLASTIC_UP_BOX
         } {
           Fl_Tree uiPrefsTree {
@@ -2131,8 +2141,10 @@ for (Fl_Tree_Item* item = tree->first(); item; item = tree->next(item), ++idx)
   Function {~PreferencesUI()} {} {
     code {delete uiMain; uiMain = NULL;} {}
   }
-  Function {fill_tree(mrv::PreferencesTree* o)} {} {
+  Function {fill_tree(mrv::PreferencesTree* o)} {open
+  } {
     code {Fl_Tree_Item* item = o->add( _("User Interface") );
+o->add( _("User Interface/Elements") );
 o->add( _("User Interface/View Window") );
 o->add( _("User Interface/File Requester") );
 o->add( _("User Interface/Fonts") );
@@ -2157,7 +2169,8 @@ o->add( _("Voice Annotations") );
 o->add( _("ComfyUI") );
 o->add( _("Errors") );
 o->add( _("Behavior") );
-o->select( item );} {}
+o->select( item );} {selected
+    }
   }
   Function {fill_audio_apis(Fl_Choice* o)} {} {
     code {o->clear();

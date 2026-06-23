@@ -4,6 +4,8 @@
 
 #include <FL/Fl_Window.H>
 
+#include "mrvUI/mrvDesktop.h"
+
 #include "mrvWidgets/mrvPanelButton.h"
 
 namespace mrv
@@ -13,7 +15,8 @@ namespace mrv
         Fl_Button(x, y, w, h, l)
     {
 #if FLTK_HAVE_PEN_SUPPORT
-        Fl::Pen::subscribe(this);
+        if (!desktop::X11() && !desktop::XWayland())
+            Fl::Pen::subscribe(this);
 #endif
     }
 

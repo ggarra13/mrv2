@@ -33,10 +33,11 @@ namespace mrv
         was_docked = true; // Assume we have NOT just undocked...
 
 #if FLTK_HAVE_PEN_SUPPORT
-        Fl::Pen::subscribe(this);
+        if (!desktop::X11() && !desktop::XWayland())
+            Fl::Pen::subscribe(this);
 #endif
     }
-    
+
     DragButton::~DragButton()
     {
     }
@@ -50,11 +51,11 @@ namespace mrv
         int new_x, new_y;
         new_x = winx + (current_mouse_x - fromx);
         new_y = winy + (current_mouse_y - fromy);
-        
+
         window()->position(new_x, new_y);
         if (window()->parent())
             window()->parent()->init_sizes();
-        
+
         // Update docking highlight feedback.
         if (would_dock()) {
             color_dock_group(FL_DARK_YELLOW);
@@ -63,11 +64,11 @@ namespace mrv
             hide_dock_group();
         }
     }
-    
+
     int DragButton::handle(int event)
     {
         int ret = Fl_Box::handle(event);
-        
+
         PanelGroup* tg = (PanelGroup*)parent();
         int docked = tg->docked();
         int x2 = 0, y2 = 0;
@@ -99,10 +100,10 @@ namespace mrv
                 return 1;
             case Fl::Pen::DRAW:
             case FL_DRAG:
-                
+
                 if (was_docked)
                 {
-                    
+
                     was_docked = false;
                     get_global_coords(fromx, fromy);
                     get_window_coords(winx, winy);
@@ -112,21 +113,21 @@ namespace mrv
 #ifdef _WIN32
                 if (window() && window()->screen_num() != _drag_screen)
                 {
-                    // The OS/FLTK just snapped the window into a new DPI space. 
+                    // The OS/FLTK just snapped the window into a new DPI space.
                     // Re-anchor the drag to prevent the infinite scaling loop!
                     get_global_coords(fromx, fromy);
                     get_window_coords(winx, winy);
                     _drag_screen = window()->screen_num();
                 }
 #endif
-                
+
                 update_drag();
                 return 1;
             case Fl::Pen::LIFT:
             case FL_RELEASE:
-                
+
                 update_drag();
-                    
+
                 // Finalize the dock state.
                 if (would_dock())
                 {
@@ -138,8 +139,8 @@ namespace mrv
                 {
                     hide_dock_group();
                 }
-                
-                return 1;                    
+
+                return 1;
             default:
                 break; // Ignore other events.
             }
@@ -171,7 +172,7 @@ namespace mrv
 
                 int posX, posY;
                 get_global_coords(posX, posY);
-                
+
                 PanelWindow* tw = tg->get_window();
                 tw->position(posX, posY);
                 if (tw->parent())
@@ -186,7 +187,7 @@ namespace mrv
         default:
             break;
         }
-        
+
         return ret;
     } // handle
 
@@ -202,13 +203,13 @@ namespace mrv
             widget->redraw();
         }
     }
-    
+
     void DragButton::show_dock_group()
     {
         PanelGroup* tg = static_cast<PanelGroup*>(parent());
         DockGroup* uiDock = tg->get_dock();
         auto uiDockGroup = uiDock->parent();
-        
+
         // Show the dock group if it is hidden
         if (!uiDockGroup->visible())
         {
@@ -227,11 +228,11 @@ namespace mrv
         DockGroup* uiDock = tg->get_dock();
         const Pack* uiDockPack = uiDock->get_pack();
         auto uiDockGroup = uiDock->parent();
-        
+
         // Color the dock area with the background color
         color_dock_group(FL_BACKGROUND_COLOR);
-                        
-        // Hide the panel if there are no panels 
+
+        // Hide the panel if there are no panels
         if (uiDockPack->children() == 0 &&
             uiDockGroup->visible())
         {
@@ -243,12 +244,12 @@ namespace mrv
             flex->layout();
         }
     }
-    
+
     int DragButton::would_dock()
     {
         int X, Y;
         get_window_coords(X, Y);
-        
+
         for (Fl_Window* win = Fl::first_window(); win;
              win = Fl::next_window(win))
         {
@@ -260,7 +261,7 @@ namespace mrv
         return 0;
     }
 
-    
+
     void DragButton::get_global_coords(int& X, int& Y)
     {
         X = Fl::event_x_root();
@@ -283,5 +284,5 @@ namespace mrv
             Y = tw->y_root();
         }
     }
-    
+
 } // namespace mrv

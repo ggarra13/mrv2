@@ -424,12 +424,6 @@ namespace mrv
         group->end();
         int GH = group->visible() ? group->h() : 0;
 
-#if FLTK_HAVE_PEN_SUPPORT
-        // Subscribe for pen support.
-        Fl::Pen::subscribe(docker);
-        Fl::Pen::subscribe(dismiss);
-#endif
-
         // Scroll will contain a pack with this panel's contents.
         scroll = new Scroll(
             X, Y + dragger->h(), w() - kMargin, h() - dragger->h() - kMargin,
