@@ -88,9 +88,6 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
   Click on the More Information text and a Button that says Run anyway or
   similar should appear.  Click on it and follow the standard instructions
   to any Windows installer.
-  One note about the Windows install.  When asked if you want to add mrv2 to
-  your PATH, it is recommended to answer No to it, as it avoids DLLs conflicts
-  with other applications that use common libraries like FFmpeg or OpenUSD.
 
 
 - On Linux, in order to install the .rpm or .deb packages requires your user to
