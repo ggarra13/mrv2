@@ -8,9 +8,10 @@ v1.6.9
 - UI: Fixed Kwin/Plasma's windows decorations.
 - UI: Added Tablet support to libdecor's cairo and GTK3 plugins, without modifying its sources.
 - UI: Added Tablet support for the panels to allow them to be moved and docked with the pen.  Note that if the panel window is above the viewing area, the tablet cannot interact with it.
-- UI: Fixed crashes when using FLTK_BACKEND=x11 on Linux.
+- Core: Fixed crashes when using FLTK_BACKEND=x11 on Linux.
 - UI: Allowed resizable bar to the right of viewport to be resized with the tablet.
 - UI: Made showing of tooltips optional in Window->Preferences.
+- UI: Made floating panels respond properly to tablet events.
 
 
 v1.6.8

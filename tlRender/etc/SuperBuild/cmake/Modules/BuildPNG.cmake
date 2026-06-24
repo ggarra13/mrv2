@@ -18,6 +18,10 @@ else()
     endif()
 endif()
 
+set(PNG_PATCH ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/patches/PNG-patch/scripts/pnglibconf.h.prebuilt
+    ${CMAKE_CURRENT_BINARY_DIR}/PNG/src/PNG/scripts/)
+
 set(PNG_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DCMAKE_INSTALL_LIBDIR=lib
@@ -36,6 +40,8 @@ ExternalProject_Add(
     DEPENDS ${PNG_DEPENDENCIES}
     GIT_REPOSITORY ${PNG_GIT_REPOSITORY}
     GIT_TAG ${PNG_GIT_TAG}
-    
+
+    PATCH_COMMAND ${PNG_PATCH}
+
     LIST_SEPARATOR |
     CMAKE_ARGS ${PNG_ARGS})
