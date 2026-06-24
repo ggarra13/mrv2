@@ -149,7 +149,7 @@ if(APPLE)
     )
 
     # Install README.md file at root of .dmg
-    install(FILES "${CMAKE_SOURCE_DIR}/etc/macOS/README.md"
+    install(FILES "${CMAKE_BINARY_DIR}/README.md"
         DESTINATION .
         COMPONENT applications
     )

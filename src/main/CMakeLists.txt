@@ -312,14 +312,6 @@ if ( NOT WIN32 )
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE
 	COMPONENT applications )
-
-       # Configure  
-       configure_file(${CMAKE_SOURCE_DIR}/etc/macOS/README.md.in
-	   ${CMAKE_SOURCE_DIR}/etc/macOS/README.md @ONLY
-	   FILE_PERMISSIONS
-	   OWNER_READ OWNER_WRITE 
-	   GROUP_READ OWNER_WRITE 
-	   WORLD_READ)
     endif()
     
     if(TLRENDER_USD)
