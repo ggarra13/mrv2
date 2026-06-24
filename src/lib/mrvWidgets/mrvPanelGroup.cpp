@@ -160,6 +160,7 @@ namespace mrv
 
             tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
             tw->end();
+            tw->copy_label(label.c_str());
             tw->screen_num(N);
 
             dock->remove(this);
@@ -470,6 +471,7 @@ namespace mrv
         tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
         tw->end();
         tw->screen_num(N);
+        tw->copy_label(lbl);
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
         this->position(kMargin, kMargin);
