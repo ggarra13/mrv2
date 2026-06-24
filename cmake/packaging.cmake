@@ -147,6 +147,14 @@ if(APPLE)
 	USE_SOURCE_PERMISSIONS
 	COMPONENT applications
     )
+    
+    # Configure README.md
+    configure_file(${MRV2_DIR}/etc/macOS/README.md.in
+	${CMAKE_BINARY_DIR}/README.md @ONLY
+    FILE_PERMISSIONS
+    OWNER_READ OWNER_WRITE 
+    GROUP_READ OWNER_WRITE 
+    WORLD_READ)
 
     # Install README.md file at root of .dmg
     install(FILES "${CMAKE_BINARY_DIR}/README.md"
