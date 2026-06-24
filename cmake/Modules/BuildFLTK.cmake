@@ -56,8 +56,8 @@ set(FLTK_USE_SYSTEM_ZLIB TRUE)
 set(FLTK_USE_SYSTEM_LIBPNG TRUE)
 
 
-# We set this to use FLTK's built-in libdecor
-set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
+# We set this to use FLTK's system libdecor
+set(FLTK_USE_SYSTEM_LIBDECOR TRUE)
 
 # Set this to FALSE to use libdecor's uglier looking windows' borders
 # instead of GTK's nicer window borders.  Note that using GTK's borders will
