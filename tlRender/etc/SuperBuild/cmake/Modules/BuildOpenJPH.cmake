@@ -1,44 +1,54 @@
 include(ExternalProject)
 
-set(OpenJPH_GIT_REPOSITORY "https://github.com/aous72/OpenJPH.git")
-set(OpenJPH_GIT_TAG "0.27.3")  # was 0.26.3
-
-set(OpenJPH_DEPENDENCIES ZLIB)
-message(STATUS "OpenJPH DEPENDENCIES=${OpenJPH_DEPENDENCIES}")
-
-# \@todo: Revisit after each release of OpenJPH
-set(OpenJPH_DISABLE_SIMD OFF)
-if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
-    set(OpenJPH_DISABLE_SIMD ON)
+if (USE_SYSTEM_LIBS)
+    find_package(OpenJPH)
+    set(OpenJPH_DEP )
 endif()
+
+
+if (NOT OpenJPH_FOUND)
+
+    set(OpenJPH_GIT_REPOSITORY "https://github.com/aous72/OpenJPH.git")
+    set(OpenJPH_GIT_TAG "0.27.3")  # was 0.26.3
+
+    set(OpenJPH_DEPENDENCIES ${ZLIB_DEP})
+    message(STATUS "OpenJPH DEPENDENCIES=${OpenJPH_DEPENDENCIES}")
+
+    # \@todo: Revisit after each release of OpenJPH
+    set(OpenJPH_DISABLE_SIMD OFF)
+    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
+	set(OpenJPH_DISABLE_SIMD ON)
+    endif()
     
-set(OpenJPH_ARGS
-    ${TLRENDER_EXTERNAL_ARGS}
-    -D OJPH_DISABLE_SIMD=${OpenJPH_DISABLE_SIMD}
-    #-D OJPH_DISABLE_SSE
-    #-D OJPH_DISABLE_SSE2
-    #-D OJPH_DISABLE_SSE3
-    #-D OJPH_DISABLE_AVX
-    #-D OJPH_DISABLE_AVX2
-    #-D OJPH_DISABLE_AVX412
-    #-D OJPH_DISABLE_NEON
-    -D OJPH_ENABLE_TIFF_SUPPORT=OFF
-    -D OJPH_BUILD_EXECUTABLES=OFF
-)
+    set(OpenJPH_ARGS
+	${TLRENDER_EXTERNAL_ARGS}
+	-D OJPH_DISABLE_SIMD=${OpenJPH_DISABLE_SIMD}
+	#-D OJPH_DISABLE_SSE
+	#-D OJPH_DISABLE_SSE2
+	#-D OJPH_DISABLE_SSE3
+	#-D OJPH_DISABLE_AVX
+	#-D OJPH_DISABLE_AVX2
+	#-D OJPH_DISABLE_AVX412
+	#-D OJPH_DISABLE_NEON
+	-D OJPH_ENABLE_TIFF_SUPPORT=OFF
+	-D OJPH_BUILD_EXECUTABLES=OFF
+    )
 
-set(OpenJPH_PATCH )
+    set(OpenJPH_PATCH )
 
-ExternalProject_Add(
-    OpenJPH
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenJPH
-    GIT_REPOSITORY ${OpenJPH_GIT_REPOSITORY}
-    GIT_TAG ${OpenJPH_GIT_TAG}
+    ExternalProject_Add(
+	OpenJPH
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/OpenJPH
+	GIT_REPOSITORY ${OpenJPH_GIT_REPOSITORY}
+	GIT_TAG ${OpenJPH_GIT_TAG}
 
-    DEPENDS ${OpenJPH_DEPENDENCIES}
-    
-    PATCH_COMMAND ${OpenJPH_PATCH}
-    
-    LIST_SEPARATOR |
-    CMAKE_ARGS ${OpenJPH_ARGS})
+	DEPENDS ${OpenJPH_DEPENDENCIES}
+	
+	PATCH_COMMAND ${OpenJPH_PATCH}
+	
+	LIST_SEPARATOR |
+	CMAKE_ARGS ${OpenJPH_ARGS})
 
-set(OpenJPH_DEP OpenJPH)
+    set(OpenJPH_DEP OpenJPH)
+
+endif()

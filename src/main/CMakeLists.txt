@@ -105,7 +105,7 @@ endif()
 #
 # Install python's requests library
 #
-if (MRV2_PYBIND11)
+if (MRV2_PYBIND11 AND BUILD_PYTHON)
     if (NOT EXISTS "${MRV2_PYTHON_LIBS}/site-packages/requests")
 	execute_process( COMMAND ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} -m pip install --target "${MRV2_PYTHON_LIBS}/site-packages" requests --no-cache-dir )
     endif()

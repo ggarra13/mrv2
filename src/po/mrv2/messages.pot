@@ -5802,9 +5802,6 @@ msgid ""
 "view window."
 msgstr ""
 
-msgid "Window at Start"
-msgstr ""
-
 msgid "When selected, mrv2 will resize its window to the first image."
 msgstr ""
 
@@ -5826,16 +5823,7 @@ msgstr ""
 msgid "When selected, mrv2 will start in a maximized window."
 msgstr ""
 
-msgid "User Interface Elements"
-msgstr ""
-
 msgid "UI Elements"
-msgstr ""
-
-msgid "Tooltips"
-msgstr ""
-
-msgid "Choose whether to show tooltips or not."
 msgstr ""
 
 msgid "Menu Bar"
@@ -5860,6 +5848,12 @@ msgstr ""
 msgid "When selected, mrv2 will start with the timeline shown."
 msgstr ""
 
+msgid "Status Bar"
+msgstr ""
+
+msgid "When selected, mrv2 will start with the status bar visible."
+msgstr ""
+
 msgid "macOS Menus"
 msgstr ""
 
@@ -5872,12 +5866,6 @@ msgid "Tool Dock"
 msgstr ""
 
 msgid "When selected, mrv2 will start with the action tool dock already open."
-msgstr ""
-
-msgid "Status Bar"
-msgstr ""
-
-msgid "When selected, mrv2 will start with the status bar visible."
 msgstr ""
 
 msgid "Only One Panel"
@@ -6406,8 +6394,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6591,9 +6579,6 @@ msgid ""
 msgstr ""
 
 msgid "Module"
-msgstr ""
-
-msgid "User Interface/Elements"
 msgstr ""
 
 msgid "User Interface/View Window"
