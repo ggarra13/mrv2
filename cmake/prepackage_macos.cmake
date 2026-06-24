@@ -339,13 +339,6 @@ endif()
 file(COPY ${CPACK_PREPACKAGE}/lib
     DESTINATION ${CPACK_PREPACKAGE}/${mrv2_NAME}.app/Contents/Resources)
 
-# Configure README.md
-configure_file(${ROOT_DIR}/src/etc/macOS/README.md.in
-    ${CPACK_PREPACKAGE}/README.md @ONLY
-    FILE_PERMISSIONS
-    OWNER_READ OWNER_WRITE 
-    GROUP_READ OWNER_WRITE 
-    WORLD_READ)
 
 #
 # Pre-pare hdr.app if present
