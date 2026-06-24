@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 set(PNG_GIT_REPOSITORY "https://github.com/pnggroup/libpng.git")
-set(PNG_GIT_TAG "v1.6.44")
+set(PNG_GIT_TAG "v1.6.58")
 
 set(PNG_DEPENDENCIES ZLIB)
 message(STATUS "PNG DEPENDENCIES=${PNG_DEPENDENCIES}")
@@ -18,17 +18,11 @@ else()
     endif()
 endif()
 
-set(PNG_PATCH ${CMAKE_COMMAND} -E copy_if_different
-    ${CMAKE_CURRENT_SOURCE_DIR}/patches/PNG-patch/scripts/pnglibconf.h.prebuilt
-    ${CMAKE_CURRENT_BINARY_DIR}/PNG/src/PNG/scripts/
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${CMAKE_CURRENT_SOURCE_DIR}/patches/PNG-patch/scripts/symbols.def
-    ${CMAKE_CURRENT_BINARY_DIR}/PNG/src/PNG/scripts/)
-
 set(PNG_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DCMAKE_INSTALL_LIBDIR=lib
     -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    -DPNG_PREFIX="mrv2_"  # prefix png functions with mrv2_
     -DPNG_SHARED=${PNG_SHARED_LIBS}
     -DPNG_STATIC=${PNG_STATIC_LIBS}
     -DPNG_TESTS=OFF
@@ -43,8 +37,6 @@ ExternalProject_Add(
     DEPENDS ${PNG_DEPENDENCIES}
     GIT_REPOSITORY ${PNG_GIT_REPOSITORY}
     GIT_TAG ${PNG_GIT_TAG}
-
-    PATCH_COMMAND ${PNG_PATCH}
 
     LIST_SEPARATOR |
     CMAKE_ARGS ${PNG_ARGS})

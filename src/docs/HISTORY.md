@@ -12,6 +12,7 @@ v1.6.9
 - UI: Allowed resizable bar to the right of viewport to be resized with the tablet.
 - UI: Made showing of tooltips optional in Window->Preferences.
 - UI: Made floating panels respond properly to tablet events.
+- Build/Core: Fixed PNG prefix to use mrv2_ to avoid clashes with GTK3 and macOS.
 
 
 v1.6.8
