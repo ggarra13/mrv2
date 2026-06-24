@@ -20,6 +20,9 @@ endif()
 
 set(PNG_PATCH ${CMAKE_COMMAND} -E copy_if_different
     ${CMAKE_CURRENT_SOURCE_DIR}/patches/PNG-patch/scripts/pnglibconf.h.prebuilt
+    ${CMAKE_CURRENT_BINARY_DIR}/PNG/src/PNG/scripts/
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/patches/PNG-patch/scripts/symbols.def
     ${CMAKE_CURRENT_BINARY_DIR}/PNG/src/PNG/scripts/)
 
 set(PNG_ARGS

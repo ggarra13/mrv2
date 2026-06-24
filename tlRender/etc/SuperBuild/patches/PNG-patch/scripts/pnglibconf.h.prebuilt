@@ -227,7 +227,6 @@
 #define png_build_grayscale_palette mrv2_png_build_grayscale_palette
 #define png_calloc mrv2_png_calloc
 #define png_chunk_benign_error mrv2_png_chunk_benign_error
-#define png_chunk_error mrv2_png_chunk_error
 #define png_chunk_warning mrv2_png_chunk_warning
 #define png_convert_from_struct_tm mrv2_png_convert_from_struct_tm
 #define png_convert_from_time_t mrv2_png_convert_from_time_t
@@ -242,7 +241,7 @@
 #define png_destroy_info_struct mrv2_png_destroy_info_struct
 #define png_destroy_read_struct mrv2_png_destroy_read_struct
 #define png_destroy_write_struct mrv2_png_destroy_write_struct
-#define png_error mrv2_png_error
+#define png_err mrv2_err
 #define png_free mrv2_png_free
 #define png_free_data mrv2_png_free_data
 #define png_free_default mrv2_png_free_default
