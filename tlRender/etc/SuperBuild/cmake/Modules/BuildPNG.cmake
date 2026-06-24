@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 set(PNG_GIT_REPOSITORY "https://github.com/pnggroup/libpng.git")
-set(PNG_GIT_TAG "v1.6.58")
+set(PNG_GIT_TAG "v1.6.58") # was v1.6.44
 
 set(PNG_DEPENDENCIES ZLIB)
 message(STATUS "PNG DEPENDENCIES=${PNG_DEPENDENCIES}")
@@ -22,7 +22,6 @@ set(PNG_ARGS
     ${TLRENDER_EXTERNAL_ARGS}
     -DCMAKE_INSTALL_LIBDIR=lib
     -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-    -DPNG_PREFIX="mrv2_"  # prefix png functions with mrv2_
     -DPNG_SHARED=${PNG_SHARED_LIBS}
     -DPNG_STATIC=${PNG_STATIC_LIBS}
     -DPNG_TESTS=OFF
@@ -30,6 +29,7 @@ set(PNG_ARGS
     -DSKIP_INSTALL_EXECUTABLES=ON
     -DSKIP_INSTALL_PROGRAMS=ON
     -DSKIP_INSTALL_FILES=ON)
+
 
 ExternalProject_Add(
     PNG

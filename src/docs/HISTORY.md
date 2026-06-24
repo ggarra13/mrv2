@@ -13,7 +13,6 @@ v1.6.9
 - UI: Made showing of tooltips optional in Window->Preferences.
 - UI: Made floating panels respond properly to tablet events.
 - Core: Updated PNG version to v1.6.58.
-- Build/Core: Fixed PNG prefix to use mrv2_ to avoid clashes with GTK3 and macOS.
 
 
 v1.6.8
