@@ -19,7 +19,6 @@ mrv2
 ====
 
 mrv2 is an open source professional player and review tool for VFX, animation and computer graphics.
-vmrv2 is a port of mrv2 to the Vulkan API for more performance on newer machines.
 
 ![banner](https://github.com/ggarra13/mrv2/blob/main/docs/www/files/Main_UI.png)
 
@@ -55,7 +54,7 @@ installation on Linux, however is one supporting GNOME 48+.
 
 ## Compatibility
 
-mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ubuntu 22.04+, and macOS 11.0+ Intel or Silicon.
+mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ubuntu 22.04+, and macOS 12.0+ Intel or Silicon.
 
 ## Notes on installation
 
@@ -66,7 +65,14 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
   as it was downloaded from internet.
   To avoid that, you need to open the Apple Logo->Settings->Privacy and Security
   and go to Security and allow "Opening Anyway".
-  Then, you need to further follow some steps as in the README file provided
+  Alternatively, you can open /Applications/Terminal.app and run this command on
+  your .dmg file.
+  
+  ```
+  sudo xattr -d com.apple.quarantine /path/to/your.dmg
+  ```
+  
+  Then, you need to further follow some steps as in the README.md file provided
   in the installer.
 
 - Windows and Chrome, like macOS, also protect you from installing files
