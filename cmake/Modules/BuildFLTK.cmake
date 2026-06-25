@@ -77,7 +77,7 @@ if (NOT USE_SYSTEM_LIBS)
     endif()
 endif()
 
-message(FATAL_ERROR "FLTK DEPENDENCIES=${FLTK_DEPENDENCIES}")
+message(STATUS "FLTK DEPENDENCIES=${FLTK_DEPENDENCIES}")
 
 #
 # Determine whether to build fltk-gl
