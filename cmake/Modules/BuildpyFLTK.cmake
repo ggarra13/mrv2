@@ -158,7 +158,7 @@ set(pyFLTK_CONFIGURE
     COMMAND ${pyFLTK_ENV} ${pyFLTK_PYTHON_EXECUTABLE} -m pip install setuptools
     COMMAND ${pyFLTK_ENV} ${pyFLTK_PYTHON_EXECUTABLE} -m pip install build)
 set(pyFLTK_BUILD  ${pyFLTK_ENV} ${pyFLTK_PYTHON_EXECUTABLE} -m build --wheel)
-set(pyFLTK_INSTALL ${pyFLTK_ENV} ${pyFLTK_PYTHON_EXECUTABLE} -m pip install . --prefix="${CMAKE_INSTALL_PREFIX}" --ignore-installed)
+set(pyFLTK_INSTALL ${pyFLTK_ENV} ${pyFLTK_PYTHON_EXECUTABLE} -m pip install .)
 
 ExternalProject_Add(
     pyFLTK
