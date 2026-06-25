@@ -296,10 +296,8 @@ set(SHADERC_DEP )
 add_subdirectory(tlRender/etc/SuperBuild)
 
 set(FLTK_DEP )
-if(BUILD_FLTK)
-    include(cmake/Modules/BuildFLTK.cmake)
-    add_dependencies(tlRender ${FLTK_DEP})
-endif()
+include(cmake/Modules/BuildFLTK.cmake)
+add_dependencies(tlRender ${FLTK_DEP})
 
 # OpenSSL must be built before Python and pyFLTK to use the right path when
 # building Python's _ssl module.
