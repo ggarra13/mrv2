@@ -18,7 +18,8 @@ find_path(RtAudio_INCLUDE_DIR NAMES rtaudio/RtAudio.h)
 set(RtAudio_INCLUDE_DIRS ${RtAudio_INCLUDE_DIR})
 
 find_library(RtAudio_LIBRARY NAMES rtaudio)
-set(RtAudio_LIBRARIES ${RtAudio_LIBRARY} ${RtAudio_LINK_LIBRARIES})
+set(RtAudio_LIBRARIES ${RtAudio_LIBRARY} ${RtAudio_LINK_LIBRARIES}
+    HINTS ${CMAKE_INSTALL_PREFIX})
 if(WIN32)
 elseif(APPLE)
     find_library(CORE_FOUNDATION CoreFoundation REQUIRED)

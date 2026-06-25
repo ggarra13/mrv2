@@ -1,5 +1,5 @@
 if (USE_SYSTEM_LIBS)
-    find_package(glfw3)
+    find_package(glfw3 CONFIG)
     set(glfw3_DEP )
 endif()
 

@@ -1,9 +1,9 @@
 if (USE_SYSTEM_LIBS)
-    find_package(minizip-ng)
+    find_package(minizip)
     set(minizip-ng_DEP )
 endif()
 
-if (NOT minizip-ng_FOUND)
+if (NOT minizip_FOUND)
 
     include(ExternalProject)
 

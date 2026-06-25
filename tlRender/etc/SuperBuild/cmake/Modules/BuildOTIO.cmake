@@ -1,11 +1,12 @@
-include(ExternalProject)
 
 if (USE_SYSTEM_LIBS)
-    find_package(OTIO)
+    find_package(OpenTimelineIO CONFIG)
     set(OTIO_DEP )
 endif()
 
-if (NOT OTIO_FOUND)
+if (NOT OpenTimelineIO_FOUND)
+    
+    include(ExternalProject)
 
     set(OTIO_GIT_REPOSITORY "https://github.com/PixarAnimationStudios/OpenTimelineIO.git")
     set(OTIO_GIT_TAG "v0.18.1")

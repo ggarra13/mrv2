@@ -131,6 +131,7 @@ sudo apt -y install autoconf \
 		    libegl-dev \
 		    libffi-dev \
 		    libgtk-3-dev \
+		    libjpeg-turbo8-dev \
 		    libpulse-dev \
 		    libssl-dev \
 		    libx11-dev \
@@ -148,11 +149,26 @@ sudo apt -y install autoconf \
 		    wayland-protocols
 
 #
-# Install dependencies (for using OS system libs)
+# These are Dependencies for using OS system libs, instead of building them
+# from scratch (-D USE_SYSTEM_LIBS=ON)
 #
-sudo apt -y install libjpeg-turbo8-dev \
+sudo apt -y install libaom-dev \
+     	    	    libdav1d-dev \
+		    libexpat1-dev \
+		    libglfw3-dev \
+		    libimath-dev \
+		    libminizip-ng-dev \
+		    libopencolorio-dev \
+		    libsnappy-dev \
      	    	    libssh2-1-dev \
+		    libsvtav1enc-dev \
+		    libpystring-dev \
+		    libvpx-dev \
+		    libx264-dev \
+		    libyaml-cpp-dev \
 		    meson \
+		    nasm \
+		    nlohmann-json3-dev \
 		    pip \
      	    	    python3-dev
 

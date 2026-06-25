@@ -1,13 +1,14 @@
 
-set(LCMS2_GIT_REPO "https://github.com/mm2/Little-CMS.git")
-set(LCMS2_GIT_TAG lcms2.17)
-
-if (USE_SYSTEM_LIBS)
-    find_package(lcms2)
-    set(LCMS2_DEP )
-endif()
+# if (USE_SYSTEM_LIBS)
+#     find_package(lcms2 REQUIRED)
+#     set(LCMS2_DEP )
+# endif()
 
 if (NOT lcms2_FOUND)
+
+    set(LCMS2_GIT_REPO "https://github.com/mm2/Little-CMS.git")
+    set(LCMS2_GIT_TAG lcms2.17)
+
     set(LCMS2_DEPENDENCIES )
     message(STATUS "LCMS2 DEPENDENCIES=${LCMS2_DEPENDENCIES}")
 

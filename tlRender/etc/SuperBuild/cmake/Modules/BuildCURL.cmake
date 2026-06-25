@@ -1,11 +1,14 @@
 include(ExternalProject)
 
 if (USE_SYSTEM_LIBS)
-    find_package(libcurl)
+    find_package(CURL CONFIG)
+    if (NOT CURL_FOUND)
+	find_package(curl)
+    endif()
     set(CURL_DEP )
 endif()
 
-if (NOT libcurl_FOUND)
+if (NOT curl_FOUND AND NOT CURL_FOUND)
     set(CURL_GIT_REPOSITORY "https://github.com/curl/curl.git")
     set(CURL_GIT_TAG "curl-8_4_0")
 
@@ -17,7 +20,7 @@ if (NOT libcurl_FOUND)
 	-DCURL_DISABLE_LDAP=ON
 	${TLRENDER_EXTERNAL_ARGS})
 
-    set(CURL_DEPENDENCIES  Libssh2 ${OpenSSL_DEP} ZLIB)
+    set(CURL_DEPENDENCIES ${Libssh2_DEP} ${OpenSSL_DEP} ${ZLIB_DEP})
     message(STATUS "CURL DEPENDENCIES=${CURL_DEPENDENCIES}")
 
     ExternalProject_Add(

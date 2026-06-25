@@ -1,11 +1,11 @@
 include(ExternalProject)
 
 if (USE_SYSTEM_LIBS)
-    find_package(aom)
+    find_package(AOM CONFIG)
     set(AOM_DEP )
 endif()
 
-if (NOT aom_FOUND)
+if (NOT AOM_FOUND)
 
     set(AOM_TAG v3.13.1)
     set(AOM_DEPENDENCIES )

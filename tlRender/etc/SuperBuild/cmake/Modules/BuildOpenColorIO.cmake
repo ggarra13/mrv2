@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 if (USE_SYSTEM_LIBS)
-    find_package(OpenColorIO)
+    find_package(OpenColorIO CONFIG)
     set(OpenColorIO_DEP )
 endif()
 
@@ -10,7 +10,7 @@ if (NOT OpenColorIO_FOUND)
     set(OpenColorIO_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/OpenColorIO.git")
     set(OpenColorIO_GIT_TAG "v2.5.1") # was v2.5.0
 
-    set(OpenColorIO_DEPENDENCIES ${Imath_DEP} ${yaml-cpp_DEP} ${expat_DEP} ${pystring_DEP} ${minizip-ng_DEP} ${ZLIB_DEP})
+    set(OpenColorIO_DEPENDENCIES ${Imath_DEP} ${yaml-cpp_DEP} ${expat_DEP} ${pystring_DEP} ${minizip-ng_DEP} ${pystring_DEP} ${ZLIB_DEP})
     message(STATUS "OpenColorIO DEPENDENCIES=${OpenColorIO_DEPENDENCIES}")
 
     set(OpenColorIO_ARGS

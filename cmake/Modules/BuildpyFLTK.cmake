@@ -95,32 +95,6 @@ set(pyFLTK_PATCH
     "${PROJECT_SOURCE_DIR}/cmake/patches/pyFLTK-patch/setup.py"
     "${CMAKE_BINARY_DIR}/deps/pyFLTK/src/pyFLTK/setup.py"
 )
-#
-# Virtual Environment Setup
-#
-set(pyFLTK_VENV_PATH "${CMAKE_BINARY_DIR}/pyfltk_venv")
-
-if(NOT BUILD_PYTHON)
-    # Define commands to create venv
-    set(pyFLTK_VENV_CREATE 
-        COMMAND ${Python_EXECUTABLE} -m venv ${pyFLTK_VENV_PATH}
-    )
-
-    # Define removal: Use file(REMOVE_RECURSE) to clean the directory
-    # This ensures the directory is deleted during the configure process 
-    # if the condition changes.
-    file(REMOVE_RECURSE "${pyFLTK_VENV_PATH}")
-    
-    # Update Python executable path to use the venv
-    if(WIN32)
-        set(pyFLTK_PYTHON_EXECUTABLE "${pyFLTK_VENV_PATH}/Scripts/python.exe")
-    else()
-        set(pyFLTK_PYTHON_EXECUTABLE "${pyFLTK_VENV_PATH}/bin/python")
-    endif()
-else()
-    set(pyFLTK_PYTHON_EXECUTABLE ${Python_EXECUTABLE})
-endif()
-
 
 # Environment setup for configure, building and installing
 set(pyFLTK_ENV ${CMAKE_COMMAND} -E env CXXFLAGS=${pyFLTK_CXX_FLAGS} )
@@ -143,7 +117,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(pyFLTK_DEBUG --debug )
 endif()
 
-if (NOT Python_VERSION)
+if (NOT ${Python_VERSION})
     message(FATAL_ERROR "Python_VERSION not defined: ${Python_VERSION}")
 endif()
 
@@ -154,11 +128,10 @@ if(NOT FLTK_BUILD_GL)
 endif()
 # Commands for configure, build and install
 set(pyFLTK_CONFIGURE
-    COMMAND ${pyFLTK_VENV_CREATE} # Only runs if BUILD_PYTHON is OFF
-    COMMAND ${pyFLTK_ENV} ${pyFLTK_PYTHON_EXECUTABLE} -m pip install setuptools
-    COMMAND ${pyFLTK_ENV} ${pyFLTK_PYTHON_EXECUTABLE} -m pip install build)
-set(pyFLTK_BUILD  ${pyFLTK_ENV} ${pyFLTK_PYTHON_EXECUTABLE} -m build --wheel)
-set(pyFLTK_INSTALL ${pyFLTK_ENV} ${pyFLTK_PYTHON_EXECUTABLE} -m pip install .)
+    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install setuptools
+    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install build)
+set(pyFLTK_BUILD     ${pyFLTK_ENV} ${Python_EXECUTABLE} -m build --wheel)
+set(pyFLTK_INSTALL ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install . )
 
 ExternalProject_Add(
     pyFLTK

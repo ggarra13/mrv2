@@ -1,5 +1,5 @@
 if (USE_SYSTEM_LIBS)
-    find_package(expat)
+    find_package(expat CONFIG)
     set(expat_DEP )
 endif()
 

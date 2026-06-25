@@ -1,9 +1,11 @@
-include(ExternalProject)
-
 if (USE_SYSTEM_LIBS)
-    find_package(LibWebP REQUIRED)
+    find_package(FFmpeg)
+    find_package(WebP CONFIG)
     set(LibWebP_DEP )
-else()
+endif()
+
+if (NOT WebP_FOUND AND NOT FFmpeg_FOUND)
+    include(ExternalProject)
 
     set(LibWebP_GIT_REPOSITORY "https://github.com/webmproject/libwebp")
     set(LibWebP_GIT_TAG "v1.6.0")

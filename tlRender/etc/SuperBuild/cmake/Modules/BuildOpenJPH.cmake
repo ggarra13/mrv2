@@ -1,12 +1,13 @@
-include(ExternalProject)
+# OpenJPH updates often, wo we always build it
 
-if (USE_SYSTEM_LIBS)
-    find_package(OpenJPH)
-    set(OpenJPH_DEP )
-endif()
+# if (USE_SYSTEM_LIBS)
+#     find_package(openjph CONFIG)
+#     set(OpenJPH_DEP )
+# endif()
 
 
-if (NOT OpenJPH_FOUND)
+if (NOT openjph_FOUND)
+    include(ExternalProject)
 
     set(OpenJPH_GIT_REPOSITORY "https://github.com/aous72/OpenJPH.git")
     set(OpenJPH_GIT_TAG "0.27.3")  # was 0.26.3

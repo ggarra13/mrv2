@@ -1,8 +1,10 @@
+# We will always build libjpeg-turbo to get CMake's config files which Ubuntu does not
+# install.
 
-if (USE_SYSTEM_LIBS)
-    find_package(libjpeg-turbo)
-    set(libjpeg-turbo_DEP )
-endif()
+# if (USE_SYSTEM_LIBS)
+#     find_package(libjpeg-turbo)
+#     set(libjpeg-turbo_DEP )
+# endif()
 
 
 if (NOT libjpeg-turbo_FOUND)
@@ -35,7 +37,7 @@ if (NOT libjpeg-turbo_FOUND)
 	-DWITH_TOOLS=OFF)
     if(NOT WIN32)
 	if(NOT SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
-	    list(APPEND libjpeg-turbo_ARGS -DCMAKE_ASM_NASM_COMPILER=${CMAKE_INSTALL_PREFIX}/bin/nasm)
+	    list(APPEND libjpeg-turbo_ARGS -DCMAKE_ASM_NASM_COMPILER=${NASM_EXECUTABLE})
 	else()
 	    list(APPEND libjpeg-turbo_ARGS -DWITH_SIMD=OFF)
 	endif()

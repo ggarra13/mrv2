@@ -1,11 +1,13 @@
-include(ExternalProject)
+# OpenEXR updates often, so we always build it.
 
-if (USE_SYSTEM_LIBS)
-    find_package(OpenEXR)
-    set(OpenEXR_DEP )
-endif()
+# if (USE_SYSTEM_LIBS)
+#     find_package(OpenEXR CONFIG)
+#     set(OpenEXR_DEP )
+# endif()
 
 if (NOT OpenEXR_FOUND)
+    include(ExternalProject)
+
     set(OpenEXR_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/openexr.git")
     set(OpenEXR_GIT_TAG "v3.4.12")  # was v3.4.9
 

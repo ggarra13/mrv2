@@ -1,7 +1,7 @@
 
 if (USE_SYSTEM_LIBS)
     find_package(FFmpeg)
-    find_package(SvtAV1)
+    find_package(svt-av1 CONFIG)
     set(SvtAV1_DEP )
 endif()
 

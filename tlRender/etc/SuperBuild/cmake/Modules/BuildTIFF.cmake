@@ -1,11 +1,11 @@
-include(ExternalProject)
-
 if (USE_SYSTEM_LIBS)
-    find_package(TIFF)
+    find_package(TIFF CONFIG)
     set(TIFF_DEP )
 endif()
 
 if (NOT TIFF_FOUND)
+    include(ExternalProject)
+
     set(TIFF_GIT_REPOSITORY "https://gitlab.com/libtiff/libtiff.git")
     set(TIFF_GIT_TAG "v4.5.0")
 

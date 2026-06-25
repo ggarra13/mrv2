@@ -1,5 +1,5 @@
 if (USE_SYSTEM_LIBS)
-    find_package(harfbuzz)
+    find_package(harfbuzz CONFIG)
     set(harfbuzz_DEP )
 endif()
 

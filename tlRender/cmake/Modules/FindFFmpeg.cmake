@@ -8,7 +8,7 @@
 # This module defines the following imported targets:
 #
 # * FFmpeg::avcodec
-# * FFmpeg::avdevice
+# * FFmpeg::avdevice (optional)
 # * FFmpeg::avformat
 # * FFmpeg::avutil
 # * FFmpeg::swresample
@@ -22,19 +22,34 @@ find_path(FFmpeg_INCLUDE_DIR NAMES libavcodec/avcodec.h)
 set(FFmpeg_INCLUDE_DIRS
     ${FFmpeg_INCLUDE_DIR})
 
-find_library(FFmpeg_avcodec_LIBRARY NAMES avcodec)
-find_library(FFmpeg_avdevice_LIBRARY NAMES avdevice)
-find_library(FFmpeg_avformat_LIBRARY NAMES avformat)
-find_library(FFmpeg_avutil_LIBRARY NAMES avutil)
-find_library(FFmpeg_swresample_LIBRARY NAMES swresample)
-find_library(FFmpeg_swscale_LIBRARY NAMES swscale)
+find_library(FFmpeg_avcodec_LIBRARY
+    NAMES avcodec
+    HINTS ${CMAKE_INSTALL_PREFIX}
+)
+find_library(FFmpeg_avdevice_LIBRARY
+    NAMES avdevice
+    HINTS ${CMAKE_INSTALL_PREFIX})
+find_library(FFmpeg_avformat_LIBRARY
+    NAMES avformat
+    HINTS ${CMAKE_INSTALL_PREFIX})
+find_library(FFmpeg_avutil_LIBRARY
+    NAMES avutil
+    HINTS ${CMAKE_INSTALL_PREFIX})
+find_library(FFmpeg_swresample_LIBRARY
+    NAMES swresample
+    HINTS ${CMAKE_INSTALL_PREFIX})
+find_library(FFmpeg_swscale_LIBRARY
+    NAMES swscale
+    HINTS ${CMAKE_INSTALL_PREFIX})
 set(FFmpeg_LIBRARIES
     ${FFmpeg_avformat_LIBRARY}
     ${FFmpeg_avcodec_LIBRARY}
     ${FFmpeg_swscale_LIBRARY}
     ${FFmpeg_avutil_LIBRARY}
-    ${FFmpeg_swresample_LIBRARY}
-    ${FFmpeg_avdevice_LIBRARY})
+    ${FFmpeg_swresample_LIBRARY})
+if (FFmpeg_avdevice_LIBRARY)
+    list(APPEND FFmpeg_LIBRARIES ${FFmpeg_avdevice_LIBRARY})
+endif()
 if(TLRENDER_NET)
     find_package(OpenSSL REQUIRED)
     list(APPEND FFmpeg_INCLUDE_DIRS ${OPENSSL_INCLUDE_DIR})
@@ -57,7 +72,6 @@ find_package_handle_standard_args(
     REQUIRED_VARS
         FFmpeg_INCLUDE_DIR
         FFmpeg_avcodec_LIBRARY
-        FFmpeg_avdevice_LIBRARY
         FFmpeg_avformat_LIBRARY
         FFmpeg_avutil_LIBRARY
         FFmpeg_swresample_LIBRARY
@@ -111,7 +125,7 @@ if(FFmpeg_FOUND AND NOT TARGET FFmpeg::avformat)
         IMPORTED_LOCATION "${FFmpeg_avformat_LIBRARY}"
         INTERFACE_LINK_LIBRARIES "${FFmpeg_avformat_LINK_LIBRARIES}")
 endif()
-if(FFmpeg_FOUND AND NOT TARGET FFmpeg::avdevice)
+if(FFmpeg_FOUND AND NOT TARGET FFmpeg::avdevice AND FFmpeg_avdevice_LIBRARY)
     add_library(FFmpeg::avdevice UNKNOWN IMPORTED)
     set_target_properties(FFmpeg::avdevice PROPERTIES
         IMPORTED_LOCATION "${FFmpeg_avdevice_LIBRARY}"
@@ -120,7 +134,9 @@ endif()
 if(FFmpeg_FOUND AND NOT TARGET FFmpeg)
     add_library(FFmpeg INTERFACE)
     target_link_libraries(FFmpeg INTERFACE FFmpeg::avcodec)
-    target_link_libraries(FFmpeg INTERFACE FFmpeg::avdevice)
+    if (FFmpeg_avdevice_LIBRARY)
+	target_link_libraries(FFmpeg INTERFACE FFmpeg::avdevice)
+    endif()
     target_link_libraries(FFmpeg INTERFACE FFmpeg::avformat)
     target_link_libraries(FFmpeg INTERFACE FFmpeg::avutil)
     target_link_libraries(FFmpeg INTERFACE FFmpeg::swresample)

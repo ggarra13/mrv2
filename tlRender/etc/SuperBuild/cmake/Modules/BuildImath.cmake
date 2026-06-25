@@ -1,7 +1,8 @@
-if (USE_SYSTEM_LIBS)
-    find_package(Imath)
-    set(Imath_DEP )
-endif()
+# We don't use find_package() here as OpenColorIO needs latest Imath
+# if (USE_SYSTEM_LIBS)
+#     find_package(Imath CONFIG)
+#     set(Imath_DEP )
+# endif()
 
 if(NOT Imath_FOUND)
     include(ExternalProject)

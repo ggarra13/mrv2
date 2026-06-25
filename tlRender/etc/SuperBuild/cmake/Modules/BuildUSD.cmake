@@ -1,5 +1,5 @@
 if (USE_SYSTEM_LIBS)
-    find_package(USD)
+    find_package(USD CONFIG)
     set(USD_DEP )
 endif()
 

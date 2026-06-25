@@ -33,7 +33,10 @@ list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} tlRender::tlIO tlRende
 
 
 if( APPLE )
-    set(OSX_FRAMEWORKS "-framework IOKit")
+    set(OSX_FRAMEWORKS
+	"-framework IOKit"
+	"-framework SystemConfiguration"
+	"-framework CoreFoundation")
     list(APPEND LIBRARIES ${OSX_FRAMEWORKS})
 endif()
 

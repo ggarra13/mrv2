@@ -1,7 +1,9 @@
-if (USE_SYSTEM_LIBS)
-    find_package(pystring)
-    set(pystring_DEP )
-endif()
+# OpenColorIO needs this in the latest version.
+
+# if (USE_SYSTEM_LIBS)
+#     find_package(pystring CONFIG)
+#     set(pystring_DEP )
+# endif()
 
 if (NOT pystring_FOUND)
 

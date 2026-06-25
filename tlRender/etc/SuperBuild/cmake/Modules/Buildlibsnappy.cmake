@@ -1,10 +1,10 @@
 if (USE_SYSTEM_LIBS)
     find_package(FFmpeg)
-    find_package(libsnappy)
+    find_package(Snappy CONFIG)
     set(libsnappy_DEP )
 endif()
 
-if (NOT libsnappy_FOUND AND NOT FFmpeg_FOUND)
+if (NOT Snappy_FOUND AND NOT FFmpeg_FOUND)
     include(ExternalProject)
 
     set(libsnappy_REPO "https://github.com/google/snappy.git")

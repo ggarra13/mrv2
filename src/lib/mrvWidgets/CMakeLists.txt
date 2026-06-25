@@ -217,8 +217,15 @@ if(TLRENDER_LIBPLACEBO)
 endif()
 
 if(TLRENDER_NET)
-    find_package(CURL REQUIRED)
-    list(APPEND LIBRARIES CURL::libcurl)
+    # First, try the one we built ourselves, which has CONFIG for cmake
+    find_package(CURL CONFIG)
+    if (NOT CURL_FOUND)
+	list(APPEND LIBRARIES CURL::libcurl)
+    else()
+	# If that failed, use Findcurl.cmake to locate the system one
+	find_package(curl REQUIRED)
+	list(APPEND LIBRARIES curl::libcurl)
+    endif()
 endif()
 
 if( WIN32 )

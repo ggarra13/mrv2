@@ -125,6 +125,8 @@ list(PREPEND CMAKE_MODULE_PATH
     ${MODULE_PATH2}
     ${MODULE_PATH3}
     ${MODULE_PATH4}
+    /usr/share/cmake/Modules
+    /usr/share/cmake
 )
 
 # Omit superfluous "Up-to-date" messages.

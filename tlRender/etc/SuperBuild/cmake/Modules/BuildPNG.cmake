@@ -1,14 +1,15 @@
-include(ExternalProject)
-
-set(PNG_GIT_REPOSITORY "https://github.com/pnggroup/libpng.git")
-set(PNG_GIT_TAG "v1.6.58") # was v1.6.44
-
 
 if (USE_SYSTEM_LIBS)
-    find_package(PNG REQUIRED)
+    find_package(PNG CONFIG)
     set(PNG_DEP )
-else()
+endif()
 
+if (NOT PNG_FOUND)
+    include(ExternalProject)
+
+    set(PNG_GIT_REPOSITORY "https://github.com/pnggroup/libpng.git")
+    set(PNG_GIT_TAG "v1.6.58") # was v1.6.44
+    
     set(PNG_DEPENDENCIES ${ZLIB_DEP})
     message(STATUS "PNG DEPENDENCIES=${PNG_DEPENDENCIES}")
 
