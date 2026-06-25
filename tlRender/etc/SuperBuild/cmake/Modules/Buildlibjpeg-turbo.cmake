@@ -36,7 +36,7 @@ if (NOT libjpeg-turbo_FOUND)
     if(NOT WIN32)
 	if(NOT SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
 	    list(APPEND libjpeg-turbo_ARGS -DCMAKE_ASM_NASM_COMPILER=${CMAKE_INSTALL_PREFIX}/bin/nasm)
-	else()	    
+	else()
 	    list(APPEND libjpeg-turbo_ARGS -DWITH_SIMD=OFF)
 	endif()
 	if(NOT APPLE)
@@ -56,12 +56,10 @@ if (NOT libjpeg-turbo_FOUND)
 	DEPENDS ${libjpeg-turbo_DEPENDENCIES}
 	GIT_REPOSITORY ${libjpeg-turbo_GIT_REPOSITORY}
 	GIT_TAG ${libjpeg-turbo_GIT_TAG}
-	
+
 	LIST_SEPARATOR |
 	CMAKE_ARGS ${libjpeg-turbo_ARGS})
 
     set(libjpeg-turbo_DEP libjpeg-turbo)
-
-    message(WARNING "libjpeg-turbo_DEP=${libjpeg-turbo_DEP}")
 
 endif()

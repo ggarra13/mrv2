@@ -201,6 +201,7 @@ set(TLRENDER_EXTERNAL_DEPS )
 foreach(BUILD_DEP ${TLRENDER_BUILD_DEPS})
     include(Build${BUILD_DEP})
     list(APPEND TLRENDER_EXTERNAL_DEPS ${${BUILD_DEP}_DEP})
+    set(${BUILD_DEP}_DEP ${BUILD_DEP} PARENT_SCOPE)
 endforeach()
 
 # Build tests.
