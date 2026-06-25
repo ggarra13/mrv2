@@ -66,6 +66,9 @@ jobs:
       - name: Install pyFLTK dependencies
         run: brew install swig
 
+      - name: Install curl dependencies
+        run: brew install libidn2
+        
       - name: Remove system OpenEXR and Imath
         run: |
           brew uninstall --ignore-dependencies openexr imath || true

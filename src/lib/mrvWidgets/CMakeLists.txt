@@ -219,8 +219,8 @@ endif()
 if(TLRENDER_NET)
     # First, try the one we built ourselves, which has CONFIG for cmake
     find_package(CURL CONFIG)
-    if (NOT CURL_FOUND)
-	list(APPEND LIBRARIES CURL::libcurl)
+    if (CURL_FOUND)
+	list(APPEND LIBRARIES CURL::libcurl_static)
     else()
 	# If that failed, use Findcurl.cmake to locate the system one
 	find_package(curl REQUIRED)

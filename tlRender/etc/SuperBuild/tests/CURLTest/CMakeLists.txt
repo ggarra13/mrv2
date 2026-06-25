@@ -1,11 +1,11 @@
-# \bug curl is already found?
-if(NOT curl_FOUND)
-    find_package(curl REQUIRED)
+# \bug CURL is already found?
+if(NOT CURL_FOUND)
+    find_package(CURL REQUIRED)
 endif()
 
 set(source main.cpp)
 
-add_executable(curlTest ${header} ${source})
-target_link_libraries(curlTest curl::curl)
+add_executable(CURLTest ${header} ${source})
+target_link_libraries(CURLTest CURL::libcurl_static)
 
-add_test(curlTest curlTest)
+add_test(CURLTest CURLTest)

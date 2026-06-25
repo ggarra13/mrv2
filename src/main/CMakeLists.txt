@@ -33,6 +33,8 @@ list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} tlRender::tlIO tlRende
 
 
 if( APPLE )
+    find_library(IDN2_LIBRARY NAMES idn2)
+    list(APPEND LIBRARIES ${IDN2_LIBRARY})
     set(OSX_FRAMEWORKS
 	"-framework IOKit"
 	"-framework SystemConfiguration"

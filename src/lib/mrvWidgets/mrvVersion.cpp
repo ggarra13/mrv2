@@ -150,6 +150,7 @@ extern "C"
 #endif
 
 #ifdef TLRENDER_NET
+#    define CURL_STATICLIB
 #    include <curl/curl.h>
 #endif
 
@@ -356,7 +357,7 @@ namespace mrv
         return "OpenGL";
 #endif
     }
-    
+
     const char* version()
     {
         return kVersion;
@@ -997,7 +998,7 @@ namespace mrv
         o << "OpenJPH v"
           << OPENJPH_VERSION_MAJOR << "." << OPENJPH_VERSION_MINOR
           << OPENJPH_VERSION_PATCH << std::endl
-          << "Copyright (c) 2019, Aous Naman" << std::endl 
+          << "Copyright (c) 2019, Aous Naman" << std::endl
           << "Copyright (c) 2019, Kakadu Software Pty Ltd, Australia" << endl
           << "Copyright (c) 2019, The University of New South Wales, Australia"
           << endl
@@ -1148,11 +1149,11 @@ namespace mrv
         {
             VkPhysicalDeviceIDPropertiesKHR id_props = {};
             id_props.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES_KHR;
-            
+
             VkPhysicalDeviceProperties2 prop = {};
             prop.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
             prop.pNext = &id_props;
-            
+
             vkGetPhysicalDeviceProperties2(devices[i], &prop);
 
             if (prop.properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU ||
@@ -1171,7 +1172,7 @@ namespace mrv
 #endif
         return out;
     }
-    
+
     uint32_t getVulkanLoaderVersion()
     {
 #ifdef OPENGL_BACKEND
@@ -1180,7 +1181,7 @@ namespace mrv
 
 #ifdef VULKAN_BACKEND
         // Attempt to get the function pointer for vkEnumerateInstanceVersion
-        PFN_vkEnumerateInstanceVersion pfnEnumerateInstanceVersion = 
+        PFN_vkEnumerateInstanceVersion pfnEnumerateInstanceVersion =
             (PFN_vkEnumerateInstanceVersion)vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion");
 
         if (pfnEnumerateInstanceVersion) {
@@ -1191,7 +1192,7 @@ namespace mrv
                 return instanceVersion;
             }
         }
-    
+
         // vkEnumerateInstanceVersion is not available, assume Vulkan 1.0
         // This value is defined as VK_MAKE_API_VERSION(0, 1, 0, 0)
         return VK_API_VERSION_1_0;
@@ -1267,7 +1268,7 @@ namespace mrv
         uint32_t minor = VK_API_VERSION_MINOR(v);
         uint32_t patch = VK_API_VERSION_PATCH(v);
         uint32_t build = 0;
-        
+
         o << "Vulkan Loader Version:\tv"
           << major << "." << minor << "." << patch
           << std::endl
@@ -1276,7 +1277,7 @@ namespace mrv
 #ifdef __APPLE__
         o << "MoltenVk Version: v" << MVK_VERSION_STRING << std::endl;
 #endif
-        
+
         VkInstance instance = ui->uiView->instance();
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
@@ -1291,7 +1292,7 @@ namespace mrv
             VkPhysicalDeviceProperties2 prop = {};
             prop.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
             prop.pNext = &id_props;
-            
+
             vkGetPhysicalDeviceProperties2(devices[i], &prop);
             VkPhysicalDeviceType t = prop.properties.deviceType;
             const std::string& deviceName = prop.properties.deviceName;
@@ -1304,7 +1305,7 @@ namespace mrv
             minor = VK_API_VERSION_MINOR(v);
             patch = VK_API_VERSION_PATCH(v);
             build = 0;
-            
+
             // NVIDIA uses a custom encoding:
             if (deviceName.find("NVIDIA") != std::string::npos)
             {
@@ -1319,7 +1320,7 @@ namespace mrv
               << build
               << std::endl
               << std::endl;
-            
+
         }
 #endif
 
@@ -1340,7 +1341,7 @@ namespace mrv
           << R"THANKS(
 Core
 ----
-Darby Johnston                                (original tlRender library) 
+Darby Johnston                                (original tlRender library)
 Gonzalo Garramuño                             (mrv2 and rewrite of mrViewer)
 Sam Richards                                  (FFmpeg encoding guidelines)
 
@@ -1419,7 +1420,7 @@ kirillall                                     (OpenEXR DWAA/DWAB multithread bug
 kursad-k                                      (Windows 11, Positioning)
 lucky3d                                       (Windows 10, Background Panel)
 lukas-remis                                   (Comparison issues)
-luzpaz                                        (Spelling corrections)  
+luzpaz                                        (Spelling corrections)
 mantissa-                                     (Sequences misdetection)
 Mark Rasmussen                                (Windows/Linux Vulkan debugging)
 mhgandvisions                                 (Session debugging)
