@@ -33,12 +33,19 @@ list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} tlRender::tlIO tlRende
 
 
 if( APPLE )
-    find_library(IDN2_LIBRARY NAMES idn2)
-    list(APPEND LIBRARIES ${IDN2_LIBRARY})
-    set(OSX_FRAMEWORKS
-	"-framework IOKit"
-	"-framework SystemConfiguration"
-	"-framework CoreFoundation")
+    set(OSX_FRAMEWORKS "-framework IOKit")
+    find_package(CURL CONFIG)
+    if (NOT CURL_FOUND)
+	find_library(IDN2_LIBRARY NAMES idn2)
+	if (NOT IDN2_LIBRARY)
+	    message(FATAL_ERROR "Missing idn2 library.  "
+		"Use: brew install libidn2")
+	endif()
+	list(APPEND LIBRARIES ${IDN2_LIBRARY})
+	list(APPEND OSXFRAMEWORKS
+	    "-framework SystemConfiguration"
+	    "-framework CoreFoundation")
+    endif()
     list(APPEND LIBRARIES ${OSX_FRAMEWORKS})
 endif()
 
