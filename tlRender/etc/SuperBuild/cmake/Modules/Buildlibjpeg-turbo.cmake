@@ -1,7 +1,7 @@
 
 if (USE_SYSTEM_LIBS)
     find_package(libjpeg-turbo)
-    set(libjpeg_turbo_DEP )
+    set(libjpeg-turbo_DEP )
 endif()
 
 
@@ -60,6 +60,8 @@ if (NOT libjpeg-turbo_FOUND)
 	LIST_SEPARATOR |
 	CMAKE_ARGS ${libjpeg-turbo_ARGS})
 
-    set(libjpeg_turbo_DEP "libjpeg-turbo")
+    set(libjpeg-turbo_DEP libjpeg-turbo)
+
+    message(WARNING "libjpeg-turbo_DEP=${libjpeg-turbo_DEP}")
 
 endif()
