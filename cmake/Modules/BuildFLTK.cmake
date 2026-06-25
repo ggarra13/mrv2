@@ -70,9 +70,11 @@ set(FLTK_USE_LIBDECOR_GTK FALSE)
 set(FLTK_DEPENDENCIES ${PNG_DEP} ${VMA_DEP} ${SHADERC_DEP} ${ZLIB_DEP})
 
 set(FLTK_USE_SYSTEM_LIBJPEG FALSE)
+message(WARNING "libjpeg-turbo_DEP in FLTK=${libjpeg-turbo_DEP}")
 if(TLRENDER_JPEG)
     set(FLTK_USE_SYSTEM_LIBJPEG TRUE)
     set(FLTK_DEPENDENCIES ${libjpeg-turbo_DEP} ${FLTK_DEPENDENCIES})
+    message(FATAL_ERROR "libjpeg-turbo_DEP to build in FLTK=${libjpeg-turbo_DEP}")
 endif()
 
 message(STATUS "FLTK DEPENDENCIES=${FLTK_DEPENDENCIES}")

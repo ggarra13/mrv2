@@ -62,4 +62,6 @@ if (NOT libjpeg-turbo_FOUND)
 
     set(libjpeg-turbo_DEP libjpeg-turbo)
 
+    message(WARNING "libjpeg-turbo_DEP=${libjpeg-turbo_DEP}");
+
 endif()
