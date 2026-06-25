@@ -297,6 +297,7 @@ add_subdirectory(tlRender/etc/SuperBuild)
 
 set(FLTK_DEP )
 include(cmake/Modules/BuildFLTK.cmake)
+message(FATAL_ERROR "PNG_DEP=${PNG_DEP}")
 add_dependencies(tlRender ${FLTK_DEP})
 
 # OpenSSL must be built before Python and pyFLTK to use the right path when
