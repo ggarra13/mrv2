@@ -57,14 +57,14 @@ function(create_translation_for TARGET SOURCES)
 	    # If pygettext.py script not found, search for command
 	    #
 	    if (NOT EXISTS ${_py_gettext_script})
-		message(WARNING "pygettext.py not found!  Looking for command")
 		find_program(_py_gettext_cmd NAMES pygettext3 pygettext)
 	    else()
 		set(_py_gettext_cmd ${Python_EXECUTABLE} )
 	    endif()
 	    
-	    if (NOT EXISTS ${_py_gettext_script})
-		message(FATAL_ERROR "pygettext.py nor pygettext found!")
+	    if (NOT EXISTS ${_py_gettext_cmd})
+		set(_py_gettext_cmd xgettext)
+		set(_py_gettext_script -L Python)
 	    endif()
 	    set(_py_gettext_args ${_py_gettext_script}
 		-d ${_py_basename} -o ${_potFile} ${_py_plugin_full_path} )

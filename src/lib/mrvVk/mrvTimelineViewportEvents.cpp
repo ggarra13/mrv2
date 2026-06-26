@@ -152,6 +152,7 @@ namespace mrv
                 // last shape is already a VKErasePathShape) -- just keep
                 // extending it via the kErase case below.
                 actionMode = ActionMode::kErase;
+                _updateActionMode(actionMode);
             }
 #endif
 
@@ -181,6 +182,12 @@ namespace mrv
 
                 auto& lastPoint = shape->pts.back();
                 lastPoint = pnt;
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+                shape->pts.back().pressure = pressure;
+
 
                 _updateAnnotationShape();
                 redrawWindows();
@@ -220,6 +227,12 @@ namespace mrv
                 else
                 {
                     shape->pts.push_back(pnt);
+
+                    float pressure = kPressure * p.pressure;
+                    if (pressure <= 0.F)
+                        pressure = 1.F;
+                    shape->pts.back().pressure = pressure;
+
                     _addAnnotationShapePoint();
                 }
 
@@ -254,6 +267,14 @@ namespace mrv
                 shape->pts[3] = pnt;
                 tmp = pointOnLine + -tNormal * normalVector;
                 shape->pts[4] = tmp;
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+                for (int i = 0; i < 5; ++i)
+                    shape->pts[i].pressure = pressure;
+
+
                 _updateAnnotationShape();
 
                 redrawWindows();
@@ -270,6 +291,7 @@ namespace mrv
                     2.0F * abs(shape->center.x - pnt.x) * pixels_per_unit();
                 if (shape->radius < shape->pen_size / 2)
                     shape->radius = shape->pen_size / 2;
+
                 _updateAnnotationShape();
                 redrawWindows();
                 return;
@@ -433,6 +455,7 @@ namespace mrv
                 // instead of drawing. Reuses the freehand-erase branch
                 // of the kErase case below.
                 actionMode = ActionMode::kErase;
+                _updateActionMode(actionMode);
             }
 #endif
 
@@ -501,6 +524,13 @@ namespace mrv
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+                for (int i = 0; i < 5; ++i)
+                    shape->pts[i].pressure = pressure;
+
                 annotation->push_back(shape);
                 _createAnnotationShape(laser);
                 break;
@@ -558,6 +588,11 @@ namespace mrv
 
                 shape->pts.push_back(pnt);
 
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+                shape->pts.back().pressure = pressure;
+
                 if (p.lastEvent == FL_PUSH)
                 {
                     annotation->push_back(shape);
@@ -601,11 +636,13 @@ namespace mrv
                 shape->soft = softBrush;
                 shape->color = color;
                 shape->laser = laser;
+
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
+
                 annotation->push_back(shape);
                 _createAnnotationShape(laser);
                 break;
@@ -617,11 +654,22 @@ namespace mrv
                 shape->soft = softBrush;
                 shape->color = color;
                 shape->laser = laser;
+
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
                 shape->pts.push_back(pnt);
+
+                float pressure = kPressure * p.pressure;
+                if (pressure <= 0.F)
+                    pressure = 1.F;
+
+                for (int i = 0; i < 5; ++i)
+                {
+                    shape->pts[i].pressure = pressure;
+                }
+
                 annotation->push_back(shape);
                 _createAnnotationShape(laser);
                 break;

@@ -1,113 +1,123 @@
-include(ExternalProject)
-
-
-# set(LIBVPX_TAG main) # live on the cutting-edge!
-
-set(VPX_TAG v1.15.2)  # was v1.15.0
-
-include(ProcessorCount)
-ProcessorCount(NPROCS)
-
-if(WIN32)
-    include(functions/Msys2)
+if (USE_SYSTEM_LIBS)
+    find_package(FFmpeg)
+    find_package(VPX)
+    set(VPX_DEP )
 endif()
 
-set(VPX_CFLAGS)
-set(VPX_CXXFLAGS)
-set(VPX_OBJCFLAGS)
-set(VPX_LDFLAGS)
-set(VPX_TARGET)
-set(VPX_DEPENDENCIES)
-set(VPX_ENV)
-if (UNIX)
-    # We modify PATH so nasm is found.  On windows, it is already in Msys2
-    # path.
-    set(VPX_ENV PATH="${CMAKE_INSTALL_PREFIX}/bin:$ENV{PATH}")
-    set(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-else()
-    
-    # Convert path for MSYS2 properly
-    convert_path_for_msys2("${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX)
-    if(WIN32 AND SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
-	set(VPX_TARGET --target=arm64-win64-vs17)
-    else()
-	set(VPX_TARGET --target=x86_64-win64-vs17)
+if (NOT VPX_FOUND AND NOT FFmpeg_FOUND)
+
+    include(ExternalProject)
+
+
+    # set(LIBVPX_TAG main) # live on the cutting-edge!
+
+    set(VPX_TAG v1.15.2)  # was v1.15.0
+
+    include(ProcessorCount)
+    ProcessorCount(NPROCS)
+
+    if(WIN32)
+	include(functions/Msys2)
     endif()
-    set(VPX_CXX_FLAGS "")
-    set(VPX_C_FLAGS "")
+
+    set(VPX_CFLAGS)
+    set(VPX_CXXFLAGS)
+    set(VPX_OBJCFLAGS)
+    set(VPX_LDFLAGS)
+    set(VPX_TARGET)
     set(VPX_DEPENDENCIES)
-endif()
-
-if(APPLE)
-    set(VPX_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    set(VPX_C_FLAGS "${CMAKE_C_FLAGS}")
-    if (CMAKE_OSX_DEPLOYMENT_TARGET)
-        list(APPEND VPX_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-        list(APPEND VPX_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+    set(VPX_ENV)
+    if (UNIX)
+	# We modify PATH so nasm is found.  On windows, it is already in Msys2
+	# path.
+	set(VPX_ENV PATH="${CMAKE_INSTALL_PREFIX}/bin:$ENV{PATH}")
+	set(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+    else()
+	
+	# Convert path for MSYS2 properly
+	convert_path_for_msys2("${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX)
+	if(WIN32 AND SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
+	    set(VPX_TARGET --target=arm64-win64-vs17)
+	else()
+	    set(VPX_TARGET --target=x86_64-win64-vs17)
+	endif()
+	set(VPX_CXX_FLAGS "")
+	set(VPX_C_FLAGS "")
+	set(VPX_DEPENDENCIES)
     endif()
-endif()
 
-message(STATUS "VPX DEPENDENCIES=${VPX_DEPENDENCIES}")
-
-set(VPX_CONFIGURE_ARGS
-    --prefix=${INSTALL_PREFIX}
-    ${VPX_TARGET}
-    --enable-pic
-    --disable-examples
-    --disable-tools
-    --disable-docs
-    --disable-unit-tests
-    --enable-vp9-highbitdepth
-    --extra-cflags=${VPX_C_FLAGS}
-    --extra-cxxflags=${VPX_CXX_FLAGS}
-)
-
-if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
-    if(NOT WIN32)
-	list(APPEND VPX_DEPENDENCIES NASM)
+    if(APPLE)
+	set(VPX_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+	set(VPX_C_FLAGS "${CMAKE_C_FLAGS}")
+	if (CMAKE_OSX_DEPLOYMENT_TARGET)
+            list(APPEND VPX_CXX_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+            list(APPEND VPX_C_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+	endif()
     endif()
-    list(APPEND VPX_CONFIGURE_ARGS --as=nasm)
-endif()
 
+    message(STATUS "VPX DEPENDENCIES=${VPX_DEPENDENCIES}")
 
-set(VPX_INSTALL make install)
-if (WIN32)
-    # Properly format VPX_CONFIGURE_ARGS
-    list(JOIN VPX_CONFIGURE_ARGS " " VPX_CONFIGURE_ARGS_STR)
+    set(VPX_CONFIGURE_ARGS
+	--prefix=${INSTALL_PREFIX}
+	${VPX_TARGET}
+	--enable-pic
+	--disable-examples
+	--disable-tools
+	--disable-docs
+	--disable-unit-tests
+	--enable-vp9-highbitdepth
+	--extra-cflags=${VPX_C_FLAGS}
+	--extra-cxxflags=${VPX_CXX_FLAGS}
+    )
 
-    set(VPX_CONFIGURE ${MRV2_MSYS_CMD} -c "pacman -Sy make nasm diffutils --noconfirm && ./configure ${VPX_CONFIGURE_ARGS_STR}")
-
-    set(VPX_BUILD ${MRV2_MSYS_CMD} -c "make -j ${NPROCS}")
-
-    set(VPX_ARCH x64)
-    if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
-	set(VPX_ARCH ARM64)
+    if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
+	if(NOT WIN32)
+	    list(APPEND VPX_DEPENDENCIES ${NASM_DEP})
+	endif()
+	list(APPEND VPX_CONFIGURE_ARGS --as=nasm)
     endif()
-    
-    set(VPX_INSTALL ${MRV2_MSYS_CMD} -c "make install && mv ${INSTALL_PREFIX}/lib/${VPX_ARCH}/vpxmd.lib ${INSTALL_PREFIX}/lib/vpx.lib" )
 
-else()
 
-    set(VPX_CONFIGURE cmake -E env ${VPX_ENV} --
-	./configure ${VPX_CONFIGURE_ARGS})
+    set(VPX_INSTALL make install)
+    if (WIN32)
+	# Properly format VPX_CONFIGURE_ARGS
+	list(JOIN VPX_CONFIGURE_ARGS " " VPX_CONFIGURE_ARGS_STR)
 
-    set(VPX_BUILD cmake -E env ${VPX_ENV} --
-	make -j ${NPROCS})
+	set(VPX_CONFIGURE ${MRV2_MSYS_CMD} -c "pacman -Sy make nasm diffutils --noconfirm && ./configure ${VPX_CONFIGURE_ARGS_STR}")
 
-    set(VPX_INSTALL cmake -E env ${VPX_ENV} --
-	make install)
+	set(VPX_BUILD ${MRV2_MSYS_CMD} -c "make -j ${NPROCS}")
+
+	set(VPX_ARCH x64)
+	if(SYSTEM_PROCESSOR_LC MATCHES "^(aarch64|arm64)$")
+	    set(VPX_ARCH ARM64)
+	endif()
+	
+	set(VPX_INSTALL ${MRV2_MSYS_CMD} -c "make install && mv ${INSTALL_PREFIX}/lib/${VPX_ARCH}/vpxmd.lib ${INSTALL_PREFIX}/lib/vpx.lib" )
+
+    else()
+
+	set(VPX_CONFIGURE cmake -E env ${VPX_ENV} --
+	    ./configure ${VPX_CONFIGURE_ARGS})
+
+	set(VPX_BUILD cmake -E env ${VPX_ENV} --
+	    make -j ${NPROCS})
+
+	set(VPX_INSTALL cmake -E env ${VPX_ENV} --
+	    make install)
+    endif()
+
+    ExternalProject_Add(
+	VPX
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/VPX
+	DEPENDS ${VPX_DEPENDENCIES}
+	GIT_REPOSITORY "https://github.com/webmproject/libvpx.git"
+	GIT_TAG ${VPX_TAG}
+	
+	CONFIGURE_COMMAND ${VPX_CONFIGURE}
+	BUILD_COMMAND ${VPX_BUILD}
+	INSTALL_COMMAND ${VPX_INSTALL}
+	BUILD_IN_SOURCE 1
+    )
+
+    set(VPX_DEP VPX)
 endif()
-
-ExternalProject_Add(
-    VPX
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/VPX
-    DEPENDS ${VPX_DEPENDENCIES}
-    GIT_REPOSITORY "https://github.com/webmproject/libvpx.git"
-    GIT_TAG ${VPX_TAG}
-    
-    CONFIGURE_COMMAND ${VPX_CONFIGURE}
-    BUILD_COMMAND ${VPX_BUILD}
-    INSTALL_COMMAND ${VPX_INSTALL}
-    BUILD_IN_SOURCE 1
-)
-

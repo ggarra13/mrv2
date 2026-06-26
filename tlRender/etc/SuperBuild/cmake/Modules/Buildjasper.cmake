@@ -16,7 +16,7 @@ set(jasper_ARGS
 
 set(jasper_DEPENDENCIES )
 if(TLRENDER_JPEG)
-    list(APPEND jasper_DEPENDENCIES libjpeg-turbo)
+    list(APPEND jasper_DEPENDENCIES ${libjpeg-turbo_DEP})
 endif()
 message(STATUS "jasper DEPENDENCIES=${jasper_DEPENDENCIES}")
     
