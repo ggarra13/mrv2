@@ -1,6 +1,8 @@
 v1.6.9
 ======
 
+- Install: Fixed dpkg -i reinstall of the same version on Debian/Ubuntu systems.
+
 - UI: Added tablet eraser support when drawing free-hand, allowing you to toggle
       between drawing and erasing mid point.
 - UI: Fixed one really nasty crash in the color picker due to some variables being derived from the wrong class.
@@ -14,7 +16,9 @@ v1.6.9
 - UI: Made floating panels respond properly to tablet events.
 - UI: Fixed two Edit buttons which could potentially not show up.
 - UI: All shapes now respond properly to tablet/pen pressure. 
+
 - Core: Updated PNG version to v1.6.58.
+
 - Build: Conditionally allowed building with less features.
 - Build: WIP. Added -D USE_SYSTEM_LIBS=ON for faster building using system libraries when possible instead of building from source, even if you are not getting cutting edge performance.  However this should make it simpler for Unix distros to bundle vmrv2/mrv2 with apt, dnf, snap or flatpack.
 - Build: Fixed a bug when NOT building Python.
