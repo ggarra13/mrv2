@@ -9,6 +9,8 @@
 
 #include "Polyline2D.h"
 
+#include <cmath>
+
 namespace tl
 {
     namespace draw
@@ -30,7 +32,7 @@ namespace tl
                 const Point& p0 = filteredPoints.back();
                 const Point& p1 = points[i];
                 const Point tmp = p0 - p1;
-                const float pressure = std::abs(p0.pressure - p1.pressure);
+                const float pressure = std::fabs(p0.pressure - p1.pressure);
                 const float length = tmp.length();
                 if (length <= m_width * pressure)
                     continue;

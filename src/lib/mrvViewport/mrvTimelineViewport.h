@@ -54,7 +54,7 @@ namespace mrv
     {
         class VoiceOver;
     }
-    
+
     namespace BACKEND_NAMESPACE
     {
 
@@ -98,7 +98,7 @@ namespace mrv
 
             //! Set the edit mode.
             void setEditMode(const timeline::EditMode& mode) noexcept;
-            
+
             //! Get the edit mode.
             timeline::EditMode getEditMode() noexcept;
 
@@ -114,11 +114,11 @@ namespace mrv
 
             //! Set the shader options.
             void setShaderOptions(const timeline::ShaderOptions& value) noexcept;
-            
+
             //! Get the background options.
             const timeline::BackgroundOptions&
             getBackgroundOptions() const noexcept;
-            
+
             //! Observe the background options.
             std::shared_ptr<observer::IValue<timeline::BackgroundOptions> >
             observeBackgroundOptions() const;
@@ -366,7 +366,7 @@ namespace mrv
 
             //! Refresh window by clearing the associated resources.
             virtual void refresh(){};
-            
+
             //! Handle view spinning when in Environment Map mode.
             void handleViewSpinning() noexcept;
 
@@ -385,7 +385,7 @@ namespace mrv
 
             //! Laser fading annotation
             static void laserFade_cb(LaserFadeData*);
-            
+
             //! Laser fading annotation
             void laserFade(LaserFadeData*);
 
@@ -414,7 +414,7 @@ namespace mrv
 
             //! Get current frame/video tags
             image::Tags getTags() const noexcept;
-            
+
             //! Record the mouse position callback.
             void recordMousePosition();
 
@@ -423,7 +423,7 @@ namespace mrv
 
             //! Delete the selected URL link.
             void linkDelete();
-            
+
             //! Delete the voice over.
             void voiceOverDelete();
 
@@ -435,9 +435,11 @@ namespace mrv
 
             //! Get the full projection matrix.
             const math::Matrix4x4f projectionMatrix() const noexcept;
-            
+
         protected:
             void _init();
+
+            void _updateActionMode(const ActionMode mode);
 
             void _updateDevices() const noexcept;
 
@@ -461,16 +463,16 @@ namespace mrv
 
             //! Get the full projection matrix.
             math::Matrix4x4f _projectionMatrixNoRotation() const noexcept;
-            
+
             //! Get the raster matrix.
             math::Matrix4x4f _rasterProjectionMatrix() const noexcept;
-            
+
             //! Get the render projection matrix.
             math::Matrix4x4f _renderProjectionMatrix() const noexcept;
 
             //! Get the matrix to pixel (raster) coordinates of image.
             math::Matrix4x4f _pixelMatrix() const noexcept;
-            
+
             //! Get the matrix to pixel (raster) coordinates of image with
             //! panning and zooming.
             math::Matrix4x4f _pixelMatrixWithTransforms() const noexcept;
@@ -515,11 +517,11 @@ namespace mrv
             void _handlePushLeftMouseButton() noexcept;
             void _handlePushLeftMouseButtonShapes() noexcept;
             int  _handleReleaseLeftMouseButtonShapes() noexcept;
-            
+
             void _handleDragLeftMouseButton() noexcept;
             void _handleDragLeftMouseButtonShapes() noexcept;
             void _handleDragSelection() noexcept;
-            
+
             void _handleDragMiddleMouseButton() noexcept;
 
             int _popupRMBMenu() noexcept;
@@ -571,11 +573,11 @@ namespace mrv
 
             void _stopVoiceRecording();
             void _stopVoicePlaying();
-            
+
             voice::MouseData currentMouseData;
             std::shared_ptr<voice::VoiceOver> currentVoiceOver;
             std::shared_ptr<tl::draw::Shape>  currentLink;
-            
+
             TLRENDER_PRIVATE();
         };
 

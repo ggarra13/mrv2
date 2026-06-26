@@ -13,6 +13,7 @@ v1.6.9
 - UI: Made showing of tooltips optional in Window->Preferences.
 - UI: Made floating panels respond properly to tablet events.
 - UI: Fixed two Edit buttons which could potentially not show up.
+- UI: All shapes now respond properly to tablet/pen pressure. 
 - Core: Updated PNG version to v1.6.58.
 - Build: Conditionally allowed building with less features.
 - Build: WIP. Added -D USE_SYSTEM_LIBS=ON for faster building using system libraries when possible instead of building from source, even if you are not getting cutting edge performance.  However this should make it simpler for Unix distros to bundle vmrv2/mrv2 with apt, dnf, snap or flatpack.

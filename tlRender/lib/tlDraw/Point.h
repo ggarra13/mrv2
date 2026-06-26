@@ -71,7 +71,7 @@ namespace tl
             {
                 x = b.x;
                 y = b.y;
-                pressure = 1.F;
+                // we don't change pressure here
                 return *this;
             }
 
