@@ -75,14 +75,9 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
   Then, you need to further follow some steps as in the README.md file provided
   in the installer.
 
-- Windows and Chrome, like macOS, also protect you from installing files
-  from the Internet.  When you first download it with Chrome it may warn
-  you that it is not an usual archive to be downloaded.  Make sure to click
-  on the right up arrow menu to Save it anyway.
-  You cannot open the .exe from Chrome directly.  You will need to open
-  Windows Explorer and go to the Downloads directory.  You should then
-  run it from there.
-  Then Windows will popup a Blue box telling you Windows SmartScreen
+- Windows, like macOS, also protect you from installing files
+  from the Internet.
+  Windows will popup a Blue box telling you Windows SmartScreen
   prevented the start of an unknown application and that you can place your
   PC at risk.
   Click on the More Information text and a Button that says Run anyway or
@@ -148,8 +143,9 @@ Currently supported:
 - Linux Wayland support
 - Internationalization (Translations) support
 - Editing
+- Pen and Tablet support on all platforms
 - OpenGL and Vulkan backends
-- Linux and Windows aarch64 (untested)
+- Linux and Windows aarch64 (untested, only tested compilation)
 
 # Tutorials
 

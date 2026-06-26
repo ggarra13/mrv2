@@ -150,7 +150,9 @@ extern "C"
 #endif
 
 #ifdef TLRENDER_NET
-#    define CURL_STATICLIB
+#    ifndef CURL_STATICLIB
+#        define CURL_STATICLIB
+#    endif
 #    include <curl/curl.h>
 #endif
 
