@@ -2,7 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-// #define DEBUG_EVENTS 1
+//#define DEBUG_EVENTS 1
 
 #include "mrViewer.h"
 
@@ -34,6 +34,10 @@
 
 #include <FL/filename.H>
 #include <FL/Fl_Menu_Button.H>
+
+#ifdef DEBUG_EVENTS
+#include <Fl/names.h>
+#endif
 
 #include <memory>
 #include <cmath>
@@ -1165,7 +1169,6 @@ namespace mrv
                 return 1;
             case Fl::Pen::ENTER:
                 p.lastEvent = 0;
-                p.pen_handled = false;
                 _updateCursor();
                 _updatePixelBar();
                 updateCoords();
@@ -1181,7 +1184,6 @@ namespace mrv
 #else
                 p.pressure = 1.F;
 #endif
-                p.pen_handled = true;
                 p.mousePos = _getFocus();
                 _handlePushLeftMouseButton();
                 _updatePixelBar();
@@ -1189,9 +1191,13 @@ namespace mrv
                 /* fall through */
             case Fl::Pen::DRAW:
             {
-                p.pen_handled = true;
 #if FLTK_HAVE_PEN_SUPPORT
                 p.pressure = Fl::Pen::event_pressure();
+                // \@note: \@bug: in Windows, we can get pressure = 0 here.
+                //                if we do, we skip it as we would add a blotch
+                //                of paint otherwise.
+                if (p.pressure <= 0)
+                    return 1;
 #else
                 p.pressure = 1.F;
 #endif
@@ -1276,9 +1282,6 @@ namespace mrv
                 {
                     take_focus();
                 }
-
-                if (p.pen_handled)
-                    return 1;
 
                 if (Fl::event_button1())
                 {
@@ -1419,11 +1422,8 @@ namespace mrv
                 return 1;
             }
             case Fl::Pen::LIFT:
-                p.pressure = 0.F;
-                /* fall-thru */
             case FL_RELEASE:
             {
-                p.pen_handled = false;
                 if (p.actionMode == ActionMode::kPolygon ||
                     p.actionMode == ActionMode::kFilledPolygon)
                     return 1;
@@ -1528,8 +1528,6 @@ namespace mrv
             }
             case FL_DRAG:
             {
-                if (p.pen_handled) return 1;
-
                 p.mousePos = _getFocus();
                 if (Fl::event_button1())
                 {

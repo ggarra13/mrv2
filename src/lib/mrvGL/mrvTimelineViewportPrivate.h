@@ -35,11 +35,11 @@ namespace mrv
             static short ghostNext;
 
             bool hdrMonitorFound = false;
-            
+
             //! Boolean to turn off ocio when playing a video or showing
             //! BT709 or sRGB images.
             bool ocio_disabled = false;
-        
+
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
             static timeline::HDROptions hdrOptions;
@@ -116,7 +116,7 @@ namespace mrv
 
             //! Action Mode.
             static ActionMode actionMode;
-            
+
             //! Edit Mode.
             static timeline::EditMode editMode;
 
@@ -125,14 +125,14 @@ namespace mrv
 
             //! Boolean flag used to mark that scrubbing is being used.
             static bool isScrubbing;
-            
+
             //! Rectangle selection ( Color area )
             static math::Box2i selection;
             math::Vector2i selectionAnchor;
 
             //! Last video size (if changed, clear selection)
             static image::Size videoSize;
-            
+
             //! Last FLTK cursor set on window.
             Fl_Cursor lastCursor = FL_CURSOR_ARROW;
 
@@ -203,10 +203,9 @@ namespace mrv
 
             //! Tooltip.
             Tooltip* tooltip = nullptr;
-            
+
             //! Tablet information.
             float pressure = 0.F;
-            bool pen_handled = false;
             math::Vector2f lastPenPosition;
         };
     }  // namespace opengl

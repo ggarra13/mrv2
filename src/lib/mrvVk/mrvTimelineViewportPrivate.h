@@ -40,12 +40,12 @@ namespace mrv
             //! Boolean to turn off ocio when playing a video or showing
             //! BT709 or sRGB images.
             bool ocio_disabled = false;
-            
+
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
             static timeline::ShaderOptions shaderOptions;
             static timeline::HDROptions hdrOptions;
-            
+
             std::vector<tl::timeline::ImageOptions> imageOptions;
             std::vector<tl::timeline::DisplayOptions> displayOptions;
             timeline::CompareOptions compareOptions;
@@ -120,13 +120,13 @@ namespace mrv
 
             //! Edit Mode.
             static timeline::EditMode editMode;
-            
+
             //! Playback mode before scrubbing.
             static tl::timeline::Playback playbackMode;
 
             //! Boolean flag used to mark that scrubbing is being used.
             static bool isScrubbing;
-            
+
             //! Rectangle selection ( Color area )
             static math::Box2i selection;
             math::Vector2i selectionAnchor;
@@ -136,7 +136,7 @@ namespace mrv
 
             //! Last FLTK cursor set on window.
             Fl_Cursor lastCursor = FL_CURSOR_NONE;
-            
+
             //! Color area information
             area::Info colorAreaInfo;
 
@@ -199,7 +199,7 @@ namespace mrv
 
             //! Editing.
             std::shared_ptr<VKTextShape> multilineText;
-            
+
             //! Overlay.
             std::shared_ptr<image::Image> overlayImage;
 
@@ -213,10 +213,9 @@ namespace mrv
 
             //! Tablet information.
             float pressure = 0.F;
-            bool  pen_handled = false;
             math::Vector2f lastPenPosition;
         };
 
     }  // namespace vlk
-    
+
 } // namespace mrv
