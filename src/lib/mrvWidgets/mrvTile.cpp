@@ -157,7 +157,7 @@ namespace mrv
         tile_set_dragbar_color(t, c);
         t->window()->cursor(c);
     }
-    
+
     int Tile::handle(int event)
     {
         static int sdrag;
@@ -341,7 +341,7 @@ namespace mrv
         return ret;
     }
 
-    /**
+/**
   Creates a new Tile widget using the given position, size,
   and label string. The default boxtype is FL_NO_BOX.
 

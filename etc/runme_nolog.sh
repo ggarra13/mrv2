@@ -60,6 +60,10 @@ if [ -z "$MSYS2_INSTALL" ]; then
     export MSYS2_INSTALL=ON
 fi
 
+if [ -z "$USE_SYSTEM_LIBS" ]; then
+    export USE_SYSTEM_LIBS=OFF
+fi
+
 if [ -z "$BUILD_VCPKG" ]; then
     export BUILD_VCPKG=OFF
     if [[ $KERNEL == *Windows* ]]; then
@@ -577,6 +581,7 @@ cmd="cmake -G 'Ninja'
 
 	   -D BUILD_VCPKG=${BUILD_VCPKG}
 	   -D BUILD_PYTHON=${BUILD_PYTHON}
+	   -D USE_SYSTEM_LIBS=${USE_SYSTEM_LIBS}
 	   -D BUILD_X11=${BUILD_X11}
 	   -D BUILD_WAYLAND=${BUILD_WAYLAND}
 	   -D BUILD_GETTEXT=${BUILD_GETTEXT}

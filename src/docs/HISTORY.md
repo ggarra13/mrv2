@@ -1,9 +1,27 @@
 v1.6.9
 ======
 
+- Install: Fixed dpkg -i reinstall of the same version on Debian/Ubuntu systems.
+
 - UI: Added tablet eraser support when drawing free-hand, allowing you to toggle
       between drawing and erasing mid point.
 - UI: Fixed one really nasty crash in the color picker due to some variables being derived from the wrong class.
+- UI: Fixed HEX pulldown of color picker which was using decimals instead.
+- UI: Fixed Kwin/Plasma's windows decorations.  Now vmrv2 on that window manager shows with nice decorations.
+- UI: Added Tablet support to libdecor's cairo and GTK3 plugins, without modifying its sources.
+- UI: Added Tablet support for the panels to allow them to be moved and docked with the pen.
+- Core: Fixed crashes when using FLTK_BACKEND=x11 on Linux's Vulkan build.
+- UI: Allowed resizable bar to the right of viewport to be resized with the tablet.
+- UI: Made showing of tooltips optional in Window->Preferences.
+- UI: Made floating panels respond properly to tablet events.
+- UI: Fixed two Edit buttons which could potentially not show up.
+- UI: All shapes now respond properly to tablet/pen pressure. 
+
+- Core: Updated PNG version to v1.6.58.
+
+- Build: Conditionally allowed building with less features.
+- Build: WIP. Added -D USE_SYSTEM_LIBS=ON for faster building using system libraries when possible instead of building from source, even if you are not getting cutting edge performance.  However this should make it simpler for Unix distros to bundle vmrv2/mrv2 with apt, dnf, snap or flatpack.
+- Build: Fixed a bug when NOT building Python.
 
 
 v1.6.8

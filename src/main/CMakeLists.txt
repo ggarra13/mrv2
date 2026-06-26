@@ -34,6 +34,18 @@ list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} tlRender::tlIO tlRende
 
 if( APPLE )
     set(OSX_FRAMEWORKS "-framework IOKit")
+    find_package(CURL CONFIG)
+    if (NOT CURL_FOUND)
+	find_library(IDN2_LIBRARY NAMES idn2)
+	if (NOT IDN2_LIBRARY)
+	    message(FATAL_ERROR "Missing idn2 library.  "
+		"Use: brew install libidn2")
+	endif()
+	list(APPEND LIBRARIES ${IDN2_LIBRARY})
+	list(APPEND OSXFRAMEWORKS
+	    "-framework SystemConfiguration"
+	    "-framework CoreFoundation")
+    endif()
     list(APPEND LIBRARIES ${OSX_FRAMEWORKS})
 endif()
 
@@ -105,7 +117,7 @@ endif()
 #
 # Install python's requests library
 #
-if (MRV2_PYBIND11)
+if (MRV2_PYBIND11 AND BUILD_PYTHON)
     if (NOT EXISTS "${MRV2_PYTHON_LIBS}/site-packages/requests")
 	execute_process( COMMAND ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} -m pip install --target "${MRV2_PYTHON_LIBS}/site-packages" requests --no-cache-dir )
     endif()
@@ -312,14 +324,6 @@ if ( NOT WIN32 )
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE
 	COMPONENT applications )
-
-       # Configure  
-       configure_file(${CMAKE_SOURCE_DIR}/etc/macOS/README.md.in
-	   ${CMAKE_SOURCE_DIR}/etc/macOS/README.md @ONLY
-	   FILE_PERMISSIONS
-	   OWNER_READ OWNER_WRITE 
-	   GROUP_READ OWNER_WRITE 
-	   WORLD_READ)
     endif()
     
     if(TLRENDER_USD)

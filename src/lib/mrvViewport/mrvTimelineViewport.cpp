@@ -374,6 +374,28 @@ namespace mrv
             if (mode == p.actionMode)
                 return;
 
+            if (mode != ActionMode::kSelection)
+            {
+                math::Box2i area;
+                area.min.x = -1; // disable area selection.
+                setSelectionArea(area);
+            }
+
+
+            if (p.actionMode == ActionMode::kText && mode != ActionMode::kText)
+            {
+                acceptMultilineInput();
+            }
+
+            p.actionMode = mode;
+
+            _updateActionMode(mode);
+        }
+
+        void TimelineViewport::_updateActionMode(const ActionMode mode)
+        {
+            TLRENDER_P();
+
             //! Turn off all buttons
             p.ui->uiScrub->value(0);
             p.ui->uiSelection->value(0);
@@ -389,27 +411,11 @@ namespace mrv
             p.ui->uiText->value(0);
             p.ui->uiVoice->value(0);
             p.ui->uiLink->value(0);
-
-            if (mode != ActionMode::kSelection)
-            {
-                math::Box2i area;
-                area.min.x = -1; // disable area selection.
-                setSelectionArea(area);
-            }
-
             if (!app::soporta_annotations)
             {
                 p.ui->uiScrub->value(1);
                 return;
             }
-
-            if (p.actionMode == ActionMode::kText && mode != ActionMode::kText)
-            {
-                acceptMultilineInput();
-            }
-
-            p.actionMode = mode;
-
 
             switch (mode)
             {

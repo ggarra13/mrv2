@@ -132,18 +132,18 @@ elseif(MRV2_BACKEND STREQUAL "BOTH")
 endif()
 
 if(MRV2_CPPTRACE)
-    add_definitions( -D MRV2_CPPTRACE )
+    add_definitions(-D MRV2_CPPTRACE)
 endif()
 
 if(MRV2_NETWORK)
     find_package(Poco REQUIRED
 	COMPONENTS Net NetSSL Foundation
 	CONFIG)
-    add_definitions( -DMRV2_NETWORK )
+    add_definitions( -D MRV2_NETWORK )
 endif()
 
 if(MRV2_PDF)
-    add_definitions( -DMRV2_PDF )
+    add_definitions( -D MRV2_PDF )
 endif()
 
 # Pass flags for CMAKE_BUILD_TYPE
@@ -391,10 +391,12 @@ if (MRV2_PYBIND11)
     install(FILES python/plug-ins/update-mrv2.py
 	DESTINATION python/plug-ins
 	COMPONENT python_plugins)
-    
-    install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
-	DESTINATION python/
-	COMPONENT python_plugins)
+
+    if (EXISTS "${CMAKE_INSTALL_PREFIX}/python/opentimelineio")
+	install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
+	    DESTINATION python/
+	    COMPONENT python_plugins)
+    endif()
     
     #
     # Install mrv2's python demos

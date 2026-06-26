@@ -115,7 +115,7 @@ enum {M_RGB, M_BYTE, M_HEX, M_HSV}; // modes
 
 int Flmm_Value_Input::format(char* buf) {
   Flmm_ColorA_Chooser* c = (Flmm_ColorA_Chooser*)parent();
-  if (c->mode() == M_HEX) return snprintf(buf, 5, "0x%02X", int(value()));
+  if (c->mode() == M_HEX) return snprintf(buf, 6, "0x%02X", int(value()));
   else return Fl_Valuator::format(buf);
 }
 

@@ -1,3 +1,5 @@
+# We don't use system libs here as OpenColorIO needs latest one
+
 include(ExternalProject)
 
 set(ZLIB_GIT_REPOSITORY "https://github.com/madler/zlib.git")
@@ -9,7 +11,7 @@ set(ZLIB_PATCH ${CMAKE_COMMAND} -E copy_if_different
 if(WIN32)
     list(APPEND ZLIB_PATCH COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/patches/ZLIB-patch/zconf.h.cmakein
-       ${CMAKE_CURRENT_BINARY_DIR}/ZLIB/src/ZLIB/zconf.h.cmakein)
+	${CMAKE_CURRENT_BINARY_DIR}/ZLIB/src/ZLIB/zconf.h.cmakein)
 endif()
 
 set(ZLIB_ARGS
@@ -25,3 +27,5 @@ ExternalProject_Add(
     PATCH_COMMAND  ${ZLIB_PATCH}
     LIST_SEPARATOR |
     CMAKE_ARGS ${ZLIB_ARGS})
+
+set(ZLIB_DEP ZLIB)

@@ -160,6 +160,7 @@ namespace mrv
 
             tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
             tw->end();
+            tw->copy_label(label.c_str());
             tw->screen_num(N);
 
             dock->remove(this);
@@ -424,12 +425,6 @@ namespace mrv
         group->end();
         int GH = group->visible() ? group->h() : 0;
 
-#if FLTK_HAVE_PEN_SUPPORT
-        // Subscribe for pen support.
-        Fl::Pen::subscribe(docker);
-        Fl::Pen::subscribe(dismiss);
-#endif
-
         // Scroll will contain a pack with this panel's contents.
         scroll = new Scroll(
             X, Y + dragger->h(), w() - kMargin, h() - dragger->h() - kMargin,
@@ -476,6 +471,7 @@ namespace mrv
         tw = new PanelWindow(X, Y, W, H, nullptr, parented_to_main);
         tw->end();
         tw->screen_num(N);
+        tw->copy_label(lbl);
         docked(false); // NOT docked
         tw->add(this); // move the tool group into the floating window
         this->position(kMargin, kMargin);

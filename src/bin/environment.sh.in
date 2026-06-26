@@ -60,11 +60,3 @@ fi
 # Debug libraries loaded on macOS
 #
 # export DYLD_PRINT_LIBRARIES=1
-
-#
-# Make Kwin use libdecor to allow dragging subwindows outside main window.
-# This will make the title bar not follow the standard KDE look.
-#
-if [[ -z $LIBDECOR_FORCE_CSD ]]; then
-    export LIBDECOR_FORCE_CSD=1
-fi

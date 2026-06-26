@@ -27,9 +27,13 @@ endif()
 list(APPEND TIFF_INCLUDE_DIRS ${ZLIB_INCLUDE_DIRS})
 
 if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
-    find_library(TIFF_LIBRARY NAMES tiffd tiff)
+    find_library(TIFF_LIBRARY
+	NAMES tiffd tiff
+	HINTS ${CMAKE_INSTALL_PREFIX})
 else()
-    find_library(TIFF_LIBRARY NAMES tiff)
+    find_library(TIFF_LIBRARY
+	NAMES tiff
+	HINTS ${CMAKE_INSTALL_PREFIX})
 endif()
 set(TIFF_LIBRARIES ${TIFF_LIBRARY})
 if(libjpeg-turbo_FOUND)

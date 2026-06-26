@@ -1,67 +1,76 @@
-include(ExternalProject)
-
-
-set(LibRaw_URL "https://www.libraw.org/data/LibRaw-0.22.0.tar.gz")  # was 0.21.1
-set(LibRaw_TAG )
-
-set(LibRaw_cmake_URL "https://github.com/LibRaw/LibRaw-cmake")
-set(LibRaw_cmake_TAG 35127051d127f1e1e3dc0ec3a9f59fa48a244ddd)
-
-ExternalProject_Add(
-    LibRaw_cmake
-    GIT_REPOSITORY ${LibRaw_cmake_URL}
-    GIT_TAG ${LibRaw_cmake_TAG}
-    BUILD_IN_SOURCE 0
-    BUILD_ALWAYS 0
-    UPDATE_COMMAND ""
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/LibRaw_cmake
-    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND ""
-    INSTALL_COMMAND ""
-)
-
-set(LibRaw_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-if(APPLE)
-    set(LibRaw_CXX_FLAGS "-Wno-register ${CMAKE_CXX_FLAGS}")
+if (USE_SYSTEM_LIBS)
+    find_package(LibRaw)
+    set(LibRaw_DEP )
 endif()
 
-set(LibRaw_ARGS
-    ${TLRENDER_EXTERNAL_ARGS}
-    -DBUILD_SHARED_LIBS=ON
-    -DBUILD_STATIC_LIBS=OFF
-    -DENABLE_OPENMP=ON
-    -DENABLE_JASPER=ON
-    -DENABLE_LCMS=ON
-    -DENABLE_X3FTOOLS=ON
-    -DENABLE_EXAMPLES=OFF
-    -DBUILD_TESTING=OFF
-    -DCMAKE_CXX_FLAGS=${LibRaw_CXX_FLAGS}
-)
+if (NOT LibRaw_FOUND)
+    include(ExternalProject)
 
-#
-# This copies the .cmake files from Libraw-cmake.  Two files need patching thou.
-#
-set(LibRaw_PATCH
-    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-    ${CMAKE_CURRENT_BINARY_DIR}/LibRaw_cmake/src/LibRaw_cmake/cmake <SOURCE_DIR>/cmake
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${CMAKE_CURRENT_SOURCE_DIR}/patches/LibRaw-patch/CMakeLists.txt 
-    ${CMAKE_CURRENT_BINARY_DIR}/LibRaw/src/LibRaw/CMakeLists.txt
-)
+    set(LibRaw_URL "https://www.libraw.org/data/LibRaw-0.22.0.tar.gz")  # was 0.21.1
+    set(LibRaw_TAG )
 
-set(LibRaw_DEPENDENCIES LibRaw_cmake jasper LCMS2 ZLIB)
-if(TLRENDER_JPEG)
-    list(APPEND LibRaw_DEPENDENCIES libjpeg-turbo)
-endif()
-message(STATUS "LibRaw DEPENDENCIES=${LibRaw_DEPENDENCIES}")
+    set(LibRaw_cmake_URL "https://github.com/LibRaw/LibRaw-cmake")
+    set(LibRaw_cmake_TAG 35127051d127f1e1e3dc0ec3a9f59fa48a244ddd)
+
+    ExternalProject_Add(
+	LibRaw_cmake
+	GIT_REPOSITORY ${LibRaw_cmake_URL}
+	GIT_TAG ${LibRaw_cmake_TAG}
+	BUILD_IN_SOURCE 0
+	BUILD_ALWAYS 0
+	UPDATE_COMMAND ""
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/LibRaw_cmake
+	INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+	CONFIGURE_COMMAND ""
+	BUILD_COMMAND ""
+	INSTALL_COMMAND ""
+    )
+
+    set(LibRaw_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    if(APPLE)
+	set(LibRaw_CXX_FLAGS "-Wno-register ${CMAKE_CXX_FLAGS}")
+    endif()
+
+    set(LibRaw_ARGS
+	${TLRENDER_EXTERNAL_ARGS}
+	-DBUILD_SHARED_LIBS=ON
+	-DBUILD_STATIC_LIBS=OFF
+	-DENABLE_OPENMP=ON
+	-DENABLE_JASPER=ON
+	-DENABLE_LCMS=ON
+	-DENABLE_X3FTOOLS=ON
+	-DENABLE_EXAMPLES=OFF
+	-DBUILD_TESTING=OFF
+	-DCMAKE_CXX_FLAGS=${LibRaw_CXX_FLAGS}
+    )
+
+    #
+    # This copies the .cmake files from Libraw-cmake.  Two files need
+    # patching thou.
+    #
+    set(LibRaw_PATCH
+	COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+	${CMAKE_CURRENT_BINARY_DIR}/LibRaw_cmake/src/LibRaw_cmake/cmake <SOURCE_DIR>/cmake
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	${CMAKE_CURRENT_SOURCE_DIR}/patches/LibRaw-patch/CMakeLists.txt 
+	${CMAKE_CURRENT_BINARY_DIR}/LibRaw/src/LibRaw/CMakeLists.txt
+    )
+
+    set(LibRaw_DEPENDENCIES LibRaw_cmake ${jasper_DEP} ${LCMS2_DEP} ${ZLIB_DEP})
+    if(TLRENDER_JPEG)
+	list(APPEND LibRaw_DEPENDENCIES ${TLRENDER_JPEG_DEP})
+    endif()
+    message(STATUS "LibRaw DEPENDENCIES=${LibRaw_DEPENDENCIES}")
     
-ExternalProject_Add(
-     LibRaw
-     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/LibRaw
-     URL ${LibRaw_URL}
-     DEPENDS ${LibRaw_DEPENDENCIES}
-     PATCH_COMMAND ${LibRaw_PATCH}
-     LIST_SEPARATOR |
-     CMAKE_ARGS ${LibRaw_ARGS}
-)
+    ExternalProject_Add(
+	LibRaw
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/LibRaw
+	URL ${LibRaw_URL}
+	DEPENDS ${LibRaw_DEPENDENCIES}
+	PATCH_COMMAND ${LibRaw_PATCH}
+	LIST_SEPARATOR |
+	CMAKE_ARGS ${LibRaw_ARGS}
+    )
+
+    set(LibRaw_DEP LibRaw)
+endif()

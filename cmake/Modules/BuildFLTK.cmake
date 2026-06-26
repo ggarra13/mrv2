@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.0.9)  # v1.9.8 is good but has no tablet support
+set(FLTK_GIT_TAG v2.1.3)  # v1.9.8 is good but has no tablet support
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_merge) # Testing branch
@@ -56,8 +56,8 @@ set(FLTK_USE_SYSTEM_ZLIB TRUE)
 set(FLTK_USE_SYSTEM_LIBPNG TRUE)
 
 
-# We set this to use FLTK's built-in libdecor
-set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
+# We set this to use FLTK's system libdecor
+set(FLTK_USE_SYSTEM_LIBDECOR TRUE)
 
 # Set this to FALSE to use libdecor's uglier looking windows' borders
 # instead of GTK's nicer window borders.  Note that using GTK's borders will
@@ -67,13 +67,14 @@ set(FLTK_USE_LIBDECOR_GTK FALSE)
 # This one may be turned off
 
 # Set FLTK default dependencies
-set(FLTK_DEPENDENCIES PNG ${VMA_DEP} ${SHADERC_DEP}
-		      	  ${WAYLAND_PROTOCOLS_DEP} ZLIB)
+if (NOT USE_SYSTEM_LIBS)
+    set(FLTK_DEPENDENCIES ${PNG_DEP} ${ZLIB_DEP})
 
-set(FLTK_USE_SYSTEM_LIBJPEG FALSE)
-if(TLRENDER_JPEG)
-    set(FLTK_USE_SYSTEM_LIBJPEG TRUE)
-    set(FLTK_DEPENDENCIES libjpeg-turbo ${FLTK_DEPENDENCIES})
+    set(FLTK_USE_SYSTEM_LIBJPEG FALSE)
+    if(TLRENDER_JPEG)
+	set(FLTK_USE_SYSTEM_LIBJPEG TRUE)
+	set(FLTK_DEPENDENCIES ${libjpeg-turbo_DEP} ${FLTK_DEPENDENCIES})
+    endif()
 endif()
 
 message(STATUS "FLTK DEPENDENCIES=${FLTK_DEPENDENCIES}")

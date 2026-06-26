@@ -104,11 +104,9 @@ INSTALL_DIR=/usr/local/@mrv2ShortName@/
 sharedir=$INSTALL_DIR/share
 
 #
-# Copy desktop, icon and locale translations
+# Copy desktop and icons 
 #
 appdir="${sharedir}/applications"
-
-cp -rf "${sharedir}/*" "/usr/share/."
 
 #
 # Copy the .png icons following Freedesktop.org

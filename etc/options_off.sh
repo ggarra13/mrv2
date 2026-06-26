@@ -12,6 +12,7 @@
 # These are some of the expensive mrv2 options
 #
 export BUILD_PYTHON=OFF
+export USE_SYSTEM_LIBS=OFF
 export MRV2_CPPTRACE=OFF
 export MRV2_PYFLTK=OFF
 export MRV2_PYBIND11=OFF

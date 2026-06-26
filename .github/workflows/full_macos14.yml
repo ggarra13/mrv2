@@ -67,6 +67,9 @@ jobs:
 
       - name: Install pyFLTK dependencies
         run: brew install swig
+        
+      - name: Install curl dependencies
+        run: brew install libidn2
 
       - name: Setup environment
         run: mkdir -p ssh

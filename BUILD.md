@@ -112,7 +112,7 @@ source "$HOME/.cargo/env"
 sudo apt update
 
 #
-# Install dependencies
+# Install dependencies (for cutting edge build)
 #
 sudo apt -y install autoconf \
                     automake \
@@ -129,8 +129,9 @@ sudo apt -y install autoconf \
 		    libcairo-dev \
 		    libdbus-1-dev \
 		    libegl-dev \
-		    libgtk-3-dev \
 		    libffi-dev \
+		    libgtk-3-dev \
+		    libjpeg-turbo8-dev \
 		    libpulse-dev \
 		    libssl-dev \
 		    libx11-dev \
@@ -147,8 +148,32 @@ sudo apt -y install autoconf \
                     tk-dev \
 		    wayland-protocols
 
+#
+# These are Dependencies for using OS system libs, instead of building them
+# from scratch (-D USE_SYSTEM_LIBS=ON)
+#
+sudo apt -y install libaom-dev \
+     	    	    libdav1d-dev \
+		    libexpat1-dev \
+		    libglfw3-dev \
+		    libimath-dev \
+		    libminizip-ng-dev \
+		    libopencolorio-dev \
+		    libsnappy-dev \
+     	    	    libssh2-1-dev \
+		    libsvtav1enc-dev \
+		    libpystring-dev \
+		    libvpx-dev \
+		    libx264-dev \
+		    libyaml-cpp-dev \
+		    meson \
+		    nasm \
+		    nlohmann-json3-dev \
+		    pip \
+     	    	    python3-dev
+
 # If you are building the Vulkan version of mrv2, you need to install
-# The VulkanSDK components
+# The VulkanSDK
 
 # Install cpanminus and IPC::Cmd non-interactively for libcrypto building
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd

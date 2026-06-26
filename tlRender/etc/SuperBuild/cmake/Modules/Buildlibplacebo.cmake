@@ -70,3 +70,4 @@ ExternalProject_Add(
     BUILD_IN_SOURCE 1
 )
 
+set(libplacebo_DEP libplacebo)

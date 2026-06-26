@@ -69,7 +69,7 @@ message( STATUS "Removing static and DLLs from ${CPACK_PREPACKAGE}/lib")
 file( GLOB STATIC_LIBS "${CPACK_PREPACKAGE}/lib/*.a"
 		       "${CPACK_PREPACKAGE}/lib/*.lib"
 		       "${CPACK_PREPACKAGE}/lib/*.dll" )
-		   
+
 
 if ( NOT "${STATIC_LIBS}" STREQUAL "" )
     file( REMOVE ${STATIC_LIBS} )
@@ -84,8 +84,8 @@ file( REMOVE_RECURSE "${CPACK_PREPACKAGE}/include" )
 
 #
 # List of python module globs to remove if present
-# 
-set( _pythonBuiltinModules 
+#
+set( _pythonBuiltinModules
     test*
     config*
     ctypes/test*
@@ -98,7 +98,7 @@ set( _pythonBuiltinModules
     unittest*
 )
 
-set( _pythonSiteModules 
+set( _pythonSiteModules
     alabaster*
     babel*
     click*
@@ -163,17 +163,19 @@ if(UNIX)
 	# do not use, like forms.
 	message( NOTICE "${linux_lib64_dir} exists...")
 	file(GLOB _dsos "${linux_lib64_dir}/*.so")
-	file(INSTALL
-	    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
-	    TYPE SHARED_LIBRARY
-	    FOLLOW_SYMLINK_CHAIN
-	    FILES ${_dsos}
-	)
+	if (_dsos)
+	    file(INSTALL
+		DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+		TYPE SHARED_LIBRARY
+		FOLLOW_SYMLINK_CHAIN
+		FILES ${_dsos}
+	    )
+	endif()
 	file(REMOVE_RECURSE ${linux_lib64_dir})
     else()
 	message( NOTICE "${linux_lib64_dir} does not exist...")
     endif()
-	
+
     #
     # Glob python directories as we don't know the version of python in this
     # script, as it does not inherit variables from the main CMakeLists.
@@ -189,7 +191,7 @@ if(UNIX)
     else()
 	list(GET MRV2_PYTHON_LIB_DIRS -1 MRV2_PYTHON_LIB_DIR)
     endif()
-    
+
     set(MRV2_PYTHON_SITE_PACKAGES_DIR "${MRV2_PYTHON_LIB_DIR}/site-packages")
 
     set( MRV2_EXES "${CPACK_PREPACKAGE}/bin/mrv2" )
@@ -197,7 +199,7 @@ if(UNIX)
     if (EXISTS "${CPACK_PREPACKAGE}/bin/hdr")
 	list(APPEND MRV2_EXES "${CPACK_PREPACKAGE}/bin/hdr" )
     endif()
-    
+
     #
     # We need to get the dependencies of the python DSOs to avoid
     # issues like openssl and libcrypto changing between Rocky Linux
@@ -206,13 +208,13 @@ if(UNIX)
     set(MRV2_PYTHON_DSO_DIR "${MRV2_PYTHON_LIB_DIR}/lib-dynload")
     file(GLOB python_dsos "${MRV2_PYTHON_DSO_DIR}/*.so")
     list(APPEND MRV2_EXES ${python_dsos} )
-	
+
     if ( APPLE )
 	#
 	# Get DYLIB dependencies of components
 	#
 	get_macos_runtime_dependencies( "${MRV2_EXES}" )
-	
+
     else()
 	#
 	# Get DSO dependencies of components
@@ -231,24 +233,24 @@ elseif(WIN32)
     if (EXISTS "${MRV2_APP_DIR}/bin/mrv2.exe")
 	file(CREATE_LINK
 	    "${MRV2_APP_DIR}/bin/mrv2.exe"
-	    "${MRV2_APP_DIR}/bin/mrv2-v${mrv2_VERSION}.exe") 
+	    "${MRV2_APP_DIR}/bin/mrv2-v${mrv2_VERSION}.exe")
     endif()
-    
-    
+
+
     set(MRV2_PYTHON_LIB_DIR "${MRV2_APP_DIR}/bin/Lib")
     set(MRV2_PYTHON_SITE_PACKAGES_DIR
 	"${MRV2_PYTHON_LIB_DIR}/site-packages")
-    
+
     #
     # Don't pack sphinx and other auxiliary documentation libs in .exe
     #
 
-    set(MRV2_PYTHON_GLOBS 
+    set(MRV2_PYTHON_GLOBS
 	"${MRV2_APP_DIR}/lib/Lib/")
 
     # 1. Collect all paths into one list first
     set(DIRS_TO_DELETE "")
-    
+
     list(APPEND DIRS_TO_DELETE "${MRV2_APP_DIR}/bin/DLLs/*.pdb")
 
     foreach(_mod ${_pythonBuiltinModules})
@@ -274,8 +276,8 @@ elseif(WIN32)
     # 4. Final pycache sweep (one single scan)
     file(GLOB_RECURSE ALL_PYCACHE "${CPACK_PREPACKAGE}/**/__pycache__")
     file(REMOVE_RECURSE ${ALL_PYCACHE})
-    
-    
+
+
     #
     # Set python's site-packages and lib dir for .zip.
     #

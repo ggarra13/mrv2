@@ -413,7 +413,7 @@ notarize() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 staple_target() {
-    local target="${1:-${PACK_DIR}/${DMG_NAME}}"
+    local target="${1:-${PACKAGE_DIR}/${DMG_NAME}}"
     step "Stapling notarization ticket: $(basename "${target}")"
 
     xcrun stapler staple "${target}" \
@@ -462,7 +462,7 @@ verify() {
             || warn "  Gatekeeper check failed"
     done
 
-    local dmg="${PACK_DIR}/${DMG_NAME}"
+    local dmg="${PACKAGE_DIR}/${DMG_NAME}"
     if [[ -f "${dmg}" ]]; then
         info "Checking DMG: $(basename "${dmg}")"
         codesign --verify --verbose=2 "${dmg}" \
@@ -573,6 +573,7 @@ fi
 
 export BUILD_DIR="${ROOT_DIR}/Release/"
 export PACK_DIR="${BUILD_DIR}/mrv2/src/mrv2-build/_CPack_Packages/Darwin/DragNDrop/${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}"
+export PACKAGE_DIR="packages/${BUILD_DIR}"
 
 # Name of the DMG produced by CPack (or the one this script creates).
 DMG_NAME="${mrv2_NAME}-v${mrv2_VERSION}-${KERNEL}-${ARCH}.dmg"
