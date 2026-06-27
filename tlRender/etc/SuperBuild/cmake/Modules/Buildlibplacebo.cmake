@@ -1,5 +1,10 @@
 include(ExternalProject)
 
+include(functions/find_meson_executable)
+find_meson_executable(libplacebo)
+
+
+
 set(libplacebo_GIT_REPO "https://code.videolan.org/videolan/libplacebo.git")
 set(libplacebo_GIT_TAG v7.351.0) # was v7.349.0
 
@@ -30,7 +35,7 @@ set(libplacebo_CONFIGURE
     "CFLAGS=${libplacebo_CFLAGS}"
     "LDFLAGS=${libplacebo_LDFLAGS}"
     "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib"
-    ${MESON_PYTHONPATH}
+    ${libplacebo_PYTHONPATH}
     --
     ${MESON_EXECUTABLE} setup
     --wipe

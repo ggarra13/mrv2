@@ -50,7 +50,7 @@ export CMAKE_FLAGS=""
 #
 # These are some of the expensive TLRENDER options
 #
-export BUILD_PYTHON=OFF
+export BUILD_PYTHON=ON  # needed for libplacebo
 
 export TLRENDER_AV1=ON
 export TLRENDER_EXR=ON

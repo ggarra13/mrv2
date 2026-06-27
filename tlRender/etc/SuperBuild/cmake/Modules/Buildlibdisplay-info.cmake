@@ -1,5 +1,7 @@
 include(ExternalProject)
 
+include(functions/find_meson_executable)
+find_meson_executable(libdisplay_info)
 
 set(libdisplay_info_GIT_REPO
     "https://gitlab.freedesktop.org/emersion/libdisplay-info.git")
@@ -22,7 +24,7 @@ set(libdisplay_info_CONFIGURE
     "CFLAGS=${libdisplay_info_CFLAGS}"
     "LDFLAGS=${libdisplay_info_LDFLAGS}"
     "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib"
-    ${MESON_PYTHONPATH} 
+    ${libdisplay_info_PYTHONPATH} 
     -- ${MESON_EXECUTABLE} setup
     --prefix=${CMAKE_INSTALL_PREFIX}
     --libdir=lib
