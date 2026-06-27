@@ -1,3 +1,8 @@
+v1.7.0
+======
+
+- Core: Updated OpenEXR version to v3.4.13.
+
 v1.6.9
 ======
 
