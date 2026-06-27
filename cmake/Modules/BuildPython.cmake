@@ -189,5 +189,7 @@ else()
     endif()
 endif()
 
+set(PYTHONPATH $ENV{PYTHONPATH})
+
 set( PYTHON_DEP Python )
 

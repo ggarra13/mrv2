@@ -1,8 +1,5 @@
 include(ExternalProject)
 
-include(functions/find_meson_executable)
-find_meson_executable(libdisplay_info)
-
 set(libdisplay_info_GIT_REPO
     "https://gitlab.freedesktop.org/emersion/libdisplay-info.git")
 set(libdisplay_info_GIT_TAG 0.3.0)
@@ -24,18 +21,15 @@ set(libdisplay_info_CONFIGURE
     "CFLAGS=${libdisplay_info_CFLAGS}"
     "LDFLAGS=${libdisplay_info_LDFLAGS}"
     "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib"
-    ${libdisplay_info_PYTHONPATH} 
+    "PYTHONPATH=${PYTHONPATH}"
     -- ${MESON_EXECUTABLE} setup
     --prefix=${CMAKE_INSTALL_PREFIX}
     --libdir=lib
     build)
 
-set(libdisplay_info_BUILD 
-    cd build && ${libdisplay_info_PYTHONPATH} ninja)
+set(libdisplay_info_BUILD cd build && ninja)
 
-set(libdisplay_info_INSTALL
-    cd build && ${libdisplay_info_PYTHONPATH} 
-    ninja install)
+set(libdisplay_info_INSTALL cd build && ninja install)
 
 ExternalProject_Add(
     libdisplay-info
