@@ -34,7 +34,7 @@ namespace tl
                 const Point tmp = p0 - p1;
                 const float pressure = std::fabs(p0.pressure - p1.pressure);
                 const float length = tmp.length();
-                if (length <= m_width * pressure)
+                if (length <= m_width)
                     continue;
                 filteredPoints.push_back(p1);
             }
