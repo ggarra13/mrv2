@@ -5,14 +5,9 @@ if (USE_SYSTEM_LIBS)
 endif()
 
 if (NOT dav1d_FOUND AND NOT FFmpeg_FOUND)
-    
     include(ExternalProject)
-    include(functions/find_meson_executable)
-    find_meson_executable(dav1d)
-
-
+    
     set(dav1d_GIT_TAG 1.3.0)
-
     set(dav1d_DEPENDENCIES ${PYTHON_DEP})
 
     if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
@@ -49,7 +44,7 @@ if (NOT dav1d_FOUND AND NOT FFmpeg_FOUND)
 	"CFLAGS=${dav1d_CFLAGS}"
 	"LDFLAGS=${dav1d_LDFLAGS}"
 	"LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib"
-	${dav1d_PYTHONPATH} 
+	${MESON_PYTHONPATH} 
 	-- ${MESON_EXECUTABLE} setup
 	--wipe
 	-Denable_tools=false

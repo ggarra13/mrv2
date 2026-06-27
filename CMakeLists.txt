@@ -269,7 +269,10 @@ if (NOT BUILD_PYTHON)
 	    	message(FATAL_ERROR "No meson found in PATH.  Please install it manually or set the PATH to it.")
 	   endif()
        endif()
-    endif()
+       set(MESON_PYTHONPATH "")
+   endif()
+else()
+    set(MESON_PYTHONPATH "PYTHONPATH=${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION}/site-packages")
 endif()
 
 
