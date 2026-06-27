@@ -32,7 +32,6 @@ namespace tl
                 const Point& p0 = filteredPoints.back();
                 const Point& p1 = points[i];
                 const Point tmp = p0 - p1;
-                const float pressure = std::fabs(p0.pressure - p1.pressure);
                 const float length = tmp.length();
                 if (length <= m_width)
                     continue;
@@ -72,14 +71,16 @@ namespace tl
                 auto& point1 = points[i];
                 auto& point2 = points[i + 1];
 
-                // Per-segment half-thickness: base size × average pressure
-                float avgPressure = (point1.pressure + point2.pressure) * 0.5f;
-                float segThickness = std::max(m_width * avgPressure, 1.F);
-
+                // Per-endpoint half-thickness: base width × each point's own
+                // pressure.  Using the same point's pressure on both sides of
+                // a joint guarantees edge continuity between segments.
+                float thicknessStart = std::max(m_width * point1.pressure, 1.F);
+                float thicknessEnd   = std::max(m_width * point2.pressure, 1.F);
 
                 if (point1 != point2)
                     segments.emplace_back(
-                        LineSegment<Point>(point1, point2), segThickness);
+                        LineSegment<Point>(point1, point2),
+                        thicknessStart, thicknessEnd);
             }
 
             if (endCapStyle == EndCapStyle::JOINT)
@@ -89,12 +90,13 @@ namespace tl
 
                 auto& point1 = points[points.size() - 1];
                 auto& point2 = points[0];
-                float avgPressure = (point1.pressure + point2.pressure) * 0.5f;
-                float segThickness = std::max(m_width * avgPressure, 1.F);
+                float thicknessStart = std::max(m_width * point1.pressure, 1.F);
+                float thicknessEnd   = std::max(m_width * point2.pressure, 1.F);
 
                 if (point1 != point2)
                     segments.emplace_back(
-                        LineSegment<Point>(point1, point2), segThickness);
+                        LineSegment<Point>(point1, point2),
+                        thicknessStart, thicknessEnd);
             }
 
             if (segments.empty())
@@ -168,11 +170,11 @@ namespace tl
             {
                 // extend the start/end points by half the thickness
                 pathStart1 =
-                    pathStart1 - firstSegment.edge1.direction() * firstSegment.thickness;
+                    pathStart1 - firstSegment.edge1.direction() * firstSegment.thicknessStart;
                 pathStart2 =
-                    pathStart2 - firstSegment.edge2.direction() * firstSegment.thickness;
-                pathEnd1 = pathEnd1 + lastSegment.edge1.direction() * lastSegment.thickness;
-                pathEnd2 = pathEnd2 + lastSegment.edge2.direction() * lastSegment.thickness;
+                    pathStart2 - firstSegment.edge2.direction() * firstSegment.thicknessStart;
+                pathEnd1 = pathEnd1 + lastSegment.edge1.direction() * lastSegment.thicknessEnd;
+                pathEnd2 = pathEnd2 + lastSegment.edge2.direction() * lastSegment.thicknessEnd;
             }
             else if (endCapStyle == EndCapStyle::ROUND)
             {
@@ -543,8 +545,15 @@ namespace tl
         void Polyline2D::createRoundSoftCap(
             const PolySegment<Point>& segment, const bool start)
         {
-            auto left = segment.edge1.direction() * segment.thickness;
-            auto right = segment.edge2.direction() * segment.thickness;
+            // `start=false` caps the beginning of the path (.a endpoints);
+            // `start=true`  caps the end of the path   (.b endpoints).
+            // Use the thickness that belongs to whichever end we're capping so
+            // the cap radius matches the actual stroke width there.
+            const float capThickness =
+                start ? segment.thicknessEnd : segment.thicknessStart;
+
+            auto left = segment.edge1.direction() * capThickness;
+            auto right = segment.edge2.direction() * capThickness;
 
             Point center, edge1, edge2;
             if (!start)
@@ -596,4 +605,4 @@ namespace tl
 
     } // namespace draw
 
-} // namespace mrv
+} // namespace tl
