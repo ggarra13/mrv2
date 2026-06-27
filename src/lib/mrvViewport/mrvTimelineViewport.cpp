@@ -411,8 +411,9 @@ namespace mrv
             p.ui->uiText->value(0);
             p.ui->uiVoice->value(0);
             p.ui->uiLink->value(0);
-            if (!app::soporta_annotations)
+            if (!mrv::feature_needs_solo_or_later())
             {
+                p.actionMode = ActionMode::kScrub;
                 p.ui->uiScrub->value(1);
                 return;
             }
