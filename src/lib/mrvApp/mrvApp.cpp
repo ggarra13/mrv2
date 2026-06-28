@@ -107,6 +107,7 @@ namespace py = pybind11;
 #include "mrvFl/mrvOCIO.h"
 
 #ifdef MRV2_NETWORK
+#    include <Poco/Net/Net.h>
 #    include <Poco/Net/SSLManager.h>
 #endif
 
@@ -608,6 +609,7 @@ namespace mrv
         // Initialize POCO Net for SSL connections.
         //
 #ifdef MRV2_NETWORK
+        Poco::Net::initializeNetwork();
         Poco::Net::initializeSSL();
 #endif
 
@@ -1283,6 +1285,8 @@ namespace mrv
             delete tcp;
             tcp = nullptr;
         }
+
+        Poco::Net::uninitializeNetwork();
     }
 
     App::~App()
@@ -1389,6 +1393,9 @@ namespace mrv
         TLRENDER_P();
 
         p.imageListener.reset();
+        p.comfyUIListener.reset();
+
+        Poco::Net::initializeNetwork();
 #endif
     }
 
@@ -1475,7 +1482,7 @@ namespace mrv
                 use_progress = false;
 
         }
-        
+
         // Calculate start and end time used in progress report
         otime::RationalTime startTime, endTime;
         _calculateCacheTimes(startTime, endTime);
@@ -1486,7 +1493,7 @@ namespace mrv
         // We use the rate of the startTime to ensure we are working in frame
         // units
         double totalFrames = (endTime - startTime).to_frames();
-                            
+
         if (!p.progress)
         {
             p.progress = new ProgressReport(ui->uiMain,
@@ -1515,7 +1522,7 @@ namespace mrv
              playback == timeline::Playback::Stop))
         {
             tcp->lock();
-            
+
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
@@ -1577,7 +1584,7 @@ namespace mrv
         else if (use_progress && playback == timeline::Playback::Reverse)
         {
             tcp->lock();
-            
+
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
@@ -1653,7 +1660,7 @@ namespace mrv
                             }
                         });
         }
-        
+
     }
 
     int App::run()
@@ -2174,7 +2181,7 @@ namespace mrv
 #ifdef MRV2_PYBIND11
             // Only release the GIL if this thread currently holds it
             std::unique_ptr<py::gil_scoped_release> release;
-            if (PyGILState_Check() && !p.options.noPython) 
+            if (PyGILState_Check() && !p.options.noPython)
             {
                 release = std::make_unique<py::gil_scoped_release>();
             }
