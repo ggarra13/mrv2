@@ -418,6 +418,8 @@ namespace mrv
                     {
                         if (Fl::event_shift())
                         {
+                            if (!mrv::feature_needs_solo_or_later())
+                                return;
                             return _handleDragSelection();
                         }
                         else
@@ -595,6 +597,9 @@ namespace mrv
             {
                 if (Fl::event_shift() || p.actionMode == ActionMode::kSelection)
                 {
+                    if (!mrv::feature_needs_solo_or_later())
+                        return;
+
                     p.lastEvent = FL_DRAG;
                     p.mousePos = _getFocus();
                     math::Vector2i pos = _getRaster();
