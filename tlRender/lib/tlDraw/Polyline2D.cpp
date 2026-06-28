@@ -348,7 +348,8 @@ namespace tl
                 Point* innerSecOpt = nullptr;
 
                 LineSegment<Point>::intersection(
-                    *inner1, *inner2, innerSecOpt, allowOverlap);
+                    *inner1, *inner2, innerSecOpt,
+                    m_softEdges? false : allowOverlap);
 
                 // for parallel lines, simply
                 // connect them directly
@@ -400,11 +401,12 @@ namespace tl
 
                     if (m_softEdges)
                     {
-                        V2f tmp(0.0f, 0.5f);
-                        m_uvs.emplace_back(tmp);
-                        m_uvs.emplace_back(tmp);
-                        tmp.x = 1.0f;
-                        m_uvs.emplace_back(tmp);
+                        float uvOuter = clockwise ? 0.0f : 1.0f;
+                        float uvInner = clockwise ? 1.0f : 0.0f;
+
+                        m_uvs.emplace_back(V2f(uvOuter, 0.5f));
+                        m_uvs.emplace_back(V2f(uvOuter, 0.5f));
+                        m_uvs.emplace_back(V2f(uvInner, 0.5f));
                     }
 
                     m_tris.emplace_back(IndexTriangle(n, n + 1, n + 2));
@@ -420,15 +422,36 @@ namespace tl
                             nextStart1 = segment2.edge1.a;
                             nextStart2 = segment2.edge2.a;
                         }
+                        else
+                        {
+                            // simply connect the intersection points
+                            size_t n = m_vertices.size();
+                            m_vertices.emplace_back(outer1->b);
+                            m_vertices.emplace_back(outer2->a);
+                            m_vertices.emplace_back(innerSec);
+
+                            if (m_softEdges)
+                            {
+                                float uvOuter = clockwise ? 0.0f : 1.0f;
+                                float uvInner = clockwise ? 1.0f : 0.0f;
+
+                                m_uvs.emplace_back(V2f(uvOuter, 0.5f));
+                                m_uvs.emplace_back(V2f(uvOuter, 0.5f));
+                                m_uvs.emplace_back(V2f(uvInner, 0.5f));
+                            }
+
+                            m_tris.emplace_back(IndexTriangle(n, n + 1, n + 2));
+                        }
                     }
                     else
                     {
-                        // draw a semicircle between the ends of the outer
-                        // edges, centered at the actual point
-                        // with half the line thickness as the radius
+                        // draw a semicircle between the ends of the outer edges
+                        float uvOuter = clockwise ? 0.0f : 1.0f;
+                        float uvInner = clockwise ? 1.0f : 0.0f;
+
                         createTriangleFan(
                             innerSec, segment1.center.b, outer1->b, outer2->a,
-                            1.0, 0.0, clockwise);
+                            uvInner, uvOuter, clockwise);
                     }
                 }
                 else

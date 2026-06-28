@@ -1196,17 +1196,23 @@ namespace mrv
                 /* fall through */
             case Fl::Pen::DRAW:
             {
+                float oldPressure = p.pressure;
 #if FLTK_HAVE_PEN_SUPPORT
-                p.pressure = Fl::Pen::event_pressure();
-                // \@note: \@bug: in Windows, we can get pressure = 0 here.
-                //                if we do, we skip it as we would add a blotch
-                //                of paint otherwise.
-                if (p.pressure <= 0)
+                float pressure = Fl::Pen::event_pressure();
+                if (pressure <= 0.F)
                     return 1;
+                p.pressure = pressure;
 #else
                 p.pressure = 1.F;
 #endif
+                math::Vector2i oldPos = p.mousePos;
                 p.mousePos = _getFocus();
+
+                int length2 = math::length2(p.mousePos - oldPos);
+                float width = _getPenSize();
+                if (length2 < width && p.pressure < oldPressure)
+                    p.pressure = oldPressure;
+
                 _handleDragLeftMouseButton();
                 _updatePixelBar();
                 return 1;

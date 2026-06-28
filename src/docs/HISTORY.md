@@ -1,7 +1,13 @@
 v1.7.0
 ======
 
-- UI: Fixed licensing helper's Donate button not responding to clicks.
+- Licensign/UI: Fixed licensing helper's Donate button not responding to clicks, making it difficult to actually donate.
+
+- Licensing: Added helper messages about what options require a donation to unlock.
+
+- Draw: Fixed soft edges drawing sometimes leaving triangle gaps, due to wrong UVs.
+- Draw: Fixed drawing leaving small tips at the end of drawing a shape when using the tablet's pressure.
+
 - Core: Updated OpenEXR version to v3.4.13.
 - Core: Improved the performance of Preferences->Single Instance.  Previously, it was locking the UI for 5 seconds on start up.  Now it is immediate.
 
