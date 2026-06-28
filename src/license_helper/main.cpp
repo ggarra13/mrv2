@@ -161,7 +161,7 @@ int main(int argc, char** argv)
          Fl_Button* donate = nullptr;
 
     { // node_locker
-        node_locked = new Fl_Flex(20, 60, 600, tabs->h() - 90,
+        node_locked = new Fl_Flex(20, 60, 600, tabs->h() - 40,
                                   _("Node-Locked License"));
 
         { // node_locked contents
@@ -186,7 +186,7 @@ int main(int argc, char** argv)
                     plans->gap(5);
                     plans->box(FL_ENGRAVED_BOX);
 
-                    Fl_Box* usd = new Fl_Box(20, prices->y(), 300, prices->h());
+                    Fl_Box* usd = new Fl_Box(20, prices->y(), 300, plans->h());
                     usd->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                     usd->label(R"TEXT(
 USD $ 25
@@ -194,7 +194,7 @@ USD $ 50
 USD $ 75
 USD $150
 USD $300)TEXT");
-                    Fl_Box* type = new Fl_Box(320, prices->y(), 300, prices->h());
+                    Fl_Box* type = new Fl_Box(320, prices->y(), 300, plans->h());
                     type->align(FL_ALIGN_LEFT | FL_ALIGN_INSIDE);
                     type->label(R"TEXT(
 Solo
@@ -210,8 +210,6 @@ Pro+
                 listed->label(_("Only the listed amounts unlock features; all others are regular donations."));
                 listed->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
 
-                prices->fixed(plans, plans->h());
-                prices->fixed(listed, listed->h());
 
                 what = new Fl_Flex(20, 0, 600, 120);
                 what->box(FL_FLAT_BOX);
@@ -239,8 +237,13 @@ All of Pro but without expiration date (you own it).
 )TEXT"));
                 what->fixed(plan_type, plan_type->w());
                 what->end();
+
+                prices->fixed(plans, plans->h());
+                prices->fixed(listed, listed->h());
                 prices->fixed(what, what->h());
             } // what
+
+            prices->end();
 
             internet = new Fl_Box(20, 0, 600, 80);
             internet->box(FL_FLAT_BOX);
