@@ -1,7 +1,9 @@
 v1.7.0
 ======
 
+- UI: Fixed licensing helper's Donate button not responding to clicks.
 - Core: Updated OpenEXR version to v3.4.13.
+- Core: Improved the performance of Preferences->Single Instance.  Previously, it was locking the UI for 5 seconds on start up.  Now it is immediate.
 
 v1.6.9
 ======

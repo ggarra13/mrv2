@@ -51,7 +51,9 @@ namespace mrv
     {
         try
         {
-            socket.connect(address);
+            // Wait only 0.25 seconds to connect
+            Poco::Timespan timeOut(0, 250000);
+            socket.connect(address, timeOut);
             socket.close();
             return true;
         }
@@ -67,10 +69,12 @@ namespace mrv
     {
         try
         {
-            socket.connect(address);
-            Poco::Net::SocketStream stream(socket);
+            Poco::Net::StreamSocket s;  // fresh socket each send
+            s.connect(address);
+            Poco::Net::SocketStream stream(s);
             stream << fileName;
             stream.flush();
+            s.close();
         }
         catch (const Poco::Exception& e)
         {
