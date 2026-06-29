@@ -17,18 +17,24 @@ endif()
 
 set(LIBRARIES )
 set(LIBRARIES_PRIVATE )
-    
+
 if(MRV2_PYBIND11)
     list(APPEND LIBRARIES mrvPy)
 else()
     list(APPEND LIBRARIES mrvApp)
 endif()
 
+list(APPEND LIBRARIES
+    tlRender::tlIO
+    tlRender::tlCore)
+
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
     list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
 endif()
 
-list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} tlRender::tlIO tlRender::tlCore)
+list(APPEND LIBRARIES
+    ${FLTK_LIBRARIES}
+    ${Intl_LIBRARIES})
 
 
 
