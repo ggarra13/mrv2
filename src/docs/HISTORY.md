@@ -1,6 +1,9 @@
 v1.7.0
 ======
 
+ChangeLog
+---------
+
 - Licensign/UI: Fixed licensing helper's Donate button not responding to clicks, making it difficult to actually donate.
 
 - Licensing: Added helper messages about what options require a donation (and what type) to unlock.
@@ -18,6 +21,9 @@ v1.7.0
 
 v1.6.9
 ======
+
+ChangeLog
+---------
 
 - Install: Fixed dpkg -i reinstall of the same version on Debian/Ubuntu systems.
 
