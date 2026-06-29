@@ -16,8 +16,11 @@ jobs:
   ###################################
   macos-13-vulkan-full-build:
     runs-on: macos-15-intel
+    # permissions:
+    #   contents: write   # Needed to update releases
 
     steps:
+
       - uses: actions/checkout@v6
         with:
           submodules: recursive
@@ -83,8 +86,11 @@ jobs:
       - name: Install ninja-build
         run: brew install ninja
 
-      - name: Install automake
-        run: brew install automake autoconf curl rsync
+      - name: Install gettext
+        run: brew install gettext
+
+      - name: Install automake and other network utils
+        run: brew install automake autoconf curl rsync wget
 
       - name: Install GNU utils
         run: brew install gnu-sed coreutils
@@ -137,23 +143,28 @@ jobs:
         run: mkdir -p ssh
 
       - name: Decode SSH key
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
         shell: bash
+
+      - name: Set permissions on SSH key
+        run: chmod 600 ssh/id_rsa
 
       - name: Decode FLTK SSH key
         run: |
-          echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
+            mkdir -p ~/.ssh
+            echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+            chmod 600 ~/.ssh/id_ed25519
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Add SourceForge to known_hosts
         shell: bash
-        run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
 
       - name: Set executable permissions
-        run: chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+        run: |
+          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
 
       - name: Build vmrv2
         env:
@@ -181,7 +192,10 @@ jobs:
           TLRENDER_USD: OFF
           TLRENDER_VPX: ON
           TLRENDER_YASM: ON
-        run: ./etc/runme_nolog.sh -t package -vk clean
+
+        run: |
+          ./etc/runme_nolog.sh -t package clean
 
       - name: Upload binaries
-        run: ./bin/release/upload_sourceforge.sh -vk
+        run: |
+          ./bin/release/upload_sourceforge.sh

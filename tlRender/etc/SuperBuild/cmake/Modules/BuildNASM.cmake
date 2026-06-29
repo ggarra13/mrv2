@@ -6,7 +6,7 @@ if (USE_SYSTEM_LIBS)
 endif()
 
 if (NOT NASM_EXECUTABLE)
-    set(NAMS_GIT_TAG nasm-3.02rc3)
+    set(NASM_GIT_TAG nasm-3.02rc3)
 
     ExternalProject_Add(
 	NASM
