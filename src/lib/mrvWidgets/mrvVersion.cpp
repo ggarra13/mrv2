@@ -1426,6 +1426,7 @@ luzpaz                                        (Spelling corrections)
 mantissa-                                     (Sequences misdetection)
 Mark Rasmussen                                (Windows/Linux Vulkan debugging)
 mhgandvisions                                 (Session debugging)
+MigMadail                                     (Slow startup)
 MMmaoamao                                     (AV1 Suggestion)
 mzigaib                                       (Sequences misdetection)
 ndeebook                                      (Save Single Frame with
