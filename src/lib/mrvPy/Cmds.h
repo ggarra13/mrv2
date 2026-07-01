@@ -7,6 +7,9 @@
 #include <pybind11/pybind11.h>
 namespace py = pybind11;
 
+#include <vector>
+#include <string>
+
 extern void mrv2_enums(py::module& m);
 extern void mrv2_vectors(py::module& m);
 extern void mrv2_filepath(py::module& m);
@@ -26,3 +29,8 @@ extern void mrv2_python_plugins(py::module& m);
 extern void mrv2_python_redirect(py::module& m);
 extern void mrv2_session(py::module& m);
 extern void mrv2_discover_python_plugins();
+
+namespace mrv
+{
+    extern void run_python_script(const std::vector<std::string>& argv);
+}

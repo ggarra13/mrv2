@@ -11,6 +11,8 @@ ChangeLog
 - Draw: Fixed soft edges drawing sometimes leaving triangle gaps, due to wrong UVs.
 - Draw: Fixed drawing leaving small tips at the end of drawing a shape when using the tablet's pressure.
 
+- Python: deprecated the cmd.args function.  Just use sys.argv as usual in python.
+
 - Core: Improved the performance of Preferences->Single Instance.  Previously, it was locking the UI for 5 seconds on start up.  Now it is immediate.
 - Core: Updated OpenColorIO version to v2.5.2.
 - Core: Updated OpenEXR version to v3.4.13.

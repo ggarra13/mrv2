@@ -1202,8 +1202,17 @@ namespace mrv
                                string::Format(_("Running python script '{0}'")).arg(script)));
                 const auto& args = p.pythonArgs->getArguments();
 
+                // 2. Prepare the arguments in a C++ vector
+                std::vector<std::string> py_args;
+                py_args.push_back(script);
+
                 if (!args.empty())
                 {
+                    for (auto& arg : args)
+                    {
+                        py_args.push_back(arg);
+                    }
+
                     LOG_STATUS(_("with Arguments:"));
                     std::string out = "[";
                     out += tl::string::join(args, ',');
@@ -1211,12 +1220,15 @@ namespace mrv
                     LOG_STATUS(out);
                 }
 
-                std::ifstream is(script);
-                std::stringstream s;
-                s << is.rdbuf();
                 try
                 {
-                    py::exec(s.str());
+#ifdef VULKAN_BACKEND
+                    // \@bug: for Vulkan we must show the window so that
+                    //        the Fl_Vk_Context is created.
+                    ui->uiMain->show();
+                    ui->uiMain->wait_for_expose();
+#endif
+                    run_python_script(py_args);
                 }
                 catch (const std::exception& e)
                 {
@@ -1378,14 +1390,6 @@ namespace mrv
         }
 #endif
     }
-
-#ifdef MRV2_PYBIND11
-    const std::vector<std::string>& App::getPythonArgs() const
-    {
-        TLRENDER_P();
-        return p.pythonArgs->getArguments();
-    }
-#endif
 
     void App::removeListener()
     {
