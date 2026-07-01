@@ -624,6 +624,3 @@ class FlowBridgePlugin(mrv2.plugin.Plugin):
         }
         return menus
 
-
-# Instantiate the plugin
-flow_plugin = FlowBridgePlugin()

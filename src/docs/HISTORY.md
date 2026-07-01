@@ -8,6 +8,8 @@ ChangeLog
 
 - Licensing: Added helper messages about what options require a donation (and what type) to unlock.
 
+- Assets: Fixed Autodesk's Flow bridge getting instantiated twice and being slow.
+
 - Draw: Fixed soft edges drawing sometimes leaving triangle gaps, due to wrong UVs.
 - Draw: Fixed drawing leaving small tips at the end of drawing a shape when using the tablet's pressure.
 
