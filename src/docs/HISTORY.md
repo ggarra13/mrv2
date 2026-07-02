@@ -10,6 +10,8 @@ ChangeLog
 
 - Assets: Fixed Autodesk's Flow bridge getting instantiated twice and being slow.
 
+- UI/Color: Fixed Saturation in the Color Panel not updating the view.
+
 - Draw: Fixed soft edges drawing sometimes leaving triangle gaps, due to wrong UVs.
 - Draw: Fixed drawing leaving small tips at the end of drawing a shape when using the tablet's pressure.
 

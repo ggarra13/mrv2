@@ -307,6 +307,7 @@ namespace mrv
                     float f = w->value();
                     o.color.enabled = true;
                     o.color.saturation = math::Vector3f(f, f, f);
+                    p.ui->uiSaturation->value(f);
                     App::app->setDisplayOptions(o);
                 });
 

@@ -2377,6 +2377,7 @@ namespace mrv
             d.color.brightness.z = d.exrDisplay.exposure * gain;
 
             float saturation = p.ui->uiSaturation->value();
+            p.ui->uiSaturationInput->value(saturation);
             _pushColorMessage("saturation", saturation);
             d.color.saturation.x = saturation;
             d.color.saturation.y = saturation;
@@ -2404,6 +2405,11 @@ namespace mrv
                 p.ui->uiFStop->labelcolor(p.ui->uiGain->labelcolor());
             }
 
+            // If color panel is open, update it too.
+            if (panel::colorPanel)
+            {
+                panel::colorPanel->setDisplayOptions(d);
+            }
             _updateDisplayOptions(d);
         }
 
