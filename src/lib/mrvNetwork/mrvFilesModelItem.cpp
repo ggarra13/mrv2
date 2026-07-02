@@ -30,6 +30,7 @@ namespace mrv
         j["ocioIcs"] = value.ocioIcs;
         j["ocioLook"] = value.ocioLook;
         j["lutOptions"] = value.lutOptions;
+        j["hash_id"] = value.hash_id;
 
         std::vector< draw::Annotation > annotations;
         for (const auto& annotation : value.annotations)
@@ -37,7 +38,7 @@ namespace mrv
             annotations.push_back(*annotation.get());
         }
         j["annotations"] = annotations;
-        
+
         std::vector< voice::Annotation > voiceAnnotations;
         for (const auto& voannotation : value.voiceAnnotations)
         {
@@ -73,6 +74,10 @@ namespace mrv
             j.at("loop").get_to(v);
             value.loop = static_cast<timeline::Loop>(v);
         }
+        if (j.contains("hash_id"))
+        {
+            j.at("hash_id").get_to(value.hash_id);
+        }
         j.at("currentTime").get_to(value.currentTime);
         j.at("inOutRange").get_to(value.inOutRange);
         j.at("videoLayer").get_to(value.videoLayer);
@@ -98,7 +103,7 @@ namespace mrv
                 draw::messageToAnnotation(annotation);
             value.annotations.push_back(tmp);
         }
-        
+
         const nlohmann::json& voannotations = j["voiceAnnotations"];
         for (const auto& voannotation : voannotations)
         {

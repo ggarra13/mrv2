@@ -27,6 +27,7 @@ if(MRV2_NETWORK)
     	mrvSyncMedia.cpp
     	mrvSyncUI.cpp
     	mrvCommandInterpreter.cpp
+	# xxhash.c  # We use XXH_INLINE_ALL
 		
 	# TCP
     	mrvClient.cpp
@@ -42,6 +43,10 @@ if(MRV2_NETWORK)
 	mrvWebRTCClient.cpp
 	mrvWebRTCManager.cpp)
     list(APPEND HEADERS
+	# Common
+	xxhash.h
+	mrvHashFile.h
+	
 	# TCP
         mrvComfyUIListener.h 
 	mrvImageListener.h
@@ -69,6 +74,9 @@ endif()
 add_library(mrvNetwork ${SOURCES} ${HEADERS})
 files_to_absolute_paths()
 
+target_compile_definitions(mrvNetwork
+    PRIVATE
+    XXH_INLINE_ALL)
 target_link_libraries(mrvNetwork PUBLIC ${LIBRARIES} )
 set_target_properties(mrvNetwork PROPERTIES FOLDER lib)
 
@@ -76,5 +84,5 @@ install(TARGETS mrvNetwork
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include/mrvOptions
+    PUBLIC_HEADER DESTINATION include/mrvNetwork
     COMPONENT libraries)

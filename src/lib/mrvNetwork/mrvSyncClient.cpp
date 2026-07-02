@@ -8,6 +8,7 @@
 
 #include "mrvEdit/mrvEditCallbacks.h"
 
+#include "mrvNetwork/mrvHashFile.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 #include "mrvNetwork/mrvConnectionHandler.h"
@@ -30,13 +31,14 @@ namespace mrv
 
         // Sync media
         auto model = ui->app->filesModel();
-        auto files = model->observeFiles()->get();
+        auto fileItems = model->observeFiles()->get();
 
         std::vector< FilesModelItem > items;
-        items.reserve(files.size());
-        for (const auto& file : files)
+        items.reserve(fileItems.size());
+        for (const auto& fileItem : fileItems)
         {
-            items.push_back(*file.get());
+            fileItem->hash_id = mrv::hashFile((*fileItem).path.get());
+            items.push_back(*fileItem.get());
         }
 
         // Send all the items to client with their annotations
