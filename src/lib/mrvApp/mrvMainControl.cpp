@@ -268,11 +268,11 @@ namespace mrv
             outputDevice->setLUTOptions(p.lutOptions);
             outputDevice->setDisplayOptions({p.displayOptions});
         }
-        
-        if (panel::colorPanel)
-        {
-            panel::colorPanel->setDisplayOptions(p.displayOptions);
-        }
+
+        // if (panel::colorPanel)
+        // {
+        //     panel::colorPanel->setDisplayOptions(p.displayOptions);
+        // }
     }
 
     void MainControl::_compareUpdate()
