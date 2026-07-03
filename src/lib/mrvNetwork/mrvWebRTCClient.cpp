@@ -24,7 +24,7 @@ namespace mrv
         if (debug == "1" || debug == "ON") {
             rtc::InitLogger(rtc::LogLevel::Debug);
         }
-        
+
 
         std::string stunServer = os::sgetenv("MRV2_STUN_SERVER");
         if (stunServer.empty())
@@ -33,7 +33,7 @@ namespace mrv
         std::string msg = string::Format(_("STUN server is {0}")).
                           arg(stunServer);
         LOG_STATUS(msg);
-        
+
         rtc::Configuration config;
         config.iceServers.emplace_back(stunServer);
         config.disableAutoNegotiation = true;
@@ -41,24 +41,39 @@ namespace mrv
         webrtcManager.setConfiguration(config);
 
         // WebRTC → WebRTCClient (this class)
-        webrtcManager.onBinaryMessage = [&](const rtc::binary& data)
+        webrtcManager.onBinaryMessage = [&](const std::string& peerId,
+                                            const rtc::binary& data)
             {
                 if (m_lock)
                     return;
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::from_bson(data);
+                message[kLocalPeerIdKey] = peerId;
                 m_receive.push_back(message);
             };
-        
-        webrtcManager.onStringMessage = [&](const std::string& msg)
+
+        webrtcManager.onStringMessage = [&](const std::string& peerId,
+                                            const std::string& msg)
             {
                 if (m_lock)
                     return;
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::parse(msg);
+                message[kLocalPeerIdKey] = peerId;
                 m_receive.push_back(message);
             };
-        
+
+        webrtcManager.onPeerDisconnected = [&](const std::string& peerId)
+            {
+                if (m_lock)
+                    return;
+                std::lock_guard lk(m_receiveMutex);
+                Message message;
+                message["command"] = "Peer Disconnected";
+                message[kLocalPeerIdKey] = peerId;
+                m_receive.push_back(message);
+            };
+
         // WebRTC → Signaling
         webrtcManager.onSignalMessage = [&](const SignalingMessage& msg) {
             signalingClient.send(msg);
@@ -72,7 +87,7 @@ namespace mrv
         signalingClient.onOffer = [&](const std::string& peerId, const std::string& sdp) {
             webrtcManager.handleOffer(peerId, sdp);
         };
-    
+
         signalingClient.onAnswer = [&](const std::string& peerId, const std::string& sdp) {
             webrtcManager.handleAnswer(peerId, sdp);
         };
@@ -85,10 +100,10 @@ namespace mrv
         signalingClient.onPeerDisconnected = [&](const std::string& peerId) {
             webrtcManager.erase(peerId);
         };
-                                
+
         signalingClient.connect(roomId, playerId);
     }
-    
+
     WebRTCClient::~WebRTCClient()
     {
     }
@@ -105,7 +120,7 @@ namespace mrv
     {
         // Not used.  We use publish directly.
     }
-    
+
     void WebRTCClient::receiveMessages()
     {
         // This is handled by a WebRTCConnection dataChannel's callback

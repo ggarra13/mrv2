@@ -99,6 +99,47 @@ namespace mrv
         Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
     }
 
+    void CommandInterpreter::handlePeerDisconnected(const std::string& peerId)
+    {
+        if (peerId.empty())
+            return; // TCP path / sentinel id — not a mesh peer, nothing to clean up
+
+        // 1. Invalidate file provenance pointing at the peer that left.
+        //    Don't just erase silently — anything mid-fetch from this
+        //    peer needs to fail loudly rather than hang.
+        size_t erased = 0;
+        for (auto it = fileSourcePeer_.begin(); it != fileSourcePeer_.end();)
+        {
+            if (it->second == peerId)
+            {
+                const std::string msg = tl::string::Format(
+                    _("Peer {0} disconnected; {1} is no longer "
+                      "available from it.")).arg(peerId).arg(it->first);
+                LOG_WARNING(msg);
+                it = fileSourcePeer_.erase(it);
+                ++erased;
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        // 2. Tear down any SFTP tunnel we had open to this peer.
+        //    Stopping the pump/listener cancels whatever transfer was
+        //    in flight; TcpDataChannelPump's destructor joins its thread.
+        // if (auto it = peerTunnels_.find(peerId); it != peerTunnels_.end())
+        // {
+        //     it->second->stop();
+        //     peerTunnels_.erase(it);
+        // }
+
+        // 3. If a fetch from this peer is actively shown in a progress
+        //    dialog, close/fail it here (UI-touching — safe now, we're
+        //    on the main thread via the timer-drained queue).
+        // cancelActiveFetchUI(peerId);  // hook for whatever UI you add
+    }
+
     void CommandInterpreter::parse(const Message& message)
     {
         const std::string& c = message["command"];
@@ -194,6 +235,13 @@ namespace mrv
                     return;
                 }
                 syncMedia(message);
+            }
+            else if (c == "Peer Disconnected")
+            {
+                const std::string peerId = message.value(kLocalPeerIdKey, std::string());
+                tcp->unlock();
+                handlePeerDisconnected(peerId);
+                return;
             }
             else if (c == "seek")
             {

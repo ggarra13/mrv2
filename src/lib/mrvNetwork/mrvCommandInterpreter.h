@@ -22,6 +22,7 @@ namespace mrv
         void parse(const Message& message);
         void syncMedia(const Message& message);
         void syncUI();
+        void handlePeerDisconnected(const std::string& peerId);
 
         void syncFile(
             const std::string& path, const std::string& audioPath,
@@ -34,6 +35,8 @@ namespace mrv
 
     private:
         ViewerUI* ui;
+        std::unordered_map<std::string, std::string> fileSourcePeer_;
+        // std::unordered_map<std::string, std::shared_ptr<SftpTunnelClient> > peerTunnels_;
     };
 
 } // namespace mrv

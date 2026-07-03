@@ -68,6 +68,8 @@ namespace mrv
     void CommandInterpreter::syncMedia(const Message& message)
     {
         // std::cerr << "message = " << message << std::endl;
+
+        const std::string peerId = message.value(kLocalPeerIdKey, std::string());
         auto app = ui->app;
         auto prefs = ui->uiPrefs;
         auto view = ui->uiView;
@@ -88,11 +90,14 @@ namespace mrv
 
         for (size_t i = 0; i < remoteFileSize; ++i)
         {
+            auto path = remoteFiles[i].path;
+            auto filePath = path.get();
+
+            fileSourcePeer_.try_emplace(filePath, peerId);
+
             if (i >= localFileSize)
             {
-                auto path = remoteFiles[i].path;
                 auto audioPath = remoteFiles[i].audioPath;
-                auto filePath = path.get();
                 auto audioFilePath = audioPath.get();
                 if (file::isReadable(filePath) &&
                     (audioFilePath.empty() || file::isReadable(audioFilePath)))
@@ -109,6 +114,17 @@ namespace mrv
                          fileIsReadable(audioFilePath)))
                     {
                         syncFile(filePath, audioFilePath, remoteFiles[i]);
+                    }
+                    else
+                    {
+                        // NEW: nothing local worked — this is the hook point
+                        // for the remote-fetch fallback.
+                        // fileSourcePeer_[filePath]
+                        // now tells us which peer's DataChannel to tunnel
+                        // through.
+                        LOG_STATUS("Could fetch " << filePath
+                                   << " from peer " << peerId);
+                        // fetchFromPeer(peerId, filePath, audioFilePath, remoteFiles[i]);
                     }
                 }
                 continue;
