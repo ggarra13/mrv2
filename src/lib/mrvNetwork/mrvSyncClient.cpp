@@ -6,6 +6,8 @@
 
 #include "mrViewer.h"
 
+#include "mrvFl/mrvIO.h"
+
 #include "mrvEdit/mrvEditCallbacks.h"
 
 #include "mrvNetwork/mrvHashFile.h"
@@ -14,6 +16,14 @@
 #include "mrvNetwork/mrvConnectionHandler.h"
 
 #include "mrvOptions/mrvCompareOptions.h"
+
+#include <tlCore/StringFormat.h>
+
+namespace
+{
+    const char* kModule = "sync";
+}
+
 
 namespace mrv
 {
@@ -35,9 +45,16 @@ namespace mrv
 
         std::vector< FilesModelItem > items;
         items.reserve(fileItems.size());
+
         for (const auto& fileItem : fileItems)
         {
-            fileItem->hash_id = mrv::hashFile((*fileItem).path.get());
+            const file::Path& path = (*fileItem).path;
+            if (path.hasProtocol())  // already a network file
+                continue;
+            std::string msg = tl::string::Format(_("Processing {0}")).
+                              arg(path.get());
+            LOG_STATUS(msg);
+            fileItem->hash_id = mrv::hashFile(path.get());
             items.push_back(*fileItem.get());
         }
 
@@ -68,7 +85,7 @@ namespace mrv
         msg["value"] = model->observeStereoIndex()->get();
         pushMessage(msg);
 
-        // Seek to current time
+        // Sync current player with all its information
         if (player)
         {
             // Send all annotations of current player
