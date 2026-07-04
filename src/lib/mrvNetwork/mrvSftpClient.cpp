@@ -226,6 +226,14 @@ namespace
         if (rc == 0)
             return true;
 
+        if (!creds.password.empty())
+        {
+            int rc = libssh2_userauth_password(session, user.c_str(),
+                                               creds.password.c_str());
+            if (rc == 0)
+                return true;
+        }
+
         const std::string msg =
             tl::string::Format(_("SFTP: public-key authentication failed: {0}"))
                 .arg(getLastError(session));
@@ -242,7 +250,8 @@ namespace mrv
         const SftpCredentials& creds,
         const std::function<void(uint64_t done, uint64_t total)>& progressCb)
     {
-        // Global libssh2 init (Safe to call repeatedly, ideally handled globally once)
+        // Global libssh2 init (Safe to call repeatedly, ideally handled
+        // globally once)
         if (libssh2_init(0) != 0)
         {
             LOG_ERROR(_("SFTP: Global libssh2 initialization failed."));
@@ -270,6 +279,13 @@ namespace mrv
         }
 
         LIBSSH2_SESSION* raw = session.get();
+        if (!raw)
+        {
+            LOG_ERROR(_("SFTP: could not get raw session."));
+            closeSocket(sock);
+            libssh2_exit();
+            return false;
+        }
 
         // Perform the basic SSH handshake protocol
         int rc = libssh2_session_handshake(raw, sock);

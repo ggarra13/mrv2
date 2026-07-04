@@ -13,6 +13,7 @@ namespace mrv
     struct SftpCredentials
     {
         std::string user;          // defaults to current OS user if empty
+        std::string password;      // if not using identityFile
         std::string identityFile;  // e.g. ~/.ssh/id_ed25519; empty = let
                                     // libssh try its default identities +
                                     // running agent

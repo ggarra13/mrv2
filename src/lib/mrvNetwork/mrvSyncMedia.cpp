@@ -22,6 +22,8 @@
 
 #include "mrViewer.h"
 
+#include <iostream>
+
 
 namespace
 {
@@ -140,14 +142,21 @@ namespace mrv
             bool ok = sftpDownloadFile("127.0.0.1", port, filePath,
                                        cachePath, creds, [](
                                            uint64_t done,
-                                           uint64_t total) {});
+                                           uint64_t total)
+                                           {
+                                               std::cerr << "movie "
+                                                         << done << "/"
+                                                         << total
+                                                         << std::endl;
+                                           });
             bool audioOk = true;
             if (ok && !audioFilePath.empty())
                 audioOk = sftpDownloadFile("127.0.0.1", port, audioFilePath,
                                            audioCachePath, creds, [](
                                                uint64_t done,
                                                uint64_t total) {});
-
+            std::cerr << "ok=" << ok << " audioOK=" << audioOk
+                      << std::endl;
             bool success = ok && audioOk;
 
             auto* data = new SyncData
