@@ -155,11 +155,24 @@ namespace mrv
 
         /**
          * Recursively creates a directory and all parent directories.
-         * * @param path The target directory path to create.
-         * @return true if the directory exists after the call (either it was created
-         * or it already existed), false if an error occurred.
+         *
+         * @param path The target directory path to create.
+         *
+         * @return true if the directory exists after the call
+         *              (either it was created or it already existed),
+         *              false if an error occurred.
          */
         bool mkdirRecursive(const std::string& path);
+
+
+        /**
+         * Given a path, returns the basename for it.
+         *
+         * @param path full path to a file.
+         *
+         * @return just the basename with the extension.
+         */
+        std::string basename(const std::string& path);
 
         /**
          * Return true if the file exists and is readable

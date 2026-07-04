@@ -205,6 +205,12 @@ namespace mrv
             return true;
         }
 
+        std::string basename(const std::string& path)
+        {
+            fs::path p(path);
+            return p.filename();
+        }
+
         static size_t ndiIndex = 1;
 
         std::string NDI(ViewerUI* ui)
