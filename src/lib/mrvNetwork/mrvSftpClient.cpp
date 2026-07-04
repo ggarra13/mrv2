@@ -9,12 +9,23 @@
 
 #include <tlCore/StringFormat.h>
 
-#include <libssh/libssh.h>
-#include <libssh/sftp.h>
+#include <libssh2.h>
+#include <libssh2_sftp.h>
+
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#else
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <netdb.h>
+#endif
 
 #include <fcntl.h>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <memory>
 #include <vector>
 
@@ -22,129 +33,202 @@ namespace
 {
     const char* kModule = "sftp";
 
-    // RAII wrappers so every early-return path below still cleans up.
-    struct SshSessionDeleter
+    // Standard cross-platform wrapper to close network sockets
+    void closeSocket(int fd)
     {
-        void operator()(ssh_session s) const
+        if (fd != -1)
+        {
+#ifdef _WIN32
+            closesocket(fd);
+#else
+            close(fd);
+#endif
+        }
+    }
+
+    // Helper to extract the last session error message string from libssh2
+    std::string getLastError(LIBSSH2_SESSION* session)
+    {
+        char* msg = nullptr;
+        libssh2_session_last_error(session, &msg, nullptr, 0);
+        return msg ? msg : "Unknown SSH error";
+    }
+
+    // RAII wrappers for automatic cleanup on early-return paths.
+    struct Libssh2SessionDeleter
+    {
+        void operator()(LIBSSH2_SESSION* s) const
         {
             if (s)
             {
-                ssh_disconnect(s);
-                ssh_free(s);
+                libssh2_session_disconnect(s, "Normal Shutdown");
+                libssh2_session_free(s);
             }
         }
     };
-    using SshSessionPtr = std::unique_ptr<ssh_session_struct, SshSessionDeleter>;
+    using Libssh2SessionPtr = std::unique_ptr<LIBSSH2_SESSION, Libssh2SessionDeleter>;
 
-    struct SftpSessionDeleter
+    struct Libssh2SftpDeleter
     {
-        void operator()(sftp_session s) const
+        void operator()(LIBSSH2_SFTP* s) const
         {
             if (s)
-                sftp_free(s);
+                libssh2_sftp_shutdown(s);
         }
     };
-    using SftpSessionPtr = std::unique_ptr<sftp_session_struct, SftpSessionDeleter>;
+    using Libssh2SftpPtr = std::unique_ptr<LIBSSH2_SFTP, Libssh2SftpDeleter>;
 
-    struct SftpFileDeleter
+    struct Libssh2SftpHandleDeleter
     {
-        void operator()(sftp_file f) const
+        void operator()(LIBSSH2_SFTP_HANDLE* h) const
         {
-            if (f)
-                sftp_close(f);
+            if (h)
+                libssh2_sftp_close(h);
         }
     };
-    using SftpFilePtr = std::unique_ptr<sftp_file_struct, SftpFileDeleter>;
+    using Libssh2SftpHandlePtr = std::unique_ptr<LIBSSH2_SFTP_HANDLE, Libssh2SftpHandleDeleter>;
 
-    struct SftpAttributesDeleter
+    // Establishes standard low-level TCP connection
+    int connectTcp(const std::string& host, uint16_t port)
     {
-        void operator()(sftp_attributes a) const
+        struct addrinfo hints, *res, *p;
+        std::memset(&hints, 0, sizeof(hints));
+        hints.ai_family = AF_UNSPEC;
+        hints.ai_socktype = SOCK_STREAM;
+
+        std::string portStr = std::to_string(port);
+        if (getaddrinfo(host.c_str(), portStr.c_str(), &hints, &res) != 0)
+            return -1;
+
+        int sock = -1;
+        for (p = res; p != nullptr; p = p->ai_next)
         {
-            if (a)
-                sftp_attributes_free(a);
+            sock = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+            if (sock == -1)
+                continue;
+
+            if (connect(sock, p->ai_addr, p->ai_addrlen) == 0)
+                break;
+
+            closeSocket(sock);
+            sock = -1;
         }
-    };
-    using SftpAttributesPtr =
-        std::unique_ptr<sftp_attributes_struct, SftpAttributesDeleter>;
+        freeaddrinfo(res);
+        return sock;
+    }
 
-    // Verifies the remote host key against the user's known_hosts,
-    // adding a first-seen entry automatically (TOFU — trust on first
-    // use), same default behavior as the openssh CLI client, but
-    // refusing outright on a *changed* key, which indicates either a
-    // reinstalled host or a real MITM attempt.
-    bool verifyKnownHost(ssh_session session)
+    // Verifies remote host key against OpenSSH format known_hosts file (TOFU logic)
+    bool verifyKnownHost(LIBSSH2_SESSION* session, const std::string& host, int port)
     {
-        enum ssh_known_hosts_e state = ssh_session_is_known_server(session);
-
-        switch (state)
+        LIBSSH2_KNOWNHOSTS* kh = libssh2_knownhost_init(session);
+        if (!kh)
         {
-        case SSH_KNOWN_HOSTS_OK:
-            return true;
+            LOG_ERROR(_("SFTP: Failed to initialize known hosts subsystem."));
+            return false;
+        }
 
-        case SSH_KNOWN_HOSTS_CHANGED:
+        std::string khPath;
+        const char* home = std::getenv("HOME");
+        if (!home)
+            home = std::getenv("USERPROFILE"); // Windows fallback
+        if (home)
+            khPath = std::string(home) + "/.ssh/known_hosts";
+
+        if (!khPath.empty())
+        {
+            // Read existing known hosts if file is present
+            libssh2_knownhost_readfile(kh, khPath.c_str(), LIBSSH2_KNOWNHOST_FILE_OPENSSH);
+        }
+
+        size_t len = 0;
+        int type = 0;
+        const char* fingerprint = libssh2_session_hostkey(session, &len, &type);
+        if (!fingerprint)
+        {
+            libssh2_knownhost_free(kh);
+            LOG_ERROR(_("SFTP: Could not retrieve remote host key."));
+            return false;
+        }
+
+        // Determine specific key type matching for OpenSSH formats
+        int checkType = LIBSSH2_KNOWNHOST_TYPE_PLAIN | LIBSSH2_KNOWNHOST_KEYENC_RAW;
+        switch (type)
+        {
+            case LIBSSH2_HOSTKEY_TYPE_RSA:       checkType |= LIBSSH2_KNOWNHOST_KEY_SSHRSA; break;
+            case LIBSSH2_HOSTKEY_TYPE_DSS:       checkType |= LIBSSH2_KNOWNHOST_KEY_SSHDSS; break;
+            case LIBSSH2_HOSTKEY_TYPE_ECDSA_256: checkType |= LIBSSH2_KNOWNHOST_KEY_ECDSA_256; break;
+            case LIBSSH2_HOSTKEY_TYPE_ECDSA_384: checkType |= LIBSSH2_KNOWNHOST_KEY_ECDSA_384; break;
+            case LIBSSH2_HOSTKEY_TYPE_ECDSA_521: checkType |= LIBSSH2_KNOWNHOST_KEY_ECDSA_521; break;
+            case LIBSSH2_HOSTKEY_TYPE_ED25519:   checkType |= LIBSSH2_KNOWNHOST_KEY_ED25519; break;
+        }
+
+        struct libssh2_knownhost* hostMatch = nullptr;
+        int rc = libssh2_knownhost_checkp(kh, host.c_str(), port, fingerprint, len,
+                                          LIBSSH2_KNOWNHOST_TYPE_PLAIN | LIBSSH2_KNOWNHOST_KEYENC_RAW,
+                                          &hostMatch);
+
+        bool success = false;
+        switch (rc)
+        {
+        case LIBSSH2_KNOWNHOST_CHECK_MATCH:
+            success = true;
+            break;
+
+        case LIBSSH2_KNOWNHOST_CHECK_MISMATCH:
             LOG_ERROR(_("SFTP: remote host key has CHANGED since last "
                         "connection. Refusing to connect - this could "
                         "indicate the host was reinstalled, or a "
                         "man-in-the-middle attack."));
-            return false;
+            break;
 
-        case SSH_KNOWN_HOSTS_OTHER:
-            LOG_ERROR(_("SFTP: remote offered a host key of a type we "
-                        "didn't expect for this host. Refusing to "
-                        "connect."));
-            return false;
-
-        case SSH_KNOWN_HOSTS_NOT_FOUND:
-        case SSH_KNOWN_HOSTS_UNKNOWN:
-        {
-            // First time seeing this host - record it (TOFU) rather
-            // than prompting, since this path runs on a background
-            // thread with no UI to prompt through. If you want an
-            // explicit user confirmation step instead, this is where
-            // to add it (surface the key fingerprint via
-            // ssh_get_publickey_hash and route through Fl::awake to
-            // ask before calling ssh_session_update_known_hosts).
-            int rc = ssh_session_update_known_hosts(session);
-            if (rc != SSH_OK)
+        case LIBSSH2_KNOWNHOST_CHECK_NOTFOUND:
+            // First time seeing this host - trust on first use (TOFU)
+            libssh2_knownhost_addc(kh, host.c_str(), nullptr, fingerprint, len,
+                                   "mrv2-client", strlen("mrv2-client"), checkType, nullptr);
+            if (!khPath.empty())
             {
-                LOG_WARNING(_("SFTP: could not write known_hosts entry; "
-                              "continuing anyway."));
+                if (libssh2_knownhost_writefile(kh, khPath.c_str(), LIBSSH2_KNOWNHOST_FILE_OPENSSH) != 0)
+                {
+                    LOG_WARNING(_("SFTP: could not write known_hosts entry; continuing anyway."));
+                }
             }
-            return true;
+            success = true;
+            break;
+
+        case LIBSSH2_KNOWNHOST_CHECK_FAILURE:
+        default:
+            LOG_ERROR(_("SFTP: error checking known hosts configuration."));
+            break;
         }
 
-        case SSH_KNOWN_HOSTS_ERROR:
-        default:
-        {
-            const std::string msg =
-                tl::string::Format(_("SFTP: error checking known "
-                                      "hosts: {0}"))
-                    .arg(ssh_get_error(session));
-            LOG_ERROR(msg);
-            return false;
-        }
-        }
+        libssh2_knownhost_free(kh);
+        return success;
     }
 
-    bool authenticate(ssh_session session, const mrv::SftpCredentials& creds)
+    bool authenticate(LIBSSH2_SESSION* session, const std::string& user, const mrv::SftpCredentials& creds)
     {
-        if (!creds.identityFile.empty())
+        std::string privKey = creds.identityFile;
+        if (privKey.empty())
         {
-            ssh_options_set(session, SSH_OPTIONS_IDENTITY,
-                             creds.identityFile.c_str());
+            const char* home = std::getenv("HOME");
+            if (!home)
+                home = std::getenv("USERPROFILE");
+            if (home)
+            {
+                // Fallback attempt on a typical default OpenSSH key location
+                privKey = std::string(home) + "/.ssh/id_rsa";
+            }
         }
 
-        // Tries the running agent first, then default identity files
-        // (~/.ssh/id_ed25519, id_rsa, etc.) plus whatever was set via
-        // SSH_OPTIONS_IDENTITY above. No password prompt involved.
-        int rc = ssh_userauth_publickey_auto(session, nullptr, nullptr);
-        if (rc == SSH_AUTH_SUCCESS)
+        // Note: Modern libssh2 versions accept passing nullptr for the public key
+        // parameter if it can extract it natively from the private key file.
+        int rc = libssh2_userauth_publickey_fromfile(session, user.c_str(), nullptr, privKey.c_str(), nullptr);
+        if (rc == 0)
             return true;
 
         const std::string msg =
-            tl::string::Format(_("SFTP: public-key authentication "
-                                  "failed: {0}"))
-                .arg(ssh_get_error(session));
+            tl::string::Format(_("SFTP: public-key authentication failed: {0}"))
+                .arg(getLastError(session));
         LOG_ERROR(msg);
         return false;
     }
@@ -158,14 +242,54 @@ namespace mrv
         const SftpCredentials& creds,
         const std::function<void(uint64_t done, uint64_t total)>& progressCb)
     {
-        SshSessionPtr session(ssh_new());
-        if (!session)
+        // Global libssh2 init (Safe to call repeatedly, ideally handled globally once)
+        if (libssh2_init(0) != 0)
         {
-            LOG_ERROR(_("SFTP: could not allocate ssh session."));
+            LOG_ERROR(_("SFTP: Global libssh2 initialization failed."));
             return false;
         }
 
-        ssh_session raw = session.get();
+        int sock = connectTcp(host, port);
+        if (sock == -1)
+        {
+            const std::string msg =
+                tl::string::Format(_("SFTP: TCP connection to {0}:{1} failed."))
+                    .arg(host).arg(port);
+            LOG_ERROR(msg);
+            libssh2_exit();
+            return false;
+        }
+
+        Libssh2SessionPtr session(libssh2_session_init());
+        if (!session)
+        {
+            LOG_ERROR(_("SFTP: could not allocate ssh session."));
+            closeSocket(sock);
+            libssh2_exit();
+            return false;
+        }
+
+        LIBSSH2_SESSION* raw = session.get();
+
+        // Perform the basic SSH handshake protocol
+        int rc = libssh2_session_handshake(raw, sock);
+        if (rc != 0)
+        {
+            const std::string msg =
+                tl::string::Format(_("SFTP: SSH handshake failed: {0}"))
+                    .arg(getLastError(raw));
+            LOG_ERROR(msg);
+            closeSocket(sock);
+            libssh2_exit();
+            return false;
+        }
+
+        if (!verifyKnownHost(raw, host, port))
+        {
+            closeSocket(sock);
+            libssh2_exit();
+            return false;
+        }
 
         std::string user = creds.user;
         if (user.empty())
@@ -177,89 +301,68 @@ namespace mrv
                 user = envUser;
         }
 
-        ssh_options_set(raw, SSH_OPTIONS_HOST, host.c_str());
-        int portInt = static_cast<int>(port);
-        ssh_options_set(raw, SSH_OPTIONS_PORT, &portInt);
-        if (!user.empty())
-            ssh_options_set(raw, SSH_OPTIONS_USER, user.c_str());
-
-        int rc = ssh_connect(raw);
-        if (rc != SSH_OK)
+        if (!authenticate(raw, user, creds))
         {
-            const std::string msg =
-                tl::string::Format(_("SFTP: connection to {0}:{1} "
-                                      "failed: {2}"))
-                    .arg(host).arg(port).arg(ssh_get_error(raw));
-            LOG_ERROR(msg);
+            closeSocket(sock);
+            libssh2_exit();
             return false;
         }
 
-        if (!verifyKnownHost(raw))
-            return false;
-
-        if (!authenticate(raw, creds))
-            return false;
-
-        SftpSessionPtr sftp(sftp_new(raw));
+        Libssh2SftpPtr sftp(libssh2_sftp_init(raw));
         if (!sftp)
         {
             const std::string msg =
-                tl::string::Format(_("SFTP: could not create sftp "
-                                      "session: {0}"))
-                    .arg(ssh_get_error(raw));
+                tl::string::Format(_("SFTP: could not create sftp session: {0}"))
+                    .arg(getLastError(raw));
             LOG_ERROR(msg);
+            closeSocket(sock);
+            libssh2_exit();
             return false;
         }
 
-        rc = sftp_init(sftp.get());
-        if (rc != SSH_OK)
+        // Remote stat sizing checks
+        LIBSSH2_SFTP_ATTRIBUTES attrs;
+        uint64_t remoteSize = 0;
+        rc = libssh2_sftp_stat_ex(sftp.get(), remotePath.c_str(), remotePath.length(),
+                                  LIBSSH2_SFTP_STAT, &attrs);
+        if (rc == 0 && (attrs.flags & LIBSSH2_SFTP_ATTR_SIZE))
         {
-            const std::string msg =
-                tl::string::Format(_("SFTP: sftp_init failed: {0}"))
-                    .arg(sftp_get_error(sftp.get()));
-            LOG_ERROR(msg);
-            return false;
+            remoteSize = attrs.filesize;
         }
-
-        // Stat first so we can report progress against a known total
-        // and detect a missing/unreadable remote file up front rather
-        // than failing on the first sftp_read.
-        SftpAttributesPtr attrs(sftp_stat(sftp.get(), remotePath.c_str()));
-        uint64_t remoteSize = attrs ? attrs->size : 0;
-        if (!attrs)
+        else
         {
             const std::string msg =
-                tl::string::Format(_("SFTP: could not stat remote file "
-                                      "{0}; proceeding without a known "
-                                      "size."))
+                tl::string::Format(_("SFTP: could not stat remote file {0}; proceeding without a known size."))
                     .arg(remotePath);
             LOG_WARNING(msg);
         }
 
-        SftpFilePtr remoteFile(sftp_open(sftp.get(), remotePath.c_str(),
-                                         O_RDONLY, 0));
+        LIBSSH2_SFTP_HANDLE* remoteFileRaw = libssh2_sftp_open_ex(
+            sftp.get(), remotePath.c_str(), remotePath.length(),
+            LIBSSH2_FXF_READ, 0, LIBSSH2_SFTP_OPENFILE);
+
+        Libssh2SftpHandlePtr remoteFile(remoteFileRaw);
         if (!remoteFile)
         {
             const std::string msg =
-                tl::string::Format(_("SFTP: could not open remote file "
-                                      "{0}: {1}"))
-                    .arg(remotePath).arg(sftp_get_error(sftp.get()));
+                tl::string::Format(_("SFTP: could not open remote file {0}: {1}"))
+                    .arg(remotePath).arg(getLastError(raw));
             LOG_ERROR(msg);
+            closeSocket(sock);
+            libssh2_exit();
             return false;
         }
 
-        // Stage to <localPath>.part and rename on success, so a
-        // failure or cancellation never leaves a partial file at the
-        // path callers treat as "this file is ready to open."
         const std::string partPath = localPath + ".part";
         FILE* out = std::fopen(partPath.c_str(), "wb");
         if (!out)
         {
             const std::string msg =
-                tl::string::Format(_("SFTP: could not open local file "
-                                      "{0} for writing."))
+                tl::string::Format(_("SFTP: could not open local file {0} for writing."))
                     .arg(partPath);
             LOG_ERROR(msg);
+            closeSocket(sock);
+            libssh2_exit();
             return false;
         }
 
@@ -270,26 +373,25 @@ namespace mrv
 
         while (true)
         {
-            ssize_t n = sftp_read(remoteFile.get(), buf.data(), buf.size());
+            // libssh2 returns bytes read, 0 on EOF, or negative value on error
+            ssize_t n = libssh2_sftp_read(remoteFile.get(), buf.data(), buf.size());
             if (n == 0)
                 break; // EOF
             if (n < 0)
             {
                 const std::string msg =
                     tl::string::Format(_("SFTP: read error on {0}: {1}"))
-                        .arg(remotePath).arg(sftp_get_error(sftp.get()));
+                        .arg(remotePath).arg(getLastError(raw));
                 LOG_ERROR(msg);
                 ok = false;
                 break;
             }
 
-            size_t written = std::fwrite(buf.data(), 1,
-                                          static_cast<size_t>(n), out);
+            size_t written = std::fwrite(buf.data(), 1, static_cast<size_t>(n), out);
             if (written != static_cast<size_t>(n))
             {
                 const std::string msg =
-                    tl::string::Format(_("SFTP: local write error "
-                                          "writing {0}."))
+                    tl::string::Format(_("SFTP: local write error writing {0}."))
                         .arg(partPath);
                 LOG_ERROR(msg);
                 ok = false;
@@ -303,6 +405,13 @@ namespace mrv
 
         std::fclose(out);
 
+        // Explicit structural teardown before managing local file manipulation paths
+        remoteFile.reset();
+        sftp.reset();
+        session.reset();
+        closeSocket(sock);
+        libssh2_exit();
+
         if (!ok)
         {
             std::remove(partPath.c_str());
@@ -312,8 +421,7 @@ namespace mrv
         if (remoteSize != 0 && totalRead != remoteSize)
         {
             const std::string msg =
-                tl::string::Format(_("SFTP: transfer of {0} incomplete: "
-                                      "got {1} of {2} bytes."))
+                tl::string::Format(_("SFTP: transfer of {0} incomplete: got {1} of {2} bytes."))
                     .arg(remotePath).arg(totalRead).arg(remoteSize);
             LOG_ERROR(msg);
             std::remove(partPath.c_str());
@@ -323,8 +431,7 @@ namespace mrv
         if (std::rename(partPath.c_str(), localPath.c_str()) != 0)
         {
             const std::string msg =
-                tl::string::Format(_("SFTP: could not rename {0} to "
-                                      "{1}."))
+                tl::string::Format(_("SFTP: could not rename {0} to {1}."))
                     .arg(partPath).arg(localPath);
             LOG_ERROR(msg);
             std::remove(partPath.c_str());
