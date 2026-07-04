@@ -102,9 +102,8 @@ namespace mrv
         size_t h = std::hash<std::string>{}(remotePath);
         std::string dir = mrv::homepath() + "/.cache/mrv2/remote/" +
                            std::to_string(h);
-        // file::mkdirRecursive(dir);   // adjust to whatever mrvCore/mrvFile actually exposes
-        // return dir + "/" + file::basename(remotePath);
-        return dir;
+        file::mkdirRecursive(dir);
+        return dir + "/" + file::basename(remotePath);
     }
 
     void CommandInterpreter::fetchRemoteFile(
