@@ -21,8 +21,11 @@ namespace mrv
             {
                 client = serverSocket_.acceptConnection();
             }
-            catch (const Poco::Exception&)
+            catch (const Poco::Exception& e)
             {
+                std::cerr << __FILE__ << " "
+                          << __FUNCTION__ << " "
+                          << __LINE__ << std::endl;
                 break; // listener closed (stop()) or real error
             }
 
@@ -46,10 +49,14 @@ namespace mrv
             channel->onOpen(
                 [this, client, channel]() mutable
                     {
+                        std::cerr << "connected sftp-tunnel" << std::endl;
                         auto pump = std::make_shared<TcpDataChannelPump>(client, channel);
                         std::weak_ptr<TcpDataChannelPump> weakPump = pump;
                         pump->setOnFinished([this, weakPump]()
                             {
+                                std::cerr << __FILE__ << " "
+                                          << __FUNCTION__ << " "
+                                          << __LINE__ << std::endl;
                                 std::lock_guard<std::mutex> lk(pumpsMutex_);
                                 pumps_.erase(
                                     std::remove_if(pumps_.begin(), pumps_.end(),
