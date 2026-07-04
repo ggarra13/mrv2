@@ -30,7 +30,7 @@ namespace mrv
 {
     namespace file
     {
-        
+
         bool isValidType(const std::string ext)
         {
             std::string extension = tl::string::toLower(ext);
@@ -77,7 +77,7 @@ namespace mrv
                 ioSystem->getFileType(extension) == tl::io::FileType::Movie);
         }
 
-        
+
         bool isSRGB(const std::string& ext)
         {
             static const std::unordered_set<std::string> extensions = {
@@ -86,15 +86,15 @@ namespace mrv
                 ".usd", ".usda", ".usdc", ".usdz",
                 ".tif", ".tiff", ".psd",
             };
-                
+
             std::string extension = string::toLower(ext);
-            
+
             if (!extension.empty() && extension[0] != '.')
                 extension.insert(extension.begin(), '.');
 
             return extensions.find(extension) != extensions.end();
         }
-        
+
         // Given a frame extension || return true if a possible audio file.
         bool isAudio(const std::string& ext)
         {
@@ -164,7 +164,7 @@ namespace mrv
         {
             return fs::exists(filePath);
         }
-        
+
         bool isReadable(const fs::path& p)
         {
             const std::string& filePath = p.u8string();
@@ -184,6 +184,27 @@ namespace mrv
             return false;
         }
 
+        bool mkdirRecursive(const std::string& path)
+        {
+            std::error_code ec;
+
+            // std::filesystem::create_directories behaves exactly like
+            // `mkdir -p`.
+            // It returns true if it actually created directories, and
+            // false if they already existed OR if an error occurred.
+            // Because of this, we pass in std::error_code to safely check for
+            // actual system errors.
+            fs::create_directories(path, ec);
+
+            if (ec) {
+                std::cerr << "Error creating directory '" << path << "': "
+                          << ec.message() << '\n';
+                return false;
+            }
+
+            return true;
+        }
+
         static size_t ndiIndex = 1;
 
         std::string NDI(ViewerUI* ui)
@@ -198,14 +219,14 @@ namespace mrv
             auto out = tmppath() + '/' + buf;
             return out;
         }
-        
+
         bool isUSD(const std::string& ext)
         {
             static const std::string extensions[] =
                 {
                     ".usd", ".usda", ".usdc", ".usdz"
                 };
-            
+
             for (const std::string& extension : extensions)
             {
                 if (ext == extension)
@@ -229,7 +250,7 @@ namespace mrv
             }
             return false;
         }
-        
+
         bool isTemporaryNDI(const tl::file::Path& path)
         {
             bool out = true;
@@ -270,7 +291,7 @@ namespace mrv
             }
             return true;
         }
-        
+
         bool isInPath(const std::string& command)
         {
 #ifdef _WIN32
