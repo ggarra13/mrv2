@@ -20,10 +20,13 @@ namespace mrv
                                    Poco::UInt16 sshdPort = 22)
             : sshdPort_(sshdPort)
         {
+            std::cerr << "[SftpTunnelServer] constructed, sshdPort=" << sshdPort_ << std::endl;
             manager.onExtraDataChannel =
                 [this](const std::string& peerId,
                        std::shared_ptr<rtc::DataChannel> dc)
                 {
+                    std::cerr << "[SftpTunnelServer] onExtraDataChannel fired, "
+                      << "peer=" << peerId << " label=" << dc->label() << std::endl;
                     if (dc->label() == "sftp-tunnel")
                         handleIncoming(peerId, dc);
                 };
