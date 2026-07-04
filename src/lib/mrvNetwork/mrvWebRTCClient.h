@@ -17,6 +17,8 @@ namespace mrv
         WebRTCClient(const std::string& room, const std::string& player = "");
         virtual ~WebRTCClient();
 
+        WebRTCManager& manager() { return webrtcManager; }
+
         void pushMessage(const Message&) override;
         void sendMessages() override;
         void receiveMessages() override;

@@ -11,6 +11,9 @@ class ViewerUI;
 namespace mrv
 {
     class FilesModelItem;
+    class SftpTunnelClient;
+    class SftpTunnelServer;
+    class WebRTCManager;
 
     class CommandInterpreter
     {
@@ -18,15 +21,25 @@ namespace mrv
         CommandInterpreter(ViewerUI*);
         ~CommandInterpreter();
 
+        void syncFile(
+            const std::string& path, const std::string& audioPath,
+            const FilesModelItem& item);
+
     protected:
         void parse(const Message& message);
         void syncMedia(const Message& message);
         void syncUI();
         void handlePeerDisconnected(const std::string& peerId);
 
-        void syncFile(
-            const std::string& path, const std::string& audioPath,
-            const FilesModelItem& item);
+        // sFTP additions
+        void ensureSftpServer(WebRTCManager& manager);
+        std::shared_ptr<SftpTunnelClient>
+        getOrCreateTunnel(WebRTCManager& manager, const std::string& peerId);
+        std::string cachePathFor(const std::string& remotePath) const;
+        void fetchRemoteFile(const std::string& peerId,
+                             const std::string& filePath,
+                             const std::string& audioFilePath,
+                             const FilesModelItem& item);
 
     public:
         void timerEvent();
@@ -36,7 +49,10 @@ namespace mrv
     private:
         ViewerUI* ui;
         std::unordered_map<std::string, std::string> fileSourcePeer_;
-        // std::unordered_map<std::string, std::shared_ptr<SftpTunnelClient> > peerTunnels_;
+        std::unordered_map<std::string, std::shared_ptr<SftpTunnelClient> > peerTunnels_;
+        std::unique_ptr<SftpTunnelServer> sftpServer_;
+        Poco::UInt16 nextTunnelPort_ = 2222;
+        std::mutex tunnelMutex_;
     };
 
 } // namespace mrv

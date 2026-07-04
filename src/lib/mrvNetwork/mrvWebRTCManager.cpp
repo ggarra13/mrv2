@@ -112,6 +112,13 @@ namespace mrv
         // Handle incoming DataChannel
         pc->onDataChannel([this, id, client](std::shared_ptr<DataChannel> dc) {
 
+            if (dc->label() != "mrv2_sync")
+            {
+                if (onExtraDataChannel)
+                    onExtraDataChannel(id, dc);
+                return;
+            }
+
             client->dataChannel = dc;
 
             dc->onOpen([id, client]() {
@@ -180,6 +187,16 @@ namespace mrv
         return client;
     }
 
+
+    std::shared_ptr<WebRTCConnection>
+    WebRTCManager::getClient(const std::string& peerId)
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        auto it = clients.find(peerId);
+        if (it == clients.end())
+            return nullptr;
+        return it->second;
+    }
 
     void WebRTCManager::handleOffer(const std::string& peerId, const std::string& sdp)
     {

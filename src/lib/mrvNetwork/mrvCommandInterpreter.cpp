@@ -2,7 +2,12 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrViewer.h"
+
+#include "mrvNetwork/mrvWebRTCClient.h"
+#include "mrvNetwork/mrvSftpTunnelClient.h"
+#include "mrvNetwork/mrvSftpTunnelServer.h"
+
+#include "mrvNetwork/mrvCommandInterpreter.h"
 
 #include "mrvFl/mrvOCIO.h"
 #include "mrvFLTK/mrvCallbacks.h"
@@ -14,8 +19,9 @@
 #include "mrvNetwork/mrvProtocolVersion.h"
 #include "mrvNetwork/mrvTCP.h"
 
-#include "mrvNetwork/mrvCommandInterpreter.h"
 #include "mrvOptions/mrvCompareOptions.h"
+
+#include "mrViewer.h"
 
 #if defined(OPENGL_BACKEND)
 #    include "mrvGL/mrvGLJson.h"

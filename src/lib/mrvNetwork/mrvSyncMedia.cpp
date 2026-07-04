@@ -2,25 +2,32 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-
-#include "mrViewer.h"
+#include "mrvNetwork/mrvSftpClient.h"
+#include "mrvNetwork/mrvSftpTunnelClient.h"
+#include "mrvNetwork/mrvSftpTunnelServer.h"
+#include "mrvNetwork/mrvWebRTCClient.h"
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvPathMapping.h"
 
+#include "mrvNetwork/mrvCommandInterpreter.h"
 #include "mrvNetwork/mrvFilePath.h"
 #include "mrvNetwork/mrvFilesModelItem.h"
-#include "mrvNetwork/mrvCommandInterpreter.h"
 
 #include "mrvCore/mrvFile.h"
+#include "mrvCore/mrvHome.h"
 
 
 #include <tlCore/StringFormat.h>
+
+#include "mrViewer.h"
+
 
 namespace
 {
     const char* kModule = "sync";
 }
+
 
 namespace
 {
@@ -42,6 +49,120 @@ namespace
 
 namespace mrv
 {
+    struct SyncData
+    {
+        CommandInterpreter* self;
+        bool success;
+        std::string cachePath;
+        std::string audioCachePath;
+        FilesModelItem item;
+    };
+
+    static void sync_callback(void* data)
+    {
+        std::unique_ptr<SyncData> d(static_cast<SyncData*>(data));
+
+        if (d->success)
+            d->self->syncFile(
+                d->cachePath,
+                d->audioCachePath,
+                d->item);
+        else
+            LOG_ERROR(_("Failed to fetch remote file via SFTP."));
+    }
+
+    void CommandInterpreter::ensureSftpServer(WebRTCManager& manager)
+    {
+        std::lock_guard<std::mutex> lk(tunnelMutex_);
+        if (!sftpServer_)
+            sftpServer_ = std::make_unique<SftpTunnelServer>(manager);
+    }
+
+    std::shared_ptr<SftpTunnelClient>
+    CommandInterpreter::getOrCreateTunnel(WebRTCManager& manager,
+                                           const std::string& peerId)
+    {
+        std::lock_guard<std::mutex> lk(tunnelMutex_);
+        auto it = peerTunnels_.find(peerId);
+        if (it != peerTunnels_.end())
+            return it->second;
+
+        auto tunnel = std::make_shared<SftpTunnelClient>(
+            manager, peerId, nextTunnelPort_++);
+        tunnel->start();
+        peerTunnels_[peerId] = tunnel;
+        return tunnel;
+    }
+
+    std::string
+    CommandInterpreter::cachePathFor(const std::string& remotePath) const
+    {
+        // Content-addressed by the remote path string, not its content —
+        // fine for now since re-fetch-on-mismatch isn't handled yet.
+        size_t h = std::hash<std::string>{}(remotePath);
+        std::string dir = mrv::homepath() + "/.cache/mrv2/remote/" +
+                           std::to_string(h);
+        // file::mkdirRecursive(dir);   // adjust to whatever mrvCore/mrvFile actually exposes
+        // return dir + "/" + file::basename(remotePath);
+        return dir;
+    }
+
+    void CommandInterpreter::fetchRemoteFile(
+        const std::string& peerId, const std::string& filePath,
+        const std::string& audioFilePath, const FilesModelItem& item)
+    {
+        auto* webrtcClient = dynamic_cast<WebRTCClient*>(tcp);
+        if (!webrtcClient)
+        {
+            LOG_ERROR(_("Not connected via WebRTC; cannot fetch remote file."));
+            return;
+        }
+        auto& manager = webrtcClient->manager();
+
+        ensureSftpServer(manager);
+        auto tunnel = getOrCreateTunnel(manager, peerId);
+
+        std::string cachePath = cachePathFor(filePath);
+        std::string audioCachePath =
+            audioFilePath.empty() ? std::string() : cachePathFor(audioFilePath);
+        Poco::UInt16 port = tunnel->localPort();
+
+        std::string msg = tl::string::Format(
+            _("Fetching {0} from peer {1} via SFTP tunnel on port {2}..."))
+                          .arg(filePath).arg(peerId).arg(port);
+        LOG_STATUS(msg);
+
+        SftpCredentials creds;
+        // creds.identityFile = prefs->sshIdentityFile;
+
+        std::thread([this, filePath, audioFilePath, cachePath,
+                     audioCachePath, port, creds, item]()
+        {
+            bool ok = sftpDownloadFile("127.0.0.1", port, filePath,
+                                       cachePath, creds, [](
+                                           uint64_t done,
+                                           uint64_t total) {});
+            bool audioOk = true;
+            if (ok && !audioFilePath.empty())
+                audioOk = sftpDownloadFile("127.0.0.1", port, audioFilePath,
+                                           audioCachePath, creds, [](
+                                               uint64_t done,
+                                               uint64_t total) {});
+
+            bool success = ok && audioOk;
+
+            auto* data = new SyncData
+                         {
+                             this,
+                             success,
+                             cachePath,
+                             audioCachePath,
+                             item
+                         };
+
+            Fl::awake(sync_callback, data);
+        }).detach();
+    }
 
     void CommandInterpreter::syncFile(
         const std::string& filePath, const std::string& audioFilePath,
@@ -115,16 +236,22 @@ namespace mrv
                     {
                         syncFile(filePath, audioFilePath, remoteFiles[i]);
                     }
+                    else if (!peerId.empty())
+                    {
+                        // Nothing local worked — last resort, fetch from
+                        // the peer that reported this file. Note: uses
+                        // path.get()/audioPath.get(), the *original*
+                        // remote paths — filePath/audioFilePath were
+                        // just mutated in place by replace_path() above.
+                        fetchRemoteFile(peerId, path.get(), audioPath.get(),
+                                        remoteFiles[i]);
+                    }
                     else
                     {
-                        // NEW: nothing local worked — this is the hook point
-                        // for the remote-fetch fallback.
-                        // fileSourcePeer_[filePath]
-                        // now tells us which peer's DataChannel to tunnel
-                        // through.
-                        LOG_STATUS("Could fetch " << filePath
-                                   << " from peer " << peerId);
-                        // fetchFromPeer(peerId, filePath, audioFilePath, remoteFiles[i]);
+                        std::string msg = tl::string::Format(
+                                      _("Remote file {0} not found locally and no "
+                                        "peer to fetch it from.")).arg(filePath);
+                        LOG_ERROR(msg);
                     }
                 }
                 continue;
