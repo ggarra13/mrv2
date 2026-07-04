@@ -77,8 +77,26 @@ namespace mrv
                 paused_ = false;
             }
             cv_.notify_all();
+            
             if (reader_.joinable())
-                reader_.join();
+            {
+                if (reader_.get_id() == std::this_thread::get_id())
+                {
+                    // We are being destroyed from within our own reader
+                    // thread (the last shared_ptr reference was released as
+                    // readLoop() returned). Joining here would self-deadlock
+                    // -- join() would throw, and even catching that, a
+                    // still-joinable std::thread's own destructor calls
+                    // std::terminate() unconditionally. Detach instead; the
+                    // thread is finishing its own execution right now, so
+                    // there's nothing left to wait for.
+                    reader_.detach();
+                }
+                else
+                {
+                    reader_.join();
+                }
+            }
         }
 
     private:
