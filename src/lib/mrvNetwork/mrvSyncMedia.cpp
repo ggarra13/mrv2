@@ -42,7 +42,7 @@ namespace
                 tl::string::Format(_("Remote file {0} does not "
                                      "exist on local filesystem."))
                     .arg(filePath);
-            LOG_ERROR(msg);
+            LOG_WARNING(msg);
             return false;
         }
         return true;
@@ -126,29 +126,29 @@ namespace mrv
         LOG_STATUS(msg);
 
         SftpCredentials creds;
-        // creds.identityFile = prefs->sshIdentityFile;
+        // creds.identityFile = uiPrefs->sshIdentityFile;
 
         std::thread([this, filePath, audioFilePath, cachePath,
                      audioCachePath, port, creds, item]()
         {
-            bool ok = sftpDownloadFile("127.0.0.1", port, filePath,
-                                       cachePath, creds, [](
-                                           uint64_t done,
-                                           uint64_t total)
-                                           {
-                                               std::cerr << "movie "
-                                                         << done << "/"
-                                                         << total
-                                                         << std::endl;
-                                           });
+            SftpClient sftpA("127.0.0.1", port, creds);
+            bool ok = sftpA.downloadFile(filePath, cachePath, [](
+                                             uint64_t done,
+                                             uint64_t total)
+                {
+                });
+            
             bool audioOk = true;
             if (ok && !audioFilePath.empty())
-                audioOk = sftpDownloadFile("127.0.0.1", port, audioFilePath,
-                                           audioCachePath, creds, [](
-                                               uint64_t done,
-                                               uint64_t total) {});
-            std::cerr << "ok=" << ok << " audioOK=" << audioOk
-                      << std::endl;
+            {
+                SftpClient sftpB("127.0.0.1", port, creds);
+                audioOk = sftpB.downloadFile(audioFilePath,
+                                             audioCachePath, [](
+                                                 uint64_t done,
+                                                 uint64_t total)
+                                                 {
+                                                 });
+            }
             bool success = ok && audioOk;
 
             auto* data = new SyncData
@@ -238,9 +238,6 @@ namespace mrv
                     }
                     else if (!peerId.empty())
                     {
-                        std::cerr << __FILE__ << " " << __FUNCTION__
-                                  << " " << __LINE__
-                                  << std::endl;
                         // Nothing local worked — last resort, fetch from
                         // the peer that reported this file. Note: uses
                         // path.get()/audioPath.get(), the *original*

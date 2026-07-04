@@ -31,8 +31,6 @@ namespace mrv
             , peerId_(std::move(peerId))
             , serverSocket_(Poco::Net::SocketAddress("127.0.0.1", localPort))
         {
-            std::cerr << __FILE__ << " opening local socket on 127.0.0.1:"
-                      << localPort << std::endl;
         }
 
         Poco::UInt16 localPort() const {

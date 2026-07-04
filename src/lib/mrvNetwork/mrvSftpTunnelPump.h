@@ -41,10 +41,6 @@ namespace mrv
                     if (!std::holds_alternative<rtc::binary>(msg))
                         return;
                     auto& data = std::get<rtc::binary>(msg);
-                    std::cerr << __FILE__ << " " << __FUNCTION__
-                              << " " << __LINE__
-                              << " size=" << data.size()
-                              << std::endl;
                     writeAllToSocket(
                         reinterpret_cast<const char*>(data.data()),
                         data.size());
@@ -59,8 +55,6 @@ namespace mrv
 
         void start()
         {
-            std::cerr << __FILE__ << " " << __FUNCTION__
-                      << " " << __LINE__ << std::endl;
             reader_ = std::thread([self = shared_from_this()]()
                                    { self->readLoop(); });
         }
@@ -132,15 +126,9 @@ namespace mrv
 
                 try
                 {
-                    std::cerr << __FILE__ << " " << __FUNCTION__
-                              << " " << __LINE__ << " received bytes="
-                              << n << std::endl;
                     channel_->send(
                         reinterpret_cast<const std::byte*>(buf.data()),
                         static_cast<size_t>(n));
-                    std::cerr << __FILE__ << " " << __FUNCTION__
-                              << " " << __LINE__ << " sent bytes="
-                              << n << std::endl;
                 }
                 catch (const std::exception&)
                 {
@@ -165,10 +153,7 @@ namespace mrv
                 try
                 {
                     n = socket_.sendBytes(data + off,
-                                           static_cast<int>(len - off));
-                    std::cerr << __FILE__ << " " << __FUNCTION__
-                              << " " << __LINE__ << " sent bytes to socket="
-                              << n << std::endl;
+                                          static_cast<int>(len - off));
                 }
                 catch (const Poco::Exception&)
                 {
