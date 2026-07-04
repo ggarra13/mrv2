@@ -73,13 +73,6 @@ namespace mrv
             LOG_ERROR(_("Failed to fetch remote file via SFTP."));
     }
 
-    void CommandInterpreter::ensureSftpServer(WebRTCManager& manager)
-    {
-        std::lock_guard<std::mutex> lk(tunnelMutex_);
-        if (!sftpServer_)
-            sftpServer_ = std::make_unique<SftpTunnelServer>(manager);
-    }
-
     std::shared_ptr<SftpTunnelClient>
     CommandInterpreter::getOrCreateTunnel(WebRTCManager& manager,
                                            const std::string& peerId)
@@ -118,9 +111,8 @@ namespace mrv
             LOG_ERROR(_("Not connected via WebRTC; cannot fetch remote file."));
             return;
         }
-        auto& manager = webrtcClient->manager();
 
-        ensureSftpServer(manager);
+        auto& manager = webrtcClient->manager();
         auto tunnel = getOrCreateTunnel(manager, peerId);
 
         std::string cachePath = cachePathFor(filePath);
@@ -246,6 +238,9 @@ namespace mrv
                     }
                     else if (!peerId.empty())
                     {
+                        std::cerr << __FILE__ << " " << __FUNCTION__
+                                  << " " << __LINE__
+                                  << std::endl;
                         // Nothing local worked — last resort, fetch from
                         // the peer that reported this file. Note: uses
                         // path.get()/audioPath.get(), the *original*

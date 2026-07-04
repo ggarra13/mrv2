@@ -32,7 +32,6 @@ namespace mrv
         void handlePeerDisconnected(const std::string& peerId);
 
         // sFTP additions
-        void ensureSftpServer(WebRTCManager& manager);
         std::shared_ptr<SftpTunnelClient>
         getOrCreateTunnel(WebRTCManager& manager, const std::string& peerId);
         std::string cachePathFor(const std::string& remotePath) const;
@@ -50,7 +49,6 @@ namespace mrv
         ViewerUI* ui;
         std::unordered_map<std::string, std::string> fileSourcePeer_;
         std::unordered_map<std::string, std::shared_ptr<SftpTunnelClient> > peerTunnels_;
-        std::unique_ptr<SftpTunnelServer> sftpServer_;
         Poco::UInt16 nextTunnelPort_ = 2222;
         std::mutex tunnelMutex_;
     };

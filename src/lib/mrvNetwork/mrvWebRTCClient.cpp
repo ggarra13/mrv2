@@ -3,6 +3,7 @@
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
 #include "mrvNetwork/mrvWebRTCClient.h"
+#include "mrvNetwork/mrvSftpTunnelServer.h"
 
 #include "mrvFl/mrvIO.h"
 
@@ -39,6 +40,12 @@ namespace mrv
         config.disableAutoNegotiation = true;
 
         webrtcManager.setConfiguration(config);
+
+        // Every mesh participant must be ready to serve a file to any other
+        // peer, regardless of whether this machine ever needs to fetch one
+        // itself - construct unconditionally, not on demand.
+        sftpServer = std::make_unique<SftpTunnelServer>(webrtcManager);
+
 
         // WebRTC → WebRTCClient (this class)
         webrtcManager.onBinaryMessage = [&](const std::string& peerId,

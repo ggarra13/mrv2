@@ -11,6 +11,8 @@
 
 namespace mrv
 {
+    class SftpTunnelServer;
+
     class WebRTCClient : public TCP
     {
     public:
@@ -28,5 +30,6 @@ namespace mrv
     protected:
         SignalingClient signalingClient;
         WebRTCManager webrtcManager;
+        std::unique_ptr<SftpTunnelServer> sftpServer;
     };
 } // namespace mrv
