@@ -34,8 +34,8 @@ namespace mrv
             return;
 
         if (player.empty())
-            playerId = "player_" + mrv::username() + "_" +
-                       generateRandomLetters(4);
+            playerId = "player_" + mrv::username() + "_" + roomId + "_" +
+                       generateRandomLetters(12);
         else
             playerId = player;
 
