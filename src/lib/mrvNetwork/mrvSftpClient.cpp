@@ -278,7 +278,8 @@ namespace mrv
     bool SftpClient::downloadFile(
         const std::string& remotePath, 
         const std::string& localPath,
-        const std::function<void(uint64_t done, uint64_t total)>& progressCb)
+        const std::function<void(const std::string& title,
+                                 uint64_t done, uint64_t total)>& progressCb)
     {
         int sock = connectTcp(m_host, m_port);
         if (sock == -1)
@@ -431,7 +432,11 @@ namespace mrv
 
             totalRead += static_cast<uint64_t>(n);
             if (progressCb)
-                progressCb(totalRead, remoteSize);
+            {
+                std::string title = tl::string::Format(_("Downloading {0}")).
+                                    arg(remotePath);
+                progressCb(title, totalRead, remoteSize);
+            }
         }
 
         std::fclose(out);
@@ -475,12 +480,12 @@ namespace mrv
     bool SftpClient::downloadFile(
         const tl::file::Path& remotePath, 
         const tl::file::Path& localPath,
-        const std::function<void(uint64_t done, uint64_t total)>& progressCb)
+        const std::function<void(const std::string& title,
+                                 uint64_t done, uint64_t total)>& progressCb)
     {
         auto frames = remotePath.getFrames();
         if (!frames.has_value() || !remotePath.isSequence())
         {
-            std::cerr << "downloading " << remotePath.get() << std::endl;
             return downloadFile(remotePath.get(), localPath.get(), progressCb);
         }
 
@@ -490,7 +495,6 @@ namespace mrv
         {
             std::string remoteFile = remotePath.getFrame(i, listdir);
             std::string localFile  = localPath.getFrame(i, listdir);
-            std::cerr << "downloading " << remoteFile << std::endl;
             bool ok = downloadFile(remoteFile, localFile, progressCb);
             if (!ok) return false;
         }

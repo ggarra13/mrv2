@@ -181,38 +181,40 @@ namespace mrv
 
 #if 1
 
-        // std::unique_ptr<ProgressReport> progress(
-        //     new ProgressReport(App::ui->uiMain, 0, 100,
-        //                        _("Downloading...")));
-        // progress->show();
+        ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
+                                                      _("Downloading..."));
+        progress->show();
 
 
         SftpClient sftp("127.0.0.1", port, creds);
         bool ok = sftp.downloadFile(filePath, cachePath, [=](
+                                        const std::string& title,
                                         uint64_t done,
                                         uint64_t total)
-                {
-                    std::cerr << done << "/" << total << std::endl;
-                    // progress->set_end(total);
-                    // progress->set_value(done);
-                });
+            {
+                progress->set_title(title.c_str());
+                progress->set_end(total);
+                progress->set_value(done);
+            });
 
         bool audioOk = true;
         if (ok && !audioFilePath.isEmpty())
         {
             SftpClient sftp("127.0.0.1", port, creds);
-            audioOk = sftp.downloadFile(audioFilePath, audioCachePath,
-                                        [=](
+            audioOk = sftp.downloadFile(audioFilePath, audioCachePath, [=](
+                                            const std::string& title,
                                             uint64_t done,
                                             uint64_t total)
                 {
-                    std::cerr << done << "/" << total << std::endl;
-                    // progress->set_end(total);
-                    // progress->set_value(done);
+                    progress->set_title(title.c_str());
+                    progress->set_end(total);
+                    progress->set_value(done);
                 });
         }
         bool success = ok && audioOk;
 
+        delete progress;
+    
         if (success)
         {
             syncFile(cachePath.get(), audioCachePath.get(), item);

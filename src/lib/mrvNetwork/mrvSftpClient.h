@@ -38,14 +38,16 @@ namespace mrv
         bool downloadFile(
             const std::string& remoteFile, 
             const std::string& localFile,
-            const std::function<void(uint64_t done, uint64_t total)>&
+            const std::function<void(const std::string& title,
+                                     uint64_t done, uint64_t total)>&
             progressCb = nullptr);
         
         // Downloads a one or more files (sequences) over SFTP to a localPath.
         bool downloadFile(
             const tl::file::Path& remotePath, 
             const tl::file::Path& localPath,
-            const std::function<void(uint64_t done, uint64_t total)>&
+            const std::function<void(const std::string& title,
+                                     uint64_t done, uint64_t total)>&
             progressCb = nullptr);
 
     private:
