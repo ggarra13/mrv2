@@ -46,6 +46,7 @@ if(MRV2_NETWORK)
 	# sFTP
 	mrvSftpTunnelClient.cpp
 	mrvSftpTunnelServer.cpp
+	mrvSftpTunnelPump.cpp
 	mrvSftpClient.cpp
     )
     list(APPEND HEADERS

@@ -47,7 +47,7 @@ namespace mrv
             channel->onOpen(
                 [this, client, channel]() mutable
                     {
-                        auto pump = std::make_shared<TcpDataChannelPump>(client, channel);
+                        auto pump = TcpDataChannelPump::create(client, channel);
                         std::weak_ptr<TcpDataChannelPump> weakPump = pump;
                         pump->setOnFinished([this, weakPump]()
                             {

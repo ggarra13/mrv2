@@ -30,7 +30,7 @@ namespace mrv
             return;
         }
 
-        auto pump = std::make_shared<TcpDataChannelPump>(socket, channel);
+        auto pump = TcpDataChannelPump::create(socket, channel);
         std::weak_ptr<TcpDataChannelPump> weakPump = pump;
         pump->setOnFinished([this, weakPump]()
             {
