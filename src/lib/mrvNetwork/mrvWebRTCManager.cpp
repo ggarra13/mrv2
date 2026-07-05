@@ -56,7 +56,7 @@ namespace mrv
 
             if (state == PeerConnection::State::Failed)
             {
-                LOG_ERROR("[" << id << "] State: " << state);
+                LOG_STATUS("[" << id << "] State: " << state);
             }
             else
             {

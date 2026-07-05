@@ -192,12 +192,16 @@ namespace mrv
         auto prefs = ui->uiPrefs;
         auto model = app->filesModel();
 
-        tcp->lock();
+        bool isLocked = tcp->isLocked();
+
+        if (!isLocked)
+            tcp->lock();
 
         LOG_STATUS("Opening " << filePath);
         app->open(filePath, audioFilePath);
 
-        tcp->unlock();
+        if (!isLocked)
+            tcp->unlock();
 
         // Copy annotations to both item and player
         auto item = model->observeA()->get();
@@ -267,8 +271,15 @@ namespace mrv
                         // path.get()/audioPath.get(), the *original*
                         // remote paths — filePath/audioFilePath were
                         // just mutated in place by replace_path() above.
-                        fetchRemoteFile(peerId, path.get(), audioPath.get(),
-                                        remoteFiles[i]);
+                        if (file::isSequence(path))
+                        {
+                            std::cerr << "sequence" << std::endl;
+                        }
+                        else
+                        {
+                            fetchRemoteFile(peerId, path.get(), audioPath.get(),
+                                            remoteFiles[i]);
+                        }
                     }
                     else
                     {

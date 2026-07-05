@@ -16,6 +16,8 @@ namespace mrv
     void to_json(nlohmann::json& j, const FilesModelItem& value)
     {
         j["path"] = value.path;
+        std::cerr << __FUNCTION__ << " value.path=" << value.path.get()
+                  << " frames=" << value.path.getFrameRange() << std::endl;
         j["audioPath"] = value.audioPath;
         j["timeRange"] = value.timeRange;
         j["speed"] = value.speed;
@@ -51,6 +53,8 @@ namespace mrv
     {
         using namespace mrv::draw;
         j.at("path").get_to(value.path);
+        std::cerr << __FUNCTION__ << " value.path=" << value.path.get()
+                  << " frames=" << value.path.getFrameRange() << std::endl;
         j.at("audioPath").get_to(value.audioPath);
         j.at("timeRange").get_to(value.timeRange);
         j.at("speed").get_to(value.speed);
