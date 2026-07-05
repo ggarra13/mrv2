@@ -6,6 +6,8 @@
 
 #include "mrvNetwork/mrvTCP.h"
 
+#include <tlCore/Path.h>
+
 class ViewerUI;
 
 namespace mrv
@@ -36,7 +38,7 @@ namespace mrv
         getOrCreateTunnel(WebRTCManager& manager, const std::string& peerId);
         std::string cachePathFor(const std::string& remotePath) const;
         void fetchRemoteFile(const std::string& peerId,
-                             const std::string& filePath,
+                             const tl::file::Path& filePath,
                              const std::string& audioFilePath,
                              const FilesModelItem& item);
 

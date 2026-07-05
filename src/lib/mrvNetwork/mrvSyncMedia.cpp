@@ -102,7 +102,7 @@ namespace mrv
     }
 
     void CommandInterpreter::fetchRemoteFile(
-        const std::string& peerId, const std::string& filePath,
+        const std::string& peerId, const file::Path& filePath,
         const std::string& audioFilePath, const FilesModelItem& item)
     {
         auto* webrtcClient = dynamic_cast<WebRTCClient*>(tcp);
@@ -128,21 +128,21 @@ namespace mrv
                 tl::string::Format(_("SFTP: {0} is only reachable via relay "
                                      "(TURN), which would consume VPS bandwidth. "
                                      "Skipping fetch to avoid unexpected costs."))
-                .arg(filePath);
+                .arg(filePath.get());
             LOG_WARNING(msg);
             return;
         }
 
         auto tunnel = getOrCreateTunnel(manager, peerId);
 
-        std::string cachePath = cachePathFor(filePath);
+        std::string cachePath = cachePathFor(filePath.get());
         std::string audioCachePath =
             audioFilePath.empty() ? std::string() : cachePathFor(audioFilePath);
         Poco::UInt16 port = tunnel->localPort();
 
         std::string msg = tl::string::Format(
             _("Fetching {0} from peer {1} via SFTP tunnel on port {2}..."))
-                          .arg(filePath).arg(peerId).arg(port);
+                          .arg(filePath.get()).arg(peerId).arg(port);
         LOG_STATUS(msg);
 
         SftpCredentials creds;
@@ -280,7 +280,7 @@ namespace mrv
                         }
                         else
                         {
-                            fetchRemoteFile(peerId, path.get(), audioPath.get(),
+                            fetchRemoteFile(peerId, path, audioPath.get(),
                                             remoteFiles[i]);
                         }
                     }

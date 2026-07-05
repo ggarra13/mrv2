@@ -274,7 +274,7 @@ namespace mrv
             libssh2_exit();
         }
     }
-
+    
     bool SftpClient::downloadFile(
         const std::string& remotePath, 
         const std::string& localPath,
@@ -471,4 +471,25 @@ namespace mrv
         return true;
     }
 
+
+    bool SftpClient::downloadFile(
+        const tl::file::Path& remotePath, 
+        const std::string& localPath,
+        const std::function<void(uint64_t done, uint64_t total)>& progressCb)
+    {
+        auto frames = remotePath.getFrames();
+        if (!frames.has_value())
+            return downloadFile(remotePath.get(), localPath, progressCb);
+
+        const math::Int64Range range = frames.value();
+        const bool listdir = true;
+        for (int64_t i = range.getMin(); i <= range.getMax(); ++i)
+        {
+            std::string remoteFile = remotePath.getFrame(i, listdir);
+            bool ok = downloadFile(remoteFile, localPath, progressCb);
+            if (!ok) return false;
+        }
+        return true;
+    }
+    
 } // namespace mrv

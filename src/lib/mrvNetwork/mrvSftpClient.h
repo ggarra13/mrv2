@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <tlCore/Path.h>
+
 #include <string>
 #include <functional>
 #include <cstdint>
@@ -35,6 +37,14 @@ namespace mrv
         // atomic-rename staging file (<localPath>.part).
         bool downloadFile(
             const std::string& remotePath, 
+            const std::string& localPath,
+            const std::function<void(uint64_t done, uint64_t total)>&
+            progressCb = nullptr);
+        
+        // Downloads a single remote file over SFTP to a local path, using an
+        // atomic-rename staging file (<localPath>.part).
+        bool downloadFile(
+            const tl::file::Path& remotePath, 
             const std::string& localPath,
             const std::function<void(uint64_t done, uint64_t total)>&
             progressCb = nullptr);

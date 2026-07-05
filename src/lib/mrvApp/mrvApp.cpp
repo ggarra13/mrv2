@@ -2209,9 +2209,6 @@ namespace mrv
                                      item->path, item->audioPath, _context,
                                      offsetTime, options);
         }
-
-        std::cerr << item->path.get() << " " << item->path.getFrameRange()
-                  << std::endl;
         
         auto out = timeline::Timeline::create(otioTimeline, _context, options);
 
