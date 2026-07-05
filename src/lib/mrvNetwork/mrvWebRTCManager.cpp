@@ -73,6 +73,18 @@ namespace mrv
             {
                 std::lock_guard<std::mutex> lock(mtx);
                 drainPendingCandidates(id);
+
+                auto pair = pc->getSelectedCandidatePair();
+                if (pair)
+                {
+                    client->isRelayedConnection =
+                        (pair->local.type() == rtc::Candidate::Type::Relayed ||
+                         pair->remote.type() == rtc::Candidate::Type::Relayed);
+                    const std::string connType = client->isRelayedConnection ? "relayed" : "direct";
+                    LOG_STATUS("[" << id << "] ICE connection type: "
+                               << connType);
+
+                }
             }
         });
 

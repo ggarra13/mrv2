@@ -19,18 +19,19 @@ namespace mrv
         std::shared_ptr<rtc::DataChannel> dataChannel;
         bool dataChannelOpen = false;
         bool sentRemote = false;
+        bool isRelatedConnection = false;
 
         std::string createOffer()
             {
                 return _peerConnection->createOffer();
             }
-        
+
         void setRemoteDescription(const rtc::Description& d)
             {
                 _peerConnection->setRemoteDescription(d);
                 sentRemote = true;
             }
-    
+
     private:
         bool _sentRemote = false;
         std::shared_ptr<rtc::PeerConnection> _peerConnection;

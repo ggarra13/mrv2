@@ -208,7 +208,7 @@ namespace mrv
         std::string basename(const std::string& path)
         {
             fs::path p(path);
-            return p.filename();
+            return p.filename().generic_string();
         }
 
         static size_t ndiIndex = 1;

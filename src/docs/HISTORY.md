@@ -8,6 +8,8 @@ ChangeLog
 
 - Licensing: Added helper messages about what options require a donation (and what type) to unlock.
 
+- Licensing: Fixed Edit license not being accepted as such.
+
 - Assets: Fixed Autodesk's Flow bridge getting instantiated twice and being slow.
 
 - UI/Color: Fixed Saturation in the Color Panel not updating the view.

@@ -113,6 +113,26 @@ namespace mrv
         }
 
         auto& manager = webrtcClient->manager();
+
+        auto client = manager.getClient(peerId);
+        if (!client)
+        {
+            LOG_ERROR(_("Peer not connected."));
+            return;
+        }
+
+        bool allowSftpOverRelay = false; //uiPrefs->uiAllowSftpOverRelay->value();
+        if (client->isRelayedConnection && !allowSftpOverRelay)
+        {
+            const std::string msg =
+                tl::string::Format(_("SFTP: {0} is only reachable via relay "
+                                     "(TURN), which would consume VPS bandwidth. "
+                                     "Skipping fetch to avoid unexpected costs."))
+                .arg(filePath);
+            LOG_WARNING(msg);
+            return;
+        }
+
         auto tunnel = getOrCreateTunnel(manager, peerId);
 
         std::string cachePath = cachePathFor(filePath);
@@ -147,8 +167,6 @@ namespace mrv
                                            audioCachePath, creds, [](
                                                uint64_t done,
                                                uint64_t total) {});
-            std::cerr << "ok=" << ok << " audioOK=" << audioOk
-                      << std::endl;
             bool success = ok && audioOk;
 
             auto* data = new SyncData
