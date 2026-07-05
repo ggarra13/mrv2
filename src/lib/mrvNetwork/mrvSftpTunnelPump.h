@@ -27,38 +27,26 @@ namespace mrv
             highThreshold_ = 1024 * 1024;
 
             channel_->setBufferedAmountLowThreshold(kLowThreshold);
-
-            
-            channel_->onBufferedAmountLow([weak = weak_from_this()]()
+            channel_->onBufferedAmountLow(
+                [this]()
                 {
-                    if (auto self = weak.lock())
-                    {
-                        std::lock_guard<std::mutex> lk(self->mutex_);
-                        self->paused_ = false;
-                        self->cv_.notify_one();
-                    }
+                    std::lock_guard<std::mutex> lk(mutex_);
+                    paused_ = false;
+                    cv_.notify_one();
                 });
 
-            
-            channel_->onMessage([weak = weak_from_this()](rtc::message_variant msg)
+            channel_->onMessage(
+                [this](rtc::message_variant msg)
                 {
-                    auto self = weak.lock();
-                    if (!self)
-                        return;
                     if (!std::holds_alternative<rtc::binary>(msg))
                         return;
                     auto& data = std::get<rtc::binary>(msg);
-                    self->writeAllToSocket(
-                        reinterpret_cast<const char*>(data.data()), data.size());
+                    writeAllToSocket(
+                        reinterpret_cast<const char*>(data.data()),
+                        data.size());
                 });
 
-            channel_->onClosed([weak = weak_from_this()]()
-                {
-                    if (auto self = weak.lock())
-                        self->finish();
-                    // If weak.lock() returns null, the pump is already destroyed
-                    // and there's nothing to do — no dangling pointer access.
-                });
+            channel_->onClosed([this]() { finish(); });
         }
 
         void setOnFinished(std::function<void()> cb) {
