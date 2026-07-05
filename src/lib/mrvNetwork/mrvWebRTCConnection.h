@@ -19,7 +19,7 @@ namespace mrv
         std::shared_ptr<rtc::DataChannel> dataChannel;
         bool dataChannelOpen = false;
         bool sentRemote = false;
-        bool isRelatedConnection = false;
+        bool isRelayedConnection = false;
 
         std::string createOffer()
             {

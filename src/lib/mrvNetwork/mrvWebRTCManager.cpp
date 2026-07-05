@@ -52,7 +52,7 @@ namespace mrv
             std::lock_guard<std::mutex> lock(mtx);
             clients[id] = client;
         }
-        pc->onStateChange([this, id, pc](PeerConnection::State state) {
+        pc->onStateChange([this, client, id, pc](PeerConnection::State state) {
 
             if (state == PeerConnection::State::Failed)
             {
@@ -74,12 +74,13 @@ namespace mrv
                 std::lock_guard<std::mutex> lock(mtx);
                 drainPendingCandidates(id);
 
-                auto pair = pc->getSelectedCandidatePair();
+                rtc::Candidate local, remote;
+                auto pair = pc->getSelectedCandidatePair(&local, &remote);
                 if (pair)
                 {
                     client->isRelayedConnection =
-                        (pair->local.type() == rtc::Candidate::Type::Relayed ||
-                         pair->remote.type() == rtc::Candidate::Type::Relayed);
+                        (local.type() == rtc::Candidate::Type::Relayed ||
+                         remote.type() == rtc::Candidate::Type::Relayed);
                     const std::string connType = client->isRelayedConnection ? "relayed" : "direct";
                     LOG_STATUS("[" << id << "] ICE connection type: "
                                << connType);
