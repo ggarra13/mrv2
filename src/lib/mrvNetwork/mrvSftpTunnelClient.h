@@ -48,11 +48,17 @@ namespace mrv
             try { serverSocket_.close(); } catch (const Poco::Exception&) {}
             if (acceptThread_.joinable())
                 acceptThread_.join();
-
-            std::lock_guard<std::mutex> lk(pumpsMutex_);
-            for (auto& pump : pumps_)
+            
+            // Swap out pumps while holding the lock, then stop them
+            // *without* holding it — so onFinished_'s own lock acquisition
+            // inside the pump's finish() path can proceed without deadlocking.
+            std::vector<std::shared_ptr<TcpDataChannelPump>> toStop;
+            {
+                std::lock_guard<std::mutex> lk(pumpsMutex_);
+                toStop.swap(pumps_);
+            }
+            for (auto& pump : toStop)
                 pump->stop();
-            pumps_.clear();
         }
 
         ~SftpTunnelClient() { stop(); }
