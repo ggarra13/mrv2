@@ -1905,6 +1905,9 @@ namespace mrv
             item->path = path;
             item->audioPath = file::Path(string::normalizePath(audioFileName));
 
+            std::cerr << &path << " "
+                      << path.get() << " " << path.getFrameRange() << std::endl;
+
             p.filesModel->add(item);
         }
 

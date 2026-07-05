@@ -57,7 +57,7 @@ namespace tl
         //! Create a new timeline from a path. The path can point to an .otio
         //! file, .otioz file, movie file, or image sequence.
         otio::SerializableObject::Retainer<otio::Timeline> create(
-            const file::Path&, const std::shared_ptr<system::Context>&,
+            file::Path&, const std::shared_ptr<system::Context>&,
             const otime::RationalTime& = time::invalidTime,
             const Options& = Options());
 
@@ -65,7 +65,7 @@ namespace tl
         //! can point to an .otio file, .otioz file, movie file, or image
         //! sequence.
         otio::SerializableObject::Retainer<otio::Timeline> create(
-            const file::Path& path, const file::Path& audioPath,
+            file::Path& path, const file::Path& audioPath,
             const std::shared_ptr<system::Context>&,
             const otime::RationalTime& = time::invalidTime,
             const Options& = Options());
@@ -115,7 +115,7 @@ namespace tl
             //! Create a new timeline from a path. The path can point to an
             //! .otio file, movie file, or image sequence.
             static std::shared_ptr<Timeline> create(
-                const file::Path&, const std::shared_ptr<system::Context>&,
+                file::Path&, const std::shared_ptr<system::Context>&,
                 const otime::RationalTime& = time::invalidTime,
                 const Options& = Options());
 
@@ -131,7 +131,7 @@ namespace tl
             //! Create a new timeline from a path and audio path. The path can
             //! point to an .otio file, movie file, or image sequence.
             static std::shared_ptr<Timeline> create(
-                const file::Path& path, const file::Path& audioPath,
+                file::Path& path, const file::Path& audioPath,
                 const std::shared_ptr<system::Context>&,
                 const otime::RationalTime& = time::invalidTime,
                 const Options& = Options());

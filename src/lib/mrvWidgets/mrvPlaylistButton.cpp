@@ -52,10 +52,11 @@ namespace mrv
     }
 
     void PlaylistButton::createTimeline(
-        const file::Path& path,
+        const file::Path& inputPath,
         const std::shared_ptr<system::Context>& context)
     {
         TLRENDER_P();
+        file::Path path = inputPath;
         p.timeline = timeline::create(path, context);
         redraw();
     }
