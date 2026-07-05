@@ -46,9 +46,7 @@ if __name__ == "__main__":
         SFTPConfig(
             host="72.60.240.137",
             port=22,
-            username="licenseuser",
-            password="mrv21973!",
-            # private_key_path="/secrets/id_rsa",
+            private_key_path="/secrets/id_rsa",
         ),
     )
 

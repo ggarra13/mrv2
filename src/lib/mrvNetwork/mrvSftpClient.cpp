@@ -5,6 +5,8 @@
 #include "mrvSftpClient.h"
 
 #include "mrvFl/mrvIO.h"
+
+#include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
 
 #include <tlCore/StringFormat.h>
@@ -32,7 +34,7 @@
 namespace
 {
     const char* kModule = "sftp";
-
+    
     // Standard cross-platform wrapper to close network sockets
     void closeSocket(int fd)
     {
@@ -215,8 +217,10 @@ namespace
                 home = std::getenv("USERPROFILE");
             if (home)
             {
+                privKey = std::string(home) + "/.ssh/id_ed25519";
                 // Fallback attempt on a typical default OpenSSH key location
-                privKey = std::string(home) + "/.ssh/id_rsa";
+                if (!mrv::file::exists(privKey))
+                    privKey = std::string(home) + "/.ssh/id_rsa";
             }
         }
 
@@ -244,28 +248,45 @@ namespace
 
 namespace mrv
 {
-    bool sftpDownloadFile(
-        const std::string& host, uint16_t port,
-        const std::string& remotePath, const std::string& localPath,
-        const SftpCredentials& creds,
+    uint32_t SftpClient::instances = 0;
+    
+    SftpClient::SftpClient(const std::string& host, uint16_t port, const SftpCredentials& creds)
+        : m_host(host)
+        , m_port(port)
+        , m_creds(creds)
+    {
+        if (instances == 0)
+        {
+            if (libssh2_init(0) != 0)
+            {
+                LOG_ERROR(_("SFTP: Global libssh2 initialization failed."));
+                return;
+            }
+        }
+        ++instances;
+    }
+
+    SftpClient::~SftpClient()
+    {
+        --instances;
+        if (instances == 0)
+        {
+            libssh2_exit();
+        }
+    }
+
+    bool SftpClient::downloadFile(
+        const std::string& remotePath, 
+        const std::string& localPath,
         const std::function<void(uint64_t done, uint64_t total)>& progressCb)
     {
-        // Global libssh2 init (Safe to call repeatedly, ideally handled
-        // globally once)
-        if (libssh2_init(0) != 0)
-        {
-            LOG_ERROR(_("SFTP: Global libssh2 initialization failed."));
-            return false;
-        }
-
-        int sock = connectTcp(host, port);
+        int sock = connectTcp(m_host, m_port);
         if (sock == -1)
         {
             const std::string msg =
                 tl::string::Format(_("SFTP: TCP connection to {0}:{1} failed."))
-                    .arg(host).arg(port);
+                    .arg(m_host).arg(m_port);
             LOG_ERROR(msg);
-            libssh2_exit();
             return false;
         }
 
@@ -274,7 +295,6 @@ namespace mrv
         {
             LOG_ERROR(_("SFTP: could not allocate ssh session."));
             closeSocket(sock);
-            libssh2_exit();
             return false;
         }
 
@@ -283,7 +303,6 @@ namespace mrv
         {
             LOG_ERROR(_("SFTP: could not get raw session."));
             closeSocket(sock);
-            libssh2_exit();
             return false;
         }
 
@@ -296,18 +315,16 @@ namespace mrv
                     .arg(getLastError(raw));
             LOG_ERROR(msg);
             closeSocket(sock);
-            libssh2_exit();
             return false;
         }
 
-        if (!verifyKnownHost(raw, host, port))
+        if (!verifyKnownHost(raw, m_host, m_port))
         {
             closeSocket(sock);
-            libssh2_exit();
             return false;
         }
 
-        std::string user = creds.user;
+        std::string user = m_creds.user;
         if (user.empty())
         {
             const char* envUser = std::getenv("USER");
@@ -315,12 +332,13 @@ namespace mrv
                 envUser = std::getenv("USERNAME"); // Windows
             if (envUser)
                 user = envUser;
+            else
+                user = "guest";
         }
 
-        if (!authenticate(raw, user, creds))
+        if (!authenticate(raw, user, m_creds))
         {
             closeSocket(sock);
-            libssh2_exit();
             return false;
         }
 
@@ -332,7 +350,6 @@ namespace mrv
                     .arg(getLastError(raw));
             LOG_ERROR(msg);
             closeSocket(sock);
-            libssh2_exit();
             return false;
         }
 
@@ -365,7 +382,6 @@ namespace mrv
                     .arg(remotePath).arg(getLastError(raw));
             LOG_ERROR(msg);
             closeSocket(sock);
-            libssh2_exit();
             return false;
         }
 
@@ -378,7 +394,6 @@ namespace mrv
                     .arg(partPath);
             LOG_ERROR(msg);
             closeSocket(sock);
-            libssh2_exit();
             return false;
         }
 
@@ -426,7 +441,6 @@ namespace mrv
         sftp.reset();
         session.reset();
         closeSocket(sock);
-        libssh2_exit();
 
         if (!ok)
         {
