@@ -1,6 +1,6 @@
 // mrvSftpTunnelServer.h
 #pragma once
-#include "mrvSftpTunnelPump.h"
+#include "mrvNetwork/mrvTcpDataChannelPump.h"
 #include "mrvNetwork/mrvWebRTCManager.h"
 #include <Poco/Net/StreamSocket.h>
 #include <Poco/Net/SocketAddress.h>

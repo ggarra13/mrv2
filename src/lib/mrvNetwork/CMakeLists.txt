@@ -42,11 +42,11 @@ if(MRV2_NETWORK)
 	mrvSignalingClient.cpp
 	mrvWebRTCClient.cpp
 	mrvWebRTCManager.cpp
+	mrvTcpDataChannelPump.cpp
 
 	# sFTP
 	mrvSftpTunnelClient.cpp
 	mrvSftpTunnelServer.cpp
-	mrvSftpTunnelPump.cpp
 	mrvSftpClient.cpp
     )
     list(APPEND HEADERS
@@ -68,13 +68,14 @@ if(MRV2_NETWORK)
 	# WebRTC
 	mrvSignalingClient.h
 	mrvSignalingMessage.h
+	mrvTcpDataChannelPump.h
 	mrvWebRTCClient.h
 	mrvWebRTCManager.h
 
 	# sFTP
-	mrvSftpTunnelPump.h
 	mrvSftpTunnelClient.h
 	mrvSftpTunnelServer.h
+	mrvSftpClient.h
     )
     list(APPEND LIBRARIES Poco::Net Poco::Foundation)
 

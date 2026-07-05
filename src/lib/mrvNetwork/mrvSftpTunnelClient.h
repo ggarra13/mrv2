@@ -3,7 +3,7 @@
 
 #include "mrvFl/mrvIO.h"
 
-#include "mrvSftpTunnelPump.h"
+#include "mrvNetwork/mrvTcpDataChannelPump.h"
 #include "mrvNetwork/mrvWebRTCManager.h"
 #include <Poco/Net/ServerSocket.h>
 #include <Poco/Net/SocketAddress.h>
