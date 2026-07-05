@@ -164,6 +164,10 @@ extern "C"
 #   include <rtc/version.h>
 #endif
 
+#ifdef MRV2_NETWORK
+#   include <mrvNetwork/xxhash.h>
+#endif
+
 #ifdef MRV2_PYBIND11
 #    include <pybind11/pybind11.h>
 #endif
@@ -1103,6 +1107,12 @@ namespace mrv
         o << "USD v" << PXR_MAJOR_VERSION << "." << PXR_MINOR_VERSION << "."
           << PXR_PATCH_VERSION << endl
           << "(C) 2016-Present Pixar" << endl
+          << endl;
+#endif
+#ifdef MRV2_NETWORK
+        o << "xxHash v" << XXH_VERSION_MAJOR << "." << XXH_VERSION_MINOR
+          << XXH_VERSION_RELEASE << endl
+          << "Copyright (C) 2012-2023 Yann Collet" << endl
           << endl;
 #endif
         o << "yaml-cpp" << endl

@@ -116,8 +116,6 @@ namespace mrv
             TLRENDER_P();
 
             file::Path path(inputPath);
-            std::cerr << __FUNCTION__ << " " << path.get()
-                      << " " << path.getFrameRange() << std::endl;
 
             static Fl_SVG_Image* NDIimage = MRV2_LOAD_SVG(NDI);
 

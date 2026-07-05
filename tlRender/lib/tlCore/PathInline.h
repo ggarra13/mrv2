@@ -5,13 +5,13 @@ namespace tl
 {
     namespace file
     {
-        
+
         inline bool isDotFile(const std::string& fileName)
         {
             return !fileName.empty() && '.' == fileName[0];
         }
 
-        inline const PathOptions& Path::getOptions()
+        inline const PathOptions& Path::getOptions() const
         {
             return _options;
         }
@@ -83,7 +83,7 @@ namespace tl
                 _path.substr(_suf.first, _suf.second) :
                 std::string();
         }
-        
+
         inline std::string Path::getNumber() const
         {
             return _num != _invalid ?
@@ -167,7 +167,7 @@ namespace tl
                 getSuffix() == other.getSuffix() &&
                 getExtension() == other.getExtension();
         }
-        
+
         inline bool Path::operator == (const Path& other) const
         {
             return _path == other._path && _frames == other._frames;
@@ -177,6 +177,6 @@ namespace tl
         {
             return !(*this == other);
         }
-        
+
     }
 }

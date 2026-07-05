@@ -59,9 +59,9 @@ namespace tl
             bool operator == (const PathOptions&) const;
             bool operator != (const PathOptions&) const;
         };
-    
+
         //! File path.
-        //! 
+        //!
         //! Example: file:///tmp/render.0001_suf.exr?user=foo;password=bar
         //! * protocol: file://
         //! * dir: /tmp/
@@ -87,7 +87,7 @@ namespace tl
             //! \name Path Options
             ///@{
 
-            const PathOptions& getOptions();
+            const PathOptions& getOptions() const;
             void setOptions(const PathOptions&);
 
             ///@}
@@ -151,12 +151,12 @@ namespace tl
 
             //! Add a path to this sequence.
             bool addSeq(const Path&);
-            
+
             ///@}
 
             //! \name Utility
             ///@{
-            
+
             //! Get whether the path is absolute.
             bool isAbsolute() const;
 
@@ -167,7 +167,7 @@ namespace tl
 
             //! \name Constants
             ///@{
-            
+
             static const std::string numbers;
             static const std::string pathSeparators;
 
@@ -200,7 +200,7 @@ namespace tl
             Extension,
             Size,
             Time,
-            
+
             Count,
             First = Name
         };
@@ -249,10 +249,12 @@ namespace tl
 
         void to_json(nlohmann::json&, const PathOptions&);
         void to_json(nlohmann::json&, const DirListOptions&);
+        void to_json(nlohmann::json&, const Path&);
 
         void from_json(const nlohmann::json&, PathOptions&);
         void from_json(const nlohmann::json&, DirListOptions&);
-        
+        void from_json(const nlohmann::json&, Path&);
+
         ///@}
     }
 }
