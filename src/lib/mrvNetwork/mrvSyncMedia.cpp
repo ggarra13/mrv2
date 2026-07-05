@@ -273,7 +273,10 @@ namespace mrv
                         // just mutated in place by replace_path() above.
                         if (file::isSequence(path))
                         {
-                            std::cerr << "sequence" << std::endl;
+                            std::cerr << "sequence "
+                                      << path.get() << " "
+                                      << path.getFrameRange()
+                                      << std::endl;
                         }
                         else
                         {
