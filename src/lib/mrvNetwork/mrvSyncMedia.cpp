@@ -6,13 +6,15 @@
 #include "mrvNetwork/mrvSftpTunnelClient.h"
 #include "mrvNetwork/mrvSftpTunnelServer.h"
 #include "mrvNetwork/mrvWebRTCClient.h"
+#include "mrvNetwork/mrvCommandInterpreter.h"
+#include "mrvNetwork/mrvFilePath.h"
+#include "mrvNetwork/mrvFilesModelItem.h"
 
 #include "mrvFl/mrvIO.h"
 #include "mrvFl/mrvPathMapping.h"
 
-#include "mrvNetwork/mrvCommandInterpreter.h"
-#include "mrvNetwork/mrvFilePath.h"
-#include "mrvNetwork/mrvFilesModelItem.h"
+#include "mrvWidgets/mrvProgressReport.h"
+
 
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
@@ -97,8 +99,8 @@ namespace mrv
         }
         peerTunnels_.clear();
     }
-    
-    
+
+
     std::shared_ptr<SftpTunnelClient>
     CommandInterpreter::getOrCreateTunnel(WebRTCManager& manager,
                                           const std::string& peerId)
@@ -177,6 +179,43 @@ namespace mrv
         SftpCredentials creds;
         // creds.identityFile = uiPrefs->sshIdentityFile;
 
+#if 1
+
+        std::unique_ptr<ProgressReport> progress(
+            new ProgressReport(App::ui->uiMain, 0, 100,
+                               _("Downloading...")));
+
+
+        SftpClient sftpA("127.0.0.1", port, creds);
+        bool ok = sftpA.downloadFile(filePath, cachePath, [&progress](
+                                         uint64_t done,
+                                         uint64_t total)
+                {
+                    progress->set_end(total);
+                    progress->set_value(done);
+                });
+
+        bool audioOk = true;
+        if (ok && !audioFilePath.isEmpty())
+        {
+            SftpClient sftpB("127.0.0.1", port, creds);
+            audioOk = sftpB.downloadFile(audioFilePath, audioCachePath,
+                                         [&progress](
+                                             uint64_t done,
+                                             uint64_t total)
+                {
+                    progress->set_end(total);
+                    progress->set_value(done);
+                });
+        }
+        bool success = ok && audioOk;
+
+        if (success)
+        {
+            syncFile(cachePath.get(), audioCachePath.get(), item);
+        }
+#else
+
         std::thread downloadThread([this, filePath, audioFilePath, cachePath,
                                     audioCachePath, port, creds, item]()
         {
@@ -213,11 +252,12 @@ namespace mrv
 
             Fl::awake(sync_callback, data);
         });
-        
+
         {
             std::lock_guard<std::mutex> lk(downloadThreadsMutex_);
             activeSftpDownloads_.push_back(std::move(downloadThread));
         }
+#endif
     }
 
     void CommandInterpreter::syncFile(
