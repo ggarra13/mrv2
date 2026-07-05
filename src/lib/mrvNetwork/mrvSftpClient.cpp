@@ -120,7 +120,8 @@ namespace
     }
 
     // Verifies remote host key against OpenSSH format known_hosts file (TOFU logic)
-    bool verifyKnownHost(LIBSSH2_SESSION* session, const std::string& host, int port)
+    bool verifyKnownHost(LIBSSH2_SESSION* session, const std::string& peerId,
+                         int port)
     {
         LIBSSH2_KNOWNHOSTS* kh = libssh2_knownhost_init(session);
         if (!kh)
@@ -165,7 +166,7 @@ namespace
         }
 
         struct libssh2_knownhost* hostMatch = nullptr;
-        int rc = libssh2_knownhost_checkp(kh, host.c_str(), port, fingerprint, len,
+        int rc = libssh2_knownhost_checkp(kh, peerId.c_str(), port, fingerprint, len,
                                           LIBSSH2_KNOWNHOST_TYPE_PLAIN | LIBSSH2_KNOWNHOST_KEYENC_RAW,
                                           &hostMatch);
 
@@ -185,7 +186,8 @@ namespace
 
         case LIBSSH2_KNOWNHOST_CHECK_NOTFOUND:
             // First time seeing this host - trust on first use (TOFU)
-            libssh2_knownhost_addc(kh, host.c_str(), nullptr, fingerprint, len,
+            libssh2_knownhost_addc(kh, peerId.c_str(), nullptr,
+                                   fingerprint, len,
                                    "mrv2-client", strlen("mrv2-client"), checkType, nullptr);
             if (!khPath.empty())
             {
@@ -278,7 +280,9 @@ namespace mrv
     bool SftpClient::downloadFile(
         const std::string& remotePath, 
         const std::string& localPath,
-        const std::function<void(const std::string& title,
+        const std::string& peerId,
+        const std::function<void(bool& aborted,
+                                 const std::string& title,
                                  uint64_t done, uint64_t total)>& progressCb)
     {
         int sock = connectTcp(m_host, m_port);
@@ -319,7 +323,7 @@ namespace mrv
             return false;
         }
 
-        if (!verifyKnownHost(raw, m_host, m_port))
+        if (!verifyKnownHost(raw, peerId, m_port))
         {
             closeSocket(sock);
             return false;
@@ -433,9 +437,12 @@ namespace mrv
             totalRead += static_cast<uint64_t>(n);
             if (progressCb)
             {
+                bool aborted = false;
                 std::string title = tl::string::Format(_("Downloading {0}")).
                                     arg(remotePath);
-                progressCb(title, totalRead, remoteSize);
+                progressCb(aborted, title, totalRead, remoteSize);
+                if (aborted)
+                    break;
             }
         }
 
@@ -480,13 +487,16 @@ namespace mrv
     bool SftpClient::downloadFile(
         const tl::file::Path& remotePath, 
         const tl::file::Path& localPath,
-        const std::function<void(const std::string& title,
+        const std::string& peerId,
+        const std::function<void(bool& aborted,
+                                 const std::string& title,
                                  uint64_t done, uint64_t total)>& progressCb)
     {
         auto frames = remotePath.getFrames();
         if (!frames.has_value() || !remotePath.isSequence())
         {
-            return downloadFile(remotePath.get(), localPath.get(), progressCb);
+            return downloadFile(remotePath.get(), localPath.get(),
+                                peerId, progressCb);
         }
 
         const math::Int64Range range = frames.value();
@@ -495,7 +505,8 @@ namespace mrv
         {
             std::string remoteFile = remotePath.getFrame(i, listdir);
             std::string localFile  = localPath.getFrame(i, listdir);
-            bool ok = downloadFile(remoteFile, localFile, progressCb);
+            bool ok = downloadFile(remoteFile, localFile, peerId,
+                                   progressCb);
             if (!ok) return false;
         }
         return true;

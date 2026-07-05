@@ -182,12 +182,13 @@ namespace mrv
 #if 1
 
         ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
-                                                      _("Downloading..."));
+                                                      "");
         progress->show();
 
 
         SftpClient sftp("127.0.0.1", port, creds);
-        bool ok = sftp.downloadFile(filePath, cachePath, [=](
+        bool ok = sftp.downloadFile(filePath, cachePath, peerId, [=](
+                                        bool& aborted,
                                         const std::string& title,
                                         uint64_t done,
                                         uint64_t total)
@@ -195,13 +196,16 @@ namespace mrv
                 progress->set_title(title.c_str());
                 progress->set_end(total);
                 progress->set_value(done);
+                if (!progress->window()->shown())
+                    aborted = true;
             });
 
         bool audioOk = true;
         if (ok && !audioFilePath.isEmpty())
         {
             SftpClient sftp("127.0.0.1", port, creds);
-            audioOk = sftp.downloadFile(audioFilePath, audioCachePath, [=](
+            audioOk = sftp.downloadFile(audioFilePath, audioCachePath, peerId, [=](
+                                            bool& aborted,
                                             const std::string& title,
                                             uint64_t done,
                                             uint64_t total)
@@ -209,6 +213,8 @@ namespace mrv
                     progress->set_title(title.c_str());
                     progress->set_end(total);
                     progress->set_value(done);
+                    if (!progress->window()->shown())
+                        aborted = true;
                 });
         }
         bool success = ok && audioOk;
