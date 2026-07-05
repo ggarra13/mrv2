@@ -181,31 +181,34 @@ namespace mrv
 
 #if 1
 
-        std::unique_ptr<ProgressReport> progress(
-            new ProgressReport(App::ui->uiMain, 0, 100,
-                               _("Downloading...")));
+        // std::unique_ptr<ProgressReport> progress(
+        //     new ProgressReport(App::ui->uiMain, 0, 100,
+        //                        _("Downloading...")));
+        // progress->show();
 
 
-        SftpClient sftpA("127.0.0.1", port, creds);
-        bool ok = sftpA.downloadFile(filePath, cachePath, [&progress](
-                                         uint64_t done,
-                                         uint64_t total)
+        SftpClient sftp("127.0.0.1", port, creds);
+        bool ok = sftp.downloadFile(filePath, cachePath, [=](
+                                        uint64_t done,
+                                        uint64_t total)
                 {
-                    progress->set_end(total);
-                    progress->set_value(done);
+                    std::cerr << done << "/" << total << std::endl;
+                    // progress->set_end(total);
+                    // progress->set_value(done);
                 });
 
         bool audioOk = true;
         if (ok && !audioFilePath.isEmpty())
         {
-            SftpClient sftpB("127.0.0.1", port, creds);
-            audioOk = sftpB.downloadFile(audioFilePath, audioCachePath,
-                                         [&progress](
-                                             uint64_t done,
-                                             uint64_t total)
+            SftpClient sftp("127.0.0.1", port, creds);
+            audioOk = sftp.downloadFile(audioFilePath, audioCachePath,
+                                        [=](
+                                            uint64_t done,
+                                            uint64_t total)
                 {
-                    progress->set_end(total);
-                    progress->set_value(done);
+                    std::cerr << done << "/" << total << std::endl;
+                    // progress->set_end(total);
+                    // progress->set_value(done);
                 });
         }
         bool success = ok && audioOk;
