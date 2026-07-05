@@ -758,5 +758,45 @@ namespace tl
             json.at("Hidden").get_to(value.hidden);
         }
 
+        void to_json(nlohmann::json& j, const Path& p)
+        {
+            j = nlohmann::json{
+                {"path", p.get()},
+                {"options", p.getOptions()}
+            };
+
+            // Explicitly handle the std::optional for maximum compatibility across json versions
+            if (const auto& frames = p.getFrames())
+            {
+                j["frames"] = *frames;
+            }
+            else
+            {
+                j["frames"] = nullptr;
+            }
+        }
+
+        void from_json(const nlohmann::json& j, Path& p)
+        {
+            std::string pathStr;
+            j.at("path").get_to(pathStr);
+
+            PathOptions options;
+            if (j.contains("options"))
+            {
+                j.at("options").get_to(options);
+            }
+
+            // Reconstruct the Path to ensure internal _parse() is triggered correctly
+            p = Path(pathStr, options);
+
+            // Re-apply frames if they are present in the JSON payload
+            if (j.contains("frames") && !j.at("frames").is_null())
+            {
+                p.setFrames(j.at("frames").get<math::Int64Range>());
+            }
+        }
+
+
     }
 }
