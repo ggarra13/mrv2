@@ -18,8 +18,6 @@ namespace mrv
         Poco::Net::StreamSocket socket;
         try
         {
-            std::cerr << __FILE__ << " opening local socket on 127.0.0.1:"
-                      << sshdPort_ << std::endl;
             socket.connect(
                 Poco::Net::SocketAddress("127.0.0.1", sshdPort_));
         }

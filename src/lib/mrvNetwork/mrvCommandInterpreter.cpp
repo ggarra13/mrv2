@@ -134,11 +134,11 @@ namespace mrv
         // 2. Tear down any SFTP tunnel we had open to this peer.
         //    Stopping the pump/listener cancels whatever transfer was
         //    in flight; TcpDataChannelPump's destructor joins its thread.
-        // if (auto it = peerTunnels_.find(peerId); it != peerTunnels_.end())
-        // {
-        //     it->second->stop();
-        //     peerTunnels_.erase(it);
-        // }
+        if (auto it = peerTunnels_.find(peerId); it != peerTunnels_.end())
+        {
+            it->second->stop();
+            peerTunnels_.erase(it);
+        }
 
         // 3. If a fetch from this peer is actively shown in a progress
         //    dialog, close/fail it here (UI-touching — safe now, we're

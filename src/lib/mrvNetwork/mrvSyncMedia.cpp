@@ -192,8 +192,12 @@ namespace mrv
         auto prefs = ui->uiPrefs;
         auto model = app->filesModel();
 
+        tcp->lock();
+
         LOG_STATUS("Opening " << filePath);
         app->open(filePath, audioFilePath);
+
+        tcp->unlock();
 
         // Copy annotations to both item and player
         auto item = model->observeA()->get();
