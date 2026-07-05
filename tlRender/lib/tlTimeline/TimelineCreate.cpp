@@ -405,7 +405,7 @@ namespace tl
         }
 
         otio::SerializableObject::Retainer<otio::Timeline> create(
-            const file::Path& path,
+            file::Path& path,
             const std::shared_ptr<system::Context>& context,
             const otime::RationalTime& offsetTime, const Options& options)
         {
@@ -413,7 +413,7 @@ namespace tl
         }
 
         otio::SerializableObject::Retainer<otio::Timeline> create(
-            const file::Path& inputPath, const file::Path& inputAudioPath,
+            file::Path& inputPath, const file::Path& inputAudioPath,
             const std::shared_ptr<system::Context>& context,
             const otime::RationalTime& offsetTime, const Options& options)
         {
@@ -433,8 +433,10 @@ namespace tl
                     !path.getNumber().empty();
                 if (isSequence)
                 {
+                    std::cerr << "is sequence" << std::endl;
                     if (!path.isSequence())
                     {
+                        std::cerr << "path is not sequence" << std::endl;
                         // Check for other files in the sequence.
                         std::vector<file::FileInfo> list;
                         file::ListOptions listOptions;
@@ -450,6 +452,7 @@ namespace tl
                         {
                             path = i->getPath();
                         }
+                        inputPath = path;
                     }
                     if (audioPath.isEmpty())
                     {
@@ -660,15 +663,15 @@ namespace tl
             const otime::RationalTime& offsetTime, const Options& options)
         {
             auto out = std::shared_ptr<Timeline>(new Timeline);
+            file::Path path(fileName, options.pathOptions);
             auto otioTimeline = timeline::create(
-                file::Path(fileName, options.pathOptions), context, offsetTime,
-                options);
+                path, context, offsetTime, options);
             out->_init(otioTimeline, context, options);
             return out;
         }
 
         std::shared_ptr<Timeline> Timeline::create(
-            const file::Path& path,
+            file::Path& path,
             const std::shared_ptr<system::Context>& context,
             const otime::RationalTime& offsetTime, const Options& options)
         {
@@ -685,8 +688,8 @@ namespace tl
             const otime::RationalTime& offsetTime, const Options& options)
         {
             auto out = std::shared_ptr<Timeline>(new Timeline);
-            auto otioTimeline = timeline::create(
-                file::Path(fileName, options.pathOptions),
+            file::Path path(fileName, options.pathOptions);
+            auto otioTimeline = timeline::create(path,
                 file::Path(audioFileName, options.pathOptions), context,
                 offsetTime, options);
             out->_init(otioTimeline, context, options);
@@ -694,7 +697,7 @@ namespace tl
         }
 
         std::shared_ptr<Timeline> Timeline::create(
-            const file::Path& path, const file::Path& audioPath,
+            file::Path& path, const file::Path& audioPath,
             const std::shared_ptr<system::Context>& context,
             const otime::RationalTime& offsetTime, const Options& options)
         {

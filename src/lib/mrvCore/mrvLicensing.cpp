@@ -75,7 +75,7 @@ namespace
 namespace
 {
 
-#if defined(TLRENDER_SSL) || defined(TLRENDER_NET) 
+#if defined(TLRENDER_SSL) || defined(TLRENDER_NET)
     // -------------------------
     // Base64 decode helper
     // -------------------------
@@ -99,7 +99,7 @@ namespace
 
         return out;
     }
-    
+
     bool verify_ed25519(const std::string& pubkey_b64,
                         const std::string& message,
                         const std::string& signature_b64) {
@@ -179,6 +179,15 @@ namespace
             mrv::app::soporta_saving = true;
             mrv::app::soporta_voice = true;
         }
+        else if (plan == "Edit")
+        {
+            mrv::app::soporta_annotations = true;
+            mrv::app::soporta_editing = true;
+            mrv::app::soporta_layers = true;
+            mrv::app::soporta_python = true;
+            mrv::app::soporta_saving = true;
+            mrv::app::soporta_voice = false;
+        }
         else if (plan == "Standard")
         {
             mrv::app::soporta_annotations = true;
@@ -215,7 +224,7 @@ namespace
             mrv::app::soporta_python = false;
             mrv::app::soporta_saving = true;
             mrv::app::soporta_voice = false;
-            
+
             const std::string msg =
                 tl::string::Format(_("Unknown licese plan '{0}'")).arg(plan);
             LOG_ERROR(msg);
@@ -248,12 +257,12 @@ namespace mrv
 {
     TLRENDER_ENUM_IMPL(LicenseType, _("Demo"), _("Node-Locked"), _("Floating"));
     TLRENDER_ENUM_SERIALIZE_IMPL(LicenseType);
-    
+
     std::vector<std::string> get_machine_ids() {
         std::vector<std::string> out;
         std::string output;
         std::string errors;
-        
+
 #if defined(_WIN32)
         //
         // Due to legacy issues, on AMD64 we relied on wmic for the license.
@@ -285,7 +294,7 @@ namespace mrv
             }
             RegCloseKey(hKey);
         }
-        
+
 #elif defined(__APPLE__)
         std::array<char, 128> buffer;
         std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(
@@ -316,13 +325,13 @@ namespace mrv
 
         const std::string path = licensepath();
         const std::string license_file = path + "/mrv2_licenses.lic";
-        
+
         if (file::isReadable(license_file))
         {
             std::string msg = string::Format(_("Found floating license at '{0}'"))
                               .arg(license_file);
             LOG_STATUS(msg);
-            
+
             // Open the file for reading
             std::ifstream file_stream(license_file);
 
@@ -351,7 +360,7 @@ namespace mrv
             }
         }
     }
-    
+
     License has_license_expired(const std::string& expires_at)
     {
         std::tm tm = {};
@@ -366,7 +375,7 @@ namespace mrv
         tm.tm_hour = 23;
         tm.tm_min  = 59;
         tm.tm_sec  = 59;
-        
+
         std::time_t exp_time = std::mktime(&tm);
 
         std::time_t now = std::time(nullptr);
@@ -374,11 +383,11 @@ namespace mrv
             LOG_ERROR(_("License expired"));
             return License::kExpired;
         }
-        
+
         return License::kValid;
     }
-    
-    
+
+
     nlohmann::json post_request(const std::string serverHost,
                                 const int serverPort,
                                 const std::string& entryPoint,
@@ -389,7 +398,7 @@ namespace mrv
         using namespace Poco;
 
         try
-        {            
+        {
             std::string caLocation = mrv::rootpath() + "/certs/cacert.pem";
 
             bool useDefault = false;
@@ -410,7 +419,7 @@ namespace mrv
                 useDefault = true;
             }
 
-            
+
             Context::Ptr context = new Context(
                 Context::CLIENT_USE,
                 "",    // privateKeyFile
@@ -421,14 +430,14 @@ namespace mrv
                 useDefault, // load default CA location
                 "ALL"
                 );
-            
+
             HTTPSClientSession session(serverHost, serverPort, context);
             // Shorter connect timeout (e.g. 2 seconds instead of ~20s default)
-            session.setConnectTimeout(Poco::Timespan(2, 0));  
+            session.setConnectTimeout(Poco::Timespan(2, 0));
 
             // General operation timeout (read/write)
             session.setTimeout(Poco::Timespan(10, 0));
-            
+
             HTTPRequest request(HTTPRequest::HTTP_POST,
                                            entryPoint,
                                            HTTPMessage::HTTP_1_1);
@@ -452,7 +461,7 @@ namespace mrv
             }
 
             nlohmann::json json_data = nlohmann::json::parse(respStr);
-            
+
             if (response.getStatus() != HTTPResponse::HTTP_OK)
             {
                 // Parse JSON error message
@@ -463,7 +472,7 @@ namespace mrv
                 }
                 return "";
             }
-        
+
             return json_data;
         }
         catch (const Exception& ex) {
@@ -488,11 +497,11 @@ namespace mrv
             LOG_ERROR(ex.what());
         }
 #endif
-        
+
         return nlohmann::json();
     }
 
-    
+
     bool send_heartbeat()
     {
         // --- Configuration ---
@@ -505,9 +514,9 @@ namespace mrv
 
         if (master_key.empty())
             return false;
-            
+
         // --- Build JSON request ---
-        
+
         // Build the request object programmatically.
         nlohmann::json request_body_json;
 
@@ -527,13 +536,13 @@ namespace mrv
                                                 "/heartbeat", requestBody);
         if (json_data.is_null() || !json_data.contains("status"))
             return false;
-        
+
         if (json_data["status"] == "renewed")
         {
             LOG_INFO("Renewed license");
             return true;
         }
-        
+
         return false;
     }
 
@@ -546,11 +555,11 @@ namespace mrv
         std::string master_key;
         get_network_configuration(serverHost, serverPort, machine_ids,
                                   master_key);
-        
+
         if (master_key.empty())
             return License::kInvalid;
 
-        
+
         // Build the request object programmatically.
         nlohmann::json request_body_json;
 
@@ -564,7 +573,7 @@ namespace mrv
         // 4. Dump the final, complete object into a string
         // The library handles all formatting and escaping correctly.
         const std::string requestBody = request_body_json.dump();
-    
+
         // --- HTTP POST to /checkout_license ---
         nlohmann::ordered_json json_data = post_request(serverHost, serverPort,
                                                         "/checkout_license",
@@ -575,10 +584,10 @@ namespace mrv
             // We just need to stop here.
             return License::kInvalid;
         }
-        
+
         // Extract the 'signature' string
         const std::string signature = json_data.at("signature").get<std::string>();
-            
+
         // Get the 'payload' object with ordered keys
         const nlohmann::ordered_json& payload_json = json_data.at("payload");
         const std::string expires_at = payload_json.at("expires_at").get<std::string>();
@@ -591,7 +600,7 @@ namespace mrv
                           arg(active_seats).
                           arg(license_limit);
         LOG_STATUS(msg);
-        
+
         // -------------------------
         // Verify license
         // -------------------------
@@ -608,9 +617,9 @@ namespace mrv
         activatePlan(plan);
         return License::kValid;
     }
-    
+
     License validate_node_locked(std::string& expiration_date)
-    {        
+    {
         // --- Configuration ---
         std::string serverHost;
         int serverPort;
@@ -618,7 +627,7 @@ namespace mrv
         std::string master_key;
         get_network_configuration(serverHost, serverPort, machine_ids,
                                   master_key);
-            
+
         // --- Build JSON request ---
         std::string machine_id;
         nlohmann::json json_data;
@@ -646,12 +655,12 @@ namespace mrv
         {
             return License::kInvalid;
         }
-        
+
         // --- Parse JSON response with nlohmann::json ---
-            
+
         // Extract the 'signature' string
         std::string signature = json_data.at("signature").get<std::string>();
-            
+
         // Get the 'payload' object with ordered keys
         const nlohmann::ordered_json& payload_json = json_data.at("payload");
 
@@ -659,12 +668,12 @@ namespace mrv
             !payload_json.contains("machine_id") ||
             !payload_json.contains("plan"))
             return License::kInvalid;
-        
+
         const std::string expires_at = payload_json.at("expires_at").get<std::string>();
         const std::string payload_machine_id = payload_json.at("machine_id").get<std::string>();
         const std::string plan = payload_json.at("plan").get<std::string>();
-        
-            
+
+
         // -------------------------
         // Verify license
         // -------------------------
@@ -690,7 +699,7 @@ namespace mrv
         {
             return License::kExpired;
         }
-        
+
         activatePlan(plan);
 
         return License::kValid;
@@ -700,7 +709,7 @@ namespace mrv
     {
         if (app::license_type != LicenseType::kFloating)
             return true;
-        
+
         // --- Configuration ---
         std::string serverHost;
         int serverPort;
@@ -708,13 +717,13 @@ namespace mrv
         std::string master_key;
         get_network_configuration(serverHost, serverPort, machine_ids,
                                   master_key);
-        
+
         if (master_key.empty())
             return false;
-        
+
         // Build the request object programmatically.
         nlohmann::json request_body_json;
-        
+
         // Add the machine_id
         request_body_json["machine_id"] = machine_ids[0];
         request_body_json["session_id"] = app::session_id;
@@ -725,7 +734,7 @@ namespace mrv
         // 4. Dump the final, complete object into a string
         // The library handles all formatting and escaping correctly.
         const std::string requestBody = request_body_json.dump();
-    
+
         // --- HTTP POST to /checkout_license ---
         nlohmann::ordered_json json_data = post_request(serverHost, serverPort,
                                                         "/release_license",
@@ -735,20 +744,20 @@ namespace mrv
             LOG_ERROR(_("Could not release floating license"));
             return false;
         }
-        
+
         if (json_data["status"] == "released")
         {
             LOG_STATUS(_("Released Floating License"));
             return true;
         }
-        
+
         return false;
     }
-        
+
     License validate_license(std::string& expiration_date)
     {
         License out = License::kInvalid;
-        
+
         if (app::license_type == LicenseType::kDemo)
         {
             out = validate_node_locked(expiration_date);
@@ -795,7 +804,7 @@ namespace mrv
                 .arg(expiration_date);
             LOG_STATUS(msg);
         }
-        
+
         return out;
     }
 
@@ -806,7 +815,7 @@ namespace mrv
             app::demo_mode = false;
             return License::kInvalid;
         }
-        
+
         std::string expiration;
         License ok = validate_license(expiration);
         return ok;
