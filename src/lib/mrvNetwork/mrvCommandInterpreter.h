@@ -36,21 +36,30 @@ namespace mrv
         // sFTP additions
         std::shared_ptr<SftpTunnelClient>
         getOrCreateTunnel(WebRTCManager& manager, const std::string& peerId);
-        std::string cachePathFor(const std::string& remotePath) const;
+        tl::file::Path cachePathFor(const tl::file::Path& remotePath) const;
         void fetchRemoteFile(const std::string& peerId,
                              const tl::file::Path& filePath,
-                             const std::string& audioFilePath,
+                             const tl::file::Path& audioFilePath,
                              const FilesModelItem& item);
 
     public:
         void timerEvent();
 
         static void timerEvent_cb(void* d);
-
+        
+        void shutdownSftpTransfers();
+        void shutdownTunnels();
+        
     private:
         ViewerUI* ui;
+        
+        
+        std::atomic<bool> shuttingDown_{false};
+        std::vector<std::thread> activeSftpDownloads_;
+        std::mutex downloadThreadsMutex_;
         std::unordered_map<std::string, std::string> fileSourcePeer_;
         std::unordered_map<std::string, std::shared_ptr<SftpTunnelClient> > peerTunnels_;
+        
         Poco::UInt16 nextTunnelPort_ = 2222;
         std::mutex tunnelMutex_;
     };

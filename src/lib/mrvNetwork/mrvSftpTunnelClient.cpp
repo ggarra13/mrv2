@@ -34,6 +34,7 @@ namespace mrv
                                        "connected.").arg(peerId_);
                 LOG_ERROR(msg);
                 client.close();
+                running_ = false;
                 continue;
             }
 

@@ -433,10 +433,8 @@ namespace tl
                     !path.getNumber().empty();
                 if (isSequence)
                 {
-                    std::cerr << "is sequence" << std::endl;
                     if (!path.isSequence())
                     {
-                        std::cerr << "path is not sequence" << std::endl;
                         // Check for other files in the sequence.
                         std::vector<file::FileInfo> list;
                         file::ListOptions listOptions;

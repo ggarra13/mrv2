@@ -34,18 +34,17 @@ namespace mrv
         SftpClient& operator=(const SftpClient&) = delete;
 
         // Downloads a single remote file over SFTP to a local path, using an
-        // atomic-rename staging file (<localPath>.part).
+        // atomic-rename staging file (<localFile>.part).
         bool downloadFile(
-            const std::string& remotePath, 
-            const std::string& localPath,
+            const std::string& remoteFile, 
+            const std::string& localFile,
             const std::function<void(uint64_t done, uint64_t total)>&
             progressCb = nullptr);
         
-        // Downloads a single remote file over SFTP to a local path, using an
-        // atomic-rename staging file (<localPath>.part).
+        // Downloads a one or more files (sequences) over SFTP to a localPath.
         bool downloadFile(
             const tl::file::Path& remotePath, 
-            const std::string& localPath,
+            const tl::file::Path& localPath,
             const std::function<void(uint64_t done, uint64_t total)>&
             progressCb = nullptr);
 

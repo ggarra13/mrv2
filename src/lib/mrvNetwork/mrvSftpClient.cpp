@@ -474,19 +474,24 @@ namespace mrv
 
     bool SftpClient::downloadFile(
         const tl::file::Path& remotePath, 
-        const std::string& localPath,
+        const tl::file::Path& localPath,
         const std::function<void(uint64_t done, uint64_t total)>& progressCb)
     {
         auto frames = remotePath.getFrames();
-        if (!frames.has_value())
-            return downloadFile(remotePath.get(), localPath, progressCb);
+        if (!frames.has_value() || !remotePath.isSequence())
+        {
+            std::cerr << "downloading " << remotePath.get() << std::endl;
+            return downloadFile(remotePath.get(), localPath.get(), progressCb);
+        }
 
         const math::Int64Range range = frames.value();
         const bool listdir = true;
         for (int64_t i = range.getMin(); i <= range.getMax(); ++i)
         {
             std::string remoteFile = remotePath.getFrame(i, listdir);
-            bool ok = downloadFile(remoteFile, localPath, progressCb);
+            std::string localFile  = localPath.getFrame(i, listdir);
+            std::cerr << "downloading " << remoteFile << std::endl;
+            bool ok = downloadFile(remoteFile, localFile, progressCb);
             if (!ok) return false;
         }
         return true;

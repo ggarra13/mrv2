@@ -233,15 +233,6 @@ namespace tl
                         setNumber(toString(_frames.value().getMin(), _pad));
                     }
                 }
-                if (_frames.has_value())
-                {
-                    std::cerr << get() << " " << _frames.value().getMin() << " - "
-                              << _frames.value().getMax() << std::endl;
-                }
-                else
-                {
-                    std::cerr << get() << " not a sequence" << std::endl;
-                }
             }
             return out;
         }

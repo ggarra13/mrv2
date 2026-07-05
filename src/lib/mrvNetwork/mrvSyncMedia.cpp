@@ -54,6 +54,7 @@ namespace mrv
     struct SyncData
     {
         CommandInterpreter* self;
+        bool shuttingDown;
         bool success;
         std::string cachePath;
         std::string audioCachePath;
@@ -63,6 +64,8 @@ namespace mrv
     static void sync_callback(void* data)
     {
         std::unique_ptr<SyncData> d(static_cast<SyncData*>(data));
+        if (d->shuttingDown)
+            return;
 
         if (d->success)
             d->self->syncFile(
@@ -73,9 +76,32 @@ namespace mrv
             LOG_ERROR(_("Failed to fetch remote file via SFTP."));
     }
 
+    void CommandInterpreter::shutdownSftpTransfers()
+    {
+        std::lock_guard<std::mutex> lk(downloadThreadsMutex_);
+        for (auto& t : activeSftpDownloads_)
+        {
+            if (t.joinable())
+                t.join();
+        }
+        activeSftpDownloads_.clear();
+    }
+
+    void CommandInterpreter::shutdownTunnels()
+    {
+        shuttingDown_ = true;  // signal all threads to wrap up
+        std::lock_guard<std::mutex> lk(tunnelMutex_);
+        for (auto& [peerId, tunnel] : peerTunnels_)
+        {
+            tunnel->stop();  // stops accept loop, joins acceptThread_, stops all pumps
+        }
+        peerTunnels_.clear();
+    }
+    
+    
     std::shared_ptr<SftpTunnelClient>
     CommandInterpreter::getOrCreateTunnel(WebRTCManager& manager,
-                                           const std::string& peerId)
+                                          const std::string& peerId)
     {
         std::lock_guard<std::mutex> lk(tunnelMutex_);
         auto it = peerTunnels_.find(peerId);
@@ -89,21 +115,25 @@ namespace mrv
         return tunnel;
     }
 
-    std::string
-    CommandInterpreter::cachePathFor(const std::string& remotePath) const
+    tl::file::Path
+    CommandInterpreter::cachePathFor(const tl::file::Path& remotePath) const
     {
         // Content-addressed by the remote path string, not its content —
         // fine for now since re-fetch-on-mismatch isn't handled yet.
-        size_t h = std::hash<std::string>{}(remotePath);
+        size_t h = std::hash<std::string>{}(remotePath.get());
         std::string dir = mrv::homepath() + "/.cache/mrv2/remote/" +
                            std::to_string(h);
         file::mkdirRecursive(dir);
-        return dir + "/" + file::basename(remotePath);
+        tl::file::Path path(dir + "/" + file::basename(remotePath.get()));
+        const auto& frames = remotePath.getFrames();
+        if (frames.has_value())
+            path.setFrames(frames.value());
+        return path;
     }
 
     void CommandInterpreter::fetchRemoteFile(
         const std::string& peerId, const file::Path& filePath,
-        const std::string& audioFilePath, const FilesModelItem& item)
+        const file::Path& audioFilePath, const FilesModelItem& item)
     {
         auto* webrtcClient = dynamic_cast<WebRTCClient*>(tcp);
         if (!webrtcClient)
@@ -135,9 +165,8 @@ namespace mrv
 
         auto tunnel = getOrCreateTunnel(manager, peerId);
 
-        std::string cachePath = cachePathFor(filePath.get());
-        std::string audioCachePath =
-            audioFilePath.empty() ? std::string() : cachePathFor(audioFilePath);
+        const tl::file::Path& cachePath = cachePathFor(filePath);
+        const tl::file::Path& audioCachePath = cachePathFor(audioFilePath);
         Poco::UInt16 port = tunnel->localPort();
 
         std::string msg = tl::string::Format(
@@ -148,40 +177,47 @@ namespace mrv
         SftpCredentials creds;
         // creds.identityFile = uiPrefs->sshIdentityFile;
 
-        std::thread([this, filePath, audioFilePath, cachePath,
-                     audioCachePath, port, creds, item]()
+        std::thread downloadThread([this, filePath, audioFilePath, cachePath,
+                                    audioCachePath, port, creds, item]()
         {
             SftpClient sftpA("127.0.0.1", port, creds);
             bool ok = sftpA.downloadFile(filePath, cachePath, [](
                                              uint64_t done,
                                              uint64_t total)
                 {
+                    std::cerr << done << " / " << total << std::endl;
                 });
 
             bool audioOk = true;
-            if (ok && !audioFilePath.empty())
+            if (ok && !audioFilePath.isEmpty())
             {
                 SftpClient sftpB("127.0.0.1", port, creds);
-                audioOk = sftpB.downloadFile(audioFilePath,
-                                             audioCachePath, [](
+                audioOk = sftpB.downloadFile(audioFilePath, audioCachePath, [](
                                                  uint64_t done,
                                                  uint64_t total)
-                                                 {
-                                                 });
+                    {
+                        std::cerr << done << " / " << total << std::endl;
+                    });
             }
             bool success = ok && audioOk;
 
             auto* data = new SyncData
                          {
                              this,
+                             shuttingDown_,
                              success,
-                             cachePath,
-                             audioCachePath,
+                             cachePath.get(),
+                             audioCachePath.get(),
                              item
                          };
 
             Fl::awake(sync_callback, data);
-        }).detach();
+        });
+        
+        {
+            std::lock_guard<std::mutex> lk(downloadThreadsMutex_);
+            activeSftpDownloads_.push_back(std::move(downloadThread));
+        }
     }
 
     void CommandInterpreter::syncFile(
@@ -271,18 +307,8 @@ namespace mrv
                         // path.get()/audioPath.get(), the *original*
                         // remote paths — filePath/audioFilePath were
                         // just mutated in place by replace_path() above.
-                        if (file::isSequence(path))
-                        {
-                            std::cerr << "sequence "
-                                      << path.get() << " "
-                                      << path.getFrameRange()
-                                      << std::endl;
-                        }
-                        else
-                        {
-                            fetchRemoteFile(peerId, path, audioPath.get(),
-                                            remoteFiles[i]);
-                        }
+                        fetchRemoteFile(peerId, path, audioPath,
+                                        remoteFiles[i]);
                     }
                     else
                     {
