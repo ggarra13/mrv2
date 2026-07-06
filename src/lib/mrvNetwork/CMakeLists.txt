@@ -42,12 +42,7 @@ if(MRV2_NETWORK)
 	mrvSignalingClient.cpp
 	mrvWebRTCClient.cpp
 	mrvWebRTCManager.cpp
-	mrvTcpDataChannelPump.cpp
 
-	# sFTP
-	mrvSftpTunnelClient.cpp
-	mrvSftpTunnelServer.cpp
-	mrvSftpClient.cpp
     )
     list(APPEND HEADERS
 	# Common
@@ -71,11 +66,6 @@ if(MRV2_NETWORK)
 	mrvTcpDataChannelPump.h
 	mrvWebRTCClient.h
 	mrvWebRTCManager.h
-
-	# sFTP
-	mrvSftpTunnelClient.h
-	mrvSftpTunnelServer.h
-	mrvSftpClient.h
     )
     list(APPEND LIBRARIES Poco::Net Poco::Foundation)
 

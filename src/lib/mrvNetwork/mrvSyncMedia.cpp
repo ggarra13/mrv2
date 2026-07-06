@@ -2,9 +2,7 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#include "mrvNetwork/mrvSftpClient.h"
-#include "mrvNetwork/mrvSftpTunnelClient.h"
-#include "mrvNetwork/mrvSftpTunnelServer.h"
+#include "mrvNetwork/mrvFileTransferClient.h"
 #include "mrvNetwork/mrvWebRTCClient.h"
 #include "mrvNetwork/mrvCommandInterpreter.h"
 #include "mrvNetwork/mrvFilePath.h"
@@ -80,42 +78,26 @@ namespace mrv
 
     void CommandInterpreter::shutdownSftpTransfers()
     {
-        std::lock_guard<std::mutex> lk(downloadThreadsMutex_);
-        for (auto& t : activeSftpDownloads_)
-        {
-            if (t.joinable())
-                t.join();
-        }
-        activeSftpDownloads_.clear();
+        // std::lock_guard<std::mutex> lk(downloadThreadsMutex_);
+        // for (auto& t : activeSftpDownloads_)
+        // {
+        //     if (t.joinable())
+        //         t.join();
+        // }
+        // activeSftpDownloads_.clear();
     }
 
     void CommandInterpreter::shutdownTunnels()
     {
-        shuttingDown_ = true;  // signal all threads to wrap up
-        std::lock_guard<std::mutex> lk(tunnelMutex_);
-        for (auto& [peerId, tunnel] : peerTunnels_)
-        {
-            tunnel->stop();  // stops accept loop, joins acceptThread_, stops all pumps
-        }
-        peerTunnels_.clear();
+        // shuttingDown_ = true;  // signal all threads to wrap up
+        // std::lock_guard<std::mutex> lk(tunnelMutex_);
+        // for (auto& [peerId, tunnel] : peerTunnels_)
+        // {
+        //     tunnel->stop();  // stops accept loop, joins acceptThread_, stops all pumps
+        // }
+        // peerTunnels_.clear();
     }
 
-
-    std::shared_ptr<SftpTunnelClient>
-    CommandInterpreter::getOrCreateTunnel(WebRTCManager& manager,
-                                          const std::string& peerId)
-    {
-        std::lock_guard<std::mutex> lk(tunnelMutex_);
-        auto it = peerTunnels_.find(peerId);
-        if (it != peerTunnels_.end())
-            return it->second;
-
-        auto tunnel = std::make_shared<SftpTunnelClient>(
-            manager, peerId, nextTunnelPort_++);
-        tunnel->start();
-        peerTunnels_[peerId] = tunnel;
-        return tunnel;
-    }
 
     tl::file::Path
     CommandInterpreter::cachePathFor(const tl::file::Path& remotePath) const
@@ -153,7 +135,7 @@ namespace mrv
             return;
         }
 
-        bool allowSftpOverRelay = false; //uiPrefs->uiAllowSftpOverRelay->value();
+        bool allowSftpOverRelay = false; 
         if (client->isRelayedConnection && !allowSftpOverRelay)
         {
             const std::string msg =
@@ -165,20 +147,6 @@ namespace mrv
             return;
         }
 
-        auto tunnel = getOrCreateTunnel(manager, peerId);
-
-        const tl::file::Path& cachePath = cachePathFor(filePath);
-        const tl::file::Path& audioCachePath = cachePathFor(audioFilePath);
-        Poco::UInt16 port = tunnel->localPort();
-
-        std::string msg = tl::string::Format(
-            _("Fetching {0} from peer {1} via SFTP tunnel on port {2}..."))
-                          .arg(filePath.get()).arg(peerId).arg(port);
-        LOG_STATUS(msg);
-
-        SftpCredentials creds;
-        // creds.identityFile = uiPrefs->sshIdentityFile;
-
 #if 1
 
         ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
@@ -186,88 +154,47 @@ namespace mrv
         progress->show();
 
 
-        SftpClient sftp("127.0.0.1", port, creds);
-        bool ok = sftp.downloadFile(filePath, cachePath, peerId, [=](
-                                        bool& aborted,
-                                        const std::string& title,
-                                        uint64_t done,
-                                        uint64_t total)
-            {
-                progress->set_title(title.c_str());
-                progress->set_end(total);
-                progress->set_value(done);
-                if (!progress->window()->shown())
-                    aborted = true;
-            });
+        FileTransferClient ftc(manager, peerId);
+        // bool ok = ftc.downloadFile(filePath, cachePath, peerId, [=](
+        //                                bool& aborted,
+        //                                const std::string& title,
+        //                                uint64_t done,
+        //                                uint64_t total)
+        //     {
+        //         progress->set_title(title.c_str());
+        //         progress->set_end(total);
+        //         progress->set_value(done);
+        //         if (!progress->window()->shown())
+        //             aborted = true;
+        //     });
 
         bool audioOk = true;
-        if (ok && !audioFilePath.isEmpty())
-        {
-            SftpClient sftp("127.0.0.1", port, creds);
-            audioOk = sftp.downloadFile(audioFilePath, audioCachePath, peerId, [=](
-                                            bool& aborted,
-                                            const std::string& title,
-                                            uint64_t done,
-                                            uint64_t total)
-                {
-                    progress->set_title(title.c_str());
-                    progress->set_end(total);
-                    progress->set_value(done);
-                    if (!progress->window()->shown())
-                        aborted = true;
-                });
-        }
+        // if (ok && !audioFilePath.isEmpty())
+        // {
+        //     FileTransferClient ftc(manager, peerId);
+            
+        //     audioOk = ftc.downloadFile(audioFilePath, audioCachePath, peerId, [=](
+        //                                     bool& aborted,
+        //                                     const std::string& title,
+        //                                     uint64_t done,
+        //                                     uint64_t total)
+        //         {
+        //             progress->set_title(title.c_str());
+        //             progress->set_end(total);
+        //             progress->set_value(done);
+        //             if (!progress->window()->shown())
+        //                 aborted = true;
+        //         });
+        // }
         bool success = ok && audioOk;
-
+        
         delete progress;
     
         if (success)
         {
             syncFile(cachePath.get(), audioCachePath.get(), item);
         }
-#else
 
-        std::thread downloadThread([this, filePath, audioFilePath, cachePath,
-                                    audioCachePath, port, creds, item]()
-        {
-            SftpClient sftpA("127.0.0.1", port, creds);
-            bool ok = sftpA.downloadFile(filePath, cachePath, [](
-                                             uint64_t done,
-                                             uint64_t total)
-                {
-                    std::cerr << done << " / " << total << std::endl;
-                });
-
-            bool audioOk = true;
-            if (ok && !audioFilePath.isEmpty())
-            {
-                SftpClient sftpB("127.0.0.1", port, creds);
-                audioOk = sftpB.downloadFile(audioFilePath, audioCachePath, [](
-                                                 uint64_t done,
-                                                 uint64_t total)
-                    {
-                        std::cerr << done << " / " << total << std::endl;
-                    });
-            }
-            bool success = ok && audioOk;
-
-            auto* data = new SyncData
-                         {
-                             this,
-                             shuttingDown_,
-                             success,
-                             cachePath.get(),
-                             audioCachePath.get(),
-                             item
-                         };
-
-            Fl::awake(sync_callback, data);
-        });
-
-        {
-            std::lock_guard<std::mutex> lk(downloadThreadsMutex_);
-            activeSftpDownloads_.push_back(std::move(downloadThread));
-        }
 #endif
     }
 
