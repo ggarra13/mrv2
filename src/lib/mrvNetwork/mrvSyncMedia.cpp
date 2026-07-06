@@ -175,30 +175,35 @@ namespace mrv
                     ok = true;
             });
 
-        bool audioOk = true;
-        if (ok && !audioFilePath.isEmpty())
+        while (!ok)
         {
-            FileTransferClient ftc(manager, peerId);
-
-            bool audioOk = false;
-            ftc.downloadFile(audioFilePath, audioCachePath, [&](
-                                 bool& aborted,
-                                 const std::string& title,
-                                 uint64_t done,
-                                 uint64_t total)
-                {
-                    progress->set_title(title.c_str());
-                    progress->set_end(total);
-                    progress->set_value(done);
-                    if (!progress->window()->shown())
-                    {
-                        aborted = true;
-                        ok = false;
-                    }
-                    if (done == total)
-                        audioOk = true;
-                });
+            Fl::check();
         }
+
+        bool audioOk = true;
+        // if (ok && !audioFilePath.isEmpty())
+        // {
+        //     FileTransferClient ftc(manager, peerId);
+
+        //     audioOk = false;
+        //     ftc.downloadFile(audioFilePath, audioCachePath, [&](
+        //                          bool& aborted,
+        //                          const std::string& title,
+        //                          uint64_t done,
+        //                          uint64_t total)
+        //         {
+        //             progress->set_title(title.c_str());
+        //             progress->set_end(total);
+        //             progress->set_value(done);
+        //             if (!progress->window()->shown())
+        //             {
+        //                 aborted = true;
+        //                 audioOk = false;
+        //             }
+        //             if (done == total)
+        //                 audioOk = true;
+        //         });
+        // }
         bool success = ok && audioOk;
 
         delete progress;
