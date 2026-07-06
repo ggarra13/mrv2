@@ -38,7 +38,14 @@ namespace mrv
             size_t n = std::fread(buf.data(), 1, kChunkSize, f);
             if (n == 0)
                 break;
-            dc->send(reinterpret_cast<const std::byte*>(buf.data()), n);
+
+            // Check if the client closed the connection or aborted
+            if (!dc->isOpen()) 
+                break;
+            
+            bool success = dc->send(reinterpret_cast<const std::byte*>(buf.data()), n);
+            if (!success)
+                break;
         }
         std::fclose(f);
 

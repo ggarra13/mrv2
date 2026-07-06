@@ -22,7 +22,8 @@ namespace mrv
             const tl::file::Path& localPath,
             std::function<void(bool& aborted,
                                const std::string& title,
-                               uint64_t done,uint64_t total)> progressCb);
+                               uint64_t done,uint64_t total) > progressCb,
+            std::function<void(bool exit) > doneCb);
 
     private:
         void handleText(const std::string& text);
@@ -48,6 +49,7 @@ namespace mrv
         std::deque<std::string> pendingRemotePaths_;
         std::deque<std::string> pendingLocalPaths_;
     
+        std::string currentRemotePath_;
         std::string currentLocalPath_;
         std::string currentPartPath_;
     

@@ -29,19 +29,21 @@ namespace mrv
                                           std::function<void(
                                               bool& aborted,
                                               const std::string& title,
-                                               uint64_t,uint64_t)> progressCb)
+                                              uint64_t,uint64_t) > progressCb,
+                                          std::function<void(bool) > doneCb)
     {
         remotePath_ = remotePath;
         localPath_ = localPath;
         partPath_ = localPath.get() + ".part";
         progressCb_ = std::move(progressCb);
+        doneCb_ = std::move(doneCb);
         
         // Populate the download queues
         auto frames = remotePath.getFrames();
         if (remotePath.isSequence() && frames.has_value())
         {
             math::Int64Range range = frames.value();
-            const bool listdir = true; // or however your API handles this
+            const bool listdir = true; 
             for (int64_t i = range.getMin(); i <= range.getMax(); ++i)
             {
                 pendingRemotePaths_.push_back(remotePath.getFrame(i, listdir));
@@ -57,6 +59,7 @@ namespace mrv
         auto peer = manager_.getClient(peerId_);
         if (!peer)
         {
+            LOG_ERROR("No peerId " << peerId_);
             return;
         }
 
@@ -119,8 +122,6 @@ namespace mrv
             auto peer = manager_.getClient(peerId_);
             if (peer) 
             {
-                 // Find the existing data channel. Alternatively, make `dc_` a member of FileTransferClient
-                 // For brevity, assuming you added std::shared_ptr<rtc::DataChannel> dc_ to your class:
                  requestNextFile(dc_); 
             }
         }
@@ -132,16 +133,28 @@ namespace mrv
             return;
         std::fwrite(data.data(), 1, data.size(), out_);
         totalRead_ += data.size();
+        
+        const bool listdir = true;
+        const file::Path path(currentRemotePath_);
+        const std::string title =
+            tl::string::Format(_("Downloading {0}...")).arg(path.get());
 
         bool aborted = false;
         if (progressCb_)
         {
-            const std::string title =
-                tl::string::Format(_("Downloading {0}...")).
-                arg(remotePath_.get());
             progressCb_(aborted, title, totalRead_, remoteSize_);
             if (aborted)
             {
+                // 1. Sever the connection to stop incoming traffic
+                if (dc_) {
+                    dc_->close();
+                }
+
+                // 2. Clear pending queues so the sequence fully stops
+                pendingRemotePaths_.clear();
+                pendingLocalPaths_.clear();
+                
+                // 3. Clean up local state
                 finish(false);
             }
         }
@@ -151,7 +164,11 @@ namespace mrv
     {
         bool expected = false;
         if (!finished_.compare_exchange_strong(expected, true))
+        {
+            if (doneCb_)
+                doneCb_(success);
             return;
+        }
 
         if (out_)
         {
@@ -161,20 +178,15 @@ namespace mrv
 
         if (success)
         {
-            std::string newName = localPath_.get();
-            std::rename(partPath_.c_str(), newName.c_str());
+            std::rename(currentPartPath_.c_str(), currentLocalPath_.c_str());
         }
         else
         {
-            std::remove(partPath_.c_str());
+            std::remove(currentPartPath_.c_str());
         }
-
-        // // Marshal back to main thread for UI/file open
-        // Fl::awake([this, success](void*)
-        //     {
-        //         if (doneCb_)
-        //             doneCb_(success);
-        //     }, nullptr);
+        
+        if (doneCb_)
+            doneCb_(success);
     }
 
     void FileTransferClient::requestNextFile(std::shared_ptr<rtc::DataChannel> dc)
@@ -188,7 +200,7 @@ namespace mrv
         }
 
         // Pop the next file off the queues
-        std::string remote = pendingRemotePaths_.front();
+        currentRemotePath_ = pendingRemotePaths_.front();
         pendingRemotePaths_.pop_front();
         
         currentLocalPath_ = pendingLocalPaths_.front();
@@ -202,7 +214,7 @@ namespace mrv
 
         // Ask the server for it
         Message req;
-        req["path"] = remote;
+        req["path"] = currentRemotePath_;
         dc->send(req.dump());
     }
     

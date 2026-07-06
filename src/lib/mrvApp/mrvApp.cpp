@@ -1279,9 +1279,6 @@ namespace mrv
         p.mainControl = nullptr;
 
 #ifdef MRV2_NETWORK
-        p.commandInterpreter->shutdownTunnels();
-        p.commandInterpreter->shutdownSftpTransfers();
-            
         delete p.commandInterpreter;
         p.commandInterpreter = nullptr;
 #endif

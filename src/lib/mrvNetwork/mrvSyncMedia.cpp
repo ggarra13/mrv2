@@ -76,28 +76,6 @@ namespace mrv
             LOG_ERROR(_("Failed to fetch remote file via SFTP."));
     }
 
-    void CommandInterpreter::shutdownSftpTransfers()
-    {
-        // std::lock_guard<std::mutex> lk(downloadThreadsMutex_);
-        // for (auto& t : activeSftpDownloads_)
-        // {
-        //     if (t.joinable())
-        //         t.join();
-        // }
-        // activeSftpDownloads_.clear();
-    }
-
-    void CommandInterpreter::shutdownTunnels()
-    {
-        // shuttingDown_ = true;  // signal all threads to wrap up
-        // std::lock_guard<std::mutex> lk(tunnelMutex_);
-        // for (auto& [peerId, tunnel] : peerTunnels_)
-        // {
-        //     tunnel->stop();  // stops accept loop, joins acceptThread_, stops all pumps
-        // }
-        // peerTunnels_.clear();
-    }
-
 
     tl::file::Path
     CommandInterpreter::cachePathFor(const tl::file::Path& remotePath) const
@@ -150,79 +128,105 @@ namespace mrv
         const tl::file::Path& cachePath = cachePathFor(filePath);
         const tl::file::Path& audioCachePath = cachePathFor(audioFilePath);
 
-        // ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
-        //                                               "");
-        // progress->show();
+        ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
+                                                      _("Transfers"));
+        auto progress_to_delete = progress;
+        progress->show();
+        Fl::check();
 
 
         FileTransferClient ftc(manager, peerId);
-        bool ok = false;
+        std::atomic<bool> ok = true;
         ftc.downloadFile(filePath, cachePath, [&](
                              bool& aborted,
                              const std::string& title,
                              uint64_t done,
                              uint64_t total)
             {
-                // Fl::lock();   // Acquire the GUI lock
+                Fl::lock();   // Acquire the GUI lock
         
-                // // Safely update the UI
-                // progress->set_title(title.c_str());
-                // progress->set_end(total);
-                // progress->set_value(done);
+                // Safely update the UI
+                progress->set_title(title.c_str());
+                progress->set_end(total);
+                progress->set_value(done);
         
-                // if (progress->window() && !progress->window()->shown())
-                // {
-                //     aborted = true;
-                //     ok = true;
-                // }
-                
-                // // Wake up the main thread's event loop so it redraws
-                // // immediately.
-                // // Without this, the UI might not update until you move
-                // // your mouse.
-                // Fl::awake();  
+                if (progress->window() && !progress->window()->shown())
+                {
+                    aborted = true;
+                    ok = false;
+                    progress = nullptr;
+                }
         
-                // Fl::unlock(); // Release the GUI lock
-                std::cerr << title << " " << std::endl
-                          << done << "/" << total << std::endl;
-                
-                // if (done == total)
-                //     ok = true;
-            });
+                // Wake up the main thread's event loop so it redraws
+                // immediately.
+                // Without this, the UI might not update until you move
+                // your mouse.
+                Fl::awake();
 
-        while (!ok)
+                // Release the GUI lock
+                Fl::unlock();
+                
+            }, [&](bool success)
+                {
+                    ok = success;
+                    progress = nullptr;
+                });
+
+        while (progress && ok)
         {
             Fl::check();
         }
 
-        bool audioOk = true;
-        // if (ok && !audioFilePath.isEmpty())
-        // {
-        //     FileTransferClient ftc(manager, peerId);
 
-        //     audioOk = false;
-        //     ftc.downloadFile(audioFilePath, audioCachePath, [&](
-        //                          bool& aborted,
-        //                          const std::string& title,
-        //                          uint64_t done,
-        //                          uint64_t total)
-        //         {
-        //             progress->set_title(title.c_str());
-        //             progress->set_end(total);
-        //             progress->set_value(done);
-        //             if (!progress->window()->shown())
-        //             {
-        //                 aborted = true;
-        //                 audioOk = false;
-        //             }
-        //             if (done == total)
-        //                 audioOk = true;
-        //         });
-        // }
+        std::atomic<bool> audioOk = true;
+        if (!audioFilePath.isEmpty())
+        {
+            progress = progress_to_delete;
+            
+            ftc.downloadFile(audioFilePath, audioCachePath, [&](
+                                 bool& aborted,
+                                 const std::string& title,
+                                 uint64_t done,
+                                 uint64_t total)
+                {
+                    Fl::lock();   // Acquire the GUI lock
+        
+                    // Safely update the UI
+                    progress->set_title(title.c_str());
+                    progress->set_end(total);
+                    progress->set_value(done);
+        
+                    if (progress->window() && !progress->window()->shown())
+                    {
+                        aborted = true;
+                        ok = false;
+                        progress = nullptr;
+                    }
+        
+                    // Wake up the main thread's event loop so it redraws
+                    // immediately.
+                    // Without this, the UI might not update until you move
+                    // your mouse.
+                    Fl::awake();
+
+                    // Release the GUI lock
+                    Fl::unlock();
+                
+                }, [&](bool success)
+                    {
+                        ok = success;
+                        progress = nullptr;
+                    });
+
+            while (progress && ok)
+            {
+                Fl::check();
+            }
+        }
+        
+        delete progress_to_delete;
+
         bool success = ok && audioOk;
-
-        // delete progress;
-
         if (success)
         {
             syncFile(cachePath.get(), audioCachePath.get(), item);

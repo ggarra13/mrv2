@@ -105,11 +105,11 @@ namespace mrv
     void CommandInterpreter::handlePeerDisconnected(const std::string& peerId)
     {
         if (peerId.empty())
-            return; // TCP path / sentinel id — not a mesh peer, nothing to clean up
+            return; // ot a mesh peer, nothing to clean up
 
-        // 1. Invalidate file provenance pointing at the peer that left.
-        //    Don't just erase silently — anything mid-fetch from this
-        //    peer needs to fail loudly rather than hang.
+        // Invalidate file provenance pointing at the peer that left.
+        // Don't just erase silently — anything mid-fetch from this
+        // peer needs to fail loudly rather than hang.
         size_t erased = 0;
         for (auto it = fileSourcePeer_.begin(); it != fileSourcePeer_.end();)
         {
