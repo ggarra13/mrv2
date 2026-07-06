@@ -177,7 +177,6 @@ namespace mrv
             Fl::check();
         }
 
-
         std::atomic<bool> audioOk = true;
         if (!audioFilePath.isEmpty())
         {
