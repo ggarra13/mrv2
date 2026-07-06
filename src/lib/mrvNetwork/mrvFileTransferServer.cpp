@@ -46,7 +46,6 @@ namespace mrv
         nlohmann::json footer;
         footer["done"] = true;
         dc->send(footer.dump());
-        dc->close();
     }
 
     FileTransferServer::FileTransferServer(WebRTCManager& manager)

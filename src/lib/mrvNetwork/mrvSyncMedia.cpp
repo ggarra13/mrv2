@@ -150,9 +150,9 @@ namespace mrv
         const tl::file::Path& cachePath = cachePathFor(filePath);
         const tl::file::Path& audioCachePath = cachePathFor(audioFilePath);
 
-        ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
-                                                      "");
-        progress->show();
+        // ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
+        //                                               "");
+        // progress->show();
 
 
         FileTransferClient ftc(manager, peerId);
@@ -163,17 +163,31 @@ namespace mrv
                              uint64_t done,
                              uint64_t total)
             {
+                // Fl::lock();   // Acquire the GUI lock
+        
+                // // Safely update the UI
                 // progress->set_title(title.c_str());
                 // progress->set_end(total);
                 // progress->set_value(done);
-                // if (!progress->window()->shown())
+        
+                // if (progress->window() && !progress->window()->shown())
                 // {
                 //     aborted = true;
-                //     ok = false;
+                //     ok = true;
                 // }
-                std::cerr << done << "/" << total << std::endl;
-                if (done == total)
-                    ok = true;
+                
+                // // Wake up the main thread's event loop so it redraws
+                // // immediately.
+                // // Without this, the UI might not update until you move
+                // // your mouse.
+                // Fl::awake();  
+        
+                // Fl::unlock(); // Release the GUI lock
+                std::cerr << title << " " << std::endl
+                          << done << "/" << total << std::endl;
+                
+                // if (done == total)
+                //     ok = true;
             });
 
         while (!ok)
@@ -207,7 +221,7 @@ namespace mrv
         // }
         bool success = ok && audioOk;
 
-        delete progress;
+        // delete progress;
 
         if (success)
         {

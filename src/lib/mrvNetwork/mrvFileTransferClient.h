@@ -4,6 +4,8 @@
 
 #include <tlCore/Path.h>
 
+#include <deque>
+
 namespace mrv
 {
 
@@ -26,8 +28,11 @@ namespace mrv
         void handleText(const std::string& text);
         void handleBinary(const rtc::binary& data);
         void finish(bool success);
+        // Helper method to process the queue
+        void requestNextFile(std::shared_ptr<rtc::DataChannel> dc);
 
         WebRTCManager& manager_;
+        std::shared_ptr<rtc::DataChannel> dc_;
         std::string peerId_;
         tl::file::Path localPath_, remotePath_;
         std::string partPath_;
@@ -39,6 +44,13 @@ namespace mrv
         uint64_t remoteSize_ = 0;
         uint64_t totalRead_ = 0;
         std::atomic<bool> finished_{false};
+
+        std::deque<std::string> pendingRemotePaths_;
+        std::deque<std::string> pendingLocalPaths_;
+    
+        std::string currentLocalPath_;
+        std::string currentPartPath_;
+    
     };
 
 }  // namespace mrv
