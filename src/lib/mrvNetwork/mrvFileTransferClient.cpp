@@ -135,6 +135,9 @@ namespace mrv
         {
             std::string newName = localPath_.get();
             std::rename(partPath_.c_str(), newName.c_str());
+
+            bool aborted = false;
+            progressCb_(aborted, "", remoteSize_, remoteSize_);
         }
         else
         {
