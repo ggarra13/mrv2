@@ -17,6 +17,8 @@ ChangeLog
 
 - Python: deprecated the cmd.args function.  Just use sys.argv as usual in python.
 
+- Core: Fixed Preferences->Revert not reverting Path Mappings correctly.
+- Core: Fixed Path Mappings not allowing two keys with the same path.
 - Core: Improved the performance of Preferences->Single Instance.  Previously, it was locking the UI for 5 seconds on start up.  Now it is immediate.
 - Core: Updated OpenColorIO version to v2.5.2.
 - Core: Updated OpenEXR version to v3.4.13.
