@@ -135,7 +135,7 @@ namespace mrv
             return;
         }
 
-        bool allowSftpOverRelay = false; 
+        bool allowSftpOverRelay = false;
         if (client->isRelayedConnection && !allowSftpOverRelay)
         {
             const std::string msg =
@@ -147,7 +147,8 @@ namespace mrv
             return;
         }
 
-#if 1
+        const tl::file::Path& cachePath = cachePathFor(filePath);
+        const tl::file::Path& audioCachePath = cachePathFor(audioFilePath);
 
         ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
                                                       "");
@@ -155,47 +156,57 @@ namespace mrv
 
 
         FileTransferClient ftc(manager, peerId);
-        // bool ok = ftc.downloadFile(filePath, cachePath, peerId, [=](
-        //                                bool& aborted,
-        //                                const std::string& title,
-        //                                uint64_t done,
-        //                                uint64_t total)
-        //     {
-        //         progress->set_title(title.c_str());
-        //         progress->set_end(total);
-        //         progress->set_value(done);
-        //         if (!progress->window()->shown())
-        //             aborted = true;
-        //     });
+        bool ok = false;
+        ftc.downloadFile(filePath, cachePath, [&](
+                             bool& aborted,
+                             const std::string& title,
+                             uint64_t done,
+                             uint64_t total)
+            {
+                progress->set_title(title.c_str());
+                progress->set_end(total);
+                progress->set_value(done);
+                if (!progress->window()->shown())
+                {
+                    aborted = true;
+                    ok = false;
+                }
+                if (done == total)
+                    ok = true;
+            });
 
         bool audioOk = true;
-        // if (ok && !audioFilePath.isEmpty())
-        // {
-        //     FileTransferClient ftc(manager, peerId);
-            
-        //     audioOk = ftc.downloadFile(audioFilePath, audioCachePath, peerId, [=](
-        //                                     bool& aborted,
-        //                                     const std::string& title,
-        //                                     uint64_t done,
-        //                                     uint64_t total)
-        //         {
-        //             progress->set_title(title.c_str());
-        //             progress->set_end(total);
-        //             progress->set_value(done);
-        //             if (!progress->window()->shown())
-        //                 aborted = true;
-        //         });
-        // }
+        if (ok && !audioFilePath.isEmpty())
+        {
+            FileTransferClient ftc(manager, peerId);
+
+            bool audioOk = false;
+            ftc.downloadFile(audioFilePath, audioCachePath, [&](
+                                 bool& aborted,
+                                 const std::string& title,
+                                 uint64_t done,
+                                 uint64_t total)
+                {
+                    progress->set_title(title.c_str());
+                    progress->set_end(total);
+                    progress->set_value(done);
+                    if (!progress->window()->shown())
+                    {
+                        aborted = true;
+                        ok = false;
+                    }
+                    if (done == total)
+                        audioOk = true;
+                });
+        }
         bool success = ok && audioOk;
-        
+
         delete progress;
-    
+
         if (success)
         {
             syncFile(cachePath.get(), audioCachePath.get(), item);
         }
-
-#endif
     }
 
     void CommandInterpreter::syncFile(

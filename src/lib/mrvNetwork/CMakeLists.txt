@@ -39,6 +39,8 @@ if(MRV2_NETWORK)
     	mrvServer.cpp
 
 	# WebRTC
+	mrvFileTransferClient.cpp
+	mrvFileTransferServer.cpp
 	mrvSignalingClient.cpp
 	mrvWebRTCClient.cpp
 	mrvWebRTCManager.cpp
@@ -63,7 +65,6 @@ if(MRV2_NETWORK)
 	# WebRTC
 	mrvSignalingClient.h
 	mrvSignalingMessage.h
-	mrvTcpDataChannelPump.h
 	mrvWebRTCClient.h
 	mrvWebRTCManager.h
     )
