@@ -163,14 +163,15 @@ namespace mrv
                              uint64_t done,
                              uint64_t total)
             {
-                progress->set_title(title.c_str());
-                progress->set_end(total);
-                progress->set_value(done);
-                if (!progress->window()->shown())
-                {
-                    aborted = true;
-                    ok = false;
-                }
+                // progress->set_title(title.c_str());
+                // progress->set_end(total);
+                // progress->set_value(done);
+                // if (!progress->window()->shown())
+                // {
+                //     aborted = true;
+                //     ok = false;
+                // }
+                std::cerr << done << "/" << total << std::endl;
                 if (done == total)
                     ok = true;
             });
