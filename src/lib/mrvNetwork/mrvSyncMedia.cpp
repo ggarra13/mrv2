@@ -123,11 +123,8 @@ namespace mrv
                 progress->set_end(total);
                 progress->set_value(done);
 
-                std::cerr << done << "/" << total << std::endl;
-
                 if (progress->window() && !progress->window()->shown())
                 {
-                    std::cerr << "aborted" << std::endl;
                     aborted = true;
                     ok = false;
                     progress = nullptr;
@@ -144,7 +141,6 @@ namespace mrv
 
             }, [&](bool success)
                 {
-                    std::cerr << "finish " << success << std::endl;
                     ok = success;
                     progress = nullptr;
                 });
