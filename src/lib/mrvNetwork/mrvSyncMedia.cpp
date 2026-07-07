@@ -51,32 +51,6 @@ namespace
 
 namespace mrv
 {
-    struct SyncData
-    {
-        CommandInterpreter* self;
-        bool shuttingDown;
-        bool success;
-        std::string cachePath;
-        std::string audioCachePath;
-        FilesModelItem item;
-    };
-
-    static void sync_callback(void* data)
-    {
-        std::unique_ptr<SyncData> d(static_cast<SyncData*>(data));
-        if (d->shuttingDown)
-            return;
-
-        if (d->success)
-            d->self->syncFile(
-                d->cachePath,
-                d->audioCachePath,
-                d->item);
-        else
-            LOG_ERROR(_("Failed to fetch remote file via SFTP."));
-    }
-
-
     tl::file::Path
     CommandInterpreter::cachePathFor(const tl::file::Path& remotePath) const
     {
@@ -259,7 +233,7 @@ namespace mrv
             return;
         auto player = view->getTimelinePlayer();
         if (player)
-            player->setAllAnnotations(item->annotations);
+            player->mergeAllAnnotations(item->annotations);
     }
 
     void CommandInterpreter::syncMedia(const Message& message)
