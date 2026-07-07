@@ -63,7 +63,9 @@ namespace mrv
             };
 
         // Send chunks
-        const size_t kChunkSize = 1024 * 1024;
+        size_t maxMsgSize = dc->maxMessageSize();
+        const size_t kChunkSize = std::min<size_t>(1024 * 1024, maxMsgSize);
+        
         std::vector<char> buf(kChunkSize);
         bool ok = true;
 
