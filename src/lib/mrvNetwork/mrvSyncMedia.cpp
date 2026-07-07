@@ -87,11 +87,10 @@ namespace mrv
             return;
         }
 
-        bool allowSftpOverRelay = false;
-        if (client->isRelayedConnection && !allowSftpOverRelay)
+        if (client->isRelayedConnection)
         {
             const std::string msg =
-                tl::string::Format(_("SFTP: {0} is only reachable via relay "
+                tl::string::Format(_("{0} is only reachable via relay "
                                      "(TURN), which would consume VPS bandwidth. "
                                      "Skipping fetch to avoid unexpected costs."))
                 .arg(filePath.get());
@@ -118,19 +117,22 @@ namespace mrv
                              uint64_t total)
             {
                 Fl::lock();   // Acquire the GUI lock
-        
+
                 // Safely update the UI
                 progress->set_title(title.c_str());
                 progress->set_end(total);
                 progress->set_value(done);
-        
+
+                std::cerr << done << "/" << total << std::endl;
+
                 if (progress->window() && !progress->window()->shown())
                 {
+                    std::cerr << "aborted" << std::endl;
                     aborted = true;
                     ok = false;
                     progress = nullptr;
                 }
-        
+
                 // Wake up the main thread's event loop so it redraws
                 // immediately.
                 // Without this, the UI might not update until you move
@@ -139,9 +141,10 @@ namespace mrv
 
                 // Release the GUI lock
                 Fl::unlock();
-                
+
             }, [&](bool success)
                 {
+                    std::cerr << "finish " << success << std::endl;
                     ok = success;
                     progress = nullptr;
                 });
@@ -152,30 +155,33 @@ namespace mrv
         }
 
         std::atomic<bool> audioOk = true;
+
+#if 0
         if (!audioFilePath.isEmpty())
         {
             progress = progress_to_delete;
-            
+
             ftc.downloadFile(audioFilePath, audioCachePath, [&](
                                  bool& aborted,
                                  const std::string& title,
                                  uint64_t done,
                                  uint64_t total)
                 {
+                    std::cerr << done << "/" << total << std::endl;
                     Fl::lock();   // Acquire the GUI lock
-        
+
                     // Safely update the UI
                     progress->set_title(title.c_str());
                     progress->set_end(total);
                     progress->set_value(done);
-        
+
                     if (progress->window() && !progress->window()->shown())
                     {
                         aborted = true;
                         ok = false;
                         progress = nullptr;
                     }
-        
+
                     // Wake up the main thread's event loop so it redraws
                     // immediately.
                     // Without this, the UI might not update until you move
@@ -184,7 +190,7 @@ namespace mrv
 
                     // Release the GUI lock
                     Fl::unlock();
-                
+
                 }, [&](bool success)
                     {
                         ok = success;
@@ -196,7 +202,8 @@ namespace mrv
                 Fl::check();
             }
         }
-        
+#endif
+
         delete progress_to_delete;
 
         bool success = ok && audioOk;
