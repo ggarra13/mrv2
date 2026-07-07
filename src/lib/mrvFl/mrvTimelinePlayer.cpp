@@ -838,6 +838,13 @@ namespace mrv
 
         // Clear global undo annotations since the timeline state has been modified externally
         p.undoAnnotations.clear();
+
+
+        std::cerr << "AFTER MERGE ANNOTATIONS:" << std::endl;
+        for (const auto& ann : p.annotations)
+        {
+            std::cerr << "\t" << ann->time << std::endl;
+        }
     }
 
     void TimelinePlayer::clearFrameAnnotation()

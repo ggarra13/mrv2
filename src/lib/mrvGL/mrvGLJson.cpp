@@ -202,16 +202,7 @@ namespace tl
         void from_json(const nlohmann::json& json, Annotation& value)
         {
             json.at("all_frames").get_to(value.allFrames);
-            if (json.contains("time"))
-            {
-                json.at("time").get_to(value.time);
-            }
-            else
-            {
-                int64_t frame;
-                json.at("frame").get_to(frame);
-                value.time = otime::RationalTime(frame, 24.0);
-            }
+            json.at("time").get_to(value.time);
             const nlohmann::json& shapes = json["shapes"];
             for (auto& shape : shapes)
             {

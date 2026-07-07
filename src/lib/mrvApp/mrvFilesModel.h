@@ -54,8 +54,6 @@ namespace mrv
         bool mute = false;
         double audioOffset = 0.0;
 
-        std::string hash_id;
-
         std::string ocioIcs;
         std::string ocioLook;
         timeline::LUTOptions lutOptions;

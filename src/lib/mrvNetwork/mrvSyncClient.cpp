@@ -89,12 +89,14 @@ namespace mrv
         {
             // Send all annotations of current player
             msg["command"] = "Annotations";
-            auto annotationsPtr = player->getAllAnnotations();
+            const auto& annotationsPtr = player->getAllAnnotations();
 
             std::vector< draw::Annotation > annotations;
-            annotations.resize(annotationsPtr.size());
+            annotations.reserve(annotationsPtr.size());
             for (const auto& annotationPtr : annotationsPtr)
             {
+                if (annotationPtr->shapes.empty())
+                    continue;
                 annotations.push_back(*annotationPtr.get());
             }
 

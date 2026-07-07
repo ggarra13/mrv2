@@ -915,8 +915,18 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-
                 const std::vector<draw::Annotation>& tmp = message["value"];
+
+                std::cerr << "1 merge ann "
+                          << __FUNCTION__ << " " << __LINE__
+                          << " size=" << tmp.size()
+                          << std::endl;
+                for (const auto& t : tmp)
+                {
+                    std::cerr << "\t" << t.time << std::endl;
+                }
+
+                
                 std::vector< std::shared_ptr<draw::Annotation> > annotations;
                 for (const auto& ann : tmp)
                 {
@@ -924,8 +934,9 @@ namespace mrv
                         messageToAnnotation(ann);
                     annotations.push_back(annotation);
                 }
-                std::cerr << "merge ann "
+                std::cerr << "2 merge ann "
                           << __FUNCTION__ << " " << __LINE__
+                          << " size=" << annotations.size()
                           << std::endl;
                 player->mergeAllAnnotations(annotations);
 

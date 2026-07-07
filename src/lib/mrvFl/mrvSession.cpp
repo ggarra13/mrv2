@@ -130,6 +130,8 @@ namespace mrv
                 std::vector< voice::Annotation > voAnnotations;
                 for (const auto& ann : annotations)
                 {
+                    if (ann->shapes.empty())
+                        continue;
                     jAnnotations.push_back(*(ann.get()));
                 }
                 for (const auto& ann : voannotations)

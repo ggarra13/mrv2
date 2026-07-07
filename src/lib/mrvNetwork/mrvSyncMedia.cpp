@@ -237,9 +237,6 @@ namespace mrv
         auto player = view->getTimelinePlayer();
         if (player)
         {
-            std::cerr << "copy ann "
-                      << __FUNCTION__ << " " << __LINE__
-                      << std::endl;
             player->mergeAllAnnotations(item->annotations);
         }
     }

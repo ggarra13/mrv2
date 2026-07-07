@@ -30,7 +30,6 @@ namespace mrv
         j["ocioIcs"] = value.ocioIcs;
         j["ocioLook"] = value.ocioLook;
         j["lutOptions"] = value.lutOptions;
-        j["hash_id"] = value.hash_id;
 
         std::vector< draw::Annotation > annotations;
         for (const auto& annotation : value.annotations)
@@ -73,10 +72,6 @@ namespace mrv
             int v;
             j.at("loop").get_to(v);
             value.loop = static_cast<timeline::Loop>(v);
-        }
-        if (j.contains("hash_id"))
-        {
-            j.at("hash_id").get_to(value.hash_id);
         }
         j.at("currentTime").get_to(value.currentTime);
         j.at("inOutRange").get_to(value.inOutRange);
