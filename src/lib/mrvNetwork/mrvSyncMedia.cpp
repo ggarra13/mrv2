@@ -217,13 +217,9 @@ namespace mrv
         auto prefs = ui->uiPrefs;
         auto model = app->filesModel();
 
-        tcp->lock();
-
         LOG_STATUS("Sync file " << filePath << " with audio "
                    << audioFilePath);
         app->open(filePath, audioFilePath);
-
-        tcp->unlock();
 
         // Copy annotations to both item and player
         auto item = model->observeA()->get();

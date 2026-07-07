@@ -111,6 +111,8 @@ namespace mrv
     void CommandInterpreter::parse(const Message& message)
     {
         const std::string& c = message["command"];
+        std::cerr << "command is " << c << std::endl;
+
         auto app = ui->app;
         auto prefs = ui->uiPrefs;
         auto view = ui->uiView;
