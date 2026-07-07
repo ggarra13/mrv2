@@ -17,12 +17,14 @@ namespace mrv
 
     WebRTCManager::WebRTCManager()
     {
+#if 0
         rtc::SctpSettings sctpSettings;
         sctpSettings.recvBufferSize = 4 * 1024 * 1024;      // default is much smaller
         sctpSettings.sendBufferSize = 4 * 1024 * 1024;
         sctpSettings.maxChunksOnQueue = 16384;
         sctpSettings.initialCongestionWindow = 10;          // in MTUs, default is very small (often ~3)
         rtc::SetSctpSettings(sctpSettings);
+#endif
     }
 
     void WebRTCManager::setConfiguration(const rtc::Configuration& value)
