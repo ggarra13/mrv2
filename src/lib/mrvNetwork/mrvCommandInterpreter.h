@@ -41,16 +41,12 @@ namespace mrv
         void timerEvent();
 
         static void timerEvent_cb(void* d);
-        
+
         void shutdownSftpTransfers();
         void shutdownTunnels();
-        
+
     private:
         ViewerUI* ui;
-        
-        
-        std::unordered_map<std::string, std::string> fileSourcePeer_;
-        //std::unordered_map<std::string, std::shared_ptr<FileTransferChannel> > peerChannels_;
     };
 
 } // namespace mrv

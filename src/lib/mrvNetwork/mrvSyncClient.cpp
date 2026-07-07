@@ -51,9 +51,6 @@ namespace mrv
             const file::Path& path = (*fileItem).path;
             if (path.hasProtocol())  // already a network file
                 continue;
-            std::string msg = tl::string::Format(_("Processing {0}")).
-                              arg(path.get());
-            LOG_STATUS(msg);
             items.push_back(*fileItem.get());
         }
 

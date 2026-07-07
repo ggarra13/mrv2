@@ -219,7 +219,8 @@ namespace mrv
 
         tcp->lock();
 
-        LOG_STATUS("Opening " << filePath);
+        LOG_STATUS("Sync file " << filePath << " with audio "
+                   << audioFilePath);
         app->open(filePath, audioFilePath);
 
         tcp->unlock();
@@ -255,17 +256,13 @@ namespace mrv
         size_t remoteFileSize = remoteFiles.size();
         size_t localFileSize = localFiles.size();
 
-        if (remoteFileSize < localFileSize)
-        {
-            LOG_WARNING(_("Remote files are less than local files."));
-        }
+        std::cerr << "remote files " << remoteFileSize << std::endl;
+        std::cerr << " local files " << localFileSize << std::endl;
 
         for (size_t i = 0; i < remoteFileSize; ++i)
         {
             auto path = remoteFiles[i].path;
             auto filePath = path.get();
-
-            fileSourcePeer_.try_emplace(filePath, peerId);
 
             if (i >= localFileSize)
             {
@@ -311,6 +308,11 @@ namespace mrv
             {
                 auto remotePath = remoteFiles[i].path;
                 auto localPath = localFiles[i]->path;
+                std::cerr << "compare remote path = "
+                          << remotePath.get()
+                          << " to local path = "
+                          << localPath.get()
+                          << std::endl;
                 if (remotePath != localPath)
                 {
                     // Check if we match on one of the path mappings first.
@@ -318,6 +320,11 @@ namespace mrv
                     replace_path(filePath);
                     if (fileIsReadable(filePath))
                     {
+                        std::cerr << "\tremote path "
+                                  << remotePath.get()
+                                  << " matched as "
+                                  << filePath
+                                  << std::endl;
                         localFiles[i]->annotations = remoteFiles[i].annotations;
                         continue;
                     }
