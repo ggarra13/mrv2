@@ -37,7 +37,7 @@ namespace mrv
         dc->send(header.dump());
 
         // --- Backpressure machinery ---
-        const size_t kMaxBufferedAmount = 8 * 1024 * 1024; // 8 MB high-water mark
+        const size_t kMaxBufferedAmount = 1024 * 1024; // 1 MB high-water mark
         std::mutex mtx;
         std::condition_variable cv;
 
@@ -63,7 +63,7 @@ namespace mrv
             };
 
         // Send chunks
-        const size_t kChunkSize = 1024 * 1024;
+        const size_t kChunkSize = 256 * 1024;
         std::vector<char> buf(kChunkSize);
         bool ok = true;
 

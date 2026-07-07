@@ -17,7 +17,7 @@ namespace mrv
 
     WebRTCManager::WebRTCManager()
     {
-#if 0
+#if 1
         rtc::SctpSettings sctpSettings;
         sctpSettings.recvBufferSize = 4 * 1024 * 1024;      // default is much smaller
         sctpSettings.sendBufferSize = 4 * 1024 * 1024;
