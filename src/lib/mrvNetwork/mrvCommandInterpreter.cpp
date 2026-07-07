@@ -924,8 +924,8 @@ namespace mrv
                         messageToAnnotation(ann);
                     annotations.push_back(annotation);
                 }
+                player->mergeAllAnnotations(annotations);
 
-                player->setAllAnnotations(annotations);
                 ui->uiTimeline->redraw();
                 ui->uiMain->fill_menu(ui->uiMenuBar);
             }

@@ -133,7 +133,7 @@ namespace mrv
 
         //! Update video cache.
         void updateVideoCache(const otime::RationalTime& time);
-        
+
         ///@}
 
         //! \name Audio
@@ -343,10 +343,10 @@ namespace mrv
         const std::vector< otime::RationalTime > getAnnotationTimes() const;
 
         //! @{
-        
+
         //! Get annotation for current time
         std::shared_ptr< draw::Annotation > getAnnotation() const;
-        
+
         //! Get undo annotation for current time
         std::shared_ptr< draw::Annotation > getUndoAnnotation() const;
 
@@ -366,6 +366,10 @@ namespace mrv
         //! Set frame annotations in timeline player for current frame (time).
         void setFrameAnnotation(const std::shared_ptr< draw::Annotation >&);
 
+        //! Merge all annotations in timeline player with a new list.
+        void mergeAllAnnotations(
+            const std::vector< std::shared_ptr< draw::Annotation >>&);
+
         //! Set all annotations in timeline player.
         void setAllAnnotations(
             const std::vector< std::shared_ptr< draw::Annotation >>&);
@@ -380,7 +384,7 @@ namespace mrv
 #ifdef TLRENDER_FFMPEG
         //! Get annotation for current time
         std::shared_ptr< voice::Annotation > getVoiceAnnotation() const;
-        
+
         //! Get undo annotation for current time
         std::shared_ptr< voice::Annotation > getUndoVoiceAnnotation() const;
 
@@ -408,15 +412,15 @@ namespace mrv
         //! Remove an annotation from list.
         void removeAnnotation(const std::shared_ptr< voice::Annotation >&);
 #endif
-        
+
         //! @}
-        
+
         //! Clear all annotations in timeline player for current frame (time).
         void clearFrameAnnotation();
 
         //! Clear all annotations in timeline player.
         void clearAllAnnotations();
-        
+
         //! Undo the last annotation.
         void undoAnnotation();
 
@@ -431,7 +435,7 @@ namespace mrv
 
         //! @}
 
-        
+
     protected:
         template < typename T >
         void pushMessage(const std::string& command, const T& value);
