@@ -83,7 +83,6 @@ namespace mrv
             });
 
         dc->onClosed([this]() {
-            LOG_STATUS("Closed dc");
             finish(false);
         });
         dc->onError([this](std::string err) {
@@ -167,12 +166,7 @@ namespace mrv
     }
 
     void FileTransferClient::finish(bool success)
-    {
-        std::cerr << "finish totalRead_="
-                  << totalRead_
-                  << " remoteSze="
-                  << remoteSize_ << std::endl;
-            
+    {       
         bool expected = false;
         if (!finished_.compare_exchange_strong(expected, true))
         {
