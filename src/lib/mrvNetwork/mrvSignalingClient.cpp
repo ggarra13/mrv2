@@ -68,11 +68,11 @@ namespace mrv
         websocket = std::make_shared<rtc::WebSocket>(config);
     
         websocket->onOpen([]() {
-            LOG_STATUS("WebSocket connected, signaling ready");
+            LOG_INFO("WebSocket connected, signaling ready");
         });
 
         websocket->onClosed([]() {
-            LOG_STATUS("WebSocket closed.");
+            LOG_INFO("WebSocket closed.");
         });
 
         websocket->onError([](const std::string &error) {

@@ -217,16 +217,12 @@ namespace mrv
         auto prefs = ui->uiPrefs;
         auto model = app->filesModel();
 
-        bool isLocked = tcp->isLocked();
-
-        if (!isLocked)
-            tcp->lock();
+        tcp->lock();
 
         LOG_STATUS("Opening " << filePath);
         app->open(filePath, audioFilePath);
 
-        if (!isLocked)
-            tcp->unlock();
+        tcp->unlock();
 
         // Copy annotations to both item and player
         auto item = model->observeA()->get();
