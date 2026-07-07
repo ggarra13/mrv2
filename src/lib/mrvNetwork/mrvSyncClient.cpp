@@ -54,7 +54,6 @@ namespace mrv
             std::string msg = tl::string::Format(_("Processing {0}")).
                               arg(path.get());
             LOG_STATUS(msg);
-            fileItem->hash_id = mrv::hashFile(path.get());
             items.push_back(*fileItem.get());
         }
 
