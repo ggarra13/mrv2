@@ -114,10 +114,6 @@ namespace mrv
         }
         else if (msg.value("done", false))
         {
-            std::cerr << "msg done totalRead_="
-                      << totalRead_
-                      << " remoteSze="
-                      << remoteSize_ << std::endl;
             // Footer — current file received
             if (out_)
             {

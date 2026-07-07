@@ -86,6 +86,7 @@ namespace mrv
             {
                 if (!waitForRoom())
                 {
+                    LOG_ERROR("Timed out waiting for buffer to drain");
                     ok = false;
                     break;
                 }
