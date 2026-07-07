@@ -145,16 +145,16 @@ namespace mrv
             progressCb_(aborted, title, totalRead_, remoteSize_);
             if (aborted)
             {
-                // 1. Sever the connection to stop incoming traffic
+                // Sever the connection to stop incoming traffic
                 if (dc_) {
                     dc_->close();
                 }
 
-                // 2. Clear pending queues so the sequence fully stops
+                // Clear pending queues so the sequence fully stops
                 pendingRemotePaths_.clear();
                 pendingLocalPaths_.clear();
                 
-                // 3. Clean up local state
+                // Clean up local state
                 finish(false);
             }
         }
@@ -165,8 +165,6 @@ namespace mrv
         bool expected = false;
         if (!finished_.compare_exchange_strong(expected, true))
         {
-            if (doneCb_)
-                doneCb_(success);
             return;
         }
 
