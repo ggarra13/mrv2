@@ -97,18 +97,8 @@ namespace mrv
                 }
             }
 
-            bool success = dc->send(
+            dc->send(
                 reinterpret_cast<const std::byte*>(buf.data()), n);
-            if (!success)
-            {
-                // With the wait above this should now be rare (a genuine
-                // failure, e.g. channel closing right after the check), so
-                // treat it as a real error rather than silently retrying
-                // forever.
-                LOG_ERROR("dc->send failed unexpectedly");
-                ok = false;
-                break;
-            }
         }
         std::fclose(f);
 
