@@ -127,11 +127,8 @@ namespace mrv
         {
             using namespace panel;
 
-            tcp->lock();
-
             if (c == "sync")
             {
-                tcp->unlock();
                 tcp->syncClient();
             }
             else if (c == "setPlayback")
@@ -139,7 +136,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -164,7 +160,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 timeline::Loop value = message["value"];
@@ -175,7 +170,6 @@ namespace mrv
                 bool receive = prefs->ReceiveMedia->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 std::string fileName = message["fileName"];
@@ -200,7 +194,6 @@ namespace mrv
                 bool receive = prefs->ReceiveMedia->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 syncMedia(message);
@@ -208,7 +201,6 @@ namespace mrv
             else if (c == "Peer Disconnected")
             {
                 const std::string peerId = message.value(kLocalPeerIdKey, std::string());
-                tcp->unlock();
                 handlePeerDisconnected(peerId);
                 return;
             }
@@ -217,7 +209,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 otime::RationalTime value = message["value"];
@@ -228,7 +219,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const int key = message["value"];
@@ -240,7 +230,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const int key = message["value"];
@@ -252,7 +241,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const int button = message["button"];
@@ -265,7 +253,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 float X = message["X"];
@@ -279,7 +266,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 float X = message["X"];
@@ -296,7 +282,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 float X = message["X"];
@@ -309,7 +294,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 ui->uiTimeline->frameView();
@@ -319,7 +303,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 otime::TimeRange value = message["value"];
@@ -330,7 +313,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 double value = message["value"];
@@ -341,7 +323,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 player->setInPoint();
@@ -351,7 +332,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -362,7 +342,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -373,7 +352,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -384,7 +362,6 @@ namespace mrv
                 bool receive = prefs->ReceiveColor->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 int value = message["value"];
@@ -398,7 +375,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 panel::redrawThumbnails();
@@ -408,7 +384,6 @@ namespace mrv
                 bool receive = prefs->ReceiveAudio->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 float value = message["value"];
@@ -423,7 +398,6 @@ namespace mrv
                 bool receive = prefs->ReceiveAudio->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -438,7 +412,6 @@ namespace mrv
                 bool receive = prefs->ReceiveAudio->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 double value = message["value"];
@@ -450,7 +423,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -461,7 +433,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -472,7 +443,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -483,7 +453,6 @@ namespace mrv
                 bool receive = prefs->ReceiveTimeline->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -494,7 +463,6 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !view)
                 {
-                    tcp->unlock();
                     return;
                 }
                 ui->uiRedoDraw->activate();
@@ -505,7 +473,6 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !view)
                 {
-                    tcp->unlock();
                     return;
                 }
                 ui->uiUndoDraw->activate();
@@ -516,7 +483,6 @@ namespace mrv
                 bool receive = prefs->ReceivePanAndZoom->value();
                 if (!receive || !view)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const EnvironmentMapOptions& o = message["value"];
@@ -527,7 +493,6 @@ namespace mrv
                 bool receive = prefs->ReceiveColor->value();
                 if (!receive || !view)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const tl::timeline::OCIOOptions& local = view->getOCIOOptions();
@@ -562,7 +527,6 @@ namespace mrv
                 bool receive = prefs->ReceiveColor->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const tl::timeline::DisplayOptions& o = message["value"];
@@ -609,7 +573,6 @@ namespace mrv
                 bool receive = prefs->ReceiveColor->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const tl::timeline::ImageOptions& o = message["value"];
@@ -620,7 +583,6 @@ namespace mrv
                 bool receive = prefs->ReceiveColor->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const tl::timeline::LUTOptions& o = message["value"];
@@ -631,7 +593,6 @@ namespace mrv
                 bool receive = prefs->ReceiveColor->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 float value = message["value"];
@@ -643,7 +604,6 @@ namespace mrv
                 bool receive = prefs->ReceiveColor->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 float value = message["value"];
@@ -655,7 +615,6 @@ namespace mrv
                 bool receive = prefs->ReceiveColor->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 float value = message["value"];
@@ -667,7 +626,6 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 clear_note_annotation_cb(ui);
@@ -681,7 +639,6 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const std::string& text = message["value"];
@@ -696,13 +653,11 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto annotation = player->getAnnotation();
                 if (!annotation)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto shape = messageToShape(message["value"]);
@@ -718,13 +673,11 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto annotation = player->getAnnotation();
                 if (!annotation)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -742,19 +695,16 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto annotation = player->getAnnotation();
                 if (!annotation)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto shape = annotation->lastShape();
                 if (!shape)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -777,25 +727,21 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto annotation = player->getAnnotation();
                 if (!annotation)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto lastShape = annotation->lastShape();
                 if (!lastShape)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto shape = dynamic_cast< draw::PathShape* >(lastShape.get());
                 if (!shape)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const draw::Point& value = message["value"];
@@ -807,13 +753,11 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto annotation = player->getAnnotation();
                 if (!annotation)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto shape = messageToShape(message["value"]);
@@ -827,13 +771,11 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto annotation = player->getAnnotation();
                 if (!annotation)
                 {
-                    tcp->unlock();
                     return;
                 }
                 auto shape = messageToShape(message["value"]);
@@ -847,7 +789,6 @@ namespace mrv
             {
                 if (!player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const otime::RationalTime& time = message["value"];
@@ -857,7 +798,6 @@ namespace mrv
             {
                 if (!player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 player->clearCache();
@@ -867,7 +807,6 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool allFrames = message["value"];
@@ -878,7 +817,6 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive || !player)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -910,7 +848,6 @@ namespace mrv
                 // When all files are closed, we get an infinite zoom (null),
                 if (isinf(remoteZoom))
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -935,7 +872,6 @@ namespace mrv
                 bool receive = prefs->ReceiveAnnotations->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -946,7 +882,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -966,7 +901,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -986,7 +920,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1006,7 +939,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1026,7 +958,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1045,7 +976,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1065,7 +995,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive || !view)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1076,7 +1005,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive || !view)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1087,7 +1015,6 @@ namespace mrv
                 bool receive = prefs->ReceiveColor->value();
                 if (!receive || !view)
                 {
-                    tcp->unlock();
                     return;
                 }
                 const math::Box2i& area = message["value"];
@@ -1098,7 +1025,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1111,7 +1037,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1123,7 +1048,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1136,7 +1060,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1148,7 +1071,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1160,7 +1082,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1172,7 +1093,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1184,7 +1104,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1197,7 +1116,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1209,7 +1127,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1221,7 +1138,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1233,7 +1149,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 EditMode value = message["value"];
@@ -1250,7 +1165,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1262,7 +1176,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1275,7 +1188,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1289,7 +1201,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1303,7 +1214,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
 #ifdef MRV2_PYBIND11
@@ -1317,7 +1227,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1329,7 +1238,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1341,7 +1249,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1354,7 +1261,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1367,7 +1273,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1379,7 +1284,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1391,7 +1295,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 TIMELINEUI::DisplayOptions value = message["value"];
@@ -1402,7 +1305,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 ui->uiTimeline->frameView();
@@ -1412,7 +1314,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1423,7 +1324,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
                 bool value = message["value"];
@@ -1512,7 +1412,6 @@ namespace mrv
                 bool receive = prefs->ReceiveUI->value();
                 if (!receive)
                 {
-                    tcp->unlock();
                     return;
                 }
 
@@ -1546,7 +1445,6 @@ namespace mrv
         {
             LOG_ERROR(e.what() << " message=" << message);
         }
-        tcp->unlock();
     }
 
     void CommandInterpreter::timerEvent()
@@ -1561,7 +1459,7 @@ namespace mrv
 
         while (tcp->hasReceive())
         {
-            const Message& message = tcp->popMessage();
+            const Message message = tcp->popMessage();
             parse(message);
         }
         Fl::repeat_timeout(kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);

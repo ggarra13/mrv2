@@ -66,7 +66,6 @@ namespace mrv
                     return;
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::parse(msg);
-                message[kLocalPeerIdKey] = peerId;
                 m_receive.push_back(message);
             };
 
@@ -130,7 +129,7 @@ namespace mrv
 
     void WebRTCClient::receiveMessages()
     {
-        // This is handled by a WebRTCConnection dataChannel's callback
+        // This is handled by a WebRTCManager's dataChannel's callback
     }
 
 } // namespace mrv

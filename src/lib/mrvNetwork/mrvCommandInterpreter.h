@@ -39,12 +39,8 @@ namespace mrv
 
     public:
         void timerEvent();
-
         static void timerEvent_cb(void* d);
-
-        void shutdownSftpTransfers();
-        void shutdownTunnels();
-
+        
     private:
         ViewerUI* ui;
     };

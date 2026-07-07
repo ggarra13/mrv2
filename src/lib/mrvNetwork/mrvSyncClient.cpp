@@ -68,7 +68,7 @@ namespace mrv
 
         // Sync panels
         panel::syncPanels();
-
+        
         // Set the current file index
         msg["command"] = "Set A Index";
         msg["value"] = model->observeAIndex()->get();

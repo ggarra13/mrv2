@@ -152,7 +152,6 @@ namespace mrv
 
         std::atomic<bool> audioOk = true;
 
-#if 0
         if (!audioFilePath.isEmpty())
         {
             progress = progress_to_delete;
@@ -163,7 +162,6 @@ namespace mrv
                                  uint64_t done,
                                  uint64_t total)
                 {
-                    std::cerr << done << "/" << total << std::endl;
                     Fl::lock();   // Acquire the GUI lock
 
                     // Safely update the UI
@@ -198,7 +196,6 @@ namespace mrv
                 Fl::check();
             }
         }
-#endif
 
         delete progress_to_delete;
 
@@ -239,7 +236,7 @@ namespace mrv
     void CommandInterpreter::syncMedia(const Message& message)
     {
         // std::cerr << "message = " << message << std::endl;
-
+        
         const std::string peerId = message.value(kLocalPeerIdKey, std::string());
         auto app = ui->app;
         auto prefs = ui->uiPrefs;
@@ -303,11 +300,6 @@ namespace mrv
             {
                 auto remotePath = remoteFiles[i].path;
                 auto localPath = localFiles[i]->path;
-                std::cerr << "compare remote path = "
-                          << remotePath.get()
-                          << " to local path = "
-                          << localPath.get()
-                          << std::endl;
                 if (remotePath != localPath)
                 {
                     // Check if we match on one of the path mappings first.
@@ -315,11 +307,6 @@ namespace mrv
                     replace_path(filePath);
                     if (fileIsReadable(filePath))
                     {
-                        std::cerr << "\tremote path "
-                                  << remotePath.get()
-                                  << " matched as "
-                                  << filePath
-                                  << std::endl;
                         localFiles[i]->annotations = remoteFiles[i].annotations;
                         continue;
                     }
@@ -349,6 +336,7 @@ namespace mrv
                 }
             }
         }
+
     }
 
 } // namespace mrv

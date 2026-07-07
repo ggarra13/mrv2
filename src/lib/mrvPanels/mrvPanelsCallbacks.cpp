@@ -623,7 +623,7 @@ namespace mrv
             if (send)
             {
                 tcp->pushMessage(
-                    "Stereo 3D Panel", static_cast<bool>(!statsPanel));
+                    "Stats Panel", static_cast<bool>(!statsPanel));
             }
             if (statsPanel)
             {
