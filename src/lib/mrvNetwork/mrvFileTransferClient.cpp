@@ -189,18 +189,14 @@ namespace mrv
 
     void FileTransferClient::requestNextFile(std::shared_ptr<rtc::DataChannel> dc)
     {
-        std::cerr << __FUNCTION__ << " " << __LINE__ << " " << dc << std::endl;
         if (pendingRemotePaths_.empty())
         {
-            std::cerr << __FUNCTION__ << " " << __LINE__ << " " << dc << std::endl;
             // All files are downloaded, now we can safely close out
             finish(true);
             dc->close();
-            std::cerr << __FUNCTION__ << " " << __LINE__ << " " << dc << std::endl;
             return;
         }
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << " " << dc << std::endl;
         // Pop the next file off the queues
         currentRemotePath_ = pendingRemotePaths_.front();
         pendingRemotePaths_.pop_front();
