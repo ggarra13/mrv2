@@ -136,10 +136,10 @@ namespace mrv
     {
         if (!out_)
             return;
+
         std::fwrite(data.data(), 1, data.size(), out_);
         totalRead_ += data.size();
 
-        const bool listdir = true;
         const file::Path path(currentRemotePath_);
         const std::string title =
             tl::string::Format(_("Downloading {0}...")).arg(path.get());
@@ -147,6 +147,7 @@ namespace mrv
         bool aborted = false;
         if (progressCb_)
         {
+            std::cerr << totalRead_ << "/" << remoteSize_ << std::endl;
             progressCb_(aborted, title, totalRead_, remoteSize_);
             if (aborted)
             {
@@ -166,7 +167,7 @@ namespace mrv
     }
 
     void FileTransferClient::finish(bool success)
-    {       
+    {
         bool expected = false;
         if (!finished_.compare_exchange_strong(expected, true))
         {
