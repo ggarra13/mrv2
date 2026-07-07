@@ -51,8 +51,6 @@ namespace mrv
         webrtcManager.onBinaryMessage = [&](const std::string& peerId,
                                             const rtc::binary& data)
             {
-                if (m_lock)
-                    return;
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::from_bson(data);
                 message[kLocalPeerIdKey] = peerId;
@@ -62,8 +60,6 @@ namespace mrv
         webrtcManager.onStringMessage = [&](const std::string& peerId,
                                             const std::string& msg)
             {
-                if (m_lock)
-                    return;
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::parse(msg);
                 m_receive.push_back(message);
@@ -71,8 +67,6 @@ namespace mrv
 
         webrtcManager.onPeerDisconnected = [&](const std::string& peerId)
             {
-                if (m_lock)
-                    return;
                 std::lock_guard lk(m_receiveMutex);
                 Message message;
                 message["command"] = "Peer Disconnected";
