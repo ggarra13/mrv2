@@ -37,17 +37,17 @@ namespace mrv
         partPath_ = localPath.get() + ".part";
         progressCb_ = std::move(progressCb);
         doneCb_ = std::move(doneCb);
-        
+
         // Populate the download queues
         auto frames = remotePath.getFrames();
         if (remotePath.isSequence() && frames.has_value())
         {
             math::Int64Range range = frames.value();
-            const bool listdir = true; 
+            const bool listdir = true;
             for (int64_t i = range.getMin(); i <= range.getMax(); ++i)
             {
                 pendingRemotePaths_.push_back(remotePath.getFrame(i, listdir));
-                pendingLocalPaths_.push_back(localPath.getFrame(i, listdir)); 
+                pendingLocalPaths_.push_back(localPath.getFrame(i, listdir));
             }
         }
         else
@@ -55,7 +55,7 @@ namespace mrv
             pendingRemotePaths_.push_back(remotePath.get());
             pendingLocalPaths_.push_back(localPath.get());
         }
-        
+
         auto peer = manager_.getClient(peerId_);
         if (!peer)
         {
@@ -85,7 +85,7 @@ namespace mrv
         dc->onClosed([this]() { finish(false); });
         dc->onError([this](std::string) { finish(false); });
     }
-    
+
     void FileTransferClient::handleText(const std::string& text)
     {
         Message msg = nlohmann::json::parse(text);
@@ -114,26 +114,26 @@ namespace mrv
                 std::fclose(out_);
                 out_ = nullptr;
             }
-            
+
             // Finalize this specific file
             std::rename(currentPartPath_.c_str(), currentLocalPath_.c_str());
 
             // Retrieve the DataChannel (assuming you can grab it from peerConnection or store it as a member variable `dc_`)
             auto peer = manager_.getClient(peerId_);
-            if (peer) 
+            if (peer)
             {
-                 requestNextFile(dc_); 
+                 requestNextFile(dc_);
             }
         }
     }
-    
+
     void FileTransferClient::handleBinary(const rtc::binary& data)
     {
         if (!out_)
             return;
         std::fwrite(data.data(), 1, data.size(), out_);
         totalRead_ += data.size();
-        
+
         const bool listdir = true;
         const file::Path path(currentRemotePath_);
         const std::string title =
@@ -153,7 +153,7 @@ namespace mrv
                 // Clear pending queues so the sequence fully stops
                 pendingRemotePaths_.clear();
                 pendingLocalPaths_.clear();
-                
+
                 // Clean up local state
                 finish(false);
             }
@@ -182,30 +182,34 @@ namespace mrv
         {
             std::remove(currentPartPath_.c_str());
         }
-        
+
         if (doneCb_)
             doneCb_(success);
     }
 
     void FileTransferClient::requestNextFile(std::shared_ptr<rtc::DataChannel> dc)
     {
+        std::cerr << __FUNCTION__ << " " << __LINE__ << " " << dc << std::endl;
         if (pendingRemotePaths_.empty())
         {
+            std::cerr << __FUNCTION__ << " " << __LINE__ << " " << dc << std::endl;
             // All files are downloaded, now we can safely close out
             finish(true);
             dc->close();
+            std::cerr << __FUNCTION__ << " " << __LINE__ << " " << dc << std::endl;
             return;
         }
 
+            std::cerr << __FUNCTION__ << " " << __LINE__ << " " << dc << std::endl;
         // Pop the next file off the queues
         currentRemotePath_ = pendingRemotePaths_.front();
         pendingRemotePaths_.pop_front();
-        
+
         currentLocalPath_ = pendingLocalPaths_.front();
         pendingLocalPaths_.pop_front();
-        
+
         currentPartPath_ = currentLocalPath_ + ".part";
-        
+
         // Reset state for this specific file
         totalRead_ = 0;
         remoteSize_ = 0;
@@ -215,5 +219,5 @@ namespace mrv
         req["path"] = currentRemotePath_;
         dc->send(req.dump());
     }
-    
+
 }  // namespace mrv
