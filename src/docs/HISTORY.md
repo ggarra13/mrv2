@@ -13,6 +13,7 @@ ChangeLog
 - Assets: Fixed Autodesk's Flow bridge getting instantiated twice and being slow.
 
 - UI/Color: Fixed Saturation in the Color Panel not updating the view.
+- UI: Added WebRTC Panel to session saving and loading.
 
 - Annotations: Fixed annotations algorithm when syncing to a remote machine.  Now the annotations for the player are merged.
 - Annotations: Fixed annotations appearing at time -1/-1 due to an incorrect use resize of a std::vector, instead of reserve.
