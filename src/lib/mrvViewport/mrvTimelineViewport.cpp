@@ -1322,9 +1322,6 @@ namespace mrv
             bool send = p.ui->uiPrefs->SendPanAndZoom->value();
             if (send)
             {
-                bool isLocked = tcp->isLocked();
-                tcp->unlock();
-                
                 nlohmann::json viewport = getViewportSize();
                 Message msg;
                 msg["command"] = "viewPosAndZoom";
@@ -1332,9 +1329,6 @@ namespace mrv
                 msg["zoom"] = p.viewZoom;
                 msg["viewport"] = viewport;
                 tcp->pushMessage(msg);
-
-                if (isLocked)
-                    tcp->lock();
             }
         }
 
@@ -1351,7 +1345,16 @@ namespace mrv
         void TimelineViewport::frameView() noexcept
         {
             TLRENDER_P();
+
+            bool isLocked = tcp->isLocked();
+            tcp->unlock();
+            
             _frameView();
+
+            if (isLocked)
+                tcp->lock();
+
+            
             _refresh();
             _updateZoom();
             updateCoords();
