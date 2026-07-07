@@ -3,9 +3,15 @@
 #include "mrvNetwork/mrvWebRTCManager.h"
 #include "mrvNetwork/mrvMessage.h"
 
+#include "mrvFl/mrvIO.h"
+
+namespace
+{
+    const char* kModule = "sfts";
+}
+
 namespace mrv
 {
-
     static void sendFile(std::shared_ptr<rtc::DataChannel> dc,
                          const std::string& path)
     {
@@ -30,34 +36,90 @@ namespace mrv
         header["path"] = path;
         dc->send(header.dump());
 
+        // --- Backpressure machinery ---
+        const size_t kMaxBufferedAmount = 1024 * 1024; // 1 MB high-water mark
+        std::mutex mtx;
+        std::condition_variable cv;
+
+        // Fires whenever bufferedAmount() drops below the threshold set below.
+        dc->onBufferedAmountLow(
+            [&cv]()
+                {
+                    cv.notify_one();
+                });
+        dc->setBufferedAmountLowThreshold(kMaxBufferedAmount);
+
+        // Blocks until there's room to send more without exceeding the
+        // high-water mark. Also bails out (returns false) if the channel
+        // closes while we're waiting.
+        auto waitForRoom = [&]() -> bool
+            {
+                std::unique_lock<std::mutex> lock(mtx);
+                return cv.wait_for(lock, std::chrono::seconds(5), [&]()
+                    {
+                        return !dc->isOpen() ||
+                            dc->bufferedAmount() < kMaxBufferedAmount;
+                    });
+            };
+
         // Send chunks
         const size_t kChunkSize = 256 * 1024;
         std::vector<char> buf(kChunkSize);
+        bool ok = true;
+
         while (!std::feof(f))
         {
             size_t n = std::fread(buf.data(), 1, kChunkSize, f);
             if (n == 0)
                 break;
 
-            // Check if the client closed the connection or aborted
             if (!dc->isOpen())
             {
-                std::cerr << "dc is no longer open" << std::endl;
+                ok = false;
                 break;
             }
-            
-            bool success = dc->send(reinterpret_cast<const std::byte*>(buf.data()), n);
+
+            // If the buffer is already over the high-water mark, wait for
+            // onBufferedAmountLow to fire (or the peer to disappear) before
+            // pushing more data in.
+            if (dc->bufferedAmount() >= kMaxBufferedAmount)
+            {
+                if (!waitForRoom())
+                {
+                    ok = false;
+                    break;
+                }
+                if (!dc->isOpen())
+                {
+                    ok = false;
+                    break;
+                }
+            }
+
+            bool success = dc->send(
+                reinterpret_cast<const std::byte*>(buf.data()), n);
             if (!success)
             {
-                std::cerr << "dc->send did not succeed" << std::endl;
+                // With the wait above this should now be rare (a genuine
+                // failure, e.g. channel closing right after the check), so
+                // treat it as a real error rather than silently retrying
+                // forever.
+                LOG_ERROR("dc->send failed unexpectedly");
+                ok = false;
                 break;
             }
         }
         std::fclose(f);
 
-        // Send footer
+        // Only report success if every chunk actually went out. Sending
+        // "done" on a truncated transfer causes the client to rename the
+        // partial .part file into place as if it were complete.
         nlohmann::json footer;
-        footer["done"] = true;
+        if (ok)
+            footer["done"] = true;
+        else
+            footer["error"] = "Transfer failed or was interrupted: " + path;
+
         dc->send(footer.dump());
     }
 

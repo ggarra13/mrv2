@@ -82,8 +82,14 @@ namespace mrv
                     handleBinary(std::get<rtc::binary>(msg));
             });
 
-        dc->onClosed([this]() { finish(false); });
-        dc->onError([this](std::string) { finish(false); });
+        dc->onClosed([this]() {
+            LOG_STATUS("Closed dc");
+            finish(false);
+        });
+        dc->onError([this](std::string err) {
+            LOG_ERROR(err);
+            finish(false);
+        });
     }
 
     void FileTransferClient::handleText(const std::string& text)

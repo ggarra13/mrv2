@@ -116,10 +116,6 @@ namespace mrv
                              uint64_t done,
                              uint64_t total)
             {
-
-#if 1
-                std::cerr << done << "/" << total << std::endl;
-#else
                 Fl::lock();   // Acquire the GUI lock
 
                 // Safely update the UI
@@ -142,8 +138,7 @@ namespace mrv
 
                 // Release the GUI lock
                 Fl::unlock();
-#endif
-
+                
             }, [&](bool success)
                 {
                     ok = success;
