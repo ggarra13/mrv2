@@ -40,12 +40,18 @@ namespace mrv
                 break;
 
             // Check if the client closed the connection or aborted
-            if (!dc->isOpen()) 
+            if (!dc->isOpen())
+            {
+                std::cerr << "dc is no longer open" << std::endl;
                 break;
+            }
             
             bool success = dc->send(reinterpret_cast<const std::byte*>(buf.data()), n);
             if (!success)
+            {
+                std::cerr << "dc->send did not succeed" << std::endl;
                 break;
+            }
         }
         std::fclose(f);
 

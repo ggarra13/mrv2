@@ -108,6 +108,10 @@ namespace mrv
         }
         else if (msg.value("done", false))
         {
+            std::cerr << "msg done totalRead_="
+                      << totalRead_
+                      << " remoteSze="
+                      << remoteSize_ << std::endl;
             // Footer — current file received
             if (out_)
             {
@@ -162,6 +166,11 @@ namespace mrv
 
     void FileTransferClient::finish(bool success)
     {
+        std::cerr << "finish totalRead_="
+                  << totalRead_
+                  << " remoteSze="
+                  << remoteSize_ << std::endl;
+            
         bool expected = false;
         if (!finished_.compare_exchange_strong(expected, true))
         {
