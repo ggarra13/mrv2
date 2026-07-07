@@ -924,6 +924,9 @@ namespace mrv
                         messageToAnnotation(ann);
                     annotations.push_back(annotation);
                 }
+                std::cerr << "merge ann "
+                          << __FUNCTION__ << " " << __LINE__
+                          << std::endl;
                 player->mergeAllAnnotations(annotations);
 
                 ui->uiTimeline->redraw();
