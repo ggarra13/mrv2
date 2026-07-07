@@ -14,13 +14,12 @@ ChangeLog
 
 - UI/Color: Fixed Saturation in the Color Panel not updating the view.
 
+- Draw: Fixed annotations algorithm when syncing to a remote machine.  Now the annotations for the player are merged.
 - Draw: Fixed soft edges drawing sometimes leaving triangle gaps, due to wrong UVs.
 - Draw: Fixed drawing leaving small tips at the end of drawing a shape when using the tablet's pressure.
 
 - Python: deprecated the cmd.args function.  Just use sys.argv as usual in python.
 
-- Core: Fixed Preferences->Revert not reverting Path Mappings correctly.
-- Core: Fixed Path Mappings not allowing two keys with the same path.
 - Core: Improved the performance of Preferences->Single Instance.  Previously, it was locking the UI for 5 seconds on start up.  Now it is immediate.
 - Core: Updated OpenColorIO version to v2.5.2.
 - Core: Updated OpenEXR version to v3.4.13.
