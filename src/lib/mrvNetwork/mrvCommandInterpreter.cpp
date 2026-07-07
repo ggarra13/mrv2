@@ -111,7 +111,6 @@ namespace mrv
     void CommandInterpreter::parse(const Message& message)
     {
         const std::string& c = message["command"];
-        std::cerr << "\tparse " << c << std::endl;
 
         auto app = ui->app;
         auto prefs = ui->uiPrefs;
@@ -1548,7 +1547,6 @@ namespace mrv
             LOG_ERROR(e.what() << " message=" << message);
         }
         tcp->unlock();
-        std::cerr << "\t\tunlocked tcp" << std::endl;
     }
 
     void CommandInterpreter::timerEvent()
