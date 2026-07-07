@@ -1910,6 +1910,8 @@ namespace mrv
 
         if (ui->uiPrefs->SendMedia->value())
         {
+            std::cerr << "send open file locked?="
+                      << tcp->isLocked() << std::endl;
             Message msg;
             msg["command"] = "Open File";
             msg["fileName"] = fileName;
