@@ -1322,21 +1322,20 @@ namespace mrv
             bool send = p.ui->uiPrefs->SendPanAndZoom->value();
             if (send)
             {
-                nlohmann::json viewPos = p.viewPos;
+                bool isLocked = tcp->isLocked();
+                tcp->unlock();
+                
                 nlohmann::json viewport = getViewportSize();
                 Message msg;
                 msg["command"] = "viewPosAndZoom";
-                msg["viewPos"] = viewPos;
+                msg["viewPos"] = p.viewPos;
                 msg["zoom"] = p.viewZoom;
                 msg["viewport"] = viewport;
                 tcp->pushMessage(msg);
+
+                if (isLocked)
+                    tcp->lock();
             }
-
-            auto m = getMultilineInput();
-            if (!m)
-                return;
-
-            redraw();
         }
 
         void TimelineViewport::setViewZoom(

@@ -110,6 +110,7 @@ namespace mrv
 
     void WebRTCClient::pushMessage(const Message& message)
     {
+        // Only push messages if we are not locked.
         if (m_lock)
             return;
         std::lock_guard lk(m_sendMutex);
