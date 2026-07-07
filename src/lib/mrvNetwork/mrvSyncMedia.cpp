@@ -217,9 +217,11 @@ namespace mrv
         auto prefs = ui->uiPrefs;
         auto model = app->filesModel();
 
-        LOG_STATUS("Sync file " << filePath << " with audio "
-                   << audioFilePath);
+        tcp->lock();
+        
         app->open(filePath, audioFilePath);
+
+        tcp->unlock();
 
         // Copy annotations to both item and player
         auto item = model->observeA()->get();
@@ -251,9 +253,6 @@ namespace mrv
         std::vector<FilesModelItem> remoteFiles = message["value"];
         size_t remoteFileSize = remoteFiles.size();
         size_t localFileSize = localFiles.size();
-
-        std::cerr << "remote files " << remoteFileSize << std::endl;
-        std::cerr << " local files " << localFileSize << std::endl;
 
         for (size_t i = 0; i < remoteFileSize; ++i)
         {

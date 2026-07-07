@@ -17,6 +17,8 @@ ChangeLog
 - Annotations: Fixed annotations algorithm when syncing to a remote machine.  Now the annotations for the player are merged.
 - Annotations: Fixed annotations appearing at time -1/-1 due to an incorrect use resize of a std::vector, instead of reserve.
 
+- Network: Fixed re-sending of files on TCP/WebRTC connections.
+
 - Draw: Fixed soft edges drawing sometimes leaving triangle gaps, due to wrong UVs.
 - Draw: Fixed drawing leaving small tips at the end of drawing a shape when using the tablet's pressure.
 

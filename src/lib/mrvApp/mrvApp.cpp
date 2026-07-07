@@ -1464,6 +1464,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+        bool isLocked = tcp->isLocked();
+        
         tcp->lock();
         p.player->setPlayback(timeline::Playback::Stop);
 
@@ -1517,7 +1519,8 @@ namespace mrv
         else
         {
             // Start playback right away.
-            tcp->unlock();
+            if (!isLocked)
+                tcp->unlock();
             ui->uiView->setPlayback(playback);
         }
 
@@ -1530,7 +1533,8 @@ namespace mrv
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
-                    [this, playback](const timeline::PlayerCacheInfo& value)
+                    [this, playback, isLocked]
+                    (const timeline::PlayerCacheInfo& value)
                         {
                             TLRENDER_P();
 
@@ -1580,7 +1584,8 @@ namespace mrv
                                 p.progress = nullptr;
                                 ui->uiView->setPlayback(playback);
                                 p.cacheInfoObserver.reset();
-                                tcp->unlock();
+                                if (!isLocked)
+                                    tcp->unlock();
                                 return;
                             }
                         });
@@ -1592,7 +1597,8 @@ namespace mrv
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
-                    [this, playback](const timeline::PlayerCacheInfo& value)
+                    [this, playback, isLocked]
+                    (const timeline::PlayerCacheInfo& value)
                         {
                             TLRENDER_P();
 
@@ -1659,7 +1665,8 @@ namespace mrv
                                 p.progress = nullptr;
                                 ui->uiView->setPlayback(playback);
                                 p.cacheInfoObserver.reset();
-                                tcp->unlock();
+                                if (!isLocked)
+                                    tcp->unlock();
                                 return;
                             }
                         });
@@ -1871,7 +1878,7 @@ namespace mrv
     App::open(const std::string& fileName, const std::string& audioFileName)
     {
         TLRENDER_P();
-
+            
         file::Path filePath(string::normalizePath(fileName));
 
         if (filePath.getExtension() == ".mrv2s")
@@ -1880,6 +1887,7 @@ namespace mrv
             session::load(fileName);
             return;
         }
+
 
         file::PathOptions pathOptions;
         pathOptions.seqMaxDigits =
@@ -1897,7 +1905,6 @@ namespace mrv
             return;
         }
 
-
         for (const auto& path :
                  timeline::getPaths(filePath, pathOptions, _context) )
         {
@@ -1910,8 +1917,6 @@ namespace mrv
 
         if (ui->uiPrefs->SendMedia->value())
         {
-            std::cerr << "send open file locked?="
-                      << tcp->isLocked() << std::endl;
             Message msg;
             msg["command"] = "Open File";
             msg["fileName"] = fileName;
