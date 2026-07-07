@@ -1904,7 +1904,7 @@ namespace mrv
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
             item->audioPath = file::Path(string::normalizePath(audioFileName));
-            
+
             p.filesModel->add(item);
         }
 
@@ -2206,7 +2206,7 @@ namespace mrv
                                      item->path, item->audioPath, _context,
                                      offsetTime, options);
         }
-        
+
         auto out = timeline::Timeline::create(otioTimeline, _context, options);
 
 #ifdef MRV2_PYBIND11
