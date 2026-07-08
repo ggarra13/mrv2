@@ -106,6 +106,8 @@ namespace mrv
             std::shared_ptr< draw::Shape > s;
             if (annotation) s = annotation->lastShape();
 
+            math::Size2i renderSize = getRenderSize();
+
             ActionMode actionMode = p.actionMode;
             const float pen_size = _getPenSize();
 

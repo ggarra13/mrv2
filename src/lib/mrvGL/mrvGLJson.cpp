@@ -89,7 +89,7 @@ namespace mrv
         //     value.shapes.push_back(shape);
         // }
 #ifdef USE_OPENGL2
-        else if (type == "GL2Text")
+        else if (type == "GL2Text" || type == "Text")
         {
             auto shape = std::make_shared< GL2TextShape >();
             json.get_to(*shape.get());
