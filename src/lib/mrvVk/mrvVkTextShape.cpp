@@ -871,12 +871,14 @@ namespace mrv
     void from_json(const nlohmann::json& json, VKTextShape& value)
     {
         from_json(json, static_cast<draw::PathShape&>(value));
+
         json.at("text").get_to(value.text);
         if (json.contains("fontPath"))
         {
             json.at("fontPath").get_to(value.fontPath);
         }
-        
+
+        // If invalid font path, choose the first font on the system.
         if (value.fontPath.empty() || !fs::exists(value.fontPath))
         {
             const std::vector<fs::path>& fontList = image::discoverSystemFonts();
@@ -886,6 +888,7 @@ namespace mrv
         }
         value.fontSystem = App::ui->uiView->getFontSystem();
         value.editing = false;
+
         json.at("fontSize").get_to(value.fontSize);
     }
 

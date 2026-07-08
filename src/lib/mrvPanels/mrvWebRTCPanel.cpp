@@ -138,6 +138,8 @@ namespace mrv
             const char* kButtonLabel = _("Disconnect");
             _r->createButton->copy_label(kButtonLabel);
 
+            _r->roomGroup->deactivate();
+
             _p->ui->uiMain->fill_menu(_p->ui->uiMenuBar);
         }
 

@@ -587,7 +587,6 @@ namespace mrv
                     shape->soft = false;
                     shape->color = color;
                     shape->laser = laser;
-                    shape->pts.push_back(pnt);
                     p.lastEvent = FL_PUSH;
                 }
                 else
@@ -597,8 +596,8 @@ namespace mrv
                         std::dynamic_pointer_cast<GLFilledPolygonShape>(s);
                     if (!shape)
                         return;
-                    shape->pts.push_back(pnt);
                 }
+                shape->pts.push_back(pnt);
 
                 if (p.lastEvent == FL_PUSH)
                 {
@@ -606,6 +605,11 @@ namespace mrv
                     _createAnnotationShape(false);
                     p.lastEvent = FL_DRAG;
                 }
+                else
+                {
+                    _updateAnnotationShape();
+                }
+                redrawWindows();
                 break;
             }
             case ActionMode::kPolygon:
@@ -641,6 +645,11 @@ namespace mrv
                     _createAnnotationShape(false);
                     p.lastEvent = FL_DRAG;
                 }
+                else
+                {
+                    _updateAnnotationShape();
+                }
+                redrawWindows();
                 break;
             }
             case ActionMode::kFilledCircle:

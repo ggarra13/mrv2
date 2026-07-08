@@ -29,7 +29,7 @@ namespace
 
     using tl::geom::Triangle2;
     using tl::math::Vector2f;
-    
+
    //! Helper function to check if a codepoint is inherently an emoji
     bool detectIsEmoji(unsigned int cp) {
         return (cp >= 0x1F300 && cp <= 0x1F9FF) || // Misc Symbols, Pictographs, Emoticons
@@ -46,7 +46,7 @@ namespace
                 (cp >= 0xFE00 && cp <= 0xFE0F) ||   // Variation Selectors
                 (cp >= 0x1F3FB && cp <= 0x1F3FF));   // Skin Tone
     }
-    
+
     // Check if vertex i in the polygon is an ear
     bool isEar(
         const std::vector<Vector2f>& points, const std::vector<int>& poly,
@@ -173,10 +173,10 @@ namespace mrv
     {
         using namespace tl;
         using namespace tl::draw;
-        
+
 
         const bool catmullRomSpline = true;
-        
+
         lines->drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
@@ -204,7 +204,7 @@ namespace mrv
 
                 int lineSize = 3 * mult;
                 if (lineSize < 1) lineSize = 1;
-                
+
                 lines->drawLines(
                     render, pts, color, lineSize, false,
                     Polyline2D::JointStyle::ROUND,
@@ -232,6 +232,43 @@ namespace mrv
             Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
     }
 
+    void VKFilledPolygonShape::draw(
+        const std::shared_ptr<timeline_vlk::Render>& render,
+        const std::shared_ptr<vulkan::Lines> lines)
+    {
+        using namespace tl::draw;
+
+        bool enableBlending = false;
+        if (color.a < 0.99F)
+            enableBlending = true;
+
+        if (pts.size() < 3)
+        {
+            lines->drawLines(render, pts, color, pen_size);
+            return;
+        }
+
+        geom::TriangleMesh2 mesh;
+        mesh.v.reserve(pts.size() + 64);
+
+        size_t numVertices = pts.size();
+        mesh.v.reserve(numVertices);
+        for (size_t i = 0; i < numVertices; ++i)
+            mesh.v.push_back(math::Vector2f(pts[i].x, pts[i].y));
+
+        std::vector<int> poly;
+        for (int i = 0; i < pts.size(); ++i)
+        {
+            poly.push_back(i + 1);
+        }
+        auto triangles = triangulatePolygon(mesh.v, poly);
+        mesh.triangles = triangles;
+
+        math::Vector2i pos;
+        render->drawMesh("annotation", "rect", "rect", "mesh", mesh,
+                         pos, color, enableBlending);
+    }
+
     void VKCircleShape::draw(
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::shared_ptr<vulkan::Lines> lines)
@@ -249,43 +286,6 @@ namespace mrv
         lines->drawLines(
             render, pts, color, pen_size, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::JOINT, catmullRomSpline);
-    }
-
-    void VKFilledPolygonShape::draw(
-        const std::shared_ptr<timeline_vlk::Render>& render,
-        const std::shared_ptr<vulkan::Lines> lines)
-    {
-        using namespace tl::draw;
-
-        bool enableBlending = false;
-        if (color.a < 0.99F)
-            enableBlending = true;
-
-        if (pts.size() < 3)
-        {
-            lines->drawLines(render, pts, color, pen_size);
-            return;
-        }
-        
-        geom::TriangleMesh2 mesh;
-        mesh.v.reserve(pts.size() + 64);
-
-        size_t numVertices = pts.size();
-        mesh.v.reserve(numVertices);
-        for (size_t i = 0; i < numVertices; ++i)
-            mesh.v.push_back(math::Vector2f(pts[i].x, pts[i].y));
-
-        std::vector<int> poly;
-        for (int i = 0; i < pts.size(); ++i)
-        {
-            poly.push_back(i + 1);
-        }
-        auto triangles = triangulatePolygon(mesh.v, poly);
-        mesh.triangles = triangles;
-        
-        math::Vector2i pos;
-        render->drawMesh("annotation", "rect", "rect", "mesh", mesh,
-                         pos, color, enableBlending);
     }
 
     void VKFilledCircleShape::draw(
@@ -354,7 +354,7 @@ namespace mrv
         // --- 1. Get Stored Data (using the "hack" method) ---
         const draw::Point& pnt = pts[0]; // Anchor (raster space)
         const draw::Point& pixel_dims = pts[1]; // L-shape (pixel space)
-        
+
         // Calculate current raster offsets
         float L_height_raster = pixel_dims.y * scale;
         float L_width_raster = pixel_dims.x * scale;
@@ -362,18 +362,18 @@ namespace mrv
         // --- 3. Calculate Final Raster Points ---
         draw::Point pnt2(pnt.x, pnt.y + L_height_raster);
         draw::Point pnt3(pnt.x + L_width_raster, pnt.y + L_height_raster);
-        
+
         const float radius = std::fabs(pts[0].y - pnt2.y) * 1.05;
 
         math::Vector2f center;
         center.x = (pts[0].x + pnt2.x + pnt3.x) / 3;
         center.y = (pts[0].y + pnt2.y + pnt3.y) / 3;
-        
+
         return math::Box2f(center.x - radius, center.y - radius,
                            radius * 2, radius * 2);
-                           
+
     }
-    
+
     void VKLinkShape::draw(
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::shared_ptr<vulkan::Lines> lines)
@@ -392,7 +392,7 @@ namespace mrv
         // --- 2. Convert Pixel-Space values to Raster-Space ---
         // Calculate current raster pen size
         float pen_size_raster = pen_size_px * mult;
-        
+
         // Calculate current raster offsets
         float L_height_raster = pixel_dims.y * mult;
         float L_width_raster = pixel_dims.x * mult;
@@ -416,15 +416,15 @@ namespace mrv
         line[1].y += offset;
         line[2].x += offset;
         line[2].y += offset;
-        
+
         lines->drawLines(
             render, line, shadowColor, pen_size_raster,
             soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
-        
+
         center.x = (pts[0].x + pnt2.x + pnt3.x) / 3 + offset;
         center.y = (pts[0].y + pnt2.y + pnt3.y) / 3 + offset;
-        
+
         lines->drawCircle(render, center, radius,
                           pen_size_raster, shadowColor, soft);
 
@@ -434,14 +434,14 @@ namespace mrv
         line[1].y -= offset;
         line[2].x -= offset;
         line[2].y -= offset;
-        
+
         lines->drawLines(
             render, line, color, pen_size_raster, soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
-        
+
         center.x -= offset;
         center.y -= offset;
-        
+
         lines->drawCircle(render, center, radius, pen_size_raster, color, soft);
     }
 
@@ -483,7 +483,7 @@ namespace mrv
         else
         {
             const std::string err = string::Format(_("'{0}' is not a file, directory or url.")).arg(url);
-            LOG_ERROR(err); 
+            LOG_ERROR(err);
         }
     }
 
@@ -496,16 +496,16 @@ namespace mrv
         url = linkEdit.uiURL->value();
         if (url.empty())
             return false;
-        
+
         if (url.substr(0, 4) == "www.")
             url = "http://" + url;
-        
+
         title = linkEdit.uiTitle->value();
 
         ai_prompt = linkEdit.uiAIPrompt->value();
         return true;
     }
-    
+
     int VKLinkShape::handle(int event)
     {
         if (event == FL_PUSH)
@@ -525,7 +525,7 @@ namespace mrv
         }
         return 0;
     }
-    
+
 
     void to_json(nlohmann::json& json, const VKPathShape& value)
     {
@@ -577,7 +577,7 @@ namespace mrv
         replace_path(value.url);
         json.at("ai_prompt").get_to(value.ai_prompt);
     }
-    
+
     void to_json(nlohmann::json& json, const VKCircleShape& value)
     {
         to_json(json, static_cast<const draw::Shape&>(value));
@@ -676,7 +676,7 @@ namespace mrv
 
         const math::Vector2i c(int(center.x), int(center.y));
         const math::Vector2i e(int(mouse.pos.x), int(mouse.pos.y));
-        
+
         switch(status)
         {
         case voice::RecordStatus::Stopped:
@@ -687,7 +687,7 @@ namespace mrv
             math::Box2i box(c.x - boxRadius, c.y - boxRadius,
                             boxRadius * 2, boxRadius * 2);
             render->drawRect(box, stoppedColor);
-            
+
             box = math::Box2i(c.x - radius, c.y - radius,
                               radius * 2, radius * 2);
             render->drawRect(box, blackColor);
@@ -714,7 +714,7 @@ namespace mrv
             //
             vulkan::Lines lines(render->getContext(), VK_NULL_HANDLE);
             lines.drawLine(render, c, e, lineColor, 2);
-            
+
             math::Box2i box(int(e.x - radius), int(e.y - radius),
                             radius * 2, radius * 2);
             render->drawRect(box, cursorColor);
@@ -739,18 +739,18 @@ namespace mrv
             //
             vulkan::Lines lines(render->getContext(), VK_NULL_HANDLE);
             lines.drawLine(render, c, e, lineColor, 2);
-            
+
             math::Box2i box(int(e.x - radius), int(e.y - radius),
                             radius * 2, radius * 2);
             render->drawRect(box, cursorColor);
-            
+
             //
             // Draw box and icon
             //
             box = math::Box2i(c.x - boxRadius, c.y - boxRadius,
                               boxRadius * 2, boxRadius * 2);
             render->drawRect(box, stoppedColor);
-            
+
             lines.drawFilledCircle(render, center, radius, recordingColor);
 
             break;
