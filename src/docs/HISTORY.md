@@ -16,6 +16,7 @@ ChangeLog
 - UI: Added WebRTC Panel to session saving and loading.
 
 - Annotations: mrv2 and vmrv2 now use the same coordinates when working through the network.  It is now possible to sync mrv2<->vmrv2 or viceversa.
+- Annotations: vmrv2 can now send Text annotations to another machine.  However there's still no guarantee the actual font will be available, so a default font is used in that case.
 - Annotations: Fixed annotations algorithm when syncing to a remote machine.  Now the annotations for the player are merged.
 - Annotations: Fixed annotations appearing at time -1/-1 due to an incorrect use resize of a std::vector, instead of reserve.
 
