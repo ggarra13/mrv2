@@ -3567,7 +3567,7 @@ namespace mrv
             if (path == nullptr)
                 return;
 
-            draw::Point& pnt = path->pts.back();
+            draw::Point pnt = path->pts.back();
 
 #ifdef OPENGL_BACKEND
             math::Size2i size = getRenderSize();
