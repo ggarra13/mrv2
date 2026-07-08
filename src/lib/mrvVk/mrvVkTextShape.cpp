@@ -25,7 +25,7 @@ namespace
 
     using tl::geom::Triangle2;
     using tl::math::Vector2f;
-    
+
    //! Helper function to check if a codepoint is inherently an emoji
     bool detectIsEmoji(unsigned int cp) {
         return (cp >= 0x1F300 && cp <= 0x1F9FF) || // Misc Symbols, Pictographs, Emoticons
@@ -42,7 +42,7 @@ namespace
                 (cp >= 0xFE00 && cp <= 0xFE0F) ||   // Variation Selectors
                 (cp >= 0x1F3FB && cp <= 0x1F3FF));   // Skin Tone
     }
-    
+
     std::string _getFontFamily(const tl::file::Path& path)
     {
         std::string out;
@@ -57,7 +57,7 @@ namespace mrv
     {
         return App::ui->uiView->acceptMultilineInput();
     }
-    
+
     unsigned VKTextShape::line_end(unsigned c)
     {
         const char* start = text.c_str();
@@ -92,21 +92,21 @@ namespace mrv
         ++c;
         return c;
     }
-    
+
 
     unsigned VKTextShape::current_line()
     {
         unsigned line = 0;
         const char* p = text.c_str();
-    
-        // Iterate directly up to utf8_pos. 
+
+        // Iterate directly up to utf8_pos.
         // No need to copy/convert the string for line counting.
         for (unsigned i = 0; i < utf8_pos && p[i]; ++i)
         {
             if (p[i] == '\n')
                 ++line;
         }
-    
+
         return line;
     }
 
@@ -127,7 +127,7 @@ namespace mrv
 
             // If we hit a newline, we've reached the start of the current line
             if (*prev == '\n') {
-                break; 
+                break;
             }
 
             // Move the cursor back and count this as 1 visible column
@@ -137,13 +137,13 @@ namespace mrv
 
         return column;
     }
-    
+
     void VKTextShape::to_cursor()
     {
         const char* start = text.c_str();
         const char* target = start + utf8_pos;
         const char* p = start;
-    
+
         unsigned count = 0;
 
         while (p < target) {
@@ -160,7 +160,7 @@ namespace mrv
             }
 
             // 2. Zero Width Joiner (ZWJ)
-            // If it's a ZWJ, we treat it as a modifier (don't increment count) 
+            // If it's a ZWJ, we treat it as a modifier (don't increment count)
             // AND we must treat the character immediately following it as a modifier too.
             if (cp == 0x200D) {
                 is_modifier = true;
@@ -207,11 +207,11 @@ namespace mrv
 
         cursor = count;
     }
-    
+
     int VKTextShape::kf_paste()
     {
         if (!Fl::event_text() || !Fl::event_length()) return 1;
-            
+
         const char* t = Fl::event_text();
         const char* e = t + Fl::event_length();
 
@@ -235,7 +235,7 @@ namespace mrv
         text = left + copy + right;
 
         to_cursor();
-        
+
         return 1;
     }
 
@@ -252,10 +252,10 @@ namespace mrv
         while (p < end && *p != '\n' && col < column)
         {
             const char* next = fl_utf8_next_composed_char(p, end);
-        
+
             // Safety: If next returns null or doesn't advance, break to avoid infinite loop
             if (!next || next <= p) break;
-        
+
             p = next;
             col++;
         }
@@ -273,7 +273,7 @@ namespace mrv
         utf8_pos = pos - text.c_str();
         Fl::compose_reset();
         to_cursor();
-        return 1; 
+        return 1;
     }
 
     int VKTextShape::handle_move_down() {
@@ -288,7 +288,7 @@ namespace mrv
         to_cursor();
         return 1;
     }
-    
+
 
     int VKTextShape::kf_select_all()
     {
@@ -299,25 +299,25 @@ namespace mrv
     {
         return 0;
     }
-    
+
     int VKTextShape::kf_copy_cut()
     {
         return 0;
     }
-    
+
     int VKTextShape::handle_backspace()
     {
         if (utf8_pos == 0) return 1;
 
         const char* start = text.c_str();
-    
+
         // We start at the current cursor position
         const char* current_ptr = start + utf8_pos;
-    
+
         // We will calculate the new position (prev_ptr) by stepping back
         const char* prev_ptr = fl_utf8_previous_composed_char(current_ptr,
                                                               start);
-        
+
         // Perform the deletion
         unsigned final_prev_index = prev_ptr - start;
         unsigned len = utf8_pos - final_prev_index;
@@ -329,27 +329,27 @@ namespace mrv
         to_cursor();
         return 1;
     }
-    
+
     int VKTextShape::handle_insert(const char* new_text, int len,
                                    int del_back) {
         if (del_back > 0 && utf8_pos >= (unsigned)del_back) {
             utf8_pos -= del_back;
             text.erase(utf8_pos, del_back);
         }
-    
+
         if (new_text && len > 0) {
             text.insert(utf8_pos, new_text, len);
             utf8_pos += len;
         }
         Fl::compose_reset();
-    
+
         to_cursor();
         return 1;
     }
-    
+
     int VKTextShape::handle(int e)
     {
-     
+
         if (e == FL_PASTE) return kf_paste();
         if (e != FL_KEYBOARD) return 0;
 
@@ -410,7 +410,7 @@ namespace mrv
         to_cursor();
         return 1;
     }
-    
+
     int VKTextShape::handle_move_right()
     {
         if (utf8_pos >= text.size()) return 1;
@@ -418,7 +418,7 @@ namespace mrv
         const char* start = text.c_str();
         const char* end = start + text.size();
         const char* current_ptr = start + utf8_pos;
-        
+
         const char* new_ptr = fl_utf8_next_composed_char(current_ptr, end);
 
         utf8_pos = (unsigned)(new_ptr - start);
@@ -437,22 +437,22 @@ namespace mrv
 
         const char* new_ptr = fl_utf8_next_composed_char(current_ptr, end);
         unsigned int delete_len = (unsigned int)(new_ptr - current_ptr);
-        
+
         text.erase(utf8_pos, delete_len);
-    
+
         to_cursor();
         return 1;
     }
-    
+
     int VKTextShape::handle_mouse_click(int event, const math::Vector2i& local)
     {
         file::Path path(fontPath);
         const std::string fontFamily = _getFontFamily(path);
-        
+
         const image::FontInfo fontInfo(fontFamily, fontSize);
         const image::FontMetrics fontMetrics = fontSystem->getMetrics(fontInfo);
         const int ascender = fontMetrics.ascender;
-        
+
         // Copy the text to process it line by line
         std::string txt = text;
 
@@ -465,7 +465,7 @@ namespace mrv
         const char* text_start = text.c_str();
         const char* text_it = text_start;
         const char* text_end = text_start + text.size();
-        
+
         for (; pos != std::string::npos; pos = txt.find('\n'))
         {
             const std::string line = txt.substr(0, pos);
@@ -492,7 +492,7 @@ namespace mrv
         to_cursor();
         return 1;
     }
-    
+
 
     void VKTextShape::_positionCursor(
         const std::string& line, const char* text_it, int x, int y,
@@ -503,35 +503,35 @@ namespace mrv
         //
         const file::Path path(fontPath);
         const std::string fontFamily = _getFontFamily(path);
-        
+
         //
         // Add emoji font.
         //
         const file::Path emojiPath = image::emojiFont();
         const std::string emojiFamily = _getFontFamily(emojiPath);
-        
+
         //
         // Get metrics for selected font.
-        // 
+        //
         const image::FontInfo fontInfo(fontFamily, fontSize);
         const image::FontInfo emojiInfo(emojiFamily, fontSize);
-        
+
         const char* text_start = text.c_str();
         const char* text_end = text_start + text.size();
-        
+
         std::string currentRun;
         bool runIsEmoji = false;
         bool prevWasZWJ = false;
         bool firstChar = true;
-        
+
         // Helper to flush the current accumulated run
-        auto flushRun = [&](const std::string& run, bool isEmoji) 
+        auto flushRun = [&](const std::string& run, bool isEmoji)
             {
                 if (run.empty()) return;
-                
+
                 const auto& activeInfo = isEmoji ? emojiInfo : fontInfo;
                 const auto& glyphs = fontSystem->getGlyphs(run, activeInfo);
-        
+
                 for (const auto& glyph : glyphs)
                 {
                     if (glyph)
@@ -551,28 +551,28 @@ namespace mrv
                     }
                 }
             };
-        
+
         for (size_t i = 0; i < line.size(); )
         {
             // fl_utf8len returns the length of the UTF-8 sequence (1 to 4 bytes)
             int len = fl_utf8len(line[i]);
-        
+
             // Safety fallback: if FLTK returns < 1 for some reason, assume 1 byte to prevent infinite loops
-            if (len < 1) len = 1; 
+            if (len < 1) len = 1;
 
             std::string charStr = line.substr(i, len);
-        
+
             // Decode the codepoint to check for ZWJ/Variation Selectors
             unsigned int codepoint = fl_utf8decode(charStr.c_str(), nullptr, &len);
-                
+
             // Check if emoji
             bool isEmojiChar = detectIsEmoji(codepoint);
-                
+
             // Define "Sticky" characters that should not break a run
             bool isZWJ = (codepoint == 0x200D);
             bool isVS = (codepoint >= 0xFE00 && codepoint <= 0xFE0F);
             bool isSticky = isZWJ || isVS || prevWasZWJ;
-                
+
             // Update runIsEmoji immediately if it's the very first character
             if (firstChar)
             {
@@ -586,7 +586,7 @@ namespace mrv
                 currentRun.clear();
                 runIsEmoji = isEmojiChar;
             }
-    
+
             currentRun += charStr;
             i += len; // Advance by the UTF-8 length
             prevWasZWJ = isZWJ;
@@ -611,36 +611,36 @@ namespace mrv
         //
         const file::Path path(fontPath);
         const std::string fontFamily = _getFontFamily(path);
-        
+
         //
         // Add emoji font.
         //
         const file::Path emojiPath = image::emojiFont();
         const std::string emojiFamily = _getFontFamily(emojiPath);
-        
+
         //
         // Get metrics for selected font.
-        // 
+        //
         const image::FontInfo fontInfo(fontFamily, fontSize);
         const image::FontInfo emojiInfo(emojiFamily, fontSize);
 
-        
+
         // Buffers for batching
-        int currentDrawX = x; 
+        int currentDrawX = x;
         std::string currentRun;
         bool runIsEmoji = false;
         bool prevWasZWJ = false;
         bool firstChar = true;
 
         // Helper to flush the current accumulated run
-        auto flushRun = [&](const std::string& run, bool isEmoji) 
+        auto flushRun = [&](const std::string& run, bool isEmoji)
             {
                 if (run.empty()) return;
-                
+
                 const auto& activeInfo = isEmoji ? emojiInfo : fontInfo;
                 const auto& glyphs = fontSystem->getGlyphs(run, activeInfo);
                 math::Vector2i pnt(currentDrawX, y);
-        
+
                 for (const auto& glyph : glyphs)
                 {
                     if (glyph)
@@ -659,23 +659,23 @@ namespace mrv
         {
             // fl_utf8len returns the length of the UTF-8 sequence (1 to 4 bytes)
             int len = fl_utf8len(line[i]);
-        
+
             // Safety fallback: if FLTK returns < 1 for some reason, assume 1 byte to prevent infinite loops
-            if (len < 1) len = 1; 
+            if (len < 1) len = 1;
 
             std::string charStr = line.substr(i, len);
-        
+
             // Decode the codepoint to check for ZWJ/Variation Selectors
             unsigned int codepoint = fl_utf8decode(charStr.c_str(), nullptr, &len);
-                
+
             // Check if emoji
             bool isEmojiChar = detectIsEmoji(codepoint);
-                
+
             // Define "Sticky" characters that should not break a run
             bool isZWJ = (codepoint == 0x200D);
             bool isVS = (codepoint >= 0xFE00 && codepoint <= 0xFE0F);
             bool isSticky = isZWJ || isVS || prevWasZWJ;
-                
+
             // Update runIsEmoji immediately if it's the very first character
             if (firstChar)
             {
@@ -689,7 +689,7 @@ namespace mrv
                 currentRun.clear();
                 runIsEmoji = isEmojiChar;
             }
-    
+
             currentRun += charStr;
             i += len; // Advance by the UTF-8 length
             prevWasZWJ = isZWJ;
@@ -701,7 +701,7 @@ namespace mrv
             flushRun(currentRun, runIsEmoji);
         }
     }
-    
+
     void VKTextShape::draw(
         const std::shared_ptr<timeline_vlk::Render>& render,
         const std::shared_ptr<vulkan::Lines> lines)
@@ -711,26 +711,26 @@ namespace mrv
         //
         const file::Path path(fontPath);
         const std::string fontFamily = _getFontFamily(path);
-        
+
         if (!fontSystem->hasFont(fontFamily))
         {
             fontSystem->addFont(fontPath);
         }
-        
+
         //
         // Add emoji font.
         //
         const file::Path emojiPath = image::emojiFont();
         const std::string emojiFamily = _getFontFamily(emojiPath);
-        
+
         if (!fontSystem->hasFont(emojiFamily))
         {
             fontSystem->addFont(emojiPath.get());
         }
-        
+
         //
         // Get metrics for selected font.
-        // 
+        //
         const image::FontInfo fontInfo(fontFamily, fontSize);
         const image::FontInfo emojiInfo(emojiFamily, fontSize);
         const image::FontMetrics fontMetrics = fontSystem->getMetrics(fontInfo);
@@ -753,14 +753,14 @@ namespace mrv
         std::vector<timeline::TextInfo> textInfos;
         unsigned cursor_count = 0;
         int currentDrawX = x;
-        
+
         for (; pos != std::string::npos; y += fontSize, pos = txt.find('\n'))
         {
             const std::string line = txt.substr(0, pos);
-            
+
 
             _drawLine(render, line, x, y, textInfos, cursor_count, cursor_pos);
-            
+
 
             if (txt.size() > pos)
             {
@@ -778,10 +778,10 @@ namespace mrv
         {
             _drawLine(render, txt, x, y, textInfos, cursor_count, cursor_pos);
         }
-        
+
         const image::Color4f cursorColor(.8F, 0.8F, 0.8F);
         math::Box2i cursorBox(cursor_pos.x, cursor_pos.y, 2, fontSize);
-            
+
         if (editing)
         {
             auto boxf = math::Box2f(pts[0].x, pts[0].y + descender - ascender, 70, 0);
@@ -808,9 +808,9 @@ namespace mrv
                                            cursorBox.w() * mult,
                                            cursorBox.h()));
             boxf = math::margin(boxf, 8.F);
-            
+
             auto roundedBox = createRoundedRect(boxf, 5 * mult);
-                
+
             //
             // Draw background which will be darker
             //
@@ -827,7 +827,7 @@ namespace mrv
 
             int cross_size = kCrossSize * mult / 3;
             if (cross_size < kCrossSize / 2) cross_size = kCrossSize / 2;
-            
+
             int line_size = 2 * mult / 3;
             if (line_size < 2) line_size = 2;
 
@@ -835,16 +835,16 @@ namespace mrv
             math::Vector2i end(boxf.min.x + cross_size,
                                boxf.min.y + cross_size);
             lines->drawLine(render, start, end, crossColor, line_size);
-            
+
             start = math::Vector2i(boxf.min.x + cross_size, boxf.min.y);
             end = math::Vector2i(boxf.min.x, boxf.min.y + cross_size);
             lines->drawLine(render, start, end, crossColor, line_size);
 
             box = math::Box2i(boxf.x(), boxf.y(), boxf.w(), boxf.h());
         }
-        
+
         //
-        // Draw all text with color 
+        // Draw all text with color
         //
         for (const auto& textInfo : textInfos)
         {
@@ -854,7 +854,7 @@ namespace mrv
         {
             //
             // Finally, draw cursor.
-            // 
+            //
             render->drawRect(cursorBox, cursorColor);
         }
     }
@@ -872,7 +872,18 @@ namespace mrv
     {
         from_json(json, static_cast<draw::PathShape&>(value));
         json.at("text").get_to(value.text);
-        json.at("fontPath").get_to(value.fontPath);
+        if (json.contains("fontPath"))
+        {
+            json.at("fontPath").get_to(value.fontPath);
+        }
+        else
+        {
+            const std::vector<fs::path>& fontList = image::discoverSystemFonts();
+            auto path = fontList[0];
+            auto u8 = path.filename().u8string();
+            std::string fileName = std::string(u8.begin(), u8.end());
+            value.fontPath = fileName;
+        }
         json.at("fontSize").get_to(value.fontSize);
     }
 

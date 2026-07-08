@@ -733,7 +733,10 @@ namespace mrv
     {
         from_json(json, static_cast<draw::PathShape&>(value));
         json.at("text").get_to(value.text);
-        json.at("font").get_to(value.font);
+        if (json.contains("font"))
+            json.at("font").get_to(value.font);
+        else
+            value.font = 0;
         json.at("fontSize").get_to(value.fontSize);
 
         math::Size2i size = App::ui->uiView->getRenderSize();
