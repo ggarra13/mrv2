@@ -147,7 +147,6 @@ namespace mrv
         bool aborted = false;
         if (progressCb_)
         {
-            std::cerr << totalRead_ << "/" << remoteSize_ << std::endl;
             progressCb_(aborted, title, totalRead_, remoteSize_);
             if (aborted)
             {

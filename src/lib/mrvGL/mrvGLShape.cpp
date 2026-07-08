@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrViewer.h"
+
 #include "mrvURLLinkUI.h"
 
 #include "mrvGL/mrvGLUtil.h"
@@ -185,21 +187,21 @@ namespace mrv
         color.a = 1.F;
 
         if (rectangle)
-        {           
+        {
             math::Box2i box(
                 pts[0].x, pts[0].y, pts[2].x - pts[0].x, pts[2].y - pts[0].y);
             render->drawRect(box, color, "erase");
-            
+
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             if (drawing)
             {
                 const bool catmullRomSpline = false;
                 color.r = 0.F; color.g = 1.F;
-                
+
                 int lineSize = 3 * mult;
                 if (lineSize < 1) lineSize = 1;
-                
+
                 lines->drawLines(
                     render, pts, color, lineSize, soft,
                     Polyline2D::JointStyle::ROUND,
@@ -393,44 +395,44 @@ namespace mrv
         const draw::Point& pnt = pts[0]; // Anchor (raster space)
         const draw::Point& pixel_dims = pts[1]; // L-shape (pixel space)
         const float pen_size_px = pen_size; // Pen (pixel space)
-        
+
         // --- 2. Convert Pixel-Space values to Raster-Space ---
         // Calculate current raster pen size
         float pen_size_raster = pen_size_px * mult;
-        
+
         // Calculate current raster offsets
         float L_height_raster = pixel_dims.y * mult;
         float L_width_raster = pixel_dims.x * mult;
-        
+
         // --- 3. Calculate Final Raster Points ---
         draw::Point pnt2(pnt.x, pnt.y - L_height_raster);
         draw::Point pnt3(pnt.x + L_width_raster, pnt.y - L_height_raster);
-        
+
         // --- 4. Calculate radius of circle and shadow offset
         const float radius = std::fabs(pts[0].y - pnt2.y) * 1.05;
         const float offset = radius * 0.15F;
-        
+
         std::vector< draw::Point > line;
 
         line.push_back(pts[0]);
         line.push_back(pnt2);
         line.push_back(pnt3);
-        
+
         line[0].x += offset;
         line[0].y -= offset;
         line[1].x += offset;
         line[1].y -= offset;
         line[2].x += offset;
         line[2].y -= offset;
-        
+
         lines->drawLines(
             render, line, shadowColor, pen_size_raster, soft,
             Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
-        
+
         center.x = (pts[0].x + pnt2.x + pnt3.x) / 3 + offset;
         center.y = (pts[0].y + pnt2.y + pnt3.y) / 3 - offset;
-        
+
         lines->drawCircle(render, center, radius, pen_size_raster,
                           shadowColor, soft);
 
@@ -440,22 +442,22 @@ namespace mrv
         line[1].y += offset;
         line[2].x -= offset;
         line[2].y += offset;
-        
+
         lines->drawLines(
             render, line, color, pen_size_raster,
             soft, Polyline2D::JointStyle::ROUND,
             Polyline2D::EndCapStyle::ROUND, catmullRomSpline);
-        
+
         center.x -= offset;
         center.y += offset;
-        
+
         lines->drawCircle(render, center, radius, pen_size_raster, color, soft);
     }
 
     void GLLinkShape::open()
     {
         const char* kModule = "link";
-        
+
         if (url.substr(0, 4) == "http" ||
             url.substr(0, 3) == "ftp")
         {
@@ -491,10 +493,10 @@ namespace mrv
         {
             /* xgettext:c++-format */
             const std::string err = string::Format(_("'{0}' is not a file, directory or url.")).arg(url);
-            LOG_ERROR(err); 
+            LOG_ERROR(err);
         }
     }
-    
+
     bool GLLinkShape::edit()
     {
         URLLinkUI linkEdit(this);
@@ -504,22 +506,22 @@ namespace mrv
         url = linkEdit.uiURL->value();
         if (url.empty())
             return false;
-        
+
         if (url.substr(0, 4) == "www.")
             url = "http://" + url;
-        
+
         title = linkEdit.uiTitle->value();
-        
+
         ai_prompt = linkEdit.uiAIPrompt->value();
         return true;
     }
-    
+
     const math::Box2f GLLinkShape::getBBox(float scale) const
     {
         // --- 1. Get Stored Data (using the "hack" method) ---
         const draw::Point& pnt = pts[0]; // Anchor (raster space)
         const draw::Point& pixel_dims = pts[1]; // L-shape (pixel space)
-        
+
         // Calculate current raster offsets
         float L_height_raster = pixel_dims.y * scale;
         float L_width_raster = pixel_dims.x * scale;
@@ -527,18 +529,18 @@ namespace mrv
         // --- 3. Calculate Final Raster Points ---
         draw::Point pnt2(pnt.x, pnt.y - L_height_raster);
         draw::Point pnt3(pnt.x + L_width_raster, pnt.y - L_height_raster);
-        
+
         const float radius = std::fabs(pts[0].y - pnt2.y) * 1.05;
 
         math::Vector2f center;
         center.x = (pts[0].x + pnt2.x + pnt3.x) / 3;
         center.y = (pts[0].y + pnt2.y + pnt3.y) / 3;
-        
+
         return math::Box2f(center.x - radius, center.y - radius,
                            radius * 2, radius * 2);
-                           
+
     }
-    
+
     int GLLinkShape::handle(int event)
     {
         if (event == FL_PUSH)
@@ -596,7 +598,7 @@ namespace mrv
         if (!txt.empty())
         {
             pnt.y = y;
-            
+
             const auto glyphs = fontSystem->getGlyphs(txt, fontInfo);
             render->appendText(textInfos, glyphs, pnt);
         }
@@ -609,40 +611,87 @@ namespace mrv
 
     void to_json(nlohmann::json& json, const GLPathShape& value)
     {
-        to_json(json, static_cast<const draw::PathShape&>(value));
+        draw::PathShape path = static_cast<const draw::PathShape&>(value);
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : path.pts)
+        {
+            p.y = size.h - p.y;
+        }
+
+        to_json(json, path);
         json["type"] = "DrawPath";
     }
 
     void from_json(const nlohmann::json& json, GLPathShape& value)
     {
         from_json(json, static_cast<draw::PathShape&>(value));
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : value.pts)
+        {
+            p.y = size.h - p.y;
+        }
     }
 
     void to_json(nlohmann::json& json, const GLPolygonShape& value)
     {
-        to_json(json, static_cast<const draw::PathShape&>(value));
+        draw::PathShape path = static_cast<const draw::PathShape&>(value);
+        math::Size2i size = App::ui->uiView->getRenderSize();
+
+        for (auto& p : path.pts)
+            p.y = size.h - p.y;
+
+        to_json(json, path);
+
         json["type"] = "Polygon";
     }
 
     void from_json(const nlohmann::json& json, GLPolygonShape& value)
     {
         from_json(json, static_cast<draw::PathShape&>(value));
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : value.pts)
+        {
+            p.y = size.h - p.y;
+        }
     }
 
     void to_json(nlohmann::json& json, const GLFilledPolygonShape& value)
     {
-        to_json(json, static_cast<const draw::PathShape&>(value));
+        draw::PathShape path = static_cast<const draw::PathShape&>(value);
+        math::Size2i size = App::ui->uiView->getRenderSize();
+
+        for (auto& p : path.pts)
+            p.y = size.h - p.y;
+
+        to_json(json, path);
+
         json["type"] = "FilledPolygon";
     }
 
     void from_json(const nlohmann::json& json, GLFilledPolygonShape& value)
     {
         from_json(json, static_cast<draw::PathShape&>(value));
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : value.pts)
+        {
+            p.y = size.h - p.y;
+        }
     }
 
     void to_json(nlohmann::json& json, const GLTextShape& value)
     {
-        to_json(json, static_cast<const draw::PathShape&>(value));
+        draw::PathShape path = static_cast<const draw::PathShape&>(value);
+        math::Size2i size = App::ui->uiView->getRenderSize();
+
+        for (auto& p : path.pts)
+            p.y = size.h - p.y;
+
+        to_json(json, path);
+
         json["type"] = "Text";
         json["text"] = value.text;
         json["fontFamily"] = value.fontFamily;
@@ -655,12 +704,25 @@ namespace mrv
         json.at("text").get_to(value.text);
         json.at("fontFamily").get_to(value.fontFamily);
         json.at("fontSize").get_to(value.fontSize);
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : value.pts)
+        {
+            p.y = size.h - p.y;
+        }
     }
 
 #ifdef USE_OPENGL2
     void to_json(nlohmann::json& json, const GL2TextShape& value)
     {
-        to_json(json, static_cast<const draw::PathShape&>(value));
+        draw::PathShape path = static_cast<const draw::PathShape&>(value);
+        math::Size2i size = App::ui->uiView->getRenderSize();
+
+        for (auto& p : path.pts)
+            p.y = size.h - p.y;
+
+        to_json(json, path);
+
         json["type"] = "GL2Text";
         json["text"] = value.text;
         json["font"] = value.font;
@@ -673,12 +735,25 @@ namespace mrv
         json.at("text").get_to(value.text);
         json.at("font").get_to(value.font);
         json.at("fontSize").get_to(value.fontSize);
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : value.pts)
+        {
+            p.y = size.h - p.y;
+        }
     }
 #endif
 
     void to_json(nlohmann::json& json, const GLLinkShape& value)
     {
-        to_json(json, static_cast<const draw::PathShape&>(value));
+        draw::PathShape path = static_cast<const draw::PathShape&>(value);
+        math::Size2i size = App::ui->uiView->getRenderSize();
+
+        for (auto& p : path.pts)
+            p.y = size.h - p.y;
+
+        to_json(json, path);
+
         json["type"] = "Link";
         json["url"] = value.url;
         json["title"] = value.title;
@@ -692,75 +767,141 @@ namespace mrv
         json.at("title").get_to(value.title);
         replace_path(value.url);
         json.at("ai_prompt").get_to(value.ai_prompt);
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : value.pts)
+        {
+            p.y = size.h - p.y;
+        }
     }
 
-    
+
     void to_json(nlohmann::json& json, const GLCircleShape& value)
     {
         to_json(json, static_cast<const draw::Shape&>(value));
         json["type"] = "Circle";
-        json["center"] = value.center;
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        json["center"] = math::Vector2f(value.center.x,
+                                        size.h - value.center.y);
         json["radius"] = value.radius;
     }
 
     void from_json(const nlohmann::json& json, GLCircleShape& value)
     {
         from_json(json, static_cast<draw::Shape&>(value));
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
         json.at("center").get_to(value.center);
         json.at("radius").get_to(value.radius);
+
+        value.center.y = size.h - value.center.y;
     }
 
     void to_json(nlohmann::json& json, const GLFilledCircleShape& value)
     {
         to_json(json, static_cast<const draw::Shape&>(value));
         json["type"] = "FilledCircle";
-        json["center"] = value.center;
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        json["center"] = math::Vector2f(value.center.x,
+                                        size.h - value.center.y);
         json["radius"] = value.radius;
     }
 
     void from_json(const nlohmann::json& json, GLFilledCircleShape& value)
     {
         from_json(json, static_cast<draw::Shape&>(value));
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
         json.at("center").get_to(value.center);
         json.at("radius").get_to(value.radius);
+
+        value.center.y = size.h - value.center.y;
     }
 
     void to_json(nlohmann::json& json, const GLArrowShape& value)
     {
-        to_json(json, static_cast<const draw::PathShape&>(value));
+        draw::PathShape path = static_cast<const draw::PathShape&>(value);
+        math::Size2i size = App::ui->uiView->getRenderSize();
+
+        for (auto& p : path.pts)
+            p.y = size.h - p.y;
+
+        to_json(json, path);
+
         json["type"] = "Arrow";
     }
 
     void from_json(const nlohmann::json& json, GLArrowShape& value)
     {
         from_json(json, static_cast<draw::PathShape&>(value));
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : value.pts)
+        {
+            p.y = size.h - p.y;
+        }
     }
 
     void to_json(nlohmann::json& json, const GLRectangleShape& value)
     {
-        to_json(json, static_cast<const draw::PathShape&>(value));
+        draw::PathShape path = static_cast<const draw::PathShape&>(value);
+        math::Size2i size = App::ui->uiView->getRenderSize();
+
+        for (auto& p : path.pts)
+            p.y = size.h - p.y;
+
+        to_json(json, path);
+
         json["type"] = "Rectangle";
     }
 
     void from_json(const nlohmann::json& json, GLRectangleShape& value)
     {
         from_json(json, static_cast<draw::PathShape&>(value));
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : value.pts)
+        {
+            p.y = size.h - p.y;
+        }
     }
 
     void to_json(nlohmann::json& json, const GLFilledRectangleShape& value)
     {
-        to_json(json, static_cast<const draw::PathShape&>(value));
+        draw::PathShape path = static_cast<const draw::PathShape&>(value);
+        math::Size2i size = App::ui->uiView->getRenderSize();
+
+        for (auto& p : path.pts)
+            p.y = size.h - p.y;
+
+        to_json(json, path);
+
         json["type"] = "FilledRectangle";
     }
 
     void from_json(const nlohmann::json& json, GLFilledRectangleShape& value)
     {
         from_json(json, static_cast<draw::PathShape&>(value));
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : value.pts)
+        {
+            p.y = size.h - p.y;
+        }
     }
 
     void to_json(nlohmann::json& json, const GLErasePathShape& value)
     {
-        to_json(json, static_cast<const draw::PathShape&>(value));
+        draw::PathShape path = static_cast<const draw::PathShape&>(value);
+        math::Size2i size = App::ui->uiView->getRenderSize();
+
+        for (auto& p : path.pts)
+            p.y = size.h - p.y;
+
+        to_json(json, path);
+
         json["type"] = "ErasePath";
         json["rectangle"] = value.rectangle;
     }
@@ -769,6 +910,12 @@ namespace mrv
     {
         from_json(json, static_cast<draw::PathShape&>(value));
         json.at("rectangle").get_to(value.rectangle);
+
+        math::Size2i size = App::ui->uiView->getRenderSize();
+        for (auto& p : value.pts)
+        {
+            p.y = size.h - p.y;
+        }
     }
 
     void GLVoiceOverShape::draw(
@@ -793,7 +940,7 @@ namespace mrv
 
         const math::Vector2i c(int(center.x), int(center.y));
         const math::Vector2i e(int(mouse.pos.x), int(mouse.pos.y));
-        
+
         switch(status)
         {
         case voice::RecordStatus::Stopped:
@@ -804,7 +951,7 @@ namespace mrv
             math::Box2i box(c.x - boxRadius, c.y - boxRadius,
                             boxRadius * 2, boxRadius * 2);
             render->drawRect(box, stoppedColor);
-            
+
             box = math::Box2i(c.x - radius, c.y - radius,
                               radius * 2, radius * 2);
             render->drawRect(box, blackColor);
@@ -831,7 +978,7 @@ namespace mrv
             //
             opengl::Lines lines;
             lines.drawLine(render, c, e, lineColor, 2);
-            
+
             math::Box2i box(int(e.x - radius), int(e.y - radius),
                             radius * 2, radius * 2);
             render->drawRect(box, cursorColor);
@@ -856,18 +1003,18 @@ namespace mrv
             //
             opengl::Lines lines;
             lines.drawLine(render, c, e, lineColor, 2);
-            
+
             math::Box2i box(int(e.x - radius), int(e.y - radius),
                             radius * 2, radius * 2);
             render->drawRect(box, cursorColor);
-            
+
             //
             // Draw box and icon
             //
             box = math::Box2i(c.x - boxRadius, c.y - boxRadius,
                               boxRadius * 2, boxRadius * 2);
             render->drawRect(box, stoppedColor);
-            
+
             lines.drawFilledCircle(render, center, radius, recordingColor);
 
             break;
@@ -877,5 +1024,5 @@ namespace mrv
             break;
         }
     }
-    
+
 } // namespace mrv

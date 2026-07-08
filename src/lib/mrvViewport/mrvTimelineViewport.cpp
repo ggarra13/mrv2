@@ -1348,13 +1348,13 @@ namespace mrv
 
             bool isLocked = tcp->isLocked();
             tcp->unlock();
-            
+
             _frameView();
 
             if (isLocked)
                 tcp->lock();
 
-            
+
             _refresh();
             _updateZoom();
             updateCoords();
@@ -3567,7 +3567,12 @@ namespace mrv
             if (path == nullptr)
                 return;
 
-            const draw::Point& pnt = path->pts.back();
+            draw::Point& pnt = path->pts.back();
+
+#ifdef OPENGL_BACKEND
+            math::Size2i size = getRenderSize();
+            pnt.y = size.h - pnt.y;
+#endif
 
             nlohmann::json json = pnt;
 

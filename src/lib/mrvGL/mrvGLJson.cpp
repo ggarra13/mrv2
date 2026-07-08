@@ -11,7 +11,7 @@
 namespace mrv
 {
     using namespace tl::draw;
-    
+
 #if defined(OPENGL_BACKEND)
     std::shared_ptr< Shape > messageToShape(const nlohmann::json& json)
     {
@@ -184,7 +184,7 @@ namespace mrv
 namespace tl
 {
     namespace draw
-    {   
+    {
         void to_json(nlohmann::json& json, const Annotation& value)
         {
             nlohmann::json shapes;
@@ -210,6 +210,6 @@ namespace tl
             }
         }
 #endif // OPENGL_BACKEND
-        
+
     } // namespace draw
 } // namespace tl

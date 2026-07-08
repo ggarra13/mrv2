@@ -798,7 +798,13 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                const draw::Point& value = message["value"];
+
+                draw::Point value = message["value"];
+
+#ifdef OPENGL_BACKEND
+                math::Size2i size = App::ui->uiView->getRenderSize();
+                value.y = size.h - value.y;
+#endif
                 shape->pts.push_back(value);
                 view->redrawWindows();
             }

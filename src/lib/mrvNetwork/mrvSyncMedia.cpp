@@ -54,6 +54,9 @@ namespace mrv
     tl::file::Path
     CommandInterpreter::cachePathFor(const tl::file::Path& remotePath) const
     {
+        if (remotePath.isEmpty())
+            return remotePath;
+
         // Content-addressed by the remote path string, not its content —
         // fine for now since re-fetch-on-mismatch isn't handled yet.
         size_t h = std::hash<std::string>{}(remotePath.get());
@@ -120,8 +123,8 @@ namespace mrv
 
                 // Safely update the UI
                 progress->set_title(title.c_str());
-                progress->set_end(total);
-                progress->set_value(done);
+                progress->set_end(total / 1024);
+                progress->set_value(done / 1024);
 
                 if (progress->window() && !progress->window()->shown())
                 {
@@ -138,7 +141,7 @@ namespace mrv
 
                 // Release the GUI lock
                 Fl::unlock();
-                
+
             }, [&](bool success)
                 {
                     ok = success;
@@ -166,8 +169,8 @@ namespace mrv
 
                     // Safely update the UI
                     progress->set_title(title.c_str());
-                    progress->set_end(total);
-                    progress->set_value(done);
+                    progress->set_end(total / 1024);
+                    progress->set_value(done / 1024);
 
                     if (progress->window() && !progress->window()->shown())
                     {
@@ -216,7 +219,7 @@ namespace mrv
 
         bool isLocked = tcp->isLocked();
         tcp->lock();
-        
+
         app->open(filePath, audioFilePath);
 
         if (!isLocked)
@@ -238,7 +241,7 @@ namespace mrv
     void CommandInterpreter::syncMedia(const Message& message)
     {
         // std::cerr << "message = " << message << std::endl;
-        
+
         const std::string peerId = message.value(kLocalPeerIdKey, std::string());
         auto app = ui->app;
         auto prefs = ui->uiPrefs;
