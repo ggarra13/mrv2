@@ -876,14 +876,16 @@ namespace mrv
         {
             json.at("fontPath").get_to(value.fontPath);
         }
-        else
+        
+        if (value.fontPath.empty() || !fs::exists(value.fontPath))
         {
             const std::vector<fs::path>& fontList = image::discoverSystemFonts();
             auto path = fontList[0];
-            auto u8 = path.filename().u8string();
-            std::string fileName = std::string(u8.begin(), u8.end());
-            value.fontPath = fileName;
+            auto u8 = path.u8string();
+            value.fontPath = std::string(u8.begin(), u8.end());
         }
+        value.fontSystem = App::ui->uiView->getFontSystem();
+        value.editing = false;
         json.at("fontSize").get_to(value.fontSize);
     }
 
