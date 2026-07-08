@@ -844,6 +844,7 @@ namespace mrv
                 }
                 auto shape = messageToShape(message["value"]);
                 annotation->shapes.push_back(shape);
+
                 // Create annotation menus if not there already
                 ui->uiMain->fill_menu(ui->uiMenuBar);
                 view->updateUndoRedoButtons();

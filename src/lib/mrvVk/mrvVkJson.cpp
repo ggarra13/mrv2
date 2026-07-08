@@ -15,7 +15,7 @@ namespace mrv
 #if defined(VULKAN_BACKEND)
     std::shared_ptr< Shape > messageToShape(const nlohmann::json& json)
     {
-        std::string type = json["type"];
+        const std::string type = json["type"];
         if (type == "DrawPath")
         {
             auto shape = std::make_shared< VKPathShape >();

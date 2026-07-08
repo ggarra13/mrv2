@@ -1,16 +1,16 @@
 v1.7.0
 ======
-
+	
 ChangeLog
 ---------
 
 - Licensing/UI: Fixed licensing helper's Donate button not responding to clicks, making it difficult to actually donate.
-
 - Licensing: Added helper messages about what options require a donation (and what type) to unlock.
-
 - Licensing: Fixed Edit license not being accepted as such.
 
-- Assets: Fixed Autodesk's Flow bridge getting instantiated twice and being slow.
+- Startup: Fixed Preferences->User Interface->Single Instance being slow to startup, particularly on Windows.
+
+- Assets: Fixed Autodesk's Flow bridge getting instantiated twice and being slower than it should be.
 
 - UI/Color: Fixed Saturation in the Color Panel not updating the view.
 - UI: Added WebRTC Panel to session saving and loading.
@@ -18,8 +18,8 @@ ChangeLog
 - Annotations: mrv2 and vmrv2 now use the same coordinates when working through the network.  It is now possible to sync mrv2<->vmrv2 or viceversa.
 - Annotations: Fixed annotations algorithm when syncing to a remote machine.  Now the annotations for the player are merged.
 - Annotations: Fixed annotations appearing at time -1/-1 due to an incorrect use resize of a std::vector, instead of reserve.
-
-- Network: Fixed re-sending of files on TCP/WebRTC connections.
+- Annotations: Fixed Polygon and Filled Polygon annotations not getting transmitted properly through network connections.
+- Annotations: Fixed Text annotations not being able to be sent through the network.  Note, however, in order to get the same annotation, the font chosen must be available on both the local and remote machine.
 
 - Draw: Fixed soft edges drawing sometimes leaving triangle gaps, due to wrong UVs.
 - Draw: Fixed drawing leaving small tips at the end of drawing a shape when using the tablet's pressure.
