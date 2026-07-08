@@ -736,7 +736,7 @@ namespace mrv
         if (json.contains("font"))
             json.at("font").get_to(value.font);
         else
-            value.font = 0;
+            value.font = FL_HELVETICA;
         json.at("fontSize").get_to(value.fontSize);
 
         math::Size2i size = App::ui->uiView->getRenderSize();
