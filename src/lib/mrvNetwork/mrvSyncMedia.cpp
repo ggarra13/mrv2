@@ -256,8 +256,6 @@ namespace mrv
         size_t remoteFileSize = remoteFiles.size();
         size_t localFileSize = localFiles.size();
 
-        std::cerr << "syncMedia from " << peerId << std::endl;
-
         for (size_t i = 0; i < remoteFileSize; ++i)
         {
             auto path = remoteFiles[i].path;

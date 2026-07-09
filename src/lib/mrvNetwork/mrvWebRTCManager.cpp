@@ -148,9 +148,7 @@ namespace mrv
 
                 nlohmann::json message;
                 message["command"] = "sync";
-
-                std::cerr << id << " send sync command for ANSWERER" << std::endl;
-
+                
                 const std::string s = message.dump();
 
                 client->dataChannel->send(s);
