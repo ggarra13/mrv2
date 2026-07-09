@@ -4,7 +4,7 @@ if [[ -d /Applications/@mrv2_NAME@.app/ ]]; then
 
     echo
     echo "This application is not yet notarized nor codesigned."
-    echo "This is because it costs around u$200 for it and the notarization is"
+    echo "This is because it costs around u\$200 for it and the notarization is"
     echo "stored in my machine and cannot be transferred."
     echo
     echo "The official download page is:"

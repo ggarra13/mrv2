@@ -78,7 +78,7 @@ msgid "For custom development:"
 msgstr "For custom development:"
 
 msgid "Contact ggarra13@@gmail.com"
-msgstr ""
+msgstr "Contact ggarra13@@gmail.com"
 
 #~ msgid ""
 #~ "\n"
