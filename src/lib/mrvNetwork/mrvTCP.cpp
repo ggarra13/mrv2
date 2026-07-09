@@ -109,6 +109,12 @@ namespace mrv
         m_send.push_back(message);
     }
 
+    void TCP::pushToPeer(const std::string& peerId,
+                         const Message& message)
+    {
+        pushMessage(message);
+    }
+
     void TCP::pushMessage(const std::string& command, bool value)
     {
         Message message = {{"command", command}, {"value", value}};

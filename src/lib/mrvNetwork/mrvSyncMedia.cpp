@@ -47,6 +47,44 @@ namespace
         }
         return true;
     }
+
+    // fetchRemoteFile() can be triggered by more than one syncMedia()
+    // call referencing the same file — e.g. two peers in an all-to-all
+    // mesh both announcing the same file at close to the same time, or
+    // two rapid-fire announcements from the same peer arriving before
+    // the local files model reflects that a fetch is already under way.
+    // Since cachePathFor() derives the local cache path deterministically
+    // from the remote path string, two concurrent fetches for the same
+    // path would both write to the same .part file — this registry makes
+    // sure only the first one actually runs; later callers just skip.
+    std::mutex gFetchMutex;
+    std::unordered_set<std::string> gFetchesInFlight;
+
+    class FetchGuard
+    {
+    public:
+        explicit FetchGuard(const std::string& key) : key_(key)
+        {
+            std::lock_guard<std::mutex> lock(gFetchMutex);
+            acquired_ = gFetchesInFlight.insert(key_).second;
+        }
+        ~FetchGuard()
+        {
+            if (acquired_)
+            {
+                std::lock_guard<std::mutex> lock(gFetchMutex);
+                gFetchesInFlight.erase(key_);
+            }
+        }
+        bool acquired() const { return acquired_; }
+
+        FetchGuard(const FetchGuard&) = delete;
+        FetchGuard& operator=(const FetchGuard&) = delete;
+
+    private:
+        std::string key_;
+        bool acquired_ = false;
+    };
 } // namespace
 
 namespace mrv
@@ -96,6 +134,17 @@ namespace mrv
                 tl::string::Format(_("{0} is only reachable via relay "
                                      "(TURN), which would consume VPS bandwidth. "
                                      "Skipping fetch to avoid unexpected costs."))
+                .arg(filePath.get());
+            LOG_WARNING(msg);
+            return;
+        }
+
+        FetchGuard guard(filePath.get());
+        if (!guard.acquired())
+        {
+            const std::string msg = tl::string::Format(
+                _("Already fetching {0} from another sync request; "
+                  "skipping duplicate."))
                 .arg(filePath.get());
             LOG_WARNING(msg);
             return;
@@ -220,11 +269,9 @@ namespace mrv
         }
     }
 
-    void CommandInterpreter::syncMedia(const Message& message)
+    void CommandInterpreter::syncMedia(const std::string&peerId,
+                                       const Message& message)
     {
-        // std::cerr << "message = " << message << std::endl;
-
-        const std::string peerId = message.value(kLocalPeerIdKey, std::string());
         auto app = ui->app;
         auto prefs = ui->uiPrefs;
         auto view = ui->uiView;

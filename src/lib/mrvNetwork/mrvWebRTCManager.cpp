@@ -30,6 +30,27 @@ namespace mrv
         config = value;
     }
 
+    void WebRTCManager::pushMessageToPeer(const Message& msg,
+                                          const std::string& peerId)
+    {
+        std::vector< uint8_t > bson = nlohmann::json::to_bson(msg);
+        std::size_t messageLength = bson.size();
+        if (messageLength == 0)
+            return;
+
+        auto i = clients.find(peerId);
+        if (i != clients.end())
+        {
+            auto client = i->second;
+            if (!client->dataChannelOpen)
+                return;
+
+            client->dataChannel->send(
+                reinterpret_cast<const std::byte*>(bson.data()),
+                messageLength);
+        }
+    }
+
     void WebRTCManager::publish(const Message& msg)
     {
         std::vector< uint8_t > bson = nlohmann::json::to_bson(msg);

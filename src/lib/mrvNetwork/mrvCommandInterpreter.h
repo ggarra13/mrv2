@@ -27,8 +27,10 @@ namespace mrv
 
     protected:
         void parse(const Message& message);
-        void syncMedia(const Message& message);
-        void syncUI();
+
+        void syncMedia(const std::string& peerId, const Message& message);
+        void syncUI(const std::string& peerId);
+
         void handlePeerDisconnected(const std::string& peerId);
 
         tl::file::Path cachePathFor(const tl::file::Path& remotePath) const;
@@ -40,7 +42,7 @@ namespace mrv
     public:
         void timerEvent();
         static void timerEvent_cb(void* d);
-        
+
     private:
         ViewerUI* ui;
     };

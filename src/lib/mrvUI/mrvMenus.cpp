@@ -671,7 +671,7 @@ namespace mrv
         }
 
         // Make sure to sync panels remotely.
-        syncPanels();
+        syncPanels("");
 
         {
             const timeline::DisplayOptions& displayOptions =
