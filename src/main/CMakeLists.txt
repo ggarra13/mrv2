@@ -165,70 +165,24 @@ if ( APPLE )
 	    DESTINATION lib
 	    COMPONENT applications )
     endforeach()
+
+    #
+    # Fix system libs first
+    #
+    foreach(_LIB intl omp idn2 vulkan)
+	fix_dylib_rpath(mrv2 "${_LIB}" "")
+    endforeach()
     
-    # 1. Look for the unversioned DSO (libintl.dylib). 
-    # We provide the standard Homebrew paths as hints so it works seamlessly
-    # on both architectures.
-    find_library(INTL_UNVERSIONED_LIB NAMES intl
-        HINTS
-            /opt/homebrew/opt/gettext/lib  # Apple Silicon Homebrew
-            /usr/local/opt/gettext/lib     # Intel Homebrew
-    )
-
-    if (INTL_UNVERSIONED_LIB)
-        # 2. Resolve the symlink to get the absolute path to the versioned dylib
-        # E.g., /opt/homebrew/opt/gettext/lib/libintl.8.dylib
-        get_filename_component(INTL_REAL_PATH "${INTL_UNVERSIONED_LIB}" REALPATH)
-
-        # 3. Extract just the versioned filename
-        # E.g., libintl.8.dylib
-        get_filename_component(INTL_REAL_NAME "${INTL_REAL_PATH}" NAME)
-
-        # 4. Run install_name_tool using the dynamically resolved paths
-        add_custom_command(TARGET mrv2 POST_BUILD
-            COMMAND install_name_tool -change 
-            "${INTL_REAL_PATH}" 
-            "@rpath/${INTL_REAL_NAME}" 
-            $<TARGET_FILE:mrv2>
-            COMMENT "Fixing libintl path to use @rpath/${INTL_REAL_NAME} for mrv2"
-        )
-    else()
-        message(WARNING "Could not find libintl.dylib. Skipping install_name_tool configuration.")
-    endif()
+    #
+    # Fix cmake_install_prefix libs next
+    #
+    foreach(_LIB
+	    avcodec dovi avdevice avformat avutil placebo
+	    python${MRV2_PYTHON_VERSION}
+	    swresample swscale vulkan)
+	fix_dylib_rpath(mrv2 "${_LIB}" "${CMAKE_INSTALL_PREFIX}/lib")
+    endforeach()
     
-    if(MRV2_BACKEND STREQUAL "VK")
-	# 1. Look for the unversioned DSO (libvulkan.dylib). 
-	# We provide the standard Homebrew paths as hints so it works seamlessly
-	# on both architectures.
-	find_library(VULKAN_UNVERSIONED_LIB NAMES vulkan
-            HINTS
-	    "$ENV{VULKAN_SDK}/lib"               # Downloaded install
-            /opt/homebrew/opt/vulkan-loader/lib  # Apple Silicon Homebrew
-            /usr/local/opt/vulkan-loader/lib     # Intel Homebrew
-	)
-	
-	if (VULKAN_UNVERSIONED_LIB)
-            # 2. Resolve the symlink to get the absolute path to the versioned
-	    #    dylib
-            # E.g., /usr/local/opt/vulkan-loader/lib/libvulkan.1.dylib
-            get_filename_component(VULKAN_REAL_PATH "${VULKAN_UNVERSIONED_LIB}" REALPATH)
-
-            # 3. Extract just the versioned filename
-            # E.g., libvulkan.1.dylib
-            get_filename_component(VULKAN_REAL_NAME "${VULKAN_REAL_PATH}" NAME)
-
-            # 4. Run install_name_tool using the dynamically resolved paths
-            add_custom_command(TARGET mrv2 POST_BUILD
-		COMMAND install_name_tool -change 
-		"${VULKAN_REAL_PATH}" 
-		"@rpath/${VULKAN_REAL_NAME}" 
-		$<TARGET_FILE:mrv2>
-		COMMENT "Fixing libvulkan path to use @rpath/${VULKAN_REAL_NAME} for mrv2"
-            )
-	else()
-            message(WARNING "Could not find libvulkan.dylib. Skipping install_name_tool configuration.")
-	endif()
-    endif()
 elseif ( UNIX )
 
     if(MRV2_PYBIND11)

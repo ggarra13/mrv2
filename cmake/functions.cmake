@@ -726,3 +726,55 @@ function(install_ndi)
 	endif()
     endif()
 endfunction()
+
+function(fix_dylib_rpath EXE LIBNAME FIND_PATHS)
+    unset(UNVERSIONED_LIB CACHE)
+    unset(UNVERSIONED_LIB)
+    
+    # 1. Look for the unversioned DSO (libintl.dylib). 
+    # We provide the standard Homebrew paths as hints so it works seamlessly
+    # on both architectures.
+    find_library(UNVERSIONED_LIB
+	NAMES
+	${LIBNAME}
+        HINTS
+	${FIND_PATHS}
+        /opt/homebrew/lib  # Apple Silicon Homebrew
+        /usr/local/lib     # Intel Homebrew
+	NO_DEFAULT_PATH
+
+    )
+    
+    if (UNVERSIONED_LIB)
+	# 2. Extract the actual LC_ID_DYLIB from the library
+        # This is the exact string the linker embeds into your EXE.
+        execute_process(
+            COMMAND otool -D "${UNVERSIONED_LIB}"
+            OUTPUT_VARIABLE OTOOL_OUTPUT
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+        
+        # otool -D outputs two lines: the file path, and the ID path.
+        # We use regex to grab just the second line.
+        string(REGEX REPLACE ".*\n(.*)" "\\1" DYLIB_ID "${OTOOL_OUTPUT}")
+        string(STRIP "${DYLIB_ID}" DYLIB_ID)
+
+        message(STATUS "Found ${LIBNAME}: Internal ID is ${DYLIB_ID}")
+	
+	# 3. Extract just the versioned filename for the new @rpath
+        get_filename_component(REAL_NAME "${DYLIB_ID}" NAME)
+        message(STATUS "Will change to: @rpath/${REAL_NAME}")
+	
+
+        # 4. Run install_name_tool using the dynamically resolved paths
+        add_custom_command(TARGET ${EXE} POST_BUILD
+            COMMAND install_name_tool -change 
+            "${DYLIB_ID}" 
+            "@rpath/${REAL_NAME}" 
+            $<TARGET_FILE:${EXE}>
+            COMMENT "Fixing ${LIBNAME} path to use @rpath/${REAL_NAME} for ${EXE}"
+        )
+    else()
+        message(WARNING "Could not find ${LIBNAME}. Skipping install_name_tool configuration.")
+    endif()
+endfunction()
