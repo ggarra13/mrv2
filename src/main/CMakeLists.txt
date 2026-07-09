@@ -196,35 +196,38 @@ if ( APPLE )
         message(WARNING "Could not find libintl.dylib. Skipping install_name_tool configuration.")
     endif()
     
-    # 1. Look for the unversioned DSO (libvulkan.dylib). 
-    # We provide the standard Homebrew paths as hints so it works seamlessly
-    # on both architectures.
-    find_library(VULKAN_UNVERSIONED_LIB NAMES vulkan
-        HINTS
+    if(MRV2_BACKEND STREQUAL "VK")
+	# 1. Look for the unversioned DSO (libvulkan.dylib). 
+	# We provide the standard Homebrew paths as hints so it works seamlessly
+	# on both architectures.
+	find_library(VULKAN_UNVERSIONED_LIB NAMES vulkan
+            HINTS
 	    "$ENV{VULKAN_SDK}/lib"               # Downloaded install
             /opt/homebrew/opt/vulkan-loader/lib  # Apple Silicon Homebrew
             /usr/local/opt/vulkan-loader/lib     # Intel Homebrew
-    )
+	)
+	
+	if (VULKAN_UNVERSIONED_LIB)
+            # 2. Resolve the symlink to get the absolute path to the versioned
+	    #    dylib
+            # E.g., /usr/local/opt/vulkan-loader/lib/libvulkan.1.dylib
+            get_filename_component(VULKAN_REAL_PATH "${VULKAN_UNVERSIONED_LIB}" REALPATH)
 
-    if (VULKAN_UNVERSIONED_LIB)
-        # 2. Resolve the symlink to get the absolute path to the versioned dylib
-        # E.g., /usr/local/opt/vulkan-loader/lib/libvulkan.1.dylib
-        get_filename_component(VULKAN_REAL_PATH "${VULKAN_UNVERSIONED_LIB}" REALPATH)
+            # 3. Extract just the versioned filename
+            # E.g., libvulkan.1.dylib
+            get_filename_component(VULKAN_REAL_NAME "${VULKAN_REAL_PATH}" NAME)
 
-        # 3. Extract just the versioned filename
-        # E.g., libvulkan.1.dylib
-        get_filename_component(VULKAN_REAL_NAME "${VULKAN_REAL_PATH}" NAME)
-
-        # 4. Run install_name_tool using the dynamically resolved paths
-        add_custom_command(TARGET mrv2 POST_BUILD
-            COMMAND install_name_tool -change 
-            "${VULKAN_REAL_PATH}" 
-            "@rpath/${VULKAN_REAL_NAME}" 
-            $<TARGET_FILE:mrv2>
-            COMMENT "Fixing libvulkan path to use @rpath/${VULKAN_REAL_NAME} for mrv2"
-        )
-    else()
-        message(WARNING "Could not find libvulkan.dylib. Skipping install_name_tool configuration.")
+            # 4. Run install_name_tool using the dynamically resolved paths
+            add_custom_command(TARGET mrv2 POST_BUILD
+		COMMAND install_name_tool -change 
+		"${VULKAN_REAL_PATH}" 
+		"@rpath/${VULKAN_REAL_NAME}" 
+		$<TARGET_FILE:mrv2>
+		COMMENT "Fixing libvulkan path to use @rpath/${VULKAN_REAL_NAME} for mrv2"
+            )
+	else()
+            message(WARNING "Could not find libvulkan.dylib. Skipping install_name_tool configuration.")
+	endif()
     endif()
 elseif ( UNIX )
 
