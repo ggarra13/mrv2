@@ -22,6 +22,8 @@ namespace mrv
         WebRTCManager& manager() { return webrtcManager; }
 
         void pushMessage(const Message&) override;
+        void pushToPeer(const std::string& peerId,
+                        const Message& message) override;
         void sendMessages() override;
         void receiveMessages() override;
 

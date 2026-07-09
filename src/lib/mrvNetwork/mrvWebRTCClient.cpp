@@ -117,6 +117,20 @@ namespace mrv
         webrtcManager.publish(message);
     }
 
+    void WebRTCClient::pushToPeer(const std::string& peerId,
+                                  const Message& message)
+    {
+        // Only push messages if we are not locked.
+        if (m_lock)
+            return;
+
+        if (peerId.empty())
+            return pushMessage(message);
+
+        std::lock_guard lk(m_sendMutex);
+        webrtcManager.pushMessageToPeer(peerId, message);
+    }
+
     void WebRTCClient::sendMessages()
     {
         // Not used.  We use publish directly.

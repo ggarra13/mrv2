@@ -14,6 +14,7 @@
 #include "mrvNetwork/mrvFilesModelItem.h"
 #include "mrvNetwork/mrvProtocolVersion.h"
 #include "mrvNetwork/mrvConnectionHandler.h"
+#include "mrvNetwork/mrvCommandInterpreter.h"
 
 #include "mrvOptions/mrvCompareOptions.h"
 
@@ -27,7 +28,7 @@ namespace
 
 namespace mrv
 {
-    void TCP::syncClient()
+    void TCP::syncClient(const std::string& peerId)
     {
         ViewerUI* ui = App::ui;
         PreferencesUI* prefs = ui->uiPrefs;
@@ -35,7 +36,10 @@ namespace mrv
         auto player = view->getTimelinePlayer();
 
         // Send the protocol version as first thing.
-        pushMessage("Protocol Version", kProtocolVersion);
+        Message msg;
+        msg["command"] = "Protocol Version";
+        msg["value"] = kProtocolVersion;
+        pushToPeer(peerId, msg);
 
         int value;
 
@@ -56,35 +60,34 @@ namespace mrv
         }
 
         // Send all the items to client with their annotations
-        Message msg;
         msg["command"] = "Media Items";
         msg["value"] = items;
-        pushMessage(msg);
+        pushToPeer(peerId, msg);
 
 
         // Sync main UI elements
-        syncUI();
+        syncUI(peerId);
 
 
         // Sync panels
-        panel::syncPanels();
-        
+        panel::syncPanels(peerId);
+
         // Set the current file index
         msg["command"] = "Set A Index";
         msg["value"] = model->observeAIndex()->get();
-        pushMessage(msg);
+        pushToPeer(peerId, msg);
 
 
         // Set the comparison file indexes
         msg["command"] = "Set B Indexes";
         msg["value"] = model->observeBIndexes()->get();
-        pushMessage(msg);
+        pushToPeer(peerId, msg);
 
 
         // Set the current file index
         msg["command"] = "Set Stereo Index";
         msg["value"] = model->observeStereoIndex()->get();
-        pushMessage(msg);
+        pushToPeer(peerId, msg);
 
 
         // Sync current player with all its information
@@ -106,31 +109,31 @@ namespace mrv
 
 
             msg["value"] = annotations;
-            pushMessage(msg);
+            pushToPeer(peerId, msg);
 
 
             // Send Environment Map Options
             msg["command"] = "setEnvironmentMapOptions";
             msg["value"] = view->getEnvironmentMapOptions();
-            pushMessage(msg);
+            pushToPeer(peerId, msg);
 
 
             // Send Background Options
             msg["command"] = "setBackgroundOptions";
             msg["value"] = view->getBackgroundOptions();
-            pushMessage(msg);
+            pushToPeer(peerId, msg);
 
 
             // Send Compare Options
             msg["command"] = "setCompareOptions";
             msg["value"] = model->observeCompareOptions()->get();
-            pushMessage(msg);
+            pushToPeer(peerId, msg);
 
 
             // Send Stereo 3D Options
             msg["command"] = "setStereo3DOptions";
             msg["value"] = model->observeStereo3DOptions()->get();
-            pushMessage(msg);
+            pushToPeer(peerId, msg);
 
 
             // Set Edit mode
@@ -140,13 +143,13 @@ namespace mrv
                             : EditMode::kTimeline;
             msg["value"] = mode;
             msg["height"] = editModeH;
-            pushMessage(msg);
+            pushToPeer(peerId, msg);
 
 
             // Seek to current time in player
             msg["command"] = "seek";
             msg["value"] = player->currentTime();
-            pushMessage(msg);
+            pushToPeer(peerId, msg);
 
 
             // Send playback (as it does not compare if equal, we don't need

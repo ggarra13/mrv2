@@ -17,19 +17,38 @@ namespace mrv
 
     WebRTCManager::WebRTCManager()
     {
-#if 1
         rtc::SctpSettings sctpSettings;
         sctpSettings.recvBufferSize = 4 * 1024 * 1024;      // default is much smaller
         sctpSettings.sendBufferSize = 4 * 1024 * 1024;
         sctpSettings.maxChunksOnQueue = 16384;
         sctpSettings.initialCongestionWindow = 10;          // in MTUs, default is very small (often ~3)
         rtc::SetSctpSettings(sctpSettings);
-#endif
     }
 
     void WebRTCManager::setConfiguration(const rtc::Configuration& value)
     {
         config = value;
+    }
+
+    void WebRTCManager::pushMessageToPeer(const Message& msg,
+                                          const std::string& peerId)
+    {
+        std::vector< uint8_t > bson = nlohmann::json::to_bson(msg);
+        std::size_t messageLength = bson.size();
+        if (messageLength == 0)
+            return;
+
+        auto i = clients.find(peerId);
+        if (i != clients.end())
+        {
+            auto client = i->second;
+            if (!client->dataChannelOpen)
+                return;
+
+            client->dataChannel->send(
+                reinterpret_cast<const std::byte*>(bson.data()),
+                messageLength);
+        }
     }
 
     void WebRTCManager::publish(const Message& msg)
@@ -150,7 +169,7 @@ namespace mrv
                 nlohmann::json message;
                 message["command"] = "sync";
 
-                std::string s = message.dump();
+                const std::string s = message.dump();
 
                 client->dataChannel->send(s);
             });

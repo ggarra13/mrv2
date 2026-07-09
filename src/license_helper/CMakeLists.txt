@@ -44,6 +44,26 @@ target_link_libraries(license_helper PUBLIC ${LIBRARIES}
 target_link_directories(license_helper
     BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib )
 
+if (APPLE)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+	add_custom_command(TARGET license_helper POST_BUILD
+            COMMAND install_name_tool -change 
+            /opt/homebrew/opt/gettext/lib/libintl.8.dylib 
+            @rpath/libintl.8.dylib 
+            $<TARGET_FILE:license_helper>
+            COMMENT "Fixing libintl path to use @rpath for license_helper"
+	)
+    else()
+	add_custom_command(TARGET license_helper POST_BUILD
+            COMMAND install_name_tool -change 
+            /usr/local/opt/gettext/lib/libintl.8.dylib 
+            @rpath/libintl.8.dylib 
+            $<TARGET_FILE:license_helper>
+            COMMENT "Fixing libintl path to use @rpath for license_helper"
+	)
+    endif()
+endif()
+
 install(TARGETS license_helper
     RUNTIME DESTINATION bin COMPONENT applications
     LIBRARY DESTINATION lib COMPONENT libraries

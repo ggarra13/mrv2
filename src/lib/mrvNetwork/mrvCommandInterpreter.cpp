@@ -43,7 +43,7 @@
 
 namespace
 {
-    const char* kModule = "inter";
+    const char* kModule = "cmdi";
     const double kTimeout = 0.01;
 } // namespace
 
@@ -131,8 +131,10 @@ namespace mrv
 
             if (c == "sync")
             {
+                const std::string peerId = message.value(kLocalPeerIdKey,
+                                                         std::string());
                 tcp->unlock();
-                tcp->syncClient();
+                tcp->syncClient(peerId);
             }
             else if (c == "setPlayback")
             {
@@ -203,7 +205,9 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                syncMedia(message);
+                const std::string peerId = message.value(kLocalPeerIdKey,
+                                                         std::string());
+                syncMedia(peerId, message);
             }
             else if (c == "Peer Disconnected")
             {

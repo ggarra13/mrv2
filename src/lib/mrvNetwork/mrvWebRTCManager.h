@@ -30,17 +30,18 @@ namespace mrv
 
         void addRemoteCandidate(const std::string& peerId, const rtc::Candidate& c);
 
+        void pushMessageToPeer(const Message&, const std::string& peerId);
         void publish(const Message&);
 
-        std::function<void(const std::string& peerId, const rtc::binary&)> onBinaryMessage;
-        std::function<void(const std::string& peerId, const std::string&)> onStringMessage;
+        std::function<void(const std::string& peerId, const rtc::binary&)>
+        onBinaryMessage;
 
-        // Fired for any incoming DataChannel whose label isn't "mrv2_sync".
-        // Only one consumer at a time (last one registered wins) — fine
-        // while SFTP tunneling is the only such consumer, but worth
-        // revisiting if a second non-sync channel type gets added later.
+        std::function<void(const std::string& peerId, const std::string&)>
+        onStringMessage;
+
         std::function<void(const std::string& peerId,
-                        std::shared_ptr<rtc::DataChannel>)> onExtraDataChannel;
+                           std::shared_ptr<rtc::DataChannel>)>
+        onExtraDataChannel;
 
         std::function<void(const SignalingMessage&)>
         onSignalMessage;

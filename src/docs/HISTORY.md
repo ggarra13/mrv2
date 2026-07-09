@@ -22,6 +22,8 @@ ChangeLog
 - Annotations: Fixed Polygon and Filled Polygon annotations not getting transmitted properly through network connections.
 - Annotations: Fixed Text annotations not being able to be sent through the network.  Note, however, in order to get the same annotation, the font chosen must be available on both the local and remote machine.
 
+- Syncing: Made WebRTC syncing faster and sync only between offerer-answerer, instead of syncing all the mesh nodes.
+
 - Draw: Fixed soft edges drawing sometimes leaving triangle gaps, due to wrong UVs.
 - Draw: Fixed drawing leaving small tips at the end of drawing a shape when using the tablet's pressure.
 

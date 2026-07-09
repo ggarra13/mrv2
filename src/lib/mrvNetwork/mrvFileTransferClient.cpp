@@ -1,4 +1,3 @@
-
 #include "mrvNetwork/mrvFileTransferClient.h"
 #include "mrvNetwork/mrvWebRTCManager.h"
 #include "mrvNetwork/mrvMessage.h"
@@ -40,7 +39,8 @@ namespace mrv
 
         // Populate the download queues
         auto frames = remotePath.getFrames();
-        if (remotePath.isSequence() && frames.has_value())
+        const bool isSequence = remotePath.isSequence() && frames.has_value();
+        if (isSequence)
         {
             math::Int64Range range = frames.value();
             const bool listdir = true;
@@ -64,7 +64,14 @@ namespace mrv
         }
 
         rtc::DataChannelInit init;
-        init.reliability.unordered = false;
+        // Image sequences: each frame is requested and fully received
+        // before the next is asked for, so keep the channel ordered.
+        // Movie files: a single file is streamed as many chunks that we
+        // want delivered as fast as possible without head-of-line
+        // blocking, so open the channel unordered. Every chunk carries
+        // its destination byte offset (mrvFileChunk.h) so it can be
+        // written to the right place regardless of arrival order.
+        init.reliability.unordered = !isSequence;
 
         auto dc = dc_ = peer->peerConnection->createDataChannel(
             "file-transfer", init);
@@ -109,36 +116,67 @@ namespace mrv
             {
                 LOG_ERROR("Could not open " + currentPartPath_);
                 finish(false);
+                return;
             }
+
+            // On an unordered channel, chunks may have already arrived
+            // before this header did. Replay them now that the file is
+            // open.
+            for (const auto& chunk : pendingChunks_)
+            {
+                if (chunk.size() < kChunkHeaderSize)
+                    continue;
+                const uint64_t offset = unpackChunkOffset(chunk.data());
+                writeChunk(offset, chunk.data() + kChunkHeaderSize,
+                          chunk.size() - kChunkHeaderSize);
+            }
+            pendingChunks_.clear();
+
+            checkComplete();
         }
         else if (msg.value("done", false))
         {
-            // Footer — current file received
-            if (out_)
-            {
-                std::fclose(out_);
-                out_ = nullptr;
-            }
-
-            // Finalize this specific file
-            std::rename(currentPartPath_.c_str(), currentLocalPath_.c_str());
-
-            // Retrieve the DataChannel (assuming you can grab it from peerConnection or store it as a member variable `dc_`)
-            auto peer = manager_.getClient(peerId_);
-            if (peer)
-            {
-                 requestNextFile(dc_);
-            }
+            // Footer received. On an ordered (sequence) channel every
+            // data chunk necessarily arrived first, so this completes the
+            // file immediately. On an unordered (movie) channel this can
+            // race ahead of the last chunk(s), so we only finalize once
+            // checkComplete() sees receivedBytes_ has caught up.
+            doneReceived_ = true;
+            checkComplete();
         }
     }
 
     void FileTransferClient::handleBinary(const rtc::binary& data)
     {
-        if (!out_)
+        if (data.size() < kChunkHeaderSize)
+        {
+            LOG_ERROR("Malformed chunk (smaller than the offset header)");
             return;
+        }
 
-        std::fwrite(data.data(), 1, data.size(), out_);
-        totalRead_ += data.size();
+        if (!out_)
+        {
+            // "size" hasn't opened the output file yet — can happen on an
+            // unordered channel where control and data messages can race.
+            // Buffer the raw message (header included) and replay it once
+            // the file is open.
+            pendingChunks_.emplace_back(data.begin(), data.end());
+            return;
+        }
+
+        const uint64_t offset = unpackChunkOffset(data.data());
+        writeChunk(offset, data.data() + kChunkHeaderSize,
+                  data.size() - kChunkHeaderSize);
+    }
+
+    void FileTransferClient::writeChunk(uint64_t offset,
+                                        const std::byte* payload,
+                                        size_t payloadSize)
+    {
+        std::fseek(out_, static_cast<long>(offset), SEEK_SET);
+        std::fwrite(payload, 1, payloadSize, out_);
+        totalRead_ += payloadSize;
+        receivedBytes_ += payloadSize;
 
         const file::Path path(currentRemotePath_);
         const std::string title =
@@ -161,7 +199,38 @@ namespace mrv
 
                 // Clean up local state
                 finish(false);
+                return;
             }
+        }
+
+        checkComplete();
+    }
+
+    void FileTransferClient::checkComplete()
+    {
+        if (out_ && doneReceived_ && receivedBytes_ >= remoteSize_)
+            completeCurrentFile();
+    }
+
+    void FileTransferClient::completeCurrentFile()
+    {
+        if (out_)
+        {
+            std::fclose(out_);
+            out_ = nullptr;
+        }
+
+        // Finalize this specific file
+        std::rename(currentPartPath_.c_str(), currentLocalPath_.c_str());
+
+        doneReceived_ = false;
+        receivedBytes_ = 0;
+        pendingChunks_.clear();
+
+        auto peer = manager_.getClient(peerId_);
+        if (peer)
+        {
+            requestNextFile(dc_);
         }
     }
 
@@ -214,6 +283,9 @@ namespace mrv
         // Reset state for this specific file
         totalRead_ = 0;
         remoteSize_ = 0;
+        receivedBytes_ = 0;
+        doneReceived_ = false;
+        pendingChunks_.clear();
 
         // Ask the server for it
         Message req;

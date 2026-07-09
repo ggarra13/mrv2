@@ -47,6 +47,44 @@ namespace
         }
         return true;
     }
+
+    // fetchRemoteFile() can be triggered by more than one syncMedia()
+    // call referencing the same file — e.g. two peers in an all-to-all
+    // mesh both announcing the same file at close to the same time, or
+    // two rapid-fire announcements from the same peer arriving before
+    // the local files model reflects that a fetch is already under way.
+    // Since cachePathFor() derives the local cache path deterministically
+    // from the remote path string, two concurrent fetches for the same
+    // path would both write to the same .part file — this registry makes
+    // sure only the first one actually runs; later callers just skip.
+    std::mutex gFetchMutex;
+    std::unordered_set<std::string> gFetchesInFlight;
+
+    class FetchGuard
+    {
+    public:
+        explicit FetchGuard(const std::string& key) : key_(key)
+        {
+            std::lock_guard<std::mutex> lock(gFetchMutex);
+            acquired_ = gFetchesInFlight.insert(key_).second;
+        }
+        ~FetchGuard()
+        {
+            if (acquired_)
+            {
+                std::lock_guard<std::mutex> lock(gFetchMutex);
+                gFetchesInFlight.erase(key_);
+            }
+        }
+        bool acquired() const { return acquired_; }
+
+        FetchGuard(const FetchGuard&) = delete;
+        FetchGuard& operator=(const FetchGuard&) = delete;
+
+    private:
+        std::string key_;
+        bool acquired_ = false;
+    };
 } // namespace
 
 namespace mrv
@@ -101,109 +139,118 @@ namespace mrv
             return;
         }
 
+        FetchGuard guard(filePath.get());
+        if (!guard.acquired())
+        {
+            const std::string msg = tl::string::Format(
+                _("Already fetching {0} from another sync request; "
+                  "skipping duplicate."))
+                .arg(filePath.get());
+            LOG_WARNING(msg);
+            return;
+        }
+
         const tl::file::Path& cachePath = cachePathFor(filePath);
         const tl::file::Path& audioCachePath = cachePathFor(audioFilePath);
 
         ProgressReport* progress = new ProgressReport(App::ui->uiMain, 0, 100,
                                                       _("Transfers"));
-        auto progress_to_delete = progress;
         progress->show();
         Fl::check();
 
-
-        FileTransferClient ftc(manager, peerId);
-        std::atomic<bool> ok = true;
-        ftc.downloadFile(filePath, cachePath, [&](
-                             bool& aborted,
-                             const std::string& title,
-                             uint64_t done,
-                             uint64_t total)
+        // Blocks (pumping the FLTK event loop) until `remote` has finished
+        // downloading to `local`, reusing the same progress window, and
+        // returns whether it succeeded.
+        //
+        // Each call gets its own FileTransferClient rather than sharing
+        // one across the video and audio transfers: the class doesn't
+        // guarantee it's safe to reuse across two independent
+        // downloadFile() calls, and a fresh instance per transfer keeps
+        // that a non-issue rather than something to reason about.
+        //
+        // Completion is tracked with a dedicated atomic<bool> (`done`)
+        // rather than by nulling out `progress` from the background
+        // callback thread and testing it unsynchronized on the main
+        // thread — that raw-pointer read/write pair was a data race, and
+        // in the abort case it could also null the pointer out from under
+        // a callback that was about to dereference it again.
+        auto runTransfer = [&](const file::Path& remote,
+                               const tl::file::Path& local) -> bool
             {
-                Fl::lock();   // Acquire the GUI lock
+                FileTransferClient ftc(manager, peerId);
+                std::atomic<bool> done = false;
+                std::atomic<bool> success = false;
+                
+                auto startTime = std::chrono::steady_clock::now();
 
-                // Safely update the UI
-                progress->set_title(title.c_str());
-                progress->set_end(total / 1024);
-                progress->set_value(done / 1024);
+                ftc.downloadFile(remote, local, [&](
+                                     bool& aborted,
+                                     const std::string& title,
+                                     uint64_t doneBytes,
+                                     uint64_t total)
+                    {
+                        Fl::lock();   // Acquire the GUI lock
 
-                if (progress->window() && !progress->window()->shown())
+                        // Safely update the UI
+                        progress->set_title(title.c_str());
+                        progress->set_end(total / 1024);
+                        progress->set_value(doneBytes / 1024);
+
+                        if (!progress->window() ||
+                            (progress->window() &&
+                             !progress->window()->shown()))
+                            aborted = true;
+
+                        // Wake up the main thread's event loop so it
+                        // redraws immediately. Without this, the UI might
+                        // not update until you move your mouse.
+                        Fl::awake();
+
+                        // Release the GUI lock
+                        Fl::unlock();
+
+                    }, [&](bool ok)
+                        {
+                            success = ok;
+                            done = true;
+                        });
+
+                while (!done)
                 {
-                    aborted = true;
-                    ok = false;
-                    progress = nullptr;
+                    Fl::check();
                 }
 
-                // Wake up the main thread's event loop so it redraws
-                // immediately.
-                // Without this, the UI might not update until you move
-                // your mouse.
-                Fl::awake();
 
-                // Release the GUI lock
-                Fl::unlock();
-
-            }, [&](bool success)
+                if (success)
                 {
-                    ok = success;
-                    progress = nullptr;
-                });
+                    auto now = std::chrono::steady_clock::now();
+                    
+                    // Calculate the total elapsed duration since start
+                    std::chrono::duration<float> duration = now - startTime;
+                    const float seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
+                    const std::string msg = tl::string::Format("{0} downloaded in {1} seconds").
+                                            arg(remote.get()).arg(seconds);
+                    LOG_STATUS(msg);
+                }
+                
+                return success;
+            };
 
-        while (progress && ok)
+        bool ok = runTransfer(filePath, cachePath);
+
+        // Only fetch the audio track if the video actually came through —
+        // an aborted or failed video transfer means there's nothing to
+        // sync, so don't make the peer (or the user) sit through a second
+        // transfer for nothing.
+        bool audioOk = true;
+        if (ok && !audioFilePath.isEmpty())
         {
-            Fl::check();
+            audioOk = runTransfer(audioFilePath, audioCachePath);
         }
 
-        std::atomic<bool> audioOk = true;
+        delete progress;
 
-        if (!audioFilePath.isEmpty())
-        {
-            progress = progress_to_delete;
-
-            ftc.downloadFile(audioFilePath, audioCachePath, [&](
-                                 bool& aborted,
-                                 const std::string& title,
-                                 uint64_t done,
-                                 uint64_t total)
-                {
-                    Fl::lock();   // Acquire the GUI lock
-
-                    // Safely update the UI
-                    progress->set_title(title.c_str());
-                    progress->set_end(total / 1024);
-                    progress->set_value(done / 1024);
-
-                    if (progress->window() && !progress->window()->shown())
-                    {
-                        aborted = true;
-                        ok = false;
-                        progress = nullptr;
-                    }
-
-                    // Wake up the main thread's event loop so it redraws
-                    // immediately.
-                    // Without this, the UI might not update until you move
-                    // your mouse.
-                    Fl::awake();
-
-                    // Release the GUI lock
-                    Fl::unlock();
-
-                }, [&](bool success)
-                    {
-                        ok = success;
-                        progress = nullptr;
-                    });
-
-            while (progress && ok)
-            {
-                Fl::check();
-            }
-        }
-
-        delete progress_to_delete;
-
-        bool success = ok && audioOk;
-        if (success)
+        if (ok && audioOk)
         {
             syncFile(cachePath.get(), audioCachePath.get(), item);
         }
@@ -238,11 +285,9 @@ namespace mrv
         }
     }
 
-    void CommandInterpreter::syncMedia(const Message& message)
+    void CommandInterpreter::syncMedia(const std::string&peerId,
+                                       const Message& message)
     {
-        // std::cerr << "message = " << message << std::endl;
-
-        const std::string peerId = message.value(kLocalPeerIdKey, std::string());
         auto app = ui->app;
         auto prefs = ui->uiPrefs;
         auto view = ui->uiView;

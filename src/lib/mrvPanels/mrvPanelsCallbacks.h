@@ -105,7 +105,7 @@ namespace mrv
         ///@}
 
         //! Sync panels on a network connection.
-        void syncPanels();
+        void syncPanels(const std::string& peerId);
 
         //! \name Panel FLTK menu and function callbacks.
         ///@{
