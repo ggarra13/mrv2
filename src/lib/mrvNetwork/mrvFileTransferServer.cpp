@@ -16,6 +16,7 @@ namespace
 
     // 8 MB high-water mark for per-subscriber backpressure.
     const size_t kMaxBufferedAmount = 8 * 1024 * 1024;
+    const size_t kLowWaterMark = 4 * 1024 * 1024; // Wakes up at 4MB
 
     void sendError(std::shared_ptr<rtc::DataChannel> dc, const std::string& msg)
     {
@@ -53,7 +54,7 @@ namespace
         std::unique_lock<std::mutex> lock(mtx);
         return cv.wait_for(lock, std::chrono::seconds(5), [&]()
             {
-                return !dc->isOpen() || dc->bufferedAmount() < kMaxBufferedAmount;
+                return !dc->isOpen() || dc->bufferedAmount() < kLowWaterMark;
             });
     }
 }
@@ -160,10 +161,13 @@ namespace mrv
                             sendHeaderNow = session->headerSent;
                             knownSize = session->size;
 
-                            dc->setBufferedAmountLowThreshold(kMaxBufferedAmount);
+                            dc->setBufferedAmountLowThreshold(kLowWaterMark);
                             auto bufMtx = sub.bufMtx;
                             auto bufCv = sub.bufCv;
-                            dc->onBufferedAmountLow([bufCv]() { bufCv->notify_one(); });
+                            dc->onBufferedAmountLow([bufMtx, bufCv]() {
+                                std::lock_guard<std::mutex> lock(*bufMtx);
+                                bufCv->notify_one();
+                            });
 
                             session->subscribers.push_back(std::move(sub));
                         }
@@ -229,6 +233,10 @@ namespace mrv
             if (!session->subscribers.empty())
                 maxMsgSize = session->subscribers.front().dc->maxMessageSize();
         }
+
+        // If 0, treat as unbounded (defaulting to our 1MB preference)
+        if (maxMsgSize == 0) maxMsgSize = 1024 * 1024;
+
         size_t kChunkSize = std::min<size_t>(1024 * 1024, maxMsgSize);
         kChunkSize = (kChunkSize > kChunkHeaderSize)
                          ? kChunkSize - kChunkHeaderSize
@@ -346,8 +354,12 @@ namespace mrv
 
         auto mtx = std::make_shared<std::mutex>();
         auto cv = std::make_shared<std::condition_variable>();
-        dc->onBufferedAmountLow([cv]() { cv->notify_one(); });
-        dc->setBufferedAmountLowThreshold(kMaxBufferedAmount);
+
+        dc->setBufferedAmountLowThreshold(kLowWaterMark);
+        dc->onBufferedAmountLow([mtx, cv]() { 
+            std::lock_guard<std::mutex> lock(*mtx); // Safely locked
+            cv->notify_one(); 
+        });
 
         std::vector<std::byte> buf(kChunkHeaderSize + kChunkSize);
         uint64_t offset = 0;

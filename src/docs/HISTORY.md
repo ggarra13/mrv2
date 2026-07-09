@@ -7,6 +7,7 @@ ChangeLog
 - Licensing/UI: Fixed licensing helper's Donate button not responding to clicks, making it difficult to actually donate.
 - Licensing: Added helper messages about what options require a donation (and what type) to unlock.
 - Licensing: Fixed Edit license not being accepted as such.
+- macOS Licensing: Fixed license_helper not finding the shipped libint.8.dylib.
 
 - Startup: Fixed Preferences->User Interface->Single Instance being slow to startup, particularly on Windows.
 
