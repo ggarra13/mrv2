@@ -45,22 +45,34 @@ target_link_directories(license_helper
     BEFORE PUBLIC ${CMAKE_INSTALL_PREFIX}/lib )
 
 if (APPLE)
-    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
-	add_custom_command(TARGET license_helper POST_BUILD
+    # 1. Look for the unversioned DSO (libintl.dylib). 
+    # We provide the standard Homebrew paths as hints so it works seamlessly
+    # on both architectures.
+    find_library(INTL_UNVERSIONED_LIB NAMES intl
+        HINTS
+            /opt/homebrew/opt/gettext/lib  # Apple Silicon Homebrew
+            /usr/local/opt/gettext/lib     # Intel Homebrew
+    )
+
+    if (INTL_UNVERSIONED_LIB)
+        # 2. Resolve the symlink to get the absolute path to the versioned dylib
+        # E.g., /opt/homebrew/opt/gettext/lib/libintl.8.dylib
+        get_filename_component(INTL_REAL_PATH "${INTL_UNVERSIONED_LIB}" REALPATH)
+
+        # 3. Extract just the versioned filename
+        # E.g., libintl.8.dylib
+        get_filename_component(INTL_REAL_NAME "${INTL_REAL_PATH}" NAME)
+
+        # 4. Run install_name_tool using the dynamically resolved paths
+        add_custom_command(TARGET license_helper POST_BUILD
             COMMAND install_name_tool -change 
-            /opt/homebrew/opt/gettext/lib/libintl.8.dylib 
-            @rpath/libintl.8.dylib 
+            "${INTL_REAL_PATH}" 
+            "@rpath/${INTL_REAL_NAME}" 
             $<TARGET_FILE:license_helper>
-            COMMENT "Fixing libintl path to use @rpath for license_helper"
-	)
+            COMMENT "Fixing libintl path to use @rpath/${INTL_REAL_NAME} for license_helper"
+        )
     else()
-	add_custom_command(TARGET license_helper POST_BUILD
-            COMMAND install_name_tool -change 
-            /usr/local/opt/gettext/lib/libintl.8.dylib 
-            @rpath/libintl.8.dylib 
-            $<TARGET_FILE:license_helper>
-            COMMENT "Fixing libintl path to use @rpath for license_helper"
-	)
+        message(WARNING "Could not find libintl.dylib. Skipping install_name_tool configuration.")
     endif()
 endif()
 
