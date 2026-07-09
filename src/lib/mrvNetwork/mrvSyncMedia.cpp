@@ -23,6 +23,8 @@
 #include "mrViewer.h"
 
 #include <iostream>
+#include <unordered_set>
+#include <string>
 
 
 namespace
