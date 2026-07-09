@@ -52,7 +52,7 @@ namespace
                      std::mutex& mtx, std::condition_variable& cv)
     {
         std::unique_lock<std::mutex> lock(mtx);
-        return cv.wait_for(lock, std::chrono::seconds(2), [&]()
+        return cv.wait_for(lock, std::chrono::seconds(5), [&]()
             {
                 return !dc->isOpen() || dc->bufferedAmount() < kLowWaterMark;
             });
