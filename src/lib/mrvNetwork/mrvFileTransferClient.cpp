@@ -9,7 +9,7 @@
 
 namespace
 {
-    const char* kModule = "wftc";
+    const char* kModule = "ftc";
 }
 
 
@@ -128,7 +128,7 @@ namespace mrv
                     continue;
                 const uint64_t offset = unpackChunkOffset(chunk.data());
                 writeChunk(offset, chunk.data() + kChunkHeaderSize,
-                           chunk.size() - kChunkHeaderSize);
+                          chunk.size() - kChunkHeaderSize);
             }
             pendingChunks_.clear();
 
