@@ -190,7 +190,7 @@ if ( APPLE )
             "${INTL_REAL_PATH}" 
             "@rpath/${INTL_REAL_NAME}" 
             $<TARGET_FILE:mrv2>
-            COMMENT "Fixing libintl path to use @rpath/${INTL_REAL_NAME} for license_helper"
+            COMMENT "Fixing libintl path to use @rpath/${INTL_REAL_NAME} for mrv2"
         )
     else()
         message(WARNING "Could not find libintl.dylib. Skipping install_name_tool configuration.")
@@ -208,11 +208,11 @@ if ( APPLE )
 
     if (VULKAN_UNVERSIONED_LIB)
         # 2. Resolve the symlink to get the absolute path to the versioned dylib
-        # E.g., /opt/homebrew/opt/gettext/lib/libvulkan.8.dylib
+        # E.g., /usr/local/opt/vulkan-loader/lib/libvulkan.1.dylib
         get_filename_component(VULKAN_REAL_PATH "${VULKAN_UNVERSIONED_LIB}" REALPATH)
 
         # 3. Extract just the versioned filename
-        # E.g., libvulkan.8.dylib
+        # E.g., libvulkan.1.dylib
         get_filename_component(VULKAN_REAL_NAME "${VULKAN_REAL_PATH}" NAME)
 
         # 4. Run install_name_tool using the dynamically resolved paths
@@ -221,7 +221,7 @@ if ( APPLE )
             "${VULKAN_REAL_PATH}" 
             "@rpath/${VULKAN_REAL_NAME}" 
             $<TARGET_FILE:mrv2>
-            COMMENT "Fixing libvulkan path to use @rpath/${VULKAN_REAL_NAME} for license_helper"
+            COMMENT "Fixing libvulkan path to use @rpath/${VULKAN_REAL_NAME} for mrv2"
         )
     else()
         message(WARNING "Could not find libvulkan.dylib. Skipping install_name_tool configuration.")
