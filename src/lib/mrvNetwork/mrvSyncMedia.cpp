@@ -180,6 +180,8 @@ namespace mrv
                 FileTransferClient ftc(manager, peerId);
                 std::atomic<bool> done = false;
                 std::atomic<bool> success = false;
+                
+                auto startTime = std::chrono::steady_clock::now();
 
                 ftc.downloadFile(remote, local, [&](
                                      bool& aborted,
@@ -217,6 +219,20 @@ namespace mrv
                 {
                     Fl::check();
                 }
+
+
+                if (success)
+                {
+                    auto now = std::chrono::steady_clock::now();
+                    
+                    // Calculate the total elapsed duration since start
+                    std::chrono::duration<float> duration = now - startTime;
+                    const float seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
+                    const std::string msg = tl::string::Format("{0} downloaded in {1} seconds").
+                                            arg(remote.get()).arg(seconds);
+                    LOG_STATUS(msg);
+                }
+                
                 return success;
             };
 
