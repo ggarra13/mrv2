@@ -2,6 +2,23 @@
 
 if [[ -d /Applications/@mrv2_NAME@.app/ ]]; then
 
+    echo
+    echo "This application is not yet notarized nor codesigned."
+    echo "This is because it costs around u$200 for it and the notarization is"
+    echo "stored in my machine and cannot be transferred."
+    echo
+    echo "The official download page is:"
+    echo "https://mrv2.sourceforge.io/downloads/mrv2-download-page.html"
+    echo
+    echo "You should open the script in an editor to see that the commands"
+    echo "that will be run, don't endanger your system."
+    echo
+    echo "After dragging the @mrv2_NAME@ icon to Applications,"
+    echo "You should double click on this installation script."
+    echo
+    echo "You will be asked for your password once."
+    echo
+   
     sudo xattr -cr /Applications/@mrv2_NAME@.app/
 
     sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
@@ -10,7 +27,8 @@ if [[ -d /Applications/@mrv2_NAME@.app/ ]]; then
     
     codesign -vvv --deep /Applications/@mrv2_NAME@.app
 else
-    echo "Please drag the @mrv2_NAME@ directory to the Applications folder"
+    echo "Please drag the @mrv2_NAME@ directory to the Applications "
+    echo "folder first"
     sleep 10
     exit 1
 fi
