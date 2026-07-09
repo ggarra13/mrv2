@@ -135,7 +135,6 @@ namespace mrv
 
             if (dc->label() != "mrv2_sync")
             {
-                std::cerr << "onDataChannel not mrv2_sync" << std::endl;
                 if (onExtraDataChannel)
                     onExtraDataChannel(id, dc);
                 return;
@@ -148,7 +147,7 @@ namespace mrv
 
                 nlohmann::json message;
                 message["command"] = "sync";
-                
+
                 const std::string s = message.dump();
 
                 client->dataChannel->send(s);
