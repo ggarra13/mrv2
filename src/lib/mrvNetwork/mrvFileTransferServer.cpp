@@ -127,7 +127,8 @@ namespace mrv
         else
             footer["error"] = "Transfer failed or was interrupted: " + path;
 
-        dc->send(footer.dump());
+        if (dc->isOpen())
+            dc->send(footer.dump());
     }
 
     FileTransferServer::FileTransferServer(WebRTCManager& manager)

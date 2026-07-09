@@ -145,7 +145,9 @@ namespace mrv
                         progress->set_end(total / 1024);
                         progress->set_value(doneBytes / 1024);
 
-                        if (progress->window() && !progress->window()->shown())
+                        if (!progress->window() ||
+                            (progress->window() &&
+                             !progress->window()->shown()))
                             aborted = true;
 
                         // Wake up the main thread's event loop so it
