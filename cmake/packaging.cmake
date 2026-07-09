@@ -162,6 +162,21 @@ if(APPLE)
         COMPONENT applications
     )
     
+    # Configure runme.sh.in
+    configure_file(${MRV2_DIR}/etc/macOS/runme.sh.in
+	${CMAKE_BINARY_DIR}/runme.sh @ONLY
+    FILE_PERMISSIONS
+    OWNER_READ OWNER_WRITE 
+    GROUP_READ OWNER_WRITE 
+    WORLD_READ)
+
+    # Install README.md file at root of .dmg
+    install(FILES "${CMAKE_BINARY_DIR}/runme.sh"
+        DESTINATION .
+        COMPONENT applications
+    )
+
+
     if (EXISTS ${CMAKE_INSTALL_PREFIX}/bin/hdr)
 	
 	set(HDR_BUNDLE_DIR ${CMAKE_BINARY_DIR}/hdr.app)

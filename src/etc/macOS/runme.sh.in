@@ -1,0 +1,28 @@
+#/usr/bin/env bash
+
+if [[ -d /Applications/@mrv2_NAME@.app/ ]]; then
+
+    sudo xattr -cr /Applications/@mrv2_NAME@.app/
+
+    sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
+    sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
+    sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
+    
+    codesign -vvv --deep /Applications/@mrv2_NAME@.app
+else
+    echo "Please drag the @mrv2_NAME@ directory to the Applications folder"
+    sleep 10
+    exit 1
+fi
+
+
+if [[ -d /Applications/hdr.app/ ]]; then
+
+    sudo xattr -cr /Applications/hdr.app/
+
+    sudo codesign --force --sign - /Applications/hdr.app/Contents/Resources/bin/*
+    sudo codesign --force --sign - /Applications/hdr.app/Contents/Resources/lib/*
+    sudo codesign --force --deep --sign - /Applications/hdr.app
+    
+    codesign -vvv --deep /Applications/hdr.app
+fi
