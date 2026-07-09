@@ -17,14 +17,12 @@ namespace mrv
 
     WebRTCManager::WebRTCManager()
     {
-#if 1
         rtc::SctpSettings sctpSettings;
         sctpSettings.recvBufferSize = 4 * 1024 * 1024;      // default is much smaller
         sctpSettings.sendBufferSize = 4 * 1024 * 1024;
         sctpSettings.maxChunksOnQueue = 16384;
         sctpSettings.initialCongestionWindow = 10;          // in MTUs, default is very small (often ~3)
         rtc::SetSctpSettings(sctpSettings);
-#endif
     }
 
     void WebRTCManager::setConfiguration(const rtc::Configuration& value)
@@ -137,6 +135,7 @@ namespace mrv
 
             if (dc->label() != "mrv2_sync")
             {
+                std::cerr << "onDataChannel not mrv2_sync" << std::endl;
                 if (onExtraDataChannel)
                     onExtraDataChannel(id, dc);
                 return;
@@ -150,7 +149,9 @@ namespace mrv
                 nlohmann::json message;
                 message["command"] = "sync";
 
-                std::string s = message.dump();
+                std::cerr << id << " send sync command for ANSWERER" << std::endl;
+
+                const std::string s = message.dump();
 
                 client->dataChannel->send(s);
             });
@@ -179,6 +180,8 @@ namespace mrv
 
                 nlohmann::json message;
                 message["command"] = "sync";
+
+                std::cerr << id << " send sync command for OFFERER" << std::endl;
 
                 std::string s = message.dump();
 

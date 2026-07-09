@@ -1,13 +1,14 @@
-
 #include "mrvNetwork/mrvFileTransferServer.h"
+#include "mrvNetwork/mrvFileChunk.h"
 #include "mrvNetwork/mrvWebRTCManager.h"
 #include "mrvNetwork/mrvMessage.h"
 
 #include "mrvFl/mrvIO.h"
 
+
 namespace
 {
-    const char* kModule = "sfts";
+    const char* kModule = "wfts";
 }
 
 namespace mrv
@@ -37,7 +38,9 @@ namespace mrv
         dc->send(header.dump());
 
         // --- Backpressure machinery ---
-        const size_t kMaxBufferedAmount = 8 * 1024 * 1024; //8 MB high-water mark
+        // 8 MB high-water mark
+        const size_t kMaxBufferedAmount = 8 * 1024 * 1024;
+
         std::mutex mtx;
         std::condition_variable cv;
 
@@ -62,16 +65,26 @@ namespace mrv
                     });
             };
 
-        // Send chunks
+        // Send chunks. Every chunk is prefixed with an 8-byte offset
+        // header (see mrvFileChunk.h) giving its position in the file, so
+        // the receiver can reassemble it correctly regardless of the
+        // order chunks are actually delivered in — the channel may be
+        // unordered (movie files) or ordered (sequence frames); either
+        // way this side doesn't need to treat them differently.
         size_t maxMsgSize = dc->maxMessageSize();
-        const size_t kChunkSize = std::min<size_t>(1024 * 1024, maxMsgSize);
-        
-        std::vector<char> buf(kChunkSize);
+        size_t kChunkSize = std::min<size_t>(1024 * 1024, maxMsgSize);
+        kChunkSize = (kChunkSize > kChunkHeaderSize)
+                         ? kChunkSize - kChunkHeaderSize
+                         : 1;
+
+        std::vector<std::byte> buf(kChunkHeaderSize + kChunkSize);
+        uint64_t offset = 0;
         bool ok = true;
 
         while (!std::feof(f))
         {
-            size_t n = std::fread(buf.data(), 1, kChunkSize, f);
+            size_t n = std::fread(buf.data() + kChunkHeaderSize, 1,
+                                  kChunkSize, f);
             if (n == 0)
                 break;
 
@@ -99,8 +112,9 @@ namespace mrv
                 }
             }
 
-            dc->send(
-                reinterpret_cast<const std::byte*>(buf.data()), n);
+            packChunkOffset(offset, buf.data());
+            dc->send(buf.data(), kChunkHeaderSize + n);
+            offset += n;
         }
         std::fclose(f);
 

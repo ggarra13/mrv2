@@ -63,6 +63,9 @@ if(MRV2_NETWORK)
     	mrvServer.h
 	
 	# WebRTC
+	mrvFileChunk.h
+	mrvFileTransferClient.h
+	mrvFileTransferServer.h
 	mrvSignalingClient.h
 	mrvSignalingMessage.h
 	mrvWebRTCClient.h

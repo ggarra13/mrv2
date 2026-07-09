@@ -43,7 +43,7 @@
 
 namespace
 {
-    const char* kModule = "inter";
+    const char* kModule = "cmdi";
     const double kTimeout = 0.01;
 } // namespace
 

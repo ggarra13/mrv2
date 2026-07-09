@@ -1345,16 +1345,7 @@ namespace mrv
         void TimelineViewport::frameView() noexcept
         {
             TLRENDER_P();
-
-            bool isLocked = tcp->isLocked();
-            tcp->unlock();
-
             _frameView();
-
-            if (isLocked)
-                tcp->lock();
-
-
             _refresh();
             _updateZoom();
             updateCoords();

@@ -1,4 +1,5 @@
-# SPDX-Lsicense-Identifier: BSD-3-Clause
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright Contributors to the mrv2 Project. All rights reserved.
 # flow_bridge.py – mrv2 ↔ Autodesk Flow (ShotGrid) two-way plugin
 # Uses PyFLTK + correct mrv2.plugin.Plugin API
 
@@ -62,7 +63,7 @@ try:
     language = cmd.getLanguage()
 
     # Set the domain (name for your translations) and directory
-    translator = gettext.translation('update-mrv2', localedir=locale,
+    translator = gettext.translation('flow-bridge', localedir=locale,
                                      languages=[language])
 
     # Mark strings for translation using the _() function
@@ -170,7 +171,7 @@ def submit_version(
 
     if upload_media:
         sg().upload("Version", version["id"], movie_path, field_name="sg_uploaded_movie")
-        sg_log(_(f"Media uploaded."))
+        sg_log(_("Media uploaded."))
 
     if update_shot_status:
         sg().update("Shot", shot_id, {"sg_status_list": update_shot_status})
