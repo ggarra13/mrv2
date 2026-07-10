@@ -47,6 +47,8 @@ namespace mrv
         virtual bool hasReceive() const { return !m_receive.empty(); }
 
         virtual void pushMessage(const Message& message);
+        virtual void pushToPeer(const std::string& peerId,
+                                const Message& message);
 
         void pushMessage(const std::string& command, bool value);
         void pushMessage(const std::string& command, int8_t value);
@@ -62,26 +64,23 @@ namespace mrv
             const std::string& command, const otime::RationalTime& value);
         void
         pushMessage(const std::string& command, const otime::TimeRange& value);
-        
-        void lock() { m_lock = true; }
-        void unlock() { m_lock = false; }
-        bool isLocked() { return m_lock == true; }
 
-        //! Sync client to peer's data.
-        void syncClient();
+        inline void lock() { m_lock = true; }
+        inline void unlock() { m_lock = false; }
+        inline bool isLocked() { return m_lock == true; }
 
         virtual Message popMessage();
 
-        void close();
+        void syncClient(const std::string& peerId);
 
-        inline size_t numReceive() const { return m_receive.size(); };
+        void close();
 
     protected:
         virtual void sendMessages() = 0;
         virtual void receiveMessages() = 0;
-        
+
         //! Sync client to peer's UI.
-        void syncUI();
+        void syncUI(const std::string& peerId);
 
         Message receiveMessage();
 

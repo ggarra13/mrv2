@@ -75,7 +75,7 @@ namespace mrv
         LOG_STATUS(msg);
 
         //! Sync this client to the server
-        syncClient();
+        syncClient("");
     }
 
     /**

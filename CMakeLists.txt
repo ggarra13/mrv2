@@ -242,36 +242,39 @@ endif()
 set(Python_FIND_DEBUG TRUE)
 set(Python3_FIND_DEBUG TRUE)
 if (NOT BUILD_PYTHON)
-   if (TLRENDER_LIBPLACEBO OR TLRENDER_AV1)	
-       find_program(MESON_EXECUTABLE NAMES meson.exe meson)
-       if (NOT MESON_EXECUTABLE)
-            message(WARNING "No meson found in path.  Trying to install it "
-		    "with ${Python_EXECUTABLE}")
-		    execute_process(COMMAND ${Python_EXECUTABLE} -m pip install --user meson )
-	    if(WIN32)
-		# Use execute_process to get the Python version
-	    	execute_process(
-			COMMAND ${Python_EXECUTABLE} -c "import sys; print(f'Python{sys.version_info.major}{sys.version_info.minor}')"
-			OUTPUT_VARIABLE PYTHON_VERSION
-			OUTPUT_STRIP_TRAILING_WHITESPACE
-			)		
+    find_program(MESON_EXECUTABLE NAMES meson.exe meson)
+    if (NOT MESON_EXECUTABLE)
+        message(WARNING "No meson found in path.  Trying to install it "
+	    "with ${Python_EXECUTABLE} in user PYTHONPATH")
+	execute_process(COMMAND ${Python_EXECUTABLE} -m pip install --user meson )
+	if(WIN32)
+	    # Use execute_process to get the Python version
+	    execute_process(
+		COMMAND ${Python_EXECUTABLE} -c "import sys; print(f'Python{sys.version_info.major}{sys.version_info.minor}')"
+		OUTPUT_VARIABLE PYTHON_VERSION
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+	    )		
 	    
-	        # Construct the Roaming Scripts directory path
-	    	set(ROAMING_SCRIPTS_DIR "$ENV{APPDATA}/Python/${PYTHON_VERSION}/Scripts")
+	    # Construct the Roaming Scripts directory path
+	    set(ROAMING_SCRIPTS_DIR "$ENV{APPDATA}/Python/${PYTHON_VERSION}/Scripts")
 
-		# Add the Roaming Scripts directory to the PATH environment variable
-            	set(ENV{PATH} "${ROAMING_SCRIPTS_DIR};$ENV{PATH}")
-	    endif()
+	    # Add the Roaming Scripts directory to the PATH environment variable
+            set(ENV{PATH} "${ROAMING_SCRIPTS_DIR};$ENV{PATH}")
+	endif()
     
-	    find_program(MESON_EXECUTABLE NAMES meson.exe meson)
-	    if (NOT MESON_EXECUTABLE)
-	        message(WARNING "Path is $ENV{PATH}")
-	    	message(FATAL_ERROR "No meson found in PATH.  Please install it manually or set the PATH to it.")
-	   endif()
-       endif()
+	find_program(MESON_EXECUTABLE NAMES meson.exe meson)
+	if (NOT MESON_EXECUTABLE)
+	    message(WARNING "Path is $ENV{PATH}")
+	    message(FATAL_ERROR "No meson found in PATH.  Please install it manually or set the PATH to it.")
+	endif()
+    endif()
+else()
+    if (WIN32)
+	set(MESON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/Scripts/meson.exe)
+    else()
+	set(MESON_EXECUTABLE ${CMAKE_INSTALL_PREFIX}/bin/meson)
     endif()
 endif()
-
 
 set(cpptrace_DEP )
 if(NOT APPLE AND MRV2_CPPTRACE)

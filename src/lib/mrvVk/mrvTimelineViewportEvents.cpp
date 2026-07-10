@@ -564,6 +564,10 @@ namespace mrv
                     _createAnnotationShape(false);
                     p.lastEvent = FL_DRAG;
                 }
+                else
+                {
+                    _updateAnnotationShape();
+                }
                 break;
             }
             case ActionMode::kPolygon:
@@ -598,6 +602,10 @@ namespace mrv
                     annotation->push_back(shape);
                     _createAnnotationShape(false);
                     p.lastEvent = FL_DRAG;
+                }
+                else
+                {
+                    _updateAnnotationShape();
                 }
                 break;
             }

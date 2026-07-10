@@ -53,7 +53,7 @@ namespace mrv
         float volume = 0.F;
         bool mute = false;
         double audioOffset = 0.0;
-        
+
         std::string ocioIcs;
         std::string ocioLook;
         timeline::LUTOptions lutOptions;
@@ -118,10 +118,10 @@ namespace mrv
 
         //! Close all the files.
         void closeAll();
-        
+
         //! Set the A file.
         void setA(int index);
-        
+
         //! Set the A file even if already set.
         void forceA(int index);
 

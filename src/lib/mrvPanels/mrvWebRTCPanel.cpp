@@ -14,6 +14,7 @@
 
 #include "mrvIcons/Network.h"
 
+#include "mrvOS/mrvString.h"
 #include "mrvCore/mrvUtil.h"
 
 #include <FL/Fl_Input.H>
@@ -75,9 +76,9 @@ namespace mrv
 
             Input* i;
             Fl_Button* b;
-            
+
             g->begin();
-            
+
             int X = 80 * g->w() / 270;
             int Y = 20;
 
@@ -91,7 +92,7 @@ namespace mrv
                 {
                 });
             _r->roomGroup->end();
-            
+
             const char* kButtonLabel = _("Connect");
             auto bW = new Widget<Fl_Button>(g->x(), Y, 30, 20, kButtonLabel);
             b = _r->createButton = bW;
@@ -103,7 +104,7 @@ namespace mrv
                         shutdown();
                         return;
                     }
-                    
+
                     bool showMessage = false;
                     std::string roomId = _r->room->value();
                     if (roomId.size() < 6)
@@ -111,9 +112,11 @@ namespace mrv
                         showMessage = true;
                         roomId += generateRandomLetters(6);
                     }
-                    
+
+                    roomId = string::stripWhitespace(roomId);
+
                     _r->room->value(roomId.c_str());
-                    
+
                     if (showMessage)
                     {
                         mrv::fl_alert(_("Share the room ID with the persons "
@@ -122,11 +125,11 @@ namespace mrv
                                         "is only available in the Pro+ tier."),
                                       nullptr);
                     }
-            
+
                     tcp = new WebRTCClient(roomId);
                     deactivate();
                 });
-            
+
             g->end();
         }
 
@@ -134,7 +137,9 @@ namespace mrv
         {
             const char* kButtonLabel = _("Disconnect");
             _r->createButton->copy_label(kButtonLabel);
-            
+
+            _r->roomGroup->deactivate();
+
             _p->ui->uiMain->fill_menu(_p->ui->uiMenuBar);
         }
 

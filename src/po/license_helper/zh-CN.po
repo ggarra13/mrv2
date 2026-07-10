@@ -70,7 +70,7 @@ msgid "For custom development:"
 msgstr "关于定制开发："
 
 msgid "Contact ggarra13@@gmail.com"
-msgstr ""
+msgstr "联系方式：ggarra13@@gmail.com"
 
 #~ msgid ""
 #~ "\n"

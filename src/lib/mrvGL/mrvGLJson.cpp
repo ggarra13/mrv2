@@ -11,7 +11,7 @@
 namespace mrv
 {
     using namespace tl::draw;
-    
+
 #if defined(OPENGL_BACKEND)
     std::shared_ptr< Shape > messageToShape(const nlohmann::json& json)
     {
@@ -89,7 +89,7 @@ namespace mrv
         //     value.shapes.push_back(shape);
         // }
 #ifdef USE_OPENGL2
-        else if (type == "GL2Text")
+        else if (type == "GL2Text" || type == "Text")
         {
             auto shape = std::make_shared< GL2TextShape >();
             json.get_to(*shape.get());
@@ -184,7 +184,7 @@ namespace mrv
 namespace tl
 {
     namespace draw
-    {   
+    {
         void to_json(nlohmann::json& json, const Annotation& value)
         {
             nlohmann::json shapes;
@@ -202,16 +202,7 @@ namespace tl
         void from_json(const nlohmann::json& json, Annotation& value)
         {
             json.at("all_frames").get_to(value.allFrames);
-            if (json.contains("time"))
-            {
-                json.at("time").get_to(value.time);
-            }
-            else
-            {
-                int64_t frame;
-                json.at("frame").get_to(frame);
-                value.time = otime::RationalTime(frame, 24.0);
-            }
+            json.at("time").get_to(value.time);
             const nlohmann::json& shapes = json["shapes"];
             for (auto& shape : shapes)
             {
@@ -219,6 +210,6 @@ namespace tl
             }
         }
 #endif // OPENGL_BACKEND
-        
+
     } // namespace draw
 } // namespace tl

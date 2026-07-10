@@ -87,7 +87,7 @@ def parse_and_process_dates(args):
 
     beta_start_dt = start_dt + timedelta(days=1)
 
-    print(" START DATE:", start_dt.strftime("%Y-%m-%d %H:%M:%S %Z"))
+    print("  START DATE:", start_dt.strftime("%Y-%m-%d %H:%M:%S %Z"))
     print("    END DATE:", end_dt.strftime("%Y-%m-%d %H:%M:%S %Z"))
     diff = end_dt - start_dt
     print(f' DIFFERENCE: {diff.days} days, {diff.seconds//3600} hours, {(diff.seconds//60)%60} minutes')

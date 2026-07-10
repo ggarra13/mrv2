@@ -110,10 +110,12 @@ namespace mrv
         }
         
         void ThumbnailPanel::_createThumbnail(
-            Fl_Widget* widget, const file::Path& path,
+            Fl_Widget* widget, const file::Path& inputPath,
             const otime::RationalTime& currentTime, const int layerId)
         {
             TLRENDER_P();
+
+            file::Path path(inputPath);
 
             static Fl_SVG_Image* NDIimage = MRV2_LOAD_SVG(NDI);
 

@@ -48,7 +48,7 @@ find_package_handle_standard_args(
     REQUIRED_VARS LibRaw_INCLUDE_DIR LibRaw_LIBRARY)
 mark_as_advanced(LibRaw_INCLUDE_DIR LibRaw_LIBRARY)
 
-set(LibRaw_LINK_LIBRARIES ZLIB)
+set(LibRaw_LINK_LIBRARIES ZLIB::ZLIB)
 if(LCMS2_FOUND)
     list(APPEND LibRaw_LINK_LIBRARIES LCMS2::lcms2)
 endif()

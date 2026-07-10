@@ -839,12 +839,20 @@ namespace mrv
             mappingpath.c_str(), "filmaura", "mrv2.paths",
             (Fl_Preferences::Root)0);
         num = path_mapping.entries();
+
+        std::map<std::string, std::string> mapped;
+        uiPrefs->PathMappings->clear();
         for (int i = 0; i < num; ++i)
         {
             snprintf(key, 2048, "Path #%d", i + 1);
             path_mapping.get(key, tmpS, "", 4096);
             if (strlen(tmpS) == 0)
                 continue;
+            const std::string line = tmpS;
+            auto splitArray = string::split(line, '\t');
+            if (mapped.find(splitArray[0]) != mapped.end())
+                continue;
+            mapped[splitArray[0]] = splitArray[1];
             uiPrefs->PathMappings->add(tmpS);
         }
         /* xgettext:c++-format */
@@ -1622,9 +1630,9 @@ namespace mrv
             userprefspath.c_str(), "filmaura", "mrv2.paths",
             (Fl_Preferences::Root)((int)Fl_Preferences::CLEAR));
         path_mapping.clear();
-        for (int i = 2; i <= uiPrefs->PathMappings->size(); ++i)
+        for (int i = 1; i <= uiPrefs->PathMappings->size(); ++i)
         {
-            snprintf(key, 256, "Path #%d", i - 1);
+            snprintf(key, 256, "Path #%d", i);
             path_mapping.set(key, uiPrefs->PathMappings->text(i));
         }
 

@@ -107,6 +107,7 @@ namespace py = pybind11;
 #include "mrvFl/mrvOCIO.h"
 
 #ifdef MRV2_NETWORK
+#    include <Poco/Net/Net.h>
 #    include <Poco/Net/SSLManager.h>
 #endif
 
@@ -608,6 +609,7 @@ namespace mrv
         // Initialize POCO Net for SSL connections.
         //
 #ifdef MRV2_NETWORK
+        Poco::Net::initializeNetwork();
         Poco::Net::initializeSSL();
 #endif
 
@@ -1200,8 +1202,17 @@ namespace mrv
                                string::Format(_("Running python script '{0}'")).arg(script)));
                 const auto& args = p.pythonArgs->getArguments();
 
+                // 2. Prepare the arguments in a C++ vector
+                std::vector<std::string> py_args;
+                py_args.push_back(script);
+
                 if (!args.empty())
                 {
+                    for (auto& arg : args)
+                    {
+                        py_args.push_back(arg);
+                    }
+
                     LOG_STATUS(_("with Arguments:"));
                     std::string out = "[";
                     out += tl::string::join(args, ',');
@@ -1209,12 +1220,15 @@ namespace mrv
                     LOG_STATUS(out);
                 }
 
-                std::ifstream is(script);
-                std::stringstream s;
-                s << is.rdbuf();
                 try
                 {
-                    py::exec(s.str());
+#ifdef VULKAN_BACKEND
+                    // \@bug: for Vulkan we must show the window so that
+                    //        the Fl_Vk_Context is created.
+                    ui->uiMain->show();
+                    ui->uiMain->wait_for_expose();
+#endif
+                    run_python_script(py_args);
                 }
                 catch (const std::exception& e)
                 {
@@ -1283,6 +1297,8 @@ namespace mrv
             delete tcp;
             tcp = nullptr;
         }
+
+        Poco::Net::uninitializeNetwork();
     }
 
     App::~App()
@@ -1375,20 +1391,15 @@ namespace mrv
 #endif
     }
 
-#ifdef MRV2_PYBIND11
-    const std::vector<std::string>& App::getPythonArgs() const
-    {
-        TLRENDER_P();
-        return p.pythonArgs->getArguments();
-    }
-#endif
-
     void App::removeListener()
     {
 #ifdef MRV2_NETWORK
         TLRENDER_P();
 
         p.imageListener.reset();
+        p.comfyUIListener.reset();
+
+        Poco::Net::initializeNetwork();
 #endif
     }
 
@@ -1453,6 +1464,8 @@ namespace mrv
     {
         TLRENDER_P();
 
+        bool isLocked = tcp->isLocked();
+        
         tcp->lock();
         p.player->setPlayback(timeline::Playback::Stop);
 
@@ -1475,7 +1488,7 @@ namespace mrv
                 use_progress = false;
 
         }
-        
+
         // Calculate start and end time used in progress report
         otime::RationalTime startTime, endTime;
         _calculateCacheTimes(startTime, endTime);
@@ -1486,7 +1499,7 @@ namespace mrv
         // We use the rate of the startTime to ensure we are working in frame
         // units
         double totalFrames = (endTime - startTime).to_frames();
-                            
+
         if (!p.progress)
         {
             p.progress = new ProgressReport(ui->uiMain,
@@ -1506,7 +1519,8 @@ namespace mrv
         else
         {
             // Start playback right away.
-            tcp->unlock();
+            if (!isLocked)
+                tcp->unlock();
             ui->uiView->setPlayback(playback);
         }
 
@@ -1515,11 +1529,12 @@ namespace mrv
              playback == timeline::Playback::Stop))
         {
             tcp->lock();
-            
+
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
-                    [this, playback](const timeline::PlayerCacheInfo& value)
+                    [this, playback, isLocked]
+                    (const timeline::PlayerCacheInfo& value)
                         {
                             TLRENDER_P();
 
@@ -1569,7 +1584,8 @@ namespace mrv
                                 p.progress = nullptr;
                                 ui->uiView->setPlayback(playback);
                                 p.cacheInfoObserver.reset();
-                                tcp->unlock();
+                                if (!isLocked)
+                                    tcp->unlock();
                                 return;
                             }
                         });
@@ -1577,11 +1593,12 @@ namespace mrv
         else if (use_progress && playback == timeline::Playback::Reverse)
         {
             tcp->lock();
-            
+
             p.cacheInfoObserver =
                 observer::ValueObserver<timeline::PlayerCacheInfo>::create(
                     p.player->player()->observeCacheInfo(),
-                    [this, playback](const timeline::PlayerCacheInfo& value)
+                    [this, playback, isLocked]
+                    (const timeline::PlayerCacheInfo& value)
                         {
                             TLRENDER_P();
 
@@ -1648,12 +1665,13 @@ namespace mrv
                                 p.progress = nullptr;
                                 ui->uiView->setPlayback(playback);
                                 p.cacheInfoObserver.reset();
-                                tcp->unlock();
+                                if (!isLocked)
+                                    tcp->unlock();
                                 return;
                             }
                         });
         }
-        
+
     }
 
     int App::run()
@@ -1860,7 +1878,7 @@ namespace mrv
     App::open(const std::string& fileName, const std::string& audioFileName)
     {
         TLRENDER_P();
-
+            
         file::Path filePath(string::normalizePath(fileName));
 
         if (filePath.getExtension() == ".mrv2s")
@@ -1869,6 +1887,7 @@ namespace mrv
             session::load(fileName);
             return;
         }
+
 
         file::PathOptions pathOptions;
         pathOptions.seqMaxDigits =
@@ -1885,7 +1904,6 @@ namespace mrv
             LOG_ERROR(err);
             return;
         }
-
 
         for (const auto& path :
                  timeline::getPaths(filePath, pathOptions, _context) )
@@ -2174,7 +2192,7 @@ namespace mrv
 #ifdef MRV2_PYBIND11
             // Only release the GIL if this thread currently holds it
             std::unique_ptr<py::gil_scoped_release> release;
-            if (PyGILState_Check() && !p.options.noPython) 
+            if (PyGILState_Check() && !p.options.noPython)
             {
                 release = std::make_unique<py::gil_scoped_release>();
             }

@@ -8,7 +8,7 @@ endif()
 if (NOT OpenColorIO_FOUND)
 
     set(OpenColorIO_GIT_REPOSITORY "https://github.com/AcademySoftwareFoundation/OpenColorIO.git")
-    set(OpenColorIO_GIT_TAG "v2.5.1") # was v2.5.0
+    set(OpenColorIO_GIT_TAG "v2.5.2") # was v2.5.1
 
     set(OpenColorIO_DEPENDENCIES ${Imath_DEP} ${yaml-cpp_DEP} ${expat_DEP} ${pystring_DEP} ${minizip-ng_DEP} ${pystring_DEP} ${ZLIB_DEP})
     message(STATUS "OpenColorIO DEPENDENCIES=${OpenColorIO_DEPENDENCIES}")
@@ -16,6 +16,7 @@ if (NOT OpenColorIO_FOUND)
     set(OpenColorIO_ARGS
 	${TLRENDER_EXTERNAL_ARGS}
 	-DCMAKE_INSTALL_LIBDIR=lib
+	-DBUILD_TESTING=OFF
 	-DOCIO_BUILD_APPS=OFF
 	-DOCIO_BUILD_TESTS=OFF
 	-DOCIO_BUILD_GPU_TESTS=OFF

@@ -62,7 +62,9 @@ namespace mrv
             std::shared_ptr<vlk::OffscreenBuffer> getAnnotationFBO();
 
             void setSaveOverlay(const bool save);
-
+            
+            std::shared_ptr<image::FontSystem > getFontSystem();
+            
         protected:            
             void _updateHDRMetadata();
 

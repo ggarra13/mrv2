@@ -698,6 +698,11 @@ namespace mrv
             return ctx;
         }
         
+        std::shared_ptr<image::FontSystem > Viewport::getFontSystem()
+        {
+            return _p->fontSystem;
+        }
+        
         void Viewport::draw()
         {
             TLRENDER_P();

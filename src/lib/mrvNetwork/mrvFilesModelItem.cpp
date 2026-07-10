@@ -37,7 +37,7 @@ namespace mrv
             annotations.push_back(*annotation.get());
         }
         j["annotations"] = annotations;
-        
+
         std::vector< voice::Annotation > voiceAnnotations;
         for (const auto& voannotation : value.voiceAnnotations)
         {
@@ -98,7 +98,7 @@ namespace mrv
                 draw::messageToAnnotation(annotation);
             value.annotations.push_back(tmp);
         }
-        
+
         const nlohmann::json& voannotations = j["voiceAnnotations"];
         for (const auto& voannotation : voannotations)
         {

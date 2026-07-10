@@ -130,6 +130,8 @@ namespace mrv
                 std::vector< voice::Annotation > voAnnotations;
                 for (const auto& ann : annotations)
                 {
+                    if (ann->shapes.empty())
+                        continue;
                     jAnnotations.push_back(*(ann.get()));
                 }
                 for (const auto& ann : voannotations)
@@ -187,6 +189,7 @@ namespace mrv
                 {"USD", (usdPanel != nullptr)},
 #endif
                 {"Logs", (logsPanel != nullptr)},
+                {"WebRTC", (webrtcPanel != nullptr)},
             };
 
             if (filesPanel)
@@ -231,6 +234,8 @@ namespace mrv
                 waveformPanel->save();
             if (logsPanel)
                 logsPanel->save();
+            if (webrtcPanel)
+                webrtcPanel->save();
 
             std::string config = ui->uiPrefs->uiPrefsOCIOConfig->value();
 
@@ -360,7 +365,7 @@ namespace mrv
             session["viewZoom"] = view->viewZoom();
             session["viewPos"] = view->viewPos();
             session["actionMode"] = view->getActionMode();
-                        
+
             std::ofstream ofs(fileName);
             if (!ofs.is_open())
             {
@@ -397,7 +402,7 @@ namespace mrv
             App::unsaved_annotations = false;
 
             ui->uiMain->update_title_bar();
-            
+
             /* xgettext:c++-format */
             const std::string msg =
                 string::Format(_("Session saved to \"{0}\".")).arg(fileName);
@@ -451,7 +456,7 @@ namespace mrv
                     return false;
                 }
                 ifs.close();
-                
+
                 // Set the edit mode to timeline
                 set_edit_mode_cb(EditMode::kTimeline, ui);
 
@@ -466,7 +471,7 @@ namespace mrv
 
                 // Close all first, but don't exit.
                 close_all_cb(nullptr, ui);
-                
+
                 // Turn off auto-playback temporarily
                 bool autoPlayback = ui->uiPrefs->uiPrefsAutoPlayback->value();
                 ui->uiPrefs->uiPrefsAutoPlayback->value(false);
@@ -513,11 +518,11 @@ namespace mrv
                             break;
                         }
                     }
-                    
+
                     if (!audioPath.empty())
                     {
                         replace_path(audioPath);
-                        
+
                         while (!file::isReadable(audioPath))
                         {
                             const std::string msg = string::Format(_("Audio File '{0}' is not readable.\n\nDo you want to replace it with another?")).arg(audioPath);
@@ -542,7 +547,7 @@ namespace mrv
                             }
                         }
                     }
-                    
+
                     app->open(path, audioPath);
 
                     // Copy annotations to both item and player
@@ -670,7 +675,7 @@ namespace mrv
                     // Hide Panels and Windows
                     removePanels(ui);
                     removeWindows(ui);
-                    
+
                     j = session["settings"];
 
                     auto settings = app->settings();
@@ -740,7 +745,7 @@ namespace mrv
                         show_window_cb(_(wc->name), ui);
                     }
                 }
-                    
+
                 if (version >= 3)
                 {
                     EnvironmentMapOptions env =
@@ -805,7 +810,7 @@ namespace mrv
                         session["imageOptions"];
                     app->setImageOptions(imageOptions);
                 }
-                
+
                 if (version >= 2)
                 {
                     std::vector<int> Bindexes = session["Bindexes"];
@@ -844,7 +849,7 @@ namespace mrv
                                 auto annotation = voice::messageToAnnotation(value);
                                 voiceAnnotations.push_back(annotation);
                             }
-                    
+
                             player->setAllAnnotations(voiceAnnotations);
                         }
 
@@ -907,11 +912,11 @@ namespace mrv
                             auto viewPos = session["viewPos"];
                             double viewZoom = session["viewZoom"];
                             view->setViewPosAndZoom(viewPos, viewZoom);
-                        
+
                             bool frameView = session["frameView"];
                             view->setFrameView(frameView);
                             view->redraw();
-                            
+
                             // If we are running command-line, wait a tad for
                             // the callbacks and the main resize of window
                             // function to update.
@@ -923,7 +928,7 @@ namespace mrv
                             auto actionMode = session["actionMode"];
                             view->setActionMode(actionMode);
                         }
-                        
+
                     }
                 }
             }
@@ -940,8 +945,8 @@ namespace mrv
             if (! string::ends_with(fileName, "temp.mrv2s") &&
                 ! string::ends_with(fileName, "lang.mrv2s"))
                 setCurrent(fileName);
-                
-            
+
+
             return true;
         }
 

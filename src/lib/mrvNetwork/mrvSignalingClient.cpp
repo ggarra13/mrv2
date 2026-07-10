@@ -34,7 +34,7 @@ namespace mrv
             return;
 
         if (player.empty())
-            playerId = "player_" + mrv::username() + "_" +
+            playerId = "player_" + mrv::username() + "_" + roomId + "_" +
                        generateRandomLetters(4);
         else
             playerId = player;
@@ -68,11 +68,11 @@ namespace mrv
         websocket = std::make_shared<rtc::WebSocket>(config);
     
         websocket->onOpen([]() {
-            LOG_STATUS("WebSocket connected, signaling ready");
+            LOG_INFO("WebSocket connected, signaling ready");
         });
 
         websocket->onClosed([]() {
-            LOG_STATUS("WebSocket closed.");
+            LOG_INFO("WebSocket closed.");
         });
 
         websocket->onError([](const std::string &error) {

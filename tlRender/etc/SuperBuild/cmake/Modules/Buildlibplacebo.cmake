@@ -1,10 +1,5 @@
 include(ExternalProject)
 
-include(functions/find_meson_executable)
-find_meson_executable(libplacebo)
-
-
-
 set(libplacebo_GIT_REPO "https://code.videolan.org/videolan/libplacebo.git")
 set(libplacebo_GIT_TAG v7.351.0) # was v7.349.0
 
@@ -35,7 +30,7 @@ set(libplacebo_CONFIGURE
     "CFLAGS=${libplacebo_CFLAGS}"
     "LDFLAGS=${libplacebo_LDFLAGS}"
     "LD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX}/lib"
-    ${libplacebo_PYTHONPATH}
+    "PYTHONPATH=${PYTHONPATH}"
     --
     ${MESON_EXECUTABLE} setup
     --wipe
@@ -48,11 +43,9 @@ set(libplacebo_CONFIGURE
     --prefix=${CMAKE_INSTALL_PREFIX}
     build)
 
-set(libplacebo_BUILD
-    cd build && ${libplacebo_PYTHONPATH} ninja)
+set(libplacebo_BUILD cd build && ninja)
 
-set(libplacebo_INSTALL
-    cd build && ${libplacebo_PYTHONPATH} ninja install)
+set(libplacebo_INSTALL cd build && ninja install)
 
 set(libplacebo_PATCH)
 

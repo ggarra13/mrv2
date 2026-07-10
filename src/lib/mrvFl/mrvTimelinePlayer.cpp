@@ -717,7 +717,7 @@ namespace mrv
             return *found;
         }
     }
-    
+
     std::shared_ptr< draw::Annotation > TimelinePlayer::getUndoAnnotation() const
     {
         TLRENDER_P();
@@ -790,10 +790,54 @@ namespace mrv
     }
 
     void TimelinePlayer::setAllAnnotations(
-        const std::vector< std::shared_ptr< draw::Annotation >>& value)
+        const std::vector<std::shared_ptr<draw::Annotation > >& value)
     {
         _p->annotations = value;
         _p->undoAnnotations.clear();
+    }
+
+    void TimelinePlayer::mergeAllAnnotations(
+        const std::vector<std::shared_ptr<draw::Annotation > >& values)
+    {
+        TLRENDER_P();
+
+        for (const auto& incomingAnnotation : values)
+        {
+            if (!incomingAnnotation)
+                continue;
+
+            // Search for an existing annotation at the exact same time
+            auto found = std::find_if(
+                p.annotations.begin(), p.annotations.end(),
+                [&incomingAnnotation](const std::shared_ptr<draw::Annotation>& a)
+                {
+                    return a->time == incomingAnnotation->time;
+                });
+
+            if (found != p.annotations.end())
+            {
+                // Clash exists: merge shapes into the existing annotation
+                auto& existingAnnotation = *found;
+
+                existingAnnotation->shapes.insert(
+                    existingAnnotation->shapes.end(),
+                    incomingAnnotation->shapes.begin(),
+                    incomingAnnotation->shapes.end()
+                );
+
+                // Clear the local undo buffer since new shapes were added
+                // (Matches the behavior of Annotation::push_back)
+                existingAnnotation->undo_shapes.clear();
+            }
+            else
+            {
+                // No clash: append the new annotation
+                p.annotations.push_back(incomingAnnotation);
+            }
+        }
+
+        // Clear global undo annotations since the timeline state has been modified externally
+        p.undoAnnotations.clear();
     }
 
     void TimelinePlayer::clearFrameAnnotation()
@@ -938,7 +982,7 @@ namespace mrv
             return *found;
         }
     }
-        
+
     //! Get undo annotation for current time
     std::shared_ptr< voice::Annotation > TimelinePlayer::getUndoVoiceAnnotation() const
     {
@@ -1010,7 +1054,7 @@ namespace mrv
         TLRENDER_P();
 
         std::vector< std::shared_ptr< voice::Annotation > > out;
-        
+
         const auto& time = currentTime();
         const int64_t frame = time.value();
 
@@ -1056,7 +1100,7 @@ namespace mrv
     void TimelinePlayer::removeAnnotation(const std::shared_ptr< voice::Annotation >& voiceAnnotation)
     {
         TLRENDER_P();
-        
+
         p.undoVoiceAnnotations = p.voiceAnnotations;
         p.voiceAnnotations.erase(
             std::remove(p.voiceAnnotations.begin(),
@@ -1064,7 +1108,7 @@ namespace mrv
             p.voiceAnnotations.end());
     }
 #endif
-    
+
     void TimelinePlayer::timerEvent()
     {
         _p->player->tick();

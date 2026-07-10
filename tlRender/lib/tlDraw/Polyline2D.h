@@ -142,15 +142,36 @@ namespace tl
 
             template <typename Point> struct PolySegment
             {
-                PolySegment(const LineSegment<Point>& center, float thickness) :
+                /**
+                 * Build a tapered segment where each endpoint has its own
+                 * half-thickness.  Using the shared point's pressure at both
+                 * ends of adjacent segments guarantees that edge1.b / edge2.b
+                 * of segment[i] lands exactly on edge1.a / edge2.a of
+                 * segment[i+1], eliminating geometric gaps between segments.
+                 */
+                PolySegment(
+                    const LineSegment<Point>& center, float thicknessStart,
+                    float thicknessEnd) :
+                    // Initialiser order must match declaration order below.
                     center(center),
-                    thickness(thickness),
-                    edge1(center + center.normal() * thickness),
-                    edge2(center - center.normal() * thickness)
+                    // edge1/edge2 are offset in opposite normal directions;
+                    // each endpoint uses its own thickness so the strip tapers.
+                    edge1(
+                        center.a + center.normal() * thicknessStart,
+                        center.b + center.normal() * thicknessEnd),
+                    edge2(
+                        center.a - center.normal() * thicknessStart,
+                        center.b - center.normal() * thicknessEnd),
+                    thicknessStart(thicknessStart),
+                    thicknessEnd(thicknessEnd),
+                    thickness((thicknessStart + thicknessEnd) * 0.5f)
                 {
                 }
 
                 LineSegment<Point> center, edge1, edge2;
+                // Per-endpoint half-thicknesses (= m_width * endpoint.pressure).
+                float thicknessStart, thicknessEnd;
+                // Average kept for callers that only need a single width value.
                 float thickness;
             };
 

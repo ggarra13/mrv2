@@ -22,7 +22,7 @@ namespace mrv
         using tl::file::Path;
         using tl::file::PathOptions;
 
-        
+
         /**
          * Given a tlRender's path, return whether the file can be loaded by
          * tlRender.
@@ -57,7 +57,7 @@ namespace mrv
         {
             return isMovie(tl::string::toLower(path.getExtension()));
         }
-        
+
         /**
          * Given a lowercase filename extension, return whether the extension is
          * from an sRGBB image format.
@@ -118,7 +118,7 @@ namespace mrv
         {
             return isSequence(path.get());
         }
-        
+
         /**
          * Given a lowercase filename extension, return whether the extension is
          * from an OpenUSD scene.
@@ -152,7 +152,28 @@ namespace mrv
          * @return true if it exists and is readable, false if not.
          */
         bool exists(const fs::path& path);
-        
+
+        /**
+         * Recursively creates a directory and all parent directories.
+         *
+         * @param path The target directory path to create.
+         *
+         * @return true if the directory exists after the call
+         *              (either it was created or it already existed),
+         *              false if an error occurred.
+         */
+        bool mkdirRecursive(const std::string& path);
+
+
+        /**
+         * Given a path, returns the basename for it.
+         *
+         * @param path full path to a file.
+         *
+         * @return just the basename with the extension.
+         */
+        std::string basename(const std::string& path);
+
         /**
          * Return true if the file exists and is readable
          *
@@ -171,7 +192,7 @@ namespace mrv
         //! Returns whether the string is a potential URI string.
         //! It must have at least one slash and one period.
         bool isPotentialURI(const std::string& path);
-        
+
         //! Returns whether the filename is a temporary NDI file.
         bool isTemporaryNDI(const Path& path);
 
@@ -180,10 +201,10 @@ namespace mrv
 
         //! Returns whether the filename is an .otio or .otioz file.
         bool isOTIO(const Path& path);
-            
+
         //! Returns whether command is in the PATH environment variable.
         bool isInPath(const std::string& command);
-        
+
     } // namespace file
 
 } // namespace mrv

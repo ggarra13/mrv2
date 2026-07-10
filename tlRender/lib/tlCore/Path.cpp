@@ -25,7 +25,7 @@ namespace tl
                 return std::string(u8.begin(), u8.end());
             }
         }
-        
+
         std::vector<std::string> split(std::filesystem::path path)
         {
             std::list<std::string> out;
@@ -163,7 +163,7 @@ namespace tl
             _parse(_options);
             _frames = tmp;
         }
-        
+
         void Path::setNumber(const std::string& value)
         {
             _path = getProtocol() + getDirectory() + getBaseName() + value + getSuffix() + getExtension() + getRequest();
@@ -343,7 +343,7 @@ namespace tl
                 _dir = std::pair<size_t, size_t>(protocolSize, dirSize);
             }
             const size_t protocolDirSize = protocolSize + dirSize;
-            
+
             // Find the extension.
             size_t extPos = std::string::npos;
             if (size > 0)
@@ -389,7 +389,7 @@ namespace tl
                     size = sufPos;   // strip suffix so number detection sees a clean stem
                 }
             }
-            
+
             // Find the number.
             size_t numPos = std::string::npos;
             if (size > 0)
@@ -680,7 +680,7 @@ namespace tl
                 // Find matching sequence files.
                 bool init = true;
                 std::string fileName(out.get());
-                
+
 #if defined(__cpp_lib_char8_t)
                 // C++20: u8path is deprecated. We cast the string data to char8_t.
                 const std::filesystem::path stdpath{reinterpret_cast<const char8_t*>(fileName.data())};
@@ -748,6 +748,46 @@ namespace tl
             json.at("SeqMaxDigits").get_to(value.seqMaxDigits);
             json.at("Hidden").get_to(value.hidden);
         }
+
+        void to_json(nlohmann::json& j, const Path& p)
+        {
+            j = nlohmann::json{
+                {"path", p.get()},
+                {"options", p.getOptions()}
+            };
+
+            // Explicitly handle the std::optional for maximum compatibility across json versions
+            if (const auto& frames = p.getFrames())
+            {
+                j["frames"] = *frames;
+            }
+            else
+            {
+                j["frames"] = nullptr;
+            }
+        }
+
+        void from_json(const nlohmann::json& j, Path& p)
+        {
+            std::string pathStr;
+            j.at("path").get_to(pathStr);
+
+            PathOptions options;
+            if (j.contains("options"))
+            {
+                j.at("options").get_to(options);
+            }
+
+            // Reconstruct the Path to ensure internal _parse() is triggered correctly
+            p = Path(pathStr, options);
+
+            // Re-apply frames if they are present in the JSON payload
+            if (j.contains("frames") && !j.at("frames").is_null())
+            {
+                p.setFrames(j.at("frames").get<math::Int64Range>());
+            }
+        }
+
 
     }
 }

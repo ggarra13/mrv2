@@ -185,7 +185,6 @@ namespace mrv
             return false;
         }
 
-        Fl::check();
         ++_frame;
         
         return true;

@@ -164,6 +164,10 @@ extern "C"
 #   include <rtc/version.h>
 #endif
 
+#ifdef MRV2_NETWORK
+#   include <mrvNetwork/xxhash.h>
+#endif
+
 #ifdef MRV2_PYBIND11
 #    include <pybind11/pybind11.h>
 #endif
@@ -1105,6 +1109,12 @@ namespace mrv
           << "(C) 2016-Present Pixar" << endl
           << endl;
 #endif
+#ifdef MRV2_NETWORK
+        o << "xxHash v" << XXH_VERSION_MAJOR << "." << XXH_VERSION_MINOR
+          << XXH_VERSION_RELEASE << endl
+          << "Copyright (C) 2012-2023 Yann Collet" << endl
+          << endl;
+#endif
         o << "yaml-cpp" << endl
           << "Copyright (c) 2008-2015 Jesse Beder." << endl
           << endl;
@@ -1426,6 +1436,7 @@ luzpaz                                        (Spelling corrections)
 mantissa-                                     (Sequences misdetection)
 Mark Rasmussen                                (Windows/Linux Vulkan debugging)
 mhgandvisions                                 (Session debugging)
+MigMadail                                     (Slow startup)
 MMmaoamao                                     (AV1 Suggestion)
 mzigaib                                       (Sequences misdetection)
 ndeebook                                      (Save Single Frame with

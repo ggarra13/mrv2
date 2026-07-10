@@ -17,18 +17,24 @@ endif()
 
 set(LIBRARIES )
 set(LIBRARIES_PRIVATE )
-    
+
 if(MRV2_PYBIND11)
     list(APPEND LIBRARIES mrvPy)
 else()
     list(APPEND LIBRARIES mrvApp)
 endif()
 
+list(APPEND LIBRARIES
+    tlRender::tlIO
+    tlRender::tlCore)
+
 if(TLRENDER_VK AND MRV2_BACKEND STREQUAL "VK")
     list(APPEND LIBRARIES ${FLTK_vk_LIBRARY})
 endif()
 
-list(APPEND LIBRARIES ${FLTK_LIBRARIES} ${Intl_LIBRARIES} tlRender::tlIO tlRender::tlCore)
+list(APPEND LIBRARIES
+    ${FLTK_LIBRARIES}
+    ${Intl_LIBRARIES})
 
 
 
@@ -158,6 +164,23 @@ if ( APPLE )
 	install( DIRECTORY ${framework}
 	    DESTINATION lib
 	    COMPONENT applications )
+    endforeach()
+
+    #
+    # Fix system libs first
+    #
+    foreach(_LIB intl omp idn2 vulkan)
+	fix_dylib_rpath(mrv2 "${_LIB}" "")
+    endforeach()
+    
+    #
+    # Fix cmake_install_prefix libs next
+    #
+    foreach(_LIB
+	    avcodec dovi avdevice avformat avutil placebo
+	    python${MRV2_PYTHON_VERSION}
+	    swresample swscale vulkan)
+	fix_dylib_rpath(mrv2 "${_LIB}" "${CMAKE_INSTALL_PREFIX}/lib")
     endforeach()
     
 elseif ( UNIX )

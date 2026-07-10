@@ -1,250 +1,96 @@
 
-To install it, after opening the .dmg file, drag the @mrv2_NAME@ icon to the Applications directory.  If there's already an existant @mrv2_NAME@ version, we recommend you overwrite it (in case it does not work well for you, you can always revert to a previous version).
+To install it, after opening the .dmg file, drag the @mrv2_NAME@ icon to the 
+Applications directory.  If there's already an existant @mrv2_NAME@ version, we
+recommend you overwrite it (in case it does not work well for you, you can 
+always revert to a previous version).
 
-As the @mrv2_NAME@ application is currently neither code signed nor notarized, you need to do some fearful steps.
+As the @mrv2_NAME@ application is currently neither code signed nor notarized, 
+you need to do a fearful step.
 
-With the Finder, open /Applications/Terminal.app
+You need to double click on the installation.command file.
 
-In the Terminal window, run these commands:
-  
-```
-  sudo xattr -cr /Applications/@mrv2_NAME@.app/
-```
-
-Enter your password.  Then, right after, run these commands:
-
-```
-  sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
-  sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
-  sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
-
-  codesign -vvv --deep /Applications/@mrv2_NAME@.app
-```
-  
-  If the last step prints "satisfies its Designated Requirement", you're gold.
-
------------------------------------------------------------------------------
-
-Um die Anwendung zu installieren, öffnen Sie zunächst die .dmg-Datei und ziehen anschließend das Symbol von @mrv2_NAME@ in das Verzeichnis „Programme“ (Applications). Falls bereits eine Version von @mrv2_NAME@ vorhanden ist, empfehlen wir, diese zu überschreiben. (Sollte die neue Version nicht wie gewünscht funktionieren, können Sie jederzeit zu einer früheren Version zurückkehren.)
-
-Da die Anwendung @mrv2_NAME@ derzeit weder code-signiert noch notariell beglaubigt ist, müssen einige zusätzliche Schritte durchgeführt werden.
-
-Öffnen Sie im Finder die Anwendung /Applications/Terminal.app.
-
-Führen Sie im Terminalfenster folgenden Befehl aus:
-
-```
-sudo xattr -cr /Applications/@mrv2_NAME@.app/
-```
-
-Geben Sie Ihr Passwort ein. Führen Sie anschließend direkt danach die folgenden Befehle aus:
-
-```
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
-sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
-
-codesign -vvv --deep /Applications/@mrv2_NAME@.app
-```
-
-Wenn der letzte Schritt die Meldung „satisfies its Designated Requirement“ ausgibt, war die Signierung erfolgreich und die Anwendung sollte korrekt funktionieren.
-
------------------------------------------------------------------------------
-Para instalar la aplicación, después de abrir el archivo .dmg, arrastre el icono de @mrv2_NAME@ a la carpeta Aplicaciones (Applications). Si ya existe una versión de @mrv2_NAME@ instalada, recomendamos sobrescribirla. (Si la nueva versión no funciona correctamente para usted, siempre podrá volver a una versión anterior).
-
-Como la aplicación @mrv2_NAME@ actualmente no está firmada digitalmente ni notarizada, deberá realizar algunos pasos adicionales.
-
-Desde el Finder, abra /Applications/Terminal.app.
-
-En la ventana de Terminal, ejecute el siguiente comando:
-
-```
-sudo xattr -cr /Applications/@mrv2_NAME@.app/
-```
-
-Introduzca su contraseña. A continuación, ejecute los siguientes comandos:
-
-```
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
-sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
-
-codesign -vvv --deep /Applications/@mrv2_NAME@.app
-```
-
-Si el último paso muestra el mensaje «satisfies its Designated Requirement», todo habrá salido correctamente.
-
------------------------------------------------------------------------------
-Pour installer l'application, après avoir ouvert le fichier .dmg, faites glisser l'icône @mrv2_NAME@ dans le dossier Applications. Si une version de @mrv2_NAME@ est déjà installée, nous vous recommandons de l'écraser. (Si cette nouvelle version ne fonctionne pas correctement pour vous, vous pourrez toujours revenir à une version précédente.)
-
-Comme l'application @mrv2_NAME@ n'est actuellement ni signée numériquement ni notariée, vous devrez effectuer quelques étapes supplémentaires.
-
-Dans le Finder, ouvrez /Applications/Terminal.app.
-
-Dans la fenêtre du Terminal, exécutez la commande suivante :
-
-```
-sudo xattr -cr /Applications/@mrv2_NAME@.app/
-```
-
-Saisissez votre mot de passe. Ensuite, exécutez immédiatement les commandes suivantes :
-
-```
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
-sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
-
-codesign -vvv --deep /Applications/@mrv2_NAME@.app
-```
-
-Si la dernière étape affiche le message « satisfies its Designated Requirement », tout s'est déroulé correctement.
-
------------------------------------------------------------------------------
-एप्लिकेशन को इंस्टॉल करने के लिए, .dmg फ़ाइल खोलने के बाद @mrv2_NAME@ आइकन को Applications फ़ोल्डर में खींचकर छोड़ें। यदि @mrv2_NAME@ का कोई संस्करण पहले से मौजूद है, तो हम उसे ओवरराइट करने की सलाह देते हैं। (यदि नया संस्करण आपके लिए सही ढंग से कार्य नहीं करता है, तो आप हमेशा किसी पुराने संस्करण पर वापस जा सकते हैं।)
-
-चूँकि @mrv2_NAME@ एप्लिकेशन वर्तमान में न तो कोड-साइन किया गया है और न ही नोटराइज़ किया गया है, इसलिए आपको कुछ अतिरिक्त चरण पूरे करने होंगे।
-
-Finder का उपयोग करके /Applications/Terminal.app खोलें।
-
-Terminal विंडो में निम्नलिखित कमांड चलाएँ:
-
-```
-sudo xattr -cr /Applications/@mrv2_NAME@.app/
-```
-
-अपना पासवर्ड दर्ज करें। इसके तुरंत बाद निम्नलिखित कमांड चलाएँ:
-
-```
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
-sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
-
-codesign -vvv --deep /Applications/@mrv2_NAME@.app
-```
-
-यदि अंतिम चरण में "satisfies its Designated Requirement" संदेश प्रदर्शित होता है, तो सब कुछ सफलतापूर्वक पूरा हो गया है।
-
-----------------------------------------------------------------------------
-Per installare l'applicazione, dopo aver aperto il file .dmg, trascina l'icona di @mrv2_NAME@ nella cartella Applicazioni (Applications). Se è già presente una versione di @mrv2_NAME@, ti consigliamo di sovrascriverla. (Se la nuova versione non dovesse funzionare correttamente, potrai sempre tornare a una versione precedente.)
-
-Poiché l'applicazione @mrv2_NAME@ attualmente non è né firmata digitalmente né notarizzata, sarà necessario eseguire alcuni passaggi aggiuntivi.
-
-Dal Finder, apri /Applications/Terminal.app.
-
-Nella finestra del Terminale, esegui il seguente comando:
-
-```
-sudo xattr -cr /Applications/@mrv2_NAME@.app/
-```
-
-Inserisci la tua password. Subito dopo, esegui i seguenti comandi:
-
-```
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
-sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
-
-codesign -vvv --deep /Applications/@mrv2_NAME@.app
-```
-
-Se l'ultimo passaggio mostra il messaggio «satisfies its Designated Requirement», l'operazione è andata a buon fine.
-
-----------------------------------------------------------------------------
-アプリケーションをインストールするには、.dmg ファイルを開いた後、@mrv2_NAME@ アイコンを「アプリケーション (Applications)」フォルダへドラッグしてください。すでに @mrv2_NAME@ の既存バージョンがインストールされている場合は、上書きすることをお勧めします。（新しいバージョンが正常に動作しない場合は、いつでも以前のバージョンに戻すことができます。）
-
-現在、@mrv2_NAME@ アプリケーションはコード署名および Apple の公証（Notarization）が行われていないため、いくつかの追加手順を実行する必要があります。
-
-Finder から /Applications/Terminal.app を開いてください。
-
-ターミナルウィンドウで、次のコマンドを実行してください。
-
-```
-sudo xattr -cr /Applications/@mrv2_NAME@.app/
-```
-
-パスワードを入力してください。その後、続けて次のコマンドを実行してください。
-
-```
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
-sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
-
-codesign -vvv --deep /Applications/@mrv2_NAME@.app
-```
-
-最後の手順で「satisfies its Designated Requirement」と表示された場合は、正常に完了しています。
+You will be asked for your password once and the codesigning commands will be
+run and then you will be able to enjoy @mrv2_NAME@.
 
 ------------------------------------------------------------------------------
-Para instalar a aplicação, após abrir o ficheiro .dmg, arraste o ícone do @mrv2_NAME@ para a pasta Aplicações (Applications). Se já existir uma versão do @mrv2_NAME@ instalada, recomendamos que a substitua. (Caso a nova versão não funcione corretamente para si, poderá sempre voltar a uma versão anterior.)
+Um @mrv2_NAME@ zu installieren, öffnen Sie die .dmg-Datei und ziehen Sie anschließend das Symbol von @mrv2_NAME@ in den Ordner „Programme“. Falls bereits eine Version von @mrv2_NAME@ vorhanden ist, empfehlen wir, diese zu überschreiben. Sollte die neue Version für Sie nicht zufriedenstellend funktionieren, können Sie jederzeit zu einer früheren Version zurückkehren.
 
-Como a aplicação @mrv2_NAME@ atualmente não está assinada digitalmente nem notarizada, será necessário executar alguns passos adicionais.
+Da die Anwendung @mrv2_NAME@ derzeit weder code-signiert noch notariell beglaubigt ist, müssen Sie einen kleinen, aber wichtigen Schritt durchführen.
 
-No Finder, abra /Applications/Terminal.app.
+Doppelklicken Sie dazu auf die Datei „installation.command“.
 
-Na janela do Terminal, execute o seguinte comando:
+Sie werden einmal nach Ihrem Passwort gefragt. Anschließend werden die Code-Signing-Befehle ausgeführt, und danach können Sie @mrv2_NAME@ verwenden.
 
-```
-sudo xattr -cr /Applications/@mrv2_NAME@.app/
-```
+------------------------------------------------------------------------------
+Para instalar @mrv2_NAME@, después de abrir el archivo .dmg, arrastre el icono de @mrv2_NAME@ a la carpeta Aplicaciones. Si ya existe una versión de @mrv2_NAME@, le recomendamos sobrescribirla. Si la nueva versión no funciona correctamente para usted, siempre podrá volver a una versión anterior.
 
-Introduza a sua palavra-passe. Em seguida, execute os seguintes comandos:
+Como la aplicación @mrv2_NAME@ actualmente no está firmada ni notarizada por Apple, deberá realizar un pequeño paso.
 
-```
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
-sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
+Haga doble clic en el archivo installation.command.
 
-codesign -vvv --deep /Applications/@mrv2_NAME@.app
-```
+Se le solicitará su contraseña una sola vez. A continuación se ejecutarán los comandos de firma de código y después podrá disfrutar de @mrv2_NAME@.
 
-Se o último passo apresentar a mensagem «satisfies its Designated Requirement», então tudo correu bem.
+------------------------------------------------------------------------------
+Pour installer @mrv2_NAME@, ouvrez le fichier .dmg, puis faites glisser l'icône de @mrv2_NAME@ vers le dossier Applications. Si une version de @mrv2_NAME@ est déjà installée, nous vous recommandons de la remplacer. Si la nouvelle version ne vous convient pas, vous pourrez toujours revenir à une version précédente.
 
----------------
-Чтобы установить приложение, после открытия файла .dmg перетащите значок @mrv2_NAME@ в папку Applications. Если версия @mrv2_NAME@ уже установлена, мы рекомендуем заменить её новой. (Если новая версия будет работать некорректно, вы всегда сможете вернуться к предыдущей версии.)
+Comme l'application @mrv2_NAME@ n'est actuellement ni signée ni notarisée par Apple, vous devrez effectuer une petite étape.
 
-Поскольку приложение @mrv2_NAME@ в настоящее время не подписано цифровой подписью и не прошло нотариальное заверение Apple, потребуется выполнить несколько дополнительных шагов.
+Double-cliquez sur le fichier installation.command.
 
-В Finder откройте /Applications/Terminal.app.
+Votre mot de passe vous sera demandé une seule fois. Les commandes de signature de code seront ensuite exécutées, et vous pourrez alors profiter de @mrv2_NAME@.
 
-В окне терминала выполните следующую команду:
+------------------------------------------------------------------------------
+@mrv2_NAME@ को स्थापित करने के लिए, .dmg फ़ाइल खोलने के बाद @mrv2_NAME@ के आइकन को Applications फ़ोल्डर में खींचकर छोड़ दें। यदि @mrv2_NAME@ का कोई संस्करण पहले से मौजूद है, तो हम उसे अधिलेखित (overwrite) करने की सलाह देते हैं। यदि नया संस्करण आपके लिए ठीक से काम नहीं करता, तो आप किसी भी समय पिछले संस्करण पर वापस जा सकते हैं।
 
-```
-sudo xattr -cr /Applications/@mrv2_NAME@.app/
-```
+चूँकि @mrv2_NAME@ ऐप वर्तमान में न तो कोड-साइन किया गया है और न ही Apple द्वारा नोटराइज़ किया गया है, इसलिए आपको एक छोटा-सा अतिरिक्त चरण पूरा करना होगा।
 
-Введите свой пароль. Затем сразу выполните следующие команды:
+installation.command फ़ाइल पर डबल-क्लिक करें।
 
-```
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
-sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
+आपसे केवल एक बार आपका पासवर्ड पूछा जाएगा। इसके बाद कोड-साइनिंग कमांड चलाए जाएँगे और फिर आप @mrv2_NAME@ का उपयोग कर सकेंगे।
 
-codesign -vvv --deep /Applications/@mrv2_NAME@.app
-```
+------------------------------------------------------------------------------
+Per installare @mrv2_NAME@, dopo aver aperto il file .dmg, trascina l'icona di @mrv2_NAME@ nella cartella Applicazioni. Se è già presente una versione di @mrv2_NAME@, ti consigliamo di sovrascriverla. Se la nuova versione non dovesse funzionare correttamente, potrai sempre tornare a una versione precedente.
 
-Если на последнем шаге отображается сообщение «satisfies its Designated Requirement», значит всё прошло успешно.
+Poiché l'applicazione @mrv2_NAME@ al momento non è né firmata né notarizzata da Apple, dovrai eseguire un piccolo passaggio.
 
-----------------------
-要安装该应用程序，请在打开 .dmg 文件后，将 @mrv2_NAME@ 图标拖动到“应用程序（Applications）”文件夹中。如果系统中已经存在 @mrv2_NAME@ 的旧版本，我们建议您直接覆盖安装。（如果新版本无法正常工作，您随时都可以恢复到之前的版本。）
+Fai doppio clic sul file installation.command.
 
-由于 @mrv2_NAME@ 应用程序目前既未进行代码签名，也未经过 Apple 公证（Notarization），因此您需要执行一些额外的步骤。
+Ti verrà chiesta la password una sola volta. Verranno quindi eseguiti i comandi di firma del codice e successivamente potrai utilizzare @mrv2_NAME@.
 
-请使用 Finder 打开 /Applications/Terminal.app。
+------------------------------------------------------------------------------
+@mrv2_NAME@ をインストールするには、.dmg ファイルを開いた後、@mrv2_NAME@ のアイコンを「アプリケーション」フォルダへドラッグしてください。すでに @mrv2_NAME@ がインストールされている場合は、上書きすることをお勧めします。新しいバージョンが正常に動作しない場合は、いつでも以前のバージョンに戻すことができます。
 
-在终端窗口中，运行以下命令：
+現在、@mrv2_NAME@ はコード署名および Apple の公証（Notarization）が行われていないため、追加の手順を実行する必要があります。
 
-```
-sudo xattr -cr /Applications/@mrv2_NAME@.app/
-```
+installation.command ファイルをダブルクリックしてください。
 
-输入您的密码。然后立即运行以下命令：
+パスワードの入力は一度だけ求められます。その後、コード署名のコマンドが実行され、@mrv2_NAME@ を使用できるようになります。
 
-```
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/bin/*
-sudo codesign --force --sign - /Applications/@mrv2_NAME@.app/Contents/Resources/lib/*
-sudo codesign --force --deep --sign - /Applications/@mrv2_NAME@.app
+------------------------------------------------------------------------------
+Para instalar o @mrv2_NAME@, após abrir o arquivo .dmg, arraste o ícone do @mrv2_NAME@ para a pasta Aplicativos. Se já existir uma versão do @mrv2_NAME@ instalada, recomendamos substituí-la. Caso a nova versão não funcione corretamente para você, será sempre possível voltar para uma versão anterior.
 
-codesign -vvv --deep /Applications/@mrv2_NAME@.app
-```
+Como o aplicativo @mrv2_NAME@ atualmente não é assinado nem notarizado pela Apple, será necessário realizar uma pequena etapa adicional.
 
-如果最后一步显示“satisfies its Designated Requirement”，则说明所有步骤均已成功完成。
+Dê um clique duplo no arquivo installation.command.
+
+Sua senha será solicitada apenas uma vez. Em seguida, os comandos de assinatura de código serão executados e você poderá usar o @mrv2_NAME@.
+
+------------------------------------------------------------------------------
+Чтобы установить @mrv2_NAME@, откройте файл .dmg, затем перетащите значок @mrv2_NAME@ в папку «Программы». Если у вас уже установлена версия @mrv2_NAME@, рекомендуем заменить её новой. Если новая версия будет работать неудовлетворительно, вы всегда сможете вернуться к предыдущей версии.
+
+Поскольку приложение @mrv2_NAME@ в настоящее время не подписано и не прошло нотариальную проверку Apple, необходимо выполнить небольшой дополнительный шаг.
+
+Дважды щёлкните по файлу installation.command.
+
+Пароль потребуется ввести только один раз. После этого будут выполнены команды подписи кода, и вы сможете пользоваться @mrv2_NAME@.
+
+------------------------------------------------------------------------------
+要安装 @mrv2_NAME@，请先打开 .dmg 文件，然后将 @mrv2_NAME@ 图标拖到“应用程序”文件夹中。如果已经安装了 @mrv2_NAME@，建议直接覆盖现有版本。如果新版本不能正常工作，您随时都可以恢复到之前的版本。
+
+由于 @mrv2_NAME@ 当前既没有进行代码签名，也没有通过 Apple 的公证（Notarization），因此还需要执行一个额外的步骤。
+
+请双击 installation.command 文件。
+
+系统只会要求您输入一次密码。随后将自动执行代码签名命令，完成后您就可以正常使用 @mrv2_NAME@ 了。
+
+------------------------------------------------------------------------------

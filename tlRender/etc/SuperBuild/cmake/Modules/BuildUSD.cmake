@@ -10,11 +10,6 @@ if (NOT USD_FOUND)
     include(ProcessorCount)
     ProcessorCount(NPROCS)
 
-    if(NPROCS GREATER 1)
-	math(EXPR NPROCS "${NPROCS} / 2")
-    endif()
-
-
     set(USD_DEPENDENCIES ${PYTHON_DEP})
     message(STATUS "USD DEPENDENCIES=${USD_DEPENDENCIES}")
 

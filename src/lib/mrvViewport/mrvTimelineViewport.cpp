@@ -411,8 +411,9 @@ namespace mrv
             p.ui->uiText->value(0);
             p.ui->uiVoice->value(0);
             p.ui->uiLink->value(0);
-            if (!app::soporta_annotations)
+            if (!mrv::feature_needs_solo_or_later())
             {
+                p.actionMode = ActionMode::kScrub;
                 p.ui->uiScrub->value(1);
                 return;
             }
@@ -1321,21 +1322,14 @@ namespace mrv
             bool send = p.ui->uiPrefs->SendPanAndZoom->value();
             if (send)
             {
-                nlohmann::json viewPos = p.viewPos;
                 nlohmann::json viewport = getViewportSize();
                 Message msg;
                 msg["command"] = "viewPosAndZoom";
-                msg["viewPos"] = viewPos;
+                msg["viewPos"] = p.viewPos;
                 msg["zoom"] = p.viewZoom;
                 msg["viewport"] = viewport;
                 tcp->pushMessage(msg);
             }
-
-            auto m = getMultilineInput();
-            if (!m)
-                return;
-
-            redraw();
         }
 
         void TimelineViewport::setViewZoom(
@@ -2376,6 +2370,7 @@ namespace mrv
             d.color.brightness.z = d.exrDisplay.exposure * gain;
 
             float saturation = p.ui->uiSaturation->value();
+            p.ui->uiSaturationInput->value(saturation);
             _pushColorMessage("saturation", saturation);
             d.color.saturation.x = saturation;
             d.color.saturation.y = saturation;
@@ -2403,6 +2398,11 @@ namespace mrv
                 p.ui->uiFStop->labelcolor(p.ui->uiGain->labelcolor());
             }
 
+            // If color panel is open, update it too.
+            if (panel::colorPanel)
+            {
+                panel::colorPanel->setDisplayOptions(d);
+            }
             _updateDisplayOptions(d);
         }
 
@@ -3558,7 +3558,12 @@ namespace mrv
             if (path == nullptr)
                 return;
 
-            const draw::Point& pnt = path->pts.back();
+            draw::Point pnt = path->pts.back();
+
+#ifdef OPENGL_BACKEND
+            math::Size2i size = getRenderSize();
+            pnt.y = size.h - pnt.y;
+#endif
 
             nlohmann::json json = pnt;
 

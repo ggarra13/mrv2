@@ -117,21 +117,48 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(pyFLTK_DEBUG --debug )
 endif()
 
-if (NOT ${Python_VERSION})
-    message(FATAL_ERROR "Python_VERSION not defined: ${Python_VERSION}")
-endif()
-
 set(pyFLTK_ARGS )
 # \@todo: we keep opengl for now.
 if(NOT FLTK_BUILD_GL)
     list(APPEND pyFLTK_ARGS --disable-gl)
 endif()
-# Commands for configure, build and install
-set(pyFLTK_CONFIGURE
-    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install setuptools
-    COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install build)
-set(pyFLTK_BUILD     ${pyFLTK_ENV} ${Python_EXECUTABLE} -m build --wheel)
-set(pyFLTK_INSTALL ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install . )
+
+#
+# Configure build/install commands based on BUILD_PYTHON setting
+#
+if(BUILD_PYTHON)
+    # Original behavior: install to system/current Python environment
+    set(pyFLTK_CONFIGURE
+        COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install setuptools
+        COMMAND ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install build)
+    set(pyFLTK_BUILD     ${pyFLTK_ENV} ${Python_EXECUTABLE} -m build --wheel)
+    set(pyFLTK_INSTALL ${pyFLTK_ENV} ${Python_EXECUTABLE} -m pip install . )
+else()
+    # New behavior: compile in venv and install to CMAKE_INSTALL_PREFIX
+    set(pyFLTK_VENV_DIR "${CMAKE_CURRENT_BINARY_DIR}/deps/pyFLTK/venv")
+    
+    if(WIN32)
+        set(pyFLTK_VENV_PYTHON "${pyFLTK_VENV_DIR}/Scripts/python.exe")
+        set(pyFLTK_VENV_PIP "${pyFLTK_VENV_DIR}/Scripts/pip.exe")
+    else()
+        set(pyFLTK_VENV_PYTHON "${pyFLTK_VENV_DIR}/bin/python")
+        set(pyFLTK_VENV_PIP "${pyFLTK_VENV_DIR}/bin/pip")
+    endif()
+    
+    set(pyFLTK_CONFIGURE
+        # Create virtual environment
+        COMMAND ${Python_EXECUTABLE} -m venv "${pyFLTK_VENV_DIR}"
+        # Upgrade pip, setuptools, and build in the venv
+        COMMAND ${pyFLTK_VENV_PIP} install --upgrade pip setuptools build)
+    
+    set(pyFLTK_BUILD
+        ${CMAKE_COMMAND} -E env CXXFLAGS=${pyFLTK_CXX_FLAGS}
+        PATH="${pyFLTK_VENV_DIR}/bin:$ENV{PATH}"
+        ${pyFLTK_VENV_PYTHON} -m build --wheel)
+    
+    set(pyFLTK_INSTALL
+        ${pyFLTK_VENV_PIP} install --prefix "${CMAKE_INSTALL_PREFIX}" --no-deps .)
+endif()
 
 ExternalProject_Add(
     pyFLTK
