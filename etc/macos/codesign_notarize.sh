@@ -380,6 +380,11 @@ sign_dmg() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 notarize() {
+    if [[ "${DEVELOPER_ID}" == "" ]]; then
+	echo "DEVELOPER_ID not set. Will not notarize .dmg.  "
+	echo "Need NOTARYTOOL_PROFILE set."
+	exit 0
+    fi
     local target="${1:-${PACKAGE_DIRECTORY}/${DMG_NAME}}"
     step "Notarizing: $(basename "${target}")"
     [[ -f "${target}" ]] || die "File not found for notarization: ${target}"
@@ -389,13 +394,13 @@ notarize() {
     output=$(xcrun notarytool submit "${target}" \
         --keychain-profile "${NOTARYTOOL_PROFILE}" \
         --wait 2>&1)
+    
 
     echo "${output}"
 
     if echo "${output}" | grep -q "status: Accepted"; then
         ok "Notarization accepted by Apple."
-    else
-        # Extract submission UUID and fetch the detailed log for diagnosis.
+    else submission UUID and fetch the detailed log for diagnosis.
         local uuid
         uuid=$(echo "${output}" | grep -Eo 'id: [0-9a-f-]{36}' | head -1 | awk '{print $2}')
         if [[ -n "${uuid}" ]]; then
@@ -413,6 +418,11 @@ notarize() {
 # ─────────────────────────────────────────────────────────────────────────────
 
 staple_target() {
+    if [[ "${DEVELOPER_ID}" == "" ]]; then
+	echo "DEVELOPER_ID not set. Cannot staple certificate"
+	echo "Need NOTARYTOOL_PROFILE set."
+	exit 0
+    fi
     local target="${1:-${PACKAGE_DIR}/${DMG_NAME}}"
     step "Stapling notarization ticket: $(basename "${target}")"
 
