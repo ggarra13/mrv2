@@ -9,6 +9,8 @@ ChangeLog
 - Licensing: Fixed Edit license not being accepted as such.
 - macOS Licensing: Fixed license_helper not finding the shipped libint.dylib.
 
+- Install: Simplified macOS install using an installer script that automatically codesigns the applications.
+
 - Startup: Fixed Preferences->User Interface->Single Instance being slow to startup, particularly on Windows.
 
 - Assets: Fixed Autodesk's Flow bridge getting instantiated twice and being slower than it should be.
