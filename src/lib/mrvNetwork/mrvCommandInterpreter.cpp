@@ -180,12 +180,23 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
+                const std::string peerId = message.value(kLocalPeerIdKey,
+                                                         std::string());
                 std::string fileName = message["fileName"];
                 std::string audioFileName = message["audioFileName"];
                 replace_path(fileName);
-                if (!audioFileName.empty())
-                    replace_path(audioFileName);
-                app->open(fileName, audioFileName);
+                if (file::isReadable(fileName) &&
+                    (audioFileName.empty() || file::isReadable(audioFileName)))
+                {
+                    app->open(fileName, audioFileName);
+                }
+                else if (!peerId.empty())
+                {
+                    file::Path filePath(message["fileName"]);
+                    file::Path audioFilePath = message["audioFileName"];
+                    FilesModelItem item;
+                    fetchRemoteFile(peerId, filePath, audioFilePath, item);
+                }
             }
             else if (c == "closeAll")
             {

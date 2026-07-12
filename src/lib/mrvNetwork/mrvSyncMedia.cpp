@@ -100,8 +100,9 @@ namespace mrv
         // Content-addressed by the remote path string, not its content —
         // fine for now since re-fetch-on-mismatch isn't handled yet.
         size_t h = std::hash<std::string>{}(remotePath.get());
-        std::string dir = mrv::homepath() + "/.cache/mrv2/remote/" +
-                           std::to_string(h);
+        std::string dir =
+            App::ui->uiPrefs->uiPrefsWebRTCCacheDirectory->value() +
+            std::to_string(h);
         file::mkdirRecursive(dir);
         tl::file::Path path(dir + "/" + file::basename(remotePath.get()));
         const auto& frames = remotePath.getFrames();
@@ -182,7 +183,7 @@ namespace mrv
                 FileTransferClient ftc(manager, peerId);
                 std::atomic<bool> done = false;
                 std::atomic<bool> success = false;
-                
+
                 auto startTime = std::chrono::steady_clock::now();
 
                 ftc.downloadFile(remote, local, [&](
@@ -226,7 +227,7 @@ namespace mrv
                 if (success)
                 {
                     auto now = std::chrono::steady_clock::now();
-                    
+
                     // Calculate the total elapsed duration since start
                     std::chrono::duration<float> duration = now - startTime;
                     const float seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
@@ -234,7 +235,7 @@ namespace mrv
                                             arg(remote.get()).arg(seconds);
                     LOG_STATUS(msg);
                 }
-                
+
                 return success;
             };
 

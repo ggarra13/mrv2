@@ -15,6 +15,8 @@
 #include "mrvIcons/Network.h"
 
 #include "mrvOS/mrvString.h"
+#include "mrvOS/mrvOS.h"
+
 #include "mrvCore/mrvUtil.h"
 
 #include <FL/Fl_Input.H>
@@ -105,6 +107,7 @@ namespace mrv
                         return;
                     }
 
+                    bool shouldDeactivate = false;
                     bool showMessage = false;
                     std::string roomId = _r->room->value();
                     if (roomId.size() < 6)
@@ -112,10 +115,15 @@ namespace mrv
                         showMessage = true;
                         roomId += generateRandomLetters(6);
                     }
+                    else
+                    {
+                        shouldDeactivate = true;
+                    }
 
                     roomId = string::stripWhitespace(roomId);
 
                     _r->room->value(roomId.c_str());
+
 
                     if (showMessage)
                     {
@@ -126,8 +134,15 @@ namespace mrv
                                       nullptr);
                     }
 
+                    // Prepend studio name to roomId to keep the connection "secret".
+                    std::string studio = os::sgetenv("MRV2_WEB_STUDIO");
+                    if (!studio.empty())
+                        roomId = studio + "_" + roomId;
+
                     tcp = new WebRTCClient(roomId);
-                    deactivate();
+
+                    if (shouldDeactivate)
+                        deactivate();
                 });
 
             g->end();
