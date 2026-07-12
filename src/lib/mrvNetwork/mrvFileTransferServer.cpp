@@ -44,18 +44,29 @@ namespace
 
     // Blocks until there's room to send more on `dc` without exceeding
     // kMaxBufferedAmount, or bails out (returns false) if the channel
-    // closes or a peer stalls for too long. Mirrors the single-peer
-    // backpressure logic from before, just parameterized per subscriber
-    // so a slow peer's wait doesn't need a bespoke condition variable
-    // wired up ad hoc at every call site.
+    // closes or genuinely stalls. Polls in short increments rather than
+    // relying on a single long wait_for: if onBufferedAmountLow doesn't
+    // fire promptly for whatever reason, we still re-check the real
+    // bufferedAmount() every 20ms instead of only after a full 5s
+    // timeout, so a healthy peer that's actually draining fine never
+    // visibly pauses. The notify still short-circuits each poll
+    // immediately when it does fire.
     bool waitForRoom(std::shared_ptr<rtc::DataChannel> dc,
                      std::mutex& mtx, std::condition_variable& cv)
     {
+        constexpr auto kPollInterval = std::chrono::milliseconds(20);
+        constexpr auto kStallTimeout = std::chrono::seconds(5);
+
+        const auto deadline = std::chrono::steady_clock::now() + kStallTimeout;
+
         std::unique_lock<std::mutex> lock(mtx);
-        return cv.wait_for(lock, std::chrono::seconds(5), [&]()
-            {
-                return !dc->isOpen() || dc->bufferedAmount() < kLowWaterMark;
-            });
+        while (dc->isOpen() && dc->bufferedAmount() >= kLowWaterMark)
+        {
+            if (std::chrono::steady_clock::now() >= deadline)
+                return false;
+            cv.wait_for(lock, kPollInterval);
+        }
+        return dc->isOpen();
     }
 }
 
@@ -356,9 +367,9 @@ namespace mrv
         auto cv = std::make_shared<std::condition_variable>();
 
         dc->setBufferedAmountLowThreshold(kLowWaterMark);
-        dc->onBufferedAmountLow([mtx, cv]() { 
+        dc->onBufferedAmountLow([mtx, cv]() {
             std::lock_guard<std::mutex> lock(*mtx); // Safely locked
-            cv->notify_one(); 
+            cv->notify_one();
         });
 
         std::vector<std::byte> buf(kChunkHeaderSize + kChunkSize);
