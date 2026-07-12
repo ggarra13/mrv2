@@ -194,10 +194,36 @@ namespace mrv
                 {
                     std::string fileName = message["fileName"];
                     std::string audioFileName = message["audioFileName"];
-                    file::Path filePath(fileName);
-                    file::Path audioFilePath(audioFileName);
-                    FilesModelItem item;
-                    fetchRemoteFile(peerId, filePath, audioFilePath, item);
+                    
+                    file::Path remoteFilePath(fileName);
+                    file::Path remoteAudioFilePath(audioFileName);
+
+                    auto files = app->filesModel()->observeFiles()->get();
+                    bool found = false;
+                    int idx = 0;
+                    for (const auto& file : files)
+                    {
+                        const auto path = file->path;
+                        const auto audioPath = file->audioPath;
+                        if (path.getBaseName() == remoteFilePath.getBaseName() &&
+                            audioPath.getBaseName() == remoteAudioFilePath.getBaseName())
+                        {
+                            found = true;
+                            break;
+                        }
+                        ++idx;
+                    }
+
+                    if (!found)
+                    {
+                        FilesModelItem item;
+                        fetchRemoteFile(peerId, remoteFilePath,
+                                        remoteAudioFilePath, item);
+                    }
+                    else
+                    {
+                        app->filesModel()->setA(idx);
+                    }
                 }
             }
             else if (c == "closeAll")
