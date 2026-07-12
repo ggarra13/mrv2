@@ -182,9 +182,13 @@ namespace mrv
                 }
                 const std::string peerId = message.value(kLocalPeerIdKey,
                                                          std::string());
-                std::string fileName = message["fileName"];
-                std::string audioFileName = message["audioFileName"];
+                tl::file::Path remoteFilePath = message["filePath"];
+                tl::file::Path remoteAudioFilePath = message["audioFilePath"];
+
+                std::string fileName = remoteFilePath.get();
+                std::string audioFileName = remoteAudioFilePath.get();
                 replace_path(fileName);
+                replace_path(audioFileName);
                 if (file::isReadable(fileName) &&
                     (audioFileName.empty() || file::isReadable(audioFileName)))
                 {
@@ -192,12 +196,6 @@ namespace mrv
                 }
                 else if (!peerId.empty())
                 {
-                    std::string fileName = message["fileName"];
-                    std::string audioFileName = message["audioFileName"];
-                    
-                    file::Path remoteFilePath(fileName);
-                    file::Path remoteAudioFilePath(audioFileName);
-
                     auto files = app->filesModel()->observeFiles()->get();
                     bool found = false;
                     int idx = 0;
@@ -216,7 +214,7 @@ namespace mrv
 
                     if (!found)
                     {
-                        FilesModelItem item;
+                        FilesModelItem item;  // dummy item
                         fetchRemoteFile(peerId, remoteFilePath,
                                         remoteAudioFilePath, item);
                     }

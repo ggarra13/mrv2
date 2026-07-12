@@ -1465,7 +1465,7 @@ namespace mrv
         TLRENDER_P();
 
         bool isLocked = tcp->isLocked();
-        
+
         tcp->lock();
         p.player->setPlayback(timeline::Playback::Stop);
 
@@ -1878,8 +1878,9 @@ namespace mrv
     App::open(const std::string& fileName, const std::string& audioFileName)
     {
         TLRENDER_P();
-            
+
         file::Path filePath(string::normalizePath(fileName));
+        file::Path audioFilePath(string::normalizePath(audioFileName));
 
         if (filePath.getExtension() == ".mrv2s")
         {
@@ -1910,7 +1911,7 @@ namespace mrv
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
-            item->audioPath = file::Path(string::normalizePath(audioFileName));
+            item->audioPath = audioFilePath;
 
             p.filesModel->add(item);
         }
@@ -1919,8 +1920,8 @@ namespace mrv
         {
             Message msg;
             msg["command"] = "Open File";
-            msg["fileName"] = fileName;
-            msg["audioFileName"] = audioFileName;
+            msg["filePath"] = filePath;
+            msg["audioFilePath"] = audioFilePath;
             tcp->pushMessage(msg);
         }
     }

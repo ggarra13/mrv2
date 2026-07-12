@@ -5,6 +5,8 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include <tlCore/StringFormat.h>
+
 #include <algorithm>
 #include <condition_variable>
 #include <thread>
@@ -200,6 +202,10 @@ namespace mrv
     {
         const std::string& path = session->path;
 
+        const std::string msg = tl::string::Format(_("Started serving '{0}'")).
+                                arg(path);
+        LOG_STATUS(msg);
+
         FILE* f = std::fopen(path.c_str(), "rb");
         if (!f)
         {
@@ -331,6 +337,9 @@ namespace mrv
             std::lock_guard<std::mutex> lock(sessionsMutex_);
             std::lock_guard<std::mutex> slock(session->mtx);
             sessions_.erase(path);
+            const std::string msg =
+                tl::string::Format(_("Ended serving '{0}'")).arg(path);
+            LOG_STATUS(msg);
             for (auto& sub : session->subscribers)
             {
                 sendDone(sub.dc);
