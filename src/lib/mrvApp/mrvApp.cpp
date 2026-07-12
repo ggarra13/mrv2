@@ -1915,15 +1915,6 @@ namespace mrv
 
             p.filesModel->add(item);
         }
-
-        if (ui->uiPrefs->SendMedia->value())
-        {
-            Message msg;
-            msg["command"] = "Open File";
-            msg["filePath"] = filePath;
-            msg["audioFilePath"] = audioFilePath;
-            tcp->pushMessage(msg);
-        }
     }
 
     void App::openSeparateAudioDialog()
@@ -2216,6 +2207,15 @@ namespace mrv
         }
 
         auto out = timeline::Timeline::create(otioTimeline, _context, options);
+
+        if (ui->uiPrefs->SendMedia->value())
+        {
+            Message msg;
+            msg["command"] = "Open File";
+            msg["filePath"] = item->path;
+            msg["audioFilePath"] = item->audioPath;
+            tcp->pushMessage(msg);
+        }
 
 #ifdef MRV2_PYBIND11
         const std::string& path = item->path.get();
