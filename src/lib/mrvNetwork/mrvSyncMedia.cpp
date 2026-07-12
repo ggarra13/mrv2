@@ -100,9 +100,8 @@ namespace mrv
         // Content-addressed by the remote path string, not its content —
         // fine for now since re-fetch-on-mismatch isn't handled yet.
         size_t h = std::hash<std::string>{}(remotePath.get());
-        std::string dir =
-            App::ui->uiPrefs->uiPrefsWebRTCCacheDirectory->value() +
-            std::to_string(h);
+        std::string cache_dir = App::ui->uiPrefs->uiPrefsWebRTCCacheDirectory->value();
+        std::string dir = cache_dir + "/" + std::to_string(h);
         file::mkdirRecursive(dir);
         tl::file::Path path(dir + "/" + file::basename(remotePath.get()));
         const auto& frames = remotePath.getFrames();
