@@ -192,8 +192,10 @@ namespace mrv
                 }
                 else if (!peerId.empty())
                 {
-                    file::Path filePath(message["fileName"]);
-                    file::Path audioFilePath = message["audioFileName"];
+                    std::string fileName = message["fileName"];
+                    std::string audioFileName = message["audioFileName"];
+                    file::Path filePath(fileName);
+                    file::Path audioFilePath(audioFileName);
                     FilesModelItem item;
                     fetchRemoteFile(peerId, filePath, audioFilePath, item);
                 }
