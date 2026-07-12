@@ -105,13 +105,14 @@ namespace
                         const std::string& signature_b64) {
         auto pubkey_bytes = base64_decode(pubkey_b64);
         if (pubkey_bytes.size() != 32) {
-            std::cerr << "Error: Invalid public key length. Expected 32, got " << pubkey_bytes.size() << ".\n";
+            LOG_ERROR("Error: Invalid public key length. Expected 32, got "
+                      << pubkey_bytes.size() << ".");
             return false;
         }
 
         auto sig_bytes = base64_decode(signature_b64);
         if (sig_bytes.empty()) {
-            std::cerr << "Error: Base64 decoding of signature failed.\n";
+            LOG_ERROR("Error: Base64 decoding of signature failed.");
             return false;
         }
 
@@ -119,21 +120,21 @@ namespace
                                                      pubkey_bytes.data(),
                                                      pubkey_bytes.size());
         if (!pkey) {
-            std::cerr << "OpenSSL Error: Failed to load Ed25519 public key.\n";
+            LOG_ERROR("OpenSSL Error: Failed to load Ed25519 public key.");
             ERR_print_errors_fp(stderr);
             return false;
         }
 
         EVP_MD_CTX* ctx = EVP_MD_CTX_new();
         if (!ctx) {
-            std::cerr << "OpenSSL Error: Failed to create EVP_MD_CTX.\n";
+            LOG_ERROR("OpenSSL Error: Failed to create EVP_MD_CTX.");
             EVP_PKEY_free(pkey);
             return false;
         }
 
         // 1. Initialize the verification context with the public key.
         if (EVP_DigestVerifyInit(ctx, nullptr, nullptr, nullptr, pkey) != 1) {
-            std::cerr << "OpenSSL Error: Failed to initialize digest verification.\n";
+            LOG_ERROR("OpenSSL Error: Failed to initialize digest verification.");
             ERR_print_errors_fp(stderr);
             EVP_MD_CTX_free(ctx);
             EVP_PKEY_free(pkey);
@@ -154,7 +155,7 @@ namespace
         } else if (result == 0) {
             return false; // Signature is invalid
         } else {
-            std::cerr << "OpenSSL Error: An error occurred during verification.\n";
+            LOG_ERROR("OpenSSL Error: An error occurred during verification.");
             ERR_print_errors_fp(stderr);
             return false;
         }
@@ -168,6 +169,12 @@ namespace
     }
 #endif
 
+    /**
+     * Main entry function to turn on / off the options based on license
+     * Plan
+     *
+     * @param plan valid plan name
+     */
     void activatePlan(const std::string& plan)
     {
         if (plan == "Pro" || plan == "Pro+")
@@ -243,6 +250,14 @@ namespace
         LOG_INFO(msg);
     }
 
+    /**
+     * Function used to strip spaces and new lines from a string from the
+     * output of a command or license return string.
+     *
+     * @param output string to strip the spaces and newlines
+     *
+     * @return stripped string
+     */
     inline std::string stripOutput(const std::string& output)
     {
         std::string out = output;
@@ -313,6 +328,18 @@ namespace mrv
         return out;
     }
 
+    /**
+     * Common function to return:
+     *
+     * @param server Server to connect for the license
+     * @param port   Port for the request (443 for HTTPS POST request)
+     * @param machine_ids List of valid machine_ids for node-locked licenses.
+     *                    We use a vector of machine_ids since Windows
+     *                    deprecated the wmic command we were originally using
+     *                    for the license
+     * @param master_key  Master Key for floating licenses.
+     *                    Found through environment variable MRV2_LICENSEPATH.
+     */
     void get_network_configuration(std::string& server, int& port,
                                    std::vector<std::string>& machine_ids,
                                    std::string& master_key)
@@ -362,6 +389,14 @@ namespace mrv
         }
     }
 
+    /**
+     * Check a string for expiration.  Date is expected to be in:
+     * YEAR-MM-DD format, with unused time and timezone.
+     *
+     * @param expires_at License expiration date.
+     *
+     * @return License Status (kValid or kExpired).
+     */
     License has_license_expired(const std::string& expires_at)
     {
         std::tm tm = {};
@@ -388,7 +423,19 @@ namespace mrv
         return License::kValid;
     }
 
-
+    /**
+     * HTTPS post request
+     *
+     * @param serverHost host for the post request
+     * @param serverPort port for the post request (usually 443 = https)
+     * @param entryPoint entry point on server for the post request.
+     * @param requestBody JSON string for the request body.
+     *
+     * Uses mrv2's built-in certificate by default which is updated on each
+     * build.  As a backup, if it is missing, use the OS's default one.
+     *
+     * @return a nlohmann::json message.
+     */
     nlohmann::json post_request(const std::string serverHost,
                                 const int serverPort,
                                 const std::string& entryPoint,
@@ -503,6 +550,12 @@ namespace mrv
     }
 
 
+    /**
+     * Send a hearbeat to license server to verify floating license is still
+     * active and renew it.
+     *
+     * @return true if valid, false if not.
+     */
     bool send_heartbeat()
     {
         // --- Configuration ---
@@ -547,6 +600,13 @@ namespace mrv
         return false;
     }
 
+    /**
+     * Validate a floating license
+     *
+     * @param expiration_date Returned expiration date as a string
+     *
+     * @return License State (kValid, kInvalid, kExpired)
+     */
     License validate_floating(std::string& expiration_date)
     {
         // --- Configuration ---
@@ -615,7 +675,10 @@ namespace mrv
         }
 
         expiration_date = expires_at;
+
+        // Activate the options based on Plan.
         activatePlan(plan);
+
         return License::kValid;
     }
 
@@ -701,6 +764,7 @@ namespace mrv
             return License::kExpired;
         }
 
+        // Activate the options based on Plan.
         activatePlan(plan);
 
         return License::kValid;
@@ -755,6 +819,16 @@ namespace mrv
         return false;
     }
 
+    /**
+     * Main License Validation routine.
+     *
+     * @param expiration_date returned reference to a string with the
+     *                        expiration date.
+     *
+     * @return License State (kInvalid, kValid, kExpired)
+     *         app::license_type is changed to the LicenseType
+     *         (kNodeLocked or kFloating)
+     */
     License validate_license(std::string& expiration_date)
     {
         License out = License::kInvalid;
@@ -809,6 +883,11 @@ namespace mrv
         return out;
     }
 
+    /**
+     * Validate a floating license after a period.
+     *
+     * @return License State (kInvalid, kValid, kExpired)
+     */
     License license_beat()
     {
         if (app::force_demo)
@@ -817,6 +896,7 @@ namespace mrv
             return License::kInvalid;
         }
 
+        // On license beat, we don't check the expiration date.
         std::string expiration;
         License ok = validate_license(expiration);
         return ok;

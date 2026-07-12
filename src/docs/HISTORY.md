@@ -1,3 +1,13 @@
+v1.7.1
+======
+
+ChangeLog
+---------
+
+- Core: Bumped FLTK to v2.1.5.
+- Core: Changed license server's domain so that it will be possible to move to a new VPS due price increases.
+- Core: Added comments to License functions, as they were rather messy.
+
 v1.7.0
 ======
 	
