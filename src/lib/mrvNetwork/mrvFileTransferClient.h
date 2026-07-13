@@ -41,14 +41,21 @@ namespace mrv
         static void abortAwakeCB(void* data);
 
     private:
+        //! Struct used for Fl::awake to cleanly exit from a datachannels'
+        //! thread.
         struct AbortContext
         {
             FileTransferClient* self;
             std::shared_ptr<rtc::DataChannel> dc;
         };
+
+        //! WebRTC datachannel handlers for text and binary data.
         void handleText(const std::string& text);
         void handleBinary(const rtc::binary& data);
+
+        //! Called on success or failure for cleanup.
         void finish(bool success);
+
         // Helper method to process the queue
         void requestNextFile(std::shared_ptr<rtc::DataChannel> dc);
 
@@ -67,23 +74,34 @@ namespace mrv
         // may be the last to arrive.
         void checkComplete();
 
+        // WebRTC handlers
         WebRTCManager& manager_;
         std::shared_ptr<rtc::DataChannel> dc_;
         std::string peerId_;
+
+        // Local and remote paths (we use paths instead of strings to know the
+        // list of frame numbers in sequences).
         tl::file::Path localPath_, remotePath_;
         std::string partPath_;
+
+        // Function callbacks
         std::function<void(bool& aborted,
                            const std::string& title,
                            uint64_t,uint64_t)> progressCb_;
+
         std::function<void(bool)> doneCb_;
+
+        // File writing variables.x
         FILE* out_ = nullptr;
         uint64_t remoteSize_ = 0;
         uint64_t totalRead_ = 0;
         std::atomic<bool> finished_{false};
 
+        // Queues used for transferring multiple files.
         std::deque<std::string> pendingRemotePaths_;
         std::deque<std::string> pendingLocalPaths_;
 
+        // Current files begin transferred
         std::string currentRemotePath_;
         std::string currentLocalPath_;
         std::string currentPartPath_;

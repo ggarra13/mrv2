@@ -176,8 +176,6 @@ namespace mrv
                                         const std::byte* payload,
                                         size_t payloadSize)
     {
-        std::cerr << "offset: " << offset << " size=" << payloadSize
-                  << std::endl;
         std::fseek(out_, static_cast<long>(offset), SEEK_SET);
         std::fwrite(payload, 1, payloadSize, out_);
         totalRead_ += payloadSize;

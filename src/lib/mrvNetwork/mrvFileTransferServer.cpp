@@ -201,7 +201,6 @@ namespace mrv
     void FileTransferServer::runSession(std::shared_ptr<Session> session)
     {
         const std::string& path = session->path;
-        std::cerr << "Started sending " << path << std::endl;
 
         FILE* f = std::fopen(path.c_str(), "rb");
         if (!f)
@@ -258,7 +257,7 @@ namespace mrv
 
         std::vector<std::byte> buf(kChunkHeaderSize + kChunkSize);
         uint64_t offset = 0;
-        
+
         while (!std::feof(f))
         {
             size_t n = std::fread(buf.data() + kChunkHeaderSize, 1,
@@ -320,8 +319,6 @@ namespace mrv
             }
         }
         std::fclose(f);
-        
-        std::cerr << "Finished sending " << path << std::endl;
 
         // Leader's read is done. Tell every subscriber still attached
         // that no more live chunks are coming; subscribers that joined
