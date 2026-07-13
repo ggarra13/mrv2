@@ -344,8 +344,13 @@ namespace mrv
                                    std::vector<std::string>& machine_ids,
                                    std::string& master_key)
     {
-        //server = "srv1037957.hstgr.cloud";
-        server = "filmaura.cloud";
+        server = os::sgetenv("MRV2_LICENSE_SERVER");
+        if (server.empty())
+        {
+            //server = "srv1037957.hstgr.cloud";
+            server = "filmaura.cloud";
+        }
+
         port = 443;
 
         machine_ids = get_machine_ids();
