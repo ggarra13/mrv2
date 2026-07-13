@@ -173,18 +173,21 @@ namespace mrv
                                         const std::byte* payload,
                                         size_t payloadSize)
     {
+        std::cerr << "offset: " << offset << " size=" << payloadSize
+                  << std::endl;
         std::fseek(out_, static_cast<long>(offset), SEEK_SET);
         std::fwrite(payload, 1, payloadSize, out_);
         totalRead_ += payloadSize;
         receivedBytes_ += payloadSize;
 
         const file::Path path(currentRemotePath_);
-        const std::string title =
-            tl::string::Format(_("Downloading {0}...")).arg(path.get());
 
         bool aborted = false;
         if (progressCb_)
         {
+            const std::string title =
+                tl::string::Format(_("Downloading {0}...")).arg(path.get());
+        
             progressCb_(aborted, title, totalRead_, remoteSize_);
             if (aborted)
             {

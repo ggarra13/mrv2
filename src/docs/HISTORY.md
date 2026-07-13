@@ -7,6 +7,7 @@ ChangeLog
 - WebRTC: Added WebRTC panel to Preferences.  Allows setting cache directory and whether to clean it at the start of mrv2.
 - WebRTC: When connected and file is opened, if it does not exist locally, it will now transfer it (Pro+ version only).
 - WebRTC: Made it read the environment variable MRV2_WEBRTC_STUDIO to prepend it to the room name and keep the connection secret.
+- WebRTC: added -room command-line flag to start a WebRTC connection.
 
 - Core: Bumped FLTK to v2.1.5.
 - Core: Changed license server's domain so that it will be possible to move to a new VPS due price increases.
