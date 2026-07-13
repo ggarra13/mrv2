@@ -10,6 +10,16 @@
 #endif
 
 
+#include "mrvNetwork/mrvDummyClient.h"
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvCommandInterpreter.h"
+#    include "mrvNetwork/mrvClient.h"
+#    include "mrvNetwork/mrvComfyUIListener.h"
+#    include "mrvNetwork/mrvImageListener.h"
+#    include "mrvNetwork/mrvServer.h"
+#    include "mrvNetwork/mrvParseHost.h"
+#    include "mrvNetwork/mrvWebRTCClient.h"
+#endif
 
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
@@ -77,16 +87,6 @@ namespace py = pybind11;
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvNetwork/mrvDummyClient.h"
-#ifdef MRV2_NETWORK
-#    include "mrvNetwork/mrvCommandInterpreter.h"
-#    include "mrvNetwork/mrvClient.h"
-#    include "mrvNetwork/mrvComfyUIListener.h"
-#    include "mrvNetwork/mrvImageListener.h"
-#    include "mrvNetwork/mrvServer.h"
-#    include "mrvNetwork/mrvParseHost.h"
-#    include "mrvNetwork/mrvWebRTCClient.h"
-#endif
 
 #if defined(TLRENDER_USD)
 #    include "mrvOptions/mrvUSD.h"
@@ -1134,7 +1134,7 @@ namespace mrv
             std::string studio = os::sgetenv("MRV2_WEB_STUDIO");
             if (!studio.empty())
                 roomId = studio + "_" + roomId;
-            
+
             tcp = new WebRTCClient(roomId);
         }
 #endif
