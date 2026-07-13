@@ -10,6 +10,16 @@
 #endif
 
 
+#include "mrvNetwork/mrvDummyClient.h"
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvCommandInterpreter.h"
+#    include "mrvNetwork/mrvClient.h"
+#    include "mrvNetwork/mrvComfyUIListener.h"
+#    include "mrvNetwork/mrvImageListener.h"
+#    include "mrvNetwork/mrvServer.h"
+#    include "mrvNetwork/mrvParseHost.h"
+#    include "mrvNetwork/mrvWebRTCClient.h"
+#endif
 
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
@@ -77,15 +87,6 @@ namespace py = pybind11;
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvNetwork/mrvDummyClient.h"
-#ifdef MRV2_NETWORK
-#    include "mrvNetwork/mrvCommandInterpreter.h"
-#    include "mrvNetwork/mrvClient.h"
-#    include "mrvNetwork/mrvComfyUIListener.h"
-#    include "mrvNetwork/mrvImageListener.h"
-#    include "mrvNetwork/mrvServer.h"
-#    include "mrvNetwork/mrvParseHost.h"
-#endif
 
 #if defined(TLRENDER_USD)
 #    include "mrvOptions/mrvUSD.h"
@@ -172,6 +173,8 @@ namespace mrv
         bool server = false;
         std::string client;
         unsigned port = 55150;
+
+        std::string webrtcRoom;
 #endif
 
         timeline::CompareOptions compareOptions;
@@ -516,6 +519,9 @@ namespace mrv
                     _("Port number for the server to listen to or for the "
                       "client to connect to."),
                     string::Format("{0}").arg(p.options.port)),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.webrtcRoom, {"-room"},
+                    _("Connect to a WebRTC room at <value>.")),
 #endif
 
                 app::CmdLineHeader::create({}, _("Miscellaneous:")),
@@ -1121,6 +1127,16 @@ namespace mrv
             store_port(p.options.port);
         }
 
+        if (!p.options.webrtcRoom.empty() &&
+            dynamic_cast<DummyClient*>(tcp) != nullptr)
+        {
+            std::string roomId = p.options.webrtcRoom;
+            std::string studio = os::sgetenv("MRV2_WEB_STUDIO");
+            if (!studio.empty())
+                roomId = studio + "_" + roomId;
+
+            tcp = new WebRTCClient(roomId);
+        }
 #endif
 
         //

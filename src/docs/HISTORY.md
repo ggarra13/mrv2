@@ -4,10 +4,12 @@ v1.7.1
 ChangeLog
 ---------
 
+- WebRTC: Added environment variable MRV2_WEBRTC_STUDIO that gets prepended to any room ID connection.  This can be used to keep the connection secure.
 - WebRTC: Added WebRTC panel to Preferences.  Allows setting cache directory and whether to clean it at the start of mrv2.
 - WebRTC: When connected and file is opened, if it does not exist locally, it will now transfer it (Pro+ version only).
 - WebRTC: Made it read the environment variable MRV2_WEBRTC_STUDIO to prepend it to the room name and keep the connection secret.
 - WebRTC: Made the transaction be atomic and cleanly close the data channel on abort or error.
+- WebRTC: added -room command-line flag to start a WebRTC connection.
 
 - Core: Made the default Settings->Cache->Gigabytes use 1 / 4 of available memory instead of 1 / 2.
 - Core: Bumped FLTK to v2.1.5.

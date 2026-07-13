@@ -6,6 +6,7 @@
 
 #include <tlCore/StringFormat.h>
 
+#include <FL/Fl.H>
 
 namespace
 {
@@ -90,11 +91,13 @@ namespace mrv
             });
 
         dc->onClosed([this]() {
-            finish(false);
+            auto* ctx = new AbortContext{this, dc_};
+            Fl::awake(&FileTransferClient::abortAwakeCB, ctx);
         });
         dc->onError([this](std::string err) {
             LOG_ERROR(err);
-            finish(false);
+            auto* ctx = new AbortContext{this, dc_};
+            Fl::awake(&FileTransferClient::abortAwakeCB, ctx);
         });
     }
 
@@ -179,31 +182,42 @@ namespace mrv
         receivedBytes_ += payloadSize;
 
         const file::Path path(currentRemotePath_);
-        const std::string title =
-            tl::string::Format(_("Downloading {0}...")).arg(path.get());
 
         bool aborted = false;
         if (progressCb_)
         {
+            const std::string title =
+                tl::string::Format(_("Downloading {0}...")).arg(path.get());
+
             progressCb_(aborted, title, totalRead_, remoteSize_);
             if (aborted)
             {
-                // Sever the connection to stop incoming traffic
-                if (dc_) {
-                    dc_->close();
-                }
-
                 // Clear pending queues so the sequence fully stops
                 pendingRemotePaths_.clear();
                 pendingLocalPaths_.clear();
 
-                // Clean up local state
-                finish(false);
+                // We're still executing inside dc_'s own message-dispatch
+                // stack (flushPendingMessages). Closing dc_ or destroying
+                // `this` (via finish() -> doneCb_) here corrupts
+                // libdatachannel's internal message queue. Defer real
+                // teardown to the main thread via Fl::awake, after this
+                // callback has returned.
+                auto* ctx = new AbortContext{this, dc_};
+                Fl::awake(&FileTransferClient::abortAwakeCB, ctx);
                 return;
             }
         }
 
         checkComplete();
+    }
+
+    void FileTransferClient::abortAwakeCB(void* data)
+    {
+        std::unique_ptr<AbortContext> ctx(
+            static_cast<AbortContext*>(data));
+        if (ctx->dc)
+            ctx->dc->close();
+        ctx->self->finish(false);
     }
 
     void FileTransferClient::checkComplete()

@@ -114,7 +114,7 @@ namespace mrv
             s->step(1.0);
             s->range(1.f, static_cast<double>(totalPhysMem));
             int Gbytes = settings->getValue<int>("Cache/GBytes");
-            s->default_value(totalPhysMem / 2);
+            s->default_value(totalPhysMem / 4);
             s->value(Gbytes);
             sV->callback(
                 [=](auto w)

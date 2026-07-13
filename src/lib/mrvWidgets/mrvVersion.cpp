@@ -209,9 +209,11 @@ extern "C"
 
 #include "mrvOS/mrvOS.h"
 #include "mrvOS/mrvCPU.h"
+#include "mrvOS/mrvMemory.h"
 
 
 #include <tlCore/String.h>
+#include <tlCore/StringFormat.h>
 
 
 #ifdef TLRENDER_RAW
@@ -1140,6 +1142,24 @@ namespace mrv
         {
             b->add(line.c_str());
         }
+
+        uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
+            totalPhysMem, physMemUsed, physMemUsedByMe;
+
+        memory_information(
+            totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
+            totalPhysMem, physMemUsed, physMemUsedByMe);
+
+
+        b->add("");
+        std::string msg;
+        msg = tl::string::Format(
+            _("Total Physical Memory: {0} Gb")).arg(totalPhysMem / 1024.0);
+        b->add(msg.c_str());
+        msg = tl::string::Format(
+            _("Total Virtual Memory: {0} Gb")).arg(totalVirtualMem / 1024.0);
+        b->add(msg.c_str());
+
     }
 
     std::string gpu_list(ViewerUI* ui)
@@ -1359,20 +1379,20 @@ Sam Richards                                  (FFmpeg encoding guidelines)
 
 FLTK
 ----
-Albrecht Schlosser                            (FLTK 1.4 developer, Windows,
+Albrecht Schlosser                            (FLTK developer, Windows,
                                                macOS and build system)
 Bill Spitzak                                  (FLTK creator)
 David Gibson                                  (FLTK developer)
 F. Constantini                                (FLTK developer)
-Greg Ercolano                                 (FLTK 1.4 contributor,
+Greg Ercolano                                 (FLTK contributor,
                                                mrv2 color schemes,
                                                CollapsibleGroup widget,
-                                               porting from fltk2.0 to 1.4)
+                                               porting from fltk2.0 to 1.4+)
 Ian MacArthur                                 (FLTK contributor, original
                                                docking code, See-Through code)
-Manolo Guoy                                   (FLTK 1,4 developer, macOS and
-                                               Wayland)
-Matthias Melcher                              (FLTK 1.4 developer, macOS,
+Manolo Guoy                                   (FLTK developer, macOS, Windows
+                                               and Wayland)
+Matthias Melcher                              (FLTK developer, macOS,
                                                fluid and FlmmAColorChooser)
 Michael Sweet                                 (FLTK developer)
 MoAlyousef                                    (FLTK contributor, C++ source
