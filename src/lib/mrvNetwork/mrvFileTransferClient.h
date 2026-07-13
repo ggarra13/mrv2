@@ -38,7 +38,14 @@ namespace mrv
                                uint64_t done,uint64_t total) > progressCb,
             std::function<void(bool exit) > doneCb);
 
+        static void abortAwakeCB(void* data);
+
     private:
+        struct AbortContext
+        {
+            FileTransferClient* self;
+            std::shared_ptr<rtc::DataChannel> dc;
+        };
         void handleText(const std::string& text);
         void handleBinary(const rtc::binary& data);
         void finish(bool success);
@@ -76,7 +83,7 @@ namespace mrv
 
         std::deque<std::string> pendingRemotePaths_;
         std::deque<std::string> pendingLocalPaths_;
-    
+
         std::string currentRemotePath_;
         std::string currentLocalPath_;
         std::string currentPartPath_;
@@ -99,7 +106,7 @@ namespace mrv
         // out_ (possible once the channel is unordered) are buffered here
         // and flushed once the file is open.
         std::vector<std::vector<std::byte>> pendingChunks_;
-    
+
     };
 
 }  // namespace mrv
