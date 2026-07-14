@@ -1241,6 +1241,9 @@ msgid ""
 "Port number for the server to listen to or for the client to connect to."
 msgstr "服务器监听或客户端连接的端口号"
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "连接到位于 <value> 的 WebRTC 房间。"
+
 msgid "Miscellaneous:"
 msgstr "杂项:"
 
@@ -2464,6 +2467,9 @@ msgstr "Notes"
 msgid "STUN server is {0}"
 msgstr "STUN 服务器是 {0}"
 
+msgid "No Web RTC Server set."
+msgstr "未设置 WebRTC 服务器。"
+
 msgid "The room ID is: {0}"
 msgstr "房间 ID 是：{0}"
 
@@ -2633,6 +2639,12 @@ msgstr "根据OCIO环境变量设置OCIO配置"
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "从 \"{0}{1}\" 导入路径映射图"
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "删除目录时出错：“{0}”。"
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "已清理目录：“{0}”。"
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "正在从 \"{0}{1}.prefs\" 导入快捷键"
@@ -4601,6 +4613,12 @@ msgstr "With msvc "
 msgid "mrv2 depends on:"
 msgstr "mrv2 depends on:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "物理内存总量：{0} GB"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "虚拟内存总量：{0} GB"
+
 msgid "Vendor:\t"
 msgstr "供应商:"
 
@@ -6020,6 +6038,15 @@ msgstr "×3"
 msgid "X 4"
 msgstr "×4"
 
+msgid "Home Directory"
+msgstr "主目录"
+
+msgid "Temp Directory"
+msgstr "临时目录"
+
+msgid "Custom"
+msgstr "自定义"
+
 msgid "Do Nothing"
 msgstr "Do Nothing"
 
@@ -6834,6 +6861,30 @@ msgid ""
 "This setting opens a pipe to communicate with ComfyUI's "
 "mrv2_save_exr_node.py"
 msgstr "此设置打开管道, 以便与 ComfyUI 的 drv2_ save_ exr_ node 进行通讯 。"
+
+msgid "WebRTC settings"
+msgstr "WebRTC 设置"
+
+msgid "Stun Server"
+msgstr "STUN 服务器"
+
+msgid "WebRTC Server"
+msgstr "WebRTC 服务器"
+
+msgid "Clean directory at Start up"
+msgstr "启动时清理目录"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "查看器启动时清理 WebRTC 缓存目录。"
+
+msgid "WebRTC Cache"
+msgstr "WebRTC 缓存"
+
+msgid "Cache Directory"
+msgstr "缓存目录"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "用于存放 WebRTC 下载内容的目录。"
 
 msgid "Errors"
 msgstr "错误"

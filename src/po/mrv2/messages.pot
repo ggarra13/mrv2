@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.7.0\n"
+"Project-Id-Version: mrv2 v1.7.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -1141,6 +1141,9 @@ msgstr ""
 
 msgid ""
 "Port number for the server to listen to or for the client to connect to."
+msgstr ""
+
+msgid "Connect to a WebRTC room at <value>."
 msgstr ""
 
 msgid "Miscellaneous:"
@@ -2362,6 +2365,9 @@ msgstr ""
 msgid "STUN server is {0}"
 msgstr ""
 
+msgid "No Web RTC Server set."
+msgstr ""
+
 msgid "The room ID is: {0}"
 msgstr ""
 
@@ -2521,6 +2527,12 @@ msgid "Setting OCIO config from OCIO environment variable."
 msgstr ""
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
+msgstr ""
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr ""
+
+msgid "Cleaned directory: \"{0}\"."
 msgstr ""
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
@@ -4452,6 +4464,12 @@ msgstr ""
 msgid "mrv2 depends on:"
 msgstr ""
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr ""
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr ""
+
 msgid "Vendor:\t"
 msgstr ""
 
@@ -5743,6 +5761,15 @@ msgstr ""
 msgid "X 4"
 msgstr ""
 
+msgid "Home Directory"
+msgstr ""
+
+msgid "Temp Directory"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
 msgid "Do Nothing"
 msgstr ""
 
@@ -6550,6 +6577,30 @@ msgstr ""
 
 msgid ""
 "This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py"
+msgstr ""
+
+msgid "WebRTC settings"
+msgstr ""
+
+msgid "Stun Server"
+msgstr ""
+
+msgid "WebRTC Server"
+msgstr ""
+
+msgid "Clean directory at Start up"
+msgstr ""
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr ""
+
+msgid "WebRTC Cache"
+msgstr ""
+
+msgid "Cache Directory"
+msgstr ""
+
+msgid "Directory where WebRTC downloads will reside."
 msgstr ""
 
 msgid "Errors"

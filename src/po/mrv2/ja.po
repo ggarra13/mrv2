@@ -1238,6 +1238,9 @@ msgid ""
 "Port number for the server to listen to or for the client to connect to."
 msgstr "サーバーがリッスンするポート番号を指定する"
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "<value> の WebRTC ルームに接続します。"
+
 msgid "Miscellaneous:"
 msgstr "その他:"
 
@@ -2468,6 +2471,9 @@ msgstr "注記"
 msgid "STUN server is {0}"
 msgstr "STUN サーバーは {0} です"
 
+msgid "No Web RTC Server set."
+msgstr "WebRTC サーバーが設定されていません。"
+
 msgid "The room ID is: {0}"
 msgstr "ルームID: {0}"
 
@@ -2639,6 +2645,12 @@ msgstr "OCIO 環境変数から OCIO 設定を設定しています。"
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "パス マッピングが「{0}{1}」から読み込まれました。"
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "ディレクトリの削除中にエラーが発生しました: 「{0}」。"
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "ディレクトリをクリーンアップしました: 「{0}」。"
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" からホットキーをロードしています。"
@@ -4608,6 +4620,12 @@ msgstr "MSVCを使用して"
 msgid "mrv2 depends on:"
 msgstr "mrv2は以下に依存しています:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "物理メモリ合計: {0} GB"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "仮想メモリ合計: {0} GB"
+
 msgid "Vendor:\t"
 msgstr "ベンダー:\t"
 
@@ -5999,6 +6017,15 @@ msgstr "×3"
 msgid "X 4"
 msgstr "×4"
 
+msgid "Home Directory"
+msgstr "ホームディレクトリ"
+
+msgid "Temp Directory"
+msgstr "一時ディレクトリ"
+
+msgid "Custom"
+msgstr "カスタム"
+
 msgid "Do Nothing"
 msgstr "何もしない"
 
@@ -6827,6 +6854,30 @@ msgid ""
 "This setting opens a pipe to communicate with ComfyUI's "
 "mrv2_save_exr_node.py"
 msgstr "この設定は、ComfyUIのmrv2_save_exr_node.pyと通信するためのパイプを開きます。"
+
+msgid "WebRTC settings"
+msgstr "WebRTC 設定"
+
+msgid "Stun Server"
+msgstr "STUN サーバー"
+
+msgid "WebRTC Server"
+msgstr "WebRTC サーバー"
+
+msgid "Clean directory at Start up"
+msgstr "起動時にディレクトリをクリーンアップ"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "ビューアーの起動時に WebRTC キャッシュディレクトリをクリーンアップします。"
+
+msgid "WebRTC Cache"
+msgstr "WebRTC キャッシュ"
+
+msgid "Cache Directory"
+msgstr "キャッシュディレクトリ"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "WebRTC のダウンロードを保存するディレクトリ。"
 
 msgid "Errors"
 msgstr "エラー"

@@ -1259,6 +1259,9 @@ msgid ""
 msgstr ""
 "Номер порта для сервера, чтобы слушать или чтобы клиент подключался к нему."
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "Подключиться к комнате WebRTC по адресу <value>."
+
 msgid "Miscellaneous:"
 msgstr "Разное:"
 
@@ -2516,6 +2519,9 @@ msgstr "Примечания"
 msgid "STUN server is {0}"
 msgstr "STUN-сервер: {0}"
 
+msgid "No Web RTC Server set."
+msgstr "Сервер WebRTC не задан."
+
 msgid "The room ID is: {0}"
 msgstr "Идентификатор комнаты: {0}"
 
@@ -2701,6 +2707,12 @@ msgstr "Запуск OCIO Conig из переменной окружающей �
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Картирование путей было загружено с \" {0} {1}\"."
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "Ошибка при удалении каталога: «{0}»."
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "Каталог очищен: «{0}»."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Загрузка хот-дога из \"{0}{1}.prefs\"."
@@ -4693,6 +4705,12 @@ msgstr "С msvc"
 msgid "mrv2 depends on:"
 msgstr "mrv2 зависит от:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "Общий объём физической памяти: {0} ГБ"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "Общий объём виртуальной памяти: {0} ГБ"
+
 msgid "Vendor:\t"
 msgstr "Поставщик:"
 
@@ -6132,6 +6150,15 @@ msgstr "× 3"
 msgid "X 4"
 msgstr "× 4"
 
+msgid "Home Directory"
+msgstr "Домашний каталог"
+
+msgid "Temp Directory"
+msgstr "Временный каталог"
+
+msgid "Custom"
+msgstr "Пользовательский"
+
 msgid "Do Nothing"
 msgstr "Ничего не делай"
 
@@ -7047,6 +7074,30 @@ msgid ""
 "mrv2_save_exr_node.py"
 msgstr ""
 "Эта установка открывает трубу для связи с ComfyUI mrv2_save_exr_node.py"
+
+msgid "WebRTC settings"
+msgstr "Настройки WebRTC"
+
+msgid "Stun Server"
+msgstr "Сервер STUN"
+
+msgid "WebRTC Server"
+msgstr "Сервер WebRTC"
+
+msgid "Clean directory at Start up"
+msgstr "Очищать каталог при запуске"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "Очищать каталог кэша WebRTC при запуске программы просмотра."
+
+msgid "WebRTC Cache"
+msgstr "Кэш WebRTC"
+
+msgid "Cache Directory"
+msgstr "Каталог кэша"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "Каталог, в котором будут храниться загрузки WebRTC."
 
 msgid "Errors"
 msgstr "Ошибки"

@@ -1251,6 +1251,9 @@ msgid ""
 msgstr ""
 "Port number for the server to listen to or for the client to connect to."
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "Connect to a WebRTC room at <value>."
+
 msgid "Miscellaneous:"
 msgstr "Miscellaneous:"
 
@@ -2498,6 +2501,9 @@ msgstr "Notes"
 msgid "STUN server is {0}"
 msgstr "STUN server is {0}"
 
+msgid "No Web RTC Server set."
+msgstr "No Web RTC Server set."
+
 msgid "The room ID is: {0}"
 msgstr "The room ID is: {0}"
 
@@ -2675,6 +2681,12 @@ msgstr "Setting OCIO config from OCIO environment variable."
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Path mappings have been loaded from \"{0}{1}\"."
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "Error deleting directory: \"{0}\"."
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "Cleaned directory: \"{0}\"."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
@@ -4665,6 +4677,12 @@ msgstr "With msvc "
 msgid "mrv2 depends on:"
 msgstr "mrv2 depends on:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "Total Physical Memory: {0} Gb"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "Total Virtual Memory: {0} Gb"
+
 msgid "Vendor:\t"
 msgstr "Vendor:\t"
 
@@ -6101,6 +6119,15 @@ msgstr "X 3"
 msgid "X 4"
 msgstr "X 4"
 
+msgid "Home Directory"
+msgstr "Home Directory"
+
+msgid "Temp Directory"
+msgstr "Temp Directory"
+
+msgid "Custom"
+msgstr "Custom"
+
 msgid "Do Nothing"
 msgstr "Do Nothing"
 
@@ -7008,6 +7035,30 @@ msgid ""
 msgstr ""
 "This setting opens a pipe to communicate with ComfyUI's "
 "mrv2_save_exr_node.py"
+
+msgid "WebRTC settings"
+msgstr "WebRTC settings"
+
+msgid "Stun Server"
+msgstr "Stun Server"
+
+msgid "WebRTC Server"
+msgstr "WebRTC Server"
+
+msgid "Clean directory at Start up"
+msgstr "Clean directory at Start up"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "Clean the WebRTC cache directory on start of the viewer."
+
+msgid "WebRTC Cache"
+msgstr "WebRTC Cache"
+
+msgid "Cache Directory"
+msgstr "Cache Directory"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "Directory where WebRTC downloads will reside."
 
 msgid "Errors"
 msgstr "Errors"

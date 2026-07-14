@@ -1235,6 +1235,9 @@ msgid ""
 "Port number for the server to listen to or for the client to connect to."
 msgstr "सर्वर से जुड़ने के लिए पोर्ट संख्या या क्लाइंट के लिए."
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "<value> पर WebRTC कमरे से कनेक्ट करें।"
+
 msgid "Miscellaneous:"
 msgstr "विविध:"
 
@@ -2483,6 +2486,9 @@ msgstr "टिप्पणी"
 msgid "STUN server is {0}"
 msgstr "STUN सर्वर {0} है"
 
+msgid "No Web RTC Server set."
+msgstr "कोई WebRTC सर्वर सेट नहीं है।"
+
 msgid "The room ID is: {0}"
 msgstr "कमरे की आईडी है: {0}"
 
@@ -2662,6 +2668,12 @@ msgstr "ओओआईओ एनवायरनमेंट वेरिएबल 
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "पथ \"{0}{1}\" से लोड किया गया."
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "निर्देशिका हटाने में त्रुटि: \"{0}\"।"
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "निर्देशिका साफ़ की गई: \"{0}\"।"
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" से गर्म हवा लोड किया जा रहा है।"
@@ -4660,6 +4672,12 @@ msgstr "msvc के साथ"
 msgid "mrv2 depends on:"
 msgstr "mrv2 इस पर निर्भर करता है:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "कुल भौतिक मेमोरी: {0} GB"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "कुल वर्चुअल मेमोरी: {0} GB"
+
 msgid "Vendor:\t"
 msgstr "विक्रेता:"
 
@@ -6074,6 +6092,15 @@ msgstr "× 3"
 msgid "X 4"
 msgstr "× 4"
 
+msgid "Home Directory"
+msgstr "होम निर्देशिका"
+
+msgid "Temp Directory"
+msgstr "अस्थायी निर्देशिका"
+
+msgid "Custom"
+msgstr "कस्टम"
+
 msgid "Do Nothing"
 msgstr "कुछ नहीं करें"
 
@@ -6978,6 +7005,30 @@ msgid ""
 msgstr ""
 "यह सेटिंग कॉमफयूयू से संपर्क करने के लिए एक पाइप खोलती है मैं हूँ "
 "mrv2_und_und."
+
+msgid "WebRTC settings"
+msgstr "WebRTC सेटिंग्स"
+
+msgid "Stun Server"
+msgstr "STUN सर्वर"
+
+msgid "WebRTC Server"
+msgstr "WebRTC सर्वर"
+
+msgid "Clean directory at Start up"
+msgstr "प्रारंभ पर निर्देशिका साफ़ करें"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "व्यूअर प्रारंभ होने पर WebRTC कैश निर्देशिका साफ़ करें।"
+
+msgid "WebRTC Cache"
+msgstr "WebRTC कैश"
+
+msgid "Cache Directory"
+msgstr "कैश निर्देशिका"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "वह निर्देशिका जहाँ WebRTC डाउनलोड संग्रहीत किए जाएँगे।"
 
 msgid "Errors"
 msgstr "त्रुटियाँ"

@@ -1234,6 +1234,9 @@ msgid ""
 "Port number for the server to listen to or for the client to connect to."
 msgstr "Portnummer fr den Server zum Anhren oder zum Verbinden des Clients."
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "Mit einem WebRTC-Raum unter <value> verbinden."
+
 msgid "Miscellaneous:"
 msgstr "Verschiedenes:"
 
@@ -2503,6 +2506,9 @@ msgstr "Anmerkungen"
 msgid "STUN server is {0}"
 msgstr "STUN-Server ist {0}"
 
+msgid "No Web RTC Server set."
+msgstr "Kein WebRTC-Server festgelegt."
+
 msgid "The room ID is: {0}"
 msgstr "Die Raum-ID lautet: {0}"
 
@@ -2686,6 +2692,12 @@ msgstr "Einstellung von OCIO config aus der Umgebungsvariable OCIO."
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Pfad-Mappings wurden aus \"{0}{1}\" geladen."
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "Fehler beim Löschen des Verzeichnisses: „{0}“."
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "Verzeichnis bereinigt: „{0}“."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Hotkeys von \"{0}{1}.prefs\" werden geladen."
@@ -4688,6 +4700,12 @@ msgstr "Mit msvc"
 msgid "mrv2 depends on:"
 msgstr "mrv2 hngt ab von:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "Gesamter physischer Speicher: {0} GB"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "Gesamter virtueller Speicher: {0} GB"
+
 msgid "Vendor:\t"
 msgstr "Hersteller:"
 
@@ -6124,6 +6142,15 @@ msgstr "× 3"
 msgid "X 4"
 msgstr "× 4"
 
+msgid "Home Directory"
+msgstr "Persönliches Verzeichnis"
+
+msgid "Temp Directory"
+msgstr "Temporäres Verzeichnis"
+
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
 msgid "Do Nothing"
 msgstr "Nichts tun"
 
@@ -7052,6 +7079,31 @@ msgid ""
 msgstr ""
 "Diese Einstellung ffnet eine Pipe, um mit ComfyUIs mrv2_save_exr_node.py zu "
 "kommunizieren."
+
+msgid "WebRTC settings"
+msgstr "WebRTC-Einstellungen"
+
+msgid "Stun Server"
+msgstr "STUN-Server"
+
+msgid "WebRTC Server"
+msgstr "WebRTC-Server"
+
+msgid "Clean directory at Start up"
+msgstr "Verzeichnis beim Start bereinigen"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "Das WebRTC-Cache-Verzeichnis beim Start des Viewers bereinigen."
+
+msgid "WebRTC Cache"
+msgstr "WebRTC-Cache"
+
+msgid "Cache Directory"
+msgstr "Cache-Verzeichnis"
+
+#, fuzzy
+msgid "Directory where WebRTC downloads will reside."
+msgstr "Verzeichnis, in dem sich Clip befindet"
 
 msgid "Errors"
 msgstr "Fehler"
