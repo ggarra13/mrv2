@@ -995,6 +995,15 @@ namespace mrv
         // WebRTC
         //
         Fl_Preferences WebRTC(base, "WebRTC") ;
+
+
+        WebRTC.get("stun_server", tmpS, "", 4096);
+        uiPrefs->uiPrefsWebRTCStunServer->value(tmpS);
+        
+        WebRTC.get("webrtc_server", tmpS, "", 4096);
+        uiPrefs->uiPrefsWebRTCServer->value(tmpS);
+
+        
         WebRTC.get("clean_directory", tmp, 1);
         uiPrefs->uiPrefsWebRTCCleanDirectory->value(tmp);
 
@@ -1759,6 +1768,11 @@ namespace mrv
         ComfyUI.set("input_pipe", (int)uiPrefs->uiPrefsUseComfyUIPipe->value());
 
         Fl_Preferences WebRTC(base, "WebRTC");
+
+        WebRTC.set("stun_server", uiPrefs->uiPrefsWebRTCStunServer->value());
+        
+        WebRTC.set("webrtc_server", uiPrefs->uiPrefsWebRTCServer->value());
+        
         WebRTC.set("choice",
                    (int)uiPrefs->uiPrefsWebRTCCacheSetting->value());
         WebRTC.set("clean_directory",

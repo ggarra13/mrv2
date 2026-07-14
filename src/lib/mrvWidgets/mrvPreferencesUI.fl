@@ -59,7 +59,7 @@ decl {\#include "mrvFl/mrvOCIO.h"} {private global
 decl {\#include "mrvFLTK/mrvFileRequester.h"} {public global
 }
 
-decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {public global
+decl {\#include "mrvWidgets/mrvOCIOBrowser.h"} {selected public global
 }
 
 decl {\#include "mrvWidgets/mrvChoice.h"} {public global
@@ -96,8 +96,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double hide resizable
-      code0 {main = m;} non_modal size_range {847 449 0 0}
+      xywh {489 182 847 449} type Double resizable
+      code0 {main = m;} non_modal size_range {847 449 0 0} visible
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
@@ -1992,11 +1992,19 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
               tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
-                xywh {318 68 529 310}
+                xywh {318 69 508 312}
               } {
+                Fl_Input uiPrefsWebRTCStunServer {
+                  label {Stun Server}
+                  xywh {438 94 370 32} color 20 textcolor 56
+                }
+                Fl_Input uiPrefsWebRTCServer {
+                  label {WebRTC Server}
+                  xywh {438 153 370 32} color 20 textcolor 56
+                }
                 Fl_Check_Button uiPrefsWebRTCCleanDirectory {
                   label {Clean directory at Start up}
-                  tooltip {Clean the WebRTC cache directory on start of the viewer.} xywh {545 88 25 30} down_box DOWN_BOX value 1 align 4
+                  tooltip {Clean the WebRTC cache directory on start of the viewer.} xywh {545 229 25 30} down_box DOWN_BOX value 1 align 4
                 }
                 Fl_Choice uiPrefsWebRTCCacheSetting {
                   label {WebRTC Cache}
@@ -2018,7 +2026,7 @@ else
 
 path += "/.cache/mrv2/remote";
 v->uiPrefsWebRTCCacheDirectory->value(path.c_str());} open
-                  tooltip {This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py} xywh {545 136 180 26} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py} xywh {545 277 180 26} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -2035,8 +2043,8 @@ v->uiPrefsWebRTCCacheDirectory->value(path.c_str());} open
                   }
                 }
                 Fl_Input uiPrefsWebRTCCacheDirectory {
-                  label {Cache Directory} selected
-                  tooltip {Directory where WebRTC downloads will reside.} xywh {438 192 370 26} color 20 textcolor 56
+                  label {Cache Directory}
+                  tooltip {Directory where WebRTC downloads will reside.} xywh {438 324 370 26} color 20 textcolor 56
                   code0 {std::string path = mrv::homepath() + "/.cache/mrv2/remote";}
                   code1 {std::string oldpath = o->value();}
                   code2 {if (oldpath.empty()) o->value(path.c_str());}
