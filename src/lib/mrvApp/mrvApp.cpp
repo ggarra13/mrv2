@@ -2357,7 +2357,14 @@ namespace mrv
                             if (!file::isTemporaryEDL(item->path) &&
                                 !file::isTemporaryNDI(item->path))
                             {
-                                const std::string& file = item->path.get();
+                                std::string file = item->path.get();
+                                auto frames = item->path.getFrames();
+                                if (frames.has_value())
+                                {
+                                    const math::Int64Range& range = frames.value();
+                                    const bool listdir = true;
+                                    file = item->path.getFrame(range.getMin(), listdir);
+                                }
                                 p.settings->addRecentFile(file);
                             }
                         }

@@ -4,6 +4,8 @@ v1.7.1
 ChangeLog
 ---------
 
+- UI: File->Recent menu now correctly displays the first frame of the sequence, instead of the frame that was used to load it with.
+
 - WebRTC: Added environment variable MRV2_WEBRTC_STUDIO that gets prepended to any room ID connection.  This can be used to keep the connection secure.
 - WebRTC: Added WebRTC panel to Preferences.  Allows setting cache directory and whether to clean it at the start of mrv2.
 - WebRTC: When connected and file is opened, if it does not exist locally, it will now transfer it (Pro+ version only).
