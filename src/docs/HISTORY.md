@@ -5,6 +5,7 @@ ChangeLog
 ---------
 
 - UI: File->Recent menu now correctly displays the first frame of the sequence, instead of the frame that was used to load it with.
+- UI: Fixed some flickering of Progress Report on Windows to not using Fl_Double_Window.
 
 - WebRTC: Added environment variable MRV2_WEBRTC_STUDIO that gets prepended to any room ID connection.  This can be used to keep the connection secure.
 - WebRTC: Added WebRTC panel to Preferences.  Allows setting cache directory and whether to clean it at the start of mrv2.

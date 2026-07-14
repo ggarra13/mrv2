@@ -11,7 +11,7 @@
 
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Progress.H>
-#include <FL/Fl_Window.H>
+#include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl.H>
 #include <FL/fl_ask.H>
@@ -30,7 +30,7 @@ namespace mrv
         _end(end)
     {
         Fl_Group::current(0);
-        w = new Fl_Window(
+        w = new Fl_Double_Window(
             main->x() + main->w() / 2 - 320,
             main->y() + main->h() / 2 - 120 / 2, 640, 120);
         w->size_range(640, 120);
@@ -85,7 +85,7 @@ namespace mrv
         if (progress)
             progress->minimum(value);
     }
-    
+
     void ProgressReport::set_end(int64_t value)
     {
         _end = value;
@@ -98,7 +98,7 @@ namespace mrv
         if (progress)
             progress->copy_label(title);
     }
-    
+
     void ProgressReport::show()
     {
         w->show();
@@ -123,12 +123,12 @@ namespace mrv
         progress->value(value);
         tick();
     }
-    
+
     bool ProgressReport::tick()
     {
         if (!w)
             return false;
-        
+
         progress->value(progress->value() + 1);
 
         const auto now = std::chrono::steady_clock::now();
@@ -138,7 +138,7 @@ namespace mrv
 
         // Get elapsed time in milliseconds (long long)
         const auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_duration).count();
-        
+
         int hour, min, sec, ms;
         to_hour_min_sec(elapsed_ms, hour, min, sec, ms);
 
@@ -186,7 +186,7 @@ namespace mrv
         }
 
         ++_frame;
-        
+
         return true;
     }
 
