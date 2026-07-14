@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrvApp/mrvApp.h"
+
 #include "mrvNetwork/mrvWebRTCClient.h"
 #include "mrvNetwork/mrvFileTransferServer.h"
 
@@ -10,6 +12,8 @@
 #include "mrvOS/mrvOS.h"
 
 #include <tlCore/StringFormat.h>
+
+#include "mrViewer.h"
 
 namespace
 {
@@ -28,6 +32,8 @@ namespace mrv
 
 
         std::string stunServer = os::sgetenv("MRV2_STUN_SERVER");
+        if (stunServer.empty())
+            stunServer = App::ui->uiPrefs->uiPrefsWebRTCStunServer->value();
         if (stunServer.empty())
             stunServer = "stun:stun.l.google.com:19302";
 

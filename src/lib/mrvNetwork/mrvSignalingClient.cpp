@@ -17,6 +17,8 @@
 #include <string>
 #include <thread>
 
+#include "mrViewer.h"
+
 namespace
 {
     const char* kModule = "wss ";
@@ -28,18 +30,23 @@ namespace mrv
     void SignalingClient::connect(const std::string& roomId,
                                   const std::string& player)
     {
-
-        const std::string activeWebRTC = os::sgetenv("MRV2_WEB_RTC");
-        if (activeWebRTC != "1" && activeWebRTC != "ON")
-            return;
-
         if (player.empty())
             playerId = "player_" + mrv::username() + "_" + roomId + "_" +
                        generateRandomLetters(4);
         else
             playerId = player;
 
-        std::string server = os::sgetenv("MRV2_WEB_RTC_SERVER");        
+        std::string server = os::sgetenv("MRV2_WEB_RTC_SERVER");
+        if (server.empty())
+            server = App::ui->uiPrefs->uiPrefsWebRTCServer->value();
+        
+        if (server.empty())
+        {
+            std::string msg = _("No Web RTC Server set.");
+            LOG_ERROR(msg);
+            return;
+        }
+        
         const std::string url = server + "/" + roomId + "/" + playerId;
         
         std::string msg = string::Format(_("The room ID is: {0}")).arg(roomId);
