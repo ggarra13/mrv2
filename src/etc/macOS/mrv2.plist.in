@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+</dict>
+</plist>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
 	<key>CFBundleExecutable</key>
 	<string>@INSTALL_NAME@</string>
 	<key>CFBundleIdentifier</key>
@@ -99,5 +105,11 @@
             </array>
         </dict>
     </array>
+
+    <key>NSCameraUsageDescription</key>
+    <string>This application requires camera access for WebRTC video streaming.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This application requires microphone access for WebRTC audio streaming.</string>
+    
 </dict>
 </plist>
