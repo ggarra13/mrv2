@@ -191,10 +191,12 @@ namespace mrv
                                      uint64_t doneBytes,
                                      uint64_t total)
                     {
+#ifndef __linux__
                         Fl::lock();   // Acquire the GUI lock
 
                         // Safely update the UI
                         progress->set_title(title.c_str());
+#endif
                         progress->set_end(total / 1024);
                         progress->set_value(doneBytes / 1024);
 
@@ -204,12 +206,13 @@ namespace mrv
                             aborted = true;
 
                         // Wake up the main thread's event loop so it
-                        // redraws immediately. Without this, the UI might
-                        // not update until you move your mouse.
+                        // redraws immediately.
                         Fl::awake();
 
+#ifndef __linux__
                         // Release the GUI lock
                         Fl::unlock();
+#endif
 
                     }, [&](bool ok)
                         {
