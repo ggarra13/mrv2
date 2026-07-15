@@ -36,7 +36,11 @@ Contents:
 
 # Pre-built binaries
 
-If you are looking for pre-built binaries for Windows, Linux or macOS, they can be found in:
+If you are looking for the latest release with a guided way of selecting the binaries for your platform go to:
+
+[Guided Download](https://mrv2.sourceforge.io/downloads/mrv2-download-page.html)
+
+If you are looking for ALL the binaries, they can be found in:
 
 [GitHub](https://github.com/ggarra13/mrv2/releases)
 
@@ -50,7 +54,7 @@ The source forge site also hosts beta builds (nightly builds with the latest cha
 
 The Linux releases are built on Rocky Linux 8.10 using SCL.
 The Linux beta builds are built on Ubuntu 24.04.  The preferred OS for
-installation on Linux, however is one supporting GNOME 48+.
+installation on Linux, however is one supporting GNOME 50+.
 
 ## Compatibility
 
