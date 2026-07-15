@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <list>
+#include <deque>
 #include <vector>
 #include <string>
 #include <mutex>
@@ -44,7 +44,11 @@ namespace mrv
         virtual void stop();
 
         inline bool hasSend() const { return !m_send.empty(); }
-        virtual bool hasReceive() const { return !m_receive.empty(); }
+        virtual bool hasReceive() const {
+            if (m_lock)
+                return false;
+            return !m_receive.empty();
+        }
 
         virtual void pushMessage(const Message& message);
         virtual void pushToPeer(const std::string& peerId,
@@ -91,16 +95,16 @@ namespace mrv
 #endif
         volatile bool m_running = false;
 
-        bool m_lock = false;
+        std::atomic<bool> m_lock = false;
 
         bool m_isClient = false;
 
         std::vector< std::thread* > m_threads;
         std::mutex m_sendMutex;
-        std::list< Message > m_send;
+        std::deque< Message > m_send;
 
         static std::mutex m_receiveMutex;
-        static std::list< Message > m_receive;
+        static std::deque< Message > m_receive;
 
         std::vector< uint8_t > m_buffer;
     };
