@@ -51,9 +51,10 @@ namespace tl
                     // the timeline.
                     if (auto read = getRead(clip, options.ioOptions))
                     {
-                        // Use waitResponsive here to keep GNOME happy.
-                        auto infoFuture = read->getInfo();
-                        const io::Info& ioInfo = waitResponsive(infoFuture);
+                        // // Use waitResponsive here to keep GNOME happy.
+                        // auto infoFuture = read->getInfo();
+                        // const io::Info& ioInfo = waitResponsive(infoFuture);
+                        const io::Info& ioInfo = read->getInfo().get();
                         this->ioInfo.video = ioInfo.video;
                         this->ioInfo.videoTime = ioInfo.videoTime;
                         this->ioInfo.tags.insert(
@@ -89,9 +90,10 @@ namespace tl
                     // the timeline.
                     if (auto read = getRead(clip, options.ioOptions))
                     {
-                        // Use waitResponsive here to keep GNOME happy.
-                        auto infoFuture = read->getInfo();
-                        const io::Info& ioInfo = waitResponsive(infoFuture);
+                        // // Use waitResponsive here to keep GNOME happy.
+                        // auto infoFuture = read->getInfo();
+                        // const io::Info& ioInfo = waitResponsive(infoFuture);
+                        const io::Info& ioInfo = read->getInfo().get();
                         this->ioInfo.audio = ioInfo.audio;
                         this->ioInfo.audioTime = ioInfo.audioTime;
                         this->ioInfo.tags.insert(
