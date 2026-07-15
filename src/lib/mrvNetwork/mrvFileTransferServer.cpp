@@ -88,6 +88,9 @@ namespace mrv
         // after the leader's read finishes.
         uint64_t joinOffset = 0;
 
+        // Max message size for this subscriber.
+        size_t maxMessageSize = 1024 * 1024;
+
         // Backpressure primitives for this subscriber's DataChannel.
         // Shared (not owned) so the onBufferedAmountLow callback
         // registered on dc and the waiting code in runSession() refer to
@@ -171,6 +174,7 @@ namespace mrv
                             Subscriber sub;
                             sub.dc = dc;
                             sub.joinOffset = session->offset;
+                            sub.maxMessageSize = dc->maxMessageSize();
                             sendHeaderNow = session->headerSent;
                             knownSize = session->size;
 
@@ -309,7 +313,65 @@ namespace mrv
                     }
                 }
 
-                sub.dc->send(buf.data(), kChunkHeaderSize + n);
+                try
+                {
+                    // Fall back to 1MB if the subscriber's limit is reporting as unbounded (0)
+                    size_t subMaxMsgSize = sub.maxMessageSize;
+                    if (subMaxMsgSize == 0) subMaxMsgSize = 1024 * 1024;
+
+                    const size_t totalChunkSize = kChunkHeaderSize + n;
+
+                    // Fast Path: If the overall chunk fits, send it directly
+                    if (totalChunkSize <= subMaxMsgSize)
+                    {
+                        sub.dc->send(buf.data(), totalChunkSize);
+                    }
+                    // Slow Path: Chunk is too big for this subscriber. Split and send in slices
+                    else
+                    {
+                        // Determine the maximum payload portion we can pack alongside the header
+                        const size_t subChunkLimit = (subMaxMsgSize > kChunkHeaderSize)
+                                                     ? subMaxMsgSize - kChunkHeaderSize
+                                                     : 1;
+
+                        std::vector<std::byte> scratch;
+                        size_t bytesSent = 0;
+
+                        while (bytesSent < n)
+                        {
+                            const size_t chunkPayloadSize = std::min(subChunkLimit, n - bytesSent);
+
+                            // Resize our scratch buffer to hold the header + this slice's payload.
+                            // Using resize() on a persistent buffer avoids repeated heap allocations.
+                            scratch.resize(kChunkHeaderSize + chunkPayloadSize);
+
+                            // Compute and pack the absolute file offset for this slice
+                            const uint64_t subOffset = offset + bytesSent;
+                            packChunkOffset(subOffset, scratch.data());
+
+                            // Copy the payload slice from our main read buffer to the scratch buffer
+                            std::copy(buf.begin() + kChunkHeaderSize + bytesSent,
+                                      buf.begin() + kChunkHeaderSize + bytesSent + chunkPayloadSize,
+                                      scratch.begin() + kChunkHeaderSize);
+
+                            // Transmit the sub-chunk
+                            sub.dc->send(scratch.data(), scratch.size());
+
+                            bytesSent += chunkPayloadSize;
+                        }
+                    }
+                }
+                catch (const std::exception& e)
+                {
+                    LOG_ERROR("Send failed for subscriber, dropping from live session: " +
+                              path + " (" + e.what() + ")");
+                    std::lock_guard<std::mutex> lock(session->mtx);
+                    auto& subs = session->subscribers;
+                    subs.erase(std::remove_if(subs.begin(), subs.end(),
+                                              [&](const Subscriber& s) {
+                                                  return s.dc == sub.dc;
+                                              }), subs.end());
+                }
             }
 
             offset += n;
@@ -360,7 +422,12 @@ namespace mrv
         }
 
         size_t maxMsgSize = dc->maxMessageSize();
+
+        // If 0, treat as unbounded (defaulting to our 1MB preference)
+        if (maxMsgSize == 0) maxMsgSize = 1024 * 1024;
+
         size_t kChunkSize = std::min<size_t>(1024 * 1024, maxMsgSize);
+
         kChunkSize = (kChunkSize > kChunkHeaderSize)
                          ? kChunkSize - kChunkHeaderSize
                          : 1;
