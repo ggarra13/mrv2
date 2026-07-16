@@ -14,8 +14,8 @@ ChangeLog
 - WebRTC: Made the transaction be atomic and cleanly close the data channel on abort or error.
 - WebRTC: added -room command-line flag to start a WebRTC connection.
 
-- Core: Fixed the use of Fl::check in tlRender innards.
-- Core: Made the default Settings->Cache->Gigabytes use 1 / 4 of available memory instead of 1 / 2.
+- Core: Fixed the use of Fl::check in tlRender innards, as it was crashing WebRTC downloads.
+- Core: Made the default Settings->Cache->Gigabytes use 1 / 3 of available memory instead of 1 / 2.
 - Core: Bumped FLTK to v2.1.5.
 - Core: Changed license server's domain so that it will be possible to move to a new VPS due price increases.
 - Core: Added comments to License functions, as they were rather messy.
