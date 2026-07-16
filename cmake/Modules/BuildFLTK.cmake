@@ -4,7 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.1.9)  # v2.1.9 fixes Fl::lock on Wayland.
+set(FLTK_GIT_TAG v2.2.0)  # v2.2.0 fixes Fl::lock on Wayland.
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_merge) # Testing branch

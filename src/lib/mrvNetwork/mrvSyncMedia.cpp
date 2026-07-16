@@ -203,12 +203,12 @@ namespace mrv
                              !progress->window()->shown()))
                             aborted = true;
 
+                        // Release the GUI lock
+                        Fl::unlock();
+
                         // Wake up the main thread's event loop so it
                         // redraws immediately.
                         Fl::awake();
-
-                        // Release the GUI lock
-                        Fl::unlock();
                     }, [&](bool ok)
                         {
                             success = ok;
