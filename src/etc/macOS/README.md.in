@@ -7,7 +7,7 @@ always revert to a previous version).
 As the @mrv2_NAME@ application is currently neither code signed nor notarized, 
 you need to do a fearful step.
 
-You need to double click on the installation.command file.  On macOS Tahoe+ and later, you do have to force Mac OS (in the Security part of the System Settings) to allow the file to run.
+You need to double click on the installation.command file.  On macOS 15+ and later, you do have to force Mac OS (in the Security part of the System Settings) to allow the file to run.
 
 You will be asked for your password once and the codesigning commands will be
 run and then you will be able to enjoy @mrv2_NAME@.
@@ -17,7 +17,7 @@ Um @mrv2_NAME@ zu installieren, öffnen Sie die .dmg-Datei und ziehen Sie anschl
 
 Da die Anwendung @mrv2_NAME@ derzeit weder code-signiert noch notariell beglaubigt ist, müssen Sie einen kleinen, aber wichtigen Schritt durchführen.
 
-Doppelklicken Sie dazu auf die Datei „installation.command“.  Auf macOS Tahoe+ müssen Sie macOS tatsächlich dazu veranlassen, die Ausführung der Datei zuzulassen (im Bereich „Sicherheit“ der Systemeinstellungen).
+Doppelklicken Sie dazu auf die Datei „installation.command“.  Auf macOS 15+ müssen Sie macOS tatsächlich dazu veranlassen, die Ausführung der Datei zuzulassen (im Bereich „Sicherheit“ der Systemeinstellungen).
 
 Sie werden einmal nach Ihrem Passwort gefragt. Anschließend werden die Code-Signing-Befehle ausgeführt, und danach können Sie @mrv2_NAME@ verwenden.
 
@@ -26,7 +26,7 @@ Para instalar @mrv2_NAME@, después de abrir el archivo .dmg, arrastre el icono 
 
 Como la aplicación @mrv2_NAME@ actualmente no está firmada ni notarizada por Apple, deberá realizar un pequeño paso.
 
-Haga doble clic en el archivo installation.command.  En macOS Tahoe and later, sí es necesario indicar a macOS que permita ejecutar el archivo (en la sección Seguridad de la Configuración del sistema).
+Haga doble clic en el archivo installation.command.  En macOS 15+ and later, sí es necesario indicar a macOS que permita ejecutar el archivo (en la sección Seguridad de la Configuración del sistema).
 
 Se le solicitará su contraseña una sola vez. A continuación se ejecutarán los comandos de firma de código y después podrá disfrutar de @mrv2_NAME@.
 
@@ -35,7 +35,7 @@ Pour installer @mrv2_NAME@, ouvrez le fichier .dmg, puis faites glisser l'icône
 
 Comme l'application @mrv2_NAME@ n'est actuellement ni signée ni notarisée par Apple, vous devrez effectuer une petite étape.
 
-Double-cliquez sur le fichier installation.command.  Sur macOS Tahoe+, vous devez effectivement forcer macOS à autoriser l'exécution du fichier (dans la section Sécurité des Réglages Système).
+Double-cliquez sur le fichier installation.command.  Sur macOS 15+, vous devez effectivement forcer macOS à autoriser l'exécution du fichier (dans la section Sécurité des Réglages Système).
 
 Votre mot de passe vous sera demandé une seule fois. Les commandes de signature de code seront ensuite exécutées, et vous pourrez alors profiter de @mrv2_NAME@.
 
@@ -44,7 +44,7 @@ Votre mot de passe vous sera demandé une seule fois. Les commandes de signature
 
 चूँकि @mrv2_NAME@ ऐप वर्तमान में न तो कोड-साइन किया गया है और न ही Apple द्वारा नोटराइज़ किया गया है, इसलिए आपको एक छोटा-सा अतिरिक्त चरण पूरा करना होगा।
 
-installation.command फ़ाइल पर डबल-क्लिक करें।. macOS Tahoe+ पर आपको macOS को फ़ाइल चलाने की अनुमति देने के लिए बाध्य करना होगा (सिस्टम सेटिंग्स के सुरक्षा अनुभाग में)।
+installation.command फ़ाइल पर डबल-क्लिक करें।. macOS 15+ पर आपको macOS को फ़ाइल चलाने की अनुमति देने के लिए बाध्य करना होगा (सिस्टम सेटिंग्स के सुरक्षा अनुभाग में)।
 
 आपसे केवल एक बार आपका पासवर्ड पूछा जाएगा। इसके बाद कोड-साइनिंग कमांड चलाए जाएँगे और फिर आप @mrv2_NAME@ का उपयोग कर सकेंगे।
 
@@ -53,7 +53,7 @@ Per installare @mrv2_NAME@, dopo aver aperto il file .dmg, trascina l'icona di @
 
 Poiché l'applicazione @mrv2_NAME@ al momento non è né firmata né notarizzata da Apple, dovrai eseguire un piccolo passaggio.
 
-Fai doppio clic sul file installation.command.  Su macOS Tahoe+ è necessario forzare macOS ad autorizzare l'esecuzione del file (nella sezione Sicurezza delle Impostazioni di Sistema).
+Fai doppio clic sul file installation.command.  Su macOS 15+ è necessario forzare macOS ad autorizzare l'esecuzione del file (nella sezione Sicurezza delle Impostazioni di Sistema).
 
 Ti verrà chiesta la password una sola volta. Verranno quindi eseguiti i comandi di firma del codice e successivamente potrai utilizzare @mrv2_NAME@.
 
@@ -62,7 +62,7 @@ Ti verrà chiesta la password una sola volta. Verranno quindi eseguiti i comandi
 
 現在、@mrv2_NAME@ はコード署名および Apple の公証（Notarization）が行われていないため、追加の手順を実行する必要があります。
 
-installation.command ファイルをダブルクリックしてください。macOS Tahoe+ では、システム設定の「セキュリティ」から、macOS にそのファイルの実行を許可するよう設定する必要があります。
+installation.command ファイルをダブルクリックしてください。macOS 15+ では、システム設定の「セキュリティ」から、macOS にそのファイルの実行を許可するよう設定する必要があります。
 
 パスワードの入力は一度だけ求められます。その後、コード署名のコマンドが実行され、@mrv2_NAME@ を使用できるようになります。
 
@@ -71,7 +71,7 @@ Para instalar o @mrv2_NAME@, após abrir o arquivo .dmg, arraste o ícone do @mr
 
 Como o aplicativo @mrv2_NAME@ atualmente não é assinado nem notarizado pela Apple, será necessário realizar uma pequena etapa adicional.
 
-Dê um clique duplo no arquivo installation.command.  No macOS Tahoe+, é necessário forçar o macOS a permitir a execução do arquivo (na seção Segurança dos Ajustes do Sistema).
+Dê um clique duplo no arquivo installation.command.  No macOS 15+, é necessário forçar o macOS a permitir a execução do arquivo (na seção Segurança dos Ajustes do Sistema).
 
 Sua senha será solicitada apenas uma vez. Em seguida, os comandos de assinatura de código serão executados e você poderá usar o @mrv2_NAME@.
 
@@ -80,7 +80,7 @@ Sua senha será solicitada apenas uma vez. Em seguida, os comandos de assinatura
 
 Поскольку приложение @mrv2_NAME@ в настоящее время не подписано и не прошло нотариальную проверку Apple, необходимо выполнить небольшой дополнительный шаг.
 
-Дважды щёлкните по файлу installation.command.  В macOS Tahoe+ необходимо принудительно разрешить macOS запуск этого файла (в разделе «Безопасность» системных настроек).
+Дважды щёлкните по файлу installation.command.  В macOS 15+ необходимо принудительно разрешить macOS запуск этого файла (в разделе «Безопасность» системных настроек).
 
 Пароль потребуется ввести только один раз. После этого будут выполнены команды подписи кода, и вы сможете пользоваться @mrv2_NAME@.
 
@@ -89,7 +89,7 @@ Sua senha será solicitada apenas uma vez. Em seguida, os comandos de assinatura
 
 由于 @mrv2_NAME@ 当前既没有进行代码签名，也没有通过 Apple 的公证（Notarization），因此还需要执行一个额外的步骤。
 
-请双击 installation.command 文件。 在 macOS Tahoe+ 上，您确实需要在“系统设置”的“安全性”部分中允许 macOS 运行该文件。
+请双击 installation.command 文件。 在 macOS 15+ 上，您确实需要在“系统设置”的“安全性”部分中允许 macOS 运行该文件。
 
 系统只会要求您输入一次密码。随后将自动执行代码签名命令，完成后您就可以正常使用 @mrv2_NAME@ 了。
 
