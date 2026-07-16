@@ -88,10 +88,12 @@ namespace mrv
             auto iW = new Widget< Input >(
                 g->x() + X, Y + 5, g->w() - X - 30, 20, _("Room"));
             _r->room = i = iW;
+            i->value(settings->getValue<std::string>("WebRTC/Room").c_str());
             i->tooltip(_("Room name to enter."));
             iW->callback(
                 [=](auto o)
                 {
+                    settings->setValue("WebRTC/Room", std::string(o->value()));
                 });
             _r->roomGroup->end();
 

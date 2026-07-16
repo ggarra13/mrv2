@@ -1131,6 +1131,7 @@ namespace mrv
             dynamic_cast<DummyClient*>(tcp) != nullptr)
         {
             std::string roomId = p.options.webrtcRoom;
+            p.settings->setValue("WebRTC/Room", roomId);
             std::string studio = os::sgetenv("MRV2_WEB_STUDIO");
             if (!studio.empty())
                 roomId = studio + "_" + roomId;
