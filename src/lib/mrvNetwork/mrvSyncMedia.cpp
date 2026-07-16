@@ -217,7 +217,10 @@ namespace mrv
 
                 while (!done)
                 {
-                    Fl::check();
+                    // Instead of Fl::check() we call Fl::wait() with a minor
+                    // delay so the Fl::lock/unlock does not get called that
+                    // fast that would leave the lock in a locked state.
+                    Fl::wait(0.05);
                 }
 
 
