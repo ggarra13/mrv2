@@ -35,7 +35,7 @@ namespace tl
             {
                 while (fut.wait_for(pollInterval) != std::future_status::ready)
                 {
-                    Fl::check();   // process pending FLTK / OS events
+                    Fl::wait(0.05);   // process pending FLTK / OS events
                 }
                 return fut.get();
             }
@@ -51,10 +51,13 @@ namespace tl
                     // the timeline.
                     if (auto read = getRead(clip, options.ioOptions))
                     {
-                        // // Use waitResponsive here to keep GNOME happy.
-                        // auto infoFuture = read->getInfo();
-                        // const io::Info& ioInfo = waitResponsive(infoFuture);
+#ifdef __linux__
+                        // Use waitResponsive here to keep GNOME happy.
+                        auto infoFuture = read->getInfo();
+                        const io::Info& ioInfo = waitResponsive(infoFuture);
+#else
                         const io::Info& ioInfo = read->getInfo().get();
+#endif
                         this->ioInfo.video = ioInfo.video;
                         this->ioInfo.videoTime = ioInfo.videoTime;
                         this->ioInfo.tags.insert(
@@ -90,10 +93,13 @@ namespace tl
                     // the timeline.
                     if (auto read = getRead(clip, options.ioOptions))
                     {
-                        // // Use waitResponsive here to keep GNOME happy.
-                        // auto infoFuture = read->getInfo();
-                        // const io::Info& ioInfo = waitResponsive(infoFuture);
+#ifdef __linux__
+                        // Use waitResponsive here to keep GNOME happy.
+                        auto infoFuture = read->getInfo();
+                        const io::Info& ioInfo = waitResponsive(infoFuture);
+#else
                         const io::Info& ioInfo = read->getInfo().get();
+#endif
                         this->ioInfo.audio = ioInfo.audio;
                         this->ioInfo.audioTime = ioInfo.audioTime;
                         this->ioInfo.tags.insert(
