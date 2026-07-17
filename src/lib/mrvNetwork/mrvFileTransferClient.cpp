@@ -123,11 +123,8 @@ namespace mrv
 
         if (currentIsOptional_)
         {
-            // A referenced clip/audio/sequence frame the .otio pointed to
-            // isn't there. Note it and keep going — the rest of the
-            // timeline can still come down and be opened with this one
-            // piece offline/missing, same as tlRender already tolerates
-            // locally.
+            // Server no longer closes dc_ for us on a per-file error, so
+            // it's still safe to keep issuing requests on it.
             failedPaths_.push_back(currentRemotePath_);
 
             doneReceived_ = false;
@@ -139,10 +136,11 @@ namespace mrv
             return;
         }
 
-        // Required file (the .otio itself, or a plain movie/sequence
-        // frame outside the otio-expansion path) — same hard-abort
-        // behavior as before.
+        // Required file — this is now the only place responsible for
+        // closing dc_ on a reported error, since the server won't.
         finish(false);
+        if (dc_)
+            dc_->close();
     }
 
     void FileTransferClient::handleText(const std::string& text)
@@ -162,6 +160,7 @@ namespace mrv
             {
                 LOG_ERROR("Could not open " + currentPartPath_);
                 finish(false);
+                if (dc_) dc_->close();
                 return;
             }
 
@@ -347,6 +346,17 @@ namespace mrv
         pendingOptional_.pop_front();
 
         currentPartPath_ = currentLocalPath_ + ".part";
+
+        // otio-referenced media can carry its own relative subdirectory
+        // (e.g. "2K/black-widow.mov") that may not exist locally yet.
+        // fopen() won't create it for us.
+        std::error_code ec;
+        const auto partDir = std::filesystem::path(currentPartPath_).parent_path();
+        if (!partDir.empty())
+            std::filesystem::create_directories(partDir, ec);
+        if (ec)
+            LOG_ERROR("Could not create directory " + partDir.string() + ": " + ec.message());
+
 
         // Reset state for this specific file
         totalRead_ = 0;

@@ -25,7 +25,12 @@ namespace
         nlohmann::json err;
         err["error"] = msg;
         dc->send(err.dump());
-        dc->close();
+        // NOTE: no dc->close() here anymore. This channel is reused for a
+        // whole sequence of file requests (see FileTransferClient::
+        // requestNextFile), so one missing path shouldn't tear down the
+        // transport. Whether the channel closes after an error is now the
+        // client's call: it closes dc_ itself for a required-file failure,
+        // and keeps requesting on the same dc_ for an optional one.
     }
 
     void sendHeader(std::shared_ptr<rtc::DataChannel> dc,
