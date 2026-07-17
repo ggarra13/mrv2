@@ -4,7 +4,8 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.2.1)  # v2.2.0 fixes Fl::lock on Wayland in FLTK original branch.
+# v2.2.0 fixes Fl::lock on Wayland and v2.2.2 fixes libdecor-gtk compiling on Rocky Linux 8.10 (without the patch command here).
+set(FLTK_GIT_TAG v2.2.2)
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_merge) # Testing branch
@@ -57,14 +58,25 @@ set(FLTK_USE_SYSTEM_LIBPNG TRUE)
 
 
 # We set this to use FLTK's system libdecor
-set(FLTK_USE_SYSTEM_LIBDECOR TRUE)
+set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
 
 # Set this to FALSE to use libdecor's uglier looking windows' borders
 # instead of GTK's nicer window borders.  Note that using GTK's borders will
 # result in a warning due to FLTK and GLFW calling the same function.
+# With the Vulkan backend, we don't have to worry about that.
 set(FLTK_USE_LIBDECOR_GTK FALSE)
+if (MRV2_BACKEND STREQUAL "VK")
+    set(FLTK_USE_LIBDECOR_GTK TRUE)
+endif()
 
-# This one may be turned off
+#
+# This patch is needed for Rocky Linux 8.10
+#
+set(FLTK_PATCH
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/libdecor/src/plugins/gtk/libdecor-gtk.c"
+    "${CMAKE_BINARY_DIR}/deps/FLTK/src/FLTK/libdecor/src/plugins/gtk/libdecor-gtk.c")
 
 # Set FLTK default dependencies
 if (NOT USE_SYSTEM_LIBS)
@@ -96,9 +108,6 @@ if (FLTK_BUILD_VK)
     message(STATUS "FLTK BUILD Vulkan ${FLTK_BUILD_VK}")
 endif()
 
-set(FLTK_PATCH
-)
-
 if (APPLE OR WIN32)
     # We modify and use TLRENDER_* variables to propagate them to tlRender
     set(TLRENDER_X11 OFF)
@@ -126,6 +135,8 @@ ExternalProject_Add(
 
     DEPENDS ${FLTK_DEPENDENCIES}
 
+    PATCH_COMMAND ${FLTK_PATCH}
+    
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
     -DCMAKE_CXX_COMPILER=${FLTK_CXX_COMPILER}

@@ -6,6 +6,7 @@ ChangeLog
 
 - UI: File->Recent menu now correctly displays the first frame of the sequence, instead of the frame that was used to load it with.
 - UI: Fixed some flickering of Progress Report on Windows to not using Fl_Double_Window.
+- UI: Made client side decoration on Wayland use GNOME with Vulkan backend.  The OpenGL backend must remain using the Cairo decoration.
 
 - WebRTC: Added environment variable MRV2_WEBRTC_STUDIO that gets prepended to any room ID connection.  This can be used to keep the connection secure.
 - WebRTC: Added WebRTC panel to Preferences.  Allows setting cache directory and whether to clean it at the start of mrv2.
@@ -14,8 +15,8 @@ ChangeLog
 - WebRTC: Made the transaction be atomic and cleanly close the data channel on abort or error.
 - WebRTC: added -room command-line flag to start a WebRTC connection.
 
-- Core: Fixed the use of Fl::check in tlRender innards.
-- Core: Made the default Settings->Cache->Gigabytes use 1 / 4 of available memory instead of 1 / 2.
+- Core: Fixed the use of Fl::check in tlRender innards, as it was crashing WebRTC downloads.
+- Core: Made the default Settings->Cache->Gigabytes use 1 / 3 of available memory instead of 1 / 2.
 - Core: Bumped FLTK to v2.1.5.
 - Core: Changed license server's domain so that it will be possible to move to a new VPS due price increases.
 - Core: Added comments to License functions, as they were rather messy.

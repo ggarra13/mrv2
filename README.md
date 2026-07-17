@@ -77,7 +77,8 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
   ```
   
   Then, you need to further follow some steps as in the README.md file provided
-  in the installer.
+  in the installer.  You will run a codesigning a script, which, again, will need permissions from Privacy and Secury *AND* enter your password.
+  Apple just keeps making it harder and harder for non-funded Open Source Developers to distribute free applications.
 
 - Windows, like macOS, also protect you from installing files
   from the Internet.
