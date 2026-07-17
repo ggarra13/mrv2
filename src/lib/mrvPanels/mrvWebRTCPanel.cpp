@@ -138,10 +138,10 @@ namespace mrv
 
                     // Prepend studio name to roomId to keep the connection "secret".
                     std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
-                    if (!studio.empty())
-                        roomId = studio + "_" + roomId;
+                    if (studio.empty())
+                        studio = p.ui->uiPrefs->uiPrefsWebRTCStudio->value();
 
-                    tcp = new WebRTCClient(roomId);
+                    tcp = new WebRTCClient(studio, roomId);
 
                     if (shouldDeactivate)
                         deactivate();

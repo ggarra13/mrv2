@@ -22,7 +22,8 @@ namespace
 
 namespace mrv
 {
-    WebRTCClient::WebRTCClient(const std::string& roomId,
+    WebRTCClient::WebRTCClient(const std::string& studio,
+                               const std::string& roomId,
                                const std::string& playerId)
     {
         std::string debug = os::sgetenv("MRV2_WEBRTC_DEBUG");
@@ -107,7 +108,7 @@ namespace mrv
             webrtcManager.erase(peerId);
         };
 
-        signalingClient.connect(roomId, playerId);
+        signalingClient.connect(studio, roomId, playerId);
     }
 
     WebRTCClient::~WebRTCClient()

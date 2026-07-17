@@ -1132,11 +1132,11 @@ namespace mrv
         {
             std::string roomId = p.options.webrtcRoom;
             p.settings->setValue("WebRTC/Room", roomId);
-            std::string studio = os::sgetenv("MRV2_WEB_STUDIO");
-            if (!studio.empty())
-                roomId = studio + "_" + roomId;
+            std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
+            if (studio.empty())
+                studio = ui->uiPrefs->uiPrefsWebRTCStudio->value();
 
-            tcp = new WebRTCClient(roomId);
+            tcp = new WebRTCClient(studio, roomId);
         }
 #endif
 

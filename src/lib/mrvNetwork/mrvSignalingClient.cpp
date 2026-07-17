@@ -27,7 +27,8 @@ namespace
 namespace mrv
 {
 
-    void SignalingClient::connect(const std::string& roomId,
+    void SignalingClient::connect(const std::string& studio,
+                                  const std::string& roomId,
                                   const std::string& player)
     {
         if (player.empty())
@@ -39,24 +40,25 @@ namespace mrv
         std::string server = os::sgetenv("MRV2_WEB_RTC_SERVER");
         if (server.empty())
             server = App::ui->uiPrefs->uiPrefsWebRTCServer->value();
-        
+
         if (server.empty())
         {
             std::string msg = _("No Web RTC Server set.");
             LOG_ERROR(msg);
             return;
         }
-        
-        const std::string url = server + "/" + roomId + "/" + playerId;
-        
+
+        const std::string url = server + "/" + studio + "_" + roomId +
+                                "/" + playerId;
+
         std::string msg = string::Format(_("The room ID is: {0}")).arg(roomId);
         LOG_STATUS(msg);
-        
+
         msg = string::Format(_("The player ID is: {0}")).arg(playerId);
         LOG_STATUS(msg);
-        
+
         rtc::WebSocketConfiguration config;
-        
+
         std::string caLocation = mrv::rootpath() + "/certs/cacert.pem";
         if (!file::isReadable(caLocation))
         {
@@ -71,9 +73,9 @@ namespace mrv
 
         if (!caLocation.empty())
             config.caCertificatePemFile = caLocation;
-        
+
         websocket = std::make_shared<rtc::WebSocket>(config);
-    
+
         websocket->onOpen([]() {
             LOG_INFO("WebSocket connected, signaling ready");
         });
@@ -85,7 +87,7 @@ namespace mrv
         websocket->onError([](const std::string &error) {
             LOG_ERROR("WebSocket failed: " << error);
         });
-    
+
         websocket->onMessage([&](std::variant<rtc::binary, std::string> data) {
             if (!std::holds_alternative<std::string>(data))
                 return;
@@ -93,7 +95,7 @@ namespace mrv
             nlohmann::json message = nlohmann::json::parse(std::get<std::string>(data));
             handleMessage(message);
         });
-    
+
         websocket->open(url);
 
         while (!websocket->isOpen()) {
@@ -106,7 +108,7 @@ namespace mrv
     void SignalingClient::send(const SignalingMessage& msg)
     {
         nlohmann::json j;
-    
+
         j["id"] = msg.peerId;
         j["type"] = msg.type;
 
@@ -118,7 +120,7 @@ namespace mrv
 
         if (!msg.mid.empty())
             j["mid"] = msg.mid;
-    
+
         websocket->send(j.dump());
     }
 

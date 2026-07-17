@@ -16,7 +16,8 @@ namespace mrv
     class WebRTCClient : public TCP
     {
     public:
-        WebRTCClient(const std::string& room, const std::string& player = "");
+        WebRTCClient(const std::string& studio,
+                     const std::string& room, const std::string& player = "");
         virtual ~WebRTCClient();
 
         WebRTCManager& manager() { return webrtcManager; }
