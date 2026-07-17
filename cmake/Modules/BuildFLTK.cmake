@@ -61,10 +61,12 @@ set(FLTK_USE_SYSTEM_LIBDECOR TRUE)
 
 # Set this to FALSE to use libdecor's uglier looking windows' borders
 # instead of GTK's nicer window borders.  Note that using GTK's borders will
-# result in a warning due to FLTK and GLFW calling the same function.
+# result in a warning in mrv2 OpenGL due to FLTK and GLFW calling the same
+# function.
+# vmrv2 Vulkan does not suffer from this.
+# Note that FLTK_USE_LIBDECOR_GTK TRUE does not compile on Rocky Linux 8.10 due
+# to an undefined macro.
 set(FLTK_USE_LIBDECOR_GTK FALSE)
-
-# This one may be turned off
 
 # Set FLTK default dependencies
 if (NOT USE_SYSTEM_LIBS)
