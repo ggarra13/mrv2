@@ -57,12 +57,16 @@ set(FLTK_USE_SYSTEM_LIBPNG TRUE)
 
 
 # We set this to use FLTK's system libdecor
-set(FLTK_USE_SYSTEM_LIBDECOR TRUE)
+set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
 
 # Set this to FALSE to use libdecor's uglier looking windows' borders
 # instead of GTK's nicer window borders.  Note that using GTK's borders will
 # result in a warning due to FLTK and GLFW calling the same function.
+# With the Vulkan backend, we don't have to worry about that.
 set(FLTK_USE_LIBDECOR_GTK FALSE)
+if (MRV2_BACKEND STREQUAL "VK")
+    set(FLTK_USE_LIBDECOR_GTK TRUE)
+endif()
 
 # This one may be turned off
 
