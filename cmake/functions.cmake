@@ -142,6 +142,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libgio
 	libglib
 	libgobject
+	libgtk
 	libpango
 	libwayland-client
 	libwayland-cursor
@@ -252,9 +253,9 @@ function( is_system_lib TARGET ISSYSLIB )
 	${_x11_libs}
 	${_opengl_libs}
 	${_macos_libs}
-s    )
+    )
 
-    
+
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
     foreach( lib ${_acceptedlibs} )
 	if ("${TARGET}" MATCHES "${lib}")
