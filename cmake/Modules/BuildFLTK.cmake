@@ -4,7 +4,8 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.2.1)  # v2.2.0 fixes Fl::lock on Wayland in FLTK original branch.
+# v2.2.0 fixes Fl::lock on Wayland and v2.2.2 fixes libdecor-gtk compiling on Rocky Linux 8.10 (without the patch command here).
+set(FLTK_GIT_TAG v2.2.2)
 
 #set(FLTK_GIT_TAG vk)  # Cutting edge!
 #set(FLTK_GIT_TAG vk_merge) # Testing branch
