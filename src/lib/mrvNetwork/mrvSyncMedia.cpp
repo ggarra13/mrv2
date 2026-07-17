@@ -209,10 +209,33 @@ namespace mrv
                         // Wake up the main thread's event loop so it
                         // redraws immediately.
                         Fl::awake();
-                    }, [&](bool ok)
+                    }, [&](bool ok, const std::vector<std::string>& failedPaths)
                         {
+                            Fl::lock();
+
                             success = ok;
                             done = true;
+
+                            if (ok && !failedPaths.empty())
+                            {
+                                // The timeline itself downloaded fine, but some of the
+                                // media it references wasn't found on the server. Still
+                                // usable — just tell the user what's missing rather than
+                                // silently opening a timeline with holes in it.
+                                std::string msg = _("The timeline downloaded, but the "
+                                                    "following referenced media could "
+                                                    "not be found on the server:\n\n");
+                                for (const auto& p : failedPaths)
+                                    msg += "  " + p + "\n";
+                                fl_alert("%s", msg.c_str());
+                            }
+                            else if (!ok)
+                            {
+                                fl_alert("%s", _("Download failed."));
+                            }
+
+                            Fl::unlock();
+                            Fl::awake();
                         });
 
                 while (!done)

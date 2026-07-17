@@ -1,3 +1,5 @@
+#include "mrvEdit/mrvEditCallbacks.h"
+
 #include "mrvNetwork/mrvFileTransferClient.h"
 #include "mrvNetwork/mrvWebRTCManager.h"
 #include "mrvNetwork/mrvMessage.h"
@@ -30,7 +32,8 @@ namespace mrv
                                               bool& aborted,
                                               const std::string& title,
                                               uint64_t,uint64_t) > progressCb,
-                                          std::function<void(bool) > doneCb)
+                                          std::function<void(bool,
+                                                             const std::vector<std::string>&) > doneCb)
     {
         remotePath_ = remotePath;
         localPath_ = localPath;
@@ -49,12 +52,14 @@ namespace mrv
             {
                 pendingRemotePaths_.push_back(remotePath.getFrame(i, listdir));
                 pendingLocalPaths_.push_back(localPath.getFrame(i, listdir));
+                pendingOptional_.push_back(false);
             }
         }
         else
         {
             pendingRemotePaths_.push_back(remotePath.get());
             pendingLocalPaths_.push_back(localPath.get());
+            pendingOptional_.push_back(false);
         }
 
         auto peer = manager_.getClient(peerId_);
@@ -91,14 +96,53 @@ namespace mrv
             });
 
         dc->onClosed([this]() {
+            if (!currentRemotePath_.empty())
+                failedPaths_.push_back(currentRemotePath_);
             auto* ctx = new AbortContext{this, dc_};
             Fl::awake(&FileTransferClient::abortAwakeCB, ctx);
         });
         dc->onError([this](std::string err) {
             LOG_ERROR(err);
+            if (!currentRemotePath_.empty())
+                failedPaths_.push_back(currentRemotePath_);
             auto* ctx = new AbortContext{this, dc_};
             Fl::awake(&FileTransferClient::abortAwakeCB, ctx);
         });
+    }
+
+    void FileTransferClient::handleFileError(const std::string& err)
+    {
+        LOG_ERROR(err);
+
+        if (out_)
+        {
+            std::fclose(out_);
+            out_ = nullptr;
+        }
+        std::remove(currentPartPath_.c_str());
+
+        if (currentIsOptional_)
+        {
+            // A referenced clip/audio/sequence frame the .otio pointed to
+            // isn't there. Note it and keep going — the rest of the
+            // timeline can still come down and be opened with this one
+            // piece offline/missing, same as tlRender already tolerates
+            // locally.
+            failedPaths_.push_back(currentRemotePath_);
+
+            doneReceived_ = false;
+            receivedBytes_ = 0;
+            pendingChunks_.clear();
+
+            if (manager_.getClient(peerId_))
+                requestNextFile(dc_);
+            return;
+        }
+
+        // Required file (the .otio itself, or a plain movie/sequence
+        // frame outside the otio-expansion path) — same hard-abort
+        // behavior as before.
+        finish(false);
     }
 
     void FileTransferClient::handleText(const std::string& text)
@@ -107,8 +151,7 @@ namespace mrv
 
         if (msg.contains("error"))
         {
-            LOG_ERROR(msg["error"].get<std::string>());
-            finish(false);
+            handleFileError(msg["error"].get<std::string>());
         }
         else if (msg.contains("size"))
         {
@@ -181,7 +224,7 @@ namespace mrv
         totalRead_ += payloadSize;
         receivedBytes_ += payloadSize;
 
-        const file::Path path(currentRemotePath_);
+        const tl::file::Path path(currentRemotePath_);
 
         bool aborted = false;
         if (progressCb_)
@@ -195,6 +238,7 @@ namespace mrv
                 // Clear pending queues so the sequence fully stops
                 pendingRemotePaths_.clear();
                 pendingLocalPaths_.clear();
+                pendingOptional_.clear();
 
                 // We're still executing inside dc_'s own message-dispatch
                 // stack (flushPendingMessages). Closing dc_ or destroying
@@ -237,6 +281,13 @@ namespace mrv
         // Finalize this specific file
         std::rename(currentPartPath_.c_str(), currentLocalPath_.c_str());
 
+        const tl::file::Path finishedRemote(currentRemotePath_);
+        if (!otioExpanded_ && finishedRemote.getExtension() == ".otio")
+        {
+            otioExpanded_ = true;
+            expandOtioReferences(finishedRemote, currentLocalPath_);
+        }
+
         doneReceived_ = false;
         receivedBytes_ = 0;
         pendingChunks_.clear();
@@ -272,7 +323,7 @@ namespace mrv
         }
 
         if (doneCb_)
-            doneCb_(success);
+            doneCb_(success, failedPaths_);
     }
 
     void FileTransferClient::requestNextFile(std::shared_ptr<rtc::DataChannel> dc)
@@ -292,6 +343,9 @@ namespace mrv
         currentLocalPath_ = pendingLocalPaths_.front();
         pendingLocalPaths_.pop_front();
 
+        currentIsOptional_ = pendingOptional_.front();
+        pendingOptional_.pop_front();
+
         currentPartPath_ = currentLocalPath_ + ".part";
 
         // Reset state for this specific file
@@ -301,10 +355,62 @@ namespace mrv
         doneReceived_ = false;
         pendingChunks_.clear();
 
+
         // Ask the server for it
         Message req;
         req["path"] = currentRemotePath_;
         dc->send(req.dump());
+    }
+
+    void FileTransferClient::expandOtioReferences(
+        const tl::file::Path& remoteOtioPath,
+        const std::string& localOtioPath)
+    {
+        otio::ErrorStatus err;
+        otio::SerializableObject::Retainer<otio::Timeline> timeline(
+            dynamic_cast<otio::Timeline*>(
+                otio::Timeline::from_json_file(localOtioPath, &err)));
+        if (!timeline || otio::is_error(err))
+        {
+            LOG_ERROR("Could not parse downloaded .otio: " + localOtioPath);
+            return;
+        }
+
+        // The server-side directory the referenced media is relative to —
+        // we already know it, since we're the ones who chose remotePath_.
+        const std::string remoteBaseDir = remoteOtioPath.getDirectory();
+        const std::string localBaseDir  = tl::file::Path(localOtioPath).getDirectory();
+
+        for (const auto& mediaPath : getOtioTimelinePaths(timeline, remoteBaseDir))
+        {
+            // Re-anchor under the local download dir, preserving whatever
+            // relative sub-structure the .otio itself used, so its
+            // internal (relative) references stay valid after download.
+            std::string localMedia = mediaPath.get();
+            if (localMedia.rfind(remoteBaseDir, 0) == 0)
+                localMedia = localBaseDir + localMedia.substr(remoteBaseDir.size());
+            else
+                localMedia = localBaseDir + mediaPath.getFileName();
+
+            if (mediaPath.isSequence() && mediaPath.getFrames().has_value())
+            {
+                const auto range = mediaPath.getFrames().value();
+                const tl::file::Path localMediaPath(localMedia);
+                const bool listdir = true;
+                for (int64_t i = range.getMin(); i <= range.getMax(); ++i)
+                {
+                    pendingRemotePaths_.push_back(mediaPath.getFrame(i, listdir));
+                    pendingLocalPaths_.push_back(localMediaPath.getFrame(i, listdir));
+                    pendingOptional_.push_back(true);
+                }
+            }
+            else
+            {
+                pendingRemotePaths_.push_back(mediaPath.get());
+                pendingLocalPaths_.push_back(localMedia);
+                pendingOptional_.push_back(true);
+            }
+        }
     }
 
 }  // namespace mrv
