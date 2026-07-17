@@ -14,6 +14,8 @@ ChangeLog
 - WebRTC: Made it read the environment variable MRV2_WEBRTC_STUDIO to prepend it to the room name and keep the connection secret.
 - WebRTC: Made the transaction be atomic and cleanly close the data channel on abort or error.
 - WebRTC: added -room command-line flag to start a WebRTC connection.
+- WebRTC: Added Preferences->WebRTC to easily change settings.  Note that environment variables take precedence over these settings and they are purposedly not shown to keep the connection confidential.
+- WebRTC: Added support for transfering .otio files, with all the files referenced in them.
 
 - Core: Fixed the use of Fl::check in tlRender innards, as it was crashing WebRTC downloads.
 - Core: Made the default Settings->Cache->Gigabytes use 1 / 3 of available memory instead of 1 / 2.
