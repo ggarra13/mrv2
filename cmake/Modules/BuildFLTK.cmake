@@ -64,9 +64,16 @@ set(FLTK_USE_SYSTEM_LIBDECOR TRUE)
 # result in a warning in mrv2 OpenGL due to FLTK and GLFW calling the same
 # function.
 # vmrv2 Vulkan does not suffer from this.
-# Note that FLTK_USE_LIBDECOR_GTK TRUE does not compile on Rocky Linux 8.10 due
-# to an undefined macro.
-set(FLTK_USE_LIBDECOR_GTK FALSE)
+set(FLTK_USE_LIBDECOR_GTK TRUE)
+
+#
+# This patch is needed for Rocky Linux 8.10
+#
+set(FLTK_PATCH ${CMAKE_COMMAND} -E copy_if_different
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/libdecor/src/plugins/gtk/libdecor-gtk.c"
+    "${CMAKE_BINARY_DIR}/deps/FLTK/src/FLTK/libdecor/src/plugins/gtk/libdecor-gtk.c")
 
 # Set FLTK default dependencies
 if (NOT USE_SYSTEM_LIBS)
@@ -128,6 +135,8 @@ ExternalProject_Add(
 
     DEPENDS ${FLTK_DEPENDENCIES}
 
+    PATCH_COMMAND ${FLTK_PATCH}
+    
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
     -DCMAKE_CXX_COMPILER=${FLTK_CXX_COMPILER}
