@@ -67,7 +67,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	    libMoltenVK
 	    libvulkan)
     endif()
-    
+
     #
     # List of libraries that are accepted to distribute
     #
@@ -97,7 +97,7 @@ function( is_system_lib TARGET ISSYSLIB )
     #
     set(_kde_libs
 	libkwin
-	
+
 	libKF5ConfigCore
 	libKF5ConfigGui
 	libKF5CoreAddons
@@ -106,7 +106,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libKF5Plasma
 	libKF5WaylandClient
 	libKF5WindowSystem
-	
+
 	libKF6ConfigCore
 	libKF6ConfigGui
 	libKF6CoreAddons
@@ -115,11 +115,11 @@ function( is_system_lib TARGET ISSYSLIB )
 	libKF6Plasma
 	libKF6WaylandClient
 	libKF6WindowSystem
-	
+
 	libinput
     )
 
-    set(_qt_libs	
+    set(_qt_libs
 	libQt5Core
 	libQt5DBus
 	libQt5Gui
@@ -134,11 +134,12 @@ function( is_system_lib TARGET ISSYSLIB )
 	libQt6WaylandClient
 	libQt6WaylandCompositor
     )
-    
+
     set(_gnome_libs
 	libcairo
 	libdrm
 	libdrm2
+	libgdk-3
 	libgio
 	libglib
 	libgobject
@@ -180,7 +181,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libXv
 	libXxf86dga
 	libXxf86vm
-	
+
 	libxcb-shape
 	libxcb-xfixes
 	libxcb-render
@@ -214,7 +215,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	    tk
 	)
     endif()
-    
+
     #
     # List of system libraries that should *NOT* be distributed
     #
