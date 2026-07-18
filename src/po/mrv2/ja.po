@@ -1521,6 +1521,18 @@ msgstr "{0} {1}をストリーミング中..."
 msgid "Stop streaming"
 msgstr "ストリーミング"
 
+msgid "Complexity"
+msgstr "難易度"
+
+msgid "Draw Mode"
+msgstr "描画モード"
+
+msgid "Stage Cache"
+msgstr "キャッシュ"
+
+msgid "Disk Cache in GB"
+msgstr "ディスクキャッシュ"
+
 msgid "Room"
 msgstr "ルーム"
 
@@ -2536,6 +2548,16 @@ msgstr "{0} は既に別の同期要求で取得中のため、重複した要�
 msgid "Transfers"
 msgstr "転送"
 
+msgid ""
+"The timeline downloaded, but the following referenced media could not be found on the server:\n"
+"\n"
+msgstr ""
+"タイムラインはダウンロードされましたが、以下の参照メディアはサーバー上に見つかりませんでした:\n"
+"\n"
+
+msgid "Download failed."
+msgstr "ダウンロードに失敗しました。"
+
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr "リモートファイル {0} はローカルに見つからず、取得元となるピアもありません。"
 
@@ -3525,29 +3547,32 @@ msgstr "HAP プロファイルには .mov 拡張子が必要です。.mov に変
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新しいファイル {0} はすでに存在します！上書きできません。"
 
+msgid "Rotated image info: {0}"
+msgstr "回転された画像情報: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "スケーリングされた画像情報: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: ライタープラグインを開けません。"
 
 msgid "Image info: {0} {1}"
 msgstr "画像情報: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "スケーリングされた画像情報: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr "画像が大きすぎてアノテーションを保存できません。ビューポートサイズに拡大縮小します。"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "ライタープラグインが出力情報を取得しませんでした。デフォルトの {0} に設定します"
+
+msgid "Output info: {0} {1}"
+msgstr "出力情報: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "プロファイル {0}、ピクセル形式 {1} を使用しています。"
 
 msgid "Using preset {0}."
 msgstr "プリセット{0}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "オフスクリーンバッファ情報: {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "出力情報: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "オーディオなしでムービーを保存しています %<PRId64> - %<PRId64>"
@@ -3564,11 +3589,32 @@ msgstr "オーディオなしで画像を保存しています %<PRId64> - %<PRI
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "しかし、どこかへ行こうとしているわけじゃない。"
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: 無効な OpenGL 形式とタイプ"
+
+msgid "OpenGL info: {0}"
+msgstr "OpenGL 情報: {0}"
+
 msgid "Saving... {0}"
 msgstr "保存中... {0}"
 
+msgid "Unsupported output format"
+msgstr "サポートされていない出力形式: %1%"
+
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
+
 msgid "Render size: {0}"
 msgstr "レンダーサイズ: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "画像レイヤー '{0}' 情報: {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "オフスクリーンバッファ情報: {0}"
+
+msgid "Unsupported output format: "
+msgstr "サポートされていない出力形式: %1%"
 
 msgid "2.35"
 msgstr "2.35"
@@ -3594,38 +3640,14 @@ msgstr "    先読み    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    後ろ    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
-msgid "HDR monitor min. nits = {0}"
-msgstr "HDR モニターの最小輝度（ニト）= {0}"
-
-msgid "HDR monitor max. nits = {0}"
-msgstr "HDR モニターの最大輝度（ニト）= {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDRモニターが見つからないか、設定されていません。"
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr "HDRモニターがVulkanまたはウィンドウマネージャーによって検出されませんでした。"
-
-msgid "Vulkan color space is {0}"
-msgstr "Vulkanの色空間は{0}です"
-
-msgid "Vulkan format is {0}"
-msgstr "Vulkanのフォーマットは{0}です"
-
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "インデックス {0} のアクティブなHDRモニターに切り替えました"
-
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr "インデックス {0} のHDR対応だが非アクティブなモニターに切り替えました"
-
-msgid "Changed to SDR monitor at index {0}"
-msgstr "インデックス {0} のSDRモニターに変更しました"
-
 msgid "Edit Text"
 msgstr "テキストを編集"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' はファイル、ディレクトリ、またはURLではありません。"
+
+msgid "Invalid font for text drawing"
+msgstr "フォントファイル情報が無効です。"
 
 msgid "Could not convert message to shape: "
 msgstr "ベクター図形に変換"
@@ -6864,6 +6886,9 @@ msgstr "STUN サーバー"
 msgid "WebRTC Server"
 msgstr "WebRTC サーバー"
 
+msgid "Studio name to prefix to all Room connections."
+msgstr "すべてのルーム接続の先頭に付加するスタジオ名。"
+
 msgid "Clean directory at Start up"
 msgstr "起動時にディレクトリをクリーンアップ"
 
@@ -7763,9 +7788,6 @@ msgstr "スクラブ モード"
 msgid "Area Selection Mode"
 msgstr "エリア選択モード"
 
-msgid "Draw Mode"
-msgstr "描画モード"
-
 msgid "Erase Mode"
 msgstr "消去モード"
 
@@ -7877,48 +7899,39 @@ msgstr "host_statistics64に失敗しました。"
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました。"
 
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "HDR モニターの最小輝度（ニト）= {0}"
+
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "HDR モニターの最大輝度（ニト）= {0}"
+
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDRモニターが見つからないか、設定されていません。"
+
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
+#~ msgstr "HDRモニターがVulkanまたはウィンドウマネージャーによって検出されませんでした。"
+
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Vulkanの色空間は{0}です"
+
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Vulkanのフォーマットは{0}です"
+
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "インデックス {0} のアクティブなHDRモニターに切り替えました"
+
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
+#~ msgstr "インデックス {0} のHDR対応だが非アクティブなモニターに切り替えました"
+
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "インデックス {0} のSDRモニターに変更しました"
+
 #~ msgid ""
 #~ "Get command-line arguments passed as single quoted string to -pythonArgs."
 #~ msgstr "コマンドライン引数を、-pythonArgs に単一引用符で囲まれた文字列として渡します。"
 
-#~ msgid "Complexity"
-#~ msgstr "難易度"
-
-#~ msgid "Stage Cache"
-#~ msgstr "キャッシュ"
-
-#~ msgid "Disk Cache in GB"
-#~ msgstr "ディスクキャッシュ"
-
 #~ msgid "Remote files are less than local files."
 #~ msgstr "ローカルファイルのみがサポートされています。"
-
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "回転された画像情報: {0}"
-
-#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr "画像が大きすぎてアノテーションを保存できません。ビューポートサイズに拡大縮小します。"
-
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: 無効な OpenGL 形式とタイプ"
-
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "OpenGL 情報: {0}"
-
-#~ msgid "Unsupported output format"
-#~ msgstr "サポートされていない出力形式: %1%"
-
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
-
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "画像レイヤー '{0}' 情報: {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "サポートされていない出力形式: %1%"
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "フォントファイル情報が無効です。"
 
 #~ msgid "Start or In Point of the video."
 #~ msgstr "動画の開始点（Inポイント）。"

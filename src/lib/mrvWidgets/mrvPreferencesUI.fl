@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.050020
+version 1.0500
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -1991,20 +1991,20 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
               label WebRTC open
               tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5
             } {
-              Fl_Group {} {open
+              Fl_Group {} {open selected
                 xywh {318 69 508 312}
               } {
                 Fl_Input uiPrefsWebRTCStunServer {
                   label {Stun Server}
-                  xywh {438 86 370 32} color 20 textcolor 56
+                  tooltip {WebRTC STUN Server.  Leave blank to use Google's.} xywh {438 86 370 32} color 20 textcolor 56
                 }
                 Fl_Input uiPrefsWebRTCServer {
                   label {WebRTC Server}
-                  xywh {438 133 370 32} color 20 textcolor 56
+                  tooltip {WebRTC server used to sync the connections.} xywh {438 133 370 32} color 20 textcolor 56
                 }
                 Fl_Input uiPrefsWebRTCStudio {
-                  label Studio selected
-                  tooltip {Studio name to prefix to all Room connections.} xywh {438 180 370 32} color 20 textcolor 56
+                  label Studio
+                  tooltip {Studio name to prefix to all Room connections.  Use some unique name.} xywh {438 180 370 32} color 20 textcolor 56
                 }
                 Fl_Check_Button uiPrefsWebRTCCleanDirectory {
                   label {Clean directory at Start up}
@@ -2030,7 +2030,7 @@ else
 
 path += "/.cache/mrv2/remote";
 v->uiPrefsWebRTCCacheDirectory->value(path.c_str());} open
-                  tooltip {This setting opens a pipe to communicate with ComfyUI's mrv2_save_exr_node.py} xywh {545 277 180 26} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Cache Directory presets.} xywh {545 277 180 26} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
