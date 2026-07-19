@@ -996,12 +996,17 @@ namespace mrv
         //
         Fl_Preferences WebRTC(base, "WebRTC") ;
 
+        std::string stun_server = "stun:stun.l.google.com:19302";
+        WebRTC.get("stun_server", tmpS, stun_server.c_str(), 4096);
+        if (strlen(tmpS) != 0)
+            stun_server = tmpS;
+        uiPrefs->uiPrefsWebRTCStunServer->value(stun_server.c_str());
 
-        WebRTC.get("stun_server", tmpS, "", 4096);
-        uiPrefs->uiPrefsWebRTCStunServer->value(tmpS);
-
-        WebRTC.get("webrtc_server", tmpS, "", 4096);
-        uiPrefs->uiPrefsWebRTCServer->value(tmpS);
+        std::string webrtc_server = "wss://filmaura.cloud/sync";
+        WebRTC.get("webrtc_server", tmpS, webrtc_server.c_str(), 4096);
+        if (strlen(tmpS) != 0)
+            webrtc_server = tmpS;
+        uiPrefs->uiPrefsWebRTCServer->value(webrtc_server.c_str());
 
         WebRTC.get("webrtc_studio", tmpS, "", 4096);
         uiPrefs->uiPrefsWebRTCStudio->value(tmpS);

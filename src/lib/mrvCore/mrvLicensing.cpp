@@ -100,6 +100,38 @@ namespace
         return out;
     }
 
+    // -------------------------
+    // Base64 encode helper
+    // -------------------------
+    std::string base64_encode(const unsigned char* data, size_t len) {
+        BIO* bio, * b64;
+        BUF_MEM* bufferPtr;
+
+        b64 = BIO_new(BIO_f_base64());
+        bio = BIO_new(BIO_s_mem());
+        bio = BIO_push(b64, bio);
+
+        BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL); // no newlines
+        BIO_write(bio, data, static_cast<int>(len));
+        BIO_flush(bio);
+
+        BIO_get_mem_ptr(bio, &bufferPtr);
+        std::string out(bufferPtr->data, bufferPtr->length);
+
+        BIO_free_all(bio);
+        return out;
+    }
+
+    // Convenience overload for std::vector<unsigned char>
+    std::string base64_encode(const std::vector<unsigned char>& in) {
+        return base64_encode(in.data(), in.size());
+    }
+
+    std::string base64_encode(const std::string& in) {
+        return base64_encode(reinterpret_cast<const unsigned char*>(in.data()),
+                             in.size());
+    }
+
     bool verify_ed25519(const std::string& pubkey_b64,
                         const std::string& message,
                         const std::string& signature_b64) {
@@ -685,6 +717,97 @@ namespace mrv
         activatePlan(plan);
 
         return License::kValid;
+    }
+
+    std::string request_webrtc_ticket()
+    {
+        // --- Configuration ---
+        std::string serverHost;
+        int serverPort;
+        std::vector<std::string> machine_ids;
+        std::string master_key;
+        get_network_configuration(serverHost, serverPort, machine_ids,
+                                  master_key);
+
+        std::string valid_machine_id;
+        nlohmann::json valid_json_data;
+
+        // --- Build JSON request ---
+        for (const auto& id : machine_ids)
+        {
+            const std::string requestVersion = mrv::version();  // legacy
+            const std::string requestBody = "{\"machine_id\":\"" +
+                                            id + "\",\"plan\":\""
+                                            + requestVersion + "\"}";
+
+            // --- HTTP POST to /webrtc_ticket ---
+            nlohmann::json json_data = post_request(serverHost, serverPort,
+                                                    "/webrtc_ticket",
+                                                    requestBody);
+
+            if (json_data.is_null() ||
+                !json_data.contains("signature") ||
+                !json_data.contains("payload"))
+                continue;
+
+            valid_machine_id = id;
+            valid_json_data = json_data;
+            break; // Successfully got a ticket
+        }
+
+        if (valid_machine_id.empty())
+        {
+            LOG_ERROR("Could not obtain a WebRTC ticket from the server.");
+            return "";
+        }
+
+        // --- Parse JSON response with nlohmann::json ---
+        std::string signature = valid_json_data.at("signature").get<std::string>();
+        const nlohmann::ordered_json& payload_json = valid_json_data.at("payload");
+
+        if (!payload_json.contains("expires_at") ||
+            !payload_json.contains("machine_id") ||
+            !payload_json.contains("purpose"))
+        {
+            LOG_ERROR("Malformed ticket payload.");
+            return "";
+        }
+
+        const std::string expires_at = payload_json.at("expires_at").get<std::string>();
+        const std::string payload_machine_id = payload_json.at("machine_id").get<std::string>();
+        const std::string purpose = payload_json.at("purpose").get<std::string>();
+
+        // -------------------------
+        // Verify server signature locally (Prevents spoofing)
+        // -------------------------
+        const std::string verify_json = payload_json.dump(-1);
+        bool valid = verify_ed25519(verify_key_b64, verify_json, signature);
+
+        if (!valid)
+        {
+            LOG_ERROR("❌ Invalid signature on WebRTC ticket");
+            return "";
+        }
+
+        // Double-check the payload data
+        if (payload_machine_id != valid_machine_id || purpose != "webrtc_sync")
+        {
+            LOG_ERROR("WebRTC ticket mismatch (machine_id or purpose invalid).");
+            return "";
+        }
+
+        // -------------------------
+        // Prepare the token for the WebSocket URL
+        // -------------------------
+        // We dump the ENTIRE json (payload + signature) to a compact string
+        std::string raw_token_json = valid_json_data.dump(-1);
+
+        // Base64 encode it so it safely passes through the URL query parameter
+        // NOTE: Replace `base64_encode` with whatever base64 encoding utility
+        // you currently use in your C++ codebase.
+        std::string base64_token = base64_encode(raw_token_json);
+
+        return base64_token;
     }
 
     License validate_node_locked(std::string& expiration_date)

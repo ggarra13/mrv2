@@ -7,6 +7,7 @@
 
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvUtil.h"
 
 #include <tlCore/StringFormat.h>
@@ -31,6 +32,15 @@ namespace mrv
                                   const std::string& roomId,
                                   const std::string& player)
     {
+        std::string token = request_webrtc_ticket();
+        if (token.empty())
+        {
+            std::string msg = _("Cannot connect to WebRTC: User is not authorized or "
+                                "license expired");
+            LOG_ERROR(msg);
+            return;
+        }
+
         if (player.empty())
             playerId = "player_" + mrv::username() + "_" + roomId + "_" +
                        generateRandomLetters(4);
@@ -43,13 +53,18 @@ namespace mrv
 
         if (server.empty())
         {
-            std::string msg = _("No Web RTC Server set.");
+            server = "wss://filmaura.cloud/sync";
+        }
+
+        if (studio.empty())
+        {
+            std::string msg = _("No Web RTC Studio set.  Please update Preferences->WebRTC");
             LOG_ERROR(msg);
             return;
         }
 
         const std::string url = server + "/" + studio + "_" + roomId +
-                                "/" + playerId;
+                                "/" + playerId + "?token=" + token;
 
         std::string msg = string::Format(_("The room ID is: {0}")).arg(roomId);
         LOG_STATUS(msg);

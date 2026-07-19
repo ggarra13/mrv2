@@ -139,7 +139,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libcairo
 	libdrm
 	libdrm2
-	libgdk-3
+	libgdk
 	libgio
 	libglib
 	libgobject
