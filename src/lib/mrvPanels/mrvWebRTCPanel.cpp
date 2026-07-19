@@ -131,17 +131,26 @@ namespace mrv
                     {
                         mrv::fl_alert(_("Share the room ID with the persons "
                                         "that will review the session "
-                                        "with you.\n\nNote that this feature "
-                                        "is only available in the Pro+ tier."),
+                                        "with you.\n\n"),
                                       nullptr);
                     }
 
                     settings->setValue("WebRTC/Room", roomId);
 
-                    // Prepend studio name to roomId to keep the connection "secret".
+                    // Prepend studio name to roomId to keep the connection
+                    // "secret".
                     std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
                     if (studio.empty())
                         studio = p.ui->uiPrefs->uiPrefsWebRTCStudio->value();
+
+                    if (!mrv::app::soporta_voice)
+                    {
+                        mrv::fl_alert(_("This feature is unlimited on the "
+                                        "Pro and Pro+ tiers.\n\n"
+                                        "On other tiers, it is limited to 2\n"
+                                        "connections and 30 minutes of use."),
+                                      nullptr);
+                    }
 
                     tcp = new WebRTCClient(studio, roomId);
 

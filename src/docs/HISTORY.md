@@ -8,6 +8,13 @@ ChangeLog
 - UI: Fixed some flickering of Progress Report on Windows to not using Fl_Double_Window.
 - UI: Made client side decoration on Wayland use GNOME with Vulkan backend.  The OpenGL backend must remain using the uglier Cairo decoration.
 
+- WebRTC: It is now live.  You can now connect two or more computers and share their media.
+On the free tier, only two computers can be connected and there's a limit of 30 minutes.  On the Pro tier, there's no limit on the number of computers or time limit.
+   Quick start:
+      * Go to Preferences->WebRTC, enter the name of your studio.  Use the same name on each computer you will hook up.
+      * Go to Panel/WebRTC on one machine.  Enter the name of a room longer than 6 characters.  Click Connect.
+      * Go to Panel/WebRTC on the other machine.  Enter the same room name.  Click connect.
+      * If all went well, both machines will sync and you can synchronize what gets received/sent with the Sync menu.
 - WebRTC: Added environment variable MRV2_WEBRTC_STUDIO that gets prepended to any room ID connection.  This can be used to keep the connection secure.
 - WebRTC: Added WebRTC panel to Preferences.  Allows setting cache directory and whether to clean it at the start of mrv2.
 - WebRTC: When connected and file is opened, if it does not exist locally, it will now transfer it (Pro+ version only).
