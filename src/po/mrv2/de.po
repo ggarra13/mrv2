@@ -1521,18 +1521,6 @@ msgstr "Streaming von {0} {1}..."
 msgid "Stop streaming"
 msgstr "Streaming beenden"
 
-msgid "Complexity"
-msgstr "Komplexität"
-
-msgid "Draw Mode"
-msgstr "Zeichenmodus"
-
-msgid "Stage Cache"
-msgstr "Stufen-Cache"
-
-msgid "Disk Cache in GB"
-msgstr "Festplatten-Cache in GB"
-
 msgid "Room"
 msgstr "Raum"
 
@@ -2518,8 +2506,15 @@ msgstr "Anmerkungen"
 msgid "STUN server is {0}"
 msgstr "STUN-Server ist {0}"
 
-msgid "No Web RTC Server set."
-msgstr "Kein WebRTC-Server festgelegt."
+msgid "Cannot connect to WebRTC: User is not authorized or license expired"
+msgstr ""
+"Verbindung zu WebRTC nicht möglich: Benutzer ist nicht autorisiert oder die "
+"Lizenz ist abgelaufen"
+
+msgid "No Web RTC Studio set.  Please update Preferences->WebRTC Studio"
+msgstr ""
+"Kein WebRTC-Studio festgelegt. Bitte aktualisieren Sie "
+"Einstellungen->WebRTC-Studio"
 
 msgid "The room ID is: {0}"
 msgstr "Die Raum-ID lautet: {0}"
@@ -3619,34 +3614,29 @@ msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 "Die neue Datei {0} existiert bereits! Sie kann nicht berschrieben werden."
 
-msgid "Rotated image info: {0}"
-msgstr "Informationen zum gedrehten Bild: {0}"
-
-msgid "Scaled image info: {0}"
-msgstr "Skalierte Bildinformation: {0}"
-
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: Das Schreiber-Plugin kann nicht geffnet werden."
 
 msgid "Image info: {0} {1}"
 msgstr "Bildinformation: {0} {1}"
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
-msgstr ""
-"Bild zu groß für das Speichern von Anmerkungen. Es wird auf die "
-"Ansichtsgröße skaliert."
+msgid "Scaled image info: {0}"
+msgstr "Skalierte Bildinformation: {0}"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "Writer Plugin bekam keine Ausgabeinformationen. Standardmig auf {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "Ausgabeinfos: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "Verwendung von Profil {0}, Pixelformat {1}."
 
 msgid "Using preset {0}."
 msgstr "Verwendung von voreingestellten {0}."
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "Offscreen-Puffer-Info: {0}"
+
+msgid "Output info: {0} {1}"
+msgstr "Ausgabeinfos: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "Speichern von Filmen ohne Audio % <PRId64> - % <PRId64>"
@@ -3664,32 +3654,11 @@ msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 "Audio nur in der Zeitleiste, aber nicht versuchen, Audio zu speichern."
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr "{0}: Ungültiges OpenGL-Format und -Typ"
-
-msgid "OpenGL info: {0}"
-msgstr "OpenGL-Informationen: {0}"
-
 msgid "Saving... {0}"
 msgstr "Speichern... {0}"
 
-msgid "Unsupported output format"
-msgstr "Nicht unterstütztes Ausgabeformat"
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr "Leere Videodaten zur Zeit {0}. Wiederholungsbild."
-
 msgid "Render size: {0}"
 msgstr "Rendergröße: {0}"
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr "Bildebenen-Informationen '{0}': {1} {2}"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "Offscreen-Puffer-Info: {0}"
-
-msgid "Unsupported output format: "
-msgstr "Nicht unterstütztes Ausgabeformat: "
 
 msgid "2.35"
 msgstr "2,35"
@@ -3715,14 +3684,39 @@ msgstr "    Vorne    V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr "    Hinter   V: % 4<PRIu64>    A: % 4<PRIu64>"
 
+msgid "HDR monitor min. nits = {0}"
+msgstr "HDR-Monitor min. nits = {0}"
+
+msgid "HDR monitor max. nits = {0}"
+msgstr "HDR-Monitor max. nits = {0}"
+
+msgid "HDR monitor not found or not configured."
+msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
+
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr "HDR-Monitor wurde von Vulkan oder dem Window Manager nicht erkannt."
+
+msgid "Vulkan color space is {0}"
+msgstr "Vulkan-Farbraum ist {0}"
+
+msgid "Vulkan format is {0}"
+msgstr "Vulkan-Format ist {0}"
+
+msgid "Changed to HDR active monitor at index {0}"
+msgstr "Zum aktiven HDR-Monitor am Index {0} gewechselt"
+
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr ""
+"Zu einem HDR-unterstützenden, aber inaktiven Monitor am Index {0} gewechselt"
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr "Zum SDR-Monitor am Index {0} gewechselt"
+
 msgid "Edit Text"
 msgstr "Text bearbeiten"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' ist keine Datei, kein Verzeichnis und keine URL."
-
-msgid "Invalid font for text drawing"
-msgstr "Ungültige Schriftart für die Texterstellung"
 
 msgid "Could not convert message to shape: "
 msgstr "Nachricht kann nicht in Form konvertiert werden:"
@@ -7109,11 +7103,20 @@ msgstr "WebRTC-Einstellungen"
 msgid "Stun Server"
 msgstr "STUN-Server"
 
+msgid "WebRTC STUN Server.  Leave blank to use Google's."
+msgstr "WebRTC-STUN-Server. Leer lassen, um den von Google zu verwenden."
+
 msgid "WebRTC Server"
 msgstr "WebRTC-Server"
 
-msgid "Studio name to prefix to all Room connections."
-msgstr "Studio-Name, der allen Raumverbindungen vorangestellt wird."
+msgid "WebRTC server used to sync the connections."
+msgstr ""
+"WebRTC-Server, der zum Synchronisieren der Verbindungen verwendet wird."
+
+msgid "Studio name to prefix to all Room connections.  Use some unique name."
+msgstr ""
+"Studio-Name, der allen Raumverbindungen vorangestellt wird. Verwenden Sie "
+"einen eindeutigen Namen."
 
 msgid "Clean directory at Start up"
 msgstr "Verzeichnis beim Start bereinigen"
@@ -7123,6 +7126,9 @@ msgstr "Das WebRTC-Cache-Verzeichnis beim Start des Viewers bereinigen."
 
 msgid "WebRTC Cache"
 msgstr "WebRTC-Cache"
+
+msgid "Cache Directory presets."
+msgstr "Voreinstellungen für das Cache-Verzeichnis."
 
 msgid "Cache Directory"
 msgstr "Cache-Verzeichnis"
@@ -8024,6 +8030,9 @@ msgstr "Scrub-Modus"
 msgid "Area Selection Mode"
 msgstr "Modus fr die Flchenauswahl"
 
+msgid "Draw Mode"
+msgstr "Zeichenmodus"
+
 msgid "Erase Mode"
 msgstr "Lschmodus"
 
@@ -8135,33 +8144,46 @@ msgstr "host_statistik64 fehlgeschlagen"
 msgid "task info failed"
 msgstr "Task-Info fehlgeschlagen"
 
-#~ msgid "HDR monitor min. nits = {0}"
-#~ msgstr "HDR-Monitor min. nits = {0}"
+#~ msgid "Complexity"
+#~ msgstr "Komplexität"
 
-#~ msgid "HDR monitor max. nits = {0}"
-#~ msgstr "HDR-Monitor max. nits = {0}"
+#~ msgid "Stage Cache"
+#~ msgstr "Stufen-Cache"
 
-#~ msgid "HDR monitor not found or not configured."
-#~ msgstr "HDR-Monitor nicht gefunden oder nicht konfiguriert."
+#~ msgid "Disk Cache in GB"
+#~ msgstr "Festplatten-Cache in GB"
 
-#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
-#~ msgstr "HDR-Monitor wurde von Vulkan oder dem Window Manager nicht erkannt."
+#~ msgid "Rotated image info: {0}"
+#~ msgstr "Informationen zum gedrehten Bild: {0}"
 
-#~ msgid "Vulkan color space is {0}"
-#~ msgstr "Vulkan-Farbraum ist {0}"
-
-#~ msgid "Vulkan format is {0}"
-#~ msgstr "Vulkan-Format ist {0}"
-
-#~ msgid "Changed to HDR active monitor at index {0}"
-#~ msgstr "Zum aktiven HDR-Monitor am Index {0} gewechselt"
-
-#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
+#~ msgid "Image too big for Save Annotations.  Will scale to the viewport size."
 #~ msgstr ""
-#~ "Zu einem HDR-unterstützenden, aber inaktiven Monitor am Index {0} gewechselt"
+#~ "Bild zu groß für das Speichern von Anmerkungen. Es wird auf die "
+#~ "Ansichtsgröße skaliert."
 
-#~ msgid "Changed to SDR monitor at index {0}"
-#~ msgstr "Zum SDR-Monitor am Index {0} gewechselt"
+#~ msgid "{0}: Invalid OpenGL format and type"
+#~ msgstr "{0}: Ungültiges OpenGL-Format und -Typ"
+
+#~ msgid "OpenGL info: {0}"
+#~ msgstr "OpenGL-Informationen: {0}"
+
+#~ msgid "Unsupported output format"
+#~ msgstr "Nicht unterstütztes Ausgabeformat"
+
+#~ msgid "Empty video data at time {0}.  Repeating frame."
+#~ msgstr "Leere Videodaten zur Zeit {0}. Wiederholungsbild."
+
+#~ msgid "Image Layer '{0}' info: {1} {2}"
+#~ msgstr "Bildebenen-Informationen '{0}': {1} {2}"
+
+#~ msgid "Unsupported output format: "
+#~ msgstr "Nicht unterstütztes Ausgabeformat: "
+
+#~ msgid "Invalid font for text drawing"
+#~ msgstr "Ungültige Schriftart für die Texterstellung"
+
+#~ msgid "No Web RTC Server set."
+#~ msgstr "Kein WebRTC-Server festgelegt."
 
 #~ msgid ""
 #~ "Get command-line arguments passed as single quoted string to -pythonArgs."

@@ -1426,18 +1426,6 @@ msgstr ""
 msgid "Stop streaming"
 msgstr ""
 
-msgid "Complexity"
-msgstr ""
-
-msgid "Draw Mode"
-msgstr ""
-
-msgid "Stage Cache"
-msgstr ""
-
-msgid "Disk Cache in GB"
-msgstr ""
-
 msgid "Room"
 msgstr ""
 
@@ -2377,7 +2365,10 @@ msgstr ""
 msgid "STUN server is {0}"
 msgstr ""
 
-msgid "No Web RTC Server set."
+msgid "Cannot connect to WebRTC: User is not authorized or license expired"
+msgstr ""
+
+msgid "No Web RTC Studio set.  Please update Preferences->WebRTC Studio"
 msgstr ""
 
 msgid "The room ID is: {0}"
@@ -3402,31 +3393,28 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
-msgid "Rotated image info: {0}"
-msgstr ""
-
-msgid "Scaled image info: {0}"
-msgstr ""
-
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
 msgid "Image info: {0} {1}"
 msgstr ""
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgid "Scaled image info: {0}"
 msgstr ""
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
-msgstr ""
-
-msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
 msgid "Using preset {0}."
+msgstr ""
+
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -3444,31 +3432,10 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr ""
-
-msgid "OpenGL info: {0}"
-msgstr ""
-
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Unsupported output format"
-msgstr ""
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr ""
-
 msgid "Render size: {0}"
-msgstr ""
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr ""
-
-msgid "Offscreen Buffer info: {0}"
-msgstr ""
-
-msgid "Unsupported output format: "
 msgstr ""
 
 msgid "2.35"
@@ -3495,13 +3462,37 @@ msgstr ""
 msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
 msgstr ""
 
+msgid "HDR monitor min. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor max. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor not found or not configured."
+msgstr ""
+
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr ""
+
+msgid "Vulkan color space is {0}"
+msgstr ""
+
+msgid "Vulkan format is {0}"
+msgstr ""
+
+msgid "Changed to HDR active monitor at index {0}"
+msgstr ""
+
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr ""
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr ""
+
 msgid "Edit Text"
 msgstr ""
 
 msgid "'{0}' is not a file, directory or url."
-msgstr ""
-
-msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -6606,10 +6597,16 @@ msgstr ""
 msgid "Stun Server"
 msgstr ""
 
+msgid "WebRTC STUN Server.  Leave blank to use Google's."
+msgstr ""
+
 msgid "WebRTC Server"
 msgstr ""
 
-msgid "Studio name to prefix to all Room connections."
+msgid "WebRTC server used to sync the connections."
+msgstr ""
+
+msgid "Studio name to prefix to all Room connections.  Use some unique name."
 msgstr ""
 
 msgid "Clean directory at Start up"
@@ -6619,6 +6616,9 @@ msgid "Clean the WebRTC cache directory on start of the viewer."
 msgstr ""
 
 msgid "WebRTC Cache"
+msgstr ""
+
+msgid "Cache Directory presets."
 msgstr ""
 
 msgid "Cache Directory"
@@ -7507,6 +7507,9 @@ msgid "Scrub Mode"
 msgstr ""
 
 msgid "Area Selection Mode"
+msgstr ""
+
+msgid "Draw Mode"
 msgstr ""
 
 msgid "Erase Mode"

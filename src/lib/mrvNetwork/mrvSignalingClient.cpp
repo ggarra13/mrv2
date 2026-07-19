@@ -58,7 +58,7 @@ namespace mrv
 
         if (studio.empty())
         {
-            std::string msg = _("No Web RTC Studio set.  Please update Preferences->WebRTC");
+            std::string msg = _("No Web RTC Studio set.  Please update Preferences->WebRTC Studio");
             LOG_ERROR(msg);
             return;
         }
@@ -96,7 +96,7 @@ namespace mrv
         });
 
         websocket->onClosed([]() {
-            LOG_INFO("WebSocket closed.");
+            LOG_INFO("WebSocket closed");
         });
 
         websocket->onError([](const std::string &error) {
@@ -171,6 +171,14 @@ namespace mrv
         }
         else if (type == "peer_disconnected") {
             if (onPeerDisconnected) onPeerDisconnected(sender_id);
+        }
+        else if (type == "error") {
+            std::string err = message["message"];
+            LOG_ERROR(err);
+        }
+        else if (type == "warning") {
+            std::string err = message["message"];
+            LOG_WARNING(err);
         }
     }
 
