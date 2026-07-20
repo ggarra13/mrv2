@@ -395,7 +395,7 @@ namespace mrv
         {
             std::string msg = string::Format(_("Found floating license at '{0}'"))
                               .arg(license_file);
-            LOG_STATUS(msg);
+            LOG_INFO(msg);
 
             // Open the file for reading
             std::ifstream file_stream(license_file);
@@ -719,7 +719,59 @@ namespace mrv
         return License::kValid;
     }
 
-    std::string request_webrtc_ticket()
+    std::string request_webrtc_ticket_floating()
+    {
+        // --- Configuration ---
+        std::string serverHost;
+        int serverPort;
+        std::vector<std::string> machine_ids;
+        std::string master_key;
+        get_network_configuration(serverHost, serverPort, machine_ids,
+                                  master_key);
+        if (master_key.empty())
+            return "";
+
+        // Build the request object programmatically.
+        nlohmann::json request_body_json;
+
+        // Add the machine_id
+        request_body_json["machine_id"] = machine_ids[0];
+        request_body_json["session_id"] = "";
+
+        // Parse the corrected master key string and add it as a nested object
+        request_body_json["master_key"] = nlohmann::json::parse(master_key);
+
+        // 4. Dump the final, complete object into a string
+        // The library handles all formatting and escaping correctly.
+        const std::string requestBody = request_body_json.dump();
+
+        // --- HTTP POST to /checkout_license ---
+        nlohmann::ordered_json json_data = post_request(
+            serverHost, serverPort,
+            "/webrtc_ticket_floating",
+            requestBody);
+        if (json_data.is_null() || !json_data.contains("signature"))
+        {
+            // The error message was already logged inside post_request.
+            // We just need to stop here.
+            return "";
+        }
+
+        // -------------------------
+        // Prepare the token for the WebSocket URL
+        // -------------------------
+        // We dump the ENTIRE json (payload + signature) to a compact string
+        std::string raw_token_json = json_data.dump(-1);
+
+        // Base64 encode it so it safely passes through the URL query parameter
+        // NOTE: Replace `base64_encode` with whatever base64 encoding utility
+        // you currently use in your C++ codebase.
+        std::string base64_token = base64_encode(raw_token_json);
+
+        return base64_token;
+    }
+
+    std::string request_webrtc_ticket_node_locked()
     {
         // --- Configuration ---
         std::string serverHost;
@@ -810,6 +862,15 @@ namespace mrv
         return base64_token;
     }
 
+    std::string request_webrtc_ticket()
+    {
+
+        if (app::license_type == LicenseType::kFloating)
+            return request_webrtc_ticket_floating();
+        else
+            return request_webrtc_ticket_node_locked();
+    }
+
     License validate_node_locked(std::string& expiration_date)
     {
         // --- Configuration ---
@@ -819,6 +880,9 @@ namespace mrv
         std::string master_key;
         get_network_configuration(serverHost, serverPort, machine_ids,
                                   master_key);
+
+        if (!master_key.empty())
+            return License::kInvalid;
 
         // --- Build JSON request ---
         std::string machine_id;

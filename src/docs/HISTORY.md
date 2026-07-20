@@ -6,7 +6,11 @@ ChangeLog
 
 - UI: File->Recent menu now correctly displays the first frame of the sequence, instead of the frame that was used to load it with.
 - UI: Fixed some flickering of Progress Report on Windows to not using Fl_Double_Window.
-- UI: Made client side decoration on Wayland use GNOME with Vulkan backend.  The OpenGL backend must remain using the uglier Cairo decoration.
+- UI: Made client side decoration on Linux Wayland use GNOME with Vulkan backend.  The OpenGL backend must remain using the uglier Cairo decoration.
+- UI: Fixed double repeated message about Solo upgrade when clicking on area selection.
+
+- Licensing: Removed a repeated message of floating licensing.
+- Licensing: Made floating licensing take over node locked licensing if present.
 
 - WebRTC: It is now live.  You can now connect two or more computers and share their media.
 On the free tier, only two computers can be connected and there's a limit of 30 minutes.  On the Pro tier, there's no limit on the number of computers or time limit.
@@ -15,6 +19,7 @@ On the free tier, only two computers can be connected and there's a limit of 30 
       * Go to Panel/WebRTC on one machine.  Enter the name of a room longer than 6 characters.  Click Connect.
       * Go to Panel/WebRTC on the other machine.  Enter the same room name.  Click connect.
       * If all went well, both machines will sync and you can synchronize what gets received/sent with the Sync menu.
+      
 - WebRTC: Added environment variable MRV2_WEBRTC_STUDIO that gets prepended to any room ID connection.  This can be used to keep the connection secure.
 - WebRTC: Added WebRTC panel to Preferences.  Allows setting cache directory and whether to clean it at the start of mrv2.
 - WebRTC: When connected and file is opened, if it does not exist locally, it will now transfer it (Pro+ version only).
