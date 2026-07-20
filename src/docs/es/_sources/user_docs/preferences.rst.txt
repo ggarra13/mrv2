@@ -583,13 +583,11 @@ Red
 
 Las preferencias de Red permiten establecer que seteos son enviados y recibidos por la máquina local cuando está conectada en una red a otro servidor o cliente.
 
-OpenGL
-======
+Vídeo
+=====
 
 .. image:: ./images/preferences/es_opengl.png
    :align: center
-
-OpenGL is the default API used for 3D rendering in the timeline and viewports.
 
 .. topic:: Monitor VSync
 
@@ -617,7 +615,83 @@ OpenGL is the default API used for 3D rendering in the timeline and viewports.
 	   Asumiendo que tu Escritorio lo permita, copiar será usado para mover
 	   y panear en la línea de tiempo, lo que usualmenter es más rápido.
 	   De otra forma, un shader deberá ser usado.
+
+Audio
+=====
+
+.. topic:: API
+
+	   Dependiendo de la plataforma, podría cambear el tipo de control del audio.
 	   
+.. topic:: Equipo de Salida
+
+	   Si tiene varios dispositivos (como audífinos y megáfonos), puede
+	   cambiar qué equipo usar.
+
+Anotaciones de Voz
+==================
+
+En los planes Pro and Pro+, puede tener anotaciones de voz.  Aquí puede setear:
+
+.. topic:: Grabar en Carpera
+
+	   Directorio donde los archivo .wav temporarios se guardarán.
+
+.. topic:: Velocidad de Reproducción
+
+	   Velocidad al reproducir la anotación de voz (deje en Normal).
+
+.. topic:: Micrófono
+
+	   El dispositivo que tiene el micrófono con el que grabará.
+
+.. topic:: Volúmen
+
+	   El volúmen para el micrófono (déjelo en 100).
+
+ComfyUI
+=======
+
+Esto permite conectar a ComfyUI with mrv2 and vmrv2 por un socket y el nodo de Comfy llamado ComfyUI_mrv2.
+
+.. topic:: Use ComfyUI Pipe
+
+	   Cuando activo, el programa comenzará un poco mas lento, pero habrá
+	   una tubería para conectar las imágenes de ComfyUI.
+
+WebRTC
+======
+
+Estos seteos controlan las entrañas de WebRTC.  Si no está haciendo nada complejo, lo único que necesita completar es "Studio".
+
+.. topic:: Stun Server
+
+	   El servidor de STUN para WebRTC.
+	   Probablemente lo mejor es dejarlo en su valor por defecto.
+
+.. topic:: WebRTC Server
+
+	   El servidor de socket de web para vmrv2 / mrv2.
+	   Probablemente lo mejor es dejarlo en su valor por defecto.
+
+.. topic:: Studio
+
+	   Este es el seteo IMPORTANTE.  *DEBERÍA* establecerlo para su estudio.  Evite usar un nombre común que pueda ser adivinado.  Todas las máquinas a conectar necesitan este nombre en común.
+
+.. topic:: Clean directory at Start up
+
+	   Cuando está activado, el directorio de cache usado por las bajadas
+	   de WebRTC es borrado al arrancar el program.
+
+.. topic:: WebRTC Cache
+
+	   Algunos preseteos para el directorio del cache. 
+
+.. topic:: Cache Directory
+
+	   El verdadero directorio de cache donde los archivos se descargarán.
+	   Si no existe, se creará.
+
 Errores
 =======
 

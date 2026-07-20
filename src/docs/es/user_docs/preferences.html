@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preferencias &mdash; documentación de mrv2 - v1.6.6</title>
+  <title>Preferencias &mdash; documentación de mrv2 - v1.7.1</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=5d0feb18"></script>
+      <script src="../_static/documentation_options.js?v=e753318c"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/translations.js?v=f85f4cfb"></script>
@@ -82,7 +82,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#cargando">Cargando</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mapeo-de-carpetas">Mapeo de Carpetas</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#red">Red</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#opengl">OpenGL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#video">Vídeo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#audio">Audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#anotaciones-de-voz">Anotaciones de Voz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comfyui">ComfyUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#webrtc">WebRTC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#errores">Errores</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#comportamiento">Comportamiento</a></li>
 </ul>
@@ -645,10 +649,9 @@ cruz roja).</p>
 <img alt="../_images/es_network.png" class="align-center" src="../_images/es_network.png" />
 <p>Las preferencias de Red permiten establecer que seteos son enviados y recibidos por la máquina local cuando está conectada en una red a otro servidor o cliente.</p>
 </section>
-<section id="opengl">
-<h2>OpenGL<a class="headerlink" href="#opengl" title="Link to this heading"></a></h2>
+<section id="video">
+<h2>Vídeo<a class="headerlink" href="#video" title="Link to this heading"></a></h2>
 <img alt="../_images/es_opengl.png" class="align-center" src="../_images/es_opengl.png" />
-<p>OpenGL is the default API used for 3D rendering in the timeline and viewports.</p>
 <aside class="topic">
 <p class="topic-title">Monitor VSync</p>
 <p>Siempre por Defecto.  Se sugiere no modificar.</p>
@@ -676,6 +679,79 @@ De otra forma, un shader deberá ser usado.</p>
 <p>Asumiendo que tu Escritorio lo permita, copiar será usado para mover
 y panear en la línea de tiempo, lo que usualmenter es más rápido.
 De otra forma, un shader deberá ser usado.</p>
+</aside>
+</section>
+<section id="audio">
+<h2>Audio<a class="headerlink" href="#audio" title="Link to this heading"></a></h2>
+<aside class="topic">
+<p class="topic-title">API</p>
+<p>Dependiendo de la plataforma, podría cambear el tipo de control del audio.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Equipo de Salida</p>
+<p>Si tiene varios dispositivos (como audífinos y megáfonos), puede
+cambiar qué equipo usar.</p>
+</aside>
+</section>
+<section id="anotaciones-de-voz">
+<h2>Anotaciones de Voz<a class="headerlink" href="#anotaciones-de-voz" title="Link to this heading"></a></h2>
+<p>En los planes Pro and Pro+, puede tener anotaciones de voz.  Aquí puede setear:</p>
+<aside class="topic">
+<p class="topic-title">Grabar en Carpera</p>
+<p>Directorio donde los archivo .wav temporarios se guardarán.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Velocidad de Reproducción</p>
+<p>Velocidad al reproducir la anotación de voz (deje en Normal).</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Micrófono</p>
+<p>El dispositivo que tiene el micrófono con el que grabará.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Volúmen</p>
+<p>El volúmen para el micrófono (déjelo en 100).</p>
+</aside>
+</section>
+<section id="comfyui">
+<h2>ComfyUI<a class="headerlink" href="#comfyui" title="Link to this heading"></a></h2>
+<p>Esto permite conectar a ComfyUI with mrv2 and vmrv2 por un socket y el nodo de Comfy llamado ComfyUI_mrv2.</p>
+<aside class="topic">
+<p class="topic-title">Use ComfyUI Pipe</p>
+<p>Cuando activo, el programa comenzará un poco mas lento, pero habrá
+una tubería para conectar las imágenes de ComfyUI.</p>
+</aside>
+</section>
+<section id="webrtc">
+<h2>WebRTC<a class="headerlink" href="#webrtc" title="Link to this heading"></a></h2>
+<p>Estos seteos controlan las entrañas de WebRTC.  Si no está haciendo nada complejo, lo único que necesita completar es «Studio».</p>
+<aside class="topic">
+<p class="topic-title">Stun Server</p>
+<p>El servidor de STUN para WebRTC.
+Probablemente lo mejor es dejarlo en su valor por defecto.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">WebRTC Server</p>
+<p>El servidor de socket de web para vmrv2 / mrv2.
+Probablemente lo mejor es dejarlo en su valor por defecto.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Studio</p>
+<p>Este es el seteo IMPORTANTE.  <em>DEBERÍA</em> establecerlo para su estudio.  Evite usar un nombre común que pueda ser adivinado.  Todas las máquinas a conectar necesitan este nombre en común.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Clean directory at Start up</p>
+<p>Cuando está activado, el directorio de cache usado por las bajadas
+de WebRTC es borrado al arrancar el program.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">WebRTC Cache</p>
+<p>Algunos preseteos para el directorio del cache.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Cache Directory</p>
+<p>El verdadero directorio de cache donde los archivos se descargarán.
+Si no existe, se creará.</p>
 </aside>
 </section>
 <section id="errores">

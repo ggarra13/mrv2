@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preferences &mdash; mrv2 v1.6.6 documentation</title>
+  <title>Preferences &mdash; mrv2 v1.7.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=e69d7754"></script>
+      <script src="../_static/documentation_options.js?v=5cc1adc0"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -81,7 +81,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#loading">Loading</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#paths-mapping">Paths Mapping</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#network">Network</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#opengl">OpenGL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#video">Video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#audio">Audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#voice-annotations">Voice Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comfyui">ComfyUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#webrtc">WebRTC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#errors">Errors</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#behavior">Behavior</a></li>
 </ul>
@@ -650,10 +654,9 @@ cross).</p>
 <img alt="../_images/en_network.png" class="align-center" src="../_images/en_network.png" />
 <p>The Network preferences allows you to set what settings are sent and received by the local machine when connected on a network to another server or client.</p>
 </section>
-<section id="opengl">
-<h2>OpenGL<a class="headerlink" href="#opengl" title="Link to this heading"></a></h2>
+<section id="video">
+<h2>Video<a class="headerlink" href="#video" title="Link to this heading"></a></h2>
 <img alt="../_images/en_opengl.png" class="align-center" src="../_images/en_opengl.png" />
-<p>OpenGL is the default API used for 3D rendering in the timeline and viewports.</p>
 <aside class="topic">
 <p class="topic-title">Monitor VSync</p>
 <p>Defaults to Always.  It allows drawings to wait for the monitor sync
@@ -684,6 +687,79 @@ a shader must be used.</p>
 <p>Assuming your Desktop system allows it, blitting will be used to
 moving and panning in the timeline, which is usually faster.
 Otherwise a shader must be used.</p>
+</aside>
+</section>
+<section id="audio">
+<h2>Audio<a class="headerlink" href="#audio" title="Link to this heading"></a></h2>
+<aside class="topic">
+<p class="topic-title">API</p>
+<p>Depending on platform, you might be able to change the backend used
+for audio.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Output Device</p>
+<p>If you several outputs (like earphones and speakers), you might be
+able to change what device to use.</p>
+</aside>
+</section>
+<section id="voice-annotations">
+<h2>Voice Annotations<a class="headerlink" href="#voice-annotations" title="Link to this heading"></a></h2>
+<p>On the Pro and Pro+ tiers, you can have voice annotations.  Here you can set:</p>
+<aside class="topic">
+<p class="topic-title">Save Path</p>
+<p>Directory where the temporary .wav files will be stored.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Playback Speed</p>
+<p>Speed when playing the Voice Annotation (leave in Normal).</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Microphone</p>
+<p>The actual device that has the microphone you will recording with.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Volume</p>
+<p>The actual volume for the microphone (leave at 100).</p>
+</aside>
+</section>
+<section id="comfyui">
+<h2>ComfyUI<a class="headerlink" href="#comfyui" title="Link to this heading"></a></h2>
+<p>This allows you to connect ComfyUI with mrv2 and vmrv2 through a socket and the ComfyUI_mrv2 node.</p>
+<aside class="topic">
+<p class="topic-title">Use ComfyUI Pipe</p>
+<p>When active, program start up will be a little bit slower, but there will be a pipe to bring the images from ComfyUI.</p>
+</aside>
+</section>
+<section id="webrtc">
+<h2>WebRTC<a class="headerlink" href="#webrtc" title="Link to this heading"></a></h2>
+<p>These settings control the deep innards of WebRTC.  If you are not doing anything complex, the only thing you need to fill in is “Studio”.</p>
+<aside class="topic">
+<p class="topic-title">Stun Server</p>
+<p>The STUN server for WebRTC.
+You should likely leave it at its default.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">WebRTC Server</p>
+<p>The web socket server for vmrv2 / mrv2.
+You should likely leave it at its default.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Studio</p>
+<p>This is the important setting that you <em>SHOULD</em> set for you studio.  Avoid a simple name that can be guessed.  Every machine to connect needs this name in common.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Clean directory at Start up</p>
+<p>When checked, the cache directory used for WebRTC downloads is
+cleared on program start.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">WebRTC Cache</p>
+<p>Some presets for the cache directory.</p>
+</aside>
+<aside class="topic">
+<p class="topic-title">Cache Directory</p>
+<p>The actual cache directory files will be downloaded into.
+If it does not exist, it will be created.</p>
 </aside>
 </section>
 <section id="errors">
