@@ -75,6 +75,9 @@ La sección de Comportamiento de la Ventana permite establecer cómo se comporta
 Elementos de UI
 +++++++++++++++
 
+.. image:: ./images/preferences/es_elements.png
+   :align: center
+	   
 .. topic:: Las barras de la UI
    
 	   Estas te permiten arrancar mrv2 sin alguna de sus barras.
@@ -586,7 +589,7 @@ Las preferencias de Red permiten establecer que seteos son enviados y recibidos 
 Vídeo
 =====
 
-.. image:: ./images/preferences/es_opengl.png
+.. image:: ./images/preferences/es_video.png
    :align: center
 
 .. topic:: Monitor VSync
@@ -619,6 +622,9 @@ Vídeo
 Audio
 =====
 
+.. image:: ./images/preferences/es_audio.png
+   :align: center
+	   
 .. topic:: API
 
 	   Dependiendo de la plataforma, podría cambear el tipo de control del audio.
@@ -631,6 +637,9 @@ Audio
 Anotaciones de Voz
 ==================
 
+.. image:: ./images/preferences/es_voice_annotations.png
+   :align: center
+	   
 En los planes Pro and Pro+, puede tener anotaciones de voz.  Aquí puede setear:
 
 .. topic:: Grabar en Carpera
@@ -652,6 +661,9 @@ En los planes Pro and Pro+, puede tener anotaciones de voz.  Aquí puede setear:
 ComfyUI
 =======
 
+.. image:: ./images/preferences/es_comfyui.png
+   :align: center
+	   
 Esto permite conectar a ComfyUI with mrv2 and vmrv2 por un socket y el nodo de Comfy llamado ComfyUI_mrv2.
 
 .. topic:: Use ComfyUI Pipe
@@ -661,6 +673,9 @@ Esto permite conectar a ComfyUI with mrv2 and vmrv2 por un socket y el nodo de C
 
 WebRTC
 ======
+
+.. image:: ./images/preferences/es_webrtc.png
+   :align: center
 
 Estos seteos controlan las entrañas de WebRTC.  Si no está haciendo nada complejo, lo único que necesita completar es "Studio".
 

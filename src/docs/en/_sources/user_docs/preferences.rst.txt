@@ -70,8 +70,11 @@ The Window Behavior section allows you to set how the main and secondary window 
 
 	   With this setting, it allows mrv2 to start at the size of the loaded image (Normal), at Fullscreen or in Presentation mode.
 
-UI Elements
-+++++++++++
+Elements
+++++++++
+
+.. image:: ./images/preferences/en_elements.png
+   :align: center
 
 .. topic:: The UI bars
    
@@ -594,7 +597,7 @@ The Network preferences allows you to set what settings are sent and received by
 Video
 =====
 
-.. image:: ./images/preferences/en_opengl.png
+.. image:: ./images/preferences/en_video.png
    :align: center
 
 .. topic:: Monitor VSync
@@ -630,6 +633,9 @@ Video
 Audio
 =====
 
+.. image:: ./images/preferences/en_audio.png
+   :align: center
+	   
 .. topic:: API
 
 	   Depending on platform, you might be able to change the backend used
@@ -642,6 +648,9 @@ Audio
 
 Voice Annotations
 =================
+
+.. image:: ./images/preferences/en_voice_annotations.png
+   :align: center
 
 On the Pro and Pro+ tiers, you can have voice annotations.  Here you can set:
 
@@ -664,6 +673,9 @@ On the Pro and Pro+ tiers, you can have voice annotations.  Here you can set:
 ComfyUI
 =======
 
+.. image:: ./images/preferences/en_comfyui.png
+   :align: center
+
 This allows you to connect ComfyUI with mrv2 and vmrv2 through a socket and the ComfyUI_mrv2 node.
 
 .. topic:: Use ComfyUI Pipe
@@ -672,6 +684,9 @@ This allows you to connect ComfyUI with mrv2 and vmrv2 through a socket and the 
 
 WebRTC
 ======
+
+.. image:: ./images/preferences/en_webrtc.png
+   :align: center
 
 These settings control the deep innards of WebRTC.  If you are not doing anything complex, the only thing you need to fill in is "Studio".
 
