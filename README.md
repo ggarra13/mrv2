@@ -73,7 +73,7 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
   your .dmg file.
   
   ```
-  sudo xattr -d com.apple.quarantine /path/to/your.dmg
+  xattr -d com.apple.quarantine /path/to/your.dmg
   ```
   
   Then, you need to further follow some steps as in the README.md file provided
