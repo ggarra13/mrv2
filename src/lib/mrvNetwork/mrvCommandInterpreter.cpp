@@ -196,32 +196,9 @@ namespace mrv
                 }
                 else if (!peerId.empty())
                 {
-                    auto files = app->filesModel()->observeFiles()->get();
-                    bool found = false;
-                    int idx = 0;
-                    for (const auto& file : files)
-                    {
-                        const auto path = file->path;
-                        const auto audioPath = file->audioPath;
-                        if (path.getBaseName() == remoteFilePath.getBaseName() &&
-                            audioPath.getBaseName() == remoteAudioFilePath.getBaseName())
-                        {
-                            found = true;
-                            break;
-                        }
-                        ++idx;
-                    }
-
-                    if (!found)
-                    {
-                        FilesModelItem item;  // dummy item
-                        fetchRemoteFile(peerId, remoteFilePath,
-                                        remoteAudioFilePath, item);
-                    }
-                    else
-                    {
-                        app->filesModel()->setA(idx);
-                    }
+                    FilesModelItem item;  // dummy item
+                    fetchRemoteFile(peerId, remoteFilePath,
+                                    remoteAudioFilePath, item);
                 }
             }
             else if (c == "closeAll")
