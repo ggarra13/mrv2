@@ -67,9 +67,7 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
   The macOS application is currently not notarized, so when you launch it you
   will not be able to run it as macOS will warn you that the file is not secure
   as it was downloaded from internet.
-  To avoid that, you need to open the Apple Logo->Settings->Privacy and Security
-  and go to Security and allow "Opening Anyway".
-  Alternatively, you can open /Applications/Terminal.app and run this command on
+  You should open /Applications/Terminal.app and run this command on
   your .dmg file.
   
   ```
