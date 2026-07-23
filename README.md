@@ -62,24 +62,19 @@ mrv2 and vmrv2 **OFFICIAL RELEASE** binaries run on Windows 10+, RedHat 8+ or Ub
 
 ## Notes on installation
 
-- On macOS you install it by opening the .dmg file.  When you do so, Apple's
-  Gatekeeper will not allow it.
-  The macOS application is currently not notarized, so when you launch it you
-  will not be able to run it as macOS will warn you that the file is not secure
-  as it was downloaded from internet.
-  To avoid that, you need to open the Apple Logo->Settings->Privacy and Security
-  and go to Security and allow "Opening Anyway".
-  Alternatively, you can open /Applications/Terminal.app and run this command on
-  your .dmg file.
+- The macOS application is currently not notarized nor code signed.
+  On macOS you install it by opening the .dmg file.  Before you do so, you need
+  to do a simple step.
+  You need to open /Applications/Terminal.app and run this command on your
+  .dmg file.
   
   ```
   xattr -d com.apple.quarantine /path/to/your.dmg
   ```
   
   Then, you need to further follow some steps as in the README.md file provided
-  in the installer.  You will run a codesigning a script, which, again, will need permissions from Privacy and Secury *AND* enter your password.
-  Apple just keeps making it harder and harder for non-funded Open Source Developers to distribute free applications.
-
+  inside the .dmg.
+  
 - Windows, like macOS, also protect you from installing files
   from the Internet.
   Windows will popup a Blue box telling you Windows SmartScreen
