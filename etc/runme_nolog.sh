@@ -32,7 +32,7 @@ mkdir -p $PWD/${BUILD_DIR}/install/bin/
 # Create Windows certificate file
 #
 if [[ $KERNEL == *Windows* ]]; then
-    if [[ -e certificates/mrv2.pfx ]]; then
+    if [[ ! -e certificates/mrv2.pfx ]]; thenx
 	cd certificates
 	create_windows_cert.sh
 	cd -
