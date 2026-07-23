@@ -61,7 +61,7 @@ jobs:
       # Ephemeral keychain details (not secret — unique per run)
       KEYCHAIN_NAME:     build-${{ github.run_id }}.keychain
       KEYCHAIN_PASSWORD: ephemeral-${{ github.run_id }}
-      
+
     steps:
 
       - uses: actions/checkout@v6
@@ -71,16 +71,22 @@ jobs:
 
       - name: Install ccache
         run: brew install ccache
+
+      - name: Global Secrets
+        run: |
+          echo "DEVELOPER_ID=${DEVELOPER_ID}"
+          echo "APPLE_ID=${APPLE_ID}"
+          echo "TEAM_ID=${TEAM_ID}"
+          echo "NOTARY_PROFILE=${NOTARY_PROFILE}"
             
       - name: Configure ccache
         run: |
-          echo "DEVELOPER_ID=${DEVELOPER_ID}"
           echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
           echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
           echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
           echo "CCACHE_DATE=$(date +'%Y-%m')" >> $GITHUB_ENV
           ccache --max-size=500M
-              
+          
       - name: Import Developer ID Certificate
         env:
           MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
@@ -123,6 +129,7 @@ jobs:
           # # Scrub the .p12 file immediately.
           # rm -f "${CERT_FILE}"
           true
+          
       # ── 4. Store notarytool credentials in the ephemeral keychain ─────────
       #
       # xcrun notarytool submit uses the keychain profile stored here.
@@ -131,6 +138,8 @@ jobs:
         env:
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
         run: |
+          echo "APP_PASSWORD=${APP_PASSWORD}"
+          
           # xcrun notarytool store-credentials "${NOTARYTOOL_PROFILE}" \
           #   --apple-id  "${APPLE_ID}" \
           #   --team-id   "${TEAM_ID}" \
@@ -299,4 +308,4 @@ jobs:
         run: |
           # security delete-keychain "${KEYCHAIN_NAME}" 2>/dev/null || true
           true
-          
+

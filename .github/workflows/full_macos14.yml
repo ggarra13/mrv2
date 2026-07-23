@@ -50,11 +50,11 @@ jobs:
     runs-on: macos-14
     permissions:
       contents: write
-
+    
     # ── Timeout ──────────────────────────────────────────────────────────────
     # Notarization can take several minutes; 30 min is a safe upper bound.
     # timeout-minutes: 30
-
+    
     env:
       CMAKE_OSX_DEPLOYMENT_TARGET: 14.0
       # ── Passed through to codesign_notarize.sh ───────────────────────────
@@ -77,6 +77,13 @@ jobs:
       - name: Install ccache
         run: brew install ccache
 
+      - name: Global Secrets
+        run: |
+          echo "DEVELOPER_ID=${DEVELOPER_ID}"
+          echo "APPLE_ID=${APPLE_ID}"
+          echo "TEAM_ID=${TEAM_ID}"
+          echo "NOTARY_PROFILE=${NOTARY_PROFILE}"
+            
       - name: Configure ccache
         run: |
           echo "DEVELOPER_ID=${DEVELOPER_ID}"
@@ -85,7 +92,7 @@ jobs:
           echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
           echo "CCACHE_DATE=$(date +'%Y-%m')" >> $GITHUB_ENV
           ccache --max-size=500M
-              
+          
       - name: Import Developer ID Certificate
         env:
           MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
@@ -137,13 +144,15 @@ jobs:
         env:
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
         run: |
+          echo "APP_PASSWORD=${APP_PASSWORD}"
+          
           # xcrun notarytool store-credentials "${NOTARYTOOL_PROFILE}" \
           #   --apple-id  "${APPLE_ID}" \
           #   --team-id   "${TEAM_ID}" \
           #   --password  "${APP_PASSWORD}" \
           #   --keychain  "${KEYCHAIN_NAME}"
           true
-              
+          
       - uses: actions/cache@v5
         with:
           path: ~/.ccache

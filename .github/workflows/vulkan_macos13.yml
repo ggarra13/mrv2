@@ -77,9 +77,15 @@ jobs:
       - name: Install ccache
         run: brew install ccache
 
-      - name: Configure ccache
+      - name: Global Secrets
         run: |
           echo "DEVELOPER_ID=${DEVELOPER_ID}"
+          echo "APPLE_ID=${APPLE_ID}"
+          echo "TEAM_ID=${TEAM_ID}"
+          echo "NOTARY_PROFILE=${NOTARY_PROFILE}"
+            
+      - name: Configure ccache
+        run: |
           echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
           echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
           echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
@@ -128,6 +134,7 @@ jobs:
           # # Scrub the .p12 file immediately.
           # rm -f "${CERT_FILE}"
           true
+          
       # ── 4. Store notarytool credentials in the ephemeral keychain ─────────
       #
       # xcrun notarytool submit uses the keychain profile stored here.
@@ -136,6 +143,8 @@ jobs:
         env:
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
         run: |
+          echo "APP_PASSWORD=${APP_PASSWORD}"
+          
           # xcrun notarytool store-credentials "${NOTARYTOOL_PROFILE}" \
           #   --apple-id  "${APPLE_ID}" \
           #   --team-id   "${TEAM_ID}" \
@@ -188,7 +197,7 @@ jobs:
           key: ${{ runner.os }}-${{ runner.arch }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-cargo-
-          
+
       - name: Install ninja-build
         run: brew install ninja
 
@@ -209,7 +218,7 @@ jobs:
 
       - name: Install curl dependencies
         run: brew install libidn2
-
+        
       # Install Vulkan SDK manually
       - name: Install/Build Vulkan SDK
         env:
@@ -218,7 +227,7 @@ jobs:
         run: |
           if [[ "$BUILD_VULKAN" == "ON" ]]; then
             ./etc/macos/install_vulkan.sh
-             
+
             echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
             echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
             echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
