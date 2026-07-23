@@ -38,6 +38,8 @@ namespace mrv
         if (messageLength == 0)
             return;
 
+        std::lock_guard<std::mutex> lock(mtx);
+
         auto i = clients.find(peerId);
         if (i != clients.end())
         {
@@ -57,6 +59,8 @@ namespace mrv
         std::size_t messageLength = bson.size();
         if (messageLength == 0)
             return;
+
+        std::lock_guard<std::mutex> lock(mtx);
 
         for (auto& [_, client] : clients)
         {
