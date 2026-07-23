@@ -77,7 +77,7 @@ namespace mrv
         std::string caLocation = mrv::rootpath() + "/certs/cacert.pem";
         if (!file::isReadable(caLocation))
         {
-#ifdef __linux___
+#ifdef __linux__
             caLocation = "/etc/ssl/certs/ca-certificates.crt";
 #elif defined(__APPLE__)
             caLocation = "/usr/local/etc/openssl@3/cert.pem";

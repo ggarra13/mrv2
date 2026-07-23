@@ -33,6 +33,6 @@ namespace mrv
     protected:
         SignalingClient signalingClient;
         WebRTCManager webrtcManager;
-        std::unique_ptr<FileTransferServer> fileServer;
+        std::shared_ptr<FileTransferServer> fileServer;
     };
 } // namespace mrv

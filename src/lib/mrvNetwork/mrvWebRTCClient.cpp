@@ -51,7 +51,7 @@ namespace mrv
         // Every mesh participant must be ready to serve a file to any other
         // peer, regardless of whether this machine ever needs to fetch one
         // itself - construct unconditionally, not on demand.
-        fileServer = std::make_unique<FileTransferServer>(webrtcManager);
+        fileServer = FileTransferServer::create(webrtcManager);
 
 
         // WebRTC → WebRTCClient (this class)
