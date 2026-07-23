@@ -51,6 +51,10 @@ jobs:
     permissions:
       contents: write
 
+    # ── Timeout ──────────────────────────────────────────────────────────────
+    # Notarization can take several minutes; 30 min is a safe upper bound.
+    # timeout-minutes: 30
+
     env:
       CMAKE_OSX_DEPLOYMENT_TARGET: 14.0
       # ── Passed through to codesign_notarize.sh ───────────────────────────

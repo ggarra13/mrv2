@@ -28,6 +28,17 @@ echo "PATH is now set now to ${PATH}"
 echo "It has:"
 mkdir -p $PWD/${BUILD_DIR}/install/bin/
 
+#
+# Create Windows certificate file
+#
+if [[ $KERNEL == *Windows* ]]; then
+    if [[ -e certificates/mrv2.pfx ]]; then
+	cd certificates
+	create_windows_cert.shc
+	cd -
+    fi
+fi
+
 if [[ $INSTALL_CMAKE == 1 ]]; then
     . etc/install_cmake.sh
 fi
@@ -557,6 +568,7 @@ else
     echo
     exit 1
 fi
+
 
 #
 # Work-around FLTK's CMakeLists.txt bug

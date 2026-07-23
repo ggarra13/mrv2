@@ -318,13 +318,6 @@ jobs:
         run: |
           pacman -S --noconfirm rsync coreutils
 
-      - name: Create pfx file
-        run: |
-          echo "MRV2_WINDOWS_SIGNING_PASSWORD=${MRV2_WINDOWS_SIGNING_PASSWORD}"
-          cd certificates/
-          create_windows_cert.sh
-          cd -
-
       - name: Build vmrv2
         env:
           INSTALL_CMAKE: ON
