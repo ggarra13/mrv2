@@ -16,6 +16,9 @@ jobs:
   ###################################
   windows-full-build:
     runs-on: windows-2022
+    
+    env:
+      MRV2_WINDOWS_SIGNING_PASSWORD: ${{ secrets.MRV2_WINDOWS_SIGNING_PASSWORD }}
 
     defaults:
       run:

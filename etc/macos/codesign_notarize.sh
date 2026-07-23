@@ -40,6 +40,9 @@ APP_PASSWORD="${APP_PASSWORD:-@keychain:mrv2-notarytool}"
 # Developer ID Application certificate — exactly as it appears in Keychain Access.
 # Example: "Developer ID Application: Gonzalo Garramuño (XXXXXXXXXX)"
 DEVELOPER_ID="${DEVELOPER_ID:-}"  # Safe
+if [[ "$DEVELOPER_ID" == "empty" ]]; then
+    DEVELOPER_ID=""
+fi
 
 # Apple ID (email) associated with your developer account.
 APPLE_ID="${APPLE_ID:-ggarra13@gmail.com}"  # Somewhat safe, but recommended

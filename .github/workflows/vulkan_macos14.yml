@@ -45,10 +45,6 @@ jobs:
     runs-on: macos-14
     permissions:
       contents: write
-
-    # ── Timeout ──────────────────────────────────────────────────────────────
-    # Notarization can take several minutes; 30 min is a safe upper bound.
-    timeout-minutes: 30
     
     env:
       CMAKE_OSX_DEPLOYMENT_TARGET: 14.0
@@ -74,6 +70,7 @@ jobs:
             
       - name: Configure ccache
         run: |
+          echo "DEVELOPER_ID=${DEVELOPER_ID}"
           echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
           echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
           echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
@@ -234,10 +231,6 @@ jobs:
             echo "✓ Vulkan tools available"
             vulkaninfo --summary || true
           fi
-
-      - name: Remove system OpenEXR and Imath
-        run: |
-          brew uninstall --ignore-dependencies openexr imath || true
 
       - name: Setup environment
         run: mkdir -p ssh
