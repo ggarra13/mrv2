@@ -82,9 +82,9 @@ namespace mrv
         auto dc = dc_ = peer->peerConnection->createDataChannel(
             "file-transfer", init);
 
-        dc->onOpen([this]()
+        dc->onOpen([this, dc]()
             {
-                requestNextFile(dc_);
+                requestNextFile(dc);
             });
 
         dc->onMessage([this](rtc::message_variant msg)
