@@ -34,7 +34,7 @@ mkdir -p $PWD/${BUILD_DIR}/install/bin/
 if [[ $KERNEL == *Windows* ]]; then
     if [[ -e certificates/mrv2.pfx ]]; then
 	cd certificates
-	create_windows_cert.shc
+	create_windows_cert.sh
 	cd -
     fi
 fi
