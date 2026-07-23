@@ -58,6 +58,7 @@ namespace mrv
         webrtcManager.onBinaryMessage = [&](const std::string& peerId,
                                             const rtc::binary& data)
             {
+                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::from_bson(data);
                 message[kLocalPeerIdKey] = peerId;
@@ -67,6 +68,7 @@ namespace mrv
         webrtcManager.onStringMessage = [&](const std::string& peerId,
                                             const std::string& msg)
             {
+                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::parse(msg);
                 m_receive.push_back(message);
@@ -74,6 +76,7 @@ namespace mrv
 
         webrtcManager.onPeerDisconnected = [&](const std::string& peerId)
             {
+                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 std::lock_guard lk(m_receiveMutex);
                 Message message;
                 message["command"] = "Peer Disconnected";
@@ -83,28 +86,34 @@ namespace mrv
 
         // WebRTC → Signaling
         webrtcManager.onSignalMessage = [&](const SignalingMessage& msg) {
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             signalingClient.send(msg);
         };
 
         // Signaling → WebRTC
         signalingClient.onInitPeer = [&](const std::string& peerId, bool isOfferer) {
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             webrtcManager.createPeer(peerId, isOfferer);
         };
 
         signalingClient.onOffer = [&](const std::string& peerId, const std::string& sdp) {
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             webrtcManager.handleOffer(peerId, sdp);
         };
 
         signalingClient.onAnswer = [&](const std::string& peerId, const std::string& sdp) {
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             webrtcManager.handleAnswer(peerId, sdp);
         };
 
         signalingClient.onRemoteCandidate = [&](const std::string& peerId,
                                                 const rtc::Candidate& c) {
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             webrtcManager.addRemoteCandidate(peerId, c);
         };
 
         signalingClient.onPeerDisconnected = [&](const std::string& peerId) {
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             webrtcManager.erase(peerId);
         };
 
