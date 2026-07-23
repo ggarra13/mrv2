@@ -277,6 +277,7 @@ jobs:
 
       - name: Build vmrv2
         env:
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
           BUILD_PYTHON: ON
           MRV2_PYFLTK: ON
           MRV2_PYBIND11: ON
