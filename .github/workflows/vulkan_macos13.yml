@@ -1,3 +1,35 @@
+# macOS Code Sign & Notarize — mrv2
+#
+# Required GitHub Actions secrets (Settings → Secrets and variables → Actions):
+#
+#   MACOS_CERTIFICATE_BASE64   Base64-encoded Developer ID .p12 certificate.
+#                              Generate with:
+#                                base64 -i cert.p12 | pbcopy
+#
+#   P12_PASSWORD               Password that protects the .p12 file.
+#
+#   DEVELOPER_ID               Full certificate name as it appears in
+#                              Keychain Access, e.g.:
+#                              "Developer ID Application: Jane Doe (ABCDE12345)"
+#
+#   APPLE_ID                   Apple ID (email) tied to your developer account.
+#
+#   TEAM_ID                    10-character Apple Team ID from developer.apple.com.
+#
+#   APP_PASSWORD               App-specific password created at
+#                              appleid.apple.com → Sign-In and Security.
+#                              (Used to store notarytool credentials in the
+#                               ephemeral keychain — @keychain: prefix not
+#                               needed in CI because we create the keychain
+#                               fresh each run.)
+#
+# Optional secrets (fall back to the defaults shown):
+#
+#   NOTARYTOOL_PROFILE         Keychain profile name [mrv2-notarytool]
+#   MRV2_APP                   Main app bundle name  [mrv2.app]
+#   VMRV2_APP                  Vulkan app bundle     [vmrv2.app]
+#   HDR_APP                    HDR app bundle        [hdr.app]  set "" to skip
+
 name: Vulkan MacOS Intel
 
 on:
