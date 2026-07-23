@@ -118,7 +118,7 @@ namespace mrv
 
                 std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 rtc::Candidate local, remote;
-                auto pair = pc->getSelectedCandidatePair(&local, &remote);
+                auto pair = client->peerConnection->getSelectedCandidatePair(&local, &remote);
                 if (pair)
                 {
                     std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
