@@ -144,15 +144,13 @@ namespace mrv
     void FileTransferServer::handleRequest(const std::string& peerId,
                                            std::shared_ptr<rtc::DataChannel> dc)
     {
-        std::weak_ptr<rtc::DataChannel> wdc = dc;
         std::weak_ptr<FileTransferServer> weakSelf = weak_from_this();
 
         dc->onMessage(
-            [weakSelf, wdc](rtc::message_variant msg)
+            [weakSelf, dc](rtc::message_variant msg)
                 {
                     auto self = weakSelf.lock();
-                    auto dc = wdc.lock();
-                    if (!self || !dc)
+                    if (!self)
                         return;
 
                     if (!std::holds_alternative<std::string>(msg))
