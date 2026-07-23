@@ -494,7 +494,7 @@ namespace mrv
                     string::Format(_("{0} is not readable. Using system default.")).
                     arg(caLocation);
                 LOG_STATUS(msg);
-#ifdef __linux___
+#ifdef __linux__
                 caLocation = "/etc/ssl/certs/ca-certificates.crt";
 #elif defined(__APPLE__)
                 caLocation = "/usr/local/etc/openssl@3/cert.pem";
