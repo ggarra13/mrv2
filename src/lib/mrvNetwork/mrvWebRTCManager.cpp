@@ -38,8 +38,6 @@ namespace mrv
         if (messageLength == 0)
             return;
 
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
         auto i = clients.find(peerId);
         if (i != clients.end())
         {
@@ -87,7 +85,10 @@ namespace mrv
             std::lock_guard<std::mutex> lock(mtx);
             clients[id] = client;
         }
-        pc->onStateChange([this, client, id, pc](PeerConnection::State state) {
+
+        std::weak_ptr<WebRTCConnection> wclient = client;
+
+        pc->onStateChange([this, wclient, id](PeerConnection::State state) {
 
             std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             if (state == PeerConnection::State::Failed)
@@ -108,6 +109,10 @@ namespace mrv
             }
             else
             {
+                auto client = wclient.lock();
+                if (!client)
+                    return;
+
                 std::lock_guard<std::mutex> lock(mtx);
                 drainPendingCandidates(id);
 
@@ -167,7 +172,7 @@ namespace mrv
             });
 
         // Handle incoming DataChannel
-        pc->onDataChannel([this, id, client](std::shared_ptr<DataChannel> dc) {
+        pc->onDataChannel([this, id, wclient](std::shared_ptr<DataChannel> dc) {
 
             std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             if (dc->label() != "mrv2_sync")
@@ -178,10 +183,15 @@ namespace mrv
                 return;
             }
 
+            auto client = wclient.lock();
+            if (!client) return;
+
             client->dataChannel = dc;
 
-            dc->onOpen([id, client]() {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+            dc->onOpen([id, wclient]() {
+                auto client = wclient.lock();
+                if (!client) return;
+
                 client->dataChannelOpen = true;
 
                 nlohmann::json message;
@@ -194,18 +204,17 @@ namespace mrv
 
             dc->onMessage(
                 [this, id](const rtc::binary data) {
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     if (onBinaryMessage)
                         onBinaryMessage(id, data);
                 },
                 [this, id](const std::string& msg) {
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     if (onStringMessage)
                         onStringMessage(id, msg);
                 });
 
-            dc->onClosed([id, client]() {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+            dc->onClosed([wclient]() {
+                auto client = wclient.lock();
+                if (!client) return;
                 client->dataChannelOpen = false;
             });
         });
@@ -214,8 +223,10 @@ namespace mrv
         {
             auto dc = pc->createDataChannel("mrv2_sync");
 
-            dc->onOpen([id, client]() {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+            dc->onOpen([wclient]() {
+                auto client = wclient.lock();
+                if (!client) return;
+
                 client->dataChannelOpen = true;
 
                 nlohmann::json message;
@@ -228,30 +239,26 @@ namespace mrv
 
             dc->onMessage(
                 [this, id](const rtc::binary data) {
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     if (onBinaryMessage)
                     {
-                        std::cerr << __FUNCTION__ << " "
-                                  << __LINE__ << std::endl;
                         onBinaryMessage(id, data);
                     }
                 },
                 [this, id](const std::string& msg) {
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     if (onStringMessage)
                     {
-                        std::cerr << __FUNCTION__ << " "
-                                  << __LINE__ << std::endl;
                         onStringMessage(id, msg);
                     }
                 });
 
-            dc->onClosed([id, client]() {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+            dc->onClosed([wclient]() {
+                auto client = wclient.lock();
+                if (!client) return;
+
                 client->dataChannelOpen = false;
             });
-            client->dataChannel = dc;
 
+            client->dataChannel = dc;
             pc->setLocalDescription();
         }
 
