@@ -38,6 +38,8 @@ namespace mrv
         if (messageLength == 0)
             return;
 
+        std::lock_guard<std::mutex> lock(mtx);
+
         auto i = clients.find(peerId);
         if (i != clients.end())
         {
@@ -57,6 +59,8 @@ namespace mrv
         std::size_t messageLength = bson.size();
         if (messageLength == 0)
             return;
+
+        std::lock_guard<std::mutex> lock(mtx);
 
         for (auto& [_, client] : clients)
         {
@@ -86,6 +90,7 @@ namespace mrv
 
         pc->onStateChange([this, wclient, id](PeerConnection::State state) {
 
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             LOG_STATUS("[" << id << "] State: " << state);
 
             if (state == PeerConnection::State::Disconnected ||
@@ -126,6 +131,10 @@ namespace mrv
                                << connType);
 
                 }
+                else
+                {
+                    LOG_STATUS("[" << id << "] Could not get pair");
+                }
             }
         });
 
@@ -144,6 +153,7 @@ namespace mrv
 
         pc->onGatheringStateChange(
             [this, wpc = make_weak_ptr(pc), id](PeerConnection::GatheringState state) {
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 LOG_STATUS("Gathering State: " << state);
                 if (state == PeerConnection::GatheringState::Complete) {
                     if(auto pc = wpc.lock()) {
@@ -345,7 +355,8 @@ namespace mrv
     void WebRTCManager::drainPendingCandidates(const std::string& peerId)
     {
         // Drain any candidates that arrived before we were ready.
-        // DO NOT ADD std::lock_guard lock(mtx).
+        // DO NOT ADD std::lock_guard lock(mtx) here.
+        // Add it to the calling function.
         auto i = clients.find(peerId);
         if (i == clients.end())
             return;
