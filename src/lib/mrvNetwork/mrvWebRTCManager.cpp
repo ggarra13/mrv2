@@ -87,14 +87,8 @@ namespace mrv
         }
         pc->onStateChange([this, client, id, pc](PeerConnection::State state) {
 
-            if (state == PeerConnection::State::Failed)
-            {
-                LOG_STATUS("[" << id << "] State: " << state);
-            }
-            else
-            {
-                LOG_STATUS("[" << id << "] State: " << state);
-            }
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+            LOG_STATUS("[" << id << "] State: " << state);
 
             if (state == PeerConnection::State::Disconnected ||
                 state == PeerConnection::State::Failed ||
@@ -120,6 +114,10 @@ namespace mrv
                                << connType);
 
                 }
+                else
+                {
+                    LOG_STATUS("[" << id << "] Could not get pair");
+                }
             }
         });
 
@@ -138,6 +136,7 @@ namespace mrv
 
         pc->onGatheringStateChange(
             [this, wpc = make_weak_ptr(pc), id](PeerConnection::GatheringState state) {
+            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 LOG_STATUS("Gathering State: " << state);
                 if (state == PeerConnection::GatheringState::Complete) {
                     if(auto pc = wpc.lock()) {
@@ -298,7 +297,8 @@ namespace mrv
     void WebRTCManager::drainPendingCandidates(const std::string& peerId)
     {
         // Drain any candidates that arrived before we were ready.
-        // DO NOT ADD std::lock_guard lock(mtx).
+        // DO NOT ADD std::lock_guard lock(mtx) here.
+        // Add it to the calling function.
         auto i = clients.find(peerId);
         if (i == clients.end())
             return;
