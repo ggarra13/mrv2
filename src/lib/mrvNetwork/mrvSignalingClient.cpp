@@ -107,7 +107,6 @@ namespace mrv
             if (!std::holds_alternative<std::string>(data))
                 return;
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             nlohmann::json message = nlohmann::json::parse(std::get<std::string>(data));
             handleMessage(message);
         });
@@ -115,7 +114,6 @@ namespace mrv
         websocket->open(url);
 
         while (!websocket->isOpen()) {
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             if (websocket->isClosed())
                 return;
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
