@@ -58,8 +58,6 @@ namespace mrv
         if (messageLength == 0)
             return;
 
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
         for (auto& [_, client] : clients)
         {
             if (!client->dataChannelOpen)
@@ -77,8 +75,6 @@ namespace mrv
     {
         using namespace rtc;
 
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
         auto pc = std::make_shared<PeerConnection>(config);
         auto client = std::make_shared<WebRTCConnection>(pc);
         {
@@ -90,7 +86,6 @@ namespace mrv
 
         pc->onStateChange([this, wclient, id](PeerConnection::State state) {
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             if (state == PeerConnection::State::Failed)
             {
                 LOG_STATUS("[" << id << "] State: " << state);
@@ -116,12 +111,10 @@ namespace mrv
                 std::lock_guard<std::mutex> lock(mtx);
                 drainPendingCandidates(id);
 
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 rtc::Candidate local, remote;
                 auto pair = client->peerConnection->getSelectedCandidatePair(&local, &remote);
                 if (pair)
                 {
-                    std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                     client->isRelayedConnection =
                         (local.type() == rtc::Candidate::Type::Relayed ||
                          remote.type() == rtc::Candidate::Type::Relayed);
@@ -134,7 +127,6 @@ namespace mrv
         });
 
         pc->onLocalCandidate([this, id](Candidate candidate) {
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             SignalingMessage msg;
             msg.peerId = id;
             msg.type = "candidate";
@@ -143,20 +135,17 @@ namespace mrv
 
             if (onSignalMessage)
             {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 onSignalMessage(msg);
             }
         });
 
         pc->onGatheringStateChange(
             [this, wpc = make_weak_ptr(pc), id](PeerConnection::GatheringState state) {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 LOG_STATUS("Gathering State: " << state);
                 if (state == PeerConnection::GatheringState::Complete) {
                     if(auto pc = wpc.lock()) {
                         auto description = pc->localDescription();
 
-                        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                         SignalingMessage msg;
                         msg.peerId = id;
                         msg.type = description->typeString();
@@ -164,7 +153,6 @@ namespace mrv
 
                         if (onSignalMessage)
                         {
-                            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                             onSignalMessage(msg);
                         }
                     }
@@ -174,10 +162,8 @@ namespace mrv
         // Handle incoming DataChannel
         pc->onDataChannel([this, id, wclient](std::shared_ptr<DataChannel> dc) {
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             if (dc->label() != "mrv2_sync")
             {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 if (onExtraDataChannel)
                     onExtraDataChannel(id, dc);
                 return;
@@ -269,7 +255,6 @@ namespace mrv
     std::shared_ptr<WebRTCConnection>
     WebRTCManager::getClient(const std::string& peerId)
     {
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         std::lock_guard<std::mutex> lock(mtx);
         auto it = clients.find(peerId);
         if (it == clients.end())
@@ -279,29 +264,23 @@ namespace mrv
 
     void WebRTCManager::handleOffer(const std::string& peerId, const std::string& sdp)
     {
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         auto client = createPeer(peerId, /*isOfferer*/ false);
 
         auto description = rtc::Description(sdp, "offer");
         client->setRemoteDescription(description);
 
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
         auto pc = client->peerConnection;
         pc->setLocalDescription();
 
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         drainPendingCandidates(peerId);
     }
 
     void WebRTCManager::handleAnswer(const std::string& peerId, const std::string& sdp)
     {
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         std::lock_guard<std::mutex> lock(mtx);
         if (auto jt = clients.find(peerId); jt != clients.end()) {
             auto client = jt->second;
             auto description = rtc::Description(sdp, "answer");
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             client->setRemoteDescription(description);
 
             drainPendingCandidates(peerId);
@@ -310,17 +289,14 @@ namespace mrv
 
     void WebRTCManager::addRemoteCandidate(const std::string& peerId, const rtc::Candidate& c)
     {
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         std::lock_guard<std::mutex> lock(mtx);
         auto jt = clients.find(peerId);
         if (jt != clients.end() && jt->second->sentRemote)
         {
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             jt->second->peerConnection->addRemoteCandidate(c);
         }
         else
         {
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             // PC not created or sendRemoteDescription not sent yet — buffer it
             pendingCandidates[peerId].push_back(c);
         }
@@ -328,15 +304,12 @@ namespace mrv
 
     void WebRTCManager::erase(const std::string& peerId)
     {
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
         std::lock_guard<std::mutex> lock(mtx);
         clients.erase(peerId);
         pendingCandidates.erase(peerId);
 
         if (onPeerDisconnected)
         {
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             onPeerDisconnected(peerId);
         }
     }
@@ -352,7 +325,6 @@ namespace mrv
         auto client = i->second;
         auto pc = client->peerConnection;
 
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
         if (auto it = pendingCandidates.find(peerId);
             it != pendingCandidates.end()) {
             for (auto& c : it->second)
