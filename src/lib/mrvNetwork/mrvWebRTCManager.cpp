@@ -90,13 +90,19 @@ namespace mrv
 
         pc->onStateChange([this, wclient, id](PeerConnection::State state) {
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             LOG_STATUS("[" << id << "] State: " << state);
 
             if (state == PeerConnection::State::Disconnected ||
                 state == PeerConnection::State::Failed ||
                 state == PeerConnection::State::Closed) {
-                std::cerr << "Destroy connection for " << id << std::endl;
+
+                if (wclient.expired())
+                {
+                    // Check if this callback belongs to a connection
+                    // that has already been replaced or destroyed.
+                    return;
+                }
+
                 // Detach erasure to another thread to avoid destroying
                 // the PeerConnection from within its own callback thread.
                 std::thread([this, id]() { erase(id); }).detach();
@@ -105,13 +111,7 @@ namespace mrv
             {
                 auto client = wclient.lock();
                 if (!client)
-                {
-                    std::cerr << "no client lock " << __FUNCTION__
-                              << " " << __LINE__ << std::endl;
                     return;
-                }
-                std::cerr << "client lock " << __FUNCTION__
-                          << " " << __LINE__ << std::endl;
 
                 std::lock_guard<std::mutex> lock(mtx);
                 drainPendingCandidates(id);
@@ -119,10 +119,7 @@ namespace mrv
                 rtc::Candidate local, remote;
                 auto pc = client->peerConnection;
                 if (!pc)
-                {
-                    std::cerr << "no client->peerConnection (pc)" << std::endl;
                     return;
-                }
                 auto pair = pc->getSelectedCandidatePair(&local, &remote);
                 if (pair)
                 {
@@ -156,7 +153,6 @@ namespace mrv
 
         pc->onGatheringStateChange(
             [this, wpc = make_weak_ptr(pc), id](PeerConnection::GatheringState state) {
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 LOG_STATUS("Gathering State: " << state);
                 if (state == PeerConnection::GatheringState::Complete) {
                     if(auto pc = wpc.lock()) {
@@ -187,24 +183,14 @@ namespace mrv
 
             auto client = wclient.lock();
             if (!client)
-            {
-                std::cerr << "no client lock " << __FUNCTION__
-                          << " " << __LINE__ << std::endl;
                 return;
-            }
 
             client->dataChannel = dc;
 
             dc->onOpen([id, wclient]() {
                 auto client = wclient.lock();
                 if (!client)
-                {
-                    std::cerr << "no client lock " << __FUNCTION__
-                              << " " << __LINE__ << std::endl;
                     return;
-                }
-                std::cerr << "client lock " << __FUNCTION__
-                          << " " << __LINE__ << std::endl;
 
                 client->dataChannelOpen = true;
 
@@ -229,13 +215,7 @@ namespace mrv
             dc->onClosed([wclient]() {
                 auto client = wclient.lock();
                 if (!client)
-                {
-                    std::cerr << "no client lock " << __FUNCTION__
-                              << " " << __LINE__ << std::endl;
                     return;
-                }
-                std::cerr << "client lock " << __FUNCTION__
-                          << " " << __LINE__ << std::endl;
                 client->dataChannelOpen = false;
             });
         });
@@ -247,14 +227,7 @@ namespace mrv
             dc->onOpen([wclient]() {
                 auto client = wclient.lock();
                 if (!client)
-                {
-                    std::cerr << "no client lock " << __FUNCTION__
-                              << " " << __LINE__ << std::endl;
                     return;
-                }
-
-                std::cerr << "client lock " << __FUNCTION__
-                          << " " << __LINE__ << std::endl;
 
                 client->dataChannelOpen = true;
 
@@ -283,11 +256,7 @@ namespace mrv
             dc->onClosed([wclient]() {
                 auto client = wclient.lock();
                 if (!client)
-                {
-                    std::cerr << "no client lock " << __FUNCTION__
-                              << " " << __LINE__ << std::endl;
                     return;
-                }
 
                 client->dataChannelOpen = false;
             });
@@ -312,7 +281,12 @@ namespace mrv
 
     void WebRTCManager::handleOffer(const std::string& peerId, const std::string& sdp)
     {
-        auto client = createPeer(peerId, /*isOfferer*/ false);
+        // Fetch the existing client initialized by onInitPeer,
+        // rather than blindly overwriting it.
+        auto client = getClient(peerId);
+        if (!client) {
+            client = createPeer(peerId, /*isOfferer*/ false);
+        }
 
         auto description = rtc::Description(sdp, "offer");
         client->setRemoteDescription(description);
