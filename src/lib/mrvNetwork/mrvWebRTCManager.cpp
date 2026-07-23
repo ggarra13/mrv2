@@ -99,8 +99,6 @@ namespace mrv
         if (messageLength == 0)
             return;
 
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
         for (auto& [_, client] : clients)
         {
             if (!client->dataChannelOpen)
