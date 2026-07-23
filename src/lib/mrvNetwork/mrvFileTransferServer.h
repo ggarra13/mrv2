@@ -39,14 +39,17 @@ namespace mrv
     // overlap at all) simply starts a brand new Session, i.e. a plain
     // single-reader full read — the degenerate case when there's no
     // concurrency to multiplex.
-    class FileTransferServer
+    class FileTransferServer : public std::enable_shared_from_this<FileTransferServer>
     {
     public:
-        explicit FileTransferServer(WebRTCManager& manager);
+        static std::shared_ptr<FileTransferServer> create(WebRTCManager& manager);
 
     private:
         struct Subscriber;
         struct Session;
+
+        FileTransferServer() = default;
+        void init(WebRTCManager& manager);   // moved ctor body here
 
         void handleRequest(const std::string& peerId,
                            std::shared_ptr<rtc::DataChannel> dc);

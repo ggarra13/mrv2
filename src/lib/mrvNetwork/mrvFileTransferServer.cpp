@@ -120,14 +120,24 @@ namespace mrv
         bool headerSent = false;               // protected by mtx
     };
 
-    FileTransferServer::FileTransferServer(WebRTCManager& manager)
+    std::shared_ptr<FileTransferServer>
+    FileTransferServer::create(WebRTCManager& manager)
     {
+        auto self = std::shared_ptr<FileTransferServer>(new FileTransferServer());
+        self->init(manager);
+        return self;
+    }
+
+    void FileTransferServer::init(WebRTCManager& manager)
+    {
+        std::weak_ptr<FileTransferServer> weakSelf = weak_from_this();
         manager.onExtraDataChannel =
-            [this](const std::string& peerId,
-                   std::shared_ptr<rtc::DataChannel> dc)
+            [weakSelf](const std::string& peerId, std::shared_ptr<rtc::DataChannel> dc)
                 {
+                    auto self = weakSelf.lock();
+                    if (!self) return;
                     if (dc->label() == "file-transfer")
-                        handleRequest(peerId, dc);
+                        self->handleRequest(peerId, dc);
                 };
     }
 
@@ -135,12 +145,14 @@ namespace mrv
                                            std::shared_ptr<rtc::DataChannel> dc)
     {
         std::weak_ptr<rtc::DataChannel> wdc = dc;
+        std::weak_ptr<FileTransferServer> weakSelf = weak_from_this();
 
         dc->onMessage(
-            [this, wdc](rtc::message_variant msg)
+            [weakSelf, wdc](rtc::message_variant msg)
                 {
+                    auto self = weakSelf.lock();
                     auto dc = wdc.lock();
-                    if (!dc)
+                    if (!self || !dc)
                         return;
 
                     if (!std::holds_alternative<std::string>(msg))
@@ -153,9 +165,9 @@ namespace mrv
                     std::shared_ptr<Session> session;
                     bool isNew = false;
                     {
-                        std::lock_guard<std::mutex> lock(sessionsMutex_);
-                        auto it = sessions_.find(path);
-                        if (it != sessions_.end())
+                        std::lock_guard<std::mutex> lock(self->sessionsMutex_);
+                        auto it = self->sessions_.find(path);
+                        if (it != self->sessions_.end())
                         {
                             session = it->second;
                         }
@@ -163,7 +175,7 @@ namespace mrv
                         {
                             session = std::make_shared<Session>();
                             session->path = path;
-                            sessions_[path] = session;
+                            self->sessions_[path] = session;
                             isNew = true;
                         }
 
@@ -205,9 +217,11 @@ namespace mrv
 
                     if (isNew)
                     {
-                        std::thread([this, session]()
+                        std::thread([weakSelf, session]()
                             {
-                                runSession(session);
+                                auto self = weakSelf.lock();
+                                if (!self) return;
+                                self->runSession(session);
                             }).detach();
                     }
                 });

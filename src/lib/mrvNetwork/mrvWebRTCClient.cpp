@@ -51,14 +51,13 @@ namespace mrv
         // Every mesh participant must be ready to serve a file to any other
         // peer, regardless of whether this machine ever needs to fetch one
         // itself - construct unconditionally, not on demand.
-        fileServer = std::make_unique<FileTransferServer>(webrtcManager);
+        fileServer = FileTransferServer::create(webrtcManager);
 
 
         // WebRTC → WebRTCClient (this class)
         webrtcManager.onBinaryMessage = [&](const std::string& peerId,
                                             const rtc::binary& data)
             {
-                std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 std::lock_guard lk(m_receiveMutex);
                 Message message = nlohmann::json::from_bson(data);
                 message[kLocalPeerIdKey] = peerId;

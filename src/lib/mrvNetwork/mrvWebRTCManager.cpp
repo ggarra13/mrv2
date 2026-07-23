@@ -23,6 +23,47 @@ namespace mrv
         sctpSettings.maxChunksOnQueue = 16384;
         sctpSettings.initialCongestionWindow = 10;          // in MTUs, default is very small (often ~3)
         rtc::SetSctpSettings(sctpSettings);
+
+        eraseThread_ = std::thread(&WebRTCManager::eraseWorker, this);
+    }
+
+    WebRTCManager::~WebRTCManager()
+    {
+        {
+            std::lock_guard<std::mutex> lock(eraseQueueMutex_);
+            stopping_ = true;
+        }
+        eraseQueueCv_.notify_all();
+
+        // guaranteed no thread touches `this` after this point
+        if (eraseThread_.joinable())
+            eraseThread_.join();
+    }
+
+    void WebRTCManager::requestErase(const std::string& peerId)
+    {
+        std::lock_guard<std::mutex> lock(eraseQueueMutex_);
+        eraseQueue_.push_back(peerId);
+        eraseQueueCv_.notify_one();
+    }
+
+    void WebRTCManager::eraseWorker()
+    {
+        while (true)
+        {
+            std::string peerId;
+            {
+                std::unique_lock<std::mutex> lock(eraseQueueMutex_);
+                eraseQueueCv_.wait(lock, [this] {
+                    return stopping_ || !eraseQueue_.empty();
+                });
+                if (stopping_ && eraseQueue_.empty())
+                    return;
+                peerId = eraseQueue_.front();
+                eraseQueue_.pop_front();
+            }
+            erase(peerId);   // existing body, unchanged
+        }
     }
 
     void WebRTCManager::setConfiguration(const rtc::Configuration& value)
@@ -77,8 +118,6 @@ namespace mrv
     {
         using namespace rtc;
 
-        std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-
         auto pc = std::make_shared<PeerConnection>(config);
         auto client = std::make_shared<WebRTCConnection>(pc);
         {
@@ -90,7 +129,6 @@ namespace mrv
 
         pc->onStateChange([this, wclient, id](PeerConnection::State state) {
 
-            std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
             if (state == PeerConnection::State::Failed)
             {
                 LOG_STATUS("[" << id << "] State: " << state);
@@ -103,9 +141,7 @@ namespace mrv
             if (state == PeerConnection::State::Disconnected ||
                 state == PeerConnection::State::Failed ||
                 state == PeerConnection::State::Closed) {
-                // Detach erasure to another thread to avoid destroying
-                // the PeerConnection from within its own callback thread.
-                std::thread([this, id]() { erase(id); }).detach();
+                requestErase(id);
             }
             else
             {
@@ -118,7 +154,7 @@ namespace mrv
 
                 std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
                 rtc::Candidate local, remote;
-                auto pair = pc->getSelectedCandidatePair(&local, &remote);
+                auto pair = client->peerConnection->getSelectedCandidatePair(&local, &remote);
                 if (pair)
                 {
                     std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
