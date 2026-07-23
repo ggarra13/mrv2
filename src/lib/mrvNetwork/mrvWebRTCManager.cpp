@@ -96,6 +96,7 @@ namespace mrv
             if (state == PeerConnection::State::Disconnected ||
                 state == PeerConnection::State::Failed ||
                 state == PeerConnection::State::Closed) {
+                std::cerr << "Destroy connection for " << id << std::endl;
                 // Detach erasure to another thread to avoid destroying
                 // the PeerConnection from within its own callback thread.
                 std::thread([this, id]() { erase(id); }).detach();
@@ -109,6 +110,8 @@ namespace mrv
                               << " " << __LINE__ << std::endl;
                     return;
                 }
+                std::cerr << "client lock " << __FUNCTION__
+                          << " " << __LINE__ << std::endl;
 
                 std::lock_guard<std::mutex> lock(mtx);
                 drainPendingCandidates(id);
@@ -200,6 +203,8 @@ namespace mrv
                               << " " << __LINE__ << std::endl;
                     return;
                 }
+                std::cerr << "client lock " << __FUNCTION__
+                          << " " << __LINE__ << std::endl;
 
                 client->dataChannelOpen = true;
 
@@ -229,6 +234,8 @@ namespace mrv
                               << " " << __LINE__ << std::endl;
                     return;
                 }
+                std::cerr << "client lock " << __FUNCTION__
+                          << " " << __LINE__ << std::endl;
                 client->dataChannelOpen = false;
             });
         });
@@ -245,6 +252,9 @@ namespace mrv
                               << " " << __LINE__ << std::endl;
                     return;
                 }
+
+                std::cerr << "client lock " << __FUNCTION__
+                          << " " << __LINE__ << std::endl;
 
                 client->dataChannelOpen = true;
 
