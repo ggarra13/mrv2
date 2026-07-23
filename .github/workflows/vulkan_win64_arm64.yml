@@ -18,7 +18,7 @@ jobs:
     runs-on: windows-11-arm
     permissions:
       contents: write # Needed to update releases
-      
+
     env:
       MRV2_WINDOWS_SIGNING_PASSWORD: ${{ secrets.MRV2_WINDOWS_SIGNING_PASSWORD }}
 
@@ -313,7 +313,7 @@ jobs:
       - name: Set executable permissions
         run: |
           chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
-          
+
       - name: Install MSYS2 Dependencies
         run: |
           pacman -S --noconfirm rsync coreutils
