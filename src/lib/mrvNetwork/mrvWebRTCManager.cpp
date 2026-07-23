@@ -95,8 +95,9 @@ namespace mrv
             if (state == PeerConnection::State::Disconnected ||
                 state == PeerConnection::State::Failed ||
                 state == PeerConnection::State::Closed) {
-                // remove disconnected client
-                erase(id);
+                // Detach erasure to another thread to avoid destroying
+                // the PeerConnection from within its own callback thread.
+                std::thread([this, id]() { erase(id); }).detach();
             }
             else
             {
@@ -221,8 +222,8 @@ namespace mrv
             dc->onClosed([id, client]() {
                 client->dataChannelOpen = false;
             });
-            client->dataChannel = dc;
 
+            client->dataChannel = dc;
             pc->setLocalDescription();
         }
 
