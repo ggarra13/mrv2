@@ -86,14 +86,7 @@ namespace mrv
 
         pc->onStateChange([this, wclient, id](PeerConnection::State state) {
 
-            if (state == PeerConnection::State::Failed)
-            {
-                LOG_STATUS("[" << id << "] State: " << state);
-            }
-            else
-            {
-                LOG_STATUS("[" << id << "] State: " << state);
-            }
+            LOG_STATUS("[" << id << "] State: " << state);
 
             if (state == PeerConnection::State::Disconnected ||
                 state == PeerConnection::State::Failed ||
@@ -106,13 +99,23 @@ namespace mrv
             {
                 auto client = wclient.lock();
                 if (!client)
+                {
+                    std::cerr << "no client lock " << __FUNCTION__
+                              << " " << __LINE__ << std::endl;
                     return;
+                }
 
                 std::lock_guard<std::mutex> lock(mtx);
                 drainPendingCandidates(id);
 
                 rtc::Candidate local, remote;
-                auto pair = client->peerConnection->getSelectedCandidatePair(&local, &remote);
+                auto pc = client->peerConnection;
+                if (!pc)
+                {
+                    std::cerr << "no client->peerConnection (pc)" << std::endl;
+                    return;
+                }
+                auto pair = pc->getSelectedCandidatePair(&local, &remote);
                 if (pair)
                 {
                     client->isRelayedConnection =
@@ -170,13 +173,23 @@ namespace mrv
             }
 
             auto client = wclient.lock();
-            if (!client) return;
+            if (!client)
+            {
+                std::cerr << "no client lock " << __FUNCTION__
+                          << " " << __LINE__ << std::endl;
+                return;
+            }
 
             client->dataChannel = dc;
 
             dc->onOpen([id, wclient]() {
                 auto client = wclient.lock();
-                if (!client) return;
+                if (!client)
+                {
+                    std::cerr << "no client lock " << __FUNCTION__
+                              << " " << __LINE__ << std::endl;
+                    return;
+                }
 
                 client->dataChannelOpen = true;
 
@@ -200,7 +213,12 @@ namespace mrv
 
             dc->onClosed([wclient]() {
                 auto client = wclient.lock();
-                if (!client) return;
+                if (!client)
+                {
+                    std::cerr << "no client lock " << __FUNCTION__
+                              << " " << __LINE__ << std::endl;
+                    return;
+                }
                 client->dataChannelOpen = false;
             });
         });
@@ -211,7 +229,12 @@ namespace mrv
 
             dc->onOpen([wclient]() {
                 auto client = wclient.lock();
-                if (!client) return;
+                if (!client)
+                {
+                    std::cerr << "no client lock " << __FUNCTION__
+                              << " " << __LINE__ << std::endl;
+                    return;
+                }
 
                 client->dataChannelOpen = true;
 
@@ -239,7 +262,12 @@ namespace mrv
 
             dc->onClosed([wclient]() {
                 auto client = wclient.lock();
-                if (!client) return;
+                if (!client)
+                {
+                    std::cerr << "no client lock " << __FUNCTION__
+                              << " " << __LINE__ << std::endl;
+                    return;
+                }
 
                 client->dataChannelOpen = false;
             });
