@@ -41,7 +41,8 @@ namespace mrv
         LOG_STATUS(msg);
 
         rtc::Configuration config;
-        config.iceServers.emplace_back(stunServer);
+        if (!stunServer.empty())
+            config.iceServers.emplace_back(stunServer);
         config.disableAutoNegotiation = true;
 
         webrtcManager.setConfiguration(config);
