@@ -63,6 +63,26 @@ msgstr ""
 "Editing + 语音和链接注释功能（一年）\n"
 "Pro 的全部功能，无到期时间（永久授权，归您所有）。\n"
 
+msgid ""
+"Floating licenses available upon request. Contact\n"
+"ggarra13@@gmail.com and once agreed upon price,\n"
+"you will be given a Master Key.  Enter it here and\n"
+"follow the instructions you will be given."
+msgstr ""
+"浮动许可证可按需提供。请联系\n"
+"ggarra13@@gmail.com，价格协商一致后，\n"
+"您将获得一个主密钥。请在此输入该密钥，\n"
+"并按照提供给您的说明进行操作。"
+
+msgid "Master Key"
+msgstr "主密钥"
+
+msgid "Install"
+msgstr "安装"
+
+msgid "Demo"
+msgstr "演示"
+
 msgid "Custom Development"
 msgstr "定制开发"
 

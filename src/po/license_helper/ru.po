@@ -72,6 +72,26 @@ msgstr ""
 "Editing + Голосовые и ссылочные аннотации на один год\n"
 "Все возможности Pro без срока действия (лицензия навсегда).\n"
 
+msgid ""
+"Floating licenses available upon request. Contact\n"
+"ggarra13@@gmail.com and once agreed upon price,\n"
+"you will be given a Master Key.  Enter it here and\n"
+"follow the instructions you will be given."
+msgstr ""
+"Плавающие лицензии предоставляются по запросу. Свяжитесь с\n"
+"ggarra13@@gmail.com, и после согласования стоимости\n"
+"вам будет предоставлен мастер-ключ. Введите его здесь\n"
+"и следуйте полученным инструкциям."
+
+msgid "Master Key"
+msgstr "Мастер-ключ"
+
+msgid "Install"
+msgstr "Установить"
+
+msgid "Demo"
+msgstr "Демо"
+
 msgid "Custom Development"
 msgstr "Индивидуальная разработка"
 

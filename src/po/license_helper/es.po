@@ -72,6 +72,26 @@ msgstr ""
 "Edición + anotaciones de voz y enlaces por un año\n"
 "Todo lo de Pro pero sin fecha de vencimiento (es tuyo).\n"
 
+msgid ""
+"Floating licenses available upon request. Contact\n"
+"ggarra13@@gmail.com and once agreed upon price,\n"
+"you will be given a Master Key.  Enter it here and\n"
+"follow the instructions you will be given."
+msgstr ""
+"Las licencias flotantes están disponibles bajo solicitud. Contacte a\n"
+"ggarra13@@gmail.com y, una vez acordado el precio,\n"
+"se le proporcionará una Clave Maestra. Introdúzcala aquí y\n"
+"siga las instrucciones que se le proporcionarán."
+
+msgid "Master Key"
+msgstr "LLave Maestra"
+
+msgid "Install"
+msgstr "Instalar"
+
+msgid "Demo"
+msgstr "Demo"
+
 msgid "Custom Development"
 msgstr "Desarrollo Personalizado"
 

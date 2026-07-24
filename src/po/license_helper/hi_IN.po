@@ -71,6 +71,26 @@ msgstr ""
 "Editing + Voice और Link Annotations एक वर्ष के लिए\n"
 "Pro की सभी सुविधाएँ, लेकिन बिना समाप्ति तिथि के (यह आपका है)।\n"
 
+msgid ""
+"Floating licenses available upon request. Contact\n"
+"ggarra13@@gmail.com and once agreed upon price,\n"
+"you will be given a Master Key.  Enter it here and\n"
+"follow the instructions you will be given."
+msgstr ""
+"फ्लोटिंग लाइसेंस अनुरोध पर उपलब्ध हैं। संपर्क करें\n"
+"ggarra13@@gmail.com पर, और मूल्य तय हो जाने के बाद,\n"
+"आपको एक मास्टर कुंजी प्रदान की जाएगी। इसे यहाँ दर्ज करें\n"
+"और आपको दिए जाने वाले निर्देशों का पालन करें।"
+
+msgid "Master Key"
+msgstr "मास्टर कुंजी"
+
+msgid "Install"
+msgstr "स्थापित करें"
+
+msgid "Demo"
+msgstr "डेमो"
+
 msgid "Custom Development"
 msgstr "कस्टम डेवलपमेंट (Custom Development)"
 

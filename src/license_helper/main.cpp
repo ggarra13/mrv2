@@ -291,20 +291,23 @@ You need an Internet connection to use.)TEXT");
     }
 
     {
-        Fl_Group* floating = new Fl_Group(20, 60, 600-20, 320,
+        Fl_Group* floating = new Fl_Group(20, 60, 600-20, tabs->h() - 40,
                                           "Floating Licenses");
 
-        Fl_Box*    box = new Fl_Box(20, 60, 580, 80);
-        box->label("Floating licenses available upon request. Contact\n"
-                   "ggarra13@@gmail.com and once agreed, enter the Master Key");
+        Fl_Box*    box = new Fl_Box(20, 60, 580, 160);
+        box->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+        box->label(_("Floating licenses available upon request. Contact\n"
+                     "ggarra13@@gmail.com and once agreed upon price,\n"
+                     "you will be given a Master Key.  Enter it here and\n"
+                     "follow the instructions you will be given."));
 
-        master_key = new Fl_Multiline_Input(20, 150, 580, 140, "Master Key");
+        master_key = new Fl_Multiline_Input(20, 220, 580, 200, _("Master Key"));
         master_key->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
 
-        Fl_Button* install = new Fl_Button(340, 300, 250, 40, "Install");
+        Fl_Button* install = new Fl_Button(340, 480, 250, 40, _("Install"));
         install->callback((Fl_Callback*)install_cb, nullptr);
 
-        Fl_Button* demo = new Fl_Button(80, 300, 220, 40, "Demo");
+        Fl_Button* demo = new Fl_Button(80, 480, 220, 40, _("Demo"));
         demo->callback((Fl_Callback*)exit_cb, nullptr);
 
         floating->end();
