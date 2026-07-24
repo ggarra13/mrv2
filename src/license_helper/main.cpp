@@ -295,8 +295,8 @@ You need an Internet connection to use.)TEXT");
                                           "Floating Licenses");
 
         Fl_Box*    box = new Fl_Box(20, 60, 580, 80);
-        box->label("Please enter your master key for your facility you "
-                   "got from ggarra13@@gmail.com");
+        box->label("Floating licenses available upon request. Contact\n"
+                   "ggarra13@@gmail.com and once agreed, enter the Master Key");
 
         master_key = new Fl_Multiline_Input(20, 150, 580, 140, "Master Key");
         master_key->align(FL_ALIGN_CENTER | FL_ALIGN_TOP);
