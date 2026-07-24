@@ -31,10 +31,16 @@ namespace mrv
             rtc::InitLogger(rtc::LogLevel::Debug);
         }
 
-
-        std::string stunServer = os::sgetenv("MRV2_STUN_SERVER");
-        if (stunServer.empty())
+        std::string stunServer;
+        const char* env = fl_getenv("MRV2_STUN_SERVER");
+        if (env)
+        {
+            stunServer = env;
+        }
+        else
+        {
             stunServer = App::ui->uiPrefs->uiPrefsWebRTCStunServer->value();
+        }
 
         std::string msg = string::Format(_("STUN server is {0}")).
                           arg(stunServer);
