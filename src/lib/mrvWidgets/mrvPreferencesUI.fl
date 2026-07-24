@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0500
+version 1.050020
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -96,7 +96,7 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {489 182 847 449} type Double resizable
+      xywh {0 0 847 449} type Double resizable
       code3 {main = m;} non_modal size_range {847 449 0 0} visible
     } {
       Fl_Group {} {open
@@ -110,8 +110,8 @@ class PreferencesUI {open
             xywh {280 28 567 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
-              label {User Interface}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label {User Interface} selected
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label {Window Behavior}
@@ -1989,26 +1989,50 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
             }
             Fl_Group {} {
               label WebRTC open
-              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5
+              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5 hide
             } {
-              Fl_Group {} {open selected
+              Fl_Group {} {open
                 xywh {318 69 508 312}
               } {
+                Fl_Choice {} {
+                  label {WebRTC Presets}
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {int value = o->value();
+if (value == 0)
+{
+    v->uiPrefsWebRTCStunServer->value("stun:stun.l.google.com:19302");
+}
+else if (value == 1)
+{
+    v->uiPrefsWebRTCStunServer->value("");
+}} open
+                  tooltip {WebRTC presets} xywh {545 79 180 26} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label Internet
+                    xywh {60 60 100 20}
+                  }
+                  MenuItem {} {
+                    label LAN
+                    xywh {60 60 100 20}
+                  }
+                }
                 Fl_Input uiPrefsWebRTCStunServer {
                   label {Stun Server}
-                  tooltip {WebRTC STUN Server.  Leave blank to use Google's.} xywh {438 86 370 32} color 20 textcolor 56
+                  tooltip {WebRTC STUN Server.  Leave blank to use Google's.} xywh {438 119 370 32} color 20 textcolor 56
                 }
                 Fl_Input uiPrefsWebRTCServer {
                   label {WebRTC Server}
-                  tooltip {WebRTC server used to sync the connections.} xywh {438 133 370 32} color 20 textcolor 56
+                  tooltip {WebRTC server used to sync the connections.} xywh {438 166 370 32} color 20 textcolor 56
                 }
                 Fl_Input uiPrefsWebRTCStudio {
                   label Studio
-                  tooltip {Studio name to prefix to all Room connections.  Use some unique name.} xywh {438 180 370 32} color 20 textcolor 56
+                  tooltip {Studio name to prefix to all Room connections.  Use some unique name.} xywh {438 213 370 32} color 20 textcolor 56
                 }
                 Fl_Check_Button uiPrefsWebRTCCleanDirectory {
                   label {Clean directory at Start up}
-                  tooltip {Clean the WebRTC cache directory on start of the viewer.} xywh {545 229 25 30} down_box DOWN_BOX value 1 align 4
+                  tooltip {Clean the WebRTC cache directory on start of the viewer.} xywh {545 246 25 30} down_box DOWN_BOX value 1 align 4
                 }
                 Fl_Choice uiPrefsWebRTCCacheSetting {
                   label {WebRTC Cache}

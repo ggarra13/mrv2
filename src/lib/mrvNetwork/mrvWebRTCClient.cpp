@@ -35,8 +35,6 @@ namespace mrv
         std::string stunServer = os::sgetenv("MRV2_STUN_SERVER");
         if (stunServer.empty())
             stunServer = App::ui->uiPrefs->uiPrefsWebRTCStunServer->value();
-        if (stunServer.empty())
-            stunServer = "stun:stun.l.google.com:19302";
 
         std::string msg = string::Format(_("STUN server is {0}")).
                           arg(stunServer);
