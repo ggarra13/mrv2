@@ -4,7 +4,7 @@ v1.7.1
 ChangeLog
 ---------
 
-- Installation: Simplified macOS installation a tad.  Also fixed a potential issue with the installation.command script.
+- Installation: Simplified macOS installation a tad.  Also fixed shebang issue with the installation.command script.
 
 - UI: File->Recent menu now correctly displays the first frame of the sequence, instead of the frame that was used to load it with.
 - UI: Fixed some flickering of Progress Report on Windows to not using Fl_Double_Window.
