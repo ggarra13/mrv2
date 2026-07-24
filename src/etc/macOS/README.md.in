@@ -1,7 +1,7 @@
 
 To install it, after downloading it, before opening the .dmg file, run in an /Applications/Terminal.app
 
-xattr -d com.apple.quarantine /path/to/your/dmg/file.dmg
+xattr -d com.apple.quarantine /path/to/your/file.dmg
 
 Then open the .dmg file and drag the @mrv2_NAME@ icon to the 
 Applications directory.  If there's already an existant @mrv2_NAME@ version, we
@@ -19,7 +19,7 @@ run and then you will be able to enjoy @mrv2_NAME@.
 ------------------------------------------------------------------------------
 Um @mrv2_NAME@ zu installieren, führen Sie nach dem Herunterladen und **bevor** Sie die .dmg-Datei öffnen, folgenden Befehl in der /Applications/Terminal.app aus:
 
-xattr -d com.apple.quarantine /Pfad/zu/Ihrer/dmg/Datei.dmg
+xattr -d com.apple.quarantine /Pfad/zu/Ihrer/Datei.dmg
 
 Öffnen Sie anschließend die .dmg-Datei und ziehen Sie das Symbol von @mrv2_NAME@ in den Ordner „Programme“. Falls bereits eine Version von @mrv2_NAME@ vorhanden ist, empfehlen wir, diese zu überschreiben (falls die neue Version für Sie nicht zufriedenstellend funktioniert, können Sie jederzeit zu einer früheren Version zurückkehren).
 
@@ -56,7 +56,7 @@ Votre mot de passe vous sera demandé une seule fois. Les commandes de signature
 ------------------------------------------------------------------------------
 @mrv2_NAME@ स्थापित करने के लिए, इसे डाउनलोड करने के बाद और .dmg फ़ाइल खोलने से **पहले**, /Applications/Terminal.app में निम्नलिखित कमांड चलाएँ:
 
-xattr -d com.apple.quarantine /path/to/your/dmg/file.dmg
+xattr -d com.apple.quarantine /path/to/your/file.dmg
 
 इसके बाद .dmg फ़ाइल खोलें और @mrv2_NAME@ आइकन को Applications फ़ोल्डर में खींचें। यदि @mrv2_NAME@ का कोई संस्करण पहले से मौजूद है, तो हम उसे प्रतिस्थापित करने की सलाह देते हैं (यदि नया संस्करण आपके लिए ठीक से काम नहीं करता है, तो आप हमेशा पिछले संस्करण पर वापस जा सकते हैं)।
 
@@ -81,7 +81,7 @@ Ti verrà richiesta la password una sola volta. Verranno quindi eseguiti i coman
 ------------------------------------------------------------------------------
 @mrv2_NAME@ をインストールするには、ダウンロード後、.dmg ファイルを開く**前に**、/Applications/Terminal.app で次のコマンドを実行してください。
 
-xattr -d com.apple.quarantine /path/to/your/dmg/file.dmg
+xattr -d com.apple.quarantine /path/to/your/file.dmg
 
 その後、.dmg ファイルを開き、@mrv2_NAME@ のアイコンを「Applications」フォルダーへドラッグしてください。すでに @mrv2_NAME@ がインストールされている場合は、上書きすることをお勧めします（新しいバージョンが期待どおりに動作しない場合は、いつでも以前のバージョンに戻すことができます）。
 
@@ -120,7 +120,7 @@ xattr -d com.apple.quarantine /путь/к/вашему/файлу.dmg
 ------------------------------------------------------------------------------
 要安装 @mrv2_NAME@，请在下载完成后、**打开 .dmg 文件之前**，在 /Applications/Terminal.app 中运行以下命令：
 
-xattr -d com.apple.quarantine /path/to/your/dmg/file.dmg
+xattr -d com.apple.quarantine /path/to/your/file.dmg
 
 然后打开 .dmg 文件，并将 @mrv2_NAME@ 图标拖到“应用程序”文件夹中。如果已经安装了 @mrv2_NAME@ 的旧版本，我们建议直接覆盖安装（如果新版本无法正常工作，您随时可以恢复到之前的版本）。
 

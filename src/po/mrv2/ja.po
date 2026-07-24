@@ -6039,6 +6039,12 @@ msgstr "×3"
 msgid "X 4"
 msgstr "×4"
 
+msgid "Internet"
+msgstr "インターネット"
+
+msgid "LAN"
+msgstr "LAN"
+
 msgid "Home Directory"
 msgstr "ホームディレクトリ"
 
@@ -6879,6 +6885,12 @@ msgstr "この設定は、ComfyUIのmrv2_save_exr_node.pyと通信するため�
 
 msgid "WebRTC settings"
 msgstr "WebRTC 設定"
+
+msgid "WebRTC Presets"
+msgstr "WebRTCプリセット"
+
+msgid "WebRTC presets"
+msgstr "WebRTCプリセット"
 
 msgid "Stun Server"
 msgstr "STUN サーバー"

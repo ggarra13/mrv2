@@ -45,7 +45,7 @@ sign_installer() {
     done
     
     echo "Signing failed after retries"
-    rm -f "$NSIS_INSTALLER"
+    #rm -f "$NSIS_INSTALLER"
     exit 1
 }
 

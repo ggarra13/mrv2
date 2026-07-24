@@ -6060,6 +6060,12 @@ msgstr "×3"
 msgid "X 4"
 msgstr "×4"
 
+msgid "Internet"
+msgstr "互联网"
+
+msgid "LAN"
+msgstr "局域网"
+
 msgid "Home Directory"
 msgstr "主目录"
 
@@ -6886,6 +6892,12 @@ msgstr "此设置打开管道, 以便与 ComfyUI 的 drv2_ save_ exr_ node 进�
 
 msgid "WebRTC settings"
 msgstr "WebRTC 设置"
+
+msgid "WebRTC Presets"
+msgstr "WebRTC 预设"
+
+msgid "WebRTC presets"
+msgstr "WebRTC 预设"
 
 msgid "Stun Server"
 msgstr "STUN 服务器"

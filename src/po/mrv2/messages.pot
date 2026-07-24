@@ -5779,6 +5779,12 @@ msgstr ""
 msgid "X 4"
 msgstr ""
 
+msgid "Internet"
+msgstr ""
+
+msgid "LAN"
+msgstr ""
+
 msgid "Home Directory"
 msgstr ""
 
@@ -6455,8 +6461,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: "
-"gizmo_v001.0001.exr"
+"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
+"exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -6598,6 +6604,12 @@ msgid ""
 msgstr ""
 
 msgid "WebRTC settings"
+msgstr ""
+
+msgid "WebRTC Presets"
+msgstr ""
+
+msgid "WebRTC presets"
 msgstr ""
 
 msgid "Stun Server"

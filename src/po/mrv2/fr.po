@@ -6170,6 +6170,12 @@ msgstr "X 3"
 msgid "X 4"
 msgstr "X 4"
 
+msgid "Internet"
+msgstr "Internet"
+
+msgid "LAN"
+msgstr "Réseau local"
+
 msgid "Home Directory"
 msgstr "Répertoire personnel"
 
@@ -7125,6 +7131,12 @@ msgstr ""
 
 msgid "WebRTC settings"
 msgstr "Paramètres WebRTC"
+
+msgid "WebRTC Presets"
+msgstr "Préréglages WebRTC"
+
+msgid "WebRTC presets"
+msgstr "Préréglages WebRTC"
 
 msgid "Stun Server"
 msgstr "Serveur STUN"

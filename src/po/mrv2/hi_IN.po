@@ -6118,6 +6118,12 @@ msgstr "× 3"
 msgid "X 4"
 msgstr "× 4"
 
+msgid "Internet"
+msgstr "इंटरनेट"
+
+msgid "LAN"
+msgstr "स्थानीय नेटवर्क"
+
 msgid "Home Directory"
 msgstr "होम निर्देशिका"
 
@@ -7033,6 +7039,12 @@ msgstr ""
 "mrv2_und_und."
 
 msgid "WebRTC settings"
+msgstr "WebRTC सेटिंग्स"
+
+msgid "WebRTC Presets"
+msgstr "WebRTC प्रीसेट"
+
+msgid "WebRTC presets"
 msgstr "WebRTC सेटिंग्स"
 
 msgid "Stun Server"
