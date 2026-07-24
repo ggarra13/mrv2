@@ -40,5 +40,16 @@ files="${OUTPUT_FILE} ${files}"
 
 echo $files
 
+#
+# Read and count files
+#
+read -ra items <<< "$files"
+count=${#items[@]}
+
+if [[ $count != 23 ]]; then
+    echo "Not all files in beta release are there!"
+    exit 1
+fi
+
 gh release upload $1 $files --clobber 
 
