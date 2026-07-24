@@ -169,10 +169,6 @@ namespace mrv
                                << connType);
 
                 }
-                else
-                {
-                    LOG_STATUS("[" << id << "] Could not get pair");
-                }
             }
         });
 
