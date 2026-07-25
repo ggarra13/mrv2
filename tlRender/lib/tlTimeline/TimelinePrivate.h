@@ -56,6 +56,22 @@ namespace tl
             io::Info ioInfo;
             uint64_t requestId = 0;
 
+            // The pixels per unit for OTIO spatial coordinates, taken from the
+            // first clip that has them. The coordinates are unit-less, so a
+            // reference is needed to map them onto a pixel size. Stays 1.0 when no
+            // clip has bounds, where it is unused.
+            double boundsScale = 1.0;
+            // The canvas shared by the whole timeline, the union of every clip's
+            // spatial coordinates. Empty when no clip has bounds, which leaves
+            // the layout to the image sizes as before. The offset translates the
+            // canvas minimum to the origin.
+            image::Size canvasSize;      // ftk::Size2I
+            math::Vector2f canvasOffset;
+            // The reference size used by Spatial::Normalize for clips that have
+            // no spatial coordinates of their own, taken from the first video
+            // clip.
+            image::Size normalizeSize;  // ftk::Size2I
+
             struct VideoLayerData
             {
                 VideoLayerData() {};
@@ -63,6 +79,8 @@ namespace tl
 
                 std::future<io::VideoData> image;
                 std::future<io::VideoData> imageB;
+                std::optional<math::Box2f> bounds;
+                std::optional<math::Box2f> boundsB;
                 Transition transition = Transition::kNone;
                 float transitionValue = 0.F;
             };
@@ -74,7 +92,7 @@ namespace tl
                 uint64_t id = 0;
                 otime::RationalTime time = time::invalidTime;
                 io::Options options;
-                std::promise<VideoData> promise;
+                std::promise<VideoFrame> promise;
 
                 std::vector<VideoLayerData> layerData;
             };

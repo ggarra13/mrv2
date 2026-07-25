@@ -24,155 +24,263 @@ namespace tl
         TLRENDER_ENUM_IMPL(CompareTimeMode, "Relative", "Absolute");
         TLRENDER_ENUM_SERIALIZE_IMPL(CompareTimeMode);
 
-        std::vector<math::Box2i>
-        getBoxes(CompareMode mode, const std::vector<image::Size>& sizes)
+        namespace
+        {
+            //! Get the image information used to lay out each video frame,
+            //! taken from the first layer that has an image.
+            //!
+            //! When the frame has a canvas from the OTIO spatial coordinates,
+            //! the canvas size is substituted for the image size. The canvas
+            //! spans the whole timeline, so the layout stays the same no
+            //! matter which clips are visible or what resolution they were
+            //! rendered at; the layers are positioned within it when they are
+            //! drawn. The canvas already describes the display geometry, so
+            //! the pixel aspect ratio is not applied a second time.
+            std::vector<image::Info> getInfos(const std::vector<VideoFrame>& videoFrame)
+            {
+                std::vector<image::Info> out;
+                for (const auto& i : videoFrame)
+                {
+                    image::Info info;
+                    for (const auto& layer : i.layers)
+                    {
+                        if (layer.image)
+                        {
+                            info = layer.image->getInfo();
+                            break;
+                        }
+                        else if (layer.imageB)
+                        {
+                            info = layer.imageB->getInfo();
+                            break;
+                        }
+                    }
+                    if (i.canvasSize.isValid())
+                    {
+                        info.size = i.canvasSize;
+                        info.size.pixelAspectRatio = 1.F;
+                    }
+                    out.push_back(info);
+                }
+                return out;
+            }
+        }
+
+        std::vector<math::Box2i> getBounds(
+            const CompareOptions& options,
+            const AspectRatioOptions& aspectRatioOptions,
+            const std::vector<image::Info>& infos)
         {
             std::vector<math::Box2i> out;
-            const size_t count = sizes.size();
-            switch (mode)
+            const size_t count = infos.size();
+            switch (options.mode)
             {
             case CompareMode::Horizontal:
             {
-                image::Size size;
+                math::Size2i size;
                 if (count > 0)
                 {
-                    size = sizes[0];
+                    size = getRenderSize(infos[0], aspectRatioOptions);
+                    out.push_back(math::Box2i(0, 0, size.w, size.h));
                 }
-                if (count > 0)
+                if (options.fitToA && count > 1)
                 {
-                    out.push_back(math::Box2i(
-                        0, 0, size.w * size.pixelAspectRatio, size.h));
+                    out.push_back(getBox(
+                                      math::Box2i(size.w, 0, size.w, size.h),
+                                      infos[1],
+                                      aspectRatioOptions,
+                                      BoxHAlign::Left));
                 }
-                if (count > 1)
+                else if (count > 1)
                 {
-                    out.push_back(math::Box2i(
-                        size.w * size.pixelAspectRatio, 0,
-                        size.w * size.pixelAspectRatio, size.h));
+                    const math::Size2i sizeB = getRenderSize(infos[1],
+                                                            aspectRatioOptions);
+                    out.push_back(math::Box2i(size.w, 0, sizeB.w, sizeB.h));
                 }
                 break;
             }
             case CompareMode::Vertical:
             {
-                image::Size size;
+                math::Size2i size;
                 if (count > 0)
                 {
-                    size = sizes[0];
+                    size = getRenderSize(infos[0], aspectRatioOptions);
+                    out.push_back(math::Box2i(0, 0, size.w, size.h));
                 }
-                if (count > 0)
+                if (options.fitToA && count > 1)
                 {
-                    out.push_back(math::Box2i(
-                        0, 0, size.w * size.pixelAspectRatio, size.h));
+                    out.push_back(getBox(
+                                      math::Box2i(0, size.h, size.w, size.h),
+                                      infos[1],
+                                      aspectRatioOptions,
+                                      BoxHAlign::Center,
+                                      BoxVAlign::Top));
                 }
-                if (count > 1)
+                else if (count > 1)
                 {
-                    out.push_back(math::Box2i(
-                        0, size.h, size.w * size.pixelAspectRatio, size.h));
+                    const math::Size2i sizeB =
+                        getRenderSize(infos[1], aspectRatioOptions);
+                    out.push_back(math::Box2i(0, size.h, sizeB.w, sizeB.h));
                 }
                 break;
             }
             case CompareMode::Tile:
                 if (count > 0)
                 {
-                    image::Size tileSize;
-                    for (const auto& i : sizes)
+                    const int cols = std::max(1, static_cast<int>(std::ceil(std::sqrt(count))));
+                    math::Size2i size;
+                    if (options.fitToA)
                     {
-                        tileSize = std::max(tileSize, i);
+                        size = getRenderSize(infos[0], aspectRatioOptions);
                     }
-
-                    int columns = 0;
-                    int rows = 0;
-                    switch (count)
+                    else
                     {
-                    case 1:
-                        columns = 1;
-                        rows = 1;
-                        break;
-                    case 2:
-                        columns = 1;
-                        rows = 2;
-                        break;
-                    default:
-                    {
-                        const float sqrt = std::sqrt(count);
-                        columns = std::ceil(sqrt);
-                        const std::div_t d = std::div(count, columns);
-                        rows = d.quot + (d.rem > 0 ? 1 : 0);
-                        break;
-                    }
-                    }
-
-                    int i = 0;
-                    for (int r = 0, y = 0; r < rows; ++r)
-                    {
-                        for (int c = 0, x = 0; c < columns; ++c, ++i)
+                        for (size_t i = 0; i < count; ++i)
                         {
-                            if (i < count)
-                            {
-                                const auto& s = sizes[i];
-                                const math::Box2i box(
-                                    x, y,
-                                    tileSize.w * tileSize.pixelAspectRatio,
-                                    tileSize.h);
-                                out.push_back(box);
-                            }
-                            x += tileSize.w * tileSize.pixelAspectRatio;
+                            const math::Size2i size2 =
+                                getRenderSize(infos[i], aspectRatioOptions);
+                            size.w = std::max(size.w, size2.w);
+                            size.h = std::max(size.h, size2.h);
                         }
-                        y += tileSize.h;
+                    }
+                    int c = 0;
+                    int x = 0;
+                    int y = 0;
+                    for (size_t i = 0; i < count; ++i)
+                    {
+                        out.push_back(math::Box2i(x, y, size.w, size.h));
+                        if (++c >= cols)
+                        {
+                            c = 0;
+                            x = 0;
+                            y += size.h;
+                        }
+                        else
+                        {
+                            x += size.w;
+                        }
                     }
                 }
                 break;
             default:
-                for (size_t i = 0; i < std::min(count, static_cast<size_t>(2));
-                     ++i)
+                if (options.fitToA && count > 0)
                 {
-                    out.push_back(math::Box2i(
-                        0, 0, sizes[0].w * sizes[0].pixelAspectRatio,
-                        sizes[0].h));
+                    const math::Size2i size = getRenderSize(infos[0],
+                                                            aspectRatioOptions);
+                    for (size_t i = 0; i < count; ++i)
+                    {
+                        out.push_back(math::Box2i(0, 0, size.w, size.h));
+                    }
+                }
+                else if (count > 0)
+                {
+                    for (size_t i = 0; i < count; ++i)
+                    {
+                        const math::Size2i size =
+                            getRenderSize(infos[i],
+                                          aspectRatioOptions);
+                        out.push_back(math::Box2i(0, 0, size.w, size.h));
+                    }
                 }
                 break;
             }
             return out;
         }
 
-        std::vector<math::Box2i>
-        getBoxes(CompareMode mode, const std::vector<VideoData>& videoData)
+        std::vector<math::Box2i> getBoxes(
+            const CompareOptions& options,
+            const AspectRatioOptions& aspectRatioOptions,
+            const std::vector<image::Info>& infos)
         {
-            std::vector<image::Size> sizes;
-            for (const auto& i : videoData)
+            std::vector<math::Box2i> out;
+            const std::vector<math::Box2i> bounds =
+                getBounds(options, aspectRatioOptions, infos);
+            for (size_t i = 0; i < bounds.size() && i < infos.size(); ++i)
             {
-                sizes.push_back(i.size);
-            }
-            return getBoxes(mode, sizes);
-        }
-
-        math::Size2i
-        getRenderSize(CompareMode mode, const std::vector<image::Size>& sizes)
-        {
-            math::Size2i out;
-            math::Box2i box;
-            const auto boxes = getBoxes(mode, sizes);
-            if (!boxes.empty())
-            {
-                box = boxes[0];
-                for (size_t i = 1; i < boxes.size(); ++i)
-                {
-                    box = expand(box, boxes[i]);
-                }
-                out.w = box.w();
-                out.h = box.h();
+                out.push_back(getBox(bounds[i], infos[i], aspectRatioOptions));
             }
             return out;
         }
 
-        math::Size2i
-        getRenderSize(CompareMode mode, const std::vector<VideoData>& videoData)
+        std::vector<math::Box2i> getBoxes(
+            const CompareOptions& options,
+            const AspectRatioOptions& aspectRatioOptions,
+            const std::vector<VideoFrame>& videoFrame)
         {
-            std::vector<image::Size> sizes;
-            for (const auto& i : videoData)
+            return getBoxes(options, aspectRatioOptions, getInfos(videoFrame));
+        }
+
+        std::vector<math::Box2i> getBoxes(
+            const CompareOptions& options,
+            const std::vector<DisplayOptions>& display,
+            const std::vector<VideoFrame>& videoFrame)
+        {
+            return getBoxes(options,
+                            !display.empty() ? display.front().aspect :
+                            AspectRatioOptions(),
+                            getInfos(videoFrame));
+        }
+        std::vector<math::Box2i> getBoxes(
+            const CompareMode mode,
+            const std::vector<DisplayOptions>& display,
+            const std::vector<VideoFrame>& videoFrame)
+        {
+            CompareOptions options;
+            options.mode = mode;
+            return getBoxes(options, display, videoFrame);
+        }
+
+        math::Size2i getRenderSize(
+            const CompareOptions& options,
+            const AspectRatioOptions& aspectRatioOptions,
+            const std::vector<image::Info>& infos)
+        {
+            math::Size2i out;
+            const auto bounds = getBounds(options, aspectRatioOptions, infos);
+            const auto bbox = math::bbox(bounds);
+            switch (options.mode)
             {
-                sizes.push_back(i.size);
+            case CompareMode::A:
+                if (!bounds.empty())
+                {
+                    out.w = bounds[0].w();
+                    out.h = bounds[0].h();
+                }
+                break;
+            case CompareMode::B:
+                if (bounds.size() > 1)
+                {
+                    out.w = bounds[1].w();
+                    out.h = bounds[1].h();
+                }
+                break;
+            default:
+                out.w = bbox.w();
+                out.h = bbox.h();
+                break;
             }
-            return getRenderSize(mode, sizes);
+            return out;
+        }
+
+        math::Size2i getRenderSize(
+            const CompareOptions& options,
+            const AspectRatioOptions& aspectRatioOptions,
+            const std::vector<VideoFrame>& videoFrame)
+        {
+            return getRenderSize(options, aspectRatioOptions,
+                                 getInfos(videoFrame));
+        }
+
+        //! Get the render size for the given compare mode.
+        math::Size2i getRenderSize(
+            const CompareOptions& options,
+            const std::vector<DisplayOptions>& display,
+            const std::vector<VideoFrame>& videoFrame)
+        {
+            return getRenderSize(options,
+                                 !display.empty() ? display.front().aspect :
+                                 AspectRatioOptions(),
+                                 videoFrame);
         }
 
         otime::RationalTime getCompareTime(

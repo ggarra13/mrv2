@@ -103,7 +103,7 @@ namespace tl
                 playbackObserver;
             std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
                 currentTimeObserver;
-            std::shared_ptr<observer::ListObserver<timeline::VideoData> >
+            std::shared_ptr<observer::ListObserver<timeline::VideoFrame> >
                 videoObserver;
             std::shared_ptr<observer::ListObserver<timeline::AudioData> >
                 audioObserver;
@@ -112,7 +112,7 @@ namespace tl
 #ifdef OPENGL_BACKEND
             std::shared_ptr<gl::GLFWWindow> window;
 #endif
-            
+
             struct Mutex
             {
                 device::DeviceConfig config;
@@ -139,7 +139,7 @@ namespace tl
                 otime::RationalTime playbackStartTime = time::invalidTime;
                 double speed = 24.F;
                 double defaultSpeed = 24.F;
-                std::vector<timeline::VideoData> videoData;
+                std::vector<timeline::VideoFrame> videoData;
                 std::shared_ptr<image::Image> overlay;
                 float volume = 1.F;
                 bool mute = false;
@@ -167,7 +167,7 @@ namespace tl
                 float rotateZ = 0.F;
                 bool frameView = true;
                 otime::TimeRange timeRange = time::invalidTimeRange;
-                std::vector<timeline::VideoData> videoData;
+                std::vector<timeline::VideoFrame> videoData;
                 std::shared_ptr<image::Image> overlay;
 
 #ifdef OPENGL_BACKEND
@@ -261,7 +261,7 @@ namespace tl
                         }
                     }
 #endif
-     
+
                 });
         }
 
@@ -271,7 +271,7 @@ namespace tl
         {
         }
 #endif
-        
+
 #ifdef VULKAN_BACKEND
         OutputDevice::OutputDevice(Fl_Vk_Context& c) :
             ctx(c),
@@ -591,9 +591,9 @@ namespace tl
                         },
                         observer::CallbackAction::Suppress);
                 p.videoObserver =
-                    observer::ListObserver<timeline::VideoData>::create(
+                    observer::ListObserver<timeline::VideoFrame>::create(
                         p.player->observeCurrentVideo(),
-                        [weak](const std::vector<timeline::VideoData>& value)
+                        [weak](const std::vector<timeline::VideoFrame>& value)
                         {
                             if (auto device = weak.lock())
                             {
@@ -746,7 +746,7 @@ namespace tl
                 p.thread.render = timeline_vlk::Render::create(ctx, context);
 
                 VkDevice device = ctx.device;
-                                
+
                 VkCommandPoolCreateInfo cmd_pool_info = {};
                 cmd_pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
                 cmd_pool_info.queueFamilyIndex = ctx.queueFamilyIndex;
@@ -820,7 +820,7 @@ namespace tl
                                          frameRate != p.mutex.frameRate;
 
                         size = timeline::getRenderSize(
-                            compareOptions.mode, p.thread.videoData);
+                            compareOptions, displayOptions, p.thread.videoData);
 
                         createDevice = p.mutex.config != config ||
                                        p.mutex.enabled != enabled ||
@@ -885,7 +885,7 @@ namespace tl
                 p.thread.cmd = beginSingleTimeCommands(ctx.device,
                                                        p.thread.commandPool);
 #endif
-                
+
                 if (createDevice)
                 {
 #ifdef OPENGL_BACKEND
@@ -1039,7 +1039,7 @@ namespace tl
                 }
 
                 auto& video_frame = p.thread.NDI_video_frame;
-                
+
                 p.thread.outputPixelType = getOutputType(config.pixelType);
 
                 video_frame.xres = size.w;
@@ -1784,12 +1784,12 @@ namespace tl
                 timeline::RenderOptions renderOptions;
                 renderOptions.colorBuffer =
                     getColorBuffer(p.thread.outputPixelType);
-                
+
 #ifdef OPENGL_BACKEND
                 gl::OffscreenBufferBinding binding(p.thread.offscreenBuffer);
                 p.thread.render->begin(renderSize, renderOptions);
 #endif
-#ifdef VULKAN_BACKEND                                    
+#ifdef VULKAN_BACKEND
                 p.thread.offscreenBuffer->transitionToColorAttachment(p.thread.cmd);
                 p.thread.render->begin(p.thread.cmd, p.thread.offscreenBuffer,
                                        p.thread.frameIndex,
@@ -1919,10 +1919,13 @@ namespace tl
                         pm * centerTranslationMatrix * resizeScaleMatrix *
                         translateMatrix * zoomMatrix * offsetTransformMatrix *
                         rotateMatrix * centeringMatrix);
+
                     p.thread.render->drawVideo(
                         p.thread.videoData,
                         timeline::getBoxes(
-                            compareOptions.mode, p.thread.videoData),
+                            compareOptions,
+                            displayOptions,
+                            p.thread.videoData),
                         imageOptions, displayOptions, compareOptions,
                         backgroundOptions);
                 }
@@ -1941,7 +1944,7 @@ namespace tl
                 }
 
                 p.thread.render->end();
-                
+
 #ifdef OPENGL_BACKEND
                 glBindBuffer(GL_PIXEL_PACK_BUFFER, p.thread.pbo);
                 glPixelStorei(
@@ -1987,11 +1990,11 @@ namespace tl
             }
             glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 #endif
-            
+
 #ifdef VULKAN_BACKEND
             if (!p.thread.offscreenBuffer)
                 return;
-            
+
             p.thread.offscreenBuffer->transitionToColorAttachment(p.thread.cmd);
 
             const uint32_t width = p.thread.size.w;
@@ -1999,7 +2002,7 @@ namespace tl
             p.thread.offscreenBuffer->readPixels(p.thread.cmd, 0, 0, width, height);
 
             vkEndCommandBuffer(p.thread.cmd);
-            
+
             p.thread.offscreenBuffer->submitReadback(p.thread.cmd);
 
             {
@@ -2014,19 +2017,19 @@ namespace tl
             {
                 result = p.thread.offscreenBuffer->getLatestReadPixels(data);
             }
-            
+
             vkFreeCommandBuffers(ctx.device, p.thread.commandPool, 1, &p.thread.cmd);
             p.thread.cmd = VK_NULL_HANDLE;
 
             if (!data)
                 return;
-            
+
             p.thread.frameIndex = (p.thread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
 
-                                    
+
             copyPackPixels(video_frame.p_data, data, p.thread.size,
                            p.thread.outputPixelType);
-#endif    
+#endif
 
             std::shared_ptr<image::HDRData> hdrData;
             switch (p.thread.hdrMode)
@@ -2036,7 +2039,7 @@ namespace tl
             {
                 if (p.thread.videoData.empty())
                     return;
-                const auto ocio = p.mutex.ocioOptions; 
+                const auto ocio = p.mutex.ocioOptions;
                 hdrData = device::getHDRData(p.thread.videoData[0]);
                 if (!hdrData && !config.noMetadata)
                 {
@@ -2045,7 +2048,7 @@ namespace tl
                     if (ocio.enabled && !display.empty() && !view.empty())
                     {
                         std::string displayView = ocio.display;
-                        if (!view.empty() && view != "Default" && 
+                        if (!view.empty() && view != "Default" &&
                             view != "(default)" && view != "None")
                         {
                             displayView += "/" + view;
@@ -2053,7 +2056,7 @@ namespace tl
 
                         hdrData.reset(new image::HDRData(image::nameToPrimaries(displayView)));
                         hdrData->isDisplayReferred = true;
-                        
+
                         float peak = 1000.F;
                         if (view.find("10000") != std::string::npos)
                         {
@@ -2067,7 +2070,7 @@ namespace tl
                         {
                             peak = 100.F;
                         }
-                    
+
                         switch (hdrData->eotf)
                         {
                         case image::EOTF_BT2100_PQ:

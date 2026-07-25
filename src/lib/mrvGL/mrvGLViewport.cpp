@@ -259,11 +259,14 @@ namespace mrv
                         break;
                     case kAccuracyAuto:
                         image::PixelType pixelType = image::PixelType::RGBA_U8;
-                        auto& video = p.videoData[0];
+                        static auto emptyVideo = timeline::VideoFrame();
+                        timeline::VideoFrame& video = emptyVideo;
+                        if (!p.videoData.empty())
+                            video = p.videoData[0];
                         if (p.missingFrame &&
                             p.missingFrameType != MissingFrameType::kBlackFrame)
                         {
-                            video = p.lastVideoData;
+                            video = p.lastVideoFrame;
                         }
 
                         if (!video.layers.empty() && video.layers[0].image &&
@@ -409,7 +412,9 @@ namespace mrv
                                     gl.render->drawVideo(
                                         p.videoData,
                                         timeline::getBoxes(
-                                            p.compareOptions.mode, p.videoData),
+                                            p.compareOptions.mode,
+                                            p.displayOptions,
+                                            p.videoData),
                                         p.imageOptions, p.displayOptions,
                                         p.compareOptions, getBackgroundOptions());
                                 }

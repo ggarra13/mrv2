@@ -24,6 +24,26 @@ namespace tl
             const std::chrono::milliseconds timeout(5);
         }
 
+        //! Get a clip's box within the timeline canvas.
+        std::optional<math::Box2f> getCanvasBox(
+            const otio::Clip* otioClip,
+            Spatial spatial,
+            const image::Size& normalizeSize,
+            double scale,
+            const math::Vector2f& offset)
+        {
+            std::optional<math::Box2f> out;
+            if (const auto bounds = getSpatialBounds(
+                otioClip,
+                spatial,
+                normalizeSize,
+                scale))
+            {
+                out = bounds.value() + offset;
+            }
+            return out;
+        }
+
         bool Timeline::Private::getVideoInfo(const otio::Composable* composable)
         {
             if (auto clip = dynamic_cast<const otio::Clip*>(composable))
@@ -216,49 +236,61 @@ namespace tl
                                         videoData.image = readVideo(
                                             otioClip, requestTime,
                                             request->options);
+                                        videoData.bounds = getCanvasBox(
+                                            otioClip,
+                                            options.spatial,
+                                            normalizeSize,
+                                            boundsScale,
+                                            canvasOffset);
                                     }
                                     const auto neighbors =
                                         otioTrack->neighbors_of(
                                             otioItem, &errorStatus);
                                     if (auto otioTransition =
-                                            dynamic_cast<otio::Transition*>(
-                                                neighbors.second.value))
+                                        dynamic_cast<otio::Transition*>(
+                                            neighbors.second.value))
                                     {
                                         if (requestTime >
                                             range.value().end_time_inclusive() -
-                                                otioTransition->in_offset())
+                                            otioTransition->in_offset())
                                         {
                                             videoData.transition = toTransition(
                                                 otioTransition
-                                                    ->transition_type());
+                                                ->transition_type());
                                             videoData.transitionValue =
                                                 transitionValue(
                                                     requestTime.value(),
                                                     range.value()
-                                                            .end_time_inclusive()
-                                                            .value() -
-                                                        otioTransition
-                                                            ->in_offset()
-                                                            .value(),
+                                                    .end_time_inclusive()
+                                                    .value() -
+                                                    otioTransition
+                                                    ->in_offset()
+                                                    .value(),
                                                     range.value()
-                                                            .end_time_inclusive()
-                                                            .value() +
-                                                        otioTransition
-                                                            ->out_offset()
-                                                            .value() +
-                                                        1.0);
+                                                    .end_time_inclusive()
+                                                    .value() +
+                                                    otioTransition
+                                                    ->out_offset()
+                                                    .value() +
+                                                    1.0);
                                             const auto transitionNeighbors =
                                                 otioTrack->neighbors_of(
                                                     otioTransition,
                                                     &errorStatus);
                                             if (const auto otioClipB =
-                                                    dynamic_cast<otio::Clip*>(
-                                                        transitionNeighbors
-                                                            .second.value))
+                                                dynamic_cast<otio::Clip*>(
+                                                    transitionNeighbors
+                                                    .second.value))
                                             {
                                                 videoData.imageB = readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
+                                                videoData.bounds = getCanvasBox(
+                                                    otioClipB,
+                                                    options.spatial,
+                                                    normalizeSize,
+                                                    boundsScale,
+                                                    canvasOffset);
                                             }
                                         }
                                     }
@@ -304,6 +336,12 @@ namespace tl
                                                 videoData.image = readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
+                                                videoData.bounds = getCanvasBox(
+                                                    otioClipB,
+                                                    options.spatial,
+                                                    normalizeSize,
+                                                    boundsScale,
+                                                    canvasOffset);
                                             }
                                         }
                                     }
@@ -514,11 +552,12 @@ namespace tl
                 }
                 if (valid)
                 {
-                    VideoData data;
+                    VideoFrame data;
                     if (!ioInfo.video.empty())
                     {
                         data.size = ioInfo.video.front().size;
                     }
+                    data.canvasSize = canvasSize;
                     data.time = (*videoRequestIt)->time;
                     try
                     {
@@ -533,6 +572,8 @@ namespace tl
                             {
                                 layer.imageB = j.imageB.get().image;
                             }
+                            layer.bounds = j.bounds;
+                            layer.boundsB = j.boundsB;
                             layer.transition = j.transition;
                             layer.transitionValue = j.transitionValue;
                             data.layers.push_back(layer);
@@ -626,7 +667,7 @@ namespace tl
                 thread.audioRequestsInProgress.clear();
                 for (auto& request : videoRequests)
                 {
-                    VideoData data;
+                    VideoFrame data;
                     data.time = request->time;
                     for (auto& i : request->layerData)
                     {
@@ -639,6 +680,8 @@ namespace tl
                         {
                             layer.imageB = i.imageB.get().image;
                         }
+                        layer.bounds = i.bounds;
+                        layer.boundsB = i.boundsB;
                         layer.transition = i.transition;
                         layer.transitionValue = i.transitionValue;
                         data.layers.push_back(layer);
@@ -740,7 +783,7 @@ namespace tl
                     //! \bug If the trimmed range is less than the media time,
                     //! assume the media time is wrong (e.g., ALab trailer) and
                     //! compensate for it.
-                    trimmedRange = OTIO_NS::TimeRange(
+                    trimmedRange = otio::TimeRange(
                         ioInfo.audioTime.start_time() + trimmedRange.start_time(),
                         trimmedRange.duration());
                 }

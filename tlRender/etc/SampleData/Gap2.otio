@@ -32,7 +32,7 @@
                             "duration": {
                                 "OTIO_SCHEMA": "RationalTime.1",
                                 "rate": 30,
-                                "value": 90
+                                "value": 30
                             },
                             "start_time": {
                                 "OTIO_SCHEMA": "RationalTime.1",
@@ -41,11 +41,27 @@
                             }
                         },
                         "name": "BART_2021-02-07"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 30,
+                                "value": 90
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 30,
+                                "value": 0
+                            }
+                        }
                     }
                 ],
                 "kind": "Video", 
-                "name": "Video",
-                "enabled": true
+                "name": "Video"
             },
             {
                 "OTIO_SCHEMA": "Track.1", 
@@ -74,7 +90,7 @@
                             "duration": {
                                 "OTIO_SCHEMA": "RationalTime.1",
                                 "rate": 44100,
-                                "value": 132300
+                                "value": 44100
                             },
                             "start_time": {
                                 "OTIO_SCHEMA": "RationalTime.1",
@@ -83,11 +99,27 @@
                             }
                         },
                         "name": "BART_2021-02-07"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Gap.1",
+                        "name": "Gap",
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 88200
+                            },
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 44100,
+                                "value": 0
+                            }
+                        }
                     }
                 ],
                 "kind": "Audio", 
-                "name": "Audio",
-                "enabled": true
+                "name": "Audio"
             }
         ], 
         "name": "Stack"

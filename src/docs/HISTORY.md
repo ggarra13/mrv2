@@ -31,6 +31,7 @@ On the free tier, only two computers can be connected and there's a limit of 30 
 - WebRTC: Added Preferences->WebRTC to easily change settings.  Note that environment variables take precedence over these settings and they are purposedly not shown to keep the connection confidential.
 - WebRTC: Added support for transfering .otio files, with all the files referenced in them.
 
+- Core: Fixed a crash upon exit with compare options and video playback.
 - Core: Fixed the use of Fl::check in tlRender innards, as it was crashing WebRTC downloads.
 - Core: Made the default Settings->Cache->Gigabytes use 1 / 3 of available memory instead of 1 / 2.
 - Core: Bumped FLTK to v2.1.5.

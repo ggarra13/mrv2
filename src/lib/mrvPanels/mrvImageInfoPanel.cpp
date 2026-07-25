@@ -2482,7 +2482,7 @@ namespace mrv
             }
 
             const auto view = _p->ui->uiView;
-            const auto videoData = view->getVideoData();
+            const auto videoData = view->getVideoFrame();
 
             // Then add image tags
             if (!videoData.empty() && !videoData[0].layers.empty() &&

@@ -75,7 +75,7 @@ namespace tl
 
             Player();
 
-            void updateVideoData();
+            void updateVideoFrame();
 
         public:
             ~Player();
@@ -276,10 +276,10 @@ namespace tl
             void setCompareVideoLayers(const std::vector<int>&);
 
             //! Get the current video data.
-            const std::vector<VideoData>& getCurrentVideo() const;
+            const std::vector<VideoFrame>& getCurrentVideo() const;
 
             //! Observe the current video data.
-            std::shared_ptr<observer::IList<VideoData> >
+            std::shared_ptr<observer::IList<VideoFrame> >
             observeCurrentVideo() const;
 
             ///@}

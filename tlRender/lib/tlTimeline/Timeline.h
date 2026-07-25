@@ -34,20 +34,55 @@ namespace tl
         TLRENDER_ENUM(FileSequenceAudio);
         TLRENDER_ENUM_SERIALIZE(FileSequenceAudio);
 
+        //! Spatial coordinate options.
+        enum class Spatial
+        {
+            //! Ignore the OTIO spatial coordinates, laying out clips from their
+            //! image sizes
+            kNone,
+
+            //! Use the OTIO spatial coordinates where clips provide them
+            Coordinates,
+
+            //! Use the OTIO spatial coordinates, and give clips without them
+            //! the size of the first video clip, so that clips of differing
+            //! resolutions are all displayed at the same size
+            Normalize,
+
+            Count,
+            First = kNone
+        };
+        TLRENDER_ENUM(Spatial);
+
         //! Timeline options.
         struct Options
         {
             FileSequenceAudio fileSequenceAudio = FileSequenceAudio::BaseName;
+
+            //! Spatial coordinates.
+            Spatial spatial = Spatial::Coordinates;
+
             std::string fileSequenceAudioFileName;
             std::string fileSequenceAudioDirectory;
 
+            //! Enable workarounds for timelines that may not conform exactly
+            //! to specification.
+            bool compat = true;
+
+            //! Maximum number of video requests.
             size_t videoRequestCount = 16;
+
+            //! Maximum number of audio requests.
             size_t audioRequestCount = 16;
+
+            //! Request timeout.
             std::chrono::milliseconds requestTimeout =
                 std::chrono::milliseconds(5);
 
+            //! I/O options.
             io::Options ioOptions;
 
+            //! Path options.
             file::PathOptions pathOptions;
 
             bool operator==(const Options&) const;
@@ -74,7 +109,7 @@ namespace tl
         struct VideoRequest
         {
             uint64_t id = 0;
-            std::future<VideoData> future;
+            std::future<VideoFrame> future;
         };
 
         //! Audio request.
@@ -83,6 +118,12 @@ namespace tl
             uint64_t id = 0;
             std::future<AudioData> future;
         };
+
+        std::optional<math::Box2f> getSpatialBounds(
+            const otio::Clip* otioClip,
+            Spatial spatial,
+            const image::Size& normalizeSize,
+            double scale);
 
         //! Timeline.
         class Timeline : public std::enable_shared_from_this<Timeline>
@@ -192,6 +233,9 @@ namespace tl
             void tick();
 
         private:
+
+            void _getCanvas();
+
             TLRENDER_PRIVATE();
         };
     } // namespace timeline

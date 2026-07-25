@@ -1,0 +1,112 @@
+{
+    "OTIO_SCHEMA": "Timeline.1",
+    "metadata": {},
+    "name": "SpatialCoordinatesOffsetY",
+    "tracks": {
+        "OTIO_SCHEMA": "Stack.1",
+        "children": [
+            {
+                "OTIO_SCHEMA": "Track.1",
+                "children": [
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 24,
+                                    "value": 0
+                                },
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 24,
+                                    "value": 24
+                                }
+                            },
+                            "target_url": "SpatialLarge.png",
+                            "available_image_bounds": {
+                                "OTIO_SCHEMA": "Box2d.1",
+                                "min": {
+                                    "OTIO_SCHEMA": "V2d.1",
+                                    "x": 0.0,
+                                    "y": 0.0
+                                },
+                                "max": {
+                                    "OTIO_SCHEMA": "V2d.1",
+                                    "x": 16.0,
+                                    "y": 9.0
+                                }
+                            }
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 24,
+                                "value": 0
+                            },
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 24,
+                                "value": 24
+                            }
+                        },
+                        "name": "Lower"
+                    },
+                    {
+                        "OTIO_SCHEMA": "Clip.1",
+                        "media_reference": {
+                            "OTIO_SCHEMA": "ExternalReference.1",
+                            "available_range": {
+                                "OTIO_SCHEMA": "TimeRange.1",
+                                "start_time": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 24,
+                                    "value": 0
+                                },
+                                "duration": {
+                                    "OTIO_SCHEMA": "RationalTime.1",
+                                    "rate": 24,
+                                    "value": 24
+                                }
+                            },
+                            "target_url": "SpatialSmall.png",
+                            "available_image_bounds": {
+                                "OTIO_SCHEMA": "Box2d.1",
+                                "min": {
+                                    "OTIO_SCHEMA": "V2d.1",
+                                    "x": 0.0,
+                                    "y": 9.0
+                                },
+                                "max": {
+                                    "OTIO_SCHEMA": "V2d.1",
+                                    "x": 16.0,
+                                    "y": 18.0
+                                }
+                            }
+                        },
+                        "source_range": {
+                            "OTIO_SCHEMA": "TimeRange.1",
+                            "start_time": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 24,
+                                "value": 0
+                            },
+                            "duration": {
+                                "OTIO_SCHEMA": "RationalTime.1",
+                                "rate": 24,
+                                "value": 24
+                            }
+                        },
+                        "name": "Upper"
+                    }
+                ],
+                "kind": "Video",
+                "name": "Video"
+            }
+        ],
+        "name": "Stack"
+    }
+}

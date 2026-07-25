@@ -4,7 +4,10 @@
 
 #pragma once
 
+#include <tlTimeline/DisplayOptions.h>
 #include <tlTimeline/Video.h>
+
+#include <tlCore/Box.h>
 
 namespace tl
 {
@@ -47,25 +50,59 @@ namespace tl
             math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
             float wipeRotation = 0.F;
             float overlay = .5F;
+            bool  fitToA = true;
 
             bool operator==(const CompareOptions&) const;
             bool operator!=(const CompareOptions&) const;
         };
 
-        //! Get the boxes for the given compare mode and sizes.
-        std::vector<math::Box2i>
-        getBoxes(CompareMode, const std::vector<image::Size>&);
+        //! Get the bounds for the given compare mode.
+        std::vector<math::Box2i> getBounds(
+            const CompareOptions&,
+            const AspectRatioOptions&,
+            const std::vector<image::Info>&);
 
-        //! Get the boxes for the given compare mode and video data.
-        std::vector<math::Box2i>
-        getBoxes(CompareMode, const std::vector<VideoData>&);
+        //! Get the boxes for the given compare mode.
+        std::vector<math::Box2i> getBoxes(
+            const CompareOptions&,
+            const AspectRatioOptions&,
+            const std::vector<image::Info>&);
 
-        //! Get the render size for the given compare mode and sizes.
-        math::Size2i
-        getRenderSize(CompareMode, const std::vector<image::Size>&);
+        //! Get the boxes for the given compare mode.
+        std::vector<math::Box2i> getBoxes(
+            const CompareOptions&,
+            const AspectRatioOptions&,
+            const std::vector<VideoFrame>&);
 
-        //! Get the render size for the given compare mode and video data.
-        math::Size2i getRenderSize(CompareMode, const std::vector<VideoData>&);
+        //! Get the boxes for the given compare mode.
+        std::vector<math::Box2i> getBoxes(
+            const CompareOptions&,
+            const std::vector<DisplayOptions>&,
+            const std::vector<VideoFrame>&);
+
+        //! Get the boxes for the given compare mode.
+        std::vector<math::Box2i> getBoxes(
+            const CompareMode,
+            const std::vector<DisplayOptions>&,
+            const std::vector<VideoFrame>&);
+
+        //! Get the render size for the given compare mode.
+        math::Size2i getRenderSize(
+            const CompareOptions&,
+            const AspectRatioOptions&,
+            const std::vector<image::Info>&);
+
+        //! Get the render size for the given compare mode.
+        math::Size2i getRenderSize(
+            const CompareOptions&,
+            const AspectRatioOptions&,
+            const std::vector<VideoFrame>&);
+
+        //! Get the render size for the given compare mode.
+        math::Size2i getRenderSize(
+            const CompareOptions&,
+            const std::vector<DisplayOptions>&,
+            const std::vector<VideoFrame>&);
 
         //! Get a compare time.
         otime::RationalTime getCompareTime(
