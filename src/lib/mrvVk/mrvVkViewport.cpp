@@ -774,7 +774,7 @@ namespace mrv
             vk.cmd = cmd;
 
             const math::Size2i viewportSize = getViewportSize();
-            const math::Size2i renderSize = getRenderSize();
+            math::Size2i renderSize = getRenderSize();
 
             bool hasAlpha = false;
             const float alpha = p.ui->uiMain->get_alpha() / 255.F;
@@ -859,6 +859,14 @@ namespace mrv
                     break;
                 }
 
+                if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
+                    !p.videoData.front().layers.empty())
+                {
+                    auto image = p.videoData.front().layers.front().image;
+                    p.videoData.front().size.pixelAspectRatio = p.pixelAspectRatio;
+                    if (image) image->setPixelAspectRatio(p.pixelAspectRatio);
+                    renderSize = getRenderSize();
+                }
 
                 vlk::OffscreenBufferOptions offscreenBufferOptions;
                 offscreenBufferOptions.colorType = vk.colorBufferType;

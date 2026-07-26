@@ -476,7 +476,8 @@ namespace mrv
     nlohmann::json post_request(const std::string serverHost,
                                 const int serverPort,
                                 const std::string& entryPoint,
-                                const std::string& requestBody)
+                                const std::string& requestBody,
+                                const bool has_master_key = false)
     {
 #ifdef MRV2_NETWORK
         using namespace Poco::Net;
@@ -549,6 +550,10 @@ namespace mrv
 
             if (response.getStatus() != HTTPResponse::HTTP_OK)
             {
+                if (entryPoint == "/node_locked_license" &&
+                    has_master_key)
+                    return "";
+
                 // Parse JSON error message
                 if (json_data.contains("detail")) {
                     LOG_ERROR(json_data["detail"]);
@@ -881,9 +886,6 @@ namespace mrv
         get_network_configuration(serverHost, serverPort, machine_ids,
                                   master_key);
 
-        if (!master_key.empty())
-            return License::kInvalid;
-
         // --- Build JSON request ---
         std::string machine_id;
         nlohmann::json json_data;
@@ -897,7 +899,7 @@ namespace mrv
             // --- HTTP POST to /node_locked_license ---
             json_data = post_request(serverHost, serverPort,
                                      "/node_locked_license",
-                                     requestBody);
+                                     requestBody, !master_key.empty());
             if (json_data.is_null() ||
                 !json_data.contains("signature") ||
                 !json_data.contains("payload"))

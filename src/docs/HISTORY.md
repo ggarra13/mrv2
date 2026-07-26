@@ -12,7 +12,6 @@ ChangeLog
 - UI: Fixed double repeated message about Solo upgrade when clicking on area selection.
 
 - Licensing: Removed a repeated message of floating licensing.
-- Licensing: Made floating licensing take over node locked licensing if present.
 
 - WebRTC: It is now live.  You can now connect two or more computers and share their media.
 On the free tier, only two computers can be connected and there's a limit of 30 minutes.  On the Pro tier, there's no limit on the number of computers or time limit.
@@ -31,6 +30,8 @@ On the free tier, only two computers can be connected and there's a limit of 30 
 - WebRTC: Added Preferences->WebRTC to easily change settings.  Note that environment variables take precedence over these settings and they are purposedly not shown to keep the connection confidential.
 - WebRTC: Added support for transfering .otio files, with all the files referenced in them.
 
+- Core: Fixed Vulkan fatal errors when changing pixel ratio.
+- Core: Fixed OpenGL NAN reporting when changing pixel ratio.
 - Core: Fixed a crash upon exit with compare options and video playback.
 - Core: Fixed the use of Fl::check in tlRender innards, as it was crashing WebRTC downloads.
 - Core: Made the default Settings->Cache->Gigabytes use 1 / 3 of available memory instead of 1 / 2.

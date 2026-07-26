@@ -1391,13 +1391,13 @@ namespace mrv
                 }
             }
 
-            if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
-                !p.videoData[0].layers.empty())
-            {
-                auto image = p.videoData[0].layers[0].image;
-                p.videoData[0].size.pixelAspectRatio = p.pixelAspectRatio;
-                image->setPixelAspectRatio(p.pixelAspectRatio);
-            }
+            // if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
+            //     !p.videoData.front().layers.empty())
+            // {
+            //     auto image = p.videoData.front().layers.front().image;
+            //     p.videoData.front().size.pixelAspectRatio = p.pixelAspectRatio;
+            //     if (image) image->setPixelAspectRatio(p.pixelAspectRatio);
+            // }
 
             if (p.resizeWindow)
             {
