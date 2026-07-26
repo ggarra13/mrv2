@@ -18,7 +18,7 @@ ChangeLog
 - WebRTC: It is now live.  You can now connect two or more computers and share their media.
 On the free tier, only two computers can be connected and there's a limit of 30 minutes.  On the Pro tier, there's no limit on the number of computers or time limit.
    Quick start:
-      * Go to Preferences->WebRTC, enter the name of your studio.  Use the same name on each computer you will hook up.
+      * Go to Preferences->WebRTC, enter the name of your studio.  Use the same name on each computer you will hook up.  Make sure it is unique and not easy to guess.x
       * Go to Panel/WebRTC on one machine.  Enter the name of a room longer than 6 characters.  Click Connect.
       * Go to Panel/WebRTC on the other machine.  Enter the same room name.  Click connect.
       * If all went well, both machines will sync and you can synchronize what gets received/sent with the Sync menu.
@@ -32,6 +32,9 @@ On the free tier, only two computers can be connected and there's a limit of 30 
 - WebRTC: Added Preferences->WebRTC to easily change settings.  Note that environment variables take precedence over these settings and they are purposedly not shown to keep the connection confidential.
 - WebRTC: Added support for transfering .otio files, with all the files referenced in them.
 
+- Core: Made clips create textures of their size only to save memory when using smaller files.
+- Core: Added support for .otio Spatial coordinates.
+- Core: Fixed some Vulkan AMD/NVidia assumptions for comformancy with Vulkan 1.3.
 - Core: Fixed Vulkan fatal errors when changing pixel ratio.
 - Core: Fixed OpenGL NAN reporting when changing pixel ratio.
 - Core: Fixed a crash upon exit with compare options and video playback.

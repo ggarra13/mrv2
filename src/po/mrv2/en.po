@@ -7508,7 +7508,7 @@ msgid "{0} Active Licenses from {1}."
 msgstr "{0} Active Licenses from {1}."
 
 msgid "Valid license for {0}"
-msgstr "No Valid Devices found"
+msgstr "Valid license for {0}"
 
 msgid "Could not release floating license"
 msgstr "Could not release floating license"
