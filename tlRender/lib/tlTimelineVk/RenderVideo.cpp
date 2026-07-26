@@ -1387,7 +1387,7 @@ namespace tl
                                 p.buffers["video"], layer.imageB,
                                 getBox(
                                     layerBox(layer.boundsB),
-                                    layer.image->getInfo(),
+                                    layer.imageB->getInfo(),
                                     displayOptions.aspect),
                                 image::Color4f(1.F, 1.F, 1.F, layer.transitionValue), imageOptions.get() ? *imageOptions : layer.imageOptionsB,
                                 clearRenderPass);

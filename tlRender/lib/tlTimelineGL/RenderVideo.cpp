@@ -1195,7 +1195,7 @@ namespace tl
                                 layer.imageB,
                                 getBox(
                                     layerBox(layer.boundsB),
-                                    layer.image->getInfo(),
+                                    layer.imageB->getInfo(),
                                     displayOptions.aspect),
                                 image::Color4f(
                                     1.F, 1.F, 1.F, layer.transitionValue),
