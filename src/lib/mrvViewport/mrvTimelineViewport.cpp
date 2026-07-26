@@ -1611,9 +1611,20 @@ namespace mrv
         math::Size2i TimelineViewport::getRenderSize() const noexcept
         {
             TLRENDER_P();
-            return timeline::getRenderSize(p.compareOptions,
-                                           p.displayOptions,
-                                           p.videoData);
+            static math::Size2i previous;
+            const math::Size2i& out = timeline::getRenderSize(p.compareOptions,
+                                                              p.displayOptions,
+                                                              p.videoData);
+            // tlRender can now return different render sizes for each clip.
+            // if we are auto framing, frame the view if the render size
+            // changed.
+            if (p.frameView && out != previous)
+            {
+                previous = out;
+                TimelineViewport* self = const_cast<TimelineViewport*>(this);
+                if (self) self->_frameView();
+            }
+            return out;
         }
 
         float TimelineViewport::getRotation() const noexcept
