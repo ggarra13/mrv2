@@ -958,6 +958,11 @@ namespace mrv
             return License::kExpired;
         }
 
+        const std::string msg =
+            string::Format(_("Valid license for {0}")).
+            arg(machine_id);
+        LOG_STATUS(msg);
+
         // Activate the options based on Plan.
         activatePlan(plan);
 
