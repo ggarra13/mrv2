@@ -10,6 +10,8 @@ ChangeLog
 - UI: Fixed some flickering of Progress Report on Windows to not using Fl_Double_Window.
 - UI: Made client side decoration on Linux Wayland use GNOME with Vulkan backend.  The OpenGL backend must remain using the uglier Cairo decoration.
 - UI: Fixed double repeated message about Solo upgrade when clicking on area selection.
+- UI: Linux Wayland.  Made tablet cursor hide the tooltips upon leaving the widget.
+- UI: Linux Wayland.  Made tablet cursor not allow flickering the tooltip (still somewhat buggy).
 
 - Licensing: Removed a repeated message of floating licensing.
 
