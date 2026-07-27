@@ -3855,4 +3855,53 @@ namespace mrv
         }
     }
 
+    // New: explicit base directory, used by remote-download expansion.
+    const std::vector<file::Path> getOtioTimelinePaths(
+        const otio::SerializableObject::Retainer<otio::Timeline>& otioTimeline,
+        const std::string& directory)
+    {
+        std::vector<file::Path> out;
+        file::PathOptions options;
+        for (const auto& i : otioTimeline.value->tracks()->children())
+        {
+            if (auto otioTrack = dynamic_cast<const otio::Track*>(i.value))
+            {
+                if (otio::Track::Kind::audio == otioTrack->kind())
+                {
+                    for (const auto& child : otioTrack->children())
+                    {
+                        auto clip = otio::dynamic_retainer_cast<otio::Clip>(child);
+                        if (!clip) continue;
+                        auto media = clip->media_reference();
+                        if (auto ref = dynamic_cast<otio::ExternalReference*>(media))
+                            out.push_back(timeline::getPath(media, directory, options));
+                    }
+                }
+                else if (otio::Track::Kind::video == otioTrack->kind())
+                {
+                    for (const auto& child : otioTrack->children())
+                    {
+                        auto clip = otio::dynamic_retainer_cast<otio::Clip>(child);
+                        if (!clip) continue;
+                        auto media = clip->media_reference();
+                        if (dynamic_cast<otio::ExternalReference*>(media) ||
+                            dynamic_cast<otio::ImageSequenceReference*>(media))
+                            out.push_back(timeline::getPath(media, directory, options));
+                    }
+                }
+            }
+        }
+        return out;
+    }
+
+    // Old call sites (opening a local .otio) keep working unchanged:
+    const std::vector<file::Path> getOtioTimelinePaths(
+        const otio::SerializableObject::Retainer<otio::Timeline>& otioTimeline)
+    {
+        char currentDir[4096];
+        if (fl_getcwd(currentDir, 4096) == nullptr)
+            LOG_ERROR(_("Could not get current path."));
+        return getOtioTimelinePaths(otioTimeline, std::string(currentDir) + '/');
+    }
+
 } // namespace mrv

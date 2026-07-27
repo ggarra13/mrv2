@@ -276,6 +276,7 @@
         }
 
         p.defaultValues["Python/Editor"] = command;
+        p.defaultValues["WebRTC/Room"] = "";
     }
 
     SettingsObject::~SettingsObject() {}

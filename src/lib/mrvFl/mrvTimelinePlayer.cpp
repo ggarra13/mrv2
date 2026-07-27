@@ -250,7 +250,7 @@ namespace mrv
         return _p->player->observeInOutRange()->get();
     }
 
-    const std::vector<timeline::VideoData>& TimelinePlayer::currentVideo() const
+    const std::vector<timeline::VideoFrame>& TimelinePlayer::currentVideo() const
     {
         return _p->player->getCurrentVideo();
     }

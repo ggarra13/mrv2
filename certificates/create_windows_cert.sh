@@ -3,12 +3,15 @@
 # mrv2
 # Copyright Contributors to the mrv2 Project. All rights reserved.
 
-#!/bin/bash
-
 # Configuration - Match this exactly to your CMake CPACK_PACKAGE_VENDOR
 VENDOR_NAME="Gonzalo Garramuno (ggarra13@gmail.com)"
 OUTPUT_FILE="mrv2.pfx"
-PASS="secretsalt1973!"
+PASS="${MRV2_WINDOWS_SIGNING_PASSWORD}"
+
+if [[ "$MRV2_WINDOWS_SIGNING_PASSWORD" == "" ]]; then
+    echo "No MRV2_WINDOWS_SIGNING_PASSWORD set.  Cannot create certificate."
+    exit 1
+fi
 
 echo "Removing old files..."
 rm -f mrv2.key mrv2.crt "$OUTPUT_FILE"

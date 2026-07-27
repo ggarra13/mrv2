@@ -120,7 +120,7 @@ Para que la conección se ejecute, debés tener varios puertos de tu cortafuegos
 
 El menú permite elegir qué fuente reproducir.  Nótese que el comienzo de la reproducción de NDI® en mrv2 es actualmente un poco lenta, ya que necesita llevar el audio y el video al cache primero.
 
-Desde la version v1.6.6, salida de Video y Audio de NDI® fue agregado.  Esto te permite transmitir los contenidos de qué se reproduce en mrv2 a cualquier software o dispositivo de NDI® compatible (como NDI® Tools Studio Monitor en Windows o NDI® Tools Video Monitor en macOS o otras instancias de mrv2 mismo).
+Desde la version v1.7.1, salida de Video y Audio de NDI® fue agregado.  Esto te permite transmitir los contenidos de qué se reproduce en mrv2 a cualquier software o dispositivo de NDI® compatible (como NDI® Tools Studio Monitor en Windows o NDI® Tools Video Monitor en macOS o otras instancias de mrv2 mismo).
 
 NDI® is a registered trademark of Vizrt NDI AB.
 
@@ -204,6 +204,14 @@ Panel de WebRTC
 
 El Panel de WebRTC permite sincronizar dos o más reproductores en cualquier parte de la Internet en una "Sala".
 Cuando alguien se conecta a la Sala, puede controlar los reproductores, llendo de un lado a otro, usar las herramientas de dibujo, etc.
-Note que los videos o imágenes no sen enviados por la internet, pero se mantienen localmente.
-Si esta mezclando plataformas o clips que no están en la misma ubicación en ambas localidades remotas, debería usar Preferencias->Mapeo de Carpetas para asegurarse que el clip es encontrado.
-Tambien puede evitar el sincronizado de los clips si va al menú Sync->Media y carga los clips manualmente.
+
+Para usar WebRTC, debe primero establecer el nombre de su Estudio en Preferences->WebRTC->Estudio.  Debe usar un nombre único así no se expone por error.
+
+Luego debe setear el nombre de la Sala a un nombre relativamente único.
+
+A partir de la version 1.7.1, los clips *SÍ PUEDEN SER* enviados a través de un canal especial, encriptado.  Piense en P2P, BitTorrent or Zoom como equivalencias.
+El cliente al que le faltan los datos se detiene mientras recibe las películas, mientras el servidor que tiene los clips puede interactuar, mientras envía el contentido en el fondo.
+Los clips van de la máquina de un artista a otra, y no son almacenados en ningún servidor.
+Esto ocurre si la resolución de los clips no pueden ser encontrados en el mismo lugar o a traves de Mapeo de Carpetas.
+Si esta mezclando plataformas o clips que están en los mismo lados pero en ubicación diferentes, debería usar Preferencias->Mapeo de Carpetas primero para asegurarse que el clip es encontrado.  Si no se encuentra en ningún lado el clip, puede ahora dejar que el clip se envíe a través de la internet con WebRTC.
+Tambien puede evitar el sincronizado de los clips si va al menú y desactiva Sync->Media y carga los clips manualmente.

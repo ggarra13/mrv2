@@ -73,7 +73,7 @@ namespace tl
             std::shared_ptr<observer::Value<io::Options> > ioOptions;
             std::shared_ptr<observer::Value<int> > videoLayer;
             std::shared_ptr<observer::List<int> > compareVideoLayers;
-            std::shared_ptr<observer::List<VideoData> > currentVideoData;
+            std::shared_ptr<observer::List<VideoFrame> > currentVideoFrame;
             std::shared_ptr<observer::Value<float> > volume;
             std::shared_ptr<observer::Value<bool> > mute;
             std::shared_ptr<observer::List<int> > channelMute;
@@ -95,7 +95,7 @@ namespace tl
                 io::Options ioOptions;
                 int videoLayer = 0;
                 std::vector<int> compareVideoLayers;
-                std::vector<VideoData> currentVideoData;
+                std::vector<VideoFrame> currentVideoFrame;
                 double audioOffset = 0.0;
                 std::vector<AudioData> currentAudioData;
                 bool clearRequests = false;
@@ -136,7 +136,7 @@ namespace tl
 
                 std::map<otime::RationalTime, std::vector<VideoRequest> >
                     videoDataRequests;
-                std::map<otime::RationalTime, std::vector<VideoData> >
+                std::map<otime::RationalTime, std::vector<VideoFrame> >
                     videoDataCache;
 #if defined(TLRENDER_AUDIO)
                 std::unique_ptr<RtAudio> rtAudio;

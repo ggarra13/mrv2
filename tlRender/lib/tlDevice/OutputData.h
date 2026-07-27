@@ -123,6 +123,6 @@ namespace tl
         TLRENDER_ENUM_SERIALIZE(HDRMode);
 
         //! Get HDR data from timeline video data.
-        std::shared_ptr<image::HDRData> getHDRData(const timeline::VideoData&);
+        std::shared_ptr<image::HDRData> getHDRData(const timeline::VideoFrame&);
     } // namespace device
 } // namespace tl

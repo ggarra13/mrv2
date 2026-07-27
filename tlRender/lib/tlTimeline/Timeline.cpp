@@ -26,9 +26,89 @@ namespace tl
             FileSequenceAudio, "None", "BaseName", "FileName", "Directory");
         TLRENDER_ENUM_SERIALIZE_IMPL(FileSequenceAudio);
 
+        TLRENDER_ENUM_IMPL(
+            Spatial,
+            "None",
+            "Coordinates",
+            "Normalize");
+
+
+        //! Get the OTIO spatial coordinates of a clip. These are optional;
+        //! clips without them are laid out from their image size as before.
+        //! The coordinates are returned as authored, in the OTIO coordinate
+        //! system: unit-less and Y-up.
+        std::optional<math::Box2f> getClipBounds(const otio::Clip* otioClip)
+        {
+            std::optional<math::Box2f> out;
+            otio::ErrorStatus errorStatus;
+            const auto bounds = otioClip->available_image_bounds(&errorStatus);
+            if (bounds.has_value() && !otio::is_error(errorStatus))
+            {
+                const auto& min = bounds.value().min;
+                const auto& max = bounds.value().max;
+                out = math::Box2f(
+                    math::Vector2f(min.x, min.y),
+                    math::Vector2f(max.x, max.y));
+            }
+            return out;
+        }
+
+        //! Convert OTIO spatial coordinates into image space.
+        //!
+        //! The OTIO coordinates are unit-less, so they are scaled by the
+        //! pixels per unit established from the first clip that has them;
+        //! bounds of "0, 0, 1920, 1080" and "0, 0, 16, 9" describe the same
+        //! area and must give the same result. The Y axis is also flipped,
+        //! since OTIO is Y-up and image space is Y-down.
+        std::optional<math::Box2f> toImageSpace(
+            const std::optional<math::Box2f>& bounds,
+            double scale)
+        {
+            std::optional<math::Box2f> out;
+            if (bounds.has_value())
+            {
+                const auto& min = bounds.value().min;
+                const auto& max = bounds.value().max;
+                out = math::Box2f(
+                    math::Vector2f(min.x * scale, -max.y * scale),
+                    math::Vector2f(max.x * scale, -min.y * scale));
+            }
+            return out;
+        }
+
+        //! Get a clip's box in image space, before it is placed on the canvas.
+        //!
+        //! With Spatial::Normalize a clip that has no spatial coordinates is
+        //! given the reference size, so that clips of differing resolutions
+        //! are displayed at the same size. This covers timelines that were not
+        //! authored with spatial coordinates at all.
+        std::optional<math::Box2f> getSpatialBounds(
+            const otio::Clip* otioClip,
+            Spatial spatial,
+            const image::Size& normalizeSize,
+            double scale)
+        {
+            std::optional<math::Box2f> out;
+            if (Spatial::kNone == spatial)
+            {
+                return out;
+            }
+            out = toImageSpace(getClipBounds(otioClip), scale);
+            if (!out.has_value() &&
+                Spatial::Normalize == spatial &&
+                normalizeSize.isValid())
+            {
+                out = math::Box2f(
+                    math::Vector2f(0.F, -static_cast<float>(normalizeSize.h)),
+                    math::Vector2f(static_cast<float>(normalizeSize.w), 0.F));
+            }
+            return out;
+        }
+
         bool Options::operator==(const Options& other) const
         {
             return fileSequenceAudio == other.fileSequenceAudio &&
+                   spatial == other.spatial &&
                    fileSequenceAudioFileName ==
                        other.fileSequenceAudioFileName &&
                    fileSequenceAudioDirectory ==
@@ -168,6 +248,7 @@ namespace tl
                     }
                 }
             }
+            _getCanvas();
 
             logSystem->print(
                 string::Format("tl::timeline::Timeline {0}").arg(this),
@@ -300,7 +381,7 @@ namespace tl
             }
             else
             {
-                request->promise.set_value(VideoData());
+                request->promise.set_value(VideoFrame());
             }
             return out;
         }
@@ -387,5 +468,85 @@ namespace tl
                 p.timelineChanges->setAlways(true);
             }
         }
+
+
+        void Timeline::_getCanvas()
+        {
+            TLRENDER_P();
+            // The OTIO spatial coordinates describe a single canvas shared by the
+            // whole timeline, so the extent is taken from every clip rather than
+            // from the clips visible at one time. This keeps the render size
+            // stable as playback moves between clips.
+            p.normalizeSize = !p.ioInfo.video.empty() ?
+                              p.ioInfo.video[0].size :
+                              image::Size();
+            const image::Size& normalizeSize = p.normalizeSize;
+            const auto otioClips = p.otioTimeline.value->find_children<otio::Clip>();
+
+            // The coordinates are unit-less, so a reference is needed to map
+            // them onto a pixel size. Take it from the first clip that has
+            // coordinates, which is not necessarily the first clip in the
+            // timeline, together with the resolution the timeline is
+            // working at.
+            if (normalizeSize.isValid())
+            {
+                for (const auto& otioClip : otioClips)
+                {
+                    if (const auto bounds = getClipBounds(otioClip))
+                    {
+                        const float w = bounds.value().getSize().w;
+                        if (w > 0.F)
+                        {
+                            p.boundsScale = normalizeSize.w / w;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            std::optional<math::Box2f> canvas;
+            for (const auto& otioClip : otioClips)
+            {
+                // Report the coordinates as they were authored, so the numbers
+                // in the file can be seen alongside the canvas derived from
+                // them.
+                if (const auto authored = getClipBounds(otioClip))
+                {
+                    p.ioInfo.tags[string::Format("OTIO Image Bounds {0}").
+                                  arg(otioClip->name())] =
+                        string::Format("{0}, {1}, {2}, {3}").
+                        arg(authored.value().min.x).
+                        arg(authored.value().min.y).
+                        arg(authored.value().max.x).
+                        arg(authored.value().max.y);
+                }
+                if (const auto bounds = getSpatialBounds(
+                        otioClip,
+                        p.options.spatial,
+                        normalizeSize,
+                        p.boundsScale))
+                {
+                    canvas = canvas.has_value() ?
+                             math::expand(canvas.value(), bounds.value()) :
+                             bounds.value();
+                }
+            }
+            if (canvas.has_value())
+            {
+                const math::Size2f size = canvas.value().getSize();
+                if (size.w > 0.F && size.h > 0.F)
+                {
+                    p.canvasOffset = -canvas.value().min;
+                    p.canvasSize = image::Size(
+                        static_cast<int>(std::round(size.w)),
+                        static_cast<int>(std::round(size.h)));
+                    p.ioInfo.tags["OTIO Canvas"] =
+                        string::Format("{0}").arg(p.canvasSize);
+                    p.ioInfo.tags["OTIO Pixels Per Unit"] =
+                        string::Format("{0}").arg(p.boundsScale);
+                }
+            }
+        }
+
     } // namespace timeline
 } // namespace tl

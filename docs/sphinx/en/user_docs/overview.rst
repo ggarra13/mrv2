@@ -28,7 +28,7 @@ In addition to that, you can use Link Annotations to have linked images with an 
 
 Albeit I use AI for math, coding, learning and general trouble-shooting, it is not for me as an artist.  I had a short stint on an AI project, but decided it was not for me.  Also doing hard-core AI requires thorough math knowledge which is not my strongest point.  I would rather concentrate on building a tool that helps artists get familiar with AI by using the same review concepts that appear in dailies.
 
-Current Version: v1.6.6 - Overview
+Current Version: v1.7.1 - Overview
 **********************************
 
 This version of the application is a robust and high performance playback and review solution. mrv2 has been deployed at multiple facilities and is used by multiple individuals daily since August 2022.

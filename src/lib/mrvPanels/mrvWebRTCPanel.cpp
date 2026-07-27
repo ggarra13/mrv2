@@ -15,6 +15,8 @@
 #include "mrvIcons/Network.h"
 
 #include "mrvOS/mrvString.h"
+#include "mrvOS/mrvOS.h"
+
 #include "mrvCore/mrvUtil.h"
 
 #include <FL/Fl_Input.H>
@@ -86,10 +88,12 @@ namespace mrv
             auto iW = new Widget< Input >(
                 g->x() + X, Y + 5, g->w() - X - 30, 20, _("Room"));
             _r->room = i = iW;
+            i->value(settings->getValue<std::string>("WebRTC/Room").c_str());
             i->tooltip(_("Room name to enter."));
             iW->callback(
                 [=](auto o)
                 {
+                    settings->setValue("WebRTC/Room", std::string(o->value()));
                 });
             _r->roomGroup->end();
 
@@ -105,6 +109,7 @@ namespace mrv
                         return;
                     }
 
+                    bool shouldDeactivate = false;
                     bool showMessage = false;
                     std::string roomId = _r->room->value();
                     if (roomId.size() < 6)
@@ -112,25 +117,53 @@ namespace mrv
                         showMessage = true;
                         roomId += generateRandomLetters(6);
                     }
+                    else
+                    {
+                        shouldDeactivate = true;
+                    }
 
                     roomId = string::stripWhitespace(roomId);
 
                     _r->room->value(roomId.c_str());
 
+
                     if (showMessage)
                     {
                         mrv::fl_alert(_("Share the room ID with the persons "
                                         "that will review the session "
-                                        "with you.\n\nNote that this feature "
-                                        "is only available in the Pro+ tier."),
+                                        "with you.\n\n"),
                                       nullptr);
                     }
 
-                    tcp = new WebRTCClient(roomId);
-                    deactivate();
+                    settings->setValue("WebRTC/Room", roomId);
+
+                    // Prepend studio name to roomId to keep the connection
+                    // "secret".
+                    std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
+                    if (studio.empty())
+                        studio = p.ui->uiPrefs->uiPrefsWebRTCStudio->value();
+
+                    if (!mrv::app::soporta_voice)
+                    {
+                        mrv::fl_alert(_("This feature is unlimited on the "
+                                        "Pro and Pro+ tiers.\n\n"
+                                        "On other tiers, it is limited to 2\n"
+                                        "connections and 30 minutes of use."),
+                                      nullptr);
+                    }
+
+                    tcp = new WebRTCClient(studio, roomId);
+
+                    if (shouldDeactivate)
+                        deactivate();
                 });
 
             g->end();
+
+            if (dynamic_cast< DummyClient* >(tcp) == nullptr)
+            {
+                deactivate();
+            }
         }
 
         void WebRTCPanel::deactivate()

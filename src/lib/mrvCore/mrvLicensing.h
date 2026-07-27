@@ -33,10 +33,17 @@ namespace mrv
     TLRENDER_ENUM(LicenseType);
     TLRENDER_ENUM_SERIALIZE(LicenseType);
 
-    
+
     std::vector<std::string> get_machine_ids();
 
     bool release_license();
     License validate_license(std::string& expiration_date);
     License license_beat();
+
+    /**
+     * Request a temporary webrtc ticket for Pro/Pro+ plans.
+     *
+     * @return string with the query.
+     */
+    std::string request_webrtc_ticket();
 }

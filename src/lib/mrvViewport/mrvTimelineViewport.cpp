@@ -185,8 +185,8 @@ namespace mrv
         }
 
         //
-        const std::vector<tl::timeline::VideoData>&
-        TimelineViewport::getVideoData() const noexcept
+        const std::vector<tl::timeline::VideoFrame>&
+        TimelineViewport::getVideoFrame() const noexcept
         {
             return _p->videoData;
         }
@@ -1087,9 +1087,9 @@ namespace mrv
             if (player)
             {
                 p.videoDataObserver =
-                    observer::ListObserver<timeline::VideoData>::create(
+                    observer::ListObserver<timeline::VideoFrame>::create(
                         p.player->player()->observeCurrentVideo(),
-                        [this](const std::vector<timeline::VideoData>& value)
+                        [this](const std::vector<timeline::VideoFrame>& value)
                             { currentVideoCallback(value); },
                         observer::CallbackAction::Suppress);
 
@@ -1363,7 +1363,7 @@ namespace mrv
         }
 
         void TimelineViewport::currentVideoCallback(
-            const std::vector<timeline::VideoData>& values) noexcept
+            const std::vector<timeline::VideoFrame>& values) noexcept
         {
             TLRENDER_P();
 
@@ -1391,13 +1391,13 @@ namespace mrv
                 }
             }
 
-            if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
-                !p.videoData[0].layers.empty())
-            {
-                auto image = p.videoData[0].layers[0].image;
-                p.videoData[0].size.pixelAspectRatio = p.pixelAspectRatio;
-                image->setPixelAspectRatio(p.pixelAspectRatio);
-            }
+            // if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
+            //     !p.videoData.front().layers.empty())
+            // {
+            //     auto image = p.videoData.front().layers.front().image;
+            //     p.videoData.front().size.pixelAspectRatio = p.pixelAspectRatio;
+            //     if (image) image->setPixelAspectRatio(p.pixelAspectRatio);
+            // }
 
             if (p.resizeWindow)
             {
@@ -1476,7 +1476,7 @@ namespace mrv
                             const auto image = videoData.layers[0].image;
                             if (image && image->isValid())
                             {
-                                p.lastVideoData = videoData;
+                                p.lastVideoFrame = videoData;
                                 break;
                             }
                             if (currentTime <= inOutRange.start_time())
@@ -1488,7 +1488,7 @@ namespace mrv
                 {
                     if (p.player->playback() != timeline::Playback::Reverse)
                     {
-                        p.lastVideoData = values[0];
+                        p.lastVideoFrame = values[0];
                     }
                 }
             }
@@ -1611,7 +1611,20 @@ namespace mrv
         math::Size2i TimelineViewport::getRenderSize() const noexcept
         {
             TLRENDER_P();
-            return timeline::getRenderSize(p.compareOptions.mode, p.videoData);
+            static math::Size2i previous;
+            const math::Size2i& out = timeline::getRenderSize(p.compareOptions,
+                                                              p.displayOptions,
+                                                              p.videoData);
+            // tlRender can now return different render sizes for each clip.
+            // if we are auto framing, frame the view if the render size
+            // changed.
+            if (p.frameView && out != previous)
+            {
+                previous = out;
+                TimelineViewport* self = const_cast<TimelineViewport*>(this);
+                if (self) self->_frameView();
+            }
+            return out;
         }
 
         float TimelineViewport::getRotation() const noexcept
@@ -3677,7 +3690,7 @@ namespace mrv
 
             p.videoData.clear();
 
-            timeline::VideoData data;
+            timeline::VideoFrame data;
             data.size = image->getSize();
             if (p.player)
             {

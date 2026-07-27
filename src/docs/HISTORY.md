@@ -1,3 +1,49 @@
+v1.7.1
+======
+
+ChangeLog
+---------
+
+- Installation: Simplified macOS installation a tad.  Also fixed shebang issue with the installation.command script.
+
+- UI: File->Recent menu now correctly displays the first frame of the sequence, instead of the frame that was used to load it with.
+- UI: Fixed some flickering of Progress Report on Windows to not using Fl_Double_Window.
+- UI: Made client side decoration on Linux Wayland use GNOME with Vulkan backend.  The OpenGL backend must remain using the uglier Cairo decoration.
+- UI: Fixed double repeated message about Solo upgrade when clicking on area selection.
+- UI: Linux Wayland.  Made tablet cursor hide the tooltips upon leaving the widget.
+- UI: Linux Wayland.  Made tablet cursor not allow flickering the tooltip (still somewhat buggy).
+
+- Licensing: Removed a repeated message of floating licensing.
+
+- WebRTC: It is now live.  You can now connect two or more computers and share their media.
+On the free tier, only two computers can be connected and there's a limit of 30 minutes.  On the Pro tier, there's no limit on the number of computers or time limit.
+   Quick start:
+      * Go to Preferences->WebRTC, enter the name of your studio.  Use the same name on each computer you will hook up.  Make sure it is unique and not easy to guess.x
+      * Go to Panel/WebRTC on one machine.  Enter the name of a room longer than 6 characters.  Click Connect.
+      * Go to Panel/WebRTC on the other machine.  Enter the same room name.  Click connect.
+      * If all went well, both machines will sync and you can synchronize what gets received/sent with the Sync menu.
+      
+- WebRTC: Added environment variable MRV2_WEBRTC_STUDIO that gets prepended to any room ID connection.  This can be used to keep the connection secure.
+- WebRTC: Added WebRTC panel to Preferences.  Allows setting cache directory and whether to clean it at the start of mrv2.
+- WebRTC: When connected and file is opened, if it does not exist locally, it will now transfer it (Pro+ version only).
+- WebRTC: Made it read the environment variable MRV2_WEBRTC_STUDIO to prepend it to the room name and keep the connection secret.
+- WebRTC: Made the transaction be atomic and cleanly close the data channel on abort or error.
+- WebRTC: added -room command-line flag to start a WebRTC connection.
+- WebRTC: Added Preferences->WebRTC to easily change settings.  Note that environment variables take precedence over these settings and they are purposedly not shown to keep the connection confidential.
+- WebRTC: Added support for transfering .otio files, with all the files referenced in them.
+
+- Core: Made clips create textures of their size only to save memory when using smaller files.
+- Core: Added support for .otio Spatial coordinates.
+- Core: Fixed some Vulkan AMD/NVidia assumptions for comformancy with Vulkan 1.3.
+- Core: Fixed Vulkan fatal errors when changing pixel ratio.
+- Core: Fixed OpenGL NAN reporting when changing pixel ratio.
+- Core: Fixed a crash upon exit with compare options and video playback.
+- Core: Fixed the use of Fl::check in tlRender innards, as it was crashing WebRTC downloads.
+- Core: Made the default Settings->Cache->Gigabytes use 1 / 3 of available memory instead of 1 / 2.
+- Core: Bumped FLTK to v2.1.5.
+- Core: Changed license server's domain so that it will be possible to move to a new VPS due price increases.
+- Core: Added comments to License functions, as they were rather messy.
+
 v1.7.0
 ======
 	

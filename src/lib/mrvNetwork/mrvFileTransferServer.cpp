@@ -5,6 +5,8 @@
 
 #include "mrvFl/mrvIO.h"
 
+#include <tlCore/StringFormat.h>
+
 #include <algorithm>
 #include <condition_variable>
 #include <thread>
@@ -23,7 +25,12 @@ namespace
         nlohmann::json err;
         err["error"] = msg;
         dc->send(err.dump());
-        dc->close();
+        // NOTE: no dc->close() here anymore. This channel is reused for a
+        // whole sequence of file requests (see FileTransferClient::
+        // requestNextFile), so one missing path shouldn't tear down the
+        // transport. Whether the channel closes after an error is now the
+        // client's call: it closes dc_ itself for a required-file failure,
+        // and keeps requesting on the same dc_ for an optional one.
     }
 
     void sendHeader(std::shared_ptr<rtc::DataChannel> dc,
@@ -44,18 +51,29 @@ namespace
 
     // Blocks until there's room to send more on `dc` without exceeding
     // kMaxBufferedAmount, or bails out (returns false) if the channel
-    // closes or a peer stalls for too long. Mirrors the single-peer
-    // backpressure logic from before, just parameterized per subscriber
-    // so a slow peer's wait doesn't need a bespoke condition variable
-    // wired up ad hoc at every call site.
+    // closes or genuinely stalls. Polls in short increments rather than
+    // relying on a single long wait_for: if onBufferedAmountLow doesn't
+    // fire promptly for whatever reason, we still re-check the real
+    // bufferedAmount() every 20ms instead of only after a full 5s
+    // timeout, so a healthy peer that's actually draining fine never
+    // visibly pauses. The notify still short-circuits each poll
+    // immediately when it does fire.
     bool waitForRoom(std::shared_ptr<rtc::DataChannel> dc,
                      std::mutex& mtx, std::condition_variable& cv)
     {
+        constexpr auto kPollInterval = std::chrono::milliseconds(20);
+        constexpr auto kStallTimeout = std::chrono::seconds(5);
+
+        const auto deadline = std::chrono::steady_clock::now() + kStallTimeout;
+
         std::unique_lock<std::mutex> lock(mtx);
-        return cv.wait_for(lock, std::chrono::seconds(5), [&]()
-            {
-                return !dc->isOpen() || dc->bufferedAmount() < kLowWaterMark;
-            });
+        while (dc->isOpen() && dc->bufferedAmount() >= kLowWaterMark)
+        {
+            if (std::chrono::steady_clock::now() >= deadline)
+                return false;
+            cv.wait_for(lock, kPollInterval);
+        }
+        return dc->isOpen();
     }
 }
 
@@ -74,6 +92,9 @@ namespace mrv
         // > 0 means this subscriber needs [0, joinOffset) backfilled
         // after the leader's read finishes.
         uint64_t joinOffset = 0;
+
+        // Max message size for this subscriber.
+        size_t maxMessageSize = 1024 * 1024;
 
         // Backpressure primitives for this subscriber's DataChannel.
         // Shared (not owned) so the onBufferedAmountLow callback
@@ -99,23 +120,39 @@ namespace mrv
         bool headerSent = false;               // protected by mtx
     };
 
-    FileTransferServer::FileTransferServer(WebRTCManager& manager)
+    std::shared_ptr<FileTransferServer>
+    FileTransferServer::create(WebRTCManager& manager)
     {
+        auto self = std::shared_ptr<FileTransferServer>(new FileTransferServer());
+        self->init(manager);
+        return self;
+    }
+
+    void FileTransferServer::init(WebRTCManager& manager)
+    {
+        std::weak_ptr<FileTransferServer> weakSelf = weak_from_this();
         manager.onExtraDataChannel =
-            [this](const std::string& peerId,
-                   std::shared_ptr<rtc::DataChannel> dc)
+            [weakSelf](const std::string& peerId, std::shared_ptr<rtc::DataChannel> dc)
                 {
+                    auto self = weakSelf.lock();
+                    if (!self) return;
                     if (dc->label() == "file-transfer")
-                        handleRequest(peerId, dc);
+                        self->handleRequest(peerId, dc);
                 };
     }
 
     void FileTransferServer::handleRequest(const std::string& peerId,
                                            std::shared_ptr<rtc::DataChannel> dc)
     {
+        std::weak_ptr<FileTransferServer> weakSelf = weak_from_this();
+
         dc->onMessage(
-            [this, dc](rtc::message_variant msg)
+            [weakSelf, dc](rtc::message_variant msg)
                 {
+                    auto self = weakSelf.lock();
+                    if (!self)
+                        return;
+
                     if (!std::holds_alternative<std::string>(msg))
                         return;
 
@@ -126,9 +163,9 @@ namespace mrv
                     std::shared_ptr<Session> session;
                     bool isNew = false;
                     {
-                        std::lock_guard<std::mutex> lock(sessionsMutex_);
-                        auto it = sessions_.find(path);
-                        if (it != sessions_.end())
+                        std::lock_guard<std::mutex> lock(self->sessionsMutex_);
+                        auto it = self->sessions_.find(path);
+                        if (it != self->sessions_.end())
                         {
                             session = it->second;
                         }
@@ -136,7 +173,7 @@ namespace mrv
                         {
                             session = std::make_shared<Session>();
                             session->path = path;
-                            sessions_[path] = session;
+                            self->sessions_[path] = session;
                             isNew = true;
                         }
 
@@ -158,6 +195,7 @@ namespace mrv
                             Subscriber sub;
                             sub.dc = dc;
                             sub.joinOffset = session->offset;
+                            sub.maxMessageSize = dc->maxMessageSize();
                             sendHeaderNow = session->headerSent;
                             knownSize = session->size;
 
@@ -177,9 +215,11 @@ namespace mrv
 
                     if (isNew)
                     {
-                        std::thread([this, session]()
+                        std::thread([weakSelf, session]()
                             {
-                                runSession(session);
+                                auto self = weakSelf.lock();
+                                if (!self) return;
+                                self->runSession(session);
                             }).detach();
                     }
                 });
@@ -296,7 +336,65 @@ namespace mrv
                     }
                 }
 
-                sub.dc->send(buf.data(), kChunkHeaderSize + n);
+                try
+                {
+                    // Fall back to 1MB if the subscriber's limit is reporting as unbounded (0)
+                    size_t subMaxMsgSize = sub.maxMessageSize;
+                    if (subMaxMsgSize == 0) subMaxMsgSize = 1024 * 1024;
+
+                    const size_t totalChunkSize = kChunkHeaderSize + n;
+
+                    // Fast Path: If the overall chunk fits, send it directly
+                    if (totalChunkSize <= subMaxMsgSize)
+                    {
+                        sub.dc->send(buf.data(), totalChunkSize);
+                    }
+                    // Slow Path: Chunk is too big for this subscriber. Split and send in slices
+                    else
+                    {
+                        // Determine the maximum payload portion we can pack alongside the header
+                        const size_t subChunkLimit = (subMaxMsgSize > kChunkHeaderSize)
+                                                     ? subMaxMsgSize - kChunkHeaderSize
+                                                     : 1;
+
+                        std::vector<std::byte> scratch;
+                        size_t bytesSent = 0;
+
+                        while (bytesSent < n)
+                        {
+                            const size_t chunkPayloadSize = std::min(subChunkLimit, n - bytesSent);
+
+                            // Resize our scratch buffer to hold the header + this slice's payload.
+                            // Using resize() on a persistent buffer avoids repeated heap allocations.
+                            scratch.resize(kChunkHeaderSize + chunkPayloadSize);
+
+                            // Compute and pack the absolute file offset for this slice
+                            const uint64_t subOffset = offset + bytesSent;
+                            packChunkOffset(subOffset, scratch.data());
+
+                            // Copy the payload slice from our main read buffer to the scratch buffer
+                            std::copy(buf.begin() + kChunkHeaderSize + bytesSent,
+                                      buf.begin() + kChunkHeaderSize + bytesSent + chunkPayloadSize,
+                                      scratch.begin() + kChunkHeaderSize);
+
+                            // Transmit the sub-chunk
+                            sub.dc->send(scratch.data(), scratch.size());
+
+                            bytesSent += chunkPayloadSize;
+                        }
+                    }
+                }
+                catch (const std::exception& e)
+                {
+                    LOG_ERROR("Send failed for subscriber, dropping from live session: " +
+                              path + " (" + e.what() + ")");
+                    std::lock_guard<std::mutex> lock(session->mtx);
+                    auto& subs = session->subscribers;
+                    subs.erase(std::remove_if(subs.begin(), subs.end(),
+                                              [&](const Subscriber& s) {
+                                                  return s.dc == sub.dc;
+                                              }), subs.end());
+                }
             }
 
             offset += n;
@@ -347,7 +445,12 @@ namespace mrv
         }
 
         size_t maxMsgSize = dc->maxMessageSize();
+
+        // If 0, treat as unbounded (defaulting to our 1MB preference)
+        if (maxMsgSize == 0) maxMsgSize = 1024 * 1024;
+
         size_t kChunkSize = std::min<size_t>(1024 * 1024, maxMsgSize);
+
         kChunkSize = (kChunkSize > kChunkHeaderSize)
                          ? kChunkSize - kChunkHeaderSize
                          : 1;
@@ -356,9 +459,9 @@ namespace mrv
         auto cv = std::make_shared<std::condition_variable>();
 
         dc->setBufferedAmountLowThreshold(kLowWaterMark);
-        dc->onBufferedAmountLow([mtx, cv]() { 
+        dc->onBufferedAmountLow([mtx, cv]() {
             std::lock_guard<std::mutex> lock(*mtx); // Safely locked
-            cv->notify_one(); 
+            cv->notify_one();
         });
 
         std::vector<std::byte> buf(kChunkHeaderSize + kChunkSize);

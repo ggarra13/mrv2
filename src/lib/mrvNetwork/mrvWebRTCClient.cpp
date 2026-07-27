@@ -2,6 +2,8 @@
 // mrv2
 // Copyright Contributors to the mrv2 Project. All rights reserved.
 
+#include "mrvApp/mrvApp.h"
+
 #include "mrvNetwork/mrvWebRTCClient.h"
 #include "mrvNetwork/mrvFileTransferServer.h"
 
@@ -11,6 +13,8 @@
 
 #include <tlCore/StringFormat.h>
 
+#include "mrViewer.h"
+
 namespace
 {
     const char* kModule = "w3tc";
@@ -18,7 +22,8 @@ namespace
 
 namespace mrv
 {
-    WebRTCClient::WebRTCClient(const std::string& roomId,
+    WebRTCClient::WebRTCClient(const std::string& studio,
+                               const std::string& roomId,
                                const std::string& playerId)
     {
         std::string debug = os::sgetenv("MRV2_WEBRTC_DEBUG");
@@ -26,17 +31,24 @@ namespace mrv
             rtc::InitLogger(rtc::LogLevel::Debug);
         }
 
-
-        std::string stunServer = os::sgetenv("MRV2_STUN_SERVER");
-        if (stunServer.empty())
-            stunServer = "stun:stun.l.google.com:19302";
+        std::string stunServer;
+        const char* env = fl_getenv("MRV2_STUN_SERVER");
+        if (env)
+        {
+            stunServer = env;
+        }
+        else
+        {
+            stunServer = App::ui->uiPrefs->uiPrefsWebRTCStunServer->value();
+        }
 
         std::string msg = string::Format(_("STUN server is {0}")).
                           arg(stunServer);
         LOG_STATUS(msg);
 
         rtc::Configuration config;
-        config.iceServers.emplace_back(stunServer);
+        if (!stunServer.empty())
+            config.iceServers.emplace_back(stunServer);
         config.disableAutoNegotiation = true;
 
         webrtcManager.setConfiguration(config);
@@ -44,7 +56,7 @@ namespace mrv
         // Every mesh participant must be ready to serve a file to any other
         // peer, regardless of whether this machine ever needs to fetch one
         // itself - construct unconditionally, not on demand.
-        fileServer = std::make_unique<FileTransferServer>(webrtcManager);
+        fileServer = FileTransferServer::create(webrtcManager);
 
 
         // WebRTC → WebRTCClient (this class)
@@ -101,7 +113,7 @@ namespace mrv
             webrtcManager.erase(peerId);
         };
 
-        signalingClient.connect(roomId, playerId);
+        signalingClient.connect(studio, roomId, playerId);
     }
 
     WebRTCClient::~WebRTCClient()

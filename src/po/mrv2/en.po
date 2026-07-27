@@ -555,12 +555,12 @@ msgid ""
 "\n"
 "Image module.\n"
 "\n"
-"Contains all classes and enums related to image controls. \n"
+"Contains all classes and enums related to image controls.\n"
 msgstr ""
 "\n"
 "Image module.\n"
 "\n"
-"Contains all classes and enums related to image controls. \n"
+"Contains all classes and enums related to image controls.\n"
 
 msgid "Red Channel."
 msgstr "Red Channel."
@@ -648,6 +648,12 @@ msgstr "Enabled Soft Clip."
 
 msgid "Soft clip value."
 msgstr "Soft clip value."
+
+msgid "Aspect Ratio."
+msgstr "Aspect Ratio."
+
+msgid "Aspect Ratio Options."
+msgstr "Aspect Ratio Options."
 
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
 msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
@@ -1251,6 +1257,9 @@ msgid ""
 msgstr ""
 "Port number for the server to listen to or for the client to connect to."
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "Connect to a WebRTC room at <value>."
+
 msgid "Miscellaneous:"
 msgstr "Miscellaneous:"
 
@@ -1544,11 +1553,20 @@ msgstr "Room name to enter."
 msgid ""
 "Share the room ID with the persons that will review the session with you.\n"
 "\n"
-"Note that this feature is only available in the Pro+ tier."
 msgstr ""
 "Share the room ID with the persons that will review the session with you.\n"
 "\n"
-"Note that this feature is only available in the Pro+ tier."
+
+msgid ""
+"This feature is unlimited on the Pro and Pro+ tiers.\n"
+"\n"
+"On other tiers, it is limited to 2\n"
+"connections and 30 minutes of use."
+msgstr ""
+"This feature is unlimited on the Pro and Pro+ tiers.\n"
+"\n"
+"On other tiers, it is limited to 2\n"
+"connections and 30 minutes of use."
 
 msgid "Type of Waveform Monitor."
 msgstr "Type of Waveform Monitor."
@@ -2498,6 +2516,12 @@ msgstr "Notes"
 msgid "STUN server is {0}"
 msgstr "STUN server is {0}"
 
+msgid "Cannot connect to WebRTC: User is not authorized or license expired"
+msgstr "Cannot connect to WebRTC: User is not authorized or license expired"
+
+msgid "No Web RTC Studio set.  Please update Preferences->WebRTC Studio"
+msgstr "No Web RTC Studio set.  Please update Preferences->WebRTC Studio"
+
 msgid "The room ID is: {0}"
 msgstr "The room ID is: {0}"
 
@@ -2561,6 +2585,16 @@ msgstr "Already fetching {0} from another sync request; skipping duplicate."
 
 msgid "Transfers"
 msgstr "Transfers"
+
+msgid ""
+"The timeline downloaded, but the following referenced media could not be found on the server:\n"
+"\n"
+msgstr ""
+"The timeline downloaded, but the following referenced media could not be found on the server:\n"
+"\n"
+
+msgid "Download failed."
+msgstr "Download failed."
 
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr "Remote file {0} not found locally and no peer to fetch it from."
@@ -2675,6 +2709,12 @@ msgstr "Setting OCIO config from OCIO environment variable."
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Path mappings have been loaded from \"{0}{1}\"."
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "Error deleting directory: \"{0}\"."
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "Cleaned directory: \"{0}\"."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
@@ -4665,6 +4705,12 @@ msgstr "With msvc "
 msgid "mrv2 depends on:"
 msgstr "mrv2 depends on:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "Total Physical Memory: {0} Gb"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "Total Virtual Memory: {0} Gb"
+
 msgid "Vendor:\t"
 msgstr "Vendor:\t"
 
@@ -6101,6 +6147,21 @@ msgstr "X 3"
 msgid "X 4"
 msgstr "X 4"
 
+msgid "Internet"
+msgstr "Internet"
+
+msgid "LAN"
+msgstr "LAN"
+
+msgid "Home Directory"
+msgstr "Home Directory"
+
+msgid "Temp Directory"
+msgstr "Temp Directory"
+
+msgid "Custom"
+msgstr "Custom"
+
 msgid "Do Nothing"
 msgstr "Do Nothing"
 
@@ -7009,6 +7070,48 @@ msgstr ""
 "This setting opens a pipe to communicate with ComfyUI's "
 "mrv2_save_exr_node.py"
 
+msgid "WebRTC settings"
+msgstr "WebRTC settings"
+
+msgid "WebRTC Presets"
+msgstr "WebRTC Presets"
+
+msgid "WebRTC presets"
+msgstr "WebRTC presets"
+
+msgid "Stun Server"
+msgstr "Stun Server"
+
+msgid "WebRTC STUN Server.  Leave blank to use Google's."
+msgstr "WebRTC STUN Server.  Leave blank to use Google's."
+
+msgid "WebRTC Server"
+msgstr "WebRTC Server"
+
+msgid "WebRTC server used to sync the connections."
+msgstr "WebRTC server used to sync the connections."
+
+msgid "Studio name to prefix to all Room connections.  Use some unique name."
+msgstr "Studio name to prefix to all Room connections.  Use some unique name."
+
+msgid "Clean directory at Start up"
+msgstr "Clean directory at Start up"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "Clean the WebRTC cache directory on start of the viewer."
+
+msgid "WebRTC Cache"
+msgstr "WebRTC Cache"
+
+msgid "Cache Directory presets."
+msgstr "Cache Directory presets."
+
+msgid "Cache Directory"
+msgstr "Cache Directory"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "Directory where WebRTC downloads will reside."
+
 msgid "Errors"
 msgstr "Errors"
 
@@ -7403,6 +7506,9 @@ msgstr "{0} is not readable. Using system default."
 
 msgid "{0} Active Licenses from {1}."
 msgstr "{0} Active Licenses from {1}."
+
+msgid "Valid license for {0}"
+msgstr "Valid license for {0}"
 
 msgid "Could not release floating license"
 msgstr "Could not release floating license"
@@ -8013,11 +8119,6 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "task info failed"
 
-#~ msgid ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-#~ msgstr ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-
 #~ msgid "Complexity"
 #~ msgstr "Complexity"
 
@@ -8026,9 +8127,6 @@ msgstr "task info failed"
 
 #~ msgid "Disk Cache in GB"
 #~ msgstr "Disk Cache in GB"
-
-#~ msgid "Remote files are less than local files."
-#~ msgstr "Remote files are less than local files."
 
 #~ msgid "Rotated image info: {0}"
 #~ msgstr "Rotated image info: {0}"
@@ -8056,6 +8154,17 @@ msgstr "task info failed"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Invalid font for text drawing"
+
+#~ msgid "No Web RTC Server set."
+#~ msgstr "No Web RTC Server set."
+
+#~ msgid ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+#~ msgstr ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+
+#~ msgid "Remote files are less than local files."
+#~ msgstr "Remote files are less than local files."
 
 #~ msgid "Start or In Point of the video."
 #~ msgstr "Start or In Point of the video."

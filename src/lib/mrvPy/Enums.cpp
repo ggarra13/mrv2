@@ -86,7 +86,7 @@ void mrv2_enums(py::module& m)
         .value("DWAB", Imf::DWAB_COMPRESSION)
         //.value("HT256", Imf::HT256_COMPRESSION)
         ;
-    
+
     py::enum_<mrv::SaveContents>(io, "Contents")
         .value("Display_Window", mrv::SaveContents::kDisplayWindow)
         .value("Data_Window", mrv::SaveContents::kDataWindow);
@@ -156,6 +156,10 @@ void mrv2_enums(py::module& m)
     // .export_values();
     //
 
+    py::enum_<timeline::AspectRatioType>(image, "AspectRatioType")
+        .value("Pixel", timeline::AspectRatioType::Pixel)
+        .value("Display", timeline::AspectRatioType::Display);
+
     py::enum_<timeline::InputVideoLevels>(image, "InputVideoLevels")
         .value("FromFile", timeline::InputVideoLevels::FromFile)
         .value("FullRange", timeline::InputVideoLevels::FullRange)
@@ -211,7 +215,7 @@ void mrv2_enums(py::module& m)
         .value("Vertical", timeline::CompareMode::Vertical)
         .value("Tile", timeline::CompareMode::Tile)
         .export_values();
-    
+
     py::enum_<timeline::CompareTimeMode>(media, "CompareTimeMode")
         .value("Relative", timeline::CompareTimeMode::Relative)
         .value("Absolute", timeline::CompareTimeMode::Absolute)

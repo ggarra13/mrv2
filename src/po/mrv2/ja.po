@@ -545,12 +545,12 @@ msgid ""
 "\n"
 "Image module.\n"
 "\n"
-"Contains all classes and enums related to image controls. \n"
+"Contains all classes and enums related to image controls.\n"
 msgstr ""
 "\n"
-"イメージモジュール。\n"
+"画像モジュール。\n"
 "\n"
-"イメージコントロールに関連するすべてのクラスとenumを含みます。\n"
+"画像コントロールに関連するすべてのクラスと列挙型が含まれています。\n"
 
 msgid "Red Channel."
 msgstr "レッドチャネル"
@@ -638,6 +638,12 @@ msgstr "ソフトクリッピング"
 
 msgid "Soft clip value."
 msgstr "ソフトクリッピング"
+
+msgid "Aspect Ratio."
+msgstr "アスペクト比。"
+
+msgid "Aspect Ratio Options."
+msgstr "アスペクト比のオプション。"
 
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
 msgstr "縮小フィルター :class:`mrv2.image.ImageFilter`。"
@@ -1238,6 +1244,9 @@ msgid ""
 "Port number for the server to listen to or for the client to connect to."
 msgstr "サーバーがリッスンするポート番号を指定する"
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "<value> の WebRTC ルームに接続します。"
+
 msgid "Miscellaneous:"
 msgstr "その他:"
 
@@ -1527,11 +1536,20 @@ msgstr "参加するルーム名。"
 msgid ""
 "Share the room ID with the persons that will review the session with you.\n"
 "\n"
-"Note that this feature is only available in the Pro+ tier."
 msgstr ""
-"セッションを一緒にレビューする相手とルームIDを共有してください。\n"
+"ルームIDを、あなたと一緒にセッションをレビューする人たちと共有してください。\n"
 "\n"
-"この機能は Pro+ プランでのみ利用可能です。"
+
+msgid ""
+"This feature is unlimited on the Pro and Pro+ tiers.\n"
+"\n"
+"On other tiers, it is limited to 2\n"
+"connections and 30 minutes of use."
+msgstr ""
+"この機能は、Pro および Pro+ プランでは無制限に利用できます。\n"
+"\n"
+"その他のプランでは、2 件の\n"
+"接続と30分間の利用に制限されています。"
 
 msgid "Type of Waveform Monitor."
 msgstr "ウェーブフォームモニターの種類。"
@@ -2468,6 +2486,12 @@ msgstr "注記"
 msgid "STUN server is {0}"
 msgstr "STUN サーバーは {0} です"
 
+msgid "Cannot connect to WebRTC: User is not authorized or license expired"
+msgstr "WebRTC に接続できません: ユーザーが認証されていないか、ライセンスの有効期限が切れています"
+
+msgid "No Web RTC Studio set.  Please update Preferences->WebRTC Studio"
+msgstr "WebRTC スタジオが設定されていません。［設定］→［WebRTC スタジオ］で設定してください"
+
 msgid "The room ID is: {0}"
 msgstr "ルームID: {0}"
 
@@ -2529,6 +2553,16 @@ msgstr "{0} は既に別の同期要求で取得中のため、重複した要�
 
 msgid "Transfers"
 msgstr "転送"
+
+msgid ""
+"The timeline downloaded, but the following referenced media could not be found on the server:\n"
+"\n"
+msgstr ""
+"タイムラインはダウンロードされましたが、以下の参照メディアはサーバー上に見つかりませんでした:\n"
+"\n"
+
+msgid "Download failed."
+msgstr "ダウンロードに失敗しました。"
 
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr "リモートファイル {0} はローカルに見つからず、取得元となるピアもありません。"
@@ -2639,6 +2673,12 @@ msgstr "OCIO 環境変数から OCIO 設定を設定しています。"
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "パス マッピングが「{0}{1}」から読み込まれました。"
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "ディレクトリの削除中にエラーが発生しました: 「{0}」。"
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "ディレクトリをクリーンアップしました: 「{0}」。"
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" からホットキーをロードしています。"
@@ -4608,6 +4648,12 @@ msgstr "MSVCを使用して"
 msgid "mrv2 depends on:"
 msgstr "mrv2は以下に依存しています:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "物理メモリ合計: {0} GB"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "仮想メモリ合計: {0} GB"
+
 msgid "Vendor:\t"
 msgstr "ベンダー:\t"
 
@@ -5999,6 +6045,21 @@ msgstr "×3"
 msgid "X 4"
 msgstr "×4"
 
+msgid "Internet"
+msgstr "インターネット"
+
+msgid "LAN"
+msgstr "LAN"
+
+msgid "Home Directory"
+msgstr "ホームディレクトリ"
+
+msgid "Temp Directory"
+msgstr "一時ディレクトリ"
+
+msgid "Custom"
+msgstr "カスタム"
+
 msgid "Do Nothing"
 msgstr "何もしない"
 
@@ -6828,6 +6889,48 @@ msgid ""
 "mrv2_save_exr_node.py"
 msgstr "この設定は、ComfyUIのmrv2_save_exr_node.pyと通信するためのパイプを開きます。"
 
+msgid "WebRTC settings"
+msgstr "WebRTC 設定"
+
+msgid "WebRTC Presets"
+msgstr "WebRTCプリセット"
+
+msgid "WebRTC presets"
+msgstr "WebRTCプリセット"
+
+msgid "Stun Server"
+msgstr "STUN サーバー"
+
+msgid "WebRTC STUN Server.  Leave blank to use Google's."
+msgstr "WebRTC STUN サーバー。空欄のままにすると Google のサーバーを使用します。"
+
+msgid "WebRTC Server"
+msgstr "WebRTC サーバー"
+
+msgid "WebRTC server used to sync the connections."
+msgstr "接続を同期するために使用する WebRTC サーバー。"
+
+msgid "Studio name to prefix to all Room connections.  Use some unique name."
+msgstr "すべてのルーム接続の先頭に付加するスタジオ名です。一意の名前を使用してください。"
+
+msgid "Clean directory at Start up"
+msgstr "起動時にディレクトリをクリーンアップ"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "ビューアーの起動時に WebRTC キャッシュディレクトリをクリーンアップします。"
+
+msgid "WebRTC Cache"
+msgstr "WebRTC キャッシュ"
+
+msgid "Cache Directory presets."
+msgstr "キャッシュディレクトリのプリセット。"
+
+msgid "Cache Directory"
+msgstr "キャッシュディレクトリ"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "WebRTC のダウンロードを保存するディレクトリ。"
+
 msgid "Errors"
 msgstr "エラー"
 
@@ -7216,6 +7319,9 @@ msgstr "{0} は読み取れません。システムのデフォルトを使用�
 
 msgid "{0} Active Licenses from {1}."
 msgstr "{1} からの有効なライセンスが {0} 件あります。"
+
+msgid "Valid license for {0}"
+msgstr "{0} の有効なライセンス"
 
 msgid "Could not release floating license"
 msgstr "フローティングライセンスを解放できませんでした。"
@@ -7826,10 +7932,6 @@ msgstr "host_statistics64に失敗しました。"
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました。"
 
-#~ msgid ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-#~ msgstr "コマンドライン引数を、-pythonArgs に単一引用符で囲まれた文字列として渡します。"
-
 #~ msgid "Complexity"
 #~ msgstr "難易度"
 
@@ -7838,9 +7940,6 @@ msgstr "タスク情報の取得に失敗しました。"
 
 #~ msgid "Disk Cache in GB"
 #~ msgstr "ディスクキャッシュ"
-
-#~ msgid "Remote files are less than local files."
-#~ msgstr "ローカルファイルのみがサポートされています。"
 
 #~ msgid "Rotated image info: {0}"
 #~ msgstr "回転された画像情報: {0}"
@@ -7868,6 +7967,16 @@ msgstr "タスク情報の取得に失敗しました。"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "フォントファイル情報が無効です。"
+
+#~ msgid "No Web RTC Server set."
+#~ msgstr "WebRTC サーバーが設定されていません。"
+
+#~ msgid ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+#~ msgstr "コマンドライン引数を、-pythonArgs に単一引用符で囲まれた文字列として渡します。"
+
+#~ msgid "Remote files are less than local files."
+#~ msgstr "ローカルファイルのみがサポートされています。"
 
 #~ msgid "Start or In Point of the video."
 #~ msgstr "動画の開始点（Inポイント）。"

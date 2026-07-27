@@ -16,6 +16,22 @@ get_kernel
 extract_version
 
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  CONFIGURATION
+#  Secret variables
+# ─────────────────────────────────────────────────────────────────────────────
+
+# App-specific password created at appleid.apple.com > Sign-In and Security.
+# Pass the literal value OR use the @keychain: prefix to avoid shell history exposure:
+#   xcrun notarytool store-credentials  ← run once; then set:
+#   APP_PASSWORD="@keychain:mrv2-notarytool"
+MACOS_CERTIFICATE_BASE64="${MACOS_CERTIFICATE_BASE64}"
+P12_PASSWORD="${P12_PASSWORD}"
+APP_PASSWORD="${APP_PASSWORD:-@keychain:mrv2-notarytool}"
+
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 #  CONFIGURATION
 #  Override any of these via environment variables or CLI flags.
@@ -23,22 +39,20 @@ extract_version
 
 # Developer ID Application certificate — exactly as it appears in Keychain Access.
 # Example: "Developer ID Application: Gonzalo Garramuño (XXXXXXXXXX)"
-DEVELOPER_ID="${DEVELOPER_ID:-}"
+DEVELOPER_ID="${DEVELOPER_ID:-}"  # Safe
+if [[ "$DEVELOPER_ID" == "empty" ]]; then
+    DEVELOPER_ID=""
+fi
 
 # Apple ID (email) associated with your developer account.
-APPLE_ID="${APPLE_ID:-ggarra13@gmail.com}"
+APPLE_ID="${APPLE_ID:-ggarra13@gmail.com}"  # Somewhat safe, but recommended
+                                            # to encrypt due to email.
 
 # Apple Team ID (10-character string, visible at developer.apple.com).
-TEAM_ID="${TEAM_ID:-XXXXXXXXXX}"
-
-# App-specific password created at appleid.apple.com > Sign-In and Security.
-# Pass the literal value OR use the @keychain: prefix to avoid shell history exposure:
-#   xcrun notarytool store-credentials  ← run once; then set:
-#   APP_PASSWORD="@keychain:mrv2-notarytool"
-APP_PASSWORD="${APP_PASSWORD:-@keychain:mrv2-notarytool}"
+TEAM_ID="${TEAM_ID:-XXXXXXXXXX}"  # Safe
 
 # Keychain profile name used with xcrun notarytool store-credentials (run once).
-NOTARYTOOL_PROFILE="${NOTARYTOOL_PROFILE:-mrv2-notarytool}"
+NOTARYTOOL_PROFILE="${NOTARYTOOL_PROFILE:-mrv2-notarytool}" # Safe
 
 # CPack / build output directory that contains the .app bundles and the DMG.
 

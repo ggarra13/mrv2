@@ -302,7 +302,7 @@ namespace tl
                             if (i->second)
                             {
                                 
-                                timeline::VideoData videoData;
+                                timeline::VideoFrame videoData;
                                 videoData.size = i->second->getSize();
                                 videoData.layers.push_back({i->second});
 

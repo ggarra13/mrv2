@@ -291,8 +291,8 @@ namespace mrv
             void setMissingFrameType(const MissingFrameType);
 
             //
-            const std::vector<tl::timeline::VideoData>&
-            getVideoData() const noexcept;
+            const std::vector<tl::timeline::VideoFrame>&
+            getVideoFrame() const noexcept;
 
             // Callbacks
             int acceptMultilineInput() noexcept;
@@ -302,7 +302,7 @@ namespace mrv
             void currentTimeChanged(const otime::RationalTime&) const noexcept;
 
             void currentVideoCallback(
-                const std::vector<tl::timeline::VideoData>&) noexcept;
+                const std::vector<tl::timeline::VideoFrame>&) noexcept;
 
             //! Set the OCIO configuration from the GUI.
             void updateOCIOOptions() noexcept;
@@ -456,6 +456,8 @@ namespace mrv
             math::Vector2f _getFocusf() const noexcept;
             math::Vector2f _getRasterf(int X, int Y) const noexcept;
             math::Vector2f _getRasterf() const noexcept;
+
+
 
             //! Get the normalized rotation between 0 and 360
             //! full rotation of the image (user rotation + video rotation)

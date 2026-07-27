@@ -546,7 +546,7 @@ msgid ""
 "\n"
 "Image module.\n"
 "\n"
-"Contains all classes and enums related to image controls. \n"
+"Contains all classes and enums related to image controls.\n"
 msgstr ""
 "\n"
 "图像模块。\n"
@@ -639,6 +639,12 @@ msgstr "启用软剪切"
 
 msgid "Soft clip value."
 msgstr "软剪切值"
+
+msgid "Aspect Ratio."
+msgstr "宽高比。"
+
+msgid "Aspect Ratio Options."
+msgstr "宽高比选项。"
 
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
 msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
@@ -1241,6 +1247,9 @@ msgid ""
 "Port number for the server to listen to or for the client to connect to."
 msgstr "服务器监听或客户端连接的端口号"
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "连接到位于 <value> 的 WebRTC 房间。"
+
 msgid "Miscellaneous:"
 msgstr "杂项:"
 
@@ -1530,11 +1539,20 @@ msgstr "要进入的房间名称。"
 msgid ""
 "Share the room ID with the persons that will review the session with you.\n"
 "\n"
-"Note that this feature is only available in the Pro+ tier."
 msgstr ""
-"与将和您一起审阅会话的人员共享房间 ID。\n"
+"请将房间 ID 分享给将与您一起审阅会话的人员。\n"
 "\n"
-"请注意，此功能仅在 Pro+ 版本中可用。"
+
+msgid ""
+"This feature is unlimited on the Pro and Pro+ tiers.\n"
+"\n"
+"On other tiers, it is limited to 2\n"
+"connections and 30 minutes of use."
+msgstr ""
+"此功能在 Pro 和 Pro+ 套餐中可无限制使用。\n"
+"\n"
+"在其他套餐中，仅限 2 个\n"
+"连接和 30 分钟的使用时间。"
 
 msgid "Type of Waveform Monitor."
 msgstr "波形监视器类型。"
@@ -2464,6 +2482,12 @@ msgstr "Notes"
 msgid "STUN server is {0}"
 msgstr "STUN 服务器是 {0}"
 
+msgid "Cannot connect to WebRTC: User is not authorized or license expired"
+msgstr "无法连接到 WebRTC：用户未获得授权或许可证已过期"
+
+msgid "No Web RTC Studio set.  Please update Preferences->WebRTC Studio"
+msgstr "未设置 WebRTC 工作室。请更新“首选项->WebRTC 工作室”。"
+
 msgid "The room ID is: {0}"
 msgstr "房间 ID 是：{0}"
 
@@ -2525,6 +2549,16 @@ msgstr "已在另一个同步请求中获取 {0}；跳过重复请求。"
 
 msgid "Transfers"
 msgstr "传输"
+
+msgid ""
+"The timeline downloaded, but the following referenced media could not be found on the server:\n"
+"\n"
+msgstr ""
+"时间轴已下载，但以下引用的媒体无法在服务器上找到：\n"
+"\n"
+
+msgid "Download failed."
+msgstr "下载失败。"
 
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr "本地未找到远程文件 {0}，且没有可用于获取该文件的对等端。"
@@ -2633,6 +2667,12 @@ msgstr "根据OCIO环境变量设置OCIO配置"
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "从 \"{0}{1}\" 导入路径映射图"
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "删除目录时出错：“{0}”。"
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "已清理目录：“{0}”。"
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "正在从 \"{0}{1}.prefs\" 导入快捷键"
@@ -4601,6 +4641,12 @@ msgstr "With msvc "
 msgid "mrv2 depends on:"
 msgstr "mrv2 depends on:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "物理内存总量：{0} GB"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "虚拟内存总量：{0} GB"
+
 msgid "Vendor:\t"
 msgstr "供应商:"
 
@@ -6020,6 +6066,21 @@ msgstr "×3"
 msgid "X 4"
 msgstr "×4"
 
+msgid "Internet"
+msgstr "互联网"
+
+msgid "LAN"
+msgstr "局域网"
+
+msgid "Home Directory"
+msgstr "主目录"
+
+msgid "Temp Directory"
+msgstr "临时目录"
+
+msgid "Custom"
+msgstr "自定义"
+
 msgid "Do Nothing"
 msgstr "Do Nothing"
 
@@ -6835,6 +6896,48 @@ msgid ""
 "mrv2_save_exr_node.py"
 msgstr "此设置打开管道, 以便与 ComfyUI 的 drv2_ save_ exr_ node 进行通讯 。"
 
+msgid "WebRTC settings"
+msgstr "WebRTC 设置"
+
+msgid "WebRTC Presets"
+msgstr "WebRTC 预设"
+
+msgid "WebRTC presets"
+msgstr "WebRTC 预设"
+
+msgid "Stun Server"
+msgstr "STUN 服务器"
+
+msgid "WebRTC STUN Server.  Leave blank to use Google's."
+msgstr "WebRTC STUN 服务器。留空将使用 Google 的服务器。"
+
+msgid "WebRTC Server"
+msgstr "WebRTC 服务器"
+
+msgid "WebRTC server used to sync the connections."
+msgstr "用于同步连接的 WebRTC 服务器。"
+
+msgid "Studio name to prefix to all Room connections.  Use some unique name."
+msgstr "添加到所有房间连接前面的工作室名称。请使用唯一的名称。"
+
+msgid "Clean directory at Start up"
+msgstr "启动时清理目录"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "查看器启动时清理 WebRTC 缓存目录。"
+
+msgid "WebRTC Cache"
+msgstr "WebRTC 缓存"
+
+msgid "Cache Directory presets."
+msgstr "缓存目录预设。"
+
+msgid "Cache Directory"
+msgstr "缓存目录"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "用于存放 WebRTC 下载内容的目录。"
+
 msgid "Errors"
 msgstr "错误"
 
@@ -7224,6 +7327,9 @@ msgstr "{0} 无法读取。正在使用系统默认值。"
 
 msgid "{0} Active Licenses from {1}."
 msgstr "来自 {1} 的 {0} 个活动许可证。"
+
+msgid "Valid license for {0}"
+msgstr "{0} 的有效许可证"
 
 msgid "Could not release floating license"
 msgstr "无法释放浮动许可证。"
@@ -7834,10 +7940,6 @@ msgstr "host_statistics64 failed"
 msgid "task info failed"
 msgstr "任务信息失败"
 
-#~ msgid ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-#~ msgstr "-pythonArgs"
-
 #~ msgid "Complexity"
 #~ msgstr "复杂程度"
 
@@ -7846,9 +7948,6 @@ msgstr "任务信息失败"
 
 #~ msgid "Disk Cache in GB"
 #~ msgstr "磁盘缓存 (GB)"
-
-#~ msgid "Remote files are less than local files."
-#~ msgstr "远程文件少于本地文件 。"
 
 #~ msgid "Rotated image info: {0}"
 #~ msgstr "已旋转的图像信息: {0}"
@@ -7876,6 +7975,16 @@ msgstr "任务信息失败"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "用于文本绘图的无效字体"
+
+#~ msgid "No Web RTC Server set."
+#~ msgstr "未设置 WebRTC 服务器。"
+
+#~ msgid ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+#~ msgstr "-pythonArgs"
+
+#~ msgid "Remote files are less than local files."
+#~ msgstr "远程文件少于本地文件 。"
 
 #~ msgid "Start or In Point of the video."
 #~ msgstr "视频的起始点（In点）。"

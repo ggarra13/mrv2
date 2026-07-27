@@ -534,10 +534,12 @@ msgid ""
 "\n"
 "Image module.\n"
 "\n"
-"Contains all classes and enums related to image controls. \n"
+"Contains all classes and enums related to image controls.\n"
 msgstr ""
 "\n"
-"छवि मॉड्यूल. छवि नियंत्रण से संबंधित सभी क्लासों तथा अक्षरों को समाहित करता है.\n"
+"छवि मॉड्यूल।\n"
+"\n"
+"इसमें छवि नियंत्रणों से संबंधित सभी क्लासें और एनम शामिल हैं।\n"
 
 msgid "Red Channel."
 msgstr "रेड चैनल."
@@ -627,6 +629,12 @@ msgstr "सॉफ्ट क्लिपिंग सक्षम करें."
 
 msgid "Soft clip value."
 msgstr "सॉफ्ट क्लिप मूल्य."
+
+msgid "Aspect Ratio."
+msgstr "आस्पेक्ट अनुपात।"
+
+msgid "Aspect Ratio Options."
+msgstr "आस्पेक्ट अनुपात के विकल्प।"
 
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
 msgstr "न्यूनतम फ़िल्टर:क्लास: `mrv2.image.ImageFilter`."
@@ -1235,6 +1243,9 @@ msgid ""
 "Port number for the server to listen to or for the client to connect to."
 msgstr "सर्वर से जुड़ने के लिए पोर्ट संख्या या क्लाइंट के लिए."
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "<value> पर WebRTC कमरे से कनेक्ट करें।"
+
 msgid "Miscellaneous:"
 msgstr "विविध:"
 
@@ -1529,11 +1540,20 @@ msgstr "प्रवेश करने के लिए कमरे का न
 msgid ""
 "Share the room ID with the persons that will review the session with you.\n"
 "\n"
-"Note that this feature is only available in the Pro+ tier."
 msgstr ""
-"कमरे की आईडी उन लोगों के साथ साझा करें जो आपके साथ सत्र की समीक्षा करेंगे।\n"
+"रूम आईडी उन लोगों के साथ साझा करें जो आपके साथ इस सत्र की समीक्षा करेंगे।\n"
 "\n"
-"ध्यान दें कि यह सुविधा केवल Pro+ संस्करण में उपलब्ध है।"
+
+msgid ""
+"This feature is unlimited on the Pro and Pro+ tiers.\n"
+"\n"
+"On other tiers, it is limited to 2\n"
+"connections and 30 minutes of use."
+msgstr ""
+"यह सुविधा Pro और Pro+ योजनाओं में असीमित है।\n"
+"\n"
+"अन्य योजनाओं में यह 2\n"
+"कनेक्शनों और 30 मिनट के उपयोग तक सीमित है।"
 
 msgid "Type of Waveform Monitor."
 msgstr "वेवफॉर्म मॉनिटर का प्रकार।"
@@ -2483,6 +2503,16 @@ msgstr "टिप्पणी"
 msgid "STUN server is {0}"
 msgstr "STUN सर्वर {0} है"
 
+msgid "Cannot connect to WebRTC: User is not authorized or license expired"
+msgstr ""
+"WebRTC से कनेक्ट नहीं किया जा सकता: उपयोगकर्ता अधिकृत नहीं है या लाइसेंस की "
+"अवधि समाप्त हो गई है"
+
+msgid "No Web RTC Studio set.  Please update Preferences->WebRTC Studio"
+msgstr ""
+"कोई WebRTC स्टूडियो सेट नहीं है। कृपया वरीयताएँ->WebRTC स्टूडियो को अपडेट "
+"करें"
+
 msgid "The room ID is: {0}"
 msgstr "कमरे की आईडी है: {0}"
 
@@ -2548,6 +2578,16 @@ msgstr ""
 
 msgid "Transfers"
 msgstr "स्थानांतरण"
+
+msgid ""
+"The timeline downloaded, but the following referenced media could not be found on the server:\n"
+"\n"
+msgstr ""
+"टाइमलाइन डाउनलोड हो गई, लेकिन निम्नलिखित संदर्भित मीडिया सर्वर पर नहीं मिले:\n"
+"\n"
+
+msgid "Download failed."
+msgstr "डाउनलोड विफल रहा।"
 
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr ""
@@ -2662,6 +2702,12 @@ msgstr "ओओआईओ एनवायरनमेंट वेरिएबल 
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "पथ \"{0}{1}\" से लोड किया गया."
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "निर्देशिका हटाने में त्रुटि: \"{0}\"।"
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "निर्देशिका साफ़ की गई: \"{0}\"।"
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" से गर्म हवा लोड किया जा रहा है।"
@@ -4660,6 +4706,12 @@ msgstr "msvc के साथ"
 msgid "mrv2 depends on:"
 msgstr "mrv2 इस पर निर्भर करता है:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "कुल भौतिक मेमोरी: {0} GB"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "कुल वर्चुअल मेमोरी: {0} GB"
+
 msgid "Vendor:\t"
 msgstr "विक्रेता:"
 
@@ -6074,6 +6126,21 @@ msgstr "× 3"
 msgid "X 4"
 msgstr "× 4"
 
+msgid "Internet"
+msgstr "इंटरनेट"
+
+msgid "LAN"
+msgstr "स्थानीय नेटवर्क"
+
+msgid "Home Directory"
+msgstr "होम निर्देशिका"
+
+msgid "Temp Directory"
+msgstr "अस्थायी निर्देशिका"
+
+msgid "Custom"
+msgstr "कस्टम"
+
 msgid "Do Nothing"
 msgstr "कुछ नहीं करें"
 
@@ -6979,6 +7046,51 @@ msgstr ""
 "यह सेटिंग कॉमफयूयू से संपर्क करने के लिए एक पाइप खोलती है मैं हूँ "
 "mrv2_und_und."
 
+msgid "WebRTC settings"
+msgstr "WebRTC सेटिंग्स"
+
+msgid "WebRTC Presets"
+msgstr "WebRTC प्रीसेट"
+
+msgid "WebRTC presets"
+msgstr "WebRTC सेटिंग्स"
+
+msgid "Stun Server"
+msgstr "STUN सर्वर"
+
+msgid "WebRTC STUN Server.  Leave blank to use Google's."
+msgstr ""
+"WebRTC STUN सर्वर। Google का सर्वर उपयोग करने के लिए इसे खाली छोड़ दें।"
+
+msgid "WebRTC Server"
+msgstr "WebRTC सर्वर"
+
+msgid "WebRTC server used to sync the connections."
+msgstr "कनेक्शनों को समन्वित करने के लिए उपयोग किया जाने वाला WebRTC सर्वर।"
+
+msgid "Studio name to prefix to all Room connections.  Use some unique name."
+msgstr ""
+"सभी रूम कनेक्शनों के आगे जोड़े जाने वाले स्टूडियो का नाम। कोई अद्वितीय नाम "
+"उपयोग करें।"
+
+msgid "Clean directory at Start up"
+msgstr "प्रारंभ पर निर्देशिका साफ़ करें"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "व्यूअर प्रारंभ होने पर WebRTC कैश निर्देशिका साफ़ करें।"
+
+msgid "WebRTC Cache"
+msgstr "WebRTC कैश"
+
+msgid "Cache Directory presets."
+msgstr "कैश निर्देशिका के पूर्वनिर्धारित विकल्प।"
+
+msgid "Cache Directory"
+msgstr "कैश निर्देशिका"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "वह निर्देशिका जहाँ WebRTC डाउनलोड संग्रहीत किए जाएँगे।"
+
 msgid "Errors"
 msgstr "त्रुटियाँ"
 
@@ -7376,6 +7488,9 @@ msgstr "{0} पढ़ा नहीं जा सकता। सिस्टम 
 
 msgid "{0} Active Licenses from {1}."
 msgstr "{0} सक्रिय लाइसेंस {1} से।"
+
+msgid "Valid license for {0}"
+msgstr "{0} के लिए वैध लाइसेंस"
 
 msgid "Could not release floating license"
 msgstr "फ़्लोटिंग लाइसेंस जारी नहीं किया जा सका।"
@@ -7986,12 +8101,6 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
 
-#~ msgid ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-#~ msgstr ""
-#~ "कमांड लाइन आर्गुमेंट पास करें जैसा कि उद्धृत वाक्यांश - आईक्वेंगर को उद्धृत "
-#~ "किया गया है."
-
 #~ msgid "Complexity"
 #~ msgstr "जटिलता"
 
@@ -8000,9 +8109,6 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid "Disk Cache in GB"
 #~ msgstr "GB में डिस्क कैश"
-
-#~ msgid "Remote files are less than local files."
-#~ msgstr "रिमोट फ़ाइलें स्थानीय फ़ाइलों से कम हैं."
 
 #~ msgid "Rotated image info: {0}"
 #~ msgstr "छवि जानकारी घुमाएँ: {0}"
@@ -8030,6 +8136,18 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
+
+#~ msgid "No Web RTC Server set."
+#~ msgstr "कोई WebRTC सर्वर सेट नहीं है।"
+
+#~ msgid ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+#~ msgstr ""
+#~ "कमांड लाइन आर्गुमेंट पास करें जैसा कि उद्धृत वाक्यांश - आईक्वेंगर को उद्धृत "
+#~ "किया गया है."
+
+#~ msgid "Remote files are less than local files."
+#~ msgstr "रिमोट फ़ाइलें स्थानीय फ़ाइलों से कम हैं."
 
 #~ msgid "Start or In Point of the video."
 #~ msgstr "वीडियो का प्रारंभ या In बिंदु।"

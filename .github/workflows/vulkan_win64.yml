@@ -17,6 +17,9 @@ jobs:
   windows-vulkan-full-build:
     runs-on: windows-2022
 
+    env:
+      MRV2_WINDOWS_SIGNING_PASSWORD: ${{ secrets.MRV2_WINDOWS_SIGNING_PASSWORD }}
+      
     defaults:
       run:
         shell: msys2 {0}
@@ -278,8 +281,8 @@ jobs:
 
       - name: Set executable permissions
         run: |
-          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
-
+          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh ./certificates/*.sh
+          
       - name: Install MSYS2 Dependencies
         run: |
           pacman -S --noconfirm rsync coreutils

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo mrv2 &mdash; documentación de mrv2 - v1.6.6</title>
+  <title>Módulo mrv2 &mdash; documentación de mrv2 - v1.7.1</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=5d0feb18"></script>
+      <script src="../_static/documentation_options.js?v=e753318c"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/translations.js?v=f85f4cfb"></script>
@@ -173,71 +173,71 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="mrv2.FileMedia">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mrv2.</span></span><span class="sig-name descname"><span class="pre">FileMedia</span></span><a class="headerlink" href="#mrv2.FileMedia" title="Link to this definition"></a></dt>
-<dd><p>Class used to hold a media item.</p>
+<dd><p>Clase para un archivo de medios.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.path">
 <span class="sig-name descname"><span class="pre">path</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.Path</span></span><a class="headerlink" href="#mrv2.FileMedia.path" title="Link to this definition"></a></dt>
-<dd><p>Path <a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.Path</span></code></a> to the File Media.</p>
+<dd><p>Archivo <a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.Path</span></code></a> de la File Media.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.audioPath">
 <span class="sig-name descname"><span class="pre">audioPath</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.Path</span></span><a class="headerlink" href="#mrv2.FileMedia.audioPath" title="Link to this definition"></a></dt>
-<dd><p>Audio path <a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.Path</span></code></a> to the File Media if any.</p>
+<dd><p>Archivo <a class="reference internal" href="#mrv2.Path" title="mrv2.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.Path</span></code></a> opcional de audio para una File Media.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.timeRange">
 <span class="sig-name descname"><span class="pre">timeRange</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.TimeRange</span></span><a class="headerlink" href="#mrv2.FileMedia.timeRange" title="Link to this definition"></a></dt>
-<dd><p>Time range <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.TimeRange</span></code> of the File Media.</p>
+<dd><p>Rango de tiempoe <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.TimeRange</span></code> de la File Media.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.playback">
 <span class="sig-name descname"><span class="pre">playback</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.timeline.Playback</span></span><a class="headerlink" href="#mrv2.FileMedia.playback" title="Link to this definition"></a></dt>
-<dd><p>Playback state <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.timeline.Playbacks</span></code> of the File Media.</p>
+<dd><p>Estado de reproduccióne <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.timeline.Playbacks</span></code> de la File Media.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.loop">
 <span class="sig-name descname"><span class="pre">loop</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.timeline.Loop</span></span><a class="headerlink" href="#mrv2.FileMedia.loop" title="Link to this definition"></a></dt>
-<dd><p>Loop state <a class="reference internal" href="timeline.html#mrv2.timeline.Loop" title="mrv2.timeline.Loop"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.timeline.Loop</span></code></a> of the File Media.</p>
+<dd><p>Estado de loop <a class="reference internal" href="timeline.html#mrv2.timeline.Loop" title="mrv2.timeline.Loop"><code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.timeline.Loop</span></code></a> en la File Media.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.currentTime">
 <span class="sig-name descname"><span class="pre">currentTime</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.RationalTime</span></span><a class="headerlink" href="#mrv2.FileMedia.currentTime" title="Link to this definition"></a></dt>
-<dd><p>Current time <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.RationalTime</span></code> of the File Media.</p>
+<dd><p>Tiempo actual <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.RationalTime</span></code> de la File Media.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.inOutRange">
 <span class="sig-name descname"><span class="pre">inOutRange</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">mrv2.TimeRange</span></span><a class="headerlink" href="#mrv2.FileMedia.inOutRange" title="Link to this definition"></a></dt>
-<dd><p>In/Out range <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.TimeRange</span></code> of the File Media.</p>
+<dd><p>Rango de tiempo <code class="xref py py-class docutils literal notranslate"><span class="pre">mrv2.TimeRange</span></code> de la File Media.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.videoLayer">
 <span class="sig-name descname"><span class="pre">videoLayer</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">int</span></span><a class="headerlink" href="#mrv2.FileMedia.videoLayer" title="Link to this definition"></a></dt>
-<dd><p>Video layer of the File Media.</p>
+<dd><p>Capa de vídeo de la File Media.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.volume">
 <span class="sig-name descname"><span class="pre">volume</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.FileMedia.volume" title="Link to this definition"></a></dt>
-<dd><p>Volume of the File Media.</p>
+<dd><p>Volumen de la File Media.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.mute">
 <span class="sig-name descname"><span class="pre">mute</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">bool</span></span><a class="headerlink" href="#mrv2.FileMedia.mute" title="Link to this definition"></a></dt>
-<dd><p>Mute state of the File Media.</p>
+<dd><p>Estado de mudo en la File Media.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mrv2.FileMedia.audioOffset">
 <span class="sig-name descname"><span class="pre">audioOffset</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">float</span></span><a class="headerlink" href="#mrv2.FileMedia.audioOffset" title="Link to this definition"></a></dt>
-<dd><p>Audio offset of the File Media.</p>
+<dd><p>Compensación de audio de una File Media.</p>
 </dd></dl>
 
 </dd></dl>

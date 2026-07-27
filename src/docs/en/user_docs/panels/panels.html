@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panels &mdash; mrv2 v1.6.6 documentation</title>
+  <title>Panels &mdash; mrv2 v1.7.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=e69d7754"></script>
+      <script src="../../_static/documentation_options.js?v=5cc1adc0"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -192,7 +192,7 @@ Horizontal, Vertical and Tile.  The Tile comparison allows multiple images to be
 <p>The NDI Panel allows you to play back an NDI® stream (ie. a video and audio playback stream) from anywhere on your network using the Network Device Interface protocol.</p>
 <p>For the connection to take place, you need to make sure your firewall allows incoming and outgoing connections.  For more information, refer to the NDI® SDK documentation.</p>
 <p>The pulldown allows you to select the source to play.  Note that starting of playback of NDI® in mrv2 is currently a tad slow, as it needs to cache the video thumbnails and audio first.</p>
-<p>In v1.6.6 and later, NDI® Video and Audio output was also added.  This allows you to stream the contents of what’s playing in mrv2 to any NDI® compatible device or software (like NDI® Tools Studio Monitor on Windows or NDI® Tools Video Monitor on macOS or other instance of mrv2 itself).</p>
+<p>In v1.7.1 and later, NDI® Video and Audio output was also added.  This allows you to stream the contents of what’s playing in mrv2 to any NDI® compatible device or software (like NDI® Tools Studio Monitor on Windows or NDI® Tools Video Monitor on macOS or other instance of mrv2 itself).</p>
 <p>NDI® is a registered trademark of Vizrt NDI AB.</p>
 </section>
 <section id="playlist-panel">
@@ -243,8 +243,13 @@ The Waveform shows the luminance of the pixels on the Y axis, while the X axis s
 <section id="webrtc-panel">
 <h2>WebRTC Panel<a class="headerlink" href="#webrtc-panel" title="Link to this heading"></a></h2>
 <img alt="../../_images/webrtc-panel-01.png" class="align-center" src="../../_images/webrtc-panel-01.png" />
-<p>The WebRTC Panel allows syncing two or more remote viewers anywhere in the Web in a “Room”.  Then anyone in the Room can control the viewers, by going back and forth, using the drawing tools, etc.
-Note that the actual media is not sent through the web, but must be kept locally.  If you are mixing platforms or the media is not on the same location on both remote locations, you should use Preferences-&gt;Path Mapping to make sure the media is found.</p>
+<p>The WebRTC Panel allows syncing two or more remote viewers anywhere in the Web in a “Room”.  Then anyone in the Room can control the viewers, by going back and forth, using the drawing tools, etc.</p>
+<p>To use WebRTC, you first should set the name of your Studio in Preferences-&gt;WebRTC-&gt;Studio.  You should make it a unique name so that it is not exposed by chance.</p>
+<p>Then you should set the Room name also to a relatively unique name (avoid names like “RoomA” or “Room1”)</p>
+<p>Starting with v1.7.1, The actual media <em>CAN BE</em> sent through a special data channel, encrypted.  Think P2P, BitTorrent or Zoom.
+The client that misses the data is stopped, while the machine that has the clips can still interact while sendinging the content in the background.  Note that unlike other viewers, there’s no need for a centralized server on the cloud.  The server and client are the same artists’ computers.
+This happens if the media resolution cannot be found in the same place or through Path Mappings.
+If you are mixing platforms or the media is already there on both places but not on the same location, you should use Preferences-&gt;Path Mapping first to make sure the media is found and avoid transfers through the internet.</p>
 </section>
 </section>
 

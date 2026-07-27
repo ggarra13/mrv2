@@ -99,5 +99,11 @@
             </array>
         </dict>
     </array>
+
+    <key>NSCameraUsageDescription</key>
+    <string>This application requires camera access for WebRTC video streaming.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This application requires microphone access for WebRTC audio streaming.</string>
+    
 </dict>
 </plist>

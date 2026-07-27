@@ -552,12 +552,12 @@ msgid ""
 "\n"
 "Image module.\n"
 "\n"
-"Contains all classes and enums related to image controls. \n"
+"Contains all classes and enums related to image controls.\n"
 msgstr ""
 "\n"
-"Модуль изображения.\n"
+"Модуль изображений.\n"
 "\n"
-"Содержит все классы и энумы, связанные с управлением изображениями.\n"
+"Содержит все классы и перечисления, связанные с элементами управления изображением.\n"
 
 msgid "Red Channel."
 msgstr "Красный канал."
@@ -645,6 +645,12 @@ msgstr "Включён Мягкий Клип."
 
 msgid "Soft clip value."
 msgstr "Мягкое значение клипа."
+
+msgid "Aspect Ratio."
+msgstr "Соотношение сторон."
+
+msgid "Aspect Ratio Options."
+msgstr "Параметры соотношения сторон."
 
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
 msgstr "Фильтр уменьшения масштаба :class:`mrv2.image.ImageFilter`."
@@ -1259,6 +1265,9 @@ msgid ""
 msgstr ""
 "Номер порта для сервера, чтобы слушать или чтобы клиент подключался к нему."
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "Подключиться к комнате WebRTC по адресу <value>."
+
 msgid "Miscellaneous:"
 msgstr "Разное:"
 
@@ -1552,11 +1561,20 @@ msgstr "Имя комнаты для входа."
 msgid ""
 "Share the room ID with the persons that will review the session with you.\n"
 "\n"
-"Note that this feature is only available in the Pro+ tier."
 msgstr ""
 "Поделитесь идентификатором комнаты с людьми, которые будут просматривать сеанс вместе с вами.\n"
 "\n"
-"Обратите внимание, что эта функция доступна только в версии Pro+."
+
+msgid ""
+"This feature is unlimited on the Pro and Pro+ tiers.\n"
+"\n"
+"On other tiers, it is limited to 2\n"
+"connections and 30 minutes of use."
+msgstr ""
+"Эта функция доступна без ограничений в тарифах Pro и Pro+.\n"
+"\n"
+"В остальных тарифах она ограничена 2\n"
+"подключениями и 30 минутами использования."
 
 msgid "Type of Waveform Monitor."
 msgstr "Тип монитора осциллограммы."
@@ -2516,6 +2534,14 @@ msgstr "Примечания"
 msgid "STUN server is {0}"
 msgstr "STUN-сервер: {0}"
 
+msgid "Cannot connect to WebRTC: User is not authorized or license expired"
+msgstr ""
+"Не удалось подключиться к WebRTC: пользователь не авторизован или срок "
+"действия лицензии истёк"
+
+msgid "No Web RTC Studio set.  Please update Preferences->WebRTC Studio"
+msgstr "Студия WebRTC не задана. Обновите настройки: Настройки->Студия WebRTC"
+
 msgid "The room ID is: {0}"
 msgstr "Идентификатор комнаты: {0}"
 
@@ -2582,6 +2608,16 @@ msgstr ""
 
 msgid "Transfers"
 msgstr "Передачи"
+
+msgid ""
+"The timeline downloaded, but the following referenced media could not be found on the server:\n"
+"\n"
+msgstr ""
+"Таймлайн был загружен, но следующие связанные медиафайлы не удалось найти на сервере:\n"
+"\n"
+
+msgid "Download failed."
+msgstr "Не удалось выполнить загрузку."
 
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr ""
@@ -2701,6 +2737,12 @@ msgstr "Запуск OCIO Conig из переменной окружающей �
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Картирование путей было загружено с \" {0} {1}\"."
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "Ошибка при удалении каталога: «{0}»."
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "Каталог очищен: «{0}»."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Загрузка хот-дога из \"{0}{1}.prefs\"."
@@ -4693,6 +4735,12 @@ msgstr "С msvc"
 msgid "mrv2 depends on:"
 msgstr "mrv2 зависит от:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "Общий объём физической памяти: {0} ГБ"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "Общий объём виртуальной памяти: {0} ГБ"
+
 msgid "Vendor:\t"
 msgstr "Поставщик:"
 
@@ -6132,6 +6180,21 @@ msgstr "× 3"
 msgid "X 4"
 msgstr "× 4"
 
+msgid "Internet"
+msgstr "Интернет"
+
+msgid "LAN"
+msgstr "Локальная сеть"
+
+msgid "Home Directory"
+msgstr "Домашний каталог"
+
+msgid "Temp Directory"
+msgstr "Временный каталог"
+
+msgid "Custom"
+msgstr "Пользовательский"
+
 msgid "Do Nothing"
 msgstr "Ничего не делай"
 
@@ -7048,6 +7111,51 @@ msgid ""
 msgstr ""
 "Эта установка открывает трубу для связи с ComfyUI mrv2_save_exr_node.py"
 
+msgid "WebRTC settings"
+msgstr "Настройки WebRTC"
+
+msgid "WebRTC Presets"
+msgstr "Предустановки WebRTC"
+
+msgid "WebRTC presets"
+msgstr "Предустановки WebRTC"
+
+msgid "Stun Server"
+msgstr "Сервер STUN"
+
+msgid "WebRTC STUN Server.  Leave blank to use Google's."
+msgstr ""
+"STUN-сервер WebRTC. Оставьте поле пустым, чтобы использовать сервер Google."
+
+msgid "WebRTC Server"
+msgstr "Сервер WebRTC"
+
+msgid "WebRTC server used to sync the connections."
+msgstr "Сервер WebRTC, используемый для синхронизации соединений."
+
+msgid "Studio name to prefix to all Room connections.  Use some unique name."
+msgstr ""
+"Имя студии, добавляемое в качестве префикса ко всем подключениям к комнатам."
+" Используйте уникальное имя."
+
+msgid "Clean directory at Start up"
+msgstr "Очищать каталог при запуске"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "Очищать каталог кэша WebRTC при запуске программы просмотра."
+
+msgid "WebRTC Cache"
+msgstr "Кэш WebRTC"
+
+msgid "Cache Directory presets."
+msgstr "Предустановки каталога кэша."
+
+msgid "Cache Directory"
+msgstr "Каталог кэша"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "Каталог, в котором будут храниться загрузки WebRTC."
+
 msgid "Errors"
 msgstr "Ошибки"
 
@@ -7445,6 +7553,9 @@ msgstr ""
 
 msgid "{0} Active Licenses from {1}."
 msgstr "{0} активных лицензий от {1}."
+
+msgid "Valid license for {0}"
+msgstr "Действительная лицензия для {0}"
 
 msgid "Could not release floating license"
 msgstr "Не удалось освободить плавающую лицензию."
@@ -8055,12 +8166,6 @@ msgstr "shop_statistics64 не сработал"
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
 
-#~ msgid ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-#~ msgstr ""
-#~ "Получите аргументы в командной линии, как одна цитируемая струна - "
-#~ "PythonArgs."
-
 #~ msgid "Complexity"
 #~ msgstr "Сложность"
 
@@ -8069,9 +8174,6 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "Disk Cache in GB"
 #~ msgstr "Дисковый кэш в GB"
-
-#~ msgid "Remote files are less than local files."
-#~ msgstr "Удалённые файлы меньше, чем местные."
 
 #~ msgid "Rotated image info: {0}"
 #~ msgstr "Информация о поворачиваемых изображениях: {0}"
@@ -8101,6 +8203,18 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Неверный шрифт для текстового рисунка"
+
+#~ msgid "No Web RTC Server set."
+#~ msgstr "Сервер WebRTC не задан."
+
+#~ msgid ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+#~ msgstr ""
+#~ "Получите аргументы в командной линии, как одна цитируемая струна - "
+#~ "PythonArgs."
+
+#~ msgid "Remote files are less than local files."
+#~ msgstr "Удалённые файлы меньше, чем местные."
 
 #~ msgid "Start or In Point of the video."
 #~ msgstr "Начало видео или точка In."

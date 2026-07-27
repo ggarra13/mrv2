@@ -6,6 +6,7 @@
 
 #include <tlTimeline/ImageOptions.h>
 
+#include <tlCore/Box.h>
 #include <tlCore/Color.h>
 #include <tlCore/Image.h>
 #include <tlCore/Matrix.h>
@@ -48,7 +49,7 @@ namespace tl
         void to_json(nlohmann::json& j, const Color& value);
 
         void from_json(const nlohmann::json& j, Color& value);
-        
+
         //! Get a brightness color matrix.
         math::Matrix4x4f brightness(const math::Vector3f&);
 
@@ -81,7 +82,7 @@ namespace tl
         void to_json(nlohmann::json& j, const Levels& value);
 
         void from_json(const nlohmann::json& j, Levels& value);
-        
+
         //! These values match the ones in exrdisplay for comparison and
         //! testing.
         struct EXRDisplay
@@ -99,7 +100,7 @@ namespace tl
         void to_json(nlohmann::json& j, const EXRDisplay& value);
 
         void from_json(const nlohmann::json& j, EXRDisplay& value);
-        
+
         //! Soft clip.
         struct SoftClip
         {
@@ -113,7 +114,7 @@ namespace tl
         void to_json(nlohmann::json& j, const SoftClip& value);
 
         void from_json(const nlohmann::json& j, SoftClip& value);
-        
+
         //! Autonormalize.
         struct Normalize
         {
@@ -128,7 +129,7 @@ namespace tl
         void to_json(nlohmann::json& j, const Normalize& value);
 
         void from_json(const nlohmann::json& j, Normalize& value);
-        
+
         //! HDR usage.
         enum class HDRInformation {
             FromFile,
@@ -140,12 +141,95 @@ namespace tl
         };
         TLRENDER_ENUM(HDRInformation);
         TLRENDER_ENUM_SERIALIZE(HDRInformation);
-        
+
+
+        //! Aspect ratio.
+        struct AspectRatio
+        {
+            AspectRatio() = default;
+            explicit AspectRatio(float num, float den = 1.F);
+
+            float num = 1.F;
+            float den = 1.F;
+
+            bool isValid() const;
+
+            operator float () const;
+
+            bool operator == (const AspectRatio&) const;
+            bool operator != (const AspectRatio&) const;
+        };
+
+        //! Get a label.
+        std::string getLabel(const AspectRatio&);
+
+        //! Aspect ratio types.
+        enum class AspectRatioType
+        {
+            Pixel,
+            Display,
+
+            Count,
+            First = Pixel
+        };
+        TLRENDER_ENUM(AspectRatioType);
+
+        //! Aspect ratio options.
+        struct AspectRatioOptions
+        {
+            AspectRatioOptions() = default;
+            AspectRatioOptions(const AspectRatio&, AspectRatioType);
+
+            AspectRatio     value = AspectRatio(0.F, 0.F);
+            AspectRatioType type  = AspectRatioType::Pixel;
+
+            bool operator == (const AspectRatioOptions&) const;
+            bool operator != (const AspectRatioOptions&) const;
+        };
+
+        //! Get the aspect ratio.
+        float getAspectRatio(
+            const image::Info&,
+            const AspectRatioOptions&);
+
+        //! Get the render size.
+        math::Size2i getRenderSize(
+            const image::Info&,
+            const AspectRatioOptions&);
+
+        //! Horizontal box alignment.
+        enum class BoxHAlign
+        {
+            Center,
+            Left,
+            Right
+        };
+
+        //! Vertical box alignment.
+        enum class BoxVAlign
+        {
+            Center,
+            Top,
+            Bottom
+        };
+
+        //! Get a box that fits within the given box.
+        math::Box2i getBox(
+            const math::Box2i&,
+            const image::Info&,
+            const AspectRatioOptions&,
+            BoxHAlign = BoxHAlign::Center,
+            BoxVAlign = BoxVAlign::Center);
+
+        //! Get a label.
+        std::string getLabel(const AspectRatioOptions&);
+
         //! Display options.
         struct DisplayOptions
         {
             Channels channels = Channels::Color;
             image::Mirror mirror;
+            AspectRatioOptions aspect;
             Color color;
             Levels levels;
             EXRDisplay exrDisplay;
@@ -160,7 +244,7 @@ namespace tl
             bool operator==(const DisplayOptions&) const;
             bool operator!=(const DisplayOptions&) const;
         };
-        
+
         void to_json(nlohmann::json& j, const DisplayOptions& value);
 
         void from_json(const nlohmann::json& j, DisplayOptions& value);

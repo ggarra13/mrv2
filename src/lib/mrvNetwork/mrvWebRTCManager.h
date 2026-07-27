@@ -15,6 +15,7 @@ namespace mrv
     {
     public:
         WebRTCManager();
+        ~WebRTCManager();
 
         void setConfiguration(const rtc::Configuration&);
 
@@ -51,6 +52,9 @@ namespace mrv
         void erase(const std::string& peerId);
 
     protected:
+        // queue-based, non-blocking
+        void requestErase(const std::string& peerId);
+        void eraseWorker();                            // runs on eraseThread_
         void drainPendingCandidates(const std::string& peerId);
 
         rtc::Configuration config;
@@ -58,6 +62,12 @@ namespace mrv
         std::unordered_map<std::string, std::vector<rtc::Candidate> > pendingCandidates;
 
         std::mutex mtx;
+
+        std::thread eraseThread_;
+        std::mutex eraseQueueMutex_;
+        std::condition_variable eraseQueueCv_;
+        std::deque<std::string> eraseQueue_;
+        bool stopping_ = false;   // guarded by eraseQueueMutex_
     };
 
 }

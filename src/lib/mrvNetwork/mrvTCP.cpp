@@ -60,7 +60,7 @@ namespace mrv
     TCP* tcp = nullptr;
 
     std::mutex TCP::m_receiveMutex;
-    std::list< Message > TCP::m_receive;
+    std::deque< Message > TCP::m_receive;
 
     TCP::TCP() {}
 

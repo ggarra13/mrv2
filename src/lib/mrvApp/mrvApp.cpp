@@ -10,6 +10,16 @@
 #endif
 
 
+#include "mrvNetwork/mrvDummyClient.h"
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvCommandInterpreter.h"
+#    include "mrvNetwork/mrvClient.h"
+#    include "mrvNetwork/mrvComfyUIListener.h"
+#    include "mrvNetwork/mrvImageListener.h"
+#    include "mrvNetwork/mrvServer.h"
+#    include "mrvNetwork/mrvParseHost.h"
+#    include "mrvNetwork/mrvWebRTCClient.h"
+#endif
 
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
@@ -77,15 +87,6 @@ namespace py = pybind11;
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvNetwork/mrvDummyClient.h"
-#ifdef MRV2_NETWORK
-#    include "mrvNetwork/mrvCommandInterpreter.h"
-#    include "mrvNetwork/mrvClient.h"
-#    include "mrvNetwork/mrvComfyUIListener.h"
-#    include "mrvNetwork/mrvImageListener.h"
-#    include "mrvNetwork/mrvServer.h"
-#    include "mrvNetwork/mrvParseHost.h"
-#endif
 
 #if defined(TLRENDER_USD)
 #    include "mrvOptions/mrvUSD.h"
@@ -172,6 +173,8 @@ namespace mrv
         bool server = false;
         std::string client;
         unsigned port = 55150;
+
+        std::string webrtcRoom;
 #endif
 
         timeline::CompareOptions compareOptions;
@@ -516,6 +519,9 @@ namespace mrv
                     _("Port number for the server to listen to or for the "
                       "client to connect to."),
                     string::Format("{0}").arg(p.options.port)),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.webrtcRoom, {"-room"},
+                    _("Connect to a WebRTC room at <value>.")),
 #endif
 
                 app::CmdLineHeader::create({}, _("Miscellaneous:")),
@@ -1121,6 +1127,17 @@ namespace mrv
             store_port(p.options.port);
         }
 
+        if (!p.options.webrtcRoom.empty() &&
+            dynamic_cast<DummyClient*>(tcp) != nullptr)
+        {
+            std::string roomId = p.options.webrtcRoom;
+            p.settings->setValue("WebRTC/Room", roomId);
+            std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
+            if (studio.empty())
+                studio = ui->uiPrefs->uiPrefsWebRTCStudio->value();
+
+            tcp = new WebRTCClient(studio, roomId);
+        }
 #endif
 
         //
@@ -1465,7 +1482,7 @@ namespace mrv
         TLRENDER_P();
 
         bool isLocked = tcp->isLocked();
-        
+
         tcp->lock();
         p.player->setPlayback(timeline::Playback::Stop);
 
@@ -1878,8 +1895,9 @@ namespace mrv
     App::open(const std::string& fileName, const std::string& audioFileName)
     {
         TLRENDER_P();
-            
+
         file::Path filePath(string::normalizePath(fileName));
+        file::Path audioFilePath(string::normalizePath(audioFileName));
 
         if (filePath.getExtension() == ".mrv2s")
         {
@@ -1910,18 +1928,9 @@ namespace mrv
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
-            item->audioPath = file::Path(string::normalizePath(audioFileName));
+            item->audioPath = audioFilePath;
 
             p.filesModel->add(item);
-        }
-
-        if (ui->uiPrefs->SendMedia->value())
-        {
-            Message msg;
-            msg["command"] = "Open File";
-            msg["fileName"] = fileName;
-            msg["audioFileName"] = audioFileName;
-            tcp->pushMessage(msg);
         }
     }
 
@@ -2216,6 +2225,15 @@ namespace mrv
 
         auto out = timeline::Timeline::create(otioTimeline, _context, options);
 
+        if (ui->uiPrefs->SendMedia->value())
+        {
+            Message msg;
+            msg["command"] = "Open File";
+            msg["filePath"] = item->path;
+            msg["audioFilePath"] = item->audioPath;
+            tcp->pushMessage(msg);
+        }
+
 #ifdef MRV2_PYBIND11
         const std::string& path = item->path.get();
         const std::string& audioPath = item->audioPath.get();
@@ -2340,7 +2358,14 @@ namespace mrv
                             if (!file::isTemporaryEDL(item->path) &&
                                 !file::isTemporaryNDI(item->path))
                             {
-                                const std::string& file = item->path.get();
+                                std::string file = item->path.get();
+                                auto frames = item->path.getFrames();
+                                if (frames.has_value())
+                                {
+                                    const math::Int64Range& range = frames.value();
+                                    const bool listdir = true;
+                                    file = item->path.getFrame(range.getMin(), listdir);
+                                }
                                 p.settings->addRecentFile(file);
                             }
                         }

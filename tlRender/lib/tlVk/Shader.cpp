@@ -14,6 +14,7 @@
 #include <atomic>
 #include <cassert>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 
 namespace tl
@@ -642,6 +643,28 @@ namespace tl
             // If you use push constants, define them here
             if (pushSize > 0)
             {
+                // The Vulkan 1.3 spec only guarantees a minimum of 128
+                // bytes for maxPushConstantsSize. Desktop NVIDIA and AMD
+                // drivers both expose 256 bytes, which is why a push
+                // constant struct in the 129-256 byte range can look fine
+                // there and still fail pipeline-layout creation on an
+                // implementation that only offers the guaranteed minimum.
+                VkPhysicalDeviceProperties deviceProps{};
+                vkGetPhysicalDeviceProperties(ctx.gpu, &deviceProps);
+                const uint32_t maxPushConstantsSize =
+                    deviceProps.limits.maxPushConstantsSize;
+
+                if (pushSize > maxPushConstantsSize)
+                {
+                    std::ostringstream os;
+                    os << "tl::vlk::Shader " << shaderName
+                       << ": push constant size (" << pushSize
+                       << " bytes) exceeds this device's "
+                          "maxPushConstantsSize ("
+                       << maxPushConstantsSize << " bytes).";
+                    throw std::runtime_error(os.str());
+                }
+
                 VkPushConstantRange pushConstantRange = {};
                 pushConstantRange.stageFlags = pushStageFlags;
                 pushConstantRange.offset = 0;

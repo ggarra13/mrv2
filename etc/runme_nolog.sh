@@ -28,6 +28,30 @@ echo "PATH is now set now to ${PATH}"
 echo "It has:"
 mkdir -p $PWD/${BUILD_DIR}/install/bin/
 
+#
+# Create Windows certificate file
+#
+if [[ $KERNEL == *Windows* ]]; then
+    if [[ ! -e certificates/mrv2.pfx ]]; then
+	cd certificates
+	./create_windows_cert.sh
+	cd -
+    fi
+elif [[ $KERNEL == *Darwin* ]]; then
+    echo "Global secrets"
+    echo "--------------"
+    echo "MACOS_CERTIFICATE_BASE64=$MACOS_CERTIFICATE_BASE64"
+    echo "P12_PASSWORD=$P12_PASSWORD"
+    echo "DEVELOPER_ID=$DEVELOPER_ID"
+    echo "APPLE_ID=$APPLE_ID"
+    echo "TEAM_ID=$TEAM_ID"
+    echo "NOTARYTOOL_PROFILE=$NOTARYTOOL_PROFILE"
+    echo
+    echo "Local secrets"
+    echo "-------------"
+    echo "APP_PASSWORD=$APP_PASSWORD"
+fi
+
 if [[ $INSTALL_CMAKE == 1 ]]; then
     . etc/install_cmake.sh
 fi
@@ -557,6 +581,7 @@ else
     echo
     exit 1
 fi
+
 
 #
 # Work-around FLTK's CMakeLists.txt bug

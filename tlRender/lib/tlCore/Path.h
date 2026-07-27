@@ -96,6 +96,7 @@ namespace tl
             ///@{
 
             const std::string& get() const;
+
             bool isEmpty() const;
 
             bool hasProtocol() const;
@@ -115,6 +116,8 @@ namespace tl
             std::string getExtension() const;
             std::string getRequest() const;
             std::string getFileName(bool dir = false) const;
+            std::string getFileNameWithRange(bool dir = false) const;
+
 
             void setProtocol(const std::string&);
             void setDirectory(const std::string&);

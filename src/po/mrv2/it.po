@@ -545,10 +545,12 @@ msgid ""
 "\n"
 "Image module.\n"
 "\n"
-"Contains all classes and enums related to image controls. \n"
+"Contains all classes and enums related to image controls.\n"
 msgstr ""
 "\n"
-"Modulo immagine. Contiene tutte le classi e enum relativi ai controlli immagine.\n"
+"Modulo immagine.\n"
+"\n"
+"Contiene tutte le classi e le enumerazioni relative ai controlli dell'immagine.\n"
 
 msgid "Red Channel."
 msgstr "Canale Rosso."
@@ -636,6 +638,12 @@ msgstr "Clip morbido abilitato."
 
 msgid "Soft clip value."
 msgstr "Valore del clip morbido."
+
+msgid "Aspect Ratio."
+msgstr "Rapporto d'aspetto."
+
+msgid "Aspect Ratio Options."
+msgstr "Opzioni del rapporto d'aspetto."
 
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
 msgstr "Minify filter :class:`mrv2.image.ImageFilter`."
@@ -1249,6 +1257,9 @@ msgid ""
 msgstr ""
 "Numero di porta per il server da ascoltare o per il client da connettersi."
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "Connettiti a una stanza WebRTC su <value>."
+
 msgid "Miscellaneous:"
 msgstr "Varie:"
 
@@ -1542,11 +1553,20 @@ msgstr "Nome della stanza a cui accedere."
 msgid ""
 "Share the room ID with the persons that will review the session with you.\n"
 "\n"
-"Note that this feature is only available in the Pro+ tier."
 msgstr ""
-"Condividi l'ID della stanza con le persone che revisioneranno la sessione con te.\n"
+"Condividi l'ID della stanza con le persone che esamineranno la sessione insieme a te.\n"
 "\n"
-"Nota che questa funzione è disponibile solo nel piano Pro+."
+
+msgid ""
+"This feature is unlimited on the Pro and Pro+ tiers.\n"
+"\n"
+"On other tiers, it is limited to 2\n"
+"connections and 30 minutes of use."
+msgstr ""
+"Questa funzionalità è illimitata nei piani Pro e Pro+.\n"
+"\n"
+"Negli altri piani è limitata a 2\n"
+"connessioni e 30 minuti di utilizzo."
 
 msgid "Type of Waveform Monitor."
 msgstr "Tipo di monitor forma d'onda."
@@ -2515,6 +2535,14 @@ msgstr "Note"
 msgid "STUN server is {0}"
 msgstr "Il server STUN è {0}"
 
+msgid "Cannot connect to WebRTC: User is not authorized or license expired"
+msgstr ""
+"Impossibile connettersi a WebRTC: l'utente non è autorizzato o la licenza è "
+"scaduta"
+
+msgid "No Web RTC Studio set.  Please update Preferences->WebRTC Studio"
+msgstr "Nessuno studio WebRTC impostato. Aggiornare Preferenze->Studio WebRTC"
+
 msgid "The room ID is: {0}"
 msgstr "L'ID della stanza è: {0}"
 
@@ -2580,6 +2608,16 @@ msgstr ""
 
 msgid "Transfers"
 msgstr "Trasferimenti"
+
+msgid ""
+"The timeline downloaded, but the following referenced media could not be found on the server:\n"
+"\n"
+msgstr ""
+"La timeline è stata scaricata, ma i seguenti file multimediali referenziati non sono stati trovati sul server:\n"
+"\n"
+
+msgid "Download failed."
+msgstr "Download non riuscito."
 
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr ""
@@ -2698,6 +2736,12 @@ msgstr ""
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Le mappature dei percorsi sono state caricate da \"{0}{1}\"."
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "Errore durante l'eliminazione della directory: \"{0}\"."
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "Directory ripulita: \"{0}\"."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Caricamento di tasti di avviamento da \"{0}{1}.prefs\"."
@@ -4697,6 +4741,12 @@ msgstr "Con msvc"
 msgid "mrv2 depends on:"
 msgstr "mrv2 dipende da:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "Memoria fisica totale: {0} GB"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "Memoria virtuale totale: {0} GB"
+
 msgid "Vendor:\t"
 msgstr "Fornitore:"
 
@@ -6133,6 +6183,21 @@ msgstr "× 3"
 msgid "X 4"
 msgstr "× 4"
 
+msgid "Internet"
+msgstr "Internet"
+
+msgid "LAN"
+msgstr "LAN"
+
+msgid "Home Directory"
+msgstr "Directory home"
+
+msgid "Temp Directory"
+msgstr "Directory temporanea"
+
+msgid "Custom"
+msgstr "Personalizzata"
+
 msgid "Do Nothing"
 msgstr "Non fare niente"
 
@@ -7072,6 +7137,50 @@ msgstr ""
 "Questa impostazione apre un tubo per comunicare con mrv2_save_exr_node.py di"
 " ComfyUI"
 
+msgid "WebRTC settings"
+msgstr "Impostazioni WebRTC"
+
+msgid "WebRTC Presets"
+msgstr "Preimpostazioni WebRTC"
+
+msgid "WebRTC presets"
+msgstr "Preimpostazioni WebRTC"
+
+msgid "Stun Server"
+msgstr "Server STUN"
+
+msgid "WebRTC STUN Server.  Leave blank to use Google's."
+msgstr "Server STUN WebRTC. Lasciare vuoto per usare quello di Google."
+
+msgid "WebRTC Server"
+msgstr "Server WebRTC"
+
+msgid "WebRTC server used to sync the connections."
+msgstr "Server WebRTC utilizzato per sincronizzare le connessioni."
+
+msgid "Studio name to prefix to all Room connections.  Use some unique name."
+msgstr ""
+"Nome dello studio da anteporre a tutte le connessioni delle stanze. "
+"Utilizzare un nome univoco."
+
+msgid "Clean directory at Start up"
+msgstr "Pulisci la directory all'avvio"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "Pulisci la directory della cache WebRTC all'avvio del visualizzatore."
+
+msgid "WebRTC Cache"
+msgstr "Cache WebRTC"
+
+msgid "Cache Directory presets."
+msgstr "Preimpostazioni della directory della cache."
+
+msgid "Cache Directory"
+msgstr "Directory della cache"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "Directory in cui verranno salvati i download WebRTC."
+
 msgid "Errors"
 msgstr "Errori"
 
@@ -7472,6 +7581,9 @@ msgstr ""
 
 msgid "{0} Active Licenses from {1}."
 msgstr "{0} licenze attive da {1}."
+
+msgid "Valid license for {0}"
+msgstr "Licenza valida per {0}"
 
 msgid "Could not release floating license"
 msgstr "Impossibile rilasciare la licenza flottante."
@@ -8082,12 +8194,6 @@ msgstr "host_statistics64 non riuscito"
 msgid "task info failed"
 msgstr "Informazione dell'attività non riuscita"
 
-#~ msgid ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-#~ msgstr ""
-#~ "Ottieni gli argomenti di linea di comando passati come singola stringa "
-#~ "citata a -pythonArgs."
-
 #~ msgid "Complexity"
 #~ msgstr "Complexità"
 
@@ -8096,9 +8202,6 @@ msgstr "Informazione dell'attività non riuscita"
 
 #~ msgid "Disk Cache in GB"
 #~ msgstr "Cache disco in GB"
-
-#~ msgid "Remote files are less than local files."
-#~ msgstr "I file remoti sono inferiori ai file locali."
 
 #~ msgid "Rotated image info: {0}"
 #~ msgstr "Informazioni sull'immagine rotante: {0}"
@@ -8128,6 +8231,18 @@ msgstr "Informazione dell'attività non riuscita"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Tipo di carattere non valido per il disegno di testo"
+
+#~ msgid "No Web RTC Server set."
+#~ msgstr "Nessun server WebRTC impostato."
+
+#~ msgid ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+#~ msgstr ""
+#~ "Ottieni gli argomenti di linea di comando passati come singola stringa "
+#~ "citata a -pythonArgs."
+
+#~ msgid "Remote files are less than local files."
+#~ msgstr "I file remoti sono inferiori ai file locali."
 
 #~ msgid "Start or In Point of the video."
 #~ msgstr "Inizio o punto di ingresso (In) del video."

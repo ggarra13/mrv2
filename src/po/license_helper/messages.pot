@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: license_helper v1.7.0\n"
+"Project-Id-Version: license_helper v1.7.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -51,11 +51,27 @@ msgstr ""
 
 msgid ""
 "\n"
-"Annotations and Saving only for a year\n"
+"Annotations for one year\n"
 "Solo + Python for one year\n"
 "Standard + Editing for one year\n"
 "Editing + Voice and Link Annotations for one year\n"
 "All of Pro but without expiration date (you own it).\n"
+msgstr ""
+
+msgid ""
+"Floating licenses available upon request. Contact\n"
+"ggarra13@@gmail.com and once agreed upon price,\n"
+"you will be given a Master Key.  Enter it here and\n"
+"follow the instructions you will be given."
+msgstr ""
+
+msgid "Master Key"
+msgstr ""
+
+msgid "Install"
+msgstr ""
+
+msgid "Demo"
 msgstr ""
 
 msgid "Custom Development"

@@ -532,10 +532,12 @@ msgid ""
 "\n"
 "Image module.\n"
 "\n"
-"Contains all classes and enums related to image controls. \n"
+"Contains all classes and enums related to image controls.\n"
 msgstr ""
 "\n"
-"Bildmodul. Enthlt alle Klassen und Enums im Zusammenhang mit Bildsteuerungen.\n"
+"Bildmodul.\n"
+"\n"
+"Enthält alle Klassen und Enums für die Bildsteuerung.\n"
 
 msgid "Red Channel."
 msgstr "Roter Kanal."
@@ -623,6 +625,12 @@ msgstr "Soft Clip aktiviert."
 
 msgid "Soft clip value."
 msgstr "Soft-Clip-Wert."
+
+msgid "Aspect Ratio."
+msgstr "Seitenverhältnis."
+
+msgid "Aspect Ratio Options."
+msgstr "Optionen für das Seitenverhältnis."
 
 msgid "Minify filter :class:`mrv2.image.ImageFilter`."
 msgstr "Filter verkleinern :class:`mrv2.image.ImageFilter`."
@@ -1234,6 +1242,9 @@ msgid ""
 "Port number for the server to listen to or for the client to connect to."
 msgstr "Portnummer fr den Server zum Anhren oder zum Verbinden des Clients."
 
+msgid "Connect to a WebRTC room at <value>."
+msgstr "Mit einem WebRTC-Raum unter <value> verbinden."
+
 msgid "Miscellaneous:"
 msgstr "Verschiedenes:"
 
@@ -1527,11 +1538,20 @@ msgstr "Name des Raums, dem beigetreten werden soll."
 msgid ""
 "Share the room ID with the persons that will review the session with you.\n"
 "\n"
-"Note that this feature is only available in the Pro+ tier."
 msgstr ""
-"Teilen Sie die Raum-ID mit den Personen, die die Sitzung mit Ihnen begutachten werden.\n"
+"Geben Sie die Raum-ID an die Personen weiter, die die Sitzung gemeinsam mit Ihnen überprüfen werden.\n"
 "\n"
-"Beachten Sie, dass diese Funktion nur in der Pro+-Version verfügbar ist."
+
+msgid ""
+"This feature is unlimited on the Pro and Pro+ tiers.\n"
+"\n"
+"On other tiers, it is limited to 2\n"
+"connections and 30 minutes of use."
+msgstr ""
+"Diese Funktion ist in den Pro- und Pro+-Tarifen unbegrenzt verfügbar.\n"
+"\n"
+"In allen anderen Tarifen ist sie auf 2\n"
+"Verbindungen und 30 Minuten Nutzungsdauer begrenzt."
 
 msgid "Type of Waveform Monitor."
 msgstr "Typ des Waveform-Monitors."
@@ -2503,6 +2523,16 @@ msgstr "Anmerkungen"
 msgid "STUN server is {0}"
 msgstr "STUN-Server ist {0}"
 
+msgid "Cannot connect to WebRTC: User is not authorized or license expired"
+msgstr ""
+"Verbindung zu WebRTC nicht möglich: Benutzer ist nicht autorisiert oder die "
+"Lizenz ist abgelaufen"
+
+msgid "No Web RTC Studio set.  Please update Preferences->WebRTC Studio"
+msgstr ""
+"Kein WebRTC-Studio festgelegt. Bitte aktualisieren Sie "
+"Einstellungen->WebRTC-Studio"
+
 msgid "The room ID is: {0}"
 msgstr "Die Raum-ID lautet: {0}"
 
@@ -2569,6 +2599,16 @@ msgstr ""
 
 msgid "Transfers"
 msgstr "Übertragungen"
+
+msgid ""
+"The timeline downloaded, but the following referenced media could not be found on the server:\n"
+"\n"
+msgstr ""
+"Die Zeitleiste wurde heruntergeladen, aber die folgenden referenzierten Medien konnten auf dem Server nicht gefunden werden:\n"
+"\n"
+
+msgid "Download failed."
+msgstr "Download fehlgeschlagen."
 
 msgid "Remote file {0} not found locally and no peer to fetch it from."
 msgstr ""
@@ -2686,6 +2726,12 @@ msgstr "Einstellung von OCIO config aus der Umgebungsvariable OCIO."
 
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Pfad-Mappings wurden aus \"{0}{1}\" geladen."
+
+msgid "Error deleting directory: \"{0}\"."
+msgstr "Fehler beim Löschen des Verzeichnisses: „{0}“."
+
+msgid "Cleaned directory: \"{0}\"."
+msgstr "Verzeichnis bereinigt: „{0}“."
 
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Hotkeys von \"{0}{1}.prefs\" werden geladen."
@@ -4688,6 +4734,12 @@ msgstr "Mit msvc"
 msgid "mrv2 depends on:"
 msgstr "mrv2 hngt ab von:"
 
+msgid "Total Physical Memory: {0} Gb"
+msgstr "Gesamter physischer Speicher: {0} GB"
+
+msgid "Total Virtual Memory: {0} Gb"
+msgstr "Gesamter virtueller Speicher: {0} GB"
+
 msgid "Vendor:\t"
 msgstr "Hersteller:"
 
@@ -6124,6 +6176,21 @@ msgstr "× 3"
 msgid "X 4"
 msgstr "× 4"
 
+msgid "Internet"
+msgstr "Internet"
+
+msgid "LAN"
+msgstr "LAN"
+
+msgid "Home Directory"
+msgstr "Persönliches Verzeichnis"
+
+msgid "Temp Directory"
+msgstr "Temporäres Verzeichnis"
+
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
 msgid "Do Nothing"
 msgstr "Nichts tun"
 
@@ -7053,6 +7120,51 @@ msgstr ""
 "Diese Einstellung ffnet eine Pipe, um mit ComfyUIs mrv2_save_exr_node.py zu "
 "kommunizieren."
 
+msgid "WebRTC settings"
+msgstr "WebRTC-Einstellungen"
+
+msgid "WebRTC Presets"
+msgstr "WebRTC-Voreinstellungen"
+
+msgid "WebRTC presets"
+msgstr "WebRTC-Voreinstellungen"
+
+msgid "Stun Server"
+msgstr "STUN-Server"
+
+msgid "WebRTC STUN Server.  Leave blank to use Google's."
+msgstr "WebRTC-STUN-Server. Leer lassen, um den von Google zu verwenden."
+
+msgid "WebRTC Server"
+msgstr "WebRTC-Server"
+
+msgid "WebRTC server used to sync the connections."
+msgstr ""
+"WebRTC-Server, der zum Synchronisieren der Verbindungen verwendet wird."
+
+msgid "Studio name to prefix to all Room connections.  Use some unique name."
+msgstr ""
+"Studio-Name, der allen Raumverbindungen vorangestellt wird. Verwenden Sie "
+"einen eindeutigen Namen."
+
+msgid "Clean directory at Start up"
+msgstr "Verzeichnis beim Start bereinigen"
+
+msgid "Clean the WebRTC cache directory on start of the viewer."
+msgstr "Das WebRTC-Cache-Verzeichnis beim Start des Viewers bereinigen."
+
+msgid "WebRTC Cache"
+msgstr "WebRTC-Cache"
+
+msgid "Cache Directory presets."
+msgstr "Voreinstellungen für das Cache-Verzeichnis."
+
+msgid "Cache Directory"
+msgstr "Cache-Verzeichnis"
+
+msgid "Directory where WebRTC downloads will reside."
+msgstr "Verzeichnis, in dem WebRTC-Downloads gespeichert werden."
+
 msgid "Errors"
 msgstr "Fehler"
 
@@ -7451,6 +7563,9 @@ msgstr "{0} ist nicht lesbar. Systemstandard wird verwendet."
 
 msgid "{0} Active Licenses from {1}."
 msgstr "{0} aktive Lizenzen von {1}."
+
+msgid "Valid license for {0}"
+msgstr "Gültige Lizenz für {0}"
 
 msgid "Could not release floating license"
 msgstr "Schwimmende Lizenz konnte nicht freigegeben werden."
@@ -8061,12 +8176,6 @@ msgstr "host_statistik64 fehlgeschlagen"
 msgid "task info failed"
 msgstr "Task-Info fehlgeschlagen"
 
-#~ msgid ""
-#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
-#~ msgstr ""
-#~ "Erhalten Sie Kommandozeilen-Argumente, die als einzelne zitierte "
-#~ "Zeichenkette an -pythonArgs bergeben werden."
-
 #~ msgid "Complexity"
 #~ msgstr "Komplexität"
 
@@ -8075,9 +8184,6 @@ msgstr "Task-Info fehlgeschlagen"
 
 #~ msgid "Disk Cache in GB"
 #~ msgstr "Festplatten-Cache in GB"
-
-#~ msgid "Remote files are less than local files."
-#~ msgstr "Entfernte Dateien sind weniger als lokale Dateien."
 
 #~ msgid "Rotated image info: {0}"
 #~ msgstr "Informationen zum gedrehten Bild: {0}"
@@ -8107,6 +8213,18 @@ msgstr "Task-Info fehlgeschlagen"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Ungültige Schriftart für die Texterstellung"
+
+#~ msgid "No Web RTC Server set."
+#~ msgstr "Kein WebRTC-Server festgelegt."
+
+#~ msgid ""
+#~ "Get command-line arguments passed as single quoted string to -pythonArgs."
+#~ msgstr ""
+#~ "Erhalten Sie Kommandozeilen-Argumente, die als einzelne zitierte "
+#~ "Zeichenkette an -pythonArgs bergeben werden."
+
+#~ msgid "Remote files are less than local files."
+#~ msgstr "Entfernte Dateien sind weniger als lokale Dateien."
 
 #~ msgid "E"
 #~ msgstr "E"

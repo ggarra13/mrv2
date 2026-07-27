@@ -92,10 +92,10 @@ namespace mrv
             ViewerUI* ui = nullptr;
 
             //! Video frame and data
-            std::vector<tl::timeline::VideoData> videoData;
+            std::vector<tl::timeline::VideoFrame> videoData;
 
             //! Last valid video frame and data
-            tl::timeline::VideoData lastVideoData;
+            tl::timeline::VideoFrame lastVideoFrame;
 
             //! OpenGL3 fontSystem (used for HUD)
             std::shared_ptr<image::FontSystem> fontSystem;
@@ -195,7 +195,7 @@ namespace mrv
             std::chrono::high_resolution_clock::time_point startTime;
 
             // Observers.
-            std::shared_ptr<observer::ListObserver<timeline::VideoData> >
+            std::shared_ptr<observer::ListObserver<timeline::VideoFrame> >
             videoDataObserver;
 
             //! Overlay.

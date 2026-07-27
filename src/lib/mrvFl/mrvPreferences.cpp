@@ -42,6 +42,7 @@
 #include <FL/Fl_Sys_Menu_Bar.H> // for macOS menus
 
 #include <algorithm>
+#include <system_error>
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -990,6 +991,63 @@ namespace mrv
         ComfyUI.get("input_pipe", tmp, 0);
         uiPrefs->uiPrefsUseComfyUIPipe->value((bool)tmp);
 
+        //
+        // WebRTC
+        //
+        Fl_Preferences WebRTC(base, "WebRTC") ;
+
+        WebRTC.get("stun_server", tmpS, "stun:stun.l.google.com:19302", 4096);
+        uiPrefs->uiPrefsWebRTCStunServer->value(tmpS);
+
+        std::string webrtc_server = "wss://filmaura.cloud/sync";
+        WebRTC.get("webrtc_server", tmpS, webrtc_server.c_str(), 4096);
+        if (strlen(tmpS) != 0)
+            webrtc_server = tmpS;
+        uiPrefs->uiPrefsWebRTCServer->value(webrtc_server.c_str());
+
+        WebRTC.get("webrtc_studio", tmpS, "", 4096);
+        uiPrefs->uiPrefsWebRTCStudio->value(tmpS);
+
+
+        WebRTC.get("clean_directory", tmp, 1);
+        uiPrefs->uiPrefsWebRTCCleanDirectory->value(tmp);
+
+        WebRTC.get("choice", tmp, 0);
+        uiPrefs->uiPrefsWebRTCCacheSetting->value(tmp);
+
+        std::string defaultValue = mrv::homepath() +
+                                   "/.config/mrv2/cache/remote";
+        WebRTC.get("cache_directory", tmpS, defaultValue.c_str(), 4096);
+        uiPrefs->uiPrefsWebRTCCacheDirectory->value(tmpS);
+
+        if (uiPrefs->uiPrefsWebRTCCleanDirectory->value())
+        {
+            std::string dir = uiPrefs->uiPrefsWebRTCCacheDirectory->value();
+            // Make sure path is > 5 letters long for safety.
+            if (dir.size() > 5)
+            {
+                fs::path path = dir;
+                std::error_code ec;
+
+                fs::remove_all(path, ec);
+                if (ec)
+                {
+                    std::string msg =
+                        tl::string::Format(_("Error deleting directory: "
+                                             "\"{0}\".")).
+                                           arg(ec.message());
+                    LOG_ERROR(msg);
+                }
+                else
+                {
+                    std::string msg =
+                        tl::string::Format(_("Cleaned directory: "
+                                             "\"{0}\".")).
+                                           arg(dir);
+                    LOG_STATUS(msg);
+                }
+            }
+        }
 
         //
         // Behavior
@@ -1713,6 +1771,21 @@ namespace mrv
 
         Fl_Preferences ComfyUI(base, "comfyUI");
         ComfyUI.set("input_pipe", (int)uiPrefs->uiPrefsUseComfyUIPipe->value());
+
+        Fl_Preferences WebRTC(base, "WebRTC");
+
+        WebRTC.set("stun_server", uiPrefs->uiPrefsWebRTCStunServer->value());
+
+        WebRTC.set("webrtc_server", uiPrefs->uiPrefsWebRTCServer->value());
+
+        WebRTC.set("webrtc_studio", uiPrefs->uiPrefsWebRTCStudio->value());
+
+        WebRTC.set("choice",
+                   (int)uiPrefs->uiPrefsWebRTCCacheSetting->value());
+        WebRTC.set("clean_directory",
+                   (int)uiPrefs->uiPrefsWebRTCCleanDirectory->value());
+        WebRTC.set("cache_directory",
+                   uiPrefs->uiPrefsWebRTCCacheDirectory->value());
 
         Fl_Preferences audio(base, "audio");
 

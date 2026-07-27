@@ -115,7 +115,7 @@ namespace mrv
         int videoLayer() const;
 
         //! Get the video.
-        const std::vector<timeline::VideoData>& currentVideo() const;
+        const std::vector<timeline::VideoFrame>& currentVideo() const;
 
         ///@}
 
