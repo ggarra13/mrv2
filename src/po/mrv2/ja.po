@@ -5,7 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mrv2 v1.7.1\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"PO-Revision-Date: 2026-07-27 16:34+0900\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2026-07-27 22:27+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -2238,7 +2239,7 @@ msgid "Duration of Subtitle"
 msgstr "字幕の継続時間"
 
 msgid "Linear"
-msgstr "線形"
+msgstr "Linear"
 
 msgid "Logarithmic"
 msgstr "対数"
@@ -3083,22 +3084,22 @@ msgid "Redo Edit"
 msgstr "編集をやり直す"
 
 msgid "Go to the beginning of the sequence."
-msgstr "シーケンスの先頭に移動します。"
+msgstr "シーケンスの先頭に移動。"
 
 msgid "Play sequence backwards."
-msgstr "シーケンスを逆方向に再生します。"
+msgstr "シーケンスを逆方向に再生。"
 
 msgid "Go back one frame."
-msgstr "1フレーム戻ります。"
+msgstr "1フレーム戻る。"
 
 msgid "Stop playback."
-msgstr "再生を停止します。"
+msgstr "再生を停止。"
 
 msgid "Play sequence forwards."
-msgstr "シーケンスを順方向に再生します。"
+msgstr "シーケンスを順方向に再生。"
 
 msgid "Go to the end of the sequence."
-msgstr "シーケンスの末尾に移動します。"
+msgstr "シーケンスの末尾に移動。"
 
 msgid "Set In Point"
 msgstr "イン点を設定"
@@ -3847,7 +3848,7 @@ msgid "File/Save and Reload Session"
 msgstr "ファイル/セッションを保存して再読み込み"
 
 msgid "File/Recent/%s"
-msgstr "ファイル/最近使った/%s"
+msgstr "ファイル/最近使ったファイル/%s"
 
 msgid "File/Quit"
 msgstr "ファイル/終了"
@@ -5611,13 +5612,13 @@ msgid "@|>"
 msgstr "@|>"
 
 msgid "Advance one frame."
-msgstr "1フレーム進みます。"
+msgstr "1フレーム進める。"
 
 msgid "@>"
 msgstr "@>"
 
 msgid "Play sequence forward."
-msgstr "シーケンスを順方向に再生します。"
+msgstr "シーケンスを順方向に再生。"
 
 msgid "@>|"
 msgstr "@>|"
@@ -5626,10 +5627,10 @@ msgid "Looping mode (Loop, Once, Ping-Pong)"
 msgstr "ループモード (ループ、1回、ピンポン)"
 
 msgid "Some default frame rate settings."
-msgstr "デフォルトのフレームレート設定です。"
+msgstr "デフォルトのフレームレート設定。"
 
 msgid "Allows you to adjust frame rate playback."
-msgstr "再生フレームレートを調整できます。"
+msgstr "再生フレームレートの調整。"
 
 msgid "Mute audio or switch audio tracks with the right mouse button."
 msgstr ""
@@ -5643,13 +5644,13 @@ msgid "I"
 msgstr "I"
 
 msgid "Allows you to set starting frame for timeline."
-msgstr "タイムラインの開始フレームを設定できます。"
+msgstr "タイムラインの開始フレームの設定。"
 
 msgid "O"
 msgstr "O"
 
 msgid "Allows you to set the ending frame for timeline."
-msgstr "タイムラインの終了フレームを設定できます。"
+msgstr "タイムラインの終了フレームの設定。"
 
 msgid "mrv2"
 msgstr "mrv2"
@@ -7539,7 +7540,7 @@ msgid "Save Frames To Folder"
 msgstr "フレームをフォルダに保存"
 
 msgid "Save OTIO Timeline"
-msgstr "OTIOタイムラインを保存"
+msgstr "OTIO タイムラインを保存"
 
 msgid "Save Annotations Only"
 msgstr "注釈のみ保存"
