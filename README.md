@@ -145,7 +145,7 @@ Currently supported:
 - Editing
 - Pen and Tablet support on all platforms
 - OpenGL and Vulkan backends
-- Linux and Windows aarch64 (untested, only tested compilation)
+- Linux and Windows aarch64
 
 # Tutorials
 
