@@ -6,6 +6,8 @@ ChangeLog
 
 - UI: Improved Japanese translation (thanks to coolvitto).
 
+- Core: FLTK's Pen support is now improved.
+- Core: FLTK's UTF-8 support is now improved.
 
 v1.7.1
 ======
