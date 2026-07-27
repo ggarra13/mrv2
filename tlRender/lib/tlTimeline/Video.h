@@ -57,7 +57,7 @@ namespace tl
             //! clip provides OTIO spatial coordinates. The layer boxes are
             //! positioned within it. Empty otherwise, which lays the frame
             //! out from the image sizes instead.
-            image::Size canvasSize;
+            math::Size2i canvasSize;
 
             otime::RationalTime time = time::invalidTime;
             std::vector<VideoLayer> layers;

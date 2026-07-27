@@ -148,7 +148,7 @@ namespace mrv
         //! Get the audio sync offset (in seconds).
         double audioOffset() const;
 
-        const std::vector<timeline::AudioData>& currentAudio() const;
+        const std::vector<timeline::AudioFrame>& currentAudio() const;
 
         ///@}
 

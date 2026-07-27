@@ -39,6 +39,17 @@ namespace tl
 
         IRead::~IRead() {}
 
+
+        std::string IRead::getError() const
+        {
+            return std::string();
+        }
+
+        size_t IRead::getErrorCount() const
+        {
+            return 0;
+        }
+
         std::future<VideoData>
         IRead::readVideo(const otime::RationalTime&, const Options&)
         {

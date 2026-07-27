@@ -116,13 +116,13 @@ namespace tl
         struct AudioRequest
         {
             uint64_t id = 0;
-            std::future<AudioData> future;
+            std::future<AudioFrame> future;
         };
 
         std::optional<math::Box2f> getSpatialBounds(
             const otio::Clip* otioClip,
             Spatial spatial,
-            const image::Size& normalizeSize,
+            const math::Size2i& normalizeSize,
             double scale);
 
         //! Timeline.

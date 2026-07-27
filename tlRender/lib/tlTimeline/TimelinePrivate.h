@@ -26,7 +26,7 @@ namespace tl
             bool getVideoInfo(const otio::Composable*);
             bool getAudioInfo(const otio::Composable*);
 
-            float transitionValue(double frame, double in, double out) const;
+            float _transitionValue(double frame, double in, double out) const;
 
             void tick();
             void requests();
@@ -50,27 +50,36 @@ namespace tl
             file::Path path;
             file::Path audioPath;
             Options options;
+            // Owned by the request thread, like the Thread struct below.
             memory::LRUCache<std::string, std::shared_ptr<io::IRead> >
                 readCache;
+            // Errors observed while building frames (broken promises caught
+            // in videoFrame()/audioFrame()). Owned by the request thread.
+            size_t frameErrorCount = 0;
+            std::string frameError;
+            // High water mark of the reader error total, so the count stays
+            // monotonic when readers are evicted from the cache. Owned by
+            // the request thread.
+            size_t readErrorMax = 0;
             otime::TimeRange timeRange = time::invalidTimeRange;
             io::Info ioInfo;
             uint64_t requestId = 0;
 
             // The pixels per unit for OTIO spatial coordinates, taken from the
             // first clip that has them. The coordinates are unit-less, so a
-            // reference is needed to map them onto a pixel size. Stays 1.0 when no
-            // clip has bounds, where it is unused.
+            // reference is needed to map them onto a pixel size. Stays 1.0
+            // when no clip has bounds, where it is unused.
             double boundsScale = 1.0;
-            // The canvas shared by the whole timeline, the union of every clip's
-            // spatial coordinates. Empty when no clip has bounds, which leaves
-            // the layout to the image sizes as before. The offset translates the
-            // canvas minimum to the origin.
-            image::Size canvasSize;      // ftk::Size2I
+            // The canvas shared by the whole timeline, the union of every
+            // clip's spatial coordinates. Empty when no clip has bounds, which
+            // leaves the layout to the image sizes as before. The offset
+            // translates the canvas minimum to the origin.
+            math::Size2i canvasSize;
             math::Vector2f canvasOffset;
             // The reference size used by Spatial::Normalize for clips that have
             // no spatial coordinates of their own, taken from the first video
             // clip.
-            image::Size normalizeSize;  // ftk::Size2I
+            math::Size2i normalizeSize;
 
             struct VideoLayerData
             {
@@ -84,10 +93,10 @@ namespace tl
                 Transition transition = Transition::kNone;
                 float transitionValue = 0.F;
             };
-            struct VideoRequest
+            struct PendingVideoRequest
             {
-                VideoRequest() {};
-                VideoRequest(VideoRequest&&) = default;
+                PendingVideoRequest() {};
+                PendingVideoRequest(PendingVideoRequest&&) = default;
 
                 uint64_t id = 0;
                 otime::RationalTime time = time::invalidTime;
@@ -109,35 +118,48 @@ namespace tl
                 otio::Transition* inTransition = nullptr;
                 otio::Transition* outTransition = nullptr;
             };
-            struct AudioRequest
+            struct PendingAudioRequest
             {
-                AudioRequest() {};
-                AudioRequest(AudioRequest&&) = default;
+                PendingAudioRequest() {};
+                PendingAudioRequest(PendingAudioRequest&&) = default;
 
                 uint64_t id = 0;
                 double seconds = -1.0;
                 io::Options options;
-                std::promise<AudioData> promise;
+                std::promise<AudioFrame> promise;
 
                 std::vector<AudioLayerData> layerData;
             };
 
+            // Shared between the main thread and the request thread; every
+            // field is guarded by mutex. The request queues are filled by the
+            // main thread (getVideo/getAudio, cancelRequests) and drained by
+            // the request thread (_requests). stopped is set by the request
+            // thread at shutdown and read by the main thread to reject late
+            // requests.
             struct Mutex
             {
                 otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
                 bool otioTimelineChanged = false;
-                std::list<std::shared_ptr<VideoRequest> > videoRequests;
-                std::list<std::shared_ptr<AudioRequest> > audioRequests;
+                std::list<std::shared_ptr<PendingVideoRequest> > videoRequests;
+                std::list<std::shared_ptr<PendingAudioRequest> > audioRequests;
                 bool stopped = false;
+                std::string readError;
+                size_t readErrorCount = 0;
                 std::mutex mutex;
             };
             Mutex mutex;
+            // Owned by the request thread; no locking. The in-progress lists
+            // hold requests whose IO futures are outstanding. thread and
+            // running are the exceptions: the main thread starts the thread
+            // (in _init) and clears running (in ~Timeline) to ask it to stop;
+            // running is atomic for that handoff.
             struct Thread
             {
                 otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
-                std::list<std::shared_ptr<VideoRequest> >
+                std::list<std::shared_ptr<PendingVideoRequest> >
                     videoRequestsInProgress;
-                std::list<std::shared_ptr<AudioRequest> >
+                std::list<std::shared_ptr<PendingAudioRequest> >
                     audioRequestsInProgress;
                 std::condition_variable cv;
                 std::thread thread;
@@ -145,6 +167,18 @@ namespace tl
                 std::chrono::steady_clock::time_point logTimer;
             };
             Thread thread;
+
+            // Build a finished frame from a request whose futures are ready.
+            // Calling these blocks on the layer futures via get(), so callers
+            // must ensure readiness (poll with wait_for, or accept the block at
+            // shutdown).
+            VideoFrame videoFrame(PendingVideoRequest&);
+            AudioFrame audioFrame(PendingAudioRequest&);
+            // Aggregate reader and frame errors into the mutex-guarded
+            // fields. Called on the request thread before completing a
+            // request, so the error state is current by the time a caller's
+            // future resolves.
+            void updateReadErrors();
         };
     } // namespace timeline
 } // namespace tl

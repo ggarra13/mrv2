@@ -85,7 +85,7 @@ namespace tl
         std::optional<math::Box2f> getSpatialBounds(
             const otio::Clip* otioClip,
             Spatial spatial,
-            const image::Size& normalizeSize,
+            const math::Size2i& normalizeSize,
             double scale)
         {
             std::optional<math::Box2f> out;
@@ -256,31 +256,31 @@ namespace tl
                                "    Time range: {0}\n"
                                "    Video: {1} {2}\n"
                                "    Audio: {3} {4} {5}")
-                    .arg(p.timeRange)
-                    .arg(
-                        !p.ioInfo.video.empty() ? p.ioInfo.video[0].size
-                                                : image::Size())
-                    .arg(
-                        !p.ioInfo.video.empty() ? p.ioInfo.video[0].pixelType
-                                                : image::PixelType::kNone)
-                    .arg(p.ioInfo.audio.channelCount)
-                    .arg(p.ioInfo.audio.dataType)
-                    .arg(p.ioInfo.audio.sampleRate));
+                .arg(p.timeRange)
+                .arg(
+                    !p.ioInfo.video.empty() ? p.ioInfo.video[0].size
+                    : image::Size())
+                .arg(
+                    !p.ioInfo.video.empty() ? p.ioInfo.video[0].pixelType
+                    : image::PixelType::kNone)
+                .arg(p.ioInfo.audio.channelCount)
+                .arg(p.ioInfo.audio.dataType)
+                .arg(p.ioInfo.audio.sampleRate));
 
             // Create a new thread.
             p.mutex.otioTimeline = p.otioTimeline;
             p.thread.running = true;
             p.thread.thread = std::thread(
                 [this]
-                {
-                    TLRENDER_P();
-                    p.thread.logTimer = std::chrono::steady_clock::now();
-                    while (p.thread.running)
                     {
-                        p.tick();
-                    }
-                    p.finishRequests();
-                });
+                        TLRENDER_P();
+                        p.thread.logTimer = std::chrono::steady_clock::now();
+                        while (p.thread.running)
+                        {
+                            p.tick();
+                        }
+                        p.finishRequests();
+                    });
         }
 
         Timeline::Timeline() :
@@ -359,7 +359,7 @@ namespace tl
         {
             TLRENDER_P();
             (p.requestId)++;
-            auto request = std::make_shared<Private::VideoRequest>();
+            auto request = std::make_shared<Private::PendingVideoRequest>();
             request->id = p.requestId;
             request->time = time;
             request->options = options;
@@ -391,7 +391,7 @@ namespace tl
         {
             TLRENDER_P();
             (p.requestId)++;
-            auto request = std::make_shared<Private::AudioRequest>();
+            auto request = std::make_shared<Private::PendingAudioRequest>();
             request->id = p.requestId;
             request->seconds = seconds;
             request->options = options;
@@ -413,7 +413,7 @@ namespace tl
             }
             else
             {
-                request->promise.set_value(AudioData());
+                request->promise.set_value(AudioFrame());
             }
             return out;
         }
@@ -477,10 +477,11 @@ namespace tl
             // whole timeline, so the extent is taken from every clip rather than
             // from the clips visible at one time. This keeps the render size
             // stable as playback moves between clips.
-            p.normalizeSize = !p.ioInfo.video.empty() ?
-                              p.ioInfo.video[0].size :
-                              image::Size();
-            const image::Size& normalizeSize = p.normalizeSize;
+            image::Size videoSize =!p.ioInfo.video.empty() ?
+                                   p.ioInfo.video[0].size : image::Size();
+            p.normalizeSize.w = videoSize.w;
+            p.normalizeSize.h = videoSize.h;
+            const math::Size2i& normalizeSize = p.normalizeSize;
             const auto otioClips = p.otioTimeline.value->find_children<otio::Clip>();
 
             // The coordinates are unit-less, so a reference is needed to map
@@ -537,7 +538,7 @@ namespace tl
                 if (size.w > 0.F && size.h > 0.F)
                 {
                     p.canvasOffset = -canvas.value().min;
-                    p.canvasSize = image::Size(
+                    p.canvasSize = math::Size2i(
                         static_cast<int>(std::round(size.w)),
                         static_cast<int>(std::round(size.h)));
                     p.ioInfo.tags["OTIO Canvas"] =

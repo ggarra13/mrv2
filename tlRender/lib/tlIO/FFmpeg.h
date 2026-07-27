@@ -91,7 +91,7 @@ namespace tl
                                          type);
             return sd ? sd->data : NULL;
         }
-        
+
         //! Convert to HDR data.
         bool
         toHDRData(AVStream*, image::HDRData&);

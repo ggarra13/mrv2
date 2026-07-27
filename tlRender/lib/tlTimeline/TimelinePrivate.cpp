@@ -9,6 +9,7 @@
 #include <tlIO/System.h>
 
 #include <tlCore/Assert.h>
+#include <tlCore/Audio.h>
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl.H>
@@ -28,7 +29,7 @@ namespace tl
         std::optional<math::Box2f> getCanvasBox(
             const otio::Clip* otioClip,
             Spatial spatial,
-            const image::Size& normalizeSize,
+            const math::Size2i& normalizeSize,
             double scale,
             const math::Vector2f& offset)
         {
@@ -116,7 +117,7 @@ namespace tl
             return false;
         }
 
-        float Timeline::Private::transitionValue(
+        float Timeline::Private::_transitionValue(
             double frame, double in, double out) const
         {
             return (frame - in) / (out - in);
@@ -170,8 +171,8 @@ namespace tl
         void Timeline::Private::requests()
         {
             // Gather requests.
-            std::list<std::shared_ptr<VideoRequest> > newVideoRequests;
-            std::list<std::shared_ptr<AudioRequest> > newAudioRequests;
+            std::list<std::shared_ptr<PendingVideoRequest> > newVideoRequests;
+            std::list<std::shared_ptr<PendingAudioRequest> > newAudioRequests;
             {
                 std::unique_lock<std::mutex> lock(mutex.mutex);
                 thread.cv.wait_for(
@@ -212,12 +213,14 @@ namespace tl
                 try
                 {
                     for (const auto& otioTrack :
-                         thread.otioTimeline->video_tracks())
+                             thread.otioTimeline->video_tracks())
                     {
+                        if (!otioTrack->enabled())
+                            continue;
                         for (const auto& otioChild : otioTrack->children())
                         {
                             if (auto otioItem =
-                                    dynamic_cast<otio::Item*>(otioChild.value))
+                                dynamic_cast<otio::Item*>(otioChild.value))
                             {
                                 const auto requestTime =
                                     request->time - timeRange.start_time();
@@ -228,15 +231,15 @@ namespace tl
                                 if (range.has_value() &&
                                     range.value().contains(requestTime))
                                 {
-                                    VideoLayerData videoData;
+                                    VideoLayerData videoLayerData;
                                     if (auto otioClip =
-                                            dynamic_cast<const otio::Clip*>(
-                                                otioItem))
+                                        dynamic_cast<const otio::Clip*>(
+                                            otioItem))
                                     {
-                                        videoData.image = readVideo(
+                                        videoLayerData.image = readVideo(
                                             otioClip, requestTime,
                                             request->options);
-                                        videoData.bounds = getCanvasBox(
+                                        videoLayerData.bounds = getCanvasBox(
                                             otioClip,
                                             options.spatial,
                                             normalizeSize,
@@ -254,11 +257,11 @@ namespace tl
                                             range.value().end_time_inclusive() -
                                             otioTransition->in_offset())
                                         {
-                                            videoData.transition = toTransition(
+                                            videoLayerData.transition = toTransition(
                                                 otioTransition
                                                 ->transition_type());
-                                            videoData.transitionValue =
-                                                transitionValue(
+                                            videoLayerData.transitionValue =
+                                                _transitionValue(
                                                     requestTime.value(),
                                                     range.value()
                                                     .end_time_inclusive()
@@ -282,10 +285,10 @@ namespace tl
                                                     transitionNeighbors
                                                     .second.value))
                                             {
-                                                videoData.imageB = readVideo(
+                                                videoLayerData.imageB = readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
-                                                videoData.bounds = getCanvasBox(
+                                                videoLayerData.bounds = getCanvasBox(
                                                     otioClipB,
                                                     options.spatial,
                                                     normalizeSize,
@@ -295,48 +298,48 @@ namespace tl
                                         }
                                     }
                                     if (auto otioTransition =
-                                            dynamic_cast<otio::Transition*>(
-                                                neighbors.first.value))
+                                        dynamic_cast<otio::Transition*>(
+                                            neighbors.first.value))
                                     {
                                         if (requestTime <
                                             range.value().start_time() +
-                                                otioTransition->out_offset())
+                                            otioTransition->out_offset())
                                         {
                                             std::swap(
-                                                videoData.image,
-                                                videoData.imageB);
-                                            videoData.transition = toTransition(
+                                                videoLayerData.image,
+                                                videoLayerData.imageB);
+                                            videoLayerData.transition = toTransition(
                                                 otioTransition
-                                                    ->transition_type());
-                                            videoData.transitionValue =
-                                                transitionValue(
+                                                ->transition_type());
+                                            videoLayerData.transitionValue =
+                                                _transitionValue(
                                                     requestTime.value(),
                                                     range.value()
-                                                            .start_time()
-                                                            .value() -
-                                                        otioTransition
-                                                            ->in_offset()
-                                                            .value() -
-                                                        1.0,
+                                                    .start_time()
+                                                    .value() -
+                                                    otioTransition
+                                                    ->in_offset()
+                                                    .value() -
+                                                    1.0,
                                                     range.value()
-                                                            .start_time()
-                                                            .value() +
-                                                        otioTransition
-                                                            ->out_offset()
-                                                            .value());
+                                                    .start_time()
+                                                    .value() +
+                                                    otioTransition
+                                                    ->out_offset()
+                                                    .value());
                                             const auto transitionNeighbors =
                                                 otioTrack->neighbors_of(
                                                     otioTransition,
                                                     &errorStatus);
                                             if (const auto otioClipB =
-                                                    dynamic_cast<otio::Clip*>(
-                                                        transitionNeighbors
-                                                            .first.value))
+                                                dynamic_cast<otio::Clip*>(
+                                                    transitionNeighbors
+                                                    .first.value))
                                             {
-                                                videoData.image = readVideo(
+                                                videoLayerData.image = readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
-                                                videoData.bounds = getCanvasBox(
+                                                videoLayerData.bounds = getCanvasBox(
                                                     otioClipB,
                                                     options.spatial,
                                                     normalizeSize,
@@ -346,7 +349,7 @@ namespace tl
                                         }
                                     }
                                     request->layerData.push_back(
-                                        std::move(videoData));
+                                        std::move(videoLayerData));
                                 }
                             }
                         }
@@ -366,12 +369,12 @@ namespace tl
                 try
                 {
                     for (const auto& otioTrack :
-                         thread.otioTimeline->audio_tracks())
+                             thread.otioTimeline->audio_tracks())
                     {
                         for (const auto& otioChild : otioTrack->children())
                         {
                             if (auto otioItem =
-                                    dynamic_cast<otio::Item*>(otioChild.value))
+                                dynamic_cast<otio::Item*>(otioChild.value))
                             {
                                 const auto rangeOptional =
                                     otioItem->trimmed_range_in_parent();
@@ -379,15 +382,15 @@ namespace tl
                                 {
                                     const otime::TimeRange clipTimeRange(
                                         rangeOptional.value()
-                                            .start_time()
-                                            .rescaled_to(1.0),
+                                        .start_time()
+                                        .rescaled_to(1.0),
                                         rangeOptional.value()
-                                            .duration()
-                                            .rescaled_to(1.0));
+                                        .duration()
+                                        .rescaled_to(1.0));
                                     const double start = request->seconds -
                                                          timeRange.start_time()
-                                                             .rescaled_to(1.0)
-                                                             .value();
+                                                         .rescaled_to(1.0)
+                                                         .value();
                                     const otime::TimeRange requestTimeRange =
                                         otime::TimeRange(
                                             otime::RationalTime(start, 1.0),
@@ -400,30 +403,30 @@ namespace tl
                                         otioTrack->neighbors_of(
                                             otioItem, &errorStatus);
                                     if (auto otioTransition =
-                                            dynamic_cast<otio::Transition*>(
-                                                neighbors.first.value))
+                                        dynamic_cast<otio::Transition*>(
+                                            neighbors.first.value))
                                     {
                                         const auto inOffset =
                                             otioTransition->in_offset()
-                                                .rescaled_to(1.0);
+                                            .rescaled_to(1.0);
                                         transitionRange = otime::TimeRange(
                                             transitionRange.start_time() -
-                                                inOffset,
+                                            inOffset,
                                             transitionRange.duration() +
-                                                inOffset);
+                                            inOffset);
                                     }
 
                                     if (auto otioTransition =
-                                            dynamic_cast<otio::Transition*>(
-                                                neighbors.second.value))
+                                        dynamic_cast<otio::Transition*>(
+                                            neighbors.second.value))
                                     {
                                         const auto outOffset =
                                             otioTransition->out_offset()
-                                                .rescaled_to(1.0);
+                                            .rescaled_to(1.0);
                                         transitionRange = otime::TimeRange(
                                             transitionRange.start_time(),
                                             transitionRange.duration() +
-                                                outOffset);
+                                            outOffset);
                                     }
 
                                     if (requestTimeRange.intersects(
@@ -438,26 +441,26 @@ namespace tl
                                         // requestTimeRange.clamped(clipTimeRange);
                                         const double start = std::max(
                                             transitionRange.start_time()
-                                                .value(),
+                                            .value(),
                                             requestTimeRange.start_time()
-                                                .value());
+                                            .value());
                                         const double end = std::min(
                                             transitionRange.start_time()
-                                                    .value() +
-                                                transitionRange.duration()
-                                                    .value(),
+                                            .value() +
+                                            transitionRange.duration()
+                                            .value(),
                                             requestTimeRange.start_time()
-                                                    .value() +
-                                                requestTimeRange.duration()
-                                                    .value());
+                                            .value() +
+                                            requestTimeRange.duration()
+                                            .value());
                                         audioData.timeRange = otime::TimeRange(
                                             otime::RationalTime(start, 1.0),
                                             otime::RationalTime(
                                                 end - start, 1.0));
 
                                         if (auto otioClip =
-                                                dynamic_cast<otio::Clip*>(
-                                                    otioItem))
+                                            dynamic_cast<otio::Clip*>(
+                                                otioItem))
                                         {
                                             audioData.audio = readAudio(
                                                 otioClip, audioData.timeRange,
@@ -465,22 +468,22 @@ namespace tl
                                         }
 
                                         if (auto otioTransition =
-                                                dynamic_cast<otio::Transition*>(
-                                                    neighbors.second.value))
+                                            dynamic_cast<otio::Transition*>(
+                                                neighbors.second.value))
                                         {
                                             const auto pad =
                                                 otime::RationalTime(1.0, 1.0);
                                             const auto inOffset =
                                                 otioTransition->in_offset()
-                                                    .rescaled_to(1.0);
+                                                .rescaled_to(1.0);
                                             const auto outOffset =
                                                 otioTransition->out_offset()
-                                                    .rescaled_to(1.0);
+                                                .rescaled_to(1.0);
                                             auto transitionRange =
                                                 otime::TimeRange(
                                                     clipTimeRange
-                                                            .end_time_inclusive() -
-                                                        inOffset,
+                                                    .end_time_inclusive() -
+                                                    inOffset,
                                                     inOffset + outOffset + pad);
                                             if (audioData.timeRange.intersects(
                                                     transitionRange))
@@ -493,19 +496,19 @@ namespace tl
                                         }
 
                                         if (auto otioTransition =
-                                                dynamic_cast<otio::Transition*>(
-                                                    neighbors.first.value))
+                                            dynamic_cast<otio::Transition*>(
+                                                neighbors.first.value))
                                         {
                                             const auto outOffset =
                                                 otioTransition->out_offset()
-                                                    .rescaled_to(1.0);
+                                                .rescaled_to(1.0);
                                             const auto inOffset =
                                                 otioTransition->in_offset()
-                                                    .rescaled_to(1.0);
+                                                .rescaled_to(1.0);
                                             auto transitionRange =
                                                 otime::TimeRange(
                                                     clipTimeRange.start_time() -
-                                                        inOffset,
+                                                    inOffset,
                                                     outOffset + inOffset);
                                             if (audioData.timeRange.intersects(
                                                     transitionRange))
@@ -552,40 +555,10 @@ namespace tl
                 }
                 if (valid)
                 {
-                    VideoFrame data;
-                    if (!ioInfo.video.empty())
-                    {
-                        data.size = ioInfo.video.front().size;
-                    }
-                    data.canvasSize = canvasSize;
-                    data.time = (*videoRequestIt)->time;
-                    try
-                    {
-                        for (auto& j : (*videoRequestIt)->layerData)
-                        {
-                            VideoLayer layer;
-                            if (j.image.valid())
-                            {
-                                layer.image = j.image.get().image;
-                            }
-                            if (j.imageB.valid())
-                            {
-                                layer.imageB = j.imageB.get().image;
-                            }
-                            layer.bounds = j.bounds;
-                            layer.boundsB = j.boundsB;
-                            layer.transition = j.transition;
-                            layer.transitionValue = j.transitionValue;
-                            data.layers.push_back(layer);
-                        }
-                    }
-                    catch (const std::exception&)
-                    {
-                        //! \todo How should this be handled?
-                    }
-                    (*videoRequestIt)->promise.set_value(data);
-                    videoRequestIt =
-                        thread.videoRequestsInProgress.erase(videoRequestIt);
+                    const auto frame = videoFrame(**videoRequestIt);
+                    updateReadErrors();
+                    (*videoRequestIt)->promise.set_value(frame);
+                    videoRequestIt = thread.videoRequestsInProgress.erase(videoRequestIt);
                     continue;
                 }
                 ++videoRequestIt;
@@ -606,34 +579,9 @@ namespace tl
                 }
                 if (valid)
                 {
-                    AudioData data;
-                    data.seconds = (*audioRequestIt)->seconds;
-                    try
-                    {
-                        for (auto& j : (*audioRequestIt)->layerData)
-                        {
-                            AudioLayer layer;
-                            if (j.audio.valid())
-                            {
-                                const auto audioData = j.audio.get();
-                                if (audioData.audio)
-                                {
-                                    layer.audio = padAudioToOneSecond(
-                                        audioData.audio, j.seconds,
-                                        j.timeRange);
-                                    layer.clipTimeRange = j.clipTimeRange;
-                                    layer.inTransition = j.inTransition;
-                                    layer.outTransition = j.outTransition;
-                                }
-                            }
-                            data.layers.push_back(layer);
-                        }
-                    }
-                    catch (const std::exception&)
-                    {
-                        //! \todo How should this be handled?
-                    }
-                    (*audioRequestIt)->promise.set_value(data);
+                    const auto frame = audioFrame(**audioRequestIt);
+                    updateReadErrors();
+                    (*audioRequestIt)->promise.set_value(frame);
                     audioRequestIt =
                         thread.audioRequestsInProgress.erase(audioRequestIt);
                     continue;
@@ -642,12 +590,131 @@ namespace tl
             }
         }
 
+        void Timeline::Private::updateReadErrors()
+        {
+            size_t count = frameErrorCount;
+            std::string error = frameError;
+            for (const auto& read : readCache.getValues())
+            {
+                if (read)
+                {
+                    count += read->getErrorCount();
+                    if (error.empty())
+                    {
+                        error = read->getError();
+                    }
+                }
+            }
+            readErrorMax = std::max(readErrorMax, count);
+            {
+                std::unique_lock<std::mutex> lock(mutex.mutex);
+                mutex.readErrorCount = readErrorMax;
+                if (mutex.readError.empty())
+                {
+                    mutex.readError = error;
+                }
+            }
+        }
+
+        VideoFrame Timeline::Private::videoFrame(PendingVideoRequest& request)
+        {
+            VideoFrame frame;
+            if (!ioInfo.video.empty())
+            {
+                frame.size = ioInfo.video.front().size;
+            }
+            frame.canvasSize = canvasSize;
+            frame.time = request.time;
+            for (auto& i : request.layerData)
+            {
+                VideoLayer layer;
+                try
+                {
+                    if (i.image.valid())
+                    {
+                        layer.image = i.image.get().image;
+                    }
+                    if (i.imageB.valid())
+                    {
+                        layer.imageB = i.imageB.get().image;
+                    }
+                }
+                catch (const std::exception& e)
+                {
+                    ++frameErrorCount;
+                    if (frameError.empty())
+                    {
+                        frameError = e.what();
+                    }
+                    if (auto context = this->context.lock())
+                    {
+                        auto logSystem = context->getLogSystem();
+                        logSystem->print(
+                            "tl::Timeline",
+                            e.what(),
+                            log::Type::Error);
+                    }
+                }
+                layer.bounds = i.bounds;
+                layer.boundsB = i.boundsB;
+                layer.transition = i.transition;
+                layer.transitionValue = i.transitionValue;
+                frame.layers.push_back(layer);
+            }
+            return frame;
+        }
+
+        AudioFrame Timeline::Private::audioFrame(PendingAudioRequest& request)
+        {
+            AudioFrame frame;
+            frame.seconds = request.seconds;
+            for (auto& i : request.layerData)
+            {
+                AudioLayer layer;
+                try
+                {
+                    if (i.audio.valid())
+                    {
+                        const auto audioData = i.audio.get();
+                        if (audioData.audio)
+                        {
+                            layer.audio = padAudioToOneSecond(audioData.audio, i.seconds, i.timeRange);
+                        }
+                    }
+                }
+                catch (const std::exception& e)
+                {
+                    ++frameErrorCount;
+                    if (frameError.empty())
+                    {
+                        frameError = e.what();
+                    }
+                    if (auto context = this->context.lock())
+                    {
+                        auto logSystem = context->getLogSystem();
+                        logSystem->print(
+                            "tl::Timeline",
+                            e.what(),
+                            log::Type::Error);
+                    }
+                }
+                frame.layers.push_back(layer);
+            }
+            if (frame.layers.empty())
+            {
+                auto audio = audio::Audio::create(ioInfo.audio, ioInfo.audio.sampleRate);
+                audio->zero();
+                frame.layers.push_back({ audio });
+            }
+            return frame;
+        }
+
         void Timeline::Private::finishRequests()
         {
             {
-                std::list<std::shared_ptr<Private::VideoRequest> >
+                std::list<std::shared_ptr<Private::PendingVideoRequest> >
                     videoRequests;
-                std::list<std::shared_ptr<Private::AudioRequest> >
+                std::list<std::shared_ptr<Private::PendingAudioRequest> >
                     audioRequests;
                 {
                     std::unique_lock<std::mutex> lock(mutex.mutex);
@@ -667,43 +734,15 @@ namespace tl
                 thread.audioRequestsInProgress.clear();
                 for (auto& request : videoRequests)
                 {
-                    VideoFrame data;
-                    data.time = request->time;
-                    for (auto& i : request->layerData)
-                    {
-                        VideoLayer layer;
-                        if (i.image.valid())
-                        {
-                            layer.image = i.image.get().image;
-                        }
-                        if (i.imageB.valid())
-                        {
-                            layer.imageB = i.imageB.get().image;
-                        }
-                        layer.bounds = i.bounds;
-                        layer.boundsB = i.boundsB;
-                        layer.transition = i.transition;
-                        layer.transitionValue = i.transitionValue;
-                        data.layers.push_back(layer);
-                    }
-                    request->promise.set_value(data);
+                    const auto frame = videoFrame(*request);
+                    updateReadErrors();
+                    request->promise.set_value(frame);
                 }
                 for (auto& request : audioRequests)
                 {
-                    AudioData data;
-                    data.seconds = request->seconds;
-                    for (auto& i : request->layerData)
-                    {
-                        AudioLayer layer;
-                        if (i.audio.valid())
-                        {
-                            layer.audio = i.audio.get().audio;
-                            layer.inTransition = i.inTransition;
-                            layer.outTransition = i.outTransition;
-                        }
-                        data.layers.push_back(layer);
-                    }
-                    request->promise.set_value(data);
+                    const auto frame = audioFrame(*request);
+                    updateReadErrors();
+                    request->promise.set_value(frame);
                 }
             }
         }

@@ -57,7 +57,8 @@ namespace tl
                     }
                     if (i.canvasSize.isValid())
                     {
-                        info.size = i.canvasSize;
+                        info.size.w = i.canvasSize.w;
+                        info.size.h = i.canvasSize.h;
                         info.size.pixelAspectRatio = 1.F;
                     }
                     out.push_back(info);

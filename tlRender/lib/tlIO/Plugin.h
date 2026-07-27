@@ -80,6 +80,15 @@ namespace tl
             //! Cancel pending requests.
             virtual void cancelRequests() = 0;
 
+            //! Get the first error encountered while reading, or an empty
+            //! string. Errors are also sent to the log. The default
+            //! implementation returns an empty string.
+            virtual std::string getError() const;
+
+            //! Get the number of errors encountered while reading. The
+            //! default implementation returns zero.
+            virtual size_t getErrorCount() const;
+
         protected:
             std::vector<file::MemoryRead> _memory;
         };

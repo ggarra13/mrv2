@@ -60,7 +60,7 @@ namespace tl
                 }
             }
 #endif
-            
+
             RtAudioFormat toRtAudio(audio::DataType value) noexcept
             {
                 RtAudioFormat out = 0;
@@ -141,7 +141,7 @@ namespace tl
             p.mute = observer::Value<bool>::create(false);
             p.channelMute = observer::List<int>::create();
             p.audioOffset = observer::Value<double>::create(0.0);
-            p.currentAudioData = observer::List<AudioData>::create();
+            p.currentAudioFrame = observer::List<AudioFrame>::create();
             p.cacheOptions = observer::Value<PlayerCacheOptions>::create(
                 playerOptions.cache);
             p.cacheInfo = observer::Value<PlayerCacheInfo>::create();
@@ -307,7 +307,7 @@ namespace tl
                         if (p.ioInfo.audio.isValid())
                         {
                             const auto& timeRange = p.timeline->getTimeRange();
-                            std::vector<AudioData> audioDataList;
+                            std::vector<AudioFrame> audioFrameList;
                             {
                                 const int64_t seconds =
                                     p.thread.currentTime.rescaled_to(1.0)
@@ -321,17 +321,17 @@ namespace tl
                                      {seconds - 1, seconds, seconds + 1})
                                 {
                                     auto i =
-                                        p.audioMutex.audioDataCache.find(s);
-                                    if (i != p.audioMutex.audioDataCache.end())
+                                        p.audioMutex.audioFrameCache.find(s);
+                                    if (i != p.audioMutex.audioFrameCache.end())
                                     {
-                                        audioDataList.push_back(i->second);
+                                        audioFrameList.push_back(i->second);
                                     }
                                 }
                             }
                             {
                                 std::unique_lock<std::mutex> lock(
                                     p.mutex.mutex);
-                                p.mutex.currentAudioData = audioDataList;
+                                p.mutex.currentAudioFrame = audioFrameList;
                             }
                         }
 
@@ -408,8 +408,8 @@ namespace tl
             if (!p.ioInfo.video.empty())
             {
                 const auto i =
-                    p.thread.videoDataCache.find(p.thread.currentTime);
-                if (i != p.thread.videoDataCache.end())
+                    p.thread.videoFrameCache.find(p.thread.currentTime);
+                if (i != p.thread.videoFrameCache.end())
                 {
                     std::unique_lock<std::mutex> lock(p.mutex.mutex);
                     p.mutex.currentVideoFrame = i->second;
@@ -1000,15 +1000,15 @@ namespace tl
             }
         }
 
-        const std::vector<AudioData>& Player::getCurrentAudio() const
+        const std::vector<AudioFrame>& Player::getCurrentAudio() const
         {
-            return _p->currentAudioData->get();
+            return _p->currentAudioFrame->get();
         }
 
-        std::shared_ptr<observer::IList<AudioData> >
+        std::shared_ptr<observer::IList<AudioFrame> >
         Player::observeCurrentAudio() const
         {
-            return _p->currentAudioData;
+            return _p->currentAudioFrame;
         }
 
         const PlayerCacheOptions& Player::getCacheOptions() const
@@ -1043,7 +1043,7 @@ namespace tl
             TLRENDER_P();
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                p.thread.videoDataCache.erase(time);
+                p.thread.videoFrameCache.erase(time);
                 p.forwardRequests(
                     time, time, otime::RationalTime(1.0, time.rate()), true);
             }
@@ -1067,14 +1067,14 @@ namespace tl
             const otio::SerializableObject::Retainer<otio::Timeline>& value)
         {
             TLRENDER_P();
-            
+
             p.timeline->setTimeline(value);
             if (!p.timeline)
                 return;
             p.speed->setIfChanged(p.timeline->getTimeRange().duration().rate());
             p.inOutRange->setIfChanged(p.timeline->getTimeRange());
         }
-    
+
         void Player::tick()
         {
             TLRENDER_P();
@@ -1133,17 +1133,17 @@ namespace tl
 
             // Sync with the thread.
             std::vector<VideoFrame> currentVideoFrame;
-            std::vector<AudioData> currentAudioData;
+            std::vector<AudioFrame> currentAudioFrame;
             PlayerCacheInfo cacheInfo;
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
                 p.mutex.currentTime = p.currentTime->get();
                 currentVideoFrame = p.mutex.currentVideoFrame;
-                currentAudioData = p.mutex.currentAudioData;
+                currentAudioFrame = p.mutex.currentAudioFrame;
                 cacheInfo = p.mutex.cacheInfo;
             }
             p.currentVideoFrame->setIfChanged(currentVideoFrame);
-            p.currentAudioData->setIfChanged(currentAudioData);
+            p.currentAudioFrame->setIfChanged(currentAudioFrame);
             p.cacheInfo->setIfChanged(cacheInfo);
         }
     } // namespace timeline

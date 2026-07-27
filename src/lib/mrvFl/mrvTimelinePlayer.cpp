@@ -270,7 +270,8 @@ namespace mrv
         return _p->player->observeAudioOffset()->get();
     }
 
-    const std::vector<timeline::AudioData>& TimelinePlayer::currentAudio() const
+    const std::vector<timeline::AudioFrame>&
+    TimelinePlayer::currentAudio() const
     {
         return _p->player->observeCurrentAudio()->get();
     }

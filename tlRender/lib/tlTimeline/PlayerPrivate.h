@@ -78,7 +78,7 @@ namespace tl
             std::shared_ptr<observer::Value<bool> > mute;
             std::shared_ptr<observer::List<int> > channelMute;
             std::shared_ptr<observer::Value<double> > audioOffset;
-            std::shared_ptr<observer::List<AudioData> > currentAudioData;
+            std::shared_ptr<observer::List<AudioFrame> > currentAudioFrame;
             std::shared_ptr<observer::Value<PlayerCacheOptions> > cacheOptions;
             std::shared_ptr<observer::Value<PlayerCacheInfo> > cacheInfo;
             std::shared_ptr<observer::ValueObserver<bool> > timelineObserver;
@@ -97,7 +97,7 @@ namespace tl
                 std::vector<int> compareVideoLayers;
                 std::vector<VideoFrame> currentVideoFrame;
                 double audioOffset = 0.0;
-                std::vector<AudioData> currentAudioData;
+                std::vector<AudioFrame> currentAudioFrame;
                 bool clearRequests = false;
                 bool clearCache = false;
                 CacheDirection cacheDirection = CacheDirection::Forward;
@@ -114,7 +114,7 @@ namespace tl
                 bool mute = false;
                 std::vector<int> channelMute;
                 std::chrono::steady_clock::time_point muteTimeout;
-                std::map<int64_t, AudioData> audioDataCache;
+                std::map<int64_t, AudioFrame> audioFrameCache;
                 bool reset = false;
                 std::mutex mutex;
             };
@@ -135,13 +135,13 @@ namespace tl
                 PlayerCacheOptions cacheOptions;
 
                 std::map<otime::RationalTime, std::vector<VideoRequest> >
-                    videoDataRequests;
+                    videoFrameRequests;
                 std::map<otime::RationalTime, std::vector<VideoFrame> >
-                    videoDataCache;
+                    videoFrameCache;
 #if defined(TLRENDER_AUDIO)
                 std::unique_ptr<RtAudio> rtAudio;
 #endif // TLRENDER_AUDIO
-                std::map<int64_t, AudioRequest> audioDataRequests;
+                std::map<int64_t, AudioRequest> audioFrameRequests;
                 std::chrono::steady_clock::time_point cacheTimer;
                 std::chrono::steady_clock::time_point logTimer;
                 std::atomic<bool> running;
