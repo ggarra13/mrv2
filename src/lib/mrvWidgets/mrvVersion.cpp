@@ -1434,6 +1434,7 @@ c0nvexo                                       (Color Pipeline on Missing
 Christoph Lohr                                (Color Pipeline Debugging,
                                                UI improvements,
                                                MKV Support idea)
+coolvitto                                     (Japanese translations)
 danbradham                                    (UI debugging)
 darkvertext                                   (Environment mapping support)
 dchabashvili                                  (Annotations exporting to movs)
