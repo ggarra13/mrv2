@@ -21,6 +21,8 @@
 namespace py = pybind11;
 #endif
 
+#include <random>
+
 namespace
 {
     const float kTimeout = 0.01;
@@ -93,7 +95,7 @@ namespace mrv
                             {
                                 std::memset(d, 255, w * h * depth);
                             }
-                            
+
                             i->first->bind_image(rgbImage);
                             i->first->redraw();
                         }
@@ -108,10 +110,11 @@ namespace mrv
             Fl::repeat_timeout(
                 kTimeout, (Fl_Timeout_Handler)timerEvent_cb, this);
         }
-        
+
         void ThumbnailPanel::_createThumbnail(
             Fl_Widget* widget, const file::Path& inputPath,
-            const otime::RationalTime& currentTime, const int layerId)
+            const otime::RationalTime& currentTime, const int layerId,
+            const std::string& mediaReferenceKey)
         {
             TLRENDER_P();
 
@@ -147,7 +150,7 @@ namespace mrv
 #ifdef MRV2_PYBIND11
                 // Only release the GIL if this thread currently holds it
                 std::unique_ptr<py::gil_scoped_release> release;
-                if (PyGILState_Check()) 
+                if (PyGILState_Check())
                 {
                     release = std::make_unique<py::gil_scoped_release>();
                 }
@@ -186,14 +189,16 @@ namespace mrv
                 io::Options options;
                 if (_clearCache)
                 {
-                    options["ClearCache"] = string::Format("{0}").arg(rand());
+                    std::random_device rd;
+                    options["ClearCache"] = string::Format("{0}").arg(rd());
                     _clearCache = false;
                 }
 
                 options["Layer"] = string::Format("{0}").arg(layerId);
-                
+
                 thumbnailRequests[widget] =
-                    thumbnailSystem->getThumbnail(path, size.h, time, options);
+                    thumbnailSystem->getThumbnail(path, size.h, time,
+                                                  mediaReferenceKey, options);
             }
             catch (const std::exception& e)
             {

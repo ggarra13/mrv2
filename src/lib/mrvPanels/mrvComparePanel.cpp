@@ -144,7 +144,7 @@ namespace mrv
                 time = player->currentTime();
 
             size = panel::calculateImageSize();
-            
+
             file::Path lastPath;
             int Y = g->y();
 
@@ -166,7 +166,7 @@ namespace mrv
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
                 const std::string file = path.getFileName(listdir);
-                
+
                 auto bW = new Widget<ClipButton>(
                     g->x(), g->y() + 20 + i * size.h + 4, g->w(), size.h + 4);
                 ClipButton* b = bW;
@@ -218,8 +218,9 @@ namespace mrv
                     label = file;
                 }
                 b->copy_label(label.c_str());
-                
-                _createThumbnail(b, path, time, layerId);
+
+                _createThumbnail(b, path, time, layerId,
+                                 media->mediaReferenceKey);
 
                 Y += size.h;
             }
@@ -247,7 +248,7 @@ namespace mrv
                     model->setCompareTime(o);
                 });
 
-            
+
             Fl_Button* b;
             auto bW = new Widget< Button >(X, Y, 30, 30);
             b = bW;
@@ -358,7 +359,7 @@ namespace mrv
                 {
                     compare_add_cb(nullptr, p.ui);
                 });
-            
+
             bW = new Widget< Button >(X + 240, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(CompareMultiply));
@@ -369,7 +370,7 @@ namespace mrv
                 {
                     compare_multiply_cb(nullptr, p.ui);
                 });
-            
+
             bW = new Widget< Button >(X + 270, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(Prev));
@@ -573,7 +574,7 @@ namespace mrv
             {
                 const auto& media = files->getItem(i);
                 const auto& path = media->path;
-                
+
                 const std::string protocol = path.getProtocol();
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
@@ -624,7 +625,8 @@ namespace mrv
                 }
                 b->copy_label(label.c_str());
 
-                _createThumbnail(b, path, time, layerId);
+                _createThumbnail(b, path, time, layerId,
+                                 media->mediaReferenceKey);
             }
         }
 
@@ -642,7 +644,7 @@ namespace mrv
         {
             compareTimeW->value(static_cast<int>(value));
         }
-        
+
         void ComparePanel::refresh()
         {
             _cancelRequests();

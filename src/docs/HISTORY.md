@@ -6,6 +6,8 @@ ChangeLog
 
 - UI: Improved Japanese translation (thanks to coolvitto).
 
+- Core: Added support for multiple media references in .otio files (works in
+  	Viewport, Timeline and Thumbnails).
 - Core: FLTK's Pen support is now improved.
 - Core: FLTK's UTF-8 support is now improved.
 

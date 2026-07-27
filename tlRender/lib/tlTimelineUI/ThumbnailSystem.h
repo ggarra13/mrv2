@@ -156,7 +156,7 @@ namespace tl
 
             ThumbnailGenerator(Fl_Vk_Context& ctx);
 #endif
-            
+
         public:
             ~ThumbnailGenerator();
 
@@ -189,18 +189,21 @@ namespace tl
             ThumbnailRequest getThumbnail(
                 const file::Path&, int height,
                 const otime::RationalTime& = time::invalidTime,
+                const std::string& = "",
                 const io::Options& = io::Options());
 
             //! Get a video thumbnail.
             ThumbnailRequest getThumbnail(
                 const file::Path&, const std::vector<file::MemoryRead>&,
                 int height, const otime::RationalTime& = time::invalidTime,
+                const std::string& = "",
                 const io::Options& = io::Options());
 
             //! Get an audio waveform.
             WaveformRequest getWaveform(
                 const file::Path&, const math::Size2i&,
                 const otime::TimeRange& = time::invalidTimeRange,
+                const std::string& = "",
                 const io::Options& = io::Options());
 
             //! Get an audio waveform.
@@ -208,6 +211,7 @@ namespace tl
                 const file::Path&, const std::vector<file::MemoryRead>&,
                 const math::Size2i&,
                 const otime::TimeRange& = time::invalidTimeRange,
+                const std::string& = "",
                 const io::Options& = io::Options());
 
             //! Cancel pending requests.
@@ -267,12 +271,14 @@ namespace tl
             ThumbnailRequest getThumbnail(
                 const file::Path&, int height,
                 const otime::RationalTime& = time::invalidTime,
+                const std::string& mediaReferenceKey = "",
                 const io::Options& = io::Options());
 
             //! Get an audio waveform.
             WaveformRequest getWaveform(
                 const file::Path&, const math::Size2i&,
                 const otime::TimeRange& = time::invalidTimeRange,
+                const std::string& mediaReferenceKey = "",
                 const io::Options& = io::Options());
 
             //! Cancel pending requests.
@@ -285,7 +291,7 @@ namespace tl
 #ifdef VULKAN_BACKEND
             Fl_Vk_Context& ctx;
 #endif
-            
+
             TLRENDER_PRIVATE();
         };
     } // namespace TIMELINEUI

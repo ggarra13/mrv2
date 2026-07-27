@@ -6,6 +6,11 @@ if [[ "$1" == "" ]]; then
 fi
 
 #
+# OTIO macros
+#
+sef -i 's#OTIO_NS::#otio::#' $*
+
+#
 # FTK macros
 #
 sed -i 's#FTK_API##' $*
@@ -14,7 +19,6 @@ sed -i 's#FTK_NON_COPYABLE#TLRENDER_NON_COPYABLE#' $*
 #
 # tlRender macros
 #
-
 sed -i 's#TL_API##' $*
 sed -i 's#TL_ENUM#TLRENDER_ENUM#' $*
 

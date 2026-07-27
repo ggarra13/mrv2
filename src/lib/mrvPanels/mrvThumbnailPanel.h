@@ -28,7 +28,7 @@ namespace mrv
     {
         using namespace tl;
         class ThumbnailPanel : public PanelWidget
-        {            
+        {
         public:
             ThumbnailPanel(ViewerUI* ui);
             virtual ~ThumbnailPanel();
@@ -39,13 +39,14 @@ namespace mrv
 
             void clearCache();
 
-            
+
         protected:
 
-            
+
             void _createThumbnail(
                 Fl_Widget* widget, const file::Path& path,
-                const otime::RationalTime& time, const int layerId = 0);
+                const otime::RationalTime& time, const int layerId = 0,
+                const std::string& mediaReferenceKey = "");
 
             void _cancelRequests();
 

@@ -47,6 +47,7 @@ namespace tl
         };
 
         void VideoClipItem::_init(
+            const std::shared_ptr<timeline::Timeline> timeline,
             const otio::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
@@ -56,7 +57,7 @@ namespace tl
             const std::shared_ptr<IWidget>& parent)
         {
             const auto path = timeline::getPath(
-                clip->media_reference(), itemData->directory,
+                timeline->getMediaReference(clip), itemData->directory,
                 itemData->options.pathOptions);
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
@@ -64,7 +65,7 @@ namespace tl
                 ui::ColorRole::VideoClip, "tl::TIMELINEUI::VideoClipItem",
                 clip.value, scale, options, displayOptions, itemData, context,
                 parent);
-            
+
             TLRENDER_P();
 
             p.clipName = clip->name();
@@ -95,6 +96,7 @@ namespace tl
         }
 
         std::shared_ptr<VideoClipItem> VideoClipItem::create(
+            const std::shared_ptr<timeline::Timeline> timeline,
             const otio::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
@@ -105,7 +107,7 @@ namespace tl
         {
             auto out = std::shared_ptr<VideoClipItem>(new VideoClipItem);
             out->_init(
-                clip, scale, options, displayOptions, itemData,
+                timeline, clip, scale, options, displayOptions, itemData,
                 thumbnailGenerator, context, parent);
             return out;
         }
@@ -217,7 +219,7 @@ namespace tl
             const math::Box2i& drawRect, const ui::DrawEvent& event)
         {
             IBasicItem::drawEvent(drawRect, event);
-            
+
             if (_displayOptions.thumbnails)
             {
                 _drawThumbnails(drawRect, event);
@@ -258,7 +260,7 @@ namespace tl
                         p.path, p.memoryRead, p.ioOptions);
                 }
             }
- 
+
             const int thumbnailWidth =
                 (_displayOptions.thumbnails && p.ioInfo &&
                  !p.ioInfo->video.empty())
@@ -289,7 +291,7 @@ namespace tl
                                         _timeRange.duration().value(),
                                 _timeRange.duration().rate())
                                 .floor();
-                        const otime::RationalTime mediaTime = 
+                        const otime::RationalTime mediaTime =
                             timeline::toVideoMediaTime(
                                 time, _timeRange, _trimmedRange,
                                 p.ioInfo->videoTime.duration().rate());
@@ -301,7 +303,7 @@ namespace tl
                         {
                             if (i->second)
                             {
-                                
+
                                 timeline::VideoFrame videoData;
                                 videoData.size = i->second->getSize();
                                 videoData.layers.push_back({i->second});
@@ -354,7 +356,7 @@ namespace tl
                                     p.thumbnailGenerator->getThumbnail(
                                         p.path, p.memoryRead,
                                         _displayOptions.thumbnailHeight,
-                                        mediaTime, p.ioOptions);
+                                        mediaTime, "", p.ioOptions);
                             }
                         }
                     }

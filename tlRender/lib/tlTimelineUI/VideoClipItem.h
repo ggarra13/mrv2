@@ -22,6 +22,7 @@ namespace tl
         {
         protected:
             void _init(
+                const std::shared_ptr<timeline::Timeline> timeline,
                 const otio::SerializableObject::Retainer<otio::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
@@ -36,6 +37,7 @@ namespace tl
 
             //! Create a new item.
             static std::shared_ptr<VideoClipItem> create(
+                const std::shared_ptr<timeline::Timeline>,
                 const otio::SerializableObject::Retainer<otio::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,

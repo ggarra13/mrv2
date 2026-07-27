@@ -27,6 +27,7 @@ namespace mrv
         j["volume"] = value.volume;
         j["mute"] = value.mute;
         j["audioOffset"] = value.audioOffset;
+        j["mediaReferenceKey"] = value.mediaReferenceKey;
         j["ocioIcs"] = value.ocioIcs;
         j["ocioLook"] = value.ocioLook;
         j["lutOptions"] = value.lutOptions;
@@ -90,6 +91,10 @@ namespace mrv
         if (j.contains("lutOptions"))
         {
             j.at("lutOptions").get_to(value.lutOptions);
+        }
+        if (j.contains("mediaReferenceKey"))
+        {
+            j.at("mediaReferenceKey").get_to(value.mediaReferenceKey);
         }
         const nlohmann::json& annotations = j["annotations"];
         for (const auto& annotation : annotations)

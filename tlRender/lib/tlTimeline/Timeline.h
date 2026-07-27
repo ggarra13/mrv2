@@ -11,7 +11,10 @@
 #include <tlCore/Path.h>
 #include <tlCore/ValueObserver.h>
 
+#include <tlIO/Plugin.h>
+
 #include <opentimelineio/timeline.h>
+#include <opentimelineio/mediaReference.h>
 
 #include <future>
 
@@ -201,6 +204,53 @@ namespace tl
             //! Get the timeline options.
             const Options& getOptions() const;
 
+            //! \name Media References
+            ///
+            //! Clips may carry several media references, for example a proxy
+            //! and a full resolution version of the same media, and one of
+            //! them is active at a time. Which one is active is tracked here
+            //! rather than written back to the OTIO timeline, so that the
+            //! timeline can be read by the request thread without locking.
+            ///@{
+
+            //! Get the media reference keys used anywhere in the timeline,
+            //! sorted and without duplicates.
+            std::vector<std::string> getMediaReferenceKeys() const;
+
+            //! Get the media reference key applied to the whole timeline. An
+            //! empty key, the default, leaves every clip on the media
+            //! reference that OTIO has active.
+            std::string getMediaReferenceKey() const;
+
+            //! Set the media reference key for the whole timeline. Clips that
+            //! have no media reference with this key fall back to
+            //! otio::Clip::default_media_key, and then to the media reference
+            //! OTIO has active.
+            //!
+            //! The change applies to media read after it; the caller is
+            //! responsible for discarding anything already read, for example
+            //! with Player::clearCache().
+            void setMediaReferenceKey(const std::string&);
+
+            //! Get the media reference key applied to the given clip, which
+            //! may be empty. This is the key set for the clip alone, not the
+            //! timeline wide key it falls back to.
+            std::string getMediaReferenceKey(const otio::Clip*) const;
+
+            //! Set the media reference key for a single clip, overriding the
+            //! timeline wide key. An empty key returns the clip to the timeline
+            //! wide key.
+            void setMediaReferenceKey(
+                const otio::Clip*,
+                const std::string&);
+
+            //! Get the media reference a clip is read from, honoring the keys
+            //! set above.
+            otio::MediaReference* getMediaReference(
+                const otio::Clip*) const;
+
+            ///@}
+
             //! \name Information
             ///@{
 
@@ -233,7 +283,23 @@ namespace tl
             void tick();
 
         private:
-
+            void _tick();
+            void _requests();
+            void _finishRequests();
+            std::future<io::VideoData> _readVideo(
+                const otio::Clip*, const otime::RationalTime&,
+                const io::Options&);
+            std::future<io::AudioData> _readAudio(
+                const otio::Clip*, const otime::TimeRange&,
+                const io::Options&);
+            std::shared_ptr<io::IRead> _getRead(
+                const otio::Clip*,
+                const io::Options&);
+            std::shared_ptr<io::IRead> _getRead(
+                const otio::MediaReference*,
+                const io::Options&);
+            bool _getVideoInfo(const otio::Composable*);
+            bool _getAudioInfo(const otio::Composable*);
             void _getCanvas();
 
             TLRENDER_PRIVATE();

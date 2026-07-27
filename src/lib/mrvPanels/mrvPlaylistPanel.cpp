@@ -70,7 +70,7 @@ namespace mrv
             ThumbnailPanel(ui)
         {
             MRV2_R();
-            
+
             add_group("Playlist");
             g->bind_image(MRV2_LOAD_SVG(Playlist));
 
@@ -127,7 +127,7 @@ namespace mrv
             file::Path lastPath;
 
             size = panel::calculateImageSize();
-            
+
             size_t numValidFiles = 0;
             for (size_t i = 0; i < numFiles; ++i)
             {
@@ -167,7 +167,7 @@ namespace mrv
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
                 const std::string file = path.getFileName(listdir);
-                
+
                 std::string label;
                 if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
                     kThumbnailNormal)
@@ -179,7 +179,7 @@ namespace mrv
                     label = file;
                 }
                 b->copy_label(label.c_str());
-                
+
                 if (i == aIndex)
                 {
                     b->value(1);
@@ -196,7 +196,7 @@ namespace mrv
 
                 b->createTimeline(path, App::app->getContext());
 
-                _createThumbnail(b, path, time);
+                _createThumbnail(b, path, time, 0, media->mediaReferenceKey);
             }
 
             if (numValidFiles == 0)
@@ -307,7 +307,7 @@ namespace mrv
 
                 b->createTimeline(path, App::app->getContext());
 
-                _createThumbnail(b, path, time);
+                _createThumbnail(b, path, time, 0, media->mediaReferenceKey);
             }
         }
 
@@ -364,7 +364,7 @@ namespace mrv
             }
         }
 
-        
+
     } // namespace panel
 
 } // namespace mrv

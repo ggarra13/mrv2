@@ -23,22 +23,9 @@ namespace tl
     {
         struct Timeline::Private
         {
-            bool getVideoInfo(const otio::Composable*);
-            bool getAudioInfo(const otio::Composable*);
-
             float _transitionValue(double frame, double in, double out) const;
 
             void tick();
-            void requests();
-            void finishRequests();
-
-            std::shared_ptr<io::IRead>
-            getRead(const otio::Clip*, const io::Options&);
-            std::future<io::VideoData> readVideo(
-                const otio::Clip*, const otime::RationalTime&,
-                const io::Options&);
-            std::future<io::AudioData> readAudio(
-                const otio::Clip*, const otime::TimeRange&, const io::Options&);
 
             std::shared_ptr<audio::Audio> padAudioToOneSecond(
                 const std::shared_ptr<audio::Audio>&, double seconds,
@@ -47,6 +34,12 @@ namespace tl
             std::weak_ptr<system::Context> context;
             otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
             std::shared_ptr<observer::Value<bool> > timelineChanges;
+            // Media references named by a bundle but not found inside it. They
+            // are not read from their path, since a bundle is meant to be self
+            // contained and quietly reading a file from somewhere else would be
+            // misleading; reading one of these fails instead. Filled in while
+            // the timeline is read and only read afterwards.
+            std::set<const otio::MediaReference*> unavailableMediaReferences;
             file::Path path;
             file::Path audioPath;
             Options options;
@@ -63,7 +56,15 @@ namespace tl
             size_t readErrorMax = 0;
             otime::TimeRange timeRange = time::invalidTimeRange;
             io::Info ioInfo;
-            uint64_t requestId = 0;
+            // The clip whose media references provide the video information, and
+            // the information for each of those references. Both are filled in
+            // while the timeline is read and only read afterwards, so that
+            // getIOInfo() can follow the media reference key without any I/O,
+            // and without touching the read cache from the main thread.
+            const otio::Clip* videoInfoClip = nullptr;
+
+            std::map<const otio::MediaReference*, io::Info>
+            videoInfoByReference;
 
             // The pixels per unit for OTIO spatial coordinates, taken from the
             // first clip that has them. The coordinates are unit-less, so a
@@ -80,6 +81,15 @@ namespace tl
             // no spatial coordinates of their own, taken from the first video
             // clip.
             math::Size2i normalizeSize;
+
+            // The largest resolution among the media references of the first
+            // video clip. The canvas is built from this rather than from the
+            // resolution of whichever reference happens to be active when the
+            // timeline is read, so that switching to a higher resolution
+            // reference is not capped by a canvas built for a proxy. Equal to
+            // the resolution of the active reference when a clip has only one.
+            math::Size2i maxVideoSize;
+            uint64_t requestId = 0;
 
             struct VideoLayerData
             {
@@ -146,6 +156,15 @@ namespace tl
                 bool stopped = false;
                 std::string readError;
                 size_t readErrorCount = 0;
+                // The requested media reference keys, handed to the request
+                // thread. The timeline wide key applies to clips that have no
+                // entry of their own in clipMediaReferenceKeys. An empty key
+                // leaves a clip on the media reference that OTIO has active.
+                // The OTIO timeline itself is never written, so that it can be
+                // read without locking; see Timeline::setMediaReferenceKey().
+                std::string mediaReferenceKey;
+                std::map<const otio::Clip*, std::string> clipMediaReferenceKeys;
+                bool mediaReferenceKeysChanged = false;
                 std::mutex mutex;
             };
             Mutex mutex;
@@ -165,6 +184,10 @@ namespace tl
                 std::thread thread;
                 std::atomic<bool> running;
                 std::chrono::steady_clock::time_point logTimer;
+                // Copies of the media reference keys, refreshed under the mutex
+                // when the main thread changes them.
+                std::string mediaReferenceKey;
+                std::map<const OTIO_NS::Clip*, std::string> clipMediaReferenceKeys;
             };
             Thread thread;
 
@@ -174,6 +197,11 @@ namespace tl
             // shutdown).
             VideoFrame videoFrame(PendingVideoRequest&);
             AudioFrame audioFrame(PendingAudioRequest&);
+            // Resolve which media reference a clip should be read from, using
+            // the thread-owned key state. Request thread only; the main thread
+            // goes through Timeline::getMediaReference(), which takes the
+            // mutex.
+            otio::MediaReference* mediaReference(const otio::Clip*) const;
             // Aggregate reader and frame errors into the mutex-guarded
             // fields. Called on the request thread before completing a
             // request, so the error state is current by the time a caller's

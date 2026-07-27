@@ -1544,6 +1544,25 @@ namespace mrv
                 const FilesPanelOptions& o = message["value"];
                 app->filesModel()->setFilesPanelOptions(o);
             }
+            else if (c == "setMediaReferenceKey")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                std::string key = message["value"];
+
+                const auto& timeline = player->timeline();
+                if (!timeline) return;
+
+                timeline->setMediaReferenceKey(key);
+                player->clearCache();
+                ui->uiTimeline->setTimelinePlayer(nullptr);
+                ui->uiTimeline->setTimelinePlayer(player);
+                ui->uiView->redrawWindows();
+            }
             else if (c == "Protocol Version")
             {
                 int value = message["value"];
