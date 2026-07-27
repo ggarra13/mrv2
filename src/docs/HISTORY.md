@@ -1,3 +1,12 @@
+v1.7.2
+======
+
+ChangeLog
+---------
+
+- UI: Improved Japanese translation (thanks to coolvitto).
+
+
 v1.7.1
 ======
 
