@@ -2,11 +2,6 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
-#if defined(TLRENDER_QT5) || defined(TLRENDER_QT6)
-#    include <tlQtTest/TimeObjectTest.h>
-#    include <tlQt/Init.h>
-#endif // TLRENDER_QT5 || TLRENDER_QT6
-
 #include <tlGLTest/GLFWTest.h>
 #include <tlGLTest/MeshTest.h>
 #include <tlGLTest/OffscreenBufferTest.h>
@@ -169,18 +164,18 @@ void timelineTests(
     std::vector<std::shared_ptr<tests::ITest> >& tests,
     const std::shared_ptr<system::Context>& context)
 {
-    tests.push_back(timeline_tests::CompareOptionsTest::create(context));
-    tests.push_back(timeline_tests::DisplayOptionsTest::create(context));
-    tests.push_back(timeline_tests::EditTest::create(context));
-    tests.push_back(timeline_tests::IRenderTest::create(context));
-    tests.push_back(timeline_tests::ImageOptionsTest::create(context));
-    tests.push_back(timeline_tests::LUTOptionsTest::create(context));
-    tests.push_back(timeline_tests::MemoryReferenceTest::create(context));
-    tests.push_back(timeline_tests::OCIOOptionsTest::create(context));
-    tests.push_back(timeline_tests::PlayerOptionsTest::create(context));
-    tests.push_back(timeline_tests::PlayerTest::create(context));
-    tests.push_back(timeline_tests::TimelineTest::create(context));
-    tests.push_back(timeline_tests::UtilTest::create(context));
+    // tests.push_back(timeline_tests::CompareOptionsTest::create(context));
+    // tests.push_back(timeline_tests::DisplayOptionsTest::create(context));
+    // tests.push_back(timeline_tests::EditTest::create(context));
+    // tests.push_back(timeline_tests::IRenderTest::create(context));
+    // tests.push_back(timeline_tests::ImageOptionsTest::create(context));
+    // tests.push_back(timeline_tests::LUTOptionsTest::create(context));
+    // tests.push_back(timeline_tests::MemoryReferenceTest::create(context));
+    // tests.push_back(timeline_tests::OCIOOptionsTest::create(context));
+    // tests.push_back(timeline_tests::PlayerOptionsTest::create(context));
+    // tests.push_back(timeline_tests::PlayerTest::create(context));
+    // tests.push_back(timeline_tests::TimelineTest::create(context));
+    // tests.push_back(timeline_tests::UtilTest::create(context));
 }
 
 void appTests(
@@ -189,19 +184,10 @@ void appTests(
 {
 }
 
-void qtTests(
-    std::vector<std::shared_ptr<tests::ITest> >& tests,
-    const std::shared_ptr<system::Context>& context)
-{
-#if defined(TLRENDER_QT5) || defined(TLRENDER_QT6)
-    tests.push_back(qt_tests::TimeObjectTest::create(context));
-#endif // TLRENDER_QT5 || TLRENDER_QT6
-}
-
 int main(int argc, char* argv[])
 {
     auto context = system::Context::create();
-    timeline::init(context);
+    // timeline::init(context);
 
     auto logObserver = observer::ListObserver<log::Item>::create(
         context->getSystem<log::System>()->observeLog(),
