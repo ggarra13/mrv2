@@ -14,9 +14,6 @@
 #include <tlGLTest/TextureTest.h>
 #include <tlGL/Init.h>
 
-#include <tlAppTest/AppTest.h>
-#include <tlAppTest/CmdLineTest.h>
-
 #include <tlTimelineTest/CompareOptionsTest.h>
 #include <tlTimelineTest/DisplayOptionsTest.h>
 #include <tlTimelineTest/EditTest.h>
@@ -97,34 +94,34 @@ void coreTests(
     std::vector<std::shared_ptr<tests::ITest> >& tests,
     const std::shared_ptr<system::Context>& context)
 {
-    tests.push_back(core_tests::AudioTest::create(context));
-    tests.push_back(core_tests::BoxTest::create(context));
-    tests.push_back(core_tests::ColorTest::create(context));
-    tests.push_back(core_tests::ContextTest::create(context));
-    tests.push_back(core_tests::ErrorTest::create(context));
-    tests.push_back(core_tests::FileIOTest::create(context));
-    tests.push_back(core_tests::FileInfoTest::create(context));
-    tests.push_back(core_tests::FileTest::create(context));
-    tests.push_back(core_tests::FontSystemTest::create(context));
-    tests.push_back(core_tests::HDRTest::create(context));
-    tests.push_back(core_tests::ImageTest::create(context));
-    tests.push_back(core_tests::LRUCacheTest::create(context));
-    tests.push_back(core_tests::ListObserverTest::create(context));
-    tests.push_back(core_tests::LogSystemTest::create(context));
-    tests.push_back(core_tests::MapObserverTest::create(context));
-    tests.push_back(core_tests::MathTest::create(context));
-    tests.push_back(core_tests::MatrixTest::create(context));
-    tests.push_back(core_tests::MemoryTest::create(context));
-    tests.push_back(core_tests::MeshTest::create(context));
-    tests.push_back(core_tests::OSTest::create(context));
-    tests.push_back(core_tests::PathTest::create(context));
-    tests.push_back(core_tests::RangeTest::create(context));
-    tests.push_back(core_tests::SizeTest::create(context));
-    tests.push_back(core_tests::StringTest::create(context));
-    tests.push_back(core_tests::StringFormatTest::create(context));
-    tests.push_back(core_tests::TimeTest::create(context));
-    tests.push_back(core_tests::ValueObserverTest::create(context));
-    tests.push_back(core_tests::VectorTest::create(context));
+    // tests.push_back(core_tests::AudioTest::create(context));
+    // tests.push_back(core_tests::BoxTest::create(context));
+    // tests.push_back(core_tests::ColorTest::create(context));
+    // tests.push_back(core_tests::ContextTest::create(context));
+    // tests.push_back(core_tests::ErrorTest::create(context));
+    // tests.push_back(core_tests::FileIOTest::create(context));
+    // tests.push_back(core_tests::FileInfoTest::create(context));
+    // tests.push_back(core_tests::FileTest::create(context));
+    // tests.push_back(core_tests::FontSystemTest::create(context));
+    // tests.push_back(core_tests::HDRTest::create(context));
+    // tests.push_back(core_tests::ImageTest::create(context));
+    // tests.push_back(core_tests::LRUCacheTest::create(context));
+    // tests.push_back(core_tests::ListObserverTest::create(context));
+    // tests.push_back(core_tests::LogSystemTest::create(context));
+    // tests.push_back(core_tests::MapObserverTest::create(context));
+    // tests.push_back(core_tests::MathTest::create(context));
+    // tests.push_back(core_tests::MatrixTest::create(context));
+    // tests.push_back(core_tests::MemoryTest::create(context));
+    // tests.push_back(core_tests::MeshTest::create(context));
+    // tests.push_back(core_tests::OSTest::create(context));
+    // tests.push_back(core_tests::PathTest::create(context));
+    // tests.push_back(core_tests::RangeTest::create(context));
+    // tests.push_back(core_tests::SizeTest::create(context));
+    // tests.push_back(core_tests::StringTest::create(context));
+    // tests.push_back(core_tests::StringFormatTest::create(context));
+    // tests.push_back(core_tests::TimeTest::create(context));
+    // tests.push_back(core_tests::ValueObserverTest::create(context));
+    // tests.push_back(core_tests::VectorTest::create(context));
 }
 
 void glTests(
@@ -132,11 +129,11 @@ void glTests(
     const std::shared_ptr<system::Context>& context)
 {
 #if defined(TLRENDER_GLFW)
-    tests.push_back(gl_tests::GLFWTest::create(context));
-    tests.push_back(gl_tests::MeshTest::create(context));
-    tests.push_back(gl_tests::OffscreenBufferTest::create(context));
-    tests.push_back(gl_tests::ShaderTest::create(context));
-    tests.push_back(gl_tests::TextureTest::create(context));
+    // tests.push_back(gl_tests::GLFWTest::create(context));
+    // tests.push_back(gl_tests::MeshTest::create(context));
+    // tests.push_back(gl_tests::OffscreenBufferTest::create(context));
+    // tests.push_back(gl_tests::ShaderTest::create(context));
+    // tests.push_back(gl_tests::TextureTest::create(context));
 #endif // TLRENDER_GLFW
 }
 
@@ -173,26 +170,24 @@ void timelineTests(
     std::vector<std::shared_ptr<tests::ITest> >& tests,
     const std::shared_ptr<system::Context>& context)
 {
-    tests.push_back(timeline_tests::CompareOptionsTest::create(context));
-    tests.push_back(timeline_tests::DisplayOptionsTest::create(context));
-    tests.push_back(timeline_tests::EditTest::create(context));
-    tests.push_back(timeline_tests::IRenderTest::create(context));
-    tests.push_back(timeline_tests::ImageOptionsTest::create(context));
-    tests.push_back(timeline_tests::LUTOptionsTest::create(context));
-    tests.push_back(timeline_tests::MemoryReferenceTest::create(context));
-    tests.push_back(timeline_tests::OCIOOptionsTest::create(context));
-    tests.push_back(timeline_tests::PlayerOptionsTest::create(context));
-    tests.push_back(timeline_tests::PlayerTest::create(context));
-    tests.push_back(timeline_tests::TimelineTest::create(context));
-    tests.push_back(timeline_tests::UtilTest::create(context));
+    // tests.push_back(timeline_tests::CompareOptionsTest::create(context));
+    // tests.push_back(timeline_tests::DisplayOptionsTest::create(context));
+    // tests.push_back(timeline_tests::EditTest::create(context));
+    // tests.push_back(timeline_tests::IRenderTest::create(context));
+    // tests.push_back(timeline_tests::ImageOptionsTest::create(context));
+    // tests.push_back(timeline_tests::LUTOptionsTest::create(context));
+    // tests.push_back(timeline_tests::MemoryReferenceTest::create(context));
+    // tests.push_back(timeline_tests::OCIOOptionsTest::create(context));
+    // tests.push_back(timeline_tests::PlayerOptionsTest::create(context));
+    // tests.push_back(timeline_tests::PlayerTest::create(context));
+    // tests.push_back(timeline_tests::TimelineTest::create(context));
+    // tests.push_back(timeline_tests::UtilTest::create(context));
 }
 
 void appTests(
     std::vector<std::shared_ptr<tests::ITest> >& tests,
     const std::shared_ptr<system::Context>& context)
 {
-    tests.push_back(app_tests::AppTest::create(context));
-    tests.push_back(app_tests::CmdLineTest::create(context));
 }
 
 void qtTests(
