@@ -9,6 +9,10 @@ HOME            - if set, where the .filmaura directory, license and preference
 LANGUAGE        - Language to used in the UI (Usually set by the OS or mrv2
                   preferences).
 OCIO            - OCIO override for OpenColorIO's config file.
-MRV2_STUDIOPATH - global variable where to look up preferences settings first
-                  for a studio setting (before the user settings).
+
+MRV2_LICENSE_SERVER - Server to connect to obtain a (v)mrv2 license. 
+MRV2_LICENSEPATH    - Path to the floating license mrv2_licenses.lic.
+MRV2_STUDIOPATH     - Where to look up preferences settings first
+                      for a studio setting (before the user settings).
+MRV2_WEBRTC_STUDIO  - Name of the studio for WebRTC connections. 
 
