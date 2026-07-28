@@ -6,6 +6,7 @@ ChangeLog
 
 - UI: Improved Japanese translation (thanks to coolvitto).
 
+- Core: Fixed spaces on FontSystem.cpp.
 - Core: Added support for multiple media references in .otio files (works in
   	Viewport, Timeline and Thumbnails).
 - Core: FLTK's Pen support is now improved.

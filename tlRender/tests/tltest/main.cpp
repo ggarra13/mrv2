@@ -97,7 +97,7 @@ void coreTests(
     tests.push_back(core_tests::FileIOTest::create(context));
     tests.push_back(core_tests::FileInfoTest::create(context));
     tests.push_back(core_tests::FileTest::create(context));
-    // tests.push_back(core_tests::FontSystemTest::create(context));
+    tests.push_back(core_tests::FontSystemTest::create(context));
     tests.push_back(core_tests::HDRTest::create(context));
     tests.push_back(core_tests::ImageTest::create(context));
     tests.push_back(core_tests::LRUCacheTest::create(context));
