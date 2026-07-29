@@ -1002,7 +1002,7 @@ namespace mrv
         WebRTC.get("turn_server", tmpS, "", 4096);
         uiPrefs->uiPrefsWebRTCTurnServer->value(tmpS);
 
-        std::string webrtc_signaling = "wss://sync.filmaura.cloud";
+        std::string webrtc_signaling = "wss://sync.filmaura.cloud/sync";
         WebRTC.get("webrtc_signaling", tmpS, webrtc_signaling.c_str(), 4096);
         if (strlen(tmpS) != 0)
             webrtc_signaling = tmpS;
