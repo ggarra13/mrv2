@@ -8,6 +8,8 @@ ChangeLog
 - UI: Adding a Transition with Select and then Edit->Selected->Add Transition
       now refits the Edit timeline to show the transition.
 
+- UI/Core: Added support for multiple projects in WebRTC connections.
+
 - Core: Fixed incorrect media references' paths when loading and modifying an
   	.otio timeline with multiple media references (ie. Full and Proxy for
 	example).

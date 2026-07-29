@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.050000
+version 1.050020
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -96,8 +96,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double resizable
-      code3 {main = m;} non_modal size_range {847 449 0 0} visible
+      xywh {0 0 847 449} type Double hide resizable
+      code3 {main = m;} non_modal size_range {847 449 0 0}
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
@@ -110,8 +110,8 @@ class PreferencesUI {open
             xywh {280 28 567 380} box PLASTIC_UP_BOX labelcolor 32
           } {
             Fl_Group {} {
-              label {User Interface} selected
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label {User Interface}
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Window Behavior}
@@ -1989,10 +1989,10 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
             }
             Fl_Group {} {
               label WebRTC open
-              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5 hide
+              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
-                xywh {318 69 508 312}
+                xywh {318 69 508 313}
               } {
                 Fl_Choice {} {
                   label {WebRTC Presets}
@@ -2000,39 +2000,56 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
                   callback {int value = o->value();
 if (value == 0)
 {
+    v->uiPrefsWebRTCSignalingServer->value("wss://sync.filmaura.cloud/sync");
     v->uiPrefsWebRTCStunServer->value("stun:stun.l.google.com:19302");
+    v->uiPrefsWebRTCTurnServer->value("turn://turn.filmaura.cloud:3478");
 }
 else if (value == 1)
 {
+    v->uiPrefsWebRTCSignalingServer->value("wss://sync.filmaura.cloud/sync");
     v->uiPrefsWebRTCStunServer->value("");
-}} open
+}
+else if (value == 2)
+{
+    v->uiPrefsWebRTCSignalingServer->value("");
+    v->uiPrefsWebRTCStunServer->value("");    
+    v->uiPrefsWebRTCTurnServer->value("");
+}} open selected
                   tooltip {WebRTC presets} xywh {545 79 180 26} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
                     label Internet
-                    xywh {60 60 100 20}
+                    xywh {70 70 100 20}
                   }
                   MenuItem {} {
                     label LAN
                     xywh {60 60 100 20}
                   }
+                  MenuItem {} {
+                    label Custom
+                    xywh {70 70 100 20}
+                  }
+                }
+                Fl_Input uiPrefsWebRTCSignalingServer {
+                  label Signaling
+                  tooltip {WebRTC signaling server to sync the connections.} xywh {438 118 370 32} color 20 textcolor 56
                 }
                 Fl_Input uiPrefsWebRTCStunServer {
                   label {Stun Server}
-                  tooltip {WebRTC STUN Server.  Leave blank to use Google's.} xywh {438 119 370 32} color 20 textcolor 56
+                  tooltip {WebRTC STUN Server.  Leave blank to use Google's.} xywh {438 154 370 32} color 20 textcolor 56
                 }
-                Fl_Input uiPrefsWebRTCServer {
-                  label {WebRTC Server}
-                  tooltip {WebRTC server used to sync the connections.} xywh {438 166 370 32} color 20 textcolor 56
+                Fl_Input uiPrefsWebRTCTurnServer {
+                  label {Turn Server}
+                  tooltip {WebRTC STUN Server.  Leave blank to use Google's.} xywh {438 189 370 32} color 20 textcolor 56
                 }
                 Fl_Input uiPrefsWebRTCStudio {
                   label Studio
-                  tooltip {Studio name to prefix to all Room connections.  Use some unique name.} xywh {438 213 370 32} color 20 textcolor 56
+                  tooltip {Studio name to prefix to all Room connections.  Use some unique name.} xywh {438 245 370 32} color 20 textcolor 56
                 }
                 Fl_Check_Button uiPrefsWebRTCCleanDirectory {
                   label {Clean directory at Start up}
-                  tooltip {Clean the WebRTC cache directory on start of the viewer.} xywh {545 246 25 30} down_box DOWN_BOX value 1 align 4
+                  tooltip {Clean the WebRTC cache directory on start of the viewer.} xywh {545 278 25 30} down_box DOWN_BOX value 1 align 4
                 }
                 Fl_Choice uiPrefsWebRTCCacheSetting {
                   label {WebRTC Cache}
@@ -2054,7 +2071,7 @@ else
 
 path += "/.cache/mrv2/remote";
 v->uiPrefsWebRTCCacheDirectory->value(path.c_str());} open
-                  tooltip {Cache Directory presets.} xywh {545 277 180 26} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Cache Directory presets.} xywh {545 309 180 26} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -2072,7 +2089,7 @@ v->uiPrefsWebRTCCacheDirectory->value(path.c_str());} open
                 }
                 Fl_Input uiPrefsWebRTCCacheDirectory {
                   label {Cache Directory}
-                  tooltip {Directory where WebRTC downloads will reside.} xywh {438 324 370 26} color 20 textcolor 56
+                  tooltip {Directory where WebRTC downloads will reside.} xywh {438 356 370 26} color 20 textcolor 56
                   code3 {std::string path = mrv::homepath() + "/.cache/mrv2/remote";
 std::string oldpath = o->value();
 if (oldpath.empty()) o->value(path.c_str());}

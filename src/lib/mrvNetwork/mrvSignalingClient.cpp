@@ -47,18 +47,20 @@ namespace mrv
         else
             playerId = player;
 
-        std::string server = os::sgetenv("MRV2_WEB_RTC_SERVER");
+        std::string server = os::sgetenv("MRV2_WEB_RTC_SIGNALING_SERVER");
         if (server.empty())
-            server = App::ui->uiPrefs->uiPrefsWebRTCServer->value();
+            server = App::ui->uiPrefs->uiPrefsWebRTCSignalingServer->value();
 
         if (server.empty())
         {
-            server = "wss://sync.filmaura.cloud/sync";
+            std::string msg = _("No Sync server set.  Please update Preferences->WebRTC->Signaling");
+            LOG_ERROR(msg);
+            return;
         }
 
         if (studio.empty())
         {
-            std::string msg = _("No Web RTC Studio set.  Please update Preferences->WebRTC Studio");
+            std::string msg = _("No Web RTC Studio set.  Please update Preferences->WebRTC->Studio");
             LOG_ERROR(msg);
             return;
         }

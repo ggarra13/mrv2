@@ -72,13 +72,6 @@ jobs:
       - name: Install ccache
         run: brew install ccache
 
-      - name: Global Secrets
-        run: |
-          echo "DEVELOPER_ID=${DEVELOPER_ID}"
-          echo "APPLE_ID=${APPLE_ID}"
-          echo "TEAM_ID=${TEAM_ID}"
-          echo "NOTARY_PROFILE=${NOTARY_PROFILE}"
-            
       - name: Configure ccache
         run: |
           echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV

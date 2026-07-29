@@ -999,11 +999,16 @@ namespace mrv
         WebRTC.get("stun_server", tmpS, "stun:stun.l.google.com:19302", 4096);
         uiPrefs->uiPrefsWebRTCStunServer->value(tmpS);
 
-        std::string webrtc_server = "wss://filmaura.cloud/sync";
-        WebRTC.get("webrtc_server", tmpS, webrtc_server.c_str(), 4096);
+        WebRTC.get("stun_server", tmpS, "stun:stun.l.google.com:19302", 4096);
+        uiPrefs->uiPrefsWebRTCStunServer->value(tmpS);
+
+        std::string webrtc_signaling = "wss://sync.filmaura.cloud";
+        WebRTC.get("webrtc_signaling", tmpS, webrtc_signaling.c_str(), 4096);
         if (strlen(tmpS) != 0)
-            webrtc_server = tmpS;
-        uiPrefs->uiPrefsWebRTCServer->value(webrtc_server.c_str());
+            webrtc_signaling = tmpS;
+        uiPrefs->uiPrefsWebRTCSignalingServer->value(webrtc_signaling.c_str());
+
+
 
         WebRTC.get("webrtc_studio", tmpS, "", 4096);
         uiPrefs->uiPrefsWebRTCStudio->value(tmpS);
@@ -1776,7 +1781,7 @@ namespace mrv
 
         WebRTC.set("stun_server", uiPrefs->uiPrefsWebRTCStunServer->value());
 
-        WebRTC.set("webrtc_server", uiPrefs->uiPrefsWebRTCServer->value());
+        WebRTC.set("webrtc_signaling", uiPrefs->uiPrefsWebRTCSignalingServer->value());
 
         WebRTC.set("webrtc_studio", uiPrefs->uiPrefsWebRTCStudio->value());
 
