@@ -3981,7 +3981,7 @@ msgid "Playback/Toggle In and Out Points"
 msgstr "播放/切换入点和出点"
 
 msgid "Playback/Toggle In\\/Out Otio Clip"
-msgstr "播放重放/切换英寸/Otio 剪切外"
+msgstr "播放/切换英寸/Otio 剪切外"
 
 msgid "Playback/Loop Playback"
 msgstr "播放/循环播放"

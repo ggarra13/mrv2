@@ -3328,7 +3328,7 @@ msgid "OCIO config (*.{"
 msgstr "ОКИО-Конфигурация (*) {"
 
 msgid "Load OCIO Config"
-msgstr "Загрузить OCIO Conpig"
+msgstr "Загрузить OCIO Config"
 
 msgid "Default"
 msgstr "По умолчанию"
@@ -4159,46 +4159,46 @@ msgid "View/Compare/Tile"
 msgstr "Вид/Сравнение/Плитка"
 
 msgid "Timeline/Cache/Clear"
-msgstr "Сроки/Кэш/Очистить"
+msgstr "Таймлайн/Кэш/Очистить"
 
 msgid "Timeline/Cache/Update Frame"
-msgstr "Сроки/Кэш/Обновить рамки"
+msgstr "Таймлайн/Кэш/Обновить кадр"
 
 msgid "Timeline/Editable"
-msgstr "Сроки/Редакция"
+msgstr "Таймлайн/Редактируемый"
 
 msgid "Timeline/Frame View"
-msgstr "Сроки/Рамочный вид"
+msgstr "Таймлайн/Покадровый вид"
 
 msgid "Timeline/Scroll To Current Frame"
-msgstr "Сроки/Свиток в текущую структуру"
+msgstr "Таймлайн/Прокрутить к текущему кадру"
 
 msgid "Timeline/Track Info"
-msgstr "Сроки/Информация о дорожке"
+msgstr "Таймлайн/Информация о дорожке"
 
 msgid "Timeline/Clip Info"
-msgstr "Сроки/Скопировать информацию"
+msgstr "Таймлайн/Информация о клипе"
 
 msgid "Timeline/Thumbnails/None"
-msgstr "Сроки/Пальцы/Нет"
+msgstr "Таймлайн/Миниатюры/Нет"
 
 msgid "Timeline/Thumbnails/Small"
-msgstr "Сроки/Пальцы/Маленький"
+msgstr "Таймлайн/Миниатюры/Маленькие"
 
 msgid "Timeline/Thumbnails/Medium"
-msgstr "Сроки/Пальцы/Средняя"
+msgstr "Таймлайн/Миниатюры/Средние"
 
 msgid "Timeline/Thumbnails/Large"
-msgstr "Сроки/Пальцы/Большой"
+msgstr "Таймлайн/Миниатюры/Большие"
 
 msgid "Timeline/Transitions"
-msgstr "Сроки/Переходные периоды"
+msgstr "Таймлайн/Переходы"
 
 msgid "Timeline/Markers"
-msgstr "Сроки/Маркеры"
+msgstr "Таймлайн/Маркеры"
 
 msgid "Timeline/Visible Tracks/{0}"
-msgstr "Сроки/Видимые дорожки/{0}"
+msgstr "Таймлайн/Видимые дорожки/{0}"
 
 msgid "Timeline/Media Reference/{0}"
 msgstr "Таймлайн/Ссылка на медиафайл/{0}"
@@ -6241,7 +6241,7 @@ msgstr ""
 "уверены, что хотите продолжить?"
 
 msgid "User Interface"
-msgstr "Интерфэйс пользователя"
+msgstr "Пользовательский интерфейс"
 
 msgid "Window Behavior"
 msgstr "Поведение окна"
@@ -6314,7 +6314,7 @@ msgstr "Максимизация"
 
 msgid "When selected, mrv2 will start in a maximized window."
 msgstr "При выборе mrv2 начнётся в максимальном окне."
-
+       
 msgid "User Interface Elements"
 msgstr "Элементы пользовательского интерфейса"
 
@@ -7236,31 +7236,31 @@ msgid "User Interface/Elements"
 msgstr "Пользовательский интерфейс/Элементы"
 
 msgid "User Interface/View Window"
-msgstr "Интерфэйс пользователя/Вид Окно"
+msgstr "Пользовательский интерфейс/Окно просмотра"
 
 msgid "User Interface/File Requester"
-msgstr "Интерфэйс пользователя/Запрашиватель файла"
+msgstr "Пользовательский интерфейс/Диалог выбора файла"
 
 msgid "User Interface/Fonts"
-msgstr "Интерфэйс пользователя/Шрифты"
+msgstr "Пользовательский интерфейс/Шрифты"
 
 msgid "User Interface/Language and Colors"
-msgstr "Интерфэйс пользователя/Язык и цвета"
+msgstr "Пользовательский интерфейс/Язык и цвета"
 
 msgid "User Interface/Pixel Toolbar"
-msgstr "Интерфэйс пользователя/Панель пикселя"
+msgstr "Пользовательский интерфейс/Панель пикселей"
 
 msgid "User Interface/Positioning"
-msgstr "Интерфэйс пользователя/Расположение"
+msgstr "Пользовательский интерфейс/Позиционирование"
 
 msgid "User Interface/Render"
-msgstr "Интерфэйс пользователя/Редакция"
+msgstr "Пользовательский интерфейс/Рендеринг"
 
 msgid "User Interface/Thumbnails"
-msgstr "Интерфэйс пользователя/Пальцы"
+msgstr "Пользовательский интерфейс/Миниатюры"
 
 msgid "User Interface/Timeline"
-msgstr "Интерфэйс пользователя/Сроки"
+msgstr "Пользовательский интерфейс/Таймлайн"
 
 msgid "No Audio was Compiled"
 msgstr "Никакого звука не было скомпилировано"

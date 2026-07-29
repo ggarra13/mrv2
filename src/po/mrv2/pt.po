@@ -66,7 +66,7 @@ msgid ""
 "Contains all classes and enums related to UI (User Interface). \n"
 msgstr ""
 "\n"
-"Mdulo UI. Contm todas as classes e enums relacionados  UI (Interface de usurio).\n"
+"Modulo UI. Contm todas as classes e enums relacionados  UI (Interface de usuário).\n"
 
 msgid "Refresh menus."
 msgstr "Actualizar menus."
@@ -2117,13 +2117,13 @@ msgid "First Frame"
 msgstr "Primeiro Quadro"
 
 msgid "First frame of clip - User selected"
-msgstr "Primeira moldura do clipe - Usurio selecionado"
+msgstr "Primeira moldura do clipe - Usuário selecionado"
 
 msgid "Last Frame"
 msgstr "ltimo Quadro"
 
 msgid "Last frame of clip - User selected"
-msgstr "ltima moldura do clipe - Usurio selecionado"
+msgstr "ltima moldura do clipe - Usuário selecionado"
 
 msgid "(PAL Fields)"
 msgstr "(Campos PAL)"
@@ -2226,24 +2226,24 @@ msgstr "O vdeo tem legendas fechadas"
 
 msgid "Avg. Bitrate"
 msgstr "Avg. Bitrate"
-
+       
 msgid "Language"
-msgstr "Lngua"
+msgstr "Idioma"
 
 msgid "Language if known"
-msgstr "Lngua se conhecida"
+msgstr "Idioma, se conhecido"
 
 msgid "Start of Subtitle"
-msgstr "Incio da Legenda"
+msgstr "Início da legenda"
 
 msgid "Duration of Subtitle"
-msgstr "Durao do Subttulo"
+msgstr "Duração da legenda"
 
 msgid "Linear"
 msgstr "Linear"
 
 msgid "Logarithmic"
-msgstr "Logartmico"
+msgstr "Logarítmico"
 
 msgid "Square Root"
 msgstr "Raiz quadrada"
@@ -4181,7 +4181,7 @@ msgid "Timeline/Visible Tracks/{0}"
 msgstr "Calendário/Pistas Visíveis/{0}"
 
 msgid "Timeline/Media Reference/{0}"
-msgstr "Linha do tempo/Referência de mídia/{0}"
+msgstr "Linha Do Tempo/Referência de mídia/{0}"
 
 msgid "Image/Next"
 msgstr "Imagem/Prxima"
@@ -6218,7 +6218,7 @@ msgstr ""
 "a certeza de que deseja continuar?"
 
 msgid "User Interface"
-msgstr "Interface do Usurio"
+msgstr "Interface do Usuário"
 
 msgid "Window Behavior"
 msgstr "Comportamento da Janela"
@@ -6485,7 +6485,7 @@ msgid "Sets the font to use in panels. (Not yet working)"
 msgstr "Defina a fonte a usar em painis. (Ainda no est funcionando)"
 
 msgid "Language and Colors"
-msgstr "Lngua e cores"
+msgstr "Idioma e cores"
 
 msgid "Scheme"
 msgstr "Regime"
@@ -7233,7 +7233,7 @@ msgid "User Interface/Fonts"
 msgstr "Interface do Usuário/Fontes"
 
 msgid "User Interface/Language and Colors"
-msgstr "Interface do Usuário/Lngua e cores"
+msgstr "Interface do Usuário/Idioma e cores"
 
 msgid "User Interface/Pixel Toolbar"
 msgstr "Interface do Usuário/Barra de Ferramentas do Pixel"

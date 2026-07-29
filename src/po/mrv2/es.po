@@ -4244,7 +4244,7 @@ msgid "Timeline/Visible Tracks/{0}"
 msgstr "Línea de Tiempo/Pistas Visibles/{0}"
 
 msgid "Timeline/Media Reference/{0}"
-msgstr "Línea de tiempo/Referencia de medios/{0}"
+msgstr "Línea de Tiempo/Referencia de medios/{0}"
 
 msgid "Image/Next"
 msgstr "Imagen/Siguiente"

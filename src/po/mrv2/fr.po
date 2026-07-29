@@ -1398,25 +1398,25 @@ msgid "&File/&Save"
 msgstr "Fichier/Enregistrer"
 
 msgid "&Edit/&Undo"
-msgstr "Modifier/Annuler"
+msgstr "Édition/Annuler"
 
 msgid "&Edit/Cu&t"
-msgstr "Modifier/Cut"
+msgstr "Édition/Cut"
 
 msgid "&Edit/&Copy"
-msgstr "Modifier/Copier"
+msgstr "Édition/Copier"
 
 msgid "&Edit/&Paste"
-msgstr "Modifier/Coller"
+msgstr "Édition/Coller"
 
 msgid "&Edit/&Delete"
-msgstr "Modifier/Supprimer"
+msgstr "Édition/Supprimer"
 
 msgid "&Edit/&Comment Selection"
-msgstr "Modifier/Sélection des commentaires"
+msgstr "Édition/Sélection des commentaires"
 
 msgid "&Edit/&Uncomment Selection"
-msgstr "Modifier/Désactiver la sélection des commentaires"
+msgstr "Édition/Désactiver la sélection des commentaires"
 
 msgid "&Search/&Find..."
 msgstr "Recherche/Trouvez..."
@@ -3468,7 +3468,7 @@ msgid "Could not restart mrv2 instance with a session file."
 msgstr "Impossible de redémarrer l’instance mrv2 avec le fichier de session."
 
 msgid "Edit Text Annotation"
-msgstr "Modifier l'annotation texte"
+msgstr "Édition l'annotation texte"
 
 msgid "No item selected"
 msgstr "Aucun élément sélectionné"
@@ -3749,7 +3749,7 @@ msgid "Changed to SDR monitor at index {0}"
 msgstr "Passé au moniteur SDR à l’indice {0}"
 
 msgid "Edit Text"
-msgstr "Modifier le texte"
+msgstr "Édition le texte"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' n’est pas un fichier, un répertoire ou une URL."
@@ -4157,46 +4157,46 @@ msgid "View/Compare/Tile"
 msgstr "Vue/Comparer/Tile"
 
 msgid "Timeline/Cache/Clear"
-msgstr "Échéancier/Cache/Effacer"
+msgstr "Timeline/Cache/Effacer"
 
 msgid "Timeline/Cache/Update Frame"
-msgstr "Échéancier/Cache/Mise à jour du cadre"
+msgstr "Timeline/Cache/Mise à jour du cadre"
 
 msgid "Timeline/Editable"
-msgstr "Échéancier/Éditable"
+msgstr "Timeline/Éditable"
 
 msgid "Timeline/Frame View"
-msgstr "Échéancier/Affichage du cadre"
+msgstr "Timeline/Affichage du cadre"
 
 msgid "Timeline/Scroll To Current Frame"
-msgstr "Échéancier/Faites défiler vers le cadre actuel"
+msgstr "Timeline/Faites défiler vers le cadre actuel"
 
 msgid "Timeline/Track Info"
-msgstr "Échéancier/Informations sur la piste"
+msgstr "Timeline/Informations sur la piste"
 
 msgid "Timeline/Clip Info"
-msgstr "Échéancier/Informations sur le clip"
+msgstr "Timeline/Informations sur le clip"
 
 msgid "Timeline/Thumbnails/None"
-msgstr "Échéancier/Thumbnails/Aucun"
+msgstr "Timeline/Thumbnails/Aucun"
 
 msgid "Timeline/Thumbnails/Small"
-msgstr "Échéancier/Thumbnails/Petite"
+msgstr "Timeline/Thumbnails/Petite"
 
 msgid "Timeline/Thumbnails/Medium"
-msgstr "Échéancier/Thumbnails/Moyenne"
+msgstr "Timeline/Thumbnails/Moyenne"
 
 msgid "Timeline/Thumbnails/Large"
-msgstr "Échéancier/Thumbnails/Grandes"
+msgstr "Timeline/Thumbnails/Grandes"
 
 msgid "Timeline/Transitions"
-msgstr "Échéancier/Transitions"
+msgstr "Timeline/Transitions"
 
 msgid "Timeline/Markers"
-msgstr "Échéancier/Marqueurs"
+msgstr "Timeline/Marqueurs"
 
 msgid "Timeline/Visible Tracks/{0}"
-msgstr "Échéancier/Voies visibles/{0}"
+msgstr "Timeline/Voies visibles/{0}"
 
 msgid "Timeline/Media Reference/{0}"
 msgstr "Timeline/Référence média/{0}"
@@ -4268,16 +4268,16 @@ msgid "Edit/Associated Clips"
 msgstr "Édition/Clips associés"
 
 msgid "Edit/Frame/Cut"
-msgstr "Modifier/Cadre/Cut"
+msgstr "Édition/Cadre/Cut"
 
 msgid "Edit/Frame/Copy"
-msgstr "Modifier/Cadre/Copier"
+msgstr "Édition/Cadre/Copier"
 
 msgid "Edit/Frame/Paste"
-msgstr "Modifier/Cadre/Coller"
+msgstr "Édition/Cadre/Coller"
 
 msgid "Edit/Frame/Insert"
-msgstr "Modifier/Cadre/Insérer"
+msgstr "Édition/Cadre/Insérer"
 
 msgid "Edit/Time/Audio Clip/Insert"
 msgstr "Édition/Temps/Clip audio/Insérer"
@@ -4310,10 +4310,10 @@ msgid "Edit/Time/Slice"
 msgstr "Édition/Temps/Couper"
 
 msgid "Edit/Undo"
-msgstr "Modifier/Annuler"
+msgstr "Édition/Annuler"
 
 msgid "Edit/Redo"
-msgstr "Modifier/Refaire"
+msgstr "Édition/Refaire"
 
 msgid "OCIO/Presets"
 msgstr "OCIO/Préréglages"
@@ -4367,7 +4367,7 @@ msgid "Sync/Send/Color"
 msgstr "Synchroniser/Envoyer/Couleur"
 
 msgid "Sync/Send/Timeline"
-msgstr "Synchroniser/Envoyer/Échéancier"
+msgstr "Synchroniser/Envoyer/Timeline"
 
 msgid "Sync/Send/Annotations"
 msgstr "Synchroniser/Envoyer/Annotations"
@@ -4388,7 +4388,7 @@ msgid "Sync/Accept/Color"
 msgstr "Synchroniser/Accepter/Couleur"
 
 msgid "Sync/Accept/Timeline"
-msgstr "Synchroniser/Accepter/Échéancier"
+msgstr "Synchroniser/Accepter/Timeline"
 
 msgid "Sync/Accept/Annotations"
 msgstr "Synchroniser/Accepter/Annotations"
@@ -5694,7 +5694,7 @@ msgid "MenuBar"
 msgstr "MenuBar"
 
 msgid "Edit"
-msgstr "Modifier"
+msgstr "Édition"
 
 msgid "Fit Window to Image"
 msgstr "Fixer la fenêtre à l'image"
@@ -5822,7 +5822,7 @@ msgid "uiTimelineGroup"
 msgstr "Groupe des carreaux"
 
 msgid "uiTimeline"
-msgstr "Échéancier"
+msgstr "Timeline"
 
 msgid "BottomBar"
 msgstr "BottomBar"
@@ -6654,7 +6654,7 @@ msgstr ""
 "Comment afficher les miniatures de la ligne de temps dans les panneaux."
 
 msgid "Edit Viewport"
-msgstr "Modifier le point de vue"
+msgstr "Édition le point de vue"
 
 msgid "How to display timeline thumbnails by default."
 msgstr "Comment afficher les miniatures de la chronologie par défaut."
@@ -6857,10 +6857,10 @@ msgid "Behavior"
 msgstr "Comportement"
 
 msgid "Edit Associated Clips"
-msgstr "Modifier les clips associés"
+msgstr "Édition les clips associés"
 
 msgid "Edit Associated Clips."
-msgstr "Modifier les clips associés."
+msgstr "Édition les clips associés."
 
 msgid "Editable"
 msgstr "Éditable"
@@ -7291,7 +7291,7 @@ msgid "User Interface/Thumbnails"
 msgstr "Interface utilisateur/Thumbnails"
 
 msgid "User Interface/Timeline"
-msgstr "Interface utilisateur/Échéancier"
+msgstr "Interface utilisateur/Timeline"
 
 msgid "No Audio was Compiled"
 msgstr "Aucun audio n'a été compilé"
@@ -8709,13 +8709,13 @@ msgstr "l'information de la tâche a échoué"
 #~ msgstr "Entrez une URL."
 
 #~ msgid "Timeline/Edit Associated Clips"
-#~ msgstr "Échéancier/Modifier les clips associés"
+#~ msgstr "Timeline/Édition les clips associés"
 
 #~ msgid "Edit/Remove"
-#~ msgstr "Modifier/Supprimer"
+#~ msgstr "Édition/Supprimer"
 
 #~ msgid "Edit/&Copy"
-#~ msgstr "Modifier/Copier"
+#~ msgstr "Édition/Copier"
 
 #~ msgid "HDR active monitor at index {0}"
 #~ msgstr "Moniteur HDR actif à l’indice {0}"

@@ -4173,7 +4173,7 @@ msgid "Timeline/Visible Tracks/{0}"
 msgstr "टाइम-लाइन/दृष्टिगोचर ट्रैक्स/{0}"
 
 msgid "Timeline/Media Reference/{0}"
-msgstr "टाइमलाइन/मीडिया संदर्भ/{0}"
+msgstr "टाइम-लाइन/मीडिया संदर्भ/{0}"
 
 msgid "Image/Next"
 msgstr "छवि/अगला"
