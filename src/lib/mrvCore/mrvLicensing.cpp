@@ -380,7 +380,8 @@ namespace mrv
         if (server.empty())
         {
             //server = "srv1037957.hstgr.cloud";
-            server = "filmaura.cloud";
+            //server = "filmaura.cloud";
+            server = "api.filmaura.cloud";
         }
 
         port = 443;

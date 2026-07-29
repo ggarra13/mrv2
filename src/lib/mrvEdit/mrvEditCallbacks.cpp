@@ -275,6 +275,31 @@ namespace mrv
         static size_t otioIndex = 1;
         file::Path savedPath, savedAudioPath;
 
+
+        void makeMediaAbsolute(otio::MediaReference* media,
+                               const std::string& directory,
+                               const file::PathOptions options)
+        {
+            if (auto ref = dynamic_cast<otio::ExternalReference*>(media))
+            {
+                file::Path urlPath(ref->target_url());
+                if (!urlPath.isAbsolute())
+                {
+                    urlPath = timeline::getPath(media, directory, options);
+                    ref->set_target_url(urlPath.get());
+                }
+            }
+            else if (auto ref = dynamic_cast<otio::ImageSequenceReference*>(media))
+            {
+                file::Path urlPath(ref->target_url_base());
+                if (!urlPath.isAbsolute())
+                {
+                    urlPath = timeline::getPath(media, directory, options);
+                    ref->set_target_url_base(urlPath.getDirectory());
+                }
+            }
+        }
+
         //! This routine makes paths absolute if possible.
         //! It uses the information from the current media item.
         void makePathsAbsolute(otio::Timeline* timeline, ViewerUI* ui)
@@ -366,31 +391,18 @@ namespace mrv
                         auto clip = otio::dynamic_retainer_cast<Clip>(child);
                         if (!clip)
                             continue;
-                        auto media = clip->media_reference();
-                        if (auto ref =
-                                dynamic_cast<otio::ExternalReference*>(media))
+                        auto medias = clip->media_references();
+                        if (!medias.empty())
                         {
-                            file::Path urlPath(ref->target_url());
-                            if (!urlPath.isAbsolute())
+                            for (auto [_, media] : medias)
                             {
-                                urlPath = timeline::getPath(
-                                    media, directory, options);
-                                ref->set_target_url(urlPath.get());
+                                makeMediaAbsolute(media, directory, options);
                             }
                         }
-                        else if (
-                            auto ref =
-                                dynamic_cast<otio::ImageSequenceReference*>(
-                                    media))
+                        else
                         {
-                            file::Path urlPath(ref->target_url_base());
-                            if (!urlPath.isAbsolute())
-                            {
-                                urlPath = timeline::getPath(
-                                    media, directory, options);
-                                ref->set_target_url_base(
-                                    urlPath.getDirectory());
-                            }
+                            auto media = clip->media_reference();
+                            makeMediaAbsolute(media, directory, options);
                         }
                     }
                 }
@@ -401,17 +413,18 @@ namespace mrv
                         auto clip = otio::dynamic_retainer_cast<Clip>(child);
                         if (!clip)
                             continue;
-                        auto media = clip->media_reference();
-                        if (auto ref =
-                                dynamic_cast<otio::ExternalReference*>(media))
+                        auto medias = clip->media_references();
+                        if (!medias.empty())
                         {
-                            file::Path urlPath(ref->target_url());
-                            if (!urlPath.isAbsolute())
+                            for (auto [_, media] : medias)
                             {
-                                urlPath = timeline::getPath(
-                                    media, audioDirectory, options);
-                                ref->set_target_url(urlPath.get());
+                                makeMediaAbsolute(media, directory, options);
                             }
+                        }
+                        else
+                        {
+                            auto media = clip->media_reference();
+                            makeMediaAbsolute(media, directory, options);
                         }
                     }
                 }
@@ -2145,6 +2158,8 @@ namespace mrv
         const auto& time = getTime(player);
         updateTimeline(timeline, time, ui);
         toOtioFile(timeline, ui);
+
+        set_edit_mode_cb(EditMode::kFull, ui);
     }
 
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui)

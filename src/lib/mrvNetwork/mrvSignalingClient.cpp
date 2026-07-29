@@ -53,7 +53,7 @@ namespace mrv
 
         if (server.empty())
         {
-            server = "wss://filmaura.cloud/sync";
+            server = "wss://sync.filmaura.cloud/sync";
         }
 
         if (studio.empty())

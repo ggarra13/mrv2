@@ -10,7 +10,7 @@ namespace tl
 {
     namespace TIMELINEUI
     {
-        
+
         void TimelineItem::_mouseMoveEventTrim(ui::MouseMoveEvent& event)
         {
             TLRENDER_P();
@@ -22,7 +22,7 @@ namespace tl
                 break;
             case Private::MouseMode::Transition:
             {
-                _mouseMoveEventRoll(event);                
+                _mouseMoveEventRoll(event);
                 break;
             }
             case Private::MouseMode::Item:
@@ -30,7 +30,7 @@ namespace tl
                 _mouse.pos.y = _mouse.pressPos.y;
                 const int offset = _mouse.pos.x - _mouse.pressPos.x;
                 math::Box2i move;
-                    
+
                 for (const auto& item : p.mouse.items)
                 {
                     const math::Box2i& g = item->geometry;
@@ -42,7 +42,7 @@ namespace tl
                     {
                         math::Size2i size = g.getSize();
                         size.w -= offset;
-                        
+
                         move = math::Box2i(
                             g.min + _mouse.pos - _mouse.pressPos,
                             size );
@@ -54,7 +54,7 @@ namespace tl
                         move = math::Box2i(g.min, size);
                     }
 
-                        
+
                     otime::RationalTime startTime = posToTime(move.x());
                     otime::RationalTime duration  = posToTime(move.x() + move.w()) - startTime;
                     startTime -= _timeRange.start_time();
@@ -76,7 +76,7 @@ namespace tl
                         if (duration.value() <= 1.F)
                         continue;
                     }
-                    
+
                     item->p->setGeometry(move);
                 }
                 break;
@@ -102,19 +102,19 @@ namespace tl
                 _mouse.pos.y = _mouse.pressPos.y;
                 const int offset = _mouse.pos.x - _mouse.pressPos.x;
                 math::Box2i move;
-                
+
                 //
                 // Store an undo in callback
                 //
                 _storeUndo();
-                
+
                 const auto otioTimeline = p.player->getTimeline()->getTimeline();
                 for (const auto& item : p.mouse.items)
                 {
                     const math::Box2i& g = item->geometry;
                     otime::TimeRange timeRange = item->p->getTimeRange();
                     otime::TimeRange origRange = timeRange;
-                                        
+
                     math::Size2i size = g.getSize();
                     if (p.mouse.side == Private::MouseClick::Left)
                     {
@@ -135,10 +135,10 @@ namespace tl
 
                     startTime -= _timeRange.start_time();
                     timeRange = otime::TimeRange(startTime, duration);
-                    
+
                     auto startOffset = timeRange.start_time() - origRange.start_time();
                     auto durationOffset = timeRange.duration() - origRange.duration();
-                    
+
                     const int trackIndex = item->track;
                     const int itemIndex = item->index;
                     const int otioItemIndex = p.tracks[trackIndex].otioIndexes[itemIndex];
@@ -150,7 +150,7 @@ namespace tl
                         const auto& otioChild = otioTrack->children()[otioItemIndex];
                         auto otioItem = otio::dynamic_retainer_cast<otio::Item>(otioChild);
 
-                        
+
                         auto parentRange = otioItem->trimmed_range_in_parent().value();
                         auto proposedRange = otio::TimeRange(parentRange.start_time() + startOffset,
                                                              parentRange.duration() + durationOffset);
@@ -158,20 +158,20 @@ namespace tl
 
                         _clampRangeToNeighborTransitions(otioItem, proposedRange, clampedRange);
 
-                        // 2. Calculate the "Correction" applied by the clamp
+                        // Calculate the "Correction" applied by the clamp
                         // If the clamp moved the start by +2 frames, we need to subtract that from our offset
                         auto startCorrection = clampedRange.start_time() - proposedRange.start_time();
                         auto durationCorrection = clampedRange.duration() - proposedRange.duration();
 
-                       // 3. Apply the correction to your offsets
+                        // Apply the correction to your offsets
                         startOffset += startCorrection;
                         durationOffset += durationCorrection;
-                        
+
                         if (auto otioClip = otio::dynamic_retainer_cast<otio::Clip>(otioChild))
                         {
                             origRange = otioClip->source_range().value();
-                            
-                            const auto& availableRange = otioClip->available_range(&status);              
+
+                            const auto& availableRange = otioClip->available_range(&status);
                             auto startTime = origRange.start_time() + startOffset;
                             auto duration  = origRange.duration() + durationOffset;
                             timeRange = otime::TimeRange(startTime, duration);
@@ -189,11 +189,11 @@ namespace tl
                                     duration = otime::RationalTime(1.F, duration.rate());
                                 timeRange = otime::TimeRange(startTime, duration);
                             }
-                            
+
                             otioClip->set_source_range(timeRange);
                         }
                         else if (auto otioGap = otio::dynamic_retainer_cast<otio::Gap>(otioChild))
-                        {         
+                        {
                             auto startTime = origRange.start_time() + startOffset;
                             auto duration  = origRange.duration() + durationOffset;
 
@@ -201,9 +201,9 @@ namespace tl
                                 startTime = otime::RationalTime(0.F, startTime.rate());
                             if (duration.value() < 1.F)
                                 duration = otime::RationalTime(1.F, duration.rate());
-                            
+
                             timeRange = otime::TimeRange(startTime, duration);
-                            
+
                             otioGap->set_source_range(timeRange);
                         }
                     }
@@ -217,7 +217,7 @@ namespace tl
             }
             default:
                 break;
-            }   
+            }
         }
 
     }
