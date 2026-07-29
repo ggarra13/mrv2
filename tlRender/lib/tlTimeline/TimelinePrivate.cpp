@@ -102,10 +102,6 @@ namespace tl
         VideoFrame Timeline::Private::videoFrame(PendingVideoRequest& request)
         {
             VideoFrame frame;
-            if (!ioInfo.video.empty())
-            {
-                frame.size = ioInfo.video.front().size;
-            }
             frame.canvasSize = canvasSize;
             frame.time = request.time;
             for (auto& i : request.layerData)
@@ -116,6 +112,11 @@ namespace tl
                     if (i.image.valid())
                     {
                         layer.image = i.image.get().image;
+                        if (frame.size.w == 0 && frame.size.h == 0)
+                        {
+                            frame.size.w = i.size.w;
+                            frame.size.h = i.size.h;
+                        }
                     }
                     if (i.imageB.valid())
                     {
@@ -143,6 +144,11 @@ namespace tl
                 layer.transition = i.transition;
                 layer.transitionValue = i.transitionValue;
                 frame.layers.push_back(layer);
+            }
+
+            if (0 == frame.size.w && 0 == frame.size.h && !ioInfo.video.empty())
+            {
+                frame.size = ioInfo.video.front().size;
             }
             return frame;
         }
@@ -229,5 +235,19 @@ namespace tl
             audio::move(list, out->getData(), out->getByteCount());
             return out;
         }
+
+        math::Size2i
+        Timeline::Private::videoInfoSize(const otio::Clip* clip) const
+        {
+            math::Size2i out;
+            const auto i = videoInfoByReference.find(mediaReference(clip));
+            if (i != videoInfoByReference.end() && !i->second.video.empty())
+            {
+                out.w = i->second.video[0].size.w;
+                out.h = i->second.video[0].size.h;
+            }
+            return out;
+        }
+
     } // namespace timeline
 } // namespace tl

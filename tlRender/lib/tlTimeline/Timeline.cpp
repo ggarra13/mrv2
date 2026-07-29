@@ -743,6 +743,8 @@ namespace tl
                                         videoLayerData.image = _readVideo(
                                             otioClip, requestTime,
                                             request->options);
+                                        videoLayerData.size =
+                                            p.videoInfoSize(otioClip);
                                         videoLayerData.bounds = getCanvasBox(
                                             otioClip,
                                             p.options.spatial,
@@ -792,6 +794,8 @@ namespace tl
                                                 videoLayerData.imageB = _readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
+                                                videoLayerData.size =
+                                                    p.videoInfoSize(otioClipB);
                                                 videoLayerData.bounds = getCanvasBox(
                                                     otioClipB,
                                                     p.options.spatial,
@@ -843,6 +847,8 @@ namespace tl
                                                 videoLayerData.image = _readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
+                                                videoLayerData.size =
+                                                    p.videoInfoSize(otioClipB);
                                                 videoLayerData.bounds = getCanvasBox(
                                                     otioClipB,
                                                     p.options.spatial,
@@ -1345,10 +1351,7 @@ namespace tl
             // the whole timeline, so the extent is taken from every clip
             // rather than from the clips visible at one time. This keeps the
             // render size stable as playback moves between clips.
-            image::Size videoSize =!p.ioInfo.video.empty() ?
-                                   p.ioInfo.video[0].size : image::Size();
-            p.normalizeSize.w = videoSize.w;
-            p.normalizeSize.h = videoSize.h;
+            p.normalizeSize = p.maxVideoSize;
             const math::Size2i& normalizeSize = p.normalizeSize;
             const auto otioClips = p.otioTimeline.value->find_children<otio::Clip>();
 
@@ -1357,6 +1360,13 @@ namespace tl
             // coordinates, which is not necessarily the first clip in the
             // timeline, together with the resolution the timeline is
             // working at.
+            //
+            // This uses the active media reference rather than the union of
+            // all of them, unlike the canvas below. The coordinates of a clip's
+            // references describe the same area, so any of them gives the same
+            // scale; taking the union here would only matter for a clip whose
+            // references were authored inconsistently, where the active one is
+            // the better guide.
             if (normalizeSize.isValid())
             {
                 for (const auto& otioClip : otioClips)
@@ -1389,6 +1399,9 @@ namespace tl
                         arg(authored.value().max.x).
                         arg(authored.value().max.y);
                 }
+                // Cover every media reference, not just the active one, so that
+                // changing the active media reference cannot place a clip
+                // outside the canvas.
                 if (const auto bounds = getSpatialBounds(
                         otioClip,
                         p.options.spatial,
