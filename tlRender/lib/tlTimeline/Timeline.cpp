@@ -794,6 +794,9 @@ namespace tl
                                                 videoLayerData.imageB = _readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
+                                                const auto sizeB = p.videoInfoSize(otioClipB);
+                                                videoLayerData.size.w = std::max(videoLayerData.size.w, sizeB.w);
+                                                videoLayerData.size.h = std::max(videoLayerData.size.h, sizeB.h);
                                                 videoLayerData.size =
                                                     p.videoInfoSize(otioClipB);
                                                 videoLayerData.bounds = getCanvasBox(
@@ -847,8 +850,9 @@ namespace tl
                                                 videoLayerData.image = _readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
-                                                videoLayerData.size =
-                                                    p.videoInfoSize(otioClipB);
+                                                const auto sizeOther = p.videoInfoSize(otioClipB);
+                                                videoLayerData.size.w = std::max(videoLayerData.size.w, sizeOther.w);
+                                                videoLayerData.size.h = std::max(videoLayerData.size.h, sizeOther.h);
                                                 videoLayerData.bounds = getCanvasBox(
                                                     otioClipB,
                                                     p.options.spatial,

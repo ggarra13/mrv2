@@ -1618,6 +1618,7 @@ namespace mrv
             // tlRender can now return different render sizes for each clip.
             // if we are auto framing, frame the view if the render size
             // changed.
+            // This code is a hack and should be fixed!
             if (p.frameView && out != previous)
             {
                 previous = out;

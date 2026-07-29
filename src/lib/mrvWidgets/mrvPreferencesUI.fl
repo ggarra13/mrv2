@@ -96,8 +96,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double resizable
-      code3 {main = m;} non_modal size_range {847 449 0 0} visible
+      xywh {0 0 847 449} type Double hide resizable
+      code3 {main = m;} non_modal size_range {847 449 0 0}
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
@@ -444,8 +444,8 @@ o->add(font.c_str());}
               }
             }
             Fl_Group {} {
-              label {Language and Colors} selected
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label {Language and Colors}
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label UI open
@@ -1989,7 +1989,7 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
             }
             Fl_Group {} {
               label WebRTC open
-              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5 hide
+              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {open
                 xywh {318 69 508 314}
@@ -2002,7 +2002,7 @@ if (value == 0)
 {
     v->uiPrefsWebRTCSignalingServer->value("wss://sync.filmaura.cloud/sync");
     v->uiPrefsWebRTCStunServer->value("stun:stun.l.google.com:19302");
-    v->uiPrefsWebRTCTurnServer->value("");
+    v->uiPrefsWebRTCTurnServer->value("turn://turn.filmaura.cloud:3478");
 }
 else if (value == 1)
 {
@@ -2027,7 +2027,7 @@ else if (value == 2)
                     xywh {60 60 100 20}
                   }
                   MenuItem {} {
-                    label Custom
+                    label Custom selected
                     xywh {70 70 100 20}
                   }
                 }

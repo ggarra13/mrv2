@@ -112,16 +112,13 @@ namespace tl
                     if (i.image.valid())
                     {
                         layer.image = i.image.get().image;
-                        if (frame.size.w == 0 && frame.size.h == 0)
-                        {
-                            frame.size.w = i.size.w;
-                            frame.size.h = i.size.h;
-                        }
                     }
                     if (i.imageB.valid())
                     {
                         layer.imageB = i.imageB.get().image;
                     }
+                    if (i.size.w > frame.size.w) frame.size.w = i.size.w;
+                    if (i.size.h > frame.size.h) frame.size.h = i.size.h;
                 }
                 catch (const std::exception& e)
                 {
