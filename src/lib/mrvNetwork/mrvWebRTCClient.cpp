@@ -42,13 +42,31 @@ namespace mrv
             stunServer = App::ui->uiPrefs->uiPrefsWebRTCStunServer->value();
         }
 
+        std::string turnServer;
+        env = fl_getenv("MRV2_TURN_SERVER");
+        if (env)
+        {
+            turnServer = env;
+        }
+        else
+        {
+            turnServer = App::ui->uiPrefs->uiPrefsWebRTCTurnServer->value();
+        }
+
         std::string msg = string::Format(_("STUN server is {0}")).
                           arg(stunServer);
+        LOG_STATUS(msg);
+
+        // TURN Server format:
+        // [turn|turns]:[username]:[password]@[hostname]:[port][?transport=udp|tcp|tls]
+        msg = string::Format(_("TURN server is {0}")).arg(turnServer);
         LOG_STATUS(msg);
 
         rtc::Configuration config;
         if (!stunServer.empty())
             config.iceServers.emplace_back(stunServer);
+        if (!turnServer.empty())
+            config.iceServers.emplace_back(turnServer);
         config.disableAutoNegotiation = true;
 
         webrtcManager.setConfiguration(config);

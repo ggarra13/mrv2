@@ -8,7 +8,9 @@ ChangeLog
 - UI: Adding a Transition with Select and then Edit->Selected->Add Transition
       now refits the Edit timeline to show the transition.
 
-- UI/Core: Added support for multiple projects in WebRTC connections.
+- WebRTC: Added support for TURN server and a "Custom" preset.
+- WebRTC: Removed the room ID from the player name.
+- UI/Core: Added support for multiple Projects in WebRTC connections.
 
 - Core: Fixed incorrect media references' paths when loading and modifying an
   	.otio timeline with multiple media references (ie. Full and Proxy for

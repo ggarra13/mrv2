@@ -144,11 +144,13 @@ namespace mrv
                         return;
                     }
 
-                    roomId = projectId + "_" + string::stripWhitespace(roomId);
-
+                    roomId = string::stripWhitespace(roomId);
+                    projectId = string::stripWhitespace(projectId);
 
                     settings->setValue("WebRTC/Project", projectId);
                     settings->setValue("WebRTC/Room", roomId);
+
+                    roomId = projectId + "_" + roomId;
 
                     // Prepend studio name to roomId to keep the connection
                     // "secret".

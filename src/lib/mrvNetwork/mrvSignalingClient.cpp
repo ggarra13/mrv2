@@ -42,18 +42,16 @@ namespace mrv
         }
 
         if (player.empty())
-            playerId = "player_" + mrv::username() + "_" + roomId + "_" +
+            playerId = "player_" + mrv::username() + "_" +
                        generateRandomLetters(4);
         else
             playerId = player;
 
-        std::string server = os::sgetenv("MRV2_WEB_RTC_SIGNALING_SERVER");
-        if (server.empty())
-            server = App::ui->uiPrefs->uiPrefsWebRTCSignalingServer->value();
+        std::string server = App::ui->uiPrefs->uiPrefsWebRTCSignalingServer->value();
 
         if (server.empty())
         {
-            std::string msg = _("No Sync server set.  Please update Preferences->WebRTC->Signaling");
+            std::string msg = _("No Signaling server set.  Please update Preferences->WebRTC->Signaling");
             LOG_ERROR(msg);
             return;
         }

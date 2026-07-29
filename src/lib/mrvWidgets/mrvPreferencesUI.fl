@@ -96,8 +96,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double hide resizable
-      code3 {main = m;} non_modal size_range {847 449 0 0}
+      xywh {0 0 847 449} type Double resizable
+      code3 {main = m;} non_modal size_range {847 449 0 0} visible
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
@@ -444,8 +444,8 @@ o->add(font.c_str());}
               }
             }
             Fl_Group {} {
-              label {Language and Colors}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label {Language and Colors} selected
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label UI open
@@ -1989,10 +1989,10 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
             }
             Fl_Group {} {
               label WebRTC open
-              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5
+              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {open
-                xywh {318 69 508 313}
+                xywh {318 69 508 314}
               } {
                 Fl_Choice {} {
                   label {WebRTC Presets}
@@ -2002,7 +2002,7 @@ if (value == 0)
 {
     v->uiPrefsWebRTCSignalingServer->value("wss://sync.filmaura.cloud/sync");
     v->uiPrefsWebRTCStunServer->value("stun:stun.l.google.com:19302");
-    v->uiPrefsWebRTCTurnServer->value("turn://turn.filmaura.cloud:3478");
+    v->uiPrefsWebRTCTurnServer->value("");
 }
 else if (value == 1)
 {
@@ -2014,7 +2014,7 @@ else if (value == 2)
     v->uiPrefsWebRTCSignalingServer->value("");
     v->uiPrefsWebRTCStunServer->value("");    
     v->uiPrefsWebRTCTurnServer->value("");
-}} open selected
+}} open
                   tooltip {WebRTC presets} xywh {545 79 180 26} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
@@ -2045,11 +2045,11 @@ else if (value == 2)
                 }
                 Fl_Input uiPrefsWebRTCStudio {
                   label Studio
-                  tooltip {Studio name to prefix to all Room connections.  Use some unique name.} xywh {438 245 370 32} color 20 textcolor 56
+                  tooltip {Studio name to prefix to all Room connections.  Use some unique name.} xywh {438 240 370 32} color 20 textcolor 56
                 }
                 Fl_Check_Button uiPrefsWebRTCCleanDirectory {
                   label {Clean directory at Start up}
-                  tooltip {Clean the WebRTC cache directory on start of the viewer.} xywh {545 278 25 30} down_box DOWN_BOX value 1 align 4
+                  tooltip {Clean the WebRTC cache directory on start of the viewer.} xywh {545 289 25 30} down_box DOWN_BOX value 1 align 4
                 }
                 Fl_Choice uiPrefsWebRTCCacheSetting {
                   label {WebRTC Cache}
@@ -2071,7 +2071,7 @@ else
 
 path += "/.cache/mrv2/remote";
 v->uiPrefsWebRTCCacheDirectory->value(path.c_str());} open
-                  tooltip {Cache Directory presets.} xywh {545 309 180 26} down_box BORDER_BOX align 132 textcolor 32
+                  tooltip {Cache Directory presets.} xywh {545 320 180 26} down_box BORDER_BOX align 132 textcolor 32
                   class {mrv::Choice}
                 } {
                   MenuItem {} {
@@ -2089,7 +2089,7 @@ v->uiPrefsWebRTCCacheDirectory->value(path.c_str());} open
                 }
                 Fl_Input uiPrefsWebRTCCacheDirectory {
                   label {Cache Directory}
-                  tooltip {Directory where WebRTC downloads will reside.} xywh {438 356 370 26} color 20 textcolor 56
+                  tooltip {Directory where WebRTC downloads will reside.} xywh {438 357 370 26} color 20 textcolor 56
                   code3 {std::string path = mrv::homepath() + "/.cache/mrv2/remote";
 std::string oldpath = o->value();
 if (oldpath.empty()) o->value(path.c_str());}
