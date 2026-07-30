@@ -8,6 +8,7 @@ ChangeLog
 - UI: Adding a Transition with Select and then Edit->Selected->Add Transition
       now refits the Edit timeline to show the transition.
 - UI/Core: Added support for multiple Projects in WebRTC connections.
+- UI: Fixed Compare Panel not showing the Tile compare mode.
 - UI: Fixed some natural language translations.
 
 - WebRTC: Added support for TURN server and a "Custom" preset.
