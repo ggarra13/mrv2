@@ -11,8 +11,11 @@ ChangeLog
 - UI: Fixed some natural language translations.
 
 - WebRTC: Added support for TURN server and a "Custom" preset.
-- WebRTC: Removed the room ID from the player name.
+- WebRTC: Removed the room ID from the player's name.
 
+- Core: Added work-around when .otio clips that have video (or audio) greater
+  	than the media time.
+- Core: Fixed transitions not using a consistant resolution.
 - Core: Fixed incorrect media references' paths when loading and modifying an
   	.otio timeline with multiple media references (ie. Full and Proxy for
 	example).
