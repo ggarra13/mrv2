@@ -63,10 +63,10 @@ set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
 # result in a warning due to FLTK and GLFW calling the same function.
 # With the Vulkan backend, we don't have to worry about that.
 set(FLTK_USE_LIBDECOR_GTK FALSE)
-# if (MRV2_BACKEND STREQUAL "VK")
-#     set(FLTK_USE_LIBDECOR_GTK TRUE)  # This creates problem disting
-#                                      # from Rocky Linux 8.10 to Ubuntu 26.04
-# endif()
+if (MRV2_BACKEND STREQUAL "VK")
+    set(FLTK_USE_LIBDECOR_GTK TRUE)  # Fixed disting problems between RL 8.10
+                                     # and Ubuntu 26.04 LTS.
+endif()
 
 #
 # This patch is needed for Rocky Linux 8.10
