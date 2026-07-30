@@ -55,8 +55,8 @@ function( is_system_lib TARGET ISSYSLIB )
     # Cairo libs
     #
     set(_cairo_libs
-	libcairo
 	libcairo-gobject
+	libcairo
 	libpixman)
     
     #
@@ -85,7 +85,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libavfilter
 	libavformat
 	libavutil
-	libcairo
+	#libcairo
 	libcryp
 	libdisplay-info
 	libdovi
@@ -144,9 +144,12 @@ function( is_system_lib TARGET ISSYSLIB )
     )
 
     set(_gtk_libs
+	libatk-bridge
+	libepoxy
 	libgtk
 	libgdk
 	libgdk_pixbuf
+	libgmodule
 	libpangocairo
 	libpango
 	libpangoft2
@@ -156,7 +159,6 @@ function( is_system_lib TARGET ISSYSLIB )
     )
     
     set(_gnome_libs
-	libcairo
 	libdrm
 	libdrm2
 	libgdk
