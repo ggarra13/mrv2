@@ -52,6 +52,14 @@ endfunction()
 function( is_system_lib TARGET ISSYSLIB )
 
     #
+    # Cairo libs
+    #
+    set(_cairo_libs
+	libcairo
+	libcairo-gobject
+	libpixman)
+    
+    #
     # Vulkan Libs to distribute on Linux and macOS
     # 
     set(_vulkan_libs
@@ -135,6 +143,18 @@ function( is_system_lib TARGET ISSYSLIB )
 	libQt6WaylandCompositor
     )
 
+    set(_gtk_libs
+	libgtk
+	libgdk
+	libgdk_pixbuf
+	libpangocairo
+	libpango
+	libpangoft2
+	libharfbuzz
+	libatk
+	libatk
+    )
+    
     set(_gnome_libs
 	libcairo
 	libdrm
@@ -150,9 +170,11 @@ function( is_system_lib TARGET ISSYSLIB )
 	libwayland-egl
 	libwayland-server
 	libxkbcommon
+	${_gtk_libs}
     )
 
     set(_x11_libs
+	libICE
 	libX11
 	libX11-xcb
 	libXau
@@ -248,6 +270,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libz
 	vulkan-          # On Windows, we don't distribute vulkan-1.dll
 	${_audio_libs}
+	${_cairo_libs}
 	${_kde_libs}
 	${_gnome_libs}
 	${_qt_libs}
