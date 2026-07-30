@@ -2226,7 +2226,7 @@ msgstr "O vdeo tem legendas fechadas"
 
 msgid "Avg. Bitrate"
 msgstr "Avg. Bitrate"
-       
+
 msgid "Language"
 msgstr "Idioma"
 
@@ -2292,6 +2292,12 @@ msgstr "Selecione uma ou mais imagens B."
 
 msgid "Select between Relative or Absolute Compare Time Mode"
 msgstr "Selecione entre Modo de Tempo de Comparao Relativo ou Absoluto"
+
+msgid "Fit to A"
+msgstr "Ajustar a A"
+
+msgid "Fit All clips to the size of the first clip."
+msgstr "Ajusta todos os clipes ao tamanho do primeiro clipe."
 
 msgid "Compare A"
 msgstr "Comparar A"

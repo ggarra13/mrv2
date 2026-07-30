@@ -2278,6 +2278,12 @@ msgstr "1つ以上の B画像を選択します。"
 msgid "Select between Relative or Absolute Compare Time Mode"
 msgstr "相対または絶対比較時間モードを選択します"
 
+msgid "Fit to A"
+msgstr "Aに合わせる"
+
+msgid "Fit All clips to the size of the first clip."
+msgstr "すべてのクリップを最初のクリップのサイズに合わせます。"
+
 msgid "Compare A"
 msgstr "A を比較"
 

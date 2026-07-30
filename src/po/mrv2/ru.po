@@ -2314,6 +2314,12 @@ msgstr "Выберите один или несколько изображени
 msgid "Select between Relative or Absolute Compare Time Mode"
 msgstr "Выбор относительного или абсолютного времени"
 
+msgid "Fit to A"
+msgstr "Подогнать к A"
+
+msgid "Fit All clips to the size of the first clip."
+msgstr "Подогнать все клипы под размер первого клипа."
+
 msgid "Compare A"
 msgstr "Сравнить A"
 
@@ -6314,7 +6320,7 @@ msgstr "Максимизация"
 
 msgid "When selected, mrv2 will start in a maximized window."
 msgstr "При выборе mrv2 начнётся в максимальном окне."
-       
+
 msgid "User Interface Elements"
 msgstr "Элементы пользовательского интерфейса"
 

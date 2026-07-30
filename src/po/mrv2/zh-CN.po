@@ -2277,6 +2277,12 @@ msgstr "选择一个或多个 B 图像 。"
 msgid "Select between Relative or Absolute Compare Time Mode"
 msgstr "在相对比较或绝对比较模式之间选择"
 
+msgid "Fit to A"
+msgstr "适配到 A"
+
+msgid "Fit All clips to the size of the first clip."
+msgstr "将所有剪辑调整为与第一个剪辑相同的大小。"
+
 msgid "Compare A"
 msgstr "比较A"
 

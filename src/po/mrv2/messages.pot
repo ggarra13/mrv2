@@ -2170,6 +2170,12 @@ msgstr ""
 msgid "Select between Relative or Absolute Compare Time Mode"
 msgstr ""
 
+msgid "Fit to A"
+msgstr ""
+
+msgid "Fit All clips to the size of the first clip."
+msgstr ""
+
 msgid "Compare A"
 msgstr ""
 

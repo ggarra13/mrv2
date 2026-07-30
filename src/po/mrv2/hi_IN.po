@@ -2292,6 +2292,12 @@ msgstr "एक या अधिक छवि चुनें."
 msgid "Select between Relative or Absolute Compare Time Mode"
 msgstr "सापेक्षिक या निरपेक्ष समय मोड के बीच चुनें"
 
+msgid "Fit to A"
+msgstr "A के अनुसार फ़िट करें"
+
+msgid "Fit All clips to the size of the first clip."
+msgstr "सभी क्लिपों को पहली क्लिप के आकार के अनुसार फ़िट करें।"
+
 msgid "Compare A"
 msgstr "अ की तुलना करें"
 

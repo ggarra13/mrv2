@@ -2299,6 +2299,12 @@ msgstr "Whlen Sie ein oder mehrere B-Bilder aus."
 msgid "Select between Relative or Absolute Compare Time Mode"
 msgstr "Whlen Sie zwischen relativen oder absoluten Vergleichszeitmodus"
 
+msgid "Fit to A"
+msgstr "An A anpassen"
+
+msgid "Fit All clips to the size of the first clip."
+msgstr "Alle Clips an die Größe des ersten Clips anpassen."
+
 msgid "Compare A"
 msgstr "Vergleich A"
 
