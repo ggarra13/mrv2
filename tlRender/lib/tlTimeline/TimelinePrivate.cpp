@@ -103,6 +103,8 @@ namespace tl
         {
             VideoFrame frame;
             frame.canvasSize = canvasSize;
+            frame.size.w = maxVideoSize.w;
+            frame.size.h = maxVideoSize.h;
             frame.time = request.time;
             for (auto& i : request.layerData)
             {
@@ -117,8 +119,6 @@ namespace tl
                     {
                         layer.imageB = i.imageB.get().image;
                     }
-                    if (i.size.w > frame.size.w) frame.size.w = i.size.w;
-                    if (i.size.h > frame.size.h) frame.size.h = i.size.h;
                 }
                 catch (const std::exception& e)
                 {
@@ -141,11 +141,6 @@ namespace tl
                 layer.transition = i.transition;
                 layer.transitionValue = i.transitionValue;
                 frame.layers.push_back(layer);
-            }
-
-            if (0 == frame.size.w && 0 == frame.size.h && !ioInfo.video.empty())
-            {
-                frame.size = ioInfo.video.front().size;
             }
             return frame;
         }
@@ -230,19 +225,6 @@ namespace tl
             size_t sampleCount = audio::getSampleCount(list);
             auto out = audio::Audio::create(audio->getInfo(), sampleCount);
             audio::move(list, out->getData(), out->getByteCount());
-            return out;
-        }
-
-        math::Size2i
-        Timeline::Private::videoInfoSize(const otio::Clip* clip) const
-        {
-            math::Size2i out;
-            const auto i = videoInfoByReference.find(mediaReference(clip));
-            if (i != videoInfoByReference.end() && !i->second.video.empty())
-            {
-                out.w = i->second.video[0].size.w;
-                out.h = i->second.video[0].size.h;
-            }
             return out;
         }
 

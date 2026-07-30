@@ -319,6 +319,7 @@ namespace tl
                     }
                 }
             }
+            _getMaxVideoSize();
             _getCanvas();
 
             // Give each media reference the timeline level information,
@@ -743,8 +744,6 @@ namespace tl
                                         videoLayerData.image = _readVideo(
                                             otioClip, requestTime,
                                             request->options);
-                                        videoLayerData.size =
-                                            p.videoInfoSize(otioClip);
                                         videoLayerData.bounds = getCanvasBox(
                                             otioClip,
                                             p.options.spatial,
@@ -794,11 +793,6 @@ namespace tl
                                                 videoLayerData.imageB = _readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
-                                                const auto sizeB = p.videoInfoSize(otioClipB);
-                                                videoLayerData.size.w = std::max(videoLayerData.size.w, sizeB.w);
-                                                videoLayerData.size.h = std::max(videoLayerData.size.h, sizeB.h);
-                                                videoLayerData.size =
-                                                    p.videoInfoSize(otioClipB);
                                                 videoLayerData.bounds = getCanvasBox(
                                                     otioClipB,
                                                     p.options.spatial,
@@ -850,9 +844,6 @@ namespace tl
                                                 videoLayerData.image = _readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
-                                                const auto sizeOther = p.videoInfoSize(otioClipB);
-                                                videoLayerData.size.w = std::max(videoLayerData.size.w, sizeOther.w);
-                                                videoLayerData.size.h = std::max(videoLayerData.size.h, sizeOther.h);
                                                 videoLayerData.bounds = getCanvasBox(
                                                     otioClipB,
                                                     p.options.spatial,
@@ -1430,6 +1421,52 @@ namespace tl
                         string::Format("{0}").arg(p.canvasSize);
                     p.ioInfo.tags["OTIO Pixels Per Unit"] =
                         string::Format("{0}").arg(p.boundsScale);
+                }
+            }
+            else if (p.maxVideoSize.isValid())
+            {
+                // No clip in this timeline carries OTIO spatial coordinates,
+                // so there is no authored canvas to derive from. Fall back to
+                // the largest native resolution found across every clip in the
+                // timeline (see _getMaxVideoSize()), so that
+                // VideoFrame::canvasSize is still valid
+                // and getInfos() (CompareOptions.cpp) substitutes it for the
+                // raw per-frame image size on every frame -- giving
+                // getRenderSize() one stable value for the whole timeline
+                // instead of tracking whichever clip happens to be playing.
+                p.canvasOffset = math::Vector2f();
+                p.canvasSize = p.maxVideoSize;
+            }
+        }
+
+        void Timeline::_getMaxVideoSize()
+        {
+            TLRENDER_P();
+            // Scan every clip in the timeline (not just the first, and not just
+            // its alternate media references) so that transitions between clips
+            // of different native resolution/aspect ratio are measured against
+            // the true timeline-wide maximum, not whichever clip happened to be
+            // first. Readers opened here stay in the read cache.
+            for (const auto& otioClip :
+                     p.otioTimeline.value->find_children<otio::Clip>())
+            {
+                for (const auto& i : otioClip->media_references())
+                {
+                    if (auto read = _getRead(i.second, p.options.ioOptions))
+                    {
+                        const io::Info& info = read->getInfo().get();
+                        if (!info.video.empty())
+                        {
+                            const math::Size2i size(
+                                info.video[0].size.w,
+                                info.video[0].size.h);
+                            if (size.w * size.h >
+                                p.maxVideoSize.w * p.maxVideoSize.h)
+                            {
+                                p.maxVideoSize = size;
+                            }
+                        }
+                    }
                 }
             }
         }

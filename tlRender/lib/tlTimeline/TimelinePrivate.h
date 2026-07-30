@@ -91,10 +91,6 @@ namespace tl
             math::Size2i maxVideoSize;
             uint64_t requestId = 0;
 
-            // Resolve the size of the media reference a clip is currently
-            // being read from. Request thread only, same as mediaReference().
-            math::Size2i videoInfoSize(const otio::Clip*) const;
-
             struct VideoLayerData
             {
                 VideoLayerData() {};
@@ -106,15 +102,6 @@ namespace tl
                 std::optional<math::Box2f> boundsB;
                 Transition transition = Transition::kNone;
                 float transitionValue = 0.F;
-
-                // The resolution of the media reference this layer's image is
-                // actually being read from (resolved at request-build time via
-                // mediaReference()),
-                // so that videoFrame() can report the size of the reference
-                // in use instead of the timeline-wide ioInfo, which reflects
-                // whichever reference happened to be active when the timeline
-                // was first read.
-                math::Size2i size;
             };
             struct PendingVideoRequest
             {
