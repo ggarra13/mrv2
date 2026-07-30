@@ -142,6 +142,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libgdk
 	libgio
 	libglib
+	liggmodule
 	libgobject
 	libgtk
 	libpango

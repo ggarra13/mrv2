@@ -122,12 +122,6 @@ namespace tl
             std::future<AudioFrame> future;
         };
 
-        std::optional<math::Box2f> getSpatialBounds(
-            const otio::Clip* otioClip,
-            Spatial spatial,
-            const math::Size2i& normalizeSize,
-            double scale);
-
         //! Timeline.
         class Timeline : public std::enable_shared_from_this<Timeline>
         {
