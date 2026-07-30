@@ -13,6 +13,8 @@ ChangeLog
 - WebRTC: Added support for TURN server and a "Custom" preset.
 - WebRTC: Removed the room ID from the player's name.
 
+- Core: Fixed a random crash when using Wipes (particularly on the Vulkan
+  	backend on Linux).
 - Core: Added work-around when .otio clips that have video (or audio) greater
   	than the media time.
 - Core: Fixed transitions not using a consistant resolution.
