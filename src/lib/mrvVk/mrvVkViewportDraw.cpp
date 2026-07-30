@@ -239,7 +239,7 @@ namespace mrv
 
             vk.render->drawVideo(
                 {p.lastVideoFrame},
-                timeline::getBoxes(p.compareOptions.mode,
+                timeline::getBoxes(p.compareOptions,
                                    p.displayOptions,
                                    {p.lastVideoFrame}),
                 p.imageOptions, p.displayOptions, p.compareOptions,

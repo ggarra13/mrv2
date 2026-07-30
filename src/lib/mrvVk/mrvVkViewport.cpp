@@ -1036,7 +1036,7 @@ namespace mrv
                             vk.render->drawVideo(
                                 p.videoData,
                                 timeline::getBoxes(
-                                    p.compareOptions.mode,
+                                    p.compareOptions,
                                     p.displayOptions,
                                     p.videoData),
                                 p.imageOptions, p.displayOptions,

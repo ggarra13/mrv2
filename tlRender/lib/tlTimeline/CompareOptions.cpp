@@ -94,8 +94,8 @@ namespace tl
                 }
                 else if (count > 1)
                 {
-                    const math::Size2i sizeB = getRenderSize(infos[1],
-                                                            aspectRatioOptions);
+                    const math::Size2i sizeB =
+                        getRenderSize(infos[1], aspectRatioOptions);
                     out.push_back(math::Box2i(size.w, 0, sizeB.w, sizeB.h));
                 }
                 break;

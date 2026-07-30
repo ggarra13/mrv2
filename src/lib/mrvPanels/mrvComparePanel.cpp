@@ -250,20 +250,20 @@ namespace mrv
             Y += 30;
 
             // \@todo \bug: Implement this
-            // auto cFitA = new Widget< Fl_Check_Button >(X + 10, Y, 30, 30,
-            //                                            _("Fit to A"));
-            // cB = cFitA;
-            // cB->value(o.fitToA);
-            // cB->tooltip(_("Fit All clips to the size of the first clip."));
-            // cFitA->callback(
-            //     [=](auto w)
-            //     {
-            //         auto o = model->observeCompareOptions()->get();
-            //         o.fitToA = w->value();
-            //         model->setCompareOptions(o);
-            //     });
+            auto cFitA = new Widget< Fl_Check_Button >(X + 10, Y, 30, 30,
+                                                       _("Fit to A"));
+            cB = cFitA;
+            cB->value(o.fitToA);
+            cB->tooltip(_("Fit All clips to the size of the first clip."));
+            cFitA->callback(
+                [=](auto w)
+                {
+                    auto o = model->observeCompareOptions()->get();
+                    o.fitToA = w->value();
+                    model->setCompareOptions(o);
+                });
 
-            // Y += 30;
+            Y += 30;
 
             Fl_Group* bg = new Fl_Group(X, Y, g->w(), 30);
             bg->begin();
