@@ -4,6 +4,7 @@ v1.7.2
 ChangeLog
 ---------
 
+- UI: Linux Vulkan backend uses GTK / GLib as window decorations.
 - UI: Improved Japanese translation (thanks to coolvitto).
 - UI: Improved all translations.
 - UI: Adding a Transition with Select and then Edit->Selected->Add Transition
@@ -12,6 +13,7 @@ ChangeLog
 - UI: Fixed Compare Panel not showing the Tile compare mode.
 - UI: Fixed some natural language translations.
 - UI: Fixed Compare Panel buttons sometimes not responding.
+- UI: Put Compare Panel buttons in two rows which is cleaner.
 
 - WebRTC: Added support for TURN server and a "Custom" preset.
 - WebRTC: Removed the room ID from the player's name.
