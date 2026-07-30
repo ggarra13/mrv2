@@ -265,7 +265,7 @@ namespace mrv
 
             Y += 30;
 
-            Fl_Group* bg = new Fl_Group(X, Y, g->w(), 30);
+            Fl_Group* bg = new Fl_Group(X, Y, g->w(), 60);
             bg->begin();
 
             Fl_Button* b;
@@ -369,7 +369,9 @@ namespace mrv
                     compare_tile_cb(nullptr, p.ui);
                 });
 
-            bW = new Widget< Button >(X + 240, Y, 30, 30);
+            Y += 30;
+
+            bW = new Widget< Button >(X, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(CompareAdd));
             b->tooltip(_("Add the A and B files"));
@@ -379,7 +381,7 @@ namespace mrv
                     compare_add_cb(nullptr, p.ui);
                 });
 
-            bW = new Widget< Button >(X + 270, Y, 30, 30);
+            bW = new Widget< Button >(X + 30, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(CompareMultiply));
             b->tooltip(_("Multiply the A and B files"));
@@ -390,7 +392,7 @@ namespace mrv
                     compare_multiply_cb(nullptr, p.ui);
                 });
 
-            bW = new Widget< Button >(X + 300, Y, 30, 30);
+            bW = new Widget< Button >(X + 60, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(Prev));
             b->tooltip(_("Previous filename"));
@@ -401,7 +403,7 @@ namespace mrv
                         p.ui->app->filesModel()->prevB();
                 });
 
-            bW = new Widget< Button >(X + 300, Y, 30, 30);
+            bW = new Widget< Button >(X + 90, Y, 30, 30);
             b = bW;
             b->bind_image(MRV2_LOAD_SVG(Next));
             b->tooltip(_("Next filename"));
