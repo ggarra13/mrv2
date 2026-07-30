@@ -414,7 +414,7 @@ namespace tl
                     glBindTexture(
                         GL_TEXTURE_2D, p.buffers["overlay"]->getColorID());
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(
                             geom::box(boxes[0], true),
@@ -571,7 +571,7 @@ namespace tl
                     glBindTexture(
                         GL_TEXTURE_2D, p.buffers["difference1"]->getColorID());
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(
                             geom::box(boxes[0], true),
@@ -730,7 +730,7 @@ namespace tl
                     glBindTexture(
                         GL_TEXTURE_2D, p.buffers["multiply1"]->getColorID());
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(
                             geom::box(boxes[0], true),
@@ -889,7 +889,7 @@ namespace tl
                     glBindTexture(
                         GL_TEXTURE_2D, p.buffers["add1"]->getColorID());
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(
                             geom::box(boxes[0], true),

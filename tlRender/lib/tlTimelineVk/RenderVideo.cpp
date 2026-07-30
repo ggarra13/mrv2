@@ -344,7 +344,7 @@ namespace tl
             }
 
             // ----- FIRST RENDER PASS OF LEFT VIDEO
-            p.fbo->beginLoadRenderPass(p.cmd);  // \note: was ClearRenderPass
+            p.fbo->beginLoadRenderPass(p.cmd);
 
 
             pipelineLayoutName = "wipe_left_stencil";
@@ -409,7 +409,7 @@ namespace tl
             pipelineLayoutName = "wipe_left_image";
 
 
-            if (p.vbos["video"])
+            if (p.vbos["video"] && !boxes.empty())
             {
                 p.vbos["video"]->copy(convert(geom::box(boxes[0], true),
                                               p.vbos["video"]->getType()));
@@ -579,7 +579,7 @@ namespace tl
             pipelineLayoutName = "wipe_right_image";
 
 
-            if (p.vbos["video"])
+            if (p.vbos["video"] && !boxes.empty())
             {
                 p.vbos["video"]->copy(convert(geom::box(boxes[0], true),
                                               p.vbos["video"]->getType()));
@@ -743,7 +743,7 @@ namespace tl
                     _bindDescriptorSets(pipelineLayoutName, "overlay");
 
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
                     }
@@ -865,7 +865,7 @@ namespace tl
                     p.shaders["difference"]->setFBO("textureSamplerB", p.buffers["difference1"]);
                     _bindDescriptorSets(pipelineLayoutName, "difference");
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
                     }
@@ -987,7 +987,7 @@ namespace tl
                     p.shaders["multiply"]->setFBO("textureSamplerB", p.buffers["multiply1"]);
                     _bindDescriptorSets(pipelineLayoutName, "multiply");
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
                     }
@@ -1101,7 +1101,7 @@ namespace tl
                     p.shaders["add"]->setFBO("textureSamplerB", p.buffers["add1"]);
                     _bindDescriptorSets(pipelineLayoutName, "add");
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
                     }
