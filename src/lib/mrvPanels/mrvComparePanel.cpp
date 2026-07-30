@@ -147,6 +147,7 @@ namespace mrv
 
             file::Path lastPath;
             int Y = g->y();
+            Fl_Check_Button* cB;
 
             for (size_t i = 0; i < numFiles; ++i)
             {
@@ -237,10 +238,6 @@ namespace mrv
             int v = static_cast<int>(model->getCompareTime());
             pm->value(v);
             pm->tooltip(_("Select between Relative or Absolute Compare Time Mode"));
-
-            Fl_Group* bg = new Fl_Group(X, Y, g->w(), 30);
-            bg->begin();
-
             cMode->callback(
                 [=](auto w)
                 {
@@ -248,6 +245,28 @@ namespace mrv
                     model->setCompareTime(o);
                 });
 
+            auto o = model->observeCompareOptions()->get();
+
+            Y += 30;
+
+            // \@todo \bug: Implement this
+            // auto cFitA = new Widget< Fl_Check_Button >(X + 10, Y, 30, 30,
+            //                                            _("Fit to A"));
+            // cB = cFitA;
+            // cB->value(o.fitToA);
+            // cB->tooltip(_("Fit All clips to the size of the first clip."));
+            // cFitA->callback(
+            //     [=](auto w)
+            //     {
+            //         auto o = model->observeCompareOptions()->get();
+            //         o.fitToA = w->value();
+            //         model->setCompareOptions(o);
+            //     });
+
+            // Y += 30;
+
+            Fl_Group* bg = new Fl_Group(X, Y, g->w(), 30);
+            bg->begin();
 
             Fl_Button* b;
             auto bW = new Widget< Button >(X, Y, 30, 30);
@@ -437,7 +456,6 @@ namespace mrv
             s->range(0.f, 1.0f);
             s->step(0.01F);
             s->default_value(0.5f);
-            auto o = model->observeCompareOptions()->get();
             s->value(o.wipeCenter.x);
             sV->callback(
                 [=](auto w)
