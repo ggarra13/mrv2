@@ -32,15 +32,15 @@ if [[ @mrv2_NAME@ == "vmrv2" ]]; then
     mrv2="@CPACK_INSTALL_PREFIX@/bin/mrv2"
     vmrv2="@CPACK_INSTALL_PREFIX@/bin/@mrv2_NAME@"
     if [[ -e $mrv2 ]]; then
-	ln -s $mrv2 $vmrv2
+	ln -sf $mrv2 $vmrv2
     fi
 fi
 
 
 echo "Creating symlink from $startup to /usr/bin/@mrv2_NAME@"
-ln -s "$startup" /usr/bin/@mrv2_NAME@
+ln -sf "$startup" /usr/bin/@mrv2_NAME@
 echo "Creating symlink from $startup to /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@"
-ln -s "$startup" /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@
+ln -sf "$startup" /usr/bin/@mrv2_NAME@-v@mrv2_VERSION@
 
 startup="@CPACK_INSTALL_PREFIX@/bin/hdr.sh"
 if [[ -e $startup ]]; then
