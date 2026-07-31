@@ -10,7 +10,7 @@ endif()
 
 if (NOT FFmpeg_FOUND)
     
-    set(FFmpeg_VERSION 8.1)
+    set(FFmpeg_VERSION 8.1.2)
 
     set(FFmpeg_DEPENDENCIES ZLIB ${OpenSSL_DEP})
     if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
@@ -632,7 +632,9 @@ if (NOT FFmpeg_FOUND)
 	FFmpeg
 	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg
 	DEPENDS ${FFmpeg_DEPENDENCIES}
-	URL https://ffmpeg.org/releases/ffmpeg-${FFmpeg_VERSION}.tar.bz2
+	GIT_REPOSITORY "https://github.com/FFmpeg/FFmpeg.git"
+	GIT_TAG "n${FFmpeg_VERSION}"
+	# URL https://www.ffmpeg.org/releases/ffmpeg-${FFmpeg_VERSION}.tar.bz2
 	PATCH_COMMAND ${FFmpeg_PATCH}
 	CONFIGURE_COMMAND ${FFmpeg_CONFIGURE}
 	BUILD_COMMAND ${FFmpeg_BUILD}
