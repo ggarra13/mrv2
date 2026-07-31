@@ -3394,8 +3394,8 @@ namespace mrv
     /// \@todo: REFACTOR THIS PLEASE
     EditMode editMode = EditMode::kTimeline;
     EditMode previousEditMode = EditMode::kTimeline;
-    int      editModeH = 30;
-    const int kMinEditModeH = 30;
+    int      editModeH = 32;
+    const int kMinEditModeH = 32;
 
     void save_edit_mode_state(ViewerUI* ui)
     {
