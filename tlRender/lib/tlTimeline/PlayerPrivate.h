@@ -41,6 +41,7 @@ namespace tl
             void cacheUpdate();
 
             void finishedVideoRequests();
+            void finishedAudioRequests();
 
             void resetAudioTime();
 #if defined(TLRENDER_AUDIO)
@@ -124,7 +125,7 @@ namespace tl
                 bool mute = false;
                 std::vector<int> channelMute;
                 std::chrono::steady_clock::time_point muteTimeout;
-                std::map<int64_t, AudioFrame> audioFrameCache;
+                std::map<int64_t, AudioFrame> cache;
                 bool reset = false;
                 std::mutex mutex;
             };
@@ -145,13 +146,13 @@ namespace tl
                 PlayerCacheOptions cacheOptions;
 
                 std::map<otime::RationalTime, std::vector<VideoRequest> >
-                    videoFrameRequests;
+                    videoRequests;
                 std::map<otime::RationalTime, std::vector<VideoFrame> >
-                    videoFrameCache;
+                    videoCache;
 #if defined(TLRENDER_AUDIO)
                 std::unique_ptr<RtAudio> rtAudio;
 #endif // TLRENDER_AUDIO
-                std::map<int64_t, AudioRequest> audioFrameRequests;
+                std::map<int64_t, AudioRequest> audioRequests;
                 std::chrono::steady_clock::time_point cacheTimer;
                 std::chrono::steady_clock::time_point logTimer;
                 std::atomic<bool> running;

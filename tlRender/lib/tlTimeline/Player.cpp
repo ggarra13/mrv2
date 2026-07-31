@@ -321,9 +321,8 @@ namespace tl
                                 for (int64_t s :
                                      {seconds - 1, seconds, seconds + 1})
                                 {
-                                    auto i =
-                                        p.audioMutex.audioFrameCache.find(s);
-                                    if (i != p.audioMutex.audioFrameCache.end())
+                                    auto i = p.audioMutex.cache.find(s);
+                                    if (i != p.audioMutex.cache.end())
                                     {
                                         audioFrameList.push_back(i->second);
                                     }
@@ -408,9 +407,8 @@ namespace tl
             const auto& timeRange = p.timeline->getTimeRange();
             if (!p.ioInfo.video.empty())
             {
-                const auto i =
-                    p.thread.videoFrameCache.find(p.thread.currentTime);
-                if (i != p.thread.videoFrameCache.end())
+                const auto i = p.thread.videoCache.find(p.thread.currentTime);
+                if (i != p.thread.videoCache.end())
                 {
                     std::unique_lock<std::mutex> lock(p.mutex.mutex);
                     p.mutex.currentVideoFrame = i->second;
@@ -1044,7 +1042,7 @@ namespace tl
             TLRENDER_P();
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
-                p.thread.videoFrameCache.erase(time);
+                p.thread.videoCache.erase(time);
                 p.forwardRequests(
                     time, time, otime::RationalTime(1.0, time.rate()), true);
             }

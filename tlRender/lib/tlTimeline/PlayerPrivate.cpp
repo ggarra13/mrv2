@@ -122,14 +122,14 @@ namespace tl
         void Player::Private::clearRequests()
         {
             std::vector<std::vector<uint64_t> > ids(1 + thread.compare.size());
-            for (const auto& i : thread.videoFrameRequests)
+            for (const auto& i : thread.videoRequests)
             {
                 for (size_t j = 0; j < i.second.size() && j < ids.size(); ++j)
                 {
                     ids[j].push_back(i.second[j].id);
                 }
             }
-            for (const auto& i : thread.audioFrameRequests)
+            for (const auto& i : thread.audioRequests)
             {
                 ids[0].push_back(i.second.id);
             }
@@ -138,20 +138,20 @@ namespace tl
             {
                 thread.compare[i]->cancelRequests(ids[i + 1]);
             }
-            thread.videoFrameRequests.clear();
-            thread.audioFrameRequests.clear();
+            thread.videoRequests.clear();
+            thread.audioRequests.clear();
         }
 
         void Player::Private::clearCache()
         {
-            thread.videoFrameCache.clear();
+            thread.videoCache.clear();
             {
                 std::unique_lock<std::mutex> lock(mutex.mutex);
                 mutex.cacheInfo = PlayerCacheInfo();
             }
             {
                 std::unique_lock<std::mutex> lock(audioMutex.mutex);
-                audioMutex.audioFrameCache.clear();
+                audioMutex.cache.clear();
             }
         }
 
@@ -207,13 +207,13 @@ namespace tl
             const otime::TimeRange& timeRange = timeline->getTimeRange();
             for (auto time = start; time >= end; time -= inc)
             {
-                const auto i = thread.videoFrameCache.find(time);
-                if (i == thread.videoFrameCache.end())
+                const auto i = thread.videoCache.find(time);
+                if (i == thread.videoCache.end())
                 {
-                    const auto j = thread.videoFrameRequests.find(time);
-                    if (j == thread.videoFrameRequests.end())
+                    const auto j = thread.videoRequests.find(time);
+                    if (j == thread.videoRequests.end())
                     {
-                        auto& request = thread.videoFrameRequests[time];
+                        auto& request = thread.videoRequests[time];
                         request.clear();
                         io::Options ioOptions2 = thread.ioOptions;
                         ioOptions2["Layer"] =
@@ -245,13 +245,13 @@ namespace tl
             const otime::TimeRange& timeRange = timeline->getTimeRange();
             for (otime::RationalTime time = start; time <= end; time += inc)
             {
-                const auto i = thread.videoFrameCache.find(time);
-                if (i == thread.videoFrameCache.end())
+                const auto i = thread.videoCache.find(time);
+                if (i == thread.videoCache.end())
                 {
-                    const auto j = thread.videoFrameRequests.find(time);
-                    if (j == thread.videoFrameRequests.end())
+                    const auto j = thread.videoRequests.find(time);
+                    if (j == thread.videoRequests.end())
                     {
-                        auto& request = thread.videoFrameRequests[time];
+                        auto& request = thread.videoRequests[time];
                         request.clear();
                         io::Options ioOptions2 = thread.ioOptions;
                         ioOptions2["Layer"] =
@@ -281,41 +281,69 @@ namespace tl
         void Player::Private::finishedVideoRequests()
         {
             // Check for finished video.
-            auto videoFrameRequestsIt = thread.videoFrameRequests.begin();
-            while (videoFrameRequestsIt != thread.videoFrameRequests.end())
+            auto videoRequestsIt = thread.videoRequests.begin();
+            while (videoRequestsIt != thread.videoRequests.end())
             {
                 bool ready = true;
-                for (auto videoFrameRequestIt =
-                         videoFrameRequestsIt->second.begin();
-                     videoFrameRequestIt != videoFrameRequestsIt->second.end();
-                     ++videoFrameRequestIt)
+                for (auto videoRequestIt =
+                         videoRequestsIt->second.begin();
+                     videoRequestIt != videoRequestsIt->second.end();
+                     ++videoRequestIt)
                 {
-                    ready &= videoFrameRequestIt->future.valid() &&
-                             videoFrameRequestIt->future.wait_for(
+                    ready &= videoRequestIt->future.valid() &&
+                             videoRequestIt->future.wait_for(
                                  std::chrono::seconds(0)) ==
                                  std::future_status::ready;
                 }
                 if (ready)
                 {
-                    const otime::RationalTime time = videoFrameRequestsIt->first;
-                    auto& videoFrameCache = thread.videoFrameCache[time];
-                    videoFrameCache.clear();
-                    for (auto videoFrameRequestIt =
-                             videoFrameRequestsIt->second.begin();
-                         videoFrameRequestIt !=
-                         videoFrameRequestsIt->second.end();
-                         ++videoFrameRequestIt)
+                    const otime::RationalTime time = videoRequestsIt->first;
+                    auto& videoCache = thread.videoCache[time];
+                    videoCache.clear();
+                    for (auto videoRequestIt =
+                             videoRequestsIt->second.begin();
+                         videoRequestIt !=
+                         videoRequestsIt->second.end();
+                         ++videoRequestIt)
                     {
-                        auto videoFrame = videoFrameRequestIt->future.get();
+                        auto videoFrame = videoRequestIt->future.get();
                         videoFrame.time = time;
-                        videoFrameCache.push_back(videoFrame);
+                        videoCache.push_back(videoFrame);
                     }
-                    videoFrameRequestsIt =
-                        thread.videoFrameRequests.erase(videoFrameRequestsIt);
+                    videoRequestsIt =
+                        thread.videoRequests.erase(videoRequestsIt);
                 }
                 else
                 {
-                    ++videoFrameRequestsIt;
+                    ++videoRequestsIt;
+                }
+            }
+        }
+
+
+        void Player::Private::finishedAudioRequests()
+        {
+            // Check for finished audio.
+            auto audioRequestsIt = thread.audioRequests.begin();
+            while (audioRequestsIt != thread.audioRequests.end())
+            {
+                if (audioRequestsIt->second.future.valid() &&
+                    audioRequestsIt->second.future.wait_for(
+                        std::chrono::seconds(0)) == std::future_status::ready)
+                {
+                    auto audioFrame = audioRequestsIt->second.future.get();
+                    audioFrame.seconds = audioRequestsIt->first;
+                    {
+                        std::unique_lock<std::mutex> lock(audioMutex.mutex);
+                        audioMutex.cache[audioRequestsIt->first] =
+                            audioFrame;
+                    }
+                    audioRequestsIt =
+                        thread.audioRequests.erase(audioRequestsIt);
+                }
+                else
+                {
+                    ++audioRequestsIt;
                 }
             }
         }
@@ -441,8 +469,8 @@ namespace tl
                 audioRange, inOutAudioRange, thread.cacheDirection);
 
             // Remove old video from the cache.
-            auto videoCacheIt = thread.videoFrameCache.begin();
-            while (videoCacheIt != thread.videoFrameCache.end())
+            auto videoCacheIt = thread.videoCache.begin();
+            while (videoCacheIt != thread.videoCache.end())
             {
                 const otime::RationalTime t = videoCacheIt->first;
                 const auto j = std::find_if(
@@ -451,7 +479,7 @@ namespace tl
                     { return value.contains(t); });
                 if (j == videoRanges.end())
                 {
-                    videoCacheIt = thread.videoFrameCache.erase(videoCacheIt);
+                    videoCacheIt = thread.videoCache.erase(videoCacheIt);
                 }
                 else
                 {
@@ -462,8 +490,8 @@ namespace tl
             // Remove old audio from the cache.
             {
                 std::unique_lock<std::mutex> lock(audioMutex.mutex);
-                auto audioCacheIt = audioMutex.audioFrameCache.begin();
-                while (audioCacheIt != audioMutex.audioFrameCache.end())
+                auto audioCacheIt = audioMutex.cache.begin();
+                while (audioCacheIt != audioMutex.cache.end())
                 {
                     const otime::TimeRange cacheRange(
                         otime::RationalTime(
@@ -477,8 +505,7 @@ namespace tl
                         { return cacheRange.intersects(value); });
                     if (j == audioRanges.end())
                     {
-                        audioCacheIt =
-                            audioMutex.audioFrameCache.erase(audioCacheIt);
+                        audioCacheIt = audioMutex.cache.erase(audioCacheIt);
                     }
                     else
                     {
@@ -560,11 +587,11 @@ namespace tl
                     std::unique_lock<std::mutex> lock(audioMutex.mutex);
                     for (int64_t s : seconds)
                     {
-                        const auto i = audioMutex.audioFrameCache.find(s);
-                        if (i == audioMutex.audioFrameCache.end())
+                        const auto i = audioMutex.cache.find(s);
+                        if (i == audioMutex.cache.end())
                         {
-                            const auto j = thread.audioFrameRequests.find(s);
-                            if (j == thread.audioFrameRequests.end())
+                            const auto j = thread.audioRequests.find(s);
+                            if (j == thread.audioRequests.end())
                             {
                                 requests[s] = timeRange.start_time()
                                                   .rescaled_to(1.0)
@@ -579,14 +606,14 @@ namespace tl
                 case CacheDirection::Forward:
                     for (auto i = requests.begin(); i != requests.end(); ++i)
                     {
-                        thread.audioFrameRequests[i->first] =
+                        thread.audioRequests[i->first] =
                             timeline->getAudio(i->second, thread.ioOptions);
                     }
                     break;
                 case CacheDirection::Reverse:
                     for (auto i = requests.rbegin(); i != requests.rend(); ++i)
                     {
-                        thread.audioFrameRequests[i->first] =
+                        thread.audioRequests[i->first] =
                             timeline->getAudio(i->second, thread.ioOptions);
                     }
                     break;
@@ -606,30 +633,7 @@ namespace tl
             }
 
             finishedVideoRequests();
-
-            // Check for finished audio.
-            auto audioFrameRequestsIt = thread.audioFrameRequests.begin();
-            while (audioFrameRequestsIt != thread.audioFrameRequests.end())
-            {
-                if (audioFrameRequestsIt->second.future.valid() &&
-                    audioFrameRequestsIt->second.future.wait_for(
-                        std::chrono::seconds(0)) == std::future_status::ready)
-                {
-                    auto audioFrame = audioFrameRequestsIt->second.future.get();
-                    audioFrame.seconds = audioFrameRequestsIt->first;
-                    {
-                        std::unique_lock<std::mutex> lock(audioMutex.mutex);
-                        audioMutex.audioFrameCache[audioFrameRequestsIt->first] =
-                            audioFrame;
-                    }
-                    audioFrameRequestsIt =
-                        thread.audioFrameRequests.erase(audioFrameRequestsIt);
-                }
-                else
-                {
-                    ++audioFrameRequestsIt;
-                }
-            }
+            finishedAudioRequests();
 
             // Update cached frames.
             const auto now = std::chrono::steady_clock::now();
@@ -642,7 +646,7 @@ namespace tl
                 const size_t audioCacheMax = getAudioCacheMax();
 
                 std::vector<otime::RationalTime> videoCacheFrames;
-                for (const auto& i : thread.videoFrameCache)
+                for (const auto& i : thread.videoCache)
                 {
                     videoCacheFrames.push_back(i.first);
                 }
@@ -659,7 +663,7 @@ namespace tl
                 std::vector<int64_t> audioCacheKeys;
                 {
                     std::unique_lock<std::mutex> lock(audioMutex.mutex);
-                    for (const auto& i : audioMutex.audioFrameCache)
+                    for (const auto& i : audioMutex.cache)
                     {
                         audioCacheKeys.push_back(i.first);
                     }
@@ -716,7 +720,7 @@ namespace tl
             size_t audioFrameCacheSize = 0;
             {
                 std::unique_lock<std::mutex> lock(audioMutex.mutex);
-                audioFrameCacheSize = audioMutex.audioFrameCache.size();
+                audioFrameCacheSize = audioMutex.cache.size();
             }
 
             // Create an array of characters to draw the timeline.
@@ -797,9 +801,9 @@ namespace tl
                         .arg(string::join(ioOptionStrings, ", "))
                         .arg(cacheOptions->get().readAhead)
                         .arg(cacheOptions->get().readBehind)
-                        .arg(thread.videoFrameRequests.size())
-                        .arg(thread.videoFrameCache.size())
-                        .arg(thread.audioFrameRequests.size())
+                        .arg(thread.videoRequests.size())
+                        .arg(thread.videoCache.size())
+                        .arg(thread.audioRequests.size())
                         .arg(audioFrameCacheSize)
                         .arg(currentTimeDisplay)
                         .arg(videoCacheFramesDisplay)

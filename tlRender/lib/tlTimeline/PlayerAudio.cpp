@@ -224,9 +224,8 @@ namespace tl
                     AudioFrame audioFrame;
                     {
                         std::unique_lock<std::mutex> lock(p->audioMutex.mutex);
-                        const auto j =
-                            p->audioMutex.audioFrameCache.find(seconds);
-                        if (j != p->audioMutex.audioFrameCache.end())
+                        const auto j = p->audioMutex.cache.find(seconds);
+                        if (j != p->audioMutex.cache.end())
                         {
                             audioFrame = j->second;
                         }

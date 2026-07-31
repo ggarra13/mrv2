@@ -56,11 +56,12 @@ namespace tl
             size_t readErrorMax = 0;
             otime::TimeRange timeRange = time::invalidTimeRange;
             io::Info ioInfo;
-            // The clip whose media references provide the video information, and
-            // the information for each of those references. Both are filled in
-            // while the timeline is read and only read afterwards, so that
-            // getIOInfo() can follow the media reference key without any I/O,
-            // and without touching the read cache from the main thread.
+            // The clip whose media references provide the video information,
+            // and the information for each of those references. Both are
+            // filled in while the timeline is read and only read afterwards,
+            // so that getIOInfo() can follow the media reference key without
+            // any I/O, and without touching the read cache from the main
+            // thread.
             const otio::Clip* videoInfoClip = nullptr;
 
             std::map<const otio::MediaReference*, io::Info>
