@@ -15,6 +15,8 @@
 
 #include "mrViewer.h"
 
+#include <regex>
+
 namespace
 {
     const char* kModule = "w3tc";
@@ -57,8 +59,6 @@ namespace mrv
                           arg(stunServer);
         LOG_STATUS(msg);
 
-        // TURN Server format:
-        // [turn|turns]:[username]:[password]@[hostname]:[port][?transport=udp|tcp|tls]
         msg = string::Format(_("TURN server is {0}")).arg(turnServer);
         LOG_STATUS(msg);
 
@@ -66,7 +66,31 @@ namespace mrv
         if (!stunServer.empty())
             config.iceServers.emplace_back(stunServer);
         if (!turnServer.empty())
-            config.iceServers.emplace_back(turnServer);
+        {
+            //
+            // Format is:
+            //
+            // [turn|turns]:[username]:[password]@[hostname]:[port][?transport=udp|tcp|tls]
+            //
+            std::regex re(
+                R"(^(turn|turns):([^:@]+):([^@]+)@((?:[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*)|(?:\d{1,3}(?:\.\d{1,3}){3})|\[[0-9A-Fa-f:.%]+\]):([0-9]{1,5})(?:\?transport=(udp|tcp|tls))?$)");
+            std::smatch m;
+            if (std::regex_match(turnServer, m, re))
+            {
+                config.iceServers.emplace_back(turnServer);
+            }
+            else
+            {
+                std::string msg = _("Incorrectly defined TURN server.");
+                LOG_ERROR(msg);
+
+                msg = _("Must match:");
+                LOG_ERROR(msg);
+
+                LOG_ERROR("[turn|turns]:[username]:[password]@[hostname]:[port][?transport=udp|tcp|tls]");
+                return;
+            }
+        }
         config.disableAutoNegotiation = true;
 
         webrtcManager.setConfiguration(config);
