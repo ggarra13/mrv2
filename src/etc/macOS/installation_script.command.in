@@ -4,6 +4,8 @@ if [[ -d /Applications/@mrv2_NAME@.app/ ]]; then
 
     echo
     echo "This application is not yet notarized nor codesigned."
+    echo "Even though I tried, Apple has refused to enroll me on"
+    echo "as an individual developer."
     echo
     echo "The official download page is:"
     echo "https://mrv2.sourceforge.io/downloads/mrv2-download-page.html"
