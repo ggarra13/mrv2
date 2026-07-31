@@ -14,8 +14,6 @@
 set +e
 
 . etc/build_dir.sh
-. etc/update_cacert.sh
-update_cacert
 
 rm -rf $BUILD_DIR/install/include/FL
 
