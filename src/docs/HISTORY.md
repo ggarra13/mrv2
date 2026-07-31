@@ -4,7 +4,7 @@ v1.7.2
 ChangeLog
 ---------
 
-- UI: Linux Vulkan backend uses GTK / GLib as window decorations.
+- UI: Linux Vulkan backend now uses GTK / GLib as window decorations.
 - UI: Improved Japanese translation (thanks to coolvitto).
 - UI: Improved all translations.
 - UI: Adding a Transition with Select and then Edit->Selected->Add Transition
@@ -15,7 +15,8 @@ ChangeLog
 - UI: Fixed Compare Panel buttons sometimes not responding.
 - UI: Put Compare Panel buttons in two rows which is cleaner.
 - UI: Made Timeline display the audio cache, as it was hidden.
-- UI: Improved HUD Cache display to just return a percentage.
+- UI: Improved HUD Cache display to just return a percentage for video and
+      audio.
 
 - WebRTC: Added support for TURN server and a "Custom" preset.
 - WebRTC: Removed the room ID from the player's name.
@@ -33,6 +34,8 @@ ChangeLog
   	Viewport, Timeline and Thumbnails).
 - Core: FLTK's Pen support is now improved.
 - Core: FLTK's UTF-8 support is now improved.
+- Core: Removed even more libraries from Linux packaging to depend more on
+  	the system ones.
 
 v1.7.1
 ======
