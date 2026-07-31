@@ -17,8 +17,11 @@ namespace tl
         //! Timeline player cache information.
         struct PlayerCacheInfo
         {
-            //! Video cache percentage used.
+            //! Percentage used of the video cache.
             float videoPercentage = 0.F;
+
+            //! Percentage used of the audio cache.
+            float audioPercentage = 0.F;
 
             //! Cached video frames.
             std::vector<otime::TimeRange> videoFrames;

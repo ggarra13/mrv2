@@ -117,7 +117,8 @@ namespace tl
 
             p.playerOptions = playerOptions;
             p.timeline = timeline;
-            p.ioInfo = p.timeline->getIOInfo();
+            p.ioInfo = timeline->getIOInfo();
+            p.sourceAudioInfo = timeline->getIOInfo().audio;
 
             // Create observers.
             p.speed = observer::Value<double>::create(
@@ -304,7 +305,7 @@ namespace tl
                         updateVideoFrame();
 
                         // Update the current audio data.
-                        if (p.ioInfo.audio.isValid())
+                        if (p.sourceAudioInfo.isValid())
                         {
                             const auto& timeRange = p.timeline->getTimeRange();
                             std::vector<AudioFrame> audioFrameList;

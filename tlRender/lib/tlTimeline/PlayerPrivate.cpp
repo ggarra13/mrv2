@@ -155,6 +155,51 @@ namespace tl
             }
         }
 
+        size_t Player::Private::getVideoCacheMax() const
+        {
+            // This function returns the approximate number of video frames
+            // that can fit in the cache. Note that this doesn't take into
+            // account clips with different sizes or multiple tracks.
+            size_t byteCount = 0;
+            const io::Info& videoInfo = timeline->getIOInfo();
+            if (thread.videoLayer >= 0 &&
+                thread.videoLayer < static_cast<int>(videoInfo.video.size()))
+            {
+                byteCount += videoInfo.video[thread.videoLayer].getByteCount();
+
+                // Add byte counts from timelines that are being compared.
+                for (size_t i = 0; i < thread.compare.size(); ++i)
+                {
+                    const int compareLayer = i < thread.compareVideoLayers.size() ?
+                                             thread.compareVideoLayers[i] :
+                                             thread.videoLayer;
+                    const io::Info& compareInfo = thread.compare[i]->getIOInfo();
+                    if (compareLayer >= 0 &&
+                        compareLayer < static_cast<int>(compareInfo.video.size()))
+                    {
+                        byteCount += compareInfo.video[compareLayer].getByteCount();
+                    }
+                }
+            }
+
+            return byteCount > 0 ?
+                ((thread.cacheOptions.videoGB * memory::gigabyte) / byteCount) :
+                0;
+        }
+
+        size_t Player::Private::getAudioCacheMax() const
+        {
+            // This function returns the approximate number seconds of audio
+            // that can fit in the cache. Note that this doesn't take into
+            // account clips with different sizes or multiple tracks.
+            const size_t byteCount =
+                sourceAudioInfo.sampleRate * sourceAudioInfo.getByteCount();
+
+            return byteCount > 0 ?
+                ((thread.cacheOptions.audioGB * memory::gigabyte) / byteCount) :
+                0;
+        }
+
         void Player::Private::reverseRequests(
             const otime::RationalTime& start, const otime::RationalTime& end,
             const otime::RationalTime& inc)
@@ -168,9 +213,6 @@ namespace tl
                     const auto j = thread.videoFrameRequests.find(time);
                     if (j == thread.videoFrameRequests.end())
                     {
-                        // std::cerr << thread.cacheDirection
-                        //           << "\t\tBACK video request: "
-                        //           << time << std::endl;
                         auto& request = thread.videoFrameRequests[time];
                         request.clear();
                         io::Options ioOptions2 = thread.ioOptions;
@@ -595,13 +637,17 @@ namespace tl
             if (diff.count() > .5F)
             {
                 thread.cacheTimer = now;
-                std::vector<otime::RationalTime> cachedVideoFrames;
+
+                const size_t videoCacheMax = getVideoCacheMax();
+                const size_t audioCacheMax = getAudioCacheMax();
+
+                std::vector<otime::RationalTime> videoCacheFrames;
                 for (const auto& i : thread.videoFrameCache)
                 {
-                    cachedVideoFrames.push_back(i.first);
+                    videoCacheFrames.push_back(i.first);
                 }
-                const float cachedVideoPercentage =
-                    cachedVideoFrames.size() /
+                const float videoCachePercentage =
+                    videoCacheFrames.size() /
                     static_cast<float>(
                         readAheadDivided
                             .rescaled_to(timeRange.duration().rate())
@@ -610,19 +656,25 @@ namespace tl
                             .rescaled_to(timeRange.duration().rate())
                             .value()) *
                     100.F;
-                std::vector<otime::RationalTime> cachedAudioFrames;
+                std::vector<int64_t> audioCacheKeys;
                 {
                     std::unique_lock<std::mutex> lock(audioMutex.mutex);
                     for (const auto& i : audioMutex.audioFrameCache)
                     {
-                        cachedAudioFrames.push_back(otime::RationalTime(
-                            timeRange.start_time().rescaled_to(1.0).value() +
-                                i.first,
-                            1.0));
+                        audioCacheKeys.push_back(i.first);
                     }
                 }
-                auto cachedVideoRanges = toRanges(cachedVideoFrames);
-                auto cachedAudioRanges = toRanges(cachedAudioFrames);
+                std::vector<otime::RationalTime> audioCacheFrames;
+                for (const auto& key : audioCacheKeys)
+                {
+                    audioCacheFrames.push_back(otio::RationalTime(key, 1.0));
+                }
+                const float audioCachePercentage = audioCacheMax > 0 ?
+                                                   (audioCacheKeys.size() / static_cast<float>(audioCacheMax) * 100.F) :
+                                                   0.F;
+
+                auto cachedVideoRanges = toRanges(videoCacheFrames);
+                auto cachedAudioRanges = toRanges(audioCacheFrames);
                 for (auto& i : cachedAudioRanges)
                 {
                     i = otime::TimeRange(
@@ -633,10 +685,10 @@ namespace tl
                             .rescaled_to(timeRange.duration().rate())
                             .ceil());
                 }
-                float cachedAudioPercentage = 0.F;
                 {
                     std::unique_lock<std::mutex> lock(mutex.mutex);
-                    mutex.cacheInfo.videoPercentage = cachedVideoPercentage;
+                    mutex.cacheInfo.videoPercentage = videoCachePercentage;
+                    mutex.cacheInfo.audioPercentage = audioCachePercentage;
                     mutex.cacheInfo.videoFrames = cachedVideoRanges;
                     mutex.cacheInfo.audioFrames = cachedAudioRanges;
                 }
@@ -680,7 +732,7 @@ namespace tl
             }
 
             // Create an array of characters to draw the cached video frames.
-            std::string cachedVideoFramesDisplay(lineLength, '.');
+            std::string videoCacheFramesDisplay(lineLength, '.');
             for (const auto& i : cacheInfo.videoFrames)
             {
                 n = (i.start_time() - timeRange.start_time()).value() /
@@ -691,15 +743,15 @@ namespace tl
                 const size_t t1 = math::clamp(n, 0.0, 1.0) * (lineLength - 1);
                 for (size_t j = t0; j <= t1; ++j)
                 {
-                    if (j < cachedVideoFramesDisplay.size())
+                    if (j < videoCacheFramesDisplay.size())
                     {
-                        cachedVideoFramesDisplay[j] = 'V';
+                        videoCacheFramesDisplay[j] = 'V';
                     }
                 }
             }
 
             // Create an array of characters to draw the cached audio frames.
-            std::string cachedAudioFramesDisplay(lineLength, '.');
+            std::string audioCacheFramesDisplay(lineLength, '.');
             for (const auto& i : cacheInfo.audioFrames)
             {
                 double n = (i.start_time() - timeRange.start_time()).value() /
@@ -710,9 +762,9 @@ namespace tl
                 const size_t t1 = math::clamp(n, 0.0, 1.0) * (lineLength - 1);
                 for (size_t j = t0; j <= t1; ++j)
                 {
-                    if (j < cachedAudioFramesDisplay.size())
+                    if (j < audioCacheFramesDisplay.size())
                     {
-                        cachedAudioFramesDisplay[j] = 'A';
+                        audioCacheFramesDisplay[j] = 'A';
                     }
                 }
             }
@@ -750,8 +802,8 @@ namespace tl
                         .arg(thread.audioFrameRequests.size())
                         .arg(audioFrameCacheSize)
                         .arg(currentTimeDisplay)
-                        .arg(cachedVideoFramesDisplay)
-                        .arg(cachedAudioFramesDisplay));
+                        .arg(videoCacheFramesDisplay)
+                        .arg(audioCacheFramesDisplay));
         }
     } // namespace timeline
 } // namespace tl

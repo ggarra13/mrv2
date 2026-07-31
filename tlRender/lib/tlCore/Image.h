@@ -266,6 +266,9 @@ namespace tl
             //! Get the aspect ratio.
             float getAspect() const;
 
+            //! Get the number of bytes used to store an image.
+            size_t getByteCount() const;
+
             bool operator==(const Info&) const;
             bool operator!=(const Info&) const;
         };

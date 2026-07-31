@@ -239,7 +239,7 @@ namespace tl
                    (value % alignment != 0 ? alignment : 0);
         }
 
-        std::size_t getDataByteCount(const Info& info)
+        size_t getDataByteCount(const Info& info)
         {
             std::size_t out = 0;
             const size_t w = info.size.w;
@@ -457,6 +457,11 @@ namespace tl
         void Image::fill()
         {
             std::memset(_data, 0xFF, _dataByteCount);
+        }
+
+        size_t Info::getByteCount() const
+        {
+            return getDataByteCount(*this);
         }
 
         void to_json(nlohmann::json& j, const Mirror& value)

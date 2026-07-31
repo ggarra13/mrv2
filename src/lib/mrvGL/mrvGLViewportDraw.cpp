@@ -1251,57 +1251,16 @@ namespace mrv
 
             if (p.hud & HudDisplay::kCache)
             {
-                const auto& cacheInfo = player->cacheInfo();
-
-                uint64_t aheadVideoFrames = 0, behindVideoFrames = 0;
-                uint64_t aheadAudioFrames = 0, behindAudioFrames = 0;
-
-                otime::TimeRange currentRange(
-                    otime::RationalTime(
-                        static_cast<double>(frame), player->defaultSpeed()),
-                    otime::RationalTime(1.0, player->defaultSpeed()));
-
-                for (const auto& i : cacheInfo.videoFrames)
+                if (p.player)
                 {
-                    if (i.intersects(currentRange))
-                    {
-                        aheadVideoFrames +=
-                            i.end_time_inclusive().to_frames() - frame;
-                        behindVideoFrames += frame - i.start_time().to_frames();
-                    }
+                    const auto cache = p.player->player()->observeCacheInfo()->get();
+                    _appendText(textInfos, _("Cache: "), fontInfo, pos,
+                                lineHeight);
+                    snprintf(
+                        buf, 512, "    V: %.2f %%  A: %.2f %%",
+                        cache.videoPercentage, cache.audioPercentage);
+                    _appendText(textInfos, buf, fontInfo, pos, lineHeight);
                 }
-
-                for (const auto& i : cacheInfo.audioFrames)
-                {
-                    if (i.intersects(currentRange))
-                    {
-                        aheadAudioFrames +=
-                            i.end_time_inclusive().to_frames() - frame;
-                        behindAudioFrames += frame - i.start_time().to_frames();
-                    }
-                }
-                _appendText(textInfos, _("Cache: "), fontInfo, pos, lineHeight);
-                const auto ioSystem =
-                    App::app->getContext()->getSystem<io::System>();
-                const auto& cache = ioSystem->getCache();
-                const size_t maxCache = cache->getMax() / memory::gigabyte;
-                const float pctCache = cache->getPercentage();
-                const float usedCache = maxCache * (pctCache / 100.F);
-                /* xgettext:c-format */
-                snprintf(
-                    buf, 512, _("    Used: %.2g of %zu Gb (%.2g %%)"), usedCache,
-                    maxCache, pctCache);
-                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
-                /* xgettext:c-format */
-                snprintf(
-                    buf, 512, _("    Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
-                    aheadVideoFrames, aheadAudioFrames);
-                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
-                /* xgettext:c-format */
-                snprintf(
-                    buf, 512, _("    Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
-                    behindVideoFrames, behindAudioFrames);
-                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
             }
 
             if (p.hud & HudDisplay::kAttributes)

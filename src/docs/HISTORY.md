@@ -15,6 +15,7 @@ ChangeLog
 - UI: Fixed Compare Panel buttons sometimes not responding.
 - UI: Put Compare Panel buttons in two rows which is cleaner.
 - UI: Made Timeline display the audio cache, as it was hidden.
+- UI: Improved HUD Cache display to just return a percentage.
 
 - WebRTC: Added support for TURN server and a "Custom" preset.
 - WebRTC: Removed the room ID from the player's name.

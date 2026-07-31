@@ -36,6 +36,8 @@ namespace tl
                 const bool clearFrame = false);
             void clearRequests();
             void clearCache();
+            size_t getVideoCacheMax() const;
+            size_t getAudioCacheMax() const;
             void cacheUpdate();
 
             void finishedVideoRequests();
@@ -61,6 +63,14 @@ namespace tl
             PlayerOptions playerOptions;
             std::shared_ptr<Timeline> timeline;
             io::Info ioInfo;
+
+            // The audio format of the media, found when the timeline was read.
+            // This is stable across media reference keys, because the timeline
+            // hands the readers its own audio format to convert to, so every
+            // reference is read in the format found when the timeline was
+            // read. This is what the audio thread reads, and is not the audio
+            // device format; that is audioInfo.
+            audio::Info sourceAudioInfo;
 
             std::shared_ptr<observer::Value<double> > speed;
             std::shared_ptr<observer::Value<Playback> > playback;
