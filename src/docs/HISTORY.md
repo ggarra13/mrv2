@@ -23,7 +23,8 @@ ChangeLog
 
 - HDR: Added missing hdr.exe utility on Windows.
 
-
+- Core: Fixed a bug on CPU feature detection on Windows aarch64.
+- Core: Added more HW CPU acceleration features on arm64 and aarch64 to mrvCPU.h/mrvCPU.cpp.
 - Core: Brought back the hdr utility on Windows which was missing from vmrv2.
 - Core: Bumped FFmpeg version to v8.1.2.
 - Core: Improved failed FFmpeg reads and proper handling of reverse playback on
