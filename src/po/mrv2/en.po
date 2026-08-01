@@ -2539,10 +2539,10 @@ msgid "TURN server is {0}"
 msgstr "TURN server is {0}"
 
 msgid "Incorrectly defined TURN server."
-msgstr ""
+msgstr "Incorrectly defined TURN server."
 
 msgid "Must match:"
-msgstr ""
+msgstr "Must match:"
 
 msgid "Cannot connect to WebRTC: User is not authorized or license expired"
 msgstr "Cannot connect to WebRTC: User is not authorized or license expired"
