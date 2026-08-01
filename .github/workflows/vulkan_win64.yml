@@ -30,11 +30,7 @@ jobs:
           submodules: recursive
           fetch-depth: 1    
 
-      # Deprecated:
-      # - name: Setup environment
-      #   uses: ilammy/msvc-dev-cmd@v1
-
-      - name: Setup environment
+      - name: Install MSVC
         uses: TheMrMilchmann/setup-msvc-dev@v4
         with:
           arch: amd64
@@ -251,22 +247,12 @@ jobs:
               exit 1
           }
 
-      # - name: Verify Vulkan
-      #   run: ${VULKAN_SDK}/Bin/vulkaninfoSDK.exe
-
       - name: Setup environment
         run: mkdir -p ssh
 
       - name: Decode SSH key
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
         shell: bash
-
-      # - name: Decode FLTK SSH key
-      #   run: |
-      #       mkdir -p ~/.ssh
-      #       echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-      #       chmod 600 ~/.ssh/id_ed25519
-      #       ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Set permissions on SSH key
         shell: cmd

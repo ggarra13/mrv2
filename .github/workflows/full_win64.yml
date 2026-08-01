@@ -30,10 +30,6 @@ jobs:
           submodules: recursive
           fetch-depth: 1
 
-      # \@note: No longer maintaned
-      # - name: Install MSVC
-      #  uses: ilammy/msvc-dev-cmd@v1
-
       - name: Install MSVC
         uses: TheMrMilchmann/setup-msvc-dev@v4
         with:
@@ -88,7 +84,6 @@ jobs:
           Start-Process vc_redist_2022.x64.exe -ArgumentList "/install", "/quiet", "/norestart" -Wait
         shell: powershell
 
-
       - name: Install ccache
         shell: pwsh
         run: |
@@ -133,7 +128,7 @@ jobs:
         with:
           # Match the exact absolute path defined in the previous step
           path: ${{ runner.temp }}/.ccache
-          key: ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-v1
+          key: ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-${{ github.sha }}
           restore-keys: |
               ${{ runner.os }}-${{ runner.arch }}-OpenGL-ccache-
 
@@ -160,14 +155,6 @@ jobs:
       - name: Decode SSH key
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ssh/id_rsa
         shell: bash
-
-      - name: Decode FLTK SSH key
-        shell: bash
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.FLTK_DEPLOY_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Set permissions on SSH key
         shell: cmd
@@ -201,6 +188,7 @@ jobs:
           TLRENDER_EXR: ON
           TLRENDER_FFMPEG: ON
           TLRENDER_FFMPEG_MINIMAL: ON
+          TLRENDER_GL: ON
           TLRENDER_HAP: ON
           TLRENDER_JPEG: ON
           TLRENDER_NDI: OFF

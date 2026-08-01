@@ -311,7 +311,7 @@ src/lib:
 src/hdr:
 	Main entry point for 'hdr' NDI utility.
 
-src/main:
+src/mrv2:
 	main.cpp     - Main entry point and python module initialization.
 		       
 
