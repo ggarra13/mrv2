@@ -332,7 +332,6 @@ if [ -z "$VULKAN_SDK" ]; then
 	echo "Coukd not guess VULKAN_SDK, last guess ${VULKAN_SDK}"
 	unset VULKAN_SDK
 	export TLRENDER_VK=OFF
-	export MRV2_HDR=OFF
     fi
 else
     echo "Using VULKAN_SDK from environment: ${VULKAN_SDK}"

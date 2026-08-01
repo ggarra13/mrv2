@@ -1152,7 +1152,7 @@ Value is:  pow( 2, 1/x );} xywh {783 30 150 29} type {Horz Knob} labelsize 10 ma
           class {mrv::Tile}
         } {
           Fl_Box uiTimelineLimit {
-            xywh {0 86 934 474} labeltype NO_LABEL hide resizable
+            xywh {0 86 934 472} labeltype NO_LABEL hide resizable
           }
           Fl_Pack uiViewGroup {
             label ViewGroup open

@@ -21,6 +21,10 @@ ChangeLog
 - WebRTC: Added support for TURN server and a "Custom" preset.
 - WebRTC: Removed the room ID from the player's name.
 
+- HDR: Added missing hdr.exe utility on Windows.
+
+
+- Core: Brought back the hdr utility on Windows which was missing from vmrv2.
 - Core: Bumped FFmpeg version to v8.1.2.
 - Core: Improved failed FFmpeg reads and proper handling of reverse playback on
   	broken movies.
