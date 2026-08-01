@@ -4,9 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.2.4)  # was v2.2.3
-#set(FLTK_GIT_TAG vk)  # Cutting edge!
-#set(FLTK_GIT_TAG vk_merge) # Testing branch
+set(FLTK_GIT_TAG v2.2.5)  # was v2.2.4
 
 if(MRV2_VK)
     message(STATUS "Using ggarra13's private FLTK branch")
