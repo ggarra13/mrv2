@@ -150,6 +150,9 @@ namespace mrv
                     settings->setValue("WebRTC/Project", projectId);
                     settings->setValue("WebRTC/Room", roomId);
 
+                    projectId = string::replaceCharacter(projectId, ' ', '_');
+                    roomId = string::replaceCharacter(roomId, ' ', '_');
+
                     roomId = projectId + "_" + roomId;
 
                     // Prepend studio name to roomId to keep the connection

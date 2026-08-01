@@ -16,32 +16,32 @@ namespace mrv
     {
         using namespace tl::string;
 
-        /** 
+        /**
          * Given a path with backslashes (\) returns a string with forward
          * slashes / replaced.
-         * 
+         *
          * @param path path with backslashes
-         * 
+         *
          * @return normalized path
          */
         std::string normalizePath(const std::string& path);
 
-        /** 
+        /**
          * Convert a utf8 string to a utf16 string as used in Windows APIs
-         * 
+         *
          * @param command as utf8 string
-         * 
+         *
          * @return Same command as utf16 string
          */
         std::wstring convert_utf8_to_utf16(const std::string& utf8_command);
-        
+
         inline
         bool ends_with(const std::string& value, const std::string& ending)
         {
             if (ending.size() > value.size()) return false;
             return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
         }
-        
+
         /**
          * Split a string on a char delimiter
          *
@@ -134,7 +134,16 @@ namespace mrv
         std::string
         commentCharacter(const std::string& input, const char match = '/');
 
-        
+
+        /**
+         * Return a string with all the 'match' characters replaced with
+         * 'rep' character
+         */
+        std::string
+        replaceCharacter(const std::string& input, const char match = ' ',
+                         const char rep = '_');
+
+
         /**
          * @brief Class used to mimic Qt's string function so that it converts
          *       to integers or doubles.
