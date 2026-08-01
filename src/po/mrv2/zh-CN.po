@@ -2504,6 +2504,12 @@ msgstr "STUN 服务器是 {0}"
 msgid "TURN server is {0}"
 msgstr "TURN 服务器为 {0}"
 
+msgid "Incorrectly defined TURN server."
+msgstr "TURN 服务器定义不正确。"
+
+msgid "Must match:"
+msgstr "必须匹配："
+
 msgid "Cannot connect to WebRTC: User is not authorized or license expired"
 msgstr "无法连接到 WebRTC：用户未获得授权或许可证已过期"
 
@@ -3625,15 +3631,6 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "缓存："
-
-msgid "    Used: %.2g of %zu Gb (%.2g %%)"
-msgstr "    已使用: %.2g  %zu Gb (% 2g %%)"
-
-msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "    前    V: % 4<PRIu64>    A: % 4<PRIu64>"
-
-msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "    后    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR 显示器最小亮度（尼特）= {0}"
@@ -7970,6 +7967,15 @@ msgstr "host_statistics64 failed"
 
 msgid "task info failed"
 msgstr "任务信息失败"
+
+#~ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
+#~ msgstr "    已使用: %.2g  %zu Gb (% 2g %%)"
+
+#~ msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+#~ msgstr "    前    V: % 4<PRIu64>    A: % 4<PRIu64>"
+
+#~ msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+#~ msgstr "    后    V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 #~ msgid "Complexity"
 #~ msgstr "复杂程度"

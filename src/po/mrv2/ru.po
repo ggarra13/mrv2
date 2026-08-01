@@ -2556,6 +2556,12 @@ msgstr "STUN-сервер: {0}"
 msgid "TURN server is {0}"
 msgstr "TURN-сервер: {0}"
 
+msgid "Incorrectly defined TURN server."
+msgstr "TURN-сервер задан некорректно."
+
+msgid "Must match:"
+msgstr "Должно соответствовать:"
+
 msgid "Cannot connect to WebRTC: User is not authorized or license expired"
 msgstr ""
 "Не удалось подключиться к WebRTC: пользователь не авторизован или срок "
@@ -3718,15 +3724,6 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "Кэш: "
-
-msgid "    Used: %.2g of %zu Gb (%.2g %%)"
-msgstr "Использовано: %.2g от %zu Gb (%.2g%%)"
-
-msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "   Впереди   V: % 4<PRIu64>    A: % 4<PRIu64>"
-
-msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 msgid "HDR monitor min. nits = {0}"
 msgstr "Минимальная яркость HDR-монитора (нит) = {0}"
@@ -8197,6 +8194,15 @@ msgstr "shop_statistics64 не сработал"
 
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
+
+#~ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
+#~ msgstr "Использовано: %.2g от %zu Gb (%.2g%%)"
+
+#~ msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+#~ msgstr "   Впереди   V: % 4<PRIu64>    A: % 4<PRIu64>"
+
+#~ msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+#~ msgstr "      Позади V: % 4<PRIu64>    A: % 4<PRIu64>"
 
 #~ msgid "Complexity"
 #~ msgstr "Сложность"

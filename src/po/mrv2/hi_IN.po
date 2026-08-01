@@ -2525,6 +2525,12 @@ msgstr "STUN सर्वर {0} है"
 msgid "TURN server is {0}"
 msgstr "TURN सर्वर {0} है"
 
+msgid "Incorrectly defined TURN server."
+msgstr "TURN सर्वर गलत तरीके से परिभाषित किया गया है।"
+
+msgid "Must match:"
+msgstr "इससे मेल खाना चाहिए:"
+
 msgid "Cannot connect to WebRTC: User is not authorized or license expired"
 msgstr ""
 "WebRTC से कनेक्ट नहीं किया जा सकता: उपयोगकर्ता अधिकृत नहीं है या लाइसेंस की "
@@ -3691,15 +3697,6 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "कैश: "
-
-msgid "    Used: %.2g of %zu Gb (%.2g %%)"
-msgstr "उपयोग में: %.2g of %zu Gb (%.2g %%)"
-
-msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "     आगे     V: % 4<PRIu64>     A: % 4<PRIu64>"
-
-msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "      पीछे    V: % 4<PRIu64>     A: % 4<PRIu64>"
 
 msgid "HDR monitor min. nits = {0}"
 msgstr "HDR मॉनिटर की न्यूनतम ब्राइटनेस (निट्स) = {0}"
@@ -8133,6 +8130,15 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
+
+#~ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
+#~ msgstr "उपयोग में: %.2g of %zu Gb (%.2g %%)"
+
+#~ msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+#~ msgstr "     आगे     V: % 4<PRIu64>     A: % 4<PRIu64>"
+
+#~ msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+#~ msgstr "      पीछे    V: % 4<PRIu64>     A: % 4<PRIu64>"
 
 #~ msgid "Complexity"
 #~ msgstr "जटिलता"

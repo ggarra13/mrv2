@@ -2546,6 +2546,12 @@ msgstr "Le serveur STUN est {0}"
 msgid "TURN server is {0}"
 msgstr "Le serveur TURN est {0}"
 
+msgid "Incorrectly defined TURN server."
+msgstr "Serveur TURN mal défini."
+
+msgid "Must match:"
+msgstr "Doit correspondre à :"
+
 msgid "Cannot connect to WebRTC: User is not authorized or license expired"
 msgstr ""
 "Impossible de se connecter à WebRTC : l'utilisateur n'est pas autorisé ou la"
@@ -3717,15 +3723,6 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB VMem: %<PRIu64> / %<PRIu64> MB"
 
 msgid "Cache: "
 msgstr "Cache: "
-
-msgid "    Used: %.2g of %zu Gb (%.2g %%)"
-msgstr "Utilisé : %.2g de %zu Gb (%.2g %%)"
-
-msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Avant V: % 4<PRIu64> A: % 4<PRIu64>"
-
-msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
-msgstr "Derrière V: % 4<PRIu64> A: % 4<PRIu64>"
 
 msgid "HDR monitor min. nits = {0}"
 msgstr "Luminosité minimale du moniteur HDR (nits) = {0}"
@@ -8236,6 +8233,15 @@ msgstr "host_statistics64 a échoué"
 
 msgid "task info failed"
 msgstr "l'information de la tâche a échoué"
+
+#~ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
+#~ msgstr "Utilisé : %.2g de %zu Gb (%.2g %%)"
+
+#~ msgid "    Ahead    V: % 4<PRIu64>    A: % 4<PRIu64>"
+#~ msgstr "Avant V: % 4<PRIu64> A: % 4<PRIu64>"
+
+#~ msgid "    Behind   V: % 4<PRIu64>    A: % 4<PRIu64>"
+#~ msgstr "Derrière V: % 4<PRIu64> A: % 4<PRIu64>"
 
 #~ msgid "Complexity"
 #~ msgstr "Complexité"
