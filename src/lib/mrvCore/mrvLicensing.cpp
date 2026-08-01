@@ -1070,7 +1070,8 @@ namespace mrv
             app::demo_mode = true;
         }
 
-        if (app::license_type != LicenseType::kDemo)
+        if (app::license_type != LicenseType::kDemo &&
+            out == License::kValid)
         {
             /* xgettext:c++-format */
             std::string msg =
