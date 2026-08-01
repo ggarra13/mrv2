@@ -492,7 +492,7 @@ endif()
 #
 # Add main source
 #
-add_subdirectory(main)
+add_subdirectory(mrv2)
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
     add_subdirectory(tests)

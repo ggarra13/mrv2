@@ -8,19 +8,21 @@ fi
 #
 # OTIO macros
 #
-sef -i 's#OTIO_NS::#otio::#' $*
+sed -i 's#OTIO_NS::#otio::#' $*
 
 #
 # FTK macros
 #
 sed -i 's#FTK_API##' $*
 sed -i 's#FTK_NON_COPYABLE#TLRENDER_NON_COPYABLE#' $*
+sed -i 's#FTK_P;#TLRENDER_P;#' $*
 
 #
 # tlRender macros
 #
 sed -i 's#TL_API##' $*
 sed -i 's#TL_ENUM#TLRENDER_ENUM#' $*
+sed -i 's#TL_P;#TLRENDER_P;#' $*
 
 #
 # FTK classes

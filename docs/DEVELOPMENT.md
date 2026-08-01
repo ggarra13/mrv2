@@ -11,10 +11,17 @@ Build System
 	runmeq.sh
 		Main script to build just mrv2 once runme.sh was run.
 		Fast way to do iterations on mrv2's source code.
-	runmet.sh
+	runme2.sh
+		Main script to build mrv2 and tlRender.
+        runme3.sh
 		Main script to build mrv2, tlRender and FLTK all of
 		which change often.  In order to use this script, you
-		must manually use git to pull the latest tlRender or FLTK (or
+		must manually use git to pull the latest FLTK (or
+		whatever tag you want to build against).	
+        runme4.sh
+		Main script to build mrv2, tlRender, FLTK and pyFLTK all of
+		which change often.  In order to use this script, you
+		must manually use git to pull the latest FLTK (or
 		whatever tag you want to build against).		
 
 	CMakeLists.txt
@@ -110,7 +117,7 @@ src/icons
 
 tlRender/lib/
 	tlCore		   - Core tlRender classes.
-	tlDevice  	   - Device classes (NDI)
+	tlDevice  	   - Device classes (NDI Output)
 	tlDraw        	   - Annotation Drawing classes.
 	tlGL	       	   - Base OpenGL classes
 	tlIO	       	   - I/O Plugin classes.
@@ -118,7 +125,7 @@ tlRender/lib/
 	tlTimelineGL	   - OpenGL Timeline drawing and tonemapping classes.
 	tlTimelineUI	   - OpenGL and Vulkan Timeline drawing/editing classes.
 	tlTimelineVK	   - Vulkan Timeline drawing and HDR classes.
-	tlUI               - Legacy GLFW drawing classes (may be removed)
+	tlUI               - Legacy Darby's drawing layout classes.
 	tlVk		   - Base Vulkan classes
 	
 
@@ -260,7 +267,7 @@ src/lib:
 	mrvOS		- OS functions common to all platforms.
 
   			  mrvEnv.*              - Windows wchar versions of Unix
-					         setenv and unsetenv.
+			 		          setenv and unsetenv.
 			  mrvFileManager.*      - Open files in default file manager.
 			  mrvI8N.h	        - Handle internationalization with
 			  		          gettext / libintl
@@ -274,13 +281,13 @@ src/lib:
 			  mrvSignalHandler.h    - Installs signal handler
 			  mrvStackTrace.h       - Spit out a stack trace
 			  
-			  mrvMemory.h           - Function used to determine used
-			  		          and virtual memory on all
-					         OSes.
+			  mrvMemory.h           - Function used to determine
+			  			  used and virtual memory on all
+					          OSes. 
 			  mrvOS.h               - Common functions like execv on
 			  		          all platforms.  (Split and
-					         refactor between mrvOS/ and
-					         mrvUI/)
+					          refactor between mrvOS/ and
+					          mrvUI/)
 			
 	mrvPy		- Python (pybind11) code.  Must remove mrv2 namespace.
 			  Keep as is.  Some files renaming perhasp.

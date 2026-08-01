@@ -296,6 +296,7 @@ namespace tl
             bool _getAudioInfo(const otio::Composable*);
             void _getCanvas();
             void _getMaxVideoSize();
+            void _timelineUpdate();
 
             TLRENDER_PRIVATE();
         };

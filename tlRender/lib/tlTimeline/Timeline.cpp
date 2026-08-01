@@ -44,7 +44,7 @@ namespace tl
             }
 
 
-            float _transitionValue(double frame, double in, double out)
+            float transitionValue(double frame, double in, double out)
             {
                 return (frame - in) / (out - in);
             }
@@ -267,7 +267,6 @@ namespace tl
             p.readCache.setMax(readCacheMax);
 
             // Get information about the timeline.
-            p.timeRange = timeline::getTimeRange(p.otioTimeline.value);
             for (const auto& i : p.otioTimeline.value->tracks()->children())
             {
                 if (auto otioTrack = dynamic_cast<const otio::Track*>(i.value))
@@ -306,37 +305,7 @@ namespace tl
                     }
                 }
             }
-            for (const auto& i : p.otioTimeline.value->tracks()->children())
-            {
-                if (auto otioTrack = dynamic_cast<const otio::Track*>(i.value))
-                {
-                    if (otio::Track::Kind::video == otioTrack->kind())
-                    {
-                        if (_getVideoInfo(otioTrack))
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-            _getMaxVideoSize();
-            _getCanvas();
-
-            // Give each media reference the timeline level information,
-            // keeping its own video information and tags. getIOInfo() can
-            // then hand back whichever of these matches the media reference
-            // being read.
-            for (auto& i : p.videoInfoByReference)
-            {
-                io::Info ioInfo = p.ioInfo;
-                ioInfo.video = i.second.video;
-                ioInfo.videoTime = i.second.videoTime;
-                for (const auto& tag : i.second.tags)
-                {
-                    ioInfo.tags[tag.first] = tag.second;
-                }
-                i.second = ioInfo;
-            }
+            _timelineUpdate();
 
             logSystem->print(
                 string::Format("tl::timeline::Timeline {0}").arg(this),
@@ -409,7 +378,10 @@ namespace tl
             TLRENDER_P();
             p.otioTimeline = value;
             if (p.otioTimeline.value)
-                p.timeRange = timeline::getTimeRange(p.otioTimeline.value);
+            {
+                _timelineUpdate();
+            }
+
             std::unique_lock<std::mutex> lock(p.mutex.mutex);
             if (!p.mutex.stopped)
             {
@@ -766,7 +738,7 @@ namespace tl
                                                 otioTransition
                                                 ->transition_type());
                                             videoLayerData.transitionValue =
-                                                _transitionValue(
+                                                transitionValue(
                                                     requestTime.value(),
                                                     range.value()
                                                     .end_time_inclusive()
@@ -817,7 +789,7 @@ namespace tl
                                                 otioTransition
                                                 ->transition_type());
                                             videoLayerData.transitionValue =
-                                                _transitionValue(
+                                                transitionValue(
                                                     requestTime.value(),
                                                     range.value()
                                                     .start_time()
@@ -1061,7 +1033,6 @@ namespace tl
                 if (valid)
                 {
                     const auto frame = p.videoFrame(**videoRequestIt);
-                    p.updateReadErrors();
                     (*videoRequestIt)->promise.set_value(frame);
                     videoRequestIt = p.thread.videoRequestsInProgress.erase(videoRequestIt);
                     continue;
@@ -1085,7 +1056,6 @@ namespace tl
                 if (valid)
                 {
                     const auto frame = p.audioFrame(**audioRequestIt);
-                    p.updateReadErrors();
                     (*audioRequestIt)->promise.set_value(frame);
                     audioRequestIt =
                         p.thread.audioRequestsInProgress.erase(audioRequestIt);
@@ -1307,13 +1277,11 @@ namespace tl
                 for (auto& request : videoRequests)
                 {
                     const auto frame = p.videoFrame(*request);
-                    p.updateReadErrors();
                     request->promise.set_value(frame);
                 }
                 for (auto& request : audioRequests)
                 {
                     const auto frame = p.audioFrame(*request);
-                    p.updateReadErrors();
                     request->promise.set_value(frame);
                 }
             }
@@ -1481,6 +1449,51 @@ namespace tl
                         }
                     }
                 }
+            }
+        }
+
+        void Timeline::_timelineUpdate()
+        {
+            TLRENDER_P();
+
+            p.timeRange = timeline::getTimeRange(p.otioTimeline.value);
+            // The old videoInfoClip/videoInfoByReference pointers belonged
+            // to the tree we just released above and are now dangling --
+            // they must be rebuilt against the new tree, not reused.
+            p.videoInfoClip = nullptr;
+            p.videoInfoByReference.clear();
+            p.maxVideoSize = math::Size2i();
+            p.canvasSize = math::Size2i();
+            p.canvasOffset = math::Vector2f();
+            p.normalizeSize = math::Size2i();
+            p.boundsScale = 1.0;
+
+            for (const auto& i : p.otioTimeline.value->tracks()->children())
+            {
+                if (auto otioTrack = dynamic_cast<const otio::Track*>(i.value))
+                {
+                    if (otio::Track::Kind::video == otioTrack->kind())
+                    {
+                        if (_getVideoInfo(otioTrack))
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            _getMaxVideoSize();
+            _getCanvas();
+
+            for (auto& i : p.videoInfoByReference)
+            {
+                io::Info ioInfo = p.ioInfo;
+                ioInfo.video = i.second.video;
+                ioInfo.videoTime = i.second.videoTime;
+                for (const auto& tag : i.second.tags)
+                {
+                    ioInfo.tags[tag.first] = tag.second;
+                }
+                i.second = ioInfo;
             }
         }
 

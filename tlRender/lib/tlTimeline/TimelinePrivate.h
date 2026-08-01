@@ -203,11 +203,6 @@ namespace tl
             // goes through Timeline::getMediaReference(), which takes the
             // mutex.
             otio::MediaReference* mediaReference(const otio::Clip*) const;
-            // Aggregate reader and frame errors into the mutex-guarded
-            // fields. Called on the request thread before completing a
-            // request, so the error state is current by the time a caller's
-            // future resolves.
-            void updateReadErrors();
         };
     } // namespace timeline
 } // namespace tl

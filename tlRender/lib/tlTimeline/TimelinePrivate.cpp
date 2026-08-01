@@ -73,32 +73,6 @@ namespace tl
         }
 
 
-        void Timeline::Private::updateReadErrors()
-        {
-            size_t count = frameErrorCount;
-            std::string error = frameError;
-            for (const auto& read : readCache.getValues())
-            {
-                if (read)
-                {
-                    count += read->getErrorCount();
-                    if (error.empty())
-                    {
-                        error = read->getError();
-                    }
-                }
-            }
-            readErrorMax = std::max(readErrorMax, count);
-            {
-                std::unique_lock<std::mutex> lock(mutex.mutex);
-                mutex.readErrorCount = readErrorMax;
-                if (mutex.readError.empty())
-                {
-                    mutex.readError = error;
-                }
-            }
-        }
-
         VideoFrame Timeline::Private::videoFrame(PendingVideoRequest& request)
         {
             VideoFrame frame;
