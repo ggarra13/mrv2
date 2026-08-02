@@ -323,10 +323,6 @@ You run the .bat file first, which will set the Visual Studio paths and
 fire up a Msys console.  From then on, all commands described are run in 
 the Msys console.
 
-FFmpeg and liblcms2 are now compiled as part of the pre-flight cmake build.  libssh and libcrypto are taken from Msys64 repositories when building FFmpeg as well as swig.
-
-The libintl and libiconv libraries are taken from the MSys64 repositories as pre-flight check with the bin/install_libintl_window.sh script (part of runme.sh).
-
 ## CMake build options
 
 The main runme.sh script supports passing CMake flags to it and allows turning on or off some options of mrv2.  You must pass them like:

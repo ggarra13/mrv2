@@ -17,6 +17,7 @@ ChangeLog
 - UI: Made Timeline display the audio cache, as it was hidden.
 - UI: Improved HUD Cache display to just return a percentage for video and
       audio.
+- UI: Fixed timeline dragging position getting reset when editing a transition.
 
 - WebRTC: Added support for TURN server and a "Custom" preset.
 - WebRTC: Removed the room ID from the player's name.
