@@ -374,8 +374,8 @@ else()
     #
     # Set the MUI Installer icon
     #
-    set(CPACK_NSIS_MUI_ICON "${MRV2_DIR}/main/app.ico")
-    set(CPACK_NSIS_MUI_UNICON "${MRV2_DIR}/main/app.ico")
+    set(CPACK_NSIS_MUI_ICON "${MRV2_DIR}/mrv2/app.ico")
+    set(CPACK_NSIS_MUI_UNICON "${MRV2_DIR}/mrv2/app.ico")
 
     #
     # Set the MUI banner to use a custom mrv2 one.
