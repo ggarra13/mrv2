@@ -5,7 +5,7 @@ ChangeLog
 ---------
 
 - UI: Linux Vulkan backend now uses GTK / GLib as window decorations.
-- UI: Improved Japanese translation (thanks to coolvitto).
+- UI: Improved Japanese translation (thanks to @coolvitto).
 - UI: Improved all translations.
 - UI: Adding a Transition with Select and then Edit->Selected->Add Transition
       now refits the Edit timeline to show the transition.
@@ -24,6 +24,8 @@ ChangeLog
 
 - HDR: Added missing hdr.exe utility on Windows.
 
+- Core: We now allow the Vulkan backend to work in headless mode (ie. no UI), for running python scripts like baking OCIO for example.
+- Core: Fixed a validation error on Main Viewport.
 - Core: Renamed main subdirectory as mrv2.
 - Core: Fixed a bug on CPU feature detection on Windows aarch64.
 - Core: Added more HW CPU acceleration features on arm64 and aarch64 to mrvCPU.h/mrvCPU.cpp.

@@ -1091,7 +1091,8 @@ namespace mrv
                         p.player->player()->observeCurrentVideo(),
                         [this](const std::vector<timeline::VideoFrame>& value)
                             { currentVideoCallback(value); },
-                        observer::CallbackAction::Suppress);
+                        observer::CallbackAction::Trigger);
+                        // observer::CallbackAction::Suppress);
 
                 // needed for refreshing secondary viewport when stopped.
                 p.videoData = player->currentVideo();
@@ -1390,14 +1391,6 @@ namespace mrv
                     p.videoSize = videoSize;
                 }
             }
-
-            // if (p.pixelAspectRatio > 0.F && !p.videoData.empty() &&
-            //     !p.videoData.front().layers.empty())
-            // {
-            //     auto image = p.videoData.front().layers.front().image;
-            //     p.videoData.front().size.pixelAspectRatio = p.pixelAspectRatio;
-            //     if (image) image->setPixelAspectRatio(p.pixelAspectRatio);
-            // }
 
             if (p.resizeWindow)
             {

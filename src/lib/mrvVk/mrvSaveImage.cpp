@@ -63,7 +63,7 @@ namespace mrv
 
         // Stop the playback
         player->stop();
-        
+
         std::shared_ptr<image::Image> tmpImage;
 
         auto currentTime = player->currentTime();
@@ -115,8 +115,8 @@ namespace mrv
             }
 
             vlk::OffscreenBufferOptions offscreenBufferOptions;
-            std::shared_ptr<timeline_vlk::Render> render;
 
+            std::cerr << "saving with pic" << std::endl;
             image::Size renderSize;
 
             int layerId = ui->uiColorChannel->value();
@@ -137,7 +137,7 @@ namespace mrv
                     renderSize.h = compareSize.h;
                 }
                 // \@todo: rotated images not yet supported.
-                
+
                 // auto rotation = view->getRotation();
                 // if (options.annotations && rotationSign(rotation) != 0)
                 // {
@@ -170,11 +170,7 @@ namespace mrv
                 LOG_STATUS(msg);
             }
 
-                    
-            // Create the renderer.
-            auto ctx = ui->uiView->getContext();
-            render = timeline_vlk::Render::create(ctx, context);
-            
+
             offscreenBufferOptions.colorType = image::PixelType::RGBA_F32;
             offscreenBufferOptions.pbo = true;
 
@@ -188,12 +184,12 @@ namespace mrv
                     string::Format("{0}: Cannot open writer plugin.")
                     .arg(file));
             }
-            
+
             auto tags = ui->uiView->getTags();
 
             io::Info ioInfo;
             image::Info outputInfo, scaleInfo, bufferInfo;
-            
+
             outputInfo.pixelType = info.video[layerId].pixelType;
             outputInfo.size.pixelAspectRatio = 1.0;
 
@@ -201,7 +197,7 @@ namespace mrv
             std::shared_ptr<image::Image> annotationImage;
             std::shared_ptr<image::Image> bufferImage;
             std::shared_ptr<image::Image> scaleImage;
-            
+
             // Create scaleImage if resolution is not the same.
             if (resolution != SaveResolution::kSameSize)
             {
@@ -214,7 +210,7 @@ namespace mrv
                       .arg(scaleInfo.pixelType);
                 LOG_STATUS(msg);
             }
-            
+
             else if (resolution == SaveResolution::kHalfSize)
             {
                 renderSize.w /= 2;
@@ -234,7 +230,7 @@ namespace mrv
 
             outputInfo.size = renderSize;
             outputInfo = writerPlugin->getWriteInfo(outputInfo);
-                
+
             if (image::PixelType::kNone == outputInfo.pixelType)
             {
                 outputInfo.pixelType = image::PixelType::RGBA_U8;
@@ -259,7 +255,7 @@ namespace mrv
                 offscreenBufferOptions.colorType =
                     outputInfo.pixelType;
             }
-            
+
             math::Box2i displayWindow(0, 0, renderSize.w, renderSize.h);
             math::Box2i dataWindow(0, 0, renderSize.w, renderSize.h);
             if (!options.annotations && saveEXR)
@@ -278,19 +274,24 @@ namespace mrv
                 }
                 if (options.exrSaveContents == SaveContents::kDisplayWindow)
                     dataWindow = displayWindow;
-                
+
                 outputInfo.size.w = dataWindow.max.x - dataWindow.min.x + 1;
                 outputInfo.size.h = dataWindow.max.y - dataWindow.min.y + 1;
             }
 #endif
-            
+
             //
             // Create image buffer (main FBO).
-            // 
+            //
             math::Size2i offscreenBufferSize(renderSize.w, renderSize.h);
             std::shared_ptr<vlk::OffscreenBuffer> buffer;
 
             buffer = view->getVideoFBO();
+            if (!buffer)
+            {
+                LOG_ERROR("No Video FBO");
+                return 1;
+            }
             offscreenBufferOptions = buffer->getOptions();
 
             if (options.annotations)
@@ -307,15 +308,15 @@ namespace mrv
                 view->redraw();
                 // flush is needed
                 Fl::flush();
-                
+
                 image::Info annotationInfo = outputInfo;
                 annotationInfo.pixelType = image::PixelType::RGBA_U8;
                 annotationImage = image::Image::create(annotationInfo);
             }
-            
+
             const size_t width = buffer->getWidth();
             const size_t height = buffer->getHeight();
-                
+
             bufferInfo = outputInfo;
             bufferInfo.pixelType = offscreenBufferOptions.colorType;
             bufferInfo.size.w = width;
@@ -326,11 +327,11 @@ namespace mrv
                 tl::string::Format(_("Offscreen Buffer info: {0}"))
                 .arg(offscreenBufferOptions.colorType);
             LOG_STATUS(msg);
-            
-            
+
+
             // Turn off hud so it does not get captured by readPixels.
             view->setHudActive(false);
-                
+
             // Prepare annotations without HUD, cursors, and overlay with
             // a centered and frame image for easier checking.
             if (options.annotations)
@@ -349,18 +350,18 @@ namespace mrv
                 // flush is needed
                 Fl::flush();
             }
-            
+
             if (saveHDR)
             {
                 outputInfo.pixelType = image::PixelType::RGB_F32;
                 offscreenBufferOptions.colorType = image::PixelType::RGB_F32;
             }
-            
+
             if (saveJPEG)
             {
                 outputInfo.pixelType = image::PixelType::RGB_U8;
             }
-            
+
 #ifdef TLRENDER_EXR
             if (saveEXR)
             {
@@ -379,10 +380,10 @@ namespace mrv
             ioOptions["OpenEXR/PixelType"] = getLabel(outputInfo.pixelType);
 #endif
             outputImage = image::Image::create(outputInfo);
-            
+
             ioInfo.videoTime = oneFrameTimeRange;
             ioInfo.video.push_back(outputInfo);
-            
+
             auto writer = writerPlugin->write(path, ioInfo, ioOptions);
             if (!writer)
             {
@@ -404,27 +405,27 @@ namespace mrv
             {
                 view->setSaveOverlay(false);
             }
-                
-                
+
+
             view->redraw();
             view->flush(); // needed
             Fl::flush();
-                        
+
             VkDevice device = view->device();
             VkCommandPool commandPool = view->commandPool();
 
             // Read Main Image Viewport
             VkCommandBuffer cmd = beginSingleTimeCommands(device,
                                                           commandPool);
-            
+
             buffer->readPixels(cmd, 0, 0, width, height);
-            
+
             vkEndCommandBuffer(cmd);
-            
+
             buffer->submitReadback(cmd);
 
             view->wait_queue();
-            
+
             VkResult result = VK_NOT_READY;
             void* imageData = nullptr;
             while (result == VK_NOT_READY)
@@ -432,7 +433,7 @@ namespace mrv
                 result = buffer->getLatestReadPixels(imageData);
             }
             if (imageData)
-            {                            
+            {
                 std::memcpy(bufferImage->getData(), imageData,
                             bufferImage->getDataByteCount());
             }
@@ -447,8 +448,8 @@ namespace mrv
             // Read Annotation Image
             //
             flipImageInY(bufferImage);
-                        
-                        
+
+
             if (options.annotations)
             {
                 auto overlayBuffer = view->getAnnotationFBO();
@@ -458,13 +459,13 @@ namespace mrv
                                                                   commandPool);
 
                     overlayBuffer->readPixels(cmd, 0, 0, width, height);
-            
+
                     vkEndCommandBuffer(cmd);
-            
+
                     overlayBuffer->submitReadback(cmd);
 
                     view->wait_queue();
-            
+
                     VkResult result = VK_NOT_READY;
                     void* imageData = nullptr;
                     while (result == VK_NOT_READY)
@@ -480,7 +481,7 @@ namespace mrv
                     {
                         annotationImage->zero();
                     }
-                            
+
                     vkFreeCommandBuffers(device, commandPool, 1, &cmd);
                 }
                 else
@@ -492,13 +493,13 @@ namespace mrv
                 // Composite annotation image over buffer.
                 //
                 composite_RGBA_U8(bufferImage, annotationImage);
-                
+
                 vkFreeCommandBuffers(device, commandPool, 1, &cmd);
-                        
+
                 view->setSaveOverlay(false);
             }
-            
-            
+
+
             if (bufferImage != scaleImage)
             {
                 if (!scaleImage)
@@ -508,7 +509,7 @@ namespace mrv
 
                 convertImage(scaleImage, bufferImage);
             }
-                    
+
             //
             // Scale down result.
             //
@@ -536,7 +537,7 @@ namespace mrv
             {
                 outputImage = bufferImage;
             }
-            
+
             outputImage->setTags(tags);
             writer->writeVideo(currentTime, outputImage);
         }
@@ -576,7 +577,7 @@ namespace mrv
             waitForFrame(player, time);
 
             _save_single_frame(file, ui, options, frameIndex);
-            
+
             frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
         }
 
@@ -622,7 +623,7 @@ namespace mrv
             waitForFrame(player, time);
 
             _save_single_frame(file, ui, options, frameIndex);
-            
+
             frameIndex = (frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
         }
 
@@ -667,14 +668,14 @@ namespace mrv
         // Stop the playback
         player->stop();
 
-        const auto& currentTime = player->currentTime(); 
+        const auto& currentTime = player->currentTime();
 
         // Save this frame with the frame number
         player->seek(currentTime);
         waitForFrame(player, currentTime);
-            
+
         _save_single_frame(file, ui, options, 0);
-        
+
         // Rename file name that got saved with a frame number to the actual
         // frame that the user set.
         int64_t currentFrame = currentTime.to_frames();

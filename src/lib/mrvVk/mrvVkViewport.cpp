@@ -101,8 +101,6 @@ namespace mrv
         {
             TLRENDER_P();
 
-            int stereo = 0;
-            mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | stereo);
             // m_debugSync = true;
         }
 
@@ -383,7 +381,8 @@ namespace mrv
         {
             std::vector<const char*> out;
             out = Fl_Vk_Window::get_device_extensions();
-            out.push_back(VK_EXT_HDR_METADATA_EXTENSION_NAME);
+            if (!headless())
+                out.push_back(VK_EXT_HDR_METADATA_EXTENSION_NAME);
             return out;
         }
 
@@ -531,6 +530,19 @@ namespace mrv
                 vk.annotation_pipeline = VK_NULL_HANDLE;
             }
 
+            if (vk.pipeline_layout != VK_NULL_HANDLE)
+            {
+                vkDestroyPipelineLayout(device(), vk.pipeline_layout, nullptr);
+                vk.pipeline_layout = VK_NULL_HANDLE;
+            }
+
+            if (vk.annotation_pipeline_layout != VK_NULL_HANDLE)
+            {
+                vkDestroyPipelineLayout(device(),
+                                        vk.annotation_pipeline_layout, nullptr);
+                vk.annotation_pipeline_layout = VK_NULL_HANDLE;
+            }
+
             VkWindow::destroy();
         }
 
@@ -589,14 +601,12 @@ namespace mrv
 
         std::shared_ptr<vlk::OffscreenBuffer> Viewport::getVideoFBO()
         {
-            MRV2_VK();
-            return vk.buffer;
+            return _vk->buffer;
         }
 
         std::shared_ptr<vlk::OffscreenBuffer> Viewport::getAnnotationFBO()
         {
-            MRV2_VK();
-            return vk.overlay;
+            return _vk->overlay;
         }
 
 
@@ -708,8 +718,6 @@ namespace mrv
             TLRENDER_P();
             MRV2_VK();
 
-
-
             // Get the command buffer started for the current frame.
             VkCommandBuffer cmd = getCurrentCommandBuffer();
 
@@ -789,7 +797,6 @@ namespace mrv
 
             if (renderSize.isValid())
             {
-
                 vk.colorBufferType = image::PixelType::RGBA_U8;
 
                 int accuracy = p.ui->uiPrefs->uiPrefsColorAccuracy->value();
@@ -814,6 +821,8 @@ namespace mrv
                     {
                         video = p.lastVideoFrame;
                     }
+
+                    // std::cerr << "\t\tdraw " << video.time << std::endl;
 
                     if (!video.layers.empty() && video.layers[0].image &&
                         video.layers[0].image->isValid())
@@ -1959,8 +1968,17 @@ namespace mrv
             attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
             attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            attachments[0].initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-            attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Final layout for presentation
+
+            if (headless())
+            {
+                attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            }
+            else
+            {
+                attachments[0].initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+                attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            }
 
             attachments[1] = VkAttachmentDescription();
 

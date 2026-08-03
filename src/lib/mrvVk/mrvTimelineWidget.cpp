@@ -203,8 +203,6 @@ namespace mrv
             VkWindow(X, Y, W, H, L),
             _p(new Private)
         {
-            int fl_double = FL_DOUBLE;
-            mode(FL_RGB | FL_ALPHA | fl_double);
             // m_debugSync = true;
         }
 

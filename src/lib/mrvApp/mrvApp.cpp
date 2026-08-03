@@ -747,6 +747,38 @@ namespace mrv
         }
 #endif
 
+        //
+        // Show the UI if no python script was fed in (when Python is
+        // supported).
+        // We make sure the UI is visible when we feed a filename.
+        // This is needed to avoid an issue with Wayland not properly
+        // refreshing the play buttons.
+        //
+        bool showUI = true;
+
+#ifdef MRV2_PYBIND11
+        int stereo = 0;
+        ui->uiView->mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL |
+                         stereo);
+        ui->uiTimeline->mode(FL_RGB | FL_ALPHA | FL_DOUBLE);
+
+        if (app::soporta_python && !p.options.pythonScript.empty())
+        {
+            showUI = false;
+
+            ui->uiView->headless(true);
+            ui->uiTimeline->headless(true);
+        }
+        else
+        {
+            ui->uiView->headless(false);
+            ui->uiTimeline->headless(false);
+
+            ui->uiMain->show();
+            ui->uiMain->wait_for_expose();
+        }
+#endif
+
         Preferences::run();
 
 #if defined(TLRENDER_USD)
@@ -986,25 +1018,8 @@ namespace mrv
         outputDisplay = new PythonOutput(0, 0, 400, 400);
 #endif
 
-        //
-        // Show the UI if no python script was fed in (when Python is supported).
-        // We make sure the UI is visible when we feed a filename.
-        // This is needed to avoid an issue with Wayland not properly refreshing the play buttons.
-        //
-        bool showUI = true;
-
-#ifdef MRV2_PYBIND11
-        if (app::soporta_python && !p.options.pythonScript.empty())
-        {
-            showUI = false;
-        }
-#endif
-
         if (showUI)
         {
-            ui->uiMain->show();
-            ui->uiMain->wait_for_expose();
-
             ui->uiView->take_focus();
 
             // Fix for always on top on Linux
@@ -1239,12 +1254,8 @@ namespace mrv
 
                 try
                 {
-#ifdef VULKAN_BACKEND
-                    // \@bug: for Vulkan we must show the window so that
-                    //        the Fl_Vk_Context is created.
-                    ui->uiMain->show();
-                    ui->uiMain->wait_for_expose();
-#endif
+                    ui->uiView->render_offscreen();
+                    ui->uiTimeline->render_offscreen();
                     run_python_script(py_args);
                 }
                 catch (const std::exception& e)
@@ -1254,6 +1265,12 @@ namespace mrv
                     _exit = 1;
                     return;
                 }
+
+#ifdef VULKAN_BACKEND
+                ui->uiView->destroy();
+                ui->uiTimeline->destroy();
+#endif
+
                 delete ui;
                 ui = nullptr;
                 return;
