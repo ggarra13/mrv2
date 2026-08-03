@@ -727,7 +727,7 @@ namespace mrv
                 else
                 {
                     auto playerTime = player->currentTime();
-                    msg = string::Format(_("Saving... {0} player {1}"))
+                    msg = string::Format(_("Saving... {0}"))
                           .arg(currentTime)
                           .arg(playerTime);
                     LOG_STATUS(msg);
