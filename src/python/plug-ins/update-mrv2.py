@@ -141,7 +141,7 @@ def fltk_check_callback(data):
             install_progress = 0
             Fl.check()
     if subprocess_result is None:
-        Fl.repeat_timeout(1.0, fltk_check_callback, data)
+        Fl_repeat_timeout(1.0, fltk_check_callback, data)
     else:
         print(_("\n\nInstall completed with output:\n"),subprocess_result)
         
@@ -364,7 +364,7 @@ class UpdatePlugin(plugin.Plugin):
             if not os.path.exists(exe):
                 exe = f'"C:/Program Files/{prefix} {version}/bin/mrv2.exe"'
         elif kernel == 'Darwin':
-            exe = f'/Applications/{prefix}.app/Contents/MacOS/mrv2'
+            exe = f'/Applications/{prefix}.app/Contents/MacOS/{prefix}'
         else:
             print(_('Unknown platform'),kernel)
         return exe
@@ -392,7 +392,7 @@ class UpdatePlugin(plugin.Plugin):
         # Start the timeout callback
         import threading
         data = [ self, download_file ]
-        Fl.add_timeout(4.0, fltk_check_callback, data)
+        Fl_add_timeout(4.0, fltk_check_callback, data)
         threading.Thread(target=run_subprocess, args=(command,)).start()
 
     def install_as_admin(self, command, download_file, password = None):

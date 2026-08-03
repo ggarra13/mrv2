@@ -62,7 +62,7 @@ done
 hdiutil detach "/Volumes/${DMG_NAME}"
 
 # Optional: Display a message when the .dmg is unmounted
-echo "Disk image unmounted."
+echo "Disk image unmounted.  ${DMG_PREFIX} should be ready to use."
 
 # Exit the script
 exit 0

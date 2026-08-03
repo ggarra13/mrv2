@@ -495,9 +495,16 @@ namespace mrv
             if (textBuffer->length() == 0)
             {
                 std::string imports = R"PYTHON(
+
+#
+# OpenTimelineIO imports (used by mrv2 API)
+#
 import opentimelineio as otio
 import opentimelineio.opentime as otime
 
+#
+# mrv2 API
+#
 import mrv2
 from mrv2 import annotations, cmd, math, image, io, media
 from mrv2 import playlist, timeline, ui, )PYTHON";
@@ -506,6 +513,14 @@ from mrv2 import playlist, timeline, ui, )PYTHON";
                 imports += "usd, ";
 #endif
                 imports += "session, settings";
+                imports += R"PYTHON(
+
+#
+# mrv2 UI toolkit
+#
+from fltk import *
+import fltk as Fl
+)PYTHON";
                 textBuffer->append(imports.c_str());
             }
 
