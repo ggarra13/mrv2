@@ -108,8 +108,10 @@ if(BUILD_PYTHON)
 	file( REMOVE_RECURSE ${MRV2_PYTHON_LIBS}/site-packages/fltk14/test )
     endif()
 
-    install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
-	DESTINATION ${MRV2_PYTHON_LIBS}/site-packages/)
+    if (EXISTS "${CMAKE_INSTALL_PREFIX}/python/opentimelineio")
+	install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
+	    DESTINATION ${MRV2_PYTHON_LIBS}/site-packages/)
+    endif()
 
     if (UNIX)
 	install( DIRECTORY ${MRV2_PYTHON_LIBS}
