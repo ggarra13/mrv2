@@ -227,8 +227,19 @@ if(APPLE)
     set(CPACK_DMG_VOLUME_ICON ${MRV2_DIR}/etc/macOS/mrv2.icns)
     
     
-    
-    set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${mrv2_NAME};applications;/")
+    # 1. Always install the core applications component flat to the root directory
+    set(CPACK_INSTALL_CMAKE_PROJECTS 
+	"${CMAKE_BINARY_DIR}" "${mrv2_NAME}" "applications" "/"
+    )
+
+    # 2. If Python is enabled, append those components directly to the list
+    if(BUILD_PYTHON)
+	list(APPEND CPACK_INSTALL_CMAKE_PROJECTS 
+            "${CMAKE_BINARY_DIR}" "${mrv2_NAME}" "python_plugins" "/"
+            "${CMAKE_BINARY_DIR}" "${mrv2_NAME}" "python_demos" "/"
+	)
+    endif()
+
     set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/install;.")
 
 elseif(UNIX)

@@ -392,11 +392,14 @@ if (MRV2_PYBIND11)
 	DESTINATION python/plug-ins
 	COMPONENT python_plugins)
 
-    if (EXISTS "${CMAKE_INSTALL_PREFIX}/python/opentimelineio")
-	install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
-	    DESTINATION python/
-	    COMPONENT python_plugins)
+    install(CODE "
+    if(EXISTS \"\${CMAKE_INSTALL_PREFIX}/python/opentimelineio\")
+        file(INSTALL \"\${CMAKE_INSTALL_PREFIX}/python/opentimelineio\" 
+             DESTINATION \"\${CMAKE_INSTALL_PREFIX}/python\"
+             USE_SOURCE_PERMISSIONS)
     endif()
+"
+	COMPONENT python_plugins)
     
     #
     # Install mrv2's python demos

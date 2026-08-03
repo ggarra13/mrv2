@@ -25,7 +25,7 @@ ChangeLog
 - HDR: Added missing hdr.exe utility on Windows.
 
 - Core: mrv2/vmrv2's Help->Update mrv2 will now correctly determine vmrv2 and mrv2.
-- Core: When using Help->Update mrv2 on macOS, it will automatically remove the quarantine flag.
+- Core: When using Help->Update mrv2 on macOS, it will automatically remove the quarantine flag and now call the installation.command script for a smooth installation.
 - Core: From v1.7.2 on, macOS will be able to upgrade mrv2 or vmrv2 by just going to Help->Update mrv2.
 - Core: We now allow the Vulkan backend to work in headless mode (ie. no UI), for running python scripts like baking OCIO for example.
 - Core: Fixed a validation error on Main Viewport.
