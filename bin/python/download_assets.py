@@ -16,7 +16,7 @@ download_assets v{VERSION}
 
 A program to download all betas or version assets from sourceforge.
 """
-            
+ 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=description)
