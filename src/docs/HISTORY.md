@@ -24,7 +24,7 @@ ChangeLog
 
 - HDR: Added missing hdr.exe utility on Windows.
 
-- Python: Added a pre-built opentimelineio package on all platforms, which was getting compiled but not packaged.
+- Python: Added a pre-built Python's opentimelineio package on all platforms, which was getting compiled but not packaged.
 
 - Core: Added pyFLTK python package that was missing from macOS.
 - Core: mrv2/vmrv2's Help->Update mrv2 will now correctly determine vmrv2 and mrv2.
