@@ -1,3 +1,9 @@
+v1.7.3
+======
+
+- UI: Fixed tooltip of "Advance forward one frame" button in all languages.
+
+
 v1.7.2
 ======
 
