@@ -52,8 +52,8 @@ headers = {
 
 
 KNOWN_SF_MIRRORS = [
-    "ufpr", "netix", "nav", "kent", "nchc", "jaist",
-    "versaweb", "cytranet", "iweb", "tenet"
+    "ufpr", "altushost-swe", "netix", "nav", "kent", "nchc", "jaist",
+    "versaweb", "cytranet", "iweb", "tenet",
 ]
 
 def resolve_mirror_url(file_url, mirror_name):
