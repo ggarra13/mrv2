@@ -16,13 +16,13 @@ extern "C"
 {
 #include <libavutil/display.h>
 #include <libavutil/imgutils.h>
-#include <libavutil/opt.h>   
+#include <libavutil/opt.h>
 } // extern "C"
 
 namespace
 {
     const char* kModule = "ffmpeg";
-    
+
     static constexpr std::array<double, 16> valid_timecode_rates{
         { 1.0,
           12.0,
@@ -41,13 +41,13 @@ namespace
           60000.0 / 1001.0,
           60.0 }
     };
-    
+
     bool is_valid_timecode_rate(double fps)
     {
         auto b = valid_timecode_rates.begin(), e = valid_timecode_rates.end();
         return std::find(b, e, fps) != e;
     }
-    
+
 }
 
 namespace tl
@@ -56,8 +56,8 @@ namespace tl
     {
 
         namespace
-        {   
-            
+        {
+
             void setPrimariesFromAVColorPrimaries(int ffmpegPrimaries,
                                                   image::HDRData& hdrData)
             {
@@ -158,8 +158,8 @@ namespace tl
                     break;
                 }
             }
-        
-        
+
+
 
             image::EOTFType toEOTF(AVColorTransferCharacteristic trc)
             {
@@ -229,7 +229,7 @@ namespace tl
             //
             // If we are potentially reading a .webp sequence, add a format
             // specifier to it to read a sequence of frames if available.
-            // 
+            //
             std::string formatFileName = fileName;
             file::Path path(fileName);
             const std::string& extension = path.getExtension();
@@ -430,7 +430,7 @@ namespace tl
                                                  .arg(fileName)
                                                  .arg(getErrorLabel(r)));
                 }
-                
+
                 _info.size.w = _avCodecParameters[_avStream]->width;
                 _info.size.h = _avCodecParameters[_avStream]->height;
 
@@ -451,7 +451,7 @@ namespace tl
                     _tags["FFmpeg Pixel Format"] = pixel_format;
                 else
                     _tags["FFmpeg Pixel Format"] = "Unknown";
-                    
+
 
                 // LibVPX returns AV_PIX_FMT_YUV420P with metadata
                 // "alpha_mode" set to 1.
@@ -742,9 +742,9 @@ namespace tl
                     break;
 
                 default:
-                    // A safe default is usually Rec.709, though strictly speaking 
+                    // A safe default is usually Rec.709, though strictly speaking
                         // you might want to guess based on video resolution.
-                        _info.yuvCoefficients = image::YUVCoefficients::REC709; 
+                        _info.yuvCoefficients = image::YUVCoefficients::REC709;
                     break;
                 }
 
@@ -930,7 +930,7 @@ namespace tl
                 {
                     _tags["Video Color Primaries"] =
                         av_color_primaries_name(params->color_primaries);
-                    
+
                 }
                 {
                     _avColorTRC = params->color_trc;
@@ -1064,7 +1064,7 @@ namespace tl
                         string::Format("{0}: Cannot allocate frame")
                         .arg(_fileName));
                 }
-                    
+
                 if (!canCopy(
                         _avInputPixelFormat, _avOutputPixelFormat,
                         _fastYUV420PConversion))
@@ -1229,6 +1229,7 @@ namespace tl
                         AVSEEK_FLAG_BACKWARD) < 0)
                 {
                     //! \todo How should this be handled?
+                    std::cerr << "seeking error" << std::endl;
                 }
             }
 
@@ -1276,9 +1277,9 @@ namespace tl
                         else if (decoding < 0)
                         {
                             // \@bug: We failed decoding this frame.
-                            // This will make FFmpeg try to use the next available frame.
-                            seek(targetTime);
-                            decoding = 0;
+                            //        Try seeking which may fix it.
+                            if (targetTime.value() == currentTime.value())
+                                seek(targetTime);
                         }
                         decoding = _decode(backwards, targetTime, currentTime);
                         if (AVERROR(EAGAIN) == decoding)
@@ -1291,7 +1292,13 @@ namespace tl
                         }
                         else if (decoding < 0)
                         {
-                            //! \todo How should this be handled?
+                            std::string err = string::Format("Decoding failed "
+                                                             "for "
+                                                             "currentTime={0} "
+                                                             "targetTime={1}")
+                                              .arg(currentTime)
+                                              .arg(targetTime);
+                            LOG_ERROR(err);
                             break;
                         }
                         else if (1 == decoding)
@@ -1358,7 +1365,7 @@ namespace tl
                 // std::cout << "video timestamp: " << timestamp << std::endl;
                 const auto& avVideoStream =
                     _avFormatContext->streams[_avStream];
-                
+
                 const otime::RationalTime time(
                     _timeRange.start_time().value() +
                         av_rescale_q(
@@ -1375,7 +1382,7 @@ namespace tl
                         currentTime = targetTime;
                     else
                         currentTime = time;
-                    
+
                     std::shared_ptr<image::Image> image;
 
                     auto tags = _tags;
@@ -1386,7 +1393,7 @@ namespace tl
                         ss << time;
                         tags["otioClipTime"] = ss.str();
                     }
-                    
+
                     // Clone to safely hold this frame's buffer data.
                     AVFrame* cloned = av_frame_clone(_avFrame);
 
@@ -1395,7 +1402,7 @@ namespace tl
                         {
                             av_frame_free(&f);
                         });
-                    
+
                     _copy(image, safeFrame);
 
                     AVDictionaryEntry* tag = nullptr;
@@ -1416,7 +1423,7 @@ namespace tl
                     {
                         tags[tag->key] = tag->value;
                     }
-                    
+
                     _hdr.eotf = toEOTF(_avFrame->color_trc);
                     setPrimariesFromAVColorPrimaries(_avFrame->color_primaries,
                                                      _hdr);
@@ -1426,7 +1433,7 @@ namespace tl
                         image->setHDR(_hdr);
                     }
                     image->setTags(tags);
-                    
+
                     _buffer.push_back(image);
                     out = 1;
 
@@ -1437,7 +1444,7 @@ namespace tl
                     }
                     break;
                 }
-                
+
                 // Prepare for next decode
                 av_frame_unref(_avFrame);
             }
@@ -1448,16 +1455,16 @@ namespace tl
                               std::shared_ptr<AVFrame> avFrame)
         {
             // Check if avFrame changed image size (can happen when reading a
-            // sequence of .webp) 
+            // sequence of .webp)
             if (avFrame->width != _info.size.w &&
                 avFrame->width > 0)
                 _info.size.w = avFrame->width;
-            
+
             if (avFrame->height != _info.size.h &&
                 avFrame->height > 0)
                 _info.size.h = avFrame->height;
-            
-            
+
+
             const std::size_t w = _info.size.w;
             const std::size_t h = _info.size.h;
 
@@ -1532,7 +1539,7 @@ namespace tl
             {
                 image = image::Image::create(_info);
                 data = image->getData();
-                
+
                 av_image_fill_arrays(
                     _avFrame2->data, _avFrame2->linesize, data,
                     _avOutputPixelFormat, w, h, 1);

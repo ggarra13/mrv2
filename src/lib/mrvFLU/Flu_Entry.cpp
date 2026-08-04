@@ -121,7 +121,7 @@ struct Flu_Entry::Private
         timelineui_vk::ThumbnailRequest request;
     };
 #endif
-    
+
     ThumbnailData thumbnail;
 
     bool bind_image = false;
@@ -971,9 +971,9 @@ void Flu_Entry::startRequest()
         io::Options options;
 
         std::random_device rd;
-        options["clearCache"] = string::Format("{0}").arg(rd());
+        options["ClearCache"] = string::Format("{0}").arg(rd());
         p.thumbnail.request = thumbnailSystem->getThumbnail(path, size.h, time,
-                                                            options);
+                                                            "", options);
         p.thumbnail.init = false;
         isPicture = true;
 

@@ -4,10 +4,7 @@
 
 include( ExternalProject )
 
-set(FLTK_GIT_TAG v2.1.4)  # v2.1.3 is good with tablet support
-
-#set(FLTK_GIT_TAG vk)  # Cutting edge!
-#set(FLTK_GIT_TAG vk_merge) # Testing branch
+set(FLTK_GIT_TAG v2.2.7)  # was v2.2.4
 
 if(MRV2_VK)
     message(STATUS "Using ggarra13's private FLTK branch")
@@ -57,14 +54,26 @@ set(FLTK_USE_SYSTEM_LIBPNG TRUE)
 
 
 # We set this to use FLTK's system libdecor
-set(FLTK_USE_SYSTEM_LIBDECOR TRUE)
+set(FLTK_USE_SYSTEM_LIBDECOR FALSE)
 
 # Set this to FALSE to use libdecor's uglier looking windows' borders
 # instead of GTK's nicer window borders.  Note that using GTK's borders will
 # result in a warning due to FLTK and GLFW calling the same function.
+# With the Vulkan backend, we don't have to worry about that.
 set(FLTK_USE_LIBDECOR_GTK FALSE)
+if (MRV2_BACKEND STREQUAL "VK")
+    set(FLTK_USE_LIBDECOR_GTK TRUE)  # Fixed disting problems between RL 8.10
+                                     # and Ubuntu 26.04 LTS.
+endif()
 
-# This one may be turned off
+#
+# This patch is needed for Rocky Linux 8.10
+#
+set(FLTK_PATCH
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/cmake/patches/FLTK-patch/libdecor/src/plugins/gtk/libdecor-gtk.c"
+    "${CMAKE_BINARY_DIR}/deps/FLTK/src/FLTK/libdecor/src/plugins/gtk/libdecor-gtk.c")
 
 # Set FLTK default dependencies
 if (NOT USE_SYSTEM_LIBS)
@@ -96,9 +105,6 @@ if (FLTK_BUILD_VK)
     message(STATUS "FLTK BUILD Vulkan ${FLTK_BUILD_VK}")
 endif()
 
-set(FLTK_PATCH
-)
-
 if (APPLE OR WIN32)
     # We modify and use TLRENDER_* variables to propagate them to tlRender
     set(TLRENDER_X11 OFF)
@@ -126,6 +132,8 @@ ExternalProject_Add(
 
     DEPENDS ${FLTK_DEPENDENCIES}
 
+    PATCH_COMMAND ${FLTK_PATCH}
+    
     CMAKE_ARGS
     -DCMAKE_C_COMPILER=${FLTK_C_COMPILER}
     -DCMAKE_CXX_COMPILER=${FLTK_CXX_COMPILER}

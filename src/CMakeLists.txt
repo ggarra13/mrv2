@@ -391,12 +391,6 @@ if (MRV2_PYBIND11)
     install(FILES python/plug-ins/update-mrv2.py
 	DESTINATION python/plug-ins
 	COMPONENT python_plugins)
-
-    if (EXISTS "${CMAKE_INSTALL_PREFIX}/python/opentimelineio")
-	install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/python/opentimelineio
-	    DESTINATION python/
-	    COMPONENT python_plugins)
-    endif()
     
     #
     # Install mrv2's python demos
@@ -480,13 +474,19 @@ add_subdirectory(license_helper)
 # Add hdr source
 #
 if (TLRENDER_NDI AND TLRENDER_VK AND MRV2_HDR)
+    message(STATUS "Will build hdr utility")
     add_subdirectory(hdr)
+else()
+    message(STATUS "Will NOT build hdr utility due to one of these being OFF")
+    message(STATUS "TLRENDER_NDI=${TLRENDER_NDI}")
+    message(STATUS "TLRENDER_VK=${TLRENDER_VK}")
+    message(STATUS "MRV2_HDR=${MRV2_HDR}")
 endif()
 
 #
 # Add main source
 #
-add_subdirectory(main)
+add_subdirectory(mrv2)
 
 if (MRV2_BACKEND STREQUAL "VK" OR MRV2_BACKEND STREQUAL "BOTH")
     add_subdirectory(tests)

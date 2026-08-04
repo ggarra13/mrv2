@@ -38,6 +38,7 @@ namespace tl
         };
 
         void AudioClipItem::_init(
+            const std::shared_ptr<timeline::Timeline> timeline,
             const otio::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
@@ -47,7 +48,7 @@ namespace tl
             const std::shared_ptr<IWidget>& parent)
         {
             const auto path = timeline::getPath(
-                clip->media_reference(), itemData->directory,
+                timeline->getMediaReference(clip), itemData->directory,
                 itemData->options.pathOptions);
             IBasicItem::_init(
                 !clip->name().empty() ? clip->name()
@@ -82,6 +83,7 @@ namespace tl
         }
 
         std::shared_ptr<AudioClipItem> AudioClipItem::create(
+            const std::shared_ptr<timeline::Timeline> timeline,
             const otio::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
@@ -92,7 +94,7 @@ namespace tl
         {
             auto out = std::shared_ptr<AudioClipItem>(new AudioClipItem);
             out->_init(
-                clip, scale, options, displayOptions, itemData,
+                timeline, clip, scale, options, displayOptions, itemData,
                 thumbnailGenerator, context, parent);
             return out;
         }
@@ -306,7 +308,7 @@ namespace tl
                                 p.waveformRequests[mediaRange.start_time()] =
                                     p.thumbnailGenerator->getWaveform(
                                         p.path, p.memoryRead, box.getSize(),
-                                        mediaRange, _data->options.ioOptions);
+                                        mediaRange, "", _data->options.ioOptions);
                             }
                         }
                     }

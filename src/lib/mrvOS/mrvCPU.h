@@ -33,6 +33,11 @@ typedef struct cpucaps_s
     int hasNEON;
     int hasARMv8;
     int hasARMv8Crypto;
+    int hasARMv8Crc;     /* CRC32 instructions */
+    int hasARMv8Dotprod; /* v8.2 SDOT/UDOT integer dot product */
+    int hasARMv8Fp16;    /* half-precision (FP16) NEON arithmetic */
+    int hasSVE;          /* Scalable Vector Extension */
+    int hasSVE2;         /* Scalable Vector Extension 2 */
 } CpuCaps;
 
 extern CpuCaps gCpuCaps;

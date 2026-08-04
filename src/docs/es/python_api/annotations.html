@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo de anotaciones &mdash; documentación de mrv2 - v1.6.6</title>
+  <title>Módulo de anotaciones &mdash; documentación de mrv2 - v1.7.1</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=5d0feb18"></script>
+      <script src="../_static/documentation_options.js?v=e753318c"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/translations.js?v=f85f4cfb"></script>
@@ -103,8 +103,8 @@
              
   <section id="module-mrv2.annotations">
 <span id="modulo-de-anotaciones"></span><h1>Módulo de anotaciones<a class="headerlink" href="#module-mrv2.annotations" title="Link to this heading"></a></h1>
-<p>Annotations module.</p>
-<p>Contains all functions and classes related to the annotationss.</p>
+<p>Mòdulo de Anotaciones.</p>
+<p>Contiene todas las clases y enums relacionados con las anotaciones.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.annotations.add">
 <span class="sig-prename descclassname"><span class="pre">mrv2.annotations.</span></span><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mrv2.annotations.add" title="Link to this definition"></a></dt>
@@ -112,39 +112,39 @@
 <ol class="arabic simple">
 <li><p>add(time: opentime::v0_18_1::RationalTime, notes: str) -&gt; None</p></li>
 </ol>
-<p>Add notes annotations to current clip at a certain time.</p>
+<p>Agregue anotaciones de notas al clip actual en cierto tiempo.</p>
 <ol class="arabic simple" start="2">
 <li><p>add(frame: int, notes: str) -&gt; None</p></li>
 </ol>
-<p>Add notes annotations to current clip at a certain frame.</p>
+<p>Agregue anotaciones de notas al clip actual en cierto cuadro.</p>
 <ol class="arabic simple" start="3">
 <li><p>add(seconds: float, notes: str) -&gt; None</p></li>
 </ol>
-<p>Add notes annotations to current clip at certain seconds.</p>
+<p>Agregue anotaciones de notas al clip actual en ciertos segundos.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.annotations.getLinkAnnotationsJSON">
 <span class="sig-prename descclassname"><span class="pre">mrv2.annotations.</span></span><span class="sig-name descname"><span class="pre">getLinkAnnotationsJSON</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.annotations.getLinkAnnotationsJSON" title="Link to this definition"></a></dt>
-<dd><p>Get all URL/File/AI directions for current frame as a JSON file.</p>
+<dd><p>Obtener todas las direcciones de URL/archivo/IA para el fotograma actual como un archivo JSON.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.annotations.getTimes">
 <span class="sig-prename descclassname"><span class="pre">mrv2.annotations.</span></span><span class="sig-name descname"><span class="pre">getTimes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list[opentime::v0_18_1::RationalTime]</span></span></span><a class="headerlink" href="#mrv2.annotations.getTimes" title="Link to this definition"></a></dt>
-<dd><p>Get all times for annotations.</p>
+<dd><p>Consigue todos los tiempos para anotaciones.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.annotations.getVoiceAnnotations">
 <span class="sig-prename descclassname"><span class="pre">mrv2.annotations.</span></span><span class="sig-name descname"><span class="pre">getVoiceAnnotations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mrv2.annotations.getVoiceAnnotations" title="Link to this definition"></a></dt>
-<dd><p>Get all .wav voice annotations for current frame.</p>
+<dd><p>Obtener todas las anotaciones de voz .wav del fotograma actual.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mrv2.annotations.getVoiceAnnotationsJSON">
 <span class="sig-prename descclassname"><span class="pre">mrv2.annotations.</span></span><span class="sig-name descname"><span class="pre">getVoiceAnnotationsJSON</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mrv2.annotations.getVoiceAnnotationsJSON" title="Link to this definition"></a></dt>
-<dd><p>Get all voice and mouse directions for current frame as a JSON file.</p>
+<dd><p>Obtener todas las direcciones de voz y del ratón del fotograma actual como un archivo JSON.</p>
 </dd></dl>
 
 </section>

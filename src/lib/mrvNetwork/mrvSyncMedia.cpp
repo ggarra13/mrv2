@@ -100,8 +100,8 @@ namespace mrv
         // Content-addressed by the remote path string, not its content —
         // fine for now since re-fetch-on-mismatch isn't handled yet.
         size_t h = std::hash<std::string>{}(remotePath.get());
-        std::string dir = mrv::homepath() + "/.cache/mrv2/remote/" +
-                           std::to_string(h);
+        std::string cache_dir = App::ui->uiPrefs->uiPrefsWebRTCCacheDirectory->value();
+        std::string dir = cache_dir + "/" + std::to_string(h);
         file::mkdirRecursive(dir);
         tl::file::Path path(dir + "/" + file::basename(remotePath.get()));
         const auto& frames = remotePath.getFrames();
@@ -182,8 +182,8 @@ namespace mrv
                 FileTransferClient ftc(manager, peerId);
                 std::atomic<bool> done = false;
                 std::atomic<bool> success = false;
-                
-                auto startTime = std::chrono::steady_clock::now();
+
+                auto start = Fl::now();
 
                 ftc.downloadFile(remote, local, [&](
                                      bool& aborted,
@@ -203,38 +203,59 @@ namespace mrv
                              !progress->window()->shown()))
                             aborted = true;
 
-                        // Wake up the main thread's event loop so it
-                        // redraws immediately. Without this, the UI might
-                        // not update until you move your mouse.
-                        Fl::awake();
-
                         // Release the GUI lock
                         Fl::unlock();
 
-                    }, [&](bool ok)
+                        // Wake up the main thread's event loop so it
+                        // redraws immediately.
+                        Fl::awake();
+                    }, [&](bool ok, const std::vector<std::string>& failedPaths)
                         {
+                            Fl::lock();
+
                             success = ok;
                             done = true;
+
+                            if (ok && !failedPaths.empty())
+                            {
+                                // The timeline itself downloaded fine, but some of the
+                                // media it references wasn't found on the server. Still
+                                // usable — just tell the user what's missing rather than
+                                // silently opening a timeline with holes in it.
+                                std::string msg = _("The timeline downloaded, but the "
+                                                    "following referenced media could "
+                                                    "not be found on the server:\n\n");
+                                for (const auto& p : failedPaths)
+                                    msg += "  " + p + "\n";
+                                fl_alert("%s", msg.c_str());
+                            }
+                            else if (!ok)
+                            {
+                                fl_alert("%s", _("Download failed."));
+                            }
+
+                            Fl::unlock();
+                            Fl::awake();
                         });
 
                 while (!done)
                 {
-                    Fl::check();
+                    // Instead of Fl::check() we call Fl::wait() with a minor
+                    // delay so the Fl::lock/unlock does not get called that
+                    // fast that would leave the lock in a locked state.
+                    Fl::wait(0.05);
                 }
 
 
                 if (success)
                 {
-                    auto now = std::chrono::steady_clock::now();
-                    
                     // Calculate the total elapsed duration since start
-                    std::chrono::duration<float> duration = now - startTime;
-                    const float seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
+                    const float seconds = Fl::seconds_since(start);
                     const std::string msg = tl::string::Format("{0} downloaded in {1} seconds").
                                             arg(remote.get()).arg(seconds);
                     LOG_STATUS(msg);
                 }
-                
+
                 return success;
             };
 

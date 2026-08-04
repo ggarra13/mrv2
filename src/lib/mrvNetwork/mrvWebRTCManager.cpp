@@ -23,6 +23,47 @@ namespace mrv
         sctpSettings.maxChunksOnQueue = 16384;
         sctpSettings.initialCongestionWindow = 10;          // in MTUs, default is very small (often ~3)
         rtc::SetSctpSettings(sctpSettings);
+
+        eraseThread_ = std::thread(&WebRTCManager::eraseWorker, this);
+    }
+
+    WebRTCManager::~WebRTCManager()
+    {
+        {
+            std::lock_guard<std::mutex> lock(eraseQueueMutex_);
+            stopping_ = true;
+        }
+        eraseQueueCv_.notify_all();
+
+        // guaranteed no thread touches `this` after this point
+        if (eraseThread_.joinable())
+            eraseThread_.join();
+    }
+
+    void WebRTCManager::requestErase(const std::string& peerId)
+    {
+        std::lock_guard<std::mutex> lock(eraseQueueMutex_);
+        eraseQueue_.push_back(peerId);
+        eraseQueueCv_.notify_one();
+    }
+
+    void WebRTCManager::eraseWorker()
+    {
+        while (true)
+        {
+            std::string peerId;
+            {
+                std::unique_lock<std::mutex> lock(eraseQueueMutex_);
+                eraseQueueCv_.wait(lock, [this] {
+                    return stopping_ || !eraseQueue_.empty();
+                });
+                if (stopping_ && eraseQueue_.empty())
+                    return;
+                peerId = eraseQueue_.front();
+                eraseQueue_.pop_front();
+            }
+            erase(peerId);   // existing body, unchanged
+        }
     }
 
     void WebRTCManager::setConfiguration(const rtc::Configuration& value)
@@ -37,6 +78,8 @@ namespace mrv
         std::size_t messageLength = bson.size();
         if (messageLength == 0)
             return;
+
+        std::lock_guard<std::mutex> lock(mtx);
 
         auto i = clients.find(peerId);
         if (i != clients.end())
@@ -57,6 +100,8 @@ namespace mrv
         std::size_t messageLength = bson.size();
         if (messageLength == 0)
             return;
+
+        std::lock_guard<std::mutex> lock(mtx);
 
         for (auto& [_, client] : clients)
         {
@@ -81,29 +126,38 @@ namespace mrv
             std::lock_guard<std::mutex> lock(mtx);
             clients[id] = client;
         }
-        pc->onStateChange([this, client, id, pc](PeerConnection::State state) {
 
-            if (state == PeerConnection::State::Failed)
-            {
-                LOG_STATUS("[" << id << "] State: " << state);
-            }
-            else
-            {
-                LOG_STATUS("[" << id << "] State: " << state);
-            }
+        std::weak_ptr<WebRTCConnection> wclient = client;
+
+        pc->onStateChange([this, wclient, id](PeerConnection::State state) {
+
+            LOG_STATUS("[" << id << "] State: " << state);
 
             if (state == PeerConnection::State::Disconnected ||
                 state == PeerConnection::State::Failed ||
                 state == PeerConnection::State::Closed) {
-                // remove disconnected client
-                erase(id);
+                if (wclient.expired())
+                {
+                    // Check if this callback belongs to a connection
+                    // that has already been replaced or destroyed.
+                    return;
+                }
+
+                requestErase(id);
             }
             else
             {
+                auto client = wclient.lock();
+                if (!client)
+                    return;
+
                 std::lock_guard<std::mutex> lock(mtx);
                 drainPendingCandidates(id);
 
                 rtc::Candidate local, remote;
+                auto pc = client->peerConnection;
+                if (!pc)
+                    return;
                 auto pair = pc->getSelectedCandidatePair(&local, &remote);
                 if (pair)
                 {
@@ -152,7 +206,7 @@ namespace mrv
             });
 
         // Handle incoming DataChannel
-        pc->onDataChannel([this, id, client](std::shared_ptr<DataChannel> dc) {
+        pc->onDataChannel([this, id, wclient](std::shared_ptr<DataChannel> dc) {
 
             if (dc->label() != "mrv2_sync")
             {
@@ -161,9 +215,17 @@ namespace mrv
                 return;
             }
 
+            auto client = wclient.lock();
+            if (!client)
+                return;
+
             client->dataChannel = dc;
 
-            dc->onOpen([id, client]() {
+            dc->onOpen([id, wclient]() {
+                auto client = wclient.lock();
+                if (!client)
+                    return;
+
                 client->dataChannelOpen = true;
 
                 nlohmann::json message;
@@ -184,7 +246,10 @@ namespace mrv
                         onStringMessage(id, msg);
                 });
 
-            dc->onClosed([id, client]() {
+            dc->onClosed([wclient]() {
+                auto client = wclient.lock();
+                if (!client)
+                    return;
                 client->dataChannelOpen = false;
             });
         });
@@ -193,7 +258,11 @@ namespace mrv
         {
             auto dc = pc->createDataChannel("mrv2_sync");
 
-            dc->onOpen([id, client]() {
+            dc->onOpen([wclient]() {
+                auto client = wclient.lock();
+                if (!client)
+                    return;
+
                 client->dataChannelOpen = true;
 
                 nlohmann::json message;
@@ -218,11 +287,15 @@ namespace mrv
                     }
                 });
 
-            dc->onClosed([id, client]() {
+            dc->onClosed([wclient]() {
+                auto client = wclient.lock();
+                if (!client)
+                    return;
+
                 client->dataChannelOpen = false;
             });
-            client->dataChannel = dc;
 
+            client->dataChannel = dc;
             pc->setLocalDescription();
         }
 
@@ -242,7 +315,12 @@ namespace mrv
 
     void WebRTCManager::handleOffer(const std::string& peerId, const std::string& sdp)
     {
-        auto client = createPeer(peerId, /*isOfferer*/ false);
+        // Fetch the existing client initialized by onInitPeer,
+        // rather than blindly overwriting it.
+        auto client = getClient(peerId);
+        if (!client) {
+            client = createPeer(peerId, /*isOfferer*/ false);
+        }
 
         auto description = rtc::Description(sdp, "offer");
         client->setRemoteDescription(description);
@@ -287,13 +365,16 @@ namespace mrv
         pendingCandidates.erase(peerId);
 
         if (onPeerDisconnected)
+        {
             onPeerDisconnected(peerId);
+        }
     }
 
     void WebRTCManager::drainPendingCandidates(const std::string& peerId)
     {
         // Drain any candidates that arrived before we were ready.
-        // DO NOT ADD std::lock_guard lock(mtx).
+        // DO NOT ADD std::lock_guard lock(mtx) here.
+        // Add it to the calling function.
         auto i = clients.find(peerId);
         if (i == clients.end())
             return;

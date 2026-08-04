@@ -85,7 +85,7 @@ namespace tl
               << (a.enabled ? "True" : "False") << " value=" << a.value << ">";
             return o;
         }
-        
+
         inline std::ostream&
         operator<<(std::ostream& o, const DisplayOptions& a)
         {
@@ -175,7 +175,7 @@ void mrv2_image(pybind11::module& m)
     image.doc() = _(R"PYTHON(
 Image module.
 
-Contains all classes and enums related to image controls. 
+Contains all classes and enums related to image controls.
 )PYTHON");
 
     py::class_<image::Color4f>(image, "Color4f")
@@ -324,6 +324,28 @@ Contains all classes and enums related to image controls.
             })
         .doc() = _("Soft clip value.");
 
+    py::class_<timeline::AspectRatio>(image, "AspectRatio")
+        .def(
+            py::init<float, float>(),
+            py::arg("num") = 1.F,
+            py::arg("den") = 1.F)
+        .def(
+            "__repr__",
+            [](const timeline::AspectRatio& o)
+            {
+                std::ostringstream s;
+                s << o.num << " / " << o.den;
+                return s.str();
+            })
+        .doc() = _("Aspect Ratio.");
+
+    py::class_<timeline::AspectRatioOptions>(image, "AspectRatioOptions")
+        .def(
+            py::init<timeline::AspectRatio, timeline::AspectRatioType>(),
+            py::arg("aspectRatio") = timeline::AspectRatio(),
+            py::arg("aspectRatioType") = timeline::AspectRatioType::Pixel)
+        .doc() = _("Aspect Ratio Options.");
+
     py::class_<timeline::ImageFilters>(image, "ImageFilters")
         .def(py::init<>())
         .def(
@@ -350,10 +372,15 @@ Contains all classes and enums related to image controls.
         .def(py::init<>())
         .def(
             py::init<
-                timeline::Channels, image::Mirror, timeline::Color,
-                timeline::Levels, timeline::EXRDisplay, timeline::SoftClip,
+            timeline::Channels,
+            image::Mirror,
+            timeline::AspectRatioOptions,
+            timeline::Color,
+            timeline::Levels, timeline::EXRDisplay, timeline::SoftClip,
             timeline::ImageFilters, image::VideoLevels>(),
-            py::arg("channels") = timeline::Channels::Color, py::arg("mirror"),
+            py::arg("channels") = timeline::Channels::Color,
+            py::arg("mirror"),
+            py::arg("aspectRatioOptions"),
             py::arg("color"), py::arg("levels"), py::arg("exrDisplay"),
             py::arg("softClip"), py::arg("imageFilters"),
             py::arg("videoLevels") = image::VideoLevels::FullRange)

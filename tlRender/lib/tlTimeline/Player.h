@@ -17,8 +17,11 @@ namespace tl
         //! Timeline player cache information.
         struct PlayerCacheInfo
         {
-            //! Video cache percentage used.
+            //! Percentage used of the video cache.
             float videoPercentage = 0.F;
+
+            //! Percentage used of the audio cache.
+            float audioPercentage = 0.F;
 
             //! Cached video frames.
             std::vector<otime::TimeRange> videoFrames;
@@ -75,7 +78,7 @@ namespace tl
 
             Player();
 
-            void updateVideoData();
+            void updateVideoFrame();
 
         public:
             ~Player();
@@ -95,7 +98,7 @@ namespace tl
             //! Set the OpenTimelineIO timeline, resetting in/out points.
             void setTimeline(
                 const otio::SerializableObject::Retainer<otio::Timeline>&);
-            
+
             //! Get the path.
             const file::Path& getPath() const;
 
@@ -276,10 +279,10 @@ namespace tl
             void setCompareVideoLayers(const std::vector<int>&);
 
             //! Get the current video data.
-            const std::vector<VideoData>& getCurrentVideo() const;
+            const std::vector<VideoFrame>& getCurrentVideo() const;
 
             //! Observe the current video data.
-            std::shared_ptr<observer::IList<VideoData> >
+            std::shared_ptr<observer::IList<VideoFrame> >
             observeCurrentVideo() const;
 
             ///@}
@@ -325,10 +328,10 @@ namespace tl
             void setAudioOffset(double);
 
             //! Get the current audio data.
-            const std::vector<AudioData>& getCurrentAudio() const;
+            const std::vector<AudioFrame>& getCurrentAudio() const;
 
             //! Observe the current audio data.
-            std::shared_ptr<observer::IList<AudioData> >
+            std::shared_ptr<observer::IList<AudioFrame> >
             observeCurrentAudio() const;
 
             ///@}

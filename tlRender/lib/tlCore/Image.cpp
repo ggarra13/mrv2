@@ -19,26 +19,6 @@ namespace tl
 {
     namespace image
     {
-        math::Box2i getBox(float aspect, const math::Box2i& box)
-        {
-            math::Box2i out;
-            const math::Size2i boxSize = box.getSize();
-            const float boxAspect = aspectRatio(boxSize);
-            if (boxAspect > aspect)
-            {
-                out = math::Box2i(
-                    box.min.x + boxSize.w / 2.F - (boxSize.h * aspect) / 2.F,
-                    box.min.y, boxSize.h * aspect, boxSize.h);
-            }
-            else
-            {
-                out = math::Box2i(
-                    box.min.x,
-                    box.min.y + boxSize.h / 2.F - (boxSize.w / aspect) / 2.F,
-                    boxSize.w, boxSize.w / aspect);
-            }
-            return out;
-        }
 
         TLRENDER_ENUM_IMPL(
             PixelType, "None",
@@ -54,9 +34,9 @@ namespace tl
             "YUV_420P_U8", "YUV_422P_U8", "YUV_444P_U8",
 
             "YUV_420P_U10", "YUV_422P_U10", "YUV_444P_U10",
-            
+
             "YUV_420P_U12", "YUV_422P_U12", "YUV_444P_U12",
-            
+
             "YUV_420P_U16", "YUV_422P_U16", "YUV_444P_U16",
 
             "ARGB_4444_Premult");
@@ -259,7 +239,7 @@ namespace tl
                    (value % alignment != 0 ? alignment : 0);
         }
 
-        std::size_t getDataByteCount(const Info& info)
+        size_t getDataByteCount(const Info& info)
         {
             std::size_t out = 0;
             const size_t w = info.size.w;
@@ -387,17 +367,17 @@ namespace tl
             std::atomic<size_t> objectCount = 0;
             std::atomic<size_t> totalByteCount = 0;
         }
-        
+
         size_t Image::getTotalByteCount()
         {
             return totalByteCount;
         }
-        
+
         size_t Image::getObjectCount()
         {
             return objectCount;
         }
-        
+
         void Image::_init(const Info& info, const bool ownsData)
         {
             _info = info;
@@ -406,7 +386,7 @@ namespace tl
 
             totalByteCount += _dataByteCount;
             ++objectCount;
-            
+
             if (ownsData)
             {
                 //! Allocate a bit of extra space since FFmpeg sws_scale()
@@ -423,7 +403,7 @@ namespace tl
         {
             if (_owns)
                 delete [] _data;
-            
+
             totalByteCount -= _dataByteCount;
             --objectCount;
         }
@@ -463,7 +443,7 @@ namespace tl
             out->_avFrame = _avFrame;
             return out;
         }
-        
+
         void Image::setTags(const Tags& value)
         {
             _tags = value;
@@ -473,10 +453,15 @@ namespace tl
         {
             std::memset(_data, 0, _dataByteCount);
         }
-        
+
         void Image::fill()
         {
             std::memset(_data, 0xFF, _dataByteCount);
+        }
+
+        size_t Info::getByteCount() const
+        {
+            return getDataByteCount(*this);
         }
 
         void to_json(nlohmann::json& j, const Mirror& value)
@@ -490,7 +475,7 @@ namespace tl
             j.at("x").get_to(value.x);
             j.at("y").get_to(value.y);
         }
-        
+
         void to_json(nlohmann::json& json, const Size& value)
         {
             json = {value.w, value.h};
@@ -535,6 +520,6 @@ namespace tl
             out.h = std::stoi(split[1]);
             return is;
         }
-        
+
     } // namespace image
 } // namespace tl

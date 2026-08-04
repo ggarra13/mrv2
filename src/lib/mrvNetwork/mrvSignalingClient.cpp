@@ -7,6 +7,7 @@
 
 #include "mrvCore/mrvFile.h"
 #include "mrvCore/mrvHome.h"
+#include "mrvCore/mrvLicensing.h"
 #include "mrvCore/mrvUtil.h"
 
 #include <tlCore/StringFormat.h>
@@ -17,6 +18,8 @@
 #include <string>
 #include <thread>
 
+#include "mrViewer.h"
+
 namespace
 {
     const char* kModule = "wss ";
@@ -25,35 +28,56 @@ namespace
 namespace mrv
 {
 
-    void SignalingClient::connect(const std::string& roomId,
+    void SignalingClient::connect(const std::string& studio,
+                                  const std::string& roomId,
                                   const std::string& player)
     {
-
-        const std::string activeWebRTC = os::sgetenv("MRV2_WEB_RTC");
-        if (activeWebRTC != "1" && activeWebRTC != "ON")
+        std::string token = request_webrtc_ticket();
+        if (token.empty())
+        {
+            std::string msg = _("Cannot connect to WebRTC: User is not authorized or "
+                                "license expired");
+            LOG_ERROR(msg);
             return;
+        }
 
         if (player.empty())
-            playerId = "player_" + mrv::username() + "_" + roomId + "_" +
+            playerId = "player_" + mrv::username() + "_" +
                        generateRandomLetters(4);
         else
             playerId = player;
 
-        std::string server = os::sgetenv("MRV2_WEB_RTC_SERVER");        
-        const std::string url = server + "/" + roomId + "/" + playerId;
-        
+        std::string server = App::ui->uiPrefs->uiPrefsWebRTCSignalingServer->value();
+
+        if (server.empty())
+        {
+            std::string msg = _("No Signaling server set.  Please update Preferences->WebRTC->Signaling");
+            LOG_ERROR(msg);
+            return;
+        }
+
+        if (studio.empty())
+        {
+            std::string msg = _("No Web RTC Studio set.  Please update Preferences->WebRTC->Studio");
+            LOG_ERROR(msg);
+            return;
+        }
+
+        const std::string url = server + "/" + studio + "_" + roomId +
+                                "/" + playerId + "?token=" + token;
+
         std::string msg = string::Format(_("The room ID is: {0}")).arg(roomId);
         LOG_STATUS(msg);
-        
+
         msg = string::Format(_("The player ID is: {0}")).arg(playerId);
         LOG_STATUS(msg);
-        
+
         rtc::WebSocketConfiguration config;
-        
+
         std::string caLocation = mrv::rootpath() + "/certs/cacert.pem";
         if (!file::isReadable(caLocation))
         {
-#ifdef __linux___
+#ifdef __linux__
             caLocation = "/etc/ssl/certs/ca-certificates.crt";
 #elif defined(__APPLE__)
             caLocation = "/usr/local/etc/openssl@3/cert.pem";
@@ -64,21 +88,21 @@ namespace mrv
 
         if (!caLocation.empty())
             config.caCertificatePemFile = caLocation;
-        
+
         websocket = std::make_shared<rtc::WebSocket>(config);
-    
+
         websocket->onOpen([]() {
             LOG_INFO("WebSocket connected, signaling ready");
         });
 
         websocket->onClosed([]() {
-            LOG_INFO("WebSocket closed.");
+            LOG_INFO("WebSocket closed");
         });
 
         websocket->onError([](const std::string &error) {
             LOG_ERROR("WebSocket failed: " << error);
         });
-    
+
         websocket->onMessage([&](std::variant<rtc::binary, std::string> data) {
             if (!std::holds_alternative<std::string>(data))
                 return;
@@ -86,7 +110,7 @@ namespace mrv
             nlohmann::json message = nlohmann::json::parse(std::get<std::string>(data));
             handleMessage(message);
         });
-    
+
         websocket->open(url);
 
         while (!websocket->isOpen()) {
@@ -99,7 +123,7 @@ namespace mrv
     void SignalingClient::send(const SignalingMessage& msg)
     {
         nlohmann::json j;
-    
+
         j["id"] = msg.peerId;
         j["type"] = msg.type;
 
@@ -111,7 +135,7 @@ namespace mrv
 
         if (!msg.mid.empty())
             j["mid"] = msg.mid;
-    
+
         websocket->send(j.dump());
     }
 
@@ -147,6 +171,14 @@ namespace mrv
         }
         else if (type == "peer_disconnected") {
             if (onPeerDisconnected) onPeerDisconnected(sender_id);
+        }
+        else if (type == "error") {
+            std::string err = message["message"];
+            LOG_ERROR(err);
+        }
+        else if (type == "warning") {
+            std::string err = message["message"];
+            LOG_WARNING(err);
         }
     }
 

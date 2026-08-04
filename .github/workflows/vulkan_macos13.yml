@@ -1,3 +1,35 @@
+# macOS Code Sign & Notarize — mrv2
+#
+# Required GitHub Actions secrets (Settings → Secrets and variables → Actions):
+#
+#   MACOS_CERTIFICATE_BASE64   Base64-encoded Developer ID .p12 certificate.
+#                              Generate with:
+#                                base64 -i cert.p12 | pbcopy
+#
+#   P12_PASSWORD               Password that protects the .p12 file.
+#
+#   DEVELOPER_ID               Full certificate name as it appears in
+#                              Keychain Access, e.g.:
+#                              "Developer ID Application: Jane Doe (ABCDE12345)"
+#
+#   APPLE_ID                   Apple ID (email) tied to your developer account.
+#
+#   TEAM_ID                    10-character Apple Team ID from developer.apple.com.
+#
+#   APP_PASSWORD               App-specific password created at
+#                              appleid.apple.com → Sign-In and Security.
+#                              (Used to store notarytool credentials in the
+#                               ephemeral keychain — @keychain: prefix not
+#                               needed in CI because we create the keychain
+#                               fresh each run.)
+#
+# Optional secrets (fall back to the defaults shown):
+#
+#   NOTARYTOOL_PROFILE         Keychain profile name [mrv2-notarytool]
+#   MRV2_APP                   Main app bundle name  [mrv2.app]
+#   VMRV2_APP                  Vulkan app bundle     [vmrv2.app]
+#   HDR_APP                    HDR app bundle        [hdr.app]  set "" to skip
+
 name: Vulkan MacOS Intel
 
 on:
@@ -18,6 +50,22 @@ jobs:
     runs-on: macos-15-intel
     # permissions:
     #   contents: write   # Needed to update releases
+    
+    # ── Timeout ──────────────────────────────────────────────────────────────
+    # Notarization can take several minutes; 30 min is a safe upper bound.
+    # timeout-minutes: 30
+    
+    env:
+      CMAKE_OSX_DEPLOYMENT_TARGET: 14.0
+      # ── Passed through to codesign_notarize.sh ───────────────────────────
+      DEVELOPER_ID:         ${{ secrets.DEVELOPER_ID }}
+      APPLE_ID:             ${{ secrets.APPLE_ID }}
+      TEAM_ID:              ${{ secrets.TEAM_ID }}
+      NOTARYTOOL_PROFILE:   ${{ secrets.NOTARYTOOL_PROFILE || 'mrv2-notarytool' }}
+      
+      # Ephemeral keychain details (not secret — unique per run)
+      KEYCHAIN_NAME:     build-${{ github.run_id }}.keychain
+      KEYCHAIN_PASSWORD: ephemeral-${{ github.run_id }}
 
     steps:
 
@@ -36,6 +84,66 @@ jobs:
           echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
           echo "CCACHE_DATE=$(date +'%Y-%m')" >> $GITHUB_ENV
           ccache --max-size=500M
+          
+      - name: Import Developer ID Certificate
+        env:
+          MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+        run: |
+          #  # Decode the base64 certificate to a temporary .p12 file.
+          # CERT_FILE="$(mktemp).p12"
+          # echo "${MACOS_CERTIFICATE_BASE64}" | base64 --decode > "${CERT_FILE}"
+
+          # # Create an ephemeral keychain.
+          # security create-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_NAME}"
+
+          # # Make it the default so codesign/xcrun pick it up automatically.
+          # security default-keychain -s "${KEYCHAIN_NAME}"
+          # security unlock-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_NAME}"
+
+          # # Keep the keychain unlocked for the duration of the job
+          # # (default lock timeout is 300 s which can be too short for notarization).
+          # security set-keychain-settings -lut 7200 "${KEYCHAIN_NAME}"
+
+          # # Import the certificate — allow codesign and xcrun to use it.
+          # security import "${CERT_FILE}" \
+          #   -k "${KEYCHAIN_NAME}" \
+          #   -P "${P12_PASSWORD}" \
+          #   -T /usr/bin/codesign \
+          #   -T /usr/bin/xcrun
+
+          # # Grant codesign access without an interactive prompt.
+          # security set-key-partition-list \
+          #   -S apple-tool:,apple: \
+          #   -s \
+          #   -k "${KEYCHAIN_PASSWORD}" \
+          #   "${KEYCHAIN_NAME}"
+
+          # # Add our keychain to the search list so it is found alongside
+          # # the system keychain.
+          # security list-keychains -d user -s "${KEYCHAIN_NAME}" \
+          #   "$(security list-keychains -d user | sed -e 's/[[:space:]]//g' -e 's/"//g' | tr '\n' ' ')"
+
+          # # Scrub the .p12 file immediately.
+          # rm -f "${CERT_FILE}"
+          true
+          
+      # ── 4. Store notarytool credentials in the ephemeral keychain ─────────
+      #
+      # xcrun notarytool submit uses the keychain profile stored here.
+      # Because the keychain is ephemeral we must do this on every run.
+      - name: Store notarytool credentials
+        env:
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+        run: |
+          echo "APP_PASSWORD=${APP_PASSWORD}"
+          
+          # xcrun notarytool store-credentials "${NOTARYTOOL_PROFILE}" \
+          #   --apple-id  "${APPLE_ID}" \
+          #   --team-id   "${TEAM_ID}" \
+          #   --password  "${APP_PASSWORD}" \
+          #   --keychain  "${KEYCHAIN_NAME}"
+          true
           
       - uses: actions/cache@v5
         with:
@@ -82,7 +190,7 @@ jobs:
           key: ${{ runner.os }}-${{ runner.arch }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-cargo-
-          
+
       - name: Install ninja-build
         run: brew install ninja
 
@@ -90,7 +198,7 @@ jobs:
         run: brew install gettext
 
       - name: Install automake and other network utils
-        run: brew install automake autoconf curl rsync wget
+        run: brew install automake autoconf curl rsync
 
       - name: Install GNU utils
         run: brew install gnu-sed coreutils
@@ -103,7 +211,7 @@ jobs:
 
       - name: Install curl dependencies
         run: brew install libidn2
-
+        
       # Install Vulkan SDK manually
       - name: Install/Build Vulkan SDK
         env:
@@ -112,7 +220,7 @@ jobs:
         run: |
           if [[ "$BUILD_VULKAN" == "ON" ]]; then
             ./etc/macos/install_vulkan.sh
-             
+
             echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
             echo "${VULKAN_SDK}/bin" >> $GITHUB_PATH
             echo "VK_LAYER_PATH=$VULKAN_SDK/lib" >> $GITHUB_ENV
@@ -134,10 +242,6 @@ jobs:
             echo "✓ Vulkan tools available"
             vulkaninfo --summary || true
           fi
-        
-      - name: Remove system OpenEXR and Imath
-        run: |
-          brew uninstall --ignore-dependencies openexr imath || true
 
       - name: Setup environment
         run: mkdir -p ssh
@@ -158,17 +262,15 @@ jobs:
 
       - name: Add SourceForge to known_hosts
         shell: bash
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
+        run: ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts
 
       - name: Set executable permissions
         run: |
-          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh
+          chmod +x ./*.sh ./bin/*.sh ./etc/*.sh ./bin/release/*.sh ./etc/macos/*.sh
 
       - name: Build vmrv2
         env:
-          INSTALL_CMAKE: ON
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
           BUILD_PYTHON: ON
           MRV2_PYFLTK: ON
           MRV2_PYBIND11: ON
@@ -192,10 +294,17 @@ jobs:
           TLRENDER_USD: OFF
           TLRENDER_VPX: ON
           TLRENDER_YASM: ON
-
-        run: |
-          ./etc/runme_nolog.sh -t package -vk
+        run: ./etc/runme_nolog.sh -t package -vk
 
       - name: Upload binaries
+        run: ./bin/release/upload_sourceforge.sh -vk
+
+      # ── 12. Cleanup — delete the ephemeral keychain ───────────────────────
+      # This step runs even if earlier steps fail so the certificate is
+      # never left behind on the runner.
+      - name: Delete ephemeral keychain
+        if: always()
         run: |
-          ./bin/release/upload_sourceforge.sh -vk
+          # security delete-keychain "${KEYCHAIN_NAME}" 2>/dev/null || true
+          true
+

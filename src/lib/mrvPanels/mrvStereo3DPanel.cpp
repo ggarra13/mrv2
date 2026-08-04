@@ -140,7 +140,7 @@ namespace mrv
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
                 const std::string file = path.getFileName(listdir);
-                
+
                 auto bW = new Widget<ClipButton>(
                     g->x(), g->y() + 20 + i * 68, g->w(), 68);
                 ClipButton* b = bW;
@@ -152,7 +152,7 @@ namespace mrv
                 {
                     layerId = p.ui->uiColorChannel->value();
                 }
-                
+
                 if (stereoIndex == i)
                 {
                     b->value(1);
@@ -188,8 +188,9 @@ namespace mrv
                     label = file;
                 }
                 b->copy_label(label.c_str());
-                
-                _createThumbnail(b, path, time, layerId);
+
+                _createThumbnail(b, path, time, layerId,
+                                 media->mediaReferenceKey);
             }
 
             Stereo3DOptions o = model->observeStereo3DOptions()->get();
@@ -389,7 +390,7 @@ namespace mrv
                 const std::string dir = path.getDirectory();
                 const bool listdir = false;
                 const std::string file = path.getFileName(listdir);
-                
+
                 ClipButton* b = m.second;
 
                 uint16_t layerId = media->videoLayer;
@@ -399,7 +400,7 @@ namespace mrv
                     layerId = p.ui->uiColorChannel->value();
                     found = true;
                 }
-                
+
                 if (stereoIndex != i)
                 {
                     b->value(0);
@@ -418,7 +419,7 @@ namespace mrv
                 {
                     time = media->currentTime;
                 }
-                
+
                 std::string label;
                 if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
                     kThumbnailNormal)
@@ -432,7 +433,8 @@ namespace mrv
                 }
                 b->copy_label(label.c_str());
 
-                _createThumbnail(b, path, time, layerId);
+                _createThumbnail(b, path, time, layerId,
+                                 media->mediaReferenceKey);
             }
         }
 

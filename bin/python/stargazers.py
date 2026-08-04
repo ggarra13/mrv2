@@ -17,13 +17,17 @@ DELIMITER = ", "
 # --- IMPORTANT: Authentication ---
 # Get token from environment variable or set to None for unauthenticated access (limited)
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") 
+
 HEADERS = {
-    "Accept": "application/vnd.github.v3.star+json" # This media type includes the 'starred_at' timestamp
+    "Accept": "application/vnd.github.v3.star+json",
+    "X-GitHub-Api-Version": "2022-11-28"   # or "2026-03-10"
 }
 
 if GITHUB_TOKEN:
-    # Use 'Authorization: Bearer <TOKEN>' for fine-grained tokens (recommended) or classic PATs.
     HEADERS["Authorization"] = f"Bearer {GITHUB_TOKEN}"
+    print("✅ Running with authenticated access (using GITHUB_TOKEN).")
+else:
+    print("⚠️  No GITHUB_TOKEN found → unauthenticated (very limited rate).")
 
 # --- Function to Fetch All Stargazers ---
 def fetch_all_stargazers():
@@ -56,7 +60,11 @@ def fetch_all_stargazers():
                     print(f"\nError 403: Forbidden (Check your token and permissions). Response: {response.json()}")
                     break
             elif response.status_code != 200:
-                print(f"\nError: Received status code {response.status_code}. Response: {response.json()}")
+                print(f"\nError: Received status code {response.status_code}.")
+                print(f"Response: {response.json()}")
+                if response.status_code == 404:
+                    print("→ This usually means the token doesn't have access to this repo.")
+                    print("→ Try generating a new fine-grained token with Metadata read permission.")
                 break
             
             data = response.json()
@@ -110,12 +118,6 @@ def save_to_txt(data):
 
 # --- Main Execution ---
 if __name__ == "__main__":
-    
-    if not GITHUB_TOKEN:
-        print("⚠️ Warning: GITHUB_TOKEN environment variable not set. Running unauthenticated with a low rate limit.")
-    else:
-        print("✅ Running with authenticated access (using GITHUB_TOKEN).")
-
     stargazer_data = fetch_all_stargazers()
     save_to_txt(stargazer_data)
     

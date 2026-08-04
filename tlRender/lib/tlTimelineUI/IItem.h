@@ -50,7 +50,7 @@ namespace tl
             bool operator==(const ItemOptions&) const;
             bool operator!=(const ItemOptions&) const;
         };
-        
+
         void to_json(nlohmann::json& j, const ItemOptions& value);
 
         void from_json(const nlohmann::json& j, ItemOptions& value);
@@ -82,7 +82,7 @@ namespace tl
             bool operator==(const DisplayOptions&) const;
             bool operator!=(const DisplayOptions&) const;
         };
-        
+
         void to_json(nlohmann::json& j, const DisplayOptions& value);
 
         void from_json(const nlohmann::json& j, DisplayOptions& value);
@@ -144,7 +144,7 @@ namespace tl
 
             //! Set the itme trimmed range.
             void setTrimmedRange(const otime::TimeRange&);
-            
+
             //! Set the item scale.
             virtual void setScale(double);
 

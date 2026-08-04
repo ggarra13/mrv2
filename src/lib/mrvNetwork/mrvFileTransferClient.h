@@ -36,18 +36,36 @@ namespace mrv
             std::function<void(bool& aborted,
                                const std::string& title,
                                uint64_t done,uint64_t total) > progressCb,
-            std::function<void(bool exit) > doneCb);
+            std::function<void(bool success,
+                               const std::vector<std::string>& failedPaths) > doneCb);
+
+        static void abortAwakeCB(void* data);
 
     private:
+        //! Struct used for Fl::awake to cleanly exit from a datachannels'
+        //! thread.
+        struct AbortContext
+        {
+            FileTransferClient* self;
+            std::shared_ptr<rtc::DataChannel> dc;
+        };
+
+        //! WebRTC datachannel handlers for text and binary data.
         void handleText(const std::string& text);
         void handleBinary(const rtc::binary& data);
+
+        //! Handles a file error.
+        void handleFileError(const std::string& err);
+
+        //! Called on success or failure for cleanup.
         void finish(bool success);
-        // Helper method to process the queue
+
+        //! Helper method to process the queue
         void requestNextFile(std::shared_ptr<rtc::DataChannel> dc);
 
-        // Writes one offset-tagged chunk (payload only, header already
-        // stripped) to out_ at the given offset, updating counters,
-        // progress, and abort handling.
+        //! Writes one offset-tagged chunk (payload only, header already
+        //! stripped) to out_ at the given offset, updating counters,
+        //! progress, and abort handling.
         void writeChunk(uint64_t offset, const std::byte* payload,
                         size_t payloadSize);
 
@@ -60,23 +78,41 @@ namespace mrv
         // may be the last to arrive.
         void checkComplete();
 
+        // WebRTC handlers
         WebRTCManager& manager_;
         std::shared_ptr<rtc::DataChannel> dc_;
         std::string peerId_;
+
+        // Local and remote paths (we use paths instead of strings to know the
+        // list of frame numbers in sequences).
         tl::file::Path localPath_, remotePath_;
         std::string partPath_;
+
+        // Function callbacks
         std::function<void(bool& aborted,
                            const std::string& title,
                            uint64_t,uint64_t)> progressCb_;
-        std::function<void(bool)> doneCb_;
+
+        std::function<void(bool, const std::vector<std::string>&)> doneCb_;
+
+        // File writing variables.x
         FILE* out_ = nullptr;
         uint64_t remoteSize_ = 0;
         uint64_t totalRead_ = 0;
         std::atomic<bool> finished_{false};
 
+        // parallel to pendingRemotePaths_/pendingLocalPaths_
+        std::deque<bool>        pendingOptional_;
+        bool                     currentIsOptional_ = false;
+
+        // remote paths that failed but were skipped
+        std::vector<std::string> failedPaths_;
+
+        // Queues used for transferring multiple files.
         std::deque<std::string> pendingRemotePaths_;
         std::deque<std::string> pendingLocalPaths_;
-    
+
+        // Current files begin transferred
         std::string currentRemotePath_;
         std::string currentLocalPath_;
         std::string currentPartPath_;
@@ -99,7 +135,10 @@ namespace mrv
         // out_ (possible once the channel is unordered) are buffered here
         // and flushed once the file is open.
         std::vector<std::vector<std::byte>> pendingChunks_;
-    
+
+        bool otioExpanded_ = false;
+        void expandOtioReferences(const tl::file::Path& remoteOtioPath,
+                                  const std::string& localOtioPath);
     };
 
 }  // namespace mrv

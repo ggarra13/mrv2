@@ -88,7 +88,7 @@ namespace tl
                 const timeline::ImageOptions& =
                     timeline::ImageOptions()) override;
             void drawVideo(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>& = {},
                 const std::vector<timeline::DisplayOptions>& = {},
@@ -107,55 +107,55 @@ namespace tl
                 const std::vector<math::Box2i>&,
                 const timeline::BackgroundOptions&);
             void _drawVideoA(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoB(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoWipe(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoOverlay(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoDifference(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoAdd(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoMultiply(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoTile(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideo(
-                const timeline::VideoData&, const math::Box2i&,
+                const timeline::VideoFrame&, const math::Box2i&,
                 const std::shared_ptr<timeline::ImageOptions>&,
                 const timeline::DisplayOptions&);
 

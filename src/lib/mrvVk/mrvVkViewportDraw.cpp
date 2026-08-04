@@ -51,7 +51,7 @@ namespace mrv
 {
     namespace vulkan
     {
-    
+
         void Viewport::_drawAnaglyph(int left, int right) const noexcept
         {
             TLRENDER_P();
@@ -61,9 +61,12 @@ namespace mrv
             vk.render->drawAnaglyph(
                 {p.videoData[left],
                  p.videoData[right]},
-                timeline::getBoxes(timeline::CompareMode::Wipe, {
-                        p.videoData[left],
-                        p.videoData[right]}),
+                timeline::getBoxes(timeline::CompareMode::Wipe,
+                                   p.displayOptions,
+                                   {
+                                       p.videoData[left],
+                                       p.videoData[right]
+                                   }),
                 p.stereo3DOptions.eyeSeparation,
                 p.imageOptions, p.displayOptions);
         }
@@ -76,9 +79,12 @@ namespace mrv
             vk.render->drawStereo(
                 {p.videoData[left],
                  p.videoData[right]},
-                timeline::getBoxes(timeline::CompareMode::Wipe, {
-                        p.videoData[left],
-                        p.videoData[right]}),
+                timeline::getBoxes(timeline::CompareMode::Wipe,
+                                   p.displayOptions,
+                                   {
+                                       p.videoData[left],
+                                       p.videoData[right]
+                                   }),
                 timeline_vlk::StereoType::kScanlines,
                 p.stereo3DOptions.eyeSeparation,
                 p.imageOptions, p.displayOptions);
@@ -92,9 +98,12 @@ namespace mrv
             vk.render->drawStereo(
                 {p.videoData[left],
                  p.videoData[right]},
-                timeline::getBoxes(timeline::CompareMode::Wipe, {
-                        p.videoData[left],
-                        p.videoData[right]}),
+                timeline::getBoxes(timeline::CompareMode::Wipe,
+                                   p.displayOptions,
+                                   {
+                                       p.videoData[left],
+                                       p.videoData[right]
+                                   }),
                 timeline_vlk::StereoType::kCheckers,
                 p.stereo3DOptions.eyeSeparation,
                 p.imageOptions, p.displayOptions);
@@ -108,9 +117,12 @@ namespace mrv
             vk.render->drawStereo(
                 {p.videoData[left],
                  p.videoData[right]},
-                timeline::getBoxes(timeline::CompareMode::Wipe, {
-                        p.videoData[left],
-                        p.videoData[right]}),
+                timeline::getBoxes(timeline::CompareMode::Wipe,
+                                   p.displayOptions,
+                                   {
+                                       p.videoData[left],
+                                       p.videoData[right]
+                                   }),
                 timeline_vlk::StereoType::kColumns,
                 p.stereo3DOptions.eyeSeparation,
                 p.imageOptions, p.displayOptions);
@@ -148,7 +160,9 @@ namespace mrv
                     vk.render->drawVideo(
                         {p.videoData[left]},
                         timeline::getBoxes(
-                            timeline::CompareMode::A, {p.videoData[left]}),
+                            timeline::CompareMode::A,
+                            p.displayOptions,
+                            {p.videoData[left]}),
                         p.imageOptions, p.displayOptions, p.compareOptions,
                         getBackgroundOptions());
                 }
@@ -176,7 +190,9 @@ namespace mrv
                 vk.render->drawVideo(
                     {p.videoData[right]},
                     timeline::getBoxes(
-                        timeline::CompareMode::A, {p.videoData[right]}),
+                        timeline::CompareMode::A,
+                        p.displayOptions,
+                        {p.videoData[right]}),
                     p.imageOptions, p.displayOptions);
 
                 _drawOverlays(renderSize);
@@ -222,8 +238,10 @@ namespace mrv
             MRV2_VK();
 
             vk.render->drawVideo(
-                {p.lastVideoData},
-                timeline::getBoxes(p.compareOptions.mode, {p.lastVideoData}),
+                {p.lastVideoFrame},
+                timeline::getBoxes(p.compareOptions,
+                                   p.displayOptions,
+                                   {p.lastVideoFrame}),
                 p.imageOptions, p.displayOptions, p.compareOptions,
                 getBackgroundOptions());
 
@@ -262,7 +280,7 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-            
+
             auto note = dynamic_cast< draw::NoteShape* >(shape.get());
             if (note)
             {
@@ -321,7 +339,7 @@ namespace mrv
                 const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
                 const std::vector<std::shared_ptr<bool> >& voannotations,
                 const math::Size2i& renderSize)
-#endif  
+#endif
         {
             TLRENDER_P();
             MRV2_VK();
@@ -331,7 +349,7 @@ namespace mrv
             {
                 annotationBuffer->transitionToColorAttachment(vk.cmd);
             }
-            
+
             // Start the annotation render.
             timeline::RenderOptions renderOptions;
             renderOptions.colorBuffer = image::PixelType::RGBA_U8;
@@ -341,13 +359,13 @@ namespace mrv
             render->setOCIOOptions(timeline::OCIOOptions());
             render->setLUTOptions(timeline::LUTOptions());
             render->setTransform(renderMVP);
-            
+
             render->beginRenderPass();
-            
+
             // Calculate resolution multiplier.
             float resolutionMultiplier = renderSize.w * 6 / 4096.0 / p.viewZoom;
             resolutionMultiplier = std::clamp(resolutionMultiplier, 1.F, 10.F);
-            
+
             // Iterate through each annotation.
             for (const auto& annotation : annotations)
             {
@@ -413,7 +431,7 @@ namespace mrv
                         // 4. Calculate the final MVP for the text
                         // The text correction happens *before* the global projection is applied.
                         const math::Matrix4x4f textMVP = projectionMatrix() * textModelMatrix;
-                      
+
                         render->setTransform(textMVP);
                     }
                     else
@@ -426,23 +444,23 @@ namespace mrv
 
 #ifdef TLRENDER_FFMPEG
             VKVoiceOverShape shape;
-            
+
             for (const auto annotation : voannotations)
             {
                 if (!annotation->allFrames && time.floor() != annotation->time.floor())
                     continue;
-                
+
                 const auto& voices = annotation->voices;
                 for (const auto voice : voices)
                 {
-                    
+
                     shape.center = voice->getCenter();
                     shape.status = voice->getStatus();
                     shape.mult   = resolutionMultiplier;
-                    
+
                     const auto& mouseData = voice->getMouseData();
                     shape.blinkingIndex = ( voice->getCounter() * 12 ) % 256;
-                    
+
                     shape.draw(render, mouseData);
                 }
             }
@@ -461,7 +479,7 @@ namespace mrv
         {
             TLRENDER_P();
             MRV2_VK();
-            
+
             shader->bind(m_currentFrameIndex);
             shader->setUniform("transform.mvp", orthoMatrix,
                                vlk::kShaderVertex);
@@ -470,7 +488,7 @@ namespace mrv
                 channels = p.displayOptions[0].channels;
             shader->setUniform("channels", static_cast<int>(channels));
             shader->setFBO("textureSampler", overlay);
-            
+
             // --- Bind Descriptor Set for this shader ---
             // Record the command to bind the descriptor set for the CURRENT
             // frame index
@@ -479,7 +497,7 @@ namespace mrv
                 cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                 vk.annotation_pipeline_layout, 0, 1,
                 &descriptorSet, 0, nullptr);
-            
+
             if (vk.avao && vbo)
             {
                 // Draw calls for the composition geometry (e.g., a
@@ -497,17 +515,17 @@ namespace mrv
 
             VkCommandBuffer cmd =
                 beginSingleTimeCommands(device(), commandPool());
-            
+
             const size_t width = overlay->getWidth();
             const size_t height = overlay->getHeight();
-            
+
             const image::PixelType pixelType = image::PixelType::RGBA_U8;
             vk.annotationImage = image::Image::create(width, height, pixelType);
-            
+
             overlay->readPixels(cmd, 0, 0, width, height);
-            
+
             vkEndCommandBuffer(cmd);
-            
+
             overlay->submitReadback(cmd);
 
             wait_queue();
@@ -518,49 +536,49 @@ namespace mrv
             {
                 result = overlay->getLatestReadPixels(data);
             }
-            
+
             if (!data)
                 return;
-            
+
             std::memcpy(vk.annotationImage->getData(),
                         data, vk.annotationImage->getDataByteCount());
-            
+
             vkFreeCommandBuffers(device(), commandPool(), 1, &cmd);
         }
-        
+
         inline void Viewport::_appendText(
             std::vector<timeline::TextInfo>& textInfos,
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
             math::Vector2i& pos, const int16_t lineHeight) const
         {
             MRV2_VK();
-            
+
             vk.render->appendText(textInfos, glyphs, pos);
             pos.y += lineHeight;
         }
-        
+
         inline void Viewport::_appendText(
             std::vector<timeline::TextInfo>& textInfos,
             const std::string& text,
             const image::FontInfo& fontInfo,
             math::Vector2i& pos, const int16_t lineHeight) const
-        {   
+        {
             _appendText(textInfos, _p->fontSystem->getGlyphs(text, fontInfo), pos,
                         lineHeight);
         }
-        
+
         void Viewport::_drawText(const std::vector<timeline::TextInfo>& textInfos,
                                  const math::Vector2i& pos,
                                  const image::Color4f& color) const
         {
             MRV2_VK();
-            
+
             for (auto& textInfo : textInfos)
             {
                 vk.render->drawText(textInfo, pos, color);
             }
         }
-            
+
         void Viewport::_drawRectangleOutline(
             const std::string& pipelineName,
             const math::Matrix4x4f& mvp,
@@ -568,7 +586,7 @@ namespace mrv
         {
             MRV2_VK();
             TLRENDER_P();
-            
+
 
             float width = 2 / _p->viewZoom; //* renderSize.w / viewportSize.w;
             vk.render->setTransform(mvp);
@@ -579,7 +597,7 @@ namespace mrv
         void Viewport::_drawAreaSelection() const noexcept
         {
             TLRENDER_P();
-            
+
             Fl_Color c = p.ui->uiPrefs->uiPrefsViewSelection->color();
             uint8_t r, g, b;
             Fl::get_color(c, r, g, b);
@@ -595,7 +613,7 @@ namespace mrv
             const math::Matrix4x4f& mvp = projectionMatrix();
             _drawRectangleOutline("selection", mvp, selection, color);
         }
-        
+
         void Viewport::_drawSafeAreas(
             const float percentX, const float percentY,
             const float pixelAspectRatio, const image::Color4f& color,
@@ -605,7 +623,7 @@ namespace mrv
             MRV2_VK();
 
             auto renderSize = getRenderSize();
-            
+
             double aspectX = (double)renderSize.h / (double)renderSize.w;
             double aspectY = (double)renderSize.w / (double)renderSize.h;
 
@@ -619,7 +637,7 @@ namespace mrv
             }
 
             int width = 2 / _p->viewZoom;
-            
+
             math::Box2i box;
             int X, Y;
             if (vertical)
@@ -638,23 +656,23 @@ namespace mrv
             box.min.y = Y;
             box.max.x = (renderSize.w - X);
             box.max.y = (renderSize.h - Y);
-            
+
             _drawRectangleOutline(label, mvp, box, color);
-            
+
             const image::FontInfo fontInfo(kFontFamily, 12 * width);
             const auto& glyphs = _p->fontSystem->getGlyphs(label, fontInfo);
-            
+
             math::Vector2i pos(box.min.x, (box.max.y - 2 * width));
             std::vector<timeline::TextInfo> textInfos;
             vk.render->appendText(textInfos, glyphs, pos);
-            
+
             _drawText(textInfos, math::Vector2i(), color);
         }
 
         void Viewport::_drawSafeAreas() noexcept
         {
             MRV2_VK();
-            
+
             TLRENDER_P();
             if (!p.player)
                 return;
@@ -711,19 +729,19 @@ namespace mrv
             const image::Color4f shadowColor(0.F, 0.F, 0.F, 1.F);
             const math::Vector2i shadowPos1{ 1, 1 };
             const math::Vector2i shadowPos2{ -1, -1 };
-            
+
             Fl_Color c = p.ui->uiPrefs->uiPrefsViewHud->color();
             uint8_t r, g, b;
             Fl::get_color(c, r, g, b);
             const image::Color4f labelColor(r / 255.F, g / 255.F, b / 255.F, alpha);
             const math::Vector2i labelPos;
-            
+
             _drawText(textInfos, shadowPos1, shadowColor);
             _drawText(textInfos, shadowPos2, shadowColor);
-            
+
             _drawText(textInfos, labelPos, labelColor);
         }
-        
+
         void Viewport::_drawHUD(float alpha) const noexcept
         {
             TLRENDER_P();
@@ -734,7 +752,7 @@ namespace mrv
 
             Viewport* self = const_cast< Viewport* >(this);
             const math::Size2i& viewportSize = getViewportSize();
-            
+
             // Calculate resolution multiplier.
             uint16_t fontSize = p.ui->uiPrefs->uiPrefsHudFontSize->value() *
                                 self->pixels_per_unit();
@@ -743,7 +761,7 @@ namespace mrv
 
             const image::FontMetrics fontMetrics =
                 p.fontSystem->getMetrics(fontInfo);
-            
+
             auto lineHeight = fontMetrics.lineHeight;
             math::Vector2i pos(20, lineHeight * 2);
 
@@ -752,7 +770,7 @@ namespace mrv
             const auto& path = player->path();
             const otime::RationalTime& time = p.videoData[0].time;
             int64_t frame = time.to_frames();
-            
+
             vk.render->setViewport(math::Box2i(0, 0, viewportSize.w,
                                                viewportSize.h));
             vk.render->setRenderSize(viewportSize);
@@ -765,7 +783,7 @@ namespace mrv
                                         0.F, static_cast<float>(viewportSize.h), -1.F, 1.F));
 
             std::vector<timeline::TextInfo> textInfos;
-            
+
             char buf[512];
             if (p.hud & HudDisplay::kDirectory)
             {
@@ -866,7 +884,7 @@ namespace mrv
                 {
                     const otime::TimeRange& range = player->timeRange();
                     const int64_t maxFrames = range.duration().to_frames();
-                
+
                     // Calculate skipped frames
                     int64_t absdiff = std::abs(time.value() - p.lastFrame);
                     if (absdiff > 1 && absdiff < 30 && absdiff < maxFrames - 1)
@@ -901,7 +919,7 @@ namespace mrv
                         fps, player->speed());
 
                     tmp += buf;
-                    
+
                     if (swap_interval())
                         tmp += " FIFO";
                     else
@@ -956,54 +974,16 @@ namespace mrv
 
             if (p.hud & HudDisplay::kCache)
             {
-                const auto& cacheInfo = player->cacheInfo();
-
-                uint64_t aheadVideoFrames = 0, behindVideoFrames = 0;
-                uint64_t aheadAudioFrames = 0, behindAudioFrames = 0;
-
-                otime::TimeRange currentRange(
-                    otime::RationalTime(
-                        static_cast<double>(frame), player->defaultSpeed()),
-                    otime::RationalTime(1.0, player->defaultSpeed()));
-
-                for (const auto& i : cacheInfo.videoFrames)
+                if (p.player)
                 {
-                    if (i.intersects(currentRange))
-                    {
-                        aheadVideoFrames +=
-                            i.end_time_inclusive().to_frames() - frame;
-                        behindVideoFrames += frame - i.start_time().to_frames();
-                    }
+                    const auto cache = p.player->player()->observeCacheInfo()->get();
+                    _appendText(textInfos, _("Cache: "), fontInfo, pos,
+                                lineHeight);
+                    snprintf(
+                        buf, 512, "    V: %.2f %%  A: %.2f %%",
+                        cache.videoPercentage, cache.audioPercentage);
+                    _appendText(textInfos, buf, fontInfo, pos, lineHeight);
                 }
-
-                for (const auto& i : cacheInfo.audioFrames)
-                {
-                    if (i.intersects(currentRange))
-                    {
-                        aheadAudioFrames +=
-                            i.end_time_inclusive().to_frames() - frame;
-                        behindAudioFrames += frame - i.start_time().to_frames();
-                    }
-                }
-                _appendText(textInfos, _("Cache: "), fontInfo, pos, lineHeight);
-                const auto ioSystem =
-                    App::app->getContext()->getSystem<io::System>();
-                const auto& cache = ioSystem->getCache();
-                const size_t maxCache = cache->getMax() / memory::gigabyte;
-                const float pctCache = cache->getPercentage();
-                const float usedCache = maxCache * (pctCache / 100.F);
-                snprintf(
-                    buf, 512, _("    Used: %.2g of %zu Gb (%.2g %%)"), usedCache,
-                    maxCache, pctCache);
-                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
-                snprintf(
-                    buf, 512, _("    Ahead    V: % 4" PRIu64 "    A: % 4" PRIu64),
-                    aheadVideoFrames, aheadAudioFrames);
-                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
-                snprintf(
-                    buf, 512, _("    Behind   V: % 4" PRIu64 "    A: % 4" PRIu64),
-                    behindVideoFrames, behindAudioFrames);
-                _appendText(textInfos, buf, fontInfo, pos, lineHeight);
             }
 
             if (p.hud & HudDisplay::kAttributes)
@@ -1022,7 +1002,7 @@ namespace mrv
             }
 
             _drawHUD(textInfos, alpha);
-            
+
             vk.render->setTransform(oldTransform);
             vk.render->setRenderPass(oldRenderPass);
         }
@@ -1055,7 +1035,7 @@ namespace mrv
         void Viewport::_drawDataWindow() noexcept
         {
             TLRENDER_P();
-            
+
             image::Tags::const_iterator i = p.tagData.find("Data Window");
             if (i == p.tagData.end())
                 return;
@@ -1089,7 +1069,7 @@ namespace mrv
             TLRENDER_P();
             if (!p.player || !p.fontSystem)
                 return;
-            
+
             MRV2_VK();
 
             Viewport* self = const_cast< Viewport* >(this);
@@ -1132,20 +1112,20 @@ namespace mrv
 
             vk.render->end();
         }
-        
+
         void Viewport::_updateHDRMetadata()
         {
             TLRENDER_P();
 
 #define DEBUG_METADATA 0
-            
+
             // On Linux at least, we must send the real metadata over,
             // so we translate OCIO to proper HDRData.
             // If no OCIO is active, assume it is a movie and send the
             // stored HDRData (which can be sRGB, BT. 709 or HDR.
             const int screen_idx = this->screen_num();
             const timeline::OCIOOptions& ocio = getOCIOOptions(screen_idx);
-                
+
             // if (!p.monitor.hdr_enabled || (!ocio.enabled && !p.hdrOptions.tonemap))
             if (!p.monitor.hdr_enabled)
             {
@@ -1159,7 +1139,7 @@ namespace mrv
                 m_hdr_metadata.displayPrimaryGreen = { 0.300F, 0.600F };
                 m_hdr_metadata.displayPrimaryBlue = { 0.15F, 0.060F };
                 m_hdr_metadata.whitePoint = { 0.3127F, 0.3290F };
-                
+
                 // Max display capability
                 m_hdr_metadata.maxLuminance = 100.F;
                 m_hdr_metadata.minLuminance = 0.1F;
@@ -1173,7 +1153,7 @@ namespace mrv
                 if (ocio.enabled && !ocio.display.empty() && !ocio.view.empty())
                 {
                     std::string displayView = ocio.display;
-                    if (!ocio.view.empty() && ocio.view != "Default" && 
+                    if (!ocio.view.empty() && ocio.view != "Default" &&
                         ocio.view != "(default)" && ocio.view != "None")
                     {
                         displayView += "/" + ocio.view;
@@ -1198,15 +1178,15 @@ namespace mrv
                                 ocioPeak = std::stof(match[1].str());
                             } catch (const std::exception& e) {
                                 // Fallback for parsing errors
-                                ocioPeak = 1000.0F; 
+                                ocioPeak = 1000.0F;
                             }
                         } else {
                             // Default fallback if no nits pattern is found
-                            ocioPeak = 1000.0F; 
+                            ocioPeak = 1000.0F;
                         }
                         data.displayMasteringLuminance = math::FloatRange(0.001F, ocioPeak);
                         data.maxCLL = std::min(ocioPeak, monitorPeak);
-                        data.maxFALL = std::min(100.F, data.maxCLL * 0.1F); 
+                        data.maxFALL = std::min(100.F, data.maxCLL * 0.1F);
                     }
                     else  // is SDR view
                     {
@@ -1245,7 +1225,7 @@ namespace mrv
                     LOG_WARNING("Sending HDR Monitor metadata=" << data);
 #endif
                 }
-                
+
                 m_hdr_metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
                 m_hdr_metadata.displayPrimaryRed = {
                     data.primaries[image::HDRPrimaries::Red][0],
@@ -1266,7 +1246,7 @@ namespace mrv
                 // Max display capability
                 m_hdr_metadata.maxLuminance =
                     data.displayMasteringLuminance.getMax();
-                m_hdr_metadata.minLuminance = 
+                m_hdr_metadata.minLuminance =
                     data.displayMasteringLuminance.getMin();
                 m_hdr_metadata.maxContentLightLevel = data.maxCLL;
                 m_hdr_metadata.maxFrameAverageLightLevel = data.maxFALL;
@@ -1282,7 +1262,7 @@ namespace mrv
             {
                 m_hdr_metadata_changed = false; // Mark as unchanged
             }
-            
+
         }
 
 

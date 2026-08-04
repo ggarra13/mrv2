@@ -116,11 +116,10 @@ namespace mrv
     {
         std::map< std::string, std::string> map;
         mrv::Browser* b = App::ui->uiPrefs->PathMappings;
-        // 0 is browser offset, 1 is title.
+        // 0 is browser offset, 1 is title.  Start loop at 2.
         for (int i = 2; i <= b->size(); ++i)
         {
             std::string line = b->text(i);
-            std::cerr << "idx=" << i << " " << line << std::endl;
             auto splitArray = string::split(line, '\t');
             map.insert(std::make_pair(splitArray[0], splitArray[1]));
         }

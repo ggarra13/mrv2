@@ -20,6 +20,8 @@ fi
 NOARGS=1
 . etc/build_dir.sh
 
+export GITHUB_TOKEN="$(gh auth token)"
+
 locate_python
 
 export LD_LIBRARY_PATH=$BUILD_DIR/install/lib64:$BUILD_DIR/install/lib:$OLD_LIBRRARY_PATH

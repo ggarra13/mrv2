@@ -36,7 +36,13 @@ namespace tl
         //! Timeline player cache options.
         struct PlayerCacheOptions
         {
-            //! Cache read ahead.
+            //! Video cache size in gigabytes.
+            float videoGB = 4.F;
+
+            //! Audio cache size in gigabytes.
+            float audioGB = .5F;
+
+            //! Cache read ahead (not used by Darby).
             otime::RationalTime readAhead = otime::RationalTime(5.0, 1.0);
 
             //! Cache read behind.

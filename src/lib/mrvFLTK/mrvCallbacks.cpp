@@ -99,7 +99,7 @@ namespace mrv
     {
         if (mrv::App::unsaved_edits || mrv::App::unsaved_annotations)
         {
-            
+
             int choice = fl_choice(
                 _("You have unsaved changes. "
                   "Do you want to save the session before closing?"),
@@ -113,7 +113,7 @@ namespace mrv
         }
         return 1;
     }
-    
+
     using namespace panel;
 
     WindowCallback kWindowCallbacks[] = {
@@ -226,7 +226,7 @@ namespace mrv
         }
         if (urlMovie.cancel)
             return;
-        
+
         std::string url = urlMovie.uiURL->value();
         std::string user = urlMovie.uiUser->value();
         std::string password = urlMovie.uiPassword->value();
@@ -237,7 +237,7 @@ namespace mrv
         {
             url = "https://" + url;
         }
-        
+
         std::vector<std::string> files;
         std::string full_url = url;
         if (!user.empty())
@@ -246,7 +246,7 @@ namespace mrv
             full_url += ";password=" + password;
         if (!suffix.empty())
             full_url += suffix;
-        
+
         files.push_back(full_url);
 
         open_files_cb(files, ui);
@@ -302,7 +302,7 @@ namespace mrv
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void open_new_instance_cb(Fl_Menu_* w, ViewerUI* ui)
     {
 #ifdef _WIN32
@@ -391,7 +391,7 @@ namespace mrv
 
         model->setA(bIndexes[0]);
         model->setB(aIndex, true);
-        
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -440,7 +440,7 @@ namespace mrv
         model->setCompareOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void compare_add_cb(Fl_Widget* w, ViewerUI* ui)
     {
         auto model = App::app->filesModel();
@@ -449,7 +449,7 @@ namespace mrv
         model->setCompareOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void compare_multiply_cb(Fl_Widget* w, ViewerUI* ui)
     {
         auto model = App::app->filesModel();
@@ -1082,7 +1082,7 @@ namespace mrv
 
         App::unsaved_edits = false;
         App::unsaved_annotations = false;
-        
+
         // Must come before model->close().
         if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeCurrent", 0);
@@ -1107,7 +1107,7 @@ namespace mrv
         App::unsaved_edits = false;
         App::unsaved_annotations = false;
 
-        
+
         if (ui->uiPrefs->SendMedia->value())
             tcp->pushMessage("closeAll", 0);
 
@@ -1128,9 +1128,9 @@ namespace mrv
 
         App::unsaved_edits = false;
         App::unsaved_annotations = false;
-        
+
         tcp->lock();
-        
+
         // Close all files
         close_all_cb(w, ui);
 
@@ -1227,14 +1227,14 @@ namespace mrv
 
         // Release the floating license if any.
         release_license();
-    
+
         // Remove any temporary EDLs in tmppath
         if (ui->uiPrefs->uiPrefsRemoveEDLs->value())
             removeTemporaryEDLs(ui);
 
 
         Fl::hide_all_windows();
-        
+
         // Remove thumbnail system.
 #ifdef VULKAN_BACKEND
         auto context = App::app->getContext();
@@ -1283,7 +1283,7 @@ namespace mrv
         ui->uiView->setShaderOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-        
+
     void debanding_medium_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::ShaderOptions o = ui->uiView->getShaderOptions();
@@ -1291,7 +1291,7 @@ namespace mrv
         ui->uiView->setShaderOptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void debanding_high_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::ShaderOptions o = ui->uiView->getShaderOptions();
@@ -1300,7 +1300,7 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 #endif
-    
+
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         timeline::DisplayOptions o = ui->app->displayOptions();
@@ -1490,7 +1490,7 @@ namespace mrv
         ui->uiView->setHDROptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void select_hdr_tonemap_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const Fl_Menu_Item* item = m->mvalue();
@@ -1509,7 +1509,7 @@ namespace mrv
         ui->uiView->setHDROptions(o);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void select_hdr_gamut_mapping_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const Fl_Menu_Item* item = m->mvalue();
@@ -1530,12 +1530,12 @@ namespace mrv
     }
 
     void toggle_fullscreen_cb(Fl_Menu_* m, ViewerUI* ui)
-    {        
+    {
         MyViewport* view = ui->uiView;
         bool active = !view->getFullScreenMode();
         ui->uiView->setFullScreenMode(active);
 
-        
+
         // These are needed to clean the resources and avoid
         // OpenGL flickering.
         ui->uiView->refresh();
@@ -1546,7 +1546,7 @@ namespace mrv
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Fullscreen", active);
-        
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
@@ -1557,7 +1557,7 @@ namespace mrv
         const bool presentation = !view->getPresentationMode();
         view->setPresentationMode(presentation);
 
-        
+
         // These are needed to clean the resources and avoid
         // OpenGL flickering.
         ui->uiView->refresh();
@@ -1852,7 +1852,7 @@ namespace mrv
     }
 
     void toggle_ui_bar(ViewerUI* ui, Fl_Group* const bar)
-    {   
+    {
         if (bar->visible())
         {
             bar->hide();
@@ -1863,8 +1863,8 @@ namespace mrv
         }
 
         ui->uiRegion->layout();
-        
-        ui->uiMain->fill_menu(ui->uiMenuBar);       
+
+        ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
     void toggle_menu_bar(Fl_Menu_*, ViewerUI* ui)
@@ -1906,7 +1906,7 @@ namespace mrv
         {
             set_edit_mode_cb(EditMode::kNone, ui);
         }
-        
+
         bool send = ui->uiPrefs->SendUI->value();
         if (send)
             tcp->pushMessage("Bottom Bar", (bool)ui->uiBottomBar->visible());
@@ -1995,7 +1995,7 @@ namespace mrv
             ui->uiHotkey->uiMain->show();
         if (has_about_window)
             ui->uiAbout->uiMain->show();
-        
+
         ui->uiView->frameView();
 
         PanelGroup::show_all();
@@ -2110,7 +2110,7 @@ namespace mrv
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player) return;
-        
+
         TimelineClass* c = ui->uiTimeWindow;
         const otime::TimeRange& inOutRange = player->inOutRange();
         const otime::TimeRange& timeRange = player->timeRange();
@@ -2141,9 +2141,9 @@ namespace mrv
                 c->uiEndButton->value(true);
             }
         }
-        
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
-        
+
     }
 
     static void playback_loop_mode(ViewerUI* ui, timeline::Loop mode)
@@ -2345,7 +2345,7 @@ namespace mrv
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::FromFile;
         app->setImageOptions(o);
-        
+
         timeline::DisplayOptions d = app->displayOptions();
         d.videoLevels = image::VideoLevels::FullRange;
         app->setDisplayOptions(d);
@@ -2364,7 +2364,7 @@ namespace mrv
         app->setDisplayOptions(d);
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void video_levels_legal_range_hdr_cb(Fl_Menu_*, ViewerUI* ui)
     {
         App* app = ui->app;
@@ -2384,7 +2384,7 @@ namespace mrv
         timeline::ImageOptions o = app->imageOptions();
         o.videoLevels = timeline::InputVideoLevels::FullRange;
         app->setImageOptions(o);
-        
+
         timeline::DisplayOptions d = app->displayOptions();
         d.videoLevels = image::VideoLevels::FullRange;
         app->setDisplayOptions(d);
@@ -2434,7 +2434,7 @@ namespace mrv
     {
         ui->uiView->framePrev();
     }
-    
+
     void next_second_cb(Fl_Menu_*, ViewerUI* ui)
     {
         auto player = ui->uiView->getTimelinePlayer();
@@ -2639,7 +2639,7 @@ namespace mrv
             _("No"), _("Yes"), NULL, NULL);
         if (!ok)
             return;
-        
+
         if (ui->uiPrefs->SendAnnotations->value())
             tcp->pushMessage("Clear All Annotations", 0);
         player->clearAllAnnotations();
@@ -2799,6 +2799,34 @@ namespace mrv
         if (editMode != EditMode::kTimeline)
             set_edit_mode_cb(EditMode::kFull, ui);
         ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
+    void timeline_media_reference_key_cb(Fl_Menu_* m, ViewerUI* ui)
+    {
+        auto player = ui->uiView->getTimelinePlayer();
+        if (!player) return;
+
+        Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(m->mvalue());
+        const std::string key = item->label();
+
+        const auto& timeline = player->timeline();
+        if (!timeline) return;
+
+        timeline->setMediaReferenceKey(key);
+        player->clearCache();
+        ui->uiTimeline->setTimelinePlayer(nullptr);
+        ui->uiTimeline->setTimelinePlayer(player);
+        ui->uiView->redrawWindows();
+
+        auto Aitem = ui->app->filesModel()->observeA()->get();
+        Aitem->mediaReferenceKey = key;
+        panel::refreshThumbnails();
+
+        Message msg;
+        msg["command"] = "setMediaReferenceKey";
+        msg["value"] = key;
+        if (ui->uiPrefs->SendUI->value())
+            tcp->pushMessage(msg);
     }
 
     void timeline_thumbnails_small_cb(Fl_Menu_* m, ViewerUI* ui)
@@ -3031,7 +3059,7 @@ namespace mrv
     }
 
     void unlock_features_cb(Fl_Menu_*, ViewerUI* ui)
-    {        
+    {
 #ifdef _WIN32
         std::string helper = rootpath() + "/bin/license_helper.exe";
 #else
@@ -3049,11 +3077,11 @@ namespace mrv
         {
             LOG_ERROR(_("Install is broken.  Missing license_helper"));
         }
-        
+
         int ret = os::exec_command(helper);
         if (ret != 0) return;
     }
-    
+
     void help_documentation_cb(Fl_Menu_*, ViewerUI* ui)
     {
         const std::string& docs = docspath();
@@ -3209,7 +3237,7 @@ namespace mrv
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
-    
+
     void load_session_cb(Fl_Menu_* m, ViewerUI* ui)
     {
         const std::string& fileName = open_session_file();
@@ -3333,7 +3361,7 @@ namespace mrv
                 window.add(s->text);
             }
 #endif
-            
+
 #ifdef VULKAN_BACKEND
             if (auto s = dynamic_cast<VKTextShape*>(shape.get()))
             {
@@ -3544,5 +3572,5 @@ namespace mrv
 
         file_manager::show_uri(path);
     }
-    
+
 } // namespace mrv

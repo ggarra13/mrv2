@@ -1,25 +1,25 @@
 # Japanese translations for hdr package.
 # This file is distributed under the same license as the hdr package.
-# Automatically generated, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hdr v1.3.7\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
-"PO-Revision-Date: 2025-04-08 12:30-0300\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
-"Language: ja\n"
+"PO-Revision-Date: 2026-07-27 16:35+0900\n"
+"Last-Translator: coolvitto\n"
+"Language-Team: \n"
+"Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 msgid "ERROR:\t"
-msgstr "エラー:\t"
+msgstr "エラー :\t"
 
 msgid "WARN:\t"
-msgstr "警告:\t"
+msgstr "警告 :\t"
 
 msgid "English"
 msgstr "英語"
@@ -181,22 +181,22 @@ msgid "Services"
 msgstr "サービス"
 
 msgid "Show All"
-msgstr "すべてを表示"
+msgstr "すべて表示"
 
 msgid "Quit hdr"
 msgstr "hdr を終了"
 
 msgid "HDR monitor found."
-msgstr "HDRモニターが見つかりました。"
+msgstr "HDR モニターが見つかりました。"
 
 msgid "HDR monitor not found or not configured."
-msgstr "HDRモニターが見つからないか、設定されていません。"
+msgstr "HDR モニターが見つからないか、設定されていません。"
 
 msgid "HDR monitor min. nits = {0}"
-msgstr "HDR モニターの最小輝度（ニト）= {0}"
+msgstr "HDR モニターの最小輝度 = {0}"
 
 msgid "HDR monitor max. nits = {0}"
-msgstr "HDR モニターの最大輝度（ニト）= {0}"
+msgstr "HDR モニターの最大輝度 = {0}"
 
 msgid "Connection/"
 msgstr "接続/"
@@ -208,16 +208,16 @@ msgid "HDR/Pass through Metadata to Display"
 msgstr "HDR/メタデータをディスプレイにパススルー"
 
 #~ msgid "\tDesktop Environment: "
-#~ msgstr "\tデスクトップ環境: "
+#~ msgstr "\tデスクトップ環境 : "
 
 #~ msgid "Unknown"
 #~ msgstr "不明"
 
 #~ msgid "\tKernel Info: "
-#~ msgstr "\tカーネル情報: "
+#~ msgstr "\tカーネル情報 : "
 
 #~ msgid "\tDistribution: "
-#~ msgstr "\tディストリビューション: "
+#~ msgstr "\t配布 : "
 
 #~ msgid "Could not determine monitor's nits."
-#~ msgstr "モニターのニット値を判別できませんでした。"
+#~ msgstr "モニターの nits値を判別できませんでした。"

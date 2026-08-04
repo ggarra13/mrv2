@@ -1430,6 +1430,39 @@ namespace mrv
                         item->set();
                 }
             }
+
+            if (player)
+            {
+                const auto& timeline = player->timeline();
+                if (timeline)
+                {
+                    std::vector<std::string> keys = timeline->getMediaReferenceKeys();
+                    std::string key = timeline->getMediaReferenceKey();
+                    if (keys.size() > 1)
+                    {
+                        for (unsigned i = 0; i < keys.size(); ++i)
+                        {
+                            /* xgettext:c++-format */
+                            std::string msg =
+                                tl::string::Format(_("Timeline/Media Reference/{0}"))
+                                .arg(keys[i]);
+
+                            idx = menu->add(
+                                msg.c_str(), 0,
+                                (Fl_Callback*)
+                                timeline_media_reference_key_cb, ui,
+                                FL_MENU_RADIO);
+
+                            if ((key == keys[i]) ||
+                                (key.empty() && keys[i] == "DEFAULT_MEDIA"))
+                            {
+                                item = (Fl_Menu_Item*)&(menu->menu()[idx]);
+                                item->set();
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         const int aIndex = model->observeAIndex()->get();

@@ -83,19 +83,19 @@ namespace mrv
 
     //! Menu function to remove audio gap at current time.
     void edit_remove_video_gap_cb(Fl_Menu_* m, ViewerUI* ui);
-    
+
     //! Menu function to insert an audio gap at current time.
     void edit_insert_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to remove audio gap at current time.
     void edit_remove_audio_gap_cb(Fl_Menu_* m, ViewerUI* ui);
-    
+
     //! Menu function to remove selected items.
     void edit_remove_selected_cb(Fl_Menu_* m, ViewerUI* ui);
 
     //! Menu function to add a transition between 2 or 4 selected items.
     void edit_add_transition_cb(Fl_Menu_* m, ViewerUI* ui);
-    
+
     //! Menu function to undo an edit or annotation.
     void edit_undo_cb(Fl_Menu_* m, ViewerUI* ui);
 
@@ -147,4 +147,12 @@ namespace mrv
     void set_edit_button(EditMode mode, ViewerUI* ui);
     void set_edit_mode_cb(EditMode mode, ViewerUI* ui);
     int calculate_edit_viewport_size(ViewerUI* ui);
+
+    const std::vector<file::Path> getOtioTimelinePaths(
+        const otio::SerializableObject::Retainer<otio::Timeline>& otioTimeline,
+        const std::string& directory);
+
+    const std::vector<file::Path> getOtioTimelinePaths(
+        const otio::SerializableObject::Retainer<otio::Timeline>&
+        otioTimeline);
 } // namespace mrv

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paneles &mdash; documentación de mrv2 - v1.6.6</title>
+  <title>Paneles &mdash; documentación de mrv2 - v1.7.1</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=5d0feb18"></script>
+      <script src="../../_static/documentation_options.js?v=e753318c"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/translations.js?v=f85f4cfb"></script>
@@ -193,7 +193,7 @@ Horizontal, Vertical y Mosaicos.  La comparación de Mosaicos permite que muchas
 <p>El Panel de NDI permite reproducir una fuente de NDI® (es decir, una fuente de video y audio) desde cualquier lugar en tu red usando el protocolo Network Device Interface.</p>
 <p>Para que la conección se ejecute, debés tener varios puertos de tu cortafuegos abiertos de entrada y salida.  Para más información, refiérase a la documentación del SDK de NDI®.</p>
 <p>El menú permite elegir qué fuente reproducir.  Nótese que el comienzo de la reproducción de NDI® en mrv2 es actualmente un poco lenta, ya que necesita llevar el audio y el video al cache primero.</p>
-<p>Desde la version v1.6.6, salida de Video y Audio de NDI® fue agregado.  Esto te permite transmitir los contenidos de qué se reproduce en mrv2 a cualquier software o dispositivo de NDI® compatible (como NDI® Tools Studio Monitor en Windows o NDI® Tools Video Monitor en macOS o otras instancias de mrv2 mismo).</p>
+<p>Desde la version v1.7.1, salida de Video y Audio de NDI® fue agregado.  Esto te permite transmitir los contenidos de qué se reproduce en mrv2 a cualquier software o dispositivo de NDI® compatible (como NDI® Tools Studio Monitor en Windows o NDI® Tools Video Monitor en macOS o otras instancias de mrv2 mismo).</p>
 <p>NDI® is a registered trademark of Vizrt NDI AB.</p>
 </section>
 <section id="panel-de-lista-de-reproduccion">
@@ -242,10 +242,15 @@ Un Forma de Onda muesta la luminancia de los píxeles en el axis Y, mientras que
 <h2>Panel de WebRTC<a class="headerlink" href="#panel-de-webrtc" title="Link to this heading"></a></h2>
 <img alt="../../_images/webrtc-panel-01.png" class="align-center" src="../../_images/webrtc-panel-01.png" />
 <p>El Panel de WebRTC permite sincronizar dos o más reproductores en cualquier parte de la Internet en una «Sala».
-Cuando alguien se conecta a la Sala, puede controlar los reproductores, llendo de un lado a otro, usar las herramientas de dibujo, etc.
-Note que los videos o imágenes no sen enviados por la internet, pero se mantienen localmente.
-Si esta mezclando plataformas o clips que no están en la misma ubicación en ambas localidades remotas, debería usar Preferencias-&gt;Mapeo de Carpetas para asegurarse que el clip es encontrado.
-Tambien puede evitar el sincronizado de los clips si va al menú Sync-&gt;Media y carga los clips manualmente.</p>
+Cuando alguien se conecta a la Sala, puede controlar los reproductores, llendo de un lado a otro, usar las herramientas de dibujo, etc.</p>
+<p>Para usar WebRTC, debe primero establecer el nombre de su Estudio en Preferences-&gt;WebRTC-&gt;Estudio.  Debe usar un nombre único así no se expone por error.</p>
+<p>Luego debe setear el nombre de la Sala a un nombre relativamente único.</p>
+<p>A partir de la version 1.7.1, los clips <em>SÍ PUEDEN SER</em> enviados a través de un canal especial, encriptado.  Piense en P2P, BitTorrent or Zoom como equivalencias.
+El cliente al que le faltan los datos se detiene mientras recibe las películas, mientras el servidor que tiene los clips puede interactuar, mientras envía el contentido en el fondo.
+Los clips van de la máquina de un artista a otra, y no son almacenados en ningún servidor.
+Esto ocurre si la resolución de los clips no pueden ser encontrados en el mismo lugar o a traves de Mapeo de Carpetas.
+Si esta mezclando plataformas o clips que están en los mismo lados pero en ubicación diferentes, debería usar Preferencias-&gt;Mapeo de Carpetas primero para asegurarse que el clip es encontrado.  Si no se encuentra en ningún lado el clip, puede ahora dejar que el clip se envíe a través de la internet con WebRTC.
+Tambien puede evitar el sincronizado de los clips si va al menú y desactiva Sync-&gt;Media y carga los clips manualmente.</p>
 </section>
 </section>
 

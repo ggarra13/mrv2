@@ -276,6 +276,8 @@
         }
 
         p.defaultValues["Python/Editor"] = command;
+        p.defaultValues["WebRTC/Room"] = "Unique Name";
+        p.defaultValues["WebRTC/Project"] = "Unnamed";
     }
 
     SettingsObject::~SettingsObject() {}

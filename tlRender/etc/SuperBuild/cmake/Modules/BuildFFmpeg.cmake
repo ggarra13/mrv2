@@ -10,7 +10,7 @@ endif()
 
 if (NOT FFmpeg_FOUND)
     
-    set(FFmpeg_VERSION 8.1)
+    set(FFmpeg_VERSION 8.1.2)
 
     set(FFmpeg_DEPENDENCIES ZLIB ${OpenSSL_DEP})
     if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
@@ -580,16 +580,13 @@ if (NOT FFmpeg_FOUND)
 	set(FFmpeg_OPENSSL_COPY
             "cp ${BINARY_DIR}/ffmpeg_configure.sh ${BINARY_DIR}/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
 
-	set(PKG_CONFIG_PATH_MSys2 "${INSTALL_PREFIX}/lib/pkgconfig")
-
-	# Ensure PKG_CONFIG_PATH is set within the MSYS2 shell command
-	set(PKG_CONFIG_PATH_CMD "export PKG_CONFIG_PATH=${PKG_CONFIG_PATH_MSys2}:\$PKG_CONFIG_PATH &&")
-	
 	list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
 
+	# PKG_CONFIG_PATH is exported inside ffmpeg_configure.sh itself, so it
+	# no longer needs to be set as a separate command here.
 	set(FFmpeg_CONFIGURE ${FFmpeg_MSYS2}
             -c "pacman -S diffutils make nasm pkg-config --noconfirm && \
-        ${FFmpeg_OPENSSL_COPY} ${PKG_CONFIG_PATH_CMD} \
+        ${FFmpeg_OPENSSL_COPY} \
         ./ffmpeg_configure.sh")
 	
 	set(FFmpeg_BUILD ${FFmpeg_MSYS2} -c "make -j ${NPROCS}")
@@ -601,7 +598,12 @@ if (NOT FFmpeg_FOUND)
             COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swresample.lib ${INSTALL_PREFIX}/lib"
             COMMAND ${FFmpeg_MSYS2} -c "mv ${INSTALL_PREFIX}/bin/swscale.lib ${INSTALL_PREFIX}/lib")
     else()
-	set(FFmpeg_CONFIGURE export PKG_CONFIG_PATH=${INSTALL_PREFIX}/lib/pkgconfig:\$PKG_CONFIG_PATH && ./configure ${FFmpeg_CONFIGURE_ARGS})
+	set(FFmpeg_CONFIGURE_COPY
+            "cp ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/ffmpeg_configure.sh &&")
+
+	# PKG_CONFIG_PATH is exported inside ffmpeg_configure.sh itself, so it
+	# no longer needs to be set as a separate command here.
+	set(FFmpeg_CONFIGURE sh -c "${FFmpeg_CONFIGURE_COPY} chmod +x ./ffmpeg_configure.sh && ./ffmpeg_configure.sh")
 	set(FFmpeg_BUILD make -j ${NPROCS})
 	set(FFmpeg_INSTALL make install)
 	list(JOIN FFmpeg_CONFIGURE_ARGS " \\\n" FFmpeg_CONFIGURE_ARGS_TMP)
@@ -614,11 +616,11 @@ if (NOT FFmpeg_FOUND)
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/")
 
     #
-    # Create the ffmpeg_configure.sh file (used only on Windows for now)
+    # Create the ffmpeg_configure.sh file (used on both MSYS2/Windows and Unix)
     #
     message(STATUS "Creating ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/")
 
-    set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
+    set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\nexport PKG_CONFIG_PATH=${INSTALL_PREFIX}/lib/pkgconfig:\$PKG_CONFIG_PATH\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh
 	${FFmpeg_CONFIGURE_CONTENTS}
     )
@@ -632,7 +634,9 @@ if (NOT FFmpeg_FOUND)
 	FFmpeg
 	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg
 	DEPENDS ${FFmpeg_DEPENDENCIES}
-	URL https://ffmpeg.org/releases/ffmpeg-${FFmpeg_VERSION}.tar.bz2
+	GIT_REPOSITORY "https://github.com/FFmpeg/FFmpeg.git"
+	GIT_TAG "n${FFmpeg_VERSION}"
+	# URL https://www.ffmpeg.org/releases/ffmpeg-${FFmpeg_VERSION}.tar.bz2
 	PATCH_COMMAND ${FFmpeg_PATCH}
 	CONFIGURE_COMMAND ${FFmpeg_CONFIGURE}
 	BUILD_COMMAND ${FFmpeg_BUILD}

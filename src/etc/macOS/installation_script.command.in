@@ -1,11 +1,11 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 
 if [[ -d /Applications/@mrv2_NAME@.app/ ]]; then
 
     echo
     echo "This application is not yet notarized nor codesigned."
-    echo "This is because it costs around u\$200 for it and the notarization is"
-    echo "stored in my machine and cannot be transferred."
+    echo "Even though I tried, Apple has refused to enroll me on"
+    echo "as an individual developer."
     echo
     echo "The official download page is:"
     echo "https://mrv2.sourceforge.io/downloads/mrv2-download-page.html"

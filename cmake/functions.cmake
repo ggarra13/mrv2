@@ -52,6 +52,14 @@ endfunction()
 function( is_system_lib TARGET ISSYSLIB )
 
     #
+    # Cairo libs
+    #
+    set(_cairo_libs
+	libcairo-gobject
+	libcairo
+	libpixman)
+    
+    #
     # Vulkan Libs to distribute on Linux and macOS
     # 
     set(_vulkan_libs
@@ -67,7 +75,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	    libMoltenVK
 	    libvulkan)
     endif()
-    
+
     #
     # List of libraries that are accepted to distribute
     #
@@ -77,7 +85,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libavfilter
 	libavformat
 	libavutil
-	libcairo
+	#libcairo
 	libcryp
 	libdisplay-info
 	libdovi
@@ -97,7 +105,7 @@ function( is_system_lib TARGET ISSYSLIB )
     #
     set(_kde_libs
 	libkwin
-	
+
 	libKF5ConfigCore
 	libKF5ConfigGui
 	libKF5CoreAddons
@@ -106,7 +114,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libKF5Plasma
 	libKF5WaylandClient
 	libKF5WindowSystem
-	
+
 	libKF6ConfigCore
 	libKF6ConfigGui
 	libKF6CoreAddons
@@ -115,11 +123,11 @@ function( is_system_lib TARGET ISSYSLIB )
 	libKF6Plasma
 	libKF6WaylandClient
 	libKF6WindowSystem
-	
+
 	libinput
     )
 
-    set(_qt_libs	
+    set(_qt_libs
 	libQt5Core
 	libQt5DBus
 	libQt5Gui
@@ -134,23 +142,42 @@ function( is_system_lib TARGET ISSYSLIB )
 	libQt6WaylandClient
 	libQt6WaylandCompositor
     )
+
+    set(_gtk_libs
+	libatk-bridge
+	libepoxy
+	libgtk
+	libgdk
+	libgdk_pixbuf
+	libgmodule
+	libpangocairo
+	libpango
+	libpangoft2
+	libharfbuzz
+	libatk
+	libatk
+    )
     
     set(_gnome_libs
-	libcairo
 	libdrm
 	libdrm2
+	libgdk
 	libgio
 	libglib
+	liggmodule
 	libgobject
+	libgtk
 	libpango
 	libwayland-client
 	libwayland-cursor
 	libwayland-egl
 	libwayland-server
 	libxkbcommon
+	${_gtk_libs}
     )
 
     set(_x11_libs
+	libICE
 	libX11
 	libX11-xcb
 	libXau
@@ -179,7 +206,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	libXv
 	libXxf86dga
 	libXxf86vm
-	
+
 	libxcb-shape
 	libxcb-xfixes
 	libxcb-render
@@ -213,7 +240,7 @@ function( is_system_lib TARGET ISSYSLIB )
 	    tk
 	)
     endif()
-    
+
     #
     # List of system libraries that should *NOT* be distributed
     #
@@ -246,15 +273,16 @@ function( is_system_lib TARGET ISSYSLIB )
 	libz
 	vulkan-          # On Windows, we don't distribute vulkan-1.dll
 	${_audio_libs}
+	${_cairo_libs}
 	${_kde_libs}
 	${_gnome_libs}
 	${_qt_libs}
 	${_x11_libs}
 	${_opengl_libs}
 	${_macos_libs}
-s    )
+    )
 
-    
+
     set( ${ISSYSLIB} 0 PARENT_SCOPE)
     foreach( lib ${_acceptedlibs} )
 	if ("${TARGET}" MATCHES "${lib}")
@@ -310,6 +338,7 @@ function( get_runtime_dependencies TARGET )
     foreach (exe ${TARGET})
 	if ( EXISTS ${exe} )
 	    message( STATUS "PARSING ${exe} for DSOs...." )
+	    execute_process(COMMAND chmod a+x "${exe}")
 	    execute_process(COMMAND ldd ${exe} OUTPUT_VARIABLE ldd_out)
 	    string (REPLACE "\n" ";" ldd_out_lines ${ldd_out})
 	    foreach (line ${ldd_out_lines})

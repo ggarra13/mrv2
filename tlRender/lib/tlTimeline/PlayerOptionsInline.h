@@ -9,7 +9,9 @@ namespace tl
         inline bool
         PlayerCacheOptions::operator==(const PlayerCacheOptions& other) const
         {
-            return readAhead == other.readAhead &&
+            return videoGB == other.videoGB &&
+                   audioGB == other.audioGB &&
+                   readAhead == other.readAhead &&
                    readBehind == other.readBehind;
         }
 

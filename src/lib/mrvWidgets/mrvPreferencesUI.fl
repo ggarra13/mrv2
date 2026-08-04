@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0500
+version 1.050020
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -33,6 +33,9 @@ decl {\#include "mrvOS/mrvEnv.h"} {public global
 }
 
 decl {\#include "mrvCore/mrvFonts.h"} {public global
+}
+
+decl {\#include "mrvCore/mrvHome.h"} {public global
 }
 
 decl {\#include "mrvOS/mrvI8N.h"} {public global
@@ -93,8 +96,8 @@ class PreferencesUI {open
       label Preferences
       user_data this user_data_type {PreferencesUI*}
       callback {o->hide();} open
-      xywh {0 0 847 449} type Double resizable
-      code0 {main = m;} non_modal size_range {847 449 0 0} visible
+      xywh {0 0 847 449} type Double hide resizable
+      code3 {main = m;} non_modal size_range {847 449 0 0}
     } {
       Fl_Group {} {open
         xywh {0 0 847 449} box FLAT_BOX
@@ -108,7 +111,7 @@ class PreferencesUI {open
           } {
             Fl_Group {} {
               label {User Interface}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label {Window Behavior}
@@ -426,16 +429,16 @@ If you try to open several mrv2s with different images, all these images will be
                   Fl_Choice uiFontMenus {
                     label Menus open
                     tooltip {Sets the font to use in menus.} xywh {485 164 160 25} down_box BORDER_BOX
-                    code0 {const auto& fonts = mrv::fonts::list();}
-                    code1 {for (const auto& font : fonts)}
-                    code2 {o->add(font.c_str());}
+                    code3 {const auto& fonts = mrv::fonts::list();
+for (const auto& font : fonts)
+o->add(font.c_str());}
                   } {}
                   Fl_Choice uiFontPanels {
                     label Panels open
                     tooltip {Sets the font to use in panels. (Not yet working)} xywh {485 214 160 25} down_box BORDER_BOX
-                    code0 {const auto& fonts = mrv::fonts::list();}
-                    code1 {for (const auto& font : fonts)}
-                    code2 {o->add(font.c_str());}
+                    code3 {const auto& fonts = mrv::fonts::list();
+for (const auto& font : fonts)
+o->add(font.c_str());}
                   } {}
                 }
               }
@@ -451,8 +454,8 @@ If you try to open several mrv2s with different images, all these images will be
                 Fl_Choice uiLanguage {
                   label Language
                   xywh {508 78 160 25} down_box BORDER_BOX
-                  code0 {auto languages = mrv::getLanguages(); std::string entry;}
-                  code1 {for (const auto& language : languages) { entry = _(language.c_str()); entry += " (" + language + ")"; o->add(entry.c_str()); }}
+                  code3 {auto languages = mrv::getLanguages(); std::string entry;
+for (const auto& language : languages) { entry = _(language.c_str()); entry += " (" + language + ")"; o->add(entry.c_str()); }}
                 } {}
                 Fl_Choice {} {
                   label Scheme
@@ -831,7 +834,7 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                 Fl_Choice uiPrefsPanelThumbnails {
                   label Panels open
                   tooltip {How to display timeline thumbnails in panels.} xywh {398 97 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
-                  code0 {o->value(2);}
+                  code3 {o->value(2);}
                 } {
                   MenuItem {} {
                     label None
@@ -849,7 +852,7 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                 Fl_Choice uiPrefsEditThumbnails {
                   label {Edit Viewport} open
                   tooltip {How to display timeline thumbnails by default.} xywh {398 140 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
-                  code0 {o->value(1);}
+                  code3 {o->value(1);}
                 } {
                   MenuItem {} {
                     label None
@@ -892,7 +895,7 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                   Fl_Choice uiPrefsTimelineDisplay {
                     label Display
                     tooltip {How to display timeline by default.} xywh {397 145 405 27} box THIN_DOWN_BOX down_box BORDER_BOX
-                    code0 {o->value(0);}
+                    code3 {o->value(0);}
                   } {
                     MenuItem {} {
                       label Frames
@@ -1171,7 +1174,7 @@ const char* t = o->text(idx);
 float g = (float) atof( t );
 v->uiPrefsFPS->value( g );}
                         xywh {601 186 75 25}
-                        code0 {o->disable_label();}
+                        code3 {o->disable_label();}
                         class {mrv::PopupMenu}
                       } {
                         MenuItem {} {
@@ -1288,7 +1291,7 @@ v->uiPrefsFPS->value( g );}
                   Fl_Choice uiPrefsEditView {
                     label {Default View}
                     tooltip {How to display timeline by default.} xywh {560 127 210 26} box THIN_DOWN_BOX down_box BORDER_BOX
-                    code0 {o->value(0);}
+                    code3 {o->value(0);}
                   } {
                     MenuItem {} {
                       label {Video Only}
@@ -1565,7 +1568,7 @@ v->uiOCIO_Display_View->do_callback();}
                 Fl_Input uiPrefsVersionRegex {
                   label {Version Regex}
                   tooltip {Regular Expression used to match clip versions.  Must group three things (prefix, number and suffix). If left on its default value (_v), it will automatically be created a regular expression to match versions defined with _v in the name of the file, directory or both. For example: gizmo_v001.0001.exr} xywh {443 165 345 30} color 20 textcolor 56
-                  code0 {o->value( "_v" );}
+                  code3 {o->value( "_v" );}
                 }
                 Fl_Spinner uiPrefsMaxImagesApart {
                   label {Maximum Images Apart}
@@ -1582,7 +1585,7 @@ v->uiOCIO_Display_View->do_callback();}
                 Fl_Menu_Button uiMissingFrameType {
                   label {Black Frame}
                   xywh {545 73 247 34}
-                  code0 {o->enable_glyph();}
+                  code3 {o->enable_glyph();}
                   class {mrv::PopupMenu}
                 } {
                   MenuItem {} {
@@ -1606,7 +1609,7 @@ v->uiOCIO_Display_View->do_callback();}
             } {
               Fl_Browser PathMappings {
                 tooltip {Use Up and Down arrows to move the selected line up and down.  Double click to change item.  Click on an empty area to unselect.} xywh {329 93 476 282} type Hold color 20 textcolor 56
-                code0 {mrv::fill_path_mappings(o);}
+                code3 {mrv::fill_path_mappings(o);}
                 class {mrv::PathMappingBrowser}
               }
               Fl_Button {} {
@@ -1892,15 +1895,15 @@ v->uiOCIO_Display_View->do_callback();}
                     user_data this user_data_type {PreferencesUI*}
                     callback {fill_audio_output_devices(v);} open
                     tooltip {Audio API to use for platforms that support multiple APIs (Linux only)} xywh {388 225 356 22} down_box BORDER_BOX align 132 when 5 textcolor 32
-                    code0 {fill_audio_apis(o);}
-                    code1 {o->value(0);}
+                    code3 {fill_audio_apis(o);
+o->value(0);}
                     class {mrv::Choice}
                   } {}
                   Fl_Choice uiPrefsAudioOutputDevice {
                     label {Output Device} open
                     tooltip {Output Device to use for audio playback.} xywh {388 298 356 24} down_box BORDER_BOX align 132 textcolor 32
-                    code0 {fill_audio_output_devices(this);}
-                    code1 {o->value(0);}
+                    code3 {fill_audio_output_devices(this);
+o->value(0);}
                     class {mrv::Choice}
                   } {}
                 }
@@ -1953,7 +1956,7 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
                 Fl_Choice uiPrefsVoiceOverMicrophone {
                   label Microphone open
                   xywh {478 222 310 32} down_box BORDER_BOX
-                  code0 {fill_audio_input_devices(this);}
+                  code3 {fill_audio_input_devices(this);}
                 } {}
                 Fl_Value_Slider uiPrefsVoiceOverVolume {
                   label Volume
@@ -1981,6 +1984,115 @@ uiPrefs->uiPrefsVoiceOverPath->value( r.c_str() );}
                     label Yes
                     xywh {40 40 100 20}
                   }
+                }
+              }
+            }
+            Fl_Group {} {
+              label WebRTC open
+              tooltip {WebRTC settings} xywh {298 51 549 340} box EMBOSSED_BOX align 5
+            } {
+              Fl_Group {} {open
+                xywh {318 69 508 314}
+              } {
+                Fl_Choice {} {
+                  label {WebRTC Presets}
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {int value = o->value();
+if (value == 0)
+{
+    v->uiPrefsWebRTCSignalingServer->value("wss://sync.filmaura.cloud/sync");
+    v->uiPrefsWebRTCStunServer->value("stun:stun.l.google.com:19302");
+    v->uiPrefsWebRTCTurnServer->value("turn://turn.filmaura.cloud:3478");
+}
+else if (value == 1)
+{
+    v->uiPrefsWebRTCSignalingServer->value("wss://sync.filmaura.cloud/sync");
+    v->uiPrefsWebRTCStunServer->value("");
+}
+else if (value == 2)
+{
+    v->uiPrefsWebRTCSignalingServer->value("");
+    v->uiPrefsWebRTCStunServer->value("");    
+    v->uiPrefsWebRTCTurnServer->value("");
+}} open
+                  tooltip {WebRTC presets} xywh {545 79 180 26} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label Internet
+                    xywh {70 70 100 20}
+                  }
+                  MenuItem {} {
+                    label LAN
+                    xywh {60 60 100 20}
+                  }
+                  MenuItem {} {
+                    label Custom selected
+                    xywh {70 70 100 20}
+                  }
+                }
+                Fl_Input uiPrefsWebRTCSignalingServer {
+                  label Signaling
+                  tooltip {WebRTC signaling server to sync the connections.} xywh {438 118 370 32} color 20 textcolor 56
+                }
+                Fl_Input uiPrefsWebRTCStunServer {
+                  label {Stun Server}
+                  tooltip {WebRTC STUN Server.  Leave blank to use Google's.} xywh {438 154 370 32} color 20 textcolor 56
+                }
+                Fl_Input uiPrefsWebRTCTurnServer {
+                  label {Turn Server}
+                  tooltip {WebRTC STUN Server.  Leave blank to use Google's.} xywh {438 189 370 32} color 20 textcolor 56
+                }
+                Fl_Input uiPrefsWebRTCStudio {
+                  label Studio
+                  tooltip {Studio name to prefix to all Room connections.  Use some unique name.} xywh {438 240 370 32} color 20 textcolor 56
+                }
+                Fl_Check_Button uiPrefsWebRTCCleanDirectory {
+                  label {Clean directory at Start up}
+                  tooltip {Clean the WebRTC cache directory on start of the viewer.} xywh {545 289 25 30} down_box DOWN_BOX value 1 align 4
+                }
+                Fl_Choice uiPrefsWebRTCCacheSetting {
+                  label {WebRTC Cache}
+                  user_data this user_data_type {PreferencesUI*}
+                  callback {int value = o->value();
+std::string path;
+if (value == 0)
+{
+   path = mrv::homepath(); 
+}
+else if (value == 1)
+{
+   path = mrv::tmppath();
+}
+else 
+{
+   return;
+}
+
+path += "/.cache/mrv2/remote";
+v->uiPrefsWebRTCCacheDirectory->value(path.c_str());} open
+                  tooltip {Cache Directory presets.} xywh {545 320 180 26} down_box BORDER_BOX align 132 textcolor 32
+                  class {mrv::Choice}
+                } {
+                  MenuItem {} {
+                    label {Home Directory}
+                    xywh {50 50 100 20}
+                  }
+                  MenuItem {} {
+                    label {Temp Directory}
+                    xywh {50 50 100 20}
+                  }
+                  MenuItem {} {
+                    label Custom
+                    xywh {60 60 100 20}
+                  }
+                }
+                Fl_Input uiPrefsWebRTCCacheDirectory {
+                  label {Cache Directory}
+                  tooltip {Directory where WebRTC downloads will reside.} xywh {438 357 370 26} color 20 textcolor 56
+                  code3 {std::string path = mrv::homepath() + "/.cache/mrv2/remote";
+std::string oldpath = o->value();
+if (oldpath.empty()) o->value(path.c_str());}
                 }
               }
             }
@@ -2126,8 +2238,8 @@ for (Fl_Tree_Item* item = tree->first(); item; item = tree->next(item), ++idx)
       }
 }}
             xywh {9 24 270 423} color 20 when 4
-            code0 {fill_tree(o);}
-            code1 {o->showroot(false);}
+            code3 {fill_tree(o);
+o->showroot(false);}
             class {mrv::PreferencesTree}
           }
         }
@@ -2167,10 +2279,10 @@ o->add( _("Video") );
 o->add( _("Audio") );
 o->add( _("Voice Annotations") );
 o->add( _("ComfyUI") );
+o->add(  "WebRTC" );
 o->add( _("Errors") );
 o->add( _("Behavior") );
-o->select( item );} {selected
-    }
+o->select( item );} {}
   }
   Function {fill_audio_apis(Fl_Choice* o)} {} {
     code {o->clear();

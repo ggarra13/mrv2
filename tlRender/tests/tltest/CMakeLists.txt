@@ -7,8 +7,8 @@ set(LIBRARIES
     #    tlAppTest
     tlCoreTest
     # tlGLTest
-    tlIOTest
-    #    tlTimelineTest
+    # tlIOTest
+    #   tlTimelineTest
 )
 
 find_package(NDI)

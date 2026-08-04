@@ -15,7 +15,7 @@ namespace tl
     namespace timeline_gl
     {
         void Render::drawVideo(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoFrame,
             const std::vector<math::Box2i>& boxes,
             const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions,
@@ -24,7 +24,7 @@ namespace tl
         {
             //! \todo Render the background only if there is valid video data
             //! and a valid layer?
-            if (!videoData.empty() && !videoData.front().layers.empty())
+            if (!videoFrame.empty() && !videoFrame.front().layers.empty())
             {
                 _drawBackground(boxes, backgroundOptions);
             }
@@ -32,63 +32,63 @@ namespace tl
             {
             case timeline::CompareMode::A:
                 _drawVideoA(
-                    videoData, boxes, imageOptions, displayOptions,
+                    videoFrame, boxes, imageOptions, displayOptions,
                     compareOptions);
                 break;
             case timeline::CompareMode::B:
                 _drawVideoB(
-                    videoData, boxes, imageOptions, displayOptions,
+                    videoFrame, boxes, imageOptions, displayOptions,
                     compareOptions);
                 break;
             case timeline::CompareMode::Wipe:
                 _drawVideoWipe(
-                    videoData, boxes, imageOptions, displayOptions,
+                    videoFrame, boxes, imageOptions, displayOptions,
                     compareOptions);
                 break;
             case timeline::CompareMode::Overlay:
                 _drawVideoOverlay(
-                    videoData, boxes, imageOptions, displayOptions,
+                    videoFrame, boxes, imageOptions, displayOptions,
                     compareOptions);
                 break;
             case timeline::CompareMode::Difference:
-                if (videoData.size() > 1)
+                if (videoFrame.size() > 1)
                 {
                     _drawVideoDifference(
-                        videoData, boxes, imageOptions, displayOptions,
+                        videoFrame, boxes, imageOptions, displayOptions,
                         compareOptions);
                 }
                 else
                 {
                     _drawVideoA(
-                        videoData, boxes, imageOptions, displayOptions,
+                        videoFrame, boxes, imageOptions, displayOptions,
                         compareOptions);
                 }
                 break;
             case timeline::CompareMode::Multiply:
-                if (videoData.size() > 1)
+                if (videoFrame.size() > 1)
                 {
                     _drawVideoMultiply(
-                        videoData, boxes, imageOptions, displayOptions,
+                        videoFrame, boxes, imageOptions, displayOptions,
                         compareOptions);
                 }
                 else
                 {
                     _drawVideoA(
-                        videoData, boxes, imageOptions, displayOptions,
+                        videoFrame, boxes, imageOptions, displayOptions,
                         compareOptions);
                 }
                 break;
             case timeline::CompareMode::Add:
-                if (videoData.size() > 1)
+                if (videoFrame.size() > 1)
                 {
                     _drawVideoAdd(
-                        videoData, boxes, imageOptions, displayOptions,
+                        videoFrame, boxes, imageOptions, displayOptions,
                         compareOptions);
                 }
                 else
                 {
                     _drawVideoA(
-                        videoData, boxes, imageOptions, displayOptions,
+                        videoFrame, boxes, imageOptions, displayOptions,
                         compareOptions);
                 }
                 break;
@@ -96,7 +96,7 @@ namespace tl
             case timeline::CompareMode::Vertical:
             case timeline::CompareMode::Tile:
                 _drawVideoTile(
-                    videoData, boxes, imageOptions, displayOptions,
+                    videoFrame, boxes, imageOptions, displayOptions,
                     compareOptions);
                 break;
             default:
@@ -156,7 +156,7 @@ namespace tl
         }
 
         void Render::_drawVideoA(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoFrame,
             const std::vector<math::Box2i>& boxes,
             const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions,
@@ -164,10 +164,10 @@ namespace tl
         {
             TLRENDER_P();
 
-            if (!videoData.empty() && !boxes.empty())
+            if (!videoFrame.empty() && !boxes.empty())
             {
                 _drawVideo(
-                    videoData[0], boxes[0],
+                    videoFrame[0], boxes[0],
                     !imageOptions.empty()
                         ? std::make_shared<timeline::ImageOptions>(
                               imageOptions[0])
@@ -178,16 +178,16 @@ namespace tl
         }
 
         void Render::_drawVideoB(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoFrame,
             const std::vector<math::Box2i>& boxes,
             const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions,
             const timeline::CompareOptions& compareOptions)
         {
-            if (videoData.size() > 1 && boxes.size() > 1)
+            if (videoFrame.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
-                    videoData[1], boxes[1],
+                    videoFrame[1], boxes[1],
                     imageOptions.size() > 1
                         ? std::make_shared<timeline::ImageOptions>(
                               imageOptions[1])
@@ -198,7 +198,7 @@ namespace tl
         }
 
         void Render::_drawVideoWipe(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoFrame,
             const std::vector<math::Box2i>& boxes,
             const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions,
@@ -261,10 +261,10 @@ namespace tl
             }
             glStencilFunc(GL_EQUAL, 1, 0xFF);
             glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-            if (!videoData.empty() && !boxes.empty())
+            if (!videoFrame.empty() && !boxes.empty())
             {
                 _drawVideo(
-                    videoData[0], boxes[0],
+                    videoFrame[0], boxes[0],
                     !imageOptions.empty()
                         ? std::make_shared<timeline::ImageOptions>(
                               imageOptions[0])
@@ -307,10 +307,10 @@ namespace tl
             }
             glStencilFunc(GL_EQUAL, 1, 0xFF);
             glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-            if (videoData.size() > 1 && boxes.size() > 1)
+            if (videoFrame.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
-                    videoData[1], boxes[1],
+                    videoFrame[1], boxes[1],
                     imageOptions.size() > 1
                         ? std::make_shared<timeline::ImageOptions>(
                               imageOptions[1])
@@ -321,7 +321,7 @@ namespace tl
         }
 
         void Render::_drawVideoOverlay(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoFrame,
             const std::vector<math::Box2i>& boxes,
             const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions,
@@ -329,10 +329,10 @@ namespace tl
         {
             TLRENDER_P();
 
-            if (videoData.size() > 1 && boxes.size() > 1)
+            if (videoFrame.size() > 1 && boxes.size() > 1)
             {
                 _drawVideo(
-                    videoData[1], boxes[1],
+                    videoFrame[1], boxes[1],
                     imageOptions.size() > 1
                         ? std::make_shared<timeline::ImageOptions>(
                               imageOptions[1])
@@ -340,7 +340,7 @@ namespace tl
                     displayOptions.size() > 1 ? displayOptions[1]
                                               : timeline::DisplayOptions());
             }
-            if (!videoData.empty() && !boxes.empty())
+            if (!videoFrame.empty() && !boxes.empty())
             {
                 const math::Size2i offscreenBufferSize(
                     boxes[0].w(), boxes[0].h());
@@ -379,7 +379,7 @@ namespace tl
                             -1.F, 1.F));
 
                     _drawVideo(
-                        videoData[0],
+                        videoFrame[0],
                         math::Box2i(
                             0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                         !imageOptions.empty()
@@ -414,7 +414,7 @@ namespace tl
                     glBindTexture(
                         GL_TEXTURE_2D, p.buffers["overlay"]->getColorID());
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(
                             geom::box(boxes[0], true),
@@ -431,14 +431,14 @@ namespace tl
         }
 
         void Render::_drawVideoDifference(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoFrame,
             const std::vector<math::Box2i>& boxes,
             const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions,
             const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
-            if (!videoData.empty() && !boxes.empty())
+            if (!videoFrame.empty() && !boxes.empty())
             {
                 const math::Size2i offscreenBufferSize(
                     boxes[0].w(), boxes[0].h());
@@ -478,7 +478,7 @@ namespace tl
                             -1.F, 1.F));
 
                     _drawVideo(
-                        videoData[0],
+                        videoFrame[0],
                         math::Box2i(
                             0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                         !imageOptions.empty()
@@ -493,7 +493,7 @@ namespace tl
                         "transform.mvp", p.transform);
                 }
 
-                if (videoData.size() > 1)
+                if (videoFrame.size() > 1)
                 {
                     offscreenBufferOptions = gl::OffscreenBufferOptions();
                     offscreenBufferOptions.colorType =
@@ -532,7 +532,7 @@ namespace tl
                                 -1.F, 1.F));
 
                         _drawVideo(
-                            videoData[1],
+                            videoFrame[1],
                             math::Box2i(
                                 0, 0, offscreenBufferSize.w,
                                 offscreenBufferSize.h),
@@ -553,7 +553,7 @@ namespace tl
                 if (p.buffers["difference0"] && p.buffers["difference1"])
                 {
                     glDisable(GL_BLEND);
-                              
+
                     glViewport(
                         p.viewport.x(),
                         p.renderSize.h - p.viewport.h() - p.viewport.y(),
@@ -571,7 +571,7 @@ namespace tl
                     glBindTexture(
                         GL_TEXTURE_2D, p.buffers["difference1"]->getColorID());
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(
                             geom::box(boxes[0], true),
@@ -583,21 +583,21 @@ namespace tl
                         p.vaos["video"]->draw(
                             GL_TRIANGLES, 0, p.vbos["video"]->getSize());
                     }
-                    
+
                     glEnable(GL_BLEND);
                 }
             }
         }
 
         void Render::_drawVideoMultiply(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoFrame,
             const std::vector<math::Box2i>& boxes,
             const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions,
             const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
-            if (!videoData.empty() && !boxes.empty())
+            if (!videoFrame.empty() && !boxes.empty())
             {
                 const math::Size2i offscreenBufferSize(
                     boxes[0].w(), boxes[0].h());
@@ -637,7 +637,7 @@ namespace tl
                             -1.F, 1.F));
 
                     _drawVideo(
-                        videoData[0],
+                        videoFrame[0],
                         math::Box2i(
                             0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                         !imageOptions.empty()
@@ -652,7 +652,7 @@ namespace tl
                         "transform.mvp", p.transform);
                 }
 
-                if (videoData.size() > 1)
+                if (videoFrame.size() > 1)
                 {
                     offscreenBufferOptions = gl::OffscreenBufferOptions();
                     offscreenBufferOptions.colorType =
@@ -691,7 +691,7 @@ namespace tl
                                 -1.F, 1.F));
 
                         _drawVideo(
-                            videoData[1],
+                            videoFrame[1],
                             math::Box2i(
                                 0, 0, offscreenBufferSize.w,
                                 offscreenBufferSize.h),
@@ -730,7 +730,7 @@ namespace tl
                     glBindTexture(
                         GL_TEXTURE_2D, p.buffers["multiply1"]->getColorID());
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(
                             geom::box(boxes[0], true),
@@ -742,21 +742,21 @@ namespace tl
                         p.vaos["video"]->draw(
                             GL_TRIANGLES, 0, p.vbos["video"]->getSize());
                     }
-                    
+
                     glEnable(GL_BLEND);
                 }
             }
         }
-        
+
         void Render::_drawVideoAdd(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoFrame,
             const std::vector<math::Box2i>& boxes,
             const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions,
             const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
-            if (!videoData.empty() && !boxes.empty())
+            if (!videoFrame.empty() && !boxes.empty())
             {
                 const math::Size2i offscreenBufferSize(
                     boxes[0].w(), boxes[0].h());
@@ -796,7 +796,7 @@ namespace tl
                             -1.F, 1.F));
 
                     _drawVideo(
-                        videoData[0],
+                        videoFrame[0],
                         math::Box2i(
                             0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
                         !imageOptions.empty()
@@ -811,7 +811,7 @@ namespace tl
                         "transform.mvp", p.transform);
                 }
 
-                if (videoData.size() > 1)
+                if (videoFrame.size() > 1)
                 {
                     offscreenBufferOptions = gl::OffscreenBufferOptions();
                     offscreenBufferOptions.colorType =
@@ -850,7 +850,7 @@ namespace tl
                                 -1.F, 1.F));
 
                         _drawVideo(
-                            videoData[1],
+                            videoFrame[1],
                             math::Box2i(
                                 0, 0, offscreenBufferSize.w,
                                 offscreenBufferSize.h),
@@ -889,7 +889,7 @@ namespace tl
                     glBindTexture(
                         GL_TEXTURE_2D, p.buffers["add1"]->getColorID());
 
-                    if (p.vbos["video"])
+                    if (p.vbos["video"] && !boxes.empty())
                     {
                         p.vbos["video"]->copy(convert(
                             geom::box(boxes[0], true),
@@ -901,23 +901,23 @@ namespace tl
                         p.vaos["video"]->draw(
                             GL_TRIANGLES, 0, p.vbos["video"]->getSize());
                     }
-                    
+
                     glEnable(GL_BLEND);
                 }
             }
         }
 
         void Render::_drawVideoTile(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoFrame,
             const std::vector<math::Box2i>& boxes,
             const std::vector<timeline::ImageOptions>& imageOptions,
             const std::vector<timeline::DisplayOptions>& displayOptions,
             const timeline::CompareOptions& compareOptions)
         {
-            for (size_t i = 0; i < videoData.size() && i < boxes.size(); ++i)
+            for (size_t i = 0; i < videoFrame.size() && i < boxes.size(); ++i)
             {
                 _drawVideo(
-                    videoData[i], boxes[i],
+                    videoFrame[i], boxes[i],
                     i < imageOptions.size()
                         ? std::make_shared<timeline::ImageOptions>(
                               imageOptions[i])
@@ -960,7 +960,7 @@ namespace tl
         } // namespace
 
         void Render::_drawVideo(
-            const timeline::VideoData& videoData, const math::Box2i& box,
+            const timeline::VideoFrame& videoFrame, const math::Box2i& box,
             const std::shared_ptr<timeline::ImageOptions>& imageOptions,
             const timeline::DisplayOptions& displayOptions)
         {
@@ -976,6 +976,32 @@ namespace tl
             p.shaders["image"]->setUniform("transform.mvp", transform);
 
             const math::Size2i& offscreenBufferSize = box.getSize();
+
+            // The box a layer occupies within the offscreen buffer. Without
+            // OTIO spatial coordinates a layer fills the buffer as before;
+            // with them it keeps its place in the timeline canvas, scaled to
+            // the buffer.
+            const auto layerBox = [&videoFrame, &offscreenBufferSize](
+                const std::optional<math::Box2f>& bounds)
+            {
+                math::Box2i out(math::Vector2i(), offscreenBufferSize);
+                if (bounds.has_value() && videoFrame.canvasSize.isValid())
+                {
+                    const float sx = offscreenBufferSize.w /
+                        static_cast<float>(videoFrame.canvasSize.w);
+                    const float sy = offscreenBufferSize.h /
+                        static_cast<float>(videoFrame.canvasSize.h);
+                    out = math::Box2i(
+                        math::Vector2i(
+                            std::lround(bounds.value().min.x * sx),
+                            std::lround(bounds.value().min.y * sy)),
+                        math::Vector2i(
+                            std::lround(bounds.value().max.x * sx),
+                            std::lround(bounds.value().max.y * sy)));
+                }
+                return out;
+            };
+
             gl::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
             offscreenBufferOptions.colorFilters = displayOptions.imageFilters;
@@ -997,7 +1023,7 @@ namespace tl
                 glClear(GL_COLOR_BUFFER_BIT);
 
                 bool clearRenderPass = true;
-                for (const auto& layer : videoData.layers)
+                for (const auto& layer : videoFrame.layers)
                 {
                     switch (layer.transition)
                     {
@@ -1040,11 +1066,10 @@ namespace tl
                                     timeline::AlphaBlend::Straight;
                                 drawImage(
                                     layer.image,
-                                    image::getBox(
-                                        layer.image->getAspect(),
-                                        math::Box2i(
-                                            0, 0, offscreenBufferSize.w,
-                                            offscreenBufferSize.h)),
+                                    getBox(
+                                        layerBox(layer.bounds),
+                                        layer.image->getInfo(),
+                                        displayOptions.aspect),
                                     image::Color4f(1.F, 1.F, 1.F, v),
                                     dissolveImageOptions);
                             }
@@ -1065,11 +1090,10 @@ namespace tl
                                     timeline::AlphaBlend::Straight;
                                 drawImage(
                                     layer.imageB,
-                                    image::getBox(
-                                        layer.imageB->getAspect(),
-                                        math::Box2i(
-                                            0, 0, offscreenBufferSize.w,
-                                            offscreenBufferSize.h)),
+                                    getBox(
+                                        layerBox(layer.boundsB),
+                                        layer.imageB->getInfo(),
+                                        displayOptions.aspect),
                                     image::Color4f(1.F, 1.F, 1.F, v),
                                     dissolveImageOptions);
                             }
@@ -1082,7 +1106,7 @@ namespace tl
                                 else
                                 {
                                     glEnable(GL_BLEND);
-                                    
+
                                     glBlendFuncSeparate(
                                         GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
                                         GL_ONE);
@@ -1156,11 +1180,10 @@ namespace tl
                         {
                             drawImage(
                                 layer.image,
-                                image::getBox(
-                                    layer.image->getAspect(),
-                                    math::Box2i(
-                                        0, 0, offscreenBufferSize.w,
-                                        offscreenBufferSize.h)),
+                                getBox(
+                                    layerBox(layer.bounds),
+                                    layer.image->getInfo(),
+                                    displayOptions.aspect),
                                 image::Color4f(
                                     1.F, 1.F, 1.F, 1.F - layer.transitionValue),
                                 imageOptions.get() ? *imageOptions
@@ -1170,11 +1193,10 @@ namespace tl
                         {
                             drawImage(
                                 layer.imageB,
-                                image::getBox(
-                                    layer.imageB->getAspect(),
-                                    math::Box2i(
-                                        0, 0, offscreenBufferSize.w,
-                                        offscreenBufferSize.h)),
+                                getBox(
+                                    layerBox(layer.boundsB),
+                                    layer.imageB->getInfo(),
+                                    displayOptions.aspect),
                                 image::Color4f(
                                     1.F, 1.F, 1.F, layer.transitionValue),
                                 imageOptions.get() ? *imageOptions
@@ -1187,11 +1209,10 @@ namespace tl
                         {
                             drawImage(
                                 layer.image,
-                                image::getBox(
-                                    layer.image->getAspect(),
-                                    math::Box2i(
-                                        0, 0, offscreenBufferSize.w,
-                                        offscreenBufferSize.h)),
+                                getBox(
+                                    layerBox(layer.bounds),
+                                    layer.image->getInfo(),
+                                    displayOptions.aspect),
                                 image::Color4f(1.F, 1.F, 1.F),
                                 imageOptions.get() ? *imageOptions
                                                    : layer.imageOptions);

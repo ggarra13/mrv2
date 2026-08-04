@@ -70,7 +70,7 @@ namespace tl
             double streamTime, RtAudioStreamStatus status, void* userData)
         {
             auto p = reinterpret_cast<Player::Private*>(userData);
-    
+
             // Get mutex protected values.
             Playback playback = Playback::Stop;
             otime::RationalTime playbackStartTime = time::invalidTime;
@@ -214,34 +214,33 @@ namespace tl
                 std::cerr << "TIM frameOffset: " << frameOffset << std::endl;
                 std::cerr << "TIM frame:       " << frame   << std::endl;
 #endif
-                
+
                 while (audio::getSampleCount(thread.buffer) < outSamples)
                 {
 #if CHECK_AUDIO
                     std::cout << "\tseconds: " << seconds << std::endl;
                     std::cerr << "\tinOffsetSamples: " << inOffsetSamples  << std::endl;
 #endif
-                    AudioData audioData;
+                    AudioFrame audioFrame;
                     {
                         std::unique_lock<std::mutex> lock(p->audioMutex.mutex);
-                        const auto j =
-                            p->audioMutex.audioDataCache.find(seconds);
-                        if (j != p->audioMutex.audioDataCache.end())
+                        const auto j = p->audioMutex.cache.find(seconds);
+                        if (j != p->audioMutex.cache.end())
                         {
-                            audioData = j->second;
+                            audioFrame = j->second;
                         }
                     }
 
                     std::vector<float> volumeScale;
-                    volumeScale.reserve(audioData.layers.size());
+                    volumeScale.reserve(audioFrame.layers.size());
                     std::vector<std::shared_ptr<audio::Audio> > audios;
-                    std::vector<const uint8_t*> audioDataP;
+                    std::vector<const uint8_t*> audioFrameP;
                     const size_t dataByteOffset =
                         inOffsetSamples * inputInfo.getByteCount();
                     const auto sample =
                         seconds * inSampleRate + inOffsetSamples;
                     int audioIndex = 0;
-                    for (const auto& layer : audioData.layers)
+                    for (const auto& layer : audioFrame.layers)
                     {
                         float volumeMultiplier = 1.F;
                         if (layer.audio && layer.audio->getInfo() == inputInfo)
@@ -342,17 +341,17 @@ namespace tl
                                 audio = tmp;
                                 audios.push_back(audio);
                             }
-                            audioDataP.push_back(
+                            audioFrameP.push_back(
                                 audio->getData() + dataByteOffset);
                             volumeScale.push_back(volumeMultiplier);
                             ++audioIndex;
                         }
                     }
 
-                    if (audioDataP.empty())
+                    if (audioFrameP.empty())
                     {
                         volumeScale.push_back(0.F);
-                        audioDataP.push_back(thread.silence->getData());
+                        audioFrameP.push_back(thread.silence->getData());
                     }
 
                     size_t inSamples = std::min(
@@ -367,15 +366,15 @@ namespace tl
                         }
 
                         audio::reverse(
-                            const_cast<uint8_t**>(audioDataP.data()),
-                            audioDataP.size(), inSamples,
+                            const_cast<uint8_t**>(audioFrameP.data()),
+                            audioFrameP.size(), inSamples,
                             inputInfo.channelCount, inputInfo.dataType);
                     }
 
                     auto tmp = audio::Audio::create(inputInfo, inSamples);
                     tmp->zero();
                     audio::mix(
-                        audioDataP.data(), audioDataP.size(), tmp->getData(),
+                        audioFrameP.data(), audioFrameP.size(), tmp->getData(),
                         volume, volumeScale, inSamples, inputInfo.channelCount,
                         inputInfo.dataType);
 

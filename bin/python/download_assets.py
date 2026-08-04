@@ -16,7 +16,7 @@ download_assets v{VERSION}
 
 A program to download all betas or version assets from sourceforge.
 """
-            
+ 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=description)
@@ -52,8 +52,8 @@ headers = {
 
 
 KNOWN_SF_MIRRORS = [
-    "ufpr", "netix", "nav", "kent", "nchc", "jaist",
-    "versaweb", "cytranet", "iweb", "tenet"
+    "ufpr", "altushost-swe", "netix", "nav", "kent", "nchc", "jaist",
+    "versaweb", "cytranet", "iweb", "tenet",
 ]
 
 def resolve_mirror_url(file_url, mirror_name):
@@ -150,7 +150,7 @@ def download_with_best_mirror(file_url, output_path, filename):
             print(f"Mirror '{mirror}' failed: {e}, trying next...")
 
     if not downloaded:
-        print(f"✗ All mirrors failed for {filename}")
+        print(f"✗ ALL MIRRORS FAILED FOR: {filename}")
     
 def parse_sourceforge_page(html_content, base_url):
     """

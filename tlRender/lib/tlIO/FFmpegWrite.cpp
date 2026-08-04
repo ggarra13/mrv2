@@ -360,7 +360,7 @@ namespace tl
                     out = AVCOL_TRC_BT2020_10;
                 else if (s == "bt2020-12")
                     out = AVCOL_TRC_BT2020_12;
-                else if (s == "smpte2084" || s == "pq" || s == "bt2100") 
+                else if (s == "smpte2084" || s == "pq" || s == "bt2100")
                     out = AVCOL_TRC_SMPTE2084;
                 else if (s == "arib-std-b67" || s == "hlg")
                     out = AVCOL_TRC_ARIB_STD_B67;
@@ -683,7 +683,7 @@ namespace tl
 
             bool hasHDR = false;
             image::HDRData hdr;
-            
+
 
             // Audio
             AVCodecContext* avAudioCodecContext = nullptr;
@@ -1114,7 +1114,7 @@ namespace tl
                 {
                     workSize = 1024;
                 }
-                
+
                 p.avAudioFrame->nb_samples = workSize;
                 p.avAudioFrame->format = p.avAudioCodecContext->sample_fmt;
                 p.avAudioFrame->sample_rate = p.sampleRate;
@@ -1358,6 +1358,12 @@ namespace tl
                 //     throw std::runtime_error(string::Format("{0}: No pixel
                 //     formats available").arg(p.fileName));
                 // }
+
+                if ((videoInfo.size.w == 0 && videoInfo.size.h == 0) ||
+                    videoInfo.size.pixelAspectRatio == 0)
+                {
+                    throw std::runtime_error("Resolution to save is 0x0");
+                }
 
                 p.avCodecContext->codec_id = avCodec->id;
                 p.avCodecContext->codec_type = AVMEDIA_TYPE_VIDEO;
@@ -1957,7 +1963,7 @@ namespace tl
                     p.hdr = j.get<image::HDRData>();
                 }
             }
-                
+
             _encode(p.avCodecContext, p.avVideoStream, p.avFrame, p.avPacket);
         }
 
@@ -1973,7 +1979,7 @@ namespace tl
             const auto& info = audioIn->getInfo();
             if (!info.isValid())
                 return;
-            
+
 
             int r = 0;
             const auto timeRange = otime::TimeRange(
@@ -2029,7 +2035,7 @@ namespace tl
                 }
 
                 const size_t sampleCount = audio->getSampleCount();
-                
+
                 r = av_audio_fifo_write(
                     p.avAudioFifo,
                     reinterpret_cast<void**>(p.flatPointers.data()),
@@ -2071,7 +2077,7 @@ namespace tl
                     frameSize);
 
                 fifoSize = av_audio_fifo_size(p.avAudioFifo);
-                
+
                 if (r < 0)
                 {
                     throw std::runtime_error(
@@ -2135,11 +2141,11 @@ namespace tl
 
             }
         }
-        
+
         void Write::_attach_hdr_metadata(AVFrame *frame)
         {
             TLRENDER_P();
-            
+
             AVFrameSideData* sd = nullptr;
 
             // --- Mastering display metadata ---
@@ -2154,20 +2160,20 @@ namespace tl
 
                 const float rx = p.hdr.primaries[0].x;
                 const float ry = p.hdr.primaries[0].y;
-                
+
                 const float gx = p.hdr.primaries[1].x;
                 const float gy = p.hdr.primaries[1].y;
-                
+
                 const float bx = p.hdr.primaries[2].x;
                 const float by = p.hdr.primaries[2].y;
-                
+
                 const float wx = p.hdr.primaries[3].x;
                 const float wy = p.hdr.primaries[3].y;
 
                 // Convert to rationals
                 mdm->display_primaries[0][0] = av_d2q(rx, 100000); // Rx
                 mdm->display_primaries[0][1] = av_d2q(ry, 100000); // Ry
-                
+
                 mdm->display_primaries[1][0] = av_d2q(gx, 100000); // Gx
                 mdm->display_primaries[1][1] = av_d2q(gy, 100000); // Gy
 
@@ -2176,14 +2182,14 @@ namespace tl
 
                 mdm->white_point[0] = av_d2q(wx, 100000);
                 mdm->white_point[1] = av_d2q(wy, 100000);
-    
+
                 mdm->has_primaries = 1;
 
                 float min_lum = p.hdr.displayMasteringLuminance.getMin();
                 if (min_lum <= 0.F)
                     min_lum = 1.F;
                 float max_lum = p.hdr.displayMasteringLuminance.getMax();
-                
+
                 mdm->max_luminance = av_d2q(max_lum, 10000);
                 mdm->min_luminance = av_d2q(min_lum, 10000);
 
@@ -2202,7 +2208,7 @@ namespace tl
                 clm->MaxFALL = p.hdr.maxFALL;  // frame average light level
             }
         }
-    
+
         void Write::_encode(
             AVCodecContext* context, const AVStream* stream,
             AVFrame* frame, AVPacket* packet)
@@ -2226,7 +2232,7 @@ namespace tl
             while (r >= 0)
             {
                 r = avcodec_receive_packet(context, packet);
-                
+
                 if (r == AVERROR_EOF || r == AVERROR(EAGAIN))
                 {
                     return;

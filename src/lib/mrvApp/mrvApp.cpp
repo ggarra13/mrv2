@@ -10,6 +10,16 @@
 #endif
 
 
+#include "mrvNetwork/mrvDummyClient.h"
+#ifdef MRV2_NETWORK
+#    include "mrvNetwork/mrvCommandInterpreter.h"
+#    include "mrvNetwork/mrvClient.h"
+#    include "mrvNetwork/mrvComfyUIListener.h"
+#    include "mrvNetwork/mrvImageListener.h"
+#    include "mrvNetwork/mrvServer.h"
+#    include "mrvNetwork/mrvParseHost.h"
+#    include "mrvNetwork/mrvWebRTCClient.h"
+#endif
 
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
@@ -77,15 +87,6 @@ namespace py = pybind11;
 
 #include "mrvUI/mrvDesktop.h"
 
-#include "mrvNetwork/mrvDummyClient.h"
-#ifdef MRV2_NETWORK
-#    include "mrvNetwork/mrvCommandInterpreter.h"
-#    include "mrvNetwork/mrvClient.h"
-#    include "mrvNetwork/mrvComfyUIListener.h"
-#    include "mrvNetwork/mrvImageListener.h"
-#    include "mrvNetwork/mrvServer.h"
-#    include "mrvNetwork/mrvParseHost.h"
-#endif
 
 #if defined(TLRENDER_USD)
 #    include "mrvOptions/mrvUSD.h"
@@ -172,6 +173,8 @@ namespace mrv
         bool server = false;
         std::string client;
         unsigned port = 55150;
+
+        std::string webrtcRoom;
 #endif
 
         timeline::CompareOptions compareOptions;
@@ -516,6 +519,9 @@ namespace mrv
                     _("Port number for the server to listen to or for the "
                       "client to connect to."),
                     string::Format("{0}").arg(p.options.port)),
+                app::CmdLineValueOption<std::string>::create(
+                    p.options.webrtcRoom, {"-room"},
+                    _("Connect to a WebRTC room at <value>.")),
 #endif
 
                 app::CmdLineHeader::create({}, _("Miscellaneous:")),
@@ -738,6 +744,38 @@ namespace mrv
                 }
                 return;
             }
+        }
+#endif
+
+        //
+        // Show the UI if no python script was fed in (when Python is
+        // supported).
+        // We make sure the UI is visible when we feed a filename.
+        // This is needed to avoid an issue with Wayland not properly
+        // refreshing the play buttons.
+        //
+        bool showUI = true;
+
+#ifdef MRV2_PYBIND11
+        int stereo = 0;
+        ui->uiView->mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL |
+                         stereo);
+        ui->uiTimeline->mode(FL_RGB | FL_ALPHA | FL_DOUBLE);
+
+        if (app::soporta_python && !p.options.pythonScript.empty())
+        {
+            showUI = false;
+
+            ui->uiView->headless(true);
+            ui->uiTimeline->headless(true);
+        }
+        else
+        {
+            ui->uiView->headless(false);
+            ui->uiTimeline->headless(false);
+
+            ui->uiMain->show();
+            ui->uiMain->wait_for_expose();
         }
 #endif
 
@@ -980,25 +1018,8 @@ namespace mrv
         outputDisplay = new PythonOutput(0, 0, 400, 400);
 #endif
 
-        //
-        // Show the UI if no python script was fed in (when Python is supported).
-        // We make sure the UI is visible when we feed a filename.
-        // This is needed to avoid an issue with Wayland not properly refreshing the play buttons.
-        //
-        bool showUI = true;
-
-#ifdef MRV2_PYBIND11
-        if (app::soporta_python && !p.options.pythonScript.empty())
-        {
-            showUI = false;
-        }
-#endif
-
         if (showUI)
         {
-            ui->uiMain->show();
-            ui->uiMain->wait_for_expose();
-
             ui->uiView->take_focus();
 
             // Fix for always on top on Linux
@@ -1121,6 +1142,17 @@ namespace mrv
             store_port(p.options.port);
         }
 
+        if (!p.options.webrtcRoom.empty() &&
+            dynamic_cast<DummyClient*>(tcp) != nullptr)
+        {
+            std::string roomId = p.options.webrtcRoom;
+            p.settings->setValue("WebRTC/Room", roomId);
+            std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
+            if (studio.empty())
+                studio = ui->uiPrefs->uiPrefsWebRTCStudio->value();
+
+            tcp = new WebRTCClient(studio, roomId);
+        }
 #endif
 
         //
@@ -1222,12 +1254,8 @@ namespace mrv
 
                 try
                 {
-#ifdef VULKAN_BACKEND
-                    // \@bug: for Vulkan we must show the window so that
-                    //        the Fl_Vk_Context is created.
-                    ui->uiMain->show();
-                    ui->uiMain->wait_for_expose();
-#endif
+                    ui->uiView->render_offscreen();
+                    ui->uiTimeline->render_offscreen();
                     run_python_script(py_args);
                 }
                 catch (const std::exception& e)
@@ -1237,6 +1265,12 @@ namespace mrv
                     _exit = 1;
                     return;
                 }
+
+#ifdef VULKAN_BACKEND
+                ui->uiView->destroy();
+                ui->uiTimeline->destroy();
+#endif
+
                 delete ui;
                 ui = nullptr;
                 return;
@@ -1465,7 +1499,7 @@ namespace mrv
         TLRENDER_P();
 
         bool isLocked = tcp->isLocked();
-        
+
         tcp->lock();
         p.player->setPlayback(timeline::Playback::Stop);
 
@@ -1878,8 +1912,9 @@ namespace mrv
     App::open(const std::string& fileName, const std::string& audioFileName)
     {
         TLRENDER_P();
-            
+
         file::Path filePath(string::normalizePath(fileName));
+        file::Path audioFilePath(string::normalizePath(audioFileName));
 
         if (filePath.getExtension() == ".mrv2s")
         {
@@ -1910,18 +1945,9 @@ namespace mrv
         {
             auto item = std::make_shared<FilesModelItem>();
             item->path = path;
-            item->audioPath = file::Path(string::normalizePath(audioFileName));
+            item->audioPath = audioFilePath;
 
             p.filesModel->add(item);
-        }
-
-        if (ui->uiPrefs->SendMedia->value())
-        {
-            Message msg;
-            msg["command"] = "Open File";
-            msg["fileName"] = fileName;
-            msg["audioFileName"] = audioFileName;
-            tcp->pushMessage(msg);
         }
     }
 
@@ -2216,6 +2242,15 @@ namespace mrv
 
         auto out = timeline::Timeline::create(otioTimeline, _context, options);
 
+        if (ui->uiPrefs->SendMedia->value())
+        {
+            Message msg;
+            msg["command"] = "Open File";
+            msg["filePath"] = item->path;
+            msg["audioFilePath"] = item->audioPath;
+            tcp->pushMessage(msg);
+        }
+
 #ifdef MRV2_PYBIND11
         const std::string& path = item->path.get();
         const std::string& audioPath = item->audioPath.get();
@@ -2340,7 +2375,14 @@ namespace mrv
                             if (!file::isTemporaryEDL(item->path) &&
                                 !file::isTemporaryNDI(item->path))
                             {
-                                const std::string& file = item->path.get();
+                                std::string file = item->path.get();
+                                auto frames = item->path.getFrames();
+                                if (frames.has_value())
+                                {
+                                    const math::Int64Range& range = frames.value();
+                                    const bool listdir = true;
+                                    file = item->path.getFrame(range.getMin(), listdir);
+                                }
                                 p.settings->addRecentFile(file);
                             }
                         }

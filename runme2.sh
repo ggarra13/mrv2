@@ -14,35 +14,6 @@
 set +e
 
 . etc/build_dir.sh
-. etc/update_cacert.sh
-update_cacert
-
-rm -rf $BUILD_DIR/install/include/FL
-
-dir=$BUILD_DIR/deps/FLTK/src/FLTK-build/
-if [[ ! -d $dir ]]; then
-    echo "FLTK directory"
-    echo $dir
-    echo "does not exist. Please run:"
-    echo " $ runme.sh [sameflags]"
-    exit 1
-fi
-
-
-cd $dir
-
-#
-#  Rebuild latest FLTK
-#
-
-cmake --build . $FLAGS --config $CMAKE_BUILD_TYPE -t install 
-if [[ $? != 0 ]]; then
-    echo "COMPILATON of FLTK failed"
-    cd -
-    exit 1
-fi
-
-cd -
 
 dir=$BUILD_DIR/tlRender/etc/SuperBuild/tlRender/src/tlRender-build/
 if [[ ! -d $dir ]]; then

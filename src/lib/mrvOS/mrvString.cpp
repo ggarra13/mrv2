@@ -31,17 +31,17 @@ namespace mrv
 
             // 1. Determine the required size of the UTF-16 buffer.
             // The 'to' argument is passed as NULL to just calculate the length.
-            // The length returned is the number of wide characters (wchar_t), 
+            // The length returned is the number of wide characters (wchar_t),
             // including the null terminator.
             int wide_len = fl_utf8toUtf16(
-                utf8_command.c_str(), 
+                utf8_command.c_str(),
                 static_cast<unsigned>(utf8_command.length()),
-                nullptr, 
+                nullptr,
                 0);
 
             if (wide_len <= 0) {
                 // Handle conversion error or empty string case
-                return L""; 
+                return L"";
             }
 
             // 2. Allocate the buffer and perform the conversion.
@@ -49,7 +49,7 @@ namespace mrv
             std::vector<unsigned short> wide_buffer(wide_len + 1);
 
             fl_utf8toUtf16(
-                utf8_command.c_str(), 
+                utf8_command.c_str(),
                 static_cast<unsigned>(utf8_command.length()),
                 wide_buffer.data(),
                 wide_len + 1 // The size of the output buffer in bytes
@@ -92,6 +92,26 @@ namespace mrv
 
             return out;
         }
-        
+
+        std::string replaceCharacter(const std::string& input,
+                                     const char match, const char rep)
+        {
+            std::string out;
+
+            for (char c : input)
+            {
+                if (c == match)
+                {
+                    out += rep;
+                }
+                else
+                {
+                    out += c;
+                }
+            }
+
+            return out;
+        }
+
     } // namespace string
 } // namespace mrv

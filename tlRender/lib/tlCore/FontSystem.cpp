@@ -93,54 +93,54 @@ namespace
         }
         return utf8;
     }
-    
+
     FT_Error setFacePixelSize(FT_Face face, unsigned int size,
                               float& scale)
     {
         scale = 1.F;
-        
+
         // If the font is scalable (TrueType/OpenType outlines), use the
         // requested size directly.
         if (FT_IS_SCALABLE(face))
         {
             return FT_Set_Pixel_Sizes(face, 0, size);
         }
-    
+
         // If the font is NOT scalable (Bitmap/Emoji), snap to the closest
         // available fixed size.
         if (face->num_fixed_sizes > 0)
         {
             int bestIndex = 0;
             int minDiff = std::numeric_limits<int>::max();
-        
+
             for (int i = 0; i < face->num_fixed_sizes; ++i)
             {
                 // For bitmap fonts, check both height and y_ppem
                 // y_ppem is usually more reliable for matching
                 int height = face->available_sizes[i].height;
-            
+
                 // Some fonts store size info in y_ppem (26.6 fixed point)
                 int ppem = face->available_sizes[i].y_ppem >> 6;
-            
+
                 // Use whichever gives better information
                 int sizeToCompare = (ppem > 0) ? ppem : height;
-            
+
                 int diff = std::abs(sizeToCompare - static_cast<int>(size));
                 if (diff < minDiff)
                 {
                     minDiff = diff;
                     bestIndex = i;
-                    scale = static_cast<float>(size) / static_cast<float>(sizeToCompare);                                  
+                    scale = static_cast<float>(size) / static_cast<float>(sizeToCompare);
                 }
             }
-            
-            FT_Error err = FT_Select_Size(face, bestIndex);        
+
+            FT_Error err = FT_Select_Size(face, bestIndex);
             return err;
         }
 
         return FT_Err_Invalid_Pixel_Size;
     }
-    
+
 }
 
 namespace
@@ -200,24 +200,24 @@ namespace tl
         {
             if (!source || targetWidth <= 0 || targetHeight <= 0)
                 return source;
-    
+
             const auto& srcInfo = source->getInfo();
             int srcWidth = srcInfo.size.w;
             int srcHeight = srcInfo.size.h;
-    
+
             // If already the right size, return as-is
             if (srcWidth == targetWidth && srcHeight == targetHeight)
                 return source;
-    
+
             // Create new image at target size
             image::Info dstInfo(targetWidth, targetHeight, srcInfo.pixelType);
             auto dst = image::Image::create(dstInfo);
-    
+
             const uint8_t* srcData = source->getData();
             uint8_t* dstData = dst->getData();
-    
+
             int bytesPerPixel = (srcInfo.pixelType == image::PixelType::RGBA_U8) ? 4 : 1;
-    
+
             // Simple nearest-neighbor scaling (fast, reasonable for small sizes)
             for (int dy = 0; dy < targetHeight; ++dy)
             {
@@ -226,25 +226,25 @@ namespace tl
                     // Map destination pixel to source pixel
                     int sx = (dx * srcWidth) / targetWidth;
                     int sy = (dy * srcHeight) / targetHeight;
-            
+
                     // Clamp to valid range
                     sx = std::min(sx, srcWidth - 1);
                     sy = std::min(sy, srcHeight - 1);
-            
+
                     // Copy pixel
                     const uint8_t* srcPixel = srcData + (sy * srcWidth + sx) * bytesPerPixel;
                     uint8_t* dstPixel = dstData + (dy * targetWidth + dx) * bytesPerPixel;
-            
+
                     for (int b = 0; b < bytesPerPixel; ++b)
                     {
                         dstPixel[b] = srcPixel[b];
                     }
                 }
             }
-    
+
             return dst;
         }
-        
+
         std::vector<uint8_t> getFontData(const std::string& name)
         {
             std::vector<uint8_t> out;
@@ -355,7 +355,7 @@ namespace tl
             TLRENDER_P();
             return p.fontData.find(name) != p.fontData.end();
         }
-        
+
         void FontSystem::addFont(
             const std::string& name, const uint8_t* data, size_t size)
         {
@@ -374,14 +374,14 @@ namespace tl
         void FontSystem::addFont(const fs::path& filePath)
         {
             TLRENDER_P();
-            
+
             file::Path fileName(filePath.filename().generic_string());
             const std::string name = fileName.getBaseName() +
                                      fileName.getNumber() +
                                      fileName.getSuffix();
             if (p.fontData.find(name) != p.fontData.end())
                 return;
-            
+
             std::ifstream file(filePath, std::ios::binary | std::ios::ate);
             if (!file) {
                 std::cerr << "Failed to open font: " << filePath << std::endl;
@@ -397,7 +397,7 @@ namespace tl
                 return;
             }
 
-            
+
             addFont(name, buffer.data(), buffer.size());
         }
 
@@ -427,9 +427,9 @@ namespace tl
 
             if (fontInfo.family.empty())
                 return out;
-            
+
             FT_Face face = p.getFTFace(fontInfo);
-            
+
             float scale;
             FT_Error ftError = setFacePixelSize(face, fontInfo.size, scale);
             if (ftError)
@@ -470,26 +470,26 @@ namespace tl
                 load_flags |= FT_LOAD_COLOR;
             }
             hb_ft_font_set_load_flags(hbFont, load_flags);
-    
-            
+
+
             hb_buffer_t* buf = hb_buffer_create();
             hb_buffer_set_cluster_level(buf,
                                         HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES);
             hb_buffer_add_utf32(buf, (const uint32_t*)text.data(), text.size(), 0, text.size());
-    
+
             hb_buffer_guess_segment_properties(buf);
-    
+
             hb_shape(hbFont, buf, NULL, 0);
-    
+
             unsigned int glyphCount;
             hb_glyph_info_t* glyphInfo = hb_buffer_get_glyph_infos(buf, &glyphCount);
             hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions(buf, &glyphCount);
-    
+
             std::vector<ShapedGlyph> result;
             for (unsigned int i = 0; i < glyphCount; ++i)
             {
                 result.push_back({
-                        glyphInfo[i].codepoint, 
+                        glyphInfo[i].codepoint,
                         glyphPos[i].x_advance / 64,
                         glyphPos[i].y_advance / 64,
                         glyphPos[i].x_offset / 64,
@@ -497,7 +497,7 @@ namespace tl
                         glyphInfo[i].cluster
                     });
             }
-    
+
             hb_buffer_destroy(buf);
             hb_font_destroy(hbFont);
             return result;
@@ -585,6 +585,13 @@ namespace tl
                             current_line_w = std::max(current_line_w, textLineX);
                             pos_x = 0.0;
                             pos_y += h;
+
+                            // Reset the space marker so we don't reuse it
+                            // infinitely
+                            textLine = shaped.end();
+
+                            // Advance the iterator past the space character
+                            ++j;
                             continue;
                         }
                         else
@@ -592,6 +599,9 @@ namespace tl
                             current_line_w = std::max(current_line_w, pos_x);
                             pos_x = x;
                             pos_y += h;
+
+                            // Advance the iterator to the next character
+                            ++j;
                             continue;
                          }
                     }
@@ -614,8 +624,8 @@ namespace tl
 
             size.w = max_w;
             size.h = pos_y;
-        }        
-        
+        }
+
         std::vector<math::Box2i> FontSystem::getBox(
             const std::string& text, const FontInfo& fontInfo, int maxLineWidth)
         {
@@ -633,7 +643,7 @@ namespace tl
             }
             return out;
         }
-        
+
         math::Size2i FontSystem::getSize(
             const std::string& text, const FontInfo& fontInfo, int maxLineWidth)
         {
@@ -647,7 +657,7 @@ namespace tl
             catch (const std::exception& e)
             {
                 _log(e.what(), log::Type::Error);
-            } 
+            }
             return out;
         }
 
@@ -666,12 +676,12 @@ namespace tl
                 float scale;
                 FT_Error ftError = setFacePixelSize(face,
                                                     fontInfo.size, scale);
-                
+
                 const auto& shaped = shapeText(utf32, fontInfo, face);
-                
+
                 for (const auto& sg : shaped) {
                     auto glyph = p.getGlyphByIndex(sg.glyphIndex,
-                                                   fontInfo); 
+                                                   fontInfo);
                     out.push_back(glyph);
                 }
             }
@@ -683,7 +693,7 @@ namespace tl
         }
 
 
-        std::shared_ptr<Glyph> 
+        std::shared_ptr<Glyph>
         FontSystem::Private::getGlyphByIndex(uint32_t ftGlyphIndex,
                                              const FontInfo& fontInfo)
         {
@@ -691,12 +701,12 @@ namespace tl
 
             if (fontInfo.family.empty())
                 return out;
-            
-            GlyphInfo key(ftGlyphIndex, fontInfo); 
+
+            GlyphInfo key(ftGlyphIndex, fontInfo);
             if (!glyphCache.get(key, out))
             {
                 FT_Face face = getFTFace(fontInfo);
-                
+
                 float scale;
                 FT_Error ftError = setFacePixelSize(face,
                                                     fontInfo.size, scale);
@@ -710,7 +720,7 @@ namespace tl
                 {
                     base_flags |= FT_LOAD_FORCE_AUTOHINT;
                 }
-                        
+
                 bool tried_color = false;
                 FT_UInt load_flags = base_flags;
 
@@ -721,7 +731,7 @@ namespace tl
                 }
 
                 ftError = FT_Load_Glyph(face, ftGlyphIndex, load_flags);
-                    
+
                 if (ftError == FT_Err_Unimplemented_Feature &&
                     tried_color)
                 {
@@ -731,7 +741,7 @@ namespace tl
                                             ftGlyphIndex,
                                             load_flags);
                 }
-                        
+
                 if (ftError)
                 {
                     throw std::runtime_error("Cannot load glyph (error: " + std::to_string(ftError) + ")");
@@ -741,7 +751,7 @@ namespace tl
                 {
                     throw std::runtime_error("No glyph pointer");
                 }
-                
+
                 // Proceed to FT_Render_Glyph
                 ftError = FT_Render_Glyph(face->glyph,
                                           FT_RENDER_MODE_NORMAL);
@@ -750,11 +760,11 @@ namespace tl
                     throw std::runtime_error("Render glyph (error: " + std::to_string(ftError) + ")");
                     return out;
                 }
-                
-                
+
+
                 out = std::make_shared<Glyph>();
                 out->info = key;
-            
+
                 FT_Bitmap& ftBitmap = face->glyph->bitmap;
                 const image::Info imageInfo(
                     ftBitmap.width, ftBitmap.rows,
@@ -793,10 +803,10 @@ namespace tl
                             unsigned int g = p[1];
                             unsigned int r = p[2];
                             unsigned int a = p[3];
-                                    
+
                             // Calculate grayscale intensity
                             unsigned int lum = (r * 6966 + g * 23436 + b * 2366) >> 15; // fast approx
-                                        
+
                             // Apply Alpha blending against black background for the glyph
                             // (Since L_U8 has no alpha channel in this context, we bake it)
                             rowDataP[x] = static_cast<uint8_t>((lum * a) / 255);
@@ -811,7 +821,7 @@ namespace tl
                         uint8_t* rowDataP = outData + ftBitmap.width * y;
                         const unsigned char* bitmapP =
                             ftBitmap.buffer + y * ftBitmap.pitch;
-                                
+
                         for (size_t x = 0; x < ftBitmap.width; ++x)
                         {
                             int byteIndex = x / 8;
@@ -821,7 +831,7 @@ namespace tl
                         }
                     }
                 }
-                else 
+                else
                 {
                     // Fallback zero
                     memset(out->image->getData(), 0,
@@ -840,18 +850,18 @@ namespace tl
                 {
                     const auto& imgInfo = out->image->getInfo();
                     int actualHeight = imgInfo.size.h;
-    
+
                     // Calculate target size based on requested font size
                     // Use the selected bitmap size as reference
                     float scale = static_cast<float>(fontInfo.size) / actualHeight;
-    
+
                     if (scale != 1.0f && scale > 0.1f && scale < 10.0f) // Reasonable scale range
                     {
                         int targetWidth = static_cast<int>(imgInfo.size.w * scale);
                         int targetHeight = static_cast<int>(fontInfo.size);
-        
+
                         out->image = scaleBitmap(out->image, targetWidth, targetHeight);
-                        
+
                         // Adjust metrics proportionally
                         out->offset.x = static_cast<int>(out->offset.x * scale);
                         out->offset.y = static_cast<int>(out->offset.y * scale);
@@ -884,7 +894,7 @@ namespace tl
                     }
                 }
             }
-            
+
             // Sort by filename
             std::sort(out.begin(), out.end(),
                       [](const fs::path& a, const fs::path& b)

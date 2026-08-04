@@ -18,7 +18,7 @@ namespace tl
     {
 
         void Render::drawAnaglyph(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoData,
             const std::vector<math::Box2i>& boxes,
             const float eyeSeparation,
             const std::vector<timeline::ImageOptions>& imageOptions,

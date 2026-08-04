@@ -25,6 +25,11 @@ namespace mrv
             void make_current();
             void show() FL_OVERRIDE;
 
+            void headless(bool) {};
+            bool headless() { return false; };
+
+            void render_offscreen() {};
+
 #ifdef __APPLE__
         protected:
             void set_window_transparency(double alpha);

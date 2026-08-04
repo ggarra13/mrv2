@@ -155,7 +155,7 @@ namespace tl
             _updates |= ui::Update::Size;
             _updates |= ui::Update::Draw;
         }
-        
+
         const otime::TimeRange& IItem::getTrimmedRange() const
         {
             return _trimmedRange;
@@ -268,7 +268,7 @@ namespace tl
             j.at("inputEnabled").get_to(value.inputEnabled);
             j.at("editAssociatedClips").get_to(value.editAssociatedClips);
         }
-        
+
         void to_json(nlohmann::json& j, const DisplayOptions& value)
         {
             j["trackInfo"] = value.trackInfo;

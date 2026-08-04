@@ -81,7 +81,7 @@ namespace mrv
             //! Set whether to stop playback when scrubbing.
             void setStopOnScrub(bool);
 
-            //! Set the Display options.
+            //! Set the Item options.
             void setItemOptions(const timelineui_vk::ItemOptions&);
 
             //! Set the Display options.
@@ -131,16 +131,16 @@ namespace mrv
             int keyReleaseEvent(unsigned key, const int modifiers);
 
             void setEditMode(const timeline::EditMode);
-            
+
             void moveCallback(const std::vector<tl::timeline::MoveData>&);
 
             void continuePlaying();
 
             void init_colorspace() FL_OVERRIDE;
-            
+
             std::vector<const otio::Item* > getSelectedItems() const;
             std::vector<const otio::Transition* > getSelectedTransitions() const;
-            
+
         protected:
             const float pixelRatio() const;
 

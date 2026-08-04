@@ -117,6 +117,13 @@ namespace tl
                 getBaseName() + getNumber() + getSuffix() + getExtension();
         }
 
+        inline std::string Path::getFileNameWithRange(bool dir) const
+        {
+            return dir ?
+                getDirectory() + getBaseName() + getFrameRange() + getSuffix() + getExtension() :
+                getBaseName() + getFrameRange() + getSuffix() + getExtension();
+        }
+
         inline const std::optional<math::Int64Range>& Path::getFrames() const
         {
             return _frames;

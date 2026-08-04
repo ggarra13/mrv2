@@ -228,7 +228,7 @@ namespace tl
 
             //! Draws the video data to the internal FBO.
             void drawVideo(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>& = {},
                 const std::vector<timeline::DisplayOptions>& = {},
@@ -239,7 +239,7 @@ namespace tl
             //! Draws the stereo video data to the internal FBO with a
             //! particular method.
             void drawStereo(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const StereoType = StereoType::kScanlines,
                 const float offset = 0.F,
@@ -249,7 +249,7 @@ namespace tl
 
             //! Draws the stereo video data as an anaglyph to the internal FBO.
             void drawAnaglyph(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const float offset = 0.F,
                 const std::vector<timeline::ImageOptions>& = {},
@@ -296,49 +296,49 @@ namespace tl
                 const std::vector<math::Box2i>&,
                 const timeline::BackgroundOptions&);
             void _drawVideoA(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoB(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoWipe(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoOverlay(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoDifference(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoAdd(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoMultiply(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
             void _drawVideoTile(
-                const std::vector<timeline::VideoData>&,
+                const std::vector<timeline::VideoFrame>&,
                 const std::vector<math::Box2i>&,
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
@@ -346,7 +346,7 @@ namespace tl
             void _drawVideo(
                 std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::string& pipelineName,
-                const timeline::VideoData&, const math::Box2i&,
+                const timeline::VideoFrame&, const math::Box2i&,
                 const std::shared_ptr<timeline::ImageOptions>&,
                 const timeline::DisplayOptions&);
             void _create2DMesh(

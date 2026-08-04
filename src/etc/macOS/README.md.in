@@ -1,96 +1,133 @@
 
-To install it, after opening the .dmg file, drag the @mrv2_NAME@ icon to the 
+To install it, after downloading it, before opening the .dmg file, run in an /Applications/Terminal.app
+
+xattr -d com.apple.quarantine /path/to/your/file.dmg
+
+Then open the .dmg file and drag the @mrv2_NAME@ icon to the 
 Applications directory.  If there's already an existant @mrv2_NAME@ version, we
 recommend you overwrite it (in case it does not work well for you, you can 
 always revert to a previous version).
 
 As the @mrv2_NAME@ application is currently neither code signed nor notarized, 
-you need to do a fearful step.
+you need to do another fearful step.
 
-You need to double click on the installation.command file.
+You need to double click on the installation.command file.  On macOS 15+ and later, you may have to force Mac OS (in the Security part of the System Settings) to allow the file to run.
 
 You will be asked for your password once and the codesigning commands will be
 run and then you will be able to enjoy @mrv2_NAME@.
 
 ------------------------------------------------------------------------------
-Um @mrv2_NAME@ zu installieren, öffnen Sie die .dmg-Datei und ziehen Sie anschließend das Symbol von @mrv2_NAME@ in den Ordner „Programme“. Falls bereits eine Version von @mrv2_NAME@ vorhanden ist, empfehlen wir, diese zu überschreiben. Sollte die neue Version für Sie nicht zufriedenstellend funktionieren, können Sie jederzeit zu einer früheren Version zurückkehren.
+Um @mrv2_NAME@ zu installieren, führen Sie nach dem Herunterladen und **bevor** Sie die .dmg-Datei öffnen, folgenden Befehl in der /Applications/Terminal.app aus:
 
-Da die Anwendung @mrv2_NAME@ derzeit weder code-signiert noch notariell beglaubigt ist, müssen Sie einen kleinen, aber wichtigen Schritt durchführen.
+xattr -d com.apple.quarantine /Pfad/zu/Ihrer/Datei.dmg
 
-Doppelklicken Sie dazu auf die Datei „installation.command“.
+Öffnen Sie anschließend die .dmg-Datei und ziehen Sie das Symbol von @mrv2_NAME@ in den Ordner „Programme“. Falls bereits eine Version von @mrv2_NAME@ vorhanden ist, empfehlen wir, diese zu überschreiben (falls die neue Version für Sie nicht zufriedenstellend funktioniert, können Sie jederzeit zu einer früheren Version zurückkehren).
 
-Sie werden einmal nach Ihrem Passwort gefragt. Anschließend werden die Code-Signing-Befehle ausgeführt, und danach können Sie @mrv2_NAME@ verwenden.
+Da die Anwendung @mrv2_NAME@ derzeit weder code-signiert noch notariell beglaubigt ist, ist noch ein weiterer Schritt erforderlich.
+
+Doppelklicken Sie auf die Datei installation.command. Unter macOS 15 und neuer müssen Sie macOS möglicherweise in den Systemeinstellungen unter „Datenschutz & Sicherheit“ erlauben, diese Datei auszuführen.
+
+Sie werden einmal nach Ihrem Passwort gefragt. Anschließend werden die Code-Signing-Befehle ausgeführt und Sie können @mrv2_NAME@ verwenden.
+------------------------------------------------------------------------------
+Para instalar @mrv2_NAME@, después de descargarlo y **antes** de abrir el archivo .dmg, ejecute el siguiente comando en /Applications/Terminal.app:
+
+xattr -d com.apple.quarantine /ruta/a/su/archivo.dmg
+
+Luego abra el archivo .dmg y arrastre el icono de @mrv2_NAME@ a la carpeta Aplicaciones. Si ya existe una versión de @mrv2_NAME@, le recomendamos reemplazarla (si la nueva versión no funciona correctamente para usted, siempre podrá volver a una versión anterior).
+
+Como la aplicación @mrv2_NAME@ actualmente no está firmada con un certificado de código ni notarizada, deberá realizar un paso adicional.
+
+Haga doble clic en el archivo installation.command. En macOS 15 o posterior, es posible que deba permitir en la sección Seguridad de Ajustes del Sistema que macOS ejecute este archivo.
+
+Se le solicitará su contraseña una sola vez. Después se ejecutarán los comandos de firma de código y podrá disfrutar de @mrv2_NAME@.
 
 ------------------------------------------------------------------------------
-Para instalar @mrv2_NAME@, después de abrir el archivo .dmg, arrastre el icono de @mrv2_NAME@ a la carpeta Aplicaciones. Si ya existe una versión de @mrv2_NAME@, le recomendamos sobrescribirla. Si la nueva versión no funciona correctamente para usted, siempre podrá volver a una versión anterior.
+Pour installer @mrv2_NAME@, après l'avoir téléchargé et **avant** d'ouvrir le fichier .dmg, exécutez la commande suivante dans /Applications/Terminal.app :
 
-Como la aplicación @mrv2_NAME@ actualmente no está firmada ni notarizada por Apple, deberá realizar un pequeño paso.
+xattr -d com.apple.quarantine /chemin/vers/votre/fichier.dmg
 
-Haga doble clic en el archivo installation.command.
+Ouvrez ensuite le fichier .dmg et faites glisser l'icône de @mrv2_NAME@ dans le dossier Applications. Si une version de @mrv2_NAME@ est déjà installée, nous vous recommandons de la remplacer (si la nouvelle version ne vous convient pas, vous pourrez toujours revenir à une version précédente).
 
-Se le solicitará su contraseña una sola vez. A continuación se ejecutarán los comandos de firma de código y después podrá disfrutar de @mrv2_NAME@.
+Comme l'application @mrv2_NAME@ n'est actuellement ni signée ni notarisée par Apple, une étape supplémentaire est nécessaire.
+
+Double-cliquez sur le fichier installation.command. Sous macOS 15 ou version ultérieure, vous devrez peut-être autoriser l'exécution de ce fichier dans la section Sécurité des Réglages Système.
+
+Votre mot de passe vous sera demandé une seule fois. Les commandes de signature du code seront alors exécutées et vous pourrez utiliser @mrv2_NAME@.
+------------------------------------------------------------------------------
+@mrv2_NAME@ स्थापित करने के लिए, इसे डाउनलोड करने के बाद और .dmg फ़ाइल खोलने से **पहले**, /Applications/Terminal.app में निम्नलिखित कमांड चलाएँ:
+
+xattr -d com.apple.quarantine /path/to/your/file.dmg
+
+इसके बाद .dmg फ़ाइल खोलें और @mrv2_NAME@ आइकन को Applications फ़ोल्डर में खींचें। यदि @mrv2_NAME@ का कोई संस्करण पहले से मौजूद है, तो हम उसे प्रतिस्थापित करने की सलाह देते हैं (यदि नया संस्करण आपके लिए ठीक से काम नहीं करता है, तो आप हमेशा पिछले संस्करण पर वापस जा सकते हैं)।
+
+चूँकि @mrv2_NAME@ एप्लिकेशन वर्तमान में न तो कोड-साइन किया गया है और न ही Apple द्वारा नोटराइज़ किया गया है, इसलिए आपको एक अतिरिक्त चरण पूरा करना होगा।
+
+installation.command फ़ाइल पर डबल-क्लिक करें। macOS 15 या उसके बाद के संस्करण में आपको सिस्टम सेटिंग्स के सुरक्षा अनुभाग में इस फ़ाइल को चलाने की अनुमति देनी पड़ सकती है।
+
+आपसे केवल एक बार आपका पासवर्ड माँगा जाएगा। इसके बाद कोड-साइनिंग कमांड चलेंगी और आप @mrv2_NAME@ का उपयोग कर सकेंगे।
 
 ------------------------------------------------------------------------------
-Pour installer @mrv2_NAME@, ouvrez le fichier .dmg, puis faites glisser l'icône de @mrv2_NAME@ vers le dossier Applications. Si une version de @mrv2_NAME@ est déjà installée, nous vous recommandons de la remplacer. Si la nouvelle version ne vous convient pas, vous pourrez toujours revenir à une version précédente.
+Per installare @mrv2_NAME@, dopo averlo scaricato e **prima** di aprire il file .dmg, esegui il seguente comando in /Applications/Terminal.app:
 
-Comme l'application @mrv2_NAME@ n'est actuellement ni signée ni notarisée par Apple, vous devrez effectuer une petite étape.
+xattr -d com.apple.quarantine /percorso/del/tuo/file.dmg
 
-Double-cliquez sur le fichier installation.command.
+Successivamente apri il file .dmg e trascina l'icona di @mrv2_NAME@ nella cartella Applicazioni. Se è già presente una versione di @mrv2_NAME@, ti consigliamo di sostituirla (se la nuova versione non dovesse funzionare correttamente, potrai sempre tornare a una versione precedente).
 
-Votre mot de passe vous sera demandé une seule fois. Les commandes de signature de code seront ensuite exécutées, et vous pourrez alors profiter de @mrv2_NAME@.
+Poiché l'applicazione @mrv2_NAME@ al momento non è né firmata digitalmente né notarizzata da Apple, è necessario eseguire un ulteriore passaggio.
 
+Fai doppio clic sul file installation.command. Su macOS 15 e versioni successive potrebbe essere necessario consentire l'esecuzione del file nella sezione Sicurezza delle Impostazioni di Sistema.
+
+Ti verrà richiesta la password una sola volta. Verranno quindi eseguiti i comandi di firma del codice e potrai utilizzare @mrv2_NAME@.
 ------------------------------------------------------------------------------
-@mrv2_NAME@ को स्थापित करने के लिए, .dmg फ़ाइल खोलने के बाद @mrv2_NAME@ के आइकन को Applications फ़ोल्डर में खींचकर छोड़ दें। यदि @mrv2_NAME@ का कोई संस्करण पहले से मौजूद है, तो हम उसे अधिलेखित (overwrite) करने की सलाह देते हैं। यदि नया संस्करण आपके लिए ठीक से काम नहीं करता, तो आप किसी भी समय पिछले संस्करण पर वापस जा सकते हैं।
+@mrv2_NAME@ をインストールするには、ダウンロード後、.dmg ファイルを開く**前に**、/Applications/Terminal.app で次のコマンドを実行してください。
 
-चूँकि @mrv2_NAME@ ऐप वर्तमान में न तो कोड-साइन किया गया है और न ही Apple द्वारा नोटराइज़ किया गया है, इसलिए आपको एक छोटा-सा अतिरिक्त चरण पूरा करना होगा।
+xattr -d com.apple.quarantine /path/to/your/file.dmg
 
-installation.command फ़ाइल पर डबल-क्लिक करें।
+その後、.dmg ファイルを開き、@mrv2_NAME@ のアイコンを「Applications」フォルダーへドラッグしてください。すでに @mrv2_NAME@ がインストールされている場合は、上書きすることをお勧めします（新しいバージョンが期待どおりに動作しない場合は、いつでも以前のバージョンに戻すことができます）。
 
-आपसे केवल एक बार आपका पासवर्ड पूछा जाएगा। इसके बाद कोड-साइनिंग कमांड चलाए जाएँगे और फिर आप @mrv2_NAME@ का उपयोग कर सकेंगे।
+現在、@mrv2_NAME@ はコード署名および Apple の公証（Notarization）が行われていないため、もう一つ手順が必要です。
 
-------------------------------------------------------------------------------
-Per installare @mrv2_NAME@, dopo aver aperto il file .dmg, trascina l'icona di @mrv2_NAME@ nella cartella Applicazioni. Se è già presente una versione di @mrv2_NAME@, ti consigliamo di sovrascriverla. Se la nuova versione non dovesse funzionare correttamente, potrai sempre tornare a una versione precedente.
-
-Poiché l'applicazione @mrv2_NAME@ al momento non è né firmata né notarizzata da Apple, dovrai eseguire un piccolo passaggio.
-
-Fai doppio clic sul file installation.command.
-
-Ti verrà chiesta la password una sola volta. Verranno quindi eseguiti i comandi di firma del codice e successivamente potrai utilizzare @mrv2_NAME@.
-
-------------------------------------------------------------------------------
-@mrv2_NAME@ をインストールするには、.dmg ファイルを開いた後、@mrv2_NAME@ のアイコンを「アプリケーション」フォルダへドラッグしてください。すでに @mrv2_NAME@ がインストールされている場合は、上書きすることをお勧めします。新しいバージョンが正常に動作しない場合は、いつでも以前のバージョンに戻すことができます。
-
-現在、@mrv2_NAME@ はコード署名および Apple の公証（Notarization）が行われていないため、追加の手順を実行する必要があります。
-
-installation.command ファイルをダブルクリックしてください。
+installation.command ファイルをダブルクリックしてください。macOS 15 以降では、「システム設定」の「セキュリティ」からこのファイルの実行を許可する必要がある場合があります。
 
 パスワードの入力は一度だけ求められます。その後、コード署名のコマンドが実行され、@mrv2_NAME@ を使用できるようになります。
 
 ------------------------------------------------------------------------------
-Para instalar o @mrv2_NAME@, após abrir o arquivo .dmg, arraste o ícone do @mrv2_NAME@ para a pasta Aplicativos. Se já existir uma versão do @mrv2_NAME@ instalada, recomendamos substituí-la. Caso a nova versão não funcione corretamente para você, será sempre possível voltar para uma versão anterior.
+Para instalar o @mrv2_NAME@, após fazer o download e **antes** de abrir o arquivo .dmg, execute o seguinte comando no /Applications/Terminal.app:
 
-Como o aplicativo @mrv2_NAME@ atualmente não é assinado nem notarizado pela Apple, será necessário realizar uma pequena etapa adicional.
+xattr -d com.apple.quarantine /caminho/para/seu/arquivo.dmg
 
-Dê um clique duplo no arquivo installation.command.
+Em seguida, abra o arquivo .dmg e arraste o ícone do @mrv2_NAME@ para a pasta Aplicativos. Caso já exista uma versão do @mrv2_NAME@ instalada, recomendamos substituí-la (se a nova versão não funcionar bem para você, sempre será possível voltar para uma versão anterior).
+
+Como o aplicativo @mrv2_NAME@ atualmente não possui assinatura de código nem foi notarizado pela Apple, será necessário realizar mais uma etapa.
+
+Clique duas vezes no arquivo installation.command. No macOS 15 ou posterior, talvez seja necessário permitir a execução do arquivo na seção Segurança dos Ajustes do Sistema.
 
 Sua senha será solicitada apenas uma vez. Em seguida, os comandos de assinatura de código serão executados e você poderá usar o @mrv2_NAME@.
 
 ------------------------------------------------------------------------------
-Чтобы установить @mrv2_NAME@, откройте файл .dmg, затем перетащите значок @mrv2_NAME@ в папку «Программы». Если у вас уже установлена версия @mrv2_NAME@, рекомендуем заменить её новой. Если новая версия будет работать неудовлетворительно, вы всегда сможете вернуться к предыдущей версии.
+Чтобы установить @mrv2_NAME@, после загрузки и **до** открытия файла .dmg выполните следующую команду в /Applications/Terminal.app:
 
-Поскольку приложение @mrv2_NAME@ в настоящее время не подписано и не прошло нотариальную проверку Apple, необходимо выполнить небольшой дополнительный шаг.
+xattr -d com.apple.quarantine /путь/к/вашему/файлу.dmg
 
-Дважды щёлкните по файлу installation.command.
+Затем откройте файл .dmg и перетащите значок @mrv2_NAME@ в папку «Программы». Если у вас уже установлена версия @mrv2_NAME@, рекомендуем заменить её (если новая версия будет работать неудовлетворительно, вы всегда сможете вернуться к предыдущей версии).
 
-Пароль потребуется ввести только один раз. После этого будут выполнены команды подписи кода, и вы сможете пользоваться @mrv2_NAME@.
+Поскольку приложение @mrv2_NAME@ в настоящее время не подписано цифровой подписью и не прошло нотариальную проверку Apple, потребуется выполнить ещё один шаг.
+
+Дважды щёлкните файл installation.command. В macOS 15 и более поздних версиях вам может потребоваться разрешить запуск этого файла в разделе «Безопасность» системных настроек.
+
+Пароль будет запрошен только один раз. После этого будут выполнены команды цифровой подписи, и вы сможете пользоваться @mrv2_NAME@.
 
 ------------------------------------------------------------------------------
-要安装 @mrv2_NAME@，请先打开 .dmg 文件，然后将 @mrv2_NAME@ 图标拖到“应用程序”文件夹中。如果已经安装了 @mrv2_NAME@，建议直接覆盖现有版本。如果新版本不能正常工作，您随时都可以恢复到之前的版本。
+要安装 @mrv2_NAME@，请在下载完成后、**打开 .dmg 文件之前**，在 /Applications/Terminal.app 中运行以下命令：
+
+xattr -d com.apple.quarantine /path/to/your/file.dmg
+
+然后打开 .dmg 文件，并将 @mrv2_NAME@ 图标拖到“应用程序”文件夹中。如果已经安装了 @mrv2_NAME@ 的旧版本，我们建议直接覆盖安装（如果新版本无法正常工作，您随时可以恢复到之前的版本）。
 
 由于 @mrv2_NAME@ 当前既没有进行代码签名，也没有通过 Apple 的公证（Notarization），因此还需要执行一个额外的步骤。
 
-请双击 installation.command 文件。
+双击 installation.command 文件。在 macOS 15 及更高版本中，您可能需要在“系统设置”的“安全性”部分允许该文件运行。
 
-系统只会要求您输入一次密码。随后将自动执行代码签名命令，完成后您就可以正常使用 @mrv2_NAME@ 了。
+系统会要求您输入一次密码。随后将执行代码签名命令，之后您就可以使用 @mrv2_NAME@ 了。
 
 ------------------------------------------------------------------------------

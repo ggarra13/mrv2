@@ -1,3 +1,106 @@
+v1.7.2
+======
+
+ChangeLog
+---------
+
+- UI: Linux Vulkan backend now uses GTK / GLib as window decorations.
+- UI: Improved Japanese translation (thanks to @coolvitto).
+- UI: Improved all translations.
+- UI: Adding a Transition with Select and then Edit->Selected->Add Transition
+      now refits the Edit timeline to show the transition.
+- UI/Core: Added support for multiple Projects in WebRTC connections.
+- UI: Fixed Compare Panel not showing the Tile compare mode.
+- UI: Fixed some natural language translations.
+- UI: Fixed Compare Panel buttons sometimes not responding.
+- UI: Put Compare Panel buttons in two rows which is cleaner.
+- UI: Made Timeline display the audio cache, as it was hidden.
+- UI: Improved HUD Cache display to just return a percentage for video and
+      audio.
+- UI: Fixed timeline dragging position getting reset when editing a transition.
+
+- WebRTC: Added support for TURN server and a "Custom" preset.
+- WebRTC: Removed the room ID from the player's name.
+
+- HDR: Added missing hdr.exe utility on Windows.
+
+- Python: Added a pre-built Python's opentimelineio package on all platforms, which was getting compiled but not packaged.
+
+- Core: Added pyFLTK python package that was missing from macOS.
+- Core: mrv2/vmrv2's Help->Update mrv2 will now correctly determine vmrv2 and mrv2.
+- Core: When using Help->Update mrv2 on macOS, it will automatically remove the quarantine flag and now call the installation.command script for a smooth installation.
+- Core: From v1.7.2 on, macOS will be able to upgrade mrv2 or vmrv2 by just going to Help->Update mrv2.
+- Core: We now allow the Vulkan backend to work in headless mode (ie. no UI), for running python scripts like baking OCIO for example.
+- Core: Fixed a validation error on Main Viewport.
+- Core: Renamed main subdirectory as mrv2.
+- Core: Fixed a bug on CPU feature detection on Windows aarch64.
+- Core: Added more HW CPU acceleration features on arm64 and aarch64 to mrvCPU.h/mrvCPU.cpp.
+- Core: Brought back the hdr utility on Windows which was missing from vmrv2.
+- Core: Bumped FFmpeg version to v8.1.2.
+- Core: Improved failed FFmpeg reads and proper handling of reverse playback on
+  	broken movies.
+- Core: Fixed a random crash when using Wipes (particularly on the Vulkan
+  	backend on Linux).
+- Core: Added work-around when .otio clips that have video (or audio) greater
+  	than the media time.
+- Core: Fixed transitions not using a consistant resolution.
+- Core: Fixed incorrect media references' paths when loading and modifying an
+  	.otio timeline with multiple media references (ie. Full and Proxy for
+	example).
+- Core: Fixed spaces on FontSystem.cpp.
+- Core: Added support for multiple media references in .otio files (works in
+  	Viewport, Timeline and Thumbnails).
+- Core: FLTK's Pen support is now improved.
+- Core: FLTK's UTF-8 support is now improved.
+- Core: Removed even more libraries from Linux packaging to depend more on
+  	the system ones.
+
+v1.7.1
+======
+
+ChangeLog
+---------
+
+- Installation: Simplified macOS installation a tad.  Also fixed shebang issue with the installation.command script.
+
+- UI: File->Recent menu now correctly displays the first frame of the sequence, instead of the frame that was used to load it with.
+- UI: Fixed some flickering of Progress Report on Windows to not using Fl_Double_Window.
+- UI: Made client side decoration on Linux Wayland use GNOME with Vulkan backend.  The OpenGL backend must remain using the uglier Cairo decoration.
+- UI: Fixed double repeated message about Solo upgrade when clicking on area selection.
+- UI: Linux Wayland.  Made tablet cursor hide the tooltips upon leaving the widget.
+- UI: Linux Wayland.  Made tablet cursor not allow flickering the tooltip (still somewhat buggy).
+
+- Licensing: Removed a repeated message of floating licensing.
+
+- WebRTC: It is now live.  You can now connect two or more computers and share their media.
+On the free tier, only two computers can be connected and there's a limit of 30 minutes.  On the Pro tier, there's no limit on the number of computers or time limit.
+   Quick start:
+      * Go to Preferences->WebRTC, enter the name of your studio.  Use the same name on each computer you will hook up.  Make sure it is unique and not easy to guess.x
+      * Go to Panel/WebRTC on one machine.  Enter the name of a room longer than 6 characters.  Click Connect.
+      * Go to Panel/WebRTC on the other machine.  Enter the same room name.  Click connect.
+      * If all went well, both machines will sync and you can synchronize what gets received/sent with the Sync menu.
+      
+- WebRTC: Added environment variable MRV2_WEBRTC_STUDIO that gets prepended to any room ID connection.  This can be used to keep the connection secure.
+- WebRTC: Added WebRTC panel to Preferences.  Allows setting cache directory and whether to clean it at the start of mrv2.
+- WebRTC: When connected and file is opened, if it does not exist locally, it will now transfer it (Pro+ version only).
+- WebRTC: Made it read the environment variable MRV2_WEBRTC_STUDIO to prepend it to the room name and keep the connection secret.
+- WebRTC: Made the transaction be atomic and cleanly close the data channel on abort or error.
+- WebRTC: added -room command-line flag to start a WebRTC connection.
+- WebRTC: Added Preferences->WebRTC to easily change settings.  Note that environment variables take precedence over these settings and they are purposedly not shown to keep the connection confidential.
+- WebRTC: Added support for transfering .otio files, with all the files referenced in them.
+
+- Core: Made clips create textures of their size only to save memory when using smaller files.
+- Core: Added support for .otio Spatial coordinates.
+- Core: Fixed some Vulkan AMD/NVidia assumptions for comformancy with Vulkan 1.3.
+- Core: Fixed Vulkan fatal errors when changing pixel ratio.
+- Core: Fixed OpenGL NAN reporting when changing pixel ratio.
+- Core: Fixed a crash upon exit with compare options and video playback.
+- Core: Fixed the use of Fl::check in tlRender innards, as it was crashing WebRTC downloads.
+- Core: Made the default Settings->Cache->Gigabytes use 1 / 3 of available memory instead of 1 / 2.
+- Core: Bumped FLTK to v2.1.5.
+- Core: Changed license server's domain so that it will be possible to move to a new VPS due price increases.
+- Core: Added comments to License functions, as they were rather messy.
+
 v1.7.0
 ======
 	

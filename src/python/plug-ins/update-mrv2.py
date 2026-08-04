@@ -141,7 +141,7 @@ def fltk_check_callback(data):
             install_progress = 0
             Fl.check()
     if subprocess_result is None:
-        Fl.repeat_timeout(1.0, fltk_check_callback, data)
+        Fl_repeat_timeout(1.0, fltk_check_callback, data)
     else:
         print(_("\n\nInstall completed with output:\n"),subprocess_result)
         
@@ -331,12 +331,15 @@ class UpdatePlugin(plugin.Plugin):
         
         version = self.match_version(download_file)
         kernel = platform.system()
+        prefix = "mrv2"
+        if cmd.getBackend() == 'Vulkan':
+            prefix = "vmrv2"
         exe = None
         if kernel == 'Linux':
-            exe = f'/usr/local/mrv2-v{version}-Linux-64/bin/mrv2.sh'
+            exe = f'/usr/local/{prefix}-v{version}-Linux-64/bin/mrv2.sh'
         elif kernel == 'Windows':
             import winreg
-            exe = 'C:/Program Files/mrv2/bin/mrv2.exe'
+            exe = f'C:/Program Files/{prefix}/bin/mrv2.exe'
             try:
                 key_path = r"Applications\mrv2.exe\shell\Open\command"
                 key = winreg.OpenKey(winreg.HKEY_CLASSES_ROOT,
@@ -355,13 +358,13 @@ class UpdatePlugin(plugin.Plugin):
             # Look for default install locations
             #
             if not os.path.exists(exe):
-                exe = f'"C:/Program Files/mrv2-v{version}/bin/mrv2.exe"'
+                exe = f'"C:/Program Files/{prefix}-v{version}/bin/mrv2.exe"'
             if not os.path.exists(exe):
-                exe = f'"C:/Program Files/mrv2 v{version}/bin/mrv2.exe"'
+                exe = f'"C:/Program Files/{prefix} v{version}/bin/mrv2.exe"'
             if not os.path.exists(exe):
-                exe = f'"C:/Program Files/mrv2 {version}/bin/mrv2.exe"'
+                exe = f'"C:/Program Files/{prefix} {version}/bin/mrv2.exe"'
         elif kernel == 'Darwin':
-            exe = f'/Applications/mrv2.app/Contents/MacOS/mrv2'
+            exe = f'/Applications/{prefix}.app/Contents/MacOS/{prefix}'
         else:
             print(_('Unknown platform'),kernel)
         return exe
@@ -389,10 +392,9 @@ class UpdatePlugin(plugin.Plugin):
         # Start the timeout callback
         import threading
         data = [ self, download_file ]
-        Fl.add_timeout(4.0, fltk_check_callback, data)
+        Fl_add_timeout(4.0, fltk_check_callback, data)
         threading.Thread(target=run_subprocess, args=(command,)).start()
 
-                         
     def install_as_admin(self, command, download_file, password = None):
         """Given a command, a download file, and an optional password,
         install the download_file by running the command using the provided
@@ -481,7 +483,7 @@ class UpdatePlugin(plugin.Plugin):
             self.install_as_admin(command, download_file)
         elif download_file.endswith('.dmg'):
             root_dir=cmd.rootPath()
-            command = f'{root_dir}/bin/install_dmg.sh {download_file}'
+            command = f'{root_dir}/bin/install_dmg.sh "{download_file}"'
             self.install_as_admin(command, download_file)
         else:
             print(_('You will need to install file'),download_file,

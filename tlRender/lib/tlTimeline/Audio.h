@@ -26,17 +26,17 @@ namespace tl
         };
 
         //! Audio data.
-        struct AudioData
+        struct AudioFrame
         {
             double seconds = -1.0;
             std::vector<AudioLayer> layers;
 
-            bool operator==(const AudioData&) const;
-            bool operator!=(const AudioData&) const;
+            bool operator==(const AudioFrame&) const;
+            bool operator!=(const AudioFrame&) const;
         };
 
         //! Compare the time values of audio data.
-        bool isTimeEqual(const AudioData&, const AudioData&);
+        bool isTimeEqual(const AudioFrame&, const AudioFrame&);
     } // namespace timeline
 } // namespace tl
 

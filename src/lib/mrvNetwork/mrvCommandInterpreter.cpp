@@ -180,12 +180,26 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                std::string fileName = message["fileName"];
-                std::string audioFileName = message["audioFileName"];
+                const std::string peerId = message.value(kLocalPeerIdKey,
+                                                         std::string());
+                tl::file::Path remoteFilePath = message["filePath"];
+                tl::file::Path remoteAudioFilePath = message["audioFilePath"];
+
+                std::string fileName = remoteFilePath.get();
+                std::string audioFileName = remoteAudioFilePath.get();
                 replace_path(fileName);
-                if (!audioFileName.empty())
-                    replace_path(audioFileName);
-                app->open(fileName, audioFileName);
+                replace_path(audioFileName);
+                if (file::isReadable(fileName) &&
+                    (audioFileName.empty() || file::isReadable(audioFileName)))
+                {
+                    app->open(fileName, audioFileName);
+                }
+                else if (!peerId.empty())
+                {
+                    FilesModelItem item;  // dummy item
+                    fetchRemoteFile(peerId, remoteFilePath,
+                                    remoteAudioFilePath, item);
+                }
             }
             else if (c == "closeAll")
             {
@@ -1529,6 +1543,25 @@ namespace mrv
 
                 const FilesPanelOptions& o = message["value"];
                 app->filesModel()->setFilesPanelOptions(o);
+            }
+            else if (c == "setMediaReferenceKey")
+            {
+                bool receive = prefs->ReceiveUI->value();
+                if (!receive)
+                {
+                    tcp->unlock();
+                    return;
+                }
+                std::string key = message["value"];
+
+                const auto& timeline = player->timeline();
+                if (!timeline) return;
+
+                timeline->setMediaReferenceKey(key);
+                player->clearCache();
+                ui->uiTimeline->setTimelinePlayer(nullptr);
+                ui->uiTimeline->setTimelinePlayer(player);
+                ui->uiView->redrawWindows();
             }
             else if (c == "Protocol Version")
             {

@@ -25,6 +25,7 @@
 #  define ARCH_ARM64
 #  ifdef __linux__
 #        include <sys/auxv.h>
+#        include <asm/hwcap.h>
 #  endif
 #endif
 
@@ -234,7 +235,12 @@ std::string GetCpuCaps(CpuCaps* caps)
     caps->hasNEON = 0;
     caps->hasARMv8 = 0;
     caps->hasARMv8Crypto = 0;
-    
+    caps->hasARMv8Crc = 0;
+    caps->hasARMv8Dotprod = 0;
+    caps->hasARMv8Fp16 = 0;
+    caps->hasSVE = 0;
+    caps->hasSVE2 = 0;
+
     unsigned int regs[4];
     unsigned int regs2[4];
     memset(regs, 0, sizeof(unsigned int) * 4);
@@ -722,16 +728,51 @@ std::string GetCpuCaps(CpuCaps* caps)
     caps->hasNEON = 0;
     caps->hasARMv8 = 0;
     caps->hasARMv8Crypto = 0;
-    
+    caps->hasARMv8Crc = 0;
+    caps->hasARMv8Dotprod = 0;
+    caps->hasARMv8Fp16 = 0;
+    caps->hasSVE = 0;
+    caps->hasSVE2 = 0;
+
 #  ifdef _WIN32
-    // Windows ARM64: Use IsProcessorFeaturePresent for feature detection
+    // Windows ARM64: Use IsProcessorFeaturePresent for feature detection.
+    //
+    // NOTE: PF_ARM_VFP_32_REGISTERS_AVAILABLE is *not* NEON - it only
+    // reports that the CPU exposes 32 VFP registers.  The correct flag
+    // for Advanced SIMD (NEON) support is
+    // PF_ARM_NEON_INSTRUCTIONS_AVAILABLE.
     LOG_INFO("CPU: ARM64 (Windows)");
-    caps->hasNEON = IsProcessorFeaturePresent(PF_ARM_VFP_32_REGISTERS_AVAILABLE);
-    caps->hasARMv8 = IsProcessorFeaturePresent(PF_ARM_V8_INSTRUCTIONS_AVAILABLE);
-    caps->hasARMv8Crypto = IsProcessorFeaturePresent(PF_ARM_V8_CRYPTO_INSTRUCTIONS_AVAILABLE);
+    caps->hasNEON =
+        IsProcessorFeaturePresent(PF_ARM_NEON_INSTRUCTIONS_AVAILABLE);
+    caps->hasARMv8 =
+        IsProcessorFeaturePresent(PF_ARM_V8_INSTRUCTIONS_AVAILABLE);
+    caps->hasARMv8Crypto =
+        IsProcessorFeaturePresent(PF_ARM_V8_CRYPTO_INSTRUCTIONS_AVAILABLE);
+
+    // These feature flags were added in newer Windows SDKs; guard so we
+    // still build against older SDKs that don't define them yet.
+#     ifdef PF_ARM_V8_CRC32_INSTRUCTIONS_AVAILABLE
+    caps->hasARMv8Crc =
+        IsProcessorFeaturePresent(PF_ARM_V8_CRC32_INSTRUCTIONS_AVAILABLE);
+#     endif
+#     ifdef PF_ARM_V82_DP_INSTRUCTIONS_AVAILABLE
+    caps->hasARMv8Dotprod =
+        IsProcessorFeaturePresent(PF_ARM_V82_DP_INSTRUCTIONS_AVAILABLE);
+#     endif
+#     ifdef PF_ARM_V82_FP16_INSTRUCTIONS_AVAILABLE
+    caps->hasARMv8Fp16 =
+        IsProcessorFeaturePresent(PF_ARM_V82_FP16_INSTRUCTIONS_AVAILABLE);
+#     endif
+    // As of this writing there is no shipping Windows-on-ARM hardware
+    // with SVE/SVE2, and the SDK flags are inconsistently available, so
+    // hasSVE / hasSVE2 are left at 0 on Windows.
+
     LOG_INFO("NEON: " << (caps->hasNEON ? "yes" : "no"));
     LOG_INFO("ARMv8-A: " << (caps->hasARMv8 ? "yes" : "no"));
     LOG_INFO("ARMv8-A Crypto: " << (caps->hasARMv8Crypto ? "yes" : "no"));
+    LOG_INFO("ARMv8-A CRC32: " << (caps->hasARMv8Crc ? "yes" : "no"));
+    LOG_INFO("ARMv8.2-A Dotprod: " << (caps->hasARMv8Dotprod ? "yes" : "no"));
+    LOG_INFO("ARMv8.2-A FP16: " << (caps->hasARMv8Fp16 ? "yes" : "no"));
 #  else // ! _WIN32
       // Linux or other non-Windows ARM64
       LOG_INFO("CPU: ARM64");
@@ -740,9 +781,35 @@ std::string GetCpuCaps(CpuCaps* caps)
          caps->hasNEON = (hwcap & HWCAP_ASIMD) != 0;
          caps->hasARMv8 = (hwcap & HWCAP_CPUID) != 0; // Basic ARMv8-A support
          caps->hasARMv8Crypto = (hwcap & (HWCAP_AES | HWCAP_PMULL)) != 0;
+#        ifdef HWCAP_CRC32
+         caps->hasARMv8Crc = (hwcap & HWCAP_CRC32) != 0;
+#        endif
+#        ifdef HWCAP_ASIMDDP
+         caps->hasARMv8Dotprod = (hwcap & HWCAP_ASIMDDP) != 0;
+#        endif
+#        if defined(HWCAP_FPHP) && defined(HWCAP_ASIMDHP)
+         caps->hasARMv8Fp16 = (hwcap & (HWCAP_FPHP | HWCAP_ASIMDHP)) != 0;
+#        endif
+#        ifdef HWCAP_SVE
+         caps->hasSVE = (hwcap & HWCAP_SVE) != 0;
+#        endif
+#        ifdef AT_HWCAP2
+#            ifdef HWCAP2_SVE2
+         {
+             unsigned long hwcap2 = getauxval(AT_HWCAP2);
+             caps->hasSVE2 = (hwcap2 & HWCAP2_SVE2) != 0;
+         }
+#            endif
+#        endif
          LOG_INFO("NEON: " << (caps->hasNEON ? "yes" : "no"));
          LOG_INFO("ARMv8-A: " << (caps->hasARMv8 ? "yes" : "no"));
          LOG_INFO("ARMv8-A Crypto: " << (caps->hasARMv8Crypto ? "yes" : "no"));
+         LOG_INFO("ARMv8-A CRC32: " << (caps->hasARMv8Crc ? "yes" : "no"));
+         LOG_INFO(
+             "ARMv8.2-A Dotprod: " << (caps->hasARMv8Dotprod ? "yes" : "no"));
+         LOG_INFO("ARMv8.2-A FP16: " << (caps->hasARMv8Fp16 ? "yes" : "no"));
+         LOG_INFO("SVE: " << (caps->hasSVE ? "yes" : "no"));
+         LOG_INFO("SVE2: " << (caps->hasSVE2 ? "yes" : "no"));
 #     else // ! __linux__
          // Fallback for other ARM64 platforms (e.g., macOS)
          LOG_INFO("CPU: ARM64 (Unknown platform, assuming NEON)");
@@ -855,6 +922,16 @@ std::string GetCpuCaps(CpuCaps* caps)
         out << "ARMv8-A ";
     if (caps->hasARMv8Crypto)
         out << "ARMv8-A-Crypto ";
+    if (caps->hasARMv8Crc)
+        out << "ARMv8-A-CRC32 ";
+    if (caps->hasARMv8Dotprod)
+        out << "ARMv8.2-A-Dotprod ";
+    if (caps->hasARMv8Fp16)
+        out << "ARMv8.2-A-FP16 ";
+    if (caps->hasSVE)
+        out << "SVE ";
+    if (caps->hasSVE2)
+        out << "SVE2 ";
     if (caps->hasAltiVec)
         out << "AltiVec ";
 

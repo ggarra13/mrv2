@@ -17,7 +17,7 @@ namespace tl
     namespace timeline_vlk
     {
         void Render::drawStereo(
-            const std::vector<timeline::VideoData>& videoData,
+            const std::vector<timeline::VideoFrame>& videoData,
             const std::vector<math::Box2i>& boxes,
             const StereoType stereoType,
             const float eyeSeparation,

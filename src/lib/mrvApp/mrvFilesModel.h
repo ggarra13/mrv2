@@ -54,6 +54,9 @@ namespace mrv
         bool mute = false;
         double audioOffset = 0.0;
 
+        // For .otio files, media reference key (Full/Proxy/etc.).
+        std::string mediaReferenceKey;
+
         std::string ocioIcs;
         std::string ocioLook;
         timeline::LUTOptions lutOptions;

@@ -33,7 +33,7 @@ namespace tl
 #ifdef VULKAN_BACKEND
             OutputDevice(Fl_Vk_Context&);
 #endif
-            
+
         public:
             ~OutputDevice();
 
@@ -142,7 +142,7 @@ namespace tl
             void _createDevice(
                 const device::DeviceConfig&, bool& active, math::Size2i& size,
                 otime::RationalTime& frameRate);
-            timeline::AudioData findAudioData(double seconds);
+            timeline::AudioFrame findAudioFrame(double seconds);
             void _audio();
             math::Matrix4x4f _projectionMatrix() const noexcept;
             void _render(
@@ -153,12 +153,12 @@ namespace tl
                 const timeline::CompareOptions&,
                 const timeline::BackgroundOptions&);
             void _read(const device::DeviceConfig&);
-            void _cacheUpdate(const std::vector<timeline::AudioData>&);
+            void _cacheUpdate(const std::vector<timeline::AudioFrame>&);
 
 #ifdef VULKAN_BACKEND
             Fl_Vk_Context& ctx;
 #endif
-            
+
             TLRENDER_PRIVATE();
         };
     } // namespace ndi
