@@ -95,7 +95,7 @@ namespace mrv
         b->add(_("@B12@C7@b@.Function\t@B12@C7@b@.Hotkey"));
 
         std::vector<std::string> rows;
-        
+
         for (int i = 0; hotkeys[i].hotkey; ++i)
         {
             const HotkeyEntry& h = hotkeys[i];
@@ -158,7 +158,7 @@ namespace mrv
             if (hotkeys[i].hotkey->to_s() == "<Ctrl>+" &&
                 hotkeys[i].hotkey->to_s() == "<Ctrl>-")
                 is_assigned = true;
-            
+
             if (h->hk == *(hotkeys[i].hotkey) && idx != i &&
                 hotkeys[i].hotkey->to_s() != "[" &&
                 hotkeys[i].hotkey->to_s() != "]")
@@ -209,7 +209,7 @@ namespace mrv
             {
                 flags |= std::regex_constants::icase;
             }
-            
+
             std::regex regex{searchText, flags};
             int start = o->value() + 1;
             for (int i = start; i <= o->size(); ++i)
@@ -390,9 +390,9 @@ namespace mrv
         }
     }
 
-    /** 
+    /**
      * Load hotkeys from a path
-     * 
+     *
      * @param path This parameter is the preferences path.  Not the full path.
      */
     void load_hotkeys(const std::string& path)
@@ -461,7 +461,7 @@ namespace mrv
         tooltip += addHotkeys(kGammaLess, kGammaMore, kResetChanges);
         ui->uiGamma->copy_tooltip(tooltip.c_str());
         ui->uiGammaInput->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Toggle Edit Mode.");
         tooltip += addHotkey(kToggleEditMode);
         ui->uiEdit->copy_tooltip(tooltip.c_str());
@@ -485,7 +485,7 @@ namespace mrv
                     "ALT + Left Mouse Button to erase an area.");
         tooltip += addHotkey(kEraseMode);
         ui->uiErase->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Polygon Tool");
         tooltip += addHotkey(kPolygonMode);
         ui->uiPolygon->copy_tooltip(tooltip.c_str());
@@ -506,35 +506,35 @@ namespace mrv
                     "Right click to edit previously stamped text.");
         tooltip += addHotkey(kTextMode);
         ui->uiText->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Voice Annotation Tool");
         tooltip += addHotkey(kVoiceMode);
         ui->uiVoice->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("URL/File Link Tool");
         tooltip += addHotkey(kLinkMode);
         ui->uiLink->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Undo Draw");
         tooltip += addHotkey(kUndoDraw);
         ui->uiUndoDraw->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Redo Draw");
         tooltip += addHotkey(kRedoDraw);
         ui->uiRedoDraw->copy_tooltip(tooltip.c_str());
 
         //
         // Editing tooltips
-        // 
+        //
 
         tooltip = _("Move Edit Tool");
         tooltip += addHotkey(kEditMove);
         ui->uiMove->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Roll Edit Tool.\nMoves the ending or beginning adding gaps.");
         tooltip += addHotkey(kEditRoll);
         ui->uiRoll->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Trim Edit Tool\nMoves the ending or beginning without adding gaps");
         tooltip += addHotkey(kEditTrim);
         ui->uiTrim->copy_tooltip(tooltip.c_str());
@@ -542,12 +542,12 @@ namespace mrv
         tooltip = _("Slip Edit Tool\nSlips the in point of the clip without modifying others or its duration.");
         tooltip += addHotkey(kEditSlip);
         ui->uiSlip->copy_tooltip(tooltip.c_str());
-        
-        
+
+
         tooltip = _("Undo Edit");
         tooltip += addHotkey(kEditUndo);
         ui->uiUndoEdit->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Redo Edit");
         tooltip += addHotkey(kEditRedo);
         ui->uiRedoEdit->copy_tooltip(tooltip.c_str());
@@ -573,7 +573,7 @@ namespace mrv
         tooltip += addHotkey(kStop);
         c->uiStop->copy_tooltip(tooltip.c_str());
 
-        tooltip = _("Go back one frame.");
+        tooltip = _("Go forward one frame.");
         tooltip += addHotkey(kFrameStepFwd);
         c->uiStepForwards->copy_tooltip(tooltip.c_str());
 
@@ -592,12 +592,12 @@ namespace mrv
         tooltip = _("Set Out Point");
         tooltip += addHotkey(kSetOutPoint);
         c->uiEndButton->copy_tooltip(tooltip.c_str());
-        
+
         tooltip = _("Mute/Unmute audio - Select Audio track with Right "
                     "Mouse Button");
         tooltip += addHotkey(kToggleMuteAudio);
         c->uiAudioTracks->copy_tooltip(tooltip.c_str());
-        
+
         //
         // Pixel Tool Bar.
         //

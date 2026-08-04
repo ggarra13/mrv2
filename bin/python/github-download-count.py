@@ -357,8 +357,8 @@ if __name__ == "__main__":
     # Run the three queries using plain requests)
     for folder, date_start in [
         (tag, start_date_str),                     # released (detailed)
-        ("beta/opengl", start_date_str),
-        ("beta/vulkan", start_date_str)
+        ("beta/opengl", beta_start_date_str),
+        ("beta/vulkan", beta_start_date_str)
     ]:
         (mrv2_sf, vmrv2_sf,
          mrv2_win_sf, vmrv2_win_sf,
