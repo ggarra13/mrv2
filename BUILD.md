@@ -89,6 +89,16 @@ sudo dnf -y install alsa-lib-devel \
 # source to a newer version.
 
 #
+# Vulkan SDK
+#
+sudo dnf install vulkan-headers vulkan-loader-devel
+sudo dnf install vulkan-tools vulkan-validation-layers-devel
+sudo dnf install spirv-tools
+
+# The following one may not be found and may require compiling from source
+sudo dnf install shaderc
+
+#
 # To compile you need a newer compiler than those in Red Hat.
 #
 sudo dnf install gcc-toolset-14
@@ -173,7 +183,8 @@ sudo apt -y install libaom-dev \
      	    	    python3-dev
 
 # If you are building the Vulkan version of mrv2, you need to install
-# The VulkanSDK
+# The VulkanSDK:
+sudo apt install libvulkan-dev glslang-dev libshaderc-dev spirv-tools
 
 # Install cpanminus and IPC::Cmd non-interactively for libcrypto building
 sudo cpan App::cpanminus && cpanm --notest IPC::Cmd

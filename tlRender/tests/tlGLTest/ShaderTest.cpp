@@ -54,7 +54,6 @@ namespace tl
                 try
                 {
                     auto shader = Shader::create(
-
                         "#version 410\n"
                         "\n"
                         "in vec3 vPos;\n"

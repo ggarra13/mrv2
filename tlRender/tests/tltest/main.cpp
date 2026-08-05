@@ -123,11 +123,11 @@ void glTests(
     const std::shared_ptr<system::Context>& context)
 {
 #if defined(TLRENDER_GLFW)
-    // tests.push_back(gl_tests::GLFWTest::create(context));
-    // tests.push_back(gl_tests::MeshTest::create(context));
-    // tests.push_back(gl_tests::OffscreenBufferTest::create(context));
-    // tests.push_back(gl_tests::ShaderTest::create(context));
-    // tests.push_back(gl_tests::TextureTest::create(context));
+    tests.push_back(gl_tests::GLFWTest::create(context));
+    tests.push_back(gl_tests::MeshTest::create(context));
+    tests.push_back(gl_tests::OffscreenBufferTest::create(context));
+    tests.push_back(gl_tests::ShaderTest::create(context));
+    tests.push_back(gl_tests::TextureTest::create(context));
 #endif // TLRENDER_GLFW
 }
 
@@ -141,7 +141,7 @@ void ioTests(
     tests.push_back(io_tests::PPMTest::create(context));
     tests.push_back(io_tests::SGITest::create(context));
 #if defined(TLRENDER_FFMPEG)
-    //tests.push_back(io_tests::FFmpegTest::create(context));
+    tests.push_back(io_tests::FFmpegTest::create(context));
 #endif // TLRENDER_FFMPEG
 #if defined(TLRENDER_JPEG)
     tests.push_back(io_tests::JPEGTest::create(context));
@@ -208,9 +208,9 @@ int main(int argc, char* argv[])
     std::vector<std::shared_ptr<tests::ITest> > tests;
     // tests.push_back(core_tests::PathTest::create(context));
     // tests.push_back(timeline_tests::TimelineTest::create(context));
-    coreTests(tests, context);
-    // glTests(tests, context);
-    ioTests(tests, context);
+    // coreTests(tests, context);
+    glTests(tests, context);
+    // ioTests(tests, context);
     // timelineTests(tests, context);
 
     for (const auto& test : tests)

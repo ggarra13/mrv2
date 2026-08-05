@@ -5,10 +5,10 @@ set(SOURCE
 
 set(LIBRARIES
     tlCoreTest
-    tlDevice
-    # tlGLTest
+    tlGLTest
     tlIOTest
-    # tlTimelineTest
+    tlTimelineTest
+    tlDevice
 )
 
 find_package(NDI)

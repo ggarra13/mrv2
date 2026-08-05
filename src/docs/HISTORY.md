@@ -3,6 +3,11 @@ v1.7.3
 
 - UI: Fixed tooltip of "Advance forward one frame" button in all languages.
 
+- Core: Fixed a crash on the OpenEXR reader when reading a corrupt/truncated file.
+- Core: Fixed and added tlRender's unit tests.
+
+- Build: Documented Vulkan compilation on Linux.
+
 
 v1.7.2
 ======
