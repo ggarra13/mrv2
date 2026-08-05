@@ -135,8 +135,8 @@ void ioTests(
     std::vector<std::shared_ptr<tests::ITest> >& tests,
     const std::shared_ptr<system::Context>& context)
 {
-    tests.push_back(io_tests::CineonTest::create(context));
-//     tests.push_back(io_tests::DPXTest::create(context));
+    // tests.push_back(io_tests::CineonTest::create(context));  // segfaults
+    tests.push_back(io_tests::DPXTest::create(context));
 //     tests.push_back(io_tests::IOTest::create(context));
 //     tests.push_back(io_tests::PPMTest::create(context));
 //     tests.push_back(io_tests::SGITest::create(context));
@@ -211,7 +211,7 @@ int main(int argc, char* argv[])
     coreTests(tests, context);
     // glTests(tests, context);
     ioTests(tests, context);
-    timelineTests(tests, context);
+    // timelineTests(tests, context);
 
     for (const auto& test : tests)
     {

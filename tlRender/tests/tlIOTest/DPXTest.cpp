@@ -218,13 +218,17 @@ namespace tl
                                     image->setTags(tags);
                                     try
                                     {
+                                        std::cout << "call write" << std::endl;
                                         write(
                                             plugin, image, path, imageInfo,
                                             tags, options);
+                                        std::cout << "call read" << std::endl;
                                         read(
                                             plugin, image, path, memoryIO, tags,
                                             options);
+                                        std::cout << "clear cache" << std::endl;
                                         system->getCache()->clear();
+                                        std::cout << "call readError" << std::endl;
                                         readError(
                                             plugin, image, path, memoryIO,
                                             options);

@@ -30,12 +30,12 @@
 
 
 #    include <tlDevice/OutputData.h>
-#    include <tlDevice/NDI/NDIOptions.h>
 #    include <tlDevice/NDI/NDIOutputDevice.h>
 #    include <tlDevice/NDI/NDISystem.h>
 #    include <tlDevice/NDI/NDIUtil.h>
 
 #    include <tlCore/ListObserver.h>
+#    include <tlCore/NDIOptions.h>
 #    include <tlCore/StringFormat.h>
 
 #    include <FL/Fl_Choice.H>
@@ -66,7 +66,7 @@ namespace mrv
             PopupMenu* outputAudioMenu = nullptr;
             PopupMenu* outputMetadataMenu = nullptr;
             PopupMenu* outputFormatMenu = nullptr;
-            
+
             std::shared_ptr<observer::ListObserver<device::DeviceInfo> > deviceObserver;
 
             static std::string lastStream;
@@ -94,7 +94,7 @@ namespace mrv
 
             Fl_SVG_Image* svg = MRV2_LOAD_SVG(NDI);
             g->bind_image(svg);
-                        
+
             g->callback(
                 [](Fl_Widget* w, void* d)
                 {
@@ -112,10 +112,10 @@ namespace mrv
             MRV2_R();
 
             r.play.running = false;
-            
+
             r.cacheInfoObserver.reset();
             r.deviceObserver.reset();
-            
+
             auto model = p.ui->app->filesModel();
             if (model)
             {
@@ -188,10 +188,10 @@ namespace mrv
                     _ndi_input(item);
                 });
 
-            
+
             auto context = App::app->getContext();
             auto NDISystem = context->getSystem<ndi::System>();
-            
+
             r.deviceObserver =
                 observer::ListObserver<device::DeviceInfo>::create(
                         NDISystem->observeDeviceInfo(),
@@ -201,7 +201,7 @@ namespace mrv
 
                                 r.sourceMenu->clear();
                                 r.sourceMenu->add(_("None"));
-                                
+
                                 for (auto& device : devices)
                                 {
                                     r.sourceMenu->add(device.name.c_str());
@@ -321,9 +321,9 @@ namespace mrv
                 {
                     int value = b->value();
                     settings->setValue("NDI/Output/Format", value);
-                    
+
                     device::PixelType pixelType = _ndi_fourCC(value);
-                
+
                     auto outputDevice = App::app->outputDevice();
                     if (!outputDevice)
                         return;
@@ -347,7 +347,7 @@ namespace mrv
                 {
                     int value = b->value();
                     settings->setValue("NDI/Output/Audio", value);
-                    
+
                     auto outputDevice = App::app->outputDevice();
                     if (!outputDevice)
                         return;
@@ -371,7 +371,7 @@ namespace mrv
                 {
                     int value = b->value();
                     settings->setValue("NDI/Output/Metadata", value);
-                    
+
                     auto outputDevice = App::app->outputDevice();
                     if (!outputDevice)
                         return;
@@ -380,7 +380,7 @@ namespace mrv
                     config.noMetadata = value;
                     outputDevice->setConfig(config);
                 });
-            
+
             cg->end();
 
             key = prefix + "NDI Output";
@@ -395,57 +395,57 @@ namespace mrv
         void NDIPanel::_ndi_output(ToggleButton* b)
         {
             MRV2_R();
-            
+
             SettingsObject* settings = App::app->settings();
-            
+
             if (!App::ui->uiView->getTimelinePlayer())
             {
                 b->value(0);
                 b->redraw();
                 return;
             }
-                    
+
             if (!b->value())
             {
-                
+
                 App::app->beginNDIOutputStream();
 
-                
+
                 const Fl_Menu_Item* item = r.outputFormatMenu->mvalue();
                 if (!item || !item->label())
                     return;
-                
+
                 int fltk_value = r.outputFormatMenu->value();
                 settings->setValue("NDI/Output/Format", fltk_value);
 
                 device::PixelType pixelType = _ndi_fourCC(fltk_value);
-                    
+
                 const Fl_Menu_Item* audioItem = r.outputAudioMenu->mvalue();
                 if (!audioItem || !audioItem->label())
                     return;
-                
+
                 int noAudio = r.outputAudioMenu->value();
                 settings->setValue("NDI/Output/Audio", noAudio);
-                
+
                 int noMetadata = r.outputMetadataMenu->value();
-                
+
                 device::DeviceConfig config;
                 config.deviceIndex = 0;
                 config.displayModeIndex = 0;
                 config.pixelType = pixelType;
                 config.noAudio = noAudio;
                 config.noMetadata = noMetadata;
-                
-                
+
+
                 std::string format = item->label();
-                
+
                 /* xgettext:c++-format */
                 const std::string msg =
                     string::Format(_("Streaming {0} {1}...")).
                     arg(config.pixelType).
                     arg(audioItem->label());
                 LOG_STATUS(msg);
-                            
+
                 auto outputDevice = App::app->outputDevice();
                 if (!outputDevice)
                     return;
@@ -462,7 +462,7 @@ namespace mrv
                 b->redraw();
             }
         }
-        
+
         void NDIPanel::_ndi_input(const Fl_Menu_Item* item)
         {
             TLRENDER_P();
@@ -478,7 +478,7 @@ namespace mrv
                 LOG_STATUS("Close stream " << r.lastStream);
 
             r.cacheInfoObserver.reset();
-            
+
             auto model = p.ui->app->filesModel();
             if (model)
             {
@@ -499,7 +499,7 @@ namespace mrv
             options.sourceName = sourceName;
             options.bestFormat = r.inputFormatMenu->value();
             options.noAudio = r.inputAudioMenu->value();
-            
+
             nlohmann::json j;
             j = options;
 
@@ -546,7 +546,7 @@ namespace mrv
                                 }
                             }
                         });
-                
+
                 r.play.thread = std::thread(
                     [this, player, seconds]
                         {
@@ -570,15 +570,15 @@ namespace mrv
             }
 
         }
-        
+
         device::PixelType  NDIPanel::_ndi_fourCC(int fltk_value)
         {
             MRV2_R();
-            
+
             const Fl_Menu_Item* item = r.outputFormatMenu->mvalue();
             const std::string format = item->label();
 
-            
+
             if (format == _("Best Format"))
             {
 #ifdef TLRENDER_NDI_ADVANCED
@@ -597,7 +597,7 @@ namespace mrv
             }
 
             int idx = -1;
-                
+
             for (const auto& label :
                      tl::device::getPixelTypeLabels())
             {
@@ -605,10 +605,10 @@ namespace mrv
                 if (label == format)
                     break;
             }
-            
+
             return static_cast<device::PixelType>(idx);
         }
-        
+
     } // namespace panel
 
 } // namespace mrv
