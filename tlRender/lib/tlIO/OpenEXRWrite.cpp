@@ -162,6 +162,8 @@ namespace tl
             TLRENDER_P();
 
             const auto& info = image->getInfo();
+            p.pixelType = info.pixelType;  // Not needed but for safety
+
             Imf::Header header(
                 info.size.w, info.size.h, info.size.pixelAspectRatio,
                 Imath::V2f(0.F, 0.F), 1.F, Imf::INCREASING_Y, _compression);
@@ -175,7 +177,7 @@ namespace tl
                                           _chromaticities.white.y);
                 addAdoptedNeutral(header, adoptedNeutral);
             }
-            
+
             const auto tags = image->getTags();
             writeTags(tags, _speed, header);
 

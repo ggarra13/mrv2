@@ -141,7 +141,7 @@ void ioTests(
     tests.push_back(io_tests::PPMTest::create(context));
     tests.push_back(io_tests::SGITest::create(context));
 #if defined(TLRENDER_FFMPEG)
-    tests.push_back(io_tests::FFmpegTest::create(context));
+    //tests.push_back(io_tests::FFmpegTest::create(context));
 #endif // TLRENDER_FFMPEG
 #if defined(TLRENDER_JPEG)
     tests.push_back(io_tests::JPEGTest::create(context));

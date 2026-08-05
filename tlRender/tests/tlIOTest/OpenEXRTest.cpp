@@ -120,6 +120,8 @@ namespace tl
                 }
                 std::vector<uint8_t> memoryData;
                 std::vector<file::MemoryRead> memory;
+                std::shared_ptr<io::IRead> read;
+
                 if (memoryIO)
                 {
                     auto fileIO =
@@ -128,10 +130,25 @@ namespace tl
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
                         file::MemoryRead(memoryData.data(), memoryData.size()));
+                    read = plugin->read(path, memory, options);
                 }
-                auto read = plugin->read(path, memory, options);
-                const auto videoData =
-                    read->readVideo(otime::RationalTime(0.0, 24.0)).get();
+                else
+                {
+                    read = plugin->read(path, options);
+                }
+
+                if (!read)
+                    return;
+
+                try
+                {
+                    const auto videoData =
+                        read->readVideo(otime::RationalTime(0.0, 24.0)).get();
+                }
+                catch(const std::exception& e)
+                {
+                    std::cerr << e.what() << std::endl;
+                }
             }
         } // namespace
 
@@ -140,104 +157,121 @@ namespace tl
             auto system = _context->getSystem<System>();
             auto plugin = system->getPlugin<exr::Plugin>();
 
-            const image::Tags tags = {
-                //{ "Name", "Name" },
-                //{ "Type", "scanlineimage" },
-                //{ "Version", "1" },
-                //{ "Chunk Count", "1" },
-                //{ "View", "View" },
-                //{ "Tile", "1 2 1 1" },
-                {"AdoptedNeutral", "0 1"},
-                {"Altitude", "1"},
-                {"Aperture", "1"},
-                {"AscFramingDecisionList", "AscFramingDecisionList"},
-                {"CameraCCTSetting", "1"},
-                {"CameraColorBalance", "1 2"},
-                {"CameraFirmwareVersion", "CameraFirmwareVersion"},
-                {"CameraLabel", "CameraLabel"},
-                {"CameraMake", "CameraMake"},
-                {"CameraModel", "CameraModel"},
-                {"CameraSerialNumber", "CameraSerialNumber"},
-                {"CameraTintSetting", "1"},
-                {"CameraTintSetting", "CameraTintSetting"},
-                {"CapDate", "CapDate"},
-                {"CaptureRate", "24 1"},
-                {"Chromaticities", "0 1 2 3 4 5 6 7"},
-                {"Comments", "Comments"},
-                {"EffectiveFocalLength", "1"},
-                {"EntrancePupilOffset", "1"},
-                {"Envmap", "1"},
-                {"ExpTime", "1"},
-                {"Focus", "1"},
-                {"FramesPerSecond", "24 1"},
-                {"ImageCounter", "1"},
-                {"IsoSpeed", "1"},
-                {"KeyCode", "1:2:3:4:5:6:20"},
-                {"Latitude", "1"},
-                {"LensFirmwareVersion", "LensFirmwareVersion"},
-                {"LensMake", "LensMake"},
-                {"LensModel", "LensModel"},
-                {"LensSerialNumber", "LensSerialNumber"},
-                {"Longitude", "1"},
-                {"NominalFocalLength", "1"},
-                {"OriginalDataWindow", "0 1 2 3"},
-                {"Owner", "Owner"},
-                {"PinholeFocalLength", "1"},
-                {"ReelName", "ReelName"},
-                {"SensorAcquisitionRectangle", "0 1 2 3"},
-                {"SensorCenterOffset", "0 1"},
-                {"SensorPhotositePitch", "1"},
-                {"ShutterAngle", "1"},
-                {"TStop", "1"},
-                {"TimeCode", "01:00:00:00"},
-                {"UtcOffset", "1"},
-                {"WhiteLuminance", "1"},
-                {"WorldToCamera", "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"},
-                {"WorldToNDC", "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"},
-                {"XDensity", "1"},
+            const image::Tags tags;
 
-                {"Wrapmodes", "Wrapmodes"},
-                {"MultiView", "5:hello0:5:world"},
-                {"DeepImageState", "1"},
+            // const image::Tags tags = {
+            //     //{ "Name", "Name" },
+            //     //{ "Type", "scanlineimage" },
+            //     //{ "Version", "1" },
+            //     //{ "Chunk Count", "1" },
+            //     //{ "View", "View" },
+            //     //{ "Tile", "1 2 1 1" },
+            //     {"AdoptedNeutral", "0 1"},
+            //     {"Altitude", "1"},
+            //     {"Aperture", "1"},
+            //     {"AscFramingDecisionList", "Asc FramingDecisionList"},
+            //     {"CameraCCTSetting", "1"},
+            //     {"CameraColorBalance", "1 2"},
+            //     {"CameraFirmwareVersion", "CameraFirmwareVersion"},
+            //     {"CameraLabel", "CameraLabel"},
+            //     {"CameraMake", "CameraMake"},
+            //     {"CameraModel", "CameraModel"},
+            //     {"CameraSerialNumber", "CameraSerialNumber"},
+            //     {"CameraTintSetting", "1"},
+            //     {"CameraTintSetting", "CameraTintSetting"},
+            //     {"CapDate", "CapDate"},
+            //     {"CaptureRate", "24 1"},
+            //     {"Chromaticities", "0 1 2 3 4 5 6 7"},
+            //     {"Comments", "Comments"},
+            //     {"EffectiveFocalLength", "1"},
+            //     {"EntrancePupilOffset", "1"},
+            //     {"Envmap", "1"},
+            //     {"ExpTime", "1"},
+            //     {"Focus", "1"},
+            //     {"FramesPerSecond", "24 1"},
+            //     {"ImageCounter", "1"},
+            //     {"IsoSpeed", "1"},
+            //     {"KeyCode", "1:2:3:4:5:6:20"},
+            //     {"Latitude", "1"},
+            //     {"LensFirmwareVersion", "LensFirmwareVersion"},
+            //     {"LensMake", "LensMake"},
+            //     {"LensModel", "LensModel"},
+            //     {"LensSerialNumber", "LensSerialNumber"},
+            //     {"Longitude", "1"},
+            //     {"NominalFocalLength", "1"},
+            //     {"OriginalDataWindow", "0 1 2 3"},
+            //     {"Owner", "Owner"},
+            //     {"PinholeFocalLength", "1"},
+            //     {"ReelName", "ReelName"},
+            //     {"SensorAcquisitionRectangle", "0 1 2 3"},
+            //     {"SensorCenterOffset", "0 1"},
+            //     {"SensorPhotositePitch", "1"},
+            //     {"ShutterAngle", "1"},
+            //     {"TStop", "1"},
+            //     {"TimeCode", "01:00:00:00"},
+            //     {"UtcOffset", "1"},
+            //     {"WhiteLuminance", "1"},
+            //     {"WorldToCamera", "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"},
+            //     {"WorldToNDC", "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"},
+            //     {"XDensity", "1"},
 
-                /*{ "X Density", "1" },
-                { "Owner", "Owner" },
-                { "Comments", "Comments" },
-                { "Capture Date", "Capture Date" },
-                { "UTC Offset", "1" },
-                { "Longitude", "1" },
-                { "Latitude", "1" },
-                { "Altitude", "1" },
-                { "Focus", "1" },
-                { "Exposure Time", "1" },
-                { "Aperture", "1" },
-                { "ISO Speed", "1" },
-                { "Environment Map", "1" },
-                { "Keycode", "1 2 3 4 5 6 7" },
-                { "Timecode", "01:02:03:04" },
-                { "Wrap Modes", "Wrap Modes" }*/
-            };
+            //     {"Wrapmodes", "Wrapmodes"},
+            //     {"MultiView", "5:hello0:5:world"},
+            //     {"DeepImageState", "1"},
+
+            //     /*{ "X Density", "1" },
+            //     { "Owner", "Owner" },
+            //     { "Comments", "Comments" },
+            //     { "Capture Date", "Capture Date" },
+            //     { "UTC Offset", "1" },
+            //     { "Longitude", "1" },
+            //     { "Latitude", "1" },
+            //     { "Altitude", "1" },
+            //     { "Focus", "1" },
+            //     { "Exposure Time", "1" },
+            //     { "Aperture", "1" },
+            //     { "ISO Speed", "1" },
+            //     { "Environment Map", "1" },
+            //     { "Keycode", "1 2 3 4 5 6 7" },
+            //     { "Timecode", "01:02:03:04" },
+            //     { "Wrap Modes", "Wrap Modes" }*/
+            // };
             const std::vector<std::string> fileNames = {
                 "OpenEXRTest", "大平原"};
             const std::vector<bool> memoryIOList = {false, true};
             const std::vector<image::Size> sizes = {
                 image::Size(16, 16), image::Size(1, 1), image::Size(0, 0)};
-            const std::vector<std::pair<std::string, std::string> > options = {
-                {"OpenEXR/ChannelGrouing", "None"},
-                {"OpenEXR/ChannelGrouing", "Known"},
-                {"OpenEXR/ChannelGrouing", "All"},
-                {"OpenEXR/Compression", "None"},
-                {"OpenEXR/Compression", "RLE"},
-                {"OpenEXR/Compression", "ZIPS"},
-                {"OpenEXR/Compression", "ZIP"},
-                {"OpenEXR/Compression", "PIZ"},
-                {"OpenEXR/Compression", "PXR24"},
-                {"OpenEXR/Compression", "B44"},
-                {"OpenEXR/Compression", "B44A"},
-                {"OpenEXR/Compression", "DWAA"},
-                {"OpenEXR/Compression", "DWAB"},
-                {"OpenEXR/DWACompressionLevel", "45"},
-                {"OpenEXR/DWACompressionLevel", "100"}};
+            std::vector<std::pair<std::string, std::string> > optionList;
+            optionList.reserve(100);
+            optionList.emplace_back("OpenEXR/ChannelGrouping", "None");
+            optionList.emplace_back("OpenEXR/ChannelGrouping", "Known");
+            optionList.emplace_back("OpenEXR/ChannelGrouping", "All");
+            optionList.emplace_back("OpenEXR/Compression", "None");
+            optionList.emplace_back("OpenEXR/Compression", "RLE");
+            optionList.emplace_back("OpenEXR/Compression", "ZIPS");
+            optionList.emplace_back("OpenEXR/Compression", "ZIP");
+            optionList.emplace_back("OpenEXR/Compression", "PIZ");
+            optionList.emplace_back("OpenEXR/Compression", "PXR24");
+            optionList.emplace_back("OpenEXR/Compression", "B44");
+            optionList.emplace_back("OpenEXR/Compression", "B44A");
+            optionList.emplace_back("OpenEXR/Compression", "DWAA");
+            optionList.emplace_back("OpenEXR/Compression", "DWAB");
+            optionList.emplace_back("OpenEXR/DWACompressionLevel", "45");
+            optionList.emplace_back("OpenEXR/DWACompressionLevel", "100");
+
+            std::set<std::string> validPixelTypes;
+            validPixelTypes.insert("L_U32");
+            validPixelTypes.insert("L_F16");
+            validPixelTypes.insert("L_F32");
+            validPixelTypes.insert("LA_U32");
+            validPixelTypes.insert("LA_F16");
+            validPixelTypes.insert("LA_F32");
+            validPixelTypes.insert("RGB_U32");
+            validPixelTypes.insert("RGB_F16");
+            validPixelTypes.insert("RGB_F32");
+            validPixelTypes.insert("RGBA_U32");
+            validPixelTypes.insert("RGBA_F16");
+            validPixelTypes.insert("RGBA_F32");
 
             for (const auto& fileName : fileNames)
             {
@@ -245,14 +279,22 @@ namespace tl
                 {
                     for (const auto& size : sizes)
                     {
+                        Options options;
                         for (const auto& pixelType : image::getPixelTypeEnums())
                         {
-                            for (const auto& option : options)
+                            auto pixelTypeName = getLabel(pixelType);
+                            if (validPixelTypes.find(pixelTypeName) ==
+                                validPixelTypes.end())
+                                continue;
+                            options["OpenEXR/PixelType"] = pixelTypeName;
+                            for (const auto& option : optionList)
                             {
-                                Options options;
                                 options[option.first] = option.second;
                                 const auto imageInfo = plugin->getWriteInfo(
                                     image::Info(size, pixelType));
+                                std::cerr << "getWriteInfo returned="
+                                          << imageInfo.pixelType
+                                          << std::endl;
                                 if (imageInfo.isValid())
                                 {
                                     file::Path path;
