@@ -391,7 +391,7 @@ namespace tl
                         _s.reset(new IStream(fileName.c_str()));
                     }
 
-                    // 2. ALWAYS open as MultiPartInputFile. 
+                    // 2. ALWAYS open as MultiPartInputFile.
                     try
                     {
                         _f.reset(new Imf::MultiPartInputFile(*_s));
@@ -438,7 +438,7 @@ namespace tl
 
                             int numXLevels = _t_part->numXLevels();
                             int numYLevels = _t_part->numYLevels();
-            
+
                             {
                                 std::stringstream ss;
                                 ss << numXLevels;
@@ -459,7 +459,7 @@ namespace tl
                         {
                             const Imf::Header& header = _f->header(partNumber);
                             parseHeader(header, partNumber);
-                            
+
                             // Check for tiling and get counts for base level reads ---
                             if (header.hasTileDescription())
                             {
@@ -646,13 +646,13 @@ namespace tl
                         header.displayWindow() = header.dataWindow();
                         parseHeader(header);
                     }
-    
+
                     Imf::LineOrder lineOrder = header.lineOrder();
 
                     const image::Info& imageInfo = _info.video[layer];
-                    
+
                     image::Info vulkanInfo = imageInfo;
-                    
+
 #ifdef VULKAN_BACKEND
                     if (!_useRGBOnly)
                     {
@@ -682,7 +682,7 @@ namespace tl
                     uint8_t* basePtr = nullptr;
                     size_t scb = 0;
                     char* sliceBase = nullptr;
-                    
+
                     if (needTemp)
                     {
                         tempDataWindow = _dataWindow;
@@ -714,10 +714,10 @@ namespace tl
                             _layers[layer].channels[c].name;
                         const math::Vector2i& sampling =
                             _layers[layer].channels[c].sampling;
-                        
+
                         if (name == "RY" || name == "BY")
                             YBYRY = true;
-                        
+
                         frameBuffer.insert(
                             name.c_str(),
                             Imf::Slice(
@@ -757,7 +757,7 @@ namespace tl
                             for (int x = 0; x < tx; ++x)
                                 tiledInputPart.readTile(x, y, _xLevel, _yLevel);
                     }
-                    
+
                     if (needTemp)
                     {
                         if (YBYRY)
@@ -945,6 +945,11 @@ namespace tl
                     const otime::RationalTime& time, const io::Options& options)
                 {
                     io::VideoData out;
+
+                    // Early exit.
+                    if (!_f)
+                        return out;
+
                     int layer = 0;
                     auto i = options.find("Layer");
                     if (i != options.end())
@@ -991,7 +996,7 @@ namespace tl
                     int maxX =
                         std::max(_dataWindow.max.x, _displayWindow.max.x);
                     image::Info imageInfo = _info.video[layer];
-                    
+
                     // 3. Determine Tiled status and prepare TiledInputPart if necessary
                     bool isTiled = false;
                     std::unique_ptr<Imf::TiledInputPart> tiledPartForRead;
@@ -1027,7 +1032,7 @@ namespace tl
                                 vulkanInfo.pixelType = image::PixelType::RGBA_F32;
                         }
 #endif
-                        
+
                         out.image = image::Image::create(vulkanInfo);  // Vulkan channels in used image
 
                         const size_t vulkanChannels = image::getChannelCount(vulkanInfo.pixelType);
@@ -1036,7 +1041,7 @@ namespace tl
                         const size_t cb = vulkanChannels * channelByteCount;
                         const size_t scb =
                             vulkanInfo.size.w * vulkanChannels * channelByteCount;
-                        
+
                         if (_fast)
                         {
                             Imf::FrameBuffer frameBuffer;
@@ -1116,7 +1121,7 @@ namespace tl
                                             cb, scb, 1, 1, 1.F));
                                 }
                             }
-#endif                      
+#endif
                             Imf::InputPart in(
                                 *_f.get(), _layers[layer].partNumber);
                             in.setFrameBuffer(frameBuffer);
@@ -1171,7 +1176,7 @@ namespace tl
                                 maxY = _dataWindow.max.y;
                                 minX = _dataWindow.min.x;
                                 maxX = _dataWindow.max.x;
-                                
+
                                 const size_t size = _dataWindow.w() * cb;
                                 for (int y = minY; y <= maxY; ++y)
                                 {
@@ -1228,7 +1233,7 @@ namespace tl
                                 }
                             }
 
-                            
+
                             switch (vulkanInfo.pixelType)
                             {
                             case image::PixelType::RGB_F16:
@@ -1257,7 +1262,7 @@ namespace tl
                         }
                     }
 
-                    if (_ignoreDisplayWindow && 
+                    if (_ignoreDisplayWindow &&
                         (_dataWindow.min.x < _displayWindow.min.x ||
                          _dataWindow.max.x > _displayWindow.max.x ||
                          _dataWindow.min.y < _displayWindow.min.y ||
@@ -1278,12 +1283,12 @@ namespace tl
                         data.min.y = 0;
                         data.max.x += -data.min.x;
                         data.min.x = 0;
-                                
+
                         _info.tags["Display Window"] =
                             serialize(display);
                         _info.tags["Data Window"] = serialize(data);
                     }
-                    
+
                     if (_autoNormalize)
                     {
                         math::Vector4f minimum, maximum;
@@ -1344,7 +1349,7 @@ namespace tl
                 _ignoreDisplayWindow =
                     static_cast<bool>(std::atoi(option->second.c_str()));
             }
-            
+
             option = options.find("OpenEXR/UseRGBOnly");
             if (option != options.end())
             {

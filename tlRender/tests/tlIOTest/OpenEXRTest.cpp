@@ -140,15 +140,8 @@ namespace tl
                 if (!read)
                     return;
 
-                try
-                {
-                    const auto videoData =
-                        read->readVideo(otime::RationalTime(0.0, 24.0)).get();
-                }
-                catch(const std::exception& e)
-                {
-                    std::cerr << e.what() << std::endl;
-                }
+                const auto videoData =
+                    read->readVideo(otime::RationalTime(0.0, 24.0)).get();
             }
         } // namespace
 
