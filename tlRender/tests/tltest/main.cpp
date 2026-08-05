@@ -135,29 +135,29 @@ void ioTests(
     std::vector<std::shared_ptr<tests::ITest> >& tests,
     const std::shared_ptr<system::Context>& context)
 {
-    // tests.push_back(io_tests::CineonTest::create(context));  // segfaults
+    tests.push_back(io_tests::CineonTest::create(context));
     tests.push_back(io_tests::DPXTest::create(context));
-//     tests.push_back(io_tests::IOTest::create(context));
-//     tests.push_back(io_tests::PPMTest::create(context));
-//     tests.push_back(io_tests::SGITest::create(context));
-// #if defined(TLRENDER_FFMPEG)
-//     tests.push_back(io_tests::FFmpegTest::create(context));
-// #endif // TLRENDER_FFMPEG
-// #if defined(TLRENDER_JPEG)
-//     tests.push_back(io_tests::JPEGTest::create(context));
-// #endif // TLRENDER_JPEG
-// #if defined(TLRENDER_EXR)
-//     tests.push_back(io_tests::OpenEXRTest::create(context));
-// #endif // TLRENDER_EXR
-// #if defined(TLRENDER_PNG)
-//     tests.push_back(io_tests::PNGTest::create(context));
-// #endif // TLRENDER_PNG
-// #if defined(TLRENDER_TIFF)
-//     tests.push_back(io_tests::TIFFTest::create(context));
-// #endif // TLRENDER_TIFF
-// #if defined(TLRENDER_STB)
-//     tests.push_back(io_tests::STBTest::create(context));
-// #endif // TLRENDER_STB
+    tests.push_back(io_tests::IOTest::create(context));
+    tests.push_back(io_tests::PPMTest::create(context));
+    tests.push_back(io_tests::SGITest::create(context));
+#if defined(TLRENDER_FFMPEG)
+    tests.push_back(io_tests::FFmpegTest::create(context));
+#endif // TLRENDER_FFMPEG
+#if defined(TLRENDER_JPEG)
+    tests.push_back(io_tests::JPEGTest::create(context));
+#endif // TLRENDER_JPEG
+#if defined(TLRENDER_EXR)
+    tests.push_back(io_tests::OpenEXRTest::create(context));
+#endif // TLRENDER_EXR
+#if defined(TLRENDER_PNG)
+    tests.push_back(io_tests::PNGTest::create(context));
+#endif // TLRENDER_PNG
+#if defined(TLRENDER_TIFF)
+    tests.push_back(io_tests::TIFFTest::create(context));
+#endif // TLRENDER_TIFF
+#if defined(TLRENDER_STB)
+    tests.push_back(io_tests::STBTest::create(context));
+#endif // TLRENDER_STB
 }
 
 void timelineTests(
@@ -187,7 +187,7 @@ void appTests(
 int main(int argc, char* argv[])
 {
     auto context = system::Context::create();
-    //timeline::init(context);
+    timeline::init(context);
 
     auto logObserver = observer::ListObserver<log::Item>::create(
         context->getSystem<log::System>()->observeLog(),

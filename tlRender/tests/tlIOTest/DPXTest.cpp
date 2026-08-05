@@ -119,6 +119,7 @@ namespace tl
                 }
                 std::vector<uint8_t> memoryData;
                 std::vector<file::MemoryRead> memory;
+                std::shared_ptr<io::IRead> read; // Declare IRead here
                 if (memoryIO)
                 {
                     auto fileIO =
@@ -127,8 +128,14 @@ namespace tl
                     fileIO->read(memoryData.data(), memoryData.size());
                     memory.push_back(
                         file::MemoryRead(memoryData.data(), memoryData.size()));
+                    // Use the memory overload and pass options
+                    read = plugin->read(path, memory);
                 }
-                auto read = plugin->read(path, memory);
+                else
+                {
+                    // Use the standard file overload and pass options
+                    read = plugin->read(path, options);
+                }
                 const auto videoData =
                     read->readVideo(otime::RationalTime(0.0, 24.0)).get();
             }
@@ -181,7 +188,7 @@ namespace tl
             const std::vector<bool> memoryIOList = {false, true};
             const std::vector<image::Size> sizes = {
                 image::Size(16, 16), image::Size(1, 1), image::Size(0, 0)};
-            const std::vector<std::pair<std::string, std::string> > options = {
+            const std::vector<std::pair<std::string, std::string> > optionList = {
                 {"DPX/Version", "1.0"},
                 {"DPX/Version", "2.0"},
                 {"DPX/Endian", "Auto"},
@@ -196,7 +203,7 @@ namespace tl
                     {
                         for (const auto& pixelType : image::getPixelTypeEnums())
                         {
-                            for (const auto& option : options)
+                            for (const auto& option : optionList)
                             {
                                 Options options;
                                 options[option.first] = option.second;
@@ -218,17 +225,13 @@ namespace tl
                                     image->setTags(tags);
                                     try
                                     {
-                                        std::cout << "call write" << std::endl;
                                         write(
                                             plugin, image, path, imageInfo,
                                             tags, options);
-                                        std::cout << "call read" << std::endl;
                                         read(
                                             plugin, image, path, memoryIO, tags,
                                             options);
-                                        std::cout << "clear cache" << std::endl;
                                         system->getCache()->clear();
-                                        std::cout << "call readError" << std::endl;
                                         readError(
                                             plugin, image, path, memoryIO,
                                             options);
