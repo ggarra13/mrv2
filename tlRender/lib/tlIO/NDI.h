@@ -7,7 +7,8 @@
 #include <tlCore/LogSystem.h>
 
 #include <tlDevice/NDI/NDI.h>
-#include <tlDevice/NDI/NDIOptions.h>
+
+#include <tlCore/NDIOptions.h>
 
 #include <tlIO/Plugin.h>
 

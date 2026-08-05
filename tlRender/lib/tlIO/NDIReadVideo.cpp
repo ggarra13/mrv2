@@ -4,6 +4,7 @@
 
 #include <tlIO/FFmpegMacros.h>
 #include <tlIO/NDIReadPrivate.h>
+#include <tlIO/NDIUtil.h>
 
 #include <tlDevice/NDI/NDIUtil.h>
 

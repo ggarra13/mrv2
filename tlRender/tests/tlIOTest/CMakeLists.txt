@@ -42,5 +42,5 @@ endif()
 find_package(NDI)
 
 add_library(tlIOTest ${SOURCE} ${HEADERS})
-target_link_libraries(tlIOTest tlTestLib tlIO NDI)
+target_link_libraries(tlIOTest tlTestLib tlIO tlDevice NDI)
 set_target_properties(tlIOTest PROPERTIES FOLDER tests)

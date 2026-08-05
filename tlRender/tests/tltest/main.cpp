@@ -135,7 +135,7 @@ void ioTests(
     std::vector<std::shared_ptr<tests::ITest> >& tests,
     const std::shared_ptr<system::Context>& context)
 {
-//     tests.push_back(io_tests::CineonTest::create(context));
+    tests.push_back(io_tests::CineonTest::create(context));
 //     tests.push_back(io_tests::DPXTest::create(context));
 //     tests.push_back(io_tests::IOTest::create(context));
 //     tests.push_back(io_tests::PPMTest::create(context));
@@ -187,7 +187,7 @@ void appTests(
 int main(int argc, char* argv[])
 {
     auto context = system::Context::create();
-    // timeline::init(context);
+    //timeline::init(context);
 
     auto logObserver = observer::ListObserver<log::Item>::create(
         context->getSystem<log::System>()->observeLog(),
@@ -210,8 +210,8 @@ int main(int argc, char* argv[])
     // tests.push_back(timeline_tests::TimelineTest::create(context));
     coreTests(tests, context);
     // glTests(tests, context);
-    // ioTests(tests, context);
-    // timelineTests(tests, context);
+    ioTests(tests, context);
+    timelineTests(tests, context);
 
     for (const auto& test : tests)
     {

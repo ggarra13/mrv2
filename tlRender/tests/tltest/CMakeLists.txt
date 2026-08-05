@@ -4,11 +4,11 @@ set(SOURCE
     main.cpp)
 
 set(LIBRARIES
-    #    tlAppTest
     tlCoreTest
+    tlDevice
     # tlGLTest
-    # tlIOTest
-    #   tlTimelineTest
+    tlIOTest
+    # tlTimelineTest
 )
 
 find_package(NDI)

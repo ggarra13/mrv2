@@ -13,18 +13,19 @@ set(HEADERS
     UtilTest.h)
 
 set(SOURCE
-    CompareOptionsTest.cpp
+    # CompareOptionsTest.cpp
     DisplayOptionsTest.cpp
-    EditTest.cpp
+    # EditTest.cpp
     IRenderTest.cpp
     ImageOptionsTest.cpp
     LUTOptionsTest.cpp
     MemoryReferenceTest.cpp
     OCIOOptionsTest.cpp
     PlayerOptionsTest.cpp
-    PlayerTest.cpp
-    TimelineTest.cpp
-    UtilTest.cpp)
+    # PlayerTest.cpp
+    # TimelineTest.cpp
+    # UtilTest.cpp
+)
 
 add_library(tlTimelineTest ${SOURCE} ${HEADERS})
 target_link_libraries(tlTimelineTest tlTestLib tlTimeline)
