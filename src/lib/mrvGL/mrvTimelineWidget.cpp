@@ -850,7 +850,7 @@ namespace mrv
                 glClearColor(0.F, 0.F, 0.F, 0.F);
                 glClear(GL_COLOR_BUFFER_BIT);
 
-                if (p.buffer)
+                if (p.buffer && p.shader)
                 {
                     p.shader->bind();
                     const auto pm = math::ortho(
