@@ -7,6 +7,7 @@ v1.7.3
 
 - NDI: Minor improvement to NDI reading in the player.
 
+- Core: Major improvement to reading of image sequences.
 - Core: Minor improvement of performance on video reading.
 - Core: Improved performance of image reading.
 - Core: Fixed some OpenEXR memory issues and potential crashes. 

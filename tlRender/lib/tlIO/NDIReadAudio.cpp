@@ -89,7 +89,6 @@ namespace tl
 
         void ReadAudio::_from_ndi(const NDIlib_audio_frame_t& a)
         {
-            std::cerr << "got audio frame" << std::endl;
             _info.channelCount = a.no_channels;
             _info.sampleRate = a.sample_rate;
 
