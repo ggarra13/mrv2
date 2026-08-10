@@ -1255,9 +1255,20 @@ namespace mrv
         if (!versionString)
             versionString = (char*)_("Unknown");
 
+        int gl_version_major = 0;
+        sscanf((const char *)versionString, "%d", &gl_version_major);
+
+        char* GLSLString = nullptr;
+        if (gl_version_major >= 3)
+        {
+            GLSLString = (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+        }
+        if (!GLSLString)
+            GLSLString = (char*)_("Unknown");
         o << _("Vendor:\t") << vendorString << endl
           << _("Renderer:\t") << rendererString << endl
           << _("Version:\t") << versionString << endl
+          << _("GLSL Version:\t") << GLSLString << endl
           << endl;
 
         // Get maximum texture resolution for gfx card

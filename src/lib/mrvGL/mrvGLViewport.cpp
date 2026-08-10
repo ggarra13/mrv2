@@ -122,13 +122,15 @@ namespace mrv
 
             if (auto context = gl.context.lock())
             {
-                gl.render = timeline_gl::Render::create(context);
-                p.fontSystem = image::FontSystem::create(context);
-
-                gl.lines = std::make_shared<opengl::Lines>();
-
                 try
                 {
+                    gl.render = timeline_gl::Render::create(context);
+                    p.fontSystem = image::FontSystem::create(context);
+                    
+                    gl.lines = std::make_shared<opengl::Lines>();
+
+                    make_current();
+                    
                     const std::string& vertexSource = timeline_gl::vertexSource();
                     gl.shader =
                         gl::Shader::create(vertexSource, textureFragmentSource());

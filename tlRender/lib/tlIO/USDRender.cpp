@@ -117,8 +117,12 @@ namespace tl
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glVersionMinor);
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
             glfwWindowHint(GLFW_OPENGL_PROFILE, glProfile);
+#if defined(__APPLE__) 
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+#endif
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
             gl::windowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
+            
             p.glfwWindow =
                 glfwCreateWindow(1, 1, "tl::usd::Render", NULL, NULL);
             if (!p.glfwWindow)

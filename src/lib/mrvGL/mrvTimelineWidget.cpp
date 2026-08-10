@@ -676,6 +676,8 @@ namespace mrv
             {
                 try
                 {
+                    make_current();
+                    
                     p.render = timeline_gl::Render::create(context);
                     CHECK_GL;
                     const std::string vertexSource =
