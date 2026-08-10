@@ -6,12 +6,6 @@
 
 #include <tlCore/FileInfo.h>
 
-#if defined(__APPLE__)
-#    include <ApplicationServices/ApplicationServices.h>
-#    include <CoreFoundation/CFBundle.h>
-#    include <CoreServices/CoreServices.h>
-#endif // __APPLE__
-
 #if defined(__linux__)
 #    include <linux/limits.h>
 #endif // __linux__
@@ -29,38 +23,6 @@ namespace tl
         std::string getUserPath(UserPath value)
         {
             std::string out;
-#if defined(__APPLE__)
-            OSType folderType = kDesktopFolderType;
-            switch (value)
-            {
-            case UserPath::Home:
-                folderType = kCurrentUserFolderType;
-                break;
-            case UserPath::Desktop:
-                folderType = kDesktopFolderType;
-                break;
-            case UserPath::Documents:
-                folderType = kDocumentsFolderType;
-                break;
-            case UserPath::Downloads:
-                folderType = kCurrentUserFolderType;
-                break;
-            default:
-                break;
-            }
-            FSRef ref;
-            FSFindFolder(kUserDomain, folderType, kCreateFolder, &ref);
-            char path[PATH_MAX];
-            FSRefMakePath(&ref, (UInt8*)&path, PATH_MAX);
-            if (UserPath::Downloads == value)
-            {
-                out = Path(path, "Downloads").get();
-            }
-            else
-            {
-                out = path;
-            }
-#else  // __APPLE__
             if (struct passwd* buf = ::getpwuid(::getuid()))
             {
                 const std::string dir(buf->pw_dir);
@@ -82,7 +44,6 @@ namespace tl
                     break;
                 }
             }
-#endif // __APPLE__
             return out;
         }
 
