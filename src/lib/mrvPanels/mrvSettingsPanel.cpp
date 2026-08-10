@@ -195,16 +195,16 @@ namespace mrv
             Fl_Choice* m = mW;
             m->labelsize(12);
             m->align(FL_ALIGN_LEFT);
-            for (const auto& i : timeline::getFileSequenceAudioLabels())
+            for (const auto& i : timeline::getImageSeqAudioLabels())
             {
                 m->add(_(i.c_str()));
             }
-            m->value(settings->getValue<int>("FileSequence/Audio"));
+            m->value(settings->getValue<int>("ImageSequence/Audio"));
             mW->callback(
                 [=](auto o)
                 {
                     int v = o->value();
-                    settings->setValue("FileSequence/Audio", v);
+                    settings->setValue("ImageSequence/Audio", v);
                 });
 
             Fl_Input* i;
@@ -215,30 +215,14 @@ namespace mrv
             i->textcolor(FL_BLACK);
             i->cursor_color(FL_RED);
             std::string file =
-                settings->getValue<std::string>("FileSequence/AudioFileName");
+                settings->getValue<std::string>("ImageSequence/AudioFileName");
 
             i->value(file.c_str());
             iW->callback(
                 [=](auto o)
                 {
                     std::string file = o->value();
-                    settings->setValue("FileSequence/AudioFileName", file);
-                });
-
-            iW = new Widget<Fl_Input>(
-                g->x() + 130, 170, g->w() - 130, 20, "Audio directory");
-            i = iW;
-            i->labelsize(12);
-            i->textcolor(FL_BLACK);
-            i->cursor_color(FL_RED);
-            i->value(
-                settings->getValue<std::string>("FileSequence/AudioDirectory")
-                    .c_str());
-            iW->callback(
-                [=](auto o)
-                {
-                    std::string dir = o->value();
-                    settings->setValue("FileSequence/AudioDirectory", dir);
+                    settings->setValue("ImageSequence/AudioFileName", file);
                 });
 
             auto inW = new Widget<Fl_Int_Input>(

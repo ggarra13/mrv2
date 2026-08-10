@@ -155,8 +155,7 @@ namespace mrv
                     release = std::make_unique<py::gil_scoped_release>();
                 }
 #endif
-                const auto& timeline =
-                    timeline::Timeline::create(path, context);
+                const auto& timeline = timeline::Timeline::create(context, path);
                 const auto& timeRange = timeline->getTimeRange();
 
                 auto time = currentTime;

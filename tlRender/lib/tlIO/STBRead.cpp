@@ -117,7 +117,7 @@ namespace tl
                     const size_t bytes =
                         image::getBitDepth(imageInfo.pixelType) / 8;
 
-                    
+
                     stbi_set_flip_vertically_on_load(1);
 
                     int x = 0, y = 0, n = 1;
@@ -173,12 +173,7 @@ namespace tl
 #endif
                         }
 
-                        _info.tags["otioClipName"] = fileName;
-                        {
-                            std::stringstream ss;
-                            ss << time;
-                            _info.tags["otioClipTime"] = ss.str();
-                        }
+                        io::addOtioTags(_info.tags, fileName, time);
                         out.image->setTags(_info.tags);
                     }
 
@@ -192,63 +187,33 @@ namespace tl
             };
         } // namespace
 
-        void Read::_init(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            ISequenceRead::_init(path, memory, options, cache, logSystem);
+        Decode::Decode()
+        {}
 
+        Decode::~Decode()
+        {}
+
+        std::shared_ptr<Decode> Decode::create()
+        {
+            return std::shared_ptr<Decode>(new Decode);
+        }
+
+        io::Info Decode::getInfo(
+            const std::string& fileName, const file::MemoryRead* memory)
+        {
+            return File(fileName, memory, false).getInfo();
+        }
+
+        io::VideoData Decode::readVideo(
+            const std::string& fileName, const file::MemoryRead* memory,
+            const otime::RationalTime& time, const io::Options& options)
+        {
             auto option = options.find("AutoNormalize");
             if (option != options.end())
             {
                 _autoNormalize =
                     static_cast<bool>(std::atoi(option->second.c_str()));
             }
-        }
-
-        Read::Read() {}
-
-        Read::~Read()
-        {
-            _finish();
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const io::Options& options,
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, {}, options, cache, logSystem);
-            return out;
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, memory, options, cache, logSystem);
-            return out;
-        }
-
-        io::Info Read::_getInfo(
-            const std::string& fileName, const file::MemoryRead* memory)
-        {
-            io::Info out = File(fileName, memory, false).getInfo();
-            out.videoTime =
-                otime::TimeRange::range_from_start_end_time_inclusive(
-                    otime::RationalTime(_startFrame, _defaultSpeed),
-                    otime::RationalTime(_endFrame, _defaultSpeed));
-            return out;
-        }
-
-        io::VideoData Read::_readVideo(
-            const std::string& fileName, const file::MemoryRead* memory,
-            const otime::RationalTime& time, const io::Options&)
-        {
             return File(fileName, memory, _autoNormalize).read(fileName, time);
         }
     } // namespace stb

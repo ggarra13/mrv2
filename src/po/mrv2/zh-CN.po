@@ -199,12 +199,6 @@ msgstr "设置文件序列音频文件名"
 msgid "Get file sequence audio file name."
 msgstr "获取文件序列音频文件名"
 
-msgid "Set file sequence audio directory."
-msgstr "设置文件序列音频目录"
-
-msgid "Get file sequence audio directory."
-msgstr "获取文件序列音频目录"
-
 msgid "Set maximum file sequence digits."
 msgstr "设定最大文件序列位数"
 
@@ -8049,6 +8043,12 @@ msgstr "任务信息失败"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "用于文本绘图的无效字体"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "设置文件序列音频目录"
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "获取文件序列音频目录"
 
 #~ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 #~ msgstr "    已使用: %.2g  %zu Gb (% 2g %%)"

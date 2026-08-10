@@ -4,8 +4,10 @@
 
 #pragma once
 
-#include <tlCore/HDR.h>
+#include <tlIO/Cache.h>
 #include <tlIO/NDI.h>
+
+#include <tlCore/HDR.h>
 
 extern "C"
 {
@@ -23,12 +25,13 @@ namespace tl
 {
     namespace ndi
     {
+        extern std::mutex NDI_recv_mutex;
+        extern NDIlib_recv_instance_t NDI_recv;
 
         class ReadVideo
         {
         public:
             ReadVideo(
-                const std::string& fileName, const NDIlib_source_t& NDIsource,
                 const NDIlib_recv_create_t& recv_desc,
                 const NDIlib_video_frame_t& video_frame,
                 const std::weak_ptr<log::System>& logSystem,
@@ -64,7 +67,6 @@ namespace tl
 
             //! NDI structs
             const std::string _fileName;
-            NDIlib_recv_instance_t NDI_recv = nullptr;
             int frame_rate_N = 30000, frame_rate_D = 1001;
 
             //! FFmpeg conversion variables
@@ -87,16 +89,16 @@ namespace tl
         {
         public:
             ReadAudio(
-                const std::string& fileName, const NDIlib_source_t& NDIsource,
+                const NDIlib_recv_create_t& recv_desc,
                 const NDIlib_audio_frame_t& audio_frame,
-                const std::weak_ptr<log::System>& logSystem, const Options&);
+                const std::weak_ptr<log::System>& logSystem,
+                const Options&);
 
             ~ReadAudio();
 
             void start();
             void stop();
 
-            const bool isValid() const;
             const audio::Info& getInfo() const;
             const otime::TimeRange& getTimeRange() const;
 
@@ -112,10 +114,9 @@ namespace tl
             int _decode(const otime::RationalTime& currentTime);
             void _from_ndi(const NDIlib_audio_frame_t& audio_frame);
 
+            NDIlib_recv_instance_t _NDI_recv = nullptr;
             const std::string _fileName;
             std::weak_ptr<log::System> _logSystem;
-
-            NDIlib_recv_instance_t NDI_recv = nullptr;
 
             Options _options;
             audio::Info _info;
@@ -123,16 +124,14 @@ namespace tl
             std::list<std::shared_ptr<audio::Audio> > _buffer;
         };
 
-        struct Read::Private
+        struct VideoRead::Private
         {
             Options options;
+            std::shared_ptr<io::Cache> cache;
 
-            NDIlib_find_instance_t NDI_find = nullptr;
             NDIlib_recv_instance_t NDI_recv = nullptr;
-            static std::string sourceName;
-
+            NDIlib_find_instance_t NDI_find = nullptr;
             std::shared_ptr<ReadVideo> readVideo;
-            std::shared_ptr<ReadAudio> readAudio;
 
             io::Info info;
             struct InfoRequest
@@ -163,6 +162,22 @@ namespace tl
                 std::atomic<bool> running;
             };
             VideoThread videoThread;
+        };
+
+        struct AudioRead::Private
+        {
+            Options options;
+            std::shared_ptr<io::Cache> cache;
+
+            NDIlib_recv_instance_t NDI_recv = nullptr;
+            NDIlib_find_instance_t NDI_find = nullptr;
+            std::shared_ptr<ReadAudio> readAudio;
+
+            io::Info info;
+            struct InfoRequest
+            {
+                std::promise<io::Info> promise;
+            };
 
             struct AudioRequest
             {
@@ -172,7 +187,8 @@ namespace tl
             };
             struct AudioMutex
             {
-                std::list<std::shared_ptr<AudioRequest> > requests;
+                std::list<std::shared_ptr<InfoRequest> > infoRequests;
+                std::list<std::shared_ptr<AudioRequest> > audioRequests;
                 bool stopped = false;
                 std::mutex mutex;
             };

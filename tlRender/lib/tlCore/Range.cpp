@@ -15,27 +15,27 @@ namespace tl
     {
         void to_json(nlohmann::json& json, const IntRange& value)
         {
-            json = {value.getMin(), value.getMax()};
+            json = {value.min(), value.max()};
         }
         
         void to_json(nlohmann::json& json, const Int64Range& value)
         {
-            json = {value.getMin(), value.getMax()};
+            json = {value.min(), value.max()};
         }
 
         void to_json(nlohmann::json& json, const SizeTRange& value)
         {
-            json = {value.getMin(), value.getMax()};
+            json = {value.min(), value.max()};
         }
 
         void to_json(nlohmann::json& json, const FloatRange& value)
         {
-            json = {value.getMin(), value.getMax()};
+            json = {value.min(), value.max()};
         }
 
         void to_json(nlohmann::json& json, const DoubleRange& value)
         {
-            json = {value.getMin(), value.getMax()};
+            json = {value.min(), value.max()};
         }
 
         void from_json(const nlohmann::json& json, IntRange& value)
@@ -85,31 +85,31 @@ namespace tl
 
         std::ostream& operator<<(std::ostream& os, const IntRange& value)
         {
-            os << value.getMin() << "-" << value.getMax();
+            os << value.min() << "-" << value.max();
             return os;
         }
         
         std::ostream& operator<<(std::ostream& os, const Int64Range& value)
         {
-            os << value.getMin() << "-" << value.getMax();
+            os << value.min() << "-" << value.max();
             return os;
         }
 
         std::ostream& operator<<(std::ostream& os, const SizeTRange& value)
         {
-            os << value.getMin() << "-" << value.getMax();
+            os << value.min() << "-" << value.max();
             return os;
         }
 
         std::ostream& operator<<(std::ostream& os, const FloatRange& value)
         {
-            os << value.getMin() << "-" << value.getMax();
+            os << value.min() << "-" << value.max();
             return os;
         }
 
         std::ostream& operator<<(std::ostream& os, const DoubleRange& value)
         {
-            os << value.getMin() << "-" << value.getMax();
+            os << value.min() << "-" << value.max();
             return os;
         }
 

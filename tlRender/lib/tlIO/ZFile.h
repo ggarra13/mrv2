@@ -13,78 +13,57 @@
 
 namespace tl
 {
-    //! ZFILE image I/O.
+    //! ZFile image I/O.
     //!
     //! References:
     //! https://github.com/nothings/zfile.git
     //!
     namespace zfile
     {
-        //! ZFILE reader.
-        class Read : public io::ISequenceRead
+        //! ZFILE decoder.
+        class Decode : public io::IDecode
         {
         protected:
-            void _init(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
-
-            Read();
+            Decode();
 
         public:
-            virtual ~Read();
+            virtual ~Decode();
 
-            //! Create a new reader.
-            static std::shared_ptr<Read> create(
-                const file::Path&, const io::Options&,
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            //! Create a new decoder.
+            static std::shared_ptr<Decode> create();
 
-            //! Create a new reader.
-            static std::shared_ptr<Read> create(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            io::Info getInfo(
+                const std::string& fileName,
+                const file::MemoryRead* = nullptr) override;
+            io::VideoData readVideo(
+                const std::string& fileName,
+                const file::MemoryRead*,
+                const otio::RationalTime&,
+                const io::Options& = io::Options()) override;
 
-        protected:
-            io::Info _getInfo(
-                const std::string& fileName, const file::MemoryRead*) override;
-            io::VideoData _readVideo(
-                const std::string& fileName, const file::MemoryRead*,
-                const otime::RationalTime&, const io::Options&) override;
+            private:
+                image::Info _info;
         };
 
-        //! ZFILE plugin.
-        class Plugin : public io::IPlugin
+        //! ZFile read plugin.
+        class ReadPlugin : public io::IReadPlugin
         {
         protected:
-            Plugin();
+            void _init(const std::shared_ptr<log::System>&);
+
+            ReadPlugin() = default;
 
         public:
             //! Create a new plugin.
-            static std::shared_ptr<Plugin> create(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            static std::shared_ptr<ReadPlugin> create(
+                const std::shared_ptr<log::System>&);
 
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const io::Options& = io::Options()) override;
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const std::vector<file::MemoryRead>&,
+            std::shared_ptr<io::IDecode> decode(
                 const io::Options& = io::Options()) override;
-            image::Info getWriteInfo(
-                const image::Info&,
-                const io::Options& = io::Options()) const override
-            {
-                image::Info out;
-                return out;
-            }
-            std::shared_ptr<io::IWrite> write(
-                const file::Path&, const io::Info&,
-                const io::Options& = io::Options()) override
-            {
-                std::shared_ptr<io::IWrite> out;
-                return out;
-            }
+
+            std::string getPluginInfo(
+                const io::Options& = io::Options()) const override;
         };
+
     } // namespace zfile
 } // namespace tl

@@ -1331,7 +1331,7 @@ namespace mrv
         }
 
         auto context = App::app->getContext();
-        auto ioSystem = context->getSystem<io::System>();
+        auto ioSystem = context->getSystem<io::ReadSystem>();
 
         for (auto composition : compositions)
         {
@@ -1365,7 +1365,7 @@ namespace mrv
             int audioIndex = track->index_of_child(audioItem);
 
             const timeline::Options options;
-            if (auto read = ioSystem->read(audioPath, options.ioOptions))
+            if (auto read = ioSystem->audioRead(audioPath, options.ioOptions))
             {
                 const auto info = read->getInfo().get();
                 if (!info.audio.isValid())

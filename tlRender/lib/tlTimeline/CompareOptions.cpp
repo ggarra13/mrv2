@@ -36,10 +36,10 @@ namespace tl
             //! rendered at; the layers are positioned within it when they are
             //! drawn. The canvas already describes the display geometry, so
             //! the pixel aspect ratio is not applied a second time.
-            std::vector<image::Info> getInfos(const std::vector<VideoFrame>& videoFrame)
+            std::vector<image::Info> getInfos(const std::vector<VideoFrame>& videoFrames)
             {
                 std::vector<image::Info> out;
-                for (const auto& i : videoFrame)
+                for (const auto& i : videoFrames)
                 {
                     image::Info info;
                     for (const auto& layer : i.layers)
@@ -221,15 +221,6 @@ namespace tl
                             AspectRatioOptions(),
                             getInfos(videoFrame));
         }
-        std::vector<math::Box2i> getBoxes(
-            const CompareMode mode,
-            const std::vector<DisplayOptions>& display,
-            const std::vector<VideoFrame>& videoFrame)
-        {
-            CompareOptions options;
-            options.mode = mode;
-            return getBoxes(options, display, videoFrame);
-        }
 
         math::Size2i getRenderSize(
             const CompareOptions& options,
@@ -263,6 +254,16 @@ namespace tl
             return out;
         }
 
+        std::vector<math::Box2i> getBoxes(
+            const CompareMode mode,
+            const std::vector<DisplayOptions>& display,
+            const std::vector<VideoFrame>& videoFrame)
+        {
+            CompareOptions options;
+            options.mode = mode;
+            return getBoxes(options, display, videoFrame);
+        }
+
         math::Size2i getRenderSize(
             const CompareOptions& options,
             const AspectRatioOptions& aspectRatioOptions,
@@ -272,7 +273,6 @@ namespace tl
                                  getInfos(videoFrame));
         }
 
-        //! Get the render size for the given compare mode.
         math::Size2i getRenderSize(
             const CompareOptions& options,
             const std::vector<DisplayOptions>& display,

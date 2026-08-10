@@ -26,38 +26,33 @@ namespace tl
         TLRENDER_ENUM(ChannelGrouping);
         TLRENDER_ENUM_SERIALIZE(ChannelGrouping);
 
-        //! OpenEXR reader.
-        class Read : public io::ISequenceRead
+        //! Get default channels.
+        std::set<std::string> getDefaultChannels(const std::set<std::string>&);
+
+        //! Reorder channels.
+        void reorderChannels(std::vector<std::string>&);
+
+        //! OpenEXR decoder.
+        class Decode : public io::IDecode
         {
         protected:
-            void _init(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
-
-            Read();
+            Decode();
 
         public:
-            virtual ~Read();
+            virtual ~Decode();
 
-            //! Create a new reader.
-            static std::shared_ptr<Read> create(
-                const file::Path&, const io::Options&,
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            //! Create a new decoder.
+            static std::shared_ptr<Decode> create();
 
-            //! Create a new reader.
-            static std::shared_ptr<Read> create(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
-
-        protected:
-            io::Info _getInfo(
-                const std::string& fileName, const file::MemoryRead*) override;
-            io::VideoData _readVideo(
-                const std::string& fileName, const file::MemoryRead*,
-                const otime::RationalTime&, const io::Options&) override;
+            io::Info getInfo(
+                const std::string& fileName,
+                const file::MemoryRead* = nullptr) override;
+            io::VideoData readVideo(
+                const std::string& fileName,
+                const file::MemoryRead*,
+                const otio::RationalTime&,
+                const io::Options& = io::Options()) override;
+            double getSpeed(const io::Info&, double defaultSpeed) const override;
 
         private:
             ChannelGrouping _channelGrouping = ChannelGrouping::Known;
@@ -65,9 +60,10 @@ namespace tl
             bool _ignoreDisplayWindow = false;
             bool _ignoreChromaticities = false;
             bool _autoNormalize = false;
-            int _xLevel = -1;
-            int _yLevel = -1;
+            int  _xLevel = -1;
+            int  _yLevel = -1;
         };
+
 
         //! OpenEXR writer.
         class Write : public io::ISequenceWrite
@@ -75,7 +71,7 @@ namespace tl
         protected:
             void _init(
                 const file::Path&, const io::Info&, const io::Options&,
-                const std::weak_ptr<log::System>&);
+                const std::shared_ptr<log::System>&);
 
             Write();
 
@@ -85,7 +81,7 @@ namespace tl
             //! Create a new writer.
             static std::shared_ptr<Write> create(
                 const file::Path&, const io::Info&, const io::Options&,
-                const std::weak_ptr<log::System>&);
+                const std::shared_ptr<log::System>&);
 
         protected:
             void _writeVideo(
@@ -104,36 +100,52 @@ namespace tl
             Imf::Compression _compression = Imf::ZIP_COMPRESSION;
             float _dwaCompressionLevel = 45.F;
             int _zipCompressionLevel = 4;
-            double _speed = io::sequenceDefaultSpeed;
+            double _speed = io::SeqOptions().defaultSpeed;
         };
 
-        //! OpenEXR plugin.
-        class Plugin : public io::IPlugin
+        //! OpenEXR read plugin.
+        class ReadPlugin : public io::IReadPlugin
         {
         protected:
-            void _init(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            void _init(const std::shared_ptr<log::System>&);
 
-            Plugin();
+            ReadPlugin();
 
         public:
             //! Create a new plugin.
-            static std::shared_ptr<Plugin> create(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            static std::shared_ptr<ReadPlugin> create(
+                const std::shared_ptr<log::System>&);
 
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const io::Options& = io::Options()) override;
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const std::vector<file::MemoryRead>&,
+            std::shared_ptr<io::IDecode> decode(
                 const io::Options& = io::Options()) override;
-            image::Info getWriteInfo(
+
+            std::string getPluginInfo(
+                const io::Options& = io::Options()) const override;
+        };
+
+        //! OpenEXR write plugin.
+        class WritePlugin : public io::IWritePlugin
+        {
+        protected:
+            void _init(const std::shared_ptr<log::System>&);
+
+            WritePlugin();
+
+        public:
+            //! Create a new write plugin.
+            static std::shared_ptr<WritePlugin> create(
+                const std::shared_ptr<log::System>&);
+
+            image::Info getInfo(
                 const image::Info&,
                 const io::Options& = io::Options()) const override;
             std::shared_ptr<io::IWrite> write(
-                const file::Path&, const io::Info&,
+                const file::Path&,
+                const io::Info&,
                 const io::Options& = io::Options()) override;
+
+            std::string getPluginInfo(
+                const io::Options& = io::Options()) const override;
         };
     } // namespace exr
 } // namespace tl

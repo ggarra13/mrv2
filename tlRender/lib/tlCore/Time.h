@@ -15,6 +15,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <optional>
 
 namespace tl
 {
@@ -43,6 +44,14 @@ namespace tl
         //! exactly, unlike the "==" operator which rescales the values.
         constexpr bool
         compareExact(const otime::TimeRange&, const otime::TimeRange&);
+
+        constexpr bool compareExact(
+            const std::optional<otio::RationalTime>&,
+            const std::optional<otio::RationalTime>&);
+
+        constexpr bool compareExact(
+            const std::optional<otio::TimeRange>&,
+            const std::optional<otio::TimeRange>&);
 
         //! Get the frames in a time range.
         std::vector<otime::RationalTime> frames(const otime::TimeRange&);

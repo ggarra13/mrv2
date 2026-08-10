@@ -8,6 +8,7 @@
 
 #include <tlCore/FileIO.h>
 
+#include <opentimelineio/imageSequenceReference.h>
 #include <opentimelineio/mediaReference.h>
 #include <opentimelineio/timeline.h>
 
@@ -17,7 +18,7 @@ namespace tl
     {
         //! Get the timeline file extensions.
         std::vector<std::string>
-        getExtensions(int types, const std::shared_ptr<system::Context>&);
+        getExtensions(const std::shared_ptr<system::Context>&, int type);
 
         //! Convert frames to ranges.
         std::vector<otime::TimeRange>
@@ -70,6 +71,14 @@ namespace tl
         file::Path getPath(
             const otio::MediaReference*, const std::string& directory,
             file::PathOptions);
+
+        //! Convert from an OTIO missing frame policy.
+        io::MissingFrames fromOTIO(
+            otio::ImageSequenceReference::MissingFramePolicy);
+
+        //! Convert to an OTIO missing frame policy.
+        otio::ImageSequenceReference::MissingFramePolicy toOTIO(
+            io::MissingFrames);
 
         //! Get a memory read for a media reference.
         std::vector<file::MemoryRead>

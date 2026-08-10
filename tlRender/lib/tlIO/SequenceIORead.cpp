@@ -41,13 +41,7 @@ namespace tl
                 }
             }
 
-            auto i = options.find("SequenceIO/ThreadCount");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.threadCount;
-            }
-            i = options.find("SequenceIO/DefaultSpeed");
+            auto i = options.find("SequenceIO/DefaultSpeed");
             if (i != options.end())
             {
                 std::stringstream ss(i->second);
@@ -159,13 +153,6 @@ namespace tl
             image::Tags& tags, const std::string& clipName,
             const otime::RationalTime& time)
         {
-            tags["otioClipName"] = clipName;
-
-            {
-                std::stringstream ss;
-                ss << time;
-                tags["otioClipTime"] = ss.str();
-            }
         }
 
         void ISequenceRead::cancelRequests()
@@ -176,7 +163,7 @@ namespace tl
         void ISequenceRead::_finish()
         {
             TLRENDER_P();
-            
+
             // Stop the sequence thread
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
@@ -212,16 +199,16 @@ namespace tl
 
                     if (!p.thread.running)
                         return;
-                    
+
                     infoRequests = std::move(p.mutex.infoRequests);
                     while (!p.mutex.videoRequests.empty() &&
                            (p.thread.videoRequestsInProgress.size() +
-                            videoRequests.size()) < p.threadCount)
+                            videoRequests.size()) < 16)
                     {
                         videoRequests.push_back(
                             p.mutex.videoRequests.front());
                         p.mutex.videoRequests.pop_front();
-                    }                    
+                    }
                 }
 
                 // Information rquests.
@@ -346,7 +333,7 @@ namespace tl
                                 .arg(_path.get())
                                 .arg(requestsSize)
                                 .arg(p.thread.videoRequestsInProgress.size())
-                                .arg(p.threadCount));
+                                .arg(16));
                     }
                 }
             }

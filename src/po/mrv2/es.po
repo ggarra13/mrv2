@@ -216,12 +216,6 @@ msgstr "Setear nombre del archivo de audio para la secuencia."
 msgid "Get file sequence audio file name."
 msgstr "Obtener nombre del archivo de audio para la secuencia."
 
-msgid "Set file sequence audio directory."
-msgstr "Setear el directorio de audio para la secuencia."
-
-msgid "Get file sequence audio directory."
-msgstr "Obtener el directorio de audio para la secuencia."
-
 msgid "Set maximum file sequence digits."
 msgstr "Setear los máximos digitos de la secuencia."
 
@@ -8297,6 +8291,12 @@ msgstr "task info falló"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Fuente inválida para dibujar texto"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Setear el directorio de audio para la secuencia."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Obtener el directorio de audio para la secuencia."
 
 #~ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 #~ msgstr "    Usado: %.2g of %zu Gb (%.2g %%)"

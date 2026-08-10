@@ -2,6 +2,7 @@
 // Copyright (c) 2021-2024 Darby Johnston
 // All rights reserved.
 
+#include <tlIO/Cache.h>
 #include <tlIO/USDPrivate.h>
 
 #include <tlCore/File.h>
@@ -98,13 +99,11 @@ namespace tl
             Thread thread;
         };
 
-        void Render::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        void Render::_init(const std::shared_ptr<log::System>& logSystem)
         {
             TLRENDER_P();
 
-            p.cache = cache;
+            // p.cache = cache;
             p.logSystem = logSystem;
 
 #if defined(__APPLE__)
@@ -180,11 +179,10 @@ namespace tl
         }
 
         std::shared_ptr<Render> Render::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             auto out = std::shared_ptr<Render>(new Render);
-            out->_init(cache, logSystem);
+            out->_init(logSystem);
             return out;
         }
 
@@ -465,7 +463,7 @@ namespace tl
 
                     if (!p.thread.running)
                         break;
-                    
+
                     if (!p.mutex.infoRequests.empty())
                     {
                         infoRequest = p.mutex.infoRequests.front();
@@ -475,7 +473,7 @@ namespace tl
                     {
                         request = p.mutex.requests.front();
                         p.mutex.requests.pop_front();
-                    }                    
+                    }
                 }
 
                 // Set options.
@@ -585,21 +583,15 @@ namespace tl
 
                 // Check the I/O cache.
                 io::VideoData videoData;
+                image::Tags tags;
                 if (request && p.cache)
                 {
                     const std::string cacheKey = io::getVideoCacheKey(
                         request->path, request->time, ioOptions, {});
                     if (p.cache->getVideo(cacheKey, videoData))
                     {
-                        image::Tags tags;
-                        tags["otioClipName"] = request->path.get();
-                        {
-                            std::stringstream ss;
-                            ss << request->time;
-                            tags["otioClipTime"] = ss.str();
-                        }
+                        io::addOtioTags(tags, request->path.get(), request->time);
                         videoData.image->setTags(tags);
-
                         request->promise.set_value(videoData);
                         request.reset();
                     }
@@ -647,14 +639,7 @@ namespace tl
                         }
 
                         videoData.time = request->time;
-
-                        image::Tags tags;
-                        tags["otioClipName"] = request->path.get();
-                        {
-                            std::stringstream ss;
-                            ss << request->time;
-                            tags["otioClipTime"] = ss.str();
-                        }
+                        io::addOtioTags(tags, request->path.get(), request->time);
                         image->setTags(tags);
 
                         videoData.image = image;
@@ -704,14 +689,14 @@ namespace tl
                             {
                                 renderWidth = std::atoi(i->second.c_str());
                             }
-                            
+
                             float complexity = 1.F;
                             i = ioOptions.find("USD/complexity");
                             if (i != ioOptions.end())
                             {
                                 complexity = std::atof(i->second.c_str());
                             }
-                            
+
                             DrawMode drawMode = DrawMode::ShadedSmooth;
                             i = ioOptions.find("USD/drawMode");
                             if (i != ioOptions.end())
@@ -719,28 +704,28 @@ namespace tl
                                 std::stringstream ss(i->second);
                                 ss >> drawMode;
                             }
-                            
+
                             bool enableLighting = true;
                             i = ioOptions.find("USD/enableLighting");
                             if (i != ioOptions.end())
                             {
                                 enableLighting = std::atoi(i->second.c_str());
                             }
-                            
+
                             bool enableSceneLights = true;
                             i = ioOptions.find("USD/enableSceneLights");
                             if (i != ioOptions.end())
                             {
                                 enableSceneLights = std::atoi(i->second.c_str());
                             }
-                            
+
                             bool enableSceneMaterials = true;
                             i = ioOptions.find("USD/enableSceneMaterials");
                             if (i != ioOptions.end())
                             {
                                 enableSceneMaterials = std::atoi(i->second.c_str());
                             }
-                                
+
                             bool sRGB = true;
                             i = ioOptions.find("USD/sRGB");
                             if (i != ioOptions.end())
@@ -755,7 +740,7 @@ namespace tl
                             {
                                 cameraName = i->second;
                             }
-                            
+
                             GfCamera gfCamera;
                             auto camera =
                                 getCamera(stageCacheItem.stage, cameraName);
@@ -817,7 +802,7 @@ namespace tl
                             renderParams.enableLighting = enableLighting;
                             renderParams.enableSceneLights = enableSceneLights;
                             renderParams.enableSceneMaterials = enableSceneMaterials;
-                            
+
                             renderParams.clearColor =
                                 GfVec4f(0.F, 0.F, 0.F, 0.F);
                             renderParams.colorCorrectionMode =

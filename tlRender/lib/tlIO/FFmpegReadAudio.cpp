@@ -12,8 +12,8 @@ namespace tl
     {
         ReadAudio::ReadAudio(
             const std::string& fileName,
-            const std::vector<file::MemoryRead>& memory, double videoRate,
-            const Options& options) :
+            const std::vector<file::MemoryRead>& memory,
+            const ReadOptions& options) :
             _fileName(fileName),
             _options(options)
         {
@@ -114,6 +114,26 @@ namespace tl
                     _info.audioInfo.push_back(info);
                 }
             }
+
+            // The video rate is needed only to parse the timecode tag
+            // into a start time below, and is read from this reader's own
+            // format context: the audio does not depend on a video reader
+            // existing. A file with no video has no rate to parse the
+            // timecode against.
+            // Negative, so that from_timecode() below rejects it and
+            // leaves the start time alone.
+            double videoRate = -1.0;
+            const int avVideoStream = findStream(
+                _avFormatContext,
+                AVMEDIA_TYPE_VIDEO);
+            if (avVideoStream != -1)
+            {
+                videoRate = av_q2d(av_guess_frame_rate(
+                                       _avFormatContext,
+                                       _avFormatContext->streams[avVideoStream],
+                                       nullptr));
+            }
+
 
             // If user selected specific track, use it.
             if (options.audioTrack >= 0)
@@ -357,6 +377,7 @@ namespace tl
                         avcodec_get_name(_avCodecContext[_avStream]->codec_id);
                 }
             }
+
         }
 
         ReadAudio::~ReadAudio()

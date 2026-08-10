@@ -3,6 +3,7 @@
 // All rights reserved.
 
 #include <tlIO/Cineon.h>
+#include <tlIO/Normalize.h>
 
 #include <tlCore/Locale.h>
 #include <tlCore/StringFormat.h>
@@ -13,80 +14,141 @@ namespace tl
 {
     namespace cineon
     {
-        void Read::_init(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+
+        // io::VideoData File::read(
+        //     const std::string& fileName, const file::MemoryRead* memory,
+        //     const otime::RationalTime& time, const io::Options& options)
+        // {
+        //     io::VideoData out;
+        //     out.time = time;
+
+        //     auto io = memory ? file::FileIO::create(fileName, *memory)
+        //                      : file::FileIO::create(fileName, file::Mode::Read);
+        //     io::Info info;
+        //     cineon::read(io, info);
+
+        //     out.image = image::Image::create(info.video[0]);
+        //     _addOtioTags(info.tags, fileName, time);
+        //     out.image->setTags(info.tags);
+        //     io->read(
+        //         out.image->getData(), image::getDataByteCount(info.video[0]));
+        //     return out;
+        // }
+
+
+
+
+
+        class File
         {
-            ISequenceRead::_init(path, memory, options, cache, logSystem);
+        public:
+            File(const std::string& fileName,
+                 const file::MemoryRead* memory)
+                {
+                    auto io =
+                        memory ?
+                        file::FileIO::create(fileName, *memory) :
+                        file::FileIO::create(fileName, file::Mode::Read);
+                    const auto header = cineon::read(io, _info);
+                }
+
+            io::Info getInfo()
+                {
+                    return _info;
+                }
+
+            io::VideoData read(const std::string& fileName,
+                               const file::MemoryRead* memory,
+                               const otime::RationalTime& time,
+                               const io::Options& options)
+                {
+                    io::VideoData out;
+                    out.time = time;
+
+                    auto i = options.find("AutoNormalize");
+                    if (i != options.end())
+                    {
+                        _autoNormalize =
+                            static_cast<bool>(std::atoi(i->second.c_str()));
+                    }
+
+                    auto io = memory ? file::FileIO::create(fileName, *memory)
+                              : file::FileIO::create(fileName, file::Mode::Read);
+                    io::Info info;
+                    cineon::read(io, info);
+
+                    out.image = image::Image::create(info.video[0]);
+                    io->read(
+                        out.image->getData(), image::getDataByteCount(info.video[0]));
+
+                    if (_autoNormalize)
+                    {
+                        math::Vector4f minimum, maximum;
+                        io::normalizeImage(
+                            minimum, maximum, out.image, info.video[0], 0,
+                            info.video[0].size.w, 0, info.video[0].size.h);
+                        info.tags["Autonormalize Minimum"] = io::serialize(minimum);
+                        info.tags["Autonormalize Maximum"] = io::serialize(maximum);
+                    }
+
+                    io::addOtioTags(info.tags, fileName, time);
+
+                    out.image->setTags(info.tags);
+                    return out;
+                }
+
+        protected:
+            bool _autoNormalize = false;
+            io::Info _info;
+        };
+
+        Decode::Decode()
+        {}
+
+        Decode::~Decode()
+        {}
+
+        std::shared_ptr<Decode> Decode::create()
+        {
+            return std::shared_ptr<Decode>(new Decode);
         }
 
-        Read::Read() {}
-
-        Read::~Read()
-        {
-            _finish();
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const io::Options& options,
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, {}, options, cache, logSystem);
-            return out;
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, memory, options, cache, logSystem);
-            return out;
-        }
-
-        io::Info Read::_getInfo(
+        io::Info Decode::getInfo(
             const std::string& fileName, const file::MemoryRead* memory)
         {
-            io::Info out;
-            auto io = memory ? file::FileIO::create(fileName, *memory)
-                             : file::FileIO::create(fileName, file::Mode::Read);
-            const auto header = read(io, out);
-            float speed = _defaultSpeed;
-            const auto i = out.tags.find("Film Frame Rate");
-            if (i != out.tags.end())
-            {
-                locale::SetAndRestore saved;
-                speed = std::stof(i->second);
-            }
-            out.videoTime =
-                otime::TimeRange::range_from_start_end_time_inclusive(
-                    otime::RationalTime(_startFrame, speed),
-                    otime::RationalTime(_endFrame, speed));
-            return out;
+            return File(fileName, memory).getInfo();
         }
 
-        io::VideoData Read::_readVideo(
-            const std::string& fileName, const file::MemoryRead* memory,
-            const otime::RationalTime& time, const io::Options&)
+        double Decode::getSpeed(const io::Info& info, double defaultSpeed) const
         {
-            io::VideoData out;
-            out.time = time;
+            double out = defaultSpeed;
 
-            auto io = memory ? file::FileIO::create(fileName, *memory)
-                             : file::FileIO::create(fileName, file::Mode::Read);
-            io::Info info;
-            read(io, info);
-
-            out.image = image::Image::create(info.video[0]);
-            _addOtioTags(info.tags, fileName, time);
-            out.image->setTags(info.tags);
-            io->read(
-                out.image->getData(), image::getDataByteCount(info.video[0]));
+            locale::SetAndRestore saved;
+            auto i = info.tags.find("Film Frame Rate");
+            if (i != info.tags.end())
+            {
+                out = std::stof(i->second);
+            }
+            else
+            {
+                i = info.tags.find("TV Frame Rate");
+                if (i != info.tags.end())
+                {
+                    out = std::stof(i->second);
+                }
+            }
+            // Film/TV Rate can be corrupt.  Sanity check here.
+            if (out <= 0.F)
+                out = defaultSpeed;
             return out;
         }
+
+        io::VideoData Decode::readVideo(
+            const std::string& fileName, const file::MemoryRead* memory,
+            const otime::RationalTime& time, const io::Options& options)
+        {
+            return File(fileName, memory).read(fileName, memory, time, options);
+        }
+
     } // namespace cineon
 } // namespace tl

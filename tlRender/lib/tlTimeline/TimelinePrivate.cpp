@@ -164,31 +164,79 @@ namespace tl
             return frame;
         }
 
+        std::optional<otio::TimeRange>
+        Timeline::Private::getTrimmedRangeInParent(
+            const otio::Composable* otioComposable) const
+        {
+            if (const auto i = trimmedRangeInParent.find(otioComposable);
+                i != trimmedRangeInParent.end())
+            {
+                return i->second;
+            }
+            if (auto otioItem = dynamic_cast<const otio::Item*>(otioComposable))
+            {
+                return otioItem->trimmed_range_in_parent();
+            }
+            return std::nullopt;
+        }
+
+        std::vector<otio::Composable*> Timeline::Private::getTrackChildrenAt(
+            const otio::Track* otioTrack,
+            const otio::RationalTime& time) const
+        {
+            std::vector<otio::Composable*> out;
+            const auto i = trackItems.find(otioTrack);
+            if (i == trackItems.end())
+            {
+                for (const auto& otioChild : otioTrack->children())
+                {
+                    out.push_back(otioChild.value);
+                }
+                return out;
+            }
+            const auto& items = i->second;
+            auto j = std::upper_bound(
+                items.begin(),
+                items.end(),
+                time,
+                [](const otio::RationalTime& value, const TrackItem& item)
+                    {
+                        return value < item.range.start_time();
+                    });
+            if (j != items.begin())
+            {
+                --j;
+                if (j->range.contains(time))
+                {
+                    out.push_back(j->item);
+                }
+            }
+            return out;
+        }
+
 
         std::shared_ptr<audio::Audio> Timeline::Private::padAudioToOneSecond(
             const std::shared_ptr<audio::Audio>& audio, double seconds,
-            const otime::TimeRange& timeRange)
+            const otime::TimeRange& range)
         {
             std::list<std::shared_ptr<audio::Audio> > list;
             const double s =
                 seconds - this->timeRange.start_time().rescaled_to(1.0).value();
-            if (timeRange.start_time().value() > s)
+            if (range.start_time().value() > s)
             {
                 const otime::RationalTime t =
-                    timeRange.start_time() - otime::RationalTime(s, 1.0);
+                    range.start_time() - otime::RationalTime(s, 1.0);
                 const otime::RationalTime t2 =
                     t.rescaled_to(audio->getInfo().sampleRate);
-                auto silence =
-                    audio::Audio::create(audio->getInfo(), t2.value());
+                auto silence = audio::Audio::create(audio->getInfo(), t2.value());
                 silence->zero();
                 list.push_back(silence);
             }
             list.push_back(audio);
-            if (timeRange.end_time_exclusive().value() < s + 1.0)
+            if (range.end_time_exclusive().value() < s + 1.0)
             {
                 const otime::RationalTime t =
-                    otime::RationalTime(s + 1.0, 1.0) -
-                    timeRange.end_time_exclusive();
+                    otime::RationalTime(s + 1.0, 1.0) - range.end_time_exclusive();
                 const otime::RationalTime t2 =
                     t.rescaled_to(audio->getInfo().sampleRate);
                 auto silence =

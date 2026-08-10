@@ -36,6 +36,25 @@ namespace tl
         {
         }
 
+        inline size_t TriangleMesh2::getByteCount() const
+        {
+            return
+                v.size() * sizeof(math::Vector2f) +
+                c.size() * sizeof(math::Vector4f) +
+                t.size() * sizeof(math::Vector2f) +
+                triangles.size() * sizeof(Triangle2);
+        }
+
+        inline size_t TriangleMesh3::getByteCount() const
+        {
+            return
+                v.size() * sizeof(math::Vector3f) +
+                c.size() * sizeof(math::Vector4f) +
+                t.size() * sizeof(math::Vector2f) +
+                n.size() * sizeof(math::Vector3f) +
+                triangles.size() * sizeof(Triangle3);
+        }
+
         inline float edge(
             const math::Vector2f& p, const math::Vector2f& v0,
             const math::Vector2f& v1)

@@ -12,7 +12,7 @@ namespace tl
 {
     namespace TIMELINEUI
     {
-        class ThumbnailGenerator;
+        class ThumbnailSystem;
     }
 
     namespace TIMELINEUI
@@ -26,7 +26,7 @@ namespace tl
                 const otio::SerializableObject::Retainer<otio::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<ThumbnailGenerator>,
+                const std::shared_ptr<ThumbnailSystem>,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent);
 
@@ -41,7 +41,7 @@ namespace tl
                 const otio::SerializableObject::Retainer<otio::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<ThumbnailGenerator>,
+                const std::shared_ptr<ThumbnailSystem>,
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 

@@ -6,7 +6,7 @@
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
-#include <tlIO/FFmpegMacros.h>
+#include <tlIO/IOMacros.h>
 
 #include <tlCore/Path.h>
 #include <tlCore/String.h>
@@ -193,8 +193,8 @@ namespace tl
         ReadVideo::ReadVideo(
             const std::string& fileName,
             const std::vector<file::MemoryRead>& memory,
-            const std::weak_ptr<log::System>& logSystem,
-            const Options& options) :
+            const ReadOptions& options,
+            const std::shared_ptr<log::System>& logSystem) :
             _fileName(fileName),
             _logSystem(logSystem),
             _options(options)
@@ -1229,7 +1229,6 @@ namespace tl
                         AVSEEK_FLAG_BACKWARD) < 0)
                 {
                     //! \todo How should this be handled?
-                    std::cerr << "seeking error" << std::endl;
                 }
             }
 

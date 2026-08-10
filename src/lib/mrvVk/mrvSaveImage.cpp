@@ -116,7 +116,6 @@ namespace mrv
 
             vlk::OffscreenBufferOptions offscreenBufferOptions;
 
-            std::cerr << "saving with pic" << std::endl;
             image::Size renderSize;
 
             int layerId = ui->uiColorChannel->value();
@@ -176,7 +175,7 @@ namespace mrv
 
             // Create the writer.
             auto writerPlugin =
-                context->getSystem<io::System>()->getPlugin(path);
+                context->getSystem<io::WriteSystem>()->getPlugin(path);
 
             if (!writerPlugin)
             {
@@ -229,7 +228,7 @@ namespace mrv
             }
 
             outputInfo.size = renderSize;
-            outputInfo = writerPlugin->getWriteInfo(outputInfo);
+            outputInfo = writerPlugin->getInfo(outputInfo);
 
             if (image::PixelType::kNone == outputInfo.pixelType)
             {

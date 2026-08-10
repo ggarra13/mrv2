@@ -29,7 +29,6 @@ namespace tl
     {
         struct DeviceSystem::Private
         {
-            std::weak_ptr<system::Context> context;
             std::shared_ptr<observer::List<DeviceInfo> > deviceInfo;
             struct Mutex
             {
@@ -44,10 +43,8 @@ namespace tl
         void
         DeviceSystem::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::device::System", context);
+            ISystem::_init(context, "tl::device::System");
             TLRENDER_P();
-
-            p.context = context;
 
             p.deviceInfo = observer::List<DeviceInfo>::create();
 
@@ -151,7 +148,7 @@ namespace tl
                                 dlProfileAttributes->Release();
 
                                 dl->Release();
-                                
+
 
                                 deviceInfo.pixelTypes.push_back(PixelType::_8BitBGRA);
                                 deviceInfo.pixelTypes.push_back(PixelType::_8BitYUV);
@@ -218,7 +215,9 @@ namespace tl
                 });
         }
 
-        DeviceSystem::DeviceSystem() :
+        DeviceSystem::DeviceSystem(
+            const std::shared_ptr<system::Context>& context) :
+            ISystem::ISystem(context, "tl::device::System"),
             _p(new Private)
         {
         }
@@ -236,7 +235,7 @@ namespace tl
         std::shared_ptr<DeviceSystem>
         DeviceSystem::create(const std::shared_ptr<system::Context>& context)
         {
-            auto out = std::shared_ptr<DeviceSystem>(new DeviceSystem);
+            auto out = std::shared_ptr<DeviceSystem>(new DeviceSystem(context));
             out->_init(context);
             return out;
         }

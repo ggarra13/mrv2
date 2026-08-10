@@ -5,6 +5,7 @@
 #include <tlIO/DPX.h>
 
 #include <tlIO/Cineon.h>
+#include <tlIO/Normalize.h>
 
 #include <tlCore/Error.h>
 #include <tlCore/Locale.h>
@@ -83,55 +84,55 @@ namespace tl
         {
             void convertEndian(Header& header)
             {
-                memory::endian(&header.file.imageOffset, 1, 4);
-                memory::endian(&header.file.size, 1, 4);
-                memory::endian(&header.file.dittoKey, 1, 4);
-                memory::endian(&header.file.headerSize, 1, 4);
-                memory::endian(&header.file.industryHeaderSize, 1, 4);
-                memory::endian(&header.file.userHeaderSize, 1, 4);
-                memory::endian(&header.file.encryptionKey, 1, 4);
+                memory::swapEndian(&header.file.imageOffset, 1, 4);
+                memory::swapEndian(&header.file.size, 1, 4);
+                memory::swapEndian(&header.file.dittoKey, 1, 4);
+                memory::swapEndian(&header.file.headerSize, 1, 4);
+                memory::swapEndian(&header.file.industryHeaderSize, 1, 4);
+                memory::swapEndian(&header.file.userHeaderSize, 1, 4);
+                memory::swapEndian(&header.file.encryptionKey, 1, 4);
 
-                memory::endian(&header.image.orient, 1, 2);
-                memory::endian(&header.image.elemSize, 1, 2);
-                memory::endian(&header.image.size, 2, 4);
+                memory::swapEndian(&header.image.orient, 1, 2);
+                memory::swapEndian(&header.image.elemSize, 1, 2);
+                memory::swapEndian(&header.image.size, 2, 4);
                 for (size_t i = 0; i < 8; ++i)
                 {
-                    memory::endian(&header.image.elem[i].dataSign, 1, 4);
-                    memory::endian(&header.image.elem[i].lowData, 1, 4);
-                    memory::endian(&header.image.elem[i].lowQuantity, 1, 4);
-                    memory::endian(&header.image.elem[i].highData, 1, 4);
-                    memory::endian(&header.image.elem[i].highQuantity, 1, 4);
-                    memory::endian(&header.image.elem[i].packing, 1, 2);
-                    memory::endian(&header.image.elem[i].encoding, 1, 2);
-                    memory::endian(&header.image.elem[i].dataOffset, 1, 4);
-                    memory::endian(&header.image.elem[i].linePadding, 1, 4);
-                    memory::endian(&header.image.elem[i].elemPadding, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].dataSign, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].lowData, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].lowQuantity, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].highData, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].highQuantity, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].packing, 1, 2);
+                    memory::swapEndian(&header.image.elem[i].encoding, 1, 2);
+                    memory::swapEndian(&header.image.elem[i].dataOffset, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].linePadding, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].elemPadding, 1, 4);
                 }
 
-                memory::endian(&header.source.offset, 2, 4);
-                memory::endian(&header.source.center, 2, 4);
-                memory::endian(&header.source.size, 2, 4);
-                memory::endian(&header.source.border, 4, 2);
-                memory::endian(&header.source.pixelAspect, 2, 4);
-                memory::endian(&header.source.scanSize, 2, 4);
+                memory::swapEndian(&header.source.offset, 2, 4);
+                memory::swapEndian(&header.source.center, 2, 4);
+                memory::swapEndian(&header.source.size, 2, 4);
+                memory::swapEndian(&header.source.border, 4, 2);
+                memory::swapEndian(&header.source.pixelAspect, 2, 4);
+                memory::swapEndian(&header.source.scanSize, 2, 4);
 
-                memory::endian(&header.film.frame, 1, 4);
-                memory::endian(&header.film.sequence, 1, 4);
-                memory::endian(&header.film.hold, 1, 4);
-                memory::endian(&header.film.frameRate, 1, 4);
-                memory::endian(&header.film.shutter, 1, 4);
+                memory::swapEndian(&header.film.frame, 1, 4);
+                memory::swapEndian(&header.film.sequence, 1, 4);
+                memory::swapEndian(&header.film.hold, 1, 4);
+                memory::swapEndian(&header.film.frameRate, 1, 4);
+                memory::swapEndian(&header.film.shutter, 1, 4);
 
-                memory::endian(&header.tv.timecode, 1, 4);
-                memory::endian(&header.tv.userBits, 1, 4);
-                memory::endian(&header.tv.sampleRate, 2, 4);
-                memory::endian(&header.tv.frameRate, 1, 4);
-                memory::endian(&header.tv.timeOffset, 1, 4);
-                memory::endian(&header.tv.gamma, 1, 4);
-                memory::endian(&header.tv.blackLevel, 1, 4);
-                memory::endian(&header.tv.blackGain, 1, 4);
-                memory::endian(&header.tv.breakpoint, 1, 4);
-                memory::endian(&header.tv.whiteLevel, 1, 4);
-                memory::endian(&header.tv.integrationTimes, 1, 4);
+                memory::swapEndian(&header.tv.timecode, 1, 4);
+                memory::swapEndian(&header.tv.userBits, 1, 4);
+                memory::swapEndian(&header.tv.sampleRate, 2, 4);
+                memory::swapEndian(&header.tv.frameRate, 1, 4);
+                memory::swapEndian(&header.tv.timeOffset, 1, 4);
+                memory::swapEndian(&header.tv.gamma, 1, 4);
+                memory::swapEndian(&header.tv.blackLevel, 1, 4);
+                memory::swapEndian(&header.tv.blackGain, 1, 4);
+                memory::swapEndian(&header.tv.breakpoint, 1, 4);
+                memory::swapEndian(&header.tv.whiteLevel, 1, 4);
+                memory::swapEndian(&header.tv.integrationTimes, 1, 4);
             }
 
             bool isValid(const uint8_t* in)
@@ -177,7 +178,7 @@ namespace tl
             else
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Bad magic number"));
             }
 
@@ -200,7 +201,7 @@ namespace tl
             if (out.image.elemSize != 1)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Unsupported file"));
             }
             imageInfo.size.w = out.image.size[0];
@@ -288,7 +289,7 @@ namespace tl
             if (image::PixelType::kNone == imageInfo.pixelType)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Unsupported file"));
             }
             const size_t dataByteCount = image::getDataByteCount(imageInfo);
@@ -296,14 +297,14 @@ namespace tl
             if (dataByteCount > ioSize - out.file.imageOffset)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Incomplete file"));
             }
 
             if (out.image.elem[0].encoding)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Unsupported file"));
             }
 
@@ -311,7 +312,7 @@ namespace tl
                 out.image.elem[0].linePadding)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Unsupported file"));
             }
 
@@ -326,7 +327,7 @@ namespace tl
             // Tags.
             if (cineon::isValid(out.file.time, 24))
             {
-                info.tags["Time"] = cineon::toString(out.file.time, 24);
+                info.tags["Time"] = ""; // cineon::toString(out.file.time, 24);
             }
             if (cineon::isValid(out.file.creator, 100))
             {
@@ -338,8 +339,7 @@ namespace tl
             }
             if (cineon::isValid(out.file.copyright, 200))
             {
-                info.tags["Copyright"] =
-                    cineon::toString(out.file.copyright, 200);
+                info.tags["Copyright"] = cineon::toString(out.file.copyright, 200);
             }
 
             if (isValid(&out.source.offset[0]) &&
@@ -410,11 +410,12 @@ namespace tl
                 info.tags["Source Scan Size"] = ss.str();
             }
 
-            if (cineon::isValid(out.film.id, 2) &&
-                cineon::isValid(out.film.type, 2) &&
-                cineon::isValid(out.film.offset, 2) &&
-                cineon::isValid(out.film.prefix, 6) &&
-                cineon::isValid(out.film.count, 4))
+            if (// cineon::isValid(out.film.id, 2) &&
+                // cineon::isValid(out.film.type, 2) &&
+                // cineon::isValid(out.film.offset, 2) &&
+                // cineon::isValid(out.film.prefix, 6) &&
+                // cineon::isValid(out.film.count, 4)
+                0)
             {
                 info.tags["Keycode"] = time::keycodeToString(
                     std::stoi(std::string(out.film.id, 2)),
@@ -549,7 +550,7 @@ namespace tl
             // Set the file position.
             if (out.file.imageOffset)
             {
-                io->setPos(out.file.imageOffset);
+                io->seek(out.file.imageOffset, file::SeekMode::Set);
             }
 
             return out;
@@ -690,7 +691,7 @@ namespace tl
             auto i = info.tags.find("Time");
             if (i != info.tags.end())
             {
-                cineon::fromString(i->second, header.file.time, 24, false);
+                // cineon::fromString(i->second, header.file.time, 24, false);
             }
             i = info.tags.find("Creator");
             if (i != info.tags.end())
@@ -796,7 +797,7 @@ namespace tl
             i = info.tags.find("Film Format");
             if (i != info.tags.end())
             {
-                cineon::fromString(i->second, header.film.format, 32, false);
+                // cineon::fromString(i->second, header.film.format, 32, false);
             }
             i = info.tags.find("Film Frame");
             if (i != info.tags.end())
@@ -826,12 +827,12 @@ namespace tl
             i = info.tags.find("Film Frame ID");
             if (i != info.tags.end())
             {
-                cineon::fromString(i->second, header.film.frameId, 32, false);
+                // cineon::fromString(i->second, header.film.frameId, 32, false);
             }
             i = info.tags.find("Film Slate");
             if (i != info.tags.end())
             {
-                cineon::fromString(i->second, header.film.slate, 100, false);
+                // cineon::fromString(i->second, header.film.slate, 100, false);
             }
 
             i = info.tags.find("Timecode");
@@ -932,43 +933,50 @@ namespace tl
         void finishWrite(const std::shared_ptr<file::FileIO>& io)
         {
             const uint32_t size = static_cast<uint32_t>(io->getPos());
-            io->setPos(12);
+            io->seek(12, file::SeekMode::Set);
             io->writeU32(size);
         }
 
-        void Plugin::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        void ReadPlugin::_init(const std::shared_ptr<log::System>& logSystem)
         {
-            IPlugin::_init(
-                "DPX", {{".dpx", io::FileType::Sequence}}, cache, logSystem);
+            std::map<std::string, io::FileType> exts;
+            exts[".dpx"] = io::FileType::Sequence;
+            IReadPlugin::_init("DPX", exts, logSystem);
         }
 
-        Plugin::Plugin() {}
-
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(cache, logSystem);
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::shared_ptr<io::IDecode> ReadPlugin::decode(const io::Options&)
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return Decode::create();
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options)
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
         {
-            return Read::create(path, memory, options, _cache, _logSystem);
+            return "DPX";
         }
 
-        image::Info Plugin::getWriteInfo(
+        void WritePlugin::_init(const std::shared_ptr<log::System>& logSystem)
+        {
+            std::map<std::string, io::FileType> exts;
+            exts[".dpx"] = io::FileType::Sequence;
+            IWritePlugin::_init("DPX", exts, logSystem);
+        }
+        std::shared_ptr<WritePlugin> WritePlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<WritePlugin>(new WritePlugin);
+            out->_init(logSystem);
+            return out;
+        }
+
+        image::Info WritePlugin::getInfo(
             const image::Info& info, const io::Options& options) const
         {
             image::Info out;
@@ -986,17 +994,22 @@ namespace tl
             return out;
         }
 
-        std::shared_ptr<io::IWrite> Plugin::write(
+        std::shared_ptr<io::IWrite> WritePlugin::write(
             const file::Path& path, const io::Info& info,
             const io::Options& options)
         {
             if (info.video.empty() ||
                 (!info.video.empty() &&
-                 !_isWriteCompatible(info.video[0], options)))
+                 !_isCompatible(info.video[0], options)))
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(path.get())
-                                             .arg("Unsupported video"));
-            return Write::create(path, info, options, _logSystem);
+                                         .arg(path.get())
+                                         .arg("Unsupported video depth"));
+            return Write::create(path, info, options, _logSystem.lock());
+        }
+
+        std::string WritePlugin::getPluginInfo(const io::Options&) const
+        {
+            return "DPX";
         }
     } // namespace dpx
 } // namespace tl

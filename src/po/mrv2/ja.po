@@ -201,12 +201,6 @@ msgstr "ファイルシーケンスのオーディオファイル名を設定し
 msgid "Get file sequence audio file name."
 msgstr "ファイルシーケンスのオーディオファイル名を取得します。"
 
-msgid "Set file sequence audio directory."
-msgstr "ファイルシーケンスのオーディオディレクトリを設定します。"
-
-msgid "Get file sequence audio directory."
-msgstr "ファイルシーケンスのオーディオディレクトリを取得します。"
-
 msgid "Set maximum file sequence digits."
 msgstr "ファイルシーケンスの最大桁数を設定します。"
 
@@ -3392,7 +3386,7 @@ msgid "Hotkeys"
 msgstr "ホットキー"
 
 msgid "Preferences"
-msgstr "設定"
+msgstr "環境設定"
 
 msgid "About"
 msgstr "情報"
@@ -8213,6 +8207,12 @@ msgstr "タスク情報の取得に失敗しました"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "テキスト描画用の無効なフォント"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "ファイルシーケンスのオーディオディレクトリを設定します。"
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "ファイルシーケンスのオーディオディレクトリを取得します。"
 
 #~ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 #~ msgstr "    使用済み : %.2g / %zu Gb (%.2g %%)"

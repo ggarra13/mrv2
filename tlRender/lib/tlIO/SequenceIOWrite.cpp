@@ -25,12 +25,12 @@ namespace tl
             std::string suffix;
             std::string extension;
 
-            float defaultSpeed = sequenceDefaultSpeed;
+            float defaultSpeed = SeqOptions().defaultSpeed;
         };
 
         void ISequenceWrite::_init(
             const file::Path& path, const Info& info, const Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             IWrite::_init(path, options, info, logSystem);
 

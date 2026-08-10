@@ -48,7 +48,7 @@ namespace mrv
         {
             math::Int64Range range = frames.value();
             const bool listdir = true;
-            for (int64_t i = range.getMin(); i <= range.getMax(); ++i)
+            for (int64_t i = range.min(); i <= range.max(); ++i)
             {
                 pendingRemotePaths_.push_back(remotePath.getFrame(i, listdir));
                 pendingLocalPaths_.push_back(localPath.getFrame(i, listdir));
@@ -407,7 +407,7 @@ namespace mrv
                 const auto range = mediaPath.getFrames().value();
                 const tl::file::Path localMediaPath(localMedia);
                 const bool listdir = true;
-                for (int64_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (int64_t i = range.min(); i <= range.max(); ++i)
                 {
                     pendingRemotePaths_.push_back(mediaPath.getFrame(i, listdir));
                     pendingLocalPaths_.push_back(localMediaPath.getFrame(i, listdir));

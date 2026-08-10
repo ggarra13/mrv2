@@ -3522,8 +3522,8 @@ namespace mrv
         auto app = App::app;
 
         // Update the I/O cache.
-        auto ioSystem = app->getContext()->getSystem<io::System>();
-        ioSystem->getCache()->clear();
+        auto ioSystem = app->getContext()->getSystem<io::ReadSystem>();
+        // ioSystem->getCache()->clear();
 
         player->clearCache();
     }

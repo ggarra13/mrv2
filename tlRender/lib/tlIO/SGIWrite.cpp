@@ -92,8 +92,8 @@ namespace tl
                     header.channels = image::getChannelCount(info.pixelType);
                     header.pixelMin = 0;
                     header.pixelMax = image::getBitDepth(info.pixelType) == 8
-                                          ? image::U8Range.getMax()
-                                          : image::U16Range.getMax();
+                                          ? image::U8Range.max()
+                                          : image::U16Range.max();
 
                     auto io = file::FileIO::create(fileName, file::Mode::Write);
                     io->setEndianConversion(
@@ -123,7 +123,7 @@ namespace tl
         void Write::_init(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             ISequenceWrite::_init(path, info, options, logSystem);
         }
@@ -135,7 +135,7 @@ namespace tl
         std::shared_ptr<Write> Write::create(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             auto out = std::shared_ptr<Write>(new Write);
             out->_init(path, info, options, logSystem);

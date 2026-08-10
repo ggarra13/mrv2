@@ -202,12 +202,6 @@ msgstr "Установить звуковое имя файла."
 msgid "Get file sequence audio file name."
 msgstr "Найдите последовательность звукового файла."
 
-msgid "Set file sequence audio directory."
-msgstr "Установите аудиоканал файловой последовательности."
-
-msgid "Get file sequence audio directory."
-msgstr "Возьмите аудиоканал файловой последовательности."
-
 msgid "Set maximum file sequence digits."
 msgstr "Установите максимальные цифры последовательности файлов."
 
@@ -8253,6 +8247,12 @@ msgstr "Ошибка информации о задаче"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Неверный шрифт для текстового рисунка"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Установите аудиоканал файловой последовательности."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Возьмите аудиоканал файловой последовательности."
 
 #~ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 #~ msgstr "Использовано: %.2g от %zu Gb (%.2g%%)"

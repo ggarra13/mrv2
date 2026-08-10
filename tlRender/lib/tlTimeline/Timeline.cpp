@@ -5,228 +5,770 @@
 #include <tlTimeline/TimelinePrivate.h>
 
 #include <tlTimeline/Util.h>
+#include <tlTimeline/ZipPrivate.h>
 
+#include <tlIO/SequenceIO.h>
 #include <tlIO/System.h>
 
 #include <tlCore/Assert.h>
 #include <tlCore/Error.h>
 #include <tlCore/String.h>
 #include <tlCore/StringFormat.h>
+#include <tlCore/URL.h>
+
+#include <opentimelineio/externalReference.h>
+#include <opentimelineio/gap.h>
+#include <opentimelineio/imageSequenceReference.h>
+#include <opentimelineio/transition.h>
 
 namespace tl
 {
     namespace timeline
     {
-        namespace
-        {
-            const size_t readCacheMax = 10;
-        }
-
-        TLRENDER_ENUM_IMPL(
-            FileSequenceAudio, "None", "BaseName", "FileName", "Directory");
-        TLRENDER_ENUM_SERIALIZE_IMPL(FileSequenceAudio);
-
-        TLRENDER_ENUM_IMPL(
-            Spatial,
-            "None",
-            "Coordinates",
-            "Normalize");
-
 
         namespace
         {
-            std::string getKey(const file::Path& path)
+            //! An absolute, normalized form of a media path, used only to
+            //! compare paths that name the same file in different ways.
+            std::string normalMediaPath(const file::Path& path)
             {
-                std::vector<std::string> out;
-                out.push_back(path.get());
-                out.push_back(path.getNumber());
-                return string::join(out, ';');
+                std::filesystem::path out = std::filesystem::u8path(path.get());
+                if (!out.is_absolute())
+                {
+                    std::error_code ec;
+                    const std::filesystem::path abs = std::filesystem::absolute(out, ec);
+                    if (!ec)
+                    {
+                        out = abs;
+                    }
+                }
+                return out.lexically_normal().u8string();
             }
-
-
-            float transitionValue(double frame, double in, double out)
-            {
-                return (frame - in) / (out - in);
-            }
-
-        } // namespace
-
-        //! Get the OTIO spatial coordinates of a clip. These are optional;
-        //! clips without them are laid out from their image size as before.
-        //! The coordinates are returned as authored, in the OTIO coordinate
-        //! system: unit-less and Y-up.
-        std::optional<math::Box2f> getClipBounds(const otio::Clip* otioClip)
-        {
-            std::optional<math::Box2f> out;
-            otio::ErrorStatus errorStatus;
-            const auto bounds = otioClip->available_image_bounds(&errorStatus);
-            if (bounds.has_value() && !otio::is_error(errorStatus))
-            {
-                const auto& min = bounds.value().min;
-                const auto& max = bounds.value().max;
-                out = math::Box2f(
-                    math::Vector2f(min.x, min.y),
-                    math::Vector2f(max.x, max.y));
-            }
-            return out;
         }
 
-        //! Convert OTIO spatial coordinates into image space.
-        //!
-        //! The OTIO coordinates are unit-less, so they are scaled by the
-        //! pixels per unit established from the first clip that has them;
-        //! bounds of "0, 0, 1920, 1080" and "0, 0, 16, 9" describe the same
-        //! area and must give the same result. The Y axis is also flipped,
-        //! since OTIO is Y-up and image space is Y-down.
-        std::optional<math::Box2f> toImageSpace(
-            const std::optional<math::Box2f>& bounds,
-            double scale)
+        namespace
         {
-            std::optional<math::Box2f> out;
-            if (bounds.has_value())
-            {
-                const auto& min = bounds.value().min;
-                const auto& max = bounds.value().max;
-                out = math::Box2f(
-                    math::Vector2f(min.x * scale, -max.y * scale),
-                    math::Vector2f(max.x * scale, -min.y * scale));
-            }
-            return out;
-        }
+            const std::chrono::milliseconds timeout(5);
 
-        //! Resolve which media reference a clip should be read from.
-        //!
-        //! A key set for the clip alone takes precedence over the timeline
-        //! wide key. Clips that do not have the requested key fall back to the
-        //! default media key, and then to the media reference OTIO has active.
-        otio::MediaReference* resolveMediaReference(
-            const otio::Clip* otioClip,
-            const std::string& key,
-            const std::map<const otio::Clip*, std::string>& clipKeys)
-        {
-            std::string clipKey = key;
-            const auto i = clipKeys.find(otioClip);
-            if (i != clipKeys.end() && !i->second.empty())
-            {
-                clipKey = i->second;
-            }
-            if (clipKey.empty())
-            {
-                // The common case, where no key has been set. Return early so
-                // that the media reference map is not copied.
-                return otioClip->media_reference();
-            }
-            const auto mediaReferences = otioClip->media_references();
-            auto j = mediaReferences.find(clipKey);
-            if (j == mediaReferences.end())
-            {
-                j = mediaReferences.find(otio::Clip::default_media_key);
-            }
-            return j != mediaReferences.end() ?
-                j->second :
-                otioClip->media_reference();
-        }
+            // How often an otherwise idle timeline wakes to log itself, and so
+            // how long it will wait for a request before looking again.
+            const std::chrono::seconds logInterval(10);
+            // How long a timeline without a thread waits for one of its own
+            // requests before giving up on it.
+            const std::chrono::seconds syncRequestTimeout(60);
 
-        //! Get a clip's box in image space, before it is placed on the canvas.
-        //!
-        //! With Spatial::Normalize a clip that has no spatial coordinates is
-        //! given the reference size, so that clips of differing resolutions
-        //! are displayed at the same size. This covers timelines that were not
-        //! authored with spatial coordinates at all.
-        std::optional<math::Box2f> getSpatialBounds(
-            const otio::Clip* otioClip,
-            Spatial spatial,
-            const math::Size2i& normalizeSize,
-            double scale)
-        {
-            std::optional<math::Box2f> out;
-            if (Spatial::kNone == spatial)
+            //! Get the OTIO spatial coordinates of a media reference. These are
+            //! optional; media without them is laid out from the image size as
+            //! before. The coordinates are returned as authored, in the OTIO
+            //! coordinate system: unit-less and Y-up.
+            std::optional<math::Box2f> getMediaReferenceBounds(
+                const otio::MediaReference* otioMediaReference)
             {
+                std::optional<math::Box2f> out;
+                if (otioMediaReference)
+                {
+                    const auto bounds = otioMediaReference->available_image_bounds();
+                    if (bounds.has_value())
+                    {
+                        const auto& min = bounds.value().min;
+                        const auto& max = bounds.value().max;
+                        out = math::Box2f(
+                            math::Vector2f(min.x, min.y),
+                            math::Vector2f(max.x, max.y));
+                    }
+                }
                 return out;
             }
-            out = toImageSpace(getClipBounds(otioClip), scale);
-            if (!out.has_value() &&
-                Spatial::Normalize == spatial &&
-                normalizeSize.isValid())
+
+            //! Get the OTIO spatial coordinates of a clip's active media
+            //! reference.
+            std::optional<math::Box2f> getClipBounds(const otio::Clip* otioClip)
             {
-                out = math::Box2f(
-                    math::Vector2f(0.F, -static_cast<float>(normalizeSize.h)),
-                    math::Vector2f(static_cast<float>(normalizeSize.w), 0.F));
+                return getMediaReferenceBounds(otioClip->media_reference());
             }
-            return out;
-        }
 
-        //! Get a clip's box within the timeline canvas.
-        std::optional<math::Box2f> getCanvasBox(
-            const otio::Clip* otioClip,
-            Spatial spatial,
-            const math::Size2i& normalizeSize,
-            double scale,
-            const math::Vector2f& offset)
-        {
-            std::optional<math::Box2f> out;
-            if (const auto bounds = getSpatialBounds(
-                otioClip,
-                spatial,
-                normalizeSize,
-                scale))
+            //! Look on disk for the frames a sequence has and group them into runs
+            //! of consecutive numbers, one per clip.
+            //!
+            //! This is the one place that goes looking, and it is a snapshot:
+            //! frames written after it are picked up by opening the sequence again,
+            //! not while it is being watched. The other policies need no such thing
+            //! because they answer for a missing frame as they meet it.
+            std::vector<math::Int64Range> getRuns(
+                const file::Path& path,
+                const math::Int64Range& within,
+                const file::PathOptions& pathOptions)
             {
-                out = bounds.value() + offset;
+                std::vector<math::Int64Range> out;
+                auto frames = file::toFrames(file::findSeq(path, pathOptions));
+                std::sort(frames.begin(), frames.end());
+                for (int64_t frame : frames)
+                {
+                    if (frame < within.min() || frame > within.max())
+                    {
+                        // Outside the range asked for, so not this sequence's
+                        // business even though it sits beside it on disk.
+                        continue;
+                    }
+                    if (!out.empty() && out.back().max() + 1 == frame)
+                    {
+                        out.back() = math::Int64Range(out.back().min(), frame);
+                    }
+                    else
+                    {
+                        out.push_back(math::Int64Range(frame, frame));
+                    }
+                }
+                return out;
             }
-            return out;
+
+            //! Convert OTIO spatial coordinates into image space.
+            //!
+            //! The OTIO coordinates are unit-less, so they are scaled by the
+            //! pixels per unit established from the first clip that has them;
+            //! bounds of "0, 0, 1920, 1080" and "0, 0, 16, 9" describe the same
+            //! area and must give the same result. The Y axis is also flipped,
+            //! since OTIO is Y-up and image space is Y-down.
+            std::optional<math::Box2f> toImageSpace(
+                const std::optional<math::Box2f>& bounds,
+                double scale)
+            {
+                std::optional<math::Box2f> out;
+                if (bounds.has_value())
+                {
+                    const auto& min = bounds.value().min;
+                    const auto& max = bounds.value().max;
+                    out = math::Box2f(
+                        math::Vector2f(min.x * scale, -max.y * scale),
+                        math::Vector2f(max.x * scale, -min.y * scale));
+                }
+                return out;
+            }
+
+            //! Resolve which media reference a clip should be read from.
+            //!
+            //! A key set for the clip alone takes precedence over the timeline
+            //! wide key. Clips that do not have the requested key fall back to
+            //! the default media key, and then to the media reference OTIO has
+            //! active.
+            otio::MediaReference* resolveMediaReference(
+                const otio::Clip* otioClip,
+                const std::string& key,
+                const std::map<const otio::Clip*, std::string>& clipKeys)
+            {
+                std::string clipKey = key;
+                const auto i = clipKeys.find(otioClip);
+                if (i != clipKeys.end() && !i->second.empty())
+                {
+                    clipKey = i->second;
+                }
+                if (clipKey.empty())
+                {
+                    // The common case, where no key has been set. Return early so
+                    // that the media reference map is not copied.
+                    return otioClip->media_reference();
+                }
+                const auto mediaReferences = otioClip->media_references();
+                auto j = mediaReferences.find(clipKey);
+                if (j == mediaReferences.end())
+                {
+                    j = mediaReferences.find(otio::Clip::default_media_key);
+                }
+                return j != mediaReferences.end() ?
+                    j->second :
+                    otioClip->media_reference();
+            }
+
+            //! Get a clip's box in image space, before it is placed on the canvas.
+            //!
+            //! With Spatial::Normalize a clip that has no spatial coordinates is
+            //! given the reference size, so that clips of differing resolutions
+            //! are displayed at the same size. This covers timelines that were not
+            //! authored with spatial coordinates at all.
+            std::optional<math::Box2f> getSpatialBounds(
+                const otio::Clip* otioClip,
+                Spatial spatial,
+                const math::Size2i& normalizeSize,
+                double scale)
+            {
+                std::optional<math::Box2f> out;
+                if (Spatial::kNone == spatial)
+                {
+                    return out;
+                }
+                out = toImageSpace(getClipBounds(otioClip), scale);
+                if (!out.has_value() &&
+                    Spatial::Normalize == spatial &&
+                    normalizeSize.isValid())
+                {
+                    out = math::Box2f(
+                        math::Vector2f(0.F, -static_cast<float>(normalizeSize.h)),
+                        math::Vector2f(static_cast<float>(normalizeSize.w), 0.F));
+                }
+                return out;
+            }
+
+            //! Get a clip's box within the timeline canvas.
+            std::optional<math::Box2f> getCanvasBox(
+                const otio::Clip* otioClip,
+                Spatial spatial,
+                const math::Size2i& normalizeSize,
+                double scale,
+                const math::Vector2f& offset)
+            {
+                std::optional<math::Box2f> out;
+                if (const auto bounds = getSpatialBounds(
+                        otioClip,
+                        spatial,
+                        normalizeSize,
+                        scale))
+                {
+                    out = bounds.value() + offset;
+                }
+                return out;
+            }
+
+            namespace
+            {
+                std::string getKey(const file::Path& path)
+                {
+                    std::vector<std::string> out;
+                    out.push_back(path.get());
+                    out.push_back(path.getNumber());
+                    return string::join(out, ';');
+                }
+            }
         }
 
-        bool Options::operator==(const Options& other) const
+        namespace
         {
-            return fileSequenceAudio == other.fileSequenceAudio &&
-                   spatial == other.spatial &&
-                   fileSequenceAudioFileName ==
-                       other.fileSequenceAudioFileName &&
-                   fileSequenceAudioDirectory ==
-                       other.fileSequenceAudioDirectory &&
-                   videoRequestCount == other.videoRequestCount &&
-                   audioRequestCount == other.audioRequestCount &&
-                   requestTimeout == other.requestTimeout &&
-                   ioOptions == other.ioOptions &&
-                   pathOptions == other.pathOptions;
-        }
+            file::Path getAssociatedAudio(
+                const std::shared_ptr<system::Context>& context,
+                const file::Path& path,
+                const ImageSeqAudio& imageSeqAudio,
+                const std::vector<std::string>& imageSeqAudioExts,
+                const std::string& imageSeqAudioFileName,
+                const file::PathOptions& pathOptions)
+            {
+                file::Path out;
+                auto ioSystem = context->getSystem<io::ReadSystem>();
+                switch (imageSeqAudio)
+                {
+                case ImageSeqAudio::Ext:
+                {
+                    // Check for an audio file with the same base name.
+                    std::vector<std::string> baseNames;
+                    baseNames.push_back(path.getDirectory() + path.getBaseName());
+                    std::string tmp = path.getBaseName();
+                    if (!tmp.empty() && '.' == tmp[tmp.size() - 1])
+                    {
+                        tmp.pop_back();
+                    }
+                    baseNames.push_back(path.getDirectory() + tmp);
+                    for (const auto& baseName : baseNames)
+                    {
+                        for (const auto& ext : imageSeqAudioExts)
+                        {
+                            const file::Path audioPath(baseName + ext,
+                                                       pathOptions);
+                            if (std::filesystem::exists(std::filesystem::u8path(audioPath.get())))
+                            {
+                                out = audioPath;
+                                break;
+                            }
+                        }
+                    }
 
-        bool Options::operator!=(const Options& other) const
-        {
-            return !(*this == other);
-        }
+                    // Or use the first audio file.
+                    if (out.isEmpty())
+                    {
+                        file::DirListOptions listOptions;
+                        listOptions.filterExt = imageSeqAudioExts;
+                        const auto entries = file::dirList(path.getDirectory(), listOptions);
+                        if (!entries.empty())
+                        {
+                            out = entries.front().path;
+                        }
+                    }
+
+                    break;
+                }
+                case ImageSeqAudio::FileName:
+                    out = file::Path(path.getDirectory() +
+                                     imageSeqAudioFileName, pathOptions);
+                    break;
+                default: break;
+                }
+                return out;
+            }
+        }  // namespace
 
         void Timeline::_init(
-            const otio::SerializableObject::Retainer<otio::Timeline>&
-                otioTimeline,
             const std::shared_ptr<system::Context>& context,
+            file::Path& inputPath,
+            file::Path& inputAudioPath,
             const Options& options)
         {
             TLRENDER_P();
 
             auto logSystem = context->getLogSystem();
+            logSystem->print(
+                "tl::Timeline::_init",
+                string::Format(
+                    "\n"
+                    "    Path: {0}\n"
+                    "    Audio path: {1}").
+                arg(inputPath.get()).
+                arg(inputAudioPath.get()));
+
+            otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+
+            // Is the input a sequence?
+            const std::vector<std::string> seqExts = getExtensions(
+                context,
+                static_cast<int>(io::FileType::Sequence));
+            const bool hasSeqExt = std::find(
+                seqExts.begin(),
+                seqExts.end(),
+                string::toLower(inputPath.getExtension())) != seqExts.end();
+            if (hasSeqExt && options.seqExpand)
+            {
+                inputPath = file::expandSeq(inputPath, options.pathOptions);
+            }
+            if (hasSeqExt && inputPath.isSequence())
+            {
+                if (inputAudioPath.isEmpty())
+                {
+                    // Check for an associated audio file.
+                    inputAudioPath = getAssociatedAudio(
+                        context,
+                        inputPath,
+                        options.imageSeqAudio,
+                        options.imageSeqAudioExts,
+                        options.imageSeqAudioFileName,
+                        options.pathOptions);
+                }
+            }
+
+            // Read the file. A sequence is read by a decoder, which holds no
+            // thread; only a format that has to be read statefully still needs
+            // a reader here.
+            auto ioSystem = context->getSystem<io::ReadSystem>();
+            io::Info info;
+            bool infoValid = false;
+            if (auto plugin = ioSystem->getPlugin(inputPath))
+            {
+                if (auto decode = plugin->decode(options.ioOptions))
+                {
+                    info = io::SeqDecode::create(
+                        inputPath, {}, decode, options.ioOptions)->getInfo();
+                    infoValid = true;
+                }
+            }
+            if (!infoValid)
+            {
+                // Which tracks this file gets depends on both halves, so both
+                // are read and merged here. The readers are temporary: what
+                // the timeline goes on to read is decided by the tracks below.
+                auto videoRead = ioSystem->videoRead(inputPath,
+                                                     options.ioOptions);
+                auto audioRead = ioSystem->audioRead(inputPath,
+                                                     options.ioOptions);
+                std::future<io::Info> videoFuture;
+                std::future<io::Info> audioFuture;
+                if (videoRead)
+                {
+                    videoFuture = videoRead->getInfo();
+                }
+                if (audioRead)
+                {
+                    audioFuture = audioRead->getInfo();
+                }
+                io::Info videoInfo;
+                if (videoFuture.valid())
+                {
+                    videoInfo = videoFuture.get();
+                    infoValid = true;
+                }
+                io::Info audioInfo;
+                if (audioFuture.valid())
+                {
+                    audioInfo = audioFuture.get();
+                    infoValid = true;
+                }
+                if (infoValid)
+                {
+                    info = merge(videoInfo, audioInfo);
+                }
+            }
+            if (infoValid)
+            {
+                std::optional<otio::RationalTime> startTime;
+                otio::Track* videoTrack = nullptr;
+                otio::Track* audioTrack = nullptr;
+
+                // Read the video.
+                if (!info.video.empty())
+                {
+                    startTime = info.videoTime->start_time();
+                    const double rate = info.videoTime->duration().rate();
+                    const io::MissingFrames missingFrames =
+                        io::getMissingFrames(options.ioOptions);
+
+                    // Every clip names the whole sequence over the whole range it
+                    // covers, whatever the clip itself takes out of it. They are
+                    // separate objects because a clip owns its reference, but they
+                    // describe the same file, so the reads behind them share one
+                    // decoder.
+                    const auto makeClip =
+                        [&](const otio::TimeRange& sourceRange)
+                            {
+                                auto out = new otio::Clip;
+                                out->set_source_range(sourceRange);
+                                if (inputPath.isSequence())
+                                {
+                                    auto mediaReference =
+                                        new otio::ImageSequenceReference(
+                                            "",
+                                            inputPath.getBaseName(),
+                                            inputPath.getExtension(),
+                                            info.videoTime->start_time().value(),
+                                            1,
+                                            rate,
+                                            inputPath.getPadding(),
+                                            // A file opened directly has no reference
+                                            // to say what to do about frames it is
+                                            // missing, so it takes the options the
+                                            // timeline was opened with.
+                                            toOTIO(missingFrames));
+                                    mediaReference->set_available_range(*info.videoTime);
+                                    out->set_media_reference(mediaReference);
+                                }
+                                else
+                                {
+                                    out->set_media_reference(
+                                        new otio::ExternalReference(
+                                            inputPath.getFileName(),
+                                            info.videoTime));
+                                }
+                                return out;
+                            };
+
+                    // A structural policy is answered here rather than by the
+                    // reads: the frames that are there are found once, and a clip
+                    // is laid over each run of them. Skip puts the runs end to
+                    // end, so the timeline is only as long as the frames it has;
+                    // Gaps leaves the holes in, so every frame keeps the time it
+                    // had. Either way no read asks for a frame that is not there.
+                    std::vector<math::Int64Range> runs;
+                    if (inputPath.isSequence() &&
+                        io::isStructural(missingFrames) &&
+                        inputPath.getFrames().has_value())
+                    {
+                        runs = getRuns(
+                            inputPath,
+                            inputPath.getFrames().value(),
+                            options.pathOptions);
+                    }
+
+                    videoTrack = new otio::Track(
+                        "Video", std::nullopt, otio::Track::Kind::video);
+                    if (runs.size() < 2 && io::MissingFrames::Gaps != missingFrames)
+                    {
+                        // Nothing to take out, so this is the same single clip a
+                        // complete sequence gets. A lone run still covers only
+                        // itself, which is what Skip means when the frames that
+                        // are there are consecutive.
+                        videoTrack->append_child(makeClip(
+                                                     runs.empty() ?
+                                                     *info.videoTime :
+                                                     otio::TimeRange(
+                                                         otio::RationalTime(runs.front().min(), rate),
+                                                         otio::RationalTime(
+                                                             runs.front().max() - runs.front().min() + 1,
+                                                             rate))));
+                    }
+                    else
+                    {
+                        const math::Int64Range& frames =
+                            inputPath.getFrames().value();
+                        int64_t at = frames.min();
+                        for (const auto& run : runs)
+                        {
+                            if (io::MissingFrames::Gaps == missingFrames &&
+                                run.min() > at)
+                            {
+                                videoTrack->append_child(new otio::Gap(
+                                                             otio::RationalTime(run.min() - at, rate)));
+                            }
+                            videoTrack->append_child(makeClip(otio::TimeRange(
+                                                                  otio::RationalTime(run.min(), rate),
+                                                                  otio::RationalTime(
+                                                                      run.max() - run.min() + 1, rate))));
+                            at = run.max() + 1;
+                        }
+                        if (io::MissingFrames::Gaps == missingFrames &&
+                            at <= frames.max())
+                        {
+                            // The tail of a render that has not got there yet, kept
+                            // so the range asked for is the range shown.
+                            videoTrack->append_child(new otio::Gap(
+                                                         otio::RationalTime(frames.max() - at + 1, rate)));
+                        }
+                    }
+                }
+
+                // Read the separate audio if provided.
+                if (!inputAudioPath.isEmpty())
+                {
+                    if (auto audioRead = ioSystem->audioRead(inputAudioPath, options.ioOptions))
+                    {
+                        const auto audioInfo = audioRead->getInfo().get();
+
+                        auto audioClip = new otio::Clip;
+                        audioClip->set_source_range(*audioInfo.audioTime);
+                        audioClip->set_media_reference(new otio::ExternalReference(
+                                                           inputAudioPath.getFileName(),
+                                                           audioInfo.audioTime));
+
+                        audioTrack = new otio::Track("Audio", std::nullopt, otio::Track::Kind::audio);
+                        audioTrack->append_child(audioClip);
+                    }
+                }
+                else if (info.audio.isValid())
+                {
+                    if (!startTime.has_value())
+                    {
+                        startTime = info.audioTime->start_time();
+                    }
+
+                    auto audioClip = new otio::Clip;
+                    audioClip->set_source_range(*info.audioTime);
+                    audioClip->set_media_reference(new otio::ExternalReference(
+                                                       inputPath.getFileName(),
+                                                       info.audioTime));
+
+                    audioTrack = new otio::Track("Audio", std::nullopt, otio::Track::Kind::audio);
+                    audioTrack->append_child(audioClip);
+                }
+
+                // Create the stack.
+                auto otioStack = new otio::Stack;
+                if (videoTrack)
+                {
+                    otioStack->append_child(videoTrack);
+                }
+                if (audioTrack)
+                {
+                    otioStack->append_child(audioTrack);
+                }
+
+                // Create the timeline.
+                otioTimeline = new otio::Timeline(inputPath.get());
+                otioTimeline->set_tracks(otioStack);
+                if (startTime.has_value())
+                {
+                    otioTimeline->set_global_start_time(startTime);
+                }
+            }
+
+            // Is the input an OTIO file?
+            if (!otioTimeline)
+            {
+                const std::string fileName = inputPath.get();
+                const std::string ext = string::toLower(inputPath.getExtension());
+                otio::ErrorStatus otioError;
+                if (".otio" == ext)
+                {
+                    otioTimeline = dynamic_cast<otio::Timeline*>(
+                        otio::Timeline::from_json_file(fileName, &otioError));
+                    if (!otioTimeline)
+                    {
+                        throw std::runtime_error(
+                            string::Format("Cannot read timeline: \"{0}\"").
+                            arg(inputPath.get()));
+                    }
+                    else if (otio::is_error(otioError))
+                    {
+                        throw std::runtime_error(
+                            string::Format("Cannot read timeline: \"{0}\": {1}").
+                            arg(inputPath.get()).
+                            arg(otioError.details));
+                    }
+                }
+                else if (".otioz" == ext)
+                {
+                    // Read as scattered ranges rather than start to finish:
+                    // opening reads a local header per media file, and those
+                    // are spread across the whole bundle, one before each
+                    // file's data. Asking for sequential read ahead makes the
+                    // operating system fetch around every one of them and
+                    // then throw it away.
+                    p.fileIO = file::FileIO::create(
+                        fileName,
+                        file::Mode::Read,
+                        file::Read::MemoryMapped,
+                        file::Access::Random);
+
+                    p.zipReader = std::make_shared<ZipReader>(logSystem);
+                    auto& zipReader = *p.zipReader;
+                    zipReader.open(fileName, p.fileIO->getSize());
+
+                    std::string json = zipReader.readText("content.otio");
+                    otioTimeline = dynamic_cast<otio::Timeline*>(
+                        otio::Timeline::from_json_string(json, &otioError));
+                    if (!otioTimeline)
+                    {
+                        throw std::runtime_error(
+                            string::Format("Cannot read timeline: \"{0}\"").
+                            arg(inputPath.get()));
+                    }
+                    else if (otio::is_error(otioError))
+                    {
+                        throw std::runtime_error(
+                            string::Format("Cannot read timeline: \"{0}\": {1}").
+                            arg(inputPath.get()).
+                            arg(otioError.details));
+                    }
+
+                    // Map a media reference to the memory it occupies within the
+                    // bundle.
+                    //
+                    // The bundle is missing the media it is playing if the active
+                    // reference is not there, so that is an error. An alternate
+                    // that is missing only costs the ability to switch to it, so
+                    // the timeline is still opened and the reference is recorded
+                    // as unavailable. Either way the media is never read from its
+                    // path: a bundle is meant to be self contained, and quietly
+                    // reading a file from somewhere else would be misleading.
+                    // Record which references the bundle holds, and check the
+                    // first file of each so that a bundle missing its media is
+                    // still reported at open. Working out every frame's byte
+                    // range waits until the reference is read: for a bundle of
+                    // 25,000 frames that was seconds of URL decoding and path
+                    // parsing before anything appeared.
+                    const auto mapMediaReference = [&](
+                        otio::MediaReference* mediaReference,
+                        bool active)
+                        {
+                            if (!mediaReference ||
+                                p.bundleMediaReferences.find(mediaReference) !=
+                                p.bundleMediaReferences.end())
+                            {
+                                return;
+                            }
+
+                            std::string first;
+                            if (auto externalReference =
+                                dynamic_cast<otio::ExternalReference*>(mediaReference))
+                            {
+                                first = file::Path(
+                                    url::decode(externalReference->target_url())).get();
+                            }
+                            else if (auto imageSeqReference =
+                                     dynamic_cast<otio::ImageSequenceReference*>(mediaReference))
+                            {
+                                if (imageSeqReference->number_of_images_in_sequence() <= 0)
+                                {
+                                    return;
+                                }
+                                first = file::Path(url::decode(
+                                                       imageSeqReference->target_url_for_image_number(0))).get();
+                            }
+                            else
+                            {
+                                return;
+                            }
+
+                            if (!zipReader.find(first).has_value())
+                            {
+                                if (active)
+                                {
+                                    throw std::runtime_error(string::Format(
+                                                                 "Cannot find zip entry: \"{0}\"").arg(first));
+                                }
+                                logSystem->print(
+                                    "tl::Timeline",
+                                    string::Format(
+                                        "Cannot find zip entry: \"{0}\"; this media "
+                                        "reference cannot be used").
+                                    arg(first),
+                                    log::Type::Warning);
+                                p.unavailableMediaReferences.insert(mediaReference);
+                                return;
+                            }
+                            p.bundleMediaReferences.insert(mediaReference);
+                        };
+
+                    // Map every media reference, not only the active one, so that
+                    // the active reference can be changed without re-reading the
+                    // bundle.
+                    for (auto clip : otioTimeline->find_children<otio::Clip>())
+                    {
+                        const auto* activeReference = clip->media_reference();
+                        for (const auto& i : clip->media_references())
+                        {
+                            mapMediaReference(i.second, i.second == activeReference);
+                        }
+                    }
+                }
+            }
+
+            if (!otioTimeline)
+            {
+                // Nothing claimed the file and it is not a timeline document.
+                // Whether that is because the format is not supported at all or
+                // because a supported file could not be read is the difference
+                // between "try another application" and "this file is damaged",
+                // so say which.
+                throw std::runtime_error(
+                    ioSystem->getPlugin(inputPath) ?
+                    string::Format("Cannot read the file: \"{0}\"").
+                    arg(inputPath.get()) :
+                    string::Format("Unsupported file format: \"{0}\"").
+                    arg(inputPath.get()));
+            }
+
+            otio::AnyDictionary dict;
+            dict["path"] = inputPath.get();
+            dict["audioPath"] = inputAudioPath.get();
+            otioTimeline->metadata()["tlRender"] = dict;
+
+            _init(context, otioTimeline, options);
+        }
+
+        void Timeline::_init(
+            const std::shared_ptr<system::Context>& context,
+            const otio::SerializableObject::Retainer<otio::Timeline>&
+            otioTimeline,
+            const Options& options)
+        {
+            TLRENDER_P();
+
+            p.context = context;
+            auto logSystem = context->getLogSystem();
+            p.logSystem = logSystem;
             {
                 std::vector<std::string> lines;
                 lines.push_back(std::string());
                 lines.push_back(string::Format("    File sequence audio: {0}")
-                                    .arg(options.fileSequenceAudio));
+                                .arg(options.imageSeqAudio));
                 lines.push_back(
                     string::Format("    File sequence audio file name: {0}")
-                        .arg(options.fileSequenceAudioFileName));
-                lines.push_back(
-                    string::Format("    File sequence audio directory: {0}")
-                        .arg(options.fileSequenceAudioDirectory));
+                    .arg(options.imageSeqAudioFileName));
+                lines.push_back(string::Format("    * Compatability: {0}").
+                                arg(options.compat));
                 lines.push_back(string::Format("    Video request count: {0}")
-                                    .arg(options.videoRequestCount));
+                                .arg(options.videoRequestCount));
                 lines.push_back(string::Format("    Audio request count: {0}")
-                                    .arg(options.audioRequestCount));
+                                .arg(options.audioRequestCount));
                 lines.push_back(string::Format("    Request timeout: {0}ms")
-                                    .arg(options.requestTimeout.count()));
+                                .arg(options.requestTimeout.count()));
                 for (const auto& i : options.ioOptions)
                 {
                     lines.push_back(string::Format("    AV I/O {0}: {1}")
-                                        .arg(i.first)
-                                        .arg(i.second));
+                                    .arg(i.first)
+                                    .arg(i.second));
                 }
                 lines.push_back(
                     string::Format("    Path max number digits: {0}")
@@ -238,6 +780,7 @@ namespace tl
 
             p.context = context;
             p.otioTimeline = otioTimeline;
+            p.frameCache = io::Cache::create();
             p.timelineChanges = observer::Value<bool>::create(false);
             const auto i = otioTimeline->metadata().find("tlRender");
             if (i != otioTimeline->metadata().end())
@@ -264,9 +807,58 @@ namespace tl
                 }
             }
             p.options = options;
-            p.readCache.setMax(readCacheMax);
+            p.videoReadCache.setMax(p.options.readCacheMax);
+            p.audioReadCache.setMax(p.options.readCacheMax);
+            p.seqCache.setMax(p.options.seqCacheMax);
 
-            // Get information about the timeline.
+            // Get information about the timeline. A timeline whose tracks have
+            // no duration is zero length rather than unset, so that everything
+            // downstream has a range to work in.
+            for (const auto& otioTrack :
+                     p.otioTimeline.value->find_children<otio::Track>())
+            {
+                otio::ErrorStatus errorStatus;
+                const auto ranges = otioTrack->range_of_all_children(&errorStatus);
+                if (otio::is_error(errorStatus))
+                {
+                    continue;
+                }
+                auto& trackItems = p.trackItems[otioTrack];
+                for (const auto& i : ranges)
+                {
+                    if (const auto trimmed = otioTrack->trim_child_range(i.second))
+                    {
+                        p.trimmedRangeInParent[i.first] = trimmed.value();
+                        if (auto otioItem = dynamic_cast<otio::Item*>(i.first))
+                        {
+                            trackItems.push_back({ otioItem, trimmed.value() });
+                        }
+                    }
+                }
+                std::sort(
+                    trackItems.begin(),
+                    trackItems.end(),
+                    [](const Private::TrackItem& a, const Private::TrackItem& b)
+                        {
+                            return a.range.start_time() < b.range.start_time();
+                        });
+            }
+            for (const auto& otioClip :
+                     p.otioTimeline.value->find_children<otio::Clip>())
+            {
+                for (const auto& i : otioClip->media_references())
+                {
+                    if (i.second)
+                    {
+                        const file::Path mediaPath = timeline::getPath(
+                            i.second,
+                            p.path.getDirectory(),
+                            p.options.pathOptions);
+                        p.mediaByPath[mediaPath.get()] = i.second;
+                        p.mediaByNormalPath[normalMediaPath(mediaPath)] = i.second;
+                    }
+                }
+            }
             for (const auto& i : p.otioTimeline.value->tracks()->children())
             {
                 if (auto otioTrack = dynamic_cast<const otio::Track*>(i.value))
@@ -327,11 +919,12 @@ namespace tl
             // Create a new thread.
             p.mutex.otioTimeline = p.otioTimeline;
             p.thread.running = true;
+            p.thread.logTimer = std::chrono::steady_clock::now();
+            p.startReadPool(p.options.readThreadCount);
             p.thread.thread = std::thread(
                 [this]
                     {
                         TLRENDER_P();
-                        p.thread.logTimer = std::chrono::steady_clock::now();
                         while (p.thread.running)
                         {
                             _tick();
@@ -340,19 +933,109 @@ namespace tl
                     });
         }
 
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+        }
+
+        float Timeline::_transitionValue(double frame, double in, double out) const
+        {
+            return (frame - in) / (out - in);
+        }
+
         Timeline::Timeline() :
             _p(new Private)
         {
+            ++objectCount;
         }
 
         Timeline::~Timeline()
         {
             TLRENDER_P();
-            p.thread.running = false;
+            if (auto logSystem = p.logSystem.lock())
+            {
+                logSystem->print(
+                    string::Format("tl::~Timeline {0}").arg(this),
+                    p.path.get());
+            }
+
+            {
+                std::unique_lock<std::mutex> lock(p.mutex.mutex);
+                p.thread.running = false;
+            }
+            p.thread.cv.notify_one();
             if (p.thread.thread.joinable())
             {
                 p.thread.thread.join();
             }
+            p.stopReadPool();
+
+            --objectCount;
+        }
+
+        std::shared_ptr<Timeline> Timeline::create(
+            const std::shared_ptr<system::Context>& context,
+            const otio::SerializableObject::Retainer<otio::Timeline>& timeline,
+            const Options& options)
+        {
+            auto out = std::shared_ptr<Timeline>(new Timeline);
+            out->_init(context, timeline, options);
+            return out;
+        }
+
+        std::shared_ptr<Timeline> Timeline::create(
+            const std::shared_ptr<system::Context>& context,
+            file::Path& path,
+            const Options& options)
+        {
+            auto out = std::shared_ptr<Timeline>(new Timeline);
+            file::Path empty;
+            out->_init(context, path, empty, options);
+            return out;
+        }
+
+        std::shared_ptr<Timeline> Timeline::create(
+            const std::shared_ptr<system::Context>& context,
+            file::Path& path,
+            file::Path& audioPath,
+            const Options& options)
+        {
+            auto out = std::shared_ptr<Timeline>(new Timeline);
+            out->_init(context, path, audioPath, options);
+            return out;
+        }
+
+        std::shared_ptr<Timeline> Timeline::create(
+            const std::shared_ptr<system::Context>& context,
+            const std::string& fileName,
+            const Options& options)
+        {
+            auto out = std::shared_ptr<Timeline>(new Timeline);
+            file::Path path(fileName, options.pathOptions);
+            file::Path empty;
+            out->_init(
+                context,
+                path,
+                empty,
+                options);
+            return out;
+        }
+
+        std::shared_ptr<Timeline> Timeline::create(
+            const std::shared_ptr<system::Context>& context,
+            const std::string& fileName,
+            const std::string& audioFileName,
+            const Options& options)
+        {
+            auto out = std::shared_ptr<Timeline>(new Timeline);
+            file::Path path(fileName, options.pathOptions);
+            file::Path audioPath(audioFileName, options.pathOptions);
+            out->_init(
+                context,
+                path,
+                audioPath,
+                options);
+            return out;
         }
 
         const std::weak_ptr<system::Context>& Timeline::getContext() const
@@ -402,6 +1085,51 @@ namespace tl
         const Options& Timeline::getOptions() const
         {
             return _p->options;
+        }
+
+        std::future<io::VideoData> Timeline::readMedia(
+            const file::Path& path,
+            const otio::RationalTime& time,
+            const io::Options& options)
+        {
+            TLRENDER_P();
+            std::future<io::VideoData> out;
+            const io::Options optionsMerged = io::merge(options, p.options.ioOptions);
+            if (auto mediaReference = _findMedia(path))
+            {
+                if (auto seq = _getSeqDecode(mediaReference, optionsMerged))
+                {
+                    out = p.submitRead(
+                        [seq, time, optionsMerged]
+                            {
+                                return seq->readVideo(time, optionsMerged);
+                            });
+                }
+                else if (auto videoRead = _getVideoRead(mediaReference, optionsMerged))
+                {
+                    out = videoRead->readVideo(time, optionsMerged);
+                }
+            }
+            return out;
+        }
+
+        std::future<io::AudioData> Timeline::readMediaAudio(
+            const file::Path& path,
+            const otio::TimeRange& timeRange,
+            const io::Options& options)
+        {
+            TLRENDER_P();
+            std::future<io::AudioData> out;
+            const io::Options optionsMerged = io::merge(options, p.options.ioOptions);
+            if (auto mediaReference = _findMedia(path))
+            {
+                // Audio is never a sequence of stateless files.
+                if (auto audioRead = _getAudioRead(mediaReference, optionsMerged))
+                {
+                    out = audioRead->readAudio(timeRange, optionsMerged);
+                }
+            }
+            return out;
         }
 
         otio::MediaReference* Timeline::Private::mediaReference(
@@ -633,6 +1361,7 @@ namespace tl
                 p.timelineChanges->setAlways(true);
             }
         }
+
         void Timeline::_requests()
         {
             TLRENDER_P();
@@ -645,15 +1374,15 @@ namespace tl
                 p.thread.cv.wait_for(
                     lock, p.options.requestTimeout,
                     [this]
-                    {
-                        TLRENDER_P();
+                        {
+                            TLRENDER_P();
 
-                        return p.mutex.otioTimeline.value ||
-                               !p.mutex.videoRequests.empty() ||
-                               !p.thread.videoRequestsInProgress.empty() ||
-                               !p.mutex.audioRequests.empty() ||
-                               !p.thread.audioRequestsInProgress.empty();
-                    });
+                            return p.mutex.otioTimeline.value ||
+                                !p.mutex.videoRequests.empty() ||
+                                !p.thread.videoRequestsInProgress.empty() ||
+                                !p.mutex.audioRequests.empty() ||
+                                !p.thread.audioRequestsInProgress.empty();
+                        });
                 if (p.mutex.otioTimeline.value)
                 {
                     p.thread.otioTimeline = p.mutex.otioTimeline;
@@ -738,7 +1467,7 @@ namespace tl
                                                 otioTransition
                                                 ->transition_type());
                                             videoLayerData.transitionValue =
-                                                transitionValue(
+                                                _transitionValue(
                                                     requestTime.value(),
                                                     range.value()
                                                     .end_time_inclusive()
@@ -789,7 +1518,7 @@ namespace tl
                                                 otioTransition
                                                 ->transition_type());
                                             videoLayerData.transitionValue =
-                                                transitionValue(
+                                                _transitionValue(
                                                     requestTime.value(),
                                                     range.value()
                                                     .start_time()
@@ -1065,48 +1794,6 @@ namespace tl
             }
         }
 
-        std::shared_ptr<io::IRead> Timeline::_getRead(
-            const otio::Clip* clip,
-            const io::Options& ioOptions)
-        {
-            TLRENDER_P();
-            return _getRead(p.mediaReference(clip), ioOptions);
-        }
-
-        std::shared_ptr<io::IRead> Timeline::_getRead(
-            const otio::MediaReference* mediaReference,
-            const io::Options& ioOptions)
-        {
-            TLRENDER_P();
-            std::shared_ptr<io::IRead> out;
-            if (p.unavailableMediaReferences.find(mediaReference) !=
-                p.unavailableMediaReferences.end())
-            {
-                // Named by the bundle but not inside it. Reading it from its path
-                // would be reading a different file than the bundle describes.
-                return out;
-            }
-            const auto path = timeline::getPath(
-                mediaReference,
-                p.path.getDirectory(),
-                p.options.pathOptions);
-            const std::string key = getKey(path);
-            if (!p.readCache.get(key, out))
-            {
-                if (auto context = p.context.lock())
-                {
-                    const auto memoryRead = getMemoryRead(mediaReference);
-                    io::Options options = ioOptions;
-                    options["SequenceIO/DefaultSpeed"] =
-                        string::Format("{0}").arg(p.timeRange.duration().rate());
-                    const auto ioSystem = context->getSystem<io::System>();
-                    out = ioSystem->read(path, memoryRead, options);
-                    p.readCache.add(key, out);
-                }
-            }
-            return out;
-        }
-
         std::future<io::VideoData> Timeline::_readVideo(
             const otio::Clip* clip, const otime::RationalTime& time,
             const io::Options& options)
@@ -1114,18 +1801,28 @@ namespace tl
             TLRENDER_P();
 
             std::future<io::VideoData> out;
-            io::Options optionsMerged =
-                io::merge(options, p.options.ioOptions);
+            io::Options optionsMerged = io::merge(options, p.options.ioOptions);
             optionsMerged["USD/cameraName"] = clip->name();
-            auto read = _getRead(clip, optionsMerged);
-            const auto timeRangeOpt = clip->trimmed_range_in_parent();
-            if (read && timeRangeOpt.has_value())
+
+            const auto mediaReference = p.mediaReference(clip);
+            // A sequence is decoded on the timeline's pool; anything that has to
+            // be read statefully keeps its own reader.
+            auto seq = _getSeqDecode(mediaReference, optionsMerged);
+            auto read = seq ? nullptr : _getVideoRead(mediaReference, optionsMerged);
+            const auto timeRangeOpt = p.getTrimmedRangeInParent(clip);
+            if ((seq || read) && timeRangeOpt.has_value())
             {
-                const io::Info& ioInfo = read->getInfo().get();
-                OTIO_NS::TimeRange availableRange = clip->available_range();
-                OTIO_NS::TimeRange trimmedRange = clip->trimmed_range();
+                const io::Info& ioInfo = seq ? seq->getInfo() : read->getInfo().get();
+                if (!ioInfo.videoTime.has_value())
+                {
+                    // No video in the media, so there is no frame to read and no
+                    // rate to convert the time with.
+                    return out;
+                }
+                otio::TimeRange availableRange = clip->available_range();
+                otio::TimeRange trimmedRange = clip->trimmed_range();
                 if (p.options.compat &&
-                    availableRange.start_time() > ioInfo.videoTime.start_time())
+                    availableRange.start_time() > ioInfo.videoTime->start_time())
                 {
                     //! \bug If the available range is greater than the media
                     //! time, assume the media time is wrong and compensate
@@ -1134,10 +1831,18 @@ namespace tl
                         trimmedRange.start_time() - availableRange.start_time(),
                         trimmedRange.duration());
                 }
-                const auto mediaTime = timeline::toVideoMediaTime(
-                    time, timeRangeOpt.value(), clip->trimmed_range(),
-                    ioInfo.videoTime.duration().rate());
-                out = read->readVideo(mediaTime, optionsMerged);
+                const auto mediaTime = toVideoMediaTime(
+                    time,
+                    timeRangeOpt.value(),
+                    trimmedRange,
+                    ioInfo.videoTime->duration().rate());
+                out = seq ?
+                      p.submitRead(
+                          [seq, mediaTime, optionsMerged]
+                              {
+                                  return seq->readVideo(mediaTime, optionsMerged);
+                              }) :
+                      read->readVideo(mediaTime, optionsMerged);
             }
             return out;
         }
@@ -1151,26 +1856,29 @@ namespace tl
             std::future<io::AudioData> out;
             io::Options optionsMerged =
                 io::merge(options, p.options.ioOptions);
-            auto read = _getRead(clip, optionsMerged);
+            auto read = _getAudioRead(clip, optionsMerged);
             const auto timeRangeOpt = clip->trimmed_range_in_parent();
             if (read && timeRangeOpt.has_value())
             {
                 const io::Info& ioInfo = read->getInfo().get();
-                otime::TimeRange trimmedRange = clip->trimmed_range();
-                if (p.options.compat &&
-                    trimmedRange.start_time() < ioInfo.audioTime.start_time())
+                if (ioInfo.audioTime.has_value())
                 {
-                    //! \bug If the trimmed range is less than the media time,
-                    //! assume the media time is wrong (e.g., ALab trailer) and
-                    //! compensate for it.
-                    trimmedRange = otio::TimeRange(
-                        ioInfo.audioTime.start_time() + trimmedRange.start_time(),
-                        trimmedRange.duration());
+                    otime::TimeRange trimmedRange = clip->trimmed_range();
+                    if (p.options.compat &&
+                        trimmedRange.start_time() < ioInfo.audioTime->start_time())
+                    {
+                        //! \bug If the trimmed range is less than the media time,
+                        //! assume the media time is wrong (e.g., ALab trailer) and
+                        //! compensate for it.
+                        trimmedRange = otio::TimeRange(
+                            ioInfo.audioTime->start_time() + trimmedRange.start_time(),
+                            trimmedRange.duration());
+                    }
+                    const auto mediaRange = timeline::toAudioMediaTime(
+                        timeRange, timeRangeOpt.value(), trimmedRange,
+                        ioInfo.audio.sampleRate);
+                    out = read->readAudio(mediaRange, optionsMerged);
                 }
-                const auto mediaRange = timeline::toAudioMediaTime(
-                    timeRange, timeRangeOpt.value(), trimmedRange,
-                    ioInfo.audio.sampleRate);
-                out = read->readAudio(mediaRange, optionsMerged);
             }
             return out;
         }
@@ -1183,9 +1891,11 @@ namespace tl
                 if (auto context = p.context.lock())
                 {
                     // The first video clip defines the video information for the timeline.
-                    if (auto read = _getRead(clip, p.options.ioOptions))
+                    io::Info ioInfo;
+                    if (_getVideoIOInfo(
+                            p.mediaReference(clip), p.options.ioOptions,
+                            ioInfo))
                     {
-                        const io::Info& ioInfo = read->getInfo().get();
                         p.ioInfo.video = ioInfo.video;
                         p.ioInfo.videoTime = ioInfo.videoTime;
                         p.ioInfo.tags.insert(ioInfo.tags.begin(), ioInfo.tags.end());
@@ -1208,17 +1918,15 @@ namespace tl
                         p.videoInfoClip = clip;
                         for (const auto& i : clip->media_references())
                         {
-                            if (auto mediaReferenceRead =
-                                _getRead(i.second, p.options.ioOptions))
+                            io::Info mediaReferenceInfo;
+                            if (_getVideoIOInfo(
+                                    i.second, p.options.ioOptions, mediaReferenceInfo))
                             {
-                                const io::Info& mediaReferenceInfo =
-                                    mediaReferenceRead->getInfo().get();
-
                                 // Kept so that getIOInfo() can report the media
-                                // that is actually being read; completed with the
-                                // timeline level information once it is known.
+                                // that is actually being read; completed with
+                                // the timeline level information once it is
+                                // known.
                                 p.videoInfoByReference[i.second] = mediaReferenceInfo;
-
                                 if (!mediaReferenceInfo.video.empty())
                                 {
                                     const math::Size2i size(
@@ -1287,6 +1995,262 @@ namespace tl
             }
         }
 
+        void Timeline::Private::startReadPool(size_t threadCount)
+        {
+            readPool.stopped = false;
+            for (size_t i = 0; i < std::max(threadCount, size_t(1)); ++i)
+            {
+                readPool.threads.push_back(
+                    std::thread(
+                        [this]
+                            {
+                                while (true)
+                                {
+                                    ReadPool::Task task;
+                                    {
+                                        std::unique_lock<std::mutex> lock(readPool.mutex);
+                                        readPool.cv.wait(
+                                            lock,
+                                            [this]
+                                                {
+                                                    return readPool.stopped || !readPool.tasks.empty();
+                                                });
+                                        if (readPool.tasks.empty())
+                                        {
+                                            // Stopped and drained.
+                                            return;
+                                        }
+                                        task = std::move(readPool.tasks.front());
+                                        readPool.tasks.pop_front();
+                                    }
+                                    try
+                                    {
+                                        task.promise.set_value(task.f());
+                                    }
+                                    catch (const std::exception&)
+                                    {
+                                        // Passed on rather than delivered empty: the
+                                        // frame still comes out blank, since videoFrame()
+                                        // catches this and carries on, but it is counted
+                                        // and logged instead of going by in silence.
+                                        task.promise.set_exception(std::current_exception());
+                                    }
+                                }
+                            }));
+            }
+        }
+
+        void Timeline::Private::stopReadPool()
+        {
+            std::list<ReadPool::Task> dropped;
+            {
+                std::unique_lock<std::mutex> lock(readPool.mutex);
+                readPool.stopped = true;
+                // Whatever has not started decoding is not going to be looked at,
+                // so give the frames back empty rather than making the close wait
+                // for a queue of them.
+                dropped = std::move(readPool.tasks);
+                readPool.tasks.clear();
+            }
+            for (auto& task : dropped)
+            {
+                task.promise.set_value(io::VideoData());
+            }
+            readPool.cv.notify_all();
+            for (auto& thread : readPool.threads)
+            {
+                if (thread.joinable())
+                {
+                    thread.join();
+                }
+            }
+            readPool.threads.clear();
+        }
+
+        std::future<io::VideoData> Timeline::Private::submitRead(
+            std::function<io::VideoData()> f)
+        {
+            ReadPool::Task task;
+            task.f = std::move(f);
+            auto out = task.promise.get_future();
+            if (readPool.threads.empty())
+            {
+                // No pool: the caller is the worker.
+                try
+                {
+                    task.promise.set_value(task.f());
+                }
+                catch (const std::exception&)
+                {
+                    task.promise.set_exception(std::current_exception());
+                }
+                return out;
+            }
+            bool queued = false;
+            {
+                std::unique_lock<std::mutex> lock(readPool.mutex);
+                if (!readPool.stopped)
+                {
+                    readPool.tasks.push_back(std::move(task));
+                    queued = true;
+                }
+            }
+            if (queued)
+            {
+                readPool.cv.notify_one();
+            }
+            else
+            {
+                task.promise.set_value(io::VideoData());
+            }
+            return out;
+        }
+
+        bool Timeline::_getIOInfo(
+            const otio::MediaReference* mediaReference,
+            const io::Options& ioOptions,
+            io::Info& out)
+        {
+            if (auto seq = _getSeqDecode(mediaReference, ioOptions))
+            {
+                out = seq->getInfo();
+                return true;
+            }
+            // Both requests go out before either is waited on, so that the two
+            // readers open the file at the same time.
+            auto videoRead = _getVideoRead(mediaReference, ioOptions);
+            auto audioRead = _getAudioRead(mediaReference, ioOptions);
+            std::future<io::Info> videoFuture;
+            std::future<io::Info> audioFuture;
+            if (videoRead)
+            {
+                videoFuture = videoRead->getInfo();
+            }
+            if (audioRead)
+            {
+                audioFuture = audioRead->getInfo();
+            }
+            if (!videoFuture.valid() && !audioFuture.valid())
+            {
+                return false;
+            }
+            io::Info videoInfo;
+            if (videoFuture.valid())
+            {
+                videoInfo = videoFuture.get();
+            }
+            io::Info audioInfo;
+            if (audioFuture.valid())
+            {
+                audioInfo = audioFuture.get();
+            }
+            out = merge(videoInfo, audioInfo);
+            return true;
+        }
+
+        std::shared_ptr<io::SeqDecode> Timeline::_getSeqDecode(
+            const otio::MediaReference* mediaReference,
+            const io::Options& ioOptions)
+        {
+            TLRENDER_P();
+            return p.getCached<io::SeqDecode>(
+                p.seqCache,
+                mediaReference,
+                ioOptions,
+                [](const std::shared_ptr<system::Context>& context,
+                   const file::Path& path,
+                   const std::vector<file::MemoryRead>& mem,
+                   const io::Options& options)
+                    {
+                        std::shared_ptr<io::SeqDecode> out;
+                        const auto readSystem = context->getSystem<io::ReadSystem>();
+                        if (const auto plugin = readSystem->getPlugin(path))
+                        {
+                            // Null for a format that has to be read statefully,
+                            // which leaves the caller to fall back to a reader.
+                            if (const auto decode = plugin->decode(options))
+                            {
+                                out = io::SeqDecode::create(path, mem, decode, options);
+                            }
+                        }
+                        return out;
+                    });
+        }
+
+        std::shared_ptr<io::IVideoRead> Timeline::_getVideoRead(
+            const otio::Clip* clip,
+            const io::Options& ioOptions)
+        {
+            TLRENDER_P();
+            return _getVideoRead(p.mediaReference(clip), ioOptions);
+        }
+
+        std::shared_ptr<io::IAudioRead> Timeline::_getAudioRead(
+            const otio::Clip* clip,
+            const io::Options& ioOptions)
+        {
+            TLRENDER_P();
+            return _getAudioRead(p.mediaReference(clip), ioOptions);
+        }
+
+        std::shared_ptr<io::IAudioRead> Timeline::_getAudioRead(
+            const otio::MediaReference* mediaReference,
+            const io::Options& ioOptions)
+        {
+            TLRENDER_P();
+            const file::Path mediaPath = timeline::getPath(
+                mediaReference, p.path.getDirectory(), p.options.pathOptions);
+            // auto frameCache = p.getFrameCache(mediaPath);
+            auto frameCache = p.frameCache;
+            return p.getCached<io::IAudioRead>(
+                p.audioReadCache,
+                mediaReference,
+                ioOptions,
+                [frameCache](const std::shared_ptr<system::Context>& context,
+                   const file::Path& path,
+                   const std::vector<file::MemoryRead>& mem,
+                   const io::Options& options)
+                    {
+                        auto read = context->getSystem<io::ReadSystem>()->audioRead(
+                            path, mem, options);
+                        if (read)
+                            read->setCache(frameCache);  // no-op for non-FFmpeg readers
+                        return read;
+                    });
+        }
+
+        bool Timeline::_getVideoIOInfo(
+            const otio::MediaReference* mediaReference,
+            const io::Options& ioOptions,
+            io::Info& out)
+        {
+            if (auto seq = _getSeqDecode(mediaReference, ioOptions))
+            {
+                out = seq->getInfo();
+                return true;
+            }
+            if (auto videoRead = _getVideoRead(mediaReference, ioOptions))
+            {
+                out = videoRead->getInfo().get();
+                return true;
+            }
+            return false;
+        }
+
+        bool Timeline::_getAudioIOInfo(
+            const otio::MediaReference* mediaReference,
+            const io::Options& ioOptions,
+            io::Info& out)
+        {
+            // Audio is never a sequence of stateless files.
+            if (auto audioRead = _getAudioRead(mediaReference, ioOptions))
+            {
+                out = audioRead->getInfo().get();
+                return true;
+            }
+            return false;
+        }
+
         bool Timeline::_getAudioInfo(const otio::Composable* composable)
         {
             TLRENDER_P();
@@ -1296,7 +2260,7 @@ namespace tl
                 {
                     // The first audio clip defines the audio information for
                     // the timeline.
-                    if (auto read = _getRead(clip, p.options.ioOptions))
+                    if (auto read = _getAudioRead(clip, p.options.ioOptions))
                     {
                         const io::Info& ioInfo = read->getInfo().get();
                         p.ioInfo.audio = ioInfo.audio;
@@ -1433,7 +2397,7 @@ namespace tl
             {
                 for (const auto& i : otioClip->media_references())
                 {
-                    if (auto read = _getRead(i.second, p.options.ioOptions))
+                    if (auto read = _getVideoRead(i.second, p.options.ioOptions))
                     {
                         const io::Info& info = read->getInfo().get();
                         if (!info.video.empty())
@@ -1462,6 +2426,8 @@ namespace tl
             // they must be rebuilt against the new tree, not reused.
             p.videoInfoClip = nullptr;
             p.videoInfoByReference.clear();
+            p.videoReadCache.clear();
+            p.seqCache.clear();
             p.maxVideoSize = math::Size2i();
             p.canvasSize = math::Size2i();
             p.canvasOffset = math::Vector2f();
@@ -1497,5 +2463,292 @@ namespace tl
             }
         }
 
+        size_t Timeline::getVideoRequestMax() const
+        {
+            // At least one, whatever the options say. Zero here would not mean
+            // "no limit", it would mean no request is ever picked up, and a
+            // timeline without a thread would wait for one that never came.
+            return std::max(_p->options.readThreadCount, size_t(1)) * 2;
+        }
+
+        size_t Timeline::getReadThreadCount() const
+        {
+            return _p->readPool.threads.size();
+        }
+
+        std::shared_ptr<io::Cache> Timeline::Private::getFrameCache(
+            const file::Path& mediaPath)
+        {
+            const std::string key = getKey(mediaPath);
+            std::unique_lock<std::mutex> lock(readCacheMutex);
+            std::shared_ptr<io::Cache> out;
+            if (!pathFrameCache.get(key, out))
+            {
+                out = io::Cache::create();
+                out->setMax(4 * memory::gigabyte);
+                pathFrameCache.add(key, out);
+            }
+            return out;
+        }
+
+        std::shared_ptr<io::IVideoRead> Timeline::_getVideoRead(
+            const otio::MediaReference* mediaReference,
+            const io::Options& ioOptions)
+        {
+            TLRENDER_P();
+            const file::Path mediaPath = timeline::getPath(
+                mediaReference, p.path.getDirectory(), p.options.pathOptions);
+            auto frameCache = p.frameCache; //p.getFrameCache(mediaPath);
+            return p.getCached<io::IVideoRead>(
+                p.videoReadCache,
+                mediaReference,
+                ioOptions,
+                [frameCache](const std::shared_ptr<system::Context>& context,
+                             const file::Path& path,
+                             const std::vector<file::MemoryRead>& mem,
+                             const io::Options& options)
+                    {
+                        auto read = context->getSystem<io::ReadSystem>()->videoRead(
+                            path, mem, options);
+                        if (read)
+                            read->setCache(frameCache);
+                        return read;
+                    });
+        }
+
+        std::vector<file::Path> Timeline::getMediaPaths() const
+        {
+            TLRENDER_P();
+            std::vector<file::Path> out;
+            for (const auto& i : p.mediaByPath)
+            {
+                out.push_back(file::Path(i.first));
+            }
+            return out;
+        }
+
+        otio::MediaReference* Timeline::_findMedia(const file::Path& path)
+        {
+            TLRENDER_P();
+            const auto i = p.mediaByPath.find(path.get());
+            if (i != p.mediaByPath.end())
+            {
+                return i->second;
+            }
+            // The media references are resolved when the timeline is read, so they
+            // are usually absolute, while a caller asks with the path it was given.
+            // Opening a file by a relative path otherwise found none of its own
+            // media.
+            const auto j = p.mediaByNormalPath.find(normalMediaPath(path));
+            return j != p.mediaByNormalPath.end() ? j->second : nullptr;
+        }
+
+        bool Timeline::getMediaInfo(
+            const file::Path& path,
+            io::Info& out,
+            const io::Options& options)
+        {
+            TLRENDER_P();
+            if (auto mediaReference = _findMedia(path))
+            {
+                return _getIOInfo(
+                    mediaReference, io::merge(options, p.options.ioOptions), out);
+            }
+            return false;
+        }
+
+        std::optional<Timeline::MediaAt> Timeline::_mediaAt(
+            const otio::RationalTime& time)
+        {
+            TLRENDER_P();
+            std::optional<MediaAt> out;
+            if (!p.otioTimeline)
+            {
+                return out;
+            }
+            // The same lookup the request thread makes: the timeline's own start is
+            // taken off, and the first enabled video track holding that time wins.
+            // Bisected rather than walked, because this is asked for the playhead
+            // and for every ruler label that is drawn, and a sequence built out of
+            // the runs of frames it has can be in a great many pieces.
+            const otio::RationalTime trackTime = time - p.timeRange.start_time();
+            for (const auto& otioTrack : p.otioTimeline->video_tracks())
+            {
+                if (!otioTrack->enabled())
+                {
+                    continue;
+                }
+                for (const auto& otioChild :
+                         p.getTrackChildrenAt(otioTrack, trackTime))
+                {
+                    auto otioClip = dynamic_cast<const otio::Clip*>(otioChild);
+                    if (!otioClip)
+                    {
+                        continue;
+                    }
+                    const auto rangeInParent = p.getTrimmedRangeInParent(otioClip);
+                    if (!rangeInParent.has_value() ||
+                        !rangeInParent.value().contains(trackTime))
+                    {
+                        continue;
+                    }
+
+                    out = _mediaFrom(otioClip, rangeInParent.value());
+                    if (out)
+                    {
+                        return out;
+                    }
+                }
+            }
+            return out;
+        }
+
+        std::optional<Timeline::MediaAt> Timeline::_mediaFrom(
+            const otio::Clip* otioClip,
+            const otio::TimeRange& rangeInParent)
+        {
+            TLRENDER_P();
+            std::optional<MediaAt> out;
+            const io::Options optionsMerged = p.options.ioOptions;
+            auto mediaReference = p.mediaReference(otioClip);
+            io::Info ioInfo;
+            MediaAt mediaAt;
+
+            mediaAt.seq = _getSeqDecode(mediaReference, optionsMerged);
+            if (mediaAt.seq)
+            {
+                ioInfo = mediaAt.seq->getInfo();
+            }
+            else if (auto read = _getVideoRead(mediaReference, optionsMerged))
+            {
+                ioInfo = read->getInfo().get();
+            }
+            else
+            {
+                return out;
+            }
+
+            if (!ioInfo.videoTime.has_value())
+            {
+                // No video in the media, so there is no rate to convert times
+                // with and nothing to say where the clip sits.
+                return out;
+            }
+            otio::TimeRange trimmedRange = otioClip->trimmed_range();
+            const otio::TimeRange availableRange = otioClip->available_range();
+            if (p.options.compat &&
+                availableRange.start_time() > ioInfo.videoTime->start_time())
+            {
+                // The same compensation _readVideo() makes, so that both agree on
+                // which media time a timeline time means.
+                trimmedRange = otio::TimeRange(
+                    trimmedRange.start_time() - availableRange.start_time(),
+                    trimmedRange.duration());
+            }
+            mediaAt.rangeInParent = rangeInParent;
+            mediaAt.trimmedRange = trimmedRange;
+            mediaAt.rate = ioInfo.videoTime->duration().rate();
+            out = mediaAt;
+            return out;
+        }
+
+        size_t Timeline::getObjectCount()
+        {
+            return objectCount;
+        }
+
+        template<typename T>
+        std::shared_ptr<T> Timeline::Private::getCached(
+            memory::LRUCache<std::string, std::shared_ptr<T> >& cache,
+            const otio::MediaReference* mediaReference,
+            const io::Options& ioOptions,
+            const std::function<std::shared_ptr<T>(
+                   const std::shared_ptr<system::Context>&,
+                   const file::Path&,
+                   const std::vector<file::MemoryRead>&,
+                   const io::Options&)>& create)
+        {
+            std::shared_ptr<T> out;
+            if (mediaUnavailable(mediaReference))
+            {
+                // Named by the bundle but not inside it. Reading it from its
+                // path would be reading a different file than the bundle
+                // describes.
+                return out;
+            }
+            const auto mediaPath = timeline::getPath(
+                mediaReference,
+                path.getDirectory(),
+                options.pathOptions);
+            const std::string key = getKey(mediaPath);
+            std::unique_lock<std::mutex> lock(readCacheMutex);
+            if (!cache.get(key, out))
+            {
+                auto context = this->context.lock();
+                if (!context)
+                {
+                    return out;
+                }
+                try
+                {
+                    const auto mem = getMemoryRead(mediaReference);
+                    if (mediaUnavailable(mediaReference))
+                    {
+                        // Resolving its byte ranges said the bundle does not
+                        // hold it; reading it from its path is not the same
+                        // file.
+                        return out;
+                    }
+                    io::Options readOptions = ioOptions;
+                    readOptions["SequenceIO/DefaultSpeed"] =
+                        string::Format("{0}").arg(timeRange.duration().rate());
+                    if (auto imageSeqReference =
+                        dynamic_cast<const otio::ImageSequenceReference*>(mediaReference))
+                    {
+                        // The reference says what to do about frames it does
+                        // not have, and it is more specific than the options
+                        // the timeline was opened with. A reference this
+                        // timeline built for a file opened directly carries
+                        // those options already.
+                        // readOptions["SequenceIO/MissingFrames"] = to_string(
+                        //     fromOTIO(imageSeqReference->missing_frame_policy()));
+                    }
+                    out = create(context, mediaPath, mem, readOptions);
+                }
+                catch (const std::exception& e)
+                {
+                    if (auto log = context->getLogSystem())
+                    {
+                        log->print(
+                            "tl::Timeline",
+                            string::Format("Cannot read \"{0}\": {1}").
+                            arg(mediaPath.get()).arg(e.what()),
+                            log::Type::Error);
+                    }
+                    return std::shared_ptr<T>();
+                }
+                if (out)
+                {
+                    cache.add(key, out);
+                }
+            }
+            return out;
+        }
+
+        bool Timeline::Private::mediaUnavailable(
+            const otio::MediaReference* mediaReference)
+        {
+            std::unique_lock<std::mutex> lock(memFilesMutex);
+            return unavailableMediaReferences.find(mediaReference) !=
+                unavailableMediaReferences.end();
+        }
+
+        void Timeline::setCacheOptions(const PlayerCacheOptions& options)
+        {
+            TLRENDER_P();
+
+            double sum = (options.videoGB + options.audioGB);
+            p.frameCache->setMax(sum * memory::gigabyte);
+        }
     } // namespace timeline
 } // namespace tl

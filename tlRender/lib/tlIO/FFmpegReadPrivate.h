@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <tlIO/Cache.h>
 #include <tlIO/FFmpeg.h>
 
 extern "C"
@@ -39,18 +40,25 @@ namespace tl
 
         const size_t avIOContextBufferSize = 4096;
 
-        struct Options
+        struct ReadOptions
         {
             otime::RationalTime startTime = time::invalidTime;
             bool yuvToRGBConversion = false;
+            bool hwAccel = false;
             bool fastYUV420PConversion = true;
             audio::Info audioConvertInfo;
             int audioTrack = -1;
-            size_t threadCount = ffmpeg::threadCount;
-            size_t requestTimeout = 5;
+            size_t threadCount = Options().threadCount;
             size_t videoBufferSize = 4;
             otime::RationalTime audioBufferSize = otime::RationalTime(2.0, 1.0);
         };
+
+        //! Parse the reader options.
+        ReadOptions getReadOptions(const io::Options&);
+
+        //! Find the stream of the given type to read, or -1. A stream
+        //! marked as the default is preferred over the first one found.
+        int findStream(AVFormatContext*, AVMediaType);
 
         class ReadVideo
         {
@@ -58,8 +66,8 @@ namespace tl
             ReadVideo(
                 const std::string& fileName,
                 const std::vector<file::MemoryRead>& memory,
-                const std::weak_ptr<log::System>& logSystem,
-                const Options& options);
+                const ReadOptions& options,
+                const std::shared_ptr<log::System>& logSystem);
 
             ~ReadVideo();
 
@@ -84,10 +92,13 @@ namespace tl
             void _copy(std::shared_ptr<image::Image>&,
                        std::shared_ptr<AVFrame>);
             float _getRotation(const AVStream*);
+            void _initHwAccel(const AVCodec*);
+            static AVPixelFormat _getHwFormat(AVCodecContext*,
+                                              const AVPixelFormat*);
 
             //! tlRender variables
             std::string _fileName;
-            Options _options;
+            ReadOptions _options;
             image::Info _info;
             image::HDRData _hdr;
             otime::TimeRange _timeRange = time::invalidTimeRange;
@@ -105,6 +116,7 @@ namespace tl
             AVRational _avSpeed = {24, 1};
             int _avStream = -1;
             int _avAudioStream = -1;
+            bool _fastYUV420PConversion = true;
             std::map<int, AVCodecParameters*> _avCodecParameters;
             std::map<int, AVCodecContext*> _avCodecContext;
             AVFrame* _avFrame = nullptr;
@@ -112,8 +124,9 @@ namespace tl
             AVColorTransferCharacteristic _avColorTRC;
             AVPixelFormat _avInputPixelFormat = AV_PIX_FMT_NONE;
             AVPixelFormat _avOutputPixelFormat = AV_PIX_FMT_NONE;
-            bool _fastYUV420PConversion = true;
             SwsContext* _swsContext = nullptr;
+            AVBufferRef* _hwDeviceContext = nullptr;
+            AVPixelFormat _hwPixelFormat = AV_PIX_FMT_NONE;
             std::list<std::shared_ptr<image::Image> > _buffer;
             bool _eof = false;
         };
@@ -123,8 +136,8 @@ namespace tl
         public:
             ReadAudio(
                 const std::string& fileName,
-                const std::vector<file::MemoryRead>&, double videoRate,
-                const Options&);
+                const std::vector<file::MemoryRead>&,
+                const ReadOptions&);
 
             ~ReadAudio();
 
@@ -141,11 +154,15 @@ namespace tl
             size_t getBufferSize() const;
             void bufferCopy(uint8_t*, size_t sampleCount);
 
+            std::string getErrorString() { return ""; }
+            size_t getErrorCount() { return 0; }
+
+
         private:
             int _decode(const otime::RationalTime& currentTime);
 
             std::string _fileName;
-            Options _options;
+            ReadOptions _options;
             audio::Info _info;
             otime::TimeRange _timeRange = time::invalidTimeRange;
             image::Tags _tags;
@@ -163,12 +180,20 @@ namespace tl
             bool _eof = false;
         };
 
-        struct Read::Private
+        // Errors are recorded by the worker thread and read through
+        // getError()/getErrorCount() from any thread.
+        struct ErrorMutex
         {
-            Options options;
+            std::string error;
+            size_t count = 0;
+            std::mutex mutex;
+        };
+
+        struct VideoRead::Private
+        {
+            ReadOptions options;
 
             std::shared_ptr<ReadVideo> readVideo;
-            std::shared_ptr<ReadAudio> readAudio;
 
             io::Info info;
             struct InfoRequest
@@ -182,15 +207,16 @@ namespace tl
                 io::Options options;
                 std::promise<io::VideoData> promise;
             };
+
             struct VideoMutex
             {
                 std::list<std::shared_ptr<InfoRequest> > infoRequests;
                 std::list<std::shared_ptr<VideoRequest> > videoRequests;
-                // std::shared_ptr<VideoRequest> videoRequest;
                 bool stopped = false;
                 std::mutex mutex;
             };
             VideoMutex videoMutex;
+
             struct VideoThread
             {
                 otime::RationalTime currentTime = time::invalidTime;
@@ -201,16 +227,35 @@ namespace tl
             };
             VideoThread videoThread;
 
+            std::shared_ptr<io::Cache> cache;
+
+            ErrorMutex errorMutex;
+        };
+
+        struct AudioRead::Private
+        {
+            ReadOptions options;
+
+            std::shared_ptr<ReadAudio> readAudio;
+
+            io::Info info;
+            struct InfoRequest
+            {
+                std::promise<io::Info> promise;
+            };
             struct AudioRequest
             {
-                otime::TimeRange timeRange = time::invalidTimeRange;
+                otio::TimeRange timeRange;
                 io::Options options;
                 std::promise<io::AudioData> promise;
             };
+
+            std::shared_ptr<io::Cache> cache;
+
             struct AudioMutex
             {
+                std::list<std::shared_ptr<InfoRequest> > infoRequests;
                 std::list<std::shared_ptr<AudioRequest> > requests;
-                // std::shared_ptr<AudioRequest> currentRequest;
                 bool stopped = false;
                 std::mutex mutex;
             };
@@ -224,6 +269,8 @@ namespace tl
                 std::atomic<bool> running;
             };
             AudioThread audioThread;
+
+            ErrorMutex errorMutex;
         };
     } // namespace ffmpeg
 } // namespace tl

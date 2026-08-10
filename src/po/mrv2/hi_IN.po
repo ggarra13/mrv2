@@ -193,12 +193,6 @@ msgstr "फ़ाइल अनुक्रम ऑडियो फ़ाइल �
 msgid "Get file sequence audio file name."
 msgstr "फ़ाइल अनुक्रम ऑडियो फ़ाइल नाम प्राप्त करें."
 
-msgid "Set file sequence audio directory."
-msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री सेट करें."
-
-msgid "Get file sequence audio directory."
-msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री प्राप्त करें."
-
 msgid "Set maximum file sequence digits."
 msgstr "अधिकतम फ़ाइल अनुक्रम संख्या सेट करें."
 
@@ -8112,6 +8106,12 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री सेट करें."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री प्राप्त करें."
 
 #~ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 #~ msgstr "उपयोग में: %.2g of %zu Gb (%.2g %%)"

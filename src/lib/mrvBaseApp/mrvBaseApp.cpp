@@ -91,7 +91,7 @@ namespace mrv
                             static_cast<size_t>(log::StringConvert::Prefix);
                         for (const auto& i : value)
                         {
-                            _print("[LOG] " + toString(i, options));
+                            _print("[LOG] " + getLabel(i, options));
                         }
                     },
                     observer::CallbackAction::Suppress);

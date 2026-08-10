@@ -278,39 +278,30 @@ namespace tl
         //! Finish writing the header.
         void finishWrite(const std::shared_ptr<file::FileIO>&);
 
-        //! DPX reader.
-        class Read : public io::ISequenceRead
+        //! DPX decoder.
+        class Decode : public io::IDecode
         {
         protected:
-            void _init(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
-
-            Read();
+            Decode();
 
         public:
-            virtual ~Read();
+            virtual ~Decode();
 
-            //! Create a new reader.
-            static std::shared_ptr<Read> create(
-                const file::Path&, const io::Options&,
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            //! Create a new decoder.
+            static std::shared_ptr<Decode> create();
 
-            //! Create a new reader.
-            static std::shared_ptr<Read> create(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                const io::Options&, const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            io::Info getInfo(
+                const std::string& fileName,
+                const file::MemoryRead* = nullptr) override;
+            io::VideoData readVideo(
+                const std::string& fileName,
+                const file::MemoryRead*,
+                const otio::RationalTime&,
+                const io::Options& = io::Options()) override;
 
-        protected:
-            io::Info _getInfo(
-                const std::string& fileName, const file::MemoryRead*) override;
-            io::VideoData _readVideo(
-                const std::string& fileName, const file::MemoryRead*,
-                const otime::RationalTime&, const io::Options&) override;
+            double getSpeed(const io::Info& info, double defaultSpeed) const override;
 
+        private:
             bool _autoNormalize = false;
         };
 
@@ -320,7 +311,7 @@ namespace tl
         protected:
             void _init(
                 const file::Path&, const io::Info&, const io::Options&,
-                const std::weak_ptr<log::System>&);
+                const std::shared_ptr<log::System>&);
 
             Write();
 
@@ -330,7 +321,7 @@ namespace tl
             //! Create a new writer.
             static std::shared_ptr<Write> create(
                 const file::Path&, const io::Info&, const io::Options&,
-                const std::weak_ptr<log::System>&);
+                const std::shared_ptr<log::System>&);
 
         protected:
             void _writeVideo(
@@ -339,33 +330,49 @@ namespace tl
                 const io::Options&) override;
         };
 
-        //! DPX plugin.
-        class Plugin : public io::IPlugin
+        //! DPX read plugin.
+        class ReadPlugin : public io::IReadPlugin
         {
         protected:
-            void _init(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            void _init(const std::shared_ptr<log::System>&);
 
-            Plugin();
+            ReadPlugin() = default;
 
         public:
             //! Create a new plugin.
-            static std::shared_ptr<Plugin> create(
-                const std::shared_ptr<io::Cache>&,
-                const std::weak_ptr<log::System>&);
+            static std::shared_ptr<ReadPlugin> create(
+                const std::shared_ptr<log::System>&);
 
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const io::Options& = io::Options()) override;
-            std::shared_ptr<io::IRead> read(
-                const file::Path&, const std::vector<file::MemoryRead>&,
+            std::shared_ptr<io::IDecode> decode(
                 const io::Options& = io::Options()) override;
-            image::Info getWriteInfo(
-                const image::Info&,
+
+            std::string getPluginInfo(
                 const io::Options& = io::Options()) const override;
+        };
+
+        //! DPX write plugin.
+        class WritePlugin : public io::IWritePlugin
+        {
+        protected:
+            void _init(const std::shared_ptr<log::System>&);
+
+            WritePlugin() = default;
+
+        public:
+            //! Create a new plugin.
+            static std::shared_ptr<WritePlugin> create(
+                const std::shared_ptr<log::System>&);
+
+            image::Info getInfo(
+                const image::Info&,
+                const io::Options & = io::Options()) const override;
             std::shared_ptr<io::IWrite> write(
-                const file::Path&, const io::Info&,
-                const io::Options& = io::Options()) override;
+                const file::Path&,
+                const io::Info&,
+                const io::Options & = io::Options()) override;
+
+            std::string getPluginInfo(
+                const io::Options& = io::Options()) const override;
         };
     } // namespace dpx
 } // namespace tl

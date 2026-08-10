@@ -23,5 +23,23 @@ namespace tl
             return a.start_time().strictly_equal(b.start_time()) &&
                    a.duration().strictly_equal(b.duration());
         }
+
+        constexpr bool compareExact(
+            const std::optional<otio::RationalTime>& a,
+            const std::optional<otio::RationalTime>& b)
+    {
+        return a.has_value() && b.has_value() ?
+            a.value().strictly_equal(b.value()) :
+            a.has_value() == b.has_value();
+    }
+
+        constexpr bool compareExact(
+            const std::optional<otio::TimeRange>& a,
+            const std::optional<otio::TimeRange>& b)
+        {
+            return a.has_value() && b.has_value() ?
+                compareExact(a.value(), b.value()) :
+                a.has_value() == b.has_value();
+        }
     } // namespace time
 } // namespace tl

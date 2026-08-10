@@ -118,10 +118,7 @@ namespace mrv
         auto context = ui->app->getContext();
 
         // Get I/O cache and store its size.
-        auto ioSystem = context->getSystem<io::System>();
-        auto cache = ioSystem->getCache();
-
-        size_t oldCacheSize = cache->getMax();
+        auto ioSystem = context->getSystem<io::WriteSystem>();
 
         const std::string& directory = path.getDirectory();
         const std::string& baseName = path.getBaseName();
@@ -202,10 +199,6 @@ namespace mrv
             auto Aitem = model->observeA()->get();
             std::string inputFile = Aitem->path.get();
 
-            // Make I/O cache be 1Gb to deal with long movies fine.
-            size_t bytes = memory::gigabyte;
-            cache->setMax(bytes);
-
             auto context = ui->app->getContext();
             auto timeline = player->timeline();
 
@@ -246,16 +239,21 @@ namespace mrv
 
             auto videoTime = info.videoTime;
 
-            const bool hasVideo = (!info.video.empty()) && options.saveVideo;
+            const bool hasVideo = (!info.video.empty() ||
+                                   info.videoTime.has_value()) &&
+                                  options.saveVideo;
 
-            if (player->timeRange() != timeRange ||
-                info.videoTime.start_time() != timeRange.start_time() ||
-                info.videoTime.duration() != timeRange.duration())
+            if (hasVideo)
             {
-                double videoRate = info.videoTime.duration().rate();
-                videoTime = otime::TimeRange(
-                    timeRange.start_time().rescaled_to(videoRate),
-                    timeRange.duration().rescaled_to(videoRate));
+                if (player->timeRange() != timeRange ||
+                    info.videoTime->start_time() != timeRange.start_time() ||
+                    info.videoTime->duration() != timeRange.duration())
+                {
+                    double videoRate = info.videoTime->duration().rate();
+                    videoTime = otime::TimeRange(
+                        timeRange.start_time().rescaled_to(videoRate),
+                        timeRange.duration().rescaled_to(videoRate));
+                }
             }
 
             auto audioTime = time::invalidTimeRange;
@@ -263,7 +261,7 @@ namespace mrv
             bool hasAudio = info.audio.isValid();
             if (hasAudio)
             {
-                audioTime = info.audioTime;
+                audioTime = info.audioTime.value();
                 if (player->timeRange() != timeRange ||
                     audioTime.start_time() !=
                         timeRange.start_time().rescaled_to(sampleRate))
@@ -481,7 +479,7 @@ namespace mrv
                 }
 
                 outputInfo.size = renderSize;
-                outputInfo = writerPlugin->getWriteInfo(outputInfo);
+                outputInfo = writerPlugin->getInfo(outputInfo);
 
                 if (image::PixelType::kNone == outputInfo.pixelType)
                 {
@@ -974,7 +972,8 @@ namespace mrv
                         outputImage = bufferImage;
                     }
 
-                    if (videoTime.contains(currentTime))
+                    if (videoTime.has_value() &&
+                        videoTime->contains(currentTime))
                     {
                         const auto& tags = ui->uiView->getTags();
                         outputImage->setTags(tags);
@@ -1036,8 +1035,6 @@ namespace mrv
         }
 
         App::unsaved_annotations = false;
-
-        cache->setMax(oldCacheSize);
     }
 
 } // namespace mrv

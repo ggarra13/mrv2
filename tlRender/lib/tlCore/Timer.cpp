@@ -129,12 +129,9 @@ namespace tl
             std::vector<std::weak_ptr<Timer> > timers;
         };
 
-        void TimerSystem::_init(const std::shared_ptr<system::Context>& context)
-        {
-            ISystem::_init("tl::time::TimerSystem", context);
-        }
-
-        TimerSystem::TimerSystem() :
+        TimerSystem::TimerSystem(
+            const std::shared_ptr<system::Context>& context) :
+            system::ISystem(context, "tl::time::TimerSystem"),
             _p(new Private)
         {
         }
@@ -147,8 +144,7 @@ namespace tl
             auto out = context->getSystem<TimerSystem>();
             if (!out)
             {
-                out = std::shared_ptr<TimerSystem>(new TimerSystem);
-                out->_init(context);
+                out = std::shared_ptr<TimerSystem>(new TimerSystem(context));
             }
             return out;
         }

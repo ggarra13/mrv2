@@ -1300,6 +1300,7 @@ namespace mrv
     {
         TLRENDER_P();
 
+        // Release Devices
 #ifdef TLRENDER_NDI
         endNDIOutputStream();
 #endif
@@ -1308,22 +1309,42 @@ namespace mrv
         endBMDOutputStream();
 #endif
 
+        // Release Thumbnail System
+#ifdef VULKAN_BACKEND
+        if (auto thumbnailSystem = _context->getSystem<timelineui_vk::ThumbnailSystem>())
+        {
+            thumbnailSystem->shutdown();
+        }
+#endif
+#ifdef OPENGL_BACKEND
+        if (auto thumbnailSystem = _context->getSystem<timelineui::ThumbnailSystem>())
+        {
+            thumbnailSystem->shutdown();
+        }
+#endif
 
+        // Release Main Controller
         delete p.mainControl;
         p.mainControl = nullptr;
 
 #ifdef MRV2_NETWORK
+        // Release Network Command Interpreter
         delete p.commandInterpreter;
         p.commandInterpreter = nullptr;
 #endif
+
+        // Remove ComfyUI and Single Instance sockets
         removeListener();
 
+        // Finally, delete the main UI
         delete ui;
         ui = nullptr;
 
+        // Delete tlRender's context
         delete p.contextObject;
         p.contextObject = nullptr;
 
+        // Delete any TCP / WebRTC client or server
         if (tcp)
         {
             tcp->stop();
@@ -1511,7 +1532,7 @@ namespace mrv
         if (!info.video.empty())
         {
             auto video = info.video[0];
-            const auto duration = info.videoTime.duration();
+            const auto duration = info.videoTime->duration();
             if (duration.to_seconds() > 180.0)
                 use_progress = true;
             if (video.size.w > 2048)
@@ -2190,14 +2211,13 @@ namespace mrv
     {
         TLRENDER_P();
 
+        std::shared_ptr<timeline::Timeline> out;
         timeline::Options options;
 
-        options.fileSequenceAudio = static_cast<timeline::FileSequenceAudio>(
+        options.imageSeqAudio = static_cast<timeline::ImageSeqAudio>(
             p.settings->getValue<int>("FileSequence/Audio"));
-        options.fileSequenceAudioFileName =
+        options.imageSeqAudioFileName =
             p.settings->getValue<std::string>("FileSequence/AudioFileName");
-        options.fileSequenceAudioDirectory =
-            p.settings->getValue<std::string>("FileSequence/AudioDirectory");
 
         options.videoRequestCount =
             p.settings->getValue<int>("Performance/VideoRequestCount");
@@ -2223,24 +2243,26 @@ namespace mrv
                 release = std::make_unique<py::gil_scoped_release>();
             }
 #endif
-            otioTimeline = item->audioPath.isEmpty()
-                               ? timeline::create(
-                                     item->path, _context, offsetTime, options)
-                               : timeline::create(
-                                     item->path, item->audioPath, _context,
-                                     offsetTime, options);
+            if (item->audioPath.isEmpty())
+            {
+                out = timeline::Timeline::create(_context, item->path, options);
+            }
+            else
+            {
+                out = timeline::Timeline::create(_context, item->path, item->audioPath, options);
+            }
         }
         else
         {
-            otioTimeline = item->audioPath.isEmpty()
-                               ? timeline::create(
-                                     item->path, _context, offsetTime, options)
-                               : timeline::create(
-                                     item->path, item->audioPath, _context,
-                                     offsetTime, options);
+            if (item->audioPath.isEmpty())
+            {
+                out = timeline::Timeline::create(_context, item->path, options);
+            }
+            else
+            {
+                out = timeline::Timeline::create(_context, item->path, item->audioPath, options);
+            }
         }
-
-        auto out = timeline::Timeline::create(otioTimeline, _context, options);
 
         if (ui->uiPrefs->SendMedia->value())
         {
@@ -2381,7 +2403,7 @@ namespace mrv
                                 {
                                     const math::Int64Range& range = frames.value();
                                     const bool listdir = true;
-                                    file = item->path.getFrame(range.getMin(), listdir);
+                                    file = item->path.getFrame(range.min(), listdir);
                                 }
                                 p.settings->addRecentFile(file);
                             }
@@ -2614,8 +2636,7 @@ namespace mrv
             uint64_t bytes = Gbytes * memory::gigabyte;
 
             // Update the I/O cache.
-            auto ioSystem = _context->getSystem<io::System>();
-            ioSystem->getCache()->setMax(bytes);
+            auto ioSystem = _context->getSystem<io::ReadSystem>();
 
             // old readAhead/readBehind code used when playing sequences.
             const auto timeline = p.player->timeline();
@@ -2662,6 +2683,10 @@ namespace mrv
 
                 options.readAhead = otime::RationalTime(readAhead, 1.0);
                 options.readBehind = otime::RationalTime(readBehind, 1.0);
+            }
+            else
+            {
+                options.videoGB = Gbytes;
             }
         }
 

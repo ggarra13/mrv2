@@ -218,12 +218,7 @@ namespace tl
                     const auto& info = _info.video[0];
                     out.image = image::Image::create(info);
 
-                    _info.tags["otioClipName"] = fileName;
-                    {
-                        std::stringstream ss;
-                        ss << time;
-                        _info.tags["otioClipTime"] = ss.str();
-                    }
+                    io::addOtioTags(_info.tags, fileName, time);
                     out.image->setTags(_info.tags);
 
                     if (_planar)
@@ -327,53 +322,26 @@ namespace tl
             };
         } // namespace
 
-        void Read::_init(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        Decode::Decode()
         {
-            ISequenceRead::_init(path, memory, options, cache, logSystem);
         }
 
-        Read::Read() {}
-
-        Read::~Read()
+        Decode::~Decode()
         {
-            _finish();
         }
 
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const io::Options& options,
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        std::shared_ptr<Decode> Decode::create()
         {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, {}, options, cache, logSystem);
-            return out;
+            return std::shared_ptr<Decode>(new Decode);
         }
 
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, memory, options, cache, logSystem);
-            return out;
-        }
-
-        io::Info Read::_getInfo(
+        io::Info Decode::getInfo(
             const std::string& fileName, const file::MemoryRead* memory)
         {
-            io::Info out = File(fileName, memory).getInfo();
-            out.videoTime =
-                otime::TimeRange::range_from_start_end_time_inclusive(
-                    otime::RationalTime(_startFrame, _defaultSpeed),
-                    otime::RationalTime(_endFrame, _defaultSpeed));
-            return out;
+            return File(fileName, memory).getInfo();
         }
 
-        io::VideoData Read::_readVideo(
+        io::VideoData Decode::readVideo(
             const std::string& fileName, const file::MemoryRead* memory,
             const otime::RationalTime& time, const io::Options&)
         {

@@ -23,6 +23,17 @@ namespace tl
 {
     namespace exr
     {
+        namespace
+        {
+            //! Set the number of threads OpenEXR uses within a single file,
+            //! frames are also read in parallel (see SeqOptions::threadCount).
+            void setThreadCount()
+            {
+                Imf::setGlobalThreadCount(std::thread::hardware_concurrency());
+            }
+        }
+
+
         TLRENDER_ENUM_IMPL(ChannelGrouping, "None", "Known", "All");
         TLRENDER_ENUM_SERIALIZE_IMPL(ChannelGrouping);
 
@@ -310,7 +321,6 @@ namespace tl
                     // Add the layer.
                     out.push_back(Layer(list));
                 }
-
                 return out;
             }
 
@@ -345,7 +355,6 @@ namespace tl
                     out.push_back(layer);
                 }
             }
-
             return out;
         }
 
@@ -841,42 +850,64 @@ namespace tl
             }
         }
 
-        void Plugin::_init(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        void ReadPlugin::_init(
+            const std::shared_ptr<log::System>& logSystem)
         {
-            IPlugin::_init(
-                "OpenEXR", {{".exr", io::FileType::Sequence}}, cache,
-                logSystem);
+            std::map<std::string, io::FileType> extensions;
+            extensions[".exr"] = io::FileType::Sequence;
+            extensions[".sxr"] = io::FileType::Sequence;
+            io::IReadPlugin::_init("OpenEXR", extensions, logSystem);
 
-            Imf::setGlobalThreadCount(0);
+            setThreadCount();
         }
 
-        Plugin::Plugin() {}
+        ReadPlugin::ReadPlugin() {}
 
-        std::shared_ptr<Plugin> Plugin::create(
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        std::shared_ptr<ReadPlugin> ReadPlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
         {
-            auto out = std::shared_ptr<Plugin>(new Plugin);
-            out->_init(cache, logSystem);
+            auto out = std::shared_ptr<ReadPlugin>(new ReadPlugin);
+            out->_init(logSystem);
             return out;
         }
 
-        std::shared_ptr<io::IRead>
-        Plugin::read(const file::Path& path, const io::Options& options)
+        std::shared_ptr<io::IDecode> ReadPlugin::decode(const io::Options&)
         {
-            return Read::create(path, options, _cache, _logSystem);
+            return Decode::create();
         }
 
-        std::shared_ptr<io::IRead> Plugin::read(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options)
+        std::string ReadPlugin::getPluginInfo(const io::Options&) const
         {
-            return Read::create(path, memory, options, _cache, _logSystem);
+            return string::Format("{0}.{1}.{2}").
+                arg(OPENEXR_VERSION_MAJOR).
+                arg(OPENEXR_VERSION_MINOR).
+                arg(OPENEXR_VERSION_PATCH);
         }
 
-        image::Info Plugin::getWriteInfo(
+        WritePlugin::WritePlugin()
+        {}
+
+        void WritePlugin::_init(const std::shared_ptr<log::System>& logSystem)
+        {
+            // Get formats.
+            std::map<std::string, io::FileType> extensions;
+            extensions[".exr"] = io::FileType::Sequence;
+            extensions[".sxr"] = io::FileType::Sequence;
+
+            IWritePlugin::_init("OpenEXR", extensions, logSystem);
+
+            setThreadCount();
+       }
+
+        std::shared_ptr<WritePlugin> WritePlugin::create(
+            const std::shared_ptr<log::System>& logSystem)
+        {
+            auto out = std::shared_ptr<WritePlugin>(new WritePlugin);
+            out->_init(logSystem);
+            return out;
+        }
+
+        image::Info WritePlugin::getInfo(
             const image::Info& info, const io::Options& options) const
         {
             image::Info out;
@@ -918,17 +949,25 @@ namespace tl
             return out;
         }
 
-        std::shared_ptr<io::IWrite> Plugin::write(
+        std::shared_ptr<io::IWrite> WritePlugin::write(
             const file::Path& path, const io::Info& info,
             const io::Options& options)
         {
             if (info.video.empty() ||
                 (!info.video.empty() &&
-                 !_isWriteCompatible(info.video[0], options)))
+                 !_isCompatible(info.video[0], options)))
                 throw std::runtime_error(string::Format("{0}: {1}")
                                              .arg(path.get())
-                                             .arg("Unsupported video"));
-            return Write::create(path, info, options, _logSystem);
+                                             .arg("Unsupported video depth"));
+            return Write::create(path, info, options, _logSystem.lock());
+        }
+
+        std::string WritePlugin::getPluginInfo(const io::Options&) const
+        {
+            return string::Format("{0}.{1}.{2}").
+                arg(OPENEXR_VERSION_MAJOR).
+                arg(OPENEXR_VERSION_MINOR).
+                arg(OPENEXR_VERSION_PATCH);
         }
     } // namespace exr
 } // namespace tl

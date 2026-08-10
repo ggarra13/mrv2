@@ -1604,6 +1604,7 @@ namespace mrv
         math::Size2i TimelineViewport::getRenderSize() const noexcept
         {
             TLRENDER_P();
+
             return timeline::getRenderSize(p.compareOptions,
                                            p.displayOptions,
                                            p.videoData);

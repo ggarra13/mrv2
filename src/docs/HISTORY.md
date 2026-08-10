@@ -2,11 +2,22 @@ v1.7.3
 ======
 
 - UI: Fixed tooltip of "Advance forward one frame" button in all languages.
+- UI: Fixed "Window/Preferences" not showing up in Japanese due to wrong translation.
 
+- NDI: Minor improvement to NDI reading in the player.
+
+- Core: Minor improvement of performance on video reading.
+- Core: Improved performance of image reading.
+- Core: Fixed some OpenEXR memory issues and potential crashes. 
+- Core: Faster thumbnail creation.
+- Core: Fixed some Vulkan's VMA misuse.
+- Core: Fixed resource leak in thumbnailSystem.
 - Core: Fixed a crash on the OpenEXR reader when reading a corrupt/truncated file.
 - Core: Fixed and added tlRender's unit tests.
 
+
 - Build: Documented Vulkan compilation on Linux.
+- Build: Bumped OpenEXR to v3.4.14.
 
 
 v1.7.2

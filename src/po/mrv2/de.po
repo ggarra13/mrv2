@@ -197,12 +197,6 @@ msgstr "Stellen Sie den Namen der Dateisequenz-Audiodatei ein."
 msgid "Get file sequence audio file name."
 msgstr "Holen Sie sich den Namen der Dateisequenz Audiodatei."
 
-msgid "Set file sequence audio directory."
-msgstr "Dateisequenz-Audio-Verzeichnis festlegen."
-
-msgid "Get file sequence audio directory."
-msgstr "Datei-Sequenz-Audio-Verzeichnis."
-
 msgid "Set maximum file sequence digits."
 msgstr "Legen Sie die maximalen Dateisequenzziffern fest."
 
@@ -8269,6 +8263,12 @@ msgstr "Task-Info fehlgeschlagen"
 
 #~ msgid "Invalid font for text drawing"
 #~ msgstr "Ungültige Schriftart für die Texterstellung"
+
+#~ msgid "Set file sequence audio directory."
+#~ msgstr "Dateisequenz-Audio-Verzeichnis festlegen."
+
+#~ msgid "Get file sequence audio directory."
+#~ msgstr "Datei-Sequenz-Audio-Verzeichnis."
 
 #~ msgid "    Used: %.2g of %zu Gb (%.2g %%)"
 #~ msgstr "Verwendet: %.2g %zu Gb (%.2g %%)"

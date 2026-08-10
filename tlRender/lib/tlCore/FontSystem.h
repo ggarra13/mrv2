@@ -83,9 +83,10 @@ namespace tl
         protected:
             void _init(const std::shared_ptr<system::Context>&);
 
-            FontSystem();
+            FontSystem(const std::shared_ptr<system::Context>&);
 
         public:
+
             virtual ~FontSystem();
 
             //! Create a new system.
@@ -97,7 +98,7 @@ namespace tl
             void addFont(const fs::path& filePath);
 
             bool hasFont(const std::string&);
-            
+
             //! \name Information
             ///@{
 
@@ -138,12 +139,12 @@ namespace tl
             TLRENDER_PRIVATE();
         };
 
-        //! Return the list of all fonts found in the current OS. 
+        //! Return the list of all fonts found in the current OS.
         std::vector<fs::path> discoverSystemFonts();
 
         //! Return an installed emoji font is available.
         file::Path emojiFont();
-        
+
     } // namespace image
 } // namespace tl
 

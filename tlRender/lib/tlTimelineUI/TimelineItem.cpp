@@ -64,20 +64,11 @@ namespace tl
                 observer::Value<otime::RationalTime>::create(time::invalidTime);
 
 #ifdef OPENGL_BACKEND
-            p.thumbnailGenerator = TIMELINEUI::ThumbnailGenerator::create(
-                context->getSystem<TIMELINEUI::ThumbnailSystem>()->getCache(), context,
-                window);
+            p.thumbnailSystem = ThumbnailSystem::create(context, window);
 #endif
 
 #ifdef VULKAN_BACKEND
-            if (!context->getSystem<timelineui_vk::ThumbnailSystem>())
-            {
-                context->addSystem(timelineui_vk::ThumbnailSystem::create(context, ctx));
-            }
-
-            p.thumbnailGenerator = timelineui_vk::ThumbnailGenerator::create(
-                context->getSystem<timelineui_vk::ThumbnailSystem>()->getCache(), context,
-                ctx);
+            p.thumbnailSystem = ThumbnailSystem::create(context, ctx);
 #endif
 
             const auto timeline = p.player->getTimeline();
@@ -129,14 +120,14 @@ namespace tl
                                 track.items.push_back(VideoClipItem::create(
                                     timeline, clip, scale, options,
                                     displayOptions,
-                                    itemData, p.thumbnailGenerator, context,
+                                    itemData, p.thumbnailSystem, context,
                                     shared_from_this()));
                                 break;
                             case TrackType::Audio:
                                 track.items.push_back(AudioClipItem::create(
                                     timeline, clip, scale, options,
                                     displayOptions,
-                                    itemData, p.thumbnailGenerator, context,
+                                    itemData, p.thumbnailSystem, context,
                                     shared_from_this()));
                                 break;
                             default:

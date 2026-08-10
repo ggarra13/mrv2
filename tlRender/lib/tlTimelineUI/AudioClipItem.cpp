@@ -23,7 +23,7 @@ namespace tl
         {
             file::Path path;
             std::vector<file::MemoryRead> memoryRead;
-            std::shared_ptr<ThumbnailGenerator> thumbnailGenerator;
+            std::shared_ptr<ThumbnailSystem> thumbnailSystem;
 
             struct SizeData
             {
@@ -43,7 +43,7 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<TIMELINEUI::ThumbnailGenerator> thumbnailGenerator,
+            const std::shared_ptr<TIMELINEUI::ThumbnailSystem> thumbnailSystem,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
@@ -60,7 +60,7 @@ namespace tl
 
             p.path = path;
             p.memoryRead = timeline::getMemoryRead(clip->media_reference());
-            p.thumbnailGenerator = thumbnailGenerator;
+            p.thumbnailSystem = thumbnailSystem;
 
             const std::string infoCacheKey =
                 io::getInfoCacheKey(path, _data->options.ioOptions);
@@ -88,14 +88,14 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<TIMELINEUI::ThumbnailGenerator> thumbnailGenerator,
+            const std::shared_ptr<TIMELINEUI::ThumbnailSystem> thumbnailSystem,
             const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<AudioClipItem>(new AudioClipItem);
             out->_init(
                 timeline, clip, scale, options, displayOptions, itemData,
-                thumbnailGenerator, context, parent);
+                thumbnailSystem, context, parent);
             return out;
         }
 
@@ -158,7 +158,7 @@ namespace tl
                 {
                     const auto mesh = i->second.future.get();
                     const std::string cacheKey = io::getAudioCacheKey(
-                        p.path, i->second.timeRange, _data->options.ioOptions,
+                        p.path, i->second.timeRange.value(), _data->options.ioOptions,
                         {});
                     _data->waveforms[cacheKey] = mesh;
                     i = p.waveformRequests.erase(i);
@@ -234,8 +234,8 @@ namespace tl
             {
                 if (!p.ioInfo && !p.infoRequest.future.valid())
                 {
-                    p.infoRequest = p.thumbnailGenerator->getInfo(
-                        p.path, p.memoryRead, _data->options.ioOptions);
+                    p.infoRequest = p.thumbnailSystem->getInfo(
+                        p.path, _data->options.ioOptions);
                 }
             }
 
@@ -271,13 +271,14 @@ namespace tl
                                 _timeRange.start_time().rate())
                                 .round();
                         otime::TimeRange trimmedRange = _trimmedRange;
-                        if (trimmedRange.start_time() < p.ioInfo->audioTime.start_time())
+                        if (p.ioInfo->audioTime.has_value() &&
+                            trimmedRange.start_time() < p.ioInfo->audioTime->start_time())
                         {
                             //! \bug If the trimmed range is less than the media time,
                             //! assume the media time is wrong (e.g., ALab trailer) and
                             //! compensate for it.
                             trimmedRange = otime::TimeRange(
-                                p.ioInfo->audioTime.start_time() + trimmedRange.start_time(),
+                                p.ioInfo->audioTime->start_time() + trimmedRange.start_time(),
                                 trimmedRange.duration());
                         }
                         const otime::TimeRange mediaRange =
@@ -306,8 +307,8 @@ namespace tl
                             if (j == p.waveformRequests.end())
                             {
                                 p.waveformRequests[mediaRange.start_time()] =
-                                    p.thumbnailGenerator->getWaveform(
-                                        p.path, p.memoryRead, box.getSize(),
+                                    p.thumbnailSystem->getWaveform(
+                                        p.path, box.getSize(),
                                         mediaRange, "", _data->options.ioOptions);
                             }
                         }
@@ -330,7 +331,7 @@ namespace tl
                 ids.push_back(i.second.id);
             }
             p.waveformRequests.clear();
-            p.thumbnailGenerator->cancelRequests(ids);
+            p.thumbnailSystem->cancelRequests(ids);
         }
     } // namespace TIMELINEUI
 } // namespace tl

@@ -33,7 +33,7 @@ namespace tl
     namespace timeline
     {
         std::vector<std::string> getExtensions(
-            int types, const std::shared_ptr<system::Context>& context)
+            const std::shared_ptr<system::Context>& context, int types)
         {
             std::vector<std::string> out;
             //! \todo Get extensions for the Python adapters?
@@ -42,11 +42,11 @@ namespace tl
                 out.push_back(".otio");
                 out.push_back(".otioz");
             }
-            if (auto ioSystem = context->getSystem<io::System>())
+            if (auto ioSystem = context->getSystem<io::ReadSystem>())
             {
                 for (const auto& plugin : ioSystem->getPlugins())
                 {
-                    const auto& extensions = plugin->getExtensions(types);
+                    const auto& extensions = plugin->getExts(types);
                     out.insert(out.end(), extensions.begin(), extensions.end());
                 }
             }
@@ -279,7 +279,7 @@ namespace tl
             {
             case file::Type::Directory:
             {
-                auto ioSystem = context->getSystem<io::System>();
+                auto ioSystem = context->getSystem<io::ReadSystem>();
                 file::ListOptions listOptions;
                 listOptions.maxNumberDigits = pathOptions.seqMaxDigits;
                 std::vector<file::FileInfo> list;
@@ -566,6 +566,50 @@ namespace tl
                     }
                 }
             }
+        }
+
+
+        io::MissingFrames fromOTIO(
+            otio::ImageSequenceReference::MissingFramePolicy value)
+        {
+            io::MissingFrames out = io::MissingFrames::Error;
+            switch (value)
+            {
+            case OTIO_NS::ImageSequenceReference::MissingFramePolicy::hold:
+                out = io::MissingFrames::Hold;
+                break;
+            case OTIO_NS::ImageSequenceReference::MissingFramePolicy::black:
+                out = io::MissingFrames::Black;
+                break;
+            default: break;
+            }
+            return out;
+        }
+
+        otio::ImageSequenceReference::MissingFramePolicy toOTIO(
+            io::MissingFrames value)
+        {
+            auto out = otio::ImageSequenceReference::MissingFramePolicy::error;
+            switch (value)
+            {
+            case io::MissingFrames::Hold:
+                out = otio::ImageSequenceReference::MissingFramePolicy::hold;
+                break;
+            case io::MissingFrames::Black:
+                out = otio::ImageSequenceReference::MissingFramePolicy::black;
+                break;
+            case io::MissingFrames::Skip:
+            case io::MissingFrames::Gaps:
+                // Nothing to say: the clips over this reference already cover
+                // only the frames that are there, so no read reaches a missing
+                // one and the policy never comes up. Written as hold so that
+                // another application opening the same reference behaves
+                // sanely.
+                out = otio::ImageSequenceReference::MissingFramePolicy::hold;
+                break;
+            default: break;
+            }
+            return out;
         }
 
         otime::RationalTime toVideoMediaTime(

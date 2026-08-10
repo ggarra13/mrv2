@@ -105,18 +105,18 @@ namespace mrv2
                 panel::settingsPanel->refresh();
         }
 
-        void setFileSequenceAudio(const timeline::FileSequenceAudio value)
+        void setFileSequenceAudio(const timeline::ImageSeqAudio value)
         {
             mrv::settings()->setValue(
-                "FileSequence/Audio", static_cast<int>(value));
+                "ImageSequence/Audio", static_cast<int>(value));
             if (panel::settingsPanel)
                 panel::settingsPanel->refresh();
         }
 
-        timeline::FileSequenceAudio fileSequenceAudio()
+        timeline::ImageSeqAudio fileSequenceAudio()
         {
-            return static_cast<timeline::FileSequenceAudio>(
-                mrv::settings()->getValue<int>("FileSequence/Audio"));
+            return static_cast<timeline::ImageSeqAudio>(
+                mrv::settings()->getValue<int>("ImageSequence/Audio"));
         }
 
         /**
@@ -142,29 +142,6 @@ namespace mrv2
                 "FileSequence/AudioFileName");
         }
 
-        /**
-         * @brief Set the file sequence audio directory.
-         *
-         * @param value a string
-         */
-        void setFileSequenceAudioDirectory(const std::string& value)
-        {
-            mrv::settings()->setValue("FileSequence/AudioDirectory", value);
-            if (panel::settingsPanel)
-                panel::settingsPanel->refresh();
-        }
-
-        /**
-         * @brief Returns the file sequence audio directory.
-         *
-         *
-         * @return a string
-         */
-        std::string fileSequenceAudioDirectory()
-        {
-            return mrv::settings()->getValue<std::string>(
-                "FileSequence/AudioDirectory");
-        }
 
         /**
          * Set the maximum file sequqnce digits.
@@ -425,14 +402,6 @@ Contains all settings functions.
     sequence.def(
         "audioFileName", &mrv2::settings::fileSequenceAudioFileName,
         _("Get file sequence audio file name."));
-
-    sequence.def(
-        "setAudioDirectory", &mrv2::settings::setFileSequenceAudioDirectory,
-        _("Set file sequence audio directory."));
-
-    sequence.def(
-        "audioDirectory", &mrv2::settings::fileSequenceAudioDirectory,
-        _("Get file sequence audio directory."));
 
     py::module misc = settings.def_submodule("misc");
 

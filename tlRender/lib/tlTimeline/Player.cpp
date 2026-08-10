@@ -1028,6 +1028,8 @@ namespace tl
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
                 p.mutex.cacheOptions = value;
+                if (p.timeline)
+                    p.timeline->setCacheOptions(value);
             }
         }
 

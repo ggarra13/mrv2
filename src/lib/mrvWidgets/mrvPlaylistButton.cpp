@@ -57,7 +57,8 @@ namespace mrv
     {
         TLRENDER_P();
         file::Path path = inputPath;
-        p.timeline = timeline::create(path, context);
+        auto timeline = timeline::Timeline::create(context, path);
+        p.timeline = timeline->getTimeline();
         redraw();
     }
 
@@ -102,7 +103,7 @@ namespace mrv
             if (stack)
             {
                 auto tracks = stack->children();
-                
+
                 for (auto child : tracks)
                 {
                     auto track = otio::dynamic_retainer_cast<otio::Track>(child);

@@ -185,12 +185,6 @@ msgstr ""
 msgid "Get file sequence audio file name."
 msgstr ""
 
-msgid "Set file sequence audio directory."
-msgstr ""
-
-msgid "Get file sequence audio directory."
-msgstr ""
-
 msgid "Set maximum file sequence digits."
 msgstr ""
 

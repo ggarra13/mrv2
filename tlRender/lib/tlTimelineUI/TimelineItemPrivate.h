@@ -32,7 +32,7 @@ namespace tl
             std::shared_ptr<observer::Value<otime::RationalTime> > timeScrub;
             std::vector<int> frameMarkers;
             int minimumHeight = 0;
-            std::shared_ptr<TIMELINEUI::ThumbnailGenerator> thumbnailGenerator;
+            std::shared_ptr<ThumbnailSystem> thumbnailSystem;
             std::unordered_map<std::string,
                                std::vector<std::shared_ptr<image::Glyph>> > labelsCache;
             struct Track
@@ -45,9 +45,9 @@ namespace tl
 
                 std::vector<std::shared_ptr<IItem> > items;
                 std::vector<int> otioIndexes;
-                
+
                 std::map<int, std::vector<std::shared_ptr<EffectItem> > > effects;
-                
+
 
                 std::vector<std::shared_ptr<TransitionItem> > transitions;
                 std::vector<int> otioTransitionIndexes;
@@ -91,7 +91,7 @@ namespace tl
                 Left,
                 Right,
             };
-            
+
             struct MouseItemData
             {
                 MouseItemData();

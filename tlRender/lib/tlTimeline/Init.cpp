@@ -30,7 +30,7 @@ namespace tl
 
         void System::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::timeline::System", context);
+            ISystem::_init(context, "tl::timeline::System");
             const std::vector<std::pair<std::string, bool> > registerTypes{
                 {"RawMemoryReference",
                  otio::TypeRegistry::instance()
@@ -61,14 +61,16 @@ namespace tl
             }
         }
 
-        System::System() {}
+        System::System(const std::shared_ptr<system::Context>& context) :
+            system::ISystem(context, "tl::timeline::System")
+        {}
 
         System::~System() {}
 
         std::shared_ptr<System>
         System::create(const std::shared_ptr<system::Context>& context)
         {
-            auto out = std::shared_ptr<System>(new System);
+            auto out = std::shared_ptr<System>(new System(context));
             out->_init(context);
             return out;
         }

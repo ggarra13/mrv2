@@ -28,6 +28,7 @@ set(HEADERS
     RenderUtil.h
     TimeUnits.h
     Timeline.h
+    TimelineOptions.h
     Transition.h
     Util.h
     UtilInline.h
@@ -35,7 +36,9 @@ set(HEADERS
     VideoInline.h)
 set(PRIVATE_HEADERS
     PlayerPrivate.h
-    TimelinePrivate.h)
+    TimelinePrivate.h
+    ZipPrivate.h
+)
 
 set(SOURCE
     BackgroundOptions.cpp
@@ -56,10 +59,12 @@ set(SOURCE
     RenderUtil.cpp
     TimeUnits.cpp
     Timeline.cpp
-    TimelineCreate.cpp
+    TimelineOptions.cpp
     TimelinePrivate.cpp
     Transition.cpp
-    Util.cpp)
+    Util.cpp
+    Zip.cpp
+)
 
 add_library(tlTimeline ${HEADERS} ${PRIVATE_HEADERS} ${SOURCE})
 target_link_libraries(tlTimeline tlIO)

@@ -79,14 +79,6 @@ if(MRV2_NETWORK)
 endif()
 
 set(LIBRARIES mrvFl mrvEdit)
-# if(MRV2_PYBIND11)
-#     list( APPEND LIBRARIES pybind11::embed )
-#     if(UNIX AND NOT APPLE)
-# 	# \@note: still needed?
-# 	# Needed for python3.10 on Rocky and Ubuntu 20.04
-# 	list( APPEND LIBRARIES "util" )
-#     endif()
-# endif()
 
 add_library(mrvPanels ${SOURCES} ${HEADERS})
 files_to_absolute_paths()

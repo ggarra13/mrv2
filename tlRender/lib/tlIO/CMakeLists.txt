@@ -1,6 +1,7 @@
 set(HEADERS
     Cache.h
     Cineon.h
+    Decode.h
     DPX.h
     IO.h
     IOInline.h
@@ -8,12 +9,16 @@ set(HEADERS
     PPM.h
     Plugin.h
     PluginInline.h
+    Read.h
     SGI.h
+    SeqDecode.h
     SequenceIO.h
     STB.h
     System.h
-    SystemInline.h)
+    SystemInline.h
+    Write.h)
 set(HEADERS_PRIVATE
+    IOMacros.h
     SequenceIOReadPrivate.h)
 
 set(SOURCE
@@ -21,6 +26,7 @@ set(SOURCE
     CineonRead.cpp
     CineonWrite.cpp
     Cineon.cpp
+    Decode.cpp
     DPXRead.cpp
     DPXWrite.cpp
     DPX.cpp
@@ -31,15 +37,15 @@ set(SOURCE
     PPMRead.cpp
     PPMWrite.cpp
     Plugin.cpp
+    Read.cpp
+    SeqDecode.cpp
+    SequenceIO.cpp
+    SequenceIOWrite.cpp
     SGI.cpp
     SGIRead.cpp
     SGIWrite.cpp
-    STB.cpp
-    STBRead.cpp
-    STBWrite.cpp
-    SequenceIORead.cpp
-    SequenceIOWrite.cpp
     System.cpp
+    Write.cpp
 )
 
 set(LIBRARIES)
@@ -70,7 +76,7 @@ if(TLRENDER_EXR)
     list(APPEND LIBRARIES_PRIVATE OpenEXR::OpenEXR)
 endif()
 if(TLRENDER_FFMPEG)
-    list(APPEND HEADERS FFmpeg.h FFmpegMacros.h FFmpegReadPrivate.h)
+    list(APPEND HEADERS FFmpeg.h FFmpegReadPrivate.h)
     list(APPEND SOURCE FFmpeg.cpp FFmpegRead.cpp FFmpegReadAudio.cpp
         FFmpegReadVideo.cpp FFmpegWrite.cpp)
     list(APPEND LIBRARIES_PRIVATE FFmpeg)
@@ -101,9 +107,9 @@ if(TLRENDER_NDI AND TLRENDER_FFMPEG)
     list(APPEND HEADERS NDIUtil.h)
     list(APPEND HEADERS_PRIVATE NDI.h)
     list(APPEND SOURCE
-	NDI.cpp NDIRead.cpp NDIReadVideo.cpp NDIReadAudio.cpp NDIUtil.cpp )
+ 	NDI.cpp NDIRead.cpp NDIReadVideo.cpp NDIReadAudio.cpp NDIUtil.cpp )
     list(APPEND LIBRARIES_PRIVATE NDI)
-endif()
+ endif()
 if(TLRENDER_ZFILE)
     list(APPEND SOURCE ZFile.cpp ZFileRead.cpp)
     list(APPEND HEADERS_PRIVATE ZFile.h)

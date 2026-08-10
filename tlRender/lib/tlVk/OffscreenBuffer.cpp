@@ -311,7 +311,7 @@ namespace tl
 
         struct StagingBuffer {
             VkBuffer buffer = VK_NULL_HANDLE;
-            VkDeviceMemory memory;
+            VkDeviceMemory memory = VK_NULL_HANDLE;
             void* mappedPtr = nullptr;
             VkFence fence = VK_NULL_HANDLE;
         };

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright Contributors to the tlRender and feather-tk project.
+// Copyright Contributors to the tlRender, mrv2 and feather-tk projects.
 
 #include <tlCore/Path.h>
 
@@ -106,6 +106,123 @@ namespace tl
         {
             return !(*this == other);
         }
+
+        FrameSeq::FrameSeq(const math::Int64Range& range, int inc) :
+            range(range),
+            inc(inc)
+        {}
+
+        FrameSeq::FrameSeq(int64_t min, int64_t max, int inc) :
+            range(min, max),
+            inc(inc)
+        {}
+
+        FrameSeq::FrameSeq(int64_t frame) :
+            range(frame, frame),
+            inc(1)
+        {}
+
+        bool FrameSeq::operator == (const FrameSeq& other) const
+        {
+            return range == other.range && inc == other.inc;
+        }
+
+        bool FrameSeq::operator != (const FrameSeq& other) const
+        {
+            return !(*this == other);
+        }
+
+        std::vector<FrameSeq> toFrameSeq(const std::vector<int64_t>& value)
+        {
+            std::vector<FrameSeq> out;
+            std::vector<int64_t> tmp = value;
+            std::sort(tmp.begin(), tmp.end());
+            tmp.erase(std::unique(tmp.begin(), tmp.end()), tmp.end());
+            for (size_t i = 0; i < tmp.size(); ++i)
+            {
+                size_t j = i + 2;
+                for (;
+                     j < tmp.size() && tmp[j] - tmp[j - 1] == tmp[i + 1] - tmp[i];
+                     ++j)
+                {}
+                if (j > i + 2)
+                {
+                    out.push_back(FrameSeq(tmp[i], tmp[j - 1], static_cast<int>(tmp[i + 1] - tmp[i])));
+                    i = j - 1;
+                }
+                else
+                {
+                    j = i + 1;
+                    for (;
+                         j < tmp.size() && tmp[j] - tmp[j - 1] == tmp[i + 1] - tmp[i];
+                         ++j)
+                    {
+                    }
+                    if (j > i + 1)
+                    {
+                        out.push_back(FrameSeq(tmp[i], tmp[j - 1], static_cast<int>(tmp[i + 1] - tmp[i])));
+                        i = j - 1;
+                    }
+                    else
+                    {
+                        out.push_back(FrameSeq(tmp[i], tmp[i]));
+                    }
+                }
+            }
+            return out;
+        }
+
+        std::vector<int64_t> toFrames(const FrameSeq& value)
+        {
+            std::vector<int64_t> out;
+            const int64_t inc = value.inc > 0 ? value.inc : 1;
+            for (int64_t frame = value.range.min();
+                 frame <= value.range.max(); frame += inc)
+            {
+                out.push_back(frame);
+            }
+            return out;
+        }
+
+        std::vector<int64_t> toFrames(const std::vector<FrameSeq>& value)
+        {
+            std::vector<int64_t> out;
+            for (const auto& i : value)
+            {
+                const auto frames = toFrames(i);
+                out.insert(out.end(), frames.begin(), frames.end());
+            }
+            return out;
+        }
+
+        std::string getLabel(const FrameSeq& value)
+        {
+            std::stringstream ss;
+            if (value.range.equal())
+            {
+                ss << value.range.min();
+            }
+            else
+            {
+                ss << value.range.min() << "-" << value.range.max();
+                if (value.inc > 1)
+                {
+                    ss << ":" << value.inc;
+                }
+            }
+            return ss.str();
+        }
+
+        std::string getLabel(const std::vector<FrameSeq>& value)
+        {
+            std::vector<std::string> tmp;
+            for (const auto& i : value)
+            {
+                tmp.push_back(getLabel(i));
+            }
+            return string::join(tmp, ',');
+        }
+
 
         Path::Path(
             const std::string& value,
@@ -230,7 +347,7 @@ namespace tl
                     _pad = pad;
                     if (_frames.has_value())
                     {
-                        setNumber(toString(_frames.value().getMin(), _pad));
+                        setNumber(toString(_frames.value().min(), _pad));
                     }
                 }
             }
@@ -668,6 +785,37 @@ namespace tl
                     });
 
             return out;
+        }
+
+        std::vector<FrameSeq> findSeq(
+            const Path& path,
+            const PathOptions& pathOptions)
+        {
+            std::vector<int64_t> frames;
+            if (path.hasNumber() || path.hasSeqWildcard())
+            {
+                const auto abs = std::filesystem::absolute(
+                    std::filesystem::u8path(path.get()));
+                const auto parent = abs.parent_path();
+                if (std::filesystem::exists(parent))
+                {
+                    for (const auto& i : std::filesystem::directory_iterator(parent))
+                    {
+                        if (std::filesystem::is_directory(i.path()))
+                        {
+                            continue;
+                        }
+                        const Path entry(i.path().u8string(), pathOptions);
+                        if (path.sequence(entry) &&
+                            entry.getFrames().has_value())
+                        {
+                            frames.push_back(
+                                entry.getFrames().value().min());
+                        }
+                    }
+                }
+            }
+            return toFrameSeq(frames);
         }
 
         Path expandSeq(

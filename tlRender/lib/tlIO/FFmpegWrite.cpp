@@ -15,7 +15,7 @@
 #include <tlCore/LogSystem.h>
 
 #include <tlIO/FFmpeg.h>
-#include <tlIO/FFmpegMacros.h>
+#include <tlIO/IOMacros.h>
 
 extern "C"
 {
@@ -704,7 +704,7 @@ namespace tl
         void Write::_init(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             IWrite::_init(path, options, info, logSystem);
 
@@ -1255,7 +1255,7 @@ namespace tl
                     break;
                 }
 
-                p.avSpeed = info.videoTime.duration().rate();
+                p.avSpeed = info.videoTime.has_value() ? info.videoTime->duration().rate() : 24.0F;
                 const auto& videoInfo = info.video[0];
 
                 // Allow setting the speed if not saving audio
@@ -1604,7 +1604,9 @@ namespace tl
                         i.second.c_str(), 0);
                 }
 
-                p.videoStartTime = info.videoTime.start_time();
+                p.videoStartTime = info.videoTime.has_value() ?
+                                   info.videoTime->start_time() :
+                                   otio::RationalTime(0.F, 24.F);
                 // Set timecode
                 option = options.find("timecode");
                 if (option != options.end())
@@ -1623,7 +1625,7 @@ namespace tl
                     otime::ErrorStatus errorStatus;
                     const otime::RationalTime time =
                         otime::RationalTime::from_timecode(
-                            timecode, info.videoTime.duration().rate(),
+                            timecode, p.videoStartTime.rate(),
                             &errorStatus);
                     if (!otime::is_error(errorStatus))
                     {
@@ -1876,7 +1878,7 @@ namespace tl
         std::shared_ptr<Write> Write::create(
             const file::Path& path, const io::Info& info,
             const io::Options& options,
-            const std::weak_ptr<log::System>& logSystem)
+            const std::shared_ptr<log::System>& logSystem)
         {
             auto out = std::shared_ptr<Write>(new Write);
             out->_init(path, info, options, logSystem);
@@ -2185,10 +2187,10 @@ namespace tl
 
                 mdm->has_primaries = 1;
 
-                float min_lum = p.hdr.displayMasteringLuminance.getMin();
+                float min_lum = p.hdr.displayMasteringLuminance.min();
                 if (min_lum <= 0.F)
                     min_lum = 1.F;
-                float max_lum = p.hdr.displayMasteringLuminance.getMax();
+                float max_lum = p.hdr.displayMasteringLuminance.max();
 
                 mdm->max_luminance = av_d2q(max_lum, 10000);
                 mdm->min_luminance = av_d2q(min_lum, 10000);

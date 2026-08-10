@@ -14,6 +14,7 @@
 #include <tlCore/Image.h>
 #include <tlCore/Mesh.h>
 #include <tlCore/Path.h>
+#include <tlCore/ValueObserver.h>
 
 #include <future>
 
@@ -41,7 +42,7 @@ namespace tl
         {
             uint64_t id = 0;
             int height = 0;
-            otime::RationalTime time = time::invalidTime;
+            std::optional<otio::RationalTime> time;
             std::future<std::shared_ptr<image::Image> > future;
         };
 
@@ -50,8 +51,21 @@ namespace tl
         {
             uint64_t id = 0;
             math::Size2i size;
-            otime::TimeRange timeRange = time::invalidTimeRange;
+            std::optional<otio::TimeRange> timeRange;
             std::future<std::shared_ptr<geom::TriangleMesh2> > future;
+        };
+
+        //! Thumbnails cache options.
+        struct ThumbnailCacheOptions
+        {
+            //! Video cache size in megabytes.
+            float thumbnailMB = 16.F;
+
+            //! Audio cache size in megabytes.
+            float waveformMB = 16.F;
+
+            bool operator == (const ThumbnailCacheOptions&) const;
+            bool operator != (const ThumbnailCacheOptions&) const;
         };
 
         //! Thumbnail cache.
@@ -135,43 +149,35 @@ namespace tl
             TLRENDER_PRIVATE();
         };
 
-        //! Thumbnail generator.
-        class ThumbnailGenerator
-            : public std::enable_shared_from_this<ThumbnailGenerator>
+        //! Thumbnail System.
+        class ThumbnailSystem : public system::ISystem
         {
         protected:
 #ifdef OPENGL_BACKEND
-            void _init(
-                const std::shared_ptr<ThumbnailCache>&,
+            ThumbnailSystem(
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<gl::GLFWWindow>&);
-
-            ThumbnailGenerator();
 #endif
 
 #ifdef VULKAN_BACKEND
-            void _init(
-                const std::shared_ptr<ThumbnailCache>&,
-                const std::shared_ptr<system::Context>&);
-
-            ThumbnailGenerator(Fl_Vk_Context& ctx);
+            ThumbnailSystem(
+                const std::shared_ptr<system::Context>&,
+                Fl_Vk_Context& ctx);
 #endif
 
         public:
-            ~ThumbnailGenerator();
+            ~ThumbnailSystem();
 
 #ifdef OPENGL_BACKEND
-            //! Create a new thumbnail generator.
-            static std::shared_ptr<ThumbnailGenerator> create(
-                const std::shared_ptr<ThumbnailCache>&,
+            //! Create a new thumbnail System.
+            static std::shared_ptr<ThumbnailSystem> create(
                 const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<gl::GLFWWindow>& = nullptr);
 #endif
 
 #ifdef VULKAN_BACKEND
-            //! Create a new thumbnail generator.
-            static std::shared_ptr<ThumbnailGenerator> create(
-                const std::shared_ptr<ThumbnailCache>&,
+            //! Create a new thumbnail System.
+            static std::shared_ptr<ThumbnailSystem> create(
                 const std::shared_ptr<system::Context>&,
                 Fl_Vk_Context&);
 #endif
@@ -182,40 +188,57 @@ namespace tl
 
             //! Get information.
             InfoRequest getInfo(
-                const file::Path&, const std::vector<file::MemoryRead>&,
+                const file::Path&, const file::Path&,
                 const io::Options& = io::Options());
 
             //! Get a video thumbnail.
             ThumbnailRequest getThumbnail(
                 const file::Path&, int height,
-                const otime::RationalTime& = time::invalidTime,
-                const std::string& = "",
+                const std::optional<otio::RationalTime>& time,
+                const std::string& mediaReferenceKey = "",
                 const io::Options& = io::Options());
 
             //! Get a video thumbnail.
             ThumbnailRequest getThumbnail(
-                const file::Path&, const std::vector<file::MemoryRead>&,
-                int height, const otime::RationalTime& = time::invalidTime,
-                const std::string& = "",
+                const file::Path& timelinePath,
+                const file::Path& mediaPath,
+                int height,
+                const std::optional<otio::RationalTime>& time,
+                const std::string& mediaReferenceKey = "",
                 const io::Options& = io::Options());
 
             //! Get an audio waveform.
             WaveformRequest getWaveform(
                 const file::Path&, const math::Size2i&,
-                const otime::TimeRange& = time::invalidTimeRange,
-                const std::string& = "",
+                const std::optional<otime::TimeRange >& timeRange,
+                const std::string& mediaReferenceKey = "",
                 const io::Options& = io::Options());
 
             //! Get an audio waveform.
             WaveformRequest getWaveform(
-                const file::Path&, const std::vector<file::MemoryRead>&,
+                const file::Path& timelinePath,
+                const file::Path& mediaPath,
                 const math::Size2i&,
-                const otime::TimeRange& = time::invalidTimeRange,
-                const std::string& = "",
+                const std::optional<otime::TimeRange >& timeRange,
+                const std::string& mediaReferenceKey = "",
                 const io::Options& = io::Options());
 
             //! Cancel pending requests.
             void cancelRequests(const std::vector<uint64_t>&);
+
+            //! Get the cache options.
+            const ThumbnailCacheOptions& getCacheOptions() const;
+
+            //! Observe the cache options.
+            std::shared_ptr<observer::IValue<ThumbnailCacheOptions> > observeCacheOptions() const;
+
+            //! Set the cache options.
+            void setCacheOptions(const ThumbnailCacheOptions&);
+
+            //! Clear the cache.
+            void clearCache();
+
+            void shutdown();
 
         private:
             void _infoRun();
@@ -225,7 +248,6 @@ namespace tl
             void _thumbnailCancel();
             void _waveformCancel();
             void _startThreads();
-            void _exitThreads();
 
 #ifdef VULKAN_BACKEND
             Fl_Vk_Context& ctx;
@@ -233,66 +255,13 @@ namespace tl
             TLRENDER_PRIVATE();
         };
 
-        //! Thumbnail system.
-        class ThumbnailSystem : public system::ISystem
-        {
-        protected:
-            void _init(const std::shared_ptr<system::Context>&);
+        //! \name Serialize
+        ///@{
 
-#ifdef OPENGL_BACKEND
-            ThumbnailSystem();
-#endif
+        void to_json(nlohmann::json&, const ThumbnailCacheOptions&);
 
-#ifdef VULKAN_BACKEND
-            ThumbnailSystem(Fl_Vk_Context&);
-#endif
+        void from_json(const nlohmann::json&, ThumbnailCacheOptions&);
 
-        public:
-            ~ThumbnailSystem();
-
-#ifdef OPENGL_BACKEND
-            //! Create a new system.
-            static std::shared_ptr<ThumbnailSystem>
-            create(const std::shared_ptr<system::Context>&);
-#endif
-
-#ifdef VULKAN_BACKEND
-            //! Create a new system.
-            static std::shared_ptr<ThumbnailSystem>
-            create(const std::shared_ptr<system::Context>&,
-                   Fl_Vk_Context& ctx);
-#endif
-
-            //! Get information.
-            InfoRequest
-            getInfo(const file::Path&, const io::Options& = io::Options());
-
-            //! Get a video thumbnail.
-            ThumbnailRequest getThumbnail(
-                const file::Path&, int height,
-                const otime::RationalTime& = time::invalidTime,
-                const std::string& mediaReferenceKey = "",
-                const io::Options& = io::Options());
-
-            //! Get an audio waveform.
-            WaveformRequest getWaveform(
-                const file::Path&, const math::Size2i&,
-                const otime::TimeRange& = time::invalidTimeRange,
-                const std::string& mediaReferenceKey = "",
-                const io::Options& = io::Options());
-
-            //! Cancel pending requests.
-            void cancelRequests(const std::vector<uint64_t>&);
-
-            //! Get the thumbnail cache.
-            const std::shared_ptr<ThumbnailCache>& getCache() const;
-
-        private:
-#ifdef VULKAN_BACKEND
-            Fl_Vk_Context& ctx;
-#endif
-
-            TLRENDER_PRIVATE();
-        };
+        ///@}
     } // namespace TIMELINEUI
 } // namespace tl

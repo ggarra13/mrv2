@@ -130,7 +130,7 @@ namespace tl
                     _io->readU16(&_header.channels);
                     _io->readU32(&_header.pixelMin);
                     _io->readU32(&_header.pixelMax);
-                    _io->setPos(512);
+                    _io->seek(512, file::SeekMode::Set);
                     if (_header.storage)
                     {
                         const size_t size = _header.height * _header.channels;
@@ -177,8 +177,6 @@ namespace tl
                     }
                     _info.layout.endian = memory::Endian::MSB;
                 }
-
-                const image::Info& getInfo() const { return _info; }
 
                 io::VideoData read(
                     const std::string& fileName,
@@ -266,16 +264,13 @@ namespace tl
                     }
 
                     image::Tags tags;
-                    tags["otioClipName"] = fileName;
-                    {
-                        std::stringstream ss;
-                        ss << time;
-                        tags["otioClipTime"] = ss.str();
-                    }
+                    io::addOtioTags(tags, fileName, time);
                     out.image->setTags(tags);
 
                     return out;
                 }
+
+                image::Info getInfo() { return _info; }
 
             private:
                 std::shared_ptr<file::FileIO> _io;
@@ -286,58 +281,31 @@ namespace tl
             };
         } // namespace
 
-        void Read::_init(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
+        Decode::Decode()
+        {}
+
+        Decode::~Decode()
+        {}
+
+        std::shared_ptr<Decode> Decode::create()
         {
-            ISequenceRead::_init(path, memory, options, cache, logSystem);
+            return std::shared_ptr<Decode>(new Decode);
         }
 
-        Read::Read() {}
-
-        Read::~Read()
-        {
-            _finish();
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const io::Options& options,
-            const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, {}, options, cache, logSystem);
-            return out;
-        }
-
-        std::shared_ptr<Read> Read::create(
-            const file::Path& path, const std::vector<file::MemoryRead>& memory,
-            const io::Options& options, const std::shared_ptr<io::Cache>& cache,
-            const std::weak_ptr<log::System>& logSystem)
-        {
-            auto out = std::shared_ptr<Read>(new Read);
-            out->_init(path, memory, options, cache, logSystem);
-            return out;
-        }
-
-        io::Info Read::_getInfo(
+        io::Info Decode::getInfo(
             const std::string& fileName, const file::MemoryRead* memory)
         {
             io::Info out;
             out.video.push_back(File(fileName, memory).getInfo());
-            out.videoTime =
-                otime::TimeRange::range_from_start_end_time_inclusive(
-                    otime::RationalTime(_startFrame, _defaultSpeed),
-                    otime::RationalTime(_endFrame, _defaultSpeed));
             return out;
         }
 
-        io::VideoData Read::_readVideo(
+        io::VideoData Decode::readVideo(
             const std::string& fileName, const file::MemoryRead* memory,
             const otime::RationalTime& time, const io::Options&)
         {
             return File(fileName, memory).read(fileName, time);
         }
+
     } // namespace sgi
 } // namespace tl

@@ -6,6 +6,7 @@
 
 #include <tlTimeline/Timeline.h>
 
+#include <tlIO/Cache.h>
 #include <tlIO/Plugin.h>
 
 #include <tlCore/LRUCache.h>
@@ -19,11 +20,16 @@
 
 namespace tl
 {
+    class ZipReader;
+
     namespace timeline
     {
         struct Timeline::Private
         {
-            float _transitionValue(double frame, double in, double out) const;
+            std::weak_ptr<system::Context> context;
+            std::weak_ptr<log::System> logSystem;
+            std::shared_ptr<file::FileIO> fileIO;
+            otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
 
             void tick();
 
@@ -31,21 +37,102 @@ namespace tl
                 const std::shared_ptr<audio::Audio>&, double seconds,
                 const otime::TimeRange&);
 
-            std::weak_ptr<system::Context> context;
-            otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+            // OTIO works out an item's range in its track by summing the
+            // duration of every preceding sibling, and _requests() asks each
+            // track child for its range on every request to find the one
+            // covering the requested time. Left to OTIO that is quadratic in
+            // the number of clips: 20,000 clips took nine seconds to reach
+            // the first frame and 100,000 never got there. Filled in once by
+            // _init(), which can be done in a single pass per track; the OTIO
+            // timeline is never written, so this can be read without locking.
+            std::map<const otio::Composable*, otio::TimeRange> trimmedRangeInParent;
+            // The items of each track in time order. Only one item can cover a
+            // given time, but _requests() used to walk and cast every child of
+            // every track to find it, which kept a hundred thousand clips from
+            // reaching the first frame even once the ranges above were cached.
+            struct TrackItem
+            {
+                otio::Item* item = nullptr;
+                otio::TimeRange range;
+            };
+            std::map<const otio::Track*, std::vector<TrackItem> > trackItems;
+            // The bundle stays open so that a media reference's byte ranges can
+            // be worked out when it is first read. Doing it for every reference
+            // at open meant generating a file name, decoding it as a URL and
+            // parsing it as a path for all 25,000 frames of a bundle before
+            // anything could be shown.
+            std::shared_ptr<ZipReader> zipReader;
+            std::set<const otio::MediaReference*> bundleMediaReferences;
+            // Always the inner of the two locks: creating a reader holds
+            // readCacheMutex and then asks getMem()/mediaUnavailable() where
+            // the media lives. Nothing guarded here may reach back for
+            // readCacheMutex.
+            std::mutex memFilesMutex;
+            std::map<const otio::MediaReference*,
+                     std::shared_ptr<std::vector<file::MemoryRead> > > memFiles;
             std::shared_ptr<observer::Value<bool> > timelineChanges;
             // Media references named by a bundle but not found inside it. They
             // are not read from their path, since a bundle is meant to be self
             // contained and quietly reading a file from somewhere else would be
             // misleading; reading one of these fails instead. Filled in while
             // the timeline is read and only read afterwards.
-            std::set<const otio::MediaReference*> unavailableMediaReferences;
+            std::set<const otio::MediaReference*> unavailableMediaReferences
+            ;
+            // Guarded by memFilesMutex once the timeline is running, since a
+            // reference can also turn out to be unavailable when its byte
+            // ranges are worked out on first read.
+            bool mediaUnavailable(const otio::MediaReference*);
+
+            // Where a media reference's files live inside the bundle, worked
+            // out on first use. Shared rather than copied: inside a bundle a
+            // sequence reference carries a byte range per frame, and a long one
+            // is not a vector to hand out by value.
+            // std::shared_ptr<std::vector<file::MemoryRead> > getMem(
+            //     const otio::MediaReference*);
+
+            // Look up the reader or decoder for a media reference, creating one
+            // on a miss. The three caches differ only in what they hold and how
+            // an entry is made; the availability checks either side of
+            // resolving the byte ranges, the key and the lock are the same for
+            // all of them, and were easy to get subtly wrong three times over.
+            template<typename T>
+            std::shared_ptr<T> getCached(
+                memory::LRUCache<std::string, std::shared_ptr<T> >&,
+                const otio::MediaReference*,
+                const io::Options&,
+                const std::function<std::shared_ptr<T>(
+                const std::shared_ptr<system::Context>&,
+                const file::Path&,
+                const std::vector<file::MemoryRead>&,
+                const io::Options&)>&);
+
             file::Path path;
             file::Path audioPath;
             Options options;
-            // Owned by the request thread, like the Thread struct below.
-            memory::LRUCache<std::string, std::shared_ptr<io::IRead> >
-                readCache;
+            // Held while a caller drives an unthreaded timeline. _requests()
+            // mutates the thread-owned lists without locking, on the assumption
+            // that one thread runs it; without a thread that is whichever
+            // caller is in getVideo()/getAudio(), and the thumbnail system
+            // has three.
+            std::mutex driverMutex;
+            // Guards the three caches below. They were owned by the request
+            // thread, but a timeline opened without one is read by whichever
+            // thread drives it, and the thumbnail system drives one from three.
+            //
+            // Always the outer of the two locks; see memFilesMutex.
+            std::mutex readCacheMutex;
+            // Video and audio are read by separate readers, cached separately
+            // so that a reference read for only one of them -- a silent plate,
+            // a bundle's .wav -- costs only that one.
+            memory::LRUCache<std::string, std::shared_ptr<io::IVideoRead> > videoReadCache;
+            memory::LRUCache<std::string, std::shared_ptr<io::IAudioRead> > audioReadCache;
+            // Sequences, which unlike the read caches hold no thread and no
+            // queue: a decoder is stateless, so what is cached here is only
+            // where each frame lives. Evicting one costs nothing, which is
+            // why this holds far more entries than the read caches can afford
+            // to.
+            memory::LRUCache<std::string, std::shared_ptr<io::SeqDecode> > seqCache;
+
             // Errors observed while building frames (broken promises caught
             // in videoFrame()/audioFrame()). Owned by the request thread.
             size_t frameErrorCount = 0;
@@ -54,6 +141,15 @@ namespace tl
             // monotonic when readers are evicted from the cache. Owned by
             // the request thread.
             size_t readErrorMax = 0;
+            // Media by resolved path, built once while the timeline is read.
+            // Resolving a path means decoding a URL and parsing it, so doing it
+            // per lookup made every thumbnail request walk the whole timeline.
+            std::map<std::string, otio::MediaReference*> mediaByPath;
+            //! The same references keyed by an absolute, normalized path, so
+            //! that a caller which opened the timeline with a relative path
+            //! still finds them. mediaByPath keeps the paths as written,
+            //! which is what getMediaPaths() reports.
+            std::map<std::string, otio::MediaReference*> mediaByNormalPath;
             otime::TimeRange timeRange = time::invalidTimeRange;
             io::Info ioInfo;
             // The clip whose media references provide the video information,
@@ -188,9 +284,57 @@ namespace tl
                 // Copies of the media reference keys, refreshed under the mutex
                 // when the main thread changes them.
                 std::string mediaReferenceKey;
-                std::map<const OTIO_NS::Clip*, std::string> clipMediaReferenceKeys;
+                std::map<const otio::Clip*, std::string> clipMediaReferenceKeys;
             };
             Thread thread;
+
+            // Where sequence frames are decoded. One pool serves every clip in
+            // the timeline rather than a reader thread per clip: with 198 clips
+            // and room for ten readers, a single pass used to create and join a
+            // thread nearly two hundred times.
+            struct ReadPool
+            {
+                struct Task
+                {
+                    std::function<io::VideoData()> f;
+                    std::promise<io::VideoData> promise;
+                };
+                std::vector<std::thread> threads;
+                std::list<Task> tasks;
+                std::condition_variable cv;
+                std::mutex mutex;
+                bool stopped = false;
+            };
+            ReadPool readPool;
+
+            // Start and stop the decoding threads.
+            void startReadPool(size_t threadCount);
+            void stopReadPool();
+            // Decode on the pool. The future carries an empty VideoData if the
+            // decode throws, which is what a reader did with a failed frame.
+            std::future<io::VideoData>
+            submitRead(std::function<io::VideoData()>);
+
+            // Give up on a request that has not resolved, so that a caller
+            // waiting on its future is not left waiting forever. The frame
+            // comes back empty and the reason goes to the log.
+            void abandon(const std::shared_ptr<PendingVideoRequest>&);
+            void abandon(const std::shared_ptr<PendingAudioRequest>&);
+
+            // Global decoded-frame caches for stateful video readers
+            // (currently just FFmpeg).  Kept separate from videoReadCache on
+            // purpose: a VideoRead can be evicted and recreated by
+            // videoReadCache under memory/clip-count pressure,
+            // but the backward-scrub frames it accumulated should survive
+            // that -- this map is what makes that possible. Effectively
+            // unbounded (paths, not bytes), since the actual byte budget is
+            // enforced per-entry by io::Cache::setMax().
+            std::shared_ptr< io::Cache > frameCache;
+
+            // This is currently unused.
+            memory::LRUCache<std::string, std::shared_ptr<io::Cache> >
+            pathFrameCache;
+            std::shared_ptr<io::Cache> getFrameCache(const file::Path&);
 
             // Build a finished frame from a request whose futures are ready.
             // Calling these blocks on the layer futures via get(), so callers
@@ -203,6 +347,20 @@ namespace tl
             // goes through Timeline::getMediaReference(), which takes the
             // mutex.
             otio::MediaReference* mediaReference(const otio::Clip*) const;
+
+            //! Get a track child's trimmed range in its parent, from
+            //! trimmedRangeInParent. Anything not covered by the cache, such
+            //! as an item nested below a track, falls back to asking OTIO.
+            std::optional<otio::TimeRange> getTrimmedRangeInParent(
+                const otio::Composable*) const;
+
+            //! Get the children of a track that can cover the given time,
+            //! found by bisecting trackItems. A track that was not indexed
+            //! gives back all of its children, so the caller still sees
+            //! everything it used to.
+            std::vector<otio::Composable*> getTrackChildrenAt(
+                const otio::Track*,
+                const otime::RationalTime&) const;
         };
     } // namespace timeline
 } // namespace tl
