@@ -6,7 +6,8 @@ v1.7.3
 
 - NDI: Minor improvement to NDI reading in the player.
 
-- Core: OpenTimelineIO clips now tonemaps each clip found if it is a movie, an HDR movie, a bt709 or an sRGB image, all will get tonemapped correctly.  Of course dissolves from one format of image to another one will not work.
+- Core: OpenTimelineIO timelines now open faster (specially .otioz ones).
+- Core: OpenTimelineIO clips now tonemap each clip found if it is a movie, an HDR movie, a bt709 or an sRGB image, all will get tonemapped correctly.  Of course dissolves from one format of image to another one will not work.
 - Core: Brought and cherry-picked current tlRender to be more in sync with the one in mrv2.
 - Core: Major improvement to reading of image sequences.
 - Core: Minor improvement of performance on video reading.
@@ -17,7 +18,6 @@ v1.7.3
 - Core: Fixed resource leak in thumbnailSystem.
 - Core: Fixed a crash on the OpenEXR reader when reading a corrupt/truncated file.
 - Core: Fixed and added tlRender's unit tests.
-
 
 - Build: Documented Vulkan compilation on Linux.
 - Build: Bumped OpenEXR to v3.4.14.
