@@ -98,7 +98,6 @@ namespace tl
 
         void ReadVideo::_from_ndi(const NDIlib_video_frame_t& video_frame)
         {
-            std::cerr << "got video frame" << std::endl;
             bool init = false;
 
             float pixelAspectRatio = 1.F;
