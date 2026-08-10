@@ -14,31 +14,6 @@ namespace tl
 {
     namespace cineon
     {
-
-        // io::VideoData File::read(
-        //     const std::string& fileName, const file::MemoryRead* memory,
-        //     const otime::RationalTime& time, const io::Options& options)
-        // {
-        //     io::VideoData out;
-        //     out.time = time;
-
-        //     auto io = memory ? file::FileIO::create(fileName, *memory)
-        //                      : file::FileIO::create(fileName, file::Mode::Read);
-        //     io::Info info;
-        //     cineon::read(io, info);
-
-        //     out.image = image::Image::create(info.video[0]);
-        //     _addOtioTags(info.tags, fileName, time);
-        //     out.image->setTags(info.tags);
-        //     io->read(
-        //         out.image->getData(), image::getDataByteCount(info.video[0]));
-        //     return out;
-        // }
-
-
-
-
-
         class File
         {
         public:
