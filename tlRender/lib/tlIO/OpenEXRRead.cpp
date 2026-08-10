@@ -964,13 +964,6 @@ namespace tl
                         _info.tags["Data Window"] = serialize(dataWindow);
                     }
 
-                    _info.tags["otioClipName"] = fileName;
-                    {
-                        std::stringstream ss;
-                        ss << time;
-                        _info.tags["otioClipTime"] = ss.str();
-                    }
-
                     int minY =
                         std::min(_dataWindow.min.y, _displayWindow.min.y);
                     int minX =
@@ -1287,6 +1280,7 @@ namespace tl
                             io::serialize(maximum);
                     }
 
+                    io::addOtioTags(_info.tags, fileName, time);
                     out.image->setTags(_info.tags);
                     return out;
                 }

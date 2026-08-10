@@ -48,7 +48,6 @@ namespace tl
             _logSystem(logSystem),
             _options(options)
         {
-            _tags["otioClipName"] = _fileName;
             double fps = v.frame_rate_N / static_cast<double>(v.frame_rate_D);
             double startTime = 0.0;
             double lastTime = kNDI_MOVIE_DURATION * fps;
@@ -322,11 +321,7 @@ namespace tl
             NDIlib_video_frame_t video_frame;
             NDIlib_frame_type_e type;
 
-            {
-                std::stringstream ss;
-                ss << time;
-                _tags["otioClipTime"] = ss.str();
-            }
+            io::addOtioTags(_tags, _fileName, time);
 
             while (out == 0 && NDI_recv)
             {

@@ -7,6 +7,7 @@ v1.7.3
 
 - NDI: Minor improvement to NDI reading in the player.
 
+- Core: OpenTimelineIO clips now tonemaps each clip found if it is a movie, an HDR movie, a bt709 or an sRGB image, all will get tonemapped correctly.  Of course dissolves from one format of image to another one will not work.
 - Core: Major improvement to reading of image sequences.
 - Core: Minor improvement of performance on video reading.
 - Core: Improved performance of image reading.
