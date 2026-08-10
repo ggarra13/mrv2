@@ -1132,6 +1132,124 @@ namespace tl
             return out;
         }
 
+        std::vector<file::MemoryRead>
+        Timeline::getMem(const otio::MediaReference* otioRef)
+        {
+            TLRENDER_P();
+            return *p.getMem(otioRef);
+        }
+
+        std::shared_ptr<std::vector<file::MemoryRead> >
+        Timeline::Private::getMem(const OTIO_NS::MediaReference* otioRef)
+        {
+            std::unique_lock<std::mutex> lock(memFilesMutex);
+            if (const auto i = memFiles.find(otioRef); i != memFiles.end())
+            {
+                return i->second;
+            }
+            if (bundleMediaReferences.find(otioRef) ==
+                bundleMediaReferences.end())
+            {
+                // Not in a bundle: read from its path.
+                return std::make_shared<std::vector<file::MemoryRead> >();
+            }
+
+            // First use of this reference: work out where each of its files
+            // lives inside the bundle.
+            //
+            // A sequence member is placed at its offset from the first frame
+            // rather than packed against the previous one, so that the result
+            // is indexed by frame number. Packing them would misplace every
+            // frame/ after a gap, and every frame at all when the step is
+            // greater than one.
+            auto out = std::make_shared<std::vector<file::MemoryRead> >();
+            std::vector<std::pair<size_t, std::string> > mediaFileNames;
+            if (auto externalReference = dynamic_cast<const otio::ExternalReference*>(otioRef))
+            {
+                mediaFileNames.push_back(std::make_pair(
+                                             size_t(0),
+                                             file::Path(url::decode(externalReference->target_url())).get()));
+            }
+            else if (auto imageSeqReference =
+                     dynamic_cast<const otio::ImageSequenceReference*>(otioRef))
+            {
+                const int count = imageSeqReference->number_of_images_in_sequence();
+                const size_t step = std::max(imageSeqReference->frame_step(), 1);
+                mediaFileNames.reserve(count);
+                for (int number = 0; number < count; ++number)
+                {
+                    mediaFileNames.push_back(std::make_pair(
+                                                 number * step,
+                                                 file::Path(url::decode(
+                                                               imageSeqReference->target_url_for_image_number(number))).get()));
+                }
+            }
+            if (!mediaFileNames.empty())
+            {
+                out->resize(mediaFileNames.back().first + 1);
+            }
+            size_t found = 0;
+            std::string missing;
+            size_t missingCount = 0;
+            for (const auto& mediaFileName : mediaFileNames)
+            {
+                const auto entry = zipReader->find(mediaFileName.second);
+                if (!entry.has_value())
+                {
+                    // A sequence member the bundle does not hold is a missing
+                    // frame, which the sequence decoder deals with. Leave its slot
+                    // empty and carry on.
+                    ++missingCount;
+                    if (missing.empty())
+                    {
+                        missing = mediaFileName.second;
+                    }
+                    continue;
+                }
+                (*out)[mediaFileName.first] = file::MemoryRead(
+                    fileIO,
+                    fileIO->getMemoryStart() + entry->offset,
+                    entry->size);
+                ++found;
+            }
+            if (0 == found)
+            {
+                // The bundle holds none of this media. Mark the reference
+                // unavailable rather than returning nothing: an empty result reads
+                // as "not in a bundle", and the caller would go on to read the
+                // media from its path, which is a different file than the bundle
+                // describes.
+                if (auto log = logSystem.lock())
+                {
+                    log->print(
+                        "tl::Timeline",
+                        string::Format(
+                            "Cannot find zip entry: \"{0}\"; this media "
+                            "reference cannot be used").arg(missing),
+                        log::Type::Error);
+                }
+                unavailableMediaReferences.insert(otioRef);
+                out->clear();
+            }
+            else if (missingCount > 0)
+            {
+                if (auto log = logSystem.lock())
+                {
+                    log->print(
+                        "tl::Timeline",
+                        string::Format(
+                            "Bundle is missing {0} of {1} sequence frames, "
+                            "starting with \"{2}\"").
+                        arg(missingCount).
+                        arg(mediaFileNames.size()).
+                        arg(missing),
+                        log::Type::Warning);
+                }
+            }
+            memFiles[otioRef] = out;
+            return out;
+        }
+
         otio::MediaReference* Timeline::Private::mediaReference(
             const otio::Clip* otioClip) const
         {
@@ -2691,7 +2809,7 @@ namespace tl
                 }
                 try
                 {
-                    const auto mem = getMemoryRead(mediaReference);
+                    const auto mem = getMem(mediaReference);
                     if (mediaUnavailable(mediaReference))
                     {
                         // Resolving its byte ranges said the bundle does not
@@ -2713,7 +2831,7 @@ namespace tl
                         // readOptions["SequenceIO/MissingFrames"] = to_string(
                         //     fromOTIO(imageSeqReference->missing_frame_policy()));
                     }
-                    out = create(context, mediaPath, mem, readOptions);
+                    out = create(context, mediaPath, *mem, readOptions);
                 }
                 catch (const std::exception& e)
                 {
