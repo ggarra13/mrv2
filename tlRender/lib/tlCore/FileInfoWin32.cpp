@@ -73,11 +73,7 @@ namespace tl
                 do
                 {
                     const std::wstring fileName(ffd.cFileName);
-                    // Skip current and parent directories
-                    if (fileName != L"." && fileName != L"..")
-                    {
-                        fileNames.push_back(fileName);
-                    }
+                    fileNames.push_back(fileName);
                 } while (FindNextFileW(hFind, &ffd) != 0);
 
                 FindClose(hFind);

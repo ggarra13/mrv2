@@ -21,7 +21,8 @@ namespace tl
         {
             std::string toUtf8(const std::filesystem::path& p)
             {
-                auto u8 = p.u8string();
+                // generic_string always uses '/'
+                auto u8 = p.generic_u8string();
                 return std::string(u8.begin(), u8.end());
             }
         }
@@ -805,7 +806,7 @@ namespace tl
                         {
                             continue;
                         }
-                        const Path entry(i.path().u8string(), pathOptions);
+                        const Path entry(i.path().generic_u8string(), pathOptions);
                         if (path.sequence(entry) &&
                             entry.getFrames().has_value())
                         {
