@@ -28,6 +28,74 @@ namespace tl
 
         namespace
         {
+            std::string getKey(const file::Path& path)
+            {
+                std::vector<std::string> out;
+                out.push_back(path.get());
+                out.push_back(path.getNumber());
+                return string::join(out, ';');
+            }
+
+            file::Path getAssociatedAudio(
+                const std::shared_ptr<system::Context>& context,
+                const file::Path& path,
+                const ImageSeqAudio& imageSeqAudio,
+                const std::vector<std::string>& imageSeqAudioExts,
+                const std::string& imageSeqAudioFileName,
+                const file::PathOptions& pathOptions)
+            {
+                file::Path out;
+                auto ioSystem = context->getSystem<io::ReadSystem>();
+                switch (imageSeqAudio)
+                {
+                case ImageSeqAudio::Ext:
+                {
+                    // Check for an audio file with the same base name.
+                    std::vector<std::string> baseNames;
+                    baseNames.push_back(path.getDirectory() + path.getBaseName());
+                    std::string tmp = path.getBaseName();
+                    if (!tmp.empty() && '.' == tmp[tmp.size() - 1])
+                    {
+                        tmp.pop_back();
+                    }
+                    baseNames.push_back(path.getDirectory() + tmp);
+                    for (const auto& baseName : baseNames)
+                    {
+                        for (const auto& ext : imageSeqAudioExts)
+                        {
+                            const file::Path audioPath(baseName + ext,
+                                                       pathOptions);
+                            if (std::filesystem::exists(std::filesystem::u8path(audioPath.get())))
+                            {
+                                out = audioPath;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Or use the first audio file.
+                    if (out.isEmpty())
+                    {
+                        file::DirListOptions listOptions;
+                        listOptions.filterExt = imageSeqAudioExts;
+                        const auto entries = file::dirList(path.getDirectory(), listOptions);
+                        if (!entries.empty())
+                        {
+                            out = entries.front().path;
+                        }
+                    }
+
+                    break;
+                }
+                case ImageSeqAudio::FileName:
+                    out = file::Path(path.getDirectory() +
+                                     imageSeqAudioFileName, pathOptions);
+                    break;
+                default: break;
+                }
+                return out;
+            }
+
             //! An absolute, normalized form of a media path, used only to
             //! compare paths that name the same file in different ways.
             std::string normalMediaPath(const file::Path& path)
@@ -122,6 +190,25 @@ namespace tl
                 return out;
             }
 
+            //! Get the union of the OTIO spatial coordinates of every media
+            //! reference on a clip. The canvas is built from this rather than from
+            //! the active reference, so that changing the active media reference
+            //! leaves the canvas unchanged.
+            std::optional<math::Box2f> getClipBoundsUnion(const otio::Clip* otioClip)
+            {
+                std::optional<math::Box2f> out;
+                for (const auto& i : otioClip->media_references())
+                {
+                    if (const auto bounds = getMediaReferenceBounds(i.second))
+                    {
+                        out = out.has_value() ?
+                              math::expand(out.value(), bounds.value()) :
+                              bounds.value();
+                    }
+                }
+                return out;
+            }
+
             //! Convert OTIO spatial coordinates into image space.
             //!
             //! The OTIO coordinates are unit-less, so they are scaled by the
@@ -186,7 +273,7 @@ namespace tl
             //! are displayed at the same size. This covers timelines that were not
             //! authored with spatial coordinates at all.
             std::optional<math::Box2f> getSpatialBounds(
-                const otio::Clip* otioClip,
+                const std::optional<math::Box2f>& clipBounds,
                 Spatial spatial,
                 const math::Size2i& normalizeSize,
                 double scale)
@@ -196,7 +283,7 @@ namespace tl
                 {
                     return out;
                 }
-                out = toImageSpace(getClipBounds(otioClip), scale);
+                out = toImageSpace(clipBounds, scale);
                 if (!out.has_value() &&
                     Spatial::Normalize == spatial &&
                     normalizeSize.isValid())
@@ -210,7 +297,7 @@ namespace tl
 
             //! Get a clip's box within the timeline canvas.
             std::optional<math::Box2f> getCanvasBox(
-                const otio::Clip* otioClip,
+                const std::optional<math::Box2f>& clipBounds,
                 Spatial spatial,
                 const math::Size2i& normalizeSize,
                 double scale,
@@ -218,7 +305,7 @@ namespace tl
             {
                 std::optional<math::Box2f> out;
                 if (const auto bounds = getSpatialBounds(
-                        otioClip,
+                        clipBounds,
                         spatial,
                         normalizeSize,
                         scale))
@@ -228,79 +315,6 @@ namespace tl
                 return out;
             }
 
-            namespace
-            {
-                std::string getKey(const file::Path& path)
-                {
-                    std::vector<std::string> out;
-                    out.push_back(path.get());
-                    out.push_back(path.getNumber());
-                    return string::join(out, ';');
-                }
-            }
-        }
-
-        namespace
-        {
-            file::Path getAssociatedAudio(
-                const std::shared_ptr<system::Context>& context,
-                const file::Path& path,
-                const ImageSeqAudio& imageSeqAudio,
-                const std::vector<std::string>& imageSeqAudioExts,
-                const std::string& imageSeqAudioFileName,
-                const file::PathOptions& pathOptions)
-            {
-                file::Path out;
-                auto ioSystem = context->getSystem<io::ReadSystem>();
-                switch (imageSeqAudio)
-                {
-                case ImageSeqAudio::Ext:
-                {
-                    // Check for an audio file with the same base name.
-                    std::vector<std::string> baseNames;
-                    baseNames.push_back(path.getDirectory() + path.getBaseName());
-                    std::string tmp = path.getBaseName();
-                    if (!tmp.empty() && '.' == tmp[tmp.size() - 1])
-                    {
-                        tmp.pop_back();
-                    }
-                    baseNames.push_back(path.getDirectory() + tmp);
-                    for (const auto& baseName : baseNames)
-                    {
-                        for (const auto& ext : imageSeqAudioExts)
-                        {
-                            const file::Path audioPath(baseName + ext,
-                                                       pathOptions);
-                            if (std::filesystem::exists(std::filesystem::u8path(audioPath.get())))
-                            {
-                                out = audioPath;
-                                break;
-                            }
-                        }
-                    }
-
-                    // Or use the first audio file.
-                    if (out.isEmpty())
-                    {
-                        file::DirListOptions listOptions;
-                        listOptions.filterExt = imageSeqAudioExts;
-                        const auto entries = file::dirList(path.getDirectory(), listOptions);
-                        if (!entries.empty())
-                        {
-                            out = entries.front().path;
-                        }
-                    }
-
-                    break;
-                }
-                case ImageSeqAudio::FileName:
-                    out = file::Path(path.getDirectory() +
-                                     imageSeqAudioFileName, pathOptions);
-                    break;
-                default: break;
-                }
-                return out;
-            }
         }  // namespace
 
         void Timeline::_init(
@@ -751,10 +765,10 @@ namespace tl
             {
                 std::vector<std::string> lines;
                 lines.push_back(std::string());
-                lines.push_back(string::Format("    File sequence audio: {0}")
+                lines.push_back(string::Format("    * Image sequence audio: {0}")
                                 .arg(options.imageSeqAudio));
                 lines.push_back(
-                    string::Format("    File sequence audio file name: {0}")
+                    string::Format("    * Image sequence audio file name: {0}")
                     .arg(options.imageSeqAudioFileName));
                 lines.push_back(string::Format("    * Compatability: {0}").
                                 arg(options.compat));
@@ -1564,7 +1578,7 @@ namespace tl
                                             otioClip, requestTime,
                                             request->options);
                                         videoLayerData.bounds = getCanvasBox(
-                                            otioClip,
+                                            getMediaReferenceBounds(p.mediaReference(otioClip)),
                                             p.options.spatial,
                                             p.normalizeSize,
                                             p.boundsScale,
@@ -1612,8 +1626,8 @@ namespace tl
                                                 videoLayerData.imageB = _readVideo(
                                                     otioClipB, requestTime,
                                                     request->options);
-                                                videoLayerData.bounds = getCanvasBox(
-                                                    otioClipB,
+                                                videoLayerData.boundsB = getCanvasBox(
+                                                    getMediaReferenceBounds(p.mediaReference(otioClipB)),
                                                     p.options.spatial,
                                                     p.normalizeSize,
                                                     p.boundsScale,
@@ -1664,7 +1678,7 @@ namespace tl
                                                     otioClipB, requestTime,
                                                     request->options);
                                                 videoLayerData.bounds = getCanvasBox(
-                                                    otioClipB,
+                                                    getMediaReferenceBounds(p.mediaReference(otioClipB)),
                                                     p.options.spatial,
                                                     p.normalizeSize,
                                                     p.boundsScale,
@@ -2331,6 +2345,8 @@ namespace tl
                     {
                         auto read = context->getSystem<io::ReadSystem>()->audioRead(
                             path, mem, options);
+                        // \@note: TO AI.  This read is working.
+
                         if (read)
                             read->setCache(frameCache);  // no-op for non-FFmpeg readers
                         return read;
@@ -2461,7 +2477,7 @@ namespace tl
                 // changing the active media reference cannot place a clip
                 // outside the canvas.
                 if (const auto bounds = getSpatialBounds(
-                        otioClip,
+                        getClipBoundsUnion(otioClip),
                         p.options.spatial,
                         normalizeSize,
                         p.boundsScale))
