@@ -99,13 +99,11 @@ namespace tl
             for (auto i = in.begin(); i != in.end(); ++i)
             {
                 const std::string tmp(i.name());
-                const size_t index = tmp.find_first_of('.');
-                if (index != std::string::npos)
+                // Skip channels that belong to named sub-layers
+                // (containing '.')
+                if (tmp.find('.') != std::string::npos)
                 {
-                    if (index != 0 || index != tmp.size() - 1)
-                    {
-                        continue;
-                    }
+                    continue;
                 }
                 out.insert(i.name(), i.channel());
             }

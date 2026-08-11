@@ -1545,6 +1545,18 @@ msgstr "{0} {1} をストリーミング中..."
 msgid "Stop streaming"
 msgstr "ストリーミング停止"
 
+msgid "Complexity"
+msgstr "複雑さ"
+
+msgid "Draw Mode"
+msgstr "描画モード"
+
+msgid "Stage Cache"
+msgstr "ステージキャッシュ"
+
+msgid "Disk Cache in GB"
+msgstr "ディスクキャッシュ (GB)"
+
 msgid "Project"
 msgstr "プロジェクト"
 
@@ -3649,31 +3661,35 @@ msgstr "HAP プロファイルには .mov 拡張子が必要です。.mov に変
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "新しいファイル {0} はすでに存在します！上書きできません。"
 
+msgid "Rotated image info: {0}"
+msgstr "回転画像情報 : {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "スケーリングされた画像情報 : {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: ライタープラグインを開けません。"
 
 msgid "Image info: {0} {1}"
 msgstr "画像情報: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "スケーリングされた画像情報 : {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr ""
+"画像が大きすぎて注釈を保存できません。ビューポートサイズにスケールします。"
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr ""
 "ライタープラグインが出力情報を取得しませんでした。デフォルトの {0} に設定しま"
 "す"
 
+msgid "Output info: {0} {1}"
+msgstr "出力情報 : {0} {1}"
+
 msgid "Using profile {0}, pixel format {1}."
 msgstr "プロファイル {0}、ピクセル形式 {1} を使用中。"
 
 msgid "Using preset {0}."
 msgstr "プリセット{0} を使用中。"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "オフスクリーンバッファ情報 : {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "出力情報 : {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "オーディオなしでムービーを保存しています %<PRId64> - %<PRId64>"
@@ -3692,11 +3708,32 @@ msgstr ""
 "オーディオはタイムラインにのみありますが、オーディオを保存しようとしていませ"
 "ん。"
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: 無効なOpenGL形式とタイプ"
+
+msgid "OpenGL info: {0}"
+msgstr "OpenGL情報 : {0}"
+
 msgid "Saving... {0}"
 msgstr "保存中... {0}"
 
+msgid "Unsupported output format"
+msgstr "サポートされていない出力形式"
+
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
+
 msgid "Render size: {0}"
 msgstr "レンダーサイズ: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "画像レイヤー '{0}' 情報 : {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "オフスクリーンバッファ情報 : {0}"
+
+msgid "Unsupported output format: "
+msgstr "サポートされていない出力形式 : "
 
 msgid "2.35"
 msgstr "2.35"
@@ -3713,40 +3750,14 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "キャッシュ : "
 
-msgid "HDR monitor min. nits = {0}"
-msgstr "HDR モニターの最小輝度 = {0}"
-
-msgid "HDR monitor max. nits = {0}"
-msgstr "HDR モニターの最大輝度 = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR モニターが見つからないか、設定されていません。"
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr ""
-"HDR モニターが Vulkan またはウィンドウマネージャーによって検出されませんでし"
-"た。"
-
-msgid "Vulkan color space is {0}"
-msgstr "Vulkan の色空間は {0}です"
-
-msgid "Vulkan format is {0}"
-msgstr "Vulkan  のフォーマットは {0} です"
-
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "インデックス {0} のアクティブな HDR モニターに切り替えました"
-
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr "インデックス {0} の HDR 対応だが非アクティブなモニターに切り替えました"
-
-msgid "Changed to SDR monitor at index {0}"
-msgstr "インデックス {0} の SDR モニターに変更しました"
-
 msgid "Edit Text"
 msgstr "テキストを編集"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' はファイル、ディレクトリ、または URL ではありません。"
+
+msgid "Invalid font for text drawing"
+msgstr "テキスト描画用の無効なフォント"
 
 msgid "Could not convert message to shape: "
 msgstr "メッセージを図形に変換できませんでした : "
@@ -4763,6 +4774,10 @@ msgid "Renderer:\t"
 msgstr "レンダラー :\t"
 
 msgid "Version:\t"
+msgstr "バージョン :\t"
+
+#, fuzzy
+msgid "GLSL Version:\t"
 msgstr "バージョン :\t"
 
 msgid "Max. Texture Size:\t"
@@ -6954,8 +6969,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "クリップバージョンに一致させるための正規表現。プレフィックス、番号、サフィッ"
 "クスの3つをグループ化する必要があります。デフォルト値 (_v)のままにすると、"
@@ -8056,9 +8071,6 @@ msgstr "スクラブモード"
 msgid "Area Selection Mode"
 msgstr "領域選択モード"
 
-msgid "Draw Mode"
-msgstr "描画モード"
-
 msgid "Erase Mode"
 msgstr "消去モード"
 
@@ -8170,43 +8182,35 @@ msgstr "host_statistics64 に失敗しました"
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました"
 
-#~ msgid "Complexity"
-#~ msgstr "複雑さ"
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "HDR モニターの最小輝度 = {0}"
 
-#~ msgid "Stage Cache"
-#~ msgstr "ステージキャッシュ"
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "HDR モニターの最大輝度 = {0}"
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "ディスクキャッシュ (GB)"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR モニターが見つからないか、設定されていません。"
 
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "回転画像情報 : {0}"
-
-#~ msgid ""
-#~ "Image too big for Save Annotations.  Will scale to the viewport size."
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
 #~ msgstr ""
-#~ "画像が大きすぎて注釈を保存できません。ビューポートサイズにスケールします。"
+#~ "HDR モニターが Vulkan またはウィンドウマネージャーによって検出されませんで"
+#~ "した。"
 
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: 無効なOpenGL形式とタイプ"
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Vulkan の色空間は {0}です"
 
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "OpenGL情報 : {0}"
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Vulkan  のフォーマットは {0} です"
 
-#~ msgid "Unsupported output format"
-#~ msgstr "サポートされていない出力形式"
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "インデックス {0} のアクティブな HDR モニターに切り替えました"
 
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "時刻 {0} にビデオデータがありません。フレームを繰り返します。"
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
+#~ msgstr ""
+#~ "インデックス {0} の HDR 対応だが非アクティブなモニターに切り替えました"
 
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "画像レイヤー '{0}' 情報 : {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "サポートされていない出力形式 : "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "テキスト描画用の無効なフォント"
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "インデックス {0} の SDR モニターに変更しました"
 
 #~ msgid "Set file sequence audio directory."
 #~ msgstr "ファイルシーケンスのオーディオディレクトリを設定します。"
@@ -8260,8 +8264,8 @@ msgstr "タスク情報の取得に失敗しました"
 
 #~ msgid ""
 #~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt."
-#~ "rate` seconds.\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
+#~ "rt.rate` seconds.\n"
 #~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 #~ msgstr ""
 #~ "\n"
@@ -8337,8 +8341,8 @@ msgstr "タスク情報の取得に失敗しました"
 #~ msgstr "タイムコード (``HH:MM:SS;FRAME``)に変換します。"
 
 #~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:"
-#~ "`~RationalTime`."
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
+#~ "a :class:`~RationalTime`."
 #~ msgstr ""
 #~ "タイムコード文字列 (``HH:MM:SS;FRAME``)を:class:`~RationalTime`に変換しま"
 #~ "す。"
@@ -8347,8 +8351,8 @@ msgstr "タスク情報の取得に失敗しました"
 #~ "Convert a time with microseconds string (``HH:MM:ss`` where ``ss`` is an "
 #~ "integer or a decimal number) into a :class:`~RationalTime`."
 #~ msgstr ""
-#~ "マイクロ秒を含む時間文字列 (``HH:MM:ss``、``ss``は整数または小数)を:class:"
-#~ "`~RationalTime`に変換します。"
+#~ "マイクロ秒を含む時間文字列 (``HH:MM:ss``、``ss``は整数または小数)"
+#~ "を:class:`~RationalTime`に変換します。"
 
 #~ msgid ""
 #~ "\n"
@@ -8668,8 +8672,8 @@ msgstr "タスク情報の取得に失敗しました"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (exclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (exclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 9.\n"
@@ -8683,8 +8687,8 @@ msgstr "タスク情報の取得に失敗しました"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (inclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (inclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 10.\n"

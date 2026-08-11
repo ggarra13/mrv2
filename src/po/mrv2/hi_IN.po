@@ -1517,6 +1517,18 @@ msgstr "{0} स्ट्रीम कर रहा है {1}"
 msgid "Stop streaming"
 msgstr "स्ट्रीम जारी करना बन्द करें"
 
+msgid "Complexity"
+msgstr "जटिलता"
+
+msgid "Draw Mode"
+msgstr "मोड आरेखित करें"
+
+msgid "Stage Cache"
+msgstr "चरण कैश"
+
+msgid "Disk Cache in GB"
+msgstr "GB में डिस्क कैश"
+
 msgid "Project"
 msgstr "प्रोजेक्ट"
 
@@ -3601,29 +3613,32 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr "नया फ़ाइल {0} पहले से मौजूद है! इसपर लिख नहीं सकता"
 
+msgid "Rotated image info: {0}"
+msgstr "छवि जानकारी घुमाएँ: {0}"
+
+msgid "Scaled image info: {0}"
+msgstr "स्केल्ड छवि सूचना: {0}"
+
 msgid "{0}: Cannot open writer plugin."
 msgstr "{0}: लेखक प्लगइन खोल नहीं सका."
 
 msgid "Image info: {0} {1}"
 msgstr "छवि जानकारी: {0} {1}"
 
-msgid "Scaled image info: {0}"
-msgstr "स्केल्ड छवि सूचना: {0}"
+msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgstr "सहेजने के लिए छवि बहुत बड़ा. व्यूपोर्ट आकार में स्केल किया जाएगा."
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
 msgstr "राइटर प्लगइन आउटपुट जानकारी नहीं पा सका. {0} को डिफ़ॉल्ट रूप में"
+
+msgid "Output info: {0} {1}"
+msgstr "आउटपुट जानकारी: {0} {1}"
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr "प्रोफाइल {0} का उपयोग कर रहा है, पिक्सेल प्रारूप {1}."
 
 msgid "Using preset {0}."
 msgstr "{0} का उपयोग कर रहा है"
-
-msgid "Offscreen Buffer info: {0}"
-msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
-
-msgid "Output info: {0} {1}"
-msgstr "आउटपुट जानकारी: {0} {1}"
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
 msgstr "ऑडियो %<PRId64> - %<PRId64> के बिना इंजन सहेजा जा रहा है"
@@ -3640,11 +3655,32 @@ msgstr "ऑडियो के बिना छवि सहेज रहा ह
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr "केवल समय में ऑडियो, लेकिन ऑडियो सहेजने की कोशिश नहीं कर रहा है."
 
+msgid "{0}: Invalid OpenGL format and type"
+msgstr "{0}: अवैध OpenGL प्रारूप और प्रकार"
+
+msgid "OpenGL info: {0}"
+msgstr "ओपन- जीएल जानकारी: {0}"
+
 msgid "Saving... {0}"
 msgstr "सहेजा जा रहा है... {0}"
 
+msgid "Unsupported output format"
+msgstr "असमर्थित आउटपुट प्रारूप"
+
+msgid "Empty video data at time {0}.  Repeating frame."
+msgstr "{0} समय पर वीडियो आँकड़ा खाली करें"
+
 msgid "Render size: {0}"
 msgstr "रेंडर आकार: {0}"
+
+msgid "Image Layer '{0}' info: {1} {2}"
+msgstr "छवि परत '{0}' जानकारी: {1} {2}"
+
+msgid "Offscreen Buffer info: {0}"
+msgstr "ऑफस्क्रीन बफ़र जानकारी: {0}"
+
+msgid "Unsupported output format: "
+msgstr "असमर्थित आउटपुट प्रारूप: "
 
 msgid "2.35"
 msgstr "2.35"
@@ -3661,38 +3697,14 @@ msgstr "PMem: %<PRIu64> / %<PRIu64> MB  VMem: %<PRIu64> / %<PRIu64> MB"
 msgid "Cache: "
 msgstr "कैश: "
 
-msgid "HDR monitor min. nits = {0}"
-msgstr "HDR मॉनिटर की न्यूनतम ब्राइटनेस (निट्स) = {0}"
-
-msgid "HDR monitor max. nits = {0}"
-msgstr "HDR मॉनिटर की अधिकतम ब्राइटनेस (निट्स) = {0}"
-
-msgid "HDR monitor not found or not configured."
-msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
-
-msgid "HDR monitor not detected by Vulkan or Window Manager."
-msgstr "Vulkan या विंडो मैनेजर द्वारा HDR मॉनिटर का पता नहीं चला।"
-
-msgid "Vulkan color space is {0}"
-msgstr "Vulkan रंग स्थान {0} है"
-
-msgid "Vulkan format is {0}"
-msgstr "Vulkan फ़ॉर्मेट {0} है"
-
-msgid "Changed to HDR active monitor at index {0}"
-msgstr "इंडेक्स {0} पर सक्रिय HDR मॉनिटर पर बदला गया"
-
-msgid "Changed to HDR supported but inactive monitor at index {0}"
-msgstr "इंडेक्स {0} पर HDR समर्थित लेकिन निष्क्रिय मॉनिटर पर बदला गया"
-
-msgid "Changed to SDR monitor at index {0}"
-msgstr "इंडेक्स {0} पर SDR मॉनिटर में बदला गया"
-
 msgid "Edit Text"
 msgstr "पाठ संपादित करें"
 
 msgid "'{0}' is not a file, directory or url."
 msgstr "'{0}' कोई फ़ाइल, निर्देशिका या URL नहीं है।"
+
+msgid "Invalid font for text drawing"
+msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
 
 msgid "Could not convert message to shape: "
 msgstr "संदेश को आकार में परिवर्तित नहीं कर सका:"
@@ -4706,6 +4718,10 @@ msgid "Renderer:\t"
 msgstr "रेंडरर:"
 
 msgid "Version:\t"
+msgstr "संस्करणः"
+
+#, fuzzy
+msgid "GLSL Version:\t"
 msgstr "संस्करणः"
 
 msgid "Max. Texture Size:\t"
@@ -6857,8 +6873,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 "क्लिप संस्करणों से मेल खाने के लिए उपयोग किया जाने वाला नियमित अभिव्यक्ति (रेगुलर "
 "एक्सप्रेशन)। इसमें तीन चीजें (प्रिफिक्स, संख्या, और सफिक्स) का समूह होना चाहिए। यदि इसे "
@@ -7956,9 +7972,6 @@ msgstr "स्क्रैप मोड"
 msgid "Area Selection Mode"
 msgstr "क्षेत्र चयन विधि"
 
-msgid "Draw Mode"
-msgstr "मोड आरेखित करें"
-
 msgid "Erase Mode"
 msgstr "मिटाने का मोड"
 
@@ -8070,42 +8083,32 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
 
-#~ msgid "Complexity"
-#~ msgstr "जटिलता"
+#~ msgid "HDR monitor min. nits = {0}"
+#~ msgstr "HDR मॉनिटर की न्यूनतम ब्राइटनेस (निट्स) = {0}"
 
-#~ msgid "Stage Cache"
-#~ msgstr "चरण कैश"
+#~ msgid "HDR monitor max. nits = {0}"
+#~ msgstr "HDR मॉनिटर की अधिकतम ब्राइटनेस (निट्स) = {0}"
 
-#~ msgid "Disk Cache in GB"
-#~ msgstr "GB में डिस्क कैश"
+#~ msgid "HDR monitor not found or not configured."
+#~ msgstr "HDR मॉनिटर नहीं मिला या कॉन्फ़िगर नहीं किया गया।"
 
-#~ msgid "Rotated image info: {0}"
-#~ msgstr "छवि जानकारी घुमाएँ: {0}"
+#~ msgid "HDR monitor not detected by Vulkan or Window Manager."
+#~ msgstr "Vulkan या विंडो मैनेजर द्वारा HDR मॉनिटर का पता नहीं चला।"
 
-#~ msgid ""
-#~ "Image too big for Save Annotations.  Will scale to the viewport size."
-#~ msgstr "सहेजने के लिए छवि बहुत बड़ा. व्यूपोर्ट आकार में स्केल किया जाएगा."
+#~ msgid "Vulkan color space is {0}"
+#~ msgstr "Vulkan रंग स्थान {0} है"
 
-#~ msgid "{0}: Invalid OpenGL format and type"
-#~ msgstr "{0}: अवैध OpenGL प्रारूप और प्रकार"
+#~ msgid "Vulkan format is {0}"
+#~ msgstr "Vulkan फ़ॉर्मेट {0} है"
 
-#~ msgid "OpenGL info: {0}"
-#~ msgstr "ओपन- जीएल जानकारी: {0}"
+#~ msgid "Changed to HDR active monitor at index {0}"
+#~ msgstr "इंडेक्स {0} पर सक्रिय HDR मॉनिटर पर बदला गया"
 
-#~ msgid "Unsupported output format"
-#~ msgstr "असमर्थित आउटपुट प्रारूप"
+#~ msgid "Changed to HDR supported but inactive monitor at index {0}"
+#~ msgstr "इंडेक्स {0} पर HDR समर्थित लेकिन निष्क्रिय मॉनिटर पर बदला गया"
 
-#~ msgid "Empty video data at time {0}.  Repeating frame."
-#~ msgstr "{0} समय पर वीडियो आँकड़ा खाली करें"
-
-#~ msgid "Image Layer '{0}' info: {1} {2}"
-#~ msgstr "छवि परत '{0}' जानकारी: {1} {2}"
-
-#~ msgid "Unsupported output format: "
-#~ msgstr "असमर्थित आउटपुट प्रारूप: "
-
-#~ msgid "Invalid font for text drawing"
-#~ msgstr "पाठ चित्रण के लिए अमान्य फ़ॉन्ट"
+#~ msgid "Changed to SDR monitor at index {0}"
+#~ msgstr "इंडेक्स {0} पर SDR मॉनिटर में बदला गया"
 
 #~ msgid "Set file sequence audio directory."
 #~ msgstr "फ़ाइल अनुक्रम ऑडियो डिरेक्ट्री सेट करें."
@@ -8158,8 +8161,8 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid ""
 #~ "\n"
-#~ "The RationalTime class represents a measure of time of :math:`rt.value/rt."
-#~ "rate` seconds.\n"
+#~ "The RationalTime class represents a measure of time of :math:`rt.value/"
+#~ "rt.rate` seconds.\n"
 #~ "It can be rescaled into another :class:`~RationalTime`'s rate.\n"
 #~ msgstr ""
 #~ "\n"
@@ -8233,8 +8236,8 @@ msgstr "कार्य सूचना असफल"
 #~ msgstr "समयकोड में बदलें (USHH:MS; FSUSUD)"
 
 #~ msgid ""
-#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into a :class:"
-#~ "`~RationalTime`."
+#~ "Convert a timecode string (``HH:MM:SS;FRAME``) into "
+#~ "a :class:`~RationalTime`."
 #~ msgstr ""
 #~ "समयकोड स्ट्रिंग (``HH:MM:SS;FRAME``) को :class:`~RationalTime` में परिवर्तित करें।"
 
@@ -8315,8 +8318,9 @@ msgstr "कार्य सूचना असफल"
 #~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "'other' (:class:`~RationalTime`) को :attr:`start_time`/:attr:"
-#~ "`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+#~ "'other' (:class:`~RationalTime`) "
+#~ "को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार "
+#~ "क्लैंप करें।\n"
 
 #~ msgid ""
 #~ "\n"
@@ -8324,8 +8328,9 @@ msgstr "कार्य सूचना असफल"
 #~ ":attr:`start_time`/:attr:`end_time_exclusive` and bound arguments.\n"
 #~ msgstr ""
 #~ "\n"
-#~ "'other' (:class:`~TimeRange`) को :attr:`start_time`/:attr:"
-#~ "`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार क्लैंप करें।\n"
+#~ "'other' (:class:`~TimeRange`) "
+#~ "को :attr:`start_time`/:attr:`end_time_exclusive` और बाउंड आर्ग्यूमेंट्स के अनुसार "
+#~ "क्लैंप करें।\n"
 
 #~ msgid ""
 #~ "\n"
@@ -8570,8 +8575,8 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (exclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (exclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 9.\n"
@@ -8585,8 +8590,8 @@ msgstr "कार्य सूचना असफल"
 
 #~ msgid ""
 #~ "\n"
-#~ "Creates a :class:`~TimeRange` from start and end :class:"
-#~ "`~RationalTime`\\s (inclusive).\n"
+#~ "Creates a :class:`~TimeRange` from start and "
+#~ "end :class:`~RationalTime`\\s (inclusive).\n"
 #~ "\n"
 #~ "For example, if start_time is 1 and end_time is 10, the returned will "
 #~ "have a duration of 10.\n"
