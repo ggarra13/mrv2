@@ -10,6 +10,7 @@ v1.7.3
 
 - NDI: Minor improvement to NDI reading in the player.
 
+- Core: Fixed an OpenGL error (crash) on texture counting. 
 - Core: Fixed a bug in OpenEXR reader on Vulkan backend when the image was promoted to 4 channels.
 - Core: Fixed a minor bug in OpenEXR reading code.
 - Core: OpenTimelineIO timelines now open faster (specially .otioz ones).

@@ -415,11 +415,11 @@ namespace tl
                     const io::MissingFrames missingFrames =
                         io::getMissingFrames(options.ioOptions);
 
-                    // Every clip names the whole sequence over the whole range it
-                    // covers, whatever the clip itself takes out of it. They are
-                    // separate objects because a clip owns its reference, but they
-                    // describe the same file, so the reads behind them share one
-                    // decoder.
+                    // Every clip names the whole sequence over the whole range
+                    // it covers, whatever the clip itself takes out of it.
+                    // They are separate objects because a clip owns its
+                    // reference, but they describe the same file, so the reads
+                    // behind them share one decoder.
                     const auto makeClip =
                         [&](const otio::TimeRange& sourceRange)
                             {

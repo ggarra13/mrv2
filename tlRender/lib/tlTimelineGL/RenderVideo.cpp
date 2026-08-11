@@ -1351,7 +1351,7 @@ namespace tl
                             p.placeboData->textures[i].type,
                             p.placeboData->textures[i].id);
                     }
-                    texturesOffset += p.ocioData->textures.size();
+                    texturesOffset += p.placeboData->textures.size();
                 }
 #endif // TLRENDER_LIBPLACEBO
 
