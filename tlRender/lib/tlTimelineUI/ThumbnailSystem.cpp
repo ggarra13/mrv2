@@ -148,12 +148,14 @@ namespace tl
             std::string getWaveformKey(
                 const file::Path& path,
                 const file::Path& mediaPath,
+                const std::string& mediaReferenceKey,
                 const math::Size2i& size,
                 const std::optional<otio::TimeRange>& timeRange,
                 const io::Options& options)
             {
                 std::stringstream ss;
-                ss << path.get() << ";" << mediaPath.get() << ";" <<
+                ss << path.get() << ";" << mediaPath.get()  << ";"
+                   << mediaReferenceKey << ";" <<
                     size << ";";
                 if (timeRange.has_value())
                 {
@@ -716,6 +718,7 @@ namespace tl
             const std::string key = getWaveformKey(
                 path,
                 mediaPath,
+                mediaReferenceKey,
                 size,
                 timeRange,
                 options);
@@ -1466,6 +1469,7 @@ namespace tl
                     const std::string key = getWaveformKey(
                         request->path,
                         request->mediaPath,
+                        request->mediaReferenceKey,
                         request->size,
                         request->timeRange,
                         request->options);
