@@ -196,7 +196,7 @@ namespace mrv
                 options["Layer"] = string::Format("{0}").arg(layerId);
 
                 thumbnailRequests[widget] =
-                    thumbnailSystem->getThumbnail(path, size.h, time,
+                    thumbnailSystem->getThumbnail(timelinePath, path, size.h, time,
                                                   mediaReferenceKey, options);
             }
             catch (const std::exception& e)
