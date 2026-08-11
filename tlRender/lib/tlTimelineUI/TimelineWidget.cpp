@@ -46,7 +46,7 @@ namespace tl
 #ifdef OPENGL_BACKEND
             std::shared_ptr<gl::GLFWWindow> window;
 #endif
-            
+
             std::shared_ptr<ui::ScrollWidget> scrollWidget;
             std::shared_ptr<TimelineItem> timelineItem;
 
@@ -102,7 +102,7 @@ namespace tl
                 "tl::TIMELINEUI::TimelineWidget", math::Size2i(1, 1), context,
                 static_cast<int>(gl::GLFWWindowOptions::kNone));
 #endif
-            
+
             p.scrollWidget = ui::ScrollWidget::create(
                 context, ui::ScrollType::Both, shared_from_this());
             p.scrollWidget->setScrollEventsEnabled(false);
@@ -128,7 +128,7 @@ namespace tl
         }
 #endif
 
-#ifdef VULKAN_BACKEND        
+#ifdef VULKAN_BACKEND
         TimelineWidget::TimelineWidget(Fl_Vk_Context& ctx) :
             ctx(ctx),
             _p(new Private)
@@ -146,7 +146,7 @@ namespace tl
             return out;
         }
 #endif
-        
+
         double TimelineWidget::getScale() const
         {
             TLRENDER_P();
@@ -243,7 +243,7 @@ namespace tl
                 p.timelineItem->setEditMode(value);
             }
         }
-        
+
         void TimelineWidget::setViewZoom(double value)
         {
             setViewZoom(
@@ -772,17 +772,19 @@ namespace tl
                     p.itemData->options = p.player->getOptions();
 #ifdef OPENGL_BACKEND
                     p.timelineItem = TimelineItem::create(
+                        context,
                         p.player,
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
-                        p.itemData, p.window, context);
+                        p.itemData, p.window);
 #endif
 #ifdef VULKAN_BACKEND
                     p.timelineItem = TimelineItem::create(
+                        context,
                         p.player,
                         p.player->getTimeline()->getTimeline()->tracks(),
                         p.scale, p.itemOptions->get(), p.displayOptions->get(),
-                        p.itemData, ctx, context);
+                        p.itemData, ctx);
 #endif
                     p.timelineItem->setEditable(p.editable->get());
                     p.timelineItem->setEditMode(p.editMode->get());
@@ -808,22 +810,22 @@ namespace tl
                 }
             }
         }
-        
+
         std::vector<const otio::Item*> TimelineWidget::getSelectedItems() const
         {
             TLRENDER_P();
-            
+
             std::vector<const otio::Item* > out;
             if (p.timelineItem)
                 out = p.timelineItem->getSelectedItems();
             return out;
         }
-        
+
         std::vector<const otio::Transition*>
         TimelineWidget::getSelectedTransitions() const
         {
             TLRENDER_P();
-            
+
             std::vector<const otio::Transition* > out;
             if (p.timelineItem)
                 out = p.timelineItem->getSelectedTransitions();

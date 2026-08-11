@@ -26,6 +26,7 @@ namespace tl
         struct VideoClipItem::Private
         {
             std::string clipName;
+            file::Path timelinePath;
             file::Path path;
             std::vector<file::MemoryRead> memoryRead;
             std::shared_ptr<ThumbnailSystem> thumbnailSystem;
@@ -47,13 +48,13 @@ namespace tl
         };
 
         void VideoClipItem::_init(
-            const std::shared_ptr<timeline::Timeline> timeline,
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Timeline>& timeline,
             const otio::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<ThumbnailSystem> thumbnailSystem,
-            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<ThumbnailSystem>& thumbnailSystem,
             const std::shared_ptr<IWidget>& parent)
         {
             const auto path = timeline::getPath(
@@ -69,7 +70,12 @@ namespace tl
             TLRENDER_P();
 
             p.clipName = clip->name();
+            p.timelinePath = timeline->getPath();
             p.path = path;
+            std::cerr << "video clip timelinePath=" << p.timelinePath.get()
+                      << std::endl;
+            std::cerr << "              clip path=" << p.path.get()
+                      << std::endl;
             p.memoryRead = timeline::getMemoryRead(clip->media_reference());
             p.thumbnailSystem = thumbnailSystem;
 
@@ -96,19 +102,19 @@ namespace tl
         }
 
         std::shared_ptr<VideoClipItem> VideoClipItem::create(
-            const std::shared_ptr<timeline::Timeline> timeline,
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Timeline>& timeline,
             const otio::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<TIMELINEUI::ThumbnailSystem> thumbnailSystem,
-            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<ThumbnailSystem>& thumbnailSystem,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<VideoClipItem>(new VideoClipItem);
             out->_init(
-                timeline, clip, scale, options, displayOptions, itemData,
-                thumbnailSystem, context, parent);
+                context, timeline, clip, scale, options, displayOptions,
+                itemData, thumbnailSystem, parent);
             return out;
         }
 
@@ -354,6 +360,7 @@ namespace tl
                             {
                                 p.thumbnailRequests[mediaTime] =
                                     p.thumbnailSystem->getThumbnail(
+                                        p.timelinePath,
                                         p.path, _displayOptions.thumbnailHeight,
                                         mediaTime, "", p.ioOptions);
                             }

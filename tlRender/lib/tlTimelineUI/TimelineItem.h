@@ -32,28 +32,28 @@ namespace tl
         protected:
 #ifdef OPENGL_BACKEND
             void _init(
-                const std::shared_ptr<timeline::Player>&,
-                const otio::SerializableObject::Retainer<otio::Stack>&,
+                const std::shared_ptr<system::Context>& context,
+                const std::shared_ptr<timeline::Player>& player,
+                const otio::SerializableObject::Retainer<otio::Stack>& stack,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<gl::GLFWWindow>&,
-                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent);
 
-            
+
             TimelineItem();
 #endif
 
 #ifdef VULKAN_BACKEND
             void _init(
-                const std::shared_ptr<timeline::Player>&,
-                const otio::SerializableObject::Retainer<otio::Stack>&,
+                const std::shared_ptr<system::Context>& context,
+                const std::shared_ptr<timeline::Player>& player,
+                const otio::SerializableObject::Retainer<otio::Stack>& stack,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent);
 
-            TimelineItem(Fl_Vk_Context&);	
+            TimelineItem(Fl_Vk_Context&);
 #endif
 
         public:
@@ -62,27 +62,27 @@ namespace tl
 #ifdef OPENGL_BACKEND
             //! Create a new item.
             static std::shared_ptr<TimelineItem> create(
+                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<timeline::Player>&,
                 const otio::SerializableObject::Retainer<otio::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 const std::shared_ptr<gl::GLFWWindow>&,
-                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 #endif
 
 #ifdef VULKAN_BACKEND
             //! Create a new item.
             static std::shared_ptr<TimelineItem> create(
+                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<timeline::Player>&,
                 const otio::SerializableObject::Retainer<otio::Stack>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
                 Fl_Vk_Context& ctx,
-                const std::shared_ptr<system::Context>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 #endif
-            
+
             //! Set whether the timeline is editable.
             void setEditable(bool);
 
@@ -126,8 +126,8 @@ namespace tl
 
             std::vector<const otio::Item*> getSelectedItems() const;
             std::vector<const otio::Transition*> getSelectedTransitions() const;
-            
-            
+
+
         protected:
             void _timeUnitsUpdate() override;
 
@@ -136,7 +136,7 @@ namespace tl
 #ifdef VULKAN_BACKEND
             Fl_Vk_Context& ctx;
 #endif
-            
+
         private:
             bool _isTrackVisible(int) const;
 
@@ -148,7 +148,7 @@ namespace tl
             void _mouseMoveEventSlide(ui::MouseMoveEvent&);
             void _mouseMoveEventSlip(ui::MouseMoveEvent&);
             void _mouseMoveEventTrim(ui::MouseMoveEvent&);
-            
+
             void _mouseReleaseEventFill(ui::MouseClickEvent&);
             void _mouseReleaseEventMove(ui::MouseClickEvent&);
             void _mouseReleaseEventRipple(ui::MouseClickEvent&);
@@ -161,7 +161,7 @@ namespace tl
             bool _clampRangeToNeighborTransitions(const otio::Item* item,
                                                   const otime::TimeRange& proposedRange,
                                                   otime::TimeRange& clampedRange);
-            
+
             void _drawInOutPoints(const math::Box2i&, const ui::DrawEvent&);
             math::Size2i
             _getLabelMaxSize(const std::shared_ptr<image::FontSystem>&) const;

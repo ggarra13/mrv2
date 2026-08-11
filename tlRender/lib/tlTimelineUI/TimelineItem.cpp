@@ -24,24 +24,24 @@ namespace tl
     {
 #ifdef OPENGL_BACKEND
         void TimelineItem::_init(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
             const otio::SerializableObject::Retainer<otio::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             const std::shared_ptr<gl::GLFWWindow>& window,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
 #endif
 
 #ifdef VULKAN_BACKEND
         void TimelineItem::_init(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
             const otio::SerializableObject::Retainer<otio::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
 #endif
         {
@@ -118,16 +118,16 @@ namespace tl
                             {
                             case TrackType::Video:
                                 track.items.push_back(VideoClipItem::create(
-                                    timeline, clip, scale, options,
+                                    context, timeline, clip, scale, options,
                                     displayOptions,
-                                    itemData, p.thumbnailSystem, context,
+                                    itemData, p.thumbnailSystem,
                                     shared_from_this()));
                                 break;
                             case TrackType::Audio:
                                 track.items.push_back(AudioClipItem::create(
-                                    timeline, clip, scale, options,
+                                    context, timeline, clip, scale, options,
                                     displayOptions,
-                                    itemData, p.thumbnailSystem, context,
+                                    itemData, p.thumbnailSystem,
                                     shared_from_this()));
                                 break;
                             default:
@@ -222,19 +222,19 @@ namespace tl
         }
 
         std::shared_ptr<TimelineItem> TimelineItem::create(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
             const otio::SerializableObject::Retainer<otio::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             const std::shared_ptr<gl::GLFWWindow>& window,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<TimelineItem>(new TimelineItem);
             out->_init(
-                player, stack, scale, options, displayOptions, itemData, window,
-                context, parent);
+                context, player, stack, scale, options, displayOptions,
+                itemData, window, parent);
             return out;
         }
 #endif
@@ -247,19 +247,19 @@ namespace tl
         }
 
         std::shared_ptr<TimelineItem> TimelineItem::create(
+            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<timeline::Player>& player,
             const otio::SerializableObject::Retainer<otio::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
             Fl_Vk_Context& ctx,
-            const std::shared_ptr<system::Context>& context,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<TimelineItem>(new TimelineItem(ctx));
             out->_init(
-                player, stack, scale, options, displayOptions, itemData,
-                context, parent);
+                context, player, stack, scale, options, displayOptions,
+                itemData, parent);
             return out;
         }
 #endif

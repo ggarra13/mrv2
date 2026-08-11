@@ -9,20 +9,11 @@
 
 #include <tlIO/System.h>
 
-#ifdef OPENGL_BACKEND
-#    include <tlTimelineGL/Render.h>
-#    include <tlGL/GL.h>
-#    include <tlGL/GLFWWindow.h>
-#    include <tlGL/OffscreenBuffer.h>
-#endif
-
-#ifdef VULKAN_BACKEND
-#    include <tlTimelineVk/Render.h>
-#    include <tlVk/Vk.h>
-#    include <tlVk/OffscreenBuffer.h>
-#    include <FL/Fl_Vk_Utils.H>
-#    include <FL/Fl.H>
-#endif
+#include <tlTimelineVk/Render.h>
+#include <tlVk/Vk.h>
+#include <tlVk/OffscreenBuffer.h>
+#include <FL/Fl_Vk_Utils.H>
+#include <FL/Fl.H>
 
 #include <tlCore/AudioResample.h>
 #include <tlCore/LRUCache.h>
@@ -173,12 +164,9 @@ namespace tl
         struct ThumbnailSystem::Private
         {
             std::weak_ptr<system::Context> context;
-#ifdef OPENGL_BACKEND
-            std::shared_ptr<gl::GLFWWindow> window;
-#endif
-            uint64_t requestId = 0;;
-            std::shared_ptr<observer::Value<ThumbnailCacheOptions> > cacheOptions;
 
+            uint64_t requestId = 0;
+            std::shared_ptr<observer::Value<ThumbnailCacheOptions> > cacheOptions;
 
             struct InfoRequest
             {
@@ -256,17 +244,11 @@ namespace tl
 
             struct ThumbnailThread
             {
-#ifdef OPENGL_BACKEND
-                std::shared_ptr<timeline_gl::Render> render;
-                std::shared_ptr<gl::OffscreenBuffer> buffer;
-#endif
-#ifdef VULKAN_BACKEND
                 std::shared_ptr<timeline_vlk::Render> render;
                 std::shared_ptr<vlk::OffscreenBuffer> buffer;
                 VkCommandBuffer cmd = VK_NULL_HANDLE;
                 VkCommandPool commandPool = VK_NULL_HANDLE;
                 uint32_t frameIndex = 0;
-#endif
                 std::atomic<bool> ioCacheClear = false;
                 std::condition_variable cv;
                 std::thread thread;
@@ -338,12 +320,8 @@ namespace tl
                 [this]
                 {
                     TLRENDER_P();
-#ifdef OPENGL_BACKEND
-                    p.window->makeCurrent();
-#endif
                     if (auto context = p.context.lock())
                     {
-#ifdef VULKAN_BACKEND
                         // Check Vulkan context
                         while ((ctx.queue() == VK_NULL_HANDLE ||
                                 ctx.device == VK_NULL_HANDLE ||
@@ -382,13 +360,6 @@ namespace tl
 
                         p.thumbnailThread.render =
                             timeline_vlk::Render::create(ctx, context);
-
-#endif
-
-#ifdef OPENGL_BACKEND
-                        p.thumbnailThread.render = timeline_gl::Render::create(
-                            context);
-#endif
                     }
                     if (p.thumbnailThread.render)
                     {
@@ -401,17 +372,12 @@ namespace tl
                     p.thumbnailThread.buffer.reset();
                     p.thumbnailThread.render.reset();
                     _thumbnailCancel();
-#ifdef OPENGL_BACKEND
-                    p.window->doneCurrent();
-#endif
-#ifdef VULKAN_BACKEND
                     if (p.thumbnailThread.commandPool != VK_NULL_HANDLE)
                     {
                         vkDestroyCommandPool(ctx.device,
                                              p.thumbnailThread.commandPool,
                                              nullptr);
                     }
-#endif
                 });
 
             p.waveformMutex.cache.setMax(p.cacheOptions->get().waveformMB * memory::megabyte);
@@ -473,36 +439,6 @@ namespace tl
 
         }
 
-#ifdef OPENGL_BACKEND
-
-        ThumbnailSystem::ThumbnailSystem(
-            const std::shared_ptr<system::Context>& context,
-            const std::shared_ptr<gl::GLFWWindow>& window) :
-            ISystem::ISystem(context, "tl::timelineui::ThumbnailSystem"),
-            _p(new Private)
-        {
-            TLRENDER_P();
-
-            p.context = context;
-
-            p.window = window;
-            if (!p.window)
-            {
-                p.window = gl::GLFWWindow::create(
-                    "tl::timelineui::ThumbnailSystem", math::Size2i(1, 1), context,
-                    static_cast<int>(gl::GLFWWindowOptions::kNone));
-            }
-
-            p.cacheOptions = observer::Value<ThumbnailCacheOptions>::create();
-
-            _startThreads();
-        }
-
-#endif
-
-#ifdef VULKAN_BACKEND
-
-
         ThumbnailSystem::ThumbnailSystem(
             const std::shared_ptr<system::Context>& context,
             Fl_Vk_Context& vlk_ctx) :
@@ -519,7 +455,6 @@ namespace tl
             _startThreads();
         }
 
-#endif
         ThumbnailSystem::~ThumbnailSystem()
         {
             shutdown();
@@ -530,38 +465,24 @@ namespace tl
             TLRENDER_P();
 
             p.infoThread.running = false;
-            p.thumbnailThread.running = false;
-            p.waveformThread.running = false;
             if (p.infoThread.thread.joinable())
             {
                 p.infoThread.thread.join();
             }
+
+            p.thumbnailThread.running = false;
             if (p.thumbnailThread.thread.joinable())
             {
                 p.thumbnailThread.thread.join();
             }
+
+            p.waveformThread.running = false;
             if (p.waveformThread.thread.joinable())
             {
                 p.waveformThread.thread.join();
             }
         }
 
-#ifdef OPENGL_BACKEND
-        std::shared_ptr<ThumbnailSystem> ThumbnailSystem::create(
-            const std::shared_ptr<system::Context>& context,
-            const std::shared_ptr<gl::GLFWWindow>& window)
-        {
-            auto out = context->getSystem<ThumbnailSystem>();
-            if (!out)
-            {
-                out = std::shared_ptr<ThumbnailSystem>(new ThumbnailSystem(context, window));
-                context->addSystem(out);
-            }
-            return out;
-        }
-#endif
-
-#ifdef VULKAN_BACKEND
         std::shared_ptr<ThumbnailSystem> ThumbnailSystem::create(
             const std::shared_ptr<system::Context>& context,
             Fl_Vk_Context& ctx)
@@ -574,7 +495,6 @@ namespace tl
             }
             return out;
         }
-#endif
 
         InfoRequest ThumbnailSystem::getInfo(
             const file::Path& path, const io::Options& options)
@@ -976,108 +896,85 @@ namespace tl
                                                                         time, request->options);
                                 if (videoRequest.valid())
                                 {
-                                    const auto videoData = videoRequest.get();
-#ifdef OPENGL_BACKEND
-                                    gl::OffscreenBufferOptions options;
-                                    options.colorType = image::PixelType::RGBA_U8;
-                                    if (gl::doCreate(
-                                            p.thumbnailThread.buffer, size,
-                                            options))
+                                    if (p.thumbnailThread.running)
                                     {
-                                        p.thumbnailThread.buffer =
-                                            gl::OffscreenBuffer::create(
-                                                size, options);
-                                    }
-                                    if (p.thumbnailThread.render &&
-                                        p.thumbnailThread.buffer && videoData.image &&
-                                        p.thumbnailThread.running)
-                                    {
-                                        gl::OffscreenBufferBinding binding(
-                                            p.thumbnailThread.buffer);
-                                        p.thumbnailThread.render->begin(size);
-                                        p.thumbnailThread.render->drawImage(
-                                            videoData.image,
-                                            {math::Box2i(0, 0, size.w, size.h)});
-                                        p.thumbnailThread.render->end();
-                                        image = image::Image::create(
-                                            size.w, size.h,
-                                            image::PixelType::RGBA_U8);
-                                        glPixelStorei(GL_PACK_ALIGNMENT, 1);
-                                        glReadPixels(
-                                            0, 0, size.w, size.h, GL_RGBA,
-                                            GL_UNSIGNED_BYTE, image->getData());
-                                    }
-#endif
-#ifdef VULKAN_BACKEND
-                                    vlk::OffscreenBufferOptions options;
-                                    options.colorType = image::PixelType::RGBA_U8;
-                                    options.pbo = true;
-                                    if (vlk::doCreate(p.thumbnailThread.buffer, size, options))
-                                    {
-                                        p.thumbnailThread.buffer = vlk::OffscreenBuffer::create(ctx,
-                                                                                                size,
-                                                                                                options);
-                                    }
-                                    if (p.thumbnailThread.render &&
-                                        p.thumbnailThread.buffer && videoData.image &&
-                                        p.thumbnailThread.running)
-                                    {
-                                        image = image::Image::create(
-                                            size.w, size.h,
-                                            image::PixelType::RGBA_U8);
-
-                                        VkCommandBuffer& cmd = p.thumbnailThread.cmd;
-                                        vkResetCommandBuffer(cmd, 0);
-
-                                        VkCommandBufferBeginInfo beginInfo = {};
-                                        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-                                        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-                                        vkBeginCommandBuffer(cmd, &beginInfo);
-
-                                        p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
-
-                                        timeline::RenderOptions renderOptions;
-                                        renderOptions.clear = true;
-                                        p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
-                                                                        p.thumbnailThread.frameIndex, size,
-                                                                        renderOptions);
-
-                                        const math::Matrix4x4f ortho = math::ortho(
-                                            0.F, static_cast<float>(size.w),
-                                            0.F, static_cast<float>(size.h),
-                                            -1.F, 1.F);
-                                        p.thumbnailThread.render->setTransform(ortho);
-
-                                        p.thumbnailThread.render->drawImage(
-                                            videoData.image,
-                                            {math::Box2i(0, 0, size.w, size.h)});
-
-                                        p.thumbnailThread.render->end();
-
-
-                                        p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
-                                                                             size.h);
-
-                                        vkEndCommandBuffer(cmd);
-
-                                        p.thumbnailThread.buffer->submitReadback(cmd);
-
-                                        VkResult result = VK_NOT_READY;
-                                        void* imageData = nullptr;
-                                        while (result == VK_NOT_READY)
+                                        const auto videoData = videoRequest.get();
+                                        vlk::OffscreenBufferOptions options;
+                                        options.colorType = image::PixelType::RGBA_U8;
+                                        options.pbo = true;
+                                        if (vlk::doCreate(p.thumbnailThread.buffer, size, options))
                                         {
-                                            result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
+                                            p.thumbnailThread.buffer = vlk::OffscreenBuffer::create(ctx,
+                                                                                                    size,
+                                                                                                    options);
                                         }
+                                        if (p.thumbnailThread.render &&
+                                            p.thumbnailThread.buffer && videoData.image &&
+                                            p.thumbnailThread.running)
+                                        {
+                                            image = image::Image::create(
+                                                size.w, size.h,
+                                                image::PixelType::RGBA_U8);
 
-                                        if (imageData)
-                                            std::memcpy(image->getData(), imageData, image->getDataByteCount());
-                                        else
-                                            std::memset(image->getData(), 0, image->getDataByteCount());
+                                            VkCommandBuffer& cmd = p.thumbnailThread.cmd;
+                                            vkResetCommandBuffer(cmd, 0);
 
-                                        p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
-                                    }
-#endif
+                                            VkCommandBufferBeginInfo beginInfo = {};
+                                            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+                                            beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+                                            vkBeginCommandBuffer(cmd, &beginInfo);
+
+                                            p.thumbnailThread.buffer->transitionToColorAttachment(cmd);
+
+                                            timeline::RenderOptions renderOptions;
+                                            renderOptions.clear = true;
+                                            p.thumbnailThread.render->begin(cmd, p.thumbnailThread.buffer,
+                                                                            p.thumbnailThread.frameIndex, size,
+                                                                            renderOptions);
+
+                                            const math::Matrix4x4f ortho = math::ortho(
+                                                0.F, static_cast<float>(size.w),
+                                                0.F, static_cast<float>(size.h),
+                                                -1.F, 1.F);
+                                            p.thumbnailThread.render->setTransform(ortho);
+
+                                            p.thumbnailThread.render->drawImage(
+                                                videoData.image,
+                                                {math::Box2i(0, 0, size.w, size.h)});
+
+                                            p.thumbnailThread.render->end();
+
+
+                                            p.thumbnailThread.buffer->readPixels(cmd, 0, 0, size.w,
+                                                                                 size.h);
+
+                                            vkEndCommandBuffer(cmd);
+
+                                            p.thumbnailThread.buffer->submitReadback(cmd);
+
+                                            VkResult result = VK_NOT_READY;
+                                            void* imageData = nullptr;
+                                            while (result == VK_NOT_READY &&
+                                                   p.thumbnailThread.running)
+                                            {
+                                                result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
+                                            }
+
+                                            // Safely bail without writing to the image if thread is dying
+                                            if (!p.thumbnailThread.running)
+                                            {
+                                                request->promise.set_value(nullptr);
+                                                break;
+                                            }
+                                            if (imageData)
+                                                std::memcpy(image->getData(), imageData, image->getDataByteCount());
+                                            else
+                                                std::memset(image->getData(), 0, image->getDataByteCount());
+
+                                            p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
+                                        }
+                                    }  // thread.running
                                 }  // videoRequest valid
                             } // size valid
                         }
@@ -1113,43 +1010,6 @@ namespace tl
                             }
                             if (size.isValid())
                             {
-#ifdef OPENGL_BACKEND
-                                gl::OffscreenBufferOptions options;
-                                options.colorType = image::PixelType::RGBA_U8;
-                                if (gl::doCreate(
-                                    p.thumbnailThread.buffer,
-                                    size,
-                                    options))
-                                {
-                                    p.thumbnailThread.buffer = gl::OffscreenBuffer::create(
-                                        size,
-                                        options);
-                                }
-                                if (p.thumbnailThread.render && p.thumbnailThread.buffer)
-                                {
-                                    gl::OffscreenBufferBinding binding(p.thumbnailThread.buffer);
-                                    p.thumbnailThread.render->begin(size);
-                                    p.thumbnailThread.render->drawVideo(
-                                        { videoData },
-                                        { math::Box2i(0, 0, size.w, size.h) });
-                                    p.thumbnailThread.render->end();
-                                    image::Info info(size.w,
-                                                     size.h,
-                                                     image::PixelType::RGBA_U8);
-                                    image = image::Image::create(info);
-                                    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-                                    glReadPixels(
-                                        0,
-                                        0,
-                                        size.w,
-                                        size.h,
-                                        GL_RGBA,
-                                        GL_UNSIGNED_BYTE,
-                                        image->getData());
-                                }
-#endif
-
-#ifdef VULKAN_BACKEND
                                 vlk::OffscreenBufferOptions options;
                                 options.colorType =
                                     image::PixelType::RGBA_U8;
@@ -1208,7 +1068,8 @@ namespace tl
 
                                     VkResult result = VK_NOT_READY;
                                     void* imageData = nullptr;
-                                    while (result == VK_NOT_READY)
+                                    while (result == VK_NOT_READY &&
+                                           p.thumbnailThread.running)
                                     {
                                         result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
                                     }
@@ -1221,7 +1082,6 @@ namespace tl
 
                                     p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                 }  // if (p.thumbnailThread.buffer
-#endif
                             }  // if (size.isValid())
                         }  // if timeline
                     }  // try

@@ -22,12 +22,12 @@ namespace tl
         {
         protected:
             void _init(
-                const std::shared_ptr<timeline::Timeline> timeline,
+                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<timeline::Timeline>&,
                 const otio::SerializableObject::Retainer<otio::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<ThumbnailSystem>,
-                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<ThumbnailSystem>&,
                 const std::shared_ptr<IWidget>& parent);
 
             AudioClipItem();
@@ -37,12 +37,12 @@ namespace tl
 
             //! Create a new item.
             static std::shared_ptr<AudioClipItem> create(
-                const std::shared_ptr<timeline::Timeline> timeline,
+                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<timeline::Timeline>&,
                 const otio::SerializableObject::Retainer<otio::Clip>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const std::shared_ptr<ThumbnailSystem>,
-                const std::shared_ptr<system::Context>&,
+                const std::shared_ptr<ThumbnailSystem>&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 
             void setScale(double) override;

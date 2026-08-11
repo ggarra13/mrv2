@@ -25,7 +25,7 @@ set(SOURCE
     Init.cpp
     MarkerItem.cpp
     # StackItem.cpp
-    ThumbnailSystem.cpp
+    # ThumbnailSystem.cpp
     TimelineItem.cpp
     TimelineItemFill.cpp
     TimelineItemMove.cpp
@@ -40,10 +40,12 @@ set(SOURCE
     VideoClipItem.cpp)
 
 if(MRV2_BACKEND STREQUAL "VK")
+    list(APPEND SOURCE ThumbnailSystem_Vk.cpp)
     set(LIBRARY_NAME tlTimelineUIVk)
 endif()
 
 if(MRV2_BACKEND STREQUAL "GL")
+    list(APPEND SOURCE ThumbnailSystem_GL.cpp)
     set(LIBRARY_NAME tlTimelineUI)
 endif()
 

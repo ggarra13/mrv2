@@ -934,18 +934,22 @@ namespace tl
             p.mutex.otioTimeline = p.otioTimeline;
             p.thread.running = true;
             p.thread.logTimer = std::chrono::steady_clock::now();
-            p.startReadPool(p.options.readThreadCount);
-            p.thread.thread = std::thread(
-                [this]
-                    {
-                        TLRENDER_P();
-                        while (p.thread.running)
+            if (p.options.threaded)
+            {
+                p.startReadPool(p.options.readThreadCount);
+                p.thread.thread = std::thread(
+                    [this]
                         {
-                            _tick();
-                        }
-                        _finishRequests();
-                    });
+                            TLRENDER_P();
+                            while (p.thread.running)
+                            {
+                                _tick();
+                            }
+                            _finishRequests();
+                        });
+            }
         }
+
 
         namespace
         {
@@ -2345,7 +2349,6 @@ namespace tl
                     {
                         auto read = context->getSystem<io::ReadSystem>()->audioRead(
                             path, mem, options);
-                        // \@note: TO AI.  This read is working.
 
                         if (read)
                             read->setCache(frameCache);  // no-op for non-FFmpeg readers

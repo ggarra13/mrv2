@@ -21,7 +21,9 @@ namespace tl
     {
         struct AudioClipItem::Private
         {
+            file::Path timelinePath;
             file::Path path;
+
             std::vector<file::MemoryRead> memoryRead;
             std::shared_ptr<ThumbnailSystem> thumbnailSystem;
 
@@ -38,13 +40,13 @@ namespace tl
         };
 
         void AudioClipItem::_init(
-            const std::shared_ptr<timeline::Timeline> timeline,
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Timeline>& timeline,
             const otio::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<TIMELINEUI::ThumbnailSystem> thumbnailSystem,
-            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<ThumbnailSystem>& thumbnailSystem,
             const std::shared_ptr<IWidget>& parent)
         {
             const auto path = timeline::getPath(
@@ -58,6 +60,7 @@ namespace tl
                 parent);
             TLRENDER_P();
 
+            p.timelinePath = timeline->getPath();
             p.path = path;
             p.memoryRead = timeline::getMemoryRead(clip->media_reference());
             p.thumbnailSystem = thumbnailSystem;
@@ -83,19 +86,19 @@ namespace tl
         }
 
         std::shared_ptr<AudioClipItem> AudioClipItem::create(
-            const std::shared_ptr<timeline::Timeline> timeline,
+            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<timeline::Timeline>& timeline,
             const otio::SerializableObject::Retainer<otio::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const std::shared_ptr<TIMELINEUI::ThumbnailSystem> thumbnailSystem,
-            const std::shared_ptr<system::Context>& context,
+            const std::shared_ptr<ThumbnailSystem>& thumbnailSystem,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::shared_ptr<AudioClipItem>(new AudioClipItem);
             out->_init(
-                timeline, clip, scale, options, displayOptions, itemData,
-                thumbnailSystem, context, parent);
+                context, timeline, clip, scale, options, displayOptions,
+                itemData, thumbnailSystem, parent);
             return out;
         }
 
@@ -308,8 +311,11 @@ namespace tl
                             {
                                 p.waveformRequests[mediaRange.start_time()] =
                                     p.thumbnailSystem->getWaveform(
-                                        p.path, box.getSize(),
-                                        mediaRange, "", _data->options.ioOptions);
+                                        p.timelinePath,
+                                        p.path,
+                                        box.getSize(),
+                                        mediaRange, "",
+                                        _data->options.ioOptions);
                             }
                         }
                     }
