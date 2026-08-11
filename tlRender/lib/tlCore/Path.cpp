@@ -837,11 +837,29 @@ namespace tl
                 // C++17: u8path is the standard way to handle UTF-8 strings.
                 const std::filesystem::path stdpath = std::filesystem::u8path(fileName);
 #endif
-                auto parent = stdpath.parent_path();
+                // Resolve to an absolute path first (as findSeq() does). Otherwise,
+                // for a path with no directory component (a file in the current
+                // directory), parent_path() is empty and falls back to ".", which
+                // makes directory_iterator() yield entries prefixed with "./".
+                // Those entries then parse to a non-empty directory ("./") that
+                // never equals the original path's empty directory, so
+                // out.sequence(entry) never matches and only the single original
+                // frame is ever returned.
+                const auto abs = std::filesystem::absolute(stdpath);
+                auto parent = abs.parent_path();
                 if (parent.empty())
                 {
                     parent = ".";
                 }
+
+                // Rebuild 'out' from the absolute path too, so its directory
+                // field lines up with the directory field of the entries
+                // produced by directory_iterator() below. If 'out' kept the
+                // original (possibly directory-less) string, its directory
+                // would still be "" while every entry's directory is now a
+                // real absolute path, and the comparisons below would fail
+                // just the same.
+                out = Path(toUtf8(abs), pathOptions);
 
                 try
                 {
