@@ -6,6 +6,7 @@ v1.7.3
 - UI: Fixed tooltip of "Advance forward one frame" button in all languages.
 - UI/Core: Added listing of GLSL version in Help->About->HW on OpenGL backend.
 - UI: Fixed "Window/Preferences" not showing up in Japanese due to weird gettext bug.
+- UI: You can now easily drag a clip to the timeline view to create a new .otio EDL timeline, without having to go first to the Playlist Panel.
 
 - NDI: Minor improvement to NDI reading in the player.
 

@@ -707,7 +707,7 @@ namespace tl
             auto request = std::make_shared<Private::WaveformRequest>();
             request->id = p.requestId;
             request->path = path;
-            request->mediaPath = path;
+            request->mediaPath = mediaPath;
             request->size = size;
             request->timeRange = timeRange;
             request->mediaReferenceKey = mediaReferenceKey;

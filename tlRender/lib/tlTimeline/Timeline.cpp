@@ -2545,6 +2545,7 @@ namespace tl
             p.videoInfoClip = nullptr;
             p.videoInfoByReference.clear();
             p.videoReadCache.clear();
+            p.audioReadCache.clear();
             p.seqCache.clear();
             p.maxVideoSize = math::Size2i();
             p.canvasSize = math::Size2i();
@@ -2552,16 +2553,26 @@ namespace tl
             p.normalizeSize = math::Size2i();
             p.boundsScale = 1.0;
 
+            bool videoFound = false;
+            bool audioFound = false;
+
             for (const auto& i : p.otioTimeline.value->tracks()->children())
             {
                 if (auto otioTrack = dynamic_cast<const otio::Track*>(i.value))
                 {
-                    if (otio::Track::Kind::video == otioTrack->kind())
+                    if (!videoFound && otio::Track::Kind::video == otioTrack->kind())
                     {
-                        if (_getVideoInfo(otioTrack))
-                        {
-                            break;
-                        }
+                        videoFound = _getVideoInfo(otioTrack);
+                    }
+                    else if (!audioFound && otio::Track::Kind::audio == otioTrack->kind())
+                    {
+                        audioFound = _getAudioInfo(otioTrack);
+                    }
+
+                    // Break early if we've successfully found both
+                    if (videoFound && audioFound)
+                    {
+                        break;
                     }
                 }
             }
