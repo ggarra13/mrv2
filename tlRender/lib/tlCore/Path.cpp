@@ -837,22 +837,34 @@ namespace tl
                 // C++17: u8path is the standard way to handle UTF-8 strings.
                 const std::filesystem::path stdpath = std::filesystem::u8path(fileName);
 #endif
-                for (const auto& i : std::filesystem::directory_iterator(stdpath.parent_path()))
+                auto parent = stdpath.parent_path();
+                if (parent.empty())
                 {
-                    const Path entry(toUtf8(i.path()), pathOptions);
-                    const bool isDir = std::filesystem::is_directory(i.path());
-                    if (init && !isDir)
+                    parent = ".";
+                }
+
+                try
+                {
+                    for (const auto& i : std::filesystem::directory_iterator(parent))
                     {
-                        if (out.sequence(entry))
+                        const Path entry(toUtf8(i.path()), pathOptions);
+                        const bool isDir = std::filesystem::is_directory(i.path());
+                        if (init && !isDir)
                         {
-                            init = false;
-                            out = entry;
+                            if (out.sequence(entry))
+                            {
+                                init = false;
+                                out = entry;
+                            }
+                        }
+                        if (!init)
+                        {
+                            out.addSeq(entry);
                         }
                     }
-                    if (!init)
-                    {
-                        out.addSeq(entry);
-                    }
+                }
+                catch(const std::exception&)
+                {
                 }
             }
             return out;
@@ -936,7 +948,6 @@ namespace tl
                 p.setFrames(j.at("frames").get<math::Int64Range>());
             }
         }
-
 
     }
 }

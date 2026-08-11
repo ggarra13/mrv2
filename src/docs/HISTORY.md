@@ -4,14 +4,15 @@ v1.7.3
 - Install: Fixed Linux installers trying to place opentimelineio's python module in my /home directory.
 
 - UI: Fixed tooltip of "Advance forward one frame" button in all languages.
-- UI: Fixed "Window/Preferences" not showing up in Japanese due to wrong translation.
+- UI: Fixed "Window/Preferences" not showing up in Japanese due to weird gettext bug.
 
 - NDI: Minor improvement to NDI reading in the player.
 
+- Core: Fixed a bug in OpenEXR reader on Vulkan backend when the image was promoted to 4 channels.
+- Core: Fixed a minor bug in OpenEXR reading code.
 - Core: OpenTimelineIO timelines now open faster (specially .otioz ones).
 - Core: OpenTimelineIO clips now tonemap each clip found if it is a movie, an HDR movie, a bt709 or an sRGB image, all will get tonemapped correctly.  Of course dissolves from one format of image to another one will not work.
 - Core: Brought and cherry-picked current tlRender to be more in sync with the one in mrv2.
-- Core: Major improvement to reading of image sequences.
 - Core: Minor improvement of performance on video reading.
 - Core: Improved performance of image reading.
 - Core: Fixed some OpenEXR memory issues and potential crashes. 

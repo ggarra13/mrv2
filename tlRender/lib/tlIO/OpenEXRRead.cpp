@@ -376,7 +376,14 @@ namespace tl
                     const bool ignoreChromaticities, const bool autoNormalize,
                     const bool useRGBOnly,
                     const int xLevel, const int yLevel,
-                    const std::shared_ptr<log::System>& logSystem)
+                    const std::shared_ptr<log::System>& logSystem) :
+                    _channelGrouping(channelGrouping),
+                    _ignoreDisplayWindow(ignoreDisplayWindow),
+                    _ignoreChromaticities(ignoreChromaticities),
+                    _autoNormalize(autoNormalize),
+                    _useRGBOnly(useRGBOnly),
+                    _xLevel(xLevel),
+                    _yLevel(yLevel)
                 {
                     // Open the file.
                     if (memory)
@@ -396,9 +403,6 @@ namespace tl
                     {
                         return;
                     }
-
-                    _xLevel = xLevel;
-                    _yLevel = yLevel;
 
                     if (_xLevel > 0 || _yLevel > 0)
                     {
@@ -666,7 +670,7 @@ namespace tl
                     if (needTemp)
                     {
                         tempDataWindow = _dataWindow;
-                        tempInfo = imageInfo;
+                        tempInfo = vulkanInfo;
                         tempInfo.size.w = _dataWindow.w();
                         tempInfo.size.h = _dataWindow.h();
                         tempImage = image::Image::create(tempInfo);
@@ -1105,10 +1109,10 @@ namespace tl
                             in.setFrameBuffer(frameBuffer);
 
                             if (!_ignoreDisplayWindow ||
-                                _dataWindow.min.x >= _displayWindow.min.x ||
-                                _dataWindow.max.x <= _displayWindow.max.x ||
-                                _dataWindow.min.y >= _displayWindow.min.y ||
-                                _dataWindow.max.y <= _displayWindow.max.y)
+                                (_dataWindow.min.x >= _displayWindow.min.x &&
+                                 _dataWindow.max.x <= _displayWindow.max.x &&
+                                 _dataWindow.min.y >= _displayWindow.min.y &&
+                                 _dataWindow.max.y <= _displayWindow.max.y))
                             {
                                 for (int y = _displayWindow.min.y;
                                      y <= _displayWindow.max.y; ++y)

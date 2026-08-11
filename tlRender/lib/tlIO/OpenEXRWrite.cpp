@@ -55,9 +55,9 @@ namespace tl
             if (i != options.end())
             {
                 std::stringstream ss(i->second);
-                int i;
-                ss >> i;
-                _compression = static_cast<Imf::Compression>(i);
+                int j;
+                ss >> j;
+                _compression = static_cast<Imf::Compression>(j);
             }
             i = options.find("OpenEXR/PixelType");
             if (i != options.end())
