@@ -1,6 +1,8 @@
 v1.7.3
 ======
 
+- Install: Fixed Linux installers trying to place opentimelineio's python module in my /home directory.
+
 - UI: Fixed tooltip of "Advance forward one frame" button in all languages.
 - UI: Fixed "Window/Preferences" not showing up in Japanese due to wrong translation.
 - UI/Core: Added listing of GLSL version in Help->About->HW on OpenGL backend.
