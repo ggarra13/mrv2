@@ -129,6 +129,10 @@ namespace tl
             //! Get the timeline options.
             const Options& getOptions() const;
 
+            //! Get the memory for the given media reference.
+            std::vector<file::MemoryRead> getMem(
+                const OTIO_NS::MediaReference*);
+
             //! Get how many video requests the timeline keeps in flight.
             //!
             //! Twice the decoding threads: enough that a thread finishing a frame

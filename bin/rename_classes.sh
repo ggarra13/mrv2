@@ -55,9 +55,16 @@ sed -i 's#ftk::Image#image::Image#g' "$@"
 sed -i 's#ftk::LogSystem#log::System#g' "$@"
 sed -i 's#ftk::Context#system::Context#g' "$@"
 sed -i 's#ftk::Path#file::Path#g' "$@"
+
 sed -i 's#ftk::LRUCache#memory::LRUCache#g' "$@"
+
 sed -i 's#ftk::MemFile#file::MemoryRead#g' "$@"
+
 sed -i 's#ftk::FileIO#file::FileIO#g' "$@"
+sed -i 's#ftk::FileMode::#file::Mode::#' "$@"
+sed -i 's#ftk::FileRead::MMap#file::Read::MemoryMapped#' "$@"
+sed -i 's#ftk::FileRead::#file::Read::#' "$@"
+sed -i 's#ftk::FileAccess::#file::Access::#' "$@"
 
 #
 # ftk functions

@@ -59,9 +59,11 @@ namespace tl
         //! Read files from memory.
         struct MemoryRead
         {
-            MemoryRead();
-            MemoryRead(const uint8_t*, size_t size);
+            MemoryRead() = default;
+            MemoryRead(const std::shared_ptr<void>&, const uint8_t*,
+                       size_t size);
 
+            std::shared_ptr<void> f;
             const uint8_t* p = nullptr;
             size_t size = 0;
 

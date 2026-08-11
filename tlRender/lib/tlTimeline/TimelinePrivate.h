@@ -64,8 +64,8 @@ namespace tl
             std::shared_ptr<ZipReader> zipReader;
             std::set<const otio::MediaReference*> bundleMediaReferences;
             // Always the inner of the two locks: creating a reader holds
-            // readCacheMutex and then asks getMem()/mediaUnavailable() where
-            // the media lives. Nothing guarded here may reach back for
+            // readCacheMutex and then asks getMemoryRead()/mediaUnavailable()
+            // where the media lives. Nothing guarded here may reach back for
             // readCacheMutex.
             std::mutex memFilesMutex;
             std::map<const otio::MediaReference*,
@@ -87,8 +87,8 @@ namespace tl
             // out on first use. Shared rather than copied: inside a bundle a
             // sequence reference carries a byte range per frame, and a long one
             // is not a vector to hand out by value.
-            // std::shared_ptr<std::vector<file::MemoryRead> > getMem(
-            //     const otio::MediaReference*);
+            std::shared_ptr<std::vector<file::MemoryRead> > getMem(
+                const otio::MediaReference*);
 
             // Look up the reader or decoder for a media reference, creating one
             // on a miss. The three caches differ only in what they hold and how

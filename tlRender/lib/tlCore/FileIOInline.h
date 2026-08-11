@@ -6,17 +6,19 @@ namespace tl
 {
     namespace file
     {
-        inline MemoryRead::MemoryRead() {}
-
-        inline MemoryRead::MemoryRead(const uint8_t* p, size_t size) :
+        inline MemoryRead::MemoryRead(const std::shared_ptr<void>& f,
+                                      const uint8_t* p, size_t size) :
+            f(f),
             p(p),
             size(size)
-        {
-        }
+        {}
 
         inline bool MemoryRead::operator==(const MemoryRead& other) const
         {
-            return p == other.p && size == other.size;
+            return
+                f == other.f &&
+                p == other.p &&
+                size == other.size;
         }
 
         inline bool MemoryRead::operator!=(const MemoryRead& other) const
