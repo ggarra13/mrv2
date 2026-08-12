@@ -592,7 +592,8 @@ namespace tl
                     if (p.cache->getVideo(cacheKey, videoData))
                     {
                         image::Tags tags;
-                        io::addOtioTags(tags, fileName, time);
+                        io::addOtioTags(tags, request->path.get(),
+                                        request->time);
                         videoData.image->setTags(tags);
 
                         request->promise.set_value(videoData);
@@ -644,7 +645,7 @@ namespace tl
                         videoData.time = request->time;
 
                         image::Tags tags;
-                        io::addOtioTags(tags, fileName, request->time);
+                        io::addOtioTags(tags, request->path.get(), request->time);
                         image->setTags(tags);
 
                         videoData.image = image;
