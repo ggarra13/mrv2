@@ -7,9 +7,11 @@ v1.7.3
 - UI/Core: Added listing of GLSL version in Help->About->HW on OpenGL backend.
 - UI: Fixed "Window/Preferences" not showing up in Japanese due to weird gettext bug.
 - UI: You can now easily drag a clip to the timeline view to create a new .otio EDL timeline, without having to go first to the Playlist Panel.
+- UI: Thumbnails clear their cache correctly now.
 
 - NDI: Minor improvement to NDI reading in the player.
 
+- Core: Now each panel has its own thumbnail cache.
 - Core: Fixed an OpenGL error (crash) on texture counting. 
 - Core: Fixed a bug in OpenEXR reader on Vulkan backend when the image was promoted to 4 channels.
 - Core: Fixed a minor bug in OpenEXR reading code.

@@ -25,7 +25,7 @@ set(SOURCE
     Init.cpp
     MarkerItem.cpp
     # StackItem.cpp
-    # ThumbnailSystem.cpp
+    ThumbnailSystem.cpp
     TimelineItem.cpp
     TimelineItemFill.cpp
     TimelineItemMove.cpp

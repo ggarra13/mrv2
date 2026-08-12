@@ -57,12 +57,9 @@ namespace mrv
             //! Whether to clear the cache for the thumbnails.
             bool _clearCache = false;
 
-#ifdef OPENGL_BACKEND
-            std::map<Fl_Widget*, timelineui::ThumbnailRequest> thumbnailRequests;
-#endif
-#ifdef VULKAN_BACKEND
-            std::map<Fl_Widget*, timelineui_vk::ThumbnailRequest> thumbnailRequests;
-#endif
+            std::shared_ptr<TIMELINEUI::ThumbnailSystem> thumbnailSystem;
+
+            std::map<Fl_Widget*, TIMELINEUI::ThumbnailRequest> thumbnailRequests;
         };
 
     } // namespace panel

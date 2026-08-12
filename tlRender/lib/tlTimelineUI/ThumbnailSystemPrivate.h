@@ -22,17 +22,36 @@
 
 #include <tlIO/System.h>
 
-#include <tlCore/AudioResample.h>
 #include <tlCore/LRUCache.h>
-#include <tlCore/StringFormat.h>
 #include <tlCore/Timer.h>
-
-#include <sstream>
 
 namespace tl
 {
     namespace TIMELINEUI
     {
+        namespace
+        {
+            // Timelines, which hold no thread now that they are opened
+            // without one, so a file browser listing can keep the ones it is
+            // showing rather than reopening two at a time. Idle entries are
+            // dropped after ioCacheTimeout regardless.
+            const size_t ioCacheMax   = 100;
+            // How long a thread holds its open timelines once it goes idle.
+            // The point is to let go of readers, and the decode subprocesses
+            // they keep alive, after a file is closed. It has to be long
+            // compared to how long opening costs: a bundle of 25,000 entries
+            // takes seconds to open, and dropping it between two thumbnails
+            // meant most of the time went into opening it again.
+            const std::chrono::seconds ioCacheTimeout(60);
+            const size_t infoCacheMax = 1000;
+        }
+
+        std::shared_ptr<timeline::Timeline> getTimeline(
+            const std::shared_ptr<system::Context>& context,
+            memory::LRUCache<std::string, std::shared_ptr<timeline::Timeline> >& cache,
+            std::mutex& mutex,
+            const file::Path& path);
+
         struct ThumbnailSystem::Private
         {
             std::weak_ptr<system::Context> context;

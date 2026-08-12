@@ -137,15 +137,31 @@ namespace mrv
 
             try
             {
+                TIMELINEUI::ThumbnailCacheOptions thumbnailOptions;
+                thumbnailOptions.thumbnailMB = 0.05F * 64;  // 64 clips of 128 x 80
+                thumbnailOptions.waveformMB = 0.F;
+
                 const auto context = App::app->getContext();
 #ifdef OPENGL_BACKEND
-                auto thumbnailSystem =
-                    context->getSystem<timelineui::ThumbnailSystem>();
+                if (!thumbnailSystem)
+                {
+                    thumbnailSystem = TIMELINEUI::ThumbnailSystem::create(context);
+                    thumbnailSystem->setCacheOptions(thumbnailOptions);
+                }
 #endif
 #ifdef VULKAN_BACKEND
-                auto thumbnailSystem =
-                    context->getSystem<timelineui_vk::ThumbnailSystem>();
+                if (!thumbnailSystem)
+                {
+                    Fl_Vk_Context& ctx = p.ui->uiView->getContext();
+                    thumbnailSystem = TIMELINEUI::ThumbnailSystem::create(context, ctx);
+                    thumbnailSystem->setCacheOptions(thumbnailOptions);
+                }
 #endif
+                if (_clearCache)
+                {
+                    thumbnailSystem->clearCache();
+                    _clearCache = false;
+                }
 
 #ifdef MRV2_PYBIND11
                 // Only release the GIL if this thread currently holds it
@@ -186,17 +202,10 @@ namespace mrv
                 }
 
                 io::Options options;
-                if (_clearCache)
-                {
-                    std::random_device rd;
-                    options["ClearCache"] = string::Format("{0}").arg(rd());
-                    _clearCache = false;
-                }
-
                 options["Layer"] = string::Format("{0}").arg(layerId);
 
                 thumbnailRequests[widget] =
-                    thumbnailSystem->getThumbnail(timelinePath, path, size.h, time,
+                    thumbnailSystem->getThumbnail(path, size.h, time,
                                                   mediaReferenceKey, options);
             }
             catch (const std::exception& e)
