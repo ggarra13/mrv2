@@ -2,12 +2,15 @@ v1.7.3
 ======
 
 - UI: Fixed tooltip of "Advance forward one frame" button in all languages.
+- UI: Fixed "Window/Preferences" not showing up in Japanese due to weird gettext bug.
+- UI: You can now easily drag a clip to the timeline view to create a new .otio EDL timeline, without having to go first to the Playlist Panel.
 
 - Core: Fixed a crash on the OpenEXR reader when reading a corrupt/truncated file.
 - Core: Fixed and added tlRender's unit tests.
 - Core: Fixed loading of image sequences command-line from the current directory. 
 - Core: OpenTimelineIO clips now tonemap each clip found if it is a movie, an HDR movie, a bt709 or an sRGB image, all will get tonemapped correctly.  Of course dissolves from one format of image to another one will not work.
 - Core: Fixed and added tlRender's unit tests.
+- Core:
 
 - Build: Documented Vulkan compilation on Linux.
 
