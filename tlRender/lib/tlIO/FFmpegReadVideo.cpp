@@ -1387,12 +1387,7 @@ namespace tl
 
                     auto tags = _tags;
 
-                    tags["otioClipName"] = _fileName;
-                    {
-                        std::stringstream ss;
-                        ss << time;
-                        tags["otioClipTime"] = ss.str();
-                    }
+                    io::addOtioTags(tags, _fileName, time);
 
                     // Clone to safely hold this frame's buffer data.
                     AVFrame* cloned = av_frame_clone(_avFrame);

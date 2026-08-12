@@ -46,6 +46,20 @@ namespace tl
             bool operator!=(const Info&) const;
         };
 
+        //! Add the tags describing the video, which are derived from the rest
+        //! of the information rather than read from the file.
+        void addVideoTags(io::Info&);
+
+        //! Add the OTIO tags.
+        void addOtioTags(
+            image::Tags& tags, const std::string& clipName,
+            const otime::RationalTime& time);
+
+        //! Merge the video half of the information with the audio half. Video
+        //! and audio come from separate readers; this is how the two halves are
+        //! put back together.
+        io::Info merge(const io::Info& video, const io::Info& audio);
+
         //! Video I/O data.
         struct VideoData
         {

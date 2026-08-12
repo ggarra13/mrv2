@@ -193,12 +193,7 @@ namespace tl
                     out.image = image::Image::create(info);
 
                     auto tags = _info.tags;
-                    tags["otioClipName"] = fileName;
-                    {
-                        std::stringstream ss;
-                        ss << time;
-                        tags["otioClipTime"] = ss.str();
-                    }
+                    io::addOtioTags(tags, fileName, time);
                     out.image->setTags(tags);
 
                     auto& params(_processor->imgdata.params);

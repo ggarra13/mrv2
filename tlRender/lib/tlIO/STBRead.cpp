@@ -117,7 +117,7 @@ namespace tl
                     const size_t bytes =
                         image::getBitDepth(imageInfo.pixelType) / 8;
 
-                    
+
                     stbi_set_flip_vertically_on_load(1);
 
                     int x = 0, y = 0, n = 1;
@@ -173,12 +173,7 @@ namespace tl
 #endif
                         }
 
-                        _info.tags["otioClipName"] = fileName;
-                        {
-                            std::stringstream ss;
-                            ss << time;
-                            _info.tags["otioClipTime"] = ss.str();
-                        }
+                        io::addOtioTags(_info.tags, fileName, time);
                         out.image->setTags(_info.tags);
                     }
 

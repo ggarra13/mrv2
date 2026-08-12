@@ -980,12 +980,8 @@ namespace tl
                         _info.tags["Data Window"] = serialize(dataWindow);
                     }
 
-                    _info.tags["otioClipName"] = fileName;
-                    {
-                        std::stringstream ss;
-                        ss << time;
-                        _info.tags["otioClipTime"] = ss.str();
-                    }
+
+                    io::addOtioTags(_info.tags, fileName, time);
 
                     int minY =
                         std::min(_dataWindow.min.y, _displayWindow.min.y);

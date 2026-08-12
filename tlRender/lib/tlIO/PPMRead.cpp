@@ -142,12 +142,7 @@ namespace tl
                     }
 
                     image::Tags tags;
-                    tags["otioClipName"] = fileName;
-                    {
-                        std::stringstream ss;
-                        ss << time;
-                        tags["otioClipTime"] = ss.str();
-                    }
+                    io::addOtioTags(tags, fileName, time);
                     out.image->setTags(tags);
 
                     return out;

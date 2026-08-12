@@ -155,19 +155,6 @@ namespace tl
             return future;
         }
 
-        void ISequenceRead::_addOtioTags(
-            image::Tags& tags, const std::string& clipName,
-            const otime::RationalTime& time)
-        {
-            tags["otioClipName"] = clipName;
-
-            {
-                std::stringstream ss;
-                ss << time;
-                tags["otioClipTime"] = ss.str();
-            }
-        }
-
         void ISequenceRead::cancelRequests()
         {
             _cancelRequests();
@@ -176,7 +163,7 @@ namespace tl
         void ISequenceRead::_finish()
         {
             TLRENDER_P();
-            
+
             // Stop the sequence thread
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
@@ -212,7 +199,7 @@ namespace tl
 
                     if (!p.thread.running)
                         return;
-                    
+
                     infoRequests = std::move(p.mutex.infoRequests);
                     while (!p.mutex.videoRequests.empty() &&
                            (p.thread.videoRequestsInProgress.size() +
@@ -221,7 +208,7 @@ namespace tl
                         videoRequests.push_back(
                             p.mutex.videoRequests.front());
                         p.mutex.videoRequests.pop_front();
-                    }                    
+                    }
                 }
 
                 // Information rquests.

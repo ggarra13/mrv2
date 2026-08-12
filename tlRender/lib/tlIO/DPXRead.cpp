@@ -61,7 +61,7 @@ namespace tl
         {
             io::Info out;
             auto io = memory ? file::FileIO::create(fileName, *memory)
-                             : file::FileIO::create(fileName, file::Mode::Read);
+                      : file::FileIO::create(fileName, file::Mode::Read);
             Transfer transfer = Transfer::User;
             const auto header = read(io, out, transfer);
             float speed = _defaultSpeed;
@@ -98,7 +98,7 @@ namespace tl
             out.time = time;
 
             auto io = memory ? file::FileIO::create(fileName, *memory)
-                             : file::FileIO::create(fileName, file::Mode::Read);
+                      : file::FileIO::create(fileName, file::Mode::Read);
             io::Info info;
             Transfer transfer = Transfer::User;
             read(io, info, transfer);
@@ -117,8 +117,7 @@ namespace tl
                 info.tags["Autonormalize Maximum"] = io::serialize(maximum);
             }
 
-            _addOtioTags(info.tags, fileName, time);
-
+            io::addOtioTags(info.tags, fileName, time);
             out.image->setTags(info.tags);
             return out;
         }

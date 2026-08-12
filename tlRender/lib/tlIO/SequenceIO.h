@@ -46,10 +46,6 @@ namespace tl
                 const std::string& fileName, const file::MemoryRead*,
                 const otime::RationalTime&, const Options&) = 0;
 
-            void _addOtioTags(
-                image::Tags& tags, const std::string&,
-                const otime::RationalTime&);
-
             //! \bug This must be called in the sub-class destructor.
             void _finish();
 

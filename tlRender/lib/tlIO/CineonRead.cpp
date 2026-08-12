@@ -82,7 +82,7 @@ namespace tl
             read(io, info);
 
             out.image = image::Image::create(info.video[0]);
-            _addOtioTags(info.tags, fileName, time);
+            io::addOtioTags(info.tags, fileName, time);
             out.image->setTags(info.tags);
             io->read(
                 out.image->getData(), image::getDataByteCount(info.video[0]));

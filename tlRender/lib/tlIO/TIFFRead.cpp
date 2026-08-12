@@ -218,12 +218,7 @@ namespace tl
                     const auto& info = _info.video[0];
                     out.image = image::Image::create(info);
 
-                    _info.tags["otioClipName"] = fileName;
-                    {
-                        std::stringstream ss;
-                        ss << time;
-                        _info.tags["otioClipTime"] = ss.str();
-                    }
+                    io::addOtioTags(_info.tags, fileName, time);
                     out.image->setTags(_info.tags);
 
                     if (_planar)
