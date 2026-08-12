@@ -748,6 +748,8 @@ Flu_Entry::~Flu_Entry()
 {
     TLRENDER_P();
 
+    Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
+
     if (p.bind_image)
         delete icon;
 }
