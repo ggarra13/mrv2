@@ -4,6 +4,8 @@
 
 #include <tlIO/IO.h>
 
+#include <sstream>
+
 namespace tl
 {
     namespace io
