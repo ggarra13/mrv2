@@ -2889,7 +2889,14 @@ namespace mrv
 
         if (!file::isTemporaryEDL(destItem->path))
         {
-            LOG_ERROR(_("You can only add clips to an .otio EDL playlist."));
+            // 1. Get the index of the currently displayed clip (the 'A' item)
+            auto aIndex = ui->app->filesModel()->observeAIndex()->get();
+
+            // 2. Create a new timeline containing the currently displayed clip
+            add_clip_to_new_timeline_cb(aIndex, ui);
+
+            // 3. Append the dragged clip to this newly created timeline
+            add_clip_to_timeline_cb(index, ui);
             return;
         }
 
