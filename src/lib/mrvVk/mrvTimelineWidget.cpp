@@ -576,16 +576,18 @@ namespace mrv
             }
 
             const image::Size size(kTHUMB_WIDTH, kTHUMB_HEIGHT);
-            const auto& time = _posToTime(_toUI(Fl::event_x()));
+            const otio::RationalTime& timelineTime = _posToTime(_toUI(Fl::event_x()));
+            otio::RationalTime time = timelineTime;
 
             if (auto thumbnailSystem = p.thumbnailSystem.lock())
             {
+                const auto timeline = timeline::Timeline::create(p.context.lock(), path);
+                auto mediaPath = timeline->getMediaPath(time);
                 p.thumbnail.request =
-                    thumbnailSystem->getThumbnail(path, size.h, time,
-                                                  mediaReferenceKey);
+                    thumbnailSystem->getThumbnail(path, mediaPath, size.h, time);
             }
 
-            timeToText(buffer, time, _p->units);
+            timeToText(buffer, timelineTime, _p->units);
             p.box->copy_label(buffer);
             return 1;
         }
