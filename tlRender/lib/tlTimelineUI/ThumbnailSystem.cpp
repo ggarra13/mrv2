@@ -1198,7 +1198,8 @@ namespace tl
 
                                     VkResult result = VK_NOT_READY;
                                     void* imageData = nullptr;
-                                    while (result == VK_NOT_READY)
+                                    while (result == VK_NOT_READY &&
+                                           p.thumbnailThread.running)
                                     {
                                         result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
                                     }
@@ -1306,7 +1307,8 @@ namespace tl
 
                                     VkResult result = VK_NOT_READY;
                                     void* imageData = nullptr;
-                                    while (result == VK_NOT_READY)
+                                    while (result == VK_NOT_READY &&
+                                           p.thumbnailThread.running)
                                     {
                                         result = p.thumbnailThread.buffer->getLatestReadPixels(imageData);
                                     }
