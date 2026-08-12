@@ -29,7 +29,7 @@ namespace tl
             // 16 MB
             constexpr size_t DYNAMIC_VERTEX_BUFFER_SIZE = 16 * 1024 * 1024;
         }
-        
+
         TLRENDER_ENUM_IMPL(
             VBOType,
             "Pos2_F32",
@@ -67,25 +67,25 @@ namespace tl
 
         std::size_t getByteCount(VBOType value)
         {
-            const std::array<size_t, static_cast<size_t>(VBOType::Count)> data =                
+            const std::array<size_t, static_cast<size_t>(VBOType::Count)> data =
                 {   // Pos2_F32
                     2 * sizeof(float),
                     // Pos2_F32_UV_U16
                     2 * sizeof(float) + 2 * sizeof(uint16_t),
                     // Pos2_F32_Color_F32
-                    2 * sizeof(float) + 4 * sizeof(float),    
-                    // Pos3_F32                  
+                    2 * sizeof(float) + 4 * sizeof(float),
+                    // Pos3_F32
                     3 * sizeof(float),
                     // Pos3_F32_UV_U16
                     3 * sizeof(float) + 2 * sizeof(uint16_t),
                     // Pos3_F32_UV_U16_Normal_U10
-                    3 * sizeof(float) + 2 * sizeof(uint16_t) + 
+                    3 * sizeof(float) + 2 * sizeof(uint16_t) +
                     sizeof(PackedNormal),
                     // Pos3_F32_UV_U16_Color_U8
-                    3 * sizeof(float) + 2 * sizeof(uint16_t) + 
+                    3 * sizeof(float) + 2 * sizeof(uint16_t) +
                     sizeof(PackedColor),
                     // Pos3_F32_UV_U16_Normal_U10_Color_U8
-                    3 * sizeof(float) + 2 * sizeof(uint16_t) + 
+                    3 * sizeof(float) + 2 * sizeof(uint16_t) +
                     sizeof(PackedNormal) + sizeof(PackedColor),
                     // Pos3_F32_UV_F32
                     3 * sizeof(float) + 2 * sizeof(float),
@@ -115,12 +115,12 @@ namespace tl
         {
             const size_t vertexByteCount = vlk::getByteCount(type);
             std::vector<uint8_t> out(
-                (range.getMax() - range.getMin() + 1) * 3 * vertexByteCount);
+                (range.max() - range.min() + 1) * 3 * vertexByteCount);
             uint8_t* p = out.data();
             switch (type)
             {
             case vlk::VBOType::Pos2_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex2* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -136,7 +136,7 @@ namespace tl
                 }
                 break;
             case vlk::VBOType::Pos2_F32_UV_U16:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex2* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -166,7 +166,7 @@ namespace tl
                 }
                 break;
             case vlk::VBOType::Pos2_F32_Color_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex2* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -211,12 +211,12 @@ namespace tl
         {
             const size_t vertexByteCount = vlk::getByteCount(type);
             std::vector<uint8_t> out(
-                (range.getMax() - range.getMin() + 1) * 3 * vertexByteCount);
+                (range.max() - range.min() + 1) * 3 * vertexByteCount);
             uint8_t* p = out.data();
             switch (type)
             {
             case vlk::VBOType::Pos3_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -233,7 +233,7 @@ namespace tl
                 }
                 break;
             case vlk::VBOType::Pos3_F32_UV_U16:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -264,7 +264,7 @@ namespace tl
                 }
                 break;
             case vlk::VBOType::Pos3_F32_UV_U16_Normal_U10:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -314,7 +314,7 @@ namespace tl
                 }
                 break;
             case vlk::VBOType::Pos3_F32_UV_U16_Color_U8:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -369,7 +369,7 @@ namespace tl
                 }
                 break;
             case vlk::VBOType::Pos3_F32_Color_U8:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -382,7 +382,7 @@ namespace tl
                         pf[1] = v ? mesh.v[v - 1].y : 0.F;
                         pf[2] = v ? mesh.v[v - 1].z : 0.F;
                         p += 3 * sizeof(float);
-                        
+
                         const size_t c = vertices[k]->c;
                         auto packedColor = reinterpret_cast<PackedColor*>(p);
                         packedColor->r =
@@ -410,7 +410,7 @@ namespace tl
                 }
                 break;
             case vlk::VBOType::Pos3_F32_UV_U16_Normal_U10_Color_U8:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -484,7 +484,7 @@ namespace tl
                 }
                 break;
             case vlk::VBOType::Pos3_F32_UV_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -507,7 +507,7 @@ namespace tl
                 }
                 break;
             case vlk::VBOType::Pos3_F32_UV_F32_Normal_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -537,7 +537,7 @@ namespace tl
                 }
                 break;
             case vlk::VBOType::Pos3_F32_UV_F32_Normal_F32_Color_F32:
-                for (size_t i = range.getMin(); i <= range.getMax(); ++i)
+                for (size_t i = range.min(); i <= range.max(); ++i)
                 {
                     const geom::Vertex3* vertices[] = {
                         &mesh.triangles[i].v[0], &mesh.triangles[i].v[1],
@@ -592,12 +592,12 @@ namespace tl
         {
             return objectCount;
         }
-        
+
         size_t VBO::getTotalByteCount()
         {
             return totalByteCount;
         }
-        
+
         struct VBO::Private
         {
             std::size_t size = 0;
@@ -615,10 +615,10 @@ namespace tl
 
             ++objectCount;
             totalByteCount += size * getByteCount(type);
-            
+
             p.size = size;
             p.type = type;
-            
+
             p.bindingDesc.resize(1);
             p.bindingDesc[0].binding = 0;
             p.bindingDesc[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
@@ -706,7 +706,7 @@ namespace tl
                 // Using UNORM means the 0-255 byte is mapped to 0.0-1.0 in the shader
                 p.attributes.push_back({3, 0, VK_FORMAT_R8G8B8A8_UNORM, 20});
                 break;
-                
+
             case VBOType::Pos3_F32_UV_U16_Normal_U10:
                 // Stride: 12 (Pos) + 4 (UV) + 4 (Normal) = 20 bytes
                 // Using uint32_t for the packed normal ensures 4-byte alignment
@@ -803,7 +803,7 @@ namespace tl
                     VK_FORMAT_R32G32B32_SFLOAT,
                     0 // offset
                 });
-                
+
                 p.attributes.push_back(
                     {1, 0, VK_FORMAT_R16G16_UNORM,
                      static_cast<uint32_t>(3 * sizeof(float))});
@@ -853,7 +853,7 @@ namespace tl
         VBO::~VBO()
         {
             TLRENDER_P();
-            
+
             --objectCount;
             totalByteCount -= p.size * getByteCount(p.type);
         }
@@ -869,7 +869,7 @@ namespace tl
         {
             return _p->size;
         }
-        
+
         const std::vector<uint8_t>& VBO::getData() const
         {
             return _p->data;
@@ -891,7 +891,7 @@ namespace tl
 
             VkBuffer vertexBuffer = VK_NULL_HANDLE;
             VmaAllocation allocation = VK_NULL_HANDLE;
-            
+
             void* mappedPtr = nullptr;
 
             // relative offset within this frame's partition
@@ -901,7 +901,7 @@ namespace tl
             size_t regionSize = 0;
 
             size_t alignment = 1;
-            
+
             VkDeviceSize totalSize = 0;
         };
 
@@ -911,14 +911,16 @@ namespace tl
 
             if (value <= p.totalSize)
                 return;
-            
+
             p.totalSize = value;
-            
-            if (p.vertexBuffer != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
+
+            if (p.vertexBuffer != VK_NULL_HANDLE)
             {
                 vmaDestroyBuffer(ctx.allocator, p.vertexBuffer, p.allocation);
+                p.vertexBuffer = VK_NULL_HANDLE;
+                p.allocation = VK_NULL_HANDLE;
             }
-            
+
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
 
@@ -945,7 +947,7 @@ namespace tl
 
             VkPhysicalDeviceProperties props;
             vkGetPhysicalDeviceProperties(ctx.gpu, &props);
-    
+
             VkMemoryRequirements memReqs;
             vkGetBufferMemoryRequirements(ctx.device, p.vertexBuffer, &memReqs);
 
@@ -953,20 +955,20 @@ namespace tl
             // 2. Atom size (required for flushing non-coherent memory)
             // We use the max of these to ensure every "slot" in our ring buffer is safe to flush.
             p.alignment = std::max(memReqs.alignment, props.limits.nonCoherentAtomSize);
-    
-            // Note: minUniformBufferOffsetAlignment is NOT required for Vertex Buffers, 
+
+            // Note: minUniformBufferOffsetAlignment is NOT required for Vertex Buffers,
             // but p.alignment must be at least 1.
             p.alignment = std::max(p.alignment, (size_t)1);
 
             const VkDeviceSize totalSize = p.totalSize;
             const VkDeviceSize frameCount = MAX_FRAMES_IN_FLIGHT;
-    
+
             // Ensure each frame's start is aligned to p.alignment
             p.regionSize = (totalSize / frameCount);
             p.regionSize = (p.regionSize / p.alignment) * p.alignment;
 
             if (p.regionSize == 0) throw std::runtime_error("Buffer too small");
-    
+
             p.mappedPtr = allocInfo.pMappedData;
             if (!p.mappedPtr)
             {
@@ -976,7 +978,7 @@ namespace tl
                 }
             }
         }
-        
+
         void VAO::_init()
         {
             setMemorySize(DYNAMIC_VERTEX_BUFFER_SIZE);
@@ -1012,11 +1014,11 @@ namespace tl
             TLRENDER_P();
             if (p.frameIndex == value)
                 return;
-            
+
             p.frameIndex = value;
             p.relativeOffset = 0;
         }
-        
+
         std::size_t VAO::upload(const std::vector<uint8_t>& vertexData)
         {
             TLRENDER_P();
@@ -1031,7 +1033,7 @@ namespace tl
                           << std::endl;
                 throw std::runtime_error("VAO: Frame region overflow!");
             }
-            
+
             // Compute absolute offset in the big buffer:
             // per-frame region + relative
             const std::size_t absOffset = (p.frameIndex * p.regionSize) + p.relativeOffset;
@@ -1041,12 +1043,12 @@ namespace tl
             // IMPORTANT: Flush must be aligned to nonCoherentAtomSize
             // We align the size of the flush to p.alignment (which includes atomSize)
             size_t alignedFlushSize = (dataSize + p.alignment - 1) & ~(p.alignment - 1);
-    
+
             // Don't flush past the allocated buffer size
             if (absOffset + alignedFlushSize > p.totalSize) {
                 alignedFlushSize = p.totalSize - absOffset;
             }
-            
+
             if (vmaFlushAllocation(ctx.allocator, p.allocation, absOffset, alignedFlushSize) != VK_SUCCESS)
             {
                 throw std::runtime_error("vmaFlushAllocation failed");
@@ -1086,11 +1088,11 @@ namespace tl
             vmaGetAllocationInfo(ctx.allocator, _p->allocation, &allocInfo);
             return allocInfo.deviceMemory;
         }
-        
+
         bool VAO::canFit(std::size_t dataSize) const
         {
             return (_p->relativeOffset + dataSize) <= _p->regionSize;
         }
-        
+
     } // namespace vlk
 } // namespace tl

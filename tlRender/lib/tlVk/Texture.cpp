@@ -37,9 +37,9 @@ namespace tl
             "MirrorClampToEdge",
             );
         TLRENDER_ENUM_SERIALIZE_IMPL(TextureBorder);
-        
+
         VkSamplerAddressMode getTextureBorder(TextureBorder value)
-        {            
+        {
             VkSamplerAddressMode out = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
             switch (value)
             {
@@ -64,7 +64,7 @@ namespace tl
             };
             return out;
         }
-        
+
         std::size_t getDataByteCount(
             const VkImageType type, uint32_t w, uint32_t h, uint32_t d,
             VkFormat format)
@@ -201,7 +201,7 @@ namespace tl
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM
-                    
+
                     // YUV_*P_U12
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
@@ -211,7 +211,7 @@ namespace tl
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_420_UNORM
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM
-                    
+
                     VK_FORMAT_R8G8B8A8_UNORM};
             return data[static_cast<std::size_t>(type)];
         }
@@ -225,7 +225,7 @@ namespace tl
         {
             return !(*this == other);
         }
-        
+
         bool TextureOptions::operator==(const TextureOptions& other) const
         {
             return filters == other.filters && tiling == other.tiling &&
@@ -252,25 +252,25 @@ namespace tl
             std::atomic<size_t> objectCount = 0;
             std::atomic<size_t> totalByteCount = 0;
         }
-        
+
         size_t Texture::getTotalByteCount()
         {
             return totalByteCount;
         }
-        
+
         size_t Texture::getObjectCount()
         {
             return objectCount;
         }
-        
+
         std::unique_ptr<SamplersCache> Texture::samplersCache;
-        
+
         struct Texture::Private
         {
             image::Info info;
 
             TextureOptions options;
-            
+
             std::string name;
             uint32_t arrayLayers = 1; // unused.
 
@@ -285,7 +285,7 @@ namespace tl
             VmaAllocation allocation = VK_NULL_HANDLE;
 
             VkCommandPool commandPool = VK_NULL_HANDLE;
-            
+
             VkImageView imageView = VK_NULL_HANDLE;
             VkSampler sampler = VK_NULL_HANDLE;
             VkFence uploadFence = VK_NULL_HANDLE;
@@ -312,7 +312,7 @@ namespace tl
 
             if (p.options.tiling == VK_IMAGE_TILING_OPTIMAL)
                 p.memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    
+
             createCommandPool();
             createImage();
             allocateMemory();
@@ -357,10 +357,10 @@ namespace tl
                 p.info.pixelType = image::PixelType::L_U8;
                 break;
             default:
-                p.info.pixelType = image::PixelType::RGBA_F32; 
+                p.info.pixelType = image::PixelType::RGBA_F32;
                 break;
             }
-            
+
             switch(p.imageType)
             {
                 //case VK_IMAGE_TYPE_2D: // [Fix 4] Allow 2D textures to be Optimal too
@@ -380,7 +380,7 @@ namespace tl
             allocateMemory();
             createImageView();
             createSampler();
-            
+
             totalByteCount += getDataByteCount(p.imageType,
                                                p.info.size.w,
                                                p.info.size.h,
@@ -402,25 +402,24 @@ namespace tl
         Texture::~Texture()
         {
             TLRENDER_P();
-            
+
             VkDevice device = ctx.device;
 
             {
                 std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                 vkDeviceWaitIdle(device); // needed
             }
-            
+
             if (p.imageView != VK_NULL_HANDLE)
             {
                 vkDestroyImageView(device, p.imageView, nullptr);
             }
-            
-            if (p.image != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
-                vmaDestroyImage(ctx.allocator, p.image, p.allocation);
-            
+
+            vmaDestroyImage(ctx.allocator, p.image, p.allocation);
+
             if (p.commandPool != VK_NULL_HANDLE)
                 vkDestroyCommandPool(device, p.commandPool, nullptr);
-            
+
 
             totalByteCount -= getDataByteCount(p.imageType,
                                                p.info.size.w,
@@ -542,7 +541,7 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-            
+
             // Determine proper masks
             if (p.currentLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
                 newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
@@ -583,7 +582,7 @@ namespace tl
                 srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
                 dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
             }
-    
+
             VkImageMemoryBarrier barrier = {};
             barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
             barrier.oldLayout = p.currentLayout;
@@ -632,7 +631,7 @@ namespace tl
             TLRENDER_P();
             p.needPadRgbToRgba = value;
         }
-        
+
         void Texture::copy(const std::shared_ptr<image::Image>& data, int x, int y)
         {
             TLRENDER_P();
@@ -656,12 +655,12 @@ namespace tl
                 size_t dstPixelBytes = getDataByteCount(p.imageType, p.info.size.w, p.info.size.h, p.depth, p.internalFormat) / pixelCount;
                 bufferSize = pixelCount * dstPixelBytes;
             }
-    
+
             VkBufferCreateInfo bufInfo = {};
             bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
             bufInfo.size = bufferSize;
             bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
-            
+
             VmaAllocationCreateInfo allocInfo = {};
             allocInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
             allocInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
@@ -669,6 +668,8 @@ namespace tl
 
             VK_CHECK(vmaCreateBuffer(ctx.allocator, &bufInfo, &allocInfo,
                                      &stagingBuffer, &stagingAllocation, nullptr));
+            vmaSetAllocationName(ctx.allocator, stagingAllocation,
+                                 "Texture Copy Buffer 1");
 
             // Copy image data to buffer, respecting alignment AND
             // format conversion
@@ -683,7 +684,7 @@ namespace tl
                 size_t dstPixelBytes = 4 * (image::getBitDepth(p.info.pixelType)/8); // careful to pick dest bit depth
                 size_t bufferSize = pixelCount * dstPixelBytes;
 
-                
+
                 if (p.info.pixelType == image::PixelType::RGBA_U8)
                 {
                     const uint8_t* s = reinterpret_cast<const uint8_t*>(srcData);
@@ -744,7 +745,7 @@ namespace tl
                 size_t pixelSize = image::getBitDepth(info.pixelType) / 8 *
                                    image::getChannelCount(info.pixelType);
                 size_t srcRowBytes = info.size.w * pixelSize;
-                
+
                 // Use a standard 4-byte or pixel-size alignment if
                 // info.layout.alignment is unreliable
                 size_t alignment = std::max((size_t)info.layout.alignment,
@@ -764,7 +765,7 @@ namespace tl
             vmaUnmapMemory(ctx.allocator, stagingAllocation);
             vmaFlushAllocation(ctx.allocator, stagingAllocation, 0,
                                VK_WHOLE_SIZE);
-            
+
             // Begin command buffer
             VkCommandBuffer cmd = beginSingleTimeCommands(device,
                                                           p.commandPool);
@@ -778,20 +779,20 @@ namespace tl
             // Prepare region copy
             VkBufferImageCopy region = {};
             region.bufferOffset = 0;
-            
+
             // This MUST match the stride of the data we just wrote into the
             // buffer
             size_t pixelSize = image::getBitDepth(info.pixelType) / 8 *
                                image::getChannelCount(info.pixelType);
             size_t alignment = std::max((size_t)info.layout.alignment,
                                         pixelSize);
-            
+
             // If the buffer is tightly packed, bufferRowLength should be 0 or
             // the width.
             // If it's padded, it MUST be the width in pixels (not bytes).
             uint32_t strideInPixels = (uint32_t)(( (info.size.w * pixelSize) +
                                                    alignment - 1) & ~(alignment - 1)) / pixelSize;
-            
+
             region.bufferRowLength = (strideInPixels > (uint32_t)info.size.w) ?
                                      strideInPixels : 0;
             region.bufferImageHeight = 0;
@@ -824,19 +825,19 @@ namespace tl
                 std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                 endSingleTimeCommands(cmd, device, p.commandPool, queue);
             }
-            
+
             vmaDestroyBuffer(ctx.allocator, stagingBuffer, stagingAllocation);
-            
+
             p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
- 
+
         void Texture::copy(const uint8_t* upload, const std::size_t size,
                            const int rowPitch)
         {
             TLRENDER_P();
 
             uint8_t* data = const_cast<uint8_t*>(upload);
-            
+
             // Assuming 'data' is a pointer to your tightly packed
             // source pixel data
             size_t pixel_size =
@@ -846,7 +847,7 @@ namespace tl
             {
                 pixel_size = sizeof(uint32_t);
             }
-            
+
             VkDevice device = ctx.device;
             VkPhysicalDevice gpu = ctx.gpu;
             VkQueue queue = ctx.queue();
@@ -855,11 +856,11 @@ namespace tl
             VkMemoryRequirements memReqs;
             vkGetImageMemoryRequirements(device, p.image, &memReqs);
 
-            
-            // Fast-path condition: 
+
+            // Fast-path condition:
             // - Memory must be Host Visible
             // - Tiling must be Linear (Optimal tiling cannot be memcpied directly)
-            bool canDirectMap = (p.memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) && 
+            bool canDirectMap = (p.memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) &&
                                 (p.options.tiling == VK_IMAGE_TILING_LINEAR);
 
             if (canDirectMap)
@@ -888,11 +889,11 @@ namespace tl
                 {
                     VK_CHECK(vmaMapMemory(ctx.allocator, p.allocation,
                                           &mapped));
-                    
+
 
                     const uint32_t src_row_pitch = rowPitch > 0 ? rowPitch : (p.info.size.w * pixel_size);
                     const uint32_t dst_row_size = p.info.size.w * pixel_size;
-                    
+
                     if (p.needPadRgbToRgba)
                     {
                         const size_t pixelCount = static_cast<size_t>(p.info.size.w) * p.info.size.h;
@@ -964,18 +965,18 @@ namespace tl
                             std::memcpy(dst_row, src_row, dst_row_size);
                         }
                     }
-                    
+
                     vmaUnmapMemory(ctx.allocator, p.allocation);
                     vmaFlushAllocation(ctx.allocator, p.allocation, 0, VK_WHOLE_SIZE);
                 }
-                
+
                 // We must transition the image layout so the shader can
                 // read it.
-                // Even though we wrote the data via CPU, the GPU state machine 
+                // Even though we wrote the data via CPU, the GPU state machine
                 // still thinks the image is UNDEFINED.
-                
+
                 VkCommandBuffer cmd = beginSingleTimeCommands(device, p.commandPool);
-                
+
                 transition(cmd,
                            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                            VK_ACCESS_HOST_WRITE_BIT, // We just wrote to it from Host
@@ -987,7 +988,7 @@ namespace tl
                     std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                     endSingleTimeCommands(cmd, device, p.commandPool, queue);
                 }
-                
+
                 // Update the tracked layout state
                 p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             }
@@ -1004,7 +1005,7 @@ namespace tl
                     size_t dstPixelBytes = getDataByteCount(p.imageType, p.info.size.w, p.info.size.h, p.depth, p.internalFormat) / pixelCount;
                     bufferSize = pixelCount * dstPixelBytes;
                 }
-        
+
                 VkBufferCreateInfo bufInfo = {};
                 bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
                 bufInfo.size = bufferSize;
@@ -1016,15 +1017,18 @@ namespace tl
                 allocInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
                 allocInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
                                   VMA_ALLOCATION_CREATE_MAPPED_BIT; // Map automatically
-        
+
                 VK_CHECK(vmaCreateBuffer(ctx.allocator, &bufInfo, &allocInfo,
                                          &stagingBuffer, &stagingAllocation,
                                          nullptr));
 
+                vmaSetAllocationName(ctx.allocator, stagingAllocation,
+                                     "Texture Copy Buffer 2");
+
                 void* mapped;
                 VK_CHECK(vmaMapMemory(ctx.allocator, stagingAllocation,
                                       &mapped));
-                
+
                 if (p.needPadRgbToRgba &&
                     p.info.pixelType == image::PixelType::RGBA_F32)
                 {
@@ -1051,7 +1055,7 @@ namespace tl
                 // Transition image for copy
                 VkCommandBuffer cmd =
                     beginSingleTimeCommands(device, p.commandPool);
-                
+
                 transition(
                     cmd,
                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_ACCESS_NONE,
@@ -1094,9 +1098,9 @@ namespace tl
                     std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                     endSingleTimeCommands(cmd, device, p.commandPool, queue);
                 }
-                
+
                 vmaDestroyBuffer(ctx.allocator, stagingBuffer, stagingAllocation);
-                
+
                 p.currentLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             }
         }
@@ -1117,7 +1121,7 @@ namespace tl
         void Texture::createImage()
         {
             TLRENDER_P();
-    
+
             VkPhysicalDeviceImageFormatInfo2 formatInfo = {};
             formatInfo.sType =
                 VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2;
@@ -1166,7 +1170,7 @@ namespace tl
                     throw std::runtime_error(err + string_VkFormat(p.format));
                     break;
                 }
-                
+
                 // Verify the fallback format is supported
                 formatInfo.format = p.internalFormat;
                 result = vkGetPhysicalDeviceImageFormatProperties2(gpu,
@@ -1199,19 +1203,22 @@ namespace tl
             allocInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
 
             if (p.memoryFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) {
-                // Usually for textures that stay on GPU. 
+                // Usually for textures that stay on GPU.
                 // VMA will prefer DEVICE_LOCAL memory.
                 allocInfo.usage    = VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE;
-                allocInfo.priority = 1.0f; 
+                allocInfo.priority = 1.0f;
             } else {
                 // For staging buffers or dynamic textures.
                 // This ensures CPU can write to it and it's visible to GPU.
                 allocInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
                                   VMA_ALLOCATION_CREATE_MAPPED_BIT;
             }
-            
+
             VK_CHECK(vmaCreateImage(ctx.allocator, &imageInfo, &allocInfo,
                                     &p.image, &p.allocation, nullptr));
+
+            vmaSetAllocationName(ctx.allocator, p.allocation,
+                                 "Texture createImage");
         }
 
         void Texture::allocateMemory()
@@ -1268,7 +1275,7 @@ namespace tl
             poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
             poolInfo.queueFamilyIndex = ctx.queueFamilyIndex;
             poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-            
+
             vkCreateCommandPool(device, &poolInfo, nullptr, &p.commandPool);
         }
 
@@ -1298,7 +1305,7 @@ namespace tl
         {
             _p->currentLayout = value;
         }
-        
+
         bool doCreate(
             const std::shared_ptr<Texture>& texture,
             const math::Size2i& size, const TextureOptions& options)

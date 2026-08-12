@@ -30,15 +30,18 @@ namespace tl
 
             VkDevice device = ctx.device;
 
-            if (p.buffer != VK_NULL_HANDLE && p.allocation != VK_NULL_HANDLE)
-            {
-                vmaDestroyBuffer(ctx.allocator, p.buffer, p.allocation);
-            }
+            vmaDestroyBuffer(ctx.allocator, p.buffer, p.allocation);
         }
 
         void Buffer::createBuffer(VkDeviceSize bufferSize)
         {
             TLRENDER_P();
+
+            if (p.buffer != VK_NULL_HANDLE) {
+                vmaDestroyBuffer(ctx.allocator, p.buffer, p.allocation);
+                p.buffer = VK_NULL_HANDLE;
+                p.allocation = VK_NULL_HANDLE;
+            }
 
             VkBufferCreateInfo bufferInfo = { VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
             bufferInfo.size = p.bufferSize = bufferSize;
@@ -118,7 +121,7 @@ namespace tl
             // NOTE: The previous code called vmaUnmapMemory here. That was a bug.
             // We must NOT unmap if we used VMA_ALLOCATION_CREATE_MAPPED_BIT.
 
-            VkResult result = vmaFlushAllocation(ctx.allocator, p.allocation, 0, size);
+            VkResult result = vmaFlushAllocation(ctx.allocator, p.allocation, 0, VK_WHOLE_SIZE);
             if (result != VK_SUCCESS)
             {
                 throw std::runtime_error("vmaFlushAllocation failed");
