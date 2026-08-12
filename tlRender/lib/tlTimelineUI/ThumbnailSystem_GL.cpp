@@ -302,9 +302,7 @@ namespace tl
                                 {
                                     if (p.thumbnailThread.running)
                                     {
-                                        std::cerr << "future get " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                         const auto videoFrame = videoFuture.get();
-                                        std::cerr << "future got " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                         gl::OffscreenBufferOptions options;
                                         options.colorType = image::PixelType::RGBA_U8;
                                         if (gl::doCreate(
@@ -374,9 +372,7 @@ namespace tl
 
                                 if (status == std::future_status::ready)
                                 {
-                                    std::cerr << "future get " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                     videoFrame = future.get();
-                                    std::cerr << "future got " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                     break;
                                 }
                             }

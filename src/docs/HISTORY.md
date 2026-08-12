@@ -13,6 +13,8 @@ This is a major upgrade and bug fix release.
 
 - NDI: Minor improvement to NDI reading in the player.
 
+- Core: Fixed a bug that would make sequences not load up if they were in the current directory.
+- Core: Fixed sequences sometimes not being detected on Windows due to different path separators.
 - Core: Fixed Thumbnail crashes on file requester on Linux.
 - Core: Now each panel has its own thumbnail cache.
 - Core: Fixed an OpenGL error (crash) on texture counting. 

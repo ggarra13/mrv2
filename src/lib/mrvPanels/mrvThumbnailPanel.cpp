@@ -160,7 +160,7 @@ namespace mrv
                     thumbnailSystem->setCacheOptions(thumbnailOptions);
                 }
 #endif
-                if (_clearCache)
+                // if (_clearCache)
                 {
                     thumbnailSystem->clearCache();
                     _clearCache = false;

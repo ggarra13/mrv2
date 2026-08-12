@@ -235,7 +235,7 @@ namespace tl
             // same file at once is cheaper than that, and only one of the
             // two ends up in the cache.
             timeline::Options options;
-            options.threaded = false;
+            // options.threaded = false;  // <--- was false, now true
             file::Path inOutPath = path;
             out = timeline::Timeline::create(context, inOutPath, options);
             {
@@ -262,25 +262,19 @@ namespace tl
             p.infoThread.running = false;
             if (p.infoThread.thread.joinable())
             {
-                std::cerr << "join info thread" << std::endl;
                 p.infoThread.thread.join();
-                std::cerr << "joined info thread" << std::endl;
             }
 
             p.thumbnailThread.running = false;
             if (p.thumbnailThread.thread.joinable())
             {
-                std::cerr << "join thumbnail thread" << std::endl;
                 p.thumbnailThread.thread.join();
-                std::cerr << "joined thumbnail thread" << std::endl;
             }
 
             p.waveformThread.running = false;
             if (p.waveformThread.thread.joinable())
             {
-                std::cerr << "join waveform thread" << std::endl;
                 p.waveformThread.thread.join();
-                std::cerr << "joined waveform thread" << std::endl;
             }
         }
 
@@ -288,6 +282,14 @@ namespace tl
         ThumbnailSystem::cancelRequests(const std::vector<uint64_t>& ids)
         {
             TLRENDER_P();
+
+            //
+            // Fill up the promises.
+            //
+            _infoCancel();
+            _thumbnailCancel();
+            _waveformCancel();
+
             // Looked up as a set: this is called with the requests of a whole
             // timeline's worth of items, and searching the list of ids for each
             // pending request made cancelling cost the product of the two.
@@ -335,6 +337,17 @@ namespace tl
                     {
                         ++i;
                     }
+                }
+            }
+            {
+                // Acquire the cache lock to safely iterate over the shared
+                // Timeline instances.
+                std::unique_lock<std::mutex> lock(p.ioCacheMutex);
+
+                // p.ioCache.getValues() is a list of timelines.
+                for (const auto& timeline : p.ioCache.getValues())
+                {
+                    timeline->cancelRequests(ids);
                 }
             }
         }
@@ -621,9 +634,7 @@ namespace tl
                                 request->mediaPath, timeRange, request->options);
                             if (audioRequest.valid())
                             {
-                                std::cerr << "future get " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                 const auto audioData = audioRequest.get();
-                                std::cerr << "future got " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                 if (audioData.audio && p.waveformThread.running)
                                 {
                                     auto resample = audio::AudioResample::create(
