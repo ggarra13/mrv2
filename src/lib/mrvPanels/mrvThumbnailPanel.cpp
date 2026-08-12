@@ -11,10 +11,13 @@
 #include "mrvCore/mrvFile.h"
 #include "mrvFLTK/mrvWait.h"
 
+#include <tlTimeline/Timeline.h>
+
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl_Widget.H>
 #include <FL/Fl.H>
+
 
 #ifdef MRV2_PYBIND11
 #    include <pybind11/embed.h>
@@ -204,8 +207,9 @@ namespace mrv
                 io::Options options;
                 options["Layer"] = string::Format("{0}").arg(layerId);
 
+                auto mediaPath = timeline->getMediaPath(time);
                 thumbnailRequests[widget] =
-                    thumbnailSystem->getThumbnail(path, size.h, time,
+                    thumbnailSystem->getThumbnail(path, mediaPath, size.h, time,
                                                   mediaReferenceKey, options);
             }
             catch (const std::exception& e)
@@ -221,15 +225,6 @@ namespace mrv
 
         void ThumbnailPanel::_cancelRequests()
         {
-            const auto context = App::app->getContext();
-#ifdef OPENGL_BACKEND
-            auto thumbnailSystem = context->getSystem<timelineui::ThumbnailSystem>();
-#endif
-
-#ifdef VULKAN_BACKEND
-            auto thumbnailSystem = context->getSystem<timelineui_vk::ThumbnailSystem>();
-#endif
-
             std::vector<uint64_t> ids;
             for (const auto& i : thumbnailRequests)
             {

@@ -151,6 +151,9 @@ namespace tl
             //! keeps the reading on the side that knows where the bytes are.
             std::vector<file::Path> getMediaPaths() const;
 
+            //! Get the media path (if any) at the current mediaTime.
+            file::Path getMediaPath(otio::RationalTime& mediaTime);
+
             //! Get the information for one of the media in the timeline.
             bool getMediaInfo(
                 const file::Path&,

@@ -72,10 +72,6 @@ namespace tl
             p.clipName = clip->name();
             p.timelinePath = timeline->getPath();
             p.path = path;
-            std::cerr << "video clip timelinePath=" << p.timelinePath.get()
-                      << std::endl;
-            std::cerr << "              clip path=" << p.path.get()
-                      << std::endl;
             p.memoryRead = timeline::getMemoryRead(clip->media_reference());
             p.thumbnailSystem = thumbnailSystem;
 

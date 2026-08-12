@@ -372,6 +372,7 @@ namespace tl
                                 if (status == std::future_status::ready)
                                 {
                                     videoFrame = future.get();
+                                    break;
                                 }
                             }
 

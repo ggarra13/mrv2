@@ -2898,5 +2898,113 @@ namespace tl
             double sum = (options.videoGB + options.audioGB);
             p.frameCache->setMax(sum * memory::gigabyte);
         }
+
+        file::Path Timeline::getMediaPath(otio::RationalTime& mediaTime)
+        {
+            file::Path path = getPath();
+            file::Path out = path;
+            const otime::RationalTime time = mediaTime;
+
+            const auto extension = path.getExtension();
+            if (extension == ".otio" || extension == ".otioz")
+            {
+                if (auto otioTimeline = getTimeline())
+                {
+                    for (const auto& child : otioTimeline->tracks()->children())
+                    {
+                        auto track = otio::dynamic_retainer_cast<otio::Track>(child);
+                        if (!track || track->kind() != otio::Track::Kind::video)
+                            continue;
+
+                        otio::ErrorStatus errorStatus;
+                        for (const auto& trackChild : track->children())
+                        {
+                            auto clip = otio::dynamic_retainer_cast<otio::Clip>(trackChild);
+                            if (!clip)
+                                continue;
+
+                            const auto range = track->range_of_child(clip, &errorStatus);
+                            if (otio::is_error(errorStatus))
+                                continue;
+
+                            if (range.start_time() <= time && time < range.end_time_exclusive())
+                            {
+                                if (auto ref = clip->media_reference())
+                                {
+                                    // The directory the .otio (or any nested .otio, if you ever
+                                    // support nested references) lives in — target_url()s inside
+                                    // it are relative to this, the same way Timeline::create()
+                                    // resolves them internally.
+                                    const std::string baseDir = path.getDirectory();
+
+                                    if (auto ext = dynamic_cast<otio::ExternalReference*>(ref))
+                                    {
+                                        out = file::Path(url::decode(ext->target_url()));
+                                        if (!out.isAbsolute())
+                                            out = file::Path(baseDir + out.get());
+
+                                        io::Info info;
+
+                                        double fileRate = time.rate();  // fallback if getMediaInfo fails
+                                        if (getMediaInfo(out, info) &&
+                                            info.videoTime.has_value())
+                                            fileRate = info.videoTime->duration().rate();
+
+                                        const otio::TimeRange trimmedRange = clip->trimmed_range();
+                                        const otio::RationalTime offset =
+                                            (time - range.start_time()).rescaled_to(trimmedRange.start_time().rate());
+                                        mediaTime = (trimmedRange.start_time() + offset).rescaled_to(fileRate);
+                                    }
+                                    else if (auto seq = dynamic_cast<otio::ImageSequenceReference*>(ref))
+                                    {
+                                        std::string dir = seq->target_url_base();
+                                        if (!dir.empty() && dir.back() != '/' && dir.back() != '\\')
+                                            dir += '/';
+
+                                        // Build a path pointing at the sequence's first frame — same
+                                        // shape file::Path expects when you open a sequence file
+                                        // directly, which is why plain-sequence files already work.
+                                        std::stringstream number;
+                                        number << std::setfill('0')
+                                               << std::setw(seq->frame_zero_padding())
+                                               << seq->start_frame();
+
+                                        std::string url = dir + seq->name_prefix() + number.str() +
+                                                          seq->name_suffix();
+
+                                        out = file::Path(url::decode(url));
+                                        if (!out.isAbsolute())
+                                            out = file::Path(baseDir + out.get());
+
+                                        io::Info info;
+
+                                        double fileRate = time.rate();  // fallback if getMediaInfo fails
+                                        if (getMediaInfo(out, info) &&
+                                            info.videoTime.has_value())
+                                            fileRate = info.videoTime->duration().rate();
+
+                                        const otio::TimeRange trimmedRange = clip->trimmed_range();
+                                        const otio::RationalTime offset =
+                                            (time - range.start_time()).rescaled_to(trimmedRange.start_time().rate());
+                                        mediaTime = (trimmedRange.start_time() + offset).rescaled_to(fileRate);
+                                        // mediaTime = track->transformed_time(time, clip, &errorStatus);
+                                    }
+                                    else
+                                    {
+                                        // GeneratorReference, MissingReference, etc. — nothing we can
+                                        // resolve to a readable path; leave mediaPath == path so it
+                                        // falls into the existing "picture of the timeline" fallback
+                                        // rather than silently doing nothing.
+                                    }
+                                }
+                            }
+                        }
+                        break; // first video track is enough for a thumbnail
+                    }
+                }
+            }
+            return out;
+        }
+
     } // namespace timeline
 } // namespace tl

@@ -441,9 +441,20 @@ namespace tl
                                                  log::Type::Warning);
                             }
                             const auto info = timeline->getIOInfo();
-                            const auto videoData = timeline->getVideo(
+                            auto future = timeline->getVideo(
                                 request->time.value_or(
-                                    timeline->getTimeRange().start_time())).future.get();
+                                    timeline->getTimeRange().start_time())).future;
+                            timeline::VideoFrame videoFrame;
+                            while (p.thumbnailThread.running)
+                            {
+                                std::future_status status = future.wait_for(std::chrono::milliseconds(5));
+
+                                if (status == std::future_status::ready)
+                                {
+                                    videoFrame = future.get();
+                                    break;
+                                }
+                            }
                             math::Size2i size;
                             if (!info.video.empty())
                             {
@@ -497,7 +508,7 @@ namespace tl
                                         -1.F, 1.F);
                                     p.thumbnailThread.render->setTransform(ortho);
                                     p.thumbnailThread.render->drawVideo(
-                                        {videoData},
+                                        {videoFrame},
                                         {math::Box2i(
                                                 0, 0, size.w, size.h)});
                                     p.thumbnailThread.render->end();
