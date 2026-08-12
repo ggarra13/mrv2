@@ -1604,6 +1604,7 @@ namespace mrv
         math::Size2i TimelineViewport::getRenderSize() const noexcept
         {
             TLRENDER_P();
+
             return timeline::getRenderSize(p.compareOptions,
                                            p.displayOptions,
                                            p.videoData);
@@ -3771,9 +3772,20 @@ namespace mrv
             }
             else
             {
-                const auto path = p.player->player()->getPath();
+                auto path = p.player->player()->getPath();
+                if (file::isOTIO(path))
+                {
+                    // We have an otio timeline.  Get the clip name from the
+                    // tag and recreate the path for checking.
+                    auto tags = p.videoData[0].layers[0].image->getTags();
+                    if (tags.find("otioClipName") != tags.end())
+                    {
+                        path = file::Path(tags["otioClipName"]);
+                    }
+                }
+
                 const auto extension = path.getExtension();
-                if (file::isMovie(extension) || file::isOTIO(path))
+                if (file::isMovie(extension))
                 {
                     p.hdrOptions.tonemap = true;
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
@@ -3781,12 +3793,6 @@ namespace mrv
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
                     {
                         p.ocio_disabled = true;
-                    }
-                    else
-                    {
-                        if (file::isOTIO(path))
-                            p.hdrOptions.tonemap = false;
-                        p.ocio_disabled = false;
                     }
                 }
                 else if (file::isSRGB(extension))
@@ -3801,7 +3807,8 @@ namespace mrv
                 }
                 else
                 {
-                    // A linear or log image.  Do not tonemap with libplacebo.
+                    // A linear or log image.  Do not tonemap with
+                    // libplacebo.
                     p.hdrOptions.tonemap = false;
 
                     // Make sure ocio is enabled.
