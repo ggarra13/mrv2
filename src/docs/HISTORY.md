@@ -5,6 +5,7 @@ v1.7.3
 
 - Core: Fixed a crash on the OpenEXR reader when reading a corrupt/truncated file.
 - Core: Fixed and added tlRender's unit tests.
+- Core: Fixed loading of image sequences command-line from the current directory. 
 
 - Build: Documented Vulkan compilation on Linux.
 

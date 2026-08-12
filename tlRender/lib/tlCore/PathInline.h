@@ -159,8 +159,8 @@ namespace tl
         {
             return _frames.has_value() ?
                 !_frames.value().equal() ?
-                toString(_frames.value().getMin(), _pad) + "-" + toString(_frames.value().getMax(), _pad) :
-                toString(_frames.value().getMin(), _pad) :
+                toString(_frames.value().min(), _pad) + "-" + toString(_frames.value().max(), _pad) :
+                toString(_frames.value().min(), _pad) :
                 std::string();
         }
 

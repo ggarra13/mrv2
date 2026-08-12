@@ -29,6 +29,16 @@ namespace tl
         {
         }
 
+        template <typename T> constexpr T Range<T>::min() const
+        {
+            return _min;
+        }
+
+        template <typename T> constexpr T Range<T>::max() const
+        {
+            return _max;
+        }
+
         template <typename T> constexpr T Range<T>::getMin() const
         {
             return _min;
@@ -58,7 +68,7 @@ namespace tl
         {
             return _min == _max;
         }
-        
+
         template <typename T> constexpr bool Range<T>::contains(T value) const
         {
             return value >= _min && value <= _max;
@@ -86,34 +96,34 @@ namespace tl
         template<typename T>
         inline bool contains(const Range<T>& range, T value)
         {
-            return value >= range.getMin() && value <= range.getMax();
+            return value >= range.min() && value <= range.max();
         }
 
         template<typename T>
         inline bool intersects(const Range<T>& range, const Range<T>& value)
         {
             return !(
-                value.getMax() < range.getMin() ||
-                value.getMin() > range.getMax());
+                value.max() < range.min() ||
+                value.min() > range.max());
         }
 
         template<typename T>
         inline Range<T> expand(const Range<T>& range, T value)
         {
             return Range<T>(
-                std::min(range.getMin(), value),
-                std::max(range.getMax(), value));
+                std::min(range.min(), value),
+                std::max(range.max(), value));
         }
 
         template<typename T>
         inline Range<T> expand(const Range<T>& range, const Range<T>& value)
         {
             return Range<T>(
-                std::min(range.getMin(), value.getMin()),
-                std::max(range.getMax(), value.getMax()));
+                std::min(range.min(), value.min()),
+                std::max(range.max(), value.max()));
         }
 
-        
+
         template <typename T>
         constexpr bool Range<T>::operator==(const Range<T>& value) const
         {
