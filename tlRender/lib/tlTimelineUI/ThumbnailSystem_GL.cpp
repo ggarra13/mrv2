@@ -361,12 +361,6 @@ namespace tl
                             }
                             const auto info = timeline->getIOInfo();
 
-                            // //! Video request is this:
-                            // struct VideoRequest
-                            // {
-                            //     uint64_t id = 0;
-                            //     std::future<VideoFrame> future;
-                            // };
                             auto future = timeline->getVideo(
                                 request->time.value_or(
                                     timeline->getTimeRange().start_time())).future;
