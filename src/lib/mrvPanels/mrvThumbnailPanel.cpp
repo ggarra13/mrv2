@@ -208,9 +208,16 @@ namespace mrv
                 options["Layer"] = string::Format("{0}").arg(layerId);
 
                 auto mediaPath = timeline->getMediaPath(time);
-                thumbnailRequests[widget] =
-                    thumbnailSystem->getThumbnail(path, mediaPath, size.h, time,
-                                                  mediaReferenceKey, options);
+                double duration = timeRange.duration().value();
+                if (duration > 0.F &&
+                    (!file::isOTIO(path) || path != mediaPath))
+                {
+                    thumbnailRequests[widget] =
+                        thumbnailSystem->getThumbnail(path, mediaPath, size.h,
+                                                      time,
+                                                      mediaReferenceKey,
+                                                      options);
+                }
             }
             catch (const std::exception& e)
             {

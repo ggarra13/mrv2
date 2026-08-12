@@ -194,7 +194,7 @@ namespace mrv
                     time = media->currentTime;
                 }
 
-                b->createTimeline(path, App::app->getContext());
+                b->createTimeline(App::app->getContext(), path);
 
                 _createThumbnail(b, path, time, 0, media->mediaReferenceKey);
             }
@@ -305,7 +305,7 @@ namespace mrv
                     }
                 }
 
-                b->createTimeline(path, App::app->getContext());
+                b->createTimeline(App::app->getContext(), path);
 
                 _createThumbnail(b, path, time, 0, media->mediaReferenceKey);
             }

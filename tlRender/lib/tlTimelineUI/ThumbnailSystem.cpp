@@ -262,19 +262,25 @@ namespace tl
             p.infoThread.running = false;
             if (p.infoThread.thread.joinable())
             {
+                std::cerr << "join info thread" << std::endl;
                 p.infoThread.thread.join();
+                std::cerr << "joined info thread" << std::endl;
             }
 
             p.thumbnailThread.running = false;
             if (p.thumbnailThread.thread.joinable())
             {
+                std::cerr << "join thumbnail thread" << std::endl;
                 p.thumbnailThread.thread.join();
+                std::cerr << "joined thumbnail thread" << std::endl;
             }
 
             p.waveformThread.running = false;
             if (p.waveformThread.thread.joinable())
             {
+                std::cerr << "join waveform thread" << std::endl;
                 p.waveformThread.thread.join();
+                std::cerr << "joined waveform thread" << std::endl;
             }
         }
 
@@ -615,7 +621,9 @@ namespace tl
                                 request->mediaPath, timeRange, request->options);
                             if (audioRequest.valid())
                             {
+                                std::cerr << "future get " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                 const auto audioData = audioRequest.get();
+                                std::cerr << "future got " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                 if (audioData.audio && p.waveformThread.running)
                                 {
                                     auto resample = audio::AudioResample::create(

@@ -273,7 +273,7 @@ namespace tl
                     std::shared_ptr<image::Image> image;
                     try
                     {
-                        //std::cout << "thumbnail request: " <<
+                        // std::cout << "thumbnail request: " <<
                         //    request->path.get() << " " <<
                         //    request->time << std::endl;
                         auto context = p.context.lock();
@@ -302,7 +302,9 @@ namespace tl
                                 {
                                     if (p.thumbnailThread.running)
                                     {
+                                        std::cerr << "future get " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                         const auto videoFrame = videoFuture.get();
+                                        std::cerr << "future got " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                         gl::OffscreenBufferOptions options;
                                         options.colorType = image::PixelType::RGBA_U8;
                                         if (gl::doCreate(
@@ -360,8 +362,6 @@ namespace tl
                                                  log::Type::Warning);
                             }
 
-#if 1
-#else
                             const auto info = timeline->getIOInfo();
 
                             auto future = timeline->getVideo(
@@ -374,7 +374,9 @@ namespace tl
 
                                 if (status == std::future_status::ready)
                                 {
+                                    std::cerr << "future get " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                     videoFrame = future.get();
+                                    std::cerr << "future got " << __FUNCTION__ << " " << __LINE__ << std::endl;
                                     break;
                                 }
                             }
@@ -428,7 +430,6 @@ namespace tl
                                         image->getData());
                                 }
                             }  // if (size.isValid())
-#endif
                         }  // if timeline
                     }  // try
                     catch (const std::exception&)

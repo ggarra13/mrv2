@@ -192,7 +192,7 @@ void Flu_Entry::timerEvent()
 
     if (p.thumbnail.request.future.valid() &&
         p.thumbnail.request.future.wait_for(std::chrono::seconds(0)) ==
-            std::future_status::ready)
+        std::future_status::ready)
     {
         if (auto image = p.thumbnail.request.future.get())
         {
@@ -748,6 +748,8 @@ Flu_Entry::~Flu_Entry()
 {
     TLRENDER_P();
 
+    Fl::remove_timeout((Fl_Timeout_Handler)timerEvent_cb, this);
+
     if (p.bind_image)
         delete icon;
 }
@@ -957,10 +959,10 @@ void Flu_Entry::startRequest()
 
     if (auto thumbnailSystem = p.thumbnailSystem.lock())
     {
+        const auto& timeline =
+            timeline::Timeline::create(mrv::App::app->getContext(), path);
         if (extension == ".otio" || extension == ".otioz")
         {
-            const auto& timeline =
-                timeline::Timeline::create(mrv::App::app->getContext(), path);
             const auto& timeRange = timeline->getTimeRange();
             if (time::isValid(timeRange))
             {
@@ -972,8 +974,14 @@ void Flu_Entry::startRequest()
 
         std::random_device rd;
         options["ClearCache"] = string::Format("{0}").arg(rd());
-        p.thumbnail.request = thumbnailSystem->getThumbnail(path, size.h, time,
-                                                            "", options);
+        auto mediaPath = timeline->getMediaPath(time);
+        if (!mrv::file::isOTIO(path) || path != mediaPath)
+        {
+            p.thumbnail.request =
+                thumbnailSystem->getThumbnail(path, mediaPath,
+                                              size.h, time,
+                                              "", options);
+        }
         p.thumbnail.init = false;
         isPicture = true;
 

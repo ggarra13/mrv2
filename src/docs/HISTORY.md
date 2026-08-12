@@ -1,6 +1,8 @@
 v1.7.3
 ======
 
+This is a major upgrade and bug fix release.
+
 - Install: Fixed Linux installers trying to place opentimelineio's python module in my /home directory.
 
 - UI: Fixed tooltip of "Advance forward one frame" button in all languages.
@@ -11,6 +13,7 @@ v1.7.3
 
 - NDI: Minor improvement to NDI reading in the player.
 
+- Core: Fixed Thumbnail crashes on file requester on Linux.
 - Core: Now each panel has its own thumbnail cache.
 - Core: Fixed an OpenGL error (crash) on texture counting. 
 - Core: Fixed a bug in OpenEXR reader on Vulkan backend when the image was promoted to 4 channels.
