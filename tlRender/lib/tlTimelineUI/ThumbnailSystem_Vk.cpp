@@ -434,12 +434,14 @@ namespace tl
                             {
                                 logSystem->print("tl::ui::ThumbnailSystem",
                                                  string::Format("Media not found in timeline, "
-                                                                "using the timeline itself: \"{0}\" "
+                                                                "using \"{0}\" in timeline "
                                                                 "in \"{1}\"").
                                                  arg(request->mediaPath.get()).
                                                  arg(request->path.get()),
                                                  log::Type::Warning);
                             }
+#if 1
+#else
                             const auto info = timeline->getIOInfo();
                             auto future = timeline->getVideo(
                                 request->time.value_or(
@@ -538,6 +540,7 @@ namespace tl
                                     p.thumbnailThread.frameIndex = (p.thumbnailThread.frameIndex + 1) % vlk::MAX_FRAMES_IN_FLIGHT;
                                 }  // if (p.thumbnailThread.buffer
                             }  // if (size.isValid())
+#endif
                         }  // if timeline
                     }  // try
                     catch (const std::exception&)

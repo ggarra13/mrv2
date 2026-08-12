@@ -231,7 +231,8 @@ namespace mrv
                 const auto& request = i.second;
                 ids.push_back(request.id);
             }
-            thumbnailSystem->cancelRequests(ids);
+            if (thumbnailSystem)
+                thumbnailSystem->cancelRequests(ids);
             thumbnailRequests.clear();
         }
 
