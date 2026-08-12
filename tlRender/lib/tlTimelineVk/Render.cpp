@@ -72,15 +72,15 @@ namespace
         beginBarrier.image = outputRGBA->getImage();
         beginBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 
-        vkCmdPipelineBarrier(cmd, 
-                             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 
-                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 
+        vkCmdPipelineBarrier(cmd,
+                             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
                              0, 0, nullptr, 0, nullptr, 1, &beginBarrier);
 
         // 3. Dispatch the Compute Shader
         uint32_t groupCountX = (width + 15) / 16;
         uint32_t groupCountY = (height + 15) / 16;
-            
+
         shader->dispatch(cmd, groupCountX, groupCountY);
 
         // 4. Barrier: Transition Output Image to SHADER_READ_ONLY for the Fragment Shader
@@ -92,12 +92,12 @@ namespace
         endBarrier.image = outputRGBA->getImage();
         endBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 
-        vkCmdPipelineBarrier(cmd, 
-                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 
-                             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 
+        vkCmdPipelineBarrier(cmd,
+                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
                              0, 0, nullptr, 0, nullptr, 1, &endBarrier);
     }
-    
+
     // Convert from R10G10B10A2 to Vulkan A2R10G10B10 (ChatGPT)
     void convert_R10G10B10A2_to_A2R10G10B10(
         // DPX buffer (R10G10B10A2) - big endian
@@ -116,17 +116,17 @@ namespace
 
             if (tl::memory::getEndian() != endian)
                 pixel = byteSwap32(pixel);
-                    
+
             // Correct extraction for A2R10G10B10 layout
             const uint32_t R = (pixel >> 22) & 0x3FF;
             const uint32_t G = (pixel >> 12) & 0x3FF;
             const uint32_t B = (pixel >>  2) & 0x3FF;
             const uint32_t A = 0x3FF;
-                    
+
             // Vulkan expects: A (bits 30-31), B (20-29), G
             // (10-19), R (0-9)
             pixel = (A << 30) | (R << 20) | (G << 10) | (B << 0);
-                        
+
             dst[i] = pixel;
         }
     }
@@ -276,7 +276,7 @@ namespace
         return VK_FORMAT_UNDEFINED;
     }
 #endif
-    
+
 } // namespace
 
 namespace tl
@@ -381,7 +381,7 @@ namespace tl
             size_t offset)
         {
             TLRENDER_P();
-            
+
             const auto& info = image->getInfo();
             switch (info.pixelType)
             {
@@ -782,7 +782,7 @@ namespace tl
 
             pl_shader_params shader_params;
             memset(&shader_params, 0, sizeof(pl_shader_params));
-                
+
             shader_params.id = 1;
             shader_params.gpu = gpu;
             shader_params.dynamic_constants = false;
@@ -792,7 +792,7 @@ namespace tl
             {
                 throw std::runtime_error("pl_shader_alloc failed!");
             }
-                
+
             state = nullptr;
             res = nullptr;
 
@@ -839,7 +839,7 @@ namespace tl
             pcUBOSize = 0;
             pl_gpu_dummy_destroy(&gpu);
             pl_log_destroy(&log);
-            
+
             for (int i = 0; i < ssboCmds.size(); ++i)
             {
                 if (ssboCmds[i] != VK_NULL_HANDLE)
@@ -892,7 +892,7 @@ namespace tl
                                           [] {
                                               return vlk::Texture::getTotalByteCount();
                                           });
-                
+
                 p.statsSystem->addSampler("Vulkan Objects/Buffers: ",
                                           [] {
                                               return vlk::OffscreenBuffer::getObjectCount();
@@ -910,7 +910,7 @@ namespace tl
                                               return vlk::Texture::getObjectCount();
                                           });
             }
-            
+
             p.glyphTextureAtlas = vlk::TextureAtlas::create(
                 ctx, 1, 4096, image::PixelType::L_U8,
                 timeline::ImageFilter::Linear);
@@ -937,12 +937,12 @@ namespace tl
             TLRENDER_P();
 
             VkDevice device = ctx.device;
-            
+
             for (auto& [_, pipeline] : p.pipelines)
             {
                 vkDestroyPipeline(device, pipeline.second, nullptr);
             }
-            
+
             for (auto& [_, pipelineLayout] : p.pipelineLayouts)
             {
                 vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
@@ -1002,13 +1002,13 @@ namespace tl
                                      VK_STENCIL_OP_KEEP,
                                      VK_STENCIL_OP_KEEP,
                                      VK_COMPARE_OP_ALWAYS);
-            
+
             vkCmdSetStencilCompareMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
                                        0xFFFFFFFF);
             vkCmdSetStencilWriteMask(cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
                                      0xFFFFFFFF);
 #endif
-            
+
             begin(renderSize, renderOptions);
         }
 
@@ -1041,7 +1041,7 @@ namespace tl
             g.pipelineLayouts.clear();
             g.bindingSets.clear();
             g.buffers.clear();
-            
+
             const math::Matrix4x4f transform;
             const image::Color4f color(1.F, 1.F, 1.F);
 
@@ -1108,7 +1108,7 @@ namespace tl
                 _createBindingSet(p.shaders["colorMesh"]);
             }
 
-            // Shader to creates a quad with a texture for text drawing 
+            // Shader to creates a quad with a texture for text drawing
             if (!p.shaders["text"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -1127,10 +1127,10 @@ namespace tl
                 p.shaders["text"]->addTexture("textureSampler");
                 p.shaders["text"]->addPush(
                     "color", color, vlk::kShaderFragment);
-                
+
                 _createBindingSet(p.shaders["text"]);
             }
-            
+
             // Shader to read one mesh with 3 vertex and uvs and a simple textue.
             if (!p.shaders["texture"])
             {
@@ -1150,7 +1150,7 @@ namespace tl
                 p.shaders["texture"]->addTexture("textureSampler");
                 p.shaders["texture"]->addPush(
                     "color", color, vlk::kShaderFragment);
-                
+
                 _createBindingSet(p.shaders["texture"]);
             }
 
@@ -1198,7 +1198,7 @@ namespace tl
                     "transform.mvp", transform, vlk::kShaderVertex);
                 p.shaders["overlay"]->addFBO("textureSampler");
                 p.shaders["overlay"]->addPush("color", color, vlk::kShaderFragment);
-                
+
                 _createBindingSet(p.shaders["overlay"]);
             }
             if (!p.shaders["difference"])
@@ -1356,7 +1356,7 @@ namespace tl
             {
                 p.shaders["pbr"] = vlk::Shader::create(
                     ctx, vertexUSD(), fragmentUSD(), "pbr");
-                
+
                 PBRTransform transform;
                 p.shaders["pbr"]->createUniform("u_Transform", transform,
                                                 vlk::kShaderVertex);
@@ -1366,15 +1366,15 @@ namespace tl
                 p.shaders["pbr"]->addTexture("u_RoughnessMap");
                 p.shaders["pbr"]->addTexture("u_NormalMap");
                 p.shaders["pbr"]->addTexture("u_AOMap");
-                
+
                 PBRMaterial material;
-                
+
                 p.shaders["pbr"]->createUniform("u_Material", material);
-                
+
                 PBRScene scene;
                 scene.lightColor = math::Vector3f(1, 1, 1);
                 p.shaders["pbr"]->createUniform("u_Scene", scene);
-                
+
                 _createBindingSet(p.shaders["pbr"]);
             }
             if (!p.compute["rgbf16_to_rgbaf16"])
@@ -1411,7 +1411,7 @@ namespace tl
                 _createBindingSet(p.compute["rgbf32_to_rgbaf32"]);
                 p.compute["rgbf32_to_rgbaf32"]->createComputePipeline();
             }
-            
+
             if (!p.compute["hdr_peak_detection"])
             {
                 try
@@ -1438,7 +1438,7 @@ namespace tl
                                                                               "hdr_peak_detection");
                     }
 #endif
-                
+
 #else
                     p.compute["hdr_peak_detection"] = vlk::Shader::create(ctx,
                                                                           computeHDRPeakDetection(),
@@ -1454,7 +1454,7 @@ namespace tl
                 {
                 }
             }
-            
+
 
             if (!p.shaders["display"])
                 _displayShader();
@@ -1480,7 +1480,7 @@ namespace tl
                 p.vbos["text"] = vlk::VBO::create(2 * 3,
                                                   vlk::VBOType::Pos2_F32_UV_U16);
                 p.vaos["text"] = vlk::VAO::create(ctx);
-                
+
                 {
                     const std::string pipelineName = "text";
                     const std::string pipelineLayoutName = "text";
@@ -1538,25 +1538,25 @@ namespace tl
         {
             return _p->frameIndex;
         }
-        
+
         void Render::setMonitorCapabilities(const monitor::Capabilities& value)
         {
             TLRENDER_P();
-            
+
             if (p.monitor == value)
                 return;
-            
+
             p.monitor = value;
 
             p.shaders["display"].reset();
             _displayShader();
         }
-        
+
         Fl_Vk_Context& Render::getContext() const
         {
             return ctx;
         }
-        
+
         math::Size2i Render::getRenderSize() const
         {
             return _p->renderSize;
@@ -1576,7 +1576,7 @@ namespace tl
         {
             _p->viewport = value;
         }
-        
+
         void Render::beginLoadRenderPass()
         {
             TLRENDER_P();
@@ -1584,7 +1584,7 @@ namespace tl
             p.fbo->transitionToColorAttachment(p.cmd);
             p.fbo->beginLoadRenderPass(p.cmd);
         }
-        
+
         void Render::beginRenderPass()
         {
             TLRENDER_P();
@@ -1596,17 +1596,17 @@ namespace tl
         void Render::endRenderPass()
         {
             TLRENDER_P();
-            
+
             p.fbo->endRenderPass(p.cmd);
         }
-        
+
         void Render::setupViewportAndScissor()
         {
             TLRENDER_P();
-            
+
             p.fbo->setupViewportAndScissor();
         }
-        
+
         void Render::clearViewport(const image::Color4f& value)
         {
             TLRENDER_P();
@@ -1630,7 +1630,7 @@ namespace tl
             // buffer
             vkCmdBeginRenderPass(p.cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
             vkCmdEndRenderPass(p.cmd);
-            
+
             // Update C++ layout tracking to match render pass
             //finalLayout
             p.fbo->setImageLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
@@ -1681,11 +1681,11 @@ namespace tl
         {
             _p->transform = value;
         }
-        
+
         void Render::applyTransforms()
         {
             TLRENDER_P();
-            
+
             for (auto& i : p.shaders)
             {
                 if (i.second)
@@ -1715,7 +1715,7 @@ namespace tl
             {
                 OCIO::GpuShaderDesc::UniformData data;
                 const char* name = shaderDesc->getUniform(i, data);
-        
+
                 switch (data.m_type)
                 {
                 case OCIO::UNIFORM_DOUBLE:
@@ -1731,19 +1731,19 @@ namespace tl
             }
             return s.str();
         }
-        
+
 
         void
         Render::_updateOCIOUniforms(const OCIO::GpuShaderDescRcPtr& shaderDesc)
         {
             TLRENDER_P();
-            
+
             const unsigned numUniforms = shaderDesc->getNumUniforms();
             for (unsigned i = 0; i < numUniforms; ++i)
             {
                 OCIO::GpuShaderDesc::UniformData data;
                 const char* name = shaderDesc->getUniform(i, data);
-        
+
                 if (data.m_type == OCIO::UNIFORM_DOUBLE)
                 {
                     // Note: OCIO uses double, but GLSL usually uses float
@@ -1772,7 +1772,7 @@ namespace tl
                 }
             }
         }
-        
+
         void
         Render::_createOCIOUniforms(const OCIO::GpuShaderDescRcPtr& shaderDesc)
         {
@@ -1782,12 +1782,12 @@ namespace tl
             {
                 OCIO::GpuShaderDesc::UniformData data;
                 const char* name = shaderDesc->getUniform(i, data);
-        
+
                 if (data.m_type == OCIO::UNIFORM_DOUBLE)
                 {
                     // Note: OCIO uses double, but GLSL usually uses float
                     float value = static_cast<float>(data.m_getDouble());
-                    p.shaders["display"]->createUniform(name, value); 
+                    p.shaders["display"]->createUniform(name, value);
                 }
                 else if (data.m_type == OCIO::UNIFORM_BOOL)
                 {
@@ -1830,7 +1830,7 @@ namespace tl
             }
             return index;
         }
-        
+
         void Render::_addTextures(
             std::vector<std::shared_ptr<vlk::Texture> >& textures,
             const OCIO::GpuShaderDescRcPtr& shaderDesc)
@@ -1907,7 +1907,7 @@ namespace tl
                 auto texture = vlk::Texture::create(
                     ctx, VK_IMAGE_TYPE_3D, width, height, depth, imageFormat,
                     samplerName, options);
-            
+
                 texture->copy(reinterpret_cast<const uint8_t*>(newvalues.data()), newvalues.size() * sizeof(float));
                 texture->transitionToShaderRead(p.cmd);
                 index = ocioIndexFromSamplerName(samplerName, index);
@@ -1925,7 +1925,7 @@ namespace tl
                 OCIO::GpuShaderDesc::TextureType channel = OCIO::GpuShaderDesc::TEXTURE_RED_CHANNEL;
                 OCIO::GpuShaderCreator::TextureDimensions dimensions = OCIO::GpuShaderDesc::TEXTURE_1D;
                 OCIO::Interpolation interpolation = OCIO::INTERP_LINEAR;
-        
+
                 shaderDesc->getTexture(i, textureName, samplerName, width, height, channel, dimensions, interpolation);
 
                 if (!textureName || !*textureName || !samplerName || !*samplerName || width == 0) continue;
@@ -1952,7 +1952,7 @@ namespace tl
 
                 VkFormat imageFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
                 int channels = 4;
-        
+
                 std::vector<float> paddedValues;
                 const void* dataPtr = values;
                 size_t dataSize = 0;
@@ -1993,7 +1993,7 @@ namespace tl
                 default:
                     throw std::runtime_error("Unknown OCIO dimension");
                 }
-                
+
                 // NOTE: We use the 'height' returned by OCIO. Do NOT force it to 1.
                 auto texture = vlk::Texture::create(
                     ctx, imageType, width, height, 1, imageFormat,
@@ -2002,7 +2002,7 @@ namespace tl
                 texture->copy(reinterpret_cast<const uint8_t*>(dataPtr), dataSize);
                 texture->transitionToShaderRead(p.cmd);
                 index = ocioIndexFromSamplerName(samplerName, index);
-                
+
                 sortedTextures[index].push_back(texture);
             }
 
@@ -2022,39 +2022,39 @@ namespace tl
                                      const std::size_t pushConstantsMaxSize)
         {
             TLRENDER_P();
-            
+
             // Collect non-floats and floats separately to optimize push constants
             std::vector<struct pl_shader_var> non_floats;
             std::vector<struct pl_shader_var> floats;
-    
+
             for (int i = 0; i < res->num_variables; ++i) {
                 const struct pl_shader_var shader_var = res->variables[i];
                 const struct pl_var var = shader_var.var;
                 const std::string glsl_type = pl_var_glsl_type_name(var);
                 const bool is_float = (glsl_type == "float");
-        
+
                 if (is_float) {
                     floats.push_back(shader_var);
                 } else {
                     non_floats.push_back(shader_var);
                 }
             }
-    
+
             // Combine into a grouped list: non-floats first, then floats
             std::vector<struct pl_shader_var> all_grouped;
             all_grouped.reserve(non_floats.size() + floats.size());
             all_grouped.insert(all_grouped.end(), non_floats.begin(), non_floats.end());
             all_grouped.insert(all_grouped.end(), floats.begin(), floats.end());
-    
+
             // Now pack into push constants until we can't fit more
             std::vector<struct pl_shader_var> push_vars;
             std::vector<struct pl_shader_var> ubo_vars;
-    
+
             for (const auto &shader_var : all_grouped)
             {
                 const struct pl_var var = shader_var.var;
                 const struct pl_var_layout layout = pl_std430_layout(currentOffset, &var);
-        
+
                 if (layout.offset + layout.size > pushConstantsMaxSize) {
                     ubo_vars.push_back(shader_var);
                 } else {
@@ -2062,7 +2062,7 @@ namespace tl
                     currentOffset = layout.offset + layout.size;
                 }
             }
-    
+
             // Generate push constant block if there are variables for it
             if (!push_vars.empty())
             {
@@ -2078,7 +2078,7 @@ namespace tl
                 }
                 s << "};\n";
             }
-    
+
             // Generate UBO block if there are remaining variables
             if (!ubo_vars.empty())
             {
@@ -2104,7 +2104,7 @@ namespace tl
 
             p.placeboData->pcUBOvars = ubo_vars;
         }
-        
+
         void Render::_addTextures(
             std::vector<std::shared_ptr<vlk::Texture> >& textures,
             const pl_shader_res* res)
@@ -2202,7 +2202,7 @@ namespace tl
             p.ocioOptions = value;
 
 #if defined(TLRENDER_OCIO)
-            
+
             if (p.ocioOptions.enabled)
             {
                 p.ocioData.reset(new OCIOData);
@@ -2234,7 +2234,7 @@ namespace tl
                         p.ocioData.reset();
                         throw std::runtime_error("Cannot create OCIO transform");
                     }
-                
+
                     OCIO::ConstColorSpaceRcPtr srcCS =
                         p.ocioData->config->getColorSpace(
                             p.ocioOptions.input.c_str());
@@ -2447,7 +2447,7 @@ namespace tl
                 return;
 
             p.shaderOptions = value;
-            
+
             p.shaders["display"].reset();
             _displayShader();
         }
@@ -2455,7 +2455,7 @@ namespace tl
         void Render::setHDROptions(const timeline::HDROptions& value)
         {
             TLRENDER_P();
-            
+
            // 1. Identify what specifically changed
            const bool tonemapChanged = (value.tonemap != p.hdrOptions.tonemap);
            const bool hdrDataChanged = (value.hdrData != p.hdrOptions.hdrData);
@@ -2463,7 +2463,7 @@ namespace tl
            const bool algorithmChanged = (value.algorithm != p.hdrOptions.algorithm);
            const bool oldIsHDRPlus = image::isHDRPlus(p.hdrOptions.hdrData);
            const bool oldIsDolby = image::isHDRDolbyVision(p.hdrOptions.hdrData);
-           
+
            // Determine if we should run Peak Detection
            // Requirement: Tonemap ON, Peak Detection ON, and
            // NOT HDR10+/Dolby
@@ -2474,7 +2474,7 @@ namespace tl
                                         (isDolby != oldIsDolby);
 
            if (tonemapChanged || algorithmChanged || metadataChanged)
-           {                              
+           {
 #if defined(TLRENDER_LIBPLACEBO)
                if (p.placeboData && p.placeboData->state)
                {
@@ -2489,15 +2489,15 @@ namespace tl
                                        peakDetectionChanged ||
                                        algorithmChanged ||
                                        metadataChanged);
-           
+
            p.hdrOptions = value;
-                                                                   
+
 #if defined(TLRENDER_LIBPLACEBO)
             if (p.hdrOptions.tonemap)
             {
                 const bool effectivePeakDetection =
                     p.hdrOptions.peak_detection && !isHDRPlus && !isDolby;
-                
+
                 if (!p.placeboData || peakDetectionChanged || hdrDataChanged ||
                     metadataChanged)
                 {
@@ -2515,8 +2515,8 @@ namespace tl
                     static float current_avg = PL_COLOR_SDR_WHITE;
                     static float current_peak = PL_COLOR_SDR_WHITE;
 
-                    // IMPORTANT: If peak detection was just enabled or content changed, 
-                    // reset the "previous" values so the first frame of detection always 
+                    // IMPORTANT: If peak detection was just enabled or content changed,
+                    // reset the "previous" values so the first frame of detection always
                     // triggers a "New Shot" recreation.
                     if (peakDetectionChanged || hdrDataChanged)
                     {
@@ -2526,42 +2526,42 @@ namespace tl
                     const std::string shaderName = "hdr_peak_detection";
                     const auto shader = p.compute[shaderName];
                     const auto img = p.buffers["video"];
-                                        
+
                     _createBindingSet(shader);
 
                     shader->bind(p.frameIndex);
                     shader->setFBO("img", img);
-                        
+
                     const std::string pipelineLayoutName = shaderName;
                     _bindComputeDescriptorSets(pipelineLayoutName,
                                                shaderName);
 
                     VkCommandBuffer cmd = p.placeboData->ssboCmds[p.frameIndex];
                     vkResetCommandBuffer(cmd, 0);
-                        
+
                     VkCommandBufferBeginInfo beginInfo = {};
                     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
                     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
                     vkBeginCommandBuffer(cmd, &beginInfo);
-                            
+
                     img->transitionToShaderRead(cmd);
 
                     // This seems to not entirely clear the data alwayss
                     shader->clearSSBO(cmd, "PeakData");
 
-                        
+
                     const size_t width = p.fbo->getWidth();
                     const size_t height = p.fbo->getHeight();
                     const uint32_t groupCountX = (width + 15) / 16;
                     const uint32_t groupCountY = (height + 15) / 16;
                     shader->dispatch(cmd, groupCountX, groupCountY);
-                        
+
                     img->transitionToColorAttachment(cmd);
 
                     vkEndCommandBuffer(cmd);
 
                     vkResetFences(ctx.device, 1, &p.placeboData->ssboFences[p.frameIndex]);
-                    
+
                     VkPipelineStageFlags pipe_stage_flags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
                     VkSubmitInfo submitInfo = {};
                     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -2570,13 +2570,13 @@ namespace tl
                     submitInfo.commandBufferCount = 1;
                     submitInfo.pCommandBuffers = &cmd;
                     submitInfo.signalSemaphoreCount = 0;
-                            
+
                     {
                         std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                         vkQueueSubmit(ctx.queue(), 1, &submitInfo,
                                       p.placeboData->ssboFences[p.frameIndex]);
                     }
-                    
+
                     vkWaitForFences(ctx.device, 1,
                                     &p.placeboData->ssboFences[p.frameIndex],
                                     VK_TRUE, UINT64_MAX);
@@ -2600,7 +2600,7 @@ namespace tl
 
                     p.placeboData->maxPeak = current_peak / 10000.F;
                     p.placeboData->avgPeak = current_avg / 10000.F;
-                    
+
                     updateDisplayShader = true;
                 }
                 else
@@ -2614,7 +2614,7 @@ namespace tl
                 p.placeboData.reset();
             }
 #endif // TLRENDER_LIBPLACEBO
-            
+
             if (updateDisplayShader || !p.shaders["display"])
             {
                 _displayShader();
@@ -2644,11 +2644,11 @@ namespace tl
             {
                 pl_shader_params shader_params;
                 memset(&shader_params, 0, sizeof(pl_shader_params));
-                
+
                 shader_params.id = 1;
                 shader_params.gpu = p.placeboData->gpu;
                 shader_params.dynamic_constants = false;
-            
+
                 pl_shader_reset(p.placeboData->shader, &shader_params);
 
                 pl_color_map_params cmap = pl_color_map_high_quality_params;
@@ -2667,8 +2667,8 @@ namespace tl
 
                 switch (data.eotf)
                 {
-                case image::EOTFType::EOTF_BT2100_PQ: 
-                case image::EOTFType::EOTF_BT2020:    
+                case image::EOTFType::EOTF_BT2100_PQ:
+                case image::EOTFType::EOTF_BT2020:
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                     src_colorspace.transfer = PL_COLOR_TRC_PQ;
                     isHDRVideo = true;
@@ -2694,10 +2694,10 @@ namespace tl
 
                 case image::EOTFType::EOTF_BT601:
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_601_525;
-                    src_colorspace.transfer = PL_COLOR_TRC_BT_1886; 
+                    src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
                     break;
 
-                case image::EOTFType::EOTF_SRGB: 
+                case image::EOTFType::EOTF_SRGB:
                 default:
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                     src_colorspace.transfer = PL_COLOR_TRC_SRGB;
@@ -2705,12 +2705,12 @@ namespace tl
                 }
 
                 if (isHDRVideo)
-                {                        
+                {
                     cmap.metadata = PL_HDR_METADATA_ANY;
 
                     pl_hdr_metadata& hdr = src_colorspace.hdr;
-                    hdr.min_luma = data.displayMasteringLuminance.getMin();
-                    hdr.max_luma = data.displayMasteringLuminance.getMax();
+                    hdr.min_luma = data.displayMasteringLuminance.min();
+                    hdr.max_luma = data.displayMasteringLuminance.max();
                     hdr.prim.red.x = data.primaries[image::HDRPrimaries::Red][0];
                     hdr.prim.red.y = data.primaries[image::HDRPrimaries::Red][1];
                     hdr.prim.green.x = data.primaries[image::HDRPrimaries::Green][0];
@@ -2733,7 +2733,7 @@ namespace tl
                     hdr.ootf.num_anchors = data.ootf.numAnchors;
                     for (int i = 0; i < hdr.ootf.num_anchors; i++)
                         hdr.ootf.anchors[i] = data.ootf.anchors[i];
-                    
+
                     if (p.placeboData->maxPeak > 0.F)
                     {
                         hdr.max_pq_y = p.placeboData->maxPeak;
@@ -2743,8 +2743,8 @@ namespace tl
                     {
                         hdr.max_pq_y = data.maxPQY;
                         hdr.avg_pq_y = data.avgPQY;
-                    }                    
-                    
+                    }
+
                     // defaults, generates LUTs if state is set.
                     cmap.gamut_mapping = &pl_gamut_map_perceptual;
                     switch (p.hdrOptions.gamutMapping)
@@ -2779,7 +2779,7 @@ namespace tl
                     default:
                         break;
                     }
-                    
+
 
                     switch (p.hdrOptions.algorithm)
                     {
@@ -2830,8 +2830,8 @@ namespace tl
 
                 // Resolve dst color space from swapchain FIRST, independent
                 // of HDR logic.
-                auto vkColorSpace = ctx.colorSpace; 
-                
+                auto vkColorSpace = ctx.colorSpace;
+
                 if (vkColorSpace == VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT)
                 {
                     // Non-linear Display P3, sRGB transfer (what macOS/P3 displays expect for SDR)
@@ -2889,16 +2889,16 @@ namespace tl
                         // Strict SDR passthrough (we need to use spline not
                         // clip as suggested by Gemini)
                         cmap.tone_mapping_function = &pl_tone_map_spline;
-                        
+
                         // Ensure libplacebo doesn't try to stretch or boost
                         // the image dynamically
                         cmap.inverse_tone_mapping = false;
                         cmap.metadata = PL_HDR_METADATA_NONE;
-                        
+
                         src_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE; //203.0;
                         src_colorspace.hdr.min_luma = 0.0;
                     }
-                    
+
                 }
                 else
                 {
@@ -2906,7 +2906,7 @@ namespace tl
                     {
                         // SDR video on SDR monitor - do not do any gamut or
                         // tone mapping
-                        
+
                         // Explicitly set src luminance so libplacebo doesn't have to infer
                         src_colorspace.hdr.max_luma = PL_COLOR_SDR_WHITE;
                         src_colorspace.hdr.min_luma = 0.F;
@@ -2931,7 +2931,7 @@ namespace tl
                         cmap.metadata = PL_HDR_METADATA_NONE;
                     }
                 }
-                
+
 
                 //
                 //  If OCIO is active, do not use libplacebo for tone-mapping.
@@ -2941,29 +2941,29 @@ namespace tl
                 {
                     dst_colorspace.primaries = src_colorspace.primaries;
                     dst_colorspace.transfer = src_colorspace.transfer;
-                        
+
                     dst_colorspace.hdr.min_luma = 0.F;
                     dst_colorspace.hdr.max_luma = src_colorspace.hdr.max_luma > 0 ? src_colorspace.hdr.max_luma : p.monitor.max_nits;
-                        
+
                     cmap.gamut_mapping = nullptr;
                     cmap.tone_mapping_function = nullptr;
                 }
 
                 pl_color_space_infer(&src_colorspace);
                 pl_color_space_infer(&dst_colorspace);
-                        
+
                 pl_color_map_args color_map_args;
                 memset(&color_map_args, 0, sizeof(pl_color_map_args));
 
                 color_map_args.src = src_colorspace;
                 color_map_args.dst = dst_colorspace;
                 color_map_args.prelinearized = false;
-                    
+
                 color_map_args.state = &(p.placeboData->state);
-                    
+
                 pl_shader_color_map_ex(p.placeboData->shader, &cmap,
                                        &color_map_args);
-                
+
                 const pl_shader_res* res = pl_shader_finalize(p.placeboData->shader);
                 p.placeboData->res = res;
                 if (!res)
@@ -3044,7 +3044,7 @@ namespace tl
 
                 _parseVariables(s, pushSize, res,
                                 ctx.gpu_props.limits.maxPushConstantsSize);
-                    
+
                 s << std::endl
                   << "//" << std::endl
                   << "// Constants" << std::endl
@@ -3079,7 +3079,7 @@ namespace tl
 
                 s << res->glsl << std::endl;
                 toneMapDef = s.str();
-                
+
 #if defined(TLRENDER_LIBPLACEBO)
                 try
                 {
@@ -3114,12 +3114,12 @@ namespace tl
             }
             if (p.ocioData && p.ocioData->shaderDesc)
             {
-                ocioDef = _getOCIOUniforms(p.ocioData->shaderDesc); 
+                ocioDef = _getOCIOUniforms(p.ocioData->shaderDesc);
                 ocioDef = p.ocioData->shaderDesc->getShaderText();
                 ocioDef = replaceUniformSampler(ocioDef, p.bindingIndex);
                 ocio = "outColor = ocioDisplayFunc(outColor);";
             }
-            
+
             if (p.lutData && p.lutData->shaderDesc)
             {
                 lutDef = p.lutData->shaderDesc->getShaderText();
@@ -3153,18 +3153,18 @@ namespace tl
             {
                 debanding = "outColor = texture(textureSampler, t);\n";
             }
-            
+
             const std::string source = displayFragmentSource(
                 ocioICSDef, ocioICS, ocioDef, ocio, lutDef, lut,
                 p.lutOptions.order, toneMapDef, toneMap,
                 debandingDef, debanding);
-                
+
             bool recreateShader = false;
             if (!p.shaders["display"] || p.oldSource != source)
             {
                 recreateShader = true;
                 p.oldSource = source;
-                
+
 #if DEBUG_DISPLAY_SHADER
                 std::cerr << source << std::endl;
 #endif
@@ -3198,7 +3198,7 @@ namespace tl
                 p.shaders["display"] =
                     vlk::Shader::create(ctx, vertexSource(), source, "display");
 #endif
-                
+
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
                 p.shaders["display"]->addFBO("textureSampler");
@@ -3217,7 +3217,7 @@ namespace tl
                     _createOCIOUniforms(p.lutData->shaderDesc);
                 }
 #endif
-                
+
                 UBOLevels uboLevels;
                 p.shaders["display"]->createUniform("uboLevels", uboLevels);
 
@@ -3232,10 +3232,10 @@ namespace tl
 
                 UBOColor uboColor;
                 p.shaders["display"]->createUniform("uboColor", uboColor);
-                
+
                 UBOOptions ubo;
                 p.shaders["display"]->createUniform("ubo", ubo);
-                
+
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData)
                 {
@@ -3272,7 +3272,7 @@ namespace tl
                     size_t offset = 0;
                     p.placeboData->pcUBOData = malloc(size);
                     memset(p.placeboData->pcUBOData, 0, size);
-                    
+
                     for (const auto &shader_var : p.placeboData->pcUBOvars)
                     {
                         const struct pl_var var = shader_var.var;
@@ -3288,15 +3288,15 @@ namespace tl
                 p.shaders["display"]->debugDescriptorSets();
 #endif
             } // recreateShader
-                
-        }
-    
 
-            
+        }
+
+
+
 #if defined(TLRENDER_LIBPLACEBO)
         std::string Render::_debugPLVar(const struct pl_shader_var& shader_var)
         {
-            
+
             std::stringstream s;
             const struct pl_var var = shader_var.var;
             std::string glsl_type = pl_var_glsl_type_name(var);
@@ -3370,10 +3370,10 @@ namespace tl
                     break;
                 }
             }
-            
+
             return s.str();
         }
 #endif
-        
+
     } // namespace timeline_vlk
 } // namespace tl

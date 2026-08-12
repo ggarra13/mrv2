@@ -20,7 +20,7 @@ namespace tl
                 return (x + alignment - 1) & ~(alignment - 1);
             }
         }
-        
+
         void Render::_create2DMesh(
             const std::string& meshName, const geom::TriangleMesh2& mesh)
         {
@@ -28,10 +28,10 @@ namespace tl
 
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
-            
+
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += size;
-            
+
             auto type = vlk::VBOType::Pos2_F32;
             if (!mesh.t.empty() && !mesh.c.empty())
             {
@@ -71,7 +71,7 @@ namespace tl
 
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += triangleCount;
-            
+
             if (!p.vbos[meshName] ||
                 p.vbos[meshName]->getSize() != triangleCount * 3)
             {
@@ -126,7 +126,7 @@ namespace tl
             {
                 type = vlk::VBOType::Pos3_F32_Color_U8;
             }
-            
+
             if (!p.vbos[meshName] ||
                 (p.vbos[meshName] &&
                  p.vbos[meshName]->getSize() != triangleCount * 3))
@@ -142,7 +142,7 @@ namespace tl
                 p.vaos[meshName]->bind(p.frameIndex);
             }
         }
-        
+
         void Render::_emitMeshDraw(const std::string& pipelineLayoutName,
                                    const std::string& shaderName,
                                    const std::string& meshName,
@@ -238,7 +238,7 @@ namespace tl
             TLRENDER_P();
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
-            
+
             _createBindingSet(p.shaders[shaderName]);
             _uploadMesh(meshName, mesh, size);
 
@@ -264,7 +264,7 @@ namespace tl
             TLRENDER_P();
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
-            
+
             auto shader = p.shaders[shaderName];
             if (!shader)
                 throw std::runtime_error("Unknown shader '" + shaderName + "'.");
@@ -283,9 +283,9 @@ namespace tl
             const auto transform = p.transform *
                                    math::translate(math::Vector3f(position.x, position.y, 0.F));
             _emitMeshDraw(pipelineLayoutName, shaderName, meshName, transform, color);
-        }        
-        
-        
+        }
+
+
         void Render::drawMesh(
             const geom::TriangleMesh2& mesh, const math::Vector2i& position,
             const image::Color4f& color, const std::string& meshName)
@@ -309,12 +309,12 @@ namespace tl
             p.currentStats.meshTriangles += mesh.triangles.size();
 
             _createBindingSet(p.shaders["colorMesh"]);
-            
+
             const auto transform =
                 p.transform *
                 math::translate(
                     math::Vector3f(position.x, position.y, 0.F));
-            
+
             p.shaders["colorMesh"]->bind(p.frameIndex);
             p.shaders["colorMesh"]->setUniform(
                 "transform.mvp", transform, vlk::kShaderVertex);
@@ -327,7 +327,7 @@ namespace tl
         }
 
 
-        
+
         void Render::Private::createTextMesh(
             Fl_Vk_Context& ctx, const geom::TriangleMesh2& mesh)
         {
@@ -358,7 +358,7 @@ namespace tl
             const image::Color4f& color)
         {
             TLRENDER_P();
-            
+
             const geom::TriangleMesh2& mesh = info.mesh;
             const size_t size = mesh.triangles.size();
             if (size == 0) return;
@@ -371,19 +371,19 @@ namespace tl
 
             _uploadMesh("text", mesh, size);
             _createBindingSet(p.shaders["text"]);
-            
+
             vlk::ColorBlendStateInfo cb;
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             colorBlendAttachment.blendEnable = VK_TRUE;
-                
+
             colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
             colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
             colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-            
+
             cb.attachments.push_back(colorBlendAttachment);
-            
-                
+
+
             vlk::DepthStencilStateInfo ds;
             ds.depthTestEnable = VK_FALSE;
             ds.depthWriteEnable = VK_FALSE;
@@ -392,29 +392,29 @@ namespace tl
             createPipeline("text", "text",
                            getRenderPass(), p.shaders["text"],
                            p.vbos["text"], cb, ds);
-            
+
             p.shaders["text"]->bind(p.frameIndex);
             p.shaders["text"]->setUniform("transform.mvp", transform);
             p.shaders["text"]->setTexture("textureSampler",
                                           textures[textureIndex]);
             _bindDescriptorSets("text", "text");
-                            
+
             VkPipelineLayout pipelineLayout = p.pipelineLayouts["text"];
             vkCmdPushConstants(
                 p.cmd, pipelineLayout,
                 p.shaders["text"]->getPushStageFlags(), 0,
                 sizeof(color), &color);
-                            
+
             _vkDraw("text");
-        }                
-        
+        }
+
         void Render::appendText(
             std::vector<timeline::TextInfo>& textInfos,
             const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
             const math::Vector2i& pos)
         {
             TLRENDER_P();
-            
+
             uint8_t textureIndex = 0;
             const auto& textures = p.glyphTextureAtlas->getTextures();
 
@@ -435,7 +435,7 @@ namespace tl
                     textInfos.emplace_back(textInfo);
                 }
             }
-            
+
             timeline::TextInfo& lastTextInfo = textInfos.back();
             geom::TriangleMesh2& mesh = lastTextInfo.mesh;
             size_t& meshIndex = lastTextInfo.meshIndex;
@@ -471,10 +471,10 @@ namespace tl
                         if (item.textureIndex != textureIndex)
                         {
                             textureIndex = item.textureIndex;
-                            
+
                             const timeline::TextInfo textInfo(textureIndex);
                             textInfos.emplace_back(textInfo);
-                            
+
                             timeline::TextInfo& lastTextInfo = textInfos.back();
                             mesh = lastTextInfo.mesh;
                             meshIndex = lastTextInfo.meshIndex;
@@ -482,7 +482,7 @@ namespace tl
 
                         const math::Vector2i& offset = glyph->offset;
                         const math::Box2i box(
-                            pos.x + x + offset.x, pos.y - offset.y, 
+                            pos.x + x + offset.x, pos.y - offset.y,
                             glyph->image->getWidth(),
                             glyph->image->getHeight());
                         const auto& min = box.min;
@@ -492,24 +492,24 @@ namespace tl
                         mesh.v.push_back(math::Vector2f(max.x + 1, min.y));
                         mesh.v.push_back(math::Vector2f(max.x + 1, max.y + 1));
                         mesh.v.push_back(math::Vector2f(min.x, max.y + 1));
-                        
+
                         mesh.t.push_back(
                             math::Vector2f(
-                                item.textureU.getMin(),
-                                item.textureV.getMin()));
+                                item.textureU.min(),
+                                item.textureV.min()));
                         mesh.t.push_back(
                             math::Vector2f(
-                                item.textureU.getMax(),
-                                item.textureV.getMin()));
+                                item.textureU.max(),
+                                item.textureV.min()));
                         mesh.t.push_back(
                             math::Vector2f(
-                                item.textureU.getMax(),
-                                item.textureV.getMax()));
+                                item.textureU.max(),
+                                item.textureV.max()));
                         mesh.t.push_back(
                             math::Vector2f(
-                                item.textureU.getMin(),
-                                item.textureV.getMax()));
-                        
+                                item.textureU.min(),
+                                item.textureV.max()));
+
                         geom::Triangle2 triangle;
                         triangle.v[0].v = meshIndex + 1;
                         triangle.v[1].v = meshIndex + 2;
@@ -545,7 +545,7 @@ namespace tl
             const std::string shaderName = "texture";
             const std::string pipelineLayoutName = shaderName;
             const std::string meshName = "texture";
-            
+
             createPipeline(
                 p.fbo, pipelineName, pipelineLayoutName,
                 shaderName, meshName);
@@ -560,13 +560,13 @@ namespace tl
                 p.vbos["texture"]->copy(
                     convert(geom::box(box), p.vbos["texture"]->getType()));
             }
-            
+
             VkPipelineLayout pipelineLayout = p.pipelineLayouts["texture"];
             vkCmdPushConstants(
                 p.cmd, pipelineLayout,
                 shader->getPushStageFlags(), 0,
                 sizeof(color), &color);
-            
+
             _vkDraw("texture");
         }
 
@@ -725,7 +725,7 @@ namespace tl
             fbo->setupViewportAndScissor(p.cmd);
 
             _vkDraw("image");
-            
+
             fbo->endRenderPass(p.cmd);
         }
 
@@ -880,12 +880,12 @@ namespace tl
             {
                 setClipRect(p.clipRect);
             }
-            
+
             _vkDraw("image");
-                
+
             p.fbo->endRenderPass(p.cmd);
         }
 
-        
+
     } // namespace timeline_vlk
 } // namespace tl
