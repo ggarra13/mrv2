@@ -2458,6 +2458,7 @@ namespace mrv
     {
         create_new_timeline_cb(ui);
         add_clip_to_timeline_cb(index, ui);
+        panel::redrawThumbnails();
     }
 
     void addTimelineToEDL(

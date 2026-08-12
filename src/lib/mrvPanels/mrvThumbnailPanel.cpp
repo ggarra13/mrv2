@@ -140,16 +140,11 @@ namespace mrv
 
             try
             {
-                TIMELINEUI::ThumbnailCacheOptions thumbnailOptions;
-                thumbnailOptions.thumbnailMB = 0.05F * 64;  // 64 clips of 128 x 80
-                thumbnailOptions.waveformMB = 0.F;
-
                 const auto context = App::app->getContext();
 #ifdef OPENGL_BACKEND
                 if (!thumbnailSystem)
                 {
                     thumbnailSystem = TIMELINEUI::ThumbnailSystem::create(context);
-                    thumbnailSystem->setCacheOptions(thumbnailOptions);
                 }
 #endif
 #ifdef VULKAN_BACKEND
@@ -157,7 +152,6 @@ namespace mrv
                 {
                     Fl_Vk_Context& ctx = p.ui->uiView->getContext();
                     thumbnailSystem = TIMELINEUI::ThumbnailSystem::create(context, ctx);
-                    thumbnailSystem->setCacheOptions(thumbnailOptions);
                 }
 #endif
                 // if (_clearCache)
