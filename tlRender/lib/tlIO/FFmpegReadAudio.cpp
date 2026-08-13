@@ -13,7 +13,7 @@ namespace tl
         ReadAudio::ReadAudio(
             const std::string& fileName,
             const std::vector<file::MemoryRead>& memory, double videoRate,
-            const Options& options) :
+            const ReadOptions& options) :
             _fileName(fileName),
             _options(options)
         {

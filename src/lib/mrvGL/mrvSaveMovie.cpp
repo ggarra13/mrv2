@@ -139,7 +139,7 @@ namespace mrv
             ioOptions["FFmpeg/WriteProfile"] = getLabel(options.ffmpegProfile);
             ioOptions["FFmpeg/AudioCodec"] = getLabel(options.ffmpegAudioCodec);
             ioOptions["FFmpeg/ThreadCount"] =
-                string::Format("{0}").arg(ffmpeg::threadCount);
+                string::Format("{0}").arg(ffmpeg::Options().threadCount);
 
             // If we are not saving a movie, take speed from the player's
             // current speed.

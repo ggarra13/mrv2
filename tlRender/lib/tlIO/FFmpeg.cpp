@@ -23,6 +23,7 @@ extern "C"
 #include <libavutil/channel_layout.h>
 #include <libavutil/dict.h>
 #include <libavutil/dovi_meta.h>
+#include <libavutil/ffversion.h>
 #include <libavutil/hdr_dynamic_metadata.h>
 #include <libavutil/imgutils.h>
 #include <libavutil/mastering_display_metadata.h>
@@ -34,6 +35,28 @@ namespace tl
 {
     namespace ffmpeg
     {
+        bool Options::operator == (const Options& other) const
+        {
+            return
+                yuvToRgb == other.yuvToRgb &&
+                hwAccel == other.hwAccel &&
+                threadCount == other.threadCount;
+        }
+
+        bool Options::operator != (const Options& other) const
+        {
+            return !(*this == other);
+        }
+
+        io::Options getOptions(const Options& value)
+        {
+            io::Options out;
+            out["FFmpeg/YUVToRGB"] = string::Format("{0}").arg(value.yuvToRgb);
+            out["FFmpeg/HWAccel"] = string::Format("{0}").arg(value.hwAccel);
+            out["FFmpeg/ThreadCount"] = string::Format("{0}").arg(value.threadCount);
+            return out;
+        }
+
         TLRENDER_ENUM_IMPL(
             Profile, "None", "H264", "ProRes", "ProRes_Proxy", "ProRes_LT",
             "ProRes_HQ", "ProRes_4444", "ProRes_XQ", "DNxHD", "DNxHR_LB",

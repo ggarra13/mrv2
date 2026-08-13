@@ -68,8 +68,16 @@ namespace tl
         TLRENDER_ENUM(AudioCodec);
         TLRENDER_ENUM_SERIALIZE(AudioCodec);
 
-        //! Number of threads.
-        const size_t threadCount = 0;
+        //! FFmpeg options.
+        struct Options
+        {
+            bool   yuvToRgb    = false;
+            bool   hwAccel     = false;
+            size_t threadCount = 0;
+
+            bool operator == (const Options&) const;
+            bool operator != (const Options&) const;
+        };
 
         //! Software scaler flags.
         const int swsScaleFlags = SWS_SPLINE | SWS_ACCURATE_RND |

@@ -61,6 +61,93 @@ namespace tl
             return offset;
         }
 
+        ReadOptions getReadOptions(const io::Options& options)
+        {
+            ReadOptions out;
+            if (auto i = options.find("FFmpeg/YUVToRGBConversion"); i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.yuvToRGBConversion;
+            }
+            if (auto i = options.find("FFmpeg/FastYUV420PConversion"); i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.fastYUV420PConversion;
+            }
+            if (auto i = options.find("FFmpeg/HWAccel"); i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.hwAccel;
+            }
+            if (auto i = options.find("FFmpeg/AudioChannelCount");
+                i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.audioConvertInfo.channelCount;
+            }
+            if (auto i = options.find("FFmpeg/AudioType"); i != options.end())
+            {
+                from_string(i->second, out.audioConvertInfo.dataType);
+            }
+            if (auto i = options.find("FFmpeg/AudioSampleRate");
+                i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.audioConvertInfo.sampleRate;
+            }
+            if (auto i = options.find("FFmpeg/ThreadCount");
+                i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.threadCount;
+            }
+            if (auto i = options.find("FFmpeg/VideoBufferSize");
+                i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.videoBufferSize;
+            }
+            if (auto i = options.find("FFmpeg/AudioBufferSize");
+                i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.audioBufferSize;
+            }
+            if (auto i = options.find("FFmpeg/AudioTrack");
+                i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.audioTrack;
+            }
+            return out;
+        }
+
+        int findStream(AVFormatContext* avFormatContext, AVMediaType type)
+        {
+            int out = -1;
+            for (unsigned int i = 0; i < avFormatContext->nb_streams; ++i)
+            {
+                if (type == avFormatContext->streams[i]->codecpar->codec_type &&
+                    AV_DISPOSITION_DEFAULT == avFormatContext->streams[i]->disposition)
+                {
+                    out = i;
+                    break;
+                }
+            }
+            if (-1 == out)
+            {
+                for (unsigned int i = 0; i < avFormatContext->nb_streams; ++i)
+                {
+                    if (type == avFormatContext->streams[i]->codecpar->codec_type)
+                    {
+                        out = i;
+                        break;
+                    }
+                }
+            }
+            return out;
+        }
+
         void Read::_init(
             const file::Path& path, const std::vector<file::MemoryRead>& memory,
             const io::Options& options, const std::shared_ptr<io::Cache>& cache,
@@ -70,66 +157,7 @@ namespace tl
 
             TLRENDER_P();
 
-            auto i = options.find("FFmpeg/YUVToRGBConversion");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.options.yuvToRGBConversion;
-            }
-            i = options.find("FFmpeg/FastYUV420PConversion");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.options.fastYUV420PConversion;
-            }
-            i = options.find("FFmpeg/AudioChannelCount");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.options.audioConvertInfo.channelCount;
-            }
-            i = options.find("FFmpeg/AudioDataType");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.options.audioConvertInfo.dataType;
-            }
-            i = options.find("FFmpeg/AudioSampleRate");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.options.audioConvertInfo.sampleRate;
-            }
-            i = options.find("FFmpeg/AudioTrack");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.options.audioTrack;
-            }
-            i = options.find("FFmpeg/ThreadCount");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.options.threadCount;
-            }
-            i = options.find("FFmpeg/RequestTimeout");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.options.requestTimeout;
-            }
-            i = options.find("FFmpeg/VideoBufferSize");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.options.videoBufferSize;
-            }
-            i = options.find("FFmpeg/AudioBufferSize");
-            if (i != options.end())
-            {
-                std::stringstream ss(i->second);
-                ss >> p.options.audioBufferSize;
-            }
+            p.options = getReadOptions(options);
 
             p.videoThread.running = true;
             p.audioThread.running = true;

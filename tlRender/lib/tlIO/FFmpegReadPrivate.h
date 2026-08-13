@@ -39,18 +39,25 @@ namespace tl
 
         const size_t avIOContextBufferSize = 4096;
 
-        struct Options
+        struct ReadOptions
         {
             otime::RationalTime startTime = time::invalidTime;
             bool yuvToRGBConversion = false;
+            bool hwAccel = false;
             bool fastYUV420PConversion = true;
             audio::Info audioConvertInfo;
             int audioTrack = -1;
-            size_t threadCount = ffmpeg::threadCount;
-            size_t requestTimeout = 5;
+            size_t threadCount = Options().threadCount;
             size_t videoBufferSize = 4;
             otime::RationalTime audioBufferSize = otime::RationalTime(2.0, 1.0);
         };
+
+        //! Parse the reader options.
+        ReadOptions getReadOptions(const io::Options&);
+
+        //! Find the stream of the given type to read, or -1. A stream
+        //! marked as the default is preferred over the first one found.
+        int findStream(AVFormatContext*, AVMediaType);
 
         class ReadVideo
         {
@@ -59,7 +66,7 @@ namespace tl
                 const std::string& fileName,
                 const std::vector<file::MemoryRead>& memory,
                 const std::weak_ptr<log::System>& logSystem,
-                const Options& options);
+                const ReadOptions& options);
 
             ~ReadVideo();
 
@@ -84,10 +91,13 @@ namespace tl
             void _copy(std::shared_ptr<image::Image>&,
                        std::shared_ptr<AVFrame>);
             float _getRotation(const AVStream*);
+            void _initHwAccel(const AVCodec*);
+            static AVPixelFormat _getHwFormat(AVCodecContext*,
+                                              const AVPixelFormat*);
 
             //! tlRender variables
             std::string _fileName;
-            Options _options;
+            ReadOptions _options;
             image::Info _info;
             image::HDRData _hdr;
             otime::TimeRange _timeRange = time::invalidTimeRange;
@@ -105,6 +115,7 @@ namespace tl
             AVRational _avSpeed = {24, 1};
             int _avStream = -1;
             int _avAudioStream = -1;
+            bool _fastYUV420PConversion = true;
             std::map<int, AVCodecParameters*> _avCodecParameters;
             std::map<int, AVCodecContext*> _avCodecContext;
             AVFrame* _avFrame = nullptr;
@@ -112,8 +123,9 @@ namespace tl
             AVColorTransferCharacteristic _avColorTRC;
             AVPixelFormat _avInputPixelFormat = AV_PIX_FMT_NONE;
             AVPixelFormat _avOutputPixelFormat = AV_PIX_FMT_NONE;
-            bool _fastYUV420PConversion = true;
             SwsContext* _swsContext = nullptr;
+            AVBufferRef* _hwDeviceContext = nullptr;
+            AVPixelFormat _hwPixelFormat = AV_PIX_FMT_NONE;
             std::list<std::shared_ptr<image::Image> > _buffer;
             bool _eof = false;
         };
@@ -124,7 +136,7 @@ namespace tl
             ReadAudio(
                 const std::string& fileName,
                 const std::vector<file::MemoryRead>&, double videoRate,
-                const Options&);
+                const ReadOptions&);
 
             ~ReadAudio();
 
@@ -145,7 +157,7 @@ namespace tl
             int _decode(const otime::RationalTime& currentTime);
 
             std::string _fileName;
-            Options _options;
+            ReadOptions _options;
             audio::Info _info;
             otime::TimeRange _timeRange = time::invalidTimeRange;
             image::Tags _tags;
@@ -165,7 +177,7 @@ namespace tl
 
         struct Read::Private
         {
-            Options options;
+            ReadOptions options;
 
             std::shared_ptr<ReadVideo> readVideo;
             std::shared_ptr<ReadAudio> readAudio;
@@ -182,15 +194,16 @@ namespace tl
                 io::Options options;
                 std::promise<io::VideoData> promise;
             };
+
             struct VideoMutex
             {
                 std::list<std::shared_ptr<InfoRequest> > infoRequests;
                 std::list<std::shared_ptr<VideoRequest> > videoRequests;
-                // std::shared_ptr<VideoRequest> videoRequest;
                 bool stopped = false;
                 std::mutex mutex;
             };
             VideoMutex videoMutex;
+
             struct VideoThread
             {
                 otime::RationalTime currentTime = time::invalidTime;
@@ -210,7 +223,6 @@ namespace tl
             struct AudioMutex
             {
                 std::list<std::shared_ptr<AudioRequest> > requests;
-                // std::shared_ptr<AudioRequest> currentRequest;
                 bool stopped = false;
                 std::mutex mutex;
             };

@@ -194,7 +194,7 @@ namespace tl
             const std::string& fileName,
             const std::vector<file::MemoryRead>& memory,
             const std::weak_ptr<log::System>& logSystem,
-            const Options& options) :
+            const ReadOptions& options) :
             _fileName(fileName),
             _logSystem(logSystem),
             _options(options)

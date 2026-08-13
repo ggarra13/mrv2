@@ -285,10 +285,10 @@ namespace tl
                                         p.ioInfo.audio.channelCount);
                             }
                             j = p.options.ioOptions.find(
-                                "FFmpeg/AudioDataType");
+                                "FFmpeg/AudioType");
                             if (j == p.options.ioOptions.end())
                             {
-                                p.options.ioOptions["FFmpeg/AudioDataType"] =
+                                p.options.ioOptions["FFmpeg/AudioType"] =
                                     string::Format("{0}").arg(
                                         p.ioInfo.audio.dataType);
                             }
