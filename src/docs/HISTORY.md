@@ -10,6 +10,7 @@ v1.7.3
 - Core: Fixed Thumbnail crashes on file requester on Linux.
 - Core: Fixed loading of image sequences command-line from the current directory.
 - Core: Fixed potential hanging of thumbnail generator on Vulkan backend.
+- Core/macOS: Fixed a crash on start-up on OpenGL backend.
 - Core: OpenTimelineIO clips now tonemap each clip found if it is a movie, an HDR movie, a bt709 or an sRGB image, all will get tonemapped correctly.  Of course dissolves from one format of image to another one will not work.
 - Core: Fixed and added tlRender's unit tests.
 

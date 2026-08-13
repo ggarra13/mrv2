@@ -757,10 +757,14 @@ namespace mrv
         bool showUI = true;
 
 #ifdef MRV2_PYBIND11
+
+#ifdef VULKAN_BACKEND
+        // Reset the mode.
         int stereo = 0;
         ui->uiView->mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL |
-                         stereo);
-        ui->uiTimeline->mode(FL_RGB | FL_ALPHA | FL_DOUBLE);
+                         FL_OPENGL3 | stereo);
+        ui->uiTimeline->mode(FL_RGB | FL_ALPHA | FL_DOUBLE | FL_OPENGL3);
+#endif
 
         if (app::soporta_python && !p.options.pythonScript.empty())
         {
