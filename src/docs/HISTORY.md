@@ -5,6 +5,7 @@ v1.7.3
 - UI: Fixed "Window/Preferences" not showing up in Japanese due to weird gettext bug.
 - UI: You can now easily drag a clip to the timeline view to create a new .otio EDL timeline, without having to go first to the Playlist Panel.
 
+- Core/Windows: Fixed a skipping of current and parent directories for FileInfoWin32.cpp.
 - Core: Fixed a crash on the OpenEXR reader when reading a corrupt/truncated file.
 - Core: Fixed and added tlRender's unit tests.
 - Core: Fixed Thumbnail crashes on file requester on Linux.
