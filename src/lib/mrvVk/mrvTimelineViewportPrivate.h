@@ -211,6 +211,9 @@ namespace mrv
             int screen_index = 0;
             monitor::Capabilities monitor;
 
+            //! libplacebo toggle.
+            bool tonemap = true;
+
             //! Tablet information.
             float pressure = 0.F;
             math::Vector2f lastPenPosition;

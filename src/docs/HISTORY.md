@@ -13,6 +13,8 @@ v1.7.3
 - Core: Fixed potential hanging of thumbnail generator on Vulkan backend.
 - Core/macOS: Fixed a crash on start-up on OpenGL backend.
 - Core: OpenTimelineIO clips now tonemap each clip found if it is a movie, an HDR movie, a bt709 or an sRGB image, all will get tonemapped correctly.  Of course dissolves from one format of image to another one will not work.
+- Core: Saving OpenTimelineIO timelines with audio now works.
+- Core: Saving clips or .otio timelines in the Vulkan backend turns off tonemapping so that BT709 and similar clips will write their data intact, not in HDR.
 - Core: Fixed and added tlRender's unit tests.
 
 - Build: Documented Vulkan compilation on Linux.

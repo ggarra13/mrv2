@@ -207,6 +207,9 @@ namespace mrv
             //! Tablet information.
             float pressure = 0.F;
             math::Vector2f lastPenPosition;
+
+            // libplacebo toggle.
+            bool tonemap = true;
         };
     }  // namespace opengl
 } // namespace mrv

@@ -1071,6 +1071,18 @@ namespace mrv
             return _p->hdrOptions;
         }
 
+        void TimelineViewport::setToneMapping(const bool value) noexcept
+        {
+            TLRENDER_P();
+
+            if (p.tonemap == value)
+                return;
+
+            p.tonemap = value;
+            _getHDR();
+            redrawWindows();
+        }
+
         void TimelineViewport::setTimelinePlayer(TimelinePlayer* player) noexcept
         {
             TLRENDER_P();
@@ -3787,7 +3799,7 @@ namespace mrv
                 const auto extension = path.getExtension();
                 if (file::isMovie(extension))
                 {
-                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.tonemap = p.tonemap;
                     p.hdrOptions.hdrData = image::nameToPrimaries("BT709");
 
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())
@@ -3797,7 +3809,7 @@ namespace mrv
                 }
                 else if (file::isSRGB(extension))
                 {
-                    p.hdrOptions.tonemap = true;
+                    p.hdrOptions.tonemap = p.tonemap;
                     p.hdrOptions.hdrData = image::nameToPrimaries("SRGB");
 
                     if (p.ui->uiPrefs->uiOCIONotOnVideos->value())

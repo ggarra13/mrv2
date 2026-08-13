@@ -269,14 +269,15 @@ namespace mrv
                 audioTime = info.audioTime.value();
                 if (player->timeRange() != timeRange ||
                     audioTime.start_time() !=
-                        timeRange.start_time().rescaled_to(sampleRate))
+                    timeRange.start_time().rescaled_to(sampleRate) ||
+                    audioTime.duration() !=
+                    timeRange.duration().rescaled_to(sampleRate))
                 {
                     audioTime = otime::TimeRange(
                         timeRange.start_time().rescaled_to(sampleRate),
                         timeRange.duration().rescaled_to(sampleRate));
                 }
             }
-
 #ifdef TLRENDER_FFMPEG
             const std::string& profile = getLabel(options.ffmpegProfile);
 
@@ -627,6 +628,9 @@ namespace mrv
 
             // Turn off hud so it does not get captured by readPixels.
             view->setHudActive(false);
+
+            // Turn off tonemapping so libplacebo does not get used.
+            view->setToneMapping(false);
 
             // Prepare annotations without HUD, cursors, and overlay with
             // a centered and frame image for easier checking.
@@ -1024,6 +1028,7 @@ namespace mrv
         view->setHudActive(hud);
         view->setShowVideo(true);
         view->setSaveOverlay(false);
+        view->setToneMapping(true);
 
         player->seek(currentTime);
         player->setMute(mute);

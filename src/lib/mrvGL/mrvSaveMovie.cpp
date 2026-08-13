@@ -264,7 +264,9 @@ namespace mrv
                 audioTime = info.audioTime.value();
                 if (player->timeRange() != timeRange ||
                     audioTime.start_time() !=
-                        timeRange.start_time().rescaled_to(sampleRate))
+                    timeRange.start_time().rescaled_to(sampleRate) ||
+                    audioTime.duration() !=
+                    timeRange.duration().rescaled_to(sampleRate))
                 {
                     audioTime = otime::TimeRange(
                         timeRange.start_time().rescaled_to(sampleRate),

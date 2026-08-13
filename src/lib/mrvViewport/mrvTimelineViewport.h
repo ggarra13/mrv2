@@ -162,6 +162,9 @@ namespace mrv
 
             const timeline::HDROptions& getHDROptions() const noexcept;
 
+            //! Toggle libplacebo tonemapping.
+            void setToneMapping(const bool) noexcept;
+
             //! Set the timeline players.
             void setTimelinePlayer(TimelinePlayer*) noexcept;
 
