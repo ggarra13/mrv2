@@ -55,10 +55,6 @@ namespace tl
         //! Parse the reader options.
         ReadOptions getReadOptions(const io::Options&);
 
-        //! Find the stream of the given type to read, or -1. A stream
-        //! marked as the default is preferred over the first one found.
-        int findStream(AVFormatContext*, AVMediaType);
-
         class ReadVideo
         {
         public:

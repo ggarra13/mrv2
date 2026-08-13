@@ -122,32 +122,6 @@ namespace tl
             return out;
         }
 
-        int findStream(AVFormatContext* avFormatContext, AVMediaType type)
-        {
-            int out = -1;
-            for (unsigned int i = 0; i < avFormatContext->nb_streams; ++i)
-            {
-                if (type == avFormatContext->streams[i]->codecpar->codec_type &&
-                    AV_DISPOSITION_DEFAULT == avFormatContext->streams[i]->disposition)
-                {
-                    out = i;
-                    break;
-                }
-            }
-            if (-1 == out)
-            {
-                for (unsigned int i = 0; i < avFormatContext->nb_streams; ++i)
-                {
-                    if (type == avFormatContext->streams[i]->codecpar->codec_type)
-                    {
-                        out = i;
-                        break;
-                    }
-                }
-            }
-            return out;
-        }
-
         void Read::_init(
             const file::Path& path, const std::vector<file::MemoryRead>& memory,
             const io::Options& options, const std::shared_ptr<io::Cache>& cache,
