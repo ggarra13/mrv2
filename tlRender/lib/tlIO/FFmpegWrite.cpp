@@ -1255,7 +1255,7 @@ namespace tl
                     break;
                 }
 
-                p.avSpeed = info.videoTime.duration().rate();
+                p.avSpeed = info.videoTime->duration().rate();
                 const auto& videoInfo = info.video[0];
 
                 // Allow setting the speed if not saving audio
@@ -1604,7 +1604,7 @@ namespace tl
                         i.second.c_str(), 0);
                 }
 
-                p.videoStartTime = info.videoTime.start_time();
+                p.videoStartTime = info.videoTime->start_time();
                 // Set timecode
                 option = options.find("timecode");
                 if (option != options.end())
@@ -1623,7 +1623,7 @@ namespace tl
                     otime::ErrorStatus errorStatus;
                     const otime::RationalTime time =
                         otime::RationalTime::from_timecode(
-                            timecode, info.videoTime.duration().rate(),
+                            timecode, info.videoTime->duration().rate(),
                             &errorStatus);
                     if (!otime::is_error(errorStatus))
                     {

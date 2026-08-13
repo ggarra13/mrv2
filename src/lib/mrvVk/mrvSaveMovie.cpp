@@ -244,15 +244,18 @@ namespace mrv
             // Render information.
             const auto& info = player->ioInfo();
 
-            auto videoTime = info.videoTime;
+
+            otime::TimeRange videoTime = time::invalidTimeRange;
+            if (info.videoTime.has_value())
+                videoTime = info.videoTime.value();
 
             const bool hasVideo = (!info.video.empty()) && options.saveVideo;
 
             if (player->timeRange() != timeRange ||
-                info.videoTime.start_time() != timeRange.start_time() ||
-                info.videoTime.duration() != timeRange.duration())
+                videoTime.start_time() != timeRange.start_time() ||
+                videoTime.duration() != timeRange.duration())
             {
-                double videoRate = info.videoTime.duration().rate();
+                double videoRate = videoTime.duration().rate();
                 videoTime = otime::TimeRange(
                     timeRange.start_time().rescaled_to(videoRate),
                     timeRange.duration().rescaled_to(videoRate));
@@ -263,7 +266,7 @@ namespace mrv
             bool hasAudio = info.audio.isValid();
             if (hasAudio)
             {
-                audioTime = info.audioTime;
+                audioTime = info.audioTime.value();
                 if (player->timeRange() != timeRange ||
                     audioTime.start_time() !=
                         timeRange.start_time().rescaled_to(sampleRate))

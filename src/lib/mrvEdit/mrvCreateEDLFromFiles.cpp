@@ -38,7 +38,7 @@ namespace
 namespace mrv
 {
     using namespace tl;
-    
+
     using otime::RationalTime;
     using otime::TimeRange;
 
@@ -52,22 +52,22 @@ namespace mrv
                             const std::vector<std::string> files)
     {
         otio::ErrorStatus errorStatus;
-        
+
         const timeline::Options options;
-        
+
         otio::SerializableObject::Retainer<otio::Timeline> otioTimeline =
             new otio::Timeline("EDL");
 
         auto videoTrack =
             new otio::Track("Video", std::nullopt, otio::Track::Kind::video);
-        
+
         auto audioTrack =
             new otio::Track("Audio", std::nullopt, otio::Track::Kind::audio);
 
-            
+
         auto context = App::app->getContext();
         auto ioSystem = context->getSystem<io::System>();
-            
+
         for (const auto& file : files)
         {
             tl::file::Path path(file);
@@ -75,7 +75,7 @@ namespace mrv
             {
                 path = tl::file::Path(tl::file::getCWD() + file);
             }
-            
+
             if (mrv::file::isOTIO(path))
             {
                 LOG_ERROR(_("Cannot currently concatenate an .otio file."));
@@ -87,7 +87,7 @@ namespace mrv
                 LOG_ERROR(_("Cannot currently concatenate a directory."));
                 return false;
             }
-            
+
             if (!mrv::file::isReadable(file))
             {
                 /* xgettext:c-format */
@@ -99,7 +99,7 @@ namespace mrv
                 LOG_ERROR(err);
                 continue;
             }
-                
+
             // Is the input a sequence?
             const bool isSequence = mrv::file::isSequence(path);
 
@@ -126,7 +126,7 @@ namespace mrv
                     }
                 }
             }
-            
+
             // Is the input a video or audio file?
             if (auto read = ioSystem->read(path, options.ioOptions))
             {
@@ -138,7 +138,7 @@ namespace mrv
                 // Read the video.
                 if (!info.video.empty())
                 {
-                    startTime = info.videoTime.start_time();
+                    startTime = info.videoTime->start_time();
                     auto videoClip = new otio::Clip;
                     videoClip->set_source_range(info.videoTime);
                     if (isSequence)
@@ -147,9 +147,9 @@ namespace mrv
                             path.getProtocol() + path.getDirectory(),
                             path.getBaseName(),
                             path.getExtension(),
-                            info.videoTime.start_time().value(),
+                            info.videoTime->start_time().value(),
                             1,
-                            info.videoTime.duration().rate(),
+                            info.videoTime->duration().rate(),
                             path.getPadding());
                         mediaReference->set_available_range(info.videoTime);
                         videoClip->set_media_reference(mediaReference);
@@ -171,7 +171,7 @@ namespace mrv
                 {
                     if (startTime.is_invalid_time())
                     {
-                        startTime = info.audioTime.start_time();
+                        startTime = info.audioTime->start_time();
                     }
 
                     auto audioClip = new otio::Clip;
@@ -197,7 +197,7 @@ namespace mrv
                 }
             }
         }
-        
+
         auto stack = new otio::Stack;
 
         stack->append_child(videoTrack, &errorStatus);
@@ -209,7 +209,7 @@ namespace mrv
                 .arg(errorStatus.full_description);
             throw std::runtime_error(error);
         }
-        
+
         stack->append_child(audioTrack, &errorStatus);
         if (otio::is_error(errorStatus))
         {

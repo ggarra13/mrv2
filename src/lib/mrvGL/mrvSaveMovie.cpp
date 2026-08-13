@@ -240,15 +240,17 @@ namespace mrv
             // Render information.
             const auto& info = player->ioInfo();
 
-            auto videoTime = info.videoTime;
+            otime::TimeRange videoTime = time::invalidTimeRange;
+            if (info.videoTime.has_value())
+                videoTime = info.videoTime.value();
 
             const bool hasVideo = (!info.video.empty()) && options.saveVideo;
 
             if (player->timeRange() != timeRange ||
-                info.videoTime.start_time() != timeRange.start_time() ||
-                info.videoTime.duration() != timeRange.duration())
+                videoTime.start_time() != timeRange.start_time() ||
+                videoTime.duration() != timeRange.duration())
             {
-                double videoRate = info.videoTime.duration().rate();
+                double videoRate = videoTime.duration().rate();
                 videoTime = otime::TimeRange(
                     timeRange.start_time().rescaled_to(videoRate),
                     timeRange.duration().rescaled_to(videoRate));
@@ -259,7 +261,7 @@ namespace mrv
             bool hasAudio = info.audio.isValid();
             if (hasAudio)
             {
-                audioTime = info.audioTime;
+                audioTime = info.audioTime.value();
                 if (player->timeRange() != timeRange ||
                     audioTime.start_time() !=
                         timeRange.start_time().rescaled_to(sampleRate))
@@ -371,7 +373,7 @@ namespace mrv
                     string::Format("{0}: Saving over same file being played!")
                         .arg(file));
             }
-            
+
 
             gl::OffscreenBufferOptions offscreenBufferOptions;
             std::shared_ptr<timeline_gl::Render> render;
@@ -428,7 +430,7 @@ namespace mrv
             }
 
             bool interactive = view->visible_r();
-            
+
             std::shared_ptr<gl::GLFWWindow> window;
             if (!interactive)
             {
@@ -634,7 +636,7 @@ namespace mrv
                     auto entries = tl::ffmpeg::getProfileLabels();
                     std::string profileName =
                         entries[(int)options.ffmpegProfile];
-                    
+
                     /* xgettext:c++-format */
                     msg = tl::string::Format(
                               _("Using profile {0}, pixel format {1}."))
@@ -765,7 +767,7 @@ namespace mrv
             waitForFrame(player, startTime);
 
             int32_t frameIndex = 0;
-            
+
             while (running)
             {
                 context->tick();
@@ -912,7 +914,7 @@ namespace mrv
 
                         delete rgb;
 #else
-                        
+
 #  ifdef VULKAN_BACKEND
 #  else
                         GLenum imageBuffer = GL_FRONT;
@@ -932,7 +934,7 @@ namespace mrv
                             X, Y, outputInfo.size.w, outputInfo.size.h, format,
                             type, outputImage->getData());
 #  endif
-                        
+
 #endif
                     }
                     else
@@ -965,7 +967,7 @@ namespace mrv
 #ifdef VULKAN_BACKEND
                             VkDevice device = ctx.device;
                             VkCommandPool commandPool = ctx.commandPool;
-                
+
                             VkCommandBuffer cmd = beginSingleTimeCommands(device, commandPool);
                             buffer->transitionToColorAttachment(cmd);
 
@@ -983,7 +985,7 @@ namespace mrv
                                 render->setTransform(ortho);
                                 render->setOCIOOptions(view->getOCIOOptions());
                                 render->setLUTOptions(view->lutOptions());
-                    
+
                                 render->drawVideo(
                                     {videoData},
                                     {math::Box2i(0, 0,
@@ -992,34 +994,34 @@ namespace mrv
                                     {timeline::DisplayOptions()},
                                     timeline::CompareOptions(),
                                     ui->uiView->getBackgroundOptions());
-                    
+
                                 render->end();
                             }
 
                             buffer->transitionToColorAttachment(cmd);
-                
+
                             buffer->readPixels(cmd, 0, 0,
                                                renderSize.w, renderSize.h);
-                                    
+
                             vkEndCommandBuffer(cmd);
-                
+
                             buffer->submitReadback(cmd);
 
                             {
                                 std::lock_guard<std::mutex> lock(ctx.queue_mutex());
                                 vkQueueWaitIdle(ctx.queue());
                             }
-                                    
+
                             void* imageData = buffer->getLatestReadPixels();
                             if (imageData)
                             {
                                 std::memcpy(outputImage->getData(), imageData,
                                             outputImage->getDataByteCount());
-                                    
+
                                 vkFreeCommandBuffers(device, commandPool, 1,
-                                                     &cmd);    
+                                                     &cmd);
                             }
-                                    
+
 #else
                             // back to conventional pixel operation
                             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);

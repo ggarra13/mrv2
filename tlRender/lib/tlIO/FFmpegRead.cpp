@@ -69,7 +69,7 @@ namespace tl
             IRead::_init(path, memory, options, cache, logSystem);
 
             TLRENDER_P();
-            
+
             auto i = options.find("FFmpeg/YUVToRGBConversion");
             if (i != options.end())
             {
@@ -156,7 +156,7 @@ namespace tl
                             p.readAudio = std::make_shared<ReadAudio>(
                                 path.hasProtocol() ?
                                 path.get() : path.getFileName(true),
-                                _memory, p.info.videoTime.duration().rate(),
+                                _memory, p.info.videoTime->duration().rate(),
                                 p.options);
                             p.info.audio = p.readAudio->getInfo();
                             p.info.audioTime = p.readAudio->getTimeRange();
@@ -276,7 +276,7 @@ namespace tl
                 p.audioThread.thread.join();
             }
         }
-        
+
         std::shared_ptr<Read> Read::create(
             const file::Path& path, const io::Options& options,
             const std::shared_ptr<io::Cache>& cache,
@@ -403,7 +403,7 @@ namespace tl
         void Read::_videoThread()
         {
             TLRENDER_P();
-            p.videoThread.currentTime = p.info.videoTime.start_time();
+            p.videoThread.currentTime = p.info.videoTime->start_time();
             p.readVideo->start();
             p.videoThread.logTimer = std::chrono::steady_clock::now();
             while (p.videoThread.running)
@@ -424,7 +424,7 @@ namespace tl
                     // Check if we woke up to stop
                     if (!p.videoThread.running)
                         return;
-                    
+
                     infoRequests = std::move(p.videoMutex.infoRequests);
                     if (!p.videoMutex.videoRequests.empty())
                     {
@@ -501,7 +501,7 @@ namespace tl
                         data, videoRequest->time, videoRequest->options);
                     videoRequest->promise.set_value(data);
                     p.videoThread.currentTime += otime::RationalTime(
-                        1.0, p.info.videoTime.duration().rate());
+                        1.0, p.info.videoTime->duration().rate());
                 }
 
                 // Logging.
@@ -539,7 +539,7 @@ namespace tl
         void Read::_audioThread()
         {
             TLRENDER_P();
-            p.audioThread.currentTime = p.info.audioTime.start_time();
+            p.audioThread.currentTime = p.info.audioTime->start_time();
             p.readAudio->start();
             p.audioThread.logTimer = std::chrono::steady_clock::now();
             while (p.audioThread.running)
@@ -558,11 +558,11 @@ namespace tl
                     // Check if we woke up to stop
                     if (!p.audioThread.running)
                         return;
-                    
+
                     // Check for spurious wakeup
                     if (p.audioMutex.requests.empty())
                         continue;
-                                        
+
                     request = p.audioMutex.requests.front();
                     p.audioMutex.requests.pop_front();
                     requestSampleCount =
@@ -602,21 +602,21 @@ namespace tl
                 if (request)
                 {
                     intersects =
-                        request->timeRange.intersects(p.info.audioTime);
+                        request->timeRange.intersects(p.info.audioTime.value());
                 }
                 while (request && intersects &&
                        p.readAudio->getBufferSize() <
-                           request->timeRange.duration()
-                               .rescaled_to(p.info.audio.sampleRate)
-                               .value() &&
+                       request->timeRange.duration()
+                       .rescaled_to(p.info.audio.sampleRate)
+                       .value() &&
                        p.readAudio->isValid() &&
                        p.readAudio->process(
                            p.audioThread.currentTime,
                            requestSampleCount
-                               ? requestSampleCount
-                               : p.options.audioBufferSize
-                                     .rescaled_to(p.info.audio.sampleRate)
-                                     .value()))
+                           ? requestSampleCount
+                           : p.options.audioBufferSize
+                           .rescaled_to(p.info.audio.sampleRate)
+                           .value()))
                     ;
 
                 // Handle request.
@@ -630,11 +630,11 @@ namespace tl
                     if (intersects)
                     {
                         size_t offset = 0;
-                        if (audioData.time < p.info.audioTime.start_time())
+                        if (audioData.time < p.info.audioTime->start_time())
                         {
                             offset =
-                                (p.info.audioTime.start_time() - audioData.time)
-                                    .value();
+                                (p.info.audioTime->start_time() -
+                                 audioData.time).value();
                         }
                         p.readAudio->bufferCopy(
                             audioData.audio->getData() +

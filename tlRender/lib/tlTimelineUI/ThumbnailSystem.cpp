@@ -942,7 +942,7 @@ namespace tl
                             const otime::RationalTime time =
                                 request->time != time::invalidTime
                                 ? request->time
-                                : info.videoTime.start_time();
+                                : info.videoTime->start_time();
                             const auto videoData =
                                 read->readVideo(time, request->options)
                                 .get();
@@ -952,6 +952,11 @@ namespace tl
                                 gl::OffscreenBufferBinding binding(
                                     p.thumbnailThread.buffer);
                                 p.thumbnailThread.render->begin(size);
+                                const math::Matrix4x4f ortho = math::ortho(
+                                    0.F, static_cast<float>(size.w),
+                                    static_cast<float>(size.h), 0.F,
+                                    -1.F, 1.F);
+                                p.thumbnailThread.render->setTransform(ortho);
                                 p.thumbnailThread.render->drawImage(
                                     videoData.image,
                                     {math::Box2i(0, 0, size.w, size.h)});
@@ -1014,6 +1019,11 @@ namespace tl
                                     gl::OffscreenBufferBinding binding(
                                         p.thumbnailThread.buffer);
                                     p.thumbnailThread.render->begin(size);
+                                    const math::Matrix4x4f ortho = math::ortho(
+                                        0.F, static_cast<float>(size.w),
+                                        static_cast<float>(size.h), 0.F,
+                                        -1.F, 1.F);
+                                    p.thumbnailThread.render->setTransform(ortho);
                                     p.thumbnailThread.render->drawVideo(
                                         {videoData},
                                         {math::Box2i(
@@ -1148,7 +1158,7 @@ namespace tl
                                 const otime::RationalTime time =
                                     request->time != time::invalidTime
                                     ? request->time
-                                    : info.videoTime.start_time();
+                                    : info.videoTime->start_time();
                                 const auto videoData =
                                     read->readVideo(time, request->options)
                                     .get();

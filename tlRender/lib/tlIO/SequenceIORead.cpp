@@ -377,48 +377,7 @@ namespace tl
 
         void ISequenceRead::Private::addTags(Info& info)
         {
-            if (!info.video.empty())
-            {
-                {
-                    std::stringstream ss;
-                    ss << info.video[0].size.w << " " << info.video[0].size.h;
-                    info.tags["Video Resolution"] = ss.str();
-                }
-                {
-                    std::stringstream ss;
-                    ss.precision(2);
-                    ss << std::fixed;
-                    ss << info.video[0].size.pixelAspectRatio;
-                    info.tags["Video Pixel Aspect Ratio"] = ss.str();
-                }
-                {
-                    std::stringstream ss;
-                    ss << info.video[0].pixelType;
-                    info.tags["Video Pixel Type"] = ss.str();
-                }
-                {
-                    std::stringstream ss;
-                    ss << info.video[0].videoLevels;
-                    info.tags["Video Levels"] = ss.str();
-                }
-                {
-                    std::stringstream ss;
-                    ss << info.videoTime.start_time().to_timecode();
-                    info.tags["Video Start Time"] = ss.str();
-                }
-                {
-                    std::stringstream ss;
-                    ss << info.videoTime.duration().to_timecode();
-                    info.tags["Video Duration"] = ss.str();
-                }
-                {
-                    std::stringstream ss;
-                    ss.precision(2);
-                    ss << std::fixed;
-                    ss << info.videoTime.start_time().rate() << " FPS";
-                    info.tags["Video Speed"] = ss.str();
-                }
-            }
+            io::addVideoTags(info);
         }
     } // namespace io
 } // namespace tl

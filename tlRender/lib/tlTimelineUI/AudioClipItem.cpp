@@ -271,13 +271,13 @@ namespace tl
                                 _timeRange.start_time().rate())
                                 .round();
                         otime::TimeRange trimmedRange = _trimmedRange;
-                        if (trimmedRange.start_time() < p.ioInfo->audioTime.start_time())
+                        if (trimmedRange.start_time() < p.ioInfo->audioTime->start_time())
                         {
                             //! \bug If the trimmed range is less than the media time,
                             //! assume the media time is wrong (e.g., ALab trailer) and
                             //! compensate for it.
                             trimmedRange = otime::TimeRange(
-                                p.ioInfo->audioTime.start_time() + trimmedRange.start_time(),
+                                p.ioInfo->audioTime->start_time() + trimmedRange.start_time(),
                                 trimmedRange.duration());
                         }
                         const otime::TimeRange mediaRange =

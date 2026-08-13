@@ -421,7 +421,7 @@ namespace tl
             std::string error;
             file::Path path = inputPath;
             file::Path audioPath = inputAudioPath;
-            
+
             try
             {
                 auto ioSystem = context->getSystem<io::System>();
@@ -476,7 +476,7 @@ namespace tl
                     // Read the video.
                     if (!info.video.empty())
                     {
-                        startTime = info.videoTime.start_time();
+                        startTime = info.videoTime->start_time();
                         auto videoClip = new otio::Clip;
                         videoClip->set_source_range(info.videoTime);
                         if (isSequence)
@@ -486,8 +486,8 @@ namespace tl
                                     "",  // \@bug: not path.getDirectory()?
                                     path.getBaseName(),
                                     path.getSuffix() + path.getExtension(),
-                                    info.videoTime.start_time().value(), 1,
-                                    info.videoTime.duration().rate(),
+                                    info.videoTime->start_time().value(), 1,
+                                    info.videoTime->duration().rate(),
                                     path.getPadding());
                             mediaReference->set_available_range(info.videoTime);
                             videoClip->set_media_reference(mediaReference);
@@ -554,7 +554,7 @@ namespace tl
                     {
                         if (startTime.is_invalid_time())
                         {
-                            startTime = info.audioTime.start_time();
+                            startTime = info.audioTime->start_time();
                         }
 
                         auto audioClip = new otio::Clip;

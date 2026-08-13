@@ -147,7 +147,7 @@ namespace tl
                             p.info.videoTime = p.readVideo->getTimeRange();
                         }
                         p.videoThread.currentTime =
-                            p.info.videoTime.start_time();
+                            p.info.videoTime->start_time();
 
                         p.videoThread.logTimer =
                             std::chrono::steady_clock::now();
@@ -185,7 +185,7 @@ namespace tl
                         p.info.audio = p.readAudio->getInfo();
                         p.info.audioTime = p.readAudio->getTimeRange();
                         p.audioThread.currentTime =
-                            p.info.audioTime.start_time();
+                            p.info.audioTime->start_time();
                         p.audioThread.logTimer =
                             std::chrono::steady_clock::now();
 
@@ -436,7 +436,7 @@ namespace tl
                     }
 
                     p.videoThread.currentTime += otime::RationalTime(
-                        1.0, p.info.videoTime.duration().rate());
+                        1.0, p.info.videoTime->duration().rate());
                 }
 
                 // Logging.
@@ -479,7 +479,7 @@ namespace tl
             while (p.audioThread.running)
             {
                 std::shared_ptr<Private::AudioRequest> request;
-                const double sampleRate = p.info.audioTime.duration().rate();
+                const double sampleRate = p.info.audioTime->duration().rate();
                 size_t requestSampleCount = 0;
                 bool seek = false;
                 // Check requests.
@@ -541,7 +541,7 @@ namespace tl
                 if (request)
                 {
                     intersects =
-                        request->timeRange.intersects(p.info.audioTime);
+                        request->timeRange.intersects(p.info.audioTime.value());
                 }
 
                 while (request && intersects &&
@@ -564,11 +564,11 @@ namespace tl
                     if (intersects)
                     {
                         size_t offset = 0;
-                        if (audioData.time < p.info.audioTime.start_time())
+                        if (audioData.time < p.info.audioTime->start_time())
                         {
                             offset =
-                                (p.info.audioTime.start_time() - audioData.time)
-                                    .value();
+                                (p.info.audioTime->start_time() -
+                                 audioData.time).value();
                         }
                         p.readAudio->bufferCopy(
                             audioData.audio->getData() +

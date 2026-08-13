@@ -1515,7 +1515,7 @@ namespace mrv
         if (!info.video.empty())
         {
             auto video = info.video[0];
-            const auto duration = info.videoTime.duration();
+            const otime::RationalTime duration = info.videoTime->duration();
             if (duration.to_seconds() > 180.0)
                 use_progress = true;
             if (video.size.w > 2048)

@@ -294,7 +294,7 @@ namespace tl
                         const otime::RationalTime mediaTime =
                             timeline::toVideoMediaTime(
                                 time, _timeRange, _trimmedRange,
-                                p.ioInfo->videoTime.duration().rate());
+                                p.ioInfo->videoTime->duration().rate());
 
                         const std::string cacheKey = io::getVideoCacheKey(
                             p.path, mediaTime, p.ioOptions, {});
