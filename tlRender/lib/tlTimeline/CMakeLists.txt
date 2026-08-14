@@ -56,7 +56,6 @@ set(SOURCE
     RenderUtil.cpp
     TimeUnits.cpp
     Timeline.cpp
-    TimelinePrivate.cpp
     Transition.cpp
     Util.cpp)
 
