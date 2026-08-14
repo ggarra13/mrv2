@@ -102,7 +102,7 @@ namespace tl
             size_t readThreadCount = getDefaultReadThreadCount();
 
             //! Maximum number of video requests.
-            size_t videoRequestCount = 16;
+            size_t videoRequestMax = 16;
 
             //! Maximum number of audio requests in flight.
             //!
@@ -111,8 +111,7 @@ namespace tl
             //! its own threading, so there is no thread count here for it to
             //! follow and this is the only limit on how much audio is being
             //! assembled at once.
-            size_t audioRequestCount = 16;
-
+            size_t audioRequestMax = 16;
 
             //! Maximum number of stateful readers held per half.
             //!

@@ -2221,9 +2221,9 @@ namespace mrv
         options.imageSeqAudioFileName =
             p.settings->getValue<std::string>("FileSequence/AudioFileName");
 
-        options.videoRequestCount =
+        options.videoRequestMax =
             p.settings->getValue<int>("Performance/VideoRequestCount");
-        options.audioRequestCount =
+        options.audioRequestMax =
             p.settings->getValue<int>("Performance/AudioRequestCount");
 
         options.ioOptions = _getIOOptions();
