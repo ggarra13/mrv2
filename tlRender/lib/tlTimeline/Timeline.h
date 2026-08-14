@@ -129,8 +129,13 @@ namespace tl
 
         protected:
             void _init(
+                const std::shared_ptr<system::Context>& context,
+                file::Path& inputPath, const file::Path& inputAudioPath,
+                const Options& options);
+            void _init(
+                const std::shared_ptr<system::Context>&,
                 const otio::SerializableObject::Retainer<otio::Timeline>&,
-                const std::shared_ptr<system::Context>&, const Options&);
+                const Options&);
 
             Timeline();
 
@@ -139,39 +144,39 @@ namespace tl
 
             //! Create a new timeline.
             static std::shared_ptr<Timeline> create(
-                const otio::SerializableObject::Retainer<otio::Timeline>&,
                 const std::shared_ptr<system::Context>&,
-                const Options& = Options());
-
-            //! Create a new timeline from a file name. The file name can point
-            //! to an .otio file, movie file, or image sequence.
-            static std::shared_ptr<Timeline> create(
-                const std::string&, const std::shared_ptr<system::Context>&,
-                const otime::RationalTime& = time::invalidTime,
+                const otio::SerializableObject::Retainer<otio::Timeline>&,
                 const Options& = Options());
 
             //! Create a new timeline from a path. The path can point to an
             //! .otio file, movie file, or image sequence.
             static std::shared_ptr<Timeline> create(
-                file::Path&, const std::shared_ptr<system::Context>&,
-                const otime::RationalTime& = time::invalidTime,
+                const std::shared_ptr<system::Context>&,
+                file::Path& inOutPath,
+                const Options& = Options());
+
+            //! Create a new timeline from a path and audio path. The path can
+            //! point to an .otio file, movie file, or image sequence.
+            static std::shared_ptr<Timeline> create(
+                const std::shared_ptr<system::Context>&,
+                file::Path& inOutPath,
+                file::Path& inOutAudioPath,
+                const Options& = Options());
+
+            //! Create a new timeline from a file name. The file name can point
+            //! to an .otio file, movie file, or image sequence.
+            static std::shared_ptr<Timeline> create(
+                const std::shared_ptr<system::Context>&,
+                const std::string&,
                 const Options& = Options());
 
             //! Create a new timeline from a file name and audio file name.
             //! The file name can point to an .otio file, movie file, or
             //! image sequence.
             static std::shared_ptr<Timeline> create(
-                const std::string& fileName, const std::string& audioFilename,
                 const std::shared_ptr<system::Context>&,
-                const otime::RationalTime& = time::invalidTime,
-                const Options& = Options());
-
-            //! Create a new timeline from a path and audio path. The path can
-            //! point to an .otio file, movie file, or image sequence.
-            static std::shared_ptr<Timeline> create(
-                file::Path& path, const file::Path& audioPath,
-                const std::shared_ptr<system::Context>&,
-                const otime::RationalTime& = time::invalidTime,
+                const std::string& fileName,
+                const std::string& audioFilename,
                 const Options& = Options());
 
             //! Get the context.

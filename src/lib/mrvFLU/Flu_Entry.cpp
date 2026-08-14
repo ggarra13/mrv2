@@ -962,7 +962,7 @@ void Flu_Entry::startRequest()
         if (extension == ".otio" || extension == ".otioz")
         {
             const auto& timeline =
-                timeline::Timeline::create(path, mrv::App::app->getContext());
+                timeline::Timeline::create(mrv::App::app->getContext(), path);
             const auto& timeRange = timeline->getTimeRange();
             if (time::isValid(timeRange))
             {

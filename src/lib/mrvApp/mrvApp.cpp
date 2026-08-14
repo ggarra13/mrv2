@@ -2213,9 +2213,7 @@ namespace mrv
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits"), 255);
 
         otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
-        otime::RationalTime offsetTime;
         double value = ui->uiPrefs->uiStartTimeOffset->value();
-        offsetTime = otime::RationalTime(value, 24.0); // rate is not used.
 
         if (file::isUSD(item->path))
         {
@@ -2227,24 +2225,13 @@ namespace mrv
                 release = std::make_unique<py::gil_scoped_release>();
             }
 #endif
-            otioTimeline = item->audioPath.isEmpty()
-                               ? timeline::create(
-                                     item->path, _context, offsetTime, options)
-                               : timeline::create(
-                                     item->path, item->audioPath, _context,
-                                     offsetTime, options);
-        }
-        else
-        {
-            otioTimeline = item->audioPath.isEmpty()
-                               ? timeline::create(
-                                     item->path, _context, offsetTime, options)
-                               : timeline::create(
-                                     item->path, item->audioPath, _context,
-                                     offsetTime, options);
         }
 
-        auto out = timeline::Timeline::create(otioTimeline, _context, options);
+        auto out = item->audioPath.isEmpty()
+                   ? timeline::Timeline::create(
+                       _context, item->path, options)
+                   : timeline::Timeline::create(
+                       _context, item->path, item->audioPath, options);
 
         if (ui->uiPrefs->SendMedia->value())
         {
