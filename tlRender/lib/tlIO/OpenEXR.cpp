@@ -18,6 +18,8 @@
 #include <ImfThreading.h>
 
 #include <array>
+#include <algorithm>
+#include <thread>
 
 namespace tl
 {
@@ -849,7 +851,16 @@ namespace tl
                 "OpenEXR", {{".exr", io::FileType::Sequence}}, cache,
                 logSystem);
 
-            Imf::setGlobalThreadCount(0);
+            // Let OpenEXR's internal thread pool parallelize scanline
+            // and tile decompression (PIZ, ZIP, DWAA/DWAB, etc.) across
+            // the available hardware threads. Passing 0 here disables
+            // that pool entirely and forces fully single-threaded
+            // decoding, which is a significant performance regression
+            // on multi-core machines and on heavily compressed footage.
+            const unsigned int hardwareThreads =
+                std::thread::hardware_concurrency();
+            Imf::setGlobalThreadCount(
+                std::max(1u, hardwareThreads > 0 ? hardwareThreads - 1 : 0u));
         }
 
         Plugin::Plugin() {}

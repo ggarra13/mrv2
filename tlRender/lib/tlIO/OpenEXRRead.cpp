@@ -282,15 +282,18 @@ namespace tl
                         view = header.view() + " ";
                     std::vector<Layer> layers =
                         getLayers(header.channels(), _channelGrouping);
+                    // NOTE: The video info vector is indexed by layer, not
+                    // by part number -- a single part can contain several
+                    // layers (or, more rarely, none), so partNumber and the
+                    // video index diverge as soon as there is more than one
+                    // part. Indexing with partNumber here previously wrote
+                    // the per-part compression info into the wrong slot (or
+                    // past the end of the vector for files with more parts
+                    // than layers), corrupting earlier parts' info or
+                    // causing undefined behavior. Each newly-added video
+                    // entry for this part is updated instead.
                     size_t offset = _info.video.size();
                     _info.video.resize(offset + layers.size());
-                    _info.video[partNumber].compression = compressionName;
-                    _info.video[partNumber].compressionNumScanlines =
-                        compressionNumScanlines;
-                    _info.video[partNumber].isLossyCompression =
-                        isLossyCompression;
-                    _info.video[partNumber].isValidDeepCompression =
-                        isValidDeepCompression;
                     for (size_t i = 0; i < layers.size(); ++i)
                     {
                         layers[i].partNumber = partNumber;
@@ -302,6 +305,11 @@ namespace tl
                         if (sampling.x != 1 || sampling.y != 1)
                             _fast = false;
                         auto& info = _info.video[offset + i];
+                        info.compression = compressionName;
+                        info.compressionNumScanlines =
+                            compressionNumScanlines;
+                        info.isLossyCompression = isLossyCompression;
+                        info.isValidDeepCompression = isValidDeepCompression;
                         info.name = view + layer.name;
                         int w = std::max(_displayWindow.w(), _dataWindow.w());
                         int h = std::max(_displayWindow.h(), _dataWindow.h());
@@ -828,7 +836,6 @@ namespace tl
                         // Copy intersection from temp to out.image, zero the rest
                         uint8_t* outPtr = out.image->getData();
                         size_t outScb = imageInfo.size.w * cb;
-                        int outWidth = imageInfo.size.w;
                         int outHeight = imageInfo.size.h;
 
                         int dispMinX = _displayWindow.min.x;
@@ -947,16 +954,22 @@ namespace tl
                     io::VideoData out;
 
                     // Early exit.
-                    if (!_f)
+                    if (!_f || _info.video.empty() || _layers.empty())
                         return out;
 
                     int layer = 0;
                     auto i = options.find("Layer");
                     if (i != options.end())
                     {
-                        layer = std::min(
-                            std::atoi(i->second.c_str()),
-                            static_cast<int>(_info.video.size()) - 1);
+                        // Clamp to a valid range on both ends -- an
+                        // out-of-range or negative "Layer" option (e.g.
+                        // from bad/adversarial input) would otherwise
+                        // index _layers[] out of bounds below.
+                        layer = std::max(
+                            0,
+                            std::min(
+                                std::atoi(i->second.c_str()),
+                                static_cast<int>(_info.video.size()) - 1));
                     }
 
                     // 1. Get header for the current part.
@@ -1122,11 +1135,9 @@ namespace tl
                                 *_f.get(), _layers[layer].partNumber);
                             in.setFrameBuffer(frameBuffer);
 
-                            if (!_ignoreDisplayWindow ||
-                                _dataWindow.min.x >= _displayWindow.min.x ||
-                                _dataWindow.max.x <= _displayWindow.max.x ||
-                                _dataWindow.min.y >= _displayWindow.min.y ||
-                                _dataWindow.max.y <= _displayWindow.max.y)
+                            // Composite into the display window unless the
+                            // caller explicitly asked to ignore it.
+                            if (!_ignoreDisplayWindow)
                             {
                                 for (int y = _displayWindow.min.y;
                                      y <= _displayWindow.max.y; ++y)
