@@ -59,7 +59,7 @@ namespace tl
             TLRENDER_P();
 
             p.path = path;
-            p.memoryRead = timeline::getMemoryRead(clip->media_reference());
+            p.memoryRead = timeline->getMem(clip->media_reference());
             p.thumbnailGenerator = thumbnailGenerator;
 
             const std::string infoCacheKey =

@@ -966,6 +966,7 @@ namespace tl
             // Ensure each frame's start is aligned to p.alignment
             p.regionSize = (totalSize / frameCount);
             p.regionSize = (p.regionSize / p.alignment) * p.alignment;
+            p.relativeOffset = 0; // reset relative offset.
 
             if (p.regionSize == 0) throw std::runtime_error("Buffer too small");
 
@@ -1030,6 +1031,7 @@ namespace tl
                           << p.totalSize
                           << " region="
                           << (p.regionSize * vlk::MAX_FRAMES_IN_FLIGHT)
+                          << " dataSize=" << dataSize
                           << std::endl;
                 throw std::runtime_error("VAO: Frame region overflow!");
             }

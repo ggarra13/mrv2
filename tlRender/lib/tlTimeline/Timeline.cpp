@@ -32,6 +32,27 @@ namespace tl
             const size_t readCacheMax = 10;
         }
 
+        namespace
+        {
+            //! An absolute, normalized form of a media path, used only to compare
+            //! paths that name the same file in different ways.
+            std::string normalMediaPath(const file::Path& path)
+            {
+                std::filesystem::path out = std::filesystem::u8path(path.get());
+                if (!out.is_absolute())
+                {
+                    std::error_code ec;
+                    const std::filesystem::path abs = std::filesystem::absolute(out, ec);
+                    if (!ec)
+                    {
+                        out = abs;
+                    }
+                }
+                return out.lexically_normal().u8string();
+            }
+        }
+
+
         TLRENDER_ENUM_IMPL(
             FileSequenceAudio, "None", "BaseName", "FileName", "Directory");
         TLRENDER_ENUM_SERIALIZE_IMPL(FileSequenceAudio);
@@ -1165,6 +1186,59 @@ namespace tl
                 otioClip,
                 thread.mediaReferenceKey,
                 thread.clipMediaReferenceKeys);
+        }
+
+        otio::MediaReference* Timeline::_findMedia(const file::Path& path)
+        {
+            TLRENDER_P();
+            const auto i = p.mediaByPath.find(path.get());
+            if (i != p.mediaByPath.end())
+            {
+                return i->second;
+            }
+            // The media references are resolved when the timeline is read, so they
+            // are usually absolute, while a caller asks with the path it was given.
+            // Opening a file by a relative path otherwise found none of its own
+            // media.
+            const auto j = p.mediaByNormalPath.find(normalMediaPath(path));
+            return j != p.mediaByNormalPath.end() ? j->second : nullptr;
+        }
+
+        std::future<io::VideoData> Timeline::readMedia(
+            const file::Path& path,
+            const otio::RationalTime& time,
+            const io::Options& options)
+        {
+            TLRENDER_P();
+            std::future<io::VideoData> out;
+            const io::Options optionsMerged = io::merge(options, p.options.ioOptions);
+            if (auto mediaReference = _findMedia(path))
+            {
+                if (auto read = _getRead(mediaReference, optionsMerged))
+                {
+                    out = read->readVideo(time, optionsMerged);
+                }
+            }
+            return out;
+        }
+
+        std::future<io::AudioData> Timeline::readMediaAudio(
+            const file::Path& path,
+            const otio::TimeRange& timeRange,
+            const io::Options& options)
+        {
+            TLRENDER_P();
+            std::future<io::AudioData> out;
+            const io::Options optionsMerged = io::merge(options, p.options.ioOptions);
+            if (auto mediaReference = _findMedia(path))
+            {
+                // Audio is never a sequence of stateless files.
+                if (auto audioRead = _getRead(mediaReference, optionsMerged))
+                {
+                    out = audioRead->readAudio(timeRange, optionsMerged);
+                }
+            }
+            return out;
         }
 
         std::vector<std::string> Timeline::getMediaReferenceKeys() const

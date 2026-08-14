@@ -105,6 +105,15 @@ namespace tl
             // monotonic when readers are evicted from the cache. Owned by
             // the request thread.
             size_t readErrorMax = 0;
+            // Media by resolved path, built once while the timeline is read.
+            // Resolving a path means decoding a URL and parsing it, so doing it
+            // per lookup made every thumbnail request walk the whole timeline.
+            std::map<std::string, otio::MediaReference*> mediaByPath;
+            //! The same references keyed by an absolute, normalized path, so
+            //! that a caller which opened the timeline with a relative path
+            //! still finds them. mediaByPath keeps the paths as written,
+            //! which is what getMediaPaths() reports.
+            std::map<std::string, otio::MediaReference*> mediaByNormalPath;
             otime::TimeRange timeRange = time::invalidTimeRange;
             io::Info ioInfo;
             // The clip whose media references provide the video information,

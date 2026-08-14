@@ -275,6 +275,17 @@ namespace tl
             //! \name Video and Audio Data
             ///@{
 
+            std::future<io::VideoData> readMedia(
+                const file::Path& path,
+                const otio::RationalTime& time,
+                const io::Options& options);
+
+            std::future<io::AudioData>
+            readMediaAudio(
+                const file::Path& path,
+                const otio::TimeRange& timeRange,
+                const io::Options& options);
+
             //! Get video data.
             VideoRequest getVideo(
                 const otime::RationalTime&, const io::Options& = io::Options());
@@ -307,6 +318,10 @@ namespace tl
             std::shared_ptr<io::IRead> _getRead(
                 const otio::MediaReference*,
                 const io::Options&);
+
+            // Find a media reference by its resolved path.
+            otio::MediaReference* _findMedia(const file::Path&);
+
             bool _getVideoInfo(const otio::Composable*);
             bool _getAudioInfo(const otio::Composable*);
             void _getCanvas();

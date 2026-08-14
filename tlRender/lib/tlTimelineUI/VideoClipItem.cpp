@@ -70,7 +70,7 @@ namespace tl
 
             p.clipName = clip->name();
             p.path = path;
-            p.memoryRead = timeline::getMemoryRead(clip->media_reference());
+            p.memoryRead = timeline->getMem(clip->media_reference());
             p.thumbnailGenerator = thumbnailGenerator;
 
             p.ioOptions = _data->options.ioOptions;
