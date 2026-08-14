@@ -14,10 +14,6 @@ if (NOT OpenEXR_FOUND)
     set(OpenEXR_DEPENDENCIES ${OpenJPH_DEP} ${Imath_DEP} ${ZLIB_DEP})
     message(STATUS "OpenEXR DEPENDENCIES=${OpenEXR_DEPENDENCIES}")
 
-    # \bug Disable OpenEXR threading to work around a crash at shutdown in the
-    #      OpenEXR thread pool. Note that we already set the OpenEXR global thread
-    #      count to zero wiht Imf::setGlobalThreadCount(0), since we load frames in
-    #      parallel.
     set(OpenEXR_ARGS
 	${TLRENDER_EXTERNAL_ARGS}
 	-DOPENEXR_BUILD_TOOLS=OFF
