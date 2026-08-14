@@ -6,6 +6,7 @@
 
 #include <tlTimeline/MemoryReference.h>
 #include <tlTimeline/Util.h>
+#include <tlTimeline/ZipPrivate.h>
 
 #include <tlIO/System.h>
 
@@ -21,10 +22,6 @@
 #include <opentimelineio/imageSequenceReference.h>
 #include <opentimelineio/serializableCollection.h>
 
-#include <minizip/mz.h>
-#include <minizip/mz_strm.h>
-#include <minizip/mz_zip.h>
-#include <minizip/mz_zip_rw.h>
 
 namespace tl
 {
@@ -285,283 +282,13 @@ namespace tl
             return !(*this == other);
         }
 
-                class ZipReader
-        {
-        public:
-            ZipReader(const std::string& fileName)
-            {
-                reader = mz_zip_reader_create();
-                if (!reader)
-                {
-                    throw std::runtime_error(
-                        string::Format("{0}: Cannot create zip reader")
-                            .arg(fileName));
-                }
-                int32_t err = mz_zip_reader_open_file(reader, fileName.c_str());
-                if (err != MZ_OK)
-                {
-                    throw std::runtime_error(
-                        string::Format("{0}: Cannot open zip reader")
-                            .arg(fileName));
-                }
-            }
-
-            ~ZipReader() { mz_zip_reader_delete(&reader); }
-
-            void* reader = nullptr;
-        };
-
-        class ZipReaderFile
-        {
-        public:
-            ZipReaderFile(void* reader, const std::string& fileName) :
-                reader(reader)
-            {
-                int32_t err = mz_zip_reader_entry_open(reader);
-                if (err != MZ_OK)
-                {
-                    throw std::runtime_error(
-                        string::Format("{0}: Cannot open zip entry")
-                            .arg(fileName));
-                }
-            }
-
-            ~ZipReaderFile() { mz_zip_reader_entry_close(reader); }
-
-            void* reader = nullptr;
-        };
-
-        otio::SerializableObject::Retainer<otio::Timeline>
-        readOTIO(const file::Path& path, otio::ErrorStatus* errorStatus)
-        {
-            otio::SerializableObject::Retainer<otio::Timeline> out;
-            const std::string fileName = path.get();
-            const std::string extension = string::toLower(path.getExtension());
-            if (".otio" == extension)
-            {
-                auto timeline =
-                    otio::Timeline::from_json_file(fileName, errorStatus);
-                out = dynamic_cast<otio::Timeline*>(timeline);
-                if (!out)
-                {
-                    auto collection =
-                        dynamic_cast<otio::SerializableCollection*>(timeline);
-                    if (collection)
-                    {
-                        auto children =
-                            collection->find_children<otio::Timeline>();
-                        if (children.size() > 1)
-                        {
-                            throw std::runtime_error(
-                                string::Format(
-                                    "{0}: Only one timeline is supported.")
-                                    .arg(fileName));
-                        }
-                        else if (children.size() == 1)
-                        {
-                            out = otio::dynamic_retainer_cast<otio::Timeline>(
-                                children[0]);
-                        }
-                    }
-                }
-            }
-            else if (".otioz" == extension)
-            {
-                {
-                    ZipReader zipReader(fileName);
-
-                    const std::string contentFileName = "content.otio";
-                    int32_t err = mz_zip_reader_locate_entry(
-                        zipReader.reader, contentFileName.c_str(), 0);
-                    if (err != MZ_OK)
-                    {
-                        throw std::runtime_error(
-                            string::Format("{0}: Cannot find zip entry")
-                                .arg(contentFileName));
-                    }
-                    mz_zip_file* fileInfo = nullptr;
-                    err = mz_zip_reader_entry_get_info(
-                        zipReader.reader, &fileInfo);
-                    if (err != MZ_OK)
-                    {
-                        throw std::runtime_error(
-                            string::Format(
-                                "{0}: Cannot get zip entry information")
-                                .arg(contentFileName));
-                    }
-                    ZipReaderFile zipReaderFile(
-                        zipReader.reader, contentFileName);
-                    std::vector<char> buf;
-                    buf.resize(fileInfo->uncompressed_size + 1);
-                    err = mz_zip_reader_entry_read(
-                        zipReader.reader, buf.data(),
-                        fileInfo->uncompressed_size);
-                    if (err != fileInfo->uncompressed_size)
-                    {
-                        throw std::runtime_error(
-                            string::Format("{0}: Cannot read zip entry")
-                                .arg(contentFileName));
-                    }
-                    buf[fileInfo->uncompressed_size] = 0;
-
-                    out = dynamic_cast<otio::Timeline*>(
-                        otio::Timeline::from_json_string(
-                            buf.data(), errorStatus));
-
-                    auto fileIO =
-                        file::FileIO::create(fileName, file::Mode::Read);
-                    for (auto clip : out->find_children<otio::Clip>())
-                    {
-                        if (auto externalReference =
-                                dynamic_cast<otio::ExternalReference*>(
-                                    clip->media_reference()))
-                        {
-                            const std::string mediaFileName =
-                                file::Path(url::decode(externalReference->target_url()))
-                                    .get();
-
-                            int32_t err = mz_zip_reader_locate_entry(
-                                zipReader.reader, mediaFileName.c_str(), 0);
-                            if (err != MZ_OK)
-                            {
-                                throw std::runtime_error(
-                                    string::Format("{0}: Cannot find zip entry")
-                                        .arg(mediaFileName));
-                            }
-                            err = mz_zip_reader_entry_get_info(
-                                zipReader.reader, &fileInfo);
-                            if (err != MZ_OK)
-                            {
-                                throw std::runtime_error(
-                                    string::Format(
-                                        "{0}: Cannot get zip entry information")
-                                        .arg(mediaFileName));
-                            }
-
-                            const size_t headerSize = 30 +
-                                                      fileInfo->filename_size +
-                                                      fileInfo->extrafield_size;
-                            auto memoryReference = new ZipMemoryReference(
-                                fileIO, externalReference->target_url(),
-                                fileIO->getMemoryStart() +
-                                    fileInfo->disk_offset + headerSize,
-                                fileInfo->uncompressed_size,
-                                externalReference->available_range(),
-                                externalReference->metadata());
-                            clip->set_media_reference(memoryReference);
-                        }
-                        else if (
-                            auto imageSequenceReference =
-                                dynamic_cast<otio::ImageSequenceReference*>(
-                                    clip->media_reference()))
-                        {
-                            std::vector<const uint8_t*> memory;
-                            std::vector<size_t> memory_sizes;
-                            for (int number = 0;
-                                 number < imageSequenceReference
-                                              ->number_of_images_in_sequence();
-                                 ++number)
-                            {
-                                const std::string mediaFileName = file::Path(
-                                    url::decode(imageSequenceReference
-                                                ->target_url_for_image_number(
-                                                    number)))
-                                    .get();
-
-                                int32_t err = mz_zip_reader_locate_entry(
-                                    zipReader.reader, mediaFileName.c_str(), 0);
-                                if (err != MZ_OK)
-                                {
-                                    throw std::runtime_error(
-                                        string::Format(
-                                            "{0}: Cannot find zip entry")
-                                            .arg(mediaFileName));
-                                }
-                                err = mz_zip_reader_entry_get_info(
-                                    zipReader.reader, &fileInfo);
-                                if (err != MZ_OK)
-                                {
-                                    throw std::runtime_error(
-                                        string::Format("{0}: Cannot get zip "
-                                                       "entry information")
-                                            .arg(mediaFileName));
-                                }
-
-                                const size_t headerSize =
-                                    30 + fileInfo->filename_size +
-                                    fileInfo->extrafield_size;
-                                memory.push_back(
-                                    fileIO->getMemoryStart() +
-                                    fileInfo->disk_offset + headerSize);
-                                memory_sizes.push_back(
-                                    fileInfo->uncompressed_size);
-                            }
-                            auto memoryReference =
-                                new ZipMemorySequenceReference(
-                                    fileIO,
-                                    imageSequenceReference
-                                        ->target_url_for_image_number(0),
-                                    memory, memory_sizes,
-                                    imageSequenceReference->available_range(),
-                                    imageSequenceReference->metadata());
-                            clip->set_media_reference(memoryReference);
-                        }
-                    }
-                }
-            }
-            else
-            {
-#if defined(TLRENDER_PYTHON)
-                Py_Initialize();
-                try
-                {
-                    auto pyModule = PyObjectRef(
-                        PyImport_ImportModule("opentimelineio.adapters"));
-
-                    auto pyReadFromFile = PyObjectRef(
-                        PyObject_GetAttrString(pyModule, "read_from_file"));
-                    auto pyReadFromFileArgs = PyObjectRef(PyTuple_New(1));
-                    auto pyReadFromFileArg = PyUnicode_FromStringAndSize(
-                        fileName.c_str(), fileName.size());
-                    if (!pyReadFromFileArg)
-                    {
-                        throw std::runtime_error("Cannot create arg");
-                    }
-                    PyTuple_SetItem(pyReadFromFileArgs, 0, pyReadFromFileArg);
-                    auto pyTimeline = PyObjectRef(PyObject_CallObject(
-                        pyReadFromFile, pyReadFromFileArgs));
-
-                    auto pyToJSONString = PyObjectRef(
-                        PyObject_GetAttrString(pyTimeline, "to_json_string"));
-                    auto pyJSONString =
-                        PyObjectRef(PyObject_CallObject(pyToJSONString, NULL));
-                    out = otio::SerializableObject::Retainer<otio::Timeline>(
-                        dynamic_cast<otio::Timeline*>(
-                            otio::Timeline::from_json_string(
-                                PyUnicode_AsUTF8AndSize(pyJSONString, NULL),
-                                errorStatus)));
-                }
-                catch (const std::exception& e)
-                {
-                    errorStatus->outcome =
-                        otio::ErrorStatus::Outcome::FILE_OPEN_FAILED;
-                    errorStatus->details = e.what();
-                }
-                if (PyErr_Occurred())
-                {
-                    PyErr_Print();
-                }
-                Py_Finalize();
-#endif // TLRENDER_PYTHON
-            }
-            return out;
-        }
-
         void Timeline::_init(
             const std::shared_ptr<system::Context>& context,
             file::Path& inputPath, const file::Path& inputAudioPath,
             const Options& options)
         {
+            TLRENDER_P();
+
             std::string error;
             file::Path path = inputPath;
             file::Path audioPath = inputAudioPath;
@@ -761,16 +488,152 @@ namespace tl
             if (!otioTimeline)
             {
                 otio::ErrorStatus errorStatus;
-                otioTimeline = readOTIO(path, &errorStatus);
-                if (otio::is_error(errorStatus))
+                const std::string fileName = path.get();
+                const std::string extension = string::toLower(path.getExtension());
+                if (".otio" == extension)
                 {
-                    otioTimeline = nullptr;
-                    error = errorStatus.full_description;
+                    auto timeline =
+                        otio::Timeline::from_json_file(fileName, &errorStatus);
+                    otioTimeline = dynamic_cast<otio::Timeline*>(timeline);
+                    if (!otioTimeline)
+                    {
+                        auto collection =
+                            dynamic_cast<otio::SerializableCollection*>(timeline);
+                        if (collection)
+                        {
+                            auto children =
+                                collection->find_children<otio::Timeline>();
+                            if (children.size() > 1)
+                            {
+                                throw std::runtime_error(
+                                    string::Format(
+                                        "{0}: Only one timeline is supported.")
+                                    .arg(fileName));
+                            }
+                            else if (children.size() == 1)
+                            {
+                                otioTimeline = otio::dynamic_retainer_cast<otio::Timeline>(
+                                    children[0]);
+                            }
+                        }
+                    }
                 }
-                else if (!otioTimeline)
+                else if (".otioz" == extension)
                 {
-                    error = string::Format("{0}: Cannot read timeline")
-                                .arg(path.get());
+                    // Read as scattered ranges rather than start to finish:
+                    // opening reads a local header per media file, and those
+                    // are spread across the whole bundle, one before each
+                    // file's data. Asking for sequential read ahead makes the
+                    // operating system fetch around every one of them and
+                    // then throw it away.
+                    p.fileIO = file::FileIO::create(
+                        fileName,
+                        file::Mode::Read,
+                        file::Read::MemoryMapped,
+                        file::Access::Random);
+
+                    p.zipReader = std::make_shared<ZipReader>(logSystem);
+                    auto& zipReader = *p.zipReader;
+                    zipReader.open(fileName, p.fileIO->getSize());
+
+                    std::string json = zipReader.readText("content.otio");
+                    otioTimeline = dynamic_cast<otio::Timeline*>(
+                        otio::Timeline::from_json_string(json, &errorStatus));
+                    if (!otioTimeline)
+                    {
+                        throw std::runtime_error(
+                            string::Format("Cannot read timeline: \"{0}\"").
+                            arg(path.get()));
+                    }
+                    else if (otio::is_error(errorStatus))
+                    {
+                        throw std::runtime_error(
+                            string::Format("Cannot read timeline: \"{0}\": {1}").
+                            arg(path.get()).
+                            arg(errorStatus.details));
+                    }
+
+
+                    // Map a media reference to the memory it occupies within the
+                    // bundle.
+                    //
+                    // The bundle is missing the media it is playing if the active
+                    // reference is not there, so that is an error. An alternate
+                    // that is missing only costs the ability to switch to it, so
+                    // the timeline is still opened and the reference is recorded
+                    // as unavailable. Either way the media is never read from its
+                    // path: a bundle is meant to be self contained, and quietly
+                    // reading a file from somewhere else would be misleading.
+                    // Record which references the bundle holds, and check the
+                    // first file of each so that a bundle missing its media is
+                    // still reported at open. Working out every frame's byte
+                    // range waits until the reference is read: for a bundle of
+                    // 25,000 frames that was seconds of URL decoding and path
+                    // parsing before anything appeared.
+                    const auto mapMediaReference = [&](
+                        otio::MediaReference* mediaReference,
+                        bool active)
+                        {
+                            if (!mediaReference ||
+                                p.bundleMediaReferences.find(mediaReference) !=
+                                p.bundleMediaReferences.end())
+                            {
+                                return;
+                            }
+
+                            std::string first;
+                            if (auto externalReference =
+                                dynamic_cast<otio::ExternalReference*>(mediaReference))
+                            {
+                                first = file::Path(
+                                    url::decode(externalReference->target_url())).get();
+                            }
+                            else if (auto imageSeqReference =
+                                     dynamic_cast<otio::ImageSequenceReference*>(mediaReference))
+                            {
+                                if (imageSeqReference->number_of_images_in_sequence() <= 0)
+                                {
+                                    return;
+                                }
+                                first = file::Path(url::decode(
+                                                       imageSeqReference->target_url_for_image_number(0))).get();
+                            }
+                            else
+                            {
+                                return;
+                            }
+
+                            if (!zipReader.find(first).has_value())
+                            {
+                                if (active)
+                                {
+                                    throw std::runtime_error(string::Format(
+                                                                 "Cannot find zip entry: \"{0}\"").arg(first));
+                                }
+                                logSystem->print(
+                                    "tl::Timeline",
+                                    string::Format(
+                                        "Cannot find zip entry: \"{0}\"; this media "
+                                        "reference cannot be used").
+                                    arg(first),
+                                    log::Type::Warning);
+                                p.unavailableMediaReferences.insert(mediaReference);
+                                return;
+                            }
+                            p.bundleMediaReferences.insert(mediaReference);
+                        };
+
+                    // Map every media reference, not only the active one, so that
+                    // the active reference can be changed without re-reading the
+                    // bundle.
+                    for (auto clip : otioTimeline->find_children<otio::Clip>())
+                    {
+                        const auto* activeReference = clip->media_reference();
+                        for (const auto& i : clip->media_references())
+                        {
+                            mapMediaReference(i.second, i.second == activeReference);
+                        }
+                    }
                 }
             }
             if (!otioTimeline)
@@ -1057,6 +920,164 @@ namespace tl
         const Options& Timeline::getOptions() const
         {
             return _p->options;
+        }
+
+        std::optional<size_t>
+        Timeline::getBundleMemoryOffset(const otio::MediaReference* otioRef) const
+        {
+            TLRENDER_P();
+
+            // Verify via existing bookkeeping that this reference is part of the bundle
+            if (p.bundleMediaReferences.find(otioRef) == p.bundleMediaReferences.end())
+            {
+                return std::nullopt;
+            }
+
+            // Determine the internal file path for the media reference
+            std::string mediaFileName;
+            if (auto externalReference = dynamic_cast<const otio::ExternalReference*>(otioRef))
+            {
+                mediaFileName = file::Path(url::decode(externalReference->target_url())).get();
+            }
+            else if (auto imageSeqReference = dynamic_cast<const otio::ImageSequenceReference*>(otioRef))
+            {
+                // For sequences, grab the offset using the first frame
+                if (imageSeqReference->number_of_images_in_sequence() > 0)
+                {
+                    mediaFileName = file::Path(
+                        url::decode(imageSeqReference->target_url_for_image_number(0))).get();
+                }
+            }
+
+            // If a valid path is derived, query the ZipReader for its offset inside the memory block
+            if (!mediaFileName.empty() && p.zipReader)
+            {
+                const auto entry = p.zipReader->find(mediaFileName);
+                if (entry.has_value())
+                {
+                    return entry->offset;
+                }
+            }
+
+            return std::nullopt;
+        }
+
+        std::vector<file::MemoryRead>
+        Timeline::getMem(const otio::MediaReference* otioRef)
+        {
+            TLRENDER_P();
+            return *p.getMem(otioRef);
+        }
+
+        std::shared_ptr<std::vector<file::MemoryRead> >
+        Timeline::Private::getMem(const OTIO_NS::MediaReference* otioRef)
+        {
+            std::unique_lock<std::mutex> lock(memFilesMutex);
+            if (const auto i = memFiles.find(otioRef); i != memFiles.end())
+            {
+                return i->second;
+            }
+            if (bundleMediaReferences.find(otioRef) ==
+                bundleMediaReferences.end())
+            {
+                // Not in a bundle: read from its path.
+                return std::make_shared<std::vector<file::MemoryRead> >();
+            }
+
+            // First use of this reference: work out where each of its files
+            // lives inside the bundle.
+            //
+            // A sequence member is placed at its offset from the first frame
+            // rather than packed against the previous one, so that the result
+            // is indexed by frame number. Packing them would misplace every
+            // frame/ after a gap, and every frame at all when the step is
+            // greater than one.
+            auto out = std::make_shared<std::vector<file::MemoryRead> >();
+            std::vector<std::pair<size_t, std::string> > mediaFileNames;
+            if (auto externalReference = dynamic_cast<const otio::ExternalReference*>(otioRef))
+            {
+                mediaFileNames.push_back(std::make_pair(
+                                             size_t(0),
+                                             file::Path(url::decode(externalReference->target_url())).get()));
+            }
+            else if (auto imageSeqReference =
+                     dynamic_cast<const otio::ImageSequenceReference*>(otioRef))
+            {
+                const int count = imageSeqReference->number_of_images_in_sequence();
+                const size_t step = std::max(imageSeqReference->frame_step(), 1);
+                mediaFileNames.reserve(count);
+                for (int number = 0; number < count; ++number)
+                {
+                    mediaFileNames.push_back(std::make_pair(
+                                                 number * step,
+                                                 file::Path(url::decode(
+                                                               imageSeqReference->target_url_for_image_number(number))).get()));
+                }
+            }
+            if (!mediaFileNames.empty())
+            {
+                out->resize(mediaFileNames.back().first + 1);
+            }
+            size_t found = 0;
+            std::string missing;
+            size_t missingCount = 0;
+            for (const auto& mediaFileName : mediaFileNames)
+            {
+                const auto entry = zipReader->find(mediaFileName.second);
+                if (!entry.has_value())
+                {
+                    // A sequence member the bundle does not hold is a missing
+                    // frame, which the sequence decoder deals with. Leave its slot
+                    // empty and carry on.
+                    ++missingCount;
+                    if (missing.empty())
+                    {
+                        missing = mediaFileName.second;
+                    }
+                    continue;
+                }
+                (*out)[mediaFileName.first] = file::MemoryRead(
+                    fileIO,
+                    fileIO->getMemoryStart() + entry->offset,
+                    entry->size);
+                ++found;
+            }
+            if (0 == found)
+            {
+                // The bundle holds none of this media. Mark the reference
+                // unavailable rather than returning nothing: an empty result reads
+                // as "not in a bundle", and the caller would go on to read the
+                // media from its path, which is a different file than the bundle
+                // describes.
+                if (auto log = logSystem.lock())
+                {
+                    log->print(
+                        "tl::Timeline",
+                        string::Format(
+                            "Cannot find zip entry: \"{0}\"; this media "
+                            "reference cannot be used").arg(missing),
+                        log::Type::Error);
+                }
+                unavailableMediaReferences.insert(otioRef);
+                out->clear();
+            }
+            else if (missingCount > 0)
+            {
+                if (auto log = logSystem.lock())
+                {
+                    log->print(
+                        "tl::Timeline",
+                        string::Format(
+                            "Bundle is missing {0} of {1} sequence frames, "
+                            "starting with \"{2}\"").
+                        arg(missingCount).
+                        arg(mediaFileNames.size()).
+                        arg(missing),
+                        log::Type::Warning);
+                }
+            }
+            memFiles[otioRef] = out;
+            return out;
         }
 
         otio::MediaReference* Timeline::Private::mediaReference(

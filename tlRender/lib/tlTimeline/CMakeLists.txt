@@ -57,7 +57,8 @@ set(SOURCE
     TimeUnits.cpp
     Timeline.cpp
     Transition.cpp
-    Util.cpp)
+    Util.cpp
+    Zip.cpp)
 
 add_library(tlTimeline ${HEADERS} ${PRIVATE_HEADERS} ${SOURCE})
 target_link_libraries(tlTimeline tlIO)

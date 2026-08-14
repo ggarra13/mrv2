@@ -21,25 +21,55 @@ namespace tl
 {
     namespace timeline
     {
+        class ZipReader;
+
         struct Timeline::Private
         {
-            float _transitionValue(double frame, double in, double out) const;
+            std::weak_ptr<system::Context> context;
+            std::weak_ptr<log::System> logSystem;
+            std::shared_ptr<file::FileIO> fileIO;
+            otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
 
             void tick();
 
             std::shared_ptr<audio::Audio> padAudioToOneSecond(
                 const std::shared_ptr<audio::Audio>&, double seconds,
                 const otime::TimeRange&);
-
-            std::weak_ptr<system::Context> context;
-            otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
-            std::shared_ptr<observer::Value<bool> > timelineChanges;
+;
             // Media references named by a bundle but not found inside it. They
             // are not read from their path, since a bundle is meant to be self
             // contained and quietly reading a file from somewhere else would be
             // misleading; reading one of these fails instead. Filled in while
             // the timeline is read and only read afterwards.
             std::set<const otio::MediaReference*> unavailableMediaReferences;
+            // Guarded by memFilesMutex once the timeline is running, since a
+            // reference can also turn out to be unavailable when its byte
+            // ranges are worked out on first read.
+            bool mediaUnavailable(const otio::MediaReference*);
+
+            // Where a media reference's files live inside the bundle, worked
+            // out on first use. Shared rather than copied: inside a bundle a
+            // sequence reference carries a byte range per frame, and a long one
+            // is not a vector to hand out by value.
+            std::shared_ptr<std::vector<file::MemoryRead> > getMem(
+                const otio::MediaReference*);
+
+            // The bundle stays open so that a media reference's byte ranges can
+            // be worked out when it is first read. Doing it for every reference
+            // at open meant generating a file name, decoding it as a URL and
+            // parsing it as a path for all 25,000 frames of a bundle before
+            // anything could be shown.
+            std::shared_ptr<ZipReader> zipReader;
+            std::set<const otio::MediaReference*> bundleMediaReferences;
+
+            // Always the inner of the two locks: creating a reader holds
+            // readCacheMutex and then asks getMemoryRead()/mediaUnavailable()
+            // where the media lives. Nothing guarded here may reach back for
+            // readCacheMutex.
+            std::mutex memFilesMutex;
+            std::map<const otio::MediaReference*,
+                     std::shared_ptr<std::vector<file::MemoryRead> > > memFiles;
+            std::shared_ptr<observer::Value<bool> > timelineChanges;
             file::Path path;
             file::Path audioPath;
             Options options;

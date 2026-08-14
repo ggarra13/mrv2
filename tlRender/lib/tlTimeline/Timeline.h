@@ -203,6 +203,10 @@ namespace tl
             //! Get the timeline options.
             const Options& getOptions() const;
 
+            //! Get the memory for the given media reference.
+            std::vector<file::MemoryRead> getMem(
+                const OTIO_NS::MediaReference*);
+
             //! \name Media References
             ///
             //! Clips may carry several media references, for example a proxy
@@ -242,6 +246,12 @@ namespace tl
             void setMediaReferenceKey(
                 const otio::Clip*,
                 const std::string&);
+
+            //! Get the memory offset in bytes for a media reference bundled in an
+            //! .otioz file.
+            //! Returns std::nullopt if the reference is not part of a bundle or cannot
+            //! be found.
+            std::optional<size_t> getBundleMemoryOffset(const otio::MediaReference*) const;
 
             //! Get the media reference a clip is read from, honoring the keys
             //! set above.
@@ -302,6 +312,8 @@ namespace tl
             void _getCanvas();
             void _getMaxVideoSize();
             void _timelineUpdate();
+            otio::SerializableObject::Retainer<otio::Timeline>
+            _readOTIO(const file::Path& path, otio::ErrorStatus* errorStatus);
 
             TLRENDER_PRIVATE();
         };
