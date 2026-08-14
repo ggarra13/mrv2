@@ -1,3 +1,10 @@
+v1.7.4
+======
+
+- OpenEXR: Improved loading performance a tad.
+- OpenEXR: Fixed layer information (like lossy compression for the layer not the part number)
+
+
 v1.7.3
 ======
 
