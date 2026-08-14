@@ -67,7 +67,7 @@ namespace tl
 
         void System::_init(const std::shared_ptr<system::Context>& context)
         {
-            ICoreSystem::_init("tl::log:::System", context);
+            ICoreSystem::_init(context, "tl::log:::System");
             TLRENDER_P();
 
             p.startTime = std::chrono::steady_clock::now();

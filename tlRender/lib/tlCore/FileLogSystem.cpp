@@ -46,7 +46,7 @@ namespace tl
             const std::string& fileName,
             const std::shared_ptr<system::Context>& context)
         {
-            ICoreSystem::_init("tl::file:::FileLogSystem", context);
+            ICoreSystem::_init(context, "tl::file:::FileLogSystem");
             TLRENDER_P();
 
             p.fileName = fileName;

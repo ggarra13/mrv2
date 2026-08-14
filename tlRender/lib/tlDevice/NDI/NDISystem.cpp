@@ -78,7 +78,7 @@ namespace tl
 
         void System::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::ndi::System", context);
+            ISystem::_init(context, "tl::ndi::System");
             TLRENDER_P();
 
             p.context = context;

@@ -20,7 +20,7 @@ namespace tl
         {
         protected:
             void
-            _init(const std::string& name, const std::shared_ptr<Context>&);
+            _init(const std::shared_ptr<Context>&, const std::string& name);
             ISystem();
 
         public:

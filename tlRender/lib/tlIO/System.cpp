@@ -58,7 +58,7 @@ namespace tl
 
         void System::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::io::System", context);
+            ISystem::_init(context, "tl::io::System");
             TLRENDER_P();
 
             p.cache = Cache::create();

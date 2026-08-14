@@ -1627,7 +1627,7 @@ namespace tl
         void
         ThumbnailSystem::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::TIMELINEUI::ThumbnailSystem", context);
+            ISystem::_init(context, "tl::timelineui::ThumbnailSystem");
             TLRENDER_P();
             p.cache = ThumbnailCache::create(context);
 #ifdef OPENGL_BACKEND

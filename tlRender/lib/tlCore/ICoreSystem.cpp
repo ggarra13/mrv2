@@ -9,7 +9,7 @@ namespace tl
     namespace system
     {
         void ICoreSystem::_init(
-            const std::string& name, const std::shared_ptr<Context>& context)
+            const std::shared_ptr<Context>& context, const std::string& name)
         {
             _context = context;
             _name = name;

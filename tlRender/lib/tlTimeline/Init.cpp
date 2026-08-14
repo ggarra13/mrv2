@@ -30,7 +30,7 @@ namespace tl
 
         void System::_init(const std::shared_ptr<system::Context>& context)
         {
-            ISystem::_init("tl::timeline::System", context);
+            ISystem::_init(context, "tl::timeline::System");
             const std::vector<std::pair<std::string, bool> > registerTypes{
                 {"RawMemoryReference",
                  otio::TypeRegistry::instance()
