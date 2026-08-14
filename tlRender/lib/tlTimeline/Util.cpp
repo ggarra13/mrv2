@@ -401,8 +401,9 @@ namespace tl
                     dynamic_cast<const RawMemoryReference*>(ref))
             {
                 out.push_back(file::MemoryRead(
-                    rawMemoryReference->memory(),
-                    rawMemoryReference->memory_size()));
+                                  nullptr,
+                                  rawMemoryReference->memory(),
+                                  rawMemoryReference->memory_size()));
             }
             else if (
                 auto sharedMemoryReference =
@@ -411,7 +412,8 @@ namespace tl
                 if (const auto& memory = sharedMemoryReference->memory())
                 {
                     out.push_back(
-                        file::MemoryRead(memory->data(), memory->size()));
+                        file::MemoryRead(
+                            nullptr, memory->data(), memory->size()));
                 }
             }
             else if (
@@ -426,7 +428,8 @@ namespace tl
                 for (size_t i = 0; i < memory_size && i < memory_sizes_size;
                      ++i)
                 {
-                    out.push_back(file::MemoryRead(memory[i], memory_sizes[i]));
+                    out.push_back(file::MemoryRead(
+                            nullptr, memory[i], memory_sizes[i]));
                 }
             }
             else if (
@@ -439,7 +442,8 @@ namespace tl
                     if (memory)
                     {
                         out.push_back(
-                            file::MemoryRead(memory->data(), memory->size()));
+                            file::MemoryRead(
+                                nullptr, memory->data(), memory->size()));
                     }
                 }
             }

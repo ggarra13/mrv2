@@ -131,36 +131,36 @@ namespace tl
         {
             void convertEndian(Header& header)
             {
-                memory::endian(&header.file.imageOffset, 1, 4);
-                memory::endian(&header.file.headerSize, 1, 4);
-                memory::endian(&header.file.industryHeaderSize, 1, 4);
-                memory::endian(&header.file.userHeaderSize, 1, 4);
-                memory::endian(&header.file.size, 1, 4);
+                memory::swapEndian(&header.file.imageOffset, 1, 4);
+                memory::swapEndian(&header.file.headerSize, 1, 4);
+                memory::swapEndian(&header.file.industryHeaderSize, 1, 4);
+                memory::swapEndian(&header.file.userHeaderSize, 1, 4);
+                memory::swapEndian(&header.file.size, 1, 4);
 
                 for (uint8_t i = 0; i < 8; ++i)
                 {
-                    memory::endian(&header.image.channel[i].size, 2, 4);
-                    memory::endian(&header.image.channel[i].lowData, 1, 4);
-                    memory::endian(&header.image.channel[i].lowQuantity, 1, 4);
-                    memory::endian(&header.image.channel[i].highData, 1, 4);
-                    memory::endian(&header.image.channel[i].highQuantity, 1, 4);
+                    memory::swapEndian(&header.image.channel[i].size, 2, 4);
+                    memory::swapEndian(&header.image.channel[i].lowData, 1, 4);
+                    memory::swapEndian(&header.image.channel[i].lowQuantity, 1, 4);
+                    memory::swapEndian(&header.image.channel[i].highData, 1, 4);
+                    memory::swapEndian(&header.image.channel[i].highQuantity, 1, 4);
                 }
 
-                memory::endian(&header.image.white, 2, 4);
-                memory::endian(&header.image.red, 2, 4);
-                memory::endian(&header.image.green, 2, 4);
-                memory::endian(&header.image.blue, 2, 4);
-                memory::endian(&header.image.linePadding, 1, 4);
-                memory::endian(&header.image.channelPadding, 1, 4);
+                memory::swapEndian(&header.image.white, 2, 4);
+                memory::swapEndian(&header.image.red, 2, 4);
+                memory::swapEndian(&header.image.green, 2, 4);
+                memory::swapEndian(&header.image.blue, 2, 4);
+                memory::swapEndian(&header.image.linePadding, 1, 4);
+                memory::swapEndian(&header.image.channelPadding, 1, 4);
 
-                memory::endian(&header.source.offset, 2, 4);
-                memory::endian(&header.source.inputPitch, 2, 4);
-                memory::endian(&header.source.gamma, 1, 4);
+                memory::swapEndian(&header.source.offset, 2, 4);
+                memory::swapEndian(&header.source.inputPitch, 2, 4);
+                memory::swapEndian(&header.source.gamma, 1, 4);
 
-                memory::endian(&header.film.prefix, 1, 4);
-                memory::endian(&header.film.count, 1, 4);
-                memory::endian(&header.film.frame, 1, 4);
-                memory::endian(&header.film.frameRate, 1, 4);
+                memory::swapEndian(&header.film.prefix, 1, 4);
+                memory::swapEndian(&header.film.count, 1, 4);
+                memory::swapEndian(&header.film.frame, 1, 4);
+                memory::swapEndian(&header.film.frameRate, 1, 4);
             }
 
             bool isValid(const uint8_t* in)
@@ -413,7 +413,7 @@ namespace tl
             // Set the file position.
             if (out.file.imageOffset)
             {
-                io->setPos(out.file.imageOffset);
+                io->seek(out.file.imageOffset, file::SeekMode::Set);
             }
 
             return out;
@@ -592,7 +592,7 @@ namespace tl
         void finishWrite(const std::shared_ptr<file::FileIO>& io)
         {
             const uint32_t size = static_cast<uint32_t>(io->getPos());
-            io->setPos(20);
+            io->seek(20, file::SeekMode::Set);
             io->writeU32(size);
         }
 

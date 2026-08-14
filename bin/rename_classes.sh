@@ -90,6 +90,7 @@ sed -i 's|<tlRender/|<tl|' "$@"
 #
 # tlRender classes
 #
+sed -i 's#memory::endian(#memory::swapEndian(#' "$@"
 sed -i 's#\bFileType::Seq\b#io::FileType::Sequence#' "$@"
 sed -i 's# IDecode# io::IDecode#' "$@"
 sed -i 's#<IDecode#<io::IDecode#' "$@"

@@ -130,7 +130,7 @@ namespace tl
                     _io->readU16(&_header.channels);
                     _io->readU32(&_header.pixelMin);
                     _io->readU32(&_header.pixelMax);
-                    _io->setPos(512);
+                    _io->seek(512, file::SeekMode::Set);
                     if (_header.storage)
                     {
                         const size_t size = _header.height * _header.channels;

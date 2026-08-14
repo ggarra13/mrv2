@@ -83,55 +83,55 @@ namespace tl
         {
             void convertEndian(Header& header)
             {
-                memory::endian(&header.file.imageOffset, 1, 4);
-                memory::endian(&header.file.size, 1, 4);
-                memory::endian(&header.file.dittoKey, 1, 4);
-                memory::endian(&header.file.headerSize, 1, 4);
-                memory::endian(&header.file.industryHeaderSize, 1, 4);
-                memory::endian(&header.file.userHeaderSize, 1, 4);
-                memory::endian(&header.file.encryptionKey, 1, 4);
+                memory::swapEndian(&header.file.imageOffset, 1, 4);
+                memory::swapEndian(&header.file.size, 1, 4);
+                memory::swapEndian(&header.file.dittoKey, 1, 4);
+                memory::swapEndian(&header.file.headerSize, 1, 4);
+                memory::swapEndian(&header.file.industryHeaderSize, 1, 4);
+                memory::swapEndian(&header.file.userHeaderSize, 1, 4);
+                memory::swapEndian(&header.file.encryptionKey, 1, 4);
 
-                memory::endian(&header.image.orient, 1, 2);
-                memory::endian(&header.image.elemSize, 1, 2);
-                memory::endian(&header.image.size, 2, 4);
+                memory::swapEndian(&header.image.orient, 1, 2);
+                memory::swapEndian(&header.image.elemSize, 1, 2);
+                memory::swapEndian(&header.image.size, 2, 4);
                 for (size_t i = 0; i < 8; ++i)
                 {
-                    memory::endian(&header.image.elem[i].dataSign, 1, 4);
-                    memory::endian(&header.image.elem[i].lowData, 1, 4);
-                    memory::endian(&header.image.elem[i].lowQuantity, 1, 4);
-                    memory::endian(&header.image.elem[i].highData, 1, 4);
-                    memory::endian(&header.image.elem[i].highQuantity, 1, 4);
-                    memory::endian(&header.image.elem[i].packing, 1, 2);
-                    memory::endian(&header.image.elem[i].encoding, 1, 2);
-                    memory::endian(&header.image.elem[i].dataOffset, 1, 4);
-                    memory::endian(&header.image.elem[i].linePadding, 1, 4);
-                    memory::endian(&header.image.elem[i].elemPadding, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].dataSign, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].lowData, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].lowQuantity, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].highData, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].highQuantity, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].packing, 1, 2);
+                    memory::swapEndian(&header.image.elem[i].encoding, 1, 2);
+                    memory::swapEndian(&header.image.elem[i].dataOffset, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].linePadding, 1, 4);
+                    memory::swapEndian(&header.image.elem[i].elemPadding, 1, 4);
                 }
 
-                memory::endian(&header.source.offset, 2, 4);
-                memory::endian(&header.source.center, 2, 4);
-                memory::endian(&header.source.size, 2, 4);
-                memory::endian(&header.source.border, 4, 2);
-                memory::endian(&header.source.pixelAspect, 2, 4);
-                memory::endian(&header.source.scanSize, 2, 4);
+                memory::swapEndian(&header.source.offset, 2, 4);
+                memory::swapEndian(&header.source.center, 2, 4);
+                memory::swapEndian(&header.source.size, 2, 4);
+                memory::swapEndian(&header.source.border, 4, 2);
+                memory::swapEndian(&header.source.pixelAspect, 2, 4);
+                memory::swapEndian(&header.source.scanSize, 2, 4);
 
-                memory::endian(&header.film.frame, 1, 4);
-                memory::endian(&header.film.sequence, 1, 4);
-                memory::endian(&header.film.hold, 1, 4);
-                memory::endian(&header.film.frameRate, 1, 4);
-                memory::endian(&header.film.shutter, 1, 4);
+                memory::swapEndian(&header.film.frame, 1, 4);
+                memory::swapEndian(&header.film.sequence, 1, 4);
+                memory::swapEndian(&header.film.hold, 1, 4);
+                memory::swapEndian(&header.film.frameRate, 1, 4);
+                memory::swapEndian(&header.film.shutter, 1, 4);
 
-                memory::endian(&header.tv.timecode, 1, 4);
-                memory::endian(&header.tv.userBits, 1, 4);
-                memory::endian(&header.tv.sampleRate, 2, 4);
-                memory::endian(&header.tv.frameRate, 1, 4);
-                memory::endian(&header.tv.timeOffset, 1, 4);
-                memory::endian(&header.tv.gamma, 1, 4);
-                memory::endian(&header.tv.blackLevel, 1, 4);
-                memory::endian(&header.tv.blackGain, 1, 4);
-                memory::endian(&header.tv.breakpoint, 1, 4);
-                memory::endian(&header.tv.whiteLevel, 1, 4);
-                memory::endian(&header.tv.integrationTimes, 1, 4);
+                memory::swapEndian(&header.tv.timecode, 1, 4);
+                memory::swapEndian(&header.tv.userBits, 1, 4);
+                memory::swapEndian(&header.tv.sampleRate, 2, 4);
+                memory::swapEndian(&header.tv.frameRate, 1, 4);
+                memory::swapEndian(&header.tv.timeOffset, 1, 4);
+                memory::swapEndian(&header.tv.gamma, 1, 4);
+                memory::swapEndian(&header.tv.blackLevel, 1, 4);
+                memory::swapEndian(&header.tv.blackGain, 1, 4);
+                memory::swapEndian(&header.tv.breakpoint, 1, 4);
+                memory::swapEndian(&header.tv.whiteLevel, 1, 4);
+                memory::swapEndian(&header.tv.integrationTimes, 1, 4);
             }
 
             bool isValid(const uint8_t* in)
@@ -549,7 +549,7 @@ namespace tl
             // Set the file position.
             if (out.file.imageOffset)
             {
-                io->setPos(out.file.imageOffset);
+                io->seek(out.file.imageOffset, file::SeekMode::Set);
             }
 
             return out;
@@ -932,7 +932,7 @@ namespace tl
         void finishWrite(const std::shared_ptr<file::FileIO>& io)
         {
             const uint32_t size = static_cast<uint32_t>(io->getPos());
-            io->setPos(12);
+            io->seek(12, file::SeekMode::Set);
             io->writeU32(size);
         }
 

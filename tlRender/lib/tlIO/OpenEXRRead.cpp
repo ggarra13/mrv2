@@ -126,7 +126,7 @@ namespace tl
             TLRENDER_P();
             if (p.f)
             {
-                p.f->setPos(pos);
+                p.f->seek(pos, file::SeekMode::Set);
             }
             p.pos = pos;
         }
