@@ -51,11 +51,17 @@ namespace tl
         constexpr Endian opposite(Endian);
 
         //! Convert the endianness of a block of memory in place.
-        void endian(void* in, size_t size, size_t wordSize);
+        void swapEndian(
+            void*  in,
+            size_t wordCount,
+            size_t wordSize);
 
         //! Convert the endianness of a block of memory.
-        void endian(const void* in, void* out, size_t size, size_t wordSize);
-
+        void swapEndian(
+            const void* in,
+            void*       out,
+            size_t      wordCount,
+            size_t      wordSize);
         ///@}
 
         //! \name Bits

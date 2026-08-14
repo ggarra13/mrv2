@@ -18,7 +18,7 @@ namespace tl
         TLRENDER_ENUM_IMPL(Endian, "MSB", "LSB");
         TLRENDER_ENUM_SERIALIZE_IMPL(Endian);
 
-        void endian(void* in, size_t size, size_t wordSize)
+        void swapEndian(void* in, size_t size, size_t wordSize)
         {
             uint8_t* p = reinterpret_cast<uint8_t*>(in);
             uint8_t tmp;
@@ -68,7 +68,7 @@ namespace tl
             }
         }
 
-        void endian(const void* in, void* out, size_t size, size_t wordSize)
+        void swapEndian(const void* in, void* out, size_t size, size_t wordSize)
         {
             const uint8_t* inP = reinterpret_cast<const uint8_t*>(in);
             uint8_t* outP = reinterpret_cast<uint8_t*>(out);

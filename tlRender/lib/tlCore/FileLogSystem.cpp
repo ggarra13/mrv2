@@ -81,7 +81,7 @@ namespace tl
                         {
                             auto io = file::FileIO::create(
                                 p.fileName, file::Mode::Append);
-                            io->seek(io->getSize());
+                            io->seek(io->getSize(), SeekMode::Set);
                             const size_t options =
                                 static_cast<size_t>(log::StringConvert::Time) |
                                 static_cast<size_t>(log::StringConvert::Prefix);
@@ -102,7 +102,7 @@ namespace tl
                     {
                         auto io = file::FileIO::create(
                             p.fileName, file::Mode::Append);
-                        io->seek(io->getSize());
+                        io->seek(io->getSize(), file::SeekMode::Set);
                         const size_t options =
                             static_cast<size_t>(log::StringConvert::Time) |
                             static_cast<size_t>(log::StringConvert::Prefix);

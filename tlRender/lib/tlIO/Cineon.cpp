@@ -211,7 +211,7 @@ namespace tl
             else
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Bad magic number"));
             }
 
@@ -236,7 +236,7 @@ namespace tl
             if (!out.image.channels)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("No image channels"));
             }
             uint8_t i = 1;
@@ -259,7 +259,7 @@ namespace tl
             {
                 throw std::runtime_error(
                     string::Format("{0}: {1}")
-                        .arg(io->getFileName())
+                        .arg(io->getPath())
                         .arg("Unsupported image channels"));
             }
             switch (out.image.channels)
@@ -281,20 +281,20 @@ namespace tl
             if (image::PixelType::kNone == imageInfo.pixelType)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Unsupported bit depth"));
             }
             if (isValid(&out.image.linePadding) && out.image.linePadding)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Unsupported line padding"));
             }
             if (isValid(&out.image.channelPadding) && out.image.channelPadding)
             {
                 throw std::runtime_error(
                     string::Format("{0}: {1}")
-                        .arg(io->getFileName())
+                        .arg(io->getPath())
                         .arg("Unsupported channel padding"));
             }
 
@@ -302,7 +302,7 @@ namespace tl
                 image::getDataByteCount(imageInfo))
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Incomplete file"));
             }
             switch (static_cast<Orient>(out.image.orient))

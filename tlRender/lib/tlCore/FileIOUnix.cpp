@@ -8,6 +8,8 @@
 #include <tlCore/Memory.h>
 #include <tlCore/StringFormat.h>
 
+#include <atomic>
+
 #if defined(__linux__)
 #    include <linux/limits.h>
 #endif // __linux__
@@ -18,9 +20,6 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
-
-#define _STAT struct stat
-#define _STAT_FNC stat
 
 namespace tl
 {
@@ -55,44 +54,45 @@ namespace tl
             }
 
             std::string getErrorMessage(
-                ErrorType type, const std::string& fileName,
+                ErrorType type,
+                const std::string& path,
                 const std::string& message = std::string())
             {
                 std::string out;
                 switch (type)
                 {
                 case ErrorType::Open:
-                    out = string::Format("{0}: Cannot open file").arg(fileName);
+                    out = string::Format("{0}: Cannot open file").arg(path);
                     break;
                 case ErrorType::Stat:
-                    out = string::Format("{0}: Cannot stat file").arg(fileName);
+                    out = string::Format("{0}: Cannot stat file").arg(path);
                     break;
                 case ErrorType::MemoryMap:
                     out =
-                        string::Format("{0}: Cannot memory map").arg(fileName);
+                        string::Format("{0}: Cannot memory map").arg(path);
                     break;
                 case ErrorType::Close:
-                    out = string::Format("{0}: Cannot close").arg(fileName);
+                    out = string::Format("{0}: Cannot close").arg(path);
                     break;
                 case ErrorType::CloseMemoryMap:
-                    out = string::Format("{0}: Cannot unmap").arg(fileName);
+                    out = string::Format("{0}: Cannot unmap").arg(path);
                     break;
                 case ErrorType::Read:
-                    out = string::Format("{0}: Cannot read").arg(fileName);
+                    out = string::Format("{0}: Cannot read").arg(path);
                     break;
                 case ErrorType::ReadMemoryMap:
                     out = string::Format("{0}: Cannot read memory map")
-                              .arg(fileName);
+                              .arg(path);
                     break;
                 case ErrorType::Write:
-                    out = string::Format("{0}: Cannot write").arg(fileName);
+                    out = string::Format("{0}: Cannot write").arg(path);
                     break;
                 case ErrorType::Seek:
-                    out = string::Format("{0}: Cannot seek").arg(fileName);
+                    out = string::Format("{0}: Cannot seek").arg(path);
                     break;
                 case ErrorType::SeekMemoryMap:
                     out = string::Format("{0}: Cannot seek memory map")
-                              .arg(fileName);
+                              .arg(path);
                     break;
                 default:
                     break;
@@ -108,11 +108,11 @@ namespace tl
 
         struct FileIO::Private
         {
-            void setPos(size_t, bool seek);
+            void seek(size_t, SeekMode);
 
-            std::string fileName;
+            std::filesystem::path path;
             Mode mode = Mode::First;
-            ReadType readType = ReadType::First;
+            Read read = Read::First;
             size_t pos = 0;
             size_t size = 0;
             bool endianConversion = false;
@@ -123,61 +123,39 @@ namespace tl
             const uint8_t* memoryP = nullptr;
         };
 
+        namespace
+        {
+            std::atomic<size_t> objectCount = 0;
+        }
+
         FileIO::FileIO() :
             _p(new Private)
         {
+            ++objectCount;
         }
 
         FileIO::~FileIO()
         {
             _close();
+            --objectCount;
+        }
+
+        size_t FileIO::getObjectCount()
+        {
+            return objectCount;
         }
 
         std::shared_ptr<FileIO>
-        FileIO::create(const std::string& fileName, const MemoryRead& memory)
+        FileIO::create(const std::filesystem::path& path, const MemoryRead& memory)
         {
             auto out = std::shared_ptr<FileIO>(new FileIO);
-            out->_p->fileName = fileName;
+            out->_p->path = path;
             out->_p->mode = Mode::Read;
-            out->_p->readType = ReadType::Normal;
+            out->_p->read = Read::Normal;
             out->_p->size = memory.size;
             out->_p->memoryStart = memory.p;
             out->_p->memoryEnd = memory.p + memory.size;
             out->_p->memoryP = memory.p;
-            return out;
-        }
-
-        std::shared_ptr<FileIO> FileIO::createTemp()
-        {
-            auto out = std::shared_ptr<FileIO>(new FileIO);
-
-            // Open the file.
-            const std::string fileName = getTemp() + "/XXXXXX";
-            const size_t size = fileName.size();
-            std::vector<char> buf(size + 1);
-            memcpy(buf.data(), fileName.c_str(), size);
-            buf[size] = 0;
-            out->_p->f = mkstemp(buf.data());
-            if (-1 == out->_p->f)
-            {
-                throw std::runtime_error(getErrorMessage(
-                    ErrorType::Open, fileName, getErrorString()));
-            }
-
-            // Stat the file.
-            _STAT info;
-            memset(&info, 0, sizeof(_STAT));
-            if (_STAT_FNC(buf.data(), &info) != 0)
-            {
-                throw std::runtime_error(getErrorMessage(
-                    ErrorType::Stat, fileName, getErrorString()));
-            }
-            out->_p->fileName = std::string(buf.data());
-            out->_p->mode = Mode::ReadWrite;
-            out->_p->readType = ReadType::Normal;
-            out->_p->pos = 0;
-            out->_p->size = info.st_size;
-
             return out;
         }
 
@@ -186,9 +164,9 @@ namespace tl
             return _p->f != -1 || _p->memoryStart;
         }
 
-        const std::string& FileIO::getFileName() const
+        const std::filesystem::path& FileIO::getPath() const
         {
-            return _p->fileName;
+            return _p->path;
         }
 
         size_t FileIO::getSize() const
@@ -201,14 +179,9 @@ namespace tl
             return _p->pos;
         }
 
-        void FileIO::setPos(size_t in)
+        void FileIO::seek(size_t in, SeekMode mode)
         {
-            _p->setPos(in, false);
-        }
-
-        void FileIO::seek(size_t in)
-        {
-            _p->setPos(in, true);
+            _p->seek(in, mode);
         }
 
         const uint8_t* FileIO::getMemoryStart() const
@@ -255,7 +228,7 @@ namespace tl
             if (!p.memoryStart && -1 == p.f)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Read, p.fileName));
+                    getErrorMessage(ErrorType::Read, p.path));
             }
 
             switch (p.mode)
@@ -268,11 +241,11 @@ namespace tl
                     if (memoryP > p.memoryEnd)
                     {
                         throw std::runtime_error(getErrorMessage(
-                            ErrorType::ReadMemoryMap, p.fileName));
+                            ErrorType::ReadMemoryMap, p.path));
                     }
                     if (p.endianConversion && wordSize > 1)
                     {
-                        memory::endian(p.memoryP, in, size, wordSize);
+                        memory::swapEndian(p.memoryP, in, size, wordSize);
                     }
                     else
                     {
@@ -286,16 +259,16 @@ namespace tl
                     if (-1 == r)
                     {
                         throw std::runtime_error(getErrorMessage(
-                            ErrorType::Read, p.fileName, getErrorString()));
+                            ErrorType::Read, p.path, getErrorString()));
                     }
                     else if (r != size * wordSize)
                     {
                         throw std::runtime_error(
-                            getErrorMessage(ErrorType::Read, p.fileName));
+                            getErrorMessage(ErrorType::Read, p.path));
                     }
                     if (p.endianConversion && wordSize > 1)
                     {
-                        memory::endian(in, size, wordSize);
+                        memory::swapEndian(in, size, wordSize);
                     }
                 }
                 break;
@@ -306,16 +279,16 @@ namespace tl
                 if (-1 == r)
                 {
                     throw std::runtime_error(getErrorMessage(
-                        ErrorType::Read, p.fileName, getErrorString()));
+                        ErrorType::Read, p.path, getErrorString()));
                 }
                 else if (r != size * wordSize)
                 {
                     throw std::runtime_error(
-                        getErrorMessage(ErrorType::Read, p.fileName));
+                        getErrorMessage(ErrorType::Read, p.path));
                 }
                 if (p.endianConversion && wordSize > 1)
                 {
-                    memory::endian(in, size, wordSize);
+                    memory::swapEndian(in, size, wordSize);
                 }
                 break;
             }
@@ -325,6 +298,71 @@ namespace tl
             p.pos += size * wordSize;
         }
 
+        void FileIO::readAt(void* in, size_t pos, size_t size, size_t wordSize) const
+        {
+            TLRENDER_P();
+
+            if (p.mode != Mode::Read && p.mode != Mode::ReadWrite)
+            {
+                throw std::runtime_error(
+                    getErrorMessage(ErrorType::Read, p.path.u8string()));
+            }
+
+            const size_t byteCount = size * wordSize;
+            if (pos > p.size || byteCount > p.size - pos)
+            {
+                throw std::runtime_error(
+                    getErrorMessage(
+                        p.memoryStart ? ErrorType::ReadMemoryMap : ErrorType::Read,
+                        p.path.u8string()));
+            }
+
+            if (p.memoryStart)
+            {
+                if (p.endianConversion && wordSize > 1)
+                {
+                    memory::swapEndian(p.memoryStart + pos, in, size, wordSize);
+                }
+                else
+                {
+                    memcpy(in, p.memoryStart + pos, byteCount);
+                }
+            }
+            else if (p.f != -1)
+            {
+                uint8_t* out = reinterpret_cast<uint8_t*>(in);
+                size_t remaining = byteCount;
+                off_t offset = pos;
+                while (remaining > 0)
+                {
+                    // A short read is not an error; large reads get broken up.
+                    const ssize_t r = ::pread(p.f, out, remaining, offset);
+                    if (r < 0)
+                    {
+                        throw std::runtime_error(
+                            getErrorMessage(ErrorType::Read, p.path.u8string(), getErrorString()));
+                    }
+                    else if (0 == r)
+                    {
+                        throw std::runtime_error(
+                            getErrorMessage(ErrorType::Read, p.path.u8string()));
+                    }
+                    out       += r;
+                    offset    += r;
+                    remaining -= r;
+                }
+                if (p.endianConversion && wordSize > 1)
+                {
+                    memory::swapEndian(in, size, wordSize);
+                }
+            }
+            else
+            {
+                throw std::runtime_error(
+                    getErrorMessage(ErrorType::Read, p.path.u8string()));
+            }
+        }
+
         void FileIO::write(const void* in, size_t size, size_t wordSize)
         {
             TLRENDER_P();
@@ -332,7 +370,7 @@ namespace tl
             if (-1 == p.f)
             {
                 throw std::runtime_error(
-                    getErrorMessage(ErrorType::Write, p.fileName));
+                    getErrorMessage(ErrorType::Write, p.path));
             }
 
             const uint8_t* inP = reinterpret_cast<const uint8_t*>(in);
@@ -340,20 +378,21 @@ namespace tl
             if (p.endianConversion && wordSize > 1)
             {
                 tmp.resize(size * wordSize);
-                memory::endian(in, tmp.data(), size, wordSize);
+                memory::swapEndian(in, tmp.data(), size, wordSize);
                 inP = tmp.data();
             }
             if (::write(p.f, inP, size * wordSize) == -1)
             {
                 throw std::runtime_error(getErrorMessage(
-                    ErrorType::Write, p.fileName, getErrorString()));
+                    ErrorType::Write, p.path, getErrorString()));
             }
             p.pos += size * wordSize;
             p.size = std::max(p.pos, p.size);
         }
 
         void
-        FileIO::_open(const std::string& fileName, Mode mode, ReadType readType)
+        FileIO::_open(const std::filesystem::path& path, Mode mode, Read read,
+                      Access access)
         {
             TLRENDER_P();
 
@@ -382,29 +421,21 @@ namespace tl
             default:
                 break;
             }
-            p.f = ::open(fileName.c_str(), openFlags, openMode);
+            p.f = ::open(path.u8string().c_str(), openFlags, openMode);
             if (-1 == p.f)
             {
                 throw std::runtime_error(getErrorMessage(
-                    ErrorType::Open, fileName, getErrorString()));
+                    ErrorType::Open, path, getErrorString()));
             }
 
-            // Stat the file.
-            _STAT info;
-            memset(&info, 0, sizeof(_STAT));
-            if (_STAT_FNC(fileName.c_str(), &info) != 0)
-            {
-                throw std::runtime_error(getErrorMessage(
-                    ErrorType::Stat, fileName, getErrorString()));
-            }
-            p.fileName = fileName;
+            p.path = path;
             p.mode = mode;
-            p.readType = readType;
+            p.read = read;
             p.pos = 0;
-            p.size = info.st_size;
+            p.size = std::filesystem::file_size(path);
 
             // Memory mapping.
-            if (ReadType::MemoryMapped == p.readType && Mode::Read == p.mode &&
+            if (Read::MemoryMapped == p.read && Mode::Read == p.mode &&
                 p.size > 0)
             {
                 p.mMap = mmap(0, p.size, PROT_READ, MAP_SHARED, p.f, 0);
@@ -412,7 +443,7 @@ namespace tl
                 if (p.mMap == (void*)-1)
                 {
                     throw std::runtime_error(getErrorMessage(
-                        ErrorType::MemoryMap, fileName, getErrorString()));
+                        ErrorType::MemoryMap, path, getErrorString()));
                 }
                 p.memoryStart = reinterpret_cast<const uint8_t*>(p.mMap);
                 p.memoryEnd = p.memoryStart + p.size;
@@ -426,7 +457,7 @@ namespace tl
 
             bool out = true;
 
-            p.fileName = std::string();
+            p.path = std::string();
 
             if (p.mMap != (void*)-1)
             {
@@ -437,7 +468,7 @@ namespace tl
                     if (error)
                     {
                         *error = getErrorMessage(
-                            ErrorType::CloseMemoryMap, p.fileName,
+                            ErrorType::CloseMemoryMap, p.path,
                             getErrorString());
                     }
                 }
@@ -455,7 +486,7 @@ namespace tl
                     if (error)
                     {
                         *error = getErrorMessage(
-                            ErrorType::Close, p.fileName, getErrorString());
+                            ErrorType::Close, p.path, getErrorString());
                     }
                 }
                 p.f = -1;
@@ -468,70 +499,92 @@ namespace tl
             return out;
         }
 
-        void FileIO::Private::setPos(size_t in, bool seek)
+        void FileIO::Private::seek(size_t value, SeekMode seekMode)
         {
-            switch (mode)
+            if (Mode::Read == mode && memoryStart)
             {
-            case Mode::Read:
-            {
-                if (memoryStart)
+                switch (seekMode)
                 {
-                    if (!seek)
-                    {
-                        memoryP =
-                            reinterpret_cast<const uint8_t*>(memoryStart) + in;
-                    }
-                    else
-                    {
-                        memoryP += in;
-                    }
+                case SeekMode::Set:
+                    memoryP = reinterpret_cast<const uint8_t*>(memoryStart) + value;
                     if (memoryP > memoryEnd)
                     {
-                        throw std::runtime_error(getErrorMessage(
-                            ErrorType::SeekMemoryMap, fileName));
+                        throw std::runtime_error(
+                            getErrorMessage(ErrorType::SeekMemoryMap, path.u8string()));
                     }
-                }
-                else
-                {
-                    if (::lseek(f, in, !seek ? SEEK_SET : SEEK_CUR) ==
-                        (off_t)-1)
+                    break;
+                case SeekMode::Forward:
+                    memoryP += value;
+                    if (memoryP > memoryEnd)
                     {
-                        throw std::runtime_error(getErrorMessage(
-                            ErrorType::Seek, fileName, getErrorString()));
+                        throw std::runtime_error(
+                            getErrorMessage(ErrorType::SeekMemoryMap, path.u8string()));
                     }
+                    break;
+                case SeekMode::Reverse:
+                    memoryP -= value;
+                    if (memoryP < memoryStart)
+                    {
+                        throw std::runtime_error(
+                            getErrorMessage(ErrorType::SeekMemoryMap, path.u8string()));
+                    }
+                    break;
+                default: break;
                 }
-                break;
-            }
-            case Mode::Write:
-            case Mode::ReadWrite:
-            case Mode::Append:
-            {
-                if (::lseek(f, in, !seek ? SEEK_SET : SEEK_CUR) == (off_t)-1)
-                {
-                    throw std::runtime_error(getErrorMessage(
-                        ErrorType::Seek, fileName, getErrorString()));
-                }
-                break;
-            }
-            default:
-                break;
-            }
-            if (!seek)
-            {
-                pos = in;
             }
             else
             {
-                pos += in;
+                off_t offset = value;
+                int whence = SEEK_SET;
+                switch (seekMode)
+                {
+                case SeekMode::Forward:
+                    whence = SEEK_CUR;
+                    break;
+                case SeekMode::Reverse:
+                    offset = -offset;
+                    whence = SEEK_CUR;
+                    break;
+                default: break;
+                }
+                if (::lseek(f, offset, whence) == (off_t)-1)
+                {
+                    throw std::runtime_error(
+                        getErrorMessage(ErrorType::Seek, path.u8string(), getErrorString()));
+                }
+            }
+            switch (seekMode)
+            {
+            case SeekMode::Set: pos = value; break;
+            case SeekMode::Forward: pos += value; break;
+            case SeekMode::Reverse: pos -= value; break;
+            default: break;
             }
         }
 
-        void truncate(const std::string& fileName, size_t size)
+        void prefetch(const void* p, size_t size)
         {
-            if (::truncate(fileName.c_str(), size) != 0)
+            if (p && size > 0)
+            {
+                madvise(const_cast<void*>(p), size, MADV_WILLNEED);
+            }
+        }
+
+        void truncate(const std::filesystem::path& path, size_t size)
+        {
+            if (::truncate(path.u8string().c_str(), size) != 0)
+            {
+                throw std::runtime_error(
+                    getErrorMessage(ErrorType::Write, path.u8string(), getErrorString()));
+            }
+        }
+
+        void truncate(const std::string& path, size_t size)
+        {
+            if (::truncate(path.c_str(), size) != 0)
             {
                 throw std::runtime_error(getErrorMessage(
-                    ErrorType::Write, fileName, getErrorString()));
+                    ErrorType::Write, path, getErrorString()));
             }
         }
     } // namespace file

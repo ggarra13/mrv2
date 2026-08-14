@@ -29,28 +29,60 @@ namespace tl
         TLRENDER_ENUM_SERIALIZE(Mode);
 
         //! File reading type.
-        enum class ReadType {
+        enum class Read {
             Normal,
             MemoryMapped,
 
             Count,
             First = Normal
         };
-        TLRENDER_ENUM(ReadType);
-        TLRENDER_ENUM_SERIALIZE(ReadType);
+        TLRENDER_ENUM(Read);
+        TLRENDER_ENUM_SERIALIZE(Read);
+
+        //! Expected access pattern, used as a read ahead hint.
+        //!
+        //! Sequential asks the operating system to read ahead and to drop what has
+        //! been passed. That is wrong for a file read as scattered ranges, where the
+        //! read ahead is thrown away and costs more than it saves; a bundle of media
+        //! is read that way.
+        enum class Access
+        {
+            Sequential,
+            Random,
+
+            Count,
+            First = Sequential
+        };
+        TLRENDER_ENUM(Access);
+        TLRENDER_ENUM_SERIALIZE(Access);
 
         //! Read files from memory.
         struct MemoryRead
         {
-            MemoryRead();
-            MemoryRead(const uint8_t*, size_t size);
+            MemoryRead() = default;
+            MemoryRead(const std::shared_ptr<void>&, const uint8_t*,
+                       size_t size);
 
+            std::shared_ptr<void> f;
             const uint8_t* p = nullptr;
             size_t size = 0;
 
             bool operator==(const MemoryRead&) const;
             bool operator!=(const MemoryRead&) const;
         };
+
+        //! Seek modes.
+        enum class SeekMode
+        {
+            Set,
+            Forward,
+            Reverse,
+
+            Count,
+            First = Set
+        };
+        TLRENDER_ENUM(SeekMode);
+        TLRENDER_ENUM_SERIALIZE(Access);
 
         //! File I/O.
         class FileIO
@@ -65,15 +97,27 @@ namespace tl
 
             //! Create a new file I/O object.
             static std::shared_ptr<FileIO> create(
-                const std::string& fileName, Mode,
-                ReadType = ReadType::MemoryMapped);
+                const std::filesystem::path&,
+                Mode,
+                Read r = Read::MemoryMapped,
+                Access = Access::Sequential);
+
+            //! Create a new file I/O object.
+            static std::shared_ptr<FileIO> create(
+                const std::string&,
+                Mode,
+                Read = Read::MemoryMapped,
+                Access = Access::Sequential);
 
             //! Create a read-only file I/O object from memory.
-            static std::shared_ptr<FileIO>
-            create(const std::string& fileName, const MemoryRead&);
+            static std::shared_ptr<FileIO> create(
+                const std::filesystem::path&,
+                const MemoryRead&);
 
-            //! Create a read-write temporary file I/O object.
-            static std::shared_ptr<FileIO> createTemp();
+            //! Create a read-only file I/O object from memory.
+            static std::shared_ptr<FileIO> create(
+                const std::string&,
+                const MemoryRead&);
 
             //! Get whether the file is open.
             bool isOpen() const;
@@ -81,8 +125,8 @@ namespace tl
             //! \name Information
             ///@{
 
-            //! Get the file name.
-            const std::string& getFileName() const;
+            //! Get the file path.
+            const std::filesystem::path& getPath() const;
 
             //! Get the file size.
             size_t getSize() const;
@@ -95,11 +139,8 @@ namespace tl
             //! Get the current file position.
             size_t getPos() const;
 
-            //! Set the current file position.
-            void setPos(size_t);
-
             //! Advance the current file position.
-            void seek(size_t);
+            void seek(size_t, SeekMode);
 
             //! Get whether the file position is at the end of the file.
             bool isEOF() const;
@@ -118,6 +159,15 @@ namespace tl
             void read32(int32_t*, size_t = 1);
             void readU32(uint32_t*, size_t = 1);
             void readF32(float*, size_t = 1);
+
+            //! Read from an absolute position, leaving the current position
+            //! unchanged.
+            //!
+            //! This touches none of the object's state, so several threads may
+            //! read from one file at once; seek() followed by read() cannot be
+            //! used that way. It may not run concurrently with the position
+            //! changing calls.
+            void readAt(void*, size_t pos, size_t size, size_t wordSize = 1) const;
 
             ///@}
 
@@ -171,12 +221,23 @@ namespace tl
 
             ///@}
 
+            //! Get the number of objects currenty instantiated.
+            static size_t getObjectCount();
+
         private:
-            void _open(const std::string& fileName, Mode, ReadType);
+            void _open(const std::filesystem::path&, Mode, Read, Access);
             bool _close(std::string* error = nullptr);
 
             TLRENDER_PRIVATE();
         };
+
+        //! Ask the operating system to populate a range of a memory mapped
+        //! file.
+        //!
+        //! Reading a mapped range without this faults it in a page at a time,
+        //! and the faults are synchronous and contend with each other when
+        //! several threads read from one mapping.
+        void prefetch(const void*, size_t);
 
         //! Read the contents from a file.
         std::string readContents(const std::shared_ptr<FileIO>&);
@@ -187,20 +248,25 @@ namespace tl
             size_t maxLen = string::cBufferSize);
 
         //! Read a line from a file.
-        //! \todo Should we handle comments like readWord()?
-        void readLine(
-            const std::shared_ptr<FileIO>&, char*,
-            size_t maxLen = string::cBufferSize);
+        std::string readLine(
+            const std::shared_ptr<FileIO>&);
 
         //! Read all the lines from a file.
         std::vector<std::string> readLines(const std::string& fileName);
+
+        //! Read all the lines from a file.
+        std::vector<std::string> readLines(const std::string&);
 
         //! Write lines to a file.
         void writeLines(
             const std::string& fileName, const std::vector<std::string>&);
 
         //! Truncate a file.
+        void truncate(const std::filesystem::path&, size_t);
+
+        //! Truncate a file.
         void truncate(const std::string& fileName, size_t);
+
     } // namespace file
 } // namespace tl
 

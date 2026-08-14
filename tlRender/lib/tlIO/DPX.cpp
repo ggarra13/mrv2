@@ -177,7 +177,7 @@ namespace tl
             else
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Bad magic number"));
             }
 
@@ -200,7 +200,7 @@ namespace tl
             if (out.image.elemSize != 1)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Unsupported file"));
             }
             imageInfo.size.w = out.image.size[0];
@@ -288,7 +288,7 @@ namespace tl
             if (image::PixelType::kNone == imageInfo.pixelType)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Unsupported file"));
             }
             const size_t dataByteCount = image::getDataByteCount(imageInfo);
@@ -296,14 +296,14 @@ namespace tl
             if (dataByteCount > ioSize - out.file.imageOffset)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Incomplete file"));
             }
 
             if (out.image.elem[0].encoding)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Unsupported file"));
             }
 
@@ -311,7 +311,7 @@ namespace tl
                 out.image.elem[0].linePadding)
             {
                 throw std::runtime_error(string::Format("{0}: {1}")
-                                             .arg(io->getFileName())
+                                             .arg(io->getPath())
                                              .arg("Unsupported file"));
             }
 
