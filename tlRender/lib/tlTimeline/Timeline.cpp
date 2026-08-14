@@ -962,6 +962,84 @@ namespace tl
             return std::nullopt;
         }
 
+        template<typename T>
+        std::shared_ptr<T> Timeline::Private::getCached(
+            memory::LRUCache<std::string, std::shared_ptr<T> >& cache,
+            const otio::MediaReference* mediaReference,
+            const io::Options& ioOptions,
+            const std::function<std::shared_ptr<T>(
+                   const std::shared_ptr<system::Context>&,
+                   const file::Path&,
+                   const std::vector<file::MemoryRead>&,
+                   const io::Options&)>& create)
+        {
+            std::shared_ptr<T> out;
+            if (mediaUnavailable(mediaReference))
+            {
+                // Named by the bundle but not inside it. Reading it from its
+                // path would be reading a different file than the bundle
+                // describes.
+                return out;
+            }
+            const auto mediaPath = timeline::getPath(
+                mediaReference,
+                path.getDirectory(),
+                options.pathOptions);
+            const std::string key = getKey(mediaPath);
+            std::unique_lock<std::mutex> lock(readCacheMutex);
+            if (!cache.get(key, out))
+            {
+                auto context = this->context.lock();
+                if (!context)
+                {
+                    return out;
+                }
+                try
+                {
+                    const auto mem = getMem(mediaReference);
+                    if (mediaUnavailable(mediaReference))
+                    {
+                        // Resolving its byte ranges said the bundle does not
+                        // hold it; reading it from its path is not the same
+                        // file.
+                        return out;
+                    }
+                    io::Options readOptions = ioOptions;
+                    readOptions["SequenceIO/DefaultSpeed"] =
+                        string::Format("{0}").arg(timeRange.duration().rate());
+                    if (auto imageSeqReference =
+                        dynamic_cast<const otio::ImageSequenceReference*>(mediaReference))
+                    {
+                        // The reference says what to do about frames it does
+                        // not have, and it is more specific than the options
+                        // the timeline was opened with. A reference this
+                        // timeline built for a file opened directly carries
+                        // those options already.
+                        // readOptions["SequenceIO/MissingFrames"] = to_string(
+                        //     fromOTIO(imageSeqReference->missing_frame_policy()));
+                    }
+                    out = create(context, mediaPath, *mem, readOptions);
+                }
+                catch (const std::exception& e)
+                {
+                    if (auto log = context->getLogSystem())
+                    {
+                        log->print(
+                            "tl::Timeline",
+                            string::Format("Cannot read \"{0}\": {1}").
+                            arg(mediaPath.get()).arg(e.what()),
+                            log::Type::Error);
+                    }
+                    return std::shared_ptr<T>();
+                }
+                if (out)
+                {
+                    cache.add(key, out);
+                }
+            }
+            return out;
+        }
+
         std::vector<file::MemoryRead>
         Timeline::getMem(const otio::MediaReference* otioRef)
         {
@@ -1754,33 +1832,29 @@ namespace tl
             const io::Options& ioOptions)
         {
             TLRENDER_P();
-            std::shared_ptr<io::IRead> out;
-            if (p.unavailableMediaReferences.find(mediaReference) !=
-                p.unavailableMediaReferences.end())
-            {
-                // Named by the bundle but not inside it. Reading it from its path
-                // would be reading a different file than the bundle describes.
-                return out;
-            }
-            const auto path = timeline::getPath(
+            const file::Path mediaPath = timeline::getPath(
+                mediaReference, p.path.getDirectory(), p.options.pathOptions);
+            return p.getCached<io::IRead>(
+                p.readCache,
                 mediaReference,
-                p.path.getDirectory(),
-                p.options.pathOptions);
-            const std::string key = getKey(path);
-            if (!p.readCache.get(key, out))
-            {
-                if (auto context = p.context.lock())
-                {
-                    const auto memoryRead = getMemoryRead(mediaReference);
-                    io::Options options = ioOptions;
-                    options["SequenceIO/DefaultSpeed"] =
-                        string::Format("{0}").arg(p.timeRange.duration().rate());
-                    const auto ioSystem = context->getSystem<io::System>();
-                    out = ioSystem->read(path, memoryRead, options);
-                    p.readCache.add(key, out);
-                }
-            }
-            return out;
+                ioOptions,
+                [](const std::shared_ptr<system::Context>& context,
+                             const file::Path& path,
+                             const std::vector<file::MemoryRead>& mem,
+                             const io::Options& options)
+                    {
+                        auto read = context->getSystem<io::System>()->read(
+                            path, mem, options);
+                        return read;
+                    });
+        }
+
+        bool Timeline::Private::mediaUnavailable(
+            const otio::MediaReference* mediaReference)
+        {
+            std::unique_lock<std::mutex> lock(memFilesMutex);
+            return unavailableMediaReferences.find(mediaReference) !=
+                unavailableMediaReferences.end();
         }
 
         std::future<io::VideoData> Timeline::_readVideo(

@@ -76,6 +76,27 @@ namespace tl
             // Owned by the request thread, like the Thread struct below.
             memory::LRUCache<std::string, std::shared_ptr<io::IRead> >
                 readCache;
+            // Guards the three caches below. They were owned by the request
+            // thread, but a timeline opened without one is read by whichever
+            // thread drives it, and the thumbnail system drives one from three.
+            //
+            // Always the outer of the two locks; see memFilesMutex.
+            std::mutex readCacheMutex;
+            // Look up the reader or decoder for a media reference, creating one
+            // on a miss. The three caches differ only in what they hold and how
+            // an entry is made; the availability checks either side of
+            // resolving the byte ranges, the key and the lock are the same for
+            // all of them, and were easy to get subtly wrong three times over.
+            template<typename T>
+            std::shared_ptr<T> getCached(
+                memory::LRUCache<std::string, std::shared_ptr<T> >&,
+                const otio::MediaReference*,
+                const io::Options&,
+                const std::function<std::shared_ptr<T>(
+                const std::shared_ptr<system::Context>&,
+                const file::Path&,
+                const std::vector<file::MemoryRead>&,
+                const io::Options&)>&);
             // Errors observed while building frames (broken promises caught
             // in videoFrame()/audioFrame()). Owned by the request thread.
             size_t frameErrorCount = 0;
