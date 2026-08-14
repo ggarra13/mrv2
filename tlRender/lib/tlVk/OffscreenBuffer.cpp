@@ -14,6 +14,7 @@
 
 #include <FL/vk_enum_string_helper.h>
 #include <FL/Fl_Vk_Utils.H>
+#include <FL/vk_mem_alloc.h>
 
 #include <array>
 #include <atomic>
@@ -311,7 +312,7 @@ namespace tl
 
         struct StagingBuffer {
             VkBuffer buffer = VK_NULL_HANDLE;
-            VkDeviceMemory memory = VK_NULL_HANDLE;
+            VmaAllocation allocation = VK_NULL_HANDLE;
             void* mappedPtr = nullptr;
             VkFence fence = VK_NULL_HANDLE;
         };
@@ -342,13 +343,13 @@ namespace tl
 
             // Multisampled color render target (only created when sampling > 1)
             VkImage         msColorImage       = VK_NULL_HANDLE;
-            VkDeviceMemory  msColorMemory      = VK_NULL_HANDLE;
+            VmaAllocation   msColorAllocation  = VK_NULL_HANDLE;
             VkImageView     msColorImageView   = VK_NULL_HANDLE;
             VkImageLayout   msColorImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
             // Resolved single-sample color image (public API image/view/layout)
             VkImage         resolveImage       = VK_NULL_HANDLE;
-            VkDeviceMemory  resolveMemory      = VK_NULL_HANDLE;
+            VmaAllocation   resolveAllocation  = VK_NULL_HANDLE;
             VkImageView     resolveImageView   = VK_NULL_HANDLE;
             VkImageLayout   resolveImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
@@ -359,7 +360,7 @@ namespace tl
             // All depth accessors index into these vectors with frameIndex.
             // ----------------------------------------------------------------
             std::vector<VkImage>        depthImages;
-            std::vector<VkDeviceMemory> depthMemories;
+            std::vector<VmaAllocation>  depthAllocations;
             std::vector<VkImageView>    depthImageViews;
             std::vector<VkImageLayout>  depthLayouts;
 
@@ -392,7 +393,7 @@ namespace tl
             }
 
             VkImage&        activeDepthImage()        { return depthImages[clampedFrameIndex()]; }
-            VkDeviceMemory& activeDepthMemory()       { return depthMemories[clampedFrameIndex()]; }
+            VmaAllocation&  activeDepthAllocation()    { return depthAllocations[clampedFrameIndex()]; }
             VkImageView&    activeDepthImageView()    { return depthImageViews[clampedFrameIndex()]; }
             VkImageLayout&  activeDepthLayout()       { return depthLayouts[clampedFrameIndex()]; }
             VkFramebuffer&  activeFramebuffer()       { return framebuffers[clampedFrameIndex()]; }
@@ -516,9 +517,9 @@ namespace tl
 
             // Multisampled color
             if (p.msColorImage != VK_NULL_HANDLE)
-                vkDestroyImage(device, p.msColorImage, nullptr);
-            if (p.msColorMemory != VK_NULL_HANDLE)
-                vkFreeMemory(device, p.msColorMemory, nullptr);
+                vmaDestroyImage(ctx.allocator, p.msColorImage, p.msColorAllocation);
+            p.msColorImage = VK_NULL_HANDLE;
+            p.msColorAllocation = VK_NULL_HANDLE;
             if (p.msColorImageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.msColorImageView, nullptr);
 
@@ -537,9 +538,9 @@ namespace tl
 
             // Resolved color (always present)
             if (p.resolveImage != VK_NULL_HANDLE)
-                vkDestroyImage(device, p.resolveImage, nullptr);
-            if (p.resolveMemory != VK_NULL_HANDLE)
-                vkFreeMemory(device, p.resolveMemory, nullptr);
+                vmaDestroyImage(ctx.allocator, p.resolveImage, p.resolveAllocation);
+            p.resolveImage = VK_NULL_HANDLE;
+            p.resolveAllocation = VK_NULL_HANDLE;
             if (p.resolveImageView != VK_NULL_HANDLE)
                 vkDestroyImageView(device, p.resolveImageView, nullptr);
 
@@ -549,24 +550,20 @@ namespace tl
                 if (p.depthImageViews[i] != VK_NULL_HANDLE)
                     vkDestroyImageView(device, p.depthImageViews[i], nullptr);
                 if (p.depthImages[i] != VK_NULL_HANDLE)
-                    vkDestroyImage(device, p.depthImages[i], nullptr);
-                if (p.depthMemories[i] != VK_NULL_HANDLE)
-                    vkFreeMemory(device, p.depthMemories[i], nullptr);
+                    vmaDestroyImage(ctx.allocator, p.depthImages[i], p.depthAllocations[i]);
             }
             p.depthImages.clear();
-            p.depthMemories.clear();
+            p.depthAllocations.clear();
             p.depthImageViews.clear();
             p.depthLayouts.clear();
 
             // PBO ring of buffers
             for (auto& pbo : p.pboRing)
             {
-                if (pbo.buffer != VK_NULL_HANDLE)
-                    vkDestroyBuffer(device, pbo.buffer, nullptr);
                 if (pbo.fence != VK_NULL_HANDLE)
                     vkDestroyFence(device, pbo.fence, nullptr);
-                if (pbo.memory != VK_NULL_HANDLE)
-                    vkFreeMemory(device, pbo.memory, nullptr);
+                if (pbo.buffer != VK_NULL_HANDLE)
+                    vmaDestroyBuffer(ctx.allocator, pbo.buffer, pbo.allocation);
             }
 
             // Reset layouts
@@ -628,7 +625,7 @@ namespace tl
             TLRENDER_P();
 
             p.depthImages.resize(p.depthFrameCount, VK_NULL_HANDLE);
-            p.depthMemories.resize(p.depthFrameCount, VK_NULL_HANDLE);
+            p.depthAllocations.resize(p.depthFrameCount, VK_NULL_HANDLE);
             p.depthLayouts.resize(p.depthFrameCount, VK_IMAGE_LAYOUT_UNDEFINED);
 
             VkSampleCountFlagBits samples = getVulkanSamples(p.options.sampling);
@@ -647,27 +644,16 @@ namespace tl
             imageInfo.samples       = samples;
             imageInfo.sharingMode   = VK_SHARING_MODE_EXCLUSIVE;
 
+            VmaAllocationCreateInfo allocCreateInfo{};
+            allocCreateInfo.usage         = VMA_MEMORY_USAGE_AUTO;
+            allocCreateInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+
             for (uint32_t i = 0; i < p.depthFrameCount; ++i)
             {
-                if (vkCreateImage(ctx.device, &imageInfo, nullptr,
-                                  &p.depthImages[i]) != VK_SUCCESS)
+                if (vmaCreateImage(ctx.allocator, &imageInfo, &allocCreateInfo,
+                                   &p.depthImages[i], &p.depthAllocations[i],
+                                   nullptr) != VK_SUCCESS)
                     throw std::runtime_error("Failed to create depth image");
-
-                VkMemoryRequirements memReq;
-                vkGetImageMemoryRequirements(ctx.device, p.depthImages[i], &memReq);
-
-                VkMemoryAllocateInfo allocInfo{};
-                allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.allocationSize  = memReq.size;
-                allocInfo.memoryTypeIndex = findMemoryType(
-                    memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-                if (vkAllocateMemory(ctx.device, &allocInfo, nullptr,
-                                     &p.depthMemories[i]) != VK_SUCCESS)
-                    throw std::runtime_error("Failed to allocate depth memory");
-
-                vkBindImageMemory(ctx.device, p.depthImages[i],
-                                  p.depthMemories[i], 0);
             }
         }
 
@@ -730,22 +716,14 @@ namespace tl
                 info.samples       = VK_SAMPLE_COUNT_1_BIT;
                 info.sharingMode   = VK_SHARING_MODE_EXCLUSIVE;
 
-                if (vkCreateImage(device, &info, nullptr, &p.resolveImage) != VK_SUCCESS)
+                VmaAllocationCreateInfo allocCreateInfo{};
+                allocCreateInfo.usage         = VMA_MEMORY_USAGE_AUTO;
+                allocCreateInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+
+                if (vmaCreateImage(ctx.allocator, &info, &allocCreateInfo,
+                                   &p.resolveImage, &p.resolveAllocation,
+                                   nullptr) != VK_SUCCESS)
                     throw std::runtime_error("Failed to create resolve image");
-
-                VkMemoryRequirements memReq;
-                vkGetImageMemoryRequirements(device, p.resolveImage, &memReq);
-
-                VkMemoryAllocateInfo allocInfo{};
-                allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.allocationSize  = memReq.size;
-                allocInfo.memoryTypeIndex = findMemoryType(
-                    memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-                if (vkAllocateMemory(device, &allocInfo, nullptr, &p.resolveMemory) != VK_SUCCESS)
-                    throw std::runtime_error("Failed to allocate resolve image memory");
-
-                vkBindImageMemory(device, p.resolveImage, p.resolveMemory, 0);
             }
 
             // --------------------------------------------------
@@ -767,22 +745,14 @@ namespace tl
                 info.samples       = samples;
                 info.sharingMode   = VK_SHARING_MODE_EXCLUSIVE;
 
-                if (vkCreateImage(device, &info, nullptr, &p.msColorImage) != VK_SUCCESS)
+                VmaAllocationCreateInfo allocCreateInfo{};
+                allocCreateInfo.usage         = VMA_MEMORY_USAGE_AUTO;
+                allocCreateInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+
+                if (vmaCreateImage(ctx.allocator, &info, &allocCreateInfo,
+                                   &p.msColorImage, &p.msColorAllocation,
+                                   nullptr) != VK_SUCCESS)
                     throw std::runtime_error("Failed to create multisampled color image");
-
-                VkMemoryRequirements memReq;
-                vkGetImageMemoryRequirements(device, p.msColorImage, &memReq);
-
-                VkMemoryAllocateInfo allocInfo{};
-                allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.allocationSize  = memReq.size;
-                allocInfo.memoryTypeIndex = findMemoryType(
-                    memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-                if (vkAllocateMemory(device, &allocInfo, nullptr, &p.msColorMemory) != VK_SUCCESS)
-                    throw std::runtime_error("Failed to allocate multisampled color memory");
-
-                vkBindImageMemory(device, p.msColorImage, p.msColorMemory, 0);
             }
         }
 
@@ -1227,7 +1197,13 @@ namespace tl
         }
 
         // ====================================================================
-        //  Memory helpers (unchanged)
+        //  Memory helpers
+        //
+        //  No longer used internally now that all allocations go through
+        //  ctx.allocator (VMA), which picks memory types itself. Left in
+        //  place since it's part of the class's public API declared in the
+        //  header; remove it there too if nothing outside this class calls
+        //  it.
         // ====================================================================
 
         uint32_t OffscreenBuffer::findMemoryType(
@@ -1620,30 +1596,33 @@ namespace tl
                 bufferInfo.size        = bufferSize;
                 bufferInfo.usage       = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
                 bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-                vkCreateBuffer(device, &bufferInfo, nullptr, &pbo.buffer);
-
-                VkMemoryRequirements memReq;
-                vkGetBufferMemoryRequirements(device, pbo.buffer, &memReq);
-
-                VkMemoryAllocateInfo allocInfo = {};
-                allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                allocInfo.allocationSize  = memReq.size;
 
                 //
                 // Important:  we must use VK_MEMORY_PROPERTY_HOST_CACHED_BIT
                 //             for fast readbacks and invalidate the memory
-                //             before accessing the pointer.
+                //             before accessing the pointer.  HOST_ACCESS_RANDOM
+                //             is the VMA hint that steers it toward cached
+                //             host memory for readback (as opposed to
+                //             SEQUENTIAL_WRITE, which is meant for uploads).
                 //
-                allocInfo.memoryTypeIndex =
-                    findMemoryType(
-                    memReq.memoryTypeBits,
+                VmaAllocationCreateInfo allocCreateInfo{};
+                allocCreateInfo.usage         = VMA_MEMORY_USAGE_AUTO;
+                allocCreateInfo.flags         =
+                    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT |
+                    VMA_ALLOCATION_CREATE_MAPPED_BIT;
+                allocCreateInfo.requiredFlags =
                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                    VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+                    VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
 
-                vkAllocateMemory(device, &allocInfo, nullptr, &pbo.memory);
-                vkBindBufferMemory(device, pbo.buffer, pbo.memory, 0);
+                VmaAllocationInfo allocationInfo{};
+                if (vmaCreateBuffer(ctx.allocator, &bufferInfo, &allocCreateInfo,
+                                    &pbo.buffer, &pbo.allocation,
+                                    &allocationInfo) != VK_SUCCESS)
+                    throw std::runtime_error("Failed to create staging buffer");
 
-                vkMapMemory(device, pbo.memory, 0, bufferSize, 0, &pbo.mappedPtr);
+                // VMA_ALLOCATION_CREATE_MAPPED_BIT gives us a persistent
+                // pointer for the lifetime of the allocation.
+                pbo.mappedPtr = allocationInfo.pMappedData;
 
                 VkFenceCreateInfo fenceInfo{VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
                 fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT; // allow reuse on first frame
@@ -1769,19 +1748,13 @@ namespace tl
         void* OffscreenBuffer::getInlineReadbackPtr()
         {
             TLRENDER_P();
-            VkDevice device = ctx.device;
 
             // The last-written slot is one behind the current writeIndex
             int slot = (p.writeIndex - 1 + NUM_PBO_BUFFERS) % NUM_PBO_BUFFERS;
             auto& pbo = p.pboRing[slot];
 
             // Invalidate host cache so we see the GPU's writes
-            VkMappedMemoryRange range{};
-            range.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-            range.memory = pbo.memory;
-            range.offset = 0;
-            range.size   = VK_WHOLE_SIZE;
-            vkInvalidateMappedMemoryRanges(device, 1, &range);
+            vmaInvalidateAllocation(ctx.allocator, pbo.allocation, 0, VK_WHOLE_SIZE);
 
             return pbo.mappedPtr;
         }
@@ -1798,12 +1771,8 @@ namespace tl
 
             if (result == VK_SUCCESS)
             {
-                VkMappedMemoryRange memoryRange = {};
-                memoryRange.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-                memoryRange.memory = pbo.memory;
-                memoryRange.offset = 0;
-                memoryRange.size   = VK_WHOLE_SIZE;
-                vkInvalidateMappedMemoryRanges(device, 1, &memoryRange);
+                // Invalidate host cache so we see the GPU's writes
+                vmaInvalidateAllocation(ctx.allocator, pbo.allocation, 0, VK_WHOLE_SIZE);
 
                 imageData = pbo.mappedPtr;
 

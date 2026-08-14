@@ -2,7 +2,8 @@ v1.7.4
 ======
 
 - OpenEXR: Improved loading performance a tad.
-- OpenEXR: Fixed layer information (like lossy compression for the layer not the part number)
+- OpenEXR: Fixed layer information (like lossy compression for the layer not the part number).
+- Vulkan: Made Offscreen buffers use the memory allocator for better performance.  This makes creating the 4K annotation bufer much faster.
 
 
 v1.7.3
