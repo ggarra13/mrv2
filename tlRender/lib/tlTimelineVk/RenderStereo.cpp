@@ -29,12 +29,12 @@ namespace tl
 
             //
             // Some constants
-            // 
+            //
             const VkColorComponentFlags rgbaMask[] =
                 { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
                   VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
             const VkColorComponentFlags noneMask[] = { 0 };
-            
+
 
             //
             // Some auxiliary variables
@@ -45,7 +45,7 @@ namespace tl
 
             //
             // Create offscreen buffer to draw into
-            // 
+            //
             const math::Size2i& offscreenBufferSize = p.fbo->getSize();
             vlk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
@@ -60,24 +60,24 @@ namespace tl
                     vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
                                                  offscreenBufferOptions);
             }
-            
+
 
             // Main FBO Transitions
             p.fbo->transitionToColorAttachment(p.cmd);
             p.fbo->transitionDepthToStencilAttachment(p.cmd);
-            
+
 
             // Draw left image to "stereo_image" buffer
             if (!videoData.empty() && !boxes.empty())
             {
                 p.buffers["stereo_image"]->transitionToColorAttachment(p.cmd);
-                
+
                 _drawVideo(
-                    p.buffers["stereo_image"], "display", 
+                    p.buffers["stereo_image"], "display",
                     videoData[0], boxes[0],
                     !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
                     !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
-                
+
                 p.buffers["stereo_image"]->transitionToShaderRead(p.cmd);
             }
 
@@ -105,12 +105,11 @@ namespace tl
                 size.w = size.h = 1;
                 mesh = geom::checkers(box, size);
             }
-            
+
             p.vbos["stereo"] =
                 vlk::VBO::create(mesh.triangles.size() * 3,
                                  vlk::VBOType::Pos2_F32);
-            p.vaos["stereo"] = vlk::VAO::create(ctx);
-            
+
             p.vbos["stereo"]->copy(convert(mesh,
                                            p.vbos["stereo"]->getType()));
 
@@ -126,14 +125,14 @@ namespace tl
                 vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
                 colorBlendAttachment.blendEnable = VK_FALSE;
                 cb.attachments.push_back(colorBlendAttachment);
-            
+
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
 
                 //
                 // These are for static stencils
                 //
-                ds.stencilTestEnable = VK_TRUE;            
+                ds.stencilTestEnable = VK_TRUE;
                 VkStencilOpState stencilOp = {};
                 stencilOp.failOp = VK_STENCIL_OP_KEEP;
                 stencilOp.passOp = VK_STENCIL_OP_REPLACE;
@@ -166,9 +165,9 @@ namespace tl
                                p.shaders["wipe"], p.vbos["stereo"],
                                cb, ds);
             }
-            
+
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-            
+
             _createBindingSet(p.shaders["wipe"]);
 
             // Prepare shaders
@@ -179,13 +178,13 @@ namespace tl
                                           vlk::kShaderVertex);
             _bindDescriptorSets(pipelineLayoutName, "wipe");
 
-            
+
             ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
             _vkDraw("stereo");
 
             // Draw video
             pipelineLayoutName = "stereo_image1";
-            
+
             if (p.vbos["video"])
             {
                 p.vbos["video"]->copy(convert(geom::box(boxes[0], true),
@@ -196,7 +195,7 @@ namespace tl
                 vlk::ColorBlendStateInfo cb;
                 vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
                 cb.attachments.push_back(colorBlendAttachment);
-            
+
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
 
@@ -218,7 +217,7 @@ namespace tl
                 vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
 #else
                 ds.stencilTestEnable = VK_TRUE;
-            
+
                 //
                 // These are for static stencils
                 //
@@ -233,7 +232,7 @@ namespace tl
                 ds.front = stencilOp;
                 ds.back = stencilOp;
 #endif
-            
+
                 createPipeline("stereo_image1",
                                pipelineLayoutName,
                                p.fbo->getClearRenderPass(),
@@ -268,29 +267,29 @@ namespace tl
 
             // Draw second image to "stereo_image" buffer
             if (videoData.size() > 1 && boxes.size() > 1)
-            {   
+            {
                 math::Matrix4x4f saved = getTransform();
                 const math::Matrix4x4f mvp = saved * math::translate(math::Vector3f(
                                                                    eyeSeparation, 0.F, 0.F));
                 setTransform(mvp);
-            
+
                 p.buffers["stereo_image"]->transitionToColorAttachment(p.cmd);
-                
+
                 _drawVideo(
-                    p.buffers["stereo_image"], "display", 
+                    p.buffers["stereo_image"], "display",
                     videoData[1], boxes[1],
                     !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
-                    !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());  
-                
+                    !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
+
                 p.buffers["stereo_image"]->transitionToShaderRead(p.cmd);
-                
+
                 setTransform(saved);
             }
 
             // END FIRST RENDER PASS
-            
+
             // ----- SECOND RENDER PASS OF RIGHT VIDEO
-            
+
             p.fbo->beginLoadRenderPass(p.cmd);
 
 
@@ -313,15 +312,13 @@ namespace tl
                 box.min.x = 1.0;
                 mesh = geom::checkers(box, size);
             }
-            
+
             p.vbos["stereo"] =
                 vlk::VBO::create(mesh.triangles.size() * 3,
                                  vlk::VBOType::Pos2_F32);
-            p.vaos["stereo"] = vlk::VAO::create(ctx);
-            
             p.vbos["stereo"]->copy(convert(mesh,
                                            p.vbos["stereo"]->getType()));
-            
+
 
             pipelineLayoutName = "stereo2_stencil";
             {
@@ -329,10 +326,10 @@ namespace tl
                 vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
                 colorBlendAttachment.blendEnable = VK_FALSE;
                 cb.attachments.push_back(colorBlendAttachment);
-            
+
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
-                
+
 #if USE_DYNAMIC_STENCILS
                 ctx.vkCmdSetStencilTestEnableEXT(p.cmd, VK_TRUE);
                 ctx.vkCmdSetStencilOpEXT(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK,
@@ -348,7 +345,7 @@ namespace tl
                 vkCmdSetStencilReference(p.cmd, VK_STENCIL_FACE_FRONT_AND_BACK, 1);
 #else
                 ds.stencilTestEnable = VK_TRUE;
-            
+
                 VkStencilOpState stencilOp = {};
                 stencilOp.failOp = VK_STENCIL_OP_KEEP;
                 stencilOp.passOp = VK_STENCIL_OP_REPLACE;
@@ -366,9 +363,9 @@ namespace tl
                                p.shaders["wipe"], p.vbos["stereo"],
                                cb, ds);
             }
-            
+
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-            
+
             _createBindingSet(p.shaders["wipe"]);
             color = image::Color4f(1.F, 0.F, 0.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -381,10 +378,10 @@ namespace tl
 
             ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
             _vkDraw("stereo");
-            
+
             // Draw video
             pipelineLayoutName = "stereo_image2";
-            
+
             if (p.vbos["video"])
             {
                 p.vbos["video"]->copy(convert(geom::box(boxes[1], true),
@@ -395,7 +392,7 @@ namespace tl
                 vlk::ColorBlendStateInfo cb;
                 vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
                 cb.attachments.push_back(colorBlendAttachment);
-            
+
                 vlk::DepthStencilStateInfo ds;
                 ds.depthTestEnable = VK_FALSE;
 
@@ -415,7 +412,7 @@ namespace tl
                                          1);
 #else
                 ds.stencilTestEnable = VK_TRUE;
-            
+
                 VkStencilOpState stencilOp = {};
                 stencilOp.failOp = VK_STENCIL_OP_KEEP;
                 stencilOp.passOp = VK_STENCIL_OP_KEEP;
@@ -426,7 +423,7 @@ namespace tl
                 stencilOp.reference = 1;
                 ds.front = ds.back = stencilOp;
 #endif
-                
+
                 createPipeline("stereo_image2",
                                pipelineLayoutName,
                                p.fbo->getLoadRenderPass(),
@@ -434,10 +431,10 @@ namespace tl
                                p.vbos["video"],
                                cb, ds);
             }
-            
+
 
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
-            
+
             _createBindingSet(p.shaders["overlay"]);
             color = image::Color4f(1.F, 1.F, 1.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
@@ -451,15 +448,15 @@ namespace tl
             // If I draw with colors, the pattern is being drawn.
             ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);
             _vkDraw("video");
-            
+
             p.fbo->endRenderPass(p.cmd);
             // END SECOND RENDER PASS
-            
+
             p.fbo->transitionToShaderRead(p.cmd);
-            
+
             // Transition buffer back to color attachment
             p.buffers["stereo_image"]->transitionToColorAttachment(p.cmd);
-           
+
         }
 
     } // namespace timeline_vlk

@@ -923,6 +923,22 @@ namespace tl
         {
             TLRENDER_P();
 
+            // ----------------------------------------------------------------
+            //  Pool initialization – create the pool on first use.
+            //
+            //  The pool is a member of Private:
+            //    std::shared_ptr<vlk::VAOPool> vaoPool;
+            //
+            //  Call  p.vaoPool->bind(p.frameIndex)  once per frame, e.g. in
+            //  Render::begin() - NOT here
+            // ----------------------------------------------------------------
+            if (!p.vaoPool)
+            {
+                VkDeviceSize slotSize =
+                    static_cast<VkDeviceSize>(64 * memory::megabyte);
+                p.vaoPool = vlk::VAOPool::create(ctx, slotSize);
+            }
+
             for (int i = 0; i < vlk::MAX_FRAMES_IN_FLIGHT; ++i)
             {
                 p.garbage[i].pipelines.reserve(20);
@@ -987,6 +1003,7 @@ namespace tl
             p.fbo = fbo;
             p.renderPass = fbo->getClearRenderPass();
             p.frameIndex = frameIndex;
+            p.vaoPool->bind(frameIndex);
 
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
             const VkColorComponentFlags allMask[] =
@@ -1467,20 +1484,16 @@ namespace tl
             {
                 p.vbos["image"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["image"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["rect"] || p.vbos["rect"]->getSize() != 6)
             {
                 p.vbos["rect"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32);
-                p.vaos["rect"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["text"])
             {
                 p.vbos["text"] = vlk::VBO::create(2 * 3,
                                                   vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["text"] = vlk::VAO::create(ctx);
-
                 {
                     const std::string pipelineName = "text";
                     const std::string pipelineLayoutName = "text";
@@ -1495,19 +1508,16 @@ namespace tl
             {
                 p.vbos["texture"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["texture"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["wipe"] || p.vbos["wipe"]->getSize() != 3)
             {
                 p.vbos["wipe"] =
                     vlk::VBO::create(1 * 3, vlk::VBOType::Pos2_F32);
-                p.vaos["wipe"] = vlk::VAO::create(ctx);
             }
             if (!p.vbos["video"] || p.vbos["video"]->getSize() != 6)
             {
                 p.vbos["video"] =
                     vlk::VBO::create(2 * 3, vlk::VBOType::Pos2_F32_UV_U16);
-                p.vaos["video"] = vlk::VAO::create(ctx);
             }
 
             if (renderOptions.clear)

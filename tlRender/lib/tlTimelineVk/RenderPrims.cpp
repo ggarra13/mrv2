@@ -56,11 +56,6 @@ namespace tl
                 p.vbos[meshName]->copy(convert(mesh, type));
             }
 
-            if (!p.vaos[meshName] && p.vbos[meshName])
-            {
-                p.vaos[meshName] = vlk::VAO::create(ctx);
-                p.vaos[meshName]->bind(p.frameIndex);
-            }
         }
 
         void Render::_uploadMesh(const std::string& meshName,
@@ -80,12 +75,6 @@ namespace tl
             }
             if (p.vbos[meshName])
                 p.vbos[meshName]->copy(convert(mesh, vlk::VBOType::Pos2_F32_UV_U16));
-
-            if (!p.vaos[meshName] && p.vbos[meshName])
-            {
-                p.vaos[meshName] = vlk::VAO::create(ctx);
-                p.vaos[meshName]->bind(p.frameIndex);
-            }
         }
 
         void Render::_create3DMesh(const std::string& meshName,
@@ -135,12 +124,6 @@ namespace tl
             }
             if (p.vbos[meshName])
                 p.vbos[meshName]->copy(convert(mesh, type));
-
-            if (!p.vaos[meshName] && p.vbos[meshName])
-            {
-                p.vaos[meshName] = vlk::VAO::create(ctx);
-                p.vaos[meshName]->bind(p.frameIndex);
-            }
         }
 
         void Render::_emitMeshDraw(const std::string& pipelineLayoutName,
@@ -320,10 +303,12 @@ namespace tl
                 "transform.mvp", transform, vlk::kShaderVertex);
             _bindDescriptorSets(pipelineLayoutName, "colorMesh");
 
-            if (p.vaos["colorMesh"] && p.vbos["colorMesh"])
-            {
-                _vkDraw("colorMesh");
-            }
+            // Upload the vertex data into the pool and draw immediately.
+            // The pool selects a slot with enough room, overflowing to a new
+            // 1 GB buffer when the current one is full.
+            const vlk::VAOAllocation alloc =
+                p.vaoPool->upload(p.vbos["colorMesh"]);
+            p.vaoPool->draw(p.cmd, alloc);
         }
 
 
@@ -344,11 +329,6 @@ namespace tl
             if (vbos["text"])
             {
                 vbos["text"]->copy(convert(mesh, vbos["text"]->getType()));
-            }
-            if (!vaos["text"] && vbos["text"])
-            {
-                vaos["text"] = vlk::VAO::create(ctx);
-                vaos["text"]->bind(frameIndex);
             }
         }
 

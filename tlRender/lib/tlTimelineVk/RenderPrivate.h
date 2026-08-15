@@ -23,6 +23,7 @@ extern "C"
 #include <tlVk/Shader.h>
 #include <tlVk/Texture.h>
 #include <tlVk/TextureAtlas.h>
+#include <tlVk/VAOPool.h>
 
 #include <tlCore/StatsSystem.h>
 
@@ -56,7 +57,7 @@ namespace tl
         std::string vertexPBR();
         std::string fragmentPBR();
 
-        
+
         std::string vertexSource();
         std::string vertex2Source();
         std::string vertex2NoUVsSource();
@@ -76,11 +77,11 @@ namespace tl
 
         // For HDR peak detection
         std::string computeHDRPeakDetection();
-        
+
         // For pixel conversions
         std::string computeRGB_F16_To_RGBA_F16();
         std::string computeRGB_F32_To_RGBA_F32();
-        
+
         // For annotations
         std::string softFragmentSource();
         std::string hardFragmentSource();
@@ -147,7 +148,7 @@ namespace tl
             pl_shader shader;
             pl_shader_obj state = nullptr;
             const pl_shader_res* res = nullptr;
-            
+
             std::vector<pl_shader_var> pcUBOvars;
             void* pcUBOData = nullptr;
             size_t pcUBOSize = 0;
@@ -155,14 +156,14 @@ namespace tl
             // Peak detection variables
             float maxPeak = 0;
             float avgPeak = 0;
-            
-            
+
+
             // Vulkan variables
             Fl_Vk_Context& ctx;
             std::vector<VkFence> ssboFences;
             std::vector<VkCommandBuffer> ssboCmds;
             VkCommandPool ssboCmdPool = VK_NULL_HANDLE;
-            
+
             std::vector<std::shared_ptr<vlk::Texture> > textures;
         };
 #endif
@@ -183,7 +184,7 @@ namespace tl
             timeline::OCIOOptions ocioOptions;
             timeline::LUTOptions lutOptions;
             timeline::HDROptions hdrOptions;
-            timeline::ShaderOptions shaderOptions; 
+            timeline::ShaderOptions shaderOptions;
             unsigned bindingIndex = 7;
             timeline::RenderOptions renderOptions;
             std::string oldSource;
@@ -230,7 +231,7 @@ namespace tl
             std::shared_ptr<vlk::Texture> blueNoiseTexture;
             std::map<image::GlyphInfo, vlk::TextureAtlasID> glyphIDs;
             std::unordered_map<std::string, std::shared_ptr<vlk::VBO> > vbos;
-            std::unordered_map<std::string, std::shared_ptr<vlk::VAO> > vaos;
+            std::shared_ptr<vlk::VAOPool> vaoPool;
 
             std::chrono::steady_clock::time_point timer;
             struct Stats

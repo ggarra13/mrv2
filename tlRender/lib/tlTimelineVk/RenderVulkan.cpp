@@ -27,12 +27,12 @@ namespace tl
         void Render::_createBindingSet(const std::shared_ptr<vlk::Shader>& shader)
         {
             TLRENDER_P();
-            
+
             auto bindingSet = shader->createBindingSet();
             p.garbage[p.frameIndex].bindingSets.push_back(bindingSet);
         }
-        
-        
+
+
         VkPipelineLayout Render::_createPipelineLayout(
             const std::string& pipelineLayoutName,
             const std::shared_ptr<vlk::Shader> shader)
@@ -44,7 +44,7 @@ namespace tl
             {
                 p.garbage[p.frameIndex].pipelineLayouts.push_back(pipelineLayout);
             }
-            
+
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};
             pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
             pPipelineLayoutCreateInfo.pNext = NULL;
@@ -62,14 +62,14 @@ namespace tl
                 pPipelineLayoutCreateInfo.pushConstantRangeCount = 1;
                 pPipelineLayoutCreateInfo.pPushConstantRanges = &pushConstantRange;
             }
-            
+
             VkResult result = vkCreatePipelineLayout(ctx.device, &pPipelineLayoutCreateInfo, NULL, &pipelineLayout);
             VK_CHECK(result);
-            
+
             p.pipelineLayouts[pipelineLayoutName] = pipelineLayout;
             return pipelineLayout;
         }
-        
+
         void Render::createPipeline(const std::string& pipelineName,
                                     const std::string& pipelineLayoutName,
                                     const VkRenderPass renderPass,
@@ -80,7 +80,7 @@ namespace tl
                                     const vlk::MultisampleStateInfo& ms)
         {
             TLRENDER_P();
-            
+
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
             {
@@ -90,7 +90,7 @@ namespace tl
             }
 
             VkDevice device = ctx.device;
-            
+
             // Elements of new Pipeline (fill with mesh info)
             vlk::VertexInputStateInfo vi;
             vi.bindingDescriptions = mesh->getBindingDescription();
@@ -110,7 +110,7 @@ namespace tl
             dynamicState.dynamicStates = {
                 VK_DYNAMIC_STATE_VIEWPORT,
                 VK_DYNAMIC_STATE_SCISSOR,
-                
+
 #if USE_DYNAMIC_RGBA_WRITE_MASKS
                 // For dynamic R/G/B/A masks
                 VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT,
@@ -188,7 +188,7 @@ namespace tl
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
             p.currentPipeline = pipelineName;
         }
-        
+
         void Render::createPipeline(
             const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
             const std::string& pipelineName,
@@ -207,7 +207,7 @@ namespace tl
 
             const auto& shader = p.shaders[shaderName];
             const auto& mesh = p.vbos[meshName];
-            
+
             vlk::ColorBlendStateInfo cb;
             vlk::ColorBlendAttachmentStateInfo colorBlendAttachment;
             if (enableBlending)
@@ -225,18 +225,18 @@ namespace tl
                 colorBlendAttachment.blendEnable = VK_FALSE;
             }
             cb.attachments.push_back(colorBlendAttachment);
-            
+
             vlk::DepthStencilStateInfo ds;
             ds.depthTestEnable = fbo->hasDepth() ? VK_TRUE : VK_FALSE;
             ds.depthWriteEnable = fbo->hasDepth() ? VK_TRUE : VK_FALSE;
             ds.stencilTestEnable = fbo->hasStencil() ? VK_TRUE : VK_FALSE;
-            
+
             vlk::MultisampleStateInfo ms;
             ms.rasterizationSamples = fbo->getSampleCount();
 
             createPipeline(pipelineName, pipelineLayoutName,
                            fbo->getLoadRenderPass(), shader, mesh, cb, ds, ms);
-            
+
             fbo->setupViewportAndScissor(p.cmd);
             if (p.clipRectEnabled)
             {
@@ -250,35 +250,35 @@ namespace tl
 
             if (p.currentPipeline == pipelineName)
                 return;
-            
+
             const auto& pair = p.pipelines[pipelineName];
             VkPipeline pipeline = pair.second;
 
             // Enable the pipeline.
             vkCmdBindPipeline(p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
             p.currentPipeline = pipelineName;
-            
+
             ++(p.currentStats.pipelineChanges);
         }
-        
+
         void Render::_bindDescriptorSets(
             const std::string& pipelineLayoutName, const std::string& shaderName)
         {
             TLRENDER_P();
-            
+
             VkDescriptorSet descriptorSet = p.shaders[shaderName]->getDescriptorSet();
-            
+
             vkCmdBindDescriptorSets(
                 p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
                 p.pipelineLayouts[pipelineLayoutName], 0, 1,
                 &descriptorSet, 0, nullptr);
         }
-        
+
         void Render::_bindComputeDescriptorSets(
             const std::string& pipelineLayoutName, const std::string& shaderName)
         {
             TLRENDER_P();
-            
+
             VkDescriptorSet descriptorSet = p.compute[shaderName]->getDescriptorSet();
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
@@ -286,20 +286,24 @@ namespace tl
                 pipelineLayout = _createPipelineLayout(pipelineLayoutName,
                                                        p.compute[shaderName]);
             }
-            
+
             vkCmdBindDescriptorSets(
                 p.cmd, VK_PIPELINE_BIND_POINT_COMPUTE,
                 p.pipelineLayouts[pipelineLayoutName], 0, 1,
                 &descriptorSet, 0, nullptr);
         }
-        
+
 
         void Render::_vkDraw(const std::string& meshName)
         {
             TLRENDER_P();
-            
-            p.vaos[meshName]->bind(p.frameIndex);
-            p.vaos[meshName]->draw(p.cmd, p.vbos[meshName]);
+
+            // Upload the vertex data into the pool and draw immediately.
+            // The pool selects a slot with enough room, overflowing to a new
+            // 1 GB buffer when the current one is full.
+            const vlk::VAOAllocation alloc =
+                p.vaoPool->upload(p.vbos[meshName]);
+            p.vaoPool->draw(p.cmd, alloc);
         }
 
         VkRenderPass Render::getRenderPass() const
