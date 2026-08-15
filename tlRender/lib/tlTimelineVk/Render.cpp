@@ -1155,7 +1155,12 @@ namespace tl
                 _createBindingSet(p.shaders["text"]);
             }
 
-            // Shader to read one mesh with 3 vertex and uvs and a simple textue.
+            // Shader used to draw a textured quad modulated by a push color.
+            // "texture", "overlay", and "dissolve" all use the same vertex
+            // source (vertexSource()), the same fragment source
+            // (textureFragmentSource()), and the same uniform/texture/push
+            // setup, so build the pipeline once and share it below instead of
+            // creating three identical pipelines.
             if (!p.shaders["texture"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -1177,6 +1182,8 @@ namespace tl
 
                 _createBindingSet(p.shaders["texture"]);
             }
+            p.shaders["overlay"] = p.shaders["texture"];
+            p.shaders["dissolve"] = p.shaders["texture"];
 
             // Shader used to read an RGB or YUV image
             if (!p.shaders["image"])
@@ -1204,27 +1211,6 @@ namespace tl
 
                 _createBindingSet(p.shaders["image"]);
             }
-            if (!p.shaders["overlay"])
-            {
-#if USE_PRECOMPILED_SHADERS
-                p.shaders["overlay"] = vlk::Shader::create(
-                    ctx,
-                    Vertex3_spv,
-                    Vertex3_spv_len,
-                    textureFragment_spv,
-                    textureFragment_spv_len, "overlay");
-#else
-                p.shaders["overlay"] = vlk::Shader::create(
-                    ctx, vertexSource(), textureFragmentSource(), "overlay");
-#endif
-
-                p.shaders["overlay"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["overlay"]->addFBO("textureSampler");
-                p.shaders["overlay"]->addPush("color", color, vlk::kShaderFragment);
-
-                _createBindingSet(p.shaders["overlay"]);
-            }
             if (!p.shaders["difference"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -1242,8 +1228,8 @@ namespace tl
 
                 p.shaders["difference"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["difference"]->addFBO("textureSampler");
-                p.shaders["difference"]->addFBO("textureSamplerB");
+                p.shaders["difference"]->addTexture("textureSampler");
+                p.shaders["difference"]->addTexture("textureSamplerB");
 
                 _createBindingSet(p.shaders["difference"]);
             }
@@ -1264,8 +1250,8 @@ namespace tl
 
                 p.shaders["multiply"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["multiply"]->addFBO("textureSampler");
-                p.shaders["multiply"]->addFBO("textureSamplerB");
+                p.shaders["multiply"]->addTexture("textureSampler");
+                p.shaders["multiply"]->addTexture("textureSamplerB");
 
                 _createBindingSet(p.shaders["multiply"]);
             }
@@ -1286,30 +1272,10 @@ namespace tl
 
                 p.shaders["add"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["add"]->addFBO("textureSampler");
-                p.shaders["add"]->addFBO("textureSamplerB");
+                p.shaders["add"]->addTexture("textureSampler");
+                p.shaders["add"]->addTexture("textureSamplerB");
 
                 _createBindingSet(p.shaders["add"]);
-            }
-            if (!p.shaders["dissolve"])
-            {
-#if USE_PRECOMPILED_SHADERS
-                p.shaders["dissolve"] = vlk::Shader::create(
-                    ctx,
-                    Vertex3_spv,
-                    Vertex3_spv_len,
-                    textureFragment_spv,
-                    textureFragment_spv_len, "dissolve");
-#else
-                p.shaders["dissolve"] = vlk::Shader::create(
-                    ctx, vertexSource(), textureFragmentSource(), "dissolve");
-#endif
-                p.shaders["dissolve"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["dissolve"]->addFBO("textureSampler");
-                p.shaders["dissolve"]->addPush(
-                    "color", color, vlk::kShaderFragment);
-                _createBindingSet(p.shaders["dissolve"]);
             }
             if (!p.shaders["hard"])
             {
@@ -1322,7 +1288,7 @@ namespace tl
                     hardFragment_spv_len, "hard");
 #else
                 p.shaders["hard"] = vlk::Shader::create(
-                    ctx, vertex2Source(), softFragmentSource(), "hard");
+                    ctx, vertex2Source(), hardFragmentSource(), "hard");
 #endif
                 p.shaders["hard"]->createUniform(
                     "transform.mvp", transform, vlk::kShaderVertex);
@@ -1452,7 +1418,7 @@ namespace tl
                                                                           "hdr_peak_detection");
 #endif
                     hdr::PeakData peakData;
-                    p.compute["hdr_peak_detection"]->addFBO("img", vlk::kShaderCompute);
+                    p.compute["hdr_peak_detection"]->addTexture("img", vlk::kShaderCompute);
                     p.compute["hdr_peak_detection"]->addSSBO("PeakData", peakData, vlk::kShaderCompute);
                     _createBindingSet(p.compute["hdr_peak_detection"]);
                     p.compute["hdr_peak_detection"]->createComputePipeline();
@@ -3201,7 +3167,7 @@ namespace tl
 
                 p.shaders["display"]->createUniform(
                     "transform.mvp", p.transform, vlk::kShaderVertex);
-                p.shaders["display"]->addFBO("textureSampler");
+                p.shaders["display"]->addTexture("textureSampler");
 
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData && p.ocioData->icsDesc)

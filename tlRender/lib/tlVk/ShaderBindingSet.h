@@ -24,9 +24,9 @@ namespace tl
         struct ShaderBindingSet
         {
             std::string shaderName;
-            
+
             std::shared_ptr<vlk::DescriptorSetLayout> descriptorSetLayout;
-            
+
             // MAX_FRAMES_PER_FLIGHT objects
             std::vector<VkDescriptorSet> descriptorSets;
             std::vector<VkDescriptorPool> descriptorPools;
@@ -37,25 +37,18 @@ namespace tl
                 std::vector<VkBuffer> buffers;
                 std::vector<VkDescriptorBufferInfo> infos;
                 std::vector<VmaAllocation> allocation;
-                
+
                 VkDescriptorSetLayoutBinding layoutBinding;
                 std::size_t size = 0;
             };
             std::map<std::string, UniformParameter> uniforms;
-            
+
             struct TextureParameter
             {
                 uint32_t binding;
                 VkShaderStageFlags stageFlags;
             };
             std::map<std::string, TextureParameter> textures;
-
-            struct FBOParameter
-            {
-                uint32_t binding;
-                VkShaderStageFlags stageFlags;
-            };
-            std::map<std::string, FBOParameter> fbos;
 
             struct StorageBufferParameter {
                 std::vector<std::shared_ptr<vlk::Buffer> > buffers;
@@ -73,7 +66,7 @@ namespace tl
                 VkShaderStageFlags stageFlags;
             };
             std::map<std::string, StorageImageParameter> storageImages;
-            
+
             struct SSBOParameter
             {
                 std::vector<VkBuffer> buffers;
@@ -86,7 +79,7 @@ namespace tl
 
             VkDevice device;
             VmaAllocator allocator;
-            
+
             ShaderBindingSet(VkDevice device, VmaAllocator vmaAllocator) :
                 device(device),
                 allocator(vmaAllocator)
@@ -120,7 +113,7 @@ namespace tl
                         param.buffers[frameIndex] = vlk::Buffer::create(ctx, size);
                         param.currentSizes[frameIndex] = size;
 
-                        // 2. CRITICAL: Because the VkBuffer handle changed, 
+                        // 2. CRITICAL: Because the VkBuffer handle changed,
                         // we MUST update the Descriptor Set for this frame.
                         VkDescriptorBufferInfo bufferInfo{};
                         bufferInfo.buffer = param.buffers[frameIndex]->getBuffer();
@@ -140,7 +133,7 @@ namespace tl
                     // 3. Upload the data (this handles the map/memcpy/unmap internally)
                     param.buffers[frameIndex]->upload(data);
                 }
-                                   
+
             void updateStorageImage(
                 const std::string& name,
                 VkDescriptorSet descriptorSet,
@@ -153,8 +146,8 @@ namespace tl
                     VkDescriptorImageInfo imageInfo{};
                     imageInfo.imageView   = texture->getImageView();
                     // Storage images do not use samplers in the shader (imageStore/imageLoad)
-                    imageInfo.sampler     = VK_NULL_HANDLE; 
-                    imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL; 
+                    imageInfo.sampler     = VK_NULL_HANDLE;
+                    imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
 
                     VkWriteDescriptorSet write{};
                     write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -184,7 +177,7 @@ namespace tl
                     allocator, it->second.allocation[frameIndex], &mapped);
                 memcpy(mapped, data, size);
                 vmaUnmapMemory(allocator, it->second.allocation[frameIndex]);
-                
+
                 // We need to update the bufferInfo in the descriptor set for the
                 // current frame.  Alternatively, you could use dynamic uniform
                 // buffers.
@@ -193,7 +186,7 @@ namespace tl
                 // For this approach, we re-write the descriptor set for this
                 // binding and frame
                 VkDescriptorBufferInfo bufferInfo = it->second.infos[frameIndex];
-                
+
                 VkWriteDescriptorSet write{};
                 write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                 write.dstSet = descriptorSet;
@@ -202,7 +195,7 @@ namespace tl
                 write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
                 write.descriptorCount = 1;
                 write.pBufferInfo = &bufferInfo;
-                
+
                 vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
             }
 
@@ -228,14 +221,14 @@ namespace tl
                     memcpy(mapped, data, size);
                     vmaUnmapMemory(allocator,
                                    it->second.allocation[frameIndex]);
-                
+
                     auto descriptorSet = descriptorSets[frameIndex];
 
                     // Update the set for this frame
                     // For this approach, we re-write the descriptor set for this
                     // binding and frame
                     VkDescriptorBufferInfo bufferInfo = it->second.infos[frameIndex];
-                
+
                     VkWriteDescriptorSet write{};
                     write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                     write.dstSet = descriptorSet;
@@ -259,7 +252,7 @@ namespace tl
                         "Texture binding not found: " + name);
                 if (!texture)
                     throw std::runtime_error("Null texture for: " + name);
-                
+
                 VkDescriptorImageInfo imageInfo{};
                 imageInfo.sampler = texture->getSampler();
                 imageInfo.imageView = texture->getImageView();
@@ -274,7 +267,7 @@ namespace tl
                     VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
                 write.descriptorCount = 1;
                 write.pImageInfo = &imageInfo;
-                
+
                 vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
             }
 
@@ -282,11 +275,11 @@ namespace tl
                 VkDescriptorSet descriptorSet,
                 const std::shared_ptr<OffscreenBuffer>& fbo)
             {
-                auto it = fbos.find(name);
-                if (it == fbos.end())
+                auto it = textures.find(name);
+                if (it == textures.end())
                     throw std::runtime_error("FBO binding not found: " + name);
                 if (!fbo)
-                    throw std::runtime_error("Null texture for: " + name);
+                    throw std::runtime_error("updateFBO: Null FBO for: " + name);
 
                 uint32_t binding = it->second.binding;
 
@@ -308,7 +301,7 @@ namespace tl
 
                 vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
             }
-            
+
             void destroy()
                 {
                     for (auto& [_, ubo] : uniforms)
@@ -321,7 +314,7 @@ namespace tl
                                                  ubo.allocation[i]);
                         }
                     }
-                    
+
                     for (auto& [_, sb] : storageBuffers)
                     {
                         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
@@ -329,7 +322,7 @@ namespace tl
                             sb.buffers[i].reset();
                         }
                     }
-                    
+
                     for (auto& [_, ssbo] : ssbos)
                     {
                         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
@@ -352,7 +345,6 @@ namespace tl
 
                     uniforms.clear();
                     textures.clear();
-                    fbos.clear();
                     storageBuffers.clear();
                     storageImages.clear();
                 }
@@ -368,7 +360,7 @@ namespace tl
                     }
 
                     VkBuffer ssbo_buffer = it->second.buffers[frameIndex];
-                    
+
                     // Reset SSBO to zero
                     VkBufferMemoryBarrier barrier = {
                         VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER};
@@ -392,7 +384,7 @@ namespace tl
                                          0, 0, nullptr, 1, &barrier, 0,
                                          nullptr);
                 }
-            
+
             void* mapSSBO(const std::string& name,
                           const int frameIndex)
                 {
@@ -407,7 +399,7 @@ namespace tl
                                  &ptr);
                     return ptr;
                 }
-            
+
             void unmapSSBO(const std::string& name,
                            const int frameIndex)
                 {
@@ -419,13 +411,13 @@ namespace tl
                     vmaUnmapMemory(allocator,
                                    it->second.allocation[frameIndex]);
                 }
-            
-            
+
+
             VkDescriptorPool getDescriptorPool(size_t frameIndex) const
             {
                 return descriptorPools.at(frameIndex);
             }
-            
+
             VkDescriptorSet getDescriptorSet(size_t frameIndex) const
             {
                 return descriptorSets.at(frameIndex);

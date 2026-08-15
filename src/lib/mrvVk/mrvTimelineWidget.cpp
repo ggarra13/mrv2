@@ -711,7 +711,7 @@ namespace mrv
                         math::Matrix4x4f pm;
                         p.shader->createUniform(
                             "transform.mvp", pm, vlk::kShaderVertex);
-                        p.shader->addFBO("textureSampler");
+                        p.shader->addTexture("textureSampler");
                         p.shader->addPush("opacity", 1.0, vlk::kShaderFragment);
                         p.shader->createBindingSet();
                     }

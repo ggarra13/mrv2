@@ -50,11 +50,11 @@ namespace tl
         class Shader : public std::enable_shared_from_this<Shader>
         {
             TLRENDER_NON_COPYABLE(Shader);
-            
+
         public:
             Shader(Fl_Vk_Context& ctx);
             ~Shader();
-            
+
             void _init(const std::string& computeSource,
                        const std::string& name);
             void _init(const uint32_t* computeBytes,
@@ -77,21 +77,21 @@ namespace tl
                 Fl_Vk_Context& ctx,
                 const std::string& computeSource,
                 const std::string& name);
-            
+
             //! Create a new compute shader from SPIRV.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
                 const uint32_t* computeBytes,
                 const uint32_t computeLength,
                 const std::string& name);
-            
+
             //! Create a new vertex and fragment shader from source.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
                 const std::string& vertexSource,
                 const std::string& fragmentSource,
                 const std::string& name);
-            
+
             //! Create a new vertex shader from SPIRV and fragment from source.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
@@ -99,7 +99,7 @@ namespace tl
                 const uint32_t vertexLength,
                 const std::string& fragmentSource,
                 const std::string& name);
-            
+
             //! Create a new vertex and fragment shaders from SPIRV.
             static std::shared_ptr<Shader> create(
                 Fl_Vk_Context& ctx,
@@ -120,13 +120,13 @@ namespace tl
 
             //! Get the vertex source if available.
             const std::string& getVertexSource() const;
-            
+
             //! Get the fragment source if available.
             const std::string& getFragmentSource() const;
-            
+
             //! Get the compute source if available.
             const std::string& getComputeSource() const;
-            
+
             //! Get the Vulkan description set for current frame.
             const VkDescriptorSet getDescriptorSet() const;
 
@@ -148,7 +148,7 @@ namespace tl
             void createUniform(
                 const std::string&, const T& value,
                 const ShaderFlags stageFlags = kShaderFragment);
-            
+
             // Create uniform UBO from a size
             inline void createUniformData(const std::string&, const size_t size,
                                    const ShaderFlags stageFlags = kShaderFragment);
@@ -173,7 +173,7 @@ namespace tl
             //! Createa a push block given a size.
             void createPush(const std::string& name, const std::size_t size,
                             const ShaderFlags stageFlags);
-            
+
             //! Get the push stage flags.
             inline VkShaderStageFlags getPushStageFlags() { return pushStageFlags; }
 
@@ -190,11 +190,6 @@ namespace tl
                 const std::string& name,
                 const std::shared_ptr<Texture>& texture,
                 const ShaderFlags stageFlags = kShaderFragment);
-            
-            //! Add and FBO to list of shader parameters.
-            void addFBO(
-                const std::string& name,
-                const ShaderFlags stageFlags = kShaderFragment);
 
             //! Attach an FBO and updata shader parameters.
             void setFBO(
@@ -203,7 +198,7 @@ namespace tl
                 const ShaderFlags stageFlags = kShaderFragment);
 
             //! Add a Storage Buffer to shader.
-            void addStorageBuffer(const std::string& name, 
+            void addStorageBuffer(const std::string& name,
                                   const ShaderFlags stageFlags = kShaderCompute);
 
             //! Attach an Storage Buffer and updata shader parameters.
@@ -211,11 +206,11 @@ namespace tl
                 const std::string& name,
                 const uint8_t* data,
                 const std::size_t size);
-            
+
             //! Add a Storage Image to shader.
-            void addStorageImage(const std::string& name, 
+            void addStorageImage(const std::string& name,
                                  const ShaderFlags stageFlags = kShaderCompute);
-            
+
             //! Attach and upload a texture to shader parameters.
             void setStorageImage(
                 const std::string& name,
@@ -241,7 +236,7 @@ namespace tl
 
             //! Unmap the SSBO data.
             void unmapSSBO(const std::string& name);
-            
+
             //! Create a new shader binding set.
             std::shared_ptr<ShaderBindingSet> createBindingSet();
 
@@ -250,7 +245,7 @@ namespace tl
 
             //! Create a pipelineLayout
             void createPipelineLayout();
-            
+
             //! Create a compute pipeline from this shader.
             //! Must be called after createBindingSet.
             void createComputePipeline();
@@ -272,14 +267,14 @@ namespace tl
 
             //! Get object count.
             static size_t getObjectCount();
-            
+
         private:
             void _createVertexShader(const std::string&);
             void _createFragmentShader(const std::string&);
             void _createComputeShader(const std::string&);
-            
+
             Fl_Vk_Context& ctx;
-            
+
             std::string shaderName = "Shader";
 
             //! Counter used in binding UBOs, Textures and FBOs.
@@ -305,19 +300,16 @@ namespace tl
             typedef ShaderBindingSet::TextureParameter TextureBinding;
             std::map<std::string, TextureBinding> textureBindings;
 
-            typedef ShaderBindingSet::FBOParameter FBOBinding;
-            std::map<std::string, FBOBinding> fboBindings;
-
             // Add these maps to your Shader class members
             typedef ShaderBindingSet::StorageBufferParameter StorageBufferBinding;
             std::map<std::string, StorageBufferBinding> storageBufferBindings;
-            
+
             typedef ShaderBindingSet::StorageImageParameter StorageImageBinding;
             std::map<std::string, StorageImageBinding> storageImageBindings;
 
             typedef ShaderBindingSet::SSBOParameter SSBOBinding;
             std::map<std::string, SSBOBinding> ssbos;
-            
+
             std::shared_ptr<ShaderBindingSet> activeBindingSet;
 
             TLRENDER_PRIVATE();

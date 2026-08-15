@@ -659,7 +659,7 @@ namespace mrv
                     // Create parameters for shader.
                     vk.shader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
-                    vk.shader->addFBO("textureSampler"); // default is fragment
+                    vk.shader->addTexture("textureSampler"); // default is fragment
                     float opacity = 1.F;
                     vk.shader->addPush("opacity", opacity, vlk::kShaderFragment);
                     vk.shader->createBindingSet();
@@ -682,7 +682,7 @@ namespace mrv
                         "vk.annotationShader");
                     vk.annotationShader->createUniform(
                         "transform.mvp", mvp, vlk::kShaderVertex);
-                    vk.annotationShader->addFBO("textureSampler");
+                    vk.annotationShader->addTexture("textureSampler");
                     int channels = 0; // Color Channel
                     vk.annotationShader->createUniform("channels", channels);
                     vk.annotationShader->createBindingSet();
