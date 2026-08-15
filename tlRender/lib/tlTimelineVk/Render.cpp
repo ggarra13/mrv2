@@ -1063,6 +1063,12 @@ namespace tl
             const image::Color4f color(1.F, 1.F, 1.F);
 
             // Shader used to draw a 2D mesh with a texture * color
+            //
+            // "rect" and "wipe" use the same vertex source
+            // (vertex2NoUVsSource()), the same fragment source
+            // (meshFragmentSource()), and the same uniform/push/binding
+            // setup, so build the pipeline once here and share it below
+            // instead of creating two identical pipelines.
             if (!p.shaders["rect"])
             {
 #if USE_PRECOMPILED_SHADERS
@@ -1082,6 +1088,7 @@ namespace tl
                     "color", color, vlk::kShaderFragment);
                 _createBindingSet(p.shaders["rect"]);
             }
+            p.shaders["wipe"] = p.shaders["rect"];
 
             // Shader used to draw a 3d mesh with a texture * push color
             if (!p.shaders["mesh"])
@@ -1340,24 +1347,7 @@ namespace tl
                 p.shaders["soft"]->addPush("color", color);
                 _createBindingSet(p.shaders["soft"]);
             }
-            if (!p.shaders["wipe"])
-            {
-#if USE_PRECOMPILED_SHADERS
-                p.shaders["wipe"] = vlk::Shader::create(
-                    ctx,
-                    Vertex2NoUVs_spv,
-                    Vertex2NoUVs_spv_len,
-                    meshFragment_spv,
-                    meshFragment_spv_len, "wipe");
-#else
-                p.shaders["wipe"] = vlk::Shader::create(
-                    ctx, vertex2NoUVsSource(), meshFragmentSource(), "wipe");
-#endif
-                p.shaders["wipe"]->createUniform(
-                    "transform.mvp", transform, vlk::kShaderVertex);
-                p.shaders["wipe"]->addPush("color", color, vlk::kShaderFragment);
-                _createBindingSet(p.shaders["wipe"]);
-            }
+            // "wipe" is set above, sharing the "rect" pipeline.
 #if USE_DUMMY_SHADER
             if (!p.shaders["dummy"])
             {

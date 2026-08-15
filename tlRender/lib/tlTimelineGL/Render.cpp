@@ -650,16 +650,18 @@ namespace tl
             glEnable(GL_BLEND);
             glBlendEquation(GL_FUNC_ADD);
 
-            if (!p.shaders["rect"])
-            {
-                p.shaders["rect"] =
-                    gl::Shader::create(vertexSource(), meshFragmentSource());
-            }
+            // "rect", "mesh", and "wipe" all use the same vertex and
+            // fragment source (vertexSource() / meshFragmentSource()), so
+            // compile it once and share the program between them instead
+            // of building three identical GL shaders.
             if (!p.shaders["mesh"])
             {
                 p.shaders["mesh"] =
                     gl::Shader::create(vertexSource(), meshFragmentSource());
             }
+            p.shaders["rect"] = p.shaders["mesh"];
+            p.shaders["wipe"] = p.shaders["mesh"];
+
             if (!p.shaders["colorMesh"])
             {
                 p.shaders["colorMesh"] = gl::Shader::create(
@@ -670,25 +672,23 @@ namespace tl
                 p.shaders["text"] =
                     gl::Shader::create(vertexSource(), textFragmentSource());
             }
+
+            // "texture", "overlay", and "dissolve" all use the same vertex
+            // and fragment source (vertexSource() / textureFragmentSource()),
+            // so compile it once and share the program between them instead
+            // of building three identical GL shaders.
             if (!p.shaders["texture"])
             {
                 p.shaders["texture"] =
                     gl::Shader::create(vertexSource(), textureFragmentSource());
             }
+            p.shaders["overlay"] = p.shaders["texture"];
+            p.shaders["dissolve"] = p.shaders["texture"];
+
             if (!p.shaders["image"])
             {
                 p.shaders["image"] =
                     gl::Shader::create(vertexSource(), imageFragmentSource());
-            }
-            if (!p.shaders["wipe"])
-            {
-                p.shaders["wipe"] =
-                    gl::Shader::create(vertexSource(), meshFragmentSource());
-            }
-            if (!p.shaders["overlay"])
-            {
-                p.shaders["overlay"] =
-                    gl::Shader::create(vertexSource(), textureFragmentSource());
             }
             if (!p.shaders["difference"])
             {
@@ -704,11 +704,6 @@ namespace tl
             {
                 p.shaders["multiply"] = gl::Shader::create(
                     vertexSource(), multiplyFragmentSource());
-            }
-            if (!p.shaders["dissolve"])
-            {
-                p.shaders["dissolve"] =
-                    gl::Shader::create(vertexSource(), textureFragmentSource());
             }
             _displayShader();
 
