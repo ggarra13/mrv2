@@ -978,13 +978,10 @@ namespace tl
                                 ".otioz", request->path.getExtension(),
                                 string::Compare::CaseInsensitive))
                         {
-                            otime::RationalTime offsetTime =
-                                time::invalidTime;
                             timeline::Options timelineOptions;
                             timelineOptions.ioOptions = request->options;
                             auto timeline = timeline::Timeline::create(
-                                request->path, context, offsetTime,
-                                timelineOptions);
+                                context, request->path, timelineOptions);
                             timeline->setMediaReferenceKey(request->mediaReferenceKey);
                             const auto info = timeline->getIOInfo();
                             // const auto videoData = timeline->getVideo(
