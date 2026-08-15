@@ -1386,12 +1386,23 @@ namespace mrv
             if (p.selection.min.x >= 0)
             {
                 image::Size videoSize;
-                if (!values.empty() && !values[0].layers.empty())
+                if (!values.empty())
                 {
-                    const auto image = values[0].layers[0].image;
-                    if (image && image->isValid())
+                    if (!values[0].layers.empty())
                     {
-                        videoSize = image->getSize();
+                        auto image = values[0].layers[0].image;
+                        if (image && image->isValid())
+                        {
+                            videoSize = image->getSize();
+                        }
+                        else
+                        {
+                            image = values[0].layers[0].imageB;
+                            if (image && image->isValid())
+                            {
+                                videoSize = image->getSize();
+                            }
+                        }
                     }
                 }
 
@@ -1410,10 +1421,6 @@ namespace mrv
                 {
                     resizeWindow();
                 }
-                else if (p.frameView)
-                {
-                    frameView();
-                }
 
                 const auto& renderSize = getRenderSize();
                 if (renderSize.isValid())
@@ -1421,23 +1428,29 @@ namespace mrv
                     p.resizeWindow = false;
                 }
             }
-            else if (p.frameView && p.switchClip)
-            {
-                frameView();
-            }
 
             if (p.switchClip && !values.empty() && !values[0].layers.empty())
             {
-                const auto image = values[0].layers[0].image;
+                auto image = values[0].layers[0].image;
                 if (image && image->isValid())
                 {
-                    const auto& videoSize = image->getSize();
-                    p.videoSize = videoSize;
+                    p.videoSize = image->getSize();
+                }
+                else
+                {
+                    image = values[0].layers[0].imageB;
+                    if (image && image->isValid())
+                    {
+                        p.videoSize = image->getSize();
+                    }
                 }
 
                 p.switchClip = false;
                 p.droppedFrames = 0;
             }
+
+            if (p.frameView)
+                frameView();
 
             _getTags();
 

@@ -25,6 +25,7 @@ namespace tl
             Horizontal,
             Vertical,
             Tile,
+            Butterfly,
 
             Count,
             First = A

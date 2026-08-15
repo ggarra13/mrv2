@@ -140,7 +140,7 @@ namespace tl
                                shader->getPushStageFlags(), 0,
                                sizeof(color), &color);
             shader->setUniform("transform.mvp", transform);
-            _bindDescriptorSets(pipelineLayoutName, shaderName);
+            _bindDescriptorSets(pipelineLayoutName, shader);
             _vkDraw(meshName);
         }
 
@@ -291,17 +291,18 @@ namespace tl
             ++(p.currentStats.meshes);
             p.currentStats.meshTriangles += mesh.triangles.size();
 
-            _createBindingSet(p.shaders["colorMesh"]);
+            auto shader = p.shaders["colorMesh"];
+            _createBindingSet(shader);
 
             const auto transform =
                 p.transform *
                 math::translate(
                     math::Vector3f(position.x, position.y, 0.F));
 
-            p.shaders["colorMesh"]->bind(p.frameIndex);
-            p.shaders["colorMesh"]->setUniform(
+            shader->bind(p.frameIndex);
+            shader->setUniform(
                 "transform.mvp", transform, vlk::kShaderVertex);
-            _bindDescriptorSets(pipelineLayoutName, "colorMesh");
+            _bindDescriptorSets(pipelineLayoutName, shader);
 
             // Upload the vertex data into the pool and draw immediately.
             // The pool selects a slot with enough room, overflowing to a new
@@ -369,20 +370,21 @@ namespace tl
             ds.depthWriteEnable = VK_FALSE;
             ds.stencilTestEnable = VK_FALSE;
 
+            auto shader = p.shaders["text"];
             createPipeline("text", "text",
-                           getRenderPass(), p.shaders["text"],
+                           getRenderPass(), shader,
                            p.vbos["text"], cb, ds);
 
-            p.shaders["text"]->bind(p.frameIndex);
-            p.shaders["text"]->setUniform("transform.mvp", transform);
-            p.shaders["text"]->setTexture("textureSampler",
+            shader->bind(p.frameIndex);
+            shader->setUniform("transform.mvp", transform);
+            shader->setTexture("textureSampler",
                                           textures[textureIndex]);
-            _bindDescriptorSets("text", "text");
+            _bindDescriptorSets("text", shader);
 
             VkPipelineLayout pipelineLayout = p.pipelineLayouts["text"];
             vkCmdPushConstants(
                 p.cmd, pipelineLayout,
-                p.shaders["text"]->getPushStageFlags(), 0,
+                shader->getPushStageFlags(), 0,
                 sizeof(color), &color);
 
             _vkDraw("text");
@@ -533,7 +535,7 @@ namespace tl
             auto shader = p.shaders[shaderName];
             shader->bind(p.frameIndex);
             shader->setTexture("textureSampler", texture);
-            _bindDescriptorSets(pipelineLayoutName, shaderName);
+            _bindDescriptorSets(pipelineLayoutName, shader);
 
             if (p.vbos["texture"])
             {
@@ -701,7 +703,7 @@ namespace tl
                            shaderName, meshName, enableBlending,
                            srcColorBlendFactor, dstColorBlendFactor,
                            srcAlphaBlendFactor, dstAlphaBlendFactor);
-            _bindDescriptorSets(pipelineLayoutName, shaderName);
+            _bindDescriptorSets(pipelineLayoutName, p.shaders["image"]);
             fbo->setupViewportAndScissor(p.cmd);
 
             _vkDraw("image");
@@ -853,7 +855,7 @@ namespace tl
                            shaderName, meshName, enableBlending,
                            srcColorBlendFactor, dstColorBlendFactor,
                            srcAlphaBlendFactor, dstAlphaBlendFactor);
-            _bindDescriptorSets(pipelineLayoutName, shaderName);
+            _bindDescriptorSets(pipelineLayoutName, p.shaders["image"]);
             p.fbo->setupViewportAndScissor(p.cmd);
 
             if (p.clipRectEnabled)

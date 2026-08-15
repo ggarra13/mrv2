@@ -262,11 +262,11 @@ namespace tl
         }
 
         void Render::_bindDescriptorSets(
-            const std::string& pipelineLayoutName, const std::string& shaderName)
+            const std::string& pipelineLayoutName, const std::shared_ptr<vlk::Shader> shader)
         {
             TLRENDER_P();
 
-            VkDescriptorSet descriptorSet = p.shaders[shaderName]->getDescriptorSet();
+            VkDescriptorSet descriptorSet = shader->getDescriptorSet();
 
             vkCmdBindDescriptorSets(
                 p.cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
@@ -275,16 +275,16 @@ namespace tl
         }
 
         void Render::_bindComputeDescriptorSets(
-            const std::string& pipelineLayoutName, const std::string& shaderName)
+            const std::string& pipelineLayoutName, const std::shared_ptr<vlk::Shader> shader)
         {
             TLRENDER_P();
 
-            VkDescriptorSet descriptorSet = p.compute[shaderName]->getDescriptorSet();
+            VkDescriptorSet descriptorSet = shader->getDescriptorSet();
             VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
             if (!pipelineLayout)
             {
                 pipelineLayout = _createPipelineLayout(pipelineLayoutName,
-                                                       p.compute[shaderName]);
+                                                       shader);
             }
 
             vkCmdBindDescriptorSets(

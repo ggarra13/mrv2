@@ -2500,7 +2500,7 @@ namespace tl
 
                     const std::string pipelineLayoutName = shaderName;
                     _bindComputeDescriptorSets(pipelineLayoutName,
-                                               shaderName);
+                                               shader);
 
                     VkCommandBuffer cmd = p.placeboData->ssboCmds[p.frameIndex];
                     vkResetCommandBuffer(cmd, 0);

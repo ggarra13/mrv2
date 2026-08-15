@@ -1,11 +1,19 @@
 v1.7.4
 ======
 
+- UI: Fixed a resizing of the clip to zoom of 1 in WebRTC transmissions and in Compare B mode.
+
 - OpenEXR: Improved loading performance a tad.
 - OpenEXR: Fixed layer information (like lossy compression for the layer not the part number).
-- Vulkan: Made Offscreen buffers use the memory allocator for better performance.  This makes creating the 4K annotation buffer much faster.
+
+- Vulkan: Made Offscreen buffers use the memory allocator for better performance.  This makes creating the 4K buffers much faster.
+
 - OTIO: Improved the loading of .otioz files as they are now read in memory.
+
 - Wayland: fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on .otioz files).
+
+- Vulkan: Optimized shader pipeline.
+- OpenGL: Optimized shader pipeline.
 
 
 v1.7.3

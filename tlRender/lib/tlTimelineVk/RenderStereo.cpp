@@ -27,6 +27,8 @@ namespace tl
         {
             TLRENDER_P();
 
+            auto wipeShader = p.shaders["wipe"];
+
             //
             // Some constants
             //
@@ -162,21 +164,21 @@ namespace tl
                 // Draw stencil mask
                 createPipeline("stereo1_stencil", pipelineLayoutName,
                                p.fbo->getClearRenderPass(),
-                               p.shaders["wipe"], p.vbos["stereo"],
+                               wipeShader, p.vbos["stereo"],
                                cb, ds);
             }
 
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
-            _createBindingSet(p.shaders["wipe"]);
+            _createBindingSet(wipeShader);
 
             // Prepare shaders
             vkCmdPushConstants(p.cmd, pipelineLayout,
-                               p.shaders["wipe"]->getPushStageFlags(), 0,
+                               wipeShader->getPushStageFlags(), 0,
                                sizeof(color), &color);
-            p.shaders["wipe"]->setUniform("transform.mvp", p.transform,
+            wipeShader->setUniform("transform.mvp", p.transform,
                                           vlk::kShaderVertex);
-            _bindDescriptorSets(pipelineLayoutName, "wipe");
+            _bindDescriptorSets(pipelineLayoutName, wipeShader);
 
 
             ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
@@ -236,7 +238,7 @@ namespace tl
                 createPipeline("stereo_image1",
                                pipelineLayoutName,
                                p.fbo->getClearRenderPass(),
-                               p.shaders["overlay"],
+                               p.shaders["texture"],
                                p.vbos["video"],
                                cb, ds);
             }
@@ -246,15 +248,15 @@ namespace tl
             //
             // Prepare shaders
             //
-            _createBindingSet(p.shaders["overlay"]);
+            auto textureShader = p.shaders["texture"];
+            _createBindingSet(textureShader);
             color = image::Color4f(1.F, 1.F, 1.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
-                               p.shaders["overlay"]->getPushStageFlags(), 0,
+                               textureShader->getPushStageFlags(), 0,
                                sizeof(color), &color);
-            p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-            p.shaders["overlay"]->setFBO("textureSampler",
-                                         p.buffers["stereo_image"]);
-            _bindDescriptorSets(pipelineLayoutName, "overlay");
+            textureShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            textureShader->setFBO("textureSampler", p.buffers["stereo_image"]);
+            _bindDescriptorSets(pipelineLayoutName, textureShader);
 
             //
             // Draw with RGBA the video
@@ -360,20 +362,20 @@ namespace tl
                 // Draw stencil mask
                 createPipeline("stereo2_stencil", pipelineLayoutName,
                                p.fbo->getLoadRenderPass(),
-                               p.shaders["wipe"], p.vbos["stereo"],
+                               wipeShader, p.vbos["stereo"],
                                cb, ds);
             }
 
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
-            _createBindingSet(p.shaders["wipe"]);
+            _createBindingSet(wipeShader);
             color = image::Color4f(1.F, 0.F, 0.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
-                               p.shaders["wipe"]->getPushStageFlags(), 0,
+                               wipeShader->getPushStageFlags(), 0,
                                sizeof(color), &color);
-            p.shaders["wipe"]->setUniform("transform.mvp", p.transform,
-                                          vlk::kShaderVertex);
-            _bindDescriptorSets(pipelineLayoutName, "wipe");
+            wipeShader->setUniform("transform.mvp", p.transform,
+                                   vlk::kShaderVertex);
+            _bindDescriptorSets(pipelineLayoutName, wipeShader);
 
 
             ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, noneMask);
@@ -427,7 +429,7 @@ namespace tl
                 createPipeline("stereo_image2",
                                pipelineLayoutName,
                                p.fbo->getLoadRenderPass(),
-                               p.shaders["overlay"],
+                               p.shaders["texture"],
                                p.vbos["video"],
                                cb, ds);
             }
@@ -435,15 +437,15 @@ namespace tl
 
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
-            _createBindingSet(p.shaders["overlay"]);
+            _createBindingSet(textureShader);
             color = image::Color4f(1.F, 1.F, 1.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
-                               p.shaders["overlay"]->getPushStageFlags(), 0,
+                               textureShader->getPushStageFlags(), 0,
                                sizeof(color), &color);
-            p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-            p.shaders["overlay"]->setFBO("textureSampler",
-                                         p.buffers["stereo_image"]);
-            _bindDescriptorSets(pipelineLayoutName, "overlay");
+            textureShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            textureShader->setFBO("textureSampler",
+                                  p.buffers["stereo_image"]);
+            _bindDescriptorSets(pipelineLayoutName, textureShader);
 
             // If I draw with colors, the pattern is being drawn.
             ctx.vkCmdSetColorWriteMaskEXT(p.cmd, 0, 1, rgbaMask);

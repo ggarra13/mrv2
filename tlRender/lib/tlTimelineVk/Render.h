@@ -48,7 +48,7 @@ namespace tl
             kColumns,
             kCheckers,
         };
-        
+
         //! Vulkan renderer.
         class Render : public timeline::IRender
         {
@@ -92,7 +92,7 @@ namespace tl
 
             // HDR functions
             void setMonitorCapabilities(const monitor::Capabilities&);
-            
+
             // Main entry pipeline creation function
             void createPipeline(const std::string& pipelineName,
                                 const std::string& pipelineLayoutName,
@@ -101,7 +101,7 @@ namespace tl
                                 const std::shared_ptr<vlk::VBO>& mesh,
                                 const vlk::ColorBlendStateInfo& cb = vlk::ColorBlendStateInfo(),
                                 const vlk::DepthStencilStateInfo& ds = vlk::DepthStencilStateInfo(),
-                                const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());         
+                                const vlk::MultisampleStateInfo& ms = vlk::MultisampleStateInfo());
             void createPipeline(
                 const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::string& pipelineName,
@@ -135,7 +135,7 @@ namespace tl
 
             //! Changes the current Vulkan render pass.
             void setRenderPass(VkRenderPass);
-            
+
             math::Box2i getViewport() const override;
             void setViewport(const math::Box2i&) override;
             void clearViewport(const image::Color4f&) override;
@@ -150,7 +150,7 @@ namespace tl
             void setOCIOOptions(const timeline::OCIOOptions&) override;
             void setLUTOptions(const timeline::LUTOptions&) override;
             void setHDROptions(const timeline::HDROptions&) override;
-            
+
             //! @{
             //!     These functions draw to the internal FBO.
             void drawRect(const math::Box2i&, const image::Color4f&,
@@ -177,7 +177,7 @@ namespace tl
                 std::vector<timeline::TextInfo>& info,
                 const std::vector<std::shared_ptr<image::Glyph> >& glyphs,
                 const math::Vector2i& position) override;
-            
+
             //! Draws the text meshes.
             void drawText(
                 const timeline::TextInfo&,
@@ -276,7 +276,7 @@ namespace tl
             void beginRenderPass() override;
             void endRenderPass() override;
             void setupViewportAndScissor() override;
-            
+
         private:
             void _displayShader();
 
@@ -291,7 +291,7 @@ namespace tl
                                const image::Color4f& color);
 
             void _setupRectCommon(const math::Box2i& box);
-            
+
             void _drawBackground(
                 const std::vector<math::Box2i>&,
                 const timeline::BackgroundOptions&);
@@ -359,13 +359,13 @@ namespace tl
                 const std::shared_ptr<vlk::Shader> shader);
             void _bindDescriptorSets(
                 const std::string& pipelineLayoutName,
-                const std::string& shaderName);
+                const std::shared_ptr<vlk::Shader> shaderName);
             void _bindComputeDescriptorSets(
                 const std::string& pipelineLayoutName,
-                const std::string& shaderName);
+                const std::shared_ptr<vlk::Shader> shaderName);
             void _vkDraw(const std::string& meshName);
 
-            
+
 #if defined(TLRENDER_LIBPLACEBO)
             void _addTextures(
                 std::vector<std::shared_ptr<vlk::Texture> >& textures,

@@ -268,6 +268,9 @@ namespace tl
         {
             TLRENDER_P();
 
+            auto wipeShader = p.shaders["wipe"];
+            auto textureShader = p.shaders["texture"];
+
 
             image::Color4f color(1.F, 0.F, 0.F);
             VkPipelineLayout pipelineLayout;
@@ -389,18 +392,18 @@ namespace tl
                 // Draw left stencil mask
                 createPipeline("wipe_left_stencil", pipelineLayoutName,
                                p.fbo->getLoadRenderPass(),
-                               p.shaders["wipe"], p.vbos["wipe"],
+                               wipeShader, p.vbos["wipe"],
                                cb, ds);
             }
 
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
-            _createBindingSet(p.shaders["wipe"]);
+            _createBindingSet(wipeShader);
             vkCmdPushConstants(p.cmd, pipelineLayout,
-                               p.shaders["wipe"]->getPushStageFlags(), 0,
+                               wipeShader->getPushStageFlags(), 0,
                                sizeof(color), &color);
-            p.shaders["wipe"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-            _bindDescriptorSets(pipelineLayoutName, "wipe");
+            wipeShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            _bindDescriptorSets(pipelineLayoutName, wipeShader);
 
             _vkDraw("wipe");
 
@@ -454,7 +457,7 @@ namespace tl
                 createPipeline("wipe_image1",
                                pipelineLayoutName,
                                p.fbo->getLoadRenderPass(),  // \note: was clearRenderPass
-                               p.shaders["overlay"],
+                               textureShader,
                                p.vbos["video"],
                                cb, ds);
             }
@@ -462,15 +465,15 @@ namespace tl
 
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
-            _createBindingSet(p.shaders["overlay"]);
+            _createBindingSet(textureShader);
             color = image::Color4f(1.F, 1.F, 1.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
-                               p.shaders["overlay"]->getPushStageFlags(), 0,
+                               textureShader->getPushStageFlags(), 0,
                                sizeof(color), &color);
-            p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-            p.shaders["overlay"]->setFBO("textureSampler",
-                                         p.buffers["wipe_image"]);
-            _bindDescriptorSets(pipelineLayoutName, "overlay");
+            textureShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            textureShader->setFBO("textureSampler",
+                                  p.buffers["wipe_image"]);
+            _bindDescriptorSets(pipelineLayoutName, textureShader);
 
             _vkDraw("video");
 
@@ -559,19 +562,19 @@ namespace tl
                 // Draw left stencil mask
                 createPipeline("wipe_right_stencil", pipelineLayoutName,
                                p.fbo->getLoadRenderPass(),
-                               p.shaders["wipe"], p.vbos["wipe"],
+                               wipeShader, p.vbos["wipe"],
                                cb, ds);
             }
 
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
-            _createBindingSet(p.shaders["wipe"]);
+            _createBindingSet(wipeShader);
             color = image::Color4f(0.F, 1.F, 0.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
-                               p.shaders["wipe"]->getPushStageFlags(), 0,
+                               wipeShader->getPushStageFlags(), 0,
                                sizeof(color), &color);
-            p.shaders["wipe"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-            _bindDescriptorSets(pipelineLayoutName, "wipe");
+            wipeShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            _bindDescriptorSets(pipelineLayoutName, wipeShader);
 
             _vkDraw("wipe");
 
@@ -627,7 +630,7 @@ namespace tl
                 createPipeline("wipe_right_image",
                                pipelineLayoutName,
                                p.fbo->getLoadRenderPass(),
-                               p.shaders["overlay"],
+                               textureShader,
                                p.vbos["video"],
                                cb, ds);
             }
@@ -635,15 +638,14 @@ namespace tl
 
             pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
 
-            _createBindingSet(p.shaders["overlay"]);
+            _createBindingSet(textureShader);
             color = image::Color4f(1.F, 1.F, 1.F);
             vkCmdPushConstants(p.cmd, pipelineLayout,
-                               p.shaders["overlay"]->getPushStageFlags(), 0,
+                               textureShader->getPushStageFlags(), 0,
                                sizeof(color), &color);
-            p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-            p.shaders["overlay"]->setFBO("textureSampler",
-                                         p.buffers["wipe_image"]);
-            _bindDescriptorSets(pipelineLayoutName, "overlay");
+            textureShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            textureShader->setFBO("textureSampler", p.buffers["wipe_image"]);
+            _bindDescriptorSets(pipelineLayoutName, textureShader);
 
             _vkDraw("video");
 
@@ -690,7 +692,7 @@ namespace tl
                 if (doCreate(p.buffers["overlay"], offscreenBufferSize, offscreenBufferOptions))
                 {
                     if (p.buffers["overlay"])
-                        p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["overlay"]));
+                        p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["texture"]));
                     p.buffers["overlay"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize,
                                                                         offscreenBufferOptions);
                 }
@@ -713,13 +715,14 @@ namespace tl
 
                     p.buffers["overlay"]->transitionToShaderRead(p.cmd);
 
-                    _createBindingSet(p.shaders["overlay"]);
-                    p.shaders["overlay"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+                    auto textureShader = p.shaders["texture"];
+                    _createBindingSet(textureShader);
+                    textureShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
 
                     const image::Color4f color = image::Color4f(1.F, 1.F, 1.F, compareOptions.overlay);
 
-                    const std::string pipelineName = "overlay";
-                    const std::string shaderName = "overlay";
+                    const std::string pipelineName = "texture";
+                    const std::string shaderName = "texture";
                     const std::string meshName = "video";
                     const std::string pipelineLayoutName = shaderName;
                     createPipeline(p.fbo, pipelineName,
@@ -733,14 +736,14 @@ namespace tl
 
                     VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                     vkCmdPushConstants(p.cmd, pipelineLayout,
-                                       p.shaders["overlay"]->getPushStageFlags(), 0, sizeof(color), &color);
+                                       textureShader->getPushStageFlags(), 0, sizeof(color), &color);
 
                     p.fbo->transitionToColorAttachment(p.cmd);
                     p.fbo->beginLoadRenderPass(p.cmd);
 
-                    p.shaders["overlay"]->setFBO("textureSampler", p.buffers["overlay"]);
+                    textureShader->setFBO("textureSampler", p.buffers["overlay"]);
 
-                    _bindDescriptorSets(pipelineLayoutName, "overlay");
+                    _bindDescriptorSets(pipelineLayoutName, textureShader);
 
 
                     if (p.vbos["video"] && !boxes.empty())
@@ -860,10 +863,11 @@ namespace tl
                     p.fbo->beginLoadRenderPass(p.cmd);
 
                     // Prepare shaders
-                    p.shaders["difference"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-                    p.shaders["difference"]->setFBO("textureSampler", p.buffers["difference0"]);
-                    p.shaders["difference"]->setFBO("textureSamplerB", p.buffers["difference1"]);
-                    _bindDescriptorSets(pipelineLayoutName, "difference");
+                    auto differenceShader = p.shaders["difference"];
+                    differenceShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+                    differenceShader->setFBO("textureSampler", p.buffers["difference0"]);
+                    differenceShader->setFBO("textureSamplerB", p.buffers["difference1"]);
+                    _bindDescriptorSets(pipelineLayoutName, differenceShader);
 
                     if (p.vbos["video"] && !boxes.empty())
                     {
@@ -982,10 +986,11 @@ namespace tl
                     p.fbo->beginLoadRenderPass(p.cmd);
 
                     // Prepare shaders
-                    p.shaders["multiply"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-                    p.shaders["multiply"]->setFBO("textureSampler", p.buffers["multiply0"]);
-                    p.shaders["multiply"]->setFBO("textureSamplerB", p.buffers["multiply1"]);
-                    _bindDescriptorSets(pipelineLayoutName, "multiply");
+                    auto multiplyShader = p.shaders["multiply"];
+                    multiplyShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+                    multiplyShader->setFBO("textureSampler", p.buffers["multiply0"]);
+                    multiplyShader->setFBO("textureSamplerB", p.buffers["multiply1"]);
+                    _bindDescriptorSets(pipelineLayoutName, multiplyShader);
 
                     if (p.vbos["video"] && !boxes.empty())
                     {
@@ -1096,10 +1101,11 @@ namespace tl
                     p.fbo->beginLoadRenderPass(p.cmd);
 
                     // Prepare shaders
-                    p.shaders["add"]->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-                    p.shaders["add"]->setFBO("textureSampler", p.buffers["add0"]);
-                    p.shaders["add"]->setFBO("textureSamplerB", p.buffers["add1"]);
-                    _bindDescriptorSets(pipelineLayoutName, "add");
+                    auto addShader = p.shaders["add"];
+                    addShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+                    addShader->setFBO("textureSampler", p.buffers["add0"]);
+                    addShader->setFBO("textureSamplerB", p.buffers["add1"]);
+                    _bindDescriptorSets(pipelineLayoutName, addShader);
 
                     if (p.vbos["video"] && !boxes.empty())
                     {
@@ -1146,6 +1152,8 @@ namespace tl
             const timeline::DisplayOptions& displayOptions)
         {
             TLRENDER_P();
+
+            auto textureShader = p.shaders["texture"];
 
             // Saving and restoring the old matrix is needed for tiling.
             math::Matrix4x4 oldTransform = p.transform;
@@ -1284,21 +1292,21 @@ namespace tl
 
                                 VkPipelineLayout pipelineLayout = p.pipelineLayouts[pipelineLayoutName];
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
-                                                   p.shaders["dissolve"]->getPushStageFlags(), 0, sizeof(color), &color);
+                                                   textureShader->getPushStageFlags(), 0, sizeof(color), &color);
 
                                 if (clearRenderPass)
                                     p.buffers["video"]->beginClearRenderPass(p.cmd);
                                 else
                                     p.buffers["video"]->beginLoadRenderPass(p.cmd);
 
+                                auto textureShader = p.shaders["texture"];
+                                _createBindingSet(textureShader);
 
-                                _createBindingSet(p.shaders["dissolve"]);
-
-                                p.shaders["dissolve"]->setUniform("transform.mvp", transform, vlk::kShaderVertex);
-                                p.shaders["dissolve"]->setFBO("textureSampler", p.buffers["dissolve"]);
+                                textureShader->setUniform("transform.mvp", transform, vlk::kShaderVertex);
+                                textureShader->setFBO("textureSampler", p.buffers["dissolve"]);
 
                                 _bindDescriptorSets(pipelineLayoutName,
-                                                    "dissolve");
+                                                    textureShader);
 
 
                                 if (p.vbos["video"])
@@ -1311,7 +1319,7 @@ namespace tl
                                 }
                                 _vkDraw("video");
 
-                                _createBindingSet(p.shaders["dissolve"]);
+                                _createBindingSet(textureShader);
 
                                 pipelineDissolveName = pipelineNameBase + "_Pass2_BlendColorForceAlpha";
                                 enableBlending = true;
@@ -1342,14 +1350,14 @@ namespace tl
                                         VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
                                 }
                                 vkCmdPushConstants(p.cmd, pipelineLayout,
-                                                   p.shaders["dissolve"]->getPushStageFlags(), 0,
+                                                   textureShader->getPushStageFlags(), 0,
                                                    sizeof(color), &color);
 
-                                p.shaders["dissolve"]->setUniform("transform.mvp", transform,
+                                textureShader->setUniform("transform.mvp", transform,
                                                                   vlk::kShaderVertex);
-                                p.shaders["dissolve"]->setFBO("textureSampler", p.buffers["dissolve2"]);
+                                textureShader->setFBO("textureSampler", p.buffers["dissolve2"]);
                                 _bindDescriptorSets(pipelineLayoutName,
-                                                    "dissolve");
+                                                    textureShader);
 
                                 if (p.vbos["video"])
                                 {
@@ -1500,9 +1508,10 @@ namespace tl
 
                 fbo->beginLoadRenderPass(p.cmd);
 
-                p.shaders["display"]->bind(p.frameIndex);
-                p.shaders["display"]->setUniform("transform.mvp", oldTransform, vlk::kShaderVertex);
-                p.shaders["display"]->setFBO("textureSampler", p.buffers["video"]);
+                auto displayShader = p.shaders["display"];
+                displayShader->bind(p.frameIndex);
+                displayShader->setUniform("transform.mvp", oldTransform, vlk::kShaderVertex);
+                displayShader->setFBO("textureSampler", p.buffers["video"]);
 
 #if defined(TLRENDER_LIBPLACEBO)
                 if (p.placeboData && p.placeboData->pcUBOSize > 0)
@@ -1520,7 +1529,7 @@ namespace tl
                         currentOffset = dst_layout.offset + dst_layout.size;
                     }
 
-                    p.shaders["display"]->setUniformData("pcUBO", p.placeboData->pcUBOData,
+                    displayShader->setUniformData("pcUBO", p.placeboData->pcUBOData,
                                                          p.placeboData->pcUBOSize);
                 }
 #endif
@@ -1548,14 +1557,14 @@ namespace tl
                 uboLevels.outLow = displayOptions.levels.outLow;
                 uboLevels.outHigh = displayOptions.levels.outHigh;
                 uboLevels.gamma = uboLevels.gamma > 0.F ? (1.F / uboLevels.gamma) : 1000000.F;
-                p.shaders["display"]->setUniform("uboLevels", uboLevels);
+                displayShader->setUniform("uboLevels", uboLevels);
 
                 UBONormalize uboNormalize;
                 uboNormalize.enabled = displayOptions.normalize.enabled;
                 uboNormalize.minimum = displayOptions.normalize.minimum;
                 uboNormalize.maximum = displayOptions.normalize.maximum;
 
-                p.shaders["display"]->setUniform("uboNormalize", uboNormalize);
+                displayShader->setUniform("uboNormalize", uboNormalize);
 
                 UBOColor uboColor;
                 const bool colorMatrixEnabled = displayOptions.color != timeline::Color() && displayOptions.color.enabled;
@@ -1564,7 +1573,7 @@ namespace tl
                 uboColor.matrix = color(displayOptions.color);
                 uboColor.invert = displayOptions.color.invert;
 
-                p.shaders["display"]->setUniform("uboColor", uboColor);
+                displayShader->setUniform("uboColor", uboColor);
 
                 UBOOptions ubo;
                 ubo.channels = static_cast<int>(displayOptions.channels);
@@ -1573,14 +1582,14 @@ namespace tl
                 ubo.softClip = displayOptions.softClip.enabled ? displayOptions.softClip.value : 0.F;
                 ubo.videoLevels = static_cast<int>(displayOptions.videoLevels);
                 ubo.invalidValues = displayOptions.invalidValues;
-                p.shaders["display"]->setUniform("ubo", ubo);
+                displayShader->setUniform("ubo", ubo);
 
 #if defined(TLRENDER_OCIO)
                 if (p.ocioData)
                 {
                     for (const auto& texture : p.ocioData->textures)
                     {
-                        p.shaders["display"]->setTexture(texture->getName(),
+                        displayShader->setTexture(texture->getName(),
                                                          texture);
                     }
                 }
@@ -1588,7 +1597,7 @@ namespace tl
                 {
                     for (const auto& texture : p.lutData->textures)
                     {
-                        p.shaders["display"]->setTexture(texture->getName(),
+                        displayShader->setTexture(texture->getName(),
                                                          texture);
                     }
                 }
@@ -1598,13 +1607,13 @@ namespace tl
                 {
                     for (const auto& texture : p.placeboData->textures)
                     {
-                        p.shaders["display"]->setTexture(texture->getName(),
+                        displayShader->setTexture(texture->getName(),
                                                          texture);
                     }
                 }
 #endif // TLRENDER_LIBPLACEBO
 
-                _bindDescriptorSets(pipelineLayoutName, "display");
+                _bindDescriptorSets(pipelineLayoutName, displayShader);
 
                 if (p.vbos["video"])
                 {
