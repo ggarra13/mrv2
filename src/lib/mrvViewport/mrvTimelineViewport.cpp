@@ -1425,6 +1425,9 @@ namespace mrv
                 const auto& renderSize = getRenderSize();
                 if (renderSize.isValid())
                 {
+                    if (p.frameView)
+                        frameView();
+
                     p.resizeWindow = false;
                 }
             }
@@ -1445,12 +1448,12 @@ namespace mrv
                     }
                 }
 
+                if (p.frameView)
+                    frameView();
+
                 p.switchClip = false;
                 p.droppedFrames = 0;
             }
-
-            if (p.frameView)
-                frameView();
 
             _getTags();
 
