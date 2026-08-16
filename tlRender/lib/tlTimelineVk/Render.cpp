@@ -1185,6 +1185,30 @@ namespace tl
             p.shaders["overlay"] = p.shaders["texture"];
             p.shaders["dissolve"] = p.shaders["texture"];
 
+            if (!p.shaders["butterfly"])
+            {
+#if 0 //USE_PRECOMPILED_SHADERS
+                p.shaders["butterfly"] = vlk::Shader::create(
+                    ctx,
+                    Vertex3_spv,
+                    Vertex3_spv_len,
+                    imageFragment_spv,
+                    imageFragment_spv_len, "butterfly");
+#else
+                p.shaders["butterfly"] = vlk::Shader::create(
+                    ctx,
+                    vertexSource(),
+                    butterflyFragmentSource(),
+                    "butterfly");
+#endif
+
+                p.shaders["butterfly"]->createUniform(
+                    "transform.mvp", transform, vlk::kShaderVertex);
+                p.shaders["butterfly"]->addTexture("textureSampler");
+                p.shaders["butterfly"]->addTexture("textureSamplerB");
+
+                _createBindingSet(p.shaders["butterfly"]);
+            }
             // Shader used to read an RGB or YUV image
             if (!p.shaders["image"])
             {
@@ -1325,6 +1349,7 @@ namespace tl
                 _createBindingSet(p.shaders["dummy"]);
             }
 #endif
+#if USE_OPENUSD
             if (!p.shaders["pbr"])
             {
                 p.shaders["pbr"] = vlk::Shader::create(
@@ -1350,6 +1375,7 @@ namespace tl
 
                 _createBindingSet(p.shaders["pbr"]);
             }
+#endif
             if (!p.compute["rgbf16_to_rgbaf16"])
             {
 #if USE_PRECOMPILED_SHADERS

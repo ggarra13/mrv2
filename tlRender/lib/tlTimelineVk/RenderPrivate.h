@@ -70,6 +70,7 @@ namespace tl
         std::string differenceFragmentSource();
         std::string multiplyFragmentSource();
         std::string addFragmentSource();
+        std::string butterflyFragmentSource();
         std::string debandingFragmentSource(const float threshold = 48.F,
                                             const float range = 16.F,
                                             const int iterations = 1,

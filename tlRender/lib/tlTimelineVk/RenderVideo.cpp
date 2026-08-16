@@ -11,6 +11,7 @@
 #include <tlVk/Util.h>
 
 #include <tlCore/Math.h>
+#include <tlCore/StringFormat.h>
 
 #include <random>
 
@@ -90,6 +91,11 @@ namespace tl
                 {
                     _drawVideoA(videoFrame, boxes, imageOptions, displayOptions, compareOptions);
                 }
+                break;
+            case timeline::CompareMode::Butterfly:
+                _drawVideoButterfly(
+                    videoFrame, boxes, imageOptions, displayOptions,
+                    compareOptions);
                 break;
             case timeline::CompareMode::Horizontal:
             case timeline::CompareMode::Vertical:
@@ -786,120 +792,13 @@ namespace tl
             const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
-            if (!videoFrame.empty() && !boxes.empty())
+            if (videoFrame.empty() || boxes.empty())
+                return;
+
+            if (_drawVideoPair(videoFrame, boxes, imageOptions, displayOptions))
             {
-                const math::Size2i offscreenBufferSize(boxes[0].w(), boxes[0].h());
-                vlk::OffscreenBufferOptions offscreenBufferOptions;
-                offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-                if (!displayOptions.empty())
-                {
-                    offscreenBufferOptions.colorFilters =
-                        imageFilters(imageOptions, 0);
-                }
-                if (doCreate(p.buffers["difference0"], offscreenBufferSize, offscreenBufferOptions))
-                {
-                    if (p.buffers["difference0"])
-                        p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["difference0"]));
-                    p.buffers["difference0"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
-                }
-
-                p.buffers["difference0"]->transitionToColorAttachment(p.cmd);
-                p.buffers["difference0"]->beginClearRenderPass(p.cmd);
-                p.buffers["difference0"]->endRenderPass(p.cmd);
-
-                if (p.buffers["difference0"])
-                {
-                    _drawVideo(
-                        p.buffers["difference0"], "difference0",
-                        videoFrame[0], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
-                        !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
-                        !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
-                }
-
-                if (videoFrame.size() > 1)
-                {
-                    offscreenBufferOptions = vlk::OffscreenBufferOptions();
-                    offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-                    if (displayOptions.size() > 1)
-                    {
-                        offscreenBufferOptions.colorFilters =
-                            imageFilters(imageOptions, 1);
-                    }
-                    if (doCreate(p.buffers["difference1"], offscreenBufferSize, offscreenBufferOptions))
-                    {
-                        if (p.buffers["difference1"])
-                            p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["difference1"]));
-                        p.buffers["difference1"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
-                    }
-
-                    p.buffers["difference1"]->transitionToColorAttachment(p.cmd);
-                    p.buffers["difference1"]->beginClearRenderPass(p.cmd);
-                    p.buffers["difference1"]->endRenderPass(p.cmd);
-
-                    if (p.buffers["difference1"])
-                    {
-                        _drawVideo(
-                            p.buffers["difference1"], "difference1",
-                            videoFrame[1], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
-                            imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
-                            displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
-                    }
-                }
-                else
-                {
-                    p.buffers["difference1"].reset();
-                }
-
-                if (p.buffers["difference0"] && p.buffers["difference1"])
-                {
-                    // glBlendFuncSeparate(
-                    //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-
-                    // glViewport(
-                    //     p.viewport.x(),
-                    //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
-                    //     p.viewport.w(), p.viewport.h());
-
-                    // Transition buffers to color read
-                    p.buffers["difference0"]->transitionToShaderRead(p.cmd);
-                    p.buffers["difference1"]->transitionToShaderRead(p.cmd);
-
-                    const std::string pipelineName = "difference";
-                    const std::string pipelineLayoutName = "difference";
-                    const std::string shaderName = "difference";
-                    const std::string meshName = "video";
-                    const bool enableBlending = false;
-                    createPipeline(p.fbo, pipelineName,
-                                   pipelineLayoutName, shaderName, meshName,
-                                   enableBlending,
-                                   VK_BLEND_FACTOR_SRC_ALPHA,
-                                   VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                   VK_BLEND_FACTOR_ONE,
-                                   VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
-
-                    // Begin the new compositing render pass.
-                    p.fbo->transitionToColorAttachment(p.cmd);
-                    p.fbo->beginLoadRenderPass(p.cmd);
-
-                    // Prepare shaders
-                    auto differenceShader = p.shaders["difference"];
-                    differenceShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-                    differenceShader->setFBO("textureSampler", p.buffers["difference0"]);
-                    differenceShader->setFBO("textureSamplerB", p.buffers["difference1"]);
-                    _bindDescriptorSets(pipelineLayoutName, differenceShader);
-
-                    if (p.vbos["video"] && !boxes.empty())
-                    {
-                        p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
-                    }
-                    _vkDraw("video");
-
-                    p.fbo->endRenderPass(p.cmd);
-
-                    // Transition buffer back to color attachment
-                    p.buffers["difference0"]->transitionToColorAttachment(p.cmd);
-                    p.buffers["difference1"]->transitionToColorAttachment(p.cmd);
-                }
+                p.shaders["difference"]->bind(p.frameIndex);
+                _drawVideoPairShader("difference", boxes[0]);
             }
         }
 
@@ -911,120 +810,15 @@ namespace tl
             const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
-            if (!videoFrame.empty() && !boxes.empty())
+
+            if (videoFrame.empty() || boxes.empty())
+                return;
+
+            if (_drawVideoPair(
+                videoFrame, boxes, imageOptions, displayOptions))
             {
-                const math::Size2i offscreenBufferSize(boxes[0].w(), boxes[0].h());
-                vlk::OffscreenBufferOptions offscreenBufferOptions;
-                offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-                if (!displayOptions.empty())
-                {
-                    offscreenBufferOptions.colorFilters =
-                        imageFilters(imageOptions, 0);
-                }
-                if (doCreate(p.buffers["multiply0"], offscreenBufferSize, offscreenBufferOptions))
-                {
-                    if (p.buffers["multiply0"])
-                        p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["multiply0"]));
-                    p.buffers["multiply0"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
-                }
-
-                p.buffers["multiply0"]->transitionToColorAttachment(p.cmd);
-                p.buffers["multiply0"]->beginClearRenderPass(p.cmd);
-                p.buffers["multiply0"]->endRenderPass(p.cmd);
-
-                if (p.buffers["multiply0"])
-                {
-                    _drawVideo(
-                        p.buffers["multiply0"], "multiply0",
-                        videoFrame[0], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
-                        !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
-                        !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
-                }
-
-                if (videoFrame.size() > 1)
-                {
-                    offscreenBufferOptions = vlk::OffscreenBufferOptions();
-                    offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-                    if (displayOptions.size() > 1)
-                    {
-                        offscreenBufferOptions.colorFilters =
-                            imageFilters(imageOptions, 1);
-                    }
-                    if (doCreate(p.buffers["multiply1"], offscreenBufferSize, offscreenBufferOptions))
-                    {
-                        if (p.buffers["multiply1"])
-                            p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["multiply1"]));
-                        p.buffers["multiply1"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
-                    }
-
-                    p.buffers["multiply1"]->transitionToColorAttachment(p.cmd);
-                    p.buffers["multiply1"]->beginClearRenderPass(p.cmd);
-                    p.buffers["multiply1"]->endRenderPass(p.cmd);
-
-                    if (p.buffers["multiply1"])
-                    {
-                        _drawVideo(
-                            p.buffers["multiply1"], "multiply1",
-                            videoFrame[1], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
-                            imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
-                            displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
-                    }
-                }
-                else
-                {
-                    p.buffers["multiply1"].reset();
-                }
-
-                if (p.buffers["multiply0"] && p.buffers["multiply1"])
-                {
-                    // glBlendFuncSeparate(
-                    //     GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-
-                    // glViewport(
-                    //     p.viewport.x(),
-                    //     p.renderSize.h - p.viewport.h() - p.viewport.y(),
-                    //     p.viewport.w(), p.viewport.h());
-
-                    // Transition buffers to color read
-                    p.buffers["multiply0"]->transitionToShaderRead(p.cmd);
-                    p.buffers["multiply1"]->transitionToShaderRead(p.cmd);
-
-                    const std::string pipelineName = "multiply";
-                    const std::string pipelineLayoutName = "multiply";
-                    const std::string shaderName = "multiply";
-                    const std::string meshName = "video";
-                    const bool enableBlending = false;
-                    createPipeline(p.fbo, pipelineName,
-                                   pipelineLayoutName, shaderName, meshName,
-                                   enableBlending,
-                                   VK_BLEND_FACTOR_SRC_ALPHA,
-                                   VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                   VK_BLEND_FACTOR_ONE,
-                                   VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
-
-                    // Begin the new compositing render pass.
-                    p.fbo->transitionToColorAttachment(p.cmd);
-                    p.fbo->beginLoadRenderPass(p.cmd);
-
-                    // Prepare shaders
-                    auto multiplyShader = p.shaders["multiply"];
-                    multiplyShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-                    multiplyShader->setFBO("textureSampler", p.buffers["multiply0"]);
-                    multiplyShader->setFBO("textureSamplerB", p.buffers["multiply1"]);
-                    _bindDescriptorSets(pipelineLayoutName, multiplyShader);
-
-                    if (p.vbos["video"] && !boxes.empty())
-                    {
-                        p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
-                    }
-                    _vkDraw("video");
-
-                    p.fbo->endRenderPass(p.cmd);
-
-                    // Transition buffer back to color attachment
-                    p.buffers["multiply0"]->transitionToColorAttachment(p.cmd);
-                    p.buffers["multiply1"]->transitionToColorAttachment(p.cmd);
-                }
+                p.shaders["multiply"]->bind(p.frameIndex);
+                _drawVideoPairShader("multiply", boxes[0]);
             }
         }
 
@@ -1036,112 +830,35 @@ namespace tl
             const timeline::CompareOptions& compareOptions)
         {
             TLRENDER_P();
-            if (!videoFrame.empty() && !boxes.empty())
+
+            if (videoFrame.empty() || boxes.empty())
+                return;
+
+            if (_drawVideoPair(
+                videoFrame, boxes, imageOptions, displayOptions))
             {
-                const math::Size2i offscreenBufferSize(boxes[0].w(), boxes[0].h());
-                vlk::OffscreenBufferOptions offscreenBufferOptions;
-                offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-                if (!displayOptions.empty())
-                {
-                    offscreenBufferOptions.colorFilters =
-                        imageFilters(imageOptions, 0);
-                }
-                if (doCreate(p.buffers["add0"], offscreenBufferSize, offscreenBufferOptions))
-                {
-                    if (p.buffers["add0"])
-                        p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["add0"]));
-                    p.buffers["add0"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
-                }
+                p.shaders["add"]->bind(p.frameIndex);
+                _drawVideoPairShader("add", boxes[0]);
+            }
+        }
 
-                p.buffers["add0"]->transitionToColorAttachment(p.cmd);
-                p.buffers["add0"]->beginClearRenderPass(p.cmd);
-                p.buffers["add0"]->endRenderPass(p.cmd);
+        void Render::_drawVideoButterfly(
+            const std::vector<timeline::VideoFrame>& videoFrame,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions,
+            const timeline::CompareOptions& compareOptions)
+        {
+            TLRENDER_P();
 
-                if (p.buffers["add0"])
-                {
-                    _drawVideo(
-                        p.buffers["add0"], "add0",
-                        videoFrame[0], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
-                        !imageOptions.empty() ? std::make_shared<timeline::ImageOptions>(imageOptions[0]) : nullptr,
-                        !displayOptions.empty() ? displayOptions[0] : timeline::DisplayOptions());
-                }
+            if (videoFrame.empty() || boxes.empty())
+                return;
 
-                if (videoFrame.size() > 1)
-                {
-                    offscreenBufferOptions = vlk::OffscreenBufferOptions();
-                    offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-                    if (displayOptions.size() > 1)
-                    {
-                        offscreenBufferOptions.colorFilters =
-                            imageFilters(imageOptions, 1);
-                    }
-                    if (doCreate(p.buffers["add1"], offscreenBufferSize, offscreenBufferOptions))
-                    {
-                        if (p.buffers["add1"])
-                            p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers["add1"]));
-                        p.buffers["add1"] = vlk::OffscreenBuffer::create(ctx, offscreenBufferSize, offscreenBufferOptions);
-                    }
-
-                    p.buffers["add1"]->transitionToColorAttachment(p.cmd);
-                    p.buffers["add1"]->beginClearRenderPass(p.cmd);
-                    p.buffers["add1"]->endRenderPass(p.cmd);
-
-                    if (p.buffers["add1"])
-                    {
-                        _drawVideo(
-                            p.buffers["add1"], "add1",
-                            videoFrame[1], math::Box2i(0, 0, offscreenBufferSize.w, offscreenBufferSize.h),
-                            imageOptions.size() > 1 ? std::make_shared<timeline::ImageOptions>(imageOptions[1]) : nullptr,
-                            displayOptions.size() > 1 ? displayOptions[1] : timeline::DisplayOptions());
-                    }
-                }
-                else
-                {
-                    p.buffers["add1"].reset();
-                }
-
-                if (p.buffers["add0"] && p.buffers["add1"])
-                {
-                    // Transition buffers to shader read
-                    p.buffers["add0"]->transitionToShaderRead(p.cmd);
-                    p.buffers["add1"]->transitionToShaderRead(p.cmd);
-
-                    const std::string pipelineName = "add";
-                    const std::string pipelineLayoutName = "add";
-                    const std::string shaderName = "add";
-                    const std::string meshName = "video";
-                    const bool enableBlending = false;
-                    createPipeline(p.fbo, pipelineName,
-                                   pipelineLayoutName, shaderName, meshName,
-                                   enableBlending,
-                                   VK_BLEND_FACTOR_SRC_ALPHA,
-                                   VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                   VK_BLEND_FACTOR_ONE,
-                                   VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
-
-                    // Begin the new compositing render pass.
-                    p.fbo->transitionToColorAttachment(p.cmd);
-                    p.fbo->beginLoadRenderPass(p.cmd);
-
-                    // Prepare shaders
-                    auto addShader = p.shaders["add"];
-                    addShader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
-                    addShader->setFBO("textureSampler", p.buffers["add0"]);
-                    addShader->setFBO("textureSamplerB", p.buffers["add1"]);
-                    _bindDescriptorSets(pipelineLayoutName, addShader);
-
-                    if (p.vbos["video"] && !boxes.empty())
-                    {
-                        p.vbos["video"]->copy(convert(geom::box(boxes[0], true), p.vbos["video"]->getType()));
-                    }
-                    _vkDraw("video");
-
-                    p.fbo->endRenderPass(p.cmd);
-
-                    // Transition buffer back to color attachment
-                    p.buffers["add0"]->transitionToColorAttachment(p.cmd);
-                    p.buffers["add1"]->transitionToColorAttachment(p.cmd);
-                }
+            if (_drawVideoPair(
+                videoFrame, boxes, imageOptions, displayOptions))
+            {
+                p.shaders["butterfly"]->bind(p.frameIndex);
+                _drawVideoPairShader("butterfly", boxes[0]);
             }
         }
 
@@ -1660,6 +1377,122 @@ namespace tl
             }
 
             p.transform = oldTransform;
+        }
+
+        bool Render::_drawVideoPair(
+            const std::vector<timeline::VideoFrame>& videoFrame,
+            const std::vector<math::Box2i>& boxes,
+            const std::vector<timeline::ImageOptions>& imageOptions,
+            const std::vector<timeline::DisplayOptions>& displayOptions)
+        {
+            TLRENDER_P();
+            const math::Size2i offscreenBufferSize(boxes[0].w(), boxes[0].h());
+
+            // Each file into a buffer of its own, drawn through the whole
+            // display pipeline so that what is combined is what would have
+            // been shown.
+            for (size_t i = 0; i < 2; ++i)
+            {
+                const std::string name = string::Format("compare{0}").arg(i);
+                if (i > 0 && videoFrame.size() <= i)
+                {
+                    if (p.buffers[name])
+                        p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers[name]));
+                    p.buffers[name].reset();
+                    continue;
+                }
+                vlk::OffscreenBufferOptions offscreenBufferOptions;
+                offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
+                offscreenBufferOptions.depth = vlk::OffscreenDepth::kNone;
+                if (displayOptions.size() > i)
+                {
+                    offscreenBufferOptions.colorFilters = imageFilters(imageOptions, i);
+                }
+                if (doCreate(
+                    p.buffers[name],
+                    offscreenBufferSize,
+                    offscreenBufferOptions))
+                {
+                    if (p.buffers[name])
+                        p.garbage[p.frameIndex].buffers.push_back(std::move(p.buffers[name]));
+                    p.buffers[name] = vlk::OffscreenBuffer::create(ctx,
+                                                                   offscreenBufferSize,
+                                                                   offscreenBufferOptions);
+                }
+                if (!p.buffers[name])
+                {
+                    continue;
+                }
+
+                p.buffers[name]->transitionToColorAttachment(p.cmd);
+                p.buffers[name]->beginClearRenderPass(p.cmd);
+                p.buffers[name]->endRenderPass(p.cmd);
+
+                const auto oldTransform = p.transform;
+                _drawVideo(
+                    p.buffers[name], "display",
+                    videoFrame[i],
+                    boxes[i],
+                    imageOptions.size() > i ?
+                        std::make_shared<timeline::ImageOptions>(imageOptions[i]) :
+                        nullptr,
+                    displayOptions.size() > i ?
+                    displayOptions[i] :
+                    timeline::DisplayOptions());
+
+                // Restored because the buffer above replaced it, and the
+                // caller draws with the transform it came in with.
+                p.transform = oldTransform;
+
+                p.buffers[name]->transitionToShaderRead(p.cmd);
+            }
+
+            return p.buffers["compare0"] && p.buffers["compare1"];
+        }
+
+        void Render::_drawVideoPairShader(
+            const std::string& shaderName,
+            const math::Box2i& box)
+        {
+            TLRENDER_P();
+
+            // Transition buffers to color read
+            p.buffers["compare0"]->transitionToShaderRead(p.cmd);
+            p.buffers["compare1"]->transitionToShaderRead(p.cmd);
+
+            const std::string pipelineName = shaderName;
+            const std::string pipelineLayoutName = shaderName;
+            const std::string meshName = "video";
+            const bool enableBlending = false;
+            createPipeline(p.fbo, pipelineName,
+                           pipelineLayoutName, shaderName, meshName,
+                           enableBlending);
+
+            // Begin the new compositing render pass.
+            p.fbo->transitionToColorAttachment(p.cmd);
+            p.fbo->beginLoadRenderPass(p.cmd);
+
+            // Prepare shaders
+            auto shader = p.shaders[shaderName];
+            shader->setUniform("transform.mvp", p.transform, vlk::kShaderVertex);
+            shader->setFBO("textureSampler", p.buffers["compare0"]);
+            shader->setFBO("textureSamplerB", p.buffers["compare1"]);
+            _bindDescriptorSets(pipelineLayoutName, shader);
+
+            if (p.vbos["video"])
+            {
+                p.vbos["video"]->copy(convert(
+                    geom::box(box, true),
+                    p.vbos["video"]->getType()));
+            }
+
+            _vkDraw("video");
+
+            p.fbo->endRenderPass(p.cmd);
+
+            // Transition buffer back to color attachment
+            p.buffers["compare0"]->transitionToColorAttachment(p.cmd);
+            p.buffers["compare1"]->transitionToColorAttachment(p.cmd);
         }
 
     }   // namespace timeline_vlk

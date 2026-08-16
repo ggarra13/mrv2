@@ -17,6 +17,9 @@
 // Use 1 for using the dummy shader for debugging.
 #define USE_DUMMY_SHADER 0
 
+// Use 1 for using OpenUSD in vmrv2
+#define USE_OPENUSD 0
+
 //
 // Use 1 for faster startups.
 //
@@ -25,7 +28,7 @@
 //
 // Use 1 for using dynamic stencils.
 //
-#define USE_DYNAMIC_STENCILS 0          
+#define USE_DYNAMIC_STENCILS 0
 
 //
 // Use 1 for using dynamic RGBA write masks.

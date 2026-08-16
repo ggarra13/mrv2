@@ -343,6 +343,26 @@ namespace tl
                 const std::vector<timeline::ImageOptions>&,
                 const std::vector<timeline::DisplayOptions>&,
                 const timeline::CompareOptions&);
+
+            void _drawVideoButterfly(
+                const std::vector<timeline::VideoFrame>& videoFrame,
+                const std::vector<math::Box2i>& boxes,
+                const std::vector<timeline::ImageOptions>& imageOptions,
+                const std::vector<timeline::DisplayOptions>& displayOptions,
+                const timeline::CompareOptions& compareOptions);
+
+            //! Draw both files into a pair of offscreen buffers, for the
+            //! comparisons that combine them a pixel at a time. Answers
+            //! whether there are two to combine.
+            bool _drawVideoPair(
+                const std::vector<timeline::VideoFrame>&,
+                const std::vector<math::Box2i>&,
+                const std::vector<timeline::ImageOptions>&,
+                const std::vector<timeline::DisplayOptions>&);
+            //! Draw the pair through a shader that samples both.
+            void _drawVideoPairShader(
+                const std::string& shader,
+                const math::Box2i&);
             void _drawVideo(
                 std::shared_ptr<vlk::OffscreenBuffer>& fbo,
                 const std::string& pipelineName,
