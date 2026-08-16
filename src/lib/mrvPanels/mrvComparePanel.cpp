@@ -20,6 +20,7 @@
 #include "mrvWidgets/mrvHorSlider.h"
 #include "mrvWidgets/mrvPopupMenu.h"
 
+#include "mrvIcons/Butterfly.h"
 #include "mrvIcons/Compare.h"
 #include "mrvIcons/CompareA.h"
 #include "mrvIcons/CompareB.h"
@@ -394,8 +395,9 @@ namespace mrv
 
             bW = new Widget< Button >(X + 60, Y, 30, 30);
             b = bW;
-            b->bind_image(MRV2_LOAD_SVG(CompareMultiply));
-            b->tooltip(_("Butterfly the A and B files"));
+            b->bind_image(MRV2_LOAD_SVG(Butterfly));
+            b->tooltip(_("Show the halves of the A and B files,\n"
+                         "one of them mirrored"));
 
             bW->callback(
                 [=](auto w)

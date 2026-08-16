@@ -9,6 +9,7 @@ set(SOURCES
     Annotations.cpp
     Arrow.cpp
     Audio.cpp
+    Butterfly.cpp
     Circle.cpp
     Clear.cpp
     ColorArea.cpp
