@@ -29,8 +29,6 @@ namespace tl
         {
             TLRENDER_P();
 
-            //! \todo Render the background only if there is valid video data
-            //! and a valid layer?
             if (!videoFrame.empty() && !videoFrame.front().layers.empty())
             {
                 _drawBackground(boxes, backgroundOptions);

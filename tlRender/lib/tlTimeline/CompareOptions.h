@@ -51,6 +51,7 @@ namespace tl
             math::Vector2f wipeCenter = math::Vector2f(.5F, .5F);
             float wipeRotation = 0.F;
             float overlay = .5F;
+            float differenceGain = 1.F;
             bool  fitToA = true;
 
             bool operator==(const CompareOptions&) const;

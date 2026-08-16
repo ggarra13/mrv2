@@ -192,7 +192,7 @@ namespace mrv
 
                 p.active->setIfChanged(_getActive());
                 p.layers->setIfChanged(_getLayers());
-                
+
                 if (files.size() <= 1)
                 {
                     auto compareOptions = p.compareOptions->get();
@@ -239,7 +239,7 @@ namespace mrv
     void FilesModel::forceA(int index)
     {
         TLRENDER_P();
-        
+
         if (index >= 0 && index < p.files->getSize())
         {
             auto oldA = p.files->getItem(index);
@@ -250,7 +250,7 @@ namespace mrv
             p.layers->setAlways(_getLayers());
         }
     }
-    
+
     // value == true → “make sure this index is included in B”
     // value == false → “make sure this index is NOT included in B”
     void FilesModel::setB(int index, bool value)
@@ -270,6 +270,7 @@ namespace mrv
                 case timeline::CompareMode::A:
                 case timeline::CompareMode::B:
                 case timeline::CompareMode::Wipe:
+                case timeline::CompareMode::Butterfly:
                 case timeline::CompareMode::Overlay:
                 case timeline::CompareMode::Difference:
                 case timeline::CompareMode::Add:
@@ -556,13 +557,14 @@ namespace mrv
     void FilesModel::setCompareOptions(const timeline::CompareOptions& value)
     {
         TLRENDER_P();
-        
+
         if (p.compareOptions->setIfChanged(value))
         {
             switch (value.mode)
             {
             case timeline::CompareMode::A:
             case timeline::CompareMode::B:
+            case timeline::CompareMode::Butterfly:
             case timeline::CompareMode::Wipe:
             case timeline::CompareMode::Overlay:
             case timeline::CompareMode::Difference:
@@ -666,6 +668,7 @@ namespace mrv
         switch (p.compareOptions->get().mode)
         {
         case timeline::CompareMode::B:
+        case timeline::CompareMode::Butterfly:
         case timeline::CompareMode::Wipe:
         case timeline::CompareMode::Overlay:
         case timeline::CompareMode::Difference:

@@ -459,6 +459,15 @@ namespace mrv
         ui->uiMain->fill_menu(ui->uiMenuBar);
     }
 
+    void compare_butterfly_cb(Fl_Widget* w, ViewerUI* ui)
+    {
+        auto model = App::app->filesModel();
+        auto o = model->observeCompareOptions()->get();
+        o.mode = timeline::CompareMode::Butterfly;
+        model->setCompareOptions(o);
+        ui->uiMain->fill_menu(ui->uiMenuBar);
+    }
+
     void compare_horizontal_cb(Fl_Widget* w, ViewerUI* ui)
     {
         auto model = App::app->filesModel();

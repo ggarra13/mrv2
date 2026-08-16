@@ -217,10 +217,10 @@ vec4 sampleTexture(
               pixelType == PixelType_YUV_422P_U10 ||
               pixelType == PixelType_YUV_444P_U10)
           {
-            // 
+            //
             // 10-bit data may be packed in 16-bit textures, normalize to [0,1]
             float rangeScale = 1023.0 / 65535.0; // 1023 = 2^10 - 1
-            y  = y / rangeScale; 
+            y  = y / rangeScale;
             cb = cb / rangeScale;
             cr = cr / rangeScale;
           }
@@ -230,7 +230,7 @@ vec4 sampleTexture(
           {
             // 12-bit data may be packed in 16-bit textures, normalize to [0,1]
             float rangeScale = 4095.0 / 65535.0; // 1023 = 2^10 - 1
-            y  = y / rangeScale; 
+            y  = y / rangeScale;
             cb = cb / rangeScale;
             cr = cr / rangeScale;
           }
@@ -251,7 +251,7 @@ vec4 sampleTexture(
               float yMax = 235.0 * range;  // 235 << (bitDepth - 8)
               float cMin = 16.0 * range;   // 16 << (bitDepth - 8)
               float cMax = 240.0 * range;  // 240 << (bitDepth - 8)
-            
+
               // Scale to 0-1 range and normalize
               y = clamp((y * maxValue - yMin) / (yMax - yMin), 0.0, 1.0);
               cb = clamp((cb * maxValue - cMin) / (cMax - cMin), 0.0, 1.0) - 0.5;
@@ -274,7 +274,7 @@ vec4 sampleTexture(
               c.g = (c.g - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
               c.b = (c.b - (16.0 / 255.0)) * (255.0 / (240.0 - 16.0));
           }
-              
+
           if (1 == imageChannels)
           {
               c.g = c.b = c.r;
@@ -661,32 +661,34 @@ vec4 sampleTexture(
             return "#version 410\n"
                    "\n"
                    "in vec2 fTexture;\n"
+                   "\n"
                    "out vec4 outColor;\n"
                    "\n"
                    "uniform sampler2D textureSampler;\n"
                    "uniform sampler2D textureSamplerB;\n"
+                   "uniform float gain;\n"
                    "\n"
                    "void main()\n"
                    "{\n"
                    "    vec4 c = texture(textureSampler, fTexture);\n"
                    "    vec4 cB = texture(textureSamplerB, fTexture);\n"
-                   "    outColor.r = abs(c.r - cB.r);\n"
-                   "    outColor.g = abs(c.g - cB.g);\n"
-                   "    outColor.b = abs(c.b - cB.b);\n"
+                   "    outColor.r = abs(c.r - cB.r) * gain;\n"
+                   "    outColor.g = abs(c.g - cB.g) * gain;\n"
+                   "    outColor.b = abs(c.b - cB.b) * gain;\n"
                    "    outColor.a = max(c.a, cB.a);\n"
                    "}\n";
         }
-        
+
         std::string multiplyFragmentSource()
         {
             return R"(#version 410
-                 
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
-                 
+
 uniform sampler2D textureSampler;
 uniform sampler2D textureSamplerB;
-                 
+
 void main()
 {
     vec4 c = texture(textureSampler, fTexture);
@@ -701,13 +703,13 @@ void main()
         std::string addFragmentSource()
         {
             return R"(#version 410
-                 
+
 layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
-                 
+
 uniform sampler2D textureSampler;
 uniform sampler2D textureSamplerB;
-                 
+
 void main()
 {
     vec4 c = texture(textureSampler, fTexture);
@@ -718,6 +720,34 @@ void main()
     outColor.a = max(c.a, cB.a);
 })";
         }
-        
+
+        std::string butterflyFragmentSource()
+        {
+            return
+                "#version 410\n"
+                "\n"
+                "in vec2 fTexture;\n"
+                "out vec4 outColor;\n"
+                "\n"
+                "uniform sampler2D textureSampler;\n"
+                "uniform sampler2D textureSamplerB;\n"
+                "\n"
+                "void main()\n"
+                "{\n"
+                // The same half of both, the second one mirrored, so that
+                // the middle of the picture is on both sides of the seam.
+                "    if (fTexture.x < .5)\n"
+                "    {\n"
+                "        outColor = texture(textureSampler, fTexture);\n"
+                "    }\n"
+                "    else\n"
+                "    {\n"
+                "        outColor = texture(\n"
+                "            textureSamplerB,\n"
+                "            vec2(1.0 - fTexture.x, fTexture.y));\n"
+                "    }\n"
+                "}\n";
+        }
+
     } // namespace timeline_gl
 } // namespace tl
