@@ -18,6 +18,20 @@ namespace tl
 {
     namespace timeline_vlk
     {
+        namespace
+        {
+            // The filters for one of the images being drawn, which is where
+            // they live now: how a picture is sampled is a fact about the
+            // picture, not about the colours it is shown in.
+            timeline::ImageFilters imageFilters(
+                const std::vector<timeline::ImageOptions>& imageOptions,
+                size_t index)
+            {
+                return index < imageOptions.size() ?
+                    imageOptions[index].imageFilters :
+                    timeline::ImageFilters();
+            }
+        }
 
         void Render::drawVideo(
             const std::vector<timeline::VideoFrame>& videoFrame,
@@ -276,7 +290,11 @@ namespace tl
             const math::Size2i& offscreenBufferSize = p.fbo->getSize();
             vlk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-            offscreenBufferOptions.colorFilters = displayOptions[0].imageFilters;
+            if (!displayOptions.empty())
+            {
+                offscreenBufferOptions.colorFilters =
+                    imageFilters(imageOptions, 0);
+            }
             offscreenBufferOptions.depth = vlk::OffscreenDepth::kNone;
             offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
             offscreenBufferOptions.clear = false;
@@ -685,7 +703,8 @@ namespace tl
                 offscreenBufferOptions.stencil = vlk::OffscreenStencil::kNone;
                 if (!displayOptions.empty())
                 {
-                    offscreenBufferOptions.colorFilters = displayOptions[0].imageFilters;
+                    offscreenBufferOptions.colorFilters =
+                        imageFilters(imageOptions, 0);
                 }
                 if (doCreate(p.buffers["overlay"], offscreenBufferSize, offscreenBufferOptions))
                 {
@@ -774,7 +793,8 @@ namespace tl
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                 if (!displayOptions.empty())
                 {
-                    offscreenBufferOptions.colorFilters = displayOptions[0].imageFilters;
+                    offscreenBufferOptions.colorFilters =
+                        imageFilters(imageOptions, 0);
                 }
                 if (doCreate(p.buffers["difference0"], offscreenBufferSize, offscreenBufferOptions))
                 {
@@ -802,7 +822,8 @@ namespace tl
                     offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                     if (displayOptions.size() > 1)
                     {
-                        offscreenBufferOptions.colorFilters = displayOptions[1].imageFilters;
+                        offscreenBufferOptions.colorFilters =
+                            imageFilters(imageOptions, 1);
                     }
                     if (doCreate(p.buffers["difference1"], offscreenBufferSize, offscreenBufferOptions))
                     {
@@ -897,7 +918,8 @@ namespace tl
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                 if (!displayOptions.empty())
                 {
-                    offscreenBufferOptions.colorFilters = displayOptions[0].imageFilters;
+                    offscreenBufferOptions.colorFilters =
+                        imageFilters(imageOptions, 0);
                 }
                 if (doCreate(p.buffers["multiply0"], offscreenBufferSize, offscreenBufferOptions))
                 {
@@ -925,7 +947,8 @@ namespace tl
                     offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                     if (displayOptions.size() > 1)
                     {
-                        offscreenBufferOptions.colorFilters = displayOptions[1].imageFilters;
+                        offscreenBufferOptions.colorFilters =
+                            imageFilters(imageOptions, 1);
                     }
                     if (doCreate(p.buffers["multiply1"], offscreenBufferSize, offscreenBufferOptions))
                     {
@@ -1020,7 +1043,8 @@ namespace tl
                 offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                 if (!displayOptions.empty())
                 {
-                    offscreenBufferOptions.colorFilters = displayOptions[0].imageFilters;
+                    offscreenBufferOptions.colorFilters =
+                        imageFilters(imageOptions, 0);
                 }
                 if (doCreate(p.buffers["add0"], offscreenBufferSize, offscreenBufferOptions))
                 {
@@ -1048,7 +1072,8 @@ namespace tl
                     offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
                     if (displayOptions.size() > 1)
                     {
-                        offscreenBufferOptions.colorFilters = displayOptions[1].imageFilters;
+                        offscreenBufferOptions.colorFilters =
+                            imageFilters(imageOptions, 1);
                     }
                     if (doCreate(p.buffers["add1"], offscreenBufferSize, offscreenBufferOptions))
                     {
@@ -1188,7 +1213,7 @@ namespace tl
 
             vlk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-            offscreenBufferOptions.colorFilters = displayOptions.imageFilters;
+            offscreenBufferOptions.colorFilters = imageFilters(imageOptions, 0);
             if (doCreate(p.buffers["video"], offscreenBufferSize, offscreenBufferOptions))
             {
                 if (p.buffers["video"])

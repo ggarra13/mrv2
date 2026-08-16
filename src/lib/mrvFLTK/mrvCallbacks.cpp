@@ -1312,18 +1312,40 @@ namespace mrv
 
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.imageFilters.minify = timeline::ImageFilter::Nearest;
-        ui->app->setDisplayOptions(o);
+        // Legacy
+        {
+            timeline::DisplayOptions o = ui->app->displayOptions();
+            o.imageFilters.minify = timeline::ImageFilter::Nearest;
+            ui->app->setDisplayOptions(o);
+        }
+
+        // New code
+        {
+            timeline::ImageOptions o = ui->app->imageOptions();
+            o.imageFilters.minify = timeline::ImageFilter::Nearest;
+            ui->app->setImageOptions(o);
+        }
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();
     }
 
     void minify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.imageFilters.minify = timeline::ImageFilter::Linear;
-        ui->app->setDisplayOptions(o);
+        // Legacy
+        {
+            timeline::DisplayOptions o = ui->app->displayOptions();
+            o.imageFilters.minify = timeline::ImageFilter::Linear;
+            ui->app->setDisplayOptions(o);
+        }
+
+        // New code
+        {
+            timeline::ImageOptions o = ui->app->imageOptions();
+            o.imageFilters.minify = timeline::ImageFilter::Nearest;
+            ui->app->setImageOptions(o);
+        }
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();
     }
@@ -1342,6 +1364,10 @@ namespace mrv
         timeline::DisplayOptions o = ui->app->displayOptions();
         o.imageFilters.magnify = timeline::ImageFilter::Linear;
         ui->app->setDisplayOptions(o);
+
+        timeline::ImageOptions i = app->imageOptions();
+        ui->app->setImageOptions(i);
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();
     }

@@ -491,7 +491,7 @@ namespace tl
             if (!displayOptions.empty())
             {
                 offscreenBufferOptions.colorFilters =
-                    displayOptions[0].imageFilters;
+                    imageFilters(imageOptions, 0);
             }
             if (doCreate(
                     p.buffers["multiply0"], offscreenBufferSize,
@@ -545,7 +545,7 @@ namespace tl
                 if (displayOptions.size() > 1)
                 {
                     offscreenBufferOptions.colorFilters =
-                        displayOptions[1].imageFilters;
+                        imageFilters(imageOptions, 1);
                 }
                 if (doCreate(
                         p.buffers["multiply1"], offscreenBufferSize,
@@ -649,7 +649,7 @@ namespace tl
                 if (!displayOptions.empty())
                 {
                     offscreenBufferOptions.colorFilters =
-                        displayOptions[0].imageFilters;
+                        imageFilters(imageOptions, 0);
                 }
                 if (doCreate(
                         p.buffers["add0"], offscreenBufferSize,
@@ -702,6 +702,8 @@ namespace tl
                         p.renderOptions.colorBuffer;
                     if (displayOptions.size() > 1)
                     {
+                        offscreenBufferOptions.colorFilters =
+                            imageFilters(imageOptions, 1);
                         offscreenBufferOptions.colorFilters =
                             displayOptions[1].imageFilters;
                     }
@@ -1291,11 +1293,8 @@ namespace tl
             for (size_t i = 0; i < 2; ++i)
             {
                 const std::string name = string::Format("compare{0}").arg(i);
-                std::cerr << name << " START " << i << std::endl;
                 if (i > 0 && videoFrame.size() <= i)
                 {
-                    std::cerr << name << " reset " << i << " "
-                              << " size=" << videoFrame.size() << std::endl;
                     p.buffers[name].reset();
                     continue;
                 }
@@ -1305,22 +1304,17 @@ namespace tl
                 {
                     offscreenBufferOptions.colorFilters = imageFilters(imageOptions, i);
                 }
-                std::cerr << name << " check " << offscreenBufferSize
-                          << " " << p.buffers[name] << " " << i
-                          << std::endl;
                 if (doCreate(
                     p.buffers[name],
                     offscreenBufferSize,
                     offscreenBufferOptions))
                 {
-                    std::cerr << name << " create" << std::endl;
                     p.buffers[name] = gl::OffscreenBuffer::create(
                         offscreenBufferSize,
                         offscreenBufferOptions);
                 }
                 if (!p.buffers[name])
                 {
-                    std::cerr << name << " not created" << std::endl;
                     continue;
                 }
 
@@ -1360,9 +1354,6 @@ namespace tl
                 p.shaders["display"]->bind();
                 p.shaders["display"]->setUniform("transform.mvp", getTransform());
             }
-
-            std::cerr << "compare0 buffer=" << p.buffers["compare0"] << std::endl;
-            std::cerr << "compare1 buffer=" << p.buffers["compare1"] << std::endl;
 
             return p.buffers["compare0"] && p.buffers["compare1"];
         }
