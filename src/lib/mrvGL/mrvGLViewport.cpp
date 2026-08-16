@@ -876,8 +876,6 @@ namespace mrv
                 if (p.hudActive && p.hud != HudDisplay::kNone)
                     _drawHUD(alpha);
 
-                if (!p.helpText.empty())
-                    _drawHelpText();
             }
 
 #ifdef USE_OPENGL2

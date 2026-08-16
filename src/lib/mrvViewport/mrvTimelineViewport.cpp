@@ -135,18 +135,11 @@ namespace mrv
         bool TimelineViewport::Private::displayWindow = false;
         bool TimelineViewport::Private::ignoreDisplayWindow = false;
         float TimelineViewport::Private::pixelAspectRatio = -1.F;
-        std::string TimelineViewport::Private::helpText;
-        float TimelineViewport::Private::helpTextFade;
         bool TimelineViewport::Private::hudActive = true;
         HudDisplay TimelineViewport::Private::hud = HudDisplay::kNone;
         image::Tags TimelineViewport::Private::tagData;
         short TimelineViewport::Private::ghostNext = 5;
         short TimelineViewport::Private::ghostPrevious = 5;
-
-        static void drawTimeoutText_cb(TimelineViewport* view)
-        {
-            view->clearHelpText();
-        }
 
         void TimelineViewport::_init()
         {
@@ -189,39 +182,6 @@ namespace mrv
         TimelineViewport::getVideoFrame() const noexcept
         {
             return _p->videoData;
-        }
-
-        void TimelineViewport::clearHelpText()
-        {
-            TLRENDER_P();
-            p.helpTextFade -= kHelpTimeout;
-            if (mrv::is_equal(p.helpTextFade, 0.F))
-            {
-                Fl::remove_timeout((Fl_Timeout_Handler)drawTimeoutText_cb, this);
-                p.helpText.clear();
-            }
-            else
-            {
-                Fl::repeat_timeout(
-                    kHelpTimeout, (Fl_Timeout_Handler)drawTimeoutText_cb, this);
-            }
-            redrawWindows();
-        }
-
-        void TimelineViewport::setHelpText(const std::string& text)
-        {
-            TLRENDER_P();
-            if (text == p.helpText)
-                return;
-
-            p.helpText = text;
-            p.helpTextFade = kHelpTextFade;
-
-            Fl::remove_timeout((Fl_Timeout_Handler)drawTimeoutText_cb, this);
-            Fl::add_timeout(
-                kHelpTimeout, (Fl_Timeout_Handler)drawTimeoutText_cb, this);
-
-            redrawWindows();
         }
 
         void TimelineViewport::undo()

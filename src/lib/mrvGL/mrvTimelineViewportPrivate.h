@@ -103,10 +103,6 @@ namespace mrv
             //! Right mouse menu
             Fl_Menu_Button* popupMenu = nullptr;
 
-            //! Temporary help text displayed in HUD
-            static std::string helpText;
-            static float helpTextFade;
-
             //! HUD display flags (ORed together).
             static bool hudActive;
             static HudDisplay hud;

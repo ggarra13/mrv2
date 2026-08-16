@@ -1471,14 +1471,6 @@ namespace mrv
                                 if (!p.player)
                                     return 1;
 
-                                if (_isPlaybackStopped())
-                                {
-                                    setHelpText(_("Play"));
-                                }
-                                else
-                                {
-                                    setHelpText(_("Stop"));
-                                }
                                 togglePlayback();
                             }
                             else

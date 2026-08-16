@@ -1187,13 +1187,13 @@ namespace tl
 
             if (!p.shaders["butterfly"])
             {
-#if 0 //USE_PRECOMPILED_SHADERS
+#if USE_PRECOMPILED_SHADERS
                 p.shaders["butterfly"] = vlk::Shader::create(
                     ctx,
                     Vertex3_spv,
                     Vertex3_spv_len,
-                    imageFragment_spv,
-                    imageFragment_spv_len, "butterfly");
+                    butterflyFragment_spv,
+                    butterflyFragment_spv_len, "butterfly");
 #else
                 p.shaders["butterfly"] = vlk::Shader::create(
                     ctx,

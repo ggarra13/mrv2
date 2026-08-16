@@ -201,12 +201,6 @@ namespace mrv
             //! Set pixel aspect ratio of image.
             void setPixelAspectRatio(const float x) noexcept;
 
-            //! Clear the help text after 1 second has elapsed.
-            void clearHelpText();
-
-            //! Set help HUD text
-            void setHelpText(const std::string&);
-
             //! @{ HUD controls
 
             bool getHudActive() const;

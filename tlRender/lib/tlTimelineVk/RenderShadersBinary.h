@@ -11,7 +11,7 @@
 #include "shaders/rgbf32_to_rgbaf32_Compute.spv.h"
 
 // Fragmant shaders
-#include "shaders/colorMeshVertex.spv.h"
+#include "shaders/butterflyFragment.spv.h"
 #include "shaders/colorMeshFragment.spv.h"
 #include "shaders/differenceFragment.spv.h"
 #include "shaders/addFragment.spv.h"
@@ -28,3 +28,4 @@
 #include "shaders/Vertex2.spv.h"
 #include "shaders/Vertex2NoUVs.spv.h"
 #include "shaders/Vertex3.spv.h"
+#include "shaders/colorMeshVertex.spv.h"
