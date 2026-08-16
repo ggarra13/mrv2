@@ -1312,7 +1312,7 @@ namespace mrv
 
     void minify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        // Legacy
+        // Legacy code
         {
             timeline::DisplayOptions o = ui->app->displayOptions();
             o.imageFilters.minify = timeline::ImageFilter::Nearest;
@@ -1332,7 +1332,7 @@ namespace mrv
 
     void minify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        // Legacy
+        // Legacy code
         {
             timeline::DisplayOptions o = ui->app->displayOptions();
             o.imageFilters.minify = timeline::ImageFilter::Linear;
@@ -1352,13 +1352,19 @@ namespace mrv
 
     void magnify_nearest_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.imageFilters.magnify = timeline::ImageFilter::Nearest;
-        ui->app->setDisplayOptions(o);
+        // Legacy code
+        {
+            timeline::DisplayOptions o = ui->app->displayOptions();
+            o.imageFilters.magnify = timeline::ImageFilter::Nearest;
+            ui->app->setDisplayOptions(o);
+        }
 
-        timeline::ImageOptions i = ui->app->imageOptions();
-        i.imageFilters.magnify = timeline::ImageFilter::Linear;
-        ui->app->setImageOptions(i);
+        // New code
+        {
+            timeline::ImageOptions o = ui->app->imageOptions();
+            o.imageFilters.magnify = timeline::ImageFilter::Linear;
+            ui->app->setImageOptions(o);
+        }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();
@@ -1366,13 +1372,19 @@ namespace mrv
 
     void magnify_linear_cb(Fl_Menu_* m, ViewerUI* ui)
     {
-        timeline::DisplayOptions o = ui->app->displayOptions();
-        o.imageFilters.magnify = timeline::ImageFilter::Linear;
-        ui->app->setDisplayOptions(o);
+        // Legacy code
+        {
+            timeline::DisplayOptions o = ui->app->displayOptions();
+            o.imageFilters.magnify = timeline::ImageFilter::Linear;
+            ui->app->setDisplayOptions(o);
+        }
 
-        timeline::ImageOptions i = ui->app->imageOptions();
-        i.imageFilters.magnify = timeline::ImageFilter::Linear;
-        ui->app->setImageOptions(i);
+        // New code
+        {
+            timeline::ImageOptions o = ui->app->imageOptions();
+            o.imageFilters.magnify = timeline::ImageFilter::Linear;
+            ui->app->setImageOptions(o);
+        }
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();
