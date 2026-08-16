@@ -910,7 +910,9 @@ namespace tl
 
             gl::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-            offscreenBufferOptions.colorFilters = displayOptions.imageFilters;
+            offscreenBufferOptions.colorFilters = imageOptions.get() ?
+                                                  (*imageOptions).imageFilters :
+                                                  timeline::ImageFilters();
             if (doCreate(
                     p.buffers["video"], offscreenBufferSize,
                     offscreenBufferOptions))

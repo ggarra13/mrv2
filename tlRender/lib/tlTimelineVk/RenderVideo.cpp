@@ -1213,7 +1213,9 @@ namespace tl
 
             vlk::OffscreenBufferOptions offscreenBufferOptions;
             offscreenBufferOptions.colorType = p.renderOptions.colorBuffer;
-            offscreenBufferOptions.colorFilters = imageFilters(imageOptions, 0);
+            offscreenBufferOptions.colorFilters = imageOptions.get() ?
+                                                  (*imageOptions).imageFilters :
+                                                  timeline::ImageFilters();
             if (doCreate(p.buffers["video"], offscreenBufferSize, offscreenBufferOptions))
             {
                 if (p.buffers["video"])

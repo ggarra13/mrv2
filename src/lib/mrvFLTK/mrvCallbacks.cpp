@@ -1355,6 +1355,11 @@ namespace mrv
         timeline::DisplayOptions o = ui->app->displayOptions();
         o.imageFilters.magnify = timeline::ImageFilter::Nearest;
         ui->app->setDisplayOptions(o);
+
+        timeline::ImageOptions i = ui->app->imageOptions();
+        i.imageFilters.magnify = timeline::ImageFilter::Linear;
+        ui->app->setImageOptions(i);
+
         ui->uiMain->fill_menu(ui->uiMenuBar);
         ui->uiView->redrawWindows();
     }
@@ -1365,7 +1370,8 @@ namespace mrv
         o.imageFilters.magnify = timeline::ImageFilter::Linear;
         ui->app->setDisplayOptions(o);
 
-        timeline::ImageOptions i = app->imageOptions();
+        timeline::ImageOptions i = ui->app->imageOptions();
+        i.imageFilters.magnify = timeline::ImageFilter::Linear;
         ui->app->setImageOptions(i);
 
         ui->uiMain->fill_menu(ui->uiMenuBar);
