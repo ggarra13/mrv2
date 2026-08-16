@@ -2,6 +2,7 @@ v1.7.4
 ======
 
 - UI: Fixed a resizing of the clip to zoom of 1 in WebRTC transmissions and in Compare B mode.
+- UI/Core: Added Butterfly compare mode.
 
 - OpenEXR: Improved loading performance a tad.
 - OpenEXR: Fixed layer information (like lossy compression for the layer not the part number).
