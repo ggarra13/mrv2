@@ -574,87 +574,7 @@ namespace tl
                             arg(errorStatus.details));
                     }
 
-
-                    // Map a media reference to the memory it occupies within the
-                    // bundle.
-                    //
-                    // The bundle is missing the media it is playing if the active
-                    // reference is not there, so that is an error. An alternate
-                    // that is missing only costs the ability to switch to it, so
-                    // the timeline is still opened and the reference is recorded
-                    // as unavailable. Either way the media is never read from its
-                    // path: a bundle is meant to be self contained, and quietly
-                    // reading a file from somewhere else would be misleading.
-                    // Record which references the bundle holds, and check the
-                    // first file of each so that a bundle missing its media is
-                    // still reported at open. Working out every frame's byte
-                    // range waits until the reference is read: for a bundle of
-                    // 25,000 frames that was seconds of URL decoding and path
-                    // parsing before anything appeared.
-                    const auto mapMediaReference = [&](
-                        otio::MediaReference* mediaReference,
-                        bool active)
-                        {
-                            if (!mediaReference ||
-                                p.bundleMediaReferences.find(mediaReference) !=
-                                p.bundleMediaReferences.end())
-                            {
-                                return;
-                            }
-
-                            std::string first;
-                            if (auto externalReference =
-                                dynamic_cast<otio::ExternalReference*>(mediaReference))
-                            {
-                                first = file::Path(
-                                    url::decode(externalReference->target_url())).get();
-                            }
-                            else if (auto imageSeqReference =
-                                     dynamic_cast<otio::ImageSequenceReference*>(mediaReference))
-                            {
-                                if (imageSeqReference->number_of_images_in_sequence() <= 0)
-                                {
-                                    return;
-                                }
-                                first = file::Path(url::decode(
-                                                       imageSeqReference->target_url_for_image_number(0))).get();
-                            }
-                            else
-                            {
-                                return;
-                            }
-
-                            if (!zipReader.find(first).has_value())
-                            {
-                                if (active)
-                                {
-                                    throw std::runtime_error(string::Format(
-                                                                 "Cannot find zip entry: \"{0}\"").arg(first));
-                                }
-                                logSystem->print(
-                                    "tl::Timeline",
-                                    string::Format(
-                                        "Cannot find zip entry: \"{0}\"; this media "
-                                        "reference cannot be used").
-                                    arg(first),
-                                    log::Type::Warning);
-                                p.unavailableMediaReferences.insert(mediaReference);
-                                return;
-                            }
-                            p.bundleMediaReferences.insert(mediaReference);
-                        };
-
-                    // Map every media reference, not only the active one, so that
-                    // the active reference can be changed without re-reading the
-                    // bundle.
-                    for (auto clip : otioTimeline->find_children<otio::Clip>())
-                    {
-                        const auto* activeReference = clip->media_reference();
-                        for (const auto& i : clip->media_references())
-                        {
-                            mapMediaReference(i.second, i.second == activeReference);
-                        }
-                    }
+                    p.mapBundleMediaReferences(otioTimeline);
                 }
             }
             if (!otioTimeline)
@@ -915,7 +835,9 @@ namespace tl
             const otio::SerializableObject::Retainer<otio::Timeline>& value)
         {
             TLRENDER_P();
+
             p.otioTimeline = value;
+
             if (p.otioTimeline.value)
             {
                 _timelineUpdate();
@@ -2319,6 +2241,13 @@ namespace tl
                 }
                 i.second = ioInfo;
             }
+
+            if (p.zipReader)
+            {
+                auto otioTimeline = otio::dynamic_retainer_cast<otio::Timeline>(p.otioTimeline);
+                if (otioTimeline)
+                    p.mapBundleMediaReferences(otioTimeline);
+            }
         }
         namespace
         {
@@ -2500,6 +2429,101 @@ namespace tl
             auto out = audio::Audio::create(audio->getInfo(), sampleCount);
             audio::move(list, out->getData(), out->getByteCount());
             return out;
+        }
+
+        void
+        Timeline::Private::mapBundleMediaReferences(otio::Timeline* otioTimeline)
+        {
+            unavailableMediaReferences.clear();
+            bundleMediaReferences.clear();
+
+            if (!otioTimeline)
+                return;
+
+            // Map a media reference to the memory it occupies within the
+            // bundle.
+            //
+            // The bundle is missing the media it is playing if the active
+            // reference is not there, so that is an error. An alternate
+            // that is missing only costs the ability to switch to it, so
+            // the timeline is still opened and the reference is recorded
+            // as unavailable. Either way the media is never read from its
+            // path: a bundle is meant to be self contained, and quietly
+            // reading a file from somewhere else would be misleading.
+            // Record which references the bundle holds, and check the
+            // first file of each so that a bundle missing its media is
+            // still reported at open. Working out every frame's byte
+            // range waits until the reference is read: for a bundle of
+            // 25,000 frames that was seconds of URL decoding and path
+            // parsing before anything appeared.
+            const auto mapMediaReference = [&](
+                otio::MediaReference* mediaReference,
+                bool active)
+                {
+                    if (!mediaReference ||
+                        bundleMediaReferences.find(mediaReference) !=
+                        bundleMediaReferences.end())
+                    {
+                        return;
+                    }
+
+                    std::string first;
+                    if (auto externalReference =
+                        dynamic_cast<otio::ExternalReference*>(mediaReference))
+                    {
+                        first = file::Path(
+                            url::decode(externalReference->target_url())).get();
+                    }
+                    else if (auto imageSeqReference =
+                             dynamic_cast<otio::ImageSequenceReference*>(mediaReference))
+                    {
+                        if (imageSeqReference->number_of_images_in_sequence() <= 0)
+                        {
+                            return;
+                        }
+                        first = file::Path(url::decode(
+                                               imageSeqReference->target_url_for_image_number(0))).get();
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+                    if (!zipReader->find(first).has_value())
+                    {
+                        if (active)
+                        {
+                            throw std::runtime_error(string::Format(
+                                                         "Cannot find zip entry: \"{0}\"").arg(first));
+                        }
+                        if (auto context = this->context.lock())
+                        {
+                            auto logSystem = context->getLogSystem();
+                            logSystem->print(
+                                "tl::Timeline",
+                                string::Format(
+                                    "Cannot find zip entry: \"{0}\"; this media "
+                                    "reference cannot be used").
+                                arg(first),
+                                log::Type::Warning);
+                        }
+                        unavailableMediaReferences.insert(mediaReference);
+                        return;
+                    }
+                    bundleMediaReferences.insert(mediaReference);
+                };
+
+            // Map every media reference, not only the active one, so that
+            // the active reference can be changed without re-reading the
+            // bundle.
+            for (auto clip : otioTimeline->find_children<otio::Clip>())
+            {
+                const auto* activeReference = clip->media_reference();
+                for (const auto& i : clip->media_references())
+                {
+                    mapMediaReference(i.second, i.second == activeReference);
+                }
+            }
         }
 
     } // namespace timeline

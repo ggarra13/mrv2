@@ -61,6 +61,7 @@ namespace tl
             // anything could be shown.
             std::shared_ptr<ZipReader> zipReader;
             std::set<const otio::MediaReference*> bundleMediaReferences;
+            void mapBundleMediaReferences(otio::Timeline*);
 
             // Always the inner of the two locks: creating a reader holds
             // readCacheMutex and then asks getMemoryRead()/mediaUnavailable()
