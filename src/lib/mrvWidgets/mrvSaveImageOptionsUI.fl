@@ -68,10 +68,19 @@ for (int i = 0; i < o->size(); ++i)
    if (saved == type)
    {
        o->value(i);
+       if (type == "zip" || type == "zips")
+       {
+           ZipCompressionGroup->activate();
+       }
+       else if (type == "dwaa" || type == "dwab")
+       {
+           DWACompressionGroup->activate();
+       }
        return;
     }
 }
-o->value(0);} {}
+o->value(0);} {selected
+    }
   }
   Function {select_contents(Fl_Choice* o)} {open
   } {
@@ -98,10 +107,10 @@ o->menu_end();
   } {
     Fl_Window uiMain {
       label {Save Image Options} open
-      xywh {0 0 523 511} type Double align 5 modal visible
+      xywh {0 0 523 511} type Double align 5 hide modal
     } {
       Fl_Group {} {
-        label {Common Settings} open
+        label {Common Settings}
         xywh {71 37 380 120} box ROUNDED_FRAME color 56
       } {
         Fl_Check_Button Annotations {
@@ -238,7 +247,7 @@ v->redraw();}
           label Contents
           user_data this user_data_type {SaveImageOptionsUI*}
           callback {auto settings = mrv::App::app->settings();
-settings->setValue("SaveImage/Contents", o->value());} open selected
+settings->setValue("SaveImage/Contents", o->value());} open
           tooltip {OpenEXR's Contents to Save} xywh {243 367 170 32} down_box BORDER_BOX
         } {
           MenuItem {} {
