@@ -3678,14 +3678,6 @@ namespace mrv
                 ui->uiEditGroup->show();
                 ui->uiActionGroup->hide();
             }
-            else
-            {
-                if (!feature_needs_edit_or_later())
-                {
-                    ui->uiEditGroup->hide();
-                    ui->uiActionGroup->show();
-                }
-            }
         }
         else
         {

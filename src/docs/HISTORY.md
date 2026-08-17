@@ -8,6 +8,8 @@ v1.7.4
 - UI/Core: Improved thumbnails performance of all files, particularly .otio files.
 
 - Edit: Improved the performance of editing .otio files when dragging clips to the Timeline Viewport.  This removes the clunky file switching that used to happen.
+- Edit: The Playlist panel has been removed.  Now all clip concatenation operations happen directly by dragging clips to the Timeline Viewport.
+- UI/Edit: Removed some duplicated messages of an Edit donation.  Now in demo mode, you can open the timeline viewport to see the .otio tracks, but you just cannot edit them.
 
 - OpenEXR: Improved loading performance a tad.
 - OpenEXR: Fixed layer information (like lossy compression for the layer not the part number).

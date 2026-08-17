@@ -7,7 +7,6 @@ set(HEADERS
     mrvFilesModel.h
     mrvGlobals.h
     mrvMainControl.h
-    mrvPlaylistsModel.h
     mrvSettingsObject.h
     mrvStdAnyHelper.h
 )
@@ -16,7 +15,6 @@ set(SOURCES
     mrvFilesModel.cpp
     mrvGlobals.cpp
     mrvMainControl.cpp
-    mrvPlaylistsModel.cpp
     mrvSettingsObject.cpp
 )
 

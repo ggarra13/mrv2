@@ -15,7 +15,6 @@ namespace mrv
         ColorPanel* colorPanel = nullptr;
         FilesPanel* filesPanel = nullptr;
         ComparePanel* comparePanel = nullptr;
-        PlaylistPanel* playlistPanel = nullptr;
         SettingsPanel* settingsPanel = nullptr;
         EnvironmentMapPanel* environmentMapPanel = nullptr;
         LogsPanel* logsPanel = nullptr;
@@ -81,11 +80,6 @@ namespace mrv
                 if (clearCache) stereo3DPanel->clearCache();
                 stereo3DPanel->redraw();
             }
-            if (playlistPanel)
-            {
-                if (clearCache) playlistPanel->clearCache();
-                playlistPanel->redraw();
-            }
             bool send = App::ui->uiPrefs->SendTimeline->value();
             if (send)
                 tcp->pushMessage("Redraw Panel Thumbnails", clearCache);
@@ -101,8 +95,6 @@ namespace mrv
                 comparePanel->refresh();
             if (stereo3DPanel)
                 stereo3DPanel->refresh();
-            if (playlistPanel)
-                playlistPanel->refresh();
         }
 
         void redraw_thumbnails_cb(Fl_Widget* w, void* data)
@@ -119,8 +111,6 @@ namespace mrv
                 files_panel_cb(nullptr, ui);
             if (comparePanel && comparePanel->is_panel())
                 compare_panel_cb(nullptr, ui);
-            if (playlistPanel && playlistPanel->is_panel())
-                playlist_panel_cb(nullptr, ui);
             if (settingsPanel && settingsPanel->is_panel())
                 settings_panel_cb(nullptr, ui);
             if (logsPanel && logsPanel->is_panel())
@@ -173,8 +163,6 @@ namespace mrv
                 files_panel_cb(nullptr, ui);
             if (comparePanel && !comparePanel->is_panel())
                 compare_panel_cb(nullptr, ui);
-            if (playlistPanel && !playlistPanel->is_panel())
-                playlist_panel_cb(nullptr, ui);
             if (settingsPanel && !settingsPanel->is_panel())
                 settings_panel_cb(nullptr, ui);
             if (logsPanel && !logsPanel->is_panel())
@@ -273,26 +261,6 @@ namespace mrv
                 return;
             }
             comparePanel = new ComparePanel(ui);
-            ui->uiMain->fill_menu(ui->uiMenuBar);
-        }
-
-        void playlist_panel_cb(Fl_Widget* w, ViewerUI* ui)
-        {
-            bool send = ui->uiPrefs->SendUI->value();
-            if (send)
-            {
-                tcp->pushMessage(
-                    "Playlist Panel", static_cast<bool>(!playlistPanel));
-            }
-
-            if (playlistPanel)
-            {
-                delete playlistPanel;
-                playlistPanel = nullptr;
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-                return;
-            }
-            playlistPanel = new PlaylistPanel(ui);
             ui->uiMain->fill_menu(ui->uiMenuBar);
         }
 
@@ -684,10 +652,6 @@ namespace mrv
 
             msg["command"] = "Color Area Panel";
             msg["value"] = static_cast<bool>(colorAreaPanel);
-            tcp->pushToPeer(peerId, msg);
-
-            msg["command"] = "Playlist Panel";
-            msg["value"] = static_cast<bool>(playlistPanel);
             tcp->pushToPeer(peerId, msg);
 
             msg["command"] = "Media Info Panel";

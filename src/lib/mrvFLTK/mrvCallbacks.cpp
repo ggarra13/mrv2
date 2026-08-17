@@ -136,7 +136,6 @@ namespace mrv
 #ifdef TLRENDER_NDI
         {_("NDI"), (Fl_Callback*)ndi_panel_cb},
 #endif
-        {_("Playlist"), (Fl_Callback*)playlist_panel_cb},
 #ifdef MRV2_PYBIND11
         {_("Python"), (Fl_Callback*)python_panel_cb},
 #endif
@@ -1152,8 +1151,6 @@ namespace mrv
             panel::colorAreaPanel->save();
         if (panel::comparePanel)
             panel::comparePanel->save();
-        if (panel::playlistPanel)
-            panel::playlistPanel->save();
         if (panel::settingsPanel)
             panel::settingsPanel->save();
         if (panel::logsPanel)
@@ -1220,8 +1217,6 @@ namespace mrv
         panel::filesPanel = nullptr;
         delete panel::comparePanel;
         panel::comparePanel = nullptr;
-        delete panel::playlistPanel;
-        panel::playlistPanel = nullptr;
 #ifdef MRV2_NETWORK
         delete panel::networkPanel;
         panel::networkPanel = nullptr;

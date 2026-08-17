@@ -31,7 +31,6 @@ namespace py = pybind11;
 
 #include "mrvApp/mrvApp.h"
 #include "mrvApp/mrvGlobals.h"
-#include "mrvApp/mrvPlaylistsModel.h"
 #include "mrvApp/mrvFilesModel.h"
 #include "mrvApp/mrvMainControl.h"
 #include "mrvApp/mrvSettingsObject.h"
@@ -220,7 +219,6 @@ namespace mrv
         std::unique_ptr<PythonArgs> pythonArgs;
 #endif
 
-        std::shared_ptr<PlaylistsModel> playlistsModel;
         std::shared_ptr<FilesModel> filesModel;
         std::vector<std::shared_ptr<FilesModelItem> > files;
         std::vector<std::shared_ptr<FilesModelItem> > activeFiles;
@@ -644,7 +642,6 @@ namespace mrv
         p.contextObject = new mrv::ContextObject(context);
         p.timeUnitsModel = timeline::TimeUnitsModel::create(context);
         p.filesModel = FilesModel::create(context);
-        p.playlistsModel = PlaylistsModel::create(context);
 
         ui->uiTimeline->setContext(context, p.timeUnitsModel, ui);
         ui->uiTimeline->setScrollBarsVisible(false);
@@ -1359,11 +1356,6 @@ namespace mrv
     const std::shared_ptr<FilesModel>& App::filesModel() const
     {
         return _p->filesModel;
-    }
-
-    const std::shared_ptr<PlaylistsModel>& App::playlistsModel() const
-    {
-        return _p->playlistsModel;
     }
 
     const timeline::LUTOptions& App::lutOptions() const

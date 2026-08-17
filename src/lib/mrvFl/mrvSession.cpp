@@ -43,7 +43,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 17;
+    const int kSessionVersion = 18;
 } // namespace
 
 namespace
@@ -166,7 +166,6 @@ namespace mrv
                 {"Color", (colorPanel != nullptr)},
                 {"Color Area", (colorAreaPanel != nullptr)},
                 {"Compare", (comparePanel != nullptr)},
-                {"Playlist", (playlistPanel != nullptr)},
                 {"Media Information", (imageInfoPanel != nullptr)},
                 {"Annotations", (annotationsPanel != nullptr)},
                 {"Devices", (devicesPanel != nullptr)},
@@ -200,8 +199,6 @@ namespace mrv
                 colorAreaPanel->save();
             if (comparePanel)
                 comparePanel->save();
-            if (playlistPanel)
-                playlistPanel->save();
             if (imageInfoPanel)
                 imageInfoPanel->save();
             if (annotationsPanel)

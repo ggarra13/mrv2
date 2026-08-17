@@ -309,9 +309,6 @@ namespace mrv
         gui.get("compare_panel_thumbnails_size", tmp, default_panel_thumbnails);
         uiPrefs->uiPrefsComparePanelThumbnails->value(tmp);
 
-        gui.get("playlist_panel_thumbnails_size", tmp, default_panel_thumbnails);
-        uiPrefs->uiPrefsPlaylistPanelThumbnails->value(tmp);
-
         gui.get("stereo3D_panel_thumbnails_size", tmp, default_panel_thumbnails);
         uiPrefs->uiPrefsStereo3DPanelThumbnails->value(tmp);
 
@@ -1474,8 +1471,6 @@ namespace mrv
                 uiPrefs->uiPrefsFilesPanelThumbnails->value());
         gui.set("compare_panel_thumbnails_size",
                 uiPrefs->uiPrefsComparePanelThumbnails->value());
-        gui.set("playlist_panel_thumbnails_size",
-                uiPrefs->uiPrefsPlaylistPanelThumbnails->value());
         gui.set("stereo3D_panel_thumbnails_size",
                 uiPrefs->uiPrefsStereo3DPanelThumbnails->value());
 

@@ -426,8 +426,6 @@ namespace mrv
                 hotkey = kToggleColorInfo.hotkey();
             else if (tmp == "Compare")
                 hotkey = kToggleCompare.hotkey();
-            else if (tmp == "Playlist")
-                hotkey = kTogglePlaylist.hotkey();
             else if (tmp == "Devices")
                 hotkey = kToggleDevices.hotkey();
             else if (tmp == "Settings")
@@ -532,13 +530,6 @@ namespace mrv
             else if (tmp == _("Compare"))
             {
                 if (comparePanel)
-                    item->set();
-                else
-                    item->clear();
-            }
-            else if (tmp == _("Playlist"))
-            {
-                if (playlistPanel)
                     item->set();
                 else
                     item->clear();

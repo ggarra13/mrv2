@@ -20,7 +20,6 @@
 #include "mrvPanels/mrvHistogramPanel.h"
 #include "mrvPanels/mrvImageInfoPanel.h"
 #include "mrvPanels/mrvLogsPanel.h"
-#include "mrvPanels/mrvPlaylistPanel.h"
 #include "mrvPanels/mrvSettingsPanel.h"
 #include "mrvPanels/mrvStatsPanel.h"
 #include "mrvPanels/mrvStereo3DPanel.h"
@@ -55,7 +54,6 @@ namespace mrv
         extern ColorPanel* colorPanel;
         extern FilesPanel* filesPanel;
         extern ComparePanel* comparePanel;
-        extern PlaylistPanel* playlistPanel;
         extern SettingsPanel* settingsPanel;
         extern LogsPanel* logsPanel;
         extern DevicesPanel* devicesPanel;
@@ -123,7 +121,6 @@ namespace mrv
         void network_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void ndi_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void python_panel_cb(Fl_Widget* w, ViewerUI* ui);
-        void playlist_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void usd_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void vectorscope_panel_cb(Fl_Widget* w, ViewerUI* ui);
