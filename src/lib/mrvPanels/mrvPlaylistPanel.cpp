@@ -126,7 +126,8 @@ namespace mrv
 
             file::Path lastPath;
 
-            size = panel::calculateImageSize();
+            int thumbnailType = p.ui->uiPrefs->uiPrefsPlaylistPanelThumbnails->value();
+            size = panel::calculateImageSize(thumbnailType);
 
             size_t numValidFiles = 0;
             for (size_t i = 0; i < numFiles; ++i)
@@ -169,8 +170,7 @@ namespace mrv
                 const std::string file = path.getFileName(listdir);
 
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     label = protocol + dir + "\n" + file + "\n" + _("Color");
                 }
@@ -179,6 +179,12 @@ namespace mrv
                     label = file;
                 }
                 b->copy_label(label.c_str());
+
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
 
                 if (i == aIndex)
                 {
@@ -279,6 +285,9 @@ namespace mrv
             auto Aindex = model->observeAIndex()->get();
             const auto files = model->observeFiles();
 
+            int thumbnailType = p.ui->uiPrefs->uiPrefsPlaylistPanelThumbnails->value();
+            size = panel::calculateImageSize(thumbnailType);
+
             for (auto& m : _r->map)
             {
                 size_t i = m.first;
@@ -303,6 +312,28 @@ namespace mrv
                     {
                         time = player->currentTime();
                     }
+                }
+
+                const std::string protocol = path.getProtocol();
+                const std::string dir = path.getDirectory();
+                const bool listdir = false;
+                const std::string file = path.getFileName(listdir);
+
+                std::string label;
+                if (thumbnailType == kThumbnailNormal)
+                {
+                    label = protocol + dir + "\n" + file + "\n" + _("Color");
+                }
+                else
+                {
+                    label = file;
+                }
+                b->copy_label(label.c_str());
+
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
                 }
 
                 b->createTimeline(path, App::app->getContext());

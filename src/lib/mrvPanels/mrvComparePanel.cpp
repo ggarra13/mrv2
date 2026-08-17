@@ -144,7 +144,8 @@ namespace mrv
             if (player)
                 time = player->currentTime();
 
-            size = panel::calculateImageSize();
+            int thumbnailType = p.ui->uiPrefs->uiPrefsComparePanelThumbnails->value();
+            size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
             int Y = g->y();
@@ -209,8 +210,7 @@ namespace mrv
                 _r->map[i] = b;
 
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     const std::string layer = getLayerName(media, layerId);
                     label = protocol + dir + "\n" + file + layer;
@@ -220,6 +220,12 @@ namespace mrv
                     label = file;
                 }
                 b->copy_label(label.c_str());
+
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
 
                 _createThumbnail(b, path, time, layerId,
                                  media->mediaReferenceKey);
@@ -603,6 +609,8 @@ namespace mrv
             auto Bindices = model->observeBIndexes()->get();
             auto o = model->observeCompareOptions()->get();
 
+            int thumbnailType = p.ui->uiPrefs->uiPrefsComparePanelThumbnails->value();
+
             for (int i = 0; i < numFiles; ++i)
             {
                 const auto& media = files->getItem(i);
@@ -646,8 +654,7 @@ namespace mrv
                 b->redraw();
 
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     const std::string layer = getLayerName(media, layerId);
                     label = protocol + dir + "\n" + file + layer;
@@ -657,6 +664,12 @@ namespace mrv
                     label = file;
                 }
                 b->copy_label(label.c_str());
+
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
 
                 _createThumbnail(b, path, time, layerId,
                                  media->mediaReferenceKey);

@@ -41,8 +41,10 @@ namespace mrv
             Fl_Group::current(0);
         }
 
-        const image::Size size = panel::calculateImageSize();
-            
+        const image::Size size = panel::calculateImageSize(
+            App::ui->uiPrefs->uiPrefsFilesPanelThumbnails->value()
+            );
+
         p.window = new MainWindow(X, Y, size.w, size.h);
         p.window->allow_expand_outside_parent();
         p.window->border(0);

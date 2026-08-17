@@ -116,7 +116,8 @@ namespace mrv
             if (player)
                 time = player->currentTime();
 
-            size = panel::calculateImageSize();
+            int thumbnailType = p.ui->uiPrefs->uiPrefsStereo3DPanelThumbnails->value();
+            size = panel::calculateImageSize(thumbnailType);
 
             file::Path lastPath;
 
@@ -176,12 +177,11 @@ namespace mrv
 
                 _r->map.insert(std::make_pair(i, b));
 
+
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
-                    const std::string layer = getLayerName(media, layerId);
-                    label = protocol + dir + "\n" + file + layer;
+                    label = protocol + dir + "\n" + file + "\n" + _("Color");
                 }
                 else
                 {
@@ -189,6 +189,11 @@ namespace mrv
                 }
                 b->copy_label(label.c_str());
 
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
                 _createThumbnail(b, path, time, layerId,
                                  media->mediaReferenceKey);
             }
@@ -373,7 +378,8 @@ namespace mrv
             if (!player)
                 return;
 
-            size = panel::calculateImageSize();
+            int thumbnailType = p.ui->uiPrefs->uiPrefsStereo3DPanelThumbnails->value();
+            image::Size size = panel::calculateImageSize(thumbnailType);
 
             const auto& model = App::app->filesModel();
             auto Aindex = model->observeAIndex()->get();
@@ -421,8 +427,7 @@ namespace mrv
                 }
 
                 std::string label;
-                if (p.ui->uiPrefs->uiPrefsPanelThumbnails->value() ==
-                    kThumbnailNormal)
+                if (thumbnailType == kThumbnailNormal)
                 {
                     const std::string layer = getLayerName(media, layerId);
                     label = protocol + dir + "\n" + file + layer;
@@ -432,6 +437,12 @@ namespace mrv
                     label = file;
                 }
                 b->copy_label(label.c_str());
+
+                if (thumbnailType == kThumbnailNone)
+                {
+                    b->bind_image(nullptr);
+                    continue;
+                }
 
                 _createThumbnail(b, path, time, layerId,
                                  media->mediaReferenceKey);

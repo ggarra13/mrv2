@@ -23,8 +23,15 @@ namespace mrv
             return false;
         }
 
-        image::Size calculateImageSize();
-        
+        /**
+         * 0 for normal thumbnails, 1 for small thumbnails, 2 for none.
+         *
+         * @param thumbnailType See above.
+         *
+         * @return size of thumbnail if any.
+         */
+        image::Size calculateImageSize(int thumbnailType);
+
         std::string getLayerName(
             const std::shared_ptr<FilesModelItem>& item,
             const uint16_t layerId);

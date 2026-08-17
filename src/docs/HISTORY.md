@@ -3,15 +3,17 @@ v1.7.4
 
 - UI: Fixed a resizing of the clip to zoom of 1 in WebRTC transmissions and in Compare B mode.
 - UI/Core: Added Butterfly compare mode.
+- UI: Added Default Panel Sizes for each Panel in the Preferences->Thumbnails, so you can have, for example, the Files Panel displaying the full thumbnail information, while the compare panel displays the small thumbnail.
+- UI: Fixed clipping of file names on the Compare Panel.
 
 - OpenEXR: Improved loading performance a tad.
 - OpenEXR: Fixed layer information (like lossy compression for the layer not the part number).
 
-- Vulkan: Made Offscreen buffers use the memory allocator for better performance.  This makes creating the 4K buffers much faster.
+- Vulkan: Made Offscreen buffers use the memory allocator for better performance.  This makes creating the 4K buffers much faster.  Noticeable at the first annotation.
 
-- OTIO: Improved the loading of .otioz files as they are now read in memory.
+- OTIO: Improved the loading of .otioz files as they are now read in memory.  However, they can no longer be edited.
 
-- Wayland: fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on .otioz files).
+- Wayland: fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on long .otioz or .otio files).
 
 - Vulkan: Optimized shader pipeline.
 - OpenGL: Optimized shader pipeline.

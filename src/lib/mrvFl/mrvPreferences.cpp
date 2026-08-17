@@ -303,7 +303,17 @@ namespace mrv
             default_panel_thumbnails = 0;
         gui.get("panel_thumbnails_size", tmp, default_panel_thumbnails);
 
-        uiPrefs->uiPrefsPanelThumbnails->value(tmp);
+        gui.get("files_panel_thumbnails_size", tmp, default_panel_thumbnails);
+        uiPrefs->uiPrefsFilesPanelThumbnails->value(tmp);
+
+        gui.get("compare_panel_thumbnails_size", tmp, default_panel_thumbnails);
+        uiPrefs->uiPrefsComparePanelThumbnails->value(tmp);
+
+        gui.get("playlist_panel_thumbnails_size", tmp, default_panel_thumbnails);
+        uiPrefs->uiPrefsPlaylistPanelThumbnails->value(tmp);
+
+        gui.get("stereo3D_panel_thumbnails_size", tmp, default_panel_thumbnails);
+        uiPrefs->uiPrefsStereo3DPanelThumbnails->value(tmp);
 
         gui.get("panel_thumbnails_manually", tmp, 0);
         uiPrefs->uiPrefsManualPanelThumbnails->value(tmp);
@@ -1458,7 +1468,17 @@ namespace mrv
         gui.set("timeline_video_offset", uiPrefs->uiStartTimeOffset->value());
         gui.set(
             "timeline_thumbnails", uiPrefs->uiPrefsTimelineThumbnails->value());
-        gui.set("panel_thumbnails_size", uiPrefs->uiPrefsPanelThumbnails->value());
+
+        // Thumbnails sizes on all panels
+        gui.set("files_panel_thumbnails_size",
+                uiPrefs->uiPrefsFilesPanelThumbnails->value());
+        gui.set("compare_panel_thumbnails_size",
+                uiPrefs->uiPrefsComparePanelThumbnails->value());
+        gui.set("playlist_panel_thumbnails_size",
+                uiPrefs->uiPrefsPlaylistPanelThumbnails->value());
+        gui.set("stereo3D_panel_thumbnails_size",
+                uiPrefs->uiPrefsStereo3DPanelThumbnails->value());
+
         gui.set("panel_thumbnails_manually",
                 uiPrefs->uiPrefsManualPanelThumbnails->value());
         gui.set("remove_edls", uiPrefs->uiPrefsRemoveEDLs->value());
