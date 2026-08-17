@@ -204,17 +204,17 @@ namespace tl
             const std::vector<timeline::DisplayOptions>& displayOptions,
             const timeline::CompareOptions& compareOptions)
         {
-            if (!videoFrame.size() > 1 || !boxes.size() > 1)
-                return;
-
-            _drawVideo(
-                videoFrame[1], boxes[1],
-                imageOptions.size() > 1
-                ? std::make_shared<timeline::ImageOptions>(
-                    imageOptions[1])
-                : nullptr,
-                displayOptions.size() > 1 ? displayOptions[1]
-                : timeline::DisplayOptions());
+            if (videoFrame.size() > 1 && boxes.size() > 1)
+            {
+                _drawVideo(
+                    videoFrame[1], boxes[1],
+                    imageOptions.size() > 1
+                    ? std::make_shared<timeline::ImageOptions>(
+                        imageOptions[1])
+                    : nullptr,
+                    displayOptions.size() > 1 ? displayOptions[1]
+                    : timeline::DisplayOptions());
+            }
         }
 
         void Render::_drawVideoWipe(
