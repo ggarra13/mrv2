@@ -165,11 +165,11 @@ settings->setValue("SaveImage/Resolution", value);} open
 DWACompressionGroup->deactivate();
 ZipCompressionGroup->deactivate();
 const std::string& label = item->label();
-if (label == "ZIP" || label == "ZIPS")
+if (label == "zip" || label == "zips")
 {
      ZipCompressionGroup->activate();
 }
-else if (label == "DWAA" || label == "DWAB")
+else if (label == "dwaa" || label == "dwab")
 {
      DWACompressionGroup->activate();
 }
