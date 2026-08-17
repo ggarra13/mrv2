@@ -573,8 +573,6 @@ namespace tl
                             arg(path.get()).
                             arg(errorStatus.details));
                     }
-
-                    p.mapBundleMediaReferences(otioTimeline);
                 }
             }
             if (!otioTimeline)
@@ -2206,6 +2204,12 @@ namespace tl
             // The old videoInfoClip/videoInfoByReference pointers belonged
             // to the tree we just released above and are now dangling --
             // they must be rebuilt against the new tree, not reused.
+            p.unavailableMediaReferences.clear();
+            p.bundleMediaReferences.clear();
+            {
+                std::unique_lock<std::mutex> lock(p.memFilesMutex);
+                p.memFiles.clear();
+            }
             p.videoInfoClip = nullptr;
             p.videoInfoByReference.clear();
             p.maxVideoSize = math::Size2i();
@@ -2242,12 +2246,9 @@ namespace tl
                 i.second = ioInfo;
             }
 
-            if (p.zipReader)
-            {
-                auto otioTimeline = otio::dynamic_retainer_cast<otio::Timeline>(p.otioTimeline);
-                if (otioTimeline)
-                    p.mapBundleMediaReferences(otioTimeline);
-            }
+            auto otioTimeline = otio::dynamic_retainer_cast<otio::Timeline>(p.otioTimeline);
+            if (p.zipReader && otioTimeline)
+                p.mapBundleMediaReferences(otioTimeline);
         }
         namespace
         {
@@ -2434,9 +2435,6 @@ namespace tl
         void
         Timeline::Private::mapBundleMediaReferences(otio::Timeline* otioTimeline)
         {
-            unavailableMediaReferences.clear();
-            bundleMediaReferences.clear();
-
             if (!otioTimeline)
                 return;
 
@@ -2521,9 +2519,17 @@ namespace tl
                 const auto* activeReference = clip->media_reference();
                 for (const auto& i : clip->media_references())
                 {
-                    mapMediaReference(i.second, i.second == activeReference);
+                    try
+                    {
+                        mapMediaReference(i.second, i.second == activeReference);
+                    }
+                    catch(const std::exception& e)
+                    {
+                        std::cerr << e.what() << std::endl;
+                    }
                 }
             }
+            std::cerr << "Mapped all media references" << std::endl;
         }
 
     } // namespace timeline
