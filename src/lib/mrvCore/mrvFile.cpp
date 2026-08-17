@@ -288,6 +288,17 @@ namespace mrv
             return true;
         }
 
+        bool isOTIOZ(const tl::file::Path& path)
+        {
+            bool out = false;
+            const auto& extension = string::toLower(path.getExtension());
+            if (extension == ".otioz")
+            {
+                out = true;
+            }
+            return out;
+        }
+
         bool isOTIO(const tl::file::Path& path)
         {
             auto extension = string::toLower(path.getExtension());

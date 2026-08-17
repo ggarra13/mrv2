@@ -2889,6 +2889,13 @@ namespace mrv
 
         if (!file::isTemporaryEDL(destItem->path))
         {
+            std::string extension = string::toLower(destItem->path.getExtension());
+            if (extension == ".otioz")
+            {
+                LOG_ERROR(_(".otioz files cannot be edited.  Please unzip them first and use the 'content.otio' file"));
+                return;
+            }
+
             // 1. Get the index of the currently displayed clip (the 'A' item)
             auto aIndex = ui->app->filesModel()->observeAIndex()->get();
 
