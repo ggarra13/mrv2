@@ -573,6 +573,8 @@ namespace tl
                             arg(path.get()).
                             arg(errorStatus.details));
                     }
+
+                    p.mapBundleMediaReferences(otioTimeline);
                 }
             }
             if (!otioTimeline)
@@ -836,7 +838,7 @@ namespace tl
 
             p.otioTimeline = value;
 
-            if (p.otioTimeline.value)
+            if (p.otioTimeline)
             {
                 _timelineUpdate();
             }
@@ -2204,12 +2206,6 @@ namespace tl
             // The old videoInfoClip/videoInfoByReference pointers belonged
             // to the tree we just released above and are now dangling --
             // they must be rebuilt against the new tree, not reused.
-            p.unavailableMediaReferences.clear();
-            p.bundleMediaReferences.clear();
-            {
-                std::unique_lock<std::mutex> lock(p.memFilesMutex);
-                p.memFiles.clear();
-            }
             p.videoInfoClip = nullptr;
             p.videoInfoByReference.clear();
             p.maxVideoSize = math::Size2i();
@@ -2245,10 +2241,6 @@ namespace tl
                 }
                 i.second = ioInfo;
             }
-
-            auto otioTimeline = otio::dynamic_retainer_cast<otio::Timeline>(p.otioTimeline);
-            if (p.zipReader && otioTimeline)
-                p.mapBundleMediaReferences(otioTimeline);
         }
         namespace
         {
@@ -2438,6 +2430,11 @@ namespace tl
             if (!otioTimeline)
                 return;
 
+            std::unique_lock<std::mutex> lock(memFilesMutex);
+            memFiles.clear();
+            bundleMediaReferences.clear();
+            unavailableMediaReferences.clear();
+
             // Map a media reference to the memory it occupies within the
             // bundle.
             //
@@ -2529,7 +2526,6 @@ namespace tl
                     }
                 }
             }
-            std::cerr << "Mapped all media references" << std::endl;
         }
 
     } // namespace timeline
