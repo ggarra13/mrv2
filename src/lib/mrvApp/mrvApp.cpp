@@ -2250,6 +2250,8 @@ namespace mrv
             run_python_open_file_cb(pythonCb, path, audioPath);
         }
 #endif
+        // Store the timeline for fast thumbnail lookups.
+        item->timeline = out;
         return out;
     }
 

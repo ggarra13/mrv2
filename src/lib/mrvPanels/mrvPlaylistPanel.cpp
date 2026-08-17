@@ -202,7 +202,7 @@ namespace mrv
 
                 b->createTimeline(path, App::app->getContext());
 
-                _createThumbnail(b, path, time, 0, media->mediaReferenceKey);
+                _createThumbnail(b, media, time, 0, media->mediaReferenceKey);
             }
 
             if (numValidFiles == 0)
@@ -338,7 +338,7 @@ namespace mrv
 
                 b->createTimeline(path, App::app->getContext());
 
-                _createThumbnail(b, path, time, 0, media->mediaReferenceKey);
+                _createThumbnail(b, media, time, 0, media->mediaReferenceKey);
             }
         }
 

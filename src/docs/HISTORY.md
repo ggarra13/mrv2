@@ -5,6 +5,9 @@ v1.7.4
 - UI/Core: Added Butterfly compare mode.
 - UI: Added Default Panel Sizes for each Panel in the Preferences->Thumbnails, so you can have, for example, the Files Panel displaying the full thumbnail information, while the compare panel displays the small thumbnail.
 - UI: Fixed clipping of file names on the Compare Panel.
+- UI/Core: Improved thumbnails performance of all files, particularly .otio files.
+
+- Edit: Improved the performance of editing .otio files when dragging clips to the Timeline Viewport.  This removes the clunky file switching that used to happen.
 
 - OpenEXR: Improved loading performance a tad.
 - OpenEXR: Fixed layer information (like lossy compression for the layer not the part number).

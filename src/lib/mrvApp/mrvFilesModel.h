@@ -16,7 +16,16 @@
 #include <tlTimeline/IRender.h>
 #include <tlTimeline/Player.h>
 
+
 #include <tlDraw/Annotation.h>
+
+namespace tl
+{
+    namespace timeline
+    {
+        class Timeline;
+    }
+}
 
 
 namespace mrv
@@ -53,6 +62,9 @@ namespace mrv
         float volume = 0.F;
         bool mute = false;
         double audioOffset = 0.0;
+
+        // Timeline kept for speeding up thumbnails
+        std::shared_ptr<timeline::Timeline> timeline;
 
         // For .otio files, media reference key (Full/Proxy/etc.).
         std::string mediaReferenceKey;

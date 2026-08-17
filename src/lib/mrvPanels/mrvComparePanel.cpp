@@ -227,7 +227,7 @@ namespace mrv
                     continue;
                 }
 
-                _createThumbnail(b, path, time, layerId,
+                _createThumbnail(b, media, time, layerId,
                                  media->mediaReferenceKey);
 
                 Y += size.h;
@@ -671,7 +671,7 @@ namespace mrv
                     continue;
                 }
 
-                _createThumbnail(b, path, time, layerId,
+                _createThumbnail(b, media, time, layerId,
                                  media->mediaReferenceKey);
             }
         }

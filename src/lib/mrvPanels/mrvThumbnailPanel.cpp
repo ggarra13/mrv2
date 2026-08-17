@@ -11,6 +11,8 @@
 #include "mrvCore/mrvFile.h"
 #include "mrvFLTK/mrvWait.h"
 
+#include <tlTimeline/Timeline.h>
+
 #include <tlCore/StringFormat.h>
 
 #include <FL/Fl_Widget.H>
@@ -112,21 +114,55 @@ namespace mrv
         }
 
         void ThumbnailPanel::_createThumbnail(
+            Fl_Widget* widget, const std::shared_ptr<FilesModelItem>& item,
+            const otime::RationalTime& time, const int layerId,
+            const std::string& mediaReferenceKey)
+        {
+            static Fl_SVG_Image* NDIimage = MRV2_LOAD_SVG(NDI);
+
+            if (file::isTemporaryNDI(item->path))
+            {
+                widget->bind_image(NDIimage->copy());
+                return;
+            }
+
+            if (item->timeline)
+            {
+                _createThumbnail(widget, item->path, item->timeline,
+                                 time, layerId, mediaReferenceKey);
+            }
+            else
+            {
+                _createThumbnail(widget, item->path, time, layerId,
+                                 mediaReferenceKey);
+            }
+        }
+
+        void ThumbnailPanel::_createThumbnail(
             Fl_Widget* widget, const file::Path& inputPath,
             const otime::RationalTime& currentTime, const int layerId,
             const std::string& mediaReferenceKey)
         {
             TLRENDER_P();
 
+            // Needed as path is changed by Timeline class
             file::Path path(inputPath);
 
-            static Fl_SVG_Image* NDIimage = MRV2_LOAD_SVG(NDI);
+            const auto context = App::app->getContext();
+            const auto& timeline = timeline::Timeline::create(context, path);
 
-            if (file::isTemporaryNDI(path))
-            {
-                widget->bind_image(NDIimage->copy());
-                return;
-            }
+            _createThumbnail(widget, path, timeline, currentTime, layerId,
+                             mediaReferenceKey);
+        }
+
+        void ThumbnailPanel::_createThumbnail(
+            Fl_Widget* widget,
+            const file::Path& path,
+            const std::shared_ptr<timeline::Timeline>& timeline,
+            const otime::RationalTime& currentTime, const int layerId,
+            const std::string& mediaReferenceKey)
+        {
+            TLRENDER_P();
 
             try
             {
@@ -148,7 +184,6 @@ namespace mrv
                     release = std::make_unique<py::gil_scoped_release>();
                 }
 #endif
-                const auto& timeline = timeline::Timeline::create(context, path);
                 const auto& timeRange = timeline->getTimeRange();
 
                 auto time = currentTime;

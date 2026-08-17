@@ -20,9 +20,18 @@
 class ViewerUI;
 class Fl_Widget;
 
+namespace tl
+{
+    namespace timeline
+    {
+        class Timeline;
+    }
+}
+
 namespace mrv
 {
     class ThumbnailCreator;
+    class FilesModelItem;
 
     namespace panel
     {
@@ -42,9 +51,19 @@ namespace mrv
 
         protected:
 
+            void _createThumbnail(
+                Fl_Widget* widget, const std::shared_ptr<FilesModelItem>&,
+                const otime::RationalTime& time, const int layerId = 0,
+                const std::string& mediaReferenceKey = "");
 
             void _createThumbnail(
                 Fl_Widget* widget, const file::Path& path,
+                const otime::RationalTime& time, const int layerId = 0,
+                const std::string& mediaReferenceKey = "");
+
+            void _createThumbnail(
+                Fl_Widget* widget, const file::Path& path,
+                const std::shared_ptr<timeline::Timeline>& timeline,
                 const otime::RationalTime& time, const int layerId = 0,
                 const std::string& mediaReferenceKey = "");
 
