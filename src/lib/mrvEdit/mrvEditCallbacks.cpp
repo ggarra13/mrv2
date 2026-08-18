@@ -20,19 +20,8 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
 
-
-#include <set>
-#include <fstream>
-#include <algorithm>
-
-#include <filesystem>
-namespace fs = std::filesystem;
-
-#include <FL/fl_utf8.h>
-
+#include <tlTimeline/Timeline.h>
 #include <tlTimeline/Util.h>
-
-#include <tlDraw/Annotation.h>
 
 #include <tlIO/System.h>
 
@@ -40,6 +29,8 @@ namespace fs = std::filesystem;
 #include <tlCore/File.h>
 #include <tlCore/FileInfo.h>
 #include <tlCore/StringFormat.h>
+
+#include <tlDraw/Annotation.h>
 
 #include <opentimelineio/clip.h>
 #include <opentimelineio/editAlgorithm.h>
@@ -49,6 +40,14 @@ namespace fs = std::filesystem;
 #include <opentimelineio/timeline.h>
 #include <opentimelineio/transition.h>
 
+#include <set>
+#include <fstream>
+#include <algorithm>
+
+#include <filesystem>
+namespace fs = std::filesystem;
+
+#include <FL/fl_utf8.h>
 
 
 
@@ -275,6 +274,23 @@ namespace mrv
         static size_t otioIndex = 1;
         file::Path savedPath, savedAudioPath;
 
+        void makeMediaToTemp(otio::MediaReference* media,
+                             const std::string& directory,
+                             const file::PathOptions options)
+        {
+            if (auto ref = dynamic_cast<otio::ExternalReference*>(media))
+            {
+                auto path = timeline::getPath(media, directory, options);
+                const bool listdir = false;
+                std::string fileName = directory + path.getFileName(listdir);
+                ref->set_target_url(fileName);
+            }
+            else if (auto ref = dynamic_cast<otio::ImageSequenceReference*>(media))
+            {
+                ref->set_target_url_base(directory);
+            }
+        }
+
 
         void makeMediaAbsolute(otio::MediaReference* media,
                                const std::string& directory,
@@ -471,6 +487,78 @@ namespace mrv
             }
         }
 
+        //! This routine makes paths absolute to /tmp directory if possible.
+        //! It uses the information from the current media item.
+        void makePathsToTemp(otio::Timeline* timeline, ViewerUI* ui)
+        {
+            auto stack = timeline->tracks();
+            auto model = ui->app->filesModel();
+            auto tracks = stack->children();
+            auto item = model->observeA()->get();
+            if (!item)
+                return;
+            auto path = item->path;
+            auto audioPath = item->audioPath.isEmpty() ? path : item->audioPath;
+
+            if (!file::isOTIOZ(path))
+                return;
+
+            std::string directory = mrv::tmppath() + "/media/";
+
+            file::PathOptions options;
+            for (int i = 0; i < tracks.size(); ++i)
+            {
+                auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
+                if (!track)
+                    continue;
+                if (track->kind() == otio::Track::Kind::video)
+                {
+                    for (auto child : track->children())
+                    {
+                        auto clip = otio::dynamic_retainer_cast<Clip>(child);
+                        if (!clip)
+                            continue;
+                        auto medias = clip->media_references();
+                        if (!medias.empty())
+                        {
+                            for (auto [_, media] : medias)
+                            {
+                                makeMediaToTemp(media, directory, options);
+                            }
+                        }
+                        else
+                        {
+                            auto media = clip->media_reference();
+                            makeMediaToTemp(media, directory, options);
+                        }
+                    }
+                }
+                else if (track->kind() == otio::Track::Kind::audio)
+                {
+                    for (auto child : track->children())
+                    {
+                        auto clip = otio::dynamic_retainer_cast<Clip>(child);
+                        if (!clip)
+                            continue;
+                        auto medias = clip->media_references();
+                        if (!medias.empty())
+                        {
+                            for (auto [_, media] : medias)
+                            {
+                                makeMediaToTemp(media, directory, options);
+                            }
+                        }
+                        else
+                        {
+                            auto media = clip->media_reference();
+                            makeMediaToTemp(media, directory, options);
+                        }
+                    }
+                }
+            }
+        }
+
+
         std::string _otioFilename(ViewerUI* ui)
         {
             char buf[256];
@@ -483,7 +571,7 @@ namespace mrv
             return out;
         }
 
-        void toOtioFile(const otio::Timeline* timeline, ViewerUI* ui)
+        void toOtioFile(otio::Timeline* timeline, ViewerUI* ui)
         {
             auto model = ui->app->filesModel();
             int index = model->observeAIndex()->get();
@@ -499,12 +587,20 @@ namespace mrv
 
             bool create = false;
             std::string otioFile;
+
             if (file::isTemporaryEDL(path))
             {
                 otioFile = path.get();
             }
             else
             {
+                if (file::isOTIOZ(path))
+                {
+                    std::string dir = mrv::tmppath() + "/media";
+                    destItem->timeline->expandOTIOZ(dir);
+                    destItem->timeline.reset();
+                    makePathsToTemp(timeline, ui);
+                }
                 create = true;
                 otioFile = otioFilename(ui);
             }

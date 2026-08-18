@@ -58,11 +58,6 @@ namespace mrv
 
             void _createThumbnail(
                 Fl_Widget* widget, const file::Path& path,
-                const otime::RationalTime& time, const int layerId = 0,
-                const std::string& mediaReferenceKey = "");
-
-            void _createThumbnail(
-                Fl_Widget* widget, const file::Path& path,
                 const std::shared_ptr<timeline::Timeline>& timeline,
                 const otime::RationalTime& time, const int layerId = 0,
                 const std::string& mediaReferenceKey = "");

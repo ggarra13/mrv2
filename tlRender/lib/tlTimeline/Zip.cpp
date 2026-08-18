@@ -8,6 +8,8 @@
 
 #include <algorithm>
 #include <array>
+#include <filesystem>
+#include <fstream>
 #include <vector>
 
 namespace tl
@@ -415,6 +417,90 @@ namespace tl
                                              "Cannot read zip entry: \"{0}\"").arg(name));
             }
             return out;
+        }
+
+        void ZipReader::saveMedia(const std::string& outputDir) const
+        {
+            namespace fs = std::filesystem;
+
+            std::error_code ec;
+            fs::create_directories(outputDir, ec);
+            if (ec)
+            {
+                throw std::runtime_error(string::Format(
+                                             "Cannot create media directory: \"{0}\"").arg(outputDir));
+            }
+
+            // Entries were already located and bounds-checked in open(), so
+            // this is a plain read of the raw (stored, uncompressed) bytes
+            // at each entry's derived offset.
+            auto io = file::FileIO::create(
+                _fileName,
+                file::Mode::Read,
+                file::Read::Normal,
+                file::Access::Random);
+
+            static const std::string mediaPrefix = "media/";
+            std::vector<uint8_t> buffer;
+            size_t savedCount = 0;
+            for (const auto& i : _entries)
+            {
+                const std::string& name = i.first;
+                if (name.compare(0, mediaPrefix.size(), mediaPrefix) != 0)
+                {
+                    // Not a media entry, e.g. the bundle's "content.otio".
+                    continue;
+                }
+                const Entry& entry = i.second;
+
+                // Use just the file name, discarding any directory
+                // structure the entry had inside the archive.
+                const size_t slash = name.find_last_of('/');
+                const std::string outName = slash != std::string::npos ?
+                                            name.substr(slash + 1) :
+                                            name;
+                if (outName.empty())
+                {
+                    // A directory entry, nothing to write.
+                    continue;
+                }
+
+                const fs::path outPath = fs::path(outputDir) / outName;
+
+                buffer.resize(static_cast<size_t>(entry.size));
+                if (entry.size > 0)
+                {
+                    io->readAt(buffer.data(), entry.offset, static_cast<size_t>(entry.size));
+                }
+
+                std::ofstream out(outPath, std::ios::binary | std::ios::trunc);
+                if (!out)
+                {
+                    throw std::runtime_error(string::Format(
+                                                 "Cannot write media file: \"{0}\"").arg(outPath.string()));
+                }
+                if (entry.size > 0)
+                {
+                    out.write(reinterpret_cast<const char*>(buffer.data()), entry.size);
+                }
+                if (!out)
+                {
+                    throw std::runtime_error(string::Format(
+                                                 "Cannot write media file: \"{0}\"").arg(outPath.string()));
+                }
+                out.close();
+                ++savedCount;
+
+                _logSystem->print("tl::ZipReader", string::Format(
+                                      "Saved zip entry \"{0}\" to \"{1}\" ({2} bytes)").
+                                  arg(name).arg(outPath.string()).arg(entry.size),
+                                  log::Type::Message);
+            }
+
+            _logSystem->print("tl::ZipReader", string::Format(
+                                  "Saved {0} media entries to \"{1}\"").
+                              arg(savedCount).arg(outputDir),
+                              log::Type::Message);
         }
     }
 }

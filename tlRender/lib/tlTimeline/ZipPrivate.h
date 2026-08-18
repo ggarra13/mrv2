@@ -48,6 +48,11 @@ namespace tl
 
             std::string readText(const std::string& name);
 
+            //! Extract every entry under "media/" to a directory on disk,
+            //! using the entry's file name (without its path inside the
+            //! archive) as the file name on disk.
+            void saveMedia(const std::string& outputDir = "/tmp/media") const;
+
         private:
             std::shared_ptr<log::System> _logSystem;
             std::string _fileName;

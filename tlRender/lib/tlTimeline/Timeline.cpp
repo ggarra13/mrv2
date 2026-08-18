@@ -2528,5 +2528,15 @@ namespace tl
             }
         }
 
+        void Timeline::expandOTIOZ(const std::string& mediaPath)
+        {
+            TLRENDER_P();
+
+            if (!p.zipReader)
+                return;
+
+            p.zipReader->saveMedia();
+        }
+
     } // namespace timeline
 } // namespace tl

@@ -272,6 +272,8 @@ namespace tl
 
             ///@}
 
+            void expandOTIOZ(const std::string& mediaPath);
+
             //! \name Video and Audio Data
             ///@{
 

@@ -133,26 +133,16 @@ namespace mrv
             }
             else
             {
-                _createThumbnail(widget, item->path, time, layerId,
+                // Needed as path is changed by Timeline class
+                file::Path path(item->path);
+
+                const auto context = App::app->getContext();
+                const auto timeline = timeline::Timeline::create(context, path);
+                item->timeline = timeline;
+
+                _createThumbnail(widget, path, timeline, time, layerId,
                                  mediaReferenceKey);
             }
-        }
-
-        void ThumbnailPanel::_createThumbnail(
-            Fl_Widget* widget, const file::Path& inputPath,
-            const otime::RationalTime& currentTime, const int layerId,
-            const std::string& mediaReferenceKey)
-        {
-            TLRENDER_P();
-
-            // Needed as path is changed by Timeline class
-            file::Path path(inputPath);
-
-            const auto context = App::app->getContext();
-            const auto& timeline = timeline::Timeline::create(context, path);
-
-            _createThumbnail(widget, path, timeline, currentTime, layerId,
-                             mediaReferenceKey);
         }
 
         void ThumbnailPanel::_createThumbnail(
