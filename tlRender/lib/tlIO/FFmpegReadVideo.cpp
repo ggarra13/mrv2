@@ -1109,56 +1109,71 @@ namespace tl
                 LOG_WARNING(msg);
                 return;
             }
-#if defined(__APPLE__)
-            const AVHWDeviceType type = AV_HWDEVICE_TYPE_VIDEOTOOLBOX;
-#elif defined(_WIN32)
-            const AVHWDeviceType type = AV_HWDEVICE_TYPE_D3D11VA;
-#else
-            const AVHWDeviceType type = AV_HWDEVICE_TYPE_VAAPI;
-#endif
-            // Find a hardware configuration for this codec and device type.
-            AVPixelFormat hwFormat = AV_PIX_FMT_NONE;
-            for (int i = 0; ; ++i)
+
+            // Try each candidate device type in order, using the first one
+            // that both offers a hardware configuration for this codec and
+            // successfully creates a device. If all candidates fail, stay
+            // on the software decoding path.
+            enum AVHWDeviceType type = AV_HWDEVICE_TYPE_NONE;
+            while ((type = av_hwdevice_iterate_types(type)) !=
+                    AV_HWDEVICE_TYPE_NONE)
             {
-                const AVCodecHWConfig* config = avcodec_get_hw_config(codec, i);
-                if (!config)
+                // Find a hardware configuration for this codec and device type.
+                AVPixelFormat hwFormat = AV_PIX_FMT_NONE;
+                for (int i = 0; ; ++i)
                 {
-                    break;
+                    const AVCodecHWConfig* config = avcodec_get_hw_config(codec, i);
+                    if (!config)
+                    {
+                        break;
+                    }
+                    if ((config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX) &&
+                        config->device_type == type)
+                    {
+                        hwFormat = config->pix_fmt;
+                        break;
+                    }
                 }
-                if ((config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX) &&
-                    config->device_type == type)
+                if (AV_PIX_FMT_NONE == hwFormat)
                 {
-                    hwFormat = config->pix_fmt;
-                    break;
+                    // This codec has no hardware support for this device
+                    // type; try the next candidate.
+                    std::string msg = string::Format(
+                        "Hardware decoding ({0}) is not available for the codec \"{1}\"; trying next backend").
+                        arg(av_hwdevice_get_type_name(type)).
+                        arg(codec->name ? codec->name : "?");
+                    LOG_WARNING(msg);
+                    continue;
                 }
-            }
-            if (AV_PIX_FMT_NONE == hwFormat)
-            {
-                // This codec has no hardware support here; stay on the software path.
-                std::string msg = string::Format("Hardware decoding is not available for the codec \"{0}\"; using software decoding").
+                // Create the hardware device. On failure, try the next candidate.
+                AVBufferRef* device = nullptr;
+                if (av_hwdevice_ctx_create(&device, type, nullptr, nullptr, 0) < 0)
+                {
+                    std::string msg = string::Format(
+                        "Cannot create a hardware decoding device ({0}); trying next backend").
+                        arg(av_hwdevice_get_type_name(type));
+                    LOG_WARNING(msg);
+                    continue;
+                }
+                _hwDeviceContext = device;
+                _hwPixelFormat = hwFormat;
+                _hwAccel = true;
+                _avCodecContext[_avStream]->hw_device_ctx = av_buffer_ref(_hwDeviceContext);
+                _avCodecContext[_avStream]->opaque = this;
+                _avCodecContext[_avStream]->get_format = _getHwFormat;
+                std::string msg = string::Format("Hardware decoding enabled ({0}) for the codec \"{1}\"").
+                                  arg(av_hwdevice_get_type_name(type)).
                                   arg(codec->name ? codec->name : "?");
-                LOG_WARNING(msg);
+                LOG_STATUS(msg);
                 return;
             }
-            // Create the hardware device. On failure, stay on the software path.
-            AVBufferRef* device = nullptr;
-            if (av_hwdevice_ctx_create(&device, type, nullptr, nullptr, 0) < 0)
-            {
-                std::string msg = string::Format("Cannot create a hardware decoding device ({0}); using software decoding").
-                                  arg(av_hwdevice_get_type_name(type));
-                LOG_WARNING(msg);
-                return;
-            }
-            _hwDeviceContext = device;
-            _hwPixelFormat = hwFormat;
-            _hwAccel = true;
-            _avCodecContext[_avStream]->hw_device_ctx = av_buffer_ref(_hwDeviceContext);
-            _avCodecContext[_avStream]->opaque = this;
-            _avCodecContext[_avStream]->get_format = _getHwFormat;
-            std::string msg = string::Format("Hardware decoding enabled ({0}) for the codec \"{1}\"").
-                              arg(av_hwdevice_get_type_name(type)).
-                              arg(codec->name ? codec->name : "?");
-            LOG_STATUS(msg);
+
+            // None of the candidate device types worked; stay on the
+            // software decoding path.
+            std::string msg = string::Format(
+                "Hardware decoding is not available for the codec \"{0}\"; using software decoding").
+                arg(codec->name ? codec->name : "?");
+            LOG_WARNING(msg);
         }
 
         void ReadVideo::start()
