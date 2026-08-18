@@ -76,7 +76,7 @@ namespace mrv
 
         std::string to_s() const;
 
-    public: 
+    public:
         bool ctrl;
         bool meta;
         bool alt;
@@ -96,7 +96,7 @@ namespace mrv
 
     //! Application behavior
     extern Hotkey kOpenNewInstance;
-    
+
     extern Hotkey kSaveImage;
     extern Hotkey kSaveImageToFolder;
     extern Hotkey kSaveOTIOEDL;
@@ -140,7 +140,7 @@ namespace mrv
     extern Hotkey kIgnoreChromaticities;
     extern Hotkey kAutoNormalize;
     extern Hotkey kInvalidValues;
-    
+
     extern Hotkey kHDRDataFromFile;
     extern Hotkey kHDRDataFalse;
     extern Hotkey kHDRDataTrue;
@@ -179,7 +179,7 @@ namespace mrv
     extern Hotkey kDebandingLow;
     extern Hotkey kDebandingMedium;
     extern Hotkey kDebandingHigh;
-    
+
     extern Hotkey kVideoLevelsFile;
     extern Hotkey kVideoLevelsLegalRange;
     extern Hotkey kVideoLevelsFullRange;
@@ -200,7 +200,7 @@ namespace mrv
 
     extern Hotkey kFrameStepFwd;
     extern Hotkey kFrameStepFPSFwd;
-    
+
     extern Hotkey kPlayBack;
     extern Hotkey kPlayBackHalfSpeed;
 
@@ -309,7 +309,6 @@ namespace mrv
     extern Hotkey kToggleColorInfo;
     extern Hotkey kToggleColorControls;
     extern Hotkey kToggleCompare;
-    extern Hotkey kTogglePlaylist;
     extern Hotkey kToggleDevices;
     extern Hotkey kToggleAnnotation;
     extern Hotkey kToggleSettings;
@@ -323,11 +322,10 @@ namespace mrv
     extern Hotkey kTogglePythonConsole;
     extern Hotkey kToggleAbout;
     extern Hotkey kToggleNDI;
-    extern Hotkey kToggleNetwork;
     extern Hotkey kToggleStereo3D;
     extern Hotkey kToggleUSD;
     extern Hotkey kToggleWebRTC;
-    
+
     //! Window behavior
     extern Hotkey kToggleClickThrough;
     extern Hotkey kUITransparencyLess;
@@ -370,10 +368,10 @@ namespace mrv
     extern Hotkey kEditSlice;
     extern Hotkey kEditSlide;
     extern Hotkey kEditSlip;
-    
-    
+
+
     extern Hotkey kToggleMuteAudio;
-    
+
     extern Hotkey kEditUndo;
     extern Hotkey kEditRedo;
 

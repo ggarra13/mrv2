@@ -442,8 +442,6 @@ namespace mrv
                 hotkey = kToggleWaveform.hotkey();
             else if (tmp == "NDI")
                 hotkey = kToggleNDI.hotkey();
-            else if (tmp == "Network")
-                hotkey = kToggleNetwork.hotkey();
             else if (tmp == "WebRTC")
                 hotkey = kToggleWebRTC.hotkey();
             else if (tmp == "USD")
