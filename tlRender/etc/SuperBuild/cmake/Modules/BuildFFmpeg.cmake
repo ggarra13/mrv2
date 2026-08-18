@@ -105,8 +105,6 @@ if (NOT FFmpeg_FOUND)
 	--disable-xlib
 	--enable-zlib
 	--disable-v4l2-m2m
-	--disable-vaapi
-	--disable-vdpau
 	--disable-large-tests
 	--pkg-config-flags=--static
 	${FFmpeg_CFLAGS}
