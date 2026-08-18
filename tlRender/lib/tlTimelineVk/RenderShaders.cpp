@@ -512,8 +512,8 @@ void main()
 
         const std::string videoLevels = R"(
 // enum tl::image::VideoLevels
-const uint VideoLevels_FullRange  = 0;
-const uint VideoLevels_LegalRange = 1;
+const int VideoLevels_FullRange  = 0;
+const int VideoLevels_LegalRange = 1;
 )";
 
         std::string imageFragmentSource()
@@ -524,52 +524,53 @@ layout(location = 0) in vec2 fTexture;
 layout(location = 0) out vec4 outColor;
 
 // enum tl::image::PixelType
-const uint PixelType_None              = 0;
-const uint PixelType_L_U8              = 1;
-const uint PixelType_L_U16             = 2;
-const uint PixelType_L_U32             = 3;
-const uint PixelType_L_F16             = 4;
-const uint PixelType_L_F32             = 5;
+const int PixelType_None              = 0;
+const int PixelType_L_U8              = 1;
+const int PixelType_L_U16             = 2;
+const int PixelType_L_U32             = 3;
+const int PixelType_L_F16             = 4;
+const int PixelType_L_F32             = 5;
 
-const uint PixelType_LA_U8             = 6;
-const uint PixelType_LA_U32            = 7;
-const uint PixelType_LA_U16            = 8;
-const uint PixelType_LA_F16            = 9;
-const uint PixelType_LA_F32            = 10;
+const int PixelType_LA_U8             = 6;
+const int PixelType_LA_U32            = 7;
+const int PixelType_LA_U16            = 8;
+const int PixelType_LA_F16            = 9;
+const int PixelType_LA_F32            = 10;
 
-const uint PixelType_RGB_U8            = 11;
-const uint PixelType_RGB_U10           = 12;
-const uint PixelType_RGB_U16           = 13;
-const uint PixelType_RGB_U32           = 14;
-const uint PixelType_RGB_F16           = 15;
-const uint PixelType_RGB_F32           = 16;
+const int PixelType_RGB_U8            = 11;
+const int PixelType_RGB_U10           = 12;
+const int PixelType_RGB_U16           = 13;
+const int PixelType_RGB_U32           = 14;
+const int PixelType_RGB_F16           = 15;
+const int PixelType_RGB_F32           = 16;
 
-const uint PixelType_RGBA_U8           = 17;
-const uint PixelType_RGBA_U16          = 18;
-const uint PixelType_RGBA_U32          = 19;
-const uint PixelType_RGBA_F16          = 20;
-const uint PixelType_RGBA_F32          = 21;
+const int PixelType_RGBA_U8           = 17;
+const int PixelType_RGBA_U16          = 18;
+const int PixelType_RGBA_U32          = 19;
+const int PixelType_RGBA_F16          = 20;
+const int PixelType_RGBA_F32          = 21;
 
-const uint PixelType_YUV_420P_U8       = 22;
-const uint PixelType_YUV_422P_U8       = 23;
-const uint PixelType_YUV_444P_U8       = 24;
+const int PixelType_YUV_420P_U8       = 22;
+const int PixelType_YUV_422P_U8       = 23;
+const int PixelType_YUV_444P_U8       = 24;
 
-const uint PixelType_YUV_420P_U10      = 25;
-const uint PixelType_YUV_422P_U10      = 26;
-const uint PixelType_YUV_444P_U10      = 27;
+const int PixelType_YUV_420P_U10      = 25;
+const int PixelType_YUV_422P_U10      = 26;
+const int PixelType_YUV_444P_U10      = 27;
 
-const uint PixelType_YUV_420P_U12      = 28;
-const uint PixelType_YUV_422P_U12      = 29;
-const uint PixelType_YUV_444P_U12      = 30;
+const int PixelType_YUV_420P_U12      = 28;
+const int PixelType_YUV_422P_U12      = 29;
+const int PixelType_YUV_444P_U12      = 30;
 
-const uint PixelType_YUV_420P_U16      = 31;
-const uint PixelType_YUV_422P_U16      = 32;
-const uint PixelType_YUV_444P_U16      = 33;
+const int PixelType_YUV_420P_U16      = 31;
+const int PixelType_YUV_422P_U16      = 32;
+const int PixelType_YUV_444P_U16      = 33;
 
-const uint PixelType_ARGB_4444_Premult = 34;
+const int PixelType_YUV_420SP_U8      = 34;
+const int PixelType_YUV_420SP_U16     = 35;
 
-const uint PixelType_YUV_420SP_U8      = 35;
-const uint PixelType_YUV_420SP_U16 = 36;
+const int PixelType_ARGB_4444_Premult = 36;
+
 
 // enum tl::image::VideoLevels
 const uint VideoLevels_FullRange  = 0;
@@ -647,7 +648,13 @@ vec4 sampleTexture(
             cb = cb / rangeScale;
             cr = cr / rangeScale;
           }
-
+          else if (pixelType == PixelType_YUV_420SP_U8 ||
+                   pixelType == PixelType_YUV_420SP_U16)
+          {
+             y  = texture(s0, textureCoord).r;
+             cb = texture(s1, textureCoord).r;
+             cr = texture(s2, textureCoord).g;
+          }
 
           if (videoLevels == VideoLevels_FullRange)
           {
