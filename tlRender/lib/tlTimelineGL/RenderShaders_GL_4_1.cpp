@@ -161,9 +161,9 @@ namespace tl
                 "const uint PixelType_YUV_420P_U16      = 31;\n"
                 "const uint PixelType_YUV_422P_U16      = 32;\n"
                 "const uint PixelType_YUV_444P_U16      = 33;\n"
-                "const uint PixelType_ARGB_4444_Premult = 34;\n"
-                "const uint PixelType_YUV_420SP_U8      = 35;\n"
-                "const uint PixelType_YUV_420SP_U16     = 36;\n";
+                "const uint PixelType_YUV_420SP_U8      = 34;\n"
+                "const uint PixelType_YUV_420SP_U16     = 35;\n"
+                "const uint PixelType_ARGB_4444_Premult = 36;\n";
 
             const std::string videoLevels =
                 "// enum tl::image::VideoLevels\n"
@@ -209,13 +209,13 @@ vec4 sampleTexture(
               sampler2D s2)
 {
        vec4 c;
-       if ((pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_444P_U16))
+       if ((pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_420SP_U16))
        {
 
           float y  = texture(s0, textureCoord).r;
           float cb = texture(s1, textureCoord).r;
           float cr = texture(s2, textureCoord).r;
-// For 10-bit and 12-bit, ensure correct normalization
+          // For 10-bit and 12-bit, ensure correct normalization
           if (pixelType == PixelType_YUV_420P_U10 ||
               pixelType == PixelType_YUV_422P_U10 ||
               pixelType == PixelType_YUV_444P_U10)
@@ -237,18 +237,12 @@ vec4 sampleTexture(
             cb = cb / rangeScale;
             cr = cr / rangeScale;
           }
-          else if (PixelType_YUV_420SP_U8 == pixelType ||
-                   PixelType_YUV_420SP_U16 == pixelType)
+          else if (pixelType == PixelType_YUV_420SP_U8 ||
+                   pixelType == PixelType_YUV_420SP_U16)
           {
-             if (VideoLevels_FullRange == videoLevels)
-             {
-                  float y  = texture(s0, textureCoord).r;
-                  float cb = texture(s1, textureCoord).r - 0.5;
-                  float cr = texture(s1, textureCoord).g - 0.5;
-                  c.r = y + (yuvCoefficients.x * cr);
-                  c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
-                  c.b = y + (yuvCoefficients.w * cb);
-              }
+            y  = texture(s0, textureCoord).r;
+            cb = texture(s1, textureCoord).r;
+            cr = texture(s1, textureCoord).g;
           }
           if (videoLevels == VideoLevels_FullRange)
           {

@@ -64,10 +64,10 @@ namespace tl
             "YUV_422P_U16",
             "YUV_444P_U16",
 
-            "ARGB_4444_Premult",
-
             "YUV 420SP U8",
-            "YUV 420SP U16");
+            "YUV 420SP U16",
+            
+            "ARGB_4444_Premult");
         TLRENDER_ENUM_SERIALIZE_IMPL(PixelType);
 
         TLRENDER_ENUM_IMPL(YUVCoefficients, "REC709", "BT2020", "BT601");
@@ -121,8 +121,8 @@ namespace tl
                 3, 3, 3,
                 3, 3, 3,
                 3, 3, 3,
-                4,
-                3, 3};
+                3, 3,
+                4};
             return values[static_cast<size_t>(value)];
         }
 
@@ -132,7 +132,7 @@ namespace tl
                 values = {0,  8,  16, 32, 16, 32, 8,  16, 32, 16,
                           32, 8,  10, 16, 32, 16, 32, 8,  16, 32,
                           16, 32, 8,  8,  8,  16, 16, 16, 16, 16, 16,
-                          16, 16, 16, 4, 8, 16};
+                          16, 16, 16, 8, 16, 4};
             return values[static_cast<size_t>(value)];
         }
 
