@@ -3,7 +3,9 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
-#define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+// #define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+#define DBG
+
 
 #include <sstream>
 
@@ -1492,7 +1494,7 @@ namespace tl
                     io::addOtioTags(tags, _fileName, time);
 
                     // Clone to safely hold this frame's buffer data.
-                    AVFrame* cloned = av_frame_clone(_avFrame);
+                    AVFrame* cloned = av_frame_clone(frame);
 
                     // Initialize a safe AVFrame shared_ptr to hold to the AVFrame data.
                     std::shared_ptr<AVFrame> safeFrame(cloned, [](AVFrame* f)
@@ -1515,18 +1517,18 @@ namespace tl
                     }
                     while (
                         (tag = av_dict_get(
-                            _avFrame->metadata, "", tag,
+                            frame->metadata, "", tag,
                             AV_DICT_IGNORE_SUFFIX)))
                     {
                         tags[tag->key] = tag->value;
                     }
 
-                    _hdr.eotf = toEOTF(_avFrame->color_trc);
-                    setPrimariesFromAVColorPrimaries(_avFrame->color_primaries,
+                    _hdr.eotf = toEOTF(frame->color_trc);
+                    setPrimariesFromAVColorPrimaries(frame->color_primaries,
                                                      _hdr);
                     if (image::isHDR(_hdr))
                     {
-                        toHDRData(_avFrame, _hdr);
+                        toHDRData(frame, _hdr);
                         image->setHDR(_hdr);
                     }
                     image->setTags(tags);
