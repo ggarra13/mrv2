@@ -1282,18 +1282,6 @@ namespace mrv
                 if ((!value && webrtcPanel) || (value && !webrtcPanel))
                     webrtc_panel_cb(nullptr, ui);
             }
-            else if (c == "Network Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && networkPanel) || (value && !networkPanel))
-                    network_panel_cb(nullptr, ui);
-            }
             else if (c == "USD Panel")
             {
 #ifdef TLRENDER_USD
@@ -1336,18 +1324,6 @@ namespace mrv
                 if ((!value && pythonPanel) || (value && !pythonPanel))
                     python_panel_cb(nullptr, ui);
 #endif
-            }
-            else if (c == "Playlist Panel")
-            {
-                bool receive = prefs->ReceiveUI->value();
-                if (!receive)
-                {
-                    tcp->unlock();
-                    return;
-                }
-                bool value = message["value"];
-                if ((!value && playlistPanel) || (value && !playlistPanel))
-                    playlist_panel_cb(nullptr, ui);
             }
             else if (c == "Settings Panel")
             {

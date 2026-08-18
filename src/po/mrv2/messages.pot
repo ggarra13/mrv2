@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: mrv2 v1.7.3\n"
+"Project-Id-Version: mrv2 v1.7.4\n"
 "Report-Msgid-Bugs-To: ggarra13@gmail.com\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -183,6 +183,12 @@ msgid "Set file sequence audio file name."
 msgstr ""
 
 msgid "Get file sequence audio file name."
+msgstr ""
+
+msgid "Set file sequence audio directory."
+msgstr ""
+
+msgid "Get file sequence audio directory."
 msgstr ""
 
 msgid "Set maximum file sequence digits."
@@ -1133,14 +1139,7 @@ msgstr ""
 msgid "Networking:"
 msgstr ""
 
-msgid "Start a server.  Use -port to specify a port number."
-msgstr ""
-
-msgid "Connect to a server at <value>.  Use -port to specify a port number."
-msgstr ""
-
-msgid ""
-"Port number for the server to listen to or for the client to connect to."
+msgid "Connect to a WebRTC project at <value>."
 msgstr ""
 
 msgid "Connect to a WebRTC room at <value>."
@@ -1153,6 +1152,9 @@ msgid "Open the application as if no license was present."
 msgstr ""
 
 msgid "Return the version and exit."
+msgstr ""
+
+msgid "Return the system information and exit."
 msgstr ""
 
 msgid "Cannot create window"
@@ -1245,42 +1247,39 @@ msgstr ""
 msgid "Stereo 3D"
 msgstr ""
 
-msgid "Type"
+msgid "Project"
 msgstr ""
 
-msgid "Client"
+msgid "Project you are working on."
 msgstr ""
 
-msgid "Server"
+msgid "Room"
 msgstr ""
 
-msgid "Host"
-msgstr ""
-
-msgid "Host name or IP to connect to.  For example: 127.0.0.1"
-msgstr ""
-
-msgid "Previously used Hosts"
-msgstr ""
-
-msgid "Port"
-msgstr ""
-
-msgid ""
-"Port to connect to.  Make sure your firewall and router allows read/write "
-"through it."
+msgid "Room name to enter."
 msgstr ""
 
 msgid "Connect"
 msgstr ""
 
-msgid "Create"
+msgid ""
+"Please enter a Project.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Please enter a unique Room.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"This feature is unlimited on the Pro and Pro+ tiers.\n"
+"\n"
+"On other tiers, it is limited to 2\n"
+"connections and 30 minutes of use."
 msgstr ""
 
 msgid "Disconnect"
-msgstr ""
-
-msgid "Shutdown"
 msgstr ""
 
 msgid "&File/&Open"
@@ -1426,45 +1425,7 @@ msgstr ""
 msgid "Stop streaming"
 msgstr ""
 
-msgid "Complexity"
-msgstr ""
-
-msgid "Draw Mode"
-msgstr ""
-
-msgid "Stage Cache"
-msgstr ""
-
-msgid "Disk Cache in GB"
-msgstr ""
-
-msgid "Project"
-msgstr ""
-
-msgid "Project you are working on."
-msgstr ""
-
-msgid "Room"
-msgstr ""
-
-msgid "Room name to enter."
-msgstr ""
-
-msgid ""
-"Please enter a Project.\n"
-"\n"
-msgstr ""
-
-msgid ""
-"Please enter a unique Room.\n"
-"\n"
-msgstr ""
-
-msgid ""
-"This feature is unlimited on the Pro and Pro+ tiers.\n"
-"\n"
-"On other tiers, it is limited to 2\n"
-"connections and 30 minutes of use."
+msgid "Type"
 msgstr ""
 
 msgid "Type of Waveform Monitor."
@@ -1486,6 +1447,9 @@ msgid "Type of Vectorscope."
 msgstr ""
 
 msgid "Toggle other eye stereo image."
+msgstr ""
+
+msgid "Color"
 msgstr ""
 
 msgid "Image"
@@ -1602,25 +1566,6 @@ msgstr ""
 msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Drop a clip here to create a playlist."
-msgstr ""
-
-msgid "Create an empty timeline with a video and audio track."
-msgstr ""
-
-msgid "Create a timeline from the selected clip."
-msgstr ""
-
-msgid ""
-"Save current EDL to a permanent location, making paths relative if possible."
-msgstr ""
-
-msgid "Close current EDL."
 msgstr ""
 
 msgid "Clear the messages"
@@ -2221,6 +2166,11 @@ msgstr ""
 msgid "Multiply the A and B files"
 msgstr ""
 
+msgid ""
+"Show the halves of the A and B files,\n"
+"one of them mirrored"
+msgstr ""
+
 msgid "Wipe"
 msgstr ""
 
@@ -2427,34 +2377,10 @@ msgstr ""
 msgid "Downloading {0}..."
 msgstr ""
 
-msgid "Server started at port {0}."
-msgstr ""
-
-msgid "Server stopped."
-msgstr ""
-
-msgid "A client connected from {0}"
-msgstr ""
-
-msgid "Client at {0} disconnected."
-msgstr ""
-
-msgid "Removing {0} from message publisher."
-msgstr ""
-
 msgid "Server listening on port "
 msgstr ""
 
 msgid "ComfyUI listening on port "
-msgstr ""
-
-msgid "Connected to server at {0}, port {1}"
-msgstr ""
-
-msgid "Server connection lost."
-msgstr ""
-
-msgid "Exception caught: "
 msgstr ""
 
 msgid "Server protocol version is {0}.  Client protocol version is {1}"
@@ -2997,7 +2923,7 @@ msgstr ""
 msgid "Items selected must be on the same track."
 msgstr ""
 
-msgid "Items selected must be contiguous on the track. Left {0}.  Right {0}."
+msgid "Items selected must be contiguous on the track. Left {0}.  Right {1}."
 msgstr ""
 
 msgid "Please select two or four contiguous items.  Selected {0}."
@@ -3021,7 +2947,9 @@ msgstr ""
 msgid "Destination file is invalid."
 msgstr ""
 
-msgid "You can only add clips to an .otio EDL playlist."
+msgid ""
+".otioz files cannot be edited.  Please unzip them first and use the "
+"'content.otio' file"
 msgstr ""
 
 msgid "Unknown media reference"
@@ -3305,12 +3233,6 @@ msgstr ""
 msgid "Link/Delete"
 msgstr ""
 
-msgid "Play"
-msgstr ""
-
-msgid "Stop"
-msgstr ""
-
 msgid "Really cancel voice over recording?"
 msgstr ""
 
@@ -3443,31 +3365,28 @@ msgstr ""
 msgid "New file {0} already exist!  Cannot overwrite it."
 msgstr ""
 
-msgid "Rotated image info: {0}"
-msgstr ""
-
-msgid "Scaled image info: {0}"
-msgstr ""
-
 msgid "{0}: Cannot open writer plugin."
 msgstr ""
 
 msgid "Image info: {0} {1}"
 msgstr ""
 
-msgid "Image too big for Save Annotations.  Will scale to the viewport size."
+msgid "Scaled image info: {0}"
 msgstr ""
 
 msgid "Writer plugin did not get output info.  Defaulting to {0}"
-msgstr ""
-
-msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Using profile {0}, pixel format {1}."
 msgstr ""
 
 msgid "Using preset {0}."
+msgstr ""
+
+msgid "Offscreen Buffer info: {0}"
+msgstr ""
+
+msgid "Output info: {0} {1}"
 msgstr ""
 
 msgid "Saving Movie without Audio %<PRId64> - %<PRId64>"
@@ -3485,31 +3404,10 @@ msgstr ""
 msgid "Audio only in timeline, but not trying to save audio."
 msgstr ""
 
-msgid "{0}: Invalid OpenGL format and type"
-msgstr ""
-
-msgid "OpenGL info: {0}"
-msgstr ""
-
 msgid "Saving... {0}"
 msgstr ""
 
-msgid "Unsupported output format"
-msgstr ""
-
-msgid "Empty video data at time {0}.  Repeating frame."
-msgstr ""
-
 msgid "Render size: {0}"
-msgstr ""
-
-msgid "Image Layer '{0}' info: {1} {2}"
-msgstr ""
-
-msgid "Offscreen Buffer info: {0}"
-msgstr ""
-
-msgid "Unsupported output format: "
 msgstr ""
 
 msgid "2.35"
@@ -3527,13 +3425,37 @@ msgstr ""
 msgid "Cache: "
 msgstr ""
 
+msgid "HDR monitor min. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor max. nits = {0}"
+msgstr ""
+
+msgid "HDR monitor not found or not configured."
+msgstr ""
+
+msgid "HDR monitor not detected by Vulkan or Window Manager."
+msgstr ""
+
+msgid "Vulkan color space is {0}"
+msgstr ""
+
+msgid "Vulkan format is {0}"
+msgstr ""
+
+msgid "Changed to HDR active monitor at index {0}"
+msgstr ""
+
+msgid "Changed to HDR supported but inactive monitor at index {0}"
+msgstr ""
+
+msgid "Changed to SDR monitor at index {0}"
+msgstr ""
+
 msgid "Edit Text"
 msgstr ""
 
 msgid "'{0}' is not a file, directory or url."
-msgstr ""
-
-msgid "Invalid font for text drawing"
 msgstr ""
 
 msgid "Could not convert message to shape: "
@@ -4535,9 +4457,6 @@ msgstr ""
 msgid "Version:\t"
 msgstr ""
 
-msgid "GLSL Version:\t"
-msgstr ""
-
 msgid "Max. Texture Size:\t"
 msgstr ""
 
@@ -4597,6 +4516,9 @@ msgid ""
 "below it.\n"
 "\n"
 "Give window focus to disable."
+msgstr ""
+
+msgid "Stop"
 msgstr ""
 
 msgid "Continue"
@@ -5529,13 +5451,13 @@ msgstr ""
 msgid "OpenEXR Options"
 msgstr ""
 
-msgid "OpenEXR's Compression Type"
-msgstr ""
-
 msgid "Pixel Type"
 msgstr ""
 
 msgid "OpenEXR's Pixel Type"
+msgstr ""
+
+msgid "OpenEXR's Compression Type"
 msgstr ""
 
 msgid "ZIP Compression"
@@ -6208,7 +6130,28 @@ msgstr ""
 msgid "Thumbnails"
 msgstr ""
 
-msgid "How to display timeline thumbnails in panels."
+msgid "Files Panel"
+msgstr ""
+
+msgid "How to display timeline thumbnails in Files Panel."
+msgstr ""
+
+msgid "Compare Panel"
+msgstr ""
+
+msgid "How to display timeline thumbnails in Compare Panel."
+msgstr ""
+
+msgid "Playlist Panel"
+msgstr ""
+
+msgid "How to display timeline thumbnails in Playlist Panel."
+msgstr ""
+
+msgid "Stereo Panel"
+msgstr ""
+
+msgid "How to display timeline thumbnails in Stereo Panel."
 msgstr ""
 
 msgid "Edit Viewport"
@@ -6502,8 +6445,8 @@ msgid ""
 "Regular Expression used to match clip versions.  Must group three things "
 "(prefix, number and suffix). If left on its default value (_v), it will "
 "automatically be created a regular expression to match versions defined with "
-"_v in the name of the file, directory or both. For example: gizmo_v001.0001."
-"exr"
+"_v in the name of the file, directory or both. For example: "
+"gizmo_v001.0001.exr"
 msgstr ""
 
 msgid "Maximum Images Apart"
@@ -7490,9 +7433,6 @@ msgstr ""
 msgid "Toggle NDI"
 msgstr ""
 
-msgid "Toggle Network"
-msgstr ""
-
 msgid "Toggle WebRTC"
 msgstr ""
 
@@ -7574,6 +7514,9 @@ msgstr ""
 msgid "Area Selection Mode"
 msgstr ""
 
+msgid "Draw Mode"
+msgstr ""
+
 msgid "Erase Mode"
 msgstr ""
 
@@ -7629,9 +7572,6 @@ msgid "Toggle Color Area Info Panel"
 msgstr ""
 
 msgid "Toggle Color Controls Panel"
-msgstr ""
-
-msgid "Toggle Playlist Panel"
 msgstr ""
 
 msgid "Toggle Compare Panel"

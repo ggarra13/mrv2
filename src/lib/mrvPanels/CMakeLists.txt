@@ -17,14 +17,12 @@ set(HEADERS
     mrvPanelsAux.h
     mrvPanelsCallbacks.h
     mrvPanelWidget.h
-    mrvPlaylistPanel.h
     mrvSettingsPanel.h
     mrvStatsPanel.h
     mrvStereo3DPanel.h
     mrvThumbnailPanel.h
     mrvVectorscopePanel.h
     mrvWaveformPanel.h
-    mrvWebRTCPanel.h
 )
 
 set(SOURCES
@@ -42,14 +40,12 @@ set(SOURCES
     mrvPanelWidget.cpp
     mrvPanelsAux.cpp
     mrvPanelsCallbacks.cpp
-    mrvPlaylistPanel.cpp
     mrvSettingsPanel.cpp
     mrvStatsPanel.cpp
     mrvStereo3DPanel.cpp
     mrvThumbnailPanel.cpp
     mrvVectorscopePanel.cpp
     mrvWaveformPanel.cpp
-    mrvWebRTCPanel.cpp
 )
 	
 if(TLRENDER_USD)
@@ -74,8 +70,8 @@ if(MRV2_PYBIND11)
 endif()
 
 if(MRV2_NETWORK)
-    list( APPEND HEADERS mrvNetworkPanel.h )
-    list( APPEND SOURCES mrvNetworkPanel.cpp )
+    list(APPEND HEADERS mrvWebRTCPanel.h)
+    list(APPEND SOURCES mrvWebRTCPanel.cpp)
 endif()
 
 set(LIBRARIES mrvFl mrvEdit)

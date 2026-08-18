@@ -63,7 +63,6 @@ set(SOURCES
     OutlineCircle.cpp
     OutlinePolygon.cpp
     OutlineRectangle.cpp
-    Playlist.cpp
     Polygon.cpp
     Prev.cpp
     Python.cpp

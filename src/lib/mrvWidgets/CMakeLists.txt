@@ -55,7 +55,6 @@ set(HEADERS
     mrvPanelConstants.h
     mrvPanelGroup.h
     mrvPanelWindow.h
-    mrvPlaylistButton.h
     mrvPopupMenu.h
     mrvPreferencesTree.h
     mrvProgressReport.h
@@ -109,7 +108,6 @@ set(SOURCES
     mrvPanelButton.cpp
     mrvPanelGroup.cpp
     mrvPanelWindow.cpp
-    mrvPlaylistButton.cpp
     mrvPopupMenu.cpp
     mrvPreferencesTree.cpp
     mrvProgressReport.cpp

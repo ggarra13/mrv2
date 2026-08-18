@@ -43,7 +43,7 @@
 namespace
 {
     const char* kModule = "mrv2s";
-    const int kSessionVersion = 17;
+    const int kSessionVersion = 18;
 } // namespace
 
 namespace
@@ -166,7 +166,6 @@ namespace mrv
                 {"Color", (colorPanel != nullptr)},
                 {"Color Area", (colorAreaPanel != nullptr)},
                 {"Compare", (comparePanel != nullptr)},
-                {"Playlist", (playlistPanel != nullptr)},
                 {"Media Information", (imageInfoPanel != nullptr)},
                 {"Annotations", (annotationsPanel != nullptr)},
                 {"Devices", (devicesPanel != nullptr)},
@@ -174,9 +173,6 @@ namespace mrv
                 {"Settings", (settingsPanel != nullptr)},
 #ifdef MRV2_PYBIND11
                 {"Python", (pythonPanel != nullptr)},
-#endif
-#ifdef MRV2_NETWORK
-                {"Network", (networkPanel != nullptr)},
 #endif
 #ifdef TLRENDER_NDI
                 {"NDI", (ndiPanel != nullptr)},
@@ -200,8 +196,6 @@ namespace mrv
                 colorAreaPanel->save();
             if (comparePanel)
                 comparePanel->save();
-            if (playlistPanel)
-                playlistPanel->save();
             if (imageInfoPanel)
                 imageInfoPanel->save();
             if (annotationsPanel)
@@ -217,10 +211,6 @@ namespace mrv
 #ifdef MRV2_PYBIND11
             if (pythonPanel)
                 pythonPanel->save();
-#endif
-#ifdef MRV2_NETWORK
-            if (networkPanel)
-                networkPanel->save();
 #endif
 #ifdef TLRENDER_USD
             if (usdPanel)

@@ -130,13 +130,9 @@ namespace mrv
         {_("Histogram"), (Fl_Callback*)histogram_panel_cb},
         {_("Logs"), (Fl_Callback*)logs_panel_cb},
         {_("Media Information"), (Fl_Callback*)image_info_panel_cb},
-#ifdef MRV2_NETWORK
-        {_("Network"), (Fl_Callback*)network_panel_cb},
-#endif
 #ifdef TLRENDER_NDI
         {_("NDI"), (Fl_Callback*)ndi_panel_cb},
 #endif
-        {_("Playlist"), (Fl_Callback*)playlist_panel_cb},
 #ifdef MRV2_PYBIND11
         {_("Python"), (Fl_Callback*)python_panel_cb},
 #endif
@@ -1152,8 +1148,6 @@ namespace mrv
             panel::colorAreaPanel->save();
         if (panel::comparePanel)
             panel::comparePanel->save();
-        if (panel::playlistPanel)
-            panel::playlistPanel->save();
         if (panel::settingsPanel)
             panel::settingsPanel->save();
         if (panel::logsPanel)
@@ -1179,10 +1173,6 @@ namespace mrv
 #ifdef TLRENDER_NDI
         if (panel::ndiPanel)
             panel::ndiPanel->save();
-#endif
-#ifdef MRV2_NETWORK
-        if (panel::networkPanel)
-            panel::networkPanel->save();
 #endif
 #ifdef TLRENDER_USD
         if (panel::usdPanel)
@@ -1220,12 +1210,6 @@ namespace mrv
         panel::filesPanel = nullptr;
         delete panel::comparePanel;
         panel::comparePanel = nullptr;
-        delete panel::playlistPanel;
-        panel::playlistPanel = nullptr;
-#ifdef MRV2_NETWORK
-        delete panel::networkPanel;
-        panel::networkPanel = nullptr;
-#endif
 #ifdef TLRENDER_NDI
         delete panel::ndiPanel;
         panel::ndiPanel = nullptr;

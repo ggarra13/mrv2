@@ -1229,7 +1229,6 @@ namespace tl
                         AVSEEK_FLAG_BACKWARD) < 0)
                 {
                     //! \todo How should this be handled?
-                    std::cerr << "seeking error" << std::endl;
                 }
             }
 

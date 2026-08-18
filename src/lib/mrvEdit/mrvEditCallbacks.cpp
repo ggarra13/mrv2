@@ -20,19 +20,8 @@
 #include "mrvCore/mrvHome.h"
 #include "mrvCore/mrvFile.h"
 
-
-#include <set>
-#include <fstream>
-#include <algorithm>
-
-#include <filesystem>
-namespace fs = std::filesystem;
-
-#include <FL/fl_utf8.h>
-
+#include <tlTimeline/Timeline.h>
 #include <tlTimeline/Util.h>
-
-#include <tlDraw/Annotation.h>
 
 #include <tlIO/System.h>
 
@@ -40,6 +29,8 @@ namespace fs = std::filesystem;
 #include <tlCore/File.h>
 #include <tlCore/FileInfo.h>
 #include <tlCore/StringFormat.h>
+
+#include <tlDraw/Annotation.h>
 
 #include <opentimelineio/clip.h>
 #include <opentimelineio/editAlgorithm.h>
@@ -49,6 +40,14 @@ namespace fs = std::filesystem;
 #include <opentimelineio/timeline.h>
 #include <opentimelineio/transition.h>
 
+#include <set>
+#include <fstream>
+#include <algorithm>
+
+#include <filesystem>
+namespace fs = std::filesystem;
+
+#include <FL/fl_utf8.h>
 
 
 
@@ -60,8 +59,8 @@ namespace
 
 namespace mrv
 {
-    using otime::RationalTime;
-    using otime::TimeRange;
+    using otio::RationalTime;
+    using otio::TimeRange;
 
     using otio::Clip;
     using otio::Composition;
@@ -275,6 +274,23 @@ namespace mrv
         static size_t otioIndex = 1;
         file::Path savedPath, savedAudioPath;
 
+        void makeMediaToTemp(otio::MediaReference* media,
+                             const std::string& directory,
+                             const file::PathOptions options)
+        {
+            if (auto ref = dynamic_cast<otio::ExternalReference*>(media))
+            {
+                auto path = timeline::getPath(media, directory, options);
+                const bool listdir = false;
+                std::string fileName = directory + path.getFileName(listdir);
+                ref->set_target_url(fileName);
+            }
+            else if (auto ref = dynamic_cast<otio::ImageSequenceReference*>(media))
+            {
+                ref->set_target_url_base(directory);
+            }
+        }
+
 
         void makeMediaAbsolute(otio::MediaReference* media,
                                const std::string& directory,
@@ -471,6 +487,78 @@ namespace mrv
             }
         }
 
+        //! This routine makes paths absolute to /tmp directory if possible.
+        //! It uses the information from the current media item.
+        void makePathsToTemp(otio::Timeline* timeline, ViewerUI* ui)
+        {
+            auto stack = timeline->tracks();
+            auto model = ui->app->filesModel();
+            auto tracks = stack->children();
+            auto item = model->observeA()->get();
+            if (!item)
+                return;
+            auto path = item->path;
+            auto audioPath = item->audioPath.isEmpty() ? path : item->audioPath;
+
+            if (!file::isOTIOZ(path))
+                return;
+
+            std::string directory = mrv::tmppath() + "/media/";
+
+            file::PathOptions options;
+            for (int i = 0; i < tracks.size(); ++i)
+            {
+                auto track = otio::dynamic_retainer_cast<Track>(tracks[i]);
+                if (!track)
+                    continue;
+                if (track->kind() == otio::Track::Kind::video)
+                {
+                    for (auto child : track->children())
+                    {
+                        auto clip = otio::dynamic_retainer_cast<Clip>(child);
+                        if (!clip)
+                            continue;
+                        auto medias = clip->media_references();
+                        if (!medias.empty())
+                        {
+                            for (auto [_, media] : medias)
+                            {
+                                makeMediaToTemp(media, directory, options);
+                            }
+                        }
+                        else
+                        {
+                            auto media = clip->media_reference();
+                            makeMediaToTemp(media, directory, options);
+                        }
+                    }
+                }
+                else if (track->kind() == otio::Track::Kind::audio)
+                {
+                    for (auto child : track->children())
+                    {
+                        auto clip = otio::dynamic_retainer_cast<Clip>(child);
+                        if (!clip)
+                            continue;
+                        auto medias = clip->media_references();
+                        if (!medias.empty())
+                        {
+                            for (auto [_, media] : medias)
+                            {
+                                makeMediaToTemp(media, directory, options);
+                            }
+                        }
+                        else
+                        {
+                            auto media = clip->media_reference();
+                            makeMediaToTemp(media, directory, options);
+                        }
+                    }
+                }
+            }
+        }
+
+
         std::string _otioFilename(ViewerUI* ui)
         {
             char buf[256];
@@ -483,7 +571,7 @@ namespace mrv
             return out;
         }
 
-        void toOtioFile(const otio::Timeline* timeline, ViewerUI* ui)
+        void toOtioFile(otio::Timeline* timeline, ViewerUI* ui)
         {
             auto model = ui->app->filesModel();
             int index = model->observeAIndex()->get();
@@ -499,12 +587,20 @@ namespace mrv
 
             bool create = false;
             std::string otioFile;
+
             if (file::isTemporaryEDL(path))
             {
                 otioFile = path.get();
             }
             else
             {
+                if (file::isOTIOZ(path))
+                {
+                    std::string dir = mrv::tmppath() + "/media";
+                    destItem->timeline->expandOTIOZ(dir);
+                    destItem->timeline.reset();
+                    makePathsToTemp(timeline, ui);
+                }
                 create = true;
                 otioFile = otioFilename(ui);
             }
@@ -2047,7 +2143,7 @@ namespace mrv
         {
             std::string err = string::Format(
                 _("Items selected must be contiguous on the track. "
-                  "Left {0}.  Right {0}."))
+                  "Left {0}.  Right {1}."))
                               .arg(left_range)
                               .arg(right_range);
             LOG_ERROR(err);
@@ -2460,13 +2556,24 @@ namespace mrv
         add_clip_to_timeline_cb(index, ui);
     }
 
+    /**
+     * Given a destination timeline and a source timeline, append source
+     * timeline to destination timeline.  Destination timeline conserves all
+     * transitions and may have some gaps added if some track in source timeline
+     * it is missing from the destination timeline.
+     *
+     * @param destTimeline   destination timeline which will be modified
+     * @param sourceTimeline source timeline to append
+     * @param inOutRange     source's in/out range to append
+     * @param timeRange      source's time range
+     */
     void addTimelineToEDL(
         otio::Timeline* destTimeline, const otio::Timeline* sourceTimeline,
         const TimeRange& inOutRange, const TimeRange& timeRange)
     {
         otio::ErrorStatus errorStatus;
         auto globalStartTime =
-            RationalTime(0.0, sourceTimeline->duration().rate());
+            otio::RationalTime(0.0, sourceTimeline->duration().rate());
         auto startTimeOpt = sourceTimeline->global_start_time();
         if (startTimeOpt.has_value())
             globalStartTime = startTimeOpt.value();
@@ -2490,7 +2597,7 @@ namespace mrv
 
         if (destStartTime.strictly_equal(time::invalidTime))
         {
-            destStartTime = RationalTime(0.0, 24.0);
+            destStartTime = otio::RationalTime(0.0, 24.0);
         }
 
         // Then, append video tracks
@@ -2522,7 +2629,8 @@ namespace mrv
             if (duration.value() > 0.0)
             {
                 auto gapRange =
-                    TimeRange(RationalTime(0.0, duration.rate()), duration);
+                    otio::TimeRange(otio::RationalTime(0.0, duration.rate()),
+                                    duration);
                 auto gap = new otio::Gap(gapRange);
                 track->append_child(gap, &errorStatus);
                 if (is_error(errorStatus))
@@ -2559,28 +2667,6 @@ namespace mrv
                         itemTrackRange.start_time().rescaled_to(videoRate) +
                             globalStartTime.rescaled_to(videoRate),
                         itemTrackRange.duration().rescaled_to(videoRate));
-
-                    // file::PathOptions options;
-                    // auto clip = otio::dynamic_retainer_cast<Clip>(child);
-                    // file::Path path;
-                    // if (clip)
-                    //     path = timeline::getPath(clip->media_reference(),
-                    //                              "",
-                    //                              options);
-
-                    // std::cerr << "---------------- " << path.get(-1,
-                    // file::PathType::FileName)
-                    //           << std::endl;
-                    // std::cerr << "      itemRange=" << itemRange
-                    //           << std::endl;
-                    // std::cerr << " itemTrackRange=" << itemTrackRange
-                    //           << std::endl;
-                    // std::cerr << "     inOutRange=" << inOutRange <<
-                    // std::endl; std::cerr << "    globalRange=" <<
-                    // videoGlobalRange
-                    //           << std::endl;
-                    // std::cerr << "videoInOutRange=" << videoInOutRange <<
-                    // std::endl;
 
                     if (videoInOutRange.intersects(videoGlobalRange))
                     {
@@ -2626,20 +2712,17 @@ namespace mrv
                 }
                 else
                 {
-                    // auto transition = dynamic_cast<Transition*>(clone);
-                    // if (transition)
-                    // {
-                    //     track->append_child(transition);
-                    //     if (is_error(errorStatus))
-                    //     {
-                    //         LOG_DEBUG("track->append_child(transition) failed
-                    //         with:"); LOG_ERROR(errorStatus.full_description);
-                    //     }
-                    // }
-                    // else
-                    // {
-                    //     LOG_ERROR("Unknown child " << child->name());
-                    // }
+                    auto transition = dynamic_cast<Transition*>(clone);
+                     if (transition)
+                    {
+                        track->append_child(transition);
+                        if (is_error(errorStatus))
+                        {
+                            LOG_DEBUG("track->append_child(transition) failed "
+                                      "with:");
+                            LOG_ERROR(errorStatus.full_description);
+                         }
+                    }
                 }
             }
         }
@@ -2659,7 +2742,7 @@ namespace mrv
                 if (duration.value() > 0.0)
                 {
                     auto gapRange =
-                        TimeRange(RationalTime(0.0, duration.rate()), duration);
+                        otio::TimeRange(otio::RationalTime(0.0, duration.rate()), duration);
                     auto gap = new otio::Gap(gapRange);
                     track->append_child(gap, &errorStatus);
                     if (is_error(errorStatus))
@@ -2699,7 +2782,7 @@ namespace mrv
             if (duration.value() > 0.0)
             {
                 auto gapRange =
-                    TimeRange(RationalTime(0.0, duration.rate()), duration);
+                    otio::TimeRange(otio::RationalTime(0.0, duration.rate()), duration);
                 auto gap = new otio::Gap(gapRange);
                 track->append_child(gap, &errorStatus);
                 if (is_error(errorStatus))
@@ -2781,25 +2864,34 @@ namespace mrv
                 }
                 else
                 {
-                    // auto transition = dynamic_cast<Transition*>(clone);
-                    // if (transition)
-                    // {
-                    //     track->append_child(transition, &errorStatus);
-                    //     if (is_error(errorStatus))
-                    //     {
-                    //         LOG_DEBUG("track->append_child(transition) failed
-                    //         with:"); LOG_ERROR(errorStatus.full_description);
-                    //     }
-                    // }
-                    // selse
-                    // {
-                    //     LOG_ERROR("Unknown child " << child->name());
-                    // }
+                    auto transition = dynamic_cast<Transition*>(clone);
+                    if (transition)
+                    {
+                        track->append_child(transition, &errorStatus);
+                        if (is_error(errorStatus))
+                        {
+                            LOG_DEBUG("track->append_child(transition) failed "
+                                      "with:");
+                            LOG_ERROR(errorStatus.full_description);
+                        }
+                    }
+                    else
+                    {
+                        LOG_ERROR("Unknown child " << child->name());
+                    }
                 }
             }
         }
     }
 
+    /**
+     * Given a source and destination clips and destination timeline,
+     *
+     * @param sourceIndex    index of the clip to add
+     * @param destIndex      index of destination timeline
+     * @param destTimeline   Destination timeline.
+     * @param ui             ViewerUI
+     */
     void addClipToTimeline(
         const int sourceIndex, const int destIndex,
         otio::Timeline* destTimeline, ViewerUI* ui)
@@ -2891,6 +2983,12 @@ namespace mrv
         {
             // 1. Get the index of the currently displayed clip (the 'A' item)
             auto aIndex = ui->app->filesModel()->observeAIndex()->get();
+
+            if (file::isOTIOZ(destItem->path))
+            {
+                auto timeline = destItem->timeline->getTimeline();
+                toOtioFile(timeline, ui);
+            }
 
             // 2. Create a new timeline containing the currently displayed clip
             add_clip_to_new_timeline_cb(aIndex, ui);
@@ -3670,14 +3768,6 @@ namespace mrv
             {
                 ui->uiEditGroup->show();
                 ui->uiActionGroup->hide();
-            }
-            else
-            {
-                if (!feature_needs_edit_or_later())
-                {
-                    ui->uiEditGroup->hide();
-                    ui->uiActionGroup->show();
-                }
             }
         }
         else

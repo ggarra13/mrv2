@@ -10,8 +10,6 @@
 
 #include "mrvEdit/mrvEditCallbacks.h"
 
-#include "mrvApp/mrvPlaylistsModel.h"
-
 #include "mrvCore/mrvBackend.h"
 
 #include <FL/Fl_Widget.H> // For Fl_Callback
