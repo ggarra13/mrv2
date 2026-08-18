@@ -725,8 +725,30 @@ namespace tl
                 textures[0]->copy(
                     reinterpret_cast<uint8_t*>(dst.data()),
                     dst.size() * sizeof(uint32_t));
+                break;
             }
-            break;
+            case image::PixelType::YUV_420SP_U8:
+            {
+                if (2 == textures.size())
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    textures[0]->copy(image->getData(), textures[0]->getInfo());
+                    textures[1]->copy(image->getData() + (w * h), textures[1]->getInfo());
+                }
+                break;
+            }
+            case image::PixelType::YUV_420SP_U16:
+            {
+                if (2 == textures.size())
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    textures[0]->copy(image->getData(), textures[0]->getInfo());
+                    textures[1]->copy(image->getData() + (w * h) * 2, textures[1]->getInfo());
+                }
+                break;
+            }
             default:
                 if (1 == textures.size())
                 {
