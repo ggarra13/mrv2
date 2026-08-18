@@ -17,6 +17,7 @@ namespace mrv
     void ffmpeg_subtitle_codecs(mrv::TextBrowser* b);
     void ffmpeg_protocols(mrv::TextBrowser* b);
     void ffmpeg_codec_information(mrv::TextBrowser* b);
+    void ffmpeg_hw_decoders(mrv::TextBrowser* b);
 
     const char* backend();
     const char* version();

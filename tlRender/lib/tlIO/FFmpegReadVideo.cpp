@@ -3,6 +3,8 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
+#define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
@@ -726,6 +728,21 @@ namespace tl
                     _info.pixelType = image::PixelType::RGB_U8;
                     break;
                 }
+                if (_hwAccel)
+                {
+                    // Hardware frames download as NV12 (8-bit) or P010 (>8-bit).
+                    // They are handed to the display shader as semi-planar YUV
+                    // with no colour conversion -- the shader performs YUV->RGB
+                    // exactly as for software-decoded YUV, so hardware and
+                    // software decoding match, and the cache keeps the smaller
+                    // YUV footprint. _avOutputPixelFormat doubles as the expected
+                    // download format and the sws fallback target (see _copy()).
+                    const AVPixFmtDescriptor* desc =
+                        av_pix_fmt_desc_get(_avInputPixelFormat);
+                    const bool gt8 = desc && desc->comp[0].depth > 8;
+                    _avOutputPixelFormat = gt8 ? AV_PIX_FMT_P010LE : AV_PIX_FMT_NV12;
+                    _info.pixelType = gt8 ? image::PixelType::YUV_420SP_U16 : image::PixelType::YUV_420SP_U8;
+                }
                 const auto params = _avCodecParameters[_avStream];
                 if (params->color_range != AVCOL_RANGE_JPEG)
                 {
@@ -1110,6 +1127,17 @@ namespace tl
                 return;
             }
 
+#if 1
+#if defined(__APPLE__)
+            const AVHWDeviceType type = AV_HWDEVICE_TYPE_VIDEOTOOLBOX;
+#elif defined(_WIN32)
+            const AVHWDeviceType type = AV_HWDEVICE_TYPE_D3D11VA;
+#else
+            const AVHWDeviceType type = AV_HWDEVICE_TYPE_VAAPI;
+#endif
+
+            for (int j = 0; j < 1; ++j)
+#else
             // Try each candidate device type in order, using the first one
             // that both offers a hardware configuration for this codec and
             // successfully creates a device. If all candidates fail, stay
@@ -1117,6 +1145,7 @@ namespace tl
             enum AVHWDeviceType type = AV_HWDEVICE_TYPE_NONE;
             while ((type = av_hwdevice_iterate_types(type)) !=
                     AV_HWDEVICE_TYPE_NONE)
+#endif
             {
                 // Find a hardware configuration for this codec and device type.
                 AVPixelFormat hwFormat = AV_PIX_FMT_NONE;
@@ -1406,8 +1435,10 @@ namespace tl
                 AVFrame* frame = _avFrame;
                 if (_hwAccel && _avFrame->format == _hwPixelFormat)
                 {
+                    DBG;
                     // Download the hardware surface to a CPU frame (NV12/P010).
                     av_frame_unref(_swFrame);
+                    DBG;
                     if (av_hwframe_transfer_data(_swFrame, _avFrame, 0) < 0)
                     {
                         std::string msg = string::Format("Cannot download a hardware frame; skipping: \"{0}\"").
@@ -1415,7 +1446,9 @@ namespace tl
                         LOG_WARNING(msg);
                         continue;
                     }
+                    DBG;
                     av_frame_copy_props(_swFrame, _avFrame);
+                    DBG;
                     frame = _swFrame;
                     if (!_hwLogged)
                     {
@@ -1425,6 +1458,7 @@ namespace tl
                         std::string msg = string::Format("Hardware decoding is active: \"{0}\"").arg(_fileName);
                         LOG_STATUS(msg);
                         _hwLogged = true;
+                        DBG;
                     }
                 }
                 const int64_t timestamp = _avFrame->pts != AV_NOPTS_VALUE
@@ -1517,6 +1551,7 @@ namespace tl
         void ReadVideo::_copy(std::shared_ptr<image::Image>& image,
                               std::shared_ptr<AVFrame> avFrame)
         {
+            DBG;
             // Check if avFrame changed image size (can happen when reading a
             // sequence of .webp)
             if (avFrame->width != _info.size.w &&
@@ -1527,12 +1562,14 @@ namespace tl
                 avFrame->height > 0)
                 _info.size.h = avFrame->height;
 
+            DBG;
             const std::size_t w = _info.size.w;
             const std::size_t h = _info.size.h;
             uint8_t* data;
 
             if (_hwAccel && avFrame->format == _avOutputPixelFormat)
             {
+                DBG;
                 image = image::Image::create(_info);
                 data = image->getData();
                 // Native semi-planar copy (NV12/P010): luma plane, then the
@@ -1540,18 +1577,22 @@ namespace tl
                 // No colour conversion -- the display shader does YUV->RGB.
                 // The sws fallback below covers the rare case of an
                 // unexpected download format.
+                DBG;
                 const std::size_t bytes =
                     (AV_PIX_FMT_P010LE == _avOutputPixelFormat) ? 2 : 1;
                 const uint8_t* const dataY = avFrame->data[0];
                 const uint8_t* const dataUV = avFrame->data[1];
                 const int linesizeY = avFrame->linesize[0];
                 const int linesizeUV = avFrame->linesize[1];
+                DBG;
                 for (std::size_t i = 0; i < h; ++i)
                 {
                     std::memcpy(data + w * bytes * i, dataY + linesizeY * i, w * bytes);
                 }
+                DBG;
                 uint8_t* const dataOutUV = data + w * h * bytes;
                 const std::size_t h2 = h / 2;
+                DBG;
                 for (std::size_t i = 0; i < h2; ++i)
                 {
                     std::memcpy(dataOutUV + w * bytes * i, dataUV + linesizeUV * i, w * bytes);
@@ -1563,6 +1604,7 @@ namespace tl
                     _avInputPixelFormat, _avOutputPixelFormat,
                     _fastYUV420PConversion))
             {
+                DBG;
                 const uint8_t* const data0 = avFrame->data[0];
                 const int linesize0 = avFrame->linesize[0];
                 switch (_avInputPixelFormat)
@@ -1629,12 +1671,14 @@ namespace tl
             {
                 if (!_swsContext)
                 {
+                    DBG;
                     // Build the scaler now that the real source format is known
                     // (the hardware download format, or a software-fallback
                     // format).
                     _initSws(static_cast<AVPixelFormat>(avFrame->format));
                 }
 
+                DBG;
                 image = image::Image::create(_info);
                 data = image->getData();
 

@@ -771,6 +771,20 @@ namespace mrv
 #endif
     }
 
+    void ffmpeg_hw_decoders(mrv::TextBrowser* b)
+    {
+#ifdef TLRENDER_FFMPEG
+        enum AVHWDeviceType type = AV_HWDEVICE_TYPE_NONE;
+        while ((type = av_hwdevice_iterate_types(type)) !=
+               AV_HWDEVICE_TYPE_NONE)
+        {
+            std::string device = av_hwdevice_get_type_name(type);
+            device += "\n";
+            b->add(device.c_str());
+        }
+#endif
+    }
+
     void ffmpeg_protocols(mrv::TextBrowser* b)
     {
 #ifdef TLRENDER_FFMPEG

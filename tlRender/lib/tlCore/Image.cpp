@@ -39,7 +39,10 @@ namespace tl
 
             "YUV_420P_U16", "YUV_422P_U16", "YUV_444P_U16",
 
-            "ARGB_4444_Premult");
+            "ARGB_4444_Premult",
+
+            "YUV 420SP U8",
+            "YUV 420SP U16");
         TLRENDER_ENUM_SERIALIZE_IMPL(PixelType);
 
         TLRENDER_ENUM_IMPL(YUVCoefficients, "REC709", "BT2020", "BT601");
@@ -354,6 +357,14 @@ namespace tl
 
             case PixelType::ARGB_4444_Premult:
                 out = w * h * 4 * 2;
+                break;
+
+            case PixelType::YUV_420SP_U8:
+                out = w * h + ((w + 1) / 2) * ((h + 1) / 2) * 2;
+                break;
+
+            case PixelType::YUV_420SP_U16:
+                out = (w * h + ((w + 1) / 2) * ((h + 1) / 2) * 2) * 2;
                 break;
 
             default:

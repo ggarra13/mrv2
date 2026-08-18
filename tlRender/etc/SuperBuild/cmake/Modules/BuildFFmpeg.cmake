@@ -87,9 +87,6 @@ if (NOT FFmpeg_FOUND)
 	--disable-avfoundation
 	--disable-bzlib
 	--disable-coreimage
-	--disable-d3d11va
-	--disable-d3d12va
-	--disable-dxva2
 	--disable-iconv
 	--disable-libxcb
 	--disable-libxcb-shm
