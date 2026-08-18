@@ -79,6 +79,7 @@ if (NOT FFmpeg_FOUND)
 	--disable-programs
 	--disable-doc
 	--disable-avfilter
+	--enable-hwaccels
 	--disable-devices
 	--disable-filters
 	--disable-alsa
@@ -103,14 +104,6 @@ if (NOT FFmpeg_FOUND)
 	--disable-vulkan
 	--disable-xlib
 	--enable-zlib
-	--disable-amf
-	--disable-cuda-llvm
-	--disable-cuvid
-	--disable-d3d11va
-	--disable-dxva2
-	--disable-ffnvcodec
-	--disable-nvdec
-	--disable-nvenc
 	--disable-v4l2-m2m
 	--disable-vaapi
 	--disable-vdpau

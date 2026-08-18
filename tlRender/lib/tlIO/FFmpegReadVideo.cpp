@@ -1529,10 +1529,12 @@ namespace tl
 
             const std::size_t w = _info.size.w;
             const std::size_t h = _info.size.h;
-            uint8_t* data = image->getData();
+            uint8_t* data;
 
             if (_hwAccel && avFrame->format == _avOutputPixelFormat)
             {
+                image = image::Image::create(_info);
+                data = image->getData();
                 // Native semi-planar copy (NV12/P010): luma plane, then the
                 // interleaved chroma plane, straight into the tlRender image.
                 // No colour conversion -- the display shader does YUV->RGB.
