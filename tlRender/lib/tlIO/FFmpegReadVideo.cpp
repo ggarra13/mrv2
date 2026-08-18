@@ -1529,7 +1529,7 @@ namespace tl
 
             const std::size_t w = _info.size.w;
             const std::size_t h = _info.size.h;
-            uint8_t* data;
+            uint8_t* data = image->getData();
 
             if (_hwAccel && avFrame->format == _avOutputPixelFormat)
             {
