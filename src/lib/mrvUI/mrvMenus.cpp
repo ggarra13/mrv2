@@ -580,15 +580,6 @@ namespace mrv
                     item->clear();
 #endif
             }
-            else if (tmp == _("Network"))
-            {
-#ifdef MRV2_NETWORK
-                if (networkPanel)
-                    item->set();
-                else
-                    item->clear();
-#endif
-            }
             else if (tmp == _("USD"))
             {
 #ifdef TLRENDER_USD
@@ -2031,7 +2022,7 @@ namespace mrv
 #endif
 
         if (dynamic_cast< DummyClient* >(tcp) == nullptr ||
-            panel::networkPanel || panel::webrtcPanel)
+            panel::webrtcPanel)
         {
             mode = FL_MENU_TOGGLE;
 

@@ -27,7 +27,6 @@
 #include "mrvPanels/mrvWaveformPanel.h"
 
 #ifdef MRV2_NETWORK
-#    include "mrvPanels/mrvNetworkPanel.h"
 #    include "mrvPanels/mrvWebRTCPanel.h"
 #endif
 
@@ -69,9 +68,6 @@ namespace mrv
         extern StatsPanel* statsPanel;
 #ifdef MRV2_PYBIND11
         extern PythonPanel* pythonPanel;
-#endif
-#ifdef MRV2_NETWORK
-        extern NetworkPanel* networkPanel;
 #endif
 #ifdef MRV2_NETWORK
         extern WebRTCPanel* webrtcPanel;
@@ -118,7 +114,6 @@ namespace mrv
         void histogram_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void image_info_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void logs_panel_cb(Fl_Widget* w, ViewerUI* ui);
-        void network_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void ndi_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void python_panel_cb(Fl_Widget* w, ViewerUI* ui);
         void settings_panel_cb(Fl_Widget* w, ViewerUI* ui);

@@ -27,16 +27,11 @@ if(MRV2_NETWORK)
     	mrvSyncMedia.cpp
     	mrvSyncUI.cpp
     	mrvCommandInterpreter.cpp
-	# xxhash.c  # We use XXH_INLINE_ALL
 		
 	# TCP
-    	mrvClient.cpp
+
 	mrvComfyUIListener.cpp
 	mrvImageListener.cpp
-    	mrvMessagePublisher.cpp
-    	mrvParseHost.cpp
-    	mrvConnectionHandler.cpp
-    	mrvServer.cpp
 
 	# WebRTC
 	mrvFileTransferClient.cpp
@@ -44,23 +39,15 @@ if(MRV2_NETWORK)
 	mrvSignalingClient.cpp
 	mrvWebRTCClient.cpp
 	mrvWebRTCManager.cpp
-
     )
     list(APPEND HEADERS
-	# Common
-	xxhash.h
-	mrvHashFile.h
 	
 	# TCP
         mrvComfyUIListener.h 
 	mrvImageListener.h
-    	mrvMessagePublisher.h
-	mrvParseHost.h
+	
     	mrvProtocolVersion.h
-    	mrvClient.h
     	mrvCommandInterpreter.h
-	mrvConnectionHandler.h
-    	mrvServer.h
 	
 	# WebRTC
 	mrvFileChunk.h

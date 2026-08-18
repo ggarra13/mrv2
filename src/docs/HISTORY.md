@@ -17,6 +17,9 @@ v1.7.4
 
 - Vulkan: Made Offscreen buffers use the memory allocator for better performance.  This makes creating the 4K buffers much faster.  Noticeable at the first annotation.
 
+- Network: TCP network connections have been deprecated in favor of WebRTC connections.
+- WebRTC: Added project and room id command-line flags.
+
 - OTIO: Improved the loading of .otioz files as they are now read in memory.  However, they can no longer be edited.  If you need to edit an .otioz file, you should unzip it first.
 
 - Wayland: fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on long .otioz or .otio files).

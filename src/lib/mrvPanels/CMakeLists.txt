@@ -23,7 +23,6 @@ set(HEADERS
     mrvThumbnailPanel.h
     mrvVectorscopePanel.h
     mrvWaveformPanel.h
-    mrvWebRTCPanel.h
 )
 
 set(SOURCES
@@ -47,7 +46,6 @@ set(SOURCES
     mrvThumbnailPanel.cpp
     mrvVectorscopePanel.cpp
     mrvWaveformPanel.cpp
-    mrvWebRTCPanel.cpp
 )
 	
 if(TLRENDER_USD)
@@ -72,8 +70,8 @@ if(MRV2_PYBIND11)
 endif()
 
 if(MRV2_NETWORK)
-    list( APPEND HEADERS mrvNetworkPanel.h )
-    list( APPEND SOURCES mrvNetworkPanel.cpp )
+    list(APPEND HEADERS mrvWebRTCPanel.h)
+    list(APPEND SOURCES mrvWebRTCPanel.cpp)
 endif()
 
 set(LIBRARIES mrvFl mrvEdit)

@@ -32,9 +32,6 @@ namespace mrv
         PythonPanel* pythonPanel = nullptr;
 #endif
 #ifdef MRV2_NETWORK
-        NetworkPanel* networkPanel = nullptr;
-#endif
-#ifdef MRV2_NETWORK
         WebRTCPanel* webrtcPanel = nullptr;
 #endif
 #ifdef TLRENDER_USD
@@ -136,10 +133,6 @@ namespace mrv
             if (backgroundPanel && backgroundPanel->is_panel())
                 background_panel_cb(nullptr, ui);
 #ifdef MRV2_NETWORK
-            if (networkPanel && networkPanel->is_panel())
-                network_panel_cb(nullptr, ui);
-#endif
-#ifdef MRV2_NETWORK
             if (webrtcPanel && webrtcPanel->is_panel())
                 webrtc_panel_cb(nullptr, ui);
 #endif
@@ -189,10 +182,6 @@ namespace mrv
                 stats_panel_cb(nullptr, ui);
             if (backgroundPanel && !backgroundPanel->is_panel())
                 background_panel_cb(nullptr, ui);
-#ifdef MRV2_NETWORK
-            if (networkPanel && !networkPanel->is_panel())
-                network_panel_cb(nullptr, ui);
-#endif
 #ifdef MRV2_NETWORK
             if (webrtcPanel && !webrtcPanel->is_panel())
                 webrtc_panel_cb(nullptr, ui);
@@ -522,27 +511,6 @@ namespace mrv
 #endif
         }
 
-        void network_panel_cb(Fl_Widget* w, ViewerUI* ui)
-        {
-#ifdef MRV2_NETWORK
-            bool send = ui->uiPrefs->SendUI->value();
-            if (send)
-            {
-                tcp->pushMessage(
-                    "Network Panel", static_cast<bool>(!networkPanel));
-            }
-            if (networkPanel)
-            {
-                delete networkPanel;
-                networkPanel = nullptr;
-                ui->uiMain->fill_menu(ui->uiMenuBar);
-                return;
-            }
-            networkPanel = new NetworkPanel(ui);
-            ui->uiMain->fill_menu(ui->uiMenuBar);
-#endif
-        }
-
         void webrtc_panel_cb(Fl_Widget* w, ViewerUI* ui)
         {
 #ifdef MRV2_NETWORK
@@ -687,11 +655,6 @@ namespace mrv
 #ifdef MRV2_PYBIND11
             msg["command"] = "Python Panel";
             msg["value"] = static_cast<bool>(pythonPanel);
-            tcp->pushToPeer(peerId, msg);
-#endif
-#ifdef MRV2_NETWORK
-            msg["command"] = "Network Panel";
-            msg["value"] = static_cast<bool>(networkPanel);
             tcp->pushToPeer(peerId, msg);
 #endif
 #ifdef MRV2_NETWORK

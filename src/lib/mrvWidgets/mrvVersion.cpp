@@ -164,10 +164,6 @@ extern "C"
 #   include <rtc/version.h>
 #endif
 
-#ifdef MRV2_NETWORK
-#   include <mrvNetwork/xxhash.h>
-#endif
-
 #ifdef MRV2_PYBIND11
 #    include <pybind11/pybind11.h>
 #endif
@@ -1111,12 +1107,6 @@ namespace mrv
           << "(C) 2016-Present Pixar" << endl
           << endl;
 #endif
-#ifdef MRV2_NETWORK
-        o << "xxHash v" << XXH_VERSION_MAJOR << "." << XXH_VERSION_MINOR
-          << XXH_VERSION_RELEASE << endl
-          << "Copyright (C) 2012-2023 Yann Collet" << endl
-          << endl;
-#endif
         o << "yaml-cpp" << endl
           << "Copyright (c) 2008-2015 Jesse Beder." << endl
           << endl;
@@ -1131,17 +1121,10 @@ namespace mrv
         }
     }
 
-    void cpu_information(mrv::TextBrowser* b)
+    const std::string cpu_info()
     {
-        const std::string& lines = GetCpuCaps(&gCpuCaps);
-
-        std::stringstream o(lines);
-
-        std::string line;
-        while (std::getline(o, line, '\n'))
-        {
-            b->add(line.c_str());
-        }
+        std::string out;
+        out += GetCpuCaps(&gCpuCaps);
 
         uint64_t totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
             totalPhysMem, physMemUsed, physMemUsedByMe;
@@ -1150,16 +1133,28 @@ namespace mrv
             totalVirtualMem, virtualMemUsed, virtualMemUsedByMe,
             totalPhysMem, physMemUsed, physMemUsedByMe);
 
-
-        b->add("");
-        std::string msg;
-        msg = tl::string::Format(
+        out += "\n";
+        out += tl::string::Format(
             _("Total Physical Memory: {0} Gb")).arg(totalPhysMem / 1024.0);
-        b->add(msg.c_str());
-        msg = tl::string::Format(
+        out += "\n";
+        out += "\n";
+        out += tl::string::Format(
             _("Total Virtual Memory: {0} Gb")).arg(totalVirtualMem / 1024.0);
-        b->add(msg.c_str());
 
+        return out;
+    }
+
+    void cpu_information(mrv::TextBrowser* b)
+    {
+        const std::string lines = cpu_info();
+
+        std::stringstream o(lines);
+
+        std::string line;
+        while (std::getline(o, line, '\n'))
+        {
+            b->add(line.c_str());
+        }
     }
 
     std::string gpu_list(ViewerUI* ui)

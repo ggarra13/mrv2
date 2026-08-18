@@ -174,9 +174,6 @@ namespace mrv
 #ifdef MRV2_PYBIND11
                 {"Python", (pythonPanel != nullptr)},
 #endif
-#ifdef MRV2_NETWORK
-                {"Network", (networkPanel != nullptr)},
-#endif
 #ifdef TLRENDER_NDI
                 {"NDI", (ndiPanel != nullptr)},
 #endif
@@ -214,10 +211,6 @@ namespace mrv
 #ifdef MRV2_PYBIND11
             if (pythonPanel)
                 pythonPanel->save();
-#endif
-#ifdef MRV2_NETWORK
-            if (networkPanel)
-                networkPanel->save();
 #endif
 #ifdef TLRENDER_USD
             if (usdPanel)

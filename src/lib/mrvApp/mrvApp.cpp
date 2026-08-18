@@ -13,11 +13,8 @@
 #include "mrvNetwork/mrvDummyClient.h"
 #ifdef MRV2_NETWORK
 #    include "mrvNetwork/mrvCommandInterpreter.h"
-#    include "mrvNetwork/mrvClient.h"
 #    include "mrvNetwork/mrvComfyUIListener.h"
 #    include "mrvNetwork/mrvImageListener.h"
-#    include "mrvNetwork/mrvServer.h"
-#    include "mrvNetwork/mrvParseHost.h"
 #    include "mrvNetwork/mrvWebRTCClient.h"
 #endif
 
@@ -169,10 +166,7 @@ namespace mrv
 #endif
 
 #ifdef MRV2_NETWORK
-        bool server = false;
-        std::string client;
-        unsigned port = 55150;
-
+        std::string webrtcProject;
         std::string webrtcRoom;
 #endif
 
@@ -192,6 +186,7 @@ namespace mrv
         bool resetSettings = false;
         bool resetHotkeys = false;
         bool displayVersion = false;
+        bool displaySysInfo = false;
         bool otioEditMode = false;
 
 #if defined(TLRENDER_USD)
@@ -504,21 +499,11 @@ namespace mrv
 #endif // TLRENDER_USD
 #ifdef MRV2_NETWORK
                 app::CmdLineHeader::create({}, _("Networking:")),
-                app::CmdLineFlagOption::create(
-                    p.options.server, {"-server"},
-                    _("Start a server.  Use -port to specify a port "
-                      "number.")),
                 app::CmdLineValueOption<std::string>::create(
-                    p.options.client, {"-client"},
-                    _("Connect to a server at <value>.  Use -port to "
-                      "specify a port number.")),
-                app::CmdLineValueOption<unsigned>::create(
-                    p.options.port, {"-port"},
-                    _("Port number for the server to listen to or for the "
-                      "client to connect to."),
-                    string::Format("{0}").arg(p.options.port)),
+                    p.options.webrtcProject, {"-wp", "-project"},
+                    _("Connect to a WebRTC project at <value>.")),
                 app::CmdLineValueOption<std::string>::create(
-                    p.options.webrtcRoom, {"-room"},
+                    p.options.webrtcRoom, {"-wr", "-room"},
                     _("Connect to a WebRTC room at <value>.")),
 #endif
 
@@ -528,15 +513,14 @@ namespace mrv
                     _("Open the application as if no license was present.")),
                 app::CmdLineFlagOption::create(
                     p.options.displayVersion, {"-version", "-v"},
-                    _("Return the version and exit."))});
+                    _("Return the version and exit.")),
+                app::CmdLineFlagOption::create(
+                    p.options.displaySysInfo, {"-sys", "-systemInfo"},
+                    _("Return the system information and exit."))});
 
-        DBG;
         const int exitCode = getExit();
         if (exitCode != 0)
-        {
-            DBG;
             return;
-        }
 
 #ifdef __APPLE__
         // For macOS, to read command-line arguments
@@ -559,7 +543,6 @@ namespace mrv
             p.options.fileNames.push_back(unused);
         }
 
-        DBG;
         if (p.options.displayVersion)
         {
             std::cout << std::endl
@@ -752,33 +735,59 @@ namespace mrv
         // refreshing the play buttons.
         //
         bool showUI = true;
-
-#ifdef MRV2_PYBIND11
+        bool headless = false;
 
 #ifdef VULKAN_BACKEND
-        // Reset the mode.
+        // Reset the mode to create the Vulkan instance even on headless mode.
         int stereo = 0;
         ui->uiView->mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL |
                          FL_OPENGL3 | stereo);
         ui->uiTimeline->mode(FL_RGB | FL_ALPHA | FL_DOUBLE | FL_OPENGL3);
 #endif
 
+#ifdef MRV2_PYBIND11
         if (app::soporta_python && !p.options.pythonScript.empty())
         {
             showUI = false;
-
-            ui->uiView->headless(true);
-            ui->uiTimeline->headless(true);
+            headless = true;
         }
-        else
+        if (p.options.displaySysInfo)
         {
-            ui->uiView->headless(false);
-            ui->uiTimeline->headless(false);
+            showUI = false;
+            headless = true;
+        }
 
+        ui->uiView->headless(headless);
+        ui->uiTimeline->headless(headless);
+
+        if (!headless)
+        {
             ui->uiMain->show();
             ui->uiMain->wait_for_expose();
         }
+
 #endif
+
+        if (p.options.displaySysInfo)
+        {
+            ui->uiView->render_offscreen();
+            ui->uiTimeline->render_offscreen();
+
+            std::cout << std::endl
+                      << mrv::cpu_info()
+                      << std::endl
+                      << std::endl
+                      << mrv::gpu_information(ui)
+                      << std::endl;
+
+#ifdef VULKAN_BACKEND
+            ui->uiView->destroy();
+            ui->uiTimeline->destroy();
+#endif
+            delete ui;
+            ui = nullptr;
+            return;
+        }
 
         Preferences::run();
 
@@ -1119,40 +1128,21 @@ namespace mrv
         }
 
 #ifdef MRV2_NETWORK
-        if (p.options.server)
-        {
-            try
-            {
-                tcp = new Server(p.options.port);
-                store_port(p.options.port);
-            }
-            catch (const Poco::Exception& e)
-            {
-                LOG_ERROR(e.displayText());
-            }
-        }
-        else if (!p.options.client.empty())
-        {
-            std::string port;
-            parse_hostname(p.options.client, port);
-            if (!port.empty())
-            {
-                p.options.port = atoi(port.c_str());
-            }
-            tcp = new Client(p.options.client, p.options.port);
-            store_port(p.options.port);
-        }
-
         if (!p.options.webrtcRoom.empty() &&
             dynamic_cast<DummyClient*>(tcp) != nullptr)
         {
+            std::string projectId = p.options.webrtcProject;
             std::string roomId = p.options.webrtcRoom;
+            p.settings->setValue("WebRTC/Project", projectId);
             p.settings->setValue("WebRTC/Room", roomId);
+
+            std::string sessionId = projectId + "_" + roomId;
+
             std::string studio = os::sgetenv("MRV2_WEBRTC_STUDIO");
             if (studio.empty())
                 studio = ui->uiPrefs->uiPrefsWebRTCStudio->value();
 
-            tcp = new WebRTCClient(studio, roomId);
+            tcp = new WebRTCClient(studio, sessionId);
         }
 #endif
 
