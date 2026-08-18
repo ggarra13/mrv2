@@ -212,7 +212,11 @@ namespace tl
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
                     VK_FORMAT_UNDEFINED, // VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM
 
-                    VK_FORMAT_R8G8B8A8_UNORM};
+                    VK_FORMAT_R8G8B8A8_UNORM,
+
+                    VK_FORMAT_G8_B8R8_2PLANE_420_UNORM,    // YUV_420SP_U8
+                    VK_FORMAT_G16_B16R16_2PLANE_420_UNORM, // YUV_420SP_U16
+            };
             return data[static_cast<std::size_t>(type)];
         }
 

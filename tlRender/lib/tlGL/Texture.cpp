@@ -123,7 +123,7 @@ namespace tl
                     
                     GL_NONE,   GL_NONE,   GL_NONE,
 
-                    GL_RGBA
+                    GL_RGBA,   GL_NONE,   GL_NONE,
 #elif defined(TLRENDER_API_GLES_2)
                     GL_LUMINANCE,
                     GL_NONE,
@@ -221,7 +221,9 @@ namespace tl
                     GL_NONE,
                     GL_NONE,
 
-                    GL_UNSIGNED_SHORT_4_4_4_4_REV
+                    GL_UNSIGNED_SHORT_4_4_4_4_REV,
+                    GL_NONE,
+                    GL_NONE,
 #elif defined(TLRENDER_API_GLES_2)
                     GL_UNSIGNED_BYTE, GL_NONE, GL_NONE, GL_NONE, GL_NONE,
 
@@ -235,6 +237,8 @@ namespace tl
                     GL_NONE,          GL_NONE, GL_NONE, GL_NONE, GL_NONE,
                     GL_NONE,
 
+                    GL_NONE,
+                    GL_NONE,
                     GL_NONE
 #endif // TLRENDER_API_GL_4_1
                 };
