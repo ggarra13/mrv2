@@ -88,6 +88,7 @@ namespace tl
                        std::shared_ptr<AVFrame>);
             float _getRotation(const AVStream*);
             void _initHwAccel(const AVCodec*);
+            void _initSws(AVPixelFormat srcFormat);
             static AVPixelFormat _getHwFormat(AVCodecContext*,
                                               const AVPixelFormat*);
 
@@ -120,10 +121,15 @@ namespace tl
             AVPixelFormat _avInputPixelFormat = AV_PIX_FMT_NONE;
             AVPixelFormat _avOutputPixelFormat = AV_PIX_FMT_NONE;
             SwsContext* _swsContext = nullptr;
-            AVBufferRef* _hwDeviceContext = nullptr;
-            AVPixelFormat _hwPixelFormat = AV_PIX_FMT_NONE;
             std::list<std::shared_ptr<image::Image> > _buffer;
             bool _eof = false;
+
+            // Hardware accelerated information.
+            bool _hwAccel = false;
+            bool _hwLogged = false;
+            AVBufferRef* _hwDeviceContext = nullptr;
+            AVPixelFormat _hwPixelFormat = AV_PIX_FMT_NONE;
+            AVFrame* _swFrame = nullptr;
         };
 
         class ReadAudio

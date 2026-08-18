@@ -132,16 +132,19 @@
          p.defaultValues["Performance/AudioBufferFrameCount"] =
              static_cast<int>(playerOptions.audioBufferFrameCount);
          p.defaultValues["SequenceIO/ThreadCount"] = 16;
+
          p.defaultValues["Performance/VideoRequestCount"] = 16;
          p.defaultValues["Performance/AudioRequestCount"] = 16;
          p.defaultValues["Performance/FFmpegThreadCount"] = 0;
          p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
          p.defaultValues["Performance/FFmpegColorAccuracy"] = 0;
+         p.defaultValues["Performance/FFmpegHWAccel"] = 0;
+
          p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
+
          p.defaultValues["EnvironmentMap/Sphere/SubdivisionX"] = 36;
          p.defaultValues["EnvironmentMap/Sphere/SubdivisionY"] = 36;
          p.defaultValues["EnvironmentMap/Spin"] = 1;
-         p.defaultValues["TCP/Control/Port"] = std::string("55150");
 
          Fl_Color c;
          p.defaultValues["Background/Type"] = 0;

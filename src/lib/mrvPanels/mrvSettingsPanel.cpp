@@ -425,6 +425,21 @@ namespace mrv
                     refresh_movie_cb(nullptr, p.ui);
                 });
 
+            cV = new Widget< Fl_Check_Button >(
+                g->x() + 90, 420, g->w(), 20, _("FFmpeg HW Accel"));
+            c = cV;
+            c->labelsize(12);
+            c->value(
+                settings->getValue<bool>("Performance/FFmpegHWAccel"));
+            c->tooltip(_("When this setting is on, the player will try to decode the movie in the GPU if possible."));
+            cV->callback(
+                [=](auto w)
+                {
+                    int v = w->value();
+                    settings->setValue("Performance/FFmpegHWAccel", v);
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+
             bg = new Fl_Group(g->x(), 440, g->w(), 30);
             bg->box(FL_NO_BOX);
             bg->begin();

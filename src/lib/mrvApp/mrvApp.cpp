@@ -2081,6 +2081,8 @@ namespace mrv
             string::Format("{0}").arg(fastYUV420PConversion);
         out["FFmpeg/ThreadCount"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegThreadCount"));
+        out["FFmpeg/HWAccel"] = string::Format("{0}").arg(
+            p.settings->getValue<int>("Performance/FFmpegHWAccel"));
 
         TimelineClass* c = ui->uiTimeWindow;
         int idx = c->uiAudioTracks->current_track();
