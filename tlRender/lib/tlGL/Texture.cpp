@@ -443,8 +443,11 @@ namespace tl
                            const int rowStride)
         {
             TLRENDER_P();
-            int bytesPerPixel = image::getBitDepth(info.pixelType) / 8;
-            int unpackRowLength = rowStride / bytesPerPixel;
+            const int channelCount = image::getChannelCount(info.pixelType);
+            const int bytesPerPixel =
+                channelCount * (image::getBitDepth(info.pixelType) / 8);
+            const int unpackRowLength =
+                bytesPerPixel > 0 ? (rowStride / bytesPerPixel) : 0;
 
 #if defined(TLRENDER_API_GL_4_1)
             if (p.pbo)

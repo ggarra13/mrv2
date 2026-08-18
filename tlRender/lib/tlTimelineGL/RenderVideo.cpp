@@ -204,7 +204,7 @@ namespace tl
             const std::vector<timeline::DisplayOptions>& displayOptions,
             const timeline::CompareOptions& compareOptions)
         {
-            if (!videoFrame.size() > 1 || !boxes.size() > 1)
+            if (videoFrame.size() < 1 || boxes.size() < 1)
                 return;
 
             _drawVideo(
