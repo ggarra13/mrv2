@@ -79,7 +79,6 @@ if (NOT FFmpeg_FOUND)
 	--disable-programs
 	--disable-doc
 	--disable-avfilter
-	--disable-hwaccels
 	--disable-devices
 	--disable-filters
 	--disable-alsa
