@@ -7,6 +7,7 @@ v1.7.4
 - UI: Fixed clipping of file names on the Compare Panel.
 - UI/Core: Improved thumbnails performance of all files, particularly .otio files.
 
+- Edit: Adding clips to a timeline with dissolves now keeps the dissolves intact instead of removing them.
 - Edit: Improved the performance of editing .otio files when dragging clips to the Timeline Viewport.  This removes the clunky file switching that used to happen.
 - Edit: The Playlist panel has been removed.  Now all clip concatenation operations happen directly by dragging clips to the Timeline Viewport.
 - UI/Edit: Removed some duplicated messages of an Edit donation.  Now in demo mode, you can open the timeline viewport to see the .otio tracks, but you just cannot edit them.
@@ -21,6 +22,8 @@ v1.7.4
 - WebRTC: Added project and room id command-line flags.
 
 - OTIO: Improved the loading of .otioz files as they are now read in memory.  However, they can no longer be edited.  If you need to edit an .otioz file, you should unzip it first.
+- OTIO: Multiple Media References are now allowed.
+- OTIO: Spatial Coordinates are now interpreted.
 
 - Wayland: fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on long .otioz or .otio files).
 

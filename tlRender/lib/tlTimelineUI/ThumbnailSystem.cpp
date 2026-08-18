@@ -491,6 +491,11 @@ namespace tl
                         if (device != VK_NULL_HANDLE &&
                             p.thumbnailThread.commandPool != VK_NULL_HANDLE)
                         {
+                            {
+                                std::lock_guard mutex(ctx.queue_mutex());
+                                vkDeviceWaitIdle(device);
+                            }
+
                             VkCommandPool& commandPool = p.thumbnailThread.commandPool;
 
                             vkFreeCommandBuffers(device, commandPool, 1, &p.thumbnailThread.cmd);
