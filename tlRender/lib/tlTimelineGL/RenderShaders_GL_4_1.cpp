@@ -161,7 +161,9 @@ namespace tl
                 "const uint PixelType_YUV_420P_U16      = 31;\n"
                 "const uint PixelType_YUV_422P_U16      = 32;\n"
                 "const uint PixelType_YUV_444P_U16      = 33;\n"
-                "const uint PixelType_ARGB_4444_Premult = 34;\n";
+                "const uint PixelType_ARGB_4444_Premult = 34;\n"
+                "const uint PixelType_YUV_420SP_U8      = 35;\n"
+                "const uint PixelType_YUV_420SP_U16     = 36;\n";
 
             const std::string videoLevels =
                 "// enum tl::image::VideoLevels\n"
@@ -183,7 +185,8 @@ float getBitDepth(int pixelType)
     {
         return 12.0;
     }
-    else if (pixelType == PixelType_YUV_420P_U16 ||
+    else if (pixelType == PixelType_YUV_420SP_U16 ||
+             pixelType == PixelType_YUV_420P_U16 ||
              pixelType == PixelType_YUV_422P_U16 ||
              pixelType == PixelType_YUV_444P_U16)
     {
@@ -234,7 +237,19 @@ vec4 sampleTexture(
             cb = cb / rangeScale;
             cr = cr / rangeScale;
           }
-
+          else if (PixelType_YUV_420SP_U8 == pixelType ||
+                   PixelType_YUV_420SP_U16 == pixelType)
+          {
+             if (VideoLevels_FullRange == videoLevels)
+             {
+                  float y  = texture(s0, textureCoord).r;
+                  float cb = texture(s1, textureCoord).r - 0.5;
+                  float cr = texture(s1, textureCoord).g - 0.5;
+                  c.r = y + (yuvCoefficients.x * cr);
+                  c.g = y - (yuvCoefficients.y * cr) - (yuvCoefficients.z * cb);
+                  c.b = y + (yuvCoefficients.w * cb);
+              }
+          }
           if (videoLevels == VideoLevels_FullRange)
           {
               cb -= 0.5;
@@ -291,8 +306,7 @@ vec4 sampleTexture(
           }
        }
       return c;
-}
-            )";
+})";
         } // namespace
 
         std::string imageFragmentSource()
