@@ -9,8 +9,11 @@
 
 #include "mrvApp/mrvSettingsObject.h"
 
+#include "mrvFl/mrvPreferences.h"
+
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvLogDisplay.h"
+#include "mrvWidgets/mrvPopupMenu.h"
 
 #include "mrvIcons/Clear.h"
 #include "mrvIcons/Logs.h"
@@ -29,9 +32,8 @@ namespace mrv
 
         struct LogsPanel::Private
         {
-            App* app;
-            Fl_Button* clearButton;
-            std::shared_ptr<observer::ListObserver<log::Item> > logObserver;
+            PopupMenu* logLevel = nullptr;
+            Fl_Button* clearButton = nullptr;
         };
 
         LogsPanel::LogsPanel(ViewerUI* ui) :
@@ -129,7 +131,24 @@ namespace mrv
             assert(controls->h() >= 0);
 
             int Y = controls->y();
-            _r->clearButton = new Fl_Button(g->x(), Y, g->w(), 30);
+
+
+            _r->logLevel = new PopupMenu(g->x(), Y, 100, 30);
+            _r->logLevel->tooltip(_("Set the verbosity of the logs."));
+            _r->logLevel->add(_("None"));
+            _r->logLevel->add(_("Errors"));
+            _r->logLevel->add(_("Warning"));
+            _r->logLevel->add(_("Status"));
+            _r->logLevel->add(_("Info"));
+            _r->logLevel->value(Preferences::logLevel);
+            _r->logLevel->callback(
+                [](Fl_Widget* w, void* d)
+                    {
+                        int level = w->value();
+                        Preferences::logLevel = level;
+                    }
+
+            _r->clearButton = new Fl_Button(g->x() + 100, Y, g->w() - 100, 30);
             _r->clearButton->image(MRV2_LOAD_SVG(Clear));
             _r->clearButton->tooltip(_("Clear the messages"));
             _r->clearButton->callback(

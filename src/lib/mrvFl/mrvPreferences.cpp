@@ -67,8 +67,6 @@ namespace mrv
     bool Preferences::native_file_chooser;
 
     std::string Preferences::root;
-    int Preferences::debug = 0;
-    int Preferences::logLevel = 0;
     std::string Preferences::hotkeys_file = "mrv2.keys";
 
     int Preferences::language_index = 0; // English

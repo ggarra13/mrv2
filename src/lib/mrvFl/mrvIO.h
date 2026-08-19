@@ -13,8 +13,6 @@
 
 #include "mrvOS/mrvI8N.h"
 
-#include "mrvFl/mrvPreferences.h"
-
 namespace mrv
 {
 
@@ -117,7 +115,7 @@ namespace mrv
 #define mrvLOG_INFO(mod, msg)                                           \
     do                                                                  \
     {                                                                   \
-        if (mrv::Preferences::logLevel > 0)                             \
+        if (mrv::trace::logLevel > 0)                             \
             mrv::trace::info << "       \t[" << mod << "] " << msg;       \
     } while (0)
 
@@ -148,21 +146,21 @@ namespace mrv
 #    define DBGM3(msg)                                                         \
         do                                                                     \
         {                                                                      \
-            if (mrv::Preferences::debug > 2)                                   \
+            if (mrv::trace::debug > 2)                                   \
                 LOG_DEBUG(msg);                                                \
         } while (0)
 
 #    define DBGM2(msg)                                                         \
         do                                                                     \
         {                                                                      \
-            if (mrv::Preferences::debug > 1)                                   \
+            if (mrv::trace::debug > 1)                                   \
                 LOG_DEBUG(msg);                                                \
         } while (0)
 
 #    define DBGM1(msg)                                                         \
         do                                                                     \
         {                                                                      \
-            if (mrv::Preferences::debug > 0)                                   \
+            if (mrv::trace::debug > 0)                                   \
                 LOG_DEBUG(msg);                                                \
         } while (0)
 
@@ -175,21 +173,21 @@ namespace mrv
 #    define DBG3                                                               \
         do                                                                     \
         {                                                                      \
-            if (mrv::Preferences::debug > 2)                                   \
+            if (mrv::trace::debug > 2)                                   \
                 LOG_DEBUG("");                                                 \
         } while (0)
 
 #    define DBG2                                                               \
         do                                                                     \
         {                                                                      \
-            if (mrv::Preferences::debug > 1)                                   \
+            if (mrv::trace::debug > 1)                                   \
                 LOG_DEBUG("");                                                 \
         } while (0)
 
 #    define DBG                                                                \
         do                                                                     \
         {                                                                      \
-            if (mrv::Preferences::debug > 0)                                   \
+            if (mrv::trace::debug > 0)                                   \
                 std::cerr << __FUNCTION__ << " (" << __LINE__ << ")"           \
                           << std::endl;                                        \
         } while (0)

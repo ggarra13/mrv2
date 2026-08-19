@@ -30,3 +30,12 @@ inline char* gettext2(const char* msgid)
 #    undef sprintf
 #    undef snprintf
 #endif
+
+namespace mrv
+{
+    namespace trace
+    {
+        extern int logLevel;
+        extern int debug;
+    }
+}

@@ -18,6 +18,7 @@ set(SOURCES
     mrvFile.cpp
     mrvMemory.cpp
     mrvOS.cpp
+    mrvI8N.cpp
     mrvRoot.cpp
     mrvStackTrace.cpp
     mrvString.cpp

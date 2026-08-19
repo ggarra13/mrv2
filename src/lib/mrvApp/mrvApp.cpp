@@ -347,10 +347,10 @@ namespace mrv
             {
                 app::CmdLineHeader::create({}, _("Debugging:")),
                 app::CmdLineValueOption<int>::create(
-                    Preferences::debug, {"-debug", "-d"},
+                    mrv::trace::debug, {"-debug", "-d"},
                     _("Debug verbosity.")),
                 app::CmdLineValueOption<int>::create(
-                    Preferences::logLevel, {"-logLevel", "-l"},
+                    mrv::trace::logLevel, {"-logLevel", "-l"},
                     _("Log verbosity."),
                     string::Format("{0}").arg(Preferences::logLevel)),
                 app::CmdLineHeader::create({}, _("Audio:")),

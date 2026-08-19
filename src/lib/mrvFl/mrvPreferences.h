@@ -52,8 +52,6 @@ namespace mrv
         static std::string root;
         static std::string hotkeys_file;
         static int language_index;
-        static int debug;
-        static int logLevel;
     };
 
 } // namespace mrv
