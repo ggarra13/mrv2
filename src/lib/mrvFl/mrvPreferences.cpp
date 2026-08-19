@@ -2248,7 +2248,16 @@ namespace mrv
         }
 
         if (normal)
-            view->setFullScreenMode(false);
+        {
+            if (view->getPresentationMode())
+            {
+                view->setPresentationMode(false);
+            }
+            else
+            {
+                view->setFullScreenMode(false);
+            }
+        }
 
         r = (Fl_Round_Button*)uiPrefs->uiPrefsOpenMode->child(3);
         int maximized = r->value();

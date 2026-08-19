@@ -6,6 +6,7 @@ v1.7.4
 - UI: Added Default Panel Sizes for each Panel in the Preferences->Thumbnails, so you can have, for example, the Files Panel displaying the full thumbnail information, while the compare panel displays the small thumbnail.
 - UI: Fixed clipping of file names on the Compare Panel.
 - UI/Core: Improved thumbnails performance of all files, particularly .otio files.
+- UI: Fixed a bug when going into Presentation mode, and opening the Preferences window and then going back to Normal mode.  It was mainly a Windows bug.
 
 - Edit: .otioz files are now loaded in memory.
 - Edit: Added the ability to edit .otioz files.
@@ -27,7 +28,9 @@ v1.7.4
 - OTIO: Multiple Media References are now allowed.
 - OTIO: Spatial Coordinates are now interpreted.
 
-- Wayland: fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on long .otioz or .otio files).
+- Wayland: Fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on long .otioz or .otio files).
+
+- Core: Added support for hardware video decoding of NV12 formats (ie. YUV420SP_U8).
 
 - Vulkan: Optimized shader pipeline.
 - OpenGL: Optimized shader pipeline.

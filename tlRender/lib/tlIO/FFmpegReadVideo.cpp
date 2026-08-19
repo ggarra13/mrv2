@@ -3,10 +3,6 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
-#define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-// #define DBG
-
-
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
@@ -1129,17 +1125,6 @@ namespace tl
                 return;
             }
 
-#if 1
-#if defined(__APPLE__)
-            const AVHWDeviceType type = AV_HWDEVICE_TYPE_VIDEOTOOLBOX;
-#elif defined(_WIN32)
-            const AVHWDeviceType type = AV_HWDEVICE_TYPE_D3D11VA;
-#else
-            const AVHWDeviceType type = AV_HWDEVICE_TYPE_VAAPI;
-#endif
-
-            for (int j = 0; j < 1; ++j)
-#else
             // Try each candidate device type in order, using the first one
             // that both offers a hardware configuration for this codec and
             // successfully creates a device. If all candidates fail, stay
@@ -1147,7 +1132,6 @@ namespace tl
             enum AVHWDeviceType type = AV_HWDEVICE_TYPE_NONE;
             while ((type = av_hwdevice_iterate_types(type)) !=
                     AV_HWDEVICE_TYPE_NONE)
-#endif
             {
                 // Find a hardware configuration for this codec and device type.
                 AVPixelFormat hwFormat = AV_PIX_FMT_NONE;
@@ -1173,7 +1157,7 @@ namespace tl
                         "Hardware decoding ({0}) is not available for the codec \"{1}\"; trying next backend").
                         arg(av_hwdevice_get_type_name(type)).
                         arg(codec->name ? codec->name : "?");
-                    LOG_WARNING(msg);
+                    LOG_INFO(msg);
                     continue;
                 }
                 // Create the hardware device. On failure, try the next candidate.
@@ -1660,14 +1644,12 @@ namespace tl
             {
                 if (!_swsContext)
                 {
-                    DBG;
                     // Build the scaler now that the real source format is known
                     // (the hardware download format, or a software-fallback
                     // format).
                     _initSws(static_cast<AVPixelFormat>(avFrame->format));
                 }
 
-                DBG;
                 image = image::Image::create(_info);
                 data = image->getData();
 

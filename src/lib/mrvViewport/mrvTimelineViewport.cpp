@@ -2433,11 +2433,6 @@ namespace mrv
             Fl::flush(); // force the redraw
         }
 
-        bool TimelineViewport::getPresentationMode() const noexcept
-        {
-            return _p->presentation;
-        }
-
         bool TimelineViewport::_hasSecondaryViewport() const noexcept
         {
             TLRENDER_P();
@@ -2499,7 +2494,13 @@ namespace mrv
             w->fill_menu(p.ui->uiMenuBar);
         }
 
-        //! Set or unset the window to full screen and hide/show all bars
+        //! Get presentation mode.
+        bool TimelineViewport::getPresentationMode() const noexcept
+        {
+            return _p->presentation;
+        }
+
+        //! Set or unset the window to full screen and hide/show all bars.
         void TimelineViewport::setPresentationMode(bool active) noexcept
         {
             TLRENDER_P();
