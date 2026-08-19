@@ -532,8 +532,8 @@ const int PixelType_L_F16             = 4;
 const int PixelType_L_F32             = 5;
 
 const int PixelType_LA_U8             = 6;
-const int PixelType_LA_U32            = 7;
-const int PixelType_LA_U16            = 8;
+const int PixelType_LA_U16            = 7;
+const int PixelType_LA_U32            = 8;
 const int PixelType_LA_F16            = 9;
 const int PixelType_LA_F32            = 10;
 
@@ -653,7 +653,7 @@ vec4 sampleTexture(
           {
              y  = texture(s0, textureCoord).r;
              cb = texture(s1, textureCoord).r;
-             cr = texture(s2, textureCoord).g;
+             cr = texture(s1, textureCoord).g;
           }
 
           if (videoLevels == VideoLevels_FullRange)
@@ -1229,7 +1229,8 @@ void main()
 {
      fColor = pc.color;
 })";
-    }
+        }
+
         std::string butterflyFragmentSource()
         {
             return R"(#version 450
@@ -1253,30 +1254,6 @@ void main()
                        vec2(1.0 - fTexture.x, fTexture.y));
     }
 })";
-            // return
-            //     "#version 450\n"
-            //     "\n"
-            //     "layout(location = 0) in vec2 fTexture;\n"
-            //     "layout(location = 1) out vec4 outColor;\n"
-            //     "\n"
-            //     "layout(binding = 1) uniform sampler2D textureSampler;\n"
-            //     "layout(binding = 2) uniform sampler2D textureSamplerB;\n"
-            //     "\n"
-            //     "void main()\n"
-            //     "{\n"
-            //     // The same half of both, the second one mirrored, so that
-            //     // the middle of the picture is on both sides of the seam.
-            //     "    if (fTexture.x < .5)\n"
-            //     "    {\n"
-            //     "        outColor = texture(textureSampler, fTexture);\n"
-            //     "    }\n"
-            //     "    else\n"
-            //     "    {\n"
-            //     "        outColor = texture(\n"
-            //     "            textureSamplerB,\n"
-            //     "            vec2(1.0 - fTexture.x, fTexture.y));\n"
-            //     "    }\n"
-            //     "}\n";
         }
 
         std::string computeRGB_F16_To_RGBA_F16()
