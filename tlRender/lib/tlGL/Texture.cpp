@@ -31,7 +31,7 @@ namespace tl
                     GL_RG,   GL_RG,   GL_RG,   GL_RG,   GL_RG,
 
                     // RGB
-                    GL_RGB,  GL_RGBA, GL_RGB,  GL_RGB,  GL_RGB,  GL_RGB,
+                    GL_RGB,  GL_RGB, GL_RGB,  GL_RGB,  GL_RGB,  GL_RGB,
 
                     // RGBA
                     GL_RGBA, GL_RGBA, GL_RGBA, GL_RGBA, GL_RGBA,
@@ -47,6 +47,12 @@ namespace tl
                     
                     // YUV_XXXP_U16
                     GL_NONE, GL_NONE, GL_NONE,
+                    
+                    // YUV 420SP_U8
+                    GL_NONE,
+
+                    // YUV 420SP_U16
+                    GL_NONE, 
 
                     // ARGB_4444_Premult
                     GL_BGRA
@@ -123,7 +129,9 @@ namespace tl
                     
                     GL_NONE,   GL_NONE,   GL_NONE,
 
-                    GL_RGBA,   GL_NONE,   GL_NONE,
+                    GL_NONE,   GL_NONE,
+                    
+                    GL_RGBA,   
 #elif defined(TLRENDER_API_GLES_2)
                     GL_LUMINANCE,
                     GL_NONE,
@@ -166,6 +174,9 @@ namespace tl
                     GL_NONE,
                     GL_NONE,
 
+                    GL_NONE,
+                    GL_NONE,
+                    
                     GL_NONE
 #endif // TLRENDER_API_GL_4_1
                 };
@@ -220,10 +231,11 @@ namespace tl
                     GL_NONE,
                     GL_NONE,
                     GL_NONE,
+                    
+                    GL_NONE,
+                    GL_NONE,
 
                     GL_UNSIGNED_SHORT_4_4_4_4_REV,
-                    GL_NONE,
-                    GL_NONE,
 #elif defined(TLRENDER_API_GLES_2)
                     GL_UNSIGNED_BYTE, GL_NONE, GL_NONE, GL_NONE, GL_NONE,
 

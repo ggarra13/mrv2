@@ -638,6 +638,20 @@ namespace tl
                 shader->setTexture("textureSampler1", textures[1]);
                 shader->setTexture("textureSampler2", textures[2]);
                 break;
+            case image::PixelType::YUV_420SP_U8:
+            case image::PixelType::YUV_420SP_U16:
+                textures[0]->transition(
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    VK_ACCESS_TRANSFER_WRITE_BIT,
+                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
+                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                textures[1]->transition(
+                    p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    VK_ACCESS_TRANSFER_WRITE_BIT,
+                    VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_SHADER_READ_BIT,
+                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+                shader->setTexture("textureSampler0", textures[0]);
+                shader->setTexture("textureSampler1", textures[1]);
             default:
                 textures[0]->transition(
                     p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
