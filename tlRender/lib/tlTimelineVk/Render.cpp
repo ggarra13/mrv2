@@ -122,7 +122,7 @@ namespace
             const uint32_t G = (pixel >> 12) & 0x3FF;
             const uint32_t B = (pixel >>  2) & 0x3FF;
             const uint32_t A = 0x3FF;
-
+            
             // Vulkan expects: A (bits 30-31), B (20-29), G
             // (10-19), R (0-9)
             pixel = (A << 30) | (R << 20) | (G << 10) | (B << 0);
@@ -362,6 +362,24 @@ namespace tl
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 infoTmp = image::Info(info.size, image::PixelType::L_U16);
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                break;
+            }
+            case image::PixelType::YUV_420SP_U8:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                infoTmp = image::Info(info.size.w / 2, info.size.h / 2,
+                                      image::PixelType::LA_U8);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                break;
+            }
+            case image::PixelType::YUV_420SP_U16:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
+                out.push_back(vlk::Texture::create(ctx, infoTmp, options));
+                infoTmp = image::Info(info.size.w / 2, info.size.h / 2,
+                                      image::PixelType::LA_U16);
                 out.push_back(vlk::Texture::create(ctx, infoTmp, options));
                 break;
             }
@@ -707,8 +725,30 @@ namespace tl
                 textures[0]->copy(
                     reinterpret_cast<uint8_t*>(dst.data()),
                     dst.size() * sizeof(uint32_t));
+                break;
             }
-            break;
+            case image::PixelType::YUV_420SP_U8:
+            {
+                if (2 == textures.size())
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    textures[0]->copy(image->getData(), textures[0]->getInfo());
+                    textures[1]->copy(image->getData() + (w * h), textures[1]->getInfo());
+                }
+                break;
+            }
+            case image::PixelType::YUV_420SP_U16:
+            {
+                if (2 == textures.size())
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    textures[0]->copy(image->getData(), textures[0]->getInfo());
+                    textures[1]->copy(image->getData() + (w * h) * 2, textures[1]->getInfo());
+                }
+                break;
+            }
             default:
                 if (1 == textures.size())
                 {

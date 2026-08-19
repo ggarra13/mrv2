@@ -79,7 +79,7 @@ if (NOT FFmpeg_FOUND)
 	--disable-programs
 	--disable-doc
 	--disable-avfilter
-	--disable-hwaccels
+	--enable-hwaccels
 	--disable-devices
 	--disable-filters
 	--disable-alsa
@@ -87,9 +87,6 @@ if (NOT FFmpeg_FOUND)
 	--disable-avfoundation
 	--disable-bzlib
 	--disable-coreimage
-	--disable-d3d11va
-	--disable-d3d12va
-	--disable-dxva2
 	--disable-iconv
 	--disable-libxcb
 	--disable-libxcb-shm
@@ -104,17 +101,7 @@ if (NOT FFmpeg_FOUND)
 	--disable-vulkan
 	--disable-xlib
 	--enable-zlib
-	--disable-amf
-	--disable-cuda-llvm
-	--disable-cuvid
-	--disable-d3d11va
-	--disable-dxva2
-	--disable-ffnvcodec
-	--disable-nvdec
-	--disable-nvenc
 	--disable-v4l2-m2m
-	--disable-vaapi
-	--disable-vdpau
 	--disable-large-tests
 	--pkg-config-flags=--static
 	${FFmpeg_CFLAGS}

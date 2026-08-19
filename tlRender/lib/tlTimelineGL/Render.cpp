@@ -120,6 +120,24 @@ namespace tl
                 out.push_back(gl::Texture::create(infoTmp, options));
                 break;
             }
+            case image::PixelType::YUV_420SP_U8:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
+                out.push_back(gl::Texture::create(infoTmp, options));
+                infoTmp = image::Info(info.size.w / 2, info.size.h / 2,
+                                      image::PixelType::LA_U8);
+                out.push_back(gl::Texture::create(infoTmp, options));
+                break;
+            }
+            case image::PixelType::YUV_420SP_U16:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
+                out.push_back(gl::Texture::create(infoTmp, options));
+                infoTmp = image::Info(info.size.w / 2, info.size.h / 2,
+                                      image::PixelType::LA_U16);
+                out.push_back(gl::Texture::create(infoTmp, options));
+                break;
+            }
             default:
             {
                 auto texture = gl::Texture::create(info, options);
@@ -348,6 +366,28 @@ namespace tl
                 }
                 break;
             }
+            case image::PixelType::YUV_420SP_U8:
+            {
+                if (2 == textures.size())
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    textures[0]->copy(image->getData(), textures[0]->getInfo());
+                    textures[1]->copy(image->getData() + (w * h), textures[1]->getInfo());
+                }
+                break;
+            }
+            case image::PixelType::YUV_420SP_U16:
+            {
+                if (2 == textures.size())
+                {
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    textures[0]->copy(image->getData(), textures[0]->getInfo());
+                    textures[1]->copy(image->getData() + (w * h) * 2, textures[1]->getInfo());
+                }
+                break;
+            }
             default:
                 if (1 == textures.size())
                 {
@@ -446,6 +486,16 @@ namespace tl
                     glActiveTexture(
                         static_cast<GLenum>(GL_TEXTURE0 + 2 + offset));
                     textures[2]->bind();
+                }
+                break;
+            case image::PixelType::YUV_420SP_U8:
+            case image::PixelType::YUV_420SP_U16:
+                if (2 == textures.size())
+                {
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + offset));
+                    textures[0]->bind();
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
+                    textures[1]->bind();
                 }
                 break;
             default:

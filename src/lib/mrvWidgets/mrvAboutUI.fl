@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0500
+version 1.050020
 i18n_type 1
 i18n_include {<libintl.h>}
 i18n_conditional {}
@@ -25,9 +25,9 @@ class AboutUI {open
   Function {make_window(ViewerUI* main)} {open private
   } {
     Fl_Window uiMain {
-      label {About mrv2} open selected
+      label {About mrv2} open
       xywh {838 347 696 398} type Double resizable
-      code0 {//main->uiMain->add(o);} modal visible
+      code3 {//main->uiMain->add(o);} modal visible
     } {
       Fl_Group {} {open
         xywh {0 0 696 398} box FLAT_BOX color 51 resizable
@@ -49,25 +49,25 @@ for (; i != e; ++i )
           } {
             Fl_Browser {} {
               xywh {12 38 672 340} color 49 textcolor 32
-              code0 {mrv::about_message(o);}
+              code3 {mrv::about_message(o);}
               class {mrv::TextBrowser}
             }
           }
           Fl_Group {} {
             label HW open
-            xywh {0 24 696 374}
+            xywh {0 24 696 374} hide
           } {
             Fl_Browser uiCPUInfo {
               label {CPU Information}
               xywh {12 53 672 92} color 49 align 1 textcolor 32
-              code0 {mrv::cpu_information(o);}
+              code3 {mrv::cpu_information(o);}
               class {mrv::TextBrowser}
             }
             Fl_Browser uiGPUInfo {
               label {GPU Information}
               xywh {12 172 672 206} color 49 align 1 textcolor 32
-              code0 {static int widths[] = {160,o->w()-160,0};}
-              code1 {o->column_widths( widths );}
+              code3 {static int widths[] = {160,o->w()-160,0};
+o->column_widths( widths );}
               class {mrv::TextBrowser}
             }
           }
@@ -77,7 +77,7 @@ for (; i != e; ++i )
           } {
             Fl_Browser {} {
               xywh {12 44 672 338} color 49 textcolor 32
-              code0 {ffmpeg_formats(o);}
+              code3 {ffmpeg_formats(o);}
               class {mrv::TextBrowser}
             }
           }
@@ -88,12 +88,12 @@ for (; i != e; ++i )
             Fl_Browser {} {
               label Codecs
               xywh {12 53 672 101} color 49 align 1 textcolor 32 deactivate
-              code0 {mrv::ffmpeg_codec_information(o);}
+              code3 {mrv::ffmpeg_codec_information(o);}
               class {mrv::TextBrowser}
             }
             Fl_Browser {} {
               xywh {12 162 672 217} color 49 align 1 textcolor 32
-              code0 {mrv::ffmpeg_video_codecs(o);}
+              code3 {mrv::ffmpeg_video_codecs(o);}
               class {mrv::TextBrowser}
             }
           }
@@ -104,12 +104,12 @@ for (; i != e; ++i )
             Fl_Browser {} {
               label Codecs
               xywh {12 53 672 101} color 49 align 1 textcolor 32 deactivate
-              code0 {mrv::ffmpeg_codec_information(o);}
+              code3 {mrv::ffmpeg_codec_information(o);}
               class {mrv::TextBrowser}
             }
             Fl_Browser {} {
               xywh {12 162 672 217} color 49 align 1 textcolor 32
-              code0 {mrv::ffmpeg_audio_codecs(o);}
+              code3 {mrv::ffmpeg_audio_codecs(o);}
               class {mrv::TextBrowser}
             }
           }
@@ -120,12 +120,22 @@ for (; i != e; ++i )
             Fl_Browser {} {
               label Codecs
               xywh {12 53 672 101} color 49 align 1 textcolor 32 deactivate
-              code0 {mrv::ffmpeg_codec_information(o);}
+              code3 {mrv::ffmpeg_codec_information(o);}
               class {mrv::TextBrowser}
             }
             Fl_Browser {} {
               xywh {12 162 672 217} color 49 align 1 textcolor 32
-              code0 {mrv::ffmpeg_subtitle_codecs(o);}
+              code3 {mrv::ffmpeg_subtitle_codecs(o);}
+              class {mrv::TextBrowser}
+            }
+          }
+          Fl_Group {} {
+            label {HW decoders} open
+            xywh {10 34 696 374} hide
+          } {
+            Fl_Browser {} {
+              xywh {22 54 672 338} color 49 textcolor 32
+              code3 {ffmpeg_hw_decoders(o);}
               class {mrv::TextBrowser}
             }
           }
@@ -135,17 +145,17 @@ for (; i != e; ++i )
           } {
             Fl_Browser {} {
               xywh {12 41 672 338} color 49 textcolor 32
-              code0 {mrv::ffmpeg_protocols(o);}
+              code3 {mrv::ffmpeg_protocols(o);}
               class {mrv::TextBrowser}
             }
           }
           Fl_Group {} {
-            label Thanks
-            xywh {0 24 696 374} hide
+            label Thanks selected
+            xywh {0 24 696 374}
           } {
             Fl_Browser {} {
               xywh {12 41 672 340} color 49 textfont 4 textcolor 32
-              code0 {mrv::thanks_message(o);}
+              code3 {mrv::thanks_message(o);}
               class {mrv::TextBrowser}
             }
           }
