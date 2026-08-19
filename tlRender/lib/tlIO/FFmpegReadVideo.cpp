@@ -3,8 +3,8 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
-// #define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
-#define DBG
+#define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+// #define DBG
 
 
 #include <sstream>
@@ -1437,10 +1437,8 @@ namespace tl
                 AVFrame* frame = _avFrame;
                 if (_hwAccel && _avFrame->format == _hwPixelFormat)
                 {
-                    DBG;
                     // Download the hardware surface to a CPU frame (NV12/P010).
                     av_frame_unref(_swFrame);
-                    DBG;
                     if (av_hwframe_transfer_data(_swFrame, _avFrame, 0) < 0)
                     {
                         std::string msg = string::Format("Cannot download a hardware frame; skipping: \"{0}\"").
@@ -1448,9 +1446,7 @@ namespace tl
                         LOG_WARNING(msg);
                         continue;
                     }
-                    DBG;
                     av_frame_copy_props(_swFrame, _avFrame);
-                    DBG;
                     frame = _swFrame;
                     if (!_hwLogged)
                     {
@@ -1460,7 +1456,6 @@ namespace tl
                         std::string msg = string::Format("Hardware decoding is active: \"{0}\"").arg(_fileName);
                         LOG_STATUS(msg);
                         _hwLogged = true;
-                        DBG;
                     }
                 }
                 const int64_t timestamp = _avFrame->pts != AV_NOPTS_VALUE
@@ -1553,7 +1548,6 @@ namespace tl
         void ReadVideo::_copy(std::shared_ptr<image::Image>& image,
                               std::shared_ptr<AVFrame> avFrame)
         {
-            DBG;
             // Check if avFrame changed image size (can happen when reading a
             // sequence of .webp)
             if (avFrame->width != _info.size.w &&
@@ -1564,14 +1558,12 @@ namespace tl
                 avFrame->height > 0)
                 _info.size.h = avFrame->height;
 
-            DBG;
             const std::size_t w = _info.size.w;
             const std::size_t h = _info.size.h;
             uint8_t* data;
 
             if (_hwAccel && avFrame->format == _avOutputPixelFormat)
             {
-                DBG;
                 image = image::Image::create(_info);
                 data = image->getData();
                 // Native semi-planar copy (NV12/P010): luma plane, then the
@@ -1579,22 +1571,18 @@ namespace tl
                 // No colour conversion -- the display shader does YUV->RGB.
                 // The sws fallback below covers the rare case of an
                 // unexpected download format.
-                DBG;
                 const std::size_t bytes =
                     (AV_PIX_FMT_P010LE == _avOutputPixelFormat) ? 2 : 1;
                 const uint8_t* const dataY = avFrame->data[0];
                 const uint8_t* const dataUV = avFrame->data[1];
                 const int linesizeY = avFrame->linesize[0];
                 const int linesizeUV = avFrame->linesize[1];
-                DBG;
                 for (std::size_t i = 0; i < h; ++i)
                 {
                     std::memcpy(data + w * bytes * i, dataY + linesizeY * i, w * bytes);
                 }
-                DBG;
                 uint8_t* const dataOutUV = data + w * h * bytes;
                 const std::size_t h2 = h / 2;
-                DBG;
                 for (std::size_t i = 0; i < h2; ++i)
                 {
                     std::memcpy(dataOutUV + w * bytes * i, dataUV + linesizeUV * i, w * bytes);
@@ -1606,7 +1594,6 @@ namespace tl
                     _avInputPixelFormat, _avOutputPixelFormat,
                     _fastYUV420PConversion))
             {
-                DBG;
                 const uint8_t* const data0 = avFrame->data[0];
                 const int linesize0 = avFrame->linesize[0];
                 switch (_avInputPixelFormat)

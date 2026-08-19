@@ -488,6 +488,16 @@ namespace tl
                     textures[2]->bind();
                 }
                 break;
+            case image::PixelType::YUV_420SP_U8:
+            case image::PixelType::YUV_420SP_U16:
+                if (2 == textures.size())
+                {
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + offset));
+                    textures[0]->bind();
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
+                    textures[1]->bind();
+                }
+                break;
             default:
                 if (1 == textures.size())
                 {
