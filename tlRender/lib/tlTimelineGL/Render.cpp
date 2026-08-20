@@ -700,18 +700,17 @@ namespace tl
             glEnable(GL_BLEND);
             glBlendEquation(GL_FUNC_ADD);
 
-            // "rect", "mesh", and "wipe" all use the same vertex and
-            // fragment source (vertexSource() / meshFragmentSource()), so
-            // compile it once and share the program between them instead
-            // of building three identical GL shaders.
+            if (!p.shaders["rect"])
+            {
+                p.shaders["rect"] =
+                    gl::Shader::create(vertexSource(), meshFragmentSource());
+                p.shaders["wipe"] = p.shaders["rect"];
+            }
             if (!p.shaders["mesh"])
             {
                 p.shaders["mesh"] =
                     gl::Shader::create(vertexSource(), meshFragmentSource());
             }
-            p.shaders["rect"] = p.shaders["mesh"];
-            p.shaders["wipe"] = p.shaders["mesh"];
-
             if (!p.shaders["colorMesh"])
             {
                 p.shaders["colorMesh"] = gl::Shader::create(
