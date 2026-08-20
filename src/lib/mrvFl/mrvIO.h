@@ -97,33 +97,34 @@ namespace mrv
 
 } // namespace mrv
 
-// Log an error
-#define mrvLOG_ERROR(mod, msg)                                          \
+#define mrvLOG_INFO(mod, msg)                                           \
     do                                                                  \
     {                                                                   \
-        mrv::trace::error << _("ERROR:\t") << "[" << mod << "] " << msg; \
+        if (mrv::trace::logLevel > 3)                                   \
+            mrv::trace::info << "       \t[" << mod << "] " << msg;     \
+    } while (0)
+
+#define mrvLOG_STATUS(mod, msg)                                         \
+    do                                                                  \
+    {                                                                   \
+        if (mrv::trace::logLevel > 2)                                   \
+            mrv::trace::info << "       \t[" << mod << "] " << msg;     \
     } while (0)
 
 // Log a warning
 #define mrvLOG_WARNING(mod, msg)                                        \
     do                                                                  \
     {                                                                   \
-        mrv::trace::warn << _("WARN:\t") << "[" << mod << "] " << msg;  \
+        if (mrv::trace::logLevel > 1)                                   \
+            mrv::trace::warn << _("WARN:\t") << "[" << mod << "] " << msg; \
     } while (0)
 
-// Log if verbosity is more than 0
-#define mrvLOG_INFO(mod, msg)                                           \
+// Log an error
+#define mrvLOG_ERROR(mod, msg)                                          \
     do                                                                  \
     {                                                                   \
-        if (mrv::trace::logLevel > 0)                             \
-            mrv::trace::info << "       \t[" << mod << "] " << msg;       \
-    } while (0)
-
-// Log out always
-#define mrvLOG_STATUS(mod, msg)                                         \
-    do                                                                  \
-    {                                                                   \
-        mrv::trace::info << "       \t[" << mod << "] " << msg;           \
+        if (mrv::trace::logLevel > 0)                                   \
+            mrv::trace::error << _("ERROR:\t") << "[" << mod << "] " << msg; \
     } while (0)
 
 #define LOG_ERROR(msg) mrvLOG_ERROR(kModule, msg << std::endl)

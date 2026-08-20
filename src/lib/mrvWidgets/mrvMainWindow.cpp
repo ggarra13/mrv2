@@ -631,7 +631,7 @@ namespace mrv
             delete rgb;
         }
     }
-    
+
     //! Turn off screen saver.
     void MainWindow::allow_screen_saver(bool value)
     {
@@ -755,13 +755,13 @@ namespace mrv
         {
             cmd = "gsettings get org.gnome.shell.extensions.tiling-assistant toggle-always-on-top";
         }
-        // else if (compositor == "kwin")
-        // {
-        //     cmd = "kreadconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" | awk -F',' '{print $1}'";
-        // }
+        else if (compositor == "kwin")
+        {
+            // cmd = "kreadconfig6 --file kglobalshortcutsrc --group kwin --key \"Keep Window Above Others\" | awk -F',' '{print $1}'";
+        }
         else
         {
-            LOG_INFO("Compositor not known");
+            LOG_INFO("Compositor " << compositor << " not known");
         }
         if (!cmd.empty())
         {
@@ -773,7 +773,7 @@ namespace mrv
                 LOG_WARNING(err);
             }
             if (ret != 0 ||
-                (compositor == "mutter" &&
+                (compositor == "gnome-shell" &&
                  out.substr(out.size() - 2, 2) == "[]"))
                 out = "";
         }
@@ -789,7 +789,7 @@ namespace mrv
         std::string hotkey = kToggleFloatOnTop.to_s();
         if (hotkey.empty())
             return;
-        if (compositor == "mutter")
+        if (compositor == "gnome-shell")
         {
             size_t startPos = 0;
             if (startPos = hotkey.find("Meta") != std::string::npos)
@@ -819,7 +819,7 @@ namespace mrv
         {
             // Not defined yet.
         }
-            
+
         if (!cmd.empty())
         {
             ret = os::exec_command(cmd, out, err);
@@ -839,11 +839,11 @@ namespace mrv
             }
         }
     }
-        
+
     void compositor_to_mrv2_hotkey(const std::string& compositor,
                                    const std::string& hotkey)
     {
-        if (compositor == "mutter")
+        if (compositor == "gnome-shell")
         {
             if (hotkey[0] != '[' || hotkey[hotkey.size() - 1] != ']')
                 return;
@@ -980,7 +980,7 @@ namespace mrv
                 p.hidden = false;
             }
         }
-        
+
         int ret = DropWindow::handle(event);
         return ret;
     }
@@ -1066,7 +1066,7 @@ namespace mrv
         }
         copy_label(buf);
     }
-    
+
     void MainWindow::show()
     {
         DropWindow::show();
@@ -1087,7 +1087,7 @@ namespace mrv
                 // Turn a mrv2 hotkey (if defined) into a compositor one.
                 mrv2_to_compositor_hotkey(compositor);
             }
-            else 
+            else
             {
                 // Turn a Compositor Hotkey into an mrv2's hotkey.
                 compositor_to_mrv2_hotkey(compositor, hotkey);
@@ -1117,10 +1117,10 @@ namespace mrv
                 scale = Fl::screen_scale(0);  // scale same for all windows.
             else if (valid_scaling == 0)
                 scale = 1.F;  // scale not supported
-            
+
             // 1. Make an offscreen surface bigger for antialiasing.
             p.offscreen = fl_create_offscreen(w()*4*scale, h()*4*scale);
-            
+
             // 2. Draw child widgets to an offscreen buffer
             fl_begin_offscreen(p.offscreen);
             Fl_Double_Window::draw_children(); // Draw all the window's children
@@ -1143,10 +1143,10 @@ namespace mrv
             // 6. Paint with alpha channel the offscreen widgets
             cairo_set_source_surface(cr, offscreen_surface, 0, 0);
             cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-            
+
             const double alpha = (double)win_alpha / 255.0;
             cairo_paint_with_alpha(cr, alpha);
-            
+
             fl_delete_offscreen(p.offscreen);
 
             clear_damage();

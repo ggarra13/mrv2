@@ -30,7 +30,7 @@
     std::vector<std::string> get##ENUM##Labels();                       \
     std::string getLabel(ENUM);                                         \
     std::string to_string(ENUM);                                        \
-    bool from_string(const std::string&, ENUM&);                        
+    bool from_string(const std::string&, ENUM&);
 
 //! Implementation macro for enum utilities.
 //!
@@ -74,7 +74,7 @@
             labels.end(),                                               \
             [s](const std::string& value)                               \
                 {                                                       \
-                    return string::compare(s, value, string::Compare::CaseInsensitive); \
+                    return tl::string::compare(s, value, tl::string::Compare::CaseInsensitive); \
                 });                                                     \
         if (i != labels.end())                                          \
         {                                                               \
@@ -141,8 +141,8 @@
         const auto i = std::find_if(                                           \
             labels.begin(), labels.end(),                                      \
             [s](const std::string& value) {                                    \
-                return string::compare(                                        \
-                    s, value, string::Compare::CaseInsensitive);               \
+                return tl::string::compare(                             \
+                    s, value, tl::string::Compare::CaseInsensitive);    \
             });                                                                \
         if (i == labels.end())                                                 \
         {                                                                      \

@@ -352,7 +352,7 @@ namespace mrv
                 app::CmdLineValueOption<int>::create(
                     mrv::trace::logLevel, {"-logLevel", "-l"},
                     _("Log verbosity."),
-                    string::Format("{0}").arg(Preferences::logLevel)),
+                    string::Format("{0}").arg(trace::logLevel)),
                 app::CmdLineHeader::create({}, _("Audio:")),
                 app::CmdLineValueOption<std::string>::create(
                     p.options.audioFileName, {"-audio", "-a"},
@@ -1005,10 +1005,7 @@ namespace mrv
                         break;
                     }
                     default:
-                        if (_options.log)
-                        {
-                            uiLogDisplay->info(msg.c_str());
-                        }
+                        LOG_INFO(msg);
                         break;
                     }
                 }

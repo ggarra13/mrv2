@@ -133,20 +133,22 @@ namespace mrv
             int Y = controls->y();
 
 
-            _r->logLevel = new PopupMenu(g->x(), Y, 100, 30);
+            auto sP = new Widget< PopupMenu >(
+                g->x(), Y, 100, 30, _("      Gigabytes"));
+            _r->logLevel = sP;
             _r->logLevel->tooltip(_("Set the verbosity of the logs."));
             _r->logLevel->add(_("None"));
             _r->logLevel->add(_("Errors"));
             _r->logLevel->add(_("Warning"));
             _r->logLevel->add(_("Status"));
             _r->logLevel->add(_("Info"));
-            _r->logLevel->value(Preferences::logLevel);
-            _r->logLevel->callback(
-                [](Fl_Widget* w, void* d)
+            _r->logLevel->value(trace::logLevel);
+            sP->callback(
+                [](auto w)
                     {
                         int level = w->value();
-                        Preferences::logLevel = level;
-                    }
+                        trace::logLevel = level;
+                    });
 
             _r->clearButton = new Fl_Button(g->x() + 100, Y, g->w() - 100, 30);
             _r->clearButton->image(MRV2_LOAD_SVG(Clear));

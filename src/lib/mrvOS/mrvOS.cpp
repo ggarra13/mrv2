@@ -94,7 +94,7 @@ namespace mrv
                 dest.append(buffer, bytesRead);
             }
         }
-        
+
         int exec_command(const std::string& utf8_command)
         {
             STARTUPINFOW si;
@@ -102,7 +102,7 @@ namespace mrv
 
             // 1. Convert UTF-8 std::string to UTF-16 std::wstring
             std::wstring utf16_command = string::convert_utf8_to_utf16(utf8_command);
-            
+
             // Initialize the structures
             ZeroMemory(&si, sizeof(si));
             si.cb = sizeof(si);
@@ -148,12 +148,12 @@ namespace mrv
 
             return static_cast<int>(exitCode);
         }
-        
+
         int exec_command_no_block(const std::string& utf8_command)
-        {        
+        {
             STARTUPINFOW si;
             PROCESS_INFORMATION pi;
-            
+
             // 1. Convert UTF-8 std::string to UTF-16 std::wstring
             std::wstring utf16_command = string::convert_utf8_to_utf16(utf8_command);
 
@@ -198,7 +198,7 @@ namespace mrv
 
             return 0;
         }
-        
+
         int exec_command(const std::string& utf8_command,
                          std::string& std_out,
                          std::string& std_err)
@@ -209,7 +209,7 @@ namespace mrv
 
             // Convert UTF-8 std::string to UTF-16 std::wstring
             std::wstring utf16_command = string::convert_utf8_to_utf16(utf8_command);
-            
+
             // Initialize output variables
             std_out.clear();
             std_err.clear();
@@ -252,12 +252,12 @@ namespace mrv
                 DWORD error = GetLastError();
                 LOG_ERROR("exec_command: CreateProcessW failed with error: " +
                           std::to_string(error));
-                
+
                 CloseHandle(hStdOutRead);
                 CloseHandle(hStdOutWrite);
                 CloseHandle(hStdErrRead);
                 CloseHandle(hStdErrWrite);
-                
+
                 std::string err = "Failed for " + utf8_command;
                 throw std::runtime_error(err);
             }
@@ -292,11 +292,11 @@ namespace mrv
 
             std_out = outThreadData;
             std_err = errThreadData;
-            
+
             // Close handles
             CloseHandle(hStdOutRead);
             CloseHandle(hStdErrRead);
-            
+
             // Cleanup
             CloseHandle(pi.hProcess);
             CloseHandle(pi.hThread);
@@ -305,19 +305,19 @@ namespace mrv
         }
 
 #else
-        
+
         int exec_command(const std::string& command)
         {
             return ::system(command.c_str());
         }
-        
+
         int exec_command_no_block(const std::string& command)
         {
             std::string no_block = command + " &";
             exec_command(no_block);
             return 0;
         }
-        
+
         int exec_command(const std::string& command,
                          std::string& std_out, std::string& std_err)
         {
@@ -543,9 +543,9 @@ namespace mrv
             static std::string wm_version;
             if (!wm_version.empty())
                 return wm_version;
-            
+
             std::string version_command;
-            
+
             if (wm == "cinnamon")
             {
                 version_command = "cinnamon --version";
@@ -634,16 +634,16 @@ namespace mrv
                 return desktop; // If no match is found
             }
         }
-        
+
         const std::string
         getWaylandCompositorVersion(const std::string& compositor)
         {
             static std::string compositor_version;
             if (!compositor_version.empty())
                 return compositor_version;
-            
+
             std::string version_command;
-            
+
             // Choose the command based on the compositor name
             if (compositor == "cage")
             {
@@ -716,7 +716,7 @@ namespace mrv
                 desktop.substr(0, 5) == "gnome" ||
                 desktop == "mutter")
             {
-                return "gnome-shell";
+                return "mutter";
             }
             else if (
                 desktop.substr(0, 4) == "kwin" || desktop == "kde" ||
@@ -748,7 +748,7 @@ namespace mrv
 
             if (!out.empty())
                 return out;
-            
+
             out = _("\tDesktop Environment: ");
 
 #ifdef __linux__

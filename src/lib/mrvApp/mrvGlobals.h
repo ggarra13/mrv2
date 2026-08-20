@@ -6,13 +6,14 @@
 
 #include "mrvCore/mrvLicensing.h"
 
+
 namespace mrv
 {
     namespace app
     {
         extern bool demo_mode;
         extern bool force_demo;
-        
+
         extern bool soporta_annotations;
         extern bool soporta_layers;
         extern bool soporta_editing;
