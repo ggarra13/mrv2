@@ -122,7 +122,7 @@ namespace
             const uint32_t G = (pixel >> 12) & 0x3FF;
             const uint32_t B = (pixel >>  2) & 0x3FF;
             const uint32_t A = 0x3FF;
-            
+
             // Vulkan expects: A (bits 30-31), B (20-29), G
             // (10-19), R (0-9)
             pixel = (A << 30) | (R << 20) | (G << 10) | (B << 0);
@@ -401,6 +401,8 @@ namespace tl
             TLRENDER_P();
 
             const auto& info = image->getInfo();
+            std::cerr << this << " " <<  __FUNCTION__ << " " << __LINE__ <<
+                info.pixelType << std::endl;
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:

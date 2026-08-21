@@ -759,7 +759,7 @@ namespace mrv
             prepare_shaders();
             prepare_mesh();
             prepare_render_pass();
-            prepare_pipeline_layout(); // Main shader layout
+            prepare_pipeline_layout();
             prepare_pipeline();
         }
 

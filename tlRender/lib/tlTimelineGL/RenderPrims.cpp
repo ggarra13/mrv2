@@ -164,7 +164,7 @@ namespace tl
             const math::Vector2i& pos)
         {
             TLRENDER_P();
-            
+
             uint8_t textureIndex = 0;
             const auto& textures = p.glyphTextureAtlas->getTextures();
 
@@ -222,7 +222,7 @@ namespace tl
 
                             const timeline::TextInfo textInfo(textureIndex);
                             textInfos.emplace_back(textInfo);
-                            
+
                             timeline::TextInfo& lastTextInfo = textInfos.back();
                             mesh = lastTextInfo.mesh;
                             meshIndex = lastTextInfo.meshIndex;
@@ -230,7 +230,7 @@ namespace tl
 
                         const math::Vector2i& offset = glyph->offset;
                         const math::Box2i box(
-                            pos.x + x + offset.x, pos.y - offset.y, 
+                            pos.x + x + offset.x, pos.y - offset.y,
                             glyph->image->getWidth(),
                             glyph->image->getHeight());
                         const auto& min = box.min;
@@ -239,7 +239,7 @@ namespace tl
                         mesh.v.push_back(math::Vector2f(min.x, min.y));
                         mesh.v.push_back(math::Vector2f(max.x + 1, min.y));
                         mesh.v.push_back(math::Vector2f(max.x + 1, max.y + 1));
-                        
+
                         mesh.v.push_back(math::Vector2f(min.x, max.y + 1));
                             mesh.t.push_back(
                                 math::Vector2f(
@@ -257,7 +257,7 @@ namespace tl
                                 math::Vector2f(
                                     item.textureU.getMin(),
                                     item.textureV.getMax()));
-                        
+
                         geom::Triangle2 triangle;
                         triangle.v[0].v = meshIndex + 1;
                         triangle.v[1].v = meshIndex + 2;
@@ -281,7 +281,7 @@ namespace tl
                 }
             }
         }
-        
+
         void Render::drawText(
             const timeline::TextInfo& textInfo,
             const math::Vector2i& position, const image::Color4f& color)
@@ -294,7 +294,7 @@ namespace tl
             const math::Matrix4x4f transform =
                 p.transform *
                 math::translate(math::Vector3f(position.x, position.y, 0.F));
-            
+
             const auto textures = p.glyphTextureAtlas->getTextures();
             p.shaders["text"]->bind();
             p.shaders["text"]->setUniform("transform.mvp", transform);
@@ -305,7 +305,7 @@ namespace tl
 
             glActiveTexture(static_cast<GLenum>(GL_TEXTURE0));
 
-            
+
             glBindTexture(GL_TEXTURE_2D, textures[textureIndex]);
             p.drawTextMesh(mesh);
         }
@@ -387,6 +387,7 @@ namespace tl
                 "imageChannels", image::getChannelCount(info.pixelType));
             p.shaders["image"]->setUniform("mirrorX", info.layout.mirror.x);
             p.shaders["image"]->setUniform("mirrorY", info.layout.mirror.y);
+            std::cerr << this << " " << info.pixelType << std::endl;
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:

@@ -605,6 +605,10 @@ namespace tl
             ubo.mirrorY = !info.layout.mirror.y;
             shader->setUniform("ubo", ubo);
 
+            std::cerr << this << " "
+                      << __FUNCTION__ << " " << __LINE__
+                      << " " << info.pixelType << std::endl;
+
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:

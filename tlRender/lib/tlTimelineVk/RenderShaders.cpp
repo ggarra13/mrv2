@@ -619,16 +619,13 @@ vec4 sampleTexture(
     sampler2D s2)
 {
     vec4 c;
-    float y = 0.0, cb = 0.0, cr = 0.0;
-            y  = texture(s0, textureCoord).r;
-            cb = texture(s1, textureCoord).r;
-            cr = texture(s1, textureCoord).g;
-c.r = y; c.g = cb; c.b = cr; c.a = 1.0;
+    float y = 0; float cr = 0; float cb = 0;
 
     if (pixelType >= PixelType_YUV_420P_U8 && pixelType <= PixelType_YUV_420SP_U16)
     {
         // 1. Fetch plane channels based on storage type
-        if (pixelType == PixelType_YUV_420SP_U8 || pixelType == PixelType_YUV_420SP_U16)
+        if (pixelType == PixelType_YUV_420SP_U8 ||
+            pixelType == PixelType_YUV_420SP_U16)
         {
             // Semi-Planar (NV12 / P010 / P016):
             y  = texture(s0, textureCoord).r;
