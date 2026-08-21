@@ -280,6 +280,16 @@ namespace tl
         private:
             void _displayShader();
 
+            void _drawImageCommon(
+                const std::shared_ptr<vlk::OffscreenBuffer>& fbo,
+                const std::shared_ptr<image::Image>& image,
+                const math::Box2i& box,
+                const image::Color4f& color,
+                const timeline::ImageOptions& imageOptions,
+                const bool clearRenderPass,
+                const bool flip,
+                const bool applyClipRect);
+
             void _uploadMesh(const std::string& meshName,
                              const geom::TriangleMesh2& mesh,
                              size_t triangleCount);
