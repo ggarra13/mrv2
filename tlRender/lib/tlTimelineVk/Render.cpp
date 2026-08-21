@@ -401,8 +401,6 @@ namespace tl
             TLRENDER_P();
 
             const auto& info = image->getInfo();
-            std::cerr << this << " " <<  __FUNCTION__ << " " << __LINE__ <<
-                info.pixelType << std::endl;
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:

@@ -605,10 +605,6 @@ namespace tl
             ubo.mirrorY = !info.layout.mirror.y;
             shader->setUniform("ubo", ubo);
 
-            std::cerr << this << " "
-                      << __FUNCTION__ << " " << __LINE__
-                      << " " << info.pixelType << std::endl;
-
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:
@@ -828,6 +824,7 @@ namespace tl
                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
                 shader->setTexture("textureSampler0", textures[0]);
                 shader->setTexture("textureSampler1", textures[1]);
+                break;
             default:
                 textures[0]->transition(
                     p.cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,

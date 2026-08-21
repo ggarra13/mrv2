@@ -321,11 +321,13 @@ namespace tl
                                     (!_displayOptions.hdr.tonemap ||
                                      _displayOptions.hdr == timeline::HDROptions()))
                                 {
-                                    if (!layer.imageB && layer.image)
+                                    if (!layer.imageB && layer.image &&
+                                        layer.image->getInfo().pixelType == image::PixelType::RGBA_U8)
                                     {
                                         event.render->drawImage(layer.image, box);
                                     }
-                                    else if (!layer.image && layer.imageB)
+                                    else if (!layer.image && layer.imageB &&
+                                             layer.imageB->getInfo().pixelType == image::PixelType::RGBA_U8)
                                     {
                                         event.render->drawImage(layer.imageB, box);
                                     }

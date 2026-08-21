@@ -387,7 +387,6 @@ namespace tl
                 "imageChannels", image::getChannelCount(info.pixelType));
             p.shaders["image"]->setUniform("mirrorX", info.layout.mirror.x);
             p.shaders["image"]->setUniform("mirrorY", info.layout.mirror.y);
-            std::cerr << this << " " << info.pixelType << std::endl;
             switch (info.pixelType)
             {
             case image::PixelType::YUV_420P_U8:
