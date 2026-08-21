@@ -31,7 +31,7 @@ v1.7.4
 
 - Wayland: Fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on long .otioz or .otio files).
 
-- Core: Added support for hardware video decoding of NV12 formats (ie. YUV420SP_U8 and YUV420SP_U16).
+- Core: Added support for hardware video decoding of NV12 formats (ie. YUV420SP_U8 and YUV420SP_U16).  Linux HW decoding under NVidia cards is a tad problematic, thou.  On Linux, we'll have to wait until I plug FFmpeg's Vulkan support. 
 
 - Vulkan: Optimized shader pipeline.
 - OpenGL: Optimized shader pipeline.
