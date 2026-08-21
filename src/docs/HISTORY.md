@@ -7,6 +7,7 @@ v1.7.4
 - UI: Fixed clipping of file names on the Compare Panel.
 - UI/Core: Improved thumbnails performance of all files, particularly .otio files.
 - UI: Fixed a bug when going into Presentation mode, and opening the Preferences window and then going back to Normal mode.  It was mainly a Windows bug.
+- UI: Added LogLevel to change the display of messages in the Logs Panel.
 
 - Edit: .otioz files are now loaded in memory.
 - Edit: Added the ability to edit .otioz files.
@@ -17,7 +18,7 @@ v1.7.4
 
 - OpenEXR: Improved loading performance a tad.
 - OpenEXR: Fixed layer information (like lossy compression for the layer not the part number).
-- OpenEXR: Fixed ghosted DWA and ZIP ghosted compression settings when saving EXR images.
+- OpenEXR: Fixed ghosted DWA and ZIP compression settings when saving EXR images.
 
 - Vulkan: Made Offscreen buffers use the memory allocator for better performance.  This makes creating the 4K buffers much faster.  Noticeable at the first annotation.
 
@@ -30,7 +31,7 @@ v1.7.4
 
 - Wayland: Fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on long .otioz or .otio files).
 
-- Core: Added support for hardware video decoding of NV12 formats (ie. YUV420SP_U8).
+- Core: Added support for hardware video decoding of NV12 formats (ie. YUV420SP_U8 and YUV420SP_U16).
 
 - Vulkan: Optimized shader pipeline.
 - OpenGL: Optimized shader pipeline.
