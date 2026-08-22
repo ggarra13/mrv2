@@ -193,9 +193,6 @@ if (NOT FFmpeg_FOUND)
 	    --enable-decoder=truehd
             --enable-decoder=v210
             --enable-decoder=v210x
-            --enable-decoder=v308
-            --enable-decoder=v408
-            --enable-decoder=v410
             --enable-decoder=vorbis
             --enable-decoder=vp8
             --enable-decoder=vp9
@@ -258,9 +255,6 @@ if (NOT FFmpeg_FOUND)
             --enable-encoder=rawvideo
 	    --enable-encoder=truehd
             --enable-encoder=v210
-            --enable-encoder=v308
-            --enable-encoder=v408
-            --enable-encoder=v410
             --enable-encoder=yuv4
             --enable-encoder=vorbis
             --enable-encoder=wmav1
