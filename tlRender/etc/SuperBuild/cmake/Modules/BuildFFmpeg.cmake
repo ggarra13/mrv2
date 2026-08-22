@@ -113,10 +113,14 @@ if (NOT FFmpeg_FOUND)
 	    --disable-videotoolbox
 	    --disable-audiotoolbox)
 	if (UNIX)
-	    list(APPEND FFmpeg_CONFIGURE_ARGS
-		--enable-vaapi
-		--enable-ffnvcodec
-		--enable-nvdec)
+	    if(DEFINED ENV{GITHUB_ACTIONS})
+		message(STATUS "Running on GitHub Actions - No HW acceleration")
+	    else()
+		list(APPEND FFmpeg_CONFIGURE_ARGS
+		    --enable-vaapi
+		    --enable-ffnvcodec
+		    --enable-nvdec)
+	    endif()
 	endif()
     else()
 	list(APPEND FFmpeg_CONFIGURE_ARGS

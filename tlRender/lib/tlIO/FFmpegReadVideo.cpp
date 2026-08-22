@@ -728,7 +728,7 @@ namespace tl
                 }
                 if (_hwAccel)
                 {
-                    // Hardware frames download as NV12 (8-bit) or P010 (>8-bit).
+                    // Hardware frames download as NV12/NV16 (8-bit) or P010/P210 (>8-bit).
                     // They are handed to the display shader as semi-planar YUV
                     // with no colour conversion -- the shader performs YUV->RGB
                     // exactly as for software-decoded YUV, so hardware and
@@ -738,8 +738,18 @@ namespace tl
                     const AVPixFmtDescriptor* desc =
                         av_pix_fmt_desc_get(_avInputPixelFormat);
                     const bool gt8 = desc && desc->comp[0].depth > 8;
-                    _avOutputPixelFormat = gt8 ? AV_PIX_FMT_P010LE : AV_PIX_FMT_NV12;
-                    _info.pixelType = gt8 ? image::PixelType::YUV_420SP_U16 : image::PixelType::YUV_420SP_U8;
+                    const bool is422 = desc && 1 == desc->log2_chroma_w && 0 == desc->log2_chroma_h;
+
+                    if (is422)
+                    {
+                        _avOutputPixelFormat = gt8 ? AV_PIX_FMT_P210LE : AV_PIX_FMT_NV16;
+                        _info.pixelType = gt8 ? image::PixelType::YUV_422SP_U16 : image::PixelType::YUV_422SP_U8;
+                    }
+                    else
+                    {
+                        _avOutputPixelFormat = gt8 ? AV_PIX_FMT_P010LE : AV_PIX_FMT_NV12;
+                        _info.pixelType = gt8 ? image::PixelType::YUV_420SP_U16 : image::PixelType::YUV_420SP_U8;
+                    }
                 }
                 const auto params = _avCodecParameters[_avStream];
                 if (params->color_range != AVCOL_RANGE_JPEG)
@@ -1110,6 +1120,9 @@ namespace tl
             const AVPixFmtDescriptor* inputDesc = av_pix_fmt_desc_get(inputFormat);
             const bool is420 = inputDesc &&
                 1 == inputDesc->log2_chroma_w && 1 == inputDesc->log2_chroma_h;
+            const bool is422 = inputDesc &&
+                1 == inputDesc->log2_chroma_w && 0 == inputDesc->log2_chroma_h;
+
             if (AVCOL_RANGE_JPEG == _avCodecParameters[_avStream]->color_range)
             {
                 std::string msg =
@@ -1117,10 +1130,10 @@ namespace tl
                 LOG_WARNING(msg);
                 return;
             }
-            if (!is420)
+            if (!is420 && !is422)
             {
                 std::string msg =
-                    string::Format("Hardware decoding skipped for a non-4:2:0 source; using software decoding: \"{0}\"").arg(_fileName);
+                    string::Format("Hardware decoding skipped for a non-4:2:0/non-4:2:2 source; using software decoding: \"{0}\"").arg(_fileName);
                 LOG_WARNING(msg);
                 return;
             }
@@ -1550,24 +1563,30 @@ namespace tl
             {
                 image = image::Image::create(_info);
                 data = image->getData();
-                // Native semi-planar copy (NV12/P010): luma plane, then the
+
+                // Native semi-planar copy (NV12/P010/NV16/P210): luma plane, then the
                 // interleaved chroma plane, straight into the tlRender image.
-                // No colour conversion -- the display shader does YUV->RGB.
-                // The sws fallback below covers the rare case of an
-                // unexpected download format.
-                const std::size_t bytes =
-                    (AV_PIX_FMT_P010LE == _avOutputPixelFormat) ? 2 : 1;
+                const bool is16Bit = (_info.pixelType == image::PixelType::YUV_420SP_U16 ||
+                                      _info.pixelType == image::PixelType::YUV_422SP_U16);
+                const std::size_t bytes = is16Bit ? 2 : 1;
+
                 const uint8_t* const dataY = avFrame->data[0];
                 const uint8_t* const dataUV = avFrame->data[1];
                 const int linesizeY = avFrame->linesize[0];
                 const int linesizeUV = avFrame->linesize[1];
+
                 for (std::size_t i = 0; i < h; ++i)
                 {
                     std::memcpy(data + w * bytes * i, dataY + linesizeY * i, w * bytes);
                 }
+
                 uint8_t* const dataOutUV = data + w * h * bytes;
-                const std::size_t h2 = h / 2;
-                for (std::size_t i = 0; i < h2; ++i)
+
+                const bool is422 = (_info.pixelType == image::PixelType::YUV_422SP_U8 ||
+                                    _info.pixelType == image::PixelType::YUV_422SP_U16);
+                const std::size_t uvHeight = is422 ? h : (h / 2);
+
+                for (std::size_t i = 0; i < uvHeight; ++i)
                 {
                     std::memcpy(dataOutUV + w * bytes * i, dataUV + linesizeUV * i, w * bytes);
                 }

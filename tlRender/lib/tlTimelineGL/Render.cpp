@@ -138,6 +138,28 @@ namespace tl
                 out.push_back(gl::Texture::create(infoTmp, options));
                 break;
             }
+            case image::PixelType::YUV_422SP_U8:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U8);
+                out.push_back(gl::Texture::create(infoTmp, options));
+                infoTmp = image::Info(
+                    image::Size(info.size.w / 2, info.size.h),
+                    image::PixelType::L_U8);
+                out.push_back(gl::Texture::create(infoTmp, options));
+                out.push_back(gl::Texture::create(infoTmp, options));
+                break;
+            }
+            case image::PixelType::YUV_422SP_U16:
+            {
+                auto infoTmp = image::Info(info.size, image::PixelType::L_U16);
+                out.push_back(gl::Texture::create(infoTmp, options));
+                infoTmp = image::Info(
+                    image::Size(info.size.w / 2, info.size.h),
+                    image::PixelType::L_U16);
+                out.push_back(gl::Texture::create(infoTmp, options));
+                out.push_back(gl::Texture::create(infoTmp, options));
+                break;
+            }
             default:
             {
                 auto texture = gl::Texture::create(info, options);
@@ -388,6 +410,40 @@ namespace tl
                 }
                 break;
             }
+            case image::PixelType::YUV_422SP_U8:
+            {
+                if (3 == textures.size())
+                {
+                    textures[0]->copy(image->getData(), textures[0]->getInfo());
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    const std::size_t w2 = w / 2;
+                    textures[1]->copy(
+                        image->getData() + (w * h),
+                        textures[1]->getInfo());
+                    textures[2]->copy(
+                        image->getData() + (w * h) + (w2 * h) * 2,
+                        textures[2]->getInfo());
+                }
+                break;
+            }
+            case image::PixelType::YUV_422SP_U16:
+            {
+                if (3 == textures.size())
+                {
+                    textures[0]->copy(image->getData(), textures[0]->getInfo());
+                    const std::size_t w = info.size.w;
+                    const std::size_t h = info.size.h;
+                    const std::size_t w2 = w / 2;
+                    textures[1]->copy(
+                        image->getData() + (w * h) * 2,
+                        textures[1]->getInfo());
+                    textures[2]->copy(
+                        image->getData() + (w * h) * 2 + (w2 * h) * 2,
+                        textures[2]->getInfo());
+                }
+                break;
+            }
             default:
                 if (1 == textures.size())
                 {
@@ -495,6 +551,18 @@ namespace tl
                     glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + offset));
                     textures[0]->bind();
                     glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
+                    textures[1]->bind();
+                }
+                break;
+            case image::PixelType::YUV_422SP_U8:
+            case image::PixelType::YUV_422SP_U16:
+                if (3 == textures.size())
+                {
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + offset));
+                    textures[0]->bind();
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + 1 + offset));
+                    textures[1]->bind();
+                    glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + 2 + offset));
                     textures[1]->bind();
                 }
                 break;

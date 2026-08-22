@@ -771,18 +771,29 @@ namespace mrv
 #endif
     }
 
-    void ffmpeg_hw_decoders(mrv::TextBrowser* b)
+    std::vector<std::string> ffmpeg_hardware_decoders()
     {
+        std::vector<std::string> out;
 #ifdef TLRENDER_FFMPEG
         enum AVHWDeviceType type = AV_HWDEVICE_TYPE_NONE;
         while ((type = av_hwdevice_iterate_types(type)) !=
                AV_HWDEVICE_TYPE_NONE)
         {
             std::string device = av_hwdevice_get_type_name(type);
-            device += "\n";
-            b->add(device.c_str());
+            out.push_back(device);
         }
 #endif
+        return out;
+    }
+
+    void ffmpeg_hw_decoders(mrv::TextBrowser* b)
+    {
+        std::vector<std::string> decoders = ffmpeg_hardware_decoders();
+        for (auto decoder : decoders)
+        {
+            decoder += "\n";
+            b->add(decoder.c_str());
+        }
     }
 
     void ffmpeg_protocols(mrv::TextBrowser* b)

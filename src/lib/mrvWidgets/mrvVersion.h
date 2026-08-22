@@ -17,6 +17,7 @@ namespace mrv
     void ffmpeg_subtitle_codecs(mrv::TextBrowser* b);
     void ffmpeg_protocols(mrv::TextBrowser* b);
     void ffmpeg_codec_information(mrv::TextBrowser* b);
+    std::vector<std::string> ffmpeg_hardware_decoders();
     void ffmpeg_hw_decoders(mrv::TextBrowser* b);
 
     const char* backend();
