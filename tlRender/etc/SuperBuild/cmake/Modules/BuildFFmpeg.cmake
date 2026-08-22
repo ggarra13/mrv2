@@ -617,7 +617,7 @@ if (NOT FFmpeg_FOUND)
     #
     message(STATUS "Creating ffmpeg_configure.sh ${CMAKE_CURRENT_BINARY_DIR}/")
 
-    set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\nexport PKG_CONFIG_PATH=${INSTALL_PREFIX}/lib/pkgconfig:\$PKG_CONFIG_PATH\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
+    set(FFmpeg_CONFIGURE_CONTENTS "#!/usr/bin/env bash\nexport PKG_CONFIG_PATH=${INSTALL_PREFIX}/lib/pkgconfig:/usr/local/lib/pkgconfig:\$PKG_CONFIG_PATH\n./configure ${FFmpeg_CONFIGURE_ARGS_TMP}\n")
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ffmpeg_configure.sh
 	${FFmpeg_CONFIGURE_CONTENTS}
     )
