@@ -376,11 +376,11 @@ namespace mrv
         const tl::file::Path& remoteOtioPath,
         const std::string& localOtioPath)
     {
-        otio::ErrorStatus err;
-        otio::SerializableObject::Retainer<otio::Timeline> timeline(
-            dynamic_cast<otio::Timeline*>(
-                otio::Timeline::from_json_file(localOtioPath, &err)));
-        if (!timeline || otio::is_error(err))
+        OTIO_NS::ErrorStatus err;
+        OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> timeline(
+            dynamic_cast<OTIO_NS::Timeline*>(
+                OTIO_NS::Timeline::from_json_file(localOtioPath, &err)));
+        if (!timeline || OTIO_NS::is_error(err))
         {
             LOG_ERROR("Could not parse downloaded .otio: " + localOtioPath);
             return;

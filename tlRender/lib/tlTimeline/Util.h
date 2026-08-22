@@ -20,12 +20,12 @@ namespace tl
         getExtensions(int types, const std::shared_ptr<system::Context>&);
 
         //! Convert frames to ranges.
-        std::vector<otime::TimeRange>
-            toRanges(std::vector<otime::RationalTime>);
+        std::vector<opentime::TimeRange>
+            toRanges(std::vector<opentime::RationalTime>);
 
         //! Loop a time.
-        otime::RationalTime loop(
-            const otime::RationalTime&, const otime::TimeRange&,
+        opentime::RationalTime loop(
+            const opentime::RationalTime&, const opentime::TimeRange&,
             bool* looped = nullptr);
 
         //! Cache direction.
@@ -40,21 +40,21 @@ namespace tl
         TLRENDER_ENUM_SERIALIZE(CacheDirection);
 
         //! Loop the cache time range.
-        std::vector<otime::TimeRange> loopCache(
-            const otime::TimeRange&, const otime::TimeRange&, CacheDirection);
+        std::vector<opentime::TimeRange> loopCache(
+            const opentime::TimeRange&, const opentime::TimeRange&, CacheDirection);
 
         //! Get the root (highest parent).
-        const otio::Composable* getRoot(const otio::Composable*);
+        const OTIO_NS::Composable* getRoot(const OTIO_NS::Composable*);
 
         //! Get the parent of the given type.
-        template <typename T> const T* getParent(const otio::Item*);
+        template <typename T> const T* getParent(const OTIO_NS::Item*);
 
         //! Get the duration of all tracks of the same kind.
-        std::optional<otime::RationalTime>
-        getDuration(const otio::Timeline*, const std::string& kind);
+        std::optional<opentime::RationalTime>
+        getDuration(const OTIO_NS::Timeline*, const std::string& kind);
 
         //! Get the time range of a timeline.
-        otime::TimeRange getTimeRange(const otio::Timeline*);
+        opentime::TimeRange getTimeRange(const OTIO_NS::Timeline*);
 
         //! Get a list of paths to open from the given path.
         std::vector<file::Path> getPaths(
@@ -68,12 +68,12 @@ namespace tl
 
         //! Get a path for a media reference.
         file::Path getPath(
-            const otio::MediaReference*, const std::string& directory,
+            const OTIO_NS::MediaReference*, const std::string& directory,
             file::PathOptions);
 
         //! Get a memory read for a media reference.
         std::vector<file::MemoryRead>
-        getMemoryRead(const otio::MediaReference*);
+        getMemoryRead(const OTIO_NS::MediaReference*);
 
         //! Convert to memory references.
         enum class ToMemoryReference {
@@ -88,25 +88,25 @@ namespace tl
 
         //! Convert media references to memory references for testing.
         void toMemoryReferences(
-            otio::Timeline*, const std::string& directory, ToMemoryReference,
+            OTIO_NS::Timeline*, const std::string& directory, ToMemoryReference,
             const file::PathOptions& = file::PathOptions());
 
         //! Transform track time to video media time.
-        otime::RationalTime toVideoMediaTime(
-            const otime::RationalTime&,
-            const otime::TimeRange& trimmedRangeInParent,
-            const otime::TimeRange& trimmedRange, double rate);
+        opentime::RationalTime toVideoMediaTime(
+            const opentime::RationalTime&,
+            const opentime::TimeRange& trimmedRangeInParent,
+            const opentime::TimeRange& trimmedRange, double rate);
 
         //! Transform track time to audio media time.
-        otime::TimeRange toAudioMediaTime(
-            const otime::TimeRange&,
-            const otime::TimeRange& trimmedRangeInParent,
-            const otime::TimeRange& trimmedRange, double sampleRate);
+        opentime::TimeRange toAudioMediaTime(
+            const opentime::TimeRange&,
+            const opentime::TimeRange& trimmedRangeInParent,
+            const opentime::TimeRange& trimmedRange, double sampleRate);
 
         //! Write a timeline to an .otioz file.
         bool writeOTIOZ(
             const std::string& fileName,
-            const otio::SerializableObject::Retainer<otio::Timeline>&,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&,
             const std::string& directory = std::string());
     } // namespace timeline
 } // namespace tl

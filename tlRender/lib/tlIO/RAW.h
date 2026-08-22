@@ -47,7 +47,7 @@ namespace tl
                 const std::string& fileName, const file::MemoryRead*) override;
             io::VideoData _readVideo(
                 const std::string& fileName, const file::MemoryRead*,
-                const otime::RationalTime&, const io::Options&) override;
+                const OTIO_NS::RationalTime&, const io::Options&) override;
         };
 
         //! RAW plugin.

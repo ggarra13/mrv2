@@ -38,8 +38,8 @@ namespace tl
                 const std::shared_ptr<system::Context>&,
                 double scale, const ItemOptions&, const DisplayOptions&,
                 const std::shared_ptr<ItemData>&,
-                const otio::Marker*,
-                const otio::TimeRange&,
+                const OTIO_NS::Marker*,
+                const OTIO_NS::TimeRange&,
                 const std::shared_ptr<IWidget>& parent = nullptr);
 
             void setGeometry(const math::Box2i&) override;
@@ -52,8 +52,8 @@ namespace tl
         private:
             void _textUpdate();
 
-            const otio::Timeline* _timeline = nullptr;
-            const otio::Marker* _marker = nullptr;
+            const OTIO_NS::Timeline* _timeline = nullptr;
+            const OTIO_NS::Marker* _marker = nullptr;
             std::string _text;
             image::Color4f _color;
 

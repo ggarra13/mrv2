@@ -327,7 +327,7 @@ namespace mrv
         void Viewport::_drawAnnotations(
             const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
             const std::shared_ptr<tl::timeline_vlk::Render>& render,
-            const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
+            const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
             const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
             const std::vector<std::shared_ptr<voice::Annotation> >& voannotations,
             const math::Size2i& renderSize)
@@ -335,7 +335,7 @@ namespace mrv
             void Viewport::_drawAnnotations(
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& annotationBuffer,
                 const std::shared_ptr<tl::timeline_vlk::Render>& render,
-                const math::Matrix4x4f& renderMVP, const otime::RationalTime& time,
+                const math::Matrix4x4f& renderMVP, const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation> >& annotations,
                 const std::vector<std::shared_ptr<bool> >& voannotations,
                 const math::Size2i& renderSize)
@@ -379,7 +379,7 @@ namespace mrv
                     {
                         for (short i = p.ghostPrevious - 1; i > 0; --i)
                         {
-                            otime::RationalTime offset(i, time.rate());
+                            OTIO_NS::RationalTime offset(i, time.rate());
                             if ((time - offset).floor() == annotationTime.floor())
                             {
                                 alphamult = 1.F - (float)i / p.ghostPrevious;
@@ -391,7 +391,7 @@ namespace mrv
                     {
                         for (short i = 1; i < p.ghostNext; ++i)
                         {
-                            otime::RationalTime offset(i, time.rate());
+                            OTIO_NS::RationalTime offset(i, time.rate());
                             if ((time + offset).floor() == annotationTime.floor())
                             {
                                 alphamult = 1.F - (float)i / p.ghostNext;
@@ -768,7 +768,7 @@ namespace mrv
             const auto player = p.player;
 
             const auto& path = player->path();
-            const otime::RationalTime& time = p.videoData[0].time;
+            const OTIO_NS::RationalTime& time = p.videoData[0].time;
             int64_t frame = time.to_frames();
 
             vk.render->setViewport(math::Box2i(0, 0, viewportSize.w,
@@ -792,7 +792,7 @@ namespace mrv
             }
 
             bool otioClip = false;
-            otime::RationalTime clipTime;
+            OTIO_NS::RationalTime clipTime;
             if (p.hud & HudDisplay::kFilename)
             {
                 std::string fullname = createStringFromPathAndTime(path, time);
@@ -882,7 +882,7 @@ namespace mrv
                     (p.actionMode != ActionMode::kScrub ||
                      p.lastEvent != FL_DRAG))
                 {
-                    const otime::TimeRange& range = player->timeRange();
+                    const OTIO_NS::TimeRange& range = player->timeRange();
                     const int64_t maxFrames = range.duration().to_frames();
 
                     // Calculate skipped frames
@@ -937,8 +937,8 @@ namespace mrv
             tmp.clear();
             if (p.hud & HudDisplay::kFrameCount)
             {
-                const otime::TimeRange& range = player->timeRange();
-                const otime::RationalTime& duration =
+                const OTIO_NS::TimeRange& range = player->timeRange();
+                const OTIO_NS::RationalTime& duration =
                     range.end_time_inclusive() - range.start_time();
                 snprintf(buf, 512, "FC: %" PRId64, (int64_t)duration.to_frames());
                 tmp += buf;

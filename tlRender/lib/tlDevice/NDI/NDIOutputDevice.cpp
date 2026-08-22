@@ -95,13 +95,13 @@ namespace tl
             std::shared_ptr<observer::Value<bool> > enabled;
             std::shared_ptr<observer::Value<bool> > active;
             std::shared_ptr<observer::Value<math::Size2i> > size;
-            std::shared_ptr<observer::Value<otime::RationalTime> > frameRate;
-            std::shared_ptr<observer::Value<otime::RationalTime> > currentTime;
+            std::shared_ptr<observer::Value<OTIO_NS::RationalTime> > frameRate;
+            std::shared_ptr<observer::Value<OTIO_NS::RationalTime> > currentTime;
 
             std::shared_ptr<timeline::Player> player;
             std::shared_ptr<observer::ValueObserver<timeline::Playback> >
                 playbackObserver;
-            std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
+            std::shared_ptr<observer::ValueObserver<OTIO_NS::RationalTime> >
                 currentTimeObserver;
             std::shared_ptr<observer::ListObserver<timeline::VideoFrame> >
                 videoObserver;
@@ -119,7 +119,7 @@ namespace tl
                 bool enabled = false;
                 bool active = false;
                 math::Size2i size;
-                otime::RationalTime frameRate = time::invalidTime;
+                OTIO_NS::RationalTime frameRate = time::invalidTime;
                 timeline::OCIOOptions ocioOptions;
                 timeline::LUTOptions lutOptions;
                 std::vector<timeline::ImageOptions> imageOptions;
@@ -133,10 +133,10 @@ namespace tl
                 double viewZoom = 1.0;
                 bool frameView = true;
                 float rotateZ = 0.F;
-                otime::TimeRange timeRange = time::invalidTimeRange;
+                OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
                 timeline::Playback playback = timeline::Playback::Stop;
-                otime::RationalTime currentTime = time::invalidTime;
-                otime::RationalTime playbackStartTime = time::invalidTime;
+                OTIO_NS::RationalTime currentTime = time::invalidTime;
+                OTIO_NS::RationalTime playbackStartTime = time::invalidTime;
                 double speed = 24.F;
                 double defaultSpeed = 24.F;
                 std::vector<timeline::VideoFrame> videoFrame;
@@ -166,7 +166,7 @@ namespace tl
                 double viewZoom = 1.0;
                 float rotateZ = 0.F;
                 bool frameView = true;
-                otime::TimeRange timeRange = time::invalidTimeRange;
+                OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
                 std::vector<timeline::VideoFrame> videoFrame;
                 std::shared_ptr<image::Image> overlay;
 
@@ -219,9 +219,9 @@ namespace tl
             p.active = observer::Value<bool>::create(false);
             p.size = observer::Value<math::Size2i>::create();
             p.frameRate =
-                observer::Value<otime::RationalTime>::create(time::invalidTime);
+                observer::Value<OTIO_NS::RationalTime>::create(time::invalidTime);
             p.currentTime =
-                observer::Value<otime::RationalTime>::create(time::invalidTime);
+                observer::Value<OTIO_NS::RationalTime>::create(time::invalidTime);
 
             p.mutex.reset = true;
 
@@ -381,12 +381,12 @@ namespace tl
             return _p->size;
         }
 
-        const otime::RationalTime& OutputDevice::getFrameRate() const
+        const OTIO_NS::RationalTime& OutputDevice::getFrameRate() const
         {
             return _p->frameRate->get();
         }
 
-        std::shared_ptr<observer::IValue<otime::RationalTime> >
+        std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
         OutputDevice::observeFrameRate() const
         {
             return _p->frameRate;
@@ -566,9 +566,9 @@ namespace tl
                         },
                         observer::CallbackAction::Suppress);
                 p.currentTimeObserver =
-                    observer::ValueObserver<otime::RationalTime>::create(
+                    observer::ValueObserver<OTIO_NS::RationalTime>::create(
                         p.player->observeCurrentTime(),
-                        [weak](const otime::RationalTime& value)
+                        [weak](const OTIO_NS::RationalTime& value)
                         {
                             if (auto device = weak.lock())
                             {
@@ -676,7 +676,7 @@ namespace tl
             TLRENDER_P();
             bool active = false;
             math::Size2i size = p.size->get();
-            otime::RationalTime frameRate = p.frameRate->get();
+            OTIO_NS::RationalTime frameRate = p.frameRate->get();
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
                 active = p.mutex.active;
@@ -726,12 +726,12 @@ namespace tl
             timeline::CompareOptions compareOptions;
             timeline::BackgroundOptions backgroundOptions;
             timeline::Playback playback = timeline::Playback::Stop;
-            otime::RationalTime currentTime = time::invalidTime;
+            OTIO_NS::RationalTime currentTime = time::invalidTime;
             math::Size2i size;
             float volume = 1.F;
             bool mute = false;
             bool reset = true;
-            otime::RationalTime frameRate = time::invalidTime;
+            OTIO_NS::RationalTime frameRate = time::invalidTime;
             double audioOffset = 0.0;
             double speed = 24.0F;
             std::vector<timeline::AudioFrame> audioFrame;
@@ -913,7 +913,7 @@ namespace tl
                                 if (videoRate > rate)
                                     rate = videoRate;
                             }
-                            frameRate = otime::RationalTime(1.0, rate);
+                            frameRate = OTIO_NS::RationalTime(1.0, rate);
                         }
 
                         try
@@ -1015,7 +1015,7 @@ namespace tl
 
         void OutputDevice::_createDevice(
             const device::DeviceConfig& config, bool& active,
-            math::Size2i& size, otime::RationalTime& frameRate)
+            math::Size2i& size, OTIO_NS::RationalTime& frameRate)
         {
             TLRENDER_P();
             if (config.deviceIndex != -1 && config.displayModeIndex != -1 &&
@@ -1051,7 +1051,7 @@ namespace tl
 
                 double frame_rate = frameRate.rate() * speedMultiplier;
                 const auto& oldFrameRate = frameRate;
-                frameRate = otime::RationalTime(1.0, frame_rate);
+                frameRate = OTIO_NS::RationalTime(1.0, frame_rate);
 
                 int denominator = 1000;
                 int numerator = static_cast<int>(frame_rate * 1000);
@@ -1139,7 +1139,7 @@ namespace tl
                 {
                     numerator = 1000;
                     denominator = 1000 * std::round(frame_rate);
-                    frameRate = otime::RationalTime(numerator, denominator);
+                    frameRate = OTIO_NS::RationalTime(numerator, denominator);
                 }
 
                 if (oldFrameRate != frameRate)
@@ -1206,15 +1206,15 @@ namespace tl
             const double outSampleRate = 1.0F; // 48000.0F;
 
             // Get the pl<yer ranges to be cached.
-            const otime::TimeRange& timeRange = p.player->getTimeRange();
-            const otime::TimeRange& inOutRange = p.player->getInOutRange();
+            const OTIO_NS::TimeRange& timeRange = p.player->getTimeRange();
+            const OTIO_NS::TimeRange& inOutRange = p.player->getInOutRange();
 
-            const otime::TimeRange audioTimeRange = otime::TimeRange(
+            const OTIO_NS::TimeRange audioTimeRange = opentime::TimeRange(
                 timeRange.start_time().rescaled_to(outSampleRate),
                 timeRange.duration().rescaled_to(outSampleRate));
 
             // Set inOutRange in outSampleRate units.
-            const otime::RationalTime& currentTime =
+            const OTIO_NS::RationalTime& currentTime =
                 p.mutex.currentTime.rescaled_to(outSampleRate);
             const auto cacheOptions = p.player->getCacheOptions();
 
@@ -1236,10 +1236,10 @@ namespace tl
 
             // Get the CacheOptions
             // we need to look up one frame for buffer
-            const otime::RationalTime readAheadDivided(
+            const OTIO_NS::RationalTime readAheadDivided(
                 cacheOptions.readAhead.value() + 1.0,
                 cacheOptions.readAhead.rate());
-            const otime::RationalTime readBehindDivided(
+            const OTIO_NS::RationalTime readBehindDivided(
                 cacheOptions.readBehind.value() + 1.0,
                 cacheOptions.readBehind.rate());
 
@@ -1248,47 +1248,47 @@ namespace tl
             // readBehindDivided << std::endl;
 
             // Rescale read aheads to times
-            const otime::RationalTime readAheadRescaled =
+            const OTIO_NS::RationalTime readAheadRescaled =
                 readAheadDivided.rescaled_to(outSampleRate).floor();
-            const otime::RationalTime readBehindRescaled =
+            const OTIO_NS::RationalTime readBehindRescaled =
                 readBehindDivided.rescaled_to(outSampleRate).floor();
             // Get the audio ranges to be cached.
-            const otime::RationalTime audioOffsetTime =
-                otime::RationalTime(p.mutex.audioOffset, 1.0)
+            const OTIO_NS::RationalTime audioOffsetTime =
+                OTIO_NS::RationalTime(p.mutex.audioOffset, 1.0)
                     .rescaled_to(outSampleRate);
-            const otime::RationalTime audioOffsetAhead =
-                otime::RationalTime(
+            const OTIO_NS::RationalTime audioOffsetAhead =
+                OTIO_NS::RationalTime(
                     audioOffsetTime.value() < 0.0
                         ? -audioOffsetTime
-                        : otime::RationalTime(0.0, outSampleRate))
+                        : OTIO_NS::RationalTime(0.0, outSampleRate))
                     .round();
-            const otime::RationalTime audioOffsetBehind =
-                otime::RationalTime(
+            const OTIO_NS::RationalTime audioOffsetBehind =
+                OTIO_NS::RationalTime(
                     audioOffsetTime.value() > 0.0
                         ? audioOffsetTime
-                        : otime::RationalTime(0.0, outSampleRate))
+                        : OTIO_NS::RationalTime(0.0, outSampleRate))
                     .round();
             // std::cerr << "currentTime: " << currentTime << std::endl;
-            otime::TimeRange audioRange = time::invalidTimeRange;
+            OTIO_NS::TimeRange audioRange = time::invalidTimeRange;
             switch (cacheDirection)
             {
             case timeline::CacheDirection::Forward:
                 audioRange =
-                    otime::TimeRange::range_from_start_end_time_inclusive(
+                    OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                         currentTime - readBehindRescaled - audioOffsetBehind,
                         currentTime + readAheadRescaled + audioOffsetAhead);
                 break;
             case timeline::CacheDirection::Reverse:
                 audioRange =
-                    otime::TimeRange::range_from_start_end_time_inclusive(
+                    OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                         currentTime - readAheadRescaled - audioOffsetAhead,
                         currentTime + readBehindRescaled + audioOffsetBehind);
                 break;
             default:
                 break;
             }
-            const otime::TimeRange inOutAudioRange =
-                otime::TimeRange::range_from_start_end_time_inclusive(
+            const OTIO_NS::TimeRange inOutAudioRange =
+                OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
                     inOutRange.start_time() - audioOffsetBehind,
                     inOutRange.end_time_inclusive() + audioOffsetAhead)
                     .clamped(audioTimeRange);
@@ -1303,15 +1303,15 @@ namespace tl
                 auto audioCacheIt = p.mutex.audioFrameCache.begin();
                 while (audioCacheIt != p.mutex.audioFrameCache.end())
                 {
-                    const otime::TimeRange cacheRange(
-                        otime::RationalTime(
+                    const OTIO_NS::TimeRange cacheRange(
+                        OTIO_NS::RationalTime(
                             timeRange.start_time().rescaled_to(1.0).value() +
                                 audioCacheIt->first,
                             1.0),
-                        otime::RationalTime(1.0, 1.0));
+                        OTIO_NS::RationalTime(1.0, 1.0));
                     const auto j = std::find_if(
                         audioRanges.begin(), audioRanges.end(),
-                        [cacheRange](const otime::TimeRange& value)
+                        [cacheRange](const OTIO_NS::TimeRange& value)
                         { return cacheRange.intersects(value); });
                     if (j == audioRanges.end())
                     {
@@ -1340,8 +1340,8 @@ namespace tl
             if (!p.player)
                 return;
 
-            const otime::TimeRange& timeRange = p.player->getTimeRange();
-            const otime::RationalTime& currentTime = p.player->getCurrentTime();
+            const OTIO_NS::TimeRange& timeRange = p.player->getTimeRange();
+            const OTIO_NS::RationalTime& currentTime = p.player->getCurrentTime();
             const auto& currentLocalTime = currentTime - timeRange.start_time();
             double currentSeconds = currentLocalTime.to_seconds();
             double secondsD = std::floor(currentSeconds);
@@ -1371,20 +1371,20 @@ namespace tl
 
             // One frame
             const size_t outSampleRate = 48000;
-            const otime::RationalTime kOneFrame(1.0, currentTime.rate());
+            const OTIO_NS::RationalTime kOneFrame(1.0, currentTime.rate());
             const size_t outSamples =
                 kOneFrame.rescaled_to(outSampleRate).value();
             const auto& inSampleDuration = kOneFrame.rescaled_to(inSampleRate);
 
             // auto outStartSample  =
-            // otime::RationalTime(secondsD, 1.0).rescaled_to(outSampleRate);
+            // OTIO_NS::RationalTime(secondsD, 1.0).rescaled_to(outSampleRate);
             // auto outCurrentSample  =
-            // otime::RationalTime(currentSeconds, 1.0).rescaled_to(outSampleRate);
+            // OTIO_NS::RationalTime(currentSeconds, 1.0).rescaled_to(outSampleRate);
             // size_t outSampleStart = outStartSample.value();
             // size_t outSampleCurrent = outCurrentSample.value();
 
             timeline::Playback playback = timeline::Playback::Stop;
-            otime::RationalTime playbackStartTime = time::invalidTime;
+            OTIO_NS::RationalTime playbackStartTime = time::invalidTime;
             double audioOffset = 0.0;
             double speed = 1.0;
             double defaultSpeed = 1.0;
@@ -1467,13 +1467,13 @@ namespace tl
                         .start_time()
                         .rescaled_to(inSampleRate)
                         .value() -
-                    otime::RationalTime(audioOffset, 1.0)
+                    OTIO_NS::RationalTime(audioOffset, 1.0)
                         .rescaled_to(inSampleRate)
                         .value();
                 const auto bufferSampleCount =
                     audio::getSampleCount(thread.buffer);
                 const auto& timeOffset =
-                    otime::RationalTime(
+                    OTIO_NS::RationalTime(
                         thread.rtAudioCurrentFrame + bufferSampleCount,
                         outSampleRate)
                         .rescaled_to(inSampleRate);
@@ -1520,7 +1520,7 @@ namespace tl
                             if (layer.inTransition)
                             {
                                 const auto& clipTimeRange = layer.clipTimeRange;
-                                const auto& range = otime::TimeRange(
+                                const auto& range = OTIO_NS::TimeRange(
                                     clipTimeRange.start_time().rescaled_to(
                                         inSampleRate),
                                     clipTimeRange.duration().rescaled_to(
@@ -1556,7 +1556,7 @@ namespace tl
                             if (layer.outTransition)
                             {
                                 const auto& clipTimeRange = layer.clipTimeRange;
-                                const auto& range = otime::TimeRange(
+                                const auto& range = OTIO_NS::TimeRange(
                                     clipTimeRange.start_time().rescaled_to(
                                         inSampleRate),
                                     clipTimeRange.duration().rescaled_to(

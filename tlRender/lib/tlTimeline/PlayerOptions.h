@@ -43,10 +43,10 @@ namespace tl
             float audioGB = .5F;
 
             //! Cache read ahead (not used by Darby).
-            otime::RationalTime readAhead = otime::RationalTime(5.0, 1.0);
+            opentime::RationalTime readAhead = opentime::RationalTime(5.0, 1.0);
 
             //! Cache read behind.
-            otime::RationalTime readBehind = otime::RationalTime(0.5, 1.0);
+            opentime::RationalTime readBehind = opentime::RationalTime(0.5, 1.0);
 
             bool operator==(const PlayerCacheOptions&) const;
             bool operator!=(const PlayerCacheOptions&) const;
@@ -73,7 +73,7 @@ namespace tl
                 std::chrono::milliseconds(5);
 
             //! Current time.
-            otime::RationalTime currentTime = time::invalidTime;
+            opentime::RationalTime currentTime = time::invalidTime;
 
             //! Start playback direction.
             Playback playback = Playback::Forward;

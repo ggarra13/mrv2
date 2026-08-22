@@ -14,8 +14,8 @@ namespace tl
     namespace timeline
     {
         //! Copy the given timeline.
-        otio::SerializableObject::Retainer<otio::Timeline>
-        copy(const otio::SerializableObject::Retainer<otio::Timeline>&);
+        OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>
+        copy(const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&);
 
         //! Edit Modes supported.
         //! \@see: https://github.com/mccartnm/OpenTimelineIO/blob/openedit_design/docs/design/editorial_design.md
@@ -61,13 +61,13 @@ namespace tl
             int toOtioIndex = 0;
 
             // Transition move variables.
-            otime::RationalTime in_offset = time::invalidTime;
-            otime::RationalTime out_offset = time::invalidTime;
+            opentime::RationalTime in_offset = time::invalidTime;
+            opentime::RationalTime out_offset = time::invalidTime;
         };
 
         //! Move items in the timeline.
-        otio::SerializableObject::Retainer<otio::Timeline> move(
-            const otio::SerializableObject::Retainer<otio::Timeline>&,
+        OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> move(
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&,
             const std::vector<MoveData>&);
     } // namespace timeline
 } // namespace tl

@@ -238,7 +238,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                otime::RationalTime value = message["value"];
+                OTIO_NS::RationalTime value = message["value"];
                 player->seek(value);
             }
             else if (c == "Timeline Key Press")
@@ -340,7 +340,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                otime::TimeRange value = message["value"];
+                OTIO_NS::TimeRange value = message["value"];
                 player->setInOutRange(value);
             }
             else if (c == "setSpeed")
@@ -875,7 +875,7 @@ namespace mrv
                     tcp->unlock();
                     return;
                 }
-                const otime::RationalTime& time = message["value"];
+                const OTIO_NS::RationalTime& time = message["value"];
                 player->updateVideoCache(time);
             }
             else if (c == "clearCache")

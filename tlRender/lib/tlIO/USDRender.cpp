@@ -57,7 +57,7 @@ namespace tl
             {
                 int64_t id = -1;
                 file::Path path;
-                otime::RationalTime time = time::invalidTime;
+                OTIO_NS::RationalTime time = time::invalidTime;
                 io::Options options;
                 std::promise<io::VideoData> promise;
             };
@@ -217,7 +217,7 @@ namespace tl
         }
 
         std::future<io::VideoData> Render::render(
-            int64_t id, const file::Path& path, const otime::RationalTime& time,
+            int64_t id, const file::Path& path, const OTIO_NS::RationalTime& time,
             const io::Options& options)
         {
             TLRENDER_P();
@@ -571,11 +571,11 @@ namespace tl
                         info.video.push_back(image::Info(
                             renderWidth, renderWidth / aspectRatio,
                             image::PixelType::RGBA_F16));
-                        info.videoTime = otime::TimeRange::
+                        info.videoTime = OTIO_NS::TimeRange::
                             range_from_start_end_time_inclusive(
-                                otime::RationalTime(
+                                OTIO_NS::RationalTime(
                                     startTimeCode, timeCodesPerSecond),
-                                otime::RationalTime(
+                                OTIO_NS::RationalTime(
                                     endTimeCode, timeCodesPerSecond));
                         // std::cout << fileName << " range: " << info.videoTime
                         // << std::endl;

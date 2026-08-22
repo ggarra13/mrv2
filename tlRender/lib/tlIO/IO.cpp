@@ -83,7 +83,7 @@ namespace tl
 
         void addOtioTags(
             image::Tags& tags, const std::string& clipName,
-            const otime::RationalTime& time)
+            const OTIO_NS::RationalTime& time)
         {
             tags["otioClipName"] = clipName;
 

@@ -949,7 +949,7 @@ namespace tl
 
                 io::VideoData read(
                     const std::string& fileName,
-                    const otime::RationalTime& time, const io::Options& options)
+                    const OTIO_NS::RationalTime& time, const io::Options& options)
                 {
                     io::VideoData out;
 
@@ -1447,15 +1447,15 @@ namespace tl
                 speed = static_cast<double>(num) / static_cast<double>(den);
             }
             out.videoTime =
-                otime::TimeRange::range_from_start_end_time_inclusive(
-                    otime::RationalTime(_startFrame, speed),
-                    otime::RationalTime(_endFrame, speed));
+                OTIO_NS::TimeRange::range_from_start_end_time_inclusive(
+                    OTIO_NS::RationalTime(_startFrame, speed),
+                    OTIO_NS::RationalTime(_endFrame, speed));
             return out;
         }
 
         io::VideoData Read::_readVideo(
             const std::string& fileName, const file::MemoryRead* memory,
-            const otime::RationalTime& time, const io::Options& options)
+            const OTIO_NS::RationalTime& time, const io::Options& options)
         {
             return File(
                        fileName, memory, _channelGrouping, _ignoreDisplayWindow,

@@ -46,7 +46,7 @@ namespace mrv
         {
             TimelinePlayer* player;
             double speed;
-            otio::RationalTime time;
+            OTIO_NS::RationalTime time;
         };
 
         void stop_playback_cb(StopData* data)
@@ -69,7 +69,7 @@ namespace mrv
         std::shared_ptr<observer::ValueObserver<timeline::Playback> >
             playbackObserver;
         std::shared_ptr<observer::ValueObserver<timeline::Loop> > loopObserver;
-        std::shared_ptr<observer::ValueObserver<otime::RationalTime> >
+        std::shared_ptr<observer::ValueObserver<OTIO_NS::RationalTime> >
             currentTimeObserver;
         std::shared_ptr<observer::ValueObserver<timeline::PlayerCacheOptions> >
             cacheOptionsObserver;
@@ -126,9 +126,9 @@ namespace mrv
             [this](timeline::Loop value) { loopChanged(value); });
 
         p.currentTimeObserver =
-            observer::ValueObserver<otime::RationalTime>::create(
+            observer::ValueObserver<OTIO_NS::RationalTime>::create(
                 p.player->observeCurrentTime(),
-                [this](const otime::RationalTime& value)
+                [this](const OTIO_NS::RationalTime& value)
                     { currentTimeChanged(value); });
 
         p.cacheOptionsObserver =
@@ -178,14 +178,14 @@ namespace mrv
         return _p->player->getTimeline();
     }
 
-    const otio::SerializableObject::Retainer<otio::Timeline>&
+    const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&
     TimelinePlayer::getTimeline() const
     {
         return _p->player->getTimeline()->getTimeline();
     }
 
     void TimelinePlayer::setTimeline(
-        const otio::SerializableObject::Retainer<otio::Timeline>& timeline)
+        const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& timeline)
     {
         _p->player->getTimeline()->setTimeline(timeline);
     }
@@ -210,7 +210,7 @@ namespace mrv
         return _p->player->getOptions();
     }
 
-    const otime::TimeRange& TimelinePlayer::timeRange() const
+    const OTIO_NS::TimeRange& TimelinePlayer::timeRange() const
     {
         return _p->player->getTimeRange();
     }
@@ -240,12 +240,12 @@ namespace mrv
         return _p->player->observeLoop()->get();
     }
 
-    const otime::RationalTime& TimelinePlayer::currentTime() const
+    const OTIO_NS::RationalTime& TimelinePlayer::currentTime() const
     {
         return _p->player->observeCurrentTime()->get();
     }
 
-    const otime::TimeRange& TimelinePlayer::inOutRange() const
+    const OTIO_NS::TimeRange& TimelinePlayer::inOutRange() const
     {
         return _p->player->observeInOutRange()->get();
     }
@@ -286,7 +286,7 @@ namespace mrv
         return _p->player->observeCacheInfo()->get();
     }
 
-    void TimelinePlayer::updateVideoCache(const otime::RationalTime& time)
+    void TimelinePlayer::updateVideoCache(const OTIO_NS::RationalTime& time)
     {
         pushMessage("updateVideoCache", time);
         _p->player->updateVideoCache(time);
@@ -369,7 +369,7 @@ namespace mrv
         _p->player->setLoop(value);
     }
 
-    void TimelinePlayer::seek(const otime::RationalTime& value)
+    void TimelinePlayer::seek(const OTIO_NS::RationalTime& value)
     {
         pushMessage("seek", value);
         _p->player->seek(value);
@@ -416,7 +416,7 @@ namespace mrv
 
         p.isStepping = true;
         const auto oneFrame =
-            otime::RationalTime(1.0, timeRange().duration().rate());
+            OTIO_NS::RationalTime(1.0, timeRange().duration().rate());
         auto time = currentTime() - oneFrame;
         if (time <= inOutRange().start_time())
         {
@@ -456,7 +456,7 @@ namespace mrv
 
         p.isStepping = true;
         const auto oneFrame =
-            otime::RationalTime(1.0, timeRange().duration().rate());
+            OTIO_NS::RationalTime(1.0, timeRange().duration().rate());
         auto time = currentTime() + oneFrame;
 
         if (time >= inOutRange().end_time_exclusive())
@@ -485,7 +485,7 @@ namespace mrv
             1.75 / speed(), (Fl_Timeout_Handler)stop_playback_cb, data);
     }
 
-    void TimelinePlayer::setInOutRange(const otime::TimeRange& value)
+    void TimelinePlayer::setInOutRange(const OTIO_NS::TimeRange& value)
     {
         pushMessage("setInOutRange", value);
         _p->player->setInOutRange(value);
@@ -603,7 +603,7 @@ namespace mrv
     }
 
     //! This signal is emitted when the current time is changed.
-    void TimelinePlayer::currentTimeChanged(const otime::RationalTime& value)
+    void TimelinePlayer::currentTimeChanged(const OTIO_NS::RationalTime& value)
     {
         auto timeline = App::ui->uiTimeline;
         timeline->redraw();
@@ -642,12 +642,12 @@ namespace mrv
 #endif
     }
 
-    const std::vector< otime::RationalTime >
+    const std::vector< OTIO_NS::RationalTime >
     TimelinePlayer::getAnnotationTimes() const
     {
         TLRENDER_P();
 
-        std::vector< otime::RationalTime > times;
+        std::vector< OTIO_NS::RationalTime > times;
         for (auto annotation : p.annotations)
         {
             times.push_back(annotation->time);

@@ -65,9 +65,9 @@ namespace mrv
         void pushMessage(
             const std::string& command, const tl::math::Vector2i& value);
         void pushMessage(
-            const std::string& command, const otime::RationalTime& value);
+            const std::string& command, const OTIO_NS::RationalTime& value);
         void
-        pushMessage(const std::string& command, const otime::TimeRange& value);
+        pushMessage(const std::string& command, const OTIO_NS::TimeRange& value);
 
         inline void lock() { m_lock = true; }
         inline void unlock() { m_lock = false; }

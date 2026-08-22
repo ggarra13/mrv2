@@ -296,7 +296,7 @@ namespace mrv
 
             void cacheChangedCallback() const noexcept;
 
-            void currentTimeChanged(const otime::RationalTime&) const noexcept;
+            void currentTimeChanged(const OTIO_NS::RationalTime&) const noexcept;
 
             void currentVideoCallback(
                 const std::vector<tl::timeline::VideoFrame>&) noexcept;

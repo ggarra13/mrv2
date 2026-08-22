@@ -953,7 +953,7 @@ void Flu_Entry::startRequest()
     }
 
     image::Size size(128, 64);
-    otime::RationalTime time = time::invalidTime;
+    OTIO_NS::RationalTime time = time::invalidTime;
 
     // Needed to change icon when user saved over the same image name.
 

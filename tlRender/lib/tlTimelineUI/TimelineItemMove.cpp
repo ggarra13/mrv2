@@ -55,10 +55,10 @@ namespace tl
                     const std::shared_ptr<IItem> transition = item->p;
                     const int transitionIndex = item->index;
                     int x = transition->getGeometry().x();
-                    const otime::RationalTime startTime = posToTime(x) - _timeRange.start_time();
-                    otime::TimeRange timeRange = transition->getTimeRange();   
-                    const otime::RationalTime& duration = timeRange.duration();
-                    timeRange = otime::TimeRange(startTime, duration);
+                    const OTIO_NS::RationalTime startTime = posToTime(x) - _timeRange.start_time();
+                    OTIO_NS::TimeRange timeRange = transition->getTimeRange();   
+                    const OTIO_NS::RationalTime& duration = timeRange.duration();
+                    timeRange = OTIO_NS::TimeRange(startTime, duration);
                     const math::Size2i& sizeHint = transition->getSizeHint();
                     transition->setTimeRange(timeRange);
                     const int y = item->geometry.y();
@@ -74,13 +74,13 @@ namespace tl
                     std::vector<IBasicItem*> transitionItems;
                     const int transitionTrack = item->track;
                     _getTransitionItems(transitionItems, transitionTrack, timeRange);
-                    const otime::TimeRange& itemRange = transitionItems[1]->getTimeRange();
+                    const OTIO_NS::TimeRange& itemRange = transitionItems[1]->getTimeRange();
 
                     const int transitionOtioIndex =
                         p.tracks[transitionTrack].otioTransitionIndexes[transitionIndex];
-                    const otime::RationalTime in_offset = itemRange.start_time() -
+                    const OTIO_NS::RationalTime in_offset = itemRange.start_time() -
                                                           timeRange.start_time();
-                    const otime::RationalTime out_offset = timeRange.end_time_exclusive() -
+                    const OTIO_NS::RationalTime out_offset = timeRange.end_time_exclusive() -
                                                            itemRange.start_time();
                     moveData.push_back(
                         {
@@ -114,7 +114,7 @@ namespace tl
                 break;
             case Private::MouseMode::CurrentTime:
             {
-                const otime::RationalTime time = posToTime(event.pos.x);
+                const OTIO_NS::RationalTime time = posToTime(event.pos.x);
                 p.timeScrub->setIfChanged(time);
                 p.player->seek(time);
                 break;
@@ -131,11 +131,11 @@ namespace tl
                     {
                         const math::Box2i& g = item->geometry;
                         auto transitionItem = dynamic_cast<TransitionItem*>(item->p.get());
-                        otime::TimeRange timeRange = transitionItem->getTimeRange();
+                        OTIO_NS::TimeRange timeRange = transitionItem->getTimeRange();
 
                         // Get item time ranges for transitions.
                         const int transitionTrack = item->track;
-                        std::vector<otime::TimeRange> itemRanges;
+                        std::vector<OTIO_NS::TimeRange> itemRanges;
                         _getTransitionTimeRanges(itemRanges, transitionTrack,
                                                  timeRange);
                         
@@ -143,10 +143,10 @@ namespace tl
                             g.min + _mouse.pos - _mouse.pressPos,
                             g.getSize() );
                             
-                        const otime::RationalTime& startTime = posToTime(move.x());
-                        const otime::RationalTime& duration  = timeRange.duration();
+                        const OTIO_NS::RationalTime& startTime = posToTime(move.x());
+                        const OTIO_NS::RationalTime& duration  = timeRange.duration();
                         
-                        timeRange = otime::TimeRange(startTime, duration);
+                        timeRange = OTIO_NS::TimeRange(startTime, duration);
                         
                         // Clamp on clips.
                         if (timeRange.start_time() - _timeRange.start_time() >=

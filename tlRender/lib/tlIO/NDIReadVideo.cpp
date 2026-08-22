@@ -54,9 +54,9 @@ namespace tl
             double fps = v.frame_rate_N / static_cast<double>(v.frame_rate_D);
             double startTime = 0.0;
             double lastTime = kNDI_MOVIE_DURATION * fps;
-            _timeRange = otime::TimeRange(
-                otime::RationalTime(startTime, fps),
-                otime::RationalTime(lastTime, fps));
+            _timeRange = OTIO_NS::TimeRange(
+                OTIO_NS::RationalTime(startTime, fps),
+                OTIO_NS::RationalTime(lastTime, fps));
 
             NDI_recv = NDIlib_recv_create(&recv_desc);
             if (!NDI_recv)
@@ -93,7 +93,7 @@ namespace tl
             return _info;
         }
 
-        const otime::TimeRange& ReadVideo::getTimeRange() const
+        const OTIO_NS::TimeRange& ReadVideo::getTimeRange() const
         {
             return _timeRange;
         }
@@ -304,7 +304,7 @@ namespace tl
             _buffer.push_back(image);
         }
 
-        bool ReadVideo::process(const otime::RationalTime& currentTime)
+        bool ReadVideo::process(const OTIO_NS::RationalTime& currentTime)
         {
             bool out = true;
 
@@ -319,7 +319,7 @@ namespace tl
             return out;
         }
 
-        int ReadVideo::_decode(const otime::RationalTime& time)
+        int ReadVideo::_decode(const OTIO_NS::RationalTime& time)
         {
             int out = 0;
             NDIlib_video_frame_t video_frame;

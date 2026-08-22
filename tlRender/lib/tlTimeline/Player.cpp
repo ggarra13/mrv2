@@ -125,11 +125,11 @@ namespace tl
                 p.timeline->getTimeRange().duration().rate());
             p.playback = observer::Value<Playback>::create(Playback::Stop);
             p.loop = observer::Value<Loop>::create(Loop::Loop);
-            p.currentTime = observer::Value<otime::RationalTime>::create(
+            p.currentTime = observer::Value<opentime::RationalTime>::create(
                 playerOptions.currentTime != time::invalidTime
                     ? playerOptions.currentTime
                     : p.timeline->getTimeRange().start_time());
-            p.inOutRange = observer::Value<otime::TimeRange>::create(
+            p.inOutRange = observer::Value<opentime::TimeRange>::create(
                 p.timeline->getTimeRange());
             p.compare = observer::List<std::shared_ptr<Timeline> >::create();
             p.compareTime = observer::Value<CompareTimeMode>::create(
@@ -474,7 +474,7 @@ namespace tl
             return _p->timeline->getOptions();
         }
 
-        const otime::TimeRange& Player::getTimeRange() const
+        const opentime::TimeRange& Player::getTimeRange() const
         {
             return _p->timeline->getTimeRange();
         }
@@ -627,18 +627,18 @@ namespace tl
             _p->loop->setIfChanged(value);
         }
 
-        otime::RationalTime Player::getCurrentTime() const
+        opentime::RationalTime Player::getCurrentTime() const
         {
             return _p->currentTime->get();
         }
 
-        std::shared_ptr<observer::IValue<otime::RationalTime> >
+        std::shared_ptr<observer::IValue<opentime::RationalTime> >
         Player::observeCurrentTime() const
         {
             return _p->currentTime;
         }
 
-        void Player::seek(const otime::RationalTime& time)
+        void Player::seek(const opentime::RationalTime& time)
         {
             TLRENDER_P();
 
@@ -688,49 +688,49 @@ namespace tl
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime -
-                    otime::RationalTime(1, timeRange.duration().rate()));
+                    opentime::RationalTime(1, timeRange.duration().rate()));
                 break;
             case TimeAction::FramePrevX10:
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime -
-                    otime::RationalTime(10, timeRange.duration().rate()));
+                    opentime::RationalTime(10, timeRange.duration().rate()));
                 break;
             case TimeAction::FramePrevX100:
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime -
-                    otime::RationalTime(100, timeRange.duration().rate()));
+                    opentime::RationalTime(100, timeRange.duration().rate()));
                 break;
             case TimeAction::FrameNext:
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime +
-                    otime::RationalTime(1, timeRange.duration().rate()));
+                    opentime::RationalTime(1, timeRange.duration().rate()));
                 break;
             case TimeAction::FrameNextX10:
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime +
-                    otime::RationalTime(10, timeRange.duration().rate()));
+                    opentime::RationalTime(10, timeRange.duration().rate()));
                 break;
             case TimeAction::FrameNextX100:
                 setPlayback(timeline::Playback::Stop);
                 seek(
                     currentTime +
-                    otime::RationalTime(100, timeRange.duration().rate()));
+                    opentime::RationalTime(100, timeRange.duration().rate()));
                 break;
             case TimeAction::JumpBack1s:
-                seek(currentTime - otime::RationalTime(1.0, 1.0));
+                seek(currentTime - opentime::RationalTime(1.0, 1.0));
                 break;
             case TimeAction::JumpBack10s:
-                seek(currentTime - otime::RationalTime(10.0, 1.0));
+                seek(currentTime - opentime::RationalTime(10.0, 1.0));
                 break;
             case TimeAction::JumpForward1s:
-                seek(currentTime + otime::RationalTime(1.0, 1.0));
+                seek(currentTime + opentime::RationalTime(1.0, 1.0));
                 break;
             case TimeAction::JumpForward10s:
-                seek(currentTime + otime::RationalTime(10.0, 1.0));
+                seek(currentTime + opentime::RationalTime(10.0, 1.0));
                 break;
             default:
                 break;
@@ -757,18 +757,18 @@ namespace tl
             timeAction(TimeAction::FrameNext);
         }
 
-        otime::TimeRange Player::getInOutRange() const
+        opentime::TimeRange Player::getInOutRange() const
         {
             return _p->inOutRange->get();
         }
 
-        std::shared_ptr<observer::IValue<otime::TimeRange> >
+        std::shared_ptr<observer::IValue<opentime::TimeRange> >
         Player::observeInOutRange() const
         {
             return _p->inOutRange;
         }
 
-        void Player::setInOutRange(const otime::TimeRange& value)
+        void Player::setInOutRange(const opentime::TimeRange& value)
         {
             TLRENDER_P();
             if (p.inOutRange->setIfChanged(value))
@@ -782,7 +782,7 @@ namespace tl
         void Player::setInPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time(
+            setInOutRange(opentime::TimeRange::range_from_start_end_time(
                 p.currentTime->get(),
                 p.inOutRange->get().end_time_exclusive()));
         }
@@ -790,7 +790,7 @@ namespace tl
         void Player::resetInPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time(
+            setInOutRange(opentime::TimeRange::range_from_start_end_time(
                 p.timeline->getTimeRange().start_time(),
                 p.inOutRange->get().end_time_exclusive()));
         }
@@ -798,14 +798,14 @@ namespace tl
         void Player::setOutPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time_inclusive(
+            setInOutRange(opentime::TimeRange::range_from_start_end_time_inclusive(
                 p.inOutRange->get().start_time(), p.currentTime->get()));
         }
 
         void Player::resetOutPoint()
         {
             TLRENDER_P();
-            setInOutRange(otime::TimeRange::range_from_start_end_time_inclusive(
+            setInOutRange(opentime::TimeRange::range_from_start_end_time_inclusive(
                 p.inOutRange->get().start_time(),
                 p.timeline->getTimeRange().end_time_inclusive()));
         }
@@ -1037,14 +1037,14 @@ namespace tl
             return _p->cacheInfo;
         }
 
-        void Player::updateVideoCache(const otime::RationalTime& time)
+        void Player::updateVideoCache(const opentime::RationalTime& time)
         {
             TLRENDER_P();
             {
                 std::unique_lock<std::mutex> lock(p.mutex.mutex);
                 p.thread.videoCache.erase(time);
                 p.forwardRequests(
-                    time, time, otime::RationalTime(1.0, time.rate()), true);
+                    time, time, opentime::RationalTime(1.0, time.rate()), true);
             }
             const auto playback = p.playback->get();
             if (playback == Playback::Stop)
@@ -1063,7 +1063,7 @@ namespace tl
         }
 
         void Player::setTimeline(
-            const otio::SerializableObject::Retainer<otio::Timeline>& value)
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& value)
         {
             TLRENDER_P();
 
@@ -1089,7 +1089,7 @@ namespace tl
                 const double timelineSpeed = timeRange.duration().rate();
                 const double speed = p.speed->get();
 
-                otime::RationalTime playbackStartTime = time::invalidTime;
+                opentime::RationalTime playbackStartTime = time::invalidTime;
                 std::chrono::steady_clock::time_point playbackStartTimer;
                 {
                     std::unique_lock<std::mutex> lock(p.mutex.mutex);
@@ -1116,9 +1116,9 @@ namespace tl
                 {
                     seconds = -seconds;
                 }
-                const otime::RationalTime currentTime = p.loopPlayback(
+                const opentime::RationalTime currentTime = p.loopPlayback(
                     playbackStartTime +
-                    otime::RationalTime(seconds, 1.0)
+                    opentime::RationalTime(seconds, 1.0)
                         .rescaled_to(timeRange.duration().rate())
                         .floor());
                 // const double currentTimeDiff = abs(currentTime.value() -

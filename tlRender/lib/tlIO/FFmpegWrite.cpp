@@ -678,7 +678,7 @@ namespace tl
             AVPixelFormat avPixelFormatIn = AV_PIX_FMT_NONE;
             AVFrame* avFrame2 = nullptr;
             SwsContext* swsContext = nullptr;
-            otime::RationalTime videoStartTime = time::invalidTime;
+            OTIO_NS::RationalTime videoStartTime = time::invalidTime;
             double avSpeed = 24.0;
 
             bool hasHDR = false;
@@ -1620,12 +1620,12 @@ namespace tl
                             string::Format("Could not set timecode to {1}")
                                 .arg(timecode));
 
-                    otime::ErrorStatus errorStatus;
-                    const otime::RationalTime time =
-                        otime::RationalTime::from_timecode(
+                    opentime::ErrorStatus errorStatus;
+                    const OTIO_NS::RationalTime time =
+                        OTIO_NS::RationalTime::from_timecode(
                             timecode, info.videoTime->duration().rate(),
                             &errorStatus);
-                    if (!otime::is_error(errorStatus))
+                    if (!opentime::is_error(errorStatus))
                     {
                         p.videoStartTime = time.floor();
                     }
@@ -1884,7 +1884,7 @@ namespace tl
         }
 
         void Write::writeVideo(
-            const otime::RationalTime& time,
+            const OTIO_NS::RationalTime& time,
             const std::shared_ptr<image::Image>& image, const io::Options&)
         {
             TLRENDER_P();
@@ -1968,7 +1968,7 @@ namespace tl
         }
 
         void Write::writeAudio(
-            const otime::TimeRange& inTimeRange,
+            const OTIO_NS::TimeRange& inTimeRange,
             const std::shared_ptr<audio::Audio>& audioIn, const io::Options&)
         {
             TLRENDER_P();
@@ -1982,7 +1982,7 @@ namespace tl
 
 
             int r = 0;
-            const auto timeRange = otime::TimeRange(
+            const auto timeRange = OTIO_NS::TimeRange(
                 inTimeRange.start_time().rescaled_to(p.sampleRate),
                 inTimeRange.duration().rescaled_to(p.sampleRate));
 

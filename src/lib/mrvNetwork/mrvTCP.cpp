@@ -179,7 +179,7 @@ namespace mrv
     }
 
     void TCP::pushMessage(
-        const std::string& command, const otime::RationalTime& value)
+        const std::string& command, const OTIO_NS::RationalTime& value)
     {
         nlohmann::json j(value);
         Message message = {{"command", command}, {"value", j}};
@@ -188,7 +188,7 @@ namespace mrv
     }
 
     void
-    TCP::pushMessage(const std::string& command, const otime::TimeRange& value)
+    TCP::pushMessage(const std::string& command, const OTIO_NS::TimeRange& value)
     {
         nlohmann::json j(value);
         Message message = {{"command", command}, {"value", j}};

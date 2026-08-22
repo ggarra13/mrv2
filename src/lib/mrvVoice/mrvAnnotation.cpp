@@ -13,7 +13,7 @@ namespace mrv
     namespace voice
     {
         Annotation::Annotation(
-            const otime::RationalTime& inTime, const bool inAllFrames)
+            const OTIO_NS::RationalTime& inTime, const bool inAllFrames)
         {
             time = inTime;
             allFrames = inAllFrames;

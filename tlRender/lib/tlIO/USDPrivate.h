@@ -42,7 +42,7 @@ namespace tl
             //! Render an image.
             std::future<io::VideoData> render(
                 int64_t id, const file::Path& path,
-                const otime::RationalTime& time, const io::Options&);
+                const OTIO_NS::RationalTime& time, const io::Options&);
 
             //! Cancel requests.
             void cancelRequests(int64_t id);

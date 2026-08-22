@@ -22,7 +22,7 @@ namespace mrv
     using namespace tl;
 
     class TimelinePlayer;
-    using otio::Timeline;
+    using OTIO_NS::Timeline;
 
     //@{
     //! Store timeline in undo queue.
@@ -48,7 +48,7 @@ namespace mrv
     file::Path
     getRelativePath(const file::Path& path, const fs::path& fileName);
 
-    //! Make paths of an otio::Timeline absolute.
+    //! Make paths of an OTIO_NS::Timeline absolute.
     void makePathsAbsolute(TimelinePlayer* player, ViewerUI* ui);
 
     //! Menu function to copy one frame to the buffer.
@@ -104,7 +104,7 @@ namespace mrv
 
     //! Edit function to shift annotations in a timeRange to a start time
     void shiftAnnotations(
-        const otime::TimeRange& range, const otime::RationalTime& startTime,
+        const opentime::TimeRange& range, const opentime::RationalTime& startTime,
         ViewerUI* ui);
 
     //! Refresh file cache
@@ -149,10 +149,10 @@ namespace mrv
     int calculate_edit_viewport_size(ViewerUI* ui);
 
     const std::vector<file::Path> getOtioTimelinePaths(
-        const otio::SerializableObject::Retainer<otio::Timeline>& otioTimeline,
+        const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& otioTimeline,
         const std::string& directory);
 
     const std::vector<file::Path> getOtioTimelinePaths(
-        const otio::SerializableObject::Retainer<otio::Timeline>&
+        const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&
         otioTimeline);
 } // namespace mrv

@@ -113,7 +113,7 @@ namespace mrv
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
                 const std::shared_ptr<tl::timeline_vlk::Render>& render,
                 const math::Matrix4x4f& renderMVP,
-                const otime::RationalTime& time,
+                const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>&
                     annotations,
                 const std::vector<std::shared_ptr<voice::Annotation> >&
@@ -124,7 +124,7 @@ namespace mrv
                 const std::shared_ptr<tl::vlk::OffscreenBuffer>& overlay,
                 const std::shared_ptr<tl::timeline_vlk::Render>& render,
                 const math::Matrix4x4f& renderMVP,
-                const otime::RationalTime& time,
+                const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>&
                     annotations,
                 const std::vector<bool>&

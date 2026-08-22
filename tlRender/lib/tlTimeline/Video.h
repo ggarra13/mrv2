@@ -59,7 +59,7 @@ namespace tl
             //! out from the image sizes instead.
             math::Size2i canvasSize;
 
-            otime::RationalTime time = time::invalidTime;
+            opentime::RationalTime time = time::invalidTime;
             std::vector<VideoLayer> layers;
 
             bool operator==(const VideoFrame&) const;

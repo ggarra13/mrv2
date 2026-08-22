@@ -73,7 +73,7 @@ namespace tl
 
             // Get mutex protected values.
             Playback playback = Playback::Stop;
-            otime::RationalTime playbackStartTime = time::invalidTime;
+            opentime::RationalTime playbackStartTime = time::invalidTime;
             double audioOffset = 0.0;
             {
                 std::unique_lock<std::mutex> lock(p->mutex.mutex);
@@ -170,13 +170,13 @@ namespace tl
                         .start_time()
                         .rescaled_to(inSampleRate)
                         .value() -
-                    otime::RationalTime(audioOffset, 1.0)
+                    opentime::RationalTime(audioOffset, 1.0)
                         .rescaled_to(inSampleRate)
                         .value();
                 const auto bufferSampleCount =
                     audio::getSampleCount(thread.buffer);
                 const auto& timeOffset =
-                    otime::RationalTime(
+                    opentime::RationalTime(
                         thread.rtAudioCurrentFrame + bufferSampleCount,
                         outSampleRate)
                         .rescaled_to(inSampleRate);
@@ -250,7 +250,7 @@ namespace tl
                             if (layer.inTransition)
                             {
                                 const auto& clipTimeRange = layer.clipTimeRange;
-                                const auto& range = otime::TimeRange(
+                                const auto& range = opentime::TimeRange(
                                     clipTimeRange.start_time().rescaled_to(
                                         inSampleRate),
                                     clipTimeRange.duration().rescaled_to(
@@ -286,7 +286,7 @@ namespace tl
                             if (layer.outTransition)
                             {
                                 const auto& clipTimeRange = layer.clipTimeRange;
-                                const auto& range = otime::TimeRange(
+                                const auto& range = opentime::TimeRange(
                                     clipTimeRange.start_time().rescaled_to(
                                         inSampleRate),
                                     clipTimeRange.duration().rescaled_to(

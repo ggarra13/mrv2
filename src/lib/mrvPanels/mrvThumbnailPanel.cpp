@@ -115,7 +115,7 @@ namespace mrv
 
         void ThumbnailPanel::_createThumbnail(
             Fl_Widget* widget, const std::shared_ptr<FilesModelItem>& item,
-            const otime::RationalTime& time, const int layerId,
+            const OTIO_NS::RationalTime& time, const int layerId,
             const std::string& mediaReferenceKey)
         {
             static Fl_SVG_Image* NDIimage = MRV2_LOAD_SVG(NDI);
@@ -149,7 +149,7 @@ namespace mrv
             Fl_Widget* widget,
             const file::Path& path,
             const std::shared_ptr<timeline::Timeline>& timeline,
-            const otime::RationalTime& currentTime, const int layerId,
+            const OTIO_NS::RationalTime& currentTime, const int layerId,
             const std::string& mediaReferenceKey)
         {
             TLRENDER_P();
@@ -181,7 +181,7 @@ namespace mrv
                 if (file::isMovie(path))
                 {
                     double start = p.ui->uiPrefs->uiStartTimeOffset->value();
-                    time -= otime::RationalTime(start, time.rate());
+                    time -= OTIO_NS::RationalTime(start, time.rate());
                 }
 
                 if (time::isValid(timeRange))

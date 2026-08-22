@@ -25,14 +25,14 @@ namespace tl
     {
         struct Player::Private
         {
-            otime::RationalTime loopPlayback(const otime::RationalTime&);
+            opentime::RationalTime loopPlayback(const opentime::RationalTime&);
 
             void reverseRequests(
-                const otime::RationalTime& start,
-                const otime::RationalTime& end, const otime::RationalTime& inc);
+                const opentime::RationalTime& start,
+                const opentime::RationalTime& end, const opentime::RationalTime& inc);
             void forwardRequests(
-                const otime::RationalTime& start,
-                const otime::RationalTime& end, const otime::RationalTime& inc,
+                const opentime::RationalTime& start,
+                const opentime::RationalTime& end, const opentime::RationalTime& inc,
                 const bool clearFrame = false);
             void clearRequests();
             void clearCache();
@@ -76,8 +76,8 @@ namespace tl
             std::shared_ptr<observer::Value<double> > speed;
             std::shared_ptr<observer::Value<Playback> > playback;
             std::shared_ptr<observer::Value<Loop> > loop;
-            std::shared_ptr<observer::Value<otime::RationalTime> > currentTime;
-            std::shared_ptr<observer::Value<otime::TimeRange> > inOutRange;
+            std::shared_ptr<observer::Value<opentime::RationalTime> > currentTime;
+            std::shared_ptr<observer::Value<opentime::TimeRange> > inOutRange;
             std::shared_ptr<observer::List<std::shared_ptr<Timeline> > >
                 compare;
             std::shared_ptr<observer::Value<CompareTimeMode> > compareTime;
@@ -97,10 +97,10 @@ namespace tl
             struct Mutex
             {
                 Playback playback = Playback::Stop;
-                otime::RationalTime playbackStartTime = time::invalidTime;
+                opentime::RationalTime playbackStartTime = time::invalidTime;
                 std::chrono::steady_clock::time_point playbackStartTimer;
-                otime::RationalTime currentTime = time::invalidTime;
-                otime::TimeRange inOutRange = time::invalidTimeRange;
+                opentime::RationalTime currentTime = time::invalidTime;
+                opentime::TimeRange inOutRange = time::invalidTimeRange;
                 std::vector<std::shared_ptr<Timeline> > compare;
                 CompareTimeMode compareTime = CompareTimeMode::Relative;
                 io::Options ioOptions;
@@ -134,8 +134,8 @@ namespace tl
             struct Thread
             {
                 Playback playback = Playback::Stop;
-                otime::RationalTime currentTime = time::invalidTime;
-                otime::TimeRange inOutRange = time::invalidTimeRange;
+                opentime::RationalTime currentTime = time::invalidTime;
+                opentime::TimeRange inOutRange = time::invalidTimeRange;
                 std::vector<std::shared_ptr<Timeline> > compare;
                 CompareTimeMode compareTime = CompareTimeMode::Relative;
                 io::Options ioOptions;
@@ -145,9 +145,9 @@ namespace tl
                 CacheDirection cacheDirection = CacheDirection::Forward;
                 PlayerCacheOptions cacheOptions;
 
-                std::map<otime::RationalTime, std::vector<VideoRequest> >
+                std::map<opentime::RationalTime, std::vector<VideoRequest> >
                     videoRequests;
-                std::map<otime::RationalTime, std::vector<VideoFrame> >
+                std::map<opentime::RationalTime, std::vector<VideoFrame> >
                     videoCache;
 #if defined(TLRENDER_AUDIO)
                 std::unique_ptr<RtAudio> rtAudio;

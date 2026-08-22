@@ -59,7 +59,7 @@ namespace tl
                 const std::string& fileName, const file::MemoryRead*) override;
             io::VideoData _readVideo(
                 const std::string& fileName, const file::MemoryRead*,
-                const otime::RationalTime&, const io::Options&) override;
+                const OTIO_NS::RationalTime&, const io::Options&) override;
         };
 
         //! PNG writer.
@@ -82,7 +82,7 @@ namespace tl
 
         protected:
             void _writeVideo(
-                const std::string& fileName, const otime::RationalTime&,
+                const std::string& fileName, const OTIO_NS::RationalTime&,
                 const std::shared_ptr<image::Image>&,
                 const io::Options&) override;
         };

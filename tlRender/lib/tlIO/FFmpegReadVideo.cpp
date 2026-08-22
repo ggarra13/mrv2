@@ -820,7 +820,7 @@ namespace tl
                             r);
                     }
 
-                    otime::RationalTime timeReference = time::invalidTime;
+                    OTIO_NS::RationalTime timeReference = time::invalidTime;
                     AVDictionaryEntry* tag = nullptr;
                     while (
                         (tag = av_dict_get(
@@ -834,19 +834,19 @@ namespace tl
                                 key, "time_reference",
                                 string::Compare::CaseInsensitive))
                         {
-                            timeReference = otime::RationalTime(
+                            timeReference = OTIO_NS::RationalTime(
                                 std::atoi(value.c_str()), sampleRate);
                         }
                     }
 
-                    otime::RationalTime startTime(0.0, sampleRate);
+                    OTIO_NS::RationalTime startTime(0.0, sampleRate);
                     if (!timeReference.is_invalid_time())
                     {
                         startTime = timeReference;
                     }
-                    _timeRange = otime::TimeRange(
+                    _timeRange = OTIO_NS::TimeRange(
                         startTime.rescaled_to(60.0),
-                        otime::RationalTime(sampleCount, sampleRate)
+                        OTIO_NS::RationalTime(sampleCount, sampleRate)
                             .rescaled_to(60.0));
                 }
                 else
@@ -911,20 +911,20 @@ namespace tl
                         }
                     }
 
-                    otime::RationalTime startTime(0.0, speed);
+                    OTIO_NS::RationalTime startTime(0.0, speed);
                     if (!timecode.empty())
                     {
-                        otime::ErrorStatus errorStatus;
-                        const otime::RationalTime time =
-                            otime::RationalTime::from_timecode(
+                        opentime::ErrorStatus errorStatus;
+                        const OTIO_NS::RationalTime time =
+                            OTIO_NS::RationalTime::from_timecode(
                                 timecode, speed, &errorStatus);
-                        if (!otime::is_error(errorStatus))
+                        if (!opentime::is_error(errorStatus))
                         {
                             startTime = time.floor();
                         }
                     }
-                    _timeRange = otime::TimeRange(
-                        startTime, otime::RationalTime(sequenceSize, speed));
+                    _timeRange = OTIO_NS::TimeRange(
+                        startTime, OTIO_NS::RationalTime(sequenceSize, speed));
                 }
 
                 for (const auto& i : tags)
@@ -1054,7 +1054,7 @@ namespace tl
             return _info;
         }
 
-        const otime::TimeRange& ReadVideo::getTimeRange() const
+        const OTIO_NS::TimeRange& ReadVideo::getTimeRange() const
         {
             return _timeRange;
         }
@@ -1287,7 +1287,7 @@ namespace tl
             }
         }
 
-        void ReadVideo::seek(const otime::RationalTime& time)
+        void ReadVideo::seek(const OTIO_NS::RationalTime& time)
         {
             if (_avStream != -1 && !_useAudioOnly)
             {
@@ -1310,8 +1310,8 @@ namespace tl
         }
 
         bool ReadVideo::process(
-            const bool backwards, const otime::RationalTime& targetTime,
-            otime::RationalTime& currentTime)
+            const bool backwards, const OTIO_NS::RationalTime& targetTime,
+            OTIO_NS::RationalTime& currentTime)
         {
             bool out = false;
             if (_avStream != -1 && _buffer.size() < _options.videoBufferSize)
@@ -1411,8 +1411,8 @@ namespace tl
         }
 
         int ReadVideo::_decode(
-            const bool backwards, const otime::RationalTime& targetTime,
-            otime::RationalTime& currentTime)
+            const bool backwards, const OTIO_NS::RationalTime& targetTime,
+            OTIO_NS::RationalTime& currentTime)
         {
             int out = 0;
             if (_singleImage && _singleImage->isValid())
@@ -1462,7 +1462,7 @@ namespace tl
                 const auto& avVideoStream =
                     _avFormatContext->streams[_avStream];
 
-                const otime::RationalTime time(
+                const OTIO_NS::RationalTime time(
                     _timeRange.start_time().value() +
                         av_rescale_q(
                             timestamp, avVideoStream->time_base,

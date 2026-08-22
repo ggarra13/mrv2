@@ -50,14 +50,14 @@ namespace mrv
 
         bool init = false;
 
-        otime::TimeRange timeRange = time::invalidTimeRange;
+        OTIO_NS::TimeRange timeRange = time::invalidTimeRange;
         io::Info ioInfo;
 
         double speed = 0.0;
         timeline::Playback playback = timeline::Playback::Stop;
         timeline::Loop loop = timeline::Loop::Loop;
-        otime::RationalTime currentTime = time::invalidTime;
-        otime::TimeRange inOutRange = time::invalidTimeRange;
+        OTIO_NS::RationalTime currentTime = time::invalidTime;
+        OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
 
         float volume = 0.F;
         bool mute = false;

@@ -59,7 +59,7 @@ namespace mrv
         ///@{
 
         //! Get the time range.
-        const otime::TimeRange& timeRange() const;
+        const OTIO_NS::TimeRange& timeRange() const;
 
         //! Get the I/O information. This information is retrieved from
         //! the first clip in the timeline.
@@ -91,7 +91,7 @@ namespace mrv
         ///@{
 
         //! Get the current time.
-        const otime::RationalTime& currentTime() const;
+        const OTIO_NS::RationalTime& currentTime() const;
 
         ///@}
 
@@ -99,7 +99,7 @@ namespace mrv
         ///@{
 
         //! Get the in/out points range.
-        const otime::TimeRange& inOutRange() const;
+        const OTIO_NS::TimeRange& inOutRange() const;
 
         ///@}
 
@@ -132,7 +132,7 @@ namespace mrv
         void clearCache();
 
         //! Update video cache.
-        void updateVideoCache(const otime::RationalTime& time);
+        void updateVideoCache(const OTIO_NS::RationalTime& time);
 
         ///@}
 
@@ -182,7 +182,7 @@ namespace mrv
         ///@{
 
         //! Seek to the given time.
-        void seek(const otime::RationalTime&);
+        void seek(const OTIO_NS::RationalTime&);
 
         //! Time action.
         void timeAction(tl::timeline::TimeAction);
@@ -205,7 +205,7 @@ namespace mrv
         ///@{
 
         //! Set the in/out points range.
-        void setInOutRange(const otime::TimeRange&);
+        void setInOutRange(const OTIO_NS::TimeRange&);
 
         //! Set the in point to the current time.
         void setInPoint();
@@ -287,10 +287,10 @@ namespace mrv
         void loopChanged(tl::timeline::Loop);
 
         //! This signal is emitted when the current time is changed.
-        void currentTimeChanged(const otime::RationalTime&);
+        void currentTimeChanged(const OTIO_NS::RationalTime&);
 
         //! This signal is emitted when the in/out points range is changed.
-        void inOutRangeChanged(const otime::TimeRange&);
+        void inOutRangeChanged(const OTIO_NS::TimeRange&);
 
         ///@}
 
@@ -319,12 +319,12 @@ namespace mrv
 
         ///@}
 
-        const otio::SerializableObject::Retainer<otio::Timeline>&
+        const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&
         getTimeline() const;
 
         //! Set the timeline.
         void
-        setTimeline(const otio::SerializableObject::Retainer<otio::Timeline>&);
+        setTimeline(const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&);
 
         //! \name Viewport link
         ///@{
@@ -340,7 +340,7 @@ namespace mrv
         bool hasVoiceAnnotations() const;
 
         //! Return a list of annotation times
-        const std::vector< otime::RationalTime > getAnnotationTimes() const;
+        const std::vector< OTIO_NS::RationalTime > getAnnotationTimes() const;
 
         //! @{
 

@@ -33,13 +33,13 @@ namespace tl
             std::vector<image::Info> video;
 
             //! Video time range.
-            std::optional<otime::TimeRange> videoTime = time::invalidTimeRange;
+            std::optional<OTIO_NS::TimeRange> videoTime = time::invalidTimeRange;
 
             //! Audio information.
             audio::Info audio;
 
             //! Audio time range.
-            std::optional<otime::TimeRange> audioTime = time::invalidTimeRange;
+            std::optional<OTIO_NS::TimeRange> audioTime = time::invalidTimeRange;
 
             //! Metadata tags.
             image::Tags tags;
@@ -55,7 +55,7 @@ namespace tl
         //! Add the OTIO tags.
         void addOtioTags(
             image::Tags& tags, const std::string& clipName,
-            const otime::RationalTime& time);
+            const OTIO_NS::RationalTime& time);
 
         //! Merge the video half of the information with the audio half. Video
         //! and audio come from separate readers; this is how the two halves are
@@ -67,10 +67,10 @@ namespace tl
         {
             VideoData();
             VideoData(
-                const otime::RationalTime&, uint16_t layer,
+                const OTIO_NS::RationalTime&, uint16_t layer,
                 const std::shared_ptr<image::Image>&);
 
-            otime::RationalTime time = time::invalidTime;
+            OTIO_NS::RationalTime time = time::invalidTime;
             uint16_t layer = 0;
             std::shared_ptr<image::Image> image;
 
@@ -93,10 +93,10 @@ namespace tl
         {
             AudioData();
             AudioData(
-                const otime::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const std::shared_ptr<audio::Audio>&);
 
-            otime::RationalTime time = time::invalidTime;
+            OTIO_NS::RationalTime time = time::invalidTime;
             std::shared_ptr<audio::Audio> audio;
 
             bool operator==(const AudioData&) const;

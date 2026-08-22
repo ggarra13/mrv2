@@ -96,7 +96,7 @@ namespace mrv
             void _drawAnnotations(
                 const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
                 const math::Matrix4x4f& renderMVP,
-                const otime::RationalTime& time,
+                const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
                 const std::vector<std::shared_ptr<voice::Annotation>>& voannotations,
                 const math::Size2i& renderSize);
@@ -104,7 +104,7 @@ namespace mrv
             void _drawAnnotations(
                 const std::shared_ptr<tl::gl::OffscreenBuffer>& overlay,
                 const math::Matrix4x4f& renderMVP,
-                const otime::RationalTime& time,
+                const OTIO_NS::RationalTime& time,
                 const std::vector<std::shared_ptr<draw::Annotation>>& annotations,
                 const std::vector<bool>& voannotations,
                 const math::Size2i& renderSize);

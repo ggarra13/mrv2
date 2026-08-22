@@ -6,7 +6,7 @@ namespace tl
 {
     namespace timeline
     {
-        template <typename T> inline const T* getParent(const otio::Item* value)
+        template <typename T> inline const T* getParent(const OTIO_NS::Item* value)
         {
             const T* out = nullptr;
             while (value)

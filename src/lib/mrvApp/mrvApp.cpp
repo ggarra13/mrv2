@@ -176,8 +176,8 @@ namespace mrv
         double speed = 0.0;
         timeline::Playback playback = timeline::Playback::Count;
         timeline::Loop loop = timeline::Loop::Count;
-        otime::RationalTime seek = time::invalidTime;
-        otime::TimeRange inOutRange = time::invalidTimeRange;
+        OTIO_NS::RationalTime seek = time::invalidTime;
+        OTIO_NS::TimeRange inOutRange = time::invalidTimeRange;
 
         timeline::OCIOOptions ocioOptions;
         timeline::LUTOptions lutOptions;
@@ -400,11 +400,11 @@ namespace mrv
                     p.options.loop, {"-loop"}, _("Playback loop mode."),
                     string::Format("{0}").arg(timeline::Loop::Loop),
                     string::join(timeline::getLoopLabels(), ", ")),
-                app::CmdLineValueOption<otime::RationalTime>::create(
+                app::CmdLineValueOption<OTIO_NS::RationalTime>::create(
                     p.options.seek, {"-seek"},
                     _("Seek to the given time, in value/fps format.  "
                       "Example: 50/30.")),
-                app::CmdLineValueOption<otime::TimeRange>::create(
+                app::CmdLineValueOption<OTIO_NS::TimeRange>::create(
                     p.options.inOutRange, {"-inOutRange", "-inout"},
                     _("Set the in/out points range in start/end/fps "
                       "format, like 23/120/24.")),
@@ -951,9 +951,9 @@ namespace mrv
                 // std::cout << "output device size: " << value << std::endl;
             });
         p.bmdFrameRateObserver =
-            observer::ValueObserver<otime::RationalTime>::create(
+            observer::ValueObserver<OTIO_NS::RationalTime>::create(
                 p.bmdOutputDevice->observeFrameRate(),
-                [this](const otime::RationalTime& value)
+                [this](const OTIO_NS::RationalTime& value)
                 {
                     // std::cout << "output device frame rate: " << value <<
                     // std::endl;
@@ -1425,8 +1425,8 @@ namespace mrv
         app->startPlayback();
     }
 
-    void App::_calculateCacheTimes(otime::RationalTime& startTime,
-                                   otime::RationalTime& endTime)
+    void App::_calculateCacheTimes(OTIO_NS::RationalTime& startTime,
+                                   OTIO_NS::RationalTime& endTime)
     {
         TLRENDER_P();
         const timeline::Playback& playback = p.options.playback;
@@ -1494,7 +1494,7 @@ namespace mrv
         if (!info.video.empty())
         {
             auto video = info.video[0];
-            const otime::RationalTime duration = info.videoTime->duration();
+            const OTIO_NS::RationalTime duration = info.videoTime->duration();
             if (duration.to_seconds() > 180.0)
                 use_progress = true;
             if (video.size.w > 2048)
@@ -1507,7 +1507,7 @@ namespace mrv
         }
 
         // Calculate start and end time used in progress report
-        otime::RationalTime startTime, endTime;
+        OTIO_NS::RationalTime startTime, endTime;
         _calculateCacheTimes(startTime, endTime);
 
         const timeline::Playback& playback = p.options.playback;
@@ -1555,7 +1555,7 @@ namespace mrv
                         {
                             TLRENDER_P();
 
-                            otime::RationalTime startTime, endTime;
+                            OTIO_NS::RationalTime startTime, endTime;
                             _calculateCacheTimes(startTime, endTime);
 
                             // 1. Calculate the total duration we are waiting for
@@ -1567,16 +1567,16 @@ namespace mrv
                             for (const auto& t : value.videoFrames)
                             {
                                 // Clip the cached segment to our specific start/end window
-                                otime::TimeRange cachedRange = t;
+                                OTIO_NS::TimeRange cachedRange = t;
                                 if (cachedRange.start_time() <= startTime) {
                                     // adjust start
                                     auto diff = startTime - cachedRange.start_time();
-                                    cachedRange = otime::TimeRange(startTime, cachedRange.duration() - diff);
+                                    cachedRange = OTIO_NS::TimeRange(startTime, cachedRange.duration() - diff);
                                 }
                                 if (cachedRange.end_time_exclusive() >= endTime) {
                                     // adjust end
                                     auto newDuration = endTime - cachedRange.start_time();
-                                    cachedRange = otime::TimeRange(cachedRange.start_time(), newDuration);
+                                    cachedRange = OTIO_NS::TimeRange(cachedRange.start_time(), newDuration);
                                 }
 
                                 // If the resulting range is valid, add its duration to our count
@@ -1619,7 +1619,7 @@ namespace mrv
                         {
                             TLRENDER_P();
 
-                            otime::RationalTime startTime, endTime;
+                            OTIO_NS::RationalTime startTime, endTime;
                             _calculateCacheTimes(startTime, endTime);
 
                             // 1. Calculate the total duration we are waiting for
@@ -1628,26 +1628,26 @@ namespace mrv
                             if (totalFrames == 0) totalFrames = 1; // Prevent division by zero
 
                             // Ensure we always have a valid range to compare against, regardless of direction
-                            otime::TimeRange targetRange = otime::TimeRange::range_from_start_end_time(
+                            OTIO_NS::TimeRange targetRange = opentime::TimeRange::range_from_start_end_time(
                                 std::min(startTime, endTime),
                                 std::max(startTime, endTime)
 );
                             // 3. Define the ranges to check
                             // We use a vector because in a wrap-around, there are two segments
-                            std::vector<otime::TimeRange> searchRanges;
+                            std::vector<OTIO_NS::TimeRange> searchRanges;
 
                             if (startTime <= endTime) {
                                 // Linear case (Forward or simple Reverse)
-                                searchRanges.push_back(otime::TimeRange::range_from_start_end_time(startTime, endTime));
+                                searchRanges.push_back(OTIO_NS::TimeRange::range_from_start_end_time(startTime, endTime));
                             } else {
                                 // Wrap-around case (Reverse playback hit the start and jumped to end)
                                 const auto& timeRange = p.player->inOutRange();
 
                                 // Segment A: from the start of the timeline to the current "end" (which is actually the playhead)
-                                searchRanges.push_back(otime::TimeRange::range_from_start_end_time(timeRange.start_time(), endTime));
+                                searchRanges.push_back(OTIO_NS::TimeRange::range_from_start_end_time(timeRange.start_time(), endTime));
 
                                 // Segment B: from the calculated "start" to the end of the timeline
-                                searchRanges.push_back(otime::TimeRange::range_from_start_end_time(startTime, timeRange.end_time_exclusive()));
+                                searchRanges.push_back(OTIO_NS::TimeRange::range_from_start_end_time(startTime, timeRange.end_time_exclusive()));
                             }
 
                             // 3. Count cached frames in all active segments
@@ -2193,7 +2193,7 @@ namespace mrv
         options.pathOptions.seqMaxDigits = std::min(
             p.settings->getValue<int>("Misc/MaxFileSequenceDigits"), 255);
 
-        otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+        OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
         double value = ui->uiPrefs->uiStartTimeOffset->value();
 
         if (file::isUSD(item->path))
@@ -2489,18 +2489,18 @@ namespace mrv
 
     }
 
-    otime::RationalTime App::_cacheReadAhead() const
+    OTIO_NS::RationalTime App::_cacheReadAhead() const
     {
         TLRENDER_P();
         double value = p.settings->getValue<double>("Cache/ReadAhead");
-        return otime::RationalTime(value, 1.0);
+        return OTIO_NS::RationalTime(value, 1.0);
     }
 
-    otime::RationalTime App::_cacheReadBehind() const
+    OTIO_NS::RationalTime App::_cacheReadBehind() const
     {
         TLRENDER_P();
         double value = p.settings->getValue<double>("Cache/ReadBehind");
-        return otime::RationalTime(value, 1.0);
+        return OTIO_NS::RationalTime(value, 1.0);
     }
 
     void App::cacheUpdate()
@@ -2551,8 +2551,8 @@ namespace mrv
 
         if (file::isTemporaryNDI(p.player->path()) || movieIsLong)
         {
-            options.readAhead = otime::RationalTime(4.0, 1.0);
-            options.readBehind = otime::RationalTime(0.0, 1.0);
+            options.readAhead = OTIO_NS::RationalTime(4.0, 1.0);
+            options.readBehind = OTIO_NS::RationalTime(0.0, 1.0);
         }
         else if (Gbytes == 0)
         {
@@ -2625,8 +2625,8 @@ namespace mrv
                 if (readBehind < behind)
                     readBehind = behind;
 
-                options.readAhead = otime::RationalTime(readAhead, 1.0);
-                options.readBehind = otime::RationalTime(readBehind, 1.0);
+                options.readAhead = OTIO_NS::RationalTime(readAhead, 1.0);
+                options.readBehind = OTIO_NS::RationalTime(readBehind, 1.0);
             }
         }
 

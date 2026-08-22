@@ -51,7 +51,7 @@ namespace tl
         }
 
         std::future<io::VideoData> Read::readVideo(
-            const otime::RationalTime& time, const io::Options& options)
+            const OTIO_NS::RationalTime& time, const io::Options& options)
         {
             TLRENDER_P();
             return p.render->render(

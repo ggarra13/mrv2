@@ -162,12 +162,12 @@ namespace tl
         //! clips without them are laid out from their image size as before.
         //! The coordinates are returned as authored, in the OTIO coordinate
         //! system: unit-less and Y-up.
-        std::optional<math::Box2f> getClipBounds(const otio::Clip* otioClip)
+        std::optional<math::Box2f> getClipBounds(const OTIO_NS::Clip* otioClip)
         {
             std::optional<math::Box2f> out;
-            otio::ErrorStatus errorStatus;
+            OTIO_NS::ErrorStatus errorStatus;
             const auto bounds = otioClip->available_image_bounds(&errorStatus);
-            if (bounds.has_value() && !otio::is_error(errorStatus))
+            if (bounds.has_value() && !OTIO_NS::is_error(errorStatus))
             {
                 const auto& min = bounds.value().min;
                 const auto& max = bounds.value().max;
@@ -206,10 +206,10 @@ namespace tl
         //! A key set for the clip alone takes precedence over the timeline
         //! wide key. Clips that do not have the requested key fall back to the
         //! default media key, and then to the media reference OTIO has active.
-        otio::MediaReference* resolveMediaReference(
-            const otio::Clip* otioClip,
+        OTIO_NS::MediaReference* resolveMediaReference(
+            const OTIO_NS::Clip* otioClip,
             const std::string& key,
-            const std::map<const otio::Clip*, std::string>& clipKeys)
+            const std::map<const OTIO_NS::Clip*, std::string>& clipKeys)
         {
             std::string clipKey = key;
             const auto i = clipKeys.find(otioClip);
@@ -227,7 +227,7 @@ namespace tl
             auto j = mediaReferences.find(clipKey);
             if (j == mediaReferences.end())
             {
-                j = mediaReferences.find(otio::Clip::default_media_key);
+                j = mediaReferences.find(OTIO_NS::Clip::default_media_key);
             }
             return j != mediaReferences.end() ?
                 j->second :
@@ -241,7 +241,7 @@ namespace tl
         //! are displayed at the same size. This covers timelines that were not
         //! authored with spatial coordinates at all.
         std::optional<math::Box2f> getSpatialBounds(
-            const otio::Clip* otioClip,
+            const OTIO_NS::Clip* otioClip,
             Spatial spatial,
             const math::Size2i& normalizeSize,
             double scale)
@@ -265,7 +265,7 @@ namespace tl
 
         //! Get a clip's box within the timeline canvas.
         std::optional<math::Box2f> getCanvasBox(
-            const otio::Clip* otioClip,
+            const OTIO_NS::Clip* otioClip,
             Spatial spatial,
             const math::Size2i& normalizeSize,
             double scale,
@@ -314,7 +314,7 @@ namespace tl
             file::Path path = inputPath;
             file::Path audioPath = inputAudioPath;
 
-            otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+            OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
 
             try
             {
@@ -362,21 +362,21 @@ namespace tl
                 {
                     const auto info = read->getInfo().get();
 
-                    otime::RationalTime startTime = time::invalidTime;
-                    otio::Track* videoTrack = nullptr;
-                    otio::Track* audioTrack = nullptr;
-                    otio::ErrorStatus errorStatus;
+                    opentime::RationalTime startTime = time::invalidTime;
+                    OTIO_NS::Track* videoTrack = nullptr;
+                    OTIO_NS::Track* audioTrack = nullptr;
+                    OTIO_NS::ErrorStatus errorStatus;
 
                     // Read the video.
                     if (!info.video.empty())
                     {
                         startTime = info.videoTime->start_time();
-                        auto videoClip = new otio::Clip;
+                        auto videoClip = new OTIO_NS::Clip;
                         videoClip->set_source_range(info.videoTime);
                         if (isSequence)
                         {
                             auto mediaReference =
-                                new otio::ImageSequenceReference(
+                                new OTIO_NS::ImageSequenceReference(
                                     "",  // \@bug: not path.getDirectory()?
                                     path.getBaseName(),
                                     path.getSuffix() + path.getExtension(),
@@ -389,15 +389,15 @@ namespace tl
                         else
                         {
                             videoClip->set_media_reference(
-                                new otio::ExternalReference(
+                                new OTIO_NS::ExternalReference(
                                     path.hasProtocol() ? path.get() :
                                     path.getFileName(),
                                     info.videoTime));
                         }
-                        videoTrack = new otio::Track(
-                            "Video", std::nullopt, otio::Track::Kind::video);
+                        videoTrack = new OTIO_NS::Track(
+                            "Video", std::nullopt, OTIO_NS::Track::Kind::video);
                         videoTrack->append_child(videoClip, &errorStatus);
-                        if (otio::is_error(errorStatus))
+                        if (OTIO_NS::is_error(errorStatus))
                         {
                             throw std::runtime_error("Cannot append child");
                         }
@@ -421,19 +421,19 @@ namespace tl
 
                             const auto audioInfo = audioRead->getInfo().get();
 
-                            auto audioClip = new otio::Clip;
+                            auto audioClip = new OTIO_NS::Clip;
                             audioClip->set_source_range(audioInfo.audioTime);
                             audioClip->set_media_reference(
-                                new otio::ExternalReference(
+                                new OTIO_NS::ExternalReference(
                                     protocol ? audioPath.get() :
                                     audioPath.getFileName(),
                                     audioInfo.audioTime));
 
-                            audioTrack = new otio::Track(
+                            audioTrack = new OTIO_NS::Track(
                                 "Audio", std::nullopt,
-                                otio::Track::Kind::audio);
+                                OTIO_NS::Track::Kind::audio);
                             audioTrack->append_child(audioClip, &errorStatus);
-                            if (otio::is_error(errorStatus))
+                            if (OTIO_NS::is_error(errorStatus))
                             {
                                 throw std::runtime_error("Cannot append child");
                             }
@@ -446,29 +446,29 @@ namespace tl
                             startTime = info.audioTime->start_time();
                         }
 
-                        auto audioClip = new otio::Clip;
+                        auto audioClip = new OTIO_NS::Clip;
                         audioClip->set_source_range(info.audioTime);
                         audioClip->set_media_reference(
-                            new otio::ExternalReference(
+                            new OTIO_NS::ExternalReference(
                                 path.hasProtocol() ? path.get() :
                                 path.getFileName(),
                                 info.audioTime));
 
-                        audioTrack = new otio::Track(
-                            "Audio", std::nullopt, otio::Track::Kind::audio);
+                        audioTrack = new OTIO_NS::Track(
+                            "Audio", std::nullopt, OTIO_NS::Track::Kind::audio);
                         audioTrack->append_child(audioClip, &errorStatus);
-                        if (otio::is_error(errorStatus))
+                        if (OTIO_NS::is_error(errorStatus))
                         {
                             throw std::runtime_error("Cannot append child");
                         }
                     }
 
                     // Create the stack.
-                    auto otioStack = new otio::Stack;
+                    auto otioStack = new OTIO_NS::Stack;
                     if (videoTrack)
                     {
                         otioStack->append_child(videoTrack, &errorStatus);
-                        if (otio::is_error(errorStatus))
+                        if (OTIO_NS::is_error(errorStatus))
                         {
                             throw std::runtime_error("Cannot append child");
                         }
@@ -476,14 +476,14 @@ namespace tl
                     if (audioTrack)
                     {
                         otioStack->append_child(audioTrack, &errorStatus);
-                        if (otio::is_error(errorStatus))
+                        if (OTIO_NS::is_error(errorStatus))
                         {
                             throw std::runtime_error("Cannot append child");
                         }
                     }
 
                     // Create the timeline.
-                    otioTimeline = new otio::Timeline(path.get());
+                    otioTimeline = new OTIO_NS::Timeline(path.get());
                     otioTimeline->set_tracks(otioStack);
                     if (time::isValid(startTime))
                     {
@@ -508,22 +508,22 @@ namespace tl
             // Is the input an OTIO file?
             if (!otioTimeline)
             {
-                otio::ErrorStatus errorStatus;
+                OTIO_NS::ErrorStatus errorStatus;
                 const std::string fileName = path.get();
                 const std::string extension = string::toLower(path.getExtension());
                 if (".otio" == extension)
                 {
                     auto timeline =
-                        otio::Timeline::from_json_file(fileName, &errorStatus);
-                    otioTimeline = dynamic_cast<otio::Timeline*>(timeline);
+                        OTIO_NS::Timeline::from_json_file(fileName, &errorStatus);
+                    otioTimeline = dynamic_cast<OTIO_NS::Timeline*>(timeline);
                     if (!otioTimeline)
                     {
                         auto collection =
-                            dynamic_cast<otio::SerializableCollection*>(timeline);
+                            dynamic_cast<OTIO_NS::SerializableCollection*>(timeline);
                         if (collection)
                         {
                             auto children =
-                                collection->find_children<otio::Timeline>();
+                                collection->find_children<OTIO_NS::Timeline>();
                             if (children.size() > 1)
                             {
                                 throw std::runtime_error(
@@ -533,7 +533,7 @@ namespace tl
                             }
                             else if (children.size() == 1)
                             {
-                                otioTimeline = otio::dynamic_retainer_cast<otio::Timeline>(
+                                otioTimeline = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Timeline>(
                                     children[0]);
                             }
                         }
@@ -558,15 +558,15 @@ namespace tl
                     zipReader.open(fileName, p.fileIO->getSize());
 
                     std::string json = zipReader.readText("content.otio");
-                    otioTimeline = dynamic_cast<otio::Timeline*>(
-                        otio::Timeline::from_json_string(json, &errorStatus));
+                    otioTimeline = dynamic_cast<OTIO_NS::Timeline*>(
+                        OTIO_NS::Timeline::from_json_string(json, &errorStatus));
                     if (!otioTimeline)
                     {
                         throw std::runtime_error(
                             string::Format("Cannot read timeline: \"{0}\"").
                             arg(path.get()));
                     }
-                    else if (otio::is_error(errorStatus))
+                    else if (OTIO_NS::is_error(errorStatus))
                     {
                         throw std::runtime_error(
                             string::Format("Cannot read timeline: \"{0}\": {1}").
@@ -582,7 +582,7 @@ namespace tl
                 throw std::runtime_error(error);
             }
 
-            otio::AnyDictionary dict;
+            OTIO_NS::AnyDictionary dict;
             dict["path"] = path.get();
             dict["audioPath"] = audioPath.get();
             otioTimeline->metadata()["tlRender"] = dict;
@@ -592,7 +592,7 @@ namespace tl
 
         void Timeline::_init(
             const std::shared_ptr<system::Context>& context,
-            const otio::SerializableObject::Retainer<otio::Timeline>&
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&
                 otioTimeline,
             const Options& options)
         {
@@ -639,7 +639,7 @@ namespace tl
                 try
                 {
                     const auto dict =
-                        std::any_cast<otio::AnyDictionary>(i->second);
+                        std::any_cast<OTIO_NS::AnyDictionary>(i->second);
                     auto j = dict.find("path");
                     if (j != dict.end())
                     {
@@ -663,9 +663,9 @@ namespace tl
             // Get information about the timeline.
             for (const auto& i : p.otioTimeline.value->tracks()->children())
             {
-                if (auto otioTrack = dynamic_cast<const otio::Track*>(i.value))
+                if (auto otioTrack = dynamic_cast<const OTIO_NS::Track*>(i.value))
                 {
-                    if (otio::Track::Kind::audio == otioTrack->kind())
+                    if (OTIO_NS::Track::Kind::audio == otioTrack->kind())
                     {
                         if (_getAudioInfo(otioTrack))
                         {
@@ -751,7 +751,7 @@ namespace tl
 
         std::shared_ptr<Timeline> Timeline::create(
             const std::shared_ptr<system::Context>& context,
-            const otio::SerializableObject::Retainer<otio::Timeline>& timeline,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& timeline,
             const Options& options)
         {
             auto out = std::shared_ptr<Timeline>(new Timeline);
@@ -819,7 +819,7 @@ namespace tl
             return _p->context;
         }
 
-        const otio::SerializableObject::Retainer<otio::Timeline>&
+        const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>&
         Timeline::getTimeline() const
         {
             return _p->otioTimeline;
@@ -832,7 +832,7 @@ namespace tl
         }
 
         void Timeline::setTimeline(
-            const otio::SerializableObject::Retainer<otio::Timeline>& value)
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline>& value)
         {
             TLRENDER_P();
 
@@ -866,7 +866,7 @@ namespace tl
         }
 
         std::optional<size_t>
-        Timeline::getBundleMemoryOffset(const otio::MediaReference* otioRef) const
+        Timeline::getBundleMemoryOffset(const OTIO_NS::MediaReference* otioRef) const
         {
             TLRENDER_P();
 
@@ -878,11 +878,11 @@ namespace tl
 
             // Determine the internal file path for the media reference
             std::string mediaFileName;
-            if (auto externalReference = dynamic_cast<const otio::ExternalReference*>(otioRef))
+            if (auto externalReference = dynamic_cast<const OTIO_NS::ExternalReference*>(otioRef))
             {
                 mediaFileName = file::Path(url::decode(externalReference->target_url())).get();
             }
-            else if (auto imageSeqReference = dynamic_cast<const otio::ImageSequenceReference*>(otioRef))
+            else if (auto imageSeqReference = dynamic_cast<const OTIO_NS::ImageSequenceReference*>(otioRef))
             {
                 // For sequences, grab the offset using the first frame
                 if (imageSeqReference->number_of_images_in_sequence() > 0)
@@ -908,7 +908,7 @@ namespace tl
         template<typename T>
         std::shared_ptr<T> Timeline::Private::getCached(
             memory::LRUCache<std::string, std::shared_ptr<T> >& cache,
-            const otio::MediaReference* mediaReference,
+            const OTIO_NS::MediaReference* mediaReference,
             const io::Options& ioOptions,
             const std::function<std::shared_ptr<T>(
                    const std::shared_ptr<system::Context>&,
@@ -951,7 +951,7 @@ namespace tl
                     readOptions["SequenceIO/DefaultSpeed"] =
                         string::Format("{0}").arg(timeRange.duration().rate());
                     if (auto imageSeqReference =
-                        dynamic_cast<const otio::ImageSequenceReference*>(mediaReference))
+                        dynamic_cast<const OTIO_NS::ImageSequenceReference*>(mediaReference))
                     {
                         // The reference says what to do about frames it does
                         // not have, and it is more specific than the options
@@ -984,7 +984,7 @@ namespace tl
         }
 
         std::vector<file::MemoryRead>
-        Timeline::getMem(const otio::MediaReference* otioRef)
+        Timeline::getMem(const OTIO_NS::MediaReference* otioRef)
         {
             TLRENDER_P();
             return *p.getMem(otioRef);
@@ -1015,14 +1015,14 @@ namespace tl
             // greater than one.
             auto out = std::make_shared<std::vector<file::MemoryRead> >();
             std::vector<std::pair<size_t, std::string> > mediaFileNames;
-            if (auto externalReference = dynamic_cast<const otio::ExternalReference*>(otioRef))
+            if (auto externalReference = dynamic_cast<const OTIO_NS::ExternalReference*>(otioRef))
             {
                 mediaFileNames.push_back(std::make_pair(
                                              size_t(0),
                                              file::Path(url::decode(externalReference->target_url())).get()));
             }
             else if (auto imageSeqReference =
-                     dynamic_cast<const otio::ImageSequenceReference*>(otioRef))
+                     dynamic_cast<const OTIO_NS::ImageSequenceReference*>(otioRef))
             {
                 const int count = imageSeqReference->number_of_images_in_sequence();
                 const size_t step = std::max(imageSeqReference->frame_step(), 1);
@@ -1101,8 +1101,8 @@ namespace tl
             return out;
         }
 
-        otio::MediaReference* Timeline::Private::mediaReference(
-            const otio::Clip* otioClip) const
+        OTIO_NS::MediaReference* Timeline::Private::mediaReference(
+            const OTIO_NS::Clip* otioClip) const
         {
             return resolveMediaReference(
                 otioClip,
@@ -1110,7 +1110,7 @@ namespace tl
                 thread.clipMediaReferenceKeys);
         }
 
-        otio::MediaReference* Timeline::_findMedia(const file::Path& path)
+        OTIO_NS::MediaReference* Timeline::_findMedia(const file::Path& path)
         {
             TLRENDER_P();
             const auto i = p.mediaByPath.find(path.get());
@@ -1128,7 +1128,7 @@ namespace tl
 
         std::future<io::VideoData> Timeline::readMedia(
             const file::Path& path,
-            const otio::RationalTime& time,
+            const OTIO_NS::RationalTime& time,
             const io::Options& options)
         {
             TLRENDER_P();
@@ -1146,7 +1146,7 @@ namespace tl
 
         std::future<io::AudioData> Timeline::readMediaAudio(
             const file::Path& path,
-            const otio::TimeRange& timeRange,
+            const OTIO_NS::TimeRange& timeRange,
             const io::Options& options)
         {
             TLRENDER_P();
@@ -1169,7 +1169,7 @@ namespace tl
 
             std::set<std::string> keys;
             for (const auto& otioClip :
-                     p.otioTimeline.value->find_children<otio::Clip>())
+                     p.otioTimeline.value->find_children<OTIO_NS::Clip>())
             {
                 for (const auto& i : otioClip->media_references())
                 {
@@ -1198,7 +1198,7 @@ namespace tl
         }
 
         std::string Timeline::getMediaReferenceKey(
-            const otio::Clip* otioClip) const
+            const OTIO_NS::Clip* otioClip) const
         {
             TLRENDER_P();
             std::unique_lock<std::mutex> lock(p.mutex.mutex);
@@ -1209,7 +1209,7 @@ namespace tl
         }
 
         void Timeline::setMediaReferenceKey(
-            const otio::Clip* otioClip,
+            const OTIO_NS::Clip* otioClip,
             const std::string& value)
         {
             TLRENDER_P();
@@ -1233,8 +1233,8 @@ namespace tl
             }
         }
 
-        otio::MediaReference* Timeline::getMediaReference(
-            const otio::Clip* otioClip) const
+        OTIO_NS::MediaReference* Timeline::getMediaReference(
+            const OTIO_NS::Clip* otioClip) const
         {
             TLRENDER_P();
             std::unique_lock<std::mutex> lock(p.mutex.mutex);
@@ -1244,7 +1244,7 @@ namespace tl
                 p.mutex.clipMediaReferenceKeys);
         }
 
-        const otime::TimeRange& Timeline::getTimeRange() const
+        const opentime::TimeRange& Timeline::getTimeRange() const
         {
             return _p->timeRange;
         }
@@ -1270,7 +1270,7 @@ namespace tl
         }
 
         VideoRequest Timeline::getVideo(
-            const otime::RationalTime& time, const io::Options& options)
+            const opentime::RationalTime& time, const io::Options& options)
         {
             TLRENDER_P();
             (p.requestId)++;
@@ -1447,11 +1447,11 @@ namespace tl
                         for (const auto& otioChild : otioTrack->children())
                         {
                             if (auto otioItem =
-                                dynamic_cast<otio::Item*>(otioChild.value))
+                                dynamic_cast<OTIO_NS::Item*>(otioChild.value))
                             {
                                 const auto requestTime =
                                     request->time - p.timeRange.start_time();
-                                otio::ErrorStatus errorStatus;
+                                OTIO_NS::ErrorStatus errorStatus;
                                 const auto range =
                                     otioItem->trimmed_range_in_parent(
                                         &errorStatus);
@@ -1460,7 +1460,7 @@ namespace tl
                                 {
                                     Private::VideoLayerData videoLayerData;
                                     if (auto otioClip =
-                                        dynamic_cast<const otio::Clip*>(
+                                        dynamic_cast<const OTIO_NS::Clip*>(
                                             otioItem))
                                     {
                                         videoLayerData.image = _readVideo(
@@ -1477,7 +1477,7 @@ namespace tl
                                         otioTrack->neighbors_of(
                                             otioItem, &errorStatus);
                                     if (auto otioTransition =
-                                        dynamic_cast<otio::Transition*>(
+                                        dynamic_cast<OTIO_NS::Transition*>(
                                             neighbors.second.value))
                                     {
                                         if (requestTime >
@@ -1508,7 +1508,7 @@ namespace tl
                                                     otioTransition,
                                                     &errorStatus);
                                             if (const auto otioClipB =
-                                                dynamic_cast<otio::Clip*>(
+                                                dynamic_cast<OTIO_NS::Clip*>(
                                                     transitionNeighbors
                                                     .second.value))
                                             {
@@ -1525,7 +1525,7 @@ namespace tl
                                         }
                                     }
                                     if (auto otioTransition =
-                                        dynamic_cast<otio::Transition*>(
+                                        dynamic_cast<OTIO_NS::Transition*>(
                                             neighbors.first.value))
                                     {
                                         if (requestTime <
@@ -1559,7 +1559,7 @@ namespace tl
                                                     otioTransition,
                                                     &errorStatus);
                                             if (const auto otioClipB =
-                                                dynamic_cast<otio::Clip*>(
+                                                dynamic_cast<OTIO_NS::Clip*>(
                                                     transitionNeighbors
                                                     .first.value))
                                             {
@@ -1601,13 +1601,13 @@ namespace tl
                         for (const auto& otioChild : otioTrack->children())
                         {
                             if (auto otioItem =
-                                dynamic_cast<otio::Item*>(otioChild.value))
+                                dynamic_cast<OTIO_NS::Item*>(otioChild.value))
                             {
                                 const auto rangeOptional =
                                     otioItem->trimmed_range_in_parent();
                                 if (rangeOptional.has_value())
                                 {
-                                    const otime::TimeRange clipTimeRange(
+                                    const opentime::TimeRange clipTimeRange(
                                         rangeOptional.value()
                                         .start_time()
                                         .rescaled_to(1.0),
@@ -1618,25 +1618,25 @@ namespace tl
                                                          p.timeRange.start_time()
                                                          .rescaled_to(1.0)
                                                          .value();
-                                    const otime::TimeRange requestTimeRange =
-                                        otime::TimeRange(
-                                            otime::RationalTime(start, 1.0),
-                                            otime::RationalTime(1.0, 1.0));
-                                    otime::TimeRange transitionRange =
+                                    const opentime::TimeRange requestTimeRange =
+                                        opentime::TimeRange(
+                                            opentime::RationalTime(start, 1.0),
+                                            opentime::RationalTime(1.0, 1.0));
+                                    opentime::TimeRange transitionRange =
                                         clipTimeRange;
 
-                                    otio::ErrorStatus errorStatus;
+                                    OTIO_NS::ErrorStatus errorStatus;
                                     const auto neighbors =
                                         otioTrack->neighbors_of(
                                             otioItem, &errorStatus);
                                     if (auto otioTransition =
-                                        dynamic_cast<otio::Transition*>(
+                                        dynamic_cast<OTIO_NS::Transition*>(
                                             neighbors.first.value))
                                     {
                                         const auto inOffset =
                                             otioTransition->in_offset()
                                             .rescaled_to(1.0);
-                                        transitionRange = otime::TimeRange(
+                                        transitionRange = opentime::TimeRange(
                                             transitionRange.start_time() -
                                             inOffset,
                                             transitionRange.duration() +
@@ -1644,13 +1644,13 @@ namespace tl
                                     }
 
                                     if (auto otioTransition =
-                                        dynamic_cast<otio::Transition*>(
+                                        dynamic_cast<OTIO_NS::Transition*>(
                                             neighbors.second.value))
                                     {
                                         const auto outOffset =
                                             otioTransition->out_offset()
                                             .rescaled_to(1.0);
-                                        transitionRange = otime::TimeRange(
+                                        transitionRange = opentime::TimeRange(
                                             transitionRange.start_time(),
                                             transitionRange.duration() +
                                             outOffset);
@@ -1662,7 +1662,7 @@ namespace tl
                                         Private::AudioLayerData audioData;
                                         audioData.seconds = request->seconds;
                                         //! \bug Why is
-                                        //! otime::TimeRange::clamped() not
+                                        //! opentime::TimeRange::clamped() not
                                         //! giving us the result we expect?
                                         // audioData.timeRange =
                                         // requestTimeRange.clamped(clipTimeRange);
@@ -1680,13 +1680,13 @@ namespace tl
                                             .value() +
                                             requestTimeRange.duration()
                                             .value());
-                                        audioData.timeRange = otime::TimeRange(
-                                            otime::RationalTime(start, 1.0),
-                                            otime::RationalTime(
+                                        audioData.timeRange = opentime::TimeRange(
+                                            opentime::RationalTime(start, 1.0),
+                                            opentime::RationalTime(
                                                 end - start, 1.0));
 
                                         if (auto otioClip =
-                                            dynamic_cast<otio::Clip*>(
+                                            dynamic_cast<OTIO_NS::Clip*>(
                                                 otioItem))
                                         {
                                             audioData.audio = _readAudio(
@@ -1695,11 +1695,11 @@ namespace tl
                                         }
 
                                         if (auto otioTransition =
-                                            dynamic_cast<otio::Transition*>(
+                                            dynamic_cast<OTIO_NS::Transition*>(
                                                 neighbors.second.value))
                                         {
                                             const auto pad =
-                                                otime::RationalTime(1.0, 1.0);
+                                                opentime::RationalTime(1.0, 1.0);
                                             const auto inOffset =
                                                 otioTransition->in_offset()
                                                 .rescaled_to(1.0);
@@ -1707,7 +1707,7 @@ namespace tl
                                                 otioTransition->out_offset()
                                                 .rescaled_to(1.0);
                                             auto transitionRange =
-                                                otime::TimeRange(
+                                                opentime::TimeRange(
                                                     clipTimeRange
                                                     .end_time_inclusive() -
                                                     inOffset,
@@ -1723,7 +1723,7 @@ namespace tl
                                         }
 
                                         if (auto otioTransition =
-                                            dynamic_cast<otio::Transition*>(
+                                            dynamic_cast<OTIO_NS::Transition*>(
                                                 neighbors.first.value))
                                         {
                                             const auto outOffset =
@@ -1733,7 +1733,7 @@ namespace tl
                                                 otioTransition->in_offset()
                                                 .rescaled_to(1.0);
                                             auto transitionRange =
-                                                otime::TimeRange(
+                                                opentime::TimeRange(
                                                     clipTimeRange.start_time() -
                                                     inOffset,
                                                     outOffset + inOffset);
@@ -1816,7 +1816,7 @@ namespace tl
         }
 
         std::shared_ptr<io::IRead> Timeline::_getRead(
-            const otio::Clip* clip,
+            const OTIO_NS::Clip* clip,
             const io::Options& ioOptions)
         {
             TLRENDER_P();
@@ -1824,7 +1824,7 @@ namespace tl
         }
 
         std::shared_ptr<io::IRead> Timeline::_getRead(
-            const otio::MediaReference* mediaReference,
+            const OTIO_NS::MediaReference* mediaReference,
             const io::Options& ioOptions)
         {
             TLRENDER_P();
@@ -1846,7 +1846,7 @@ namespace tl
         }
 
         bool Timeline::Private::mediaUnavailable(
-            const otio::MediaReference* mediaReference)
+            const OTIO_NS::MediaReference* mediaReference)
         {
             std::unique_lock<std::mutex> lock(memFilesMutex);
             return unavailableMediaReferences.find(mediaReference) !=
@@ -1854,7 +1854,7 @@ namespace tl
         }
 
         std::future<io::VideoData> Timeline::_readVideo(
-            const otio::Clip* clip, const otime::RationalTime& time,
+            const OTIO_NS::Clip* clip, const opentime::RationalTime& time,
             const io::Options& options)
         {
             TLRENDER_P();
@@ -1876,7 +1876,7 @@ namespace tl
                     //! \bug If the available range is greater than the media
                     //! time, assume the media time is wrong and compensate
                     //! for it.
-                    trimmedRange = otio::TimeRange(
+                    trimmedRange = OTIO_NS::TimeRange(
                         trimmedRange.start_time() - availableRange.start_time(),
                         trimmedRange.duration());
                 }
@@ -1889,7 +1889,7 @@ namespace tl
         }
 
         std::future<io::AudioData> Timeline::_readAudio(
-            const otio::Clip* clip, const otime::TimeRange& timeRange,
+            const OTIO_NS::Clip* clip, const opentime::TimeRange& timeRange,
             const io::Options& options)
         {
             TLRENDER_P();
@@ -1902,14 +1902,14 @@ namespace tl
             if (read && timeRangeOpt.has_value())
             {
                 const io::Info& ioInfo = read->getInfo().get();
-                otime::TimeRange trimmedRange = clip->trimmed_range();
+                opentime::TimeRange trimmedRange = clip->trimmed_range();
                 if (p.options.compat &&
                     trimmedRange.start_time() < ioInfo.audioTime->start_time())
                 {
                     //! \bug If the trimmed range is less than the media time,
                     //! assume the media time is wrong (e.g., ALab trailer) and
                     //! compensate for it.
-                    trimmedRange = otio::TimeRange(
+                    trimmedRange = OTIO_NS::TimeRange(
                         ioInfo.audioTime->start_time() + trimmedRange.start_time(),
                         trimmedRange.duration());
                 }
@@ -1921,10 +1921,10 @@ namespace tl
             return out;
         }
 
-        bool Timeline::_getVideoInfo(const otio::Composable* composable)
+        bool Timeline::_getVideoInfo(const OTIO_NS::Composable* composable)
         {
             TLRENDER_P();
-            if (auto clip = dynamic_cast<const otio::Clip*>(composable))
+            if (auto clip = dynamic_cast<const OTIO_NS::Clip*>(composable))
             {
                 if (auto context = p.context.lock())
                 {
@@ -1982,7 +1982,7 @@ namespace tl
                     }
                 }
             }
-            if (auto composition = dynamic_cast<const otio::Composition*>(composable))
+            if (auto composition = dynamic_cast<const OTIO_NS::Composition*>(composable))
             {
                 for (const auto& child : composition->children())
                 {
@@ -2033,10 +2033,10 @@ namespace tl
             }
         }
 
-        bool Timeline::_getAudioInfo(const otio::Composable* composable)
+        bool Timeline::_getAudioInfo(const OTIO_NS::Composable* composable)
         {
             TLRENDER_P();
-            if (auto clip = dynamic_cast<const otio::Clip*>(composable))
+            if (auto clip = dynamic_cast<const OTIO_NS::Clip*>(composable))
             {
                 if (auto context = p.context.lock())
                 {
@@ -2053,7 +2053,7 @@ namespace tl
                     }
                 }
             }
-            if (auto composition = dynamic_cast<const otio::Composition*>(composable))
+            if (auto composition = dynamic_cast<const OTIO_NS::Composition*>(composable))
             {
                 for (const auto& child : composition->children())
                 {
@@ -2075,7 +2075,7 @@ namespace tl
             // render size stable as playback moves between clips.
             p.normalizeSize = p.maxVideoSize;
             const math::Size2i& normalizeSize = p.normalizeSize;
-            const auto otioClips = p.otioTimeline.value->find_children<otio::Clip>();
+            const auto otioClips = p.otioTimeline.value->find_children<OTIO_NS::Clip>();
 
             // The coordinates are unit-less, so a reference is needed to map
             // them onto a pixel size. Take it from the first clip that has
@@ -2175,7 +2175,7 @@ namespace tl
             // the true timeline-wide maximum, not whichever clip happened to be
             // first. Readers opened here stay in the read cache.
             for (const auto& otioClip :
-                     p.otioTimeline.value->find_children<otio::Clip>())
+                     p.otioTimeline.value->find_children<OTIO_NS::Clip>())
             {
                 for (const auto& i : otioClip->media_references())
                 {
@@ -2216,9 +2216,9 @@ namespace tl
 
             for (const auto& i : p.otioTimeline.value->tracks()->children())
             {
-                if (auto otioTrack = dynamic_cast<const otio::Track*>(i.value))
+                if (auto otioTrack = dynamic_cast<const OTIO_NS::Track*>(i.value))
                 {
-                    if (otio::Track::Kind::video == otioTrack->kind())
+                    if (OTIO_NS::Track::Kind::video == otioTrack->kind())
                     {
                         if (_getVideoInfo(otioTrack))
                         {
@@ -2389,16 +2389,16 @@ namespace tl
 
         std::shared_ptr<audio::Audio> Timeline::Private::padAudioToOneSecond(
             const std::shared_ptr<audio::Audio>& audio, double seconds,
-            const otime::TimeRange& timeRange)
+            const opentime::TimeRange& timeRange)
         {
             std::list<std::shared_ptr<audio::Audio> > list;
             const double s =
                 seconds - this->timeRange.start_time().rescaled_to(1.0).value();
             if (timeRange.start_time().value() > s)
             {
-                const otime::RationalTime t =
-                    timeRange.start_time() - otime::RationalTime(s, 1.0);
-                const otime::RationalTime t2 =
+                const opentime::RationalTime t =
+                    timeRange.start_time() - opentime::RationalTime(s, 1.0);
+                const opentime::RationalTime t2 =
                     t.rescaled_to(audio->getInfo().sampleRate);
                 auto silence =
                     audio::Audio::create(audio->getInfo(), t2.value());
@@ -2408,10 +2408,10 @@ namespace tl
             list.push_back(audio);
             if (timeRange.end_time_exclusive().value() < s + 1.0)
             {
-                const otime::RationalTime t =
-                    otime::RationalTime(s + 1.0, 1.0) -
+                const opentime::RationalTime t =
+                    opentime::RationalTime(s + 1.0, 1.0) -
                     timeRange.end_time_exclusive();
-                const otime::RationalTime t2 =
+                const opentime::RationalTime t2 =
                     t.rescaled_to(audio->getInfo().sampleRate);
                 auto silence =
                     audio::Audio::create(audio->getInfo(), t2.value());
@@ -2425,7 +2425,7 @@ namespace tl
         }
 
         void
-        Timeline::Private::mapBundleMediaReferences(otio::Timeline* otioTimeline)
+        Timeline::Private::mapBundleMediaReferences(OTIO_NS::Timeline* otioTimeline)
         {
             if (!otioTimeline)
                 return;
@@ -2452,7 +2452,7 @@ namespace tl
             // 25,000 frames that was seconds of URL decoding and path
             // parsing before anything appeared.
             const auto mapMediaReference = [&](
-                otio::MediaReference* mediaReference,
+                OTIO_NS::MediaReference* mediaReference,
                 bool active)
                 {
                     if (!mediaReference ||
@@ -2464,13 +2464,13 @@ namespace tl
 
                     std::string first;
                     if (auto externalReference =
-                        dynamic_cast<otio::ExternalReference*>(mediaReference))
+                        dynamic_cast<OTIO_NS::ExternalReference*>(mediaReference))
                     {
                         first = file::Path(
                             url::decode(externalReference->target_url())).get();
                     }
                     else if (auto imageSeqReference =
-                             dynamic_cast<otio::ImageSequenceReference*>(mediaReference))
+                             dynamic_cast<OTIO_NS::ImageSequenceReference*>(mediaReference))
                     {
                         if (imageSeqReference->number_of_images_in_sequence() <= 0)
                         {
@@ -2511,7 +2511,7 @@ namespace tl
             // Map every media reference, not only the active one, so that
             // the active reference can be changed without re-reading the
             // bundle.
-            for (auto clip : otioTimeline->find_children<otio::Clip>())
+            for (auto clip : otioTimeline->find_children<OTIO_NS::Clip>())
             {
                 const auto* activeReference = clip->media_reference();
                 for (const auto& i : clip->media_references())

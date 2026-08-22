@@ -156,16 +156,16 @@ namespace tl
 
             std::future<io::Info> getInfo() override;
             std::future<io::VideoData> readVideo(
-                const otime::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const io::Options& = io::Options()) override;
             std::future<io::AudioData> readAudio(
-                const otime::TimeRange&,
+                const OTIO_NS::TimeRange&,
                 const io::Options& = io::Options()) override;
             void cancelRequests() override;
 
         private:
             void _addToCache(
-                io::VideoData& data, const otime::RationalTime&,
+                io::VideoData& data, const OTIO_NS::RationalTime&,
                 const io::Options&);
             void _videoThread();
             void _audioThread();
@@ -194,12 +194,12 @@ namespace tl
                 const std::weak_ptr<log::System>&);
 
             void writeVideo(
-                const otime::RationalTime&,
+                const OTIO_NS::RationalTime&,
                 const std::shared_ptr<image::Image>&,
                 const io::Options& = io::Options()) override;
 
             void writeAudio(
-                const otime::TimeRange&, const std::shared_ptr<audio::Audio>&,
+                const OTIO_NS::TimeRange&, const std::shared_ptr<audio::Audio>&,
                 const io::Options& = io::Options()) override;
 
         private:

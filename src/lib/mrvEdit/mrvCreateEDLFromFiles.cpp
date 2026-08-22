@@ -39,30 +39,30 @@ namespace mrv
 {
     using namespace tl;
 
-    using otime::RationalTime;
-    using otime::TimeRange;
+    using opentime::RationalTime;
+    using opentime::TimeRange;
 
-    using otio::Clip;
-    using otio::Composition;
-    using otio::Gap;
-    using otio::Timeline;
-    using otio::Track;
+    using OTIO_NS::Clip;
+    using OTIO_NS::Composition;
+    using OTIO_NS::Gap;
+    using OTIO_NS::Timeline;
+    using OTIO_NS::Track;
 
     bool createEDLFromFiles(std::string& otioFile,
                             const std::vector<std::string> files)
     {
-        otio::ErrorStatus errorStatus;
+        OTIO_NS::ErrorStatus errorStatus;
 
         const timeline::Options options;
 
-        otio::SerializableObject::Retainer<otio::Timeline> otioTimeline =
-            new otio::Timeline("EDL");
+        OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline =
+            new OTIO_NS::Timeline("EDL");
 
         auto videoTrack =
-            new otio::Track("Video", std::nullopt, otio::Track::Kind::video);
+            new OTIO_NS::Track("Video", std::nullopt, OTIO_NS::Track::Kind::video);
 
         auto audioTrack =
-            new otio::Track("Audio", std::nullopt, otio::Track::Kind::audio);
+            new OTIO_NS::Track("Audio", std::nullopt, OTIO_NS::Track::Kind::audio);
 
 
         auto context = App::app->getContext();
@@ -132,18 +132,18 @@ namespace mrv
             {
                 const auto info = read->getInfo().get();
 
-                otime::RationalTime startTime = time::invalidTime;
-                otio::ErrorStatus errorStatus;
+                opentime::RationalTime startTime = time::invalidTime;
+                OTIO_NS::ErrorStatus errorStatus;
 
                 // Read the video.
                 if (!info.video.empty())
                 {
                     startTime = info.videoTime->start_time();
-                    auto videoClip = new otio::Clip;
+                    auto videoClip = new OTIO_NS::Clip;
                     videoClip->set_source_range(info.videoTime);
                     if (isSequence)
                     {
-                        auto mediaReference = new otio::ImageSequenceReference(
+                        auto mediaReference = new OTIO_NS::ImageSequenceReference(
                             path.getProtocol() + path.getDirectory(),
                             path.getBaseName(),
                             path.getExtension(),
@@ -156,12 +156,12 @@ namespace mrv
                     }
                     else
                     {
-                        videoClip->set_media_reference(new otio::ExternalReference(
+                        videoClip->set_media_reference(new OTIO_NS::ExternalReference(
                                                            path.get(),
                                                            info.videoTime));
                     }
                     videoTrack->append_child(videoClip, &errorStatus);
-                    if (otio::is_error(errorStatus))
+                    if (OTIO_NS::is_error(errorStatus))
                     {
                         throw std::runtime_error("Cannot append video child");
                     }
@@ -174,23 +174,23 @@ namespace mrv
                         startTime = info.audioTime->start_time();
                     }
 
-                    auto audioClip = new otio::Clip;
+                    auto audioClip = new OTIO_NS::Clip;
                     audioClip->set_source_range(info.audioTime);
-                    audioClip->set_media_reference(new otio::ExternalReference(
+                    audioClip->set_media_reference(new OTIO_NS::ExternalReference(
                                                        path.get(),
                                                        info.audioTime));
                     audioTrack->append_child(audioClip, &errorStatus);
-                    if (otio::is_error(errorStatus))
+                    if (OTIO_NS::is_error(errorStatus))
                     {
                         throw std::runtime_error("Cannot append audio child");
                     }
                 }
                 else
                 {
-                    auto audioGap = new otio::Gap;
+                    auto audioGap = new OTIO_NS::Gap;
                     audioGap->set_source_range(info.videoTime);
                     audioTrack->append_child(audioGap, &errorStatus);
-                    if (otio::is_error(errorStatus))
+                    if (OTIO_NS::is_error(errorStatus))
                     {
                         throw std::runtime_error("Cannot append audio gap child");
                     }
@@ -198,10 +198,10 @@ namespace mrv
             }
         }
 
-        auto stack = new otio::Stack;
+        auto stack = new OTIO_NS::Stack;
 
         stack->append_child(videoTrack, &errorStatus);
-        if (otio::is_error(errorStatus))
+        if (OTIO_NS::is_error(errorStatus))
         {
             /* xgettext:c++-format */
             std::string error =
@@ -211,7 +211,7 @@ namespace mrv
         }
 
         stack->append_child(audioTrack, &errorStatus);
-        if (otio::is_error(errorStatus))
+        if (OTIO_NS::is_error(errorStatus))
         {
             /* xgettext:c++-format */
             std::string error =
@@ -225,7 +225,7 @@ namespace mrv
         otioFile = otioFilename(App::ui);
 
         otioTimeline->to_json_file(otioFile, &errorStatus);
-        if (otio::is_error(errorStatus))
+        if (OTIO_NS::is_error(errorStatus))
         {
             std::string error =
                 string::Format(_("Could not save .otio file: {0}"))

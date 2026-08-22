@@ -845,7 +845,7 @@ namespace mrv
 
                         if (version >= 11)
                         {
-                            otime::TimeRange inOutRange;
+                            OTIO_NS::TimeRange inOutRange;
                             j["inOutRange"].get_to(inOutRange);
                             player->setInOutRange(inOutRange);
 
@@ -866,14 +866,14 @@ namespace mrv
                                 {
                                     c->uiEndFrame->setTime(
                                         inOutRange.end_time_exclusive() -
-                                        otime::RationalTime(
+                                        OTIO_NS::RationalTime(
                                             1.0, inOutRange.duration().rate()));
                                     c->uiEndButton->value(1);
                                 }
                             }
                         }
 
-                        otime::RationalTime time;
+                        OTIO_NS::RationalTime time;
                         j["time"].get_to(time);
                         player->seek(time);
 

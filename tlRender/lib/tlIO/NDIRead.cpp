@@ -121,8 +121,8 @@ namespace tl
             NDIlib_audio_frame_t a;
             NDIlib_frame_type_e type_e = NDIlib_frame_type_none;
 
-            p.audioThread.currentTime = otime::RationalTime(0.0, 48000.0);
-            p.videoThread.currentTime = otime::RationalTime(0.0, fps);
+            p.audioThread.currentTime = OTIO_NS::RationalTime(0.0, 48000.0);
+            p.videoThread.currentTime = OTIO_NS::RationalTime(0.0, fps);
 
             // Preroll to find video and (potentially) audio stream
             unsigned videoCounter = 0;
@@ -292,7 +292,7 @@ namespace tl
         }
 
         std::future<io::VideoData> Read::readVideo(
-            const otime::RationalTime& time, const io::Options& options)
+            const OTIO_NS::RationalTime& time, const io::Options& options)
         {
             TLRENDER_P();
             auto request = std::make_shared<Private::VideoRequest>();
@@ -320,7 +320,7 @@ namespace tl
         }
 
         std::future<io::AudioData> Read::readAudio(
-            const otime::TimeRange& timeRange, const io::Options& options)
+            const OTIO_NS::TimeRange& timeRange, const io::Options& options)
         {
             TLRENDER_P();
             auto request = std::make_shared<Private::AudioRequest>();
@@ -435,7 +435,7 @@ namespace tl
                         _cache->addVideo(cacheKey, data);
                     }
 
-                    p.videoThread.currentTime += otime::RationalTime(
+                    p.videoThread.currentTime += OTIO_NS::RationalTime(
                         1.0, p.info.videoTime->duration().rate());
                 }
 

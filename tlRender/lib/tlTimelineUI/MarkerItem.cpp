@@ -12,47 +12,47 @@ namespace tl
         image::Color4f getMarkerColor(const std::string& color)
         {
             image::Color4f out(1.F, 0.F, 0.F);
-            if (color == otio::Marker::Color::pink)
+            if (color == OTIO_NS::Marker::Color::pink)
             {
                 out = image::Color4f(1.F, 0.F, .5F);
             }
-            else if (color == otio::Marker::Color::red)
+            else if (color == OTIO_NS::Marker::Color::red)
             {
                 out = image::Color4f(1.F, 0.F, 0.F);
             }
-            else if (color == otio::Marker::Color::orange)
+            else if (color == OTIO_NS::Marker::Color::orange)
             {
                 out = image::Color4f(1.F, .6F, 0.F);
             }
-            else if (color == otio::Marker::Color::yellow)
+            else if (color == OTIO_NS::Marker::Color::yellow)
             {
                 out = image::Color4f(1.F, 1.F, 0.F);
             }
-            else if (color == otio::Marker::Color::green)
+            else if (color == OTIO_NS::Marker::Color::green)
             {
                 out = image::Color4f(0.F, 1.F, 0.F);
             }
-            else if (color == otio::Marker::Color::cyan)
+            else if (color == OTIO_NS::Marker::Color::cyan)
             {
                 out = image::Color4f(0.F, 1.F, 1.F);
             }
-            else if (color == otio::Marker::Color::blue)
+            else if (color == OTIO_NS::Marker::Color::blue)
             {
                 out = image::Color4f(0.F, 0.F, 1.F);
             }
-            else if (color == otio::Marker::Color::purple)
+            else if (color == OTIO_NS::Marker::Color::purple)
             {
                 out = image::Color4f(.5F, 0.F, 1.F);
             }
-            else if (color == otio::Marker::Color::magenta)
+            else if (color == OTIO_NS::Marker::Color::magenta)
             {
                 out = image::Color4f(1.F, 0.F, 1.F);
             }
-            else if (color == otio::Marker::Color::black)
+            else if (color == OTIO_NS::Marker::Color::black)
             {
                 out = image::Color4f(0.F, 0.F, 0.F);
             }
-            else if (color == otio::Marker::Color::white)
+            else if (color == OTIO_NS::Marker::Color::white)
             {
                 out = image::Color4f(1.F, 1.F, 1.F);
             }
@@ -64,8 +64,8 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const otio::Marker* marker,
-            const otio::TimeRange& timeRange,
+            const OTIO_NS::Marker* marker,
+            const OTIO_NS::TimeRange& timeRange,
             const std::shared_ptr<IWidget>& parent)
         {
             IItem::_init(
@@ -97,8 +97,8 @@ namespace tl
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
-            const otio::Marker* marker,
-            const otio::TimeRange& timeRange,
+            const OTIO_NS::Marker* marker,
+            const OTIO_NS::TimeRange& timeRange,
             const std::shared_ptr<IWidget>& parent)
         {
             auto out = std::make_shared<MarkerItem>();

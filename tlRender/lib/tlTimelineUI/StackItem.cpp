@@ -58,11 +58,11 @@ namespace tl
             };
             DrawData draw;
             
-            const otio::Stack* otioStack = nullptr;
+            const OTIO_NS::Stack* otioStack = nullptr;
         };
 
         void StackItem::_init(
-            const otio::SerializableObject::Retainer<otio::Stack>& stack,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
@@ -73,8 +73,8 @@ namespace tl
             
             TLRENDER_P();
             
-            otio::TimeRange timeRange = stack->trimmed_range();
-            otio::TimeRange trimmedRange = timeRange;
+            OTIO_NS::TimeRange timeRange = stack->trimmed_range();
+            OTIO_NS::TimeRange trimmedRange = timeRange;
             
             p.label = stack->name();
             IItem::_init(
@@ -87,8 +87,8 @@ namespace tl
                 //_markerLayout = TimeLayout::create(context, timeRange, _layout);
                 for (const auto& marker : markers)
                 {
-                    otio::TimeRange markerRange = marker->marked_range();
-                    markerRange = otio::TimeRange(/*timeline.start_time() + */
+                    OTIO_NS::TimeRange markerRange = marker->marked_range();
+                    markerRange = OTIO_NS::TimeRange(/*timeline.start_time() + */
                                                   markerRange.start_time(),
                                                   markerRange.duration());
                     // auto markerItem = MarkerItem::create(
@@ -113,7 +113,7 @@ namespace tl
         }
 
         std::shared_ptr<StackItem> StackItem::create(
-            const otio::SerializableObject::Retainer<otio::Stack>& stack,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Stack>& stack,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,

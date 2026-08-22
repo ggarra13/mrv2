@@ -1399,7 +1399,7 @@ namespace mrv
 
         void ImageInfoPanel::add_time(
             const char* name, const char* tooltip,
-            const otime::RationalTime& content, const bool editable)
+            const OTIO_NS::RationalTime& content, const bool editable)
         {
             char buf[128];
 
@@ -2109,7 +2109,7 @@ namespace mrv
             const auto& directory = path.getDirectory();
 
             const auto& audioPath = player->audioPath();
-            const otime::RationalTime& time = player->currentTime();
+            const OTIO_NS::RationalTime& time = player->currentTime();
 
             const auto& fullname = createStringFromPathAndTime(path, time);
 
@@ -2150,7 +2150,7 @@ namespace mrv
                 false);
             add_time(_("End Time"), _("Ending frame of clip"), endTime, false);
 
-            const otime::TimeRange& iorange = player->inOutRange();
+            const OTIO_NS::TimeRange& iorange = player->inOutRange();
             int64_t first = iorange.start_time().to_frames();
             int64_t last = iorange.end_time_inclusive().to_frames();
 

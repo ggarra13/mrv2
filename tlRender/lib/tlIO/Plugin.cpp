@@ -51,13 +51,13 @@ namespace tl
         }
 
         std::future<VideoData>
-        IRead::readVideo(const otime::RationalTime&, const Options&)
+        IRead::readVideo(const OTIO_NS::RationalTime&, const Options&)
         {
             return std::future<VideoData>();
         }
 
         std::future<AudioData>
-        IRead::readAudio(const otime::TimeRange&, const Options&)
+        IRead::readAudio(const OTIO_NS::TimeRange&, const Options&)
         {
             return std::future<AudioData>();
         }

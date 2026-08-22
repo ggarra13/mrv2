@@ -20,10 +20,10 @@ namespace tl
             }
         } // namespace
 
-        otime::RationalTime
-        Player::Private::loopPlayback(const otime::RationalTime& time)
+        opentime::RationalTime
+        Player::Private::loopPlayback(const opentime::RationalTime& time)
         {
-            otime::RationalTime out = time;
+            opentime::RationalTime out = time;
 
             const auto& range = inOutRange->get();
             switch (loop->get())
@@ -201,10 +201,10 @@ namespace tl
         }
 
         void Player::Private::reverseRequests(
-            const otime::RationalTime& start, const otime::RationalTime& end,
-            const otime::RationalTime& inc)
+            const opentime::RationalTime& start, const opentime::RationalTime& end,
+            const opentime::RationalTime& inc)
         {
-            const otime::TimeRange& timeRange = timeline->getTimeRange();
+            const opentime::TimeRange& timeRange = timeline->getTimeRange();
             for (auto time = start; time >= end; time -= inc)
             {
                 const auto i = thread.videoCache.find(time);
@@ -221,7 +221,7 @@ namespace tl
                         request.push_back(timeline->getVideo(time, ioOptions2));
                         for (size_t i = 0; i < thread.compare.size(); ++i)
                         {
-                            const otime::RationalTime time2 =
+                            const opentime::RationalTime time2 =
                                 timeline::getCompareTime(
                                     time, timeRange,
                                     thread.compare[i]->getTimeRange(),
@@ -239,11 +239,11 @@ namespace tl
         }
 
         void Player::Private::forwardRequests(
-            const otime::RationalTime& start, const otime::RationalTime& end,
-            const otime::RationalTime& inc, const bool clearFrame)
+            const opentime::RationalTime& start, const opentime::RationalTime& end,
+            const opentime::RationalTime& inc, const bool clearFrame)
         {
-            const otime::TimeRange& timeRange = timeline->getTimeRange();
-            for (otime::RationalTime time = start; time <= end; time += inc)
+            const opentime::TimeRange& timeRange = timeline->getTimeRange();
+            for (opentime::RationalTime time = start; time <= end; time += inc)
             {
                 const auto i = thread.videoCache.find(time);
                 if (i == thread.videoCache.end())
@@ -261,7 +261,7 @@ namespace tl
                         request.push_back(timeline->getVideo(time, ioOptions2));
                         for (size_t i = 0; i < thread.compare.size(); ++i)
                         {
-                            const otime::RationalTime time2 =
+                            const opentime::RationalTime time2 =
                                 timeline::getCompareTime(
                                     time, timeRange,
                                     thread.compare[i]->getTimeRange(),
@@ -297,7 +297,7 @@ namespace tl
                 }
                 if (ready)
                 {
-                    const otime::RationalTime time = videoRequestsIt->first;
+                    const opentime::RationalTime time = videoRequestsIt->first;
                     auto& videoCache = thread.videoCache[time];
                     videoCache.clear();
                     for (auto videoRequestIt =
@@ -351,33 +351,33 @@ namespace tl
         void Player::Private::cacheUpdate()
         {
             // Get the video ranges to be cached.
-            const otime::TimeRange& timeRange = timeline->getTimeRange();
-            const otime::RationalTime readAheadDivided(
+            const opentime::TimeRange& timeRange = timeline->getTimeRange();
+            const opentime::RationalTime readAheadDivided(
                 thread.cacheOptions.readAhead.value() /
                     static_cast<double>(1 + thread.compare.size()),
                 thread.cacheOptions.readAhead.rate());
-            const otime::RationalTime readAheadRescaled =
+            const opentime::RationalTime readAheadRescaled =
                 readAheadDivided.rescaled_to(timeRange.duration().rate())
                     .floor();
-            const otime::RationalTime readBehindDivided(
+            const opentime::RationalTime readBehindDivided(
                 thread.cacheOptions.readBehind.value() /
                     static_cast<double>(1 + thread.compare.size()),
                 thread.cacheOptions.readBehind.rate());
-            const otime::RationalTime readBehindRescaled =
+            const opentime::RationalTime readBehindRescaled =
                 readBehindDivided.rescaled_to(timeRange.duration().rate())
                     .floor();
-            otime::TimeRange videoRange = time::invalidTimeRange;
+            opentime::TimeRange videoRange = time::invalidTimeRange;
             switch (thread.cacheDirection)
             {
             case CacheDirection::Forward:
                 videoRange =
-                    otime::TimeRange::range_from_start_end_time_inclusive(
+                    opentime::TimeRange::range_from_start_end_time_inclusive(
                         thread.currentTime - readBehindRescaled,
                         thread.currentTime + readAheadRescaled);
                 break;
             case CacheDirection::Reverse:
                 videoRange =
-                    otime::TimeRange::range_from_start_end_time_inclusive(
+                    opentime::TimeRange::range_from_start_end_time_inclusive(
                         thread.currentTime - readAheadRescaled,
                         thread.currentTime + readBehindRescaled);
                 break;
@@ -392,9 +392,9 @@ namespace tl
                 videoRange, thread.inOutRange, thread.cacheDirection);
             videoRanges.insert(
                 videoRanges.begin(),
-                otime::TimeRange(
+                opentime::TimeRange(
                     thread.currentTime,
-                    otime::RationalTime(1.0, thread.currentTime.rate())));
+                    opentime::RationalTime(1.0, thread.currentTime.rate())));
 
             //! If we are at the start either playing backwards or stopping,
             //! we need to loop the cache read behind to the end (for looping).
@@ -405,7 +405,7 @@ namespace tl
                 const auto& end = thread.inOutRange.end_time_inclusive();
                 const auto& start = end - readBehindRescaled;
                 videoRange =
-                    otime::TimeRange::range_from_start_end_time_inclusive(
+                    opentime::TimeRange::range_from_start_end_time_inclusive(
                         start, end);
                 videoRanges.push_back(videoRange);
             }
@@ -416,31 +416,31 @@ namespace tl
             // }
 
             // Get the audio ranges to be cached.
-            const otime::RationalTime audioOffsetTime =
-                otime::RationalTime(thread.audioOffset, 1.0)
+            const opentime::RationalTime audioOffsetTime =
+                opentime::RationalTime(thread.audioOffset, 1.0)
                     .rescaled_to(timeRange.duration().rate());
             // std::cout << "audio offset: " << audioOffsetTime << std::endl;
-            const otime::RationalTime audioOffsetAhead =
-                otime::RationalTime(
+            const opentime::RationalTime audioOffsetAhead =
+                opentime::RationalTime(
                     audioOffsetTime.value() < 0.0
                         ? -audioOffsetTime
-                        : otime::RationalTime(0.0, timeRange.duration().rate()))
+                        : opentime::RationalTime(0.0, timeRange.duration().rate()))
                     .round();
-            const otime::RationalTime audioOffsetBehind =
-                otime::RationalTime(
+            const opentime::RationalTime audioOffsetBehind =
+                opentime::RationalTime(
                     audioOffsetTime.value() > 0.0
                         ? audioOffsetTime
-                        : otime::RationalTime(0.0, timeRange.duration().rate()))
+                        : opentime::RationalTime(0.0, timeRange.duration().rate()))
                     .round();
             // std::cout << "audio offset ahead: " << audioOffsetAhead <<
             // std::endl; std::cout << "audio offset behind: " <<
             // audioOffsetBehind << std::endl;
-            otime::TimeRange audioRange = time::invalidTimeRange;
+            opentime::TimeRange audioRange = time::invalidTimeRange;
             switch (thread.cacheDirection)
             {
             case CacheDirection::Forward:
                 audioRange =
-                    otime::TimeRange::range_from_start_end_time_inclusive(
+                    opentime::TimeRange::range_from_start_end_time_inclusive(
                         thread.currentTime - readBehindRescaled -
                             audioOffsetBehind,
                         thread.currentTime + readAheadRescaled +
@@ -448,7 +448,7 @@ namespace tl
                 break;
             case CacheDirection::Reverse:
                 audioRange =
-                    otime::TimeRange::range_from_start_end_time_inclusive(
+                    opentime::TimeRange::range_from_start_end_time_inclusive(
                         thread.currentTime - readAheadRescaled -
                             audioOffsetAhead,
                         thread.currentTime + readBehindRescaled +
@@ -458,8 +458,8 @@ namespace tl
                 break;
             }
             // std::cout << "audio range: " << audioRange << std::endl;
-            const otime::TimeRange inOutAudioRange =
-                otime::TimeRange::range_from_start_end_time_inclusive(
+            const opentime::TimeRange inOutAudioRange =
+                opentime::TimeRange::range_from_start_end_time_inclusive(
                     thread.inOutRange.start_time() - audioOffsetBehind,
                     thread.inOutRange.end_time_inclusive() + audioOffsetAhead)
                     .clamped(timeRange);
@@ -472,10 +472,10 @@ namespace tl
             auto videoCacheIt = thread.videoCache.begin();
             while (videoCacheIt != thread.videoCache.end())
             {
-                const otime::RationalTime t = videoCacheIt->first;
+                const opentime::RationalTime t = videoCacheIt->first;
                 const auto j = std::find_if(
                     videoRanges.begin(), videoRanges.end(),
-                    [t](const otime::TimeRange& value)
+                    [t](const opentime::TimeRange& value)
                     { return value.contains(t); });
                 if (j == videoRanges.end())
                 {
@@ -493,15 +493,15 @@ namespace tl
                 auto audioCacheIt = audioMutex.cache.begin();
                 while (audioCacheIt != audioMutex.cache.end())
                 {
-                    const otime::TimeRange cacheRange(
-                        otime::RationalTime(
+                    const opentime::TimeRange cacheRange(
+                        opentime::RationalTime(
                             timeRange.start_time().rescaled_to(1.0).value() +
                                 audioCacheIt->first,
                             1.0),
-                        otime::RationalTime(1.0, 1.0));
+                        opentime::RationalTime(1.0, 1.0));
                     const auto j = std::find_if(
                         audioRanges.begin(), audioRanges.end(),
-                        [cacheRange](const otime::TimeRange& value)
+                        [cacheRange](const opentime::TimeRange& value)
                         { return cacheRange.intersects(value); });
                     if (j == audioRanges.end())
                     {
@@ -535,17 +535,17 @@ namespace tl
                         {
                             const auto start = range.end_time_inclusive();
                             const auto end = range.start_time();
-                            const auto inc = otime::RationalTime(
+                            const auto inc = opentime::RationalTime(
                                 1.0, range.duration().rate());
                             reverseRequests(start, end, inc);
                         }
                         else
                         {
-                            const otime::RationalTime start =
+                            const opentime::RationalTime start =
                                 range.start_time();
-                            const otime::RationalTime end =
+                            const opentime::RationalTime end =
                                 range.end_time_inclusive();
-                            const otime::RationalTime inc = otime::RationalTime(
+                            const opentime::RationalTime inc = opentime::RationalTime(
                                 1.0, range.duration().rate());
                             forwardRequests(start, end, inc);
                         }
@@ -556,7 +556,7 @@ namespace tl
                         const auto start = range.end_time_inclusive();
                         const auto end = range.start_time();
                         const auto inc =
-                            otime::RationalTime(1.0, range.duration().rate());
+                            opentime::RationalTime(1.0, range.duration().rate());
                         reverseRequests(start, end, inc);
                         break;
                     }
@@ -645,7 +645,7 @@ namespace tl
                 const size_t videoCacheMax = getVideoCacheMax();
                 const size_t audioCacheMax = getAudioCacheMax();
 
-                std::vector<otime::RationalTime> videoCacheFrames;
+                std::vector<opentime::RationalTime> videoCacheFrames;
                 for (const auto& i : thread.videoCache)
                 {
                     videoCacheFrames.push_back(i.first);
@@ -668,10 +668,10 @@ namespace tl
                         audioCacheKeys.push_back(i.first);
                     }
                 }
-                std::vector<otime::RationalTime> audioCacheFrames;
+                std::vector<opentime::RationalTime> audioCacheFrames;
                 for (const auto& key : audioCacheKeys)
                 {
-                    audioCacheFrames.push_back(otio::RationalTime(key, 1.0));
+                    audioCacheFrames.push_back(OTIO_NS::RationalTime(key, 1.0));
                 }
                 const float audioCachePercentage = audioCacheMax > 0 ?
                                                    (audioCacheKeys.size() / static_cast<float>(audioCacheMax) * 100.F) :
@@ -681,7 +681,7 @@ namespace tl
                 auto cachedAudioRanges = toRanges(audioCacheFrames);
                 for (auto& i : cachedAudioRanges)
                 {
-                    i = otime::TimeRange(
+                    i = opentime::TimeRange(
                         i.start_time()
                             .rescaled_to(timeRange.duration().rate())
                             .floor(),
@@ -706,8 +706,8 @@ namespace tl
                 string::Format("tl::timeline::Player {0}").arg(this);
 
             // Get mutex protected values.
-            otime::RationalTime currentTime = time::invalidTime;
-            otime::TimeRange inOutRange = time::invalidTimeRange;
+            opentime::RationalTime currentTime = time::invalidTime;
+            opentime::TimeRange inOutRange = time::invalidTimeRange;
             io::Options ioOptions;
             PlayerCacheInfo cacheInfo;
             {

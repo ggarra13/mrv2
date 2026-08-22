@@ -1090,7 +1090,7 @@ namespace mrv
                 panel::annotationsPanel->notes->value("");
             }
 
-            const otime::RationalTime& currentTime = player->currentTime();
+            const OTIO_NS::RationalTime& currentTime = player->currentTime();
 
             const auto& voannotations = p.player->getVoiceAnnotations();
 

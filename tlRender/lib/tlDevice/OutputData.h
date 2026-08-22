@@ -19,7 +19,7 @@ namespace tl
         {
             std::string name;
             math::Size2i size;
-            otime::RationalTime frameRate;
+            OTIO_NS::RationalTime frameRate;
 
             bool operator==(const DisplayMode&) const;
         };

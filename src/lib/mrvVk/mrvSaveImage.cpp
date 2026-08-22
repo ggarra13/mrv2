@@ -101,8 +101,8 @@ namespace mrv
             }
 #endif
 
-            otime::TimeRange oneFrameTimeRange(
-                currentTime, otime::RationalTime(1, currentTime.rate()));
+            OTIO_NS::TimeRange oneFrameTimeRange(
+                currentTime, OTIO_NS::RationalTime(1, currentTime.rate()));
 
             auto context = ui->app->getContext();
             auto timeline = player->timeline();
@@ -550,7 +550,7 @@ namespace mrv
     }
 
     int save_multiple_frames(
-        const std::string& file, const std::vector<otime::RationalTime>& times,
+        const std::string& file, const std::vector<OTIO_NS::RationalTime>& times,
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;
@@ -596,7 +596,7 @@ namespace mrv
     }
 
     int save_multiple_annotation_frames(
-        const std::string& file, const std::vector<otime::RationalTime>& times,
+        const std::string& file, const std::vector<OTIO_NS::RationalTime>& times,
         const ViewerUI* ui, SaveOptions options)
     {
         int ret = 0;

@@ -22,7 +22,7 @@ namespace mrv
         {
         public:
             Annotation() {};
-            Annotation(const otime::RationalTime& frame, const bool allFrames);
+            Annotation(const OTIO_NS::RationalTime& frame, const bool allFrames);
             ~Annotation();
 
             //! Returns true if the current canvas will be empty.
@@ -39,7 +39,7 @@ namespace mrv
             void redo();
 
         public:
-            otime::RationalTime time = time::invalidTime;
+            OTIO_NS::RationalTime time = time::invalidTime;
             std::vector< std::shared_ptr< VoiceOver > > voices;
             std::vector< std::shared_ptr< VoiceOver > > undo_voices;
             bool allFrames = false;

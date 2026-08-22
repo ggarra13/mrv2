@@ -28,31 +28,31 @@ namespace tl
             std::weak_ptr<system::Context> context;
             std::weak_ptr<log::System> logSystem;
             std::shared_ptr<file::FileIO> fileIO;
-            otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+            OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
 
             void tick();
 
             std::shared_ptr<audio::Audio> padAudioToOneSecond(
                 const std::shared_ptr<audio::Audio>&, double seconds,
-                const otime::TimeRange&);
+                const opentime::TimeRange&);
 ;
             // Media references named by a bundle but not found inside it. They
             // are not read from their path, since a bundle is meant to be self
             // contained and quietly reading a file from somewhere else would be
             // misleading; reading one of these fails instead. Filled in while
             // the timeline is read and only read afterwards.
-            std::set<const otio::MediaReference*> unavailableMediaReferences;
+            std::set<const OTIO_NS::MediaReference*> unavailableMediaReferences;
             // Guarded by memFilesMutex once the timeline is running, since a
             // reference can also turn out to be unavailable when its byte
             // ranges are worked out on first read.
-            bool mediaUnavailable(const otio::MediaReference*);
+            bool mediaUnavailable(const OTIO_NS::MediaReference*);
 
             // Where a media reference's files live inside the bundle, worked
             // out on first use. Shared rather than copied: inside a bundle a
             // sequence reference carries a byte range per frame, and a long one
             // is not a vector to hand out by value.
             std::shared_ptr<std::vector<file::MemoryRead> > getMem(
-                const otio::MediaReference*);
+                const OTIO_NS::MediaReference*);
 
             // The bundle stays open so that a media reference's byte ranges can
             // be worked out when it is first read. Doing it for every reference
@@ -60,15 +60,15 @@ namespace tl
             // parsing it as a path for all 25,000 frames of a bundle before
             // anything could be shown.
             std::shared_ptr<ZipReader> zipReader;
-            std::set<const otio::MediaReference*> bundleMediaReferences;
-            void mapBundleMediaReferences(otio::Timeline*);
+            std::set<const OTIO_NS::MediaReference*> bundleMediaReferences;
+            void mapBundleMediaReferences(OTIO_NS::Timeline*);
 
             // Always the inner of the two locks: creating a reader holds
             // readCacheMutex and then asks getMemoryRead()/mediaUnavailable()
             // where the media lives. Nothing guarded here may reach back for
             // readCacheMutex.
             std::mutex memFilesMutex;
-            std::map<const otio::MediaReference*,
+            std::map<const OTIO_NS::MediaReference*,
                      std::shared_ptr<std::vector<file::MemoryRead> > > memFiles;
             std::shared_ptr<observer::Value<bool> > timelineChanges;
             file::Path path;
@@ -91,7 +91,7 @@ namespace tl
             template<typename T>
             std::shared_ptr<T> getCached(
                 memory::LRUCache<std::string, std::shared_ptr<T> >&,
-                const otio::MediaReference*,
+                const OTIO_NS::MediaReference*,
                 const io::Options&,
                 const std::function<std::shared_ptr<T>(
                 const std::shared_ptr<system::Context>&,
@@ -109,13 +109,13 @@ namespace tl
             // Media by resolved path, built once while the timeline is read.
             // Resolving a path means decoding a URL and parsing it, so doing it
             // per lookup made every thumbnail request walk the whole timeline.
-            std::map<std::string, otio::MediaReference*> mediaByPath;
+            std::map<std::string, OTIO_NS::MediaReference*> mediaByPath;
             //! The same references keyed by an absolute, normalized path, so
             //! that a caller which opened the timeline with a relative path
             //! still finds them. mediaByPath keeps the paths as written,
             //! which is what getMediaPaths() reports.
-            std::map<std::string, otio::MediaReference*> mediaByNormalPath;
-            otime::TimeRange timeRange = time::invalidTimeRange;
+            std::map<std::string, OTIO_NS::MediaReference*> mediaByNormalPath;
+            opentime::TimeRange timeRange = time::invalidTimeRange;
             io::Info ioInfo;
             // The clip whose media references provide the video information,
             // and the information for each of those references. Both are
@@ -123,9 +123,9 @@ namespace tl
             // so that getIOInfo() can follow the media reference key without
             // any I/O, and without touching the read cache from the main
             // thread.
-            const otio::Clip* videoInfoClip = nullptr;
+            const OTIO_NS::Clip* videoInfoClip = nullptr;
 
-            std::map<const otio::MediaReference*, io::Info>
+            std::map<const OTIO_NS::MediaReference*, io::Info>
             videoInfoByReference;
 
             // The pixels per unit for OTIO spatial coordinates, taken from the
@@ -171,7 +171,7 @@ namespace tl
                 PendingVideoRequest(PendingVideoRequest&&) = default;
 
                 uint64_t id = 0;
-                otime::RationalTime time = time::invalidTime;
+                opentime::RationalTime time = time::invalidTime;
                 io::Options options;
                 std::promise<VideoFrame> promise;
 
@@ -184,11 +184,11 @@ namespace tl
                 AudioLayerData(AudioLayerData&&) = default;
 
                 double seconds = -1.0;
-                otime::TimeRange timeRange;
-                otime::TimeRange clipTimeRange;
+                opentime::TimeRange timeRange;
+                opentime::TimeRange clipTimeRange;
                 std::future<io::AudioData> audio;
-                otio::Transition* inTransition = nullptr;
-                otio::Transition* outTransition = nullptr;
+                OTIO_NS::Transition* inTransition = nullptr;
+                OTIO_NS::Transition* outTransition = nullptr;
             };
             struct PendingAudioRequest
             {
@@ -211,7 +211,7 @@ namespace tl
             // requests.
             struct Mutex
             {
-                otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+                OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
                 bool otioTimelineChanged = false;
                 std::list<std::shared_ptr<PendingVideoRequest> > videoRequests;
                 std::list<std::shared_ptr<PendingAudioRequest> > audioRequests;
@@ -225,7 +225,7 @@ namespace tl
                 // The OTIO timeline itself is never written, so that it can be
                 // read without locking; see Timeline::setMediaReferenceKey().
                 std::string mediaReferenceKey;
-                std::map<const otio::Clip*, std::string> clipMediaReferenceKeys;
+                std::map<const OTIO_NS::Clip*, std::string> clipMediaReferenceKeys;
                 bool mediaReferenceKeysChanged = false;
                 std::mutex mutex;
             };
@@ -237,7 +237,7 @@ namespace tl
             // running is atomic for that handoff.
             struct Thread
             {
-                otio::SerializableObject::Retainer<otio::Timeline> otioTimeline;
+                OTIO_NS::SerializableObject::Retainer<OTIO_NS::Timeline> otioTimeline;
                 std::list<std::shared_ptr<PendingVideoRequest> >
                     videoRequestsInProgress;
                 std::list<std::shared_ptr<PendingAudioRequest> >
@@ -263,7 +263,7 @@ namespace tl
             // the thread-owned key state. Request thread only; the main thread
             // goes through Timeline::getMediaReference(), which takes the
             // mutex.
-            otio::MediaReference* mediaReference(const otio::Clip*) const;
+            OTIO_NS::MediaReference* mediaReference(const OTIO_NS::Clip*) const;
         };
     } // namespace timeline
 } // namespace tl

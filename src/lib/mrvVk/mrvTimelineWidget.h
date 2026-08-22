@@ -138,8 +138,8 @@ namespace mrv
 
             void init_colorspace() FL_OVERRIDE;
 
-            std::vector<const otio::Item* > getSelectedItems() const;
-            std::vector<const otio::Transition* > getSelectedTransitions() const;
+            std::vector<const OTIO_NS::Item* > getSelectedItems() const;
+            std::vector<const OTIO_NS::Transition* > getSelectedTransitions() const;
 
         protected:
             const float pixelRatio() const;
@@ -200,7 +200,7 @@ namespace mrv
 
             unsigned _changeKey(unsigned key);
 
-            otime::RationalTime _posToTime(int) noexcept;
+            OTIO_NS::RationalTime _posToTime(int) noexcept;
 
             //! Function used to send a seek to the network.
             int _seek();

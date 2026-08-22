@@ -160,8 +160,8 @@ namespace mrv
                 panel::imageInfoPanel->setTimelinePlayer(nullptr);
             ui->uiTimeline->setTimelinePlayer(nullptr);
             ui->uiTimeline->redraw();
-            otio::RationalTime start = otio::RationalTime(1, 24);
-            otio::RationalTime end = otio::RationalTime(50, 24);
+            OTIO_NS::RationalTime start = OTIO_NS::RationalTime(1, 24);
+            OTIO_NS::RationalTime end = OTIO_NS::RationalTime(50, 24);
             TimelineClass* c = ui->uiTimeWindow;
             c->uiFrame->setTime(start);
             c->uiStartFrame->setTime(start);
@@ -2143,14 +2143,14 @@ namespace mrv
 
     void playback_toggle_in_out_points_cb(Fl_Menu_*, ViewerUI* ui)
     {
-        static otime::TimeRange inOut = time::invalidTimeRange;
+        static OTIO_NS::TimeRange inOut = time::invalidTimeRange;
 
         auto player = ui->uiView->getTimelinePlayer();
         if (!player) return;
 
         TimelineClass* c = ui->uiTimeWindow;
-        const otime::TimeRange& inOutRange = player->inOutRange();
-        const otime::TimeRange& timeRange = player->timeRange();
+        const OTIO_NS::TimeRange& inOutRange = player->inOutRange();
+        const OTIO_NS::TimeRange& timeRange = player->timeRange();
         if (timeRange != inOutRange)
         {
             inOut = inOutRange;
@@ -2478,7 +2478,7 @@ namespace mrv
         if (!player)
             return;
         auto time = player->currentTime();
-        time += otime::RationalTime(10.0, 1.0).rescaled_to(time.rate());
+        time += OTIO_NS::RationalTime(10.0, 1.0).rescaled_to(time.rate());
         player->seek(time);
     }
 
@@ -2488,7 +2488,7 @@ namespace mrv
         if (!player)
             return;
         auto time = player->currentTime();
-        time -= otime::RationalTime(10.0, 1.0).rescaled_to(time.rate());
+        time -= OTIO_NS::RationalTime(10.0, 1.0).rescaled_to(time.rate());
         player->seek(time);
     }
 
@@ -2504,7 +2504,7 @@ namespace mrv
         const auto track = tracks[0];
 
         const auto item =
-            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+            OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(track->child_at_time(time));
         if (!item)
             return;
 
@@ -2517,7 +2517,7 @@ namespace mrv
         }
 
         auto rate = track->trimmed_range().end_time_exclusive().rate();
-        range = otime::TimeRange::range_from_start_end_time(
+        range = OTIO_NS::TimeRange::range_from_start_end_time(
             range.start_time().rescaled_to(rate).round(),
             range.end_time_exclusive().rescaled_to(rate).round());
         player->setInOutRange(range);
@@ -2543,7 +2543,7 @@ namespace mrv
         const auto track = tracks[0];
 
         const auto item =
-            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+            OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(track->child_at_time(time));
         if (!item)
             return;
 
@@ -2551,7 +2551,7 @@ namespace mrv
         if (index >= track->children().size())
             index = 0;
         const auto child = track->children()[index];
-        const auto next_item = otio::dynamic_retainer_cast<otio::Item>(child);
+        const auto next_item = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(child);
         if (!next_item)
             return;
         const auto range = next_item->trimmed_range_in_parent().value();
@@ -2571,7 +2571,7 @@ namespace mrv
         const auto track = tracks[0];
 
         const auto item =
-            otio::dynamic_retainer_cast<otio::Item>(track->child_at_time(time));
+            OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(track->child_at_time(time));
         if (!item)
             return;
 
@@ -2579,7 +2579,7 @@ namespace mrv
         if (index < 0)
             index = track->children().size() - 1;
         const auto child = track->children()[index];
-        const auto prev_item = otio::dynamic_retainer_cast<otio::Item>(child);
+        const auto prev_item = OTIO_NS::dynamic_retainer_cast<OTIO_NS::Item>(child);
         if (!prev_item)
             return;
         const auto range = prev_item->trimmed_range_in_parent().value();
@@ -2594,9 +2594,9 @@ namespace mrv
         if (!player)
             return;
         auto currentTime = player->currentTime().round();
-        std::vector< otime::RationalTime > times = player->getAnnotationTimes();
+        std::vector< OTIO_NS::RationalTime > times = player->getAnnotationTimes();
         std::sort(
-            times.begin(), times.end(), std::greater<otime::RationalTime>());
+            times.begin(), times.end(), std::greater<OTIO_NS::RationalTime>());
         for (const auto& time : times)
         {
             const auto& roundedTime = time.round();
@@ -2622,7 +2622,7 @@ namespace mrv
         if (!player)
             return;
         const auto& currentTime = player->currentTime().round();
-        std::vector< otime::RationalTime > times = player->getAnnotationTimes();
+        std::vector< OTIO_NS::RationalTime > times = player->getAnnotationTimes();
         std::sort(times.begin(), times.end());
         for (const auto& time : times)
         {

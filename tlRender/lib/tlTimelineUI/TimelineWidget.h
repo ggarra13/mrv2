@@ -141,7 +141,7 @@ namespace tl
             std::shared_ptr<observer::IValue<bool> > observeScrub() const;
 
             //! Observe time scrubbing.
-            std::shared_ptr<observer::IValue<otime::RationalTime> >
+            std::shared_ptr<observer::IValue<OTIO_NS::RationalTime> >
             observeTimeScrub() const;
 
             ///@}
@@ -205,8 +205,8 @@ namespace tl
             void keyPressEvent(ui::KeyEvent&) override;
             void keyReleaseEvent(ui::KeyEvent&) override;
 
-            std::vector<const otio::Item*> getSelectedItems() const;
-            std::vector<const otio::Transition*> getSelectedTransitions() const;
+            std::vector<const OTIO_NS::Item*> getSelectedItems() const;
+            std::vector<const OTIO_NS::Transition*> getSelectedTransitions() const;
             
             
         protected:

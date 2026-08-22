@@ -19,45 +19,43 @@
 
 namespace tl
 {
-    namespace otime = opentime::OPENTIME_VERSION;
-    namespace otio = opentimelineio::OPENTIMELINEIO_VERSION;
 
     //! Time
     namespace time
     {
         //! Invalid time.
-        constexpr otime::RationalTime invalidTime(-1.0, -1.0);
+        constexpr OTIO_NS::RationalTime invalidTime(-1.0, -1.0);
 
         //! Invalid time range.
-        constexpr otime::TimeRange invalidTimeRange(invalidTime, invalidTime);
+        constexpr OTIO_NS::TimeRange invalidTimeRange(invalidTime, invalidTime);
 
         //! Check whether the given time is valid. This function should be
         //! used instead of comparing a time to the "invalidTime" constant.
-        inline bool isValid(const otime::RationalTime&);
+        inline bool isValid(const OTIO_NS::RationalTime&);
 
         //! Check whether the given time range is valid. This function
         //! should be used instead of comparing a time range to the
         //! "invalidTimeRange" constant.
-        inline bool isValid(const otime::TimeRange&);
+        inline bool isValid(const OTIO_NS::TimeRange&);
 
         //! Compare two time ranges. This function compares the values
         //! exactly, unlike the "==" operator which rescales the values.
         constexpr bool
-        compareExact(const otime::TimeRange&, const otime::TimeRange&);
+        compareExact(const OTIO_NS::TimeRange&, const OTIO_NS::TimeRange&);
 
         constexpr bool compareExact(
-            const std::optional<otio::RationalTime>&,
-            const std::optional<otio::RationalTime>&);
+            const std::optional<OTIO_NS::RationalTime>&,
+            const std::optional<OTIO_NS::RationalTime>&);
 
         constexpr bool compareExact(
-            const std::optional<otio::TimeRange>&,
-            const std::optional<otio::TimeRange>&);
+            const std::optional<OTIO_NS::TimeRange>&,
+            const std::optional<OTIO_NS::TimeRange>&);
 
         //! Get the frames in a time range.
-        std::vector<otime::RationalTime> frames(const otime::TimeRange&);
+        std::vector<OTIO_NS::RationalTime> frames(const OTIO_NS::TimeRange&);
 
         //! Split a time range at into seconds.
-        std::vector<otime::TimeRange> seconds(const otime::TimeRange&);
+        std::vector<OTIO_NS::TimeRange> seconds(const OTIO_NS::TimeRange&);
 
         //! Sleep for a given time.
         void sleep(const std::chrono::microseconds&);

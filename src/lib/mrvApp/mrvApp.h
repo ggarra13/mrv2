@@ -181,11 +181,11 @@ namespace mrv
 
         io::Options _getIOOptions() const;
 
-        void _calculateCacheTimes(otime::RationalTime& startTime,
-                                  otime::RationalTime& endTime);
+        void _calculateCacheTimes(OTIO_NS::RationalTime& startTime,
+                                  OTIO_NS::RationalTime& endTime);
 
-        otime::RationalTime _cacheReadAhead() const;
-        otime::RationalTime _cacheReadBehind() const;
+        OTIO_NS::RationalTime _cacheReadAhead() const;
+        OTIO_NS::RationalTime _cacheReadBehind() const;
 
         void _filesUpdate(const std::vector<std::shared_ptr<FilesModelItem> >&);
 

@@ -42,13 +42,13 @@ namespace tl
             io::Options ioOptions;
             TIMELINEUI::InfoRequest infoRequest;
             std::shared_ptr<io::Info> ioInfo;
-            std::map<otime::RationalTime, ThumbnailRequest>
+            std::map<OTIO_NS::RationalTime, ThumbnailRequest>
                 thumbnailRequests;
         };
 
         void VideoClipItem::_init(
             const std::shared_ptr<timeline::Timeline> timeline,
-            const otio::SerializableObject::Retainer<otio::Clip>& clip,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
@@ -97,7 +97,7 @@ namespace tl
 
         std::shared_ptr<VideoClipItem> VideoClipItem::create(
             const std::shared_ptr<timeline::Timeline> timeline,
-            const otio::SerializableObject::Retainer<otio::Clip>& clip,
+            const OTIO_NS::SerializableObject::Retainer<OTIO_NS::Clip>& clip,
             double scale, const ItemOptions& options,
             const DisplayOptions& displayOptions,
             const std::shared_ptr<ItemData>& itemData,
@@ -283,15 +283,15 @@ namespace tl
                         thumbnailWidth, _displayOptions.thumbnailHeight);
                     if (math::intersects(box, clipRect))
                     {
-                        const otime::RationalTime time =
-                            otime::RationalTime(
+                        const OTIO_NS::RationalTime time =
+                            OTIO_NS::RationalTime(
                                 _timeRange.start_time().value() +
                                     (w > 1 ? (x / static_cast<double>(w - 1))
                                            : 0) *
                                         _timeRange.duration().value(),
                                 _timeRange.duration().rate())
                                 .floor();
-                        const otime::RationalTime mediaTime =
+                        const OTIO_NS::RationalTime mediaTime =
                             timeline::toVideoMediaTime(
                                 time, _timeRange, _trimmedRange,
                                 p.ioInfo->videoTime->duration().rate());

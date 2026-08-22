@@ -521,7 +521,7 @@ namespace mrv
                 return;
 
             const auto& t = player->currentTime();
-            auto time = t + otime::RationalTime(dx, t.rate());
+            auto time = t + OTIO_NS::RationalTime(dx, t.rate());
 
             // Stop at end/beginning if not looping.
             int behavior = p.ui->uiPrefs->uiPrefsScrubbingLoopMode->value();
@@ -1448,7 +1448,7 @@ namespace mrv
                         while (1)
                         {
                             currentTime -=
-                                otio::RationalTime(1, currentTime.rate());
+                                OTIO_NS::RationalTime(1, currentTime.rate());
                             const auto& videoData =
                                 timeline->getVideo(currentTime, ioOptions)
                                 .future.get();
@@ -3670,7 +3670,7 @@ namespace mrv
             }
             else
             {
-                data.time = otime::RationalTime(0.F, 24.F);
+                data.time = OTIO_NS::RationalTime(0.F, 24.F);
                 activate();
             }
 

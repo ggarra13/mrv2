@@ -112,7 +112,7 @@ namespace tl
                                             BMDTimeValue frameDuration;
                                             BMDTimeScale frameTimescale;
                                             dlDisplayMode->GetFrameRate(&frameDuration, &frameTimescale);
-                                            displayMode.frameRate = otime::RationalTime(frameDuration, frameTimescale);
+                                            displayMode.frameRate = OTIO_NS::RationalTime(frameDuration, frameTimescale);
 
                                             dlDisplayMode->Release();
 

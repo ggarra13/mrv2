@@ -44,10 +44,10 @@ namespace tl
 
             double startTime = 0.0;
             double lastTime = kNDI_MOVIE_DURATION;
-            _timeRange = otime::TimeRange(
-                otime::RationalTime(startTime, 1.0)
+            _timeRange = OTIO_NS::TimeRange(
+                OTIO_NS::RationalTime(startTime, 1.0)
                     .rescaled_to(_info.sampleRate),
-                otime::RationalTime(lastTime, 1.0)
+                OTIO_NS::RationalTime(lastTime, 1.0)
                     .rescaled_to(_info.sampleRate));
         }
 
@@ -75,18 +75,18 @@ namespace tl
             return _info;
         }
 
-        const otime::TimeRange& ReadAudio::getTimeRange() const
+        const OTIO_NS::TimeRange& ReadAudio::getTimeRange() const
         {
             return _timeRange;
         }
 
-        void ReadAudio::seek(const otime::RationalTime& time)
+        void ReadAudio::seek(const OTIO_NS::RationalTime& time)
         {
             _buffer.clear();
         }
 
         bool ReadAudio::process(
-            const otime::RationalTime& currentTime, size_t sampleCount)
+            const OTIO_NS::RationalTime& currentTime, size_t sampleCount)
         {
             bool out = true;
             const size_t bufferSampleCount = getBufferSize();
@@ -113,7 +113,7 @@ namespace tl
             _buffer.push_back(tmp);
         }
 
-        int ReadAudio::_decode(const otime::RationalTime& time)
+        int ReadAudio::_decode(const OTIO_NS::RationalTime& time)
         {
             int out = 0;
             NDIlib_audio_frame_t a;
