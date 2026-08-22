@@ -112,6 +112,12 @@ if (NOT FFmpeg_FOUND)
 	list(APPEND FFmpeg_CONFIGURE_ARGS
 	    --disable-videotoolbox
 	    --disable-audiotoolbox)
+	if (UNIX)
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--enable-vaapi
+		--enable-ffnvcodec
+		--enable-nvdec)
+	endif()
     else()
 	list(APPEND FFmpeg_CONFIGURE_ARGS
 	    --enable-videotoolbox
