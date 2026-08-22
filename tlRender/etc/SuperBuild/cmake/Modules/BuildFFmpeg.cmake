@@ -10,7 +10,7 @@ endif()
 
 if (NOT FFmpeg_FOUND)
     
-    set(FFmpeg_VERSION 8.1.2)
+    set(FFmpeg_VERSION 9.0.1)
 
     set(FFmpeg_DEPENDENCIES ZLIB ${OpenSSL_DEP})
     if(SYSTEM_PROCESSOR_LC MATCHES ".*amd64.*")
@@ -34,7 +34,7 @@ if (NOT FFmpeg_FOUND)
             ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure
             ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure.bak
 	    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	    ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure
+	    ${CMAKE_CURRENT_SOURCE_DIR}/patches/FFmpeg-patch/configure_v9.0.1
 	    ${CMAKE_CURRENT_BINARY_DIR}/FFmpeg/src/FFmpeg/configure)
     endif()
     

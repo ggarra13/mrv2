@@ -1,3 +1,8 @@
+v1.7.5
+======
+
+- Libraries: Updated FFmpeg to v9.0.1.
+
 v1.7.4
 ======
 
@@ -31,7 +36,7 @@ v1.7.4
 
 - Wayland: Fixed a race condition when pressing keys (bug: was with spacebar toggling of playback on long .otioz or .otio files).
 
-- Core: Added support for hardware video decoding of NV12 formats (ie. YUV420SP_U8 and YUV420SP_U16).  Linux HW decoding under NVidia cards is a tad problematic, thou.  On Linux, we'll have to wait until I plug FFmpeg's Vulkan support. 
+- Core: Added support for hardware video decoding of NV12 formats (ie. YUV420SP_U8, YUV420SP_U16, YUV422SP_U8 and YUV422SP_U16).  The decoding is subject to the graphic cards' capabilities, thou.
 
 - Vulkan: Optimized shader pipeline.
 - OpenGL: Optimized shader pipeline.
