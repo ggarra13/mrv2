@@ -1656,6 +1656,14 @@ msgstr ""
 "この設定がオンの場合、カラースペースが「不明」の YUV420_P8 ムービーをデコードする際にカラー精度が選択されます "
 "(多少のパフォーマンス低下を伴います)。"
 
+msgid "FFmpeg HW Accel"
+msgstr "FFmpeg カラー精度"
+
+msgid ""
+"When this setting is on, the player will try to decode the movie in the GPU "
+"if possible."
+msgstr ""
+
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/Oスレッド数"
 
@@ -1675,6 +1683,21 @@ msgid ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
 msgstr "これにより、すべての設定がデフォルト値にリセットされます。 本当に続行しますか？"
+
+msgid "Set the verbosity of the logs."
+msgstr "オーディオのミュートを設定します。"
+
+msgid "Errors"
+msgstr "エラー"
+
+msgid "Warning"
+msgstr "残り時間"
+
+msgid "Status"
+msgstr "統計"
+
+msgid "Info"
+msgstr ""
 
 msgid "Clear the messages"
 msgstr "メッセージをクリア"
@@ -2539,14 +2562,15 @@ msgstr "リモートファイル {0} はローカルに見つからず、取得�
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "リモートファイル {0} はファイル名 {1} と一致しますが、パスは一致しません。"
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "リモートファイル {0} はローカルファイル名と一致しません。"
 
-msgid "ERROR:\t"
-msgstr "エラー :\t"
-
 msgid "WARN:\t"
 msgstr "警告 :\t"
+
+msgid "ERROR:\t"
+msgstr "エラー :\t"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -2640,6 +2664,7 @@ msgstr "設定から OCIO 設定を設定しています。"
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "OCIO 環境変数から OCIO 設定を設定しています。"
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "パスマッピングが \"{0}{1}\" から読み込まれました。"
 
@@ -2649,6 +2674,7 @@ msgstr "ディレクトリの削除中にエラーが発生しました: \"{0}\"
 msgid "Cleaned directory: \"{0}\"."
 msgstr "ディレクトリをクリーンアップしました: \"{0}\"。"
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" からホットキーを読み込み中です。"
 
@@ -2661,6 +2687,7 @@ msgstr "パスマッピングが \"{0}{1}\" に保存されました。"
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "ホットキーが \"{0}{1}.prefs\" に保存されました。"
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "設定が \"{0}{1}\" に保存されました。"
 
@@ -2712,6 +2739,7 @@ msgstr "表示 '{0}' のデフォルトビューがありません。表示は�
 msgid "Setting OCIO Preset '{0}'."
 msgstr "OCIO プリセット '{0}' を設定中。"
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "プリセット '{0}' が見つかりません。"
 
@@ -3093,6 +3121,7 @@ msgstr "連続する 2つのオーディオクリップを選択してくださ�
 msgid "Could not save .otio file: {0}"
 msgstr ".otio ファイルを保存できませんでした : {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "{0} の保存中にエラーが発生しました。{1}"
 
@@ -3102,14 +3131,10 @@ msgstr "EDL ファイルが空です。保存しません。"
 msgid "Destination file is invalid."
 msgstr "出力先ファイルが無効です。"
 
-msgid ""
-".otioz files cannot be edited.  Please unzip them first and use the "
-"'content.otio' file"
-msgstr ".otioz ファイルは編集できません。まず解凍して、「content.otio」ファイルを使用してください。"
-
 msgid "Unknown media reference"
 msgstr "不明なメディア参照"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "トラック #{0} - {1}"
 
@@ -3364,6 +3389,7 @@ msgstr "フレーム {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "画像が大きすぎます。ビューポートサイズで保存します。"
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "ビューポートサイズ : {0} - X={1}, Y={2}"
 
@@ -3626,6 +3652,7 @@ msgstr "再生できません - 音声注釈が空です"
 msgid "Status is not saved"
 msgstr "ステータスは保存されていません"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "オーディオ注釈ファイル {0} が見つからないか存在しません！"
 
@@ -6965,9 +6992,6 @@ msgstr "キャッシュディレクトリ"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "WebRTC のダウンロードファイルを保存するディレクトリ。"
 
-msgid "Errors"
-msgstr "エラー"
-
 msgid "On FFmpeg Error"
 msgstr "FFmpeg エラー発生時"
 
@@ -7138,6 +7162,9 @@ msgstr "コーデック"
 
 msgid "Subtitles"
 msgstr "字幕"
+
+msgid "HW decoders"
+msgstr ""
 
 msgid "Protocols"
 msgstr "プロトコル"
@@ -7960,6 +7987,11 @@ msgstr "host_statistics64 に失敗しました"
 
 msgid "task info failed"
 msgstr "タスク情報の取得に失敗しました"
+
+#~ msgid ""
+#~ ".otioz files cannot be edited.  Please unzip them first and use the "
+#~ "'content.otio' file"
+#~ msgstr ".otioz ファイルは編集できません。まず解凍して、「content.otio」ファイルを使用してください。"
 
 #~ msgid "Start a server.  Use -port to specify a port number."
 #~ msgstr "サーバーを起動します。-port でポート番号を指定します。"

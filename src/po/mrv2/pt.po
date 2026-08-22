@@ -1659,6 +1659,16 @@ msgstr ""
 "decodificar filmes YUV420_P8 que tm o Espao de Cor como 'desconhecido', ao "
 "custo de algum desempenho."
 
+msgid "FFmpeg HW Accel"
+msgstr "FFmpeg HW Accel"
+
+msgid ""
+"When this setting is on, the player will try to decode the movie in the GPU "
+"if possible."
+msgstr ""
+"Quando esta opção está ativada, o reprodutor tentará decodificar o filme na "
+"GPU, se possível."
+
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/O linhas"
 
@@ -1682,6 +1692,21 @@ msgid ""
 msgstr ""
 "Isto ir redefinir todas as suas configuraes para o seu padro. Tem certeza de"
 " que deseja continuar?"
+
+msgid "Set the verbosity of the logs."
+msgstr "Defina o nível de detalhe dos registros."
+
+msgid "Errors"
+msgstr "Erros"
+
+msgid "Warning"
+msgstr "Aviso"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Info"
+msgstr "Informações"
 
 msgid "Clear the messages"
 msgstr "Limpar as mensagens"
@@ -2565,14 +2590,15 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "O ficheiro remoto {0} corresponde ao nome do ficheiro {1} mas no ao caminho."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "O ficheiro remoto {0} no corresponde ao nome do ficheiro local."
 
-msgid "ERROR:\t"
-msgstr "ERROR:"
-
 msgid "WARN:\t"
 msgstr "WARN:"
+
+msgid "ERROR:\t"
+msgstr "ERROR:"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -2670,6 +2696,7 @@ msgstr "Configurar a configurao OCIO a partir de preferncias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Configurao da configurao OCIO a partir da varivel de ambiente OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Os mapeamentos de caminhos foram carregados a partir de \"{0}{1}\"."
 
@@ -2679,6 +2706,7 @@ msgstr "Erro ao excluir o diretório: \"{0}\"."
 msgid "Cleaned directory: \"{0}\"."
 msgstr "Diretório limpo: \"{0}\"."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Carregando as teclas acessrias de \"{0}{1}.prefs\"."
 
@@ -2691,6 +2719,7 @@ msgstr "Os mapas dos caminhos foram salvos para \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "As teclas quentes foram salvas para \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "As preferncias foram salvas para: \"{0}{1}\"."
 
@@ -2742,6 +2771,7 @@ msgstr "Nenhuma vista padrão para exibir '{0}'. Existe exibição?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Configurao do OCIO Preset '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Predefinir \"{0}\" no foi encontrado."
 
@@ -3129,6 +3159,7 @@ msgstr "Por favor, selecione dois clipes de áudio contíguos."
 msgid "Could not save .otio file: {0}"
 msgstr "No foi possvel salvar o ficheiro.otio: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Erro ao gravar {0}. {1}"
 
@@ -3138,16 +3169,10 @@ msgstr "Ficheiro EDL vazio. No salvo."
 msgid "Destination file is invalid."
 msgstr "O ficheiro de destino no  vlido."
 
-msgid ""
-".otioz files cannot be edited.  Please unzip them first and use the "
-"'content.otio' file"
-msgstr ""
-"Os arquivos .otioz não podem ser editados. Primeiro, descompacte-os e use o "
-"arquivo 'content.otio'."
-
 msgid "Unknown media reference"
 msgstr "Referência dos meios de comunicação desconhecidos"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Pista #{0} - {1}"
 
@@ -3408,6 +3433,7 @@ msgstr "Quadro {0} - CT: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagem muito grande. Vai salvar o tamanho da vista."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamanho do visor: {0} - X={1}, Y={2}"
 
@@ -3680,6 +3706,7 @@ msgstr "Não é possível reproduzir – a anotação de áudio está vazia"
 msgid "Status is not saved"
 msgstr "O status não foi salvo"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "O arquivo de anotação de áudio {0} está ausente ou não existe!"
 
@@ -7126,9 +7153,6 @@ msgstr "Diretório de cache"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "Diretório onde os downloads do WebRTC serão armazenados."
 
-msgid "Errors"
-msgstr "Erros"
-
 msgid "On FFmpeg Error"
 msgstr "No erro do FFmpeg"
 
@@ -7306,6 +7330,9 @@ msgstr "Cdigos"
 
 msgid "Subtitles"
 msgstr "Legendas"
+
+msgid "HW decoders"
+msgstr "HW decoders"
 
 msgid "Protocols"
 msgstr "Protocolos"
@@ -8128,6 +8155,13 @@ msgstr "falhou o host_statistics64"
 
 msgid "task info failed"
 msgstr "Falhou a informao da tarefa"
+
+#~ msgid ""
+#~ ".otioz files cannot be edited.  Please unzip them first and use the "
+#~ "'content.otio' file"
+#~ msgstr ""
+#~ "Os arquivos .otioz não podem ser editados. Primeiro, descompacte-os e use o "
+#~ "arquivo 'content.otio'."
 
 #~ msgid "Start a server.  Use -port to specify a port number."
 #~ msgstr "Iniciar um servidor. Use -port para especificar um nmero de porta."

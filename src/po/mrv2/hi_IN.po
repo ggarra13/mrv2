@@ -1654,6 +1654,16 @@ msgstr ""
 "है YUV420_P8 फिल्म जिसमें रंग जगह है 'अज्ञात' के रूप में, कुछ प्रदर्शन की "
 "कीमत पर."
 
+msgid "FFmpeg HW Accel"
+msgstr "FFmpeg हार्डवेयर त्वरण"
+
+msgid ""
+"When this setting is on, the player will try to decode the movie in the GPU "
+"if possible."
+msgstr ""
+"जब यह सेटिंग चालू होती है, तो प्लेयर संभव होने पर GPU पर फ़िल्म को डिकोड "
+"करने का प्रयास करेगा।"
+
 msgid "FFmpeg I/O threads"
 msgstr "एफ़एफएमपी आई/लड़ियाँ"
 
@@ -1677,6 +1687,21 @@ msgid ""
 msgstr ""
 "यह आपकी सभी सेटिंग को डिफ़ॉल्ट रूप में रीसेट करेगा. क्या आप सुनिश्चित हैं कि"
 " आप जारी रखना चाहते हैं?"
+
+msgid "Set the verbosity of the logs."
+msgstr "लॉग के विवरण का स्तर सेट करें।"
+
+msgid "Errors"
+msgstr "त्रुटियाँ"
+
+msgid "Warning"
+msgstr "चेतावनी"
+
+msgid "Status"
+msgstr "स्थिति"
+
+msgid "Info"
+msgstr "जानकारी"
 
 msgid "Clear the messages"
 msgstr "संदेशों को साफ करें"
@@ -2558,14 +2583,15 @@ msgstr ""
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "रिमोट फ़ाइल {0} नाम {1} लेकिन पथ नहीं है."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "रिमोट फ़ाइल {0} स्थानीय फ़ाइलनाम से मेल नहीं खाता."
 
-msgid "ERROR:\t"
-msgstr "त्रुटि:"
-
 msgid "WARN:\t"
 msgstr "चेतावनी:"
+
+msgid "ERROR:\t"
+msgstr "त्रुटि:"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -2661,6 +2687,7 @@ msgstr "वरीयता से ओआईआईओ विन्यास स�
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "ओओआईओ एनवायरनमेंट वेरिएबल से ओआईओ विन्यास सेट किया जा रहा है."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "पथ \"{0}{1}\" से लोड किया गया."
 
@@ -2670,6 +2697,7 @@ msgstr "निर्देशिका हटाने में त्रुट
 msgid "Cleaned directory: \"{0}\"."
 msgstr "निर्देशिका साफ़ की गई: \"{0}\"।"
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "\"{0}{1}.prefs\" से गर्म हवा लोड किया जा रहा है।"
 
@@ -2682,6 +2710,7 @@ msgstr "पथ \"{0}{1}\" को सहेजा गया."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "निर्देशिका \"{0}{1}.prefs\" को सहेजा गया है."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "वरीयता को सहेजा गया है: \"{0}{1}\"."
 
@@ -2734,6 +2763,7 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr "ओसीआईओ '{0}' सेट किया जा रहा है."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "प्रीसेट '{0}' नहीं मिला."
 
@@ -3117,6 +3147,7 @@ msgstr "कृपया दो सटे हुए ऑडियो क्लि�
 msgid "Could not save .otio file: {0}"
 msgstr ". बीजियो फ़ाइल को सहेज नहीं सका: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "{0} सहेजने में त्रुटि {1}"
 
@@ -3126,16 +3157,10 @@ msgstr "खाली ईएल फ़ाइल. सहेजा नहीं ज
 msgid "Destination file is invalid."
 msgstr "गंतव्य फ़ाइल अवैध है."
 
-msgid ""
-".otioz files cannot be edited.  Please unzip them first and use the "
-"'content.otio' file"
-msgstr ""
-".otioz फ़ाइलों को संपादित नहीं किया जा सकता। कृपया पहले उन्हें अनज़िप करें "
-"और 'content.otio' फ़ाइल का उपयोग करें।"
-
 msgid "Unknown media reference"
 msgstr "अज्ञात मीडिया संदर्भ"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "ट्रैक 5:{0} - {1}"
 
@@ -3396,6 +3421,7 @@ msgstr "फ्रेम {0} - समयकोड: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "छवि बहुत बड़ा है. व्यूपोर्ट आकार सहेजेगा."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "दृश्य आकार: {0} - X={1}, Y={2}"
 
@@ -3672,6 +3698,7 @@ msgstr "चलाया नहीं जा सकता – ऑडियो ट
 msgid "Status is not saved"
 msgstr "स्थिति सहेजी नहीं गई है"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "ऑडियो एनोटेशन फ़ाइल {0} गायब है या मौजूद नहीं है!"
 
@@ -7074,9 +7101,6 @@ msgstr "कैश निर्देशिका"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "वह निर्देशिका जहाँ WebRTC डाउनलोड संग्रहीत किए जाएँगे।"
 
-msgid "Errors"
-msgstr "त्रुटियाँ"
-
 msgid "On FFmpeg Error"
 msgstr "FFegge त्रुटि पर"
 
@@ -7255,6 +7279,9 @@ msgstr "कोडेक्स"
 
 msgid "Subtitles"
 msgstr "सबटाइटल्स"
+
+msgid "HW decoders"
+msgstr "हार्डवेयर डिकोडर"
 
 msgid "Protocols"
 msgstr "प्रोटोकॉल"
@@ -8077,6 +8104,13 @@ msgstr "मेजबान स्पेस64 असफल (_s)"
 
 msgid "task info failed"
 msgstr "कार्य सूचना असफल"
+
+#~ msgid ""
+#~ ".otioz files cannot be edited.  Please unzip them first and use the "
+#~ "'content.otio' file"
+#~ msgstr ""
+#~ ".otioz फ़ाइलों को संपादित नहीं किया जा सकता। कृपया पहले उन्हें अनज़िप करें "
+#~ "और 'content.otio' फ़ाइल का उपयोग करें।"
 
 #~ msgid "Start a server.  Use -port to specify a port number."
 #~ msgstr ""

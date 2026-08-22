@@ -1692,6 +1692,14 @@ msgstr ""
 "películas YUV420_P8 que tienen el Espacio de Color como 'unknown', al costo "
 "de velocidad de decodificación."
 
+msgid "FFmpeg HW Accel"
+msgstr "Precisión de Color de FFmpeg"
+
+msgid ""
+"When this setting is on, the player will try to decode the movie in the GPU "
+"if possible."
+msgstr ""
+
 msgid "FFmpeg I/O threads"
 msgstr "Hilos de FFmpeg I/O"
 
@@ -1715,6 +1723,21 @@ msgid ""
 msgstr ""
 "Esto reseteará todos sus seteos a su configuración estándar.  ¿Está seguro "
 "que quiere continuar?"
+
+msgid "Set the verbosity of the logs."
+msgstr "Setea el mutismo del audio."
+
+msgid "Errors"
+msgstr "Errores"
+
+msgid "Warning"
+msgstr "Restante"
+
+msgid "Status"
+msgstr "Estad."
+
+msgid "Info"
+msgstr ""
 
 msgid "Clear the messages"
 msgstr "Borrar los mensajes"
@@ -2616,14 +2639,15 @@ msgstr ""
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Archivo remoto {0} iguala nombra base {1} pero no la carpeta."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Archivo remoto {0} no es igual al archivo local."
 
-msgid "ERROR:\t"
-msgstr "ERROR:\t"
-
 msgid "WARN:\t"
 msgstr "AVISO:\t"
+
+msgid "ERROR:\t"
+msgstr "ERROR:\t"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -2723,6 +2747,7 @@ msgstr "Seteando OCIO config desde preferencias."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Seteando OCIO config de la variable de entorno OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Mapeo de carpetas ha sido cargado de \"{0}{1}\"."
 
@@ -2732,6 +2757,7 @@ msgstr "Error al eliminar el directorio: \"{0}\"."
 msgid "Cleaned directory: \"{0}\"."
 msgstr "Directorio limpiado: \"{0}\"."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Cargué teclas de manejo desde \"{0}{1}.prefs\"."
 
@@ -2744,6 +2770,7 @@ msgstr "Mapeo de carpetas ha sido grabado en \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Teclas han sido grabadas en: \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Preferencias han sido grabadas en: \"{0}{1}\"."
 
@@ -2795,6 +2822,7 @@ msgstr "No hay vista por defecto para display '{0}'.  ¿Existe el display?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Usando preseteo OCIO '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preseteo '{0}' no encontrado"
 
@@ -3187,6 +3215,7 @@ msgstr "Por favor seleccione dos clips de audio contiguos."
 msgid "Could not save .otio file: {0}"
 msgstr "No pude grabar el archivo .otio: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error grabando {0}. {1}"
 
@@ -3196,14 +3225,10 @@ msgstr "Archivo EDL vacío.  No grabando."
 msgid "Destination file is invalid."
 msgstr "Archivo de destino es inválido."
 
-msgid ""
-".otioz files cannot be edited.  Please unzip them first and use the "
-"'content.otio' file"
-msgstr ""
-
 msgid "Unknown media reference"
 msgstr "Referencia de los medios desconocidos"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Pista #{0} - {1}"
 
@@ -3462,6 +3487,7 @@ msgstr "Cuadro {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Imagen demasiado grande.  Guardaré el tamaño de la vista."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Tamaño de la Ventana: {0} - X={1}, Y={2}"
 
@@ -3737,6 +3763,7 @@ msgstr "No puedo reproducir - la anotación de audio está vacia"
 msgid "Status is not saved"
 msgstr "Estatus no es grabado"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Anotación de audio en archivo {0} está faltante o no existe!"
 
@@ -7180,9 +7207,6 @@ msgstr "Directorio de caché"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "Directorio donde se almacenarán las descargas de WebRTC."
 
-msgid "Errors"
-msgstr "Errores"
-
 msgid "On FFmpeg Error"
 msgstr "Error en FFmpeg"
 
@@ -7358,6 +7382,9 @@ msgstr "Codecs"
 
 msgid "Subtitles"
 msgstr "Subtítulos"
+
+msgid "HW decoders"
+msgstr ""
 
 msgid "Protocols"
 msgstr "Protocolos"

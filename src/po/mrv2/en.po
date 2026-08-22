@@ -1247,7 +1247,7 @@ msgid "Networking:"
 msgstr "Networking:"
 
 msgid "Connect to a WebRTC project at <value>."
-msgstr "Connect to a WebRTC room at <value>."
+msgstr "Connect to a WebRTC project at <value>."
 
 msgid "Connect to a WebRTC room at <value>."
 msgstr "Connect to a WebRTC room at <value>."
@@ -1262,7 +1262,7 @@ msgid "Return the version and exit."
 msgstr "Return the version and exit."
 
 msgid "Return the system information and exit."
-msgstr "Return the version and exit."
+msgstr "Return the system information and exit."
 
 msgid "Cannot create window"
 msgstr "Cannot create window"
@@ -1669,6 +1669,16 @@ msgstr ""
 "When this setting is on, color accuracy is chosen when decoding YUV420_P8 "
 "movies that have Color Space as 'unknown', at the cost of some performance."
 
+msgid "FFmpeg HW Accel"
+msgstr "FFmpeg HW Accel"
+
+msgid ""
+"When this setting is on, the player will try to decode the movie in the GPU "
+"if possible."
+msgstr ""
+"When this setting is on, the player will try to decode the movie in the GPU "
+"if possible."
+
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/O threads"
 
@@ -1692,6 +1702,21 @@ msgid ""
 msgstr ""
 "This will reset all your settings to their default.  Are you sure you want "
 "to continue?"
+
+msgid "Set the verbosity of the logs."
+msgstr "Set the verbosity of the logs."
+
+msgid "Errors"
+msgstr "Errors"
+
+msgid "Warning"
+msgstr "Warning"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Info"
+msgstr "Info"
 
 msgid "Clear the messages"
 msgstr "Clear the messages"
@@ -2305,6 +2330,8 @@ msgid ""
 "Show the halves of the A and B files,\n"
 "one of them mirrored"
 msgstr ""
+"Show the halves of the A and B files,\n"
+"one of them mirrored"
 
 msgid "Wipe"
 msgstr "Wipe"
@@ -2562,14 +2589,15 @@ msgstr "Remote file {0} not found locally and no peer to fetch it from."
 msgid "Remote file {0} matches file name {1} but not path."
 msgstr "Remote file {0} matches file name {1} but not path."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Remote file {0} does not match local filename."
 
-msgid "ERROR:\t"
-msgstr "ERROR:\t"
-
 msgid "WARN:\t"
 msgstr "WARN:\t"
+
+msgid "ERROR:\t"
+msgstr "ERROR:\t"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -2667,6 +2695,7 @@ msgstr "Setting OCIO config from preferences."
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Setting OCIO config from OCIO environment variable."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Path mappings have been loaded from \"{0}{1}\"."
 
@@ -2676,6 +2705,7 @@ msgstr "Error deleting directory: \"{0}\"."
 msgid "Cleaned directory: \"{0}\"."
 msgstr "Cleaned directory: \"{0}\"."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Loading hotkeys from \"{0}{1}.prefs\"."
 
@@ -2688,6 +2718,7 @@ msgstr "Path mappings have been saved to \"{0}{1}\"."
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys have been saved to \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Preferences have been saved to: \"{0}{1}\"."
 
@@ -2739,6 +2770,7 @@ msgstr "No default view for display '{0}'.  Does display exist?"
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Setting OCIO Preset '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Preset '{0}' not found."
 
@@ -3122,6 +3154,7 @@ msgstr "Please select two contiguous audio clips."
 msgid "Could not save .otio file: {0}"
 msgstr "Could not save .otio file: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Error saving {0}. {1}"
 
@@ -3131,14 +3164,10 @@ msgstr "Empty EDL file.  Not saving."
 msgid "Destination file is invalid."
 msgstr "Destination file is invalid."
 
-msgid ""
-".otioz files cannot be edited.  Please unzip them first and use the "
-"'content.otio' file"
-msgstr ""
-
 msgid "Unknown media reference"
 msgstr "Unknown media reference"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Track #{0} - {1}"
 
@@ -3398,6 +3427,7 @@ msgstr "Frame {0} - TC: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Image too big.  Will save the viewport size."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Viewport Size: {0} - X={1}, Y={2}"
 
@@ -3668,6 +3698,7 @@ msgstr "Cannot play - audio annotation is empty"
 msgid "Status is not saved"
 msgstr "Status is not saved"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Audio annotation file {0} is missing or not exists!"
 
@@ -6529,28 +6560,28 @@ msgid "Thumbnails"
 msgstr "Thumbnails"
 
 msgid "Files Panel"
-msgstr "Toggle Files Panel"
+msgstr "Files Panel"
 
 msgid "How to display timeline thumbnails in Files Panel."
-msgstr "How to display timeline thumbnails in panels."
+msgstr "How to display timeline thumbnails in Files Panel."
 
 msgid "Compare Panel"
-msgstr "Compare None"
+msgstr "Compare Panel"
 
 msgid "How to display timeline thumbnails in Compare Panel."
-msgstr "How to display timeline thumbnails in panels."
+msgstr "How to display timeline thumbnails in Compare Panel."
 
 msgid "Playlist Panel"
-msgstr "Toggle Playlist Panel"
+msgstr "Playlist Panel"
 
 msgid "How to display timeline thumbnails in Playlist Panel."
-msgstr "How to display timeline thumbnails in panels."
+msgstr "How to display timeline thumbnails in Playlist Panel."
 
 msgid "Stereo Panel"
-msgstr "Stereo 3D"
+msgstr "Stereo Panel"
 
 msgid "How to display timeline thumbnails in Stereo Panel."
-msgstr "How to display timeline thumbnails in panels."
+msgstr "How to display timeline thumbnails in Stereo Panel."
 
 msgid "Edit Viewport"
 msgstr "Edit Viewport"
@@ -7092,9 +7123,6 @@ msgstr "Cache Directory"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "Directory where WebRTC downloads will reside."
 
-msgid "Errors"
-msgstr "Errors"
-
 msgid "On FFmpeg Error"
 msgstr "On FFmpeg Error"
 
@@ -7270,6 +7298,9 @@ msgstr "Codecs"
 
 msgid "Subtitles"
 msgstr "Subtitles"
+
+msgid "HW decoders"
+msgstr "HW decoders"
 
 msgid "Protocols"
 msgstr "Protocols"

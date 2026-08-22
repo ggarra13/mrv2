@@ -1676,6 +1676,16 @@ msgstr ""
 "фильмов YUV420_P8, в которых цветное пространство является \"неизвестным\" "
 "за счет некоторых результатов."
 
+msgid "FFmpeg HW Accel"
+msgstr "FFmpeg HW Accel"
+
+msgid ""
+"When this setting is on, the player will try to decode the movie in the GPU "
+"if possible."
+msgstr ""
+"Если этот параметр включен, проигрыватель попытается декодировать фильм на "
+"GPU, если это возможно."
+
 msgid "FFmpeg I/O threads"
 msgstr "FFmpeg I/О нити"
 
@@ -1699,6 +1709,21 @@ msgid ""
 msgstr ""
 "Это перезагрузит все ваши настройки к их по умолчанию. Вы уверены, что "
 "хотите продолжить?"
+
+msgid "Set the verbosity of the logs."
+msgstr "Установите уровень подробности журналов."
+
+msgid "Errors"
+msgstr "Ошибки"
+
+msgid "Warning"
+msgstr "Предупреждение"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Info"
+msgstr "Информация"
 
 msgid "Clear the messages"
 msgstr "Очистить сообщения"
@@ -2587,14 +2612,15 @@ msgid "Remote file {0} matches file name {1} but not path."
 msgstr ""
 "Дистанционный файл {0} совпадает с именем файла {1}, но не с дорожкой."
 
+#. ++-format
 msgid "Remote file {0} does not match local filename."
 msgstr "Удалённый файл {0} не совпадает с местным именем файла."
 
-msgid "ERROR:\t"
-msgstr "ТЕРРОРИЗМ:"
-
 msgid "WARN:\t"
 msgstr "Уорн:"
+
+msgid "ERROR:\t"
+msgstr "ТЕРРОРИЗМ:"
 
 msgid ""
 "Regular expression created from {0}.  It is:\n"
@@ -2694,6 +2720,7 @@ msgstr "Сделать орио-конфигурацию из предпочте
 msgid "Setting OCIO config from OCIO environment variable."
 msgstr "Запуск OCIO Conig из переменной окружающей среды OCIO."
 
+#. ++-format
 msgid "Path mappings have been loaded from \"{0}{1}\"."
 msgstr "Картирование путей было загружено с \" {0} {1}\"."
 
@@ -2703,6 +2730,7 @@ msgstr "Ошибка при удалении каталога: «{0}»."
 msgid "Cleaned directory: \"{0}\"."
 msgstr "Каталог очищен: «{0}»."
 
+#. ++-format
 msgid "Loading hotkeys from \"{0}{1}.prefs\"."
 msgstr "Загрузка хот-дога из \"{0}{1}.prefs\"."
 
@@ -2715,6 +2743,7 @@ msgstr "Картирование путей было сохранено до \" 
 msgid "Hotkeys have been saved to \"{0}{1}.prefs\"."
 msgstr "Hotkeys были сохранены на \"{0}{1}.prefs\"."
 
+#. ++-format
 msgid "Preferences have been saved to: \"{0}{1}\"."
 msgstr "Преференции были сохранены следующим образом: \"{0}{1}\"."
 
@@ -2767,6 +2796,7 @@ msgstr ""
 msgid "Setting OCIO Preset '{0}'."
 msgstr "Установка OCIO Preset '{0}'."
 
+#. ++-format
 msgid "Preset '{0}' not found."
 msgstr "Предположить '{0}' не найдено."
 
@@ -3155,6 +3185,7 @@ msgstr "Пожалуйста, выберите два смежных аудио�
 msgid "Could not save .otio file: {0}"
 msgstr "Невозможно сохранить файл.otio: {0}"
 
+#. ++-format
 msgid "Error saving {0}. {1}"
 msgstr "Ошибка сохранения {0}. {1}"
 
@@ -3164,16 +3195,10 @@ msgstr "Пустой файл EDL, не сохранённый."
 msgid "Destination file is invalid."
 msgstr "Файл назначения недействителен."
 
-msgid ""
-".otioz files cannot be edited.  Please unzip them first and use the "
-"'content.otio' file"
-msgstr ""
-"Файлы .otioz нельзя редактировать. Сначала распакуйте их и используйте файл "
-"«content.otio»."
-
 msgid "Unknown media reference"
 msgstr "Неизвестная ссылка на средства массовой информации"
 
+#. ++-format
 msgid "Track #{0} - {1}"
 msgstr "Дорожка # {0} - {1}"
 
@@ -3432,6 +3457,7 @@ msgstr "Рамка {0} - ТС: {1} - S: {2}"
 msgid "Image too big.  Will save the viewport size."
 msgstr "Слишком большое изображение, сохранит размер смотрового портала."
 
+#. ++-format
 msgid "Viewport Size: {0} - X={1}, Y={2}"
 msgstr "Размер просмотра: {0} - X= {1}, Y= {2}"
 
@@ -3699,6 +3725,7 @@ msgstr "Воспроизведение невозможно – аудио-ан�
 msgid "Status is not saved"
 msgstr "Статус не сохранён"
 
+#. ++-format
 msgid "Audio annotation file {0} is missing or not exists!"
 msgstr "Файл аудиоаннотации {0} отсутствует или не существует!"
 
@@ -7137,9 +7164,6 @@ msgstr "Каталог кэша"
 msgid "Directory where WebRTC downloads will reside."
 msgstr "Каталог, в котором будут храниться загрузки WebRTC."
 
-msgid "Errors"
-msgstr "Ошибки"
-
 msgid "On FFmpeg Error"
 msgstr "Ошибка FFmpeg"
 
@@ -7317,6 +7341,9 @@ msgstr "Коды"
 
 msgid "Subtitles"
 msgstr "Субтитры"
+
+msgid "HW decoders"
+msgstr "Аппаратные декодеры"
 
 msgid "Protocols"
 msgstr "Протоколы"
@@ -8140,6 +8167,13 @@ msgstr "shop_statistics64 не сработал"
 
 msgid "task info failed"
 msgstr "Ошибка информации о задаче"
+
+#~ msgid ""
+#~ ".otioz files cannot be edited.  Please unzip them first and use the "
+#~ "'content.otio' file"
+#~ msgstr ""
+#~ "Файлы .otioz нельзя редактировать. Сначала распакуйте их и используйте файл "
+#~ "«content.otio»."
 
 #~ msgid "Start a server.  Use -port to specify a port number."
 #~ msgstr "Запуск сервера. Используйте порт для указания номера порта."
