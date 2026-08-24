@@ -54,7 +54,7 @@ if not lang in LANGUAGES:
 # Define your variables
 original_po = f'src/po/mrv2/{lang}.po'
 new_po = f'src/po/mrv2/{lang}_new.po'
-diff_po = f'src/po/mrv2/{lang}_diff.txt'
+diff_po = f'src/po/mrv2/{lang}_missing.po'
 
 def create_diff_po(original_po_path, new_po_path, diff_po_path):
     if not os.path.exists(original_po_path):
