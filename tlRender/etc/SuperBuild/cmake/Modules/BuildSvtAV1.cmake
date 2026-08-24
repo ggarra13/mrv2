@@ -9,7 +9,7 @@ if (NOT SvtAV1_FOUND AND NOT FFmpeg_FOUND)
     include(ExternalProject)
 
     set(SvtAV1_GIT_REPOSITORY "https://gitlab.com/AOMediaCodec/SVT-AV1.git")
-    set(SvtAV1_GIT_TAG "v4.0.1")
+    set(SvtAV1_GIT_TAG "v4.2.0")  # was 4.0.1 for FFmpeg n8.1.2
 
     # This tries to use NASM or GAS for compilation
     set(SvtAV1_ARGS
@@ -28,11 +28,11 @@ if (NOT SvtAV1_FOUND AND NOT FFmpeg_FOUND)
 		list(APPEND SvtAV1_DEPENDENCIES ${NASM_DEP})
 		if (EXISTS "${CMAKE_INSTALL_PREFIX}/bin/nasm")
 		    list(APPEND SvtAV1_ARGS -DCMAKE_ASM_NASM_COMPILER=${CMAKE_INSTALL_PREFIX}/bin/nasm)
-		else()
-		    find_program(NASM_EXECUTABLE NAMES nasm.exe nasm)
-		    list(APPEND SvtAV1_ARGS
-			-DCMAKE_ASM_NASM_COMPILER=${NASM_EXECUTABLE})
 		endif()
+	    else()
+		find_program(NASM_EXECUTABLE NAMES nasm.exe nasm)
+		list(APPEND SvtAV1_ARGS
+		    -DCMAKE_ASM_NASM_COMPILER=${NASM_EXECUTABLE})
 	    endif()
 	endif()
     endif()
