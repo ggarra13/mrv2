@@ -1,6 +1,7 @@
 v1.7.5
 ======
 
+- Libraries: Updated Svt-AV1 to v4.2.0.
 - Libraries: Updated FFmpeg to v9.0.1.
 
 v1.7.4
