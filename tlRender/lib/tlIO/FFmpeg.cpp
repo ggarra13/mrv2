@@ -99,7 +99,7 @@ namespace tl
                         av_q2d(data->display_primaries[1][0]);
                     hdr.primaries[image::HDRPrimaries::Green].y =
                         av_q2d(data->display_primaries[1][1]);
-                    
+
                     hdr.primaries[image::HDRPrimaries::Blue].x =
                         av_q2d(data->display_primaries[2][0]);
                     hdr.primaries[image::HDRPrimaries::Blue].y =
@@ -111,7 +111,7 @@ namespace tl
                         av_q2d(data->white_point[1]);
                 }
             }
-                
+
             raw = get_stream_side_data(st, AV_PKT_DATA_CONTENT_LIGHT_LEVEL);
             if (raw)
             {
@@ -120,7 +120,7 @@ namespace tl
                 hdr.maxCLL = data->MaxCLL;
                 hdr.maxFALL = data->MaxFALL;
             }
-            
+
             raw = get_stream_side_data(st, AV_PKT_DATA_DYNAMIC_HDR10_PLUS);
             if (raw)
             {
@@ -146,7 +146,7 @@ namespace tl
                     }
 
                     histogramMax *= 10000.F;
-                    
+
                     if (!hdr.sceneMax[0])
                         hdr.sceneMax[0] = histogramMax;
                     if (!hdr.sceneMax[1])
@@ -214,7 +214,7 @@ namespace tl
             }
 #endif
         }
-        
+
         float dolby_rescale(float x)
         {
             static const float PQ_M1 = 2610./4096 * 1./4,
@@ -232,7 +232,7 @@ namespace tl
             x /= 203.F;
             return x;
         }
-        
+
         bool
         toHDRData(AVFrame* frame, image::HDRData& hdr)
         {
@@ -253,7 +253,7 @@ namespace tl
                         math::FloatRange(min_luma, max_luma);
                 }
             }
-        
+
         raw = get_side_data_raw(frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
         if (raw)
         {
@@ -275,9 +275,9 @@ namespace tl
                 hdr.sceneMax[2] = 10000.F * av_q2d(p->maxscl[2]);
                 hdr.sceneAvg = 10000.F * av_q2d(p->average_maxrgb);
 
-                
+
                 float histogramMax = 0.F;
-                
+
                 for (int i = 0;
                      i < p->num_distribution_maxrgb_percentiles; i++)
                 {
@@ -501,7 +501,7 @@ namespace tl
                  {".webm", io::FileType::Movie},
                  {".webp", io::FileType::Movie},
                  {".wmv", io::FileType::Movie},
-                 
+
                  // Audio Formats
                  {".aiff", io::FileType::Audio},
                  {".mka", io::FileType::Audio},
@@ -611,17 +611,27 @@ namespace tl
                 if (avc)
                 {
                     format = "(";
-                    format += avc->item_name(avcl);
+                    // std::string item_name;
+                    // if (!avcl || !avc->item_name(avcl))
+                    // {
+                    //     format += "Unknown";
+                    // }
+                    // else
+                    // {
+                    //     format += avc->item_name(avcl);
+                    // }
                     format += ") ";
                 }
                 format += fmt;
             }
+            return;
 
             if (level != AV_LOG_VERBOSE)
             {
                 if (auto logSystem = _logSystemWeak.lock())
                 {
                     char buf[string::cBufferSize];
+                    buf[string::cBufferSize - 1] = 0;
                     vsnprintf(buf, string::cBufferSize, format.c_str(), vl);
 
                     const std::string& message =

@@ -3,6 +3,8 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
+// #define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+
 #include <sstream>
 
 #include <tlIO/FFmpegReadPrivate.h>
@@ -355,7 +357,8 @@ namespace tl
 
                 // If we are reading VPX, use libvpx-vp9 external lib if
                 // available so we can read an alpha channel.
-                if (avVideoCodecParameters->codec_id == AV_CODEC_ID_VP9)
+                if (!_options.hwAccel &&
+                    avVideoCodecParameters->codec_id == AV_CODEC_ID_VP9)
                 {
                     auto avLibVpxCodec =
                         avcodec_find_decoder_by_name("libvpx-vp9");
@@ -1151,9 +1154,9 @@ namespace tl
                 {
                     if (name != _options.hwDriver)
                     {
-                        std::string msg = string::Format("HW Driver {0} "
-                                                         " does not match "
-                                                         " {1}.")
+                        std::string msg = string::Format("HW Driver '{0}' "
+                                                         "does not match "
+                                                         "'{1}'.")
                                           .arg(name)
                                           .arg(_options.hwDriver);
                         LOG_STATUS(msg);
@@ -1204,6 +1207,8 @@ namespace tl
                 _avCodecContext[_avStream]->hw_device_ctx = av_buffer_ref(_hwDeviceContext);
                 _avCodecContext[_avStream]->opaque = this;
                 _avCodecContext[_avStream]->get_format = _getHwFormat;
+
+
                 std::string msg = string::Format("Hardware decoding enabled ({0}) for the codec \"{1}\"").
                                   arg(av_hwdevice_get_type_name(type)).
                                   arg(codec->name ? codec->name : "?");
@@ -1453,7 +1458,8 @@ namespace tl
                     av_frame_unref(_swFrame);
                     if (av_hwframe_transfer_data(_swFrame, _avFrame, 0) < 0)
                     {
-                        std::string msg = string::Format("Cannot download a hardware frame; skipping: \"{0}\"").
+                        std::string msg =
+                            string::Format("Cannot download a hardware frame; skipping: \"{0}\"").
                                           arg(_fileName);
                         LOG_WARNING(msg);
                         continue;
@@ -1574,37 +1580,21 @@ namespace tl
             const std::size_t h = _info.size.h;
             uint8_t* data;
 
-            if (_hwAccel && avFrame->format == _avOutputPixelFormat)
+            if (_hwAccel &&
+                (avFrame->format == _avOutputPixelFormat))
             {
-                image = image::Image::create(_info);
-                data = image->getData();
-
-                // Native semi-planar copy (NV12/P010/NV16/P210): luma plane, then the
-                // interleaved chroma plane, straight into the tlRender image.
-                const bool is16Bit = (_info.pixelType == image::PixelType::YUV_420SP_U16 ||
-                                      _info.pixelType == image::PixelType::YUV_422SP_U16);
-                const std::size_t bytes = is16Bit ? 2 : 1;
-
-                const uint8_t* const dataY = avFrame->data[0];
-                const uint8_t* const dataUV = avFrame->data[1];
-                const int linesizeY = avFrame->linesize[0];
-                const int linesizeUV = avFrame->linesize[1];
-
-                for (std::size_t i = 0; i < h; ++i)
-                {
-                    std::memcpy(data + w * bytes * i, dataY + linesizeY * i, w * bytes);
-                }
-
-                uint8_t* const dataOutUV = data + w * h * bytes;
-
-                const bool is422 = (_info.pixelType == image::PixelType::YUV_422SP_U8 ||
-                                    _info.pixelType == image::PixelType::YUV_422SP_U16);
-                const std::size_t uvHeight = is422 ? h : (h / 2);
-
-                for (std::size_t i = 0; i < uvHeight; ++i)
-                {
-                    std::memcpy(dataOutUV + w * bytes * i, dataUV + linesizeUV * i, w * bytes);
-                }
+                const uint8_t* planes[3] = {
+                    avFrame->data[0],
+                    avFrame->data[1],
+                    avFrame->data[2]
+                };
+                int linesize[3] = {
+                    avFrame->linesize[0],
+                    avFrame->linesize[1],
+                    avFrame->linesize[2]
+                };
+                image = image::Image::create(_info, avFrame,
+                                             planes, linesize);
                 return;
             }
 
@@ -1723,9 +1713,6 @@ namespace tl
             {
                 throw std::runtime_error(string::Format("Cannot initialize sws context: \"{0}\"").arg(_fileName));
             }
-
-            if (_hwAccel)
-                return;
 
             const auto params = _avCodecParameters[_avStream];
 

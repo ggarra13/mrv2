@@ -753,10 +753,22 @@ namespace tl
             {
                 if (2 == textures.size())
                 {
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    textures[1]->copy(image->getData() + (w * h), textures[1]->getInfo());
+                    if (image->getPlaneCount() == 1)
+                    {
+                        const std::size_t w = info.size.w;
+                        const std::size_t h = info.size.h;
+                        textures[0]->copy(image->getData(), textures[0]->getInfo());
+                        textures[1]->copy(image->getData() + (w * h), textures[1]->getInfo());
+                    }
+                    else
+                    {
+                        textures[0]->copy(image->getPlaneData(0),
+                                          textures[0]->getInfo(),
+                                          image->getLineSize(0));
+                        textures[1]->copy(image->getPlaneData(1),
+                                          textures[1]->getInfo(),
+                                          image->getLineSize(1));
+                    }
                 }
                 break;
             }
@@ -764,10 +776,22 @@ namespace tl
             {
                 if (2 == textures.size())
                 {
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    textures[1]->copy(image->getData() + (w * h) * 2, textures[1]->getInfo());
+                    if (image->getPlaneCount() == 1)
+                    {
+                        const std::size_t w = info.size.w;
+                        const std::size_t h = info.size.h;
+                        textures[0]->copy(image->getData(), textures[0]->getInfo());
+                        textures[1]->copy(image->getData() + (w * h) * 2, textures[1]->getInfo());
+                    }
+                    else
+                    {
+                        textures[0]->copy(image->getPlaneData(0),
+                                          textures[0]->getInfo(),
+                                          image->getLineSize(0));
+                        textures[1]->copy(image->getPlaneData(1),
+                                          textures[1]->getInfo(),
+                                          image->getLineSize(1));
+                    }
                 }
                 break;
             }
@@ -775,16 +799,31 @@ namespace tl
             {
                 if (3 == textures.size())
                 {
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    const std::size_t w2 = w / 2;
-                    textures[1]->copy(
-                        image->getData() + (w * h),
-                        textures[1]->getInfo());
-                    textures[2]->copy(
-                        image->getData() + (w * h) + (w2 * h) * 2,
-                        textures[2]->getInfo());
+                    if (image->getPlaneCount() == 1)
+                    {
+                        textures[0]->copy(image->getData(), textures[0]->getInfo());
+                        const std::size_t w = info.size.w;
+                        const std::size_t h = info.size.h;
+                        const std::size_t w2 = w / 2;
+                        textures[1]->copy(
+                            image->getData() + (w * h),
+                            textures[1]->getInfo());
+                        textures[2]->copy(
+                            image->getData() + (w * h) + (w2 * h) * 2,
+                            textures[2]->getInfo());
+                    }
+                    else
+                    {
+                        textures[0]->copy(image->getPlaneData(0),
+                                          textures[0]->getInfo(),
+                                          image->getLineSize(0));
+                        textures[1]->copy(image->getPlaneData(1),
+                                          textures[1]->getInfo(),
+                                          image->getLineSize(1));
+                        textures[2]->copy(image->getPlaneData(2),
+                                          textures[2]->getInfo(),
+                                          image->getLineSize(2));
+                    }
                 }
                 break;
             }
@@ -792,16 +831,31 @@ namespace tl
             {
                 if (3 == textures.size())
                 {
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    const std::size_t w2 = w / 2;
-                    textures[1]->copy(
-                        image->getData() + (w * h) * 2,
-                        textures[1]->getInfo());
-                    textures[2]->copy(
-                        image->getData() + (w * h) * 2 + (w2 * h) * 2,
-                        textures[2]->getInfo());
+                    if (image->getPlaneCount() == 1)
+                    {
+                        textures[0]->copy(image->getData(), textures[0]->getInfo());
+                        const std::size_t w = info.size.w;
+                        const std::size_t h = info.size.h;
+                        const std::size_t w2 = w / 2;
+                        textures[1]->copy(
+                            image->getData() + (w * h) * 2,
+                            textures[1]->getInfo());
+                        textures[2]->copy(
+                            image->getData() + (w * h) * 2 + (w2 * h) * 2,
+                            textures[2]->getInfo());
+                    }
+                    else
+                    {
+                        textures[0]->copy(image->getPlaneData(0),
+                                          textures[0]->getInfo(),
+                                          image->getLineSize(0));
+                        textures[1]->copy(image->getPlaneData(1),
+                                          textures[1]->getInfo(),
+                                          image->getLineSize(1));
+                        textures[2]->copy(image->getPlaneData(2),
+                                          textures[2]->getInfo(),
+                                          image->getLineSize(2));
+                    }
                 }
                 break;
             }

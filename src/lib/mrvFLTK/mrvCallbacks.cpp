@@ -3486,6 +3486,11 @@ namespace mrv
 
         auto newIndex = model->observeAIndex()->get();
         model->setA(newIndex);
+
+        if (item->playback != timeline::Playback::Stop)
+        {
+            App::app->startPlayback();
+        }
     }
 
     void set_stereo_cb(Fl_Menu_* m, void* d)

@@ -454,12 +454,10 @@ namespace mrv
 
             int idx = 1;
             std::vector<std::string> hw_decoders = ffmpeg_hardware_decoders();
-            std::cerr << "hw_decoders=" << hw_decoders.size() << std::endl;
             for (auto decoder : hw_decoders)
             {
                 if (decoder == selected)
                     selection = idx;
-                std::cerr << decoder << std::endl;
                 pm->add(decoder.c_str());
                 ++idx;
             }
