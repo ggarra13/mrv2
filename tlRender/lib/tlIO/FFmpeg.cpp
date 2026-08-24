@@ -611,20 +611,18 @@ namespace tl
                 if (avc)
                 {
                     format = "(";
-                    // std::string item_name;
-                    // if (!avcl || !avc->item_name(avcl))
-                    // {
-                    //     format += "Unknown";
-                    // }
-                    // else
-                    // {
-                    //     format += avc->item_name(avcl);
-                    // }
+                    if (!avcl || !avc || !avc->item_name(avcl))
+                    {
+                        format += "Unknown";
+                    }
+                    else
+                    {
+                        format += avc->item_name(avcl);
+                    }
                     format += ") ";
                 }
                 format += fmt;
             }
-            return;
 
             if (level != AV_LOG_VERBOSE)
             {
