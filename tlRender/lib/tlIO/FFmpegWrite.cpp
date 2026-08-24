@@ -1331,7 +1331,7 @@ namespace tl
                 if (!avCodec)
                 {
                     throw std::runtime_error(
-                        string::Format("{0}: Cannot find encoder")
+                        string::Format("{0}: Cannot find video encoder")
                             .arg(p.fileName));
                 }
                 const std::string codecName = avCodec->name;
@@ -1341,7 +1341,7 @@ namespace tl
                 if (!p.avCodecContext)
                 {
                     throw std::runtime_error(
-                        string::Format("{0}: Cannot allocate context")
+                        string::Format("{0}: Cannot allocate video context")
                             .arg(p.fileName));
                 }
                 p.avVideoStream =
@@ -1349,7 +1349,7 @@ namespace tl
                 if (!p.avVideoStream)
                 {
                     throw std::runtime_error(
-                        string::Format("{0}: Cannot allocate stream")
+                        string::Format("{0}: Cannot allocate video stream")
                             .arg(p.fileName));
                 }
                 p.avVideoStream->id = p.avFormatContext->nb_streams - 1;
@@ -1643,7 +1643,7 @@ namespace tl
                 if (!p.avFrame)
                 {
                     throw std::runtime_error(
-                        string::Format("{0}: Cannot allocate frame")
+                        string::Format("{0}: Cannot allocate main video frame")
                             .arg(p.fileName));
                 }
                 p.avFrame->format = p.avVideoStream->codecpar->format;
@@ -1662,7 +1662,7 @@ namespace tl
                 if (!p.avFrame2)
                 {
                     throw std::runtime_error(
-                        string::Format("{0}: Cannot allocate frame")
+                        string::Format("{0}: Cannot allocate aux. video frame")
                             .arg(p.fileName));
                 }
                 switch (videoInfo.pixelType)

@@ -291,15 +291,13 @@ elseif(WIN32)
 	    DESTINATION bin/Lib
 	    COMPONENT python_tk )
     endif()
-        
+    
     # For Python, Poco, USD, FLTK, NDI, MSVC runtimes and FFmpeg
     file(GLOB MRV2_DLLS "${CMAKE_INSTALL_PREFIX}/bin/*.dll"  )
 
     install(FILES ${MRV2_DLLS}
 	DESTINATION bin/
 	COMPONENT applications )
-    
-	    
 endif()
 
 
