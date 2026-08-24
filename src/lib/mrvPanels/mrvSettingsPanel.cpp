@@ -17,10 +17,12 @@
 
 #include "mrvIcons/Settings.h"
 
+#include "mrvWidgets/mrvCollapsibleGroup.h"
 #include "mrvWidgets/mrvFunctional.h"
 #include "mrvWidgets/mrvHorSlider.h"
+#include "mrvWidgets/mrvPopupMenu.h"
 #include "mrvWidgets/mrvSpinner.h"
-#include "mrvWidgets/mrvCollapsibleGroup.h"
+#include "mrvWidgets/mrvVersion.h"
 
 #include "mrvPanels/mrvPanelsCallbacks.h"
 #include "mrvPanels/mrvSettingsPanel.h"
@@ -268,7 +270,7 @@ namespace mrv
                 cg->close();
 
             cg =
-                new CollapsibleGroup(g->x(), 210, g->w(), 20, _("Performance"));
+                new CollapsibleGroup(g->x(), 210, g->w(), 22 * 8, _("Performance"));
             cg->spacing(2);
             b = cg->button();
             b->labelsize(14);
@@ -295,7 +297,7 @@ namespace mrv
 
             cg->begin();
 
-            bg = new Fl_Group(g->x(), 230, g->w(), 22 * 7);
+            bg = new Fl_Group(g->x(), 230, g->w(), 22 * 8);
             bg->box(FL_NO_BOX);
             bg->begin();
 
@@ -426,7 +428,7 @@ namespace mrv
                 });
 
             cV = new Widget< Fl_Check_Button >(
-                g->x() + 90, 420, g->w(), 20, _("FFmpeg HW Accel"));
+                g->x() + 90, 440, g->w(), 20, _("FFmpeg HW Accel"));
             c = cV;
             c->labelsize(12);
             c->value(
@@ -440,12 +442,52 @@ namespace mrv
                     refresh_movie_cb(nullptr, p.ui);
                 });
 
-            bg = new Fl_Group(g->x(), 440, g->w(), 30);
+            PopupMenu* pm;
+            auto pV = new Widget< PopupMenu >(
+                g->x() + 90, 480, g->w(), 20, _("FFmpeg HW Driver"));
+            pm = pV;
+            pm->add(_("Default HW Driver"));
+
+            int selection = 0;
+
+            std::string selected = settings->getValue<std::string>("Performance/FFmpegHWDriver");
+
+            int idx = 1;
+            std::vector<std::string> hw_decoders = ffmpeg_hardware_decoders();
+            std::cerr << "hw_decoders=" << hw_decoders.size() << std::endl;
+            for (auto decoder : hw_decoders)
+            {
+                if (decoder == selected)
+                    selection = idx;
+                std::cerr << decoder << std::endl;
+                pm->add(decoder.c_str());
+                ++idx;
+            }
+            pm->labelsize(12);
+            pm->value(selection);
+            pm->tooltip(_("Select what driver to use for your GPU."));
+            pV->callback(
+                [=](auto w)
+                {
+                    Fl_Menu_Item* item = const_cast< Fl_Menu_Item* >(w->mvalue());
+                    if (!item || !item->label())
+                        return;
+
+                    std::string label = item->label();
+                    if (label == _("Default HW Driver"))
+                    {
+                        label = "";
+                    }
+                    settings->setValue("Performance/FFmpegHWDriver", label);
+                    refresh_movie_cb(nullptr, p.ui);
+                });
+
+            bg = new Fl_Group(g->x(), 480, g->w(), 30);
             bg->box(FL_NO_BOX);
             bg->begin();
 
             spW = new Widget<Spinner>(
-                g->x() + 160, 440, g->w() - 160, 20, _("FFmpeg I/O threads"));
+                g->x() + 160, 520, g->w() - 160, 20, _("FFmpeg I/O threads"));
             sp = spW;
             digits = settings->getValue<int>("Performance/FFmpegThreadCount");
             sp->value(digits);

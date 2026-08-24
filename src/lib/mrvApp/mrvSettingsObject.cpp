@@ -139,6 +139,7 @@
          p.defaultValues["Performance/FFmpegYUVToRGBConversion"] = 0;
          p.defaultValues["Performance/FFmpegColorAccuracy"] = 0;
          p.defaultValues["Performance/FFmpegHWAccel"] = 0;
+         p.defaultValues["Performance/FFmpegHWDriver"] = "";
 
          p.defaultValues["Misc/MaxFileSequenceDigits"] = 9;
 

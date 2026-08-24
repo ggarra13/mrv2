@@ -1146,6 +1146,21 @@ namespace tl
             while ((type = av_hwdevice_iterate_types(type)) !=
                     AV_HWDEVICE_TYPE_NONE)
             {
+                std::string name = av_hwdevice_get_type_name(type);
+                if (!_options.hwDriver.empty())
+                {
+                    if (name != _options.hwDriver)
+                    {
+                        std::string msg = string::Format("HW Driver {0} "
+                                                         " does not match "
+                                                         " {1}.")
+                                          .arg(name)
+                                          .arg(_options.hwDriver);
+                        LOG_STATUS(msg);
+                        continue;
+                    }
+                }
+
                 // Find a hardware configuration for this codec and device type.
                 AVPixelFormat hwFormat = AV_PIX_FMT_NONE;
                 for (int i = 0; ; ++i)
