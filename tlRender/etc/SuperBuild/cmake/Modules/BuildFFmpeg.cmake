@@ -98,7 +98,6 @@ if (NOT FFmpeg_FOUND)
 	--disable-schannel
 	--disable-sdl2
 	--disable-securetransport
-	--disable-vulkan
 	--disable-xlib
 	--enable-zlib
 	--disable-v4l2-m2m
@@ -116,10 +115,16 @@ if (NOT FFmpeg_FOUND)
 	    if(DEFINED ENV{GITHUB_ACTIONS})
 		message(STATUS "Running on GitHub Actions - No HW acceleration")
 	    else()
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --enable-vaapi
-		    --enable-ffnvcodec
-		    --enable-nvdec)
+		if (WIN32)
+		    list(APPEND FFmpeg_CONFIGURE_ARGS
+			--enable-vulkan)
+		else()
+		    list(APPEND FFmpeg_CONFIGURE_ARGS
+			--enable-vaapi
+			--enable-ffnvcodec
+			--enable-nvdec
+			--enable-vulkan)
+		endif()
 	    endif()
 	endif()
     else()

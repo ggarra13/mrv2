@@ -3,8 +3,11 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
-//#define DEBUG_DYNAMIC_HDR 1
-//#define DEBUG_STATIC_HDR 1
+#if 1
+#    define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+#else
+#    define DBG
+#endif
 
 #include <tlIO/FFmpeg.h>
 
@@ -30,6 +33,7 @@ extern "C"
 }
 
 #include <array>
+#include <mutex>
 
 namespace tl
 {
@@ -602,69 +606,67 @@ namespace tl
         void
         Plugin::_logCallback(void* avcl, int level, const char* fmt, va_list vl)
         {
-            static std::string lastMessage;
-            std::string format;
+            // Filter out verbose messages early
+            if (level == AV_LOG_VERBOSE || !fmt)
+                return;
 
-            if (level != AV_LOG_VERBOSE)
+            if (auto logSystem = _logSystemWeak.lock())
             {
-                AVClass* avc = avcl ? *(AVClass**)avcl : NULL;
-                if (avc)
+                // 1. Safely format the FFmpeg message itself (without the
+                //    prefix
+                char messageBuf[string::cBufferSize];
+                messageBuf[string::cBufferSize - 1] = 0;
+                vsnprintf(messageBuf, string::cBufferSize, fmt, vl);
+
+                std::string finalMessage = string::removeTrailingNewlines(messageBuf);
+
+                // 2. Safely extract the context name
+                std::string prefix = "";
+                if (avcl)
                 {
-                    format = "(";
-                    if (!avcl || !avc || !avc->item_name(avcl))
+                    AVClass* avc = *(AVClass**)avcl;
+                    // Safely check the function pointer BEFORE invoking it
+                    if (avc && avc->item_name)
                     {
-                        format += "Unknown";
+                        const char* itemName = avc->item_name(avcl);
+                        prefix = std::string("(") + (itemName ? itemName : "Unknown") + ") ";
                     }
                     else
                     {
-                        format += avc->item_name(avcl);
+                        prefix = "(Unknown) ";
                     }
-                    format += ") ";
                 }
-                format += fmt;
-            }
 
-            if (level != AV_LOG_VERBOSE)
-            {
-                if (auto logSystem = _logSystemWeak.lock())
+                finalMessage = prefix + finalMessage;
+
+                // 3. Thread-safe deduplication
+                if (level < AV_LOG_INFO)
                 {
-                    char buf[string::cBufferSize];
-                    buf[string::cBufferSize - 1] = 0;
-                    vsnprintf(buf, string::cBufferSize, format.c_str(), vl);
+                    static std::string lastMessage;
+                    static std::mutex logMutex;
 
-                    const std::string& message =
-                        string::removeTrailingNewlines(buf);
+                    std::lock_guard<std::mutex> lock(logMutex);
+                    if (finalMessage == lastMessage)
+                        return;
+                    lastMessage = finalMessage;
+                }
 
-                    if (level < AV_LOG_INFO)
-                    {
-                        if (message == lastMessage)
-                            return;
-
-                        lastMessage = message;
-                    }
-
-                    switch (level)
-                    {
-                    case AV_LOG_PANIC:
-                    case AV_LOG_FATAL:
-                    case AV_LOG_ERROR:
-                        logSystem->print(
-                            "tl::io::ffmpeg::Plugin", message, log::Type::Error,
-                            "ffmpeg");
-                        break;
-                    case AV_LOG_WARNING:
-                        logSystem->print(
-                            "tl::io::ffmpeg::Plugin", message,
-                            log::Type::Warning, "ffmpeg");
-                        break;
-                    case AV_LOG_INFO:
-                        logSystem->print(
-                            "tl::io::ffmpeg::Plugin", message,
-                            log::Type::Message, "ffmpeg");
-                        break;
-                    default:
-                        break;
-                    }
+                // 4. Dispatch to the logging system
+                switch (level)
+                {
+                case AV_LOG_PANIC:
+                case AV_LOG_FATAL:
+                case AV_LOG_ERROR:
+                    logSystem->print("tl::io::ffmpeg::Plugin", finalMessage, log::Type::Error, "ffmpeg");
+                    break;
+                case AV_LOG_WARNING:
+                    logSystem->print("tl::io::ffmpeg::Plugin", finalMessage, log::Type::Warning, "ffmpeg");
+                    break;
+                case AV_LOG_INFO:
+                    logSystem->print("tl::io::ffmpeg::Plugin", finalMessage, log::Type::Message, "ffmpeg");
+                    break;
+                default:
+                    break;
                 }
             }
         }
