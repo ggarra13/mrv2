@@ -126,7 +126,7 @@ namespace mrv
         const std::string& baseName = path.getBaseName();
         const std::string& number = path.getNumber();
         const std::string& suffix = path.getSuffix();
-        const std::string& extension = path.getExtension();
+        const std::string extension = string::toLower(path.getExtension());
 
         std::string newFile = directory + baseName + number + suffix + extension;
 
@@ -141,12 +141,13 @@ namespace mrv
             ioOptions["FFmpeg/ThreadCount"] =
                 string::Format("{0}").arg(ffmpeg::Options().threadCount);
 
-            // If we are not saving a movie, take speed from the player's
+            // If we are saving a movie, take speed from the player's
             // current speed.
             {
                 const auto& model = ui->app->filesModel();
                 const auto& Aitem = model->observeA()->get();
-                const auto& extension = Aitem->path.getExtension();
+                const auto& extension =
+                    string::toLower(Aitem->path.getExtension());
                 if (!file::isMovie(extension))
                 {
                     ioOptions["FFmpeg/Speed"] =
@@ -280,8 +281,7 @@ namespace mrv
             std::string newExtension = extension;
             if (profile.substr(0, 6) == "ProRes")
             {
-                if (!string::compare(
-                        extension, ".mov", string::Compare::CaseInsensitive))
+                if (extension != ".mov")
                 {
                     LOG_WARNING(_("ProRes profiles need a .mov movie "
                                   "extension.  Changing it to .mov."));
@@ -290,12 +290,8 @@ namespace mrv
             }
             else if (profile == "VP9")
             {
-                if (!string::compare(
-                        extension, ".mp4", string::Compare::CaseInsensitive) &&
-                    !string::compare(
-                        extension, ".webm", string::Compare::CaseInsensitive) &&
-                    !string::compare(
-                        extension, ".mkv", string::Compare::CaseInsensitive))
+                if (extension != ".mp4" && extension != ".webm" &&
+                    extension != ".mkv")
                 {
                     LOG_WARNING(
                         _("VP9 profile needs a .mp4, .mkv or .webm movie "
@@ -305,10 +301,7 @@ namespace mrv
             }
             else if (profile == "AV1")
             {
-                if (!string::compare(
-                        extension, ".mp4", string::Compare::CaseInsensitive) &&
-                    !string::compare(
-                        extension, ".mkv", string::Compare::CaseInsensitive))
+                if (extension != ".mp4" && extension != ".mkv")
                 {
                     LOG_WARNING(_("AV1 profile needs a .mp4 or .mkv movie "
                                   "extension.  Changing it to .mp4"));
@@ -317,8 +310,7 @@ namespace mrv
             }
             else if (profile == "Cineform")
             {
-                if (!string::compare(
-                        extension, ".mkv", string::Compare::CaseInsensitive))
+                if (extension != ".mkv")
                 {
                     LOG_WARNING(_("GoPro Cineform profile needs a .mkv movie "
                                   "extension.  Changing it to .mkv"));
@@ -327,8 +319,7 @@ namespace mrv
             }
             else if (profile == "HAP")
             {
-                if (!string::compare(
-                        extension, ".mov", string::Compare::CaseInsensitive))
+                if (extension != ".mov")
                 {
                     LOG_WARNING(
                         _("HAP profile needs a .mov extension.  Changing "
@@ -354,10 +345,10 @@ namespace mrv
             path = file::Path(newFile);
 #endif
 
-            bool saveEXR = string::compare(
-                extension, ".exr", string::Compare::CaseInsensitive);
-            bool saveHDR = string::compare(
-                extension, ".hdr", string::Compare::CaseInsensitive);
+            bool saveEXR = (extension == ".exr" ||
+                            extension == ".sxr");
+            bool saveHDR = (extension == ".hdr");
+            bool saveJPEG = (extension == ".jpg" || extension == ".jpeg");
 
             if (time::compareExact(videoTime, time::invalidTimeRange))
                 videoTime = audioTime;
