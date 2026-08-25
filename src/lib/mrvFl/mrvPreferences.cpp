@@ -805,6 +805,9 @@ namespace mrv
         uiPrefs->uiPrefsPixelRGBA->value(tmp);
 
         pixel_toolbar.get("pixel_values", tmp, 0);
+#ifdef OPENGL_BACKEND
+        tmp += 2;
+#endif
         uiPrefs->uiPrefsPixelValues->value(tmp);
 
         pixel_toolbar.get("HSV_pixel", tmp, 0);
@@ -1679,7 +1682,11 @@ namespace mrv
 
         Fl_Preferences pixel_toolbar(base, "pixel_toolbar");
         pixel_toolbar.set("RGBA_pixel", uiPrefs->uiPrefsPixelRGBA->value());
-        pixel_toolbar.set("pixel_values", uiPrefs->uiPrefsPixelValues->value());
+        int tmp = uiPrefs->uiPrefsPixelValues->value();
+#ifdef OPENGL_BACKEND
+        tmp += 2;
+#endif
+        pixel_toolbar.set("pixel_values", tmp);
         pixel_toolbar.set("HSV_pixel", uiPrefs->uiPrefsPixelHSV->value());
         pixel_toolbar.set("Lumma_pixel", uiPrefs->uiPrefsPixelLumma->value());
 

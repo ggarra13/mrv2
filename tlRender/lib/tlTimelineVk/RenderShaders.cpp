@@ -888,7 +888,7 @@ const uint Channels_Red   = 1;
 const uint Channels_Green = 2;
 const uint Channels_Blue  = 3;
 const uint Channels_Alpha = 4;
-const uint Channels_Luma = 5;
+const uint Channels_Luma  = 5;
 
 struct Levels
 {

@@ -563,8 +563,8 @@ o->redraw();}
               }
             }
             Fl_Group {} {
-              label {Pixel Toolbar}
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
+              label {Pixel Toolbar} open
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5
             } {
               Fl_Group {} {
                 label {Pixel Toolbar} open
@@ -588,9 +588,17 @@ o->redraw();}
                   }
                 }
                 Fl_Choice uiPrefsPixelValues {
-                  label {Pixel Values}
+                  label {Pixel Values} open
                   xywh {485 160 255 25} down_box BORDER_BOX align 132
                 } {
+                  MenuItem {} {
+                    label Linear
+                    xywh {15 15 100 20}
+                  }
+                  MenuItem {} {
+                    label Nits selected
+                    xywh {25 25 100 20}
+                  }
                   MenuItem {} {
                     label {Full Lut, Gamma and Gain}
                     xywh {5 5 100 20}
@@ -824,8 +832,8 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
               }
             }
             Fl_Group {} {
-              label Thumbnails open
-              xywh {288 37 555 360} box EMBOSSED_BOX align 5
+              label Thumbnails
+              xywh {288 37 555 360} box EMBOSSED_BOX align 5 hide
             } {
               Fl_Group {} {
                 label Thumbnails open
@@ -886,7 +894,7 @@ v->uiWindowScreen->value( v->main->uiMain->screen_num() );}
                   }
                 }
                 Fl_Choice uiPrefsStereo3DPanelThumbnails {
-                  label {Stereo Panel} open selected
+                  label {Stereo Panel} open
                   tooltip {How to display timeline thumbnails in Stereo Panel.} xywh {398 202 175 28} box THIN_DOWN_BOX down_box BORDER_BOX align 8
                   code3 {o->value(1);}
                 } {

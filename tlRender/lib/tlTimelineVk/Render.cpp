@@ -3337,6 +3337,7 @@ namespace tl
                     vlk::Shader::create(ctx, Vertex3_spv, Vertex3_spv_len,
                                         source, "display");
 #else
+                std::cerr << source << std::endl;
                 p.shaders["display"] =
                     vlk::Shader::create(ctx, vertexSource(), source, "display");
 #endif
