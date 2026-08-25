@@ -421,18 +421,6 @@ namespace tl
                     _initHwAccel(avVideoCodec);
                 }
 
-                if (options.threadCount == 0)
-                {
-                    // \@note: libdav1d codec does not decode properly when
-                    //         thread count is 0.
-                    if (avVideoCodecParameters->codec_id == AV_CODEC_ID_AV1)
-                    {
-                        LOG_WARNING("Decoder AV1 may decode black with 0 "
-                                    "FFmpeg I/O threads.  Setting it to 4.");
-                        _avCodecContext[_avStream]->thread_count = 4;
-                    }
-                }
-
                 r = avcodec_open2(_avCodecContext[_avStream], avVideoCodec, 0);
                 if (r < 0)
                 {
