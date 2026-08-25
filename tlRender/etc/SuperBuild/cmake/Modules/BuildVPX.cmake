@@ -78,6 +78,7 @@ if (NOT VPX_FOUND AND NOT FFmpeg_FOUND)
 	--disable-tools
 	--disable-docs
 	--disable-unit-tests
+	--enable-runtime-cpu-detect
 	--enable-vp9-highbitdepth
 	--extra-cflags=${VPX_C_FLAGS}
 	--extra-cxxflags=${VPX_CXX_FLAGS}

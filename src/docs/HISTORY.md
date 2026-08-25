@@ -6,7 +6,7 @@ v1.7.5
 - Vulkan: Added HW decoding under Vulkan on both backends.
 
 - Libraries: Updated libvpx to v1.16.0, with aarch64 and Neon assembler
-  	     optimizations.
+  	     optimizations.  Also added runtime-cpu-detection.
 - Libraries: Updated Svt-AV1 to v4.2.0.
 - Libraries: Updated FFmpeg to v9.0.1.
 
