@@ -5,6 +5,7 @@ v1.7.5
 - UI/Core: Added to Settings->Performance a pulldown select the HW driver.
 - Vulkan: Added HW decoding under Vulkan on both backends.
 
+- Libraries: Updated libdav1d to v1.5.4.
 - Libraries: Updated Svt-AV1 to v4.2.0.
 - Libraries: Updated FFmpeg to v9.0.1.
 
