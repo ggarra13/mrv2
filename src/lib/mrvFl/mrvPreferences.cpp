@@ -805,10 +805,8 @@ namespace mrv
         uiPrefs->uiPrefsPixelRGBA->value(tmp);
 
         pixel_toolbar.get("pixel_values", tmp, 0);
-#ifdef OPENGL_BACKEND
         if (version < kPreferencesVersion)
             tmp += 2;
-#endif
         uiPrefs->uiPrefsPixelValues->value(tmp);
 
         pixel_toolbar.get("HSV_pixel", tmp, 0);
