@@ -9,7 +9,7 @@ if (NOT dav1d_FOUND AND NOT FFmpeg_FOUND)
     include(ExternalProject)
 
     set(dav1d_REPOSITORY "https://code.videolan.org/videolan/dav1d.git")
-    set(dav1d_GIT_TAG 1.3.0)
+    set(dav1d_GIT_TAG 1.5.4)  # was 1.3.0
 
     set(dav1d_DEPENDENCIES ${PYTHON_DEP})
 

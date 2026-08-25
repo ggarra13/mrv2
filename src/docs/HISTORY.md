@@ -9,6 +9,7 @@ v1.7.5
 - Libraries: Updated libvpx to v1.16.0, with aarch64 and Neon assembler
   	     optimizations.  Also added runtime-cpu-detection.
 	     This improves 8K playback to 30FPS on my old NVidia 3080 RTX.
+- Libraries: Updated libdav1d to v1.5.4.
 - Libraries: Updated Svt-AV1 to v4.2.0.
 - Libraries: Updated FFmpeg to v9.0.1.
 
