@@ -79,6 +79,11 @@ namespace tl
                 std::stringstream ss(i->second);
                 ss >> out.hwAccel;
             }
+            if (auto i = options.find("FFmpeg/HWDriver"); i != options.end())
+            {
+                std::stringstream ss(i->second);
+                ss >> out.hwDriver;
+            }
             if (auto i = options.find("FFmpeg/AudioChannelCount");
                 i != options.end())
             {

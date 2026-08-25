@@ -2080,6 +2080,8 @@ namespace mrv
             p.settings->getValue<int>("Performance/FFmpegThreadCount"));
         out["FFmpeg/HWAccel"] = string::Format("{0}").arg(
             p.settings->getValue<int>("Performance/FFmpegHWAccel"));
+        out["FFmpeg/HWDriver"] = string::Format("{0}").arg(
+            p.settings->getValue<std::string>("Performance/FFmpegHWDriver"));
 
         TimelineClass* c = ui->uiTimeWindow;
         int idx = c->uiAudioTracks->current_track();

@@ -44,6 +44,7 @@ namespace tl
             OTIO_NS::RationalTime startTime = time::invalidTime;
             bool yuvToRGBConversion = false;
             bool hwAccel = false;
+            std::string hwDriver = "";
             bool fastYUV420PConversion = true;
             audio::Info audioConvertInfo;
             int audioTrack = -1;

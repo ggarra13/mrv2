@@ -392,10 +392,24 @@ namespace tl
             {
                 if (2 == textures.size())
                 {
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    textures[1]->copy(image->getData() + (w * h), textures[1]->getInfo());
+                    if (image->getPlaneCount() == 1)
+                    {
+                        const std::size_t w = info.size.w;
+                        const std::size_t h = info.size.h;
+                        textures[0]->copy(image->getData(),
+                                          textures[0]->getInfo());
+                        textures[1]->copy(image->getData() + (w * h),
+                                          textures[1]->getInfo());
+                    }
+                    else
+                    {
+                        textures[0]->copy(image->getPlaneData(0),
+                                          textures[0]->getInfo(),
+                                          image->getLineSize(0));
+                        textures[1]->copy(image->getPlaneData(1),
+                                          textures[1]->getInfo(),
+                                          image->getLineSize(1));
+                    }
                 }
                 break;
             }
@@ -403,10 +417,24 @@ namespace tl
             {
                 if (2 == textures.size())
                 {
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    textures[1]->copy(image->getData() + (w * h) * 2, textures[1]->getInfo());
+                    if (image->getPlaneCount() == 1)
+                    {
+                        const std::size_t w = info.size.w;
+                        const std::size_t h = info.size.h;
+                        textures[0]->copy(image->getData(),
+                                          textures[0]->getInfo());
+                        textures[1]->copy(image->getData() + (w * h) * 2,
+                                          textures[1]->getInfo());
+                    }
+                    else
+                    {
+                        textures[0]->copy(image->getPlaneData(0),
+                                          textures[0]->getInfo(),
+                                          image->getLineSize(0));
+                        textures[1]->copy(image->getPlaneData(1),
+                                          textures[1]->getInfo(),
+                                          image->getLineSize(1));
+                    }
                 }
                 break;
             }
@@ -414,16 +442,29 @@ namespace tl
             {
                 if (3 == textures.size())
                 {
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    const std::size_t w2 = w / 2;
-                    textures[1]->copy(
-                        image->getData() + (w * h),
-                        textures[1]->getInfo());
-                    textures[2]->copy(
-                        image->getData() + (w * h) + (w2 * h) * 2,
-                        textures[2]->getInfo());
+                    if (image->getPlaneCount() == 1)
+                    {
+                        textures[0]->copy(image->getData(),
+                                          textures[0]->getInfo());
+                        const std::size_t w = info.size.w;
+                        const std::size_t h = info.size.h;
+                        const std::size_t w2 = w / 2;
+                        textures[1]->copy(
+                            image->getData() + (w * h),
+                            textures[1]->getInfo());
+                        textures[2]->copy(
+                            image->getData() + (w * h) + (w2 * h) * 2,
+                            textures[2]->getInfo());
+                    }
+                    else
+                    {
+                        textures[0]->copy(image->getPlaneData(0),
+                                          textures[0]->getInfo(),
+                                          image->getLineSize(0));
+                        textures[1]->copy(image->getPlaneData(1),
+                                          textures[1]->getInfo(),
+                                          image->getLineSize(1));
+                    }
                 }
                 break;
             }
@@ -431,16 +472,32 @@ namespace tl
             {
                 if (3 == textures.size())
                 {
-                    textures[0]->copy(image->getData(), textures[0]->getInfo());
-                    const std::size_t w = info.size.w;
-                    const std::size_t h = info.size.h;
-                    const std::size_t w2 = w / 2;
-                    textures[1]->copy(
-                        image->getData() + (w * h) * 2,
-                        textures[1]->getInfo());
-                    textures[2]->copy(
-                        image->getData() + (w * h) * 2 + (w2 * h) * 2,
-                        textures[2]->getInfo());
+                    if (image->getPlaneCount() == 1)
+                    {
+                        textures[0]->copy(image->getData(),
+                                          textures[0]->getInfo());
+                        const std::size_t w = info.size.w;
+                        const std::size_t h = info.size.h;
+                        const std::size_t w2 = w / 2;
+                        textures[1]->copy(
+                            image->getData() + (w * h) * 2,
+                            textures[1]->getInfo());
+                        textures[2]->copy(
+                            image->getData() + (w * h) * 2 + (w2 * h) * 2,
+                            textures[2]->getInfo());
+                    }
+                    else
+                    {
+                        textures[0]->copy(image->getPlaneData(0),
+                                          textures[0]->getInfo(),
+                                          image->getLineSize(0));
+                        textures[1]->copy(image->getPlaneData(1),
+                                          textures[1]->getInfo(),
+                                          image->getLineSize(1));
+                        textures[2]->copy(image->getPlaneData(2),
+                                          textures[2]->getInfo(),
+                                          image->getLineSize(2));
+                    }
                 }
                 break;
             }
@@ -707,7 +764,7 @@ namespace tl
                                               return gl::Texture::getTotalByteCount();
                                           });
 
-
+                
                 p.statsSystem->addSampler("GL Objects/Buffers: ",
                                           [] {
                                               return gl::OffscreenBuffer::getObjectCount();
@@ -1796,21 +1853,21 @@ namespace tl
 
 
                     cmap.metadata = PL_HDR_METADATA_ANY;
-
+                    
                     const image::HDRData& data = p.hdrOptions.hdrData;
 
                     pl_color_space src_colorspace;
                     memset(&src_colorspace, 0, sizeof(pl_color_space));
-
+                    
                     bool isHDRVideo = false;
-
+                    
                     src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                     src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
 
                     switch (data.eotf)
                     {
-                    case image::EOTFType::EOTF_BT2100_PQ:
-                    case image::EOTFType::EOTF_BT2020:
+                    case image::EOTFType::EOTF_BT2100_PQ: 
+                    case image::EOTFType::EOTF_BT2020:    
                         src_colorspace.primaries = PL_COLOR_PRIM_BT_2020;
                         src_colorspace.transfer = PL_COLOR_TRC_PQ;
                         isHDRVideo = true;
@@ -1829,16 +1886,16 @@ namespace tl
 
                     case image::EOTFType::EOTF_BT601:
                         src_colorspace.primaries = PL_COLOR_PRIM_BT_601_525;
-                        src_colorspace.transfer = PL_COLOR_TRC_BT_1886;
+                        src_colorspace.transfer = PL_COLOR_TRC_BT_1886; 
                         break;
 
-                    case image::EOTFType::EOTF_SRGB:
+                    case image::EOTFType::EOTF_SRGB: 
                     default:
                         src_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                         src_colorspace.transfer = PL_COLOR_TRC_SRGB;
                         break;
                     }
-
+                
 
 
                     if (isHDRVideo)
@@ -1919,7 +1976,7 @@ namespace tl
                             cmap.tone_mapping_function = &pl_tone_map_st2094_40;
                             break;
                         }
-
+                    
                         pl_hdr_metadata& hdr = src_colorspace.hdr;
                         hdr.min_luma = data.displayMasteringLuminance.getMin();
                         hdr.max_luma = data.displayMasteringLuminance.getMax();
@@ -1949,21 +2006,21 @@ namespace tl
                         cmap.gamut_mapping = nullptr;
                         cmap.tone_mapping_function = nullptr;
                     }
-
+                        
                     pl_color_space_infer(&src_colorspace);
 
                     pl_color_space dst_colorspace;
                     memset(&dst_colorspace, 0, sizeof(pl_color_space));
-
+                    
                     dst_colorspace.primaries = PL_COLOR_PRIM_BT_709;
                     dst_colorspace.transfer = PL_COLOR_TRC_BT_1886;
-
+                    
                     dst_colorspace.hdr.min_luma = 0.0F;
-
+                    
                     // SDR peak in nits
                     // See ITU-R Report BT.2408 for more information.
                     // or libplacebo's colorspace.h
-                    dst_colorspace.hdr.max_luma = 203.0F;
+                    dst_colorspace.hdr.max_luma = 203.0F;  
                     pl_color_space_infer(&dst_colorspace);
 
                     pl_color_map_args color_map_args;
@@ -1978,7 +2035,7 @@ namespace tl
                         p.placeboData->state = NULL;
                     }
                     color_map_args.state = &(p.placeboData->state);
-
+                    
                     pl_shader_color_map_ex(shader, &cmap, &color_map_args);
 
                     const pl_shader_res* res = pl_shader_finalize(shader);
@@ -2194,7 +2251,7 @@ namespace tl
                     s << "outColor = " << res->name << "(outColor);"
                       << std::endl;
                     toneMap = s.str();
-
+                    
                     pl_shader_free(&shader);
 
 
