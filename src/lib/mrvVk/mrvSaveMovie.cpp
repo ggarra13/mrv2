@@ -294,7 +294,7 @@ namespace mrv
             }
             else if (profile == "VP9")
             {
-                if (extension != ".mp4" && exentions != ".webm" &&
+                if (extension != ".mp4" && extension != ".webm" &&
                     extension != ".mkv")
                 {
                     LOG_WARNING(
