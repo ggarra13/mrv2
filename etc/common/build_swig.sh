@@ -83,6 +83,6 @@ fi
 #
 # Build it
 #
-./configure
+./configure --prefix=${CMAKE_INSTALL_PREFIX}
 make
-make install --prefix=${CMAKE_INSTALL_PREFIX}
+make install

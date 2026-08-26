@@ -556,11 +556,19 @@ if [[ $KERNEL == *Windows* ]]; then
     . $PWD/etc/windows/compile_dlls.sh
 fi
 
+build_swig=0
 if command -v swig > /dev/null 2>&1; then
     swig -version
+    if check_broken_swig_version; then
+       build_swig=1
+    fi
 else
+    build_swig=1
+fi
+
+if [[ $build_swig == 1 ]]; then
     echo
-    echo "swig NOT found!!! Trying to compile from source."
+    echo "swig NOT found or broken!!! Trying to compile from source."
     echo
     . etc/common/build_swig.sh
     if command -v swig > /dev/null 2>&1; then
