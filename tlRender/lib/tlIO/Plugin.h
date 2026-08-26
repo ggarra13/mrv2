@@ -106,9 +106,11 @@ namespace tl
         public:
             virtual ~IWrite();
 
-            //! Write video header.
-            virtual void writeVideoHeader(const std::shared_ptr<image::Image>&,
-                                          const Options& = Options()) {};
+            //! Set video header metadata.
+            virtual void setHDR(const image::HDRData&) {};
+
+            //! Write the header.
+            virtual void writeHeader() {};
 
             //! Write video data.
             virtual void writeVideo(

@@ -457,6 +457,7 @@ namespace mrv
             std::shared_ptr<image::Image> outputImage;
 
             outputInfo.pixelType = info.video[layerId].pixelType;
+            auto hdr = info.video[layerId].image->getHDR();
 
             player->start();
 
@@ -658,6 +659,19 @@ namespace mrv
             {
                 throw std::runtime_error(
                     string::Format("{0}: Cannot open").arg(file));
+            }
+
+            const auto videoFrame = view->getVideoFrame();
+            if (!videoFrame.empty() &&
+                !videoFrame[0].layers.empty() &&
+                videoFrame[0].layers[0].image)
+            {
+                auto hdrData = videoFrame[0].layers[0].image->getHDR();
+                if (hdrData)
+                {
+                    writer->setHDR(*hdrData);
+                }
+                writer->writeHeader();
             }
 
             int64_t startFrame = startTime.to_frames();
@@ -1059,7 +1073,16 @@ namespace mrv
 
                     if (videoTime.contains(currentTime))
                     {
-                        const auto& tags = ui->uiView->getTags();
+                        const auto videoFrame = view->getVideoFrame();
+                        if (!videoFrame.empty() &&
+                            !videoFrame[0].layers.empty() &&
+                            videoFrame[0].layers[0].image)
+                        {
+                            auto hdrData = videoFrame[0].layers[0].image->getHDR();
+                            if (hdrData)
+                                outputImage->setHDR(*hdrData);
+                        }
+                        const auto& tags = view->getTags();
                         outputImage->setTags(tags);
                         writer->writeVideo(currentTime, outputImage);
                     }

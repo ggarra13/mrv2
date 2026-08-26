@@ -1,10 +1,14 @@
 v1.7.5
 ======
 
-- Bug/Core: Fix a potential race condition in FFmpeg's log callback.
+- Bug/Core: Fix a potential race (crash) condition in FFmpeg's log callback.
 - UI/Core: Added to Settings->Performance a pulldown select the HW driver.
 
-- Vulkan: Added HW decoding under Vulkan on both backends.
+- Vulkan/Linux: Added HW decoding under Vulkan on both backends.
+
+- HDR: Added Saving of HDR movies with stream metadata.
+
+- Linux: Fixed a random crash when reloading the file requester.
 
 - Libraries: Updated libvpx to v1.16.0, with aarch64 and Neon assembler
   	     optimizations.  Also added runtime-cpu-detection.

@@ -2483,19 +2483,19 @@ namespace mrv
             }
 
             const auto view = _p->ui->uiView;
-            const auto videoData = view->getVideoFrame();
+            const auto videoFrame = view->getVideoFrame();
 
             // Then add image tags
-            if (!videoData.empty() && !videoData[0].layers.empty() &&
-                videoData[0].layers[0].image)
+            if (!videoFrame.empty() && !videoFrame[0].layers.empty() &&
+                videoFrame[0].layers[0].image)
             {
                 const image::Tags& tags =
-                    videoData[0].layers[0].image->getTags();
+                    videoFrame[0].layers[0].image->getTags();
                 for (const auto& tag : tags)
                 {
                     tagData[tag.first] = tag.second;
                 }
-                auto hdrData = videoData[0].layers[0].image->getHDR();
+                auto hdrData = videoFrame[0].layers[0].image->getHDR();
                 if (hdrData)
                     hdr = *hdrData;
                 else

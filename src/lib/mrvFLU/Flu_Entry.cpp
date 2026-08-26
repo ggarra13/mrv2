@@ -244,6 +244,10 @@ void Flu_Entry::timerEvent()
 
 void Flu_Entry::updateIcon()
 {
+    TLRENDER_P();
+
+    p.bind_image = false;
+
     Flu_File_Chooser::FileTypeInfo* tt = nullptr;
     if (type == ENTRY_MYCOMPUTER)
     {

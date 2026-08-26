@@ -409,6 +409,11 @@ namespace tl
 
             VkDevice device = ctx.device;
 
+            {
+                std::lock_guard mutex(ctx.queue_mutex());
+                vkDeviceWaitIdle(device);
+            }
+
             if (p.imageView != VK_NULL_HANDLE)
             {
                 vkDestroyImageView(device, p.imageView, nullptr);

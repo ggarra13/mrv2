@@ -3,6 +3,8 @@
 // Copyright (c) 2024-Present Gonzalo Garramuño
 // All rights reserved.
 
+#define DBG std::cerr << __FUNCTION__ << " " << __LINE__ << std::endl;
+
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -17,11 +19,19 @@
 #include <tlIO/FFmpeg.h>
 #include <tlIO/FFmpegMacros.h>
 
+#ifdef TLRENDER_DOVI
+#include <libdovi/rpu_parser.h>
+#endif
+
 extern "C"
 {
 
 #include <libavutil/audio_fifo.h>
+#ifdef TLRENDER_DOVI
+#    include <libavutil/dovi_meta.h>
+#endif
 #include <libavutil/imgutils.h>
+#include <libavutil/hdr_dynamic_metadata.h>
 #include <libavutil/mastering_display_metadata.h>
 #include <libavutil/opt.h>
 #include <libavutil/timestamp.h>
@@ -360,7 +370,8 @@ namespace tl
                     out = AVCOL_TRC_BT2020_10;
                 else if (s == "bt2020-12")
                     out = AVCOL_TRC_BT2020_12;
-                else if (s == "smpte2084" || s == "pq" || s == "bt2100")
+                else if (s == "smpte2084" || s == "pq" || s == "bt2100" ||
+                         s == "bt2100 (smpte2084)")
                     out = AVCOL_TRC_SMPTE2084;
                 else if (s == "arib-std-b67" || s == "hlg")
                     out = AVCOL_TRC_ARIB_STD_B67;
@@ -372,7 +383,7 @@ namespace tl
             {
                 AVColorSpace out = AVCOL_SPC_BT709;
                 const std::string& s = string::toLower(c);
-                if (s == "rgb" || s == "bgr")
+                if (s == "rgb" || s == "bgr" || s == "gbr")
                 {
                     out = AVCOL_SPC_RGB;
                 }
@@ -380,11 +391,20 @@ namespace tl
                 {
                     out = AVCOL_SPC_BT709;
                 }
+                else if (s == "unspecified" || s == "unkwown")
+                {
+                    out = AVCOL_SPC_UNSPECIFIED;
+                }
+                else if (s == "reserved")
+                {
+                    out = AVCOL_SPC_RESERVED;
+                }
                 else if (s == "fcc")
                 {
                     out = AVCOL_SPC_FCC;
                 }
-                else if (s == "bt601" || s == "bt470")
+                else if (s == "bt601" || s == "bt470" || s == "bt470bg" ||
+                         s == "bt601 (bt470bg)")
                 {
                     out = AVCOL_SPC_BT470BG;
                 }
@@ -400,25 +420,41 @@ namespace tl
                 {
                     out = AVCOL_SPC_YCGCO;
                 }
-                else if (s == "bt2020")
+                else if (s == "bt2020" || s == "bt2020nc")
                 {
                     out = AVCOL_SPC_BT2020_NCL;
+                }
+                else if (s == "bt2020c")
+                {
+                    out = AVCOL_SPC_BT2020_CL;
                 }
                 else if (s == "smpte2085")
                 {
                     out = AVCOL_SPC_SMPTE2085;
                 }
-                else if (s == "ictcp" || s == "bt2100")
+                else if (s == "chroma-derived-nc")
                 {
-                    out = AVCOL_SPC_SMPTE2085;
+                    out = AVCOL_SPC_CHROMA_DERIVED_NCL;
                 }
-                else if (s == "unspecified")
+                else if (s == "chroma-derived-c" || s == "chroma-derived-cl")
                 {
-                    out = AVCOL_SPC_UNSPECIFIED;
+                    out = AVCOL_SPC_CHROMA_DERIVED_CL;
                 }
-                else if (s == "reserved")
+                else if (s == "ictcp")
                 {
-                    out = AVCOL_SPC_RESERVED;
+                    out = AVCOL_SPC_ICTCP;
+                }
+                else if (s == "ipt-c2")
+                {
+                    out = AVCOL_SPC_IPT_C2;
+                }
+                else if (s == "ycgco-re")
+                {
+                    out = AVCOL_SPC_YCGCO_RE;
+                }
+                else if (s == "ycgco-ro")
+                {
+                    out = AVCOL_SPC_YCGCO_RO;
                 }
                 return out;
             }
@@ -668,6 +704,9 @@ namespace tl
         struct Write::Private
         {
             std::string fileName;
+            file::Path path;
+            io::Info info;
+            io::Options options;
             AVFormatContext* avFormatContext = nullptr;
 
             // Video
@@ -711,11 +750,20 @@ namespace tl
             TLRENDER_P();
 
             p.fileName = path.get();
+            p.path = path;
+            p.info = info;
+            p.options = options;
+
             if (info.video.empty() && !info.audio.isValid())
             {
                 throw std::runtime_error(
                     string::Format("{0}: No video or audio").arg(p.fileName));
             }
+        }
+
+        void Write::writeHeader()
+        {
+            TLRENDER_P();
 
             int r = avformat_alloc_output_context2(
                 &p.avFormatContext, NULL, NULL, p.fileName.c_str());
@@ -726,8 +774,8 @@ namespace tl
 
             AVCodec* avCodec = nullptr;
             AVCodecID avAudioCodecID = AV_CODEC_ID_AAC;
-            auto option = options.find("FFmpeg/AudioCodec");
-            if (option != options.end())
+            auto option = p.options.find("FFmpeg/AudioCodec");
+            if (option != p.options.end())
             {
                 AudioCodec audioCodec;
                 std::stringstream ss(option->second);
@@ -776,7 +824,7 @@ namespace tl
 
                 // Sanity check on codecs and containers.
                 const std::string extension =
-                    string::toLower(path.getExtension());
+                    string::toLower(p.path.getExtension());
                 if (extension == ".wav")
                 {
                     if (avAudioCodecID != AV_CODEC_ID_PCM_S16LE &&
@@ -860,7 +908,7 @@ namespace tl
             }
 
             std::string msg;
-            if (info.audio.isValid() && avAudioCodecID != AV_CODEC_ID_NONE)
+            if (p.info.audio.isValid() && avAudioCodecID != AV_CODEC_ID_NONE)
             {
                 if (!avCodec)
                     avCodec = const_cast<AVCodec*>(
@@ -890,7 +938,7 @@ namespace tl
 
                 bool resample = false;
                 p.avAudioCodecContext->sample_fmt =
-                    fromAudioType(info.audio.dataType);
+                    fromAudioType(p.info.audio.dataType);
                 if (!checkSampleFormat(
                         p.avAudioCodecContext, avCodec,
                         p.avAudioCodecContext->sample_fmt))
@@ -946,13 +994,14 @@ namespace tl
                 }
 
                 if (p.avAudioPlanar)
-                    p.flatPointers.resize(info.audio.channelCount);
+                    p.flatPointers.resize(p.info.audio.channelCount);
                 else
                     p.flatPointers.resize(1);
 
                 r = selectChannelLayout(
                     p.avAudioCodecContext, avCodec,
-                    &p.avAudioCodecContext->ch_layout, info.audio.channelCount);
+                    &p.avAudioCodecContext->ch_layout,
+                    p.info.audio.channelCount);
                 if (r < 0)
                     throw std::runtime_error(
                         string::Format(
@@ -960,7 +1009,7 @@ namespace tl
                             .arg(p.fileName));
 
                 p.sampleRate = selectSampleRate(
-                    p.avAudioCodecContext, avCodec, info.audio.sampleRate);
+                    p.avAudioCodecContext, avCodec, p.info.audio.sampleRate);
                 if (p.sampleRate == 0)
                     throw std::runtime_error(
                         string::Format("{0}: Could not select sample rate")
@@ -970,11 +1019,11 @@ namespace tl
                 av_channel_layout_describe(
                     &p.avAudioCodecContext->ch_layout, buf, 256);
 
-                if (p.sampleRate != info.audio.sampleRate || resample)
+                if (p.sampleRate != p.info.audio.sampleRate || resample)
                 {
-                    const audio::Info& input = info.audio;
+                    const audio::Info& input = p.info.audio;
                     audio::Info output(
-                        info.audio.channelCount,
+                        p.info.audio.channelCount,
                         toAudioType(p.avAudioCodecContext->sample_fmt),
                         p.sampleRate);
                     p.resample = audio::AudioResample::create(input, output);
@@ -999,7 +1048,7 @@ namespace tl
                 }
                 else
                 {
-                    const audio::Info& input = info.audio;
+                    const audio::Info& input = p.info.audio;
                     if (auto logSystem = _logSystem.lock())
                     {
                         logSystem->print(
@@ -1088,7 +1137,8 @@ namespace tl
                 }
 
                 p.avAudioFifo = av_audio_fifo_alloc(
-                    p.avAudioCodecContext->sample_fmt, info.audio.channelCount,
+                    p.avAudioCodecContext->sample_fmt,
+                    p.info.audio.channelCount,
                     1); // cannot be 0, must be 1 at least
                 if (!p.avAudioFifo)
                 {
@@ -1141,20 +1191,20 @@ namespace tl
                 }
             }
 
-            if (!info.video.empty())
+            if (!p.info.video.empty())
             {
                 AVCodecID avCodecID = AV_CODEC_ID_MPEG4;
                 Profile profile = Profile::kNone;
                 int avProfile = AV_PROFILE_UNKNOWN;
-                auto option = options.find("FFmpeg/WriteProfile");
-                if (option != options.end())
+                auto option = p.options.find("FFmpeg/WriteProfile");
+                if (option != p.options.end())
                 {
                     std::stringstream ss(option->second);
                     ss >> profile;
                 }
                 bool hardwareEncode = false;
-                option = options.find("FFmpeg/HardwareEncode");
-                if (option != options.end())
+                option = p.options.find("FFmpeg/HardwareEncode");
+                if (option != p.options.end())
                 {
                     std::stringstream ss(option->second);
                     ss >> hardwareEncode;
@@ -1255,14 +1305,15 @@ namespace tl
                     break;
                 }
 
-                p.avSpeed = info.videoTime->duration().rate();
-                const auto& videoInfo = info.video[0];
+                p.avSpeed = p.info.videoTime->duration().rate();
+                const auto& videoInfo = p.info.video[0];
 
                 // Allow setting the speed if not saving audio
-                if (!info.audio.isValid() || avAudioCodecID == AV_CODEC_ID_NONE)
+                if (!p.info.audio.isValid() ||
+                    avAudioCodecID == AV_CODEC_ID_NONE)
                 {
-                    option = options.find("FFmpeg/Speed");
-                    if (option != options.end())
+                    option = p.options.find("FFmpeg/Speed");
+                    if (option != p.options.end())
                     {
                         std::stringstream ss(option->second);
                         ss >> p.avSpeed;
@@ -1386,8 +1437,8 @@ namespace tl
                 }
 
                 std::string value;
-                option = options.find("FFmpeg/ColorRange");
-                if (option != options.end())
+                option = p.options.find("FFmpeg/ColorRange");
+                if (option != p.options.end())
                 {
                     std::stringstream ss(option->second);
                     ss >> value;
@@ -1403,8 +1454,8 @@ namespace tl
 
                 // Equivalent to -colorspace bt709
                 p.avCodecContext->colorspace = AVCOL_SPC_BT709;
-                option = options.find("FFmpeg/ColorSpace");
-                if (option != options.end())
+                option = p.options.find("FFmpeg/ColorSpace");
+                if (option != p.options.end())
                 {
                     std::stringstream ss(option->second);
                     ss >> value;
@@ -1417,8 +1468,8 @@ namespace tl
 
                 // Equivalent to -color_primaries bt709
                 p.avCodecContext->color_primaries = AVCOL_PRI_BT709;
-                option = options.find("FFmpeg/ColorPrimaries");
-                if (option != options.end())
+                option = p.options.find("FFmpeg/ColorPrimaries");
+                if (option != p.options.end())
                 {
                     std::stringstream ss(option->second);
                     ss >> value;
@@ -1437,8 +1488,8 @@ namespace tl
                     p.avCodecContext->color_trc = AVCOL_TRC_IEC61966_2_1;
                 else
                     p.avCodecContext->color_trc = AVCOL_TRC_BT709;
-                option = options.find("FFmpeg/ColorTRC");
-                if (option != options.end())
+                option = p.options.find("FFmpeg/ColorTRC");
+                if (option != p.options.end())
                 {
                     std::stringstream ss(option->second);
                     ss >> value;
@@ -1458,8 +1509,8 @@ namespace tl
 
                 // Get the pixel format from the options.
                 std::string pixelFormat = "YUV420P";
-                option = options.find("FFmpeg/PixelFormat");
-                if (option != options.end())
+                option = p.options.find("FFmpeg/PixelFormat");
+                if (option != p.options.end())
                 {
                     std::stringstream ss(option->second);
                     ss >> pixelFormat;
@@ -1505,8 +1556,8 @@ namespace tl
                 }
 
                 std::string presetFile;
-                option = options.find("FFmpeg/PresetFile");
-                if (option != options.end())
+                option = p.options.find("FFmpeg/PresetFile");
+                if (option != p.options.end())
                 {
                     std::stringstream ss(option->second);
                     std::getline(ss, presetFile);
@@ -1571,6 +1622,7 @@ namespace tl
                             .arg(getErrorLabel(r)));
                 }
 
+                _attach_stream_hdr_metadata(p.avVideoStream);
                 p.avVideoStream->time_base = {rational.second, rational.first};
                 p.avVideoStream->avg_frame_rate = {
                     rational.first, rational.second};
@@ -1583,7 +1635,7 @@ namespace tl
                             &p.avVideoStream->metadata, "alpha_mode", "1", 0);
 
                         const std::string& extension =
-                            string::toLower(path.getExtension());
+                            string::toLower(p.path.getExtension());
 
                         // \bug: this does not add alpha_mode to the .webm
                         //       or .mp4 container
@@ -1597,17 +1649,17 @@ namespace tl
                     }
                 }
 
-                for (const auto& i : info.tags)
+                for (const auto& i : p.info.tags)
                 {
                     av_dict_set(
                         &p.avFormatContext->metadata, i.first.c_str(),
                         i.second.c_str(), 0);
                 }
 
-                p.videoStartTime = info.videoTime->start_time();
+                p.videoStartTime = p.info.videoTime->start_time();
                 // Set timecode
-                option = options.find("timecode");
-                if (option != options.end())
+                option = p.options.find("timecode");
+                if (option != p.options.end())
                 {
                     std::stringstream ss(option->second);
                     std::string timecode;
@@ -1623,7 +1675,7 @@ namespace tl
                     opentime::ErrorStatus errorStatus;
                     const OTIO_NS::RationalTime time =
                         OTIO_NS::RationalTime::from_timecode(
-                            timecode, info.videoTime->duration().rate(),
+                            timecode, p.info.videoTime->duration().rate(),
                             &errorStatus);
                     if (!opentime::is_error(errorStatus))
                     {
@@ -1649,6 +1701,7 @@ namespace tl
                 p.avFrame->format = p.avVideoStream->codecpar->format;
                 p.avFrame->width = p.avVideoStream->codecpar->width;
                 p.avFrame->height = p.avVideoStream->codecpar->height;
+
                 r = av_frame_get_buffer(p.avFrame, 0);
                 if (r < 0)
                 {
@@ -1883,11 +1936,6 @@ namespace tl
             return out;
         }
 
-        void Write::writeVideoHeader(
-            const std::shared_ptr<image::Image>& image, const io::Options&)
-        {
-        }
-
         void Write::writeVideo(
             const OTIO_NS::RationalTime& time,
             const std::shared_ptr<image::Image>& image, const io::Options&)
@@ -1958,15 +2006,11 @@ namespace tl
                 {timeRational.second, timeRational.first},
                 p.avVideoStream->time_base);
 
-            for (const auto& i : image->getTags())
+            auto hdrData = image->getHDR();
+            if (hdrData)
             {
-                if (i.first == "hdr")
-                {
-                    p.hasHDR = true;
-
-                    nlohmann::json j = nlohmann::json::parse(i.second);
-                    p.hdr = j.get<image::HDRData>();
-                }
+                p.hasHDR = true;
+                p.hdr = *hdrData;
             }
 
             _encode(p.avCodecContext, p.avVideoStream, p.avFrame, p.avPacket);
@@ -2146,12 +2190,83 @@ namespace tl
 
             }
         }
+        void Write::_attach_stream_hdr_metadata(AVStream* stream)
+        {
+            TLRENDER_P();
 
-        void Write::_attach_hdr_metadata(AVFrame *frame)
+            if (!stream || !p.hasHDR)
+                return;
+
+            AVCodecParameters* par = stream->codecpar;
+
+            // --- Mastering display metadata ---
+            AVPacketSideData* sd = av_packet_side_data_new(
+                &par->coded_side_data, &par->nb_coded_side_data,
+                AV_PKT_DATA_MASTERING_DISPLAY_METADATA,
+                sizeof(AVMasteringDisplayMetadata), 0);
+            if (sd && sd->data)
+            {
+                AVMasteringDisplayMetadata* mdm =
+                    (AVMasteringDisplayMetadata*)sd->data;
+                memset(mdm, 0, sizeof(*mdm));
+
+                const float rx = p.hdr.primaries[0].x, ry = p.hdr.primaries[0].y;
+                const float gx = p.hdr.primaries[1].x, gy = p.hdr.primaries[1].y;
+                const float bx = p.hdr.primaries[2].x, by = p.hdr.primaries[2].y;
+                const float wx = p.hdr.primaries[3].x, wy = p.hdr.primaries[3].y;
+
+                mdm->display_primaries[0][0] = av_d2q(rx, 100000);
+                mdm->display_primaries[0][1] = av_d2q(ry, 100000);
+                mdm->display_primaries[1][0] = av_d2q(gx, 100000);
+                mdm->display_primaries[1][1] = av_d2q(gy, 100000);
+                mdm->display_primaries[2][0] = av_d2q(bx, 100000);
+                mdm->display_primaries[2][1] = av_d2q(by, 100000);
+                mdm->white_point[0] = av_d2q(wx, 100000);
+                mdm->white_point[1] = av_d2q(wy, 100000);
+                mdm->has_primaries = 1;
+
+                float min_lum = p.hdr.displayMasteringLuminance.getMin();
+                if (min_lum <= 0.F)
+                    min_lum = 1.F;
+                float max_lum = p.hdr.displayMasteringLuminance.getMax();
+
+                mdm->max_luminance = av_d2q(max_lum, 10000);
+                mdm->min_luminance = av_d2q(min_lum, 10000);
+                mdm->has_luminance = 1;
+            }
+
+            // --- Content light level metadata ---
+            sd = av_packet_side_data_new(
+                &par->coded_side_data, &par->nb_coded_side_data,
+                AV_PKT_DATA_CONTENT_LIGHT_LEVEL,
+                sizeof(AVContentLightMetadata), 0);
+            if (sd && sd->data)
+            {
+                AVContentLightMetadata* clm = (AVContentLightMetadata*)sd->data;
+                clm->MaxCLL = p.hdr.maxCLL;
+                clm->MaxFALL = p.hdr.maxFALL;
+            }
+        }
+
+        //! Set video header metadata.
+        void Write::setHDR(const image::HDRData& hdrData)
+        {
+            TLRENDER_P();
+
+            p.hasHDR = true;
+            p.hdr = hdrData;
+        }
+
+        void Write::_attach_frame_hdr_metadata(AVFrame *frame)
         {
             TLRENDER_P();
 
             AVFrameSideData* sd = nullptr;
+
+            sd = av_frame_get_side_data(frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA);
+            if (!sd) {
+                sd = av_frame_new_side_data(frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA, sizeof(AVMasteringDisplayMetadata));
+            }
 
             // --- Mastering display metadata ---
             sd = av_frame_new_side_data(
@@ -2202,9 +2317,14 @@ namespace tl
             }
 
             // --- Content light level metadata ---
-            sd = av_frame_new_side_data(
-                frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL,
-                sizeof(AVContentLightMetadata));
+            sd = av_frame_get_side_data(frame,
+                                        AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
+            if (!sd)
+            {
+                sd = av_frame_new_side_data(
+                    frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL,
+                    sizeof(AVContentLightMetadata));
+            }
             if (sd && sd->data)
             {
                 AVContentLightMetadata *clm = (AVContentLightMetadata*)
@@ -2212,6 +2332,111 @@ namespace tl
                 clm->MaxCLL  = p.hdr.maxCLL; // peak per-pixel light level
                 clm->MaxFALL = p.hdr.maxFALL;  // frame average light level
             }
+
+            // --- HDR 10+ metadata ---
+            if (p.hdr.sceneMax[0] > 0.F)
+            {
+                sd = av_frame_get_side_data(frame,
+                                            AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
+                if (!sd)
+                {
+                    sd = av_frame_new_side_data(
+                        frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS,
+                        sizeof(AVDynamicHDRPlus));
+                }
+                if (sd && sd->data)
+                {
+                    AVDynamicHDRPlus *data = (AVDynamicHDRPlus*) sd->data;
+                    // Zero out the struct to prevent junk data on reuse
+                    memset(data, 0, sizeof(AVDynamicHDRPlus));
+
+                    data->application_version = 1;
+                    data->num_windows = 1; // Required for params to be valid
+
+                    AVHDRPlusColorTransformParams *p_params = data->params;
+
+                    // Scale values back down by 10000 and map to rationals
+                    p_params->maxscl[0] = av_d2q(p.hdr.sceneMax[0] / 10000.F, 100000);
+                    p_params->maxscl[1] = av_d2q(p.hdr.sceneMax[1] / 10000.F, 100000);
+                    p_params->maxscl[2] = av_d2q(p.hdr.sceneMax[2] / 10000.F, 100000);
+                    p_params->average_maxrgb = av_d2q(p.hdr.sceneAvg / 10000.F, 100000);
+
+                    // The reader only kept the highest percentile as a fallback max.
+                    // We leave distribution blocks at 0 to avoid writing fabricated data.
+                    p_params->num_distribution_maxrgb_percentiles = 0;
+
+                    // Tone mapping
+                    if (p.hdr.ootf.numAnchors > 0)
+                    {
+                        p_params->tone_mapping_flag = 1;
+                        data->targeted_system_display_maximum_luminance =
+                            av_d2q(p.hdr.ootf.targetLuma, 10000);
+                        p_params->knee_point_x = av_d2q(p.hdr.ootf.kneeX, 10000);
+                        p_params->knee_point_y = av_d2q(p.hdr.ootf.kneeY, 10000);
+
+                        p_params->num_bezier_curve_anchors = p.hdr.ootf.numAnchors;
+                        for (int i = 0; i < p.hdr.ootf.numAnchors && i < 15; i++)
+                        {
+                            p_params->bezier_curve_anchors[i] = av_d2q(p.hdr.ootf.anchors[i], 10000);
+                        }
+                    }
+                    else
+                    {
+                        p_params->tone_mapping_flag = 0;
+                    }
+
+                    // FFmpeg 9.0.1 new parameters.
+                    // For now, set them to 1 to avoid division by zero
+                    // errors.
+                    p_params->fraction_bright_pixels.num = 1;
+                    p_params->fraction_bright_pixels.den = 1;
+                    p_params->color_saturation_mapping_flag = 0;
+                    p_params->color_saturation_weight.num = 1;
+                    p_params->color_saturation_weight.den = 1;
+                }
+            }
+
+            // --- Dolby Vision metadata ---
+#ifdef TLRENDER_DOVI
+            if (p.hdr.isDolbyVision)
+            {
+                DBG;
+                size_t dovi_size = 0;
+                // av_dovi_metadata_alloc respects the internal ABI limits of FFmpeg for DOVI
+                AVDOVIMetadata *dovi_alloc = av_dovi_metadata_alloc(&dovi_size);
+                if (dovi_alloc)
+                {
+                    sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DOVI_METADATA);
+                    if (!sd)
+                    {
+                        sd = av_frame_new_side_data(frame, AV_FRAME_DATA_DOVI_METADATA, dovi_size);
+                    }
+                    if (sd && sd->data)
+                    {
+                        // Copy the properly zeroed/allocated flat struct into the side data memory
+                        std::memcpy(sd->data, dovi_alloc, dovi_size);
+                        AVDOVIMetadata *metadata = (AVDOVIMetadata*)sd->data;
+
+                        AVDOVIRpuDataHeader *header = av_dovi_get_header(metadata);
+                        if (header) {
+                            header->disable_residual_flag = 1;
+                        }
+
+                        AVDOVIColorMetadata *color = av_dovi_get_color(metadata);
+                        if (color) {
+                            // \@todo: To properly reverse `source_min_pq` & `source_max_pq`,
+                            // you need the mathematical inverse of your `dolby_rescale` function.
+                            //
+                            // Example:
+                            // color->source_min_pq = (uint16_t)(dolby_inverse_rescale(p.hdr.displayMasteringLuminance.getMin()) * 4095.0f);
+                            // color->source_max_pq = (uint16_t)(dolby_inverse_rescale(p.hdr.displayMasteringLuminance.getMax()) * 4095.0f);
+                        }
+                    }
+                    av_free(dovi_alloc);
+                }
+            }
+#endif
+
         }
 
         void Write::_encode(
@@ -2222,7 +2447,7 @@ namespace tl
 
             if (p.hasHDR && frame && p.avVideoStream == stream)
             {
-                _attach_hdr_metadata(frame);
+                _attach_frame_hdr_metadata(frame);
             }
 
             int r = avcodec_send_frame(context, frame);

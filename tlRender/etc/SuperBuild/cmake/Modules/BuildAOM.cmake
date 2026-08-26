@@ -7,7 +7,9 @@ endif()
 
 if (NOT AOM_FOUND)
 
-    set(AOM_TAG v3.13.1)
+    set(AOM_GIT_REPOSITORY "https://aomedia.googlesource.com/aom.git")
+    set(AOM_GIT_TAG "v3.13.3")  # was v3.13.1
+
     set(AOM_DEPENDENCIES )
 
     set(AOM_ARGS ${TLRENDER_EXTERNAL_ARGS})
@@ -26,24 +28,20 @@ if (NOT AOM_FOUND)
 	    -DAOM_TARGET_CPU=generic)
     else()
 	list(APPEND AOM_ARGS
-	    -DENABLE_NASM=ON)
+	    -DCMAKE_ASM_NASM_COMPILER=${CMAKE_INSTALL_PREFIX}/bin/nasm)
 	set(AOM_DEPENDENCIES NASM)
     endif()
 
     message(STATUS "AOM DEPENDENCIES=${AOM_DEPENDENCIES}")
 
-    set(AOM_PATCH )
-
     ExternalProject_Add(
 	AOM
 	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/AOM
 
-	GIT_REPOSITORY "https://aomedia.googlesource.com/aom.git"
-	GIT_TAG ${AOM_TAG}
+	GIT_REPOSITORY ${AOM_GIT_REPOSITORY}
+	GIT_TAG ${AOM_GIT_TAG}
 
 	DEPENDS ${AOM_DEPENDENCIES}
-
-	PATCH_COMMAND ${AOM_PATCH}
 
 	LIST_SEPARATOR |
 	CMAKE_ARGS ${AOM_ARGS}

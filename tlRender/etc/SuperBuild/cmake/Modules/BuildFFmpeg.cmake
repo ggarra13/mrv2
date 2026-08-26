@@ -451,11 +451,6 @@ if (NOT FFmpeg_FOUND)
 	if(UNIX)
 	    list(APPEND FFmpeg_CONFIGURE_ARGS
 		--extra-ldflags="${INSTALL_PREFIX}/lib/libaom.a")
-	    if (NOT APPLE)
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --extra-libs=-lm
-		    --extra-libs=-lpthread)
-	    endif()
 	endif()
     endif()
 
@@ -467,11 +462,6 @@ if (NOT FFmpeg_FOUND)
 	if(UNIX)
 	    list(APPEND FFmpeg_CONFIGURE_ARGS
 		--extra-ldflags="${INSTALL_PREFIX}/lib/libdav1d.a")
-	    if (NOT APPLE)
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --extra-libs=-lm
-		    --extra-libs=-lpthread)
-	    endif()
 	endif()
     endif()
 
@@ -509,9 +499,6 @@ if (NOT FFmpeg_FOUND)
 	    list(APPEND FFmpeg_CONFIGURE_ARGS
 		--extra-ldflags="${INSTALL_PREFIX}/lib/libSvtAv1Enc.a")
 	    if (NOT APPLE)
-		list(APPEND FFmpeg_CONFIGURE_ARGS
-		    --extra-libs=-lm
-		    --extra-libs=-lpthread)
 	    endif()
 	endif()
     endif()
@@ -532,6 +519,14 @@ if (NOT FFmpeg_FOUND)
 	# endif()
     endif()
 
+    if(TLRENDER_SVTAV1 OR TLRENDER_AV1 OR TLRENDER_AOM)
+	if(UNIX AND NOT APPLE)
+	    list(APPEND FFmpeg_CONFIGURE_ARGS
+		--extra-libs=-lm
+		--extra-libs=-lpthread)
+	endif()
+    endif()
+    
     if(FFmpeg_SHARED_LIBS)
 	list(APPEND FFmpeg_CONFIGURE_ARGS
             --disable-static

@@ -25,7 +25,9 @@ extern "C"
 {
 #include <libavutil/channel_layout.h>
 #include <libavutil/dict.h>
-#include <libavutil/dovi_meta.h>
+#ifdef TLRENDER_DOVI
+#    include <libavutil/dovi_meta.h>
+#endif
 #include <libavutil/ffversion.h>
 #include <libavutil/hdr_dynamic_metadata.h>
 #include <libavutil/imgutils.h>
@@ -258,96 +260,97 @@ namespace tl
                 }
             }
 
-        raw = get_side_data_raw(frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
-        if (raw)
-        {
-            out = true;
-            auto data = reinterpret_cast<AVContentLightMetadata*>(raw);
-            hdr.maxCLL = data->MaxCLL;
-            hdr.maxFALL = data->MaxFALL;
-        }
-        raw = get_side_data_raw(frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
-        if (raw)
-        {
-            out = true;
-            auto data = reinterpret_cast<AVDynamicHDRPlus*>(raw);
-            if (data->application_version < 2)
+            raw = get_side_data_raw(frame, AV_FRAME_DATA_CONTENT_LIGHT_LEVEL);
+            if (raw)
             {
-                const AVHDRPlusColorTransformParams* p = data->params;
-                hdr.sceneMax[0] = 10000.F * av_q2d(p->maxscl[0]);
-                hdr.sceneMax[1] = 10000.F * av_q2d(p->maxscl[1]);
-                hdr.sceneMax[2] = 10000.F * av_q2d(p->maxscl[2]);
-                hdr.sceneAvg = 10000.F * av_q2d(p->average_maxrgb);
+                out = true;
+                auto data = reinterpret_cast<AVContentLightMetadata*>(raw);
+                hdr.maxCLL = data->MaxCLL;
+                hdr.maxFALL = data->MaxFALL;
+            }
 
-
-                float histogramMax = 0.F;
-
-                for (int i = 0;
-                     i < p->num_distribution_maxrgb_percentiles; i++)
+            raw = get_side_data_raw(frame, AV_FRAME_DATA_DYNAMIC_HDR_PLUS);
+            if (raw)
+            {
+                out = true;
+                auto data = reinterpret_cast<AVDynamicHDRPlus*>(raw);
+                if (data->application_version < 2)
                 {
-                    float value = av_q2d(p->distribution_maxrgb[i].percentile);
-                    if (value > histogramMax)
-                        histogramMax = value;
-                }
+                    const AVHDRPlusColorTransformParams* p = data->params;
+                    hdr.sceneMax[0] = 10000.F * av_q2d(p->maxscl[0]);
+                    hdr.sceneMax[1] = 10000.F * av_q2d(p->maxscl[1]);
+                    hdr.sceneMax[2] = 10000.F * av_q2d(p->maxscl[2]);
+                    hdr.sceneAvg = 10000.F * av_q2d(p->average_maxrgb);
 
-                histogramMax *= 10000.F;
-                if (!hdr.sceneMax[0])
-                    hdr.sceneMax[0] = histogramMax;
-                if (!hdr.sceneMax[1])
-                    hdr.sceneMax[1] = histogramMax;
-                if (!hdr.sceneMax[2])
-                    hdr.sceneMax[2] = histogramMax;
 
-                if (p->tone_mapping_flag == 1)
-                {
-                    hdr.ootf.targetLuma = av_q2d(
-                        data->targeted_system_display_maximum_luminance);
-                    hdr.ootf.kneeX = av_q2d(p->knee_point_x);
-                    hdr.ootf.kneeY = av_q2d(p->knee_point_y);
-                    if (p->num_bezier_curve_anchors < 16)
+                    float histogramMax = 0.F;
+
+                    for (int i = 0;
+                         i < p->num_distribution_maxrgb_percentiles; i++)
                     {
-                        hdr.ootf.numAnchors =
-                            p->num_bezier_curve_anchors;
-                        for (int i = 0; i < hdr.ootf.numAnchors; ++i)
-                            hdr.ootf.anchors[i] =
-                                av_q2d(p->bezier_curve_anchors[i]);
+                        float value = av_q2d(p->distribution_maxrgb[i].percentile);
+                        if (value > histogramMax)
+                            histogramMax = value;
+                    }
+
+                    histogramMax *= 10000.F;
+                    if (!hdr.sceneMax[0])
+                        hdr.sceneMax[0] = histogramMax;
+                    if (!hdr.sceneMax[1])
+                        hdr.sceneMax[1] = histogramMax;
+                    if (!hdr.sceneMax[2])
+                        hdr.sceneMax[2] = histogramMax;
+
+                    if (p->tone_mapping_flag == 1)
+                    {
+                        hdr.ootf.targetLuma = av_q2d(
+                            data->targeted_system_display_maximum_luminance);
+                        hdr.ootf.kneeX = av_q2d(p->knee_point_x);
+                        hdr.ootf.kneeY = av_q2d(p->knee_point_y);
+                        if (p->num_bezier_curve_anchors < 16)
+                        {
+                            hdr.ootf.numAnchors =
+                                p->num_bezier_curve_anchors;
+                            for (int i = 0; i < hdr.ootf.numAnchors; ++i)
+                                hdr.ootf.anchors[i] =
+                                    av_q2d(p->bezier_curve_anchors[i]);
+                        }
                     }
                 }
             }
-        }
-        raw = get_side_data_raw(frame, AV_FRAME_DATA_DOVI_METADATA);
-        if (raw)
-        {
-            out = true;
-
-            const AVDOVIMetadata* metadata = reinterpret_cast<AVDOVIMetadata *>(raw);
-            const AVDOVIRpuDataHeader* header = av_dovi_get_header(metadata);
-            if (header->disable_residual_flag)
+            raw = get_side_data_raw(frame, AV_FRAME_DATA_DOVI_METADATA);
+            if (raw)
             {
-                const AVDOVIColorMetadata *dovi_color;
-                dovi_color = av_dovi_get_color(metadata);
-                hdr.eotf = image::EOTF_BT2020;
-                hdr.isDolbyVision = true;
-                float min_luma = dolby_rescale(dovi_color->source_min_pq / 4095.0f);
-                float max_luma = dolby_rescale(dovi_color->source_max_pq / 4095.0f);
-                hdr.displayMasteringLuminance = math::FloatRange(min_luma, max_luma);
-                const AVDOVIDmData *dovi_ext;
-                if ((dovi_ext = av_dovi_find_level(metadata, 1))) {
-                    hdr.maxPQY = dovi_ext->l1.max_pq / 4095.0f;
-                    hdr.avgPQY = dovi_ext->l1.avg_pq / 4095.0f;
+                out = true;
+
+                const AVDOVIMetadata* metadata = reinterpret_cast<AVDOVIMetadata *>(raw);
+                const AVDOVIRpuDataHeader* header = av_dovi_get_header(metadata);
+                if (header->disable_residual_flag)
+                {
+                    const AVDOVIColorMetadata *dovi_color;
+                    dovi_color = av_dovi_get_color(metadata);
+                    hdr.eotf = image::EOTF_BT2020;
+                    hdr.isDolbyVision = true;
+                    float min_luma = dolby_rescale(dovi_color->source_min_pq / 4095.0f);
+                    float max_luma = dolby_rescale(dovi_color->source_max_pq / 4095.0f);
+                    hdr.displayMasteringLuminance = math::FloatRange(min_luma, max_luma);
+                    const AVDOVIDmData *dovi_ext;
+                    if ((dovi_ext = av_dovi_find_level(metadata, 1))) {
+                        hdr.maxPQY = dovi_ext->l1.max_pq / 4095.0f;
+                        hdr.avgPQY = dovi_ext->l1.avg_pq / 4095.0f;
+                    }
+                }
+
+                AVFrameSideData* sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DOVI_RPU_BUFFER);
+                if (sd)
+                {
+                    hdr.isDolbyVision = true;
+                    hdr_metadata_from_dovi_rpu(hdr, sd->buf->data, sd->buf->size);
                 }
             }
 
-            AVFrameSideData* sd = av_frame_get_side_data(frame, AV_FRAME_DATA_DOVI_RPU_BUFFER);
-            if (sd)
-            {
-                hdr.isDolbyVision = true;
-                hdr_metadata_from_dovi_rpu(hdr, sd->buf->data, sd->buf->size);
-            }
+            return out;
         }
-
-        return out;
-    }
 
         audio::DataType toAudioType(AVSampleFormat value)
         {
