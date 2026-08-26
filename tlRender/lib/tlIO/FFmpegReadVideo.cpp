@@ -358,17 +358,18 @@ namespace tl
 
                 // If we are reading VPX, use libvpx-vp9 external lib if
                 // available so we can read an alpha channel.
-                // if (!_options.hwAccel &&
-                //     avVideoCodecParameters->codec_id == AV_CODEC_ID_VP9)
-                // {
-                //     auto avLibVpxCodec =
-                //         avcodec_find_decoder_by_name("libvpx-vp9");
-                //     if (avLibVpxCodec)
-                //     {
-                //         avVideoCodec = avLibVpxCodec;
-                //         avVideoCodecParameters->codec_id = avVideoCodec->id;
-                //     }
-                // }
+                // Also, libvpx-vp9 is much faster than ffmpeg's vp9 built-in.
+                if (!_options.hwAccel &&
+                    avVideoCodecParameters->codec_id == AV_CODEC_ID_VP9)
+                {
+                    auto avLibVpxCodec =
+                        avcodec_find_decoder_by_name("libvpx-vp9");
+                    if (avLibVpxCodec)
+                    {
+                        avVideoCodec = avLibVpxCodec;
+                        avVideoCodecParameters->codec_id = avVideoCodec->id;
+                    }
+                }
 
                 if (!avVideoCodec)
                 {
