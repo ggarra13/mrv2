@@ -457,7 +457,6 @@ namespace mrv
             std::shared_ptr<image::Image> outputImage;
 
             outputInfo.pixelType = info.video[layerId].pixelType;
-            auto hdr = info.video[layerId].image->getHDR();
 
             player->start();
 
